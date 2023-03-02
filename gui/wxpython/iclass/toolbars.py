@@ -253,7 +253,6 @@ class IClassToolbar(BaseToolbar):
         self.parent.CategoryChanged(currentCat=cat)
 
     def _updateColor(self, cat):
-
         if cat:
             stat = self.stats_data.GetStatistics(cat)
             back_c = wx.Colour([int(x) for x in stat.color.split(":")])

@@ -48,7 +48,6 @@ from vnet.vnet_utils import DegreesToRadians
 
 class VNETData:
     def __init__(self, guiparent, mapWin):
-
         # setting initialization
         self._initSettings()
 
@@ -177,7 +176,6 @@ class VNETData:
             "turn_cat_layer": _("unique categories layer"),
         }
         for layer, layerLabel in six.iteritems(vals):
-
             if layer in ["turn_layer", "turn_cat_layer"] and not flags["t"]:
                 continue
             if layer in inv_params:
@@ -236,7 +234,6 @@ class VNETData:
 
 class VNETPointsData:
     def __init__(self, mapWin, an_data, an_params):
-
         self.mapWin = mapWin
         self.an_data = an_data
         self.an_params = an_params
@@ -291,7 +288,6 @@ class VNETPointsData:
         return self.snapping
 
     def AddPoint(self):
-
         self.pointsToDraw.AddItem(
             coords=(self.cols["def_vals"][3], self.cols["def_vals"][4])
         )
@@ -308,7 +304,6 @@ class VNETPointsData:
         self.pointsChanged.emit(method="DeletePoint", kwargs={"pt_id": pt_id})
 
     def SetPoints(self, pts_data):
-
         for item in self.pointsToDraw.GetAllItems():
             self.pointsToDraw.DeleteItem(item)
 
@@ -425,7 +420,6 @@ class VNETPointsData:
         self.cols["type"][type_idx] = colValues
 
     def _ptDataToList(self, pt_data):
-
         pt_list_data = [None] * len(self.cols["name"])
 
         for k, val in six.iteritems(pt_data):
@@ -434,7 +428,6 @@ class VNETPointsData:
         return pt_list_data
 
     def _ptListDataToPtData(self, pt_list_data):
-
         pt_data = {}
         for i, val in enumerate(pt_list_data):
             pt_data[self.cols["name"][i]] = val
@@ -468,7 +461,6 @@ class VNETPointsData:
             self._vnetPathUpdateUsePoints(pt_id)
 
     def _vnetPathUpdateUsePoints(self, checked_pt_id):
-
         alreadyChecked = []
 
         type_idx = self.cols["name"].index("type")
@@ -529,7 +521,6 @@ class VNETPointsData:
         e, n = self.mapWin.GetLastEN()
 
         if self.snapping:
-
             # compute threshold
             snapTreshPix = int(
                 UserSettings.Get(group="vnet", key="other", subkey="snap_tresh")
@@ -565,7 +556,6 @@ class VNETPointsData:
             self.SetSelected(self.GetSelected() + 1)
 
     def GetColumns(self, only_relevant=True):
-
         cols_data = deepcopy(self.cols)
 
         hidden_cols = []
@@ -588,7 +578,6 @@ class VNETPointsData:
 
 class VNETAnalysisParameters:
     def __init__(self, an_props):
-
         self.an_props = an_props
 
         self.params = {
@@ -610,7 +599,6 @@ class VNETAnalysisParameters:
         self.parametersChanged = Signal("VNETAnalysisParameters.parametersChanged")
 
     def SetParams(self, params, flags):
-
         changed_params = {}
         for p, v in six.iteritems(params):
             if p == "analysis" and v not in self.an_props.used_an:
@@ -641,7 +629,6 @@ class VNETAnalysisParameters:
         return changed_params, changed_flags
 
     def GetParam(self, param):
-
         invParams = []
         if param in [
             "input",
@@ -661,7 +648,6 @@ class VNETAnalysisParameters:
         return self.params[param], True
 
     def GetParams(self):
-
         invParams = self._getInvalidParams(self.params)
         return self.params, invParams, self.flags
 
@@ -698,7 +684,6 @@ class VNETAnalysisParameters:
 
         # check costs columns
         for col in ["arc_column", "arc_backward_column", "node_column"]:
-
             if col == "node_column":
                 try:
                     table = dbInfo.GetTable(int(params["node_layer"]))
@@ -845,7 +830,6 @@ class VNETAnalysesProperties:
         return self.vnetProperties[key]
 
     def GetRelevantParams(self, analysis):
-
         if analysis not in self.vnetProperties:
             return None
 
@@ -990,7 +974,6 @@ class VectMap:
         self.modifTime = None  # time, for modification check
 
     def __del__(self):
-
         self.DeleteRenderLayer()
 
     def AddRenderLayer(self, cmd=None, colorsCmd=None):
@@ -1108,7 +1091,6 @@ class History:
     """
 
     def __init__(self):
-
         # max number of steps in history (zero based)
         self.maxHistSteps = 3
         # current history step
@@ -1261,7 +1243,6 @@ class History:
     def _parseValue(self, value, read=False):
         """Parse value"""
         if read:  # -> read data (cast values)
-
             if value:
                 if (
                     value[0] == "[" and value[-1] == "]"
@@ -1315,7 +1296,6 @@ class History:
         newHistStep = False
         isSearchedHistStep = False
         for line in hist.readlines():
-
             if not line.strip() and isSearchedHistStep:
                 break
             elif not line.strip():
@@ -1421,7 +1401,6 @@ class VNETGlobalTurnsData:
             old_from_angle = self.turn_data[row][1]
             new_to_angle = self.turn_data[row][2]
             if self.IsInInterval(old_from_angle, new_to_angle, new_from_angle):
-
                 prev_row = row - 1
                 if prev_row == -1:
                     prev_row = len(self.turn_data) - 1
@@ -1433,7 +1412,6 @@ class VNETGlobalTurnsData:
             old_to_angle = self.turn_data[row][2]
             new_from_angle = self.turn_data[row][1]
             if self.IsInInterval(new_from_angle, old_to_angle, new_to_angle):
-
                 next_row = row + 1
                 if len(self.turn_data) == next_row:
                     next_row = 0

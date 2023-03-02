@@ -336,7 +336,6 @@ class DatabasePage(TitledPage):
         dlg.Destroy()
 
     def OnPageChanging(self, event=None):
-
         self.location = self.tlocation.GetValue()
         self.grassdatabase = self.tgisdbase.GetLabel()
         self.locTitle = self.tlocTitle.GetValue()

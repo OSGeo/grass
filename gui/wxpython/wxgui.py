@@ -132,7 +132,6 @@ def process_opt(opts, args):
 
 
 def main(argv=None):
-
     if argv is None:
         argv = sys.argv
     try:

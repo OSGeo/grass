@@ -90,7 +90,6 @@ def SnapToNode(e, n, tresh, vectMap):
 
 
 def GetNearestNodeCat(e, n, layer, tresh, vectMap):
-
     if not haveCtypes:
         return -2
 

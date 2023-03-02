@@ -2815,7 +2815,6 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         event.Skip()
 
     def UpdatePage(self, layer):
-
         if layer in self.layerPage.keys():
             table = self.dbMgrData["mapDBInfo"].layers[layer]["table"]
 
@@ -2944,7 +2943,6 @@ class TableListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __init__(
         self, parent, id, table, columns, pos=wx.DefaultPosition, size=wx.DefaultSize
     ):
-
         self.parent = parent
         self.table = table
         self.columns = columns
@@ -3005,7 +3003,6 @@ class LayerListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
     """Layer description list"""
 
     def __init__(self, parent, id, layers, pos=wx.DefaultPosition, size=wx.DefaultSize):
-
         self.parent = parent
         self.layers = layers
         ListCtrl.__init__(

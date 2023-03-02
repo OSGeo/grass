@@ -120,7 +120,6 @@ def sample_stds_by_stds_topology(
             mapmatrizes.append(mapmatrix)
 
     if len(mapmatrizes) > 0:
-
         # Simply return the map matrix
         if not print_only:
             dbif.close()

@@ -14,7 +14,6 @@ from grass.gunittest.gmodules import SimpleModule
 
 
 class Testrr(TestCase):
-
     input = "lakes"
     cover = "elevation"
     raster = "routfile"

@@ -557,7 +557,6 @@ def success_to_html_percent(total, successes):
 
 
 class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
-
     unknown_number = UNKNOWN_NUMBER_HTML
 
     def __init__(self, file_anonymizer, main_page_name="index.html"):

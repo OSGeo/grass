@@ -79,7 +79,6 @@ class ProfileRasterDialog(wx.Dialog):
         self._do_layout()
 
     def _do_layout(self):
-
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.GridBagSizer(hgap=3, vgap=3)
@@ -172,7 +171,6 @@ class ScatterRasterDialog(wx.Dialog):
         self._do_layout()
 
     def _do_layout(self):
-
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.GridBagSizer(hgap=3, vgap=3)
@@ -415,7 +413,6 @@ class HistRasterDialog(wx.Dialog):
         self._do_layout()
 
     def _do_layout(self):
-
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.GridBagSizer(hgap=3, vgap=3)

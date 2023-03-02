@@ -383,7 +383,7 @@ class MapWindowBase(object):
         """
         try:
             self.lastEN = self.Pixel2Cell(event.GetPosition())
-        except (ValueError):
+        except ValueError:
             self.lastEN = None
 
         event.Skip()

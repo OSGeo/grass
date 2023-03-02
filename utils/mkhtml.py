@@ -311,7 +311,6 @@ def has_src_code_git(src_dir, is_addon):
     else:
         os.chdir(topdir)
     try:
-
         process_result = subprocess.run(
             [
                 "git",

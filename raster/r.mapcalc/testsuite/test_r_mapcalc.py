@@ -61,7 +61,6 @@ cols: 10
 
 
 class TestRandFunction(TestCase):
-
     # TODO: replace by unified handing of maps
     to_remove = []
 
@@ -176,7 +175,6 @@ class TestRandFunction(TestCase):
 
 
 class TestBasicOperations(TestCase):
-
     # TODO: replace by unified handing of maps
     to_remove = []
 
@@ -238,7 +236,6 @@ class TestBasicOperations(TestCase):
 
 
 class TestRegionOperations(TestCase):
-
     # TODO: replace by unified handing of maps
     to_remove = []
 

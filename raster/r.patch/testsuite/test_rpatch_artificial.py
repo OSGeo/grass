@@ -122,7 +122,6 @@ cols: 8
 
 
 class TestSmallDataNoOverlap(TestCase):
-
     # TODO: replace by unified handing of maps
     to_remove = []
     cell_1 = "rpatch_small_test_cell_1"
@@ -183,7 +182,6 @@ class TestSmallDataNoOverlap(TestCase):
 
 
 class TestSmallDataOverlap(TestCase):
-
     # TODO: replace by unified handing of maps
     to_remove = []
     cell_a = "rpatch_small_test_cell_a"

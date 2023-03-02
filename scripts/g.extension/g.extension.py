@@ -219,7 +219,6 @@ def replace_shebang_win(python_file):
     with codecs.open(python_file, "r", encoding="utf8") as in_file, codecs.open(
         tmp_name, "w", encoding="utf8"
     ) as out_file:
-
         for line in in_file:
             new_line = line.replace(
                 "#!/usr/bin/env python\n", "#!/usr/bin/env python3\n"
@@ -1217,7 +1216,6 @@ def install_extension_xml(edict):
 
     # update tree
     for name in edict:
-
         # so far extensions do not have description or keywords
         # only modules have
         """
@@ -1360,7 +1358,6 @@ def install_module_xml(mlist):
 
     # update tree
     for name in mlist:
-
         try:
             desc = gtask.parse_interface(name).description
             # mname = gtask.parse_interface(name).name

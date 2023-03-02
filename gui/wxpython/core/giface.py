@@ -213,7 +213,6 @@ class StandaloneGrassInterface(GrassInterface):
     """@implements GrassInterface"""
 
     def __init__(self):
-
         # Signal when some map is created or updated by a module.
         # Used for adding/refreshing displayed layers.
         # attributes: name: map name, ltype: map type,

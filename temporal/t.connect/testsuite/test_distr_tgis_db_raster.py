@@ -15,7 +15,6 @@ import os
 
 
 class TestRasterExtraction(TestCase):
-
     mapsets_to_remove = []
     outfile = "rastlist.txt"
     gisenv = SimpleModule("g.gisenv", get="MAPSET")

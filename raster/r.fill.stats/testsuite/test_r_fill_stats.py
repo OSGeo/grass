@@ -3,7 +3,6 @@ from grass.gunittest.main import test
 
 
 class TestRFillStats(TestCase):
-
     ascii = "ascii"
     stats = "stats"
     wmean = "wmean"

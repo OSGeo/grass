@@ -36,7 +36,6 @@ class MainToolbar(BaseToolbar):
         self.scatt_mgr.modeSet.connect(self.ModeSet)
 
     def _toolbarData(self):
-
         icons = {
             "selectGroup": MetaIcon(
                 img="layer-group-add", label=_("Select imagery group")
@@ -148,7 +147,6 @@ class MainToolbar(BaseToolbar):
         self.scatt_mgr.modeSet.connect(self.ModeSet)
 
     def ActivateSelectionPolygonMode(self, event):
-
         activated = self.scatt_mgr.ActivateSelectionPolygonMode(event.IsChecked())
         self.parent.ShowPlotEditingToolbar(activated)
 
@@ -295,7 +293,6 @@ class EditingToolbar(BaseToolbar):
         self.scatt_mgr.modeSet.connect(self.ModeSet)
 
     def ModeSet(self, mode):
-
         if mode in ["zoom", "pan", "zoom_extend", None]:
             self.UnsetMode()
 

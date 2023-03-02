@@ -30,7 +30,6 @@ class PreferencesDialog(PreferencesBaseDialog):
     def __init__(
         self, parent, giface, settings=UserSettings, title=_("Modeler settings")
     ):
-
         PreferencesBaseDialog.__init__(
             self, parent=parent, giface=giface, title=title, settings=settings
         )

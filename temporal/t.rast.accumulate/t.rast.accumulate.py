@@ -325,7 +325,6 @@ def main():
     output_maps = []
 
     while input_strds_end > start and stop > start:
-
         # Make sure that the cyclic computation will stop at the correct time
         if stop and end > stop:
             end = stop

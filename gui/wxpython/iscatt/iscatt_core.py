@@ -44,7 +44,6 @@ class Core:
     """Represents scatter plot backend."""
 
     def __init__(self):
-
         self.an_data = AnalyzedData()
 
         self.scatts_dt = ScattPlotsData(self.an_data)
@@ -90,7 +89,6 @@ class Core:
         return self.scatts_dt.GetCatRast(cat_id)
 
     def AddScattPlots(self, scatt_ids):
-
         for s_id in scatt_ids:
             self.scatts_dt.AddScattPlot(scatt_id=s_id)
 
@@ -98,7 +96,6 @@ class Core:
         self.ComputeCatsScatts(cats_ids)
 
     def SetEditCatData(self, cat_id, scatt_id, bbox, value):
-
         if cat_id not in self.scatts_dt.GetCategories():
             raise GException(_("Select category for editing."))
 
@@ -116,7 +113,6 @@ class Core:
         return cat_id
 
     def ComputeCatsScatts(self, cats_ids):
-
         requested_dt = {}
         requested_dt_conds = {}
 
@@ -153,7 +149,6 @@ class Core:
             raise GException(_("Select category for editing."))
 
         for scatt_id, coords in six.iteritems(scatts_pols):
-
             if self.scatt_conds_dt.AddScattPlot(cat_id, scatt_id) < 0:
                 return False
 
@@ -184,7 +179,6 @@ class Core:
         return cat_id
 
     def ExportCatRast(self, cat_id, rast_name):
-
         cat_rast = self.scatts_dt.GetCatRast(cat_id)
         if not cat_rast:
             return 1
@@ -256,10 +250,8 @@ class CatRastUpdater:
         return updated_cats
 
     def _updateCatRast(self, bbox, areas_cats, updated_cats):
-
         rasterized_cats = []
         for c in range(len(areas_cats)):
-
             if not areas_cats[c]:
                 continue
 
@@ -285,7 +277,6 @@ class CatRastUpdater:
             RunCommand("g.remove", flags="f", type="raster", name=patch_rast)
 
     def _rasterize(self, grass_region, layer, cat, out_rast):
-
         # TODO different thread may be problem when user edits map
         environs = os.environ.copy()
         environs["GRASS_VECTOR_TEMPORARY"] = "1"
@@ -327,7 +318,6 @@ class CatRastUpdater:
             GException(_("v.to.rast failed:\n%s" % msg))
 
     def _create_grass_region_env(self, bbox):
-
         r = self.an_data.GetRegion()
         new_r = {}
 
@@ -378,7 +368,6 @@ class AnalyzedData:
     """Represents analyzed data (bands, region)."""
 
     def __init__(self):
-
         self.bands = []
         self.bands_info = {}
 
@@ -420,7 +409,6 @@ class ScattPlotsCondsData:
     """Data structure for selected areas in scatter plot(conditions)."""
 
     def __init__(self, an_data):
-
         self.an_data = an_data
 
         # TODO
@@ -431,7 +419,6 @@ class ScattPlotsCondsData:
         self.CleanUp()
 
     def CleanUp(self):
-
         self.cats = {}
 
         self.n_scatts = -1
@@ -441,7 +428,6 @@ class ScattPlotsCondsData:
             self.DeleteCategory(cat_id)
 
     def Create(self, n_bands):
-
         self.CleanUp()
 
         self.n_scatts = (n_bands - 1) * n_bands / 2
@@ -450,14 +436,12 @@ class ScattPlotsCondsData:
         self.AddCategory(cat_id=0)
 
     def AddCategory(self, cat_id):
-
         if cat_id not in self.cats.keys():
             self.cats[cat_id] = {}
             return cat_id
         return -1
 
     def DeleteCategory(self, cat_id):
-
         if cat_id not in self.cats.keys():
             return False
 
@@ -473,14 +457,12 @@ class ScattPlotsCondsData:
         return self.cats.keys()
 
     def GetCatScatts(self, cat_id):
-
         if cat_id not in self.cats:
             return False
 
         return self.cats[cat_id].keys()
 
     def AddScattPlot(self, cat_id, scatt_id):
-
         if cat_id not in self.cats:
             return -1
 
@@ -511,7 +493,6 @@ class ScattPlotsCondsData:
         return bands_info
 
     def DeleScattPlot(self, cat_id, scatt_id):
-
         if cat_id not in self.cats:
             return False
 
@@ -522,7 +503,6 @@ class ScattPlotsCondsData:
         return True
 
     def GetValuesArr(self, cat_id, scatt_id):
-
         if cat_id not in self.cats:
             return None
 
@@ -532,7 +512,6 @@ class ScattPlotsCondsData:
         return self.cats[cat_id][scatt_id]["np_vals"]
 
     def GetData(self, requested_dt):
-
         cats = {}
         for cat_id, scatt_ids in six.iteritems(requested_dt):
             if cat_id not in cats:
@@ -549,7 +528,6 @@ class ScattPlotsCondsData:
         return cats
 
     def SetData(self, cats):
-
         for cat_id, scatt_ids in six.iteritems(cats):
             for scatt_id in scatt_ids:
                 # if key is missing condition is always True (full scatter plor
@@ -579,7 +557,6 @@ class ScattPlotsData(ScattPlotsCondsData):
     """
 
     def __init__(self, an_data):
-
         self.cats_rasts = {}
         self.cats_rasts_conds = {}
         self.scatts_ids = []
@@ -611,7 +588,6 @@ class ScattPlotsData(ScattPlotsCondsData):
         return cat_id
 
     def DeleteCategory(self, cat_id):
-
         ScattPlotsCondsData.DeleteCategory(self, cat_id)
 
         grass.try_remove(self.cats_rasts_conds[cat_id])
@@ -623,7 +599,6 @@ class ScattPlotsData(ScattPlotsCondsData):
         return True
 
     def AddScattPlot(self, scatt_id):
-
         if scatt_id in self.scatts_ids:
             return False
 
@@ -635,7 +610,6 @@ class ScattPlotsData(ScattPlotsCondsData):
         return True
 
     def DeleteScatterPlot(self, scatt_id):
-
         if scatt_id not in self.scatts_ids:
             return False
 
@@ -719,7 +693,6 @@ class ScattPlotsData(ScattPlotsCondsData):
         return ellipse
 
     def CleanUp(self):
-
         ScattPlotsCondsData.CleanUp(self)
         for tmp in six.itervalues(self.cats_rasts_conds):
             grass.try_remove(tmp)
@@ -831,7 +804,6 @@ def GetRegion():
 
 
 def _parseRegion(region_str):
-
     region = {}
     region_str = region_str.splitlines()
 

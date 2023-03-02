@@ -177,7 +177,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         nprocs=1,
         time_suffix=None,
     ):
-
         TemporalAlgebraParser.__init__(
             self,
             pid=pid,
@@ -747,7 +746,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 process_queue = pymod.ParallelModuleQueue(int(self.nprocs))
 
             if isinstance(t[3], list):
-
                 granularity = None
                 if len(t[3]) > 0 and self.time_suffix == "gran":
                     map_i = t[3][0]
@@ -803,7 +801,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 count = 0
                 map_test_list = []
                 for map_i in t[3]:
-
                     # Create new map with basename
                     newident = create_numeric_suffix(
                         self.basename, count, "%0" + str(leadzero)
@@ -893,7 +890,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         overwrite=self.overwrite,
                     )
                 for map_i in register_list:
-
                     # Put the map into the process dictionary
                     start, end = map_i.get_temporal_extent_as_tuple()
                     self.process_chain_dict["register"].append(

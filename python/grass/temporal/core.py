@@ -1247,7 +1247,6 @@ class SQLDatabaseInterfaceConnection(object):
         return self.connections[mapset].execute_transaction(statement)
 
     def _create_mapset_error_message(self, mapset):
-
         return (
             "You have no permission to "
             "access mapset <%(mapset)s>, or "
@@ -1501,7 +1500,6 @@ class DBConnection(object):
 
         # Check if the database already exists
         if self.dbmi.__name__ == "sqlite3":
-
             self.cursor.execute(
                 "SELECT name FROM sqlite_master WHERE "
                 "type='table' AND name='%s';" % table_name

@@ -7,7 +7,6 @@ from grass.gunittest.main import test
 
 
 class TestBasicOperations(TestCase):
-
     # TODO: replace by unified handing of maps
     to_remove = []
 

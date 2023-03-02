@@ -212,7 +212,6 @@ from grass.script.utils import decode
 
 
 def GetRegionParams(opt_region):
-
     # set region
     if opt_region:
         reg_spl = opt_region.strip().split("@", 1)

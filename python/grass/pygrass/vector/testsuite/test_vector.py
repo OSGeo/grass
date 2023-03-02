@@ -11,12 +11,10 @@ from grass.pygrass.vector import VectorTopo
 
 
 class VectorTopoTestCase(TestCase):
-
     tmpname = "VectorTopoTestCase_map"
 
     @classmethod
     def setUpClass(cls):
-
         from grass.pygrass import utils
 
         utils.create_test_vector_map(cls.tmpname)

@@ -270,7 +270,6 @@ class DMonMap(Map):
 
             reorderedLayers = [-1] * next_layer
             for i, layer in enumerate(existingLayers):
-
                 # owned layer was not found in cmd file -> is deleted
                 if layersOrder[i] == -1 and layer in self.ownedLayers:
                     self.ownedLayers.remove(layer)

@@ -53,7 +53,6 @@ class BufferedWindow(wx.Window):
         Map=None,
         **kwargs,
     ):
-
         wx.Window.__init__(self, parent, id=id, style=style, **kwargs)
 
         self.parent = parent

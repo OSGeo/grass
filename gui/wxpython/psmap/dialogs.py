@@ -124,7 +124,6 @@ class TCValidator(Validator):
         return TCValidator(self.flag)
 
     def Validate(self, win):
-
         tc = self.GetWindow()
         val = tc.GetValue()
 
@@ -757,7 +756,6 @@ class PageSetupDialog(PsmapDialog):
         return self.hBoxDict[item].GetItem(1).GetWindow()
 
     def _toList(self, paperStr):
-
         sizeList = list()
         for line in paperStr.strip().split("\n"):
             d = dict(zip([self.cat[1]] + self.cat[3:], line.split()))
@@ -1280,7 +1278,6 @@ class MapFramePanel(Panel):
                 each.GetWindow().Disable()
 
             if self.scale[scaleType]:
-
                 self.scaleTextCtrl.SetValue("%.0f" % (1 / self.scale[scaleType]))
             if self.center[scaleType]:
                 self.eastingTextCtrl.SetValue(str(self.center[scaleType][0]))
@@ -1351,7 +1348,6 @@ class MapFramePanel(Panel):
                 mapFrameDict["region"] = None
 
                 if mapFrameDict["drawMap"]:
-
                     if mapFrameDict["mapType"] == "raster":
                         mapFile = grass.find_file(mapFrameDict["map"], element="cell")
                         if mapFile["file"] == "":
@@ -1367,7 +1363,6 @@ class MapFramePanel(Panel):
                             self.instruction.AddInstruction(raster)
 
                     elif mapFrameDict["mapType"] == "vector":
-
                         mapFile = grass.find_file(mapFrameDict["map"], element="vector")
                         if mapFile["file"] == "":
                             GMessage("Vector %s not found" % mapFrameDict["map"])
@@ -4640,7 +4635,6 @@ class MapinfoDialog(PsmapDialog):
             self.colors["borderColor"].Disable()
 
     def update(self):
-
         # units
         currUnit = self.unitConv.findUnit(
             self.panel.units["unitsCtrl"].GetStringSelection()
@@ -4767,7 +4761,6 @@ class ScalebarDialog(PsmapDialog):
         if self.scalebarDict[
             "rect"
         ]:  # set position, ref point is center and not left top corner
-
             x = self.unitConv.convert(
                 value=self.scalebarDict["where"][0]
                 - self.scalebarDict["rect"].Get()[2] / 2,

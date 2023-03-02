@@ -20,7 +20,6 @@ def check_raster(name):
 
 
 class NumpyTestCase(TestCase):
-
     name = "RasterRowTestCase_map"
 
     @classmethod

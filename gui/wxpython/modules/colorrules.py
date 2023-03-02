@@ -1977,7 +1977,6 @@ class BufferedWindow(wx.Window):
     def __init__(
         self, parent, id, style=wx.NO_FULL_REPAINT_ON_RESIZE, Map=None, **kwargs
     ):
-
         wx.Window.__init__(self, parent, id, style=style, **kwargs)
 
         self.parent = parent

@@ -1882,7 +1882,6 @@ class ProcessGrcFile(object):
             )
             and self.inVector
         ):
-
             if int(self._get_value(line)) == 1:
                 name = element.split("_")[0]
                 type = element.split("_")[1]

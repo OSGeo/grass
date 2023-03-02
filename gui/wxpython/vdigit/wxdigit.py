@@ -390,7 +390,6 @@ class IVDigit:
         return ret
 
     def _addChangeset(self):
-
         # disable redo
         changesetLast = len(self.changesets) - 1
         if self.changesetCurrent < changesetLast and len(self.changesets) > 0:
@@ -544,7 +543,6 @@ class IVDigit:
         old_areas_cats = []
         if deleteRec:
             for i in self._display.selected["ids"]:
-
                 if Vect_read_line(self.poMapInfo, None, self.poCats, i) < 0:
                     self._error.ReadLine(i)
 
@@ -643,7 +641,6 @@ class IVDigit:
         old_areas_cats = []
 
         for i in range(cList.n_values):
-
             if Vect_get_line_type(self.poMapInfo, cList.value[i]) != GV_CENTROID:
                 continue
 
@@ -715,7 +712,6 @@ class IVDigit:
 
         if b_list.n_values > 0:
             for i_line in range(b_list.n_values):
-
                 line = b_list.value[i_line]
 
                 geoms.append(self._getBbox(abs(line)))

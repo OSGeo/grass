@@ -841,7 +841,6 @@ class VectorTopo(Vector):
         )
 
         if bboxlist is not None and len(bboxlist) > 0:
-
             wkb_list = []
             line_p = libvect.line_pnts()
             line_c = libvect.line_cats()
@@ -941,7 +940,6 @@ class VectorTopo(Vector):
         bboxlist = self.find_by_bbox.areas(bbox, bboxlist_only=True)
 
         if bboxlist is not None and len(bboxlist) > 0:
-
             wkb_list = []
             line_c = libvect.line_cats()
             size = ctypes.c_size_t()
@@ -959,7 +957,6 @@ class VectorTopo(Vector):
                     self.c_mapinfo, a_id, ctypes.byref(line_c)
                 )
                 if c_ok == 0:  # Centroid found
-
                     ok = libvect.Vect_cat_get(
                         ctypes.byref(line_c), field, ctypes.byref(cat)
                     )

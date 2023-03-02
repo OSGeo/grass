@@ -930,7 +930,6 @@ class AbstractMapDataset(AbstractDataset):
         statement = ""
 
         if self.is_in_db(dbif, mapset=mapset):
-
             # SELECT all needed information from the database
             self.metadata.select(dbif)
 

@@ -719,7 +719,6 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         event.Skip()
 
     def OnDragging(self, event):
-
         if self.mouse["use"] == "pointer":
             if self.dragid >= 0:
                 self.DragItem(self.dragid, event.GetPosition())
@@ -2252,7 +2251,6 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             or "update" in data["marker"]
             or "update" in data["color"]
         ):
-
             ret = self._display.SetVectorPointMode(
                 id,
                 data["color"]["value"],

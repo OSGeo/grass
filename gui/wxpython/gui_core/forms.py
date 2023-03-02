@@ -1026,7 +1026,7 @@ class CmdPanel(wx.Panel):
         del is_section
 
         # 'Required' tab goes first, 'Optional' as the last one
-        for (newidx, content) in [
+        for newidx, content in [
             (0, _("Required")),
             (len(sections) - 1, _("Optional")),
         ]:
@@ -1256,7 +1256,6 @@ class CmdPanel(wx.Panel):
                         if p.get("type", "") == "integer" and not p.get(
                             "multiple", False
                         ):
-
                             # for multiple integers use textctrl instead of
                             # spinsctrl
                             try:
@@ -1303,7 +1302,6 @@ class CmdPanel(wx.Panel):
                         ]
                         txt2.Bind(wx.EVT_TEXT, self.OnSetValue)
                     else:
-
                         title_txt.SetLabel(title + ":")
                         value = self._getValue(p)
 
@@ -1374,7 +1372,6 @@ class CmdPanel(wx.Panel):
                 and p.get("gisprompt", False) is False
                 and p.get("prompt", "") != "color"
             ):
-
                 title_txt.SetLabel(title + ":")
                 p["wxId"] = []
                 if (
@@ -3249,7 +3246,6 @@ Test:
 
 
 if __name__ == "__main__":
-
     if len(sys.argv) == 1:
         sys.exit(_(USAGE_MESSAGE).format(name=sys.argv[0]))
 

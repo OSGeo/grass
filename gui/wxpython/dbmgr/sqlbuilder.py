@@ -475,7 +475,6 @@ class SQLBuilderSelect(SQLBuilder):
     """Class for building SELECT SQL statement"""
 
     def __init__(self, parent, vectmap, id=wx.ID_ANY, layer=1, evtHandler=None):
-
         self.evtHandler = evtHandler
 
         # set dialog title
@@ -634,7 +633,6 @@ class SQLBuilderUpdate(SQLBuilder):
     """Class for building UPDATE SQL statement"""
 
     def __init__(self, parent, vectmap, id=wx.ID_ANY, layer=1, column=None):
-
         self.column = column
         # set dialog title
         title = _("GRASS SQL Builder (%(type)s) - <%(map)s>") % {
@@ -868,7 +866,6 @@ class SQLBuilderUpdate(SQLBuilder):
         self.text_sql.SetInsertionPoint(curspos)
 
     def _initSqlFunctions(self):
-
         self.sqlFuncs = {}
         # TODO add functions for other drivers
         self.sqlFuncs["sqlite"] = {
@@ -888,7 +885,6 @@ class SQLBuilderWhere(SQLBuilder):
     """Class for building SELECT SQL WHERE statement"""
 
     def __init__(self, parent, vectmap, id=wx.ID_ANY, layer=1):
-
         title = _("GRASS SQL Builder (%(type)s) - <%(map)s>") % {
             "type": "WHERE",
             "map": vectmap,

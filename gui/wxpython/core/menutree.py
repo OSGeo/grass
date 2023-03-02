@@ -64,7 +64,6 @@ class MenuTreeModelBuilder:
     # TODO: message_handler=GError is just for backwards compatibility
     # message_handler=GError should be replaced by None
     def __init__(self, filename, expandAddons=True, message_handler=GError):
-
         self.menustyle = UserSettings.Get(
             group="appearance", key="menustyle", subkey="selection"
         )
@@ -245,7 +244,6 @@ def printCommands(node, fh, itemSep, menuSep):
 
 
 if __name__ == "__main__":
-
     action = "strings"
     menu = "manager"
 

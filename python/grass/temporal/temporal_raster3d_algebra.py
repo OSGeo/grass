@@ -38,7 +38,6 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
         dry_run=False,
         nprocs=1,
     ):
-
         TemporalRasterBaseAlgebraParser.__init__(
             self,
             pid=pid,

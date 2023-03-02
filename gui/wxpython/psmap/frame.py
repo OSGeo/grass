@@ -1174,7 +1174,6 @@ class PsMapFrame(wx.Frame):
                 self.canvas.RedrawSelectBox(id)
 
             if itype == "text":
-
                 if self.instruction[id]["rotate"]:
                     rot = float(self.instruction[id]["rotate"])
                 else:
@@ -1223,7 +1222,6 @@ class PsMapFrame(wx.Frame):
                 self.canvas.RedrawSelectBox(id)
 
             if itype in ("map", "vector", "raster", "labels"):
-
                 if itype == "raster":  # set resolution
                     try:
                         info = grass.raster_info(self.instruction[id]["raster"])
@@ -1782,7 +1780,6 @@ class PsMapBufferedWindow(wx.Window):
 
                 if self.instruction[mapId]["scaleType"] in (0, 1, 2):
                     if self.instruction[mapId]["scaleType"] == 0:
-
                         scale, foo, rect = AutoAdjust(
                             self,
                             scaleType=0,
@@ -1852,7 +1849,6 @@ class PsMapBufferedWindow(wx.Window):
         # recalculate the position of objects after dragging
         if self.mouse["use"] in ("pointer", "resize") and self.dragId != -1:
             if self.mouse["begin"] != event.GetPosition():  # for double click
-
                 self.RecalculatePosition(ids=[self.dragId])
                 if self.instruction[self.dragId].type in self.openDialogs:
                     self.openDialogs[self.instruction[self.dragId].type].updateDialog()

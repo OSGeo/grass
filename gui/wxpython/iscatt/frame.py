@@ -47,7 +47,6 @@ except ImportError:
 
 class IClassIScattPanel(wx.Panel, ManageBusyCursorMixin):
     def __init__(self, parent, giface, iclass_mapwin=None, id=wx.ID_ANY):
-
         # wx.SplitterWindow.__init__(self, parent = parent, id = id,
         #                           style = wx.SP_LIVE_UPDATE)
         wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY)
@@ -205,7 +204,6 @@ class MapDispIScattPanel(IClassIScattPanel):
 
 class ScatterPlotsPanel(scrolled.ScrolledPanel):
     def __init__(self, parent, scatt_mgr, id=wx.ID_ANY):
-
         scrolled.ScrolledPanel.__init__(self, parent)
         self.SetupScrolling(scroll_x=False, scroll_y=True, scrollToTop=False)
 
@@ -250,7 +248,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
             scatt.UpdateCur(busy)
 
     def CursorPlotMove(self, x, y, scatt_id):
-
         try:
             x = int(round(x))
             y = int(round(y))
@@ -272,7 +269,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         return self._mgr.GetPane(name)
 
     def ScatterPlotClosed(self, scatt_id):
-
         scatt_i = self.scatt_id_scatt_i[scatt_id]
 
         name = self._getScatterPlotName(scatt_i)
@@ -312,7 +308,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         # wx.CallAfter(self.Layout)
 
     def _doLayout(self):
-
         mainsizer = wx.BoxSizer(wx.VERTICAL)
         mainsizer.Add(self.mainPanel, proportion=1, flag=wx.EXPAND)
         self.SetSizer(mainsizer)
@@ -380,7 +375,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         return scatt
 
     def _creteCaption(self, scatt_id):
-
         transpose = self.transpose[scatt_id]
         bands = self.scatt_mgr.GetBands()
 
@@ -403,7 +397,6 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
 
 class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __init__(self, parent, cats_mgr, sel_cats_in_iscatt, id=wx.ID_ANY):
-
         ListCtrl.__init__(
             self,
             parent,
@@ -471,7 +464,6 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
         # self.SetColumnWidth(1, 100)
 
     def AddCategory(self):
-
         self.cats_mgr.addedCategory.disconnect(self.Update)
         cat_id = self.cats_mgr.AddCategory()
         self.cats_mgr.addedCategory.connect(self.Update)

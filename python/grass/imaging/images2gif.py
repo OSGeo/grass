@@ -325,7 +325,6 @@ class GifWriter:
         # Iterate over images
         prev = ims[0]
         for im in ims[1:]:
-
             # Get difference, sum over colors
             diff = np.abs(im - prev)
             if diff.ndim == 3:
@@ -428,7 +427,6 @@ class GifWriter:
         firstFrame = True
 
         for im, palette in zip(images, palettes):
-
             if firstFrame:
                 # Write header
 
@@ -797,7 +795,6 @@ class NeuQuant:
         self.a_s = {}
 
     def __init__(self, image, samplefac=10, colors=256):
-
         # Check Numpy
         if np is None:
             raise RuntimeError("Need Numpy for the NeuQuant algorithm.")

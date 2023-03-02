@@ -4,7 +4,6 @@ from grass.script.core import read_command
 
 
 class TestVNet(TestCase):
-
     network = "test_vnet"
 
     def tearDown(cls):

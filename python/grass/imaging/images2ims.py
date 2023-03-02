@@ -97,7 +97,6 @@ def _getFilenameParts(filename):
 
 
 def _getFilenameWithFormatter(filename, N):
-
     # Determine sequence number formatter
     formatter = "%04i"
     if N < 10:

@@ -1194,7 +1194,6 @@ class Map(object):
         # read values from wind file
         try:
             for key in self.wind.keys():
-
                 if key == "north":
                     grass_region += "north: %s; " % (region["n"])
                     continue

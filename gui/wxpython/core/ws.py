@@ -365,7 +365,6 @@ class GDALRasterMerger:
             )
 
     def _getCorners(self, geoTrans, size):
-
         ulx = geoTrans[0]
         uly = geoTrans[3]
         lrx = geoTrans[0] + size["cols"] * geoTrans[1]

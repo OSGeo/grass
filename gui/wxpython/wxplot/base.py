@@ -57,7 +57,6 @@ class BasePlotFrame(wx.Frame):
         rasterList=[],
         **kwargs,
     ):
-
         wx.Frame.__init__(self, parent, id=wx.ID_ANY, size=size, style=style, **kwargs)
 
         self.parent = parent  # MapFrame for a plot type

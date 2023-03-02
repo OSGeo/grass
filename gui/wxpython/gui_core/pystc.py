@@ -351,7 +351,6 @@ class PyStc(stc.StyledTextCtrl):
                 level & stc.STC_FOLDLEVELHEADERFLAG
                 and (level & stc.STC_FOLDLEVELNUMBERMASK) == stc.STC_FOLDLEVELBASE
             ):
-
                 if expanding:
                     self.SetFoldExpanded(lineNum, True)
                     lineNum = self.Expand(lineNum, True)

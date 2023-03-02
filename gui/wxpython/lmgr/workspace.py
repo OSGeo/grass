@@ -32,7 +32,6 @@ class WorkspaceManager:
     """Workspace Manager for creating, loading and saving workspaces."""
 
     def __init__(self, lmgr, giface):
-
         self.lmgr = lmgr
         self.workspaceFile = None
         self._giface = giface

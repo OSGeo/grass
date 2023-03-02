@@ -48,7 +48,6 @@ def Rasterize(polygon, rast, region, value):
 
 
 def ApplyColormap(vals, vals_mask, colmap, out_vals):
-
     c_uint8_p = POINTER(c_uint8)
 
     vals_p = vals.ctypes.data_as(c_uint8_p)
@@ -108,7 +107,6 @@ def ComputeScatts(
 
 
 def _memmapToFileNames(data):
-
     for k, v in six.iteritems(data):
         if "np_vals" in v:
             data[k]["np_vals"] = v["np_vals"].filename()
@@ -145,7 +143,6 @@ def _computeScattsProcess(
     cats_rasts,
     output_queue,
 ):
-
     _fileNamesToMemmap(scatts)
     _fileNamesToMemmap(scatt_conds)
 
@@ -213,7 +210,6 @@ def _regionToCellHead(region):
 
 
 def _stringListToCharArr(str_list):
-
     arr = c_char_p * len(str_list)
     char_arr = arr()
     for i, st in enumerate(str_list):
@@ -226,7 +222,6 @@ def _stringListToCharArr(str_list):
 
 
 def _getComputationStruct(cats, cats_rasts, cats_type, n_bands):
-
     sccats = struct_scCats()
     I_sc_init_cats(pointer(sccats), c_int(n_bands), c_int(cats_type))
 

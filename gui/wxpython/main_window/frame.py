@@ -1434,6 +1434,7 @@ class GMFrame(wx.Frame):
         :param event: to be able to serve as a handler of wx event
         :param cmd: command as a list (must start with 'cd')
         """
+
         # local functions
         def write_beginning(parameter=None, command=None):
             if parameter:
