@@ -15,6 +15,10 @@ jobs:
   pylint:
     name: Pylint ${{ matrix.pylint-version }}
 
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}-${{ matrix.pylint-version }}
+      cancel-in-progress: true
+
     # Using matrix just to get variables which are not environmental variables
     # and also to sync with other workflows which use matrix.
     strategy:

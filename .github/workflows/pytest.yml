@@ -13,6 +13,10 @@ on:
 
 jobs:
   pytest:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}-${{ matrix.os }}-${{ matrix.python-version }}
+      cancel-in-progress: true
+
     strategy:
       matrix:
         os:
