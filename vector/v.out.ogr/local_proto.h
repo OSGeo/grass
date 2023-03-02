@@ -2,10 +2,22 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpedantic"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+#endif
 #include <gdal.h>
 #include <gdal_version.h>
 #include <ogr_api.h>
 #include <cpl_string.h>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 /* switch to new GDAL API with GDAL 2.2+ */
 #if GDAL_VERSION_NUM >= 2020000

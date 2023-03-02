@@ -2,8 +2,21 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#include "cpl_string.h"
-#include "gdal.h"
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpedantic"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+#endif
+#include <cpl_string.h>
+#include <gdal.h>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
 #include "local_proto.h"
 
 int export_attr(GDALDatasetH hMEMDS, int band, const char *name,

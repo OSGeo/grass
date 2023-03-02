@@ -54,7 +54,19 @@
 #define PROJ_VERSION_MAJOR 4
 #endif
 #ifdef HAVE_OGR
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpedantic"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+#endif
 #include <ogr_srs_api.h>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 #if PROJ_VERSION_MAJOR >= 6 && GDAL_VERSION_MAJOR < 3
 #error "PROJ 6+ requires GDAL 3+"
 #endif

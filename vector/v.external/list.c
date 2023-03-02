@@ -7,11 +7,25 @@
 #include <grass/glocale.h>
 
 #ifdef HAVE_OGR
-#include "ogr_api.h"
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpedantic"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
 #endif
+#include <ogr_api.h>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+#endif /* HAVE_OGR */
+
 #ifdef HAVE_POSTGRES
 #include <libpq-fe.h>
-#endif
+#endif /* HAVE_POSTGRES */
+
 #include "local_proto.h"
 
 static int cmp(const void *, const void *);

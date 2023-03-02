@@ -1,9 +1,21 @@
 #ifndef V_EXTERNAL_LOCAL_PROTO_H
 #define V_EXTERNAL_LOCAL_PROTO_H
 
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpedantic"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+#endif
 #include <gdal.h>
 #include <gdal_version.h>
 #include <ogr_api.h>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 /* define type of input datasource
  * as of GDAL 2.2, all functions having as argument a GDAL/OGR dataset

@@ -24,8 +24,20 @@
 #include <grass/glocale.h>
 
 #ifdef HAVE_OGR
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpedantic"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+#endif
 #include <ogr_api.h>
 #include <cpl_string.h>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 static dbDriver *create_table(OGRLayerH, const struct field_info *);
 static int create_ogr_layer(struct Map_info *, int);

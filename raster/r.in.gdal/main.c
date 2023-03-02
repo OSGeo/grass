@@ -29,8 +29,20 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpedantic"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+#endif
 #include <gdal.h>
 #include <cpl_conv.h>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
                       int create_only, int override, int check_only);

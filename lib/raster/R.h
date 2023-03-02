@@ -1,7 +1,19 @@
 #include <grass/config.h>
 #include <grass/gis.h>
 #ifdef HAVE_GDAL
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpedantic"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+#endif
 #include <gdal.h>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 #endif
 
 #define XDR_FLOAT_NBYTES  4

@@ -55,7 +55,19 @@ static void build_pg(struct Map_info *, int);
 #endif
 
 #ifdef HAVE_OGR
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpedantic"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+#endif
 #include <ogr_api.h>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 static int add_geometry_ogr(struct Plus_head *, struct Format_info_ogr *,
                             OGRGeometryH, int, int, struct geom_parts *);

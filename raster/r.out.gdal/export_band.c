@@ -17,9 +17,22 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpedantic"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+#endif
 #include <gdal.h>
 #include <cpl_string.h>
 #include <cpl_port.h>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
 #include "local_proto.h"
 
 int exact_range_check(double, double, GDALDataType, const char *);
