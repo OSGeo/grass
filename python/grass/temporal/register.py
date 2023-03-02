@@ -31,6 +31,44 @@ from .datetime_math import (
 ###############################################################################
 
 
+def build_abstract_map_dataset(map_item, element):
+    """Build AbstractMapDataset from map item and element type.
+
+    :param map_item: The id of the map to build an abstract dataset for.
+                     Can be of the form: mapname, mapname@mapsetname, or
+                     mapname:layer / mapname:layer@mapsetname for vector
+                     maps
+    :param element: The mapset element of the maps: cell, grid3d or vector
+    :return: ID String build with the AbstractMapDataset class
+
+    .. code-block:: python
+
+        >>> import grass.temporal as tgis
+        >>> tgis.register.build_abstract_map_dataset("vectormap:1@PERMANENT", "vector")
+        'vectormap:1@PERMANENT'
+        >>> tgis.register.build_abstract_map_dataset("rastermap@PERMANENT", "cell")
+        'rastermap@PERMANENT'
+        >>> tgis.register.build_abstract_map_dataset("raster3dmap@PERMANENT", "grid3d")
+        'raster3dmap@PERMANENT'
+
+    """
+    map_name, map_mapset = (
+        map_item.split("@")[0:2] if "@" in map_item else (map_item, None)
+    )
+    map_name, map_layer = map_name.split(":") if ":" in map_name else (map_name, None)
+    if not map_mapset:
+        result = gscript.find_file(element=element, name=map_name)
+        if result["mapset"]:
+            map_mapset = result["mapset"]
+        else:
+            gscript.fatal(
+                _("{type} map <{map_name}> not found on search path").format(
+                    type=type, map_name=map_name
+                )
+            )
+    return AbstractMapDataset.build_id(map_name, map_mapset, map_layer)
+
+
 def register_maps_in_space_time_dataset(
     type,
     name,
@@ -162,24 +200,8 @@ def register_maps_in_space_time_dataset(
             maplist = maps.split(",")
 
         # Build the map list again with the ids
-        for count in range(len(maplist)):
-            row = {}
-            mapname = maplist[count]
-            if "@" not in mapname:
-                result = gscript.find_file(element=element, name=mapname)
-                if result["mapset"]:
-                    row["id"] = AbstractMapDataset.build_id(
-                        mapname, result["mapset"], None
-                    )
-                else:
-                    gscript.fatal(
-                        _("{type} map <{mapname}> not found on search path").format(
-                            type=type, mapname=mapname
-                        )
-                    )
-            else:
-                row["id"] = AbstractMapDataset.build_id(*mapname.split("@")[0:2], None)
-            maplist[count] = row
+        for idx, maplist_item in enumerate(maplist):
+            maplist[idx] = {"id": build_abstract_map_dataset(maplist_item, element)}
 
     # Read the map list from file
     if file:
@@ -223,30 +245,19 @@ def register_maps_in_space_time_dataset(
             mapname = line_list[0].strip()
             row = {}
 
-            if start_time_in_file and end_time_in_file:
+            if start_time_in_file:
                 row["start"] = line_list[1].strip()
-                row["end"] = line_list[2].strip()
 
-            if start_time_in_file and not end_time_in_file:
-                row["start"] = line_list[1].strip()
+            if end_time_in_file:
+                row["end"] = line_list[2].strip()
 
             if semantic_label_in_file:
                 idx = 3 if end_time_in_file else 2
                 # case-sensitive, the user decides on the band name
                 row["semantic_label"] = line_list[idx].strip()
 
-            if "@" not in mapname:
-                result = gscript.find_file(element=element, name=mapname)
-                if result["mapset"]:
-                    row["id"] = AbstractMapDataset.build_id(mapname, result["mapset"])
-                else:
-                    gscript.fatal(
-                        _("{type} map <{mapname}> not found on search path").format(
-                            type=type, mapname=mapname
-                        )
-                    )
-            else:
-                row["id"] = AbstractMapDataset.build_id(*mapname.split("@")[0:2])
+            row["id"] = build_abstract_map_dataset(mapname, element)
+
             maplist.append(row)
 
         if start_time_in_file is True and increment:
