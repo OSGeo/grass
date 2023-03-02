@@ -1347,7 +1347,6 @@ class TestCase(unittest.TestCase):
             )
         # TODO: use this also in assert and apply when appropriate
         if expecting_stdout and not module.outputs.stdout.strip():
-
             if module.outputs.stderr:
                 errors = " The errors are:\n" + module.outputs.stderr
             else:

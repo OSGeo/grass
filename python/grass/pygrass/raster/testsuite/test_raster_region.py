@@ -8,7 +8,6 @@ from grass.pygrass.gis.region import Region
 
 
 class RasterRowRegionTestCase(TestCase):
-
     name = "RasterRowRegionTestCase_map"
 
     @classmethod
@@ -29,7 +28,6 @@ class RasterRowRegionTestCase(TestCase):
         cls.del_temp_region()
 
     def test_resampling_1(self):
-
         region = Region()
 
         region.ewres = 4
@@ -54,7 +52,6 @@ class RasterRowRegionTestCase(TestCase):
         rast.close()
 
     def test_resampling_2(self):
-
         region = Region()
 
         region.ewres = 5
@@ -86,7 +83,6 @@ class RasterRowRegionTestCase(TestCase):
         rast.close()
 
     def test_resampling_to_numpy(self):
-
         region = Region()
         region.ewres = 0.1
         region.nsres = 0.1

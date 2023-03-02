@@ -50,7 +50,6 @@ wx.metadata
 
 
 class TestModulesMetadata(TestCase):
-
     url = "file://" + os.path.abspath("data")
 
     def test_listing(self):
@@ -62,7 +61,6 @@ class TestModulesMetadata(TestCase):
 
 
 class TestModulesFromDifferentSources(TestCase):
-
     url = "file://" + os.path.abspath("data/sample_modules")
     path = os.path.join("data", "sample_modules")
     install_prefix = "gextension_test_install_path"

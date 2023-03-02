@@ -109,7 +109,6 @@ class TestRasterUnivar(TestCase):
         cls.del_temp_region()
 
     def test_with_all_maps(self):
-
         t_rast_univar = SimpleModule(
             "t.rast.univar",
             input="A",
@@ -135,7 +134,6 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
                 self.assertLooksLike(ref_line, res_line)
 
     def test_with_subset_of_maps(self):
-
         t_rast_univar = SimpleModule(
             "t.rast.univar",
             input="A",
@@ -160,7 +158,6 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
                 self.assertLooksLike(ref_line, res_line)
 
     def test_coarser_resolution(self):
-
         t_rast_univar = SimpleModule(
             "t.rast.univar",
             input="A",
@@ -185,7 +182,6 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
                 self.assertLooksLike(ref_line, res_line)
 
     def test_subset_with_output(self):
-
         self.runModule("g.region", res=10)
         self.assertModule(
             "t.rast.univar",
@@ -213,7 +209,6 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
                 self.assertLooksLike(ref_line, res_line)
 
     def test_subset_with_output_coarse_resolution(self):
-
         self.runModule("g.region", res=10)
         self.assertModule(
             "t.rast.univar",

@@ -357,7 +357,6 @@ class ExampleMapDisplay(FrameMixin, ExampleMapPanel):
     """Map display for wrapping map panel with frame methods"""
 
     def __init__(self, parent, giface, **kwargs):
-
         # init map panel
         ExampleMapPanel.__init__(
             self,

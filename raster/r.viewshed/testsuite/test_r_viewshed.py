@@ -4,7 +4,6 @@ from grass.gunittest.gmodules import call_module
 
 
 class TestViewshed(TestCase):
-
     viewshed = "test_viewshed_from_elevation"
 
     @classmethod

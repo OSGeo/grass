@@ -105,7 +105,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         title=None,
         **kwargs,
     ):
-
         if "style" in kwargs:
             ctstyle |= kwargs["style"]
             del kwargs["style"]

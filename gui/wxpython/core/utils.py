@@ -935,7 +935,7 @@ str2rgb = {
     "yellow": (255, 255, 0),
 }
 rgb2str = {}
-for (s, r) in str2rgb.items():
+for s, r in str2rgb.items():
     rgb2str[r] = s
 # ensure that gray value has 'gray' string and not 'grey'
 rgb2str[str2rgb["gray"]] = "gray"
@@ -991,7 +991,7 @@ command2ltype = {
     "d.legend.vect": "vectleg",
 }
 ltype2command = {}
-for (cmd, ltype) in command2ltype.items():
+for cmd, ltype in command2ltype.items():
     ltype2command[ltype] = cmd
 
 

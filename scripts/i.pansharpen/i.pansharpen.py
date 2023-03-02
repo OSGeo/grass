@@ -581,7 +581,6 @@ def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
 
 
 def pca(pan, ms1, ms2, ms3, out, pid, sproc):
-
     grass.verbose(_("Using PCA/inverse PCA algorithm"))
     grass.message(_("Creating PCA images and calculating eigenvectors..."))
 

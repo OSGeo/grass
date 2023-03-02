@@ -65,7 +65,6 @@ ref3 = """azimuth,horizon_height
 
 
 class TestHorizon(TestCase):
-
     horizon = "test_horizon_from_elevation"
     horizon_output = "test_horizon_output_from_elevation"
 
