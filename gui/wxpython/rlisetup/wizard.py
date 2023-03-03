@@ -1829,7 +1829,7 @@ class VectorAreasPage(TitledPage):
         else:
             self.title.SetLabel(
                 _("Select sample area {areas_count} of {area_num}").format(
-                    areas_count=areascount + 1, area_num=self.areanum
+                    areas_count=self.areascount + 1, area_num=self.areanum
                 )
             )
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
