@@ -11,7 +11,7 @@ on:
       - releasebranch_*
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 jobs:
   formatting-check:
     name: Formatting Check

@@ -15,7 +15,7 @@ jobs:
   pytest:
     concurrency:
       group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}-${{ matrix.os }}-${{ matrix.python-version }}
-      cancel-in-progress: true
+      cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 
     strategy:
       matrix:

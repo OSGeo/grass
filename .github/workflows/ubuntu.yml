@@ -19,7 +19,7 @@ jobs:
 
     concurrency:
       group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}-${{ matrix.name }}
-      cancel-in-progress: true
+      cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 
     runs-on: ${{ matrix.os }}
     strategy:

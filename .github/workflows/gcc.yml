@@ -17,7 +17,7 @@ jobs:
 
     concurrency:
       group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}-${{ matrix.c }}-${{ matrix.cpp }}
-      cancel-in-progress: true
+      cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 
     runs-on: ubuntu-22.04
     strategy:
