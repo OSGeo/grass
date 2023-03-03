@@ -2129,22 +2129,16 @@ class DataCatalogTree(TreeView):
         self.ExpandNode(node, recursive=False)
 
     def OnCopyMapsetPath(self, event):
-        """Copy path to mapset to clipboard"""
+        """Copy path to mapset"""
         if wx.TheClipboard.Open():
             do = wx.TextDataObject()
             text = []
-            for i in range(len(self.selected_layer)):
-                text.append("%s" % (self.selected_mapset[i].path,))
-            do.SetText("\n".join(text))
+            for i in range(len(self.selected_mapset)):
+                path = os.path.join(self.selected_grassdb[i].data["name"], self.selected_location[i].data["name"], self.selected_mapset[i].data["name"])
+                text.append(path)
+            do.SetText(",".join(text))
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
-            # Added code to display a message box with the copied paths
-            paths_str = "\n".join(text)
-            wx.MessageBox(
-                f"Copied mapset paths:\n\n{paths_str}",
-                "Success",
-                wx.OK | wx.ICON_INFORMATION,
-            )
 
     def OnReloadLocation(self, event):
         """Reload all mapsets in selected location"""
