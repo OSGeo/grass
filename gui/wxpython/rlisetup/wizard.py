@@ -1734,7 +1734,6 @@ class DrawSampleUnitsPage(TitledPage):
                     num_regions=self.numregions,
                 )
             )
-
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
     def OnEnterPage(self, event):
