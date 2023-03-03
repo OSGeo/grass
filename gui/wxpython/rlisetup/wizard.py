@@ -1229,7 +1229,11 @@ class DrawRegionsPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
             self.parent.wizard.ShowPage(self.parent.summarypage)
         else:
-            self.title.SetLabel(_("Draw sample region {count} of {num_regions}").format(count=self.regioncount, num_regions=numregions))
+            self.title.SetLabel(
+                _("Draw sample region {count} of {num_regions}").format(
+                    count=self.regioncount, num_regions=numregions
+                )
+            )
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
     def OnEnterPage(self, event):
@@ -1723,7 +1727,13 @@ class DrawSampleUnitsPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
             self.parent.wizard.ShowPage(self.parent.summarypage)
         else:
-            self.title.SetLabel(_("Draw Sampling {draw_type} {count} of {num_regions}").format(draw_type=drawtype, count=self.regioncount, num_regions=self.numregions))
+            self.title.SetLabel(
+                _("Draw sampling {draw_type} {count} of {num_regions}").format(
+                    draw_type=drawtype,
+                    count=self.regioncount,
+                    num_regions=self.numregions,
+                )
+            )
 
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
@@ -1817,8 +1827,11 @@ class VectorAreasPage(TitledPage):
             self.areaNO.Enable(False)
             return True
         else:
-            areascount1 = self.areascount + 1
-            self.title.SetLabel(_("Select sample area {areas_count} of {area_num}").format(areas_count=areascount1, area_num=self.areanum))
+            self.title.SetLabel(
+                _("Select sample area {areas_count} of {area_num}").format(
+                    areas_count=areascount + 1, area_num=self.areanum
+                )
+            )
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
             return False
 
