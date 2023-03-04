@@ -2134,7 +2134,11 @@ class DataCatalogTree(TreeView):
             do = wx.TextDataObject()
             text = []
             for i in range(len(self.selected_mapset)):
-                path = os.path.join(self.selected_grassdb[i].data["name"], self.selected_location[i].data["name"], self.selected_mapset[i].data["name"])
+                path = os.path.join(
+                    self.selected_grassdb[i].data["name"],
+                    self.selected_location[i].data["name"],
+                    self.selected_mapset[i].data["name"],
+                )
                 text.append(path)
             do.SetText(",".join(text))
             wx.TheClipboard.SetData(do)
@@ -2415,6 +2419,10 @@ class DataCatalogTree(TreeView):
         self.Bind(wx.EVT_MENU, self.OnDeleteMapset, item)
         if self._restricted:
             item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy paths to mapset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
 
         self.PopupMenu(menu)
         menu.Destroy()
