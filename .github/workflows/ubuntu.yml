@@ -17,6 +17,10 @@ jobs:
   build-and-test:
     name: ${{ matrix.name }} tests
 
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}-${{ matrix.name }}
+      cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
