@@ -280,14 +280,18 @@ class TestTRastAlgebra(TestCase):
         # Check expressions
         ref_str = "...".join(
             [
-                "r_2001_01_01=if(a1@...>= 3, 1, 0)",
-                "r_2001_01_02=if(a2@...>= 3, 2, 0)",
-                "r_2001_01_03=if(a3@...>= 3, 3, 0)",
-                "r_2001_01_04=if(a4@...>= 3, 4, 0)",
+                "r_2001_01_01=if(a1@...>=3,1,0)",
+                "r_2001_01_02=if(a2@...>=3,2,0)",
+                "r_2001_01_03=if(a3@...>=3,3,0)",
+                "r_2001_01_04=if(a4@...>=3,4,0)",
             ]
         )
         ref_str = f"...{ref_str}..."
-        self.assertLooksLike(str(print_module_run.outputs.stdout), ref_str)
+        print(str(print_module_run.outputs.stdout.replace("\n", "").replace(" ", "")))
+        self.assertLooksLike(
+            str(print_module_run.outputs.stdout.replace("\n", "").replace(" ", "")),
+            ref_str,
+        )
 
     def test_simple_arithmetic_time_function_results(self):
         """Simple arithmetic to test the results of a time function"""
