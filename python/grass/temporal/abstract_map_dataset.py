@@ -11,6 +11,7 @@ for details.
 """
 from __future__ import print_function
 
+import grass.script as gs
 from grass.exceptions import ImplementationError
 from datetime import datetime
 from abc import ABCMeta, abstractmethod
@@ -165,16 +166,24 @@ class AbstractMapDataset(AbstractDataset):
         return self.base.get_map_id()
 
     @staticmethod
-    def build_id(name, mapset, layer=None):
+    def build_id(name, mapset, layer=None, check_mapset_element=None):
         """Convenient method to build the unique identifier
 
         Existing layer and mapset definitions in the name
         string will be reused
 
+        If check_mapset_element is given, but no mapset, the function will
+        try to get the correct mapset by looking for an element of the
+        given element type with the given name. If the combination is
+        not found on the current search path, it will fail and throw an error.
+
         :param name: The name of the map
         :param mapset: The mapset in which the map is located
         :param layer: The layer of the vector map, use None in case no
                       layer exists
+        :param check_mapset_element: A mapset element type to be passed
+                                     to g.findfile, e.g. "cell", "vector"
+                                     "raster3d"
 
         :return: the id of the map as "name(:layer)@mapset" while layer is
                  optional
@@ -182,16 +191,27 @@ class AbstractMapDataset(AbstractDataset):
 
         # Check if the name includes any mapset
         if name.find("@") >= 0:
-            name, mapset = name.split("@")
+            name, mapset = name.split("@")[0:2]
 
         # Check for layer number in map name
         if name.find(":") >= 0:
-            name, layer = name.split(":")
+            name, layer = name.split(":")[0:2]
+
+        if check_mapset_element and not mapset:
+            result = gs.find_file(element=check_mapset_element, name=name)
+            if result["mapset"]:
+                mapset = result["mapset"]
+            else:
+                gs.fatal(
+                    _("{type} map <{map_name}> not found on search path").format(
+                        type=check_mapset_element, map_name=name
+                    )
+                )
 
         if layer is not None:
-            return "%s:%s@%s" % (name, layer, mapset)
+            return f"{name}:{layer}@{mapset}"
         else:
-            return "%s@%s" % (name, mapset)
+            return f"{name}@{mapset}"
 
     def get_layer(self):
         """Return the layer of the map
