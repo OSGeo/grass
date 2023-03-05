@@ -95,7 +95,6 @@ class TestRasterUnivar(TestCase):
         cls.del_temp_region()
 
     def test_register_metadata_from_file(self):
-
         register_module = SimpleModule(
             "t.register",
             input="precip_abs1",

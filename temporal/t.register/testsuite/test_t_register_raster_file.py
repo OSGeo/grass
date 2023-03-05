@@ -79,7 +79,6 @@ class TestRasterUnivar(TestCase):
         cls.del_temp_region()
 
     def test_with_file_and_increment(self):
-
         tmp_file = gs.tempfile()
         with open(tmp_file, "w") as register_file:
             register_file.write("prec_1\nprec_2\nprec_3\nprec_4\nprec_5\nprec_6")
@@ -123,7 +122,6 @@ class TestRasterUnivar(TestCase):
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_with_file_and_no_increment(self):
-
         tmp_file = gs.tempfile()
         with open(tmp_file, "w") as register_file:
             register_file.write("prec_1\nprec_2\nprec_3\nprec_4\nprec_5\nprec_6")
@@ -166,7 +164,6 @@ class TestRasterUnivar(TestCase):
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_with_file_increment_and_intervall(self):
-
         tmp_file = gs.tempfile()
         with open(tmp_file, "w") as register_file:
             register_file.write("prec_1\nprec_2\nprec_3\nprec_4\nprec_5\nprec_6")
@@ -212,7 +209,6 @@ class TestRasterUnivar(TestCase):
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_with_start_in_file(self):
-
         tmp_file = gs.tempfile()
         with open(tmp_file, "w") as register_file:
             register_file.write(
@@ -265,7 +261,6 @@ class TestRasterUnivar(TestCase):
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_with_start_in_file_and_increment(self):
-
         tmp_file = gs.tempfile()
         with open(tmp_file, "w") as register_file:
             register_file.write(
@@ -295,7 +290,6 @@ class TestRasterUnivar(TestCase):
         # print(gs.read_command("t.rast.list", input="precip_abs8"))
 
     def test_with_start_and_end_in_file_and_interval(self):
-
         tmp_file = gs.tempfile()
         with open(tmp_file, "w") as register_file:
             register_file.write(
@@ -325,7 +319,6 @@ class TestRasterUnivar(TestCase):
         # print(gs.read_command("t.rast.list", input="precip_abs8"))
 
     def test_with_mapset_and_semantic_label(self):
-
         mapset = gs.gisenv()["MAPSET"]
         tmp_file = gs.tempfile()
         with open(tmp_file, "w") as register_file:

@@ -85,7 +85,6 @@ class TestRasterUnivar(TestCase):
         cls.del_temp_region()
 
     def test_with_second_increment_and_intervall(self):
-
         register_module = SimpleModule(
             "t.register",
             flags="i",
@@ -126,7 +125,6 @@ class TestRasterUnivar(TestCase):
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_with_minutes_seconds_increment_and_intervall(self):
-
         register_module = SimpleModule(
             "t.register",
             flags="i",
@@ -167,7 +165,6 @@ class TestRasterUnivar(TestCase):
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_with_hours_increment_and_intervall(self):
-
         register_module = SimpleModule(
             "t.register",
             flags="i",
@@ -209,7 +206,6 @@ class TestRasterUnivar(TestCase):
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_with_days_increment_and_no_intervall(self):
-
         register_module = SimpleModule(
             "t.register",
             input="precip_abs4",
@@ -249,7 +245,6 @@ class TestRasterUnivar(TestCase):
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_with_weeks_increment_and_no_intervall(self):
-
         register_module = SimpleModule(
             "t.register",
             input="precip_abs5",
@@ -289,7 +284,6 @@ class TestRasterUnivar(TestCase):
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_with_months_increment_and_no_intervall(self):
-
         register_module = SimpleModule(
             "t.register",
             input="precip_abs6",
@@ -329,7 +323,6 @@ class TestRasterUnivar(TestCase):
         self.assertLooksLike(str(t_rast_list.outputs.stdout), ref_str)
 
     def test_re_registering(self):
-
         # t.register  input=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="20 years, 3 months, 1 days, 4 hours"
         # t.register  input=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="99 years, 9 months, 9 days, 9 hours"
         # t.register  -i input=precip_abs7 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="99 years, 9 months, 9 days, 9 hours"

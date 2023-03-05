@@ -101,7 +101,6 @@ class TestRasterUnivar(TestCase):
         cls.del_temp_region()
 
     def test_with_different_local(self):
-
         register_module = SimpleModule(
             "t.register",
             flags="i",
