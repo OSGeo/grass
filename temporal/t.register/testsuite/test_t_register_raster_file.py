@@ -359,6 +359,8 @@ class TestRasterUnivar(TestCase):
         self.assertEqual(end, datetime(2002, 7, 1))
         self.assertEqual(strds.check_temporal_topology(), True)
         self.assertEqual(strds.get_granularity(), "3 months")
+        self.assertEqual(strds.metadata.get_number_of_semantic_labels(), 1)
+        self.assertEqual(strds.metadata.get_semantic_labels(), "semantic_label")
 
         print(gs.read_command("t.info", type="strds", input="precip_abs8"))
         t_rast_list = SimpleModule("t.rast.list", input="precip_abs8")
