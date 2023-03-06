@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 #ifdef HAVE_OGR
     dontprettify->description = _("Print 'flat' output with no linebreaks "
                                   "(applies to WKT and PROJ.4 output)");
-#elif
+#else
     dontprettify->description =
         _("Print 'flat' output with no linebreaks (applies to PROJ.4 output)");
 #endif
@@ -317,7 +317,7 @@ int main(int argc, char *argv[])
                         " or -%c flags may be specified"),
                       printinfo->key, shellinfo->key, datuminfo->key,
                       printproj4->key, printwkt->key, create->key);
-#elif
+#else
         G_fatal_error(_("Only one of -%c, -%c, -%c, -%c"
                         " or -%c flags may be specified"),
                       printinfo->key, shellinfo->key, datuminfo->key,
