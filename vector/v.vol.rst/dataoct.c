@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       v.vol.rst: program for 3D (volume) interpolation and geometry
  *               analysis from scattered point data using regularized spline
@@ -13,7 +12,7 @@
  *
  * PURPOSE:      v.vol.rst interpolates the values to 3-dimensional grid from
  *               point data (climatic stations, drill holes etc.) given in a
- *               3D vector point input. Output grid3 file is elev. 
+ *               3D vector point input. Output grid3 file is elev.
  *               Regularized spline with tension is used for the
  *               interpolation.
  *
@@ -34,7 +33,6 @@
 #include "externs.h"
 #include "user.h"
 
-
 struct quadruple *point_new(double x, double y, double z, double w, double sm)
 {
     struct quadruple *point;
@@ -51,9 +49,6 @@ struct quadruple *point_new(double x, double y, double z, double w, double sm)
 
     return point;
 }
-
-
-
 
 struct octdata *data_new(double x_orig, double y_orig, double z_orig,
                          int n_rows, int n_cols, int n_levs, int n_points)
@@ -84,9 +79,6 @@ struct octdata *data_new(double x_orig, double y_orig, double z_orig,
 
     return data;
 }
-
-
-
 
 int oct_compare(struct quadruple *point, struct octdata *data)
 /* returns the quadrant the point should be inserted in */
@@ -144,7 +136,6 @@ int oct_compare(struct quadruple *point, struct octdata *data)
         return 0;
 }
 
-
 int oct_add_data(struct quadruple *point, struct octdata *data)
 {
     int n, i, cond;
@@ -172,7 +163,6 @@ int oct_add_data(struct quadruple *point, struct octdata *data)
     return cond;
 }
 
-
 int oct_division_check(struct octdata *data)
 {
     if (data->points == NULL)
@@ -182,7 +172,6 @@ int oct_division_check(struct octdata *data)
     else
         return 1;
 }
-
 
 struct octdata **oct_divide_data(struct octdata *data)
 {
@@ -251,11 +240,6 @@ struct octdata **oct_divide_data(struct octdata *data)
     return datas;
 }
 
-
-
-
-
-
 int oct_intersect(double xmin, double xmax, double ymin, double ymax,
                   double zmin, double zmax, struct octdata *data)
 {
@@ -271,7 +255,8 @@ int oct_intersect(double xmin, double xmax, double ymin, double ymax,
     ix = ((xmin >= data->x_orig) &&
           (xmin <= data->x_orig + data->n_cols * ew_res));
 
-    /*printf("\n%f %f %f",zmin,data->z_orig,data->z_orig+data->n_levs*tb_res); */
+    /*printf("\n%f %f %f",zmin,data->z_orig,data->z_orig+data->n_levs*tb_res);
+     */
     izor = (iz || iz0);
     iyzoror = ((iy0 && izor) || (iy && izor));
 
@@ -282,14 +267,9 @@ int oct_intersect(double xmin, double xmax, double ymin, double ymax,
         return 0;
 }
 
-
-
-
-
-
-int oct_get_points(struct quadruple *points, struct octdata *data,
-                   double xmin, double xmax, double ymin, double ymax,
-                   double zmin, double zmax, int MAX)
+int oct_get_points(struct quadruple *points, struct octdata *data, double xmin,
+                   double xmax, double ymin, double ymax, double zmin,
+                   double zmax, int MAX)
 {
     int i;
     int n = 0;
@@ -301,9 +281,8 @@ int oct_get_points(struct quadruple *points, struct octdata *data,
         point = data->points + i;
         if (l >= MAX)
             return MAX + 1;
-        if ((point->x >= xmin) && (point->x <= xmax)
-            && (point->y >= ymin) && (point->y <= ymax)
-            && (point->z >= zmin) && (point->z <= zmax)) {
+        if ((point->x >= xmin) && (point->x <= xmax) && (point->y >= ymin) &&
+            (point->y <= ymax) && (point->z >= zmin) && (point->z <= zmax)) {
             points[l].x = point->x;
             points[l].y = point->y;
             points[l].z = point->z;

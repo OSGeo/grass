@@ -1,13 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       d.font
  * AUTHOR(S):    James Westervelt (CERL) (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Huidae Cho <grass4u gmail.com>, 
- *               Eric G. Miller <egm2 jps.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Eric G. Miller <egm2 jps.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      user selection of font for graphics monitor text
  * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
@@ -17,6 +16,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,7 +31,7 @@ static int max_fonts;
 static int num_fonts;
 
 static void read_freetype_fonts(int verbose);
-static void print_font_list(FILE * fp, int verbose);
+static void print_font_list(FILE *fp, int verbose);
 
 int main(int argc, char **argv)
 {
@@ -44,9 +44,8 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("display"));
     G_add_keyword(_("settings"));
-    module->description =
-        _("Selects the font in which text will be displayed "
-          "on the user's graphics monitor.");
+    module->description = _("Selects the font in which text will be displayed "
+                            "on the user's graphics monitor.");
 
     opt1 = G_define_option();
     opt1->key = "font";
@@ -83,32 +82,32 @@ int main(int argc, char **argv)
     /* load the font */
     D_open_driver();
 
-    if (flag1->answer) {        /* List font names */
+    if (flag1->answer) { /* List font names */
         print_font_list(stdout, 0);
         D_close_driver();
         exit(EXIT_SUCCESS);
     }
 
-    if (flag2->answer) {        /* List fonts verbosely */
+    if (flag2->answer) { /* List fonts verbosely */
         print_font_list(stdout, 1);
         D_close_driver();
         exit(EXIT_SUCCESS);
     }
 
-    if (opt2->answer) {         /* Full path to freetype font */
+    if (opt2->answer) { /* Full path to freetype font */
         struct stat info;
 
         /* Check a valid filename has been supplied */
         if (stat(opt2->answer, &info) != 0)
-            G_fatal_error(_("Unable to access font path %s: %s"),
-                          opt2->answer, strerror(errno));
+            G_fatal_error(_("Unable to access font path %s: %s"), opt2->answer,
+                          strerror(errno));
 
         if (!S_ISREG(info.st_mode))
             G_fatal_error(_("Font path %s is not a file"), opt2->answer);
         else
             D_font(opt2->answer);
     }
-    else if (opt1->answer) {    /* Font name from fontcap */
+    else if (opt1->answer) { /* Font name from fontcap */
         int i = 0;
 
         /* Check the fontname given is valid */
@@ -121,11 +120,12 @@ int main(int argc, char **argv)
             i++;
         }
         if (i >= num_fonts)
-            G_fatal_error(_("Font name <%s> is invalid. Check font name or consider running 'g.mkfontcap'"),
+            G_fatal_error(_("Font name <%s> is invalid. Check font name or "
+                            "consider running 'g.mkfontcap'"),
                           opt1->answer);
     }
 
-    if (opt3->answer)           /* Set character encoding */
+    if (opt3->answer) /* Set character encoding */
         D_encoding(opt3->answer);
 
     /* add this command to the list */
@@ -154,7 +154,7 @@ static void read_freetype_fonts(int verbose)
         fonts[num_fonts++] = list[i];
 }
 
-static void print_font_list(FILE * fp, int verbose)
+static void print_font_list(FILE *fp, int verbose)
 {
     int i;
 

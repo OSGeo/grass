@@ -1,3 +1,4 @@
+---
 name: CentOS
 
 on:
@@ -10,11 +11,15 @@ on:
       - main
       - releasebranch_*
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+
 jobs:
   build:
     name: ${{ matrix.os }} build
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     container: ${{ matrix.os }}
     strategy:
       matrix:
@@ -23,7 +28,7 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Get dependencies
         run: |
           yum install -y epel-release

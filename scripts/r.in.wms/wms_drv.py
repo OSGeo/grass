@@ -99,7 +99,6 @@ class WMSDrv(WMSBase):
 
         # iterate through all tiles and download them
         while True:
-
             if fetch_try == 0:
                 # get url for request the tile and information for placing the tile into
                 # raster with other tiles
@@ -443,7 +442,6 @@ class BaseRequestMgr:
     def _isGeoProj(self, proj):
         """!Is it geographic projection?"""
         if proj.find("+proj=latlong") != -1 or proj.find("+proj=longlat") != -1:
-
             return True
         return False
 
@@ -698,7 +696,6 @@ class WMTSRequestMgr(BaseRequestMgr):
         return suitable_mat_sets  # [[TileMatrixSet, TileMatrixSetLink], ....]
 
     def _getMatSetSrs(self, mat_set):
-
         return mat_set.find(self.xml_ns.NsOws("SupportedCRS")).text
 
     def _findTileMats(self, tile_mats, region, bbox):
@@ -1015,7 +1012,6 @@ class OnEarthRequestMgr(BaseRequestMgr):
             if (best_diff < tile_diff and tile_diff < 0) or (
                 best_diff > tile_diff and best_diff > 0
             ):
-
                 best_res = t_res[comp_res]
                 best_patt = pattern
 

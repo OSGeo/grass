@@ -32,18 +32,10 @@ int Compute_ortho_equation(struct Ortho_Image_Group *group)
         I_new_con_point(&temp_points, e0, n0, z1, e2, n2, z2, status);
     }
 
-
-    group->con_equation_stat = I_compute_ortho_equations(&temp_points,
-                                                         &group->camera_ref,
-                                                         &group->camera_exp,
-                                                         &group->XC,
-                                                         &group->YC,
-                                                         &group->ZC,
-                                                         &group->omega,
-                                                         &group->phi,
-                                                         &group->kappa,
-                                                         &group->M,
-                                                         &group->MI);
+    group->con_equation_stat = I_compute_ortho_equations(
+        &temp_points, &group->camera_ref, &group->camera_exp, &group->XC,
+        &group->YC, &group->ZC, &group->omega, &group->phi, &group->kappa,
+        &group->M, &group->MI);
 
     return 0;
 }
@@ -51,10 +43,8 @@ int Compute_ortho_equation(struct Ortho_Image_Group *group)
 /* compute photo to image equation */
 int Compute_ref_equation(struct Ortho_Image_Group *group)
 {
-    group->ref_equation_stat = I_compute_ref_equations(&group->photo_points,
-                                                       group->E12, group->N12,
-                                                       group->E21,
-                                                       group->N21);
+    group->ref_equation_stat = I_compute_ref_equations(
+        &group->photo_points, group->E12, group->N12, group->E21, group->N21);
 
     return 0;
 }

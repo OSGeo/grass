@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.describe
@@ -21,9 +20,8 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
-int describe(const char *name, int compact, char *no_data_str,
-             int range, int windowed, int nsteps, int as_int, int skip_nulls)
+int describe(const char *name, int compact, char *no_data_str, int range,
+             int windowed, int nsteps, int as_int, int skip_nulls)
 {
     int fd;
     struct Cell_stats statf;
@@ -52,13 +50,13 @@ int describe(const char *name, int compact, char *no_data_str,
 
     map_type = Rast_get_map_type(fd);
     if (as_int)
-        map_type = CELL_TYPE;   /* read as int */
+        map_type = CELL_TYPE; /* read as int */
 
     /* allocate the cell buffer */
     buf = Rast_allocate_c_buf();
 
     if (map_type != CELL_TYPE && range)
-        /* this will make it report fp range */
+    /* this will make it report fp range */
     {
         range = 0;
         nsteps = 1;
@@ -94,7 +92,7 @@ int describe(const char *name, int compact, char *no_data_str,
     G_verbose_message(_("Reading <%s> ..."), name);
     for (row = 0; row < nrows; row++) {
         G_percent(row, nrows, 2);
-        (*get_row) (fd, b = buf, row);
+        (*get_row)(fd, b = buf, row);
         if (range) {
             for (col = ncols; col-- > 0; b++) {
                 if (Rast_is_c_null_value(b))
@@ -131,15 +129,15 @@ int describe(const char *name, int compact, char *no_data_str,
             compact_range_list(negmin, negmax, zero, posmin, posmax, null,
                                no_data_str, skip_nulls);
         else
-            range_list(negmin, negmax, zero, posmin, posmax, null,
-                       no_data_str, skip_nulls);
+            range_list(negmin, negmax, zero, posmin, posmax, null, no_data_str,
+                       skip_nulls);
     }
     else {
         Rast_rewind_cell_stats(&statf);
 
         if (compact)
-            compact_list(&statf, dmin, dmax, no_data_str, skip_nulls,
-                         map_type, nsteps);
+            compact_list(&statf, dmin, dmax, no_data_str, skip_nulls, map_type,
+                         nsteps);
         else
             long_list(&statf, dmin, dmax, no_data_str, skip_nulls, map_type,
                       nsteps);

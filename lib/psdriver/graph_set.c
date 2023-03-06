@@ -7,7 +7,7 @@
  * coordinate system used by the applications programs has the (0,0) origin
  * in the upper left-hand corner.  Hence,
  *    screen_left < screen_right
- *    screen_top  < screen_bottom 
+ *    screen_top  < screen_bottom
  */
 
 #include <string.h>
@@ -28,8 +28,7 @@ struct ps_state ps;
 static double width, height;
 static int landscape;
 
-struct paper
-{
+struct paper {
     const char *name;
     double width, height;
     double left, right, bot, top;
@@ -45,8 +44,7 @@ static const struct paper papers[] = {
     {"us-legal", 8.5, 14.0, 1.0, 1.0, 1.0, 1.0},
     {"us-letter", 8.5, 11.0, 1.0, 1.0, 1.0, 1.0},
     {"us-tabloid", 11.0, 17.0, 1.0, 1.0, 1.0, 1.0},
-    {NULL, 0, 0, 0, 0, 0, 0}
-};
+    {NULL, 0, 0, 0, 0, 0, 0}};
 
 static void write_prolog(void)
 {
@@ -74,9 +72,8 @@ static void write_prolog(void)
     output("%%%%Title: %s\n", ps.outfile);
     output("%%%%For: %s\n", G_whoami());
     output("%%%%Orientation: %s\n", landscape ? "Landscape" : "Portrait");
-    output("%%%%BoundingBox: %d %d %d %d\n",
-           (int)floor(ps.left), (int)floor(ps.bot),
-           (int)ceil(ps.right), (int)ceil(ps.top));
+    output("%%%%BoundingBox: %d %d %d %d\n", (int)floor(ps.left),
+           (int)floor(ps.bot), (int)ceil(ps.right), (int)ceil(ps.top));
     output("%%%%CreationDate: %s\n", date_str);
     output("%%%%EndComments\n");
 

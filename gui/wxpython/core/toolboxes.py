@@ -185,7 +185,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
         if generateNew:
             try:
                 # The case when user does not have custom root
-                # file but has toolboxes requieres regeneration.
+                # file but has toolboxes requires regeneration.
                 # Unfortunately, this is the case can be often: defined
                 # toolboxes but undefined module tree file.
                 _debug(2, "toolboxes.getMenudataFile: creating a tree")

@@ -1687,7 +1687,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     double longitTime = 0.;
     double locTimeOffset;
     double latitude, longitude;
-    double coslat;
+    double coslat = 0.0;
     bool shouldBeBestAM, isBestAM;
 
     struct SunGeometryConstDay sunGeom;
@@ -2127,7 +2127,7 @@ double com_declin(int no_of_day)
 
 int test(void)
 {
-    /* not finshed yet */
+    /* not finished yet */
     int dej;
 
     G_message("\n ddd: %f", declin);

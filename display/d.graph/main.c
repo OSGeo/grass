@@ -1,18 +1,17 @@
-
 /****************************************************************************
  *
  * MODULE:       d.graph
  * AUTHOR(S):    Jim Westervelt (CERL) (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Cedric Shock <cedricgrass shockfamily.net>, 
- *               Huidae Cho <grass4u gmail.com>, 
- *               Eric G. Miller <egm2 jps.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Cedric Shock <cedricgrass shockfamily.net>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Eric G. Miller <egm2 jps.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
- * PURPOSE:      Draw graphics in a graphics window. Graph lines come from 
+ * PURPOSE:      Draw graphics in a graphics window. Graph lines come from
  *               stdin unless input specified.
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *
@@ -24,7 +23,7 @@
 /*
  *   d.graph
  *
- *   
+ *
  *
  */
 
@@ -107,7 +106,7 @@ int main(int argc, char **argv)
             D_RGB_color(R, G, B);
             set_last_color(R, G, B, RGBA_COLOR_OPAQUE);
         }
-        else                    /* (color==2) is "none" */
+        else /* (color==2) is "none" */
             set_last_color(0, 0, 0, RGBA_COLOR_NONE);
     }
 

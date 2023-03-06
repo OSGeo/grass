@@ -2,7 +2,6 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-
 int sg_factor(void)
 {
     int r, c;
@@ -49,9 +48,9 @@ int sg_factor(void)
 
 int len_slp_equ(double slope_length, double sin_theta, double S, int r, int c)
 {
-    double rill, s_l_exp,       /* m                            */
-      rill_ratio,               /* Beta                         */
-      LS;
+    double rill, s_l_exp, /* m                            */
+        rill_ratio,       /* Beta                         */
+        LS;
 
     rill_ratio = (sin_theta / 0.0896) / (3.0 * pow(sin_theta, 0.8) + 0.56);
     if (ril_flag) {

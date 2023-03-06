@@ -7,7 +7,7 @@
 #               Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
-# COPYRIGHT:    (C) 2007-2022 by Glynn Clements
+# COPYRIGHT:    (C) 2007-2023 by Glynn Clements
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -26,7 +26,6 @@ import locale
 import json
 import pathlib
 import subprocess
-import time
 
 from html.parser import HTMLParser
 
@@ -64,7 +63,11 @@ if grass_version != "unknown":
 
 
 def _get_encoding():
-    encoding = locale.getdefaultlocale()[1]
+    try:
+        # Python >= 3.11
+        encoding = locale.getencoding()
+    except AttributeError:
+        encoding = locale.getdefaultlocale()[1]
     if not encoding:
         encoding = "UTF-8"
     return encoding
@@ -148,18 +151,22 @@ def download_git_commit(url, response_format, *args, **kwargs):
         )
 
 
-def get_default_git_log(src_dir):
+def get_default_git_log(src_dir, datetime_format="%A %b %d %H:%M:%S %Y"):
     """Get default Git commit and commit date, when getting commit from
     local Git, local JSON file and remote GitHub REST API server wasn't
-    successfull.
+    successful.
 
     :param str src_dir: addon source dir
+    :param str datetime_format: output commit datetime format
+                                e.g. Sunday Jan 16 23:09:35 2022
 
     :return dict: dict which store last commit and commnit date
     """
     return {
         "commit": "unknown",
-        "date": time.ctime(os.path.getmtime(src_dir)),
+        "date": datetime.fromtimestamp(os.path.getmtime(src_dir)).strftime(
+            datetime_format
+        ),
     }
 
 
@@ -198,7 +205,7 @@ def get_git_commit_from_file(
 
     :return dict git_log: dict which store last commit and commnit date
     """
-    # Accessed date time if getting commit from JSON file wasn't successfull
+    # Accessed date time if getting commit from JSON file wasn't successful
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
     json_file_path = os.path.join(
@@ -230,7 +237,7 @@ def get_git_commit_from_rest_api_for_addon_repo(
 
     :return dict git_log: dict which store last commit and commnit date
     """
-    # Accessed date time if getting commit from GitHub REST API wasn't successfull
+    # Accessed date time if getting commit from GitHub REST API wasn't successful
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
     grass_addons_url = (
@@ -262,7 +269,7 @@ def format_git_commit_date_from_rest_api(
 
     :param str commit_datetime: commit datetime
     :param str datetime_format: output commit datetime format
-                                e.g. Sun Jan 16 23:09:35 2022
+                                e.g. Sunday Jan 16 23:09:35 2022
 
     :return str: output formatted commit datetime
     """
@@ -279,7 +286,7 @@ def format_git_commit_date_from_local_git(
 
     :param str commit_datetime: commit datetime
     :param str datetime_format: output commit datetime format
-                                e.g. Sun Jan 16 23:09:35 2022
+                                e.g. Sunday Jan 16 23:09:35 2022
 
     :return str: output formatted commit datetime
     """
@@ -304,7 +311,6 @@ def has_src_code_git(src_dir, is_addon):
     else:
         os.chdir(topdir)
     try:
-
         process_result = subprocess.run(
             [
                 "git",
@@ -371,12 +377,13 @@ header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
  <meta name="Author" content="GRASS Development Team">
  <meta name="description" content="${PGM}: ${PGM_DESC}">
  <link rel="stylesheet" href="grassdocs.css" type="text/css">
+ <meta http-equiv="content-language" content="en-us">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body bgcolor="white">
 <div id="container">
 
 <a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
-<hr class="header">
 """
 
 header_nopgm = """<h2>${PGM}</h2>
@@ -511,42 +518,90 @@ def escape_href(label):
     return label.replace(" ", "-").lower()
 
 
-def write_toc(data):
+def write_toc(data, hamburger_menu_toc=False):
+    """Write Table of Contents
+
+    :param tuple data: parsed data from MyHTMLParser class instance
+    :param bool hamburger_menu_toc: write hamburger menu TOC for the
+                                    mobile, tablet screen
+    """
+
     if not data:
         return
 
     fd = sys.stdout
-    fd.write('<div class="toc">\n')
-    fd.write('<h4 class="toc">Table of contents</h4>\n')
-    fd.write('<ul class="toc">\n')
+    if hamburger_menu_toc:
+        fd.write("<script>\n")
+        fd.write("// Create hamburger menu TOC HTML elements by the JavaScript\n")
+        fd.write("let temp = document.createElement('template');\n")
+        fd.write(
+            """const toc = '<ul class="toc-mobile-screen" """
+            """id="toc-mobile-screen">' + \n"""
+        )
+    else:
+        fd.write('<div class="toc">\n')
+        fd.write('<h4 class="toc">Table of contents</h4>\n')
+        fd.write('<ul class="toc">\n')
     first = True
     has_h2 = False
     in_h3 = False
     indent = 4
     for tag, href, text in data:
         if tag == "h3" and not in_h3 and has_h2:
-            fd.write('\n%s<ul class="toc">\n' % (" " * indent))
+            if hamburger_menu_toc:
+                fd.write("'<ul>' + \n")
+            else:
+                fd.write('\n%s<ul class="toc">\n' % (" " * indent))
             indent += 4
             in_h3 = True
         elif not first:
-            fd.write("</li>\n")
+            if hamburger_menu_toc:
+                fd.write("'</li>' + \n")
+            else:
+                fd.write("</li>\n")
 
         if tag == "h2":
             has_h2 = True
             if in_h3:
                 indent -= 4
-                fd.write("%s</ul></li>\n" % (" " * indent))
+                if hamburger_menu_toc:
+                    fd.write("'</ul></li>' + \n")
+                else:
+                    fd.write("%s</ul></li>\n" % (" " * indent))
                 in_h3 = False
 
         text = text.replace("\xa0", " ")
-        fd.write(
-            '%s<li class="toc"><a href="#%s" class="toc">%s</a>'
-            % (" " * indent, escape_href(text), text)
-        )
+        if hamburger_menu_toc:
+            fd.write(
+                f"""'<li><a class="toc-item" href="#{escape_href(text)}">"""
+                f"{text}</a>' + \n"
+            )
+        else:
+            fd.write(
+                '%s<li class="toc"><a href="#%s" class="toc">%s</a>'
+                % (" " * indent, escape_href(text), text)
+            )
         first = False
 
-    fd.write("</li>\n</ul>\n")
-    fd.write("</div>\n")
+    if hamburger_menu_toc:
+        fd.write(
+            """'</li>' +
+'<a class="close" href="#">' +
+'<img src="./hamburger_menu_close.svg" alt="close">' +
+'</a>' +
+'</ul>' +
+'<a class="hamburger" href="#toc-mobile-screen">' +
+'<img src="./hamburger_menu.svg" alt="menu">' +
+'</a>';
+temp.innerHTML = toc;
+const grassLogoLink = document.getElementsByTagName("img")[0];
+grassLogoLink.after(temp.content);
+</script>
+"""
+        )
+    else:
+        fd.write("</li>\n</ul>\n")
+        fd.write("</div>\n")
 
 
 def update_toc(data):
@@ -648,13 +703,20 @@ if not re.search("<html>", src_data, re.IGNORECASE):
             )
     if not re.search("<html>", tmp_data, re.IGNORECASE):
         sys.stdout.write(header_tmpl.substitute(PGM=pgm, PGM_DESC=pgm_desc))
+
     if tmp_data:
+        header_logo_img_el = '<img src="grass_logo.png" alt="GRASS logo">'
         for line in tmp_data.splitlines(True):
             # The cleanup happens on Makefile level too.
             if not re.search(
                 "</body>|</html>|</div> <!-- end container -->", line, re.IGNORECASE
             ):
-                sys.stdout.write(line)
+                if header_logo_img_el in line:
+                    sys.stdout.write(line)
+                    # create hamburger menu TOC
+                    write_toc(create_toc(src_data), hamburger_menu_toc=True)
+                else:
+                    sys.stdout.write(line)
 
 # create TOC
 write_toc(create_toc(src_data))

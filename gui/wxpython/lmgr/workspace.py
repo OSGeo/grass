@@ -32,7 +32,6 @@ class WorkspaceManager:
     """Workspace Manager for creating, loading and saving workspaces."""
 
     def __init__(self, lmgr, giface):
-
         self.lmgr = lmgr
         self.workspaceFile = None
         self._giface = giface
@@ -342,6 +341,15 @@ class WorkspaceManager:
                     self.lmgr.nvizUpdatePage(page)
                 self.lmgr.nvizUpdateSettings()
                 mapdisplay[i].toolbars["map"].combo.SetSelection(1)
+
+        #
+        # load layout
+        #
+        if UserSettings.Get(group="appearance", key="singleWindow", subkey="enabled"):
+            if gxwXml.layout["panes"]:
+                self.lmgr.GetAuiManager().LoadPerspective(gxwXml.layout["panes"])
+            if gxwXml.layout["notebook"]:
+                self.lmgr.GetAuiNotebook().LoadPerspective(gxwXml.layout["notebook"])
 
         self.workspaceFile = filename
         self.AddFileToHistory()

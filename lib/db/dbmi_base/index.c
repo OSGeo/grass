@@ -22,7 +22,7 @@
 
    \param index pointer to dbIndex to be initialized
  */
-void db_init_index(dbIndex * index)
+void db_init_index(dbIndex *index)
 {
     db_init_string(&index->indexName);
     db_init_string(&index->tableName);
@@ -36,7 +36,7 @@ void db_init_index(dbIndex * index)
 
    \param index pointer to dbIndex to be freed
  */
-void db_free_index(dbIndex * index)
+void db_free_index(dbIndex *index)
 {
     db_free_string(&index->indexName);
     db_free_string(&index->tableName);
@@ -53,7 +53,7 @@ void db_free_index(dbIndex * index)
 
    \return DB_OK
  */
-int db_alloc_index_columns(dbIndex * index, int ncols)
+int db_alloc_index_columns(dbIndex *index, int ncols)
 {
     index->columnNames = db_alloc_string_array(ncols);
     if (index->columnNames == NULL)
@@ -75,7 +75,7 @@ dbIndex *db_alloc_index_array(int count)
     dbIndex *list;
     int i;
 
-    list = (dbIndex *) db_calloc(count, sizeof(dbIndex));
+    list = (dbIndex *)db_calloc(count, sizeof(dbIndex));
     if (list) {
         for (i = 0; i < count; i++)
             db_init_index(&list[i]);
@@ -89,7 +89,7 @@ dbIndex *db_alloc_index_array(int count)
    \param list dbIndex array
    \param count number of items in the array
  */
-void db_free_index_array(dbIndex * list, int count)
+void db_free_index_array(dbIndex *list, int count)
 {
     int i;
 
@@ -109,7 +109,7 @@ void db_free_index_array(dbIndex * list, int count)
    \return DB_OK on success
    \return DB_FAILED on error
  */
-int db_set_index_name(dbIndex * index, const char *name)
+int db_set_index_name(dbIndex *index, const char *name)
 {
     return db_set_string(&index->indexName, name);
 }
@@ -121,7 +121,7 @@ int db_set_index_name(dbIndex * index, const char *name)
 
    \return string buffer with name
  */
-const char *db_get_index_name(dbIndex * index)
+const char *db_get_index_name(dbIndex *index)
 {
     return db_get_string(&index->indexName);
 }
@@ -135,7 +135,7 @@ const char *db_get_index_name(dbIndex * index)
    \return DB_OK on success
    \return DB_FAILED on error
  */
-int db_set_index_table_name(dbIndex * index, const char *name)
+int db_set_index_table_name(dbIndex *index, const char *name)
 {
     return db_set_string(&index->tableName, name);
 }
@@ -147,7 +147,7 @@ int db_set_index_table_name(dbIndex * index, const char *name)
 
    \return string buffer with name
  */
-const char *db_get_index_table_name(dbIndex * index)
+const char *db_get_index_table_name(dbIndex *index)
 {
     return db_get_string(&index->tableName);
 }
@@ -159,7 +159,7 @@ const char *db_get_index_table_name(dbIndex * index)
 
    \return number of columns
  */
-int db_get_index_number_of_columns(dbIndex * index)
+int db_get_index_number_of_columns(dbIndex *index)
 {
     return index->numColumns;
 }
@@ -174,8 +174,7 @@ int db_get_index_number_of_columns(dbIndex * index)
    \return DB_OK on success
    \return DB_FAILED on error
  */
-int db_set_index_column_name(dbIndex * index, int column_num,
-                             const char *name)
+int db_set_index_column_name(dbIndex *index, int column_num, const char *name)
 {
     if (column_num < 0 || column_num >= index->numColumns) {
         db_error(_("db_set_index_column_name(): invalid column number"));
@@ -192,7 +191,7 @@ int db_set_index_column_name(dbIndex * index, int column_num,
 
    \return string buffer with name
  */
-const char *db_get_index_column_name(dbIndex * index, int column_num)
+const char *db_get_index_column_name(dbIndex *index, int column_num)
 {
     if (column_num < 0 || column_num >= index->numColumns) {
         db_error(_("db_get_index_column_name(): invalid column number"));
@@ -210,7 +209,7 @@ const char *db_get_index_column_name(dbIndex * index, int column_num)
 
    \return 0
  */
-int db_set_index_type_unique(dbIndex * index)
+int db_set_index_type_unique(dbIndex *index)
 {
     index->unique = 1;
 
@@ -226,7 +225,7 @@ int db_set_index_type_unique(dbIndex * index)
 
    \return 0
  */
-int db_set_index_type_non_unique(dbIndex * index)
+int db_set_index_type_non_unique(dbIndex *index)
 {
     index->unique = 0;
 
@@ -241,18 +240,18 @@ int db_set_index_type_non_unique(dbIndex * index)
    \return non-zero if True
    \return zero if False
  */
-int db_test_index_type_unique(dbIndex * index)
+int db_test_index_type_unique(dbIndex *index)
 {
     return index->unique != 0;
 }
 
 /*!
-   \brief Report index 
+   \brief Report index
 
    \param fd file where to print index info
    \param index pointer to dbIndex
  */
-void db_print_index(FILE * fd, dbIndex * index)
+void db_print_index(FILE *fd, dbIndex *index)
 {
     int i, nCols;
 

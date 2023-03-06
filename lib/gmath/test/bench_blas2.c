@@ -1,19 +1,18 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:      Unit benchs for les creation
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      Unit benchs for les creation
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -25,7 +24,6 @@
 
 /* prototypes */
 static void bench_blas_level_2_double(int rows);
-
 
 /* *************************************************************** */
 /* Perfrome the blas level 2 unit benchs ************************** */
@@ -109,7 +107,6 @@ void bench_blas_level_2_double(int rows)
     printf("Computation time G_math_d_x_dyad: %g\n",
            compute_time_difference(tstart, tend));
     gettimeofday(&tstart, NULL);
-
 
     if (x)
         G_free_vector(x);

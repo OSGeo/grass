@@ -173,7 +173,6 @@ class Statistics:
             self.bands.append(band)
 
     def SetStatistics(self, stats):
-
         for st, val in six.iteritems(stats):
             setattr(self, st, val)
 

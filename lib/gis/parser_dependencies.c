@@ -1,7 +1,8 @@
 /*!
    \file lib/gis/parser_dependencies.c
 
-   \brief GIS Library - Argument parsing functions (dependencies between options)
+   \brief GIS Library - Argument parsing functions (dependencies between
+   options)
 
    (C) 2014-2015 by the GRASS Development Team
 
@@ -20,8 +21,7 @@
 
 #include "parser_local_proto.h"
 
-struct vector
-{
+struct vector {
     size_t elsize;
     size_t increment;
     size_t count;
@@ -52,14 +52,13 @@ static void vector_append(struct vector *v, const void *data)
     v->count++;
 }
 
-struct rule
-{
+struct rule {
     int type;
     int count;
     void **opts;
 };
 
-static struct vector rules = { sizeof(struct rule), 50 };
+static struct vector rules = {.elsize = sizeof(struct rule), .increment = 50};
 
 /*! \brief Set generic option rule
 
@@ -353,8 +352,7 @@ static void check_excludes(const struct rule *rule)
     if (count_present(rule, 1) > 0) {
         char *err;
 
-        G_asprintf(&err,
-                   _("Option <%s> is mutually exclusive with all of %s"),
+        G_asprintf(&err, _("Option <%s> is mutually exclusive with all of %s"),
                    get_name(rule->opts[0]), describe_rule(rule, 1, 0));
         append_error(err);
     }
@@ -481,20 +479,15 @@ int G__has_required_rule(void)
     return FALSE;
 }
 
-static const char *const rule_types[] = {
-    "exclusive",
-    "required",
-    "requires",
-    "requires-all",
-    "excludes",
-    "collective"
-};
+static const char *const rule_types[] = {"exclusive", "required",
+                                         "requires",  "requires-all",
+                                         "excludes",  "collective"};
 
 /*! \brief Describe option rules in XML format (internal use only)
 
    \param fp file where to print XML info
  */
-void G__describe_option_rules_xml(FILE * fp)
+void G__describe_option_rules_xml(FILE *fp)
 {
     unsigned int i, j;
 
@@ -505,8 +498,11 @@ void G__describe_option_rules_xml(FILE * fp)
     for (i = 0; i < rules.count; i++) {
         const struct rule *rule = &((const struct rule *)rules.data)[i];
 
+        if (rule->count < 0)
+            G_fatal_error(_("Internal error: the number of options is < 0"));
+
         fprintf(fp, "\t\t<rule type=\"%s\">\n", rule_types[rule->type]);
-        for (j = 0; j < rule->count; j++) {
+        for (j = 0; j < (unsigned int)rule->count; j++) {
             void *p = rule->opts[j];
 
             if (is_flag(p)) {

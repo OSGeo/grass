@@ -55,7 +55,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
     def __init__(self, parent, scatt_id, scatt_mgr, transpose, id=wx.ID_ANY):
         # TODO should not be transpose and scatt_id but x, y
         wx.Panel.__init__(self, parent, id)
-        # bacause of aui (if floatable it can not take cursor from parent)
+        # because of aui (if floatable it can not take cursor from parent)
         ManageBusyCursorMixin.__init__(self, window=self)
 
         self.parent = parent
@@ -100,7 +100,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self.axes.draw_artist(self.zoom_rect)
 
     def _createWidgets(self):
-
         # Create the mpl Figure and FigCanvas objects.
         # 5x4 inches, 100 dots-per-inch
         #
@@ -153,7 +152,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self._stopCategoryEdit()
 
     def GetCoords(self):
-
         coords = self.polygon_drawer.GetCoords()
         if coords is None:
             return
@@ -200,7 +198,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         # self.canvas.mpl_disconnect(self.cidmotion)
 
     def _doLayout(self):
-
         self.main_sizer = wx.BoxSizer(wx.VERTICAL)
         self.main_sizer.Add(self.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
         self.SetSizer(self.main_sizer)
@@ -448,7 +445,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
 
 def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
-
     _rendDtFilesToMemmaps(rend_dt)
 
     init = True
@@ -467,7 +463,6 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
                 del rend_dt[cat_id]
             continue
         if init:
-
             b2_i = scatt["bands_info"]["b1"]
             b1_i = scatt["bands_info"]["b2"]
 
@@ -547,7 +542,6 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
 
 
 def _rendDtMemmapsToFiles(rend_dt):
-
     for k, v in six.iteritems(rend_dt):
         if "dt" in v:
             rend_dt[k]["sh"] = v["dt"].shape
@@ -555,7 +549,6 @@ def _rendDtMemmapsToFiles(rend_dt):
 
 
 def _rendDtFilesToMemmaps(rend_dt):
-
     for k, v in six.iteritems(rend_dt):
         if "dt" in v:
             rend_dt[k]["dt"] = np.memmap(filename=v["dt"], shape=v["sh"])
@@ -598,7 +591,6 @@ def _getColorMap(cat_id, styles):
 
 class ScatterPlotContextMenu:
     def __init__(self, plot):
-
         self.plot = plot
         self.canvas = plot.canvas
         self.cidpress = self.canvas.mpl_connect("button_press_event", self.ContexMenu)
@@ -692,7 +684,6 @@ class PolygonDrawer:
         self.mode = mode
 
     def SetSelectionPolygonMode(self, activate):
-
         self.Show(activate)
         if not activate and self.mode:
             self.SetMode(None)
@@ -722,7 +713,6 @@ class PolygonDrawer:
         self._show(not empty_pol)
 
     def _show(self, show):
-
         self.show = show
 
         self.line.set_visible(self.show)
@@ -738,7 +728,6 @@ class PolygonDrawer:
         self.canvas.draw()
 
     def DrawCallback(self, event):
-
         style = self._getPolygonStyle()
         self.pol.set_facecolor(style["sel_pol"])
         self.line.set_markerfacecolor(style["sel_pol_vertex"])
@@ -851,7 +840,6 @@ class PolygonDrawer:
         self.Redraw()
 
     def _addVertex(self, event):
-
         if self.empty_pol:
             pt = (event.xdata, event.ydata)
             self.pol.xy = np.array([pt, pt])

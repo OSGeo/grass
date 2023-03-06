@@ -4,7 +4,6 @@
 #include "expression.h"
 #include "globals.h"
 
-
 void column_shift(void *buf, int res_type, int col)
 {
     CELL *ibuf = buf;

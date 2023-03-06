@@ -6,7 +6,6 @@ from grass.pygrass.raster import RasterRow
 
 
 class RasterRowTestCase(TestCase):
-
     name = "RasterRowTestCase_map"
 
     @classmethod

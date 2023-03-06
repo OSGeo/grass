@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       imagery library
@@ -13,18 +12,18 @@
  *****************************************************************************/
 
 /**********************************************************
-* I_get_group (group);
-* I_put_group (group);
-*
-* I_get_group_ref (group, &Ref);
-* I_put_group_ref (group, &Ref);
-* I_get_subgroup_ref_file (group, subgroup, &Ref);
-* I_put_subgroup_ref_file (group, subgroup, &Ref);
-* I_add_file_to_group_ref (name, mapset, &Ref)
-* I_transfer_group_ref_file (&Src_ref, n, &Dst_ref)
-* I_init_group_ref (&Ref);
-* I_free_group_ref (&Ref);
-**********************************************************/
+ * I_get_group (group);
+ * I_put_group (group);
+ *
+ * I_get_group_ref (group, &Ref);
+ * I_put_group_ref (group, &Ref);
+ * I_get_subgroup_ref_file (group, subgroup, &Ref);
+ * I_put_subgroup_ref_file (group, subgroup, &Ref);
+ * I_add_file_to_group_ref (name, mapset, &Ref)
+ * I_transfer_group_ref_file (&Src_ref, n, &Dst_ref)
+ * I_init_group_ref (&Ref);
+ * I_free_group_ref (&Ref);
+ **********************************************************/
 
 #include <string.h>
 #include <stdlib.h>
@@ -98,7 +97,6 @@ int I_put_subgroup(const char *group, const char *subgroup)
     return 1;
 }
 
-
 /*!
  * \brief read group REF file
  *
@@ -115,7 +113,6 @@ int I_get_group_ref(const char *group, struct Ref *ref)
 {
     return get_ref(group, "", NULL, ref);
 }
-
 
 /*!
  * \brief read group REF file
@@ -135,7 +132,6 @@ int I_get_group_ref2(const char *group, const char *mapset, struct Ref *ref)
     return get_ref(group, "", mapset, ref);
 }
 
-
 /*!
  * \brief read subgroup REF file
  *
@@ -150,12 +146,10 @@ int I_get_group_ref2(const char *group, const char *mapset, struct Ref *ref)
  *  \return int
  */
 
-int I_get_subgroup_ref(const char *group,
-                       const char *subgroup, struct Ref *ref)
+int I_get_subgroup_ref(const char *group, const char *subgroup, struct Ref *ref)
 {
     return get_ref(group, subgroup, NULL, ref);
 }
-
 
 /*!
  * \brief read subgroup REF file
@@ -171,16 +165,14 @@ int I_get_subgroup_ref(const char *group,
  *  \param ref
  *  \return int
  */
-int I_get_subgroup_ref2(const char *group,
-                        const char *subgroup, const char *mapset,
-                        struct Ref *ref)
+int I_get_subgroup_ref2(const char *group, const char *subgroup,
+                        const char *mapset, struct Ref *ref)
 {
     return get_ref(group, subgroup, mapset, ref);
 }
 
-
-static int get_ref(const char *group, const char *subgroup,
-                   const char *gmapset, struct Ref *ref)
+static int get_ref(const char *group, const char *subgroup, const char *gmapset,
+                   struct Ref *ref)
 {
     int n;
     char buf[1024];
@@ -208,7 +200,8 @@ static int get_ref(const char *group, const char *subgroup,
         return 0;
 
     while (G_getl2(buf, sizeof buf, fd)) {
-        n = sscanf(buf, "%255s %255s %15s", name, mapset, color);       /* better use INAME_LEN */
+        n = sscanf(buf, "%255s %255s %15s", name, mapset,
+                   color); /* better use INAME_LEN */
         if (n == 2 || n == 3) {
             I_add_file_to_group_ref(name, mapset, ref);
             if (n == 3)
@@ -228,8 +221,8 @@ static int set_color(const char *name, const char *mapset, const char *color,
     int n;
 
     for (n = 0; n < ref->nfiles; n++) {
-        if (strcmp(ref->file[n].name, name) == 0
-            && strcmp(ref->file[n].mapset, mapset) == 0)
+        if (strcmp(ref->file[n].name, name) == 0 &&
+            strcmp(ref->file[n].mapset, mapset) == 0)
             break;
     }
 
@@ -301,7 +294,6 @@ int I_init_ref_color_nums(struct Ref *ref)
     return 0;
 }
 
-
 /*!
  * \brief write group REF file
  *
@@ -320,7 +312,6 @@ int I_put_group_ref(const char *group, const struct Ref *ref)
 {
     return put_ref(group, "", ref);
 }
-
 
 /*!
  * \brief write subgroup REF file
@@ -374,7 +365,6 @@ static int put_ref(const char *group, const char *subgroup,
     return 1;
 }
 
-
 /*!
  * \brief add file name to Ref structure
  *
@@ -400,25 +390,21 @@ int I_add_file_to_group_ref(const char *name, const char *mapset,
     int n;
 
     for (n = 0; n < ref->nfiles; n++) {
-        if (strcmp(ref->file[n].name, name) == 0
-            && strcmp(ref->file[n].mapset, mapset) == 0)
+        if (strcmp(ref->file[n].name, name) == 0 &&
+            strcmp(ref->file[n].mapset, mapset) == 0)
             return n;
     }
 
     if ((n = ref->nfiles++))
-        ref->file =
-            (struct Ref_Files *)G_realloc(ref->file,
-                                          ref->nfiles *
-                                          sizeof(struct Ref_Files));
+        ref->file = (struct Ref_Files *)G_realloc(
+            ref->file, ref->nfiles * sizeof(struct Ref_Files));
     else
-        ref->file =
-            (struct Ref_Files *)G_malloc(ref->nfiles *
-                                         sizeof(struct Ref_Files));
+        ref->file = (struct Ref_Files *)G_malloc(ref->nfiles *
+                                                 sizeof(struct Ref_Files));
     strcpy(ref->file[n].name, name);
     strcpy(ref->file[n].mapset, mapset);
     return n;
 }
-
 
 /*!
  * \brief copy Ref lists
@@ -451,8 +437,7 @@ int I_transfer_group_ref_file(const struct Ref *ref2, int n, struct Ref *ref1)
     int k;
 
     /* insert old name into new ref */
-    k = I_add_file_to_group_ref(ref2->file[n].name, ref2->file[n].mapset,
-                                ref1);
+    k = I_add_file_to_group_ref(ref2->file[n].name, ref2->file[n].mapset, ref1);
 
     /* preserve color assignment */
     if (n == ref2->red.n)
@@ -464,8 +449,6 @@ int I_transfer_group_ref_file(const struct Ref *ref2, int n, struct Ref *ref1)
 
     return 0;
 }
-
-
 
 /*!
  * \brief initialize Ref
@@ -489,7 +472,6 @@ int I_init_group_ref(struct Ref *ref)
 
     return 0;
 }
-
 
 /*!
  * \brief free Ref structure

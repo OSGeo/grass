@@ -9,7 +9,7 @@
  * isnull: returns 1 if matrix is null, else 0.
  */
 
-int isnull(MATRIX * a)
+int isnull(MATRIX *a)
 {
     register int i, j, rows, cols;
 

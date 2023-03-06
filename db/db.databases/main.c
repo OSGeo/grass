@@ -1,9 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       db.databases
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Markus Neteler <neteler itc.it>
  * PURPOSE:      lists all databases for a given driver
  * COPYRIGHT:    (C) 2002-2006, 2012 by the GRASS Development Team
  *
@@ -18,8 +18,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-struct
-{
+struct {
     char *driver;
     char *location;
 } parms;
@@ -47,11 +46,12 @@ int main(int argc, char **argv)
     if (driver == NULL)
         G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
 
-    if (db_list_databases(driver, &locations,
-                          nlocs, &handles, &count) != DB_OK) {
+    if (db_list_databases(driver, &locations, nlocs, &handles, &count) !=
+        DB_OK) {
         db_shutdown_driver(driver);
-        G_fatal_error(_("Unable to list databases. "
-                        "Try to define correct connection settings by db.login."));
+        G_fatal_error(
+            _("Unable to list databases. "
+              "Try to define correct connection settings by db.login."));
     }
     db_shutdown_driver(driver);
 
@@ -64,7 +64,6 @@ int main(int argc, char **argv)
 
     exit(EXIT_SUCCESS);
 }
-
 
 static void parse_command_line(int argc, char **argv)
 {

@@ -113,7 +113,7 @@ class IClassMapPanel(DoubleMapPanel):
             self.giface = StandaloneMapDisplayGrassInterface(self)
         self.tree = None
 
-        # show computation region by defaut
+        # show computation region by default
         self.mapWindowProperties.showRegion = True
 
         self.firstMapWindow = IClassVDigitWindow(
@@ -598,7 +598,6 @@ class IClassMapPanel(DoubleMapPanel):
 
         while True:
             if dlg.ShowModal() == wx.ID_OK:
-
                 if dlg.GetGroupBandsErr(parent=self):
                     g, s = dlg.GetData()
                     group = grass.find_file(name=g, element="group")
@@ -1535,7 +1534,7 @@ class MapManager:
     def Render(self):
         """
         .. todo::
-            giface shoud be used instead of this method"""
+            giface should be used instead of this method"""
         self.frame.Render(self.mapWindow)
 
     def RemoveLayer(self, name, idx):

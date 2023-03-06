@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.compress
@@ -26,7 +25,7 @@
  *    Remainder of the row is a series of byte groups that describe the data:
  *        First byte: number of cells that contain the category given by second
  *        Next byte(s): category number. The number of bytes is determined
- *                      by the number of bytes in a cell 
+ *                      by the number of bytes in a cell
  *
  * The normal G_open_cell(), and Rast_put_row() do the compression
  * This program must only check that the file is not a reclass file and
@@ -103,7 +102,6 @@ int main(int argc, char *argv[])
     exit(stat);
 }
 
-
 static int process(char *name, int uncompress)
 {
     struct Colors colr;
@@ -131,11 +129,10 @@ static int process(char *name, int uncompress)
         return 1;
     }
     if (Rast_is_reclass(name, G_mapset(), rname, rmapset) > 0) {
-        G_warning(uncompress
-                  ?
-                  _("<%s> is a reclass file of map <%s> in mapset <%s> - can't uncompress")
-                  :
-                  _("<%s> is a reclass file of map <%s> in mapset <%s> - can't compress"),
+        G_warning(uncompress ? _("<%s> is a reclass file of map <%s> in mapset "
+                                 "<%s> - can't uncompress")
+                             : _("<%s> is a reclass file of map <%s> in mapset "
+                                 "<%s> - can't compress"),
                   name, rname, rmapset);
         return 1;
     }
@@ -144,8 +141,7 @@ static int process(char *name, int uncompress)
         return 1;
     }
     if (G_find_file2_misc("cell_misc", "vrt", name, G_mapset())) {
-        G_warning(_("<%s> is a virtual raster map - can't (un)compress"),
-                  name);
+        G_warning(_("<%s> is a virtual raster map - can't (un)compress"), name);
         return 1;
     }
 
@@ -165,7 +161,7 @@ static int process(char *name, int uncompress)
     else
         data_fd = G_open_old("cell", name, G_mapset());
 
-    oldsize = lseek(data_fd, (off_t) 0, SEEK_END);
+    oldsize = lseek(data_fd, (off_t)0, SEEK_END);
     close(data_fd);
 
     if (doit(name, uncompress, map_type))
@@ -191,7 +187,7 @@ static int process(char *name, int uncompress)
     else
         data_fd = G_open_old("cell", name, G_mapset());
 
-    newsize = lseek(data_fd, (off_t) 0, SEEK_END);
+    newsize = lseek(data_fd, (off_t)0, SEEK_END);
     close(data_fd);
 
     sizestr = "bytes";
@@ -219,14 +215,14 @@ static int process(char *name, int uncompress)
 
     if (newsize < oldsize)
         G_message(uncompress
-                  ? _("DONE: uncompressed file is %lu %s (%.2f%%) smaller")
-                  : _("DONE: compressed file is %lu %s (%.2f%%) smaller"),
+                      ? _("DONE: uncompressed file is %lu %s (%.2f%%) smaller")
+                      : _("DONE: compressed file is %lu %s (%.2f%%) smaller"),
                   (unsigned long)diff, sizestr,
                   (double)100.0 - 100.0 * newsize / oldsize);
     else if (newsize > oldsize)
         G_message(uncompress
-                  ? _("DONE: uncompressed file is %lu %s (%.2f%%) larger")
-                  : _("DONE: compressed file is %lu %s (%.2f%%) larger"),
+                      ? _("DONE: uncompressed file is %lu %s (%.2f%%) larger")
+                      : _("DONE: compressed file is %lu %s (%.2f%%) larger"),
                   (unsigned long)diff, sizestr,
                   (double)100.0 * newsize / oldsize - 100.0);
     else
@@ -261,16 +257,16 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
         }
         G_verbose_message(_("Uncompressing <%s>"), name);
     }
-    else {                      /* uncompress == 0 */
-    if (cellhd.compressed > 0) {
-        /*
-           G_warning(_("[%s] already compressed"), name);
-           return 1;
-         */
-        G_message(_("Re-compressing <%s> with method %s..."), name, cname);
-    }
-    else
-        G_message(_("Compressing <%s> with method %s..."), name, cname);
+    else { /* uncompress == 0 */
+        if (cellhd.compressed > 0) {
+            /*
+               G_warning(_("[%s] already compressed"), name);
+               return 1;
+             */
+            G_message(_("Re-compressing <%s> with method %s..."), name, cname);
+        }
+        else
+            G_message(_("Compressing <%s> with method %s..."), name, cname);
     }
 
     Rast_set_window(&cellhd);
@@ -310,7 +306,6 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
     return 0;
 }
 
-
 static int pprint(char *name, int shell_style)
 {
     struct Cell_head cellhd;
@@ -336,8 +331,8 @@ static int pprint(char *name, int shell_style)
         return 1;
     }
     if (Rast_is_reclass(name, G_mapset(), rname, rmapset) > 0) {
-        G_message(_("<%s> is a reclass file of map <%s> in mapset <%s>"),
-                  name, rname, rmapset);
+        G_message(_("<%s> is a reclass file of map <%s> in mapset <%s>"), name,
+                  rname, rmapset);
         return 1;
     }
 
@@ -356,29 +351,24 @@ static int pprint(char *name, int shell_style)
 
     if (!shell_style) {
         if (cellhd.compressed == 0) {
-            G_message(_("<%s> is uncompressed (method %i: %s). Data type: %s"),
-                      name, cellhd.compressed, "NONE",
-                      (map_type ==
-                       CELL_TYPE ? "CELL" : (map_type ==
-                                             DCELL_TYPE ? "DCELL" : (map_type
-                                                                     ==
-                                                                     FCELL_TYPE
-                                                                     ? "FCELL"
-                                                                     :
-                                                                     "??"))));
+            G_message(
+                _("<%s> is uncompressed (method %i: %s). Data type: %s"), name,
+                cellhd.compressed, "NONE",
+                (map_type == CELL_TYPE
+                     ? "CELL"
+                     : (map_type == DCELL_TYPE
+                            ? "DCELL"
+                            : (map_type == FCELL_TYPE ? "FCELL" : "??"))));
         }
         else if (cellhd.compressed > 0) {
-            G_message(_("<%s> is compressed (method %i: %s). Data type: %s"),
-                      name, cellhd.compressed,
-                      G_compressor_name(cellhd.compressed),
-                      (map_type ==
-                       CELL_TYPE ? "CELL" : (map_type ==
-                                             DCELL_TYPE ? "DCELL" : (map_type
-                                                                     ==
-                                                                     FCELL_TYPE
-                                                                     ? "FCELL"
-                                                                     :
-                                                                     "??"))));
+            G_message(
+                _("<%s> is compressed (method %i: %s). Data type: %s"), name,
+                cellhd.compressed, G_compressor_name(cellhd.compressed),
+                (map_type == CELL_TYPE
+                     ? "CELL"
+                     : (map_type == DCELL_TYPE
+                            ? "DCELL"
+                            : (map_type == FCELL_TYPE ? "FCELL" : "??"))));
         }
 
         if (G_find_file2_misc("cell_misc", NULLC_FILE, name, G_mapset())) {
@@ -390,9 +380,11 @@ static int pprint(char *name, int shell_style)
     }
     else {
         fprintf(stdout, "%s|%s", name,
-                (map_type == CELL_TYPE ? "CELL" :
-                 (map_type == DCELL_TYPE ? "DCELL" :
-                  (map_type == FCELL_TYPE ? "FCELL" : "??"))));
+                (map_type == CELL_TYPE
+                     ? "CELL"
+                     : (map_type == DCELL_TYPE
+                            ? "DCELL"
+                            : (map_type == FCELL_TYPE ? "FCELL" : "??"))));
         if (cellhd.compressed == 0)
             fprintf(stdout, "|NONE");
         else

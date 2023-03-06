@@ -32,17 +32,16 @@ static int save_map_bbox(const struct Format_info_pg *,
                          const struct bound_box *);
 static int create_topo_grass(const struct Format_info_pg *);
 static int has_topo_grass(const struct Format_info_pg *);
-static int write_nodes(const struct Plus_head *,
-                       const struct Format_info_pg *);
-static int write_lines(const struct Plus_head *,
-                       const struct Format_info_pg *);
-static int write_areas(const struct Plus_head *,
-                       const struct Format_info_pg *);
-static int write_isles(const struct Plus_head *,
-                       const struct Format_info_pg *);
+static int write_nodes(const struct Plus_head *, const struct Format_info_pg *);
+static int write_lines(const struct Plus_head *, const struct Format_info_pg *);
+static int write_areas(const struct Plus_head *, const struct Format_info_pg *);
+static int write_isles(const struct Plus_head *, const struct Format_info_pg *);
 static void build_stmt_id(const void *, int, int, const struct Plus_head *,
                           char **, size_t *);
 static int create_simple_feature_from_topo(struct Map_info *);
+#define NOPG_UNUSED
+#else
+#define NOPG_UNUSED UNUSED
 #endif
 
 /*!
@@ -61,7 +60,7 @@ static int create_simple_feature_from_topo(struct Map_info *);
    \return 1 on success
    \return 0 on error
  */
-int Vect_build_pg(struct Map_info *Map, int build)
+int Vect_build_pg(struct Map_info *Map NOPG_UNUSED, int build NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     struct Plus_head *plus;
@@ -83,7 +82,7 @@ int Vect_build_pg(struct Map_info *Map, int build)
         return 1;
 
     if (build == plus->built)
-        return 1;               /* do nothing */
+        return 1; /* do nothing */
 
     /* TODO move this init to better place (Vect_open_ ?), because in
        theory build may be reused on level2 */
@@ -113,11 +112,12 @@ int Vect_build_pg(struct Map_info *Map, int build)
         if (!pg_info->toposchema_name)
             G_message(_("Building pseudo-topology over simple features..."));
         else
-            G_message(_("Building topology from PostGIS topology schema <%s>..."),
-                      pg_info->toposchema_name);
+            G_message(
+                _("Building topology from PostGIS topology schema <%s>..."),
+                pg_info->toposchema_name);
     }
 
-    if (!pg_info->toposchema_name)      /* pseudo-topology for simple features */
+    if (!pg_info->toposchema_name) /* pseudo-topology for simple features */
         return Vect__build_sfa(Map, build);
 
     /* PostGIS Topology */
@@ -142,7 +142,7 @@ int Vect_build_pg(struct Map_info *Map, int build)
  */
 int build_topo(struct Map_info *Map, int build)
 {
-    int line, type, s, n_nodes;
+    int line, type, s, n_nodes = 0;
     int area, nareas, isle, nisles;
     int face[2];
     char stmt[DB_SQL_MAX];
@@ -168,7 +168,7 @@ int build_topo(struct Map_info *Map, int build)
     /*     -> upgrade */
 
     if (build < GV_BUILD_BASE)
-        return 1;               /* nothing to print */
+        return 1; /* nothing to print */
 
     /* cache features to speed-up random access (when attaching isles
        to areas) */
@@ -204,22 +204,23 @@ int build_topo(struct Map_info *Map, int build)
          * offsets, see write_nodes() for details */
         Vect__free_offset(&(pg_info->offset));
 
-        pg_info->cache.ctype = CACHE_FEATURE;   /* do not cache nodes */
+        pg_info->cache.ctype = CACHE_FEATURE; /* do not cache nodes */
         n_nodes = Map->plus.n_nodes = Vect__load_map_nodes_pg(Map, TRUE);
         Vect__free_cache(&(pg_info->cache));
     }
 
     if (build > GV_BUILD_BASE)
-        pg_info->cache.ctype = CACHE_MAP;       /* cache all features */
+        pg_info->cache.ctype = CACHE_MAP; /* cache all features */
 
     /* update TopoGeometry based on GRASS-like topology */
     Vect_build_nat(Map, build);
 
     if (n_nodes != Map->plus.n_nodes)
-        G_warning(_("Inconsistency in topology: number of nodes %d (should be %d)"),
-                  Map->plus.n_nodes, n_nodes);
+        G_warning(
+            _("Inconsistency in topology: number of nodes %d (should be %d)"),
+            Map->plus.n_nodes, n_nodes);
 
-    /* store map boundig box in DB */
+    /* store map bounding box in DB */
     save_map_bbox(pg_info, &(plus->box));
 
     /* begin transaction */
@@ -243,8 +244,10 @@ int build_topo(struct Map_info *Map, int build)
 
         G_message(_("Cleaning-up topology schema..."));
         /* 1) reset centroids to '0' (universal face) */
-        sprintf(stmt, "UPDATE \"%s\".node SET containing_face = 0 WHERE "
-                "containing_face IS NOT NULL", pg_info->toposchema_name);
+        sprintf(stmt,
+                "UPDATE \"%s\".node SET containing_face = 0 WHERE "
+                "containing_face IS NOT NULL",
+                pg_info->toposchema_name);
         G_debug(2, "SQL: %s", stmt);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             Vect__execute_pg(pg_info->conn, "ROLLBACK");
@@ -262,8 +265,10 @@ int build_topo(struct Map_info *Map, int build)
         }
 
         /* 3) delete faces (areas/isles) */
-        sprintf(stmt, "DELETE FROM \"%s\".face WHERE "
-                "face_id != 0", pg_info->toposchema_name);
+        sprintf(stmt,
+                "DELETE FROM \"%s\".face WHERE "
+                "face_id != 0",
+                pg_info->toposchema_name);
         G_debug(2, "SQL: %s", stmt);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             Vect__execute_pg(pg_info->conn, "ROLLBACK");
@@ -309,7 +314,8 @@ int build_topo(struct Map_info *Map, int build)
             }
 
             Line = plus->Line[Area->centroid];
-            sprintf(stmt, "UPDATE \"%s\".node SET "
+            sprintf(stmt,
+                    "UPDATE \"%s\".node SET "
                     "containing_face = %d WHERE node_id = %d",
                     pg_info->toposchema_name, area, (int)Line->offset);
             G_debug(2, "SQL: %s", stmt);
@@ -337,7 +343,7 @@ int build_topo(struct Map_info *Map, int build)
 
             topo_b = (struct P_topo_b *)Line->topo;
 
-            for (s = 0; s < 2; s++) {   /* for both sides */
+            for (s = 0; s < 2; s++) { /* for both sides */
                 face[s] = s == 0 ? topo_b->left : topo_b->right;
                 if (face[s] < 0) {
                     /* isle */
@@ -348,10 +354,12 @@ int build_topo(struct Map_info *Map, int build)
             G_debug(3, "update edge %d: left_face = %d, right_face = %d",
                     (int)Line->offset, face[0], face[1]);
 
-            sprintf(stmt, "UPDATE \"%s\".edge_data SET "
+            sprintf(stmt,
+                    "UPDATE \"%s\".edge_data SET "
                     "left_face = %d, right_face = %d "
-                    "WHERE edge_id = %d", pg_info->toposchema_name,
-                    face[0], face[1], (int)Line->offset);
+                    "WHERE edge_id = %d",
+                    pg_info->toposchema_name, face[0], face[1],
+                    (int)Line->offset);
 
             if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
                 Vect__execute_pg(pg_info->conn, "ROLLBACK");
@@ -363,7 +371,7 @@ int build_topo(struct Map_info *Map, int build)
         if (!pg_info->topo_geo_only) {
             write_areas(plus, pg_info);
         }
-    }                           /* build >= GV_BUILD_AREAS */
+    } /* build >= GV_BUILD_AREAS */
 
     if (build >= GV_BUILD_ATTACH_ISLES) {
         /* insert isles as faces with negative face_id */
@@ -377,7 +385,7 @@ int build_topo(struct Map_info *Map, int build)
         if (!pg_info->topo_geo_only) {
             write_isles(plus, pg_info);
         }
-    }                           /* build >= GV_BUILD_ISLES */
+    } /* build >= GV_BUILD_ISLES */
 
     if (pg_info->feature_type == SF_POLYGON) {
         int centroid;
@@ -396,8 +404,8 @@ int build_topo(struct Map_info *Map, int build)
                 continue;
 
             /* update topogeometry object: centroid -> face */
-            if (build_topogeom_stmt
-                (pg_info, GV_CENTROID, area, (int)Line->offset, stmt) &&
+            if (build_topogeom_stmt(pg_info, GV_CENTROID, area,
+                                    (int)Line->offset, stmt) &&
                 Vect__execute_pg(pg_info->conn, stmt) == -1) {
                 Vect__execute_pg(pg_info->conn, "ROLLBACK");
                 return 0;
@@ -431,7 +439,7 @@ int build_topo(struct Map_info *Map, int build)
         p = G_find_key_value("simple_feature", key_val);
         if (p && G_strcasecmp(p, "yes") == 0) {
             if (build > GV_BUILD_BASE)
-                Map->level = LEVEL_2;   /* force level to avoid errors */
+                Map->level = LEVEL_2; /* force level to avoid errors */
 
             if (create_simple_feature_from_topo(Map) != 0)
                 return 0;
@@ -443,7 +451,7 @@ int build_topo(struct Map_info *Map, int build)
     return 1;
 }
 
-/*! 
+/*!
    \brief Build UPDATE statement for topo geometry element stored in
    feature table
 
@@ -456,8 +464,8 @@ int build_topo(struct Map_info *Map, int build)
    \return 1 on success
    \return 0 on failure
  */
-int build_topogeom_stmt(const struct Format_info_pg *pg_info,
-                        int type, int topo_id, int fid, char *stmt)
+int build_topogeom_stmt(const struct Format_info_pg *pg_info, int type,
+                        int topo_id, int fid, char *stmt)
 {
     int topogeom_type;
 
@@ -477,12 +485,13 @@ int build_topogeom_stmt(const struct Format_info_pg *pg_info,
         return 0;
     }
 
-    sprintf(stmt, "UPDATE \"%s\".\"%s\" SET %s = "
+    sprintf(stmt,
+            "UPDATE \"%s\".\"%s\" SET %s = "
             "'(%d, 1, %d, %d)'::topology.TopoGeometry "
             "WHERE (%s).id = %d",
-            pg_info->schema_name, pg_info->table_name,
-            pg_info->topogeom_column, pg_info->toposchema_id,
-            topo_id, topogeom_type, pg_info->topogeom_column, fid);
+            pg_info->schema_name, pg_info->table_name, pg_info->topogeom_column,
+            pg_info->toposchema_id, topo_id, topogeom_type,
+            pg_info->topogeom_column, fid);
 
     return 1;
 }
@@ -510,19 +519,21 @@ int save_map_bbox(const struct Format_info_pg *pg_info,
     /* update bbox */
     if (has_topo_grass(pg_info)) {
         /* -> update */
-        sprintf(stmt, "UPDATE \"%s\".\"%s\" SET %s = "
-                "'BOX3D(%.12f %.12f %.12f, %.12f %.12f %.12f)'::box3d WHERE %s = %d",
-                TOPO_SCHEMA, TOPO_TABLE, TOPO_BBOX,
-                box->W, box->S, box->B, box->E, box->N, box->T,
-                TOPO_ID, pg_info->toposchema_id);
+        sprintf(stmt,
+                "UPDATE \"%s\".\"%s\" SET %s = "
+                "'BOX3D(%.12f %.12f %.12f, %.12f %.12f %.12f)'::box3d WHERE %s "
+                "= %d",
+                TOPO_SCHEMA, TOPO_TABLE, TOPO_BBOX, box->W, box->S, box->B,
+                box->E, box->N, box->T, TOPO_ID, pg_info->toposchema_id);
     }
     else {
         /* -> insert */
-        sprintf(stmt, "INSERT INTO \"%s\".\"%s\" (%s, %s) "
-                "VALUES(%d, 'BOX3D(%.12f %.12f %.12f, %.12f %.12f %.12f)'::box3d)",
-                TOPO_SCHEMA, TOPO_TABLE, TOPO_ID, TOPO_BBOX,
-                pg_info->toposchema_id, box->W, box->S, box->B, box->E,
-                box->N, box->T);
+        sprintf(
+            stmt,
+            "INSERT INTO \"%s\".\"%s\" (%s, %s) "
+            "VALUES(%d, 'BOX3D(%.12f %.12f %.12f, %.12f %.12f %.12f)'::box3d)",
+            TOPO_SCHEMA, TOPO_TABLE, TOPO_ID, TOPO_BBOX, pg_info->toposchema_id,
+            box->W, box->S, box->B, box->E, box->N, box->T);
     }
 
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
@@ -546,7 +557,8 @@ int create_topo_grass(const struct Format_info_pg *pg_info)
     PGresult *result;
 
     /* check if table exists */
-    sprintf(stmt, "SELECT COUNT(*) FROM information_schema.tables "
+    sprintf(stmt,
+            "SELECT COUNT(*) FROM information_schema.tables "
             "WHERE table_schema = '%s' AND table_name = '%s'",
             TOPO_SCHEMA, TOPO_TABLE);
     result = PQexec(pg_info->conn, stmt);
@@ -571,16 +583,18 @@ int create_topo_grass(const struct Format_info_pg *pg_info)
         return -1;
     }
     /* add primary key */
-    sprintf(stmt, "ALTER TABLE \"%s\".\"%s\" ADD PRIMARY KEY (%s)",
-            TOPO_SCHEMA, TOPO_TABLE, TOPO_ID);
+    sprintf(stmt, "ALTER TABLE \"%s\".\"%s\" ADD PRIMARY KEY (%s)", TOPO_SCHEMA,
+            TOPO_TABLE, TOPO_ID);
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
         return -1;
     }
 
     /* add constraint */
-    sprintf(stmt, "ALTER TABLE \"%s\".\"%s\" ADD CONSTRAINT \"%s_%s_fkey\" "
-            "FOREIGN KEY (%s) REFERENCES topology.topology(id) ON DELETE CASCADE",
-            TOPO_SCHEMA, TOPO_TABLE, TOPO_TABLE, TOPO_ID, TOPO_ID);
+    sprintf(
+        stmt,
+        "ALTER TABLE \"%s\".\"%s\" ADD CONSTRAINT \"%s_%s_fkey\" "
+        "FOREIGN KEY (%s) REFERENCES topology.topology(id) ON DELETE CASCADE",
+        TOPO_SCHEMA, TOPO_TABLE, TOPO_TABLE, TOPO_ID, TOPO_ID);
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
         return -1;
     }
@@ -604,7 +618,8 @@ int has_topo_grass(const struct Format_info_pg *pg_info)
 
     PGresult *result;
 
-    sprintf(stmt, "SELECT COUNT(*) FROM \"%s\".\"%s\" "
+    sprintf(stmt,
+            "SELECT COUNT(*) FROM \"%s\".\"%s\" "
             "WHERE %s = %d",
             TOPO_SCHEMA, TOPO_TABLE, TOPO_ID, pg_info->toposchema_id);
     result = PQexec(pg_info->conn, stmt);
@@ -651,7 +666,7 @@ int write_nodes(const struct Plus_head *plus,
 
     offset = &(pg_info->offset);
 
-    if (offset->array_num < 1)  /* nothing to write */
+    if (offset->array_num < 1) /* nothing to write */
         return 0;
 
     if (plus->n_nodes != offset->array_num) {
@@ -666,7 +681,7 @@ int write_nodes(const struct Plus_head *plus,
     for (i = 1; i <= plus->n_nodes; i++) {
         Node = plus->Node[i];
         if (!Node)
-            continue;           /* should not happen */
+            continue; /* should not happen */
 
         node_id = offset->array[i - 1];
 
@@ -682,9 +697,11 @@ int write_nodes(const struct Plus_head *plus,
             stmt_size = stmt_lines_size + stmt_angles_size + 512;
             stmt = (char *)G_realloc(stmt, stmt_size);
         }
-        sprintf(stmt, "INSERT INTO \"%s\".%s VALUES ("
-                "%d, '{%s}', '{%s}')", pg_info->toposchema_name,
-                TOPO_TABLE_NODE, node_id, stmt_lines, stmt_angles);
+        sprintf(stmt,
+                "INSERT INTO \"%s\".%s VALUES ("
+                "%d, '{%s}', '{%s}')",
+                pg_info->toposchema_name, TOPO_TABLE_NODE, node_id, stmt_lines,
+                stmt_angles);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             G_warning(_("Unable to write nodes"));
             return -1;
@@ -724,7 +741,8 @@ int write_lines(const struct Plus_head *plus,
 
     PGresult *res;
 
-    sprintf(stmt, "SELECT edge_id FROM \"%s\".edge_data WHERE "
+    sprintf(stmt,
+            "SELECT edge_id FROM \"%s\".edge_data WHERE "
             "left_face != 0 OR right_face != 0 ORDER BY edge_id",
             pg_info->toposchema_name);
     G_debug(2, "SQL: %s", stmt);
@@ -750,9 +768,11 @@ int write_lines(const struct Plus_head *plus,
             offset = (int)Line->offset;
 
         topo = (struct P_topo_b *)Line->topo;
-        sprintf(stmt, "INSERT INTO \"%s\".%s VALUES ("
-                "%d, %d, %d)", pg_info->toposchema_name, TOPO_TABLE_LINE,
-                offset, topo->left, topo->right);
+        sprintf(stmt,
+                "INSERT INTO \"%s\".%s VALUES ("
+                "%d, %d, %d)",
+                pg_info->toposchema_name, TOPO_TABLE_LINE, offset, topo->left,
+                topo->right);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             G_warning(_("Unable to write lines"));
             return -1;
@@ -794,7 +814,7 @@ int write_areas(const struct Plus_head *plus,
         Area = plus->Area[area];
         if (!Area) {
             G_debug(3, "Area %d skipped (dead)", area);
-            continue;           /* should not happen */
+            continue; /* should not happen */
         }
 
         /* 'lines' array */
@@ -807,7 +827,8 @@ int write_areas(const struct Plus_head *plus,
         if (Area->centroid != 0) {
             Line = plus->Line[Area->centroid];
             if (!Line) {
-                G_warning(_("Topology for centroid %d not available. Area %d skipped"),
+                G_warning(_("Topology for centroid %d not available. Area %d "
+                            "skipped"),
                           Area->centroid, area);
                 continue;
             }
@@ -822,9 +843,11 @@ int write_areas(const struct Plus_head *plus,
             stmt_size = stmt_lines_size + stmt_isles_size + 512;
             stmt = (char *)G_realloc(stmt, stmt_size);
         }
-        sprintf(stmt, "INSERT INTO \"%s\".%s VALUES ("
-                "%d, '{%s}', %d, '{%s}')", pg_info->toposchema_name,
-                TOPO_TABLE_AREA, area, stmt_lines, centroid, stmt_isles);
+        sprintf(stmt,
+                "INSERT INTO \"%s\".%s VALUES ("
+                "%d, '{%s}', %d, '{%s}')",
+                pg_info->toposchema_name, TOPO_TABLE_AREA, area, stmt_lines,
+                centroid, stmt_isles);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             return -1;
         }
@@ -866,7 +889,7 @@ int write_isles(const struct Plus_head *plus,
     for (isle = 1; isle <= plus->n_isles; isle++) {
         Isle = plus->Isle[isle];
         if (!Isle)
-            continue;           /* should not happen */
+            continue; /* should not happen */
 
         /* 'lines' array */
         build_stmt_id(Isle->lines, Isle->n_lines, TRUE, NULL, &stmt_lines,
@@ -877,9 +900,11 @@ int write_isles(const struct Plus_head *plus,
             stmt_size = stmt_lines_size + 512;
             stmt = (char *)G_realloc(stmt, stmt_size);
         }
-        sprintf(stmt, "INSERT INTO \"%s\".%s VALUES ("
-                "%d, '{%s}', %d)", pg_info->toposchema_name, TOPO_TABLE_ISLE,
-                isle, stmt_lines, Isle->area);
+        sprintf(stmt,
+                "INSERT INTO \"%s\".%s VALUES ("
+                "%d, '{%s}', %d)",
+                pg_info->toposchema_name, TOPO_TABLE_ISLE, isle, stmt_lines,
+                Isle->area);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             return -1;
         }
@@ -902,8 +927,7 @@ int write_isles(const struct Plus_head *plus,
    \param[in,out] buffer size
  */
 void build_stmt_id(const void *array, int nitems, int is_int,
-                   const struct Plus_head *plus, char **stmt,
-                   size_t *stmt_size)
+                   const struct Plus_head *plus, char **stmt, size_t *stmt_size)
 {
     int i, ivalue;
     int *iarray;
@@ -975,28 +999,25 @@ int Vect__clean_grass_db_topo(struct Format_info_pg *pg_info)
 {
     char stmt[DB_SQL_MAX];
 
-    sprintf(stmt, "DELETE FROM \"%s\".\"%s\"",
-            pg_info->toposchema_name, TOPO_TABLE_NODE);
+    sprintf(stmt, "DELETE FROM \"%s\".\"%s\"", pg_info->toposchema_name,
+            TOPO_TABLE_NODE);
     if (-1 == Vect__execute_pg(pg_info->conn, stmt))
         return -1;
 
-    sprintf(stmt, "DELETE FROM \"%s\".\"%s\"",
-            pg_info->toposchema_name, TOPO_TABLE_LINE);
+    sprintf(stmt, "DELETE FROM \"%s\".\"%s\"", pg_info->toposchema_name,
+            TOPO_TABLE_LINE);
     if (-1 == Vect__execute_pg(pg_info->conn, stmt))
         return -1;
 
-
-    sprintf(stmt, "DELETE FROM \"%s\".\"%s\"",
-            pg_info->toposchema_name, TOPO_TABLE_AREA);
+    sprintf(stmt, "DELETE FROM \"%s\".\"%s\"", pg_info->toposchema_name,
+            TOPO_TABLE_AREA);
     if (-1 == Vect__execute_pg(pg_info->conn, stmt))
         return -1;
 
-
-    sprintf(stmt, "DELETE FROM \"%s\".\"%s\"",
-            pg_info->toposchema_name, TOPO_TABLE_ISLE);
+    sprintf(stmt, "DELETE FROM \"%s\".\"%s\"", pg_info->toposchema_name,
+            TOPO_TABLE_ISLE);
     if (-1 == Vect__execute_pg(pg_info->conn, stmt))
         return -1;
-
 
     return 0;
 }
@@ -1004,7 +1025,7 @@ int Vect__clean_grass_db_topo(struct Format_info_pg *pg_info)
 /*!
    \brief Create simple features geometry from topogeometry data
 
-   \param Map pointer to Map_info struct 
+   \param Map pointer to Map_info struct
 
    \return 0 on success
    \return -1 on error
@@ -1025,14 +1046,13 @@ int create_simple_feature_from_topo(struct Map_info *Map)
         pg_info->feature_type == SF_LINESTRING) {
         sprintf(stmt,
                 "UPDATE \"%s\".\"%s\" SET %s = (SELECT geom FROM \"%s\".node "
-                "WHERE node_id = (%s).id)", pg_info->schema_name,
-                pg_info->table_name, pg_info->geom_column,
+                "WHERE node_id = (%s).id)",
+                pg_info->schema_name, pg_info->table_name, pg_info->geom_column,
                 pg_info->toposchema_name, pg_info->topogeom_column);
 
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             Vect__execute_pg(pg_info->conn, "ROLLBACK");
             return -1;
-
         }
     }
     else if (pg_info->feature_type == SF_POLYGON) {
@@ -1040,7 +1060,8 @@ int create_simple_feature_from_topo(struct Map_info *Map)
     }
     else {
         G_warning(_("Unable to build simple features from topogeometry data. "
-                    "Unsupported type %d."), pg_info->feature_type);
+                    "Unsupported type %d."),
+                  pg_info->feature_type);
     }
 
     Vect__execute_pg(pg_info->conn, "COMMIT");

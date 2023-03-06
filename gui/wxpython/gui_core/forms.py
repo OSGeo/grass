@@ -1026,7 +1026,7 @@ class CmdPanel(wx.Panel):
         del is_section
 
         # 'Required' tab goes first, 'Optional' as the last one
-        for (newidx, content) in [
+        for newidx, content in [
             (0, _("Required")),
             (len(sections) - 1, _("Optional")),
         ]:
@@ -1256,7 +1256,6 @@ class CmdPanel(wx.Panel):
                         if p.get("type", "") == "integer" and not p.get(
                             "multiple", False
                         ):
-
                             # for multiple integers use textctrl instead of
                             # spinsctrl
                             try:
@@ -1303,7 +1302,6 @@ class CmdPanel(wx.Panel):
                         ]
                         txt2.Bind(wx.EVT_TEXT, self.OnSetValue)
                     else:
-
                         title_txt.SetLabel(title + ":")
                         value = self._getValue(p)
 
@@ -1374,7 +1372,6 @@ class CmdPanel(wx.Panel):
                 and p.get("gisprompt", False) is False
                 and p.get("prompt", "") != "color"
             ):
-
                 title_txt.SetLabel(title + ":")
                 p["wxId"] = []
                 if (
@@ -2035,7 +2032,11 @@ class CmdPanel(wx.Panel):
                         )
                         if p.get("value", "") and os.path.isfile(p["value"]):
                             ifbb.Clear()
-                            enc = locale.getdefaultlocale()[1]
+                            try:
+                                # Python >= 3.11
+                                enc = locale.getencoding()
+                            except AttributeError:
+                                enc = locale.getdefaultlocale()[1]
                             with codecs.open(
                                 p["value"], encoding=enc, errors="ignore"
                             ) as f:
@@ -2262,7 +2263,7 @@ class CmdPanel(wx.Panel):
                         )
                         p["wxId"] = [self.win1.GetId()]
 
-                        def OnCheckItem(index, flag):
+                        def OnCheckItem(index=None, flag=None, event=None):
                             layers = list()
                             geometry = None
                             for layer, match, listId in self.win1.GetLayers():
@@ -2277,7 +2278,13 @@ class CmdPanel(wx.Panel):
                             # TODO: v.import has no geometry option
                             self.OnUpdateValues()  # TODO: replace by signal
 
-                        self.win1.OnCheckItem = OnCheckItem
+                        from core.globalvar import CheckWxVersion
+
+                        if CheckWxVersion([4, 1, 0]):
+                            self.win1.Bind(wx.EVT_LIST_ITEM_CHECKED, OnCheckItem)
+                            self.win1.Bind(wx.EVT_LIST_ITEM_UNCHECKED, OnCheckItem)
+                        else:
+                            self.win1.OnCheckItem = OnCheckItem
 
                 elif prompt == "sql_query":
                     win = gselect.SqlWhereSelect(parent=which_panel, param=p)
@@ -2588,7 +2595,11 @@ class CmdPanel(wx.Panel):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            enc = locale.getdefaultlocale()[1]
+            try:
+                # Python >= 3.11
+                enc = locale.getencoding()
+            except AttributeError:
+                enc = locale.getdefaultlocale()[1]
             f = codecs.open(path, encoding=enc, mode="w", errors="replace")
             try:
                 f.write(text + os.linesep)
@@ -2612,7 +2623,11 @@ class CmdPanel(wx.Panel):
                 filename = grass.tempfile()
                 win.SetValue(filename)
 
-            enc = locale.getdefaultlocale()[1]
+            try:
+                # Python >= 3.11
+                enc = locale.getencoding()
+            except AttributeError:
+                enc = locale.getdefaultlocale()[1]
             f = codecs.open(filename, encoding=enc, mode="w", errors="replace")
             try:
                 f.write(text)
@@ -3069,7 +3084,7 @@ class GUI:
             if completed[2]:
                 dcmd_params.update(completed[2])
 
-        # parse the interface decription
+        # parse the interface description
         try:
             global _blackList
             self.grass_task = gtask.parse_interface(cmd[0], blackList=_blackList)
@@ -3171,7 +3186,7 @@ class GUI:
         :return: parameter key
         :return: None on failure
         """
-        # parse the interface decription
+        # parse the interface description
         if not self.grass_task:
             tree = etree.fromstring(gtask.get_interface_description(cmd))
             self.grass_task = gtask.processTask(tree).get_task()
@@ -3231,7 +3246,6 @@ Test:
 
 
 if __name__ == "__main__":
-
     if len(sys.argv) == 1:
         sys.exit(_(USAGE_MESSAGE).format(name=sys.argv[0]))
 

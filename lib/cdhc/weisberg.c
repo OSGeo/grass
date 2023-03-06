@@ -3,7 +3,6 @@
 #include <math.h>
 #include "local_proto.h"
 
-
 double *Cdhc_weisberg_bingham(double *x, int n)
 {
     static double y[2];
@@ -37,4 +36,4 @@ double *Cdhc_weisberg_bingham(double *x, int n)
     free(xcopy);
 
     return y;
-}                               /* test14_ */
+} /* test14_ */

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.carve
@@ -15,7 +14,7 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include <string.h>
 #include <stdio.h>
@@ -24,9 +23,8 @@
 #include <grass/glocale.h>
 #include "enforce.h"
 
-
 /*
- * update_rast_history - Update a history file.  Some of the digit file 
+ * update_rast_history - Update a history file.  Some of the digit file
  * information is placed in the history file.
  */
 void update_rast_history(struct parms *parm)

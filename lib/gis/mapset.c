@@ -99,8 +99,8 @@ char *G__mapset_path(void)
     const char *location = G_location();
     const char *base = G_gisdbase();
 
-    char *mapset_path = G_malloc(strlen(base) + strlen(location) +
-                                 strlen(mapset) + 3);
+    char *mapset_path =
+        G_malloc(strlen(base) + strlen(location) + strlen(mapset) + 3);
 
     sprintf(mapset_path, "%s/%s/%s", base, location, mapset);
 

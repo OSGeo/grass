@@ -1,14 +1,12 @@
-/*
- *
- *****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       r.fill.dir
  * AUTHOR(S):    Original author unknown - Raghavan Srinivasan Nov, 1991
- *               (srin@ecn.purdue.edu) Agricultural Engineering, 
+ *               (srin@ecn.purdue.edu) Agricultural Engineering,
  *               Purdue University
  *               Markus Neteler: update to FP (C-code)
  *                             : update to FP (Fortran)
- *               Roger Miller: rewrite all code in C, complient with GRASS 5
+ *               Roger Miller: rewrite all code in C, compliant with GRASS 5
  * PURPOSE:      fills a DEM to become a depression-less DEM
  *               This creates two layers from a user specified elevation map.
  *               The output maps are filled elevation or rectified elevation
@@ -23,8 +21,8 @@
  *               Options have been added to produce a map of undrained areas
  *               and to run without filling undrained areas except single-cell
  *               pits.  Not all problems can be solved in a single pass.  The
- *               program can be run repeatedly, using the output elevations from
- *               one run as input to the next run until all problems are 
+ *               program can be run repeatedly, using the output elevations
+ *               from one run as input to the next run until all problems are
  *               resolved.
  * COPYRIGHT:    (C) 2001, 2010 by the GRASS Development Team
  *
@@ -32,12 +30,13 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
- *****************************************************************************/
+ ****************************************************************************/
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <errno.h>
 
 /* for using the "open" statement */
 #include <sys/types.h>
@@ -103,8 +102,8 @@ int main(int argc, char **argv)
 
     opt4 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt4->key = "direction";
-    opt4->description =
-        _("Name for output flow direction map for depressionless elevation raster map");
+    opt4->description = _("Name for output flow direction map for "
+                          "depressionless elevation raster map");
 
     opt5 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt5->key = "areas";
@@ -187,15 +186,17 @@ int main(int argc, char **argv)
     tempfile2 = G_tempfile();
     tempfile3 = G_tempfile();
 
-    fe = open(tempfile1, O_RDWR | O_CREAT, 0666);       /* elev */
-    fd = open(tempfile2, O_RDWR | O_CREAT, 0666);       /* dirn */
-    fm = open(tempfile3, O_RDWR | O_CREAT, 0666);       /* problems */
+    fe = open(tempfile1, O_RDWR | O_CREAT, 0666); /* elev */
+    fd = open(tempfile2, O_RDWR | O_CREAT, 0666); /* dirn */
+    fm = open(tempfile3, O_RDWR | O_CREAT, 0666); /* problems */
 
     G_message(_("Reading input elevation raster map..."));
     for (i = 0; i < nrows; i++) {
         G_percent(i, nrows, 2);
         get_row(map_id, in_buf, i);
-        write(fe, in_buf, bnd.sz);
+        if (write(fe, in_buf, bnd.sz) < 0)
+            G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
     }
     G_percent(1, 1, 1);
     Rast_close(map_id);
@@ -214,7 +215,8 @@ int main(int argc, char **argv)
         /* determine the watershed for each sink */
         wtrshed(fm, fd, nrows, ncols, 4);
 
-        /* fill all of the watersheds up to the elevation necessary for drainage */
+        /* fill all of the watersheds up to the elevation necessary for drainage
+         */
         ppupdate(fe, fm, nrows, nbasins, &bnd, &bndC);
 
         /* repeat the first three steps to get the final directions */
@@ -246,7 +248,9 @@ int main(int argc, char **argv)
         bas_id = Rast_open_new(bas_name, CELL_TYPE);
 
         for (i = 0; i < nrows; i++) {
-            read(fm, out_buf, bufsz);
+            if (read(fm, out_buf, bufsz) < 0)
+                G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                              errno, strerror(errno));
             Rast_put_row(bas_id, out_buf, CELL_TYPE);
         }
 
@@ -261,10 +265,14 @@ int main(int argc, char **argv)
     G_important_message(_("Writing output raster maps..."));
     for (i = 0; i < nrows; i++) {
         G_percent(i, nrows, 5);
-        read(fe, in_buf, bnd.sz);
+        if (read(fe, in_buf, bnd.sz) < 0)
+            G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
         put_row(new_id, in_buf);
 
-        read(fd, out_buf, bufsz);
+        if (read(fd, out_buf, bufsz) < 0)
+            G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
+                          errno, strerror(errno));
 
         for (j = 0; j < ncols; j += 1)
             out_buf[j] = dir_type(type, out_buf[j]);
@@ -300,7 +308,7 @@ int main(int argc, char **argv)
 
 static int dir_type(int type, int dir)
 {
-    if (type == 1) {            /* AGNPS aspect format */
+    if (type == 1) { /* AGNPS aspect format */
         if (dir == 128)
             return (1);
         else if (dir == 1)
@@ -323,7 +331,7 @@ static int dir_type(int type, int dir)
         }
     }
 
-    else if (type == 2) {       /* ANSWERS aspect format */
+    else if (type == 2) { /* ANSWERS aspect format */
         if (dir == 128)
             return (90);
         else if (dir == 1)
@@ -346,7 +354,7 @@ static int dir_type(int type, int dir)
         }
     }
 
-    else {                      /* [new] GRASS aspect format */
+    else { /* [new] GRASS aspect format */
         if (dir == 128)
             return (90);
         else if (dir == 1)
@@ -368,5 +376,4 @@ static int dir_type(int type, int dir)
             return (dir);
         }
     }
-
 }

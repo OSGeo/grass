@@ -29,8 +29,8 @@ int georef_window(struct Ortho_Image_Group *, struct Cell_head *,
                   struct Cell_head *, double);
 
 /* rectify.c */
-int rectify(struct Ortho_Image_Group *, char *, char *, struct cache *,
-            double, char *, char *);
+int rectify(struct Ortho_Image_Group *, char *, char *, struct cache *, double,
+            char *, char *);
 
 /* readcell.c */
 struct cache *readcell(int, int, int);

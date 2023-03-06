@@ -85,7 +85,7 @@ class GMApp(wx.App):
         def show_main_gui():
             # create and show main frame
             single = UserSettings.Get(
-                group="general", key="singleWindow", subkey="enabled"
+                group="appearance", key="singleWindow", subkey="enabled"
             )
             if single:
                 from main_window.frame import GMFrame
@@ -132,7 +132,6 @@ def process_opt(opts, args):
 
 
 def main(argv=None):
-
     if argv is None:
         argv = sys.argv
     try:

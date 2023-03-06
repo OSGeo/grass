@@ -36,7 +36,6 @@ class MainToolbar(BaseToolbar):
         self.scatt_mgr.modeSet.connect(self.ModeSet)
 
     def _toolbarData(self):
-
         icons = {
             "selectGroup": MetaIcon(
                 img="layer-group-add", label=_("Select imagery group")
@@ -133,7 +132,7 @@ class MainToolbar(BaseToolbar):
     def SetPloltsMode(self, event, tool_name):
         self.scatt_mgr.modeSet.disconnect(self.ModeSet)
         if event.IsChecked():
-            for i_tool_data in self._data:
+            for i_tool_data in self.controller.data:
                 i_tool_name = i_tool_data[0]
                 if not i_tool_name or i_tool_name in ["cats_mgr", "sel_pol_mode"]:
                     continue
@@ -148,7 +147,6 @@ class MainToolbar(BaseToolbar):
         self.scatt_mgr.modeSet.connect(self.ModeSet)
 
     def ActivateSelectionPolygonMode(self, event):
-
         activated = self.scatt_mgr.ActivateSelectionPolygonMode(event.IsChecked())
         self.parent.ShowPlotEditingToolbar(activated)
 
@@ -159,7 +157,7 @@ class MainToolbar(BaseToolbar):
         self.UnsetMode()
 
     def UnsetMode(self):
-        for i_tool_data in self._data:
+        for i_tool_data in self.controller.data:
             i_tool_name = i_tool_data[0]
             if not i_tool_name or i_tool_name in ["cats_mgr", "sel_pol_mode"]:
                 continue
@@ -281,7 +279,7 @@ class EditingToolbar(BaseToolbar):
     def SetMode(self, event, tool_name):
         self.scatt_mgr.modeSet.disconnect(self.ModeSet)
         if event.IsChecked():
-            for i_tool_data in self._data:
+            for i_tool_data in self.controller.data:
                 i_tool_name = i_tool_data[0]
                 if not i_tool_name:
                     continue
@@ -295,12 +293,11 @@ class EditingToolbar(BaseToolbar):
         self.scatt_mgr.modeSet.connect(self.ModeSet)
 
     def ModeSet(self, mode):
-
         if mode in ["zoom", "pan", "zoom_extend", None]:
             self.UnsetMode()
 
     def UnsetMode(self):
-        for i_tool_data in self._data:
+        for i_tool_data in self.controller.data:
             i_tool_name = i_tool_data[0]
             if not i_tool_name:
                 continue

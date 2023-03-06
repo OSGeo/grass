@@ -1,4 +1,3 @@
-
 #ifndef _MAPCALC_H_
 #define _MAPCALC_H_
 
@@ -61,7 +60,7 @@ extern void unopen_output_map(int fd);
 extern void copy_cats(const char *dst, int idx);
 extern void copy_colors(const char *dst, int idx);
 extern void copy_history(const char *dst, int idx);
-extern void create_history(const char *dst, expression * e);
+extern void create_history(const char *dst, expression *e);
 
 extern void prepare_region_from_maps_union(expression **, int);
 extern void prepare_region_from_maps_intersect(expression **, int);

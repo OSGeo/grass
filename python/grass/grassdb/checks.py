@@ -333,7 +333,7 @@ def get_location_invalid_reason(database, location, none_for_no_reason=False):
     # directory
     if not os.path.exists(location_path):
         return _("Location <%s> doesn't exist") % location_path
-    # permament mapset
+    # permanent mapset
     if "PERMANENT" not in os.listdir(location_path):
         return (
             _(

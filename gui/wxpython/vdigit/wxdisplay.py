@@ -1064,7 +1064,7 @@ class DisplayDriver:
         .. todo::
             map units
 
-        :param alpha: color value for aplha channel
+        :param alpha: color value for alpha channel
         """
         color = dict()
         for key in self.settings.keys():

@@ -1,13 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       v.build.polylines
  * AUTHOR(S):    Mark Lake (original contributor)
  *               Major rewrite by Radim Blazek, October 2002
- *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>
+ *               Glynn Clements <glynn gclements.plus.com>
+ *               Markus Neteler <neteler itc.it>
  *               Martin Landa <landa.martin gmail.com> (cats)
  *               Markus Metz (geometry type management, cats, attributes)
- * PURPOSE:      
+ * PURPOSE:
+ *
  * COPYRIGHT:    (C) 2000-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -33,9 +34,9 @@
 
    *****
 
-   PURPOSE 
+   PURPOSE
 
-   1) Convert lines or mixed lines and polylines to polylines.  Preserve points 
+   1) Convert lines or mixed lines and polylines to polylines.  Preserve points
    if present.  Allow the user to label the new lines as lines or area edges.
 
    *****
@@ -49,7 +50,8 @@
    of the polyline are connected to either one line, or three or more
    lines.
 
-   Points and centroids are ignored by build process and copied to output vector.
+   Points and centroids are ignored by build process and copied to output
+   vector.
 
    *****
 
@@ -127,8 +129,7 @@ int main(int argc, char **argv)
     cats->description = _("Category number mode");
     cats->options = "no,first,multi,same";
     desc = NULL;
-    G_asprintf(&desc,
-               "no;%s;first;%s;multi;%s;same;%s",
+    G_asprintf(&desc, "no;%s;first;%s;multi;%s;same;%s",
                _("Do not assign any category number to polyline"),
                _("Assign category number of first line to polyline"),
                _("Assign multiple category numbers to polyline"),
@@ -162,10 +163,10 @@ int main(int argc, char **argv)
     Vect_hist_copy(&map, &Out);
     Vect_hist_command(&Out);
 
-    /* Get the number of lines in the binary map and set up record of lines visited */
+    /* Get the number of lines in the binary map and set up record of lines
+     * visited */
 
-    lines_visited =
-        (int *)G_calloc(Vect_get_num_lines(&map) + 1, sizeof(int));
+    lines_visited = (int *)G_calloc(Vect_get_num_lines(&map) + 1, sizeof(int));
 
     /* Set up points structure and coordinate arrays */
     points = Vect_new_line_struct();
@@ -230,10 +231,11 @@ int main(int argc, char **argv)
 
     G_verbose_message(n_("%d line or boundaries found in input vector map",
                          "%d lines or boundaries found in input vector map",
-                         nlines), nlines);
+                         nlines),
+                      nlines);
     G_verbose_message(n_("%d polyline stored in output vector map",
-                         "%d polylines stored in output vector map",
-                         polyline), polyline);
+                         "%d polylines stored in output vector map", polyline),
+                      polyline);
 
     /* Copy (all linked) tables if needed */
     if (copy_tables) {

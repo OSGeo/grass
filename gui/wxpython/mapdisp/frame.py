@@ -117,7 +117,7 @@ class MapPanel(SingleMapPanel):
         self.onFocus = Signal("MapPanel.onFocus")
 
         # Emitted when starting (switching to) 3D mode.
-        # Parameter firstTime specifies if 3D was already actived.
+        # Parameter firstTime specifies if 3D was already activated.
         self.starting3dMode = Signal("MapPanel.starting3dMode")
 
         # Emitted when ending (switching from) 3D mode.
@@ -620,6 +620,11 @@ class MapPanel(SingleMapPanel):
                 .Layer(2)
                 .BestSize((self.toolbars["map"].GetBestSize())),
             )
+
+        # nviz
+        elif name == "nviz":
+            self.toolbars["map"].combo.SetValue(_("3D view"))
+            self.AddNviz()
 
         # vector digitizer
         elif name == "vdigit":
@@ -1714,16 +1719,26 @@ class MapDisplay(FrameMixin, MapPanel):
             )
         )
         # use default frame window layout
+        client_disp = wx.ClientDisplayRect()
         if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
             dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
             idx = 4 + idx * 4
             try:
                 x, y = map(int, dim.split(",")[idx : idx + 2])
                 w, h = map(int, dim.split(",")[idx + 2 : idx + 4])
+                if x == 1:
+                    # Get client display x offset (OS panel)
+                    x = client_disp[0]
+                if y == 1:
+                    # Get client display y offset (OS panel)
+                    y = client_disp[1]
                 parent.SetPosition((x, y))
                 parent.SetSize((w, h))
             except Exception:
                 pass
+        else:
+            # Set client display x, y offset (OS panel)
+            parent.SetPosition((client_disp[0], client_disp[1]))
 
         # bindings
         parent.Bind(wx.EVT_CLOSE, self.OnCloseWindow)

@@ -14,8 +14,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-struct colorinfo
-{
+struct colorinfo {
     char *name;
     char *desc;
     char *type;
@@ -117,7 +116,7 @@ char *G_color_rules_descriptions(void)
 /*!
    \brief Get color rules description for Option->descriptions
 
-   The type of color rule including range is appended to the description 
+   The type of color rule including range is appended to the description
 
    \return allocated buffer with name, description, and type
  */
@@ -172,7 +171,7 @@ char *G_color_rules_description_type(void)
 
    \param out file where to print
  */
-void G_list_color_rules(FILE * out)
+void G_list_color_rules(FILE *out)
 {
     int i, nrules;
     struct colorinfo *colorinfo;
@@ -188,14 +187,14 @@ void G_list_color_rules(FILE * out)
 /*!
    \brief Print color rules with description and type
 
-   The type of color rule including range is appended to the description. 
-   If a color rule name is given, color info is printed only for this 
+   The type of color rule including range is appended to the description.
+   If a color rule name is given, color info is printed only for this
    rule.
 
    \param name optional color rule name, or NULL
    \param out file where to print
  */
-void G_list_color_rules_description_type(FILE * out, char *name)
+void G_list_color_rules_description_type(FILE *out, char *name)
 {
     int i, nrules;
     struct colorinfo *colorinfo, csearch, *cfound;
@@ -205,13 +204,13 @@ void G_list_color_rules_description_type(FILE * out, char *name)
     cfound = NULL;
     if (name) {
         csearch.name = name;
-        cfound = bsearch(&csearch, colorinfo, nrules,
-                         sizeof(struct colorinfo), cmp_clrname);
+        cfound = bsearch(&csearch, colorinfo, nrules, sizeof(struct colorinfo),
+                         cmp_clrname);
 
         if (cfound) {
             if (cfound->desc) {
-                fprintf(out, "%s: %s [%s]\n", cfound->name,
-                        cfound->desc, cfound->type);
+                fprintf(out, "%s: %s [%s]\n", cfound->name, cfound->desc,
+                        cfound->type);
             }
             else {
                 fprintf(out, "%s: [%s]\n", cfound->name, cfound->type);
@@ -251,8 +250,8 @@ int G_find_color_rule(const char *name)
     colorinfo = get_colorinfo(&nrules);
 
     csearch.name = (char *)name;
-    result = (bsearch(&csearch, colorinfo, nrules,
-                      sizeof(struct colorinfo), cmp_clrname) != NULL);
+    result = (bsearch(&csearch, colorinfo, nrules, sizeof(struct colorinfo),
+                      cmp_clrname) != NULL);
 
     free_colorinfo(colorinfo, nrules);
 
@@ -339,8 +338,7 @@ struct colorinfo *get_colorinfo(int *nrules)
         if (cisperc)
             colorinfo[i].type = G_store(_("range: map values"));
         else {
-            G_snprintf(buf, sizeof(buf) - 1, _("range: %g to %g"), rmin,
-                       rmax);
+            G_snprintf(buf, sizeof(buf) - 1, _("range: %g to %g"), rmin, rmax);
             colorinfo[i].type = G_store(buf);
         }
     }
@@ -387,8 +385,8 @@ struct colorinfo *get_colorinfo(int *nrules)
         cdesc = G_chop(tokens[1]);
 
         csearch.name = cname;
-        cfound = bsearch(&csearch, colorinfo, *nrules,
-                         sizeof(struct colorinfo), cmp_clrname);
+        cfound = bsearch(&csearch, colorinfo, *nrules, sizeof(struct colorinfo),
+                         cmp_clrname);
 
         if (cfound) {
             cfound->desc = G_store(cdesc);

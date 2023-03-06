@@ -1,9 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       db.columns
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Markus Neteler <neteler itc.it>
  * PURPOSE:      list the column names for a table
  * COPYRIGHT:    (C) 2002-2006 by the GRASS Development Team
  *
@@ -19,16 +19,12 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-
-struct
-{
+struct {
     char *driver, *database, *table;
 } parms;
 
-
 /* function prototypes */
 static void parse_command_line(int, char **);
-
 
 int main(int argc, char **argv)
 {
@@ -71,7 +67,6 @@ int main(int argc, char **argv)
 
     exit(EXIT_SUCCESS);
 }
-
 
 static void parse_command_line(int argc, char **argv)
 {

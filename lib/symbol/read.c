@@ -1,19 +1,18 @@
-
 /****************************************************************************
-*
-* MODULE:       Symbol library 
-*   	    	
-* AUTHOR(S):    Radim Blazek
-*
-* PURPOSE:      Read symbol from a file to internal structure
-*
-* COPYRIGHT:    (C) 2001 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Symbol library
+ *
+ * AUTHOR(S):    Radim Blazek
+ *
+ * PURPOSE:      Read symbol from a file to internal structure
+ *
+ * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with
+ *               GRASS for details.
+ *
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <string.h>
@@ -60,7 +59,7 @@ SYMBOL *new_symbol(void)
 {
     SYMBOL *p;
 
-    p = (SYMBOL *) G_malloc(sizeof(SYMBOL));
+    p = (SYMBOL *)G_malloc(sizeof(SYMBOL));
     p->scale = 1.0;
     p->count = 0;
     p->alloc = 0;
@@ -69,12 +68,12 @@ SYMBOL *new_symbol(void)
 }
 
 /* add part to symbol */
-void add_part(SYMBOL * s, SYMBPART * p)
+void add_part(SYMBOL *s, SYMBPART *p)
 {
     if (s->count == s->alloc) {
         s->alloc += 10;
         s->part =
-            (SYMBPART **) G_realloc(s->part, s->alloc * sizeof(SYMBPART *));
+            (SYMBPART **)G_realloc(s->part, s->alloc * sizeof(SYMBPART *));
     }
     s->part[s->count] = p;
     s->count++;
@@ -86,7 +85,7 @@ SYMBPART *new_part(int type)
 {
     SYMBPART *p;
 
-    p = (SYMBPART *) G_malloc(sizeof(SYMBPART));
+    p = (SYMBPART *)G_malloc(sizeof(SYMBPART));
     p->type = type;
     p->count = 0;
     p->alloc = 0;
@@ -97,18 +96,16 @@ SYMBPART *new_part(int type)
 }
 
 /* add chain to part */
-void add_chain(SYMBPART * p, SYMBCHAIN * s)
+void add_chain(SYMBPART *p, SYMBCHAIN *s)
 {
     if (p->count == p->alloc) {
         p->alloc += 10;
         p->chain =
-            (SYMBCHAIN **) G_realloc(p->chain,
-                                     p->alloc * sizeof(SYMBCHAIN *));
+            (SYMBCHAIN **)G_realloc(p->chain, p->alloc * sizeof(SYMBCHAIN *));
     }
     p->chain[p->count] = s;
     p->count++;
 }
-
 
 /* --- CHAIN --- */
 /* create new empty chain */
@@ -116,7 +113,7 @@ SYMBCHAIN *new_chain(void)
 {
     SYMBCHAIN *p;
 
-    p = (SYMBCHAIN *) G_malloc(sizeof(SYMBCHAIN));
+    p = (SYMBCHAIN *)G_malloc(sizeof(SYMBCHAIN));
     p->count = 0;
     p->alloc = 0;
     p->elem = NULL;
@@ -128,11 +125,11 @@ SYMBCHAIN *new_chain(void)
 }
 
 /* add element to chain */
-void add_element(SYMBCHAIN * s, SYMBEL * e)
+void add_element(SYMBCHAIN *s, SYMBEL *e)
 {
     if (s->count == s->alloc) {
         s->alloc += 10;
-        s->elem = (SYMBEL **) G_realloc(s->elem, s->alloc * sizeof(SYMBEL *));
+        s->elem = (SYMBEL **)G_realloc(s->elem, s->alloc * sizeof(SYMBEL *));
     }
     s->elem[s->count] = e;
     s->count++;
@@ -144,7 +141,7 @@ SYMBEL *new_line(void)
 {
     SYMBEL *p;
 
-    p = (SYMBEL *) G_malloc(sizeof(SYMBEL));
+    p = (SYMBEL *)G_malloc(sizeof(SYMBEL));
     p->type = S_LINE;
     p->coor.line.count = 0;
     p->coor.line.alloc = 0;
@@ -154,16 +151,14 @@ SYMBEL *new_line(void)
 }
 
 /* add point to line */
-void add_point(SYMBEL * el, double x, double y)
+void add_point(SYMBEL *el, double x, double y)
 {
     if (el->coor.line.count == el->coor.line.alloc) {
         el->coor.line.alloc += 10;
-        el->coor.line.x =
-            (double *)G_realloc(el->coor.line.x,
-                                el->coor.line.alloc * sizeof(double));
-        el->coor.line.y =
-            (double *)G_realloc(el->coor.line.y,
-                                el->coor.line.alloc * sizeof(double));
+        el->coor.line.x = (double *)G_realloc(
+            el->coor.line.x, el->coor.line.alloc * sizeof(double));
+        el->coor.line.y = (double *)G_realloc(
+            el->coor.line.y, el->coor.line.alloc * sizeof(double));
     }
     el->coor.line.x[el->coor.line.count] = x;
     el->coor.line.y[el->coor.line.count] = y;
@@ -175,7 +170,7 @@ SYMBEL *new_arc(double x, double y, double r, double a1, double a2, int c)
 {
     SYMBEL *p;
 
-    p = (SYMBEL *) G_malloc(sizeof(SYMBEL));
+    p = (SYMBEL *)G_malloc(sizeof(SYMBEL));
     p->type = S_ARC;
     p->coor.arc.clock = c;
     p->coor.arc.x = x;
@@ -187,7 +182,7 @@ SYMBEL *new_arc(double x, double y, double r, double a1, double a2, int c)
 }
 
 /* read line coordinates */
-void read_coor(FILE * fp, SYMBEL * e)
+void read_coor(FILE *fp, SYMBEL *e)
 {
     char buf[501];
     double x, y;
@@ -218,20 +213,20 @@ void read_coor(FILE * fp, SYMBEL * e)
 }
 
 /* close file free symbol, print message, return NULL */
-SYMBOL *err(FILE * fp, SYMBOL * s, char *msg)
+SYMBOL *err(FILE *fp, SYMBOL *s, char *msg)
 {
     fclose(fp);
-    G_free(s);                  /* TODO: free all */
+    G_free(s); /* TODO: free all */
     G_warning("%s", msg);
     return NULL;
 }
 
-/* 
+/*
  *  Read symbol specified by name.
- *  Name: group/name | group/name@mapset 
+ *  Name: group/name | group/name@mapset
  *        (later add syntax to prefer symbol from GISBASE)
  *  S_read() searches first in mapsets (standard GRASS search) and
- *   then in GISBASE/etc/symbol/ 
+ *   then in GISBASE/etc/symbol/
  */
 SYMBOL *S_read(const char *sname)
 {
@@ -246,10 +241,10 @@ SYMBOL *S_read(const char *sname)
     int ret;
     char clock;
     SYMBOL *symb;
-    int current;                /* current part_type */
-    SYMBPART *part;             /* current part */
-    SYMBCHAIN *chain;           /* current chain */
-    SYMBEL *elem;               /* current element */
+    int current;      /* current part_type */
+    SYMBPART *part;   /* current part */
+    SYMBCHAIN *chain; /* current chain */
+    SYMBEL *elem;     /* current element */
 
     G_debug(3, "S_read(): sname = %s", sname);
 
@@ -258,7 +253,8 @@ SYMBOL *S_read(const char *sname)
     strcpy(group, sname);
     c = strchr(group, '/');
     if (c == NULL) {
-        G_warning(_("Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"),
+        G_warning(_("Incorrect symbol name: '%s' (should be: group/name or "
+                    "group/name@mapset)"),
                   sname);
         return NULL;
     }
@@ -273,10 +269,10 @@ SYMBOL *S_read(const char *sname)
     sprintf(buf, "symbol/%s", group);
     ms = G_find_file(buf, name, NULL);
 
-    if (ms != NULL) {           /* Found in mapsets */
+    if (ms != NULL) { /* Found in mapsets */
         fp = G_fopen_old(buf, name, ms);
     }
-    else {                      /* Search in GISBASE */
+    else { /* Search in GISBASE */
         sprintf(buf, "%s/etc/symbol/%s", G_gisbase(), sname);
         fp = fopen(buf, "r");
     }
@@ -289,7 +285,7 @@ SYMBOL *S_read(const char *sname)
     /* create new symbol */
     symb = new_symbol();
 
-    current = OBJ_NONE;         /* no part */
+    current = OBJ_NONE; /* no part */
 
     /* read file */
     while (G_getl2(buf, 2000, fp) != 0) {
@@ -336,27 +332,23 @@ SYMBOL *S_read(const char *sname)
             current = OBJ_POLYGON;
             part = new_part(S_POLYGON);
             add_part(symb, part);
-
         }
         else if (strcmp(key, "RING") == 0) {
             G_debug(4, "  RING >");
             current = OBJ_RING;
             chain = new_chain();
             add_chain(part, chain);
-
         }
         else if (strcmp(key, "LINE") == 0) {
             G_debug(4, "    LINE >");
             elem = new_line();
             add_element(chain, elem);
             read_coor(fp, elem);
-
         }
         else if (strcmp(key, "ARC") == 0) {
             G_debug(4, "    ARC");
-            ret =
-                sscanf(data, "%lf %lf %lf %lf %lf %c", &x, &y, &rad, &ang1,
-                       &ang2, &clock);
+            ret = sscanf(data, "%lf %lf %lf %lf %lf %c", &x, &y, &rad, &ang1,
+                         &ang2, &clock);
             if (ret < 5) {
                 sprintf(buf2, "Incorrect arc definition: '%s'", buf);
                 return (err(fp, symb, buf2));
@@ -367,7 +359,6 @@ SYMBOL *S_read(const char *sname)
                 i = 0;
             elem = new_arc(x, y, rad, ang1, ang2, i);
             add_element(chain, elem);
-
         }
         else if (strcmp(key, "END") == 0) {
             switch (current) {
@@ -404,8 +395,8 @@ SYMBOL *S_read(const char *sname)
                     part->color.fr = fr;
                     part->color.fg = fg;
                     part->color.fb = fb;
-                    G_debug(4, "  color [%d %d %d] = [%.3f %.3f %.3f]", r, g,
-                            b, fr, fg, fb);
+                    G_debug(4, "  color [%d %d %d] = [%.3f %.3f %.3f]", r, g, b,
+                            fr, fg, fb);
                 }
             }
             else {
@@ -432,8 +423,8 @@ SYMBOL *S_read(const char *sname)
                     part->fcolor.fr = fr;
                     part->fcolor.fg = fg;
                     part->fcolor.fb = fb;
-                    G_debug(4, "  color [%d %d %d] = [%.3f %.3f %.3f]", r, g,
-                            b, fr, fg, fb);
+                    G_debug(4, "  color [%d %d %d] = [%.3f %.3f %.3f]", r, g, b,
+                            fr, fg, fb);
                 }
             }
             else {
@@ -459,8 +450,7 @@ SYMBOL *S_read(const char *sname)
                 part->fcolor.color);
         for (j = 0; j < part->count; j++) {
             chain = part->chain[j];
-            G_debug(4, "    Chain %d: number of elements: %d", j,
-                    chain->count);
+            G_debug(4, "    Chain %d: number of elements: %d", j, chain->count);
             for (k = 0; k < chain->count; k++) {
                 elem = chain->elem[k];
                 G_debug(4, "      Element %d: type: %d", k, elem->type);
@@ -468,8 +458,8 @@ SYMBOL *S_read(const char *sname)
                     G_debug(4, "        Number of points %d",
                             elem->coor.line.count);
                     for (l = 0; l < elem->coor.line.count; l++) {
-                        G_debug(4, "        x, y: %f %f",
-                                elem->coor.line.x[l], elem->coor.line.y[l]);
+                        G_debug(4, "        x, y: %f %f", elem->coor.line.x[l],
+                                elem->coor.line.y[l]);
                     }
                 }
                 else {

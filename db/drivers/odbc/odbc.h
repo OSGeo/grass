@@ -1,5 +1,5 @@
 #ifndef _ODBC_H_
-#define	_ODBC_H_
+#define _ODBC_H_
 
 #ifdef __MINGW32__
 #include <windows.h>

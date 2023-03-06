@@ -107,7 +107,7 @@ class Select(ComboCtrl):
         validator=wx.DefaultValidator,
     ):
         """Custom control to create a ComboBox with a tree control to
-        display and select GIS elements within acessible mapsets.
+        display and select GIS elements within accessible mapsets.
         Elements can be selected with mouse. Can allow multiple
         selections, when argument <em>multiple</em> is True. Multiple
         selections are separated by commas.
@@ -436,7 +436,6 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
     # overridden ComboPopup methods
 
     def Init(self):
-
         ListCtrlComboPopup.Init(self)
         self.nmaps = 1
         self.type = None
@@ -1021,7 +1020,6 @@ class DriverSelect(wx.ComboBox):
         size=globalvar.DIALOG_LAYER_SIZE,
         **kargs,
     ):
-
         super(DriverSelect, self).__init__(
             parent, id, value, pos, size, choices, style=wx.CB_READONLY
         )
@@ -1956,7 +1954,6 @@ class GdalSelect(wx.Panel):
             self.dbPanel,
             self.protocolPanel,
         ):
-
             self.changingSizer.Add(panel, proportion=1, flag=wx.EXPAND)
 
         self.mainSizer.Add(
@@ -2003,8 +2000,11 @@ class GdalSelect(wx.Panel):
         if sourceType == "db":
             self.dbWidgets["format"].SetItems(list(self.dbFormats.values()))
             if self.dbFormats:
-                if "PostgreSQL" in self.dbFormats.values():
+                db_formats = self.dbFormats.values()
+                if "PostgreSQL" in db_formats:
                     self.dbWidgets["format"].SetStringSelection("PostgreSQL")
+                elif "PostgreSQL/PostGIS" in db_formats:
+                    self.dbWidgets["format"].SetStringSelection("PostgreSQL/PostGIS")
                 else:
                     self.dbWidgets["format"].SetSelection(0)
             self.dbWidgets["format"].Enable()
@@ -2102,6 +2102,7 @@ class GdalSelect(wx.Panel):
         if self._sourceType == "db":
             if self.dbWidgets["format"].GetStringSelection() in (
                 "PostgreSQL",
+                "PostgreSQL/PostGIS",
                 "PostGIS Raster driver",
             ):
                 ret = RunCommand("db.login", read=True, quiet=True, flags="p")
@@ -2167,14 +2168,23 @@ class GdalSelect(wx.Panel):
     def SetDatabase(self, db):
         """Update database panel."""
         sizer = self.dbPanel.GetSizer()
-        showBrowse = db in ("SQLite", "Rasterlite")
+        showBrowse = db in ("SQLite", "SQLite / Spatialite", "Rasterlite")
         showDirbrowse = db in ("FileGDB")
         showChoice = db in (
             "PostgreSQL",
+            "PostgreSQL/PostGIS",
             "PostGIS WKT Raster driver",
             "PostGIS Raster driver",
         )
-        enableFeatType = self.dest and self.ogr and db in ("PostgreSQL")
+        enableFeatType = (
+            self.dest
+            and self.ogr
+            and db
+            in (
+                "PostgreSQL",
+                "PostgreSQL/PostGIS",
+            )
+        )
         showText = not (showBrowse or showChoice or showDirbrowse)
 
         sizer.Show(self.dbWidgets["browse"], show=showBrowse)
@@ -2291,7 +2301,6 @@ class GdalSelect(wx.Panel):
             return projectionMatch
 
         def getProjMatchCaption(projectionMatch):
-
             if projectionMatch == "0":
                 projectionMatchCaption = _("No")
             else:
@@ -3011,7 +3020,6 @@ class VectorCategorySelect(wx.Panel):
                 self.buttonVecSelect.SetValue(False)
                 return
         if self._vectorSelect is None:
-
             if self.mapdisp:
                 if self.buttonVecSelect.IsEnabled():
                     switcher = self.mapdisp.GetToolSwitcher()
@@ -3096,6 +3104,14 @@ class SignatureSelect(wx.ComboBox):
         self.SetValue("")
 
     def _append_mapset_signatures(self, mapset, element, items):
+        # A workaround to list signature files before a separate
+        # signature management module is developed
+        try:
+            from grass.lib.gis import G_gisinit
+
+            G_gisinit("")
+        except Exception:
+            return
         try:
             from grass.lib.imagery import (
                 I_SIGFILE_TYPE_SIG,
@@ -3124,7 +3140,7 @@ class SignatureSelect(wx.ComboBox):
 
 
 class SeparatorSelect(wx.ComboBox):
-    """Widget for selecting seperator"""
+    """Widget for selecting separator"""
 
     def __init__(
         self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE, **kwargs

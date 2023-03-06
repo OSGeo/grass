@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_version.c
- * 
+ *
  * \brief DBMI Library (driver) - version info
  *
  * (C) 1999-2008 by the GRASS Development Team

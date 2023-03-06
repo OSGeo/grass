@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -8,8 +9,8 @@ int thin_seg(int stream_id)
     int thinned = 0;
     int r, c, r_nbr, c_nbr, last_r, last_c;
     CELL curr_stream, no_stream = 0;
-    int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
-    int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
+    int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
+    int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
     ASP_FLAG af;
 
     r = stream_node[stream_id].r;
@@ -71,8 +72,7 @@ int thin_streams(void)
     int i, j, r, c, done;
     CELL stream_id;
     int next_node;
-    struct sstack
-    {
+    struct sstack {
         int stream_id;
         int next_trib;
     } *nodestack;
@@ -119,10 +119,8 @@ int thin_streams(void)
                 if (top >= stack_step) {
                     /* need more space */
                     stack_step += 1000;
-                    nodestack =
-                        (struct sstack *)G_realloc(nodestack,
-                                                   stack_step *
-                                                   sizeof(struct sstack));
+                    nodestack = (struct sstack *)G_realloc(
+                        nodestack, stack_step * sizeof(struct sstack));
                 }
 
                 nodestack[top].next_trib = 0;
@@ -148,11 +146,11 @@ int thin_streams(void)
                     stream_id = nodestack[top].stream_id;
                     for (j = 0; j < stream_node[stream_id].n_trib; j++) {
                         /* intermediate */
-                        if (stream_node[stream_node[stream_id].trib[j]].n_trib
-                            > 0)
+                        if (stream_node[stream_node[stream_id].trib[j]].n_trib >
+                            0)
                             n_trib_total +=
-                                stream_node[stream_node[stream_id].
-                                            trib[j]].n_trib_total;
+                                stream_node[stream_node[stream_id].trib[j]]
+                                    .n_trib_total;
                         /* start */
                         else
                             n_trib_total++;
@@ -166,7 +164,7 @@ int thin_streams(void)
 
     G_free(nodestack);
 
-    G_verbose_message(_("%d of %" PRI_OFF_T " stream segments were thinned"),
+    G_verbose_message(_("%d of %" PRId64 " stream segments were thinned"),
                       n_thinned, n_stream_nodes);
 
     return 1;

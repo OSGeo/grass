@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_finddb.c
- * 
+ *
  * \brief DBMI Library (driver) - find database
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -35,7 +35,6 @@ int db_d_find_database(void)
 
     /* call the procedure */
     stat = db_driver_find_database(&handle, &found);
-
 
     /* send the return code */
     if (stat != DB_OK) {

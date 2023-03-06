@@ -100,7 +100,6 @@ def main():
 
     # ==== only points ==== #
     if vinfo["points"] > 0 and vinfo["lines"] == 0 and vinfo["areas"] == 0:
-
         # ==================================== #
         # ========== CLIP BY REGION ========== #
         # ==================================== #

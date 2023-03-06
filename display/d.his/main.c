@@ -1,12 +1,11 @@
-
 /****************************************************************************
  *
  * MODULE:       d.his
  * AUTHOR(S):    James Westervelt, CERL (original contributor)
- *               Markus Neteler <neteler itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Huidae Cho <grass4u gmail.com>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
  *               Jan-Oliver Wagner <jan intevation.de>,
  *               Hamish Bowman (brightness option)
  * PURPOSE:      produces a raster map layer using hue, intensity, and
@@ -19,6 +18,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -55,7 +55,6 @@ int main(int argc, char **argv)
     struct Flag *nulldraw;
     double bright_mult;
 
-
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -65,10 +64,9 @@ int main(int argc, char **argv)
     G_add_keyword("RGB");
     G_add_keyword("HIS");
     G_add_keyword("IHS");
-    module->description =
-        _("Displays the result obtained by combining "
-          "hue, intensity, and saturation (HIS) values "
-          "from user-specified input raster map layers.");
+    module->description = _("Displays the result obtained by combining "
+                            "hue, intensity, and saturation (HIS) values "
+                            "from user-specified input raster map layers.");
 
     opt_h = G_define_option();
     opt_h->key = "hue";
@@ -104,7 +102,6 @@ int main(int argc, char **argv)
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
 
     /* it's not truly the percentage to brighten,
        but saying that makes the option easy to use */
@@ -182,8 +179,8 @@ int main(int argc, char **argv)
     make_gray_scale(&gray_colors);
 
     /* Now do the work */
-    intensity = 255;            /* default is to not change intensity */
-    saturation = 255;           /* default is to not change saturation */
+    intensity = 255;  /* default is to not change intensity */
+    saturation = 255; /* default is to not change saturation */
 
     D_raster_draw_begin();
 
@@ -191,8 +188,8 @@ int main(int argc, char **argv)
     for (atrow = 0; atrow < window.rows;) {
         G_percent(atrow, window.rows, 2);
 
-        Rast_get_row_colors
-            (hue_file, atrow, &hue_colors, hue_r, hue_g, hue_b, hue_n);
+        Rast_get_row_colors(hue_file, atrow, &hue_colors, hue_r, hue_g, hue_b,
+                            hue_n);
 
         if (int_used)
             Rast_get_row_colors(int_file, atrow, &int_colors, int_r, dummy,
@@ -204,9 +201,8 @@ int main(int argc, char **argv)
 
         for (atcol = 0; atcol < window.cols; atcol++) {
             if (nulldraw->answer) {
-                if (hue_n[atcol]
-                    || (int_used && int_n[atcol])
-                    || (sat_used && sat_n[atcol])) {
+                if (hue_n[atcol] || (int_used && int_n[atcol]) ||
+                    (sat_used && sat_n[atcol])) {
                     Rast_set_c_null_value(&r_array[atcol], 1);
                     Rast_set_c_null_value(&g_array[atcol], 1);
                     Rast_set_c_null_value(&b_array[atcol], 1);
@@ -220,17 +216,15 @@ int main(int argc, char **argv)
             if (sat_used)
                 saturation = sat_r[atcol];
 
-            HIS_to_RGB(hue_r[atcol], hue_g[atcol], hue_b[atcol],
-                       intensity, saturation,
-                       &r_array[atcol], &g_array[atcol], &b_array[atcol]);
+            HIS_to_RGB(hue_r[atcol], hue_g[atcol], hue_b[atcol], intensity,
+                       saturation, &r_array[atcol], &g_array[atcol],
+                       &b_array[atcol]);
         }
 
         if (atrow == next_row)
-            next_row = D_draw_raster_RGB(next_row,
-                                         r_array, g_array, b_array,
-                                         &gray_colors, &gray_colors,
-                                         &gray_colors, CELL_TYPE, CELL_TYPE,
-                                         CELL_TYPE);
+            next_row = D_draw_raster_RGB(
+                next_row, r_array, g_array, b_array, &gray_colors, &gray_colors,
+                &gray_colors, CELL_TYPE, CELL_TYPE, CELL_TYPE);
 
         if (next_row > 0)
             atrow = next_row;

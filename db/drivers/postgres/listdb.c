@@ -15,8 +15,8 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_list_databases(dbString * dbpath, int npaths,
-                              dbHandle ** dblist, int *dbcount)
+int db__driver_list_databases(dbString *dbpath, int npaths, dbHandle **dblist,
+                              int *dbcount)
 {
     int i;
     const char *user, *passwd, *host, *port;
@@ -42,7 +42,8 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
         return DB_FAILED;
     }
 
-    G_debug(1, "db = %s, user = %s, pass = %s, "
+    G_debug(1,
+            "db = %s, user = %s, pass = %s, "
             "host = %s, port = %s, options = %s, tty = %s",
             pgconn.dbname, pgconn.user, pgconn.password, pgconn.host,
             pgconn.port, pgconn.options, pgconn.tty);
@@ -55,13 +56,11 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
                                "template1", user, passwd);
     }
     else {
-        pg_conn =
-            PQsetdb(host, port, pgconn.options, pgconn.tty, "template1");
+        pg_conn = PQsetdb(host, port, pgconn.options, pgconn.tty, "template1");
     }
 
     if (PQstatus(pg_conn) == CONNECTION_BAD) {
-        db_d_append_error("%s\n%s",
-                          _("Unable to connect to Postgres:"),
+        db_d_append_error("%s\n%s", _("Unable to connect to Postgres:"),
                           PQerrorMessage(pg_conn));
         db_d_report_error();
         PQfinish(pg_conn);
@@ -71,8 +70,7 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
     res = PQexec(pg_conn, "select datname from pg_database");
 
     if (!res || PQresultStatus(res) != PGRES_TUPLES_OK) {
-        db_d_append_error("%s\n%s",
-                          _("Unable to select from Postgres:"),
+        db_d_append_error("%s\n%s", _("Unable to select from Postgres:"),
                           PQerrorMessage(pg_conn));
         db_d_report_error();
         PQclear(res);

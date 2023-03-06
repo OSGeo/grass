@@ -2217,7 +2217,6 @@ class TemporalAlgebraParser(object):
             for expr in tvarexpr:
                 if isinstance(expr, list):
                     if all([issubclass(type(ele), AbstractMapDataset) for ele in expr]):
-
                         # Use method eval_map_list to evaluate map_list
                         resultlist = self.eval_map_list(expr, thenlist, topolist)
                     else:
@@ -2333,7 +2332,6 @@ class TemporalAlgebraParser(object):
                 count = 0
                 register_list = []
                 if num > 0:
-
                     # Compute the granularity for suffix creation
                     granularity = None
                     if len(t[3]) > 0 and self.time_suffix == "gran":
@@ -2382,7 +2380,6 @@ class TemporalAlgebraParser(object):
                         map_b.select(dbif)
                         map_b_extent = map_b.get_temporal_extent_as_tuple()
                         if map_a_extent != map_b_extent:
-
                             # Create new map with basename
                             newident = create_numeric_suffix(
                                 self.basename, count, "%0" + str(leadzero)

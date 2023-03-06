@@ -78,7 +78,7 @@ int M_read_list(int check_if_empty, int *num)
         line++;
         if (*buf == '#')
             continue;
-        if (*buf == ' ' || *buf == '\t') {      /* support element */
+        if (*buf == ' ' || *buf == '\t') { /* support element */
             *desc = 0;
             if (sscanf(buf, "%[^:]:%[^\n]", elem, desc) < 1)
                 continue;
@@ -91,11 +91,10 @@ int M_read_list(int check_if_empty, int *num)
             G_strip(desc);
             M__add_element(elem, desc);
         }
-        else {                  /* main element */
+        else { /* main element */
 
-            if (sscanf
-                (buf, "%[^:]:%[^:]:%[^:]:%[^\n]", elem, alias, desc,
-                 text) != 4)
+            if (sscanf(buf, "%[^:]:%[^:]:%[^:]:%[^\n]", elem, alias, desc,
+                       text) != 4)
                 format_error(element_list, line, buf);
 
             G_strip(elem);
@@ -103,8 +102,7 @@ int M_read_list(int check_if_empty, int *num)
             G_strip(desc);
             G_strip(text);
 
-            list =
-                (struct list *)G_realloc(list, (nlist + 1) * sizeof(*list));
+            list = (struct list *)G_realloc(list, (nlist + 1) * sizeof(*list));
             list[nlist].mainelem = G_store(elem);
             list[nlist].alias = G_store(alias);
             list[nlist].maindesc = G_store(desc);

@@ -177,16 +177,26 @@ class GMFrame(wx.Frame):
             try:
                 x, y = map(int, dim.split(",")[0:2])
                 w, h = map(int, dim.split(",")[2:4])
+                client_disp = wx.ClientDisplayRect()
+                if x == 1:
+                    # Get client display x offset (OS panel)
+                    x = client_disp[0]
+                if y == 1:
+                    # Get client display y offset (OS panel)
+                    y = client_disp[1]
                 self.SetPosition((x, y))
                 self.SetSize((w, h))
             except Exception:
                 pass
+            self.Layout()
+            if w <= globalvar.GM_WINDOW_SIZE[0] or h <= globalvar.GM_WINDOW_SIZE[1]:
+                self.Fit()
         else:
+            self.Layout()
+            self.Fit()
             # does center (of screen) make sense for lmgr?
             self.Centre()
 
-        self.Layout()
-        self.Fit()
         self.Show()
 
         # load workspace file if requested
@@ -274,7 +284,7 @@ class GMFrame(wx.Frame):
         return False
 
     def SetStatusText(self, *args):
-        """Overide SbMain statusbar method"""
+        """Override SbMain statusbar method"""
         self.statusbar.SetStatusText(*args)
 
     def _createMapNotebook(self):
@@ -604,7 +614,7 @@ class GMFrame(wx.Frame):
             self.datacatalog,
             aui.AuiPaneInfo()
             .Name("datacatalog")
-            .Caption("Data Catalog")
+            .Caption(_("Data"))
             .Left()
             .Layer(1)
             .Position(1)
@@ -619,7 +629,7 @@ class GMFrame(wx.Frame):
             self.notebookLayers,
             aui.AuiPaneInfo()
             .Name("layers")
-            .Caption("Layers")
+            .Caption(_("Layers"))
             .Left()
             .Layer(1)
             .Position(2)
@@ -634,7 +644,7 @@ class GMFrame(wx.Frame):
             self.search,
             aui.AuiPaneInfo()
             .Name("tools")
-            .Caption("Tools")
+            .Caption(_("Tools"))
             .Right()
             .Layer(1)
             .Position(1)
@@ -649,7 +659,7 @@ class GMFrame(wx.Frame):
             self.goutput,
             aui.AuiPaneInfo()
             .Name("console")
-            .Caption("Console")
+            .Caption(_("Console"))
             .Right()
             .BestSize(self.PANE_BEST_SIZE)
             .MinSize(self.PANE_MIN_SIZE)
@@ -663,7 +673,7 @@ class GMFrame(wx.Frame):
             self.pyshell,
             aui.AuiPaneInfo()
             .Name("python")
-            .Caption("Python")
+            .Caption(_("Python"))
             .Right()
             .BestSize(self.PANE_BEST_SIZE)
             .MinSize(self.PANE_MIN_SIZE)
@@ -765,7 +775,7 @@ class GMFrame(wx.Frame):
         self._auimgr.GetPane("nviz").Show()
         self._auimgr.Update()
 
-        # this is a bit strange here since a new window is created everytime
+        # this is a bit strange here since a new window is created every time
         if not firstTime:
             for page in ("view", "light", "fringe", "constant", "cplane", "animation"):
                 self.nviz.UpdatePage(page)
@@ -1099,6 +1109,20 @@ class GMFrame(wx.Frame):
                 lcmd=command,
             )
 
+    def GetAuiManager(self):
+        """Get aui manager
+
+        :return: aui manager instance
+        """
+        return self._auimgr
+
+    def GetAuiNotebook(self):
+        """Get aui notebook
+
+        :return: aui notebook instance
+        """
+        return self.mapnotebook
+
     def GetLayerNotebook(self):
         """Get Layers Notebook"""
         return self.notebookLayers
@@ -1410,6 +1434,7 @@ class GMFrame(wx.Frame):
         :param event: to be able to serve as a handler of wx event
         :param cmd: command as a list (must start with 'cd')
         """
+
         # local functions
         def write_beginning(parameter=None, command=None):
             if parameter:
@@ -1816,14 +1841,6 @@ class GMFrame(wx.Frame):
         win.CentreOnScreen()
         win.Show()
 
-    def OnVectorCleaning(self, event, cmd=""):
-        """Init interactive vector cleaning"""
-        from modules.vclean import VectorCleaningFrame
-
-        win = VectorCleaningFrame(parent=self)
-        win.CentreOnScreen()
-        win.Show()
-
     def OnRasterOutputFormat(self, event):
         """Set raster output format handler"""
         self.OnMenuCmd(cmd=["r.external.out"])
@@ -1946,8 +1963,6 @@ class GMFrame(wx.Frame):
         # moved from mapdisp/frame.py
         # TODO: why it is called 3 times when getting focus?
         # and one times when loosing focus?
-        if self.workspace_manager.loadingWorkspace:
-            return
         pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)
         if pgnum > -1:
             self.notebookLayers.SetSelection(pgnum)
@@ -2276,11 +2291,11 @@ class GMFrame(wx.Frame):
                 pass
 
     def OnCloseWindow(self, event):
-        """Cleanup when wxGUI is quitted"""
+        """Cleanup when wxGUI is quit"""
         self._closeWindow(event)
 
     def OnCloseWindowOrExit(self, event):
-        """Cleanup when wxGUI is quitted
+        """Cleanup when wxGUI is quit
 
         Ask user also to quit GRASS including terminal
         """
@@ -2294,10 +2309,6 @@ class GMFrame(wx.Frame):
 
     def _closeWindow(self, event):
         """Close wxGUI"""
-        # save command protocol if actived
-        if self.goutput.btnCmdProtocol.GetValue():
-            self.goutput.CmdProtocolSave()
-
         if not self.currentPage:
             self._auimgr.UnInit()
             self.Destroy()
