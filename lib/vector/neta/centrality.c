@@ -240,4 +240,4 @@ int NetA_betweenness_closeness(dglGraph_s *graph, double *betweenness,
     G_free(dst);
 
     return 0;
-};
+}
