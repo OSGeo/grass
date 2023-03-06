@@ -1,13 +1,15 @@
-
-/*******************************************************************************
+/******************************************************************************
 r.sun: This program was written by Jaro Hofierka in Summer 1993 and
-re-engineered in 1996-1999. In cooperation with Marcel Suri and Thomas Huld from
-JRC in Ispra a new version of r.sun was prepared using ESRA solar radiation
-formulas. See manual pages for details. (C) 2002 Copyright Jaro Hofierka,
-Gresaka 22, 085 01 Bardejov, Slovakia, and GeoModel, s.r.o., Bratislava,
-Slovakia email: hofierka@geomodel.sk,marcel.suri@jrc.it,suri@geomodel.sk
-Thomas.Huld@jrc.it (c) 2003-2013 by The GRASS Development Team
-*******************************************************************************/
+ re-engineered in 1996-1999. In cooperation with Marcel Suri and Thomas Huld
+ from JRC in Ispra a new version of r.sun was prepared using ESRA solar
+ radiation formulas.
+See manual pages for details.
+(C) 2002 Copyright Jaro Hofierka, Gresaka 22, 085 01 Bardejov, Slovakia,
+              and GeoModel, s.r.o., Bratislava, Slovakia
+email: hofierka@geomodel.sk,marcel.suri@jrc.it,
+       suri@geomodel.sk Thomas.Huld@jrc.it
+(c) 2003-2013 by The GRASS Development Team
+******************************************************************************/
 /*
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1679,10 +1681,10 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     int someRadiation;
     int numRows;
     int arrayOffset;
-    double lum, q1;
+    double lum = 0.0, q1 = 0.0;
     double dayRad;
-    double latid_l, cos_u, cos_v, sin_u, sin_v;
-    double sin_phi_l, tan_lam_l;
+    double latid_l = 0.0, cos_u = 0.0, cos_v = 0.0, sin_u = 0.0, sin_v = 0.0;
+    double sin_phi_l = 0.0, tan_lam_l = 0.0;
     double zmax = 0;
     double longitTime = 0.;
     double locTimeOffset;
