@@ -51,7 +51,6 @@ class WSDialogBase(wx.Dialog):
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         **kwargs,
     ):
-
         wx.Dialog.__init__(self, parent, id, style=style, **kwargs)
 
         self.parent = parent
@@ -97,7 +96,6 @@ class WSDialogBase(wx.Dialog):
         self._doLayout()
 
     def _createWidgets(self):
-
         settingsFile = os.path.join(GetSettingsPath(), "wxWS")
 
         self.settsManager = WSManageSettingsWidget(
@@ -172,7 +170,6 @@ class WSDialogBase(wx.Dialog):
         self.layerName.SetValue(title)
 
     def _doLayout(self):
-
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
 
         dialogSizer.Add(
@@ -444,7 +441,6 @@ class WSDialogBase(wx.Dialog):
             self.rb_order = ["WMS_1.1.1", "WMS_1.3.0", "WMTS", "OnEarth"]
 
             for ws in self.rb_order:
-
                 if ws in avail_ws:
                     self.web_service_sel.append(ws)
                     self.rb_choices.append(avail_ws[ws]["label"])
@@ -521,7 +517,6 @@ class AddWSDialog(WSDialogBase):
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         **kwargs,
     ):
-
         WSDialogBase.__init__(
             self,
             parent,
@@ -537,7 +532,6 @@ class AddWSDialog(WSDialogBase):
         self.btn_connect.SetDefault()
 
     def _createWidgets(self):
-
         WSDialogBase._createWidgets(self)
 
         self.btn_add = Button(parent=self, id=wx.ID_ANY, label=_("&Add layer"))
@@ -549,7 +543,6 @@ class AddWSDialog(WSDialogBase):
         self.run_btns.append(self.btn_add)
 
     def _doLayout(self):
-
         WSDialogBase._doLayout(self)
 
         self.btnsizer.Add(
@@ -686,7 +679,6 @@ class WSPropertiesDialog(WSDialogBase):
             grass.try_remove(f)
 
     def _setRevertCapFiles(self, ws_cap_files):
-
         for ws, f in six.iteritems(ws_cap_files):
             if os.path.isfile(ws_cap_files[ws]):
                 shutil.copyfile(f, self.revert_ws_cap_files[ws])
@@ -696,7 +688,6 @@ class WSPropertiesDialog(WSDialogBase):
                 f_o.close()
 
     def _createWidgets(self):
-
         WSDialogBase._createWidgets(self)
 
         self.btn_apply = Button(parent=self, id=wx.ID_ANY, label=_("&Apply"))
@@ -710,7 +701,6 @@ class WSPropertiesDialog(WSDialogBase):
         self.run_btns.append(self.btn_ok)
 
     def _doLayout(self):
-
         WSDialogBase._doLayout(self)
 
         self.btnsizer.Add(
@@ -846,7 +836,6 @@ class SaveWMSLayerDialog(wx.Dialog):
     """
 
     def __init__(self, parent, layer, giface):
-
         wx.Dialog.__init__(
             self,
             parent=parent,
@@ -865,7 +854,6 @@ class SaveWMSLayerDialog(wx.Dialog):
         self._createWidgets()
 
     def _createWidgets(self):
-
         self.labels = {}
         self.params = {}
 
@@ -933,7 +921,6 @@ class SaveWMSLayerDialog(wx.Dialog):
         self._layout()
 
     def _layout(self):
-
         self._border = wx.BoxSizer(wx.VERTICAL)
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
 

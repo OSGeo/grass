@@ -11,9 +11,13 @@ on:
       - main
       - releasebranch_*
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+
 jobs:
   run-black:
-    name: Black ${{ matrix.black-version }}
+    name: Black
 
     # Using matrix just to get variables which are not environmental variables
     # and also to sync with other workflows which use matrix.
@@ -22,7 +26,7 @@ jobs:
         include:
           - os: ubuntu-22.04
             python-version: '3.10'
-            black-version: 22.3.0
+            black-version: '23.1.0'
 
     runs-on: ${{ matrix.os }}
 

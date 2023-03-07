@@ -40,7 +40,6 @@ from grass.pydispatch.signal import Signal
 
 class VNETManager:
     def __init__(self, guiparent, giface):
-
         self.data = {}
 
         self.guiparent = guiparent
@@ -98,7 +97,6 @@ class VNETManager:
         return self.vnet_data.GetGlobalTurnsData()
 
     def RunAnalysis(self):
-
         analysis, valid = self.vnet_data.GetParam("analysis")
 
         params, err_params, flags = self.vnet_data.GetParams()
@@ -150,7 +148,6 @@ class VNETManager:
             return 1
 
     def RunAnDone(self, cmd, returncode, results):
-
         self.results["analysis"] = cmd[0]
 
         self.results["vect_map"].SaveVectMapState()
@@ -267,7 +264,6 @@ class VNETManager:
         self.giface.updateMap.emit(render=False, renderVector=False)
 
     def CreateTttb(self, params):
-
         outputMap = params["output"]
         mapName, mapSet = ParseMapStr(outputMap)
         if mapSet != grass.gisenv()["MAPSET"]:
@@ -308,7 +304,6 @@ class VNETManager:
         return True
 
     def _createTtbDone(self, event):
-
         if event.returncode != 0:
             GMessage(parent=self.guiparent, message=_("Creation of turntable failed."))
             return
@@ -522,7 +517,6 @@ class VNETAnalyses:
         self.onAnDone(event.cmd, event.returncode, output)
 
     def _runTurnsAn(self, analysis, output, params, flags, catPts):
-
         # Creates part of cmd fro analysis
         cmdParams = [analysis]
         cmdParams.extend(self._setInputParams(analysis, params, flags))
@@ -530,7 +524,6 @@ class VNETAnalyses:
 
         cats = {}
         for cat_name, pts_coor in six.iteritems(catPts):
-
             for coor in pts_coor:
                 cat_num = str(
                     GetNearestNodeCat(
@@ -768,7 +761,6 @@ class VNETAnalyses:
         for col, v in six.iteritems(
             self.data.GetAnalysisProperties()["cmdParams"]["cols"]
         ):
-
             if "inputField" in v:
                 colInptF = v["inputField"]
             else:
@@ -816,7 +808,6 @@ class VNETAnalyses:
         catNum = maxCat
 
         for catName, pts in six.iteritems(catPts):
-
             catsNums[catName] = [catNum + 1]
             for pt in pts:
                 catNum += 1
@@ -999,7 +990,6 @@ class VNETHistory:
             )
 
             for param, value in six.iteritems(params):
-
                 if param == "input":
                     inpMap = VectMap(self, value)
                     self.history.Add(
@@ -1043,7 +1033,6 @@ def AddTmpMapAnalysisMsg(mapName, tmp_maps):  # TODO
 
 class SnappingNodes(wx.EvtHandler):
     def __init__(self, giface, data, tmp_maps, mapWin):
-
         self.giface = giface
         self.data = data
         self.tmp_maps = tmp_maps
@@ -1067,7 +1056,6 @@ class SnappingNodes(wx.EvtHandler):
             return -1
 
         if not activate:
-
             if self.tmp_maps.HasTmpVectMap("vnet_snap_points"):
                 self.snapPts.DeleteRenderLayer()
 

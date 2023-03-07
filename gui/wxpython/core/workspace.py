@@ -58,6 +58,15 @@ class ProcessWorkspaceFile:
         }  # current working directory
 
         #
+        # layout
+        #
+        self.layout = {
+            "panes": None,
+            "notebook": None,
+        }
+
+        #
+        #
         # list of mapdisplays
         #
         self.displays = []
@@ -127,6 +136,18 @@ class ProcessWorkspaceFile:
             cwdPath = self.__getNodeText(node_lm, "cwd")
             if cwdPath:
                 self.layerManager["cwd"] = cwdPath
+
+        #
+        # layout
+        #
+        layout = self.root.find("layout")
+        if layout:
+            self.layout["panes"] = self.__filterValue(
+                self.__getNodeText(layout, "panes")
+            )
+            self.layout["notebook"] = self.__filterValue(
+                self.__getNodeText(layout, "notebook")
+            )
 
         #
         # displays
@@ -897,6 +918,25 @@ class WriteWorkspaceFile(object):
             file.write("%s<cwd>%s</cwd>\n" % (" " * self.indent, cwdPath))
         self.indent -= 4
         file.write("%s</layer_manager>\n" % (" " * self.indent))
+
+        # layout
+        if UserSettings.Get(group="appearance", key="singleWindow", subkey="enabled"):
+            layout_panes = self.lmgr.GetAuiManager().SavePerspective()
+            layout_notebook = self.lmgr.GetAuiNotebook().SavePerspective()
+            file.write("{indent}<layout>\n".format(indent=" " * self.indent))
+            self.indent += 4
+            file.write(
+                "{indent}<panes>{layout}</panes>\n".format(
+                    indent=" " * self.indent, layout=layout_panes
+                )
+            )
+            file.write(
+                "{indent}<notebook>{layout}</notebook>\n".format(
+                    indent=" " * self.indent, layout=layout_notebook
+                )
+            )
+            self.indent -= 4
+            file.write("{indent}</layout>\n".format(indent=" " * self.indent))
 
         # list of displays
         for page in range(0, self.lmgr.GetLayerNotebook().GetPageCount()):
@@ -1842,7 +1882,6 @@ class ProcessGrcFile(object):
             )
             and self.inVector
         ):
-
             if int(self._get_value(line)) == 1:
                 name = element.split("_")[0]
                 type = element.split("_")[1]

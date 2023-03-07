@@ -3784,7 +3784,6 @@ class NvizToolWindow(GNotebook):
         cvalue = self._getColorString(color)
 
         for name in self.mapWindow.GetLayerNames(type="raster"):
-
             data = self._getLayerPropertiesByName(name, mapType="raster")
             if not data:
                 continue  # shouldy no happen

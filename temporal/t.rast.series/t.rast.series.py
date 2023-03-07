@@ -173,7 +173,6 @@ def main():
             grass.fatal(_("%s failed. Check above error messages.") % "r.series")
 
         if not add_time:
-
             # We need to set the temporal extent from the subset of selected maps
             maps = sp.get_registered_maps_as_objects(
                 where=where, order=order, dbif=None
@@ -196,7 +195,6 @@ def main():
                 )
 
             for out_map in output.split(","):
-
                 # Create the time range for the output map
                 if out_map.find("@") >= 0:
                     id = out_map

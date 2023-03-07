@@ -236,7 +236,6 @@ class TestCompareProjections(TestCase):
 
 class TestParseKeyvalue(TestCase):
     def test_shell_script_style(self):
-
         self.assertDictEqual(
             parse_key_val(R_UNIVAR_KEYVAL_INT, val_type=int), R_UNIVAR_KEYVAL_INT_DICT
         )

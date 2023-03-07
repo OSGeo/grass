@@ -729,7 +729,6 @@ def numpy2raster(array, mtype, rastname, overwrite=False):
 
 
 if __name__ == "__main__":
-
     import doctest
     from grass.pygrass.modules import Module
 

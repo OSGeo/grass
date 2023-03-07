@@ -80,7 +80,6 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
         nprocs=1,
         time_suffix=None,
     ):
-
         TemporalRasterBaseAlgebraParser.__init__(
             self,
             pid=pid,

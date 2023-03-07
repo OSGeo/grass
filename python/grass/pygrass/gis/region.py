@@ -671,7 +671,6 @@ class Region(object):
 
 
 if __name__ == "__main__":
-
     import doctest
     from grass.pygrass import utils
     from grass.script.core import run_command

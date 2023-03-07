@@ -62,7 +62,6 @@ def _get_raster_image_as_np(lock, conn, data):
         rast = RasterRow(name, mapset)
 
         if rast.exist():
-
             reg = Region()
             reg.from_rast(name)
 

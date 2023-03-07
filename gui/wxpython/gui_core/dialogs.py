@@ -699,7 +699,6 @@ class GroupDialog(wx.Dialog):
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         **kwargs,
     ):
-
         wx.Dialog.__init__(
             self, parent=parent, id=wx.ID_ANY, title=title, style=style, **kwargs
         )
@@ -1602,7 +1601,6 @@ class MapLayersDialogBase(wx.Dialog):
 
         # check all items by default
         for item in range(self.layers.GetCount()):
-
             self.layers.Check(item, check=self._selectAll())
 
     def OnChangeParams(self, event):
@@ -1809,7 +1807,6 @@ class SetOpacityDialog(wx.Dialog):
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         opacity=1,
     ):
-
         self.parent = parent  # GMFrame
         self.opacity = opacity  # current opacity
 
@@ -2443,7 +2440,6 @@ class DefaultFontDialog(wx.Dialog):
         settings=UserSettings,
         type="font",
     ):
-
         self.settings = settings
         self.type = type
 

@@ -149,7 +149,6 @@ def _print_results_json(data):
 
 
 def _print_results(data):
-
     import textwrap
 
     for item in data:

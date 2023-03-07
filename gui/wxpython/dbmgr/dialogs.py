@@ -801,7 +801,6 @@ class AddColumnDialog(wx.Dialog):
         self._layout()
 
     def _layout(self):
-
         sizer = wx.BoxSizer(wx.VERTICAL)
         addSizer = wx.BoxSizer(wx.HORIZONTAL)
 

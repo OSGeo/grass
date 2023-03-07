@@ -629,7 +629,6 @@ class RasterAbstractBase(object):
 
 
 if __name__ == "__main__":
-
     import doctest
     from grass.pygrass.modules import Module
 

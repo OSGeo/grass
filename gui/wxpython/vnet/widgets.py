@@ -583,7 +583,6 @@ class EditItem(wx.Dialog):
         row = 0
         iField = 0
         for cell in self.data:
-
             # Select
             if type(cell[2]).__name__ == "list":
                 self.fields.append(
