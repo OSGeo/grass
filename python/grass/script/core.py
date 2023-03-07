@@ -1368,14 +1368,8 @@ def find_file(name, element="cell", mapset=None, env=None):
     }
 
     if element in element_translation:
-        element_in = element
         element = element_translation[element]
-        debug(
-            _('Element type should be "{element}" and not "{element_in}"').format(
-                element_in=element_in, element=element
-            ),
-            1,
-        )
+
     # g.findfile returns non-zero when file was not found
     # so we ignore return code and just focus on stdout
     process = start_command(
