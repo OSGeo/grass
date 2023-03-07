@@ -122,7 +122,7 @@ void G__read_gisrc_env(void)
  *
  * Calls G_fatal_error when the GISRC variable is not set.
  */
-void G__read_gisrc_path()
+void G__read_gisrc_path(void)
 {
     st->gisrc = getenv("GISRC");
     if (!st->gisrc) {

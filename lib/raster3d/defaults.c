@@ -157,7 +157,7 @@ void Rast3d_set_cache_size(int nTiles)
  *  \return int
  */
 
-int Rast3d_get_cache_size()
+int Rast3d_get_cache_size(void)
 {
     return g3d_cache_default;
 }
@@ -187,7 +187,7 @@ void Rast3d_set_cache_limit(int nBytes)
  *  \return int
  */
 
-int Rast3d_get_cache_limit()
+int Rast3d_get_cache_limit(void)
 {
     return g3d_cache_max;
 }
@@ -217,7 +217,7 @@ void Rast3d_set_file_type(int type)
  *  \return int
  */
 
-int Rast3d_get_file_type()
+int Rast3d_get_file_type(void)
 {
     return g3d_file_type;
 }

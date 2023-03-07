@@ -641,7 +641,7 @@ int LZ4_compressBound(int isize)
     return LZ4_COMPRESSBOUND(isize);
 }
 
-int LZ4_sizeofState()
+int LZ4_sizeofState(void)
 {
     return LZ4_STREAMSIZE;
 }
@@ -2454,7 +2454,7 @@ int LZ4_uncompress_unknownOutputSize(const char *source, char *dest, int isize,
 
 /* Obsolete Streaming functions */
 
-int LZ4_sizeofStreamState()
+int LZ4_sizeofStreamState(void)
 {
     return LZ4_STREAMSIZE;
 }
