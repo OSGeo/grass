@@ -963,8 +963,8 @@ void N_print_gradient_field_2d_info(N_gradient_field_2d *field)
     fprintf(stdout, "N_gradient_field_2d \n");
     fprintf(stdout, "Cols %i\n", field->cols);
     fprintf(stdout, "Rows: %i\n", field->rows);
-    fprintf(stdout, "X array pointer: %p\n", field->x_array);
-    fprintf(stdout, "Y array pointer: %p\n", field->y_array);
+    fprintf(stdout, "X array pointer: %p\n", (void *)field->x_array);
+    fprintf(stdout, "Y array pointer: %p\n", (void *)field->y_array);
     fprintf(stdout, "Min %g\n", field->min);
     fprintf(stdout, "Max %g\n", field->max);
     fprintf(stdout, "Sum %g\n", field->sum);
@@ -1066,9 +1066,9 @@ void N_print_gradient_field_3d_info(N_gradient_field_3d *field)
     fprintf(stdout, "Cols %i\n", field->cols);
     fprintf(stdout, "Rows: %i\n", field->rows);
     fprintf(stdout, "Depths %i\n", field->depths);
-    fprintf(stdout, "X array pointer: %p\n", field->x_array);
-    fprintf(stdout, "Y array pointer: %p\n", field->y_array);
-    fprintf(stdout, "Z array pointer: %p\n", field->z_array);
+    fprintf(stdout, "X array pointer: %p\n", (void *)field->x_array);
+    fprintf(stdout, "Y array pointer: %p\n", (void *)field->y_array);
+    fprintf(stdout, "Z array pointer: %p\n", (void *)field->z_array);
     fprintf(stdout, "Min %g\n", field->min);
     fprintf(stdout, "Max %g\n", field->max);
     fprintf(stdout, "Sum %g\n", field->sum);

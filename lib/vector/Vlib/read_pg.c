@@ -1259,7 +1259,7 @@ int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info,
 
     /* set cursor name */
     G_asprintf(&(pg_info->cursor_name), "%s_%s_%p", pg_info->schema_name,
-               pg_info->table_name, pg_info->conn);
+               pg_info->table_name, (void *)pg_info->conn);
 
     if (!pg_info->toposchema_name) {
         /* simple feature access (geom, fid) */
@@ -1387,7 +1387,7 @@ int Vect__open_cursor_line_pg(struct Format_info_pg *pg_info, int fid, int type)
 
     pg_info->cursor_fid = fid;
     G_asprintf(&(pg_info->cursor_name), "%s_%s_%d_%p", pg_info->schema_name,
-               pg_info->table_name, fid, pg_info->conn);
+               pg_info->table_name, fid, (void *)pg_info->conn);
 
     if (!pg_info->toposchema_name) {
         /* simple feature access (geom) */

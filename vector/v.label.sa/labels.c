@@ -62,7 +62,7 @@ label_t *labels_init(struct params *p, int *n_labels)
     G_debug(1, "Need to allocate %lu bytes of memory",
             sizeof(label_t) * label_sz);
     labels = (label_t *)G_malloc(sizeof(label_t) * label_sz);
-    G_debug(1, "labels=%p", labels);
+    G_debug(1, "labels=%p", (void *)labels);
 
     if (labels == NULL)
         G_fatal_error(_("Cannot allocate %lu bytes of memory"),
