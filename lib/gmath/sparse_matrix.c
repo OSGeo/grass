@@ -39,7 +39,7 @@ int G_math_add_spvector(G_math_spvector **Asp, G_math_spvector *spvector,
         G_debug(5,
                 "Add sparse vector %p to the sparse linear equation system at "
                 "row %i\n",
-                spvector, row);
+                (void *)spvector, row);
         Asp[row] = spvector;
     }
     else {
