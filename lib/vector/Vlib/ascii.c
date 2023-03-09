@@ -208,7 +208,7 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
                 continue;
             }
 
-            if (sscanf(buff, "%u%u", &catn, &cat) != 2) {
+            if (sscanf(buff, "%d%d", &catn, &cat) != 2) {
                 G_warning(_("Error reading categories: [%s]"), buff);
                 return -1;
             }
