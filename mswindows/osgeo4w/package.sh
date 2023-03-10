@@ -195,6 +195,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-cairo-ldflags="-L$PWD/mswindows/osgeo4w/lib -lcairo -lfontconfig" \
 		--with-bzlib \
 		--with-liblas=$PWD/mswindows/osgeo4w/liblas-config
+		--without-pdal
 
 	touch mswindows/osgeo4w/configure-stamp
 fi
