@@ -1023,9 +1023,11 @@ void Vect_line_buffer2(const struct line_pnts *Points, double da, double db,
 
     Vect_line_prune((struct line_pnts *)Points);
 
-    if (Points->n_points == 1)
-        return; /* Vect_point_buffer2(Points->x[0], Points->y[0], da, db,
-                   dalpha, round, tol, oPoints)*/
+    if (Points->n_points == 1) {
+        Vect_point_buffer2(Points->x[0], Points->y[0], da, db, dalpha, round,
+                           tol, oPoints);
+        return;
+    }
 
     /* initializations */
     tPoints = Vect_new_line_struct();
