@@ -33,7 +33,7 @@ from grass.temporal.datetime_math import (
 )
 
 
-class TestRasterUnivar(TestCase):
+class TestRegisterMapMetadata(TestCase):
     @classmethod
     def setUpClass(cls):
         """Initiate the temporal GIS and set the region"""

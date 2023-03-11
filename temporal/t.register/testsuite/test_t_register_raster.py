@@ -30,7 +30,7 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
 
-class TestRasterUnivar(TestCase):
+class TestRegister(TestCase):
     @classmethod
     def setUpClass(cls):
         """Initiate the temporal GIS and set the region"""
