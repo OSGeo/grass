@@ -42,7 +42,7 @@ struct line_pnts *Vect__new_line_struct(void);
 
    \return pointer to line_pnts
  */
-struct line_pnts *Vect_new_line_struct()
+struct line_pnts *Vect_new_line_struct(void)
 {
     struct line_pnts *p;
 
@@ -52,7 +52,7 @@ struct line_pnts *Vect_new_line_struct()
     return p;
 }
 
-struct line_pnts *Vect__new_line_struct()
+struct line_pnts *Vect__new_line_struct(void)
 {
     struct line_pnts *p;
 
