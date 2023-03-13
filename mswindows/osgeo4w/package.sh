@@ -133,7 +133,6 @@ DLLS="
 	/mingw64/bin/libfftw3-3.dll
 	/mingw64/bin/libblas.dll
 	/mingw64/bin/liblapack.dll
-	/mingw64/bin/libomp.dll
 	/mingw64/bin/libquadmath-0.dll
 "
 
