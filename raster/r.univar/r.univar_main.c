@@ -150,16 +150,7 @@ int main(int argc, char *argv[])
     if (nprocs < 1)
         G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
 #if defined(_OPENMP)
-    if (param.extended->answer) {
-        /* Calculation of extended statistics is not parallelized yet */
-        if (nprocs > 1)
-            G_warning(_("Computing extending statistics is not parallelized "
-                        "yet. Ignoring threads setting."));
-        nprocs = 1;
-    }
-    else {
-        omp_set_num_threads(nprocs);
-    }
+    omp_set_num_threads(nprocs);
 #else
     if (nprocs != 1)
         G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
