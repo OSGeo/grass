@@ -232,6 +232,7 @@ def make_command(
     :param str flags: flags to be used (given as a string)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param options: module's parameters
 
@@ -375,6 +376,7 @@ def start_command(
     :param str flags: flags to be used (given as a string)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param kwargs: module's parameters
 
@@ -388,7 +390,15 @@ def start_command(
         else:
             options[opt] = val
 
-    args = make_command(prog, flags, overwrite, quiet, verbose, **options)
+    args = make_command(
+        prog,
+        flags=flags,
+        overwrite=overwrite,
+        quiet=quiet,
+        superquiet=superquiet,
+        verbose=verbose,
+        **options,
+    )
 
     if debug_level() > 0:
         sys.stderr.write(
@@ -627,12 +637,13 @@ def exec_command(
     :param str flags: flags to be used (given as a string)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param env: directory with environmental variables
     :param list kwargs: module's parameters
 
     """
-    args = make_command(prog, flags, overwrite, quiet, verbose, **kwargs)
+    args = make_command(prog, flags, overwrite, quiet, superquiet, verbose, **kwargs)
 
     if env is None:
         env = os.environ
