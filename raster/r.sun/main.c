@@ -1690,7 +1690,8 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     double locTimeOffset;
     double latitude, longitude;
     double coslat = 0.0;
-    bool shouldBeBestAM, isBestAM;
+    bool shouldBeBestAM = false;
+    bool isBestAM = false;
 
     struct SunGeometryConstDay sunGeom;
     struct SunGeometryVarDay sunVarGeom;
