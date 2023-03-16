@@ -2420,7 +2420,7 @@ class DataCatalogTree(TreeView):
         if self._restricted:
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy paths to mapset"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy paths to mapsets"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
 
