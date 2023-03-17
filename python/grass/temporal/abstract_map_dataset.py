@@ -1091,7 +1091,7 @@ class AbstractMapDataset(AbstractDataset):
         statement = ""
 
         if execute is True:
-            self.stds_register.update(dbif=dbif, mapset=mapset)
+            self.stds_register.update(dbif=dbif)
         else:
             statement = self.stds_register.get_update_statement_mogrified(dbif=dbif)
 
