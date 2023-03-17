@@ -76,7 +76,7 @@ def main():
         data_names = [
             tarinfo.name for tarinfo in tar.getmembers() if "/" not in tarinfo.name
         ]
-    except:
+    except Exception:
         grass.fatal(_("Pack file unreadable"))
 
     if flags["p"]:
