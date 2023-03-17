@@ -170,6 +170,8 @@ else:
 
     copy_tree = partial(shutil.copytree, dirs_exist_ok=True)
 
+from pathlib import Path
+from subprocess import PIPE
 from urllib import request as urlrequest
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
@@ -184,6 +186,7 @@ else:
     ETREE_EXCEPTIONS = expat.ExpatError
 
 import grass.script as gs
+from grass.script import task as gtask
 from grass.script.utils import try_rmdir
 
 # temp dir
@@ -203,6 +206,202 @@ if sys.platform.startswith("freebsd"):
     MAKE = "gmake"
 else:
     MAKE = "make"
+
+
+class GitAdapter:
+    """
+    Basic class for listing and downloading GRASS GIS AddOns using git
+
+    """
+
+    def __init__(
+        self,
+        url="https://github.com/osgeo/grass-addons",
+        working_directory=None,
+        official_repository_structure=True,
+        major_grass_version=8,
+        branch=None,
+        verbose=False,
+        quiet=False,
+    ):
+        #: Attribute containg the URL to the online repository
+        self.url = url
+        self.major_grass_version = major_grass_version
+        #: Attribute flagging if the repository is structured like the official addons repository
+        self.official_repository_structure = official_repository_structure
+        #: Attribute containg the path to the working directory where the repo is cloned out to
+        if working_directory:
+            self.working_directory = Path(working_directory).absolute()
+        else:
+            self.working_directory = Path().absolute()
+
+        # Check if working directory is writable
+        self.__check_permissions()
+
+        #: Attribute containg available branches
+        self.branches = self._get_branch_list()
+        # Initialize the local copy
+        self._initialize_clone()
+        #: Attribute containg the default branch of the repository
+        self.default_branch = self._get_default_branch()
+        #: Attribute containg the branch used for checkout
+        self.branch = self._set_branch(branch)
+        #: Attribute containg list of addons in the repository with path to directories
+        self.addons = self._get_addons_list()
+
+    def _initialize_clone(self):
+        """Get a minimal working copy of a git repository without content"""
+        if not self.working_directory.exists():
+            self.working_directory.mkdir(exist_ok=True, parents=True)
+        gs.call(
+            ["git", "clone", "--no-checkout", "--depth=1", "--filter=tree:0", self.url],
+            cwd=self.working_directory,
+        )
+        repo_directory = (
+            self.url.split("/")[-1][0:-4]
+            if self.url.endswith(".git")
+            else self.url.split("/")[-1]
+        )
+        self.local_copy = self.working_directory / repo_directory
+
+    def __check_permissions(self):
+        """"""
+        # Create working directory if it does not exist
+        self.working_directory.mkdir(parents=True, exist_ok=True)
+        # Check pemissions in case he workdir existed
+        if not os.access(self.working_directory, os.W_OK):
+            gs.fatal(
+                _("Cannot write to working directory {}.").format(
+                    self.working_directory
+                )
+            )
+
+    def _get_branch_list(self):
+        """Return commit hash reference and names for remote branches of
+        a git repository
+
+        :param url: URL to git repository, defaults to the official GRASS GIS
+                    addon repository
+        """
+        branch_list = gs.Popen(
+            ["git", "ls-remote", "--heads", self.url],
+            stdout=PIPE,
+        )
+        branch_list = gs.decode(branch_list.communicate()[0])
+        return {
+            branch.split("/")[-1]: branch.split("\t")[0]
+            for branch in branch_list.split("\n")
+        }
+
+    def _get_default_branch(self):
+        """Return commit hash reference and names for remote branches of
+        a git repository
+
+        :param url: URL to git repository, defaults to the official GRASS GIS
+                    addon repository
+        """
+        default_branch = gs.Popen(
+            ["git", "symbolic-ref", "refs/remotes/origin/HEAD"],
+            cwd=self.local_copy,
+            stdout=PIPE,
+        )
+        return gs.decode(default_branch.communicate()[0]).rstrip().split("/")[-1]
+
+    def _get_version_branch(self):
+        """Check if version branch for the current GRASS version exists,
+        The method is only useful for repositories that follow the structure
+        and concept of the official addon repository
+
+        Returns None if no version branch is found."""
+        version_branch = f"grass{self.major_grass_version}"
+
+        return version_branch if version_branch in self.branches else None
+
+    def _set_branch(self, branch_name):
+        """Set the branch to check out to either:
+        a) a user defined branch
+        b) a version branch for repositories following the official addons repository structure
+        c) the default branch of the repository
+        """
+        checkout_branch = None
+        # Check user provided branch
+        if branch_name:
+            if branch_name not in self.branches:
+                gs.fatal(
+                    _("Branch <{branch}> not found in repository <{url}>").format(
+                        branch=branch_name, url=self.url
+                    )
+                )
+            else:
+                checkout_branch = branch_name
+        # Check version branch if relevant
+        elif self.official_repository_structure:
+            checkout_branch = self._get_version_branch()
+
+        # Use default branch if none of the above are found
+        return checkout_branch or self.default_branch
+
+    def _get_addons_list(self):
+        """Build a dictionary with addon name as key and path to directory with
+        Makefile in repository"""
+        file_list = gs.Popen(
+            ["git", "ls-tree", "--name-only", "-r", "HEAD"],
+            cwd=self.local_copy,
+            stdout=PIPE,
+            stderr=PIPE,
+        )
+        file_list, stderr = file_list.communicate()
+        # Build addons dict
+        addons_dict = {}
+        for file_path in gs.decode(file_list).rstrip().split("\n"):
+            # Consider only paths to Makefiles in src
+            if file_path.startswith("src") and file_path.endswith("Makefile"):
+                if file_path.split("/")[1] in ["tools", "models"]:
+                    # exclude tools and models
+                    continue
+                elif file_path.split("/")[1] == "hadoop" and "hd." in "/".join(
+                    file_path.split("/")[0:4]
+                ):
+                    addons_dict[file_path.split("/")[3]] = "/".join(
+                        file_path.split("/")[0:4]
+                    )
+                elif file_path.split("/")[1] == "gui":
+                    addons_dict[file_path.split("/")[3]] = "/".join(
+                        file_path.split("/")[0:4]
+                    )
+                else:
+                    if len(file_path.split("/")) >= 3 and file_path.split("/")[
+                        2
+                    ] not in ["Makefile", "hd"]:
+                        addons_dict[file_path.split("/")[2]] = "/".join(
+                            file_path.split("/")[0:3]
+                        )
+        return addons_dict
+
+    def fetch_addons(self, addon_list, all_addons=False):
+        if addon_list:
+            gs.call(
+                ["git", "sparse-checkout", "init", "--cone"],
+                cwd=self.local_copy,
+            )
+            gs.call(
+                [
+                    "git",
+                    "sparse-checkout",
+                    "set",
+                    *[self.addons[addon] for addon in addon_list],
+                ],
+                cwd=self.local_copy,
+            )
+            gs.call(
+                ["git", "checkout", self.branch],
+                cwd=self.local_copy,
+            )
+        elif all_addons:
+            gs.call(
+                ["git", "checkout", self.branch],
+                cwd=self.local_copy,
+            )
 
 
 def replace_shebang_win(python_file):
@@ -407,7 +606,7 @@ def etree_fromurl(url):
 def check_progs():
     """Check if the necessary programs are available"""
     # git to be tested once supported instead of `svn`
-    for prog in (MAKE, "gcc", "svn"):
+    for prog in (MAKE, "gcc", "git"):
         if not gs.find_program(prog, "--help"):
             gs.fatal(_("'%s' required. Please install '%s' first.") % (prog, prog))
 
@@ -702,10 +901,9 @@ def list_available_modules(url, mlist=None):
     except ETREE_EXCEPTIONS:
         gs.warning(
             _(
-                "Unable to parse '%s'. Trying to scan"
-                " SVN repository (may take some time)..."
-            )
-            % file_url
+                "Unable to parse '{url}'. Trying to scan"
+                " git repository (may take some time)..."
+            ).format(url=file_url)
         )
         list_available_extensions_svn(url)
         return
@@ -1218,9 +1416,9 @@ def install_extension_xml(edict):
         # only modules have
         """
         try:
-            desc = gs.task.parse_interface(name).description
-            # mname = gs.task.parse_interface(name).name
-            keywords = gs.task.parse_interface(name).keywords
+            desc = gtask.parse_interface(name).description
+            # mname = gtask.parse_interface(name).name
+            keywords = gtask.parse_interface(name).keywords
         except Exception as e:
             gs.warning(_("No addons metadata available."
                             " Addons metadata file not updated."))
@@ -1357,9 +1555,9 @@ def install_module_xml(mlist):
     # update tree
     for name in mlist:
         try:
-            desc = gs.task.parse_interface(name).description
-            # mname = gs.task.parse_interface(name).name
-            keywords = gs.task.parse_interface(name).keywords
+            desc = gtask.parse_interface(name).description
+            # mname = gtask.parse_interface(name).name
+            keywords = gtask.parse_interface(name).keywords
         except Exception as error:
             gs.warning(
                 _("No metadata available for module '{name}': {error}").format(
@@ -1525,6 +1723,8 @@ def download_source_code_svn(url, name, outdev, directory=None):
         (useful when you not specify directory, if *directory* is specified
         the return value is equal to it)
     """
+    if not gs.find_program("svn", "--help"):
+        gs.fatal(_("svn not found but needed to fetch AddOns from an SVN repository"))
     if not directory:
         directory = os.path.join(os.getcwd, name)
     classchar = name.split(".", 1)[0]
@@ -1535,16 +1735,18 @@ def download_source_code_svn(url, name, outdev, directory=None):
     return directory
 
 
-def download_source_code_official_github(url, name, outdev, directory=None):
+def download_source_code_official_github(
+    url, name, branch, major_grass_version=8, directory=None
+):
     """Download source code from a official GitHub repository
 
     .. note:
-        Stdout is passed to to *outdev* while stderr is will be just printed.
+        Stdout is passed to to *outdev* while stderr is just printed.
 
     :param url: URL of the repository
         (module class/family and name are attached)
     :param name: module name
-    :param outdev: output divide for the standard output of the svn command
+    :param outdev: output divide for the standard output of the git command
     :param directory: directory where the source code will be downloaded
         (default is the current directory with name attached)
 
@@ -1552,34 +1754,21 @@ def download_source_code_official_github(url, name, outdev, directory=None):
         (useful when you not specify directory, if *directory* is specified
         the return value is equal to it)
     """
-    if not directory:
-        directory = os.path.join(os.getcwd, name)
-    if gs.call(["svn", "export", url, directory], stdout=outdev) != 0:
+
+    try:
+        ga = GitAdapter(
+            url=url,
+            working_directory=directory,
+            major_grass_version=major_grass_version,
+            branch=str(branch),
+        )
+    except RuntimeError:
+        # if gs.call(["svn", "export", url, directory], stdout=outdev) != 0
         gs.fatal(_("GRASS Addons <%s> not found") % name)
-    return directory
 
+    ga.fetch_addons([name])
 
-def clone_source_code_official_github(name, outdev, url, directory=None):
-    """Download source code from a official GitHub repository
-
-    .. note:
-        Stdout is passed to to *outdev* while stderr will be just printed.
-
-    :param url: URL of the repository
-    :param name: module name
-    :param outdev: output divide for the standard output of the svn command
-    :param directory: directory where the source code will be downloaded
-        (default is the current directory with name attached)
-
-    :returns: full path to the directory with the source code
-        (useful when you not specify directory, if *directory* is specified
-        the return value is equal to it)
-    """
-    if not directory:
-        directory = os.path.join(os.getcwd, name)
-    if gs.call(["svn", "export", url, directory], stdout=outdev) != 0:
-        gs.fatal(_("GRASS Addons <%s> not found") % name)
-    return directory
+    return str(ga.local_copy / ga.addons[name])
 
 
 def move_extracted_files(extract_dir, target_dir, files):
@@ -1695,19 +1884,15 @@ def download_source_code(
 ):
     """Get source code to a local directory for compilation"""
     gs.verbose(_("Type of source identified as '{source}'.").format(source=source))
-    if source == "official":
+    if source == "official" or source == "official_fork":
         gs.message(
-            _("Fetching <%s> from " "GRASS GIS Addons repository (be patient)...")
-            % name
-        )
-        download_source_code_official_github(url, name, outdev, directory)
-    elif source == "official_fork":
-        gs.message(
-            _("Fetching <{name}> from " "<{url}> (be patient)...").format(
+            _("Fetching <{name}> from <{url}> (be patient)...").format(
                 name=name, url=url
             )
         )
-        download_source_code_official_github(url, name, outdev, directory)
+        directory = download_source_code_official_github(
+            url, name, branch, directory=directory
+        )
     elif source == "svn":
         gs.message(
             _("Fetching <{name}> from " "<{url}> (be patient)...").format(
@@ -1715,7 +1900,7 @@ def download_source_code(
             )
         )
         download_source_code_svn(url, name, outdev, directory)
-    elif source in ["remote_zip"]:  # , 'official'
+    elif source in ["remote_zip"]:
         gs.message(
             _("Fetching <{name}> from " "<{url}> (be patient)...").format(
                 name=name, url=url
@@ -1741,11 +1926,11 @@ def download_source_code(
                     gs.fatal(
                         _(
                             "Extension <{name}> not found. Please check "
-                            "'url' and 'branch' options".format(name=name)
-                        )
+                            "'url' and 'branch' options"
+                        ).format(name=name)
                     )
             else:
-                gs.fatal(_("Extension <%s> not found") % name)
+                gs.fatal(_("Extension <{}> not found").format(name))
 
         with open(zip_name, "wb") as out_file:
             shutil.copyfileobj(response, out_file)
@@ -1778,6 +1963,7 @@ def download_source_code(
             ).format(source)
         )
     assert os.path.isdir(directory)
+    return directory
 
 
 def install_extension_std_platforms(name, source, url, branch):
@@ -1792,7 +1978,7 @@ def install_extension_std_platforms(name, source, url, branch):
 
     os.chdir(TMPDIR)  # this is just to not leave something behind
     srcdir = os.path.join(TMPDIR, name)
-    download_source_code(
+    srcdir = download_source_code(
         source=source,
         url=url,
         name=name,
@@ -1883,7 +2069,7 @@ def install_extension_std_platforms(name, source, url, branch):
         sys.stderr.write(" ".join(install_cmd) + "\n")
         return 0, None, None, None
 
-    os.chdir(os.path.join(TMPDIR, name))
+    os.chdir(srcdir)
 
     gs.message(_("Compiling..."))
     if not os.path.exists(os.path.join(gisbase, "include", "Make", "Module.make")):
@@ -2404,10 +2590,43 @@ def resolve_known_host_service(url, name, branch):
         url = "{prefix}{base}{suffix}".format(
             prefix=actual_start, base=url.rstrip("/"), suffix=suffix
         )
-        gs.verbose(_("Will use the following URL for download: {0}").format(url))
+        gs.verbose
+        (_("Will use the following URL for download: {0}").format(url))
         return "remote_zip", url
     else:
         return None, None
+
+
+def validate_url(url):
+    """"""
+    if not os.path.exists(url):
+        url_validated = False
+        message = None
+        if url.startswith("http"):
+            try:
+                open_url = urlopen(url)
+                open_url.close()
+                url_validated = True
+            except URLError as error:
+                message = error
+        else:
+            try:
+                open_url = urlopen("http://" + url)
+                open_url.close()
+                url_validated = True
+            except URLError as error:
+                message = error
+            try:
+                open_url = urlopen("https://" + url)
+                open_url.close()
+                url_validated = True
+            except URLError as error:
+                message = error
+        if not url_validated:
+            gs.fatal(
+                _("Cannot open URL <{url}>: {error}").format(url=url, error=message)
+            )
+    return True
 
 
 # TODO: add also option to enforce the source type
@@ -2480,62 +2699,17 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
     ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
     """
     # Handle URL for the official repo
-    if name and (not url or fork):
-        module_class = get_module_class_name(name)
-        # note: 'trunk' is required to make URL usable for 'svn export' call
-        # and fetches the default branch
-        if not branch:
-            # Fetch from default branch
-            version_branch = get_version_branch(version[0])
-            try:
-                url = url.rstrip("/") if url else GIT_URL
-                urlrequest.urlopen(f"{url}/tree/{version_branch}/src")
-                svn_reference = "branches/{}".format(version_branch)
-            except URLError:
-                svn_reference = "trunk"
-        else:
-            svn_reference = "branches/{}".format(branch)
-
-        if not url or url == GIT_URL:
-            # Set URL for the given GRASS version
-            git_url = f"{GIT_URL}/{svn_reference}/src/{module_class}/{name}"
-            return "official", git_url
-        else:
-            # Forks from the official repo should reflect the current structure
-            url = url.rstrip("/")
-            git_url = f"{url}/{svn_reference}/src/{module_class}/{name}"
-            return "official_fork", git_url
+    if not url or url == GIT_URL:
+        return "official", GIT_URL
 
     # Check if URL can be found
     # Catch corner case if local URL is given starting with file://
     url = url[6:] if url.startswith("file://") else url
-    if not os.path.exists(url):
-        url_validated = False
-        message = None
-        if url.startswith("http"):
-            try:
-                open_url = urlopen(url)
-                open_url.close()
-                url_validated = True
-            except URLError as error:
-                message = error
-        else:
-            try:
-                open_url = urlopen("http://" + url)
-                open_url.close()
-                url_validated = True
-            except URLError as error:
-                message = error
-            try:
-                open_url = urlopen("https://" + url)
-                open_url.close()
-                url_validated = True
-            except URLError as error:
-                message = error
-        if not url_validated:
-            gs.fatal(
-                _("Cannot open URL <{url}>: {error}").format(url=url, error=message)
-            )
+    validate_url(url)
+
+    # Return validated URL for official fork
+    if fork:
+        return "official_fork", url
 
     # Handle local URLs
     if os.path.isdir(url):
