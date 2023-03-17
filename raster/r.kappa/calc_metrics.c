@@ -210,7 +210,7 @@ void calc_metrics(void)
     }
     metrics->mcc =
         (metrics->correct * metrics->observations - spktk) / sqrt(unrooted);
-};
+}
 
 /* remove repeated values */
 static int collapse(long *l, int n)
