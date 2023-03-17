@@ -71,6 +71,8 @@ export CXXFLAGS="-O2 -pipe -stdlib=libc++ -arch ${CONDA_ARCH} -Wall -Wextra"
 
 ./configure $CONFIGURE_FLAGS
 
-make -j$(sysctl -n hw.ncpu) CFLAGS="$CFLAGS -Werror" CXXFLAGS="$CXXFLAGS -Werror"
+EXEMPT="-Wno-error=deprecated-non-prototype"
+make -j$(sysctl -n hw.ncpu) CFLAGS="$CFLAGS -Werror $EXEMPT" \
+  CXXFLAGS="$CXXFLAGS -Werror $EXEMPT"
 
 make install
