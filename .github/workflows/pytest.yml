@@ -1,6 +1,6 @@
 ---
 name: pytest
-# todo: remove this comment
+
 on:
   push:
     branches:
