@@ -1393,7 +1393,7 @@ double chand(const double xtau, const GeomCond &geom)
   the computation of the aerosol reflectance and the mixed Rayleigh-aerosol
   reflectance. The polarization is addressed in computing the Rayleigh
   reflectance (Subroutine CHAND.f) by semi-empirical fitting of the vectorized
-  Successive Orders of Scattering method (Deuzé et al, 1989).
+  Successive Orders of Scattering method (Deuze et al, 1989).
 */
 void atmref(const double tamoy, const double trmoy, const double pizmoy,
             const double tamoyp, const double trmoyp,
