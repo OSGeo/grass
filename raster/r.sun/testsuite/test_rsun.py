@@ -294,7 +294,6 @@ class TestRSunMode1(TestCase):
 
 
 class TestRSunHighNorthernSlope(TestCase):
-
     elevation = "elevation_high_slope"
     slope = "slope_high_slope"
     aspect = "aspect_high_slope"
@@ -307,7 +306,11 @@ class TestRSunHighNorthernSlope(TestCase):
         cls.runModule("g.region", raster="elevation", res=50, flags="a")
         cls.runModule(
             "r.mapcalc",
-            expression=f"{cls.elevation} = -0.0002 * (x() - 637500) * (x() - 637500) + (y() - 221750) * (y() - 221750) * 0.0002",
+            expression=(
+                f"{cls.elevation} = "
+                "-0.0002 * (x() - 637500) * (x() - 637500) +"
+                "0.0002 * (y() - 221750) * (y() - 221750)"
+            ),
         )
         cls.runModule(
             "r.slope.aspect",
