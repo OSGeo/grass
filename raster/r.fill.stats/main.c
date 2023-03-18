@@ -193,14 +193,14 @@ void print_weights_matrix(long int rows, long int cols)
 void *get_input_row(unsigned long row_idx)
 {
     unsigned long i;
-    void *my_cell = NULL;
+    char *my_cell = NULL;
 
     my_cell = CELL_INPUT_HANDLES[row_idx];
 
     for (i = 0; i < PADDING_WIDTH; i++)
         my_cell += CELL_IN_SIZE;
 
-    return (my_cell);
+    return (void *)my_cell;
 }
 
 /* NEIGHBORHOOD STATISTICS
@@ -331,7 +331,7 @@ void read_neighborhood(unsigned long row_index, unsigned long col, double min,
                        double max, int preserve, stats_struct *stats)
 {
     unsigned long i, j;
-    void *cell;
+    char *cell;
     double cell_value;
 
     stats->overwrite = 0;
@@ -511,7 +511,7 @@ void init_handles(void)
 void advance_one_row(int file_desc, long current_row)
 {
     unsigned long i, j;
-    void *cell_input;
+    char *cell_input;
     static unsigned long replace_row =
         0; /* points to the row which will be replaced next */
     unsigned long replace_pos = 0;
@@ -556,7 +556,7 @@ void interpolate_row(unsigned long row_index, unsigned long cols, double min,
                      stats_struct *stats, int write_err)
 {
     unsigned long j;
-    void *cell_output;
+    char *cell_output;
     FCELL *err_output;
 
     cell_output = CELL_OUTPUT;
@@ -744,7 +744,7 @@ int main(int argc, char *argv[])
     int write_error;
 
     /* file handlers */
-    void *cell_input;
+    char *cell_input;
     int in_fd;
     int out_fd;
     int err_fd;
