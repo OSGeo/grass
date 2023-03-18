@@ -23,7 +23,7 @@
 /* PARAMETERS ************************************************************** */
 /* ************************************************************************* */
 
-void set_params()
+void set_params(void)
 {
     param.input = G_define_standard_option(G_OPT_R_INPUTS);
     param.input->required = NO;

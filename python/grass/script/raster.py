@@ -109,12 +109,20 @@ def raster_info(map, env=None):
 
 
 def mapcalc(
-    exp, quiet=False, verbose=False, overwrite=False, seed=None, env=None, **kwargs
+    exp,
+    quiet=False,
+    superquiet=False,
+    verbose=False,
+    overwrite=False,
+    seed=None,
+    env=None,
+    **kwargs,
 ):
     """Interface to r.mapcalc.
 
     :param str exp: expression
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param seed: an integer used to seed the random-number generator for the
@@ -137,6 +145,7 @@ def mapcalc(
             env=env,
             seed=seed,
             quiet=quiet,
+            superquiet=superquiet,
             verbose=verbose,
             overwrite=overwrite,
         )
@@ -145,7 +154,14 @@ def mapcalc(
 
 
 def mapcalc_start(
-    exp, quiet=False, verbose=False, overwrite=False, seed=None, env=None, **kwargs
+    exp,
+    quiet=False,
+    superquiet=False,
+    verbose=False,
+    overwrite=False,
+    seed=None,
+    env=None,
+    **kwargs,
 ):
     """Interface to r.mapcalc, doesn't wait for it to finish, returns Popen object.
 
@@ -166,6 +182,7 @@ def mapcalc_start(
 
     :param str exp: expression
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param seed: an integer used to seed the random-number generator for the
@@ -188,6 +205,7 @@ def mapcalc_start(
         env=env,
         seed=seed,
         quiet=quiet,
+        superquiet=superquiet,
         verbose=verbose,
         overwrite=overwrite,
     )
