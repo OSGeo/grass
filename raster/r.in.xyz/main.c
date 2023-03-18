@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE rtype;
     struct History history;
     char title[64];
-    void *n_array, *min_array, *max_array, *sum_array, *sumsq_array,
+    char *n_array, *min_array, *max_array, *sum_array, *sumsq_array,
         *index_array;
     void *raster_row, *ptr;
     struct Cell_head region;
