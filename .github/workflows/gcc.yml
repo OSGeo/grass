@@ -59,8 +59,6 @@ jobs:
           ldd --version
       - name: Build
         env:
-          # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
-          CFLAGS: -std=${{ matrix.c }} -fPIC -Wall -Wextra
-          # TODO: -pedantic-errors here won't compile
-          CXXFLAGS: -std=${{ matrix.cpp }} -fPIC -Wall -Wextra
+          CFLAGS: -std=${{ matrix.c }} -fPIC -Wall -Wextra -Wpedantic
+          CXXFLAGS: -std=${{ matrix.cpp }} -fPIC -Wall -Wextra -Wpedantic
         run: .github/workflows/build_ubuntu-22.04.sh $HOME/install -Werror
