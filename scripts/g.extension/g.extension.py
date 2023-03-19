@@ -219,7 +219,7 @@ class GitAdapter:
         url="https://github.com/osgeo/grass-addons",
         working_directory=None,
         official_repository_structure=True,
-        major_grass_version=8,
+        major_grass_version=None,
         branch=None,
         verbose=False,
         quiet=False,
@@ -251,16 +251,20 @@ class GitAdapter:
 
     def _initialize_clone(self):
         """Get a minimal working copy of a git repository without content"""
+        repo_directory = "grass_addons"
         if not self.working_directory.exists():
             self.working_directory.mkdir(exist_ok=True, parents=True)
         gs.call(
-            ["git", "clone", "--no-checkout", "--depth=1", "--filter=tree:0", self.url],
+            [
+                "git",
+                "clone",
+                "--no-checkout",
+                "--depth=1",
+                "--filter=tree:0",
+                self.url,
+                repo_directory,
+            ],
             cwd=self.working_directory,
-        )
-        repo_directory = (
-            self.url.split("/")[-1][0:-4]
-            if self.url.endswith(".git")
-            else self.url.split("/")[-1]
         )
         self.local_copy = self.working_directory / repo_directory
 
@@ -289,7 +293,7 @@ class GitAdapter:
         )
         branch_list = gs.decode(branch_list.communicate()[0])
         return {
-            branch.split("/")[-1]: branch.split("\t")[0]
+            branch.rsplit("/", 1)[-1]: branch.split("\t", 1)[0]
             for branch in branch_list.split("\n")
         }
 
@@ -305,7 +309,7 @@ class GitAdapter:
             cwd=self.local_copy,
             stdout=PIPE,
         )
-        return gs.decode(default_branch.communicate()[0]).rstrip().split("/")[-1]
+        return gs.decode(default_branch.communicate()[0]).rstrip().rsplit("/", 1)[-1]
 
     def _get_version_branch(self):
         """Check if version branch for the current GRASS version exists,
@@ -902,7 +906,7 @@ def list_available_modules(url, mlist=None):
         gs.warning(
             _(
                 "Unable to parse '{url}'. Trying to scan"
-                " git repository (may take some time)..."
+                " Git repository (may take some time)..."
             ).format(url=file_url)
         )
         list_available_extensions_svn(url)
@@ -1040,7 +1044,7 @@ def write_xml_modules(name, tree=None):
     file_ = open(name, "w")
     file_.write('<?xml version="1.0" encoding="UTF-8"?>\n')
     file_.write('<!DOCTYPE task SYSTEM "grass-addons.dtd">\n')
-    file_.write('<addons version="%s">\n' % version[0])
+    file_.write(f'<addons version="{VERSION[0]}">\n')
 
     libgis_revison = gs.version()["libgis_revision"]
     if tree is not None:
@@ -1086,7 +1090,7 @@ def write_xml_extensions(name, tree=None):
     file_ = open(name, "w")
     file_.write('<?xml version="1.0" encoding="UTF-8"?>\n')
     file_.write('<!DOCTYPE task SYSTEM "grass-addons.dtd">\n')
-    file_.write('<addons version="%s">\n' % version[0])
+    file_.write(f'<addons version="{VERSION[0]}">\n')
 
     libgis_revison = gs.version()["libgis_revision"]
     if tree is not None:
@@ -1142,7 +1146,7 @@ def write_xml_toolboxes(name, tree=None):
     file_ = open(name, "w")
     file_.write('<?xml version="1.0" encoding="UTF-8"?>\n')
     file_.write('<!DOCTYPE toolbox SYSTEM "grass-addons.dtd">\n')
-    file_.write('<addons version="%s">\n' % version[0])
+    file_.write(f'<addons version="{VERSION[0]}">\n')
     if tree is not None:
         for tnode in tree.findall("toolbox"):
             indent = 4
@@ -1635,10 +1639,8 @@ def install_extension_win(name):
     # build base URL
     base_url = (
         "http://wingrass.fsv.cvut.cz/"
-        "grass{major}{minor}/addons/"
-        "grass-{major}.{minor}.{patch}".format(
-            major=version[0], minor=version[1], patch=version[2]
-        )
+        f"grass{VERSION[0]}{VERSION[1]}/addons/"
+        f"grass-{VERSION[0]}.{VERSION[1]}.{VERSION[2]}"
     )
 
     # resolve ZIP URL
@@ -1735,9 +1737,7 @@ def download_source_code_svn(url, name, outdev, directory=None):
     return directory
 
 
-def download_source_code_official_github(
-    url, name, branch, major_grass_version=8, directory=None
-):
+def download_source_code_official_github(url, name, branch, directory=None):
     """Download source code from a official GitHub repository
 
     .. note:
@@ -1746,7 +1746,7 @@ def download_source_code_official_github(
     :param url: URL of the repository
         (module class/family and name are attached)
     :param name: module name
-    :param outdev: output divide for the standard output of the git command
+    :param branch: branch of the git repository to fetch from
     :param directory: directory where the source code will be downloaded
         (default is the current directory with name attached)
 
@@ -1759,8 +1759,8 @@ def download_source_code_official_github(
         ga = GitAdapter(
             url=url,
             working_directory=directory,
-            major_grass_version=major_grass_version,
-            branch=str(branch),
+            major_grass_version=int(VERSION[0]),
+            branch=branch,
         )
     except RuntimeError:
         # if gs.call(["svn", "export", url, directory], stdout=outdev) != 0
@@ -1884,7 +1884,7 @@ def download_source_code(
 ):
     """Get source code to a local directory for compilation"""
     gs.verbose(_("Type of source identified as '{source}'.").format(source=source))
-    if source == "official" or source == "official_fork":
+    if source in ("official", "official_fork"):
         gs.message(
             _("Fetching <{name}> from <{url}> (be patient)...").format(
                 name=name, url=url
@@ -1979,10 +1979,10 @@ def install_extension_std_platforms(name, source, url, branch):
     os.chdir(TMPDIR)  # this is just to not leave something behind
     srcdir = os.path.join(TMPDIR, name)
     srcdir = download_source_code(
-        source=source,
-        url=url,
-        name=name,
-        outdev=outdev,
+        source,
+        url,
+        name,
+        outdev,
         directory=srcdir,
         tmpdir=TMPDIR,
         branch=branch,
@@ -2467,10 +2467,11 @@ def resolve_install_prefix(path, to_system):
     if path == "$GRASS_ADDON_BASE":
         if not os.getenv("GRASS_ADDON_BASE"):
             gs.warning(
-                _("GRASS_ADDON_BASE is not defined, " "installing to ~/.grass%s/addons")
-                % version[0]
+                _(
+                    "GRASS_ADDON_BASE is not defined, installing to ~/.grass{}/addons"
+                ).format(VERSION[0])
             )
-            path = os.path.join(os.environ["HOME"], ".grass%s" % version[0], "addons")
+            path = os.path.join(os.environ["HOME"], f".grass{VERSION[0]}", "addons")
         else:
             path = os.environ["GRASS_ADDON_BASE"]
     if os.path.exists(path) and not os.access(path, os.W_OK):
@@ -2503,7 +2504,7 @@ def resolve_xmlurl_prefix(url, source=None):
     if source in ("official", "official_fork"):
         # use pregenerated modules XML file
         # Define branch to fetch from (latest or current version)
-        version_branch = get_version_branch(version[0])
+        version_branch = get_version_branch(VERSION[0])
 
         url = "https://grass.osgeo.org/addons/{}/".format(version_branch)
     # else try to get extensions XMl from SVN repository (provided URL)
@@ -2746,7 +2747,7 @@ def get_addons_paths(gg_addons_base_dir):
     :param str gg_addons_base_dir: dir path where addons are installed
     """
     # Define branch to fetch from (latest or current version)
-    addons_branch = get_version_branch(version[0])
+    addons_branch = get_version_branch(VERSION[0])
     url = f"https://api.github.com/repos/OSGeo/grass-addons/git/trees/{addons_branch}?recursive=1"
 
     response = download_addons_paths_file(
@@ -2851,6 +2852,6 @@ if __name__ == "__main__":
     atexit.register(cleanup)
 
     grass_version = gs.version()
-    version = grass_version["version"].split(".")
+    VERSION = grass_version["version"].split(".")
 
     sys.exit(main())
