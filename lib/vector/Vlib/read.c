@@ -19,14 +19,24 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-static int read_dummy(struct Map_info *, struct line_pnts *, struct line_cats *)
+static int read_dummy(struct Map_info *Map UNUSED,
+                      struct line_pnts *line_p UNUSED,
+                      struct line_cats *line_c UNUSED)
 {
     G_warning("Vect_read_line() %s", _("for this format/level not supported"));
     return -1;
 }
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format(struct Map_info *, struct line_pnts *, struct line_cats *)
+static int format(struct Map_info *Map UNUSED, struct line_pnts *line_p UNUSED,
+                  struct line_cats *line_c UNUSED)
+{
+    G_fatal_error(_("Requested format is not compiled in this version"));
+    return 0;
+}
+
+static int format2(struct Map_info *Map UNUSED, struct line_pnts *line_p UNUSED,
+                   struct line_cats *line_c UNUSED, int line UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
@@ -62,14 +72,14 @@ static int (*Read_line_array[])(struct Map_info *, struct line_pnts *,
                                                             V2_read_line_sfa
 #else
                                                             ,
-                                                            format, format
+                                                            format2, format2
 #endif
 #ifdef HAVE_POSTGRES
                                                             ,
                                                             V2_read_line_pg
 #else
                                                             ,
-                                                            format
+                                                            format2
 #endif
 };
 
