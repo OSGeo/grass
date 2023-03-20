@@ -156,9 +156,7 @@ def register_maps_in_space_time_dataset(
         # Build the map list again with the ids
         for idx, maplist_item in enumerate(maplist):
             maplist[idx] = {
-                "id": AbstractMapDataset.build_id(
-                    maplist_item, mapset, check_mapset_element=type
-                )
+                "id": AbstractMapDataset.build_id_from_search_path(maplist_item, type)
             }
 
     # Read the map list from file
@@ -214,9 +212,7 @@ def register_maps_in_space_time_dataset(
                 # case-sensitive, the user decides on the band name
                 row["semantic_label"] = line_list[idx].strip()
 
-            row["id"] = AbstractMapDataset.build_id(
-                mapname, mapset, check_mapset_element=type
-            )
+            row["id"] = AbstractMapDataset.build_id_from_search_path(mapname, type)
 
             maplist.append(row)
 
