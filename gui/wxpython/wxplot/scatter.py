@@ -149,7 +149,7 @@ class ScatterFrame(BasePlotFrame):
             self.raster[rpair]["datalist"] = self.CreateDatalist(rpair)
 
             # update title
-            self.ptitle += "%s vs %s, " % (
+            self.ptitle += _("%s vs %s, ") % (
                 rpair[0].split("@")[0],
                 rpair[1].split("@")[0],
             )
