@@ -151,7 +151,7 @@ int process_line(int ltype, const struct line_pnts *Points,
 void show_label(double *px, double *py, LATTR *lattr, const char *text)
 {
     double X = *px, Y = *py;
-    int Xoffset;
+    double Xoffset;
     double xarr[5], yarr[5];
     double T, B, L, R;
     double ysize;
@@ -163,13 +163,14 @@ void show_label(double *px, double *py, LATTR *lattr, const char *text)
      * A proper fix would be to obtain baseline and shift it around. */
     ysize = D_get_d_to_u_yconv() * lattr->size;
     if (lattr->yref == LBOTTOM)
-        Y = Y + ysize * 1.4;
+        Y = Y - ysize * 0.6;
     else if (lattr->yref == LCENTER)
         Y = Y + ysize * 0.35;
     else
-        Y = Y - ysize * 0.6;
+        Y = Y + ysize * 1.4;
 
-    X = X + D_get_d_to_u_xconv() * 0.5 * lattr->size;
+    if (lattr->xref != LRIGHT)
+        X = X + D_get_d_to_u_xconv() * 0.5 * lattr->size;
 
     D_pos_abs(X, Y);
     D_get_text_box(text, &T, &B, &L, &R);
