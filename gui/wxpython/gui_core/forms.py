@@ -580,7 +580,7 @@ class TaskFrame(wx.Frame):
         guisizer.Add(self.notebookpanel, proportion=1, flag=wx.EXPAND)
 
         # status bar
-        status_text = _("Enter parameters for '") + self.task.name + "'"
+        status_text = _("Enter parameters for '") + self.task.name + _("'")
         try:
             self.task.get_cmd()
             self.updateValuesHook()
