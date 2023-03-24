@@ -240,6 +240,8 @@ class GitAdapter:
 
         #: Attribute containg available branches
         self.branches = self._get_branch_list()
+        #: Attribute containg the git version
+        self.git_version = self._get_version()
         # Initialize the local copy
         self._initialize_clone()
         #: Attribute containg the default branch of the repository
@@ -248,6 +250,18 @@ class GitAdapter:
         self.branch = self._set_branch(branch)
         #: Attribute containg list of addons in the repository with path to directories
         self.addons = self._get_addons_list()
+
+    def _get_version(self):
+        """Get the installed git version"""
+        git_version = gs.Popen(["git", "--version"], stdout=PIPE)
+        return float(
+            ".".join(
+                gs.decode(git_version.communicate()[0])
+                .rstrip()
+                .rsplit(" ", 1)[-1]
+                .split(".")[0:2]
+            )
+        )
 
     def _initialize_clone(self):
         """Get a minimal working copy of a git repository without content"""
@@ -258,8 +272,8 @@ class GitAdapter:
             [
                 "git",
                 "clone",
+                "-q",
                 "--no-checkout",
-                "--depth=1",
                 "--filter=tree:0",
                 self.url,
                 repo_directory,
@@ -349,7 +363,7 @@ class GitAdapter:
         """Build a dictionary with addon name as key and path to directory with
         Makefile in repository"""
         file_list = gs.Popen(
-            ["git", "ls-tree", "--name-only", "-r", "HEAD"],
+            ["git", "ls-tree", "--name-only", "-r", self.branch],
             cwd=self.local_copy,
             stdout=PIPE,
             stderr=PIPE,
@@ -384,28 +398,24 @@ class GitAdapter:
 
     def fetch_addons(self, addon_list, all_addons=False):
         if addon_list:
-            gs.call(
-                ["git", "sparse-checkout", "init", "--cone"],
-                cwd=self.local_copy,
-            )
-            gs.call(
-                [
-                    "git",
-                    "sparse-checkout",
-                    "set",
-                    *[self.addons[addon] for addon in addon_list],
-                ],
-                cwd=self.local_copy,
-            )
-            gs.call(
-                ["git", "checkout", self.branch],
-                cwd=self.local_copy,
-            )
-        elif all_addons:
-            gs.call(
-                ["git", "checkout", self.branch],
-                cwd=self.local_copy,
-            )
+            if self.git_version >= 2.25 and not all_addons:
+                gs.call(
+                    ["git", "sparse-checkout", "init", "--cone"],
+                    cwd=self.local_copy,
+                )
+                gs.call(
+                    [
+                        "git",
+                        "sparse-checkout",
+                        "set",
+                        *[self.addons[addon] for addon in addon_list],
+                    ],
+                    cwd=self.local_copy,
+                )
+        gs.call(
+            ["git", "checkout", self.branch],
+            cwd=self.local_copy,
+        )
 
 
 def replace_shebang_win(python_file):
