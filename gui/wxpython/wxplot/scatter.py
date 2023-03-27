@@ -135,23 +135,24 @@ class ScatterFrame(BasePlotFrame):
         """Build data list for plotting each raster"""
 
         #
-        # initialize title string
-        #
-        self.ptitle = _("Bivariate Scatterplot of ")
-
-        #
         # create a datalist for plotting for each raster pair
         #
         if len(self.rasterList) == 0:
             return  # at least 1 pair of maps needed to plot
-
+        pairs = []
         for rpair in self.rasterList:
             self.raster[rpair]["datalist"] = self.CreateDatalist(rpair)
 
             # update title
-            self.ptitle += _("%s vs %s, ") % (
-                rpair[0].split("@")[0],
-                rpair[1].split("@")[0],
+            pairs.append(
+                _("{rpair0} vs {rpair1}").format(
+                    rpair0=rpair[0].split("@")[0], rpair1=rpair[1].split("@")[0]
+                )
+            )
+            self.ptitle = _(
+                "Bivariate Scatterplot of {list_of_pairs}".format(
+                    list_of_pairs=_(", ").join(pairs)
+                )
             )
 
         self.ptitle = self.ptitle.strip(", ")
