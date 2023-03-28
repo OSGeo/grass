@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
 
         Rast_init_cell_stats(&statf[i]);
         for (t = 0; t < nprocs; t++) {
-            memcpy(&thread_statf[t][i], &statf[i], sizeof(struct Cell_stats));
+            Rast_init_cell_stats(&thread_statf[t][i]);
         }
 
         Rast_get_cellhd(name, "", &cellhd[i]);
