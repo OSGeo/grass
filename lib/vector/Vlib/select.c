@@ -153,7 +153,7 @@ int Vect_spatial_index_select(const struct spatial_index *si,
     rect.boundary[3] = box->E;
     rect.boundary[4] = box->N;
     rect.boundary[5] = box->T;
-    RTreeSearch(si->si_tree, &rect, (void *)_add_item, list);
+    RTreeSearch(si->si_tree, &rect, (SearchHitCallback *)_add_item, list);
 
     G_debug(3, "Vect_spatial_index_select(): %d items selected",
             list->n_values);

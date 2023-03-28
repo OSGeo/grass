@@ -16,8 +16,9 @@ jobs:
     name: ${{ matrix.os }} build and tests
 
     concurrency:
-      group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}-${{ matrix.os }}
-      cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
+        matrix.os }}
+      cancel-in-progress: true
 
     runs-on: ${{ matrix.os }}
     strategy:
