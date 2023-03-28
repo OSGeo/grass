@@ -31,6 +31,12 @@
 
 #include "local_proto.h"
 
+void printCellNode(struct Cell_stats_node *node, int array_index)
+{
+    G_message(_("Node[%d], idx=%d, left=%d, right=%d"), array_index, node->idx,
+              node->left, node->right);
+}
+
 // helper method for development - will remove later
 void printCellStats(struct Cell_stats *stat)
 {
@@ -39,6 +45,9 @@ void printCellStats(struct Cell_stats *stat)
     G_message(_("curp= %d"), stat->curp);
     G_message(_("null_data_count= %d"), stat->null_data_count);
     G_message(_("curroffset= %d"), stat->curoffset);
+    for (int i = 0; i < stat->N; i++) {
+        printCellNode(stat->node + i, i);
+    }
 }
 
 int main(int argc, char *argv[])
@@ -308,15 +317,44 @@ int main(int argc, char *argv[])
          */
         G_verbose_message(_("Creating support files for raster map <%s>..."),
                           new_name);
+
+        // try to merge all of thread_statf[] into a single statf at
+        // thread_statf[0]
+        int next_cell_stat;
+        long merge_count;
+        // for every file
         for (int i = 0; i < nfiles; i++) {
-            for (int t = 0; t < nprocs; t++) {
-                G_message(_("thread_statf[%d][%d]"), t, i);
-                printCellStats(&thread_statf[t][i]);
-                G_message(_("#########"));
+            // merge all thread data into thread 0
+            for (int t = 1; t < nprocs; t++) {
+                if (out_type == CELL_TYPE) {
+                    Rast_rewind_cell_stats(thread_statf[t] + i);
+                    while (Rast_next_cell_stat(&next_cell_stat, &merge_count,
+                                               thread_statf[t] + i)) {
+                        if (next_cell_stat &&
+                            !Rast_find_cell_stat(next_cell_stat, &merge_count,
+                                                 thread_statf[0] + i)) {
+                            Rast_update_cell_stats(&next_cell_stat, 1,
+                                                   thread_statf[0] + i);
+                        }
+                    }
+                }
             }
         }
-        support(names, statf, nfiles, &cats, &cats_ok, &colr, &colr_ok,
-                out_type);
+
+        // for (int i = 0; i < nfiles; i++) {
+        //     // G_message(_("statf[%d]"), i);
+        //     // printCellStats(&statf[i]);
+        //     // G_message(_("#########"));
+        //     for (int t = 0; t < nprocs; t++) {
+        //         G_message(_("thread_statf[%d][%d]"), t, i);
+        //         printCellStats(&thread_statf[t][i]);
+        //         G_message(_("#########"));
+        //     }
+        // }
+
+        // now it should all be in thread_statf[0]
+        support(names, thread_statf[0], nfiles, &cats, &cats_ok, &colr,
+                &colr_ok, out_type);
     }
 
     for (t = 0; t < nprocs; t++) {
