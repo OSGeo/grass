@@ -31,11 +31,22 @@
 
 #include "local_proto.h"
 
+// helper method for development - will remove later
+void printCellStats(struct Cell_stats *stat)
+{
+    G_message(_("tlen= %d"), stat->tlen);
+    G_message(_("N= %d"), stat->N);
+    G_message(_("curp= %d"), stat->curp);
+    G_message(_("null_data_count= %d"), stat->null_data_count);
+    G_message(_("curroffset= %d"), stat->curoffset);
+}
+
 int main(int argc, char *argv[])
 {
     int **infd;
     struct Categories cats;
     struct Cell_stats *statf;
+    struct Cell_stats **thread_statf;
     struct Colors colr;
     int cats_ok;
     int colr_ok;
@@ -135,6 +146,10 @@ int main(int argc, char *argv[])
     for (t = 0; t < nprocs; t++)
         infd[t] = G_malloc(nfiles * sizeof(int));
     statf = G_malloc(nfiles * sizeof(struct Cell_stats));
+    thread_statf = G_malloc(nprocs * (nfiles * sizeof(struct Cell_stats)));
+    for (int t = 0; t < nprocs; t++) {
+        thread_statf[t] = G_malloc(nfiles * sizeof(struct Cell_stats));
+    }
     cellhd = G_malloc(nfiles * sizeof(struct Cell_head));
 
     for (i = 0; i < nfiles; i++) {
@@ -154,14 +169,18 @@ int main(int argc, char *argv[])
             out_type = DCELL_TYPE;
 
         Rast_init_cell_stats(&statf[i]);
+        for (t = 0; t < nprocs; t++) {
+            memcpy(&thread_statf[t][i], &statf[i], sizeof(struct Cell_stats));
+        }
 
         Rast_get_cellhd(name, "", &cellhd[i]);
     }
-    if (!no_support && nprocs > 1 && out_type == CELL_TYPE) {
-        no_support = true;
-        G_warning(_("Creating support files (labels, color table) disabled for "
-                    "nprocs > 1"));
-    }
+    // if (!no_support && nprocs > 1 && out_type == CELL_TYPE) {
+    //     no_support = true;
+    //     G_warning(_("Creating support files (labels, color table) disabled
+    //     for "
+    //                 "nprocs > 1"));
+    // }
 
     out_cell_size = Rast_cell_size(out_type);
 
@@ -226,9 +245,12 @@ int main(int argc, char *argv[])
                 north_edge = Rast_row_to_northing(row, &window);
                 south_edge = north_edge - window.ns_res;
 
-                if (out_type == CELL_TYPE && !no_support)
+                if (out_type == CELL_TYPE && !no_support) {
+                    // Rast_update_cell_stats((CELL *)local_presult, ncols,
+                    //                        &statf[0]);
                     Rast_update_cell_stats((CELL *)local_presult, ncols,
-                                           &statf[0]);
+                                           &thread_statf[t_id][0]);
+                }
                 for (i = 1; i < nfiles; i++) {
                     /* check if raster i overlaps with the current row */
                     if (south_edge >= cellhd[i].north ||
@@ -238,9 +260,13 @@ int main(int argc, char *argv[])
                         continue;
 
                     Rast_get_row(local_infd[i], local_patch, row, out_type);
-                    if (!do_patch(local_presult, local_patch, &statf[i], ncols,
-                                  out_type, out_cell_size, use_zero,
-                                  no_support))
+                    // if (!do_patch(local_presult, local_patch, &statf[i],
+                    // ncols,
+                    //               out_type, out_cell_size, use_zero,
+                    //               no_support))
+                    if (!do_patch(local_presult, local_patch,
+                                  &(thread_statf[t_id][i]), ncols, out_type,
+                                  out_cell_size, use_zero, no_support))
                         break;
                 }
                 void *p = G_incr_void_ptr(outbuf, out_cell_size *
@@ -282,9 +308,21 @@ int main(int argc, char *argv[])
          */
         G_verbose_message(_("Creating support files for raster map <%s>..."),
                           new_name);
+        for (int i = 0; i < nfiles; i++) {
+            for (int t = 0; t < nprocs; t++) {
+                G_message(_("thread_statf[%d][%d]"), t, i);
+                printCellStats(&thread_statf[t][i]);
+                G_message(_("#########"));
+            }
+        }
         support(names, statf, nfiles, &cats, &cats_ok, &colr, &colr_ok,
                 out_type);
     }
+
+    for (t = 0; t < nprocs; t++) {
+        G_free(thread_statf[t]);
+    }
+    G_free(thread_statf);
 
     /* now close (and create) the result */
     Rast_close(outfd);
