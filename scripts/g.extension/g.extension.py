@@ -224,12 +224,12 @@ class GitAdapter:
         verbose=False,
         quiet=False,
     ):
-        #: Attribute containg the URL to the online repository
+        #: Attribute containing the URL to the online repository
         self.url = url
         self.major_grass_version = major_grass_version
         #: Attribute flagging if the repository is structured like the official addons repository
         self.official_repository_structure = official_repository_structure
-        #: Attribute containg the path to the working directory where the repo is cloned out to
+        #: Attribute containing the path to the working directory where the repo is cloned out to
         if working_directory:
             self.working_directory = Path(working_directory).absolute()
         else:
@@ -238,17 +238,17 @@ class GitAdapter:
         # Check if working directory is writable
         self.__check_permissions()
 
-        #: Attribute containg available branches
+        #: Attribute containing available branches
         self.branches = self._get_branch_list()
-        #: Attribute containg the git version
+        #: Attribute containing the git version
         self.git_version = self._get_version()
         # Initialize the local copy
         self._initialize_clone()
-        #: Attribute containg the default branch of the repository
+        #: Attribute containing the default branch of the repository
         self.default_branch = self._get_default_branch()
-        #: Attribute containg the branch used for checkout
+        #: Attribute containing the branch used for checkout
         self.branch = self._set_branch(branch)
-        #: Attribute containg list of addons in the repository with path to directories
+        #: Attribute containing list of addons in the repository with path to directories
         self.addons = self._get_addons_list()
 
     def _get_version(self):
