@@ -192,8 +192,6 @@ RUN grass --tmp-location XY --exec g.version -rge && \
 
 FROM grass as test
 
-RUN apk add --no-cache make gcc
-
 ## run simple LAZ test
 COPY docker/testdata/simple.laz /tmp/simple.laz
 COPY docker/testdata/test_grass_session.py /scripts/test_grass_session.py
@@ -212,6 +210,14 @@ RUN grass --tmp-location XY --exec g.extension extension=r.learn.ml2
 
 FROM grass as final
 
+# These packages are required to run g.extension in GRASS GIS.
+ENV GRASS_RUN_PACKAGES="\
+      build-base \
+      gcc \
+      libpq-dev \
+      make \
+    "
+
 # GRASS GIS specific
 # allow work with MAPSETs that are not owned by current user
 ENV GRASSBIN="/usr/local/bin/grass" \
@@ -221,6 +227,13 @@ ENV GRASSBIN="/usr/local/bin/grass" \
 # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
 ENV PROJ_NETWORK=ON
 
+# Add packages for fully enabling g.extension
+RUN apk add --no-cache $GRASS_RUN_PACKAGES
+
+# addon test in final stage: does g.extension install also C-extensions?
+RUN grass --tmp-location XY --exec g.extension extension=r.gwr operation=add
+RUN grass --tmp-location XY --exec g.extension extension=r.gwr operation=remove -f
+
 # show installed version
 RUN grass --tmp-location XY --exec g.version -rge && \
     pdal --version && \
@@ -229,7 +242,6 @@ RUN grass --tmp-location XY --exec g.version -rge && \
 # test r.in.pdal in final image because test stage is not executed in github action
 COPY docker/testdata/simple.laz /tmp/simple.laz
 RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
-
 
 # Data workdir
 WORKDIR /grassdb

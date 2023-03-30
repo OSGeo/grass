@@ -50,6 +50,8 @@ ENV MYCFLAGS="-O2 -std=gnu99 -m64" \
 # List of packages to be installed (proj-data omitted: 570.04 MB)
 ENV PACKAGES="\
       attr \
+      build-base \
+      make \
       bash \
       bison \
       bzip2 \
@@ -57,6 +59,7 @@ ENV PACKAGES="\
       fftw \
       flex \
       freetype \
+      gcc \
       gdal \
       gettext \
       geos \
@@ -64,6 +67,7 @@ ENV PACKAGES="\
       libbz2 \
       libjpeg-turbo \
       libpng \
+      libpq-dev \
       musl \
       musl-utils \
       ncurses \
@@ -215,6 +219,13 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
 
 # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
 ENV PROJ_NETWORK=ON
+
+# Add packages for fully enabling g.extension
+RUN apk add --no-cache $GRASS_RUN_PACKAGES
+
+# addon test in final stage: does g.extension install also C-extensions?
+RUN grass --tmp-location XY --exec g.extension extension=r.gwr operation=add
+RUN grass --tmp-location XY --exec g.extension extension=r.gwr operation=remove -f
 
 # show installed version
 RUN grass --tmp-location XY --exec g.version -rge && \
