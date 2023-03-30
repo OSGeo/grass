@@ -2,16 +2,16 @@
 #include <grass/raster.h>
 
 /**
- * merges the statf[] arrays for each thread into
+ * Merges the statf[] arrays for each thread into
  * Thread 0 for use in the support computation.
  *
- * the funciton takes in a 2D array thread_statf[][], where
- * the rows are for represent each thread and each column is
- * a file that is being used to patch. The end result is
+ * The function takes in a 2D array thread_statf[][], where
+ * the rows represent each thread and each column is
+ * a file that is being used to patch. The result is
  * that thread_statf[0] is an array of size [nfiles] that holds
  * the merged stats information.
  *
- * the function takes in a pointer to thread_statf[][], directly
+ * The function takes in a pointer to thread_statf[][], directly
  * modifying it
  */
 void merge_threads(struct Cell_stats **thread_statf, int nprocs, int nfiles)
