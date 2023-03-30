@@ -59,6 +59,7 @@ ENV PACKAGES="\
       fftw \
       flex \
       freetype \
+      g++ \
       gcc \
       gdal \
       gettext \
