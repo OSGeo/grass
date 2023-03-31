@@ -61,7 +61,8 @@ ENV PACKAGES="\
       freetype \
       g++ \
       gcc \
-      gdal \
+      gdal-dev \
+      geos-dev \
       gettext \
       geos \
       gnutls \
@@ -69,6 +70,7 @@ ENV PACKAGES="\
       libjpeg-turbo \
       libpng \
       libpq-dev \
+      make \
       musl \
       musl-utils \
       ncurses \
@@ -88,22 +90,15 @@ ENV PACKAGES="\
     " \
     # These packages are required to compile GRASS GIS.
     GRASS_BUILD_PACKAGES="\
-      build-base \
       bzip2-dev \
       cairo-dev \
       fftw-dev \
       freetype-dev \
-      g++ \
-      gcc \
-      gdal-dev \
-      geos-dev \
       git \
       gnutls-dev \
       libc6-compat \
       libjpeg-turbo-dev \
       libpng-dev \
-      libpq-dev \
-      make \
       openjpeg-dev \
       openblas-dev \
       proj-dev \

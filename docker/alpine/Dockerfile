@@ -20,9 +20,11 @@ ENV PACKAGES="\
       flex \
       freetype \
       gdal \
+      gdal-dev \
       gdal-tools \
       gettext \
       geos \
+      geos-dev \
       gnutls \
       jsoncpp \
       laszip \
@@ -31,6 +33,7 @@ ENV PACKAGES="\
       libjpeg-turbo \
       libpng \
       libunwind \
+      make \
       musl \
       musl-utils \
       ncurses \
@@ -231,8 +234,12 @@ ENV PROJ_NETWORK=ON
 RUN apk add --no-cache $GRASS_RUN_PACKAGES
 
 # addon test in final stage: does g.extension install also C-extensions?
+# test raster C addon
 RUN grass --tmp-location XY --exec g.extension extension=r.gwr operation=add
 RUN grass --tmp-location XY --exec g.extension extension=r.gwr operation=remove -f
+# test vector C addon
+RUN grass --tmp-location XY --exec g.extension extension=v.centerpoint operation=add
+RUN grass --tmp-location XY --exec g.extension extension=v.centerpoint operation=remove -f
 
 # show installed version
 RUN grass --tmp-location XY --exec g.version -rge && \
