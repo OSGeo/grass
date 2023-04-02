@@ -17,7 +17,7 @@ def main():
     benchmark(7071, "r.patch_50M", results)
     benchmark(14142, "r.patch_200M", results)
     benchmark(10000, "r.patch_100M", results)
-    # benchmark(20000, "r.patch_400M", results)
+    benchmark(20000, "r.patch_400M", results)
 
     bm.nprocs_plot(results, filename="rpatch_benchmark.svg")
 
