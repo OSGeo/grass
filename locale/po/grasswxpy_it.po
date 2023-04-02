@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2022-05-23 10:50+0000\n"
-"Last-Translator: luca <lucadeluge@gmail.com>\n"
+"PO-Revision-Date: 2023-04-03 17:08+0000\n"
+"Last-Translator: Markus <neteler@osgeo.org>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/"
 "grasswxpy/it/>\n"
 "Language: it\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.2\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:28
 #: ../gui/wxpython/mapswipe/toolbars.py:36
@@ -4542,7 +4542,7 @@ msgstr ""
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:372
 msgid "A POINTS file exists, renaming it to POINTS_BAK"
-msgstr ""
+msgstr "Esiste un file POINTS, rinominato in POINTS_BAK"
 
 #: ../gui/wxpython/photo2image/ip2i_manager.py:398
 msgid "Opening CAMERA file failed"
@@ -8316,7 +8316,7 @@ msgstr "Mappatura tematica per mappa vettoriale in visualizzazione 3D"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:58
 msgid "3D Raster Map Calculator"
-msgstr ""
+msgstr "Calcolatore di mappe raster 3D"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:74
 msgid "mapcalc statement"
@@ -10050,6 +10050,7 @@ msgstr "Nessuna area di training da esportare."
 #, python-format
 msgid "%d training areas (%d classes) exported to vector map <%s>."
 msgstr ""
+"%d aree di formazione (%d classi ) esportate in una mappa vettoriale <%s>."
 
 #: ../gui/wxpython/iclass/frame.py:978
 msgid "Failed to create temporary vector map."
