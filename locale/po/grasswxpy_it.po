@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2023-04-03 17:08+0000\n"
+"PO-Revision-Date: 2023-04-04 21:08+0000\n"
 "Last-Translator: Markus <neteler@osgeo.org>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/"
 "grasswxpy/it/>\n"
@@ -10050,7 +10050,7 @@ msgstr "Nessuna area di training da esportare."
 #, python-format
 msgid "%d training areas (%d classes) exported to vector map <%s>."
 msgstr ""
-"%d aree di formazione (%d classi ) esportate in una mappa vettoriale <%s>."
+"%d aree di formazione (%d classi) esportate in una mappa vettoriale <%s>."
 
 #: ../gui/wxpython/iclass/frame.py:978
 msgid "Failed to create temporary vector map."
