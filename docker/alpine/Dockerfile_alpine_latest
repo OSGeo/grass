@@ -50,6 +50,8 @@ ENV MYCFLAGS="-O2 -std=gnu99 -m64" \
 # List of packages to be installed (proj-data omitted: 570.04 MB)
 ENV PACKAGES="\
       attr \
+      build-base \
+      make \
       bash \
       bison \
       bzip2 \
@@ -57,13 +59,18 @@ ENV PACKAGES="\
       fftw \
       flex \
       freetype \
-      gdal \
+      g++ \
+      gcc \
+      gdal-dev \
+      geos-dev \
       gettext \
       geos \
       gnutls \
       libbz2 \
       libjpeg-turbo \
       libpng \
+      libpq-dev \
+      make \
       musl \
       musl-utils \
       ncurses \
@@ -83,22 +90,15 @@ ENV PACKAGES="\
     " \
     # These packages are required to compile GRASS GIS.
     GRASS_BUILD_PACKAGES="\
-      build-base \
       bzip2-dev \
       cairo-dev \
       fftw-dev \
       freetype-dev \
-      g++ \
-      gcc \
-      gdal-dev \
-      geos-dev \
       git \
       gnutls-dev \
       libc6-compat \
       libjpeg-turbo-dev \
       libpng-dev \
-      libpq-dev \
-      make \
       openjpeg-dev \
       openblas-dev \
       proj-dev \
@@ -215,6 +215,17 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
 
 # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
 ENV PROJ_NETWORK=ON
+
+# Add packages for fully enabling g.extension
+RUN apk add --no-cache $GRASS_RUN_PACKAGES
+
+# addon test in final stage: does g.extension install also C-extensions?
+# test raster C addon
+RUN grass --tmp-location XY --exec g.extension extension=r.gwr operation=add
+RUN grass --tmp-location XY --exec g.extension extension=r.gwr operation=remove -f
+# test vector C addon
+RUN grass --tmp-location XY --exec g.extension extension=v.centerpoint operation=add
+RUN grass --tmp-location XY --exec g.extension extension=v.centerpoint operation=remove -f
 
 # show installed version
 RUN grass --tmp-location XY --exec g.version -rge && \
