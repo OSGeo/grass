@@ -209,6 +209,9 @@ ENV GRASSBIN=grass
 RUN /bin/bash /scripts/grass_tests.sh && rm -f /scripts/grass_tests.sh \
               /tmp/simple.laz /scripts/test_grass_session.py
 
+# delete unused packages
+RUN apk del --no-cache gettext pdal-dev
+
 # show installed version
 RUN grass --tmp-location XY --exec g.version -rge && \
     pdal --version && \
