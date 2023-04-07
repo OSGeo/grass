@@ -462,7 +462,7 @@ class VectorTopo(Vector):
                         c_mapinfo=self.c_mapinfo,
                         table=self.table,
                         writeable=self.writeable,
-                        is2D=is2D
+                        is2D=is2D,
                     )
                     for indx in ids
                 )
