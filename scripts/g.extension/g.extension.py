@@ -396,7 +396,16 @@ class GitAdapter:
                         )
         return addons_dict
 
+    def _addon_exists(self, addon_list):
+        if not [self.addons[addon] for addon in addon_list if addon in self.addons]:
+            gs.fatal(
+                _("No addon named <{}> found in the repository.").format(
+                    ", ".join(addon_list)
+                )
+            )
+
     def fetch_addons(self, addon_list, all_addons=False):
+        self._addon_exists(addon_list)
         if addon_list:
             if self.git_version >= 2.25 and not all_addons:
                 gs.call(

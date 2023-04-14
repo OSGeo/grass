@@ -18,6 +18,7 @@ import unittest
 from pathlib import Path
 
 from grass.gunittest.case import TestCase
+from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.main import test
 from grass.gunittest.utils import silent_rmtree
 
@@ -154,6 +155,14 @@ class TestModuleDownloadFromDifferentSources(TestCase):
             self.assertFileExists(file)
             if file.suffix != ".html" and file.suffix != ".py":
                 self.assertModule(str(file), help=True)
+
+    def test_github_install_official_non_exists_module(self):
+        """Test installing non exists extension from official addons repository"""
+        extension = "non_exists_extension"
+        gextension = SimpleModule("g.extension", extension=extension)
+        self.assertModuleFail(gextension)
+        self.assertTrue(gextension.outputs.stderr)
+        self.assertIn(extension, gextension.outputs.stderr)
 
 
 if __name__ == "__main__":
