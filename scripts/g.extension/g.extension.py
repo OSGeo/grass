@@ -399,7 +399,7 @@ class GitAdapter:
     def _addon_exists(self, addon_list):
         if not [self.addons[addon] for addon in addon_list if addon in self.addons]:
             gs.fatal(
-                _("No AddOn named <{}> found in the repository.").format(
+                _("No addon named <{}> found in the repository.").format(
                     ", ".join(addon_list)
                 )
             )
