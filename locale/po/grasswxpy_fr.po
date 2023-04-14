@@ -10,16 +10,17 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2017-01-16 09:34+0100\n"
+"PO-Revision-Date: 2023-04-15 15:08+0000\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
-"Language-Team: français <grass-translations@lists.osgeo.org>\n"
+"Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
+"grasswxpy/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Vé 0.1.4\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.16.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:28
 #: ../gui/wxpython/mapswipe/toolbars.py:36
@@ -15326,9 +15327,8 @@ msgid "Unable to create new mapset: {}"
 msgstr ""
 
 #: ../gui/wxpython/startup/guiutils.py:212
-#, fuzzy
 msgid "Do you want to import {}to the newly created location?"
-msgstr "Voulez-vous importer <%(name)s> dans le nouveau secteur ?"
+msgstr "Voulez-vous importer {} dans le nouveau secteur ?"
 
 #: ../gui/wxpython/startup/guiutils.py:217
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:537
@@ -18291,9 +18291,8 @@ msgid "Do advanced search using %s module"
 msgstr "Effectuer la recherche avancée avec le module %s"
 
 #: ../gui/wxpython/gui_core/menu.py:161
-#, fuzzy
 msgid "Double-click to run selected module"
-msgstr "Double-clic ou Ctrl+Entrée pour exécuter le module sélectionné"
+msgstr "Double-clic pour exécuter le module sélectionné"
 
 #: ../gui/wxpython/gui_core/menu.py:164
 msgid "&Run..."
