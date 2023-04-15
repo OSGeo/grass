@@ -12,6 +12,7 @@ COPYRIGHT: (C) 2022 Stefan Blumentrath and by the GRASS Development Team
            for details.
 """
 
+import re
 import sys
 import unittest
 
@@ -163,6 +164,26 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         self.assertModuleFail(gextension)
         self.assertTrue(gextension.outputs.stderr)
         self.assertIn(extension, gextension.outputs.stderr)
+
+    def test_github_download_official_module_src_code_only(self):
+        """Test download extension source code only from official addons
+        repository and check extension temporary directory path"""
+        gextension = SimpleModule(
+            "g.extension",
+            extension="db.join",
+            flags="d",
+        )
+        self.assertModule(gextension)
+        self.assertTrue(gextension.outputs.stderr)
+        ext_path_str = re.search(
+            rf"^{_('Path to the source code:')}\n(.+?)\n",
+            gextension.outputs.stderr,
+            re.MULTILINE,
+        )
+        self.assertTrue(ext_path_str)
+        ext_path = Path(ext_path_str.group(1))
+        self.assertTrue(ext_path.exists())
+        self.assertIn(ext_path / "Makefile", list(ext_path.iterdir()))
 
 
 if __name__ == "__main__":
