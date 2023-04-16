@@ -176,12 +176,12 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         self.assertModule(gextension)
         self.assertTrue(gextension.outputs.stderr)
         ext_path_str = re.search(
-            rf"^{_('Path to the source code:')}\n(.+?)\n",
+            rf"^{_('Path to the source code:')}(\n|\n\n)(.+?)\n",
             gextension.outputs.stderr,
             re.MULTILINE,
         )
         self.assertTrue(ext_path_str)
-        ext_path = Path(ext_path_str.group(1))
+        ext_path = Path(ext_path_str.group(2))
         self.assertTrue(ext_path.exists())
         self.assertIn(ext_path / "Makefile", list(ext_path.iterdir()))
 
