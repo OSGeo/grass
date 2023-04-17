@@ -28,6 +28,7 @@ ENV GRASS_RUN_PACKAGES="\
       gettext \
       geos \
       geos-dev \
+      git \
       gnutls \
       jsoncpp \
       laszip \
