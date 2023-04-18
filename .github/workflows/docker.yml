@@ -73,7 +73,7 @@ jobs:
             TAG_PREFIX=`echo $GITHUB_REF|cut -d '/' -f3`
           fi
           tag="${DOCKERHUB_REPOSITORY}:${TAG_PREFIX}-${{ matrix.os }}"
-          echo "::set-output name=tags::$tag"
+          echo "tags=$tag" >> $GITHUB_OUTPUT
       - name: Log
         run: |
           echo ${{ steps.meta.outputs.tags }}
@@ -117,7 +117,7 @@ jobs:
         name: Create tag name
         run: |
           tag=${DOCKERHUB_REPOSITORY}:latest
-          echo "::set-output name=tags::$tag"
+          echo "tags=$tag" >> $GITHUB_OUTPUT
       - name: Log
         run: echo ${{ steps.meta.outputs.tags }}
       - name: Set up QEMU
@@ -174,7 +174,7 @@ jobs:
         name: Update tag name
         run: |
           tag="${{ steps.meta.outputs.tags }}-${{ matrix.os }}"
-          echo "::set-output name=tags::$tag"
+          echo "tags=$tag" >> $GITHUB_OUTPUT
       - name: Log
         run: |
           echo ${{ steps.meta2.outputs.tags }}
