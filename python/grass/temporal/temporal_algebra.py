@@ -2454,7 +2454,7 @@ class TemporalAlgebraParser(object):
                         resultstds = open_new_stds(
                             t[1],
                             maps_stds_type,
-                            "absolute",
+                            self.temporaltype,
                             t[1],
                             t[1],
                             "mean",
@@ -2517,7 +2517,7 @@ class TemporalAlgebraParser(object):
 
                     self.process_chain_dict["STDS"]["name"] = t[1]
                     self.process_chain_dict["STDS"]["stdstype"] = self.stdstype
-                    self.process_chain_dict["STDS"]["temporal_type"] = "absolute"
+                    self.process_chain_dict["STDS"]["temporal_type"] = self.temporaltype
 
                 elif num == 0:
                     self.msgr.warning(
@@ -2530,7 +2530,7 @@ class TemporalAlgebraParser(object):
                         resultstds = open_new_stds(
                             t[1],
                             self.stdstype,
-                            "absolute",
+                            self.temporaltype,
                             t[1],
                             t[1],
                             "mean",
