@@ -13,14 +13,8 @@ for details.
 import os
 import shutil
 import getpass
-import tempfile
 
-from grass.grassdb.checks import (
-    mapset_exists,
-    is_mapset_valid,
-    get_mapset_invalid_reason,
-)
-from grass.grassdb.manage import delete_mapset, resolve_mapset_path, MapsetPath
+from grass.grassdb.manage import resolve_mapset_path, MapsetPath
 
 
 def _directory_to_mapset(path: MapsetPath):

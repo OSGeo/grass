@@ -5,13 +5,14 @@ import os
 import pytest
 
 import grass.script as gs
+import grass.experimental as experimental
 
 
 def test_simple_create(xy_session):
     """Session creates, starts, and finishes"""
     name = "test_mapset_1"
     session_file = xy_session.env["GISRC"]
-    with gs.MapsetSession(name, create=True, env=xy_session.env) as session:
+    with experimental.MapsetSession(name, create=True, env=xy_session.env) as session:
         gs.run_command("g.region", flags="p", env=session.env)
 
         session_mapset = gs.read_command("g.mapset", flags="p", env=session.env).strip()
@@ -34,7 +35,7 @@ def test_without_context_manager(xy_session):
     """Session creates, starts, and finishes but without a context manager API"""
     name = "test_mapset_1"
     session_file = xy_session.env["GISRC"]
-    session = gs.MapsetSession(name, create=True)
+    session = experimental.MapsetSession(name, create=True)
     gs.run_command("g.region", flags="p", env=session.env)
 
     session_mapset = gs.read_command("g.mapset", flags="p", env=session.env).strip()
@@ -58,7 +59,7 @@ def test_create_overwrite(xy_session):
     """Session creates and creates again with overwrite"""
     name = "test_mapset_1"
     session_file = xy_session.env["GISRC"]
-    with gs.MapsetSession(name, create=True) as session:
+    with experimental.MapsetSession(name, create=True) as session:
         session_mapset = gs.read_command("g.mapset", flags="p", env=session.env).strip()
         assert name == session_mapset
         gs.run_command("r.mapcalc", expression="a = 1", env=session.env)
@@ -68,7 +69,7 @@ def test_create_overwrite(xy_session):
             .split()
         )
         assert len(rasters) == 1 and rasters[0] == "a"
-    with gs.MapsetSession(name, create=True, overwrite=True) as session:
+    with experimental.MapsetSession(name, create=True, overwrite=True) as session:
         session_mapset = gs.read_command("g.mapset", flags="p", env=session.env).strip()
         assert name == session_mapset
         rasters = (
@@ -91,7 +92,7 @@ def test_ensure(xy_session):
     """Session ensures and does not delete"""
     name = "test_mapset_1"
     session_file = xy_session.env["GISRC"]
-    with gs.MapsetSession(name, ensure=True) as session:
+    with experimental.MapsetSession(name, ensure=True) as session:
         session_mapset = gs.read_command("g.mapset", flags="p", env=session.env).strip()
         assert name == session_mapset
         gs.run_command("r.mapcalc", expression="a = 1", env=session.env)
@@ -101,7 +102,7 @@ def test_ensure(xy_session):
             .split()
         )
         assert len(rasters) == 1 and rasters[0] == "a"
-    with gs.MapsetSession(name, ensure=True) as session:
+    with experimental.MapsetSession(name, ensure=True) as session:
         session_mapset = gs.read_command("g.mapset", flags="p", env=session.env).strip()
         assert name == session_mapset
         rasters = (
@@ -136,7 +137,9 @@ def test_create_multiple(xy_session):
     top_level_collected = []
     original_mapsets = get_mapset_names(env=xy_session.env)
     for name in create_names:
-        with gs.MapsetSession(name, create=True, env=xy_session.env) as session:
+        with experimental.MapsetSession(
+            name, create=True, env=xy_session.env
+        ) as session:
             collected.append(
                 gs.read_command("g.mapset", flags="p", env=session.env).strip()
             )
@@ -154,9 +157,13 @@ def test_create_multiple(xy_session):
 def test_nested_top_env(xy_session):
     """Sessions can be nested with one top-level environment"""
     names = ["test_mapset_1", "test_mapset_2", "test_mapset_3"]
-    with gs.MapsetSession(names[0], create=True, env=xy_session.env) as session1:
-        with gs.MapsetSession(names[1], create=True, env=xy_session.env) as session2:
-            with gs.MapsetSession(
+    with experimental.MapsetSession(
+        names[0], create=True, env=xy_session.env
+    ) as session1:
+        with experimental.MapsetSession(
+            names[1], create=True, env=xy_session.env
+        ) as session2:
+            with experimental.MapsetSession(
                 names[2], create=True, env=xy_session.env
             ) as session3:
                 for name, session in zip(names, [session1, session2, session3]):
@@ -170,9 +177,15 @@ def test_nested_top_env(xy_session):
 def test_nested_inherited_env(xy_session):
     """Sessions can be nested including environment"""
     names = ["test_mapset_1", "test_mapset_2", "test_mapset_3"]
-    with gs.MapsetSession(names[0], create=True, env=xy_session.env) as session1:
-        with gs.MapsetSession(names[1], create=True, env=session1.env) as session2:
-            with gs.MapsetSession(names[2], create=True, env=session2.env) as session3:
+    with experimental.MapsetSession(
+        names[0], create=True, env=xy_session.env
+    ) as session1:
+        with experimental.MapsetSession(
+            names[1], create=True, env=session1.env
+        ) as session2:
+            with experimental.MapsetSession(
+                names[2], create=True, env=session2.env
+            ) as session3:
                 for name, session in zip(names, [session1, session2, session3]):
                     session_mapset = gs.read_command(
                         "g.mapset", flags="p", env=session.env

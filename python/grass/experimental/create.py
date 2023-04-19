@@ -1,12 +1,16 @@
-import os
-import shutil
-import getpass
+"""Likely going into grass.grassdb.create"""
+
+import pathlib
 import tempfile
 
 from grass.grassdb.checks import (
     mapset_exists,
     is_mapset_valid,
     get_mapset_invalid_reason,
+)
+from grass.grassdb.create import (
+    create_mapset,
+    _directory_to_mapset,
 )
 from grass.grassdb.manage import delete_mapset, resolve_mapset_path, MapsetPath
 
@@ -50,8 +54,6 @@ def require_create_ensure_mapset(
 
 
 def create_temporary_mapset(path, location=None) -> MapsetPath:
-    import pathlib
-
     path = pathlib.Path(path)
     if location:
         path /= location

@@ -6,6 +6,7 @@ import pytest
 
 import grass.script as gs
 import grass.script.setup as grass_setup
+import grass.experimental as experimental
 
 
 @pytest.fixture
@@ -50,7 +51,7 @@ def xy_mapset_session(
     procedures which means that it can be examined in the temporary directories
     pytest creates.
     """
-    with gs.MapsetSession(
+    with experimental.MapsetSession(
         f"test_{unique_id}", create=True, env=xy_session_for_module.env
     ) as session:
         yield session
@@ -66,5 +67,7 @@ def xy_mapset_non_permament(xy_session):  # pylint: disable=redefined-outer-name
     procedures which means that it can be examined in the temporary directories
     pytest creates.
     """
-    with gs.MapsetSession("test1", create=True, env=xy_session.env) as session:
+    with experimental.MapsetSession(
+        "test1", create=True, env=xy_session.env
+    ) as session:
         yield session

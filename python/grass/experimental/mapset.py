@@ -1,3 +1,15 @@
+"Session or subsession for mapsets (subprojects)"
+
+import shutil
+import os
+from pathlib import Path
+
+import grass.script as gs
+from grass.experimental.create import (
+    require_create_ensure_mapset,
+    create_temporary_mapset,
+)
+
 
 class MapsetSession:
     """Session in another mapset in the same location
@@ -55,9 +67,7 @@ class MapsetSession:
 
     def _start(self, create, overwrite, ensure):
         """Start the session and create the mapset if requested"""
-        from grass.grassdb.create import require_create_ensure_mapset
-
-        gis_env = gisenv(env=self._env)
+        gis_env = gs.gisenv(env=self._env)
         require_create_ensure_mapset(
             gis_env["GISDBASE"],
             gis_env["LOCATION_NAME"],
@@ -66,7 +76,7 @@ class MapsetSession:
             overwrite=overwrite,
             ensure=ensure,
         )
-        self._session_file, self._env = create_environment(
+        self._session_file, self._env = gs.create_environment(
             gis_env["GISDBASE"],
             gis_env["LOCATION_NAME"],
             self._name,
@@ -135,8 +145,6 @@ class TemporaryMapsetSession:
 
     def __init__(self, *, location=None, env=None):
         """Starts the session and creates the mapset if requested"""
-        from pathlib import Path
-
         if location:
             # Simple resolution of location name versus path to location.
             # Assumes anything which is not a directory (existing files,
@@ -146,10 +154,10 @@ class TemporaryMapsetSession:
             # resolve_mapset_path functions.
             self._location_path = Path(location)
             if not self._location_path.is_dir():
-                gis_env = gisenv(env=env)
+                gis_env = gs.gisenv(env=env)
                 self._location_path = Path(gis_env["GISDBASE"]) / location
         else:
-            gis_env = gisenv(env=env)
+            gis_env = gs.gisenv(env=env)
             self._location_path = Path(gis_env["GISDBASE"]) / gis_env["LOCATION_NAME"]
         self._name = None
         self._path = None
@@ -185,12 +193,10 @@ class TemporaryMapsetSession:
 
     def _start(self, env):
         """Start the session and create the mapset if requested"""
-        from grass.grassdb.create import create_temporary_mapset
-
         self._path = create_temporary_mapset(self._location_path)
         print(repr(self._path), self._path)
         self._name = self._path.mapset
-        self._session_file, self._env = create_environment(
+        self._session_file, self._env = gs.create_environment(
             self._location_path.parent,
             self._location_path.name,
             self._name,
