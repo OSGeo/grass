@@ -181,36 +181,18 @@ as standard raster maps. Similarly for newly created maps,
 setups a format and directory where the actual data will be stored,
 however in GRASS Database the data will be created as standard maps.
 
-<h3>Starting GRASS GIS using GUI</h3>
+<h3>Starting GRASS GIS</h3>
 
-After launching GRASS GIS, the startup window will open (Fig. 2).
+After launching GRASS GIS for the first time,
+the GUI opens in a default Location <code>world_latlong_wgs84</code>.
+From there a new Location and Mapset can be created.
 
 <p>
 <center>
-  <img src="grass_start.png" alt="startup window with numbered fields"><br>
-  <i>Fig. 2: GRASS GIS startup window</i>
+  <img src="grass_start.png" alt="GRASS GIS GUI after first start"><br>
 </center>
 
-The startup windows provides these functions:
-
-<ol>
-    <li>Selecting the GRASS GIS Database directory.
-    <li>Selecting the Location (e.g. a project or area).
-        See the <em>Location Wizard</em> (4) for creating new Locations.
-    <li>Selecting the Mapset (a subproject or task).
-        Creating a new Mapset requires only name.
-    <li>The <em>Location Wizard</em> for creating new Locations
-        based for example, on existing georeferenced file or EPSG code.
-    <li>Download a sample Location from the Internet.
-    <li>Start GRASS GIS once you have selected an existing Location and Mapset
-        or defined a new one. The graphical user interface
-        <a href="wxGUI.html">wxGUI</a> will open and provide you with a
-        menu system, map visualization tool, digitizer, and more.
-</ol>
-
-<h3>Starting GRASS GIS using command line</h3>
-
-GRASS GIS can be started with given Database, Location and Mapset
+GRASS GIS can be also started with a given Database, Location and Mapset
 from the command line. For example, the following will start
 in a given Mapset with only command line interface:
 
@@ -238,7 +220,7 @@ See <a href="grass.html"><em>grass</em></a> command manual for more details.
 
 <h3>Creating a New Location with the Location Wizard</h3>
 
-The <a href="wxGUI.html">wxGUI</a> graphical user interface provides a
+The <a href="wxGUI.html">GUI</a> provides a
 graphical <em>Location Wizard</em> which lets you easily create a
 new Location for your own data. You will be guided through a series of
 dialogues to browse and select predefined projections or to
@@ -266,8 +248,6 @@ this was in the text pointing to some unknown text:
 -->
 
 <p>
-After defining a new Location, wxGUI starts automatically.
-<!-- TODO: how GUI start actually works -->
 If data were already imported, you can add them into the Layer Manager now
 and display them.
 More data can be imported into the Location, e.g. using import options in
