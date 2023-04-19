@@ -35,7 +35,7 @@ def test_without_context_manager(xy_session):
     """Session creates, starts, and finishes but without a context manager API"""
     name = "test_mapset_1"
     session_file = xy_session.env["GISRC"]
-    session = experimental.MapsetSession(name, create=True)
+    session = experimental.MapsetSession(name, create=True, env=xy_session.env)
     gs.run_command("g.region", flags="p", env=session.env)
 
     session_mapset = gs.read_command("g.mapset", flags="p", env=session.env).strip()

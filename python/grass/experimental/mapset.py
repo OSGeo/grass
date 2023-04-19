@@ -194,7 +194,6 @@ class TemporaryMapsetSession:
     def _start(self, env):
         """Start the session and create the mapset if requested"""
         self._path = create_temporary_mapset(self._location_path)
-        print(repr(self._path), self._path)
         self._name = self._path.mapset
         self._session_file, self._env = gs.create_environment(
             self._location_path.parent,
@@ -238,7 +237,32 @@ class TemporaryMapsetSession:
         self.finish()
 
 
-if __name__ == "__main__":
-    import doctest
+def _test():
+    """Quick tests of mapset session usage.
 
-    doctest.testmod()
+    The file should run outside of an existing session, but the grass package
+    needs to be on path.
+    """
+    with gs.setup.init("~/grassdata/nc_spm_08_grass7"):
+        with TemporaryMapsetSession() as session:
+            gs.run_command("g.region", res=10, rows=100, cols=200, env=session.env)
+            gs.run_command(
+                "r.surf.random", output="uniform_random", min=1, max=10, env=session.env
+            )
+            print(
+                gs.parse_command(
+                    "r.univar", map="uniform_random", flags="g", env=session.env
+                )["max"]
+            )
+
+        with MapsetSession("user1", ensure=True) as session:
+            gs.run_command("g.region", raster="elevation", env=session.env)
+            print(
+                gs.parse_command(
+                    "r.univar", map="elevation", flags="g", env=session.env
+                )["range"]
+            )
+
+
+if __name__ == "__main__":
+    _test()
