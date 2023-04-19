@@ -216,6 +216,7 @@ class GitAdapter:
 
     def __init__(
         self,
+        addons=[],
         url="https://github.com/osgeo/grass-addons",
         working_directory=None,
         official_repository_structure=True,
@@ -224,6 +225,8 @@ class GitAdapter:
         verbose=False,
         quiet=False,
     ):
+        #: Attribute containing list of addons names
+        self._addons = addons
         #: Attribute containing the URL to the online repository
         self.url = url
         self.major_grass_version = major_grass_version
@@ -369,31 +372,29 @@ class GitAdapter:
             stderr=PIPE,
         )
         file_list, stderr = file_list.communicate()
+        if stderr:
+            gs.fatal(
+                _(
+                    "Failed to get addons files list from the"
+                    " Git repository <{repo_path}>. <{error}>."
+                ).format(
+                    repo_path=self.local_copy,
+                    error=gs.decode(stderr),
+                )
+            )
         # Build addons dict
         addons_dict = {}
-        for file_path in gs.decode(file_list).rstrip().split("\n"):
-            # Consider only paths to Makefiles in src
-            if file_path.startswith("src") and file_path.endswith("Makefile"):
-                if file_path.split("/")[1] in ["tools", "models"]:
-                    # exclude tools and models
-                    continue
-                elif file_path.split("/")[1] == "hadoop" and "hd." in "/".join(
-                    file_path.split("/")[0:4]
-                ):
-                    addons_dict[file_path.split("/")[3]] = "/".join(
-                        file_path.split("/")[0:4]
-                    )
-                elif file_path.split("/")[1] == "gui":
-                    addons_dict[file_path.split("/")[3]] = "/".join(
-                        file_path.split("/")[0:4]
-                    )
-                else:
-                    if len(file_path.split("/")) >= 3 and file_path.split("/")[
-                        2
-                    ] not in ["Makefile", "hd"]:
-                        addons_dict[file_path.split("/")[2]] = "/".join(
-                            file_path.split("/")[0:3]
-                        )
+        addons = [f".*{addon}/Makefile\n" for addon in self._addons]
+        addons_makefile_pattern = re.compile(
+            rf"({'|'.join(addons)})",
+        )
+        addons_makefiles = re.findall(
+            addons_makefile_pattern,
+            gs.decode(file_list),
+        )
+        for addon in addons_makefiles:
+            addon_dir = os.path.dirname(addon)
+            addons_dict[os.path.basename(addon_dir)] = addon_dir.rstrip()
         return addons_dict
 
     def _addon_exists(self, addon_list):
@@ -1776,6 +1777,7 @@ def download_source_code_official_github(url, name, branch, directory=None):
 
     try:
         ga = GitAdapter(
+            addons=[name],
             url=url,
             working_directory=directory,
             major_grass_version=int(VERSION[0]),
