@@ -9,6 +9,9 @@ import grass.experimental as experimental
 def test_with_context_manager(xy_session):
     """Session creates, starts, and finishes"""
     session_file = xy_session.env["GISRC"]
+    original_session_mapset_list = (
+        gs.read_command("g.mapsets", flags="l", env=xy_session.env).strip().split(",")
+    )
     with experimental.TemporaryMapsetSession(env=xy_session.env) as session:
         assert session.active
         gs.run_command("g.region", flags="p", env=session.env)
@@ -28,6 +31,10 @@ def test_with_context_manager(xy_session):
     assert not session.active
     assert not os.path.exists(mapset_path)
     assert not os.path.exists(other_session_file)
+    new_session_mapset_list = (
+        gs.read_command("g.mapsets", flags="l", env=xy_session.env).strip().split(",")
+    )
+    assert sorted(original_session_mapset_list) == sorted(new_session_mapset_list)
     assert os.path.exists(session_file)
     assert xy_session.env["GISRC"]
 

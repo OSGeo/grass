@@ -262,6 +262,7 @@ def _test():
                     "r.univar", map="elevation", flags="g", env=session.env
                 )["range"]
             )
+        gs.run_command("g.mapsets", flags="l")
 
 
 if __name__ == "__main__":
