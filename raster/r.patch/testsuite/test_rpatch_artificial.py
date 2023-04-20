@@ -384,8 +384,8 @@ class TestCELLColorCategory(TestCase):
         self.assertMultiLineEqual(categories, "0,\n1,\n2,\n3,\n4,")
         color = call_module("r.colors.out", map=self.cell_ab_result).strip()
         table = (
-            "0 0:0:0\n1 1:1:1\n2 2:2:2\n3 3:3:3\n4 4:4:4\n",
-            "nv 255:255:255\ndefault 255:255:255",
+            "0 0:0:0\n1 1:1:1\n2 2:2:2\n3 3:3:3\n4 4:4:4\n"
+            "nv 255:255:255\ndefault 255:255:255"
         )
         self.assertMultiLineEqual(color, table)
         color = call_module("r.colors.out", map=self.cell_ab_result_threaded).strip()
