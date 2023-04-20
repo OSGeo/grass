@@ -73,10 +73,9 @@ RUN echo "Install Python";\
     pip$PYTHON_VERSION install --upgrade pip setuptools && \
     if [ ! -e /usr/bin/pip ]; then ln -s pip$PYTHON_VERSION /usr/bin/pip ; fi && \
     if [ ! -e /usr/bin/python ]; then ln -sf /usr/bin/$PYTHONBIN /usr/bin/python; fi && \
-    rm -r /root/.cache
-
-# Add the packages
-RUN echo "Install main packages";\
+    rm -r /root/.cache; \
+    # Add the packages
+    echo "Install main packages";\
     apk update; \
     apk add --no-cache $GRASS_RUN_PACKAGES
 
@@ -179,44 +178,36 @@ RUN cp /usr/local/grass83/gui/wxpython/xml/module_items.xml module_items.xml; \
 
 FROM common as grass
 
-ENV LC_ALL="en_US.UTF-8"
-
-# Copy GRASS GIS from build image
-COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
-COPY --from=build /usr/local/grass* /usr/local/grass/
-
-# install external Python API
-RUN pip3 install --upgrade pip six grass-session --ignore-installed six
-
-# TODO: still needed?
-RUN ln -sf /usr/local/grass $(grass --config path)
-
 # GRASS GIS specific
 # allow work with MAPSETs that are not owned by current user
 ENV GRASSBIN="/usr/local/bin/grass" \
     GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
-    SHELL="/bin/bash"
+    SHELL="/bin/bash" \
+    # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
+    PROJ_NETWORK=ON \
+    GRASSBIN=grass \
+    LC_ALL="en_US.UTF-8"
 
-# https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
-ENV PROJ_NETWORK=ON
-
-## run simple LAZ test
+# Copy GRASS GIS from build image
+COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
+COPY --from=build /usr/local/grass* /usr/local/grass/
+# run simple LAZ test
 COPY docker/testdata/simple.laz /tmp/
+COPY docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts/
 COPY docker/testdata/test_grass_session.py /scripts/
-COPY docker/alpine/grass_tests.sh /scripts/
-ENV GRASSBIN=grass
 
-# run some tests and cleanup
-RUN /bin/bash /scripts/grass_tests.sh && rm -f /scripts/grass_tests.sh \
-              /tmp/simple.laz /scripts/test_grass_session.py
-
-# delete unused packages
-RUN apk del --no-cache gettext pdal-dev
-
-# show installed version
-RUN grass --tmp-location XY --exec g.version -rge && \
-    pdal --version && \
-    python3 --version
+# install external Python API
+RUN pip3 install --upgrade pip six grass-session --ignore-installed six; \
+    ln -sf /usr/local/grass $(grass --config path); \
+    # run some tests and cleanup
+    $SHELL /scripts/grass_tests.sh \
+    && rm -f /scripts/grass_tests.sh /tmp/simple.laz /scripts/test_grass_session.py; \
+    # delete unused packages
+    apk del --no-cache gettext pdal-dev; \
+    # show installed version
+    grass --tmp-location XY --exec g.version -rge \
+    && pdal --version \
+    && python3 --version
 
 # Data workdir
 WORKDIR /grassdb
