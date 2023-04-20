@@ -450,7 +450,7 @@ class VectorTopo(Vector):
 
             >>> test_vect.close()
         """
-        is2D = bool(libvect.Vect_is_3d(self.c_mapinfo) != 1)
+        is2D = not self.is_3D()
         if vtype in _GEOOBJ.keys():
             if _GEOOBJ[vtype] is not None:
                 ids = (indx for indx in range(1, self.number_of(vtype) + 1))
