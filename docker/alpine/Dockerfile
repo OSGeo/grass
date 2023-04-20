@@ -23,11 +23,9 @@ ENV GRASS_RUN_PACKAGES="\
       g++ \
       gcc \
       gdal \
-      gdal-dev \
       gdal-tools \
       gettext \
       geos \
-      geos-dev \
       git \
       gnutls \
       jsoncpp \
@@ -36,7 +34,6 @@ ENV GRASS_RUN_PACKAGES="\
       libgeotiff \
       libjpeg-turbo \
       libpng \
-      libpq-dev \
       libunwind \
       make \
       musl \
@@ -48,7 +45,6 @@ ENV GRASS_RUN_PACKAGES="\
       py3-pillow \
       py3-six \
       pdal \
-      pdal-dev \
       postgresql \
       proj-util \
       sqlite \
@@ -203,7 +199,7 @@ RUN pip3 install --upgrade pip six grass-session --ignore-installed six; \
     $SHELL /scripts/grass_tests.sh \
     && rm -f /scripts/grass_tests.sh /tmp/simple.laz /scripts/test_grass_session.py; \
     # delete unused packages
-    apk del --no-cache gettext pdal-dev; \
+    apk del --no-cache gettext; \
     # show installed version
     grass --tmp-location XY --exec g.version -rge \
     && pdal --version \
