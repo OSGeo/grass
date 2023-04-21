@@ -37,7 +37,6 @@ class MinMaxTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         """Ensures expected computational region"""
-        os.environ["GRASS_RANDOM_SEED"] = "42"
         # modifying region just for this script
         cls.use_temp_region()
         # Only 100,000,000 seem to resonably (not 100%) ensure that all values
@@ -60,7 +59,7 @@ class MinMaxTestCase(TestCase):
         # arbitrary, but with more cells, we expect higher precision
         precision = 0.00001
         self.assertModule(
-            "r.surf.random", min=min_value, max=max_value, output=self.output
+            "r.surf.random", min=min_value, max=max_value, output=self.output, seed=42
         )
         self.assertRasterExists(self.output, msg="Output was not created")
         self.assertRasterMinMax(
@@ -84,7 +83,8 @@ class MinMaxTestCase(TestCase):
         max_value = 13
         precision = 0
         self.assertModule(
-            "r.surf.random", min=min_value, max=max_value, output=self.output, flags="i"
+            "r.surf.random", min=min_value, max=max_value, output=self.output,
+            seed=42, flags="i"
         )
         self.assertRasterExists(self.output, msg="Output was not created")
         self.assertRasterMinMax(
@@ -105,7 +105,8 @@ class MinMaxTestCase(TestCase):
         min_value = -3.3
         max_value = 5.8
         self.assertModuleFail(
-            "r.surf.random", min=min_value, max=max_value, output=self.output, flags="i"
+            "r.surf.random", min=min_value, max=max_value, output=self.output,
+            seed=42, flags="i"
         )
 
     def test_min_greater_than_max(self):
@@ -113,7 +114,23 @@ class MinMaxTestCase(TestCase):
         min_value = 10
         max_value = 5.8
         self.assertModuleFail(
-            "r.surf.random", min=min_value, max=max_value, output=self.output
+            "r.surf.random", min=min_value, max=max_value, output=self.output, seed=42
+        )
+
+    def test_double_params_with_auto_seed(self):
+        """Check if doubles instead of ints are refused"""
+        min_value = -3.3
+        max_value = 5.8
+        self.assertModuleFail(
+            "r.surf.random", min=min_value, max=max_value, output=self.output, flags="s"
+        )
+
+    def test_double_params_with_explicit_seed(self):
+        """Check if doubles instead of ints are refused"""
+        min_value = -3.3
+        max_value = 5.8
+        self.assertModuleFail(
+            "r.surf.random", min=min_value, max=max_value, output=self.output, seed=33
         )
 
 
