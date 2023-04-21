@@ -83,8 +83,12 @@ class MinMaxTestCase(TestCase):
         max_value = 13
         precision = 0
         self.assertModule(
-            "r.surf.random", min=min_value, max=max_value, output=self.output,
-            seed=42, flags="i"
+            "r.surf.random",
+            min=min_value,
+            max=max_value,
+            output=self.output,
+            seed=42,
+            flags="i",
         )
         self.assertRasterExists(self.output, msg="Output was not created")
         self.assertRasterMinMax(
@@ -105,8 +109,12 @@ class MinMaxTestCase(TestCase):
         min_value = -3.3
         max_value = 5.8
         self.assertModuleFail(
-            "r.surf.random", min=min_value, max=max_value, output=self.output,
-            seed=42, flags="i"
+            "r.surf.random",
+            min=min_value,
+            max=max_value,
+            output=self.output,
+            seed=42,
+            flags="i",
         )
 
     def test_min_greater_than_max(self):
