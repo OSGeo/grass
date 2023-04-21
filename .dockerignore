@@ -1,5 +1,6 @@
 docker
 !docker/testdata
+!docker/alpine/grass_tests.sh
 .gitignore
 .github
 .travis
