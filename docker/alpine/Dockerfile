@@ -147,7 +147,6 @@ ENV GRASS_BUILD_PACKAGES="\
       wget \
       zip \
       zstd-dev \
-      gdal-dev \
     "
 
 # Add the packages
