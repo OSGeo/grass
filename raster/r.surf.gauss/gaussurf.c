@@ -29,11 +29,6 @@ int gaussurf(char *out, /* Name of raster maps to be opened.    */
 
     int row_count, col_count;
 
-    /****** INITIALISE RANDOM NUMBER GENERATOR ******/
-
-    /* You can set GRASS_RANDOM_SEED for repeatability */
-    G_math_srand_auto();
-
     /****** OPEN CELL FILES AND GET CELL DETAILS ******/
 
     fd_out = Rast_open_new(out, DCELL_TYPE);
