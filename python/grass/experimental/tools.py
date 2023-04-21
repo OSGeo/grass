@@ -1,3 +1,4 @@
+import os
 import sys
 import shutil
 
@@ -8,10 +9,11 @@ class ExecutedTool:
     def __init__(self, name, kwargs, stdout, stderr):
         self._name = name
         self._stdout = stdout
+        self._decoded_stdout = gs.decode(self._stdout)
 
     @property
     def text(self):
-        return self._stdout
+        return self._decoded_stdout.strip()
 
     @property
     def json(self):
@@ -21,21 +23,80 @@ class ExecutedTool:
 
     @property
     def keyval(self):
+        # TODO: possibly use or add _text_to_key_value_dict
+        # which converts int and float automatically
         return gs.parse_key_val(self._stdout)
+
+    @property
+    def comma_items(self):
+        return self.text_split(",")
+
+    @property
+    def space_items(self):
+        return self.text_split(None)
+
+    def text_split(self, separator=None):
+        # The use of strip is assuming that the output is one line which
+        # ends with a newline character which is for display only.
+        return self._decoded_stdout.strip("\n").split(separator)
 
 
 class SubExecutor:
     """use as tools().params(a="x", b="y").g_region()"""
 
+    # a and b would be overwrite or stdin
+
     # Can support other envs or all PIPE and encoding read command supports
 
 
 class Tools:
-    def __init__(self):
+    def __init__(
+        self,
+        *,
+        session=None,
+        env=None,
+        overwrite=True,
+        quiet=False,
+        verbose=False,
+        superquiet=False,
+        freeze_region=False,
+    ):
         # TODO: fix region, so that external g.region call in the middle
         # is not a problem
         # i.e. region is independent/internal/fixed
-        pass
+        if env:
+            self._env = env.copy()
+        elif session and hasattr(session, "env"):
+            self._env = session.env.copy()
+        else:
+            self._env = os.environ.copy()
+        self._region_is_frozen = False
+        if freeze_region:
+            self._freeze_region()
+        if overwrite:
+            self._overwrite()
+        # This hopefully sets the numbers directly. An alternative implementation would
+        # be to pass the parameter every time.
+        # Does not check for multiple set at the same time, but the most versbose wins
+        # for safety.
+        if superquiet:
+            self._env["GRASS_VERBOSE"] = "0"
+        if quiet:
+            self._env["GRASS_VERBOSE"] = "1"
+        if verbose:
+            self._env["GRASS_VERBOSE"] = "3"
+
+    # These could be public, not protected.
+    def _freeze_region(self):
+        self._env["GRASS_REGION"] = gs.region_env(env=self._env)
+        self._region_is_frozen = True
+
+    def _overwrite(self):
+        self._env["GRASS_OVERWRITE"] = "1"
+
+    @property
+    def env(self):
+        return self._env
 
     def run(self, name, /, **kwargs):
         """Run modules from the GRASS display family (modules starting with "d.").
@@ -48,7 +109,7 @@ class Tools:
         # alternatively use dev null as default or provide it as convenient settings
         kwargs["stdout"] = gs.PIPE
         kwargs["stderr"] = gs.PIPE
-        process = gs.pipe_command(name, **kwargs)
+        process = gs.pipe_command(name, env=self._env, **kwargs)
         stdout, stderr = process.communicate()
         stderr = gs.utils.decode(stderr)
         returncode = process.poll()
@@ -85,7 +146,7 @@ class Tools:
 
 
 def _test():
-    gs.setup.init("~/grassdata/nc_spm_08_grass7/user1")
+    session = gs.setup.init("~/grassdata/nc_spm_08_grass7/user1")
 
     tools = Tools()
     tools.g_region(raster="elevation")
@@ -98,6 +159,32 @@ def _test():
             "statistics"
         ]["mean"]
     )
+
+    print(tools.g_mapset(flags="p").text)
+    print(tools.g_mapsets(flags="l").text_split())
+    print(tools.g_mapsets(flags="l").space_items)
+    print(tools.g_gisenv(get="GISDBASE,LOCATION_NAME,MAPSET", sep="comma").comma_items)
+
+    print(tools.g_region(flags="g").keyval)
+
+    env = os.environ.copy()
+    env["GRASS_REGION"] = gs.region_env(res=250)
+    coarse_computation = Tools(env=env)
+    current_region = coarse_computation.g_region(flags="g").keyval
+    print(
+        current_region["ewres"], current_region["nsres"]
+    )  # TODO: should keyval convert?
+    coarse_computation.r_slope_aspect(
+        elevation="elevation", slope="slope", flags="a", overwrite=True
+    )
+    print(coarse_computation.r_info(map="slope", flags="g").keyval)
+
+    independent_computation = Tools(session=session, freeze_region=True)
+    tools.g_region(res=500)  # we would do this for another computation elsewhere
+    print(independent_computation.g_region(flags="g").keyval["ewres"])
+
+    tools_pro = Tools(session=session, freeze_region=True, superquiet=True)
+    tools_pro.r_slope_aspect(elevation="elevation", slope="slope")
 
 
 if __name__ == "__main__":
