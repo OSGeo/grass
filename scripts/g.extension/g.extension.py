@@ -1048,9 +1048,6 @@ def cleanup():
     """Cleanup after the downloads and copilation"""
     if REMOVE_TMPDIR:
         try_rmdir(TMPDIR)
-    else:
-        gs.message("\n%s\n" % _("Path to the source code:"))
-        sys.stderr.write("%s\n" % os.path.join(TMPDIR, options["extension"]))
 
 
 def write_xml_modules(name, tree=None):
@@ -1990,6 +1987,7 @@ def download_source_code(
 def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
     gisbase = os.getenv("GISBASE")
+    path_to_src_code_message = _("Path to the source code:")
 
     # to hide non-error messages from subprocesses
     if gs.verbosity() <= 2:
@@ -2049,16 +2047,16 @@ def install_extension_std_platforms(name, source, url, branch):
                 )
 
     dirs = {
-        "bin": os.path.join(TMPDIR, name, "bin"),
-        "docs": os.path.join(TMPDIR, name, "docs"),
-        "html": os.path.join(TMPDIR, name, "docs", "html"),
-        "rest": os.path.join(TMPDIR, name, "docs", "rest"),
-        "man": os.path.join(TMPDIR, name, "docs", "man"),
-        "script": os.path.join(TMPDIR, name, "scripts"),
+        "bin": os.path.join(srcdir, "bin"),
+        "docs": os.path.join(srcdir, "docs"),
+        "html": os.path.join(srcdir, "docs", "html"),
+        "rest": os.path.join(srcdir, "docs", "rest"),
+        "man": os.path.join(srcdir, "docs", "man"),
+        "script": os.path.join(srcdir, "scripts"),
         # TODO: handle locales also for addons
-        #             'string'  : os.path.join(TMPDIR, name, 'locale'),
-        "string": os.path.join(TMPDIR, name),
-        "etc": os.path.join(TMPDIR, name, "etc"),
+        #             'string'  : os.path.join(srcdir, 'locale'),
+        "string": srcdir,
+        "etc": os.path.join(srcdir, "etc"),
     }
 
     make_cmd = [
@@ -2078,7 +2076,7 @@ def install_extension_std_platforms(name, source, url, branch):
     install_cmd = [
         MAKE,
         "MODULE_TOPDIR=%s" % gisbase,
-        "ARCH_DISTDIR=%s" % os.path.join(TMPDIR, name),
+        "ARCH_DISTDIR=%s" % srcdir,
         "INST_DIR=%s" % options["prefix"],
         "install",
     ]
@@ -2088,6 +2086,8 @@ def install_extension_std_platforms(name, source, url, branch):
         sys.stderr.write(" ".join(make_cmd) + "\n")
         gs.message("\n%s\n" % _("To install run:"))
         sys.stderr.write(" ".join(install_cmd) + "\n")
+        gs.message(f"\n{path_to_src_code_message}\n")
+        sys.stderr.write(f"{srcdir}\n")
         return 0, None, None, None
 
     os.chdir(srcdir)
@@ -2100,6 +2100,8 @@ def install_extension_std_platforms(name, source, url, branch):
         gs.fatal(_("Compilation failed, sorry." " Please check above error messages."))
 
     if flags["i"]:
+        gs.message(f"\n{path_to_src_code_message}\n")
+        sys.stderr.write(f"{srcdir}\n")
         return 0, None, None, None
 
     # collect old files
@@ -2120,7 +2122,7 @@ def install_extension_std_platforms(name, source, url, branch):
             if fullname not in old_file_list:
                 file_list.append(fullname)
 
-    return ret, module_list, file_list, os.path.join(TMPDIR, name)
+    return ret, module_list, file_list, os.path.join(srcdir)
 
 
 def remove_extension(force=False):
