@@ -70,6 +70,7 @@ class Tools:
         superquiet=False,
         freeze_region=False,
         stdin=None,
+        errors=None,
     ):
         # TODO: fix region, so that external g.region call in the middle
         # is not a problem
@@ -96,6 +97,7 @@ class Tools:
         if verbose:
             self._env["GRASS_VERBOSE"] = "3"
         self._set_stdin(stdin)
+        self._errors = errors
 
     # These could be public, not protected.
     def _freeze_region(self):
@@ -144,7 +146,7 @@ class Tools:
         # TODO: instead of printing, do exception right away
         # but right now, handle errors does not accept stderr
         # or don't use handle errors and raise instead
-        if returncode:
+        if returncode and self._errors != "ignore":
             raise gs.CalledModuleError(
                 name,
                 code=" ".join([f"{key}={value}" for key, value in kwargs.items()]),
@@ -164,6 +166,9 @@ class Tools:
 
     def feed_input_to(self, stdin, /):
         return Tools(env=self._env, stdin=stdin)
+
+    def ignore_errors_of(self):
+        return Tools(env=self._env, errors="ignore")
 
     def __getattr__(self, name):
         """Parse attribute to GRASS display module. Attribute should be in
@@ -236,6 +241,13 @@ def _test():
         input="-", output="point", separator=","
     )
     print(tools_pro.v_info(map="point", flags="t").keyval["points"])
+
+    print(tools_pro.ignore_errors_of().g_version(flags="rge").keyval)
+
+    elevation = "elevation"
+    exaggerated = "exaggerated"
+    tools_pro.r_mapcalc(expression=f"{exaggerated} = 5 * {elevation}")
+    tools_pro.feed_input_to(f"{exaggerated} = 5 * {elevation}").r_mapcalc(file="-")
 
     # try:
     tools_pro.feed_input_to("13.45,29.96,200").v_in_ascii(
