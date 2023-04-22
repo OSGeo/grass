@@ -114,7 +114,16 @@ class Tools:
         stderr = gs.utils.decode(stderr)
         returncode = process.poll()
         # TODO: instead of printing, do exception right away
+        # but right now, handle errors does not accept stderr
+        # or don't use handle errors and raise instead
         if returncode:
+            raise gs.CalledModuleError(
+                name,
+                code=" ".join([f"{key}={value}" for key, value in kwargs.items()]),
+                returncode=returncode,
+                errors=stderr,
+            )
+
             # Print only when we are capturing it and there was some output.
             # (User can request ignoring the subprocess stderr and then
             # we get only None.)
