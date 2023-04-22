@@ -1152,7 +1152,8 @@ class TemporalAlgebraParser(object):
                             returncode = self.overlay_map_extent(
                                 map_new, map_j, "and", temp_op=temporal
                             )
-                            print(map_new.get_id(), map_j.get_id())
+                            if self.debug:
+                                print(map_new.get_id(), map_j.get_id())
                             # Stop the loop if no temporal or spatial relationship exist.
                             if returncode == 0:
                                 break
@@ -1339,7 +1340,7 @@ class TemporalAlgebraParser(object):
                 if spatial_topology in spatial_relations.keys():
                     spatial_topo_check = True
 
-        if self.debug is True:
+        if self.debug:
             print("Spatial topology list", spatial_topo_list, spatial_topo_check)
 
         return spatial_topo_check
@@ -1366,7 +1367,7 @@ class TemporalAlgebraParser(object):
                     if map_b in map_a_sr[spatial_topology]:
                         spatial_topo_check = True
 
-        if self.debug is True:
+        if self.debug:
             print("Spatial topology list", spatial_topo_list, spatial_topo_check)
 
         return spatial_topo_check
@@ -2600,7 +2601,8 @@ class TemporalAlgebraParser(object):
         expr : STVDS LPAREN stds RPAREN
         """
         if self.run:
-            print(t[3])
+            if self.debug:
+                print(t[3])
             t[0] = self.check_stds(t[3], stds_type="stvds", check_type=False)
         else:
             t[0] = t[3]
