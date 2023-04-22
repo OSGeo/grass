@@ -15,6 +15,10 @@ def test_with_context_manager(xy_session):
     with experimental.TemporaryMapsetSession(env=xy_session.env) as session:
         assert session.active
         gs.run_command("g.region", flags="p", env=session.env)
+        gs.run_command(
+            "r.surf.random", output="uniform_random", min=1, max=10, env=session.env
+        )
+        gs.parse_command("r.univar", map="uniform_random", flags="g", env=session.env)
 
         session_mapset = gs.read_command("g.mapset", flags="p", env=session.env).strip()
 

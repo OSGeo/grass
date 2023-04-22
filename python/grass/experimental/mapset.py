@@ -177,8 +177,8 @@ class TemporaryMapsetSession:
 
         This is suitable for subprocess which should run this mapset.
         """
-        # TODO: Should this be a copy to be read-only?
-        # May be too much overhead with env=session.env usage.
+        # This could be a copy to be read-only, but
+        # that may be too much overhead with env=session.env usage.
         return self._env
 
     @property

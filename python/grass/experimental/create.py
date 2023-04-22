@@ -54,6 +54,11 @@ def require_create_ensure_mapset(
 
 
 def create_temporary_mapset(path, location=None) -> MapsetPath:
+    """Create temporary mapset
+
+    The user of this function is responsible for deleting the contents of the
+    temporary directory and the directory itself when done with it.
+    """
     path = pathlib.Path(path)
     if location:
         path /= location
