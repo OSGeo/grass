@@ -1,3 +1,6 @@
+import pytest
+
+import grass.script as gs
 from grass.experimental.tools import Tools
 
 
@@ -24,3 +27,13 @@ def test_stdin(xy_dataset_session):
     tools.feed_input_to("13.45,29.96,200").v_in_ascii(
         input="-", output="point", separator=","
     )
+
+
+def test_raises(xy_dataset_session):
+    tools = Tools(session=xy_dataset_session)
+    with pytest.raises(gs.CalledModuleError, match="xstandard"):
+        tools.feed_input_to("13.45,29.96,200").v_in_ascii(
+            input="-",
+            output="point",
+            format="xstandard",
+        )
