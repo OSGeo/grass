@@ -348,7 +348,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.AutoCompCancel()
         # show hint
         if self.IsEmpty():
-            self._showHint()
+            wx.CallAfter(self._showHint)
         event.Skip()
 
     def OnSetFocus(self, event):
