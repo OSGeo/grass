@@ -218,6 +218,7 @@ class GitAdapter:
         self,
         addons=[],
         url="https://github.com/osgeo/grass-addons",
+        git="git",
         working_directory=None,
         official_repository_structure=True,
         major_grass_version=None,
@@ -227,6 +228,8 @@ class GitAdapter:
     ):
         #: Attribute containing list of addons names
         self._addons = addons
+        #: Attribute containing Git command name
+        self._git = git
         #: Attribute containing the URL to the online repository
         self.url = url
         self.major_grass_version = major_grass_version
@@ -240,6 +243,8 @@ class GitAdapter:
 
         # Check if working directory is writable
         self.__check_permissions()
+        # Check if Git is installed
+        self._is_git_installed()
 
         #: Attribute containing available branches
         self.branches = self._get_branch_list()
@@ -256,15 +261,21 @@ class GitAdapter:
 
     def _get_version(self):
         """Get the installed git version"""
-        git_version = gs.Popen(["git", "--version"], stdout=PIPE)
-        return float(
-            ".".join(
-                gs.decode(git_version.communicate()[0])
-                .rstrip()
-                .rsplit(" ", 1)[-1]
-                .split(".")[0:2]
+        git_version = gs.Popen([self._git, "--version"], stdout=PIPE, stderr=PIPE)
+        git_version, stderr = git_version.communicate()
+        if stderr:
+            gs.fatal(
+                _("Failed to get Git version.\n{error}").format(
+                    gs.decode(stderr),
+                )
             )
-        )
+        git_version = re.search(r"\d+.(\d+.\d+|\d+)", gs.decode(git_version))
+        if not git_version:
+            gs.fatal(_("Failed to get Git version."))
+        git_version = git_version.group()
+        if git_version.count(".") == 2:
+            git_version = git_version.rsplit(".", 1)[0]
+        return float(git_version)
 
     def _initialize_clone(self):
         """Get a minimal working copy of a git repository without content"""
@@ -273,7 +284,7 @@ class GitAdapter:
             self.working_directory.mkdir(exist_ok=True, parents=True)
         gs.call(
             [
-                "git",
+                self._git,
                 "clone",
                 "-q",
                 "--no-checkout",
@@ -284,6 +295,13 @@ class GitAdapter:
             cwd=self.working_directory,
         )
         self.local_copy = self.working_directory / repo_directory
+
+    def _is_git_installed(self):
+        """Check if Git command is installed"""
+        try:
+            gs.call([self._git], stdout=PIPE)
+        except OSError:
+            gs.fatal(_("Could not found Git. Please install it."))
 
     def __check_permissions(self):
         """"""
@@ -305,7 +323,7 @@ class GitAdapter:
                     addon repository
         """
         branch_list = gs.Popen(
-            ["git", "ls-remote", "--heads", self.url],
+            [self._git, "ls-remote", "--heads", self.url],
             stdout=PIPE,
         )
         branch_list = gs.decode(branch_list.communicate()[0])
@@ -322,7 +340,7 @@ class GitAdapter:
                     addon repository
         """
         default_branch = gs.Popen(
-            ["git", "symbolic-ref", "refs/remotes/origin/HEAD"],
+            [self._git, "symbolic-ref", "refs/remotes/origin/HEAD"],
             cwd=self.local_copy,
             stdout=PIPE,
         )
@@ -366,7 +384,7 @@ class GitAdapter:
         """Build a dictionary with addon name as key and path to directory with
         Makefile in repository"""
         file_list = gs.Popen(
-            ["git", "ls-tree", "--name-only", "-r", self.branch],
+            [self._git, "ls-tree", "--name-only", "-r", self.branch],
             cwd=self.local_copy,
             stdout=PIPE,
             stderr=PIPE,
@@ -410,12 +428,12 @@ class GitAdapter:
         if addon_list:
             if self.git_version >= 2.25 and not all_addons:
                 gs.call(
-                    ["git", "sparse-checkout", "init", "--cone"],
+                    [self._git, "sparse-checkout", "init", "--cone"],
                     cwd=self.local_copy,
                 )
                 gs.call(
                     [
-                        "git",
+                        self._git,
                         "sparse-checkout",
                         "set",
                         *[self.addons[addon] for addon in addon_list],
@@ -423,7 +441,7 @@ class GitAdapter:
                     cwd=self.local_copy,
                 )
         gs.call(
-            ["git", "checkout", self.branch],
+            [self._git, "checkout", self.branch],
             cwd=self.local_copy,
         )
 
