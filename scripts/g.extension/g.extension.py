@@ -216,7 +216,9 @@ class GitAdapter:
 
     def __init__(
         self,
+        addons=[],
         url="https://github.com/osgeo/grass-addons",
+        git="git",
         working_directory=None,
         official_repository_structure=True,
         major_grass_version=None,
@@ -224,6 +226,10 @@ class GitAdapter:
         verbose=False,
         quiet=False,
     ):
+        #: Attribute containing list of addons names
+        self._addons = addons
+        #: Attribute containing Git command name
+        self._git = git
         #: Attribute containing the URL to the online repository
         self.url = url
         self.major_grass_version = major_grass_version
@@ -237,6 +243,8 @@ class GitAdapter:
 
         # Check if working directory is writable
         self.__check_permissions()
+        # Check if Git is installed
+        self._is_git_installed()
 
         #: Attribute containing available branches
         self.branches = self._get_branch_list()
@@ -253,15 +261,21 @@ class GitAdapter:
 
     def _get_version(self):
         """Get the installed git version"""
-        git_version = gs.Popen(["git", "--version"], stdout=PIPE)
-        return float(
-            ".".join(
-                gs.decode(git_version.communicate()[0])
-                .rstrip()
-                .rsplit(" ", 1)[-1]
-                .split(".")[0:2]
+        git_version = gs.Popen([self._git, "--version"], stdout=PIPE, stderr=PIPE)
+        git_version, stderr = git_version.communicate()
+        if stderr:
+            gs.fatal(
+                _("Failed to get Git version.\n{error}").format(
+                    gs.decode(stderr),
+                )
             )
-        )
+        git_version = re.search(r"\d+.(\d+.\d+|\d+)", gs.decode(git_version))
+        if not git_version:
+            gs.fatal(_("Failed to get Git version."))
+        git_version = git_version.group()
+        if git_version.count(".") == 2:
+            git_version = git_version.rsplit(".", 1)[0]
+        return float(git_version)
 
     def _initialize_clone(self):
         """Get a minimal working copy of a git repository without content"""
@@ -270,7 +284,7 @@ class GitAdapter:
             self.working_directory.mkdir(exist_ok=True, parents=True)
         gs.call(
             [
-                "git",
+                self._git,
                 "clone",
                 "-q",
                 "--no-checkout",
@@ -281,6 +295,13 @@ class GitAdapter:
             cwd=self.working_directory,
         )
         self.local_copy = self.working_directory / repo_directory
+
+    def _is_git_installed(self):
+        """Check if Git command is installed"""
+        try:
+            gs.call([self._git], stdout=PIPE)
+        except OSError:
+            gs.fatal(_("Could not found Git. Please install it."))
 
     def __check_permissions(self):
         """"""
@@ -302,7 +323,7 @@ class GitAdapter:
                     addon repository
         """
         branch_list = gs.Popen(
-            ["git", "ls-remote", "--heads", self.url],
+            [self._git, "ls-remote", "--heads", self.url],
             stdout=PIPE,
         )
         branch_list = gs.decode(branch_list.communicate()[0])
@@ -319,7 +340,7 @@ class GitAdapter:
                     addon repository
         """
         default_branch = gs.Popen(
-            ["git", "symbolic-ref", "refs/remotes/origin/HEAD"],
+            [self._git, "symbolic-ref", "refs/remotes/origin/HEAD"],
             cwd=self.local_copy,
             stdout=PIPE,
         )
@@ -363,37 +384,35 @@ class GitAdapter:
         """Build a dictionary with addon name as key and path to directory with
         Makefile in repository"""
         file_list = gs.Popen(
-            ["git", "ls-tree", "--name-only", "-r", self.branch],
+            [self._git, "ls-tree", "--name-only", "-r", self.branch],
             cwd=self.local_copy,
             stdout=PIPE,
             stderr=PIPE,
         )
         file_list, stderr = file_list.communicate()
+        if stderr:
+            gs.fatal(
+                _(
+                    "Failed to get addons files list from the"
+                    " Git repository <{repo_path}>. <{error}>."
+                ).format(
+                    repo_path=self.local_copy,
+                    error=gs.decode(stderr),
+                )
+            )
         # Build addons dict
         addons_dict = {}
-        for file_path in gs.decode(file_list).rstrip().split("\n"):
-            # Consider only paths to Makefiles in src
-            if file_path.startswith("src") and file_path.endswith("Makefile"):
-                if file_path.split("/")[1] in ["tools", "models"]:
-                    # exclude tools and models
-                    continue
-                elif file_path.split("/")[1] == "hadoop" and "hd." in "/".join(
-                    file_path.split("/")[0:4]
-                ):
-                    addons_dict[file_path.split("/")[3]] = "/".join(
-                        file_path.split("/")[0:4]
-                    )
-                elif file_path.split("/")[1] == "gui":
-                    addons_dict[file_path.split("/")[3]] = "/".join(
-                        file_path.split("/")[0:4]
-                    )
-                else:
-                    if len(file_path.split("/")) >= 3 and file_path.split("/")[
-                        2
-                    ] not in ["Makefile", "hd"]:
-                        addons_dict[file_path.split("/")[2]] = "/".join(
-                            file_path.split("/")[0:3]
-                        )
+        addons = [f".*{addon}/Makefile\n" for addon in self._addons]
+        addons_makefile_pattern = re.compile(
+            rf"({'|'.join(addons)})",
+        )
+        addons_makefiles = re.findall(
+            addons_makefile_pattern,
+            gs.decode(file_list),
+        )
+        for addon in addons_makefiles:
+            addon_dir = os.path.dirname(addon)
+            addons_dict[os.path.basename(addon_dir)] = addon_dir.rstrip()
         return addons_dict
 
     def _addon_exists(self, addon_list):
@@ -409,12 +428,12 @@ class GitAdapter:
         if addon_list:
             if self.git_version >= 2.25 and not all_addons:
                 gs.call(
-                    ["git", "sparse-checkout", "init", "--cone"],
+                    [self._git, "sparse-checkout", "init", "--cone"],
                     cwd=self.local_copy,
                 )
                 gs.call(
                     [
-                        "git",
+                        self._git,
                         "sparse-checkout",
                         "set",
                         *[self.addons[addon] for addon in addon_list],
@@ -422,7 +441,7 @@ class GitAdapter:
                     cwd=self.local_copy,
                 )
         gs.call(
-            ["git", "checkout", self.branch],
+            [self._git, "checkout", self.branch],
             cwd=self.local_copy,
         )
 
@@ -1047,9 +1066,6 @@ def cleanup():
     """Cleanup after the downloads and copilation"""
     if REMOVE_TMPDIR:
         try_rmdir(TMPDIR)
-    else:
-        gs.message("\n%s\n" % _("Path to the source code:"))
-        sys.stderr.write("%s\n" % os.path.join(TMPDIR, options["extension"]))
 
 
 def write_xml_modules(name, tree=None):
@@ -1776,6 +1792,7 @@ def download_source_code_official_github(url, name, branch, directory=None):
 
     try:
         ga = GitAdapter(
+            addons=[name],
             url=url,
             working_directory=directory,
             major_grass_version=int(VERSION[0]),
@@ -1988,6 +2005,7 @@ def download_source_code(
 def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
     gisbase = os.getenv("GISBASE")
+    path_to_src_code_message = _("Path to the source code:")
 
     # to hide non-error messages from subprocesses
     if gs.verbosity() <= 2:
@@ -2047,16 +2065,16 @@ def install_extension_std_platforms(name, source, url, branch):
                 )
 
     dirs = {
-        "bin": os.path.join(TMPDIR, name, "bin"),
-        "docs": os.path.join(TMPDIR, name, "docs"),
-        "html": os.path.join(TMPDIR, name, "docs", "html"),
-        "rest": os.path.join(TMPDIR, name, "docs", "rest"),
-        "man": os.path.join(TMPDIR, name, "docs", "man"),
-        "script": os.path.join(TMPDIR, name, "scripts"),
+        "bin": os.path.join(srcdir, "bin"),
+        "docs": os.path.join(srcdir, "docs"),
+        "html": os.path.join(srcdir, "docs", "html"),
+        "rest": os.path.join(srcdir, "docs", "rest"),
+        "man": os.path.join(srcdir, "docs", "man"),
+        "script": os.path.join(srcdir, "scripts"),
         # TODO: handle locales also for addons
-        #             'string'  : os.path.join(TMPDIR, name, 'locale'),
-        "string": os.path.join(TMPDIR, name),
-        "etc": os.path.join(TMPDIR, name, "etc"),
+        #             'string'  : os.path.join(srcdir, 'locale'),
+        "string": srcdir,
+        "etc": os.path.join(srcdir, "etc"),
     }
 
     make_cmd = [
@@ -2076,7 +2094,7 @@ def install_extension_std_platforms(name, source, url, branch):
     install_cmd = [
         MAKE,
         "MODULE_TOPDIR=%s" % gisbase,
-        "ARCH_DISTDIR=%s" % os.path.join(TMPDIR, name),
+        "ARCH_DISTDIR=%s" % srcdir,
         "INST_DIR=%s" % options["prefix"],
         "install",
     ]
@@ -2086,6 +2104,8 @@ def install_extension_std_platforms(name, source, url, branch):
         sys.stderr.write(" ".join(make_cmd) + "\n")
         gs.message("\n%s\n" % _("To install run:"))
         sys.stderr.write(" ".join(install_cmd) + "\n")
+        gs.message(f"\n{path_to_src_code_message}\n")
+        sys.stderr.write(f"{srcdir}\n")
         return 0, None, None, None
 
     os.chdir(srcdir)
@@ -2098,6 +2118,8 @@ def install_extension_std_platforms(name, source, url, branch):
         gs.fatal(_("Compilation failed, sorry." " Please check above error messages."))
 
     if flags["i"]:
+        gs.message(f"\n{path_to_src_code_message}\n")
+        sys.stderr.write(f"{srcdir}\n")
         return 0, None, None, None
 
     # collect old files
@@ -2118,7 +2140,7 @@ def install_extension_std_platforms(name, source, url, branch):
             if fullname not in old_file_list:
                 file_list.append(fullname)
 
-    return ret, module_list, file_list, os.path.join(TMPDIR, name)
+    return ret, module_list, file_list, os.path.join(srcdir)
 
 
 def remove_extension(force=False):
