@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2022-05-23 10:50+0000\n"
+"PO-Revision-Date: 2023-04-18 22:08+0000\n"
 "Last-Translator: Markus <neteler@osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/"
 "grassmods/de/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.2\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: ../temporal/t.connect/main.c:34
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:2
@@ -2257,6 +2257,7 @@ msgstr ""
 #: ../imagery/i.eb.eta/main.c:47
 msgid "Actual evapotranspiration for diurnal period (Bastiaanssen, 1995)."
 msgstr ""
+"Tatsächliche Evapotranspiration für den Tageszeitraum (Bastiaanssen, 1995)."
 
 #: ../imagery/i.eb.eta/main.c:52
 msgid "Name of the diurnal net radiation map [W/m2]"
@@ -3248,7 +3249,7 @@ msgstr "Kann die Datei mit dem Bericht <%s> nicht erzeugen."
 #: ../imagery/i.cluster/main.c:250
 #, c-format
 msgid "#################### CLUSTER (%s) ####################%s%s"
-msgstr ""
+msgstr "#################### CLUSTER (%s) ####################%s%s"
 
 #: ../imagery/i.cluster/main.c:252
 #, c-format
@@ -3273,7 +3274,7 @@ msgstr ""
 #: ../imagery/i.cluster/main.c:257
 #, c-format
 msgid " %s%s"
-msgstr ""
+msgstr " %s%s"
 
 #: ../imagery/i.cluster/main.c:260
 #, c-format
@@ -3288,22 +3289,22 @@ msgstr ""
 #: ../imagery/i.cluster/main.c:263
 #, c-format
 msgid "  North: %12.2f  East: %12.2f%s"
-msgstr ""
+msgstr "  Norden: %12.2f  Osten: %12.2f%s"
 
 #: ../imagery/i.cluster/main.c:265
 #, c-format
 msgid "  South: %12.2f  West: %12.2f%s"
-msgstr ""
+msgstr "  Süden: %12.2f  Westen: %12.2f%s"
 
 #: ../imagery/i.cluster/main.c:267
 #, c-format
 msgid "  Res:   %12.2f  Res:  %12.2f%s"
-msgstr ""
+msgstr "  Aufl:   %12.2f  Aufl: %12.2f%s"
 
 #: ../imagery/i.cluster/main.c:269
 #, c-format
 msgid "  Rows:  %12d  Cols: %12d  Cells: %d%s"
-msgstr ""
+msgstr "  Zeilen:  %12d  Spalten: %12d  Zellen: %d%s"
 
 #: ../imagery/i.cluster/main.c:271
 #, c-format
@@ -3328,32 +3329,32 @@ msgstr " [aus der Signaturdatei %s]"
 #: ../imagery/i.cluster/main.c:278
 #, c-format
 msgid " Minimum class size:           %d%s"
-msgstr ""
+msgstr " Mindestgröße der Klasse:      %d%s"
 
 #: ../imagery/i.cluster/main.c:279
 #, c-format
 msgid " Minimum class separation:     %f%s"
-msgstr ""
+msgstr " Minimale Klassentrennung:    %f%s"
 
 #: ../imagery/i.cluster/main.c:280
 #, c-format
 msgid " Percent convergence:          %f%s"
-msgstr ""
+msgstr " Prozentuale Konvergenz:         %f%s"
 
 #: ../imagery/i.cluster/main.c:281
 #, c-format
 msgid " Maximum number of iterations: %d%s"
-msgstr ""
+msgstr " Maximale Anzahl von Iterationen: %d%s"
 
 #: ../imagery/i.cluster/main.c:283
 #, c-format
 msgid " Row sampling interval:        %d%s"
-msgstr ""
+msgstr " Zeilenabtastintervall:       %d%s"
 
 #: ../imagery/i.cluster/main.c:284
 #, c-format
 msgid " Col sampling interval:        %d%s"
-msgstr ""
+msgstr " Col Stichprobenintervall:       %d%s"
 
 #: ../imagery/i.cluster/main.c:303
 msgid "Out of Memory. Please run again and choose a smaller sample size."
@@ -4366,7 +4367,7 @@ msgstr " Kann die Transformationsgleichung nicht erstellen."
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:25
 msgid " Run OPTION 7 of i.ortho.photo again!\n"
-msgstr ""
+msgstr " Führen Sie OPTION 7 von i.ortho.photo erneut aus!\n"
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:28
 msgid "No active Control Points!"
@@ -4374,7 +4375,7 @@ msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:30
 msgid " Run OPTION 7 of i.ortho.photo!\n"
-msgstr ""
+msgstr " Führen Sie OPTION 7 von i.ortho.photo aus!\n"
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:47
 #, c-format
@@ -4387,7 +4388,7 @@ msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:55
 msgid " Run OPTION 5 of i.ortho.photo again!"
-msgstr ""
+msgstr " Führen Sie OPTION 5 von i.ortho.photo erneut aus!"
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:59
 msgid "No active reference points."
@@ -4395,7 +4396,7 @@ msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/cp.c:61
 msgid " Run OPTION 5 of i.ortho.photo!"
-msgstr ""
+msgstr " Führen Sie OPTION 5 von i.ortho.photo aus!"
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:13
 #: ../imagery/i.ortho.photo/i.ortho.transform/main.c:98
@@ -11118,7 +11119,7 @@ msgstr "Name der ASCII-Datei mit WKT-Projektionsinformationen"
 
 #: ../locale/scriptstrings/g.cloud_to_translate.c:8
 msgid "\"-\" to pass the parameters interactively"
-msgstr ""
+msgstr "\"-\", um die Parameter interaktiv zu übergeben"
 
 #: ../locale/scriptstrings/g.cloud_to_translate.c:9
 #: ../locale/scriptstrings/i.modis.download_to_translate.c:10
@@ -17285,6 +17286,8 @@ msgid ""
 "\"Explode\" polylines, splitting them to separate lines (uses v.split + v."
 "category)"
 msgstr ""
+"Polylinien \"auflösen\", d. h. in einzelne Linien aufspalten (verwendet "
+"v.split + v.category)"
 
 #: ../locale/scriptstrings/v.explode_to_translate.c:5
 #, fuzzy
@@ -30995,6 +30998,10 @@ msgid ""
 "In case of no significant differences in the projection definitions, use the "
 "-o flag to ignore them and use current location definition.\n"
 msgstr ""
+"\n"
+"Falls es keine signifikanten Unterschiede in den Projektionsdefinitionen "
+"gibt, Flag -o verwenden, um sie zu ignorieren und die aktuelle "
+"Standortdefinition zu verwenden.\n"
 
 #: ../vector/v.in.lidar/projection.c:93 ../vector/v.in.pdal/projection.c:92
 #: ../raster3d/r3.in.lidar/projection.c:97 ../raster/r.in.lidar/projection.c:95
@@ -35990,17 +35997,17 @@ msgstr "Verarbeitung aller selektierten Ausgabedateien erfordert "
 #: ../vector/v.surf.rst/main.c:704 ../raster/r.resamp.rst/main.c:393
 #, c-format
 msgid "%.2f GB of disk space for temp files."
-msgstr ""
+msgstr "%.2f GB Speicherplatz für temporäre Dateien."
 
 #: ../vector/v.surf.rst/main.c:707 ../raster/r.resamp.rst/main.c:396
 #, c-format
 msgid "%.2f MB of disk space for temp files."
-msgstr ""
+msgstr "%.2f MB Speicherplatz für temporäre Dateien."
 
 #: ../vector/v.surf.rst/main.c:710 ../raster/r.resamp.rst/main.c:399
 #, c-format
 msgid "%.2f KB of disk space for temp files."
-msgstr ""
+msgstr "%.2f KB Speicherplatz für temporäre Dateien."
 
 #: ../vector/v.surf.rst/main.c:713
 #, c-format
@@ -36084,7 +36091,7 @@ msgstr "normalsv: Restaurierung eines uninitialisierten Blocks."
 #: ../vector/v.info/print.c:30 ../vector/v.info/print.c:32
 #, c-format
 msgid "%s"
-msgstr ""
+msgstr "%s"
 
 #: ../vector/v.info/print.c:147
 #, c-format
@@ -36798,8 +36805,8 @@ msgstr "Fangtoleranz ist %.2f."
 #, c-format
 msgid "%d boundary closed"
 msgid_plural "%d boundaries closed"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d Grenze geschlossen"
+msgstr[1] "%d Grenzen geschlossen"
 
 #: ../vector/v.edit/main.c:307
 #, c-format
@@ -38570,7 +38577,11 @@ msgid ""
 msgid_plural ""
 "%d areas found, but not requested to be exported. Verify 'type' parameter."
 msgstr[0] ""
+"%d Bereich gefunden, aber nicht zum Exportieren angefordert. Überprüfen Sie "
+"den Parameter \"Typ\"."
 msgstr[1] ""
+"%d Bereiche gefunden, aber nicht zum Exportieren angefordert. Überprüfen Sie "
+"den Parameter \"Typ\"."
 
 #: ../vector/v.out.ogr/main.c:419
 #, c-format
@@ -39499,6 +39510,10 @@ msgid ""
 "table. The number of features for those areas is stored as category in layer "
 "%d"
 msgstr ""
+"%d Flächen stellen mehrere (sich überschneidende) Merkmale dar, da sich die "
+"Polygone in der/den Eingabeschicht(en) überschneiden. Solche Gebiete sind "
+"mit mehr als 1 Zeile in der Attributtabelle verknüpft. Die Anzahl der "
+"Merkmale für diese Gebiete wird als Kategorie im Layer %d"
 
 #: ../vector/v.in.ogr/main.c:1960
 msgid ""
@@ -39514,7 +39529,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:1986
 #, c-format
 msgid "%d additional areas where created during import."
-msgstr ""
+msgstr "%d zusätzliche Bereiche wurden beim Import angelegt."
 
 #: ../vector/v.in.ogr/main.c:1989
 #, c-format
@@ -43388,11 +43403,11 @@ msgid "Tracing paths from 'from' features ..."
 msgstr ""
 
 #: ../vector/v.net.distance/main.c:423
-#, c-format
+#, c-format, fuzzy
 msgid "%d 'from' feature was not reachable"
 msgid_plural "%d 'from' features were not reachable"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d Das Merkmal \"von\" war nicht erreichbar"
+msgstr[1] "%d 'von'-Merkmale waren nicht erreichbar"
 
 #: ../vector/v.select/args.c:12
 msgid "Input vector map from which to select features (A)"
@@ -43658,7 +43673,7 @@ msgstr ""
 #: ../raster/r.mapcalc/main.c:131 ../raster/r.series/main.c:205
 #, c-format
 msgid "%s= and %s= are mutually exclusive"
-msgstr ""
+msgstr "%s= und %s= schließen sich gegenseitig aus."
 
 #: ../vector/v.colors/main.c:229
 #, c-format
@@ -45087,7 +45102,7 @@ msgstr ""
 
 #: ../general/g.findfile/main.c:66
 msgid "'.' for current mapset"
-msgstr ""
+msgstr "'.' für aktuellen Mapset"
 
 #: ../general/g.findfile/main.c:70
 msgid "Do not add quotes"
@@ -46382,7 +46397,7 @@ msgstr ""
 #: ../db/drivers/ogr/execute.c:113
 #, c-format
 msgid "\tOGR failed to write feature fid=%lld to layer <%s>"
-msgstr ""
+msgstr "\tOGR konnte das Merkmal fid=%lld nicht in das Layer <%s> schreiben."
 
 #: ../db/drivers/ogr/select.c:50
 msgid "Unable to select: \n"
@@ -53183,6 +53198,9 @@ msgid ""
 "\n"
 "Enter the rule or 'help' for the format description or 'end' to exit:\n"
 msgstr ""
+"\n"
+"Regel oder 'help' für die Formatbeschreibung eingeben oder 'end' zum Beenden:"
+"\n"
 
 #: ../raster/r.quant/read_rules.c:112
 msgid "quant rules do not cover the whole range map"
@@ -53414,7 +53432,7 @@ msgstr ""
 #: ../raster/r.stream.extract/main.c:308
 #, c-format
 msgid "%.2f%% of data are kept in memory"
-msgstr ""
+msgstr "%.2f%% der Daten werden im Speicher gehalten"
 
 #: ../raster/r.stream.extract/main.c:318
 msgid "Creating temporary files..."
@@ -53462,7 +53480,7 @@ msgstr ""
 
 #: ../raster/r.stream.extract/do_astar.c:62
 msgid "%"
-msgstr ""
+msgstr "%"
 
 #: ../raster/r.stream.extract/do_astar.c:67
 msgid "Too many points in heap %"
@@ -56243,6 +56261,8 @@ msgid ""
 "%d are too many cells, recommended are < 100 cells. The cross validation "
 "would take too much time."
 msgstr ""
+"%d sind zu viele Zellen, empfohlen sind < 100 Zellen. Die Kreuzvalidierung "
+"würde zu viel Zeit in Anspruch nehmen."
 
 #: ../raster/r.resamp.bspline/crosscorr.c:169
 #, c-format
@@ -57719,7 +57739,7 @@ msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:130
 msgid "\"-\" to read rules from stdin"
-msgstr ""
+msgstr "\"-\" um Regeln von stdin zu lesen"
 
 #: ../raster/r.colors/edit_colors.c:138
 msgid "Offset for color rule values"
@@ -58104,7 +58124,7 @@ msgstr "%s: %s: ungültiger Wert angegeben."
 #: ../raster/r.null/main.c:324
 #, c-format
 msgid "%s: illegal value spec"
-msgstr "%s: ungültiger Wert."
+msgstr "%s: ungültiger Wert angegeben"
 
 #: ../raster/r.null/main.c:385
 #, c-format
@@ -63105,7 +63125,7 @@ msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:842
 msgid "$GISBASE not defined"
-msgstr ""
+msgstr "$GISBASE nicht definiert"
 
 #: ../scripts/g.extension/g.extension.py:845
 #, python-format
