@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: grasslibs_th\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2008-01-05 15:19+0700\n"
-"Last-Translator: man <mansv68@yahoo.co.th>\n"
-"Language-Team: Thai <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2023-04-29 23:53+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Thai <https://weblate.osgeo.org/projects/grass-gis/grasslibs/"
+"th/>\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.16.4\n"
 "X-Poedit-Language: Thai\n"
 "X-Poedit-Country: THAILAND\n"
 
@@ -766,8 +768,8 @@ msgid ""
 "There are less than %d points for interpolation. No segmentation is "
 "necessary, to run the program faster set segmax=%d (see manual)"
 msgstr ""
-"มีจุด %d น้อยกว่าที่จะใช้ interpolation. ไม่มีชิ้นส่วนที่จำเป็น,ที่จะทำให้การทำงานเร็วขึ้น กำหนด "
-"segmax=%d (ดูคู่มือ)"
+"มีจุด %d น้อยกว่าที่จะใช้ interpolation. "
+"ไม่มีชิ้นส่วนที่จำเป็น,ที่จะทำให้การทำงานเร็วขึ้น กำหนด segmax=%d (ดูคู่มือ)"
 
 #: ../lib/rst/interp_float/vinput2d.c:297
 #, c-format
@@ -6729,7 +6731,8 @@ msgstr "Vect_segment_intersection() ข้อผิดพลาด (collinear ve
 
 #: ../lib/vector/Vlib/intersect.c:496
 msgid "Vect_segment_intersection() ERROR (collinear non vertical segments)"
-msgstr "Vect_segment_intersection() ข้อผิดพลาด (collinear non vertical segments)"
+msgstr ""
+"Vect_segment_intersection() ข้อผิดพลาด (collinear non vertical segments)"
 
 #: ../lib/vector/Vlib/select.c:116
 #, c-format
