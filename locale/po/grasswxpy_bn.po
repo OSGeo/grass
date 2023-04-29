@@ -639,9 +639,9 @@ msgstr ""
 msgid "Overwrite?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:224
+#: ../gui/wxpython/datacatalog/tree.py:282
 msgid "name unknown"
-msgstr ""
+msgstr "নাম অজ্ঞাত"
 
 #: ../gui/wxpython/datacatalog/tree.py:226
 #, python-brace-format
@@ -906,9 +906,9 @@ msgstr ""
 msgid "No available options"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/catalog.py:39
+#: ../gui/wxpython/datacatalog/catalog.py:51
 msgid "Data catalog"
-msgstr ""
+msgstr "তথ্যসূচী"
 
 #: ../gui/wxpython/datacatalog/catalog.py:104
 #: ../gui/wxpython/location_wizard/wizard.py:308
@@ -1349,9 +1349,9 @@ msgstr ""
 msgid "Execution failed:"
 msgstr ""
 
-#: ../gui/wxpython/core/gcmd.py:418 ../gui/wxpython/core/gcmd.py:425
+#: ../gui/wxpython/core/gcmd.py:423 ../gui/wxpython/core/gcmd.py:430
 msgid "Error: "
-msgstr ""
+msgstr "ত্রুটি"
 
 #: ../gui/wxpython/core/gcmd.py:502
 #, python-format
@@ -1395,9 +1395,9 @@ msgstr ""
 msgid "Expand all"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:950 ../gui/wxpython/dbmgr/base.py:1421
+#: ../gui/wxpython/dbmgr/base.py:1430 ../gui/wxpython/core/settings.py:788
 msgid "Edit selected record"
-msgstr ""
+msgstr "নির্বাচিত লেখ্য সম্পাদন করুন"
 
 #: ../gui/wxpython/core/settings.py:950
 msgid "Display selected"
@@ -1528,10 +1528,10 @@ msgstr ""
 msgid "Unable to parse settings '%s'"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:49
+#: ../gui/wxpython/core/utils.py:51
 #, python-format
 msgid "Syntax error: %s"
-msgstr ""
+msgstr "পদবিন্যাস ত্রুটি: %s"
 
 #: ../gui/wxpython/core/utils.py:340
 #, python-format
@@ -2626,8 +2626,8 @@ msgstr ""
 #, python-format
 msgid ""
 "Scatter plot cannot be added.\n"
-"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit "
-"<%d>.\n"
+"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit <"
+"%d>.\n"
 msgstr ""
 
 #: ../gui/wxpython/iscatt/controllers.py:319
@@ -2834,13 +2834,13 @@ msgstr ""
 msgid "Change opacity level"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/frame.py:585
+#: ../gui/wxpython/iscatt/frame.py:586
 msgid "Hide"
-msgstr ""
+msgstr "আড়াল করুন"
 
-#: ../gui/wxpython/iscatt/frame.py:587
+#: ../gui/wxpython/iscatt/frame.py:588
 msgid "Show"
-msgstr ""
+msgstr "দেখান"
 
 #: ../gui/wxpython/iscatt/frame.py:600
 msgid "Move to top"
@@ -5919,13 +5919,13 @@ msgstr ""
 msgid "Activate mode for global turns editing"
 msgstr ""
 
-#: ../gui/wxpython/vnet/toolbars.py:64
+#: ../gui/wxpython/vnet/toolbars.py:60
 msgid "Add new point"
-msgstr ""
+msgstr "একটি নতুন বিন্দু যোগ করুন"
 
-#: ../gui/wxpython/vnet/toolbars.py:67
+#: ../gui/wxpython/vnet/toolbars.py:61
 msgid "Delete selected point"
-msgstr ""
+msgstr "নির্বাচিত বিন্দুটি মুছুন"
 
 #: ../gui/wxpython/vnet/toolbars.py:120
 msgid "Execute analysis"
@@ -6054,9 +6054,9 @@ msgstr ""
 msgid "Invert colors %s:"
 msgstr ""
 
-#: ../gui/wxpython/vnet/dialogs.py:1265
+#: ../gui/wxpython/vnet/dialogs.py:1299
 msgid "Line color:"
-msgstr ""
+msgstr "রেখা বর্ণ"
 
 #: ../gui/wxpython/vnet/dialogs.py:1268
 msgid "Color for unused point:"
@@ -6153,9 +6153,9 @@ msgstr ""
 msgid "type"
 msgstr ""
 
-#: ../gui/wxpython/vnet/vnet_data.py:261
+#: ../gui/wxpython/vnet/vnet_data.py:255
 msgid "topology"
-msgstr ""
+msgstr "টপোলজি"
 
 #: ../gui/wxpython/vnet/vnet_data.py:263 ../gui/wxpython/vnet/vnet_data.py:771
 msgid "Start point"
@@ -7875,10 +7875,10 @@ msgstr ""
 msgid "Use color column instead of color table:"
 msgstr ""
 
-#: ../gui/wxpython/modules/colorrules.py:1141 ../gui/wxpython/dbmgr/base.py:484
-#: ../gui/wxpython/dbmgr/base.py:2322
+#: ../gui/wxpython/dbmgr/base.py:512 ../gui/wxpython/dbmgr/base.py:2371
+#: ../gui/wxpython/modules/colorrules.py:1148
 msgid "Add column"
-msgstr ""
+msgstr "স্তম্ভ যোগ "
 
 #: ../gui/wxpython/modules/colorrules.py:1143
 msgid "Add GRASSRGB column to current attribute table."
@@ -9010,10 +9010,10 @@ msgstr ""
 msgid "Profile of"
 msgstr ""
 
-#: ../gui/wxpython/wxplot/profile.py:95
+#: ../gui/wxpython/wxplot/profile.py:104
 #, python-format
 msgid "Distance (%s)"
-msgstr ""
+msgstr "দূরত্ব (%s)"
 
 #: ../gui/wxpython/wxplot/profile.py:97
 msgid "Distance along transect"
@@ -9132,9 +9132,9 @@ msgstr ""
 msgid "GRASS Bivariate Scatterplot Tool"
 msgstr ""
 
-#: ../gui/wxpython/wxplot/scatter.py:51
+#: ../gui/wxpython/wxplot/scatter.py:57
 msgid "Bivariate Scatterplot"
-msgstr ""
+msgstr "দ্বীচল বিন্দুচিত্র"
 
 #: ../gui/wxpython/wxplot/scatter.py:102 ../gui/wxpython/wxplot/scatter.py:254
 msgid "Nothing to plot."
@@ -9189,9 +9189,9 @@ msgstr ""
 msgid "Number of bins (for FP maps)"
 msgstr ""
 
-#: ../gui/wxpython/wxplot/dialogs.py:290 ../gui/wxpython/dbmgr/base.py:479
+#: ../gui/wxpython/dbmgr/base.py:507 ../gui/wxpython/wxplot/dialogs.py:297
 msgid "Statistics"
-msgstr ""
+msgstr "পরিসংখ্যান"
 
 #: ../gui/wxpython/wxplot/dialogs.py:360
 msgid "C&opy"
@@ -9258,17 +9258,17 @@ msgstr ""
 msgid "Font settings"
 msgstr ""
 
-#: ../gui/wxpython/wxplot/dialogs.py:762
+#: ../gui/wxpython/wxplot/dialogs.py:739
 msgid "Font family:"
-msgstr ""
+msgstr "ফন্টের পরিবার:"
 
-#: ../gui/wxpython/wxplot/dialogs.py:778
+#: ../gui/wxpython/wxplot/dialogs.py:758
 msgid "Style:"
-msgstr ""
+msgstr "শৈলি:"
 
-#: ../gui/wxpython/wxplot/dialogs.py:794
+#: ../gui/wxpython/wxplot/dialogs.py:777
 msgid "Weight:"
-msgstr ""
+msgstr "ভর:"
 
 #: ../gui/wxpython/wxplot/dialogs.py:833 ../gui/wxpython/wxplot/dialogs.py:1430
 msgid "Apply changes for the current session and close dialog"
@@ -9291,9 +9291,9 @@ msgstr ""
 msgid "Settings for selected map"
 msgstr ""
 
-#: ../gui/wxpython/wxplot/dialogs.py:1037
+#: ../gui/wxpython/wxplot/dialogs.py:1015
 msgid "Line color"
-msgstr ""
+msgstr "রেখা বর্ণ"
 
 #: ../gui/wxpython/wxplot/dialogs.py:1054
 #: ../gui/wxpython/vdigit/preferences.py:165
@@ -14663,29 +14663,29 @@ msgid ""
 "Details: %(detail)s"
 msgstr ""
 
-#: ../gui/wxpython/dbmgr/base.py:469
+#: ../gui/wxpython/dbmgr/base.py:498
 msgid "Sort ascending"
-msgstr ""
+msgstr "উর্ধক্রম সজ্জা"
 
-#: ../gui/wxpython/dbmgr/base.py:470
+#: ../gui/wxpython/dbmgr/base.py:499
 msgid "Sort descending"
-msgstr ""
+msgstr "অধঃক্রম সজ্জা"
 
-#: ../gui/wxpython/dbmgr/base.py:474
+#: ../gui/wxpython/dbmgr/base.py:503
 msgid "Calculate (only numeric columns)"
-msgstr ""
+msgstr "গননা (কেবল সংখ্যাযুক্ত স্তম্ভ)"
 
-#: ../gui/wxpython/dbmgr/base.py:477
+#: ../gui/wxpython/dbmgr/base.py:505
 msgid "Field calculator"
-msgstr ""
+msgstr "ক্ষেত্র গনক"
 
 #: ../gui/wxpython/dbmgr/base.py:496
 msgid "Area size"
 msgstr ""
 
-#: ../gui/wxpython/dbmgr/base.py:497
+#: ../gui/wxpython/dbmgr/base.py:525
 msgid "Line length"
-msgstr ""
+msgstr "রেখা দৈর্ঘ্য"
 
 #: ../gui/wxpython/dbmgr/base.py:500
 msgid "Compactness of an area"
@@ -14739,47 +14739,47 @@ msgstr ""
 msgid "Table"
 msgstr ""
 
-#: ../gui/wxpython/dbmgr/base.py:1154 ../gui/wxpython/dbmgr/base.py:2277
+#: ../gui/wxpython/dbmgr/base.py:1169 ../gui/wxpython/dbmgr/base.py:2326
 msgid " (read-only)"
-msgstr ""
+msgstr "(কেবল পাঠযোগ্য)"
 
 #: ../gui/wxpython/dbmgr/base.py:1168
 msgid "SQL Query"
 msgstr ""
 
-#: ../gui/wxpython/dbmgr/base.py:1198
+#: ../gui/wxpython/dbmgr/base.py:1210
 msgid "Simple"
-msgstr ""
+msgstr "সরল"
 
 #: ../gui/wxpython/dbmgr/base.py:1205
 msgid "Apply SELECT statement and reload data records"
 msgstr ""
 
-#: ../gui/wxpython/dbmgr/base.py:1228 ../gui/wxpython/dbmgr/base.py:1254
-#: ../gui/wxpython/dbmgr/sqlbuilder.py:498
+#: ../gui/wxpython/dbmgr/base.py:1243 ../gui/wxpython/dbmgr/base.py:1269
+#: ../gui/wxpython/dbmgr/sqlbuilder.py:509
 #, python-format
 msgid "Example: %s"
-msgstr ""
+msgstr "উদাহরণ: %s"
 
-#: ../gui/wxpython/dbmgr/base.py:1239
+#: ../gui/wxpython/dbmgr/base.py:1254
 msgid "Builder"
-msgstr ""
+msgstr "রচনাকারি"
 
-#: ../gui/wxpython/dbmgr/base.py:1244
+#: ../gui/wxpython/dbmgr/base.py:1257
 msgid "SQL Builder"
-msgstr ""
+msgstr "সিকিউল রচনাকারি"
 
-#: ../gui/wxpython/dbmgr/base.py:1426 ../gui/wxpython/dbmgr/base.py:1615
+#: ../gui/wxpython/dbmgr/base.py:1438 ../gui/wxpython/dbmgr/base.py:1623
 msgid "Insert new record"
-msgstr ""
+msgstr "নতুন লেখ্য সংযুক্তকরুন"
 
-#: ../gui/wxpython/dbmgr/base.py:1427
+#: ../gui/wxpython/dbmgr/base.py:1439
 msgid "Delete selected record(s)"
-msgstr ""
+msgstr "নির্বাচিত লেখ্য (গুলি) লুপ্তকরুন"
 
-#: ../gui/wxpython/dbmgr/base.py:1428
+#: ../gui/wxpython/dbmgr/base.py:1440
 msgid "Delete all records"
-msgstr ""
+msgstr " সমস্ত লেখ্য লুপ্তকরুন"
 
 #: ../gui/wxpython/dbmgr/base.py:1434 ../gui/wxpython/gui_core/widgets.py:1109
 #: ../gui/wxpython/gui_core/dialogs.py:782
@@ -14918,8 +14918,8 @@ msgstr ""
 #: ../gui/wxpython/dbmgr/base.py:2558
 #, python-format
 msgid ""
-"Unable to rename column. Column <%(column)s> doesn't exist in the table "
-"<%(table)s>."
+"Unable to rename column. Column <%(column)s> doesn't exist in the table <"
+"%(table)s>."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:2597
@@ -18133,8 +18133,8 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:715
 #, python-format
 msgid ""
-"Do you want to continue with deleting mapset <%(mapset)s> from location "
-"<%(location)s>?\n"
+"Do you want to continue with deleting mapset <%(mapset)s> from location <"
+"%(location)s>?\n"
 "\n"
 "ALL MAPS included in this mapset will be PERMANENTLY DELETED!"
 msgstr ""
@@ -19257,4 +19257,481 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/g.gui.psmap.py:51
 msgid "Cartographic Composer - GRASS GIS"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:313
+msgid "Ask when quiting wxGUI or closing display"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:381
+msgid "Data Catalog settings"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:386
+msgid "At startup load maps from current mapset only (in the Data tab)"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:728
+msgid "Tool dialog style:"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:1108
+msgid "Tool dialog settings"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:1136
+msgid "Close dialog when completed successfully"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/preferences.py:1515
+msgid "Automatically hightlight selected features in map display"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/widgets.py:1218
+msgid "Type to search in all tools. Press Enter for next match."
+msgstr ""
+
+#: ../gui/wxpython/gui_core/widgets.py:1291
+#, python-format
+msgid "%d tools match"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/pyedit.py:340
+msgid "Permission denied <{}>. Please change file permission for writting.{}"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/pyedit.py:665
+msgid "Deactive overwrite"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/gselect.py:2828
+#, python-format
+msgid "Unable to import C imagery library functions: %s\n"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/menu.py:169
+#, python-format
+msgid "Do advanced search using %s tool"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/menu.py:173
+msgid "Double-click to run selected tool"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/menu.py:177
+msgid "Run selected tool from the tree"
+msgstr ""
+
+#: ../gui/wxpython/gui_core/menu.py:179
+msgid "Show manual for selected tool from the tree"
+msgstr ""
+
+#: ../gui/wxpython/location_wizard/wizard.py:2686
+#, python-brace-format
+msgid "Unable to create new GRASS Database <{path}>: {error}"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_toolbars.py:40
+#: ../gui/wxpython/gcp/toolbars.py:40
+#: ../gui/wxpython/image2target/ii2t_toolbars.py:40
+msgid "Add new GCP to the list"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_toolbars.py:41
+#: ../gui/wxpython/gcp/toolbars.py:41
+#: ../gui/wxpython/image2target/ii2t_toolbars.py:41
+msgid "Delete selected GCP"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_toolbars.py:42
+#: ../gui/wxpython/gcp/toolbars.py:42
+#: ../gui/wxpython/image2target/ii2t_toolbars.py:42
+msgid "Clear selected GCP"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_toolbars.py:43
+#: ../gui/wxpython/gcp/toolbars.py:43
+#: ../gui/wxpython/image2target/ii2t_toolbars.py:43
+msgid "Recalculate RMS error"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_toolbars.py:45
+#: ../gui/wxpython/gcp/toolbars.py:45
+#: ../gui/wxpython/image2target/ii2t_toolbars.py:45
+msgid "Save GCPs to POINTS file"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_toolbars.py:47
+#: ../gui/wxpython/gcp/toolbars.py:47
+#: ../gui/wxpython/image2target/ii2t_toolbars.py:47
+msgid "Reload GCPs from POINTS file"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_toolbars.py:89
+#: ../gui/wxpython/gcp/toolbars.py:89
+#: ../gui/wxpython/image2target/ii2t_toolbars.py:89
+msgid " / Zoom to map"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_toolbars.py:106
+#: ../gui/wxpython/gcp/toolbars.py:106
+#: ../gui/wxpython/image2target/ii2t_toolbars.py:106
+msgid "Update GCP coordinates"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_toolbars.py:107
+#: ../gui/wxpython/gcp/toolbars.py:107
+#: ../gui/wxpython/image2target/ii2t_toolbars.py:107
+msgid "Update GCP coordinates)"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_toolbars.py:109
+#: ../gui/wxpython/gcp/toolbars.py:109
+#: ../gui/wxpython/image2target/ii2t_toolbars.py:109
+msgid "Quit georectification tool"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_toolbars.py:110
+#: ../gui/wxpython/gcp/toolbars.py:110
+#: ../gui/wxpython/image2target/ii2t_toolbars.py:110
+msgid "Georectifier settings"
+msgstr ""
+
+#: ../gui/wxpython/photo2image/ip2i_toolbars.py:111
+#: ../gui/wxpython/gcp/toolbars.py:111
+#: ../gui/wxpython/image2target/ii2t_toolbars.py:111
+msgid "Georectifier manual"
+msgstr ""
+
+#: ../gui/wxpython/rlisetup/wizard.py:1355
+msgid "Systematic contiguos"
+msgstr ""
+
+#: ../gui/wxpython/rlisetup/wizard.py:1357
+msgid "Systematic non contiguos"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/toolbars.py:42
+msgid "Create new model (Ctrl+N)"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/toolbars.py:43
+msgid "Load model from file (Ctrl+O)"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/toolbars.py:45
+msgid "Save current model to file (Ctrl+S)"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/toolbars.py:52
+msgid "Add GRASS tool (module) to model"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/toolbars.py:54
+msgid "Add data to model"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/toolbars.py:57
+msgid "Manually define relation between data and commands"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/toolbars.py:59
+msgid "Add loop/series to model"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/toolbars.py:60
+msgid "Add comment to model"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/toolbars.py:64
+msgid "Show model properties"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/toolbars.py:66
+msgid "Manage model variables"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/toolbars.py:68
+msgid "Redraw model canvas"
+msgstr ""
+
+#: ../gui/wxpython/gmodeler/dialogs.py:318
+#, python-format
+msgid ""
+"'%s' is not a GRASS tool.\n"
+"\n"
+"Unable to add new action to the model."
+msgstr ""
+
+#: ../gui/wxpython/modules/extensions.py:117
+msgid "Install selected add-ons GRASS tool"
+msgstr ""
+
+#: ../gui/wxpython/modules/extensions.py:212
+msgid "Fetching list of tools from GRASS-Addons (be patient)..."
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:167
+msgid "Do you want to import {} to the newly created location?"
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:407
+#, python-brace-format
+msgid ""
+"The following error occured when deleting mapset <{path}>:\n"
+"\n"
+"{error}\n"
+"\n"
+"Deleting of mapsets was interrupted."
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:492
+#, python-brace-format
+msgid ""
+"The following error occured when deleting location <{path}>:\n"
+"\n"
+"{error}\n"
+"\n"
+"Deleting of locations was interrupted."
+msgstr ""
+
+#: ../gui/wxpython/startup/guiutils.py:556
+#, python-brace-format
+msgid ""
+"The following error occured when deleting database <{path}>:\n"
+"\n"
+"{error}\n"
+"\n"
+"Deleting of GRASS database was interrupted."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/toolbars.py:365
+msgid ""
+"No vector map is open for editing. Please select firsta vector map from the "
+"combo box."
+msgstr ""
+
+#: ../gui/wxpython/vdigit/wxdisplay.py:368
+msgid ""
+"WARNING: Zero-length line or boundary drawing skipped. Use v.clean to remove "
+"it."
+msgstr ""
+
+#: ../gui/wxpython/icons/icon.py:54
+#, python-format
+msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
+msgstr ""
+
+#: ../gui/wxpython/main_window/frame.py:139
+msgid "There were some issues when loading menu or Tools:"
+msgstr ""
+
+#: ../gui/wxpython/timeline/frame.py:42
+msgid ""
+"The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some "
+"systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:62 ../gui/wxpython/menustrings.py:91
+#: ../gui/wxpython/menustrings.py:1090 ../gui/wxpython/menustrings.py:1119
+msgid "Point cloud (LAS LiDAR) import"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:64 ../gui/wxpython/menustrings.py:1092
+msgid "WMS/WMTS import"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:65 ../gui/wxpython/menustrings.py:1093
+msgid ""
+"Downloads and imports data from OGC WMS and OGC WMTS web mapping servers."
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:92 ../gui/wxpython/menustrings.py:1120
+msgid "Converts LAS LiDAR point clouds to a GRASS vector map with PDAL."
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:496 ../gui/wxpython/menustrings.py:1449
+msgid ""
+"Creates randomly placed raster cells or vector points Creates a raster map "
+"and vector point map containing randomly located cells and points."
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:525 ../gui/wxpython/menustrings.py:1478
+msgid "Fill NULL cells using IDW"
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:526 ../gui/wxpython/menustrings.py:1479
+msgid ""
+"Rapidly fills 'no data' cells (NULLs) of a raster map with interpolated "
+"values (IDW)."
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:2033
+msgid "Interactive editing and digitization of raster maps."
+msgstr ""
+
+#: ../gui/wxpython/core/render.py:872
+#, python-format
+msgid "GRASS tool '%s' not found. Unable to start map display window."
+msgstr ""
+
+#: ../gui/wxpython/core/render.py:1135
+msgid ""
+"Unable to get current geographic extent. Force quiting wxGUI. Please "
+"manually run g.region to fix the problem."
+msgstr ""
+
+#: ../gui/wxpython/core/units.py:43
+msgid "sq map units"
+msgstr ""
+
+#: ../gui/wxpython/core/units.py:44
+msgid "sq meters"
+msgstr ""
+
+#: ../gui/wxpython/core/units.py:45
+msgid "sq kilometers"
+msgstr ""
+
+#: ../gui/wxpython/core/units.py:46
+msgid "acres"
+msgstr ""
+
+#: ../gui/wxpython/core/units.py:47
+msgid "hectares"
+msgstr ""
+
+#: ../gui/wxpython/core/settings.py:801
+msgid "Combined (labels and tool names)"
+msgstr ""
+
+#: ../gui/wxpython/core/settings.py:802
+msgid "Expert (tool names only)"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1043
+#, python-brace-format
+msgid ""
+"Map <{map_name}@{map_mapset}> is not in the current location. To be able to "
+"display it you need to switch to <{map_location}> location. Note that if you "
+"switch there all current Map Displays will be closed.\n"
+"\n"
+"Do you want to switch anyway?"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:1053
+msgid "Map in a different location"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/tree.py:2299
+#: ../gui/wxpython/datacatalog/tree.py:2326
+#: ../gui/wxpython/datacatalog/tree.py:2361
+msgid "Re&load maps"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/infomanager.py:36
+msgid "Create new Location"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/infomanager.py:37
+msgid "Learn more"
+msgstr "বিশদে অবগত হওন"
+
+#: ../gui/wxpython/datacatalog/infomanager.py:40
+#, python-brace-format
+msgid ""
+"GRASS GIS helps you organize your data using Locations (projects) which "
+"contain Mapsets (subprojects). All data in one Location is in the same "
+"coordinate reference system (CRS).\n"
+"\n"
+"You are currently in Mapset PERMANENT in default Location {loc} which uses "
+"WGS 84 (EPSG:4326). Consider creating a new Location with a CRS specific to "
+"your area. You can do it now or anytime later from the toolbar above."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/infomanager.py:58
+#, python-brace-format
+msgid ""
+"You have successfully created a new Location {loc}. Currently you are in its "
+"PERMANENT Mapset which is used for storing your base maps to make them "
+"readily available in other Mapsets. You can create new Mapsets for different "
+"tasks by right clicking on the Location name.\n"
+"\n"
+"To import data, go to the toolbar above or use the buttons below."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/infomanager.py:70
+msgid ""
+"Loading of Data catalog content took rather long. To prevent delay, you can "
+"enable loading of current mapset only. You can change that later in GUI "
+"Settings, General tab."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/infomanager.py:75
+msgid "Enable loading current mapset only"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/infomanager.py:76
+msgid "No change, don't ask me again"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/infomanager.py:84
+#, python-brace-format
+msgid ""
+"{string} GRASS GIS has started in a temporary Location. To continue, use "
+"Data Catalog below to switch to a different Location."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/infomanager.py:94
+msgid "Switch to last used mapset"
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/infomanager.py:96
+#, python-brace-format
+msgid ""
+"Last used mapset in path '{mapsetpath}' is currently in use. GRASS GIS has "
+"started in a temporary Location. To continue, use Data Catalog below to "
+"switch to a different Location or remove lock file and switch to the last "
+"used mapset."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/infomanager.py:109
+#, python-brace-format
+msgid "Last used mapset in path '{mapsetpath}' does not exist."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/infomanager.py:112
+#, python-brace-format
+msgid "Last used mapset in path '{mapsetpath}' is invalid."
+msgstr ""
+
+#: ../gui/wxpython/datacatalog/infomanager.py:118
+#, python-brace-format
+msgid "Last used mapset in path '{mapsetpath}' has different owner {owner}."
+msgstr ""
+
+#: ../gui/wxpython/mapswipe/g.gui.mapswipe.py:85
+msgid "Map Swipe Tool - GRASS GIS"
+msgstr ""
+
+#: ../gui/wxpython/iclass/frame.py:1125
+msgid ""
+"There was an error initializing signatures. Check GUI console for any error "
+"messages."
+msgstr ""
+
+#: ../gui/wxpython/iclass/frame.py:1218
+msgid "Signatures are not valid. Recalculate them and then try again."
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:132
+msgid "There were some issues when loading menu or Tools tab:"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/layertree.py:487
+msgid "Check selected layers"
+msgstr ""
+
+#: ../gui/wxpython/lmgr/layertree.py:498
+msgid "Uncheck selected layers"
 msgstr ""
