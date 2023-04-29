@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
         if (end > nrows)
             end = nrows;
 
-#pragma omp parallel private(i) if (nprocs > 1)
+#pragma omp parallel private(i, row) reduction(+ : computed) if (nprocs > 1)
         {
             int t_id = 0;
 
@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
                                                       (row - start) * ncols);
                 memcpy(p, local_presult, out_cell_size * ncols);
 
-#pragma omp atomic update
+                // #pragma omp atomic update
                 computed++;
             }
 
