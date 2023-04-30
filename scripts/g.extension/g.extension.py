@@ -174,7 +174,7 @@ from pathlib import Path
 from subprocess import PIPE
 from urllib import request as urlrequest
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 # Get the XML parsing exceptions to catch. The behavior changed with Python 2.7
 # and ElementTree 1.3.
@@ -196,7 +196,7 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0",
 }
 HTTP_STATUS_CODES = list(http.HTTPStatus)
-GIT_URL = "https://github.com/OSGeo/grass-addons"
+GIT_URL = "https://github.com/OSGeo/grass-addons/"
 
 # MAKE command
 # GRASS Makefile are type of GNU Make and not BSD Make
@@ -444,6 +444,26 @@ class GitAdapter:
             [self._git, "checkout", self.branch],
             cwd=self.local_copy,
         )
+
+    def get_addons_src_code_git_repo_url_path(self):
+        """Get addons official GitHub repository source code URL path
+
+        :return dict addons_url: dictionary of addons official GitHub
+                                 repository source code URL path
+        """
+        addons_url = {}
+        for addon in self.addons:
+            addons_url[addon] = urljoin(
+                self.url,
+                urljoin(
+                    "tree/",
+                    urljoin(
+                        f"{self.branch}/",
+                        self.addons[addon],
+                    ),
+                ),
+            )
+        return addons_url
 
 
 def replace_shebang_win(python_file):
@@ -1785,9 +1805,11 @@ def download_source_code_official_github(url, name, branch, directory=None):
     :param directory: directory where the source code will be downloaded
         (default is the current directory with name attached)
 
-    :returns: full path to the directory with the source code
-        (useful when you not specify directory, if *directory* is specified
-        the return value is equal to it)
+    :return str, str: full path to the directory with the source code
+                      (useful when you not specify directory, if
+                      *directory* is specified the return value is equal
+                      to it),
+                      addon official GitHub repository source code URL path
     """
 
     try:
@@ -1804,7 +1826,10 @@ def download_source_code_official_github(url, name, branch, directory=None):
 
     ga.fetch_addons([name])
 
-    return str(ga.local_copy / ga.addons[name])
+    return (
+        str(ga.local_copy / ga.addons[name]),
+        ga.get_addons_src_code_git_repo_url_path()[name],
+    )
 
 
 def move_extracted_files(extract_dir, target_dir, files):
@@ -1918,7 +1943,12 @@ extract_tar.supported_formats = ["tar.gz", "gz", "bz2", "tar", "gzip", "targz"]
 def download_source_code(
     source, url, name, outdev, directory=None, tmpdir=None, branch=None
 ):
-    """Get source code to a local directory for compilation"""
+    """Get source code to a local directory for compilation
+
+    :return dictionary, url: addon source code directory path,
+                             addon official GitHub repository source code
+                             URL path
+    """
     gs.verbose(_("Type of source identified as '{source}'.").format(source=source))
     if source in ("official", "official_fork"):
         gs.message(
@@ -1926,7 +1956,7 @@ def download_source_code(
                 name=name, url=url
             )
         )
-        directory = download_source_code_official_github(
+        directory, url = download_source_code_official_github(
             url, name, branch, directory=directory
         )
     elif source == "svn":
@@ -1999,7 +2029,7 @@ def download_source_code(
             ).format(source)
         )
     assert os.path.isdir(directory)
-    return directory
+    return directory, url
 
 
 def install_extension_std_platforms(name, source, url, branch):
@@ -2015,7 +2045,7 @@ def install_extension_std_platforms(name, source, url, branch):
 
     os.chdir(TMPDIR)  # this is just to not leave something behind
     srcdir = os.path.join(TMPDIR, name)
-    srcdir = download_source_code(
+    srcdir, url = download_source_code(
         source,
         url,
         name,
