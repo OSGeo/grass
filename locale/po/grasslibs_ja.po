@@ -13,15 +13,16 @@ msgstr ""
 "Project-Id-Version: grasslibs_ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2012-03-05 12:14+0900\n"
-"Last-Translator: Naoki Ueda <nao@locapoint.com>\n"
-"Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2023-04-29 23:51+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Japanese <https://weblate.osgeo.org/projects/grass-gis/"
+"grasslibs/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -763,8 +764,9 @@ msgid ""
 "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for "
 "smooth connection of segments, npmin > segmax (see manual)"
 msgstr ""
-"分割パラメータが正しくありません: 分割がスムーズに行うためには以下の条件にし"
-"てくださいnpmin= %d, segmax= %d  npmin > segmax (マニュアル参照のこと)"
+"分割パラメータが正しくありません: "
+"分割がスムーズに行うためには以下の条件にしてくださいnpmin= %d, segmax= %d  "
+"npmin > segmax (マニュアル参照のこと)"
 
 #: ../lib/rst/interp_float/vinput2d.c:293
 #, c-format
@@ -815,8 +817,7 @@ msgstr "ビットマップマスクが作成されました。"
 msgid ""
 "Taking too long to find points for interpolation - please change the region "
 "to area where your points are. Continuing calculations..."
-msgstr ""
-"補間するには遠すぎます 指定した点の範囲を変更してください 処理を継続します..."
+msgstr "補間するには遠すぎます 指定した点の範囲を変更してください 処理を継続します..."
 
 #: ../lib/rst/interp_float/output2d.c:117
 #, c-format
@@ -877,8 +878,7 @@ msgstr "最初に列番号 (%d) を %d に変更します。"
 
 #: ../lib/rst/interp_float/resout2d.c:264
 msgid "No color table for input raster map -- will not create color table"
-msgstr ""
-"入力ラスタマップ用のカラーテーブルなし -- カラーテーブルを作成しません。"
+msgstr "入力ラスタマップ用のカラーテーブルなし -- カラーテーブルを作成しません。"
 
 #: ../lib/rst/interp_float/resout2d.c:458
 msgid "Changing the region back to initial..."
@@ -907,8 +907,7 @@ msgstr ""
 #: ../lib/gis/open_misc.c:49
 #, c-format
 msgid "G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"
-msgstr ""
-"G__open_misc(読み取り): マップセット <%s>は xmapsetと一致していません <%s>"
+msgstr "G__open_misc(読み取り): マップセット <%s>は xmapsetと一致していません <%s>"
 
 #: ../lib/gis/open_misc.c:74
 #, c-format
@@ -1108,9 +1107,8 @@ msgstr ""
 
 #: ../lib/gis/gisinit.c:104
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
-msgstr ""
-"システムが初期化されません。 プログラマーが G_gisinit()を呼び出すのを忘れてい"
-"ます。"
+msgstr "システムが初期化されません。 プログラマーが "
+"G_gisinit()を呼び出すのを忘れています。"
 
 #: ../lib/gis/cmprlz4.c:89 ../lib/gis/cmprlz4.c:156 ../lib/gis/cmprzlib.c:100
 #: ../lib/gis/cmprzlib.c:179 ../lib/gis/cmprzstd.c:102
@@ -1382,9 +1380,8 @@ msgstr " 保存したウィンドウ \"%s\" は完全に現在のGRASSウィン�
 #, c-format
 msgid ""
 " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
-msgstr ""
-" ウィンドウの %d%% のみ保存できます \"%s\" 現在のGRASSウィンドウと重複してい"
-"ます"
+msgstr " ウィンドウの %d%% のみ保存できます \"%s\" "
+"現在のGRASSウィンドウと重複しています"
 
 #: ../lib/gis/seek.c:54 ../lib/gis/seek.c:60
 #, c-format
@@ -3109,8 +3106,7 @@ msgstr ""
 #: ../lib/imagery/sigsetfile.c:57
 #, c-format
 msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s>"
-msgstr ""
-"署名ファイル <%s> が作成できません。 サブグループ： <%s> 、グループ： <%s>"
+msgstr "署名ファイル <%s> が作成できません。 サブグループ： <%s> 、グループ： <%s>"
 
 #: ../lib/imagery/fopen.c:25
 #, c-format
@@ -3125,8 +3121,7 @@ msgstr "グループ [%s in %s] のファイル [%s] を開けません"
 #: ../lib/imagery/fopen.c:52
 #, c-format
 msgid "Unable to find file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr ""
-"グループ [%s in %s] のサブグループ [%s] のファイル [%s] が見つかりません "
+msgstr "グループ [%s in %s] のサブグループ [%s] のファイル [%s] が見つかりません "
 
 #: ../lib/imagery/fopen.c:63 ../lib/imagery/fopen.c:164
 #, c-format
@@ -3141,8 +3136,7 @@ msgstr "グループ [%s in %s] のファイル [%s] を作成できません"
 #: ../lib/imagery/fopen.c:142
 #, c-format
 msgid "Unable to create file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr ""
-"グループ [%s in %s] の サブグループ [%s] のファイル [%s] を作成できません"
+msgstr "グループ [%s in %s] の サブグループ [%s] のファイル [%s] を作成できません"
 
 #: ../lib/imagery/iclass.c:83
 #, c-format
@@ -3462,8 +3456,7 @@ msgstr "作業マトリックスにスペースを割り当てられませんで
 
 #: ../lib/gmath/la.c:569
 msgid "Matrix (or submatrix is singular). Solution undetermined"
-msgstr ""
-"マトリックス (,またはサブマトリックスは単数です). 解決策は確定していません"
+msgstr "マトリックス (,またはサブマトリックスは単数です). 解決策は確定していません"
 
 #: ../lib/gmath/la.c:573
 msgid "Problem in LA routine."
@@ -3913,8 +3906,7 @@ msgstr "メモリ用にファイルをロードできません, ファイルが�
 
 #: ../lib/vector/diglib/file.c:212
 msgid "Vector memory mode not supported, using 'AUTO'"
-msgstr ""
-"ベクトルメモリーモードはサポートされていません。, 'AUTO'を使用してください"
+msgstr "ベクトルメモリーモードはサポートされていません。, 'AUTO'を使用してください"
 
 #: ../lib/vector/diglib/plus_struct.c:523
 #, c-format
@@ -3999,9 +3991,8 @@ msgstr "不必要なエリアを削除しようとしています"
 #: ../lib/vector/diglib/plus_area.c:410
 #, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
-msgstr ""
-"エリアに不必要なセントロイドが %d 個記録されました (ベクトルライブラリ内のバ"
-"グ)"
+msgstr "エリアに不必要なセントロイドが %d 個記録されました "
+"(ベクトルライブラリ内のバグ)"
 
 #: ../lib/vector/diglib/plus_area.c:433
 #, c-format
@@ -4386,13 +4377,11 @@ msgstr ""
 
 #: ../lib/vector/Vlib/build.c:132
 msgid "Unable to add area (map closed, topo saved)"
-msgstr ""
-"領域を追加できません (マップは閉じられています, topoは保存されています)"
+msgstr "領域を追加できません (マップは閉じられています, topoは保存されています)"
 
 #: ../lib/vector/Vlib/build.c:140
 msgid "Unable to add isle (map closed, topo saved)"
-msgstr ""
-"アイルを追加できません (マップは閉じられています, topoは保存されています)"
+msgstr "アイルを追加できません (マップは閉じられています, topoは保存されています)"
 
 #: ../lib/vector/Vlib/build.c:150
 msgid "Area of size = 0.0 ignored"
@@ -5880,13 +5869,11 @@ msgstr "不明な演算子"
 
 #: ../lib/vector/Vlib/overlay.c:124
 msgid "Overlay: line/boundary types not supported by AND operator"
-msgstr ""
-"オーバーレイ: ライン/境界タイプはAND演算子によってサポートされていません"
+msgstr "オーバーレイ: ライン/境界タイプはAND演算子によってサポートされていません"
 
 #: ../lib/vector/Vlib/overlay.c:127
 msgid "Overlay: area x area types not supported by AND operator"
-msgstr ""
-"オーバーレイ: 領域 x 領域タイプはAND演算子によってサポートされていません"
+msgstr "オーバーレイ: 領域 x 領域タイプはAND演算子によってサポートされていません"
 
 #: ../lib/vector/Vlib/clean_nodes.c:248
 #, c-format
@@ -5976,8 +5963,7 @@ msgstr ""
 #: ../lib/vector/Vlib/legal_vname.c:43
 #, c-format
 msgid "Illegal vector map name <%s>. May not contain '.' or 'NULL'."
-msgstr ""
-"無効なベクトルマップ名です<%s>.  '.' あるいは 'NULL'.が含まれていません。"
+msgstr "無効なベクトルマップ名です<%s>.  '.' あるいは 'NULL'.が含まれていません。"
 
 #: ../lib/vector/Vlib/legal_vname.c:50
 #, c-format
@@ -6452,9 +6438,8 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:988
 #, c-format
 msgid "Data type of column <%s> not supported (must be numeric)"
-msgstr ""
-"データ型 of 列 <%s> のデータタイプはサポートされていません (数字でなければな"
-"らない)"
+msgstr "データ型 of 列 <%s> のデータタイプはサポートされていません "
+"(数字でなければならない)"
 
 #: ../lib/vector/Vlib/net_build.c:202 ../lib/vector/Vlib/net_build.c:967
 msgid "Setting node costs..."
@@ -6463,9 +6448,8 @@ msgstr "ノードコストをセットしています..."
 #: ../lib/vector/Vlib/net_build.c:277 ../lib/vector/Vlib/net_build.c:1032
 #, c-format
 msgid "Database record for node %d (cat = %d) not found (cost set to 0)"
-msgstr ""
-"ノード %d (cat = %d) のデータベースレコードは見つかりませんでした (コストは0"
-"にセットされています)"
+msgstr "ノード %d (cat = %d) のデータベースレコードは見つかりませんでした "
+"(コストは0にセットされています)"
 
 #: ../lib/vector/Vlib/net_build.c:332 ../lib/vector/Vlib/net_build.c:352
 msgid "Cannot add network arc for virtual node connection."
@@ -9132,8 +9116,7 @@ msgstr "ラスターマップ <%s> からカラーを転換しています..."
 
 #: ../lib/ogsf/gs3.c:967
 msgid "View not saved by this program,there may be some inconsistancies"
-msgstr ""
-"このプログラムにビューは保存されていません,　不一致がある可能性があります"
+msgstr "このプログラムにビューは保存されていません,　不一致がある可能性があります"
 
 #: ../lib/ogsf/trans.c:180
 msgid "Out of matrix stack space"
@@ -9145,8 +9128,7 @@ msgstr "空のスタックをポップしようと試みました"
 
 #: ../lib/ogsf/gsd_surf.c:1742
 msgid "Cut-plane points mis-match between surfaces. Check resolution(s)."
-msgstr ""
-"カット平面のポイントはサーフェスの間で一致しません. 解決策を確認してください."
+msgstr "カット平面のポイントはサーフェスの間で一致しません. 解決策を確認してください."
 
 #: ../lib/ogsf/gp2.c:705
 msgid "Unknown icon marker, using \"sphere\""
@@ -10401,8 +10383,7 @@ msgstr "投影法名がありません! 投影法パラメータは不明です�
 #: ../lib/proj/convert.c:678
 #, c-format
 msgid "Datum <%s> not recognised by GRASS and no parameters found"
-msgstr ""
-"データム <%s> はGRASSに認識されていません そしてパラメータが見つかりません"
+msgstr "データム <%s> はGRASSに認識されていません そしてパラメータが見つかりません"
 
 #: ../lib/proj/convert.c:694
 #, c-format
@@ -10568,8 +10549,8 @@ msgid ""
 "Dev note: Adapted sites library used for vector points. (module should be "
 "updated to GRASS 6 vector library)"
 msgstr ""
-"Dev note: ベクトルポイントに使用された適合されたサイトライブラリ. (モジュール"
-"をGRASS 6 ベクトルライブラリにアップデートする必要があります)"
+"Dev note: ベクトルポイントに使用された適合されたサイトライブラリ. ("
+"モジュールをGRASS 6 ベクトルライブラリにアップデートする必要があります)"
 
 msgid "Cannot fetch row"
 msgstr "行をフェッチできません"

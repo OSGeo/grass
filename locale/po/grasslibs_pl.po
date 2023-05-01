@@ -9,16 +9,17 @@ msgstr ""
 "Project-Id-Version: grasslibs_pl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2013-07-16 15:42+0100\n"
-"Last-Translator: Milena Nowotarska <do.milenki * gmail.com>\n"
-"Language-Team: GRASS Translation Team\n"
+"PO-Revision-Date: 2023-04-29 23:52+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Polish <https://weblate.osgeo.org/projects/grass-gis/"
+"grasslibs/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.5.7\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -633,8 +634,8 @@ msgid ""
 "There are classbreaks outside the range min-max. Number of classes reduced "
 "to %i, but using probabilities for %i classes."
 msgstr ""
-"Podano przedziały klas spoza zakresu min-max. Liczba klas zmniejszona do %i ,"
-"ale dla klas %i użyto wartości prawdopodobnych."
+"Podano przedziały klas spoza zakresu min-max. Liczba klas zmniejszona do %i "
+",ale dla klas %i użyto wartości prawdopodobnych."
 
 #: ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67
 #: ../lib/rst/interp_float/segmen2d.c:197
@@ -1379,8 +1380,7 @@ msgstr "Region GRASS w momencie zapisu widoku:\n"
 #: ../lib/gis/view.c:545
 #, c-format
 msgid " Window saved in \"%s\" is completely outside of current GRASS window."
-msgstr ""
-" Region zapisany w \"%s\" jest całkowicie poza bieżącym regionem GRASS."
+msgstr " Region zapisany w \"%s\" jest całkowicie poza bieżącym regionem GRASS."
 
 #: ../lib/gis/view.c:549
 #, c-format
@@ -3226,8 +3226,7 @@ msgstr "podgrupa <%s> grupy <%s> jest pusta\n"
 #: ../lib/imagery/list_subgp.c:103
 #, c-format
 msgid "subgroup <%s> of group <%s> references the following raster maps\n"
-msgstr ""
-"podgrupa <%s> grupy <%s> odwołuje się do następujących map rastrowych\n"
+msgstr "podgrupa <%s> grupy <%s> odwołuje się do następujących map rastrowych\n"
 
 #: ../lib/imagery/target.c:38
 #, c-format
@@ -4027,8 +4026,7 @@ msgstr "Próba usunięcia martwego obszaru"
 #: ../lib/vector/diglib/plus_area.c:410
 #, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
-msgstr ""
-"Martwy centroid %d zarejestrowany dla obszaru (bug w bibliotece vector)"
+msgstr "Martwy centroid %d zarejestrowany dla obszaru (bug w bibliotece vector)"
 
 #: ../lib/vector/diglib/plus_area.c:433
 #, c-format
@@ -5714,7 +5712,6 @@ msgid_plural "%d primitives registered"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_nat.c:120 ../lib/vector/Vlib/build_sfa.c:386
 #: ../lib/vector/Vlib/build_sfa.c:665
@@ -5724,7 +5721,6 @@ msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_nat.c:133
 msgid "Building areas..."
@@ -5737,7 +5733,6 @@ msgid_plural "%d areas built"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_nat.c:158
 #, c-format
@@ -5746,7 +5741,6 @@ msgid_plural "%d isles built"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_nat.c:169
 msgid "Attaching islands..."
@@ -5884,8 +5878,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open.c:1138
 msgid "Size of 'coor' file differs from value saved in topology file"
-msgstr ""
-"Wielkość pliku 'coor' różni się od wartości zapisanej w pliku topologii"
+msgstr "Wielkość pliku 'coor' różni się od wartości zapisanej w pliku topologii"
 
 #: ../lib/vector/Vlib/open.c:1149 ../lib/vector/Vlib/open.c:1248
 #, c-format
@@ -6233,7 +6226,6 @@ msgid_plural "%d categories loaded"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../lib/vector/Vlib/cats.c:627
 #, c-format
@@ -6268,7 +6260,6 @@ msgid_plural "%d features without geometry skipped"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_sfa.c:725
 #, c-format
@@ -9323,8 +9314,7 @@ msgstr "brak danych"
 #: ../lib/ogsf/gs2.c:1654
 #, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
-msgstr ""
-"Mapa rastrowa <%s> jest poza bieżącym regionem. Odczyt nie powiódł się."
+msgstr "Mapa rastrowa <%s> jest poza bieżącym regionem. Odczyt nie powiódł się."
 
 #: ../lib/ogsf/gs2.c:1732 ../lib/ogsf/gs2.c:1738 ../lib/ogsf/gs2.c:1746
 #: ../lib/ogsf/gs2.c:1755 ../lib/ogsf/gs2.c:1763 ../lib/ogsf/gs2.c:1773

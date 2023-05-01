@@ -11,15 +11,16 @@ msgstr ""
 "Project-Id-Version: grasslibs_pt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2013-12-22 16:37+0200\n"
-"Last-Translator: luisa <gem12lte@student.lu.se>\n"
-"Language-Team: gem12lte@student.lu.se\n"
+"PO-Revision-Date: 2023-04-29 23:52+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/"
+"grasslibs/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -3131,8 +3132,8 @@ msgstr "Não foi possível abrir o ficheiro [%s] do grupo [%s em %s]"
 #, c-format
 msgid "Unable to find file [%s] for subgroup [%s] of group [%s in %s]"
 msgstr ""
-"Não foi possível encontrar o ficheiro [%s] para o subgrupo [%s] do o grupo "
-"[%s em %s]"
+"Não foi possível encontrar o ficheiro [%s] para o subgrupo [%s] do o grupo ["
+"%s em %s]"
 
 #: ../lib/imagery/fopen.c:63 ../lib/imagery/fopen.c:164
 #, c-format
@@ -9165,8 +9166,8 @@ msgstr "A carregar o mapa raster <%s>..."
 #, c-format
 msgid "Color table range doesn't match data (mincol=%d, maxcol=%d"
 msgstr ""
-"O intervalo de valores da tabela de cor não corresponde aos dados "
-"(mincol=%d, maxcol=%d"
+"O intervalo de valores da tabela de cor não corresponde aos dados ("
+"mincol=%d, maxcol=%d"
 
 #: ../lib/ogsf/gs3.c:658 ../lib/ogsf/gs3.c:730
 #, c-format
@@ -9628,8 +9629,7 @@ msgstr "impossível escrever ficheiro f_format para mapas CELL"
 #: ../lib/raster/put_title.c:28
 #, c-format
 msgid "category information for [%s] in [%s] missing or invalid"
-msgstr ""
-"a informação da categoria para [%s] em [%s] está em falta ou é inválida"
+msgstr "a informação da categoria para [%s] em [%s] está em falta ou é inválida"
 
 #: ../lib/raster/put_title.c:37
 msgid "G_put_title - can't create a temp file"
@@ -9647,8 +9647,7 @@ msgstr "G_put_title - não foi possível reabrir o ficheiro temporário"
 #: ../lib/raster/put_title.c:67
 #, c-format
 msgid "can't write category information for [%s] in [%s]"
-msgstr ""
-"não foi possível escrever as informações da categoria para [%s] em [%s]"
+msgstr "não foi possível escrever as informações da categoria para [%s] em [%s]"
 
 #: ../lib/raster/get_cellhd.c:65
 msgid ""
@@ -10618,8 +10617,8 @@ msgid ""
 "Dev note: Adapted sites library used for vector points. (module should be "
 "updated to GRASS 6 vector library)"
 msgstr ""
-"Nota do Dev: Bibliotecas locais adaptadas usadas para os pontos vectoriais. "
-"(o módulo deverá ser atualizado para a biblioteca vectorial GRASS 6)"
+"Nota do Dev: Bibliotecas locais adaptadas usadas para os pontos vectoriais. ("
+"o módulo deverá ser atualizado para a biblioteca vectorial GRASS 6)"
 
 msgid "Cannot fetch row"
 msgstr "Não foi possível obter linha"
