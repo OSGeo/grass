@@ -7,14 +7,17 @@ msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2009-01-27 22:58-0600\n"
-"Last-Translator: Maxim Dubinin <sim@gis-lab.info>\n"
-"Language-Team: Russian <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2023-04-29 23:53+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/"
+"grasslibs/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -5674,7 +5677,6 @@ msgid_plural "%d primitives registered"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_nat.c:120 ../lib/vector/Vlib/build_sfa.c:386
 #: ../lib/vector/Vlib/build_sfa.c:665
@@ -5684,7 +5686,6 @@ msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_nat.c:133
 msgid "Building areas..."
@@ -5697,7 +5698,6 @@ msgid_plural "%d areas built"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_nat.c:158
 #, c-format
@@ -5706,7 +5706,6 @@ msgid_plural "%d isles built"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_nat.c:169
 msgid "Attaching islands..."
@@ -6198,7 +6197,6 @@ msgid_plural "%d categories loaded"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../lib/vector/Vlib/cats.c:627
 #, c-format
@@ -6233,7 +6231,6 @@ msgid_plural "%d features without geometry skipped"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_sfa.c:725
 #, c-format
@@ -6577,8 +6574,8 @@ msgid ""
 "Database record for line %d (cat = %d, backword direction) not "
 "found(direction of line skipped)"
 msgstr ""
-"Запись в БД для линии %d (cat = %d, направление назад) не найден "
-"(направление назад пропущено)"
+"Запись в БД для линии %d (cat = %d, направление назад) не найден ("
+"направление назад пропущено)"
 
 #: ../lib/vector/Vlib/net_build.c:937
 msgid "Cannot add network arc"
@@ -6773,8 +6770,7 @@ msgstr "Vect_segment_intersection() не поддерживает 3D"
 
 #: ../lib/vector/Vlib/intersect.c:402
 msgid "Vect_segment_intersection() ERROR (collinear vertical segments)"
-msgstr ""
-"Ошибка Vect_segment_intersection() (коллинеарные вертикальные сегменты)"
+msgstr "Ошибка Vect_segment_intersection() (коллинеарные вертикальные сегменты)"
 
 #: ../lib/vector/Vlib/intersect.c:496
 msgid "Vect_segment_intersection() ERROR (collinear non vertical segments)"
@@ -9144,8 +9140,7 @@ msgstr "Чтение растрового слоя <%s>..."
 #: ../lib/ogsf/gs3.c:596
 #, c-format
 msgid "Color table range doesn't match data (mincol=%d, maxcol=%d"
-msgstr ""
-"Диапазон цветовой таблицы не соответствует данным (mincol=%d, maxcol=%d"
+msgstr "Диапазон цветовой таблицы не соответствует данным (mincol=%d, maxcol=%d"
 
 #: ../lib/ogsf/gs3.c:658 ../lib/ogsf/gs3.c:730
 #, c-format
@@ -10409,8 +10404,7 @@ msgstr ""
 #: ../lib/proj/convert.c:232
 #, c-format
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
-msgstr ""
-"OGR не может получить строку параметров в стиле WKT (Код ошибки OGR %d)"
+msgstr "OGR не может получить строку параметров в стиле WKT (Код ошибки OGR %d)"
 
 #: ../lib/proj/convert.c:471
 #, c-format
@@ -10591,8 +10585,8 @@ msgid ""
 "Dev note: Adapted sites library used for vector points. (module should be "
 "updated to GRASS 6 vector library)"
 msgstr ""
-"Заметка разреботчика: Библиотека сайтов адаптированная для векторных точек. "
-"(модуль должен быть обновлен для векторной библиотеки GRASS 6)"
+"Заметка разреботчика: Библиотека сайтов адаптированная для векторных точек. ("
+"модуль должен быть обновлен для векторной библиотеки GRASS 6)"
 
 msgid "Cannot fetch row"
 msgstr "Невозможно получить ряд"

@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: grasslibs_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2017-05-23 21:08+0200\n"
-"Last-Translator: Daniel Victoria <daniel.victoria@gmail.com>, 2017\n"
-"Language-Team: Portuguese (Brazil) (https://www.transifex.com/grass-gis/"
-"teams/45198/pt_BR/)\n"
+"PO-Revision-Date: 2023-04-29 23:52+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/"
+"grass-gis/grasslibs/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -737,8 +738,7 @@ msgstr "Memória esgotada"
 #: ../lib/driver/parse_ftcap.c:84
 #, c-format
 msgid "%s: Unable to read font definition file; use the default"
-msgstr ""
-"%s: Não foi possível ler o arquivo de definição de fonte; use o padrão "
+msgstr "%s: Não foi possível ler o arquivo de definição de fonte; use o padrão "
 
 #: ../lib/driver/parse_ftcap.c:90
 #, c-format
@@ -1031,8 +1031,8 @@ msgstr "Problema na descrição UI. A opção '%s' em <%s> não existe"
 #: ../lib/gis/parser.c:537
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
 msgstr ""
-"Use apenas uma das flags --quiet ou --verbose, não ambas. Assumindo --"
-"verbose."
+"Use apenas uma das flags --quiet ou --verbose, não ambas. Assumindo "
+"--verbose."
 
 #: ../lib/gis/parser.c:551
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
@@ -2735,8 +2735,8 @@ msgid ""
 "The dimensions of the tiles used in the output raster3d map (XxYxZ or "
 "default: 16x16x8)"
 msgstr ""
-"As dimensões dos mosaicos usados ​​no mapa raster3d de saída (XxYxZ ou padrão: "
-"16x16x8)"
+"As dimensões dos mosaicos usados ​​no mapa raster3d de saída (XxYxZ ou "
+"padrão: 16x16x8)"
 
 #: ../lib/gis/parser_standard_options.c:484
 msgid "Name of input vector map"
@@ -3340,8 +3340,7 @@ msgstr "subgrupo <%s> do grupo <%s> está vazio\n"
 #: ../lib/imagery/list_subgp.c:103
 #, c-format
 msgid "subgroup <%s> of group <%s> references the following raster maps\n"
-msgstr ""
-"subgrupo <%s> do grupo <%s> faz referência aos seguintes mapas raster\n"
+msgstr "subgrupo <%s> do grupo <%s> faz referência aos seguintes mapas raster\n"
 
 #: ../lib/imagery/target.c:38
 #, c-format
@@ -4092,8 +4091,8 @@ msgid ""
 "Attempt to read line angle for the line which is not connected to the node: "
 "node %d, line %d"
 msgstr ""
-"Tentativa de ler o ângulo da linha para a linha que não está conectada ao "
-"nó: nó, %d, linha %d"
+"Tentativa de ler o ângulo da linha para a linha que não está conectada ao nó:"
+" nó, %d, linha %d"
 
 #: ../lib/vector/diglib/port_init.c:158
 #, c-format
@@ -5274,8 +5273,7 @@ msgstr "Tipo de coluna <%s> desconhecido, exportação cancelada"
 #: ../lib/vector/Vlib/ascii.c:539
 #, c-format
 msgid "Unable to select record from table <%s> (key %s, column %s)"
-msgstr ""
-"Não é possível selecionar registro da tabela <%s> (chave %s, coluna %s)"
+msgstr "Não é possível selecionar registro da tabela <%s> (chave %s, coluna %s)"
 
 #: ../lib/vector/Vlib/ascii.c:661
 #, c-format
@@ -5959,7 +5957,8 @@ msgstr "Mapa vetorial <%s> não encontrado no mapset atual"
 
 #: ../lib/vector/Vlib/open.c:252
 msgid "Temporary vector maps can be accessed only in the current mapset"
-msgstr "Mapas vetoriais temporários podem ser acessados ​​apenas no mapset atual"
+msgstr ""
+"Mapas vetoriais temporários podem ser acessados ​​apenas no mapset atual"
 
 #: ../lib/vector/Vlib/open.c:277
 msgid ""
@@ -6318,8 +6317,7 @@ msgstr "Conteúdo WKB inválido: %d bytes"
 
 #: ../lib/vector/Vlib/read_pg.c:803
 msgid "Reading EWKB with 4-dimensional coordinates (XYZM) is not supported"
-msgstr ""
-"A leitura de EWKB com coordenadas em 4 dimensões (XYZM) não é suportada"
+msgstr "A leitura de EWKB com coordenadas em 4 dimensões (XYZM) não é suportada"
 
 #: ../lib/vector/Vlib/read_pg.c:996 ../lib/vector/Vlib/read_pg.c:1066
 #: ../lib/vector/Vlib/read_pg.c:1137
@@ -7046,8 +7044,8 @@ msgstr "Cairo: arquivo de entrada inválido <%s>"
 #, c-format
 msgid "Cairo: input file has incorrect dimensions: expected: %dx%d got: %dx%d"
 msgstr ""
-"Cairo: o arquivo de entrada tem dimensões incorretas: esperado: %dx%d "
-"obtido: %dx%d"
+"Cairo: o arquivo de entrada tem dimensões incorretas: esperado: %dx%d obtido:"
+" %dx%d"
 
 #: ../lib/cairodriver/read_ppm.c:46
 #, c-format
@@ -7744,8 +7742,8 @@ msgstr ""
 #, python-format
 msgid "Unsupported relative time unit type for %(type)s map <%(id)s>: %(u)s"
 msgstr ""
-"Tipo de unidade de tempo relativo não suportado para mapa %(type)s<%(id)s>:"
-"%(u)s"
+"Tipo de unidade de tempo relativo não suportado para mapa "
+"%(type)s<%(id)s>:%(u)s"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:476
 #, python-format
@@ -7821,8 +7819,7 @@ msgstr "Conjunto de dados de espaço tempo %(sp)s<%(name)s> não encontrado"
 
 #: ../lib/python/temporal/open_stds.py:113
 msgid "Space time datasets can only be created in the current mapset"
-msgstr ""
-"Conjuntos de dados de espaço-tempo só podem ser criados no mapset atual"
+msgstr "Conjuntos de dados de espaço-tempo só podem ser criados no mapset atual"
 
 #: ../lib/python/temporal/open_stds.py:120
 #, fuzzy
@@ -8195,8 +8192,8 @@ msgid ""
 "Temporal type of space time dataset <%(id)s> and map <%(map)s> with layer "
 "%(l)s are different"
 msgstr ""
-"O tipo temporal do conjunto de dados espaço-tempo <%(id)s> e o mapa "
-"<%(map)s> com camada %(l)s são diferentes"
+"O tipo temporal do conjunto de dados espaço-tempo <%(id)s> e o mapa <%(map)"
+"s> com camada %(l)s são diferentes"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2205
 #, python-format
@@ -8510,8 +8507,8 @@ msgid ""
 "Unable to initialize the temporal DBMI interface. Please use t.connect to "
 "specify the driver and the database string"
 msgstr ""
-"Não foi possível inicializar a interface DBMI temporal. Por favor, use t."
-"connect para especificar o driver e a string do banco de dados"
+"Não foi possível inicializar a interface DBMI temporal. Por favor, use "
+"t.connect para especificar o driver e a string do banco de dados"
 
 #: ../lib/python/temporal/core.py:654
 msgid ""
@@ -8712,8 +8709,7 @@ msgstr "Não foi possível desempacotar o mapa vetorial <%s> do arquivo %s."
 #: ../lib/python/temporal/stds_import.py:205
 #, python-format
 msgid "Space time raster dataset archive <%s> not found"
-msgstr ""
-"Arquivo de conjunto de dados raster de espaço-tempo <%s> não encontrado"
+msgstr "Arquivo de conjunto de dados raster de espaço-tempo <%s> não encontrado"
 
 #: ../lib/python/temporal/stds_import.py:208
 #, python-format
@@ -9182,8 +9178,8 @@ msgid ""
 "Install a newer version of PIL or Pillow to use this function (missing "
 "ImageOps module)"
 msgstr ""
-"Instale uma versão mais recente de PIL ou Pillow para usar esta função "
-"(módulo ImageOps ausente)"
+"Instale uma versão mais recente de PIL ou Pillow para usar esta função ("
+"módulo ImageOps ausente)"
 
 #: ../lib/python/script/task.py:60
 msgid "unknown"
@@ -9291,8 +9287,8 @@ msgstr "Nível de depuração {0}"
 #, python-brace-format
 msgid "WARNING: Ignoring unsupported debug level (must be >=0 and <=5). {0}\n"
 msgstr ""
-"AVISO: Ignorando o nível de depuração não suportado (deve ser>= 0 e <=5). "
-"{0}\n"
+"AVISO: Ignorando o nível de depuração não suportado (deve ser>= 0 e <=5). {0}"
+"\n"
 
 #: ../lib/python/script/core.py:1781
 #, python-format
@@ -10195,8 +10191,7 @@ msgstr ""
 #: ../lib/raster/quant_rw.c:166
 #, c-format
 msgid "Unable to write quant rules for raster map <%s>"
-msgstr ""
-"Não foi possível escrever regras de quantização para o mapa raster <%s>"
+msgstr "Não foi possível escrever regras de quantização para o mapa raster <%s>"
 
 #: ../lib/raster/color_read.c:103
 msgid "missing"
@@ -10399,8 +10394,7 @@ msgstr "O intervalo de dados inteiros para o mapa raster <%s> está vazio"
 #: ../lib/raster/quant_io.c:105
 #, c-format
 msgid "Attempt to open quantization table for CELL raster map <%s>"
-msgstr ""
-"Tentativa de abrir a tabela de quantização para o mapa raster CELL <%s>"
+msgstr "Tentativa de abrir a tabela de quantização para o mapa raster CELL <%s>"
 
 #: ../lib/raster/quant_io.c:135
 #, c-format
@@ -10919,8 +10913,8 @@ msgstr "Não é possível obter string de parâmetro com estilo PROJ.4"
 msgid ""
 "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
 msgstr ""
-"O OGR não consegue interpretar a string de parâmetros no estilo PROJ.4: %s "
-"(o código de erro OGR era %d)"
+"O OGR não consegue interpretar a string de parâmetros no estilo PROJ.4: %s ("
+"o código de erro OGR era %d)"
 
 #: ../lib/proj/convert.c:232
 #, c-format
