@@ -34858,8 +34858,8 @@ msgstr ""
 #: ../vector/v.external.out/link.c:26 ../vector/v.out.ogr/main.c:104
 #, c-format
 msgid ""
-"Data source starts with \"PG:\" prefix, expecting \"PostgreSQL\" format "
-"(\"%s\" given)"
+"Data source starts with \"PG:\" prefix, expecting \"PostgreSQL\" format (\"%s"
+"\" given)"
 msgstr ""
 
 #: ../vector/v.external.out/link.c:88 ../vector/v.external.out/status.c:158
@@ -40946,8 +40946,8 @@ msgstr ""
 #: ../vector/v.vol.rst/user1.c:321
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given "
-"NPMIN=%d"
+"%d points given for interpolation (after thinning) is less than given NPMIN="
+"%d"
 msgstr ""
 
 #: ../vector/v.vol.rst/user1.c:341
@@ -44110,8 +44110,8 @@ msgstr ""
 #: ../general/g.findfile/main.c:97
 #, c-format
 msgid ""
-"Parameter 'file' contains reference to <%s> mapset, but mapset parameter "
-"<%s> does not correspond"
+"Parameter 'file' contains reference to <%s> mapset, but mapset parameter <"
+"%s> does not correspond"
 msgstr ""
 
 #: ../general/g.findfile/element.c:7
@@ -56927,8 +56927,8 @@ msgstr ""
 #: ../raster/r.slope.aspect/main.c:369
 #, c-format
 msgid ""
-"You must specify at least one of the parameters: <%s>, <%s>, <%s>, <%s>, "
-"<%s>, <%s>, <%s>, <%s> or <%s>"
+"You must specify at least one of the parameters: <%s>, <%s>, <%s>, <%s>, <"
+"%s>, <%s>, <%s>, <%s> or <%s>"
 msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:396
@@ -59610,8 +59610,8 @@ msgstr ""
 #: ../scripts/v.dissolve/v.dissolve.py:68
 #, python-format
 msgid ""
-"No '%s' option specified. Dissolving based on category values from layer "
-"<%s>."
+"No '%s' option specified. Dissolving based on category values from layer <"
+"%s>."
 msgstr ""
 
 #: ../scripts/v.dissolve/v.dissolve.py:74
@@ -60571,8 +60571,8 @@ msgstr ""
 #: ../scripts/r.in.wms/wms_base.py:110
 #, python-format
 msgid ""
-"WMS version <1.3.0> will be used, because version <1.1.1> does not support "
-"<%s>projection"
+"WMS version <1.3.0> will be used, because version <1.1.1> does not support <"
+"%s>projection"
 msgstr ""
 
 #: ../scripts/r.in.wms/wms_base.py:130
@@ -62832,3 +62832,529 @@ msgstr ""
 
 msgid "%s=%s,%s: files are the same, no copy required"
 msgstr "%s=%s,%s: ファイルは同じです、 コピーは必要ありません"
+
+#: ../general/g.filename/main.c:67
+msgid "Create element directory in the current mapset"
+msgstr ""
+
+#: ../general/g.filename/main.c:69
+msgid "If element directory for database file does not exist, create it"
+msgstr ""
+
+#: ../general/g.proj/input.c:124
+msgid "Input WKT definition is too long"
+msgstr ""
+
+#: ../general/g.region/main.c:170
+msgid "Force update of the current region"
+msgstr ""
+
+#: ../imagery/i.smap/openfiles.c:42 ../imagery/i.maxlik/open.c:51
+#: ../imagery/i.cluster/open_files.c:71 ../imagery/i.cca/main.c:140
+#, c-format
+msgid ""
+"Signature - group member semantic label mismatch.\n"
+"Extra signatures for bands: %s\n"
+"Imagery group bands without signatures: %s"
+msgstr ""
+
+#: ../imagery/i.smap/openfiles.c:45 ../imagery/i.smap/openfiles.c:46
+#: ../imagery/i.maxlik/open.c:54 ../imagery/i.maxlik/open.c:55
+#: ../imagery/i.cluster/open_files.c:74 ../imagery/i.cluster/open_files.c:75
+#: ../imagery/i.cca/main.c:143 ../imagery/i.cca/main.c:144
+msgid "none"
+msgstr ""
+
+#: ../locale/scriptstrings/t.rast.export_to_translate.c:7
+msgid "Path to the directory where output is written"
+msgstr ""
+
+#: ../locale/scriptstrings/t.rast.export_to_translate.c:8
+msgid "If not given, the default is the current working directory"
+msgstr ""
+
+#: ../locale/scriptstrings/t.upgrade_to_translate.c:1
+msgid "Upgrades the version of the temporal database."
+msgstr ""
+
+#: ../locale/scriptstrings/r.semantic.label_to_translate.c:1
+msgid ""
+"Manages semantic label information assigned to a single raster map or to a "
+"list of raster maps."
+msgstr ""
+
+#: ../locale/scriptstrings/r.semantic.label_to_translate.c:4
+#: ../locale/scriptstrings/i.band.library_to_translate.c:4
+msgid "semantic label"
+msgstr ""
+
+#: ../locale/scriptstrings/r.semantic.label_to_translate.c:6
+msgid "Name of semantic label identifier (example: S2_1)"
+msgstr ""
+
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:11
+msgid "Set semantic labels"
+msgstr ""
+
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:12
+msgid ""
+"input;copy semantic labels from input to output;method;append method name to "
+"input label if existing, otherwise use method name"
+msgstr ""
+
+#: ../locale/scriptstrings/i.band.library_to_translate.c:1
+msgid ""
+"Prints available semantic label information used for multispectral data."
+msgstr ""
+
+#: ../locale/scriptstrings/i.band.library_to_translate.c:6
+msgid "Semantic label search pattern (examples: L, S2, .*_2, S2_1)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.spectral_to_translate.c:10
+msgid "Name for output image is valid for -g (or text file for -t flag)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.spectral_to_translate.c:12
+msgid "Graphics format for output file (valid for -g flag)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.spectral_to_translate.c:14
+msgid ""
+"Show sampling coordinates instead of numbering in the legend (valid for -g "
+"flag)"
+msgstr ""
+
+#: ../locale/scriptstrings/t.remove_to_translate.c:12
+msgid "Remove stds and unregister maps from temporal database"
+msgstr ""
+
+#: ../locale/scriptstrings/t.remove_to_translate.c:14
+msgid ""
+"Remove stds, unregister maps from temporal database and delete them from "
+"mapset"
+msgstr ""
+
+#: ../locale/scriptstrings/r.in.wms_to_translate.c:32
+msgid "GDAL creation option(s) to pass to the output format driver"
+msgstr ""
+
+#: ../display/d.linegraph/main.c:304
+msgid "Minimum and maximun value for Y axis (min,max)"
+msgstr ""
+
+#: ../raster/r.surf.random/main.c:59
+#, c-format
+msgid "Option %s must be an integer, <%s> provided"
+msgstr ""
+
+#: ../raster/r.surf.random/main.c:124
+#, c-format
+msgid "Minimum %s should be higher than maximum %s, but %s > %s"
+msgstr ""
+
+#: ../raster/r.surf.random/main.c:135
+#, c-format
+msgid "Uniform random integer values in range [%s, %s]"
+msgstr ""
+
+#: ../raster/r.surf.random/main.c:140
+#, c-format
+msgid "Uniform random float values in range [%s, %s)"
+msgstr ""
+
+#: ../raster/r.external/link.c:56
+msgid ""
+"Statistics in metadata are sometimes approximations: min and max can be "
+"wrong!"
+msgstr ""
+
+#: ../raster/r.external/link.c:60
+msgid "Unable to get raster band statistics"
+msgstr ""
+
+#: ../raster/r.external/main.c:140
+msgid "Read data range from metadata"
+msgstr ""
+
+#: ../raster/r.external/main.c:141
+msgid "WARNING: metadata are sometimes approximations with wrong data range"
+msgstr ""
+
+#: ../raster/r.object.geometry/main.c:74
+msgid "Calculates geometry parameters for raster objects."
+msgstr ""
+
+#: ../raster/r.object.geometry/main.c:85
+msgid "Use meters as units instead of cells"
+msgstr ""
+
+#: ../raster/r.object.geometry/main.c:95
+msgid "Input raster must be of type CELL"
+msgstr ""
+
+#: ../raster/r.object.geometry/main.c:125
+#, c-format
+msgid "Empty input map <%s>"
+msgstr ""
+
+#: ../raster/r.object.geometry/main.c:159
+msgid "Calculating statistics"
+msgstr ""
+
+#: ../raster/r.object.geometry/main.c:300
+msgid "Writing output"
+msgstr ""
+
+#: ../raster/r.quantile/main.c:387
+#, c-format
+msgid "Reducing number of bins from %d to %d"
+msgstr ""
+
+#: ../raster/r.buildvrt/main.c:223
+msgid "All input maps only contain NULL, cannot continue"
+msgstr ""
+
+#: ../raster/r.buildvrt/main.c:266
+msgid "Input ew resolutions are different"
+msgstr ""
+
+#: ../raster/r.grow.distance/main.c:180
+msgid "Minimum distance threshold"
+msgstr ""
+
+#: ../raster/r.grow.distance/main.c:186
+msgid "Maximum distance threshold"
+msgstr ""
+
+#: ../raster/r.grow.distance/main.c:207 ../raster/r.grow.distance/main.c:217
+#, c-format
+msgid "Invalid %s value '%s', ignoring."
+msgstr ""
+
+#. GTC error because given minimum_distance is not smaller than
+#. * given maximum_distance
+#: ../raster/r.grow.distance/main.c:227
+#, c-format
+msgid "'%s' must be smaller than '%s'."
+msgstr ""
+
+#: ../raster/r.random.cells/init.c:77
+msgid "Distance must be > 0.0"
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:234
+msgid "No weighting"
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:235
+msgid "Gaussian weighting function"
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:236
+msgid "Exponential weighting function"
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:237
+msgid "File with a custom weighting matrix"
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:238
+msgid "Weighting function"
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:246
+msgid ""
+"Factor used in the selected weighting function (ignored for none and file)"
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:293
+msgid "File with weighting matrix is missing."
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:299
+#, c-format
+msgid "Weighting function '%s' requires a %s."
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:340
+#, c-format
+msgid "Computing %s weights..."
+msgstr ""
+
+#: ../raster/r.li/r.li.daemon/daemon.c:115
+#, c-format
+msgid "Filepath '%s%s' exceeds max length"
+msgstr ""
+
+#: ../raster/r.li/r.li.daemon/daemon.c:122
+#, c-format
+msgid "Filepath '%s%s%c%s' exceeds max length"
+msgstr ""
+
+#: ../raster/r.li/r.li.daemon/daemon.c:125
+#, c-format
+msgid "Cannot create %s output"
+msgstr ""
+
+#: ../raster/r.geomorphon/memory.c:58
+#, c-format
+msgid ""
+"Region resolution shoudn't be lesser than map %s resolution. Run g.region "
+"raster=%s to set proper resolution"
+msgstr ""
+
+#: ../raster/r.support/main.c:123 ../raster/r.support/main.c:129
+#: ../raster/r.support/main.c:135
+msgid "Import / Export"
+msgstr ""
+
+#: ../raster/r.support/main.c:143 ../raster/r.support/main.c:149
+msgid "Semantic label"
+msgstr ""
+
+#: ../raster/r.support/main.c:145
+msgid "Semantic label e.g. S2_8A"
+msgstr ""
+
+#: ../raster/r.support/main.c:150
+msgid "Delete the semantic label"
+msgstr ""
+
+#: ../raster/r.support/main.c:178
+msgid ""
+"Semantic label removal and setting semantic label values simultaneously "
+"doesn't make sense"
+msgstr ""
+
+#: ../raster/r.support/main.c:289
+msgid ""
+"Provided semantic label is not valid. See documentation for valid examples"
+msgstr ""
+
+#: ../raster/r.random/main.c:63
+msgid "Creates randomly placed raster cells or vector points"
+msgstr ""
+
+#: ../raster/r.random/main.c:65
+msgid ""
+"Creates a raster map and vector point map containing randomly located cells "
+"and points."
+msgstr ""
+
+#: ../raster/r.random/main.c:83
+msgid "The number of points (or cells) to generate"
+msgstr ""
+
+#: ../raster/r.random/main.c:85
+msgid ""
+"The number of vector points or raster cells to generate, possibly as a "
+"percentage of number of cells"
+msgstr ""
+
+#: ../raster/r.random/main.c:113
+msgid "Generate points also for NULL cells"
+msgstr ""
+
+#: ../raster/r.random/main.c:119
+msgid "Input raster values will be used for Z coordinates"
+msgstr ""
+
+#: ../raster/r.random/main.c:123
+msgid "Do not build topology for vector points"
+msgstr ""
+
+#: ../raster/r.in.pdal/filters.c:68
+#, c-format
+msgid "Invalid range <%s> for option <%s>"
+msgstr ""
+
+#: ../vector/v.db.select/main.c:46
+#, c-format
+msgid "The flag -%c is not allowed with %s=%s. %s"
+msgstr ""
+
+#: ../vector/v.db.select/main.c:56
+#, c-format
+msgid "The option %s is not allowed with %s=%s. %s"
+msgstr ""
+
+#: ../vector/v.db.select/main.c:208
+msgid "Escaping is based on the format"
+msgstr ""
+
+#: ../vector/v.db.select/main.c:210
+msgid "Column names are always included"
+msgstr ""
+
+#: ../vector/v.db.select/main.c:212
+msgid "Separator is part of the format"
+msgstr ""
+
+#: ../vector/v.db.select/main.c:214
+msgid "Null value is part of the format"
+msgstr ""
+
+#: ../vector/v.db.select/main.c:218
+msgid "Only vertical output can use vertical separator"
+msgstr ""
+
+#: ../vector/v.patch/main.c:221
+#, c-format
+msgid "Missing attribute table for vector map <%s>"
+msgstr ""
+
+#: ../vector/v.out.ogr/main.c:667
+#, c-format
+msgid ""
+"Vector map <%s> is 3D. Use format specific layer creation options SHPT "
+"(parameter 'lco') to export in 3D rather than 2D (default)"
+msgstr ""
+
+#: ../vector/v.profile/main.c:683
+#, c-format
+msgid "Unabale to get attribute data for cat %d"
+msgstr ""
+
+#: ../vector/v.profile/main.c:692
+#, c-format
+msgid "Error while retreiving database record for cat %d"
+msgstr ""
+
+#: ../vector/v.generalize/main.c:209
+msgid "Betweeness threshold in network generalization"
+msgstr "ネットワーク一般化におけるBetweeness 閾値"
+
+#: ../vector/v.what/what.c:533
+#, c-format
+msgid ""
+"Id: %d\n"
+"Angle: %.8f\n"
+msgstr ""
+
+#: ../scripts/i.spectral/i.spectral.py:199
+msgid "Supported monitor isn't running. Please launch one of the monitors {}."
+msgstr ""
+
+#: ../scripts/i.spectral/i.spectral.py:209
+msgid "Supported monitor isn't selected. Please select one of the monitors {}."
+msgstr ""
+
+#: ../scripts/i.spectral/i.spectral.py:218
+msgid "{} monitor is used, output file {}"
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:105
+msgid "Location named <{}> already exists, download canceled"
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:108
+msgid "Downloading and extracting..."
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:112
+msgid "Archive contains only one file and no mapset directories"
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:115
+#, python-brace-format
+msgid "Unable to get the location: {error}"
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:117
+msgid "Searching for valid location..."
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:129
+#, python-brace-format
+msgid "Location found in a nested directory '{directory}'"
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:140
+#, python-brace-format
+msgid ""
+"The dowloaded file is not a valid GRASS Location. The extracted file "
+"contains these files and directories:\n"
+"{files_and_dirs}"
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:145
+msgid "Copying to final destination..."
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:147
+#, python-brace-format
+msgid "Path to the location now <{path}>"
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:127
+#, python-brace-format
+msgid ""
+"Wrong file format downloaded. Check url <{url}>. Allowed file format is "
+"{response_format}."
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:141
+#, python-brace-format
+msgid ""
+"The download of the modules.xml file from the server was not successful. "
+"File on the server <{url}> doesn't exists."
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:182
+msgid "Unable to get GRASS GIS version."
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:204
+msgid ""
+"The <{}> addon cannot be reinstalled. Addon wasn't found among the official "
+"addons."
+msgstr ""
+
+#: ../scripts/r.semantic.label/r.semantic.label.py:64
+msgid "No semantic label assigned to <{}>"
+msgstr ""
+
+#: ../scripts/r.semantic.label/r.semantic.label.py:83
+msgid "Semantic label <{}> assigned to raster map <{}>"
+msgstr ""
+
+#: ../scripts/r.semantic.label/r.semantic.label.py:90
+msgid "Semantic label dissociated from raster map <{}>"
+msgstr ""
+
+#: ../scripts/r.semantic.label/r.semantic.label.py:95
+msgid "Unable to assign/dissociate semantic label. {}"
+msgstr ""
+
+#: ../scripts/r.semantic.label/r.semantic.label.py:115
+msgid "Number of maps differs from number of semantic labels"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:213
+msgid "Converting image chanels to 8bit for processing"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:299
+msgid "Rescaling image chanels to 8bit for processing"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:292
+msgid "Cannot retrieve organization and repository from URL: <{}>."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:396
+#, python-brace-format
+msgid ""
+"Download file from <{url}>, failed. File is not on the server or check your "
+"internet connection."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1366
+#, python-brace-format
+msgid "No metadata available for module '{name}': {error}"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1435
+msgid "Downloading precompiled GRASS Addons <{}>..."
+msgstr ""

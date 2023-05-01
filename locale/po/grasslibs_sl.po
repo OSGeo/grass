@@ -776,8 +776,8 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:277
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given "
-"NPMIN=%d"
+"%d points given for interpolation (after thinning) is less than given NPMIN="
+"%d"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:282
@@ -6806,8 +6806,8 @@ msgstr "Ne morem odpreti datoteke topo za pisanje: %s\n"
 #: ../lib/vector/Vlib/net_build.c:364
 #, c-format
 msgid ""
-"There exists more than one point of node <%d> with unique category field  "
-"<%d>.\n"
+"There exists more than one point of node <%d> with unique category field  <"
+"%d>.\n"
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
@@ -8020,15 +8020,15 @@ msgstr ""
 #: ../lib/python/temporal/register.py:268
 #, fuzzy, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s> with layer %(l)s. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s> with layer %(l)s. Overwrite flag is not set."
 msgstr "Vektor '%s' že obstaja in bo prepisan."
 
 #: ../lib/python/temporal/register.py:275
 #, fuzzy, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s>. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s>. Overwrite flag is not set."
 msgstr "Vektor '%s' že obstaja in bo prepisan."
 
 #: ../lib/python/temporal/register.py:299
@@ -8256,8 +8256,8 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2312
 #, fuzzy, python-format
 msgid ""
-"Map <%(map)s> with layer %(l)s is not registered in space time dataset "
-"<%(base)s>"
+"Map <%(map)s> with layer %(l)s is not registered in space time dataset <"
+"%(base)s>"
 msgstr "Hrošč: poskus posodobitve sloja, ki ni v trenutnem mapset."
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2318
@@ -8398,8 +8398,8 @@ msgstr "Vneseni vektor '%s' ni bil najden"
 #: ../lib/python/temporal/temporal_algebra.py:1214
 #, python-format
 msgid ""
-"Wrong temporal type of space time dataset "
-"<%s>                                       <%s> time is required"
+"Wrong temporal type of space time dataset <"
+"%s>                                       <%s> time is required"
 msgstr ""
 
 #: ../lib/python/temporal/temporal_algebra.py:1234
@@ -10118,8 +10118,8 @@ msgstr "barvna podpora za [%s] v \"mapset\" [%s] %s"
 #: ../lib/raster/open.c:192
 #, fuzzy, c-format
 msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map "
-"<%s@%s> which does not exist"
+"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
+"%s> which does not exist"
 msgstr ""
 "ne morem odpreti [%s] v [%s], ker je reklasificiran iz [%s] v [%s], ki ne "
 "obstaja"

@@ -6549,10 +6549,10 @@ msgstr ""
 msgid "Input SRS"
 msgstr ""
 
-#: ../locale/scriptstrings/v.import_to_translate.c:21
 #: ../general/g.proj/main.c:175
+#: ../locale/scriptstrings/v.import_to_translate.c:21
 msgid "EPSG projection code"
-msgstr ""
+msgstr "Código de projeção EPSG"
 
 #: ../locale/scriptstrings/v.import_to_translate.c:23
 #: ../general/g.proj/main.c:205
@@ -6601,11 +6601,10 @@ msgstr ""
 msgid "Removes space time datasets from temporal database."
 msgstr ""
 
-#: ../locale/scriptstrings/t.remove_to_translate.c:4
-#: ../locale/scriptstrings/i.signature.remove_to_translate.c:4
 #: ../general/g.remove/main.c:71
+#: ../locale/scriptstrings/t.remove_to_translate.c:4
 msgid "remove"
-msgstr ""
+msgstr "remover"
 
 #: ../locale/scriptstrings/t.remove_to_translate.c:7
 msgid "Type of the space time dataset, default is strds"
@@ -7523,46 +7522,39 @@ msgstr ""
 msgid "Draws the boxplot of values in a vector attribute column"
 msgstr ""
 
-#: ../locale/scriptstrings/d.vect.colbp_to_translate.c:2
-#: ../locale/scriptstrings/d.out.file_to_translate.c:2
+#: ../general/g.cairocomp/main.c:197 ../general/g.pnmcomp/main.c:283
+#: ../general/g.ppmtopng/main.c:118
 #: ../locale/scriptstrings/d.what.vect_to_translate.c:2
-#: ../locale/scriptstrings/d.frame_to_translate.c:2
-#: ../locale/scriptstrings/d.to.rast_to_translate.c:2
-#: ../locale/scriptstrings/d.vect.colhist_to_translate.c:2
-#: ../locale/scriptstrings/d.what.rast_to_translate.c:2
-#: ../locale/scriptstrings/d.rast.leg_to_translate.c:2
-#: ../locale/scriptstrings/v.explode_to_translate.c:2
-#: ../locale/scriptstrings/wxpyimgview_to_translate.c:2
 #: ../locale/scriptstrings/d.redraw_to_translate.c:2
 #: ../locale/scriptstrings/d.correlate_to_translate.c:2
+#: ../locale/scriptstrings/d.out.file_to_translate.c:2
 #: ../locale/scriptstrings/d.polar_to_translate.c:2
-#: ../locale/scriptstrings/v.faultdirections_to_translate.c:2
-#: ../locale/scriptstrings/d.explanation.plot_to_translate.c:2
-#: ../locale/scriptstrings/d.vect.thematic2_to_translate.c:2
-#: ../locale/scriptstrings/d.mon2_to_translate.c:2
+#: ../locale/scriptstrings/d.frame_to_translate.c:2
+#: ../locale/scriptstrings/wxpyimgview_to_translate.c:2
+#: ../locale/scriptstrings/d.what.rast_to_translate.c:2
+#: ../locale/scriptstrings/d.to.rast_to_translate.c:2
+#: ../locale/scriptstrings/d.rast.leg_to_translate.c:2
 #: ../locale/scriptstrings/d.shade_to_translate.c:2
 #: ../locale/scriptstrings/d.rast.edit_to_translate.c:2
-#: ../visualization/ximgview/main.c:290 ../display/d.profile/main.c:191
-#: ../display/d.fontlist/main.c:45 ../display/d.title/main.c:49
-#: ../display/d.text/main.c:139 ../display/d.vect.chart/main.c:63
-#: ../display/d.rgb/main.c:53 ../display/d.his/main.c:62
-#: ../display/d.rast.num/main.c:77 ../display/d.geodesic/main.c:46
-#: ../display/d.vect.thematic/main.c:85 ../display/d.rast.arrow/main.c:97
-#: ../display/d.font/main.c:45 ../display/d.legend/main.c:78
-#: ../display/d.labels/main.c:43 ../display/d.erase/main.c:29
-#: ../display/d.legend.vect/main.c:50 ../display/d.vect/main.c:73
-#: ../display/d.northarrow/main.c:46 ../display/d.extract/main.c:49
-#: ../display/d.colorlist/main.c:35 ../display/d.info/main.c:34
-#: ../display/d.graph/main.c:58 ../display/d.mon/main.c:50
-#: ../display/d.grid/main.c:52 ../display/d.linegraph/main.c:231
-#: ../display/d.path/main.c:48 ../display/d.rast/main.c:53
-#: ../display/d.barscale/main.c:63 ../display/d.colortable/main.c:60
-#: ../display/d.where/main.c:43 ../display/d.rhumbline/main.c:44
-#: ../display/d.histogram/main.c:83 ../general/g.ppmtopng/main.c:118
-#: ../general/g.pnmcomp/main.c:283 ../general/g.cairocomp/main.c:197
-#: ../raster3d/r3.mkdspf/main.c:80
+#: ../raster3d/r3.mkdspf/main.c:80 ../display/d.rast.arrow/main.c:97
+#: ../display/d.title/main.c:49 ../display/d.mon/main.c:50
+#: ../display/d.graph/main.c:58 ../display/d.vect/main.c:73
+#: ../display/d.vect.chart/main.c:63 ../display/d.linegraph/main.c:224
+#: ../display/d.rhumbline/main.c:44 ../display/d.path/main.c:48
+#: ../display/d.where/main.c:44 ../display/d.colortable/main.c:60
+#: ../display/d.erase/main.c:29 ../display/d.vect.thematic/main.c:85
+#: ../display/d.rast.num/main.c:77 ../display/d.rgb/main.c:53
+#: ../display/d.legend.vect/main.c:50 ../display/d.geodesic/main.c:46
+#: ../display/d.legend/main.c:78 ../display/d.info/main.c:34
+#: ../display/d.profile/main.c:191 ../display/d.fontlist/main.c:45
+#: ../display/d.northarrow/main.c:46 ../display/d.rast/main.c:53
+#: ../display/d.font/main.c:45 ../display/d.extract/main.c:49
+#: ../display/d.barscale/main.c:63 ../display/d.colorlist/main.c:35
+#: ../display/d.grid/main.c:52 ../display/d.text/main.c:139
+#: ../display/d.histogram/main.c:83 ../display/d.labels/main.c:43
+#: ../display/d.his/main.c:62 ../visualization/ximgview/main.c:290
 msgid "display"
-msgstr ""
+msgstr "exibir"
 
 #: ../locale/scriptstrings/d.vect.colbp_to_translate.c:4
 #: ../display/d.profile/main.c:194
@@ -9388,34 +9380,27 @@ msgid ""
 "source into the local GRASS installation or removes installed extensions."
 msgstr ""
 
+#: ../general/g.mkfontcap/main.c:71 ../general/g.cairocomp/main.c:196
+#: ../general/g.version/main.c:69 ../general/g.findfile/main.c:38
+#: ../general/g.dirseps/main.c:34 ../general/g.gisenv/main.c:43
+#: ../general/g.access/main.c:37 ../general/g.remove/main.c:69
+#: ../general/g.rename/main.c:45 ../general/g.setproj/main.c:78
+#: ../general/g.filename/main.c:40 ../general/g.copy/main.c:42
+#: ../general/g.tempfile/main.c:38 ../general/g.proj/main.c:71
+#: ../general/g.list/main.c:65 ../general/g.pnmcomp/main.c:282
+#: ../general/g.ppmtopng/main.c:117 ../general/g.gui/main.c:39
+#: ../general/g.region/main.c:65 ../general/g.mapsets/main.c:63
+#: ../general/g.findetc/main.c:28 ../general/g.message/main.c:33
+#: ../general/g.mapset/main.c:49
 #: ../locale/scriptstrings/g.extension_to_translate.c:3
-#: ../locale/scriptstrings/g.cloud_to_translate.c:2
+#: ../locale/scriptstrings/r.semantic.label_to_translate.c:2
 #: ../locale/scriptstrings/g.search.modules_to_translate.c:2
-#: ../locale/scriptstrings/i.band_to_translate.c:2
-#: ../locale/scriptstrings/g.compare.md5_to_translate.c:2
-#: ../locale/scriptstrings/g.extension.all_to_translate.c:3
-#: ../locale/scriptstrings/g.citation_to_translate.c:2
 #: ../locale/scriptstrings/g.manual_to_translate.c:2
-#: ../locale/scriptstrings/g.proj.all_to_translate.c:2
-#: ../locale/scriptstrings/g.rename.many_to_translate.c:2
+#: ../locale/scriptstrings/i.band.library_to_translate.c:2
+#: ../locale/scriptstrings/g.extension.all_to_translate.c:3
 #: ../locale/scriptstrings/g.download.location_to_translate.c:3
-#: ../locale/scriptstrings/g.copyall_to_translate.c:3
-#: ../locale/scriptstrings/g.proj.identify_to_translate.c:2
-#: ../locale/scriptstrings/g.bands_to_translate.c:2
-#: ../general/g.mapsets/main.c:63 ../general/g.tempfile/main.c:38
-#: ../general/g.mkfontcap/main.c:71 ../general/g.region/main.c:65
-#: ../general/g.setproj/main.c:78 ../general/g.proj/main.c:71
-#: ../general/g.findetc/main.c:28 ../general/g.mapset/main.c:49
-#: ../general/g.message/main.c:33 ../general/g.ppmtopng/main.c:117
-#: ../general/g.pnmcomp/main.c:282 ../general/g.list/main.c:65
-#: ../general/g.findfile/main.c:38 ../general/g.gisenv/main.c:43
-#: ../general/g.dirseps/main.c:34 ../general/g.remove/main.c:69
-#: ../general/g.copy/main.c:42 ../general/g.rename/main.c:45
-#: ../general/g.gui/main.c:39 ../general/g.filename/main.c:39
-#: ../general/g.access/main.c:37 ../general/g.cairocomp/main.c:196
-#: ../general/g.version/main.c:69
 msgid "general"
-msgstr ""
+msgstr "geral"
 
 #: ../locale/scriptstrings/g.extension_to_translate.c:4
 #: ../locale/scriptstrings/g.extension.all_to_translate.c:4
@@ -31186,8 +31171,8 @@ msgid ""
 "cannot be provided for OGR layer <%s>"
 msgstr ""
 "Não foi possível converter a projeção do mapa de entrada para o formato "
-"GRASS. A verificação de projeção não pode ser fornecida para a camada OGR "
-"<%s>"
+"GRASS. A verificação de projeção não pode ser fornecida para a camada OGR <"
+"%s>"
 
 #: ../vector/v.external/list.c:326
 #, c-format
@@ -33771,8 +33756,8 @@ msgid ""
 "Too many splines (%d x %d). Consider changing spline steps \"ew_step=\" "
 "\"ns_step=\"."
 msgstr ""
-"Muitas splines (%d x %d). Considere alterar os passos de spline \"ew_step "
-"=\" \"ns_step =\"."
+"Muitas splines (%d x %d). Considere alterar os passos de spline \"ew_step ="
+"\" \"ns_step =\"."
 
 #: ../vector/v.surf.bspline/crosscorr.c:169
 #: ../raster/r.resamp.bspline/crosscorr.c:215
@@ -35001,8 +34986,8 @@ msgstr "Formato de saída atual para vetores: %s"
 #: ../vector/v.external.out/link.c:26 ../vector/v.out.ogr/main.c:104
 #, c-format
 msgid ""
-"Data source starts with \"PG:\" prefix, expecting \"PostgreSQL\" format "
-"(\"%s\" given)"
+"Data source starts with \"PG:\" prefix, expecting \"PostgreSQL\" format (\"%s"
+"\" given)"
 msgstr ""
 "A fonte de dados começa com o prefixo \"PG:\", esperando o formato "
 "\"PostgreSQL\" (\"%s\" fornecido)"
@@ -35262,8 +35247,8 @@ msgid ""
 "different FID column by 'options=\"FID=<name>\"'."
 msgstr ""
 "Valor da coluna FID inválido (%s). Os valores da coluna FID devem ser "
-"inteiros. Por favor, especifique coluna FID diferente usando "
-"'options=\"FID=<name>\"'."
+"inteiros. Por favor, especifique coluna FID diferente usando 'options="
+"\"FID=<name>\"'."
 
 #: ../vector/v.out.postgis/table.c:57
 #, c-format
@@ -36548,8 +36533,8 @@ msgid ""
 "Vector map <%s> cannot be overwritten because input table <%s> is linked to "
 "this map."
 msgstr ""
-"O mapa vetorial <%s> não pode ser substituído porque a tabela de entrada "
-"<%s> está vinculada a este mapa."
+"O mapa vetorial <%s> não pode ser substituído porque a tabela de entrada <"
+"%s> está vinculada a este mapa."
 
 #: ../vector/v.in.db/main.c:177
 #, c-format
@@ -41532,8 +41517,8 @@ msgstr ""
 #: ../vector/v.vol.rst/user1.c:321
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given "
-"NPMIN=%d"
+"%d points given for interpolation (after thinning) is less than given NPMIN="
+"%d"
 msgstr ""
 
 #: ../vector/v.vol.rst/user1.c:341
@@ -43608,10 +43593,10 @@ msgstr ""
 msgid "Unable to open SEARCH_PATH for write"
 msgstr ""
 
-#: ../general/g.tempfile/main.c:39 ../general/g.message/main.c:34
-#: ../general/g.version/main.c:70
+#: ../general/g.version/main.c:70 ../general/g.tempfile/main.c:39
+#: ../general/g.message/main.c:34
 msgid "support"
-msgstr ""
+msgstr "ajuda"
 
 #: ../general/g.tempfile/main.c:40 ../general/g.findetc/main.c:30
 #: ../general/g.message/main.c:35 ../general/g.findfile/main.c:40
@@ -44027,7 +44012,7 @@ msgstr ""
 
 #: ../general/g.setproj/main.c:192
 msgid "Unknown projection"
-msgstr ""
+msgstr "Projeção desconhecida"
 
 #: ../general/g.setproj/main.c:198
 #, c-format
@@ -44294,7 +44279,7 @@ msgstr ""
 #: ../general/g.proj/main.c:191 ../general/g.proj/main.c:204
 #: ../general/g.proj/main.c:210
 msgid "Datum"
-msgstr ""
+msgstr "Datum"
 
 #: ../general/g.proj/main.c:193
 msgid "Datum (overrides any datum specified in input co-ordinate system)"
@@ -44702,13 +44687,13 @@ msgstr ""
 msgid "Name for output mask file"
 msgstr ""
 
-#: ../general/g.pnmcomp/main.c:315 ../general/g.cairocomp/main.c:230
+#: ../general/g.cairocomp/main.c:230 ../general/g.pnmcomp/main.c:315
 msgid "Image width"
-msgstr ""
+msgstr "Largura da imagem"
 
-#: ../general/g.pnmcomp/main.c:321 ../general/g.cairocomp/main.c:236
+#: ../general/g.cairocomp/main.c:236 ../general/g.pnmcomp/main.c:321
 msgid "Image height"
-msgstr ""
+msgstr "Altura da imagem"
 
 #: ../general/g.list/list.c:131
 #, c-format
@@ -44780,9 +44765,9 @@ msgstr "Mapset <%s> não existe."
 msgid "Searches for GRASS data base files and sets variables for the shell."
 msgstr ""
 
-#: ../general/g.findfile/main.c:53 ../general/g.filename/main.c:50
+#: ../general/g.findfile/main.c:53 ../general/g.filename/main.c:51
 msgid "Name of an element"
-msgstr ""
+msgstr "Nome de um elemento"
 
 #: ../general/g.findfile/main.c:59
 msgid "Name of an existing map"
@@ -44807,13 +44792,13 @@ msgstr ""
 #: ../general/g.findfile/main.c:97
 #, c-format
 msgid ""
-"Parameter 'file' contains reference to <%s> mapset, but mapset parameter "
-"<%s> does not correspond"
+"Parameter 'file' contains reference to <%s> mapset, but mapset parameter <"
+"%s> does not correspond"
 msgstr ""
 
 #: ../general/g.findfile/element.c:7
 msgid "List of available elements:"
-msgstr ""
+msgstr "Lista de elementos disponíveis:"
 
 #: ../general/g.gisenv/main.c:48
 msgid "Outputs and modifies the user's current GRASS variable settings."
@@ -44999,7 +44984,7 @@ msgstr ""
 
 #: ../general/g.rename/main.c:55
 msgid "renamed"
-msgstr ""
+msgstr "renomeado"
 
 #: ../general/g.rename/main.c:76
 #, c-format
@@ -45132,7 +45117,7 @@ msgstr ""
 
 #: ../general/g.parser/main.c:74
 msgid "Usage"
-msgstr ""
+msgstr "Uso"
 
 #: ../general/g.parser/main.c:84
 msgid "Unable to open script file"
@@ -45256,7 +45241,7 @@ msgstr ""
 
 #: ../general/g.access/exp_perms.c:16
 msgid "has"
-msgstr ""
+msgstr "tem"
 
 #: ../general/g.access/exp_perms.c:19
 msgid "Only users in your group"
@@ -45268,7 +45253,7 @@ msgstr ""
 
 #: ../general/g.access/exp_perms.c:25
 msgid "Only you"
-msgstr ""
+msgstr "Somente você"
 
 #: ../general/g.access/exp_perms.c:31
 #, c-format
@@ -45321,7 +45306,7 @@ msgstr ""
 
 #: ../general/g.cairocomp/main.c:218
 msgid "Output screen"
-msgstr ""
+msgstr "Tela de saída"
 
 #: ../general/g.cairocomp/main.c:240
 msgid "Background color (R:G:B:A)"
@@ -45341,15 +45326,15 @@ msgstr ""
 
 #: ../general/g.version/main.c:72
 msgid "copyright"
-msgstr ""
+msgstr "copyright"
 
 #: ../general/g.version/main.c:73
 msgid "version"
-msgstr ""
+msgstr "versão"
 
 #: ../general/g.version/main.c:74
 msgid "license"
-msgstr ""
+msgstr "licença"
 
 #: ../general/g.version/main.c:75
 msgid "Displays GRASS GIS version info."
@@ -45367,7 +45352,7 @@ msgstr ""
 #: ../general/g.version/main.c:91 ../general/g.version/main.c:101
 #: ../general/g.version/main.c:107
 msgid "Additional info"
-msgstr ""
+msgstr "Informação adicional"
 
 #: ../general/g.version/main.c:85
 msgid "Print also the citation options"
@@ -45395,7 +45380,7 @@ msgstr ""
 
 #: ../general/g.version/main.c:112
 msgid "Shell"
-msgstr ""
+msgstr "Shell"
 
 #: ../general/g.version/main.c:172
 #, c-format
@@ -48339,7 +48324,7 @@ msgstr ""
 
 #: ../misc/m.nviz.image/args.c:921
 msgid "North arrow color"
-msgstr ""
+msgstr "Cor para seta Norte"
 
 #: ../misc/m.nviz.image/args.c:973
 #, c-format
@@ -48409,11 +48394,11 @@ msgstr ""
 
 #: ../misc/m.nviz.image/main.c:244
 msgid "Failed to write image"
-msgstr ""
+msgstr "Falha ao gravar a imagem"
 
 #: ../misc/m.nviz.image/main.c:246
 msgid "Unsupported output format"
-msgstr ""
+msgstr "Formato de saída não suportado"
 
 #: ../misc/m.nviz.image/surface.c:67
 #, c-format
@@ -50669,8 +50654,8 @@ msgid ""
 "Precision loss: Float32 can not preserve the DCELL precision of raster <%s>. "
 "This can be avoided by using Float64"
 msgstr ""
-"Perda de precisão: Float32 não pode preservar a precisão DCELL do raster "
-"<%s>. Isso pode ser evitado usando Float64"
+"Perda de precisão: Float32 não pode preservar a precisão DCELL do raster <"
+"%s>. Isso pode ser evitado usando Float64"
 
 #: ../raster/r.out.gdal/main.c:563
 msgid "Forcing raster export"
@@ -57759,8 +57744,8 @@ msgstr ""
 #: ../raster/r.slope.aspect/main.c:369
 #, c-format
 msgid ""
-"You must specify at least one of the parameters: <%s>, <%s>, <%s>, <%s>, "
-"<%s>, <%s>, <%s>, <%s> or <%s>"
+"You must specify at least one of the parameters: <%s>, <%s>, <%s>, <%s>, <"
+"%s>, <%s>, <%s>, <%s> or <%s>"
 msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:396
@@ -60475,8 +60460,8 @@ msgstr ""
 #: ../scripts/v.dissolve/v.dissolve.py:68
 #, python-format
 msgid ""
-"No '%s' option specified. Dissolving based on category values from layer "
-"<%s>."
+"No '%s' option specified. Dissolving based on category values from layer <"
+"%s>."
 msgstr ""
 
 #: ../scripts/v.dissolve/v.dissolve.py:74
@@ -61447,8 +61432,8 @@ msgstr ""
 #: ../scripts/r.in.wms/wms_base.py:110
 #, python-format
 msgid ""
-"WMS version <1.3.0> will be used, because version <1.1.1> does not support "
-"<%s>projection"
+"WMS version <1.3.0> will be used, because version <1.1.1> does not support <"
+"%s>projection"
 msgstr ""
 
 #: ../scripts/r.in.wms/wms_base.py:130
@@ -62730,17 +62715,17 @@ msgstr ""
 msgid "Compilation failed, sorry. Please check above error messages."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1637
+#: ../scripts/g.extension/g.extension.py:1885
 msgid "Installing..."
-msgstr ""
+msgstr "Instalando..."
 
-#: ../scripts/g.extension/g.extension.py:1728
+#: ../scripts/g.extension/g.extension.py:1976
 msgid "List of removed files:"
-msgstr ""
+msgstr "Lista de arquivos removidos:"
 
-#: ../scripts/g.extension/g.extension.py:1730
+#: ../scripts/g.extension/g.extension.py:1978
 msgid "Files to be removed:"
-msgstr ""
+msgstr "Arquivos a serem removidos:"
 
 #: ../scripts/g.extension/g.extension.py:1736
 msgid "Updating addons metadata file..."
@@ -63600,3 +63585,529 @@ msgid ""
 msgstr ""
 "O mapa vetorial <%s> é 3D. Use opções de criação de camada específicas de "
 "formato (parâmetro 'lco') para exportar <em 3D em vez de 2D (padrão)."
+
+#: ../general/g.filename/main.c:67
+msgid "Create element directory in the current mapset"
+msgstr ""
+
+#: ../general/g.filename/main.c:69
+msgid "If element directory for database file does not exist, create it"
+msgstr ""
+
+#: ../general/g.proj/input.c:124
+msgid "Input WKT definition is too long"
+msgstr ""
+
+#: ../general/g.region/main.c:170
+msgid "Force update of the current region"
+msgstr ""
+
+#: ../imagery/i.smap/openfiles.c:42 ../imagery/i.maxlik/open.c:51
+#: ../imagery/i.cluster/open_files.c:71 ../imagery/i.cca/main.c:140
+#, c-format
+msgid ""
+"Signature - group member semantic label mismatch.\n"
+"Extra signatures for bands: %s\n"
+"Imagery group bands without signatures: %s"
+msgstr ""
+
+#: ../imagery/i.smap/openfiles.c:45 ../imagery/i.smap/openfiles.c:46
+#: ../imagery/i.maxlik/open.c:54 ../imagery/i.maxlik/open.c:55
+#: ../imagery/i.cluster/open_files.c:74 ../imagery/i.cluster/open_files.c:75
+#: ../imagery/i.cca/main.c:143 ../imagery/i.cca/main.c:144
+msgid "none"
+msgstr ""
+
+#: ../locale/scriptstrings/t.rast.export_to_translate.c:7
+msgid "Path to the directory where output is written"
+msgstr ""
+
+#: ../locale/scriptstrings/t.rast.export_to_translate.c:8
+msgid "If not given, the default is the current working directory"
+msgstr ""
+
+#: ../locale/scriptstrings/t.upgrade_to_translate.c:1
+msgid "Upgrades the version of the temporal database."
+msgstr ""
+
+#: ../locale/scriptstrings/r.semantic.label_to_translate.c:1
+msgid ""
+"Manages semantic label information assigned to a single raster map or to a "
+"list of raster maps."
+msgstr ""
+
+#: ../locale/scriptstrings/r.semantic.label_to_translate.c:4
+#: ../locale/scriptstrings/i.band.library_to_translate.c:4
+msgid "semantic label"
+msgstr ""
+
+#: ../locale/scriptstrings/r.semantic.label_to_translate.c:6
+msgid "Name of semantic label identifier (example: S2_1)"
+msgstr ""
+
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:11
+msgid "Set semantic labels"
+msgstr ""
+
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:12
+msgid ""
+"input;copy semantic labels from input to output;method;append method name to "
+"input label if existing, otherwise use method name"
+msgstr ""
+
+#: ../locale/scriptstrings/i.band.library_to_translate.c:1
+msgid ""
+"Prints available semantic label information used for multispectral data."
+msgstr ""
+
+#: ../locale/scriptstrings/i.band.library_to_translate.c:6
+msgid "Semantic label search pattern (examples: L, S2, .*_2, S2_1)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.spectral_to_translate.c:10
+msgid "Name for output image is valid for -g (or text file for -t flag)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.spectral_to_translate.c:12
+msgid "Graphics format for output file (valid for -g flag)"
+msgstr ""
+
+#: ../locale/scriptstrings/i.spectral_to_translate.c:14
+msgid ""
+"Show sampling coordinates instead of numbering in the legend (valid for -g "
+"flag)"
+msgstr ""
+
+#: ../locale/scriptstrings/t.remove_to_translate.c:12
+msgid "Remove stds and unregister maps from temporal database"
+msgstr ""
+
+#: ../locale/scriptstrings/t.remove_to_translate.c:14
+msgid ""
+"Remove stds, unregister maps from temporal database and delete them from "
+"mapset"
+msgstr ""
+
+#: ../locale/scriptstrings/r.in.wms_to_translate.c:32
+msgid "GDAL creation option(s) to pass to the output format driver"
+msgstr ""
+
+#: ../display/d.linegraph/main.c:304
+msgid "Minimum and maximun value for Y axis (min,max)"
+msgstr ""
+
+#: ../raster/r.surf.random/main.c:59
+#, c-format
+msgid "Option %s must be an integer, <%s> provided"
+msgstr ""
+
+#: ../raster/r.surf.random/main.c:124
+#, c-format
+msgid "Minimum %s should be higher than maximum %s, but %s > %s"
+msgstr ""
+
+#: ../raster/r.surf.random/main.c:135
+#, c-format
+msgid "Uniform random integer values in range [%s, %s]"
+msgstr ""
+
+#: ../raster/r.surf.random/main.c:140
+#, c-format
+msgid "Uniform random float values in range [%s, %s)"
+msgstr ""
+
+#: ../raster/r.external/link.c:56
+msgid ""
+"Statistics in metadata are sometimes approximations: min and max can be "
+"wrong!"
+msgstr ""
+
+#: ../raster/r.external/link.c:60
+msgid "Unable to get raster band statistics"
+msgstr ""
+
+#: ../raster/r.external/main.c:140
+msgid "Read data range from metadata"
+msgstr ""
+
+#: ../raster/r.external/main.c:141
+msgid "WARNING: metadata are sometimes approximations with wrong data range"
+msgstr ""
+
+#: ../raster/r.object.geometry/main.c:74
+msgid "Calculates geometry parameters for raster objects."
+msgstr ""
+
+#: ../raster/r.object.geometry/main.c:85
+msgid "Use meters as units instead of cells"
+msgstr ""
+
+#: ../raster/r.object.geometry/main.c:95
+msgid "Input raster must be of type CELL"
+msgstr ""
+
+#: ../raster/r.object.geometry/main.c:125
+#, c-format
+msgid "Empty input map <%s>"
+msgstr ""
+
+#: ../raster/r.object.geometry/main.c:159
+msgid "Calculating statistics"
+msgstr ""
+
+#: ../raster/r.object.geometry/main.c:300
+msgid "Writing output"
+msgstr ""
+
+#: ../raster/r.quantile/main.c:387
+#, c-format
+msgid "Reducing number of bins from %d to %d"
+msgstr ""
+
+#: ../raster/r.buildvrt/main.c:223
+msgid "All input maps only contain NULL, cannot continue"
+msgstr ""
+
+#: ../raster/r.buildvrt/main.c:266
+msgid "Input ew resolutions are different"
+msgstr ""
+
+#: ../raster/r.grow.distance/main.c:180
+msgid "Minimum distance threshold"
+msgstr ""
+
+#: ../raster/r.grow.distance/main.c:186
+msgid "Maximum distance threshold"
+msgstr ""
+
+#: ../raster/r.grow.distance/main.c:207 ../raster/r.grow.distance/main.c:217
+#, c-format
+msgid "Invalid %s value '%s', ignoring."
+msgstr ""
+
+#. GTC error because given minimum_distance is not smaller than
+#. * given maximum_distance
+#: ../raster/r.grow.distance/main.c:227
+#, c-format
+msgid "'%s' must be smaller than '%s'."
+msgstr ""
+
+#: ../raster/r.random.cells/init.c:77
+msgid "Distance must be > 0.0"
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:234
+msgid "No weighting"
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:235
+msgid "Gaussian weighting function"
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:236
+msgid "Exponential weighting function"
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:237
+msgid "File with a custom weighting matrix"
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:238
+msgid "Weighting function"
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:246
+msgid ""
+"Factor used in the selected weighting function (ignored for none and file)"
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:293
+msgid "File with weighting matrix is missing."
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:299
+#, c-format
+msgid "Weighting function '%s' requires a %s."
+msgstr ""
+
+#: ../raster/r.neighbors/main.c:340
+#, c-format
+msgid "Computing %s weights..."
+msgstr ""
+
+#: ../raster/r.li/r.li.daemon/daemon.c:115
+#, c-format
+msgid "Filepath '%s%s' exceeds max length"
+msgstr ""
+
+#: ../raster/r.li/r.li.daemon/daemon.c:122
+#, c-format
+msgid "Filepath '%s%s%c%s' exceeds max length"
+msgstr ""
+
+#: ../raster/r.li/r.li.daemon/daemon.c:125
+#, c-format
+msgid "Cannot create %s output"
+msgstr ""
+
+#: ../raster/r.geomorphon/memory.c:58
+#, c-format
+msgid ""
+"Region resolution shoudn't be lesser than map %s resolution. Run g.region "
+"raster=%s to set proper resolution"
+msgstr ""
+
+#: ../raster/r.support/main.c:123 ../raster/r.support/main.c:129
+#: ../raster/r.support/main.c:135
+msgid "Import / Export"
+msgstr ""
+
+#: ../raster/r.support/main.c:143 ../raster/r.support/main.c:149
+msgid "Semantic label"
+msgstr ""
+
+#: ../raster/r.support/main.c:145
+msgid "Semantic label e.g. S2_8A"
+msgstr ""
+
+#: ../raster/r.support/main.c:150
+msgid "Delete the semantic label"
+msgstr ""
+
+#: ../raster/r.support/main.c:178
+msgid ""
+"Semantic label removal and setting semantic label values simultaneously "
+"doesn't make sense"
+msgstr ""
+
+#: ../raster/r.support/main.c:289
+msgid ""
+"Provided semantic label is not valid. See documentation for valid examples"
+msgstr ""
+
+#: ../raster/r.random/main.c:63
+msgid "Creates randomly placed raster cells or vector points"
+msgstr ""
+
+#: ../raster/r.random/main.c:65
+msgid ""
+"Creates a raster map and vector point map containing randomly located cells "
+"and points."
+msgstr ""
+
+#: ../raster/r.random/main.c:83
+msgid "The number of points (or cells) to generate"
+msgstr ""
+
+#: ../raster/r.random/main.c:85
+msgid ""
+"The number of vector points or raster cells to generate, possibly as a "
+"percentage of number of cells"
+msgstr ""
+
+#: ../raster/r.random/main.c:113
+msgid "Generate points also for NULL cells"
+msgstr ""
+
+#: ../raster/r.random/main.c:119
+msgid "Input raster values will be used for Z coordinates"
+msgstr ""
+
+#: ../raster/r.random/main.c:123
+msgid "Do not build topology for vector points"
+msgstr ""
+
+#: ../raster/r.in.pdal/filters.c:68
+#, c-format
+msgid "Invalid range <%s> for option <%s>"
+msgstr ""
+
+#: ../vector/v.db.select/main.c:46
+#, c-format
+msgid "The flag -%c is not allowed with %s=%s. %s"
+msgstr ""
+
+#: ../vector/v.db.select/main.c:56
+#, c-format
+msgid "The option %s is not allowed with %s=%s. %s"
+msgstr ""
+
+#: ../vector/v.db.select/main.c:208
+msgid "Escaping is based on the format"
+msgstr ""
+
+#: ../vector/v.db.select/main.c:210
+msgid "Column names are always included"
+msgstr ""
+
+#: ../vector/v.db.select/main.c:212
+msgid "Separator is part of the format"
+msgstr ""
+
+#: ../vector/v.db.select/main.c:214
+msgid "Null value is part of the format"
+msgstr ""
+
+#: ../vector/v.db.select/main.c:218
+msgid "Only vertical output can use vertical separator"
+msgstr ""
+
+#: ../vector/v.patch/main.c:221
+#, c-format
+msgid "Missing attribute table for vector map <%s>"
+msgstr "Tabela de atributos ausente para mapa vetorial <%s>"
+
+#: ../vector/v.out.ogr/main.c:667
+#, c-format
+msgid ""
+"Vector map <%s> is 3D. Use format specific layer creation options SHPT "
+"(parameter 'lco') to export in 3D rather than 2D (default)"
+msgstr ""
+
+#: ../vector/v.profile/main.c:683
+#, c-format
+msgid "Unabale to get attribute data for cat %d"
+msgstr "Não foi possível obter dados de atributo para categoria %d"
+
+#: ../vector/v.profile/main.c:692
+#, c-format
+msgid "Error while retreiving database record for cat %d"
+msgstr "Erro ao recuperar o registro do banco de dados para categoria %d"
+
+#: ../vector/v.generalize/main.c:209
+msgid "Betweeness threshold in network generalization"
+msgstr ""
+
+#: ../vector/v.what/what.c:533
+#, c-format
+msgid ""
+"Id: %d\n"
+"Angle: %.8f\n"
+msgstr ""
+
+#: ../scripts/i.spectral/i.spectral.py:199
+msgid "Supported monitor isn't running. Please launch one of the monitors {}."
+msgstr ""
+
+#: ../scripts/i.spectral/i.spectral.py:209
+msgid "Supported monitor isn't selected. Please select one of the monitors {}."
+msgstr ""
+
+#: ../scripts/i.spectral/i.spectral.py:218
+msgid "{} monitor is used, output file {}"
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:105
+msgid "Location named <{}> already exists, download canceled"
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:108
+msgid "Downloading and extracting..."
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:112
+msgid "Archive contains only one file and no mapset directories"
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:115
+#, python-brace-format
+msgid "Unable to get the location: {error}"
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:117
+msgid "Searching for valid location..."
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:129
+#, python-brace-format
+msgid "Location found in a nested directory '{directory}'"
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:140
+#, python-brace-format
+msgid ""
+"The dowloaded file is not a valid GRASS Location. The extracted file "
+"contains these files and directories:\n"
+"{files_and_dirs}"
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:145
+msgid "Copying to final destination..."
+msgstr ""
+
+#: ../scripts/g.download.location/g.download.location.py:147
+#, python-brace-format
+msgid "Path to the location now <{path}>"
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:127
+#, python-brace-format
+msgid ""
+"Wrong file format downloaded. Check url <{url}>. Allowed file format is "
+"{response_format}."
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:141
+#, python-brace-format
+msgid ""
+"The download of the modules.xml file from the server was not successful. "
+"File on the server <{url}> doesn't exists."
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:182
+msgid "Unable to get GRASS GIS version."
+msgstr ""
+
+#: ../scripts/g.extension.all/g.extension.all.py:204
+msgid ""
+"The <{}> addon cannot be reinstalled. Addon wasn't found among the official "
+"addons."
+msgstr ""
+
+#: ../scripts/r.semantic.label/r.semantic.label.py:64
+msgid "No semantic label assigned to <{}>"
+msgstr ""
+
+#: ../scripts/r.semantic.label/r.semantic.label.py:83
+msgid "Semantic label <{}> assigned to raster map <{}>"
+msgstr ""
+
+#: ../scripts/r.semantic.label/r.semantic.label.py:90
+msgid "Semantic label dissociated from raster map <{}>"
+msgstr ""
+
+#: ../scripts/r.semantic.label/r.semantic.label.py:95
+msgid "Unable to assign/dissociate semantic label. {}"
+msgstr ""
+
+#: ../scripts/r.semantic.label/r.semantic.label.py:115
+msgid "Number of maps differs from number of semantic labels"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:213
+msgid "Converting image chanels to 8bit for processing"
+msgstr ""
+
+#: ../scripts/i.pansharpen/i.pansharpen.py:299
+msgid "Rescaling image chanels to 8bit for processing"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:292
+msgid "Cannot retrieve organization and repository from URL: <{}>."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:396
+#, python-brace-format
+msgid ""
+"Download file from <{url}>, failed. File is not on the server or check your "
+"internet connection."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1366
+#, python-brace-format
+msgid "No metadata available for module '{name}': {error}"
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1435
+msgid "Downloading precompiled GRASS Addons <{}>..."
+msgstr ""

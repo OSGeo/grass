@@ -573,9 +573,9 @@ msgstr ""
 msgid "path to mapset (or location if creating one)"
 msgstr ""
 
-#: ../lib/init/grass.py:2111
+#: ../lib/init/grass.py:2272
 msgid "use temporary mapset"
-msgstr ""
+msgstr "usar mapset temporário"
 
 #: ../lib/init/grass.py:2118
 #, python-format
@@ -822,8 +822,8 @@ msgstr "Ignorando %d pontos (muito denso)"
 #: ../lib/rst/interp_float/vinput2d.c:277
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given "
-"NPMIN=%d"
+"%d points given for interpolation (after thinning) is less than given NPMIN="
+"%d"
 msgstr ""
 "%d pontos dados para a interpolação (após afinamento) é menor que o NPMIN=%d "
 "definido."
@@ -4564,7 +4564,7 @@ msgstr "Solicitação para encontrar área fora da ilha inexistente"
 
 #: ../lib/vector/Vlib/build.c:352
 msgid "Larger bbox but smaller area!!!"
-msgstr ""
+msgstr "bbox maior que a área!!!"
 
 #: ../lib/vector/Vlib/build.c:607
 msgid "Checking for topological errors..."
@@ -5553,8 +5553,8 @@ msgstr "Esquema de topologia não encontrado."
 #, c-format
 msgid "Unable to open feature index file for vector map <%s>"
 msgstr ""
-"Não foi possível abrir o arquivo de índice de feição para o mapa vetorial "
-"<%s>"
+"Não foi possível abrir o arquivo de índice de feição para o mapa vetorial <"
+"%s>"
 
 #: ../lib/vector/Vlib/open_pg.c:273
 #, c-format
@@ -5981,8 +5981,8 @@ msgstr "Não foi possível abrir arquivo de topologia para o mapa vetorial <%s>"
 #, c-format
 msgid "Unable to open category index file for vector map <%s>"
 msgstr ""
-"Não foi possível abrir arquivo de índice de categoria para o mapa vetorial "
-"<%s>"
+"Não foi possível abrir arquivo de índice de categoria para o mapa vetorial <"
+"%s>"
 
 #: ../lib/vector/Vlib/open.c:419
 #, c-format
@@ -6130,8 +6130,8 @@ msgstr "Misturando IDs de áreas e primitivas"
 #, c-format
 msgid "Unable to create category index file for vector map <%s>"
 msgstr ""
-"Não foi possível criar arquivo de índice de categoria para o mapa vetorial "
-"<%s>"
+"Não foi possível criar arquivo de índice de categoria para o mapa vetorial <"
+"%s>"
 
 #: ../lib/vector/Vlib/cindex.c:500
 msgid "Error writing out category index file"
@@ -6264,8 +6264,8 @@ msgstr "As informações de topologia não estão disponíveis para a feição %
 #, c-format
 msgid "Unable to save feature index file for vector map <%s>"
 msgstr ""
-"Não foi possível salvar o arquivo de índice de feição para o mapa vetorial "
-"<%s>"
+"Não foi possível salvar o arquivo de índice de feição para o mapa vetorial <"
+"%s>"
 
 #: ../lib/vector/Vlib/read_pg.c:272 ../lib/vector/Vlib/read_pg.c:471
 #, c-format
@@ -6713,8 +6713,8 @@ msgstr "Não é possível adicionar arco de rede para conexão de nó virtual."
 #: ../lib/vector/Vlib/net_build.c:364
 #, c-format
 msgid ""
-"There exists more than one point of node <%d> with unique category field  "
-"<%d>.\n"
+"There exists more than one point of node <%d> with unique category field  <"
+"%d>.\n"
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
@@ -6746,8 +6746,8 @@ msgid ""
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
-"Não foi possível encontrar o nó para o ponto que representa a interseção "
-"<%d> no campo de categorias exclusivas <%d>.\n"
+"Não foi possível encontrar o nó para o ponto que representa a interseção <"
+"%d> no campo de categorias exclusivas <%d>.\n"
 "O custo da interseção foi definido como 0.\n"
 "A camada de categorias exclusivas não é válida, portanto, você provavelmente "
 "obterá resultados incorretos."
@@ -6777,8 +6777,8 @@ msgid ""
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
-"A linha com id <%d> possui mais categorias exclusivas definidas no campo "
-"<%d>.\n"
+"A linha com id <%d> possui mais categorias exclusivas definidas no campo <"
+"%d>.\n"
 "A camada de categorias exclusivas não é válida, portanto, você provavelmente "
 "obterá resultados incorretos."
 
@@ -7704,16 +7704,16 @@ msgid ""
 "End time must be greater than start time for %(type)s map <%(id)s> with "
 "layer: %(l)s"
 msgstr ""
-"A hora de término deve ser maior do que a hora de início para mapa "
-"%(type)s<%(id)s> com camada: %(l)s"
+"A hora de término deve ser maior do que a hora de início para mapa %(type)s<"
+"%(id)s> com camada: %(l)s"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:389
 #: ../lib/python/temporal/abstract_map_dataset.py:482
 #, python-format
 msgid "End time must be greater than start time for %(type)s map <%(id)s>"
 msgstr ""
-"A hora de término deve ser maior do que a hora de início para mapa "
-"%(type)s<%(id)s> "
+"A hora de término deve ser maior do que a hora de início para mapa %(type)s<"
+"%(id)s> "
 
 #: ../lib/python/temporal/abstract_map_dataset.py:424
 #: ../lib/python/temporal/abstract_map_dataset.py:520
@@ -7751,8 +7751,8 @@ msgid ""
 "End time must be greater than start time for %(typ)s map <%(id)s> with layer "
 "%(l)s"
 msgstr ""
-"A hora de término deve ser maior do que a hora de início para mapa "
-"%(typ)s<%(id)s> com camada %(l)s"
+"A hora de término deve ser maior do que a hora de início para mapa %(typ)s<"
+"%(id)s> com camada %(l)s"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:800
 #, python-format
@@ -7979,8 +7979,8 @@ msgstr "%(u)s= deve ser definido caso existam time stamps relativas"
 #: ../lib/python/temporal/register.py:268
 #, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s> with layer %(l)s. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s> with layer %(l)s. Overwrite flag is not set."
 msgstr ""
 "O mapa já está registrado no banco de dados temporal. Não foi possível "
 "atualizar o mapa %(t)s <%(id)s> com camada %(l)s. A flag de substituição não "
@@ -7989,8 +7989,8 @@ msgstr ""
 #: ../lib/python/temporal/register.py:275
 #, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s>. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s>. Overwrite flag is not set."
 msgstr ""
 "O mapa já está registrado no banco de dados temporal. Não foi possível "
 "atualizar o mapa %(t)s <%(id)s>. A flag de substituição não está definida."
@@ -8207,8 +8207,8 @@ msgstr ""
 #, python-format
 msgid "Set temporal unit for space time %s dataset <%s> to %s"
 msgstr ""
-"Defina a unidade temporal do conjunto de dados <%s> de tempo espacial %s "
-"para%s"
+"Defina a unidade temporal do conjunto de dados <%s> de tempo espacial %s para"
+"%s"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2230
 #, python-format
@@ -8256,8 +8256,8 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2312
 #, python-format
 msgid ""
-"Map <%(map)s> with layer %(l)s is not registered in space time dataset "
-"<%(base)s>"
+"Map <%(map)s> with layer %(l)s is not registered in space time dataset <"
+"%(base)s>"
 msgstr ""
 "Mapa <%(map)s> com camada %(l)snão está registrado no conjunto de dados "
 "espaço-tempo <%(base)s>"
@@ -8266,8 +8266,8 @@ msgstr ""
 #, python-format
 msgid "Map <%(map)s> is not registered in space time dataset <%(base)s>"
 msgstr ""
-"Mapa <%(map)s> não está registrado no conjunto de dados espaço-tempo "
-"<%(base)s>"
+"Mapa <%(map)s> não está registrado no conjunto de dados espaço-tempo <"
+"%(base)s>"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2379
 #, python-format
@@ -8416,11 +8416,11 @@ msgstr "Conjunto de dados de espaço tempo %s<%s> não encontrado"
 #: ../lib/python/temporal/temporal_algebra.py:1214
 #, python-format
 msgid ""
-"Wrong temporal type of space time dataset "
-"<%s>                                       <%s> time is required"
+"Wrong temporal type of space time dataset <"
+"%s>                                       <%s> time is required"
 msgstr ""
-"Tipo incorreto de conjunto de dados de espaço-tempo "
-"<%s>                                        <%s> tempo é necessário"
+"Tipo incorreto de conjunto de dados de espaço-tempo <"
+"%s>                                        <%s> tempo é necessário"
 
 #: ../lib/python/temporal/temporal_algebra.py:1234
 msgid "Wrong type of input "
@@ -9455,8 +9455,8 @@ msgstr "Não foi possível escrever o histórico para o mapa raster 3D <%s>"
 #, c-format
 msgid "Unable to move temp raster map <%s> to 3D raster map <%s>"
 msgstr ""
-"Não foi possível mover o mapa raster temporário <%s> para o mapa raster 3D "
-"<%s>"
+"Não foi possível mover o mapa raster temporário <%s> para o mapa raster 3D <"
+"%s>"
 
 #: ../lib/raster3d/close.c:79
 msgid "Unable to flush all tiles"
@@ -9468,7 +9468,7 @@ msgstr "Não foi possível limpar o índice"
 
 #: ../lib/raster3d/close.c:94
 msgid "Unable to position file"
-msgstr ""
+msgstr "Não foi possível posicionar o arquivo"
 
 #: ../lib/raster3d/close.c:110 ../lib/raster3d/close.c:153
 #, c-format
@@ -9619,8 +9619,8 @@ msgstr "Carregando mapa raster <%s>..."
 #, c-format
 msgid "Color table range doesn't match data (mincol=%d, maxcol=%d"
 msgstr ""
-"O intervalo da tabela de cores não corresponde aos dados (mincol=%d, "
-"maxcol=%d"
+"O intervalo da tabela de cores não corresponde aos dados (mincol=%d, maxcol="
+"%d"
 
 #: ../lib/ogsf/gs3.c:658 ../lib/ogsf/gs3.c:730
 #, c-format
@@ -10209,8 +10209,8 @@ msgstr "Suporte de cor para <%s@%s> %s"
 #: ../lib/raster/open.c:192
 #, c-format
 msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map "
-"<%s@%s> which does not exist"
+"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
+"%s> which does not exist"
 msgstr ""
 "Não foi possível abrir o mapa raster <%s@%s> uma vez que é uma "
 "reclassificaçãao do mapa raster <%s@%s> que não existe"
@@ -10241,8 +10241,8 @@ msgid ""
 "Raster map <%s> is in different projection than current region. Found <%s>, "
 "should be <%s>."
 msgstr ""
-"Mapa raster <%s> está em uma projeção diferente da região atual. Encontrado "
-"<%s>, deveria ser <%s>."
+"Mapa raster <%s> está em uma projeção diferente da região atual. Encontrado <"
+"%s>, deveria ser <%s>."
 
 #: ../lib/raster/open.c:246
 #, c-format
@@ -10783,7 +10783,7 @@ msgstr ""
 #: ../lib/proj/do_proj.c:546
 #, c-format
 msgid "Output CRS not available for '%s'"
-msgstr ""
+msgstr "CRS de saída não disponível para '%s'"
 
 #: ../lib/proj/do_proj.c:573
 #, c-format
@@ -11247,3 +11247,125 @@ msgstr ""
 "Para executar o módulo <%s>, adicione underscore no final da opção <%s> para "
 "evitar conflito com palavras-chave Python. O underscore no início é obsoleto "
 "no GRASS GIS 7.0 e será removido na versão 7.1."
+
+#: ../lib/init/grass.py:516
+#, python-brace-format
+msgid "Unable to create temporary directory <{tmpdir_name}>! Exiting."
+msgstr ""
+
+#: ../lib/init/grass.py:2573
+msgid ""
+"Failed to start GRASS GIS, grassdata directory cannot be found or created."
+msgstr ""
+
+#: ../lib/init/grass.py:2580
+msgid ""
+"Failed to start GRASS GIS, no default location to copy in the installation "
+"or copying failed."
+msgstr ""
+
+#: ../lib/manage/do_rename.c:99 ../lib/manage/do_remove.c:101
+#: ../lib/manage/do_copy.c:83
+msgid "String for secondary color table has been truncated"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:496
+#, c-format
+msgid "Filepath '%s/%s' exceeds max length"
+msgstr ""
+
+#: ../lib/raster/put_row.c:391 ../lib/raster/put_row.c:397
+#, c-format
+msgid "Error writing compressed data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:407
+#, c-format
+msgid "Error writing uncompressed data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:521 ../lib/raster/put_row.c:526
+#, c-format
+msgid "Error writing compressed null data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:564
+#, c-format
+msgid "Error writing null row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/raster_metadata.c:158
+msgid "Semantic label is too long"
+msgstr ""
+
+#: ../lib/raster/raster_metadata.c:169
+#, c-format
+msgid "Character '%c' not allowed in a semantic label."
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:181
+#, c-format
+msgid "%s or <%s>"
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:181
+#, c-format
+msgid "%s and <%s>"
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:275
+#, c-format
+msgid "Option <%s> requires %s"
+msgstr ""
+
+#: ../lib/gis/parser.c:1273
+#, c-format
+msgid "Invalid value <%s> for parameter <%s>"
+msgstr "Valor inválido <%s> para o parâmetro <%s>"
+
+#: ../lib/gis/parser.c:1817
+#, c-format
+msgid "Unable to open %s file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/parser.c:1823
+#, c-format
+msgid "Unable to create %s file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:771
+msgid "Number of threads for parallel computing"
+msgstr "Número de threads para computação paralela"
+
+#: ../lib/imagery/manage_signatures.c:83 ../lib/imagery/manage_signatures.c:128
+#: ../lib/imagery/manage_signatures.c:184
+#: ../lib/imagery/manage_signatures.c:193
+#, c-format
+msgid "%s is not in the current mapset (%s)"
+msgstr ""
+
+#: ../lib/imagery/manage_signatures.c:93
+#, c-format
+msgid "Unable to remove %s signature"
+msgstr ""
+
+#: ../lib/imagery/manage_signatures.c:214
+#, c-format
+msgid "Unable to rename <%s> to <%s>"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:150 ../lib/imagery/sig.c:151
+msgid "Invalid signature file"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:154 ../lib/imagery/sig.c:156
+msgid "Invalid signature file version"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:220 ../lib/imagery/sig.c:194
+msgid "Invalid signature file: semantic label length limit exceeded"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:228 ../lib/imagery/sig.c:203
+msgid "Signature file does not contain bands"
+msgstr ""

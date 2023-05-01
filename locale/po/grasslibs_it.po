@@ -762,8 +762,8 @@ msgstr "Ignorati %d punti (densità eccessiva)"
 #: ../lib/rst/interp_float/vinput2d.c:277
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given "
-"NPMIN=%d"
+"%d points given for interpolation (after thinning) is less than given NPMIN="
+"%d"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:282
@@ -3132,8 +3132,8 @@ msgid ""
 "Unable to create signature file <%s> for subgroup <%s> of group <%s> - <%s> "
 "is not current mapset"
 msgstr ""
-"Impossibile creare il file <%s> per il sottogruppo <%s> del gruppo <%s> - "
-"<%s> non è nel mapset attuale"
+"Impossibile creare il file <%s> per il sottogruppo <%s> del gruppo <%s> - <"
+"%s> non è nel mapset attuale"
 
 #: ../lib/imagery/sigsetfile.c:57
 #, c-format
@@ -6559,8 +6559,8 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:364
 #, c-format
 msgid ""
-"There exists more than one point of node <%d> with unique category field  "
-"<%d>.\n"
+"There exists more than one point of node <%d> with unique category field  <"
+"%d>.\n"
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
@@ -7774,15 +7774,15 @@ msgstr "%(u)s= deve essere impostato nel caso di stampe di tempo relativo"
 #: ../lib/python/temporal/register.py:268
 #, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s> with layer %(l)s. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s> with layer %(l)s. Overwrite flag is not set."
 msgstr ""
 
 #: ../lib/python/temporal/register.py:275
 #, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s>. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s>. Overwrite flag is not set."
 msgstr ""
 
 #: ../lib/python/temporal/register.py:299
@@ -8013,8 +8013,8 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2312
 #, python-format
 msgid ""
-"Map <%(map)s> with layer %(l)s is not registered in space time dataset "
-"<%(base)s>"
+"Map <%(map)s> with layer %(l)s is not registered in space time dataset <"
+"%(base)s>"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2318
@@ -8160,8 +8160,8 @@ msgstr ""
 #: ../lib/python/temporal/temporal_algebra.py:1214
 #, python-format
 msgid ""
-"Wrong temporal type of space time dataset "
-"<%s>                                       <%s> time is required"
+"Wrong temporal type of space time dataset <"
+"%s>                                       <%s> time is required"
 msgstr ""
 "Tipo temporale del database spazio-temporale <%s> "
 "errato                                       <%s> richiesto"
@@ -8176,8 +8176,8 @@ msgid ""
 "The resulting space time dataset type <%(a)s> is different from the "
 "requested type <%(b)s>"
 msgstr ""
-"Il tipo di dataset spazio-temporale risultante <%(a)s> è diverso dal tipo "
-"<%(b)s> richiesto"
+"Il tipo di dataset spazio-temporale risultante <%(a)s> è diverso dal tipo <"
+"%(b)s> richiesto"
 
 #: ../lib/python/temporal/temporal_algebra.py:2219
 msgid ""
@@ -9136,8 +9136,8 @@ msgstr "Impossibile scrive la storia per la mappa raster 3D <%s>"
 #, c-format
 msgid "Unable to move temp raster map <%s> to 3D raster map <%s>"
 msgstr ""
-"Impossibile spostare la mappa raster temporanea <%s> nella mappa raster 3D "
-"<%s>"
+"Impossibile spostare la mappa raster temporanea <%s> nella mappa raster 3D <"
+"%s>"
 
 #: ../lib/raster3d/close.c:79
 msgid "Unable to flush all tiles"
@@ -9300,8 +9300,8 @@ msgstr "Caricando raster <%s>"
 #, c-format
 msgid "Color table range doesn't match data (mincol=%d, maxcol=%d"
 msgstr ""
-"Il range della tabella di colori non corrisponde ai dati (mincol=%d, "
-"maxcol=%d"
+"Il range della tabella di colori non corrisponde ai dati (mincol=%d, maxcol="
+"%d"
 
 #: ../lib/ogsf/gs3.c:658 ../lib/ogsf/gs3.c:730
 #, c-format
@@ -9887,8 +9887,8 @@ msgstr "Supporto colore per <%s@%s> %s"
 #: ../lib/raster/open.c:192
 #, c-format
 msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map "
-"<%s@%s> which does not exist"
+"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
+"%s> which does not exist"
 msgstr ""
 "impossibile aprire il raster <%s@%s> poiché è una riclassificazione di <%s@"
 "%s> che non esiste"
@@ -10078,8 +10078,8 @@ msgstr "L'intervallo dei dati interi per la mappa raster <%s> è vuoto"
 #, c-format
 msgid "Attempt to open quantization table for CELL raster map <%s>"
 msgstr ""
-"Tentativo di apertura della tabella di quantizzazione per la mappa raster "
-"<%s> di tipo CELL"
+"Tentativo di apertura della tabella di quantizzazione per la mappa raster <"
+"%s> di tipo CELL"
 
 #: ../lib/raster/quant_io.c:135
 #, c-format
@@ -11017,3 +11017,125 @@ msgstr ""
 "dell'opzione <%s> per evitare conflitti con le parole chiave di Python. Il "
 "trattino basso all'inizio è obsoleto in GRASS GIS 7.0 e sarà rimosso nella "
 "versione 7.1."
+
+#: ../lib/init/grass.py:516
+#, python-brace-format
+msgid "Unable to create temporary directory <{tmpdir_name}>! Exiting."
+msgstr ""
+
+#: ../lib/init/grass.py:2573
+msgid ""
+"Failed to start GRASS GIS, grassdata directory cannot be found or created."
+msgstr ""
+
+#: ../lib/init/grass.py:2580
+msgid ""
+"Failed to start GRASS GIS, no default location to copy in the installation "
+"or copying failed."
+msgstr ""
+
+#: ../lib/manage/do_rename.c:99 ../lib/manage/do_remove.c:101
+#: ../lib/manage/do_copy.c:83
+msgid "String for secondary color table has been truncated"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:496
+#, c-format
+msgid "Filepath '%s/%s' exceeds max length"
+msgstr ""
+
+#: ../lib/raster/put_row.c:391 ../lib/raster/put_row.c:397
+#, c-format
+msgid "Error writing compressed data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:407
+#, c-format
+msgid "Error writing uncompressed data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:521 ../lib/raster/put_row.c:526
+#, c-format
+msgid "Error writing compressed null data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:564
+#, c-format
+msgid "Error writing null row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/raster_metadata.c:158
+msgid "Semantic label is too long"
+msgstr ""
+
+#: ../lib/raster/raster_metadata.c:169
+#, c-format
+msgid "Character '%c' not allowed in a semantic label."
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:181
+#, c-format
+msgid "%s or <%s>"
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:181
+#, c-format
+msgid "%s and <%s>"
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:275
+#, c-format
+msgid "Option <%s> requires %s"
+msgstr ""
+
+#: ../lib/gis/parser.c:1273
+#, c-format
+msgid "Invalid value <%s> for parameter <%s>"
+msgstr ""
+
+#: ../lib/gis/parser.c:1817
+#, c-format
+msgid "Unable to open %s file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/parser.c:1823
+#, c-format
+msgid "Unable to create %s file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:771
+msgid "Number of threads for parallel computing"
+msgstr ""
+
+#: ../lib/imagery/manage_signatures.c:83 ../lib/imagery/manage_signatures.c:128
+#: ../lib/imagery/manage_signatures.c:184
+#: ../lib/imagery/manage_signatures.c:193
+#, c-format
+msgid "%s is not in the current mapset (%s)"
+msgstr ""
+
+#: ../lib/imagery/manage_signatures.c:93
+#, c-format
+msgid "Unable to remove %s signature"
+msgstr ""
+
+#: ../lib/imagery/manage_signatures.c:214
+#, c-format
+msgid "Unable to rename <%s> to <%s>"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:150 ../lib/imagery/sig.c:151
+msgid "Invalid signature file"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:154 ../lib/imagery/sig.c:156
+msgid "Invalid signature file version"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:220 ../lib/imagery/sig.c:194
+msgid "Invalid signature file: semantic label length limit exceeded"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:228 ../lib/imagery/sig.c:203
+msgid "Signature file does not contain bands"
+msgstr ""

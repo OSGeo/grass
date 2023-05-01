@@ -36811,8 +36811,8 @@ msgstr "Ime izhodnega vektorskega sloja"
 #: ../vector/v.external.out/link.c:26 ../vector/v.out.ogr/main.c:104
 #, c-format
 msgid ""
-"Data source starts with \"PG:\" prefix, expecting \"PostgreSQL\" format "
-"(\"%s\" given)"
+"Data source starts with \"PG:\" prefix, expecting \"PostgreSQL\" format (\"%s"
+"\" given)"
 msgstr ""
 
 #: ../vector/v.external.out/link.c:88 ../vector/v.external.out/status.c:158
@@ -43507,8 +43507,8 @@ msgstr ""
 #: ../vector/v.vol.rst/user1.c:321
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given "
-"NPMIN=%d"
+"%d points given for interpolation (after thinning) is less than given NPMIN="
+"%d"
 msgstr ""
 
 #: ../vector/v.vol.rst/user1.c:341
@@ -46920,8 +46920,8 @@ msgstr "Izpiši podprte formate in končaj"
 #: ../general/g.findfile/main.c:97
 #, c-format
 msgid ""
-"Parameter 'file' contains reference to <%s> mapset, but mapset parameter "
-"<%s> does not correspond"
+"Parameter 'file' contains reference to <%s> mapset, but mapset parameter <"
+"%s> does not correspond"
 msgstr ""
 
 #: ../general/g.findfile/element.c:7
@@ -60917,8 +60917,8 @@ msgstr "Anizotropni kot (v stopinjah)"
 #: ../raster/r.slope.aspect/main.c:369
 #, c-format
 msgid ""
-"You must specify at least one of the parameters: <%s>, <%s>, <%s>, <%s>, "
-"<%s>, <%s>, <%s>, <%s> or <%s>"
+"You must specify at least one of the parameters: <%s>, <%s>, <%s>, <%s>, <"
+"%s>, <%s>, <%s>, <%s> or <%s>"
 msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:396
@@ -63859,8 +63859,8 @@ msgstr "ne morem odpreti razpona za datoteko %s"
 #: ../scripts/v.dissolve/v.dissolve.py:68
 #, python-format
 msgid ""
-"No '%s' option specified. Dissolving based on category values from layer "
-"<%s>."
+"No '%s' option specified. Dissolving based on category values from layer <"
+"%s>."
 msgstr ""
 
 #: ../scripts/v.dissolve/v.dissolve.py:74
@@ -64867,8 +64867,8 @@ msgstr "neveljavna regija: %s"
 #: ../scripts/r.in.wms/wms_base.py:110
 #, python-format
 msgid ""
-"WMS version <1.3.0> will be used, because version <1.1.1> does not support "
-"<%s>projection"
+"WMS version <1.3.0> will be used, because version <1.1.1> does not support <"
+"%s>projection"
 msgstr ""
 
 #: ../scripts/r.in.wms/wms_base.py:130
