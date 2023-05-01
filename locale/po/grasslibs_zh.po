@@ -767,8 +767,7 @@ msgstr ""
 msgid ""
 "There are less than %d points for interpolation. No segmentation is "
 "necessary, to run the program faster set segmax=%d (see manual)"
-msgstr ""
-"用于内插的点少于 %d 个。如果不需要分段，为了让程序运行更快，请设置 segmax=%d "
+msgstr "用于内插的点少于 %d 个。如果不需要分段，为了让程序运行更快，请设置 segmax=%d "
 "(参阅手册)"
 
 #: ../lib/rst/interp_float/vinput2d.c:297

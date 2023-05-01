@@ -974,14 +974,14 @@ msgstr ""
 #: ../lib/gis/parser.c:537
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
 msgstr ""
-"Verwenden Sie entweder --quiet oder --verbose, aber nicht beide. Verwende --"
-"verbose."
+"Verwenden Sie entweder --quiet oder --verbose, aber nicht beide. Verwende "
+"--verbose."
 
 #: ../lib/gis/parser.c:551
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
 msgstr ""
-"Verwenden Sie entweder --quiet oder --verbose, aber nicht beide. Verwende --"
-"quiet."
+"Verwenden Sie entweder --quiet oder --verbose, aber nicht beide. Verwende "
+"--quiet."
 
 #: ../lib/gis/parser.c:566
 msgid "Use either --qq or --verbose flag, not both. Assuming --qq."
@@ -4081,8 +4081,7 @@ msgstr "Versuche tote Fläche zu löschen."
 #: ../lib/vector/diglib/plus_area.c:410
 #, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
-msgstr ""
-"Toter Zentroid %d für Fläche registriert (Bug in der Vektorbibliothek)."
+msgstr "Toter Zentroid %d für Fläche registriert (Bug in der Vektorbibliothek)."
 
 #: ../lib/vector/diglib/plus_area.c:433
 #, c-format
@@ -4481,8 +4480,7 @@ msgstr ""
 
 #: ../lib/vector/Vlib/build.c:140
 msgid "Unable to add isle (map closed, topo saved)"
-msgstr ""
-"Kann Insel nicht hinzufügen (Karte geschlossen, Topologie gespeichert)."
+msgstr "Kann Insel nicht hinzufügen (Karte geschlossen, Topologie gespeichert)."
 
 #: ../lib/vector/Vlib/build.c:150
 msgid "Area of size = 0.0 ignored"
@@ -5719,8 +5717,8 @@ msgid ""
 "Your GRASS version does not fully support feature index format %d.%d of the "
 "vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
-"Ihre GRASS Version unterstützt nicht vollständig das Objekt-Indexformat %d."
-"%d der Vektoren. Versuchen Sie die Topologie zu erneuern oder GRASS zu "
+"Ihre GRASS Version unterstützt nicht vollständig das Objekt-Indexformat "
+"%d.%d der Vektoren. Versuchen Sie die Topologie zu erneuern oder GRASS zu "
 "aktualisieren."
 
 #: ../lib/vector/Vlib/read.c:25 ../lib/vector/Vlib/write.c:30
@@ -6682,8 +6680,8 @@ msgid ""
 "Database record for line %d (cat = %d, backword direction) not "
 "found(direction of line skipped)"
 msgstr ""
-"Datenbankeintrag für Linie %d (cat = %d, rückwärts Richtung) nicht gefunden "
-"(Richtung der Linie übersprungen)."
+"Datenbankeintrag für Linie %d (cat = %d, rückwärts Richtung) nicht gefunden ("
+"Richtung der Linie übersprungen)."
 
 #: ../lib/vector/Vlib/net_build.c:937
 msgid "Cannot add network arc"

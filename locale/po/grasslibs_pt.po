@@ -3132,8 +3132,8 @@ msgstr "Não foi possível abrir o ficheiro [%s] do grupo [%s em %s]"
 #, c-format
 msgid "Unable to find file [%s] for subgroup [%s] of group [%s in %s]"
 msgstr ""
-"Não foi possível encontrar o ficheiro [%s] para o subgrupo [%s] do o grupo "
-"[%s em %s]"
+"Não foi possível encontrar o ficheiro [%s] para o subgrupo [%s] do o grupo ["
+"%s em %s]"
 
 #: ../lib/imagery/fopen.c:63 ../lib/imagery/fopen.c:164
 #, c-format
@@ -9166,8 +9166,8 @@ msgstr "A carregar o mapa raster <%s>..."
 #, c-format
 msgid "Color table range doesn't match data (mincol=%d, maxcol=%d"
 msgstr ""
-"O intervalo de valores da tabela de cor não corresponde aos dados (mincol="
-"%d, maxcol=%d"
+"O intervalo de valores da tabela de cor não corresponde aos dados ("
+"mincol=%d, maxcol=%d"
 
 #: ../lib/ogsf/gs3.c:658 ../lib/ogsf/gs3.c:730
 #, c-format
@@ -9212,7 +9212,7 @@ msgstr ""
 #: ../lib/ogsf/gsd_prim.c:642
 #, c-format
 msgid ""
-"gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please "
+"gsd_rot(): %c is an inconflictsvalid axis specification. Rotation ignored. Please "
 "advise GRASS developers of this error"
 msgstr ""
 "gsd_rot(): %c é uma especificação inválida de eixo. Rotação ignorada. Por "
@@ -9629,8 +9629,7 @@ msgstr "impossível escrever ficheiro f_format para mapas CELL"
 #: ../lib/raster/put_title.c:28
 #, c-format
 msgid "category information for [%s] in [%s] missing or invalid"
-msgstr ""
-"a informação da categoria para [%s] em [%s] está em falta ou é inválida"
+msgstr "a informação da categoria para [%s] em [%s] está em falta ou é inválida"
 
 #: ../lib/raster/put_title.c:37
 msgid "G_put_title - can't create a temp file"
@@ -9648,8 +9647,7 @@ msgstr "G_put_title - não foi possível reabrir o ficheiro temporário"
 #: ../lib/raster/put_title.c:67
 #, c-format
 msgid "can't write category information for [%s] in [%s]"
-msgstr ""
-"não foi possível escrever as informações da categoria para [%s] em [%s]"
+msgstr "não foi possível escrever as informações da categoria para [%s] em [%s]"
 
 #: ../lib/raster/get_cellhd.c:65
 msgid ""
@@ -10619,8 +10617,8 @@ msgid ""
 "Dev note: Adapted sites library used for vector points. (module should be "
 "updated to GRASS 6 vector library)"
 msgstr ""
-"Nota do Dev: Bibliotecas locais adaptadas usadas para os pontos vectoriais. "
-"(o módulo deverá ser atualizado para a biblioteca vectorial GRASS 6)"
+"Nota do Dev: Bibliotecas locais adaptadas usadas para os pontos vectoriais. ("
+"o módulo deverá ser atualizado para a biblioteca vectorial GRASS 6)"
 
 msgid "Cannot fetch row"
 msgstr "Não foi possível obter linha"

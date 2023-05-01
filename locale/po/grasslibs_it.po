@@ -752,8 +752,7 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:270
 #, c-format
 msgid "There are points outside specified 2D/3D region - %d points ignored"
-msgstr ""
-"Ci sono punti fuori dalla regione 2D/3D specificata - %d punti ignorati"
+msgstr "Ci sono punti fuori dalla regione 2D/3D specificata - %d punti ignorati"
 
 #: ../lib/rst/interp_float/vinput2d.c:273
 #, c-format
@@ -3139,8 +3138,7 @@ msgstr ""
 #: ../lib/imagery/sigsetfile.c:57
 #, c-format
 msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s>"
-msgstr ""
-"Impossibile creare il file <%s> per il sottogruppo <%s> del gruppo <%s>"
+msgstr "Impossibile creare il file <%s> per il sottogruppo <%s> del gruppo <%s>"
 
 #: ../lib/imagery/fopen.c:25
 #, c-format
@@ -3155,8 +3153,7 @@ msgstr "Impossibile aprire il file [%s] del gruppo [%s in %s]"
 #: ../lib/imagery/fopen.c:52
 #, c-format
 msgid "Unable to find file [%s] for subgroup [%s] of group [%s in %s]"
-msgstr ""
-"Impossibile trovare il file [%s] del subgroup [%s] del group [%s in %s]"
+msgstr "Impossibile trovare il file [%s] del subgroup [%s] del group [%s in %s]"
 
 #: ../lib/imagery/fopen.c:63 ../lib/imagery/fopen.c:164
 #, c-format
@@ -3356,8 +3353,8 @@ msgid ""
 "Neither %s (managed by d.mon command) nor %s (used for direct rendering) "
 "defined"
 msgstr ""
-"Nè %s (gestita dal comando d.mon) nè %s (utilizzato per il rendering "
-"diretto) definiti"
+"Nè %s (gestita dal comando d.mon) nè %s (utilizzato per il rendering diretto)"
+" definiti"
 
 #: ../lib/display/r_raster.c:150
 #, c-format
@@ -4592,8 +4589,7 @@ msgstr "Numero di isole: -"
 #: ../lib/vector/Vlib/build.c:1014
 #, c-format
 msgid "Unable to create topo file for vector map <%s>"
-msgstr ""
-"Impossibile creare il file della topologia per la mappa vettoriale <%s>"
+msgstr "Impossibile creare il file della topologia per la mappa vettoriale <%s>"
 
 #: ../lib/vector/Vlib/build.c:1022
 msgid "Error writing out topo file"
@@ -5962,8 +5958,7 @@ msgstr "Intersezione: tipologie linea/confine non supportano l'operatore AND"
 
 #: ../lib/vector/Vlib/overlay.c:127
 msgid "Overlay: area x area types not supported by AND operator"
-msgstr ""
-"Intersezione: tipologie area per area non supportate dall'operatore AND"
+msgstr "Intersezione: tipologie area per area non supportate dall'operatore AND"
 
 #: ../lib/vector/Vlib/clean_nodes.c:248
 #, c-format
@@ -7992,8 +7987,7 @@ msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2242
 msgid "Only maps from the same mapset can be registered"
-msgstr ""
-"E? possibile registrare solamente mappe appartenenti allo stesso mapset"
+msgstr "E? possibile registrare solamente mappe appartenenti allo stesso mapset"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2247
 #, python-format
@@ -8249,8 +8243,8 @@ msgid ""
 "Unable to initialize the temporal DBMI interface. Please use t.connect to "
 "specify the driver and the database string"
 msgstr ""
-"Non riesco ad inizializzare l'interfaccia temporale DBMI. Utilizzare t."
-"connect per specificare il driver e la stringa del database"
+"Non riesco ad inizializzare l'interfaccia temporale DBMI. Utilizzare "
+"t.connect per specificare il driver e la stringa del database"
 
 #: ../lib/python/temporal/core.py:654
 msgid ""
@@ -10073,8 +10067,7 @@ msgstr "Impossibile aprire il file %s per la mappa <%s>"
 #: ../lib/raster/quant_io.c:43
 #, c-format
 msgid "Floating data range for raster map <%s> is empty"
-msgstr ""
-"L'intervallo dei dati a virgola mobile per la mappa raster <%s> è vuoto"
+msgstr "L'intervallo dei dati a virgola mobile per la mappa raster <%s> è vuoto"
 
 #: ../lib/raster/quant_io.c:52
 #, c-format
@@ -10743,8 +10736,7 @@ msgstr "Memoria esaurita"
 msgid ""
 "Unable to check table. There is no temporal database connection defined for "
 "mapset <%(mapset)s>"
-msgstr ""
-"Impossibile aprire il file %s delle definizioni del database vettoriale"
+msgstr "Impossibile aprire il file %s delle definizioni del database vettoriale"
 
 msgid ""
 "Unable to execute sql statement. There is no temporal database connection "

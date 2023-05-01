@@ -9108,8 +9108,7 @@ msgstr "Traducere culori pentru rasterul <%s>..."
 
 #: ../lib/ogsf/gs3.c:967
 msgid "View not saved by this program,there may be some inconsistancies"
-msgstr ""
-"Vizualizare nesalvată de program, ar putea exista anumite inconsecvențe"
+msgstr "Vizualizare nesalvată de program, ar putea exista anumite inconsecvențe"
 
 #: ../lib/ogsf/trans.c:180
 msgid "Out of matrix stack space"

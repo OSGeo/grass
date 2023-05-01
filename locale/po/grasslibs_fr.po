@@ -394,8 +394,8 @@ msgid ""
 "Invalid return code from GUI startup script.\n"
 "Please advise GRASS developers of this error."
 msgstr ""
-"Code de retour d'erreur invalide pour le lancement de l'interface "
-"graphique.\n"
+"Code de retour d'erreur invalide pour le lancement de l'interface graphique."
+"\n"
 "Veuillez avertir les développeurs GRASS de cette erreur."
 
 #: ../lib/init/grass.py:1174
@@ -673,8 +673,8 @@ msgstr ""
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
-"Lancement de l'interface graphique <%s> en tâche de fond, merci de "
-"patienter ..."
+"Lancement de l'interface graphique <%s> en tâche de fond, merci de patienter "
+"..."
 
 #: ../lib/init/grass.py:2500
 #, python-format
@@ -704,8 +704,7 @@ msgstr "Algorithme '%s' inconnu"
 
 #: ../lib/arraystats/class.c:42
 msgid "Discont algorithm currently not available because of bugs"
-msgstr ""
-"L'algorithme discont n'est actuellement pas disponible à cause d'un bug"
+msgstr "L'algorithme discont n'est actuellement pas disponible à cause d'un bug"
 
 #: ../lib/arraystats/class.c:49
 msgid "Classification algorithm failed"
@@ -866,8 +865,8 @@ msgid ""
 "necessary, to run the program faster set segmax=%d (see manual)"
 msgstr ""
 "Il y a moins de %d points pour l'interpolation. Aucune segmentation n'est "
-"nécessaire, pour faire tourner le programme plus vite définissez segmax=%d "
-"(voir manuel)"
+"nécessaire, pour faire tourner le programme plus vite définissez segmax=%d ("
+"voir manuel)"
 
 #: ../lib/rst/interp_float/vinput2d.c:297
 #, c-format
@@ -1064,8 +1063,8 @@ msgstr ""
 #: ../lib/gis/parser.c:566
 msgid "Use either --qq or --verbose flag, not both. Assuming --qq."
 msgstr ""
-"Utiliser soit l'option --qq soit --verbose, pas les deux. Utilisation de --"
-"qq."
+"Utiliser soit l'option --qq soit --verbose, pas les deux. Utilisation de "
+"--qq."
 
 #: ../lib/gis/parser.c:597
 #, c-format
@@ -3054,8 +3053,7 @@ msgstr "Impossible d'ouvrir les descriptions des couleurs"
 
 #: ../lib/temporal/lib/default_name.c:69
 msgid "Programmer error - only SQLite driver is currently supported"
-msgstr ""
-"Erreur du programmeur - seul le pilote SQLite est actuellement supporté"
+msgstr "Erreur du programmeur - seul le pilote SQLite est actuellement supporté"
 
 #: ../lib/temporal/lib/connect.c:110
 #, c-format
@@ -3659,8 +3657,7 @@ msgstr "L'élément spécifié est en dehors des limites du tableau"
 
 #: ../lib/gmath/la.c:788
 msgid "Specified matrix column index is outside range"
-msgstr ""
-"L'index de colonne de la matrice spécifié est en dehors de l'intervalle"
+msgstr "L'index de colonne de la matrice spécifié est en dehors de l'intervalle"
 
 #: ../lib/gmath/la.c:793 ../lib/gmath/la.c:834 ../lib/gmath/la.c:1198
 #: ../lib/gmath/la.c:1250 ../lib/gmath/la.c:1325
@@ -4132,8 +4129,9 @@ msgid ""
 "Your GRASS version does not fully support topology format %d.%d of the "
 "vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
-"Votre version de GRASS ne supporte pas entièrement le format de topologie %d."
-"%d du vecteur. Merci de reconstruire la topologie ou de mettre à jour GRASS."
+"Votre version de GRASS ne supporte pas entièrement le format de topologie "
+"%d.%d du vecteur. Merci de reconstruire la topologie ou de mettre à jour "
+"GRASS."
 
 #: ../lib/vector/diglib/plus_struct.c:539
 #, c-format
@@ -4316,16 +4314,16 @@ msgstr ""
 msgid ""
 "Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
-"Erreur de lecture/écriture du portable off_t, byte_order = %d Écrit : %lu "
-"Lu : %lu"
+"Erreur de lecture/écriture du portable off_t, byte_order = %d Écrit : %lu Lu "
+": %lu"
 
 #: ../lib/vector/diglib/test.c:119
 #, c-format
 msgid ""
 "Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
-"Erreur de lecture/écriture du portable long, byte_order = %d Écrit : %lu "
-"Lu : %lu"
+"Erreur de lecture/écriture du portable long, byte_order = %d Écrit : %lu Lu :"
+" %lu"
 
 #: ../lib/vector/diglib/test.c:134
 #, c-format
@@ -4339,8 +4337,8 @@ msgstr ""
 msgid ""
 "Error in read/write portable short, byte_order = %d Written: %d Read: %d"
 msgstr ""
-"Erreur de lecture/écriture du portable court, byte_order = %d Écrit : %d "
-"Lu : %d"
+"Erreur de lecture/écriture du portable court, byte_order = %d Écrit : %d Lu :"
+" %d"
 
 #: ../lib/vector/diglib/test.c:165
 #, c-format
@@ -4641,8 +4639,7 @@ msgstr "Surface de taille = 0.0 ignorée"
 
 #: ../lib/vector/Vlib/build.c:201
 msgid "Request to find area outside nonexistent isle"
-msgstr ""
-"Requête pour trouver des surfaces à l'extérieur d'une île non-existante"
+msgstr "Requête pour trouver des surfaces à l'extérieur d'une île non-existante"
 
 #: ../lib/vector/Vlib/build.c:352
 msgid "Larger bbox but smaller area!!!"
@@ -5417,8 +5414,7 @@ msgstr "Impossible d'obtenir le contour pour la surface d'id %d"
 #: ../lib/vector/Vlib/ascii.c:875
 #, c-format
 msgid "Unable to get boundary of isle id %d (area id %d)"
-msgstr ""
-"Impossible d'obtenir les limites de l'île d'id %d (id de la surface %d)"
+msgstr "Impossible d'obtenir les limites de l'île d'id %d (id de la surface %d)"
 
 #: ../lib/vector/Vlib/ascii.c:889
 #, c-format
@@ -6308,8 +6304,7 @@ msgstr ""
 #: ../lib/vector/Vlib/legal_vname.c:50
 #, c-format
 msgid "Illegal vector map name <%s>. Must start with a letter."
-msgstr ""
-"Nom de couche vectorielle illégale <%s>. Doit commencer par une lettre."
+msgstr "Nom de couche vectorielle illégale <%s>. Doit commencer par une lettre."
 
 #: ../lib/vector/Vlib/legal_vname.c:58
 #, c-format
@@ -6922,8 +6917,8 @@ msgid ""
 "Database record for line %d (cat = %d, backword direction) not found(cost "
 "was set to 0)"
 msgstr ""
-"Enregistrement pour la ligne %d (cat = %d, direction arrière) non trouvé "
-"(coût défini à 0)"
+"Enregistrement pour la ligne %d (cat = %d, direction arrière) non trouvé ("
+"coût défini à 0)"
 
 #: ../lib/vector/Vlib/net_build.c:658 ../lib/vector/Vlib/net_build.c:1064
 msgid "Flattening the graph..."
@@ -7155,8 +7150,7 @@ msgstr "Vect_segment_intersection() ERREUR (segments verticaux colinéaires)"
 
 #: ../lib/vector/Vlib/intersect.c:496
 msgid "Vect_segment_intersection() ERROR (collinear non vertical segments)"
-msgstr ""
-"Vect_segment_intersection() ERREUR (segments verticaux non colinéaires)"
+msgstr "Vect_segment_intersection() ERREUR (segments verticaux non colinéaires)"
 
 #: ../lib/vector/Vlib/select.c:116
 #, c-format
@@ -7195,8 +7189,8 @@ msgstr "Cairo : fichier de masque en entrée <%s> invalide"
 msgid ""
 "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
 msgstr ""
-"Cairo : le fichier de masque en entrée a des dimensions incorrects : "
-"attendu : %dx%d reçu : %dx%d"
+"Cairo : le fichier de masque en entrée a des dimensions incorrects : attendu "
+": %dx%d reçu : %dx%d"
 
 #: ../lib/cairodriver/read_bmp.c:96
 #, c-format
@@ -7847,8 +7841,8 @@ msgid ""
 "End time must be greater than start time for %(type)s map <%(id)s> with "
 "layer: %(l)s"
 msgstr ""
-"La date de fin doit être après la date de début pour la carte %(type)s <"
-"%(id)s> avec la couche : %(l)s"
+"La date de fin doit être après la date de début pour la carte %(type)s <%(id)"
+"s> avec la couche : %(l)s"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:389
 #: ../lib/python/temporal/abstract_map_dataset.py:482
@@ -7894,8 +7888,8 @@ msgid ""
 "End time must be greater than start time for %(typ)s map <%(id)s> with layer "
 "%(l)s"
 msgstr ""
-"La date de fin doit être postérieure à la date de début pour la carte "
-"%(typ)s <%(id)s> avec la couche %(l)s"
+"La date de fin doit être postérieure à la date de début pour la carte %(typ)"
+"s <%(id)s> avec la couche %(l)s"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:800
 #, python-format
@@ -8192,8 +8186,8 @@ msgid ""
 "Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s - "
 "%(end)s"
 msgstr ""
-"Définir un temps absolu valide pour la carte <%(id)s> avec la couche "
-"%(layer)s vers %(start)s - %(end)s"
+"Définir un temps absolu valide pour la carte <%(id)s> avec la couche %(layer)"
+"s vers %(start)s - %(end)s"
 
 #: ../lib/python/temporal/register.py:460
 #, python-format
@@ -8362,8 +8356,8 @@ msgid ""
 "Relative time units of space time dataset <%(id)s> and map <%(map)s> with "
 "layer %(l)s are different"
 msgstr ""
-"Les unité de temps relatif du jeu de données <%(id)s> et de la carte <"
-"%(map)s> avec la couche %(l)s sont différents"
+"Les unité de temps relatif du jeu de données <%(id)s> et de la carte <%(map)"
+"s> avec la couche %(l)s sont différents"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2236
 #, python-format
@@ -8371,8 +8365,8 @@ msgid ""
 "Relative time units of space time dataset <%(id)s> and map <%(map)s> are "
 "different"
 msgstr ""
-"Les unités de temps relatif du jeu de données <%(id)s> et de la carte <"
-"%(map)s> sont différents"
+"Les unités de temps relatif du jeu de données <%(id)s> et de la carte <%(map)"
+"s> sont différents"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2242
 msgid "Only maps from the same mapset can be registered"
@@ -8654,8 +8648,8 @@ msgid ""
 "Unable to initialize the temporal DBMI interface. Please use t.connect to "
 "specify the driver and the database string"
 msgstr ""
-"Impossible d'initialiser l'interface DBMI temporelle. Merci d'utiliser t."
-"connect pour spécifier le pilote et la base de données"
+"Impossible d'initialiser l'interface DBMI temporelle. Merci d'utiliser "
+"t.connect pour spécifier le pilote et la base de données"
 
 #: ../lib/python/temporal/core.py:654
 msgid ""
@@ -8712,8 +8706,8 @@ msgid ""
 "Current temporal database info:%(info)s"
 msgstr ""
 "Base de données temporelle non supportée : erreur de version. \n"
-"La version de base de données temporelle %(backup)s  supportée est : "
-"%(tdb)i\n"
+"La version de base de données temporelle %(backup)s  supportée est : %(tdb)"
+"i\n"
 "Information de base de données temporelle actuelle : %(info)s"
 
 #: ../lib/python/temporal/core.py:793
@@ -9381,8 +9375,8 @@ msgstr ""
 #, python-format
 msgid "An error occurred while running r3.mapcalc with expression: %s"
 msgstr ""
-"Une erreur s'est produite lors du lancement de r3.mapcalc avec "
-"l'expression : %s"
+"Une erreur s'est produite lors du lancement de r3.mapcalc avec l'expression :"
+" %s"
 
 #: ../lib/python/script/core.py:56
 #, python-brace-format
@@ -9872,8 +9866,7 @@ msgstr "Essayer d'utiliser une police plus petite !"
 #: ../lib/ogsf/gv3.c:269
 #, c-format
 msgid "No features from vector map <%s> fall within current region"
-msgstr ""
-"Aucune entité de la carte vecteur <%s> ne tombe dans la région courante"
+msgstr "Aucune entité de la carte vecteur <%s> ne tombe dans la région courante"
 
 #: ../lib/ogsf/gv3.c:274
 #, c-format
@@ -10038,8 +10031,8 @@ msgstr "Le fichier PNG d'entrée n'est pas en 8-bit"
 #, c-format
 msgid "Input PNG file has incorrect dimensions: expected: %dx%d got: %lux%lu"
 msgstr ""
-"Le fichier PNG d'entrée a des dimensions incorrects : attendu : %dx%d "
-"obtenu : %lux%lu"
+"Le fichier PNG d'entrée a des dimensions incorrects : attendu : %dx%d obtenu "
+": %lux%lu"
 
 #: ../lib/pngdriver/read_png.c:90
 msgid "Input PNG file is not RGBA"
@@ -11123,8 +11116,7 @@ msgstr ""
 
 #: ../lib/proj/convert.c:478
 msgid "Updating spatial reference with embedded proj4 definition"
-msgstr ""
-"Mise à jour de la référence spatiale avec la définition proj4 embarquée"
+msgstr "Mise à jour de la référence spatiale avec la définition proj4 embarquée"
 
 #: ../lib/proj/convert.c:611
 msgid "No projection name! Projection parameters likely to be meaningless."
@@ -11206,8 +11198,7 @@ msgstr ""
 
 #: ../lib/proj/ellipse.c:128
 msgid "Invalid ellipsoid descriptors (a, rf, es or b) in file"
-msgstr ""
-"Descripteurs de l'ellipsoïde (a, rf, es ou b) invalides dans le fichier"
+msgstr "Descripteurs de l'ellipsoïde (a, rf, es ou b) invalides dans le fichier"
 
 #: ../lib/proj/ellipse.c:141
 msgid "No ellipsoid info given in file"
@@ -11420,8 +11411,8 @@ msgid ""
 "Dev note: Adapted sites library used for vector points. (module should be "
 "updated to GRASS 6 vector library)"
 msgstr ""
-"Note du dev : librairie sites adaptée utilisée pour le vecteur de points. "
-"(le module devrait être mis à jour vers la librairie vecteur GRASS 6)"
+"Note du dev : librairie sites adaptée utilisée pour le vecteur de points. ("
+"le module devrait être mis à jour vers la librairie vecteur GRASS 6)"
 
 msgid "Cannot fetch row"
 msgstr "Impossible de récupérer la ligne"
@@ -11773,8 +11764,7 @@ msgid "Illegal col3 value"
 msgstr "Valeur de colonne 3D illégale"
 
 msgid "Unable to rewrite feature/offset %lu in vector map <%s>"
-msgstr ""
-"Impossible de réécrire l'entité/décalage %lu dans la carte vecteur <%s>"
+msgstr "Impossible de réécrire l'entité/décalage %lu dans la carte vecteur <%s>"
 
 msgid "Unable to delete feature/offset %lu from vector map <%s>"
 msgstr ""
@@ -11866,14 +11856,14 @@ msgid ""
 "Coor file of vector map <%s@%s> is larger than it should be (%ld bytes "
 "excess)"
 msgstr ""
-"Le fichier coor de la carte vecteur <%s@%s> est plus grand qu'il ne devrait "
-"(%ld bytes en trop)"
+"Le fichier coor de la carte vecteur <%s@%s> est plus grand qu'il ne devrait ("
+"%ld bytes en trop)"
 
 msgid ""
 "Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
 msgstr ""
-"Le fichier coor de la carte vecteur <%s@%s> est plus petit qu'il ne devrait "
-"(%ld bytes en moins)"
+"Le fichier coor de la carte vecteur <%s@%s> est plus petit qu'il ne devrait ("
+"%ld bytes en moins)"
 
 msgid "Copy %s <%s> to current mapset as <%s>"
 msgstr "Copie %s <%s> vers <%s> dans le jeu de cartes courant"

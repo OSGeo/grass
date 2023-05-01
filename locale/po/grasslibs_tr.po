@@ -10349,8 +10349,7 @@ msgstr ""
 #: ../lib/proj/convert.c:232
 #, c-format
 msgid "OGR can't get WKT-style parameter string (OGR Error code was %d)"
-msgstr ""
-"OGR, WKT stilindeki değişken dizesini ayrıştıramıyor:(OGR Hata kodu %d)"
+msgstr "OGR, WKT stilindeki değişken dizesini ayrıştıramıyor:(OGR Hata kodu %d)"
 
 #: ../lib/proj/convert.c:471
 #, c-format

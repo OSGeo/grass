@@ -6562,8 +6562,8 @@ msgid ""
 "Database record for line %d (cat = %d, forward/both direction(s)) not found "
 "(forward/both direction(s) of line skipped)"
 msgstr ""
-"Datová položka pro linii %d (cat = %d, dopředu/oba směry nebyla "
-"nalezena(dopředu/oba směry linie přeskočeny)"
+"Datová položka pro linii %d (cat = %d, dopředu/oba směry nebyla nalezena(dopř"
+"edu/oba směry linie přeskočeny)"
 
 #: ../lib/vector/Vlib/net_build.c:888
 #, c-format
