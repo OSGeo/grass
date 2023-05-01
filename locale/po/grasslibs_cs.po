@@ -15,15 +15,16 @@ msgstr ""
 "Project-Id-Version: grasslibs_cs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2015-03-15 18:32+0100\n"
-"Last-Translator: \n"
-"Language-Team:  <cs@li.org>\n"
-"Language: cs_CS\n"
+"PO-Revision-Date: 2023-04-29 23:50+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grasslibs/"
+"cs/>\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.4\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -5675,7 +5676,6 @@ msgid_plural "%d primitives registered"
 msgstr[0] "Jedno primitivum zaregistrováno"
 msgstr[1] "%d primitiva zaregistrována"
 msgstr[2] "%d primitiv zaregistrováno"
-msgstr[3] "%d primitiv zaregistrováno"
 
 #: ../lib/vector/Vlib/build_nat.c:120 ../lib/vector/Vlib/build_sfa.c:386
 #: ../lib/vector/Vlib/build_sfa.c:665
@@ -5685,7 +5685,6 @@ msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-msgstr[3] ""
 
 #: ../lib/vector/Vlib/build_nat.c:133
 msgid "Building areas..."
@@ -5698,7 +5697,6 @@ msgid_plural "%d areas built"
 msgstr[0] "Jedna plocha vytvořena"
 msgstr[1] "%d plochy vytvořeny"
 msgstr[2] "%d ploch vytvořeno"
-msgstr[3] "%d ploch vytvořeno"
 
 #: ../lib/vector/Vlib/build_nat.c:158
 #, c-format
@@ -5707,7 +5705,6 @@ msgid_plural "%d isles built"
 msgstr[0] "Jeden ostrov vytvořen"
 msgstr[1] "%d ostrovy vytvořeny"
 msgstr[2] "%d ostrovů vytvořeno"
-msgstr[3] "%d ostrovů vytvořeno"
 
 #: ../lib/vector/Vlib/build_nat.c:169
 msgid "Attaching islands..."
@@ -6196,7 +6193,6 @@ msgid_plural "%d categories loaded"
 msgstr[0] "Jedna kategorie načtena"
 msgstr[1] "%d kategorie načteny"
 msgstr[2] "%d kategorií načteno"
-msgstr[3] "%d kategorií načteno"
 
 #: ../lib/vector/Vlib/cats.c:627
 #, c-format
@@ -6231,7 +6227,6 @@ msgid_plural "%d features without geometry skipped"
 msgstr[0] "Jeden prvek bez geometrie ignorován"
 msgstr[1] "%d prvky bez geometrie ignorovány"
 msgstr[2] "%d prvků bez geometrie ignorováno"
-msgstr[3] "%d prvků bez geometrie ignorováno"
 
 #: ../lib/vector/Vlib/build_sfa.c:725
 #, c-format
