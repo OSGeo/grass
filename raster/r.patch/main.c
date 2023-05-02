@@ -247,7 +247,6 @@ int main(int argc, char *argv[])
                                                       (row - start) * ncols);
                 memcpy(p, local_presult, out_cell_size * ncols);
 
-                // #pragma omp atomic update
                 computed++;
             }
 
