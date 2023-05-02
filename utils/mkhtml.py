@@ -691,6 +691,8 @@ def get_addon_path():
             addons_git_repo_url=urlparse.urljoin(base_url, "grass-addons/"),
         )
         grass_addons_dir = pathlib.Path(addons_base_dir) / "grass-addons"
+        if not pathlib.Path(addons_base_dir).exists():
+            pathlib.Path(addons_base_dir).mkdir(parents=True, exist_ok=True)
         if not grass_addons_dir.exists():
             gs.call(
                 [
