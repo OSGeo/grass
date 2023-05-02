@@ -9,15 +9,16 @@ msgstr ""
 "Project-Id-Version: grasslibs_vi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2010-08-27 11:18+0700\n"
-"Last-Translator: \n"
-"Language-Team: American English <kde-i18n-doc@kde.org>\n"
-"Language: vi_VI\n"
+"PO-Revision-Date: 2023-04-29 23:54+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Vietnamese <https://weblate.osgeo.org/projects/grass-gis/"
+"grasslibs/vi/>\n"
+"Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -745,8 +746,8 @@ msgstr "Bỏ qua %d điểm (quá dày)"
 #: ../lib/rst/interp_float/vinput2d.c:277
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given "
-"NPMIN=%d"
+"%d points given for interpolation (after thinning) is less than given NPMIN="
+"%d"
 msgstr ""
 "%d điểm được cung cấp để nội suy (sau khi làm mảnh) ít hơn NPMIN= %d đã cung "
 "cấp"
@@ -4102,8 +4103,7 @@ msgstr "Lỗi đọc/ghi off_t linh động, thứ_tự_byte = %d Ghi: %lu Đọ
 #, c-format
 msgid ""
 "Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
-msgstr ""
-"Lỗi đọc/ghi định dạng dài linh động, thứ_tự_byte = %d Ghi: %lu Đọc: %lu"
+msgstr "Lỗi đọc/ghi định dạng dài linh động, thứ_tự_byte = %d Ghi: %lu Đọc: %lu"
 
 #: ../lib/vector/diglib/test.c:134
 #, c-format
@@ -4115,14 +4115,12 @@ msgstr ""
 #, c-format
 msgid ""
 "Error in read/write portable short, byte_order = %d Written: %d Read: %d"
-msgstr ""
-"Lỗi đọc/ghi định dạng ngắn  linh động, thứ_tự_byte = %d Ghi: %d Đọc: %d"
+msgstr "Lỗi đọc/ghi định dạng ngắn  linh động, thứ_tự_byte = %d Ghi: %d Đọc: %d"
 
 #: ../lib/vector/diglib/test.c:165
 #, c-format
 msgid "Error in read/write portable char, byte_order = %d Written: %d Read: %d"
-msgstr ""
-"Lỗi đọc/ghi định dạng ký tự linh động, thứ_tự_byte = %d Ghi: %d Đọc: %d"
+msgstr "Lỗi đọc/ghi định dạng ký tự linh động, thứ_tự_byte = %d Ghi: %d Đọc: %d"
 
 #: ../lib/vector/diglib/plus_line.c:262 ../lib/vector/diglib/plus_line.c:302
 #, c-format
@@ -5694,6 +5692,7 @@ msgstr ""
 msgid "One primitive registered"
 msgid_plural "%d primitives registered"
 msgstr[0] ""
+msgstr[1] ""
 
 #: ../lib/vector/Vlib/build_nat.c:120 ../lib/vector/Vlib/build_sfa.c:386
 #: ../lib/vector/Vlib/build_sfa.c:665
@@ -5701,6 +5700,7 @@ msgstr[0] ""
 msgid "One vertex registered"
 msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
+msgstr[1] ""
 
 #: ../lib/vector/Vlib/build_nat.c:133
 msgid "Building areas..."
@@ -5711,12 +5711,14 @@ msgstr ""
 msgid "One area built"
 msgid_plural "%d areas built"
 msgstr[0] ""
+msgstr[1] ""
 
 #: ../lib/vector/Vlib/build_nat.c:158
 #, c-format
 msgid "One isle built"
 msgid_plural "%d isles built"
 msgstr[0] ""
+msgstr[1] ""
 
 #: ../lib/vector/Vlib/build_nat.c:169
 msgid "Attaching islands..."
@@ -6197,6 +6199,7 @@ msgstr ""
 msgid "One category loaded"
 msgid_plural "%d categories loaded"
 msgstr[0] ""
+msgstr[1] ""
 
 #: ../lib/vector/Vlib/cats.c:627
 #, c-format
@@ -6229,6 +6232,7 @@ msgstr ""
 msgid "One feature without geometry skipped"
 msgid_plural "%d features without geometry skipped"
 msgstr[0] ""
+msgstr[1] ""
 
 #: ../lib/vector/Vlib/build_sfa.c:725
 #, c-format
@@ -6483,8 +6487,8 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:364
 #, c-format
 msgid ""
-"There exists more than one point of node <%d> with unique category field  "
-"<%d>.\n"
+"There exists more than one point of node <%d> with unique category field  <"
+"%d>.\n"
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
@@ -7658,15 +7662,15 @@ msgstr ""
 #: ../lib/python/temporal/register.py:268
 #, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s> with layer %(l)s. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s> with layer %(l)s. Overwrite flag is not set."
 msgstr ""
 
 #: ../lib/python/temporal/register.py:275
 #, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s>. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s>. Overwrite flag is not set."
 msgstr ""
 
 #: ../lib/python/temporal/register.py:299
@@ -7889,8 +7893,8 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2312
 #, python-format
 msgid ""
-"Map <%(map)s> with layer %(l)s is not registered in space time dataset "
-"<%(base)s>"
+"Map <%(map)s> with layer %(l)s is not registered in space time dataset <"
+"%(base)s>"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2318
@@ -8028,8 +8032,8 @@ msgstr ""
 #: ../lib/python/temporal/temporal_algebra.py:1214
 #, python-format
 msgid ""
-"Wrong temporal type of space time dataset "
-"<%s>                                       <%s> time is required"
+"Wrong temporal type of space time dataset <"
+"%s>                                       <%s> time is required"
 msgstr ""
 
 #: ../lib/python/temporal/temporal_algebra.py:1234
@@ -9701,8 +9705,8 @@ msgstr ""
 #: ../lib/raster/open.c:192
 #, c-format
 msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map "
-"<%s@%s> which does not exist"
+"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
+"%s> which does not exist"
 msgstr ""
 
 #: ../lib/raster/open.c:197
@@ -10580,3 +10584,125 @@ msgstr "Độ lệch không hợp lệ (%ld)"
 
 msgid "Copy %s <%s> to current mapset as <%s>"
 msgstr "Chép %s < %s> vào bộ bản độ hiện tại thành <%s>"
+
+#: ../lib/init/grass.py:516
+#, python-brace-format
+msgid "Unable to create temporary directory <{tmpdir_name}>! Exiting."
+msgstr ""
+
+#: ../lib/init/grass.py:2573
+msgid ""
+"Failed to start GRASS GIS, grassdata directory cannot be found or created."
+msgstr ""
+
+#: ../lib/init/grass.py:2580
+msgid ""
+"Failed to start GRASS GIS, no default location to copy in the installation "
+"or copying failed."
+msgstr ""
+
+#: ../lib/manage/do_rename.c:99 ../lib/manage/do_remove.c:101
+#: ../lib/manage/do_copy.c:83
+msgid "String for secondary color table has been truncated"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:496
+#, c-format
+msgid "Filepath '%s/%s' exceeds max length"
+msgstr ""
+
+#: ../lib/raster/put_row.c:391 ../lib/raster/put_row.c:397
+#, c-format
+msgid "Error writing compressed data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:407
+#, c-format
+msgid "Error writing uncompressed data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:521 ../lib/raster/put_row.c:526
+#, c-format
+msgid "Error writing compressed null data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:564
+#, c-format
+msgid "Error writing null row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/raster_metadata.c:158
+msgid "Semantic label is too long"
+msgstr ""
+
+#: ../lib/raster/raster_metadata.c:169
+#, c-format
+msgid "Character '%c' not allowed in a semantic label."
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:181
+#, c-format
+msgid "%s or <%s>"
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:181
+#, c-format
+msgid "%s and <%s>"
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:275
+#, c-format
+msgid "Option <%s> requires %s"
+msgstr ""
+
+#: ../lib/gis/parser.c:1273
+#, c-format
+msgid "Invalid value <%s> for parameter <%s>"
+msgstr ""
+
+#: ../lib/gis/parser.c:1817
+#, c-format
+msgid "Unable to open %s file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/parser.c:1823
+#, c-format
+msgid "Unable to create %s file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:771
+msgid "Number of threads for parallel computing"
+msgstr ""
+
+#: ../lib/imagery/manage_signatures.c:83 ../lib/imagery/manage_signatures.c:128
+#: ../lib/imagery/manage_signatures.c:184
+#: ../lib/imagery/manage_signatures.c:193
+#, c-format
+msgid "%s is not in the current mapset (%s)"
+msgstr ""
+
+#: ../lib/imagery/manage_signatures.c:93
+#, c-format
+msgid "Unable to remove %s signature"
+msgstr ""
+
+#: ../lib/imagery/manage_signatures.c:214
+#, c-format
+msgid "Unable to rename <%s> to <%s>"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:150 ../lib/imagery/sig.c:151
+msgid "Invalid signature file"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:154 ../lib/imagery/sig.c:156
+msgid "Invalid signature file version"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:220 ../lib/imagery/sig.c:194
+msgid "Invalid signature file: semantic label length limit exceeded"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:228 ../lib/imagery/sig.c:203
+msgid "Signature file does not contain bands"
+msgstr ""

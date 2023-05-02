@@ -8,14 +8,17 @@ msgstr ""
 "Project-Id-Version: grassmods_ar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2005-03-09 12:50+0100\n"
-"Last-Translator: Dr. Alaa Masoud <alaamasoud@hotmail.com>\n"
-"Language-Team: Arabic <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2023-04-29 23:50+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Arabic <https://weblate.osgeo.org/projects/grass-gis/"
+"grasslibs/ar/>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.2\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: ../lib/init/grass.py:209
 #, fuzzy
@@ -766,8 +769,8 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:277
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given "
-"NPMIN=%d"
+"%d points given for interpolation (after thinning) is less than given NPMIN="
+"%d"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:282
@@ -5899,6 +5902,10 @@ msgid "One primitive registered"
 msgid_plural "%d primitives registered"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: ../lib/vector/Vlib/build_nat.c:120 ../lib/vector/Vlib/build_sfa.c:386
 #: ../lib/vector/Vlib/build_sfa.c:665
@@ -5907,6 +5914,10 @@ msgid "One vertex registered"
 msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: ../lib/vector/Vlib/build_nat.c:133
 #, fuzzy
@@ -5919,6 +5930,10 @@ msgid "One area built"
 msgid_plural "%d areas built"
 msgstr[0] "تم بناء الطبولوجى\n"
 msgstr[1] "تم بناء الطبولوجى\n"
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: ../lib/vector/Vlib/build_nat.c:158
 #, fuzzy, c-format
@@ -5926,6 +5941,10 @@ msgid "One isle built"
 msgid_plural "%d isles built"
 msgstr[0] "تم بناء الطبولوجى\n"
 msgstr[1] "تم بناء الطبولوجى\n"
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: ../lib/vector/Vlib/build_nat.c:169
 #, fuzzy
@@ -6427,6 +6446,10 @@ msgid "One category loaded"
 msgid_plural "%d categories loaded"
 msgstr[0] "قيمة الفئة"
 msgstr[1] "قيمة الفئة"
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: ../lib/vector/Vlib/cats.c:627
 #, c-format
@@ -6460,6 +6483,10 @@ msgid "One feature without geometry skipped"
 msgid_plural "%d features without geometry skipped"
 msgstr[0] "%d : عدد المساحات بدون اشباه مراكز\n"
 msgstr[1] "%d : عدد المساحات بدون اشباه مراكز\n"
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: ../lib/vector/Vlib/build_sfa.c:725
 #, c-format
@@ -6730,8 +6757,8 @@ msgstr "%s: لم يمكن فتح ملف  الطبوغرافية للكتابة\n
 #: ../lib/vector/Vlib/net_build.c:364
 #, c-format
 msgid ""
-"There exists more than one point of node <%d> with unique category field  "
-"<%d>.\n"
+"There exists more than one point of node <%d> with unique category field  <"
+"%d>.\n"
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
@@ -7938,15 +7965,15 @@ msgstr ""
 #: ../lib/python/temporal/register.py:268
 #, fuzzy, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s> with layer %(l)s. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s> with layer %(l)s. Overwrite flag is not set."
 msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
 
 #: ../lib/python/temporal/register.py:275
 #, fuzzy, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s>. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s>. Overwrite flag is not set."
 msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
 
 #: ../lib/python/temporal/register.py:299
@@ -8173,8 +8200,8 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2312
 #, fuzzy, python-format
 msgid ""
-"Map <%(map)s> with layer %(l)s is not registered in space time dataset "
-"<%(base)s>"
+"Map <%(map)s> with layer %(l)s is not registered in space time dataset <"
+"%(base)s>"
 msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2318
@@ -8315,8 +8342,8 @@ msgstr "غير موجود'%s' الفيكتور"
 #: ../lib/python/temporal/temporal_algebra.py:1214
 #, python-format
 msgid ""
-"Wrong temporal type of space time dataset "
-"<%s>                                       <%s> time is required"
+"Wrong temporal type of space time dataset <"
+"%s>                                       <%s> time is required"
 msgstr ""
 
 #: ../lib/python/temporal/temporal_algebra.py:1234
@@ -10028,8 +10055,8 @@ msgstr "دعم اللون [%s] مجموعة الخرائط [%s] %s"
 #: ../lib/raster/open.c:192
 #, c-format
 msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map "
-"<%s@%s> which does not exist"
+"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
+"%s> which does not exist"
 msgstr ""
 
 #: ../lib/raster/open.c:197
