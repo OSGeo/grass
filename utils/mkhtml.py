@@ -59,45 +59,30 @@ def get_version_branch(major_version, addons_git_repo_url):
     """
     version_branch = f"grass{major_version}"
     if gs:
-        popen = gs.Popen
-        fatal = gs.fatal
-    else:
-        popen = subprocess.Popen
-        fatal = sys.stderr.write
-    branch = popen(
-        [
-            "git",
-            "ls-remote",
-            "--heads",
-            addons_git_repo_url,
-            f"refs/heads/{version_branch}",
-        ],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    branch, stderr = branch.communicate()
-    if stderr:
-        message = "Failed to get branch from the Git repository <{repo_path}>.\n{error}"
-        if gs:
-            fatal(
+        branch = gs.Popen(
+            [
+                "git",
+                "ls-remote",
+                "--heads",
+                addons_git_repo_url,
+                f"refs/heads/{version_branch}",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        branch, stderr = branch.communicate()
+        if stderr:
+            gs.fatal(
                 _(
-                    message,
+                    "Failed to get branch from the Git repository"
+                    " <{repo_path}>.\n{error}"
                 ).format(
                     repo_path=addons_git_repo_url,
                     error=gs.decode(stderr),
                 )
             )
-        else:
-            message += "\n"
-            fatal(
-                message.format(
-                    repo_path=addons_git_repo_url,
-                    error=stderr.decode(),
-                )
-            )
-    branch = gs.decode(branch) if gs else branch.decode()
-    if version_branch not in branch:
-        version_branch = "grass{}".format(int(major_version) - 1)
+        if version_branch not in gs.decode(branch):
+            version_branch = "grass{}".format(int(major_version) - 1)
     return version_branch
 
 
