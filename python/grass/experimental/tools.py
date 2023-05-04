@@ -26,9 +26,18 @@ class ExecutedTool:
 
     @property
     def keyval(self):
-        # TODO: possibly use or add _text_to_key_value_dict
-        # which converts int and float automatically
-        return gs.parse_key_val(self._stdout)
+        def conversion(value):
+            try:
+                return int(value)
+            except ValueError:
+                pass
+            try:
+                return float(value)
+            except ValueError:
+                pass
+            return value
+
+        return gs.parse_key_val(self._stdout, val_type=conversion)
 
     @property
     def comma_items(self):
