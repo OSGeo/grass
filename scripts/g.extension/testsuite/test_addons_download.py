@@ -217,6 +217,23 @@ class TestModuleDownloadFromDifferentSources(TestCase):
                 response = e.args
             self.assertEqual(response, 200)
 
+    def test_github_install_official_multimodule_and_check_metadata(self):
+        """Test installing multi-module extension from official addons
+        repository without printing warning no metadata available message
+        for module wich install HTML page file only"""
+        extension = "i.sentinel"
+        gextension = SimpleModule(
+            "g.extension",
+            extension=extension,
+            prefix=str(self.install_prefix),
+        )
+        self.assertModule(gextension)
+        self.assertTrue(gextension.outputs.stderr)
+        self.assertNotIn(
+            _("No metadata available for module '{}':").format(extension),
+            gextension.outputs.stderr,
+        )
+
 
 if __name__ == "__main__":
     test()
