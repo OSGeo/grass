@@ -743,7 +743,7 @@ class Module(object):
         """Return a dictionary that includes the name, all valid
         inputs, outputs and flags as well as export settings for
         usage with actinia
-                  "export": {"format": "GTiff", "type": "raster"}
+        param export: string with export format, e.g. GTiff
         """
         import uuid
 
@@ -757,24 +757,26 @@ class Module(object):
             "GeoJSON": "vector",
             "ESRI_Shapefile": "vector",
             "SQLite": "vector",
-            "CSV": ["vector", "file"],
+            "CSV": "file",
             "TXT": "file",
         }
-        if export and not all(
-            [export_format in export_dict for export_format in export.values()]
-        ):
+        special_flags = ["overwrite", "verbose", "quiet"]
+        skip = ["stdin", "stdout", "stderr"]
+
+        # Check export formats
+        if export and export not in export_dict:
             raise GrassError("Invalid Export format.")
+
+        # Handle inputs and flags
         json_dict = {
             "module": self.name,
             "id": f"{self.name.replace('.', '_')}_{uuid.uuid4().hex}",
-            "verbose": self.flags["verbose"].value,
             "overwrite": self.flags["overwrite"].value,
             "flags": "".join(
                 [
                     flg
                     for flg in self.flags
-                    if self.flags[flg].value
-                    and flg not in ["overwrite", "verbose", "quiet", "help"]
+                    if self.flags[flg].value and flg not in special_flags + ["help"]
                 ]
             ),
             "inputs": [
@@ -785,9 +787,16 @@ class Module(object):
                     else str(val.value),
                 }
                 for key, val in self.inputs.items()
-                if val.value
+                if val.value and key not in skip
             ],
         }
+
+        # Handle special flags
+        for special_flag in special_flags:
+            if special_flag in self.flags:
+                json_dict[special_flag] = self.flags[special_flag].value
+
+        # Handle outputs
         outputs = []
         for key, val in self.outputs.items():
             if val.value:
@@ -797,11 +806,10 @@ class Module(object):
                     if type(val.value) == list
                     else str(val.value),
                 }
-                if export and key in export.keys():
-                    print("export")
+                if export:
                     param["export"] = {
-                        "format": export[key],
-                        "type": export_dict[export[key]],
+                        "format": export,
+                        "type": export_dict[export],
                     }
                 outputs.append(param)
         json_dict["outputs"] = outputs
