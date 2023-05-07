@@ -68,10 +68,47 @@ class TestModulesPickability(TestCase):
 
 
 class TestModulesJsonDictExport(TestCase):
-    def test_rsun(self):
+    def test_rinfo_simple(self):
         """Test if a Module can be exported to json dict"""
 
         Module("r.info", map="elevation", run_=False).get_json_dict()
+
+    def test_rinfo_ov(self):
+        """Test if a Module can be exported to json dict with overwite
+        and verbose flags"""
+
+        Module(
+            "r.info", overwite=True, verbose=True, map="elevation", run_=False
+        ).get_json_dict()
+
+    def test_rinfo_ov_export(self):
+        """Test if a Module can be exported to json dict with overwite
+        and verbose flags and results exported to CSV"""
+
+        Module(
+            "r.info",
+            overwite=True,
+            verbose=True,
+            map="elevation",
+            flags="g",
+            run_=False,
+        ).get_json_dict(export="CSV")
+
+    def test_rslopeaspect_ov_export(self):
+        """Test if a Module can be exported to json dict with overwite
+        and verbose flags and results exported to CSV"""
+
+        Module(
+            "r.slope.aspect",
+            elevation="elevation",
+            slope="slope",
+            aspect="aspect",
+            overwite=True,
+            verbose=True,
+            map="elevation",
+            flags="g",
+            run_=False,
+        ).get_json_dict(export="GTiff")
 
 
 class TestModulesCheck(TestCase):
