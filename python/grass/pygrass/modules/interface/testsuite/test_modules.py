@@ -101,7 +101,6 @@ class TestModulesJsonDictExport(TestCase):
             aspect="aspect",
             overwrite=True,
             verbose=True,
-            map="elevation",
             run_=False,
         ).get_json_dict(export="GTiff")
 
