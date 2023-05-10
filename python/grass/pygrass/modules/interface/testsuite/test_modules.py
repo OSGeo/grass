@@ -74,12 +74,9 @@ class TestModulesJsonDictExport(TestCase):
         Module("r.info", map="elevation", run_=False).get_json_dict()
 
     def test_rinfo_ov(self):
-        """Test if a Module can be exported to json dict with overwrite
-        and verbose flags"""
+        """Test if a Module can be exported to json dict with verbose flag"""
 
-        Module(
-            "r.info", overwrite=True, verbose=True, map="elevation", run_=False
-        ).get_json_dict()
+        Module("r.info", verbose=True, map="elevation", run_=False).get_json_dict()
 
     def test_rinfo_ov_export(self):
         """Test if a Module can be exported to json dict with overwrite
@@ -87,7 +84,6 @@ class TestModulesJsonDictExport(TestCase):
 
         Module(
             "r.info",
-            overwrite=True,
             verbose=True,
             map="elevation",
             flags="g",
@@ -106,7 +102,6 @@ class TestModulesJsonDictExport(TestCase):
             overwrite=True,
             verbose=True,
             map="elevation",
-            flags="g",
             run_=False,
         ).get_json_dict(export="GTiff")
 
