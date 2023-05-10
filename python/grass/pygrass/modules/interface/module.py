@@ -771,7 +771,6 @@ class Module(object):
         json_dict = {
             "module": self.name,
             "id": f"{self.name.replace('.', '_')}_{uuid.uuid4().hex}",
-            "overwrite": self.flags["overwrite"].value,
             "flags": "".join(
                 [
                     flg
