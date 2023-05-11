@@ -521,10 +521,8 @@ class Module(object):
             # call the command with --interface-description
             get_cmd_xml = Popen([cmd, "--interface-description"], stdout=PIPE)
         except OSError as e:
-            print("OSError error({0}): {1}".format(e.errno, e.strerror))
-            raise GrassError(
-                "Error running: `{} --interface-description`.".format(self.name)
-            )
+            print(f"OSError error({e.errno}): {e.strerror}")
+            raise GrassError(f"Error running: `{self.name} --interface-description`.")
         # get the xml of the module
         self.xml = get_cmd_xml.communicate()[0]
         # transform and parse the xml into an Element class:
@@ -765,7 +763,7 @@ class Module(object):
 
         # Check export formats
         if export and export not in export_dict:
-            raise GrassError("Invalid Export format.")
+            raise GrassError(f"Invalid export format <{export}>.")
 
         # Handle inputs and flags
         json_dict = {
