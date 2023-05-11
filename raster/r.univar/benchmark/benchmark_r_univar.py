@@ -40,7 +40,7 @@ def benchmark(size, label, results):
 
 
 def generate_map(rows, cols, fname):
-    Module("g.region", flags="p", s=0, n=rows, w=0, e=cols, res=1)
+    Module("g.region", flags="p", rows=rows, cols=cols, res=1)
     # Generate using r.random.surface if r.surf.fractal fails
     try:
         print("Generating reference map using r.surf.fractal...")
