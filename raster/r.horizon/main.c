@@ -746,7 +746,7 @@ double horizon_height(void)
 {
     double height;
 
-    tanh0 = -INFINITY;
+    tanh0 = 0.;
     length = 0;
 
     height = searching();
