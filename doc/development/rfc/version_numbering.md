@@ -7,6 +7,7 @@ Status: Draft
 ## Summary
 
 Use version number in a format _major.minor.micro_ where
+
 - _major_ is for large additions or backwards incompatible changes,
 - _minor_ is for additions, and
 - _micro_ is for fixes.
@@ -14,10 +15,11 @@ Use version number in a format _major.minor.micro_ where
 These numbers are assigned to releases. Development versions, pre-release,
 and builds are marked by additional labels as suffixes.
 
-Once a version number is assigned to a release, the associated source code cannot change,
-or in other words, version number is assigned to a particular state of the source code.
-This is sometimes called a hard freeze (or code freeze). Unlike soft freeze
-(or feature freeze) and branching, code freeze does not allow any changes of the code.
+Once a version number is assigned to a release, the associated source code
+cannot change, or in other words, version number is assigned to a particular
+state of the source code. This is sometimes called a hard freeze (or code
+freeze). Unlike soft freeze (or feature freeze) and branching, code freeze
+does not allow any changes of the code.
 
 All major and minor version numbers are used for releases,
 i.e., there is no distinction between even and odd numbers.
@@ -41,9 +43,9 @@ version 5 and 6 series.
 This odd-even practice followed the numbering scheme of the Linux kernel
 which abandoned the practice since then.
 
-At the time of version 5, the odd-even practice replaced a system where multiple numbered beta
-versions were released. Version 5.0beta10 was the last beta release before the first
-pre-release of 5.0.0.
+At the time of version 5, the odd-even practice replaced a system where multiple
+numbered beta versions were released. Version 5.0beta10 was the last beta
+release before the first pre-release of 5.0.0.
 
 The beta version practice was shortly picked up again for 7.0.0 which had four
 beta releases before the first release candidate of 7.0.0.
@@ -88,13 +90,15 @@ any backwards incompatible change in the API which includes
 both interface and behavior changes (API also defines what happens,
 not just names and signatures).
 
-Additionally, major feature additions which would require only a minor release in terms of API stability,
-are strongly suggested to trigger a major release as well.
-This in turn helps to address the issue of outdated tutorials and small, but breaking, changes.
+Additionally, major feature additions which would require only a minor release
+in terms of API stability, are strongly suggested to trigger a major release
+as well. This in turn helps to address the issue of outdated tutorials and
+small, but breaking, changes.
 
 Some major features, such as changes in the GUI, are fully backwards compatible
-(GUI API is not a public API in versions 7 and 8), but major features may heavily influence tutorials and
-other teaching materials. In that case, increasing a major version should be considered given that,
+(GUI API is not a public API in versions 7 and 8), but major features may
+heavily influence tutorials and other teaching materials. In that case,
+increasing a major version should be considered given that,
 in a sense, behavior linked to a particular interface is changed.
 
 There is always a list of many small changes which are not backwards compatible,
@@ -114,8 +118,8 @@ which are not bug fixes.
 If only backwards compatible bug fixes, i.e., fixes of incorrect behavior, are applied,
 a micro version can be released.
 
-The micro version is also known as _patch_ (which is what Semantic Versioning is using)
-and _point_ (which is what was used in some GRASS GIS documents).
+The micro version is also known as _patch_ (which is what Semantic Versioning
+is using) and _point_ (which is what was used in some GRASS GIS documents).
 The word _micro_, rather than patch, is used
 to avoid collision with patch referring to an individual changeset or fix
 (a release contains one or more of these changes).
@@ -194,26 +198,35 @@ In documentation, the version is often really needed, but don't say
 This way the version number in the sentence will always be valid because
 the version when the change was introduced stays the same and does not change.
 
-When a version is part of an output or displayed to the user, the version number should
-be determined dynamically, not hardcoded, even if it is just the major version
-number.
+When a version is part of an output or displayed to the user, the version
+number should be determined dynamically, not hardcoded, even if it is just
+the major version number.
 
 Don't include the version number where it is not needed, for example, text for links
 in a release announcement doesn't need a version because version is already given
 by the context.
 
-In short comments, references using GN where N is major version number are not common in general.
-When the version is important to mention, use vN which is a common practice.
+In short comments, references using GN where N is major version number are not
+common in general. When the version is important to mention, use vN which is
+a common practice.
 
 ## Relation to Other Documents
 
-* [RFC 4: Release Procedure](https://trac.osgeo.org/grass/wiki/RFC/4_ReleaseProcedure): This RFC describes changes to the numbering. RFC 4 describes the release procedure.
-* [Release Schedule](https://trac.osgeo.org/grass/wiki/Release/Schedule) (at Trac wiki under Release): The Release Schedule document describes schedule, branching, release maintenance, and numbering. The numbering is changed, specifically the use of odd version numbers for development.
-* [Semantic Versioning](https://semver.org/) (version 2.0.0 at the time of writing): Semantic Versioning treatment of _major_, _minor_, and _micro_ numbers should be respected. The labeling of other versions does not comply with Semantic Versioning, but it is a desired state for the future.
+- [RFC 4: Release Procedure](https://trac.osgeo.org/grass/wiki/RFC/4_ReleaseProcedure):
+  This RFC describes changes to the numbering. RFC 4 describes the release procedure.
+- [Release Schedule](https://trac.osgeo.org/grass/wiki/Release/Schedule)
+  (at Trac wiki under Release): The Release Schedule document describes
+  schedule, branching, release maintenance, and numbering. The numbering is
+  changed, specifically the use of odd version numbers for development.
+- [Semantic Versioning](https://semver.org/) (version 2.0.0 at the time of
+  writing): Semantic Versioning treatment of _major_, _minor_, and _micro_
+  numbers should be respected. The labeling of other versions does not comply
+  with Semantic Versioning, but it is a desired state for the future.
 
 ## Other Projects
 
-GDAL and PROJ follow the Semantic versioning. QGIS does as well, but in combination with odd numbers marking the development versions.
+GDAL and PROJ follow the Semantic versioning. QGIS does as well, but in
+combination with odd numbers marking the development versions.
 
 Ubuntu and Black lock their version numbering with the release schedule.
 Black, after transitioning from beta, releases a major release yearly in January
@@ -221,5 +234,8 @@ using the last two digits of year as major version and month as minor release.
 
 ## Historical Documents
 
-* Glynn Clements (2007). GRASS-dev GRASS 6.3.0 release preparation. Aug. 12 18:12:32 EDT 2007. <https://lists.osgeo.org/pipermail/grass-dev/2007-August/032705.html>
-* Neteler, Markus (2001). Towards a stable open source GIS: Status and future directions in GRASS development. Second Italian GRASS Users Meeting, University of Trento, Feb. 1-2 2001. <https://www.academia.edu/download/5140572/10.1.1.16.8991.pdf>
+- Glynn Clements (2007). GRASS-dev GRASS 6.3.0 release preparation.
+  Aug. 12 18:12:32 EDT 2007. <https://lists.osgeo.org/pipermail/grass-dev/2007-August/032705.html>
+- Neteler, Markus (2001). Towards a stable open source GIS: Status and future
+  directions in GRASS development. Second Italian GRASS Users Meeting,
+  University of Trento, Feb. 1-2 2001. <https://www.academia.edu/download/5140572/10.1.1.16.8991.pdf>
