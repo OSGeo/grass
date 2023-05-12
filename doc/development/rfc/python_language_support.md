@@ -38,8 +38,8 @@ important technical reasons.
 At the same time, as for the minor GRASS version, we raise the minimal Python
 version for a matching branch in grass-addons.
 
-For example, when Python 3.7 goes end-of-life before the release of 8.0.4, we
-raise the minimal Python version for 8.0.4 to 3.8. We also raise the minimal
+For example, when Python 3.8 goes end-of-life before the release of 8.4.0, we
+raise the minimal Python version for 8.4.0 to 3.8. We also raise the minimal
 Python version for grass8 branch in grass-addons repo to Python 3.8.
 
 ### References
