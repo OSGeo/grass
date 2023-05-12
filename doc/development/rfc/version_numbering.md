@@ -167,7 +167,7 @@ control system, but builds are managed separately.
 ## Relation to Other Documents
 
 * [RFC 4: Release Procedure](https://trac.osgeo.org/grass/wiki/RFC/4_ReleaseProcedure): No changes to release procedure, only the numbering is changed.
-* [Release Schedule](https://trac.osgeo.org/grass/wiki/Release/Schedule#Externalreleaseschedules) (at Trac wiki under Release): The Release Schedule document describes schedule, branching, release maintenance, and numbering. The numbering is changed, specifically the use of odd version numbers for development.
+* [Release Schedule](https://trac.osgeo.org/grass/wiki/Release/Schedule) (at Trac wiki under Release): The Release Schedule document describes schedule, branching, release maintenance, and numbering. The numbering is changed, specifically the use of odd version numbers for development.
 * [Semantic Versioning](https://semver.org/) (version 2.0.0 at the time of writing): Semantic Versioning treatment of _major_, _minor_, and _micro_ numbers should be respected. The labeling of other versions does not comply with Semantic Versioning, but it is a desired state for the future.
 
 ## Other Projects
