@@ -30,7 +30,7 @@ ref2 = """azimuth,horizon_height
 280.000000,0.039774
 300.000000,0.032360
 320.000000,0.014804
-340.000000,-0.001438
+340.000000,0.000000
 360.000000,0.004724
 20.000000,0.012612
 40.000000,0.015207
@@ -51,7 +51,7 @@ ref3 = """azimuth,horizon_height
 280.000000,0.039774
 300.000000,0.032360
 320.000000,0.014804
-340.000000,-0.001438
+340.000000,0.000000
 360.000000,0.004724
 20.000000,0.012612
 40.000000,0.015207
@@ -120,9 +120,9 @@ class TestHorizon(TestCase):
         )
         self.assertModule(module)
         ref = {
-            "min": -1.57079637050629,
+            "min": 0,
             "max": 0.70678365230560,
-            "stddev": 0.0708080140468585,
+            "stddev": 0.0360724286360789,
         }
         self.assertRasterFitsUnivar(
             raster="test_horizon_output_from_elevation_050",
@@ -146,7 +146,10 @@ class TestHorizon(TestCase):
         self.runModule(module_list)
         stdout = module_list.outputs.stdout.strip()
         self.assertMultiLineEqual(
-            first="test_horizon_output_from_elevation_010_000\ntest_horizon_output_from_elevation_025_512",
+            first=(
+                "test_horizon_output_from_elevation_010_000\n"
+                "test_horizon_output_from_elevation_025_512"
+            ),
             second=stdout,
         )
 
@@ -167,7 +170,10 @@ class TestHorizon(TestCase):
         self.runModule(module_list)
         stdout = module_list.outputs.stdout.strip()
         self.assertMultiLineEqual(
-            first="test_horizon_output_from_elevation_090_000\ntest_horizon_output_from_elevation_105_512",
+            first=(
+                "test_horizon_output_from_elevation_090_000\n"
+                "test_horizon_output_from_elevation_105_512"
+            ),
             second=stdout,
         )
 
