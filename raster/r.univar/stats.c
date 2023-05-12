@@ -116,6 +116,10 @@ int print_stats(univar_stat *stats)
         unsigned int i;
         size_t qpos_25, qpos_75, *qpos_perc;
 
+        /* stats collected for this zone? */
+        if (stats[z].size == 0)
+            continue;
+
         /* all these calculations get promoted to doubles, so any DIV0 becomes
          * nan */
         mean = stats[z].sum / stats[z].n;
