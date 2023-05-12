@@ -26,7 +26,7 @@ and the minimum version of Python 3 support must be stated.
 
 The minimum support for Python will, in contrast, likely change more often,
 due to each (minor) version’s 5-years life-time. At this date, the oldest
-still-alive Python version is 3.6, to be retired in December 2021.
+still-alive Python version is 3.7, to be retired in June 2023.
 
 ## Version Updates
 
