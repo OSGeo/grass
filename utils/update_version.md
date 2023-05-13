@@ -54,7 +54,7 @@ echo $VERSION
 
 ### Updating Minor Version
 
-Let's say were are at the main branch, version 3.2.0dev, and just created
+Let's say we are at the main branch, version 3.2.0dev, and just created
 a new branch for 3.2 release, so we want to update the minor version
 on the main branch to the next minor version:
 
