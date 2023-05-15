@@ -20,6 +20,7 @@ class TestRasterUnivar(TestCase):
         self.runModule("g.remove", flags="f", type="raster", name="map_a")
         self.runModule("g.remove", flags="f", type="raster", name="map_b")
         self.runModule("g.remove", flags="f", type="raster", name="zone_map")
+        self.runModule("g.remove", flags="f", type="raster", name="zone_map_with_gap")
 
     def setUp(self):
         """Create input data"""
@@ -31,7 +32,12 @@ class TestRasterUnivar(TestCase):
             "r.mapcalc", expression="map_b = 200 + row() + col()", overwrite=True
         )
         self.runModule(
-            "r.mapcalc", expression="zone_map = if(row() < 20, 1,2)", overwrite=True
+            "r.mapcalc", expression="zone_map = if(row() < 20, 1, 2)", overwrite=True
+        )
+        self.runModule(
+            "r.mapcalc",
+            expression="zone_map_with_gap = if(row()> 20, 2, 9)",
+            overwrite=True,
         )
 
     def test_1(self):
@@ -375,6 +381,68 @@ class TestRasterUnivar(TestCase):
             module="r.univar",
             map=["map_a", "map_b"],
             zones="zone_map",
+            flags="ge",
+            nprocs=4,
+            reference=univar_string,
+            precision=6,
+            sep="=",
+        )
+
+    def test_zone_with_gap_in_cats(self):
+        """
+        test if gaps in categories in a map are not included in the output
+        :return:
+        """
+
+        # Output of r.univar
+        univar_string = """zone=2;
+                           n=12600
+                           null_cells=0
+                           cells=12600
+                           min=122
+                           max=380
+                           range=258
+                           mean=251
+                           mean_of_abs=251
+                           stddev=59.8595578555895
+                           variance=3583.16666666667
+                           coeff_var=23.8484294245376
+                           sum=3162600
+                           first_quartile=201
+                           median=251
+                           third_quartile=301
+                           percentile_90=331
+                           zone=9;
+                           n=3600
+                           null_cells=0
+                           cells=12600
+                           min=102
+                           max=310
+                           range=208
+                           mean=206
+                           mean_of_abs=206
+                           stddev=56.6406803160649
+                           variance=3208.16666666667
+                           coeff_var=27.4954758815849
+                           sum=741600
+                           first_quartile=156
+                           median=206
+                           third_quartile=256
+                           percentile_90=283"""
+
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map=["map_a", "map_b"],
+            zones="zone_map_with_gap",
+            flags="ge",
+            reference=univar_string,
+            precision=6,
+            sep="=",
+        )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map=["map_a", "map_b"],
+            zones="zone_map_with_gap",
             flags="ge",
             nprocs=4,
             reference=univar_string,
