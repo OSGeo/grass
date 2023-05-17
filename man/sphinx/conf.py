@@ -238,7 +238,7 @@ texinfo_documents = [
         project,
         "GRASS Development Team",
         "grass_gis",
-        "Documentaion for Python API of GRASS GIS",
+        "Documentation for GRASS GIS in Sphinx",
         "Miscellaneous",
     ),
 ]
