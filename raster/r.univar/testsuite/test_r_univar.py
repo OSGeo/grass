@@ -243,7 +243,7 @@ class TestRasterUnivar(TestCase):
                         zone=2;
                         n=6390
                         null_cells=0
-                        cells=1710
+                        cells=6390
                         min=121
                         max=280
                         range=159
@@ -295,7 +295,7 @@ class TestRasterUnivar(TestCase):
                         zone=2;
                         n=12780
                         null_cells=0
-                        cells=3420
+                        cells=12780
                         min=121
                         max=380
                         range=259
@@ -353,7 +353,7 @@ class TestRasterUnivar(TestCase):
                         zone=2;
                         n=12780
                         null_cells=0
-                        cells=3420
+                        cells=12780
                         min=121
                         max=380
                         range=259
@@ -415,7 +415,7 @@ class TestRasterUnivar(TestCase):
                            zone=9;
                            n=3600
                            null_cells=0
-                           cells=12600
+                           cells=3600
                            min=102
                            max=310
                            range=208
