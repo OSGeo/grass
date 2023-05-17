@@ -1,7 +1,7 @@
-# Development and Maintanance Documentation
+# Development and Maintenance Documentation
 
 Here is development and maitanance documentation. The API documentation
-is at appropriate places, but here is the information relavant to
+is at appropriate places, but here is the information relevant to
 contributing to GRASS GIS and its maintanance.
 
 ## How to generate the 'Programmer's Manual'
@@ -17,7 +17,7 @@ To build the GRASS programmer's documentation, run
 make htmldocs
 ```
 
-Or to generate documentation as single html file
+Or to generate documentation as a single html file
 (recommended for simple reading)
 
 ```sh
