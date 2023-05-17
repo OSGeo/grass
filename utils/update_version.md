@@ -1,6 +1,6 @@
 # Updating Version File
 
-Version file (`include/VERSION`) can be updated using the _update_version.md_ script.
+Version file (`include/VERSION`) can be updated using the _update_version.py_ script.
 
 The script captures the logic of updating the version file incorporating
 the common actions and workflow checks.
@@ -54,20 +54,22 @@ echo $VERSION
 
 ### Updating Minor Version
 
-Let's say we are at development-only version 3.1.dev and just created
+Let's say we are at the main branch, version 3.2.0dev, and just created
 a new branch for 3.2 release, so we want to update the minor version
-to the next minor version:
+on the main branch to the next minor version:
 
 ```sh
 ./utils/update_version.py minor
 ```
 
 Separately, or as part of other changes, now is the time to commit,
-so the script suggests a commit message:
+so the script suggests a commit message in the output, e.g.:
 
 ```yaml
-message: Use the provided title as a commit message
-title: 'version: Start 3.2.0dev'
+read:
+  user_message: Use the provided message for the commit
+use:
+  commit_message: 'version: Start 3.2.0dev'
 ```
 
 ### Error Handling
@@ -85,15 +87,4 @@ only after the release:
 
 ```text
 Already dev with micro '0dev'. Release first before update.
-```
-
-### Updating Development-only Version
-
-Development-only versions have odd minor version numbers and are never actually
-released. Given the branching model, all these versions are on the _main_ branch,
-so there the minor version is increased by two. This can be done by running
-the _minor_ command twice or by using the `minor --dev`:
-
-```sh
-./utils/update_version.py minor --dev
 ```

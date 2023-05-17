@@ -143,22 +143,9 @@ def update_minor(args):
     version_file = read_version_file()
     micro = version_file.micro
     minor = int(version_file.minor)
-    if args.dev:
-        if not minor % 2:
-            sys.exit(
-                "Updating to a development-only version "
-                f"from an even minor version '{minor}' is not possible"
-            )
-        minor += 2
-    else:
-        minor += 1
+    minor += 1
     if micro.endswith("dev"):
-        if minor % 2:
-            # Odd is development-only, never released and without micro version.
-            micro = "dev"
-        else:
-            # Even will be released, so adding micro version.
-            micro = "0dev"
+        micro = "0dev"
     else:
         sys.exit("Updating version from a non-dev VERSION file is not possible")
     write_version_file(
@@ -282,9 +269,6 @@ def main():
 
     subparser = subparsers.add_parser(
         "minor", help="increase minor (x.Y.z) version (uses dev in micro)"
-    )
-    subparser.add_argument(
-        "--dev", action="store_true", help="increase development-only version"
     )
     subparser.set_defaults(func=update_minor)
 
