@@ -1,14 +1,27 @@
 # Branching How-To
 
+## Assumptions
+
+Given the creation of a new release branch will typically happen right before RC1 of a new release series, please see assumptions in the howto_release.md document.
+
+## Create a New Branch
+
 Use GitHub web interface to create a new branch:
 
-Go to _branches_ Click _New branch_ Click _Create branch_
+1. Go to _branches_.
+2. Copy name of one of the existing branches.
+3. Click _New branch_.
+4. Paste name of the existing branch.
+5. Modify the name.
+6. Click _Create branch_.
+
+Alternatively, see below instructions for create a new branch using command line.
 
 ## Check the Version
 
 ```bash
 git fetch upstream
-git switch releasebranch_8_3
+git switch releasebranch_8_4
 ```
 
 If you make changes, commit them:
