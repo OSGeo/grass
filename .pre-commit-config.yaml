@@ -37,6 +37,10 @@ repos:
     rev: v0.33.0
     hooks:
       - id: markdownlint
+        exclude: |
+          (?x)^(
+                README.md
+          )
   - repo: https://github.com/psf/black
     rev: 23.1.0
     hooks:
