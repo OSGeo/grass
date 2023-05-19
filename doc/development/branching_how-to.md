@@ -15,6 +15,7 @@ Use GitHub web interface to create a new branch:
 5. Modify the name.
 6. Click _Create branch_.
 
+Note down the commit hash which will be recorded in the [release history overview](https://grass.osgeo.org/about/history/releases/).
 Alternatively, see the instructions below to create a new branch using command line.
 
 ## Check the Version
