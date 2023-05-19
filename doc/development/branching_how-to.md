@@ -15,7 +15,7 @@ Use GitHub web interface to create a new branch:
 5. Modify the name.
 6. Click _Create branch_.
 
-Alternatively, see below instructions for create a new branch using command line.
+Alternatively, see the instructions below to create a new branch using command line.
 
 ## Check the Version
 
