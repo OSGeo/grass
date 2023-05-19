@@ -8,8 +8,8 @@
 #include <grass/manage.h>
 #include <grass/glocale.h>
 
-static int region_overlaps(const struct Cell_head *, const char *,
-                           const char *, int);
+static int region_overlaps(const struct Cell_head *, const char *, const char *,
+                           int);
 static int compare_elist(const void *, const void *);
 
 void make_list(struct elist **el, int *lcount, int *lalloc,
@@ -70,7 +70,7 @@ void make_list(struct elist **el, int *lcount, int *lalloc,
     G_free(list);
 }
 
-void print_list(FILE * fp, struct elist *el, int count, const char *separator,
+void print_list(FILE *fp, struct elist *el, int count, const char *separator,
                 int add_type, int add_mapset)
 {
     int i;
@@ -128,8 +128,9 @@ static int region_overlaps(const struct Cell_head *window, const char *name,
     case TYPE_VECT:
         Vect_set_open_level(2);
         if (Vect_open_old_head(&Map, name, mapset) < 2)
-            G_fatal_error(_("Unable to open vector map <%s@%s> on topological level"),
-                          name, mapset);
+            G_fatal_error(
+                _("Unable to open vector map <%s@%s> on topological level"),
+                name, mapset);
         Vect_get_map_box(&Map, &box);
         Vect_close(&Map);
 

@@ -22,7 +22,7 @@
  *
  * \return file descriptor
  */
-int Rowio_fileno(const ROWIO * R)
+int Rowio_fileno(const ROWIO *R)
 {
     return R->fd;
 }

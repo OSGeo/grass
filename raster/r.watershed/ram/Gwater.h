@@ -1,7 +1,6 @@
 #ifndef __G_WATER_H__
 #define __G_WATER_H__
 
-
 /* program to map out drainage basin structure  */
 /* this one uses the A * search algorithm       */
 /* written by Chuck Ehlschlaeger                */
@@ -16,31 +15,33 @@
 /* program that memory runs out */
 /* #define G_malloc malloc */
 
-#define AR_SIZE			16
-#define AR_INCR			16
-#define NOMASK			1
-#define MIN_SLOPE		.00001
-#define MIN_GRADIENT_DEGREES	1
-#define DEG_TO_RAD		((2 * M_PI) / 360.)
-#define METER_TO_FOOT		(1 / 0.3048)
-#define MAX_BYTES		2000000
-#define PAGE_BLOCK		512
-#define RITE			1
-#define LEFT			2
-#define NEITHER			0
-#define ABS(x)	(((x) < 0) ? -(x) : (x))
-#define TSTSTR(a)	(fprintf (stderr, "%s\n", a))
-#define TST(a)		(fprintf (stderr, "%e\n", (double) (a)))
+#define AR_SIZE              16
+#define AR_INCR              16
+#define NOMASK               1
+#define MIN_SLOPE            .00001
+#define MIN_GRADIENT_DEGREES 1
+#define DEG_TO_RAD           ((2 * M_PI) / 360.)
+#define METER_TO_FOOT        (1 / 0.3048)
+#define MAX_BYTES            2000000
+#define PAGE_BLOCK           512
+#define RITE                 1
+#define LEFT                 2
+#define NEITHER              0
+#define ABS(x)               (((x) < 0) ? -(x) : (x))
+#define TSTSTR(a)            (fprintf(stderr, "%s\n", a))
+#define TST(a)               (fprintf(stderr, "%e\n", (double)(a)))
 
-#define POINT       struct points
-POINT {
-    int r, c;                   /* , downr, downc */
+#define POINT                struct points
+POINT
+{
+    int r, c; /* , downr, downc */
 
     /* int nxt; */
 };
 
 #define OC_STACK struct overland_cells_stack
-OC_STACK {
+OC_STACK
+{
     int row, col;
 };
 
@@ -145,6 +146,5 @@ CELL split_stream(int, int, int[], int[], int, CELL, double, CELL);
 
 /* usage.c */
 void usage(char *);
-
 
 #endif /* __G_WATER_H__ */

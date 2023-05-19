@@ -351,7 +351,6 @@ class WSPanel(wx.Panel):
         border = wx.BoxSizer(wx.VERTICAL)
 
         if "WMS" in self.ws:
-
             boxSizer = wx.StaticBoxSizer(labels["l_order"], wx.VERTICAL)
             gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
 
@@ -380,7 +379,6 @@ class WSPanel(wx.Panel):
 
         row = 0
         for k in ["method", "maxcols", "maxrows", "o", "bgcolor"]:
-
             if k in self.params:
                 param = self.params[k]
             elif k in self.flags:
@@ -669,7 +667,6 @@ class WSPanel(wx.Panel):
         if "bgcolor" in dcmd and self.params["bgcolor"]:
             bgcolor = dcmd["bgcolor"].strip().lower()
             if len(bgcolor) == 8 and "0x" == bgcolor[:2]:
-
                 colour = "#" + bgcolor[2:]
                 self.params["bgcolor"].SetColour(colour)
 
@@ -776,7 +773,6 @@ class WSPanel(wx.Panel):
             projs_list = set(projs_list).intersection(layer_projs)
 
         if "srs" not in self.drv_props["ignored_params"]:
-
             for proj in projs_list:
                 proj_code = Srs(proj.strip()).getcode()
                 proj_spl = proj_code.split(":")
@@ -962,7 +958,6 @@ class LayersList(TreeCtrl):
 
                 def_st = None
                 for st in styles:
-
                     if st["name"]:
                         style_name = st["name"]
                     else:
@@ -1043,7 +1038,6 @@ class LayersList(TreeCtrl):
             self.layerSelected.emit(title=title)
 
         def _selectRequestableChildren(item, list_to_check, items_to_sel):
-
             self.Expand(item)
             child_item, cookie = self.GetFirstChild(item)
             while child_item and child_item.IsOk():
@@ -1106,7 +1100,6 @@ class LayersList(TreeCtrl):
                     (not it_st and not st_name)
                     or (it_st and it_st["name"] == st_name and it_type == "style")
                 ):
-
                     return True
 
                 return False
@@ -1156,12 +1149,10 @@ class LayersList(TreeCtrl):
 
 class WSManageSettingsWidget(ManageSettingsWidget):
     def __init__(self, parent, settingsFile, default_servers):
-
         ManageSettingsWidget.__init__(self, parent, settingsFile)
         self.default_servers = default_servers
 
     def _layout(self):
-
         self.btnAddDefaultServers = Button(
             parent=self, id=wx.ID_ANY, label=_("Add default")
         )
@@ -1171,7 +1162,6 @@ class WSManageSettingsWidget(ManageSettingsWidget):
         self.settingsSizer.Add(self.btnAddDefaultServers, flag=wx.RIGHT, border=5)
 
     def OnAddDefaultServers(self, event):
-
         setts = self.GetSettings()
         self.servers_to_add = {}
         for k, v in six.iteritems(self.default_servers):

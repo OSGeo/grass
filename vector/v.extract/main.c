@@ -1,12 +1,11 @@
-
 /****************************************************************
  *
  * MODULE:     v.extract
- * 
+ *
  * AUTHOR(S):  R.L.Glenn , Soil Conservation Service, USDA
  *             Updated for 5.7 by Radim Blazek
  *             Updated for 7.0 by Martin Landa <landa.martin gmail.com>
- *               
+ *
  * PURPOSE:    Selects vector features from an existing vector map and
  *             creates a new vector map containing only the selected
  *             features.
@@ -50,13 +49,11 @@ int main(int argc, char **argv)
     FILE *in;
 
     struct GModule *module;
-    struct
-    {
-        struct Option *input, *output, *file, *new, *type, *list,
-            *field, *where, *nrand, *d_key;
+    struct {
+        struct Option *input, *output, *file, *new, *type, *list, *field,
+            *where, *nrand, *d_key;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *t, *d, *r;
     } flag;
 
@@ -124,8 +121,8 @@ int main(int argc, char **argv)
     opt.file = G_define_standard_option(G_OPT_F_INPUT);
     opt.file->key = "file";
     opt.file->required = NO;
-    opt.file->label =
-        _("Input text file with category numbers/number ranges to be extracted");
+    opt.file->label = _(
+        "Input text file with category numbers/number ranges to be extracted");
     opt.file->description = _("If '-' given reads from standard input");
     opt.file->guisection = _("Selection");
 
@@ -169,9 +166,10 @@ int main(int argc, char **argv)
     if (opt.nrand->answer != NULL)
         c++;
     if (c > 1)
-        G_fatal_error(_("Options <%s>, <%s>, <%s> and <%s> options are exclusive. "
-                       "Please specify only one of them."), opt.list->key,
-                      opt.file->key, opt.where->key, opt.nrand->key);
+        G_fatal_error(
+            _("Options <%s>, <%s>, <%s> and <%s> options are exclusive. "
+              "Please specify only one of them."),
+            opt.list->key, opt.file->key, opt.where->key, opt.nrand->key);
 
     type_only = FALSE;
     if (!opt.list->answers && !opt.file->answer && !opt.where->answer &&
@@ -189,7 +187,7 @@ int main(int argc, char **argv)
         new_cat = atoi(opt.new->answer);
 
     /* Do initial read of input file */
-    Vect_set_open_level(2);     /* topology required */
+    Vect_set_open_level(2); /* topology required */
 
     if (Vect_open_old2(&In, input, "", opt.field->answer) < 0)
         G_fatal_error(_("Unable to open vector map <%s>"), input);
@@ -203,8 +201,7 @@ int main(int argc, char **argv)
 
     dissolve_key = NULL;
     if (flag.d->answer &&
-        ((type & GV_AREA) ||
-         ((type & GV_CENTROID) && (type & GV_BOUNDARY)))) {
+        ((type & GV_AREA) || ((type & GV_CENTROID) && (type & GV_BOUNDARY)))) {
         dissolve = TRUE;
         if (field > 0 && opt.d_key->answer) {
             int ncols, ret;
@@ -216,8 +213,9 @@ int main(int argc, char **argv)
 
             Fi = Vect_get_field(&In, field);
             if (!Fi) {
-                G_fatal_error(_("Database connection not defined for layer <%s>"),
-                              opt.field->answer);
+                G_fatal_error(
+                    _("Database connection not defined for layer <%s>"),
+                    opt.field->answer);
             }
 
             G_verbose_message(_("Searching for column <%s> in table <%s>..."),
@@ -278,7 +276,7 @@ int main(int argc, char **argv)
                 add_cat(x++);
         }
     }
-    else if (opt.file->answer != NULL) {        /* got a file of category numbers */
+    else if (opt.file->answer != NULL) { /* got a file of category numbers */
         if (strcmp(opt.file->answer, "-") == 0) {
             in = stdin;
         }
@@ -326,13 +324,13 @@ int main(int argc, char **argv)
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Fi->database, Fi->driver);
 
-        ncats = db_select_int(driver, Fi->table, Fi->key, opt.where->answer,
-                              &cats);
+        ncats =
+            db_select_int(driver, Fi->table, Fi->key, opt.where->answer, &cats);
         if (ncats == -1)
             G_fatal_error(_("Unable select records from table <%s>"),
                           Fi->table);
-        G_verbose_message(n_("%d category loaded",
-                             "%d categories loaded", ncats), ncats);
+        G_verbose_message(
+            n_("%d category loaded", "%d categories loaded", ncats), ncats);
 
         db_close_database(driver);
         db_shutdown_driver(driver);
@@ -342,7 +340,7 @@ int main(int argc, char **argv)
         if (ncats >= 0)
             G_free(cats);
     }
-    else if (opt.nrand->answer != NULL) {       /* Generate random category list */
+    else if (opt.nrand->answer != NULL) { /* Generate random category list */
         /* We operate on layer's CAT's and thus valid layer is required */
         if (Vect_cidx_get_field_index(&In, field) < 0)
             G_fatal_error(_("This map has no categories attached. "
@@ -356,16 +354,19 @@ int main(int argc, char **argv)
 
         nfeatures = Vect_cidx_get_type_count(&In, field, type);
         if (nrandom >= nfeatures)
-            G_fatal_error(_("Random category count must be smaller than feature count. "
-                           "There are only %d features of type(s): %s"),
-                          nfeatures, opt.type->answer);
+            G_fatal_error(
+                _("Random category count must be smaller than feature count. "
+                  "There are only %d features of type(s): %s"),
+                nfeatures, opt.type->answer);
 
         /* Let's create an array of uniq CAT values
-           According to Vlib/build.c, cidx should be already sorted by dig_cidx_sort() */
+           According to Vlib/build.c, cidx should be already sorted by
+           dig_cidx_sort() */
         ci = &(In.plus.cidx[Vect_cidx_get_field_index(&In, field)]);
         ucat_count = 0;
         for (c = 0; c < ci->n_cats; c++) {
-            /* Bitwise AND compares ci feature type with user's requested types */
+            /* Bitwise AND compares ci feature type with user's requested types
+             */
             if (ci->cat[c][1] & type) {
                 /* Don't do anything if such value already exists */
                 if (ucat_count > 0 &&
@@ -390,14 +391,14 @@ int main(int argc, char **argv)
         /* Fill cat_array with list of valid random numbers */
         while (cat_count < nrandom) {
             /* Random number in range from 0 to largest CAT value */
-            prnd = (int)floor(G_math_rand() *
-                              (ucat_array[ucat_count - 1] + 1));
+            prnd = (int)floor(G_math_rand() * (ucat_array[ucat_count - 1] + 1));
             qsort(cat_array, cat_count, sizeof(int), cmp);
-            /* Check if generated number isn't already in 
+            /* Check if generated number isn't already in
                final list and is in list of existing CATs */
-            if (bsearch(&prnd, cat_array, cat_count, sizeof(int), cmp) == NULL
-                && bsearch(&prnd, ucat_array, ucat_count, sizeof(int),
-                           cmp) != NULL)
+            if (bsearch(&prnd, cat_array, cat_count, sizeof(int), cmp) ==
+                    NULL &&
+                bsearch(&prnd, ucat_array, ucat_count, sizeof(int), cmp) !=
+                    NULL)
                 add_cat(prnd);
         }
         G_free(ucat_array);
@@ -421,9 +422,8 @@ int main(int argc, char **argv)
         Vect_copy_map_dblinks(&In, &Out, TRUE);
     }
 
-    extract_line(cat_count, cat_array, &In, &Out, new_cat, type,
-                 dissolve, dissolve_key, field, type_only,
-                 flag.r->answer ? 1 : 0);
+    extract_line(cat_count, cat_array, &In, &Out, new_cat, type, dissolve,
+                 dissolve_key, field, type_only, flag.r->answer ? 1 : 0);
 
     Vect_build(&Out);
 
@@ -442,7 +442,7 @@ int main(int argc, char **argv)
         nlines = Vect_get_num_lines(&Out);
         for (line = 1; line <= nlines; line++) {
             if (!Vect_line_alive(&Out, line))
-                continue;       /* should not happen */
+                continue; /* should not happen */
 
             ltype = Vect_read_line(&Out, NULL, NULL, line);
             if (!(ltype & GV_CENTROID)) {
@@ -479,7 +479,7 @@ int scan_cats(char *s, int *x, int *y)
 {
     char dummy[2];
 
-    if (strlen(s) == 0) {       /* error */
+    if (strlen(s) == 0) { /* error */
         *y = *x = -1;
         return 1;
     }

@@ -336,7 +336,6 @@ class DatabasePage(TitledPage):
         dlg.Destroy()
 
     def OnPageChanging(self, event=None):
-
         self.location = self.tlocation.GetValue()
         self.grassdatabase = self.tgisdbase.GetLabel()
         self.locTitle = self.tlocTitle.GetValue()
@@ -1135,7 +1134,7 @@ class DatumPage(TitledPage):
             if self.datum not in self.parent.datums:
                 event.Veto()
             else:
-                # check for datum tranforms
+                # check for datum transforms
                 #                proj4string = self.parent.CreateProj4String()
                 #                + ' +datum=%s' % self.datum
                 ret = RunCommand(
@@ -2101,7 +2100,7 @@ class CustomPage(TitledPage):
                 self.GetNext().SetPrev(self)
                 return
 
-            # check for datum tranforms
+            # check for datum transforms
             # FIXME: -t flag is a hack-around for trac bug #1849
             ret, out, err = RunCommand(
                 "g.proj",
@@ -2773,7 +2772,7 @@ class LocationWizard(wx.Object):
         return None
 
     def CreateProj4String(self):
-        """Constract PROJ.4 string"""
+        """Construct PROJ.4 string"""
         proj = self.projpage.p4proj
         proj4params = self.paramspage.p4projparams
 

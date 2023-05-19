@@ -435,7 +435,7 @@ def get_tgis_database_string():
     """Return the preprocessed temporal database string
 
     This string is the temporal database string set with t.connect
-    that was processed to substitue location, gisdbase and mapset
+    that was processed to substitute location, gisdbase and mapset
     variables.
     """
     global tgis_database_string
@@ -1247,7 +1247,6 @@ class SQLDatabaseInterfaceConnection(object):
         return self.connections[mapset].execute_transaction(statement)
 
     def _create_mapset_error_message(self, mapset):
-
         return (
             "You have no permission to "
             "access mapset <%(mapset)s>, or "
@@ -1501,7 +1500,6 @@ class DBConnection(object):
 
         # Check if the database already exists
         if self.dbmi.__name__ == "sqlite3":
-
             self.cursor.execute(
                 "SELECT name FROM sqlite_master WHERE "
                 "type='table' AND name='%s';" % table_name

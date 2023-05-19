@@ -11,8 +11,7 @@ int init_vars(int argc, char *argv[])
 {
     int r, c;
     int ele_fd, wat_fd, fd = -1;
-    int seg_rows, seg_cols, num_cseg_total, num_open_segs,
-        num_open_array_segs;
+    int seg_rows, seg_cols, num_cseg_total, num_open_segs, num_open_array_segs;
     double memory_divisor, heap_mem, seg_factor, disk_space;
 
     /* int page_block, num_cseg; */
@@ -65,8 +64,10 @@ int init_vars(int argc, char *argv[])
             asp_flag++;
         else if (sscanf(argv[r], "depression=%s", pit_name) == 1)
             pit_flag++;
-        else if (sscanf(argv[r], "threshold=%d", &bas_thres) == 1) ;
-        else if (sscanf(argv[r], "max_slope_length=%lf", &max_length) == 1) ;
+        else if (sscanf(argv[r], "threshold=%d", &bas_thres) == 1)
+            ;
+        else if (sscanf(argv[r], "max_slope_length=%lf", &max_length) == 1)
+            ;
         else if (sscanf(argv[r], "basin=%s", bas_name) == 1)
             bas_flag++;
         else if (sscanf(argv[r], "stream=%s", seg_name) == 1)
@@ -88,7 +89,8 @@ int init_vars(int argc, char *argv[])
             ls_flag++;
         else if (sscanf(argv[r], "blocking=%s", ob_name) == 1)
             ob_flag++;
-        else if (sscanf(argv[r], "memory=%lf", &segs_mb) == 1) ;
+        else if (sscanf(argv[r], "memory=%lf", &segs_mb) == 1)
+            ;
         else if (sscanf(argv[r], "disturbed_land=%s", ril_name) == 1) {
             if (sscanf(ril_name, "%lf", &ril_value) == 0) {
                 ril_value = -1.0;
@@ -101,7 +103,8 @@ int init_vars(int argc, char *argv[])
             if (sides != 4)
                 usage(argv[0]);
         }
-        else if (sscanf(argv[r], "convergence=%d", &c_fac) == 1) ;
+        else if (sscanf(argv[r], "convergence=%d", &c_fac) == 1)
+            ;
         else if (strcmp(argv[r], "-s") == 0)
             mfd = 0;
         else if (strcmp(argv[r], "-a") == 0)
@@ -113,15 +116,12 @@ int init_vars(int argc, char *argv[])
     if (mfd == 1 && (c_fac < 1 || c_fac > 10)) {
         G_fatal_error("Convergence factor must be between 1 and 10.");
     }
-    if ((ele_flag != 1)
-        ||
+    if ((ele_flag != 1) ||
         ((arm_flag == 1) &&
-         ((bas_thres <= 0) || ((haf_flag != 1) && (bas_flag != 1))))
-        ||
+         ((bas_thres <= 0) || ((haf_flag != 1) && (bas_flag != 1)))) ||
         ((bas_thres <= 0) &&
          ((bas_flag == 1) || (seg_flag == 1) || (haf_flag == 1) ||
-          (sl_flag == 1) || (sg_flag == 1) || (ls_flag == 1)))
-        )
+          (sl_flag == 1) || (sg_flag == 1) || (ls_flag == 1))))
         usage(argv[0]);
     tot_parts = 4;
     if (sl_flag || sg_flag || ls_flag)
@@ -136,10 +136,11 @@ int init_vars(int argc, char *argv[])
     if (tci_flag || spi_flag)
         atanb_flag = 1;
 
-    G_message(n_
-              ("SECTION 1 beginning: Initiating Variables. %d section total.",
-               "SECTION 1 beginning: Initiating Variables. %d sections total.",
-               tot_parts), tot_parts);
+    G_message(
+        n_("SECTION 1 beginning: Initiating Variables. %d section total.",
+           "SECTION 1 beginning: Initiating Variables. %d sections total.",
+           tot_parts),
+        tot_parts);
 
     this_mapset = G_mapset();
     /* for sd factor
@@ -158,8 +159,7 @@ int init_vars(int argc, char *argv[])
         half_res = .5 * window.ew_res;
     else
         half_res = .5 * window.ns_res;
-    diag = sqrt(window.ew_res * window.ew_res +
-                window.ns_res * window.ns_res);
+    diag = sqrt(window.ew_res * window.ew_res + window.ns_res * window.ns_res);
     if (sides == 4)
         diag *= 0.5;
 
@@ -288,7 +288,7 @@ int init_vars(int argc, char *argv[])
     afbuf = G_malloc(ncols * sizeof(ASP_FLAG));
 
     if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
-        ele_scale = 1000;       /* should be enough to do the trick */
+        ele_scale = 1000; /* should be enough to do the trick */
 
     /* initial flow accumulation */
     if (run_flag) {
@@ -307,7 +307,7 @@ int init_vars(int argc, char *argv[])
 
     /* read elevation input and mark NULL/masked cells */
     G_message("SECTION 1a: Mark masked and NULL cells");
-    do_points = (GW_LARGE_INT) nrows *ncols;
+    do_points = (GW_LARGE_INT)nrows * ncols;
 
     for (r = 0; r < nrows; r++) {
         G_percent(r, nrows, 1);
@@ -336,15 +336,15 @@ int init_vars(int argc, char *argv[])
             }
             else {
                 if (ele_map_type == CELL_TYPE) {
-                    alt_value = *((CELL *) ptr);
+                    alt_value = *((CELL *)ptr);
                 }
                 else if (ele_map_type == FCELL_TYPE) {
-                    dvalue = *((FCELL *) ptr);
+                    dvalue = *((FCELL *)ptr);
                     dvalue *= ele_scale;
                     alt_value = ele_round(dvalue);
                 }
                 else if (ele_map_type == DCELL_TYPE) {
-                    dvalue = *((DCELL *) ptr);
+                    dvalue = *((DCELL *)ptr);
                     dvalue *= ele_scale;
                     alt_value = ele_round(dvalue);
                 }
@@ -352,17 +352,17 @@ int init_vars(int argc, char *argv[])
                 /* flow accumulation */
                 if (run_flag) {
                     if (Rast_is_null_value(watptr, wat_map_type)) {
-                        wat_value = 0;  /* ok ? */
+                        wat_value = 0; /* ok ? */
                     }
                     else {
                         if (wat_map_type == CELL_TYPE) {
-                            wat_value = *((CELL *) watptr);
+                            wat_value = *((CELL *)watptr);
                         }
                         else if (wat_map_type == FCELL_TYPE) {
-                            wat_value = *((FCELL *) watptr);
+                            wat_value = *((FCELL *)watptr);
                         }
                         else if (wat_map_type == DCELL_TYPE) {
-                            wat_value = *((DCELL *) watptr);
+                            wat_value = *((DCELL *)watptr);
                         }
                     }
                 }
@@ -421,7 +421,7 @@ int init_vars(int argc, char *argv[])
                 bseg_put(&rtn, &rtn_value, r, c);
             }
         }
-        G_percent(nrows, nrows, 1);     /* finish it */
+        G_percent(nrows, nrows, 1); /* finish it */
         Rast_close(fd);
         G_free(buf);
     }
@@ -488,19 +488,19 @@ int init_vars(int argc, char *argv[])
     if (do_points % seg_cols > 0)
         num_cseg_total++;
     /* no need to have more segments open than exist */
-    num_open_array_segs =
-        (1 << 20) * heap_mem / (seg_cols * sizeof(HEAP_PNT));
+    num_open_array_segs = (1 << 20) * heap_mem / (seg_cols * sizeof(HEAP_PNT));
     if (num_open_array_segs > num_cseg_total)
         num_open_array_segs = num_cseg_total;
     if (num_open_array_segs < 2)
         num_open_array_segs = 2;
 
-    G_debug(1, "A* search heap open segments %d, total %d",
-            num_open_array_segs, num_cseg_total);
-    /* the search heap will not hold more than 5% of all points at any given time ? */
+    G_debug(1, "A* search heap open segments %d, total %d", num_open_array_segs,
+            num_cseg_total);
+    /* the search heap will not hold more than 5% of all points at any given
+     * time ? */
     /* chances are good that the heap will fit into one large segment */
-    seg_open(&search_heap, 1, do_points + 1, 1, seg_cols,
-             num_open_array_segs, sizeof(HEAP_PNT));
+    seg_open(&search_heap, 1, do_points + 1, 1, seg_cols, num_open_array_segs,
+             sizeof(HEAP_PNT));
 
     G_message(_("SECTION 1b: Determining Offmap Flow."));
 
@@ -592,10 +592,10 @@ int init_vars(int argc, char *argv[])
                     }
                 }
 
-            }                   /* end non-NULL cell */
-        }                       /* end column */
+            } /* end non-NULL cell */
+        }     /* end column */
     }
-    G_percent(r, nrows, 1);     /* finish it */
+    G_percent(r, nrows, 1); /* finish it */
 
     return 0;
 }

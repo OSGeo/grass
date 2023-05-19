@@ -30,7 +30,8 @@
 #include <stdlib.h>
 #include "pavlrc.h"
 
-#define CMP_RC(a, b) ((a)->row == (b)->row ? (a)->col - (b)->col : (a)->row - (b)->row)
+#define CMP_RC(a, b) \
+    ((a)->row == (b)->row ? (a)->col - (b)->col : (a)->row - (b)->row)
 
 /* Creates and returns a new table
    with comparison function |compare| using parameter |param|
@@ -82,11 +83,11 @@ struct pavlrc *pavlrc_find(const struct pavlrc_table *tree,
    Returns |NULL| in case of memory allocation failure. */
 struct pavlrc *pavlrc_probe(struct pavlrc_table *tree, struct pavlrc *item)
 {
-    struct pavlrc_node *y;      /* Top node to update balance factor, and parent. */
-    struct pavlrc_node *p, *q;  /* Iterator, and parent. */
-    struct pavlrc_node *n;      /* Newly inserted node. */
-    struct pavlrc_node *w;      /* New root of rebalanced subtree. */
-    int dir;                    /* Direction to descend. */
+    struct pavlrc_node *y; /* Top node to update balance factor, and parent. */
+    struct pavlrc_node *p, *q; /* Iterator, and parent. */
+    struct pavlrc_node *n;     /* Newly inserted node. */
+    struct pavlrc_node *w;     /* New root of rebalanced subtree. */
+    int dir;                   /* Direction to descend. */
 
     assert(tree != NULL && item != NULL);
 
@@ -119,7 +120,7 @@ struct pavlrc *pavlrc_probe(struct pavlrc_table *tree, struct pavlrc *item)
     if (q == NULL) {
         tree->pavl_root = n;
 
-        return item /* &n->pavl_data */ ;
+        return item /* &n->pavl_data */;
     }
     q->pavl_link[dir] = n;
 
@@ -165,7 +166,7 @@ struct pavlrc *pavlrc_probe(struct pavlrc_table *tree, struct pavlrc *item)
                 x->pavl_balance = 0, y->pavl_balance = +1;
             else if (w->pavl_balance == 0)
                 x->pavl_balance = y->pavl_balance = 0;
-            else                /* |w->pavl_balance == +1| */
+            else /* |w->pavl_balance == +1| */
                 x->pavl_balance = -1, y->pavl_balance = 0;
             w->pavl_balance = 0;
             w->pavl_parent = y->pavl_parent;
@@ -200,7 +201,7 @@ struct pavlrc *pavlrc_probe(struct pavlrc_table *tree, struct pavlrc *item)
                 x->pavl_balance = 0, y->pavl_balance = -1;
             else if (w->pavl_balance == 0)
                 x->pavl_balance = y->pavl_balance = 0;
-            else                /* |w->pavl_balance == -1| */
+            else /* |w->pavl_balance == -1| */
                 x->pavl_balance = +1, y->pavl_balance = 0;
             w->pavl_balance = 0;
             w->pavl_parent = y->pavl_parent;
@@ -212,14 +213,14 @@ struct pavlrc *pavlrc_probe(struct pavlrc_table *tree, struct pavlrc *item)
         }
     }
     else
-        return item /* &n->pavl_data */ ;
+        return item /* &n->pavl_data */;
 
     if (w->pavl_parent != NULL)
         w->pavl_parent->pavl_link[y != w->pavl_parent->pavl_link[0]] = w;
     else
         tree->pavl_root = w;
 
-    return item /* &n->pavl_data */ ;
+    return item /* &n->pavl_data */;
 }
 
 /* Inserts |item| into |table|.
@@ -256,10 +257,10 @@ struct pavlrc *pavlrc_replace(struct pavlrc_table *table, struct pavlrc *item)
    Returns a null pointer if no matching item found. */
 struct pavlrc *pavlrc_delete(struct pavlrc_table *tree, struct pavlrc *item)
 {
-    struct pavlrc_node *p;      /* Traverses tree to find node to delete. */
-    struct pavlrc_node *q;      /* Parent of |p|. */
-    int dir;                    /* Side of |q| on which |p| is linked. */
-    int cmp;                    /* Result of comparison between |item| and |p|. */
+    struct pavlrc_node *p; /* Traverses tree to find node to delete. */
+    struct pavlrc_node *q; /* Parent of |p|. */
+    int dir;               /* Side of |q| on which |p| is linked. */
+    int cmp;               /* Result of comparison between |item| and |p|. */
 
     assert(tree != NULL && item != NULL);
 
@@ -355,7 +356,7 @@ struct pavlrc *pavlrc_delete(struct pavlrc_table *tree, struct pavlrc *item)
                         x->pavl_balance = 0, y->pavl_balance = -1;
                     else if (w->pavl_balance == 0)
                         x->pavl_balance = y->pavl_balance = 0;
-                    else        /* |w->pavl_balance == -1| */
+                    else /* |w->pavl_balance == -1| */
                         x->pavl_balance = +1, y->pavl_balance = 0;
                     w->pavl_balance = 0;
                     w->pavl_parent = y->pavl_parent;
@@ -407,7 +408,7 @@ struct pavlrc *pavlrc_delete(struct pavlrc_table *tree, struct pavlrc *item)
                         x->pavl_balance = 0, y->pavl_balance = +1;
                     else if (w->pavl_balance == 0)
                         x->pavl_balance = y->pavl_balance = 0;
-                    else        /* |w->pavl_balance == +1| */
+                    else /* |w->pavl_balance == +1| */
                         x->pavl_balance = -1, y->pavl_balance = 0;
                     w->pavl_balance = 0;
                     w->pavl_parent = y->pavl_parent;
@@ -542,9 +543,9 @@ struct pavlrc *pavlrc_t_insert(struct pavlrc_traverser *trav,
     p = pavlrc_probe(tree, item);
     if (p != NULL) {
         trav->pavl_table = tree;
-        trav->pavl_node = ((struct pavlrc_node *)((char *)p -
-                                                  offsetof(struct pavlrc_node,
-                                                           pavl_data)));
+        trav->pavl_node =
+            ((struct pavlrc_node *)((char *)p -
+                                    offsetof(struct pavlrc_node, pavl_data)));
 
         return p;
     }
@@ -577,15 +578,15 @@ struct pavlrc *pavlrc_t_next(struct pavlrc_traverser *trav)
     if (trav->pavl_node == NULL)
         return pavlrc_t_first(trav, trav->pavl_table);
     else if (trav->pavl_node->pavl_link[1] == NULL) {
-        struct pavlrc_node *q, *p;      /* Current node and its child. */
+        struct pavlrc_node *q, *p; /* Current node and its child. */
 
         for (p = trav->pavl_node, q = p->pavl_parent;;
              p = q, q = q->pavl_parent)
             if (q == NULL || p == q->pavl_link[0]) {
                 trav->pavl_node = q;
 
-                return trav->pavl_node != NULL ?
-                    &trav->pavl_node->pavl_data : NULL;
+                return trav->pavl_node != NULL ? &trav->pavl_node->pavl_data
+                                               : NULL;
             }
     }
     else {
@@ -607,15 +608,15 @@ struct pavlrc *pavlrc_t_prev(struct pavlrc_traverser *trav)
     if (trav->pavl_node == NULL)
         return pavlrc_t_last(trav, trav->pavl_table);
     else if (trav->pavl_node->pavl_link[0] == NULL) {
-        struct pavlrc_node *q, *p;      /* Current node and its child. */
+        struct pavlrc_node *q, *p; /* Current node and its child. */
 
         for (p = trav->pavl_node, q = p->pavl_parent;;
              p = q, q = q->pavl_parent)
             if (q == NULL || p == q->pavl_link[1]) {
                 trav->pavl_node = q;
 
-                return trav->pavl_node != NULL ?
-                    &trav->pavl_node->pavl_data : NULL;
+                return trav->pavl_node != NULL ? &trav->pavl_node->pavl_data
+                                               : NULL;
             }
     }
     else {
@@ -653,8 +654,7 @@ struct pavlrc *pavlrc_t_replace(struct pavlrc_traverser *trav,
 /* Destroys |new| with |pavl_destroy (new, destroy)|,
    first initializing right links in |new| that have
    not yet been initialized at time of call. */
-static void
-copy_error_recovery(struct pavlrc_node *q, struct pavlrc_table *new)
+static void copy_error_recovery(struct pavlrc_node *q, struct pavlrc_table *new)
 {
     assert(q != NULL && new != NULL);
 
@@ -682,7 +682,7 @@ copy_error_recovery(struct pavlrc_node *q, struct pavlrc_table *new)
    If |allocator != NULL|, it is used for allocation in the new tree.
    Otherwise, the same allocator used for |org| is used. */
 struct pavlrc_table *pavlrc_copy(const struct pavlrc_table *org,
-                                 pavlrc_copy_func * copy,
+                                 pavlrc_copy_func *copy,
                                  struct libavl_allocator *allocator)
 {
     struct pavlrc_table *new;
@@ -702,9 +702,8 @@ struct pavlrc_table *pavlrc_copy(const struct pavlrc_table *org,
     y = (struct pavlrc_node *)&new->pavl_root;
     while (x != NULL) {
         while (x->pavl_link[0] != NULL) {
-            y->pavl_link[0] =
-                new->pavl_alloc->libavl_malloc(new->pavl_alloc,
-                                               sizeof *y->pavl_link[0]);
+            y->pavl_link[0] = new->pavl_alloc->libavl_malloc(
+                new->pavl_alloc, sizeof *y->pavl_link[0]);
             if (y->pavl_link[0] == NULL) {
                 if (y != (struct pavlrc_node *)&new->pavl_root) {
                     /* y->pavl_data = NULL; */
@@ -739,9 +738,8 @@ struct pavlrc_table *pavlrc_copy(const struct pavlrc_table *org,
             }
 
             if (x->pavl_link[1] != NULL) {
-                y->pavl_link[1] =
-                    new->pavl_alloc->libavl_malloc(new->pavl_alloc,
-                                                   sizeof *y->pavl_link[1]);
+                y->pavl_link[1] = new->pavl_alloc->libavl_malloc(
+                    new->pavl_alloc, sizeof *y->pavl_link[1]);
                 if (y->pavl_link[1] == NULL) {
                     copy_error_recovery(y, new);
 
@@ -818,17 +816,13 @@ void pavlrc_free(struct libavl_allocator *allocator, void *block)
 }
 
 /* Default memory allocator that uses |malloc()| and |free()|. */
-struct libavl_allocator pavlrc_allocator_default = {
-    pavlrc_malloc,
-    pavlrc_free
-};
+struct libavl_allocator pavlrc_allocator_default = {pavlrc_malloc, pavlrc_free};
 
 #undef NDEBUG
 #include <assert.h>
 
 /* Asserts that |pavl_insert()| succeeds at inserting |item| into |table|. */
-void (pavlrc_assert_insert) (struct pavlrc_table * table,
-                             struct pavlrc * item)
+void(pavlrc_assert_insert)(struct pavlrc_table *table, struct pavlrc *item)
 {
     struct pavlrc *p = pavlrc_probe(table, item);
 
@@ -837,8 +831,8 @@ void (pavlrc_assert_insert) (struct pavlrc_table * table,
 
 /* Asserts that |pavl_delete()| really removes |item| from |table|,
    and returns the removed item. */
-struct pavlrc *(pavlrc_assert_delete) (struct pavlrc_table * table,
-                                       struct pavlrc * item)
+struct pavlrc *(pavlrc_assert_delete)(struct pavlrc_table *table,
+                                      struct pavlrc *item)
 {
     struct pavlrc *p = pavlrc_delete(table, item);
 

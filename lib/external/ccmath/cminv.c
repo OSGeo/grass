@@ -5,9 +5,11 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include <stdlib.h>
 #include "ccmath.h"
-int cminv(Cpx * a, int n)
+
+int cminv(Cpx *a, int n)
 {
     int i, j, k, m, lc, *le;
 
@@ -18,7 +20,7 @@ int cminv(Cpx * a, int n)
     double s, t, tq = 0., zr = 1.e-15;
 
     le = (int *)calloc(n, sizeof(int));
-    q0 = (Cpx *) calloc(n, sizeof(Cpx));
+    q0 = (Cpx *)calloc(n, sizeof(Cpx));
     pa = pd = a;
     for (j = 0; j < n; ++j, ++pa, pd += n + 1) {
         if (j > 0) {

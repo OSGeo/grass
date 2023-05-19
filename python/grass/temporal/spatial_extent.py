@@ -95,7 +95,6 @@ class SpatialExtent(SQLDatabaseInterface):
         bottom=None,
         proj="XY",
     ):
-
         SQLDatabaseInterface.__init__(self, table, ident)
         self.set_id(ident)
         self.set_spatial_extent_from_values(north, south, east, west, top, bottom)

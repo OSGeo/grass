@@ -148,7 +148,9 @@ class NotebookController:
 
         try:
             self.classObject.InsertPage(self.widget, *args, **kwargs)
-        except TypeError as e:  # documentation says 'index', but certain versions of wx require 'n'
+        except (
+            TypeError
+        ) as e:  # documentation says 'index', but certain versions of wx require 'n'
             kwargs["n"] = kwargs["index"]
             del kwargs["index"]
             self.classObject.InsertPage(self.widget, *args, **kwargs)
@@ -1137,7 +1139,6 @@ class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMixin):
 
         item = -1
         while True:
-
             row = []
             item = self.GetNextItem(item)
             if item == -1:
@@ -1386,7 +1387,6 @@ class ManageSettingsWidget(wx.Panel):
         self.settingsSizer.Fit(self)
 
     def _layout(self):
-
         self.settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.HORIZONTAL)
         self.settingsSizer.Add(
             StaticText(parent=self, id=wx.ID_ANY, label=_("Load:")),
@@ -1471,7 +1471,7 @@ class ManageSettingsWidget(wx.Panel):
     def SetSettings(self, settings):
         """Set settings
 
-        :param settings: - dict with all settigs {nameofsetting : settingdata, ....}
+        :param settings: - dict with all settings {nameofsetting : settingdata, ....}
         """
         self._settings = settings
         self._saveSettings()
@@ -1479,7 +1479,7 @@ class ManageSettingsWidget(wx.Panel):
     def AddSettings(self, settings):
         """Add settings
 
-        :param settings: - dict with all settigs {nameofsetting : settingdata, ....}
+        :param settings: - dict with all settings {nameofsetting : settingdata, ....}
         """
         self._settings.update(settings)
         self._saveSettings()
@@ -1588,7 +1588,6 @@ class ManageSettingsWidget(wx.Panel):
                     if idx < 0:
                         break
                     elif idx != 0:
-
                         # find out whether it is separator
                         # $$$$; - it is separator
                         # $$$$$; - it is not separator
@@ -1794,7 +1793,6 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         data = self.GetData(checked=True)
 
         for itm in data:
-
             layer = itm[1]
             ftype = itm[2]
             if "/" in ftype:

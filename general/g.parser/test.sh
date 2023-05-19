@@ -54,4 +54,3 @@ g.message message="Value of GIS_OPT_raster: '$GIS_OPT_raster'"
 g.message message="Value of GIS_OPT_vect: '$GIS_OPT_vector'"
 
 #### end of your code ####
-

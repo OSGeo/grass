@@ -1,7 +1,7 @@
 """
 @package gui_core.treeview
 
-@brief tree view for dislaying tree model (used for search tree)
+@brief tree view for displaying tree model (used for search tree)
 
 Classes:
  - treeview::TreeView
@@ -242,7 +242,7 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, TreeListCtrl):
             self.AddColumn(column)
         self.SetMainColumn(0)
         self.RefreshItems()
-        # to solve events inconsitency
+        # to solve events inconsistency
         self.Bind(
             wx.EVT_TREE_ITEM_RIGHT_CLICK,
             lambda evt: self._emitSignal(evt.GetItem(), self.contextMenu),

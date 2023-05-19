@@ -1,4 +1,4 @@
-FROM alpine:3.15 as common
+FROM alpine:3.17 as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -8,9 +8,10 @@ LABEL maintainer="neteler@osgeo.org"
 # PACKAGES VERSIONS
 ARG PYTHON_VERSION=3
 
-# List of packages to be installed
-ENV PACKAGES="\
+# List of packages to be installed (proj-data omitted: 570.04 MB)
+ENV GRASS_RUN_PACKAGES="\
       attr \
+      build-base \
       bash \
       bison \
       bzip2 \
@@ -19,19 +20,25 @@ ENV PACKAGES="\
       fftw \
       flex \
       freetype \
+      g++ \
+      gcc \
       gdal \
+      gdal-dev \
       gdal-tools \
       gettext \
       geos \
+      geos-dev \
+      git \
       gnutls \
       jsoncpp \
       laszip \
       libbz2 \
-      libexecinfo \
       libgeotiff \
       libjpeg-turbo \
       libpng \
+      libpq-dev \
       libunwind \
+      make \
       musl \
       musl-utils \
       ncurses \
@@ -42,7 +49,7 @@ ENV PACKAGES="\
       py3-six \
       pdal \
       pdal-dev \
-      postgresql \
+      postgresql15-client \
       proj-util \
       sqlite \
       sqlite-libs \
@@ -65,13 +72,12 @@ RUN echo "Install Python";\
     rm -r /usr/lib/python*/ensurepip && \
     pip$PYTHON_VERSION install --upgrade pip setuptools && \
     if [ ! -e /usr/bin/pip ]; then ln -s pip$PYTHON_VERSION /usr/bin/pip ; fi && \
-    if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/$PYTHONBIN /usr/bin/python; fi && \
-    rm -r /root/.cache
-
-# Add the packages
-RUN echo "Install main packages";\
+    if [ ! -e /usr/bin/python ]; then ln -sf /usr/bin/$PYTHONBIN /usr/bin/python; fi && \
+    rm -r /root/.cache; \
+    # Add the packages
+    echo "Install main packages";\
     apk update; \
-    apk add --no-cache $PACKAGES
+    apk add --no-cache $GRASS_RUN_PACKAGES
 
 
 FROM common as build
@@ -119,21 +125,17 @@ ENV GRASS_BUILD_PACKAGES="\
       cairo-dev \
       fftw-dev \
       freetype-dev \
-      g++ \
-      gcc \
-      gdal-dev \
       geos-dev \
       git \
       gnutls-dev \
       libc6-compat \
       libjpeg-turbo-dev \
       libpng-dev \
-      make \
+      libpq-dev \
       openjpeg-dev \
       openblas-dev \
       pdal \
       pdal-dev \
-      postgresql-dev \
       proj-dev \
       python3-dev \
       py3-numpy-dev \
@@ -165,69 +167,50 @@ RUN echo "  => Configure and compile grass" && \
     ldconfig /etc/ld.so.conf.d
 
 # Reduce the image size - Remove unnecessary grass files
-RUN cp /usr/local/grass83/gui/wxpython/xml/module_items.xml module_items.xml; \
-    rm -rf /usr/local/grass83/demolocation; \
-    rm -rf /usr/local/grass83/fonts; \
-    rm -rf /usr/local/grass83/gui; \
-    rm -rf /usr/local/grass83/share; \
-    mkdir -p /usr/local/grass83/gui/wxpython/xml/; \
-    mv module_items.xml /usr/local/grass83/gui/wxpython/xml/module_items.xml;
+RUN cp /usr/local/grass84/gui/wxpython/xml/module_items.xml module_items.xml; \
+    rm -rf /usr/local/grass84/demolocation; \
+    rm -rf /usr/local/grass84/fonts; \
+    rm -rf /usr/local/grass84/gui; \
+    rm -rf /usr/local/grass84/share; \
+    mkdir -p /usr/local/grass84/gui/wxpython/xml/; \
+    mv module_items.xml /usr/local/grass84/gui/wxpython/xml/module_items.xml;
 
 
 FROM common as grass
-
-ENV LC_ALL="en_US.UTF-8"
-
-# Copy GRASS GIS from build image
-COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
-COPY --from=build /usr/local/grass* /usr/local/grass/
-
-# install external Python API
-RUN pip3 install --upgrade pip six grass-session --ignore-installed six
-
-RUN ln -sf /usr/local/grass `grass --config path`
-RUN grass --tmp-location XY --exec g.version -rge && \
-    pdal --version && \
-    python3 --version
-
-
-FROM grass as test
-
-RUN apk add make gcc
-
-## run simple LAZ test
-COPY docker/testdata/simple.laz /tmp/simple.laz
-COPY docker/testdata/test_grass_session.py /scripts/test_grass_session.py
-ENV GRASSBIN=grass
-
-# Test grass-session
-# Not yet ready for GRASS GIS 8:
-RUN /usr/bin/python3 /scripts/test_grass_session.py
-# Test PDAL
-RUN grass --tmp-location EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
-
-# Test addon installation
-RUN apk add py3-scikit-learn
-RUN grass --tmp-location XY --exec g.extension extension=r.learn.ml2
-
-
-FROM grass as final
 
 # GRASS GIS specific
 # allow work with MAPSETs that are not owned by current user
 ENV GRASSBIN="/usr/local/bin/grass" \
     GRASS_SKIP_MAPSET_OWNER_CHECK=1 \
-    SHELL="/bin/bash"
-ENV PROJ_NETWORK="ON"
+    SHELL="/bin/bash" \
+    # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
+    PROJ_NETWORK=ON \
+    GRASSBIN=grass \
+    LC_ALL="en_US.UTF-8"
 
+# Copy GRASS GIS from build image
+COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
+COPY --from=build /usr/local/grass* /usr/local/grass/
+# run simple LAZ test
+COPY docker/testdata/simple.laz /tmp/
+COPY docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts/
+COPY docker/testdata/test_grass_session.py /scripts/
 
-# show installed version
-RUN grass --tmp-location XY --exec g.version -rge && \
-    pdal --version && \
-    python3 --version
+# install external Python API
+RUN pip3 install --upgrade pip six grass-session --ignore-installed six; \
+    ln -sf /usr/local/grass $(grass --config path); \
+    # run some tests and cleanup
+    $SHELL /scripts/grass_tests.sh \
+    && rm -f /scripts/grass_tests.sh /tmp/simple.laz /scripts/test_grass_session.py; \
+    # delete unused packages
+    apk del --no-cache gettext pdal-dev; \
+    # show installed version
+    grass --tmp-location XY --exec g.version -rge \
+    && pdal --version \
+    && python3 --version
 
 # Data workdir
 WORKDIR /grassdb
 VOLUME /grassdb
 
-CMD $GRASSBIN --version
+CMD ["$GRASSBIN", "--version"]

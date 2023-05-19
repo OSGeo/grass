@@ -7,8 +7,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-struct whereandwhat
-{
+struct whereandwhat {
     off_t offset;
     CELL *p;
 };
@@ -33,14 +32,12 @@ int recurse_cell(CELL flag, int i, int j, int nl, int ns,
             edge == 4)
             rc += recurse_cell(flag, i - 1, j - 1, nl, ns, bas, dir);
         edge = dir[i - 1].p[j];
-        if (bas[i - 1].p[j] == -1 && !Rast_is_c_null_value(&edge) &&
-            edge == 8)
+        if (bas[i - 1].p[j] == -1 && !Rast_is_c_null_value(&edge) && edge == 8)
             rc += recurse_cell(flag, i - 1, j, nl, ns, bas, dir);
         edge = dir[i - 1].p[j + 1];
         if (bas[i - 1].p[j + 1] == -1 && !Rast_is_c_null_value(&edge) &&
             edge == 16)
             rc += recurse_cell(flag, i - 1, j + 1, nl, ns, bas, dir);
-
     }
 
     edge = dir[i].p[j - 1];
@@ -88,9 +85,9 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
     /* allocate buffers for drainage directions and basin areas */
     for (i = 0; i < mxbuf; i += 1)
-        bas[i].p = (CELL *) G_calloc(ns, sizeof(CELL));
+        bas[i].p = (CELL *)G_calloc(ns, sizeof(CELL));
     for (i = 0; i < mxbuf; i += 1)
-        dir[i].p = (CELL *) G_calloc(ns, sizeof(CELL));
+        dir[i].p = (CELL *)G_calloc(ns, sizeof(CELL));
 
     pass = 0;
 
@@ -104,7 +101,7 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
         sline = 0;
         rdline = 1;
         for (i = 0; i < mxbuf; i++) {
-            bas[i].offset = dir[i].offset = (off_t) rdline *bufsz;
+            bas[i].offset = dir[i].offset = (off_t)rdline * bufsz;
 
             lseek(fm, bas[i].offset, SEEK_SET);
             if (read(fm, bas[i].p, bufsz) < 0)
@@ -135,7 +132,7 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
                 G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
                               errno, strerror(errno));
 
-            /* If the bottom end of the buffers reach the bottom of the file, 
+            /* If the bottom end of the buffers reach the bottom of the file,
              * rotate the buffers and read new lines */
             if (rdline < nl - 1) {
                 hold = bas[0];
@@ -149,7 +146,7 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
                 dir[mxbuf - 1] = hold;
 
                 bas[mxbuf - 1].offset = dir[mxbuf - 1].offset =
-                    (off_t) rdline *bufsz;
+                    (off_t)rdline * bufsz;
 
                 lseek(fm, bas[mxbuf - 1].offset, SEEK_SET);
                 if (read(fm, bas[mxbuf - 1].p, bufsz) < 0)
@@ -163,20 +160,19 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
 
                 rdline++;
             }
-            /* After the buffer reaches the bottom of the file, stop reading file,
-             * just advance the pointers */
+            /* After the buffer reaches the bottom of the file, stop reading
+             * file, just advance the pointers */
             else {
                 nline -= 1;
                 sline += 1;
             }
-
         }
 
         /* fill the buffer */
         nline = mxbuf;
         rdline = nl - 2;
         for (i = mxbuf - 1; i >= 0; i -= 1) {
-            bas[i].offset = dir[i].offset = (off_t) rdline *bufsz;
+            bas[i].offset = dir[i].offset = (off_t)rdline * bufsz;
 
             lseek(fm, bas[i].offset, SEEK_SET);
             if (read(fm, bas[i].p, bufsz) < 0)
@@ -197,8 +193,8 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
             for (j = 1; j < ns - 1; j += 1) {
                 flag = bas[nline - 1].p[j];
                 if (flag > 0)
-                    if (recurse_cell(flag, nline - 1, j, nline, ns, bas, dir)
-                        > 0)
+                    if (recurse_cell(flag, nline - 1, j, nline, ns, bas, dir) >
+                        0)
                         repeat = 1;
             }
 
@@ -208,7 +204,7 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
                 G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
                               errno, strerror(errno));
 
-            /* Until the top of the buffers reach the top of the file, 
+            /* Until the top of the buffers reach the top of the file,
              * rotate the buffers and read new lines */
             if (rdline >= 1) {
                 hold = bas[nline - 1];
@@ -221,7 +217,7 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
                     dir[j] = dir[j - 1];
                 dir[0] = hold;
 
-                bas[0].offset = dir[0].offset = (off_t) rdline *bufsz;
+                bas[0].offset = dir[0].offset = (off_t)rdline * bufsz;
 
                 lseek(fm, bas[0].offset, SEEK_SET);
                 if (read(fm, bas[0].p, bufsz) < 0)
@@ -239,7 +235,6 @@ void wtrshed(int fm, int fd, int nl, int ns, int mxbuf)
              * line count */
             else
                 nline -= 1;
-
         }
 
     } while (repeat);

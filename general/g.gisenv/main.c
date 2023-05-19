@@ -1,14 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       g.gisenv
  * AUTHOR(S):    Michael Shapiro CERL (original contributor)
  *               Radim Blazek <radim.blazek gmail.com>,
- *               Glynn Clements <glynn gclements.plus.com>, 
+ *               Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Markus Neteler <neteler itc.it>
  *               Martin Landa <landa.martin gmail.com>
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 2003-2015 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -157,7 +156,7 @@ int main(int argc, char *argv[])
         }
         else {
             /* unset */
-            G_getenv2(u_name, store);   /* G_fatal_error() if not defined */
+            G_getenv2(u_name, store); /* G_fatal_error() if not defined */
             G_unsetenv2(u_name, store);
         }
     }
@@ -169,16 +168,18 @@ int main(int argc, char *argv[])
             if (G_strcasecmp(u_name, "GISDBASE") == 0 ||
                 G_strcasecmp(u_name, "LOCATION_NAME") == 0 ||
                 G_strcasecmp(u_name, "MAPSET") == 0) {
-                G_warning(_("Variable <%s> is mandatory. No operation performed."),
-                          u_name);
+                G_warning(
+                    _("Variable <%s> is mandatory. No operation performed."),
+                    u_name);
                 n++;
                 continue;
             }
             if (value)
-                G_warning(_("Value '%s' ignored when unsetting the GRASS variable"),
-                          value);
+                G_warning(
+                    _("Value '%s' ignored when unsetting the GRASS variable"),
+                    value);
 
-            G_getenv2(u_name, store);   /* G_fatal_error() if not defined */
+            G_getenv2(u_name, store); /* G_fatal_error() if not defined */
             G_unsetenv2(u_name, store);
             n++;
         }
@@ -195,7 +196,7 @@ int main(int argc, char *argv[])
 
 char *parse_variable(const char *v_name, char **value)
 {
-    char *u_name;               /* uppercase variable name */
+    char *u_name; /* uppercase variable name */
     char *name, *ptr;
 
     name = G_store(v_name);

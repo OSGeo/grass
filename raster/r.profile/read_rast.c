@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2000 by the GRASS Development Team
  * Author: Bob Covill <bcovill@tekmap.ns.ca>
- * 
+ *
  * This Program is free software under the GPL (>=v2)
  * Read the file COPYING coming with GRASS for details
  *
@@ -13,7 +13,7 @@
 #include "local_proto.h"
 
 int read_rast(double east, double north, double dist, int fd, int coords,
-              RASTER_MAP_TYPE data_type, FILE * fp, char *null_string)
+              RASTER_MAP_TYPE data_type, FILE *fp, char *null_string)
 {
     static DCELL *dcell;
     static int cur_row = -1;

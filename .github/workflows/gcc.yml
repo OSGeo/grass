@@ -1,3 +1,4 @@
+---
 name: GCC C/C++ standards check
 
 on:
@@ -14,7 +15,12 @@ jobs:
   build:
     name: ${{ matrix.c }} & ${{ matrix.cpp }}
 
-    runs-on: ubuntu-20.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
+        matrix.c }}-${{ matrix.cpp }}
+      cancel-in-progress: true
+
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         include:
@@ -45,10 +51,16 @@ jobs:
       - name: Set LD_LIBRARY_PATH for compilation
         run: |
           echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+      - name: Print build environment variables
+        shell: bash -el {0}
+        run: |
+          printenv | sort
+          gcc --version
+          ldd --version
       - name: Build
         env:
           # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
-          CFLAGS: "-std=${{ matrix.c }} -fPIC -Wall -Wno-error=maybe-uninitialized"
+          CFLAGS: -std=${{ matrix.c }} -fPIC -Wall -Wextra
           # TODO: -pedantic-errors here won't compile
-          CXXFLAGS: "-std=${{ matrix.cpp }} -fPIC -Wall -Wno-error=class-memaccess"
-        run: .github/workflows/build_ubuntu-20.04.sh $HOME/install -Werror
+          CXXFLAGS: -std=${{ matrix.cpp }} -fPIC -Wall -Wextra
+        run: .github/workflows/build_ubuntu-22.04.sh $HOME/install -Werror

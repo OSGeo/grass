@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       g.mkfontcap
  * AUTHOR(S):    Paul Kelly
  * PURPOSE:      Generates the font configuration file by scanning various
  *               directories for GRASS stroke and Freetype-compatible fonts.
- *              
+ *
  * COPYRIGHT:    (C) 2007-2015 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -37,18 +36,11 @@ int maxfonts;
 
 static const char *standarddirs[] = {
     /* These are the directories that are searched for Freetype-compatible
-     * font files by default. They may contain an environment variable 
+     * font files by default. They may contain an environment variable
      * *at the start* of the string, if enclosed in ${xxx} syntax. */
-    "/usr/lib/X11/fonts",
-    "/usr/share/X11/fonts",
-    "/usr/share/fonts",
-    "/usr/local/share/fonts",
-    "${HOME}/Library/Fonts",
-    "/Library/Fonts",
-    "/System/Library/Fonts",
-    "${WINDIR}\\Fonts",
-    NULL
-};
+    "/usr/lib/X11/fonts",     "/usr/share/X11/fonts",  "/usr/share/fonts",
+    "/usr/local/share/fonts", "${HOME}/Library/Fonts", "/Library/Fonts",
+    "/System/Library/Fonts",  "${WINDIR}\\Fonts",      NULL};
 
 static void add_search_dir(const char *);
 static int compare_fonts(const void *, const void *);
@@ -69,9 +61,9 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("general"));
-    module->description =
-        _("Generates the font configuration file by scanning various directories "
-         "for fonts.");
+    module->description = _(
+        "Generates the font configuration file by scanning various directories "
+        "for fonts.");
 
     overwrite = G_define_flag();
     overwrite->key = 'o';
@@ -91,7 +83,8 @@ int main(int argc, char *argv[])
     extradirs->label = _("List of extra directories to scan");
     extradirs->description =
         _("Comma-separated list of extra directories to scan for "
-          "Freetype-compatible fonts as well as the defaults (see documentation)");
+          "Freetype-compatible fonts as well as the defaults (see "
+          "documentation)");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -105,11 +98,12 @@ int main(int argc, char *argv[])
         else
             G_asprintf(&fontcapfile, "%s/etc/fontcap", gisbase);
 
-        if (!access(fontcapfile, F_OK)) {       /* File exists? */
+        if (!access(fontcapfile, F_OK)) { /* File exists? */
             if (!overwrite->answer)
-                G_fatal_error(_("Fontcap file %s already exists; use -%c flag if you "
-                               "wish to overwrite it"), fontcapfile,
-                              overwrite->key);
+                G_fatal_error(
+                    _("Fontcap file %s already exists; use -%c flag if you "
+                      "wish to overwrite it"),
+                    fontcapfile, overwrite->key);
         }
     }
 
@@ -158,7 +152,6 @@ int main(int argc, char *argv[])
     fclose(outstream);
 
     exit(EXIT_SUCCESS);
-
 }
 
 static void add_search_dir(const char *name)

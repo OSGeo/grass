@@ -1,11 +1,11 @@
-
 /****************************************************************************
  *
  * MODULE:       r3.timestamp
- * AUTHOR(S):    Michael Pelizzari <michael.pelizzari lmco.com> 
+ * AUTHOR(S):    Michael Pelizzari <michael.pelizzari lmco.com>
  *                     (original contributor)
- *               Glynn Clements <glynn gclements.plus.com> Markus Neteler <neteler itc.it>
- * PURPOSE:      Stamps raster3d files with date and time.  
+ *               Glynn Clements <glynn gclements.plus.com>
+ *               Markus Neteler <neteler itc.it>
+ * PURPOSE:      Stamps raster3d files with date and time.
  * COPYRIGHT:    (C) 2001-2006 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -15,8 +15,8 @@
  *****************************************************************************/
 
 /* based on r.timestamp by Michael Shapiro and v.timestamp by Markus Neteler:
- * 
- * Stamps raster3d files with date and time.  This main.c is linked to functions 
+ *
+ * Stamps raster3d files with date and time.  This main.c is linked to functions
  * currently residing in lib/gis/timestamp.c
  *
  */

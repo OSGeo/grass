@@ -41,7 +41,7 @@ def normalize_whitespace(text):
 
 
 def split(s):
-    """Platform spefic shlex.split"""
+    """Platform specific shlex.split"""
     try:
         if sys.platform == "win32":
             return shlex.split(s.replace("\\", r"\\"))
@@ -227,8 +227,10 @@ def GetValidLayerName(name):
         cIdx += 1
     retName = "".join(retNameList)
 
-    if not (retName[0] >= "A" and retName[0] <= "Z") and not (
-        retName[0] >= "a" and retName[0] <= "z"
+    if (
+        retName
+        and not (retName[0] >= "A" and retName[0] <= "Z")
+        and not (retName[0] >= "a" and retName[0] <= "z")
     ):
         retName = "x" + retName[1:]
 
@@ -657,7 +659,7 @@ def _parseFormats(output, writableOnly=False):
 
     patt = None
     if writableOnly:
-        patt = re.compile("\(rw\+?\)$", re.IGNORECASE)
+        patt = re.compile(r"\(rw\+?\)$", re.IGNORECASE)
 
     for line in output.splitlines():
         key, name = map(lambda x: x.strip(), line.strip().split(":", 1))
@@ -933,7 +935,7 @@ str2rgb = {
     "yellow": (255, 255, 0),
 }
 rgb2str = {}
-for (s, r) in str2rgb.items():
+for s, r in str2rgb.items():
     rgb2str[r] = s
 # ensure that gray value has 'gray' string and not 'grey'
 rgb2str[str2rgb["gray"]] = "gray"
@@ -989,7 +991,7 @@ command2ltype = {
     "d.legend.vect": "vectleg",
 }
 ltype2command = {}
-for (cmd, ltype) in command2ltype.items():
+for cmd, ltype in command2ltype.items():
     ltype2command[ltype] = cmd
 
 
@@ -1096,7 +1098,7 @@ def isInRegion(regionA, regionB):
     :param regionB: input region B as dictionary
 
     :return: True if region A is inside of region B
-    :return: False othewise
+    :return: False otherwise
     """
     if (
         regionA["s"] >= regionB["s"]

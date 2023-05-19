@@ -3,7 +3,6 @@
 #include <math.h>
 #include "local_proto.h"
 
-
 /* could probably use some cleanup/optimization */
 double *Cdhc_durbins_exact(double *x, int n)
 {

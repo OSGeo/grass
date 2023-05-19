@@ -2128,6 +2128,22 @@ class DataCatalogTree(TreeView):
         self.RefreshNode(node, recursive=True)
         self.ExpandNode(node, recursive=False)
 
+    def OnCopyMapsetPath(self, event):
+        """Copy path to mapset"""
+        if wx.TheClipboard.Open():
+            do = wx.TextDataObject()
+            text = []
+            for i in range(len(self.selected_mapset)):
+                path = os.path.join(
+                    self.selected_grassdb[i].data["name"],
+                    self.selected_location[i].data["name"],
+                    self.selected_mapset[i].data["name"],
+                )
+                text.append(path)
+            do.SetText(",".join(text))
+            wx.TheClipboard.SetData(do)
+            wx.TheClipboard.Close()
+
     def OnReloadLocation(self, event):
         """Reload all mapsets in selected location"""
         node = self.selected_location[0]
@@ -2300,6 +2316,10 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnReloadMapset, item)
 
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy path to mapset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
+
         self.PopupMenu(menu)
         menu.Destroy()
 
@@ -2399,6 +2419,10 @@ class DataCatalogTree(TreeView):
         self.Bind(wx.EVT_MENU, self.OnDeleteMapset, item)
         if self._restricted:
             item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy paths to mapsets"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
 
         self.PopupMenu(menu)
         menu.Destroy()

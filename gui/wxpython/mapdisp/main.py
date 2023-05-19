@@ -270,7 +270,6 @@ class DMonMap(Map):
 
             reorderedLayers = [-1] * next_layer
             for i, layer in enumerate(existingLayers):
-
                 # owned layer was not found in cmd file -> is deleted
                 if layersOrder[i] == -1 and layer in self.ownedLayers:
                     self.ownedLayers.remove(layer)
@@ -614,7 +613,7 @@ class MapApp(wx.App):
         # try:
         # GISBASE and other system environmental variables can not be used
         # since the process inherited them from GRASS
-        # raises exception when vaiable does not exists
+        # raises exception when viable does not exists
         # grass.gisenv()['GISDBASE']
         # except KeyError:
         #    self.timer.Stop()

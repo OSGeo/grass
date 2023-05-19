@@ -453,7 +453,7 @@ def CreateNewVector(
     disableAdd=False,
     disableTable=False,
 ):
-    """Create new vector map layer
+    r"""Create new vector map layer
 
     :param cmd: (prog, \*\*kwargs)
     :param title: window title
@@ -699,7 +699,6 @@ class GroupDialog(wx.Dialog):
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         **kwargs,
     ):
-
         wx.Dialog.__init__(
             self, parent=parent, id=wx.ID_ANY, title=title, style=style, **kwargs
         )
@@ -1136,7 +1135,7 @@ class GroupDialog(wx.Dialog):
         wx.CallAfter(self.GroupSelected)
 
     def GroupSelected(self):
-        """Group was selected, check if changes were apllied"""
+        """Group was selected, check if changes were applied"""
         self._checkChange()
         group, s = self.GetSelectedGroup()
         maps = list()
@@ -1173,7 +1172,7 @@ class GroupDialog(wx.Dialog):
         self._checkSubGSellAll()
 
     def SubGroupSelected(self):
-        """Subgroup was selected, check if changes were apllied"""
+        """Subgroup was selected, check if changes were applied"""
         self._checkChange()
 
         subgroup = self.subGroupSelect.GetValue().strip()
@@ -1602,7 +1601,6 @@ class MapLayersDialogBase(wx.Dialog):
 
         # check all items by default
         for item in range(self.layers.GetCount()):
-
             self.layers.Check(item, check=self._selectAll())
 
     def OnChangeParams(self, event):
@@ -1809,7 +1807,6 @@ class SetOpacityDialog(wx.Dialog):
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         opacity=1,
     ):
-
         self.parent = parent  # GMFrame
         self.opacity = opacity  # current opacity
 
@@ -2443,7 +2440,6 @@ class DefaultFontDialog(wx.Dialog):
         settings=UserSettings,
         type="font",
     ):
-
         self.settings = settings
         self.type = type
 

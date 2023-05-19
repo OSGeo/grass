@@ -21,9 +21,9 @@
 
 #include "parser_local_proto.h"
 
-static void usage(FILE * fp, int markers);
-static void show_options(FILE * fp, int maxlen, const char *str);
-static int show(FILE * fp, const char *item, int len);
+static void usage(FILE *fp, int markers);
+static void show_options(FILE *fp, int maxlen, const char *str);
+static int show(FILE *fp, const char *item, int len);
 
 /*!
    \brief Command line help/usage message.
@@ -55,7 +55,7 @@ void G__usage_text(void)
     usage(stdout, 1);
 }
 
-static void usage(FILE * fp, int markers)
+static void usage(FILE *fp, int markers)
 {
     struct Option *opt;
     struct Flag *flag;
@@ -64,13 +64,13 @@ static void usage(FILE * fp, int markers)
     int maxlen;
     int len, n;
     int new_prompt = 0;
-    int extensive = 0;          /* include also less important parts */
-    int standard = 0;           /* include also standard flags */
-    int detailed = 0;           /* details for each flag and option */
+    int extensive = 0; /* include also less important parts */
+    int standard = 0;  /* include also standard flags */
+    int detailed = 0;  /* details for each flag and option */
 
     new_prompt = G__uses_new_gisprompt();
 
-    if (!st->pgm_name)          /* v.dave && r.michael */
+    if (!st->pgm_name) /* v.dave && r.michael */
         st->pgm_name = G_program_name();
     if (!st->pgm_name)
         st->pgm_name = "??";
@@ -207,7 +207,6 @@ static void usage(FILE * fp, int markers)
                 fprintf(fp, "%s\n", flag->label);
                 if (detailed && flag->description)
                     fprintf(fp, "        %s\n", flag->description);
-
             }
             else if (flag->description) {
                 fprintf(fp, "%s\n", flag->description);
@@ -243,8 +242,7 @@ static void usage(FILE * fp, int markers)
             if (opt->label) {
                 fprintf(fp, "%s\n", opt->label);
                 if (detailed && opt->description) {
-                    fprintf(fp, "  %*s    %s\n",
-                            maxlen, " ", opt->description);
+                    fprintf(fp, "  %*s    %s\n", maxlen, " ", opt->description);
                 }
             }
             else if (opt->description) {
@@ -258,16 +256,15 @@ static void usage(FILE * fp, int markers)
                _(opt->options)) ;
              */
             if (opt->def)
-                fprintf(fp, _("  %*s   default: %s\n"), maxlen, " ",
-                        opt->def);
+                fprintf(fp, _("  %*s   default: %s\n"), maxlen, " ", opt->def);
 
             if (detailed && opt->descs) {
                 int i = 0;
 
                 while (opt->opts[i]) {
                     if (opt->descs[i])
-                        fprintf(fp, "  %*s    %s: %s\n",
-                                maxlen, " ", opt->opts[i], opt->descs[i]);
+                        fprintf(fp, "  %*s    %s: %s\n", maxlen, " ",
+                                opt->opts[i], opt->descs[i]);
 
                     i++;
                 }
@@ -278,7 +275,7 @@ static void usage(FILE * fp, int markers)
     }
 }
 
-static void show_options(FILE * fp, int maxlen, const char *str)
+static void show_options(FILE *fp, int maxlen, const char *str)
 {
     char *buff = G_store(str);
     char *p1, *p2;
@@ -306,7 +303,7 @@ static void show_options(FILE * fp, int maxlen, const char *str)
     G_free(buff);
 }
 
-static int show(FILE * fp, const char *item, int len)
+static int show(FILE *fp, const char *item, int len)
 {
     int n;
 

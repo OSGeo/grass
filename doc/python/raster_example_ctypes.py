@@ -11,7 +11,7 @@ cols=5`
 
 # FIXME: as an example it should make extensive use of code comments and document
 #  each and every step along the way.  (e.g. explain c_char_p().value memory pointer
-#  to string conversion for Python programmers not familar with C pointers)
+#  to string conversion for Python programmers not familiar with C pointers)
 #
 #  FIXME: explain at a basic level what ctypes is & does.
 

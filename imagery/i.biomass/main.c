@@ -1,16 +1,15 @@
-
 /****************************************************************************
  *
  * MODULE:       i.biomass
  * AUTHOR(S):    Yann Chemin - yann.chemin@gmail.com
  * PURPOSE:      Creates a map of biomass growth
- *               
+ *
  *
  * COPYRIGHT:    (C) 2002-2009 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
+ *               License (>=v2). Read the file COPYING that comes with
+ *               GRASS for details.
  *
  *****************************************************************************/
 
@@ -32,9 +31,9 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *input1, *input2, *input3, *input4, *input5, *input6;
     struct Option *output1;
-    struct History history;     /*metadata */
+    struct History history; /*metadata */
     struct Colors colors;
-    char *result1;              /*output raster name */
+    char *result1; /*output raster name */
     int infd_fpar, infd_luf, infd_lat;
     int infd_doy, infd_tsw, infd_wa;
     int outfd1;
@@ -79,8 +78,7 @@ int main(int argc, char *argv[])
 
     input6 = G_define_standard_option(G_OPT_R_INPUT);
     input6->key = "water_availability";
-    input6->description =
-        _("Value of water availability raster map [0.0-1.0]");
+    input6->description = _("Value of water availability raster map [0.0-1.0]");
 
     output1 = G_define_standard_option(G_OPT_R_OUTPUT);
     output1->description =
@@ -146,16 +144,14 @@ int main(int argc, char *argv[])
         Rast_get_d_row(infd_wa, inrast_wa, row);
         /*process the data */
         for (col = 0; col < ncols; col++) {
-            d_fpar = ((DCELL *) inrast_fpar)[col];
-            d_luf = ((DCELL *) inrast_luf)[col];
-            d_lat = ((DCELL *) inrast_lat)[col];
-            d_doy = ((DCELL *) inrast_doy)[col];
-            d_tsw = ((DCELL *) inrast_tsw)[col];
-            d_wa = ((DCELL *) inrast_wa)[col];
-            if (Rast_is_d_null_value(&d_fpar) ||
-                Rast_is_d_null_value(&d_luf) ||
-                Rast_is_d_null_value(&d_lat) ||
-                Rast_is_d_null_value(&d_doy) ||
+            d_fpar = ((DCELL *)inrast_fpar)[col];
+            d_luf = ((DCELL *)inrast_luf)[col];
+            d_lat = ((DCELL *)inrast_lat)[col];
+            d_doy = ((DCELL *)inrast_doy)[col];
+            d_tsw = ((DCELL *)inrast_tsw)[col];
+            d_wa = ((DCELL *)inrast_wa)[col];
+            if (Rast_is_d_null_value(&d_fpar) || Rast_is_d_null_value(&d_luf) ||
+                Rast_is_d_null_value(&d_lat) || Rast_is_d_null_value(&d_doy) ||
                 Rast_is_d_null_value(&d_tsw) || Rast_is_d_null_value(&d_wa))
                 Rast_set_d_null_value(&outrast1[col], 1);
             else {

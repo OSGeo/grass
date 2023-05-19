@@ -117,7 +117,7 @@ class MapPanel(SingleMapPanel):
         self.onFocus = Signal("MapPanel.onFocus")
 
         # Emitted when starting (switching to) 3D mode.
-        # Parameter firstTime specifies if 3D was already actived.
+        # Parameter firstTime specifies if 3D was already activated.
         self.starting3dMode = Signal("MapPanel.starting3dMode")
 
         # Emitted when ending (switching from) 3D mode.
@@ -620,6 +620,11 @@ class MapPanel(SingleMapPanel):
                 .Layer(2)
                 .BestSize((self.toolbars["map"].GetBestSize())),
             )
+
+        # nviz
+        elif name == "nviz":
+            self.toolbars["map"].combo.SetValue(_("3D view"))
+            self.AddNviz()
 
         # vector digitizer
         elif name == "vdigit":

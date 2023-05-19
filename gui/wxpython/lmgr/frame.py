@@ -358,7 +358,7 @@ class GMFrame(wx.Frame):
         return False
 
     def SetStatusText(self, *args):
-        """Overide SbMain statusbar method"""
+        """Override SbMain statusbar method"""
         self.statusbar.SetStatusText(*args)
 
     def _createNotebook(self):
@@ -688,7 +688,7 @@ class GMFrame(wx.Frame):
         )
         self.notebook.SetSelectionByName("nviz")
 
-        # this is a bit strange here since a new window is created everytime
+        # this is a bit strange here since a new window is created every time
         if not firstTime:
             for page in ("view", "light", "fringe", "constant", "cplane", "animation"):
                 self.nviz.UpdatePage(page)
@@ -1331,6 +1331,7 @@ class GMFrame(wx.Frame):
         :param event: to be able to serve as a handler of wx event
         :param cmd: command as a list (must start with 'cd')
         """
+
         # local functions
         def write_beginning(parameter=None, command=None):
             if parameter:
@@ -2239,11 +2240,11 @@ class GMFrame(wx.Frame):
         event.Skip()
 
     def OnCloseWindow(self, event):
-        """Cleanup when wxGUI is quitted"""
+        """Cleanup when wxGUI is quit"""
         self._closeWindow(event)
 
     def OnCloseWindowOrExit(self, event):
-        """Cleanup when wxGUI is quitted
+        """Cleanup when wxGUI is quit
 
         Ask user also to quit GRASS including terminal
         """
@@ -2257,10 +2258,6 @@ class GMFrame(wx.Frame):
 
     def _closeWindow(self, event):
         """Close wxGUI"""
-        # save command protocol if actived
-        if self.goutput.btnCmdProtocol.GetValue():
-            self.goutput.CmdProtocolSave()
-
         if not self.currentPage:
             self._auimgr.UnInit()
             self.Destroy()

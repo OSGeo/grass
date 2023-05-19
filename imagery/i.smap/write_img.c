@@ -4,10 +4,11 @@
 
 #include "bouman.h"
 
-int write_img(unsigned char **img, float **goodness, int ncols, int nrows, struct SigSet *S,    /* class parameters */
-              struct parms *parms,      /* parms: command line parameters */
+int write_img(unsigned char **img, float **goodness, int ncols, int nrows,
+              struct SigSet *S,    /* class parameters */
+              struct parms *parms, /* parms: command line parameters */
               struct files *files)
-{                               /* files: contains file to output */
+{ /* files: contains file to output */
     int row, col;
     FCELL *fcellbuf = NULL;
 
@@ -23,7 +24,7 @@ int write_img(unsigned char **img, float **goodness, int ncols, int nrows, struc
             int class = (int)img[row][col];
 
             G_debug(3, "class: [%d] row/col: [%d][%d]", class, row, col);
-            files->outbuf[col] = (CELL) S->ClassSig[class].classnum;
+            files->outbuf[col] = (CELL)S->ClassSig[class].classnum;
 
             if (parms->goodness_map)
                 fcellbuf[col] = goodness[row][col];

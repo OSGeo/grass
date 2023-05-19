@@ -1,3 +1,4 @@
+---
 name: CentOS
 
 on:
@@ -10,11 +11,15 @@ on:
       - main
       - releasebranch_*
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: ${{ matrix.os }} build
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     container: ${{ matrix.os }}
     strategy:
       matrix:

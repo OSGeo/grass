@@ -1055,7 +1055,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         Map=None,
         lmgr=None,
     ):
-
         self.grwiz = grwiz  # GR Wizard
         self._giface = giface
 
@@ -1443,7 +1442,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
     def SetGCPSatus(self, item, itemIndex):
         """Before GCP is drawn, decides it's colour and whether it
-        will be drawed.
+        will be drawn.
         """
         key = self.list.GetItemData(itemIndex)
         # incremented because of itemDataMap (has one more item) - will be
@@ -1698,7 +1697,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             targetMapWin.UpdateMap(render=False, renderVector=False)
 
     def OnFocus(self, event):
-        # TODO: it is here just to remove old or obsolate beavior of base class gcp/MapPanel?
+        # TODO: it is here just to remove old or obsolete beavior of base class gcp/MapPanel?
         # self.grwiz.SwitchEnv('source')
         pass
 
@@ -1863,7 +1862,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 print(msg, file=sys.stderr)
 
         elif maptype == "vector":
-
             # loop through all vectors in VREF
 
             self.grwiz.SwitchEnv("source")
@@ -2149,7 +2147,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         self.list.ResizeColumns()
 
     def GetNewExtent(self, region, map=None):
-
         coord_file = utils.GetTempfile()
         newreg = {
             "n": 0.0,
@@ -2254,7 +2251,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         self._giface.Help(entry="wxGUI.gcp")
 
     def OnUpdateActive(self, event):
-
         if self.activemap.GetSelection() == 0:
             self.MapWindow = self.SrcMapWindow
             self.Map = self.SrcMap
@@ -2268,7 +2264,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             self.MapWindow.SetFocus()
 
     def UpdateActive(self, win):
-
         # optionally disable tool zoomback tool
         self.GetMapToolbar().Enable(
             "zoomback", enable=(len(self.MapWindow.zoomhistory) > 1)
@@ -2447,7 +2442,6 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
         size=wx.DefaultSize,
         style=wx.LC_REPORT | wx.SUNKEN_BORDER | wx.LC_HRULES | wx.LC_SINGLE_SEL,
     ):
-
         ListCtrl.__init__(self, parent, id, pos, size, style)
 
         self.gcp = gcp  # GCP class
@@ -2471,7 +2465,6 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
         self.selectedkey = -1
 
     def _Create(self):
-
         if 0:
             # normal, simple columns
             idx_col = 0
@@ -2692,7 +2685,6 @@ class VectGroup(wx.Dialog):
         group,
         style=wx.DEFAULT_DIALOG_STYLE,
     ):
-
         wx.Dialog.__init__(
             self, parent, id, style=style, title=_("Create vector map group")
         )

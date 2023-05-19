@@ -1,10 +1,9 @@
-
 /****************************************************************************
  *
  * FILE:         d.paint.labels/color.c
  * AUTHOR(S):    Hamish Bowman, Dunedin New Zealand
  * PURPOSE:      lib fns for working with RGBA_Color struct.
- *		 Inspired by ps.map's ps_colors.c
+ *               Inspired by ps.map's ps_colors.c
  * COPYRIGHT:    (C) 2007 by Hamish Bowman, and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -22,8 +21,7 @@
 #include <grass/glocale.h>
 
 /* fill RGBA array from RGB components (0-255) */
-void set_RGBA_from_components(RGBA_Color * color,
-                              const unsigned char r,
+void set_RGBA_from_components(RGBA_Color *color, const unsigned char r,
                               const unsigned char g, const unsigned char b)
 {
     color->a = RGBA_COLOR_OPAQUE;
@@ -33,8 +31,7 @@ void set_RGBA_from_components(RGBA_Color * color,
     color->b = b;
 }
 
-
-/* 
+/*
  * \brief Parses color string and fill RGBA array
  *
  * If the color is valid the color's alpha value is set to RGBA_COLOR_OPAQUE.
@@ -42,14 +39,14 @@ void set_RGBA_from_components(RGBA_Color * color,
  *
  *  Returns: 1 - OK
  *           2 - NONE
- *           0 - Error 
+ *           0 - Error
  *
  *  \param color_string
  *  \param RGBA_Color struct to be populated
  *  \return int
- * 
+ *
  */
-int set_RGBA_from_str(RGBA_Color * color, const char *clr_str)
+int set_RGBA_from_str(RGBA_Color *color, const char *clr_str)
 {
     int r, g, b;
     int ret;
@@ -71,13 +68,13 @@ int set_RGBA_from_str(RGBA_Color * color, const char *clr_str)
 }
 
 /* set RGBA "color=none" flag */
-void unset_RGBA(RGBA_Color * color)
+void unset_RGBA(RGBA_Color *color)
 {
     color->a = RGBA_COLOR_NONE;
 }
 
 /* tests if RGBA "color=none" */
-int RGBA_has_color(const RGBA_Color * color)
+int RGBA_has_color(const RGBA_Color *color)
 {
     if (color->a != RGBA_COLOR_NONE)
         return TRUE;
@@ -85,13 +82,12 @@ int RGBA_has_color(const RGBA_Color * color)
         return FALSE;
 }
 
-
 /* set active display color from values in the RGBA array */
-void set_color_from_RGBA(const RGBA_Color * color)
+void set_color_from_RGBA(const RGBA_Color *color)
 {
     if (RGBA_has_color(color)) {
-        G_debug(5, "setting display color to [%d:%d:%d]",
-                color->r, color->g, color->b);
+        G_debug(5, "setting display color to [%d:%d:%d]", color->r, color->g,
+                color->b);
 
         D_RGB_color(color->r, color->g, color->b);
     }

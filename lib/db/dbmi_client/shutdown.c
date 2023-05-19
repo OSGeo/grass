@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/shutdown.c
- * 
+ *
  * \brief DBMI Library (client) - shutdown database connection
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -33,7 +33,7 @@
    \return 0 on success
    \return -1 on error
  */
-int db_shutdown_driver(dbDriver * driver)
+int db_shutdown_driver(dbDriver *driver)
 {
     int status;
 

@@ -1,15 +1,15 @@
-#include<stdio.h>
-#include<math.h>
-#include"zufall.h"
+#include <stdio.h>
+#include <math.h>
+#include "zufall.h"
 
 /*-
  * portable lagged Fibonacci series uniform random number generator with
  * "lags" -273 und -607:
- * 
- *        t    = u(i-273)+buff(i-607)  (floating pt.) 
- *        u(i) = t - float(int(t)) 
  *
- * W.P. Petersen, IPS, ETH Zuerich, 19 Mar. 92 
+ *        t    = u(i-273)+buff(i-607)  (floating pt.)
+ *        u(i) = t - float(int(t))
+ *
+ * W.P. Petersen, IPS, ETH Zuerich, 19 Mar. 92
  */
 
 struct klotz0 klotz0_1;
@@ -26,14 +26,14 @@ int zufall(int n, double *a)
     aptr = 0;
     nn = n;
 
-  L1:
+L1:
     if (nn <= 0)
         return 0;
 
-    q = (nn - 1) / 607;         /* factor nn = q*607 + r */
+    q = (nn - 1) / 607; /* factor nn = q*607 + r */
     left = buffsz - klotz0_1.ptr;
 
-    if (q <= 1) {               /* only one or fewer full segments */
+    if (q <= 1) { /* only one or fewer full segments */
         if (nn < left) {
             for (i = 1; i <= nn; ++i)
                 a[i + aptr] = klotz0_1.buff[klotz0_1.ptr + i - 1];
@@ -55,8 +55,8 @@ int zufall(int n, double *a)
                 /* vdir nodep */
                 /* VOCL LOOP, TEMP(t), NOVREC(buff) */
                 for (i = 1; i <= vl; ++i) {
-                    t = klotz0_1.buff[k273 + i - 1] + klotz0_1.buff[k607 + i -
-                                                                    1];
+                    t = klotz0_1.buff[k273 + i - 1] +
+                        klotz0_1.buff[k607 + i - 1];
                     klotz0_1.buff[k607 + i - 1] = t - (float)((int)t);
                 }
                 k607 += vl;
@@ -86,8 +86,8 @@ int zufall(int n, double *a)
             if (k == 1) {
                 /* VOCL LOOP, TEMP(t) */
                 for (i = 1; i <= vl; ++i) {
-                    t = klotz0_1.buff[k273 + i - 1] + klotz0_1.buff[k607 + i -
-                                                                    1];
+                    t = klotz0_1.buff[k273 + i - 1] +
+                        klotz0_1.buff[k607 + i - 1];
                     a[aptr + i] = t - (float)((int)t);
                 }
                 k273 = aptr;
@@ -163,4 +163,4 @@ int zufall(int n, double *a)
         }
         goto L1;
     }
-}                               /* zufall */
+} /* zufall */

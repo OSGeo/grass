@@ -29,9 +29,9 @@
    \return number of modified features
    \return -1 on error
  */
-int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List,
-                        double x1, double y1, double x2, double y2,
-                        double start, double step)
+int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List, double x1,
+                        double y1, double x2, double y2, double start,
+                        double step)
 {
     int i, cv_i, p_i;
     int line, type, temp_line;
@@ -39,14 +39,14 @@ int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List,
     double value, dist;
 
     struct line_cats *Cats;
-    struct line_pnts *Points, *Points_se;       /* start - end */
+    struct line_pnts *Points, *Points_se; /* start - end */
     struct bound_box box, box_se;
 
     /* for intersection */
     struct line_pnts **Points_a, **Points_b;
     int nlines_a, nlines_b;
 
-    dbCatValArray cv;           /* line_id / dist */
+    dbCatValArray cv; /* line_id / dist */
 
     nlines_modified = 0;
 
@@ -63,7 +63,7 @@ int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List,
     Vect_append_point(Points_se, x1, y1, -PORT_DOUBLE_MAX);
     Vect_append_point(Points_se, x2, y2, PORT_DOUBLE_MAX);
 
-    /* write temporaly line */
+    /* write temporary line */
     temp_line = Vect_write_line(Map, GV_LINE, Points_se, Cats);
     if (temp_line < 0) {
         return -1;
@@ -86,18 +86,18 @@ int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List,
 
         Vect_line_box(Points, &box);
         if (Vect_line_check_intersection(Points_se, Points, WITH_Z)) {
-            Vect_line_intersection(Points_se, Points, &box_se, &box,
-                                   &Points_a, &Points_b, &nlines_a, &nlines_b,
-                                   WITHOUT_Z);
+            Vect_line_intersection(Points_se, Points, &box_se, &box, &Points_a,
+                                   &Points_b, &nlines_a, &nlines_b, WITHOUT_Z);
 
-            if (nlines_a < 2 || nlines_b < 1)   /* should not happen */
+            if (nlines_a < 2 || nlines_b < 1) /* should not happen */
                 continue;
 
             /* calculate distance start point -> point of intersection */
             for (p_i = 0; p_i < Points_a[0]->n_points; p_i++) {
                 Points_a[0]->z[p_i] = 0;
             }
-            dist = Vect_line_length(Points_a[0]);       /* always first line in array? */
+            dist =
+                Vect_line_length(Points_a[0]); /* always first line in array? */
 
             cv.value[cv_i].cat = line;
             cv.value[cv_i++].val.d = dist;

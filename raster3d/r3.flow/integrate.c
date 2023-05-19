@@ -45,22 +45,20 @@ double norm(const double x, const double y, const double z)
 
    \return time step
  */
-double get_time_step(const char *unit, const double step,
-                     const double velocity, const double cell_size)
+double get_time_step(const char *unit, const double step, const double velocity,
+                     const double cell_size)
 {
     if (strcmp(unit, "time") == 0)
         return step;
     else if (strcmp(unit, "length") == 0)
         return step / velocity;
-    else                        /* cell */
+    else /* cell */
         return (step * cell_size) / velocity;
 }
 
-
-int get_velocity(RASTER3D_Region * region,
-                 struct Gradient_info *gradient_info, const double x,
-                 const double y, const double z, double *vel_x, double *vel_y,
-                 double *vel_z)
+int get_velocity(RASTER3D_Region *region, struct Gradient_info *gradient_info,
+                 const double x, const double y, const double z, double *vel_x,
+                 double *vel_y, double *vel_z)
 {
     if (gradient_info->compute_gradient)
         return get_gradient(region, gradient_info, y, x, z, vel_x, vel_y,
@@ -71,24 +69,24 @@ int get_velocity(RASTER3D_Region * region,
 }
 
 /*!
-   \brief Runge-Kutta45 (inner steps) 
+   \brief Runge-Kutta45 (inner steps)
 
    \param region pointer to current 3D region
    \param velocity_field pointer to array of 3 3D raster maps (velocity field)
    \param point pointer to array of geographic coordinates of starting point
-   \param[out] next_point pointer to array of geographic coordinates of integrated point
-   \param delta_t integration time step
-   \param error pointer to array of error values
+   \param[out] next_point pointer to array of geographic coordinates of
+   integrated point \param delta_t integration time step \param error pointer to
+   array of error values
 
    \return 0 success
    \return -1 out of region or null values
  */
-static int rk45_next(RASTER3D_Region * region,
+static int rk45_next(RASTER3D_Region *region,
                      struct Gradient_info *gradient_info, const double *point,
-                     double *next_point, const double delta_t,
-                     double *velocity, double *error)
+                     double *next_point, const double delta_t, double *velocity,
+                     double *error)
 {
-    double tmp1[6][3];          /* 3 is 3 dimensions, 6 is the number of k's */
+    double tmp1[6][3]; /* 3 is 3 dimensions, 6 is the number of k's */
     double tmp_point[3];
     double vel_x, vel_y, vel_z;
     double sum_tmp;
@@ -105,16 +103,15 @@ static int rk45_next(RASTER3D_Region * region,
 
     /* compute k's */
     for (i = 1; i < 6; i++) {
-        for (j = 0; j < 3; j++) {       /* for each coordinate */
+        for (j = 0; j < 3; j++) { /* for each coordinate */
             sum_tmp = 0;
-            for (k = 0; k < i; k++) {   /* k1; k1, k2; ... */
+            for (k = 0; k < i; k++) { /* k1; k1, k2; ... */
                 sum_tmp += B[i - 1][k] * tmp1[k][j];
             }
             tmp_point[j] = point[j] + delta_t * sum_tmp;
         }
-        if (get_velocity
-            (region, gradient_info, tmp_point[0], tmp_point[1], tmp_point[2],
-             &vel_x, &vel_y, &vel_z) < 0)
+        if (get_velocity(region, gradient_info, tmp_point[0], tmp_point[1],
+                         tmp_point[2], &vel_x, &vel_y, &vel_z) < 0)
             return -1;
 
         tmp1[i][0] = vel_x;
@@ -134,8 +131,8 @@ static int rk45_next(RASTER3D_Region * region,
     }
     *velocity = sqrt(vel_sq);
 
-    if (!Rast3d_is_valid_location
-        (region, next_point[1], next_point[0], next_point[2]))
+    if (!Rast3d_is_valid_location(region, next_point[1], next_point[0],
+                                  next_point[2]))
         return -1;
 
     /* compute error vector */
@@ -151,20 +148,19 @@ static int rk45_next(RASTER3D_Region * region,
 }
 
 /*!
-   \brief Runge-Kutta45 with step size control 
+   \brief Runge-Kutta45 with step size control
 
    \param region pointer to current 3D region
    \param velocity_field pointer to array of 3 3D raster maps (velocity field)
    \param point pointer to array of geographic coordinates of starting point
-   \param[out] next_point pointer to array of geographic coordinates of integrated point
-   \param[in,out] delta_t integration time step
-   \param min_step minimum time step
-   \param max_step maximum time step
+   \param[out] next_point pointer to array of geographic coordinates of
+   integrated point \param[in,out] delta_t integration time step \param min_step
+   minimum time step \param max_step maximum time step
 
    \return 0 success
    \return -1 out of region or null values
  */
-int rk45_integrate_next(RASTER3D_Region * region,
+int rk45_integrate_next(RASTER3D_Region *region,
                         struct Gradient_info *gradient_info,
                         const double *point, double *next_point,
                         double *delta_t, double *velocity,
@@ -188,9 +184,8 @@ int rk45_integrate_next(RASTER3D_Region * region,
     /* try to iteratively decrease error to less than max error */
     while (estimated_error > max_error) {
         /* compute next point and get estimated error */
-        if (rk45_next
-            (region, gradient_info, point, next_point, *delta_t,
-             velocity, error) == 0)
+        if (rk45_next(region, gradient_info, point, next_point, *delta_t,
+                      velocity, error) == 0)
             estimated_error = norm(error[0], error[1], error[2]);
         else
             return -1;
@@ -221,8 +216,8 @@ int rk45_integrate_next(RASTER3D_Region * region,
 
         /* break when the adjustment was needed (not sure why) */
         if (do_break) {
-            if (rk45_next(region, gradient_info, point, next_point,
-                          *delta_t, velocity, error) < 0)
+            if (rk45_next(region, gradient_info, point, next_point, *delta_t,
+                          velocity, error) < 0)
                 return -1;
             break;
         }

@@ -335,7 +335,7 @@ def main():
     # Find the skewedness of the two directions.
     # Define it to be greater than one
     # In the direction (x or y) in which the world is least skewed (ie north south in lat long)
-    # Divide the world into strips. These strips are as big as possible contrained by max_
+    # Divide the world into strips. These strips are as big as possible constrained by max_
     # In the other direction do the same thing.
     # There's some recomputation of the size of the world that's got to come in
     # here somewhere.

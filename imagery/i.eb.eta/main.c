@@ -1,16 +1,15 @@
-
 /****************************************************************************
  *
  * MODULE:       i.eb.eta
  * AUTHOR(S):    Yann Chemin - yann.chemin@gmail.com
  * PURPOSE:      Calculates the actual evapotranspiration for diurnal period
- *               as seen in Bastiaanssen (1995) 
+ *               as seen in Bastiaanssen (1995)
  *
  * COPYRIGHT:    (C) 2002-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
 
@@ -29,8 +28,8 @@ int main(int argc, char *argv[])
     int row, col;
     struct GModule *module;
     struct Option *input1, *input2, *input3, *output1;
-    struct History history;     /*metadata */
-    char *result1;              /*output raster name */
+    struct History history; /*metadata */
+    char *result1;          /*output raster name */
     int infd_rnetday, infd_evapfr, infd_tempk;
     int outfd1;
     char *rnetday, *evapfr, *tempk;
@@ -107,9 +106,9 @@ int main(int argc, char *argv[])
 
         /*process the data */
         for (col = 0; col < ncols; col++) {
-            d_rnetday = ((DCELL *) inrast_rnetday)[col];
-            d_evapfr = ((DCELL *) inrast_evapfr)[col];
-            d_tempk = ((DCELL *) inrast_tempk)[col];
+            d_rnetday = ((DCELL *)inrast_rnetday)[col];
+            d_evapfr = ((DCELL *)inrast_evapfr)[col];
+            d_tempk = ((DCELL *)inrast_tempk)[col];
             if (Rast_is_d_null_value(&d_rnetday) ||
                 Rast_is_d_null_value(&d_evapfr) ||
                 Rast_is_d_null_value(&d_tempk))

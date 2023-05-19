@@ -30,7 +30,7 @@ AR                  = @AR@
 RANLIB              = @RANLIB@
 MKDIR               = mkdir -p
 CHMOD               = chmod
-INSTALL             = @INSTALL@ 
+INSTALL             = @INSTALL@
 INSTALL_DATA        = @INSTALL_DATA@
 
 prefix              = @prefix@
@@ -85,7 +85,7 @@ XLIB                = @X_PRE_LIBS@ @XLIB@
 XEXTRALIBS          = @X_EXTRA_LIBS@
 USE_X11             = @USE_X11@
 
-MATHLIB             = @MATHLIB@ 
+MATHLIB             = @MATHLIB@
 ICONVLIB            = @ICONVLIB@
 INTLLIB             = @INTLLIB@
 SOCKLIB             = @SOCKLIB@
@@ -175,7 +175,7 @@ USE_OGR             = @USE_OGR@
 
 #NetCDF
 NETCDFLIBS          = @NETCDF_LIBS@
-NETCDFCFLAGS        = @NETCDF_CFLAGS@    
+NETCDFCFLAGS        = @NETCDF_CFLAGS@
 USE_NETCDF          = @USE_NETCDF@
 
 #LAS LiDAR through libLAS
@@ -186,7 +186,6 @@ USE_LIBLAS          = @USE_LIBLAS@
 
 #LAS LiDAR through PDAL
 PDALLIBS             = @PDAL_LIBS@
-PDALCPPFLAGS         = @PDAL_CPPFLAGS@
 PDALINC              = @PDAL_INC@
 USE_PDAL             = @USE_PDAL@
 
@@ -233,10 +232,10 @@ PTHREADLIB          = @PTHREADLIB@
 USE_PTHREAD         = @USE_PTHREAD@
 
 #OpenMP
-OMPINCPATH          = @OMPINCPATH@
-OMPLIBPATH          = @OMPLIBPATH@
-OMPLIB              = @OMPLIB@
-OMPCFLAGS           = @OMPCFLAGS@
+OPENMP_INCPATH      = @OPENMP_INCPATH@
+OPENMP_LIBPATH      = @OPENMP_LIBPATH@
+OPENMP_LIB          = @OPENMP_LIB@
+OPENMP_CFLAGS       = @OPENMP_CFLAGS@
 USE_OPENMP          = @USE_OPENMP@
 
 #OpenCL
@@ -262,4 +261,4 @@ MACOSX_ARCHS        = @MACOSX_ARCHS@
 MACOSX_SDK          = @MACOSX_SDK@
 
 # Cross compilation
-CROSS_COMPILING     = @CROSS_COMPILING@ 
+CROSS_COMPILING     = @CROSS_COMPILING@

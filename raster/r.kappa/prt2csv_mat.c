@@ -4,10 +4,8 @@
 #include "kappa.h"
 #include "local_proto.h"
 
-
 static int longcomp(const void *aa, const void *bb);
 static int collapse(long *l, int n);
-
 
 void prn2csv_error_mat(int out_cols, int hdr)
 {
@@ -36,8 +34,9 @@ void prn2csv_error_mat(int out_cols, int hdr)
         fd = stdout;
 
     if (fd == NULL) {
-        G_fatal_error(_("Cannot open file <%s> to write cats and counts (error matrix)"),
-                      output);
+        G_fatal_error(
+            _("Cannot open file <%s> to write cats and counts (error matrix)"),
+            output);
         return;
     }
     else {
@@ -57,7 +56,8 @@ void prn2csv_error_mat(int out_cols, int hdr)
         ncat1 = collapse(rlst, nstats);
         ncat2 = collapse(clst, nstats);
 
-        /* copy clst to the end of rlst, remove repeated cats, and free unused memory */
+        /* copy clst to the end of rlst, remove repeated cats, and free unused
+         * memory */
         for (i = 0; i < ncat2; i++)
             rlst[ncat1 + i] = clst[i];
         qsort(rlst, ncat1 + ncat2, sizeof(long), longcomp);
@@ -92,7 +92,7 @@ void prn2csv_error_mat(int out_cols, int hdr)
         /* print labels MAP1 */
         for (j = 0; j < ncat; j++) {
             cats = rlst;
-            cl = Rast_get_c_cat((CELL *) & (cats[j]), &(layers[0].labels));
+            cl = Rast_get_c_cat((CELL *)&(cats[j]), &(layers[0].labels));
             if (cl)
                 G_strip(cl);
             if (cl == NULL || *cl == 0)
@@ -107,7 +107,7 @@ void prn2csv_error_mat(int out_cols, int hdr)
         /* body of the matrix */
         for (rndx = 0; rndx < ncat; rndx++) {
             cats = rlst;
-            cl = Rast_get_c_cat((CELL *) & (cats[rndx]), &(layers[1].labels));
+            cl = Rast_get_c_cat((CELL *)&(cats[rndx]), &(layers[1].labels));
             if (cl)
                 G_strip(cl);
             if (cl == NULL || *cl == 0)
@@ -147,7 +147,6 @@ void prn2csv_error_mat(int out_cols, int hdr)
     }
 }
 
-
 /* remove repeated values */
 static int collapse(long *l, int n)
 {
@@ -167,7 +166,6 @@ static int collapse(long *l, int n)
 
     return m;
 }
-
 
 static int longcomp(const void *aa, const void *bb)
 {

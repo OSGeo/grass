@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.in.poly
@@ -11,12 +10,12 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
-
 
 int main(int argc, char *argv[])
 {
@@ -36,7 +35,6 @@ int main(int argc, char *argv[])
     G_add_keyword(_("import"));
     module->description =
         _("Creates raster maps from ASCII polygon/line/point data files.");
-
 
     input = G_define_standard_option(G_OPT_F_INPUT);
     input->description = _("Name of input file; or \"-\" to read from stdin");
@@ -88,7 +86,6 @@ int main(int argc, char *argv[])
     else
         null = NULL;
 
-    exit(poly_to_rast
-         (input->answer, output->answer, title->answer, n, raster_type,
-          null));
+    exit(poly_to_rast(input->answer, output->answer, title->answer, n,
+                      raster_type, null));
 }
