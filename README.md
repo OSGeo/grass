@@ -108,10 +108,6 @@ this issue, clean all the compiled files from the source code:
 make distclean
 ```
 
-
 ## Thanks to all contributors ❤
 
- <a href = "https://github.com/OSGeo/grass/graphs/contributors">
-   <img src = "https://contrib.rocks/image?repo=OSGeo/grass"/>
- </a>
-
+[![GRASS contributors](https://contrib.rocks/image?repo=OSGeo/grass "GRASS contributors")](https://github.com/OSGeo/grass/graphs/contributors)
