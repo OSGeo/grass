@@ -8,35 +8,21 @@ Licence:   This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.
 """
-import os
 import unittest
-import ctypes
+import shutil
 
 from grass.script import core as grass
-from grass.script import shutil_which
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 from grass.pygrass.gis import Mapset
-from grass.pygrass import utils
-
-from grass.lib.gis import (
-    GPATH_MAX,
-    GNAME_MAX,
-    G_file_name_misc,
-)
-from grass.lib.imagery import (
-    I_SIGFILE_TYPE_LIBSVM,
-    I_get_signatures_dir,
-    I_signatures_remove,
-)
 
 
 class IOValidationTest(TestCase):
     """Test input validation and output generation with i.svm.predict"""
 
     @classmethod
-    @unittest.skipIf(shutil_which("i.svm.predict") is None, "i.svm.predict not found.")
+    @unittest.skipIf(shutil.which("i.svm.predict") is None, "i.svm.predict not found.")
     def setUpClass(cls):
         cls.tmp_rasts = []
         cls.tmp_groups = []
@@ -123,7 +109,7 @@ class IOValidationTest(TestCase):
             cls.runModule("g.remove", flags="f", _type="group", name=group)
         # I_signatures_remove(I_SIGFILE_TYPE_LIBSVM, cls.sig1)
 
-    @unittest.skipIf(shutil_which("i.svm.predict") is None, "i.svm.predict not found.")
+    @unittest.skipIf(shutil.which("i.svm.predict") is None, "i.svm.predict not found.")
     def test_empty_group(self):
         """Empty imagery group handling"""
         rast = grass.tempname(10)
@@ -139,7 +125,7 @@ class IOValidationTest(TestCase):
         self.assertTrue(isvm.outputs.stderr)
         self.assertIn(self.group1, isvm.outputs.stderr)
 
-    @unittest.skipIf(shutil_which("i.svm.predict") is None, "i.svm.predict not found.")
+    @unittest.skipIf(shutil.which("i.svm.predict") is None, "i.svm.predict not found.")
     def test_semantic_label_mismatch1(self):
         """There are more semantic labels in the signature file than in the group"""
         rast = grass.tempname(10)
@@ -155,13 +141,14 @@ class IOValidationTest(TestCase):
         self.assertTrue(isvm.outputs.stderr)
         self.assertIn(
             (
-                "Imagery group does not contain a raster with a semantic label 'GRASS_RND1'"
+                "Imagery group does not contain a raster with "
+                + "a semantic label 'GRASS_RND1'"
             ),
             isvm.outputs.stderr,
         )
 
-    @unittest.skipIf(shutil_which("i.svm.predict") is None, "i.svm.predict not found.")
-    def test_semantic_label_mismatch1(self):
+    @unittest.skipIf(shutil.which("i.svm.predict") is None, "i.svm.predict not found.")
+    def test_semantic_label_mismatch2(self):
         """There are more semantic labels in the group than in the signature file"""
         rast = grass.tempname(10)
         isvm = SimpleModule(
@@ -179,7 +166,7 @@ class IOValidationTest(TestCase):
             in isvm.outputs.stderr
         )
 
-    @unittest.skipIf(shutil_which("i.svm.predict") is None, "i.svm.predict not found.")
+    @unittest.skipIf(shutil.which("i.svm.predict") is None, "i.svm.predict not found.")
     def test_prediction(self):
         """A successful run"""
         rast = grass.tempname(10)

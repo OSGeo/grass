@@ -56,7 +56,7 @@ class GetSignaturesDirTestCase(TestCase):
     def test_get_libsvm(self):
         elem = ctypes.create_string_buffer(GNAME_MAX)
         I_get_signatures_dir(elem, I_SIGFILE_TYPE_LIBSVM)
-        self.assertEqual(utils.decode(elem.value), f"signatures{H_DIRSEP}libsvm")
+        self.assertEqual(utils.decode(elem.value), f"signatures{HOST_DIRSEP}libsvm")
 
 
 class MakeSignaturesDirTestCase(TestCase):
@@ -541,7 +541,7 @@ class SignaturesCopyTestCase(TestCase):
         self.assertEqual(ms, self.mapset_name)
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/libsvm/{dst}/sig"))
 
-    def test_success_fq_sig(self):
+    def test_success_fq_libsvm(self):
         dst = tempname(10)
         dst_dir = f"{self.mpath}/signatures/libsvm/{dst}"
         self.sigdirs.append(dst_dir)

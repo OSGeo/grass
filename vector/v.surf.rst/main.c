@@ -422,11 +422,6 @@ int main(int argc, char *argv[])
                     "output is required"));
         threads = 1;
     }
-    if (parm.cvdev->answer && threads > 1) {
-        G_warning(_("Parallel computation disabled when cross validation "
-                    "output is required"));
-        threads = 1;
-    }
 #if defined(_OPENMP)
     omp_set_num_threads(threads);
 #else
