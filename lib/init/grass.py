@@ -1185,9 +1185,12 @@ def set_mapset(
                                     " Did you mean to create a new location?"
                                 ).format(mapset=mapset, geofile=geofile)
                             )
-                        message(
-                            _("Creating new GRASS GIS mapset <{}>...").format(mapset)
-                        )
+                        if not tmp_mapset:
+                            message(
+                                _("Creating new GRASS GIS mapset <{}>...").format(
+                                    mapset
+                                )
+                            )
                         # create mapset directory
                         os.mkdir(path)
                         if tmp_mapset:
