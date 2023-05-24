@@ -1,7 +1,9 @@
 [flake8]
 ignore =
-    E203,  # whitespace before ':' (Black)
-    W503,  # line break before binary operator (Black)
+    # whitespace before ':' (Black)
+    E203,
+    # line break before binary operator (Black)
+    W503,
 
 per-file-ignores =
     # Files and directories which need fixes or specific exceptions
