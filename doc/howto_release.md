@@ -19,7 +19,7 @@
 Update your remotes and switch to branch:
 
 ```bash
-git fetch --all --prune && git checkout releasebranch_8_2
+git fetch --all --prune && git checkout releasebranch_8_4
 ```
 
 Confirm that you are on the right branch and have no local changes
@@ -32,7 +32,7 @@ git status
 git diff
 git diff --staged
 # Should give no output:
-git log upstream/releasebranch_8_2..HEAD
+git log upstream/releasebranch_8_4..HEAD
 # Should give the same as last commits visible on GitHub:
 git log --max-count=5
 ```
@@ -41,14 +41,14 @@ Now you can merge (or rebase) updates from the remote your local branch
 and optionally update your own fork:
 
 ```bash
-git merge upstream/releasebranch_8_2 && git push origin releasebranch_8_2
+git merge upstream/releasebranch_8_4 && git push origin releasebranch_8_4
 ```
 
 Verify the result:
 
 ```bash
 # Should give no output:
-git log upstream/releasebranch_8_2..HEAD
+git log upstream/releasebranch_8_4..HEAD
 # Should give the same as last commits visible on GitHub:
 git log --max-count=5
 ```
@@ -71,14 +71,17 @@ Modify the VERSION file use the dedicated script, for RC1, e.g.:
 ```
 
 The script will compute the correct version string and print a message
-containing it into the terminal (e.g., "version: GRASS GIS 8.2.0RC1").
+containing it into the terminal (e.g., "version: GRASS GIS 3.5.0RC1").
 
 Commit with a commit message suggested by the script, e.g.:
 
 ```bash
 git diff
-git commit include/VERSION -m "version: GRASS GIS 8.2.0RC1"
+git commit include/VERSION -m "..."
 ```
+
+If you lost the script output with the suggested message use
+`./utils/update_version.py suggest` to get it.
 
 Check that there is exactly one commit on your local branch and that it is the
 version change:
@@ -124,7 +127,7 @@ Before creating the tag, it is a good idea to see if the CI jobs are not failing
 Check on GitHub or use GitHub CLI:
 
 ```bash
-gh run list --branch releasebranch_8_2
+gh run list --branch releasebranch_8_4
 ```
 
 Some time was needed to run the checks, so before getting back to creating the tag,
@@ -139,7 +142,7 @@ Create an annotated tag (a lightweight tag is okay too, but there is more metada
 stored for annotated tags including a date; message is suggested by the version script):
 
 ```bash
-git tag $TAG -a -m "GRASS GIS 8.2.0RC1"
+git tag $TAG -a -m "..."
 ```
 
 List all tags (annotated will be at the top of both lists):
@@ -169,7 +172,7 @@ release candidate because it contains contributor handles and can identify
 new contributors, so use with the *api* backend, e.g.:
 
 ```bash
-python ./generate_release_notes.py api releasebranch_8_2 8.0.0 $VERSION
+python ./generate_release_notes.py api releasebranch_8_4 8.3.0 $VERSION
 ```
 
 For micro releases, GitHub API does not give good results because it uses PRs
@@ -177,14 +180,14 @@ while the backports are usually direct commits without PRs.
 The *git log* command operates on commits, so use use the *log* backend:
 
 ```bash
-python ./generate_release_notes.py log releasebranch_8_2 8.2.0 $VERSION
+python ./generate_release_notes.py log releasebranch_8_4 8.4.0 $VERSION
 ```
 
 In between RCs and between last RC and final release, the *log* backend is useful
 for showing updates since the last RC:
 
 ```bash
-python ./generate_release_notes.py log releasebranch_8_2 8.2.0RC1 $VERSION
+python ./generate_release_notes.py log releasebranch_8_4 8.4.0RC1 $VERSION
 ```
 
 For the final release, the changes accumulated since the first RC need to be
@@ -238,8 +241,16 @@ Commit with the suggested commit message and push, e.g.:
 
 ```bash
 git show
-git commit include/VERSION -m "version: Back to 8.2.0dev"
+git commit include/VERSION -m "..."
 git push upstream
+```
+
+The message was suggested by the script, but if you lost that output,
+you can get the same or similar message again using the script
+(the message provided this way is not precise after RCs):
+
+```bash
+./utils/update_version.py suggest
 ```
 
 ## Upload to OSGeo servers
@@ -256,10 +267,10 @@ First, update the repo to get the tag locally:
 git fetch upstream
 ```
 
-Get the tagged source code, e.g.:
+Get the tagged source code, e.g. (modify the tag as needed):
 
 ```bash
-git checkout 8.2.0RC1
+git checkout 8.4.0RC1
 ```
 
 Create the Bash variables for version numbers:
@@ -465,9 +476,13 @@ the dedicated script, e.g., for next micro version, run:
 ./utils/update_version.py status
 ```
 
-Now commit the change to the branch with the commit message generated above:
+Now commit the change to the branch with the commit message generated above
+by the script:
 
 ```bash
 git diff
-git commit include/VERSION -m "version: GRASS GIS 8.2.1"
+git commit include/VERSION -m "..."
 ```
+
+If you lost the script output with the suggested message use
+`./utils/update_version.py suggest` to get it.
