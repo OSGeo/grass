@@ -16,6 +16,10 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 from grass.pygrass.gis import Mapset
+from grass.lib.imagery import (
+    I_SIGFILE_TYPE_LIBSVM,
+    I_signatures_remove,
+)
 
 
 class IOValidationTest(TestCase):
@@ -107,7 +111,7 @@ class IOValidationTest(TestCase):
             cls.runModule("g.remove", flags="f", _type="raster", name=rast)
         for group in cls.tmp_groups:
             cls.runModule("g.remove", flags="f", _type="group", name=group)
-        # I_signatures_remove(I_SIGFILE_TYPE_LIBSVM, cls.sig1)
+        I_signatures_remove(I_SIGFILE_TYPE_LIBSVM, cls.sig1)
 
     @unittest.skipIf(shutil.which("i.svm.predict") is None, "i.svm.predict not found.")
     def test_empty_group(self):
@@ -140,10 +144,11 @@ class IOValidationTest(TestCase):
         self.assertModuleFail(isvm)
         self.assertTrue(isvm.outputs.stderr)
         self.assertIn(
-            (
-                "Imagery group does not contain a raster with "
-                + "a semantic label 'GRASS_RND1'"
-            ),
+            "Imagery group does not contain a raster with a semantic label",
+            isvm.outputs.stderr,
+        )
+        self.assertIn(
+            self.rast1,
             isvm.outputs.stderr,
         )
 
