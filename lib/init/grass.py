@@ -1400,10 +1400,7 @@ def set_language(grass_config_dir):
         del os.environ['LC_ALL']  # Remove LC_ALL to not override LC_NUMERIC
 
     # From now on enforce the new language
-    if encoding:
-        gettext.install('grasslibs', gpath('locale'), codeset=encoding)
-    else:
-        gettext.install('grasslibs', gpath('locale'))
+    gettext.install("grasslibs", gpath("locale"))
 
 
 # TODO: grass_gui parameter is a hack and should be removed, see below
