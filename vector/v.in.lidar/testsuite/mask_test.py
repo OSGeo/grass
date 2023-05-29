@@ -78,8 +78,13 @@ C  1 1
 
 
 import os
+import sys
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+
+
+flags = "bto" if sys.platform == "win32" or sys.platform == "cygwin" else "bt"
 
 
 class VectorMaskTest(TestCase):
@@ -132,7 +137,7 @@ class VectorMaskTest(TestCase):
     def test_no_mask(self):
         """Test to see if the standard outputs are created"""
         self.assertModule(
-            "v.in.lidar", input=self.las_file, output=self.imported_points, flags="bt"
+            "v.in.lidar", input=self.las_file, output=self.imported_points, flags=flags
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
@@ -145,7 +150,7 @@ class VectorMaskTest(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags=flags,
             mask=self.areas,
         )
         self.assertVectorExists(self.imported_points)
@@ -159,7 +164,7 @@ class VectorMaskTest(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="btu",
+            flags=f"{flags}u",
             mask=self.areas,
         )
         self.assertVectorExists(self.imported_points)

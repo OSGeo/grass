@@ -10,6 +10,7 @@ Licence:   This program is free software under the GNU General Public
 """
 
 import os
+import sys
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -25,6 +26,8 @@ class TestCountBasedDecimation(TestCase):
     imported_points = "vinlidar_decimation_imported"
     las_file = "vinlidar_decimation_points.las"
     npoints = 300  # the values works well for 300 without rounding
+    # On MS Windows CRS information is not available for input data
+    flags = "bto" if sys.platform == "win32" or sys.platform == "cygwin" else "bt"
 
     @classmethod
     def setUpClass(cls):
@@ -60,7 +63,10 @@ class TestCountBasedDecimation(TestCase):
     def test_identical(self):
         """Test to see if the standard outputs are created"""
         self.assertModule(
-            "v.in.lidar", input=self.las_file, output=self.imported_points, flags="bt"
+            "v.in.lidar",
+            input=self.las_file,
+            output=self.imported_points,
+            flags=self.flags,
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
@@ -73,7 +79,7 @@ class TestCountBasedDecimation(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags=self.flags,
             skip=number,
         )
         self.assertVectorExists(self.imported_points)
@@ -87,7 +93,7 @@ class TestCountBasedDecimation(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags=self.flags,
             preserve=number,
         )
         self.assertVectorExists(self.imported_points)
@@ -101,7 +107,7 @@ class TestCountBasedDecimation(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags=self.flags,
             offset=number,
         )
         self.assertVectorExists(self.imported_points)
@@ -115,7 +121,7 @@ class TestCountBasedDecimation(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags=self.flags,
             limit=number,
         )
         self.assertVectorExists(self.imported_points)
@@ -157,7 +163,7 @@ class TestCountBasedDecimation(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags=self.flags,
             offset=105,
             preserve=10,
         )
@@ -173,7 +179,7 @@ class TestCountBasedDecimation(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags=self.flags,
             limit=105,
             skip=10,
         )
@@ -188,7 +194,7 @@ class TestCountBasedDecimation(TestCase):
             "v.in.lidar",
             input=self.las_file,
             output=self.imported_points,
-            flags="bt",
+            flags=self.flags,
             offset=50,
             skip=5,
             limit=self.npoints - 1,

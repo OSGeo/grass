@@ -12,6 +12,8 @@
 
 """Tests of grass.grassdb.manage"""
 
+import os
+
 from pathlib import Path
 
 from grass.grassdb.manage import MapsetPath, resolve_mapset_path, split_mapset_path
@@ -33,7 +35,8 @@ class TestMapsetPath(TestCase):
             path=full_path, directory=path, location=location_name, mapset=mapset_name
         )
         # Paths are currently stored as is (not resolved).
-        self.assertEqual(mapset_path.directory, path)
+        # pathlib uses os.sep for string represtentation of Path objects
+        self.assertEqual(mapset_path.directory, path.replace("/", os.sep))
         self.assertEqual(mapset_path.location, location_name)
         self.assertEqual(mapset_path.mapset, mapset_name)
         self.assertEqual(mapset_path.path, Path(path) / location_name / mapset_name)
@@ -51,7 +54,8 @@ class TestMapsetPath(TestCase):
             mapset=mapset_name,
         )
         # Paths are currently stored as is (not resolved).
-        self.assertEqual(mapset_path.directory, path)
+        # pathlib uses os.sep for string represtentation of Path objects
+        self.assertEqual(mapset_path.directory, path.replace("/", os.sep))
         self.assertEqual(mapset_path.location, location_name)
         self.assertEqual(mapset_path.mapset, mapset_name)
         self.assertEqual(mapset_path.path, Path(path) / location_name / mapset_name)
@@ -67,7 +71,7 @@ class TestSplitMapsetPath(TestCase):
         ref_mapset = "test_mapset_1"
         path = Path(ref_db) / ref_location / ref_mapset
         new_db, new_location, new_mapset = split_mapset_path(path)
-        self.assertEqual(new_db, ref_db)
+        self.assertEqual(new_db, ref_db.replace("/", os.sep))
         self.assertEqual(new_location, ref_location)
         self.assertEqual(new_mapset, ref_mapset)
 
@@ -78,7 +82,7 @@ class TestSplitMapsetPath(TestCase):
         ref_mapset = "test_mapset_1"
         path = Path(ref_db) / ref_location / ref_mapset
         new_db, new_location, new_mapset = split_mapset_path(str(path))
-        self.assertEqual(new_db, ref_db)
+        self.assertEqual(new_db, ref_db.replace("/", os.sep))
         self.assertEqual(new_location, ref_location)
         self.assertEqual(new_mapset, ref_mapset)
 
@@ -89,7 +93,7 @@ class TestSplitMapsetPath(TestCase):
         ref_mapset = "test_mapset_1"
         path = Path(ref_db) / ref_location / ref_mapset
         new_db, new_location, new_mapset = split_mapset_path(str(path) + "/")
-        self.assertEqual(new_db, ref_db)
+        self.assertEqual(new_db, ref_db.replace("/", os.sep))
         self.assertEqual(new_location, ref_location)
         self.assertEqual(new_mapset, ref_mapset)
 
@@ -135,7 +139,9 @@ class TestResolveMapsetPath(TestCase):
         mapset_path = resolve_mapset_path(
             path=path, location=location_name, mapset=mapset_name
         )
-        self.assertEqual(mapset_path.directory, str(Path(path).resolve()))
+        self.assertEqual(
+            mapset_path.directory, str(Path(path).resolve()).replace("/", os.sep)
+        )
         self.assertEqual(mapset_path.location, location_name)
         self.assertEqual(mapset_path.mapset, mapset_name)
         self.assertEqual(
@@ -149,7 +155,9 @@ class TestResolveMapsetPath(TestCase):
         mapset_name = "test_mapset_1"
         full_path = str(Path(path) / location_name / mapset_name)
         mapset_path = resolve_mapset_path(path=full_path)
-        self.assertEqual(mapset_path.directory, str(Path(path).resolve()))
+        self.assertEqual(
+            mapset_path.directory, str(Path(path).resolve()).replace("/", os.sep)
+        )
         self.assertEqual(mapset_path.location, location_name)
         self.assertEqual(mapset_path.mapset, mapset_name)
         self.assertEqual(

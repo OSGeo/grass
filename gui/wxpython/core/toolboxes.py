@@ -27,11 +27,6 @@ if hasattr(etree, "ParseError"):
 else:
     ETREE_EXCEPTIONS = expat.ExpatError
 
-if sys.version_info[0:2] > (2, 6):
-    has_xpath = True
-else:
-    has_xpath = False
-
 import grass.script.task as gtask
 import grass.script.core as gcore
 from grass.script.utils import try_remove, decode
@@ -430,18 +425,7 @@ def _expandToolboxes(node, toolboxes):
             items = n.find("./items")
             idx = list(items).index(subtoolbox)
 
-            if has_xpath:
-                toolbox = toolboxes.find(
-                    './/toolbox[@name="%s"]' % subtoolbox.get("name")
-                )
-            else:
-                toolbox = None
-                potentialToolboxes = toolboxes.findall(".//toolbox")
-                sName = subtoolbox.get("name")
-                for pToolbox in potentialToolboxes:
-                    if pToolbox.get("name") == sName:
-                        toolbox = pToolbox
-                        break
+            toolbox = toolboxes.find('.//toolbox[@name="%s"]' % subtoolbox.get("name"))
 
             if toolbox is None:  # not in file
                 continue
@@ -576,15 +560,7 @@ def _expandItems(node, items, itemTag):
     """
     for moduleItem in node.findall(".//" + itemTag):
         itemName = moduleItem.get("name")
-        if has_xpath:
-            moduleNode = items.find('.//%s[@name="%s"]' % (itemTag, itemName))
-        else:
-            moduleNode = None
-            potentialModuleNodes = items.findall(".//%s" % itemTag)
-            for mNode in potentialModuleNodes:
-                if mNode.get("name") == itemName:
-                    moduleNode = mNode
-                    break
+        moduleNode = items.find('.//%s[@name="%s"]' % (itemTag, itemName))
 
         if moduleNode is None:  # module not available in dist
             continue
@@ -789,9 +765,9 @@ def do_doctest_gettext_workaround():
     sys.displayhook = new_displayhook
     sys.__displayhook__ = new_displayhook
 
-    import __builtin__
+    import builtins as _builtins
 
-    __builtin__._ = new_translator
+    _builtins.__dict__["_"] = new_translator
 
 
 def doc_test():

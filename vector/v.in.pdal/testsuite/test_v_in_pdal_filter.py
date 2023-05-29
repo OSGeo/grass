@@ -10,9 +10,11 @@ Licence:   This program is free software under the GNU General Public
 """
 
 import os
+import shutil
+import unittest
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-import unittest
 
 POINTS = """\
 17.46938776,18.67346939,143,1,1,2

@@ -12,14 +12,18 @@ COPYRIGHT: (C) 2015 Vaclav Petras, and by the GRASS Development Team
            for details.
 """
 
+import os
+import sys
+import unittest
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.utils import silent_rmtree
 from grass.script.utils import decode
 
-import os
 
+ms_windows = sys.platform == "win32" or sys.platform == "cygwin"
 
 MODULES_OUTPUT = """\
 d.frame
@@ -49,6 +53,7 @@ wx.metadata
 )
 
 
+@unittest.skipIf(ms_windows, "currently not supported on MS Windows")
 class TestModulesMetadata(TestCase):
     url = "file://" + os.path.abspath("data")
 
@@ -60,6 +65,7 @@ class TestModulesMetadata(TestCase):
         self.assertMultiLineEqual(stdout, MODULES_OUTPUT)
 
 
+@unittest.skipIf(ms_windows, "currently not supported on MS Windows")
 class TestModulesFromDifferentSources(TestCase):
     url = "file://" + os.path.abspath("data/sample_modules")
     path = os.path.join("data", "sample_modules")
