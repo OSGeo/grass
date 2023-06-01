@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_ko\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2022-05-25 05:05+0000\n"
+"PO-Revision-Date: 2023-04-29 23:52+0000\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <https://weblate.osgeo.org/projects/grass-gis/"
 "grasslibs/ko/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12.2\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -750,8 +750,8 @@ msgstr ""
 #: ../lib/rst/interp_float/vinput2d.c:277
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given "
-"NPMIN=%d"
+"%d points given for interpolation (after thinning) is less than given NPMIN="
+"%d"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:282
@@ -814,9 +814,8 @@ msgstr "비트맵 마스크를 생성했습니다"
 msgid ""
 "Taking too long to find points for interpolation - please change the region "
 "to area where your points are. Continuing calculations..."
-msgstr ""
-"보간점을 찾는데 시간이 너무 많이 걸립니다 - 지역을 점자료가 있는 곳으로 한정"
-"해 주세요. 계산을 진행합니다..."
+msgstr "보간점을 찾는데 시간이 너무 많이 걸립니다 - 지역을 점자료가 있는 곳으로 "
+"한정해 주세요. 계산을 진행합니다..."
 
 #: ../lib/rst/interp_float/output2d.c:117
 #, c-format
@@ -877,9 +876,8 @@ msgstr "먼저 열번호(%d)를 %d로 바꿔주세요"
 
 #: ../lib/rst/interp_float/resout2d.c:264
 msgid "No color table for input raster map -- will not create color table"
-msgstr ""
-"입력 래스터 지도를 위한 색상 테이블이 없습니다--색상 테이블을 생성하지 않습니"
-"다"
+msgstr "입력 래스터 지도를 위한 색상 테이블이 없습니다--색상 테이블을 생성하지 "
+"않습니다"
 
 #: ../lib/rst/interp_float/resout2d.c:458
 msgid "Changing the region back to initial..."
@@ -1106,9 +1104,8 @@ msgstr ""
 
 #: ../lib/gis/gisinit.c:104
 msgid "System not initialized. Programmer forgot to call G_gisinit()."
-msgstr ""
-"시스템이 초기화되지 않았습니다. 프로그래머가 G_gisinit() 호출을 잊어버렸습니"
-"다."
+msgstr "시스템이 초기화되지 않았습니다. 프로그래머가 G_gisinit() 호출을 "
+"잊어버렸습니다."
 
 #: ../lib/gis/cmprlz4.c:89 ../lib/gis/cmprlz4.c:156 ../lib/gis/cmprzlib.c:100
 #: ../lib/gis/cmprzlib.c:179 ../lib/gis/cmprzstd.c:102
@@ -1261,8 +1258,7 @@ msgstr "G_malloc: %2$s에서 %1$lu 바이트의 메모리를 할당할 수 없�
 #: ../lib/gis/alloc.c:89
 #, c-format
 msgid "G_calloc: unable to allocate %lu * %lu bytes of memory at %s:%d"
-msgstr ""
-"G_calloc: %3$s에서 %1$lu * %2$lu 바이트의 메모리를 할당할 수 없습니다: %4$d"
+msgstr "G_calloc: %3$s에서 %1$lu * %2$lu 바이트의 메모리를 할당할 수 없습니다: %4$d"
 
 #: ../lib/gis/alloc.c:135
 #, c-format
@@ -3597,6 +3593,8 @@ msgid ""
 "\n"
 "++ Running ccmath wrapper unit tests ++"
 msgstr ""
+"\n"
+"++ ccmath 래퍼 단위 테스트를 실행 중입니다 ++"
 
 #: ../lib/gmath/test/test_ccmath_wrapper.c:42
 msgid ""
@@ -3615,6 +3613,8 @@ msgid ""
 "\n"
 "++ Running direct solver benchmark ++"
 msgstr ""
+"\n"
+"++ 직접 솔버 벤치마크를 실행 중입니다 ++"
 
 #: ../lib/gmath/test/test_blas1.c:40
 msgid ""
@@ -3721,6 +3721,8 @@ msgid ""
 "\n"
 "++ Running matrix conversion unit tests ++"
 msgstr ""
+"\n"
+"++ 행렬 변환 단위 테스트를 실행 중입니다 ++"
 
 #: ../lib/gmath/test/test_matrix_conversion.c:42
 msgid ""
@@ -3759,6 +3761,8 @@ msgid ""
 "\n"
 "++ Running solver unit tests ++"
 msgstr ""
+"\n"
+"++ 솔버 단위 테스트를 실행 중입니다 ++"
 
 #: ../lib/gmath/test/test_solvers.c:42
 msgid ""
@@ -4072,24 +4076,21 @@ msgstr ""
 msgid ""
 "Error in read/write portable double, byte_order = %d Written: %.16e3E Read: "
 "%.16e3E"
-msgstr ""
-"이식 가능한 double의 읽기/쓰기에 오류, byte_order = %d 씀: %.16e3E 읽음: "
-"%.16e3E"
+msgstr "이식 가능한 double의 읽기/쓰기에 오류, byte_order = %d 씀: %.16e3E 읽음: %."
+"16e3E"
 
 #: ../lib/vector/diglib/test.c:89
 #, c-format
 msgid ""
 "Error in read/write portable float, byte_order = %d Written: %.8e3E Read: "
 "%.8e3E"
-msgstr ""
-"이식 가능한 float의 읽기/쓰기에 오류, byte_order = %d 씀: %.8e3E 읽음: %.8e3E"
+msgstr "이식 가능한 float의 읽기/쓰기에 오류, byte_order = %d 씀: %.8e3E 읽음: %.8e3E"
 
 #: ../lib/vector/diglib/test.c:104
 #, c-format
 msgid ""
 "Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
-msgstr ""
-"이식 가능한 off_t의 읽기/쓰기에 오류, byte_order = %d 씀: %lu 읽음: %lu"
+msgstr "이식 가능한 off_t의 읽기/쓰기에 오류, byte_order = %d 씀: %lu 읽음: %lu"
 
 #: ../lib/vector/diglib/test.c:119
 #, c-format
@@ -5750,8 +5751,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open.c:277
 msgid ""
 "Vector map which is not in the current mapset cannot be opened for update"
-msgstr ""
-"현재 지도 세트 내에 존재하지 않는 벡터 지도는 갱신을 위해 열 수 없습니다"
+msgstr "현재 지도 세트 내에 존재하지 않는 벡터 지도는 갱신을 위해 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open.c:311
 #, c-format
@@ -5773,9 +5773,8 @@ msgstr "벡터 지도 <%s>를 위한 범주 색인 파일을 열 수 없습니�
 msgid ""
 "Unable to open vector map <%s> on level %d. Try to rebuild vector topology "
 "with v.build."
-msgstr ""
-"벡터 지도 <%s>를 단계 %d에서 열 수 없습니다. v.build로 벡터 위상을 복구해 보"
-"세요."
+msgstr "벡터 지도 <%s>를 단계 %d에서 열 수 없습니다. v.build로 벡터 위상을 복구해 "
+"보세요."
 
 #: ../lib/vector/Vlib/open.c:445
 #, c-format
@@ -5988,9 +5987,8 @@ msgstr ""
 #, c-format
 msgid ""
 "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
-msgstr ""
-"잘못된 벡터 지도 이름 <%s>. SQL 키워드는 벡터 지도의 이름으로 사용할 수 없습"
-"니다."
+msgstr "잘못된 벡터 지도 이름 <%s>. SQL 키워드는 벡터 지도의 이름으로 사용할 수 "
+"없습니다."
 
 #: ../lib/vector/Vlib/legal_vname.c:100 ../lib/vector/Vlib/legal_vname.c:104
 #, c-format
@@ -6051,8 +6049,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Requesting invalid feature from cache (%d). Number of features in cache: %d"
-msgstr ""
-"캐시로부터 무효한 피처를 요구하는 중입니다 (%d). 캐시 안 피처의 개수: %d"
+msgstr "캐시로부터 무효한 피처를 요구하는 중입니다 (%d). 캐시 안 피처의 개수: %d"
 
 #: ../lib/vector/Vlib/read_pg.c:368
 #, c-format
@@ -6468,8 +6465,8 @@ msgstr "가상의 교점 연결을 위한 네트워크 호를 추가할 수 없�
 #: ../lib/vector/Vlib/net_build.c:364
 #, c-format
 msgid ""
-"There exists more than one point of node <%d> with unique category field  "
-"<%d>.\n"
+"There exists more than one point of node <%d> with unique category field  <"
+"%d>.\n"
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
@@ -6957,6 +6954,8 @@ msgid ""
 "\n"
 "++ Running column unit tests ++"
 msgstr ""
+"\n"
+"++ 열 단위 테스트를 실행 중입니다 ++"
 
 #: ../lib/db/dbmi_base/test/test_columns.c:42
 msgid ""
@@ -6989,6 +6988,8 @@ msgid ""
 "\n"
 "++ Running table unit tests ++"
 msgstr ""
+"\n"
+"++ 테이블 단위 테스트를 실행 중입니다 ++"
 
 #: ../lib/db/dbmi_base/test/test_table.c:43
 msgid ""
@@ -7466,8 +7467,8 @@ msgid ""
 "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal "
 "database. The mapset of the dataset does not match the current mapset"
 msgstr ""
-"시간 데이터베이스로부터 타입 %(type)s의 자료세트 <%(ds)s>를 삭제할 수 없습니"
-"다. 자료세트의 지도 세트가 현재 지도 세트와 일치하지 않습니다"
+"시간 데이터베이스로부터 타입 %(type)s의 자료세트 <%(ds)s>를 삭제할 수 "
+"없습니다. 자료세트의 지도 세트가 현재 지도 세트와 일치하지 않습니다"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:859
 #, python-format
@@ -7644,15 +7645,15 @@ msgstr ""
 #: ../lib/python/temporal/register.py:268
 #, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s> with layer %(l)s. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s> with layer %(l)s. Overwrite flag is not set."
 msgstr ""
 
 #: ../lib/python/temporal/register.py:275
 #, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s>. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s>. Overwrite flag is not set."
 msgstr ""
 
 #: ../lib/python/temporal/register.py:299
@@ -7875,8 +7876,8 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2312
 #, python-format
 msgid ""
-"Map <%(map)s> with layer %(l)s is not registered in space time dataset "
-"<%(base)s>"
+"Map <%(map)s> with layer %(l)s is not registered in space time dataset <"
+"%(base)s>"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2318
@@ -8014,8 +8015,8 @@ msgstr ""
 #: ../lib/python/temporal/temporal_algebra.py:1214
 #, python-format
 msgid ""
-"Wrong temporal type of space time dataset "
-"<%s>                                       <%s> time is required"
+"Wrong temporal type of space time dataset <"
+"%s>                                       <%s> time is required"
 msgstr ""
 
 #: ../lib/python/temporal/temporal_algebra.py:1234
@@ -8053,15 +8054,13 @@ msgstr "빈 지도 리스트를 병합하는 중입니다"
 
 #: ../lib/python/temporal/temporal_algebra.py:2471
 msgid "First Map list is empty, can't merge it. Return only last map list"
-msgstr ""
-"첫 번째 지도 목록이 비어 있습니다, 병합할 수 없습니다. 마지막 지도 목록만 반"
-"환합니다"
+msgstr "첫 번째 지도 목록이 비어 있습니다, 병합할 수 없습니다. 마지막 지도 목록만 "
+"반환합니다"
 
 #: ../lib/python/temporal/temporal_algebra.py:2474
 msgid "Second Map list is empty, can't merge it. Return only first map list"
-msgstr ""
-"두 번째 지도 목록이 비어 있습니다, 병합할 수 없습니다. 첫 번째 지도 목록만 반"
-"환합니다"
+msgstr "두 번째 지도 목록이 비어 있습니다, 병합할 수 없습니다. 첫 번째 지도 목록만 "
+"반환합니다"
 
 #: ../lib/python/temporal/temporal_algebra.py:2482
 msgid "Space time datasets to merge must have the same temporal type"
@@ -8583,9 +8582,8 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "Mapset <{mapset}> or Location <{location}> is invalid for an unknown reason"
-msgstr ""
-"지도 세트 <{mapset}> 또는 로케이션 <{location}>이 알려지지 않은 이유로 무효합"
-"니다"
+msgstr "지도 세트 <{mapset}> 또는 로케이션 <{location}>이 알려지지 않은 이유로 "
+"무효합니다"
 
 #: ../lib/python/grassdb/checks.py:268
 #, python-format
@@ -8607,9 +8605,8 @@ msgstr ""
 #: ../lib/python/grassdb/checks.py:294
 #, fuzzy, python-brace-format
 msgid "Location <{location_path}> is invalid for an unknown reason"
-msgstr ""
-"지도 세트 <{mapset}> 또는 로케이션 <{location}>이 알려지지 않은 이유로 무효합"
-"니다"
+msgstr "지도 세트 <{mapset}> 또는 로케이션 <{location}>이 알려지지 않은 이유로 "
+"무효합니다"
 
 #: ../lib/python/grassdb/checks.py:311
 #, python-brace-format
@@ -8885,9 +8882,8 @@ msgstr ""
 #, python-format
 msgid ""
 "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
-msgstr ""
-"프로그래머 오류: '%(sql)s', '%(filename)s', 또는 '%(table)s'가 반드시 주어져"
-"야 합니다"
+msgstr "프로그래머 오류: '%(sql)s', '%(filename)s', 또는 '%(table)s'가 반드시 "
+"주어져야 합니다"
 
 #: ../lib/python/script/db.py:172
 msgid "Fetching data failed"
@@ -9178,8 +9174,7 @@ msgstr ""
 msgid ""
 "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please "
 "advise GRASS developers of this error"
-msgstr ""
-"gsd_rot(): %c는 무효한 축 사양입니다. 회전을 무시합니다. GRASS 개발자에게 이 "
+msgstr "gsd_rot(): %c는 무효한 축 사양입니다. 회전을 무시합니다. GRASS 개발자에게 이 "
 "오류를 알려 주세요."
 
 #: ../lib/ogsf/gsd_legend.c:246
@@ -9380,8 +9375,7 @@ msgstr "입력 PNG 파일이 8 비트가 아닙니다"
 #: ../lib/pngdriver/read_png.c:85
 #, c-format
 msgid "Input PNG file has incorrect dimensions: expected: %dx%d got: %lux%lu"
-msgstr ""
-"입력 PNG 파일이 잘못된 차원을 가지고 있습니다: 기대: %dx%d 실제: %lux%lu"
+msgstr "입력 PNG 파일이 잘못된 차원을 가지고 있습니다: 기대: %dx%d 실제: %lux%lu"
 
 #: ../lib/pngdriver/read_png.c:90
 msgid "Input PNG file is not RGBA"
@@ -9703,8 +9697,8 @@ msgstr ""
 #: ../lib/raster/open.c:192
 #, c-format
 msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map "
-"<%s@%s> which does not exist"
+"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
+"%s> which does not exist"
 msgstr ""
 
 #: ../lib/raster/open.c:197
@@ -10004,9 +9998,8 @@ msgstr ""
 
 #: ../lib/raster/init.c:61
 msgid "Raster library not initialized. Programmer forgot to call Rast_init()."
-msgstr ""
-"래스터 라이브러리가 초기화되지 않았습니다. 프로그래머가 Rast_init() 호출을 잊"
-"어버렸습니다."
+msgstr "래스터 라이브러리가 초기화되지 않았습니다. 프로그래머가 Rast_init() 호출을 "
+"잊어버렸습니다."
 
 #: ../lib/raster/init.c:112
 #, c-format
@@ -10389,8 +10382,7 @@ msgstr ""
 #, c-format
 msgid ""
 "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
-msgstr ""
-"OGR이 PROJ.4 형식의 매개변수 문자열을 해석할 수 없습니다: %s (OGR 오류 코드 "
+msgstr "OGR이 PROJ.4 형식의 매개변수 문자열을 해석할 수 없습니다: %s (OGR 오류 코드 "
 "%d)"
 
 #: ../lib/proj/convert.c:232
@@ -10403,9 +10395,8 @@ msgstr "OGR이 WKT 형식의 매개변수 문자열을 얻을 수 없습니다 (
 msgid ""
 "Updating spatial reference with embedded proj4 definition failed. Proj4 "
 "definition: <%s>"
-msgstr ""
-"내장된 proj4 정의를 이용해서 공간 참조를 갱신하는데 실패했습니다. Proj4 정"
-"의: <%s>"
+msgstr "내장된 proj4 정의를 이용해서 공간 참조를 갱신하는데 실패했습니다. Proj4 정의:"
+" <%s>"
 
 #: ../lib/proj/convert.c:478
 msgid "Updating spatial reference with embedded proj4 definition"
@@ -10548,8 +10539,8 @@ msgid ""
 "Dev note: Adapted sites library used for vector points. (module should be "
 "updated to GRASS 6 vector library)"
 msgstr ""
-"개발자 노트: 벡터점 지원을 위해 변형된 사이트 라이브러리를 사용했습니다. (모"
-"듈을 GRASS 6 벡터 라이브러리로 업데이트해야 합니다.)"
+"개발자 노트: 벡터점 지원을 위해 변형된 사이트 라이브러리를 사용했습니다. ("
+"모듈을 GRASS 6 벡터 라이브러리로 업데이트해야 합니다.)"
 
 #, fuzzy
 msgid "Cannot fetch row"
@@ -10581,10 +10572,10 @@ msgid ""
 "     {cmd_name} --help\n"
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
-"GUI 시작 내에 오류. (만약 있다면) 위의 메시지를 확인하고 필요한 경우 이 오류"
-"를 GRASS 개발자에게 보고하세요.\n"
-"패키지 관리자가 있는 시스템이라면 (아마도 grass-gui로 명명된) 올바른 GUI 패키"
-"지가 있는지 확인하세요.\n"
+"GUI 시작 내에 오류. (만약 있다면) 위의 메시지를 확인하고 필요한 경우 이 "
+"오류를 GRASS 개발자에게 보고하세요.\n"
+"패키지 관리자가 있는 시스템이라면 (아마도 grass-gui로 명명된) 올바른 GUI "
+"패키지가 있는지 확인하세요.\n"
 "GRASS GIS를 문자 모드에서 실행하기 위해서는 -text 플래그를 사용하세요.\n"
 "더 많은 옵션들을 보려면 '--help'를 사용할 수 있습니다\n"
 "{cmd_name} --help\n"
@@ -10674,3 +10665,125 @@ msgstr ""
 "모듈 <%s>를 실행하기 위해서는 옵션 <%s>의 끝에 언더스코어를 추가해서 파이썬 "
 "키위드와의 충돌을 방지해야 합니다. 앞부분의 언더스코어는 GRASS GIS 7.0에서는 "
 "추천하지 않으며 버전 7.1부터는 지원하지 않을 것입니다."
+
+#: ../lib/init/grass.py:516
+#, python-brace-format
+msgid "Unable to create temporary directory <{tmpdir_name}>! Exiting."
+msgstr ""
+
+#: ../lib/init/grass.py:2573
+msgid ""
+"Failed to start GRASS GIS, grassdata directory cannot be found or created."
+msgstr ""
+
+#: ../lib/init/grass.py:2580
+msgid ""
+"Failed to start GRASS GIS, no default location to copy in the installation "
+"or copying failed."
+msgstr ""
+
+#: ../lib/manage/do_rename.c:99 ../lib/manage/do_remove.c:101
+#: ../lib/manage/do_copy.c:83
+msgid "String for secondary color table has been truncated"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:496
+#, c-format
+msgid "Filepath '%s/%s' exceeds max length"
+msgstr ""
+
+#: ../lib/raster/put_row.c:391 ../lib/raster/put_row.c:397
+#, c-format
+msgid "Error writing compressed data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:407
+#, c-format
+msgid "Error writing uncompressed data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:521 ../lib/raster/put_row.c:526
+#, c-format
+msgid "Error writing compressed null data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:564
+#, c-format
+msgid "Error writing null row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/raster_metadata.c:158
+msgid "Semantic label is too long"
+msgstr ""
+
+#: ../lib/raster/raster_metadata.c:169
+#, c-format
+msgid "Character '%c' not allowed in a semantic label."
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:181
+#, c-format
+msgid "%s or <%s>"
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:181
+#, c-format
+msgid "%s and <%s>"
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:275
+#, c-format
+msgid "Option <%s> requires %s"
+msgstr ""
+
+#: ../lib/gis/parser.c:1273
+#, c-format
+msgid "Invalid value <%s> for parameter <%s>"
+msgstr ""
+
+#: ../lib/gis/parser.c:1817
+#, c-format
+msgid "Unable to open %s file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/parser.c:1823
+#, c-format
+msgid "Unable to create %s file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:771
+msgid "Number of threads for parallel computing"
+msgstr ""
+
+#: ../lib/imagery/manage_signatures.c:83 ../lib/imagery/manage_signatures.c:128
+#: ../lib/imagery/manage_signatures.c:184
+#: ../lib/imagery/manage_signatures.c:193
+#, c-format
+msgid "%s is not in the current mapset (%s)"
+msgstr ""
+
+#: ../lib/imagery/manage_signatures.c:93
+#, c-format
+msgid "Unable to remove %s signature"
+msgstr ""
+
+#: ../lib/imagery/manage_signatures.c:214
+#, c-format
+msgid "Unable to rename <%s> to <%s>"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:150 ../lib/imagery/sig.c:151
+msgid "Invalid signature file"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:154 ../lib/imagery/sig.c:156
+msgid "Invalid signature file version"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:220 ../lib/imagery/sig.c:194
+msgid "Invalid signature file: semantic label length limit exceeded"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:228 ../lib/imagery/sig.c:203
+msgid "Signature file does not contain bands"
+msgstr ""

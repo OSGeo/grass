@@ -2517,8 +2517,8 @@ msgstr ""
 #, python-format
 msgid ""
 "Scatter plot cannot be added.\n"
-"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit "
-"<%d>.\n"
+"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit <"
+"%d>.\n"
 msgstr ""
 
 #: ../gui/wxpython/iscatt/controllers.py:353
@@ -14940,8 +14940,8 @@ msgstr ""
 #: ../gui/wxpython/dbmgr/base.py:2621
 #, python-format
 msgid ""
-"Unable to rename column. Column <%(column)s> doesn't exist in the table "
-"<%(table)s>."
+"Unable to rename column. Column <%(column)s> doesn't exist in the table <"
+"%(table)s>."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:2652
@@ -18277,8 +18277,8 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:812
 #, python-format
 msgid ""
-"Do you want to continue with deleting mapset <%(mapset)s> from location "
-"<%(location)s>?\n"
+"Do you want to continue with deleting mapset <%(mapset)s> from location <"
+"%(location)s>?\n"
 "\n"
 "ALL MAPS included in this mapset will be PERMANENTLY DELETED!"
 msgstr ""
