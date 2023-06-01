@@ -20,7 +20,6 @@ for details.
 from __future__ import absolute_import
 
 import os
-import sys
 import string
 import time
 
@@ -37,10 +36,6 @@ from .core import (
 )
 from grass.exceptions import CalledModuleError
 from .utils import encode, float_or_dms, parse_key_val, try_remove
-
-
-if sys.version_info.major >= 3:
-    unicode = str
 
 
 def raster_history(map, overwrite=False, env=None):
@@ -218,14 +213,14 @@ def raster_what(map, coord, env=None, localized=False):
     """Interface to r.what
 
     >>> raster_what('elevation', [[640000, 228000]])
-    [{'elevation': {'color': '255:214:000', 'label': '', 'value': '102.479'}}]
+    [{'elevation': {'color': '255:214:000', 'label': '', 'value': 102.479}}]
 
     :param str map: the map name
     :param list coord: a list of list containing all the point that you want
                        query
     :param env:
     """
-    if isinstance(map, (bytes, unicode)):
+    if isinstance(map, str):
         map_list = [map]
     else:
         map_list = map
@@ -246,7 +241,7 @@ def raster_what(map, coord, env=None, localized=False):
         flags="rf",
         map=",".join(map_list),
         coordinates=",".join(coord_list),
-        null=_("No data"),
+        null=_("No data") if localized else "No data",
         quiet=True,
         env=env,
     )
@@ -264,7 +259,15 @@ def raster_what(map, coord, env=None, localized=False):
             tmp_dict = {}
             tmp_dict[map_name] = {}
             for j in range(len(labels)):
-                tmp_dict[map_name][labels[j]] = line[i * len(labels) + j]
+                # convert value to float
+                if j == 0:
+                    try:
+                        value = float(line[i * len(labels) + j])
+                    except ValueError:
+                        value = line[i * len(labels) + j]
+                    tmp_dict[map_name][labels[j]] = value
+                else:
+                    tmp_dict[map_name][labels[j]] = line[i * len(labels) + j]
 
             data.append(tmp_dict)
 
