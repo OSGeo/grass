@@ -337,6 +337,7 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
 
 #pragma omp parallel if (nprocs > 1)
     {
+        int z = 0;
         int t_id = 0;
 #if defined(_OPENMP)
         t_id = omp_get_thread_num();
