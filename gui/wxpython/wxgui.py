@@ -26,7 +26,7 @@ import getopt
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
 from grass.exceptions import Usage
-from grass.script.core import set_raise_on_error
+from grass.script.core import set_raise_on_error, warning
 
 from core import globalvar
 from core.utils import registerPid, unregisterPid
@@ -45,6 +45,11 @@ try:
 except ImportError:
     SC = None
 
+min_required_wx_version = [4, 2, 0]
+if not globalvar.CheckWxVersion(min_required_wx_version):
+    warning("!" * 50)
+    warning("Minimum required WxPython version: {}".format('.'.join(map(str, min_required_wx_version))))
+    warning("!" * 50)
 
 class GMApp(wx.App):
     def __init__(self, workspace=None):
