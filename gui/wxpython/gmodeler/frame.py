@@ -1011,7 +1011,7 @@ class ModelFrame(wx.Frame):
                         value=p.get("value", ""),
                         prompt=p.get("prompt", ""),
                         x=x,
-                        y=y
+                        y=y,
                     )
                     data_items.append(data)
                     self._addEvent(data)
@@ -1059,9 +1059,7 @@ class ModelFrame(wx.Frame):
                 r = 200
                 alpha = 270 * (math.pi / 180)
                 for data in data_items:
-                    data.Move(dc,
-                              x + r * math.sin(alpha),
-                              y + r * math.cos(alpha))
+                    data.Move(dc, x + r * math.sin(alpha), y + r * math.cos(alpha))
                     alpha += p * (math.pi / 180)
                     data.Show(True)
 
