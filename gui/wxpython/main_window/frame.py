@@ -47,6 +47,11 @@ from grass.script.utils import decode
 from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings, GetDisplayVectSettings
 from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype, get_shell_pid
+from core.watchdog import (
+    EVT_UPDATE_MAPSET,
+    EVT_CURRENT_MAPSET_CHANGED,
+    MapsetWatchdog,
+)
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
@@ -216,6 +221,18 @@ class GMFrame(wx.Frame):
         # redirect stderr to log area
         self._gconsole.Redirect()
 
+        #  mapset watchdog
+        self._mapset_watchdog = MapsetWatchdog(
+            elements_dirs=(("raster", "cell"),),
+            evt_handler=self,
+            giface=self._giface,
+        )
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()
+        self.Bind(
+            EVT_UPDATE_MAPSET,
+            lambda evt: self._onMapsetWatchdog(evt.src_path, evt.dest_path),
+        )
+        self.Bind(EVT_CURRENT_MAPSET_CHANGED, self._onMapsetChanged)
         # fix goutput's pane size (required for Mac OSX)`
         self.goutput.SetSashPosition(int(self.GetSize()[1] * 0.8))
 
@@ -2348,3 +2365,17 @@ class GMFrame(wx.Frame):
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
         )
         return dlg
+
+    def _onMapsetWatchdog(self, map_path, map_dest):
+        """Current mapset watchdog event handler
+
+        :param str map_path: map path (map that is changed)
+        :param str map_dest: new map path
+        """
+        self.statusbar.mask.dbChanged(
+            map=os.path.basename(map_path) if map_path else map_path,
+            newname=os.path.basename(map_dest) if map_dest else map_dest,
+        )
+
+    def _onMapsetChanged(self, event):
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()
