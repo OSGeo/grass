@@ -29,6 +29,27 @@ param_type param;
 zone_type zone_info;
 int nprocs;
 
+// Parallelization workspace
+typedef struct
+{
+    size_t n;
+    double sum;
+    double sumsq;
+    double sum_abs;
+    size_t size;
+    double min;
+    double max;
+    bucket buckets;
+} zone_data;
+
+typedef struct
+{
+    int fd;
+    int fdz;
+    void *raster_row;
+    CELL *zoneraster_row;
+} thread_workspace;
+
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
 /* ************************************************************************* */
@@ -91,7 +112,7 @@ void set_params(void)
 
 static int open_raster(const char *infile);
 static univar_stat *univar_stat_with_percentiles(int map_type);
-static void process_raster(univar_stat *stats, int *fd, int *fdz,
+static void process_raster(univar_stat *stats, thread_workspace *tw,
                            const struct Cell_head *region);
 
 /* *************************************************************** */
@@ -105,7 +126,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     univar_stat *stats;
     char **p, *z;
-    int *fd, *fdz, cell_type, min, max;
+    int cell_type, min, max;
     struct Range zone_range;
     const char *mapset, *name;
     int t;
@@ -165,18 +186,22 @@ int main(int argc, char *argv[])
     zone_info.max = 0;
     zone_info.n_zones = 0;
 
-    fdz = NULL;
-    fd = G_malloc(nprocs * sizeof(int));
+    /* setting up thread workspace */
+    thread_workspace static_tw[128]; // Try to avoid dynamic allocation if nprocs is small.
+    thread_workspace *tw = static_tw;
+    if (nprocs > 128)
+    {
+        tw = G_malloc(nprocs * sizeof(thread_workspace));
+    }
 
     /* open zoning raster */
     if ((z = param.zonefile->answer)) {
         mapset = G_find_raster2(z, "");
 
-        fdz = G_malloc(nprocs * sizeof(int));
-        for (t = 0; t < nprocs; t++)
-            fdz[t] = open_raster(z);
+        for (t = 0; t < nprocs; ++t)
+            tw[t].fdz = open_raster(z);
 
-        cell_type = Rast_get_map_type(fdz[0]);
+        cell_type = Rast_get_map_type(tw->fdz);
         if (cell_type != CELL_TYPE)
             G_fatal_error("Zoning raster must be of type CELL");
 
@@ -215,11 +240,11 @@ int main(int argc, char *argv[])
         }
 
         for (t = 0; t < nprocs; t++)
-            fd[t] = open_raster(*p);
+            tw[t].fd = open_raster(*p);
 
         if (map_type != -1) {
             /* NB: map_type must match when doing extended stats */
-            int this_type = Rast_get_map_type(fd[0]);
+            int this_type = Rast_get_map_type(tw->fd);
 
             assert(this_type > -1);
             if (map_type < -1) {
@@ -233,17 +258,17 @@ int main(int argc, char *argv[])
             }
         }
 
-        process_raster(stats, fd, fdz, &region);
+        process_raster(stats, tw, &region);
 
         /* close input raster */
         for (t = 0; t < nprocs; t++)
-            Rast_close(fd[t]);
+            Rast_close(tw[t].fd);
     }
 
     /* close zoning raster */
     if (z) {
         for (t = 0; t < nprocs; t++)
-            Rast_close(fdz[t]);
+            Rast_close(tw[t].fdz);
     }
 
     /* create the output */
@@ -293,42 +318,34 @@ static univar_stat *univar_stat_with_percentiles(int map_type)
         }
     }
 
-    /* . */
     return stats;
 }
 
-static void process_raster(univar_stat *stats, int *fd, int *fdz,
+static void process_raster(univar_stat *stats, thread_workspace *tw,
                            const struct Cell_head *region)
 {
     /* use G_window_rows(), G_window_cols() here? */
     const unsigned int rows = region->rows;
     const unsigned int cols = region->cols;
 
-    const RASTER_MAP_TYPE map_type = Rast_get_map_type(fd[0]);
+    const RASTER_MAP_TYPE map_type = Rast_get_map_type(tw->fd);
     const size_t value_sz = Rast_cell_size(map_type);
     int t;
-    int z;
     unsigned int row;
-    void **raster_row;
-    CELL **zoneraster_row = NULL;
     int n_zones = zone_info.n_zones;
     int n_alloc = n_zones ? n_zones : 1;
 
-    raster_row = G_malloc(nprocs * sizeof(void *));
-    if (n_zones) {
-        zoneraster_row = G_malloc(nprocs * sizeof(CELL *));
-    }
     for (t = 0; t < nprocs; t++) {
-        raster_row[t] = Rast_allocate_buf(map_type);
+        tw[t].raster_row = Rast_allocate_buf(map_type);
         if (n_zones) {
-            zoneraster_row[t] = Rast_allocate_c_buf();
+            tw[t].zoneraster_row = Rast_allocate_c_buf();
         }
     }
 
 #if defined(_OPENMP)
     omp_lock_t *minmax = G_malloc(n_alloc * sizeof(omp_lock_t));
 
-    for (z = 0; z < n_alloc; z++) {
+    for (int z = 0; z < n_alloc; z++) {
         omp_init_lock(&minmax[z]);
     }
 #endif
@@ -342,25 +359,23 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
 #if defined(_OPENMP)
         t_id = omp_get_thread_num();
 #endif
-        size_t *n = G_calloc(n_alloc, sizeof(size_t));
-        double *sum = G_calloc(n_alloc, sizeof(double));
-        double *sumsq = G_calloc(n_alloc, sizeof(double));
-        double *sum_abs = G_calloc(n_alloc, sizeof(double));
-        size_t *size = G_calloc(n_alloc, sizeof(size_t));
-        double *min = G_malloc(n_alloc * sizeof(double));
-        double *max = G_malloc(n_alloc * sizeof(double));
-
-        bucket *buckets = G_malloc(n_alloc * sizeof(bucket));
+        zone_data *zw = G_malloc(n_alloc * sizeof *zw);
 
         for (z = 0; z < n_alloc; z++) {
-            max[z] = DBL_MIN;
-            min[z] = DBL_MAX;
-            buckets[z].n = 0;
-            buckets[z].n_alloc = 0;
-            buckets[z].nextp = NULL;
-            buckets[z].cells = NULL;
-            buckets[z].fcells = NULL;
-            buckets[z].dcells = NULL;
+            zone_data *zd = &zw[z];
+            zd->n = 0;
+            zd->sum = 0;
+            zd->sumsq = 0;
+            zd->sum_abs = 0;
+            zd->size = 0;
+            zd->min = DBL_MAX;
+            zd->max = DBL_MIN;
+            zd->buckets.n = 0;
+            zd->buckets.n_alloc = 0;
+            zd->buckets.nextp = NULL;
+            zd->buckets.cells = NULL;
+            zd->buckets.fcells = NULL;
+            zd->buckets.dcells = NULL;
         }
 
 #pragma omp for schedule(static)
@@ -369,13 +384,14 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
             CELL *zptr = NULL;
             unsigned int col;
 
-            Rast_get_row(fd[t_id], raster_row[t_id], row, map_type);
+            thread_workspace *w = &tw[t_id];
+            Rast_get_row(w->fd, w->raster_row, row, map_type);
             if (n_zones) {
-                Rast_get_c_row(fdz[t_id], zoneraster_row[t_id], row);
-                zptr = zoneraster_row[t_id];
+                Rast_get_c_row(w->fdz, w->zoneraster_row, row);
+                zptr = w->zoneraster_row;
             }
 
-            ptr = raster_row[t_id];
+            ptr = w->raster_row;
 
             for (col = 0; col < cols; col++) {
                 double val;
@@ -390,9 +406,10 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                     }
                     zone = *zptr - zone_info.min;
                 }
+                zone_data *zd = &zw[zone];
 
                 /* count all including NULL cells in input map */
-                size[zone]++;
+                zd->size++;
 
                 /* can't do stats with NULL cells in input map */
                 if (Rast_is_null_value(ptr, map_type)) {
@@ -403,7 +420,7 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                 }
 
                 if (param.extended->answer) {
-                    bucket *t_bkt = &buckets[zone];
+                    bucket *t_bkt = &zd->buckets;
 
                     /* check allocated memory */
                     if (t_bkt->n >= t_bkt->n_alloc) {
@@ -440,19 +457,19 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                        : (map_type == FCELL_TYPE) ? *((FCELL *)ptr)
                                                   : *((CELL *)ptr));
 
-                sum[zone] += val;
-                sumsq[zone] += val * val;
-                sum_abs[zone] += fabs(val);
+                zd->sum += val;
+                zd->sumsq += val * val;
+                zd->sum_abs += fabs(val);
 
-                if (val > max[zone])
-                    max[zone] = val;
-                if (val < min[zone])
-                    min[zone] = val;
+                if (val > zd->max)
+                    zd->max = val;
+                if (val < zd->min)
+                    zd->min = val;
 
                 ptr = G_incr_void_ptr(ptr, value_sz);
                 if (n_zones)
                     zptr++;
-                buckets[zone].n++;
+                zd->buckets.n++;
             } /* end column loop */
             if (!(param.shell_style->answer)) {
 #pragma omp atomic update
@@ -462,6 +479,7 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
         } /* end row loop */
 
         for (z = 0; z < n_alloc; z++) {
+            zone_data *zd = &zw[z];
             if (param.extended->answer) {
 #pragma omp critical
                 {
@@ -471,7 +489,7 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                        point to the buffer. Case 2: other transfers, reallocate
                        exactly if there is any non-empty bucket.
                      */
-                    bucket *t_bkt = &buckets[z];
+                    bucket *t_bkt = &zd->buckets;
                     univar_stat *g_bfr = &stats[z];
                     size_t old_size;
                     size_t add_size;
@@ -531,27 +549,27 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
             }
             else {
 #pragma omp atomic update
-                stats[z].n += buckets[z].n;
+                stats[z].n += zd->buckets.n;
             }
 #pragma omp atomic update
-            stats[z].size += size[z];
+            stats[z].size += zd->size;
 #pragma omp atomic update
-            stats[z].sum += sum[z];
+            stats[z].sum += zd->sum;
 #pragma omp atomic update
-            stats[z].sumsq += sumsq[z];
+            stats[z].sumsq += zd->sumsq;
 #pragma omp atomic update
-            stats[z].sum_abs += sum_abs[z];
+            stats[z].sum_abs += zd->sum_abs;
 
 #if defined(_OPENMP)
             omp_set_lock(&minmax[z]);
 #endif
-            if (stats[z].max < max[z] ||
-                (stats[z].max != stats[z].max && max[z] != DBL_MIN)) {
-                stats[z].max = max[z];
+            if (stats[z].max < zd->max ||
+                (stats[z].max != stats[z].max && zd->max != DBL_MIN)) {
+                stats[z].max = zd->max;
             }
-            if (stats[z].min > min[z] ||
-                (stats[z].min != stats[z].min && min[z] != DBL_MAX)) {
-                stats[z].min = min[z];
+            if (stats[z].min > zd->min ||
+                (stats[z].min != stats[z].min && zd->min != DBL_MAX)) {
+                stats[z].min = zd->min;
             }
 #if defined(_OPENMP)
             omp_unset_lock(&minmax[z]);
@@ -560,26 +578,18 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
 
         /* Free per-thread variables */
         for (z = 0; z < n_alloc; z++) {
-            if (buckets[z].cells)
-                G_free(buckets[z].cells);
-            if (buckets[z].fcells)
-                G_free(buckets[z].fcells);
-            if (buckets[z].dcells)
-                G_free(buckets[z].dcells);
+            zone_data *zd = &zw[z];
+            if (zd->buckets.cells)
+                G_free(zd->buckets.cells);
+            if (zd->buckets.fcells)
+                G_free(zd->buckets.fcells);
+            if (zd->buckets.dcells)
+                G_free(zd->buckets.dcells);
         }
-        G_free(buckets);
-
-        G_free(n);
-        G_free(sum);
-        G_free(sumsq);
-        G_free(sum_abs);
-        G_free(size);
-        G_free(min);
-        G_free(max);
     } /* end parallel region */
 
 #if defined(_OPENMP)
-    for (z = 0; z < n_alloc; z++) {
+    for (int z = 0; z < n_alloc; z++) {
         omp_destroy_lock(&minmax[z]);
     }
 
@@ -587,14 +597,12 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
 #endif
 
     for (t = 0; t < nprocs; t++) {
-        G_free(raster_row[t]);
+        G_free(tw[t].raster_row);
     }
-    G_free(raster_row);
     if (n_zones) {
         for (t = 0; t < nprocs; t++) {
-            G_free(zoneraster_row[t]);
+            G_free(tw[t].zoneraster_row);
         }
-        G_free(zoneraster_row);
     }
     if (!(param.shell_style->answer))
         G_percent(rows, rows, 2);
