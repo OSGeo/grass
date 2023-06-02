@@ -337,13 +337,9 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
 
 #pragma omp parallel if (nprocs > 1)
     {
-        int z;
         int t_id = 0;
-
 #if defined(_OPENMP)
-        if (!param.extended->answer) {
-            t_id = omp_get_thread_num();
-        }
+        t_id = omp_get_thread_num();
 #endif
         size_t *n = G_calloc(n_alloc, sizeof(size_t));
         double *sum = G_calloc(n_alloc, sizeof(double));
