@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import time
 
 watchdog_used = True
 try:
@@ -63,6 +64,8 @@ class CurrentMapsetWatch(FileSystemEventHandler):
             if timestamp - self.modified_time < 0.5:
                 return
             self.modified_time = timestamp
+            # wait to make sure file writing is done
+            time.sleep(0.1)
             with open(event.src_path, "r") as f:
                 gisrc = {}
                 for line in f.readlines():
