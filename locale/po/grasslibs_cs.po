@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: grasslibs_cs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2023-04-29 23:50+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2023-05-05 10:08+0000\n"
+"Last-Translator: Markus <neteler@osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grasslibs/"
 "cs/>\n"
 "Language: cs\n"
@@ -6351,7 +6351,7 @@ msgstr ""
 #: ../lib/vector/Vlib/copy.c:364
 #, c-format
 msgid "%d features without category or from different layer skipped"
-msgstr ""
+msgstr "%d prvky bez kategorie nebo z jiné vrstvy přeskočeny"
 
 #: ../lib/vector/Vlib/copy.c:396
 msgid "Exporting nodes..."
