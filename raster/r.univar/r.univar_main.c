@@ -27,18 +27,25 @@
 
 param_type param;
 zone_type zone_info;
-int nprocs;
 
 // Parallelization workspace
 typedef struct {
     size_t n;
+    size_t n_alloc;
+    void *nextp;
+    CELL *cells;
+    FCELL *fcells;
+    DCELL *dcells;
+} zone_bucket;
+
+typedef struct {
     double sum;
     double sumsq;
     double sum_abs;
     size_t size;
     double min;
     double max;
-    bucket buckets;
+    zone_bucket bucket;
 } zone_workspace;
 
 typedef struct {
@@ -111,7 +118,7 @@ void set_params(void)
 static int open_raster(const char *infile);
 static univar_stat *univar_stat_with_percentiles(int map_type);
 static void process_raster(univar_stat *stats, thread_workspace *tw,
-                           const struct Cell_head *region);
+                           const struct Cell_head *region, int nprocs);
 
 /* *************************************************************** */
 /* **** the main functions for r.univar ************************** */
@@ -165,6 +172,7 @@ int main(int argc, char *argv[])
     }
 
     /* set nprocs parameter */
+    int nprocs;
     sscanf(param.nprocs->answer, "%d", &nprocs);
     if (nprocs < 1)
         G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
@@ -185,12 +193,7 @@ int main(int argc, char *argv[])
     zone_info.n_zones = 0;
 
     /* setting up thread workspace */
-    thread_workspace
-        static_tw[128]; // Try to avoid dynamic allocation if nprocs is small.
-    thread_workspace *tw = static_tw;
-    if (nprocs > 128) {
-        tw = G_malloc(nprocs * sizeof(thread_workspace));
-    }
+    thread_workspace *tw = G_malloc(nprocs * sizeof *tw);
 
     /* open zoning raster */
     if ((z = param.zonefile->answer)) {
@@ -256,7 +259,7 @@ int main(int argc, char *argv[])
             }
         }
 
-        process_raster(stats, tw, &region);
+        process_raster(stats, tw, &region, nprocs);
 
         /* close input raster */
         for (t = 0; t < nprocs; t++)
@@ -320,20 +323,19 @@ static univar_stat *univar_stat_with_percentiles(int map_type)
 }
 
 static void process_raster(univar_stat *stats, thread_workspace *tw,
-                           const struct Cell_head *region)
+                           const struct Cell_head *region, int nprocs)
 {
     /* use G_window_rows(), G_window_cols() here? */
-    const unsigned int rows = region->rows;
-    const unsigned int cols = region->cols;
+    const int rows = region->rows;
+    const int cols = region->cols;
 
     const RASTER_MAP_TYPE map_type = Rast_get_map_type(tw->fd);
     const size_t value_sz = Rast_cell_size(map_type);
-    int t;
-    unsigned int row;
-    int n_zones = zone_info.n_zones;
-    int n_alloc = n_zones ? n_zones : 1;
 
-    for (t = 0; t < nprocs; t++) {
+    const int n_zones = zone_info.n_zones;
+    const int n_alloc = n_zones ? n_zones : 1;
+
+    for (int t = 0; t < nprocs; t++) {
         tw[t].raster_row = Rast_allocate_buf(map_type);
         if (n_zones) {
             tw[t].zoneraster_row = Rast_allocate_c_buf();
@@ -341,7 +343,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
     }
 
 #if defined(_OPENMP)
-    omp_lock_t *minmax = G_malloc(n_alloc * sizeof(omp_lock_t));
+    omp_lock_t *minmax = G_malloc(n_alloc * sizeof *minmax);
 
     for (int z = 0; z < n_alloc; z++) {
         omp_init_lock(&minmax[z]);
@@ -350,7 +352,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
 
     int computed = 0;
 
-#pragma omp parallel if (nprocs > 1)
+#pragma omp parallel
     {
         int t_id = 0;
 #if defined(_OPENMP)
@@ -360,38 +362,34 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
 
         for (int z = 0; z < n_alloc; z++) {
             zone_workspace *zd = &zw[z];
-            zd->n = 0;
             zd->sum = 0;
             zd->sumsq = 0;
             zd->sum_abs = 0;
             zd->size = 0;
             zd->min = DBL_MAX;
             zd->max = DBL_MIN;
-            zd->buckets.n = 0;
-            zd->buckets.n_alloc = 0;
-            zd->buckets.nextp = NULL;
-            zd->buckets.cells = NULL;
-            zd->buckets.fcells = NULL;
-            zd->buckets.dcells = NULL;
+            zd->bucket.n = 0;
+            zd->bucket.n_alloc = 0;
+            zd->bucket.nextp = NULL;
+            zd->bucket.cells = NULL;
+            zd->bucket.fcells = NULL;
+            zd->bucket.dcells = NULL;
         }
 
-#pragma omp for schedule(static)
-        for (row = 0; row < rows; row++) {
-            void *ptr;
-            CELL *zptr = NULL;
-            unsigned int col;
-
+#pragma omp for
+        for (int row = 0; row < rows; row++) {
             thread_workspace *w = &tw[t_id];
+
             Rast_get_row(w->fd, w->raster_row, row, map_type);
+            void *ptr = w->raster_row;
+
+            CELL *zptr = NULL;
             if (n_zones) {
                 Rast_get_c_row(w->fdz, w->zoneraster_row, row);
                 zptr = w->zoneraster_row;
             }
 
-            ptr = w->raster_row;
-
-            for (col = 0; col < cols; col++) {
-                double val;
+            for (int col = 0; col < cols; col++) {
                 int zone = 0;
 
                 if (n_zones) {
@@ -417,42 +415,44 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                 }
 
                 if (param.extended->answer) {
-                    bucket *t_bkt = &zd->buckets;
+                    zone_bucket *bucket = &zd->bucket;
 
                     /* check allocated memory */
-                    if (t_bkt->n >= t_bkt->n_alloc) {
-                        t_bkt->n_alloc += 1000;
+                    if (bucket->n >= bucket->n_alloc) {
+                        bucket->n_alloc += 1000;
                         size_t msize;
 
                         switch (map_type) {
                         case DCELL_TYPE:
-                            msize = t_bkt->n_alloc * sizeof(DCELL);
-                            t_bkt->dcells = (DCELL *)G_realloc(
-                                (void *)t_bkt->dcells, msize);
-                            t_bkt->nextp = (void *)&(t_bkt->dcells[t_bkt->n]);
+                            msize = bucket->n_alloc * sizeof(DCELL);
+                            bucket->dcells = (DCELL *)G_realloc(
+                                (void *)bucket->dcells, msize);
+                            bucket->nextp =
+                                (void *)&(bucket->dcells[bucket->n]);
                             break;
                         case FCELL_TYPE:
-                            msize = t_bkt->n_alloc * sizeof(FCELL);
-                            t_bkt->fcells = (FCELL *)G_realloc(
-                                (void *)t_bkt->fcells, msize);
-                            t_bkt->nextp = (void *)&(t_bkt->fcells[t_bkt->n]);
+                            msize = bucket->n_alloc * sizeof(FCELL);
+                            bucket->fcells = (FCELL *)G_realloc(
+                                (void *)bucket->fcells, msize);
+                            bucket->nextp =
+                                (void *)&(bucket->fcells[bucket->n]);
                             break;
                         case CELL_TYPE:
-                            msize = t_bkt->n_alloc * sizeof(CELL);
-                            t_bkt->cells =
-                                (CELL *)G_realloc((void *)t_bkt->cells, msize);
-                            t_bkt->nextp = (void *)&(t_bkt->cells[t_bkt->n]);
+                            msize = bucket->n_alloc * sizeof(CELL);
+                            bucket->cells =
+                                (CELL *)G_realloc((void *)bucket->cells, msize);
+                            bucket->nextp = (void *)&(bucket->cells[bucket->n]);
                             break;
                         }
                     }
                     /* put the value into stats->XXXcell_array */
-                    memcpy(t_bkt->nextp, ptr, value_sz);
-                    t_bkt->nextp = G_incr_void_ptr(t_bkt->nextp, value_sz);
+                    memcpy(bucket->nextp, ptr, value_sz);
+                    bucket->nextp = G_incr_void_ptr(bucket->nextp, value_sz);
                 }
 
-                val = ((map_type == DCELL_TYPE)   ? *((DCELL *)ptr)
-                       : (map_type == FCELL_TYPE) ? *((FCELL *)ptr)
-                                                  : *((CELL *)ptr));
+                double val = ((map_type == DCELL_TYPE)   ? *((DCELL *)ptr)
+                              : (map_type == FCELL_TYPE) ? *((FCELL *)ptr)
+                                                         : *((CELL *)ptr));
 
                 zd->sum += val;
                 zd->sumsq += val * val;
@@ -466,7 +466,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                 ptr = G_incr_void_ptr(ptr, value_sz);
                 if (n_zones)
                     zptr++;
-                zd->buckets.n++;
+                zd->bucket.n++;
             } /* end column loop */
             if (!(param.shell_style->answer)) {
 #pragma omp atomic update
@@ -486,7 +486,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                        point to the buffer. Case 2: other transfers, reallocate
                        exactly if there is any non-empty bucket.
                      */
-                    bucket *t_bkt = &zd->buckets;
+                    zone_bucket *bucket = &zd->bucket;
                     univar_stat *g_bfr = &stats[z];
                     size_t old_size;
                     size_t add_size;
@@ -494,59 +494,59 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                     switch (map_type) {
                     case DCELL_TYPE:
                         if (NULL == g_bfr->dcell_array) {
-                            g_bfr->dcell_array = t_bkt->dcells;
-                            t_bkt->dcells = NULL;
+                            g_bfr->dcell_array = bucket->dcells;
+                            bucket->dcells = NULL;
                         }
-                        else if (t_bkt->n != 0) {
+                        else if (bucket->n != 0) {
                             old_size = g_bfr->n * sizeof(DCELL);
-                            add_size = t_bkt->n * sizeof(DCELL);
+                            add_size = bucket->n * sizeof(DCELL);
 
                             g_bfr->dcell_array =
                                 (DCELL *)G_realloc((void *)g_bfr->dcell_array,
                                                    old_size + add_size);
-                            memcpy(&g_bfr->dcell_array[g_bfr->n], t_bkt->dcells,
-                                   add_size);
+                            memcpy(&g_bfr->dcell_array[g_bfr->n],
+                                   bucket->dcells, add_size);
                         }
                         break;
                     case FCELL_TYPE:
                         if (NULL == g_bfr->fcell_array) {
-                            g_bfr->fcell_array = t_bkt->fcells;
-                            t_bkt->fcells = NULL;
+                            g_bfr->fcell_array = bucket->fcells;
+                            bucket->fcells = NULL;
                         }
-                        else if (t_bkt->n != 0) {
+                        else if (bucket->n != 0) {
                             old_size = g_bfr->n * sizeof(FCELL);
-                            add_size = t_bkt->n * sizeof(FCELL);
+                            add_size = bucket->n * sizeof(FCELL);
 
                             g_bfr->fcell_array =
                                 (FCELL *)G_realloc((void *)g_bfr->fcell_array,
                                                    old_size + add_size);
-                            memcpy(&g_bfr->fcell_array[g_bfr->n], t_bkt->fcells,
-                                   add_size);
+                            memcpy(&g_bfr->fcell_array[g_bfr->n],
+                                   bucket->fcells, add_size);
                         }
                         break;
                     case CELL_TYPE:
                         if (NULL == g_bfr->cell_array) {
-                            g_bfr->cell_array = t_bkt->cells;
-                            t_bkt->cells = NULL;
+                            g_bfr->cell_array = bucket->cells;
+                            bucket->cells = NULL;
                         }
-                        else if (t_bkt->n != 0) {
+                        else if (bucket->n != 0) {
                             old_size = g_bfr->n * sizeof(CELL);
-                            add_size = t_bkt->n * sizeof(CELL);
+                            add_size = bucket->n * sizeof(CELL);
 
                             g_bfr->cell_array = (CELL *)G_realloc(
                                 (void *)g_bfr->cell_array, old_size + add_size);
-                            memcpy(&g_bfr->cell_array[g_bfr->n], t_bkt->cells,
+                            memcpy(&g_bfr->cell_array[g_bfr->n], bucket->cells,
                                    add_size);
                         }
                         break;
                     }
 
-                    g_bfr->n += t_bkt->n;
+                    g_bfr->n += bucket->n;
                 }
             }
             else {
 #pragma omp atomic update
-                stats[z].n += zd->buckets.n;
+                stats[z].n += zd->bucket.n;
             }
 #pragma omp atomic update
             stats[z].size += zd->size;
@@ -576,12 +576,12 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
         /* Free per-thread variables */
         for (int z = 0; z < n_alloc; z++) {
             zone_workspace *zd = &zw[z];
-            if (zd->buckets.cells)
-                G_free(zd->buckets.cells);
-            if (zd->buckets.fcells)
-                G_free(zd->buckets.fcells);
-            if (zd->buckets.dcells)
-                G_free(zd->buckets.dcells);
+            if (zd->bucket.cells)
+                G_free(zd->bucket.cells);
+            if (zd->bucket.fcells)
+                G_free(zd->bucket.fcells);
+            if (zd->bucket.dcells)
+                G_free(zd->bucket.dcells);
         }
     } /* end parallel region */
 
@@ -593,11 +593,11 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
     G_free(minmax);
 #endif
 
-    for (t = 0; t < nprocs; t++) {
+    for (int t = 0; t < nprocs; t++) {
         G_free(tw[t].raster_row);
     }
     if (n_zones) {
-        for (t = 0; t < nprocs; t++) {
+        for (int t = 0; t < nprocs; t++) {
             G_free(tw[t].zoneraster_row);
         }
     }
