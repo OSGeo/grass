@@ -13,6 +13,11 @@ on:
 
 jobs:
   pytest:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
+        matrix.os }}-${{ matrix.python-version }}
+      cancel-in-progress: true
+
     strategy:
       matrix:
         os:
@@ -67,7 +72,7 @@ jobs:
       - name: Run pytest
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass83/lib:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
           pytest .
 
       - name: Print installed versions

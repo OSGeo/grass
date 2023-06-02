@@ -373,7 +373,8 @@ static void filter(void)
                 }
 
                 for (i = num_rows; i < rows; i++) {
-                    G_debug(5, "read: %p = %d", bufs[t_id][i], row0 + i);
+                    G_debug(5, "read: %p = %d", (void *)bufs[t_id][i],
+                            row0 + i);
                     /* enlarging the source window to the North and South is
                      * not possible for global maps in ll */
                     if (row0 + i >= 0 && row0 + i < src_w.rows)

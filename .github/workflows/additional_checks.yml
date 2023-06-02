@@ -16,6 +16,10 @@ on:
       - main
       - releasebranch_*
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
 jobs:
   additional-checks:
     name: Additional checks

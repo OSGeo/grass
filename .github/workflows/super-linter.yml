@@ -11,6 +11,10 @@ on:
       - main
       - releasebranch_*
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
 jobs:
   super-linter:
     name: GitHub Super Linter
@@ -20,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Lint code base
-        uses: github/super-linter@v4
+        uses: github/super-linter@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Listed but commented out linters would be nice to have.
