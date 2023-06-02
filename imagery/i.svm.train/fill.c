@@ -1,6 +1,6 @@
 /*
  * i.svm.train Functions filling svm_problem struct
- *  
+ *
  *   Copyright 2020 by Maris Nartiss, and The GRASS Development Team
  *   Author: Maris Nartiss
  *
@@ -13,10 +13,9 @@
 
 #include "fill.h"
 
-
 void fill_problem(const char *name_labels, const char *mapset_labels,
                   struct Ref band_refs, const char *mapset_group,
-                  double *rescale, struct svm_problem *problem)
+                  const double *rescale, struct svm_problem *problem)
 {
     int label_num, label_max;
     int value_num, value_max;
@@ -43,13 +42,12 @@ void fill_problem(const char *name_labels, const char *mapset_labels,
     /* svm_problem always stores labels as doubles */
     buf_labels = Rast_allocate_d_buf();
 
-    buf_bands = (DCELL **) G_malloc(band_refs.nfiles * sizeof(DCELL *));
+    buf_bands = (DCELL **)G_malloc(band_refs.nfiles * sizeof(DCELL *));
     fd_bands = (int *)G_calloc(band_refs.nfiles, sizeof(int));
     for (band = 0; band < band_refs.nfiles; band++) {
         buf_bands[band] = Rast_allocate_d_buf();
-        fd_bands[band] =
-            Rast_open_old(band_refs.file[band].name,
-                          band_refs.file[band].mapset);
+        fd_bands[band] = Rast_open_old(band_refs.file[band].name,
+                                       band_refs.file[band].mapset);
     }
 
     for (row = 0; row < nrows; row++) {
@@ -62,11 +60,10 @@ void fill_problem(const char *name_labels, const char *mapset_labels,
                 continue;
             if (label_num >= label_max) {
                 label_max += SIZE_INCREMENT;
-                problem->y = G_realloc(problem->y,
-                                       (size_t)label_max * sizeof(double));
-                problem->x =
-                    G_realloc(problem->x,
-                              (size_t)label_max * sizeof(struct svm_node *));
+                problem->y =
+                    G_realloc(problem->y, (size_t)label_max * sizeof(double));
+                problem->x = G_realloc(
+                    problem->x, (size_t)label_max * sizeof(struct svm_node *));
             }
             problem->l = label_num;
             problem->y[label_num] = buf_labels[col];
@@ -79,11 +76,9 @@ void fill_problem(const char *name_labels, const char *mapset_labels,
                 if (value_num >= value_max) {
                     /* Three bands are typical, thus we start with 4 nodes */
                     value_max += 4;
-                    problem->x[label_num] = G_realloc(problem->x[label_num],
-                                                      ((size_t)value_max +
-                                                       1) *
-                                                      sizeof(struct
-                                                             svm_node));
+                    problem->x[label_num] = G_realloc(
+                        problem->x[label_num],
+                        ((size_t)value_max + 1) * sizeof(struct svm_node));
                 }
                 problem->x[label_num][value_num].index = band;
                 problem->x[label_num][value_num].value =

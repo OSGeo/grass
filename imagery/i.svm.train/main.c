@@ -13,7 +13,7 @@
  *
  *               Development of this module was supported from
  *               science funding of University of Latvia (2020/2021).
- * 
+ *
  *****************************************************************************/
 #include <stdlib.h>
 #include <string.h>
@@ -32,7 +32,6 @@ void print_func(const char *s)
 {
     G_verbose_message("%s", s);
 };
-
 
 int main(int argc, char *argv[])
 {
@@ -66,7 +65,6 @@ int main(int argc, char *argv[])
     struct Categories cats;
     struct History history;
     FILE *misc_file;
-    int i, ret;
     double *rescale;
     struct Range crange;
     struct FPRange fprange;
@@ -112,7 +110,10 @@ int main(int argc, char *argv[])
     opt_svm_type->guisection = _("SVM parameters");
     G_asprintf((char **)&(opt_svm_type->descriptions),
                "c_svc;%s;"
-               "nu_svc;%s;" "one_class;%s;" "epsilon_svr;%s;" "nu_svr;%s;",
+               "nu_svc;%s;"
+               "one_class;%s;"
+               "epsilon_svr;%s;"
+               "nu_svr;%s;",
                /* GTC: SVM type */
                _("C-SVM classification"),
                /* GTC: SVM type */
@@ -135,7 +136,9 @@ int main(int argc, char *argv[])
     opt_svm_kernel->guisection = _("SVM parameters");
     G_asprintf((char **)&(opt_svm_kernel->descriptions),
                "linear;%s;"
-               "poly;%s;" "rbf;%s;" "sigmoid;%s;" /* "precomputed;%s;" */ ,
+               "poly;%s;"
+               "rbf;%s;"
+               "sigmoid;%s;" /* "precomputed;%s;" */,
                /* GTC: SVM kernel type */
                _("u'*v"),
                /* GTC: SVM kernel type */
@@ -222,8 +225,8 @@ int main(int argc, char *argv[])
     opt_svm_p->key_desc = "value";
     opt_svm_p->required = NO;
     opt_svm_p->answer = "0.1";
-    opt_svm_p->description =
-        _("The epsilon in epsilon-insensitive loss function of epsilon-SVM regression");
+    opt_svm_p->description = _("The epsilon in epsilon-insensitive loss "
+                               "function of epsilon-SVM regression");
     opt_svm_p->guisection = _("SVM options");
 
     flag_svm_shrink = G_define_flag();
@@ -242,14 +245,13 @@ int main(int argc, char *argv[])
     flag_svm_prob->description = _("Defaults to no probabilities in model");
     flag_svm_prob->guisection = _("SVM options");
 
-
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
     /* Input validation */
     /* Input maps */
-    if (G_unqualified_name(opt_group->answer, NULL, name_group, mapset_group)
-        == 0)
+    if (G_unqualified_name(opt_group->answer, NULL, name_group, mapset_group) ==
+        0)
         strcpy(mapset_group, G_mapset());
     if (opt_subgroup->answer &&
         G_unqualified_name(opt_subgroup->answer, NULL, name_subgroup,
@@ -258,8 +260,8 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Invalid subgroup <%s> provided"),
                       opt_subgroup->answer);
     if (!I_find_group2(name_group, mapset_group)) {
-        G_fatal_error(_("Group <%s> not found in mapset <%s>"),
-                      name_group, mapset_group);
+        G_fatal_error(_("Group <%s> not found in mapset <%s>"), name_group,
+                      mapset_group);
     }
     if (opt_subgroup->answer &&
         !I_find_subgroup2(name_group, name_subgroup, mapset_group)) {
@@ -272,15 +274,16 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Raster map <%s> not found"), opt_labels->answer);
     }
 
-    if (G_unqualified_name
-        (opt_sigfile->answer, G_mapset(), name_sigfile, mapset_sigfile) < 0)
+    if (G_unqualified_name(opt_sigfile->answer, G_mapset(), name_sigfile,
+                           mapset_sigfile) < 0)
         G_fatal_error(_("<%s> does not match the current mapset"),
                       mapset_sigfile);
     if (G_legal_filename(name_sigfile) < 0)
         G_fatal_error(_("<%s> is an illegal file name"), name_sigfile);
 
     /* Input SVM parameters */
-    /* TODO: Implement parameter checking duplicating svm_check_parameter() to generate translatable errors */
+    /* TODO: Implement parameter checking duplicating svm_check_parameter() to
+     * generate translatable errors */
     parameters.cache_size = atoi(opt_svm_cache_size->answer);
     parameters.degree = atoi(opt_svm_degree->answer);
     parameters.gamma = atof(opt_svm_gamma->answer);
@@ -339,10 +342,11 @@ int main(int argc, char *argv[])
 
     /* Get bands */
     if (opt_subgroup->answer) {
-        if (!I_get_subgroup_ref2
-            (name_group, opt_subgroup->answer, mapset_group, &group_ref)) {
-            G_fatal_error(_("There was an error reading subgroup <%s> in group <%s@%s>"),
-                          opt_subgroup->answer, name_group, mapset_group);
+        if (!I_get_subgroup_ref2(name_group, opt_subgroup->answer, mapset_group,
+                                 &group_ref)) {
+            G_fatal_error(
+                _("There was an error reading subgroup <%s> in group <%s@%s>"),
+                opt_subgroup->answer, name_group, mapset_group);
         }
     }
     else {
@@ -353,8 +357,9 @@ int main(int argc, char *argv[])
     }
     if (group_ref.nfiles <= 0) {
         if (opt_subgroup->answer)
-            G_fatal_error(_("Subgroup <%s> in group <%s@%s> contains no raster maps."),
-                          opt_subgroup->answer, name_group, mapset_group);
+            G_fatal_error(
+                _("Subgroup <%s> in group <%s@%s> contains no raster maps."),
+                opt_subgroup->answer, name_group, mapset_group);
         else
             G_fatal_error(_("Group <%s@%s> contains no raster maps."),
                           name_group, mapset_group);
@@ -362,12 +367,12 @@ int main(int argc, char *argv[])
     semantic_labels = G_malloc(group_ref.nfiles * sizeof(char *));
     rescale = G_malloc(group_ref.nfiles * sizeof(double));
     for (int n = 0; n < group_ref.nfiles; n++) {
-        semantic_labels[n] =
-            Rast_get_semantic_label_or_name(group_ref.file[n].name,
-                                            group_ref.file[n].mapset);
+        int ret;
+        semantic_labels[n] = Rast_get_semantic_label_or_name(
+            group_ref.file[n].name, group_ref.file[n].mapset);
         /* Use raster range for value rescaling */
-        ret = Rast_read_range(group_ref.file[n].name,
-                              group_ref.file[n].mapset, &crange);
+        ret = Rast_read_range(group_ref.file[n].name, group_ref.file[n].mapset,
+                              &crange);
         if (ret == 1) {
             Rast_get_range_min_max(&crange, &cmin, &cmax);
             rescale[n] = (double)(cmax - cmin);
@@ -376,9 +381,9 @@ int main(int argc, char *argv[])
             ret = Rast_read_fp_range(group_ref.file[n].name,
                                      group_ref.file[n].mapset, &fprange);
             if (ret != 1) {
-                G_fatal_error(_("Unable to get value range for raster map <%s@%s>"),
-                              group_ref.file[n].name,
-                              group_ref.file[n].mapset);
+                G_fatal_error(
+                    _("Unable to get value range for raster map <%s@%s>"),
+                    group_ref.file[n].name, group_ref.file[n].mapset);
             }
             Rast_get_fp_range_min_max(&fprange, &dmin, &dmax);
             rescale[n] = dmax - dmin;
@@ -398,10 +403,11 @@ int main(int argc, char *argv[])
 
     /* Fill svm_problem struct with training data */
     G_message(_("Reading training data"));
-    fill_problem(name_labels, mapset_labels, group_ref, mapset_group,
-                 rescale, &problem);
+    fill_problem(name_labels, mapset_labels, group_ref, mapset_group, rescale,
+                 &problem);
 
-    /* svm_check_parameter needs filled svm_problem struct thus checking only now */
+    /* svm_check_parameter needs filled svm_problem struct thus checking only
+     * now */
     G_verbose_message("Checking SVM parametrization");
     parameters_error = svm_check_parameter(&problem, &parameters);
     if (parameters_error)
@@ -431,8 +437,9 @@ int main(int argc, char *argv[])
     G_file_name_misc(out_path, sigfile_dir, "sig", name_sigfile, G_mapset());
     out_status = svm_save_model(out_path, model);
     if (out_status != 0) {
-        G_fatal_error(_("Unable to write trained model to file '%s'. Error code: %d"),
-                      out_path, out_status);
+        G_fatal_error(
+            _("Unable to write trained model to file '%s'. Error code: %d"),
+            out_path, out_status);
     }
     svm_free_and_destroy_model(&model);
     /* Write out semantic label info */
@@ -446,7 +453,8 @@ int main(int argc, char *argv[])
     fclose(misc_file);
     G_free(semantic_labels);
 
-    /* Write out rescaling value as the same value has to be used for prediction */
+    /* Write out rescaling value as the same value has to be used for prediction
+     */
     G_verbose_message("Writing out rescaling value");
     misc_file = G_fopen_new_misc(sigfile_dir, "rescale", name_sigfile);
     if (!misc_file)
@@ -487,7 +495,7 @@ int main(int argc, char *argv[])
         G_zero(&history, sizeof(struct History));
         /* Rast_command_history performs command wrapping */
         Rast_command_history(&history);
-        for (i = 0; i < history.nlines; i++)
+        for (int i = 0; i < history.nlines; i++)
             fprintf(misc_file, "%s\n", history.lines[i]);
         fclose(misc_file);
     }

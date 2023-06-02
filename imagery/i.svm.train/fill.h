@@ -1,6 +1,6 @@
 /*
  * i.svm.train Functions filling svm_problem struct
- *  
+ *
  *   Copyright 2020 by Maris Nartiss, and The GRASS Development Team
  *   Author: Maris Nartiss
  *
@@ -19,6 +19,6 @@
 #define SIZE_INCREMENT 64;
 
 void fill_problem(const char *, const char *, struct Ref, const char *,
-                  double *, struct svm_problem *);
+                  const double *, struct svm_problem *);
 
 #endif // FILL_H
