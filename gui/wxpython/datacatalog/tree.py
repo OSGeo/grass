@@ -23,23 +23,18 @@ import re
 import copy
 from multiprocessing import Process, Queue, cpu_count
 
-watchdog_used = True
-try:
-    from watchdog.observers import Observer
-    from watchdog.events import PatternMatchingEventHandler, FileSystemEventHandler
-except ImportError:
-    watchdog_used = False
-    PatternMatchingEventHandler = object
-    FileSystemEventHandler = object
-
-
 import wx
-from wx.lib.newevent import NewEvent
 
 from core.gcmd import RunCommand, GError, GMessage
 from core.utils import GetListOfLocations
 from core.debug import Debug
 from core.gthread import gThread
+from core.watchdog import (
+    EVT_UPDATE_MAPSET,
+    EVT_CURRENT_MAPSET_CHANGED,
+    MapsetWatchdog,
+    watchdog_used,
+)
 from gui_core.dialogs import TextEntryDialog
 from core.giface import StandaloneGrassInterface
 from core.treemodel import TreeModel, DictNode
@@ -78,10 +73,6 @@ from grass.grassdb.checks import (
     is_first_time_user,
 )
 from grass.exceptions import CalledModuleError
-
-
-updateMapset, EVT_UPDATE_MAPSET = NewEvent()
-currentMapsetChanged, EVT_CURRENT_MAPSET_CHANGED = NewEvent()
 
 
 def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
@@ -143,96 +134,6 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
 
     queue.put((maps_dict, None))
     gscript.try_remove(tmp_gisrc_file)
-
-
-class CurrentMapsetWatch(FileSystemEventHandler):
-    """Monitors rc file to check if mapset has been changed.
-    In that case wx event is dispatched to event handler.
-    Needs to check timestamp, because the modified event is sent twice.
-    This assumes new instance of this class is started
-    whenever mapset is changed."""
-
-    def __init__(self, rcfile, mapset_path, event_handler):
-        FileSystemEventHandler.__init__(self)
-        self.event_handler = event_handler
-        self.mapset_path = mapset_path
-        self.rcfile_name = os.path.basename(rcfile)
-        self.modified_time = 0
-
-    def on_modified(self, event):
-        if (
-            not event.is_directory
-            and os.path.basename(event.src_path) == self.rcfile_name
-        ):
-            timestamp = os.stat(event.src_path).st_mtime
-            if timestamp - self.modified_time < 0.5:
-                return
-            self.modified_time = timestamp
-            with open(event.src_path, "r") as f:
-                gisrc = {}
-                for line in f.readlines():
-                    key, val = line.split(":")
-                    gisrc[key.strip()] = val.strip()
-                new = os.path.join(
-                    gisrc["GISDBASE"], gisrc["LOCATION_NAME"], gisrc["MAPSET"]
-                )
-                if new != self.mapset_path:
-                    evt = currentMapsetChanged()
-                    wx.PostEvent(self.event_handler, evt)
-
-
-class MapWatch(PatternMatchingEventHandler):
-    """Monitors file events (create, delete, move files) using watchdog
-    to inform about changes in current mapset. One instance monitors
-    only one element (raster, vector, raster_3d).
-    Patterns are not used/needed in this case, use just '*' for matching
-    everything. When file/directory change is detected, wx event is dispatched
-    to event handler (can't use Signals because this is different thread),
-    containing info about the change."""
-
-    def __init__(self, patterns, element, event_handler):
-        PatternMatchingEventHandler.__init__(self, patterns=patterns)
-        self.element = element
-        self.event_handler = event_handler
-
-    def on_created(self, event):
-        if (
-            self.element == "vector" or self.element == "raster_3d"
-        ) and not event.is_directory:
-            return
-        evt = updateMapset(
-            src_path=event.src_path,
-            event_type=event.event_type,
-            is_directory=event.is_directory,
-            dest_path=None,
-        )
-        wx.PostEvent(self.event_handler, evt)
-
-    def on_deleted(self, event):
-        if (
-            self.element == "vector" or self.element == "raster_3d"
-        ) and not event.is_directory:
-            return
-        evt = updateMapset(
-            src_path=event.src_path,
-            event_type=event.event_type,
-            is_directory=event.is_directory,
-            dest_path=None,
-        )
-        wx.PostEvent(self.event_handler, evt)
-
-    def on_moved(self, event):
-        if (
-            self.element == "vector" or self.element == "raster_3d"
-        ) and not event.is_directory:
-            return
-        evt = updateMapset(
-            src_path=event.src_path,
-            event_type=event.event_type,
-            is_directory=event.is_directory,
-            dest_path=event.dest_path,
-        )
-        wx.PostEvent(self.event_handler, evt)
 
 
 class NameEntryDialog(TextEntryDialog):
@@ -387,6 +288,16 @@ class DataCatalogTree(TreeView):
         self._lastWatchdogUpdate = gscript.clock()
         self._updateMapsetWhenIdle = None
 
+        #  mapset watchdog
+        self._mapset_watchdog = MapsetWatchdog(
+            elements_dirs=(
+                ("raster", "cell"),
+                ("vector", "vector"),
+                ("raster_3d", "grid3"),
+            ),
+            evt_handler=self,
+            giface=self._giface,
+        )
         # Get databases from settings
         # add current to settings if it's not included
         self.grassdatabases = self._getValidSavedGrassDBs()
@@ -428,7 +339,6 @@ class DataCatalogTree(TreeView):
         self.Bind(
             EVT_CURRENT_MAPSET_CHANGED, lambda evt: self._updateAfterMapsetChanged()
         )
-        self.observer = None
 
     def _resetSelectVariables(self):
         """Reset variables related to item selection."""
@@ -727,55 +637,6 @@ class DataCatalogTree(TreeView):
             return errors
         return None
 
-    def ScheduleWatchCurrentMapset(self):
-        """Using watchdog library, sets up watching of current mapset folder
-        to detect changes not captured by other means (e.g. from command line).
-        Schedules 3 watches (raster, vector, 3D raster).
-        If watchdog observers are active, it restarts the observers in current mapset.
-        Also schedules monitoring of rc file to detect mapset change.
-        """
-        global watchdog_used
-        if not watchdog_used:
-            return
-
-        if self.observer and self.observer.is_alive():
-            self.observer.stop()
-            self.observer.join()
-            self.observer.unschedule_all()
-        self.observer = Observer()
-
-        gisenv = gscript.gisenv()
-        mapset_path = os.path.join(
-            gisenv["GISDBASE"], gisenv["LOCATION_NAME"], gisenv["MAPSET"]
-        )
-        rcfile = os.environ["GISRC"]
-        self.observer.schedule(
-            CurrentMapsetWatch(rcfile, mapset_path, self),
-            os.path.dirname(rcfile),
-            recursive=False,
-        )
-        for element, directory in (
-            ("raster", "cell"),
-            ("vector", "vector"),
-            ("raster_3d", "grid3"),
-        ):
-            path = os.path.join(mapset_path, directory)
-            if not os.path.exists(path):
-                try:
-                    os.mkdir(path)
-                except OSError:
-                    pass
-            if os.path.exists(path):
-                self.observer.schedule(
-                    MapWatch("*", element, self), path=path, recursive=False
-                )
-        try:
-            self.observer.start()
-        except OSError:
-            # in case inotify on linux exceeds limits
-            watchdog_used = False
-            return
-
     def _onUpdateMapsetWhenIdle(self, event):
         """When idle, check if current mapset should be reloaded
         because there are skipped update events."""
@@ -906,7 +767,7 @@ class DataCatalogTree(TreeView):
         if event.ret is not None:
             self._giface.WriteWarning("\n".join(event.ret))
         self.UpdateCurrentDbLocationMapsetNode()
-        self.ScheduleWatchCurrentMapset()
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()
         self.RefreshItems()
         self.ExpandCurrentMapset()
         self.loadingDone.emit()
@@ -2047,7 +1908,7 @@ class DataCatalogTree(TreeView):
         self.RefreshNode(self.current_mapset_node, recursive=True)
         self.ExpandCurrentMapset()
         self.RefreshItems()
-        self.ScheduleWatchCurrentMapset()
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""
