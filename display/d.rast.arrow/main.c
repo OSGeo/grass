@@ -379,7 +379,8 @@ int main(int argc, char **argv)
 
             /* treat AGNPS and ANSWERS data like old zero-as-null CELL */
             /*   TODO: update models */
-            if (map_type == 2 || map_type == 3 || map_type == 5 || map_type == 6) {
+            if (map_type == 2 || map_type == 3 || map_type == 5 ||
+                map_type == 6) {
                 if (Rast_is_null_value(ptr, raster_type))
                     aspect_c = 0;
                 else if (map_type == 5 && aspect_f < 0)
