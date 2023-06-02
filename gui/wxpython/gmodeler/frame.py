@@ -840,12 +840,13 @@ class ModelFrame(wx.Frame):
         action = ModelAction(
             self.model,
             cmd=cmd,
-            x=x + self._randomShift(),
-            y=y + self._randomShift(),
+            x=x,
+            y=y,
             id=self.model.GetNextId(),
             label=label,
             comment=comment,
         )
+
         overwrite = self.model.GetProperties().get("overwrite", None)
         if overwrite is not None:
             action.GetTask().set_flag("overwrite", overwrite)
@@ -863,24 +864,15 @@ class ModelFrame(wx.Frame):
         # show properties dialog
         win = action.GetPropDialog()
         if not win:
-            cmdLength = len(action.GetLog(string=False))
-            if cmdLength > 1 and action.IsValid():
-                self.GetOptData(
-                    dcmd=action.GetLog(string=False),
-                    layer=action,
-                    params=action.GetParams(),
-                    propwin=None,
-                )
-            else:
-                gmodule = GUI(
-                    parent=self,
-                    show=True,
-                    giface=GraphicalModelerGrassInterface(self.model),
-                )
-                gmodule.ParseCommand(
-                    action.GetLog(string=False),
-                    completed=(self.GetOptData, action, action.GetParams()),
-                )
+            gmodule = GUI(
+                parent=self,
+                show=True,
+                giface=GraphicalModelerGrassInterface(self.model),
+            )
+            gmodule.ParseCommand(
+                action.GetLog(string=False),
+                completed=(self.GetOptData, action, action.GetParams()),
+            )
         elif win and not win.IsShown():
             win.Show()
 
@@ -932,8 +924,8 @@ class ModelFrame(wx.Frame):
                 x, y = self.canvas.GetNewShapePos()
                 commentObj = ModelComment(
                     self.model,
-                    x=x + self._randomShift(),
-                    y=y + self._randomShift(),
+                    x=x,
+                    y=y,
                     id=self.model.GetNextId(),
                     label=comment,
                 )
@@ -1355,21 +1347,19 @@ class ModelCanvas(ogl.ShapeCanvas):
 
         self.Refresh()
 
-    def GetNewShapePos(self):
+    def GetNewShapePos(self, yoffset=50):
         """Determine optimal position for newly added object
 
         :return: x,y
         """
-        xNew, yNew = map(lambda x: x / 2, self.GetSize())
         diagram = self.GetDiagram()
+        if diagram.GetShapeList():
+            last = diagram.GetShapeList()[-1]
+            y = last.GetY() + last.GetBoundingBoxMin()[1]
+        else:
+            y = 20
 
-        for shape in diagram.GetShapeList():
-            y = shape.GetY()
-            yBox = shape.GetBoundingBoxMin()[1] / 2
-            if yBox > 0 and y < yNew + yBox and y > yNew - yBox:
-                yNew += yBox * 3
-
-        return xNew, yNew
+        return (self.GetSize()[0] // 2, y + yoffset)
 
     def GetShapesSelected(self):
         """Get list of selected shapes"""
