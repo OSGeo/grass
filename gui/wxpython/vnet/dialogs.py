@@ -236,7 +236,6 @@ class VNETDialog(wx.Dialog):
         )
 
     def _doVnetDialogLayout(self):
-
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         sizer.Add(self.notebook, proportion=1, flag=wx.EXPAND)
@@ -285,7 +284,6 @@ class VNETDialog(wx.Dialog):
             id=wx.ID_ANY,
             min=0,
             max=maxValue,
-            size=(150, -1),
         )
         self.anSettings["max_dist"].Bind(wx.EVT_SPINCTRL, lambda event: self.MaxDist())
         self.anSettings["max_dist"].SetValue(100000)  # TODO init val
@@ -708,7 +706,6 @@ class VNETDialog(wx.Dialog):
         self.Layout()
 
     def PointsChanged(self, method, kwargs):
-
         if method == "EditMode" and not kwargs["activated"]:
             ptListToolbar = self.toolbars["pointsList"]
             if ptListToolbar:
@@ -723,7 +720,6 @@ class VNETDialog(wx.Dialog):
             self.notebook.SetSelectionByName("points")
 
     def OnCreateTtbBtn(self, event):
-
         params, err_params, flags = self.vnet_mgr.GetParams()
         dlg = CreateTtbDialog(parent=self, init_data=params)
 
@@ -740,7 +736,6 @@ class VNETDialog(wx.Dialog):
         dlg.Destroy()
 
     def TtbCreated(self):
-
         params, err_params, flags = self.vnet_mgr.GetParams()
         self._updateParamsTab(params, flags)
 
@@ -877,7 +872,6 @@ class VNETDialog(wx.Dialog):
             self.defIsecTurnsHndlrReg = False
 
     def OnDefGlobalTurnCosts(self, event):
-
         dialog = DefGlobalTurnsDialog(self, data=self.vnet_mgr.GetGlobalTurnsData())
         dialog.Show()
 
@@ -944,7 +938,6 @@ class VNETDialog(wx.Dialog):
                 self.notebook.SetSelectionByName("parameters")
 
     def AnalysisDone(self):
-
         curr_step, steps_num = self.vnet_mgr.GetHistStep()
         self.toolbars["mainToolbar"].UpdateUndoRedo(curr_step, steps_num)
 
@@ -1016,7 +1009,6 @@ class VNETDialog(wx.Dialog):
         attrCols = an_props["cmdParams"]["cols"]
 
         for col in six.iterkeys(attrCols):
-
             if "inputField" in attrCols[col]:
                 colInptF = attrCols[col]["inputField"]
             else:
@@ -1195,11 +1187,9 @@ class PtsList(PointsList):
             self.Select(self._findIndex(kwargs["pt_id"]))
 
     def SetData(self, key, data):
-
         idx = self._findIndex(key)
         for k, v in six.iteritems(data):
             if k == "use":
-
                 if v and not self.IsItemChecked(idx):
                     self.CheckItem(idx, True)
                 elif not v and self.IsItemChecked(idx):
@@ -1578,7 +1568,6 @@ class CreateTtbDialog(wx.Dialog):
 
         btn = None
         for sel in ["input", "output", "arc_layer", "turn_layer", "turn_cat_layer"]:
-
             selPanels[sel].SetSizer(
                 self._doSelLayout(title=label[sel], sel=self.inputData[sel], btn=btn)
             )
@@ -1662,7 +1651,6 @@ class CreateTtbDialog(wx.Dialog):
             self._updateInputDbMgrPage(show=True)
 
     def GetData(self):
-
         params = {}
         for param, sel in six.iteritems(self.inputData):
             params[param] = sel.GetValue()
@@ -1706,7 +1694,6 @@ class OutputVectorDialog(wx.Dialog):
         self._layout()
 
     def _layout(self):
-
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         self.boxSizer.Add(
@@ -1732,7 +1719,6 @@ class VnetStatusbar(wx.StatusBar):
     """Extends wx.StatusBar class with functionality to show multiple messages with the highest priority"""
 
     def __init__(self, parent, style, id=wx.ID_ANY, **kwargs):
-
         wx.StatusBar.__init__(self, parent, id, style, **kwargs)
 
         self.maxPriority = 0
@@ -1757,7 +1743,6 @@ class VnetStatusbar(wx.StatusBar):
         self._updateStatus()
 
     def _updateStatus(self):
-
         currStatusText = ""
         for item in reversed(self.statusItems):
             if item["priority"] == self.maxPriority:
@@ -1822,7 +1807,6 @@ class DefIntesectionTurnCostDialog(wx.Dialog):
         ).GetParent().Hide()
 
     def SetIntersection(self, isec):
-
         self.browsePage.LoadData(self.layer, where="isec = %d" % (isec))
 
 
@@ -1836,7 +1820,6 @@ class DefGlobalTurnsDialog(wx.Dialog):
         title=_("Define Global Turn Costs"),
         **kwargs,
     ):  # v Gassu dopln preklad
-
         wx.Dialog.__init__(self, parent, id, title, style=style, **kwargs)
 
         self.data = data

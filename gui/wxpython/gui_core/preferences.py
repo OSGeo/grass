@@ -155,7 +155,11 @@ class PreferencesBaseDialog(wx.Dialog):
                 )
             win = self.FindWindowById(self.winId[gks])
 
-            if win.GetName() in ("GetValue", "IsChecked"):
+            if win.GetName() == "IsChecked":
+                value = win.SetValue(value)
+            elif win.GetName() == "GetValue":
+                if isinstance(win, (wx.ComboBox, wx.TextCtrl)):
+                    value = str(value)
                 value = win.SetValue(value)
             elif win.GetName() == "GetSelection":
                 value = win.SetSelection(value)
@@ -306,7 +310,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         askOnQuit = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
-            label=_("Ask when quiting wxGUI or closing display"),
+            label=_("Ask when quitting wxGUI or closing display"),
             name="IsChecked",
         )
         askOnQuit.SetValue(
@@ -320,7 +324,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         hideSearch = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
-            label=_("Hide '%s' tab (requires GUI restart)") % _("Modules"),
+            label=_("Hide '%s' tab (requires GUI restart)") % _("Tools"),
             name="IsChecked",
         )
         hideSearch.SetValue(
@@ -498,6 +502,29 @@ class PreferencesDialog(PreferencesBaseDialog):
         notebook.AddPage(page=panel, text=_("Appearance"))
 
         border = wx.BoxSizer(wx.VERTICAL)
+
+        #
+        # single window settings
+        #
+        box = StaticBox(
+            parent=panel, id=wx.ID_ANY, label=" %s " % _("Window layout settings")
+        )
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        singleWindow = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Use single-window mode (requires GUI restart)"),
+            name="IsChecked",
+        )
+        singleWindow.SetToolTip(
+            _("Use single-window mode instead of multi-window mode")
+        )
+        singleWindow.SetValue(
+            self.settings.Get(group="appearance", key="singleWindow", subkey="enabled")
+        )
+        self.winId["appearance:singleWindow:enabled"] = singleWindow.GetId()
+        sizer.Add(singleWindow, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
 
         box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Font settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
@@ -721,7 +748,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         #
         row += 1
         gridSizer.Add(
-            StaticText(parent=panel, id=wx.ID_ANY, label=_("Module dialog style:")),
+            StaticText(parent=panel, id=wx.ID_ANY, label=_("Tool dialog style:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
             pos=(row, 0),
         )
@@ -1094,14 +1121,14 @@ class PreferencesDialog(PreferencesBaseDialog):
         return panel
 
     def _createCmdPage(self, notebook):
-        """Create notebook page for commad dialog settings"""
+        """Create notebook page for command dialog settings"""
         panel = SP.ScrolledPanel(parent=notebook, id=wx.ID_ANY)
         panel.SetupScrolling(scroll_x=False, scroll_y=True)
-        notebook.AddPage(page=panel, text=_("Modules"))
+        notebook.AddPage(page=panel, text=_("Tools"))
 
         border = wx.BoxSizer(wx.VERTICAL)
         box = StaticBox(
-            parent=panel, id=wx.ID_ANY, label=" %s " % _("Module dialog settings")
+            parent=panel, id=wx.ID_ANY, label=" %s " % _("Tool dialog settings")
         )
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
@@ -1129,7 +1156,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         close = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
-            label=_("Close dialog when module is successfully finished"),
+            label=_("Close dialog when completed successfully"),
             name="IsChecked",
         )
         close.SetValue(self.settings.Get(group="cmd", key="closeDlg", subkey="enabled"))
@@ -1508,7 +1535,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         autoHighlight = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
-            label=_("Automatically hightlight selected features in map display"),
+            label=_("Automatically highlight selected features in map display"),
         )
         autoHighlight.SetValue(
             self.settings.Get(group="atm", key="highlight", subkey="auto")
@@ -1684,7 +1711,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         # proj
         row += 1
         label = StaticText(
-            parent=panel, id=wx.ID_ANY, label=_("Proj.4 string (required):")
+            parent=panel, id=wx.ID_ANY, label=_("PROJ string (required):")
         )
         projString = TextCtrl(
             parent=panel,
@@ -1725,7 +1752,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             id=wx.ID_ANY,
             label=_(
                 "Load EPSG codes (be patient), enter EPSG code or "
-                "insert Proj.4 string directly."
+                "insert PROJ string directly."
             ),
         )
         gridSizer.Add(note, span=(1, 2), pos=(row, 0))
@@ -1818,7 +1845,12 @@ class PreferencesDialog(PreferencesBaseDialog):
                 size = mapdisp.GetSize()
 
                 # window size must be larger than zero, not minimized
-                if not mapdisp.IsIconized() and (size[0] > 0 and size[1] > 0):
+                # when mapdisp is inside single window (panel has no IsIconized), don't save dim
+                if (
+                    hasattr(mapdisp, "IsIconized")
+                    and not mapdisp.IsIconized()
+                    and (size[0] > 0 and size[1] > 0)
+                ):
                     dim += ",%d,%d,%d,%d" % (pos[0], pos[1], size[0], size[1])
 
             self.settings.Set(

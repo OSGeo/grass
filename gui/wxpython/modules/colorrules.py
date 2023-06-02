@@ -91,9 +91,7 @@ class RulesPanel:
         # clear button
         self.clearAll = Button(parent, id=wx.ID_ANY, label=_("Clear all"))
         #  determines how many rules should be added
-        self.numRules = SpinCtrl(
-            parent, id=wx.ID_ANY, min=1, max=1e6, initial=1, size=(150, -1)
-        )
+        self.numRules = SpinCtrl(parent, id=wx.ID_ANY, min=1, max=1e6, initial=1)
         # add rules
         self.btnAdd = Button(parent, id=wx.ID_ADD)
 
@@ -1979,7 +1977,6 @@ class BufferedWindow(wx.Window):
     def __init__(
         self, parent, id, style=wx.NO_FULL_REPAINT_ON_RESIZE, Map=None, **kwargs
     ):
-
         wx.Window.__init__(self, parent, id, style=style, **kwargs)
 
         self.parent = parent

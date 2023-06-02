@@ -9,7 +9,8 @@ Classes:
  - manager::LocationPage
  - manager::GroupPage
  - manager::DispMapPage
- - manager::GCP
+ - manager::GCPPanel
+ - manager::GCPDisplay
  - manager::GCPList
  - manager::VectGroup
  - manager::EditGCP
@@ -57,9 +58,10 @@ from core import utils
 from core.render import Map
 from gui_core.gselect import Select, LocationSelect, MapsetSelect
 from gui_core.dialogs import GroupDialog
+from gui_core.mapdisp import FrameMixin
 from core.gcmd import RunCommand, GMessage, GError, GWarning
 from core.settings import UserSettings
-from gcp.mapdisplay import MapFrame
+from gcp.mapdisplay import MapPanel
 from core.giface import Notification
 from gui_core.wrap import (
     SpinCtrl,
@@ -296,22 +298,30 @@ class GCPWizard(object):
             #
             # start GCP Manager
             #
-            self.gcpmgr = GCP(
-                self.parent,
+            # create superior Map Display frame
+            mapframe = wx.Frame(
+                parent=None,
+                id=wx.ID_ANY,
+                size=globalvar.MAP_WINDOW_SIZE,
+                style=wx.DEFAULT_FRAME_STYLE,
+                title=name,
+            )
+            gcpmgr = GCPDisplay(
+                parent=mapframe,
                 giface=self._giface,
                 grwiz=self,
-                size=globalvar.MAP_WINDOW_SIZE,
-                toolbars=["gcpdisp"],
+                id=wx.ID_ANY,
                 Map=self.SrcMap,
                 lmgr=self.parent,
+                title=name,
             )
 
             # load GCPs
-            self.gcpmgr.InitMapDisplay()
-            self.gcpmgr.CenterOnScreen()
-            self.gcpmgr.Show()
+            gcpmgr.InitMapDisplay()
+            gcpmgr.CenterOnScreen()
+            gcpmgr.Show()
             # need to update AUI here for wingrass
-            self.gcpmgr._mgr.Update()
+            gcpmgr._mgr.Update()
         else:
             self.Cleanup()
 
@@ -990,7 +1000,7 @@ class DispMapPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
 
-class GCP(MapFrame, ColumnSorterMixin):
+class GCPPanel(MapPanel, ColumnSorterMixin):
     """
     Manages ground control points for georectifying. Calculates RMS statistics.
     Calls i.ortho.rectify or v.rectify to georectify map.
@@ -1008,7 +1018,6 @@ class GCP(MapFrame, ColumnSorterMixin):
         Map=None,
         lmgr=None,
     ):
-
         self.grwiz = grwiz  # GR Wizard
         self._giface = giface
 
@@ -1018,7 +1027,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             self.show_target = True
 
         # wx.Frame.__init__(self, parent, id, title, size = size, name = "GCPFrame")
-        MapFrame.__init__(
+        MapPanel.__init__(
             self,
             parent=parent,
             giface=self._giface,
@@ -1209,7 +1218,6 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.Bind(wx.EVT_ACTIVATE, self.OnFocus)
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
-        self.Bind(wx.EVT_CLOSE, self.OnQuit)
 
         self.SetSettings()
 
@@ -1294,7 +1302,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             ]
         )  # backward error
 
-        if self.statusbarManager.GetMode() == 8:  # go to
+        if self.statusbarManager.GetMode() == 5:  # go to
             self.StatusbarUpdate()
 
     def DeleteGCP(self, event):
@@ -1338,7 +1346,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
         self.UpdateColours()
 
-        if self.statusbarManager.GetMode() == 8:  # go to
+        if self.statusbarManager.GetMode() == 5:  # go to
             self.StatusbarUpdate()
             if self.list.selectedkey > 0:
                 self.statusbarManager.SetProperty("gotoGCP", self.list.selectedkey)
@@ -1403,7 +1411,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
     def SetGCPSatus(self, item, itemIndex):
         """Before GCP is drawn, decides it's colour and whether it
-        will be drawed.
+        will be drawn.
         """
         key = self.list.GetItemData(itemIndex)
         # incremented because of itemDataMap (has one more item) - will be
@@ -1701,7 +1709,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             targetMapWin.UpdateMap(render=False, renderVector=False)
 
     def OnFocus(self, event):
-        # TODO: it is here just to remove old or obsolate beavior of base class gcp/MapFrame?
+        # TODO: it is here just to remove old or obsolete beavior of base class gcp/MapPanel?
         # self.grwiz.SwitchEnv('source')
         pass
 
@@ -2043,7 +2051,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         # SD
         if GCPcount > 0:
             self.rmsmean = sum_fwd_err / GCPcount
-            self.rmssd = (sumsq_fwd_err - self.rmsmean ** 2) ** 0.5
+            self.rmssd = (sumsq_fwd_err - self.rmsmean**2) ** 0.5
             self.rmsthresh = self.rmsmean + sdfactor * self.rmssd
         else:
             self.rmsthresh = 0
@@ -2065,7 +2073,6 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.list.ResizeColumns()
 
     def GetNewExtent(self, region, map=None):
-
         coord_file = utils.GetTempfile()
         newreg = {
             "n": 0.0,
@@ -2168,7 +2175,6 @@ class GCP(MapFrame, ColumnSorterMixin):
         self._giface.Help(entry="wxGUI.gcp")
 
     def OnUpdateActive(self, event):
-
         if self.activemap.GetSelection() == 0:
             self.MapWindow = self.SrcMapWindow
             self.Map = self.SrcMap
@@ -2182,7 +2188,6 @@ class GCP(MapFrame, ColumnSorterMixin):
             self.MapWindow.SetFocus()
 
     def UpdateActive(self, win):
-
         # optionally disable tool zoomback tool
         self.GetMapToolbar().Enable(
             "zoomback", enable=(len(self.MapWindow.zoomhistory) > 1)
@@ -2291,7 +2296,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         """Adjust Map Windows after GCP Map Display has been resized"""
         # re-render image on idle
         self.resize = grass.clock()
-        super(MapFrame, self).OnSize(event)
+        super(MapPanel, self).OnSize(event)
 
     def OnIdle(self, event):
         """GCP Map Display resized, adjust Map Windows"""
@@ -2314,6 +2319,43 @@ class GCP(MapFrame, ColumnSorterMixin):
         pass
 
 
+class GCPDisplay(FrameMixin, GCPPanel):
+    """Map display for wrapping map panel with frame methods"""
+
+    def __init__(self, parent, giface, grwiz, id, lmgr, Map, title, **kwargs):
+        # init map panel
+        GCPPanel.__init__(
+            self,
+            parent=parent,
+            giface=giface,
+            grwiz=grwiz,
+            id=id,
+            lmgr=lmgr,
+            Map=Map,
+            title=title,
+            **kwargs,
+        )
+        # set system icon
+        parent.SetIcon(
+            wx.Icon(
+                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+            )
+        )
+
+        # bind to frame
+        parent.Bind(wx.EVT_CLOSE, self.OnQuit)
+
+        # extend shortcuts and create frame accelerator table
+        self.shortcuts_table.append((self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11))
+        self._initShortcuts()
+
+        # add Map Display panel to Map Display frame
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(self, proportion=1, flag=wx.EXPAND)
+        parent.SetSizer(sizer)
+        parent.Layout()
+
+
 class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
     def __init__(
         self,
@@ -2324,7 +2366,6 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
         size=wx.DefaultSize,
         style=wx.LC_REPORT | wx.SUNKEN_BORDER | wx.LC_HRULES | wx.LC_SINGLE_SEL,
     ):
-
         ListCtrl.__init__(self, parent, id, pos, size, style)
 
         self.gcp = gcp  # GCP class
@@ -2348,7 +2389,6 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
         self.selectedkey = -1
 
     def _Create(self):
-
         if 0:
             # normal, simple columns
             idx_col = 0
@@ -2577,7 +2617,6 @@ class VectGroup(wx.Dialog):
         group,
         style=wx.DEFAULT_DIALOG_STYLE,
     ):
-
         wx.Dialog.__init__(
             self, parent, id, style=style, title=_("Create vector map group")
         )

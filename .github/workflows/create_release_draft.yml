@@ -1,0 +1,104 @@
+---
+name: Create or check a release draft
+
+on:
+  push:
+    branches:
+      - main
+      - releasebranch_*
+    tags:
+      - '**'
+  pull_request:
+    branches:
+      - main
+      - releasebranch_*
+    paths:
+      - .github/**
+      - utils/**
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checks-out repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Generate core modules with last commit JSON file and patch file
+        run: |
+          python utils/generate_last_commit_file.py .
+          git add core_modules_with_last_commit.json
+          git diff --cached > core_modules_with_last_commit.patch
+
+      - name: Generate ChangeLog file
+        run: |
+          sudo apt-get install -y gzip
+          python utils/gitlog2changelog.py
+          gzip ChangeLog
+
+      - name: Create new release draft (for tags only)
+        id: create_release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: GRASS GIS ${{ github.ref }}
+          body: |
+            Overview of changes
+            - First change
+            - Second change
+          draft: true
+          prerelease: ${{ contains(github.ref, 'RC') }}
+
+      - name: Upload core_modules_with_last_commit.json file (for tags only)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: core_modules_with_last_commit.json
+          asset_name: core_modules_with_last_commit.json
+          asset_content_type: application/json
+
+      - name: Upload core_modules_with_last_commit.patch file (for tags only)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: core_modules_with_last_commit.patch
+          asset_name: core_modules_with_last_commit.patch
+          asset_content_type: text/plain
+
+      - name: Upload ChangeLog file (for tags only)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ChangeLog.gz
+          asset_name: ChangeLog.gz
+          asset_content_type: application/gzip
+
+      - name: Make the created files available
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: artifacts
+          path: |
+            core_modules_with_last_commit.*
+            ChangeLog.gz
+          if-no-files-found: warn
+          retention-days: 10

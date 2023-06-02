@@ -450,6 +450,7 @@ class VectorTopo(Vector):
 
             >>> test_vect.close()
         """
+        is2D = not self.is_3D()
         if vtype in _GEOOBJ.keys():
             if _GEOOBJ[vtype] is not None:
                 ids = (indx for indx in range(1, self.number_of(vtype) + 1))
@@ -461,6 +462,7 @@ class VectorTopo(Vector):
                         c_mapinfo=self.c_mapinfo,
                         table=self.table,
                         writeable=self.writeable,
+                        is2D=is2D,
                     )
                     for indx in ids
                 )
@@ -841,7 +843,6 @@ class VectorTopo(Vector):
         )
 
         if bboxlist is not None and len(bboxlist) > 0:
-
             wkb_list = []
             line_p = libvect.line_pnts()
             line_c = libvect.line_cats()
@@ -941,7 +942,6 @@ class VectorTopo(Vector):
         bboxlist = self.find_by_bbox.areas(bbox, bboxlist_only=True)
 
         if bboxlist is not None and len(bboxlist) > 0:
-
             wkb_list = []
             line_c = libvect.line_cats()
             size = ctypes.c_size_t()
@@ -959,7 +959,6 @@ class VectorTopo(Vector):
                     self.c_mapinfo, a_id, ctypes.byref(line_c)
                 )
                 if c_ok == 0:  # Centroid found
-
                     ok = libvect.Vect_cat_get(
                         ctypes.byref(line_c), field, ctypes.byref(cat)
                     )

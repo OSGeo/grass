@@ -1,5 +1,5 @@
 """
-(C) 2013 by the GRASS Development Team
+(C) 2013-2023 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -12,9 +12,12 @@ import os
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.gmodules import SimpleModule
 
 
 class TestTRastAlgebra(TestCase):
+    """Class for testing t.rast.algebra"""
+
     @classmethod
     def setUpClass(cls):
         """Initiate the temporal GIS and set the region"""
@@ -110,7 +113,11 @@ class TestTRastAlgebra(TestCase):
         )
 
     def tearDown(self):
-        self.runModule("t.remove", flags="df", inputs="R", quiet=True)
+        try:
+            self.runModule("t.remove", flags="df", inputs="R", quiet=True)
+        except Exception:
+            # STRDS "R" has not been created
+            pass
 
     @classmethod
     def tearDownClass(cls):
@@ -135,18 +142,18 @@ class TestTRastAlgebra(TestCase):
             basename="r",
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 0)  # 1 - 1
-        self.assertEqual(D.metadata.get_max_max(), 5)  # 4 + 1
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 0)  # 1 - 1
+        self.assertEqual(result_strds.metadata.get_max_max(), 5)  # 4 + 1
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "1 day")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "1 day")
 
-    def test_simple_arith_hash_1(self):
+    def test_simple_arithmetic_hash_1(self):
         """Simple arithmetic test including the hash operator"""
 
         self.assertModule(
@@ -159,16 +166,16 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = A + (A {#, equal,l} A)", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 2)
-        self.assertEqual(D.metadata.get_max_max(), 5)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 2)
+        self.assertEqual(result_strds.metadata.get_max_max(), 5)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
-    def test_simple_arith_td_1(self):
+    def test_simple_arithmetic_td_1(self):
         """Simple arithmetic test"""
 
         self.assertModule(
@@ -182,16 +189,16 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = A + td(A)", basename="r", suffix="time"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 2)
-        self.assertEqual(D.metadata.get_max_max(), 5)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 2)
+        self.assertEqual(result_strds.metadata.get_max_max(), 5)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
-    def test_simple_arith_td_2(self):
+    def test_simple_arithmetic_td_2(self):
         """Simple arithmetic test"""
 
         self.assertModule(
@@ -205,16 +212,16 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = A / td(A)", basename="r", suffix="gran"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 1)
-        self.assertEqual(D.metadata.get_max_max(), 4)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 1)
+        self.assertEqual(result_strds.metadata.get_max_max(), 4)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
-    def test_simple_arith_td_3(self):
+    def test_simple_arithmetic_td_3(self):
         """Simple arithmetic test"""
 
         self.assertModule(
@@ -227,16 +234,16 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = A {+,equal} td(A)", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 2)
-        self.assertEqual(D.metadata.get_max_max(), 5)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 2)
+        self.assertEqual(result_strds.metadata.get_max_max(), 5)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
-    def test_simple_arith_td_4(self):
+    def test_simple_arithmetic_td_4(self):
         """Simple arithmetic test"""
 
         self.assertModule(
@@ -249,16 +256,69 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = A {/, equal} td(A)", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 1)
-        self.assertEqual(D.metadata.get_max_max(), 4)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 1)
+        self.assertEqual(result_strds.metadata.get_max_max(), 4)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
-    def test_simple_arith_if_1(self):
+    def test_simple_arithmetic_time_function_expressions(self):
+        """Simple arithmetic to test the generated expression of a time function"""
+
+        print_module_run = SimpleModule(
+            "t.rast.algebra",
+            expression="R = if(A >= 3, start_doy(A, 0), 0)",
+            basename="r",
+            flags="d",
+            suffix="gran",
+        )
+        print_module_run.run()
+
+        # Check expressions
+        ref_str = "...".join(
+            [
+                "r_2001_01_01=if(a1@...>=3,1,0)",
+                "r_2001_01_02=if(a2@...>=3,2,0)",
+                "r_2001_01_03=if(a3@...>=3,3,0)",
+                "r_2001_01_04=if(a4@...>=3,4,0)",
+            ]
+        )
+        ref_str = f"...{ref_str}..."
+        print(str(print_module_run.outputs.stdout.replace("\n", "").replace(" ", "")))
+        self.assertLooksLike(
+            str(print_module_run.outputs.stdout.replace("\n", "").replace(" ", "")),
+            ref_str,
+        )
+
+    def test_simple_arithmetic_time_function_results(self):
+        """Simple arithmetic to test the results of a time function"""
+
+        self.assertModule(
+            "t.rast.algebra",
+            expression="R = if(A >= 3, start_doy(A, 0), 0)",
+            basename="r",
+            suffix="gran",
+        )
+
+        result_strds = tgis.open_old_stds("R", type="strds")
+
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 0)
+        self.assertEqual(result_strds.metadata.get_min_max(), 4)
+        self.assertEqual(result_strds.metadata.get_max_min(), 0)
+        self.assertEqual(result_strds.metadata.get_max_max(), 4)
+        start, end = result_strds.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 1))
+        self.assertEqual(end, datetime.datetime(2001, 1, 5))
+
+        # Check results around if-threshold
+        self.assertRasterMinMax("r_2001_01_02", 0, 0)
+        self.assertRasterMinMax("r_2001_01_03", 3, 3)
+
+    def test_simple_arithmetic_if_1(self):
         """Simple arithmetic test with if condition"""
 
         self.assertModule(
@@ -267,16 +327,16 @@ class TestTRastAlgebra(TestCase):
             basename="r",
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 3)
-        self.assertEqual(D.metadata.get_min_min(), 4)
-        self.assertEqual(D.metadata.get_max_max(), 8)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 3)
+        self.assertEqual(result_strds.metadata.get_min_min(), 4)
+        self.assertEqual(result_strds.metadata.get_max_max(), 8)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
-    def test_simple_arith_if_2(self):
+    def test_simple_arithmetic_if_2(self):
         """Simple arithmetic test with if condition"""
 
         self.assertModule(
@@ -285,16 +345,16 @@ class TestTRastAlgebra(TestCase):
             basename="r",
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 0)
-        self.assertEqual(D.metadata.get_max_max(), 0)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 0)
+        self.assertEqual(result_strds.metadata.get_max_max(), 0)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
-    def test_complex_arith_if_1(self):
+    def test_complex_arithmetic_if_1(self):
         """Complex arithmetic test with if condition"""
 
         self.assertModule(
@@ -304,32 +364,32 @@ class TestTRastAlgebra(TestCase):
             basename="r",
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 9)  # 2 + 7 a2 + c1
-        self.assertEqual(D.metadata.get_max_max(), 10)  # 3 + 7 a3 + c1
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 2)
+        self.assertEqual(result_strds.metadata.get_min_min(), 9)  # 2 + 7 a2 + c1
+        self.assertEqual(result_strds.metadata.get_max_max(), 10)  # 3 + 7 a3 + c1
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
 
-    def test_simple_arith_1(self):
+    def test_simple_arithmetic_1(self):
         """Simple arithmetic test"""
 
         self.assertModule(
             "t.rast.algebra", expression="R = A {*, equal} A {+, equal} A", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 2)  # 1*1 + 1
-        self.assertEqual(D.metadata.get_max_max(), 20)  # 4*4 + 4
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 2)  # 1*1 + 1
+        self.assertEqual(result_strds.metadata.get_max_max(), 20)  # 4*4 + 4
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
-    def test_simple_arith_2(self):
+    def test_simple_arithmetic_2(self):
         """Simple arithmetic test that creates an empty strds"""
 
         self.assertModule(
@@ -337,23 +397,23 @@ class TestTRastAlgebra(TestCase):
             expression="R = A {*, during} A {+, during} A",
             basename="r",
         )
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 0)
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 0)
 
-    def test_simple_arith_3(self):
+    def test_simple_arithmetic_3(self):
         """Simple arithmetic test"""
 
         self.assertModule(
             "t.rast.algebra", expression="R = A / A + A*A/A", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 2)  # 1/1 + 1*1/1
-        self.assertEqual(D.metadata.get_max_max(), 5)  # 4/4 + 4*4/4
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 2)  # 1/1 + 1*1/1
+        self.assertEqual(result_strds.metadata.get_max_max(), 5)  # 4/4 + 4*4/4
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
@@ -363,9 +423,9 @@ class TestTRastAlgebra(TestCase):
         self.assertModule(
             "t.rast.algebra", expression="R = A {+,equal,i} B", basename="r"
         )
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 0)
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 0)
 
     def test_temporal_intersection_2(self):
         """Simple temporal intersection test"""
@@ -374,12 +434,12 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = A {+,during,i} B", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 6)  # 1 + 5
-        self.assertEqual(D.metadata.get_max_max(), 10)  # 4 + 6
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 6)  # 1 + 5
+        self.assertEqual(result_strds.metadata.get_max_max(), 10)  # 4 + 6
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
@@ -390,12 +450,12 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = A {+,starts,i} B", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 6)  # 1 + 5
-        self.assertEqual(D.metadata.get_max_max(), 9)  # 3 + 6
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 2)
+        self.assertEqual(result_strds.metadata.get_min_min(), 6)  # 1 + 5
+        self.assertEqual(result_strds.metadata.get_max_max(), 9)  # 3 + 6
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
 
@@ -406,12 +466,12 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = A {+,finishes,intersect} B", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 7)  # 2 + 5
-        self.assertEqual(D.metadata.get_max_max(), 10)  # 4 + 6
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 2)
+        self.assertEqual(result_strds.metadata.get_min_min(), 7)  # 2 + 5
+        self.assertEqual(result_strds.metadata.get_max_max(), 10)  # 4 + 6
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
@@ -422,12 +482,12 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = A {+,starts|finishes,i} B", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 6)  # 1 + 5
-        self.assertEqual(D.metadata.get_max_max(), 10)  # 4 + 6
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 6)  # 1 + 5
+        self.assertEqual(result_strds.metadata.get_max_max(), 10)  # 4 + 6
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
@@ -438,12 +498,12 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = B {+,overlaps,u} C", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 1)
-        self.assertEqual(D.metadata.get_min_min(), 12)  # 5 + 7
-        self.assertEqual(D.metadata.get_max_max(), 12)  # 5 + 7
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 1)
+        self.assertEqual(result_strds.metadata.get_min_min(), 12)  # 5 + 7
+        self.assertEqual(result_strds.metadata.get_max_max(), 12)  # 5 + 7
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
 
@@ -454,12 +514,12 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = B {+,overlapped,u} C", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 1)
-        self.assertEqual(D.metadata.get_min_min(), 13)  # 6 + 7
-        self.assertEqual(D.metadata.get_max_max(), 13)  # 6 + 7
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 1)
+        self.assertEqual(result_strds.metadata.get_min_min(), 13)  # 6 + 7
+        self.assertEqual(result_strds.metadata.get_max_max(), 13)  # 6 + 7
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
@@ -472,12 +532,12 @@ class TestTRastAlgebra(TestCase):
             basename="r",
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 8)  # 1 + 7  a1 + c1
-        self.assertEqual(D.metadata.get_max_max(), 11)  # 4 + 7  a4 + c1
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 8)  # 1 + 7  a1 + c1
+        self.assertEqual(result_strds.metadata.get_max_max(), 11)  # 4 + 7  a4 + c1
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
 
@@ -486,12 +546,12 @@ class TestTRastAlgebra(TestCase):
 
         self.assertModule("t.rast.algebra", expression="R = A[-1] + A[1]", basename="r")
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 4)  # 1 + 3
-        self.assertEqual(D.metadata.get_max_max(), 6)  # 2 + 4
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 2)
+        self.assertEqual(result_strds.metadata.get_min_min(), 4)  # 1 + 3
+        self.assertEqual(result_strds.metadata.get_max_max(), 6)  # 2 + 4
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
 
@@ -502,12 +562,12 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = A[0,0,-1] + A[0,0,1]", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 4)  # 1 + 3
-        self.assertEqual(D.metadata.get_max_max(), 6)  # 2 + 4
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 2)
+        self.assertEqual(result_strds.metadata.get_min_min(), 4)  # 1 + 3
+        self.assertEqual(result_strds.metadata.get_max_max(), 6)  # 2 + 4
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
 
@@ -518,17 +578,16 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = tmap(singletmap)", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        maplist = D.get_registered_maps_as_objects()
-        self.assertEqual(D.metadata.get_number_of_maps(), 1)
-        self.assertEqual(D.metadata.get_min_min(), 99)
-        self.assertEqual(D.metadata.get_max_max(), 99)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 1)
+        self.assertEqual(result_strds.metadata.get_min_min(), 99)
+        self.assertEqual(result_strds.metadata.get_max_max(), 99)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "1 day")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "1 day")
 
     def test_tmap_function2(self):
         """Testing the tmap function."""
@@ -537,17 +596,16 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = tmap(singletmap) + 1", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        maplist = D.get_registered_maps_as_objects()
-        self.assertEqual(D.metadata.get_number_of_maps(), 1)
-        self.assertEqual(D.metadata.get_min_min(), 100)
-        self.assertEqual(D.metadata.get_max_max(), 100)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 1)
+        self.assertEqual(result_strds.metadata.get_min_min(), 100)
+        self.assertEqual(result_strds.metadata.get_max_max(), 100)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "1 day")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "1 day")
 
     def test_map_function1(self):
         """Testing the map function."""
@@ -556,17 +614,16 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = map(singlemap) + A", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        maplist = D.get_registered_maps_as_objects()
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 101)
-        self.assertEqual(D.metadata.get_max_max(), 104)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 101)
+        self.assertEqual(result_strds.metadata.get_max_max(), 104)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "1 day")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "1 day")
 
     def test_map_function2(self):
         """Testing the map function."""
@@ -575,65 +632,64 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R =  A * map(singlemap)", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        maplist = D.get_registered_maps_as_objects()
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 100)
-        self.assertEqual(D.metadata.get_max_max(), 400)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 100)
+        self.assertEqual(result_strds.metadata.get_max_max(), 400)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "1 day")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "1 day")
 
-    def test_temporal_select(self):
-        """Testing the temporal select operator."""
+    def test_temporal_select_one_strds(self):
+        """Testing the temporal select operator with one STRDS."""
 
         self.assertModule("t.rast.algebra", expression="R = A : A", basename="r")
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 1)
-        self.assertEqual(D.metadata.get_max_max(), 4)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 1)
+        self.assertEqual(result_strds.metadata.get_max_max(), 4)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "1 day")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "1 day")
 
-    def test_temporal_select(self):
-        """Testing the temporal select operator."""
+    def test_temporal_select_two_strds(self):
+        """Testing the temporal select operator with two STRDS."""
 
         self.assertModule("t.rast.algebra", expression="R = A : D", basename="r")
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 3)
-        self.assertEqual(D.metadata.get_max_max(), 4)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 2)
+        self.assertEqual(result_strds.metadata.get_min_min(), 3)
+        self.assertEqual(result_strds.metadata.get_max_max(), 4)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "1 day")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "1 day")
 
     def test_temporal_select_operators1(self):
         """Testing the temporal select operator. Including temporal relations."""
 
         self.assertModule("t.rast.algebra", expression="R = A : D", basename="r")
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 3)
-        self.assertEqual(D.metadata.get_max_max(), 4)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 2)
+        self.assertEqual(result_strds.metadata.get_min_min(), 3)
+        self.assertEqual(result_strds.metadata.get_max_max(), 4)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "1 day")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "1 day")
 
     def test_temporal_select_operators2(self):
         """Testing the temporal select operator. Including temporal relations."""
@@ -642,16 +698,16 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = A {!:,during} C", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 1)
-        self.assertEqual(D.metadata.get_max_max(), 4)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 2)
+        self.assertEqual(result_strds.metadata.get_min_min(), 1)
+        self.assertEqual(result_strds.metadata.get_max_max(), 4)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "1 day")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "1 day")
 
     def test_temporal_select_operators3(self):
         """Testing the temporal select operator. Including temporal relations and
@@ -661,16 +717,16 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = A {:,during,d} B", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 1)
-        self.assertEqual(D.metadata.get_max_max(), 4)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 1)
+        self.assertEqual(result_strds.metadata.get_max_max(), 4)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(), False)
-        self.assertEqual(D.get_granularity(), "2 days")
+        self.assertEqual(result_strds.check_temporal_topology(), False)
+        self.assertEqual(result_strds.get_granularity(), "2 days")
 
     def test_temporal_select_operators4(self):
         """Testing the temporal select operator. Including temporal relations and
@@ -680,21 +736,21 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = A {:,equal|during,r} C", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        maplist = D.get_registered_maps_as_objects()
-        for map_i in maplist:
+        map_list = result_strds.get_registered_maps_as_objects()
+        for map_i in map_list:
             start_map, end_map = map_i.get_absolute_time()
             self.assertEqual(start_map, datetime.datetime(2001, 1, 2))
             self.assertEqual(end_map, datetime.datetime(2001, 1, 4))
-        self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 2)
-        self.assertEqual(D.metadata.get_max_max(), 3)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 2)
+        self.assertEqual(result_strds.metadata.get_min_min(), 2)
+        self.assertEqual(result_strds.metadata.get_max_max(), 3)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual(D.check_temporal_topology(), False)
-        self.assertEqual(D.get_granularity(), "2 days")
+        self.assertEqual(result_strds.check_temporal_topology(), False)
+        self.assertEqual(result_strds.get_granularity(), "2 days")
 
     def test_temporal_hash_operator1(self):
         """Testing the temporal hash operator in the raster algebra."""
@@ -703,32 +759,32 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = if(A # D == 1, A)", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 3)
-        self.assertEqual(D.metadata.get_max_max(), 4)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 2)
+        self.assertEqual(result_strds.metadata.get_min_min(), 3)
+        self.assertEqual(result_strds.metadata.get_max_max(), 4)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "1 day")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "1 day")
 
     def test_temporal_hash_operator2(self):
         """Testing the temporal hash operator in the raster algebra."""
 
         self.assertModule("t.rast.algebra", expression="R = A # D", basename="r")
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 1)
-        self.assertEqual(D.metadata.get_max_max(), 1)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 2)
+        self.assertEqual(result_strds.metadata.get_min_min(), 1)
+        self.assertEqual(result_strds.metadata.get_max_max(), 1)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "1 day")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "1 day")
 
     def test_temporal_hash_operator3(self):
         """Testing the temporal hash operator in the raster algebra."""
@@ -737,16 +793,16 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = C {#,contains} A", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 1)
-        self.assertEqual(D.metadata.get_min_min(), 2)
-        self.assertEqual(D.metadata.get_max_max(), 2)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 1)
+        self.assertEqual(result_strds.metadata.get_min_min(), 2)
+        self.assertEqual(result_strds.metadata.get_max_max(), 2)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "2 days")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "2 days")
 
     def test_temporal_hash_operator4(self):
         """Testing the temporal hash operator in the raster algebra."""
@@ -757,16 +813,16 @@ class TestTRastAlgebra(TestCase):
             basename="r",
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 1)
-        self.assertEqual(D.metadata.get_min_min(), 2)
-        self.assertEqual(D.metadata.get_max_max(), 2)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 1)
+        self.assertEqual(result_strds.metadata.get_min_min(), 2)
+        self.assertEqual(result_strds.metadata.get_max_max(), 2)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "2 days")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "2 days")
 
     def test_raster_arithmetic_relation_1(self):
         """Arithmetic test with temporal intersection"""
@@ -775,16 +831,16 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = B {+,contains,l} A ", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 8)
-        self.assertEqual(D.metadata.get_max_max(), 13)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 2)
+        self.assertEqual(result_strds.metadata.get_min_min(), 8)
+        self.assertEqual(result_strds.metadata.get_max_max(), 13)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "2 days")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "2 days")
 
     def test_raster_arithmetic_relation_2(self):
         """Arithmetic test with temporal intersection"""
@@ -793,16 +849,16 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = B {*,contains,l} A ", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 10)
-        self.assertEqual(D.metadata.get_max_max(), 72)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 2)
+        self.assertEqual(result_strds.metadata.get_min_min(), 10)
+        self.assertEqual(result_strds.metadata.get_max_max(), 72)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "2 days")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "2 days")
 
     def test_raster_arithmetic_relation_3(self):
         """Arithmetic test with temporal intersection"""
@@ -811,16 +867,16 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = B {+,contains,l} A ", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 2)
-        self.assertEqual(D.metadata.get_min_min(), 8)
-        self.assertEqual(D.metadata.get_max_max(), 13)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 2)
+        self.assertEqual(result_strds.metadata.get_min_min(), 8)
+        self.assertEqual(result_strds.metadata.get_max_max(), 13)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "2 days")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "2 days")
 
     def test_raster_arithmetic_relation_4(self):
         """Arithmetic test with temporal intersection"""
@@ -829,16 +885,16 @@ class TestTRastAlgebra(TestCase):
             "t.rast.algebra", expression="R = B {+,contains,r} A ", basename="r"
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 8)
-        self.assertEqual(D.metadata.get_max_max(), 13)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 4)
+        self.assertEqual(result_strds.metadata.get_min_min(), 8)
+        self.assertEqual(result_strds.metadata.get_max_max(), 13)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "1 day")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "1 day")
 
     def test_raster_arithmetic_relation_5(self):
         """Complex arithmetic test with temporal intersection"""
@@ -851,16 +907,16 @@ class TestTRastAlgebra(TestCase):
             basename="r",
         )
 
-        D = tgis.open_old_stds("R", type="strds")
+        result_strds = tgis.open_old_stds("R", type="strds")
 
-        self.assertEqual(D.metadata.get_number_of_maps(), 1)
-        self.assertEqual(D.metadata.get_min_min(), 208)
-        self.assertEqual(D.metadata.get_max_max(), 208)
-        start, end = D.get_absolute_time()
+        self.assertEqual(result_strds.metadata.get_number_of_maps(), 1)
+        self.assertEqual(result_strds.metadata.get_min_min(), 208)
+        self.assertEqual(result_strds.metadata.get_max_max(), 208)
+        start, end = result_strds.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 3))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
-        self.assertEqual(D.check_temporal_topology(), True)
-        self.assertEqual(D.get_granularity(), "1 day")
+        self.assertEqual(result_strds.check_temporal_topology(), True)
+        self.assertEqual(result_strds.get_granularity(), "1 day")
 
 
 if __name__ == "__main__":

@@ -84,6 +84,8 @@ def register_maps_in_space_time_dataset(
 
     msgr = get_tgis_message_interface()
 
+    msgr.debug(1, "register_maps_in_space_time_dataset()")
+
     # Make sure the arguments are of type string
     if start != "" and start is not None:
         start = str(start)
@@ -118,6 +120,13 @@ def register_maps_in_space_time_dataset(
     mapset = get_current_mapset()
     dbif, connection_state_changed = init_dbif(None)
 
+    # create new stds only in the current mapset
+    # remove all connections to any other mapsets
+    # ugly hack !
+    currcon = {}
+    currcon[mapset] = dbif.connections[mapset]
+    dbif.connections = currcon
+
     # The name of the space time dataset is optional
     if name:
         sp = open_old_stds(name, type, dbif)
@@ -145,12 +154,10 @@ def register_maps_in_space_time_dataset(
             maplist = maps.split(",")
 
         # Build the map list again with the ids
-        for count in range(len(maplist)):
-            row = {}
-            mapid = AbstractMapDataset.build_id(maplist[count], mapset, None)
-
-            row["id"] = mapid
-            maplist[count] = row
+        for idx, maplist_item in enumerate(maplist):
+            maplist[idx] = {
+                "id": AbstractMapDataset.build_id_from_search_path(maplist_item, type)
+            }
 
     # Read the map list from file
     if file:
@@ -194,19 +201,18 @@ def register_maps_in_space_time_dataset(
             mapname = line_list[0].strip()
             row = {}
 
-            if start_time_in_file and end_time_in_file:
+            if start_time_in_file:
                 row["start"] = line_list[1].strip()
-                row["end"] = line_list[2].strip()
 
-            if start_time_in_file and not end_time_in_file:
-                row["start"] = line_list[1].strip()
+            if end_time_in_file:
+                row["end"] = line_list[2].strip()
 
             if semantic_label_in_file:
                 idx = 3 if end_time_in_file else 2
                 # case-sensitive, the user decides on the band name
                 row["semantic_label"] = line_list[idx].strip()
 
-            row["id"] = AbstractMapDataset.build_id(mapname, mapset)
+            row["id"] = AbstractMapDataset.build_id_from_search_path(mapname, type)
 
             maplist.append(row)
 
@@ -233,7 +239,7 @@ def register_maps_in_space_time_dataset(
     # Store the ids of datasets that must be updated
     datatsets_to_modify = {}
 
-    msgr.message(_("Gathering map information..."))
+    msgr.debug(2, "Gathering map information...")
 
     for count in range(len(maplist)):
         if count % 50 == 0:
@@ -262,8 +268,8 @@ def register_maps_in_space_time_dataset(
 
         is_in_db = False
 
-        # Put the map into the database
-        if not map.is_in_db(dbif):
+        # Put the map into the database of the current mapset
+        if not map.is_in_db(dbif, mapset):
             # Break in case no valid time is provided
             if (start == "" or start is None) and not map.has_grass_timestamp():
                 dbif.close()
@@ -434,14 +440,12 @@ def register_maps_in_space_time_dataset(
     msgr.percent(num_maps, num_maps, 1)
 
     if statement is not None and statement != "":
-        msgr.message(_("Registering maps in the temporal database..."))
         dbif.execute_transaction(statement)
 
     # Finally Register the maps in the space time dataset
     if name and map_object_list:
         count = 0
         num_maps = len(map_object_list)
-        msgr.message(_("Registering maps in the space time dataset..."))
         for map in map_object_list:
             if count % 50 == 0:
                 msgr.percent(count, num_maps, 1)
@@ -450,7 +454,6 @@ def register_maps_in_space_time_dataset(
 
     # Update the space time tables
     if name and map_object_list:
-        msgr.message(_("Updating space time dataset..."))
         sp.update_from_registered_maps(dbif)
         if update_cmd_list is True:
             sp.update_command_string(dbif=dbif)

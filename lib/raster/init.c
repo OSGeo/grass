@@ -1,7 +1,6 @@
-
 /**
  * \file lib/raster/init.c
- * 
+ *
  * \brief Raster Library - Handles program initialization.
  *
  * (C) 2001-2008 by the GRASS Development Team
@@ -46,7 +45,6 @@ void Rast_init(void)
     Rast__init();
 }
 
-
 /**
  * \brief Checks to see if GIS engine is initialized.
  *
@@ -56,28 +54,28 @@ void Rast_init(void)
 void Rast__check_init(void)
 {
     if (initialized)
-	return;
+        return;
 
-    G_fatal_error(_("Raster library not initialized. Programmer forgot to call Rast_init()."));
+    G_fatal_error(_("Raster library not initialized. Programmer forgot to call "
+                    "Rast_init()."));
 }
-
 
 void Rast__init(void)
 {
     if (G_is_initialized(&initialized))
-	return;
+        return;
     init();
     G_initialize_done(&initialized);
 }
 
-void Rast__error_handler(void *p)
+void Rast__error_handler(void *p UNUSED)
 {
     Rast__unopen_all();
 }
 
 static int init(void)
 {
-    char *zlib, *nulls, *cname;
+    char *nulls, *cname;
 
     Rast__init_window();
 
@@ -105,28 +103,31 @@ static int init(void)
      * 4: BZIP2
      * 5: ZSTD */
     if (cname && *cname) {
-	/* ask gislib */
-	R__.compression_type = G_compressor_number(cname);
-	if (R__.compression_type < 1) {
-	    if (R__.compression_type < 0) {
-		G_warning(_("Unknown compression method <%s>, using default %s"),
-		    cname, G_compressor_name(G_default_compressor()));
-	    }
-	    if (R__.compression_type == 0) {
-		G_warning(_("No compression is not supported for GRASS raster maps, using default %s"),
-		          G_compressor_name(G_default_compressor()));
-	    }
-	    /* use default */
-	    R__.compression_type = G_default_compressor();
-	}
-	if (G_check_compressor(R__.compression_type) != 1) {
-	    G_warning(_("This GRASS version does not support %s compression, using default %s"),
-		cname, G_compressor_name(G_default_compressor()));
-	    /* use default */
-	    R__.compression_type = G_default_compressor();
-	}
-	G_debug(1, "Using %s compression",
-	           G_compressor_name(R__.compression_type));
+        /* ask gislib */
+        R__.compression_type = G_compressor_number(cname);
+        if (R__.compression_type < 1) {
+            if (R__.compression_type < 0) {
+                G_warning(
+                    _("Unknown compression method <%s>, using default %s"),
+                    cname, G_compressor_name(G_default_compressor()));
+            }
+            if (R__.compression_type == 0) {
+                G_warning(_("No compression is not supported for GRASS raster "
+                            "maps, using default %s"),
+                          G_compressor_name(G_default_compressor()));
+            }
+            /* use default */
+            R__.compression_type = G_default_compressor();
+        }
+        if (G_check_compressor(R__.compression_type) != 1) {
+            G_warning(_("This GRASS version does not support %s compression, "
+                        "using default %s"),
+                      cname, G_compressor_name(G_default_compressor()));
+            /* use default */
+            R__.compression_type = G_default_compressor();
+        }
+        G_debug(1, "Using %s compression",
+                G_compressor_name(R__.compression_type));
     }
 
     nulls = getenv("GRASS_COMPRESS_NULLS");

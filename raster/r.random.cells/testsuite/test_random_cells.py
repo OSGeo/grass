@@ -18,7 +18,6 @@ from grass.gunittest.main import test
 
 
 class TestCounts(TestCase):
-
     # TODO: replace by unified handing of maps
     to_remove = []
     all_rast = "r_random_cells_all"
@@ -61,7 +60,9 @@ class TestCounts(TestCase):
         )
 
     def test_fill_some(self):
-        self.assertModule("r.random.cells", output=self.some_rast, distance=2, seed=100)
+        self.assertModule(
+            "r.random.cells", output=self.some_rast, distance=2.00001, seed=100
+        )
         self.to_remove.append(self.some_rast)
         self.assertRasterFitsUnivar(
             self.some_rast, reference=dict(cells=self.n_cells, min=1)

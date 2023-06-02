@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include <grass/config.h>
 #include <grass/gis.h>
@@ -35,8 +36,8 @@
    0 0 0 74        offset of end of data
    \endverbatim
 
-   See Rast__write_row_ptrs() below for the code which writes this data. 
-   However, note that the row offsets are initially zero; 
+   See Rast__write_row_ptrs() below for the code which writes this data.
+   However, note that the row offsets are initially zero;
    they get overwritten later (if you are writing compressed data,
    you don't know how much space it will require until you've compressed
    it).
@@ -52,7 +53,7 @@
  *   Rast__check_format(int fd)
  *
  *   Check to see if map with file descriptor "fd" is in compressed
- *   format.   If it is, the offset table at the beginning of the 
+ *   format.   If it is, the offset table at the beginning of the
  *   file (which gives seek addresses into the file where code for
  *   each row is found) is read into the File Control Buffer (FCB).
  *   The compressed flag in the FCB is appropriately set.
@@ -76,13 +77,13 @@ int Rast__check_format(int fd)
      */
 
     if (fcb->cellhd.compressed < 0) {
-	if (read(fcb->data_fd, compress, 3) != 3
-	    || compress[0] != 251 || compress[1] != 255 || compress[2] != 251)
-	    fcb->cellhd.compressed = 0;
+        if (read(fcb->data_fd, compress, 3) != 3 || compress[0] != 251 ||
+            compress[1] != 255 || compress[2] != 251)
+            fcb->cellhd.compressed = 0;
     }
 
     if (!fcb->cellhd.compressed)
-	return 1;
+        return 1;
 
     /* allocate space to hold the row address array */
     fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
@@ -95,8 +96,10 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
 {
     unsigned char nbytes;
     unsigned char *buf, *b;
-    int n;
-    int row;
+    unsigned int n;
+    unsigned int row;
+
+    assert(nrows >= 0);
 
     /*
      * pre3.0 row addresses were written directly from the array of off_t's
@@ -104,10 +107,10 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
      */
 
     if (old) {
-	n = (nrows + 1) * sizeof(off_t);
-	if (read(fd, row_ptr, n) != n)
-	    goto badread;
-	return 1;
+        n = ((unsigned int)nrows + 1) * sizeof(off_t);
+        if (read(fd, row_ptr, n) != n)
+            goto badread;
+        return 1;
     }
 
     /*
@@ -118,37 +121,36 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
      */
 
     if (read(fd, &nbytes, 1) != 1)
-	goto badread;
+        goto badread;
     if (nbytes == 0)
-	goto badread;
+        goto badread;
 
-    n = (nrows + 1) * nbytes;
+    n = ((unsigned int)nrows + 1) * nbytes;
     buf = G_malloc(n);
     if (read(fd, buf, n) != n)
-	goto badread;
+        goto badread;
 
-    for (row = 0, b = buf; row <= nrows; row++) {
-	off_t v = 0;
+    for (row = 0, b = buf; row <= (unsigned int)nrows; row++) {
+        off_t v = 0;
 
-	for (n = 0; n < (int)nbytes; n++) {
-	    unsigned char c = *b++;
+        for (n = 0; n < nbytes; n++) {
+            unsigned char c = *b++;
 
-	    if (nbytes > sizeof(off_t) && n < nbytes - sizeof(off_t) &&
-		c != 0)
-		goto badread;
+            if (nbytes > sizeof(off_t) && n < nbytes - sizeof(off_t) && c != 0)
+                goto badread;
 
-	    v <<= 8;
-	    v += c;
-	}
+            v <<= 8;
+            v += c;
+        }
 
-	row_ptr[row] = v;
+        row_ptr[row] = v;
     }
 
     G_free(buf);
 
     return 1;
 
-  badread:
+badread:
     return -1;
 }
 
@@ -159,9 +161,9 @@ int Rast__read_row_ptrs(int fd)
     int old = fcb->cellhd.compressed < 0;
 
     if (read_row_ptrs(nrows, old, fcb->row_ptr, fcb->data_fd) < 0) {
-	G_warning(_("Fail of initial read of compressed file [%s in %s]"),
-		  fcb->name, fcb->mapset);
-	return -1;
+        G_warning(_("Fail of initial read of compressed file [%s in %s]"),
+                  fcb->name, fcb->mapset);
+        return -1;
     }
 
     return 1;
@@ -173,9 +175,9 @@ int Rast__read_null_row_ptrs(int fd, int null_fd)
     int nrows = fcb->cellhd.rows;
 
     if (read_row_ptrs(nrows, 0, fcb->null_row_ptr, null_fd) < 0) {
-	G_warning(_("Fail of initial read of compressed null file [%s in %s]"),
-		  fcb->name, fcb->mapset);
-	return -1;
+        G_warning(_("Fail of initial read of compressed null file [%s in %s]"),
+                  fcb->name, fcb->mapset);
+        return -1;
     }
 
     return 1;
@@ -194,15 +196,15 @@ static int write_row_ptrs(int nrows, off_t *row_ptr, int fd)
     *b++ = nbytes;
 
     for (row = 0; row <= nrows; row++) {
-	off_t v = row_ptr[row];
-	int i;
+        off_t v = row_ptr[row];
+        int i;
 
-	for (i = nbytes - 1; i >= 0; i--) {
-	    b[i] = v & 0xff;
-	    v >>= 8;
-	}
+        for (i = nbytes - 1; i >= 0; i--) {
+            b[i] = v & 0xff;
+            v >>= 8;
+        }
 
-	b += nbytes;
+        b += nbytes;
     }
 
     result = (write(fd, buf, len) == len);

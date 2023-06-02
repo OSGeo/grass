@@ -10,7 +10,7 @@ ALTER TABLE raster_metadata
 
 -- strds_metadata_table.sql
 ALTER TABLE strds_metadata
- ADD COLUMN number_of_bands INTEGER;
+ ADD COLUMN number_of_semantic_labels INTEGER;
 
 -- tgis_metadata
 UPDATE tgis_metadata

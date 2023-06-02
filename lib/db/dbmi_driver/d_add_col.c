@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_add_col.c
- * 
+ *
  * \brief DBMI Library (driver) - add column to table
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -22,7 +22,7 @@
 
    \return DB_OK on success
    \return DB_FAILED on failure
-*/
+ */
 int db_d_add_column(void)
 {
     dbColumn column;
@@ -43,8 +43,8 @@ int db_d_add_column(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

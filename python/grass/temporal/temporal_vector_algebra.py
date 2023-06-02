@@ -362,7 +362,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             other map list and given temporal operator.
 
         :param maplist: List of map objects for which relations has been build
-                                    correctely.
+                                    correctly.
         :param topolist: List of strings of temporal relations.
         :param temporal: The temporal operator specifying the temporal
                                         extent operation (intersection, union, disjoint
@@ -573,7 +573,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             # Map is original from an input STVDS
                             map_i.load()
                         # Register map in result space time dataset.
-                        print(map_i.get_temporal_extent_as_tuple())
+                        if self.debug:
+                            print(map_i.get_temporal_extent_as_tuple())
                         success = resultstds.register_map(map_i, dbif=dbif)
                     resultstds.update_from_registered_maps(dbif)
 
@@ -628,7 +629,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
             t[0] = resultlist
         if self.debug:
-            str(t[1]) + t[2] + str(t[3])
+            print(str(t[1]) + t[2] + str(t[3]))
 
     def p_overlay_operation_relation(self, t):
         """
@@ -659,7 +660,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
             t[0] = resultlist
         if self.debug:
-            str(t[1]) + t[2] + str(t[3])
+            print(str(t[1]) + t[2] + str(t[3]))
 
     def p_buffer_operation(self, t):
         """

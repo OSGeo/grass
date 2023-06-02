@@ -850,7 +850,7 @@ class DbMgrBase:
         # delete page
         if layer in self.dbMgrData["mapDBInfo"].layers.keys():
             # delete page
-            # draging pages disallowed
+            # dragging pages disallowed
             # if self.browsePage.GetPageText(page).replace('Layer ', '').strip() == str(layer):
             # self.browsePage.DeletePage(page)
             # break
@@ -1832,7 +1832,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                 n, s, w, e = display.GetRegionSelected()
                 self.mapdisplay.Map.GetRegion(n=n, s=s, w=w, e=e, update=True)
         else:
-            # add map layer with higlighted vector features
+            # add map layer with highlighted vector features
             self.AddQueryMapLayer(selectedOnly)  # -> self.qlayer
 
             # set opacity based on queried layer
@@ -2020,7 +2020,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
     def OnDeleteSelected(self, event):
         """Delete vector objects selected in attribute browse window
-        (attribures and geometry)
+        (attributes and geometry)
         """
         tlist = self.FindWindowById(self.layerPage[self.selLayer]["data"])
         cats = tlist.GetSelectedItems()
@@ -2815,7 +2815,6 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         event.Skip()
 
     def UpdatePage(self, layer):
-
         if layer in self.layerPage.keys():
             table = self.dbMgrData["mapDBInfo"].layers[layer]["table"]
 
@@ -2944,7 +2943,6 @@ class TableListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __init__(
         self, parent, id, table, columns, pos=wx.DefaultPosition, size=wx.DefaultSize
     ):
-
         self.parent = parent
         self.table = table
         self.columns = columns
@@ -3005,7 +3003,6 @@ class LayerListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
     """Layer description list"""
 
     def __init__(self, parent, id, layers, pos=wx.DefaultPosition, size=wx.DefaultSize):
-
         self.parent = parent
         self.layers = layers
         ListCtrl.__init__(
@@ -3725,29 +3722,34 @@ class LayerBook(wx.Notebook):
             table=table,
             key=key,
             layer=layer,
+            getErrorMsg=True,
         )
 
-        # insert records into table if required
-        if self.addLayerWidgets["addCat"][0].IsChecked():
-            RunCommand(
-                "v.to.db",
-                parent=self,
-                quiet=True,
-                map=self.mapDBInfo.map,
-                layer=layer,
-                qlayer=layer,
-                option="cat",
-                columns=key,
-                overwrite=True,
-            )
-
-        if ret == 0:
+        if ret[0] == 0 and not ret[1]:
+            # insert records into table if required
+            if self.addLayerWidgets["addCat"][0].IsChecked():
+                RunCommand(
+                    "v.to.db",
+                    parent=self,
+                    quiet=True,
+                    map=self.mapDBInfo.map,
+                    layer=layer,
+                    qlayer=layer,
+                    option="cat",
+                    columns=key,
+                    overwrite=True,
+                )
             # update dialog (only for new layer)
             self.parentDialog.parentDbMgrBase.UpdateDialog(layer=layer)
             # update db info
             self.mapDBInfo = self.parentDialog.dbMgrData["mapDBInfo"]
             # increase layer number
             layerWin.SetValue(layer + 1)
+        elif ret[1]:
+            GWarning(
+                parent=self,
+                message=ret[1],
+            )
 
         if len(self.mapDBInfo.layers.keys()) == 1:
             # first layer add --- enable previously disabled widgets

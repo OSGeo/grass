@@ -802,7 +802,6 @@ class MapCalcFrame(wx.Frame):
 
 
 if __name__ == "__main__":
-
     app = wx.App(0)
     frame = MapCalcFrame(
         parent=None, cmd="r.mapcalc", giface=StandaloneGrassInterface()

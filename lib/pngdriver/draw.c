@@ -1,15 +1,15 @@
 /*!
-  \file lib/pngdriver/draw.c
+   \file lib/pngdriver/draw.c
 
-  \brief GRASS PNG display driver
+   \brief GRASS PNG display driver
 
-  (C) 2008 by Glynn Clements and the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Glynn Clements  
-*/
+   (C) 2008 by Glynn Clements and the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Glynn Clements
+ */
 
 #include <grass/gis.h>
 #include "driverlib.h"
@@ -47,4 +47,3 @@ void PNG_Fill(void)
 {
     png_polygon(&path);
 }
-

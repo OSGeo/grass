@@ -8,19 +8,18 @@
 void define_options(struct opt *opt)
 {
     char *desc;
-    
+
     opt->input = G_define_standard_option(G_OPT_V_INPUT);
     opt->input->required = NO;
     opt->input->label = _("Name of input vector line map (arcs)");
     opt->input->description = _("Required for operation 'nodes', 'connect', "
-				"'report' and 'nreport'");
+                                "'report' and 'nreport'");
     opt->input->guisection = _("Arcs");
 
     opt->points = G_define_standard_option(G_OPT_V_INPUT);
     opt->points->key = "points";
     opt->points->label = _("Name of input vector point map (nodes)");
-    opt->points->description =
-	_("Required for operation 'connect' and 'arcs'");
+    opt->points->description = _("Required for operation 'connect' and 'arcs'");
     opt->points->required = NO;
     opt->points->guisection = _("Nodes");
 
@@ -36,18 +35,18 @@ void define_options(struct opt *opt)
     opt->action->description = _("Operation to be performed");
     desc = NULL;
     G_asprintf(&desc,
-	       "nodes;%s;connect;%s;arcs;%s;report;%s;nreport;%s;turntable;%s;",
-	       _("new point is placed on each node (line end) "
-		 "if doesn't exist"),
-	       _("connect still unconnected points to vector network "
-		 "by inserting new line(s)"),
-	       _("new line is created from start point "
-		 "to end point"),
-	       _("print to standard output "
-		 "{line_category start_point_category end_point_category}"),
-	       _("print to standard output "
-		 "{point_category line_category[,line_category...]}"),
-         _("create turntable on vector network"));
+               "nodes;%s;connect;%s;arcs;%s;report;%s;nreport;%s;turntable;%s;",
+               _("new point is placed on each node (line end) "
+                 "if doesn't exist"),
+               _("connect still unconnected points to vector network "
+                 "by inserting new line(s)"),
+               _("new line is created from start point "
+                 "to end point"),
+               _("print to standard output "
+                 "{line_category start_point_category end_point_category}"),
+               _("print to standard output "
+                 "{point_category line_category[,line_category...]}"),
+               _("create turntable on vector network"));
     opt->action->descriptions = desc;
 
     opt->afield_opt = G_define_standard_option(G_OPT_V_FIELD);
@@ -76,14 +75,14 @@ void define_options(struct opt *opt)
     opt->thresh_opt->required = NO;
     opt->thresh_opt->multiple = NO;
     opt->thresh_opt->label = "Threshold";
-    opt->thresh_opt->description =
-	_("Required for operation 'connect'. Connect points in given threshold.");
+    opt->thresh_opt->description = _(
+        "Required for operation 'connect'. Connect points in given threshold.");
 
     opt->file = G_define_standard_option(G_OPT_F_INPUT);
     opt->file->key = "file";
     opt->file->label = _("Name of input file");
     opt->file->description =
-	_("Required for operation 'arcs' ('-' for standard input)");
+        _("Required for operation 'arcs' ('-' for standard input)");
     opt->file->required = NO;
 
     opt->cats_flag = G_define_flag();
@@ -96,15 +95,15 @@ void define_options(struct opt *opt)
     opt->snap_flag->key = 's';
     opt->snap_flag->label = _("Snap points to network");
     opt->snap_flag->description =
-	_("For operation 'connect'. By default, a new line from the point to the network is created.");
+        _("For operation 'connect'. By default, a new line from the point to "
+          "the network is created.");
     opt->snap_flag->guisection = _("Nodes");
 
     opt->tfield = G_define_standard_option(G_OPT_V_FIELD);
     opt->tfield->label = _("Turntable layer");
-    opt->tfield->description =
-    _
-    ("Layer where turntable will be attached. Format: layer number[/layer name]."
-     "Required for operation 'turntable'.");
+    opt->tfield->description = _("Layer where turntable will be attached. "
+                                 "Format: layer number[/layer name]."
+                                 "Required for operation 'turntable'.");
     opt->tfield->answer = "3";
     opt->tfield->key = "turn_layer";
     opt->tfield->required = NO;
@@ -112,70 +111,68 @@ void define_options(struct opt *opt)
 
     opt->tucfield = G_define_standard_option(G_OPT_V_FIELD);
     opt->tucfield->label = _("Layer with unique categories used in turntable");
-    opt->tucfield->description =
-    _
-    ("Layer with unique categories for every line in arc_layer and point on every node. "
-     " The categories are used in turntable. Format: layer number[/layer name]. "
-     "Required for operation 'turntable'.");
+    opt->tucfield->description = _("Layer with unique categories for every "
+                                   "line in arc_layer and point on every node. "
+                                   " The categories are used in turntable. "
+                                   "Format: layer number[/layer name]. "
+                                   "Required for operation 'turntable'.");
     opt->tucfield->answer = "4";
     opt->tucfield->key = "turn_cat_layer";
     opt->tucfield->required = NO;
     opt->tucfield->guisection = _("Turntable");
 }
 
-void parse_arguments(const struct opt *opt,
-		     int *afield, int *nfield, double *thresh, int *act)
+void parse_arguments(const struct opt *opt, int *afield, int *nfield,
+                     double *thresh, int *act)
 {
     *afield = atoi(opt->afield_opt->answer);
     *nfield = atoi(opt->nfield_opt->answer);
     *thresh = 0.0;
 
     if (strcmp(opt->action->answer, "nodes") == 0)
-	*act = TOOL_NODES;
+        *act = TOOL_NODES;
     else if (strcmp(opt->action->answer, "connect") == 0)
-	*act = TOOL_CONNECT;
+        *act = TOOL_CONNECT;
     else if (strcmp(opt->action->answer, "report") == 0)
-	*act = TOOL_REPORT;
+        *act = TOOL_REPORT;
     else if (strcmp(opt->action->answer, "nreport") == 0)
-	*act = TOOL_NREPORT;
+        *act = TOOL_NREPORT;
     else if (strcmp(opt->action->answer, "arcs") == 0)
-	*act = TOOL_ARCS;
+        *act = TOOL_ARCS;
     else if (strcmp(opt->action->answer, "turntable") == 0)
-    *act = TOOL_TURNTABLE;
+        *act = TOOL_TURNTABLE;
     else
-	G_fatal_error(_("Unknown operation"));
+        G_fatal_error(_("Unknown operation"));
 
-    if (*act == TOOL_NODES || *act == TOOL_CONNECT ||
-	*act == TOOL_REPORT || *act == TOOL_NREPORT ||
-    *act == TOOL_TURNTABLE) {
-	if (opt->input->answer == NULL)
-	    G_fatal_error(_("Required parameter <%s> not set"),
-			  opt->input->key);
+    if (*act == TOOL_NODES || *act == TOOL_CONNECT || *act == TOOL_REPORT ||
+        *act == TOOL_NREPORT || *act == TOOL_TURNTABLE) {
+        if (opt->input->answer == NULL)
+            G_fatal_error(_("Required parameter <%s> not set"),
+                          opt->input->key);
     }
 
-    if (*act == TOOL_NODES || *act == TOOL_CONNECT ||
-        *act == TOOL_TURNTABLE) {
-	if (opt->output->answer == NULL)
-	    G_fatal_error(_("Required parameter <%s> not set"),
-			  opt->output->key);
+    if (*act == TOOL_NODES || *act == TOOL_CONNECT || *act == TOOL_TURNTABLE) {
+        if (opt->output->answer == NULL)
+            G_fatal_error(_("Required parameter <%s> not set"),
+                          opt->output->key);
     }
 
     if (*act == TOOL_CONNECT) {
-	if (opt->points->answer == NULL)
-	    G_fatal_error(_("Required parameter <%s> not set"),
-			  opt->points->key);
+        if (opt->points->answer == NULL)
+            G_fatal_error(_("Required parameter <%s> not set"),
+                          opt->points->key);
 
-	if (opt->thresh_opt->answer == NULL)
-	    G_fatal_error(_("Required parameter <%s> not set"),
-			  opt->thresh_opt->key);
+        if (opt->thresh_opt->answer == NULL)
+            G_fatal_error(_("Required parameter <%s> not set"),
+                          opt->thresh_opt->key);
 
-	*thresh = atof(opt->thresh_opt->answer);
+        *thresh = atof(opt->thresh_opt->answer);
 
-	if (*thresh < 0.0)
-	    G_fatal_error(_("Threshold value must be >= 0"));
+        if (*thresh < 0.0)
+            G_fatal_error(_("Threshold value must be >= 0"));
     }
 
     if (*act == TOOL_ARCS && !opt->file->answer) {
-	G_fatal_error(_("Required parameter <%s> not set"), opt->file->key);
+        G_fatal_error(_("Required parameter <%s> not set"), opt->file->key);
     }
 }

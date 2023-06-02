@@ -60,10 +60,11 @@ class LayerList(object):
 
     def __iter__(self):
         """Iterates over the contents of the list."""
-        item = self._tree.GetFirstChild(self._tree.root)[0]
-        while item and item.IsOk():
-            yield Layer(item, self._tree.GetPyData(item))
-            item = self._tree.GetNextItem(item)
+        if self._tree:
+            item = self._tree.GetFirstChild(self._tree.root)[0]
+            while item and item.IsOk():
+                yield Layer(item, self._tree.GetPyData(item))
+                item = self._tree.GetNextItem(item)
 
     def __getitem__(self, index):
         """Select a layer from the LayerList using the index."""
@@ -177,7 +178,7 @@ class LayerManagerGrassInterface(object):
     """@implements core::giface::GrassInterface"""
 
     def __init__(self, lmgr):
-        """Costructor is specific to the current implementation.
+        """Constructor is specific to the current implementation.
 
         Uses Layer Manager object including its private attributes.
         (It encapsulates existing Layer Manager so access to private members

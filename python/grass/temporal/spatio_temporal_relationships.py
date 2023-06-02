@@ -505,7 +505,6 @@ class SpatioTemporalTopologyBuilder(object):
         tree = rtree.RTreeCreateTree(-1, 0, dim)
 
         for i in range(len(maps)):
-
             rect = self._map_to_rect(tree, maps[i], spatial)
             rtree.RTreeInsertRect(rect, i + 1, tree)
 
@@ -556,7 +555,6 @@ class SpatioTemporalTopologyBuilder(object):
         list_ = gis.G_new_ilist()
 
         for j in range(len(mapsB)):
-
             rect = self._map_to_rect(tree, mapsB[j], spatial)
             vector.RTreeSearch2(tree, rect, list_)
             rtree.RTreeFreeRect(rect)
@@ -669,7 +667,6 @@ def set_temoral_relationship(A, B, relation):
 
 
 def set_spatial_relationship(A, B, relation):
-
     if relation == "equivalent":
         if A != B:
             if not B.get_equivalent() or (

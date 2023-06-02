@@ -1,12 +1,11 @@
-
 /**************************************************************
-* I_find_group (group)
-*
-* Find the a group in the current mapset
-**************************************************************/
+ * I_find_group (group)
+ *
+ * Find the a group in the current mapset
+ **************************************************************/
+
 #include <grass/imagery.h>
 #include <grass/gis.h>
-
 
 /*!
  * \brief does group exist?
@@ -45,7 +44,7 @@ int I_find_group2(const char *group, const char *mapset)
 
 /*!
  * \brief Searches for a group file in the current mapset
- * 
+ *
  * \param group
  * \param file
  * \return int 1 if file was found, 0 otherwise
@@ -62,13 +61,12 @@ int I_find_group_file(const char *group, const char *file)
 
 /*!
  * \brief Searches for a group file in the specified mapset
- * 
+ *
  * \param group
  * \param file
  * \return int 1 if file was found, 0 otherwise
  */
-int I_find_group_file2(const char *group, const char *mapset,
-                       const char *file)
+int I_find_group_file2(const char *group, const char *mapset, const char *file)
 {
     if (!I_find_group2(group, mapset))
         return 0;
@@ -80,7 +78,7 @@ int I_find_group_file2(const char *group, const char *mapset,
 
 /*!
  * \brief Searches for a subgroup in the current mapset
- * 
+ *
  * \param group
  * \param subgroup
  * \return int 1 if subgroup was found, 0 otherwise
@@ -101,8 +99,9 @@ int I_find_subgroup(const char *group, const char *subgroup)
 }
 
 /*!
- * \brief Searches for a subgroup in specified mapset or any mapset if mapset is not set
- * 
+ * \brief Searches for a subgroup in specified mapset or any mapset if mapset is
+ * not set
+ *
  * \param group
  * \param subgroup
  * \param mapset
@@ -126,7 +125,7 @@ int I_find_subgroup2(const char *group, const char *subgroup,
 
 /*!
  * \brief Searches for a subgroup file in the current mapset
- * 
+ *
  * \param group
  * \param subgroup
  * \param file
@@ -153,7 +152,7 @@ int I_find_subgroup_file(const char *group, const char *subgroup,
 
 /*!
  * \brief Searches for a subgroup file in the specified mapset
- * 
+ *
  * \param group
  * \param subgroup
  * \param mapset
@@ -205,14 +204,15 @@ int I_find_subgroup_file2(const char *group, const char *subgroup,
 const char *I_find_signature(I_SIGFILE_TYPE type, char *name,
                              const char *mapset)
 {
-    char sdir[GNAME_MAX];       /* 'signatures/type\0' */
+    char sdir[GNAME_MAX]; /* 'signatures/type\0' */
 
     G_debug(1, "I_find_signature(): type=%d name=%s mapset=%s", type, name,
             mapset);
 
     I_get_signatures_dir(sdir, type);
 
-    /* We do not search for a specific file as file name is up to signature type */
+    /* We do not search for a specific file as file name is up to signature type
+     */
     return G_find_file(sdir, name, mapset);
 }
 
@@ -240,7 +240,7 @@ const char *I_find_signature(I_SIGFILE_TYPE type, char *name,
 const char *I_find_signature2(I_SIGFILE_TYPE type, const char *name,
                               const char *mapset)
 {
-    char sdir[GNAME_MAX];       /* 'signatures/type\0' */
+    char sdir[GNAME_MAX]; /* 'signatures/type\0' */
 
     G_debug(1, "I_find_signature2(): type=%d name=%s mapset=%s", type, name,
             mapset);

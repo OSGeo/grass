@@ -236,12 +236,9 @@ class RasterDataset(AbstractMapDataset):
         array back into grass.
         """
 
-        a = garray.array()
-
         if self.map_exists():
-            a.read(self.get_map_id())
-
-        return a
+            return garray.array(self.get_map_id())
+        return garray.array()
 
     def reset(self, ident):
         """Reset the internal structure and set the identifier"""
@@ -662,12 +659,9 @@ class Raster3DDataset(AbstractMapDataset):
         array back into grass.
         """
 
-        a = garray.array3d()
-
         if self.map_exists():
-            a.read(self.get_map_id())
-
-        return a
+            return garray.array3d(self.get_map_id())
+        return garray.array3d()
 
     def reset(self, ident):
         """Reset the internal structure and set the identifier"""
@@ -1106,7 +1100,6 @@ class VectorDataset(AbstractMapDataset):
         return self.ciface.vector_map_exists(self.get_name(), self.get_mapset())
 
     def load(self):
-
         """Load all info from an existing vector map into the internal structure
 
         This method checks first if the map exists, in case it exists
@@ -1265,7 +1258,6 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
         return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
     def reset(self, ident):
-
         """Reset the internal structure and set the identifier"""
         self.base = STRDSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))
@@ -1392,7 +1384,6 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
             return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
     def reset(self, ident):
-
         """Reset the internal structure and set the identifier"""
         self.base = STR3DSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))
@@ -1502,7 +1493,6 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
         return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
     def reset(self, ident):
-
         """Reset the internal structure and set the identifier"""
         self.base = STVDSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))

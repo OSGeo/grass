@@ -62,7 +62,7 @@ class NvizThread(Thread):
 
         self._display = None
 
-        self.setDaemon(True)
+        self.daemon = True
 
     def run(self):
         self._display = wxnviz.Nviz(self.log, self.progressbar)
@@ -719,7 +719,6 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         event.Skip()
 
     def OnDragging(self, event):
-
         if self.mouse["use"] == "pointer":
             if self.dragid >= 0:
                 self.DragItem(self.dragid, event.GetPosition())
@@ -1180,7 +1179,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def UpdateMap(self, render=True):
         """Updates the canvas anytime there is a change to the
-        underlaying images or to the geometry of the canvas.
+        underlying images or to the geometry of the canvas.
 
         :param render: re-render map composition
         :type render: bool
@@ -2252,7 +2251,6 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             or "update" in data["marker"]
             or "update" in data["color"]
         ):
-
             ret = self._display.SetVectorPointMode(
                 id,
                 data["color"]["value"],

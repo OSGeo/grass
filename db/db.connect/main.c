@@ -1,9 +1,8 @@
-
 /****************************************************************************
  *
  * MODULE:       db.connect
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Alex Shevlakov <sixote yahoo.com>, 
+ *               Alex Shevlakov <sixote yahoo.com>,
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Markus Neteler <neteler itc.it>,
  *               Hamish Bowman <hamish_b yahoo com>
@@ -44,7 +43,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("connection settings"));
     module->description =
-	_("Prints/sets general DB connection for current mapset.");
+        _("Prints/sets general DB connection for current mapset.");
 
     print = G_define_flag();
     print->key = 'p';
@@ -54,15 +53,16 @@ int main(int argc, char *argv[])
 
     shell = G_define_flag();
     shell->key = 'g';
-    shell->description = _("Print current connection parameters using shell style and exit");
+    shell->description =
+        _("Print current connection parameters using shell style and exit");
     shell->guisection = _("Print");
 
     check_set_default = G_define_flag();
     check_set_default->key = 'c';
     check_set_default->description =
-	_("Check connection parameters, set if uninitialized, and exit");
+        _("Check connection parameters, set if uninitialized, and exit");
     check_set_default->guisection = _("Set");
-    
+
     def = G_define_flag();
     def->key = 'd';
     def->label = _("Set from default settings and exit");
@@ -74,19 +74,19 @@ int main(int argc, char *argv[])
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
     if (strcmp(DB_DEFAULT_DRIVER, "sqlite") == 0) {
-	driver->answer = "sqlite";
+        driver->answer = "sqlite";
     }
     else {
-	driver->answer = "dbf";
+        driver->answer = "dbf";
     }
     driver->guisection = _("Set");
 
     database = G_define_standard_option(G_OPT_DB_DATABASE);
     if (strcmp(DB_DEFAULT_DRIVER, "sqlite") == 0) {
-	database->answer = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db";
+        database->answer = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db";
     }
     else {
-	database->answer = "$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/";
+        database->answer = "$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/";
     }
     database->guisection = _("Set");
 
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
     group->required = NO;
     group->multiple = NO;
     group->description = _("Default group of database users to which "
-			   "select privilege is granted");
+                           "select privilege is granted");
     group->guisection = _("Set");
 
     /* commented due to new mechanism - see db.login
@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
        user->type       = TYPE_STRING ;
        user->required   = NO  ;
        user->multiple   = NO ;
-       user->description= "User:" ;    
+       user->description= "User:" ;
 
        password = G_define_option() ;
        password->key        = "password" ;
@@ -119,11 +119,11 @@ int main(int argc, char *argv[])
      */
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     if (print->answer || shell->answer) {
-	/* get and print connection in shell style */
-	if (db_get_connection(&conn) == DB_OK) {
+        /* get and print connection in shell style */
+        if (db_get_connection(&conn) == DB_OK) {
             if (shell->answer) {
                 fprintf(stdout, "driver=%s\n",
                         conn.driverName ? conn.driverName : "");
@@ -135,92 +135,93 @@ int main(int argc, char *argv[])
             }
             else {
                 databaseName = substitute_variables(&conn);
-                
+
                 fprintf(stdout, "driver: %s\n",
                         conn.driverName ? conn.driverName : "");
                 /* substitute variables */
                 fprintf(stdout, "database: %s\n", databaseName);
                 G_free(database);
-                
+
                 fprintf(stdout, "schema: %s\n",
                         conn.schemaName ? conn.schemaName : "");
                 fprintf(stdout, "group: %s\n", conn.group ? conn.group : "");
             }
         }
-	else
-	    G_fatal_error(_("Database connection not defined. "
-			    "Run db.connect."));
-        
-	exit(EXIT_SUCCESS);
+        else
+            G_fatal_error(_("Database connection not defined. "
+                            "Run db.connect."));
+
+        exit(EXIT_SUCCESS);
     }
-    
+
     if (check_set_default->answer) {
-	/* check connection and set to system-wide default in required */
-	/*
-	 * TODO: improve db_{get,set}_connection() to not return DB_OK on error
-	 *       (thus currently there is no point in checking for that here)
-	 */
-	db_get_connection(&conn);
+        /* check connection and set to system-wide default in required */
+        /*
+         * TODO: improve db_{get,set}_connection() to not return DB_OK on error
+         *       (thus currently there is no point in checking for that here)
+         */
+        db_get_connection(&conn);
 
-	if (!conn.driverName && !conn.databaseName) {
+        if (!conn.driverName && !conn.databaseName) {
 
-	    db_set_default_connection();
-	    db_get_connection(&conn);
+            db_set_default_connection();
+            db_get_connection(&conn);
 
             databaseName = substitute_variables(&conn);
-	    G_important_message(_("Default driver / database set to:\n"
-				  "driver: %s\ndatabase: %s"), conn.driverName,
-				databaseName);
-	}
-        else {
-            G_important_message(_("DB settings already defined, nothing to do"));
+            G_important_message(_("Default driver / database set to:\n"
+                                  "driver: %s\ndatabase: %s"),
+                                conn.driverName, databaseName);
         }
-        
-	/* they must be a matched pair, so if one is set but not the other
-	   then give up and let the user figure it out */
-	if (!conn.driverName) {
-	    G_fatal_error(_("Default driver is not set"));
-	}
-	if (!conn.databaseName) {
-	    G_fatal_error(_("Default database is not set"));
-	}
+        else {
+            G_important_message(
+                _("DB settings already defined, nothing to do"));
+        }
 
-	/* connection either already existed or now exists */
-	exit(EXIT_SUCCESS);
+        /* they must be a matched pair, so if one is set but not the other
+           then give up and let the user figure it out */
+        if (!conn.driverName) {
+            G_fatal_error(_("Default driver is not set"));
+        }
+        if (!conn.databaseName) {
+            G_fatal_error(_("Default database is not set"));
+        }
+
+        /* connection either already existed or now exists */
+        exit(EXIT_SUCCESS);
     }
 
     if (def->answer) {
-	db_set_default_connection();
-	db_get_connection(&conn);
-	
+        db_set_default_connection();
+        db_get_connection(&conn);
+
         databaseName = substitute_variables(&conn);
-	G_important_message(_("Default driver / database set to:\n"
-			      "driver: %s\ndatabase: %s"), conn.driverName,
-			    databaseName);
-	exit(EXIT_SUCCESS);
+        G_important_message(_("Default driver / database set to:\n"
+                              "driver: %s\ndatabase: %s"),
+                            conn.driverName, databaseName);
+        exit(EXIT_SUCCESS);
     }
-    
+
     /* do not read current, set new connection from options */
     G_zero(&conn, sizeof(dbConnection));
 
     if (driver->answer)
-	conn.driverName = driver->answer;
+        conn.driverName = driver->answer;
 
     if (database->answer)
-	conn.databaseName = database->answer;
+        conn.databaseName = database->answer;
 
     if (schema->answer)
-	conn.schemaName = schema->answer;
+        conn.schemaName = schema->answer;
 
     if (group->answer)
-	conn.group = group->answer;
+        conn.group = group->answer;
 
     db_set_connection(&conn);
     /* check */
     if (db_get_connection(&conn) != DB_OK) {
-	G_fatal_error(_("Unable to set default database connection"));
+        G_fatal_error(_("Unable to set default database connection"));
 
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
 
     exit(EXIT_SUCCESS);
@@ -233,23 +234,23 @@ char *substitute_variables(dbConnection *conn)
     if (!conn->databaseName)
         return NULL;
 
-    database = (char *) G_malloc(GPATH_MAX);
+    database = (char *)G_malloc(GPATH_MAX);
     strcpy(database, conn->databaseName);
-    
+
     strcpy(buf, database);
     c = (char *)strstr(buf, "$GISDBASE");
     if (c != NULL) {
         *c = '\0';
         sprintf(database, "%s%s%s", buf, G_gisdbase(), c + 9);
     }
-    
+
     strcpy(buf, database);
     c = (char *)strstr(buf, "$LOCATION_NAME");
     if (c != NULL) {
         *c = '\0';
         sprintf(database, "%s%s%s", buf, G_location(), c + 14);
     }
-    
+
     strcpy(buf, database);
     c = (char *)strstr(buf, "$MAPSET");
     if (c != NULL) {
@@ -260,8 +261,9 @@ char *substitute_variables(dbConnection *conn)
     if (strcmp(conn->driverName, "sqlite") == 0 ||
         strcmp(conn->driverName, "dbf") == 0) {
         char *p;
+
         p = database;
-        while(*p) {
+        while (*p) {
             if (*p == '/')
                 *p = HOST_DIRSEP;
             p++;

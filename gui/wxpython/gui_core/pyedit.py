@@ -338,7 +338,7 @@ class PyEditController(object):
             GError(
                 message=_(
                     "Permission denied <{}>. Please change file "
-                    "permission for writting.{}".format(
+                    "permission for writing.{}".format(
                         file_path,
                         additional_err_message,
                     ),
@@ -662,8 +662,9 @@ class PyEditToolbar(BaseToolbar):
             "run": MetaIcon(img="execute", label=_("Run (Ctrl+R)")),
             # TODO: better icons for overwrite modes
             "overwriteTrue": MetaIcon(img="locked", label=_("Activate overwrite")),
-            "overwriteFalse": MetaIcon(img="unlocked", label=_("Deactive overwrite")),
-            "quit": MetaIcon(img="quit", label=_("Quit Simple Python Editor")),
+            "overwriteFalse": MetaIcon(img="unlocked", label=_("Deactivate overwrite")),
+            "help": BaseIcons["help"],
+            "quit": BaseIcons["quit"],
         }
 
         # workaround for http://trac.wxwidgets.org/ticket/13888
@@ -679,19 +680,39 @@ class PyEditToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                ("open", self.icons["open"], self.parent.OnOpen),
-                ("save", self.icons["save"], self.parent.OnSave),
-                (None,),
-                ("run", self.icons["run"], self.parent.OnRun),
                 (
-                    "overwrite",
+                    ("open", self.icons["open"].label.rsplit(" ", 1)[0]),
+                    self.icons["open"],
+                    self.parent.OnOpen,
+                ),
+                (
+                    ("save", self.icons["save"].label.rsplit(" ", 1)[0]),
+                    self.icons["save"],
+                    self.parent.OnSave,
+                ),
+                (None,),
+                (
+                    ("run", self.icons["run"].label.rsplit(" ", 1)[0]),
+                    self.icons["run"],
+                    self.parent.OnRun,
+                ),
+                (
+                    ("overwrite", self.icons["overwriteTrue"].label),
                     self.icons["overwriteTrue"],
                     self.OnSetOverwrite,
                     wx.ITEM_CHECK,
                 ),
                 (None,),
-                ("help", BaseIcons["help"], self.parent.OnHelp),
-                ("quit", self.icons["quit"], self.parent.OnClose),
+                (
+                    ("help", self.icons["help"].label),
+                    self.icons["help"],
+                    self.parent.OnHelp,
+                ),
+                (
+                    ("quit", self.icons["quit"].label),
+                    self.icons["quit"],
+                    self.parent.OnClose,
+                ),
             )
         )
 

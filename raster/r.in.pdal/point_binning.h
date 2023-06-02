@@ -19,16 +19,16 @@
 #include <grass/raster.h>
 
 /* Point binning methods: */
-#define METHOD_NONE        0
-#define METHOD_N           1
-#define METHOD_MIN         2
-#define METHOD_MAX         3
-#define METHOD_RANGE       4
-#define METHOD_SUM         5
-#define METHOD_MEAN        6
-#define METHOD_STDDEV      7
-#define METHOD_VARIANCE    8
-#define METHOD_COEFF_VAR   9
+#define METHOD_NONE       0
+#define METHOD_N          1
+#define METHOD_MIN        2
+#define METHOD_MAX        3
+#define METHOD_RANGE      4
+#define METHOD_SUM        5
+#define METHOD_MEAN       6
+#define METHOD_STDDEV     7
+#define METHOD_VARIANCE   8
+#define METHOD_COEFF_VAR  9
 #define METHOD_MEDIAN     10
 #define METHOD_MODE       11
 #define METHOD_PERCENTILE 12
@@ -40,37 +40,31 @@
 #define METHOD_EV2        18
 #define METHOD_EV3        19
 
-
-struct z_node
-{
+struct z_node {
     int next;
     double z;
 };
 
-struct cnt_node
-{
+struct cnt_node {
     int next;
     CELL value;
     int count;
 };
 
-struct com_node
-{
+struct com_node {
     int n;
     double *meanx;
     double *meany;
     double *comoment;
 };
 
-struct BinIndex
-{
+struct BinIndex {
     int num_nodes;
     int max_nodes;
     void *nodes;
 };
 
-struct PointBinning
-{
+struct PointBinning {
     int method;
 
     int bin_n;
@@ -105,12 +99,9 @@ void point_binning_set(struct PointBinning *, char *, char *, char *);
 void point_binning_allocate(struct PointBinning *, int, int, RASTER_MAP_TYPE);
 void point_binning_free(struct PointBinning *, struct BinIndex *);
 
-
-void write_values(struct PointBinning *,
-                  struct BinIndex *, void *, int, int, RASTER_MAP_TYPE);
-void update_value(struct PointBinning *,
-                  struct BinIndex *, int, int,
-                  int, RASTER_MAP_TYPE, double, double, double);
-
+void write_values(struct PointBinning *, struct BinIndex *, void *, int, int,
+                  RASTER_MAP_TYPE);
+void update_value(struct PointBinning *, struct BinIndex *, int, int, int,
+                  RASTER_MAP_TYPE, double, double, double);
 
 #endif /* __POINT_BINNING_H__ */

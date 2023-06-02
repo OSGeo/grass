@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.viewshed
@@ -10,16 +9,16 @@
  *               wkrichar@bowdoin.edu or willster3021@gmail.com
  *               Markus Metz: surface interpolation
  *
- * Date:         april 2011 
- * 
+ * Date:         april 2011
+ *
  * PURPOSE: To calculate the viewshed (the visible cells in the
  * raster) for the given viewpoint (observer) location.  The
  * visibility model is the following: Two points in the raster are
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the
  * line-of-sight that connects their centers does not intersect the
- * terrain. The terrain is NOT viewed as a tesselation of flat cells, 
- * i.e. if the line-of-sight does not pass through the cell center, 
+ * terrain. The terrain is NOT viewed as a tessellation of flat cells,
+ * i.e. if the line-of-sight does not pass through the cell center,
  * elevation is determined using bilinear interpolation.
  * The viewshed algorithm is efficient both in
  * terms of CPU operations and I/O operations. It has worst-case
@@ -36,8 +35,7 @@
  *****************************************************************************/
 #include <stdio.h>
 
-extern "C"
-{
+extern "C" {
 #include <grass/gis.h>
 #include <grass/glocale.h>
 }
@@ -45,8 +43,6 @@ extern "C"
 #include "grid.h"
 #include "visibility.h"
 #include "grass.h"
-
-
 
 /* ------------------------------------------------------------ */
 /* viewpoint functions */
@@ -57,7 +53,7 @@ void print_viewpoint(Viewpoint vp)
 }
 
 /* ------------------------------------------------------------ */
-void set_viewpoint_coord(Viewpoint * vp, dimensionType row, dimensionType col)
+void set_viewpoint_coord(Viewpoint *vp, dimensionType row, dimensionType col)
 {
     assert(vp);
     vp->row = row;
@@ -66,7 +62,7 @@ void set_viewpoint_coord(Viewpoint * vp, dimensionType row, dimensionType col)
 }
 
 /* ------------------------------------------------------------ */
-void set_viewpoint_elev(Viewpoint * vp, float elev)
+void set_viewpoint_elev(Viewpoint *vp, float elev)
 {
     assert(vp);
     vp->elev = elev;
@@ -75,7 +71,7 @@ void set_viewpoint_elev(Viewpoint * vp, float elev)
 
 /* ------------------------------------------------------------ */
 /*copy from b to a */
-void copy_viewpoint(Viewpoint * a, Viewpoint b)
+void copy_viewpoint(Viewpoint *a, Viewpoint b)
 {
     assert(a);
     a->row = b.row;
@@ -84,27 +80,26 @@ void copy_viewpoint(Viewpoint * a, Viewpoint b)
     return;
 }
 
-
 /* ------------------------------------------------------------ */
 /* MemoryVisibilityGrid functions */
 
 /* create and return a grid of the sizes specified in the header */
-MemoryVisibilityGrid *create_inmem_visibilitygrid(GridHeader hd, Viewpoint vp)
+MemoryVisibilityGrid *create_inmem_visibilitygrid(const GridHeader &hd,
+                                                  Viewpoint vp)
 {
 
     MemoryVisibilityGrid *visgrid;
 
-    visgrid = (MemoryVisibilityGrid *) G_malloc(sizeof(MemoryVisibilityGrid));
+    visgrid = (MemoryVisibilityGrid *)G_malloc(sizeof(MemoryVisibilityGrid));
 
     assert(visgrid);
-
 
     /* create the grid  */
     visgrid->grid = create_empty_grid();
     assert(visgrid->grid);
 
     /* create the header */
-    visgrid->grid->hd = (GridHeader *) G_malloc(sizeof(GridHeader));
+    visgrid->grid->hd = (GridHeader *)G_malloc(sizeof(GridHeader));
 
     assert(visgrid->grid->hd);
 
@@ -115,7 +110,7 @@ MemoryVisibilityGrid *create_inmem_visibilitygrid(GridHeader hd, Viewpoint vp)
     alloc_grid_data(visgrid->grid);
 
     /*allocate viewpoint */
-    visgrid->vp = (Viewpoint *) G_malloc(sizeof(Viewpoint));
+    visgrid->vp = (Viewpoint *)G_malloc(sizeof(Viewpoint));
 
     assert(visgrid->vp);
     copy_viewpoint(visgrid->vp, vp);
@@ -123,58 +118,51 @@ MemoryVisibilityGrid *create_inmem_visibilitygrid(GridHeader hd, Viewpoint vp)
     return visgrid;
 }
 
-
-
-
 /* ------------------------------------------------------------ */
-void free_inmem_visibilitygrid(MemoryVisibilityGrid * visgrid)
+void free_inmem_visibilitygrid(MemoryVisibilityGrid *visgrid)
 {
 
     assert(visgrid);
 
     if (visgrid->grid) {
-	destroy_grid(visgrid->grid);
+        destroy_grid(visgrid->grid);
     }
     if (visgrid->vp) {
-	G_free(visgrid->vp);
+        G_free(visgrid->vp);
     }
     G_free(visgrid);
 
     return;
 }
 
-
-
 /* ------------------------------------------------------------ */
 /*set all values of visgrid's Grid to the given value */
-void set_inmem_visibilitygrid(MemoryVisibilityGrid * visgrid, float val)
+void set_inmem_visibilitygrid(MemoryVisibilityGrid *visgrid, float val)
 {
 
     assert(visgrid && visgrid->grid && visgrid->grid->hd &&
-	   visgrid->grid->grid_data);
+           visgrid->grid->grid_data);
 
     dimensionType i, j;
 
     for (i = 0; i < visgrid->grid->hd->nrows; i++) {
-	assert(visgrid->grid->grid_data[i]);
-	for (j = 0; j < visgrid->grid->hd->ncols; j++) {
-	    visgrid->grid->grid_data[i][j] = val;
-	}
+        assert(visgrid->grid->grid_data[i]);
+        for (j = 0; j < visgrid->grid->hd->ncols; j++) {
+            visgrid->grid->grid_data[i][j] = val;
+        }
     }
     return;
 }
 
-
-
 /* ------------------------------------------------------------ */
 /*set the (i,j) value of visgrid's Grid to the given value */
-void add_result_to_inmem_visibilitygrid(MemoryVisibilityGrid * visgrid,
-					dimensionType i, dimensionType j,
-					float val)
+void add_result_to_inmem_visibilitygrid(MemoryVisibilityGrid *visgrid,
+                                        dimensionType i, dimensionType j,
+                                        float val)
 {
 
     assert(visgrid && visgrid->grid && visgrid->grid->hd &&
-	   visgrid->grid->grid_data);
+           visgrid->grid->grid_data);
     assert(i < visgrid->grid->hd->nrows);
     assert(j < visgrid->grid->hd->ncols);
     assert(visgrid->grid->grid_data[i]);
@@ -184,19 +172,17 @@ void add_result_to_inmem_visibilitygrid(MemoryVisibilityGrid * visgrid,
     return;
 }
 
-
-
 /* ------------------------------------------------------------ */
 /*  The following functions are used to convert the visibility results
    recorded during the viewshed computation into the output grid into
-   tehe output required by the user.  
+   tehe output required by the user.
 
    x is assumed to be the visibility value computed for a cell during the
-   viewshed computation. 
+   viewshed computation.
 
    The value computed during the viewshed is the following:
 
-   x is NODATA if the cell is NODATA; 
+   x is NODATA if the cell is NODATA;
 
 
    x is INVISIBLE if the cell is invisible;
@@ -211,9 +197,9 @@ int is_visible(float x)
     int isnull = Rast_is_null_value(&x, G_SURFACE_TYPE);
 
     if (isnull)
-	return 0;
+        return 0;
     else
-	return (x >= 0);
+        return (x >= 0);
 }
 int is_invisible_not_nodata(float x)
 {
@@ -234,9 +220,9 @@ float booleanVisibilityOutput(float x)
 {
     /* NODATA and INVISIBLE are both negative values */
     if (is_visible(x))
-	return BOOL_VISIBLE;
+        return BOOL_VISIBLE;
     else
-	return BOOL_INVISIBLE;
+        return BOOL_INVISIBLE;
 }
 
 /* ------------------------------------------------------------ */
@@ -249,34 +235,31 @@ float angleVisibilityOutput(float x)
     return x;
 }
 
-
 /* ------------------------------------------------------------ */
 /* visgrid is the structure that records the visibility information
    after the sweep is done.  Use it to write the visibility output
    grid and then distroy it.
  */
-void save_inmem_visibilitygrid(MemoryVisibilityGrid * visgrid,
-			       ViewOptions viewOptions, Viewpoint vp)
+void save_inmem_visibilitygrid(MemoryVisibilityGrid *visgrid,
+                               ViewOptions viewOptions, Viewpoint vp)
 {
 
     if (viewOptions.outputMode == OUTPUT_BOOL)
-	save_grid_to_GRASS(visgrid->grid, viewOptions.outputfname, CELL_TYPE,
-			   OUTPUT_BOOL);
+        save_grid_to_GRASS(visgrid->grid, viewOptions.outputfname, CELL_TYPE,
+                           OUTPUT_BOOL);
     else if (viewOptions.outputMode == OUTPUT_ANGLE)
-	save_grid_to_GRASS(visgrid->grid, viewOptions.outputfname, FCELL_TYPE,
-			   OUTPUT_ANGLE);
+        save_grid_to_GRASS(visgrid->grid, viewOptions.outputfname, FCELL_TYPE,
+                           OUTPUT_ANGLE);
     else
-	/* elevation  output */
-	save_vis_elev_to_GRASS(visgrid->grid, viewOptions.inputfname,
-			       viewOptions.outputfname,
-			       vp.elev + viewOptions.obsElev);
+        /* elevation  output */
+        save_vis_elev_to_GRASS(visgrid->grid, viewOptions.inputfname,
+                               viewOptions.outputfname,
+                               vp.elev + viewOptions.obsElev);
 
     free_inmem_visibilitygrid(visgrid);
 
     return;
 }
-
-
 
 /* ------------------------------------------------------------ */
 /* IOVisibilityGrid functions */
@@ -284,59 +267,54 @@ void save_inmem_visibilitygrid(MemoryVisibilityGrid * visgrid,
 
 /* ------------------------------------------------------------ */
 /*create grid from given header and viewpoint */
-IOVisibilityGrid *init_io_visibilitygrid(GridHeader hd, Viewpoint vp)
+IOVisibilityGrid *init_io_visibilitygrid(const GridHeader &hd, Viewpoint vp)
 {
     IOVisibilityGrid *visgrid;
 
-    visgrid = (IOVisibilityGrid *) G_malloc(sizeof(IOVisibilityGrid));
+    visgrid = (IOVisibilityGrid *)G_malloc(sizeof(IOVisibilityGrid));
 
     assert(visgrid);
 
     /*header */
-    visgrid->hd = (GridHeader *) G_malloc(sizeof(GridHeader));
+    visgrid->hd = (GridHeader *)G_malloc(sizeof(GridHeader));
 
     assert(visgrid->hd);
     copy_header(visgrid->hd, hd);
 
     /*viewpoint */
-    visgrid->vp = (Viewpoint *) G_malloc(sizeof(Viewpoint));
+    visgrid->vp = (Viewpoint *)G_malloc(sizeof(Viewpoint));
 
     assert(visgrid->vp);
     copy_viewpoint(visgrid->vp, vp);
 
     /*stream */
-    visgrid->visStr = new AMI_STREAM < VisCell > ();
+    visgrid->visStr = new AMI_STREAM<VisCell>();
     assert(visgrid->visStr);
 
     return visgrid;
 }
 
-
-
 /* ------------------------------------------------------------ */
 /*free the grid */
-void free_io_visibilitygrid(IOVisibilityGrid * grid)
+void free_io_visibilitygrid(IOVisibilityGrid *grid)
 {
     assert(grid);
 
     if (grid->hd)
-	G_free(grid->hd);
+        G_free(grid->hd);
     if (grid->vp)
-	G_free(grid->vp);
+        G_free(grid->vp);
     if (grid->visStr)
-	delete grid->visStr;
+        delete grid->visStr;
 
     G_free(grid);
 
     return;
 }
 
-
-
 /* ------------------------------------------------------------ */
 /*write cell to stream */
-void add_result_to_io_visibilitygrid(IOVisibilityGrid * visgrid,
-				     VisCell * cell)
+void add_result_to_io_visibilitygrid(IOVisibilityGrid *visgrid, VisCell *cell)
 {
 
     assert(visgrid && cell);
@@ -349,37 +327,35 @@ void add_result_to_io_visibilitygrid(IOVisibilityGrid * visgrid,
     return;
 }
 
-
 /* ------------------------------------------------------------ */
 /*compare function, (i,j) grid order */
-int IJCompare::compare(const VisCell & a, const VisCell & b)
+int IJCompare::compare(const VisCell &a, const VisCell &b)
 {
     if (a.row > b.row)
-	return 1;
+        return 1;
     if (a.row < b.row)
-	return -1;
+        return -1;
 
     /*a.row==b.row */
     if (a.col > b.col)
-	return 1;
+        return 1;
     if (a.col < b.col)
-	return -1;
+        return -1;
     /*all equal */
     return 0;
 }
 
-
 /* ------------------------------------------------------------ */
 /*sort stream in grid order */
-void sort_io_visibilitygrid(IOVisibilityGrid * visGrid)
+void sort_io_visibilitygrid(IOVisibilityGrid *visGrid)
 {
 
     assert(visGrid);
     assert(visGrid->visStr);
     if (visGrid->visStr->stream_len() == 0)
-	return;
+        return;
 
-    AMI_STREAM < VisCell > *sortedStr;
+    AMI_STREAM<VisCell> *sortedStr;
     AMI_err ae;
     IJCompare cmpObj;
 
@@ -392,27 +368,25 @@ void sort_io_visibilitygrid(IOVisibilityGrid * visGrid)
     return;
 }
 
-
 /* ------------------------------------------------------------ */
-void
-save_io_visibilitygrid(IOVisibilityGrid * visgrid,
-		       ViewOptions viewOptions, Viewpoint vp)
+void save_io_visibilitygrid(IOVisibilityGrid *visgrid, ViewOptions viewOptions,
+                            Viewpoint vp)
 {
 
     if (viewOptions.outputMode == OUTPUT_BOOL)
-	save_io_visibilitygrid_to_GRASS(visgrid, viewOptions.outputfname,
-					CELL_TYPE, booleanVisibilityOutput,
-					OUTPUT_BOOL);
+        save_io_visibilitygrid_to_GRASS(visgrid, viewOptions.outputfname,
+                                        CELL_TYPE, booleanVisibilityOutput,
+                                        OUTPUT_BOOL);
 
     else if (viewOptions.outputMode == OUTPUT_ANGLE)
-	save_io_visibilitygrid_to_GRASS(visgrid, viewOptions.outputfname,
-					FCELL_TYPE, angleVisibilityOutput,
-					OUTPUT_ANGLE);
+        save_io_visibilitygrid_to_GRASS(visgrid, viewOptions.outputfname,
+                                        FCELL_TYPE, angleVisibilityOutput,
+                                        OUTPUT_ANGLE);
     else
-	/* elevation  output */
-	save_io_vis_and_elev_to_GRASS(visgrid, viewOptions.inputfname,
-				      viewOptions.outputfname,
-				      vp.elev + viewOptions.obsElev);
+        /* elevation  output */
+        save_io_vis_and_elev_to_GRASS(visgrid, viewOptions.inputfname,
+                                      viewOptions.outputfname,
+                                      vp.elev + viewOptions.obsElev);
 
     /*free visibiliyty grid */
     free_io_visibilitygrid(visgrid);

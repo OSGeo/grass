@@ -362,7 +362,14 @@ class DisplayDriver:
                 for i in range(robj.npoints):
                     p = robj.point[i]
                     points.append(wx.Point(p.x, p.y))
-
+                if len(points) <= 1:
+                    self.log.write(
+                        _(
+                            "WARNING: Zero-length line or boundary drawing skipped. "
+                            "Use v.clean to remove it."
+                        )
+                    )
+                    return
                 if robj.type == TYPE_AREA:
                     pdc.DrawPolygon(points)
                 else:
@@ -1057,7 +1064,7 @@ class DisplayDriver:
         .. todo::
             map units
 
-        :param alpha: color value for aplha channel
+        :param alpha: color value for alpha channel
         """
         color = dict()
         for key in self.settings.keys():
