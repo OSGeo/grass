@@ -30,8 +30,7 @@ zone_type zone_info;
 int nprocs;
 
 // Parallelization workspace
-typedef struct
-{
+typedef struct {
     size_t n;
     double sum;
     double sumsq;
@@ -40,10 +39,9 @@ typedef struct
     double min;
     double max;
     bucket buckets;
-} zone_data;
+} zone_workspace;
 
-typedef struct
-{
+typedef struct {
     int fd;
     int fdz;
     void *raster_row;
@@ -187,10 +185,10 @@ int main(int argc, char *argv[])
     zone_info.n_zones = 0;
 
     /* setting up thread workspace */
-    thread_workspace static_tw[128]; // Try to avoid dynamic allocation if nprocs is small.
+    thread_workspace
+        static_tw[128]; // Try to avoid dynamic allocation if nprocs is small.
     thread_workspace *tw = static_tw;
-    if (nprocs > 128)
-    {
+    if (nprocs > 128) {
         tw = G_malloc(nprocs * sizeof(thread_workspace));
     }
 
@@ -354,15 +352,14 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
 
 #pragma omp parallel if (nprocs > 1)
     {
-        int z = 0;
         int t_id = 0;
 #if defined(_OPENMP)
         t_id = omp_get_thread_num();
 #endif
-        zone_data *zw = G_malloc(n_alloc * sizeof *zw);
+        zone_workspace *zw = G_malloc(n_alloc * sizeof *zw);
 
-        for (z = 0; z < n_alloc; z++) {
-            zone_data *zd = &zw[z];
+        for (int z = 0; z < n_alloc; z++) {
+            zone_workspace *zd = &zw[z];
             zd->n = 0;
             zd->sum = 0;
             zd->sumsq = 0;
@@ -406,7 +403,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                     }
                     zone = *zptr - zone_info.min;
                 }
-                zone_data *zd = &zw[zone];
+                zone_workspace *zd = &zw[zone];
 
                 /* count all including NULL cells in input map */
                 zd->size++;
@@ -478,8 +475,8 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
             }
         } /* end row loop */
 
-        for (z = 0; z < n_alloc; z++) {
-            zone_data *zd = &zw[z];
+        for (int z = 0; z < n_alloc; z++) {
+            zone_workspace *zd = &zw[z];
             if (param.extended->answer) {
 #pragma omp critical
                 {
@@ -577,8 +574,8 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
         }
 
         /* Free per-thread variables */
-        for (z = 0; z < n_alloc; z++) {
-            zone_data *zd = &zw[z];
+        for (int z = 0; z < n_alloc; z++) {
+            zone_workspace *zd = &zw[z];
             if (zd->buckets.cells)
                 G_free(zd->buckets.cells);
             if (zd->buckets.fcells)

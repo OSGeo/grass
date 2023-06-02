@@ -40,10 +40,14 @@ class TestRasterUnivar(TestCase):
             overwrite=True,
         )
         self.runModule(
-            "r.mapcalc", expression="map_float = float(300) + row() + col()", overwrite=True
+            "r.mapcalc",
+            expression="map_float = float(300) + row() + col()",
+            overwrite=True,
         )
         self.runModule(
-            "r.mapcalc", expression="map_double = double(400) + row() + col()", overwrite=True
+            "r.mapcalc",
+            expression="map_double = double(400) + row() + col()",
+            overwrite=True,
         )
 
     def test_1(self):
