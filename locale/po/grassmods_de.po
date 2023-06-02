@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2023-04-18 22:08+0000\n"
+"PO-Revision-Date: 2023-05-05 10:08+0000\n"
 "Last-Translator: Markus <neteler@osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/"
 "grassmods/de/>\n"
@@ -32105,7 +32105,7 @@ msgstr ""
 #: ../vector/v.lidar.correction/main.c:407 ../vector/v.surf.bspline/main.c:170
 #: ../vector/v.outlier/main.c:418 ../raster/r.resamp.bspline/main.c:128
 msgid "Bilinear interpolation"
-msgstr "Bilineare Interpolation."
+msgstr "Bilineare Interpolation"
 
 #: ../vector/v.lidar.correction/main.c:420
 msgid "Correction and creation of terrain vector map..."
@@ -34432,7 +34432,7 @@ msgstr "Splineinterpolations Algorithmus"
 
 #: ../vector/v.surf.bspline/main.c:171 ../raster/r.resamp.bspline/main.c:129
 msgid "Bicubic interpolation"
-msgstr "Bikubische Interpolation."
+msgstr "Bikubische Interpolation"
 
 #: ../vector/v.surf.bspline/main.c:201
 msgid "Choose either vector or raster output, not both"
