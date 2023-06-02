@@ -28,7 +28,7 @@
 param_type param;
 zone_type zone_info;
 
-// Parallelization workspace
+/* Parallelization workspace */
 typedef struct {
     size_t n;
     size_t n_alloc;
