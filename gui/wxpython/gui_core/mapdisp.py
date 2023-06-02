@@ -7,6 +7,7 @@ Classes:
  - mapdisp::MapPanelBase
  - mapdisp::SingleMapPanel
  - mapdisp::DoubleMapPanel
+ - mapdisp::FrameMixin
 
 (C) 2009-2014 by the GRASS Development Team
 

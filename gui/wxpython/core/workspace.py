@@ -201,6 +201,7 @@ class ProcessWorkspaceFile:
                     "showCompExtent": bool(int(display.get("showCompExtent", "0"))),
                     "showStatusbar": bool(int(display.get("showStatusbar", "0"))),
                     "showToolbars": bool(int(display.get("showToolbars", "0"))),
+                    "isDocked": bool(int(display.get("isDocked", "0"))),
                     "pos": pos,
                     "size": size,
                     "extent": extent,
@@ -946,8 +947,14 @@ class WriteWorkspaceFile(object):
             compRegion = gcore.region(region3d=True)
             mapdisp = mapTree.GetMapDisplay()
 
-            displayPos = mapdisp.GetPosition()
-            displaySize = mapdisp.GetSize()
+            if mapdisp.IsDocked():
+                displayPos = mapdisp.GetPosition()
+                displaySize = mapdisp.GetSize()
+            else:
+                frame = mapdisp.GetParent()
+                displayPos = frame.GetPosition()
+                displaySize = frame.GetSize()
+
             if mapdisp.toolbars["map"].combo.GetSelection() == 1:
                 viewmode = "3d"
             else:
@@ -961,6 +968,7 @@ class WriteWorkspaceFile(object):
                 'constrainRes="%d" '
                 'showStatusbar="%d" '
                 'showToolbars="%d" '
+                'isDocked="%d" '
                 'dim="%d,%d,%d,%d" '
                 'extent="%f,%f,%f,%f,%f,%f" '
                 'tbres="%f" '  # needed only for animation tool
@@ -975,6 +983,7 @@ class WriteWorkspaceFile(object):
                     int(mapdisp.mapWindowProperties.resolution),
                     int(mapdisp.IsStatusbarShown()),
                     int(mapdisp.GetMapToolbar().IsShown()),
+                    int(mapdisp.IsDocked()),
                     displayPos[0],
                     displayPos[1],
                     displaySize[0],
