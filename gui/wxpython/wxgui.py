@@ -48,8 +48,13 @@ except ImportError:
 min_required_wx_version = [4, 2, 0]
 if not globalvar.CheckWxVersion(min_required_wx_version):
     warning("!" * 50)
-    warning("Minimum required WxPython version: {}".format('.'.join(map(str, min_required_wx_version))))
+    warning(
+        "Minimum required WxPython version: {}".format(
+            ".".join(map(str, min_required_wx_version))
+        )
+    )
     warning("!" * 50)
+
 
 class GMApp(wx.App):
     def __init__(self, workspace=None):
