@@ -154,6 +154,7 @@ set(NO_HTML_DESCR_TARGETS "g.parser;ximgview;test.raster3d.lib")
 add_subdirectory(include)
 
 include_directories("${CMAKE_BINARY_DIR}/include")
+include_directories(${CMAKE_BINARY_DIR}/include/grass)
 if(MSVC)
 	include_directories("${CMAKE_SOURCE_DIR}/msvc")
 endif()
