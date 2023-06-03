@@ -221,7 +221,7 @@ class LocationDownloadPanel(wx.Panel):
         self.database = database
         self.locations = locations
         self._abort_btn_label = _("Abort")
-        self._abort_btn_tooltip = _("Abort dataset download")
+        self._abort_btn_tooltip = _("Abort download")
 
         self.label = StaticText(
             parent=self, label=_("Select sample project to download:")

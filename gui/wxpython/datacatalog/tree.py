@@ -2217,11 +2217,11 @@ class DataCatalogTree(TreeView):
         genv = gisenv()
         currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new project"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new project (location)"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCreateLocation, item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Download sample project"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Download sample project (location)"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDownloadLocation, item)
 

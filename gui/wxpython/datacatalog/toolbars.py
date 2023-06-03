@@ -35,11 +35,12 @@ icons = {
         img="mapset-add", label=_("Create new mapset in current project")
     ),
     "addLocation": MetaIcon(
-        img="location-add", label=_("Create new project in current GRASS database")
+        img="location-add",
+        label=_("Create new project (location) in current GRASS database"),
     ),
     "downloadLocation": MetaIcon(
         img="location-download",
-        label=_("Download sample project to current GRASS database"),
+        label=_("Download sample project (location) to current GRASS database"),
     ),
     "importRaster": MetaIcon(
         img="raster-import", label=_("Import raster data  [r.import]")
