@@ -1,4 +1,4 @@
-"""Test RasterSeriesMap functions"""
+"""Test SeriesMap functions"""
 
 
 from pathlib import Path
@@ -15,7 +15,7 @@ except ImportError:
     ipywidgets = None
 
 import grass.jupyter as gj
-from grass.jupyter.rasterseriesmap import is_raster
+from grass.jupyter.seriesmap import is_raster
 
 
 def test_is_raster(space_time_raster_dataset):
@@ -26,7 +26,7 @@ def test_is_raster(space_time_raster_dataset):
 
 def test_default_init(space_time_raster_dataset):
     """Check that TimeSeriesMap init runs with default parameters"""
-    img = gj.RasterSeriesMap()
+    img = gj.SeriesMap()
     img.add_rasters(space_time_raster_dataset.raster_names)
     assert img.rasters == space_time_raster_dataset.raster_names
 
@@ -34,7 +34,7 @@ def test_default_init(space_time_raster_dataset):
 def test_render_layers(space_time_raster_dataset):
     """Check that layers are rendered"""
     # create instance of TimeSeriesMap
-    img = gj.RasterSeriesMap()
+    img = gj.SeriesMap()
     # test adding base layer and d_legend here too for efficiency (rendering is
     # time-intensive)
     img.d_rast(map=space_time_raster_dataset.raster_names[0])
@@ -53,7 +53,7 @@ def test_render_layers(space_time_raster_dataset):
 @pytest.mark.skipif(ipywidgets is None, reason="ipywidgets package not available")
 def test_save(space_time_raster_dataset, tmp_path):
     """Test returns from animate and time_slider are correct object types"""
-    img = gj.RasterSeriesMap()
+    img = gj.SeriesMap()
     img.add_rasters(space_time_raster_dataset.raster_names)
     gif_file = img.save(tmp_path / "image.gif")
     assert Path(gif_file).is_file()

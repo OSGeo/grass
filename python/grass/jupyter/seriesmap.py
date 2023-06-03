@@ -1,4 +1,4 @@
-# MODULE:    grass.jupyter.rasterseriesmap
+# MODULE:    grass.jupyter.seriesmap
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
 #
@@ -31,13 +31,13 @@ def is_raster(layer):
         raise NameError(_("Could not find a raster named {}").format(layer))
 
 
-class RasterSeriesMap:
+class SeriesMap:
     """Creates visualizations of raster datasets in Jupyter
     Notebooks.
 
     Basic usage::
 
-    >>> img = RasterSeriesMap()
+    >>> img = SeriesMap()
     >>> img.add_rasters(maps=["elev", "precip", "temp"])
     >>> img.show()  # Create Slider
     >>> img.save("image.gif")
@@ -56,7 +56,7 @@ class RasterSeriesMap:
         use_region=False,
         saved_region=None,
     ):
-        """Creates an instance of the RasterSeriesMap visualizations class.
+        """Creates an instance of the SeriesMap visualizations class.
 
         :param int width: width of map in pixels
         :param int height: height of map in pixels
@@ -78,8 +78,6 @@ class RasterSeriesMap:
         self._overlay_calls = []
         self._rasters_added = False
         self._layers_rendered = False
-        self._layers = None
-        self._dates = None
         self._layer_filename_dict = {}
         self._width = width
         self._height = height
@@ -190,7 +188,7 @@ class RasterSeriesMap:
         if not self._rasters_added:
             raise RuntimeError(
                 "Cannot render rasters series since none has been added."
-                "Use RasterSeriesMap.add_rasters() to add rasters"
+                "Use SeriesMap.add_rasters() to add rasters"
             )
 
         # Make base image (background and baselayers)
@@ -246,8 +244,8 @@ class RasterSeriesMap:
 
         # Datetime selection slider
         slider = widgets.SelectionSlider(
-            options=self._dates,
-            value=self._dates[0],
+            options=self.rasters,
+            value=self.rasters[0],
             disabled=False,
             continuous_update=True,
             orientation="horizontal",
@@ -258,7 +256,7 @@ class RasterSeriesMap:
             interval=500,
             value=0,
             min=0,
-            max=len(self._dates) - 1,
+            max=len(self.rasters) - 1,
             step=1,
             description="Press play",
             disabled=False,
