@@ -1,32 +1,59 @@
+#!/usr/bin/env python
+
+##############################################################################
+# AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
+#
+# PURPOSE:   API to call GRASS tools (modules) as Python functions
+#
+# COPYRIGHT: (C) 2023 Vaclav Petras and the GRASS Development Team
+#
+#            This program is free software under the GNU General Public
+#            License (>=v2). Read the file COPYING that comes with GRASS
+#            for details.
+##############################################################################
+
+"""API to call GRASS tools (modules) as Python functions"""
+
+import json
 import os
-import sys
 import shutil
 
 import grass.script as gs
 
 
 class ExecutedTool:
+    """Result returned after executing a tool"""
+
     def __init__(self, name, kwargs, stdout, stderr):
         self._name = name
+        self._kwargs = kwargs
         self._stdout = stdout
+        self._stderr = stderr
         if self._stdout:
             self._decoded_stdout = gs.decode(self._stdout)
         else:
             self._decoded_stdout = ""
 
     @property
-    def text(self):
+    def text(self) -> str:
+        """Text output as decoded string"""
         return self._decoded_stdout.strip()
 
     @property
     def json(self):
-        import json
+        """Text output read as JSON
 
+        This returns the nested structure of dictionaries and lists or fails when
+        the output is not JSON.
+        """
         return json.loads(self._stdout)
 
     @property
     def keyval(self):
+        """Text output read as key-value pairs separated by equal signs"""
+
         def conversion(value):
+            """Convert text to int or float if possible, otherwise return it as is"""
             try:
                 return int(value)
             except ValueError:
@@ -41,33 +68,30 @@ class ExecutedTool:
 
     @property
     def comma_items(self):
+        """Text output read as comma-separated list"""
         return self.text_split(",")
 
     @property
     def space_items(self):
+        """Text output read as whitespace-separated list"""
         return self.text_split(None)
 
     def text_split(self, separator=None):
+        """Parse text output read as list separated by separators
+
+        Any leading or trailing newlines are removed prior to parsing.
+        """
         # The use of strip is assuming that the output is one line which
         # ends with a newline character which is for display only.
         return self._decoded_stdout.strip("\n").split(separator)
 
 
-class SubExecutor:
-    """use as tools().params(a="x", b="y").g_region()"""
-
-    # a and b would be overwrite or stdin
-    # Can support other envs or all PIPE and encoding read command supports
-    def __init__(self, *, tools, env, stdin=None):
-        self._tools = tools
-        self._env = env
-        self._stdin = stdin
-
-    def run(self, name, /, **kwargs):
-        pass
-
-
 class Tools:
+    """Call GRASS tools as methods
+
+    GRASS tools (modules) can be executed as methods of this class.
+    """
+
     def __init__(
         self,
         *,
@@ -81,9 +105,6 @@ class Tools:
         stdin=None,
         errors=None,
     ):
-        # TODO: fix region, so that external g.region call in the middle
-        # is not a problem
-        # i.e. region is independent/internal/fixed
         if env:
             self._env = env.copy()
         elif session and hasattr(session, "env"):
@@ -122,6 +143,7 @@ class Tools:
 
     @property
     def env(self):
+        """Internally used environment (reference to it, not a copy)"""
         return self._env
 
     def run(self, name, /, **kwargs):
@@ -152,9 +174,6 @@ class Tools:
         stdout, stderr = process.communicate(input=stdin)
         stderr = gs.utils.decode(stderr)
         returncode = process.poll()
-        # TODO: instead of printing, do exception right away
-        # but right now, handle errors does not accept stderr
-        # or don't use handle errors and raise instead
         if returncode and self._errors != "ignore":
             raise gs.CalledModuleError(
                 name,
@@ -162,21 +181,14 @@ class Tools:
                 returncode=returncode,
                 errors=stderr,
             )
-
-            # Print only when we are capturing it and there was some output.
-            # (User can request ignoring the subprocess stderr and then
-            # we get only None.)
-            if stderr:
-                sys.stderr.write(stderr)
-            gs.handle_errors(returncode, stdout, [name], kwargs)
         return ExecutedTool(name=name, kwargs=kwargs, stdout=stdout, stderr=stderr)
-        # executor = SubExecutor(tools=self, env=self._env, stdin=self._stdin)
-        # return executor.run(name, **kwargs)
 
     def feed_input_to(self, stdin, /):
+        """Get a new object which will feed text input to a tool or tools"""
         return Tools(env=self._env, stdin=stdin)
 
     def ignore_errors_of(self):
+        """Get a new object which will ignore errors of the called tools"""
         return Tools(env=self._env, errors="ignore")
 
     def __getattr__(self, name):
@@ -202,6 +214,7 @@ class Tools:
 
 
 def _test():
+    """Ad-hoc tests and examples of the Tools class"""
     session = gs.setup.init("~/grassdata/nc_spm_08_grass7/user1")
 
     tools = Tools()
@@ -227,9 +240,7 @@ def _test():
     env["GRASS_REGION"] = gs.region_env(res=250)
     coarse_computation = Tools(env=env)
     current_region = coarse_computation.g_region(flags="g").keyval
-    print(
-        current_region["ewres"], current_region["nsres"]
-    )  # TODO: should keyval convert?
+    print(current_region["ewres"], current_region["nsres"])
     coarse_computation.r_slope_aspect(
         elevation="elevation", slope="slope", flags="a", overwrite=True
     )
