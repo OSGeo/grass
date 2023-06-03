@@ -138,9 +138,6 @@ int main(int argc, char *argv[])
     parm.band->guisection = _("Bands");
 
     parm.memory = G_define_standard_option(G_OPT_MEMORYMB);
-#if GDAL_VERSION_NUM < 1800
-    parm.memory->options = "0-2047";
-#endif
 
     parm.target = G_define_option();
     parm.target->key = "target";
