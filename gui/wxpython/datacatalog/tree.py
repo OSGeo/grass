@@ -21,6 +21,7 @@ for details.
 import os
 import re
 import copy
+import time
 from multiprocessing import Process, Queue, cpu_count
 
 watchdog_used = True
@@ -168,6 +169,8 @@ class CurrentMapsetWatch(FileSystemEventHandler):
             if timestamp - self.modified_time < 0.5:
                 return
             self.modified_time = timestamp
+            # wait to make sure file writing is done
+            time.sleep(0.1)
             with open(event.src_path, "r") as f:
                 gisrc = {}
                 for line in f.readlines():
