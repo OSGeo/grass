@@ -253,6 +253,10 @@ class RenderWMSMgr(wx.EvtHandler):
             region["west"] = center - delta + region["west"]
             region["e-w resol"] = region["n-s resol"]
 
+            if region["proj"] == 3:  # LL locations
+                region["east"] = min(region["east"], 180.0)
+                region["west"] = max(region["west"], -180.0)
+
         else:
             delta = region["e-w resol"] * size["rows"] / 2
 
@@ -261,6 +265,10 @@ class RenderWMSMgr(wx.EvtHandler):
             region["north"] = center + delta + region["south"]
             region["south"] = center - delta + region["south"]
             region["n-s resol"] = region["e-w resol"]
+
+            if region["proj"] == 3:  # LL locations
+                region["north"] = min(region["north"], 90.0)
+                region["south"] = max(region["south"], -90.0)
 
     def Abort(self):
         """Abort rendering process"""
