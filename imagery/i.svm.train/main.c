@@ -88,6 +88,7 @@ int main(int argc, char *argv[])
     opt_subgroup->required = NO;
 
     opt_labels = G_define_standard_option(G_OPT_R_INPUTS);
+    opt_labels->key = "trainingmap";
     opt_labels->description = _("Map with training labels or target values");
 
     opt_sigfile = G_define_option();

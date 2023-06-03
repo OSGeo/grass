@@ -14,7 +14,7 @@ written into the signature file for use during prediction.</p>
 <p><em>i.svm.train</em> internally is using the libsvm. For introduction
 into value prediction or estimation with libsvm, see
 <a href="https://www.csie.ntu.edu.tw/~cjlin/papers/guide/guide.pdf">a
-Practical Guide to Support Vector Classification</a> by 
+Practical Guide to Support Vector Classification</a> by
 Chih-Wei Hsu, Chih-Chung Chang, and Chih-Jen Lin.</p>
 
 <p>It is strongly suggested to have semantic labels set for each raster
@@ -56,7 +56,7 @@ v.to.rast input=training output=training use=cat label_column=label
 
 # Train the SVM
 i.svm.train group=lsat7_2002 subgroup=lsat7_2002\
-    input=training signaturefile=landuse96_rnd_points
+    trainingmap=training signaturefile=landuse96_rnd_points
 
 # Go to i.svm.predict for the next step.
 </pre></div>
