@@ -1622,15 +1622,15 @@ class ModelRelation(ogl.LineShape):
         """Get list of control points"""
         return self._points
 
-    def _setPen(self):
+    def _setPen(self, bg_white=False):
         """Set pen"""
         self.SetPen(
-            wx.Pen(wx.WHITE if IsDark() else wx.BLACK, 1, wx.SOLID)
+            wx.Pen(wx.WHITE if IsDark() and not bg_white else wx.BLACK, 1, wx.SOLID)
         )
 
     def OnDraw(self, dc):
         """Draw relation"""
-        self._setPen()
+        self._setPen(dc.GetBackground() == wx.WHITE_BRUSH)
         ogl.LineShape.OnDraw(self, dc)
 
     def SetName(self, param):
