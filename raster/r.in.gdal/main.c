@@ -48,12 +48,8 @@ static GDALDatasetH opends(char *dsname, const char **doo, GDALDriverH *hDriver)
 {
     GDALDatasetH hDS = NULL;
 
-#if GDAL_VERSION_NUM >= 2000000
     hDS =
         GDALOpenEx(dsname, GDAL_OF_RASTER | GDAL_OF_READONLY, NULL, doo, NULL);
-#else
-    hDS = GDALOpen(dsname, GA_ReadOnly);
-#endif
     if (hDS == NULL)
         G_fatal_error(_("Unable to open datasource <%s>"), dsname);
     G_add_error_handler(error_handler_ds, hDS);
