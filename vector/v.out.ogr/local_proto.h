@@ -16,7 +16,7 @@ typedef GDALDriverH dr_t;
 #define ds_close(ds)              GDALClose(ds)
 
 /* some hard limits */
-#define SQL_BUFFER_SIZE 2000
+#define SQL_BUFFER_SIZE           2000
 
 struct Options {
     struct Option *input, *dsn, *layer, *type, *format, *field, *dsco, *lco,

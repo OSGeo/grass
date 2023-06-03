@@ -105,8 +105,7 @@ int describe_table(OGRLayerH hLayer, dbTable **table, cursor *c)
         ogrType = OGR_Fld_GetType(hFieldDefn);
         fieldName = OGR_Fld_GetNameRef(hFieldDefn);
 
-        if (ogrType != OFTInteger &&
-            ogrType != OFTInteger64 &&
+        if (ogrType != OFTInteger && ogrType != OFTInteger64 &&
             ogrType != OFTReal && ogrType != OFTString && ogrType != OFTDate &&
             ogrType != OFTTime && ogrType != OFTDateTime) {
             G_warning(

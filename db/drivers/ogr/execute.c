@@ -98,8 +98,7 @@ int db__driver_execute_immediate(dbString *sql)
             }
             else {
                 if ((cols[i].type != OFTInteger ||
-                     cols[i].type != OFTInteger64 ||
-                     cols[i].type != OFTReal) &&
+                     cols[i].type != OFTInteger64 || cols[i].type != OFTReal) &&
                     *(cols[i].value) == '\'') {
                     value = G_strchg(cols[i].value, '\'', ' ');
                     G_strip(value);

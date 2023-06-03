@@ -549,7 +549,7 @@ int main(int argc, char *argv[])
     if (Ogr_ds == NULL)
         G_fatal_error(_("Unable to open data source <%s>"), dsn);
 
-        /* driver name */
+    /* driver name */
     ogr_driver_name = GDALGetDriverShortName(GDALGetDatasetDriver(Ogr_ds));
     G_verbose_message(_("Using OGR driver '%s/%s'"), ogr_driver_name,
                       GDALGetDriverLongName(GDALGetDatasetDriver(Ogr_ds)));
@@ -812,7 +812,7 @@ int main(int argc, char *argv[])
             if (ogr_feature_count <= 0)
                 n_features[layer]++;
 
-                /* Geometry */
+            /* Geometry */
             Ogr_featuredefn = OGR_iter.Ogr_featuredefn;
             for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); i++) {
                 if (igeom > -1 && i != igeom)
@@ -934,9 +934,7 @@ int main(int argc, char *argv[])
                 Ogr_field =
                     OGR_FD_GetFieldDefn(Ogr_featuredefn, key_idx[layer]);
                 Ogr_ftype = OGR_Fld_GetType(Ogr_field);
-                if (!(Ogr_ftype == OFTInteger
-                      || Ogr_ftype == OFTInteger64
-                      )) {
+                if (!(Ogr_ftype == OFTInteger || Ogr_ftype == OFTInteger64)) {
                     G_fatal_error(
                         _("Key column '%s' in input layer <%s> is not integer"),
                         param.key->answer, layer_names[layer]);
@@ -1054,9 +1052,8 @@ int main(int argc, char *argv[])
                                       Ogr_fieldname);
                     }
                 }
-                else if (Ogr_ftype == OFTIntegerList
-                         || Ogr_ftype == OFTInteger64List
-                ) {
+                else if (Ogr_ftype == OFTIntegerList ||
+                         Ogr_ftype == OFTInteger64List) {
                     /* hack: treat as string */
                     sprintf(buf, "varchar ( %d )", OFTIntegerListlength);
                     col_info[i_out].type = G_store(buf);
@@ -1252,7 +1249,7 @@ int main(int argc, char *argv[])
                 /* Ogr_geometry from OGR_F_GetGeomFieldRef() should not be
                  * modified. */
                 Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
-            Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
+                Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
                 if (Ogr_geometry == NULL) {
                     nogeom++;
                 }
@@ -1285,8 +1282,7 @@ int main(int argc, char *argv[])
                         Ogr_fstring = OGR_F_GetFieldAsString(Ogr_feature, i);
                     if (Ogr_fstring && *Ogr_fstring) {
                         if (Ogr_ftype == OFTInteger ||
-                            Ogr_ftype == OFTInteger64 ||
-                            Ogr_ftype == OFTReal) {
+                            Ogr_ftype == OFTInteger64 || Ogr_ftype == OFTReal) {
                             G_rasprintf(&sqlbuf, &sqlbufsize, ", %s",
                                         Ogr_fstring);
                         }
@@ -1307,9 +1303,8 @@ int main(int argc, char *argv[])
                         }
                         else if (Ogr_ftype == OFTString ||
                                  Ogr_ftype == OFTStringList ||
-                                 Ogr_ftype == OFTIntegerList
-                                 || Ogr_ftype == OFTInteger64List
-                        ) {
+                                 Ogr_ftype == OFTIntegerList ||
+                                 Ogr_ftype == OFTInteger64List) {
                             db_set_string(&strval, (char *)Ogr_fstring);
                             db_double_quote_string(&strval);
                             G_rasprintf(&sqlbuf, &sqlbufsize, ", '%s'",
@@ -1324,8 +1319,7 @@ int main(int argc, char *argv[])
                     else {
                         /* G_warning (_("Column value not set" )); */
                         if (Ogr_ftype == OFTInteger ||
-                            Ogr_ftype == OFTInteger64 ||
-                            Ogr_ftype == OFTReal) {
+                            Ogr_ftype == OFTInteger64 || Ogr_ftype == OFTReal) {
                             G_rasprintf(&sqlbuf, &sqlbufsize, ", NULL");
                         }
                         else if (Ogr_ftype == OFTDate || Ogr_ftype == OFTTime ||
@@ -1334,9 +1328,8 @@ int main(int argc, char *argv[])
                         }
                         else if (Ogr_ftype == OFTString ||
                                  Ogr_ftype == OFTStringList ||
-                                 Ogr_ftype == OFTIntegerList
-                                 || Ogr_ftype == OFTInteger64List
-                        ) {
+                                 Ogr_ftype == OFTIntegerList ||
+                                 Ogr_ftype == OFTInteger64List) {
                             G_rasprintf(&sqlbuf, &sqlbufsize, ", NULL");
                         }
                         else {
@@ -1565,8 +1558,8 @@ int main(int argc, char *argv[])
             Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
             igeom = -1;
-                igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn,
-                                                 param.geom->answer);
+            igeom =
+                OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, param.geom->answer);
 
             cat = 0; /* field = layer + 1 */
             feature_count = 0;
@@ -1613,7 +1606,7 @@ int main(int argc, char *argv[])
                         continue; /* use only geometry defined via param.geom */
 
                     Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
-                Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
+                    Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
                     if (Ogr_geometry != NULL) {
                         centroid(Ogr_geometry, Centr, &si, layer + 1, area_cat,
                                  min_area, type);
