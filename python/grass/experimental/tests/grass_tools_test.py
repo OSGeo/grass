@@ -1,3 +1,5 @@
+"""Test grass.experimental.Tools class"""
+
 import os
 import pytest
 
@@ -46,11 +48,13 @@ def test_stdout_as_space_items(xy_dataset_session):
 
 
 def test_stdout_split_whitespace(xy_dataset_session):
+    """Check that whitespace-based split function works"""
     tools = Tools(session=xy_dataset_session)
     assert tools.g_mapset(flags="l").text_split() == ["PERMANENT"]
 
 
 def test_stdout_split_space(xy_dataset_session):
+    """Check that the split function works with space"""
     tools = Tools(session=xy_dataset_session)
     # Not a good example usage, but it tests the functionality.
     assert tools.g_mapset(flags="l").text_split(" ") == ["PERMANENT", ""]
@@ -111,6 +115,7 @@ def test_global_overwrite_vs_init(xy_dataset_session):
 
 
 def test_stdin(xy_dataset_session):
+    """Test that stdin is accepted"""
     tools = Tools(session=xy_dataset_session)
     tools.feed_input_to("13.45,29.96,200").v_in_ascii(
         input="-", output="point", separator=","
@@ -118,6 +123,7 @@ def test_stdin(xy_dataset_session):
 
 
 def test_raises(xy_dataset_session):
+    """Test that exception is raised for wrong parameter value"""
     tools = Tools(session=xy_dataset_session)
     wrong_name = "wrong_standard"
     with pytest.raises(gs.CalledModuleError, match=wrong_name):
