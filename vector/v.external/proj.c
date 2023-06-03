@@ -23,7 +23,6 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
     *proj_wkt = NULL;
 
     /* Fetch input layer projection in GRASS form. */
-#if GDAL_VERSION_NUM >= 1110000
     if (geom_col) {
         int igeom;
         OGRGeomFieldDefnH Ogr_geomdefn;
@@ -41,9 +40,6 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
     else {
         hSRS = OGR_L_GetSpatialRef(Ogr_layer);
     }
-#else
-    hSRS = OGR_L_GetSpatialRef(Ogr_layer); /* should not be freed later */
-#endif
 
     /* verbose is used only when comparing input SRS to GRASS projection,
      * not when comparing SRS's of several input layers */
