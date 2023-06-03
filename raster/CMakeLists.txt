@@ -180,7 +180,7 @@ build_program_in_subdir(
 
 set_source_files_properties(r.out.gdal/main.c
   PROPERTIES COMPILE_DEFINITIONS
-  "GRASS_VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\";GDAL_VERSION_MAJOR=\"2\";GDAL_VERSION_MINOR=\"1\";GDAL_VERSION_REV=\"1\""
+  "GRASS_VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
   )
 
  build_program_in_subdir(
