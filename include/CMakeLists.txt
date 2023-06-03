@@ -47,21 +47,7 @@ check_target(GDAL HAVE_GDAL)
 check_target(GDAL HAVE_OGR)
 check_target(SQLITE HAVE_SQLITE)
 
-#TODO: check with more version of proj
-
-if(PROJ_VERSION_STRING GREATER 599 AND PROJ_VERSION_STRING LESS 700)
-	message(STATUS "Using PROJ.4 API version 6.x")
-	set(PROJMAJOR 6)
-	check_target(PROJ HAVE_PROJ_H)
-elseif(PROJ_VERSION_STRING GREATER 499 AND PROJ_VERSION_STRING LESS 600)
-	check_target(PROJ HAVE_PROJ_H)
-	message(STATUS "Using PROJ.4 API version 5.x")
-	set(PROJMAJOR 5)
-elseif(PROJ_VERSION_STRING GREATER 399 AND PROJ_VERSION_STRING LESS 500)
-	set(USE_PROJ4API 1)
-	message(STATUS "Using PROJ.4 API version 4.x")
-	set(PROJMAJOR 4)
-endif()
+check_target(PROJ HAVE_PROJ_H)
 
 check_target(BLAS HAVE_LIBBLAS)
 check_target(BLAS HAVE_CBLAS_H)
