@@ -141,12 +141,8 @@ int main(int argc, char *argv[])
     /* open OGR DSN */
     Ogr_ds = NULL;
     if (strlen(options.dsn->answer) > 0) {
-#if GDAL_VERSION_NUM >= 2020000
         Ogr_ds =
             GDALOpenEx(options.dsn->answer, GDAL_OF_VECTOR, NULL, NULL, NULL);
-#else
-        Ogr_ds = OGROpen(dsn, FALSE, NULL);
-#endif
     }
     if (Ogr_ds == NULL)
         G_fatal_error(_("Unable to open data source <%s>"), dsn);
