@@ -211,12 +211,6 @@ class RasterSeriesMap:
         # Add baselayers
         self._render_baselayers(img)
 
-        # Create name for empty layers
-        # Random name needed to avoid potential conflict with layer names
-        # A new random_name_none is created each time the render function is run,
-        # and any existing random_name_none file will be ignored
-        random_name_none = gs.append_random("none", 8) + ".png"
-
         # Render each layer
         for layer in self.rasters:
             # Create file
@@ -308,7 +302,6 @@ class RasterSeriesMap:
         # Create a GIF from the PNG images
         import PIL.Image  # pylint: disable=import-outside-toplevel
         import PIL.ImageDraw  # pylint: disable=import-outside-toplevel
-        import PIL.ImageFont  # pylint: disable=import-outside-toplevel
 
         # Render images if they have not been already
         if not self._layers_rendered:
