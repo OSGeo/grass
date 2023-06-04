@@ -13,7 +13,7 @@ def test_key_value_parser_number(xy_dataset_session):
     assert tools.g_region(flags="g").keyval["nsres"] == 1
 
 
-@pytest.mark.fails
+@pytest.mark.xfail
 def test_key_value_parser_multiple_values(xy_dataset_session):
     """Check that strings and floats are parsed"""
     tools = Tools(session=xy_dataset_session)
