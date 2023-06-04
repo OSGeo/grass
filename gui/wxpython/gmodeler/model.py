@@ -60,7 +60,7 @@ from core.gcmd import (
 from core.settings import UserSettings
 from gui_core.forms import GUI, CmdPanel
 from gui_core.widgets import GNotebook
-from gui_core.wrap import Button
+from gui_core.wrap import Button, IsDark
 from gmodeler.giface import GraphicalModelerGrassInterface
 
 from grass.script import task as gtask
@@ -1622,14 +1622,15 @@ class ModelRelation(ogl.LineShape):
         """Get list of control points"""
         return self._points
 
-    def _setPen(self):
+    def _setPen(self, bg_white=False):
         """Set pen"""
-        pen = wx.Pen(wx.BLACK, 1, wx.SOLID)
-        self.SetPen(pen)
+        self.SetPen(
+            wx.Pen(wx.WHITE if IsDark() and not bg_white else wx.BLACK, 1, wx.SOLID)
+        )
 
     def OnDraw(self, dc):
         """Draw relation"""
-        self._setPen()
+        self._setPen(dc.GetBackground() == wx.WHITE_BRUSH)
         ogl.LineShape.OnDraw(self, dc)
 
     def SetName(self, param):
