@@ -2745,12 +2745,17 @@ class WriteActiniaFile(WriteScriptFile):
             value = p.get("value", None)
 
             if (name and value) or (name in parameterizedParams):
-                ptype = p.get("type", "string")
                 foundVar = False
 
                 if name in parameterizedParams:
                     foundVar = True
-                    value = f"{{{{ {self._getParamName(name, item)} }}}}"
+                    parameterizedParam = self._getParamName(name, item)
+                    default_val = p.get("value", "")
+
+                    if len(default_val) > 0:
+                        parameterizedParam += f"|default({default_val})"
+
+                    value = f"{{{{ {parameterizedParam} }}}}"
 
                 param_string = f'{{"param": "{name}", "value": "{value}"}}'
                 age = p.get("age", "old")
