@@ -2,7 +2,7 @@
 
 ## GRASS GIS docker matrix
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/osgeo/grass-gis.svg)](https://grass.osgeo.org/download/software/docker-images/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/osgeo/grass-gis.svg)](https://grass.osgeo.org/download/docker/)
 
 Find out included version of GDAL, GEOS, PROJ, PDAL, Python and GRASS GIS using
 
