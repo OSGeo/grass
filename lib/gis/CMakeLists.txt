@@ -1,5 +1,5 @@
 set(gislib_SRCS
-  adj_cellhd.c
+  adj_cellhd.c              aprintf.c
   copy_dir.c
   get_ellipse.c             ll_scan.c                 open_misc.c               proj3.c                   units.c
   alloc.c                   copy_file.c               get_projinfo.c            locale.c                  overwrite.c               put_window.c              user_config.c
