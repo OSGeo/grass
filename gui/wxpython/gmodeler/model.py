@@ -15,6 +15,7 @@ Classes:
  - model::ModelComment
  - model::ProcessModelFile
  - model::WriteModelFile
+ - model::WriteActiniaFile
  - model::WritePyWPSFile
  - model::WritePythonFile
  - model::ModelParamDialog
@@ -25,7 +26,7 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
-@PyWPS, Python parameterization Ondrej Pesek <pesej.ondrek gmail.com>
+@actinia, PyWPS, Python parameterization Ondrej Pesek <pesej.ondrek gmail.com>
 """
 
 import os
@@ -2663,6 +2664,132 @@ class WriteScriptFile(ABC):
         item_parameterized_flags = ", ".join(item_parameterized_flags)
 
         return item_true_flags, item_parameterized_flags, item_params
+
+
+class WriteActiniaFile(WriteScriptFile):
+    """Class for exporting model to an actinia script."""
+
+    def __init__(self, fd, model):
+        """Class for exporting model to actinia script."""
+        self.fd = fd
+        self.model = model
+        self.indent = 2
+
+        self._writeActinia()
+
+    def _writeActinia(self):
+        """Write actinia model to file."""
+        properties = self.model.GetProperties()
+
+        self.fd.write(
+            f"""{{
+{' ' * self.indent * 1}"id": "model",
+{' ' * self.indent * 1}"description": "{'""'.join(properties["description"].splitlines())}",
+{' ' * self.indent * 1}"version": "1",
+{' ' * self.indent * 1}"template": {{
+{' ' * self.indent * 2}"list": [
+"""
+        )
+
+        # [:-1] because we do not want to write the trailing comma for
+        # the last item (it would make the json file invalid)
+        for item in self.model.GetItems()[:-1]:
+            self._writePythonAction(item, item.GetParameterizedParams())
+            self.fd.write(f"{' ' * self.indent * 3}}},\n")
+        self._writePythonAction(
+            self.model.GetItems()[-1],
+            self.model.GetItems()[-1].GetParameterizedParams(),
+        )
+        self.fd.write(f"{' ' * self.indent * 3}}}\n")
+
+        self.fd.write(f"{' ' * self.indent * 2}]\n{' ' * self.indent * 1}}}\n}}")
+
+    def _writePythonAction(self, item, variables={}, intermediates=None):
+        """Write model action to Python file"""
+        task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
+        strcmd = f"{' ' * self.indent * 3}{{\n"
+        self.fd.write(
+            strcmd + self._getPythonActionCmd(item, task, len(strcmd), variables) + "\n"
+        )
+
+    def _getPythonActionCmd(self, item, task, cmdIndent, variables={}):
+        opts = task.get_options()
+
+        ret = ""
+        parameterizedParams = [v["name"] for v in variables["params"]]
+
+        flags, itemParameterizedFlags, params = self._getItemFlags(
+            item, opts, variables
+        )
+        inputs = []
+        outputs = []
+
+        if len(itemParameterizedFlags) > 0:
+            dlg = wx.MessageDialog(
+                self.model.canvas,
+                message=_(
+                    f"Module {task.get_name()} in your model contains "
+                    f"parameterized flags. actinia does not support "
+                    f"parameterized flags. The following flags are therefore "
+                    f"not being written in the generated json: "
+                    f"{itemParameterizedFlags}"
+                ),
+                caption=_("Warning"),
+                style=wx.OK_DEFAULT | wx.ICON_WARNING,
+            )
+            dlg.ShowModal()
+            dlg.Destroy()
+
+        for p in opts["params"]:
+            name = p.get("name", None)
+            value = p.get("value", None)
+            age = p.get("age", False)
+
+            if (name and value) or (name in parameterizedParams):
+                ptype = p.get("type", "string")
+                foundVar = False
+
+                if name in parameterizedParams:
+                    foundVar = True
+                    value = f"{{{{ {self._getParamName(name, item)} }}}}"
+
+                param_string = f'{{"param": "{name}", "value": "{value}"}}'
+                if age == "old":
+                    inputs.append(param_string)
+                else:
+                    outputs.append(param_string)
+
+        ret += f'{" " * self.indent * 4}"module": "{task.get_name()}",\n'
+
+        # write flags
+        if flags:
+            ret += f'{" " * self.indent * 4}"flags": "{flags}",\n'
+
+        # write inputs and outputs
+        if len(inputs) > 0:
+            ret += self.write_params("inputs", inputs)
+        else:
+            ret += "}"
+
+        if len(outputs) > 0:
+            ret += self.write_params("outputs", outputs)
+
+        # ret[:-2] to get rid of the trailing comma (to make the json valid)
+        return ret[:-2]
+
+    def write_params(self, param_type, params):
+        """Write the full list of parameters of one type.
+
+        :param param_type: type of parameters (inputs or outputs)
+        :params: list of the parameters
+        """
+        ret = f'{" " * self.indent * 4}"{param_type}": [\n'
+        for opt in params[:-1]:
+            ret += f"{' ' * self.indent * 5}{opt},\n"
+        ret += f"{' ' * self.indent * 5}{params[-1]}\n"
+        ret += f"{' ' * self.indent * 4}],\n"
+
+        return ret
 
 
 class WritePyWPSFile(WriteScriptFile):

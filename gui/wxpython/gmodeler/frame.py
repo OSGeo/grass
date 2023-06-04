@@ -173,7 +173,7 @@ class ModelFrame(wx.Frame):
             page=self.variablePanel, text=_("Variables"), name="variables"
         )
         self.notebook.AddPage(
-            page=self.pythonPanel, text=_("Python editor"), name="python"
+            page=self.pythonPanel, text=_("Script editor"), name="python"
         )
         self.notebook.AddPage(
             page=self.goutput, text=_("Command output"), name="output"
@@ -2035,6 +2035,7 @@ class PythonPanel(wx.Panel):
             choices=[
                 _("Python"),
                 _("PyWPS"),
+                _("actinia"),
             ],
         )
         self.script_type_box.SetSelection(0)  # Python
@@ -2207,6 +2208,8 @@ class PythonPanel(wx.Panel):
             self.write_object = WritePythonFile
         elif new_script_type == "PyWPS":
             self.write_object = WritePyWPSFile
+        elif new_script_type == "actinia":
+            self.write_object = WriteActiniaFile
 
         if self.RefreshScript():
             self.body.script_type = new_script_type
@@ -2223,6 +2226,12 @@ class PythonPanel(wx.Panel):
             self.btnRun.SetToolTip(_("Run script"))
         elif self.body.script_type == "PyWPS":
             self.write_object = WritePyWPSFile
+            self.btnRun.Disable()
+            self.btnRun.SetToolTip(
+                _("Run script - enabled only for basic Python scripts")
+            )
+        elif self.body.script_type == "actinia":
+            self.write_object = WriteActiniaFile
             self.btnRun.Disable()
             self.btnRun.SetToolTip(
                 _("Run script - enabled only for basic Python scripts")
