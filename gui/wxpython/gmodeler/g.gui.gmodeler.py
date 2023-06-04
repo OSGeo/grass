@@ -47,10 +47,10 @@ def main():
     set_gui_path()
 
     from core.giface import StandaloneGrassInterface
-    from gmodeler.frame import ModelFrame
+    from gmodeler.frame import ModelerFrame
 
     app = wx.App()
-    frame = ModelFrame(
+    frame = ModelerFrame(
         parent=None,
         giface=StandaloneGrassInterface(),
         title=_("Graphical Modeler - GRASS GIS"),
