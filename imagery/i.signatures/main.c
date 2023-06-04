@@ -31,36 +31,38 @@ void print_plain(const char *type, I_SIGFILE_TYPE sigtype, const char *mapset)
     if (count == 0)
         G_warning(_("No signature files of type \"%s\" found"), type);
     else {
-        printf("%s:\n", type);
+        fprintf(stdout, "%s:\n", type);
         for (int i = 0; i < count; i++) {
-            printf("    %s\n", list[i]);
+            fprintf(stdout, "    %s\n", list[i]);
         }
     }
     I_free_signatures_list(count, &list);
+    fflush(stdout);
 }
 
 void print_json(const char *type, I_SIGFILE_TYPE sigtype, const char *mapset)
 {
-    printf("{\n");
+    fprintf(stdout, "{\n");
     if (type == NULL) {
-        printf("\"sig\": [");
+        fprintf(stdout, "\"sig\": [");
         print_inline(I_SIGFILE_TYPE_SIG, mapset);
-        printf("],\n");
-        printf("\"sigset\": [");
+        fprintf(stdout, "],\n");
+        fprintf(stdout, "\"sigset\": [");
         print_inline(I_SIGFILE_TYPE_SIGSET, mapset);
-        printf("]\n");
+        fprintf(stdout, "]\n");
     }
     else if (sigtype == I_SIGFILE_TYPE_SIG) {
-        printf("\"sig\": [");
+        fprintf(stdout, "\"sig\": [");
         print_inline(I_SIGFILE_TYPE_SIG, mapset);
-        printf("]\n");
+        fprintf(stdout, "]\n");
     }
     else if (sigtype == I_SIGFILE_TYPE_SIGSET) {
-        printf("\"sigset\": [");
+        fprintf(stdout, "\"sigset\": [");
         print_inline(I_SIGFILE_TYPE_SIGSET, mapset);
-        printf("]\n");
+        fprintf(stdout, "]\n");
     }
-    printf("}\n");
+    fprintf(stdout, "}\n");
+    fflush(stdout);
 }
 
 void print_inline(I_SIGFILE_TYPE sigtype, const char *mapset)
@@ -74,8 +76,8 @@ void print_inline(I_SIGFILE_TYPE sigtype, const char *mapset)
         if (first)
             first = 0;
         else
-            printf(", ");
-        printf("\"%s\"", list[i]);
+            fprintf(stdout, ", ");
+        fprintf(stdout, "\"%s\"", list[i]);
     }
     I_free_signatures_list(count, &list);
 }
