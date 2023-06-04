@@ -2743,7 +2743,6 @@ class WriteActiniaFile(WriteScriptFile):
         for p in opts["params"]:
             name = p.get("name", None)
             value = p.get("value", None)
-            age = p.get("age", False)
 
             if (name and value) or (name in parameterizedParams):
                 ptype = p.get("type", "string")
@@ -2754,10 +2753,11 @@ class WriteActiniaFile(WriteScriptFile):
                     value = f"{{{{ {self._getParamName(name, item)} }}}}"
 
                 param_string = f'{{"param": "{name}", "value": "{value}"}}'
-                if age == "old":
-                    inputs.append(param_string)
-                else:
+                age = p.get("age", "old")
+                if age == "new":
                     outputs.append(param_string)
+                else:
+                    inputs.append(param_string)
 
         ret += f'{" " * self.indent * 4}"module": "{task.get_name()}",\n'
 
