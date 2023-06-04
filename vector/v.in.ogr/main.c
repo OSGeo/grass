@@ -1249,7 +1249,6 @@ int main(int argc, char *argv[])
                 /* Ogr_geometry from OGR_F_GetGeomFieldRef() should not be
                  * modified. */
                 Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
-                Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
                 if (Ogr_geometry == NULL) {
                     nogeom++;
                 }
@@ -1558,8 +1557,9 @@ int main(int argc, char *argv[])
             Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
             igeom = -1;
-            igeom =
-                OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, param.geom->answer);
+            if (param.geom->answer)
+                igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn,
+                                                 param.geom->answer);
 
             cat = 0; /* field = layer + 1 */
             feature_count = 0;
@@ -1606,7 +1606,6 @@ int main(int argc, char *argv[])
                         continue; /* use only geometry defined via param.geom */
 
                     Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
-                    Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
                     if (Ogr_geometry != NULL) {
                         centroid(Ogr_geometry, Centr, &si, layer + 1, area_cat,
                                  min_area, type);
