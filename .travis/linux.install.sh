@@ -35,9 +35,10 @@ sudo apt-get install --no-install-recommends \
         python3-pil \
         python3-pip \
         python3-ply \
-        python-wxgtk3.0 \
+        python3-six \
+        python-wxgtk4.0 \
         unixodbc-dev \
-        libnetcdf-dev   \
+        libnetcdf-dev \
         autoconf2.13 \
         autotools-dev \
         debhelper \
@@ -45,7 +46,7 @@ sudo apt-get install --no-install-recommends \
         fakeroot \
         flex \
         bison \
-       netcdf-bin \
+        netcdf-bin \
         dpatch \
         libblas-dev \
         pdal \
