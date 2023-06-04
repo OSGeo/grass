@@ -34,7 +34,7 @@ class TestVDbRenameColumn(TestCase):
 
         m = SimpleModule("v.info", flags="c", map="myroads")
         self.assertModule(m)
-        self.assertRegexpMatches(decode(m.outputs.stdout), "roadname")
+        self.assertRegex(decode(m.outputs.stdout), "roadname")
         self.assertNotRegexpMatches(decode(m.outputs.stdout), "ROAD_NAME")
 
 
