@@ -32,7 +32,7 @@ on:
 env:
   # Additionally mentioned in docker-sha-release-latest
   # as use of variable fails there
-  DOCKERHUB_REPOSITORY: mundialis/grass-py3-pdal
+  DOCKERHUB_REPOSITORY: osgeo/grass-gis
 
 jobs:
 
@@ -166,7 +166,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           # images: ${DOCKERHUB_REPOSITORY}
-          images: mundialis/grass-py3-pdal
+          images: osgeo/grass-gis
           tags: |
             type=ref,event=tag
           flavor: |
