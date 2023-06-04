@@ -22,38 +22,60 @@ Be sure to check your code against these rules:
 ### Use pre-commit
 
 It is highly recommended to install and use [Pre-commit](https://pre-commit.com)
-before submitting any new or modification of code or other content. The Pre-commit
-git hooks set are checking validity and executes formatting of file formats for
-a range of files types, including C/C++ and Python files. Pre-commit installs
+before submitting any new or modified code or any other content. The Pre-commit
+git hooks set are checking validity and execute automated formatting for
+a range of file formats, including C/C++ and Python. Pre-commit installs
 all necessary tools in a virtual environment upon first use.
+
+If you never used Pre-commit before, you must start by installing it on your
+system. You only do it once:
 
 ```bash
 python -m pip install pre-commit
+```
 
+Pre-commit must then be activated in the code repository. Change the directory
+to the root folder and use the `install` command:
+
+```bash
 cd <grass_source_dir>
 
 # once per repo
 pre-commit install
 ```
 
-Pre-commit will then be automatically triggered by git commit command. It is
-also possible to run manually, e.g:
+Pre-commit will then be automatically triggered by the `git commit` command. If
+it finds any problem it will abort the commit and try to solve automatically
+whatever it can.  In that case review the changes and run again `git add` and
+`git commit`.
+
+It is also possible to run Pre-commit manually, e.g:
 
 ```bash
 pre-commit run clang-format --all-files
 pre-commit run black --all-files
 ```
 
+Or to target a specific set of files:
+
+```bash
+pre_commit run --files raster/r.somemodule/*
+```
+
 The Pre-commit hooks are defined in
 [.pre-commit-config.yaml](../../../.pre-commit-config.yaml).
 
-It is possible to temporary disable the Pre-commit hooks in the repo, eg. while
+It is possible to temporally disable the Pre-commit hooks in the repo, e.g. while
 working on older branches:
 
 ```bash
 # backporting...
 pre-commit uninstall
+```
 
+And to reactive Pre-commit again:
+
+```bash
 git switch main
 pre-commit install
 ```
