@@ -26,7 +26,7 @@ import getopt
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
 from grass.exceptions import Usage
-from grass.script.core import set_raise_on_error, warning
+from grass.script.core import set_raise_on_error, warning, error
 
 from core import globalvar
 from core.utils import registerPid, unregisterPid
@@ -44,16 +44,6 @@ try:
     import wx.lib.agw.advancedsplash as SC
 except ImportError:
     SC = None
-
-min_required_wx_version = [4, 2, 0]
-if not globalvar.CheckWxVersion(min_required_wx_version):
-    warning("!" * 50)
-    warning(
-        "Minimum required WxPython version: {}".format(
-            ".".join(map(str, min_required_wx_version))
-        )
-    )
-    warning("!" * 50)
 
 
 class GMApp(wx.App):
@@ -101,10 +91,28 @@ class GMApp(wx.App):
                 from main_window.frame import GMFrame
             else:
                 from lmgr.frame import GMFrame
-
-            mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
-            mainframe.Show()
-            self.SetTopWindow(mainframe)
+            try:
+                mainframe = GMFrame(
+                    parent=None, id=wx.ID_ANY, workspace=self.workspaceFile
+                )
+            except Exception as err:
+                min_required_wx_version = [4, 2, 0]
+                if not globalvar.CheckWxVersion(min_required_wx_version):
+                    error(err)
+                    warning(
+                        _(
+                            "Current version of wxPython {} is lower than "
+                            "minimum required version {}".format(
+                                wx.__version__,
+                                ".".join(map(str, min_required_wx_version)),
+                            )
+                        )
+                    )
+                else:
+                    raise
+            else:
+                mainframe.Show()
+                self.SetTopWindow(mainframe)
 
         wx.CallAfter(show_main_gui)
 
