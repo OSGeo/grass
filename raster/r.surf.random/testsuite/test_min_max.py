@@ -123,19 +123,23 @@ class MinMaxTestCase(TestCase):
             "r.surf.random", min=min_value, max=max_value, output=self.output, seed=42
         )
 
-    def test_double_params_with_auto_seed(self):
-        """Check if doubles instead of ints are refused"""
+    def test_auto_seed(self):
+        """Check if random seed is generated with seed flag"""
         min_value = -3.3
         max_value = 5.8
-        self.assertModuleFail(
-            "r.surf.random", min=min_value, max=max_value, output=self.output, flags="s"
+        self.assertModule(
+            "r.surf.random",
+            min=min_value,
+            max=max_value,
+            output=self.output,
+            flags="s",
         )
 
-    def test_double_params_with_explicit_seed(self):
-        """Check if doubles instead of ints are refused"""
+    def test_explicit_seed(self):
+        """Check if user defined seed is used"""
         min_value = -3.3
         max_value = 5.8
-        self.assertModuleFail(
+        self.assertModule(
             "r.surf.random", min=min_value, max=max_value, output=self.output, seed=33
         )
 
