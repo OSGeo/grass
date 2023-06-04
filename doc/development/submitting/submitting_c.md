@@ -261,9 +261,11 @@ sent to any of these functions will be printed to stderr.
 
 G_message() output is not expected to be sent to pipe or file.
 
-Always use the gettext macros with _("") for user messages, example:
+Always use the gettext macros with \_("") for user messages, example:
 
 ```c
+#include "glocale.h"
+
 G_fatal_error(_("Vector map <%s> not found"), name);
 ```
 
@@ -282,10 +284,22 @@ Any message with a noun in plural form has to pass `n_()` macro, even if for the
 English language it is not required!
 
 ```c
-G_message(n_("One map", "%d maps", number), number);
-```
+G_message( n_("%d map from mapset <%s> removed",
+              "%d maps from mapset <%s> removed", count), count, mapset);
+/* Notice double use of "count" - as an argument for both functions
+   - n_() and G_message() */
 
-See [locale/README](../../../locale/README) for details.
+G_message( n_("%d map selected", "%d maps selected", count), count);
+G_message( n_("One file removed", "%d files removed", count) count);
+/* Both of forms of singular case "%d file" or "One file" are correct.
+   The choice between them is purely stylistic one. */
+
+/* Although in English it is not necessary to provide a separate
+   text if "n" always is >1, in other languages is a difference if "n"
+   is i.e. 2-4, or n==10 etc. */
+G_message( n_("Remove map", "Remove maps", count));
+/* Number it self doesn't have to be used in the output text */
+```
 
 Pipe/file data output: For data output redirected to pipe or file, please use
 fprintf() and specify the stdout stream as follows:
