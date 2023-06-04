@@ -44,6 +44,10 @@ i.e. the eight multiples of 45 degrees. Cell values are 1 to 8 clockwise from
 north for AGNPS and 1 to 8 counterclockwise from north east for Drainage. See
 <em><a href="r.watershed.html">r.watershed</a></em> for more details about the
 Drainage aspect.
+Terraflow (same as ArcGIS) type aspect map will use a power-of-two encoding
+clockwise from 1 for east to 128 for north east.
+See <em><a href="r.terraflow.html">r.terraflow</a></em> for more details about
+the Terraflow encoding.
 <p>GRASS aspect maps are measured using Cartesian conventions, i.e. in degrees
 counterclockwise from east. e.g.:
 
@@ -88,7 +92,8 @@ d.rast.arrow map=direction type=grass magnitude_map=magnitude skip=3 grid=none
 <a href="d.rast.num.html">d.rast.num</a>,
 <a href="g.region.html">g.region</a>,
 <a href="r.slope.aspect.html">r.slope.aspect</a>,
-<a href="r.watershed.html">r.watershed</a>
+<a href="r.watershed.html">r.watershed</a>,
+<a href="r.terraflow.html">r.terraflow</a>
 </em>
 
 <h2>AUTHORS</h2>
