@@ -72,7 +72,7 @@ add_subdirectory(v.lrs)
 
 build_program_in_subdir(v.mkgrid DEPENDS grass_gis grass_vector)
 
-build_program_in_subdir(v.neighbors DEPENDS grass_gis grass_vector)
+build_program_in_subdir(v.neighbors DEPENDS grass_gis grass_vector grass_stats)
 
 build_program_in_subdir(v.net DEPENDS grass_gis grass_vector)
 
