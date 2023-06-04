@@ -4,8 +4,8 @@
 @brief wxGUI Graphical Modeler for creating, editing, and managing models
 
 Classes:
- - frame::ModelCanvas
- - frame::ModelEvtHandler
+ - canvas::ModelCanvas
+ - canvas::ModelEvtHandler
 
 (C) 2010-2023 by the GRASS Development Team
 

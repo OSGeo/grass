@@ -835,11 +835,12 @@ class GMFrame(wx.Frame):
 
     def OnGModeler(self, event=None, cmd=None):
         """Launch Graphical Modeler. See OnIClass documentation"""
-        from gmodeler.frame import ModelFrame
+        from gmodeler.panels import ModelerPanel
 
-        win = ModelFrame(parent=self, giface=self._giface)
-        win.CentreOnScreen()
-        win.Show()
+        gmodeler_panel = ModelerPanel(parent=self, giface=self._giface)
+
+        # add map display panel to notebook and make it current
+        self.mapnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))
 
     def OnPsMap(self, event=None, cmd=None):
         """Launch Cartographic Composer. See OnIClass documentation"""
