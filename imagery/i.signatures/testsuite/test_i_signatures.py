@@ -57,7 +57,7 @@ class PrintSignaturesTestCase(TestCase):
         """
         If no signature file type is specified, it should print all of them
         """
-        i_sig = SimpleModule("i.signatures")
+        i_sig = SimpleModule("i.signatures", flags="p")
         self.assertModule(i_sig)
         self.assertTrue(i_sig.outputs.stdout)
         self.assertIn(self.sig_name1, i_sig.outputs.stdout)
@@ -68,13 +68,13 @@ class PrintSignaturesTestCase(TestCase):
         If a type is specified, only signatures of matching type should be printed
         """
         # Case for sig
-        i_sig = SimpleModule("i.signatures", type="sig")
+        i_sig = SimpleModule("i.signatures", type="sig", flags="p")
         self.assertModule(i_sig)
         self.assertTrue(i_sig.outputs.stdout)
         self.assertIn(self.sig_name1, i_sig.outputs.stdout)
         self.assertNotIn(self.sig_name2, i_sig.outputs.stdout)
         # Case for sigset
-        i_sig = SimpleModule("i.signatures", type="sigset")
+        i_sig = SimpleModule("i.signatures", type="sigset", flags="p")
         self.assertModule(i_sig)
         self.assertTrue(i_sig.outputs.stdout)
         self.assertNotIn(self.sig_name1, i_sig.outputs.stdout)
@@ -84,7 +84,7 @@ class PrintSignaturesTestCase(TestCase):
         """
         If no signature file type is specified, it should print all of them
         """
-        i_sig = SimpleModule("i.signatures", format="json")
+        i_sig = SimpleModule("i.signatures", format="json", flags="p")
         self.assertModule(i_sig)
         self.assertTrue(i_sig.outputs.stdout)
         json_out = json.loads(i_sig.outputs.stdout)
@@ -96,14 +96,14 @@ class PrintSignaturesTestCase(TestCase):
         If a type is specified, only signatures of matching type should be printed
         """
         # Case for sig
-        i_sig = SimpleModule("i.signatures", type="sig", format="json")
+        i_sig = SimpleModule("i.signatures", type="sig", format="json", flags="p")
         self.assertModule(i_sig)
         self.assertTrue(i_sig.outputs.stdout)
         json_out = json.loads(i_sig.outputs.stdout)
         self.assertIn(f"{self.sig_name1}@{self.mapset_name}", json_out["sig"])
         self.assertNotIn("sigset", json_out.keys())
         # Case for sigset
-        i_sig = SimpleModule("i.signatures", type="sigset", format="json")
+        i_sig = SimpleModule("i.signatures", type="sigset", format="json", flags="p")
         self.assertModule(i_sig)
         self.assertTrue(i_sig.outputs.stdout)
         json_out = json.loads(i_sig.outputs.stdout)
@@ -162,7 +162,7 @@ class ManageSignaturesTestCase(TestCase):
             "i.signatures", type="sigset", copy=(self.sig_name1, a_copy)
         )
         self.assertModule(i_sig)
-        l_sig = SimpleModule("i.signatures", format="json")
+        l_sig = SimpleModule("i.signatures", format="json", flags="p")
         self.assertModule(l_sig)
         self.assertTrue(l_sig.outputs.stdout)
         json_out = json.loads(l_sig.outputs.stdout)
@@ -173,7 +173,7 @@ class ManageSignaturesTestCase(TestCase):
         # If all is correct, copy should succeed
         i_sig = SimpleModule("i.signatures", type="sig", copy=(self.sig_name1, a_copy))
         self.assertModule(i_sig)
-        l_sig = SimpleModule("i.signatures", format="json")
+        l_sig = SimpleModule("i.signatures", format="json", flags="p")
         self.assertModule(l_sig)
         self.assertTrue(l_sig.outputs.stdout)
         json_out = json.loads(l_sig.outputs.stdout)
@@ -192,7 +192,7 @@ class ManageSignaturesTestCase(TestCase):
             "i.signatures", type="sigset", rename=(self.sig_name2, a_copy)
         )
         self.assertModule(i_sig)
-        l_sig = SimpleModule("i.signatures", format="json")
+        l_sig = SimpleModule("i.signatures", format="json", flags="p")
         self.assertModule(l_sig)
         self.assertTrue(l_sig.outputs.stdout)
         json_out = json.loads(l_sig.outputs.stdout)
@@ -205,7 +205,7 @@ class ManageSignaturesTestCase(TestCase):
             "i.signatures", type="sig", rename=(self.sig_name2, a_copy)
         )
         self.assertModule(i_sig)
-        l_sig = SimpleModule("i.signatures", format="json")
+        l_sig = SimpleModule("i.signatures", format="json", flags="p")
         self.assertModule(l_sig)
         self.assertTrue(l_sig.outputs.stdout)
         json_out = json.loads(l_sig.outputs.stdout)
@@ -222,7 +222,7 @@ class ManageSignaturesTestCase(TestCase):
         # Do nothing if file is not found
         i_sig = SimpleModule("i.signatures", type="sig", remove=self.sig_name3)
         self.assertModule(i_sig)
-        l_sig = SimpleModule("i.signatures", format="json")
+        l_sig = SimpleModule("i.signatures", format="json", flags="p")
         self.assertModule(l_sig)
         self.assertTrue(l_sig.outputs.stdout)
         json_out = json.loads(l_sig.outputs.stdout)
@@ -233,7 +233,7 @@ class ManageSignaturesTestCase(TestCase):
         # If all is correct, remove should succeed
         i_sig = SimpleModule("i.signatures", type="sigset", remove=self.sig_name3)
         self.assertModule(i_sig)
-        l_sig = SimpleModule("i.signatures", format="json")
+        l_sig = SimpleModule("i.signatures", format="json", flags="p")
         self.assertModule(l_sig)
         self.assertTrue(l_sig.outputs.stdout)
         json_out = json.loads(l_sig.outputs.stdout)

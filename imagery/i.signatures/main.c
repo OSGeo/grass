@@ -84,11 +84,11 @@ void print_inline(I_SIGFILE_TYPE sigtype, const char *mapset)
 
 int main(int argc, char *argv[])
 {
-    int print = 1;
     struct GModule *module;
     struct {
         struct Option *type, *format, *mapset, *remove, *rename, *copy;
     } parms;
+    struct Flag *print;
     I_SIGFILE_TYPE sigtype;
     char *from, *to;
 
@@ -154,12 +154,20 @@ int main(int argc, char *argv[])
     parms.copy->description = _("Name of file to copy");
     parms.copy->guisection = _("Files");
 
+    print = G_define_flag();
+    print->key = 'p';
+    print->description = _("Print signature files");
+
     G_option_requires(parms.copy, parms.type, NULL);
     G_option_requires(parms.rename, parms.type, NULL);
     G_option_requires(parms.remove, parms.type, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    if (!print->answer && !parms.copy->answer && !parms.rename->answer &&
+        !parms.remove->answer)
+        G_fatal_error(_("At least one action should be specified"));
 
     if (parms.type->answer == NULL)
         sigtype = -1;
@@ -180,14 +188,12 @@ int main(int argc, char *argv[])
             }
             I_signatures_copy(sigtype, sname, smapset, to);
         }
-        print = 0;
     }
     if (parms.remove->answers) {
         int i = 0;
         while (parms.remove->answers[i]) {
             I_signatures_remove(sigtype, parms.remove->answers[i++]);
         }
-        print = 0;
     }
     if (parms.rename->answers) {
         int i = 0;
@@ -196,11 +202,9 @@ int main(int argc, char *argv[])
             to = parms.rename->answers[i++];
             I_signatures_rename(sigtype, from, to);
         }
-        print = 0;
     }
 
-    /* If no other actionable options were provided, we just print */
-    if (print) {
+    if (print->answer) {
         if (parms.type->answer)
             if (strcmp(parms.format->answer, "plain") == 0)
                 print_plain(parms.type->answer, sigtype, parms.mapset->answer);
