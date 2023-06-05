@@ -325,8 +325,8 @@ class ModelSearchDialog(wx.Dialog):
 
     def OnCommand(self, cmd):
         """Command in prompt confirmed"""
-        if self.ValidateCmd(cmd):
-            self._command = cmd
+        if self.ValidateCmd(cmd['cmd']):
+            self._command = cmd['cmd']
             self.EndModal(wx.ID_OK)
 
     def OnOk(self, event):
