@@ -236,7 +236,7 @@ int init_vars(int argc, char *argv[])
     }
     Rast_close(fd);
     G_free(elebuf);
-    MASK_flag = (do_points < nrows * ncols);
+    MASK_flag = (do_points < (size_t)nrows * ncols);
 
     /* read flow accumulation from input map flow: amount of overland flow per
      * cell */
