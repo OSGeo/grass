@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
     /****** INITIALISE ******/
     double gauss_mean, gauss_sigma;
-    int seed_value;
+    long seed_value;
 
     struct GModule *module;
     struct Option *out;
