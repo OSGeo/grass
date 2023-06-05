@@ -195,13 +195,8 @@ class GMFrame(wx.Frame):
             except Exception:
                 pass
             self.Layout()
-            if w <= globalvar.GM_WINDOW_SIZE[0] or h <= globalvar.GM_WINDOW_SIZE[1]:
-                self.Fit()
         else:
             self.Layout()
-            self.Fit()
-            # does center (of screen) make sense for lmgr?
-            self.Centre()
 
         self.Show()
 
