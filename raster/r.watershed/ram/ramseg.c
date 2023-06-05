@@ -16,9 +16,9 @@ size_t size_array(int *ram_seg, int nrows_in, int ncols_in)
 }
 
 /* get r, c from seg_index */
-int seg_index_rc(int ramseg, int seg_index, int *r, int *c)
+size_t seg_index_rc(int ramseg, size_t seg_index, int *r, int *c)
 {
-    int seg_no, seg_remainder;
+    size_t seg_no, seg_remainder;
 
     seg_no = seg_index >> DOUBLEBITS;
     seg_remainder = seg_index - (seg_no << DOUBLEBITS);

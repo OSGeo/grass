@@ -20,13 +20,13 @@
 #include "do_astar.h"
 
 struct pq_node {
-    int idx;
+    size_t idx;
     struct pq_node *next;
 };
 
 struct pq {
     struct pq_node *first, *last;
-    int size;
+    size_t size;
 };
 
 struct pq *pq_create(void)
@@ -43,7 +43,7 @@ struct pq *pq_create(void)
 }
 
 /* dummy end must always be allocated and empty */
-int pq_add(int idx, struct pq *q)
+int pq_add(size_t idx, struct pq *q)
 {
     assert(q->last);
     assert(q->last->idx == -1);
@@ -99,7 +99,8 @@ int pq_destroy(struct pq *q)
 }
 
 struct orders {
-    int index, uphill, downhill;
+    size_t index;
+    int uphill, downhill;
     char flag;
 };
 
@@ -119,7 +120,7 @@ int do_flatarea(int index, CELL ele, CELL *alt_org, CELL *alt_new)
 {
     int upr, upc, r, c, ct_dir;
     CELL is_in_list, is_worked, this_in_list;
-    int index_doer, index_up;
+    size_t index_doer, index_up;
     int n_flat_cells = 0, counter;
     CELL ele_nbr, min_ele_diff;
     int uphill_order, downhill_order, max_uphill_order, max_downhill_order;
