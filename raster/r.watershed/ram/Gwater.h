@@ -108,7 +108,7 @@ int drop_pt(void);
 double get_slope(int, int, int, int, CELL, CELL);
 
 /* do_flatarea.c */
-int do_flatarea(int, CELL, CELL *, CELL *);
+int do_flatarea(size_t, CELL, CELL *, CELL *);
 
 /* do_cum.c */
 int do_cum(void);
