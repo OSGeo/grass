@@ -528,7 +528,7 @@ int tie_up(void)
                                  IPoints[i]);
         }
 
-        distmin = 1. / 0.;      /* +inf */
+        distmin = INFINITY;
         xmin = x;
         ymin = y;
 

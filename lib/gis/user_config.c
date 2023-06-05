@@ -30,6 +30,8 @@
 #include <assert.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdint.h>
+#include <stddef.h>
 #ifndef _WIN32
 #include <pwd.h>
 #endif
