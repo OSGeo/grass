@@ -35,6 +35,15 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+      - name: Versions
+        run: |
+          echo OS: ${{ matrix.os }}
+          echo Python: ${{ matrix.python-version }}
+          echo Minimimal Python version: ${{ matrix.min-python-version }}
+          echo Black: ${{ matrix.black-version }}
+          echo Flake8: ${{ matrix.flake8-version }}
+          echo Pylint: ${{ matrix.pylint-version }}
+
       - uses: actions/checkout@v3
 
       - name: Set up Python
