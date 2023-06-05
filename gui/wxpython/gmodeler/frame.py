@@ -48,7 +48,7 @@ class ModelerFrame(wx.Frame):
         self.panel = ModelerPanel(parent=self, giface=giface, statusbar=self.statusbar)
         
         self.menubar = Menubar(
-            parent=self.panel, model=ModelerMenuData().GetModel(separators=True)
+            parent=self, model=ModelerMenuData().GetModel(separators=True)
         )
         self.SetMenuBar(self.menubar)
 

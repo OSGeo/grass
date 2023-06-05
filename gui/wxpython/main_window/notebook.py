@@ -23,7 +23,7 @@ import wx.lib.agw.aui as aui
 
 from core import globalvar
 from gui_core.wrap import SimpleTabArt
-
+from mapdisp.frame import MapPanel
 
 class MapPageFrame(wx.Frame):
     """Frame for independent map display window."""
@@ -82,6 +82,8 @@ class MapNotebook(aui.AuiNotebook):
 
         self.SetArtProvider(SimpleTabArt())
 
+        self.currentDisplay = None
+
         # bindings
         self.Bind(
             aui.EVT_AUINOTEBOOK_PAGE_CHANGED,
@@ -118,6 +120,8 @@ class MapNotebook(aui.AuiNotebook):
         Adds page to notebook and makes it current"""
         super().AddPage(*args, **kwargs)
         self.SetSelection(self.GetPageCount() - 1)
+        if isinstance(args[0], MapPanel):
+            self.currentDisplay = self.GetCurrentPage()
 
     def SetSelectionToMapPage(self, page):
         """Decides whether to set selection to a MapNotebook page
@@ -149,6 +153,12 @@ class MapNotebook(aui.AuiNotebook):
 
     def OnClose(self, event):
         """Page of map notebook is being closed"""
-        display = self.GetCurrentPage()
-        display.OnCloseWindow(event=None, askIfSaveWorkspace=True)
+        page = self.GetCurrentPage()
+        if page == self.currentDisplay:
+            page.OnCloseWindow(event=None, askIfSaveWorkspace=True)
+        else:
+            page.OnCloseWindow(event=None)
         event.Veto()
+
+    def GetCurrentDisplay(self):
+        return self.currentDisplay

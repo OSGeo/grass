@@ -4,7 +4,7 @@
 # MODULE:    g.gui.gmodeler
 # AUTHOR(S): Martin Landa <landa.martin gmail.com>
 # PURPOSE:   Graphical Modeler to create, edit, and manage models
-# COPYRIGHT: (C) 2010-2012 by Martin Landa, and the GRASS Development Team
+# COPYRIGHT: (C) 2010-2023 by Martin Landa, and the GRASS Development Team
 #
 #  This program is free software; you can 1redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -56,7 +56,7 @@ def main():
         title=_("Graphical Modeler - GRASS GIS"),
     )
     if options["file"]:
-        frame.LoadModelFile(options["file"])
+        frame.panel.LoadModelFile(options["file"])
     frame.Show()
 
     app.MainLoop()

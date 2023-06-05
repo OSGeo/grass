@@ -19,6 +19,9 @@ This program is free software under the GNU General Public License
 import wx
 from wx.lib import ogl
 
+from gmodeler.model import *
+from gmodeler.dialogs import *
+
 class ModelCanvas(ogl.ShapeCanvas):
     """Canvas where model is drawn"""
 

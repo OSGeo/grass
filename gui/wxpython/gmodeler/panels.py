@@ -43,7 +43,7 @@ from core.gconsole import GConsole, EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE
 from core.debug import Debug
 from core.gcmd import GMessage, GException, GWarning, GError
 from core.settings import UserSettings
-from core.giface import Notification
+from core.giface import Notification, StandaloneGrassInterface
 
 from gui_core.widgets import GNotebook
 from gui_core.goutput import GConsoleWindow
@@ -65,11 +65,11 @@ from gui_core.wrap import (
     IsDark,
 )
 from gui_core.wrap import TextEntryDialog as wxTextEntryDialog
-
+from gui_core.mapdisp import FrameMixin
 from gmodeler.giface import GraphicalModelerGrassInterface
 from gmodeler.model import *
 from gmodeler.dialogs import *
-from gmodeler.canvas import ModelCanvas
+from gmodeler.canvas import ModelCanvas, ModelEvtHandler
 from gmodeler.toolbars import ModelerToolbar
 from gmodeler.preferences import PreferencesDialog, PropertiesDialog
 
@@ -77,7 +77,11 @@ wxModelDone, EVT_MODEL_DONE = NewEvent()
 
 from grass.script.utils import try_remove
 from grass.script import core as grass
+from grass.pydispatch.signal import Signal
 
+# TODO
+# FrameMixin fails with FrameMixin.Show() takes 1 positional argument but 2 weregiven
+#class ModelerPanel(FrameMixin, wx.Panel):
 class ModelerPanel(wx.Panel):
     def __init__(
             self, parent, giface, id=wx.ID_ANY, title=_("Graphical Modeler"), statusbar=None, **kwargs
@@ -177,6 +181,9 @@ class ModelerPanel(wx.Panel):
         if self.goutput:
             self.goutput.SetSashPosition(int(self.GetSize()[1] * 0.75))
 
+        # TODO:
+        self.onFocus = Signal("ModelerPanel.onFocus")
+
     def _layout(self):
         """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -201,6 +208,20 @@ class ModelerPanel(wx.Panel):
         """Returns random value to shift layout"""
         return random.randint(-self.randomness, self.randomness)
 
+    # TODO: overwrites FrameMixin
+    def SetTitle(self, title):
+        if isinstance(self._giface, StandaloneGrassInterface):
+            self.parent.SetTitle(title)
+
+    # TODO: To be moved to FrameMixin?
+    def SetStatusText(self, *args): 
+        if isinstance(self._giface, StandaloneGrassInterface):       
+            self.GetParent().SetStatusText(*args)
+        else:
+            # TODO: how to?
+            # self.SetStatusText(*args)
+            pass
+
     def GetStatusBar(self):
         """Get statusbar"""
         return self.statusbar
@@ -217,16 +238,15 @@ class ModelerPanel(wx.Panel):
         """Update window title"""
         self.modelChanged = changed
 
-        # TODO
-        # if self.modelFile:
-        #     if self.modelChanged:
-        #         self.SetTitle(
-        #             self.baseTitle + " - " + os.path.basename(self.modelFile) + "*"
-        #         )
-        #     else:
-        #         self.SetTitle(self.baseTitle + " - " + os.path.basename(self.modelFile))
-        # else:
-        #     self.SetTitle(self.baseTitle)
+        if self.modelFile:
+            if self.modelChanged:
+                self.SetTitle(
+                    self.baseTitle + " - " + os.path.basename(self.modelFile) + "*"
+                )
+            else:
+                self.SetTitle(self.baseTitle + " - " + os.path.basename(self.modelFile))
+        else:
+            self.SetTitle(self.baseTitle)
 
     def OnPageChanged(self, event):
         """Page in notebook changed"""
@@ -556,8 +576,7 @@ class ModelerPanel(wx.Panel):
             return
 
         self.modelFile = filename
-        # TODO
-        # self.SetTitle(self.baseTitle + " - " + os.path.basename(self.modelFile))
+        self.SetTitle(self.baseTitle + " - " + os.path.basename(self.modelFile))
 
         self.SetStatusText(_("Please wait, loading model..."), 0)
 
@@ -773,8 +792,7 @@ class ModelerPanel(wx.Panel):
 
         # no model file loaded
         self.modelFile = None
-        # TODO
-        # self.modelChanged = False
+        self.modelChanged = False
         self.SetTitle(self.baseTitle)
 
     def OnModelOpen(self, event):
@@ -1276,8 +1294,12 @@ class ModelerPanel(wx.Panel):
                 return
             dlg.Destroy()
 
-        if self.parent.GetName() == "ModelerFrame":
+        # TODO: StandaloneGrassInterface -> _docked ???
+        if isinstance(self._giface, StandaloneGrassInterface):
             self.parent.Destroy()
+        else:
+            # TODO: why the page is not removed completely
+            self.Destroy()
 
 class VariablePanel(wx.Panel):
     def __init__(self, parent, id=wx.ID_ANY, **kwargs):

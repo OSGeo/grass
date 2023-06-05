@@ -58,6 +58,7 @@ from core.gcmd import (
     GetDefaultEncoding,
 )
 from core.settings import UserSettings
+from core.giface import StandaloneGrassInterface
 from gui_core.forms import GUI, CmdPanel
 from gui_core.widgets import GNotebook
 from gui_core.wrap import Button, IsDark
@@ -327,10 +328,11 @@ class Model(object):
 
         if self.canvas:
             win = self.canvas.parent
-            if gxmXml.pos:
-                win.SetPosition(gxmXml.pos)
-            if gxmXml.size:
-                win.SetSize(gxmXml.size)
+            if isinstance(win._giface, StandaloneGrassInterface):
+                if gxmXml.pos:
+                    win.SetPosition(gxmXml.pos)
+                if gxmXml.size:
+                    win.SetSize(gxmXml.size)
 
         # load properties
         self.properties = gxmXml.properties
