@@ -48,26 +48,8 @@ void computeFlowAccumulation(AMI_STREAM<waterWindowBaseType> *fillStream,
     Rtimer rt, rtTotal;
     AMI_STREAM<sweepItem> *sweepstr;
 
-  rt_start(rtTotal);
-  assert(fillStream && outstr == NULL);
-  if (stats) {
-      stats->comment("------------------------------");
-      stats->comment("COMPUTING FLOW ACCUMULATION");
-  }
-  
-  { /* timestamp stats file and print memory */
-    time_t t = time(NULL);
-    char buf[BUFSIZ];
-    if(t == (time_t)-1) {
-      perror("time");
-      exit(1);
-    }
-#ifdef _WIN32
-    strcpy(buf, ctime(&t));
-#else
-    ctime_r(&t, buf);
-    buf[24] = '\0';
-#endif
+    rt_start(rtTotal);
+    assert(fillStream && outstr == NULL);
     if (stats) {
         stats->comment("------------------------------");
         stats->comment("COMPUTING FLOW ACCUMULATION");
