@@ -261,27 +261,34 @@ sent to any of these functions will be printed to stderr.
 
 G_message() output is not expected to be sent to pipe or file.
 
-Always use the gettext macros with \_("") for user messages, example:
+Messages aiming at the user should be marked for translation. Output meant for
+automatic parsing by other software should not be marked for translation.
+Generally all modules producing output should include localisation header:
 
 ```c
 #include "glocale.h"
+```
 
+Afterwards mark all user visible strings with the gettext macro \_("message"):
+
+```c
 G_fatal_error(_("Vector map <%s> not found"), name);
 ```
 
 It is suggested to add a comment line before translatable user message to give a
 hint to translators about meaning or use of cumbersome or obscure message. First
-word in the comment must be GTC - GRASS translation comment,
+word in the comment must be GTC: - GRASS translation comment,
 
 Example:
 
 ```c
-/* GTC A name of a projection */
+/* GTC: A name of a projection */
 G_message(_("State Plane"));
 ```
 
 Any message with a noun in plural form has to pass `n_()` macro, even if for the
-English language it is not required!
+English language it is not required! The syntax is
+`n_("English singular", "English plural", count)`
 
 ```c
 G_message( n_("%d map from mapset <%s> removed",
@@ -295,7 +302,7 @@ G_message( n_("One file removed", "%d files removed", count) count);
    The choice between them is purely stylistic one. */
 
 /* Although in English it is not necessary to provide a separate
-   text if "n" always is >1, in other languages is a difference if "n"
+   text if "n" always is >1, other languages do have a difference if "n"
    is i.e. 2-4, or n==10 etc. */
 G_message( n_("Remove map", "Remove maps", count));
 /* Number it self doesn't have to be used in the output text */
