@@ -73,6 +73,7 @@ int main(int argc, char *argv[])
     double min_value;
     double max_value;
     long seed_value;
+    char *seedptr;
 
     struct History history;
     char title[64];
@@ -130,7 +131,7 @@ int main(int argc, char *argv[])
         G_verbose_message(_("Generated random seed (-s): %ld"), seed_value);
     }
     else if (seed->answer) {
-        seed_value = atol(seed->answer);
+        seed_value = strtol(seed->answer, &seedptr, 10);
         G_srand48(seed_value);
         G_verbose_message(_("Read random seed from %s option: %ld"), seed->key,
                           seed_value);
