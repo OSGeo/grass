@@ -56,16 +56,12 @@ from gui_core.wrap import (
     Button,
     EmptyBitmap,
     ImageFromBitmap,
-    Menu,
-    NewId,
     StaticBox,
     StaticText,
     StockCursor,
     TextCtrl,
     IsDark,
 )
-from gui_core.wrap import TextEntryDialog as wxTextEntryDialog
-from gui_core.mapdisp import FrameMixin
 from gmodeler.giface import GraphicalModelerGrassInterface
 from gmodeler.model import *
 from gmodeler.dialogs import *
@@ -79,12 +75,16 @@ from grass.script.utils import try_remove
 from grass.script import core as grass
 from grass.pydispatch.signal import Signal
 
-# TODO
-# FrameMixin fails with FrameMixin.Show() takes 1 positional argument but 2 weregiven
-#class ModelerPanel(FrameMixin, wx.Panel):
+
 class ModelerPanel(wx.Panel):
     def __init__(
-            self, parent, giface, id=wx.ID_ANY, title=_("Graphical Modeler"), statusbar=None, **kwargs
+        self,
+        parent,
+        giface,
+        id=wx.ID_ANY,
+        title=_("Graphical Modeler"),
+        statusbar=None,
+        **kwargs,
     ):
         """Graphical modeler main panel
         :param parent: parent window
@@ -208,14 +208,14 @@ class ModelerPanel(wx.Panel):
         """Returns random value to shift layout"""
         return random.randint(-self.randomness, self.randomness)
 
-    # TODO: overwrites FrameMixin
+    # TODO:
     def SetTitle(self, title):
         if isinstance(self._giface, StandaloneGrassInterface):
             self.parent.SetTitle(title)
 
-    # TODO: To be moved to FrameMixin?
-    def SetStatusText(self, *args): 
-        if isinstance(self._giface, StandaloneGrassInterface):       
+    # TODO:
+    def SetStatusText(self, *args):
+        if isinstance(self._giface, StandaloneGrassInterface):
             self.GetParent().SetStatusText(*args)
         else:
             # TODO: how to?
@@ -225,7 +225,7 @@ class ModelerPanel(wx.Panel):
     def GetStatusBar(self):
         """Get statusbar"""
         return self.statusbar
-        
+
     def GetCanvas(self):
         """Get canvas"""
         return self.canvas
@@ -753,7 +753,7 @@ class ModelerPanel(wx.Panel):
                 parent = item
 
         self.canvas.Refresh()
-        
+
     def OnModelNew(self, event):
         """Create new model"""
         Debug.msg(4, "ModelFrame.OnModelNew():")
@@ -1300,6 +1300,7 @@ class ModelerPanel(wx.Panel):
         else:
             # TODO: why the page is not removed completely
             self.Destroy()
+
 
 class VariablePanel(wx.Panel):
     def __init__(self, parent, id=wx.ID_ANY, **kwargs):
