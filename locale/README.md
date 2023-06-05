@@ -14,7 +14,7 @@ willingness, time, and effort translating are valuable.
 Note that GRASS must be configured with `--with-nls` and (re)compiled
 to make use of the translated messages.
 
-PLEASE HELP TO TRANSLATE GRASS MESSAGES!
+**Please help us translate all the GRASS messages!!**
 
 ## Notes
 
