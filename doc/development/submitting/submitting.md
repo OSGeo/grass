@@ -73,7 +73,7 @@ working on older branches:
 pre-commit uninstall
 ```
 
-And to reactive pre-commit again:
+And to reactivate pre-commit again:
 
 ```bash
 git switch main
