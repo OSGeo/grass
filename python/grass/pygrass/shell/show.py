@@ -7,6 +7,6 @@ import io
 
 
 def raw_figure(figpath):
-    with io.OpenWrapper(figpath, mode="rb") as data:
+    with open(figpath, mode="rb") as data:
         res = data.read()
     return res
