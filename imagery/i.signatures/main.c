@@ -159,16 +159,14 @@ int main(int argc, char *argv[])
     print->key = 'p';
     print->description = _("Print signature files");
 
+    G_option_required(print, parms.copy, parms.rename, parms.remove, NULL);
+    G_option_excludes(print, parms.copy, parms.rename, parms.remove, NULL);
     G_option_requires(parms.copy, parms.type, NULL);
     G_option_requires(parms.rename, parms.type, NULL);
     G_option_requires(parms.remove, parms.type, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
-    if (!print->answer && !parms.copy->answer && !parms.rename->answer &&
-        !parms.remove->answer)
-        G_fatal_error(_("At least one action should be specified"));
 
     if (parms.type->answer == NULL)
         sigtype = -1;
