@@ -17,6 +17,6 @@ build_program(NAME r.mapcalc
    SOURCES "${r_mapcalc_SRCS}"
    DEPENDS grass_gis grass_btree grass_calc grass_raster)
 
-#build_program(NAME r3.mapcalc
-#   SOURCES "${r3_mapcalc_SRCS}"
-#   DEPENDS grass_gis grass_btree grass_calc grass_raster3d)
+build_program(NAME r3.mapcalc
+   SOURCES "${r3_mapcalc_SRCS}"
+   DEPENDS grass_gis grass_btree grass_calc grass_raster3d)
