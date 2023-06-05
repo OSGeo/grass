@@ -15,7 +15,6 @@ build_library_in_subdir(qtree
 
 build_library_in_subdir(interp_float
   NAME grass_interpfl
-  DEFS "-DPOINT2D_C=1"
   DEPENDS GEOS grass_gis grass_raster grass_bitmap grass_vector grass_qtree grass_interpdata
   HEADERS "interpf.h")
 
