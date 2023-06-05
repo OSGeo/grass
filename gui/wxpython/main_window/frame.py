@@ -194,10 +194,8 @@ class GMFrame(wx.Frame):
                 self.SetSize((w, h))
             except Exception:
                 pass
-            self.Layout()
-        else:
-            self.Layout()
-
+        
+        self.Layout()
         self.Show()
 
         # load workspace file if requested
