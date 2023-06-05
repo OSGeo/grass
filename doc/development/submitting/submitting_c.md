@@ -277,7 +277,7 @@ G_fatal_error(_("Vector map <%s> not found"), name);
 
 It is suggested to add a comment line before translatable user message to give a
 hint to translators about meaning or use of cumbersome or obscure message. First
-word in the comment must be GTC: - GRASS translation comment,
+word in the comment must be GTC: GRASS translation comment,
 
 Example:
 
