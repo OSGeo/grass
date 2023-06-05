@@ -282,7 +282,7 @@ word in the comment must be GTC: GRASS translation comment,
 Example:
 
 ```c
-/* GTC: A name of a projection */
+/* GTC: Name of a projection */
 G_message(_("State Plane"));
 ```
 
