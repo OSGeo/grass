@@ -45,8 +45,8 @@ pre-commit install
 ```
 
 Pre-commit will then be automatically triggered by the `git commit` command. If
-it finds any problem it will abort the commit and try to solve automatically
-whatever it can. In that case review the changes and run again `git add` and
+it finds any problem it will abort the commit and try to solve it automatically.
+In that case review the changes and run again `git add` and
 `git commit`.
 
 It is also possible to run pre-commit manually, e.g:
