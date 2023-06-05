@@ -1,4 +1,5 @@
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/mkhtml.py DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/generate_last_commit_file.py  DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 set(current_time_s_ms_SRCS "timer/main.c")
 if(MSVC)
