@@ -107,6 +107,7 @@ int main(int argc, char *argv[])
     parms.type->required = NO;
     parms.type->options = "sig,sigset";
     parms.type->guidependency = "remove,rename,copy";
+    parms.type->gisprompt = "old,sigtype,sigtype";
     parms.type->description = _("Type of signature file");
     parms.type->guisection = _("Main");
 

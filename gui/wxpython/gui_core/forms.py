@@ -419,6 +419,11 @@ class UpdateThread(Thread):
                 if map:
                     self.data[win.GetParent().SetData] = {"vector": map, "layer": layer}
                 # TODO: table?
+            elif name == "SignatureSelect":
+                sigtype = self.task.get_param(
+                    "sigtype", element="element", raiseError=False
+                )
+                self.data[win.UpdateItems] = {"element": sigtype.get("value", "")}
 
 
 def UpdateDialog(parent, event, eventId, task):
@@ -1456,6 +1461,7 @@ class CmdPanel(wx.Panel):
                     "cats",
                     "subgroup",
                     "sigfile",
+                    "sigtype",
                     "separator",
                     "dbdriver",
                     "dbname",
@@ -1733,6 +1739,27 @@ class CmdPanel(wx.Panel):
                     selection.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                     which_sizer.Add(
                         selection,
+                        proportion=0,
+                        flag=wx.ADJUST_MINSIZE
+                        | wx.BOTTOM
+                        | wx.LEFT
+                        | wx.RIGHT
+                        | wx.TOP,
+                        border=5,
+                    )
+                # signature type
+                elif prompt == "sigtype":
+                    win = gselect.SignatureTypeSelect(parent=which_panel)
+                    value = self._getValue(p)
+                    win.SetValue(value)
+                    p["wxId"] = [win.GetId()]
+                    if p.get("guidependency", ""):
+                        win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                        win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
+                    win.Bind(wx.EVT_TEXT, self.OnSetValue)
+                    win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                    which_sizer.Add(
+                        win,
                         proportion=0,
                         flag=wx.ADJUST_MINSIZE
                         | wx.BOTTOM
