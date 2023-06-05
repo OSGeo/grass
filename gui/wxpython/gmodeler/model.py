@@ -2624,12 +2624,17 @@ class WriteScriptFile(ABC):
         for line in item.GetLabel().splitlines():
             self.fd.write("#" + line + "\n")
 
+    def _getParamName(self, parameter_name, item):
+        return "{module_nickname}_{param_name}".format(
+            module_nickname=self._getModuleNickname(item),
+            param_name=parameter_name,
+        )
+
     @staticmethod
-    def _getParamName(parameter_name, item):
-        return "{module_name}{module_id}_{param_name}".format(
+    def _getModuleNickname(item):
+        return "{module_name}{module_id}".format(
             module_name=re.sub("[^a-zA-Z]+", "", item.GetLabel()),
             module_id=item.GetId(),
-            param_name=parameter_name,
         )
 
     def _getItemFlags(self, item, opts, variables):
@@ -2765,6 +2770,7 @@ class WriteActiniaFile(WriteScriptFile):
                     inputs.append(param_string)
 
         ret += f'{" " * self.indent * 4}"module": "{task.get_name()}",\n'
+        ret += f'{" " * self.indent * 4}"id": "{self._getModuleNickname(item)}",\n'
 
         # write flags
         if flags:
