@@ -3,6 +3,10 @@ build_program_in_subdir(
   DEPENDS grass_gis grass_raster )
 
 build_program_in_subdir(
+  r.buildvrt
+  DEPENDS grass_gis grass_raster grass_gmath)
+
+build_program_in_subdir(
   r.buffer
   DEPENDS grass_gis grass_raster )
 
@@ -78,6 +82,10 @@ build_program_in_subdir(
    r.fill.dir
    DEPENDS grass_gis grass_raster )
 
+ build_program_in_subdir(
+   r.fill.stats
+   DEPENDS grass_gis grass_raster )
+
 build_program_in_subdir(
   r.flow
   DEPENDS grass_gis grass_raster grass_segment grass_vector grass_bitmap)
@@ -119,6 +127,13 @@ build_program_in_subdir(
 build_program_in_subdir(
   r.in.mat
   DEPENDS grass_gis grass_raster)
+
+file(GLOB r_in_pdal_SOURCES "r.in.pdal/*.c" "r.in.pdal/*.cpp")
+build_program_in_subdir(
+  r.in.pdal
+  SOURCES "${r_in_pdal_SOURCES}"
+  DEPENDS grass_gis grass_raster grass_vector grass_gmath grass_segment grass_gproj
+  PRIMARY_DEPENDS PDAL)
 
 build_program_in_subdir(
   r.in.png

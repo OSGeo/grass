@@ -6,8 +6,6 @@ OBJ.*
 locale/scriptstrings/*
 bin.*/*
 dist.*/*
-.vs/*
-CMakeSettings.json
 config.log
 config.status*
 error.log
