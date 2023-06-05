@@ -2779,7 +2779,8 @@ class WriteActiniaFile(WriteScriptFile):
         if len(outputs) > 0:
             ret += self.write_params("outputs", outputs)
 
-        # ret[:-2] to get rid of the trailing comma (to make the json valid)
+        # ret[:-2] to get rid of the trailing comma and newline
+        # (to make the json valid)
         return ret[:-2]
 
     def write_params(self, param_type, params):
