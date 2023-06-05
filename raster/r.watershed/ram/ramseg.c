@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include "ramseg.h"
 
-size_t size_array(int *ram_seg, size_t nrows, size_t ncols)
+size_t size_array(int *ram_seg, int nrows_in, int ncols_in)
 {
     size_t size, segs_in_col;
+    size_t nrows = nrows_in, ncols = ncols_in;
 
     segs_in_col = ((nrows - 1) >> RAMSEGBITS) + 1;
     *ram_seg = ((ncols - 1) >> RAMSEGBITS) + 1;

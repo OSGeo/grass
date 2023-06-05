@@ -131,7 +131,7 @@ int no_stream(int, int, CELL, double, CELL);
 int overland_cells(int, int, CELL, CELL, CELL *);
 
 /* ramseg.c */
-size_t size_array(int *, size_t, size_t);
+size_t size_array(int *, int, int);
 int seg_index_rc(int, int, int *, int *);
 
 /* sg_factor.c */
