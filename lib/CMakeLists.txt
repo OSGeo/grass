@@ -21,6 +21,10 @@ build_library_in_subdir(raster
   SOURCES ${raster_SRCS}
   DEPENDS GDAL PROJ grass_gproj)
 
+if(TARGET LAPACK)
+  target_link_libraries(grass_raster LAPACK)
+endif()
+
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
   find_library(DL_LIBRARY dl)
   mark_as_advanced(DL_LIBRARY)

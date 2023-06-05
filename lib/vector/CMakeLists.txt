@@ -18,6 +18,10 @@ if(TARGET POSTGRES)
   target_link_libraries(grass_vector POSTGRES)
 endif()
 
+if(TARGET LAPACK)
+  target_link_libraries(grass_vector LAPACK)
+endif()
+
 add_subdirectory(vedit)
 
 add_subdirectory(neta)
