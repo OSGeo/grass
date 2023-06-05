@@ -28,8 +28,12 @@
 param_type param;
 zone_type zone_info;
 
-/* Parallelization workspace */
-typedef struct {
+/* Parallelization
+ * Only raster statistics reduction in process_raster() is parallelized.
+ * print_stats*() where sorting takes place for percentile computation are not.
+ * We may consider parallel sorting algorithms in the future for further speedup.
+ */
+typedef struct zone_bucket {
     size_t n;
     size_t n_alloc;
     void *nextp;
@@ -38,7 +42,7 @@ typedef struct {
     DCELL *dcells;
 } zone_bucket;
 
-typedef struct {
+typedef struct zone_workspace {
     double sum;
     double sumsq;
     double sum_abs;
@@ -48,7 +52,7 @@ typedef struct {
     zone_bucket bucket;
 } zone_workspace;
 
-typedef struct {
+typedef struct thread_workspace {
     int fd;
     int fdz;
     void *raster_row;
