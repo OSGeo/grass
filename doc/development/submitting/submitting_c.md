@@ -287,7 +287,7 @@ G_message(_("State Plane"));
 ```
 
 Any message with a noun in plural form has to pass `n_()` macro, even if for the
-English language it is not required! The syntax is
+English language is not required! The syntax is
 `n_("English singular", "English plural", count)`
 
 ```c
