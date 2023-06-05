@@ -301,7 +301,7 @@ output. This is reserved for standard module output if it has one.
 ### Translations
 
 To enable translating of messages to other languages (than English), use full
-strings, e.g. (good):
+strings, e.g. (good example):
 
 ```py
 if ...:
