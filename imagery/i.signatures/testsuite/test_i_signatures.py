@@ -36,13 +36,13 @@ class PrintSignaturesTestCase(TestCase):
         os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
         os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
         cls.sig_name1 = tempname(10)
-        sig_dir1 = f"{cls.mpath}/signatures/sigset/{cls.sig_name1}"
+        sig_dir1 = f"{cls.mpath}/signatures/sig/{cls.sig_name1}"
         os.makedirs(sig_dir1)
         cls.sigdirs.append(sig_dir1)
         sigfile_name1 = f"{sig_dir1}/sig"
         open(sigfile_name1, "a").close()
         cls.sig_name2 = tempname(10)
-        sig_dir2 = f"{cls.mpath}/signatures/sig/{cls.sig_name2}"
+        sig_dir2 = f"{cls.mpath}/signatures/sigset/{cls.sig_name2}"
         os.makedirs(sig_dir2)
         cls.sigdirs.append(sig_dir2)
         sigfile_name2 = f"{sig_dir2}/sig"
@@ -71,14 +71,14 @@ class PrintSignaturesTestCase(TestCase):
         i_sig = SimpleModule("i.signatures", type="sig")
         self.assertModule(i_sig)
         self.assertTrue(i_sig.outputs.stdout)
-        self.assertNotIn(self.sig_name1, i_sig.outputs.stdout)
-        self.assertIn(self.sig_name2, i_sig.outputs.stdout)
+        self.assertIn(self.sig_name1, i_sig.outputs.stdout)
+        self.assertNotIn(self.sig_name2, i_sig.outputs.stdout)
         # Case for sigset
         i_sig = SimpleModule("i.signatures", type="sigset")
         self.assertModule(i_sig)
         self.assertTrue(i_sig.outputs.stdout)
-        self.assertIn(self.sig_name1, i_sig.outputs.stdout)
-        self.assertNotIn(self.sig_name2, i_sig.outputs.stdout)
+        self.assertNotIn(self.sig_name1, i_sig.outputs.stdout)
+        self.assertIn(self.sig_name2, i_sig.outputs.stdout)
 
     def test_print_all_json(self):
         """
@@ -88,8 +88,8 @@ class PrintSignaturesTestCase(TestCase):
         self.assertModule(i_sig)
         self.assertTrue(i_sig.outputs.stdout)
         json_out = json.loads(i_sig.outputs.stdout)
-        self.assertIn(f"{self.sig_name2}@{self.mapset_name}", json_out["sig"])
-        self.assertIn(f"{self.sig_name1}@{self.mapset_name}", json_out["sigset"])
+        self.assertIn(f"{self.sig_name1}@{self.mapset_name}", json_out["sig"])
+        self.assertIn(f"{self.sig_name2}@{self.mapset_name}", json_out["sigset"])
 
     def test_print_type_json(self):
         """
@@ -100,15 +100,146 @@ class PrintSignaturesTestCase(TestCase):
         self.assertModule(i_sig)
         self.assertTrue(i_sig.outputs.stdout)
         json_out = json.loads(i_sig.outputs.stdout)
-        self.assertIn(f"{self.sig_name2}@{self.mapset_name}", json_out["sig"])
+        self.assertIn(f"{self.sig_name1}@{self.mapset_name}", json_out["sig"])
         self.assertNotIn("sigset", json_out.keys())
         # Case for sigset
         i_sig = SimpleModule("i.signatures", type="sigset", format="json")
         self.assertModule(i_sig)
         self.assertTrue(i_sig.outputs.stdout)
         json_out = json.loads(i_sig.outputs.stdout)
-        self.assertIn(f"{self.sig_name1}@{self.mapset_name}", json_out["sigset"])
+        self.assertIn(f"{self.sig_name2}@{self.mapset_name}", json_out["sigset"])
         self.assertNotIn("sig", json_out.keys())
+
+
+class ManageSignaturesTestCase(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.mpath = utils.decode(G_mapset_path())
+        cls.mapset_name = Mapset().name
+        cls.sigdirs = []
+        # As signatures are created directly not via signature creation
+        # tools, we must ensure signature directories exist
+        os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
+        os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
+        cls.sig_name1 = tempname(10)
+        sig_dir1 = f"{cls.mpath}/signatures/sig/{cls.sig_name1}"
+        os.makedirs(sig_dir1)
+        cls.sigdirs.append(sig_dir1)
+        sigfile_name1 = f"{sig_dir1}/sig"
+        open(sigfile_name1, "a").close()
+        cls.sig_name2 = tempname(10)
+        sig_dir2 = f"{cls.mpath}/signatures/sig/{cls.sig_name2}"
+        os.makedirs(sig_dir2)
+        cls.sigdirs.append(sig_dir2)
+        sigfile_name2 = f"{sig_dir2}/sig"
+        open(sigfile_name2, "a").close()
+        cls.sig_name3 = tempname(10)
+        sig_dir3 = f"{cls.mpath}/signatures/sigset/{cls.sig_name3}"
+        os.makedirs(sig_dir3)
+        cls.sigdirs.append(sig_dir3)
+        sigfile_name3 = f"{sig_dir3}/sig"
+        open(sigfile_name3, "a").close()
+        cls.sig_name4 = tempname(10)
+        sig_dir4 = f"{cls.mpath}/signatures/sigset/{cls.sig_name4}"
+        os.makedirs(sig_dir4)
+        cls.sigdirs.append(sig_dir4)
+        sigfile_name4 = f"{sig_dir4}/sig"
+        open(sigfile_name4, "a").close()
+
+    @classmethod
+    def tearDownClass(cls):
+        for d in cls.sigdirs:
+            shutil.rmtree(d, ignore_errors=True)
+
+    def test_copy(self):
+        a_copy = tempname(10)
+        # Fail if type is not provided
+        i_sig = SimpleModule("i.signatures", copy=(self.sig_name1, a_copy))
+        self.assertModuleFail(i_sig)
+
+        # Do nothing if file is not found
+        i_sig = SimpleModule(
+            "i.signatures", type="sigset", copy=(self.sig_name1, a_copy)
+        )
+        self.assertModule(i_sig)
+        l_sig = SimpleModule("i.signatures", format="json")
+        self.assertModule(l_sig)
+        self.assertTrue(l_sig.outputs.stdout)
+        json_out = json.loads(l_sig.outputs.stdout)
+        self.assertIn(f"{self.sig_name1}@{self.mapset_name}", json_out["sig"])
+        self.assertNotIn(f"{a_copy}@{self.mapset_name}", json_out["sig"])
+        self.assertNotIn(f"{a_copy}@{self.mapset_name}", json_out["sigset"])
+
+        # If all is correct, copy should succeed
+        i_sig = SimpleModule("i.signatures", type="sig", copy=(self.sig_name1, a_copy))
+        self.assertModule(i_sig)
+        l_sig = SimpleModule("i.signatures", format="json")
+        self.assertModule(l_sig)
+        self.assertTrue(l_sig.outputs.stdout)
+        json_out = json.loads(l_sig.outputs.stdout)
+        self.assertIn(f"{self.sig_name1}@{self.mapset_name}", json_out["sig"])
+        self.assertIn(f"{a_copy}@{self.mapset_name}", json_out["sig"])
+        self.assertNotIn(f"{a_copy}@{self.mapset_name}", json_out["sigset"])
+
+    def test_rename(self):
+        a_copy = tempname(10)
+        # Fail if type is not provided
+        i_sig = SimpleModule("i.signatures", rename=(self.sig_name2, a_copy))
+        self.assertModuleFail(i_sig)
+
+        # Do nothing if file is not found
+        i_sig = SimpleModule(
+            "i.signatures", type="sigset", rename=(self.sig_name2, a_copy)
+        )
+        self.assertModule(i_sig)
+        l_sig = SimpleModule("i.signatures", format="json")
+        self.assertModule(l_sig)
+        self.assertTrue(l_sig.outputs.stdout)
+        json_out = json.loads(l_sig.outputs.stdout)
+        self.assertIn(f"{self.sig_name2}@{self.mapset_name}", json_out["sig"])
+        self.assertNotIn(f"{a_copy}@{self.mapset_name}", json_out["sig"])
+        self.assertNotIn(f"{a_copy}@{self.mapset_name}", json_out["sigset"])
+
+        # If all is correct, rename should succeed
+        i_sig = SimpleModule(
+            "i.signatures", type="sig", rename=(self.sig_name2, a_copy)
+        )
+        self.assertModule(i_sig)
+        l_sig = SimpleModule("i.signatures", format="json")
+        self.assertModule(l_sig)
+        self.assertTrue(l_sig.outputs.stdout)
+        json_out = json.loads(l_sig.outputs.stdout)
+        self.assertNotIn(f"{self.sig_name2}@{self.mapset_name}", json_out["sig"])
+        self.assertNotIn(f"{self.sig_name2}@{self.mapset_name}", json_out["sigset"])
+        self.assertIn(f"{a_copy}@{self.mapset_name}", json_out["sig"])
+        self.assertNotIn(f"{a_copy}@{self.mapset_name}", json_out["sigset"])
+
+    def test_remove(self):
+        # Fail if type is not provided
+        i_sig = SimpleModule("i.signatures", remove=self.sig_name3)
+        self.assertModuleFail(i_sig)
+
+        # Do nothing if file is not found
+        i_sig = SimpleModule("i.signatures", type="sig", remove=self.sig_name3)
+        self.assertModule(i_sig)
+        l_sig = SimpleModule("i.signatures", format="json")
+        self.assertModule(l_sig)
+        self.assertTrue(l_sig.outputs.stdout)
+        json_out = json.loads(l_sig.outputs.stdout)
+        self.assertIn(f"{self.sig_name3}@{self.mapset_name}", json_out["sigset"])
+        self.assertIn(f"{self.sig_name4}@{self.mapset_name}", json_out["sigset"])
+        self.assertIn(f"{self.sig_name1}@{self.mapset_name}", json_out["sig"])
+
+        # If all is correct, remove should succeed
+        i_sig = SimpleModule("i.signatures", type="sigset", remove=self.sig_name3)
+        self.assertModule(i_sig)
+        l_sig = SimpleModule("i.signatures", format="json")
+        self.assertModule(l_sig)
+        self.assertTrue(l_sig.outputs.stdout)
+        json_out = json.loads(l_sig.outputs.stdout)
+        self.assertNotIn(f"{self.sig_name3}@{self.mapset_name}", json_out["sigset"])
+        self.assertIn(f"{self.sig_name4}@{self.mapset_name}", json_out["sigset"])
+        self.assertIn(f"{self.sig_name1}@{self.mapset_name}", json_out["sig"])
 
 
 if __name__ == "__main__":
