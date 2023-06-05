@@ -78,6 +78,7 @@ class MapPanel(SingleMapPanel):
         lmgr=None,
         Map=None,
         auimgr=None,
+        dockable=False,
         name="MapWindow",
         **kwargs,
     ):
@@ -112,6 +113,15 @@ class MapPanel(SingleMapPanel):
         self.tree = tree
         # checks for saving workspace
         self.canCloseDisplayCallback = None
+
+        # distinquishes whether map panel is dockable (Single-Window)
+        self._dockable = dockable
+
+        # distinguishes whether map panel is docked or not
+        self._docked = True
+
+        # undock/dock bound method
+        self._docking_callback = None
 
         # Emitted when switching map notebook tabs (Single-Window)
         self.onFocus = Signal("MapPanel.onFocus")
@@ -664,6 +674,22 @@ class MapPanel(SingleMapPanel):
         for layer in qlayer:
             self.GetMap().DeleteLayer(layer)
 
+    def SetDockingCallback(self, function):
+        """Sets docking bound method to dock or undock"""
+        self._docking_callback = function
+
+    def OnDockUndock(self, event=None):
+        """Dock or undock map display panel to independent MapFrame"""
+        if self._docking_callback:
+            self._docking_callback(self)
+            self._docked = not self._docked
+
+    def IsDocked(self):
+        return self._docked
+
+    def IsDockable(self):
+        return self._dockable
+
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
         self.RemoveQueryLayer()
@@ -979,7 +1005,15 @@ class MapPanel(SingleMapPanel):
             if pgnum_dict is not None:
                 self.CleanUp()
                 if pgnum_dict["layers"] > -1:
-                    self.closingDisplay.emit(pgnum_dict=pgnum_dict)
+                    if self.IsDockable():
+                        self.closingDisplay.emit(
+                            pgnum_dict=pgnum_dict, is_docked=self.IsDocked()
+                        )
+                        if not self.IsDocked():
+                            frame = self.GetParent()
+                            frame.Destroy()
+                    else:
+                        self.closingDisplay.emit(pgnum_dict=pgnum_dict)
                     # Destroy is called when notebook page is deleted
         else:
             self.CleanUp()
