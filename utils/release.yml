@@ -26,7 +26,7 @@ notes:
       regexp: '(winGRASS|win|[Ww]indows): '
 
     - title: Packaging, Configuration, Portability, and Compilation
-      regexp: '(packaging|pkg|rpm|deb|pkg-config|configure|config|[Mm]ake): '
+      regexp: '(packaging|pkg|rpm|deb|pkg-config|configure|config|[Mm]ake|build): '
 
     - title: Docker
       regexp: '[Dd]ocker(/[^ ]+)?: '
