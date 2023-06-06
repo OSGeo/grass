@@ -43,6 +43,10 @@ if(NOT MSVC)
   endif(USE_CCACHE)
 endif(NOT MSVC)
 
+if(USE_ALTERNATE_LINKER)
+  include("cmake/modules/linker.cmake")
+endif()
+
 if(CMAKE_BUILD_TYPE)
 set( grass_build_type "${CMAKE_BUILD_TYPE}" )
 string( TOLOWER "${grass_build_type}" grass_build_type_lc )
