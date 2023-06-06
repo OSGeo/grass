@@ -1,5 +1,6 @@
 set(script_DIRS
   r.shade
+  d.background
   d.correlate
   d.frame
   d.out.file
@@ -17,10 +18,12 @@ set(script_DIRS
   db.out.ogr
   db.test
   db.univar
+  g.download.location
   g.extension
   g.extension.all
   g.manual
   g.search.modules
+  i.band.library
   i.colors.enhance
   i.image.mosaic
   i.in.spotvgt
@@ -43,6 +46,7 @@ set(script_DIRS
   r.plane
   r.reclass.area
   r.rgb
+  r.semantic.label
   r.tileset
   r.unpack
   r3.in.xyz
