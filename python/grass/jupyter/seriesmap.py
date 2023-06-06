@@ -21,7 +21,7 @@ from pathlib import Path
 import grass.script as gs
 
 from .map import Map
-from .region import RegionManagerFor2D
+from .region import RegionManagerForSeries
 
 
 def is_raster(layer):
@@ -31,6 +31,13 @@ def is_raster(layer):
         raise NameError(_("Could not find a raster named {}").format(layer))
 
 
+def is_vector(layer):
+    """Check that map is a vector"""
+    test = gs.read_command("v.info", map=layer)
+    if not test:
+        raise NameError(_("Could not find a vector named {}".format(layer)))
+
+
 class SeriesMap:
     """Creates visualizations of raster datasets in Jupyter
     Notebooks.
@@ -38,7 +45,12 @@ class SeriesMap:
     Basic usage::
 
     >>> img = SeriesMap()
-    >>> img.add_rasters(maps=["elev", "precip", "temp"])
+    >>> img.d_rast("elev")
+    >>> img.add_rasters(maps=["lake", "parks", "temp"])
+    >>> img.d_v
+    >>> img.add_vectors(["contours", "rivers", "weather_stations"])
+
+    >>> img.d_vect(map="roads")
     >>> img.show()  # Create Slider
     >>> img.save("image.gif")
 
@@ -74,10 +86,15 @@ class SeriesMap:
             self._env = os.environ.copy()
 
         self.rasters = []
+        self.vectors = []
+        self._series_length = None
         self._base_layer_calls = []
+        self._mid_layer_calls = []
         self._overlay_calls = []
         self._rasters_added = False
+        self._vectors_added = False
         self._layers_rendered = False
+        self._render_rasters_first = True
         self._layer_filename_dict = {}
         self._width = width
         self._height = height
@@ -95,7 +112,7 @@ class SeriesMap:
         weakref.finalize(self, cleanup, self._tmpdir)
 
         # Handle Regions
-        self._region_manager = RegionManagerFor2D(
+        self._region_manager = RegionManagerForSeries(
             use_region=use_region,
             saved_region=saved_region,
             width=width,
@@ -103,19 +120,45 @@ class SeriesMap:
             env=self._env,
         )
 
-    def add_rasters(self, maps):
+    def add_rasters(self, rasters):
         """
-        :param str maps: list of rasters
+        :param list rasters: list of raster layers to add to SeriesMap
         """
-        for raster in maps:
+        for raster in rasters:
             is_raster(raster)
-        self.rasters = maps
+        self.rasters = rasters
         self._rasters_added = True
-        # Update Region: just use first raster in series, this should be improved
-        self._region_manager.set_region_from_command("d.rast", map=self.rasters[0])
+        # Update region to rasters if not use_region or saved_region
+        self._region_manager.set_region_from_rasters(self.rasters)
+
+        if self._vectors_added:
+            assert len(self.vectors) == len(self.rasters), _(
+                "Number of vectors in series must match number of vectors"
+            )
+        self._series_length = len(self.rasters)
+
+    def add_vectors(self, vectors):
+        """
+        :param list vectors: list of vector layers to add to SeriesMap
+        """
+        for vector in vectors:
+            is_vector(vector)
+        self.vectors = vectors
+        self._vectors_added = True
+        # Update region extent to vecotrs if not use_region or saved_region
+        self._region_manager.set_region_from_vectors(self.vectors)
+
+        if self._rasters_added:
+            assert len(self.rasters) == len(self.vectors), _(
+                "Number of rasters in series must match number of vectors"
+            )
+        if not self._rasters_added:
+            self._render_rasters_first = False
+        self._series_length = len(self.vectors)
 
     def __getattr__(self, name):
-        """Parse attribute to GRASS display module. Attribute should be in
+        """
+        Parse attribute to GRASS display module. Attribute should be in
         the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
         """
         # Check to make sure format is correct
@@ -128,10 +171,12 @@ class SeriesMap:
             raise AttributeError(_("Cannot find GRASS module {}").format(grass_module))
 
         def wrapper(**kwargs):
-            if not self._rasters_added:
+            if not self._rasters_added and not self._vectors_added:
                 self._base_layer_calls.append((grass_module, kwargs))
-            if self._rasters_added:
+            elif self._rasters_added and self._vectors_added:
                 self._overlay_calls.append((grass_module, kwargs))
+            else:
+                self._mid_layer_calls.append((grass_module, kwargs))
 
         return wrapper
 
@@ -140,16 +185,8 @@ class SeriesMap:
         for grass_module, kwargs in self._base_layer_calls:
             img.run(grass_module, **kwargs)
 
-    def _render_overlays(self, img):
+    def _render_mid_calls(self, filename):
         """Add collected overlays to Map instance"""
-        for grass_module, kwargs in self._overlay_calls:
-            img.run(grass_module, **kwargs)
-
-    def _render_blank_layer(self, filename):
-        """Write blank image for gaps in time series.
-
-        Adds overlays and legend to base map.
-        """
         img = Map(
             width=self._width,
             height=self._height,
@@ -158,14 +195,24 @@ class SeriesMap:
             env=self._env,
             read_file=True,
         )
-        # Add overlays
-        self._render_overlays(img)
-        # Add legend if needed
-        if self._legend:
-            self._render_legend(img)
+        for grass_module, kwargs in self._mid_layer_calls:
+            img.run(grass_module, **kwargs)
 
-    def _render_layer(self, layer, filename):
-        """Render layer to file with overlays and legend"""
+    def _render_overlays(self, filename):
+        """Add collected overlays to Map instance"""
+        img = Map(
+            width=self._width,
+            height=self._height,
+            filename=filename,
+            use_region=True,
+            env=self._env,
+            read_file=True,
+        )
+        for grass_module, kwargs in self._overlay_calls:
+            img.run(grass_module, **kwargs)
+
+    def _render_raster(self, layer, filename):
+        """Render raster to file"""
         img = Map(
             width=self._width,
             height=self._height,
@@ -175,8 +222,18 @@ class SeriesMap:
             read_file=True,
         )
         img.d_rast(map=layer)
-        # Add overlays
-        self._render_overlays(img)
+
+    def _render_vector(self, layer, filename):
+        """Render vector to file"""
+        img = Map(
+            width=self._width,
+            height=self._height,
+            filename=filename,
+            use_region=True,
+            env=self._env,
+            read_file=True,
+        )
+        img.d_vect(map=layer)
 
     def render(self):
         """Renders image for each raster in series.
@@ -185,10 +242,10 @@ class SeriesMap:
         (i.e. show or save).
         """
 
-        if not self._rasters_added:
+        if not self._rasters_added and not self._vectors_added:
             raise RuntimeError(
-                "Cannot render rasters series since none has been added."
-                "Use SeriesMap.add_rasters() to add rasters"
+                "Cannot render series since none has been added."
+                "Use SeriesMap.add_rasters() or SeriesMap.add_vectors()"
             )
 
         # Make base image (background and baselayers)
@@ -210,14 +267,24 @@ class SeriesMap:
         self._render_baselayers(img)
 
         # Render each layer
-        for layer in self.rasters:
+        for i in range(self._series_length):
             # Create file
-            filename = os.path.join(self._tmpdir.name, f"{layer}.png")
+            filename = os.path.join(self._tmpdir.name, f"{i}.png")
             # Copying the base_file ensures that previous results are overwritten
             shutil.copyfile(base_file, filename)
-            self._layer_filename_dict[layer] = filename
+            self._layer_filename_dict[i] = filename
             # Render image
-            self._render_layer(layer, filename)
+            if self._render_rasters_first:
+                self._render_raster(self.rasters[i], filename)
+            if not self._render_rasters_first:
+                self._render_vector(self.vectors[i], filename)
+            if self._mid_layer_calls:
+                self._render_mid_calls(filename)
+            if self._render_rasters_first and self.vectors:
+                self._render_vector(self.vectors[i], filename)
+            if not self._render_rasters_first and self.rasters:
+                self._render_raster(self.rasters[i], filename)
+            self._render_overlays(filename)
         self._layers_rendered = True
 
     def show(self, slider_width=None):
@@ -242,10 +309,15 @@ class SeriesMap:
         if not slider_width:
             slider_width = "70%"
 
+        if not self._render_rasters_first:
+            options = self.vectors
+        else:
+            options = self.rasters
+
         # Datetime selection slider
         slider = widgets.SelectionSlider(
-            options=self.rasters,
-            value=self.rasters[0],
+            options=options,
+            value=options[0],
             disabled=False,
             continuous_update=True,
             orientation="horizontal",
@@ -256,7 +328,7 @@ class SeriesMap:
             interval=500,
             value=0,
             min=0,
-            max=len(self.rasters) - 1,
+            max=self._series_length - 1,
             step=1,
             description="Press play",
             disabled=False,
@@ -271,7 +343,8 @@ class SeriesMap:
         # Display image associated with datetime
         def change_image(layer):
             # Look up layer name for date
-            filename = self._layer_filename_dict[layer]
+            value = options.index(layer)
+            filename = self._layer_filename_dict[value]
             with open(filename, "rb") as rfile:
                 out_img.value = rfile.read()
 
@@ -311,8 +384,8 @@ class SeriesMap:
             raise ValueError(_("filename must end in '.gif'"))
 
         images = []
-        for layer in self.rasters:
-            img_path = self._layer_filename_dict[layer]
+        for i in range(self._series_length):
+            img_path = self._layer_filename_dict[i]
             img = PIL.Image.open(img_path)
             img = img.convert("RGBA", dither=None)
             PIL.ImageDraw.Draw(img)
