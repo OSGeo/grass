@@ -2706,16 +2706,23 @@ class WriteActiniaFile(WriteScriptFile):
 
         if parameterized is True:
             self.fd.write(f'{" " * self.indent * 1}"template": {{\n')
-
-        self.fd.write(
-f"""{' ' * self.indent * 2}"list": [
-"""
-        )
+            self.fd.write(
+    f"""{' ' * self.indent * 2}"list": [
+    """
+            )
+        else:
+            self.fd.write(
+    f"""{' ' * self.indent}"list": [
+    """
+            )
 
         # module_list_str[:-2] to get rid of the trailing comma and newline
         self.fd.write(module_list_str[:-2] + "\n")
 
-        self.fd.write(f"{' ' * self.indent * 2}]\n{' ' * self.indent * 1}}}\n}}")
+        if parameterized is True:
+            self.fd.write(f"{' ' * self.indent * 2}]\n{' ' * self.indent * 1}}}\n}}")
+        else:
+            self.fd.write(f"{' ' * self.indent * 1}]\n}}")
 
     def _getPythonAction(self, item, variables={}, intermediates=None):
         """Write model action to Python file"""
