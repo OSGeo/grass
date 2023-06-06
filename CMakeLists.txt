@@ -206,7 +206,7 @@ set(ALL_SUBDIRS
   scripts
   vector
   temporal
-  # ps
+  ps
 )
 
 foreach(d ${ALL_SUBDIRS})

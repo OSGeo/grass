@@ -1,0 +1,4 @@
+build_program_in_subdir(
+  ps.map
+  DEPENDS grass_gis grass_raster grass_gmath grass_gproj grass_imagery grass_vector grass_dbmibase grass_sym)
+
