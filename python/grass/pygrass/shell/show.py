@@ -3,7 +3,6 @@ Created on Sun Jun 23 19:58:54 2013
 
 @author: pietro
 """
-import io
 
 
 def raw_figure(figpath):
