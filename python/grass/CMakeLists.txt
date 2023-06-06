@@ -5,6 +5,7 @@ copy_python_files_in_subdir(grassdb etc/python/grass)
 copy_python_files_in_subdir(imaging etc/python/grass)
 copy_python_files_in_subdir(pydispatch etc/python/grass)
 copy_python_files_in_subdir(script etc/python/grass)
+copy_python_files_in_subdir(utils etc/python/grass)
 copy_python_files_in_subdir(semantic_label etc/python/grass)
 copy_python_files_in_subdir(temporal etc/python/grass)
 copy_python_files_in_subdir(pygrass etc/python/grass)
@@ -30,6 +31,7 @@ add_custom_target(LIB_PYTHON
 	COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/etc/python/grass/script/setup.py ${GISBASE}/etc/python/grass/script/
 	VERBATIM
 	DEPENDS python_exceptions python_grassdb python_imaging python_pydispatch python_script python_semantic_label python_temporal
+  python_utils
 	python_pygrass python_pygrass_messages python_pygrass_modules python_pygrass_modules
 	python_pygrass_raster python_pygrass_vector python_pygrass_gis python_pygrass_shell
 	python_pygrass_tests python_pygrass_rpc
