@@ -276,10 +276,13 @@ class SeriesMap:
         if not slider_width:
             slider_width = "70%"
 
+        # Create lookup table for slider
+        lookup = list(zip(self._names, range(self._series_length)))
+
         # Datetime selection slider
         slider = widgets.SelectionSlider(
-            options=self._names,
-            value=self._names[0],
+            options=lookup,
+            value=0,
             disabled=False,
             continuous_update=True,
             orientation="horizontal",
@@ -303,15 +306,14 @@ class SeriesMap:
         play.observe(change_slider, names="value")
 
         # Display image associated with datetime
-        def change_image(layer):
+        def change_image(index):
             # Look up layer name for date
-            value = self._names.index(layer)
-            filename = self._layer_filename_dict[value]
+            filename = self._layer_filename_dict[index]
             with open(filename, "rb") as rfile:
                 out_img.value = rfile.read()
 
         # Return interact widget with image and slider
-        widgets.interactive_output(change_image, {"layer": slider})
+        widgets.interactive_output(change_image, {"index": slider})
         layout = widgets.Layout(
             width="100%", display="inline-flex", flex_flow="row wrap"
         )
