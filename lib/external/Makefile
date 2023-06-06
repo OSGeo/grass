@@ -3,7 +3,8 @@ MODULE_TOPDIR = ../..
 
 SUBDIRS = \
 	ccmath  \
-	shapelib
+	shapelib \
+	parson
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
