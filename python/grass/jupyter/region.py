@@ -217,6 +217,7 @@ class RegionManagerFor2D:
 
 class RegionManagerForSeries:
     """Region manager for SeriesMap"""
+
     def __init__(self, use_region, saved_region, width, height, env):
         """Manages region during rendering.
 
@@ -259,13 +260,13 @@ class RegionManagerForSeries:
             return
         try:
             if not self._resolution_set and not self._extent_set:
-                self._env["GRASS_REGION"] = gs.region_env(
-                    raster=rasters, env=self._env
-                )
+                self._env["GRASS_REGION"] = gs.region_env(raster=rasters, env=self._env)
                 self._extent_set = True
                 self._resolution_set = True
             elif not self._resolution_set:
-                self._env["GRASS_REGION"] = gs.region_env(align=rasters[0], env=self._env)
+                self._env["GRASS_REGION"] = gs.region_env(
+                    align=rasters[0], env=self._env
+                )
                 self._resolution_set = True
         except CalledModuleError:
             return
@@ -288,9 +289,7 @@ class RegionManagerForSeries:
             return
         try:
             if not self._resolution_set and not self._extent_set:
-                self._env["GRASS_REGION"] = gs.region_env(
-                    vector=vectors, env=self._env
-                )
+                self._env["GRASS_REGION"] = gs.region_env(vector=vectors, env=self._env)
                 self._extent_set = True
         except CalledModuleError:
             return
