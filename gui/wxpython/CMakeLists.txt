@@ -3,7 +3,7 @@
 
 
 set(WXPYTHON_DIR ${GISBASE}/gui/wxpython)
-set(gui_lib_DIRS core gui_core icons iscatt lmgr location_wizard
+set(gui_lib_DIRS core gui_core icons iscatt lmgr location_wizard main_window
 mapdisp mapwin modules nviz rdigit startup tools vnet web_services wxplot)
 
 set(gui_lib_targets)
