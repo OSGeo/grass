@@ -41,7 +41,7 @@ class TestVDbDropTable(TestCase):
 
         m = SimpleModule("db.tables", flags="p")
         self.assertModule(m)
-        self.assertNotRegexpMatches(decode(m.outputs.stdout), "myroads")
+        self.assertNotRegex(decode(m.outputs.stdout), "myroads")
 
 
 if __name__ == "__main__":

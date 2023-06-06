@@ -46,7 +46,7 @@ class TestDbDropColumn(TestCase):
 
         m = SimpleModule("db.columns", table=self.mapName)
         self.assertModule(m)
-        self.assertNotRegexpMatches(decode(m.outputs.stdout), self.colName)
+        self.assertNotRegex(decode(m.outputs.stdout), self.colName)
 
 
 if __name__ == "__main__":
