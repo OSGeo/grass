@@ -71,14 +71,17 @@ Modify the VERSION file use the dedicated script, for RC1, e.g.:
 ```
 
 The script will compute the correct version string and print a message
-containing it into the terminal (e.g., "version: GRASS GIS 8.3.0RC1").
+containing it into the terminal (e.g., "version: GRASS GIS 3.5.0RC1").
 
 Commit with a commit message suggested by the script, e.g.:
 
 ```bash
 git diff
-git commit include/VERSION -m "version: GRASS GIS 8.3.0RC1"
+git commit include/VERSION -m "..."
 ```
+
+If you lost the script output with the suggested message use
+`./utils/update_version.py suggest` to get it.
 
 Check that there is exactly one commit on your local branch and that it is the
 version change:
@@ -139,7 +142,7 @@ Create an annotated tag (a lightweight tag is okay too, but there is more metada
 stored for annotated tags including a date; message is suggested by the version script):
 
 ```bash
-git tag $TAG -a -m "GRASS GIS 8.3.0RC1"
+git tag $TAG -a -m "..."
 ```
 
 List all tags (annotated will be at the top of both lists):
@@ -238,8 +241,16 @@ Commit with the suggested commit message and push, e.g.:
 
 ```bash
 git show
-git commit include/VERSION -m "version: Back to 8.3.0dev"
+git commit include/VERSION -m "..."
 git push upstream
+```
+
+The message was suggested by the script, but if you lost that output,
+you can get the same or similar message again using the script
+(the message provided this way is not precise after RCs):
+
+```bash
+./utils/update_version.py suggest
 ```
 
 ## Upload to OSGeo servers
@@ -256,7 +267,7 @@ First, update the repo to get the tag locally:
 git fetch upstream
 ```
 
-Get the tagged source code, e.g.:
+Get the tagged source code, e.g. (modify the tag as needed):
 
 ```bash
 git checkout 8.3.0RC1
@@ -392,7 +403,7 @@ Software pages:
 
 ### Only in case of new major release
 
-- update cronjob '[cron_grass8_main_src_snapshot.sh](https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/)'
+- update '[cronjob(s)](https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/)'
   on grass.osgeo.org to next but one release tag for the differences
 - wiki updates, only when new major release:
   - {{cmd|xxxx}} macro: <https://grasswiki.osgeo.org/wiki/Template:Cmd>
@@ -465,9 +476,13 @@ the dedicated script, e.g., for next micro version, run:
 ./utils/update_version.py status
 ```
 
-Now commit the change to the branch with the commit message generated above:
+Now commit the change to the branch with the commit message generated above
+by the script:
 
 ```bash
 git diff
-git commit include/VERSION -m "version: GRASS GIS 8.3.1"
+git commit include/VERSION -m "..."
 ```
+
+If you lost the script output with the suggested message use
+`./utils/update_version.py suggest` to get it.
