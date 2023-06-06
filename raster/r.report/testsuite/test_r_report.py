@@ -12,6 +12,78 @@ Licence:    This program is free software under the GNU General Public
 import os
 from grass.gunittest.case import TestCase
 
+OPTION_1 = {
+    "location": "nc_spm_08_grass7",
+    "created": "Fri Dec 6 17:00:21 2013",
+    "region": {
+        "north": 279073.97546639,
+        "south": 113673.97546639,
+        "east": 798143.31179672,
+        "west": 595143.31179672,
+        "sn-res": 200,
+        "ew-res": 200,
+    },
+    "mask": None,
+    "maps": [
+        {
+            "name": "South-West Wake county",
+            "description": "geology derived from vector map",
+            "layer": "geology_30m",
+            "type": "raster",
+        }
+    ],
+    "category": {
+        "categories": [
+            {
+                "category": 217,
+                "description": "CZfg",
+                "sqmi": 27.78,
+                "acres": 17781.703,
+                "categories": [
+                    {
+                        "category": 1,
+                        "description": "developed",
+                        "sqmi": 18,
+                        "acres": 17781.703,
+                    }
+                ],
+            }
+        ],
+        "total": {"sqmi": 77.60, "acres": 49668.182},
+    },
+}
+
+OPTION_2 = {
+    "location": "nc_spm_08_grass7",
+    "created": "Fri Dec 6 17:00:21 2013",
+    "region": {
+        "north": 279073.97546639,
+        "south": 113673.97546639,
+        "east": 798143.31179672,
+        "west": 595143.31179672,
+        "sn-res": 200,
+        "ew-res": 200,
+    },
+    "mask": None,
+    "maps": [
+        {
+            "name": "South-West Wake county",
+            "description": "geology derived from vector map",
+            "layer": "geology_30m",
+            "type": "raster",
+        }
+    ],
+    "categories": {
+        "217": {
+            "description": "CZfg",
+            "sqmi": 27.78,
+            "acres": 11781.703,
+            "1": {"description": "developed", "sqmi": 18, "acres": 17781.703},
+        },
+        "total": {"sqmi": 77.60, "acres": 49668.182},
+    },
+}
+
 
 class TestRasterreport(TestCase):
     outfile = "test_out.csv"
