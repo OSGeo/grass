@@ -44,15 +44,12 @@ class SeriesMap:
 
     Basic usage::
 
-    >>> img = SeriesMap()
-    >>> img.d_rast("elev")
-    >>> img.add_rasters(maps=["lake", "parks", "temp"])
-    >>> img.d_v
-    >>> img.add_vectors(["contours", "rivers", "weather_stations"])
-
-    >>> img.d_vect(map="roads")
-    >>> img.show()  # Create Slider
-    >>> img.save("image.gif")
+    >>> series = gj.SeriesMap(height = 500)
+    >>> series.add_rasters(["elevation_shade", "geology", "soils"])
+    >>> series.add_vectors(["streams", "streets", "viewpoints"])
+    >>> series.d_barscale()
+    >>> series.show()  # Create Slider
+    >>> series.save("image.gif")
 
     This class of grass.jupyter is experimental and under development. The API can
     change at anytime.
