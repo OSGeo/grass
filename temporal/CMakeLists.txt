@@ -1,10 +1,12 @@
 set(temporal_DIRS
   t.create
+  t.copy
   t.support
   t.topology
   t.list
   t.info
   t.merge
+  t.upgrade
   t.remove
   t.sample
   t.register
