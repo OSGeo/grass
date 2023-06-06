@@ -2691,31 +2691,38 @@ class WriteActiniaFile(WriteScriptFile):
 {' ' * self.indent * 1}"id": "model",
 {' ' * self.indent * 1}"description": "{'""'.join(properties["description"].splitlines())}",
 {' ' * self.indent * 1}"version": "1",
-{' ' * self.indent * 1}"template": {{
-{' ' * self.indent * 2}"list": [
 """
         )
 
-        # [:-1] because we do not want to write the trailing comma for
-        # the last item (it would make the json file invalid)
-        for item in self.model.GetItems()[:-1]:
-            self._writePythonAction(item, item.GetParameterizedParams())
-            self.fd.write(f"{' ' * self.indent * 3}}},\n")
-        self._writePythonAction(
-            self.model.GetItems()[-1],
-            self.model.GetItems()[-1].GetParameterizedParams(),
+        parameterized = False
+        module_list_str = ""
+        for item in self.model.GetItems():
+            parameterizedParams = item.GetParameterizedParams()
+            if len(parameterizedParams["params"]) > 0:
+                parameterized = True
+
+            module_list_str += self._getPythonAction(item, parameterizedParams)
+            module_list_str += f"{' ' * self.indent * 3}}},\n"
+
+        if parameterized is True:
+            self.fd.write(f'{" " * self.indent * 1}"template": {{\n')
+
+        self.fd.write(
+f"""{' ' * self.indent * 2}"list": [
+"""
         )
-        self.fd.write(f"{' ' * self.indent * 3}}}\n")
+
+        # module_list_str[:-2] to get rid of the trailing comma and newline
+        self.fd.write(module_list_str[:-2] + "\n")
 
         self.fd.write(f"{' ' * self.indent * 2}]\n{' ' * self.indent * 1}}}\n}}")
 
-    def _writePythonAction(self, item, variables={}, intermediates=None):
+    def _getPythonAction(self, item, variables={}, intermediates=None):
         """Write model action to Python file"""
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
         strcmd = f"{' ' * self.indent * 3}{{\n"
-        self.fd.write(
-            strcmd + self._getPythonActionCmd(item, task, len(strcmd), variables) + "\n"
-        )
+
+        return strcmd + self._getPythonActionCmd(item, task, len(strcmd), variables) + "\n"
 
     def _getPythonActionCmd(self, item, task, cmdIndent, variables={}):
         opts = task.get_options()
