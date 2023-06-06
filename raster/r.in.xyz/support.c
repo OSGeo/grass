@@ -46,8 +46,11 @@ int blank_array(void *array, int nrows, int ncols, RASTER_MAP_TYPE map_type,
     case -1:
 	/* fill with NULL */
 	/* alloc for col+1, do we come up (nrows) short? no. */
-	Rast_set_null_value(array, nrows * ncols, map_type);
-	break;
+        for (row = 0; row < nrows; row++) {
+            Rast_set_null_value(ptr, ncols, map_type);
+            ptr = G_incr_void_ptr(ptr, ncols * Rast_cell_size(map_type));
+        }
+        break;
 
     default:
 	return -1;
