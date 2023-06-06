@@ -164,27 +164,27 @@ Generate a draft of release notes using a script. The script the script needs to
 run from the top directory and will expect its configuration files
 to be in the *utils* directory.
 
-For major and minor releases, GitHub API gives good results for the first
+For **major and minor releases**, GitHub API gives good results for the first
 release candidate because it contains contributor handles and can identify
 new contributors, so use with the *api* backend, e.g.:
 
 ```bash
-python ./generate_release_notes.py api releasebranch_8_3 8.0.0 $VERSION
+python ./utils/generate_release_notes.py api releasebranch_8_3 8.2.0 $VERSION
 ```
 
-For micro releases, GitHub API does not give good results because it uses PRs
+For **micro releases**, GitHub API does not give good results because it uses PRs
 while the backports are usually direct commits without PRs.
 The *git log* command operates on commits, so use use the *log* backend:
 
 ```bash
-python ./generate_release_notes.py log releasebranch_8_3 8.3.0 $VERSION
+python ./utils/generate_release_notes.py log releasebranch_8_3 8.3.0 $VERSION
 ```
 
-In between RCs and between last RC and final release, the *log* backend is useful
+In between **RCs** and between last RC and final release, the *log* backend is useful
 for showing updates since the last RC:
 
 ```bash
-python ./generate_release_notes.py log releasebranch_8_3 8.3.0RC1 $VERSION
+python ./utils/generate_release_notes.py log releasebranch_8_3 8.3.0RC1 $VERSION
 ```
 
 For the final release, the changes accumulated since the first RC need to be
