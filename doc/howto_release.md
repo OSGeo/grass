@@ -167,27 +167,27 @@ Generate a draft of release notes using a script. The script the script needs to
 run from the top directory and will expect its configuration files
 to be in the *utils* directory.
 
-For major and minor releases, GitHub API gives good results for the first
+For **major and minor releases**, GitHub API gives good results for the first
 release candidate because it contains contributor handles and can identify
 new contributors, so use with the *api* backend, e.g.:
 
 ```bash
-python ./generate_release_notes.py api releasebranch_8_4 8.3.0 $VERSION
+python ./utils/generate_release_notes.py api releasebranch_8_4 8.3.0 $VERSION
 ```
 
-For micro releases, GitHub API does not give good results because it uses PRs
+For **micro releases**, GitHub API does not give good results because it uses PRs
 while the backports are usually direct commits without PRs.
 The *git log* command operates on commits, so use use the *log* backend:
 
 ```bash
-python ./generate_release_notes.py log releasebranch_8_4 8.4.0 $VERSION
+python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0 $VERSION
 ```
 
-In between RCs and between last RC and final release, the *log* backend is useful
+In between **RCs** and between last RC and final release, the *log* backend is useful
 for showing updates since the last RC:
 
 ```bash
-python ./generate_release_notes.py log releasebranch_8_4 8.4.0RC1 $VERSION
+python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0RC1 $VERSION
 ```
 
 For the final release, the changes accumulated since the first RC need to be
@@ -403,7 +403,7 @@ Software pages:
 
 ### Only in case of new major release
 
-- update cronjob '[cron_grass8_main_src_snapshot.sh](https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/)'
+- update '[cronjob(s)](https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/)'
   on grass.osgeo.org to next but one release tag for the differences
 - wiki updates, only when new major release:
   - {{cmd|xxxx}} macro: <https://grasswiki.osgeo.org/wiki/Template:Cmd>
@@ -419,20 +419,20 @@ Software pages:
 
 ```bash
      set MAJOR=8
-     set MINOR=2
+     set MINOR=4
      set PATCH=0RC1
 ```
 
 - Update addons (grass_addons.sh) rules, eg.
 
 ```bash
-     compile $GIT_PATH/grass8 $GISBASE_PATH/grass820RC1  $ADDON_PATH/grass820RC1/addons
+     compile $GIT_PATH/grass8 $GISBASE_PATH/grass840RC1  $ADDON_PATH/grass840RC1/addons
 ```
 
 - Modify grass_copy_wwwroot.sh accordingly, eg.
 
 ```bash
-     copy_addon 820RC1 8.2.0RC1
+     copy_addon 840RC1 8.4.0RC1
 ```
 
 ### Ubuntu Launchpad notes
