@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "Gwater.h"
@@ -47,7 +48,7 @@ int do_astar(void)
     if (heap_size == 0)
 	G_fatal_error(_("No seeds for A* Search"));
 
-    G_debug(1, "heap size %" PRI_OFF_T ", points %" PRI_OFF_T, heap_size,
+    G_debug(1, "heap size %" PRId64 ", points %" PRId64, heap_size,
 	    do_points);
 
     count = 0;
@@ -62,7 +63,7 @@ int do_astar(void)
 
 	r = heap_p.pnt.r;
 	c = heap_p.pnt.c;
-	G_debug(3, "heap size %" PRI_OFF_T ", r %d, c %d", heap_size, r, c);
+	G_debug(3, "heap size %" PRId64 ", r %d, c %d", heap_size, r, c);
 
 	alt_val = heap_p.ele;
 
@@ -144,9 +145,8 @@ int do_astar(void)
 	seg_put(&aspflag, (char *)&af, r, c);
     }
     if (doer != -1)
-	G_fatal_error(_("bug in A* Search: doer %" PRI_OFF_T " heap size %"
-		       PRI_OFF_T " count %" PRI_OFF_T), doer, heap_size,
-		      count);
+        G_fatal_error(_("bug in A* Search: doer %" PRId64 " heap size %" PRId64
+                        " count %" PRId64), doer, heap_size, count);
 
     seg_close(&search_heap);
 

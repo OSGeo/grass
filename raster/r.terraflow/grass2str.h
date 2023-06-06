@@ -20,6 +20,7 @@
 #ifndef _gras2str_H
 #define _gras2str_H
 
+#include <cinttypes>
 #include <grass/iostream/ami.h>
 #include <grass/glocale.h>
 #include "option.h"
@@ -135,7 +136,7 @@ cell2stream(char* cellname, elevation_type T_max_value, long* nodata_count) {
   /* close map files */
   Rast_close (infd);
 
-  G_debug(1, "nrows=%d   ncols=%d    stream_len()=%" PRI_OFF_T, nrows, ncols,
+  G_debug(1, "nrows=%d   ncols=%d    stream_len()=%" PRId64, nrows, ncols,
 		str->stream_len());  
   assert((off_t)nrows * ncols == str->stream_len());
   rt_stop(rt);

@@ -1,6 +1,7 @@
 /* PURPOSE:      Develop the image segments */
 
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <float.h>
@@ -392,7 +393,10 @@ int mean_shift(struct globals *globals)
 	    }
 	}
 	G_percent(1, 1, 1);
-	G_message(_("Changes > threshold: %"PRI_LONG", largest change: %g"), n_changes, sqrt(maxdiff2));
+        char buf[100];
+        snprintf(buf, sizeof(buf), "%" PRI_LONG, n_changes);
+        G_message(_("Changes > threshold: %s, largest change: %g"), buf,
+                   sqrt(maxdiff2));
     }
     if (n_changes > 1)
 	G_message(_("Mean shift stopped at %d due to reaching max iteration limit, more changes may be possible"), t);
