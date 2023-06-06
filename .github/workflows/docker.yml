@@ -6,9 +6,8 @@ name: Docker
 #
 # job docker-branch-os-matrix:
 # * creates tags latest-alpine, latest-debian and latest-ubuntu for main branch
-# * creates tags stable-alpine, stable-debian and stable-ubuntu for releasebranch_7_8
-# * if action would trigger other branches as well, they would create
-#   tags <branch_name>-alpine, <branch_name>-debian and <branch_name>-ubuntu
+# * creates tags stable-alpine, stable-debian and stable-ubuntu for releasebranch_8_2
+# * creates tags <branch_name>-alpine, <branch_name>-debian and <branch_name>-ubuntu for all triggered branches
 #
 # job docker-main-latest:
 # * creates tag latest for main branch
@@ -20,10 +19,9 @@ name: Docker
 on:
   push:
     branches:
-      - 'main'
-      - 'releasebranch_*'
+      - main
+      - releasebranch_*
       - '!releasebranch_7_*'
-      - 'releasebranch_7_8'
     tags: ['*.*.*']
     paths-ignore: [doc/**]
   release:
@@ -32,14 +30,14 @@ on:
 env:
   # Additionally mentioned in docker-sha-release-latest
   # as use of variable fails there
-  DOCKERHUB_REPOSITORY: mundialis/grass-py3-pdal
+  DOCKERHUB_REPOSITORY: osgeo/grass-gis
 
 jobs:
 
   # Only run for push to configured branches, do not run for releases.
   # Take care of different os. For main branch, created tags are:
   # latest-alpine, latest-debian, latest-ubuntu
-  # For releasebranch_7_8, created tags are:
+  # For releasebranch_8_2, created tags are:
   # stable-alpine, stable-debian, stable-ubuntu
   docker-branch-os-matrix:
     name: build and push ${{ matrix.os }} for branch
@@ -65,7 +63,7 @@ jobs:
           if [ "$GITHUB_REF" == "refs/heads/main" ]
           then
             TAG_PREFIX=latest
-          elif [ "$GITHUB_REF" == "refs/heads/releasebranch_7_8" ]
+          elif [ "$GITHUB_REF" == "refs/heads/releasebranch_8_2" ]
           then
             TAG_PREFIX=stable
           else
@@ -165,7 +163,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           # images: ${DOCKERHUB_REPOSITORY}
-          images: mundialis/grass-py3-pdal
+          images: osgeo/grass-gis
           tags: |
             type=ref,event=tag
           flavor: |
