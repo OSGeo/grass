@@ -167,7 +167,9 @@ Generate a draft of release notes using a script. The script the script needs to
 run from the top directory and will expect its configuration files
 to be in the *utils* directory.
 
-For **major and minor releases**, GitHub API gives good results for the first
+#### Major and minor releases
+
+For major and minor releases, GitHub API gives good results for the first
 release candidate because it contains contributor handles and can identify
 new contributors, so use with the *api* backend, e.g.:
 
@@ -175,7 +177,9 @@ new contributors, so use with the *api* backend, e.g.:
 python ./utils/generate_release_notes.py api releasebranch_8_4 8.3.0 $VERSION
 ```
 
-For **micro releases**, GitHub API does not give good results because it uses PRs
+#### Micro releases
+
+For micro releases, GitHub API does not give good results because it uses PRs
 while the backports are usually direct commits without PRs.
 The *git log* command operates on commits, so use use the *log* backend:
 
@@ -183,12 +187,16 @@ The *git log* command operates on commits, so use use the *log* backend:
 python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0 $VERSION
 ```
 
-In between **RCs** and between last RC and final release, the *log* backend is useful
+#### RCs
+
+In between RCs and between last RC and final release, the *log* backend is useful
 for showing updates since the last RC:
 
 ```bash
 python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0RC1 $VERSION
 ```
+
+#### Finalizing the release notes
 
 For the final release, the changes accumulated since the first RC need to be
 added manually to the result from the *api* backend.
@@ -227,7 +235,7 @@ After an RC, switch to development version:
 ./utils/update_version.py dev
 ```
 
-After a final release, switch to development version for the next micro, minor,
+Next switch back to the development version for the next micro, minor,
 or major version, e.g., for micro version, use:
 
 ```bash
@@ -252,6 +260,11 @@ you can get the same or similar message again using the script
 ```bash
 ./utils/update_version.py suggest
 ```
+
+## Publish release
+
+For the final release, edit the draft release again and publish it using the
+"Publish release" button.
 
 ## Upload to OSGeo servers
 
