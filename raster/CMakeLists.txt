@@ -182,6 +182,10 @@ build_program_in_subdir(
   DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(
+  r.object.geometry
+  DEPENDS grass_gis grass_raster)
+
+build_program_in_subdir(
   r.out.ascii
   DEPENDS grass_gis grass_raster)
 
