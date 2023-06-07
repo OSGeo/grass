@@ -80,10 +80,12 @@ def CheckWxPhoenix():
 
 
 def CheckWxVersion(version):
-    """Check wx version"""
-    ver = wx.__version__
-    parsed_version = parse_version_string(ver)
+    """Check wx version.
 
+    :return: True if current wx version is greater or equal than
+    specifed version otherwise False
+    """
+    parsed_version = parse_version_string(wx.__version__)
     if parsed_version < version:
         return False
 
