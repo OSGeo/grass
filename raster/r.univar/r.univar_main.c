@@ -31,7 +31,7 @@ zone_type zone_info;
 /* Parallelization
  * Only raster statistics reduction in process_raster() is parallelized.
  * print_stats*() where sorting takes place for percentile computation are not.
- * We may consider parallel sorting algorithms in the future for further speedup.
+ * We may try parallel sorting algorithms in the future for further speedup.
  */
 typedef struct zone_bucket {
     size_t n;
