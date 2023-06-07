@@ -32,7 +32,7 @@ class TestVDbDropTable(TestCase):
 
         m = SimpleModule("db.tables", flags="p")
         self.assertModule(m)
-        self.assertRegexpMatches(decode(m.outputs.stdout), "myroads")
+        self.assertRegex(decode(m.outputs.stdout), "myroads")
 
     def test_drop_table_with_force(self):
         """Drop table with force, the column should not be in the table"""

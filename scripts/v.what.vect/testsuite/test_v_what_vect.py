@@ -42,7 +42,7 @@ class TestVWhatVect(TestCase):
 
         m = SimpleModule("v.db.select", map=self.mapName)
         self.assertModule(m)
-        self.assertRegexpMatches(decode(m.outputs.stdout), "urb_name")
+        self.assertRegex(decode(m.outputs.stdout), "urb_name")
 
 
 if __name__ == "__main__":
