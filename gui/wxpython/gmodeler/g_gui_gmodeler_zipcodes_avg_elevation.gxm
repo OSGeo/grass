@@ -9,18 +9,20 @@
     </properties>
     <variables>
         <variable name="raster" type="file">
-            <value>/opt/geodata/ncrast/elev_state_500m.tif</value>
+            <value>/tmp/elevation.tif</value>
             <description>Input raster</description>
         </variable>
         <variable name="vector" type="file">
-            <value>/opt/geodata/ncshape/zipcodes_wake.shp</value>
+            <value>/tmp/zipcodes.shp</value>
             <description>Input boundaries</description>
         </variable>
     </variables>
     <action id="1" name="r.import" pos="85,65" size="110,58">
         <comment>raster import</comment>
         <task name="r.import">
+            <flag name="overwrite" />
             <parameter name="input">
+                <parameterized />
                 <value>%raster</value>
             </parameter>
             <parameter name="memory">
@@ -38,13 +40,15 @@
             <parameter name="resolution">
                 <value>estimated</value>
             </parameter>
-            <flag name="overwrite" />
         </task>
     </action>
     <action id="2" name="v.import" pos="85,125" size="110,46">
         <comment>vector import</comment>
         <task name="v.import">
+            <flag name="o" />
+            <flag name="overwrite" />
             <parameter name="input">
+                <parameterized />
                 <value>%vector</value>
             </parameter>
             <parameter name="output">
@@ -56,8 +60,6 @@
             <parameter name="snap">
                 <value>1e-13</value>
             </parameter>
-            <flag name="o" />
-            <flag name="overwrite" />
         </task>
     </action>
     <action id="3" name="g.region" pos="85,180" size="110,52">
@@ -74,11 +76,15 @@
     <action id="4" name="v.rast.stats" pos="460,65" size="148,46">
         <comment>method = average</comment>
         <task name="v.rast.stats">
+            <flag name="c" />
             <parameter name="map">
                 <value>zipcodes_wake</value>
             </parameter>
             <parameter name="layer">
                 <value>1</value>
+            </parameter>
+            <parameter name="type">
+                <value>point,line,boundary,centroid,area</value>
             </parameter>
             <parameter name="raster">
                 <value>elevation</value>
@@ -92,7 +98,6 @@
             <parameter name="percentile">
                 <value>90</value>
             </parameter>
-            <flag name="c" />
         </task>
     </action>
     <action id="5" name="v.db.univar" pos="240,205" size="108,50">
@@ -114,6 +119,7 @@
     <action id="6" name="v.to.rast" pos="405,185" size="114,42">
         <comment>average raster</comment>
         <task name="v.to.rast">
+            <flag name="overwrite" />
             <parameter name="input">
                 <value>zipcodes_wake</value>
             </parameter>
@@ -138,19 +144,18 @@
             <parameter name="memory">
                 <value>300</value>
             </parameter>
-            <flag name="overwrite" />
         </task>
     </action>
     <action id="7" name="r.colors" pos="385,250" size="116,44">
         <comment>bgyr color table</comment>
         <task name="r.colors">
+            <flag name="e" />
             <parameter name="map">
                 <value>zipcodes_avg</value>
             </parameter>
             <parameter name="color">
                 <value>bgyr</value>
             </parameter>
-            <flag name="e" />
         </task>
     </action>
     <action id="8" name="d.mon" pos="285,310" size="122,42">
@@ -227,6 +232,12 @@
             </parameter>
             <parameter name="size">
                 <value>5</value>
+            </parameter>
+            <parameter name="icon_area">
+                <value>legend/area</value>
+            </parameter>
+            <parameter name="icon_line">
+                <value>legend/line</value>
             </parameter>
             <parameter name="label_layer">
                 <value>1</value>
