@@ -9,11 +9,11 @@
     </properties>
     <variables>
         <variable name="raster" type="file">
-            <value>/tmp/elevation.tif</value>
+            <value>/opt/geodata/ncrast/elev_state_500m.tif</value>
             <description>Input raster</description>
         </variable>
         <variable name="vector" type="file">
-            <value>/tmp/zipcodes.shp</value>
+            <value>/opt/geodata/ncshape/zipcodes_wake.shp</value>
             <description>Input boundaries</description>
         </variable>
     </variables>
