@@ -449,7 +449,7 @@ class VDigitToolbar(BaseToolbar):
             3,
             f"VDigitToolbar.OnTool(): id = {event.GetId() if event else event}",
         )
-        if self.toolSwitcher:
+        if self.toolSwitcher and event:
             self.toolSwitcher.ToolChanged(event.GetId())
 
         # set cursor
@@ -471,7 +471,8 @@ class VDigitToolbar(BaseToolbar):
         if self.action["id"] == -1:
             self.action = {"desc": "", "type": "", "id": -1}
 
-        event.Skip()
+        if event:
+            event.Skip()
 
     def OnAddPoint(self, event):
         """Add point to the vector map Laier"""
