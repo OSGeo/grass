@@ -290,9 +290,21 @@ class TestCELLColorCategory(TestCase):
         # 15 / 6 == 2.5 ((n-s) / number of cells)
         # 10 / 8 == 1.25 ((e-w) / number of cells)
         cls.runModule("g.region", n=35, s=20, e=25, w=15, nsres=2.5, ewres=1.25)
-        cls.runModule("r.in.ascii", input="-", stdin=cell_overlap_a, output=cls.cell_a)
+        cls.runModule(
+            "r.in.ascii",
+            input="-",
+            type="CELL",
+            stdin=cell_overlap_a,
+            output=cls.cell_a,
+        )
         cls.to_remove.append(cls.cell_a)
-        cls.runModule("r.in.ascii", input="-", stdin=cell_overlap_b, output=cls.cell_b)
+        cls.runModule(
+            "r.in.ascii",
+            input="-",
+            type="CELL",
+            stdin=cell_overlap_b,
+            output=cls.cell_b,
+        )
         cls.to_remove.append(cls.cell_b)
         cls.runModule(
             "r.category",
