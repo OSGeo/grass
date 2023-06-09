@@ -2707,12 +2707,12 @@ class WriteActiniaFile(WriteScriptFile):
         if parameterized is True:
             self.fd.write(f'{" " * self.indent * 1}"template": {{\n')
             self.fd.write(
-    f"""{' ' * self.indent * 2}"list": [
+                f"""{' ' * self.indent * 2}"list": [
     """
             )
         else:
             self.fd.write(
-    f"""{' ' * self.indent}"list": [
+                f"""{' ' * self.indent}"list": [
     """
             )
 
@@ -2729,7 +2729,9 @@ class WriteActiniaFile(WriteScriptFile):
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
         strcmd = f"{' ' * self.indent * 3}{{\n"
 
-        return strcmd + self._getPythonActionCmd(item, task, len(strcmd), variables) + "\n"
+        return (
+            strcmd + self._getPythonActionCmd(item, task, len(strcmd), variables) + "\n"
+        )
 
     def _getPythonActionCmd(self, item, task, cmdIndent, variables={}):
         opts = task.get_options()
