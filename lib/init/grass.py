@@ -1803,7 +1803,11 @@ def start_gui(grass_gui):
     # Check for gui interface
     if grass_gui == "wxpython":
         # TODO: report failures
-        return Popen([os.getenv("GRASS_PYTHON"), wxpath("wxgui.py")])
+        stderr_redirect = None if is_debug() else subprocess.DEVNULL
+
+        return Popen(
+            [os.getenv("GRASS_PYTHON"), wxpath("wxgui.py")], stderr=stderr_redirect
+        )
     return None
 
 
