@@ -227,7 +227,7 @@ Save the modified draft, but do not publish the release yet.
 
 ## Reset include/VERSION file to git development version
 
-Use a dedicated script to edit the VERSION file.
+Use the dedicated `update_version.py` script to edit the VERSION file.
 
 After an RC, switch to development version:
 
@@ -376,7 +376,8 @@ Add the new version to repos which build or test addons:
 For a final release (not release candidate), close the related milestone at
 <https://github.com/OSGeo/grass/milestones>.
 If there are any open issues or PRs, move them to another milestone
-in the milestone view (all can be moved at once).
+in the milestone view (all can be moved at once by selecting the open
+issues and PRs and reassigning the next milestone).
 
 ## Publish the release
 
@@ -400,19 +401,24 @@ if there are any which show well specific features added or updated in the relea
 
 Add entry in <https://trac.osgeo.org/grass/wiki/Release>
 
-### Update Hugo web site to show new version
+### Update Hugo web site and other pages to show the new version
 
 For a (final) release (not release candidate), write announcement and publish it:
 
 - News section, <https://github.com/OSGeo/grass-website/tree/master/content/news>
 
-Software pages:
+Increment the GRASS GIS version in
+
+- <https://github.com/OSGeo/grass-website/blob/master/data/grass.json>
+- <https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md>
+
+Update the version in the Wiki page: <https://grasswiki.osgeo.org/wiki/GRASS-Wiki>
+
+Subsequently, verify the software pages:
 
 - Linux: <https://github.com/OSGeo/grass-website/blob/master/content/download/linux.en.md>
 - Windows: <https://github.com/OSGeo/grass-website/blob/master/content/download/windows.en.md>
 - Mac: <https://github.com/OSGeo/grass-website/blob/master/content/download/mac.en.md>
-- Releases: <https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md>
-- Wiki: <https://grasswiki.osgeo.org/wiki/GRASS-Wiki>
 
 ### Only in case of new major release
 
