@@ -6,8 +6,8 @@
 - You have communicated with a development coordinator.
 - You have evaluated status of issues and PRs associated with the relevant milestone.
 - You have already cloned the repo with Git.
-- Your own fork is the remote called "origin".
 - The OSGeo repo is the remote called "upstream".
+- Your own fork is the remote called "origin" or "fork".
 - You don't have any local un-pushed or un-committed changes.
 - You are using Bash or a similar shell.
 
@@ -351,6 +351,23 @@ ssh $USER@$SERVER1 "cd $SERVER1DIR ; ln -s grass-$VERSION.tar.md5sum grass-$MAJO
 echo "https://grass.osgeo.org/grass$MAJOR$MINOR/source/"
 ```
 
+### Update redirects
+
+For final minor and major releases (not release candidates and micro releases),
+update `grass-stable` redirect at `osgeo7-grass`:
+
+```bash
+sudo vim /etc/apache2/sites-enabled/000-default.conf`
+```
+
+Load the new configuration:
+
+```bash
+sudo systemctl reload apache2`
+```
+
+For new branches: Update `grass-devel` using the steps above.
+
 ## Update winGRASS related files
 
 Update the winGRASS version at <https://github.com/landam/wingrass-maintenance-scripts/>:
@@ -362,7 +379,7 @@ vim wingrass-maintenance-scripts/grass_copy_wwwroot.sh
 vim wingrass-maintenance-scripts/cronjob.sh       # major/minor release only
 ```
 
-## Update addon builders
+## Update binary and addon builders
 
 Add the new version to repos which build or test addons:
 
@@ -388,8 +405,8 @@ Release is done.
 
 ## Improve release description
 
-For final releases only, go to Zenodo a get a Markdown badge for the release
-which Zenodo creates with a DOI for the published released.
+For final releases only, go to Zenodo.org a get a Markdown badge for the release
+which Zenodo creates with a DOI for the published release.
 
 For all releases, click the Binder badge to get Binder to build. Use it to test
 it and to cache the built image. Add more links to (or badges for) more notebooks
@@ -397,7 +414,7 @@ if there are any which show well specific features added or updated in the relea
 
 ## Create entries for the new release
 
-### Trac Wiki release page
+### Trac Wiki release page entry
 
 Add entry in <https://trac.osgeo.org/grass/wiki/Release>
 
@@ -434,6 +451,7 @@ Subsequently, verify the software pages:
 
 ### WinGRASS notes
 
+- Go to <https://github.com/landam/wingrass-maintenance-scripts/>
 - Update grass_packager_release.bat, eg.
 
 ```bash
@@ -467,21 +485,23 @@ Subsequently, verify the software pages:
 
 ## Tell others about release
 
-- If release candidate:
+- If release candidate (send just a short invitation to test):
   - <grass-announce@lists.osgeo.org>
   - <grass-dev@lists.osgeo.org>
-- If official release:
-  - publish related announcement press release at:
-- Our GRASS web site: /announces/
-  - Note: DON'T use relative links there
+
+If final release, send out an announcement (press release) which is a shortened
+version of release desciption and website news item (under `/announces/`).
+Note: Do not use relative links.
+
 - Our main mailing lists:
   - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org>
+    (ask a development coordinator to be added)
   - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
   - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
-- FreeGIS: <freegis-list@intevation.de>
-- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org>
+- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org> (send an email, then it
+  will be approved)
 
-Via Web / Social media:
+Via web and social media:
 
 - See: <https://grass.osgeo.org/wiki/Contact_Databases>
 
