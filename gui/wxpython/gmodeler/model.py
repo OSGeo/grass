@@ -2686,10 +2686,12 @@ class WriteActiniaFile(WriteScriptFile):
         """Write actinia model to file."""
         properties = self.model.GetProperties()
 
+        description = properties["description"]
+
         self.fd.write(
             f"""{{
 {' ' * self.indent * 1}"id": "model",
-{' ' * self.indent * 1}"description": "{'""'.join(properties["description"].splitlines())}",
+{' ' * self.indent * 1}"description": "{'""'.join(description.splitlines())}",
 {' ' * self.indent * 1}"version": "1",
 """
         )
