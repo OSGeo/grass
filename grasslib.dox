@@ -122,7 +122,7 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 \subsection misclibs Miscellaneous Libraries
 
  - datetime:	\ref datetime (DateTime library)
- - external:	\ref external (External libraries from other projects such as shapelib and \ref ccmathlib)
+ - external:	\ref external (External libraries from other projects such as shapelib, parson and \ref ccmathlib)
  - fonts:	\ref fonts (GRASS fonts library)
  - init:	\ref init (GRASS initialization code + scripts)
  - iostream:	\ref iostream (fast I/O library)
