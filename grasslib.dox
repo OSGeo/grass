@@ -131,6 +131,22 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
  - manage:      \ref managelib
  - symbol:	\ref symbol (Drawing symbols for %point %vector data library)
 
+\subsection external Adding External Libraries
+
+ The following files must be added or updated when including a new external library.
+
+ - <b>add:</b> lib/external/<b>newlib</b>
+ - <b>add:</b> lib/external/<b>newlib</b>/*.c
+ - <b>add:</b> lib/external/<b>newlib</b>/*.h
+ - <b>add:</b> lib/external/<b>newlib</b>/LICENSE
+ - <b>add:</b> lib/external/<b>newlib</b>/Makefile
+ - <b>update:</b> lib/external/Makefile
+ - <b>update:</b> lib/external/README.license
+ - <b>update:</b> lib/README.md
+ - <b>update:</b> include/Make/Install.make
+ - <b>update:</b> include/Make/GRASS.make
+ - <b>update:</b> Makefile
+
 \section location File structure of GRASS Location
 
 A GRASS <b>raster map</b> consists of several files in several subdirectories in a mapset,
