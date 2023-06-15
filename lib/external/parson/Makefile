@@ -4,8 +4,10 @@ LIB = PARSON
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-default: $(ARCH_INCDIR)/parson.h
+default: headers
 	$(MAKE) lib
 
-$(ARCH_INCDIR)/parson.h: parson.h
-	$(INSTALL_DATA) parson.h $(ARCH_INCDIR)/parson.h
+headers: $(ARCH_INCDIR)/parson.h
+
+$(ARCH_INCDIR)/%.h: %.h
+	$(INSTALL_DATA) $< $@
