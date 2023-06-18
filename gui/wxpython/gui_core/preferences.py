@@ -1830,51 +1830,48 @@ class PreferencesDialog(PreferencesBaseDialog):
         #
         # update default window dimension
         #
-        single_window = self.settings.Get(
+        windows_pos = self.settings.Get(
             group="general",
             key="defWindowPos",
             subkey="enabled",
         )
-        windows_pos = self.settings.Get(
+        single_window = self.settings.Get(
             group="appearance",
             key="singleWindow",
             subkey="enabled",
         )
-        # Multiple windows mode
-        if windows_pos and not single_window:
-            dim = ""
-            # layer manager
+        if windows_pos:
+            # get dimension of main window
             pos = self.parent.GetPosition()
             size = self.parent.GetSize()
-            dim = "%d,%d,%d,%d" % (pos[0], pos[1], size[0], size[1])
-            # opened displays
+            dim = f"{pos[0]},{pos[1]},{size[0]},{size[1]}"
+
+            # extend dimension by dimensions of opened displays
             for mapdisp in self._giface.GetAllMapDisplays():
                 pos = mapdisp.GetPosition()
                 size = mapdisp.GetSize()
 
                 # window size must be larger than zero, not minimized
-                # when mapdisp is inside single window (panel has no IsIconized), don't save dim
+                # do not save dim when mapdisp is docked within single window
                 if (
-                    hasattr(mapdisp, "IsIconized")
-                    and not mapdisp.IsIconized()
+                    not mapdisp.IsDocked()
                     and (size[0] > 0 and size[1] > 0)
                 ):
-                    dim += ",%d,%d,%d,%d" % (pos[0], pos[1], size[0], size[1])
+                    dim += f",{pos[0]},{pos[1]},{size[0]},{size[1]}"
 
-            self.settings.Set(
-                group="general", key="defWindowPos", subkey="dim", value=dim
-            )
-        # Single window mode
-        elif windows_pos and single_window:
-            pos = self.parent.GetPosition()
-            size = self.parent.GetSize()
-            dim = f"{pos[0]},{pos[1]},{size[0]},{size[1]}"
-            self.settings.Set(
-                group="general",
-                key="defWindowPos",
-                subkey="dimSingleWindow",
-                value=dim,
-            )
+            if single_window:
+                # single window mode
+                self.settings.Set(
+                    group="general",
+                    key="defWindowPos",
+                    subkey="dimSingleWindow",
+                    value=dim,
+                )
+            else:
+                # multi window mode
+                self.settings.Set(
+                    group="general", key="defWindowPos", subkey="dim", value=dim
+                )
 
         return True
 
