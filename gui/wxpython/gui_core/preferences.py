@@ -1830,10 +1830,18 @@ class PreferencesDialog(PreferencesBaseDialog):
         #
         # update default window dimension
         #
-        if (
-            self.settings.Get(group="general", key="defWindowPos", subkey="enabled")
-            is True
-        ):
+        single_window = self.settings.Get(
+            group="general",
+            key="defWindowPos",
+            subkey="enabled",
+        )
+        windows_pos = self.settings.Get(
+            group="appearance",
+            key="singleWindow",
+            subkey="enabled",
+        )
+        # Multiple windows mode
+        if windows_pos and not single_window:
             dim = ""
             # layer manager
             pos = self.parent.GetPosition()
@@ -1855,6 +1863,17 @@ class PreferencesDialog(PreferencesBaseDialog):
 
             self.settings.Set(
                 group="general", key="defWindowPos", subkey="dim", value=dim
+            )
+        # Single window mode
+        elif windows_pos and single_window:
+            pos = self.parent.GetPosition()
+            size = self.parent.GetSize()
+            dim = f"{pos[0]},{pos[1]},{size[0]},{size[1]}"
+            self.settings.Set(
+                group="general",
+                key="defWindowPos",
+                subkey="dimSingleWindow",
+                value=dim,
             )
 
         return True
