@@ -187,11 +187,6 @@ class VDigitWindow(BufferedMapWindow):
                 "ord": ord("F"),
                 "tool": self.toolbar.OnDeleteArea,
             },
-            "deleteArea": {
-                "evt": True,
-                "ord": ord("F"),
-                "tool": self.toolbar.OnDeleteArea,
-            },
             "editLine": {
                 "evt": True,
                 "ord": ord("E"),
@@ -239,24 +234,17 @@ class VDigitWindow(BufferedMapWindow):
             },
         }
 
-        def update_actual_tools():
-            event = None
-            if default_tools[tool]["evt"]:
-                event = wx.CommandEvent(id=getattr(self.toolbar, tool))
-            actual_tools[default_tools[tool]["ord"]] = {
-                "event": event,
-                "tool": default_tools[tool]["tool"],
-            }
-
+        # Custom vdigit tools if VDigitToolbar class tool param arg was defined
         actual_tools = {}
         for tool in default_tools:
-            # Default vdigit tools
-            # handle addArea menu addBoundary, addCentroid tools
-            if not self.toolbar.tools:
-                update_actual_tools()
-            # Custom vdigit tools if VDigitToolbar class tool param arg was defined
-            if self.toolbar.tools and hasattr(self.toolbar, tool):
-                update_actual_tools()
+            if hasattr(self.toolbar, tool):
+                event = None
+                if default_tools[tool]["evt"]:
+                    event = wx.CommandEvent(id=getattr(self.toolbar, tool))
+                actual_tools[default_tools[tool]["ord"]] = {
+                    "event": event,
+                    "tool": default_tools[tool]["tool"],
+                }
 
         if not shift:
             tool = actual_tools.get(kc)
