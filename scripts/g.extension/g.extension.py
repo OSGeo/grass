@@ -2149,6 +2149,8 @@ def check_style_file(name):
 
     try:
         shutil.copyfile(dist_file, addons_file)
+    except shutil.SameFileError:
+        pass
     except OSError as error:
         grass.warning(
             _(
