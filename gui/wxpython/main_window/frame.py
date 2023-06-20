@@ -186,10 +186,10 @@ class GMFrame(wx.Frame):
             }
             dim = UserSettings.Get(**single_window_dim)
             default_dim = UserSettings.Get(**single_window_dim, settings_type="default")
+
             if dim != default_dim:
                 try:
-                    x, y = map(int, dim.split(",")[0:2])
-                    w, h = map(int, dim.split(",")[2:4])
+                    x, y, w, h = map(int, dim.split(",")[:4])
                     client_disp = wx.ClientDisplayRect()
                     if x == 1:
                         # Get client display x offset (OS panel)
@@ -203,6 +203,8 @@ class GMFrame(wx.Frame):
                     pass
             else:
                 self.Maximize(True)
+        else:
+            self.Maximize(True)
         self.Show()
 
         # load workspace file if requested
