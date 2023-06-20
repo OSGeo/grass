@@ -24,6 +24,12 @@ ENV GRASS_RUN_PACKAGES="\
       gcc \
       gdal \
       gdal-dev \
+      gdal-driver-HDF5 \
+      gdal-driver-JP2OpenJPEG \
+      gdal-driver-netCDF \
+      gdal-driver-PG \
+      gdal-driver-PNG \
+      gdal-driver-WMS \
       gdal-tools \
       gettext \
       geos \
