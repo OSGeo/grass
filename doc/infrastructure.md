@@ -1,7 +1,7 @@
 # How the GRASS GIS Webserver and related infrastructure works
 
 written by M. Neteler
-Last changed: July 2020
+Last changed: June 2023
 
 Related Wiki documents:
 
@@ -16,7 +16,7 @@ than in SVN).
 
 The GitHub repositories are:
 
-* GRASS GIS core (7.x): <https://github.com/OSGeo/grass>
+* GRASS GIS core (7+): <https://github.com/OSGeo/grass>
 * GRASS GIS legacy (3.x-6.x): <https://github.com/OSGeo/grass-legacy>
 * GRASS GIS Add-ons: <https://github.com/OSGeo/grass-addons>
 * GRASS GIS promotional material: <https://github.com/OSGeo/grass-promo>
@@ -56,11 +56,11 @@ Statistics:
 Maintainer: M. Neteler
 
 * <https://grass.osgeo.org>
-  * osgeo8-grass: LXD container on osgeo8 (<https://wiki.osgeo.org/wiki/SAC_Service_Status#osgeo_8>)
+  * osgeo7-grass: LXD container on osgeo7 (<https://wiki.osgeo.org/wiki/SAC_Service_Status#osgeo_7>)
     * OS: Debian Buster
     * Apache Server with hugo (<https://github.com/OSGeo/grass-website>)
   * for migration details (7/2020), see <https://github.com/OSGeo/grass-website/issues/180>
-  * ssh login: via jumphost hop.osgeo8.osgeo.org
+  * ssh login: via jumphost hop.osgeo7.osgeo.org
   * deployment via cronjob: <https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/>
 * <https://old.grass.osgeo.org> (CMSMS, replaced in 2020 by above hugo based solution)
   * Shared virtual OSGeo machine (osgeo6) hosted at Oregon State University
@@ -71,7 +71,7 @@ Maintainer: M. Neteler
     * Apache Server with PHP
   * Login: via OSGeo LDAP, there is a "grass" LDAP group
 * Backups:
-  * osgeo8-grass: container on osgeo8 is backup'ed, see <http://wiki.osgeo.org/wiki/SAC:Backups>
+  * osgeo7-grass: container on osgeo7 is backup'ed, see <http://wiki.osgeo.org/wiki/SAC:Backups>
 * Mirrors:
   * rsync, see <https://grass.osgeo.org/contribute/>  --> Mirror
   * mirror list, see <https://grass.osgeo.org/about/mirrors/>
@@ -79,15 +79,15 @@ Maintainer: M. Neteler
 
 * Weekly software snapshots (generated Saturday morning Portland (OR), US time):
   * Source code tarball of git (GitHub) <https://github.com/OSGeo/grass>
-  * Linux binary snapshot is compiled on osgeo8-grass
+  * Linux binary snapshot is compiled on osgeo7-grass
     * GRASS is compiled with GDAL, PROJ, SQLite, MySQL, PostgreSQL, FFTW, C++ support
     * binary tar.gz and manuals are moved into Web space
 
 * GRASS user manual HTML:
-  * generated during compilation of weekly Linux binary snapshot on osgeo8-grass
+  * generated during compilation of weekly Linux binary snapshot on osgeo7-grass
 
 * GRASS addons manual HTML:
-  * generated during compilation of weekly Linux binary snapshot on osgeo8-grass
+  * generated during compilation of weekly Linux binary snapshot on osgeo7-grass
 
 * GRASS programmer's manual (<https://grass.osgeo.org/programming8/>)
   * HTML: cronjob run Wednesday morning Portland (OR), US time
