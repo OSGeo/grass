@@ -1853,7 +1853,9 @@ class PreferencesDialog(PreferencesBaseDialog):
 
                 # window size must be larger than zero, not minimized
                 # do not save dim when mapdisp is docked within single window
-                if not mapdisp.IsDocked() and (size[0] > 0 and size[1] > 0):
+                if (not mapdisp.IsDockable() or not mapdisp.IsDocked()) and (
+                    size[0] > 0 and size[1] > 0
+                ):
                     dim += f",{pos[0]},{pos[1]},{size[0]},{size[1]}"
 
             if single_window:
