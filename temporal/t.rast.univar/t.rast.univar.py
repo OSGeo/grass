@@ -2,11 +2,11 @@
 
 ############################################################################
 #
-# MODULE:	t.rast.univar
-# AUTHOR(S):	Soeren Gebbert
+# MODULE:    t.rast.univar
+# AUTHOR(S):    Soeren Gebbert
 #
-# PURPOSE:	Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset
-# COPYRIGHT:	(C) 2011-2017, Soeren Gebbert and the GRASS Development Team
+# PURPOSE:    Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset
+# COPYRIGHT:    (C) 2011-2017, Soeren Gebbert and the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -46,6 +46,15 @@
 # % required: no
 # %end
 
+# %option
+# % key: percentile
+# % type: double
+# % required: no
+# % multiple: yes
+# % options: 0-100
+# % description: Percentile to calculate (requires extended statistics flag)
+# %end
+
 # %option G_OPT_T_WHERE
 # % guisection: Selection
 # %end
@@ -71,6 +80,11 @@
 # % guisection: Formatting
 # %end
 
+# %rules
+# % requires: percentile,-e
+# % exclusive: zones,-r
+# %end
+
 import grass.script as gs
 
 ############################################################################
@@ -93,7 +107,16 @@ def main():
     no_header = flags["u"]
     rast_region = bool(flags["r"])
     separator = gs.separator(options["separator"])
-
+    percentile = None
+    if options["percentile"]:
+        try:
+            percentile = list(map(float, options["percentile"].split(",")))
+        except ValueError:
+            gs.fatal(
+                _("<{}> is not valid input to the percentile option").format(
+                    options["percentile"]
+                )
+            )
     # Make sure the temporal database exists
     tgis.init()
 
@@ -117,6 +140,7 @@ def main():
         fs=separator,
         rast_region=rast_region,
         zones=zones,
+        percentile=percentile,
         nprocs=nprocs,
     )
 
