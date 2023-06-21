@@ -24,8 +24,10 @@ ENV GRASS_RUN_PACKAGES="\
       gcc \
       gdal \
       gdal-dev \
+      gdal-driver-GMLAS \
       gdal-driver-HDF5 \
       gdal-driver-JP2OpenJPEG \
+      gdal-driver-LIBKML \
       gdal-driver-netCDF \
       gdal-driver-PG \
       gdal-driver-PNG \
