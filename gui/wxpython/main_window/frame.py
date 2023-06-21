@@ -103,7 +103,7 @@ class GMFrame(wx.Frame):
         id=wx.ID_ANY,
         title=None,
         workspace=None,
-        size=wx.Display().GetGeometry().GetSize(),
+        size=wx.GetClientDisplayRect().GetSize(),
         style=wx.DEFAULT_FRAME_STYLE,
         **kwargs,
     ):
@@ -179,30 +179,32 @@ class GMFrame(wx.Frame):
 
         # use default window layout ?
         if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
-            dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
-            try:
-                x, y = map(int, dim.split(",")[0:2])
-                w, h = map(int, dim.split(",")[2:4])
-                client_disp = wx.ClientDisplayRect()
-                if x == 1:
-                    # Get client display x offset (OS panel)
-                    x = client_disp[0]
-                if y == 1:
-                    # Get client display y offset (OS panel)
-                    y = client_disp[1]
-                self.SetPosition((x, y))
-                self.SetSize((w, h))
-            except Exception:
-                pass
-            self.Layout()
-            if w <= globalvar.GM_WINDOW_SIZE[0] or h <= globalvar.GM_WINDOW_SIZE[1]:
-                self.Fit()
-        else:
-            self.Layout()
-            self.Fit()
-            # does center (of screen) make sense for lmgr?
-            self.Centre()
+            single_window_dim = {
+                "group": "general",
+                "key": "defWindowPos",
+                "subkey": "dimSingleWindow",
+            }
+            dim = UserSettings.Get(**single_window_dim)
+            default_dim = UserSettings.Get(**single_window_dim, settings_type="default")
 
+            if dim != default_dim:
+                try:
+                    x, y, w, h = map(int, dim.split(",")[:4])
+                    client_disp = wx.ClientDisplayRect()
+                    if x == 1:
+                        # Get client display x offset (OS panel)
+                        x = client_disp[0]
+                    if y == 1:
+                        # Get client display y offset (OS panel)
+                        y = client_disp[1]
+                    self.SetPosition((x, y))
+                    self.SetSize((w, h))
+                except Exception:
+                    pass
+            else:
+                self.Maximize(True)
+        else:
+            self.Maximize(True)
         self.Show()
 
         # load workspace file if requested
