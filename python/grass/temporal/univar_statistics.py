@@ -96,7 +96,13 @@ def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=Fals
         string += f'{fs}{stats["n"]}'
         if "median" in stats:
             string += f'{fs}{stats["first_quartile"]}{fs}{stats["median"]}'
-            string += f'{fs}{stats["third_quartile"]}{fs}{stats["percentile_90"]}'
+            string += f'{fs}{stats["third_quartile"]}'
+            if stats_module.inputs.percentile:
+                for perc in stats_module.inputs.percentile:
+                    perc_value = stats[
+                        f"percentile_{str(perc).rstrip('0').rstrip('.').replace('.','_')}"
+                    ]
+                    string += f"{fs}{perc_value}"
         string += eol
     return string
 
@@ -111,6 +117,7 @@ def print_gridded_dataset_univar_statistics(
     fs="|",
     rast_region=False,
     zones=None,
+    percentile=None,
     nprocs=1,
 ):
     """Print univariate statistics for a space time raster or raster3d dataset
@@ -120,6 +127,7 @@ def print_gridded_dataset_univar_statistics(
     :param output: Name of the optional output file, if None stdout is used
     :param where: A temporal database where statement
     :param extended: If True compute extended statistics
+    :param percentile: List of percentiles to compute
     :param no_header: Suppress the printing of column names
     :param fs: Field separator
     :param nprocs: Number of cores to use for processing
@@ -148,7 +156,7 @@ def print_gridded_dataset_univar_statistics(
         dbif.close()
         err = "Space time %(sp)s dataset <%(i)s> is empty"
         if where:
-            err += " or where condition is wrong"
+            err += " or where condition does not return any maps"
         gs.fatal(
             _(err) % {"sp": sp.get_new_map_instance(None).get_type(), "i": sp.get_id()}
         )
@@ -177,7 +185,14 @@ def print_gridded_dataset_univar_statistics(
             ]
         )
         if extended is True:
-            cols.extend(["first_quartile", "median", "third_quartile", "percentile_90"])
+            cols.extend(["first_quartile", "median", "third_quartile"])
+            if percentile:
+                cols.extend(
+                    [
+                        f"percentile_{str(perc).rstrip('0').rstrip('.').replace('.','_')}"
+                        for perc in percentile
+                    ]
+                )
         string = fs.join(cols)
 
         if output is None:
@@ -197,6 +212,7 @@ def print_gridded_dataset_univar_statistics(
         "r.univar" if type == "strds" else "r3.univar",
         flags=flag,
         zones=zones,
+        percentile=percentile,
         stdout_=PIPE,
         run_=False,
     )
