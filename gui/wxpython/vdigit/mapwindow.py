@@ -237,14 +237,16 @@ class VDigitWindow(BufferedMapWindow):
         # Custom vdigit tools if VDigitToolbar class tool param arg was defined
         actual_tools = {}
         for tool in default_tools:
-            if hasattr(self.toolbar, tool):
-                event = None
-                if default_tools[tool]["evt"]:
-                    event = wx.CommandEvent(id=getattr(self.toolbar, tool))
-                actual_tools[default_tools[tool]["ord"]] = {
-                    "event": event,
-                    "tool": default_tools[tool]["tool"],
-                }
+            # custom tools, e.g. in g.gui.iclass
+            if self.toolbar.tools and tool not in self.toolbar.tools:
+                continue
+            event = None
+            if default_tools[tool]["evt"] and hasattr(self.toolbar, tool):
+                event = wx.CommandEvent(id=getattr(self.toolbar, tool))
+            actual_tools[default_tools[tool]["ord"]] = {
+                "event": event,
+                "tool": default_tools[tool]["tool"],
+            }
 
         if not shift:
             tool = actual_tools.get(kc)
