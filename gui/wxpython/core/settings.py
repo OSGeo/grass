@@ -143,6 +143,7 @@ class Settings:
                         globalvar.MAP_WINDOW_SIZE[0],
                         globalvar.MAP_WINDOW_SIZE[1],
                     ),
+                    "dimSingleWindow": "1,1,1,1",
                 },
                 # workspace
                 "workspace": {
