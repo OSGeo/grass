@@ -379,7 +379,7 @@ Update the GRASS version at <https://github.com/landam/wingrass-maintenance-scri
   and
   [grass_packager_release.bat](https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_packager_release.bat#L12)
 
-Example for 8.3.0RC1: <https://github.com/landam/wingrass-maintenance-scripts/commit/c47b0f30051108bd2e8b52d183e97930c24dfafd>
+Example for 8.3.0RC1: [commit](https://github.com/landam/wingrass-maintenance-scripts/commit/c47b0f30051108bd2e8b52d183e97930c24dfafd)
 
 ## Update binary and addon builders
 
