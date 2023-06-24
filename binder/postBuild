@@ -5,12 +5,10 @@ set -e
 
 # compile
 ./configure \
-    --enable-largefile=yes \
     --with-nls \
     --with-cxx \
     --with-readline \
     --with-bzlib \
-    --with-pthread \
     --with-proj-share=/usr/share/proj \
     --with-geos=/usr/bin/geos-config \
     --with-cairo \
