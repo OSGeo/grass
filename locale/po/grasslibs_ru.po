@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2023-06-27 08:08+0000\n"
+"PO-Revision-Date: 2023-06-28 19:08+0000\n"
 "Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/"
 "grasslibs/ru/>\n"
@@ -962,7 +962,7 @@ msgstr ""
 #: ../lib/raster/open.c:943
 #, c-format
 msgid "Raster map <%s> not found"
-msgstr "Не найдена растровая карта <%s>"
+msgstr "Растровая карта <%s> не найдена"
 
 #: ../lib/rst/interp_float/interp2d.c:232
 #, c-format
@@ -1317,7 +1317,7 @@ msgstr "Флаги:"
 #: ../lib/gis/parser_help.c:223 ../lib/gis/parser_interface.c:329
 #: ../lib/gis/parser_rest.c:164 ../lib/gis/parser_html.c:179
 msgid "Allow output files to overwrite existing files"
-msgstr "Разрешить выходным файлам перезаписывать существующие файлы"
+msgstr "Разрешать перезаписывать файлы вывода поверх существующих"
 
 #: ../lib/gis/parser_help.c:225 ../lib/gis/parser_interface.c:337
 #: ../lib/gis/parser_html.c:183
@@ -6013,10 +6013,9 @@ msgstr[3] "Один примитив зарегистрирован"
 #, c-format
 msgid "One vertex registered"
 msgid_plural "%<PRId64> vertices registered"
-msgstr[0] "%d вершина зарегистрирована"
-msgstr[1] "%d вершины зарегистрировано"
-msgstr[2] "%d вершин зарегистрировано"
-msgstr[3] "Одна вершина зарегистрирована"
+msgstr[0] "%<PRId64> вершина зарегистрирована"
+msgstr[1] "%<PRId64> вершины зарегистрировано"
+msgstr[2] "%<PRId64> вершин зарегистрировано"
 
 #: ../lib/vector/Vlib/build_nat.c:133
 msgid "Building areas..."
@@ -8058,7 +8057,7 @@ msgstr "%s= и %s= не могут использоваться совместн
 #: ../lib/python/temporal/register.py:89
 #, python-format
 msgid "%s= and the %s flag are mutually exclusive"
-msgstr "s= и флаг %s не могут использоваться совместно"
+msgstr "%s= и флаг %s не могут использоваться совместно"
 
 #: ../lib/python/temporal/register.py:93
 msgid "The increment option requires the start option"
