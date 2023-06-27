@@ -7,14 +7,17 @@ msgstr ""
 "Project-Id-Version: grassmods_ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2009-05-15 00:23-0600\n"
-"Last-Translator: Maxim Dubinin <sim@gis-lab.info>\n"
-"Language-Team: Russian <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2023-06-27 08:08+0000\n"
+"Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
+"Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/"
+"grassmods/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: ../temporal/t.connect/main.c:34
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:2
@@ -230,6 +233,9 @@ msgid ""
 "driver: %s\n"
 "database: %s"
 msgstr ""
+"Значения по умолчанию драйвера / базы данных:\n"
+"драйвер: %s\n"
+"база данных: %s"
 
 #: ../imagery/i.landsat.acca/main.c:57
 #: ../imagery/i.landsat.acca/algorithm.c:380
@@ -405,7 +411,7 @@ msgstr ""
 #: ../raster/r.watershed/shed/com_line.c:266 ../raster/r.geomorphon/main.c:297
 #, c-format
 msgid "<%s> is an illegal file name"
-msgstr ""
+msgstr "Неверное имя файла: <%s>"
 
 #: ../imagery/i.landsat.acca/algorithm.c:124
 msgid "Preliminary scene analysis:"
@@ -572,7 +578,7 @@ msgstr ""
 #: ../raster/r.stream.extract/cseg.c:41 ../raster/r.stream.extract/dseg.c:41
 #: ../raster/r.stream.extract/bseg.c:41 ../raster/r.li/r.li.daemon/list.c:49
 msgid "Out of memory"
-msgstr ""
+msgstr "Не хватает памяти"
 
 #: ../imagery/i.smap/interp.c:68 ../raster/r.texture/h_measure.c:738
 #: ../raster/r.stream.extract/load.c:44 ../raster/r.stream.extract/load.c:53
@@ -1062,7 +1068,7 @@ msgstr ""
 #: ../scripts/d.rast.leg/d.rast.leg.py:99 ../scripts/r.rgb/r.rgb.py:55
 #, c-format, python-format
 msgid "Raster map <%s> not found"
-msgstr ""
+msgstr "Не найдена растровая карта <%s>"
 
 #: ../imagery/i.gensig/parse.c:50 ../imagery/i.cluster/main.c:179
 #: ../imagery/i.gensigset/parse.c:57 ../display/d.mon/start.c:52
@@ -1826,7 +1832,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.surf.nnbathy_to_translate.c:7
 #: ../raster/r.out.bin/main.c:291 ../raster/r.random/main.c:63
 msgid "Name of input raster map"
-msgstr ""
+msgstr "Имя входной растровой карты"
 
 #: ../imagery/i.zc/main.c:74
 msgid "Zero crossing raster map"
@@ -2109,7 +2115,7 @@ msgstr ""
 
 #: ../imagery/i.cca/main.c:96
 msgid "Name of input imagery subgroup"
-msgstr ""
+msgstr "Имя входной подгруппы изображений"
 
 #: ../imagery/i.cca/main.c:103
 msgid "File containing spectral signatures"
@@ -2635,7 +2641,7 @@ msgstr ""
 #: ../raster/r.series/main.c:226 ../raster/r.in.mat/main.c:125
 #, c-format
 msgid "Unable to open input file <%s>"
-msgstr ""
+msgstr "Не удалось открыть входной файл <%s>"
 
 #: ../imagery/i.group/main.c:150
 msgid "No input raster map(s) specified"
@@ -10018,7 +10024,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.category.trim_to_translate.c:3
 #: ../locale/scriptstrings/r.out.legend_to_translate.c:3
 msgid "color"
-msgstr ""
+msgstr "цвет"
 
 #: ../locale/scriptstrings/r.euro.ecosystem_to_translate.c:4
 #: ../locale/scriptstrings/r.fill.category_to_translate.c:4
@@ -11733,6 +11739,7 @@ msgstr "Поле атрибутивной таблицы со значениям
 #: ../locale/scriptstrings/v.clean.ogr_to_translate.c:14
 msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr ""
+"Условия WHERE для инструкции SQL без использования ключевого слова «where»"
 
 #: ../locale/scriptstrings/v.what.rast.multi_to_translate.c:18
 #: ../locale/scriptstrings/v.clean.ogr_to_translate.c:15
@@ -12488,7 +12495,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.in.wfs2_to_translate.c:7
 #: ../locale/scriptstrings/r.to.vect.lines_to_translate.c:6
 msgid "Name for output vector map"
-msgstr ""
+msgstr "Имя выходной векторной карты"
 
 #: ../locale/scriptstrings/v.unpack_to_translate.c:7
 msgid "Default: taken from input file internals"
@@ -16757,7 +16764,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.class.ml_to_translate.c:5
 #: ../vector/v.voronoi/main.c:131
 msgid "Name of input vector map"
-msgstr ""
+msgstr "Имя входной векторной карты"
 
 #: ../locale/scriptstrings/r.edm.eval_to_translate.c:1
 msgid ""
@@ -25821,7 +25828,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.segment.hierarchical_to_translate.c:4
 msgid "Name of input imagery group"
-msgstr ""
+msgstr "Имя входной группы изображений"
 
 #: ../locale/scriptstrings/i.segment.hierarchical_to_translate.c:5
 #, fuzzy
@@ -26115,7 +26122,7 @@ msgstr ""
 #: ../raster/r.contour/main.c:173
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
-msgstr ""
+msgstr "Не удалось открыть базу данных <%s> с помощью драйвера <%s>"
 
 #: ../ps/ps.map/catval.c:63
 msgid "Column type not supported (must be string)"
@@ -26589,7 +26596,7 @@ msgstr ""
 #: ../raster/r.statistics/main.c:110 ../raster/r.support/main.c:245
 #, c-format
 msgid "Unable to read category file of raster map <%s>"
-msgstr ""
+msgstr "Не удалось прочитать файл категорий растровой карты <%s>"
 
 #: ../display/d.title/main.c:117 ../vector/v.surf.rst/main.c:881
 #: ../vector/v.in.ascii/main.c:279 ../general/g.setproj/get_stp.c:162
@@ -26847,7 +26854,7 @@ msgstr ""
 #: ../raster/r.cost/main.c:666
 #, c-format
 msgid "Unable to open vector map <%s>"
-msgstr ""
+msgstr "Не удалось открыть векторную карту <%s>"
 
 #: ../display/d.vect.chart/plot.c:38 ../display/d.vect.thematic/plot1.c:105
 #: ../display/d.vect/shape.c:38 ../vector/v.what.rast/main.c:138
@@ -26863,13 +26870,13 @@ msgstr ""
 #: ../doc/vector/v.example/main.c:109
 #, c-format
 msgid "Database connection not defined for layer %d"
-msgstr ""
+msgstr "Не определено соединение с базой данных для слоя %d"
 
 #: ../display/d.vect.chart/plot.c:86 ../display/d.vect/attr.c:110
 #: ../vector/v.in.db/main.c:225
 #, c-format
 msgid "Unable to open select cursor: '%s'"
-msgstr ""
+msgstr "Не удалось открыть курсор select: «%s»"
 
 #: ../display/d.rgb/main.c:58
 msgid ""
@@ -27119,7 +27126,7 @@ msgstr ""
 #: ../raster/r.path/main.c:317 ../raster/r.to.vect/main.c:289
 #: ../raster/r.cost/main.c:618 ../raster/r.cost/main.c:678
 msgid "Unable to read vector map"
-msgstr ""
+msgstr "Не удалось прочитать векторный слой"
 
 #: ../display/d.vect.thematic/display.c:118 ../display/d.vect/lines.c:175
 #, c-format
@@ -27329,7 +27336,7 @@ msgstr ""
 #: ../raster/r.stream.extract/close.c:178
 #, c-format
 msgid "Unable to start driver <%s>"
-msgstr "Невозможно запустить драйвер <%s>"
+msgstr "Не удалось запустить драйвер <%s>"
 
 #: ../display/d.vect.thematic/main.c:299 ../display/d.vect/opt.c:152
 #: ../db/db.select/main.c:81 ../db/db.columns/main.c:56
@@ -28391,7 +28398,7 @@ msgstr ""
 #: ../scripts/v.db.univar/v.db.univar.py:71
 #, c-format, python-format
 msgid "Vector map <%s> not found"
-msgstr ""
+msgstr "Векторная карта <%s> не найдена"
 
 #: ../display/d.extract/main.c:106 ../vector/v.in.lidar/main.c:555
 #: ../vector/v.lidar.edgedetection/main.c:251 ../vector/v.net.iso/main.c:356
@@ -28545,7 +28552,7 @@ msgstr ""
 #: ../scripts/d.what.rast/d.what.rast.py:35 ../scripts/d.redraw/d.redraw.py:37
 #, c-format, python-format
 msgid "Unable to open file '%s'"
-msgstr ""
+msgstr "Не удалось открыть файл «%s»"
 
 #: ../display/d.mon/list.c:145
 #, c-format
@@ -28997,7 +29004,7 @@ msgstr ""
 #: ../display/d.linegraph/main.c:494
 #, c-format
 msgid "Cannot find/open symbol: '%s'"
-msgstr ""
+msgstr "Не удалось найти/открыть символ: «%s»"
 
 #: ../display/d.linegraph/main.c:511
 #, c-format
@@ -29717,7 +29724,7 @@ msgstr ""
 #: ../vector/v.in.lidar/main.c:542 ../scripts/v.unpack/v.unpack.py:114
 #, c-format, python-format
 msgid "Vector map <%s> already exists and will be overwritten"
-msgstr ""
+msgstr "Векторная карта <%s> уже существует и будет перезаписана"
 
 #: ../vector/v.in.lidar/main.c:545 ../vector/v.edit/main.c:100
 #: ../vector/v.in.ogr/main.c:753 ../scripts/v.unpack/v.unpack.py:112
@@ -29944,7 +29951,7 @@ msgstr ""
 #: ../vector/v.in.lidar/attributes.c:129
 #, c-format
 msgid "Unable open database <%s> by driver <%s>"
-msgstr ""
+msgstr "Не удалось открыть базу данных <%s> с помощью драйвера <%s>"
 
 #: ../vector/v.in.lidar/attributes.c:135 ../vector/v.net.iso/main.c:390
 #: ../vector/v.net.flow/main.c:181 ../vector/v.net.alloc/main.c:329
@@ -29966,7 +29973,7 @@ msgstr ""
 #: ../raster/r.contour/main.c:189
 #, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
-msgstr ""
+msgstr "Не удалось создать индекс для таблицы <%s>, ключ <%s>"
 
 #: ../vector/v.in.lidar/attributes.c:144 ../vector/v.sample/main.c:197
 #: ../vector/v.decimate/copy_tab.c:124 ../vector/v.random/main.c:312
@@ -31051,7 +31058,7 @@ msgstr ""
 #: ../vector/v.reclass/main.c:128
 #, c-format
 msgid "Database connection not defined for layer %s"
-msgstr ""
+msgstr "Соединение с базой данных не определено для слоя %s"
 
 #: ../vector/v.sample/main.c:148
 #, c-format
@@ -32047,7 +32054,7 @@ msgstr ""
 
 #: ../vector/v.buffer/main.c:809 ../vector/v.overlay/area_area.c:171
 msgid "Attaching islands..."
-msgstr ""
+msgstr "Прикрепление островов…"
 
 #: ../vector/v.buffer/main.c:816
 msgid "Calculating centroids for all areas..."
@@ -32208,7 +32215,7 @@ msgstr ""
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:124
 #, c-format, python-format
 msgid "Unable to copy table <%s>"
-msgstr ""
+msgstr "Не удалось скопировать таблицу <%s>"
 
 #: ../vector/v.decimate/copy_tab.c:112 ../vector/v.vect.stats/main.c:349
 #: ../vector/v.vect.stats/main.c:431 ../vector/v.extract/copy_tab.c:117
@@ -32291,7 +32298,7 @@ msgstr ""
 #: ../raster/r.regression.multi/main.c:170 ../raster/r.what/main.c:177
 #, c-format
 msgid "Unable to open file <%s> for writing"
-msgstr ""
+msgstr "Не удалось открыть файл <%s> для записи"
 
 #: ../vector/v.db.select/main.c:192
 #, c-format
@@ -32308,7 +32315,7 @@ msgstr ""
 #: ../vector/v.reclass/main.c:267
 #, c-format
 msgid "Unable to fetch data from table <%s>"
-msgstr ""
+msgstr "Не удалось получить данные из таблицы <%s>"
 
 #: ../vector/v.db.select/main.c:375
 #, c-format
@@ -32422,7 +32429,7 @@ msgstr ""
 #: ../scripts/v.db.update/v.db.update.py:96
 #, c-format, python-format
 msgid "Column <%s> not found"
-msgstr ""
+msgstr "Столбец <%s> не найден"
 
 #: ../vector/v.to.rast/vect2rast.c:74
 #, c-format
@@ -32904,7 +32911,7 @@ msgstr ""
 #: ../scripts/v.db.renamecolumn/v.db.renamecolumn.py:91
 #, c-format, python-format
 msgid "Column <%s> not found in table <%s>"
-msgstr ""
+msgstr "Столбец <%s> не найден в таблице <%s>"
 
 #: ../vector/v.out.lidar/main.c:121
 #, c-format
@@ -37398,7 +37405,7 @@ msgstr ""
 #: ../vector/v.out.ogr/main.c:588
 #, c-format
 msgid "Unable to open OGR data source '%s'"
-msgstr ""
+msgstr "Не удалось открыть источник данных OGR «%s»"
 
 #: ../vector/v.out.ogr/main.c:608
 #, c-format
@@ -37672,7 +37679,7 @@ msgstr ""
 #: ../vector/v.patch/main.c:593
 #, c-format
 msgid "Building topology for vector map <%s>..."
-msgstr ""
+msgstr "Построение топологии для векторной карты <%s>…"
 
 #: ../vector/v.patch/main.c:599
 msgid "Intersections at borders will have to be snapped"
@@ -38107,7 +38114,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:1479
 #, c-format
 msgid "Unable to drop table: '%s'"
-msgstr ""
+msgstr "Не удалось удалить таблицу: «%s»"
 
 #: ../vector/v.in.ogr/main.c:1520
 msgid "Cleaning polygons"
@@ -38197,7 +38204,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:1921
 #, c-format
 msgid "Number of duplicate centroids: %d"
-msgstr ""
+msgstr "Количество дубликатов центроидов: %d"
 
 #: ../vector/v.in.ogr/main.c:1926 ../vector/v.in.ogr/main.c:1995
 msgid "The input could be cleaned by snapping vertices to each other."
@@ -40160,7 +40167,7 @@ msgstr ""
 #: ../vector/v.in.dxf/write_vect.c:246
 #, c-format
 msgid "Unable to add database link for vector map <%s>"
-msgstr ""
+msgstr "Не удалось добавить связь с базой данных для векторной карты <%s>"
 
 #: ../vector/v.extrude/main.c:72
 msgid ""
@@ -40541,7 +40548,7 @@ msgstr ""
 
 #: ../vector/v.vol.rst/user1.c:383
 msgid "Bitmap mask created"
-msgstr ""
+msgstr "Создана маска из битового массива"
 
 #: ../vector/v.vol.rst/user1.c:432 ../vector/v.vol.rst/user1.c:485
 #: ../vector/v.vol.rst/user1.c:538 ../vector/v.vol.rst/user1.c:591
@@ -40549,7 +40556,7 @@ msgstr ""
 #: ../vector/v.vol.rst/user1.c:750
 #, c-format
 msgid "Unable to open %s for writing"
-msgstr ""
+msgstr "Не удалось открыть %s для записи"
 
 #: ../vector/v.vol.rst/user1.c:443 ../vector/v.vol.rst/user1.c:496
 #: ../vector/v.vol.rst/user1.c:549 ../vector/v.vol.rst/user1.c:602
@@ -40712,7 +40719,7 @@ msgstr ""
 #: ../vector/v.extract/main.c:329
 #, c-format
 msgid "Unable select records from table <%s>"
-msgstr ""
+msgstr "Не удалось выбрать записи из таблицы <%s>"
 
 #: ../vector/v.extract/main.c:331
 #, c-format
@@ -40811,7 +40818,7 @@ msgstr ""
 #: ../vector/v.support/main.c:190
 #, c-format
 msgid "Unable to open history file for vector map <%s>"
-msgstr ""
+msgstr "Невозможно открыть файл истории для векторной карты <%s>"
 
 #: ../vector/v.rectify/main.c:76
 msgid ""
@@ -42323,7 +42330,7 @@ msgstr ""
 #: ../raster/r.mapcalc/main.c:131 ../raster/r.series/main.c:205
 #, c-format
 msgid "%s= and %s= are mutually exclusive"
-msgstr ""
+msgstr "%s= и %s= не могут использоваться совместно"
 
 #: ../vector/v.colors/main.c:229
 #, c-format
@@ -42399,7 +42406,7 @@ msgstr ""
 #: ../raster/r.univar/r3.univar_main.c:182 ../raster/r.colors/edit_colors.c:484
 #, c-format
 msgid "3D raster map <%s> not found"
-msgstr ""
+msgstr "Трёхмерная растровая карта <%s> не найдена"
 
 #: ../vector/v.colors/main.c:335 ../raster/r.colors/edit_colors.c:487
 #, c-format
@@ -44481,7 +44488,7 @@ msgstr ""
 
 #: ../db/db.connect/main.c:185
 msgid "Default database is not set"
-msgstr ""
+msgstr "База данных по умолчанию не задана"
 
 #: ../db/db.connect/main.c:221
 msgid "Unable to set default database connection"
@@ -45173,7 +45180,7 @@ msgstr ""
 #: ../db/drivers/sqlite/listdb.c:99
 #, c-format
 msgid "Unable to open directory '%s'"
-msgstr ""
+msgstr "Не удалось открыть каталог «%s»"
 
 #: ../db/drivers/sqlite/listdb.c:117
 #, c-format
@@ -45564,7 +45571,7 @@ msgstr ""
 #: ../raster/r.univar/r3.univar_main.c:189
 #, c-format
 msgid "Unable to open 3D raster map <%s>"
-msgstr ""
+msgstr "Не удалось открыть трёхмерную растровую карту <%s>"
 
 #: ../raster3d/r3.out.vtk/main.c:209
 msgid "No RGB Data will be created."
@@ -45604,7 +45611,7 @@ msgstr ""
 #: ../raster3d/r3.info/main.c:499 ../raster3d/r3.cross.rast/main.c:343
 #, c-format
 msgid "Unable to close 3D raster map <%s>"
-msgstr ""
+msgstr "Не удалось закрыть трёхмерную растровую карту <%s>"
 
 #: ../raster3d/r3.out.vtk/errorHandling.c:105
 msgid "Unable to close input raster maps"
@@ -45788,7 +45795,7 @@ msgstr ""
 #: ../raster3d/r3.info/main.c:448
 #, c-format
 msgid "Unable to read range of 3D raster map <%s>"
-msgstr ""
+msgstr "Не удалось прочитать диапазон трёхмерной растровой карты <%s>"
 
 #: ../raster3d/r3.mkdspf/main.c:200
 #, c-format
@@ -48895,7 +48902,7 @@ msgstr ""
 #: ../raster/r.buildvrt/main.c:113 ../raster/r.series/main.c:209
 #, c-format
 msgid "Please specify %s= or %s="
-msgstr ""
+msgstr "Необходимо указать параметры %s= или %s="
 
 #: ../raster/r.series.accumulate/main.c:255 ../raster/r.buildvrt/main.c:174
 #: ../raster/r.series/main.c:288
@@ -49539,7 +49546,7 @@ msgstr ""
 #: ../raster/r.out.gdal/main.c:714
 #, c-format
 msgid "Unable to export raster map <%s>"
-msgstr ""
+msgstr "Не удалось выполнить экспорт растровой карты <%s>"
 
 #: ../raster/r.out.gdal/main.c:727
 msgid "Number of overviews must be between 0 and 5"
@@ -50473,7 +50480,7 @@ msgstr ""
 #: ../raster/r.composite/main.c:164
 #, c-format
 msgid "Unable to read color file of raster map <%s>"
-msgstr ""
+msgstr "Не удалось прочитать цветовой файл для растровой карты <%s>"
 
 #: ../raster/r.composite/main.c:262 ../raster/r.surf.random/main.c:66
 #: ../raster/r.li/r.li.daemon/daemon.c:174 ../raster/r.surf.fractal/main.c:85
@@ -52812,7 +52819,7 @@ msgstr ""
 #: ../raster/r.stats/main.c:203 ../raster/r.stats/main.c:208
 #: ../raster/r.report/parse.c:129 ../raster/r.report/parse.c:134
 msgid "No data"
-msgstr ""
+msgstr "Нет данных"
 
 #: ../raster/r.stats/main.c:207 ../raster/r.report/parse.c:133
 msgid "Do not report cells where all maps have no data"
@@ -52855,7 +52862,7 @@ msgstr ""
 #: ../raster/r.stats/main.c:332 ../raster/r.contour/main.c:150
 #, c-format
 msgid "Unable to read fp range of raster map <%s>"
-msgstr ""
+msgstr "Не удалось прочитать диапазон с плавающей точкой растровой карты <%s>"
 
 #: ../raster/r.univar/r3.univar_main.c:37
 msgid "3D Raster map used for zoning, must be of type CELL"
@@ -52939,12 +52946,12 @@ msgstr ""
 #: ../raster/r.series.interp/main.c:130 ../raster/r.series.interp/main.c:146
 #, c-format
 msgid "Please specify %s= and %s="
-msgstr ""
+msgstr "Необходимо указать параметры %s= и %s="
 
 #: ../raster/r.series.interp/main.c:180 ../raster/r.colors/edit_colors.c:243
 #, c-format
 msgid "Unable to open %s file <%s>"
-msgstr ""
+msgstr "Не удалось открыть файл %s: <%s>"
 
 #: ../raster/r.series.interp/main.c:213
 #, c-format
@@ -53746,7 +53753,7 @@ msgstr ""
 #: ../raster/r.what/main.c:314
 #, c-format
 msgid "Unable to read vector map <%s>"
-msgstr ""
+msgstr "Невозможно прочитать векторную карту <%s>"
 
 #: ../raster/r.what/main.c:318
 #, c-format
@@ -56098,7 +56105,7 @@ msgstr ""
 #: ../raster/r.colors/rules.c:214
 #, c-format
 msgid "bad rule (%s): [%s]"
-msgstr ""
+msgstr "неверное правило (%s): [%s]"
 
 #: ../raster/r.profile/main.c:57
 msgid "Outputs the raster map layer values lying on user-defined line(s)."
@@ -56785,7 +56792,7 @@ msgstr ""
 
 #: ../raster/r.path/main.c:390
 msgid "Unable to read range file"
-msgstr ""
+msgstr "Не удалось прочитать файл диапазона"
 
 #: ../raster/r.path/main.c:393
 #, c-format
@@ -59435,7 +59442,7 @@ msgstr ""
 
 #: ../scripts/i.band/i.band.py:92
 msgid "Map <{}> not found in current mapset"
-msgstr ""
+msgstr "Карта <%s> не найдена в текущем наборе"
 
 #: ../scripts/i.band/i.band.py:101
 msgid "Operation {}: required parameter <{}> not set"
@@ -59618,7 +59625,7 @@ msgstr ""
 #: ../scripts/db.droptable/db.droptable.py:81
 #, python-format
 msgid "Deleting table <%s> which is attached to following map(s):"
-msgstr ""
+msgstr "Удаление таблицы <%s>, которая прикреплена к следующей карте (картам):"
 
 #: ../scripts/db.droptable/db.droptable.py:86
 #, python-format
@@ -59628,6 +59635,8 @@ msgstr ""
 #: ../scripts/db.droptable/db.droptable.py:88
 msgid "You must use the force flag to actually remove it. Exiting."
 msgstr ""
+"Для фактического удаления таблицы необходимо использовать флаг "
+"принудительного удаления. Завершение работы."
 
 #: ../scripts/db.droptable/db.droptable.py:97
 msgid "Cannot continue (problem deleting table)."
@@ -60854,7 +60863,7 @@ msgstr ""
 
 #: ../scripts/v.unpack/v.unpack.py:156
 msgid "Projection information does not match. Proceeding..."
-msgstr ""
+msgstr "Информация о проекции не совпадает. Продолжение обработки…"
 
 #: ../scripts/v.unpack/v.unpack.py:210
 #, python-format
@@ -61744,7 +61753,7 @@ msgid "Color in GRASS format for drawing grid, or \"none\""
 msgstr "Цвет для сетки или 'none'"
 
 msgid "Either a standard color name or R:G:B triplet"
-msgstr "Либо стандратное название цвета, либо триплет R:G:B"
+msgstr "Либо стандартное название цвета, либо код R:G:B"
 
 #, fuzzy
 msgid ""
