@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2023-05-05 10:08+0000\n"
+"PO-Revision-Date: 2023-06-28 19:08+0000\n"
 "Last-Translator: Markus <neteler@osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/"
 "grassmods/de/>\n"
@@ -5972,8 +5972,9 @@ msgstr ""
 #: ../locale/scriptstrings/i.sentinel.import_to_translate.c:16
 #: ../locale/scriptstrings/i.landsat.import_to_translate.c:16
 #: ../locale/scriptstrings/r.in.nasadem_to_translate.c:23
+#, fuzzy
 msgid "Cache size for raster rows"
-msgstr ""
+msgstr "Cachegröße für Rasterzeilen"
 
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:30
 msgid "Use AOD instead visibility"
