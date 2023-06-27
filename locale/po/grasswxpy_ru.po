@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2023-06-28 19:08+0000\n"
+"PO-Revision-Date: 2023-06-27 08:08+0000\n"
 "Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/"
 "grasswxpy/ru/>\n"
@@ -5240,7 +5240,7 @@ msgstr ""
 #: ../gui/wxpython/iclass/g.gui.iclass.py:87
 #, python-format
 msgid "Raster map <%s> not found"
-msgstr "Растровая карта <%s> не найдена"
+msgstr "Не найдена растровая карта <%s>"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:74
 #: ../gui/wxpython/dbmgr/g.gui.dbmgr.py:48 ../gui/wxpython/nviz/wxnviz.py:480
