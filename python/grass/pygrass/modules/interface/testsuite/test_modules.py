@@ -5,18 +5,14 @@ Created on Tue Jun 24 09:43:53 2014
 """
 import sys
 from fnmatch import fnmatch
+from io import BytesIO as StringIO
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
 from grass.script.core import get_commands
 from grass.exceptions import ParameterError
 from grass.pygrass.modules.interface import Module
-
-PY2 = sys.version_info[0] == 2
-if PY2:
-    from StringIO import StringIO
-else:
-    from io import BytesIO as StringIO
 
 
 SKIP = [
@@ -69,6 +65,44 @@ class TestModulesPickability(TestCase):
         out = StringIO()
         pickle.dump(Module("r.sun"), out)
         out.close()
+
+
+class TestModulesJsonDictExport(TestCase):
+    def test_rinfo_simple(self):
+        """Test if a Module can be exported to json dict"""
+
+        Module("r.info", map="elevation", run_=False).get_json_dict()
+
+    def test_rinfo_ov(self):
+        """Test if a Module can be exported to json dict with verbose flag"""
+
+        Module("r.info", verbose=True, map="elevation", run_=False).get_json_dict()
+
+    def test_rinfo_ov_export(self):
+        """Test if a Module can be exported to json dict with overwrite
+        and verbose flags and results exported to CSV"""
+
+        Module(
+            "r.info",
+            verbose=True,
+            map="elevation",
+            flags="g",
+            run_=False,
+        ).get_json_dict(export="CSV")
+
+    def test_rslopeaspect_ov_export(self):
+        """Test if a Module can be exported to json dict with overwrite
+        and verbose flags and results exported to CSV"""
+
+        Module(
+            "r.slope.aspect",
+            elevation="elevation",
+            slope="slope",
+            aspect="aspect",
+            overwrite=True,
+            verbose=True,
+            run_=False,
+        ).get_json_dict(export="GTiff")
 
 
 class TestModulesCheck(TestCase):

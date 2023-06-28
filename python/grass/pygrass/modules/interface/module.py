@@ -1,15 +1,7 @@
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
-import sys
-from multiprocessing import cpu_count, Process, Queue
 import time
+
+from multiprocessing import cpu_count, Process, Queue
+from itertools import zip_longest
 from xml.etree.ElementTree import fromstring
 
 from grass.exceptions import CalledModuleError, GrassError, ParameterError
@@ -21,13 +13,6 @@ from .flag import Flag
 from .typedict import TypeDict
 from .read import GETFROMTAG, DOC
 from .env import G_debug
-
-if sys.version_info[0] == 2:
-    from itertools import izip_longest as zip_longest
-else:
-    from itertools import zip_longest
-
-    unicode = str
 
 
 def _get_bash(self, *args, **kargs):
@@ -528,9 +513,7 @@ class Module(object):
     """
 
     def __init__(self, cmd, *args, **kargs):
-        if isinstance(cmd, unicode):
-            self.name = str(cmd)
-        elif isinstance(cmd, str):
+        if isinstance(cmd, str):
             self.name = cmd
         else:
             raise GrassError("Problem initializing the module {s}".format(s=cmd))
@@ -538,9 +521,8 @@ class Module(object):
             # call the command with --interface-description
             get_cmd_xml = Popen([cmd, "--interface-description"], stdout=PIPE)
         except OSError as e:
-            print("OSError error({0}): {1}".format(e.errno, e.strerror))
-            str_err = "Error running: `%s --interface-description`."
-            raise GrassError(str_err % self.name)
+            print(f"OSError error({e.errno}): {e.strerror}")
+            raise GrassError(f"Error running: `{self.name} --interface-description`.")
         # get the xml of the module
         self.xml = get_cmd_xml.communicate()[0]
         # transform and parse the xml into an Element class:
@@ -675,7 +657,7 @@ class Module(object):
                 # verbose and quiet) work like parameters
                 self.flags[key].value = val
             else:
-                raise ParameterError("%s is not a valid parameter." % key)
+                raise ParameterError("{} is not a valid parameter.".format(key))
 
     def get_bash(self):
         """Return a BASH representation of the Module."""
@@ -754,6 +736,82 @@ class Module(object):
                 ):
                     msg = "Required parameter <%s> not set."
                     raise ParameterError(msg % k)
+
+    def get_json_dict(self, export=None):
+        """Return a dictionary that includes the name, all valid
+        inputs, outputs and flags as well as export settings for
+        usage with actinia
+        param export: string with export format, e.g. GTiff
+        """
+        import uuid
+
+        export_dict = {
+            "GTiff": "raster",
+            "COG": "raster",
+            "strds": "GTiff",  # (multiple files packed in an tar.gz archive)
+            "PostgreSQL": "vector",
+            "GPKG": "vector",
+            "GML": "vector",
+            "GeoJSON": "vector",
+            "ESRI_Shapefile": "vector",
+            "SQLite": "vector",
+            "CSV": "file",
+            "TXT": "file",
+        }
+        special_flags = ["overwrite", "verbose", "quiet"]
+        skip = ["stdin", "stdout", "stderr"]
+
+        # Check export formats
+        if export and export not in export_dict:
+            raise GrassError(f"Invalid export format <{export}>.")
+
+        # Handle inputs and flags
+        json_dict = {
+            "module": self.name,
+            "id": f"{self.name.replace('.', '_')}_{uuid.uuid4().hex}",
+            "flags": "".join(
+                [
+                    flg
+                    for flg in self.flags
+                    if self.flags[flg].value and flg not in special_flags + ["help"]
+                ]
+            ),
+            "inputs": [
+                {
+                    "param": key,
+                    "value": ",".join(val.value)
+                    if type(val.value) == list
+                    else str(val.value),
+                }
+                for key, val in self.inputs.items()
+                if val.value and key not in skip
+            ],
+        }
+
+        # Handle special flags
+        for special_flag in special_flags:
+            if special_flag in self.flags:
+                json_dict[special_flag] = self.flags[special_flag].value
+
+        # Handle outputs
+        outputs = []
+        for key, val in self.outputs.items():
+            if val.value:
+                param = {
+                    "param": key,
+                    "value": ",".join(val.value)
+                    if type(val.value) == list
+                    else str(val.value),
+                }
+                if export:
+                    param["export"] = {
+                        "format": export,
+                        "type": export_dict[export],
+                    }
+                outputs.append(param)
+        json_dict["outputs"] = outputs
+
+        return {key: val for key, val in json_dict.items() if val}
 
     def get_dict(self):
         """Return a dictionary that includes the name, all valid
