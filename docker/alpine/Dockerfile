@@ -176,20 +176,23 @@ RUN echo "  => Configure and compile grass" && \
     make install && \
     ldconfig /etc/ld.so.conf.d
 
+# Get rid of version number here, restore in next stage via symbolic link
+RUN mv $(grass --config path) /usr/local/grass
+
 # Reduce the image size - Remove unnecessary grass files
-RUN cp /usr/local/grass84/gui/wxpython/xml/module_items.xml module_items.xml; \
-    rm -rf /usr/local/grass84/demolocation; \
-    rm -rf /usr/local/grass84/fonts; \
-    rm -rf /usr/local/grass84/gui; \
-    rm -rf /usr/local/grass84/share; \
-    mkdir -p /usr/local/grass84/gui/wxpython/xml/; \
-    mv module_items.xml /usr/local/grass84/gui/wxpython/xml/module_items.xml;
+RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
+    rm -rf /usr/local/grass/demolocation; \
+    rm -rf /usr/local/grass/fonts; \
+    rm -rf /usr/local/grass/gui; \
+    rm -rf /usr/local/grass/share; \
+    mkdir -p /usr/local/grass/gui/wxpython/xml/; \
+    mv module_items.xml /usr/local/grass/gui/wxpython/xml/module_items.xml;
 
 RUN git clone https://github.com/OSGeo/gdal-grass /src/gdal-grass
 WORKDIR /src/gdal-grass
 RUN ./configure \
     --with-gdal=/usr/bin/gdal-config \
-    --with-grass=/usr/local/grass84 && \
+    --with-grass=/usr/local/grass && \
     make -j $NUMTHREADS && \
     make install -j $NUMTHREADS
 
