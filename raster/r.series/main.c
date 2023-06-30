@@ -423,7 +423,12 @@ int main(int argc, char *argv[])
     /* memory reserved for input */
     in_buf_size = ncols * sizeof(DCELL) * num_inputs * nprocs;
     /* memory available for output buffer */
-    out_buf_size = (size_t)atoi(parm.memory->answer) * (1 << 20) - in_buf_size;
+    out_buf_size = (size_t)atoi(parm.memory->answer) * (1 << 20);
+    /* size_t is unsigned, check if any memory is left for output buffer */
+    if (out_buf_size <= in_buf_size)
+        out_buf_size = 0;
+    else
+        out_buf_size -= in_buf_size;
     /* number of buffered rows for all output maps */
     bufrows = out_buf_size / (sizeof(DCELL) * ncols * num_outputs);
     /* set the output buffer rows to be at most covering the entire map */
