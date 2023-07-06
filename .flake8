@@ -56,6 +56,7 @@ per-file-ignores =
     gui/wxpython/core/render.py: E722, F841, E501
     gui/wxpython/core/ws.py: F841, E501
     gui/wxpython/core/settings.py: E722
+    gui/wxpython/core/watchdog.py: E402
     gui/wxpython/datacatalog/tree.py: E731, E402, E501
     gui/wxpython/dbmgr/base.py: E501, E722, F841
     gui/wxpython/dbmgr/dialogs.py: E501, F841, E722

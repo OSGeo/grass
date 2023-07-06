@@ -136,86 +136,120 @@ class VDigitWindow(BufferedMapWindow):
         shift = event.ShiftDown()
         kc = event.GetKeyCode()
 
-        tools = {
-            ord("P"): {
-                "event": wx.CommandEvent(id=self.toolbar.addPoint),
+        default_tools = {
+            "addPoint": {
+                "evt": True,
+                "ord": ord("P"),
                 "tool": self.toolbar.OnAddPoint,
             },
-            ord("L"): {
-                "event": wx.CommandEvent(id=self.toolbar.addLine),
+            "addLine": {
+                "evt": True,
+                "ord": ord("L"),
                 "tool": self.toolbar.OnAddLine,
             },
-            ord("A"): {
-                "event": wx.CommandEvent(id=self.toolbar.addArea),
+            "addArea": {
+                "evt": True,
+                "ord": ord("A"),
                 "tool": self.toolbar.OnAddArea,
             },
-            ord("B"): {
-                "event": None,
+            "addBoundary": {
+                "evt": False,
+                "ord": ord("B"),
                 "tool": self.toolbar.OnAddBoundary,
             },
-            ord("C"): {
-                "event": None,
+            "addCentroid": {
+                "evt": False,
+                "ord": ord("C"),
                 "tool": self.toolbar.OnAddCentroid,
             },
-            ord("V"): {
-                "event": wx.CommandEvent(id=self.toolbar.addVertex),
+            "addVertex": {
+                "evt": True,
+                "ord": ord("V"),
                 "tool": self.toolbar.OnAddVertex,
             },
-            ord("X"): {
-                "event": wx.CommandEvent(id=self.toolbar.removeVertex),
+            "removeVertex": {
+                "evt": True,
+                "ord": ord("X"),
                 "tool": self.toolbar.OnRemoveVertex,
             },
-            ord("G"): {
-                "event": wx.CommandEvent(id=self.toolbar.moveVertex),
+            "moveVertex": {
+                "evt": True,
+                "ord": ord("G"),
                 "tool": self.toolbar.OnMoveVertex,
             },
-            ord("D"): {
-                "event": wx.CommandEvent(id=self.toolbar.deleteLine),
+            "deleteLine": {
+                "evt": True,
+                "ord": ord("D"),
                 "tool": self.toolbar.OnDeleteLine,
             },
-            ord("F"): {
-                "event": wx.CommandEvent(id=self.toolbar.deleteArea),
+            "deleteArea": {
+                "evt": True,
+                "ord": ord("F"),
                 "tool": self.toolbar.OnDeleteArea,
             },
-            ord("E"): {
-                "event": wx.CommandEvent(id=self.toolbar.editLine),
+            "editLine": {
+                "evt": True,
+                "ord": ord("E"),
                 "tool": self.toolbar.OnEditLine,
             },
-            ord("M"): {
-                "event": wx.CommandEvent(id=self.toolbar.moveLine),
+            "moveLine": {
+                "evt": True,
+                "ord": ord("M"),
                 "tool": self.toolbar.OnMoveLine,
             },
-            ord("J"): {
-                "event": wx.CommandEvent(id=self.toolbar.displayCats),
+            "displayCats": {
+                "evt": True,
+                "ord": ord("J"),
                 "tool": self.toolbar.OnDisplayCats,
             },
-            ord("K"): {
-                "event": wx.CommandEvent(id=self.toolbar.displayAttr),
+            "displayAttr": {
+                "evt": True,
+                "ord": ord("K"),
                 "tool": self.toolbar.OnDisplayAttr,
             },
-            ord("Z"): {
-                "event": wx.CommandEvent(id=self.toolbar.undo),
+            "undo": {
+                "evt": True,
+                "ord": ord("Z"),
                 "tool": self.toolbar.OnUndo,
             },
-            ord("Y"): {
-                "event": wx.CommandEvent(id=self.toolbar.redo),
+            "redo": {
+                "evt": True,
+                "ord": ord("Y"),
                 "tool": self.toolbar.OnRedo,
             },
-            ord("T"): {
-                "event": wx.CommandEvent(id=self.toolbar.settings),
+            "settings": {
+                "evt": True,
+                "ord": ord("T"),
                 "tool": self.toolbar.OnSettings,
             },
-            ord("H"): {
-                "event": wx.CommandEvent(id=self.toolbar.help),
+            "help": {
+                "evt": True,
+                "ord": ord("H"),
                 "tool": self.toolbar.OnHelp,
             },
-            ord("Q"): {
-                "event": wx.CommandEvent(id=self.toolbar.quit),
+            "quit": {
+                "evt": True,
+                "ord": ord("Q"),
                 "tool": self.toolbar.OnExit,
             },
         }
+
+        # Custom vdigit tools if VDigitToolbar class tool param arg was defined
+        actual_tools = {}
+        for tool in default_tools:
+            # custom tools, e.g. in g.gui.iclass
+            if self.toolbar.tools and tool not in self.toolbar.tools:
+                continue
+            event = None
+            if default_tools[tool]["evt"] and hasattr(self.toolbar, tool):
+                event = wx.CommandEvent(id=getattr(self.toolbar, tool))
+            actual_tools[default_tools[tool]["ord"]] = {
+                "event": event,
+                "tool": default_tools[tool]["tool"],
+            }
+
         if not shift:
-            tool = tools.get(kc)
+            tool = actual_tools.get(kc)
             if tool:
                 event = self.toolbar.OnTool(tool["event"])
                 tool["tool"](event)

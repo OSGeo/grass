@@ -1,5 +1,5 @@
 FROM debian:stable
-# currently Debian 11
+# currently Debian 12
 
 # docker run -it --rm debian:stable bash
 # apt-get update && apt-get install lsb-release -y && lsb_release -a
@@ -11,7 +11,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # define versions to be used (PDAL is not available on Debian, so we compile it here)
 # https://github.com/PDAL/PDAL/releases
-ARG PDAL_VERSION=2.4.3
+ARG PDAL_VERSION=2.5.5
 
 SHELL ["/bin/bash", "-c"]
 
@@ -43,7 +43,6 @@ RUN apt-get update && apt-get upgrade -y && \
     libjsoncpp-dev \
     libnetcdf-dev \
     libncurses5-dev \
-    libopenblas-base \
     libopenblas-dev \
     libopenjp2-7 \
     libopenjp2-7-dev \
@@ -210,7 +209,7 @@ RUN rm -r /src/grass_build/.git
 WORKDIR /scripts
 
 # install external GRASS GIS session Python API
-RUN pip3 install grass-session
+RUN pip3 install grass-session --break-system-packages
 
 # add GRASS GIS envs for python usage
 ENV GISBASE "/usr/local/grass/"

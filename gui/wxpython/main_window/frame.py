@@ -47,6 +47,11 @@ from grass.script.utils import decode
 from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings, GetDisplayVectSettings
 from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype, get_shell_pid
+from core.watchdog import (
+    EVT_UPDATE_MAPSET,
+    EVT_CURRENT_MAPSET_CHANGED,
+    MapsetWatchdog,
+)
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
@@ -98,7 +103,7 @@ class GMFrame(wx.Frame):
         id=wx.ID_ANY,
         title=None,
         workspace=None,
-        size=wx.Display().GetGeometry().GetSize(),
+        size=wx.GetClientDisplayRect().GetSize(),
         style=wx.DEFAULT_FRAME_STYLE,
         **kwargs,
     ):
@@ -174,30 +179,32 @@ class GMFrame(wx.Frame):
 
         # use default window layout ?
         if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
-            dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
-            try:
-                x, y = map(int, dim.split(",")[0:2])
-                w, h = map(int, dim.split(",")[2:4])
-                client_disp = wx.ClientDisplayRect()
-                if x == 1:
-                    # Get client display x offset (OS panel)
-                    x = client_disp[0]
-                if y == 1:
-                    # Get client display y offset (OS panel)
-                    y = client_disp[1]
-                self.SetPosition((x, y))
-                self.SetSize((w, h))
-            except Exception:
-                pass
-            self.Layout()
-            if w <= globalvar.GM_WINDOW_SIZE[0] or h <= globalvar.GM_WINDOW_SIZE[1]:
-                self.Fit()
-        else:
-            self.Layout()
-            self.Fit()
-            # does center (of screen) make sense for lmgr?
-            self.Centre()
+            single_window_dim = {
+                "group": "general",
+                "key": "defWindowPos",
+                "subkey": "dimSingleWindow",
+            }
+            dim = UserSettings.Get(**single_window_dim)
+            default_dim = UserSettings.Get(**single_window_dim, settings_type="default")
 
+            if dim != default_dim:
+                try:
+                    x, y, w, h = map(int, dim.split(",")[:4])
+                    client_disp = wx.ClientDisplayRect()
+                    if x == 1:
+                        # Get client display x offset (OS panel)
+                        x = client_disp[0]
+                    if y == 1:
+                        # Get client display y offset (OS panel)
+                        y = client_disp[1]
+                    self.SetPosition((x, y))
+                    self.SetSize((w, h))
+                except Exception:
+                    pass
+            else:
+                self.Maximize(True)
+        else:
+            self.Maximize(True)
         self.Show()
 
         # load workspace file if requested
@@ -216,6 +223,18 @@ class GMFrame(wx.Frame):
         # redirect stderr to log area
         self._gconsole.Redirect()
 
+        #  mapset watchdog
+        self._mapset_watchdog = MapsetWatchdog(
+            elements_dirs=(("raster", "cell"),),
+            evt_handler=self,
+            giface=self._giface,
+        )
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()
+        self.Bind(
+            EVT_UPDATE_MAPSET,
+            lambda evt: self._onMapsetWatchdog(evt.src_path, evt.dest_path),
+        )
+        self.Bind(EVT_CURRENT_MAPSET_CHANGED, self._onMapsetChanged)
         # fix goutput's pane size (required for Mac OSX)`
         self.goutput.SetSashPosition(int(self.GetSize()[1] * 0.8))
 
@@ -2348,3 +2367,17 @@ class GMFrame(wx.Frame):
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
         )
         return dlg
+
+    def _onMapsetWatchdog(self, map_path, map_dest):
+        """Current mapset watchdog event handler
+
+        :param str map_path: map path (map that is changed)
+        :param str map_dest: new map path
+        """
+        self.statusbar.mask.dbChanged(
+            map=os.path.basename(map_path) if map_path else map_path,
+            newname=os.path.basename(map_dest) if map_dest else map_dest,
+        )
+
+    def _onMapsetChanged(self, event):
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()
