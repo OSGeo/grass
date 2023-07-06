@@ -172,7 +172,7 @@ g.region res=100 tbres=100 res3=100 b=0 t=1500 -ap3
 
 ### First part: generate synthetic 3D data (true 3D soil data preferred)
 # generate random positions from elevation map (2D)
-r.random elevation.10m vecto=elevrand n=200 seed=42
+r.random elevation.10m vector=elevrand n=200 seed=42
 
 # generate synthetic values
 v.db.addcolumn elevrand col="x double precision, y double precision"
