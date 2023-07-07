@@ -316,16 +316,22 @@ class VectorCleaningFrame(wx.Frame):
         sizer.Add(outSizer, proportion=0,
                   flag=wx.ALL | wx.EXPAND, border=5)
 
-        sizer.Add(wx.StaticLine(parent=self, id=wx.ID_ANY,
-                                style=wx.LI_HORIZONTAL), proportion=0,
-                  flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(
+            wx.StaticLine(parent=self.panel, id=wx.ID_ANY, style=wx.LI_HORIZONTAL),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=5,
+        )
 
         sizer.Add(bodySizer, proportion=1,
                   flag=wx.ALL | wx.EXPAND, border=5)
 
-        sizer.Add(wx.StaticLine(parent=self, id=wx.ID_ANY,
-                                style=wx.LI_HORIZONTAL), proportion=0,
-                  flag=wx.EXPAND | wx.ALL, border=5)
+        sizer.Add(
+            wx.StaticLine(parent=self.panel, id=wx.ID_ANY, style=wx.LI_HORIZONTAL),
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=5,
+        )
 
         sizer.Add(btnSizer, proportion=0,
                   flag=wx.ALL | wx.ALIGN_RIGHT, border=5)
