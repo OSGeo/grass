@@ -21,18 +21,13 @@ This program is free software under the GNU General Public License
 @author Wolf Bergenheim <wolf bergenheim.net> (#962)
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import re
 import time
 import threading
 
-if sys.version_info.major == 2:
-    import Queue
-else:
-    import queue as Queue
+import queue as Queue
 
 import codecs
 import locale
@@ -570,10 +565,7 @@ class GConsole(wx.EvtHandler):
                                 message=_("Module <%s> not found.") % command[0],
                             )
                         pymodule = imp.load_source(command[0].replace(".", "_"), pyPath)
-                        try:  # PY3
-                            pymain = inspect.getfullargspec(pymodule.main)
-                        except AttributeError:
-                            pymain = inspect.getargspec(pymodule.main)
+                        pymain = inspect.getfullargspec(pymodule.main)
                         if pymain and "giface" in pymain.args:
                             pymodule.main(self._giface)
                             return
