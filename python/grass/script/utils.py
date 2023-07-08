@@ -30,7 +30,6 @@ import random
 import string
 
 
-
 def float_or_dms(s):
     """Convert DMS to float.
 

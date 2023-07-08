@@ -56,7 +56,9 @@ class NvizSettings(object):
         #
         for attrb in ("shine",):
             data["attribute"][attrb] = {}
-            for key, value in UserSettings.Get(group="nviz", key="surface", subkey=attrb).items():
+            for key, value in UserSettings.Get(
+                group="nviz", key="surface", subkey=attrb
+            ).items():
                 data["attribute"][attrb][key] = value
             data["attribute"][attrb]["update"] = None
 
@@ -64,7 +66,9 @@ class NvizSettings(object):
         # draw
         #
         data["draw"]["all"] = False  # apply only for current surface
-        for control, value in UserSettings.Get(group="nviz", key="surface", subkey="draw").items():
+        for control, value in UserSettings.Get(
+            group="nviz", key="surface", subkey="draw"
+        ).items():
             if control[:3] == "res":
                 if "resolution" not in data["draw"]:
                     data["draw"]["resolution"] = {}
@@ -110,7 +114,9 @@ class NvizSettings(object):
         #
         # draw
         #
-        for control, value in UserSettings.Get(group="nviz", key="volume", subkey="draw").items():
+        for control, value in UserSettings.Get(
+            group="nviz", key="volume", subkey="draw"
+        ).items():
             if control == "shading":
                 sel = UserSettings.Get(
                     group="nviz", key="volume", subkey=["draw", "shading"]
@@ -157,7 +163,9 @@ class NvizSettings(object):
         #
         for attrb in ("shine",):
             data["attribute"][attrb] = {}
-            for key, value in UserSettings.Get(group="nviz", key="volume", subkey=attrb).items():
+            for key, value in UserSettings.Get(
+                group="nviz", key="volume", subkey=attrb
+            ).items():
                 data["attribute"][attrb][key] = value
 
         return data
@@ -171,7 +179,9 @@ class NvizSettings(object):
             if attr == "inout":
                 data[attr]["value"] = 0
                 continue
-            for key, value in UserSettings.Get(group="nviz", key="volume", subkey=attr).items():
+            for key, value in UserSettings.Get(
+                group="nviz", key="volume", subkey=attr
+            ).items():
                 data[attr][key] = value
         return data
 

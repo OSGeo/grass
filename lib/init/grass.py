@@ -267,10 +267,7 @@ def count_wide_chars(s):
 
     :param str s: string
     """
-    return sum(
-        unicodedata.east_asian_width(c) in "WF"
-        for c in s
-    )
+    return sum(unicodedata.east_asian_width(c) in "WF" for c in s)
 
 
 def f(fmt, *args):
