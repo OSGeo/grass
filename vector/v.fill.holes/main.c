@@ -22,8 +22,7 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-struct VFillHolesParameters
-{
+struct VFillHolesParameters {
     struct GModule *module;
     struct Option *input;
     struct Option *output;
@@ -65,13 +64,12 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    Vect_check_input_output_name(options.input->answer,
-                                 options.output->answer, G_FATAL_EXIT);
+    Vect_check_input_output_name(options.input->answer, options.output->answer,
+                                 G_FATAL_EXIT);
     Vect_set_open_level(2);
 
-    if (1 >
-        Vect_open_old2(&input, options.input->answer, "",
-                       options.field->answer))
+    if (1 > Vect_open_old2(&input, options.input->answer, "",
+                           options.field->answer))
         G_fatal_error(_("Unable to open vector map <%s>"),
                       options.input->answer);
 
@@ -113,19 +111,23 @@ int main(int argc, char *argv[])
     struct cat_list *constraint_cat_list = NULL;
 
     if (field > 0)
-        constraint_cat_list =
-            Vect_cats_set_constraint(&input, field, options.where->answer,
-                                     options.cats->answer);
+        constraint_cat_list = Vect_cats_set_constraint(
+            &input, field, options.where->answer, options.cats->answer);
 
-    /* Create and initialize struct's where to store points/lines and categories */
+    /* Create and initialize struct's where to store points/lines and categories
+     */
     struct line_pnts *points = Vect_new_line_struct();
     struct line_cats *area_cats = Vect_new_cats_struct();
-    struct line_cats *empty_cats = Vect_new_cats_struct();
+    struct line_cats *boundary_cats = Vect_new_cats_struct();
 
     struct ilist *all_cats = Vect_new_list();
     struct ilist *field_cats = Vect_new_list();
+    struct ilist *area_boundaries = Vect_new_list();
 
     plus_t num_areas = Vect_get_num_areas(&input);
+    plus_t num_lines = Vect_get_num_lines(&input);
+    // Used as index. 0th element is unused.
+    bool *line_written_out = G_calloc(num_lines + 1, sizeof(bool));
 
     G_percent(0, num_areas, 1);
     for (plus_t area = 1; area <= num_areas; area++) {
@@ -144,8 +146,15 @@ int main(int argc, char *argv[])
         }
         Vect_write_line(&output, GV_CENTROID, points, area_cats);
 
-        Vect_get_area_points(&input, area, points);
-        Vect_write_line(&output, GV_BOUNDARY, points, empty_cats);
+        Vect_get_area_boundaries(&input, area, area_boundaries);
+        for (int i = 0; i < area_boundaries->n_values; i++) {
+            int boundary_id = abs(area_boundaries->value[i]);
+            if (line_written_out[boundary_id])
+                continue;
+            Vect_read_line(&input, points, boundary_cats, boundary_id);
+            Vect_write_line(&output, GV_BOUNDARY, points, boundary_cats);
+            line_written_out[boundary_id] = true;
+        }
 
         if (field > 0) {
             Vect_field_cat_get(area_cats, field, field_cats);
@@ -153,7 +162,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    Vect_destroy_cats_struct(empty_cats);
+    Vect_destroy_cats_struct(boundary_cats);
     Vect_destroy_cats_struct(area_cats);
     Vect_destroy_line_struct(points);
 
@@ -167,42 +176,41 @@ int main(int argc, char *argv[])
         G_verbose_message(_("Copying attributes for layer <%s>"),
                           options.field->answer);
 
-
-        /* outputput information useful for debuging 
+        /* outputput information useful for debuging
            include/vect/dig_structs.h
          */
         G_debug(1,
-                "Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; Table:<%s>; Key:<%s>;\n",
+                "Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; "
+                "Table:<%s>; Key:<%s>;\n",
                 input_info->number, input_info->name, input_info->driver,
                 input_info->database, input_info->table, input_info->key);
 
         struct field_info *output_info =
             Vect_default_field_info(&output, field, NULL, GV_1TABLE);
-        /* Create database for new vector map */
-        dbDriver *driver = db_start_driver_open_database(output_info->driver,
-                                                         output_info->
-                                                         database);
 
         G_debug(1,
-                "Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; Table:<%s>; Key:<%s>;\n",
+                "Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; "
+                "Table:<%s>; Key:<%s>;\n",
                 output_info->number, output_info->name, output_info->driver,
                 output_info->database, output_info->table, output_info->key);
 
-        /*
-           Vect_map_add_dblink(&output, output_info->number, output_info->name,
-           output_info->table, input_info->key,
-           output_info->database, output_info->driver);
-         */
+        /* Create database for new vector map */
+        dbDriver *driver = db_start_driver_open_database(output_info->driver,
+                                                         output_info->database);
+        Vect_map_add_dblink(&output, output_info->number, output_info->name,
+                            output_info->table, input_info->key,
+                            output_info->database, output_info->driver);
 
         /* Copy attribute table data */
-        if (db_copy_table_by_ints
-            (input_info->driver, input_info->database, input_info->table,
-             output_info->driver, Vect_subst_var(output_info->database,
-                                                 &output), output_info->table,
-             input_info->key, all_cats->value,
-             all_cats->n_values) == DB_FAILED)
-            G_fatal_error(_("Unable to copy attribute table to vector map <%s>"),
-                          options.output->answer);
+        if (db_copy_table_by_ints(
+                input_info->driver, input_info->database, input_info->table,
+                output_info->driver,
+                Vect_subst_var(output_info->database, &output),
+                output_info->table, input_info->key, all_cats->value,
+                all_cats->n_values) == DB_FAILED)
+            G_fatal_error(
+                _("Unable to copy attribute table to vector map <%s>"),
+                options.output->answer);
         db_close_database_shutdown_driver(driver);
     }
 
