@@ -176,24 +176,8 @@ int main(int argc, char *argv[])
         G_verbose_message(_("Copying attributes for layer <%s>"),
                           options.field->answer);
 
-        /* outputput information useful for debuging
-           include/vect/dig_structs.h
-         */
-        G_debug(1,
-                "Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; "
-                "Table:<%s>; Key:<%s>;\n",
-                input_info->number, input_info->name, input_info->driver,
-                input_info->database, input_info->table, input_info->key);
-
         struct field_info *output_info =
             Vect_default_field_info(&output, field, NULL, GV_1TABLE);
-
-        G_debug(1,
-                "Field number:%d; Name:<%s>; Driver:<%s>; Database:<%s>; "
-                "Table:<%s>; Key:<%s>;\n",
-                output_info->number, output_info->name, output_info->driver,
-                output_info->database, output_info->table, output_info->key);
-
         /* Create database for new vector map */
         dbDriver *driver = db_start_driver_open_database(output_info->driver,
                                                          output_info->database);
