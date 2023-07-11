@@ -1,21 +1,46 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.fill.holes</em>
+<em>v.fill.holes</em> fills empty spaces inside areas (closed boundaries with centroids).
+Preseves only areas with centroids while areas without centroids
+which typically represent holes are removed.
+
 
 <h2>EXAMPLE</h2>
 
- (North Carolina sample dataset):
+The <em>lakes</em> vector map in the North Carolina sample dataset
+contains islands inside lakes. To demonstarate <em>v.fill.holes</em>
+we will first remove the islands and then we will fill the holes
+created in the lakes to get the whole perimeter of the lakes
+including islands.
+
+Remove the islands (results in holes):
 
 <div class="code"><pre>
-v.fill.holes input= output=
+v.extract input=lakes where="FTYPE != 'ROCK/ISLAND'" output=lakes_only
 </pre></div>
+
+Remove the holes:
+
+<div class="code"><pre>
+v.fill.holes input=lakes_only output=lakes_filled
+</pre></div>
+
+<div align="center" style="margin: 10px">
+    <a href="v_fill_holes.png">
+    <img src="v_fill_holes.png" width="600" height="600" alt="Lake without holes overlapping with the lines marking the original" border="0">
+    </a><br>
+    <i>
+      Figure: The filled lake (blue) and borders of the original lakes with islands removed (light blue)
+    </i>
+</div>
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="v.clean.html">v.clean</a>,
+    <a href="v.dissolve.html">v.dissolve</a>,
+    <a href="v.clean.html">v.clean</a>
 </em>
 
 <h2>AUTHOR</h2>
 
-Vaclav Petras
+Vaclav Petras, <a href="http://geospatial.ncsu.edu/">NCSU Center for Geospatial Analytics, GeoForAll Lab</a>
