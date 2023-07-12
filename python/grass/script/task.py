@@ -25,10 +25,7 @@ from grass.exceptions import ScriptError
 from .utils import decode, split
 from .core import Popen, PIPE, get_real_command
 
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import xml.etree.ElementTree as etree
 from xml.parsers import expat  # TODO: works for any Python?
 
 # Get the XML parsing exceptions to catch. The behavior chnaged with Python 2.7
