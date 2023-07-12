@@ -9,21 +9,11 @@ for details.
 :authors: Vaclav Petras
 """
 
-from __future__ import print_function
-
 import sys
 import os
 import argparse
 import subprocess
 import locale
-
-try:
-    from itertools import izip as zip
-except ImportError:  # will be 3.x series
-    pass
-
-if sys.version_info.major >= 3:
-    unicode = str
 
 
 def _get_encoding():
@@ -45,7 +35,7 @@ def decode(bytes_, encoding=None):
 
 
 def encode(string, encoding=None):
-    if isinstance(string, unicode):
+    if isinstance(string, str):
         return string.encode(_get_encoding())
     else:
         return string
@@ -55,12 +45,7 @@ def text_to_string(text):
     """Convert text to str. Useful when passing text into environments,
     in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
     """
-    if sys.version[0] == "2":
-        # Python 2
-        return encode(text)
-    else:
-        # Python 3
-        return decode(text)
+    return decode(text)
 
 
 def main():

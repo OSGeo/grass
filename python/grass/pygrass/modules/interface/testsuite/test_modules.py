@@ -3,20 +3,15 @@ Created on Tue Jun 24 09:43:53 2014
 
 @author: pietro
 """
-import sys
 from fnmatch import fnmatch
+from io import BytesIO
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
 from grass.script.core import get_commands
 from grass.exceptions import ParameterError
 from grass.pygrass.modules.interface import Module
-
-PY2 = sys.version_info[0] == 2
-if PY2:
-    from StringIO import StringIO
-else:
-    from io import BytesIO as StringIO
 
 
 SKIP = [
@@ -66,7 +61,7 @@ class TestModulesPickability(TestCase):
         """Test if a Module instance is pickable"""
         import pickle
 
-        out = StringIO()
+        out = BytesIO()
         pickle.dump(Module("r.sun"), out)
         out.close()
 

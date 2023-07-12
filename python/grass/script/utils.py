@@ -30,10 +30,6 @@ import random
 import string
 
 
-if sys.version_info.major >= 3:
-    unicode = str
-
-
 def float_or_dms(s):
     """Convert DMS to float.
 
@@ -191,7 +187,7 @@ def decode(bytes_, encoding=None):
     >>> decode(1234)
     u'1234'
     """
-    if isinstance(bytes_, unicode):
+    if isinstance(bytes_, str):
         return bytes_
     if isinstance(bytes_, bytes):
         if encoding is None:
@@ -199,13 +195,8 @@ def decode(bytes_, encoding=None):
         else:
             enc = encoding
         return bytes_.decode(enc)
-    # if something else than text
-    if sys.version_info.major >= 3:
-        # only text should be used
-        raise TypeError("can only accept types str and bytes")
-    else:
-        # for backwards compatibility
-        return unicode(bytes_)
+    # only text should be used
+    raise TypeError("can only accept types str and bytes")
 
 
 def encode(string, encoding=None):
@@ -229,32 +220,21 @@ def encode(string, encoding=None):
     """
     if isinstance(string, bytes):
         return string
-    # this also tests str in Py3:
-    if isinstance(string, unicode):
+    if isinstance(string, str):
         if encoding is None:
             enc = _get_encoding()
         else:
             enc = encoding
         return string.encode(enc)
     # if something else than text
-    if sys.version_info.major >= 3:
-        # only text should be used
-        raise TypeError("can only accept types str and bytes")
-    else:
-        # for backwards compatibility
-        return bytes(string)
+    raise TypeError("can only accept types str and bytes")
 
 
 def text_to_string(text, encoding=None):
     """Convert text to str. Useful when passing text into environments,
     in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
     """
-    if sys.version[0] == "2":
-        # Python 2
-        return encode(text, encoding=encoding)
-    else:
-        # Python 3
-        return decode(text, encoding=encoding)
+    return decode(text, encoding=encoding)
 
 
 def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None):

@@ -15,7 +15,6 @@ This program is free software under the GNU General Public License
 """
 
 import copy
-import six
 
 from core.settings import UserSettings
 
@@ -32,7 +31,7 @@ class NvizSettings(object):
     def SetConstantDefaultProp(self):
         """Set default constant data properties"""
         data = dict()
-        for key, value in six.iteritems(UserSettings.Get(group="nviz", key="constant")):
+        for key, value in UserSettings.Get(group="nviz", key="constant").items():
             data[key] = value
         color = (
             str(data["color"][0])
@@ -57,9 +56,9 @@ class NvizSettings(object):
         #
         for attrb in ("shine",):
             data["attribute"][attrb] = {}
-            for key, value in six.iteritems(
-                UserSettings.Get(group="nviz", key="surface", subkey=attrb)
-            ):
+            for key, value in UserSettings.Get(
+                group="nviz", key="surface", subkey=attrb
+            ).items():
                 data["attribute"][attrb][key] = value
             data["attribute"][attrb]["update"] = None
 
@@ -67,9 +66,9 @@ class NvizSettings(object):
         # draw
         #
         data["draw"]["all"] = False  # apply only for current surface
-        for control, value in six.iteritems(
-            UserSettings.Get(group="nviz", key="surface", subkey="draw")
-        ):
+        for control, value in UserSettings.Get(
+            group="nviz", key="surface", subkey="draw"
+        ).items():
             if control[:3] == "res":
                 if "resolution" not in data["draw"]:
                     data["draw"]["resolution"] = {}
@@ -115,9 +114,9 @@ class NvizSettings(object):
         #
         # draw
         #
-        for control, value in six.iteritems(
-            UserSettings.Get(group="nviz", key="volume", subkey="draw")
-        ):
+        for control, value in UserSettings.Get(
+            group="nviz", key="volume", subkey="draw"
+        ).items():
             if control == "shading":
                 sel = UserSettings.Get(
                     group="nviz", key="volume", subkey=["draw", "shading"]
@@ -164,9 +163,9 @@ class NvizSettings(object):
         #
         for attrb in ("shine",):
             data["attribute"][attrb] = {}
-            for key, value in six.iteritems(
-                UserSettings.Get(group="nviz", key="volume", subkey=attrb)
-            ):
+            for key, value in UserSettings.Get(
+                group="nviz", key="volume", subkey=attrb
+            ).items():
                 data["attribute"][attrb][key] = value
 
         return data
@@ -180,9 +179,9 @@ class NvizSettings(object):
             if attr == "inout":
                 data[attr]["value"] = 0
                 continue
-            for key, value in six.iteritems(
-                UserSettings.Get(group="nviz", key="volume", subkey=attr)
-            ):
+            for key, value in UserSettings.Get(
+                group="nviz", key="volume", subkey=attr
+            ).items():
                 data[attr][key] = value
         return data
 

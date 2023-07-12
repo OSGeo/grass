@@ -37,7 +37,6 @@ is not safe, i.e. it has side effects (this should be changed in the future).
 # (this makes it more stable since we have to set up paths first)
 # pylint: disable=too-many-lines
 
-from __future__ import print_function
 import sys
 import os
 import errno
@@ -49,7 +48,6 @@ import signal
 import string
 import subprocess
 import re
-import six
 import platform
 import tempfile
 import locale
@@ -118,9 +116,7 @@ def decode(bytes_, encoding=ENCODING):
     :param encoding: encoding to be used, default value is the system's default
         encoding or, if that cannot be determined, 'UTF-8'.
     """
-    if sys.version_info.major >= 3:
-        unicode = str
-    if isinstance(bytes_, unicode):
+    if isinstance(bytes_, str):
         return bytes_
     elif isinstance(bytes_, bytes):
         return bytes_.decode(encoding)
@@ -140,12 +136,9 @@ def encode(string, encoding=ENCODING):
     :param encoding: encoding to be used, default value is the system's default
         encoding or, if that cannot be determined, 'UTF-8'.
     """
-    if sys.version_info.major >= 3:
-        unicode = str
     if isinstance(string, bytes):
         return string
-    # this also tests str in Py3:
-    elif isinstance(string, unicode):
+    elif isinstance(string, str):
         return string.encode(encoding)
     else:
         # if something else than text
@@ -155,12 +148,7 @@ def encode(string, encoding=ENCODING):
 # see https://trac.osgeo.org/grass/ticket/3508
 def to_text_string(obj, encoding=ENCODING):
     """Convert `obj` to (unicode) text string"""
-    if six.PY2:
-        # Python 2
-        return encode(obj, encoding=encoding)
-    else:
-        # Python 3
-        return decode(obj, encoding=encoding)
+    return decode(obj, encoding=encoding)
 
 
 def try_remove(path):
@@ -279,10 +267,7 @@ def count_wide_chars(s):
 
     :param str s: string
     """
-    return sum(
-        unicodedata.east_asian_width(c) in "WF"
-        for c in (s if sys.version_info.major >= 3 else unicode(s))
-    )
+    return sum(unicodedata.east_asian_width(c) in "WF" for c in s)
 
 
 def f(fmt, *args):

@@ -67,7 +67,6 @@ sources and tools:
 """
 
 import os
-import sys
 import zlib
 
 try:
@@ -80,10 +79,6 @@ try:
 except ImportError:
     PIL = None
 
-
-# True if we are running on Python 3.
-# Code taken from six.py by Benjamin Peterson (MIT licensed)
-PY3 = sys.version_info[0] == 3
 
 string_types = (str,)
 integer_types = (int,)
