@@ -16,7 +16,6 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-import six
 from math import ceil
 from itertools import cycle
 import numpy as np
@@ -467,9 +466,9 @@ class TimelineFrame(wx.Frame):
         allDatasets = [
             [
                 [(map, mapset, etype) for map in maps]
-                for etype, maps in six.iteritems(etypesDict)
+                for etype, maps in etypesDict.items()
             ]
-            for mapset, etypesDict in six.iteritems(tDict)
+            for mapset, etypesDict in tDict.items()
         ]
         # flatten this list
         if allDatasets:
@@ -615,7 +614,7 @@ def InfoFormat(timeData, datasetName, mapIndex):
     return "\n".join(text)
 
 
-class DataCursor(object):
+class DataCursor:
     """A simple data cursor widget that displays the x,y location of a
     matplotlib artist when it is selected.
 
@@ -652,8 +651,8 @@ class DataCursor(object):
             artists = [artists]
         self.artists = artists
 
-        self.axes = tuple(set(art.axes for art in self.artists))
-        self.figures = tuple(set(ax.figure for ax in self.axes))
+        self.axes = tuple({art.axes for art in self.artists})
+        self.figures = tuple({ax.figure for ax in self.axes})
 
         self.annotations = {}
         for ax in self.axes:

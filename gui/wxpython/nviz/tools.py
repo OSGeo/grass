@@ -22,7 +22,6 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
-import six
 
 import wx
 import wx.lib.colourselect as csel
@@ -2818,7 +2817,7 @@ class NvizToolWindow(GNotebook):
             return
         name = _("constant#") + str(layerIdx + 1)
         data = self.mapWindow.constants[layerIdx]
-        for attr, value in six.iteritems(data["constant"]):
+        for attr, value in data["constant"].items():
             if attr == "color":
                 value = self._getColorFromString(value)
             if attr in ("color", "value", "resolution", "transp"):
@@ -2877,7 +2876,7 @@ class NvizToolWindow(GNotebook):
         if not winName:
             return
         data[winName] = self.FindWindowById(event.GetId()).GetValue()
-        for w in six.itervalues(win[winName]):
+        for w in win[winName].values():
             self.FindWindowById(w).SetValue(data[winName])
 
         event.Skip()
@@ -3212,9 +3211,9 @@ class NvizToolWindow(GNotebook):
         sizer.Add(w, pos=(1, 0), flag=wx.ALIGN_CENTER)
 
     def __GetWindowName(self, data, id):
-        for name in six.iterkeys(data):
+        for name in data.keys():
             if isinstance(data[name], type({})):
-                for win in six.itervalues(data[name]):
+                for win in data[name].values():
                     if win == id:
                         return name
             else:
@@ -3227,7 +3226,7 @@ class NvizToolWindow(GNotebook):
         """Update view from settings values
         stored in self.mapWindow.view dictionary"""
         for control in ("height", "persp", "twist", "z-exag"):
-            for win in six.itervalues(self.win["view"][control]):
+            for win in self.win["view"][control].values():
                 try:
                     if control == "height":
                         value = int(self.mapWindow.iview[control]["value"])
@@ -3268,7 +3267,7 @@ class NvizToolWindow(GNotebook):
         value = self.FindWindowById(event.GetId()).GetValue()
 
         self.mapWindow.light["position"]["z"] = value
-        for win in six.itervalues(self.win["light"][winName]):
+        for win in self.win["light"][winName].values():
             self.FindWindowById(win).SetValue(value)
 
         self.PostLightEvent()
@@ -3387,7 +3386,7 @@ class NvizToolWindow(GNotebook):
 
         view[winName]["value"] = convert(value)
 
-        for win in six.itervalues(self.win["view"][winName]):
+        for win in self.win["view"][winName].values():
             self.FindWindowById(win).SetValue(value)
 
         self.mapWindow.iview["dir"]["use"] = False
@@ -3449,7 +3448,7 @@ class NvizToolWindow(GNotebook):
     def OnResetSurfacePosition(self, event):
         """Reset position of surface"""
 
-        for win in six.itervalues(self.win["surface"]["position"]):
+        for win in self.win["surface"]["position"].values():
             if win == self.win["surface"]["position"]["axis"]:
                 self.FindWindowById(win).SetSelection(2)  # Z
             elif win == self.win["surface"]["position"]["reset"]:
@@ -3586,13 +3585,13 @@ class NvizToolWindow(GNotebook):
 
     def EnablePage(self, name, enabled=True):
         """Enable/disable all widgets on page"""
-        for key, item in six.iteritems(self.win[name]):
+        for key, item in self.win[name].items():
             if key in ("map", "surface", "new", "planes"):
                 continue
             if isinstance(item, dict):
-                for skey, sitem in six.iteritems(self.win[name][key]):
+                for skey, sitem in self.win[name][key].items():
                     if isinstance(sitem, dict):
-                        for ssitem in six.itervalues(self.win[name][key][skey]):
+                        for ssitem in self.win[name][key][skey].values():
                             if not isinstance(ssitem, bool) and isinstance(ssitem, int):
                                 self.FindWindowById(ssitem).Enable(enabled)
                     else:
@@ -3902,7 +3901,7 @@ class NvizToolWindow(GNotebook):
         slider = self.FindWindowById(self.win["surface"][winName]["slider"])
         self.AdjustSliderRange(slider=slider, value=value)
 
-        for win in six.itervalues(self.win["surface"]["position"]):
+        for win in self.win["surface"]["position"].values():
             if win in (
                 self.win["surface"]["position"]["axis"],
                 self.win["surface"]["position"]["reset"],
@@ -4124,7 +4123,7 @@ class NvizToolWindow(GNotebook):
         slider = self.FindWindowById(self.win["vector"][vtype]["height"]["slider"])
         self.AdjustSliderRange(slider=slider, value=value)
 
-        for win in six.itervalues(self.win["vector"][vtype]["height"]):
+        for win in self.win["vector"][vtype]["height"].values():
             self.FindWindowById(win).SetValue(value)
 
         data = self.GetLayerData("vector")
@@ -4750,7 +4749,7 @@ class NvizToolWindow(GNotebook):
         slider = self.FindWindowById(self.win["volume"][winName]["slider"])
         self.AdjustSliderRange(slider=slider, value=value)
 
-        for win in six.itervalues(self.win["volume"]["position"]):
+        for win in self.win["volume"]["position"].values():
             if win in (
                 self.win["volume"]["position"]["axis"],
                 self.win["volume"]["position"]["reset"],
@@ -4818,7 +4817,7 @@ class NvizToolWindow(GNotebook):
 
     def OnResetVolumePosition(self, event):
         """Reset position of volume"""
-        for win in six.itervalues(self.win["volume"]["position"]):
+        for win in self.win["volume"]["position"].values():
             if win == self.win["volume"]["position"]["axis"]:
                 self.FindWindowById(win).SetSelection(2)  # Z
             elif win == self.win["volume"]["position"]["reset"]:
@@ -5366,7 +5365,7 @@ class NvizToolWindow(GNotebook):
         #
         # draw
         #
-        for control, drawData in six.iteritems(data["draw"]):
+        for control, drawData in data["draw"].items():
             if control == "all":  # skip 'all' property
                 continue
             if control == "resolution":
@@ -5575,7 +5574,7 @@ class NvizToolWindow(GNotebook):
             self.FindWindowById(self.win["volume"]["map"]).SetValue(layer.name)
 
         # draw
-        for control, idata in six.iteritems(data["draw"]):
+        for control, idata in data["draw"].items():
             if control == "all":  # skip 'all' property
                 continue
 

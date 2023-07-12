@@ -107,10 +107,6 @@ Note: also the respective development packages (commonly named `xxx-dev` or
   [https://matplotlib.org/](https://matplotlib.org/)
 - **python-termcolor** (recommended for `g.search.modules`)
   [https://pypi.org/project/termcolor/](https://pypi.org/project/termcolor/)
-- **six** (`python-six`, needed for Python API and for cross-version Python
-  compatibility)
-  [https://pypi.python.org/pypi/six](https://pypi.python.org/pypi/six)
-  [https://github.com/benjaminp/six](https://github.com/benjaminp/six)
 - **FFMPEG or alternative** (for wxGUI Animation tool - `g.gui.module`),
   specifically ffmpeg tool
   [https://ffmpeg.org](https://ffmpeg.org)

@@ -4,12 +4,7 @@ import re
 from ghtml import HTMLParser
 from ggroff import Formatter
 
-try:
-    # Python 2 str - bytes version
-    from StringIO import StringIO
-except ImportError:
-    # Python 3 str - unicode version
-    from io import StringIO
+from io import StringIO
 
 entities = {"nbsp": " ", "bull": "*"}
 

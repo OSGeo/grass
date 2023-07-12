@@ -12,8 +12,6 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import copy

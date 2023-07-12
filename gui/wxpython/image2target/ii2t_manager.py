@@ -32,11 +32,9 @@ This program is free software under the GNU General Public License
 # TODO: i.ortho.transform looks for REF_POINTS/CONTROL_POINTS and not POINTS
 # TODO: CHECK CONTROL_POINTS format and create it for i.ortho.transform to use.
 
-from __future__ import print_function
 
 import os
 import sys
-import six
 import shutil
 from copy import copy
 
@@ -109,7 +107,7 @@ def getSmallDnArrowImage():
     return img
 
 
-class GCPWizard(object):
+class GCPWizard:
     """
     Start wizard here and finish wizard here
     """
@@ -1384,7 +1382,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         }
         wpx = UserSettings.Get(group="gcpman", key="symbol", subkey="width")
 
-        for k, v in six.iteritems(colours):
+        for k, v in colours.items():
             col = UserSettings.Get(group="gcpman", key="symbol", subkey=k)
             self.pointsToDrawSrc.GetPen(v).SetColour(
                 wx.Colour(col[0], col[1], col[2], 255)

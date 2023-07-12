@@ -66,11 +66,8 @@ def profile_function(func):
     if do_profiling == "True" or do_profiling == "1":
         import cProfile
         import pstats
+        import io
 
-        try:
-            import StringIO as io
-        except ImportError:
-            import io
         pr = cProfile.Profile()
         pr.enable()
         func()

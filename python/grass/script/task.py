@@ -36,10 +36,6 @@ else:
     ETREE_EXCEPTIONS = expat.ExpatError
 
 
-if sys.version_info.major >= 3:
-    unicode = str
-
-
 class grassTask:
     """This class holds the structures needed for filling by the parser
 
@@ -157,7 +153,7 @@ class grassTask:
             if isinstance(val, (list, tuple)):
                 if value in val:
                     return p
-            elif isinstance(val, (bytes, unicode)):
+            elif isinstance(val, (bytes, str)):
                 if p[element][: len(value)] == value:
                     return p
             else:
