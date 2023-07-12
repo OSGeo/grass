@@ -3069,6 +3069,7 @@ class LayerBook(wx.Notebook):
         self.parent = parent
         self.parentDialog = parentDialog
         self.mapDBInfo = self.parentDialog.dbMgrData["mapDBInfo"]
+        vectName = self.parentDialog.dbMgrData["vectName"]
 
         #
         # drivers
@@ -3083,7 +3084,11 @@ class LayerBook(wx.Notebook):
         # get default values
         #
         self.defaultConnect = {}
+        vectMapset = vectName.split("@")[-1]
+        defaultMapset = RunCommand("g.mapset", flags="p", read=True, quiet=True).strip()
+        RunCommand("g.mapset", mapset=vectMapset, quiet=True)
         connect = RunCommand("db.connect", flags="p", read=True, quiet=True)
+        RunCommand("g.mapset", mapset=defaultMapset, quiet=True)
 
         for line in connect.splitlines():
             item, value = line.split(":", 1)
