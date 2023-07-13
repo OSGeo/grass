@@ -144,7 +144,7 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
  - <b>update:</b> lib/external/README.license
  - <b>update:</b> lib/README.md
  - <b>update:</b> include/Make/Install.make
- - <b>update:</b> include/Make/GRASS.make
+ - <b>update:</b> include/Make/Grass.make
  - <b>update:</b> Makefile
 
 \section location File structure of GRASS Location
