@@ -175,8 +175,7 @@ g.region res=100 tbres=100 res3=100 b=0 t=1500 -ap3
 r.random elevation.10m vector=elevrand n=200 seed=42
 
 # generate synthetic values
-v.db.addcolumn elevrand col="x double precision, y double precision"
-v.to.db elevrand option=coor col=x,y --overwrite
+v.to.db elevrand option=coor col=x,y
 v.db.select elevrand
 
 # create new 3D map
