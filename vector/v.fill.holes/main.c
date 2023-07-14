@@ -202,10 +202,6 @@ int main(int argc, char *argv[])
     Vect_destroy_list(all_cats);
 
     Vect_build(&output);
-
-    Vect_set_release_support(&input);
-    Vect_set_release_support(&output);
-
     Vect_close(&input);
 
     /* Build topology for vector map and close them */
