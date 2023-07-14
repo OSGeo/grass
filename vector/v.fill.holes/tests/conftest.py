@@ -168,6 +168,44 @@ AREAS_WITH_SPACE_ATTRIBUTE_TYPES = """\
 """
 
 
+def import_data(path, areas_name, areas_with_space_in_between):
+    gs.write_command(
+        "v.in.ascii", input="-", output=areas_name, stdin=DATA, format="standard"
+    )
+    attributes = path / "test.csv"
+    attributes.write_text(AREAS_WITH_SPACE_ATTRIBUTES)
+    attribute_types = path / "test.csvt"
+    attribute_types.write_text(AREAS_WITH_SPACE_ATTRIBUTE_TYPES)
+    # Attributes need to be created first because no vector map of the same name
+    # can exist when table is imported (interally using v.in.ogr and vector part
+    # is deleted).
+    gs.run_command("db.in.ogr", input=attributes, output=areas_with_space_in_between)
+    gs.write_command(
+        "v.in.ascii",
+        input="-",
+        output=areas_with_space_in_between,
+        stdin=AREAS_WITH_SPACE_GEOMETRY,
+        format="standard",
+    )
+    # Our old cat column is now called cat_, so we need to rename it to cat,
+    # but that's possible only on vector map level, so connect, rename, and
+    # reconnect to create indices.
+    gs.run_command(
+        "v.db.connect",
+        map=areas_with_space_in_between,
+        table=areas_with_space_in_between,
+    )
+    gs.run_command(
+        "v.db.renamecolumn", map=areas_with_space_in_between, column=("cat_", "cat")
+    )
+    gs.run_command(
+        "v.db.connect",
+        map=areas_with_space_in_between,
+        table=areas_with_space_in_between,
+        flags="o",
+    )
+
+
 @pytest.fixture(scope="module")
 def area_dataset(tmp_path_factory):
     """Create a session and fill mapset with data"""
@@ -179,44 +217,11 @@ def area_dataset(tmp_path_factory):
 
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
     with gs.setup.init(tmp_path / location):
-        gs.write_command(
-            "v.in.ascii", input="-", output=areas_name, stdin=DATA, format="standard"
-        )
-        attributes = tmp_path / "test.csv"
-        attributes.write_text(AREAS_WITH_SPACE_ATTRIBUTES)
-        attribute_types = tmp_path / "test.csvt"
-        attribute_types.write_text(AREAS_WITH_SPACE_ATTRIBUTE_TYPES)
-        # Attributes need to be created first because no vector map of the same name
-        # can exist when table is imported (interally using v.in.ogr and vector part
-        # is deleted).
-        gs.run_command(
-            "db.in.ogr", input=attributes, output=areas_with_space_in_between
-        )
-        gs.write_command(
-            "v.in.ascii",
-            input="-",
-            output=areas_with_space_in_between,
-            stdin=AREAS_WITH_SPACE_GEOMETRY,
-            format="standard",
-        )
-        # Our old cat column is now called cat_, so we need to rename it to cat,
-        # but that's possible only on vector map level, so connect, rename, and
-        # reconnect to create indices.
-        gs.run_command(
-            "v.db.connect",
-            map=areas_with_space_in_between,
-            table=areas_with_space_in_between,
-        )
-        gs.run_command(
-            "v.db.renamecolumn", map=areas_with_space_in_between, column=("cat_", "cat")
-        )
-        gs.run_command(
-            "v.db.connect",
-            map=areas_with_space_in_between,
-            table=areas_with_space_in_between,
-            flags="o",
-        )
-        yield SimpleNamespace(
+        import_data(
+            path=tmp_path,
             name=areas_name,
             areas_with_space_in_between=areas_with_space_in_between,
+        )
+        yield SimpleNamespace(
+            name=areas_name, areas_with_space_in_between=areas_with_space_in_between
         )
