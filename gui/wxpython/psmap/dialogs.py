@@ -3290,6 +3290,7 @@ class VPropertiesDialog(PsmapDialog):
     def OnOK(self, event):
         self.update()
         event.Skip()
+        self.Destroy()
 
 
 class LegendDialog(PsmapDialog):
