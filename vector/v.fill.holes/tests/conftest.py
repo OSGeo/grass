@@ -219,7 +219,7 @@ def area_dataset(tmp_path_factory):
     with gs.setup.init(tmp_path / location):
         import_data(
             path=tmp_path,
-            name=areas_name,
+            areas_name=areas_name,
             areas_with_space_in_between=areas_with_space_in_between,
         )
         yield SimpleNamespace(
