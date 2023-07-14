@@ -3084,11 +3084,21 @@ class LayerBook(wx.Notebook):
         # get default values
         #
         self.defaultConnect = {}
+        genv = grass.gisenv()
         vectMapset = vectName.split("@")[-1]
-        defaultMapset = RunCommand("g.mapset", flags="p", read=True, quiet=True).strip()
-        RunCommand("g.mapset", mapset=vectMapset, quiet=True)
-        connect = RunCommand("db.connect", flags="p", read=True, quiet=True)
-        RunCommand("g.mapset", mapset=defaultMapset, quiet=True)
+        vectEnv = grass.create_environment(
+            gisdbase=genv["GISDBASE"],
+            location=genv["LOCATION_NAME"],
+            mapset=vectMapset,
+        )
+        connect = RunCommand(
+            "db.connect",
+            flags="p",
+            env=vectEnv[1],
+            read=True,
+            quiet=True,
+        )
+        grass.utils.try_remove(vectEnv[0])
 
         for line in connect.splitlines():
             item, value = line.split(":", 1)
