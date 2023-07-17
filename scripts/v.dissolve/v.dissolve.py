@@ -9,7 +9,7 @@
 #               Vaclav Petras <wenzeslaus gmail com> (aggregate statistics)
 # PURPOSE:      Dissolve common boundaries between areas with common cat
 #                 (frontend to v.extract -d)
-# COPYRIGHT:    (c) 2006-2022 Hamish Bowman, and the GRASS Development Team
+# COPYRIGHT:    (c) 2006-2023 Hamish Bowman, and the GRASS Development Team
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
 #               for details.
@@ -24,32 +24,39 @@
 # % keyword: line
 # %end
 # %option G_OPT_V_INPUT
+# % guisection: Dissolving
 # %end
 # %option G_OPT_V_FIELD
 # % label: Layer number or name.
 # % required: no
+# % guisection: Dissolving
 # %end
 # %option G_OPT_DB_COLUMN
 # % description: Name of attribute column used to dissolve common boundaries
+# % guisection: Dissolving
 # %end
 # %option G_OPT_V_OUTPUT
+# % guisection: Dissolving
 # %end
 # %option G_OPT_DB_COLUMN
-# % key: aggregate_column
+# % key: aggregate_columns
 # % label: Name of attribute columns to get aggregate statistics for
 # % description: One column per method if result columns are specified
+# % guisection: Aggregation
 # % multiple: yes
 # %end
 # %option
-# % key: aggregate_method
+# % key: aggregate_methods
 # % label: Aggregate statistics method (e.g., sum)
 # % description: Default is all available basic statistics for a given backend
+# % guisection: Aggregation
 # % multiple: yes
 # %end
 # %option G_OPT_DB_COLUMN
-# % key: result_column
+# % key: result_columns
 # % label: New attribute column name for aggregate statistics results
 # % description: Defaults to aggregate column name and statistics name
+# % guisection: Aggregation
 # % multiple: yes
 # %end
 # %option
@@ -59,10 +66,11 @@
 # % multiple: no
 # % required: no
 # % options: sql,univar
+# % guisection: Aggregation
 # %end
 # %rules
-# % requires_all: aggregate_method,aggregate_column
-# % requires_all: result_column,aggregate_column
+# % requires_all: aggregate_methods,aggregate_columns
+# % requires_all: result_columns,aggregate_columns
 # %end
 
 """Dissolve geometries and aggregate attribute values"""
@@ -245,8 +253,9 @@ def aggregate_columns_exist_or_fatal(vector, layer, columns):
                 gs.fatal(
                     _(
                         "Column <{column}> does not exist in vector <{vector}> "
-                        "(layer <{layer}>). Specify result columns if you are adding "
-                        "function calls to aggregate columns."
+                        "(layer <{layer}>). Specify result columns with 'name type' "
+                        "syntax if you are using function calls instead of aggregate "
+                        "column names only."
                     ).format(vector=vector, layer=layer, column=column)
                 )
             gs.fatal(
@@ -324,10 +333,15 @@ def create_or_check_result_columns_or_fatal(
                     if " " not in column:
                         gs.fatal(
                             _(
-                                "Type of the result column '{column}' needs a type "
+                                "Result column '{column}' needs a type "
                                 "specified (using the syntax: 'name type') "
-                                "when no methods are provided"
-                            ).format(column=column)
+                                "when no methods are provided with the "
+                                "{option_name} option and aggregation backend is '{backend}'"
+                            ).format(
+                                column=column,
+                                option_name="aggregate_methods",
+                                backend=backend,
+                            )
                         )
             else:
                 gs.fatal(
@@ -491,7 +505,13 @@ def cleanup(name):
         name=name,
         quiet=True,
         stderr=subprocess.DEVNULL,
+        errors="ignore",
     )
+
+
+def remove_mapset_from_name(name):
+    """Remove the at-mapset part (if any) from the name"""
+    return name.split("@", maxsplit=1)[0]
 
 
 def option_as_list(options, name):
@@ -511,9 +531,9 @@ def main():
     column = options["column"]
     aggregate_backend = options["aggregate_backend"]
 
-    columns_to_aggregate = option_as_list(options, "aggregate_column")
-    user_aggregate_methods = option_as_list(options, "aggregate_method")
-    result_columns = option_as_list(options, "result_column")
+    columns_to_aggregate = option_as_list(options, "aggregate_columns")
+    user_aggregate_methods = option_as_list(options, "aggregate_methods")
+    result_columns = option_as_list(options, "result_columns")
 
     user_aggregate_methods, aggregate_backend = get_methods_and_backend(
         user_aggregate_methods, aggregate_backend, provide_defaults=not result_columns
@@ -579,7 +599,7 @@ def main():
                 ).format(column_type=coltype["type"])
             )
 
-        tmpfile = gs.append_node_pid(output)
+        tmpfile = gs.append_node_pid(remove_mapset_from_name(output))
         atexit.register(cleanup, tmpfile)
 
         try:
