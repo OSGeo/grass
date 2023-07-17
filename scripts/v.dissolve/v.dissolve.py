@@ -181,13 +181,29 @@ def quote_from_type(column_type):
     return "'"
 
 
+def sql_escape(text):
+    """Escape string for use in SQL statement.
+
+    If the argument is not string, it is returned as is.
+
+    Simple support for direct creation of SQL statements. This function,
+    column_value_to_where, and updates_to_sql need a rewrite with a more systematic
+    solution for generating statements in Python for GRASS GIS attribute engine.
+    """
+    if isinstance(text, str):
+        return text.replace("'", "''")
+    return text
+
+
 def updates_to_sql(table, updates):
     """Create SQL from a list of dicts with column, value, where"""
     sql = ["BEGIN TRANSACTION"]
     for update in updates:
         quote = quote_from_type(update.get("type", None))
+        value = update["value"]
+        sql_value = f"{quote}{sql_escape(value) if value else 'NULL'}{quote}"
         sql.append(
-            f"UPDATE {table} SET {update['column']} = {quote}{update['value']}{quote} "
+            f"UPDATE {table} SET {update['column']} = {sql_value} "
             f"WHERE {update['where']};"
         )
     sql.append("END TRANSACTION")
@@ -219,7 +235,7 @@ def column_value_to_where(column, value, *, quote):
     if value is None:
         return f"{column} IS NULL"
     if quote:
-        return f"{column}='{value}'"
+        return f"{column}='{sql_escape(value)}'"
     return f"{column}={value}"
 
 
