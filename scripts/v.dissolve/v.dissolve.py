@@ -310,67 +310,68 @@ def create_or_check_result_columns_or_fatal(
     result_columns, columns_to_aggregate, methods, backend
 ):
     """Create result columns from input if not provided or check them"""
-    if result_columns:
-        if methods and len(columns_to_aggregate) != len(methods):
-            gs.fatal(
-                _(
-                    "When result columns are specified, the number of "
-                    "aggregate columns ({columns_to_aggregate}) needs to be "
-                    "the same as the number of methods ({methods})"
-                ).format(
-                    columns_to_aggregate=len(columns_to_aggregate),
-                    methods=len(methods),
-                )
+    if not result_columns:
+        return [
+            f"{gs.legalize_vector_name(aggregate_column)}_{method}"
+            for aggregate_column, method in zip(columns_to_aggregate, methods)
+        ]
+
+    if methods and len(columns_to_aggregate) != len(methods):
+        gs.fatal(
+            _(
+                "When result columns are specified, the number of "
+                "aggregate columns ({columns_to_aggregate}) needs to be "
+                "the same as the number of methods ({methods})"
+            ).format(
+                columns_to_aggregate=len(columns_to_aggregate),
+                methods=len(methods),
             )
-        if len(result_columns) != len(columns_to_aggregate):
-            gs.fatal(
-                _(
-                    "The number of result columns ({result_columns}) needs to be "
-                    "the same as the number of aggregate columns "
-                    "({columns_to_aggregate})"
-                ).format(
-                    result_columns=len(result_columns),
-                    columns_to_aggregate=len(columns_to_aggregate),
-                )
+        )
+    if len(result_columns) != len(columns_to_aggregate):
+        gs.fatal(
+            _(
+                "The number of result columns ({result_columns}) needs to be "
+                "the same as the number of aggregate columns "
+                "({columns_to_aggregate})"
+            ).format(
+                result_columns=len(result_columns),
+                columns_to_aggregate=len(columns_to_aggregate),
             )
-        if methods and len(result_columns) != len(methods):
-            gs.fatal(
-                _(
-                    "The number of result columns ({result_columns}) needs to be "
-                    "the same as the number of aggregation methods ({methods})"
-                ).format(
-                    result_columns=len(result_columns),
-                    methods=len(methods),
-                )
+        )
+    if methods and len(result_columns) != len(methods):
+        gs.fatal(
+            _(
+                "The number of result columns ({result_columns}) needs to be "
+                "the same as the number of aggregation methods ({methods})"
+            ).format(
+                result_columns=len(result_columns),
+                methods=len(methods),
             )
-        if not methods:
-            if backend == "sql":
-                for column in result_columns:
-                    if " " not in column:
-                        gs.fatal(
-                            _(
-                                "Result column '{column}' needs a type "
-                                "specified (using the syntax: 'name type') "
-                                "when no methods are provided with the "
-                                "{option_name} option and aggregation backend is '{backend}'"
-                            ).format(
-                                column=column,
-                                option_name="aggregate_methods",
-                                backend=backend,
-                            )
+        )
+    if not methods:
+        if backend == "sql":
+            for column in result_columns:
+                if " " not in column:
+                    gs.fatal(
+                        _(
+                            "Result column '{column}' needs a type "
+                            "specified (using the syntax: 'name type') "
+                            "when no methods are provided with the "
+                            "{option_name} option and aggregation backend is '{backend}'"
+                        ).format(
+                            column=column,
+                            option_name="aggregate_methods",
+                            backend=backend,
                         )
-            else:
-                gs.fatal(
-                    _(
-                        "Methods must be specified with {backend} backend "
-                        "and with result columns provided"
-                    ).format(backend=backend)
-                )
-        return result_columns
-    return [
-        f"{gs.legalize_vector_name(aggregate_column)}_{method}"
-        for aggregate_column, method in zip(columns_to_aggregate, methods)
-    ]
+                    )
+        else:
+            gs.fatal(
+                _(
+                    "Methods must be specified with {backend} backend "
+                    "and with result columns provided"
+                ).format(backend=backend)
+            )
+    return result_columns
 
 
 def aggregate_attributes_sql(
@@ -533,9 +534,9 @@ def remove_mapset_from_name(name):
 def option_as_list(options, name):
     """Get value of an option as a list"""
     option = options[name]
-    if option:
-        return [value.strip() for value in option.split(",")]
-    return []
+    if not option:
+        return []
+    return [value.strip() for value in option.split(",")]
 
 
 def main():
