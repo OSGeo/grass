@@ -7,7 +7,7 @@
  *
  * PURPOSE:    Fill holes in an area, i.e., preserve only its outer boundary
  *
- * COPYRIGHT:  (C) 2022 by Vaclav Petras and the GRASS Development Team
+ * COPYRIGHT:  (C) 2023 by Vaclav Petras and the GRASS Development Team
  *
  *             This program is free software under the GNU General
  *             Public License (>=v2).  Read the file COPYING that
