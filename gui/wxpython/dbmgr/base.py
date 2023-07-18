@@ -3085,20 +3085,23 @@ class LayerBook(wx.Notebook):
         #
         self.defaultConnect = {}
         genv = grass.gisenv()
-        vectMapset = vectName.split("@")[-1]
-        vectEnv = grass.create_environment(
+        vectMap = grass.find_file(
+            name=vectName,
+            element="vector",
+        )
+        vectGisrc, vectEnv = grass.create_environment(
             gisdbase=genv["GISDBASE"],
             location=genv["LOCATION_NAME"],
-            mapset=vectMapset,
+            mapset=vectMap["mapset"],
         )
         connect = RunCommand(
             "db.connect",
             flags="p",
-            env=vectEnv[1],
+            env=vectEnv,
             read=True,
             quiet=True,
         )
-        grass.utils.try_remove(vectEnv[0])
+        grass.utils.try_remove(vectGisrc)
 
         for line in connect.splitlines():
             item, value = line.split(":", 1)
