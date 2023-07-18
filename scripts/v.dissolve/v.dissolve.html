@@ -55,7 +55,7 @@ and the <em>sql</em> backend is used,
 <b>aggregate_columns</b> can contain SQL syntax specifying both columns
 and the functions applied, e.g.,
 <code>aggregate_columns="sum(cows) / sum(animals)"</code>.
-In this case, <b>aggregate_methods</b> needs should be omitted.
+In this case, <b>aggregate_methods</b> should to be omitted.
 This provides the highest flexibility and it is suitable for scripting.
 
 <p>
@@ -168,7 +168,21 @@ v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities \
     aggregate_columns=ACRES
 </pre></div>
 
-The above will create multiple columns for each of the statistics computed
+To inspect the result, we will use <em>v.db.select</em> retrieving only one row
+for <code>DOTURBAN_N == 'Wadesboro'</code>:
+
+<div class="code"><pre>
+v.db.select municipalities where="DOTURBAN_N == 'Wadesboro'" separator=tab
+</pre></div>
+
+The resulting table may look like this:
+
+<div class="code"><pre>
+cat  DOTURBAN_N    ACRES_n    ACRES_min    ACRES_max    ACRES_mean    ACRES_sum
+66   Wadesboro     2          634.987      3935.325     2285.156      4570.312
+</pre></div>
+
+The above created multiple columns for each of the statistics computed
 by default. We can limit the number of statistics computed by specifying
 the method which should be used:
 
@@ -221,7 +235,8 @@ v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_5 \
 
 While it is often not necessary to specify aggregate methods or names for
 interactive exploratory analysis, specifying both <b>aggregate_methods</b>
-and <b>result_columns</b> manually is a best practice for scripting.
+and <b>result_columns</b> manually is a best practice for scripting
+(unless SQL syntax is used for <b>aggregate_columns</b>, see below).
 
 <h3>Aggregating using SQL syntax</h3>
 
@@ -250,6 +265,33 @@ v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_6 \
 
 Here, <em>v.dissolve</em> doesn't make any assumptions about the resulting
 column types, so we specified both named and the type of each column.
+
+<p>
+When working with general SQL syntax, <em>v.dissolve</em> turns off its checks for
+number of aggregate and result columns to allow for all SQL syntax to be used
+for aggregate columns. This allows us to use also functions with multiple parameters,
+for example specify separator to be used with <em>group_concat</em>:
+
+<div class="code"><pre>
+    v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_7 \
+        aggregate_columns="group_concat(MB_NAME, ';')" \
+        result_columns="names TEXT"
+</pre></div>
+
+To inspect the result, we will use <em>v.db.select</em> retrieving only one row
+for <code>DOTURBAN_N == 'Wadesboro'</code>:
+
+<div class="code"><pre>
+v.db.select municipalities_7 where="DOTURBAN_N == 'Wadesboro'" separator=tab
+</pre></div>
+
+The resulting table may look like this:
+
+<div class="code"><pre>
+cat	DOTURBAN_N	names
+66	Wadesboro	Wadesboro;Lilesville
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 

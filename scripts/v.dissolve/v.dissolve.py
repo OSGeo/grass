@@ -326,7 +326,12 @@ def create_or_check_result_columns_or_fatal(
                 methods=len(methods),
             )
         )
-    if len(result_columns) != len(columns_to_aggregate):
+    # When methods are not set with sql backend, we might be dealing with the general
+    # SQL syntax provided for columns, so we can't parse that easily, so let's not
+    # check that here.
+    if (methods or backend != "sql") and len(result_columns) != len(
+        columns_to_aggregate
+    ):
         gs.fatal(
             _(
                 "The number of result columns ({result_columns}) needs to be "
@@ -383,7 +388,7 @@ def aggregate_attributes_sql(
     result_columns,
 ):
     """Aggregate values in selected columns grouped by column using SQL backend"""
-    if len(columns_to_aggregate) != len(result_columns):
+    if methods and len(columns_to_aggregate) != len(result_columns):
         raise ValueError(
             "Number of columns_to_aggregate and result_columns must be the same"
         )
@@ -407,7 +412,7 @@ def aggregate_attributes_sql(
         select_columns = columns_to_aggregate
         column_types = None
 
-    records = json.loads(
+    data = json.loads(
         gs.read_command(
             "v.db.select",
             map=input_name,
@@ -416,7 +421,9 @@ def aggregate_attributes_sql(
             group=column,
             format="json",
         )
-    )["records"]
+    )
+    # We added the group column to the select, so we need to skip it here.
+    select_column_names = [item["name"] for item in data["info"]["columns"]][1:]
     updates = []
     add_columns = []
     if column_types:
@@ -432,13 +439,13 @@ def aggregate_attributes_sql(
             column_name, column_type = definition.split(" ", maxsplit=1)
             result_columns.append(column_name)
             column_types.append(column_type)
-    for row in records:
+    for row in data["records"]:
         where = column_value_to_where(column, row[column], quote=quote_column)
         for (
             result_column,
             column_type,
             key,
-        ) in zip(result_columns, column_types, select_columns):
+        ) in zip(result_columns, column_types, select_column_names):
             updates.append(
                 {
                     "column": result_column,

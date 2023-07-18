@@ -245,7 +245,7 @@ def test_sqlite_agg_accepted(dataset):
 
 
 def test_sqlite_concat(dataset):
-    """SQLite concat text-returning aggregate function works"""
+    """SQLite group concat text-returning aggregate function works"""
     dissolved_vector = "test_sqlite_concat"
     gs.run_command(
         "v.dissolve",
@@ -269,6 +269,34 @@ def test_sqlite_concat(dataset):
     actual_integers = sorted([record["concat_values"] for record in records])
     for expected, actual in zip(expected_integers, actual_integers):
         assert sorted(expected.split(",")) == sorted(actual.split(","))
+
+
+def test_sqlite_concat_with_two_parameters(dataset):
+    """SQLite group concat text-returning two-parameter aggregate function works"""
+    dissolved_vector = "test_sqlite_concat_separator"
+    separator = "--+--"
+    gs.run_command(
+        "v.dissolve",
+        input=dataset.vector_name,
+        column=dataset.str_column_name,
+        output=dissolved_vector,
+        aggregate_column=f"group_concat({dataset.int_column_name}, '{separator}')",
+        result_column="concat_values text",
+        aggregate_backend="sql",
+    )
+    records = json.loads(
+        gs.read_command(
+            "v.db.select",
+            map=dissolved_vector,
+            format="json",
+        )
+    )["records"]
+    # Order of records is ignored - they are just sorted.
+    # Order within values of group_concat is defined as arbitrary by SQLite.
+    expected_integers = sorted(["10", "10,10,24", "5,5"])
+    actual_integers = sorted([record["concat_values"] for record in records])
+    for expected, actual in zip(expected_integers, actual_integers):
+        assert sorted(expected.split(",")) == sorted(actual.split(separator))
 
 
 def test_duplicate_columns_and_methods_accepted(dataset):
