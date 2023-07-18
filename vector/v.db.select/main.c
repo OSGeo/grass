@@ -343,10 +343,10 @@ int main(int argc, char **argv)
                 column = db_get_table_column(table, col);
                 if (col)
                     fprintf(stdout, "},\n");
-                fprintf(stdout, "{\"name\": \"%s\",",
+                fprintf(stdout, "{\"name\":\"%s\",",
                         db_get_column_name(column));
                 int sql_type = db_get_column_sqltype(column);
-                fprintf(stdout, "\"sql_type\": \"%s\",",
+                fprintf(stdout, "\"sql_type\":\"%s\",",
                         db_sqltype_name(sql_type));
 
                 int c_type = db_sqltype_to_Ctype(sql_type);
