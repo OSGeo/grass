@@ -50,7 +50,6 @@ else:
     from wx import PyValidator as Validator
 
 import grass.script as grass
-from grass.pygrass.utils import findmaps
 
 from core.utils import PilImageToWxImage
 from dbmgr.vinfo import VectorDBInfo
@@ -1862,14 +1861,10 @@ class VectorPanel(Panel):
     def OnVector(self, event):
         """Gets info about toplogy and enables/disables choices point/line/area"""
         vmap = self.select.GetValue()
-        genv = grass.core.gisenv()
-        if not findmaps(
-            type="vector",
-            pattern=vmap,
-            mapset=genv["MAPSET"],
-            location=genv["LOCATION_NAME"],
-            gisdbase=genv["GISDBASE"],
-        ):
+        if not grass.find_file(
+            vmap,
+            element="vector",
+        )["name"]:
             return
 
         topoInfo = grass.vector_info_topo(map=vmap)
