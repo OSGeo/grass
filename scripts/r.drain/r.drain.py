@@ -108,7 +108,6 @@
 # % required: start_coordinates, start_points
 # %end
 
-import os
 import sys
 import atexit
 
@@ -141,10 +140,11 @@ def main():
     atexit.register(cleanup)
 
     if not dirmap:
+        valmap_name = valmap.split("@")[0]
         # get directions with r.fill.dir, without sink filling
-        dirmap = "%s_tmp_%d" % (valmap, os.getpid())
-        fill_map = "%s_fill_%d" % (valmap, os.getpid())
-        area_map = "%s_area_%d" % (valmap, os.getpid())
+        dirmap = grass.append_node_pid(f"{valmap_name}_tmp")
+        fill_map = grass.append_node_pid(f"{valmap_name}_fill")
+        area_map = grass.append_node_pid(f"{valmap_name}_area")
         tmp_maps = dirmap + "," + fill_map + "," + area_map
         grass.run_command(
             "r.fill.dir",
