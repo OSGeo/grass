@@ -3069,6 +3069,7 @@ class LayerBook(wx.Notebook):
         self.parent = parent
         self.parentDialog = parentDialog
         self.mapDBInfo = self.parentDialog.dbMgrData["mapDBInfo"]
+        vectName = self.parentDialog.dbMgrData["vectName"]
 
         #
         # drivers
@@ -3083,7 +3084,24 @@ class LayerBook(wx.Notebook):
         # get default values
         #
         self.defaultConnect = {}
-        connect = RunCommand("db.connect", flags="p", read=True, quiet=True)
+        genv = grass.gisenv()
+        vectMap = grass.find_file(
+            name=vectName,
+            element="vector",
+        )
+        vectGisrc, vectEnv = grass.create_environment(
+            gisdbase=genv["GISDBASE"],
+            location=genv["LOCATION_NAME"],
+            mapset=vectMap["mapset"],
+        )
+        connect = RunCommand(
+            "db.connect",
+            flags="p",
+            env=vectEnv,
+            read=True,
+            quiet=True,
+        )
+        grass.utils.try_remove(vectGisrc)
 
         for line in connect.splitlines():
             item, value = line.split(":", 1)
