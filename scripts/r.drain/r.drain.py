@@ -111,14 +111,13 @@
 import sys
 import atexit
 
-import grass.script as grass
 import grass.script as gs
 
 
 def cleanup():
     """Delete temporary direction map."""
     if tmp_maps:
-        grass.run_command(
+        gs.run_command(
             "g.remove",
             flags="f",
             quiet=True,
@@ -147,7 +146,7 @@ def main():
         fill_map = gs.append_node_pid(f"{valmap_name}_fill")
         area_map = gs.append_node_pid(f"{valmap_name}_area")
         tmp_maps = dirmap + "," + fill_map + "," + area_map
-        grass.run_command(
+        gs.run_command(
             "r.fill.dir",
             input=valmap,
             output=fill_map,
@@ -180,11 +179,11 @@ def main():
     if flags["n"]:
         pathflags += "n"
 
-    grass.run_command("r.path", flags=pathflags, **kwargs)
+    gs.run_command("r.path", flags=pathflags, **kwargs)
 
     return 0
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     sys.exit(main())
