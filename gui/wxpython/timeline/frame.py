@@ -30,7 +30,7 @@ try:
     # The recommended way to use wx with mpl is with the WXAgg
     # backend.
     matplotlib.use("WXAgg")
-    from matplotlib import gridspec as gridspec
+    from matplotlib import gridspec
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_wxagg import (
         FigureCanvasWxAgg as FigCanvas,
