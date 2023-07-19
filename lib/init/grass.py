@@ -1802,9 +1802,15 @@ def start_gui(grass_gui):
     debug("GRASS GUI should be <%s>" % grass_gui)
     # Check for gui interface
     if grass_gui == "wxpython":
-        # TODO: report failures
-        stderr_redirect = None if is_debug() else subprocess.DEVNULL
+        # Lazy-import to avoid dependency during standard import time.
+        # pylint: disable=import-outside-toplevel
+        import grass.script as gs
 
+        if is_debug() or "WX_DEBUG" in gs.gisenv():
+            stderr_redirect = None
+        else:
+            stderr_redirect = subprocess.DEVNULL
+        # TODO: report start failures?
         return Popen(
             [os.getenv("GRASS_PYTHON"), wxpath("wxgui.py")], stderr=stderr_redirect
         )
