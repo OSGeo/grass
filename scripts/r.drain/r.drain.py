@@ -112,6 +112,7 @@ import sys
 import atexit
 
 import grass.script as grass
+import grass.script as gs
 
 
 def cleanup():
@@ -140,11 +141,11 @@ def main():
     atexit.register(cleanup)
 
     if not dirmap:
-        valmap_name = valmap.split("@")[0]
+        valmap_name = valmap.split("@", maxsplit=1)[0]
         # get directions with r.fill.dir, without sink filling
-        dirmap = grass.append_node_pid(f"{valmap_name}_tmp")
-        fill_map = grass.append_node_pid(f"{valmap_name}_fill")
-        area_map = grass.append_node_pid(f"{valmap_name}_area")
+        dirmap = gs.append_node_pid(f"{valmap_name}_dir")
+        fill_map = gs.append_node_pid(f"{valmap_name}_fill")
+        area_map = gs.append_node_pid(f"{valmap_name}_area")
         tmp_maps = dirmap + "," + fill_map + "," + area_map
         grass.run_command(
             "r.fill.dir",
