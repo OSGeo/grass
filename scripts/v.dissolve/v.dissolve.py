@@ -39,32 +39,33 @@
 # %end
 # %option G_OPT_DB_COLUMN
 # % key: aggregate_columns
-# % label: Name of attribute columns to get aggregate statistics for
-# % description: One column per method if result columns are specified
+# % label: Names of attribute columns to get aggregate statistics for
+# % description: One column name or SQL expression per method if result columns are specified
 # % guisection: Aggregation
 # % multiple: yes
 # %end
 # %option
 # % key: aggregate_methods
 # % label: Aggregate statistics method (e.g., sum)
-# % description: Default is all available basic statistics for a given backend
+# % description: Default is all available basic statistics for a given backend (for sql backend: avg, count, max, min, sum)
 # % guisection: Aggregation
 # % multiple: yes
 # %end
 # %option G_OPT_DB_COLUMN
 # % key: result_columns
-# % label: New attribute column name for aggregate statistics results
-# % description: Defaults to aggregate column name and statistics name
+# % label: New attribute column names for aggregate statistics results
+# % description: Defaults to aggregate column name and statistics name and can contain type
 # % guisection: Aggregation
 # % multiple: yes
 # %end
 # %option
 # % key: aggregate_backend
 # % label: Backend for attribute aggregation
-# % description: Default is sql unless the methods are for univar
+# % description: Default is sql unless the provided aggregate methods are for univar
 # % multiple: no
 # % required: no
 # % options: sql,univar
+# % descriptions: sql;Uses SQL attribute database;univar;Uses v.db.univar
 # % guisection: Aggregation
 # %end
 # %rules
