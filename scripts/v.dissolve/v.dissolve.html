@@ -7,6 +7,104 @@ which is used to find adjacent polygons with identical attribute for common
 boundary dissolving. In this case the categories are not retained, only the
 values of the new key column. See the <em>v.reclass</em> help page for details.
 
+<center>
+<img src="v_dissolve_zipcodes.png">
+<img src="v_dissolve_towns.png">
+<p><em>
+    Figure: Areas with the same attribute value (first image) are
+    merged into into one (second image)
+</em></p>
+</center>
+
+<h3>Merging behavior</h3>
+
+Multiple areas with the same category or the same attribute value
+which are not adjacent are merged together into one entity
+which consists of multiple areas, i.e., a multipolygon.
+
+<h3>Attribute aggregation</h3>
+
+<p>
+Attributes of merged areas can be aggregated using various aggregation methods
+such as <em>sum</em> and <em>mean</em>. The specific methods available depend
+on the backend used for aggregation. Two aggregate backends (specified in
+<b>aggregate_backend</b>) are available, <em>univar</em> and <em>sql</em>.
+When <em>univar</em> is used, the methods available are the ones
+which <em>v.db.univar</em> uses by default,
+i.e., <em>n</em>, <em>min</em>, <em>max</em>, <em>range</em>,
+<em>mean</em>, <em>mean_abs</em>, <em>variance</em>, <em>stddev</em>,
+<em>coef_var</em>, and <em>sum</em>.
+When the <em>sql</em> backend is used, the methods in turn depends on the SQL
+database backend used for the attribute table of the input vector.
+For SQLite, it is at least the following
+<a href="https://www.sqlite.org/lang_aggfunc.html">build-in aggregate functions</a>:
+<em>count</em>, <em>min</em>, <em>max</em>,
+<em>avg</em>, <em>sum</em>, and <em>total</em>.
+For PostgreSQL, the list of
+<a href="https://www.postgresql.org/docs/current/functions-aggregate.html">aggregate functions</a>
+is much longer and includes, e.g., <em>count</em>, <em>min</em>, <em>max</em>,
+<em>avg</em>, <em>sum</em>, <em>stddev</em>, and <em>variance</em>.
+The <em>sql</em> aggregate backend, regardless of the underlying database,
+will typically perform significantly better than the <em>univar</em> backend.
+
+<p>
+Aggregate methods are specified by name in <b>aggregate_methods</b>
+or using SQL syntax in <b>aggregate_columns</b>.
+If <b>result_columns</b> is provided including type information
+and the <em>sql</em> backend is used,
+<b>aggregate_columns</b> can contain SQL syntax specifying both columns
+and the functions applied, e.g.,
+<code>aggregate_columns="sum(cows) / sum(animals)"</code>.
+In this case, <b>aggregate_methods</b> should to be omitted.
+This provides the highest flexibility and it is suitable for scripting.
+
+<p>
+The backend is, by default, determined automatically based on the requested
+methods. Specifically, the <em>sql</em> backend is used by default,
+but when a method is not one of the SQLite build-in aggregate functions
+and, at the same time, is available with the <em>univar</em> backend,
+the <em>univar</em> backed is used.
+The default behavior is intended for interactive use and testing.
+For scripting and other automated usage, specifying the backend explicitly
+is strongly recommended.
+
+<p>
+For convince, certain methods, namely <em>n</em>, <em>count</em>,
+<em>mean</em>, and <em>avg</em>, are converted to the name appropriate
+for the selected backend. However, for scripting, specifying the appropriate
+method (function) name for the backend is recommended because the conversion
+is a heuristic which may change in the future.
+
+<p>
+If only <b>aggregate_columns</b> is provided, methods default to
+<em>n</em>, <em>min</em>, <em>max</em>, <em>mean</em>, and <em>sum</em>.
+If the <em>univar</em> backend is specified, all the available methods
+for the <em>univar</em> backend are used.
+
+<p>
+If the <b>result_columns</b> is not provided, each method is applied to each
+specified column producing result columns for all combinations. These result
+columns have auto-generated names based on the aggregate column and method.
+If the <b>result_column</b> is provided, each method is applied only once
+to the matching column in the aggregate column list and the result will be
+available under the name of the matching result column. In other words, number
+of items in <b>aggregate_columns</b>, <b>aggregate_methods</b> (unless omitted),
+and <b>result_column</b> needs to match and no
+combinations are created on the fly.
+For scripting, it is recommended to specify all resulting column names,
+while for interactive use, automatically created combinations are expected
+to be beneficial, especially for exploratory analysis.
+
+<p>
+Type of the result column is determined based on the method selected.
+For <em>n</em> and <em>count</em>, the type is INTEGER and for all other
+methods, it is DOUBLE. Aggregate methods which produce other types
+require the type to be specified as part of the <b>result_columns</b>.
+A type can be provided in <b>result_columns</b> using the SQL syntax
+<code>name type</code>, e.g., <code>sum_of_values double precision</code>.
+Type specification is mandatory when SQL syntax is used in
+<b>aggregate_columns</b> (and <b>aggregate_methods</b> is omitted).
+
 <h2>NOTES</h2>
 
 GRASS defines a vector area as composite entity consisting of a set of
@@ -57,17 +155,158 @@ v.clean clc2000_patched out=clc2000_clean tool=snap,break,rmdupl thresh=.01
 v.dissolve input=clc2000_clean output=clc2000_final col=CODE_00
 </pre></div>
 
+<h3>Attribute aggregation</h3>
+
+While dissolving, we can aggregate attribute values of the original features.
+Let's aggregate area in acres (ACRES) of all municipal boundaries
+(boundary_municp) in the full NC dataset while dissolving common boundaries
+based on the name in the DOTURBAN_N column
+(long lines are split with backslash marking continued line as in Bash):
+
+<div class="code"><pre>
+v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities \
+    aggregate_columns=ACRES
+</pre></div>
+
+To inspect the result, we will use <em>v.db.select</em> retrieving only one row
+for <code>DOTURBAN_N == 'Wadesboro'</code>:
+
+<div class="code"><pre>
+v.db.select municipalities where="DOTURBAN_N == 'Wadesboro'" separator=tab
+</pre></div>
+
+The resulting table may look like this:
+
+<div class="code"><pre>
+cat  DOTURBAN_N    ACRES_n    ACRES_min    ACRES_max    ACRES_mean    ACRES_sum
+66   Wadesboro     2          634.987      3935.325     2285.156      4570.312
+</pre></div>
+
+The above created multiple columns for each of the statistics computed
+by default. We can limit the number of statistics computed by specifying
+the method which should be used:
+
+<div class="code"><pre>
+v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_2 \
+    aggregate_columns=ACRES aggregate_methods=sum
+</pre></div>
+
+The above gives a single column with the sum for all values in the ACRES column
+for each group of original features which had the same value in the DOTURBAN_N
+column and are now dissolved (merged) into one.
+
+<h3>Aggregating multiple attributes</h3>
+
+Expanding on the previous example, we can compute values for multiple columns
+at once by adding more columns to the <b>aggregate_columns</b> option.
+We will compute average of values in the NEW_PERC_G column:
+
+<div class="code"><pre>
+v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_3 \
+    aggregate_columns=ACRES,NEW_PERC_G aggregate_methods=sum,avg
+</pre></div>
+
+By default, all methods specified in the <b>aggregate_methods</b> are applied
+to all columns, so result of the above is four columns.
+While this is convenient for getting multiple statistics for similar columns
+(e.g. averages and standard deviations of multiple population statistics columns),
+in our case, each column is different and each aggregate method should be
+applied only to its corresponding column.
+
+<p>
+The <em>v.dissolve</em> module will apply each aggregate method only to the
+corresponding column when column names for the results are specified manually
+with the <b>result_columns</b> option:
+
+<div class="code"><pre>
+v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_4 \
+    aggregate_columns=ACRES,NEW_PERC_G aggregate_methods=sum,avg \
+    result_columns=acres,new_perc_g
+</pre></div>
+
+Now we have full control over what columns are created, but we also need to specify
+an aggregate method for each column even when the aggregate methods are the same:
+
+<div class="code"><pre>
+v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_5 \
+    aggregate_columns=ACRES,DOTURBAN_N,TEXT_NAME aggregate_methods=sum,count,count \
+    result_columns=acres,number_of_parts,named_parts
+</pre></div>
+
+While it is often not necessary to specify aggregate methods or names for
+interactive exploratory analysis, specifying both <b>aggregate_methods</b>
+and <b>result_columns</b> manually is a best practice for scripting
+(unless SQL syntax is used for <b>aggregate_columns</b>, see below).
+
+<h3>Aggregating using SQL syntax</h3>
+
+The aggregation can be done also using the full SQL syntax and set of aggregate
+functions available for a given attribute database backend.
+Here, we will assume the default SQLite database backend for attribute.
+
+<p>
+Modifying the previous example, we will now specify the SQL aggregate function calls
+explicitly instead of letting <em>v.dissolve</em> generate them for us.
+We will compute sum of the ACRES column using <code>sum(ACRES)</code>
+(alternatively, we could use SQLite specific <code>total(ACRES)</code>
+which returns zero even when all values are NULL).
+Further, we will count number of aggregated (i.e., dissolved) parts using
+<code>count(*)</code> which counts all rows regardless of NULL values.
+Then, we will count all unique names of parts as distinguished by
+the MB_NAME column using <code>count(distinct MB_NAME)</code>.
+Finally, we will collect all these names into a comma-separated list using
+<code>group_concat(MB_NAME)</code>:
+
+<div class="code"><pre>
+v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_6 \
+    aggregate_columns="total(ACRES),count(*),count(distinct MB_NAME),group_concat(MB_NAME)" \
+    result_columns="acres REAL,named_parts INTEGER,unique_names INTEGER,names TEXT"
+</pre></div>
+
+Here, <em>v.dissolve</em> doesn't make any assumptions about the resulting
+column types, so we specified both named and the type of each column.
+
+<p>
+When working with general SQL syntax, <em>v.dissolve</em> turns off its checks for
+number of aggregate and result columns to allow for all SQL syntax to be used
+for aggregate columns. This allows us to use also functions with multiple parameters,
+for example specify separator to be used with <em>group_concat</em>:
+
+<div class="code"><pre>
+    v.dissolve input=boundary_municp column=DOTURBAN_N output=municipalities_7 \
+        aggregate_columns="group_concat(MB_NAME, ';')" \
+        result_columns="names TEXT"
+</pre></div>
+
+To inspect the result, we will use <em>v.db.select</em> retrieving only one row
+for <code>DOTURBAN_N == 'Wadesboro'</code>:
+
+<div class="code"><pre>
+v.db.select municipalities_7 where="DOTURBAN_N == 'Wadesboro'" separator=tab
+</pre></div>
+
+The resulting table may look like this:
+
+<div class="code"><pre>
+cat	DOTURBAN_N	names
+66	Wadesboro	Wadesboro;Lilesville
+</pre></div>
+
+
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="v.category.html">v.category</a>,
 <a href="v.centroids.html">v.centroids</a>,
 <a href="v.extract.html">v.extract</a>,
-<a href="v.reclass.html">v.reclass</a>
+<a href="v.reclass.html">v.reclass</a>,
+<a href="v.db.univar.html">v.db.univar</a>,
+<a href="v.db.select.html">v.db.select</a>
 </em>
 
 <h2>AUTHORS</h2>
 
-module: M. Hamish Bowman, Dept. Marine Science, Otago University, New Zealand<br>
-Markus Neteler for column support<br>
-help page: Trevor Wiens
+M. Hamish Bowman, Department of Marine Science, Otago University, New Zealand (module)<br>
+Markus Neteler (column support)<br>
+Trevor Wiens (help page)<br>
+Vaclav Petras, NC State University, Center for Geospatial Analytics, GeoForAll Lab (aggregate statistics)
