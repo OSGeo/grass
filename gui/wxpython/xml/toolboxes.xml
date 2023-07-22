@@ -1214,6 +1214,9 @@
       <module-item name="v.clean">
         <label>Clean vector map</label>
       </module-item>
+      <module-item name="v.fill.holes">
+        <label>Fill holes in areas</label>
+      </module-item>
       <module-item name="v.generalize">
         <label>Smooth or simplify</label>
       </module-item>
