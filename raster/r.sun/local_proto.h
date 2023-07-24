@@ -44,7 +44,7 @@ void setHorizonInterval(double val);
 void setAngularLossDenominator();
 
 
-void cube(int, int);
+/* void cube(int, int); */
 
 double com_sol_const(int no_of_day);
 
