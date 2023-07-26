@@ -859,7 +859,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         from web_services.dialogs import SaveWMSLayerDialog
 
         dlg = SaveWMSLayerDialog(
-            parent=self, layer=mapLayer, giface=self._gifaceForDisplay
+            parent=self, layer=mapLayer, giface=self.mapdisplay._giface
         )
         dlg.CentreOnScreen()
         dlg.Show()
