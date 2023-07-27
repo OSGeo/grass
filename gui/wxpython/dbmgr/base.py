@@ -452,7 +452,6 @@ class VirtualAttributeList(ListCtrl,
         if not hasattr(self, "popupID"):
             self.popupId = {'sortAsc': NewId(),
                             'sortDesc': NewId(),
-                            'calculate': NewId(),
                             'area': NewId(),
                             'length': NewId(),
                             'compact': NewId(),
@@ -469,8 +468,10 @@ class VirtualAttributeList(ListCtrl,
         popupMenu.Append(self.popupId['sortDesc'], _("Sort descending"))
         popupMenu.AppendSeparator()
         subMenu = Menu()
-        popupMenu.AppendMenu(self.popupId['calculate'], _(
-            "Calculate (only numeric columns)"), subMenu)
+        subMenuItem = popupMenu.AppendSubMenu(
+            subMenu,
+            _("Calculate (only numeric columns)")
+        )
         popupMenu.Append(
             self.popupId['calculator'],
             _("Field calculator"))
@@ -490,7 +491,7 @@ class VirtualAttributeList(ListCtrl,
         if not self.dbMgrData['editable'] or self.columns[
                 self.GetColumn(self._col).GetText()]['ctype'] not in (
                 int, float):
-            popupMenu.Enable(self.popupId['calculate'], False)
+            subMenuItem.Enable(False)
 
         subMenu.Append(self.popupId['area'], _("Area size"))
         subMenu.Append(self.popupId['length'], _("Line length"))
