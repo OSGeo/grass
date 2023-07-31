@@ -14,7 +14,8 @@ set -e
     --with-cairo \
     --with-opengl-libs=/usr/include/GL \
     --with-freetype=yes --with-freetype-includes="/usr/include/freetype2/" \
-    --with-sqlite=yes
+    --with-sqlite=yes \
+    --without-pdal
 make
 
 # put command on path
