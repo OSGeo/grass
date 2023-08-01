@@ -386,6 +386,7 @@ r.surf.area|input:map
 r.terraflow|stream_dir:directory
 # r.texture
 r.texture|measure:method
+r.texture|prefix:output
 # r.to.vect
 r.to.vect|feature:type
 # r.topmodel
