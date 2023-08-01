@@ -76,10 +76,7 @@ from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
 from lmgr.statusbar import SbMain
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
-from lmgr.giface import (
-    LayerManagerGrassInterface,
-    LayerManagerGrassInterfaceForMapDisplay,
-)
+from lmgr.giface import LayerManagerGrassInterface
 from mapdisp.frame import MapPanel
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
@@ -415,20 +412,17 @@ class GMFrame(wx.Frame):
         self.currentPageNum = self.notebookLayers.GetSelection()
         self.notebookLayers.EnsureVisible(self.currentPageNum)
 
-        def CreateNewMapDisplay(layertree):
+        def CreateNewMapDisplay(giface, layertree):
             """Callback function which creates a new Map Display window
+            :param giface: giface for map display
             :param layertree: layer tree object
             :return: reference to mapdisplay instance
             """
-            # create instance of Map Display interface
-            self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
-                self._giface, layertree
-            )
 
             # create Map Display
             mapdisplay = MapPanel(
                 parent=self.mapnotebook,
-                giface=self._gifaceForDisplay,
+                giface=giface,
                 id=wx.ID_ANY,
                 tree=layertree,
                 lmgr=self,

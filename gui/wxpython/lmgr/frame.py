@@ -70,10 +70,7 @@ from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
 from lmgr.statusbar import SbMain
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
-from lmgr.giface import (
-    LayerManagerGrassInterface,
-    LayerManagerGrassInterfaceForMapDisplay,
-)
+from lmgr.giface import LayerManagerGrassInterface
 from mapdisp.frame import MapDisplay
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
@@ -484,10 +481,10 @@ class GMFrame(wx.Frame):
         self.notebookLayers.AddPage(page=self.pg_panel, text=name, select=True)
         self.currentPage = self.notebookLayers.GetCurrentPage()
 
-        def CreateNewMapDisplay(layertree):
+        def CreateNewMapDisplay(giface, layertree):
             """Callback function which creates a new Map Display window
+            :param giface: giface for map display
             :param layertree: layer tree object
-            :param name: name of new map display window
             :return: reference to mapdisplay instance
             """
             # count map display frame position
@@ -503,14 +500,10 @@ class GMFrame(wx.Frame):
                 title=name,
             )
 
-            # create instance of Map Display interface
-            self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
-                self._giface, layertree
-            )
             # create Map Display
             mapdisplay = MapDisplay(
                 parent=mapframe,
-                giface=self._gifaceForDisplay,
+                giface=giface,
                 id=wx.ID_ANY,
                 size=globalvar.MAP_WINDOW_SIZE,
                 tree=layertree,
