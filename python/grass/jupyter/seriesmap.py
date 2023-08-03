@@ -188,7 +188,8 @@ class SeriesMap:
         return wrapper
 
     def add_names(self, names):
-        """add list of names associated with layers. Default will be names of first series added."""
+        """Add list of names associated with layers.
+        Default will be names of first series added."""
         assert self._series_length == len(names), _(
             "Number of vectors in series must match number of vectors"
         )
@@ -301,7 +302,7 @@ class SeriesMap:
         out_img = widgets.Image(value=b"", format="png")
 
         def change_slider(change):
-            slider.value = slider.options[change.new]
+            slider.value = slider.options[change.new][1]
 
         play.observe(change_slider, names="value")
 
