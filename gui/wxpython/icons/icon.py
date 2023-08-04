@@ -45,10 +45,7 @@ try:
         raise OSError
 
     for key, img in iconSet.items():
-        if key not in iconSet or iconSet[key] is None:  # add key
-            iconSet[key] = img
-
-        iconSet[key] = os.path.join(iconPath, iconSet[key])
+        iconSet[key] = os.path.join(iconPath, img)
 except Exception as e:
     sys.exit(_("Unable to load icon theme. Reason: %s. Quitting wxGUI...") % e)
 
