@@ -342,25 +342,22 @@ int input_data(void)
     /* Update elevation map */
     copy_matrix_undef_double_to_float_values(rows, cols, si, zz);
 
-    /* Load infiltration and traps if rain is present */
-    if (if_rain == 1) {
-        /* Infiltration: read map or use a single value */
-        if (infil != NULL) {
-            inf = read_double_raster_map(rows, cols, infil, unitconv);
-        }
-        else if (infil_val >= 0.0) { /* If no value set its set to -999.99 */
-            inf = create_double_matrix(rows, cols, infil_val * unitconv);
-        }
-        else {
-            inf = create_double_matrix(rows, cols, (double)UNDEF);
-        }
-
-        /* Traps */
-        if (traps != NULL)
-            trap = read_float_raster_map(rows, cols, traps, 1.0);
-        else
-            trap = create_float_matrix(rows, cols, (double)UNDEF);
+    /* Infiltration: read map or use a single value */
+    if (infil != NULL) {
+        inf = read_double_raster_map(rows, cols, infil, unitconv);
     }
+    else if (infil_val >= 0.0) { /* If no value set its set to -999.99 */
+        inf = create_double_matrix(rows, cols, infil_val * unitconv);
+    }
+    else {
+        inf = create_double_matrix(rows, cols, (double)UNDEF);
+    }
+
+    /* Traps */
+    if (traps != NULL)
+        trap = read_float_raster_map(rows, cols, traps, 1.0);
+    else
+        trap = create_float_matrix(rows, cols, (double)UNDEF);
 
     if (detin != NULL) {
         dc = read_float_raster_map(rows, cols, detin, 1.0);
