@@ -30,6 +30,7 @@ try:
     # The recommended way to use wx with mpl is with the WXAgg
     # backend.
     matplotlib.use("WXAgg")
+    from matplotlib import gridspec
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_wxagg import (
         FigureCanvasWxAgg as FigCanvas,
@@ -424,6 +425,30 @@ class TimelineFrame(wx.Frame):
         self.datasets = datasets
         self._redraw()
 
+    def _change_figure_geometry(self, nrows=1, ncols=1, num=1):
+        """Change figure geometry
+
+        https://github.com/kecnry/autofig/commit/93e6debb953f5b2afe05f463064d60b9566afa59
+
+        :param int rows: number of rows
+        :param int cols: number of cols
+        :param int num: subplot order
+        """
+        if not check_version(3, 4, 0):
+            self.axes2d.change_geometry(nrows, ncols, num)
+        else:
+            for i, ax in enumerate(self.fig.axes):
+                ax.set_subplotspec(
+                    gridspec.SubplotSpec(
+                        gridspec.GridSpec(
+                            nrows,
+                            ncols,
+                            figure=self.fig,
+                        ),
+                        i,
+                    )
+                )
+
     def _redraw(self):
         """Readraw data.
 
@@ -437,7 +462,7 @@ class TimelineFrame(wx.Frame):
         self._draw2dFigure()
         if check_version(1, 0, 0):
             if self.view3dCheck.IsChecked():
-                self.axes2d.change_geometry(2, 1, 1)
+                self._change_figure_geometry(nrows=2, ncols=1, num=1)
                 if not self.axes3d:
                     # do not remove this import - unused but it is required for
                     # 3D
@@ -451,7 +476,8 @@ class TimelineFrame(wx.Frame):
                 if self.axes3d:
                     self.fig.delaxes(self.axes3d)
                     self.axes3d = None
-                self.axes2d.change_geometry(1, 1, 1)
+                    self._change_figure_geometry()
+                    self._draw2dFigure()
                 self.canvas.draw()
 
     def _checkDatasets(self, datasets):
