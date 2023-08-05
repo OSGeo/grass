@@ -54,8 +54,7 @@ def main():
 
     # write groff
     with open(sys.argv[2], "wb") as outf:
-        if sys.version_info.major >= 3:
-            s = s.encode("UTF-8")
+        s = s.encode("UTF-8")
         outf.write(s)
 
 

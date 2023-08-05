@@ -29,7 +29,6 @@ This program is free software under the GNU General Public License
 @author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
 """
 
-import sys
 import os
 import locale
 import tempfile
@@ -75,9 +74,6 @@ from gui_core.wrap import (
     TextCtrl,
 )
 from core.utils import cmp
-
-if sys.version_info.major >= 3:
-    unicode = str
 
 
 class Log:
@@ -689,7 +685,7 @@ class VirtualAttributeList(
             item1 = self.itemDataMap[key1][self._col]
             item2 = self.itemDataMap[key2][self._col]
 
-        if isinstance(item1, str) or isinstance(item2, unicode):
+        if isinstance(item1, str) or isinstance(item2, str):
             cmpVal = locale.strcoll(GetUnicodeValue(item1), GetUnicodeValue(item2))
         else:
             cmpVal = cmp(item1, item2)

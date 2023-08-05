@@ -49,8 +49,7 @@ def print_error(msg, type):
     """Redirect stderr"""
     global log
     if log:
-        if sys.version_info.major >= 3:
-            msg = DecodeString(msg.data)
+        msg = DecodeString(msg.data)
         log.write(msg + os.linesep)
     else:
         print(msg)
