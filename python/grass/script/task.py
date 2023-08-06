@@ -20,20 +20,14 @@ for details.
 import os
 import re
 import sys
+import xml.etree.ElementTree as etree
+from xml.parsers import expat
 
 from grass.exceptions import ScriptError
 from .utils import decode, split
 from .core import Popen, PIPE, get_real_command
 
-import xml.etree.ElementTree as etree
-from xml.parsers import expat  # TODO: works for any Python?
-
-# Get the XML parsing exceptions to catch. The behavior chnaged with Python 2.7
-# and ElementTree 1.3.
-if hasattr(etree, "ParseError"):
-    ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
-else:
-    ETREE_EXCEPTIONS = expat.ExpatError
+ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
 
 
 class grassTask:

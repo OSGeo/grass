@@ -18,18 +18,12 @@ import copy
 import xml.etree.ElementTree as etree
 from xml.parsers import expat
 
-# Get the XML parsing exceptions to catch. The behavior chnaged with Python 2.7
-# and ElementTree 1.3.
-if hasattr(etree, "ParseError"):
-    ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
-else:
-    ETREE_EXCEPTIONS = expat.ExpatError
-
 import grass.script.task as gtask
 import grass.script.core as gcore
 from grass.script.utils import try_remove, decode
 from grass.exceptions import ScriptError, CalledModuleError
 
+ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
 
 # duplicating code from core/globalvar.py
 # if this will become part of grass Python library or module, this should be
