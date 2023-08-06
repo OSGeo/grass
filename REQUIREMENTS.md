@@ -82,10 +82,6 @@ Note: also the respective development packages (commonly named `xxx-dev` or
   [https://cran.r-project.org](https://cran.r-project.org)
 - **FreeType2** (for TrueType font support and `d.text.freetype`)
   [https://freetype.org/](https://freetype.org/)
-- **Ctypes** (for ctypes interface)
-  Ctypes can be added as a third-party module in Python 2.3 and
-  2.4 - [https://pypi.org/project/ctypes/1.0.2/](https://pypi.org/project/ctypes/1.0.2/)
-  [https://docs.python.org/library/ctypes.html](https://docs.python.org/library/ctypes.html)
 - **wxPython >= 2.8.10.1** (for wxGUI)
   [https://www.wxpython.org](https://www.wxpython.org)
 - **NumPy >= 1.0.4** (for various wxGUI components and pyGRASS)
