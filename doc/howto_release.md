@@ -370,14 +370,16 @@ For new branches: Update `grass-devel` using the steps above.
 
 ## Update winGRASS related files
 
-Update the winGRASS version at <https://github.com/landam/wingrass-maintenance-scripts/>:
+Update the GRASS version at <https://github.com/landam/wingrass-maintenance-scripts>:
 
-```bash
-vim wingrass-maintenance-scripts/grass_packager_release.bat
-vim wingrass-maintenance-scripts/grass_addons.sh
-vim wingrass-maintenance-scripts/grass_copy_wwwroot.sh
-vim wingrass-maintenance-scripts/cronjob.sh       # major/minor release only
-```
+- On major or minor version change (on release branch creation) update
+  [dev_packages.csv](https://github.com/landam/wingrass-maintenance-scripts/blob/master/dev_packages.csv)
+- On release (inluding RC) update
+  [releases.csv](https://github.com/landam/wingrass-maintenance-scripts/blob/master/releases.csv)
+  and
+  [grass_packager_release.bat](https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_packager_release.bat#L12)
+
+Example for 8.3.0RC1: [commit](https://github.com/landam/wingrass-maintenance-scripts/commit/c47b0f30051108bd2e8b52d183e97930c24dfafd)
 
 ## Update binary and addon builders
 
