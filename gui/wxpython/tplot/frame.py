@@ -19,7 +19,6 @@ This program is free software under the GNU General Public License
 @author start stvds support Matej Krejci
 """
 import os
-import six
 from itertools import cycle
 import numpy as np
 
@@ -840,7 +839,7 @@ class TplotFrame(wx.Frame):
             self.yticksPos.append(1)  # TODO
             xdata = []
             ydata = []
-            for keys, values in six.iteritems(self.timeDataR[name]):
+            for keys, values in self.timeDataR[name].items():
                 if keys in [
                     "temporalType",
                     "granularity",
@@ -896,7 +895,7 @@ class TplotFrame(wx.Frame):
             xdata = []
             ydata = []
             xcsv = []
-            for keys, values in six.iteritems(self.timeDataV[name_cat[0]][name_cat[1]]):
+            for keys, values in self.timeDataV[name_cat[0]][name_cat[1]].items():
                 if keys in [
                     "temporalType",
                     "granularity",
@@ -956,7 +955,7 @@ class TplotFrame(wx.Frame):
             xdata = []
             ydata = []
             xcsv = []
-            for keys, values in six.iteritems(self.timeDataV[name]):
+            for keys, values in self.timeDataV[name].items():
                 if keys in [
                     "temporalType",
                     "granularity",
@@ -1149,9 +1148,9 @@ class TplotFrame(wx.Frame):
         allDatasets = [
             [
                 [(map, mapset, etype) for map in maps]
-                for etype, maps in six.iteritems(etypesDict)
+                for etype, maps in etypesDict.items()
             ]
-            for mapset, etypesDict in six.iteritems(tDict)
+            for mapset, etypesDict in tDict.items()
         ]
         # flatten this list
         if allDatasets:
@@ -1346,7 +1345,7 @@ class LookUp:
 
     def GetInformation(self, x):
         values = {}
-        for key, value in six.iteritems(self.data):
+        for key, value in self.data.items():
             if value[x]:
                 values[key] = [self.convert(x), value[x]]
 
@@ -1359,7 +1358,7 @@ class LookUp:
 def InfoFormat(timeData, values):
     """Formats information about dataset"""
     text = []
-    for key, val in six.iteritems(values):
+    for key, val in values.items():
         etype = timeData[key]["temporalDataType"]
         if etype == "strds":
             text.append(_("Space time raster dataset: %s") % key)
@@ -1375,7 +1374,7 @@ def InfoFormat(timeData, values):
     return "\n".join(text)
 
 
-class DataCursor(object):
+class DataCursor:
     """A simple data cursor widget that displays the x,y location of a
     matplotlib artist when it is selected.
 

@@ -1,6 +1,5 @@
 """Python interface to launch GRASS GIS modules in scripts
 """
-from __future__ import absolute_import
 
 from .core import *
 from .db import *

@@ -53,7 +53,6 @@ import os
 import sys
 import string
 import re
-import six
 from bisect import bisect
 from datetime import datetime
 from core.globalvar import wxPythonPhoenix
@@ -1506,7 +1505,7 @@ class ManageSettingsWidget(wx.Panel):
         try:
             fd = open(self.settingsFile, "w")
             fd.write("format_version=2.0\n")
-            for key, values in six.iteritems(self._settings):
+            for key, values in self._settings.items():
                 first = True
                 for v in values:
                     # escaping characters

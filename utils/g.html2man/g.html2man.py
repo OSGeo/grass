@@ -4,12 +4,7 @@ import re
 from ghtml import HTMLParser
 from ggroff import Formatter
 
-try:
-    # Python 2 str - bytes version
-    from StringIO import StringIO
-except ImportError:
-    # Python 3 str - unicode version
-    from io import StringIO
+from io import StringIO
 
 entities = {"nbsp": " ", "bull": "*"}
 
@@ -59,8 +54,7 @@ def main():
 
     # write groff
     with open(sys.argv[2], "wb") as outf:
-        if sys.version_info.major >= 3:
-            s = s.encode("UTF-8")
+        s = s.encode("UTF-8")
         outf.write(s)
 
 

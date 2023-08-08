@@ -1,13 +1,3 @@
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
-import sys
 from multiprocessing import cpu_count, Process, Queue
 import time
 from xml.etree.ElementTree import fromstring
@@ -22,12 +12,7 @@ from .typedict import TypeDict
 from .read import GETFROMTAG, DOC
 from .env import G_debug
 
-if sys.version_info[0] == 2:
-    from itertools import izip_longest as zip_longest
-else:
-    from itertools import zip_longest
-
-    unicode = str
+from itertools import zip_longest
 
 
 def _get_bash(self, *args, **kargs):
@@ -528,9 +513,7 @@ class Module(object):
     """
 
     def __init__(self, cmd, *args, **kargs):
-        if isinstance(cmd, unicode):
-            self.name = str(cmd)
-        elif isinstance(cmd, str):
+        if isinstance(cmd, str):
             self.name = cmd
         else:
             raise GrassError("Problem initializing the module {s}".format(s=cmd))

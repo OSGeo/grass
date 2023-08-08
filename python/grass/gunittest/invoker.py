@@ -9,10 +9,11 @@ for details.
 :authors: Vaclav Petras
 """
 
+import collections
 import os
-import sys
 import shutil
 import subprocess
+import sys
 
 from .checkers import text_to_keyvalue
 
@@ -32,12 +33,7 @@ from .utils import silent_rmtree, ensure_dir
 import grass.script as gs
 from grass.script.utils import decode, _get_encoding
 
-try:
-    from string import maketrans
-except ImportError:
-    maketrans = str.maketrans
-
-import collections
+maketrans = str.maketrans
 
 
 # TODO: this might be more extend then update

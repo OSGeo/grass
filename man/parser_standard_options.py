@@ -3,16 +3,18 @@ Created on Fri Jun 26 19:10:58 2015
 
 @author: pietro
 """
-from __future__ import print_function
 import argparse
+import os
 import sys
 
-try:
-    from urllib.request import urlopen
-except ImportError:
-    from urllib2 import urlopen
+from urllib.request import urlopen
 
-from build_html import *
+from build_html import (
+    header1_tmpl,
+    grass_version,
+    headerpso_tmpl,
+    write_html_footer,
+)
 
 
 def parse_options(lines, startswith="Opt"):

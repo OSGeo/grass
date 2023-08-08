@@ -438,7 +438,6 @@ for details.
     LexToken(RPAREN,')',1,48)
 
 """
-from __future__ import print_function
 
 try:
     import ply.lex as lex
@@ -447,9 +446,9 @@ except:
     pass
 
 import os
-import sys
 import copy
 from datetime import datetime
+
 import grass.pygrass.modules as pymod
 from .core import (
     init_dbif,
@@ -475,9 +474,6 @@ from .temporal_granularity import compute_absolute_time_granularity
 from .datetime_math import create_suffix_from_datetime
 from .datetime_math import create_time_suffix
 from .datetime_math import create_numeric_suffix
-
-if sys.version_info[0] >= 3:
-    unicode = str
 
 
 class TemporalAlgebraLexer(object):
@@ -1231,7 +1227,7 @@ class TemporalAlgebraParser(object):
 
         :return: List of maps.
         """
-        if isinstance(input, unicode) or isinstance(input, str):
+        if isinstance(input, str):
             # Check for mapset in given stds input.
             if input.find("@") >= 0:
                 id_input = input

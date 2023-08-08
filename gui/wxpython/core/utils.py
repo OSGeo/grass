@@ -20,7 +20,6 @@ import shlex
 import re
 import inspect
 import operator
-import six
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -878,7 +877,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
     else:
         expCmd = "export"
 
-    for key, value in six.iteritems(environ):
+    for key, value in environ.items():
         fd.write("%s %s=%s\n" % (expCmd, key, value))
 
     # write also skipped lines

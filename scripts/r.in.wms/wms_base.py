@@ -14,18 +14,12 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
 
-import os
-from math import ceil
-
 import base64
-
-try:
-    from urllib2 import Request, urlopen, HTTPError
-    from httplib import HTTPException
-except ImportError:
-    from urllib.request import Request, urlopen
-    from urllib.error import HTTPError
-    from http.client import HTTPException
+import os
+from http.client import HTTPException
+from math import ceil
+from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 
 
 import grass.script as grass

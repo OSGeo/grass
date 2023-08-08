@@ -615,7 +615,7 @@ def text_file_md5(
         regexp = re.compile(exclude_re)
     if prepend_lines:
         for line in prepend_lines:
-            hasher.update(line if sys.version_info[0] == 2 else encode(line))
+            hasher.update(encode(line))
     with open(filename, "r") as f:
         for line in f:
             # replace platform newlines by standard newline
@@ -625,10 +625,10 @@ def text_file_md5(
                 continue
             if exclude_re and regexp.match(line):
                 continue
-            hasher.update(line if sys.version_info[0] == 2 else encode(line))
+            hasher.update(encode(line))
     if append_lines:
         for line in append_lines:
-            hasher.update(line if sys.version_info[0] == 2 else encode(line))
+            hasher.update(encode(line))
     return hasher.hexdigest()
 
 

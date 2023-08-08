@@ -25,8 +25,6 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import time
@@ -52,9 +50,6 @@ from core.globalvar import SCT_EXT
 
 from grass.script import core as grass
 from grass.script.utils import decode, encode
-
-if sys.version_info.major == 2:
-    bytes = str
 
 
 def DecodeString(string):

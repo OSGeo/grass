@@ -19,16 +19,11 @@ Usage: python support/update_menudata.py [-d]
 @author Martin Landa <landa.martin gmail.com>
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import tempfile
 
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import xml.etree.ElementTree as etree
 
 from grass.script import core as grass
 from grass.script import task as gtask

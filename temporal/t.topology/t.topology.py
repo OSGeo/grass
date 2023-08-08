@@ -47,8 +47,6 @@
 # % key: s
 # % description: Print spatio-temporal topological relationships and exit
 # %end
-from __future__ import print_function
-
 import grass.script as grass
 
 

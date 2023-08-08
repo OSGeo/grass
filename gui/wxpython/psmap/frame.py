@@ -18,10 +18,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
-if sys.version_info.major == 2:
-    import Queue
-else:
-    import queue as Queue
+import queue as Queue
 from math import sin, cos, pi, sqrt
 
 import wx

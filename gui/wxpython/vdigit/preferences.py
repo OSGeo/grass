@@ -15,7 +15,6 @@ This program is free software under the GNU General Public License
 """
 
 import textwrap
-import six
 
 import wx
 import wx.lib.colourselect as csel
@@ -752,7 +751,7 @@ class VDigitSettingsDialog(wx.Dialog):
         checked = event.IsChecked()
         id = event.GetId()
         key = None
-        for attrb, val in six.iteritems(self.geomAttrb):
+        for attrb, val in self.geomAttrb.items():
             if val["check"] == id:
                 key = attrb
                 break
@@ -903,7 +902,7 @@ class VDigitSettingsDialog(wx.Dialog):
         """
         self._giface.workspaceChanged.emit()
         # symbology
-        for key, (enabled, color) in six.iteritems(self.symbology):
+        for key, (enabled, color) in self.symbology.items():
             if enabled:
                 UserSettings.Set(
                     group="vdigit",
@@ -993,7 +992,7 @@ class VDigitSettingsDialog(wx.Dialog):
             item = tree.FindItemByData("maplayer", mapLayer)
         else:
             item = None
-        for key, val in six.iteritems(self.geomAttrb):
+        for key, val in self.geomAttrb.items():
             checked = self.FindWindowById(val["check"]).IsChecked()
             column = self.FindWindowById(val["column"]).GetValue()
             unitsIdx = self.FindWindowById(val["units"]).GetSelection()

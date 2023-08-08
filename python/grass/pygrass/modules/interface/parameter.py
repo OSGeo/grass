@@ -3,15 +3,6 @@ Created on Tue Apr  2 18:31:47 2013
 
 @author: pietro
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 import re
 
 from grass.pygrass.modules.interface.docstring import docstring_property

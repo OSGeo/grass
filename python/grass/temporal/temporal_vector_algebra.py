@@ -41,8 +41,6 @@ for details.
     LexToken(RPAREN,')',1,16)
 
 """
-from __future__ import print_function
-
 try:
     import ply.yacc as yacc
 except ImportError:

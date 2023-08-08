@@ -78,10 +78,6 @@ BuildRequires:	postgresql-devel
 BuildRequires:	libpq-devel
 %endif
 BuildRequires:	proj-devel
-%if (0%{?rhel} <= 6 && !0%{?fedora})
-# argparse is included in python2.7+ but not python2.6
-BuildRequires:	python-argparse
-%endif
 %if 0%{?rhel} == 7
 # EPEL7
 BuildRequires:	python%{python3_version_nodots}-dateutil
@@ -89,12 +85,7 @@ BuildRequires:	python%{python3_version_nodots}-dateutil
 BuildRequires:	python3-dateutil
 %endif
 BuildRequires:	python3-devel
-%if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	python3-pillow
-%else
-# EPEL6
-BuildRequires:	python-imaging
-%endif
 BuildRequires:	PDAL
 BuildRequires:	PDAL-libs
 BuildRequires:	PDAL-devel

@@ -46,21 +46,12 @@ COPYING coming with GRASS for details.
 @author Stepan Turek <stepan.turek seznam.cz> (CoordinatesSelect)
 """
 
-from __future__ import print_function
-
 import sys
 import textwrap
 import os
 import copy
 import locale
-import six
-
-if sys.version_info.major == 2:
-    import Queue
-else:
-    import queue as Queue
-
-    unicode = str
+import queue as Queue
 
 import codecs
 
@@ -72,10 +63,7 @@ import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.newevent import NewEvent
 
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import xml.etree.ElementTree as etree
 
 # needed when started from command line and for testing
 if __name__ == "__main__":
@@ -1195,7 +1183,7 @@ class CmdPanel(wx.Panel):
 
             if len(p.get("values", [])) > 0:
                 valuelist = list(map(str, p.get("values", [])))
-                valuelist_desc = list(map(unicode, p.get("values_desc", [])))
+                valuelist_desc = list(map(str, p.get("values_desc", [])))
                 required_text = "*" if p.get("required", False) else ""
                 if (
                     p.get("multiple", False)
@@ -2715,7 +2703,7 @@ class CmdPanel(wx.Panel):
         self.OnUpdateSelection(event)
 
     def OnUpdateDialog(self, event):
-        for fn, kwargs in six.iteritems(event.data):
+        for fn, kwargs in event.data.items():
             fn(**kwargs)
 
         self.parent.updateValuesHook()

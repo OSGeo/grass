@@ -19,16 +19,12 @@ This program is free software under the GNU General Public License
 import re
 import os
 import sys
-import six
 import shutil
 
 from copy import deepcopy
 from core import globalvar
 
-try:
-    from xml.etree.ElementTree import ParseError
-except ImportError:  # < Python 2.7
-    from xml.parsers.expat import ExpatError as ParseError
+from xml.etree.ElementTree import ParseError
 
 import wx
 
@@ -526,7 +522,7 @@ class WSPanel(wx.Panel):
         self.conn = {"url": url, "password": password, "username": username}
 
         conn_cmd = []
-        for k, v in six.iteritems(self.conn):
+        for k, v in self.conn.items():
             if v:
                 conn_cmd.append("%s=%s" % (k, v))
 
@@ -649,7 +645,7 @@ class WSPanel(wx.Panel):
         if "method" in dcmd:
             params["method"] = dcmd["method"]
 
-        for p, v in six.iteritems(params):
+        for p, v in params.items():
             if self.params[p]:
                 self.params[p].SetStringSelection(v)
 
@@ -1164,8 +1160,8 @@ class WSManageSettingsWidget(ManageSettingsWidget):
     def OnAddDefaultServers(self, event):
         setts = self.GetSettings()
         self.servers_to_add = {}
-        for k, v in six.iteritems(self.default_servers):
-            if k not in six.iterkeys(setts):
+        for k, v in self.default_servers.items():
+            if k not in setts.keys():
                 self.servers_to_add[k] = v
             elif v != setts[k]:
                 GMessage(

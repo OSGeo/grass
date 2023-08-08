@@ -18,10 +18,8 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 
-from __future__ import print_function
 
 import os
-import six
 
 import wx
 import wx.lib.scrolledpanel as scrolled
@@ -244,7 +242,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         self.scatt_mgr.cursorPlotMove.connect(self.CursorPlotMove)
 
     def SetBusy(self, busy):
-        for scatt in six.itervalues(self.scatts):
+        for scatt in self.scatts.values():
             scatt.UpdateCur(busy)
 
     def CursorPlotMove(self, x, y, scatt_id):

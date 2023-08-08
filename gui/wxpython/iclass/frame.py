@@ -19,7 +19,6 @@ for details.
 """
 
 import os
-import six
 import copy
 import tempfile
 
@@ -1597,7 +1596,7 @@ class MapManager:
 
     def GetAlias(self, name):
         """Returns alias for layer"""
-        name = [k for k, v in six.iteritems(self.layerName) if v == name]
+        name = [k for k, v in self.layerName.items() if v == name]
         if name:
             return name[0]
         return None

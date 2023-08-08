@@ -19,7 +19,6 @@ This program is free software under the GNU General Public License
 """
 
 import copy
-import six
 
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -425,7 +424,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         newfid = -1
 
         # add/delete new category
-        for action, catsCurr in six.iteritems(check):
+        for action, catsCurr in check.items():
             for layer in catsCurr[0].keys():
                 catList = []
                 for cat in catsCurr[0][layer]:

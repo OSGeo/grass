@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 from os.path import join, exists
 import grass.lib.gis as libgis
 

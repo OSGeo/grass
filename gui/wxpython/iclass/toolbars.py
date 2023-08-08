@@ -18,8 +18,6 @@ for details.
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-from __future__ import print_function
-
 import wx
 
 from gui_core.toolbars import BaseToolbar, BaseIcons

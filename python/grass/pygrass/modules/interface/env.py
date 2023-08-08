@@ -3,7 +3,6 @@ Created on Thu May 28 17:41:32 2015
 
 @author: pietro
 """
-from __future__ import print_function
 import os
 import sys
 

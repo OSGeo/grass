@@ -17,10 +17,8 @@ for details.
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
-from __future__ import absolute_import
 
 import os
-import sys
 import string
 import time
 
@@ -37,10 +35,6 @@ from .core import (
 )
 from grass.exceptions import CalledModuleError
 from .utils import encode, float_or_dms, parse_key_val, try_remove
-
-
-if sys.version_info.major >= 3:
-    unicode = str
 
 
 def raster_history(map, overwrite=False, env=None):
@@ -225,7 +219,7 @@ def raster_what(map, coord, env=None, localized=False):
                        query
     :param env:
     """
-    if isinstance(map, (bytes, unicode)):
+    if isinstance(map, (bytes, str)):
         map_list = [map]
     else:
         map_list = map

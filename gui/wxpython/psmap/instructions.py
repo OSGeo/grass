@@ -34,7 +34,6 @@ This program is free software under the GNU General Public License
 
 import os
 import string
-import six
 from math import ceil
 from time import strftime, localtime
 from io import open
@@ -825,7 +824,7 @@ class PageSetup(InstructionObject):
                         # e.g. paper a3
                         try:
                             instr["Format"] = pformat
-                            for key, value in six.iteritems(availableFormats[pformat]):
+                            for key, value in availableFormats[pformat].items():
                                 instr[key] = float(value)
                             break
                         except KeyError:

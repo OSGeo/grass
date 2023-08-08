@@ -3,15 +3,6 @@ Created on Sat Jun 16 20:24:56 2012
 
 @author: soeren
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 
 import optparse
 

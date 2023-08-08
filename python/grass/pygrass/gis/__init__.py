@@ -1,14 +1,5 @@
 #!/usr/bin/env python3
 
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 from os import listdir
 from os.path import join, isdir
 import shutil

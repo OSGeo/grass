@@ -5,7 +5,6 @@ Created on Wed Jun 25 11:08:22 2014
 """
 import os
 import sqlite3
-import sys
 import tempfile as tmp
 from string import ascii_letters, digits
 from random import choice
@@ -17,14 +16,11 @@ from grass.gunittest.main import test
 from grass.pygrass.vector.table import Table, get_path
 
 
-if sys.version_info.major >= 3:
-    long = int
-
 # dictionary that generate random data
 COL2VALS = {
     "INT": lambda n: np.random.randint(9, size=n),
     "INTEGER": lambda n: np.random.randint(9, size=n),
-    "INTEGER PRIMARY KEY": lambda n: np.arange(1, n + 1, dtype=long),
+    "INTEGER PRIMARY KEY": lambda n: np.arange(1, n + 1, dtype=int),
     "REAL": lambda n: np.random.rand(n),
     "TEXT": lambda n: np.array([randstr() for _ in range(n)]),
 }

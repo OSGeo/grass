@@ -409,13 +409,9 @@ class GConsole(wx.EvtHandler):
             except AttributeError:
                 enc = locale.getdefaultlocale()[1]
             if enc:
-                if sys.version_info.major == 2:
-                    sys.stdout = codecs.getwriter(enc)(sys.__stdout__)
-                    sys.stderr = codecs.getwriter(enc)(sys.__stderr__)
-                else:
-                    # https://stackoverflow.com/questions/4374455/how-to-set-sys-stdout-encoding-in-python-3
-                    sys.stdout = codecs.getwriter(enc)(sys.__stdout__.detach())
-                    sys.stderr = codecs.getwriter(enc)(sys.__stderr__.detach())
+                # https://stackoverflow.com/questions/4374455/how-to-set-sys-stdout-encoding-in-python-3
+                sys.stdout = codecs.getwriter(enc)(sys.__stdout__.detach())
+                sys.stderr = codecs.getwriter(enc)(sys.__stderr__.detach())
             else:
                 sys.stdout = sys.__stdout__
                 sys.stderr = sys.__stderr__

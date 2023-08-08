@@ -10,8 +10,6 @@ for details.
 :authors: Thomas Leppelt and Soeren Gebbert
 
 """
-from __future__ import print_function
-
 try:
     import ply.yacc as yacc
 except ImportError:

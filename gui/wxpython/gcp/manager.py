@@ -27,12 +27,9 @@ This program is free software under the GNU General Public License
 @author Support for GraphicsSet added by Stepan Turek <stepan.turek seznam.cz> (2012)
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import shutil
-import six
 from copy import copy
 
 import wx
@@ -1412,7 +1409,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         }
         wpx = UserSettings.Get(group="gcpman", key="symbol", subkey="width")
 
-        for k, v in six.iteritems(colours):
+        for k, v in colours.items():
             col = UserSettings.Get(group="gcpman", key="symbol", subkey=k)
             self.pointsToDrawSrc.GetPen(v).SetColour(
                 wx.Colour(col[0], col[1], col[2], 255)

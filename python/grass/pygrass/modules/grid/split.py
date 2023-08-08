@@ -3,15 +3,6 @@ Created on Tue Apr  2 19:00:15 2013
 
 @author: pietro
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 from grass.pygrass.gis.region import Region
 from grass.pygrass.vector.basic import Bbox
 

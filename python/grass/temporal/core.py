@@ -30,7 +30,6 @@ for details.
 """
 # import traceback
 import os
-import sys
 import grass.script as gscript
 
 from .c_libraries_interface import CLibrariesInterface
@@ -53,9 +52,6 @@ except:
 import atexit
 from datetime import datetime
 
-if sys.version_info.major >= 3:
-    long = int
-
 ###############################################################################
 
 
@@ -66,11 +62,8 @@ def profile_function(func):
     if do_profiling == "True" or do_profiling == "1":
         import cProfile
         import pstats
+        import io
 
-        try:
-            import StringIO as io
-        except ImportError:
-            import io
         pr = cProfile.Profile()
         pr.enable()
         func()
@@ -1449,7 +1442,7 @@ class DBConnection(object):
                             statement[0:pos],
                             statement[pos + 1 :],
                         )
-                    elif isinstance(args[count], (int, long)):
+                    elif isinstance(args[count], int):
                         statement = "%s%d%s" % (
                             statement[0:pos],
                             args[count],

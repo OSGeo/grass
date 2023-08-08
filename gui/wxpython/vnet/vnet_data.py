@@ -24,7 +24,6 @@ This program is free software under the GNU General Public License
 """
 import os
 import math
-import six
 from copy import deepcopy
 
 from grass.script.utils import try_remove
@@ -175,7 +174,7 @@ class VNETData:
             "turn_layer": _("turntable layer"),
             "turn_cat_layer": _("unique categories layer"),
         }
-        for layer, layerLabel in six.iteritems(vals):
+        for layer, layerLabel in vals.items():
             if layer in ["turn_layer", "turn_cat_layer"] and not flags["t"]:
                 continue
             if layer in inv_params:
@@ -316,7 +315,7 @@ class VNETPointsData:
         self.pointsChanged.emit(method="SetPoints", kwargs={"pts_data": pts_data})
 
     def SetPointData(self, pt_id, data):
-        for col, v in six.iteritems(data):
+        for col, v in data.items():
             if col == "use":
                 continue
 
@@ -387,7 +386,7 @@ class VNETPointsData:
         textProp = self.pointsToDraw.GetPropertyVal("text")
         textProp["font"].SetPointSize(ptSize + 2)
 
-        for colKey, col in six.iteritems(colors):
+        for colKey, col in colors.items():
             pen = self.pointsToDraw.GetPen(colKey)
             if pen:
                 pen.SetColour(wx.Colour(col[0], col[1], col[2], 255))
@@ -422,7 +421,7 @@ class VNETPointsData:
     def _ptDataToList(self, pt_data):
         pt_list_data = [None] * len(self.cols["name"])
 
-        for k, val in six.iteritems(pt_data):
+        for k, val in pt_data.items():
             pt_list_data[self.cols["name"].index(k)] = val
 
         return pt_list_data
@@ -569,7 +568,7 @@ class VNETPointsData:
         i_red = 0
         hidden_cols.sort()
         for idx in hidden_cols:
-            for dt in six.itervalues(cols_data):
+            for dt in cols_data.values():
                 dt.pop(idx - i_red)
             i_red += 1
 
@@ -600,7 +599,7 @@ class VNETAnalysisParameters:
 
     def SetParams(self, params, flags):
         changed_params = {}
-        for p, v in six.iteritems(params):
+        for p, v in params.items():
             if p == "analysis" and v not in self.an_props.used_an:
                 continue
 
@@ -616,7 +615,7 @@ class VNETAnalysisParameters:
                 changed_params[p] = v
 
         changed_flags = {}
-        for p, v in six.iteritems(flags):
+        for p, v in flags.items():
             if p in self.flags:
                 self.flags[p] = v
                 changed_flags[p] = v
@@ -840,7 +839,7 @@ class VNETAnalysesProperties:
 
         cols = self.vnetProperties[analysis]["cmdParams"]["cols"]
 
-        for col, v in six.iteritems(cols):
+        for col, v in cols.items():
             if "inputField" in col:
                 colInptF = v["inputField"]
             else:

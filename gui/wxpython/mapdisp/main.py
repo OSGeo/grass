@@ -27,11 +27,8 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (MapPanelBase)
 """
 
-from __future__ import print_function
-
 import os
 import sys
-import six
 import time
 import shutil
 import fileinput
@@ -597,7 +594,7 @@ class MapApp(wx.App):
             if self.timer.IsRunning:
                 self.timer.Stop()
             # terminate thread
-            for f in six.itervalues(monFile):
+            for f in monFile.values():
                 try_remove(f)
         return True
 

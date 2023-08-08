@@ -21,8 +21,6 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com> (refactoring)
 """
 
-from __future__ import print_function
-
 import os
 import time
 import math
