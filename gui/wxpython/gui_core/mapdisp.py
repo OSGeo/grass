@@ -833,7 +833,7 @@ class FrameMixin:
         return self.GetParent().IsFullScreen()
 
     def IsIconized(self):
-        self.GetParent().IsIconized()
+        return self.GetParent().IsIconized()
 
     def Maximize(self):
         self.GetParent().Maximize()

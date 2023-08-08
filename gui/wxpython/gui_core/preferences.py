@@ -1850,10 +1850,9 @@ class PreferencesDialog(PreferencesBaseDialog):
             for mapdisp in self._giface.GetAllMapDisplays():
                 pos = mapdisp.GetPosition()
                 size = mapdisp.GetSize()
-
                 # window size must be larger than zero, not minimized
                 # do not save dim when mapdisp is docked within single window
-                if (not mapdisp.IsDockable() or not mapdisp.IsDocked()) and (
+                if (hasattr(mapdisp, "IsIconized") and not mapdisp.IsIconized()) and (
                     size[0] > 0 and size[1] > 0
                 ):
                     dim += f",{pos[0]},{pos[1]},{size[0]},{size[1]}"
