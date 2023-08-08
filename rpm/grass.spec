@@ -1,9 +1,9 @@
-%global shortver 82
+%global shortver 83
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:		grass
-Version:	8.2.1
-Release:	1%{?dist}
+Version:	8.3.0
+Release:	3%{?dist}
 Summary:	GRASS GIS - Geographic Resources Analysis Support System
 
 %if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
@@ -29,7 +29,7 @@ URL:		https://grass.osgeo.org
 Source0:	https://grass.osgeo.org/%{name}%{shortver}/source/%{name}-%{version}.tar.gz
 
 # fix pkgconfig file
-Patch0:		grass-pkgconfig.patch
+Patch 0:	grass-pkgconfig.patch
 
 BuildRequires:	bison
 %if %{with flexiblas}
@@ -42,16 +42,12 @@ BuildRequires:	gcc-c++
 BuildRequires:	desktop-file-utils
 BuildRequires:	fftw-devel
 BuildRequires:	flex
-%if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	freetype-devel
-%endif
 BuildRequires:	gdal-devel
 BuildRequires:	geos-devel
 BuildRequires:	gettext
 BuildRequires:	laszip-devel
-%if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	libappstream-glib
-%endif
 BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libXmu-devel
@@ -62,9 +58,7 @@ BuildRequires:	mariadb-connector-c-devel openssl-devel
 %else
 BuildRequires:	mysql-devel
 %endif
-%if (0%{?rhel} > 6 || 0%{?fedora})
 BuildRequires:	netcdf-devel
-%endif
 BuildRequires:	python3
 %if 0%{?rhel} == 7
 # EPEL7
@@ -72,7 +66,7 @@ BuildRequires:	python%{python3_version_nodots}-numpy
 %else
 BuildRequires:	python3-numpy
 %endif
-%if 0%{?rhel} && 0%{?rhel} <= 7
+%if 0%{?rhel} && 0%{?rhel} == 7
 BuildRequires:	postgresql-devel
 %else
 BuildRequires:	libpq-devel
@@ -113,23 +107,13 @@ Requires:	python%{python3_version_nodots}-numpy
 %else
 Requires:	python3-numpy
 %endif
-%if 0%{?rhel} > 6
-# EPEL7/EPEL8
-#Requires:  python3-matplotlib-wx
-%else
-Requires:	python3-matplotlib
-%endif
 %if 0%{?rhel} == 7
 # EPEL7
 Requires:	python%{python3_version_nodots}-dateutil
 %else
 Requires:	python3-dateutil
 %endif
-%if 0%{?rhel} && 0%{?rhel} < 7
-Requires: wxPython
-%else
 Requires:	python3-wxpython4
-%endif
 Requires:	PDAL
 Requires:	PDAL-libs
 
@@ -171,7 +155,7 @@ GRASS GIS development headers
 
 %prep
 %setup -q
-%patch0 -p1 -b.libdir
+%patch 0 -p1 -b.libdir
 
 # Correct mysql_config query
 sed -i -e 's/--libmysqld-libs/--libs/g' configure
@@ -205,9 +189,7 @@ find -name \*.pl | xargs sed -i -e 's,#!/usr/bin/env perl,#!%{__perl},'
 	--with-lapack-includes=%{_includedir}/flexiblas \
 %endif
 	--with-cairo \
-%if (0%{?rhel} > 6 || 0%{?fedora})
 	--with-freetype \
-%endif
 	--with-nls \
 	--with-pdal \
 	--with-readline \
@@ -216,9 +198,7 @@ find -name \*.pl | xargs sed -i -e 's,#!/usr/bin/env perl,#!%{__perl},'
 	--with-gdal=%{_bindir}/gdal-config \
 	--with-wxwidgets=%{_bindir}/wx-config \
 	--with-geos=%{_bindir}/geos-config \
-%if (0%{?rhel} > 6 || 0%{?fedora})
 	--with-netcdf=%{_bindir}/nc-config \
-%endif
 	--with-mysql-includes=%{_includedir}/mysql \
 %if (0%{?fedora} >= 27)
 	--with-mysql-libs=%{_libdir} \
@@ -307,7 +287,7 @@ cat >  %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf<<EOF
 %{_libdir}/%{name}%{shortver}/lib
 EOF
 
-%if 0%{?rhel} && 0%{?rhel} <= 7
+%if 0%{?rhel} && 0%{?rhel} == 7
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
 
@@ -343,7 +323,6 @@ fi
 %license AUTHORS COPYING GPL.TXT CHANGES
 %{_sysconfdir}/ld.so.conf.d/%{name}-%{_arch}.conf
 %{_libdir}/%{name}%{shortver}/lib/*.so
-%{_libdir}/%{name}%{shortver}/lib/*.a
 %dir %{_libdir}/%{name}%{shortver}/driver
 %dir %{_libdir}/%{name}%{shortver}/driver/db
 %{_libdir}/%{name}%{shortver}/driver/db/*
@@ -359,6 +338,18 @@ fi
 %{_libdir}/%{name}%{shortver}/include
 
 %changelog
+* Sun Aug 06 2023 Alexandre Detiste <alexandre.detiste@gmail.com> - 8.3.0-3
+- Remove support for RHEL6: Grass is now Python3 only
+
+* Thu Jul 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 8.3.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Sun Jun 25 2023 Markus Neteler <neteler@mundialis.de> 8.3.0-1
+- New upstream version GRASS GIS 8.3.0
+
+* Thu May 11 2023 Sandro Mani <manisandro@gmail.com> - 8.2.1-2
+- Rebuild (gdal)
+
 * Sat Jan 21 2023 Markus Neteler <neteler@mundialis.de> 8.2.1-1
 - New upstream version GRASS GIS 8.2.1
 
