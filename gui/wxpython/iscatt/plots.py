@@ -16,7 +16,6 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 import wx
-import six
 import numpy as np
 from math import ceil
 from multiprocessing import Process, Queue
@@ -542,14 +541,14 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
 
 
 def _rendDtMemmapsToFiles(rend_dt):
-    for k, v in six.iteritems(rend_dt):
+    for k, v in rend_dt.items():
         if "dt" in v:
             rend_dt[k]["sh"] = v["dt"].shape
             rend_dt[k]["dt"] = v["dt"].filename
 
 
 def _rendDtFilesToMemmaps(rend_dt):
-    for k, v in six.iteritems(rend_dt):
+    for k, v in rend_dt.items():
         if "dt" in v:
             rend_dt[k]["dt"] = np.memmap(filename=v["dt"], shape=v["sh"])
             del rend_dt[k]["sh"]

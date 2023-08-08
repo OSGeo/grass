@@ -21,7 +21,6 @@ This program is free software under the GNU General Public License
 """
 
 import sys
-import six
 
 import wx
 
@@ -387,7 +386,7 @@ class MapPanelBase(wx.Panel):
 
     def StatusbarEnableLongHelp(self, enable=True):
         """Enable/disable toolbars long help"""
-        for toolbar in six.itervalues(self.toolbars):
+        for toolbar in self.toolbars.values():
             if toolbar:
                 toolbar.EnableLongHelp(enable)
 

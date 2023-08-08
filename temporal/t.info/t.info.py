@@ -53,7 +53,6 @@
 # % description: Print information about the temporal DBMI interface and exit
 # % suppress_required: yes
 # %end
-from __future__ import print_function
 
 import grass.script as grass
 

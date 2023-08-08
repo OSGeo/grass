@@ -18,7 +18,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 from multiprocessing import Pool
 from subprocess import PIPE
 
