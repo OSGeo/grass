@@ -106,7 +106,7 @@ authors:
     email: hamish_b@yahoo.com
 
 repository-code: https://github.com/OSGeo/grass
-license: GNU General Public License v2 or later
+license: GPL-2.0-or-later
 doi: 10.5281/zenodo.4621728
 keywords:
   - GIS
