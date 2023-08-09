@@ -11,10 +11,11 @@ as explained below.
 
 <h3>Reprojecting raster maps</h3>
 
-Raster maps are backward projected in GRASS. This means that the
-user has to run the raster projection command (<a href=r.proj.html>r.proj</a>)
-in the target project and "pull" the map from the source project.
-Both projects need to have a projection defined.
+Rasters are reprojected using the raster projection tool
+<em><a href=r.proj.html>r.proj</a></em>.
+The tool is used in the target project to "pull" a map from its source project.
+Both projects need to have a projection defined,
+i.e., they cannot be XY (unprojected).
 
 <h3>Raster map transformation</h3>
 
@@ -35,10 +36,11 @@ To simply translate a raster map (without stretching or rotation), the
 
 <h3>Vector map projections</h3>
 
-Vector maps are backward projected in GRASS. This means that the
-user has to run the vector projection command (<a href=v.proj.html>v.proj</a>)
-in the target project and "pull" the map from the source project.
-Both projects need to have a projection defined.
+Vectors are reprojected using the vector projection tool
+<em><a href=v.proj.html>v.proj</a></em>.
+The tool is used in the target project to "pull" a map from its source project.
+Both projects need to have a projection defined,
+i.e., they cannot be XY (unprojected).
 
 <h3>Vector map transformation</h3>
 
