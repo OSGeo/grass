@@ -297,7 +297,7 @@ void main_loop(void)
 		    }
 
 		    if (zz[k][l] != UNDEF) {
-			if (infil != NULL) {	/* infiltration part */
+			if (inf[k][l] != UNDEF) {	/* infiltration part */
 			    if (inf[k][l] - si[k][l] > 0.) {
 
 				decr = pow(addac * w[lw].m, 3. / 5.);	/* decreasing factor in m */
