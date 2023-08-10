@@ -299,7 +299,6 @@ int input_data(void)
     int rows = my, cols = mx; /* my and mx are global variables */
     int max_walkers;
     double unitconv = 0.000000278; /* mm/hr to m/s */
-    int if_rain = 0;
 
     G_debug(1, "Running MAR 2011 version, started modifications on 20080211");
     G_debug(1, "Reading input data");
@@ -328,39 +327,33 @@ int input_data(void)
     /* Rain: read rain map or use a single value for all cells */
     if (rain != NULL) {
         si = read_double_raster_map(rows, cols, rain, unitconv);
-        if_rain = 1;
     }
     else if (rain_val >= 0.0) { /* If no value set its set to -999.99 */
         si = create_double_matrix(rows, cols, rain_val * unitconv);
-        if_rain = 1;
     }
     else {
         si = create_double_matrix(rows, cols, (double)UNDEF);
-        if_rain = 0;
     }
 
     /* Update elevation map */
     copy_matrix_undef_double_to_float_values(rows, cols, si, zz);
 
-    /* Load infiltration and traps if rain is present */
-    if (if_rain == 1) {
-        /* Infiltration: read map or use a single value */
-        if (infil != NULL) {
-            inf = read_double_raster_map(rows, cols, infil, unitconv);
-        }
-        else if (infil_val >= 0.0) { /* If no value set its set to -999.99 */
-            inf = create_double_matrix(rows, cols, infil_val * unitconv);
-        }
-        else {
-            inf = create_double_matrix(rows, cols, (double)UNDEF);
-        }
-
-        /* Traps */
-        if (traps != NULL)
-            trap = read_float_raster_map(rows, cols, traps, 1.0);
-        else
-            trap = create_float_matrix(rows, cols, (double)UNDEF);
+    /* Infiltration: read map or use a single value */
+    if (infil != NULL) {
+        inf = read_double_raster_map(rows, cols, infil, unitconv);
     }
+    else if (infil_val >= 0.0) { /* If no value set its set to -999.99 */
+        inf = create_double_matrix(rows, cols, infil_val * unitconv);
+    }
+    else {
+        inf = create_double_matrix(rows, cols, (double)UNDEF);
+    }
+
+    /* Traps */
+    if (traps != NULL)
+        trap = read_float_raster_map(rows, cols, traps, 1.0);
+    else
+        trap = create_float_matrix(rows, cols, (double)UNDEF);
 
     if (detin != NULL) {
         dc = read_float_raster_map(rows, cols, detin, 1.0);
