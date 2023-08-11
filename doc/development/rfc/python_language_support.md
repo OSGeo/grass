@@ -1,8 +1,8 @@
 # RFC 8: Python Language Support
 
-Author of the first draft: Nicklas Larsson
+Authors: Nicklas Larsson
 
-Status: draft
+Status: Adopted (5 June 2023)
 
 ## Introduction
 
