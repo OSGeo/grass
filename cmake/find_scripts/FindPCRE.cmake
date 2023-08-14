@@ -1,12 +1,11 @@
-
 find_path(PCRE_INCLUDE_DIR NAMES pcre.h)
 
 find_library(PCRE_LIBRARY_RELEASE NAMES pcre)
 find_library(PCRE_LIBRARY_DEBUG NAMES pcred)
 if(PCRE_LIBRARY_DEBUG)
-set(PCRE_LIBRARY ${PCRE_LIBRARY_DEBUG})
+  set(PCRE_LIBRARY ${PCRE_LIBRARY_DEBUG})
 elseif(PCRE_LIBRARY_RELEASE)
-set(PCRE_LIBRARY ${PCRE_LIBRARY_RELEASE})
+  set(PCRE_LIBRARY ${PCRE_LIBRARY_RELEASE})
 endif()
 
 set(PCRE_FOUND FALSE)
@@ -24,9 +23,5 @@ mark_as_advanced(PCRE_LIBRARY_DEBUG)
 mark_as_advanced(PCRE_LIBRARY_RELEASE)
 mark_as_advanced(PCRE_INCLUDE_DIR)
 include(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(PCRE
-   DEFAULT_MSG
-   PCRE_LIBRARY
-   PCRE_INCLUDE_DIR)
-
-
+find_package_handle_standard_args(PCRE DEFAULT_MSG PCRE_LIBRARY
+                                  PCRE_INCLUDE_DIR)

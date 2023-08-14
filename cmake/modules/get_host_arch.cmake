@@ -1,28 +1,31 @@
-# AUTHOR(S): Rashad Kanavath <rashad km gmail>
-# PURPOSE: 	 Get host system architecuture
-# COPYRIGHT: (C) 2020 by the GRASS Development Team
-#   	    	 This program is free software under the GPL (>=v2)
-#   	    	 Read the file COPYING that comes with GRASS for details.
+#[[
+AUTHOR(S):  Rashad Kanavath <rashad km gmail>
+PURPOSE:    Get host system architecuture
+COPYRIGHT:  (C) 2020 by the GRASS Development Team
+            This program is free software under the GPL (>=v2)
+            Read the file COPYING that comes with GRASS for details.
+#]]
+
 function(get_host_arch var_arch)
   set(host_arch_value "x86_64") # default value
 
   if(WIN32)
     if(MSVC)
-       execute_process(
-      COMMAND ${CMAKE_C_COMPILER}
-      ERROR_VARIABLE ev
-      OUTPUT_VARIABLE ov
-      OUTPUT_QUIET
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
+      execute_process(
+        COMMAND ${CMAKE_C_COMPILER}
+        ERROR_VARIABLE ev
+        OUTPUT_VARIABLE ov
+        OUTPUT_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
 
       if("${ev}" MATCHES "x86")
         set(${host_arch_value} "x86")
-	  else()
-	    set(${host_arch_value} "x86_64")
+      else()
+        set(${host_arch_value} "x86_64")
       endif()
 
     elseif(MINGW)
-	else()
+
+    else()
       message(FATAL_ERROR "compiler/platform is not supported")
     endif() # if(MSVC)
 
@@ -35,5 +38,7 @@ function(get_host_arch var_arch)
     set(${host_arch_value} "${ov}")
   endif()
 
-  set(${var_arch} ${host_arch_value} PARENT_SCOPE)
+  set(${var_arch}
+      ${host_arch_value}
+      PARENT_SCOPE)
 endfunction()

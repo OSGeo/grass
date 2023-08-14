@@ -6,51 +6,41 @@
 
 # LIB = GRAPH
 
-# include $(MODULE_TOPDIR)/include/Make/Lib.make
-# include $(MODULE_TOPDIR)/include/Make/Doxygen.make
+# include $(MODULE_TOPDIR)/include/Make/Lib.make include
+# $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 # DGLINC = $(ARCH_INCDIR)/dgl
 
-# default: headers
-# 	$(MAKE) lib
+# default: headers $(MAKE) lib
 
 # headers: $(DGLINC)/avl.h $(DGLINC)/tavl.h $(DGLINC)/graph.h $(DGLINC)/heap.h \
-# 	 $(DGLINC)/tree.h $(DGLINC)/type.h $(DGLINC)/helpers.h $(DGLINC)/graph_v1.h $(DGLINC)/graph_v2.h \
-# 	 $(ARCH_INCDIR)/dgl.h
+# $(DGLINC)/tree.h $(DGLINC)/type.h $(DGLINC)/helpers.h $(DGLINC)/graph_v1.h
+# $(DGLINC)/graph_v2.h \ $(ARCH_INCDIR)/dgl.h
 
-# $(DGLINC)/%.h: %.h | $(DGLINC)
-# 	$(INSTALL_DATA) $< $@
+# $(DGLINC)/%.h: %.h | $(DGLINC) $(INSTALL_DATA) $< $@
 
 set(DGL_headers
-  avl.h
-  tavl.h
-  graph.h
-  heap.h
-  tree.h
-  type.h
-  helpers.h
-  graph_v1.h
-  graph_v2.h
-)
+    avl.h
+    tavl.h
+    graph.h
+    heap.h
+    tree.h
+    type.h
+    helpers.h
+    graph_v1.h
+    graph_v2.h)
 foreach(DGL_header ${DGL_headers})
-  file(COPY ${DGL_header} DESTINATION  ${CMAKE_BINARY_DIR}/include/grass/dgl)
+  file(COPY ${DGL_header} DESTINATION ${CMAKE_BINARY_DIR}/include/grass/dgl)
 endforeach()
 
 set(graphlib_SRCS
-  avl.c
-  graph.c
-  graph_v2.c
-  helpers.c
-  tree.c
-  graph_v1.c
-  heap.c
-  tavl.c
-  )
+    avl.c
+    graph.c
+    graph_v2.c
+    helpers.c
+    tree.c
+    graph_v1.c
+    heap.c
+    tavl.c)
 
-build_module(
-  NAME grass_graph
-  SOURCES "${graphlib_SRCS}"
-  HEADERS "dgl.h"
-  )
-
-
+build_module(NAME grass_graph SOURCES "${graphlib_SRCS}" HEADERS "dgl.h")

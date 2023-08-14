@@ -1,16 +1,17 @@
-build_program_in_subdir(d.barscale DEPENDS grass_sym grass_display grass_gis )
+build_program_in_subdir(d.barscale DEPENDS grass_sym grass_display grass_gis)
 build_program_in_subdir(d.colorlist DEPENDS grass_gis grass_display)
 build_program_in_subdir(d.colortable DEPENDS grass_gis grass_display)
 build_program_in_subdir(d.erase DEPENDS grass_gis grass_display)
 if(NOT MSVC)
   build_program_in_subdir(d.font DEPENDS grass_gis grass_display grass_raster)
-  #libgen.h does not exists on windows msvc
+  # libgen.h does not exists on windows msvc
   build_program_in_subdir(d.mon DEPENDS grass_gis grass_display)
 endif()
 build_program_in_subdir(d.fontlist DEPENDS grass_gis grass_display grass_raster)
 build_program_in_subdir(d.geodesic DEPENDS grass_gis grass_display)
 build_program_in_subdir(d.graph DEPENDS grass_gis grass_sym grass_display)
-build_program_in_subdir(d.grid DEPENDS grass_gis grass_sym grass_gproj grass_display)
+build_program_in_subdir(d.grid DEPENDS grass_gis grass_sym grass_gproj
+                        grass_display)
 build_program_in_subdir(d.his DEPENDS grass_gis grass_display)
 build_program_in_subdir(d.histogram DEPENDS grass_gis grass_display)
 build_program_in_subdir(d.info DEPENDS grass_gis grass_display)
@@ -22,13 +23,23 @@ build_program_in_subdir(d.northarrow DEPENDS grass_gis grass_display grass_sym)
 build_program_in_subdir(d.path DEPENDS grass_gis grass_display grass_vector)
 build_program_in_subdir(d.profile DEPENDS grass_gis grass_display)
 build_program_in_subdir(d.rast DEPENDS grass_gis grass_display grass_raster)
-build_program_in_subdir(d.rast.arrow DEPENDS grass_gis grass_raster grass_display)
+build_program_in_subdir(d.rast.arrow DEPENDS grass_gis grass_raster
+                        grass_display)
 build_program_in_subdir(d.rast.num DEPENDS grass_gis grass_display grass_raster)
 build_program_in_subdir(d.rgb DEPENDS grass_gis grass_display grass_raster)
 build_program_in_subdir(d.rhumbline DEPENDS grass_gis grass_display)
 build_program_in_subdir(d.text DEPENDS grass_gis grass_display)
 build_program_in_subdir(d.title DEPENDS grass_gis grass_display)
-build_program_in_subdir(d.vect DEPENDS grass_gis grass_display grass_vector grass_sym)
-build_program_in_subdir(d.vect.chart DEPENDS grass_gis grass_display grass_vector grass_sym)
-build_program_in_subdir(d.vect.thematic DEPENDS grass_gis grass_display grass_vector grass_sym grass_arraystats)
+build_program_in_subdir(d.vect DEPENDS grass_gis grass_display grass_vector
+                        grass_sym)
+build_program_in_subdir(d.vect.chart DEPENDS grass_gis grass_display
+                        grass_vector grass_sym)
+build_program_in_subdir(
+  d.vect.thematic
+  DEPENDS
+  grass_gis
+  grass_display
+  grass_vector
+  grass_sym
+  grass_arraystats)
 build_program_in_subdir(d.where DEPENDS grass_gis grass_display grass_gproj)

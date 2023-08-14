@@ -1,4 +1,3 @@
-
 set(db_drivers grass_gis)
 add_subdirectory(drivers)
 
@@ -38,4 +37,4 @@ add_dependencies(db.select ${db_drivers})
 build_program_in_subdir(db.tables DEPENDS grass_dbmiclient)
 add_dependencies(db.tables ${db_drivers})
 
-#TODO: PGM = databaseintro
+# TODO: PGM = databaseintro

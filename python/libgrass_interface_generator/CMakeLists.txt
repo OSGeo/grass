@@ -1,42 +1,57 @@
 set(MODULES
-  date gis raster gmath proj imagery vector rtree display
-  stats dbmi raster3d arraystats cluster vedit segment rowio temporal)
+    date
+    gis
+    raster
+    gmath
+    proj
+    imagery
+    vector
+    rtree
+    display
+    stats
+    dbmi
+    raster3d
+    arraystats
+    cluster
+    vedit
+    segment
+    rowio
+    temporal)
 
 if(WITH_OPENGL)
   list(APPEND MODULES ogsf nviz)
 endif()
 
-set(date_HDRS         datetime.h defs/datetime.h)
-set(date_LIBS         grass_datetime)
-set(date_TARGET_NAME  grass_datetime_py)
+set(date_HDRS datetime.h defs/datetime.h)
+set(date_LIBS grass_datetime)
+set(date_TARGET_NAME grass_datetime_py)
 
-set(gis_HDRS          gis.h defs/gis.h colors.h defs/colors.h)
-set(raster_HDRS       raster.h defs/raster.h)
-set(gmath_HDRS        gmath.h defs/gmath.h)
-set(proj_HDRS         gprojects.h defs/gprojects.h)
-set(proj_LIBS         grass_gproj)
-set(vector_HDRS       vector.h defs/vector.h vect/dig_structs.h vect/dig_defines.h vect/dig_externs.h )
-set(display_HDRS      display.h defs/display.h )
-set(dbmi_HDRS         dbmi.h defs/dbmi.h )
-set(dbmi_LIBS         grass_dbmibase grass_dbmiclient )
-set(arraystats_HDRS   arraystats.h defs/arraystats.h )
-set(vedit_HDRS        vedit.h defs/vedit.h)
-set(nviz_HDRS         nviz.h defs/nviz.h)
-set(rowio_HDRS        rowio.h defs/rowio.h)
-set(temporal_HDRS     temporal.h)
-set(ogsf_HDRS         ogsf.h defs/ogsf.h)
-set(segment_HDRS      segment.h defs/segment.h)
-set(imagery_HDRS      imagery.h defs/imagery.h )
-set(rtree_HDRS	      rtree.h)
-set(stats_HDRS        stats.h defs/stats.h)
-set(raster3d_HDRS     raster3d.h defs/raster3d.h)
-set(cluster_HDRS      cluster.h defs/cluster.h)
+set(gis_HDRS gis.h defs/gis.h colors.h defs/colors.h)
+set(raster_HDRS raster.h defs/raster.h)
+set(gmath_HDRS gmath.h defs/gmath.h)
+set(proj_HDRS gprojects.h defs/gprojects.h)
+set(proj_LIBS grass_gproj)
+set(vector_HDRS vector.h defs/vector.h vect/dig_structs.h vect/dig_defines.h
+                vect/dig_externs.h)
+set(display_HDRS display.h defs/display.h)
+set(dbmi_HDRS dbmi.h defs/dbmi.h)
+set(dbmi_LIBS grass_dbmibase grass_dbmiclient)
+set(arraystats_HDRS arraystats.h defs/arraystats.h)
+set(vedit_HDRS vedit.h defs/vedit.h)
+set(nviz_HDRS nviz.h defs/nviz.h)
+set(rowio_HDRS rowio.h defs/rowio.h)
+set(temporal_HDRS temporal.h)
+set(ogsf_HDRS ogsf.h defs/ogsf.h)
+set(segment_HDRS segment.h defs/segment.h)
+set(imagery_HDRS imagery.h defs/imagery.h)
+set(rtree_HDRS rtree.h)
+set(stats_HDRS stats.h defs/stats.h)
+set(raster3d_HDRS raster3d.h defs/raster3d.h)
+set(cluster_HDRS cluster.h defs/cluster.h)
 
-#TODO
-# set(VECT_INC         ${PQINCPATH} )
-# set(proj_INC        "${PROJ_INCLUDE_DIR}")
-# set(vector_INC      "${PQINCPATH};${GDAL_INCLUDE_DIR}")
-# set(vedit_INC       "${GDAL_INCLUDE_DIR}")
+# TODO set(VECT_INC         ${PQINCPATH} ) set(proj_INC "${PROJ_INCLUDE_DIR}")
+# set(vector_INC      "${PQINCPATH};${GDAL_INCLUDE_DIR}") set(vedit_INC
+# "${GDAL_INCLUDE_DIR}")
 
 foreach(module ${MODULES})
   if(NOT ${module}_LIBS)
@@ -47,8 +62,8 @@ foreach(module ${MODULES})
     message(FATAL_ERROR "${module}_HDRS is not set")
   endif()
 
-  foreach(${module}_LIB  ${${module}_LIBS})
-    if(NOT TARGET ${${module}_LIB} )
+  foreach(${module}_LIB ${${module}_LIBS})
+    if(NOT TARGET ${${module}_LIB})
       message(FATAL_ERROR "${${module}_LIB} is not a target")
     endif()
   endforeach()
@@ -64,23 +79,20 @@ foreach(module ${MODULES})
 
   set(output_file "${GISBASE}/etc/python/grass/lib/${module}.py")
 
-  add_custom_command(OUTPUT ${output_file}
+  add_custom_command(
+    OUTPUT ${output_file}
     DEPENDS ${${module}_LIBS}
-    COMMAND ${CMAKE_COMMAND}
-	-DCTYPESGEN_PY=${CMAKE_CURRENT_SOURCE_DIR}/run.py
-	-DPython_EXECUTABLE=${Python_EXECUTABLE}
-	-DCOMPILER=${CMAKE_C_COMPILER}
-	-DBIN_DIR=${GISBASE}
-	-DHDRS=${${module}_HDRS}
-	-DLIBS=${${module}_LIBS}
-	-DOUT_FILE=${output_file}
-	-DGRASS_VERSION_NUMBER=${GRASS_VERSION_NUMBER}
-	-P ${CMAKE_SOURCE_DIR}/cmake/ctypesgen.cmake
-	COMMENT "Generating ${output_file}"
-	VERBATIM)
+    COMMAND
+      ${CMAKE_COMMAND} -DCTYPESGEN_PY=${CMAKE_CURRENT_SOURCE_DIR}/run.py
+      -DPython_EXECUTABLE=${Python_EXECUTABLE} -DCOMPILER=${CMAKE_C_COMPILER}
+      -DBIN_DIR=${GISBASE} -DHDRS=${${module}_HDRS} -DLIBS=${${module}_LIBS}
+      -DOUT_FILE=${output_file} -DGRASS_VERSION_NUMBER=${GRASS_VERSION_NUMBER}
+      -P ${CMAKE_SOURCE_DIR}/cmake/ctypesgen.cmake
+    COMMENT "Generating ${output_file}"
+    VERBATIM)
 
   add_custom_target(${${module}_TARGET_NAME} ALL DEPENDS ${output_file})
-  set_target_properties (${${module}_TARGET_NAME} PROPERTIES FOLDER lib/python)
+  set_target_properties(${${module}_TARGET_NAME} PROPERTIES FOLDER lib/python)
   install(FILES ${output_file} DESTINATION etc/python/grass/lib)
 
 endforeach()

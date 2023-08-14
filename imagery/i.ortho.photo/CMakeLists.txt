@@ -1,6 +1,11 @@
-build_library_in_subdir(lib
-	NAME grass_iortho
-	DEPENDS grass_gis grass_imagery grass_gmath)
+build_library_in_subdir(
+  lib
+  NAME
+  grass_iortho
+  DEPENDS
+  grass_gis
+  grass_imagery
+  grass_gmath)
 
 build_program_in_subdir(i.ortho.camera DEPENDS grass_iortho)
 
