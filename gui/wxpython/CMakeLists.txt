@@ -38,38 +38,38 @@ add_custom_target(copy_wxpython_xml
 	DEPENDS GUI_WXPYTHON)
 
 add_custom_target(compile_python_files
-	COMMAND ${PYTHON_EXECUTABLE} -m compileall ${GISBASE}/scripts
-	COMMAND ${PYTHON_EXECUTABLE} -m compileall ${WXPYTHON_DIR}
+	COMMAND ${Python_EXECUTABLE} -m compileall ${GISBASE}/scripts
+	COMMAND ${Python_EXECUTABLE} -m compileall ${WXPYTHON_DIR}
 	DEPENDS ALL_MODULES)
 
 add_custom_target(build_modules_items_xml
-	COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE}
+	COMMAND ${grass_env_command} ${Python_EXECUTABLE}
 	${CMAKE_CURRENT_SOURCE_DIR}/tools/build_modules_xml.py > ${WXPYTHON_DIR}/xml/module_items.xml
 	DEPENDS copy_wxpython_xml compile_python_files ${g_gui_targets}
 	COMMENT "Generating interface description for all modules..."
 	VERBATIM)
 
 add_custom_target(build_xml_menudata
-   COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE}
+   COMMAND ${grass_env_command} ${Python_EXECUTABLE}
    ${CMAKE_CURRENT_SOURCE_DIR}/core/toolboxes.py > ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/menudata.xml
-   COMMAND ${grass_env_command}  ${PYTHON_EXECUTABLE}
+   COMMAND ${grass_env_command}  ${Python_EXECUTABLE}
    ${CMAKE_CURRENT_SOURCE_DIR}/core/toolboxes.py "validate" ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/menudata.xml
    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/menudata.xml ${WXPYTHON_DIR}/xml/
    DEPENDS build_modules_items_xml)
 
 add_custom_target(build_module_tree_menudata
-  COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE}
+  COMMAND ${grass_env_command} ${Python_EXECUTABLE}
    ${CMAKE_CURRENT_SOURCE_DIR}/core/toolboxes.py "module_tree" > ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/module_tree_menudata.xml
-  COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE}
+  COMMAND ${grass_env_command} ${Python_EXECUTABLE}
    ${CMAKE_CURRENT_SOURCE_DIR}/core/toolboxes.py "validate" ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/module_tree_menudata.xml
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/module_tree_menudata.xml ${WXPYTHON_DIR}/xml/
   DEPENDS build_xml_menudata)
 
 add_custom_target(build_menustrings ALL
-  COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE}
+  COMMAND ${grass_env_command} ${Python_EXECUTABLE}
    ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "manager" >> ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
-  COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE}
+  COMMAND ${grass_env_command} ${Python_EXECUTABLE}
    ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "module_tree" >> ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
-  COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE}
+  COMMAND ${grass_env_command} ${Python_EXECUTABLE}
    ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "psmap" >> ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
   DEPENDS build_module_tree_menudata gui_images)

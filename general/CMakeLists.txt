@@ -28,7 +28,8 @@ build_program_in_subdir(g.version
      "-DARCH=\"${BUILD_ARCH}\""
   )
 
-if(WITH_CAIRO)
+# TODO: add CAIRO_HAS_XRENDER and CAIRO_HAS_XRENDER_SURFACE to if clause
+if(WITH_CAIRO AND USE_X11)
   if(NOT MSVC)
     build_program_in_subdir(g.cairocomp DEPENDS grass_gis CAIRO grass_cairodriver)
   endif()

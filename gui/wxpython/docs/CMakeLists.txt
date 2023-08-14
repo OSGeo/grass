@@ -3,7 +3,7 @@ set(wxpython_html_files)
 
 ADD_CUSTOM_COMMAND(OUTPUT ${GISBASE}/docs/html/wxGUI.components.html
   COMMAND ${grass_env_command}
-  ${PYTHON_EXECUTABLE} ${MKHTML_PY} wxGUI.components ${GRASS_VERSION_DATE} > ${GISBASE}/docs/html/wxGUI.components.html
+  ${Python_EXECUTABLE} ${MKHTML_PY} wxGUI.components ${GRASS_VERSION_DATE} > ${GISBASE}/docs/html/wxGUI.components.html
   COMMENT "Creating ${GISBASE}/docs/html/wxGUI.components.html"
   DEPENDS GUI_WXPYTHON LIB_PYTHON
   )

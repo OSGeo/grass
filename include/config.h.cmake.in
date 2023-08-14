@@ -224,6 +224,7 @@
 
 /* define if OpenGL uses Aqua (MacOS X) */
 #cmakedefine OPENGL_AQUA ${OPENGL_AQUA}
+#define OPENGL_AGL 1
 
 /* define if OpenGL uses Windows */
 #cmakedefine OPENGL_WINDOWS ${OPENGL_WINDOWS}

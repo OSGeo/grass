@@ -53,7 +53,7 @@ add_custom_command(TARGET grass_gis POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/colors.desc ${GISBASE}/etc/
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/renamed_options ${GISBASE}/etc/
   )
-  install(DIRECTORY colors DESTINATION etc/colors)
+  install(DIRECTORY colors DESTINATION etc)
   install(FILES ellipse.table ellipse.table.solar.system
 	datum.table datumtransform.table
 	FIPS.code state27 state83 projections DESTINATION etc/proj)

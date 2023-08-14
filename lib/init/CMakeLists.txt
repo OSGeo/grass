@@ -51,7 +51,7 @@ get_filename_component(GDAL_DIR ${GDAL_DIR} PATH)
 file(TO_NATIVE_PATH  ${GDAL_DIR}/bin DEPS_DLL_PATH)
 list(APPEND DLL_PATH_LIST ${DEPS_DLL_PATH})
 
-file(TO_NATIVE_PATH ${PYTHON_EXECUTABLE} GRASS_PYTHON)
+file(TO_NATIVE_PATH ${Python_EXECUTABLE} GRASS_PYTHON)
 
 # For install tree (first do install tree)
 if(UNIX OR MINGW)

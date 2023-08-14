@@ -15,7 +15,7 @@ build_library_in_subdir(driver
 add_subdirectory(proj)
 
 file(GLOB raster_SRCS "./raster/*.c")
-list(APPEND raster_SRCS "./gis/gisinit.c")
+# list(APPEND raster_SRCS "./gis/gisinit.c")
 build_library_in_subdir(raster
   DEFS "-DGDAL_DYNAMIC=1;-DGDAL_LINK=1"
   SOURCES ${raster_SRCS}
@@ -42,16 +42,16 @@ build_library_in_subdir(external/shapelib NAME grass_shape
 build_library_in_subdir(gmath
   DEPENDS grass_ccmath grass_gis
   DEFS "${use_math_DEFS}"
-  OPTIONAL_DEPENDS FFTW)
+  OPTIONAL_DEPENDS FFTW LAPACK BLAS)
 
 build_library_in_subdir(linkm)
 
 file(GLOB pngdriver_SRCS "./pngdriver/*.c")
-list(APPEND pngdriver_SRCS "./driver/init.c")
+# list(APPEND pngdriver_SRCS "./driver/init.c")
 build_library_in_subdir(pngdriver
   SOURCES ${pngdriver_SRCS}
-  DEPENDS grass_driver LIBPNG ZLIB
-  INCLUDES "./driver")
+  DEPENDS grass_driver grass_gis LIBPNG ZLIB)
+  # INCLUDES "./driver")
 
 file(GLOB psdriver_SRCS "./psdriver/*.c")
 list(APPEND psdriver_SRCS "./driver/init.c")

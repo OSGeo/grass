@@ -1,5 +1,6 @@
 include(CheckIncludeFile)
-include(CheckFunctionExists) #TODO: use CheckSymbolExists
+include(CheckSymbolExists)
+
 check_include_file(limits.h HAVE_LIMITS_H)
 check_include_file(termio.h HAVE_TERMIO_H)
 check_include_file(termios.h HAVE_TERMIOS_H)
@@ -139,7 +140,7 @@ include(CheckCSourceCompiles)
 
 set(CMAKE_REQUIRED_FLAGS ${CMAKE_C_FLAGS})
 
-CHECK_C_SOURCE_COMPILES("
+check_c_source_compiles("
 int main(int argc, char *argv[])
 {
 long long int x;
@@ -148,7 +149,7 @@ return 0;
 "
 HAVE_LONG_LONG_INT)
 
-CHECK_C_SOURCE_COMPILES("
+check_c_source_compiles("
 #include <sys/types.h>
 #include <sys/time.h>
 #include <time.h>
@@ -158,23 +159,24 @@ struct tm *tp;
 "
 TIME_WITH_SYS_TIME)
 
-CHECK_FUNCTION_EXISTS(ftime HAVE_FTIME)
-CHECK_FUNCTION_EXISTS(gethostname HAVE_GETHOSTNAME)
-CHECK_FUNCTION_EXISTS(gettimeofday HAVE_GETTIMEOFDAY)
-CHECK_FUNCTION_EXISTS(lseek HAVE_LSEEK)
-CHECK_FUNCTION_EXISTS(time HAVE_TIME)
-CHECK_FUNCTION_EXISTS(uname HAVE_UNAME)
-CHECK_FUNCTION_EXISTS(seteuid HAVE_SETEUID)
-CHECK_FUNCTION_EXISTS(setpriority HAVE_SETPRIORITY)
-CHECK_FUNCTION_EXISTS(setreuid HAVE_SETREUID)
-CHECK_FUNCTION_EXISTS(setruid HAVE_SETRUID)
-CHECK_FUNCTION_EXISTS(setpgrp SETPGRP_VOID)
-CHECK_FUNCTION_EXISTS(drand48 HAVE_DRAND48)
-CHECK_FUNCTION_EXISTS(nanosleep HAVE_NANOSLEEP)
-CHECK_FUNCTION_EXISTS(asprintf HAVE_ASPRINTF)
-CHECK_FUNCTION_EXISTS(putenv HAVE_PUTENV)
-CHECK_FUNCTION_EXISTS(setenv HAVE_SETENV)
-CHECK_FUNCTION_EXISTS(socket HAVE_SOCKET)
+check_symbol_exists(gethostname "unistd.h" HAVE_GETHOSTNAME)
+check_symbol_exists(gettimeofday "sys/time.h" HAVE_GETTIMEOFDAY)
+check_symbol_exists(time "time.h" HAVE_TIME)
+check_symbol_exists(asprintf "stdio.h" HAVE_ASPRINTF)
+check_symbol_exists(putenv "stdlib.h" HAVE_PUTENV)
+check_symbol_exists(setenv "stdlib.h" HAVE_SETENV)
+check_symbol_exists(socket "sys/socket.h" HAVE_SOCKET)
+check_symbol_exists(ftime "sys/timeb.h" HAVE_FTIME)
+check_symbol_exists(lseek "unistd.h" HAVE_LSEEK)
+check_symbol_exists(uname "sys/utsname.h" HAVE_UNAME)
+check_symbol_exists(seteuid "unistd.h" HAVE_SETEUID)
+check_symbol_exists(setpriority "sys/resource.h" HAVE_SETPRIORITY)
+check_symbol_exists(setreuid "unistd.h" HAVE_SETREUID)
+check_symbol_exists(setruid "unistd.h" HAVE_SETRUID)
+check_symbol_exists(setpgrp "unistd.h" SETPGRP_VOID)
+check_symbol_exists(drand48 "stdlib.h" HAVE_DRAND48)
+check_symbol_exists(nanosleep "time.h" HAVE_NANOSLEEP)
+check_symbol_exists(fseeko "stdio.h" HAVE_FSEEKO)
 
 set(HAVE_PBUFFERS 0)
 set(HAVE_PIXMAPS 0)
@@ -211,8 +213,6 @@ endif()
 
 endif(WITH_OPENGL)
 
-CHECK_FUNCTION_EXISTS(fseeko HAVE_FSEEKO)
-
 
 set(OPENGL_X11 0)
 set(OPENGL_AQUA 0)
@@ -220,6 +220,7 @@ set(OPENGL_WINDOWS 0)
 if(WITH_OPENGL)
   if(APPLE)
     set(OPENGL_AQUA 1)
+    set(OPENGL_AGL 1)
   elseif(WIN32)
     set(OPENGL_WINDOWS 1)
   else()
@@ -230,17 +231,15 @@ endif()
 file(GLOB_RECURSE SRCHS "*.h")
  set(include_depends)
 foreach(srch ${SRCHS})
-  get_filename_component(srch_PATH ${srch} PATH)
+  get_filename_component(srch_DIR ${srch} DIRECTORY)
   get_filename_component(srch_NAME ${srch} NAME)
-  STRING(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}" "" dsth_PATH "${srch_PATH}")
-  set(output_dir ${CMAKE_BINARY_DIR}/include/grass${dsth_PATH})
-
+  string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" dsth_DIR "${srch_DIR}")
+  set(output_dir ${CMAKE_BINARY_DIR}/include/${dsth_DIR})
   add_custom_command(
     OUTPUT ${output_dir}/${srch_NAME}
     COMMAND ${CMAKE_COMMAND} -E make_directory ${output_dir}
     COMMAND ${CMAKE_COMMAND} -E copy ${srch} ${output_dir}
-    COMMENT "Copy ${srch} to ${CMAKE_BINARY_DIR}/include/grass${dsth_PATH}/${srch_NAME}"
-    )
+    COMMENT "Copy ${srch} to ${output_dir}/${srch_NAME}")
   list(APPEND include_depends ${output_dir}/${srch_NAME} )
 endforeach()
 
