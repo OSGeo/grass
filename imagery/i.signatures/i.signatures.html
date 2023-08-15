@@ -12,6 +12,17 @@ is "copy", "remove", "rename". When the print flag is specified without
 specifying any type of signature files, it would print all signatures
 grouped by type.
 
+<h2 id="notes">NOTES</h2>
+
+By default the module will list signature files from all mapsets in the
+current search path. It is possible to limit listing only to a single
+mapset by providing the "mapset" option. The mapset can be also not listed
+in the current search path.<br>
+Actions "remove" and "rename" operate only on the
+current mapset (although accept fully qualified names). The "copy" action
+will accept a signature file name from any mapset as its first argument
+(source file to copy).
+
 <h2>EXAMPLES</h2>
 
 Print names of all signature files:
