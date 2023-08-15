@@ -21,7 +21,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 from .base import SQLDatabaseInterface
 from .core import SQLDatabaseInterfaceConnection, get_tgis_db_version_from_metadata
 

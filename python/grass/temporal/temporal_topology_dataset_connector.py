@@ -15,7 +15,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 import copy
 
 

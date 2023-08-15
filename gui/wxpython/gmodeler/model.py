@@ -34,12 +34,8 @@ import copy
 import re
 import mimetypes
 import time
-import six
 
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import xml.etree.ElementTree as etree
 
 import xml.sax.saxutils as saxutils
 
@@ -131,7 +127,7 @@ class Model(object):
 
     def ReorderItems(self, idxList):
         items = list()
-        for oldIdx, newIdx in six.iteritems(idxList):
+        for oldIdx, newIdx in idxList.items():
             item = self.items.pop(oldIdx)
             items.append(item)
             self.items.insert(newIdx, item)
@@ -678,7 +674,7 @@ class Model(object):
                 return
 
             err = list()
-            for key, item in six.iteritems(params):
+            for key, item in params.items():
                 for p in item["params"]:
                     if p.get("value", "") == "":
                         err.append((key, p.get("name", ""), p.get("description", "")))
@@ -762,7 +758,7 @@ class Model(object):
 
         # discard values
         if params:
-            for item in six.itervalues(params):
+            for item in params.values():
                 for p in item["params"]:
                     p["value"] = ""
 
@@ -828,7 +824,7 @@ class Model(object):
         if self.variables:
             params = list()
             result["variables"] = {"flags": list(), "params": params, "idx": idx}
-            for name, values in six.iteritems(self.variables):
+            for name, values in self.variables.items():
                 gtype = values.get("type", "string")
                 if gtype in ("raster", "vector", "mapset", "file", "region", "dir"):
                     gisprompt = True
@@ -2318,7 +2314,7 @@ class WriteModelFile:
             return
         self.fd.write("%s<variables>\n" % (" " * self.indent))
         self.indent += 4
-        for name, values in six.iteritems(self.variables):
+        for name, values in self.variables.items():
             self.fd.write(
                 '%s<variable name="%s" type="%s">\n'
                 % (" " * self.indent, name, values["type"])
@@ -2374,7 +2370,7 @@ class WriteModelFile:
         self.indent += 4
         if not action.IsEnabled():
             self.fd.write("%s<disabled />\n" % (" " * self.indent))
-        for key, val in six.iteritems(action.GetParams()):
+        for key, val in action.GetParams().items():
             if key == "flags":
                 for f in val:
                     if f.get("value", False) or f.get("parameterized", False):
@@ -3431,7 +3427,7 @@ class ModelParamDialog(wx.Dialog):
     def _createPages(self):
         """Create for each parameterized module its own page"""
         nameOrdered = [""] * len(self.params.keys())
-        for name, params in six.iteritems(self.params):
+        for name, params in self.params.items():
             nameOrdered[params["idx"]] = name
         for name in nameOrdered:
             params = self.params[name]

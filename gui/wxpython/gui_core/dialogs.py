@@ -30,7 +30,6 @@ This program is free software under the GNU General Public License
 
 import os
 import re
-import six
 
 import wx
 
@@ -1121,7 +1120,7 @@ class GroupDialog(wx.Dialog):
         """Get layers"""
         if self.edit_subg:
             layers = []
-            for maps, sel in six.iteritems(self.subgmaps):
+            for maps, sel in self.subgmaps.items():
                 if sel:
                     layers.append(maps)
         else:
@@ -1166,7 +1165,7 @@ class GroupDialog(wx.Dialog):
         self.subgListBox.Set(maps)
 
         for i, m in enumerate(maps):
-            if m in six.iterkeys(self.subgmaps) and self.subgmaps[m]:
+            if m in self.subgmaps.keys() and self.subgmaps[m]:
                 self.subgListBox.Check(i)
 
         self._checkSubGSellAll()

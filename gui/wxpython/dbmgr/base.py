@@ -29,7 +29,6 @@ This program is free software under the GNU General Public License
 @author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
 """
 
-import sys
 import os
 import locale
 import tempfile
@@ -75,9 +74,6 @@ from gui_core.wrap import (
     TextCtrl,
 )
 from core.utils import cmp
-
-if sys.version_info.major >= 3:
-    unicode = str
 
 
 class Log:
@@ -481,7 +477,6 @@ class VirtualAttributeList(
             self.popupId = {
                 "sortAsc": NewId(),
                 "sortDesc": NewId(),
-                "calculate": NewId(),
                 "area": NewId(),
                 "length": NewId(),
                 "compact": NewId(),
@@ -499,8 +494,9 @@ class VirtualAttributeList(
         popupMenu.Append(self.popupId["sortDesc"], _("Sort descending"))
         popupMenu.AppendSeparator()
         subMenu = Menu()
-        popupMenu.AppendMenu(
-            self.popupId["calculate"], _("Calculate (only numeric columns)"), subMenu
+        subMenuItem = popupMenu.AppendSubMenu(
+            subMenu,
+            _("Calculate (only numeric columns)"),
         )
         popupMenu.Append(self.popupId["calculator"], _("Field calculator"))
         popupMenu.AppendSeparator()
@@ -519,7 +515,7 @@ class VirtualAttributeList(
         if not self.dbMgrData["editable"] or self.columns[
             self.GetColumn(self._col).GetText()
         ]["ctype"] not in (int, float):
-            popupMenu.Enable(self.popupId["calculate"], False)
+            subMenuItem.Enable(False)
 
         subMenu.Append(self.popupId["area"], _("Area size"))
         subMenu.Append(self.popupId["length"], _("Line length"))
@@ -689,7 +685,7 @@ class VirtualAttributeList(
             item1 = self.itemDataMap[key1][self._col]
             item2 = self.itemDataMap[key2][self._col]
 
-        if isinstance(item1, str) or isinstance(item2, unicode):
+        if isinstance(item1, str) or isinstance(item2, str):
             cmpVal = locale.strcoll(GetUnicodeValue(item1), GetUnicodeValue(item2))
         else:
             cmpVal = cmp(item1, item2)
@@ -3069,6 +3065,7 @@ class LayerBook(wx.Notebook):
         self.parent = parent
         self.parentDialog = parentDialog
         self.mapDBInfo = self.parentDialog.dbMgrData["mapDBInfo"]
+        vectName = self.parentDialog.dbMgrData["vectName"]
 
         #
         # drivers
@@ -3083,7 +3080,24 @@ class LayerBook(wx.Notebook):
         # get default values
         #
         self.defaultConnect = {}
-        connect = RunCommand("db.connect", flags="p", read=True, quiet=True)
+        genv = grass.gisenv()
+        vectMap = grass.find_file(
+            name=vectName,
+            element="vector",
+        )
+        vectGisrc, vectEnv = grass.create_environment(
+            gisdbase=genv["GISDBASE"],
+            location=genv["LOCATION_NAME"],
+            mapset=vectMap["mapset"],
+        )
+        connect = RunCommand(
+            "db.connect",
+            flags="p",
+            env=vectEnv,
+            read=True,
+            quiet=True,
+        )
+        grass.utils.try_remove(vectGisrc)
 
         for line in connect.splitlines():
             item, value = line.split(":", 1)

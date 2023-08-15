@@ -14,7 +14,6 @@ import datetime
 import xml.sax.saxutils as saxutils
 import xml.etree.ElementTree as et
 import subprocess
-import sys
 import collections
 import re
 from collections.abc import Iterable
@@ -23,10 +22,7 @@ from .utils import ensure_dir
 from .checkers import text_to_keyvalue
 
 
-if sys.version_info[0] == 2:
-    from StringIO import StringIO
-else:
-    from io import StringIO
+from io import StringIO
 
 
 # TODO: change text_to_keyvalue to same sep as here

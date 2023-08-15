@@ -41,12 +41,9 @@ This program is free software under the GNU General Public License
 @author Matej Krejci <matejkrejci gmail.com> (VectorCategorySelect)
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import glob
-import six
 import ctypes
 
 import wx
@@ -538,7 +535,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
         # add extra items first
         if self.extraItems:
-            for group, items in six.iteritems(self.extraItems):
+            for group, items in self.extraItems.items():
                 node = self.AddItem(group, node=True)
                 self.seltree.SetItemTextColour(node, wx.Colour(50, 50, 200))
                 for item in items:
@@ -1167,16 +1164,16 @@ class ColumnSelect(ComboCtrl):
             columnchoices = dbInfo.GetTableDesc(table)
             keyColumn = dbInfo.GetKeyColumn(layer)
             self.columns = len(columnchoices.keys()) * [""]
-            for key, val in six.iteritems(columnchoices):
+            for key, val in columnchoices.items():
                 self.columns[val["index"]] = key
             if excludeKey:  # exclude key column
                 self.columns.remove(keyColumn)
             if excludeCols:  # exclude key column
-                for key in six.iterkeys(columnchoices):
+                for key in columnchoices.keys():
                     if key in excludeCols:
                         self.columns.remove(key)
             if type:  # only selected column types
-                for key, value in six.iteritems(columnchoices):
+                for key, value in columnchoices.item():
                     if value["type"] not in type:
                         try:
                             self.columns.remove(key)
@@ -1728,7 +1725,7 @@ class GdalSelect(wx.Panel):
                     dsn = v
                     break
             optList = list()
-            for k, v in six.iteritems(data):
+            for k, v in data.items():
                 if k in ("format", "conninfo", "topology"):
                     continue
                 optList.append("%s=%s" % (k, v))
