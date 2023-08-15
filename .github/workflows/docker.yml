@@ -17,7 +17,6 @@ on:
       - main
       - releasebranch_*
       - '!releasebranch_7_*'
-      - docker-gh-workflow-update
     # tags: ['*.*.*']
     paths-ignore: [doc/**]
   release:
@@ -36,7 +35,7 @@ jobs:
   #     8.3.0-alpine, 8.3.0-debian, 8.3.0-ubuntu
   docker-os-matrix:
     name: build and push ${{ matrix.os }} for ${{ github.ref }}
-    if: github.repository_owner == 'mmacata'
+    if: github.repository_owner == 'OSGeo'
     runs-on: ubuntu-latest
 
     strategy:
@@ -57,7 +56,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: mmacata/grass-gis
+          images: osgeo/grass-gis
           tags: |
             type=ref,event=tag
             type=ref,event=branch
