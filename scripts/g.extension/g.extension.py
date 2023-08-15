@@ -281,7 +281,7 @@ class GitAdapter:
                 "clone",
                 "-q",
                 "--no-checkout",
-                "--filter=tree:0",
+                "--filter=blob:none",
                 self.url,
                 repo_directory,
             ],
@@ -2334,6 +2334,8 @@ def check_style_file(name):
 
     try:
         shutil.copyfile(dist_file, addons_file)
+    except shutil.SameFileError:
+        pass
     except OSError as error:
         gs.warning(
             _(
@@ -2740,7 +2742,7 @@ def get_addons_paths(gg_addons_base_dir):
             "-q",
             "--no-checkout",
             f"--branch={addons_branch}",
-            "--filter=tree:0",
+            "--filter=blob:none",
             GIT_URL,
         ],
         cwd=gg_addons_base_dir,

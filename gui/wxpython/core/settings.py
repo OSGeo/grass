@@ -19,8 +19,6 @@ This program is free software under the GNU General Public License
 @author Luca Delucchi <lucadeluge gmail.com> (language choice)
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import copy
@@ -143,6 +141,7 @@ class Settings:
                         globalvar.MAP_WINDOW_SIZE[0],
                         globalvar.MAP_WINDOW_SIZE[1],
                     ),
+                    "dimSingleWindow": "1,1,1,1",
                 },
                 # workspace
                 "workspace": {

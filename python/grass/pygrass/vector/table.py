@@ -3,27 +3,13 @@ Created on Wed Aug  8 15:29:21 2012
 
 @author: pietro
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
-
-import os
-import sys
 
 import ctypes
+import os
+from collections import OrderedDict
+
 import numpy as np
 from sqlite3 import OperationalError
-
-try:
-    from collections import OrderedDict
-except ImportError:
-    from grass.pygrass.orderdict import OrderedDict
 
 import grass.lib.vector as libvect
 from grass.pygrass.gis import Mapset
@@ -34,11 +20,6 @@ from grass.script.core import warning
 
 from grass.pygrass.vector import sql
 from grass.lib.ctypes_preamble import ReturnString
-
-
-if sys.version_info.major >= 3:
-    long = int
-    unicode = str
 
 
 # For test purposes
@@ -452,14 +433,14 @@ class Columns(object):
             [
                 check(col_type),
             ]
-            if isinstance(col_type, (str, unicode))
+            if isinstance(col_type, str)
             else [check(col) for col in col_type]
         )
         col_name = (
             [
                 col_name,
             ]
-            if isinstance(col_name, (str, unicode))
+            if isinstance(col_name, str)
             else col_name
         )
         sqlcode = [
@@ -821,7 +802,7 @@ class Link(object):
                 np.uint32,
                 np.uint64,
             ):
-                sqlite3.register_adapter(t, long)
+                sqlite3.register_adapter(t, int)
             dbpath = get_path(self.database, self.table_name)
             dbdirpath = os.path.split(dbpath)[0]
             if not os.path.exists(dbdirpath):
@@ -1009,7 +990,7 @@ class DBlinks(object):
             link = self.by_name(key)
             table = link.table()
             table.drop(force=force)
-        if isinstance(key, unicode):
+        if isinstance(key, str):
             key = self.from_name_to_num(key)
         libvect.Vect_map_del_dblink(self.c_mapinfo, key)
 
