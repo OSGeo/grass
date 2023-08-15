@@ -1,18 +1,19 @@
 cff-version: 1.2.0
-message: If you use this software, please cite it using the metadata from this file.
-
 title: GRASS GIS
+message: If you use this software, please cite it using the metadata from this file.
 version: 8.4.0
 abstract: GRASS GIS (Geographic Resources Analysis Support System) is a free and open source Geographic Information System (GIS) software used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization.
-
+type: software
 authors:
-  - name: GRASS Development Team
+  - family-names: GRASS Development Team
     email: grass-dev@lists.osgeo.org
     affiliation: Open Source Geospatial Foundation (OSGeo)
-  - name: Martin Landa
+  - given-names: Martin
+    family-names: Landa
     affiliation: Czech Technical University in Prague
     orcid: https://orcid.org/0000-0001-6869-3542
-  - name: Markus Neteler
+  - given-names: Markus
+    family-names: Neteler
     affiliation: mundialis GmbH & Co. KG
     orcid: https://orcid.org/0000-0003-1916-1966
   - given-names: Markus
@@ -20,10 +21,12 @@ authors:
     email: metz@mundialis.de
     affiliation: mundialis GmbH & Co. KG
     orcid: https://orcid.org/0000-0002-4038-8754
-  - name: Anna Petrášová
+  - given-names: Anna
+    family-names: Petrášová
     affiliation: North Carolina State University
     orcid: https://orcid.org/0000-0002-5120-5538
-  - name: Vaclav Petráš
+  - given-names: Vaclav
+    family-names: Petráš
     affiliation: North Carolina State University
     orcid: https://orcid.org/0000-0001-5566-9236
   - given-names: Glynn
@@ -104,7 +107,6 @@ authors:
   - given-names: Hamish
     family-names: Bowman
     email: hamish_b@yahoo.com
-
 repository-code: https://github.com/OSGeo/grass
 license: GPL-2.0-or-later
 doi: 10.5281/zenodo.4621728
@@ -117,7 +119,3 @@ keywords:
   - open source
   - free software
   - GNU GPL v2
-
-citation:
-  - text: GRASS Development Team. (2023). Geographic Resources Analysis Support System (GRASS GIS) Software, Version 8.4.0. Open Source Geospatial Foundation. https://grass.osgeo.org
-    doi: 10.5281/zenodo.4621728
