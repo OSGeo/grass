@@ -411,7 +411,10 @@ class UpdateThread(Thread):
                 sigtype = self.task.get_param(
                     "sigtype", element="element", raiseError=False
                 )
-                self.data[win.UpdateItems] = {"element": sigtype.get("value", "")}
+                value = sigtype.get("value", "")
+                if value:
+                    value = f"signatures/{value}"
+                self.data[win.UpdateItems] = {"element": value}
 
 
 def UpdateDialog(parent, event, eventId, task):

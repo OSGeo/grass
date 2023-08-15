@@ -3155,12 +3155,6 @@ class SignatureTypeSelect(wx.ComboBox):
         self.SetName("SignatureTypeSelect")
         self.SetItems(["sig", "sigset"])
 
-    def GetValue(self):
-        value = super(SignatureTypeSelect, self).GetValue()
-        if value:
-            return f"signatures/{value}"
-        return value
-
 
 class SeparatorSelect(wx.ComboBox):
     """Widget for selecting separator"""
