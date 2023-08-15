@@ -17,7 +17,7 @@ on:
       - main
       - releasebranch_*
       - '!releasebranch_7_*'
-      - docker-workflow-update
+      - docker-gh-workflow-update
     # tags: ['*.*.*']
     paths-ignore: [doc/**]
   release:
