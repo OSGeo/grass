@@ -17,7 +17,7 @@ if "GISBASE" not in os.environ:
 if len(sys.argv) == 2:
     input = sys.argv[1]
 else:
-    input = raw_input("Name of vector map? ")
+    input = input("Name of vector map? ")
 
 # initialize GRASS library
 G_gisinit("")
