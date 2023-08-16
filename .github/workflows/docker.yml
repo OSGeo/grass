@@ -9,7 +9,7 @@ name: Docker
 # * creates tags <version>-alpine, <version>-debian and <version>-ubuntu for each release
 # * creates tags <branch_name>-alpine, <branch_name>-debian and <branch_name>-ubuntu for all triggered branches
 # * creates tags current-alpine, current-debian and current-ubuntu for releasebranch_8_3
-# * creates tag latest for main branch with ubuntu os
+# * creates tag latest for last stable release with ubuntu os
 
 on:
   push:
@@ -27,12 +27,12 @@ jobs:
   # Run for push to configured branches and all published releases.
   # Take care of different os.
   # For main branch, created tags are:
-  #     main-alpine, main-debian, main-ubuntu and latest (with ubuntu)
+  #     main-alpine, main-debian, main-ubuntu
   # For releasebranch_8_3, created tags are:
   #     current-alpine, current-debian, current-ubuntu,
   #     releasebranch_8_3-alpine, releasebranch_8_3-debian, releasebranch_8_3-ubuntu
   # For a release, e.g. 8.3.0, created tags are:
-  #     8.3.0-alpine, 8.3.0-debian, 8.3.0-ubuntu
+  #     8.3.0-alpine, 8.3.0-debian, 8.3.0-ubuntu and latest (with ubuntu)
   docker-os-matrix:
     name: build and push ${{ matrix.os }} for ${{ github.ref }}
     if: github.repository_owner == 'OSGeo'
