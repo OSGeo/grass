@@ -158,6 +158,7 @@ int main(int argc, char *argv[])
     print = G_define_flag();
     print->key = 'p';
     print->description = _("Print signature files");
+    print->guisection = _("Print");
 
     G_option_required(print, parms.copy, parms.rename, parms.remove, NULL);
     G_option_excludes(print, parms.copy, parms.rename, parms.remove, NULL);
