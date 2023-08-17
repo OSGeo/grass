@@ -54,13 +54,13 @@ int main(int argc, char *argv[])
     group_opt->description = _("Name of imagery group for ortho-rectification");
 
     location_opt = G_define_standard_option(G_OPT_M_LOCATION);
-    location_opt->key = "target_location";
+    location_opt->key = "target_project";
     location_opt->required = YES;
     location_opt->description =
-        _("Name of target location for ortho-rectification");
+        _("Name of target location (project) for ortho-rectification");
 
     mapset_opt = G_define_standard_option(G_OPT_M_MAPSET);
-    mapset_opt->key = "mapset_location";
+    mapset_opt->key = "target_mapset";
     mapset_opt->required = YES;
     mapset_opt->description =
         _("Name of target mapset for ortho-rectification");
