@@ -909,7 +909,7 @@ class GRASSStartup(wx.Frame):
             "g.mapset",
             read=True,
             flags="l",
-            location=locationName,
+            project=locationName,
             gisdbase=self.gisdbase,
         )
 

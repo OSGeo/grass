@@ -601,7 +601,7 @@ def GetListOfMapsets(dbase, location, selectable=False):
 
     if selectable:
         ret = RunCommand(
-            "g.mapset", read=True, flags="l", location=location, dbase=dbase
+            "g.mapset", read=True, flags="l", project=location, dbase=dbase
         )
 
         if not ret:
