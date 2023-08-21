@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <libsvm/svm.h>
+#include <svm.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -31,7 +31,7 @@
 void print_func(const char *s)
 {
     G_verbose_message("%s", s);
-};
+}
 
 int main(int argc, char *argv[])
 {
@@ -78,7 +78,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("svm"));
     G_add_keyword(_("classification"));
     G_add_keyword(_("training"));
-    module->description = _("Train a SVM");
+    module->label = _("Train a SVM");
+    module->description = _("Train a Support Vector Machine");
 
     opt_group = G_define_standard_option(G_OPT_I_GROUP);
     /* GTC: SVM training input */

@@ -13,14 +13,14 @@
  *
  *               Development of this module was supported from
  *               science funding of University of Latvia (2020/2021).
- * 
+ *
  *****************************************************************************/
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
 
-#include <libsvm/svm.h>
+#include <svm.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -28,15 +28,13 @@
 #include <grass/glocale.h>
 
 #define XSTR(s) STR(s)
-#define STR(s) #s
-
+#define STR(s)  #s
 
 /* LIBSVM message wrapper */
 void print_func(const char *s)
 {
     G_verbose_message("%s", s);
-};
-
+}
 
 int main(int argc, char *argv[])
 {
@@ -72,7 +70,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("classification"));
     G_add_keyword(_("prediction"));
     G_add_keyword(_("regression"));
-    module->description = _("Predict with a SVM");
+    module->label = _("Predict with a SVM");
+    module->description = _("Predict with a Support Vector Machine");
 
     opt_group = G_define_standard_option(G_OPT_I_GROUP);
     /* GTC: SVM prediction input */
@@ -92,25 +91,24 @@ int main(int argc, char *argv[])
     opt_values = G_define_standard_option(G_OPT_R_OUTPUT);
     opt_values->required = YES;
     opt_values->description =
-        _("Output map with predicted class / calculated value");
+        _("Output map with predicted class or calculated value");
 
     opt_svm_cache_size = G_define_option();
     opt_svm_cache_size->key = "cache";
     opt_svm_cache_size->type = TYPE_INTEGER;
     opt_svm_cache_size->key_desc = "cache size";
     opt_svm_cache_size->required = NO;
-    opt_svm_cache_size->options = "1-999999999";
+    opt_svm_cache_size->options = "1-";
     opt_svm_cache_size->answer = "512";
     opt_svm_cache_size->description = _("Kernel cache size in MB");
-
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
     /* Input validation */
     /* Input maps */
-    if (G_unqualified_name(opt_group->answer, NULL, name_group, mapset_group)
-        == 0)
+    if (G_unqualified_name(opt_group->answer, NULL, name_group, mapset_group) ==
+        0)
         strcpy(mapset_group, G_mapset());
     if (opt_subgroup->answer &&
         G_unqualified_name(opt_subgroup->answer, NULL, name_subgroup,
@@ -119,8 +117,8 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Invalid subgroup <%s> provided"),
                       opt_subgroup->answer);
     if (!I_find_group2(name_group, mapset_group)) {
-        G_fatal_error(_("Group <%s> not found in mapset <%s>"),
-                      name_group, mapset_group);
+        G_fatal_error(_("Group <%s> not found in mapset <%s>"), name_group,
+                      mapset_group);
     }
     if (opt_subgroup->answer &&
         !I_find_subgroup2(name_group, name_subgroup, mapset_group)) {
@@ -128,16 +126,15 @@ int main(int argc, char *argv[])
                       name_subgroup, name_group, mapset_group);
     }
 
-    if (G_unqualified_name
-        (opt_sigfile->answer, NULL, name_sigfile, mapset_sigfile) == 0)
+    if (G_unqualified_name(opt_sigfile->answer, NULL, name_sigfile,
+                           mapset_sigfile) == 0)
         strcpy(mapset_sigfile, G_mapset());
-    if (!I_find_signature2
-        (I_SIGFILE_TYPE_LIBSVM, name_sigfile, mapset_sigfile))
+    if (!I_find_signature2(I_SIGFILE_TYPE_LIBSVM, name_sigfile, mapset_sigfile))
         G_fatal_error(_("Signature file <%s@%s> not found"), name_sigfile,
                       mapset_sigfile);
 
-    if (G_unqualified_name
-        (opt_values->answer, G_mapset(), name_values, mapset_values) < 0)
+    if (G_unqualified_name(opt_values->answer, G_mapset(), name_values,
+                           mapset_values) < 0)
         G_fatal_error(_("<%s> does not match the current mapset"),
                       mapset_values);
     if (G_legal_filename(name_values) < 0)
@@ -145,10 +142,11 @@ int main(int argc, char *argv[])
 
     /* Get bands */
     if (opt_subgroup->answer) {
-        if (!I_get_subgroup_ref2
-            (name_group, opt_subgroup->answer, mapset_group, &group_ref)) {
-            G_fatal_error(_("There was an error reading subgroup <%s> in group <%s@%s>"),
-                          opt_subgroup->answer, name_group, mapset_group);
+        if (!I_get_subgroup_ref2(name_group, opt_subgroup->answer, mapset_group,
+                                 &group_ref)) {
+            G_fatal_error(
+                _("There was an error reading subgroup <%s> in group <%s@%s>"),
+                opt_subgroup->answer, name_group, mapset_group);
         }
     }
     else {
@@ -159,24 +157,23 @@ int main(int argc, char *argv[])
     }
     if (group_ref.nfiles <= 0) {
         if (opt_subgroup->answer)
-            G_fatal_error(_("Subgroup <%s> in group <%s@%s> contains no raster maps."),
-                          opt_subgroup->answer, name_group, mapset_group);
+            G_fatal_error(
+                _("Subgroup <%s> in group <%s@%s> contains no raster maps."),
+                opt_subgroup->answer, name_group, mapset_group);
         else
             G_fatal_error(_("Group <%s@%s> contains no raster maps."),
                           name_group, mapset_group);
     }
     semantic_labels_group = G_malloc(group_ref.nfiles * sizeof(char *));
     for (int n = 0; n < group_ref.nfiles; n++) {
-        semantic_labels_group[n] =
-            Rast_get_semantic_label_or_name(group_ref.file[n].name,
-                                            group_ref.file[n].mapset);
+        semantic_labels_group[n] = Rast_get_semantic_label_or_name(
+            group_ref.file[n].name, group_ref.file[n].mapset);
     }
 
     I_get_signatures_dir(sigfile_dir, I_SIGFILE_TYPE_LIBSVM);
     /* Reorder rasters to match the training order */
     misc_file =
-        G_fopen_old_misc(sigfile_dir, "version", name_sigfile,
-                         mapset_sigfile);
+        G_fopen_old_misc(sigfile_dir, "version", name_sigfile, mapset_sigfile);
     if (fscanf(misc_file, "%d", &sigfile_version) != 1) {
         G_fatal_error(_("Invalid signature file"));
     }
@@ -187,9 +184,8 @@ int main(int argc, char *argv[])
     }
 
     /* Reorder group items to match order from the signature file */
-    misc_file =
-        G_fopen_old_misc(sigfile_dir, "semantic_label", name_sigfile,
-                         mapset_sigfile);
+    misc_file = G_fopen_old_misc(sigfile_dir, "semantic_label", name_sigfile,
+                                 mapset_sigfile);
     if (!misc_file)
         G_fatal_error(_("Unable to read signature file '%s'."), name_sigfile);
     names_ordered = G_malloc(group_ref.nfiles * sizeof(char *));
@@ -209,14 +205,17 @@ int main(int argc, char *argv[])
             }
         }
         if (!found)
-            G_fatal_error(_("Imagery group does not contain a raster with a semantic label '%s'"),
+            G_fatal_error(_("Imagery group does not contain a raster with a "
+                            "semantic label '%s'"),
                           semantic_label);
     }
     fclose(misc_file);
     if (semantic_label_match_count != semantic_label_count ||
         semantic_label_match_count != group_ref.nfiles) {
-        G_fatal_error(_("Unable to match all signature file bands to imagery group bands. "
-                       "Signature band count: %d, imagery group band count: %d, band match count: %d."),
+        G_fatal_error(_("Unable to match all signature file bands to imagery "
+                        "group bands. "
+                        "Signature band count: %d, imagery group band count: "
+                        "%d, band match count: %d."),
                       semantic_label_count, group_ref.nfiles,
                       semantic_label_match_count);
     }
@@ -224,8 +223,7 @@ int main(int argc, char *argv[])
     /* Read rescaling parameter */
     rescale = G_malloc(group_ref.nfiles * sizeof(double));
     misc_file =
-        G_fopen_old_misc(sigfile_dir, "rescale", name_sigfile,
-                         mapset_sigfile);
+        G_fopen_old_misc(sigfile_dir, "rescale", name_sigfile, mapset_sigfile);
     while (fscanf(misc_file, "%lf", &r) == 1) {
         if (rescale_count == group_ref.nfiles) {
             G_fatal_error(_("Invalid signature file"));
@@ -267,16 +265,15 @@ int main(int argc, char *argv[])
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
-    buf_bands = (DCELL **) G_malloc(group_ref.nfiles * sizeof(DCELL *));
+    buf_bands = (DCELL **)G_malloc(group_ref.nfiles * sizeof(DCELL *));
     fd_bands = (int *)G_calloc(group_ref.nfiles, sizeof(int));
     for (band = 0; band < group_ref.nfiles; band++) {
         buf_bands[band] = Rast_allocate_d_buf();
         fd_bands[band] =
             Rast_open_old(names_ordered[band], mapsets_ordered[band]);
     }
-    nodes =
-        (struct svm_node *)G_malloc(((size_t)group_ref.nfiles + 1) *
-                                    sizeof(struct svm_node));
+    nodes = (struct svm_node *)G_malloc(((size_t)group_ref.nfiles + 1) *
+                                        sizeof(struct svm_node));
 
     /* Predict a class or calculate a value */
     if (svm_type == C_SVC || svm_type == NU_SVC || svm_type == ONE_CLASS) {
@@ -309,7 +306,7 @@ int main(int argc, char *argv[])
                 nodes[group_ref.nfiles].index = -1;
 
                 val = svm_predict(model, nodes);
-                out_row[col] = (CELL) val;
+                out_row[col] = (CELL)val;
             }
             Rast_put_row(fd_values, out_row, out_type);
         }
@@ -367,10 +364,9 @@ int main(int argc, char *argv[])
     G_verbose_message("Writing out history");
     Rast_short_history(name_values, "raster", &history);
     misc_file =
-        G_fopen_old_misc(sigfile_dir, "history", name_sigfile,
-                         mapset_sigfile);
+        G_fopen_old_misc(sigfile_dir, "history", name_sigfile, mapset_sigfile);
     if (misc_file != NULL) {
-        char hist_line[4096];   /* history lines are limited to 4096 */
+        char hist_line[4096]; /* history lines are limited to 4096 */
 
         while (G_getl(hist_line, sizeof(hist_line), misc_file) == 1) {
             Rast_append_history(&history, hist_line);
@@ -379,12 +375,11 @@ int main(int argc, char *argv[])
     }
     Rast_command_history(&history);
     if (opt_subgroup->answer)
-        Rast_format_history(&history, HIST_DATSRC_1,
-                            "Group/subgroup: %s@%s/%s", name_group,
-                            mapset_group, opt_subgroup->answer);
+        Rast_format_history(&history, HIST_DATSRC_1, "Group/subgroup: %s@%s/%s",
+                            name_group, mapset_group, opt_subgroup->answer);
     else
-        Rast_format_history(&history, HIST_DATSRC_1, "Group: %s@%s",
-                            name_group, mapset_group);
+        Rast_format_history(&history, HIST_DATSRC_1, "Group: %s@%s", name_group,
+                            mapset_group);
     Rast_format_history(&history, HIST_DATSRC_2, "Signature file: %s@%s",
                         name_sigfile, mapset_sigfile);
     Rast_write_history(name_values, &history);

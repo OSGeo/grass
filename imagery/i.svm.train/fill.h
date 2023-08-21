@@ -9,7 +9,7 @@
  *
  */
 
-#include <libsvm/svm.h>
+#include <svm.h>
 
 #include <grass/imagery.h>
 
