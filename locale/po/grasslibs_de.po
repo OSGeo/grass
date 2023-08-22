@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2023-06-28 19:08+0000\n"
+"PO-Revision-Date: 2023-08-23 07:08+0000\n"
 "Last-Translator: Markus <neteler@osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/"
 "grasslibs/de/>\n"
@@ -6829,17 +6829,17 @@ msgstr ""
 
 #: ../lib/vector/Vlib/break_polygons.c:102
 msgid "Break polygons: Bug in binary tree!"
-msgstr ""
+msgstr "Polygone brechen: Fehler im Binärbaum!"
 
 #: ../lib/vector/Vlib/break_polygons.c:156
 #: ../lib/vector/Vlib/break_polygons.c:435
 msgid "Breaking polygons (pass 1: select break points)..."
-msgstr ""
+msgstr "Polygone brechen (Durchgang 1: Bruchpunkte auswählen)..."
 
 #: ../lib/vector/Vlib/break_polygons.c:286
 #: ../lib/vector/Vlib/break_polygons.c:552
 msgid "Breaking polygons (pass 2: break at selected points)..."
-msgstr ""
+msgstr "Polygone brechen (Durchgang 2: an ausgewählten Punkten brechen)..."
 
 #: ../lib/vector/Vlib/break_polygons.c:398
 #: ../lib/vector/Vlib/break_polygons.c:650
@@ -8188,7 +8188,7 @@ msgstr ""
 
 #: ../lib/python/temporal/temporal_algebra.py:2434
 #: ../lib/python/temporal/temporal_raster_base_algebra.py:822
-#, fuzzy, python-format
+#, python-format
 msgid "%s map <%s> not found in GRASS spatial database"
 msgstr "%s Karte <%s> nicht in der GRASS Geodatenbank gefunden"
 
@@ -8905,6 +8905,8 @@ msgstr ""
 #, python-brace-format
 msgid "Cannot parse interface description of<{name}> module: {error}"
 msgstr ""
+"Die Schnittstellenbeschreibung des Moduls{name}> kann nicht geparst werden: "
+"{error}"
 
 #: ../lib/python/script/raster3d.py:93
 #, fuzzy, python-format
@@ -8916,7 +8918,7 @@ msgstr ""
 #: ../lib/python/script/core.py:56
 #, python-brace-format
 msgid "Cannot find the executable {0}"
-msgstr ""
+msgstr "Kann die ausführbare Datei nicht finden {0}"
 
 #: ../lib/python/script/core.py:318
 #, python-format
