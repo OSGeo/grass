@@ -109,8 +109,6 @@ for details.
 .. sectionauthor:: Glynn Clements
 """
 
-from __future__ import absolute_import
-
 import numpy
 
 from .utils import try_remove
