@@ -4,7 +4,8 @@
 user-specified raster map layer.  This map layer must exist
 in the user's current mapset search path.  Information
 about the map's boundaries, resolution, projection, data
-type, category number, data base location and mapset,
+type, category number, project, mapset,
+project parent directory (database directory),
 the timestamp and history are put into a table and written to standard
 output. The types of information listed can also be found
 in the <i>cats</i>, <i>cellhd</i>, and <i>hist</i>
@@ -42,7 +43,7 @@ r.info slope
  +----------------------------------------------------------------------------+
  | Map:      slope                          Date: Tue Nov  7 01:11:23 2006    |
  | Mapset:   PERMANENT                      Login of Creator: helena          |
- | Location: nc_spm_08_grass7                                                 |
+ | Project:  nc_spm_08_grass7                                                 |
  | DataBase: /grassdata                                                       |
  | Title:    South-West Wake county: slope in degrees ( slope_ned10m )        |
  | Timestamp: none                                                            |
@@ -108,7 +109,7 @@ Output the extended map data metadata in shell style:
 r.info -e slope
 map=slope
 mapset=PERMANENT
-location=nc_spm_08_grass7
+project=nc_spm_08_grass7
 database=/grassdata
 date="Tue Nov  7 01:11:23 2006"
 creator="helena"
