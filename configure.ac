@@ -296,7 +296,7 @@ LOC_ARG_WITH(odbc, ODBC, no)
 LOC_ARG_WITH(fftw, FFTW)
 LOC_ARG_WITH(blas, BLAS, no)
 LOC_ARG_WITH(lapack, LAPACK, no)
-LOC_ARG_WITH(libsvm, libsvm, no)
+LOC_ARG_WITH(libsvm, LIBSVM, no)
 LOC_ARG_WITH(cairo, Cairo)
 LOC_ARG_WITH(freetype, FreeType)
 LOC_ARG_WITH(nls, NLS, no)
@@ -386,8 +386,8 @@ LOC_ARG_WITH_LIB(blas, BLAS)
 LOC_ARG_WITH_INC(lapack, LAPACK)
 LOC_ARG_WITH_LIB(lapack, LAPACK)
 
-LOC_ARG_WITH_INC(libsvm, libsvm)
-LOC_ARG_WITH_LIB(libsvm, libsvm)
+LOC_ARG_WITH_INC(libsvm, LIBSVM)
+LOC_ARG_WITH_LIB(libsvm, LIBSVM)
 
 LOC_ARG_WITH_INC(cairo, cairo)
 LOC_ARG_WITH_LIB(cairo, cairo)
@@ -1700,56 +1700,36 @@ AC_SUBST(LAPACKINC)
 
 # Done checking LAPACK
 
-# libsvm option
+# Enable LIBSVM option
 LIBSVM_INC=
 LIBSVM_LIB=
 USE_LIBSVM=
 
-LOC_CHECK_USE(libsvm,libsvm,USE_LIBSVM)
+LOC_CHECK_USE(libsvm,LIBSVM,USE_LIBSVM)
 
 if test -n "$USE_LIBSVM"; then
-  LOC_CHECK_INC_PATH(libsvm,libsvm,LIBSVM_INC)
-  if test "${LIBSVM_INC}" ; then
-    echo "LIBSVM_INC:${LIBSVM_INC}"
-    CFLAGS_backup="${CFLAGS}"
-    CFLAGS="${LIBSVM_INC} ${CFLAGS}"
-    AC_CHECK_HEADER([svm.h], [], [
-      AC_MSG_ERROR([svm.h file not found in specified include path.])
-    ])
-    CFLAGS="${CFLAGS_backup}"
-  else
-    AC_CHECK_HEADER([svm.h], [], [
-        AC_PROG_AWK()
-        # Loop over each include path as we need to know directory were svm.h was found
-        DEFAULT_INCLUDE_PATHS=$(cpp -v /dev/null -o /dev/null 2>&1 | $AWK '/#include <\.\.\.> search starts here:/{flag=1; next} /End of search list./{flag=0} flag')
-        AC_MSG_CHECKING(for libsvm/svm.h)
-        for path in $DEFAULT_INCLUDE_PATHS; do
-          CFLAGS_backup="${CFLAGS}"
-          CFLAGS="-I${path}/libsvm ${CFLAGS}"
-          LOC_CHECK_HEADER([svm.h], [libsvm_found])
-          CFLAGS="${CFLAGS_backup}"
-          if test "${libsvm_found}" == "found"; then
-            LIBSVM_INC="-I${path}/libsvm"
-            AC_MSG_RESULT(yes)
-            break
-          fi
-        done
-        if test "${libsvm_found}" == "not found"; then
-          AC_MSG_ERROR([svm.h is required but not found. Install LIBSVM or specify path to its header file.])
-        fi
-      ], [
-      AC_MSG_ERROR([svm.h is required but not found. Install LIBSVM or specify path to its header file.])
-    ])
+  LOC_CHECK_INC_PATH(libsvm,LIBSVM,LIBSVM_INC)
+  LOC_CHECK_INCLUDES(svm.h,LIBSVM,$LIBSVM_INC, [
+    LOC_CHECK_INCLUDES(libsvm/svm.h,LIBSVM,$LIBSVM_INC)
+  ])
+
+  if test "x$ac_cv_header_libsvm_svm_h" = xyes; then
+    if test -n "$LIBSVM_INC"; then
+      LIBSVM_INC=${LIBSVM_INC}/libsvm
+    else
+      LIBSVM_INC=-I${includedir}/libsvm
+    fi
   fi
+
   LOC_CHECK_LIB_PATH(libsvm,libsvm,LIBSVM_LIB)
-  LOC_CHECK_LIBS(svm,svm_load_model,libsvm,$LIBSVM_LIB,LIBSVM_LIB,,,)
-  AC_DEFINE(HAVE_LIBSVM)
+  LOC_CHECK_LIBS(svm,svm_load_model,LIBSVM,$LIBSVM_LIB,LIBSVM_LIB,,,)
+  AC_DEFINE(HAVE_LIBSVM, 1, [Define to 1 if using LIBSVM.])
 fi
 
 AC_SUBST(LIBSVM_INC)
 AC_SUBST(LIBSVM_LIB)
 AC_SUBST(USE_LIBSVM)
-# Done with libsvm
+# Done checking LIBSVM
 
 # Enable Cairo display driver option
 
@@ -2077,7 +2057,7 @@ LOC_MSG_USE(GEOS support,USE_GEOS)
 LOC_MSG_USE(LAPACK support,USE_LAPACK)
 LOC_MSG_USE(Large File support (LFS), USE_LARGEFILES)
 LOC_MSG_USE(libLAS support,USE_LIBLAS)
-LOC_MSG_USE(Libsvm support,USE_LIBSVM)
+LOC_MSG_USE(LIBSVM support,USE_LIBSVM)
 LOC_MSG_USE(MySQL support,USE_MYSQL)
 LOC_MSG_USE(NetCDF support,USE_NETCDF)
 LOC_MSG_USE(NLS support,USE_NLS)
