@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
     int *readrow;
     int nrows, ncols, brows;
     int i, n, t;
-    size_t size;
+    size_t size, in_buf_size, out_buf_size;
     struct Colors colr;
     struct Cell_head cellhd;
     struct Cell_head window;
@@ -338,15 +338,6 @@ int main(int argc, char *argv[])
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    brows = atoi(parm.memory->answer) * ((1 << 20) / sizeof(DCELL)) / ncols;
-    /* set the output buffer rows to be at most covering the entire map */
-    if (brows > nrows) {
-        brows = nrows;
-    }
-    /* but at least the number of threads */
-    if (brows < ncb.threads) {
-        brows = ncb.threads;
-    }
 
     /* open raster maps */
     in_fd = G_malloc(sizeof(int) * ncb.threads);
@@ -367,6 +358,27 @@ int main(int argc, char *argv[])
                       parm.output->key, parm.method->key);
 
     outputs = G_calloc(num_outputs, sizeof(struct output));
+
+    /* memory reserved for input */
+    in_buf_size = (Rast_window_cols() + 2 * ncb.dist) * sizeof(DCELL) *
+                  ncb.nsize * ncb.threads;
+    /* memory available for output buffer */
+    out_buf_size = (size_t)atoi(parm.memory->answer) * (1 << 20);
+    /* size_t is unsigned, check if any memory is left for output buffer */
+    if (out_buf_size <= in_buf_size)
+        out_buf_size = 0;
+    else
+        out_buf_size -= in_buf_size;
+    /* number of buffered rows for all output maps */
+    brows = out_buf_size / (sizeof(DCELL) * ncols * num_outputs);
+    /* set the output buffer rows to be at most covering the entire map */
+    if (brows > nrows) {
+        brows = nrows;
+    }
+    /* but at least the number of threads */
+    if (brows < ncb.threads) {
+        brows = ncb.threads;
+    }
 
     /* read the weights */
     weights = 0;
