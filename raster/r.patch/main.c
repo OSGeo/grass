@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     int colr_ok;
     int outfd;
     RASTER_MAP_TYPE out_type, map_type;
-    size_t out_cell_size;
+    size_t out_cell_size, in_buf_size, out_buf_size;
     struct History history;
     void **presult, **patch;
     void *outbuf;
@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
     for (t = 0; t < nprocs; t++)
         infd[t] = G_malloc(nfiles * sizeof(int));
     thread_statf = G_malloc(nprocs * (nfiles * sizeof(struct Cell_stats)));
-    for (int t = 0; t < nprocs; t++) {
+    for (t = 0; t < nprocs; t++) {
         thread_statf[t] = G_malloc(nfiles * sizeof(struct Cell_stats));
     }
     cellhd = G_malloc(nfiles * sizeof(struct Cell_head));
@@ -180,7 +180,17 @@ int main(int argc, char *argv[])
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
-    bufrows = atoi(memory->answer) * (((1 << 20) / out_cell_size) / ncols);
+    /* memory reserved for presult and patch */
+    in_buf_size = out_cell_size * ncols * nprocs * 2;
+    /* memory available for output buffer */
+    out_buf_size = (size_t)atoi(memory->answer) * (1 << 20);
+    /* size_t is unsigned, check if any memory is left for output buffer */
+    if (out_buf_size <= in_buf_size)
+        out_buf_size = 0;
+    else
+        out_buf_size -= in_buf_size;
+    /* number of buffered output rows */
+    bufrows = out_buf_size / (out_cell_size * ncols);
     /* set the output buffer rows to be at most covering the entire map */
     if (bufrows > nrows) {
         bufrows = nrows;
