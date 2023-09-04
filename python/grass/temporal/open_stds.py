@@ -49,6 +49,7 @@ def open_old_stds(name, type, dbif=None):
         mapset = get_current_mapset()
     else:
         name, mapset = name.split("@")
+
     semantic_label = None
     if name.find(".") > -1:
         try:

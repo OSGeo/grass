@@ -30,6 +30,7 @@ from .core import (
     get_tgis_dbmi_paramstyle,
     SQLDatabaseInterfaceConnection,
     get_current_mapset,
+    get_available_temporal_mapsets,
 )
 
 ###############################################################################
@@ -242,13 +243,13 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
     """
 
-    def __init__(self, table=None, ident=None):
+    def __init__(self, table=None, ident=None, tgis_mapset=None):
         """Constructor of this class
 
         :param table: The name of the table
         :param ident: The identifier (primary key) of this
                       object in the database table
-        :param tgis_mapset: the mapset of the tgis db to be used
+        :param tgis_mapset: the mapset to be used for the tgis db
         """
         DictSQLSerializer.__init__(self)
 
@@ -261,6 +262,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
             self.data_mapset = self.ident.split("@" "")[1]
         else:
             self.data_mapset = None
+        self.tgis_mapset = tgis_mapset
 
     def get_table_name(self):
         """Return the name of the table in which the internal
@@ -330,17 +332,38 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
         # determine correct mapset for the temporal database
         if mapset is None:
-            mapset = get_current_mapset()
+            mapset = self.tgis_mapset
 
-        if dbif:
-            dbif.execute(sql, mapset=mapset)
-            row = dbif.fetchone(mapset=mapset)
+        row = None
+        if mapset is not None:
+            # search only in the tgis db in the given mapset
+            if dbif:
+                dbif.execute(sql, mapset=mapset)
+                row = dbif.fetchone(mapset=mapset)
+            else:
+                dbif = SQLDatabaseInterfaceConnection()
+                dbif.connect()
+                dbif.execute(sql, mapset=mapset)
+                row = dbif.fetchone(mapset=mapset)
+                dbif.close()
         else:
-            dbif = SQLDatabaseInterfaceConnection()
-            dbif.connect()
-            dbif.execute(sql, mapset=mapset)
-            row = dbif.fetchone(mapset=mapset)
-            dbif.close()
+            # search all available datasets
+            tgis_mapsets = get_available_temporal_mapsets()
+            for mapset in tgis_mapsets:
+                if dbif:
+                    dbif.execute(sql, mapset=mapset)
+                    row = dbif.fetchone(mapset=mapset)
+                else:
+                    dbif = SQLDatabaseInterfaceConnection()
+                    dbif.connect()
+                    dbif.execute(sql, mapset=mapset)
+                    row = dbif.fetchone(mapset=mapset)
+                    dbif.close()
+                    dbif = None
+                    if row is not None:
+                        # set tgis mapset for this instance
+                        self.tgis_mapset = mapset
+                        break
 
         # Nothing found
         if row is None:
@@ -544,10 +567,14 @@ class SQLDatabaseInterface(DictSQLSerializer):
         :param ident: The identifier to be updated, useful for renaming
         :return: The UPDATE string
         """
+
+        # use the temporal database in the current mapset
+        mapset = get_current_mapset()
+
         if not dbif:
             dbif = SQLDatabaseInterfaceConnection()
 
-        return dbif.mogrify_sql_statement(self.get_update_all_statement(ident))
+        return dbif.mogrify_sql_statement(self.get_update_all_statement(ident), mapset)
 
     def update_all(self, dbif=None, ident=None):
         """Serialize the content of this object, including None objects,

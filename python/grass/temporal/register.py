@@ -597,6 +597,7 @@ def register_map_object_list(
     import copy
 
     dbif, connection_state_changed = init_dbif(dbif)
+    mapset = get_current_mapset()
 
     filename = gscript.tempfile(True)
     file = open(filename, "w")
@@ -651,7 +652,7 @@ def register_map_object_list(
                 if map.get_type() == "vector":
                     mod(type="vector", name=map.get_name())
                 mod.run()
-            if map.is_in_db(dbif):
+            if map.is_in_db(dbif, mapset):
                 map.delete(dbif)
 
     if connection_state_changed:
