@@ -306,7 +306,6 @@ def register_maps_in_space_time_dataset(
                     map.set_time_to_relative()
                 else:
                     map.set_time_to_absolute()
-
         else:
             is_in_db = True
             # Check the overwrite flag
@@ -342,10 +341,10 @@ def register_maps_in_space_time_dataset(
                 continue
 
             # Select information from temporal database
-            map.select(dbif)
+            map.select(dbif, mapset)
 
             # Save the datasets that must be updated
-            datasets = map.get_registered_stds(dbif)
+            datasets = map.get_registered_stds(dbif, mapset)
             if datasets is not None:
                 for dataset in datasets:
                     if dataset != "":

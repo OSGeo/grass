@@ -242,7 +242,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
     """
 
-    def __init__(self, table=None, ident=None, tgis_mapset=None):
+    def __init__(self, table=None, ident=None):
         """Constructor of this class
 
         :param table: The name of the table
@@ -261,8 +261,6 @@ class SQLDatabaseInterface(DictSQLSerializer):
             self.data_mapset = self.ident.split("@" "")[1]
         else:
             self.data_mapset = None
-        # set the mapset where the tgis db is located
-        self.tgis_mapset = tgis_mapset
 
     def get_table_name(self):
         """Return the name of the table in which the internal
@@ -331,11 +329,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         sql = self.get_is_in_db_statement()
 
         # determine correct mapset for the temporal database
-        if self.tgis_mapset:
-            mapset = self.tgis_mapset
-        elif self.data_mapset: 
-            mapset = self.data_mapset
-        else:
+        if mapset is None:
             mapset = get_current_mapset()
 
         if dbif:
@@ -387,11 +381,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         sql, args = self.get_select_statement()
 
         # determine correct mapset for the temporal database
-        if self.tgis_mapset:
-            mapset = self.tgis_mapset
-        elif self.data_mapset: 
-            mapset = self.data_mapset
-        else:
+        if mapset is None:
             mapset = get_current_mapset()
 
         self.msgr.debug(2, "SQLDatabaseInterface.select() from mapset %s" % mapset)
@@ -648,7 +638,7 @@ class DatasetBase(SQLDatabaseInterface):
                       "name@mapset" or "name:layer@mapset"
                       used as as primary key in the temporal database
         :param name: The name of the map or dataset
-        :param mapset: The name of the mapset
+        :param mapset: The name of the mapset where data are stored
         :param creator: The name of the creator
         :param ctime: The creation datetime object
         :param ttype: The temporal type
@@ -657,7 +647,7 @@ class DatasetBase(SQLDatabaseInterface):
                           - "relative" Identifier for relative time
         """
 
-        SQLDatabaseInterface.__init__(self, table, ident, tgis_mapset)
+        SQLDatabaseInterface.__init__(self, table, ident)
 
         self.set_id(ident)
         if ident is not None and name is None and mapset is None:

@@ -75,7 +75,7 @@ def open_old_stds(name, type, dbif=None):
 
     dbif, connection_state_changed = init_dbif(dbif)
 
-    if not sp.is_in_db(dbif):
+    if not sp.is_in_db(dbif, mapset=mapset):
         dbif.close()
         msgr.fatal(
             _("Space time %(sp)s dataset <%(id)s> not found")
