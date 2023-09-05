@@ -1265,6 +1265,7 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
         self.relative_time = STRDSRelativeTime(ident=ident)
         self.spatial_extent = STRDSSpatialExtent(ident=ident)
         self.metadata = STRDSMetadata(ident=ident)
+        self.metadata.tgis_mapset = self.get_mapset()
 
 
 ###############################################################################
@@ -1391,6 +1392,7 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
         self.relative_time = STR3DSRelativeTime(ident=ident)
         self.spatial_extent = STR3DSSpatialExtent(ident=ident)
         self.metadata = STR3DSMetadata(ident=ident)
+        self.metadata.tgis_mapset = self.get_mapset()
 
 
 ###############################################################################
@@ -1500,6 +1502,7 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
         self.relative_time = STVDSRelativeTime(ident=ident)
         self.spatial_extent = STVDSSpatialExtent(ident=ident)
         self.metadata = STVDSMetadata(ident=ident)
+        self.metadata.tgis_mapset = self.get_mapset()
 
 
 ###############################################################################
