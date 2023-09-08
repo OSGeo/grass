@@ -35,7 +35,9 @@ def option_callback_W(option, opt, value, parser):
         raise optparse.BadOptionError("not in '-Wl,<opt>' form: %s%s" % (opt, value))
     opt = value[2:]
     if opt not in ["-L", "-R", "--rpath"]:
-        raise optparse.BadOptionError("-Wl option must be -L, -R" " or --rpath, not " + value[2:])
+        raise optparse.BadOptionError(
+            "-Wl option must be -L, -R" " or --rpath, not " + value[2:]
+        )
     # Push the linker option onto the list for further parsing.
     parser.rargs.insert(0, value)
 
@@ -313,13 +315,8 @@ def main(givenargs=None):
         dest="output_language",
         metavar="LANGUAGE",
         default="py",
-        choices=("py", "py32", "py27", "py25", "json"),
-        help="Choose output language (`py'[default], `py32', `py27', `py25', or "
-        "`json').  The implementation for py32 does appear to be "
-        "compatible down to at least Python2.7.15.  py25 and py27 are in "
-        "any case _not_ compatible with >= Python3.  The default choice "
-        "(py) attempts to select `py32', `py27', or `py25' based on the "
-        "version of Python that runs this script.",
+        choices=("py", "json"),
+        help="Choose output language (`py'[default], or `json').",
     )
     op.add_option(
         "-P",
@@ -390,7 +387,9 @@ def main(givenargs=None):
     elif options.output_language == "json":
         printer = printer_json.WrapperPrinter
     else:
-        msgs.error_message("No such output language `" + options.output_language + "'", cls="usage")
+        msgs.error_message(
+            "No such output language `" + options.output_language + "'", cls="usage"
+        )
         sys.exit(1)
 
     # Step 1: Parse

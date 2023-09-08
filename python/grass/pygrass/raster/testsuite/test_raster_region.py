@@ -1,4 +1,3 @@
-import six
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -42,11 +41,11 @@ class RasterRowRegionTestCase(TestCase):
         rast.set_region(region)
         rast.open(mode="r")
 
-        six.assertCountEqual(
-            self, rast[0].tolist(), [22, 22, 22, 22, 22, 32, 32, 32, 32, 32]
+        self.assertCountEqual(
+            rast[0].tolist(), [22, 22, 22, 22, 22, 32, 32, 32, 32, 32]
         )
-        six.assertCountEqual(
-            self, rast[5].tolist(), [23, 23, 23, 23, 23, 33, 33, 33, 33, 33]
+        self.assertCountEqual(
+            rast[5].tolist(), [23, 23, 23, 23, 23, 33, 33, 33, 33, 33]
         )
 
         rast.close()
@@ -77,8 +76,8 @@ class RasterRowRegionTestCase(TestCase):
         [nan, nan, nan, nan, nan, nan, nan, nan]
         """
 
-        six.assertCountEqual(self, rast[2].tolist()[2:6], [11.0, 21.0, 31.0, 41.0])
-        six.assertCountEqual(self, rast[5].tolist()[2:6], [14.0, 24.0, 34.0, 44.0])
+        self.assertCountEqual(rast[2].tolist()[2:6], [11.0, 21.0, 31.0, 41.0])
+        self.assertCountEqual(rast[5].tolist()[2:6], [14.0, 24.0, 34.0, 44.0])
 
         rast.close()
 

@@ -301,7 +301,7 @@ output. This is reserved for standard module output if it has one.
 ### Translations
 
 To enable translating of messages to other languages (than English), use full
-strings, e.g.
+strings, e.g. (good example):
 
 ```py
 if ...:
@@ -310,7 +310,7 @@ else:
     win.SetLabel(_("Name for new raster map to create"))
 ```
 
-instead of constructing string from several parts:
+instead of constructing string from several parts (bad example):
 
 ```py
 if ...:

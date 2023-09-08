@@ -82,10 +82,6 @@ Note: also the respective development packages (commonly named `xxx-dev` or
   [https://cran.r-project.org](https://cran.r-project.org)
 - **FreeType2** (for TrueType font support and `d.text.freetype`)
   [https://freetype.org/](https://freetype.org/)
-- **Ctypes** (for ctypes interface)
-  Ctypes can be added as a third-party module in Python 2.3 and
-  2.4 - [https://pypi.org/project/ctypes/1.0.2/](https://pypi.org/project/ctypes/1.0.2/)
-  [https://docs.python.org/library/ctypes.html](https://docs.python.org/library/ctypes.html)
 - **wxPython >= 2.8.10.1** (for wxGUI)
   [https://www.wxpython.org](https://www.wxpython.org)
 - **NumPy >= 1.0.4** (for various wxGUI components and pyGRASS)
@@ -107,10 +103,6 @@ Note: also the respective development packages (commonly named `xxx-dev` or
   [https://matplotlib.org/](https://matplotlib.org/)
 - **python-termcolor** (recommended for `g.search.modules`)
   [https://pypi.org/project/termcolor/](https://pypi.org/project/termcolor/)
-- **six** (`python-six`, needed for Python API and for cross-version Python
-  compatibility)
-  [https://pypi.python.org/pypi/six](https://pypi.python.org/pypi/six)
-  [https://github.com/benjaminp/six](https://github.com/benjaminp/six)
 - **FFMPEG or alternative** (for wxGUI Animation tool - `g.gui.module`),
   specifically ffmpeg tool
   [https://ffmpeg.org](https://ffmpeg.org)

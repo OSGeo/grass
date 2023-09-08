@@ -709,7 +709,7 @@ def get_addon_path():
                     "-q",
                     "--no-checkout",
                     f"--branch={addons_branch}",
-                    "--filter=tree:0",
+                    "--filter=blob:none",
                     urlparse.urljoin(base_url, "grass-addons/"),
                 ],
                 cwd=addons_base_dir,
