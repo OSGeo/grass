@@ -240,9 +240,9 @@ class RegionManagerForSeries:
     def set_region_from_rasters(self, rasters):
         """Sets computational region for rendering from a series of rasters.
 
-        This function sets the region from a series of rasters. If the extent or resolution has
-        already been set by calling this function previously or by the set_region_from_vectors()
-        function, this function will not modify it.
+        This function sets the region from a series of rasters. If the extent or
+        resolution has already been set by calling this function previously or by the
+        set_region_from vectors() function, this function will not modify it.
 
         If user specified the name of saved region during object's initialization,
         the provided region is used. If it's not specified
