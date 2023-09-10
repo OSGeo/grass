@@ -1173,7 +1173,7 @@ class ColumnSelect(ComboCtrl):
                     if key in excludeCols:
                         self.columns.remove(key)
             if type:  # only selected column types
-                for key, value in columnchoices.item():
+                for key, value in columnchoices.items():
                     if value["type"] not in type:
                         try:
                             self.columns.remove(key)
