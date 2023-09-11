@@ -600,10 +600,12 @@ int do_cum_mfd(void)
                     aspect = -aspect;
                 asp[this_index] = aspect;
             }
+            /*
             if (mfd_cells == 1)
-                /* mfdir = (1 << nextmfd[max_side]); */
+                mfdir = (1 << nextmfd[max_side]);
+            */
 
-                is_swale = FLAG_GET(swale, r, c);
+            is_swale = FLAG_GET(swale, r, c);
             /* start new stream */
             value = ABS(value) + 0.5;
             if (!is_swale && (int)value >= threshold && stream_cells < 1 &&
