@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2023-05-05 10:08+0000\n"
+"PO-Revision-Date: 2023-08-23 07:08+0000\n"
 "Last-Translator: Markus <neteler@osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/"
 "grasslibs/de/>\n"
@@ -410,7 +410,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:1516
 msgid "Building user fontcap..."
-msgstr ""
+msgstr "Erstellen von Benutzer-Schriftarten..."
 
 #: ../lib/init/grass.py:1577
 msgid "The SHELL variable is not set"
@@ -954,22 +954,22 @@ msgstr "Fehler in UI Beschreibung.  Fehlende Modul Beschreibung"
 
 #: ../lib/gis/parser.c:357
 msgid "Bug in UI description. Missing option key"
-msgstr ""
+msgstr "Fehler in der UI-Beschreibung. Fehlender Optionsschlüssel"
 
 #: ../lib/gis/parser.c:359
 #, c-format
 msgid "Bug in UI description. Option key <%s> is not valid"
-msgstr ""
+msgstr "Fehler in der UI-Beschreibung. Optionsschlüssel <%s> ist nicht gültig"
 
 #: ../lib/gis/parser.c:361
-#, c-format
+#, c-format, fuzzy
 msgid "Bug in UI description. Description for option <%s> missing"
-msgstr ""
+msgstr "Fehler in der UI-Beschreibung. Beschreibung für Option <%s> fehlt"
 
 #: ../lib/gis/parser.c:413
-#, c-format
+#, c-format, fuzzy
 msgid "Bug in UI description. Option '%s' in <%s> does not exist"
-msgstr ""
+msgstr "Fehler in der UI-Beschreibung. Option '%s' in <%s> existiert nicht"
 
 #: ../lib/gis/parser.c:537
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
@@ -2540,8 +2540,9 @@ msgid "Maximum memory to be used (in MB)"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:264
+#, fuzzy
 msgid "Cache size for raster rows"
-msgstr ""
+msgstr "Cachegröße für Rasterzeilen"
 
 #: ../lib/gis/parser_standard_options.c:272
 msgid "Name of input raster map"
@@ -3299,12 +3300,14 @@ msgid "Unable to create control point file for group [%s in %s]"
 msgstr "Kann Datei mit Kontrollpunkten der Gruppe [%s in %s] nicht erzeugen."
 
 #: ../lib/imagery/georef_tps.c:219
+#, fuzzy
 msgid "Calculating forward transformation coefficients"
-msgstr ""
+msgstr "Berechnung der Vorwärtstransformationskoeffizienten"
 
 #: ../lib/imagery/georef_tps.c:236
+#, fuzzy
 msgid "Calculating backward transformation coefficients"
-msgstr ""
+msgstr "Berechnung der Rücktransformationskoeffizienten"
 
 #: ../lib/imagery/georef_tps.c:279 ../lib/imagery/georef_tps.c:282
 #: ../lib/imagery/georef_tps.c:285 ../lib/imagery/georef_tps.c:290
@@ -4911,9 +4914,9 @@ msgid "Unsupported feature type %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/write_pg.c:774
-#, c-format
+#, c-format, fuzzy
 msgid "Building spatial index on <%s>..."
-msgstr ""
+msgstr "Aufbau eines räumlichen Index auf <%s>..."
 
 #: ../lib/vector/Vlib/write_pg.c:842
 #, c-format
@@ -5889,9 +5892,9 @@ msgid ""
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:445
-#, c-format
+#, c-format, fuzzy
 msgid "Building topology for OGR layer <%s> from datasource '%s'..."
-msgstr ""
+msgstr "Aufbau der Topologie für die OGR-Ebene <%s> aus der Datenquelle '%s'..."
 
 #: ../lib/vector/Vlib/open.c:453
 #, c-format
@@ -6755,12 +6758,12 @@ msgstr ""
 
 #: ../lib/vector/Vlib/build_pg.c:105
 msgid "Building pseudo-topology over simple features..."
-msgstr ""
+msgstr "Aufbau einer Pseudo-Topologie über Simple Features..."
 
 #: ../lib/vector/Vlib/build_pg.c:107
-#, c-format
+#, c-format, fuzzy
 msgid "Building topology from PostGIS topology schema <%s>..."
-msgstr ""
+msgstr "Aufbau der Topologie aus dem PostGIS-Topologieschema <%s>..."
 
 #: ../lib/vector/Vlib/build_pg.c:237
 msgid "Cleaning-up topology schema..."
@@ -6826,17 +6829,17 @@ msgstr ""
 
 #: ../lib/vector/Vlib/break_polygons.c:102
 msgid "Break polygons: Bug in binary tree!"
-msgstr ""
+msgstr "Polygone brechen: Fehler im Binärbaum!"
 
 #: ../lib/vector/Vlib/break_polygons.c:156
 #: ../lib/vector/Vlib/break_polygons.c:435
 msgid "Breaking polygons (pass 1: select break points)..."
-msgstr ""
+msgstr "Polygone brechen (Durchgang 1: Bruchpunkte auswählen)..."
 
 #: ../lib/vector/Vlib/break_polygons.c:286
 #: ../lib/vector/Vlib/break_polygons.c:552
 msgid "Breaking polygons (pass 2: break at selected points)..."
-msgstr ""
+msgstr "Polygone brechen (Durchgang 2: an ausgewählten Punkten brechen)..."
 
 #: ../lib/vector/Vlib/break_polygons.c:398
 #: ../lib/vector/Vlib/break_polygons.c:650
@@ -6889,45 +6892,48 @@ msgid "Unable to delete item %d from spatial index"
 msgstr "Kann Eintrag %d nicht aus dem räumlichen Index löschen."
 
 #: ../lib/cairodriver/read_ppm.c:28 ../lib/cairodriver/read_bmp.c:88
-#, c-format
+#, c-format, fuzzy
 msgid "Cairo: unable to open input file <%s>"
-msgstr ""
+msgstr "Cairo: Eingabedatei kann nicht geöffnet werden <%s>"
 
 #: ../lib/cairodriver/read_ppm.c:32 ../lib/cairodriver/read_bmp.c:92
-#, c-format
+#, c-format, fuzzy
 msgid "Cairo: invalid input file <%s>"
-msgstr ""
+msgstr "Cairo: ungültige Eingabedatei <%s>"
 
 #: ../lib/cairodriver/read_ppm.c:38
-#, c-format
+#, c-format, fuzzy
 msgid "Cairo: input file has incorrect dimensions: expected: %dx%d got: %dx%d"
 msgstr ""
+"Cairo: Eingabedatei hat falsche Abmessungen: erwartet: %dx%d erhalten: %dx%d"
 
 #: ../lib/cairodriver/read_ppm.c:46
-#, c-format
+#, c-format, fuzzy
 msgid "Cairo: unable to open input mask file <%s>"
-msgstr ""
+msgstr "Cairo: Eingabemasken-Datei kann nicht geöffnet werden <%s>"
 
 #: ../lib/cairodriver/read_ppm.c:50
-#, c-format
+#, c-format, fuzzy
 msgid "Cairo: invalid input mask file <%s>"
-msgstr ""
+msgstr "Cairo: Ungültige Eingabemasken-Datei <%s>"
 
 #: ../lib/cairodriver/read_ppm.c:56
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
 msgstr ""
+"Cairo: Eingabemasken-Datei hat falsche Abmessungen: erwartet: %dx%d erhalten:"
+" %dx%d"
 
 #: ../lib/cairodriver/read_bmp.c:96
-#, c-format
+#, c-format, fuzzy
 msgid "Cairo: Invalid BMP header for <%s>"
-msgstr ""
+msgstr "Cairo: Ungültiger BMP-Header für <%s>"
 
 #: ../lib/cairodriver/write_bmp.c:72 ../lib/cairodriver/write_ppm.c:27
-#, c-format
+#, c-format, fuzzy
 msgid "Cairo: unable to open output file <%s>"
-msgstr ""
+msgstr "Cairo: Ausgabedatei kann nicht geöffnet werden <%s>"
 
 #: ../lib/cairodriver/write_xid.c:14 ../lib/pngdriver/read_png.c:71
 #, c-format
@@ -6971,9 +6977,9 @@ msgid "Failed to initialize Cairo surface"
 msgstr ""
 
 #: ../lib/cairodriver/write_ppm.c:34
-#, c-format
+#, c-format, fuzzy
 msgid "Cairo: unable to open mask file <%s>"
-msgstr ""
+msgstr "Cairo: Maskendatei kann nicht geöffnet werden <%s>"
 
 #: ../lib/cairodriver/read_xid.c:14
 #, c-format
@@ -6995,8 +7001,9 @@ msgid "Failed to create cairo surface"
 msgstr ""
 
 #: ../lib/cairodriver/draw_bitmap.c:47
+#, fuzzy
 msgid "Cairo_Bitmap: Failed to create source"
-msgstr ""
+msgstr "Cairo_Bitmap: Quelle kann nicht erstellt werden"
 
 #: ../lib/cairodriver/text.c:46
 #, c-format
@@ -8181,7 +8188,7 @@ msgstr ""
 
 #: ../lib/python/temporal/temporal_algebra.py:2434
 #: ../lib/python/temporal/temporal_raster_base_algebra.py:822
-#, fuzzy, python-format
+#, python-format
 msgid "%s map <%s> not found in GRASS spatial database"
 msgstr "%s Karte <%s> nicht in der GRASS Geodatenbank gefunden"
 
@@ -8898,6 +8905,8 @@ msgstr ""
 #, python-brace-format
 msgid "Cannot parse interface description of<{name}> module: {error}"
 msgstr ""
+"Die Schnittstellenbeschreibung des Moduls{name}> kann nicht geparst werden: "
+"{error}"
 
 #: ../lib/python/script/raster3d.py:93
 #, fuzzy, python-format
@@ -8909,7 +8918,7 @@ msgstr ""
 #: ../lib/python/script/core.py:56
 #, python-brace-format
 msgid "Cannot find the executable {0}"
-msgstr ""
+msgstr "Kann die ausführbare Datei nicht finden {0}"
 
 #: ../lib/python/script/core.py:318
 #, python-format

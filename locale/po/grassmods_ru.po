@@ -7,14 +7,17 @@ msgstr ""
 "Project-Id-Version: grassmods_ru\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2009-05-15 00:23-0600\n"
-"Last-Translator: Maxim Dubinin <sim@gis-lab.info>\n"
-"Language-Team: Russian <grass-translations@lists.osgeo.org>\n"
+"PO-Revision-Date: 2023-06-28 19:08+0000\n"
+"Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
+"Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/"
+"grassmods/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: ../temporal/t.connect/main.c:34
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:2
@@ -230,6 +233,9 @@ msgid ""
 "driver: %s\n"
 "database: %s"
 msgstr ""
+"Значения по умолчанию драйвера / базы данных:\n"
+"драйвер: %s\n"
+"база данных: %s"
 
 #: ../imagery/i.landsat.acca/main.c:57
 #: ../imagery/i.landsat.acca/algorithm.c:380
@@ -405,7 +411,7 @@ msgstr ""
 #: ../raster/r.watershed/shed/com_line.c:266 ../raster/r.geomorphon/main.c:297
 #, c-format
 msgid "<%s> is an illegal file name"
-msgstr ""
+msgstr "Неверное имя файла: <%s>"
 
 #: ../imagery/i.landsat.acca/algorithm.c:124
 msgid "Preliminary scene analysis:"
@@ -572,7 +578,7 @@ msgstr ""
 #: ../raster/r.stream.extract/cseg.c:41 ../raster/r.stream.extract/dseg.c:41
 #: ../raster/r.stream.extract/bseg.c:41 ../raster/r.li/r.li.daemon/list.c:49
 msgid "Out of memory"
-msgstr ""
+msgstr "Не хватает памяти"
 
 #: ../imagery/i.smap/interp.c:68 ../raster/r.texture/h_measure.c:738
 #: ../raster/r.stream.extract/load.c:44 ../raster/r.stream.extract/load.c:53
@@ -655,6 +661,8 @@ msgid ""
 "Performs contextual image classification using sequential maximum a "
 "posteriori (SMAP) estimation."
 msgstr ""
+"Выполняет контекстную классификацию изображения с использованием оценки "
+"методом последовательного апострериорного максимума (SMAP)."
 
 #: ../imagery/i.smap/write_img.c:15
 msgid "Writing output raster map(s)..."
@@ -1062,7 +1070,7 @@ msgstr ""
 #: ../scripts/d.rast.leg/d.rast.leg.py:99 ../scripts/r.rgb/r.rgb.py:55
 #, c-format, python-format
 msgid "Raster map <%s> not found"
-msgstr ""
+msgstr "Растровая карта <%s> не найдена"
 
 #: ../imagery/i.gensig/parse.c:50 ../imagery/i.cluster/main.c:179
 #: ../imagery/i.gensigset/parse.c:57 ../display/d.mon/start.c:52
@@ -1124,7 +1132,7 @@ msgstr ""
 
 #: ../imagery/i.target/main.c:48
 msgid "Targets an imagery group to a GRASS location and mapset."
-msgstr ""
+msgstr "Перемещение группы изображений в область и набор GRASS."
 
 #: ../imagery/i.target/main.c:57
 msgid "Name of imagery target location"
@@ -1360,7 +1368,7 @@ msgstr ""
 #: ../raster/r.slope.aspect/main.c:280 ../raster/r.slope.aspect/main.c:286
 #: ../raster/r.slope.aspect/main.c:294
 msgid "Settings"
-msgstr ""
+msgstr "Параметры"
 
 #: ../imagery/i.segment/parse_args.c:80
 #: ../locale/scriptstrings/i.segment.hierarchical_to_translate.c:10
@@ -1818,6 +1826,8 @@ msgstr ""
 #: ../imagery/i.zc/main.c:56
 msgid "Zero-crossing \"edge detection\" raster function for image processing."
 msgstr ""
+"Растровая функция «определения границ» переходом через ноль для обработки "
+"изображений."
 
 #: ../imagery/i.zc/main.c:66
 #: ../locale/scriptstrings/r.diversity_to_translate.c:3
@@ -1826,7 +1836,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.surf.nnbathy_to_translate.c:7
 #: ../raster/r.out.bin/main.c:291 ../raster/r.random/main.c:63
 msgid "Name of input raster map"
-msgstr ""
+msgstr "Имя входной растровой карты"
 
 #: ../imagery/i.zc/main.c:74
 msgid "Zero crossing raster map"
@@ -2109,7 +2119,7 @@ msgstr ""
 
 #: ../imagery/i.cca/main.c:96
 msgid "Name of input imagery subgroup"
-msgstr ""
+msgstr "Имя входной подгруппы изображений"
 
 #: ../imagery/i.cca/main.c:103
 msgid "File containing spectral signatures"
@@ -2635,7 +2645,7 @@ msgstr ""
 #: ../raster/r.series/main.c:226 ../raster/r.in.mat/main.c:125
 #, c-format
 msgid "Unable to open input file <%s>"
-msgstr ""
+msgstr "Не удалось открыть входной файл <%s>"
 
 #: ../imagery/i.group/main.c:150
 msgid "No input raster map(s) specified"
@@ -3023,7 +3033,7 @@ msgstr ""
 
 #: ../imagery/i.ifft/main.c:81
 msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
-msgstr ""
+msgstr "Обратное быстрое преобразование Фурье (IFFT) для обработки изображений."
 
 #: ../imagery/i.ifft/main.c:86
 msgid "Name of input raster map (image fft, real part)"
@@ -4410,7 +4420,7 @@ msgstr ""
 #: ../imagery/i.ortho.photo/i.ortho.rectify/report.c:10
 #: ../imagery/i.rectify/report.c:10 ../db/db.select/main.c:105
 msgid "failed"
-msgstr ""
+msgstr "."
 
 #: ../imagery/i.ortho.photo/i.ortho.rectify/report.c:20
 #: ../imagery/i.rectify/report.c:20
@@ -5130,7 +5140,7 @@ msgstr ""
 #: ../locale/scriptstrings/i.sentinel.mask_to_translate.c:42
 #: ../locale/scriptstrings/i.sentinel.mask_to_translate.c:46
 msgid "Rescale"
-msgstr ""
+msgstr "Изменение диапазона"
 
 #: ../imagery/i.pca/main.c:108
 msgid "Cumulative percent importance for filtering"
@@ -7794,7 +7804,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.terrain.texture_to_translate.c:14
 #: ../raster/r.horizon/main.c:277 ../raster/r.horizon/main.c:296
 msgid "Optional"
-msgstr ""
+msgstr "Необязательная"
 
 #: ../locale/scriptstrings/r.import_to_translate.c:26
 #: ../raster/r.proj/main.c:213
@@ -9196,6 +9206,9 @@ msgid ""
 "Calculates univariate statistics from the non-null cells for each registered "
 "3D raster map of a space time 3D raster dataset."
 msgstr ""
+"Вычисляет одномерную статистику из ненулевых ячеек для каждой "
+"зарегистрированной трёхмерной растровой карты трёхмерного пространственно-"
+"временного растрового набора данных."
 
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:10
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:10
@@ -9558,7 +9571,7 @@ msgstr ""
 #: ../locale/scriptstrings/i.sentinel.mask_to_translate.c:21
 #: ../locale/scriptstrings/i.sentinel.mask_to_translate.c:23
 msgid "Required"
-msgstr ""
+msgstr "Обязательная"
 
 #: ../locale/scriptstrings/t.topology_to_translate.c:7
 msgid "Print temporal topological relationships and exit"
@@ -10018,7 +10031,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.category.trim_to_translate.c:3
 #: ../locale/scriptstrings/r.out.legend_to_translate.c:3
 msgid "color"
-msgstr ""
+msgstr "цвет"
 
 #: ../locale/scriptstrings/r.euro.ecosystem_to_translate.c:4
 #: ../locale/scriptstrings/r.fill.category_to_translate.c:4
@@ -11733,6 +11746,7 @@ msgstr "Поле атрибутивной таблицы со значениям
 #: ../locale/scriptstrings/v.clean.ogr_to_translate.c:14
 msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr ""
+"Условия WHERE для инструкции SQL без использования ключевого слова «where»"
 
 #: ../locale/scriptstrings/v.what.rast.multi_to_translate.c:18
 #: ../locale/scriptstrings/v.clean.ogr_to_translate.c:15
@@ -12488,7 +12502,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.in.wfs2_to_translate.c:7
 #: ../locale/scriptstrings/r.to.vect.lines_to_translate.c:6
 msgid "Name for output vector map"
-msgstr ""
+msgstr "Имя выходной векторной карты"
 
 #: ../locale/scriptstrings/v.unpack_to_translate.c:7
 msgid "Default: taken from input file internals"
@@ -12564,6 +12578,8 @@ msgid ""
 "Georeference, rectify, and import Terra-ASTER imagery and relative DEMs "
 "using gdalwarp."
 msgstr ""
+"Геопривязка, трансформация, а также импорт изображений Terra-ASTER и "
+"относительных цифровых моделей рельефа с помощью gdalwarp."
 
 #: ../locale/scriptstrings/r.in.aster_to_translate.c:6
 #: ../locale/scriptstrings/r.fillnulls_to_translate.c:4
@@ -13752,7 +13768,7 @@ msgstr ""
 #: ../display/d.vect.thematic/main.c:88 ../display/d.legend/main.c:80
 #: ../display/d.legend.vect/main.c:53
 msgid "legend"
-msgstr ""
+msgstr "легенда"
 
 #: ../locale/scriptstrings/d.rast.leg_to_translate.c:5
 #: ../locale/scriptstrings/r.out.legend_to_translate.c:24
@@ -16627,13 +16643,12 @@ msgid "Calculate models with rounded integer values"
 msgstr ""
 
 #: ../locale/scriptstrings/v.convert.all_to_translate.c:1
-#, fuzzy
 msgid ""
 "Converts all older versions of GRASS vector maps in current mapset to "
 "current format."
 msgstr ""
-"Конвертировать все старые слои GRASS < Ver5.7 в текущем наборе в текущий "
-"формат"
+"Преобразует все старые версии векторных карт GRASS в данном наборе в текущий "
+"формат."
 
 #: ../locale/scriptstrings/v.link.precip_to_translate.c:1
 msgid "Links time-windows to vector link map."
@@ -16757,7 +16772,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.class.ml_to_translate.c:5
 #: ../vector/v.voronoi/main.c:131
 msgid "Name of input vector map"
-msgstr ""
+msgstr "Имя входной векторной карты"
 
 #: ../locale/scriptstrings/r.edm.eval_to_translate.c:1
 msgid ""
@@ -18554,7 +18569,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/g.proj.all_to_translate.c:20
 msgid "Allow output files to overwrite existing files"
-msgstr ""
+msgstr "Разрешать перезаписывать файлы вывода поверх существующих"
 
 #: ../locale/scriptstrings/r.green.biomassfor.financial_to_translate.c:1
 msgid ""
@@ -25821,7 +25836,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.segment.hierarchical_to_translate.c:4
 msgid "Name of input imagery group"
-msgstr ""
+msgstr "Имя входной группы изображений"
 
 #: ../locale/scriptstrings/i.segment.hierarchical_to_translate.c:5
 #, fuzzy
@@ -26115,7 +26130,7 @@ msgstr ""
 #: ../raster/r.contour/main.c:173
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
-msgstr ""
+msgstr "Не удалось открыть базу данных <%s> с помощью драйвера <%s>"
 
 #: ../ps/ps.map/catval.c:63
 msgid "Column type not supported (must be string)"
@@ -26589,7 +26604,7 @@ msgstr ""
 #: ../raster/r.statistics/main.c:110 ../raster/r.support/main.c:245
 #, c-format
 msgid "Unable to read category file of raster map <%s>"
-msgstr ""
+msgstr "Не удалось прочитать файл категорий растровой карты <%s>"
 
 #: ../display/d.title/main.c:117 ../vector/v.surf.rst/main.c:881
 #: ../vector/v.in.ascii/main.c:279 ../general/g.setproj/get_stp.c:162
@@ -26847,7 +26862,7 @@ msgstr ""
 #: ../raster/r.cost/main.c:666
 #, c-format
 msgid "Unable to open vector map <%s>"
-msgstr ""
+msgstr "Не удалось открыть векторную карту <%s>"
 
 #: ../display/d.vect.chart/plot.c:38 ../display/d.vect.thematic/plot1.c:105
 #: ../display/d.vect/shape.c:38 ../vector/v.what.rast/main.c:138
@@ -26863,13 +26878,13 @@ msgstr ""
 #: ../doc/vector/v.example/main.c:109
 #, c-format
 msgid "Database connection not defined for layer %d"
-msgstr ""
+msgstr "Не определено соединение с базой данных для слоя %d"
 
 #: ../display/d.vect.chart/plot.c:86 ../display/d.vect/attr.c:110
 #: ../vector/v.in.db/main.c:225
 #, c-format
 msgid "Unable to open select cursor: '%s'"
-msgstr ""
+msgstr "Не удалось открыть курсор select: «%s»"
 
 #: ../display/d.rgb/main.c:58
 msgid ""
@@ -27119,7 +27134,7 @@ msgstr ""
 #: ../raster/r.path/main.c:317 ../raster/r.to.vect/main.c:289
 #: ../raster/r.cost/main.c:618 ../raster/r.cost/main.c:678
 msgid "Unable to read vector map"
-msgstr ""
+msgstr "Не удалось прочитать векторный слой"
 
 #: ../display/d.vect.thematic/display.c:118 ../display/d.vect/lines.c:175
 #, c-format
@@ -27329,7 +27344,7 @@ msgstr ""
 #: ../raster/r.stream.extract/close.c:178
 #, c-format
 msgid "Unable to start driver <%s>"
-msgstr "Невозможно запустить драйвер <%s>"
+msgstr "Не удалось запустить драйвер <%s>"
 
 #: ../display/d.vect.thematic/main.c:299 ../display/d.vect/opt.c:152
 #: ../db/db.select/main.c:81 ../db/db.columns/main.c:56
@@ -27550,7 +27565,7 @@ msgstr ""
 #: ../display/d.legend/main.c:293 ../raster/r.what/main.c:139
 #: ../raster/r.what/main.c:164
 msgid "Advanced"
-msgstr ""
+msgstr "Дополнительно"
 
 #: ../display/d.legend/main.c:127
 msgid "Thinning factor (thin=10 gives cats 0,10,20...)"
@@ -28391,7 +28406,7 @@ msgstr ""
 #: ../scripts/v.db.univar/v.db.univar.py:71
 #, c-format, python-format
 msgid "Vector map <%s> not found"
-msgstr ""
+msgstr "Векторная карта <%s> не найдена"
 
 #: ../display/d.extract/main.c:106 ../vector/v.in.lidar/main.c:555
 #: ../vector/v.lidar.edgedetection/main.c:251 ../vector/v.net.iso/main.c:356
@@ -28545,7 +28560,7 @@ msgstr ""
 #: ../scripts/d.what.rast/d.what.rast.py:35 ../scripts/d.redraw/d.redraw.py:37
 #, c-format, python-format
 msgid "Unable to open file '%s'"
-msgstr ""
+msgstr "Не удалось открыть файл «%s»"
 
 #: ../display/d.mon/list.c:145
 #, c-format
@@ -28997,7 +29012,7 @@ msgstr ""
 #: ../display/d.linegraph/main.c:494
 #, c-format
 msgid "Cannot find/open symbol: '%s'"
-msgstr ""
+msgstr "Не удалось найти/открыть символ: «%s»"
 
 #: ../display/d.linegraph/main.c:511
 #, c-format
@@ -29717,7 +29732,7 @@ msgstr ""
 #: ../vector/v.in.lidar/main.c:542 ../scripts/v.unpack/v.unpack.py:114
 #, c-format, python-format
 msgid "Vector map <%s> already exists and will be overwritten"
-msgstr ""
+msgstr "Векторная карта <%s> уже существует и будет перезаписана"
 
 #: ../vector/v.in.lidar/main.c:545 ../vector/v.edit/main.c:100
 #: ../vector/v.in.ogr/main.c:753 ../scripts/v.unpack/v.unpack.py:112
@@ -29944,7 +29959,7 @@ msgstr ""
 #: ../vector/v.in.lidar/attributes.c:129
 #, c-format
 msgid "Unable open database <%s> by driver <%s>"
-msgstr ""
+msgstr "Не удалось открыть базу данных <%s> с помощью драйвера <%s>"
 
 #: ../vector/v.in.lidar/attributes.c:135 ../vector/v.net.iso/main.c:390
 #: ../vector/v.net.flow/main.c:181 ../vector/v.net.alloc/main.c:329
@@ -29966,7 +29981,7 @@ msgstr ""
 #: ../raster/r.contour/main.c:189
 #, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
-msgstr ""
+msgstr "Не удалось создать индекс для таблицы <%s>, ключ <%s>"
 
 #: ../vector/v.in.lidar/attributes.c:144 ../vector/v.sample/main.c:197
 #: ../vector/v.decimate/copy_tab.c:124 ../vector/v.random/main.c:312
@@ -30100,7 +30115,7 @@ msgstr ""
 
 #: ../vector/v.lidar.edgedetection/main.c:79
 msgid "Detects the object's edges from a LIDAR data set."
-msgstr ""
+msgstr "Определяет границы объекта из набора данных LIDAR."
 
 #: ../vector/v.lidar.edgedetection/main.c:83
 #: ../vector/v.lidar.correction/main.c:78
@@ -30832,7 +30847,7 @@ msgstr ""
 
 #: ../vector/v.what.rast/main.c:79
 msgid "Uploads raster values at positions of vector points to the table."
-msgstr ""
+msgstr "Загружает значения растра на позициях векторных точек в таблицу."
 
 #: ../vector/v.what.rast/main.c:110
 msgid "Print categories and values instead of updating the database"
@@ -31021,7 +31036,7 @@ msgstr ""
 
 #: ../vector/v.sample/main.c:79
 msgid "Samples a raster map at vector point locations."
-msgstr ""
+msgstr "Получение значения растровой карты в местоположениях векторных точек."
 
 #: ../vector/v.sample/main.c:82 ../vector/v.surf.bspline/main.c:110
 msgid "Name of input vector point map"
@@ -31051,7 +31066,7 @@ msgstr ""
 #: ../vector/v.reclass/main.c:128
 #, c-format
 msgid "Database connection not defined for layer %s"
-msgstr ""
+msgstr "Соединение с базой данных не определено для слоя %s"
 
 #: ../vector/v.sample/main.c:148
 #, c-format
@@ -31173,7 +31188,7 @@ msgstr ""
 
 #: ../vector/v.segment/main.c:67
 msgid "Creates points/segments from input vector lines and positions."
-msgstr ""
+msgstr "Создаёт точки/сегменты из входных векторных линий и местоположений."
 
 #: ../vector/v.segment/main.c:70
 msgid "Name of input vector lines map"
@@ -31555,7 +31570,7 @@ msgstr ""
 
 #: ../vector/v.clean/main.c:55
 msgid "Toolset for cleaning topology of vector map."
-msgstr ""
+msgstr "Набор инструментов для чистки топологии векторной карты."
 
 #: ../vector/v.clean/main.c:70
 msgid "Name of output map where errors are written"
@@ -32047,7 +32062,7 @@ msgstr ""
 
 #: ../vector/v.buffer/main.c:809 ../vector/v.overlay/area_area.c:171
 msgid "Attaching islands..."
-msgstr ""
+msgstr "Прикрепление островов…"
 
 #: ../vector/v.buffer/main.c:816
 msgid "Calculating centroids for all areas..."
@@ -32208,7 +32223,7 @@ msgstr ""
 #: ../scripts/v.db.reconnect.all/v.db.reconnect.all.py:124
 #, c-format, python-format
 msgid "Unable to copy table <%s>"
-msgstr ""
+msgstr "Не удалось скопировать таблицу <%s>"
 
 #: ../vector/v.decimate/copy_tab.c:112 ../vector/v.vect.stats/main.c:349
 #: ../vector/v.vect.stats/main.c:431 ../vector/v.extract/copy_tab.c:117
@@ -32235,7 +32250,7 @@ msgstr ""
 
 #: ../vector/v.db.select/main.c:76
 msgid "Prints vector map attributes."
-msgstr ""
+msgstr "Выводит атрибуты векторной карты."
 
 #: ../vector/v.db.select/main.c:79 ../vector/v.db.select/main.c:98
 #: ../vector/v.db.select/main.c:112
@@ -32291,7 +32306,7 @@ msgstr ""
 #: ../raster/r.regression.multi/main.c:170 ../raster/r.what/main.c:177
 #, c-format
 msgid "Unable to open file <%s> for writing"
-msgstr ""
+msgstr "Не удалось открыть файл <%s> для записи"
 
 #: ../vector/v.db.select/main.c:192
 #, c-format
@@ -32308,7 +32323,7 @@ msgstr ""
 #: ../vector/v.reclass/main.c:267
 #, c-format
 msgid "Unable to fetch data from table <%s>"
-msgstr ""
+msgstr "Не удалось получить данные из таблицы <%s>"
 
 #: ../vector/v.db.select/main.c:375
 #, c-format
@@ -32408,7 +32423,7 @@ msgstr ""
 
 #: ../vector/v.to.rast/vect2rast.c:36
 msgid "Loading data..."
-msgstr ""
+msgstr "Загрузка данных…"
 
 #: ../vector/v.to.rast/vect2rast.c:48 ../vector/v.colors/main.c:279
 #: ../raster3d/r3.flow/main.c:414
@@ -32422,7 +32437,7 @@ msgstr ""
 #: ../scripts/v.db.update/v.db.update.py:96
 #, c-format, python-format
 msgid "Column <%s> not found"
-msgstr ""
+msgstr "Столбец <%s> не найден"
 
 #: ../vector/v.to.rast/vect2rast.c:74
 #, c-format
@@ -32904,7 +32919,7 @@ msgstr ""
 #: ../scripts/v.db.renamecolumn/v.db.renamecolumn.py:91
 #, c-format, python-format
 msgid "Column <%s> not found in table <%s>"
-msgstr ""
+msgstr "Столбец <%s> не найден в таблице <%s>"
 
 #: ../vector/v.out.lidar/main.c:121
 #, c-format
@@ -34129,6 +34144,8 @@ msgid ""
 "Creates a Delaunay triangulation from an input vector map containing points "
 "or centroids."
 msgstr ""
+"Создание триангуляции Делонэ на основе исходной векторной карты, содержащей "
+"точки или центроиды."
 
 #: ../vector/v.delaunay/main.c:103
 msgid "Output triangulation as a graph (lines), not areas"
@@ -35414,7 +35431,7 @@ msgstr ""
 
 #: ../vector/v.edit/args.c:158
 msgid "Query tool"
-msgstr ""
+msgstr "Инструмент запросов"
 
 #: ../vector/v.edit/args.c:160
 msgid "For 'shorter' use negative threshold value, positive value for 'longer'"
@@ -35762,6 +35779,8 @@ msgstr ""
 msgid ""
 "Creates new vector (points) map from database table containing coordinates."
 msgstr ""
+"Создаёт новую векторную (точечную) карту из таблицы базы данных с "
+"координатами."
 
 #: ../vector/v.in.db/main.c:61
 msgid "Input table name"
@@ -35992,6 +36011,8 @@ msgid ""
 "Finds line id and real km+offset for given points in vector map using linear "
 "reference system."
 msgstr ""
+"Выполняет поиск ИД линии с определением фактических значений км+смещение для "
+"заданных точек векторной карты с применением линейной системы координат."
 
 #: ../vector/v.lrs/v.lrs.where/main.c:70
 msgid "Input vector map containing points"
@@ -36057,6 +36078,8 @@ msgid ""
 "Creates points/segments from input lines, linear reference system and "
 "positions read from stdin or a file."
 msgstr ""
+"Создаёт точки/сегменты на основе вводимых линий, линейной системы координат "
+"и позиций, считываемых из stdin или файла."
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:83
 msgid "Output vector map where segments will be written"
@@ -36347,7 +36370,7 @@ msgstr ""
 
 #: ../vector/v.net.path/main.c:45
 msgid "Finds shortest path on vector network."
-msgstr ""
+msgstr "Поиск кратчайшего пути по векторной сети"
 
 #: ../vector/v.net.path/main.c:72
 msgid ""
@@ -36527,7 +36550,7 @@ msgstr ""
 
 #: ../vector/v.outlier/main.c:75
 msgid "Removes outliers from vector point data."
-msgstr ""
+msgstr "Удаляет обособленные точки из векторных точечных данных."
 
 #: ../vector/v.outlier/main.c:81
 msgid ""
@@ -36586,6 +36609,8 @@ msgid ""
 "Finds the nearest element in vector map 'to' for elements in vector map "
 "'from'."
 msgstr ""
+"Находит ближайший элемент в результирующей векторной карте для элементов в "
+"исходной векторной карте."
 
 #: ../vector/v.distance/main.c:130
 msgid "Name of existing vector map (from)"
@@ -37398,7 +37423,7 @@ msgstr ""
 #: ../vector/v.out.ogr/main.c:588
 #, c-format
 msgid "Unable to open OGR data source '%s'"
-msgstr ""
+msgstr "Не удалось открыть источник данных OGR «%s»"
 
 #: ../vector/v.out.ogr/main.c:608
 #, c-format
@@ -37672,7 +37697,7 @@ msgstr ""
 #: ../vector/v.patch/main.c:593
 #, c-format
 msgid "Building topology for vector map <%s>..."
-msgstr ""
+msgstr "Построение топологии для векторной карты <%s>…"
 
 #: ../vector/v.patch/main.c:599
 msgid "Intersections at borders will have to be snapped"
@@ -37712,6 +37737,8 @@ msgstr ""
 #: ../vector/v.db.connect/main.c:57
 msgid "Prints/sets DB connection for a vector map to attribute table."
 msgstr ""
+"Выводит информацию/выполняет подключение к базе данных для векторной карты с "
+"атрибутивной таблицей."
 
 #: ../vector/v.db.connect/main.c:79
 msgid "Format: layer number[/layer name]"
@@ -38107,7 +38134,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:1479
 #, c-format
 msgid "Unable to drop table: '%s'"
-msgstr ""
+msgstr "Не удалось удалить таблицу: «%s»"
 
 #: ../vector/v.in.ogr/main.c:1520
 msgid "Cleaning polygons"
@@ -38197,7 +38224,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:1921
 #, c-format
 msgid "Number of duplicate centroids: %d"
-msgstr ""
+msgstr "Количество дубликатов центроидов: %d"
 
 #: ../vector/v.in.ogr/main.c:1926 ../vector/v.in.ogr/main.c:1995
 msgid "The input could be cleaned by snapping vertices to each other."
@@ -39153,7 +39180,7 @@ msgstr ""
 #: ../vector/v.net/turntable.c:642
 #, c-format
 msgid "Unable to create vector map <%s>."
-msgstr ""
+msgstr "Не удалось создать векторную карту <%s>."
 
 #: ../vector/v.net/turntable.c:655
 #, c-format
@@ -39718,6 +39745,8 @@ msgid ""
 "Building contour determination and Region Growing algorithm for determining "
 "the building inside"
 msgstr ""
+"Определение внешнего контура здания и алгоритм наращивания области для "
+"определения его внутреннего контура"
 
 #: ../vector/v.lidar.growing/main.c:83
 msgid "Input vector (v.lidar.edgedetection output)"
@@ -40160,7 +40189,7 @@ msgstr ""
 #: ../vector/v.in.dxf/write_vect.c:246
 #, c-format
 msgid "Unable to add database link for vector map <%s>"
-msgstr ""
+msgstr "Не удалось добавить связь с базой данных для векторной карты <%s>"
 
 #: ../vector/v.extrude/main.c:72
 msgid ""
@@ -40313,6 +40342,8 @@ msgid ""
 "Interpolates point data to a 3D raster map using regularized spline with "
 "tension (RST) algorithm."
 msgstr ""
+"Интерполяция точечных данных в трёхмерную растровую карту с использованием "
+"алгоритма регуляризованного сплайна с натяжением (RST)."
 
 #: ../vector/v.vol.rst/main.c:248
 msgid "Name of input 3D vector points map"
@@ -40541,7 +40572,7 @@ msgstr ""
 
 #: ../vector/v.vol.rst/user1.c:383
 msgid "Bitmap mask created"
-msgstr ""
+msgstr "Создана маска из битового массива"
 
 #: ../vector/v.vol.rst/user1.c:432 ../vector/v.vol.rst/user1.c:485
 #: ../vector/v.vol.rst/user1.c:538 ../vector/v.vol.rst/user1.c:591
@@ -40549,7 +40580,7 @@ msgstr ""
 #: ../vector/v.vol.rst/user1.c:750
 #, c-format
 msgid "Unable to open %s for writing"
-msgstr ""
+msgstr "Не удалось открыть %s для записи"
 
 #: ../vector/v.vol.rst/user1.c:443 ../vector/v.vol.rst/user1.c:496
 #: ../vector/v.vol.rst/user1.c:549 ../vector/v.vol.rst/user1.c:602
@@ -40712,7 +40743,7 @@ msgstr ""
 #: ../vector/v.extract/main.c:329
 #, c-format
 msgid "Unable select records from table <%s>"
-msgstr ""
+msgstr "Не удалось выбрать записи из таблицы <%s>"
 
 #: ../vector/v.extract/main.c:331
 #, c-format
@@ -40811,7 +40842,7 @@ msgstr ""
 #: ../vector/v.support/main.c:190
 #, c-format
 msgid "Unable to open history file for vector map <%s>"
-msgstr ""
+msgstr "Невозможно открыть файл истории для векторной карты <%s>"
 
 #: ../vector/v.rectify/main.c:76
 msgid ""
@@ -40892,7 +40923,7 @@ msgstr ""
 
 #: ../vector/v.kcv/main.c:61
 msgid "Randomly partition points into test/train sets."
-msgstr ""
+msgstr "Случайное деление точек на проверочные/тренировочные наборы."
 
 #: ../vector/v.kcv/main.c:71
 msgid "Number of partitions"
@@ -40946,7 +40977,7 @@ msgstr ""
 
 #: ../vector/v.build.polylines/main.c:116
 msgid "Builds polylines from lines or boundaries."
-msgstr ""
+msgstr "Выполняет построение полилиний из линий или границ."
 
 #: ../vector/v.build.polylines/main.c:126
 msgid "Category number mode"
@@ -41106,6 +41137,7 @@ msgstr[3] ""
 #: ../vector/v.label/main.c:62
 msgid "Creates paint labels for a vector map from attached attributes."
 msgstr ""
+"Создаёт подписи рисунков для векторного слоя с помощью связанных атрибутов."
 
 #: ../vector/v.label/main.c:69
 msgid "If not given the name of the input map is used"
@@ -41723,6 +41755,8 @@ msgid ""
 "Changes vector category values for an existing vector map according to "
 "results of SQL queries or a value in attribute table column."
 msgstr ""
+"Изменяет значения векторных категорий в существующей векторной карте "
+"согласно результатам SQL-запросов или значению в столбце таблицы атрибутов."
 
 #: ../vector/v.reclass/main.c:88
 msgid "The name of the column whose values are to be used as new categories"
@@ -42323,7 +42357,7 @@ msgstr ""
 #: ../raster/r.mapcalc/main.c:131 ../raster/r.series/main.c:205
 #, c-format
 msgid "%s= and %s= are mutually exclusive"
-msgstr ""
+msgstr "%s= и %s= не могут использоваться совместно"
 
 #: ../vector/v.colors/main.c:229
 #, c-format
@@ -42399,7 +42433,7 @@ msgstr ""
 #: ../raster/r.univar/r3.univar_main.c:182 ../raster/r.colors/edit_colors.c:484
 #, c-format
 msgid "3D raster map <%s> not found"
-msgstr ""
+msgstr "Трёхмерная растровая карта <%s> не найдена"
 
 #: ../vector/v.colors/main.c:335 ../raster/r.colors/edit_colors.c:487
 #, c-format
@@ -42614,7 +42648,7 @@ msgstr ""
 
 #: ../general/g.region/main.c:72
 msgid "Manages the boundary definitions for the geographic region."
-msgstr ""
+msgstr "Определение границ географического региона."
 
 #: ../general/g.region/main.c:78 ../raster/r.region/main.c:67
 msgid "Set from default region"
@@ -43718,7 +43752,7 @@ msgstr ""
 
 #: ../general/g.gisenv/main.c:48
 msgid "Outputs and modifies the user's current GRASS variable settings."
-msgstr ""
+msgstr "Вывод и изменение текущих пользовательских параметров настройки GRASS."
 
 #: ../general/g.gisenv/main.c:49
 msgid "Prints all defined GRASS variables if no option is given."
@@ -43897,6 +43931,7 @@ msgstr ""
 #: ../general/g.rename/main.c:49
 msgid "Renames data base element files in the user's current mapset."
 msgstr ""
+"Переименовывает файлы элементов базы данных в текущем наборе пользователя."
 
 #: ../general/g.rename/main.c:55
 msgid "renamed"
@@ -44481,7 +44516,7 @@ msgstr ""
 
 #: ../db/db.connect/main.c:185
 msgid "Default database is not set"
-msgstr ""
+msgstr "База данных по умолчанию не задана"
 
 #: ../db/db.connect/main.c:221
 msgid "Unable to set default database connection"
@@ -44489,7 +44524,7 @@ msgstr ""
 
 #: ../db/db.columns/main.c:101
 msgid "List all columns for a given table."
-msgstr ""
+msgstr "Список всех столбцов для указанной таблицы."
 
 #: ../db/db.execute/main.c:86 ../db/db.execute/main.c:91
 #: ../db/db.execute/main.c:106 ../db/db.execute/main.c:111
@@ -44507,7 +44542,7 @@ msgstr ""
 
 #: ../db/db.execute/main.c:144
 msgid "SQL statement"
-msgstr ""
+msgstr "Инструкция SQL"
 
 #: ../db/db.execute/main.c:145
 msgid "Example: update rybniky set kapri = 'hodne' where kapri = 'malo'"
@@ -44558,7 +44593,7 @@ msgstr ""
 
 #: ../db/db.describe/main.c:131
 msgid "Describes a table in detail."
-msgstr ""
+msgstr "Подробное описание таблицы"
 
 #: ../db/drivers/odbc/cursor.c:36 ../db/drivers/ogr/cursor.c:65
 msgid "Unable to allocate cursor"
@@ -45173,7 +45208,7 @@ msgstr ""
 #: ../db/drivers/sqlite/listdb.c:99
 #, c-format
 msgid "Unable to open directory '%s'"
-msgstr ""
+msgstr "Не удалось открыть каталог «%s»"
 
 #: ../db/drivers/sqlite/listdb.c:117
 #, c-format
@@ -45261,7 +45296,7 @@ msgstr ""
 
 #: ../db/db.tables/main.c:99
 msgid "Lists all tables for a given database."
-msgstr ""
+msgstr "Список всех таблиц для указанной базы данных."
 
 #: ../db/db.drivers/main.c:39
 msgid "Unable to read dbmscap file"
@@ -45564,7 +45599,7 @@ msgstr ""
 #: ../raster/r.univar/r3.univar_main.c:189
 #, c-format
 msgid "Unable to open 3D raster map <%s>"
-msgstr ""
+msgstr "Не удалось открыть трёхмерную растровую карту <%s>"
 
 #: ../raster3d/r3.out.vtk/main.c:209
 msgid "No RGB Data will be created."
@@ -45604,7 +45639,7 @@ msgstr ""
 #: ../raster3d/r3.info/main.c:499 ../raster3d/r3.cross.rast/main.c:343
 #, c-format
 msgid "Unable to close 3D raster map <%s>"
-msgstr ""
+msgstr "Не удалось закрыть трёхмерную растровую карту <%s>"
 
 #: ../raster3d/r3.out.vtk/errorHandling.c:105
 msgid "Unable to close input raster maps"
@@ -45788,7 +45823,7 @@ msgstr ""
 #: ../raster3d/r3.info/main.c:448
 #, c-format
 msgid "Unable to read range of 3D raster map <%s>"
-msgstr ""
+msgstr "Не удалось прочитать диапазон трёхмерной растровой карты <%s>"
 
 #: ../raster3d/r3.mkdspf/main.c:200
 #, c-format
@@ -46415,7 +46450,7 @@ msgstr ""
 
 #: ../raster3d/r3.mask/main.c:139
 msgid "Establishes the current working 3D raster mask."
-msgstr ""
+msgstr "Установка текущей трехмерной растровой маски."
 
 #: ../raster3d/r3.mask/main.c:147
 msgid "3D raster map with reference values"
@@ -46450,7 +46485,7 @@ msgstr ""
 
 #: ../raster3d/r3.to.rast/main.c:263
 msgid "Converts 3D raster maps to 2D raster maps"
-msgstr ""
+msgstr "Конвертирует трёхмерные растровые карты в двухмерные растровые карты"
 
 #: ../raster3d/r3.to.rast/main.c:362
 #, c-format
@@ -46490,7 +46525,7 @@ msgstr ""
 
 #: ../raster3d/r3.null/main.c:186
 msgid "Explicitly create the 3D NULL-value bitmap file."
-msgstr ""
+msgstr "Явное создание трёхмерного файла битовой маски с NULL-значениями."
 
 #: ../raster3d/r3.out.v5d/main.c:73
 msgid "3D raster map to be converted to Vis5D (V5D) file"
@@ -46558,6 +46593,8 @@ msgstr ""
 #: ../raster3d/r3.info/main.c:80
 msgid "Outputs basic information about a user-specified 3D raster map layer."
 msgstr ""
+"Выводит основную информацию о трехмерном растровом слое, заданном "
+"пользователем."
 
 #: ../raster3d/r3.info/main.c:86
 msgid "Print raster3d information in shell style"
@@ -48486,6 +48523,8 @@ msgstr ""
 #: ../raster/r.to.rast3/main.c:201
 msgid "Converts 2D raster map slices to one 3D raster volume map."
 msgstr ""
+"Конвертирует срезы двухмерной растровой карты в одну растровую трёхмерную "
+"объёмную карту."
 
 #: ../raster/r.to.rast3/main.c:213
 msgid "No output map"
@@ -48744,6 +48783,8 @@ msgid ""
 "the cells around it, and stores new cell values in an output raster map "
 "layer."
 msgstr ""
+"Задаёт значения категории каждой ячейки как функции значений категорий ячеек "
+"вокруг с сохранением новых значений в выходном растровом слое карты."
 
 #: ../raster/r.neighbors/main.c:185
 msgid ""
@@ -48895,7 +48936,7 @@ msgstr ""
 #: ../raster/r.buildvrt/main.c:113 ../raster/r.series/main.c:209
 #, c-format
 msgid "Please specify %s= or %s="
-msgstr ""
+msgstr "Необходимо указать параметры %s= или %s="
 
 #: ../raster/r.series.accumulate/main.c:255 ../raster/r.buildvrt/main.c:174
 #: ../raster/r.series/main.c:288
@@ -49167,7 +49208,7 @@ msgstr ""
 
 #: ../raster/r.topmodel/main.c:55
 msgid "Simulates TOPMODEL which is a physically based hydrologic model."
-msgstr ""
+msgstr "Имитация физически-обоснованной гидрологической модели TOPMODEL."
 
 #: ../raster/r.topmodel/main.c:60
 msgid "Name of input TOPMODEL parameters file"
@@ -49539,7 +49580,7 @@ msgstr ""
 #: ../raster/r.out.gdal/main.c:714
 #, c-format
 msgid "Unable to export raster map <%s>"
-msgstr ""
+msgstr "Не удалось выполнить экспорт растровой карты <%s>"
 
 #: ../raster/r.out.gdal/main.c:727
 msgid "Number of overviews must be between 0 and 5"
@@ -50473,7 +50514,7 @@ msgstr ""
 #: ../raster/r.composite/main.c:164
 #, c-format
 msgid "Unable to read color file of raster map <%s>"
-msgstr ""
+msgstr "Не удалось прочитать цветовой файл для растровой карты <%s>"
 
 #: ../raster/r.composite/main.c:262 ../raster/r.surf.random/main.c:66
 #: ../raster/r.li/r.li.daemon/daemon.c:174 ../raster/r.surf.fractal/main.c:85
@@ -50733,7 +50774,7 @@ msgstr ""
 
 #: ../raster/r.texture/main.c:107
 msgid "Generate images with textural features from a raster map."
-msgstr ""
+msgstr "Создаёт изображения с текстурными признаками из растровой карты."
 
 #: ../raster/r.texture/main.c:147
 msgid "Textural measurement method"
@@ -50843,7 +50884,7 @@ msgstr ""
 
 #: ../raster/r.compress/main.c:71
 msgid "Compresses and decompresses raster maps."
-msgstr ""
+msgstr "Сжимает и распаковывает растровые карты."
 
 #: ../raster/r.compress/main.c:74
 msgid "Name of existing raster map(s)"
@@ -51258,7 +51299,7 @@ msgstr ""
 
 #: ../raster/r.in.bin/main.c:260
 msgid "Import a binary raster file into a GRASS raster map layer."
-msgstr ""
+msgstr "Импорт бинарного растрового файла в растровый слой карты GRASS."
 
 #: ../raster/r.in.bin/main.c:265
 msgid "Import as floating-point data (default: integer)"
@@ -51384,7 +51425,7 @@ msgstr ""
 
 #: ../raster/r.resample/main.c:58
 msgid "GRASS raster map layer data resampling capability."
-msgstr ""
+msgstr "Функция пересчёта данных растрового слоя карты GRASS."
 
 #: ../raster/r.resample/main.c:67
 msgid "Name of an input layer"
@@ -51408,7 +51449,7 @@ msgstr ""
 
 #: ../raster/r.quant/main.c:51
 msgid "Produces the quantization file for a floating-point map."
-msgstr ""
+msgstr "Создаёт файл квантования для карты с плавающей запятой."
 
 #: ../raster/r.quant/main.c:59
 msgid "Raster map(s) to be quantized"
@@ -52045,6 +52086,10 @@ msgid ""
 "raster map to a new raster map (possibly with different resolution) using "
 "regularized spline with tension and smoothing."
 msgstr ""
+"Повторное интерполирование регуляризованными сплайнами с натяжением и "
+"сглаживанием с возможностью проведения топографического анализа исходной "
+"растровой карты и получением новой растровой карты (возможно с другим "
+"разрешением)."
 
 #: ../raster/r.resamp.rst/main.c:164
 msgid "Desired east-west resolution"
@@ -52812,7 +52857,7 @@ msgstr ""
 #: ../raster/r.stats/main.c:203 ../raster/r.stats/main.c:208
 #: ../raster/r.report/parse.c:129 ../raster/r.report/parse.c:134
 msgid "No data"
-msgstr ""
+msgstr "Нет данных"
 
 #: ../raster/r.stats/main.c:207 ../raster/r.report/parse.c:133
 msgid "Do not report cells where all maps have no data"
@@ -52855,7 +52900,7 @@ msgstr ""
 #: ../raster/r.stats/main.c:332 ../raster/r.contour/main.c:150
 #, c-format
 msgid "Unable to read fp range of raster map <%s>"
-msgstr ""
+msgstr "Не удалось прочитать диапазон с плавающей точкой растровой карты <%s>"
 
 #: ../raster/r.univar/r3.univar_main.c:37
 msgid "3D Raster map used for zoning, must be of type CELL"
@@ -52939,12 +52984,12 @@ msgstr ""
 #: ../raster/r.series.interp/main.c:130 ../raster/r.series.interp/main.c:146
 #, c-format
 msgid "Please specify %s= and %s="
-msgstr ""
+msgstr "Необходимо указать параметры %s= и %s="
 
 #: ../raster/r.series.interp/main.c:180 ../raster/r.colors/edit_colors.c:243
 #, c-format
 msgid "Unable to open %s file <%s>"
-msgstr ""
+msgstr "Не удалось открыть файл %s: <%s>"
 
 #: ../raster/r.series.interp/main.c:213
 #, c-format
@@ -52997,6 +53042,7 @@ msgid ""
 "Tabulates the mutual occurrence (coincidence) of categories for two raster "
 "map layers."
 msgstr ""
+"Создаёт таблицу взаимных совпадений для категорий двух растровых слоев карты."
 
 #: ../raster/r.coin/main.c:74
 msgid "Name of first input raster map"
@@ -53128,6 +53174,8 @@ msgstr ""
 #: ../raster/r.to.rast3elev/main.c:366
 msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
 msgstr ""
+"Создаёт трёхмерную объёмную карту из двухмерной карты высот и растровых карт "
+"со значениями."
 
 #: ../raster/r.to.rast3elev/main.c:400
 msgid "The upper value is not valid"
@@ -53146,6 +53194,7 @@ msgstr ""
 #: ../raster/r.random.surface/main.c:61
 msgid "Generates random surface(s) with spatial dependence."
 msgstr ""
+"Создаёт случайную поверхность (поверхности) с пространственной зависимостью."
 
 #: ../raster/r.random.surface/main.c:68
 msgid "Name for output raster map(s)"
@@ -53487,7 +53536,7 @@ msgstr ""
 
 #: ../raster/r.li/r.li.shape/main.c:48
 msgid "Calculates shape index on a raster map"
-msgstr ""
+msgstr "Вычисляет индекс формы для растрового слоя"
 
 #: ../raster/r.li/r.li.shape/main.c:51 ../raster/r.li/r.li.mps/mps.c:54
 #: ../raster/r.li/r.li.edgedensity/edgedensity.c:50
@@ -53504,15 +53553,19 @@ msgid ""
 "Calculates mean patch size index on a raster map, using a 4 neighbour "
 "algorithm"
 msgstr ""
+"Вычисляет индекс среднего размера участка на растровой карте с "
+"использованием алгоритма 4-х ближайших соседей"
 
 #: ../raster/r.li/r.li.simpson/simpson.c:45
 msgid "Calculates Simpson's diversity index on a raster map"
-msgstr ""
+msgstr "Вычисляет индекс разнообразия Симпсона на растровой карте"
 
 #: ../raster/r.li/r.li.edgedensity/edgedensity.c:47
 msgid ""
 "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
 msgstr ""
+"Вычисляет индекс плотности границ на растровой карте с использованием "
+"алгоритма 4-х ближайших соседей"
 
 #: ../raster/r.li/r.li.edgedensity/edgedensity.c:68
 msgid "The value of the patch type"
@@ -53530,16 +53583,18 @@ msgstr ""
 
 #: ../raster/r.li/r.li.dominance/dominance.c:45
 msgid "Calculates dominance's diversity index on a raster map"
-msgstr ""
+msgstr "Вычисляет индекс доминантного разнообразия на растровом слое"
 
 #: ../raster/r.li/r.li.patchnum/main.c:49
 msgid ""
 "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
 msgstr ""
+"Вычисляет индекса количества участков на растровом слое с использованием "
+"алгоритма 4-х ближайших соседей."
 
 #: ../raster/r.li/r.li.shannon/shannon.c:45
 msgid "Calculates Shannon's diversity index on a raster map"
-msgstr ""
+msgstr "Вычисляет индекс разнообразия Шеннона на растровой карте"
 
 #: ../raster/r.li/r.li.mpa/mpa.c:43
 msgid "Calculates mean pixel attribute index on a raster map"
@@ -53551,7 +53606,7 @@ msgstr ""
 
 #: ../raster/r.li/r.li.padcv/padcv.c:52
 msgid "Calculates coefficient of variation of patch area on a raster map"
-msgstr ""
+msgstr "Вычисляет коэффициента разброса площади участка на растровой карте"
 
 #: ../raster/r.li/r.li.richness/richness.c:42
 msgid "Calculates richness index on a raster map"
@@ -53559,11 +53614,11 @@ msgstr ""
 
 #: ../raster/r.li/r.li.padsd/padsd.c:52
 msgid "Calculates standard deviation of patch area a raster map"
-msgstr ""
+msgstr "Вычисление стандартного отклонения площади участков растровой карты"
 
 #: ../raster/r.li/r.li.padrange/padrange.c:52
 msgid "Calculates range of patch area size on a raster map"
-msgstr ""
+msgstr "Вычисляет диапазон площадей участков на растровом слое"
 
 #: ../raster/r.li/r.li.daemon/worker.c:135
 #, c-format
@@ -53626,7 +53681,7 @@ msgstr ""
 
 #: ../raster/r.li/r.li.cwed/cwed.c:53
 msgid "Calculates contrast weighted edge density index on a raster map"
-msgstr ""
+msgstr "Вычисляет контрастно-взвешенную плотность границ на растровой карте"
 
 #: ../raster/r.li/r.li.cwed/cwed.c:70
 msgid "Name of file that contains the weight to calculate the index"
@@ -53641,6 +53696,8 @@ msgstr ""
 msgid ""
 "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
 msgstr ""
+"Вычисляет индекс плотности участков растрового слоя с использованием "
+"алгоритма 4-х ближайших соседей"
 
 #: ../raster/r.out.vrml/main.c:50
 msgid "VRML"
@@ -53746,7 +53803,7 @@ msgstr ""
 #: ../raster/r.what/main.c:314
 #, c-format
 msgid "Unable to read vector map <%s>"
-msgstr ""
+msgstr "Невозможно прочитать векторную карту <%s>"
 
 #: ../raster/r.what/main.c:318
 #, c-format
@@ -54148,7 +54205,7 @@ msgstr ""
 
 #: ../raster/r.rescale/main.c:51
 msgid "Rescales the range of category values in a raster map layer."
-msgstr ""
+msgstr "Изменяет диапазон значений категорий в растровом слое карты."
 
 #: ../raster/r.rescale/main.c:56 ../raster/r.rescale.eq/main.c:61
 msgid "The name of the raster map to be rescaled"
@@ -55275,7 +55332,7 @@ msgstr ""
 
 #: ../raster/r.surf.fractal/main.c:42
 msgid "Creates a fractal surface of a given fractal dimension."
-msgstr ""
+msgstr "Создаёт фрактальную поверхность заданной фрактальной размерности."
 
 #: ../raster/r.surf.fractal/main.c:48
 msgid "Fractal dimension of surface (2 < D < 3)"
@@ -55308,6 +55365,8 @@ msgid ""
 "Rescales histogram equalized the range of category values in a raster map "
 "layer."
 msgstr ""
+"Изменение масштаба гистограммы c выравниванием диапазона значений категорий "
+"в растровом слое карты."
 
 #: ../raster/r.rescale.eq/main.c:115
 #, c-format
@@ -55319,6 +55378,8 @@ msgid ""
 "Outputs a covariance/correlation matrix for user-specified raster map "
 "layer(s)."
 msgstr ""
+"Вывод матрицы коррелляции/ковариации для заданного пользователем растрового "
+"слоя (слоёв) карты."
 
 #: ../raster/r.covar/main.c:61
 msgid "Print correlation matrix"
@@ -55419,7 +55480,7 @@ msgstr ""
 
 #: ../raster/r.region/main.c:56
 msgid "Sets the boundary definitions for a raster map."
-msgstr ""
+msgstr "Задаёт определения границ растровой карты."
 
 #: ../raster/r.region/main.c:62
 msgid "Set from current region"
@@ -55489,7 +55550,7 @@ msgstr ""
 
 #: ../raster/r.out.bin/main.c:282
 msgid "Exports a GRASS raster to a binary array."
-msgstr ""
+msgstr "Экспорт растра GRASS в бинарный массив."
 
 #: ../raster/r.out.bin/main.c:298
 msgid "Name for output binary map (use output=- for stdout)"
@@ -55595,6 +55656,8 @@ msgid ""
 "Creates a raster map layer and vector point map containing randomly located "
 "points."
 msgstr ""
+"Создаёт слой растровой карты и карту векторных точек со случайно "
+"расположенными точками."
 
 #: ../raster/r.random/main.c:68
 msgid "Name of cover raster map"
@@ -55666,6 +55729,7 @@ msgstr ""
 #: ../raster/r.describe/main.c:57
 msgid "Prints terse list of category values found in a raster map layer."
 msgstr ""
+"Вывод краткого списка значений категорий, найденных в растровом слое карты."
 
 #: ../raster/r.describe/main.c:71
 msgid "Number of quantization steps"
@@ -55905,6 +55969,8 @@ msgid ""
 "Recursively traces the least cost path backwards to cells from which the "
 "cumulative cost was determined."
 msgstr ""
+"Рекурсивно прослеживается путь наименьшей стоимости к ячейкам, для которых "
+"была определена кумулятивная стоимость."
 
 #: ../raster/r.spreadpath/main.c:98
 msgid "Name of raster map containing back-path easting information"
@@ -56098,11 +56164,13 @@ msgstr ""
 #: ../raster/r.colors/rules.c:214
 #, c-format
 msgid "bad rule (%s): [%s]"
-msgstr ""
+msgstr "неверное правило (%s): [%s]"
 
 #: ../raster/r.profile/main.c:57
 msgid "Outputs the raster map layer values lying on user-defined line(s)."
 msgstr ""
+"Вывод значений растрового слоя карты, лежащих на заданной пользователем "
+"линии (линиях)."
 
 #: ../raster/r.profile/main.c:76
 msgid "Name of input file containing coordinate pairs"
@@ -56343,6 +56411,8 @@ msgid ""
 "Manages category values and labels associated with user-specified raster map "
 "layers."
 msgstr ""
+"Управление значениями категорий и подписей, которые связаны с указанными "
+"пользователем растровыми слоями."
 
 #: ../raster/r.category/main.c:69
 msgid "Comma separated value list"
@@ -56624,6 +56694,7 @@ msgstr ""
 #: ../raster/r.circle/main.c:56
 msgid "Creates a raster map containing concentric rings around a given point."
 msgstr ""
+"Создаёт растровую карту с концентрическими окружностями вокруг данной точки."
 
 #: ../raster/r.circle/main.c:63
 msgid "The coordinate of the center (east,north)"
@@ -56674,6 +56745,8 @@ msgstr ""
 #: ../raster/r.distance/main.c:42
 msgid "Locates the closest points between objects in two raster maps."
 msgstr ""
+"Определяет местонахождение ближайших точек между объектами на двух растровых "
+"картах."
 
 #: ../raster/r.distance/parse.c:35
 msgid "Name of two input raster maps for computing inter-class distances"
@@ -56785,7 +56858,7 @@ msgstr ""
 
 #: ../raster/r.path/main.c:390
 msgid "Unable to read range file"
-msgstr ""
+msgstr "Не удалось прочитать файл диапазона"
 
 #: ../raster/r.path/main.c:393
 #, c-format
@@ -57158,6 +57231,9 @@ msgid ""
 "Creates a composite raster map layer by using known category values from one "
 "(or more) map layer(s) to fill in areas of \"no data\" in another map layer."
 msgstr ""
+"Создаёт составной растровый слой карты с использованием известных значений "
+"категорий из одной карты (или нескольких карт) для заполнения пустых "
+"областей в другом слое карты."
 
 #: ../raster/r.patch/main.c:73
 msgid "Name of raster maps to be patched together"
@@ -57307,6 +57383,7 @@ msgstr ""
 #: ../raster/r.support/main.c:56
 msgid "Allows creation and/or modification of raster map layer support files."
 msgstr ""
+"Создание и/или модификация вспомогательных файлов для растровых слоев карты."
 
 #: ../raster/r.support/main.c:80
 msgid "Text to use for map data units"
@@ -57379,6 +57456,7 @@ msgid ""
 "Creates a cross product of the category values from multiple raster map "
 "layers."
 msgstr ""
+"Создаёт кросс-продукт значений категорий нескольких растровых слоев карты."
 
 #: ../raster/r.cross/main.c:80
 #, c-format
@@ -57593,7 +57671,7 @@ msgstr ""
 
 #: ../raster/r.random.cells/main.c:52
 msgid "Generates random cell values with spatial dependence."
-msgstr ""
+msgstr "Создаёт случайные значения ячеек с учетом пространственной зависимости."
 
 #: ../raster/r.random.cells/main.c:70
 msgid "Maximum number of cells to be created"
@@ -57606,6 +57684,7 @@ msgstr ""
 #: ../raster/r.in.poly/main.c:37
 msgid "Creates raster maps from ASCII polygon/line/point data files."
 msgstr ""
+"Создаёт растровую карту из ASCII-файлов с описанием полигонов/линий/точек."
 
 #: ../raster/r.in.poly/main.c:41
 msgid "Name of input file; or \"-\" to read from stdin"
@@ -57737,6 +57816,8 @@ msgid ""
 "Makes each output cell value a function of the values assigned to the "
 "corresponding cells in the input raster map layers."
 msgstr ""
+"Присваивает каждой новой ячейке значение в виде функции значений "
+"соответствующих ячеек входных слоев растровой карты."
 
 #: ../raster/r.series/main.c:151
 msgid ""
@@ -58149,6 +58230,8 @@ msgstr ""
 msgid ""
 "Outputs raster map layer values lying along user defined transect line(s)."
 msgstr ""
+"Вывод значений растрового слоя карты, находящихся вдоль заданной "
+"пользователем линии (линий) трансекты."
 
 #: ../raster/r.transect/main.c:111
 msgid "Raster map to be queried"
@@ -58160,7 +58243,7 @@ msgstr ""
 
 #: ../raster/r.support.stats/main.c:37
 msgid "Update raster map statistics"
-msgstr ""
+msgstr "Обновление статистики растровой карты"
 
 #: ../raster/r.support.stats/main.c:49
 #, c-format
@@ -59435,7 +59518,7 @@ msgstr ""
 
 #: ../scripts/i.band/i.band.py:92
 msgid "Map <{}> not found in current mapset"
-msgstr ""
+msgstr "Карта <%s> не найдена в текущем наборе"
 
 #: ../scripts/i.band/i.band.py:101
 msgid "Operation {}: required parameter <{}> not set"
@@ -59618,7 +59701,7 @@ msgstr ""
 #: ../scripts/db.droptable/db.droptable.py:81
 #, python-format
 msgid "Deleting table <%s> which is attached to following map(s):"
-msgstr ""
+msgstr "Удаление таблицы <%s>, которая прикреплена к следующей карте (картам):"
 
 #: ../scripts/db.droptable/db.droptable.py:86
 #, python-format
@@ -59628,6 +59711,8 @@ msgstr ""
 #: ../scripts/db.droptable/db.droptable.py:88
 msgid "You must use the force flag to actually remove it. Exiting."
 msgstr ""
+"Для фактического удаления таблицы необходимо использовать флаг "
+"принудительного удаления. Завершение работы."
 
 #: ../scripts/db.droptable/db.droptable.py:97
 msgid "Cannot continue (problem deleting table)."
@@ -60854,7 +60939,7 @@ msgstr ""
 
 #: ../scripts/v.unpack/v.unpack.py:156
 msgid "Projection information does not match. Proceeding..."
-msgstr ""
+msgstr "Информация о проекции не совпадает. Продолжение обработки…"
 
 #: ../scripts/v.unpack/v.unpack.py:210
 #, python-format
@@ -61181,7 +61266,7 @@ msgstr ""
 #: ../scripts/g.extension/g.extension.py:271
 #, python-brace-format
 msgid "Download file from <{url}>, failed. Check internet connection."
-msgstr ""
+msgstr "Ошибка загрузки файла с <{url}>. Проверьте соединение с интернет."
 
 #: ../scripts/g.extension/g.extension.py:296
 #, python-format
@@ -61335,12 +61420,12 @@ msgstr ""
 #: ../scripts/g.extension/g.extension.py:1427
 #, python-brace-format
 msgid "ZIP file is unreadable: {0}"
-msgstr ""
+msgstr "ZIP-файл не читается: {0}"
 
 #: ../scripts/g.extension/g.extension.py:1446
 #, python-brace-format
 msgid "Archive file is unreadable: {0}"
-msgstr ""
+msgstr "Архивный файл не читается: {0}"
 
 #: ../scripts/g.extension/g.extension.py:1454
 #, python-brace-format
@@ -61744,7 +61829,7 @@ msgid "Color in GRASS format for drawing grid, or \"none\""
 msgstr "Цвет для сетки или 'none'"
 
 msgid "Either a standard color name or R:G:B triplet"
-msgstr "Либо стандратное название цвета, либо триплет R:G:B"
+msgstr "Либо стандартное название цвета, либо код R:G:B"
 
 #, fuzzy
 msgid ""
@@ -61860,7 +61945,7 @@ msgid "String representing no data cell value"
 msgstr "Строка, обозначающая отсутствующие данные в ячейке"
 
 msgid "Surface interpolation utility for raster map."
-msgstr "Утилита интерполяции поверхности для растровых слоев."
+msgstr "Утилита интерполяции поверхности для растровой карты."
 
 #, fuzzy
 msgid ""
@@ -61881,7 +61966,7 @@ msgid "Name of layer to be used for SATURATION"
 msgstr "Имя слоя, используемого для НАСЫЩЕННОСТИ"
 
 msgid "Surface generation program."
-msgstr "Программа создания поверхности"
+msgstr "Программа формирования поверхности."
 
 msgid ""
 "Lat/long databases not supported by r.surf.idw2. Use r.surf.idw instead!"

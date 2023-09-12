@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2023-05-05 10:08+0000\n"
+"PO-Revision-Date: 2023-08-12 13:08+0000\n"
 "Last-Translator: Markus <neteler@osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/"
 "grassmods/de/>\n"
@@ -5972,8 +5972,9 @@ msgstr ""
 #: ../locale/scriptstrings/i.sentinel.import_to_translate.c:16
 #: ../locale/scriptstrings/i.landsat.import_to_translate.c:16
 #: ../locale/scriptstrings/r.in.nasadem_to_translate.c:23
+#, fuzzy
 msgid "Cache size for raster rows"
-msgstr ""
+msgstr "Cachegröße für Rasterzeilen"
 
 #: ../locale/scriptstrings/i.sentinel.preproc_to_translate.c:30
 msgid "Use AOD instead visibility"
@@ -36012,7 +36013,7 @@ msgstr "%.2f KB Speicherplatz für temporäre Dateien."
 #: ../vector/v.surf.rst/main.c:713
 #, c-format
 msgid "%d bytes of disk space for temp files."
-msgstr ""
+msgstr "%d Bytes Speicherplatz für temporäre Dateien."
 
 #: ../vector/v.surf.rst/main.c:733
 msgid "Processing segments in parallel..."
@@ -36356,8 +36357,8 @@ msgstr "Mehrere Punkte (%d) der Kategorie %d, auf 'NULL' gesetzt."
 #, c-format
 msgid "%d category loaded from table"
 msgid_plural "%d categories loaded from table"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d Kategorie aus Tabelle geladen"
+msgstr[1] "%d Kategorien aus dem Vektor geladen"
 
 #: ../vector/v.what.rast3/main.c:332
 #, c-format
@@ -36370,8 +36371,8 @@ msgstr[1] ""
 #, c-format
 msgid "%d category from vector missing in table"
 msgid_plural "%d categories from vector missing in table"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d Kategorie des Vektors fehlt in der Tabelle."
+msgstr[1] "%d Kategorien des Vektors fehlen in der Tabelle."
 
 #: ../vector/v.what.rast3/main.c:339
 #, c-format
@@ -38551,14 +38552,18 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: ../vector/v.out.ogr/main.c:394
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "%d boundary found, but not requested to be exported. Verify 'type' parameter."
 msgid_plural ""
 "%d boundaries found, but not requested to be exported. Verify 'type' "
 "parameter."
 msgstr[0] ""
+"%d Grenze gefunden, aber nicht zum Exportieren angefordert. Überprüfen Sie "
+"den Parameter \"Typ\"."
 msgstr[1] ""
+"%d Grenzen gefunden, aber nicht zum Exportieren angefordert. Überprüfen Sie "
+"den Parameter 'Typ'."
 
 #: ../vector/v.out.ogr/main.c:403
 #, c-format
@@ -38568,7 +38573,11 @@ msgid_plural ""
 "%d centroids found, but not requested to be exported. Verify 'type' "
 "parameter."
 msgstr[0] ""
+"%d Zentroid gefunden, aber nicht für Export vorgesehen. Überprüfen Sie den "
+"Parameter \"Typ\"."
 msgstr[1] ""
+"%d Zentroide gefunden, aber nicht für Export vorgesehen. Überprüfen Sie den "
+"Parameter \"Typ\"."
 
 #: ../vector/v.out.ogr/main.c:411
 #, c-format
@@ -42041,8 +42050,8 @@ msgstr "Kann keine Datensätze Tabelle <%s> selektieren."
 #, c-format
 msgid "%d category loaded"
 msgid_plural "%d categories loaded"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d Kategorie geladen"
+msgstr[1] "%d Kategorien geladen"
 
 #: ../vector/v.extract/main.c:346
 msgid ""
@@ -43151,8 +43160,8 @@ msgstr "Fange Grenzen mit %g ..."
 #, c-format
 msgid "%d boundary snapped"
 msgid_plural "%d boundaries snapped"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d Grenze eingefangen"
+msgstr[1] "%d Grenzen eingefangen"
 
 #: ../vector/v.overlay/area_area.c:122 ../vector/v.overlay/line_area.c:256
 #: ../raster/r.path/main.c:502
@@ -53849,8 +53858,8 @@ msgstr ""
 #, c-format
 msgid "%d byte of disk space for temp files."
 msgid_plural "%d bytes of disk space for temp files."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d Byte Speicherplatz für temporäre Dateien."
+msgstr[1] "%d Bytes Speicherplatz für temporäre Dateien."
 
 #: ../raster/r.resamp.rst/main.c:438
 msgid "Maximum value of a raster map is NULL."
@@ -59260,7 +59269,7 @@ msgstr "%s: SCHRITT  2 ..."
 #: ../raster/r.cross/main.c:171
 #, c-format
 msgid "%d categories"
-msgstr ""
+msgstr "%d Kategorien"
 
 #: ../raster/r.in.ascii/gethead.c:35
 msgid "input file is not a Surfer ascii grid file"
@@ -60519,6 +60528,9 @@ msgid ""
 "\n"
 "Volume report on data from <%s> using clumps on <%s> raster map"
 msgstr ""
+"\n"
+"Volumenbericht über Daten von <%s> unter Verwendung von Klumpen auf <%s> "
+"Rasterkarte"
 
 #: ../raster/r.volume/main.c:270
 #, c-format
