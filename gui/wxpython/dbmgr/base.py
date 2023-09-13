@@ -556,18 +556,19 @@ class VirtualAttributeList(
     def OnColumnSort(self, event):
         """Column heading left mouse button -> sorting"""
         self._col = event.GetColumn()
-
+        self._updateColSortFlag()
         self.ColumnSort()
-
         event.Skip()
 
     def OnColumnSortAsc(self, event):
         """Sort values of selected column (ascending)"""
+        self._updateColSortFlag()
         self.SortListItems(col=self._col, ascending=True)
         event.Skip()
 
     def OnColumnSortDesc(self, event):
         """Sort values of selected column (descending)"""
+        self._updateColSortFlag()
         self.SortListItems(col=self._col, ascending=False)
         event.Skip()
 
@@ -713,6 +714,14 @@ class VirtualAttributeList(
             return False
 
         return True
+
+    def _updateColSortFlag(self):
+        """
+        Update listmix.ColumnSorterMixin class self._colSortFlag list
+        private variable for new column which was added (required for
+        sorting new added column values)
+        """
+        self._colSortFlag.extend([0] * (len(self.columns) - len(self._colSortFlag)))
 
 
 class DbMgrBase:
