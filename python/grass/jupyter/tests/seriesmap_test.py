@@ -28,7 +28,7 @@ def test_default_init(space_time_raster_dataset):
     """Check that TimeSeriesMap init runs with default parameters"""
     img = gj.SeriesMap()
     img.add_rasters(space_time_raster_dataset.raster_names)
-    assert img.rasters == space_time_raster_dataset.raster_names
+    assert img._names == space_time_raster_dataset.raster_names
 
 
 def test_render_layers(space_time_raster_dataset):
