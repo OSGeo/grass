@@ -258,18 +258,13 @@ class RegionManagerForSeries:
             return
         if self._resolution_set and self._extent_set:
             return
-        try:
-            if not self._resolution_set and not self._extent_set:
-                self._env["GRASS_REGION"] = gs.region_env(raster=rasters, env=self._env)
-                self._extent_set = True
-                self._resolution_set = True
-            elif not self._resolution_set:
-                self._env["GRASS_REGION"] = gs.region_env(
-                    align=rasters[0], env=self._env
-                )
-                self._resolution_set = True
-        except CalledModuleError:
-            return
+        if not self._resolution_set and not self._extent_set:
+            self._env["GRASS_REGION"] = gs.region_env(raster=rasters, env=self._env)
+            self._extent_set = True
+            self._resolution_set = True
+        elif not self._resolution_set:
+            self._env["GRASS_REGION"] = gs.region_env(align=rasters[0], env=self._env)
+            self._resolution_set = True
 
     def set_region_from_vectors(self, vectors):
         """Sets computational region extent for rendering from a series of vectors
@@ -287,12 +282,9 @@ class RegionManagerForSeries:
             return
         if self._resolution_set and self._extent_set:
             return
-        try:
-            if not self._resolution_set and not self._extent_set:
-                self._env["GRASS_REGION"] = gs.region_env(vector=vectors, env=self._env)
-                self._extent_set = True
-        except CalledModuleError:
-            return
+        if not self._resolution_set and not self._extent_set:
+            self._env["GRASS_REGION"] = gs.region_env(vector=vectors, env=self._env)
+            self._extent_set = True
 
 
 class RegionManagerFor3D:
