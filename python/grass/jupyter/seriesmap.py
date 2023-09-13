@@ -14,6 +14,7 @@
 
 import tempfile
 import os
+import sys
 import weakref
 import shutil
 from pathlib import Path
@@ -320,7 +321,15 @@ class SeriesMap:
         )
         return widgets.HBox([play, slider, out_img], layout=layout)
 
-    def save(self, filename, duration=500):
+    def save(
+        self,
+        filename,
+        duration=500,
+        label=True,
+        font=None,
+        text_size=12,
+        text_color="gray",
+    ):
         """
         Creates a GIF animation of rendered layers.
 
@@ -338,6 +347,7 @@ class SeriesMap:
         # Create a GIF from the PNG images
         import PIL.Image  # pylint: disable=import-outside-toplevel
         import PIL.ImageDraw  # pylint: disable=import-outside-toplevel
+        import PIL.ImageFont  # pylint: disable=import-outside-toplevel
 
         # Render images if they have not been already
         if not self._layers_rendered:
@@ -353,7 +363,26 @@ class SeriesMap:
             img_path = self._layer_filename_dict[i]
             img = PIL.Image.open(img_path)
             img = img.convert("RGBA", dither=None)
-            PIL.ImageDraw.Draw(img)
+            draw = PIL.ImageDraw.Draw(img)
+            if label:
+                if not font and sys.platform == "linux":
+                    try:
+                        fontObj = PIL.ImageFont.truetype("DejaVuSans.ttf", text_size)
+                    except OSError:
+                        fontObj = PIL.ImageFont.load_default()
+                elif not font:
+                    try:
+                        fontObj = PIL.ImageFont.truetype("Arial.ttf", text_size)
+                    except OSError:
+                        fontObj = PIL.ImageFont.load_default()
+                else:
+                    fontObj = PIL.ImageFont.truetype(font, text_size)
+                draw.text(
+                    (0, 0),
+                    self._names[i],
+                    fill=text_color,
+                    font=fontObj,
+                )
             images.append(img)
 
         images[0].save(
