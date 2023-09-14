@@ -11,6 +11,7 @@
 #           License (>=v2). Read the file COPYING that comes with GRASS
 #           for details.
 """Create and display visualizations for a series of rasters."""
+# pylint: disable=duplicate-code
 
 import tempfile
 import os
@@ -177,13 +178,14 @@ class SeriesMap:
         if not shutil.which(grass_module):
             raise AttributeError(_("Cannot find GRASS module {}").format(grass_module))
         # if this function is called, the images need to be rendered again
-        self._layers_rendered
+        self._layers_rendered = False
 
         def wrapper(**kwargs):
             if not self._series_added:
                 self._base_layer_calls.append((grass_module, kwargs))
             else:
-                [row.append((grass_module, kwargs)) for row in self._calls]
+                for row in self._calls:
+                    row.append((grass_module, kwargs))
 
         return wrapper
 

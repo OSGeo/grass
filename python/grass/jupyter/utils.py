@@ -10,10 +10,9 @@
 #            for details.
 
 """Utility functions warpping existing processes in a suitable way"""
-
-import grass.script as gs
 import sys
 from pathlib import Path
+import grass.script as gs
 
 
 def get_region(env=None):
@@ -237,8 +236,8 @@ def save_gif(
         raise ValueError(_("filename must end in '.gif'"))
 
     images = []
-    for i in range(len(input_files)):
-        img_path = input_files[i]
+    for i, file in enumerate(input_files):
+        img_path = file
         img = PIL.Image.open(img_path)
         img = img.convert("RGBA", dither=None)
         draw = PIL.ImageDraw.Draw(img)
