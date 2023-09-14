@@ -350,8 +350,12 @@ class SeriesMap:
         if not self._layers_rendered:
             self.render()
 
+        tmp_files = []
+        for _, file in self._layer_filename_dict.items():
+            tmp_files.append(file)
+
         save_gif(
-            self._layer_filename_dict,
+            tmp_files,
             filename,
             duration=duration,
             label=label,

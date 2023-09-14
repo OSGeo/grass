@@ -237,8 +237,7 @@ def save_gif(
 
     images = []
     for i, file in enumerate(input_files):
-        img_path = file
-        img = PIL.Image.open(img_path)
+        img = PIL.Image.open(file)
         img = img.convert("RGBA", dither=None)
         draw = PIL.ImageDraw.Draw(img)
         if label:
