@@ -11,7 +11,6 @@
 #           License (>=v2). Read the file COPYING that comes with GRASS
 #           for details.
 """Create and display visualizations for a series of rasters."""
-# pylint: disable=duplicate-code
 
 import tempfile
 import os
@@ -57,6 +56,7 @@ class SeriesMap:
     """
 
     # pylint: disable=too-many-instance-attributes
+    # pylint: disable=duplicate-code
 
     def __init__(
         self,

@@ -11,7 +11,6 @@
 #           License (>=v2). Read the file COPYING that comes with GRASS
 #           for details.
 """Create and display visualizations for space-time datasets."""
-# pylint: disable=duplicate-code
 
 import tempfile
 import os
@@ -132,6 +131,7 @@ class TimeSeriesMap:
 
     # pylint: disable=too-many-instance-attributes
     # Need more attributes to build timeseriesmap visuals
+    # pylint: disable=duplicate-code
 
     def __init__(
         self,
