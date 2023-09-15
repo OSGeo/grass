@@ -1721,7 +1721,7 @@ if test -n "$USE_LIBSVM"; then
     AC_CHECK_HEADER([svm.h], [], [
         AC_PROG_AWK()
         # Loop over each include path as we need to know directory were svm.h was found
-        DEFAULT_INCLUDE_PATHS=$(cpp -v /dev/null -o /dev/null 2>&1 | $AWK '/#include <\.\.\.> search starts here:/{flag=1; next} /End of search list./{flag=0} flag')
+        DEFAULT_INCLUDE_PATHS=$(echo "" | ${CC} -E -Wp,-v - 2>&1 | $AWK '/#include <\.\.\.> search starts here:/{flag=1; next} /End of search list./{flag=0} flag')
         AC_MSG_CHECKING(for libsvm/svm.h)
         for path in $DEFAULT_INCLUDE_PATHS; do
           CFLAGS_backup="${CFLAGS}"
@@ -1737,9 +1737,7 @@ if test -n "$USE_LIBSVM"; then
         if test "${libsvm_found}" == "not found"; then
           AC_MSG_ERROR([svm.h is required but not found. Install LIBSVM or specify path to its header file.])
         fi
-      ], [
-      AC_MSG_ERROR([svm.h is required but not found. Install LIBSVM or specify path to its header file.])
-    ])
+      ])
   fi
   LOC_CHECK_LIB_PATH(libsvm,libsvm,LIBSVM_LIB)
   LOC_CHECK_LIBS(svm,svm_load_model,libsvm,$LIBSVM_LIB,LIBSVM_LIB,,,)

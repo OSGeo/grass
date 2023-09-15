@@ -14686,10 +14686,7 @@ fi
 
     CFLAGS="${CFLAGS_backup}"
   else
-    ac_fn_c_check_header_compile "$LINENO" "svm.h" "ac_cv_header_svm_h" "
-      as_fn_error $? "svm.h is required but not found. Install LIBSVM or specify path to its header file." "$LINENO" 5
-
-"
+    ac_fn_c_check_header_compile "$LINENO" "svm.h" "ac_cv_header_svm_h" "$ac_includes_default"
 if test "x$ac_cv_header_svm_h" = xyes
 then :
 
@@ -14739,7 +14736,7 @@ fi
 done
 
         # Loop over each include path as we need to know directory were svm.h was found
-        DEFAULT_INCLUDE_PATHS=$(cpp -v /dev/null -o /dev/null 2>&1 | $AWK '/#include <\.\.\.> search starts here:/{flag=1; next} /End of search list./{flag=0} flag')
+        DEFAULT_INCLUDE_PATHS=$(echo "" | ${CC} -E -Wp,-v - 2>&1 | $AWK '/#include <\.\.\.> search starts here:/{flag=1; next} /End of search list./{flag=0} flag')
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libsvm/svm.h" >&5
 printf %s "checking for libsvm/svm.h... " >&6; }
         for path in $DEFAULT_INCLUDE_PATHS; do
