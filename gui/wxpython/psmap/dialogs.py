@@ -1963,7 +1963,7 @@ class VectorPanel(Panel):
             id = self.vectorList[pos][2]
 
             dlg = VPropertiesDialog(
-                self,
+                self.parent,
                 id=id,
                 vectors=self.vectorList,
                 tmpSettings=self.tmpDialogDict[id],
