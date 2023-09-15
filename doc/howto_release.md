@@ -14,6 +14,15 @@
 *Note: Some later steps in this text are to be done by the development coordinator
 (currently Markus Neteler and Martin Landa) due to needed logins.*
 
+## Update config.guess and config.sub
+
+If outdated, update the `config.guess` and `config.sub` files:
+
+```bash
+wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
+wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
+```
+
 ## Prepare the local repo
 
 Update your remotes and switch to branch:
