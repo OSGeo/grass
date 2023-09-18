@@ -2126,8 +2126,8 @@ class PsMapBufferedWindow(wx.Window):
                     rect=rect, canvasToPaper=True
                 )
                 rect.Offset(
-                    dx=rect.GetWidth() / 2,
-                    dy=rect.GetHeight() / 2,
+                    dx=int(rect.GetWidth() / 2),
+                    dy=int(rect.GetHeight() / 2),
                 )
                 self.instruction[id]["where"] = self.CanvasPaperCoordinates(
                     rect=rect, canvasToPaper=True
