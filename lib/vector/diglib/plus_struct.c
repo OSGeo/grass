@@ -673,13 +673,68 @@ int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     if (0 >= dig__fwrite_port_C((char *)buf, 5, fp))
         return (-1);
 
-    /* determine required offset size from coor file size */
-    if (ptr->coor_size > (off_t)PORT_LONG_MAX) {
-        /* can only happen when sizeof(off_t) == 8 */
-        ptr->off_t_size = 8;
+    /* calculate the total size of topo file to get the correct off_t_size */
+    if (ptr->off_t_size == 0) {
+        off_t size = length;
+        int i;
+
+        for (i = 1; i <= ptr->n_nodes; i++) {
+            /* from dig_Wr_P_node() */
+            struct P_node *p = ptr->Node[i];
+
+            if (p == NULL)
+                size += 4;
+            else {
+                size += 20 + 8 * p->n_lines;
+                if (ptr->with_z)
+                    size += 12;
+            }
+        }
+
+        for (i = 1; i <= ptr->n_lines; i++) {
+            /* from dig_Wr_P_line() */
+            struct P_line *p = ptr->Line[i];
+
+            if (p == NULL)
+                size += 1;
+            else {
+                /* for now, off_t_size = 4 */
+                size += 5;
+                if (p->type & GV_CENTROID)
+                    size += 4;
+                else if (p->type & GV_LINE)
+                    size += 8;
+                else if (p->type & GV_BOUNDARY)
+                    size += 16;
+                else if ((p->type & GV_FACE) && ptr->with_z)
+                    size += 12;
+                else if ((p->type & GV_KERNEL) && ptr->with_z)
+                    size += 4;
+            }
+        }
+
+        for (i = 1; i <= ptr->n_areas; i++) {
+            /* from dig_Wr_P_area() */
+            struct P_area *p = ptr->Area[i];
+
+            if (p == NULL)
+                size += 4;
+            else
+                size += 12 + 4 * p->n_lines + 4 * p->n_isles;
+        }
+
+        for (i = 1; i <= ptr->n_isles; i++) {
+            /* from dig_Wr_P_isle() */
+            struct P_isle *p = ptr->Isle[i];
+
+            if (p == NULL)
+                size += 4;
+            else
+                size += 8 + 4 * p->n_lines;
+        }
+
+        ptr->off_t_size = size > PORT_LONG_MAX ? 8 : 4;
     }
-    else
-        ptr->off_t_size = 4;
 
     /* add a new field with off_t_size after byte_order? */
 
