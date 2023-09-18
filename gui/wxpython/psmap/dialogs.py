@@ -1861,11 +1861,13 @@ class VectorPanel(Panel):
     def OnVector(self, event):
         """Gets info about toplogy and enables/disables choices point/line/area"""
         vmap = self.select.GetValue()
-        try:
-            topoInfo = grass.vector_info_topo(map=vmap)
-        except grass.ScriptError:
+        if not grass.find_file(
+            vmap,
+            element="vector",
+        )["name"]:
             return
 
+        topoInfo = grass.vector_info_topo(map=vmap)
         if topoInfo:
             self.vectorType.EnableItem(2, bool(topoInfo["areas"]))
             self.vectorType.EnableItem(
