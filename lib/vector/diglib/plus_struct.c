@@ -673,8 +673,14 @@ int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     if (0 >= dig__fwrite_port_C((char *)buf, 5, fp))
         return (-1);
 
-    /* calculate the total size of topo file to get the correct off_t_size */
-    if (ptr->off_t_size == 0) {
+    /* determine required offset size from coor file size */
+    if (ptr->coor_size > (off_t)PORT_LONG_MAX) {
+        /* can only happen when sizeof(off_t) == 8 */
+        ptr->off_t_size = 8;
+    }
+    else if (ptr->off_t_size == 0) {
+        /* calculate the total size of topo file to get the correct off_t_size
+         * if coor file is less than PORT_LONG_MAX */
         off_t size = length;
         int i;
 
