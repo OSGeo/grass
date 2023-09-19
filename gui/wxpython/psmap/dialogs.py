@@ -182,13 +182,13 @@ class PenStyleComboBox(OwnerDrawnComboBox):
         dc.DrawText(
             self.GetString(item),
             r.x + 3,
-            (r.y + 0) + ((r.height / 2) - dc.GetCharHeight()) / 2,
+            int((r.y + 0) + ((r.height / 2) - dc.GetCharHeight()) / 2),
         )
         dc.DrawLine(
             r.x + 5,
-            r.y + ((r.height / 4) * 3) + 1,
+            int(r.y + ((r.height / 4) * 3) + 1),
             r.x + r.width - 5,
-            r.y + ((r.height / 4) * 3) + 1,
+            int(r.y + ((r.height / 4) * 3) + 1),
         )
 
     def OnDrawBackground(self, dc, rect, item, flags):
