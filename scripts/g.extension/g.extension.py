@@ -144,7 +144,6 @@
 # TODO: solve addon-extension(-module) confusion
 
 import fileinput
-import http
 import os
 import codecs
 import sys
@@ -188,7 +187,6 @@ PROXIES = {}
 HEADERS = {
     "User-Agent": "Mozilla/5.0",
 }
-HTTP_STATUS_CODES = list(http.HTTPStatus)
 GIT_URL = "https://github.com/OSGeo/grass-addons/"
 
 # MAKE command
@@ -258,7 +256,7 @@ class GitAdapter:
         git_version, stderr = git_version.communicate()
         if stderr:
             gs.fatal(
-                _("Failed to get Git version.\n{error}").format(
+                _("Failed to get Git version.\n{}").format(
                     gs.decode(stderr),
                 )
             )
@@ -499,28 +497,143 @@ def urlopen(url, *args, **kwargs):
     return urlrequest.urlopen(request, *args, **kwargs)
 
 
+def get_github_repository_branches_html_parser_class():
+    from html.parser import HTMLParser
+
+    class GetGitHubRepositoryBranchesHTMLParser(HTMLParser):
+        """Get GitHub addons repository branches HTML parser
+
+        :param str branch_item_element: branch item HTML element
+
+        Example of usage:
+
+        ```
+        html_parser = GetGitHubRepositoryBranchesHTMLParser()
+        html_parser.feed(response.text)
+        branches = html_parser.close()
+        ```
+        """
+
+        def __init__(self, branch_item_element="branch-filter-item"):
+            self._branch_item_element = branch_item_element
+            super().__init__()
+
+        def feed(self, data):
+            self._branches = []
+            super().feed(data)
+
+        def close(self):
+            super().close()
+            return self._branches
+
+        def handle_starttag(self, tag, attrs):
+            if tag == self._branch_item_element:
+                for attr in attrs:
+                    if attr[0] == "branch":
+                        self._branches.append(attr[1])
+                        break
+
+    return GetGitHubRepositoryBranchesHTMLParser
+
+
+def get_official_github_addons_repository_branches(url):
+    """Get all official GitHub addons repository branches
+
+    Instead of using GitHub REST API due to restriction, we use simple
+    HTML parsing of official GitHub addons repository all branches
+    HTML page URL. Use this function only under MS Windows OS platforms
+    that do not use Git.
+
+    :param str url: official GitHub addons all branches HTML page URL
+
+    :return list: list of all official GitHub addons repository branches
+    """
+    import http
+
+    http_status_codes = list(http.HTTPStatus)
+    try:
+        response = urlopen(url)
+        if response.code != 200:
+            index = http_status_codes.index(response.code)
+            desc = http_status_codes[index].description
+            gs.fatal(
+                _(
+                    "Getting official addons repository branches"
+                    " from <{url}> failed, and return status code"
+                    " <{code}> <{desc}>."
+                ).format(
+                    url=url,
+                    code=response.code,
+                    desc=desc,
+                ),
+            )
+    except HTTPError as e:
+        index = http_status_codes.index(e.code)
+        desc = http_status_codes[index].description
+        gs.fatal(
+            _(
+                "Getting official addons repository branches"
+                " from <{url}> failed. The server couldn't fulfill"
+                " the request and return status code <{code}> <{desc}>."
+            ).format(
+                url=url,
+                code=e.code,
+                desc=desc,
+            ),
+        )
+    except URLError as e:
+        gs.fatal(
+            _(
+                "Getting official addons repository branches"
+                " failed to reach a server <{url}>. Reason <{reason}>"
+            ).format(
+                url=url,
+                reason=e.reason,
+            ),
+        )
+    except Exception as e:
+        gs.fatal(
+            _(
+                "Getting official addons repository branches"
+                " from <{url}> failed due to an error <{error}>."
+            ).format(
+                url=url,
+                error=e.message if hasattr(e, "message") else e,
+            ),
+        )
+    html_parser = get_github_repository_branches_html_parser_class()()
+    html_parser.feed(gs.decode(response.read()))
+    return html_parser.close()
+
+
 def get_version_branch(major_version):
     """Check if version branch for the current GRASS version exists,
     if not, take branch for the previous version
     For the official repo we assume that at least one version branch is present"""
     version_branch = f"grass{major_version}"
-    branch = gs.Popen(
-        ["git", "ls-remote", "--heads", GIT_URL, f"refs/heads/{version_branch}"],
-        stdout=PIPE,
-        stderr=PIPE,
-    )
-    branch, stderr = branch.communicate()
-    if stderr:
-        gs.fatal(
-            _(
-                "Failed to get branch from the Git repository <{repo_path}>.\n"
-                "{error}"
-            ).format(
-                repo_path=GIT_URL,
-                error=gs.decode(stderr),
-            )
+    if sys.platform == "win32":
+        # GitHub official addons repository all branches HTML page URL
+        url = f"{GIT_URL}branches/all/"
+        branch = get_official_github_addons_repository_branches(url)
+    else:
+        branch = gs.Popen(
+            ["git", "ls-remote", "--heads", GIT_URL, f"refs/heads/{version_branch}"],
+            stdout=PIPE,
+            stderr=PIPE,
         )
-    if version_branch not in gs.decode(branch):
+        branch, stderr = branch.communicate()
+        if stderr:
+            gs.fatal(
+                _(
+                    "Failed to get branch from the Git repository <{repo_path}>.\n"
+                    "{error}"
+                ).format(
+                    repo_path=GIT_URL,
+                    error=gs.decode(stderr),
+                )
+            )
+        branch = gs.decode(branch)
+    if version_branch not in branch:
         version_branch = "grass{}".format(int(major_version) - 1)
     return version_branch
 
@@ -1147,7 +1260,7 @@ def write_xml_toolboxes(name, tree=None):
     file_.close()
 
 
-def install_extension(source, url, xmlurl, branch):
+def install_extension(source=None, url=None, xmlurl=None, branch=None):
     """Install extension (e.g. one module) or a toolbox (list of modules)"""
     gisbase = os.getenv("GISBASE")
     if not gisbase:
@@ -1514,11 +1627,12 @@ def install_module_xml(mlist):
     # read XML file
     tree = etree_fromfile(xml_file)
 
-    # Filter multi-addon addons
-    if len(mlist) > 1:
-        mlist = filter_multi_addon_addons(
-            mlist.copy()
-        )  # mlist.copy() keep the original list of add-ons
+    if sys.platform != "win32":
+        # Filter multi-addon addons
+        if len(mlist) > 1:
+            mlist = filter_multi_addon_addons(
+                mlist.copy()
+            )  # mlist.copy() keep the original list of add-ons
 
     # update tree
     for name in mlist:
@@ -2409,11 +2523,12 @@ def update_manual_page(module):
     # find URIs
     pattern = r"""<a href="([^"]+)">([^>]+)</a>"""
     addons = get_installed_extensions(force=True)
-    # Multi-addon
-    if len(addons) > 1:
-        for a in get_multi_addon_addons_which_install_only_html_man_page():
-            # Add multi-addon addons which install only manual html page
-            addons.append(a)
+    if sys.platform != "win32":
+        # Multi-addon
+        if len(addons) > 1:
+            for a in get_multi_addon_addons_which_install_only_html_man_page():
+                # Add multi-addon addons which install only manual html page
+                addons.append(a)
 
     for match in re.finditer(pattern, shtml):
         if match.group(1)[:4] == "http":
@@ -2822,17 +2937,23 @@ def main():
 
     if options["operation"] == "add":
         check_dirs()
-        if original_url == "" or flags["o"]:
-            """
-            Query GitHub API only if extension will be downloaded
-            from official GRASS GIS addon repository
-            """
-            get_addons_paths(gg_addons_base_dir=options["prefix"])
-        source, url = resolve_source_code(
-            name=options["extension"], url=original_url, branch=branch, fork=flags["o"]
-        )
-        xmlurl = resolve_xmlurl_prefix(original_url, source=source)
-        install_extension(source=source, url=url, xmlurl=xmlurl, branch=branch)
+        if sys.platform == "win32":
+            install_extension()
+        else:
+            if original_url == "" or flags["o"]:
+                """
+                Query GitHub API only if extension will be downloaded
+                from official GRASS GIS addon repository
+                """
+                get_addons_paths(gg_addons_base_dir=options["prefix"])
+            source, url = resolve_source_code(
+                name=options["extension"],
+                url=original_url,
+                branch=branch,
+                fork=flags["o"],
+            )
+            xmlurl = resolve_xmlurl_prefix(original_url, source=source)
+            install_extension(source=source, url=url, xmlurl=xmlurl, branch=branch)
     else:  # remove
         remove_extension(force=flags["f"])
 
