@@ -682,7 +682,6 @@ CAIRO_HAS_XRENDER
 USE_LIBSVM
 LIBSVM_LIB
 LIBSVM_INC
-AWK
 LAPACKINC
 LAPACKLIB
 BLASINC
@@ -14649,29 +14648,7 @@ esac
 
 
 if test -n "$USE_LIBSVM"; then
-
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of libsvm includes" >&5
-printf %s "checking for location of libsvm includes... " >&6; }
-case "$with_libsvm_includes" in
-y | ye | yes | n | no)
-	as_fn_error $? "*** You must supply a directory to --with-libsvm-includes." "$LINENO" 5
-	;;
-esac
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $with_libsvm_includes" >&5
-printf "%s\n" "$with_libsvm_includes" >&6; }
-
-if test -n "$with_libsvm_includes" ; then
-    for dir in $with_libsvm_includes; do
-        if test -d "$dir"; then
-            LIBSVM_INC="$LIBSVM_INC -I$dir"
-        else
-            as_fn_error $? "*** libsvm includes directory $dir does not exist." "$LINENO" 5
-        fi
-    done
-fi
-
   if test "${LIBSVM_INC}" ; then
-    echo "LIBSVM_INC:${LIBSVM_INC}"
     CFLAGS_backup="${CFLAGS}"
     CFLAGS="${LIBSVM_INC} ${CFLAGS}"
     ac_fn_c_check_header_compile "$LINENO" "svm.h" "ac_cv_header_svm_h" "$ac_includes_default"
@@ -14686,90 +14663,62 @@ fi
 
     CFLAGS="${CFLAGS_backup}"
   else
-    ac_fn_c_check_header_compile "$LINENO" "svm.h" "ac_cv_header_svm_h" "$ac_includes_default"
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of LIBSVM includes" >&5
+printf %s "checking for location of LIBSVM includes... " >&6; }
+case "$with_libsvm_includes" in
+y | ye | yes | n | no)
+	as_fn_error $? "*** You must supply a directory to --with-libsvm-includes." "$LINENO" 5
+	;;
+esac
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $with_libsvm_includes" >&5
+printf "%s\n" "$with_libsvm_includes" >&6; }
+
+if test -n "$with_libsvm_includes" ; then
+    for dir in $with_libsvm_includes; do
+        if test -d "$dir"; then
+            LIBSVM_INC="$LIBSVM_INC -I$dir"
+        else
+            as_fn_error $? "*** LIBSVM includes directory $dir does not exist." "$LINENO" 5
+        fi
+    done
+fi
+
+
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$LIBSVM_INC $CPPFLAGS"
+       for ac_header in svm.h
+do :
+  ac_fn_c_check_header_compile "$LINENO" "svm.h" "ac_cv_header_svm_h" "$ac_includes_default"
 if test "x$ac_cv_header_svm_h" = xyes
 then :
+  printf "%s\n" "#define HAVE_SVM_H 1" >>confdefs.h
 
 else $as_nop
 
-        for ac_prog in gawk mawk nawk awk
-do
-  # Extract the first word of "$ac_prog", so it can be a program name with args.
-set dummy $ac_prog; ac_word=$2
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-printf %s "checking for $ac_word... " >&6; }
-
-if test -n "$AWK"; then
-  ac_cv_prog_AWK="$AWK" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  case $as_dir in #(((
-    '') as_dir=./ ;;
-    */) ;;
-    *) as_dir=$as_dir/ ;;
-  esac
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
-    ac_cv_prog_AWK="$ac_prog"
-    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-fi
-AWK=$ac_cv_prog_AWK
-if test -n "$AWK"; then
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $AWK" >&5
-printf "%s\n" "$AWK" >&6; }
-else
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
-fi
-
-
-  test -n "$AWK" && break
-done
-
-        # Loop over each include path as we need to know directory were svm.h was found
-        DEFAULT_INCLUDE_PATHS=$(echo "" | ${CC} -E -Wp,-v - 2>&1 | $AWK '/#include <\.\.\.> search starts here:/{flag=1; next} /End of search list./{flag=0} flag')
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for libsvm/svm.h" >&5
-printf %s "checking for libsvm/svm.h... " >&6; }
-        for path in $DEFAULT_INCLUDE_PATHS; do
-          CFLAGS_backup="${CFLAGS}"
-          CFLAGS="-I${path}/libsvm ${CFLAGS}"
-
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-  #include <svm.h>
-
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$LIBSVM_INC $CPPFLAGS"
+       for ac_header in libsvm/svm.h
+do :
+  ac_fn_c_check_header_compile "$LINENO" "libsvm/svm.h" "ac_cv_header_libsvm_svm_h" "$ac_includes_default"
+if test "x$ac_cv_header_libsvm_svm_h" = xyes
 then :
-  libsvm_found="found"
+  printf "%s\n" "#define HAVE_LIBSVM_SVM_H 1" >>confdefs.h
+
 else $as_nop
-  libsvm_found="not found"
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 
-          CFLAGS="${CFLAGS_backup}"
-          if test "${libsvm_found}" == "found"; then
-            LIBSVM_INC="-I${path}/libsvm"
-            { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-printf "%s\n" "yes" >&6; }
-            break
-          fi
-        done
-        if test "${libsvm_found}" == "not found"; then
-          as_fn_error $? "svm.h is required but not found. Install LIBSVM or specify path to its header file." "$LINENO" 5
-        fi
+    as_fn_error $? "*** Unable to locate LIBSVM includes." "$LINENO" 5
 
 fi
+
+done
+CPPFLAGS=$ac_save_cppflags
+
+
+fi
+
+done
+CPPFLAGS=$ac_save_cppflags
 
   fi
 
@@ -16981,7 +16930,6 @@ gives unlimited permission to copy, distribute and modify it."
 ac_pwd='$ac_pwd'
 srcdir='$srcdir'
 INSTALL='$INSTALL'
-AWK='$AWK'
 test -n "\$AWK" || AWK=awk
 _ACEOF
 

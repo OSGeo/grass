@@ -9,7 +9,11 @@
  *
  */
 
+#if HAVE_SVM_H
 #include <svm.h>
+#elif HAVE_LIBSVM_SVM_H
+#include <libsvm/svm.h>
+#endif
 
 #include <grass/imagery.h>
 

@@ -107,6 +107,10 @@
 /* Define to 1 if you have the <liblas/capi/liblas.h> header file. */
 #undef HAVE_LIBLAS_CAPI_LIBLAS_H
 
+/* Define to 1 if libsvm header file is in a sub-folder or not. */
+#undef HAVE_SVM_H
+#undef HAVE_LIBSVM_SVM_H
+
 /* Define to 1 if you have the <libpq-fe.h> header file. */
 #undef HAVE_LIBPQ_FE_H
 

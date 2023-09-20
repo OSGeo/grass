@@ -20,7 +20,11 @@
 #include <stdbool.h>
 #include <unistd.h>
 
+#if HAVE_SVM_H
 #include <svm.h>
+#elif HAVE_LIBSVM_SVM_H
+#include <libsvm/svm.h>
+#endif
 
 #include <grass/gis.h>
 #include <grass/raster.h>
