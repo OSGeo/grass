@@ -661,6 +661,30 @@ def message(msg, flag=None):
     run_command("g.message", flags=flag, message=msg, errors="ignore")
 
 
+def prRed(msg):
+    """Display a message in red to highlight error message
+
+    :param str msg: message to be displayed
+    """    
+    print("\033[91m {}\033[00m".format(msg))
+
+
+def prLightPurple(msg):
+    """Display a message in lightpurple to highlight warning message
+
+    :param str msg: message to be displayed
+    """     
+    print("\033[94m {}\033[00m" .format(msg))
+
+
+def prGreen(msg):
+    """Display a message in green to highlight tip/suggestion
+
+    :param str msg: message to be displayed
+    """    
+    print("\033[92m {}\033[00m".format(msg))
+
+
 def debug(msg, debug=1):
     """Display a debugging message using `g.message -d`.
 
