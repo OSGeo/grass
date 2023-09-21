@@ -1630,10 +1630,13 @@ def install_extension_win(name):
 
     # collect module names and file names
     module_list = list()
+    module_name_pattern = re.compile(
+        r"^([d,g,i,m,p,r,s,t,v]|^db|^ps|^r3|^wx)\..*[\.py,\.exe]$"
+    )
     for r, d, f in os.walk(srcdir):
         for file in f:
             # Filter GRASS module name patterns
-            if re.search(r"^[d,db,g,i,m,p,ps,r,r3,s,t,v,wx]\..*[\.py,\.exe]$", file):
+            if re.search(module_name_pattern, file):
                 modulename = os.path.splitext(file)[0]
                 module_list.append(modulename)
     # remove duplicates in case there are .exe wrappers for python scripts
