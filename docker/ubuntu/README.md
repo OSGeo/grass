@@ -86,3 +86,22 @@ $ docker build \
 $ docker run -it grass-py3-pdal:latest-ubuntu /bin/bash
 bash-5.0#
 ```
+
+## Test the docker image
+
+Note: Adjust the volume mount to the path of the GRASS GIS source code directory.
+
+```bash
+# Test basic functionality
+$ docker run -ti \
+         -v /opt/src/grass:/grassdb \
+         grass-py3-pdal:latest-ubuntu \
+         bash docker/testdata/test_docker_image.sh
+
+# Execute also the full test suite
+$ docker run -ti \
+         -e TESTSUITE=1 \
+         -v /opt/src/grass:/grassdb \
+         grass-py3-pdal:latest-ubuntu \
+         bash docker/testdata/test_docker_image.sh
+```
