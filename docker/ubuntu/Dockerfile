@@ -1,12 +1,10 @@
 FROM ubuntu:22.04 as common
 
-LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann"
+LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Stefan Blumentrath"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# define versions to be used (PDAL is not available on Ubuntu/Debian, so we compile it here)
-# https://github.com/PDAL/PDAL/releases
 
 SHELL ["/bin/bash", "-c"]
 
@@ -264,9 +262,6 @@ RUN ln -sf /usr/local/grass84 /usr/local/grass && \
     ldconfig /etc/ld.so.conf.d
 
 RUN ls "$GISBASE/etc/python/"
-# Reduce the image size (not sure this has any effect)
-#RUN apt-get autoremove -y && \
-#    apt-get clean
 
 # Data workdir
 WORKDIR /grassdb
