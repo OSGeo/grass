@@ -1019,8 +1019,7 @@ def imshow(
     @author: Chris Beaumont <beaumont@hawaii.edu>
     """
 
-    if not axes._hold:
-        axes.cla()
+    axes.cla()
     if norm is not None:
         assert isinstance(norm, mcolors.Normalize)
     if aspect is None:
@@ -1069,7 +1068,7 @@ def imshow(
     # to tightly fit the image, regardless of dataLim.
     im.set_extent(im.get_extent())
 
-    axes.images.append(im)
+    axes.add_image(im)
     im._remove_method = lambda h: axes.images.remove(h)
 
     return im
