@@ -165,7 +165,7 @@ Web based client: See <https://grasswiki.osgeo.org/wiki/IRC>
 
 - channel owner: Alessandro Frigeri ("geoalf")
 - quasi guru level: Markus Neteler ("markusN")
-- further operators:
+- original (freenode) operators:
   - Jachym ("jachym")
   - Luca ("doktoreas")
   - Soeren ("huhabla")
