@@ -281,8 +281,9 @@ request with the translations will be opened in the GRASS GIS GitHub repo.
 In case the Weblate's git copy of the GRASS GIS repo does not update due to
 a conflict or whatever reason:
 
-Log into Weblate and check on <https://weblate.osgeo.org/projects/grass-gis/#repository>
-click on the "Manage" -> "Repository Maintenance". Therein choose "Update" button,
+Log into Weblate (requires administrator rights) and switch to
+<https://weblate.osgeo.org/projects/grass-gis/#repository>. Therein click on
+"Manage" -> "Repository Maintenance", choose the "Update" button,
 "Update with merge without fast-forward". If successful, this will create
 another pull request in the GRASS GIS repo (trigger with "Push" button).
 
