@@ -90,6 +90,18 @@ from startup.guiutils import (
 from grass.grassdb.checks import is_first_time_user
 
 
+class SingleWindowAuiManager(aui.AuiManager):
+    """Custom AuiManager class which override OnClose window
+    close event handler method to prevent prematurely uninitialize
+    manager
+
+    https://github.com/wxWidgets/Phoenix/pull/2460
+    """
+
+    def OnClose(self, event):
+        event.Skip()
+
+
 class GMFrame(wx.Frame):
     """Single Window Layout which will be parallelly developed next to the
     current Multi Window layout solution."""
@@ -150,7 +162,7 @@ class GMFrame(wx.Frame):
         self._menuTreeBuilder = LayerManagerMenuData(message_handler=add_menu_error)
         # the search tree and command console
         self._moduleTreeBuilder = LayerManagerModuleTree(message_handler=add_menu_error)
-        self._auimgr = aui.AuiManager(self)
+        self._auimgr = SingleWindowAuiManager(self)
 
         # list of open dialogs
         self.dialogs = dict()
