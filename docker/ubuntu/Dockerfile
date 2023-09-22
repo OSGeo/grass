@@ -256,12 +256,13 @@ ENV GRASSBIN="/usr/local/bin/grass" \
 COPY --from=build /usr/local/bin/grass* /usr/local/bin/
 COPY --from=build /usr/local/grass84 /usr/local/grass84/
 COPY --from=build /src/site-packages /usr/lib/python3.10/
+COPY --from=build /usr/lib/gdalplugins /usr/lib/gdalplugins
 
 # Create generic GRASS GIS lib name regardless of version number
 RUN ln -sf /usr/local/grass84 /usr/local/grass && \
     ldconfig /etc/ld.so.conf.d
 
-RUN ls "$GISBASE/etc/python/"
+ENV GDAL_DRIVER_PATH="/usr/lib/gdalplugins"
 
 # Data workdir
 WORKDIR /grassdb
