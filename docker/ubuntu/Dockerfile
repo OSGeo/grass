@@ -150,7 +150,7 @@ RUN (echo "Install Python" \
     && rm -r /root/.cache \
     )
 
-# ers are encouraged to fetch vertical datums and store into PROJ dir, e.g.:
+# Users are encouraged to fetch vertical datums and store into PROJ dir, e.g.:
 # WORKDIR /src
 # RUN mkdir vdatum && \
 #     cd vdatum && \
