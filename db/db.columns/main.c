@@ -15,13 +15,14 @@
  *****************************************************************************/
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
 struct {
-    char *driver, *database, *table, *separator;
+    char *driver, *database, *table, *separator, **exclude;
 } parms;
 
 /* function prototypes */
@@ -34,6 +35,7 @@ int main(int argc, char **argv)
     dbTable *table;
     dbString table_name;
     int col, ncols;
+    int first = 1;
 
     parse_command_line(argc, argv);
 
@@ -63,10 +65,20 @@ int main(int argc, char **argv)
 
     ncols = db_get_table_number_of_columns(table);
     for (col = 0; col < ncols; col++) {
-        if (col != 0)
+        const char *colname =
+            db_get_column_name(db_get_table_column(table, col));
+        if (parms.exclude) {
+            int i;
+            for (i = 0; parms.exclude[i] && strcmp(colname, parms.exclude[i]);
+                 i++)
+                ;
+            if (parms.exclude[i])
+                continue;
+        }
+        if (!first)
             fprintf(stdout, "%s", parms.separator);
-        fprintf(stdout, "%s",
-                db_get_column_name(db_get_table_column(table, col)));
+        fprintf(stdout, "%s", colname);
+        first = 0;
     }
     fprintf(stdout, "\n");
 
@@ -75,7 +87,7 @@ int main(int argc, char **argv)
 
 static void parse_command_line(int argc, char **argv)
 {
-    struct Option *driver, *database, *table, *separator;
+    struct Option *driver, *database, *table, *separator, *exclude;
     struct GModule *module;
     const char *drv, *db;
 
@@ -97,6 +109,11 @@ static void parse_command_line(int argc, char **argv)
     separator = G_define_standard_option(G_OPT_F_SEP);
     separator->answer = "newline";
 
+    exclude = G_define_standard_option(G_OPT_DB_COLUMN);
+    exclude->key = "exclude";
+    exclude->description = "Columns to exclude";
+    exclude->multiple = YES;
+
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("database"));
@@ -110,4 +127,5 @@ static void parse_command_line(int argc, char **argv)
     parms.database = database->answer;
     parms.table = table->answer;
     parms.separator = G_option_to_separator(separator);
+    parms.exclude = exclude->answers;
 }
