@@ -70,6 +70,12 @@ Modify the VERSION file use the dedicated script, for RC1, e.g.:
 ./utils/update_version.py rc 1
 ```
 
+Note: to change the version after the RC cycle to an official release, run
+
+```bash
+./utils/update_version.py release
+```
+
 The script will compute the correct version string and print a message
 containing it into the terminal (e.g., "version: GRASS GIS 3.5.0RC1").
 
@@ -91,7 +97,7 @@ git status
 git show
 ```
 
-Push the tag to the upstream repo:
+Push the commit to the upstream repo:
 
 ```bash
 git push upstream
@@ -139,7 +145,8 @@ git log --max-count=5
 ```
 
 Create an annotated tag (a lightweight tag is okay too, but there is more metadata
-stored for annotated tags including a date; message is suggested by the version script):
+stored for annotated tags including a date; message is suggested by the
+`./utils/update_version.py` script):
 
 ```bash
 git tag $TAG -a -m "..."
@@ -152,7 +159,8 @@ git tag -n --sort=-creatordate
 git tag -n --sort=-taggerdate
 ```
 
-Now push the tag upstream - this will trigger the automated workflows linked to tags:
+Now push the tag upstream - this will trigger the
+[automated workflows](https://github.com/OSGeo/grass/actions) linked to tags:
 
 ```bash
 git push upstream $TAG
@@ -169,8 +177,8 @@ to be in the *utils* directory.
 
 #### Major and minor releases
 
-For major and minor releases, GitHub API gives good results for the first
-release candidate because it contains contributor handles and can identify
+For major (X.y.z) and minor (x.Y.z) releases, GitHub API gives good results for the
+first release candidate because it contains contributor handles and can identify
 new contributors, so use with the *api* backend, e.g.:
 
 ```bash
@@ -179,8 +187,8 @@ python ./utils/generate_release_notes.py api releasebranch_8_4 8.3.0 $VERSION
 
 #### Micro releases
 
-For micro releases, GitHub API does not give good results because it uses PRs
-while the backports are usually direct commits without PRs.
+For micro releases (x.y.Z), GitHub API does not give good results because it uses
+PRs while the backports are usually direct commits without PRs.
 The *git log* command operates on commits, so use use the *log* backend:
 
 ```bash
@@ -229,14 +237,17 @@ Save the modified draft, but do not publish the release yet.
 
 Use the dedicated `update_version.py` script to edit the VERSION file.
 
+:loudspeaker: TODO: the lines below are sill a bit confusing, better to split
+              into subsections.
+
 After an RC, switch to development version:
 
 ```bash
 ./utils/update_version.py dev
 ```
 
-Next switch back to the development version for the next micro, minor,
-or major version, e.g., for micro version, use:
+Next switch back to the development version for the next micro (x.y.Z),
+minor (x.Y.z), or major (X.y.y) version, e.g., for micro version, use:
 
 ```bash
 ./utils/update_version.py micro
@@ -263,8 +274,8 @@ you can get the same or similar message again using the script
 
 ## Publish release
 
-For the final release, edit the draft release again and publish it using the
-"Publish release" button.
+For the final release, edit the draft release again in order to publish it
+using the "Publish release" button.
 
 ## Upload to OSGeo servers
 
@@ -312,6 +323,9 @@ wget https://github.com/OSGeo/grass/releases/download/${VERSION}/ChangeLog.gz \
 ### Get the source code tarball
 
 Fetch a tarball from GitHub we also publish on OSGeo servers:
+
+:loudspeaker: TODO: the md5sum could be created in GHA,
+              see <https://github.com/OSGeo/gdal-grass/pull/20>
 
 ```bash
 wget https://github.com/OSGeo/grass/archive/${VERSION}.tar.gz -O grass-${VERSION}.tar.gz
@@ -478,6 +492,20 @@ Subsequently, verify the software pages:
 
 - Create milestone and release: <https://launchpad.net/grass/+series>
 - Upload tarball for created release
+
+### Update grass.osgeo.org
+
+Update version:
+
+- <https://github.com/OSGeo/grass-website/blob/master/data/grass.json>
+
+Add release article to news section:
+
+- <https://github.com/neteler/grass-website/tree/master/content/news>
+
+Add release to history page:
+
+- <https://github.com/neteler/grass-website/blob/master/content/about/history/releases.md>
 
 ### Other notes
 
