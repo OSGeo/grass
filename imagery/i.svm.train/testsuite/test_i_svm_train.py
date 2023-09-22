@@ -3,7 +3,7 @@ Name:      i.svm.train input & output tests
 Purpose:   Validates user input validation code and output generation
 
 Author:    Maris Nartiss
-Copyright: (C) 2021 by Maris Nartiss and the GRASS Development Team
+Copyright: (C) 2023 by Maris Nartiss and the GRASS Development Team
 Licence:   This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.

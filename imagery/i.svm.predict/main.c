@@ -5,7 +5,7 @@
  * AUTHOR(S):    Maris Nartiss - maris.gis gmail.com
  * PURPOSE:      Predicts values with Support Vector Machine classifier
  *
- * COPYRIGHT:    (C) 2021 by Maris Nartiss and the GRASS Development Team
+ * COPYRIGHT:    (C) 2023 by Maris Nartiss and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
