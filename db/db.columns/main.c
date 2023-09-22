@@ -4,7 +4,7 @@
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Markus Neteler <neteler itc.it>,
- *               Huidae Cho <grass gmail.com>
+ *               Huidae Cho <grass4u gmail.com>
  * PURPOSE:      list the column names for a table
  * COPYRIGHT:    (C) 2002-2023 by the GRASS Development Team
  *
