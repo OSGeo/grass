@@ -20,7 +20,7 @@
 #include <grass/glocale.h>
 
 struct {
-    char *driver, *database, *table;
+    char *driver, *database, *table, *separator;
 } parms;
 
 /* function prototypes */
@@ -61,16 +61,20 @@ int main(int argc, char **argv)
     db_shutdown_driver(driver);
 
     ncols = db_get_table_number_of_columns(table);
-    for (col = 0; col < ncols; col++)
-        fprintf(stdout, "%s\n",
+    for (col = 0; col < ncols; col++) {
+        if (col != 0)
+            fprintf(stdout, "%s", parms.separator);
+        fprintf(stdout, "%s",
                 db_get_column_name(db_get_table_column(table, col)));
+    }
+    fprintf(stdout, "\n");
 
     exit(EXIT_SUCCESS);
 }
 
 static void parse_command_line(int argc, char **argv)
 {
-    struct Option *driver, *database, *table;
+    struct Option *driver, *database, *table, *separator;
     struct GModule *module;
     const char *drv, *db;
 
@@ -89,6 +93,9 @@ static void parse_command_line(int argc, char **argv)
     if ((db = db_get_default_database_name()))
         database->answer = (char *)db;
 
+    separator = G_define_standard_option(G_OPT_F_SEP);
+    separator->answer = "newline";
+
     /* Set description */
     module = G_define_module();
     G_add_keyword(_("database"));
@@ -101,4 +108,5 @@ static void parse_command_line(int argc, char **argv)
     parms.driver = driver->answer;
     parms.database = database->answer;
     parms.table = table->answer;
+    parms.separator = G_option_to_separator(separator);
 }
