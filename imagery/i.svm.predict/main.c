@@ -20,6 +20,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 
+#include <grass/config.h>
 #if HAVE_SVM_H
 #include <svm.h>
 #elif HAVE_LIBSVM_SVM_H
