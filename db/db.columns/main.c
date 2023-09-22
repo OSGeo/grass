@@ -68,11 +68,10 @@ int main(int argc, char **argv)
         const char *colname =
             db_get_column_name(db_get_table_column(table, col));
         if (parms.exclude) {
-            int i;
-            for (i = 0; parms.exclude[i] && strcmp(colname, parms.exclude[i]);
-                 i++)
+            char **p;
+            for (p = parms.exclude; *p && strcmp(colname, *p); p++)
                 ;
-            if (parms.exclude[i])
+            if (*p)
                 continue;
         }
         if (!first)
