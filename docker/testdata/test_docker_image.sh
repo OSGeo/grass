@@ -14,6 +14,10 @@ cp docker/testdata/test_grass_session.py /tmp/
 cp docker/testdata/test_grass_python.py /tmp/
 cp -r demolocation /tmp/
 
+# Test gdal-grass-plugin
+printf "\n############\nTesting the gdal_grass plugin:\n############\n"
+gdalinfo --formats | grep "GRASS -raster-"
+
 # Test grass-session
 printf "\n############\nTesting grass_session:\n############\n"
 /usr/bin/python3 /tmp/test_grass_session.py
