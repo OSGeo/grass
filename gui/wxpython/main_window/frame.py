@@ -6,6 +6,7 @@ panes for display management and access to command console.
 
 Classes:
  - frame::GMFrame
+ - frame::SingleWindowAuiManager
 
 (C) 2006-2021 by the GRASS Development Team
 
