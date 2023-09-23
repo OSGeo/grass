@@ -5,6 +5,7 @@
 
 Classes:
  - toolbars::MainToolbar
+ - toolbars::GetToolNameMixin
 
 (C) 2013 by the GRASS Development Team
 
@@ -21,7 +22,24 @@ from core.gcmd import RunCommand
 from iscatt.dialogs import SettingsDialog
 
 
-class MainToolbar(BaseToolbar):
+class GetToolNameMixin:
+    """Get tool name"""
+
+    def _get_tool_name(self, tool_name, tool_name_type=tuple):
+        """Get tool name
+
+        :param str|tuple tool_name: tool name
+        :param type tool_name_type: tool name type with default
+                                    tuple type
+
+        :return str: tool name
+        """
+        if isinstance(tool_name, tool_name_type):
+            return tool_name[0]
+        return tool_name
+
+
+class MainToolbar(BaseToolbar, GetToolNameMixin):
     """Main toolbar"""
 
     def __init__(self, parent, scatt_mgr, opt_tools=None):
@@ -133,7 +151,7 @@ class MainToolbar(BaseToolbar):
         self.scatt_mgr.modeSet.disconnect(self.ModeSet)
         if event.IsChecked():
             for i_tool_data in self.controller.data:
-                i_tool_name = i_tool_data[0]
+                i_tool_name = self._get_tool_name(i_tool_data[0])
                 if not i_tool_name or i_tool_name in ["cats_mgr", "sel_pol_mode"]:
                     continue
                 if i_tool_name == tool_name:
@@ -158,7 +176,7 @@ class MainToolbar(BaseToolbar):
 
     def UnsetMode(self):
         for i_tool_data in self.controller.data:
-            i_tool_name = i_tool_data[0]
+            i_tool_name = self._get_tool_name(i_tool_data[0])
             if not i_tool_name or i_tool_name in ["cats_mgr", "sel_pol_mode"]:
                 continue
             i_tool_id = vars(self)[i_tool_name]
@@ -176,7 +194,7 @@ class MainToolbar(BaseToolbar):
         RunCommand("g.manual", entry="wxGUI.iscatt")
 
 
-class EditingToolbar(BaseToolbar):
+class EditingToolbar(BaseToolbar, GetToolNameMixin):
     """Main toolbar"""
 
     def __init__(self, parent, scatt_mgr):
@@ -280,7 +298,7 @@ class EditingToolbar(BaseToolbar):
         self.scatt_mgr.modeSet.disconnect(self.ModeSet)
         if event.IsChecked():
             for i_tool_data in self.controller.data:
-                i_tool_name = i_tool_data[0]
+                i_tool_name = self._get_tool_name(i_tool_data[0])
                 if not i_tool_name:
                     continue
                 if i_tool_name == tool_name:
@@ -298,7 +316,7 @@ class EditingToolbar(BaseToolbar):
 
     def UnsetMode(self):
         for i_tool_data in self.controller.data:
-            i_tool_name = i_tool_data[0]
+            i_tool_name = self._get_tool_name(i_tool_data[0])
             if not i_tool_name:
                 continue
             i_tool_id = vars(self)[i_tool_name]
