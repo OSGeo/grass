@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_ko\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2023-05-02 16:08+0000\n"
+"PO-Revision-Date: 2023-09-23 06:30+0000\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <https://weblate.osgeo.org/projects/grass-gis/"
 "grasslibs/ko/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 5.0\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -4265,12 +4265,16 @@ msgid ""
 "\n"
 "-- Basic rtree unit tests failure --"
 msgstr ""
+"\n"
+"-- 기본 rtree 단위 테스트 실패 --"
 
 #: ../lib/vector/rtree/test_suite/test_basics.c:50
 msgid ""
 "\n"
 "-- Basic rtree unit tests finished successfully --"
 msgstr ""
+"\n"
+"-- 기본 rtree 단위 테스트를 성공적으로 완료했습니다 --"
 
 #: ../lib/vector/Vlib/geos.c:52
 msgid "vector map is not opened"
@@ -6984,6 +6988,8 @@ msgid ""
 "\n"
 "++ Test copy column finished ++"
 msgstr ""
+"\n"
+"++ 열 복사 테스트를 완료했습니다 ++"
 
 #: ../lib/db/dbmi_base/test/test_table.c:38
 msgid ""
