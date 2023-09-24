@@ -374,7 +374,7 @@ class CoordinateSystemPage(TitledPage):
         self.radioProjPicker = wx.RadioButton(
             parent=self,
             id=wx.ID_ANY,
-            label=_("Select CRS interactively in a map"),
+            label=_("Select CRS interactively in a map (requires Internet)"),
             style=wx.RB_GROUP,
         )
         self.radioEpsg = wx.RadioButton(
@@ -480,7 +480,13 @@ class CoordinateSystemPage(TitledPage):
             if coordsys == "xy":
                 self.radioXy.SetValue(True)
             if coordsys == "projpicker":
-                self.radioProjPicker.SetValue(True)
+                if has_internet:
+                    self.radioProjPicker.SetValue(True)
+                else:
+                    coordsys = "epsg"
+                    self.radioEpsg.SetValue(True)
+                    self.SetNext(self.parent.epsgpage)
+                    self.parent.sumpage.SetPrev(self.parent.epsgpage)
 
         if event.GetDirection():
             if coordsys == "proj":
