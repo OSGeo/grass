@@ -47,6 +47,7 @@ from .common import (
     _POS_FLOAT_PAT,
     _BBOX_SCHEMA,
     _BBOX_COLUMNS,
+    is_verbose,
     get_float,
 )
 from . import coor_latlon
