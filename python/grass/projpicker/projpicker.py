@@ -25,12 +25,13 @@
 """
 This module implements the CLI and API of ProjPicker.
 """
-# pylint: disable=import-outside-toplevel, import-error
+# pylint: disable=import-outside-toplevel, import-error, unused-import
 # pylint: disable=too-many-lines, too-many-arguments, too-many-locals
 # pylint: disable=too-many-branches, too-many-nested-blocks
 # pylint: disable=too-many-boolean-expressions, too-many-statements
 # pylint: disable=broad-except, not-callable
 # pylint: disable=consider-using-enumerate, consider-using-with
+# pylint: disable=unpacking-non-sequence
 
 import collections
 import os
