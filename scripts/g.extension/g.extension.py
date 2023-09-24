@@ -497,57 +497,19 @@ def urlopen(url, *args, **kwargs):
     return urlrequest.urlopen(request, *args, **kwargs)
 
 
-def get_github_repository_branches_html_parser_class():
-    from html.parser import HTMLParser
-
-    class GetGitHubRepositoryBranchesHTMLParser(HTMLParser):
-        """Get GitHub addons repository branches HTML parser
-
-        :param str branch_item_element: branch item HTML element
-
-        Example of usage:
-
-        ```
-        html_parser = GetGitHubRepositoryBranchesHTMLParser()
-        html_parser.feed(response.text)
-        branches = html_parser.close()
-        ```
-        """
-
-        def __init__(self, branch_item_element="branch-filter-item"):
-            self._branch_item_element = branch_item_element
-            super().__init__()
-
-        def feed(self, data):
-            self._branches = []
-            super().feed(data)
-
-        def close(self):
-            super().close()
-            return self._branches
-
-        def handle_starttag(self, tag, attrs):
-            if tag == self._branch_item_element:
-                for attr in attrs:
-                    if attr[0] == "branch":
-                        self._branches.append(attr[1])
-                        break
-
-    return GetGitHubRepositoryBranchesHTMLParser
-
-
 def get_official_github_addons_repository_branches(url):
-    """Get all official GitHub addons repository branches
+    """Get all official GitHub addons repository branches using
+    GitHub REST API
 
-    Instead of using GitHub REST API due to restriction, we use simple
-    HTML parsing of official GitHub addons repository all branches
-    HTML page URL. Use this function only under MS Windows OS platforms
+    Use this function only under MS Windows OS platforms
     that do not use Git.
 
-    :param str url: official GitHub addons all branches HTML page URL
+    :param str url: GitHub REST API for getting official GitHub addons
+                    repository branches
 
     :return list: list of all official GitHub addons repository branches
     """
+    from datetime import datetime
     import http
 
     http_status_codes = list(http.HTTPStatus)
@@ -570,15 +532,33 @@ def get_official_github_addons_repository_branches(url):
     except HTTPError as e:
         index = http_status_codes.index(e.code)
         desc = http_status_codes[index].description
+        rate_limit_exceeded = None
+        # GitHub REST API request limit exceeded 60 requests per hour per IP address
+        if e.code == 403 and e.msg == "rate limit exceeded":
+            response_headers = e.info()
+            rate_limit_reset = datetime.fromtimestamp(
+                int(response_headers.get("X-RateLimit-Reset")),
+            ).strftime("%A %b %d %H:%M:%S %Y")
+            rate_limit_exceeded = _(
+                " GitHub REST API rate limit was exceeded"
+                " {rate_limit} requests per hour per IP address."
+                " Try list official addons at <{rate_limit_reset}>"
+                " again, please."
+            ).format(
+                rate_limit=response_headers.get("X-RateLimit-Limit"),
+                rate_limit_reset=rate_limit_reset,
+            )
         gs.fatal(
             _(
                 "Getting official addons repository branches"
                 " from <{url}> failed. The server couldn't fulfill"
                 " the request and return status code <{code}> <{desc}>."
+                "{rate_limit}"
             ).format(
                 url=url,
                 code=e.code,
                 desc=desc,
+                rate_limit=rate_limit_exceeded if rate_limit_exceeded else "",
             ),
         )
     except URLError as e:
@@ -601,9 +581,7 @@ def get_official_github_addons_repository_branches(url):
                 error=e.message if hasattr(e, "message") else e,
             ),
         )
-    html_parser = get_github_repository_branches_html_parser_class()()
-    html_parser.feed(gs.decode(response.read()))
-    return html_parser.close()
+    return [branch["name"] for branch in json.load(response)]
 
 
 def get_version_branch(major_version):
@@ -612,9 +590,14 @@ def get_version_branch(major_version):
     For the official repo we assume that at least one version branch is present"""
     version_branch = f"grass{major_version}"
     if sys.platform == "win32":
-        # GitHub official addons repository all branches HTML page URL
-        url = f"{GIT_URL}branches/all/"
-        branch = get_official_github_addons_repository_branches(url)
+        git_url_parsed = urlparse(GIT_URL)
+        github_addons_repo_rest_api_branches_url = (
+            f"{git_url_parsed.scheme}://api.{git_url_parsed.hostname}"
+            f"/repos{git_url_parsed.path}branches"
+        )
+        branch = get_official_github_addons_repository_branches(
+            url=github_addons_repo_rest_api_branches_url,
+        )
     else:
         branch = gs.Popen(
             ["git", "ls-remote", "--heads", GIT_URL, f"refs/heads/{version_branch}"],
