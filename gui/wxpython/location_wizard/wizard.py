@@ -37,6 +37,7 @@ This program is free software under the GNU General Public License
 import os
 import locale
 import functools
+import socket
 
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -433,12 +434,36 @@ class CoordinateSystemPage(TitledPage):
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id=self.radioProjPicker.GetId())
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
+    def HasInternet(self, host="8.8.8.8", port=53, timeout=3):
+        # https://stackoverflow.com/a/33117579/16079666
+        """
+        Host: 8.8.8.8 (google-public-dns-a.google.com)
+        OpenPort: 53/tcp
+        Service: domain (DNS/TCP)
+        """
+        try:
+            socket.setdefaulttimeout(timeout)
+            socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
+        except:
+            return False
+        return True
+
     def OnEnterPage(self, event):
         global coordsys
 
+        has_internet = self.HasInternet()
+        if has_internet:
+            self.radioProjPicker.Enable()
+        else:
+            self.radioProjPicker.Disable()
+
         if not coordsys:
-            coordsys = "projpicker"
-            self.radioProjPicker.SetValue(True)
+            if has_internet:
+                coordsys = "projpicker"
+                self.radioProjPicker.SetValue(True)
+            else:
+                coordsys = "epsg"
+                self.radioEpsg.SetValue(True)
         else:
             if coordsys == "proj":
                 self.radioSrs.SetValue(True)
