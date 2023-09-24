@@ -538,7 +538,7 @@ def get_official_github_addons_repository_branches(url):
             response_headers = e.info()
             rate_limit_reset = datetime.fromtimestamp(
                 int(response_headers.get("X-RateLimit-Reset")),
-            ).strftime("%A %b %d %H:%M:%S %Y")
+            ).strftime("%c")
             rate_limit_exceeded = _(
                 " GitHub REST API rate limit was exceeded"
                 " {rate_limit} requests per hour per IP address."
