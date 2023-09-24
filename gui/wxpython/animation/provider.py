@@ -48,7 +48,6 @@ class BitmapProvider:
     def __init__(
         self, bitmapPool, mapFilesPool, tempDir, imageWidth=640, imageHeight=480
     ):
-
         self._bitmapPool = bitmapPool
         self._mapFilesPool = mapFilesPool
         self.imageWidth = (
@@ -851,7 +850,7 @@ def createNoDataBitmap(imageWidth, imageHeight, text="No data"):
         )
     )
     tw, th = dc.GetTextExtent(text)
-    dc.DrawText(text, (imageWidth - tw) / 2, (imageHeight - th) / 2)
+    dc.DrawText(text, (imageWidth - tw) // 2, (imageHeight - th) // 2)
     dc.SelectObject(wx.NullBitmap)
     return bitmap
 

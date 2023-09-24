@@ -30,7 +30,6 @@ for details.
 """
 # import traceback
 import os
-import sys
 import grass.script as gscript
 
 from .c_libraries_interface import CLibrariesInterface
@@ -53,9 +52,6 @@ except:
 import atexit
 from datetime import datetime
 
-if sys.version_info.major >= 3:
-    long = int
-
 ###############################################################################
 
 
@@ -66,11 +62,8 @@ def profile_function(func):
     if do_profiling == "True" or do_profiling == "1":
         import cProfile
         import pstats
+        import io
 
-        try:
-            import StringIO as io
-        except ImportError:
-            import io
         pr = cProfile.Profile()
         pr.enable()
         func()
@@ -264,7 +257,7 @@ def get_tgis_message_interface():
     """Return the temporal GIS message interface which is of type
     grass.pygrass.message.Messenger()
 
-    Use this message interface to print messages to stdout using the
+    Use this message interface to print messages to stderr using the
     GRASS C-library messaging system.
     """
     global message_interface
@@ -363,8 +356,8 @@ def get_raise_on_error():
 
 
 def get_tgis_version():
-    """Get the version number of the temporal framework
-    :returns: The version number of the temporal framework as string
+    """Get the supported version of the temporal framework
+    :returns: The version number of the temporal framework as integer
     """
     global tgis_version
     return tgis_version
@@ -374,11 +367,27 @@ def get_tgis_version():
 
 
 def get_tgis_db_version():
-    """Get the version number of the temporal framework
-    :returns: The version number of the temporal framework as string
+    """Get the supported version of the temporal database
+    :returns: The version number of the temporal database as integer
     """
     global tgis_db_version
     return tgis_db_version
+
+
+def get_tgis_db_version_from_metadata(metadata=None):
+    """Get the version number of the temporal database from metadata
+
+    :param list metadata: list of metadata items or None
+    :returns: The version number of the temporal database as integer
+    """
+    if metadata is None:
+        metadata = get_tgis_metadata()
+    for entry in metadata:
+        if "tgis_db_version" in entry:
+            return int(entry[1])
+
+    # return supported version if not possible to get from metadata
+    return get_tgis_db_version()
 
 
 ###############################################################################
@@ -419,7 +428,7 @@ def get_tgis_database_string():
     """Return the preprocessed temporal database string
 
     This string is the temporal database string set with t.connect
-    that was processed to substitue location, gisdbase and mapset
+    that was processed to substitute location, gisdbase and mapset
     variables.
     """
     global tgis_database_string
@@ -696,16 +705,14 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
         if dbif.fetchone()[0]:
             db_exists = True
 
-    backup_howto = _(
-        "The format of your actual temporal database is not "
-        "supported any more.\n"
-        "Please create a backup of your temporal database "
-        "to avoid lossing data.\nSOLUTION: "
-    )
     if tgis_db_version > 2:
-        backup_howto += _("Run t.upgrade command to upgrade your temporal database.\n")
+        backup_howto = _(
+            "Run t.upgrade command to upgrade your temporal database.\n"
+            "Consider creating a backup of your temporal database to avoid "
+            "loosing data in case something goes wrong.\n"
+        )
     else:
-        backup_howto += _(
+        backup_howto = _(
             "You need to export it by "
             "restoring the GRASS GIS version used for creating this DB."
             "Notes: Use t.rast.export and t.vect.export "
@@ -738,6 +745,8 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
                 )
                 % ({"info": get_database_info_string()})
             )
+
+        # temporal framework version check
         for entry in metadata:
             if "tgis_version" in entry and entry[1] != str(get_tgis_version()):
                 msgr.fatal(
@@ -756,22 +765,33 @@ def init(raise_fatal_error=False, skip_db_version_check=False):
                         }
                     )
                 )
-            if "tgis_db_version" in entry and entry[1] != str(get_tgis_db_version()):
+
+        # temporal database version check
+        tgis_db_version_meta = get_tgis_db_version_from_metadata(metadata)
+        if tgis_db_version_meta != tgis_db_version:
+            message = _(
+                "Temporal database version mismatch detected.\n{backup}"
+                "Supported temporal database version is: {tdb}\n"
+                "Your existing temporal database version: {ctdb}\n"
+                "Current temporal database info: {info}".format(
+                    backup=backup_howto,
+                    tdb=tgis_db_version,
+                    ctdb=tgis_db_version_meta,
+                    info=get_database_info_string(),
+                )
+            )
+
+            if tgis_db_version_meta == 2 and tgis_db_version == 3:
+                # version 3 is backward compatible with version 2
+                msgr.warning(message)
+            else:
                 msgr.fatal(
                     _(
-                        "Unsupported temporal database: version mismatch."
-                        "\n %(backup)sSupported temporal database version"
-                        " is: %(tdb)i\nCurrent temporal database info:"
-                        "%(info)s"
-                    )
-                    % (
-                        {
-                            "backup": backup_howto,
-                            "tdb": get_tgis_version(),
-                            "info": get_database_info_string(),
-                        }
+                        "The format of your actual temporal database is "
+                        "not supported any more. {m}".format(m=message)
                     )
                 )
+
         return
 
     create_temporal_database(dbif)
@@ -1220,7 +1240,6 @@ class SQLDatabaseInterfaceConnection(object):
         return self.connections[mapset].execute_transaction(statement)
 
     def _create_mapset_error_message(self, mapset):
-
         return (
             "You have no permission to "
             "access mapset <%(mapset)s>, or "
@@ -1423,7 +1442,7 @@ class DBConnection(object):
                             statement[0:pos],
                             statement[pos + 1 :],
                         )
-                    elif isinstance(args[count], (int, long)):
+                    elif isinstance(args[count], int):
                         statement = "%s%d%s" % (
                             statement[0:pos],
                             args[count],
@@ -1474,7 +1493,6 @@ class DBConnection(object):
 
         # Check if the database already exists
         if self.dbmi.__name__ == "sqlite3":
-
             self.cursor.execute(
                 "SELECT name FROM sqlite_master WHERE "
                 "type='table' AND name='%s';" % table_name

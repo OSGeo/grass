@@ -10,23 +10,23 @@ Author: Soeren Gebbert
 The GRASS partial differential equation library is designed to support the
 solution of PDE's within GRASS.
 Therefore it provides functions to create and solve linear equation systems.
-The library design is thread safe and supports threaded parallelism with OpenMP. 
+The library design is thread safe and supports threaded parallelism with OpenMP.
 Most of the available solvers (expect the gauss seidel and jacobi solver)
-and the assembling of the linear equation systems are parallelized with OpenMP. 
+and the assembling of the linear equation systems are parallelized with OpenMP.
 The creation of a linear equation system can be done by using quadratic or sparse matrices.
-Sparse and quadratic matrices are supported by the iterative equation solvers, 
+Sparse and quadratic matrices are supported by the iterative equation solvers,
 the direct equation solvers only support regular quadratic matrices.
 <p>
 To enable parallel computing, you will need a compiler with OpenMP capabilities
 and a computer with at least two cores or cpu's.
-Most proprietary compilers support OpenMP. 
+Most proprietary compilers support OpenMP.
 The free gnu-C compiler supports OpenMP since version 4.2.
 More information about OpenMP are available at http://www.openmp.org .
 <br>
 <br>
-Based on the finite volume discretization for structured grids, 
-groundwater flow and solute transport in 2d and 3d are implemented. 
-It is IMHO easy to add any partial differential equation which can be 
+Based on the finite volume discretization for structured grids,
+groundwater flow and solute transport in 2d and 3d are implemented.
+It is IMHO easy to add any partial differential equation which can be
 solved with the finite volume or the finite differences method based on structured grids.
 The basis for the discretisation is the geometrical structure of raster and volume maps.
 <br>
@@ -38,9 +38,9 @@ Currently only planimetric projections are supported for numerical calculations.
 <br>
 <br>
 The gpde library provides an easy to handle interface for reading raster and volume data into
-specific data arrays (in memory) and for writing data arrays to raster and volume maps. 
-These data arrays supports all raster and volume datatypes, overlapping boundaries 
-and provide a sophisticated null value support and array access functions. 
+specific data arrays (in memory) and for writing data arrays to raster and volume maps.
+These data arrays supports all raster and volume datatypes, overlapping boundaries
+and provide a sophisticated null value support and array access functions.
 Basic mathematical operations are available for the arrays.
 
 \section PDE The Creation of a lineare equation systems
@@ -89,9 +89,9 @@ int main()
        needed by the groundwater calculation callback */
     geom = N_init_geom_data_2d(&region, geom);
 
- 
+
     /*fill the data arrays with raster maps*/
-    N_read_rast_to_array_2d("phead_map_name", data->phead);      
+    N_read_rast_to_array_2d("phead_map_name", data->phead);
     N_read_rast_to_array_2d("phead_map_name", data->phead_start);
     N_read_rast_to_array_2d("status_map_name", data->status);
     N_read_rast_to_array_2d("hc_x_map_name", data->hc_x);
@@ -115,7 +115,7 @@ int main()
 	    }
 	}
     }
- 
+
     /*Assemble the sparse matrix */
     les = N_assemble_les_2d(N_SPARSE_LES, geom, data->status, data->phead_start, (void *)data, call);
 
@@ -123,8 +123,8 @@ int main()
     N_solver_cg(les, 100000, 0.1e-8);
 
     /* now copy the result from the x vector of the linear equation system
-       into a data array, this function is not provided by the gpde lib, 
-       you have to write your own: take a look at r.gwflow 
+       into a data array, this function is not provided by the gpde lib,
+       you have to write your own: take a look at r.gwflow
     */
     copy_x_vect_to_data_array(les->x, data->phead, geom);
 
@@ -143,7 +143,7 @@ int main()
 \endverbatim
 
 The assembling of lineare equation systems is based on a 5 point star for raster maps and a
-7 point star for volume maps, implemented as finite volume/differences discretization. 
+7 point star for volume maps, implemented as finite volume/differences discretization.
 
 <p>
 All raster and volume maps which are used to create a linear equation system
@@ -154,7 +154,7 @@ Therefore 2d and 3d data structures are implemented to support this principle:
 
 \verbatim
 
-This structure manages two dimensional data 
+This structure manages two dimensional data
 
 typedef struct
 {
@@ -223,7 +223,7 @@ void #N_write_array_2d_to_rast (N_array_2d * array, char *name);
 
 <P>
 <b>Example implementation:</b><br>
-The GRASS module <a href="https://grass.osgeo.org/grass80/manuals/r.gwflow.html">r.gwflow</a>
+The GRASS module <a href="https://grass.osgeo.org/grass-devel/manuals/r.gwflow.html">r.gwflow</a>
 implements numerical calculation program for transient,
 confined and unconfined groundwater flow in two dimensions.
 
@@ -232,7 +232,7 @@ confined and unconfined groundwater flow in two dimensions.
 typedef struct
 {
 
-This structure manages three dimensional data 
+This structure manages three dimensional data
 
     int type;                   /* which raster type FCELL_TYPE, DCELL_TYPE */
     int rows, cols, depths;
@@ -294,7 +294,7 @@ void #N_write_array_3d_to_rast3d (N_array_3d * array, char *name, int mask);
 
 <P>
 <b>Example implementation:</b><br>
-The GRASS module <a href="http://grass.itc.it/grass80/manuals/r3.gwflow.html">r3.gwflow</a>
+The GRASS module <a href="http://grass.osgeo.org/grass-devel/manuals/r3.gwflow.html">r3.gwflow</a>
 implements numerical calculation program for transient, confined
 groundwater flow in three dimensions.
 
@@ -412,11 +412,11 @@ int #N_solver_gauss (N_les * les);
 int #N_solver_lu (N_les * les);
 
 
-\subsection iterative_solvers Iterative solvers 
+\subsection iterative_solvers Iterative solvers
 
 The iterative solvers work with regular quadartic and sparse matrices.
 <p>
-To solve symmetric and positive definite linear equation systems the iterative 
+To solve symmetric and positive definite linear equation systems the iterative
 conjugated gradient method with additional diagonal preconditioning are implemented.
 
 int #N_solver_cg(N_les * les, int maxit, double error);
@@ -441,8 +441,8 @@ int #N_solver_SOR (N_les * L, int maxit, double sor, double error);
 Groundwater flow in 2 and 3 dimensions are implemented.
 
 
-This data structure contains all data needed to compute the 
-groundwater mass balance in three dimension 
+This data structure contains all data needed to compute the
+groundwater mass balance in three dimension
 
 \verbatim
 typedef struct
@@ -465,8 +465,8 @@ typedef struct
 \endverbatim
 
 
-This data structure contains all data needed to compute the 
-groundwater mass balance in two dimension 
+This data structure contains all data needed to compute the
+groundwater mass balance in two dimension
 
  \verbatim
 typedef struct
@@ -559,7 +559,7 @@ double #N_get_geom_data_area_of_cell(N_geom_data * geom, int row);
 \section mathtools Mathematical tools
 
 Several mean calculation algorithms are implemented.
-Two versions of each algorithm are available working 
+Two versions of each algorithm are available working
 with two values or a vector of values.
 
 <p>
@@ -600,8 +600,8 @@ The gradient of one cell to there neighbours in each direction has the following
 
 \verbatim
 
-The two dimensional gradient consits of 4 values between the neighbour cells
- ______________ 
+The two dimensional gradient consists of 4 values between the neighbour cells
+ ______________
 |    |    |    |
 |    |    |    |
 |----|-NC-|----|
@@ -612,7 +612,7 @@ The two dimensional gradient consits of 4 values between the neighbour cells
 |    |    |    |
 |____|____|____|
 
-The three dimensional gradient consits of 6 values between the neighbour cells
+The three dimensional gradient consists of 6 values between the neighbour cells
 
       |  /
      TC NC
@@ -624,7 +624,7 @@ The three dimensional gradient consits of 6 values between the neighbour cells
 
 \endverbatim
 
-Gradient between the cells in X and Y direction 
+Gradient between the cells in X and Y direction
 
 \verbatim
 typedef struct {
@@ -643,7 +643,7 @@ typedef struct {
 } N_gradient_3d;
 \endverbatim
 
-The gradients between the neighbours of the center cell is needed for tensor 
+The gradients between the neighbours of the center cell is needed for tensor
 calculation in the discretization of several partial differential equations.
 
 \verbatim
@@ -661,7 +661,7 @@ Gradient in X direction between the cell neighbours
 |____|____|____|
 
 Gradient in Y direction between the cell neighbours
- ______________ 
+ ______________
 |    |    |    |
 |    |    |    |
 |NWW-|-NC-|-NEE|
@@ -687,7 +687,7 @@ Gradient in Z direction between the cell neighbours
 
 \endverbatim
 
-Gradient between the cell neighbours in X direction 
+Gradient between the cell neighbours in X direction
 
 \verbatim
 typedef struct {
@@ -834,7 +834,7 @@ N_gradient_neighbours_z  * #N_alloc_gradient_neighbours_z(void);
 <p>
 void #N_free_gradient_neighbours_z(N_gradient_neighbours_z  *grad);
 <p>
-N_gradient_neighbours_z  * #N_create_gradient_neighbours_z(double NWZ, double NZ, double NEZ, double WZ, double CZ, double EZ, 
+N_gradient_neighbours_z  * #N_create_gradient_neighbours_z(double NWZ, double NZ, double NEZ, double WZ, double CZ, double EZ,
  						  double SWZ, double SZ, double SEZ);
 <p>
 int #N_copy_gradient_neighbours_z(N_gradient_neighbours_z * source, N_gradient_neighbours_z *target);
@@ -878,7 +878,7 @@ The gradient is calculated between cells for each cell and direction.
 The creation of a 2d gradient field is based on the following scheme:
 
 \verbatim
-  ______________ 
+  ______________
  |    |    |    |
  |    |    |    |
  |----|-NC-|----|
@@ -888,28 +888,28 @@ The creation of a 2d gradient field is based on the following scheme:
  |----|-SC-|----|
  |    |    |    |
  |____|____|____|
- 
- 
+
+
  x - direction:
- 
+
  r = 2 * weight[row][col]*weight[row][col + 1] / (weight[row][col]*weight[row][col + 1])
  EC = r * (pot[row][col] - pot[row][col + 1])/dx
- 
+
  y - direction:
- 
+
  r = 2 * weight[row][col]*weight[row + 1][col] / (weight[row][col]*weight[row + 1][col])
  SC = r * (pot[row][col] - pot[row + 1][col])/dy
- 
+
  the values SC and EC are the values of the next row/col
 \endverbatim
- 
+
 
 <p>
 N_gradient_field_2d * #N_compute_gradient_field_2d(N_array_2d *pot, N_array_2d *weight_x, N_array_2d *weight_y, N_geom_data *geom, N_gradient_field_2d *gradfield);
 <p>
 The computation of the gradient vectors for each cell is based on this scheme
  \verbatim
-  ______________ 
+  ______________
  |    |    |    |
  |    |    |    |
  |----|-NC-|----|
@@ -919,15 +919,15 @@ The computation of the gradient vectors for each cell is based on this scheme
  |----|-SC-|----|
  |    |    |    |
  |____|____|____|
- 
+
  x vector component:
- 
+
  x = (WC + EC) / 2
- 
+
  y vector component:
- 
+
  y = (NC + SC) / 2
- 
+
  \endverbatim
 <p>
 void #N_compute_gradient_field_components_2d(N_gradient_field_2d *field, N_array_2d *x_comp, N_array_2d *y_comp);
@@ -955,52 +955,52 @@ The creation of a 2d gradient field is based on the following scheme:
 
 
  x - direction:
- 
+
  r = 2 * weight_x[depth][row][col]*weight_x[depth][row][col + 1] / (weight_X[depth][row][col]*weight_x[depth][row][col + 1])
  EC = r * (pot[depth][row][col] - pot[depth][row][col + 1])/dx
- 
+
  y - direction:
- 
+
  r = 2 * weight_y[depth][row][col]*weight_y[depth][row + 1][col] / (weight_y[depth][row][col]*weight_y[depth][row + 1][col])
  SC = r * (pot[depth][row][col] - pot[depth][row + 1][col])/dy
- 
+
  z - direction:
- 
+
  r = 2 * weight_z[depth][row][col]*weight_z[depth + 1][row][col] / (weight_z[depth][row][col]*weight_z[depth + 1][row][col])
  TC = r * (pot[depth][row][col] - pot[depth + 1][row][col])/dy
- 
+
  the values BC, NC, WC are the values of the next depth/row/col
- 
- 
+
+
  \endverbatim
 
 <p>
 N_gradient_field_3d *#N_compute_gradient_field_3d(N_array_3d * pot, N_array_3d * weight_x, N_array_3d * weight_y, N_array_3d * weight_z, N_geom_data * geom, N_gradient_field_3d *gradfield)
 <p>
-Based on this storages scheme the gradient vector for each cell is 
+Based on this storages scheme the gradient vector for each cell is
  calculated and stored in the provided  N_array_3d structures
  \verbatim
- 
+
       |  /
      TC NC
       |/
 --WC-----EC--
      /|
    SC BC
-   /  | 
- 
+   /  |
+
  x vector component:
- 
+
  x = (WC + EC) / 2
- 
+
  y vector component:
- 
+
  y = (NC + SC) / 2
- 
+
  z vector component:
- 
+
  z = (TC + BC) / 2
- 
+
  \endverbatim
 
 <p>

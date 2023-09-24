@@ -77,7 +77,7 @@ The library is used by <tt>v.edit</tt> module and wxGUI %vector digitizer.
 \section seealso See Also
 
  - \ref vectorlib
-  
+
  - \ref dbmilib
 
 \section authors Authors

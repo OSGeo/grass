@@ -1,6 +1,6 @@
 --#############################################################################
--- This SQL script generates the raster metadata table to store 
--- and metadata for SQL queries and temporal GIS support. 
+-- This SQL script generates the raster metadata table to store
+-- and metadata for SQL queries and temporal GIS support.
 --
 -- Author: Soeren Gebbert soerengebbert <at> googlemail <dot> com
 --#############################################################################
@@ -19,8 +19,6 @@ CREATE TABLE  raster_metadata (
   ewres DOUBLE PRECISION NOT NULL,
   min DOUBLE PRECISION,
   max DOUBLE PRECISION,
-  band_reference VARCHAR,
+  semantic_label VARCHAR,
   PRIMARY KEY (id)
 );
-
-

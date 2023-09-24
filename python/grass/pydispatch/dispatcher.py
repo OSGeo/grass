@@ -25,7 +25,6 @@ Internal attributes:
         deletion, (considerably speeds up the cleanup process
         vs. the original code.)
 """
-from __future__ import generators
 import weakref
 from grass.pydispatch import saferef, robustapply, errors
 
@@ -158,7 +157,7 @@ def connect(receiver, signal=Any, sender=Any, weak=True):
         try:
             weakSender = weakref.ref(sender, remove)
             senders[senderkey] = weakSender
-        except:
+        except Exception:
             pass
 
     receiverID = id(receiver)
@@ -175,7 +174,7 @@ def connect(receiver, signal=Any, sender=Any, weak=True):
             sendersBack[receiverID] = current = []
         if senderkey not in current:
             current.append(senderkey)
-    except:
+    except Exception:
         pass
 
     receivers.append(receiver)
@@ -401,7 +400,7 @@ def _cleanupConnections(senderkey, signal):
     """Delete any empty signals for senderkey. Delete senderkey if empty."""
     try:
         receivers = connections[senderkey][signal]
-    except:
+    except Exception:
         pass
     else:
         if not receivers:
@@ -428,7 +427,7 @@ def _removeSender(senderkey):
     # could be weakly referenced.
     try:
         del senders[senderkey]
-    except:
+    except Exception:
         pass
 
 
@@ -489,7 +488,7 @@ def _killBackref(receiver, senderkey):
     while senderkey in set:
         try:
             set.remove(senderkey)
-        except:
+        except Exception:
             break
     if not set:
         try:

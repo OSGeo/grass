@@ -1,27 +1,26 @@
-
 /**
  * \file IPC.h
  *
- * \brief Types, definitions and primitives for interprocess comunication 
+ * \brief Types, definitions and primitives for interprocess communication
  *  between r.li.daemon and r.li.worker
  *
  * \author Lucio Davide Spano
- * 
+ *
  * This program is free software under the GPL (>=v2)
  * Read the COPYING file that comes with GRASS for details.
  *
  * \version 1.0
  *
  * \include stdio.h
- * 
+ *
  */
 #include <unistd.h>
 
-#define AREA 1
+#define AREA       1
 #define MASKEDAREA 2
-#define DONE 3
-#define ERROR 4
-#define TERM 5
+#define DONE       3
+#define ERROR      4
+#define TERM       5
 
 /**
  * \brief fields of message AREA
@@ -31,8 +30,7 @@
  * \member <i>rl</i> area length in rows <br>
  * \member <i>cl</i> area length in columns <br>
  */
-typedef struct fields_area
-{
+typedef struct fields_area {
     int aid;
     int x;
     int y;
@@ -49,8 +47,7 @@ typedef struct fields_area
  * \member <i>cl</i> area length in columns <br>
  * \member <i>mask</i> name of area mask <br>
  */
-typedef struct fields_maskedarea
-{
+typedef struct fields_maskedarea {
     int aid;
     int x;
     int y;
@@ -65,8 +62,7 @@ typedef struct fields_maskedarea
  * \member <i>pid</i> pid of worker <br>
  * \member <i>result</i> result of analysis <br>
  */
-typedef struct fields_done
-{
+typedef struct fields_done {
     int aid;
     int pid;
     double res;
@@ -77,8 +73,7 @@ typedef struct fields_done
  * \member <i>aid</i> area identifier <br>
  * \member <i>pid</i> pid of worker <br>
  */
-typedef struct fields_error
-{
+typedef struct fields_error {
     int aid;
     int pid;
 } fields_error;
@@ -87,8 +82,7 @@ typedef struct fields_error
  * \brief fields of message TERM
  * \member <i>pid</i> pid of daemon <br>
  */
-typedef struct fields_term
-{
+typedef struct fields_term {
     int pid;
 } fields_term;
 
@@ -100,8 +94,7 @@ typedef struct fields_term
  * \member <i>f_e</i> fields of ERROR message <br>
  * \member <i>f_t</i> fields of TERM message <br>
  */
-typedef union fields
-{
+typedef union fields {
     fields_area f_a;
     fields_maskedarea f_ma;
     fields_done f_d;
@@ -109,14 +102,12 @@ typedef union fields
     fields_term f_t;
 } fields;
 
-/** 
+/**
  * \brief generic IPC message
  * \member <i>type</i> type of message
  * \member <i>fields</i> fields of message
  */
-typedef struct msg
-{
+typedef struct msg {
     int type;
     fields f;
 } msg;
-

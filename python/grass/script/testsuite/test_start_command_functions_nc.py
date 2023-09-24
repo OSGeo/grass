@@ -1,11 +1,11 @@
 """Tests of start_command function family in nc location"""
 
-LOCATION = "nc"
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
 from grass.script.core import start_command, PIPE
+
+LOCATION = "nc"
 
 
 class TestPythonKeywordsInParameters(TestCase):
@@ -27,14 +27,14 @@ class TestPythonKeywordsInParameters(TestCase):
         proc = start_command("g.region", _raster=self.raster, stderr=PIPE)
         stderr = proc.communicate()[1]
         returncode = proc.poll()
-        self.assertEquals(returncode, 0, msg="Underscore as prefix was not accepted")
+        self.assertEqual(returncode, 0, msg="Underscore as prefix was not accepted")
         self.assertNotIn(b"_raster", stderr)
 
     def test_suffixed_underscore(self):
         proc = start_command("g.region", raster_=self.raster, stderr=PIPE)
         stderr = proc.communicate()[1]
         returncode = proc.poll()
-        self.assertEquals(
+        self.assertEqual(
             returncode,
             0,
             msg="Underscore as suffix was not accepted, stderr is:\n%s" % stderr,
@@ -45,7 +45,7 @@ class TestPythonKeywordsInParameters(TestCase):
         proc = start_command("g.region", _raster_=self.raster, stderr=PIPE)
         stderr = proc.communicate()[1]
         returncode = proc.poll()
-        self.assertEquals(returncode, 1, msg="Underscore at both sides was accepted")
+        self.assertEqual(returncode, 1, msg="Underscore at both sides was accepted")
         self.assertIn(b"raster", stderr)
 
 

@@ -23,7 +23,6 @@ import platform
 import re
 import textwrap
 import sys
-import six
 import wx
 from wx.html import HtmlWindow
 
@@ -239,7 +238,11 @@ class AboutWindow(wx.Frame):
         if not self.langUsed:
             import locale
 
-            loc = locale.getdefaultlocale()
+            try:
+                # Python >= 3.11
+                loc = locale.getlocale()
+            except AttributeError:
+                loc = locale.getdefaultlocale()
             if loc == (None, None):
                 self.langUsed = _("unknown")
             else:
@@ -388,6 +391,7 @@ class AboutWindow(wx.Frame):
                             country,
                             osgeo_id,
                             rfc2_agreed,
+                            orcid,
                         ) = line.split(",")
                 except ValueError:
                     errLines.append(line)
@@ -395,7 +399,7 @@ class AboutWindow(wx.Frame):
                 if extra:
                     contribs.append((name, email, country))
                 else:
-                    contribs.append((name, email, country, osgeo_id))
+                    contribs.append((name, email, country, osgeo_id, orcid))
 
             contribFile.close()
 
@@ -426,7 +430,13 @@ class AboutWindow(wx.Frame):
             if extra:
                 items = (_("Name"), _("E-mail"), _("Country"))
             else:
-                items = (_("Name"), _("E-mail"), _("Country"), _("OSGeo_ID"))
+                items = (
+                    _("Name"),
+                    _("E-mail"),
+                    _("Country"),
+                    _("OSGeo_ID"),
+                    _("ORCID"),
+                )
             contribBox = wx.FlexGridSizer(cols=len(items), vgap=5, hgap=5)
             for item in items:
                 text = StaticText(parent=contribwin, id=wx.ID_ANY, label=item)
@@ -611,7 +621,7 @@ class AboutWindow(wx.Frame):
         # else:
         # panel.Collapse(True)
         pageSizer = wx.BoxSizer(wx.VERTICAL)
-        for k, v in six.iteritems(js):
+        for k, v in js.items():
             if k != "total" and k != "name":
                 box = self._langBox(win, k, v)
                 pageSizer.Add(box, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)

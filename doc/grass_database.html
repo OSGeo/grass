@@ -31,7 +31,6 @@ In geospatial analysis often involves combining data from various sources
 multiple users
 -->
 
-
 <h3>GRASS GIS Database</h3>
 
 All data for GRASS GIS must be in GRASS GIS Database which is a directory
@@ -52,7 +51,6 @@ From user point of view, GRASS GIS Database with all its data in it
 is similar to, e.g. PostGIS, database, as it stores all information
 inside in a specific format and is accessible by specific tools.
 GRASS GIS Databases is in GRASS GIS often called GISDBASE or DATABASE.
-
 
 <h3>GRASS Locations</h3>
 
@@ -79,7 +77,6 @@ which would be equivalent to GRASS GIS Database. Mapsets in a Locations
 are like namespaces or schemas inside a database.
 
 <!-- TODO: naming limitations and best practices -->
-
 
 <h3>GRASS Mapsets</h3>
 
@@ -133,7 +130,6 @@ or <a href="v.proj.html"><em>v.proj</em></a> to reproject the data.
 The files and directories should not be moved or modified directly,
 but only using GRASS GIS tools.
 
-
 <h3>The role of the PERMANENT Mapset</h3>
 
 When creating a new Location, GRASS GIS automatically creates a special
@@ -160,7 +156,6 @@ the default computational region's extent and resolution values
 for the Location (which all Mapsets will inherit when they are created).
 Users have the option of switching back to the default region at any time.
 
-
 <h3>Importing, exporting and linking data</h3>
 
 GRASS GIS works only with data which are imported into a GRASS Database,
@@ -186,38 +181,18 @@ as standard raster maps. Similarly for newly created maps,
 setups a format and directory where the actual data will be stored,
 however in GRASS Database the data will be created as standard maps.
 
+<h3>Starting GRASS GIS</h3>
 
-<h3>Starting GRASS GIS using GUI</h3>
-
-After launching GRASS GIS, the startup window will open (Fig. 2).
+After launching GRASS GIS for the first time,
+the GUI opens in a default Location <code>world_latlong_wgs84</code>.
+From there a new Location and Mapset can be created.
 
 <p>
 <center>
-  <img src="grass_start.png" alt="startup window with numbered fields"><br>
-  <i>Fig. 2: GRASS GIS startup window</i>
+  <img src="grass_start.png" alt="GRASS GIS GUI after first start"><br>
 </center>
 
-The startup windows provides these functions:
-
-<ol>
-    <li>Selecting the GRASS GIS Database directory.
-    <li>Selecting the Location (e.g. a project or area).
-        See the <em>Location Wizard</em> (4) for creating new Locations.
-    <li>Selecting the Mapset (a subproject or task).
-        Creating a new Mapset requires only name.
-    <li>The <em>Location Wizard</em> for creating new Locations
-        based for example, on existing georeferenced file or EPSG code.
-    <li>Download a sample Location from the Internet.
-    <li>Start GRASS GIS once you have selected an existing Location and Mapset
-        or defined a new one. The graphical user interface
-        <a href="wxGUI.html">wxGUI</a> will open and provide you with a
-        menu system, map visualization tool, digitizer, and more.
-</ol>
-
-
-<h3>Starting GRASS GIS using command line</h3>
-
-GRASS GIS can be started with given Database, Location and Mapset
+GRASS GIS can be also started with a given Database, Location and Mapset
 from the command line. For example, the following will start
 in a given Mapset with only command line interface:
 
@@ -243,10 +218,9 @@ grass -c EPSG:5514:3 D:\grassdata\mylocation
 
 See <a href="grass.html"><em>grass</em></a> command manual for more details.
 
-
 <h3>Creating a New Location with the Location Wizard</h3>
 
-The <a href="wxGUI.html">wxGUI</a> graphical user interface provides a
+The <a href="wxGUI.html">GUI</a> provides a
 graphical <em>Location Wizard</em> which lets you easily create a
 new Location for your own data. You will be guided through a series of
 dialogues to browse and select predefined projections or to
@@ -274,21 +248,18 @@ this was in the text pointing to some unknown text:
 -->
 
 <p>
-After defining a new Location, wxGUI starts automatically.
-<!-- TODO: how GUI start actually works -->
 If data were already imported, you can add them into the Layer Manager now
 and display them.
 More data can be imported into the Location, e.g. using import options in
 the <em>File</em> menu in <em>Layer Manager</em> or
 <a href="r.import.html"><em>r.import</em></a>.
 
-
 <h2>See also</h2>
 
 <em>
-<a href="index.html">GRASS GIS 8 Reference Manual</a>
+<a href="index.html">GRASS GIS Reference Manual</a>
 <br>
-<a href="grass.html">GRASS GIS 8 startup program manual page</a>
+<a href="grass.html">GRASS GIS startup program manual page</a>
 <br>
 <a href="https://grasswiki.osgeo.org/wiki/Importing_data">Importing data on GRASS Wiki</a>
 <br>
@@ -299,8 +270,3 @@ the <em>File</em> menu in <em>Layer Manager</em> or
 <a href="r.proj.html">r.proj</a>,
 <a href="v.proj.html">v.proj</a>,
 </em>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

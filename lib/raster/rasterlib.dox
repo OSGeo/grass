@@ -1,5 +1,5 @@
 /*! \page rasterlib GRASS Raster Library
-<!-- * doxygenized from "GRASS 5 Programmer's Manual" 
+<!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004, 8/2005, 2006
      * updated to GRASS 7 by Martin Landa
   -->
@@ -31,7 +31,7 @@ library).
 
 GRASS allows the user to specify raster map names (or any other
 GIS database file) either as a simple <em>unqualified</em> name, such as
-"soils", or in case of input raster maps also as a <em>fully qualified</em> 
+"soils", or in case of input raster maps also as a <em>fully qualified</em>
 name, such as "soils@mapset", where <i>mapset</i> is the mapset where the raster
 map is to be found. Often only the unqualified raster map name is
 provided on the command line and searched in all mapsets indicated in
@@ -79,7 +79,7 @@ nonnegative file descriptor is returned if the open is
 successful. Otherwise a diagnostic message is printed and a negative
 value is returned. This routine does quite a bit of work. Since GRASS
 users expect that all raster maps will be resampled into the current
-region (nearest neighbor method), the resampling index for the raster 
+region (nearest neighbor method), the resampling index for the raster
 map is prepared by this routine after the map is opened. The resampling
 is based on the active module region. Preparation required for reading
 the various raster map formats (CELL, FCELL, DCELL) is also done.
@@ -176,8 +176,8 @@ Raster data can be thought of as a two-dimensional matrix. The
 routines described below read one full row of the matrix. It should be
 understood, however, that the number of rows and columns in the matrix
 is determined by the region, not the raster file itself. Raster data
-is always read resampled (nearest neighbor) into the region. This allows 
-the user to specify the coverage of the database during analyses. It also 
+is always read resampled (nearest neighbor) into the region. This allows
+the user to specify the coverage of the database during analyses. It also
 allows databases to consist of raster files which do not cover exactly the
 same area, or do not have the same grid cell resolution. When raster
 files are resampled into the region, they all "look" the same.
@@ -256,7 +256,7 @@ files for the new raster file are created as well.
 <b>Note:</b> If a module wants to explicitly write support files
 (e.g., a specific color table) for a raster file it creates, it must
 do so after the raster file is closed. Otherwise the close will
-overwrite the support files. See \ref Raster_Map_Layer_Support_Routines 
+overwrite the support files. See \ref Raster_Map_Layer_Support_Routines
 for routines which write raster support files.
 
  - Rast_unopen()
@@ -503,7 +503,7 @@ color. The format of this file is described in
 \ref Raster_Color_Table_Format.
 
 The routines that manipulate the raster color file use the
-<i>Colors</i> structure which is described in detail in 
+<i>Colors</i> structure which is described in detail in
 \ref GIS_Library_Data_Structures.
 
 
@@ -601,7 +601,7 @@ build some predefined color tables.
  - Rast_set_color()
 
 Set a category color. The red, green, and blue intensities for the
-color associated with category The intensities must be in the range 
+color associated with category The intensities must be in the range
 0-255. Values below zero are set as zero, values above 255 are set as
 255.
 
@@ -958,7 +958,7 @@ if(fcell <  0.0) return 0;
 return 1;
 \endcode
 
-or (as suggested by Mark Line) 
+or (as suggested by Mark Line)
 
 \code
 return(FCELL != fcell) ;
@@ -1037,7 +1037,7 @@ CELL *cell;
 cell += n;
 \endcode
 
-Now 
+Now
 
 \code
 rast = Rast_incr_void_ptr(rast, Rast_raster_size(data_type));
@@ -1078,12 +1078,12 @@ assigning FCELL values to raster cells of any type.
 If Rast_is_d_null_value() is true, sets value to null value. Converts
 DCELL val to raster data type and stores the result. Used for
 assigning DCELL values to raster cells of any type.
- 
+
  - Rast_get_value_c()
 
 Retrieves the value of raster type, converts it to CELL type and
 returns the result. If null value is stored, returns CELL null
-value. Used for retreiving CELL values from raster cells of any type.
+value. Used for retrieving CELL values from raster cells of any type.
 
 Note: when data_type != CELL_TYPE, no quantization is used, only type conversion.
 
@@ -1091,13 +1091,13 @@ Note: when data_type != CELL_TYPE, no quantization is used, only type conversion
 
 Retrieves the value of raster type, converts it to FCELL type and
 returns the result. If null value is stored, returns FCELL null
-value. Used for retreiving FCELL values from raster cells of any type.
+value. Used for retrieving FCELL values from raster cells of any type.
 
  - Rast_get_value_d()
 
 Retrieves the value of raster type, converts it to DCELL type and
 returns the result. If null value is stored, returns DCELL null
-value. Used for retreiving DCELL values from raster cells of any type.
+value. Used for retrieving DCELL values from raster cells of any type.
 
  - Rast_get_row ()
 
@@ -1560,7 +1560,7 @@ New functions to support quantization of floating-point to integer:
 Writes the <tt>f_quant</tt> file for the raster map. If
 mapset==Rast_mapset() i.e. the map is in current mapset, then the
 original quant file in <tt>cell_misc/map/f_quant</tt> is
-written. Othewise is written into <tt>quant2/mapset/name</tt> (much
+written. Otherwise is written into <tt>quant2/mapset/name</tt> (much
 like colr2 element). This results in map&#64;mapset being read using
 quant rules stored Rast_mapset(). See Rast_read_quant() for detailes.
 
@@ -1657,7 +1657,7 @@ Writes the <tt>f_quant</tt> file for the raster map.
 
  - Rast_quantize_fp_map_range()
 
-Writes the <tt>f_quant</TT> file for the raster map with one rule. 
+Writes the <tt>f_quant</TT> file for the raster map with one rule.
 
 
 \section Categories_Labeling_Functions Categories Labeling Functions (new and upgraded)
@@ -1721,11 +1721,11 @@ The format of explicit label entries is the same for integer maps.
 
 In addition label entries of new format is supported for floating point maps.
 \verbatim
-    val:descr (where val is a floating point number) 
+    val:descr (where val is a floating point number)
 \endverbatim
 or
 \verbatim
-    val1:val2:descr (where val1, val2 is a floating point range) 
+    val1:val2:descr (where val1, val2 is a floating point range)
 \endverbatim
 
 Internally the labels are stored for fp ranges of data. However when
@@ -1823,8 +1823,8 @@ first marked cat label.
  - Rast_init_cats()
 
 Same as existing Rast_init_cats() only ncats argument is
-missign. ncats has no meaning in new Categories structure and only
-stores (int) largets data value for backwards compatibility.
+missing. ncats has no meaning in new Categories structure and only
+stores (int) largest data value for backwards compatibility.
 
  - Rast_set_cats_fmt()
 

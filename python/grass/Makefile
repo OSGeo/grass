@@ -7,9 +7,7 @@ PYDIR = $(ETC)/python/grass
 
 SUBDIRS = \
 	app \
-	bandref \
 	benchmark \
-	ctypes \
 	exceptions \
 	getosm \
 	grassdb \
@@ -20,6 +18,7 @@ SUBDIRS = \
 	pydispatch \
 	pygrass \
 	script \
+	semantic_label \
 	temporal \
 	utils
 

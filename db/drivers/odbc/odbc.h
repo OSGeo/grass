@@ -1,13 +1,13 @@
 #ifndef _ODBC_H_
-#define	_ODBC_H_
+#define _ODBC_H_
 
 #ifdef __MINGW32__
- #include <windows.h>
+#include <windows.h>
 #endif
 
 #ifdef __CYGWIN__
- #include <w32api/intrin.h>
- #include <w32api/wtypes.h>
+#include <w32api/intrin.h>
+#include <w32api/wtypes.h>
 #endif
 
 /* configure checks for sql.h and stores in $(ODBCINC) */

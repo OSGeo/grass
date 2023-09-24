@@ -17,7 +17,7 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
-@author Python parameterization Ondrej Pesek <pesej.ondrek gmail.com>
+@author Python exports Ondrej Pesek <pesej.ondrek gmail.com>
 """
 
 import os
@@ -26,7 +26,6 @@ import time
 import stat
 import tempfile
 import random
-import six
 
 import wx
 from wx.lib import ogl
@@ -246,9 +245,23 @@ class ModelFrame(wx.Frame):
                 self.pythonPanel.RefreshScript()
 
             if self.pythonPanel.IsModified():
-                self.SetStatusText(_("Python script contains local modifications"), 0)
+                self.SetStatusText(
+                    _(
+                        "{} script contains local modifications".format(
+                            self.pythonPanel.body.script_type
+                        )
+                    ),
+                    0,
+                )
             else:
-                self.SetStatusText(_("Python script is up-to-date"), 0)
+                self.SetStatusText(
+                    _(
+                        "{} script is up-to-date".format(
+                            self.pythonPanel.body.script_type
+                        )
+                    ),
+                    0,
+                )
         elif page == self.notebook.GetPageIndexByName("items"):
             self.itemPanel.Update()
 
@@ -299,7 +312,7 @@ class ModelFrame(wx.Frame):
                         "sec": int(ctime - (mtime * 60)),
                     }
             except KeyError:
-                # stopped deamon
+                # stopped daemon
                 stime = _("unknown")
 
             return stime
@@ -392,7 +405,7 @@ class ModelFrame(wx.Frame):
         dlg.Init(properties)
         if dlg.ShowModal() == wx.ID_OK:
             self.ModelChanged()
-            for key, value in six.iteritems(dlg.GetValues()):
+            for key, value in dlg.GetValues().items():
                 properties[key] = value
             for action in self.model.GetItems(objType=ModelAction):
                 action.GetTask().set_flag("overwrite", properties["overwrite"])
@@ -1285,7 +1298,7 @@ class ModelCanvas(ogl.ShapeCanvas):
         self.SetDiagram(self.diagram)
         self.diagram.SetCanvas(self)
 
-        self.SetScrollbars(20, 20, 2000 / 20, 2000 / 20)
+        self.SetScrollbars(20, 20, 2000 // 20, 2000 // 20)
 
         self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
@@ -1873,7 +1886,7 @@ class VariablePanel(wx.Panel):
     def UpdateModelVariables(self):
         """Update model variables"""
         variables = dict()
-        for values in six.itervalues(self.list.GetData()):
+        for values in self.list.GetData().values():
             name = values[0]
             variables[name] = {"type": str(values[1])}
             if values[2]:
@@ -1981,13 +1994,19 @@ class ItemPanel(wx.Panel):
 
 
 class PythonPanel(wx.Panel):
+    """Model as a Python script of choice."""
+
     def __init__(self, parent, id=wx.ID_ANY, **kwargs):
-        """Model as python script"""
+        """Initialize the panel."""
         self.parent = parent
 
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
 
-        self.filename = None  # temp file to run
+        # variable for a temp file to run Python scripts
+        self.filename = None
+        # default values of variables that will be changed if the desired
+        # script type is changed
+        self.write_object = WritePythonFile
 
         self.bodyBox = StaticBox(
             parent=self, id=wx.ID_ANY, label=" %s " % _("Python script")
@@ -1997,19 +2016,33 @@ class PythonPanel(wx.Panel):
             SetDarkMode(self.body)
 
         self.btnRun = Button(parent=self, id=wx.ID_ANY, label=_("&Run"))
-        self.btnRun.SetToolTip(_("Run python script"))
+        self.btnRun.SetToolTip(_("Run script"))
         self.Bind(wx.EVT_BUTTON, self.OnRun, self.btnRun)
         self.btnSaveAs = Button(parent=self, id=wx.ID_SAVEAS)
-        self.btnSaveAs.SetToolTip(_("Save python script to file"))
+        self.btnSaveAs.SetToolTip(_("Save the script to a file"))
         self.Bind(wx.EVT_BUTTON, self.OnSaveAs, self.btnSaveAs)
         self.btnRefresh = Button(parent=self, id=wx.ID_REFRESH)
         self.btnRefresh.SetToolTip(
             _(
-                "Refresh python script based on the model.\n"
-                "It will discards all local changes."
+                "Refresh the script based on the model.\n"
+                "It will discard all local changes."
             )
         )
+        self.script_type_box = wx.Choice(
+            parent=self,
+            id=wx.ID_ANY,
+            choices=[
+                _("Python"),
+                _("PyWPS"),
+            ],
+        )
+        self.script_type_box.SetSelection(0)  # Python
         self.Bind(wx.EVT_BUTTON, self.OnRefresh, self.btnRefresh)
+        self.Bind(
+            wx.EVT_CHOICE,
+            self.OnChangeScriptType,
+            self.script_type_box,
+        )
 
         self._layout()
 
@@ -2020,8 +2053,15 @@ class PythonPanel(wx.Panel):
 
         bodySizer.Add(self.body, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
 
-        btnSizer.Add(self.btnRefresh, proportion=0, flag=wx.LEFT | wx.RIGHT, border=5)
+        btnSizer.Add(
+            StaticText(
+                parent=self, id=wx.ID_ANY, label="%s:" % _("Python script type")
+            ),
+            flag=wx.ALIGN_CENTER_VERTICAL,
+        )
+        btnSizer.Add(self.script_type_box, proportion=0, flag=wx.RIGHT, border=5)
         btnSizer.AddStretchSpacer()
+        btnSizer.Add(self.btnRefresh, proportion=0, flag=wx.LEFT | wx.RIGHT, border=5)
         btnSizer.Add(self.btnSaveAs, proportion=0, flag=wx.RIGHT, border=5)
         btnSizer.Add(self.btnRun, proportion=0, flag=wx.RIGHT, border=5)
 
@@ -2032,44 +2072,45 @@ class PythonPanel(wx.Panel):
         sizer.SetSizeHints(self)
         self.SetSizer(sizer)
 
-    def OnRun(self, event):
-        """Run Python script"""
-        self.filename = grass.tempfile()
-        try:
-            fd = open(self.filename, "w")
-            fd.write(self.body.GetText())
-        except IOError as e:
-            GError(_("Unable to launch Python script. %s") % e, parent=self)
-            return
-        finally:
-            fd.close()
-            mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
-            os.chmod(self.filename, mode | stat.S_IXUSR)
+    def RefreshScript(self):
+        """Refresh the script.
 
-        for item in self.parent.GetModel().GetItems():
-            if (
-                len(item.GetParameterizedParams()["params"])
-                + len(item.GetParameterizedParams()["flags"])
-                > 0
-            ):
-                self.parent._gconsole.RunCmd(
-                    [fd.name, "--ui"], skipInterface=False, onDone=self.OnDone
-                )
-                break
-        else:
-            self.parent._gconsole.RunCmd(
-                [fd.name], skipInterface=True, onDone=self.OnDone
+        :return: True on refresh
+        :return: False script hasn't been updated
+        """
+        if len(self.parent.GetModel().GetItems()) == 0:
+            # no need to fully parse an empty script
+            self.body.SetText("")
+            return True
+
+        if self.body.modified:
+            dlg = wx.MessageDialog(
+                self,
+                message=_(
+                    "{} script is locally modified. "
+                    "Refresh will discard all changes. "
+                    "Do you really want to continue?".format(self.body.script_type)
+                ),
+                caption=_("Update"),
+                style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
+            ret = dlg.ShowModal()
+            dlg.Destroy()
+            if ret == wx.ID_NO:
+                return False
 
-        event.Skip()
+        fd = tempfile.TemporaryFile(mode="r+")
+        self.write_object(fd, self.parent.GetModel())
+        fd.seek(0)
+        self.body.SetText(fd.read())
+        fd.close()
 
-    def OnDone(self, event):
-        """Python script finished"""
-        try_remove(self.filename)
-        self.filename = None
+        self.body.modified = False
+
+        return True
 
     def SaveAs(self, force=False):
-        """Save python script to file
+        """Save the script to a file.
 
         :return: filename
         """
@@ -2112,7 +2153,7 @@ class PythonPanel(wx.Panel):
         fd = open(filename, "w")
         try:
             if force:
-                WritePythonFile(fd, self.parent.GetModel())
+                self.write_object(fd, self.parent.GetModel())
             else:
                 fd.write(self.body.GetText())
         finally:
@@ -2123,53 +2164,87 @@ class PythonPanel(wx.Panel):
 
         return filename
 
+    def OnRun(self, event):
+        """Run Python script"""
+        self.filename = grass.tempfile()
+        try:
+            fd = open(self.filename, "w")
+            fd.write(self.body.GetText())
+        except IOError as e:
+            GError(_("Unable to launch Python script. %s") % e, parent=self)
+            return
+        finally:
+            fd.close()
+            mode = stat.S_IMODE(os.lstat(self.filename)[stat.ST_MODE])
+            os.chmod(self.filename, mode | stat.S_IXUSR)
+
+        for item in self.parent.GetModel().GetItems():
+            if (
+                len(item.GetParameterizedParams()["params"])
+                + len(item.GetParameterizedParams()["flags"])
+                > 0
+            ):
+                self.parent._gconsole.RunCmd(
+                    [fd.name, "--ui"], skipInterface=False, onDone=self.OnDone
+                )
+                break
+        else:
+            self.parent._gconsole.RunCmd(
+                [fd.name], skipInterface=True, onDone=self.OnDone
+            )
+
+        event.Skip()
+
+    def OnDone(self, event):
+        """Python script finished"""
+        try_remove(self.filename)
+        self.filename = None
+
+    def OnChangeScriptType(self, event):
+        new_script_type = self.script_type_box.GetStringSelection()
+        if new_script_type == "Python":
+            self.write_object = WritePythonFile
+        elif new_script_type == "PyWPS":
+            self.write_object = WritePyWPSFile
+
+        if self.RefreshScript():
+            self.body.script_type = new_script_type
+            self.parent.SetStatusText(
+                _("{} script is up-to-date".format(self.body.script_type)),
+                0,
+            )
+
+        self.script_type_box.SetStringSelection(self.body.script_type)
+
+        if self.body.script_type == "Python":
+            self.write_object = WritePythonFile
+            self.btnRun.Enable()
+            self.btnRun.SetToolTip(_("Run script"))
+        elif self.body.script_type == "PyWPS":
+            self.write_object = WritePyWPSFile
+            self.btnRun.Disable()
+            self.btnRun.SetToolTip(
+                _("Run script - enabled only for basic Python scripts")
+            )
+
+    def OnRefresh(self, event):
+        """Refresh the script."""
+        if self.RefreshScript():
+            self.parent.SetStatusText(
+                _("{} script is up-to-date".format(self.body.script_type)),
+                0,
+            )
+        event.Skip()
+
     def OnSaveAs(self, event):
-        """Save python script to file"""
+        """Save the script to a file."""
         self.SaveAs(force=False)
         event.Skip()
 
-    def RefreshScript(self):
-        """Refresh Python script
-
-        :return: True on refresh
-        :return: False script hasn't been updated
-        """
-        if self.body.modified:
-            dlg = wx.MessageDialog(
-                self,
-                message=_(
-                    "Python script is locally modificated. "
-                    "Refresh will discard all changes. "
-                    "Do you really want to continue?"
-                ),
-                caption=_("Update"),
-                style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
-            )
-            ret = dlg.ShowModal()
-            dlg.Destroy()
-            if ret == wx.ID_NO:
-                return False
-
-        fd = tempfile.TemporaryFile(mode="r+")
-        WritePythonFile(fd, self.parent.GetModel())
-        fd.seek(0)
-        self.body.SetText(fd.read())
-        fd.close()
-
-        self.body.modified = False
-
-        return True
-
-    def OnRefresh(self, event):
-        """Refresh Python script"""
-        if self.RefreshScript():
-            self.parent.SetStatusText(_("Python script is up-to-date"), 0)
-        event.Skip()
-
     def IsModified(self):
-        """Check if python script has been modified"""
+        """Check if the script has been modified."""
         return self.body.modified
 
     def IsEmpty(self):
-        """Check if python script is empty"""
+        """Check if the script is empty."""
         return len(self.body.GetText()) == 0

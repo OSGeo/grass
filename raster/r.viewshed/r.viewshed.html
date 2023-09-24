@@ -3,7 +3,7 @@
 <p><em>r.viewshed</em> is a module that computes the viewshed of a
 point on a raster terrain. That is, given an elevation raster, and the
 location of an observer, it generates a raster output map showing
-which cells are visible from the given location. 
+which cells are visible from the given location.
 
 The algorithm underlying <em>r.viewshed</em> minimizes both the CPU
 operations and the transfer of data between main memory and disk; as a
@@ -31,7 +31,7 @@ Otherwise, a value in [0, 180] representing the vertical angle with
 regard to the viewpoint, in degrees, if the point is visible.
 A value of 0 is directly below the specified viewing position,
 90 is due horizontal. The angle to the cell containing the viewing
-position is undefined and set to 180. 
+position is undefined and set to 180.
 
 <p>
 If the <b>-b</b> flag is set, the output is in boolean-mode, and each point
@@ -47,7 +47,7 @@ If the <b>-e</b> flag is set, the output is in elevation-mode, and each point
 in the output map is marked as:
 <!-- Check & FIXME -->
 <ul>
-  <li> no-data (null), if the respective point in the elevation map is no-data (null) 
+  <li> no-data (null), if the respective point in the elevation map is no-data (null)
   <li> -1, if the point is not visible
   <li> the difference in elevation between the point and the viewpoint, if the point is visible.
 </ul>
@@ -97,7 +97,6 @@ the amount of memory used by the program by setting the
 <b>memory</b> to the number of MB of memory they would like to
 be used.
 
-
 <h3>Memory mode</h3>
 
 The algorithm can run in two modes: in internal memory, which
@@ -115,19 +114,18 @@ instead of internal, which is slower. Overestimating the amount of
 free memory may result in <em>r.viewshed</em> running in internal mode
 and using virtual memory, which is slower than the external mode.
 
-
 <h3>The algorithm</h3>
 
 <em>r.viewshed</em> uses the following model for determining
-visibility: The height of a cell is assumed to be variable, and the 
-actual height of a point falling into a cell, but not identical the cell 
-center, is interpolated. Thus the terrain is viewed as a smooth surface. 
+visibility: The height of a cell is assumed to be variable, and the
+actual height of a point falling into a cell, but not identical the cell
+center, is interpolated. Thus the terrain is viewed as a smooth surface.
 Two points are visible to each other if their line-of-sight does not
-intersect the terrain. The height for an arbitrary point x in the terrain 
-is interpolated from the 4 surrounding neighbours. This means that this 
+intersect the terrain. The height for an arbitrary point x in the terrain
+is interpolated from the 4 surrounding neighbours. This means that this
 model does a bilinear interpolation of heights.
 
-This model is suitable for both low and high resolution rasters as well 
+This model is suitable for both low and high resolution rasters as well
 as terrain with flat and steep slopes.
 
 <p>The core of the algorithm is determining, for each cell, the
@@ -170,17 +168,16 @@ REFERENCES below.
       <th><img src="sweep1.png" width=200 alt="[SDF]" border=0></th>
       <th><img src="sweep2.png" width=200 alt="[SDF]" border=0></th>
   </tr>
-  <tr>	
+  <tr>
     <th>The sweep-line.</th>
     <th>The active cells.</th>
-  </tr> 
+  </tr>
 </table>
-
 
 <h2>EXAMPLES</h2>
 
-Using the North Carolina dataset:  Compute viewshed from a observation 
-point (coordinates: 638728.087167, 220609.261501) which is 5 meters 
+Using the North Carolina dataset:  Compute viewshed from a observation
+point (coordinates: 638728.087167, 220609.261501) which is 5 meters
 above ground:
 
 <div class="code"><pre>
@@ -216,19 +213,18 @@ g.region raster=elevation.10m
 r.viewshed input=elevation.10m output=viewshed coordinates=598869,4916642 memory=800
 </pre></div>
 
-
 <h2>REFERENCES</h2>
 
 <ul>
 
-<li>Computing Visibility on Terrains in External Memory. Herman 
-Haverkort, Laura Toma and Yi Zhuang. In <em>ACM Journal on Experimental 
+<li>Computing Visibility on Terrains in External Memory. Herman
+Haverkort, Laura Toma and Yi Zhuang. In <em>ACM Journal on Experimental
 Algorithmics (JEA)</em> 13 (2009).</li>
-	 
+
 <li><a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.76.4282&rep=rep1&type=pdf">Computing
-Visibility on Terrains in External Memory</a>. Herman Haverkort, Laura 
-Toma and Yi Zhuang. In the <em>Proceedings of the 9th Workshop on 
-Algorithm Engineering and Experiments / Workshop on Analytic Algorithms 
+Visibility on Terrains in External Memory</a>. Herman Haverkort, Laura
+Toma and Yi Zhuang. In the <em>Proceedings of the 9th Workshop on
+Algorithm Engineering and Experiments / Workshop on Analytic Algorithms
 and Combinatorics (ALENEX/ANALCO 2007)</em>.</li>
 </ul>
 
@@ -244,8 +240,3 @@ and Combinatorics (ALENEX/ANALCO 2007)</em>.</li>
 <p> Yi Zhuang (Carnegie-Mellon University): <tt>yzhuang@andrew.cmu.edu</tt>
 <p>William Richard (Bowdoin College): <tt>willster3021@gmail.com </tt>
 <p>Markus Metz
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

@@ -9,11 +9,11 @@
 #ifdef __MINGW32__
 #include <io.h>
 #include <fcntl.h>
-#define pipe(fds) _pipe(fds, 4096, O_BINARY|O_NOINHERIT)
+#define pipe(fds) _pipe(fds, 4096, O_BINARY | O_NOINHERIT)
 #endif
 
-static FILE *do_popen(struct Popen *state, int wr,
-		      const char *program, const char **args)
+static FILE *do_popen(struct Popen *state, int wr, const char *program,
+                      const char **args)
 {
     int which = wr ? 0 : 1;
     const char *dir = wr ? "w" : "r";
@@ -25,28 +25,25 @@ static FILE *do_popen(struct Popen *state, int wr,
     state->pid = -1;
 
     if (pipe(pipe_fds) < 0)
-	return NULL;
+        return NULL;
 
     cfd = pipe_fds[wr ? 0 : 1];
     pfd = pipe_fds[wr ? 1 : 0];
 
     if (!args) {
-	argv[0] = program;
-	argv[1] = NULL;
-	args = argv;
+        argv[0] = program;
+        argv[1] = NULL;
+        args = argv;
     }
 
-    state->pid = G_spawn_ex(
-	program,
-	SF_ARGVEC, args,
-	SF_REDIRECT_DESCRIPTOR, which, cfd,
-	SF_CLOSE_DESCRIPTOR, pfd,
-	SF_BACKGROUND, NULL);
+    state->pid =
+        G_spawn_ex(program, SF_ARGVEC, args, SF_REDIRECT_DESCRIPTOR, which, cfd,
+                   SF_CLOSE_DESCRIPTOR, pfd, SF_BACKGROUND, NULL);
 
     if (state->pid == -1) {
-	close(pipe_fds[0]);
-	close(pipe_fds[1]);
-	return NULL;
+        close(pipe_fds[0]);
+        close(pipe_fds[1]);
+        return NULL;
     }
 
     close(cfd);
@@ -75,8 +72,8 @@ FILE *G_popen_read(struct Popen *state, const char *program, const char **args)
 void G_popen_close(struct Popen *state)
 {
     if (state->fp)
-	fclose(state->fp);
+        fclose(state->fp);
 
     if (state->pid != -1)
-	G_wait(state->pid);
+        G_wait(state->pid);
 }

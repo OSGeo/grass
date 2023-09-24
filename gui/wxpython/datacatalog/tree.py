@@ -23,22 +23,18 @@ import re
 import copy
 from multiprocessing import Process, Queue, cpu_count
 
-watchdog_used = True
-try:
-    from watchdog.observers import Observer
-    from watchdog.events import PatternMatchingEventHandler
-except ImportError:
-    watchdog_used = False
-    PatternMatchingEventHandler = object
-
-
 import wx
-from wx.lib.newevent import NewEvent
 
 from core.gcmd import RunCommand, GError, GMessage
 from core.utils import GetListOfLocations
 from core.debug import Debug
 from core.gthread import gThread
+from core.watchdog import (
+    EVT_UPDATE_MAPSET,
+    EVT_CURRENT_MAPSET_CHANGED,
+    MapsetWatchdog,
+    watchdog_used,
+)
 from gui_core.dialogs import TextEntryDialog
 from core.giface import StandaloneGrassInterface
 from core.treemodel import TreeModel, DictNode
@@ -77,9 +73,6 @@ from grass.grassdb.checks import (
     is_first_time_user,
 )
 from grass.exceptions import CalledModuleError
-
-
-updateMapset, EVT_UPDATE_MAPSET = NewEvent()
 
 
 def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
@@ -141,60 +134,6 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
 
     queue.put((maps_dict, None))
     gscript.try_remove(tmp_gisrc_file)
-
-
-class MapWatch(PatternMatchingEventHandler):
-    """Monitors file events (create, delete, move files) using watchdog
-    to inform about changes in current mapset. One instance monitors
-    only one element (raster, vector, raster_3d).
-    Patterns are not used/needed in this case, use just '*' for matching
-    everything. When file/directory change is detected, wx event is dispatched
-    to event handler (can't use Signals because this is different thread),
-    containing info about the change."""
-
-    def __init__(self, patterns, element, event_handler):
-        PatternMatchingEventHandler.__init__(self, patterns=patterns)
-        self.element = element
-        self.event_handler = event_handler
-
-    def on_created(self, event):
-        if (
-            self.element == "vector" or self.element == "raster_3d"
-        ) and not event.is_directory:
-            return
-        evt = updateMapset(
-            src_path=event.src_path,
-            event_type=event.event_type,
-            is_directory=event.is_directory,
-            dest_path=None,
-        )
-        wx.PostEvent(self.event_handler, evt)
-
-    def on_deleted(self, event):
-        if (
-            self.element == "vector" or self.element == "raster_3d"
-        ) and not event.is_directory:
-            return
-        evt = updateMapset(
-            src_path=event.src_path,
-            event_type=event.event_type,
-            is_directory=event.is_directory,
-            dest_path=None,
-        )
-        wx.PostEvent(self.event_handler, evt)
-
-    def on_moved(self, event):
-        if (
-            self.element == "vector" or self.element == "raster_3d"
-        ) and not event.is_directory:
-            return
-        evt = updateMapset(
-            src_path=event.src_path,
-            event_type=event.event_type,
-            is_directory=event.is_directory,
-            dest_path=event.dest_path,
-        )
-        wx.PostEvent(self.event_handler, evt)
 
 
 class NameEntryDialog(TextEntryDialog):
@@ -327,7 +266,7 @@ class DataCatalogTree(TreeView):
         self.parent = parent
         self.contextMenu.connect(self.OnRightClick)
         self.itemActivated.connect(self.OnDoubleClick)
-        self._giface.currentMapsetChanged.connect(self._updateAfterMapsetChanged)
+        self._giface.currentMapsetChanged.connect(self.UpdateAfterMapsetChanged)
         self._giface.grassdbChanged.connect(self._updateAfterGrassdbChanged)
         self._iconTypes = [
             "grassdb",
@@ -349,6 +288,16 @@ class DataCatalogTree(TreeView):
         self._lastWatchdogUpdate = gscript.clock()
         self._updateMapsetWhenIdle = None
 
+        #  mapset watchdog
+        self._mapset_watchdog = MapsetWatchdog(
+            elements_dirs=(
+                ("raster", "cell"),
+                ("vector", "vector"),
+                ("raster_3d", "grid3"),
+            ),
+            evt_handler=self,
+            giface=self._giface,
+        )
         # Get databases from settings
         # add current to settings if it's not included
         self.grassdatabases = self._getValidSavedGrassDBs()
@@ -387,7 +336,9 @@ class DataCatalogTree(TreeView):
             EVT_UPDATE_MAPSET, lambda evt: self._onWatchdogMapsetReload(evt.src_path)
         )
         self.Bind(wx.EVT_IDLE, self._onUpdateMapsetWhenIdle)
-        self.observer = None
+        self.Bind(
+            EVT_CURRENT_MAPSET_CHANGED, lambda evt: self._updateAfterMapsetChanged()
+        )
 
     def _resetSelectVariables(self):
         """Reset variables related to item selection."""
@@ -686,47 +637,6 @@ class DataCatalogTree(TreeView):
             return errors
         return None
 
-    def ScheduleWatchCurrentMapset(self):
-        """Using watchdog library, sets up watching of current mapset folder
-        to detect changes not captured by other means (e.g. from command line).
-        Schedules 3 watches (raster, vector, 3D raster).
-        If watchdog observers are active, it restarts the observers in current mapset.
-        """
-        global watchdog_used
-        if not watchdog_used:
-            return
-
-        if self.observer and self.observer.is_alive():
-            self.observer.stop()
-            self.observer.join()
-            self.observer.unschedule_all()
-        self.observer = Observer()
-
-        gisenv = gscript.gisenv()
-        for element, directory in (
-            ("raster", "cell"),
-            ("vector", "vector"),
-            ("raster_3d", "grid3"),
-        ):
-            path = os.path.join(
-                gisenv["GISDBASE"], gisenv["LOCATION_NAME"], gisenv["MAPSET"], directory
-            )
-            if not os.path.exists(path):
-                try:
-                    os.mkdir(path)
-                except OSError:
-                    pass
-            if os.path.exists(path):
-                self.observer.schedule(
-                    MapWatch("*", element, self), path=path, recursive=False
-                )
-        try:
-            self.observer.start()
-        except OSError:
-            # in case inotify on linux exceeds limits
-            watchdog_used = False
-            return
-
     def _onUpdateMapsetWhenIdle(self, event):
         """When idle, check if current mapset should be reloaded
         because there are skipped update events."""
@@ -755,6 +665,15 @@ class DataCatalogTree(TreeView):
         if node:
             self._reloadMapsetNode(node)
             self.RefreshNode(node, recursive=True)
+
+    def UpdateAfterMapsetChanged(self):
+        """Wrapper around updating function called
+        after mapset was changed, as a handler of signal.
+        If watchdog is active, updating is skipped here
+        to avoid double updating.
+        """
+        if not watchdog_used:
+            self._updateAfterMapsetChanged()
 
     def GetDbNode(self, grassdb, location=None, mapset=None, map=None, map_type=None):
         """Returns node representing db/location/mapset/map or None if not found."""
@@ -848,7 +767,7 @@ class DataCatalogTree(TreeView):
         if event.ret is not None:
             self._giface.WriteWarning("\n".join(event.ret))
         self.UpdateCurrentDbLocationMapsetNode()
-        self.ScheduleWatchCurrentMapset()
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()
         self.RefreshItems()
         self.ExpandCurrentMapset()
         self.loadingDone.emit()
@@ -1973,12 +1892,23 @@ class DataCatalogTree(TreeView):
 
     def _updateAfterMapsetChanged(self):
         """Update tree after current mapset has changed"""
+        db_node, location_node, mapset_node = self.GetCurrentDbLocationMapsetNode()
+        # mapset is not in tree, create its node
+        if not mapset_node:
+            genv = gisenv()
+            if not location_node:
+                if not db_node:
+                    self.InsertGrassDb(genv["GISDBASE"])
+                else:
+                    self.InsertLocation(genv["LOCATION_NAME"], db_node)
+            else:
+                self.InsertMapset(genv["MAPSET"], location_node)
         self.UpdateCurrentDbLocationMapsetNode()
         self._reloadMapsetNode(self.current_mapset_node)
         self.RefreshNode(self.current_mapset_node, recursive=True)
         self.ExpandCurrentMapset()
         self.RefreshItems()
-        self.ScheduleWatchCurrentMapset()
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""
@@ -2058,6 +1988,22 @@ class DataCatalogTree(TreeView):
         self._reloadMapsetNode(node)
         self.RefreshNode(node, recursive=True)
         self.ExpandNode(node, recursive=False)
+
+    def OnCopyMapsetPath(self, event):
+        """Copy path to mapset"""
+        if wx.TheClipboard.Open():
+            do = wx.TextDataObject()
+            text = []
+            for i in range(len(self.selected_mapset)):
+                path = os.path.join(
+                    self.selected_grassdb[i].data["name"],
+                    self.selected_location[i].data["name"],
+                    self.selected_mapset[i].data["name"],
+                )
+                text.append(path)
+            do.SetText(",".join(text))
+            wx.TheClipboard.SetData(do)
+            wx.TheClipboard.Close()
 
     def OnReloadLocation(self, event):
         """Reload all mapsets in selected location"""
@@ -2231,6 +2177,10 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnReloadMapset, item)
 
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy path to mapset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
+
         self.PopupMenu(menu)
         menu.Destroy()
 
@@ -2330,6 +2280,10 @@ class DataCatalogTree(TreeView):
         self.Bind(wx.EVT_MENU, self.OnDeleteMapset, item)
         if self._restricted:
             item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy paths to mapsets"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
 
         self.PopupMenu(menu)
         menu.Destroy()

@@ -47,7 +47,7 @@ class SimpleModule(Module):
         for banned in ["stdout_", "stderr_", "finish_", "run_"]:
             if banned in kargs:
                 raise ValueError(
-                    "Do not set %s parameter" ", it would be overriden" % banned
+                    "Do not set %s parameter" ", it would be overridden" % banned
                 )
         kargs["stdout_"] = subprocess.PIPE
         kargs["stderr_"] = subprocess.PIPE
@@ -137,5 +137,5 @@ def call_module(
     output, errors = process.communicate(input=encode(decode(stdin)) if stdin else None)
     returncode = process.poll()
     if returncode:
-        raise CalledModuleError(returncode, module, kwargs, errors)
+        raise CalledModuleError(module, kwargs, returncode, errors)
     return decode(output) if output else None

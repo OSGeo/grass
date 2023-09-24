@@ -17,7 +17,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 from .datetime_math import compute_datetime_delta
 from functools import reduce
 from collections import OrderedDict
@@ -1152,7 +1151,7 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
     """
 
     def _return(output, tounit, shell):
-        """Fuction to return the output"""
+        """Function to return the output"""
         if shell:
             return output
         else:

@@ -6,16 +6,16 @@
 
 /*--------------------------------------------------------------------------*/
 /*FUNCTIONS DECLARATION */
-void
-P_Outlier(struct Map_info *, /**/
-	  struct Map_info *, /**/
-	  struct Map_info *, /**/
-	  struct Cell_head, /**/
-	  struct bound_box, /**/
-	  struct bound_box, /**/
-	  double **, /**/
-	  double *, /**/
-	  double, /**/ double, /**/ int *, /**/ int, /**/ dbDriver *, /**/ char *);
+void P_Outlier(struct Map_info *, /**/
+               struct Map_info *, /**/
+               struct Map_info *, /**/
+               struct Cell_head,  /**/
+               struct bound_box,  /**/
+               struct bound_box,  /**/
+               double **,         /**/
+               double *,          /**/
+               double, /**/ double, /**/ int *, /**/ int, /**/ dbDriver *,
+               /**/ char *);
 
 int Insert_Outlier(double, /**/ int, /**/ dbDriver *, /**/ char *);
 

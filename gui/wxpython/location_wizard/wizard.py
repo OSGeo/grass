@@ -36,7 +36,6 @@ This program is free software under the GNU General Public License
 """
 import os
 import locale
-import six
 import functools
 
 import wx
@@ -105,11 +104,18 @@ class TitledPage(WizardPageSimple):
     def __init__(self, parent, title):
         self.page = WizardPageSimple.__init__(self, parent)
 
+        font = wx.Font(13, wx.SWISS, wx.NORMAL, wx.BOLD)
+        font_height = font.GetPixelSize()[1]
+
         # page title
         self.title = StaticText(
-            parent=self, id=wx.ID_ANY, label=title, style=wx.ALIGN_CENTRE_HORIZONTAL
+            parent=self,
+            id=wx.ID_ANY,
+            label=title,
+            style=wx.ALIGN_CENTRE_HORIZONTAL,
+            size=(-1, font_height),
         )
-        self.title.SetFont(wx.Font(13, wx.SWISS, wx.NORMAL, wx.BOLD))
+        self.title.SetFont(font)
         # main sizers
         self.pagesizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -187,6 +193,7 @@ class DatabasePage(TitledPage):
         self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
         self.sizer.SetCols(5)
         self.sizer.SetRows(8)
+        self.sizer.AddGrowableCol(1)
 
         # definition of variables
         self.grassdatabase = grassdatabase
@@ -198,7 +205,7 @@ class DatabasePage(TitledPage):
 
         # text controls
         self.tgisdbase = self.MakeLabel(grassdatabase)
-        self.tlocation = self.MakeTextCtrl("newLocation", size=(400, -1))
+        self.tlocation = self.MakeTextCtrl("newLocation")
         self.tlocation.SetFocus()
 
         checks = [
@@ -206,7 +213,7 @@ class DatabasePage(TitledPage):
             (self._checkLocationNotExists, self._locationAlreadyExists),
         ]
         self.tlocation.SetValidator(GenericMultiValidator(checks))
-        self.tlocTitle = self.MakeTextCtrl(size=(400, -1))
+        self.tlocTitle = self.MakeTextCtrl()
 
         # text for required options
         required_txt = self.MakeLabel("*")
@@ -233,7 +240,7 @@ class DatabasePage(TitledPage):
         )
         self.sizer.Add(
             self.tlocation,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
             border=5,
             pos=(2, 1),
         )
@@ -255,7 +262,7 @@ class DatabasePage(TitledPage):
         )
         self.sizer.Add(
             self.tlocTitle,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL | wx.EXPAND,
             border=5,
             pos=(4, 1),
         )
@@ -335,7 +342,6 @@ class DatabasePage(TitledPage):
         dlg.Destroy()
 
     def OnPageChanging(self, event=None):
-
         self.location = self.tlocation.GetValue()
         self.grassdatabase = self.tgisdbase.GetLabel()
         self.locTitle = self.tlocTitle.GetValue()
@@ -921,7 +927,7 @@ class ProjParamsPage(TitledPage):
         """Go to next page"""
         if event.GetDirection():
             self.p4projparams = ""
-            for id, param in six.iteritems(self.pparam):
+            for id, param in self.pparam.items():
                 if param["type"] == "bool":
                     if param["value"] is False:
                         continue
@@ -1150,7 +1156,7 @@ class DatumPage(TitledPage):
             if self.datum not in self.parent.datums:
                 event.Veto()
             else:
-                # check for datum tranforms
+                # check for datum transforms
                 #                proj4string = self.parent.CreateProj4String()
                 #                + ' +datum=%s' % self.datum
                 ret = RunCommand(
@@ -1777,7 +1783,7 @@ class EPSGPage(TitledPage):
             return
 
         data = list()
-        for code, val in six.iteritems(self.epsgCodeDict):
+        for code, val in self.epsgCodeDict.items():
             if code is not None:
                 data.append((code, val[0], val[1]))
 
@@ -2053,7 +2059,7 @@ class IAUPage(TitledPage):
             return
 
         data = list()
-        for code, val in six.iteritems(self.epsgCodeDict):
+        for code, val in self.epsgCodeDict.items():
             if code is not None:
                 data.append((code, val[0], val[1]))
 
@@ -2116,7 +2122,7 @@ class CustomPage(TitledPage):
                 self.GetNext().SetPrev(self)
                 return
 
-            # check for datum tranforms
+            # check for datum transforms
             # FIXME: -t flag is a hack-around for trac bug #1849
             ret, out, err = RunCommand(
                 "g.proj",
@@ -2901,7 +2907,7 @@ class LocationWizard(wx.Object):
         return None
 
     def CreateProj4String(self):
-        """Constract PROJ.4 string"""
+        """Construct PROJ.4 string"""
         proj = self.projpage.p4proj
         proj4params = self.paramspage.p4projparams
 

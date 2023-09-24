@@ -49,7 +49,7 @@ class PsMapToolbar(BaseToolbar):
 
         # custom button for graphics mode selection
         # TODO: could this be somehow generalized?
-        self.arrowButton = self.CreateSelectionButton()
+        self.arrowButton = self.CreateSelectionButton(tooltip=_("Select graphics tool"))
         self.arrowButtonId = self.InsertControl(18, self.arrowButton)
         self.arrowButton.Bind(wx.EVT_BUTTON, self.OnDrawGraphicsMenu)
 
@@ -94,7 +94,6 @@ class PsMapToolbar(BaseToolbar):
                 img="layer-remove", label=_("Delete selected object")
             ),
             "preview": MetaIcon(img="execute", label=_("Show preview")),
-            "quit": MetaIcon(img="quit", label=_("Quit Cartographic Composer")),
             "addText": MetaIcon(img="text-add", label=_("Text")),
             "addMapinfo": MetaIcon(img="map-info", label=_("Map info")),
             "addLegend": MetaIcon(img="legend-add", label=_("Legend")),
@@ -111,31 +110,117 @@ class PsMapToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("loadFile", icons["scriptLoad"], self.parent.OnLoadFile),
-                ("instructionFile", icons["scriptSave"], self.parent.OnInstructionFile),
+                (
+                    ("loadFile", icons["scriptLoad"].label),
+                    icons["scriptLoad"],
+                    self.parent.OnLoadFile,
+                ),
+                (
+                    ("instructionFile", icons["scriptSave"].label),
+                    icons["scriptSave"],
+                    self.parent.OnInstructionFile,
+                ),
                 (None,),
-                ("pagesetup", icons["pageSetup"], self.parent.OnPageSetup),
+                (
+                    ("pagesetup", icons["pageSetup"].label),
+                    icons["pageSetup"],
+                    self.parent.OnPageSetup,
+                ),
                 (None,),
-                ("pointer", BaseIcons["pointer"], self.parent.OnPointer, wx.ITEM_CHECK),
-                ("pan", BaseIcons["pan"], self.parent.OnPan, wx.ITEM_CHECK),
-                ("zoomin", BaseIcons["zoomIn"], self.parent.OnZoomIn, wx.ITEM_CHECK),
-                ("zoomout", BaseIcons["zoomOut"], self.parent.OnZoomOut, wx.ITEM_CHECK),
-                ("zoomAll", icons["fullExtent"], self.parent.OnZoomAll),
+                (
+                    ("pointer", BaseIcons["pointer"].label),
+                    BaseIcons["pointer"],
+                    self.parent.OnPointer,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("pan", BaseIcons["pan"].label),
+                    BaseIcons["pan"],
+                    self.parent.OnPan,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomin", BaseIcons["zoomIn"].label),
+                    BaseIcons["zoomIn"],
+                    self.parent.OnZoomIn,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomout", BaseIcons["zoomOut"].label),
+                    BaseIcons["zoomOut"],
+                    self.parent.OnZoomOut,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("zoomAll", icons["fullExtent"].label),
+                    icons["fullExtent"],
+                    self.parent.OnZoomAll,
+                ),
                 (None,),
-                ("addMap", icons["addMap"], self.parent.OnAddMap, wx.ITEM_CHECK),
-                ("addRaster", BaseIcons["addRast"], self.parent.OnAddRaster),
-                ("addVector", BaseIcons["addVect"], self.parent.OnAddVect),
-                ("overlaysAdd", icons["overlaysAdd"], self.OnAddOverlays),
-                ("delete", icons["deleteObj"], self.parent.OnDelete),
-                ("dec", BaseIcons["overlay"], self.OnDecoration),
-                ("drawGraphics", icons["pointAdd"], self.OnDrawGraphics, wx.ITEM_CHECK),
+                (
+                    ("addMap", icons["addMap"].label),
+                    icons["addMap"],
+                    self.parent.OnAddMap,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("addRaster", BaseIcons["addRast"].label),
+                    BaseIcons["addRast"],
+                    self.parent.OnAddRaster,
+                ),
+                (
+                    ("addVector", BaseIcons["addVect"].label),
+                    BaseIcons["addVect"],
+                    self.parent.OnAddVect,
+                ),
+                (
+                    ("overlaysAdd", icons["overlaysAdd"].label),
+                    icons["overlaysAdd"],
+                    self.OnAddOverlays,
+                ),
+                (
+                    ("delete", icons["deleteObj"].label),
+                    icons["deleteObj"],
+                    self.parent.OnDelete,
+                ),
+                (
+                    ("dec", BaseIcons["overlay"].label),
+                    BaseIcons["overlay"],
+                    self.OnDecoration,
+                ),
+                (
+                    ("drawGraphics", icons["pointAdd"].label),
+                    icons["pointAdd"],
+                    self.OnDrawGraphics,
+                    wx.ITEM_CHECK,
+                ),
                 (None,),
-                ("preview", icons["preview"], self.parent.OnPreview),
-                ("generatePS", icons["psExport"], self.parent.OnPSFile),
-                ("generatePDF", icons["pdfExport"], self.parent.OnPDFFile),
+                (
+                    ("preview", icons["preview"].label),
+                    icons["preview"],
+                    self.parent.OnPreview,
+                ),
+                (
+                    ("generatePS", icons["psExport"].label),
+                    icons["psExport"],
+                    self.parent.OnPSFile,
+                ),
+                (
+                    ("generatePDF", icons["pdfExport"].label),
+                    icons["pdfExport"],
+                    self.parent.OnPDFFile,
+                ),
                 (None,),
-                ("help", BaseIcons["help"], self.parent.OnHelp),
-                ("quit", icons["quit"], self.parent.OnCloseWindow),
+                (
+                    ("help", BaseIcons["help"].label),
+                    BaseIcons["help"],
+                    self.parent.OnHelp,
+                ),
+                (
+                    ("quit", BaseIcons["quit"].label),
+                    BaseIcons["quit"],
+                    self.parent.OnCloseWindow,
+                ),
             )
         )
 

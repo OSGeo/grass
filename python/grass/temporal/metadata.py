@@ -21,8 +21,8 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 from .base import SQLDatabaseInterface
+from .core import SQLDatabaseInterfaceConnection, get_tgis_db_version_from_metadata
 
 ###############################################################################
 
@@ -88,7 +88,6 @@ class RasterMetadataBase(SQLDatabaseInterface):
         min=None,
         max=None,
     ):
-
         SQLDatabaseInterface.__init__(self, table, ident)
 
         self.set_id(ident)
@@ -337,9 +336,8 @@ class RasterMetadata(RasterMetadataBase):
         ewres=None,
         min=None,
         max=None,
-        band_reference=None,
+        semantic_label=None,
     ):
-
         RasterMetadataBase.__init__(
             self,
             "raster_metadata",
@@ -354,21 +352,22 @@ class RasterMetadata(RasterMetadataBase):
             max,
         )
 
-        self.set_band_reference(band_reference)
+        if get_tgis_db_version_from_metadata() > 2:
+            self.set_semantic_label(semantic_label)
 
-    def set_band_reference(self, band_reference):
-        """Set the band reference identifier"""
-        self.D["band_reference"] = band_reference
+    def set_semantic_label(self, semantic_label):
+        """Set the semantic label identifier"""
+        self.D["semantic_label"] = semantic_label
 
-    def get_band_reference(self):
-        """Get the band reference identifier
+    def get_semantic_label(self):
+        """Get the semantic label identifier
         :return: None if not found"""
-        if "band_reference" in self.D:
-            return self.D["band_reference"]
+        if "semantic_label" in self.D:
+            return self.D["semantic_label"]
         else:
             return None
 
-    band_reference = property(fget=get_band_reference, fset=set_band_reference)
+    semantic_label = property(fget=get_semantic_label, fset=set_semantic_label)
 
     def _print_info_body(self, shell=False):
         """Print information about this class (body part).
@@ -376,11 +375,11 @@ class RasterMetadata(RasterMetadataBase):
         :param bool shell: True for human readable style otherwise shell style
         """
         super()._print_info_body(shell)
-        # band reference section (raster specific only)
+        # semantic label section (raster specific only)
         if shell:
-            print("band_reference=" + str(self.get_band_reference()))
+            print("semantic_label=" + str(self.get_semantic_label()))
         else:
-            print(" | Band reference:............. " + str(self.get_band_reference()))
+            print(" | Semantic label:............. " + str(self.get_semantic_label()))
 
 
 ###############################################################################
@@ -466,7 +465,6 @@ class Raster3DMetadata(RasterMetadataBase):
         min=None,
         max=None,
     ):
-
         RasterMetadataBase.__init__(
             self,
             "raster3d_metadata",
@@ -628,7 +626,6 @@ class VectorMetadata(SQLDatabaseInterface):
         number_of_holes=None,
         number_of_volumes=None,
     ):
-
         SQLDatabaseInterface.__init__(self, "vector_metadata", ident)
 
         self.set_id(ident)
@@ -925,7 +922,6 @@ class STDSMetadataBase(SQLDatabaseInterface):
     def __init__(
         self, table=None, ident=None, title=None, description=None, command=None
     ):
-
         SQLDatabaseInterface.__init__(self, table, ident)
 
         self.set_id(ident)
@@ -1148,7 +1144,6 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         description=None,
         aggregation_type=None,
     ):
-
         STDSMetadataBase.__init__(self, table, ident, title, description)
 
         # Initialize the dict to select all values from the db
@@ -1341,7 +1336,8 @@ class STRDSMetadata(STDSRasterMetadataBase):
          | Maximum value min:.......... None
          | Maximum value max:.......... None
          | Aggregation type:........... None
-         | Number of registered bands:. None
+         | Number of semantic labels:.. None
+         | Semantic labels:............ None
          | Number of registered maps:.. None
          |
          | Title:
@@ -1360,18 +1356,19 @@ class STRDSMetadata(STDSRasterMetadataBase):
         max_min=None
         max_max=None
         aggregation_type=None
-        number_of_bands=None
+        number_of_semantic_labels=None
+        semantic_labels=None
         number_of_maps=None
 
     """
 
     def __init__(self, ident=None, raster_register=None, title=None, description=None):
-
         STDSRasterMetadataBase.__init__(
             self, "strds_metadata", ident, title, description
         )
 
-        self.D["number_of_bands"] = None
+        if get_tgis_db_version_from_metadata() > 2:
+            self.D["number_of_semantic_labels"] = None
 
         self.set_raster_register(raster_register)
 
@@ -1387,17 +1384,59 @@ class STRDSMetadata(STDSRasterMetadataBase):
         else:
             return None
 
-    def get_number_of_bands(self):
-        """Get the number of registered bands
+    def get_number_of_semantic_labels(self):
+        """Get the number of registered semantic labels
         :return: None if not found
         """
-        if "number_of_bands" in self.D:
-            return self.D["number_of_bands"]
+        if "number_of_semantic_labels" in self.D:
+            return self.D["number_of_semantic_labels"]
+        else:
+            return None
+
+    def get_semantic_labels(self):
+        """Get the distinct semantic labels of registered maps
+           The distinct semantic labels are not stored in the metadata table
+           and fetched on-the-fly
+        :return: None if not found
+        """
+        if get_tgis_db_version_from_metadata() <= 2:
+            # band names supported from TGIS DB version 3
+            return None
+
+        sql = "SELECT distinct semantic_label FROM %s WHERE %s.id " % (
+            "raster_metadata",
+            "raster_metadata",
+        )
+
+        sql += "IN (SELECT id FROM %s)" % (str(self.get_raster_register()))
+
+        dbif = SQLDatabaseInterfaceConnection()
+        dbif.connect()
+        dbif.execute(sql, mapset=self.mapset)
+        rows = dbif.fetchall(mapset=self.mapset)
+        dbif.close()
+
+        if rows:
+            string = ""
+            count = 0
+            for row in rows:
+                if row["semantic_label"]:
+                    if count == 0:
+                        string += row["semantic_label"]
+                    else:
+                        string += ",%s" % row["semantic_label"]
+                    count += 1
+
+            if count > 0:
+                return string
+            else:
+                return None
         else:
             return None
 
     raster_register = property(fget=get_raster_register, fset=set_raster_register)
-    number_of_bands = property(fget=get_number_of_bands)
+    number_of_semantic_labels = property(fget=get_number_of_semantic_labels)
+    semantic_labels = property(fget=get_semantic_labels)
 
     def _print_info_body(self, shell=False):
         """Print information about this class (body part).
@@ -1410,9 +1449,16 @@ class STRDSMetadata(STDSRasterMetadataBase):
             print(" | Raster register table:...... " + str(self.get_raster_register()))
         super()._print_info_body(shell)
         if shell:
-            print("number_of_bands=" + str(self.get_number_of_bands()))
+            print(
+                "number_of_semantic_labels=" + str(self.get_number_of_semantic_labels())
+            )
+            print("semantic_labels=" + str(self.get_semantic_labels()))
         else:
-            print(" | Number of registered bands:. " + str(self.get_number_of_bands()))
+            print(
+                " | Number of semantic labels:.. "
+                + str(self.get_number_of_semantic_labels())
+            )
+            print(" | Semantic labels:............ " + str(self.get_semantic_labels()))
 
 
 ###############################################################################
@@ -1495,7 +1541,6 @@ class STR3DSMetadata(STDSRasterMetadataBase):
     def __init__(
         self, ident=None, raster3d_register=None, title=None, description=None
     ):
-
         STDSRasterMetadataBase.__init__(
             self, "str3ds_metadata", ident, title, description
         )
@@ -1639,7 +1684,6 @@ class STVDSMetadata(STDSMetadataBase):
     """
 
     def __init__(self, ident=None, vector_register=None, title=None, description=None):
-
         STDSMetadataBase.__init__(self, "stvds_metadata", ident, title, description)
 
         self.set_vector_register(vector_register)
