@@ -540,9 +540,9 @@ def get_official_github_addons_repository_branches(url):
                 int(response_headers.get("X-RateLimit-Reset")),
             ).strftime("%c")
             rate_limit_exceeded = _(
-                " GitHub REST API rate limit was exceeded"
+                " GitHub REST API rate limit was exceeded:"
                 " {rate_limit} requests per hour per IP address."
-                " Try list official addons at <{rate_limit_reset}>"
+                " Try listing the official addons on <{rate_limit_reset}>"
                 " again, please."
             ).format(
                 rate_limit=response_headers.get("X-RateLimit-Limit"),
@@ -552,7 +552,7 @@ def get_official_github_addons_repository_branches(url):
             _(
                 "Getting official addons repository branches"
                 " from <{url}> failed. The server couldn't fulfill"
-                " the request and return status code <{code}> <{desc}>."
+                " the request and returned status code <{code}> <{desc}>."
                 "{rate_limit}"
             ).format(
                 url=url,
@@ -565,7 +565,7 @@ def get_official_github_addons_repository_branches(url):
         gs.fatal(
             _(
                 "Getting official addons repository branches"
-                " failed to reach a server <{url}>. Reason <{reason}>"
+                " failed to reach the server <{url}>. Reason <{reason}>"
             ).format(
                 url=url,
                 reason=e.reason,
