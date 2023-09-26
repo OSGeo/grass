@@ -3861,7 +3861,7 @@ class LayerBook(wx.Notebook):
         if (
             self.modifyLayerWidgets["driver"][1].GetStringSelection()
             != self.mapDBInfo.layers[layer]["driver"]
-            or self.modifyLayerWidgets["database"][1].GetStringSelection()
+            or self.modifyLayerWidgets["database"][1].GetValue()
             != self.mapDBInfo.layers[layer]["database"]
             or self.modifyLayerWidgets["table"][1].GetStringSelection()
             != self.mapDBInfo.layers[layer]["table"]
