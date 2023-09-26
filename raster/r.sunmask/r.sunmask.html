@@ -23,8 +23,8 @@ to latitude/longitude for the SOLPOS algorithm. Elevation is not taken into
 account for sunset/sunrise calculations.
 
 <p>
-The solar zenith angle ("sun angle above horizont") is defined as the angle
-between the horizont and the vertical (directly overhead or zenith). Its
+The solar zenith angle ("sun angle above horizon") is defined as the angle
+between the horizon and the vertical (directly overhead or zenith). Its
 values can range from 90&deg;, when the sun is directly overhead, to 0&deg;,
 when the sun is on the horizon. Values lower than 0&deg; indicate that the
 sun is below the horizon.
@@ -43,7 +43,7 @@ the sun is in the north, 90&deg; in the east, 180&deg; in the south and
 <em>r.sunmask</em> and daylight saving time: Instead of converting the
 local time to GMT, the SOLPOS algorithm uses what is known as Local
 Standard Time, which is generally defined as an offset from GMT.
-So the key is the offset from GMT, which the solpos Time
+So the key is the offset from GMT, which is the solpos Time
 Zone parameter. If the user specifies clock time (different for
 winter and summer), s/he would have to change the Time Zone parameter in
 <em>r.sunmask</em> (<b>timezone</b> parameter) seasonally. See also
