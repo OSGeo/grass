@@ -497,107 +497,13 @@ def urlopen(url, *args, **kwargs):
     return urlrequest.urlopen(request, *args, **kwargs)
 
 
-def get_official_github_addons_repository_branches(url):
-    """Get all official GitHub addons repository branches using
-    GitHub REST API
-
-    Use this function only under MS Windows OS platforms
-    that do not use Git.
-
-    :param str url: GitHub REST API for getting official GitHub addons
-                    repository branches
-
-    :return list: list of all official GitHub addons repository branches
-    """
-    from datetime import datetime
-    import http
-
-    http_status_codes = list(http.HTTPStatus)
-    try:
-        response = urlopen(url)
-        if response.code != 200:
-            index = http_status_codes.index(response.code)
-            desc = http_status_codes[index].description
-            gs.fatal(
-                _(
-                    "Getting official addons repository branches"
-                    " from <{url}> failed, and return status code"
-                    " <{code}> <{desc}>."
-                ).format(
-                    url=url,
-                    code=response.code,
-                    desc=desc,
-                ),
-            )
-    except HTTPError as e:
-        index = http_status_codes.index(e.code)
-        desc = http_status_codes[index].description
-        rate_limit_exceeded = None
-        # GitHub REST API request limit exceeded 60 requests per hour per IP address
-        if e.code == 403 and e.msg == "rate limit exceeded":
-            response_headers = e.info()
-            rate_limit_reset = datetime.fromtimestamp(
-                int(response_headers.get("X-RateLimit-Reset")),
-            ).strftime("%c")
-            rate_limit_exceeded = _(
-                " GitHub REST API rate limit was exceeded:"
-                " {rate_limit} requests per hour per IP address."
-                " Try listing the official addons on <{rate_limit_reset}>"
-                " again, please."
-            ).format(
-                rate_limit=response_headers.get("X-RateLimit-Limit"),
-                rate_limit_reset=rate_limit_reset,
-            )
-        gs.fatal(
-            _(
-                "Getting official addons repository branches"
-                " from <{url}> failed. The server couldn't fulfill"
-                " the request and returned status code <{code}> <{desc}>."
-                "{rate_limit}"
-            ).format(
-                url=url,
-                code=e.code,
-                desc=desc,
-                rate_limit=rate_limit_exceeded if rate_limit_exceeded else "",
-            ),
-        )
-    except URLError as e:
-        gs.fatal(
-            _(
-                "Getting official addons repository branches"
-                " failed to reach the server <{url}>. Reason <{reason}>"
-            ).format(
-                url=url,
-                reason=e.reason,
-            ),
-        )
-    except Exception as e:
-        gs.fatal(
-            _(
-                "Getting official addons repository branches"
-                " from <{url}> failed due to an error <{error}>."
-            ).format(
-                url=url,
-                error=e.message if hasattr(e, "message") else e,
-            ),
-        )
-    return [branch["name"] for branch in json.load(response)]
-
-
 def get_version_branch(major_version):
     """Check if version branch for the current GRASS version exists,
     if not, take branch for the previous version
     For the official repo we assume that at least one version branch is present"""
     version_branch = f"grass{major_version}"
     if sys.platform == "win32":
-        git_url_parsed = urlparse(GIT_URL)
-        github_addons_repo_rest_api_branches_url = (
-            f"{git_url_parsed.scheme}://api.{git_url_parsed.hostname}"
-            f"/repos{git_url_parsed.path}branches"
-        )
-        branch = get_official_github_addons_repository_branches(
-            url=github_addons_repo_rest_api_branches_url,
-        )
+        return version_branch
     else:
         branch = gs.Popen(
             ["git", "ls-remote", "--heads", GIT_URL, f"refs/heads/{version_branch}"],
