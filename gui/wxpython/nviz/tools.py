@@ -144,10 +144,6 @@ class NvizToolWindow(GNotebook):
 
         self.Update()
         wx.CallAfter(self.SetPage, "view")
-        wx.CallAfter(
-            self.UpdateScrolling,
-            (self.foldpanelData, self.foldpanelAppear, self.foldpanelAnalysis),
-        )
         wx.CallAfter(self.SetInitialMaps)
 
     def SetInitialMaps(self):
@@ -206,6 +202,10 @@ class NvizToolWindow(GNotebook):
     def OnPageChanged(self, event):
         new = event.GetSelection()
         # self.ChangeSelection(new)
+        # Data, Appearance, Analysis page
+        if new in (1, 2, 3):
+            foldpanel = self.GetPage(new).GetChildren()[0]
+            wx.CallLater(100, self.UpdateScrolling, (foldpanel,))
 
     def PostViewEvent(self, zExag=False):
         """Change view settings"""
@@ -243,7 +243,7 @@ class NvizToolWindow(GNotebook):
     def _createViewPage(self):
         """Create view settings page"""
         panel = SP.ScrolledPanel(parent=self, id=wx.ID_ANY)
-        panel.SetupScrolling(scroll_x=False)
+        panel.SetupScrolling()
         self.page["view"] = {"id": 0, "notebook": self.GetId()}
 
         pageSizer = wx.BoxSizer(wx.VERTICAL)
@@ -478,7 +478,7 @@ class NvizToolWindow(GNotebook):
     def _createAnimationPage(self):
         """Create view settings page"""
         panel = SP.ScrolledPanel(parent=self, id=wx.ID_ANY)
-        panel.SetupScrolling(scroll_x=False)
+        panel.SetupScrolling()
         self.page["animation"] = {"id": 0, "notebook": self.GetId()}
 
         pageSizer = wx.BoxSizer(wx.VERTICAL)
@@ -662,7 +662,6 @@ class NvizToolWindow(GNotebook):
 
     def _createDataPage(self):
         """Create data (surface, vector, volume) settings page"""
-
         self.mainPanelData = ScrolledPanel(parent=self)
         self.mainPanelData.SetupScrolling(scroll_x=False)
         try:  # wxpython <= 2.8.10
@@ -820,7 +819,7 @@ class NvizToolWindow(GNotebook):
 
     def _createSurfacePage(self, parent):
         """Create view settings page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
         self.page["surface"] = {"id": 0, "notebook": self.foldpanelData.GetId()}
         pageSizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -1135,12 +1134,13 @@ class NvizToolWindow(GNotebook):
 
         panel.Layout()
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
     def _createCPlanePage(self, parent):
         """Create cutting planes page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
         self.page["cplane"] = {"id": 4, "notebook": self.foldpanelData.GetId()}
         self.win["cplane"] = {}
 
@@ -1379,12 +1379,13 @@ class NvizToolWindow(GNotebook):
 
         panel.SetSizer(pageSizer)
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
     def _createConstantPage(self, parent):
         """Create constant page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
         self.page["constant"] = {"id": 1, "notebook": self.foldpanelData.GetId()}
         self.win["constant"] = {}
 
@@ -1471,12 +1472,13 @@ class NvizToolWindow(GNotebook):
 
         panel.SetSizer(pageSizer)
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
     def _createVectorPage(self, parent):
         """Create view settings page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
         self.page["vector"] = {"id": 2, "notebook": self.foldpanelData.GetId()}
         pageSizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -1903,6 +1905,7 @@ class NvizToolWindow(GNotebook):
 
         panel.SetSizer(pageSizer)
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
@@ -1915,7 +1918,7 @@ class NvizToolWindow(GNotebook):
 
     def _createVolumePage(self, parent):
         """Create view settings page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
         self.page["volume"] = {"id": 3, "notebook": self.foldpanelData.GetId()}
         pageSizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -2117,12 +2120,13 @@ class NvizToolWindow(GNotebook):
         )
         panel.SetSizer(pageSizer)
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
     def _createLightPage(self, parent):
         """Create light page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
 
         self.page["light"] = {"id": 0, "notebook": self.foldpanelAppear.GetId()}
         self.win["light"] = {}
@@ -2298,12 +2302,13 @@ class NvizToolWindow(GNotebook):
         panel.SetSizer(pageSizer)
         panel.Layout()
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
     def _createFringePage(self, parent):
         """Create fringe page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
 
         self.page["fringe"] = {"id": 1, "notebook": self.foldpanelAppear.GetId()}
         self.win["fringe"] = {}
@@ -2394,12 +2399,13 @@ class NvizToolWindow(GNotebook):
         panel.SetSizer(pageSizer)
         panel.Layout()
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
     def _createDecorationPage(self, parent):
         """Create decoration (north arrow, scalebar, legend) page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
 
         self.page["decoration"] = {"id": 2, "notebook": self.foldpanelAppear.GetId()}
         self.win["decoration"] = {}
@@ -2528,6 +2534,7 @@ class NvizToolWindow(GNotebook):
         panel.SetSizer(pageSizer)
         panel.Layout()
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
