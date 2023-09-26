@@ -314,7 +314,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
     def CleanUp(self):
         self.plotClosed.emit(scatt_id=self.scatt_id)
-        self.Destroy()
 
     def ZoomWheel(self, event):
         # get the current x and y limits

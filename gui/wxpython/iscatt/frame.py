@@ -276,6 +276,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         del self.scatts[scatt_id]
 
         if pane.IsOk():
+            pane.DestroyOnClose()
             self._mgr.ClosePane(pane)
         self._mgr.Update()
 
