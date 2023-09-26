@@ -869,3 +869,6 @@ class FrameMixin:
 
     def SetSize(self, *args):
         self.GetParent().SetSize(*args)
+
+    def Close(self):
+        self.GetParent().Close()
