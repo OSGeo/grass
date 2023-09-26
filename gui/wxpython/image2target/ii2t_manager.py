@@ -3119,13 +3119,13 @@ class GrSettingsDialog(wx.Dialog):
                 parent=panel, id=wx.ID_ANY, label=_("Select source map to display:")
             ),
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
         sizer.Add(
             self.srcselection,
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
         self.srcselection.SetValue(src_map)
@@ -3136,13 +3136,13 @@ class GrSettingsDialog(wx.Dialog):
                 label=_("Select target raster map to display:"),
             ),
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
         sizer.Add(
             self.tgtrastselection,
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
         self.tgtrastselection.SetValue(tgt_map["raster"])
@@ -3153,13 +3153,13 @@ class GrSettingsDialog(wx.Dialog):
                 label=_("Select target vector map to display:"),
             ),
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
         sizer.Add(
             self.tgtvectselection,
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
         self.tgtvectselection.SetValue(tgt_map["vector"])
@@ -3225,7 +3225,7 @@ class GrSettingsDialog(wx.Dialog):
                 parent=panel, id=wx.ID_ANY, label=_("Extension for output maps:")
             ),
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
         self.ext_txt = TextCtrl(parent=panel, id=wx.ID_ANY, value="", size=(350, -1))
@@ -3233,7 +3233,7 @@ class GrSettingsDialog(wx.Dialog):
         sizer.Add(
             self.ext_txt,
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
 
