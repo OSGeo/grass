@@ -354,7 +354,7 @@ class ModelFrame(wx.Frame):
                 message = _("Do you want to save changes in the model?")
             else:
                 message = _(
-                    "Do you want to store current model settings " "to model file?"
+                    "Do you want to store current model settings to model file?"
                 )
 
             # ask user to save current settings
@@ -371,7 +371,7 @@ class ModelFrame(wx.Frame):
             ret = dlg.ShowModal()
             if ret == wx.ID_YES:
                 if not self.modelFile:
-                    self.OnWorkspaceSaveAs()
+                    self.OnModelSaveAs()
                 else:
                     self.WriteModelFile(self.modelFile)
             elif ret == wx.ID_CANCEL:
@@ -560,9 +560,9 @@ class ModelFrame(wx.Frame):
                 self.SetStatusText(_("File <%s> saved") % self.modelFile, 0)
                 self.SetTitle(self.baseTitle + " - " + os.path.basename(self.modelFile))
         elif not self.modelFile:
-            self.OnModelSaveAs(None)
+            self.OnModelSaveAs()
 
-    def OnModelSaveAs(self, event):
+    def OnModelSaveAs(self, event=None):
         """Create model to file as"""
         filename = ""
         dlg = wx.FileDialog(
