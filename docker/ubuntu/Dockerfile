@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.4
 FROM ubuntu:22.04 as common
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Stefan Blumentrath"
@@ -28,20 +29,22 @@ ENV GRASS_RUN_PACKAGES="\
     libcairo2 \
     libcurl4-gnutls-dev \
     libfftw3-bin \
+    libfftw3-dev \
     libfreetype6 \
     libgdal-dev \
     libgsl27 \
     libjpeg-turbo8 \
     libjsoncpp-dev \
     libncurses5 \
-    #libopenblas-dev \
+    libopenblas-dev \
     libopenblas-base \
     libopenjp2-7 \
     libomp5 \
+    libomp-dev \
     libgeos-dev \
-    #libpdal-dev \
-    #libproj-dev \
-    #libpq-dev \
+    libpdal-dev \
+    libproj-dev \
+    libpq-dev \
     libgsl-dev \
     libpdal-base13 \
     libpdal-plugin-hdf \
@@ -90,6 +93,22 @@ RUN apt-get update \
 RUN echo LANG="en_US.UTF-8" > /etc/default/locale
 RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
 
+## fetch vertical datums for PDAL and store into PROJ dir
+WORKDIR /src
+RUN mkdir vdatum && \
+    cd vdatum && \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2012.zip && unzip -j -u usa_geoid2012.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2009.zip && unzip -j -u usa_geoid2009.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2003.zip && unzip -j -u usa_geoid2003.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid1999.zip && unzip -j -u usa_geoid1999.zip -d /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconc.gtx && mv vertconc.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertcone.gtx && mv vertcone.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconw.gtx && mv vertconw.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm96_15/egm96_15.gtx && mv egm96_15.gtx /usr/share/proj; \
+    wget -q http://download.osgeo.org/proj/vdatum/egm08_25/egm08_25.gtx && mv egm08_25.gtx /usr/share/proj; \
+    cd .. && \
+    rm -rf vdatum
+
 # Start build stage
 FROM common as build
 
@@ -98,13 +117,7 @@ ENV GRASS_BUILD_PACKAGES="\
     cmake \
     libbz2-dev \
     libcairo2-dev \
-    libopenblas-dev \
-    libpdal-dev \
-    libproj-dev \
-    libpq-dev \
-    libfftw3-dev \
     libfreetype6-dev \
-    libomp-dev \
     zlib1g-dev \
     libnetcdf-dev \
     libopenjp2-7-dev \
@@ -144,27 +157,16 @@ RUN (echo "Install Python" \
     numpy \
     Pillow \
     ply \
-    setuptools \
     matplotlib \
     psycopg2 \
     && rm -r /root/.cache \
+    && rm -rf /tmp/pip-* \
     )
-
-# Users are encouraged to fetch vertical datums and store into PROJ dir, e.g.:
-# WORKDIR /src
-# RUN mkdir vdatum && \
-#     cd vdatum && \
-#     wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2012.zip && unzip -j -u usa_geoid2012.zip -d /usr/share/proj; \
-#     cd .. && \
-#     rm -rf vdatum
 
 # copy grass gis source
 COPY . /src/grass_build/
 
 WORKDIR /src/grass_build
-
-# Cleanup potentially leftover GISRC file with wrong path to "demolocation"
-RUN rm -f /src/grass_build/dist.*/demolocation/.grassrc*
 
 # Set environmental variables for GRASS GIS compilation, without debug symbols
 # Set gcc/g++ environmental variables for GRASS GIS compilation, without debug symbols
@@ -203,7 +205,14 @@ RUN ./configure \
   --with-openmp \
   --without-opengl \
     && make -j $NUMTHREADS \
-    && make install && ldconfig
+    && make install && ldconfig \
+    &&  cp /usr/local/grass84/gui/wxpython/xml/module_items.xml module_items.xml; \
+    rm -rf /usr/local/grass84/demolocation; \
+    rm -rf /usr/local/grass84/fonts; \
+    rm -rf /usr/local/grass84/gui; \
+    rm -rf /usr/local/grass84/share; \
+    mkdir -p /usr/local/grass84/gui/wxpython/xml/; \
+    mv module_items.xml /usr/local/grass84/gui/wxpython/xml/module_items.xml;
 
 # Build the GDAL-GRASS plugin
 RUN git clone https://github.com/OSGeo/gdal-grass && \
@@ -214,25 +223,6 @@ RUN git clone https://github.com/OSGeo/gdal-grass && \
     make install -j $NUMTHREADS && \
     cd /src && \
     rm -rf "gdal-grass"
-
-# Reduce the image size - Remove unnecessary grass files
-RUN cp /usr/local/grass84/gui/wxpython/xml/module_items.xml module_items.xml; \
-    rm -rf /usr/local/grass84/demolocation; \
-    rm -rf /usr/local/grass84/fonts; \
-    rm -rf /usr/local/grass84/gui; \
-    rm -rf /usr/local/grass84/share; \
-    mkdir -p /usr/local/grass84/gui/wxpython/xml/; \
-    mv module_items.xml /usr/local/grass84/gui/wxpython/xml/module_items.xml;
-
-# Unset environmental variables to avoid later compilation issues
-ENV INTEL ""
-ENV MYCFLAGS ""
-ENV MYLDFLAGS ""
-ENV MYCXXFLAGS ""
-ENV LD_LIBRARY_PATH ""
-ENV LDFLAGS ""
-ENV CFLAGS ""
-ENV CXXFLAGS ""
 
 # Leave build stage
 FROM common as grass
@@ -250,19 +240,20 @@ ENV GRASSBIN="/usr/local/bin/grass" \
     GISBASE="/usr/local/grass/" \
     GRASSBIN="/usr/local/bin/grass" \
     PYTHONPATH="${PYTHONPATH}:/usr/local/grass/etc/python/" \
-    LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/grass/lib"
+    LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/grass/lib" \
+    GDAL_DRIVER_PATH="/usr/lib/gdalplugins"
 
 # Copy GRASS GIS from build image
-COPY --from=build /usr/local/bin/grass* /usr/local/bin/
-COPY --from=build /usr/local/grass84 /usr/local/grass84/
-COPY --from=build /src/site-packages /usr/lib/python3.10/
-COPY --from=build /usr/lib/gdalplugins /usr/lib/gdalplugins
+COPY --link --from=build /usr/local/bin/* /usr/local/bin/
+COPY --link --from=build /usr/local/grass84 /usr/local/grass84/
+COPY --link --from=build /src/site-packages /usr/lib/python3.10/
+COPY --link --from=build /usr/lib/gdalplugins /usr/lib/gdalplugins
 
 # Create generic GRASS GIS lib name regardless of version number
 RUN ln -sf /usr/local/grass84 /usr/local/grass && \
     ldconfig /etc/ld.so.conf.d
 
-ENV GDAL_DRIVER_PATH="/usr/lib/gdalplugins"
+RUN ls /usr/local/bin/
 
 # Data workdir
 WORKDIR /grassdb
