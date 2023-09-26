@@ -2034,7 +2034,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         size = self.settings.Get(group="appearance", key="outputfont", subkey="size")
         if size is None or size == 0:
             size = 11
-        size = float(size)
         if type is None or type == "":
             type = "Courier"
 
