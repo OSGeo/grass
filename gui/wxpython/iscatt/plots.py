@@ -618,7 +618,8 @@ class ScatterPlotContextMenu:
     def ShowMenu(self, menu):
         self.plot.PopupMenu(menu)
         menu.Destroy()
-        self.plot.ReleaseMouse()
+        if self.plot.HasCapture():
+            self.plot.ReleaseMouse()
 
 
 class PolygonDrawer:
