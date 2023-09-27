@@ -35,6 +35,8 @@ ENV GRASS_RUN_PACKAGES="\
     libgsl27 \
     libjpeg-turbo8 \
     libjsoncpp-dev \
+    libmagic1 \
+    libmagic-mgc \
     libncurses5 \
     libopenblas-dev \
     libopenblas-base \
@@ -95,19 +97,19 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
 
 ## fetch vertical datums for PDAL and store into PROJ dir
 WORKDIR /src
-RUN mkdir vdatum && \
-    cd vdatum && \
-    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2012.zip && unzip -j -u usa_geoid2012.zip -d /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2009.zip && unzip -j -u usa_geoid2009.zip -d /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid2003.zip && unzip -j -u usa_geoid2003.zip -d /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/usa_geoid1999.zip && unzip -j -u usa_geoid1999.zip -d /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconc.gtx && mv vertconc.gtx /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertcone.gtx && mv vertcone.gtx /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/vertcon/vertconw.gtx && mv vertconw.gtx /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/egm96_15/egm96_15.gtx && mv egm96_15.gtx /usr/share/proj; \
-    wget -q http://download.osgeo.org/proj/vdatum/egm08_25/egm08_25.gtx && mv egm08_25.gtx /usr/share/proj; \
-    cd .. && \
-    rm -rf vdatum
+
+# Get datum grids
+FROM ubuntu:22.04 as datum_grids
+
+# See: https://github.com/OSGeo/PROJ-data
+RUN apt-get update \
+    && apt-get install  -y --no-install-recommends --no-install-suggests \
+    wget \
+    && apt-get clean all \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /tmp
+RUN wget --no-check-certificate -r -l inf -A tif https://cdn.proj.org/
 
 # Start build stage
 FROM common as build
@@ -248,12 +250,11 @@ COPY --link --from=build /usr/local/bin/* /usr/local/bin/
 COPY --link --from=build /usr/local/grass84 /usr/local/grass84/
 COPY --link --from=build /src/site-packages /usr/lib/python3.10/
 COPY --link --from=build /usr/lib/gdalplugins /usr/lib/gdalplugins
+COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS GIS lib name regardless of version number
 RUN ln -sf /usr/local/grass84 /usr/local/grass && \
     ldconfig /etc/ld.so.conf.d
-
-RUN ls /usr/local/bin/
 
 # Data workdir
 WORKDIR /grassdb
