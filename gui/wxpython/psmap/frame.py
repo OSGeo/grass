@@ -2526,7 +2526,7 @@ class PsMapBufferedWindow(wx.Window):
         if rot == 0:
             pdc.DrawLabel(text=textDict["text"], rect=bounds)
         else:
-            pdc.DrawRotatedText(textDict["text"], coords[0], coords[1], rot)
+            pdc.DrawRotatedText(textDict["text"], int(coords[0]), int(coords[1]), rot)
 
         pdc.SetIdBounds(drawId, Rect(*bounds))
         self.Refresh()
