@@ -433,12 +433,10 @@ class PsMapFrame(wx.Frame):
                     "-f",
                     event.userData["filename"],
                 ]
-                message = _(
-                    "Program {} is not available."
-                    " You can download {} version here"
-                    " https://www.ghostscript.com/releases/gsdnld.html."
-                    " Please install it to create PDF.\n\n "
-                ).format(pdf_rendering_prog, arch)
+                title = _("Program {} is not available.").format(pdf_rendering_prog)
+                message = _("{title} Please install it to create PDF.\n\n").format(
+                    title=title
+                )
             else:
                 pdf_rendering_prog = "ps2pdf"
                 command = [
@@ -464,6 +462,19 @@ class PsMapFrame(wx.Frame):
                 else:
                     self.SetStatusText(_("PDF generated"), 0)
             except OSError as e:
+                if sys.platform == "win32":
+                    dlg = HyperlinkDialog(
+                        self,
+                        title=title,
+                        message=message + str(e),
+                        hyperlink="https://www.ghostscript.com/releases/gsdnld.html.",
+                        hyperlinkLabel=_("You can download {} version here.").format(
+                            arch
+                        ),
+                    )
+                    dlg.ShowModal()
+                    dlg.Destroy()
+                    return
                 GError(parent=self, message=message + str(e))
 
         elif not event.userData["temp"]:
