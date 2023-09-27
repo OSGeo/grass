@@ -163,7 +163,7 @@ def main():
     # set up projection params
     s = gcore.read_command("g.proj", flags="j")
     kv = parse_key_val(s)
-    if "XY location" in kv["+proj"] and (ll_in or ll_out):
+    if "XY location" in kv:
         gcore.fatal(_("Unable to project to or from a XY location"))
 
     in_proj = None
