@@ -98,18 +98,19 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
 ## fetch vertical datums for PDAL and store into PROJ dir
 WORKDIR /src
 
-# Get datum grids
-FROM ubuntu:22.04 as datum_grids
+# # Get datum grids
+# # Currently using https://proj.org/en/9.3/usage/network.html#how-to-enable-network-capabilities
+# FROM ubuntu:22.04 as datum_grids
 
-# See: https://github.com/OSGeo/PROJ-data
-RUN apt-get update \
-    && apt-get install  -y --no-install-recommends --no-install-suggests \
-    wget \
-    && apt-get clean all \
-    && rm -rf /var/lib/apt/lists/*
+# # See: https://github.com/OSGeo/PROJ-data
+# RUN apt-get update \
+#     && apt-get install  -y --no-install-recommends --no-install-suggests \
+#     wget \
+#     && apt-get clean all \
+#     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /tmp
-RUN wget --no-check-certificate -r -l inf -A tif https://cdn.proj.org/
+# WORKDIR /tmp
+# RUN wget --no-check-certificate -r -l inf -A tif https://cdn.proj.org/
 
 # Start build stage
 FROM common as build
@@ -250,7 +251,7 @@ COPY --link --from=build /usr/local/bin/* /usr/local/bin/
 COPY --link --from=build /usr/local/grass84 /usr/local/grass84/
 COPY --link --from=build /src/site-packages /usr/lib/python3.10/
 COPY --link --from=build /usr/lib/gdalplugins /usr/lib/gdalplugins
-COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
+# COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS GIS lib name regardless of version number
 RUN ln -sf /usr/local/grass84 /usr/local/grass && \
