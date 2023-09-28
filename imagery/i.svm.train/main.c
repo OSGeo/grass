@@ -413,8 +413,7 @@ int main(int argc, char *argv[])
 
     /* Fill svm_problem struct with training data */
     G_message(_("Reading training data"));
-    fill_problem(name_labels, mapset_labels, group_ref, mapset_group, Ms, Rs,
-                 &problem);
+    fill_problem(name_labels, mapset_labels, group_ref, Ms, Rs, &problem);
 
     /* svm_check_parameter needs filled svm_problem struct thus checking only
      * now */

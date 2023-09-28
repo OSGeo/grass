@@ -14,8 +14,8 @@
 #include "fill.h"
 
 void fill_problem(const char *name_labels, const char *mapset_labels,
-                  struct Ref band_refs, const char *mapset_group,
-                  const DCELL *Ms, const DCELL *Rs, struct svm_problem *problem)
+                  struct Ref band_refs, const DCELL *Ms, const DCELL *Rs,
+                  struct svm_problem *problem)
 {
     int label_num, label_max;
     int value_num, value_max;
