@@ -2670,120 +2670,25 @@ class GdalSelect(wx.Panel):
 
         :return list: list of Rasterlite DB rasters
         """
-        # For each raster, there are 2 corresponding SQLite tables,
-        # suffixed with _rasters and _metadata.
-        raster_tables_suffix = {
-            "table_suffix1": "_rasters",
-            "table_suffix2": "_metadata",
-        }
-        return grass.parse_command(
-            "db.select",
-            flags="c",
-            sql=(
-                "SELECT name FROM sqlite_schema WHERE type ='table'"
-                " AND name NOT LIKE 'sqlite_%'"
-                f" AND name LIKE '%{raster_tables_suffix['table_suffix1']}'"
-                f" OR name LIKE '%{raster_tables_suffix['table_suffix2']}';"
-            ),
-            database=dsn,
-            parse=(
-                self._rasterliteDBRastersParser,
-                {
-                    "raster_tables_suffix": raster_tables_suffix,
-                    "dsn": dsn,
-                },
-            ),
+        import subprocess
+
+        rasterlite_info = subprocess.run(
+            ["gdalinfo", "-json", dsn],
+            capture_output=True,
         )
+        if rasterlite_info.stderr:
+            GError(parent=self, message=grass.decode(rasterlite_info.stderr))
+            return
+        if rasterlite_info.stdout:
+            import json
 
-    def _checkRasterliteDBRasterBlobColumnExists(
-        self,
-        database,
-        tables,
-        raster_suffix,
-    ):
-        """Check if Rasterlite DB raster table has raster BLOB column
-
-        :param str database: database path
-        :param list tables: raster tables
-        :param str raster_suffix: Rasterlite DB raster table suffix,
-                                  which is _rasters usually
-
-        :return list other_tables: list of Rasterlite DB tables which
-                                   aren't rasters
-        """
-        other_tables = []
-        tabs_with_quotes = [f"'{t}'" for t in tables]
-        ret = grass.read_command(
-            "db.select",
-            flags="c",
-            sql=(
-                "SELECT sql FROM sqlite_master"
-                f" WHERE tbl_name IN ({', '.join(tabs_with_quotes)})"
-                " AND type = 'table'"
-            ),
-            database=database,
-        )
-        for line in ret.split(os.linesep):
-            if "raster BLOB" not in line:
-                for table in tables:
-                    if table in line:
-                        other_tables.append(
-                            table.replace(raster_suffix, ""),
-                        )
-        return other_tables
-
-    def _rasterliteDBRastersParser(
-        self,
-        raster_tables,
-        raster_tables_suffix,
-        dsn,
-    ):
-        """Rasterlite DB raster tables names parser
-
-        :param str raster_tables: raster tables names (output of the
-                                  db.select module)
-        :param dict raster_tables_suffix: Rasterlite DB raster table
-                                          suffixes, for each raster
-                                          there are 2 corresponding SQLite
-                                          tables, suffixed with _rasters
-                                          and _metadata
-        :param str dsn: Rasterlite DB data source name
-
-        :return list: list of Rasterlite raster names
-        """
-        import re
-
-        raster_table_sep = ","
-        raster_tables_count = {}
-        table_names_without_suffix = re.sub(
-            rf"{raster_tables_suffix['table_suffix1']}{os.linesep}"
-            f"|{raster_tables_suffix['table_suffix2']}{os.linesep}",
-            raster_table_sep,
-            raster_tables,
-        )
-        if table_names_without_suffix:
-            from collections import Counter
-
-            # [:-1] filter out last separator
-            raster_tables_count = Counter(
-                table_names_without_suffix[:-1].split(raster_table_sep)
-            )
-            # Filter out other tables which is not raster tables (has only
-            # one of table suffixed with _rasters or _metadata
-            other_tables = [
-                i for i in raster_tables_count if raster_tables_count[i] == 1
-            ]
-            for table in other_tables:
-                del raster_tables_count[table]
-            # Check if raster BLOB column type exists
-            raster_suffix = raster_tables_suffix["table_suffix1"]
-            for table in self._checkRasterliteDBRasterBlobColumnExists(
-                database=dsn,
-                tables=[f"{t}{raster_suffix}" for t in raster_tables_count],
-                raster_suffix=raster_suffix,
-            ):
-                del raster_tables_count[table]
-        return list(raster_tables_count.keys())
+            rasterlite_info = json.loads(grass.decode(rasterlite_info.stdout))
+            rasters = rasterlite_info["metadata"].get("SUBDATASETS")
+            if rasters:
+                return [
+                    v.rsplit("table=")[-1] for k, v in rasters.items() if "NAME" in k
+                ]
+            return [os.path.basename(rasterlite_info["files"][0]).rsplit(".")[0]]
 
 
 class ProjSelect(wx.ComboBox):

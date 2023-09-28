@@ -473,6 +473,28 @@ class GdalImportDialog(ImportDialog):
                 idsn = dsn
                 if "PG:" in dsn:
                     idsn = f"{dsn} table={layer}"
+                elif os.path.exists(idsn):
+                    import subprocess
+
+                    dataset_info = subprocess.run(
+                        ["gdalinfo", "-json", dsn],
+                        capture_output=True,
+                    )
+                    if dataset_info.stderr:
+                        GError(
+                            parent=self,
+                            message=grass.decode(dataset_info.stderr),
+                        )
+                        return
+                    if dataset_info.stdout:
+                        import json
+
+                        dataset_info = json.loads(
+                            grass.decode(dataset_info.stdout),
+                        )
+                        # Rasterlite DB
+                        if "Rasterlite" in dataset_info["driverShortName"]:
+                            idsn = f"RASTERLITE:{dsn},table={layer}"
             else:
                 idsn = dsn
 
