@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
 
     struct Ref group_ref;
     char **names_ordered, **mapsets_ordered;
-    const char **semantic_labels_group, **semantic_labels_svm;
+    const char **semantic_labels_group;
     char semantic_label[GNAME_MAX];
     int semantic_label_count = 0, semantic_label_match_count = 0;
 
