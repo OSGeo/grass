@@ -495,6 +495,8 @@ Subsequently, verify the software pages:
 
 ### Update grass.osgeo.org
 
+These updates are for final releases only.
+
 Update version:
 
 - <https://github.com/OSGeo/grass-website/blob/master/data/grass.json>
