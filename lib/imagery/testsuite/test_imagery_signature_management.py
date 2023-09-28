@@ -102,7 +102,7 @@ class MakeSignaturesDirTestCase(TestCase):
             os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "libsvm"))
         )
         # There should not be any side effects of calling function multiple times
-        I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
+        I_make_signatures_dir(I_SIGFILE_TYPE_LIBSVM)
         self.assertTrue(
             os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "libsvm"))
         )
