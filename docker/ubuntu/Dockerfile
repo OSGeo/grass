@@ -1,19 +1,22 @@
 # syntax=docker/dockerfile:1.4
-FROM ubuntu:22.04 as common
+
+ARG GUI=without
+
+FROM ubuntu:22.04 as common_start
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Stefan Blumentrath"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-
 SHELL ["/bin/bash", "-c"]
 
 WORKDIR /tmp
 
+ARG GUI
+
 # Todo: re-consider required dev packages for addons (~400MB in dev packages)
-ENV GRASS_RUN_PACKAGES="\
-    build-essential \
+ARG GRASS_RUN_PACKAGES="build-essential \
     bison \
     bzip2 \
     curl \
@@ -77,6 +80,117 @@ ENV GRASS_RUN_PACKAGES="\
     zlib1g \
     "
 
+# Define build packages
+ARG GRASS_BUILD_PACKAGES="cmake \
+    libbz2-dev \
+    libcairo2-dev \
+    libfreetype6-dev \
+    zlib1g-dev \
+    libnetcdf-dev \
+    libopenjp2-7-dev \
+    libreadline-dev \
+    libjpeg-dev \
+    libpnglite-dev \
+    libsqlite3-dev \
+    libtiff-dev \
+    libzstd-dev \
+    libncurses5-dev \
+    mesa-common-dev \
+    zlib1g-dev \
+    "
+
+ARG GRASS_CONFIG="--with-cxx \
+  --enable-largefile \
+  --with-proj-share=/usr/share/proj \
+  --with-gdal=/usr/bin/gdal-config \
+  --with-geos \
+  --with-sqlite \
+  --with-cairo --with-cairo-ldflags=-lfontconfig \
+  --with-freetype --with-freetype-includes=/usr/include/freetype2/ \
+  --with-fftw \
+  --with-postgres --with-postgres-includes=/usr/include/postgresql \
+  --with-netcdf \
+  --with-zstd \
+  --with-bzlib \
+  --with-pdal \
+  --without-mysql \
+  --with-blas \
+  --with-lapack \
+  --with-readline \
+  --with-odbc \
+  --with-openmp \
+  "
+
+ARG GRASS_PYTHON_PACKAGES="pip \
+    setuptools \
+    grass-session \
+    python-dateutil \
+    python-magic \
+    numpy \
+    Pillow \
+    ply \
+    matplotlib \
+    psycopg2 \
+  "
+
+
+FROM common_start as grass_without_gui
+
+ARG GRASS_CONFIG="${GRASS_CONFIG} --without-opengl"
+
+
+FROM common_start as grass_with_gui
+
+ARG GRASS_RUN_PACKAGES="${GRASS_RUN_PACKAGES} adwaita-icon-theme-full \
+  libglu1-mesa \
+  libgtk-3-0 \
+  libnotify4 \
+  libsdl2-2.0-0 \
+  libxtst6 \
+  librsvg2-common \
+  gettext \
+  freeglut3 \
+  libgstreamer-plugins-base1.0 \
+  libjpeg8 \
+  libpng16-16 \
+  libsm6 \
+  libtiff5 \
+  libwebkit2gtk-4.0 \
+"
+# librsvg2-common \
+# (fix error (wxgui.py:7782): Gtk-WARNING **: 19:53:09.774:
+# Could not load a pixbuf from /org/gtk/libgtk/theme/Adwaita/assets/check-symbolic.svg.
+# This may indicate that pixbuf loaders or the mime database could not be found.)
+
+ARG GRASS_BUILD_PACKAGES="${GRASS_BUILD_PACKAGES} adwaita-icon-theme-full \
+  libgl1-mesa-dev \
+  libglu1-mesa-dev \
+  freeglut3-dev \
+  libgstreamer-plugins-base1.0-dev \
+  libgtk-3-dev \
+  libjpeg-dev \
+  libnotify-dev \
+  libpng-dev \
+  libsdl2-dev \
+  libsm-dev \
+  libtiff-dev \
+  libwebkit2gtk-4.0-dev \
+  libxtst-dev \
+"
+
+ARG GRASS_CONFIG="${GRASS_CONFIG} --with-opengl \
+  --with-x \
+  --with-nls \
+  --with-readline \
+  "
+ARG GRASS_PYTHON_PACKAGES="${GRASS_PYTHON_PACKAGES} wxPython"
+# If you do not use any Gnome Accessibility features, to suppress warning
+# WARNING **: Couldn't connect to accessibility bus:
+# execute programs with
+ENV NO_AT_BRIDGE=1
+
+
+FROM grass_${GUI}_gui as grass_gis
 # Add ubuntugis unstable and fetch packages
 RUN apt-get update \
     && apt-get install  -y --no-install-recommends --no-install-suggests \
@@ -92,8 +206,9 @@ RUN apt-get update \
     && apt-get clean all \
     && rm -rf /var/lib/apt/lists/*
 
-RUN echo LANG="en_US.UTF-8" > /etc/default/locale
-RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
+RUN echo LANG="en_US.UTF-8" > /etc/default/locale \
+    && echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
+    && locale-gen
 
 ## fetch vertical datums for PDAL and store into PROJ dir
 WORKDIR /src
@@ -113,27 +228,7 @@ WORKDIR /src
 # RUN wget --no-check-certificate -r -l inf -A tif https://cdn.proj.org/
 
 # Start build stage
-FROM common as build
-
-# Define build packages
-ENV GRASS_BUILD_PACKAGES="\
-    cmake \
-    libbz2-dev \
-    libcairo2-dev \
-    libfreetype6-dev \
-    zlib1g-dev \
-    libnetcdf-dev \
-    libopenjp2-7-dev \
-    libreadline-dev \
-    libjpeg-dev \
-    libpnglite-dev \
-    libsqlite3-dev \
-    libtiff-dev \
-    libzstd-dev \
-    libncurses5-dev \
-    mesa-common-dev \
-    zlib1g-dev \
-    "
+FROM grass_gis as build
 
 # Add build packages
 RUN apt-get update \
@@ -152,16 +247,7 @@ RUN (echo "Install Python" \
     && mkdir -p /src/site-packages \
     && cd /src \
     && python3 -m pip install --no-cache-dir -t /src/site-packages --upgrade \
-    pip \
-    setuptools \
-    grass-session \
-    python-dateutil \
-    python-magic \
-    numpy \
-    Pillow \
-    ply \
-    matplotlib \
-    psycopg2 \
+    $GRASS_PYTHON_PACKAGES \
     && rm -r /root/.cache \
     && rm -rf /tmp/pip-* \
     )
@@ -185,28 +271,7 @@ ENV CXXFLAGS "$MYCXXFLAGS"
 ENV GRASS_PYTHON=/usr/bin/python3
 ENV NUMTHREADS=4
 RUN make distclean || echo "nothing to clean"
-RUN ./configure \
-  --with-cxx \
-  --enable-largefile \
-  --with-proj-share=/usr/share/proj \
-  --with-gdal=/usr/bin/gdal-config \
-  --with-geos \
-  --with-sqlite \
-  --with-cairo --with-cairo-ldflags=-lfontconfig \
-  --with-freetype --with-freetype-includes="/usr/include/freetype2/" \
-  --with-fftw \
-  --with-postgres --with-postgres-includes="/usr/include/postgresql" \
-  --with-netcdf \
-  --with-zstd \
-  --with-bzlib \
-  --with-pdal \
-  --without-mysql \
-  --with-blas \
-  --with-lapack \
-  --with-readline \
-  --with-odbc \
-  --with-openmp \
-  --without-opengl \
+RUN ./configure $GRASS_CONFIG \
     && make -j $NUMTHREADS \
     && make install && ldconfig \
     &&  cp /usr/local/grass84/gui/wxpython/xml/module_items.xml module_items.xml; \
@@ -218,17 +283,18 @@ RUN ./configure \
     mv module_items.xml /usr/local/grass84/gui/wxpython/xml/module_items.xml;
 
 # Build the GDAL-GRASS plugin
-RUN git clone https://github.com/OSGeo/gdal-grass && \
-    cd "gdal-grass" && \
-    ./configure --with-gdal=/usr/bin/gdal-config \
-            --with-grass=/usr/local/grass84 && \
-    make -j $NUMTHREADS && \
-    make install -j $NUMTHREADS && \
-    cd /src && \
-    rm -rf "gdal-grass"
+RUN git clone https://github.com/OSGeo/gdal-grass \
+    && cd "gdal-grass" \
+    && ./configure \
+      --with-gdal=/usr/bin/gdal-config \
+      --with-grass=/usr/local/grass84 \
+    && make -j $NUMTHREADS \
+    && make install -j $NUMTHREADS \
+    && cd /src \
+    && rm -rf "gdal-grass"
 
 # Leave build stage
-FROM common as grass
+FROM grass_gis as grass_gis_final
 
 # GRASS GIS specific
 # allow work with MAPSETs that are not owned by current user
@@ -254,8 +320,8 @@ COPY --link --from=build /usr/lib/gdalplugins /usr/lib/gdalplugins
 # COPY --link --from=datum_grids /tmp/cdn.proj.org/*.tif /usr/share/proj/
 
 # Create generic GRASS GIS lib name regardless of version number
-RUN ln -sf /usr/local/grass84 /usr/local/grass && \
-    ldconfig /etc/ld.so.conf.d
+RUN ln -sf /usr/local/grass84 /usr/local/grass \
+    && ldconfig /etc/ld.so.conf.d
 
 # Data workdir
 WORKDIR /grassdb
