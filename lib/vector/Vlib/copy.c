@@ -35,6 +35,9 @@
 
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
+#define NOPG_UNUSED
+#else
+#define NOPG_UNUSED UNUSED
 #endif
 
 static int copy_lines_1(struct Map_info *, int, struct Map_info *);
@@ -416,7 +419,7 @@ int copy_nodes(const struct Map_info *In, struct Map_info *Out)
 #endif
 
 int copy_line_nodes(const struct Map_info *In, int node, int with_z,
-                    struct line_pnts *Points, struct Map_info *Out)
+                    struct line_pnts *Points, struct Map_info *Out NOPG_UNUSED)
 {
     double x, y, z;
 

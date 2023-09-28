@@ -54,6 +54,10 @@ static void notice_processor(void *, const char *);
 static char **scan_array(const char *);
 static int remap_node(const struct Format_info_offset *, int);
 static int remap_line(const struct Plus_head *, off_t, int);
+
+#define NOPG_UNUSED
+#else
+#define NOPG_UNUSED UNUSED
 #endif
 
 /*!
@@ -66,7 +70,7 @@ static int remap_line(const struct Plus_head *, off_t, int);
    \return 0 success
    \return -1 error
  */
-int V1_open_old_pg(struct Map_info *Map, int update)
+int V1_open_old_pg(struct Map_info *Map NOPG_UNUSED, int update NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     int found;
@@ -159,7 +163,7 @@ int V1_open_old_pg(struct Map_info *Map, int update)
    \return 0 success
    \return -1 error
  */
-int V2_open_old_pg(struct Map_info *Map)
+int V2_open_old_pg(struct Map_info *Map NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     struct Format_info_pg *pg_info;
@@ -218,7 +222,8 @@ int V2_open_old_pg(struct Map_info *Map)
    \return 0 success
    \return -1 error
  */
-int V1_open_new_pg(struct Map_info *Map, const char *name, int with_z)
+int V1_open_new_pg(struct Map_info *Map NOPG_UNUSED,
+                   const char *name NOPG_UNUSED, int with_z NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     char stmt[DB_SQL_MAX];
@@ -318,7 +323,8 @@ int V1_open_new_pg(struct Map_info *Map, const char *name, int with_z)
    \return 1 topology layer does not exist
    \return -1 on error
  */
-int Vect__open_topo_pg(struct Map_info *Map, int head_only, int update)
+int Vect__open_topo_pg(struct Map_info *Map NOPG_UNUSED,
+                       int head_only NOPG_UNUSED, int update NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     int ret;
@@ -1743,7 +1749,7 @@ int Vect__load_map_lines_pg(struct Map_info *Map)
 
    Print out NOTICE message only on verbose level
  */
-void notice_processor(void *arg, const char *message)
+void notice_processor(void *arg UNUSED, const char *message)
 {
     if (G_verbose() > G_verbose_std()) {
         fprintf(stderr, "%s", message);

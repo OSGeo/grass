@@ -31,7 +31,7 @@ struct font_desc {
 };
 
 static struct font_desc *font_descriptions = NULL;
-static int num_descriptions = 0;
+static unsigned int num_descriptions = 0;
 
 static int load_font_descriptions(const char *);
 static void free_font_descriptions(void);
@@ -160,7 +160,7 @@ static int load_font_descriptions(const char *descfile)
 
 static const char *get_desc(const char *filename)
 {
-    int i;
+    unsigned int i;
 
     for (i = 0; i < num_descriptions; i++)
         if (G_strcasecmp(filename, font_descriptions[i].filename) == 0)
@@ -179,7 +179,7 @@ static const char *get_desc(const char *filename)
 
 static void free_font_descriptions(void)
 {
-    int i;
+    unsigned int i;
 
     for (i = 0; i < num_descriptions; i++) {
         G_free(font_descriptions[i].filename);

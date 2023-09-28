@@ -16,6 +16,7 @@
  *
  *****************************************************************************/
 
+#include <cinttypes>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -411,13 +412,13 @@ void printMaxSortSize(long nodata_count)
     off_t maxneed = (fillmaxsize > flowmaxsize) ? fillmaxsize : flowmaxsize;
     maxneed = 2 * maxneed; /* need 2*N to sort */
 
-    G_debug(1, "total elements=%" PRI_OFF_T ", nodata elements=%ld",
+    G_debug(1, "total elements=%" PRId64 ", nodata elements=%ld",
             (off_t)nrows * ncols, nodata_count);
     G_debug(1, "largest temporary files: ");
-    G_debug(1, "\t\t FILL: %s [%" PRI_OFF_T " elements, %ldB each]",
+    G_debug(1, "\t\t FILL: %s [%" PRId64 " elements, %ldB each]",
             formatNumber(buf, fillmaxsize), (off_t)nrows * ncols,
             sizeof(waterWindowType));
-    G_debug(1, "\t\t FLOW: %s [%" PRI_OFF_T " elements, %ldB each]",
+    G_debug(1, "\t\t FLOW: %s [%" PRId64 " elements, %ldB each]",
             formatNumber(buf, flowmaxsize), (off_t)nrows * ncols - nodata_count,
             sizeof(sweepItem));
     G_debug(1, "Will need at least %s space available in %s",

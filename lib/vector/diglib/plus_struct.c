@@ -15,6 +15,7 @@
  *
  *****************************************************************************/
 
+#include <inttypes.h>
 #include <sys/types.h>
 #include <string.h>
 #include <grass/vector.h>
@@ -571,7 +572,7 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     else
         ptr->off_t_size = 4;
 
-    if (sizeof(off_t) < ptr->off_t_size) {
+    if (sizeof(off_t) < (size_t)ptr->off_t_size) {
         G_warning(_("Vector exceeds supported file size limit"));
         return (-1);
     }
@@ -648,7 +649,7 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     if (0 >= dig__fread_port_O(&(ptr->coor_size), 1, fp, ptr->off_t_size))
         return (-1);
 
-    G_debug(2, "  coor size %" PRI_OFF_T, ptr->coor_size);
+    G_debug(2, "  coor size %" PRId64, ptr->coor_size);
 
     dig_fseek(fp, ptr->head_size, SEEK_SET);
 
@@ -761,7 +762,7 @@ int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     if (0 >= dig__fwrite_port_O(&(ptr->coor_size), 1, fp, ptr->off_t_size))
         return (-1);
 
-    G_debug(2, "topo body offset %" PRI_OFF_T, dig_ftell(fp));
+    G_debug(2, "topo body offset %" PRId64, dig_ftell(fp));
 
     return (0);
 }

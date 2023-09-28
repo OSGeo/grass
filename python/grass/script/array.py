@@ -109,8 +109,6 @@ for details.
 .. sectionauthor:: Glynn Clements
 """
 
-from __future__ import absolute_import
-
 import numpy
 
 from .utils import try_remove
@@ -187,7 +185,7 @@ class array(numpy.memmap):
         :param str mapname: name for raster map
         :param str title: title for raster map
         :param null: null value
-        :param bool overwrite: True for overwritting existing raster maps
+        :param bool overwrite: True for overwriting existing raster maps
 
         :return: 0 on success
         :return: non-zero code on failure

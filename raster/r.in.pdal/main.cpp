@@ -17,6 +17,11 @@
  *
  *****************************************************************************/
 
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#pragma clang diagnostic ignored "-Wunknown-pragmas"
+#endif
 #include <pdal/PointTable.hpp>
 #include <pdal/PointLayout.hpp>
 #include <pdal/StageFactory.hpp>
@@ -26,6 +31,9 @@
 #include <pdal/filters/MergeFilter.hpp>
 #include <pdal/filters/ReprojectionFilter.hpp>
 #include <pdal/filters/StreamCallbackFilter.hpp>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 extern "C" {
 #include <grass/gis.h>
@@ -244,7 +252,7 @@ int main(int argc, char *argv[])
     reproject_flag->description =
         _("Reprojects input dataset to the coordinate system of"
           " the GRASS location (by default only datasets with the"
-          " matching cordinate system can be imported");
+          " matching coordinate system can be imported");
     reproject_flag->guisection = _("Projection");
 
     // TODO: from the API it seems that also prj file path and proj string will

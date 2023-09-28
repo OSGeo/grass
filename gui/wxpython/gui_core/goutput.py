@@ -43,7 +43,7 @@ from core.gconsole import (
 )
 from core.globalvar import CheckWxVersion, wxPythonPhoenix
 from gui_core.prompt import GPromptSTC
-from gui_core.wrap import Button, ClearButton, StaticText, StaticBox
+from gui_core.wrap import Button, ClearButton, StaticText
 from core.settings import UserSettings
 
 
@@ -135,37 +135,23 @@ class GConsoleWindow(wx.SplitterWindow):
         if not self._gcstyle & GC_PROMPT:
             self.cmdPrompt.Hide()
 
-        if self._gcstyle & GC_PROMPT:
-            cmdLabel = _("Command prompt")
-            self.outputBox = StaticBox(
-                parent=self.panelOutput, id=wx.ID_ANY, label=" %s " % _("Output window")
-            )
-
-            self.cmdBox = StaticBox(
-                parent=self.panelOutput, id=wx.ID_ANY, label=" %s " % cmdLabel
-            )
-
         # buttons
-        self.btnOutputClear = ClearButton(parent=self.panelOutput)
-        self.btnOutputClear.SetToolTip(_("Clear output window content"))
-        self.btnCmdClear = ClearButton(parent=self.panelOutput)
-        self.btnCmdClear.SetToolTip(_("Clear command prompt content"))
-        self.btnOutputSave = Button(parent=self.panelOutput, id=wx.ID_SAVE)
-        self.btnOutputSave.SetToolTip(_("Save output window content to the file"))
+        self.btnClear = ClearButton(parent=self.panelPrompt)
+        self.btnClear.SetToolTip(_("Clear prompt and output window"))
+        self.btnOutputSave = Button(parent=self.panelPrompt, id=wx.ID_SAVE)
+        self.btnOutputSave.SetToolTip(_("Save output to a file"))
         self.btnCmdAbort = Button(parent=self.panelProgress, id=wx.ID_STOP)
         self.btnCmdAbort.SetToolTip(_("Abort running command"))
-        self.btnCmdExportHistory = Button(parent=self.panelOutput, id=wx.ID_ANY)
+        self.btnCmdExportHistory = Button(parent=self.panelPrompt, id=wx.ID_ANY)
         self.btnCmdExportHistory.SetLabel(_("&Export history"))
         self.btnCmdExportHistory.SetToolTip(
             _("Export history of executed commands to a file")
         )
 
         if not self._gcstyle & GC_PROMPT:
-            self.btnCmdClear.Hide()
             self.btnCmdExportHistory.Hide()
 
-        self.btnCmdClear.Bind(wx.EVT_BUTTON, self.cmdPrompt.OnCmdErase)
-        self.btnOutputClear.Bind(wx.EVT_BUTTON, self.OnOutputClear)
+        self.btnClear.Bind(wx.EVT_BUTTON, self.OnClear)
         self.btnOutputSave.Bind(wx.EVT_BUTTON, self.OnOutputSave)
         self.btnCmdAbort.Bind(wx.EVT_BUTTON, self._gconsole.OnCmdAbort)
         self.btnCmdExportHistory.Bind(wx.EVT_BUTTON, self.OnCmdExportHistory)
@@ -176,13 +162,6 @@ class GConsoleWindow(wx.SplitterWindow):
         """Do layout"""
         self.outputSizer = wx.BoxSizer(wx.VERTICAL)
         progressSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        if self._gcstyle & GC_PROMPT:
-            outBtnSizer = wx.StaticBoxSizer(self.outputBox, wx.HORIZONTAL)
-            cmdBtnSizer = wx.StaticBoxSizer(self.cmdBox, wx.HORIZONTAL)
-        else:
-            outBtnSizer = wx.BoxSizer(wx.HORIZONTAL)
-            cmdBtnSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         if self._gcstyle & GC_PROMPT:
             promptSizer = wx.BoxSizer(wx.VERTICAL)
@@ -202,45 +181,27 @@ class GConsoleWindow(wx.SplitterWindow):
             )
             promptSizer.Add(helpText, proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
 
+            btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+            btnSizer.Add(
+                self.btnOutputSave,
+                proportion=0,
+                flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
+                border=5,
+            )
+            btnSizer.Add(
+                self.btnCmdExportHistory,
+                proportion=0,
+                flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
+                border=5,
+            )
+            btnSizer.AddStretchSpacer()
+            btnSizer.Add(self.btnClear, proportion=0, flag=wx.EXPAND, border=5)
+            promptSizer.Add(btnSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+
         self.outputSizer.Add(
             self.cmdOutput, proportion=1, flag=wx.EXPAND | wx.ALL, border=3
         )
-        if self._gcstyle & GC_PROMPT:
-            proportion = 1
-        else:
-            proportion = 0
-            outBtnSizer.AddStretchSpacer()
 
-        outBtnSizer.Add(
-            self.btnOutputClear,
-            proportion=proportion,
-            flag=wx.ALIGN_LEFT | wx.LEFT | wx.RIGHT | wx.BOTTOM,
-            border=5,
-        )
-
-        outBtnSizer.Add(
-            self.btnOutputSave,
-            proportion=proportion,
-            flag=wx.RIGHT | wx.BOTTOM,
-            border=5,
-        )
-
-        cmdBtnSizer.Add(
-            self.btnCmdExportHistory,
-            proportion=1,
-            flag=wx.ALIGN_CENTER
-            | wx.ALIGN_CENTER_VERTICAL
-            | wx.LEFT
-            | wx.RIGHT
-            | wx.BOTTOM,
-            border=5,
-        )
-        cmdBtnSizer.Add(
-            self.btnCmdClear,
-            proportion=1,
-            flag=wx.ALIGN_CENTER | wx.RIGHT | wx.BOTTOM,
-            border=5,
-        )
         progressSizer.Add(
             self.btnCmdAbort, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=5
         )
@@ -253,16 +214,7 @@ class GConsoleWindow(wx.SplitterWindow):
 
         self.panelProgress.SetSizer(progressSizer)
         progressSizer.Fit(self.panelProgress)
-
-        btnSizer.Add(outBtnSizer, proportion=1, flag=wx.ALL | wx.ALIGN_CENTER, border=5)
-        btnSizer.Add(
-            cmdBtnSizer,
-            proportion=1,
-            flag=wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM | wx.RIGHT,
-            border=5,
-        )
         self.outputSizer.Add(self.panelProgress, proportion=0, flag=wx.EXPAND)
-        self.outputSizer.Add(btnSizer, proportion=0, flag=wx.EXPAND)
 
         self.outputSizer.Fit(self)
         self.outputSizer.SetSizeHints(self)
@@ -274,12 +226,10 @@ class GConsoleWindow(wx.SplitterWindow):
             self.panelPrompt.SetSizer(promptSizer)
 
         # split window
-        if self._gcstyle & GC_PROMPT:
-            self.SplitHorizontally(self.panelOutput, self.panelPrompt, -50)
-        else:
-            self.SplitHorizontally(self.panelOutput, self.panelPrompt, -45)
+        self.SplitHorizontally(self.panelOutput, self.panelPrompt, 0)
+        if not (self._gcstyle & GC_PROMPT):
             self.Unsplit()
-        self.SetMinimumPaneSize(self.btnCmdClear.GetSize()[1] + 25)
+        self.SetMinimumPaneSize(self.btnClear.GetSize()[1] + 100)
 
         self.SetSashGravity(1.0)
 
@@ -378,12 +328,13 @@ class GConsoleWindow(wx.SplitterWindow):
             notification=Notification.MAKE_VISIBLE,
         )
 
-    def OnOutputClear(self, event):
-        """Clear content of output window"""
+    def OnClear(self, event):
+        """Clear content of output window and command window"""
         self.cmdOutput.SetReadOnly(False)
         self.cmdOutput.ClearAll()
         self.cmdOutput.SetReadOnly(True)
         self.progressbar.SetValue(0)
+        self.cmdPrompt.CmdErase()
 
     def GetProgressBar(self):
         """Return progress bar widget"""

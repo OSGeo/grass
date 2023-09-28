@@ -44,24 +44,26 @@
  */
 #define MAX_OPEN_LEVEL 2
 
-static int open_old_dummy(struct Map_info *Map, int update)
+static int open_old_dummy(struct Map_info *Map UNUSED, int update UNUSED)
 {
     return 0;
 }
 
-static int open_new_dummy(struct Map_info *Map, const char *name, int with_z)
+static int open_new_dummy(struct Map_info *Map UNUSED, const char *name UNUSED,
+                          int with_z UNUSED)
 {
     return 0;
 }
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format_old(struct Map_info *Map, int update)
+static int format_old(struct Map_info *Map UNUSED, int update UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 
-static int format_new(struct Map_info *Map, const char *name, int with_z)
+static int format_new(struct Map_info *Map UNUSED, const char *name UNUSED,
+                      int with_z UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
@@ -1092,7 +1094,7 @@ const char *Vect_maptype_info(const struct Map_info *Map)
    - Native format                    (GV_FORMAT_NATIVE)
    - OGR format linked via v.external (GV_FORMAT_OGR)
    - OGR format                       (GV_FORMAT_OGR_DIRECT)
-   - PostGIS fomat                    (GV_FORMAT_POSTGIS)
+   - PostGIS format                   (GV_FORMAT_POSTGIS)
 
    \param Map pointer to Map_info structure
 

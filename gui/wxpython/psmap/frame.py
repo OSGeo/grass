@@ -18,10 +18,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
-if sys.version_info.major == 2:
-    import Queue
-else:
-    import queue as Queue
+import queue as Queue
 from math import sin, cos, pi, sqrt
 
 import wx
@@ -490,7 +487,7 @@ class PsMapFrame(wx.Frame):
                     ),
                     hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
                     hyperlinkLabel=_(
-                        "You can donwload {program} {arch} version here."
+                        "You can download {program} {arch} version here."
                     ).format(
                         program=program,
                         arch="64bit" if "64" in program else "32bit",
@@ -1174,7 +1171,6 @@ class PsMapFrame(wx.Frame):
                 self.canvas.RedrawSelectBox(id)
 
             if itype == "text":
-
                 if self.instruction[id]["rotate"]:
                     rot = float(self.instruction[id]["rotate"])
                 else:
@@ -1223,7 +1219,6 @@ class PsMapFrame(wx.Frame):
                 self.canvas.RedrawSelectBox(id)
 
             if itype in ("map", "vector", "raster", "labels"):
-
                 if itype == "raster":  # set resolution
                     try:
                         info = grass.raster_info(self.instruction[id]["raster"])
@@ -1782,7 +1777,6 @@ class PsMapBufferedWindow(wx.Window):
 
                 if self.instruction[mapId]["scaleType"] in (0, 1, 2):
                     if self.instruction[mapId]["scaleType"] == 0:
-
                         scale, foo, rect = AutoAdjust(
                             self,
                             scaleType=0,
@@ -1852,7 +1846,6 @@ class PsMapBufferedWindow(wx.Window):
         # recalculate the position of objects after dragging
         if self.mouse["use"] in ("pointer", "resize") and self.dragId != -1:
             if self.mouse["begin"] != event.GetPosition():  # for double click
-
                 self.RecalculatePosition(ids=[self.dragId])
                 if self.instruction[self.dragId].type in self.openDialogs:
                     self.openDialogs[self.instruction[self.dragId].type].updateDialog()
@@ -2133,8 +2126,8 @@ class PsMapBufferedWindow(wx.Window):
                     rect=rect, canvasToPaper=True
                 )
                 rect.Offset(
-                    dx=rect.GetWidth() / 2,
-                    dy=rect.GetHeight() / 2,
+                    dx=int(rect.GetWidth() / 2),
+                    dy=int(rect.GetHeight() / 2),
                 )
                 self.instruction[id]["where"] = self.CanvasPaperCoordinates(
                     rect=rect, canvasToPaper=True
@@ -2533,7 +2526,7 @@ class PsMapBufferedWindow(wx.Window):
         if rot == 0:
             pdc.DrawLabel(text=textDict["text"], rect=bounds)
         else:
-            pdc.DrawRotatedText(textDict["text"], coords[0], coords[1], rot)
+            pdc.DrawRotatedText(textDict["text"], int(coords[0]), int(coords[1]), rot)
 
         pdc.SetIdBounds(drawId, Rect(*bounds))
         self.Refresh()

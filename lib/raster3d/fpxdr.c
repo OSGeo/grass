@@ -12,8 +12,9 @@
 
 int Rast3d_is_xdr_null_num(const void *num, int isFloat)
 {
-    static const char null_bytes[8] = {0xFF, 0xFF, 0xFF, 0xFF,
-                                       0xFF, 0xFF, 0xFF, 0xFF};
+    static const char null_bytes[8] = {(char)0xFF, (char)0xFF, (char)0xFF,
+                                       (char)0xFF, (char)0xFF, (char)0xFF,
+                                       (char)0xFF, (char)0xFF};
 
     return memcmp(num, null_bytes, isFloat ? 4 : 8) == 0;
 }
@@ -36,8 +37,9 @@ int Rast3d_is_xdr_null_double(const double *d)
 
 void Rast3d_set_xdr_null_num(void *num, int isFloat)
 {
-    static const char null_bytes[8] = {0xFF, 0xFF, 0xFF, 0xFF,
-                                       0xFF, 0xFF, 0xFF, 0xFF};
+    static const char null_bytes[8] = {(char)0xFF, (char)0xFF, (char)0xFF,
+                                       (char)0xFF, (char)0xFF, (char)0xFF,
+                                       (char)0xFF, (char)0xFF};
 
     memcpy(num, null_bytes, isFloat ? 4 : 8);
 }
@@ -120,13 +122,13 @@ int Rast3d_init_copy_to_xdr(RASTER3D_Map *map, int sType)
 static int xdr_put(const void *src)
 {
     if (isFloat) {
-        if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > xdrLength)
+        if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > (size_t)xdrLength)
             return 0;
         G_xdr_put_float((char *)xdr + xdr_off, src);
         xdr_off += RASTER3D_XDR_FLOAT_LENGTH;
     }
     else {
-        if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > xdrLength)
+        if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > (size_t)xdrLength)
             return 0;
         G_xdr_put_double((char *)xdr + xdr_off, src);
         xdr_off += RASTER3D_XDR_DOUBLE_LENGTH;
@@ -202,13 +204,13 @@ int Rast3d_init_copy_from_xdr(RASTER3D_Map *map, int dType)
 static int xdr_get(void *src)
 {
     if (isFloat) {
-        if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > xdrLength)
+        if (xdr_off + RASTER3D_XDR_FLOAT_LENGTH > (size_t)xdrLength)
             return 0;
         G_xdr_get_float(src, (char *)xdr + xdr_off);
         xdr_off += RASTER3D_XDR_FLOAT_LENGTH;
     }
     else {
-        if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > xdrLength)
+        if (xdr_off + RASTER3D_XDR_DOUBLE_LENGTH > (size_t)xdrLength)
             return 0;
         G_xdr_get_double(src, (char *)xdr + xdr_off);
         xdr_off += RASTER3D_XDR_DOUBLE_LENGTH;

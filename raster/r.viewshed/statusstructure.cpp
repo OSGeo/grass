@@ -17,7 +17,7 @@
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the
  * line-of-sight that connects their centers does not intersect the
- * terrain. The terrain is NOT viewed as a tesselation of flat cells,
+ * terrain. The terrain is NOT viewed as a tessellation of flat cells,
  * i.e. if the line-of-sight does not pass through the cell center,
  * elevation is determined using bilinear interpolation.
  * The viewshed algorithm is efficient both in
@@ -58,7 +58,7 @@ extern "C" {
    If doCurv is set we need to consider the curvature of the
    earth */
 float get_vertical_angle(Viewpoint vp, StatusNode sn, surface_type elev,
-                         int doCurv)
+                         int doCurv UNUSED)
 {
 
     /*determine the difference in elevation, based on the curvature */

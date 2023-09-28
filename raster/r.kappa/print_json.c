@@ -4,7 +4,7 @@
 #include "kappa.h"
 #include "local_proto.h"
 
-void print_json()
+void print_json(void)
 {
     bool first;
     FILE *fd;
@@ -117,7 +117,11 @@ void print_json()
         else
             fprintf(fd, "%.5f", metrics->conditional_kappa[i]);
     }
-    fprintf(fd, "]\n");
+    fprintf(fd, "],\n");
+    if (metrics->mcc == na_value)
+        fprintf(fd, "    \"mcc\": null\n");
+    else
+        fprintf(fd, "    \"mcc\": %.5f\n", metrics->mcc);
 
     fprintf(fd, "}\n");
     if (output != NULL)

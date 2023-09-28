@@ -1,5 +1,5 @@
 cvs_id,name,email,country,osgeo_id,rfc2_agreed,orcid
--,Ivan Shmakov,<ivan theory.asu.ru>,Russia,1gray,yes,-
+-,Ivan Shmakov,<ivan siamics.net>,Russia,1gray,yes,-
 -,Eric Patton,<eric.patton canada.ca>,Canada,epatton,yes,-
 -,Laura Toma,<ltoma bowdoin.edu>,USA,ltoma,yes,-
 -,Markus Metz,<markus.metz.giswork googlemail.com>,Germany,mmetz,yes,0000-0002-4038-8754
@@ -17,7 +17,7 @@ cvs_id,name,email,country,osgeo_id,rfc2_agreed,orcid
 -,Margherita Di Leo,<diregola gmail com>,Italy,madi,yes,0000-0002-0279-7557
 -,Veronica Andreo,<veroandreo gmail.com>,Argentina,veroandreo,yes,0000-0002-4633-2161
 -,Stefan Blumentrath,<stefan.blumentrath nina.no>,Norway,sbl,yes,0000-0001-6675-1331
--,Ondřej Pešek,<pesej.ondrek gmail.com>,Czech Republic,pesekon2,yes,-
+-,Ondřej Pešek,<pesej.ondrek gmail.com>,Czech Republic,pesekon2,yes,0000-0002-2363-8002
 -,Tomáš Zigo,<tomas.zigo slovanet.sk>,Slovak Republic,tmszi,yes,-
 -,Nicklas Larsson,<n_larsson yahoo.com>,Hungary/Sweden,nilason,yes,-
 alex,Alex Shevlakov,<sixote yahoo.com>,Russia,-,-,-

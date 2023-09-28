@@ -216,7 +216,7 @@ static int merge_lines(struct line_pnts *Points1, struct line_cats *Cats1,
     int i, mindistidx;
     double mindist;
 
-    /* find mininal distance and its index */
+    /* find minimal distance and its index */
     mindist = Vedit_get_min_distance(Points1, Points2, 0, /* TODO 3D */
                                      &mindistidx);
 

@@ -38,7 +38,7 @@ repos:
     hooks:
       - id: markdownlint
   - repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: 23.1.0
     hooks:
       - id: black
         exclude: |
@@ -62,3 +62,9 @@ repos:
           (?x)^(
                 man/jquery.fixedheadertable.min.js
           )
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.29.0
+    hooks:
+      - id: yamllint
+        args: [--format, parsable, --strict, -d,
+               '{extends: default, rules: {truthy: disable, line-length: {max: 120, allow-non-breakable-words: true}}}']

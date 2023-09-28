@@ -416,16 +416,17 @@ N_les_callback_2d *N_alloc_les_callback_2d(void)
  * This is a template callback for mass balance calculation with 7 point stars
  * based on 3d data (g3d).
  *
- * \param data void *
+ * \param data void * (unused)
  * \param geom N_geom_data *
- * \param depth int
- * \param row   int
- * \param col   int
+ * \param depth int (unused)
+ * \param row   int (unused)
+ * \param col   int (unused)
  * \return N_data_star *
  *
  * */
-N_data_star *N_callback_template_3d(void *data, N_geom_data *geom, int col,
-                                    int row, int depth)
+N_data_star *N_callback_template_3d(void *data UNUSED, N_geom_data *geom,
+                                    int col UNUSED, int row UNUSED,
+                                    int depth UNUSED)
 {
     N_data_star *star = N_alloc_7star();
 
@@ -454,15 +455,15 @@ N_data_star *N_callback_template_3d(void *data, N_geom_data *geom, int col,
  * This is a template callback for mass balance calculation with 9 point stars
  * based on 2d data (raster).
  *
- * \param data void *
+ * \param data void * (unused)
  * \param geom N_geom_data *
- * \param row int
- * \param col int
+ * \param row int (unused)
+ * \param col int (unused)
  * \return N_data_star *
  *
  * */
-N_data_star *N_callback_template_2d(void *data, N_geom_data *geom, int col,
-                                    int row)
+N_data_star *N_callback_template_2d(void *data UNUSED, N_geom_data *geom,
+                                    int col UNUSED, int row UNUSED)
 {
     N_data_star *star = N_alloc_9star();
 
@@ -540,7 +541,7 @@ N_les *N_assemble_les_2d_dirichlet(int les_type, N_geom_data *geom,
  * equation solvers. An 2d array with start values and an 2d status array must
  * be provided as well as the location geometry and a void pointer to data
  * passed to the callback which creates the les row entries. This callback
- * must be defined in the N_les_callback_2d strcuture.
+ * must be defined in the N_les_callback_2d structure.
  *
  * The creation of the les is parallelized with OpenMP.
  * If you implement new callbacks, please make sure that the
@@ -804,7 +805,7 @@ int N_les_integrate_dirichlet_2d(N_les *les, N_geom_data *geom,
     rows = geom->rows;
     cols = geom->cols;
 
-    /*we nned to additional vectors */
+    /*we need to additional vectors */
     dvect1 = (double *)G_calloc(les->cols, sizeof(double));
     dvect2 = (double *)G_calloc(les->cols, sizeof(double));
 
@@ -845,12 +846,12 @@ int N_les_integrate_dirichlet_2d(N_les *les, N_geom_data *geom,
             if (stat > N_CELL_ACTIVE && stat < N_MAX_CELL_STATE) {
                 if (les->type == N_SPARSE_LES) {
                     /*set the rows to zero */
-                    for (i = 0; i < les->Asp[count]->cols; i++)
+                    for (i = 0; (unsigned int)i < les->Asp[count]->cols; i++)
                         les->Asp[count]->values[i] = 0.0;
                     /*set the cols to zero */
                     for (i = 0; i < les->rows; i++) {
-                        for (j = 0; j < les->Asp[i]->cols; j++) {
-                            if (les->Asp[i]->index[j] == count)
+                        for (j = 0; (unsigned int)j < les->Asp[i]->cols; j++) {
+                            if (les->Asp[i]->index[j] == (unsigned int)count)
                                 les->Asp[i]->values[j] = 0.0;
                         }
                     }
@@ -1262,7 +1263,7 @@ int N_les_integrate_dirichlet_3d(N_les *les, N_geom_data *geom,
     cols = geom->cols;
     depths = geom->depths;
 
-    /*we nned to additional vectors */
+    /*we need to additional vectors */
     dvect1 = (double *)G_calloc(les->cols, sizeof(double));
     dvect2 = (double *)G_calloc(les->cols, sizeof(double));
 
@@ -1306,12 +1307,15 @@ int N_les_integrate_dirichlet_3d(N_les *les, N_geom_data *geom,
                 if (stat > N_CELL_ACTIVE && stat < N_MAX_CELL_STATE) {
                     if (les->type == N_SPARSE_LES) {
                         /*set the rows to zero */
-                        for (i = 0; i < les->Asp[count]->cols; i++)
+                        for (i = 0; (unsigned int)i < les->Asp[count]->cols;
+                             i++)
                             les->Asp[count]->values[i] = 0.0;
                         /*set the cols to zero */
                         for (i = 0; i < les->rows; i++) {
-                            for (j = 0; j < les->Asp[i]->cols; j++) {
-                                if (les->Asp[i]->index[j] == count)
+                            for (j = 0; (unsigned int)j < les->Asp[i]->cols;
+                                 j++) {
+                                if (les->Asp[i]->index[j] ==
+                                    (unsigned int)count)
                                     les->Asp[i]->values[j] = 0.0;
                             }
                         }

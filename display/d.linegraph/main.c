@@ -297,7 +297,7 @@ int main(int argc, char **argv)
     y_range_opt = G_define_option();
     y_range_opt->key = "y_range";
     y_range_opt->description =
-        _("Minimum and maximun value for Y axis (min,max)");
+        _("Minimum and maximum value for Y axis (min,max)");
     y_range_opt->type = TYPE_DOUBLE;
     y_range_opt->key_desc = "min,max";
     y_range_opt->required = NO;
@@ -384,7 +384,7 @@ int main(int argc, char **argv)
 
     /* TODO: put this to variables, and avoid -Wsign-compare */
     for (i = 0; i < 3; i++) {
-        for (j = 0; j < strlen(title[i]->answer); j++)
+        for (j = 0; (size_t)j < strlen(title[i]->answer); j++)
             if (title[i]->answer[j] == '_')
                 title[i]->answer[j] = ' ';
     }
@@ -517,9 +517,9 @@ int main(int argc, char **argv)
     c = 0;
     j = 1;
     if (y_color_opt->answer != NULL) {
-        for (i = 0; i <= (strlen(y_color_opt->answer)); i++) {
+        for (i = 0; (size_t)i <= (strlen(y_color_opt->answer)); i++) {
             if ((y_color_opt->answer[i] == ',') ||
-                (i == (strlen(y_color_opt->answer)))) {
+                ((size_t)i == (strlen(y_color_opt->answer)))) {
                 color_name[c] = '\0';
                 in[j].color = D_translate_color(color_name);
                 j++;

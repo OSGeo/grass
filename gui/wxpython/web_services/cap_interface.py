@@ -250,7 +250,6 @@ class WMTSLayer(LayerBase):
         if param == "styles":
             styles = []
             for style_node in self.layer_node.findall(self.xml_ns.NsWmts("Style")):
-
                 style_name = ""
                 style_title = ""
 

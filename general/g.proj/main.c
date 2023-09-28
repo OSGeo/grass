@@ -104,12 +104,13 @@ int main(int argc, char *argv[])
     dontprettify = G_define_flag();
     dontprettify->key = 'f';
     dontprettify->guisection = _("Print");
-    dontprettify->description =
-        _("Print 'flat' output with no linebreaks (applies to "
 #ifdef HAVE_OGR
-          "WKT and "
+    dontprettify->description = _("Print 'flat' output with no linebreaks "
+                                  "(applies to WKT and PROJ.4 output)");
+#else
+    dontprettify->description =
+        _("Print 'flat' output with no linebreaks (applies to PROJ.4 output)");
 #endif
-          "PROJ.4 output)");
 
 #ifdef HAVE_OGR
     printwkt = G_define_flag();
@@ -310,19 +311,19 @@ int main(int argc, char *argv[])
                (printwkt->answer ? 1 : 0) +
 #endif
                (create->answer ? 1 : 0));
-    if (formats > 1)
-        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c"
+    if (formats > 1) {
 #ifdef HAVE_OGR
-                        ", -%c"
-#endif
+        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c, -%c"
                         " or -%c flags may be specified"),
                       printinfo->key, shellinfo->key, datuminfo->key,
-                      printproj4->key,
-#ifdef HAVE_OGR
-                      printwkt->key,
+                      printproj4->key, printwkt->key, create->key);
+#else
+        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c"
+                        " or -%c flags may be specified"),
+                      printinfo->key, shellinfo->key, datuminfo->key,
+                      printproj4->key, create->key);
 #endif
-                      create->key);
-
+    }
     if (printinfo->answer || shellinfo->answer)
         print_projinfo(shellinfo->answer);
     else if (datuminfo->answer)

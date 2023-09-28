@@ -31,6 +31,10 @@
 #include <grass/glocale.h>
 #include <grass/gprojects.h>
 
+// Constant to string conversion
+#define STR_HELPER(x)   #x
+#define STR(x)          STR_HELPER(x)
+
 #define NDIMS           3
 #define LONG_NAME       "long_name"
 #define STANDARD_NAME   "standard_name"
@@ -51,8 +55,9 @@
 #define UNITS           "units"
 #define DEGREES_EAST    "degrees_east"
 #define DEGREES_NORTH   "degrees_north"
-#define HISTORY_TEXT    "GRASS GIS 8 netCDF export of r3.out.netcdf"
-#define CF_SUPPORT      "CF-1.5"
+#define HISTORY_TEXT \
+    "GRASS GIS " STR(GRASS_VERSION_MAJOR) " netCDF export of r3.out.netcdf"
+#define CF_SUPPORT "CF-1.5"
 
 #define ERR(e)                      \
     {                               \
@@ -473,18 +478,18 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
      * dimensions
      * */
 
-    for (i = 0; i < region->cols; i++) {
+    for (i = 0; i < (unsigned int)region->cols; i++) {
         c = region->west + i * region->ew_res + 0.5 * region->ew_res;
         nc_put_var1_float(ncid, lon_varid, &i, &c);
     }
 
-    for (i = 0; i < region->rows; i++) {
+    for (i = 0; i < (unsigned int)region->rows; i++) {
         /* c = region->south + i * region->ns_res + 0.5 * region->ns_res; */
         c = region->north - i * region->ns_res - 0.5 * region->ns_res;
         nc_put_var1_float(ncid, lat_varid, &i, &c);
     }
 
-    for (i = 0; i < region->depths; i++) {
+    for (i = 0; i < (unsigned int)region->depths; i++) {
         if (is_time) {
             c = i * region->tb_res;
             time = (int)c;

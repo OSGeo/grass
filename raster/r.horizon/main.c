@@ -664,9 +664,7 @@ int OUTGR(int numrows, int numcols)
     return 1;
 }
 
-double amax1(arg1, arg2)
-double arg1;
-double arg2;
+double amax1(double arg1, double arg2)
 {
     double res;
 
@@ -679,9 +677,7 @@ double arg2;
     return res;
 }
 
-double amin1(arg1, arg2)
-double arg1;
-double arg2;
+double amin1(double arg1, double arg2)
 {
     double res;
 
@@ -694,9 +690,7 @@ double arg2;
     return res;
 }
 
-int min(arg1, arg2)
-int arg1;
-int arg2;
+int min(int arg1, int arg2)
 {
     int res;
 
@@ -709,9 +703,7 @@ int arg2;
     return res;
 }
 
-int max(arg1, arg2)
-int arg1;
-int arg2;
+int max(int arg1, int arg2)
 {
     int res;
 
@@ -754,7 +746,7 @@ double horizon_height(void)
 {
     double height;
 
-    tanh0 = -INFINITY;
+    tanh0 = 0.;
     length = 0;
 
     height = searching();

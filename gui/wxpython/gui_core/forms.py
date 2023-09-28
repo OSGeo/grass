@@ -46,21 +46,12 @@ COPYING coming with GRASS for details.
 @author Stepan Turek <stepan.turek seznam.cz> (CoordinatesSelect)
 """
 
-from __future__ import print_function
-
 import sys
 import textwrap
 import os
 import copy
 import locale
-import six
-
-if sys.version_info.major == 2:
-    import Queue
-else:
-    import queue as Queue
-
-    unicode = str
+import queue as Queue
 
 import codecs
 
@@ -72,10 +63,7 @@ import wx.lib.colourselect as csel
 import wx.lib.filebrowsebutton as filebrowse
 from wx.lib.newevent import NewEvent
 
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import xml.etree.ElementTree as etree
 
 # needed when started from command line and for testing
 if __name__ == "__main__":
@@ -1026,7 +1014,7 @@ class CmdPanel(wx.Panel):
         del is_section
 
         # 'Required' tab goes first, 'Optional' as the last one
-        for (newidx, content) in [
+        for newidx, content in [
             (0, _("Required")),
             (len(sections) - 1, _("Optional")),
         ]:
@@ -1195,7 +1183,7 @@ class CmdPanel(wx.Panel):
 
             if len(p.get("values", [])) > 0:
                 valuelist = list(map(str, p.get("values", [])))
-                valuelist_desc = list(map(unicode, p.get("values_desc", [])))
+                valuelist_desc = list(map(str, p.get("values_desc", [])))
                 required_text = "*" if p.get("required", False) else ""
                 if (
                     p.get("multiple", False)
@@ -1256,7 +1244,6 @@ class CmdPanel(wx.Panel):
                         if p.get("type", "") == "integer" and not p.get(
                             "multiple", False
                         ):
-
                             # for multiple integers use textctrl instead of
                             # spinsctrl
                             try:
@@ -1303,7 +1290,6 @@ class CmdPanel(wx.Panel):
                         ]
                         txt2.Bind(wx.EVT_TEXT, self.OnSetValue)
                     else:
-
                         title_txt.SetLabel(title + ":")
                         value = self._getValue(p)
 
@@ -1374,7 +1360,6 @@ class CmdPanel(wx.Panel):
                 and p.get("gisprompt", False) is False
                 and p.get("prompt", "") != "color"
             ):
-
                 title_txt.SetLabel(title + ":")
                 p["wxId"] = []
                 if (
@@ -2718,7 +2703,7 @@ class CmdPanel(wx.Panel):
         self.OnUpdateSelection(event)
 
     def OnUpdateDialog(self, event):
-        for fn, kwargs in six.iteritems(event.data):
+        for fn, kwargs in event.data.items():
             fn(**kwargs)
 
         self.parent.updateValuesHook()
@@ -3087,7 +3072,7 @@ class GUI:
             if completed[2]:
                 dcmd_params.update(completed[2])
 
-        # parse the interface decription
+        # parse the interface description
         try:
             global _blackList
             self.grass_task = gtask.parse_interface(cmd[0], blackList=_blackList)
@@ -3189,7 +3174,7 @@ class GUI:
         :return: parameter key
         :return: None on failure
         """
-        # parse the interface decription
+        # parse the interface description
         if not self.grass_task:
             tree = etree.fromstring(gtask.get_interface_description(cmd))
             self.grass_task = gtask.processTask(tree).get_task()
@@ -3249,7 +3234,6 @@ Test:
 
 
 if __name__ == "__main__":
-
     if len(sys.argv) == 1:
         sys.exit(_(USAGE_MESSAGE).format(name=sys.argv[0]))
 

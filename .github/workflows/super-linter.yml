@@ -1,3 +1,4 @@
+---
 name: General linting
 
 on:
@@ -10,6 +11,10 @@ on:
       - main
       - releasebranch_*
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
 jobs:
   super-linter:
     name: GitHub Super Linter
@@ -17,9 +22,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
       - name: Lint code base
-        uses: github/super-linter@v4
+        uses: github/super-linter@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Listed but commented out linters would be nice to have.

@@ -242,7 +242,7 @@ void N_write_array_2d_to_rast(N_array_2d *array, char *name)
  *
  * \param name * char - the name of an existing volume map
  * \param array * N_array_3d - an existing array or NULL
- * \param mask int - 0 = false, 1 = ture : if a mask is presenent, use it with
+ * \param mask int - 0 = false, 1 = true : if a mask is presenent, use it with
  * the input volume map \return N_array_3d * - the existing or new allocated
  * array
  * */
@@ -353,7 +353,7 @@ N_array_3d *N_read_rast3d_to_array_3d(char *name, N_array_3d *array, int mask)
 
     /* Close files and exit */
     if (!Rast3d_close(map))
-        Rast3d_fatal_error(map, NULL, 0, _("Error closing g3d file"));
+        Rast3d_fatal_error(_("Error closing g3d file <%s>"), name);
 
     return data;
 }
@@ -454,7 +454,7 @@ void N_write_array_3d_to_rast3d(N_array_3d *array, char *name, int mask)
         Rast3d_fatal_error("Error flushing tiles with Rast3d_flush_all_tiles");
     /* Close files and exit */
     if (!Rast3d_close(map))
-        Rast3d_fatal_error(map, NULL, 0, _("Error closing g3d file"));
+        Rast3d_fatal_error(_("Error closing g3d file <%s>"), name);
 
     return;
 }

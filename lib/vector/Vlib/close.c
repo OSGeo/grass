@@ -27,13 +27,13 @@
 
 #include "local_proto.h"
 
-static int clo_dummy(struct Map_info *map)
+static int clo_dummy(struct Map_info *map UNUSED)
 {
     return -1;
 }
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format(struct Map_info *map)
+static int format(struct Map_info *map UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;

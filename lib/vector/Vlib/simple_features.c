@@ -214,7 +214,7 @@ int Vect_sfa_line_astext(const struct line_pnts *Points, int type, int with_z,
         break;
     }
     case SF_POLYGON: /* polygon */ {
-        /* write only outter/inner ring */
+        /* write only outer/inner ring */
         fprintf(file, "(");
         for (i = 0; i < Points->n_points; i++) {
             print_point(Points, i, with_z, precision, file);
@@ -245,8 +245,8 @@ int Vect_sfa_line_astext(const struct line_pnts *Points, int type, int with_z,
    \return -1 feature type not supported (GV_POINT, GV_CENTROID, ...)
    \note Implementation is pending, now always returns 0
  */
-int Vect_sfa_is_line_simple(const struct line_pnts *Points, int type,
-                            int with_z)
+int Vect_sfa_is_line_simple(const struct line_pnts *Points UNUSED,
+                            int type UNUSED, int with_z UNUSED)
 {
     /* TODO:
        SF_FeatureType sftype;

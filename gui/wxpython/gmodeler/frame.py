@@ -26,7 +26,6 @@ import time
 import stat
 import tempfile
 import random
-import six
 
 import wx
 from wx.lib import ogl
@@ -313,7 +312,7 @@ class ModelFrame(wx.Frame):
                         "sec": int(ctime - (mtime * 60)),
                     }
             except KeyError:
-                # stopped deamon
+                # stopped daemon
                 stime = _("unknown")
 
             return stime
@@ -354,7 +353,7 @@ class ModelFrame(wx.Frame):
                 message = _("Do you want to save changes in the model?")
             else:
                 message = _(
-                    "Do you want to store current model settings " "to model file?"
+                    "Do you want to store current model settings to model file?"
                 )
 
             # ask user to save current settings
@@ -371,7 +370,7 @@ class ModelFrame(wx.Frame):
             ret = dlg.ShowModal()
             if ret == wx.ID_YES:
                 if not self.modelFile:
-                    self.OnWorkspaceSaveAs()
+                    self.OnModelSaveAs()
                 else:
                     self.WriteModelFile(self.modelFile)
             elif ret == wx.ID_CANCEL:
@@ -406,7 +405,7 @@ class ModelFrame(wx.Frame):
         dlg.Init(properties)
         if dlg.ShowModal() == wx.ID_OK:
             self.ModelChanged()
-            for key, value in six.iteritems(dlg.GetValues()):
+            for key, value in dlg.GetValues().items():
                 properties[key] = value
             for action in self.model.GetItems(objType=ModelAction):
                 action.GetTask().set_flag("overwrite", properties["overwrite"])
@@ -560,9 +559,9 @@ class ModelFrame(wx.Frame):
                 self.SetStatusText(_("File <%s> saved") % self.modelFile, 0)
                 self.SetTitle(self.baseTitle + " - " + os.path.basename(self.modelFile))
         elif not self.modelFile:
-            self.OnModelSaveAs(None)
+            self.OnModelSaveAs()
 
-    def OnModelSaveAs(self, event):
+    def OnModelSaveAs(self, event=None):
         """Create model to file as"""
         filename = ""
         dlg = wx.FileDialog(
@@ -1887,7 +1886,7 @@ class VariablePanel(wx.Panel):
     def UpdateModelVariables(self):
         """Update model variables"""
         variables = dict()
-        for values in six.itervalues(self.list.GetData()):
+        for values in self.list.GetData().values():
             name = values[0]
             variables[name] = {"type": str(values[1])}
             if values[2]:

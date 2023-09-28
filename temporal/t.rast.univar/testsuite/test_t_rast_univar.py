@@ -153,7 +153,6 @@ class TestRasterUnivar(TestCase):
         cls.del_temp_region()
 
     def test_with_all_maps(self):
-
         t_rast_univar = SimpleModule(
             "t.rast.univar",
             input="A",
@@ -179,7 +178,6 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
                 self.assertLooksLike(ref_line, res_line)
 
     def test_with_subset_of_maps(self):
-
         t_rast_univar = SimpleModule(
             "t.rast.univar",
             input="A",
@@ -204,7 +202,6 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
                 self.assertLooksLike(ref_line, res_line)
 
     def test_coarser_resolution(self):
-
         t_rast_univar = SimpleModule(
             "t.rast.univar",
             input="A",
@@ -220,6 +217,7 @@ a_2@testing||2001-04-01 00:00:00|2001-07-01 00:00:00|200|200|200|200|0|0|0|19200
 a_3@testing||2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|28800|0|96|96
 a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400|0|96|96
 """
+
         for ref, res in zip(
             univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")
         ):
@@ -231,6 +229,7 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
     def test_subset_with_output(self):
 
         self.runModule("g.region", **self.default_region, res=10)
+
         self.assertModule(
             "t.rast.univar",
             input="A",
@@ -252,11 +251,33 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
             if ref and res:
                 ref_line = ref.split("|", 1)[1]
                 res_line = res.split("|", 1)[1]
-                print(type(ref_line))
-                print(type(res_line))
                 self.assertLooksLike(ref_line, res_line)
 
-    def test_subset_with_output_coarse_resolution(self):
+    def test_subset_with_extended_statistics_and_output(self):
+        self.runModule("g.region", res=10)
+        self.assertModule(
+            "t.rast.univar",
+            input="A",
+            flags="er",
+            output="univar_output.txt",
+            where="start_time >= '2001-03-01'",
+            percentile=[10.0, 97.5],
+            overwrite=True,
+            verbose=True,
+        )
+
+        univar_text = """id|semantic_label|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells|first_quartile|median|third_quartile|percentile_10|percentile_97_5
+a_2@m2||2001-04-01 00:00:00|2001-07-01 00:00:00|200|200|200|200|0|0|0|1920000|0|9600|9600|200|200|200|200|200
+a_3@m2||2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|2880000|0|9600|9600|300|300|300|300|300
+a_4@m2||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|3840000|0|9600|9600|400|400|400|400|400
+"""
+        univar_output = open("univar_output.txt", "r").read()
+
+        for ref, res in zip(univar_text.split("\n"), univar_output.split("\n")):
+            if ref and res:
+                ref_line = ref.split("|", 1)[1]
+                res_line = res.split("|", 1)[1]
+                self.assertLooksLike(ref_line, res_line)
 
         self.runModule("g.region", **self.default_region, res=10)
         self.assertModule(
@@ -309,8 +330,6 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
         )
         self.runModule("g.region", **self.default_region, res=1)
         self.assertModule(t_rast_univar)
-
-        print(t_rast_univar.outputs.stdout.split("\n"))
 
         univar_text = """id|semantic_label|start|end|zone|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
 a_1@PERMANENT||2001-01-01 00:00:00|2001-04-01 00:00:00|1|100|100|100|100|0|0|0|60000|0|600|600

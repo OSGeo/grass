@@ -9,7 +9,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 import sys
 import uuid
 import os
@@ -253,7 +252,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # We will wrap the command line to fit into 80 character
         length = len(command)
         for token in sys.argv[1:]:
-
             # We need to remove specific characters
             token = token.replace("'", " ")
             token = token.replace('"', " ")
@@ -2535,7 +2533,6 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             and self.map_counter == 0
             and self.is_time_relative()
         ):
-
             self.set_relative_time_unit(map_rel_time_unit)
             statement += self.relative_time.get_update_all_statement_mogrified(dbif)
 

@@ -748,7 +748,7 @@ def _read_raster_info(name, mapset):
             kvp["min"] = None
             kvp["max"] = None
         elif ret == 2:
-            logging.warning(_("Raster range file is empty"))
+            logging.info(_("Raster range file is empty"))
             kvp["min"] = None
             kvp["max"] = None
         else:
@@ -766,7 +766,7 @@ def _read_raster_info(name, mapset):
             kvp["min"] = None
             kvp["max"] = None
         elif ret == 2:
-            logging.warning(_("Raster range file is empty"))
+            logging.info(_("Raster range file is empty"))
             kvp["min"] = None
             kvp["max"] = None
         else:
