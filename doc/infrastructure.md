@@ -264,7 +264,8 @@ Translations may be done using the OSGeo Weblate platform:
 
 Anyone with OSGeo-LDAP access can work on the translations.
 
-For technical background on the Weblate installation, see <https://wiki.osgeo.org/wiki/SAC:Weblate>
+For technical background and access rights of the Weblate installation,
+see <https://wiki.osgeo.org/wiki/SAC:Weblate>.
 
 ### How Weblate works
 
