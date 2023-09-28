@@ -467,7 +467,7 @@ class PsMapFrame(wx.Frame):
                         self,
                         title=title,
                         message=message + str(e),
-                        hyperlink="https://www.ghostscript.com/releases/gsdnld.html.",
+                        hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
                         hyperlinkLabel=_("You can download {} version here.").format(
                             arch
                         ),
