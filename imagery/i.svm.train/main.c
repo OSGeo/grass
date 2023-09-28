@@ -12,7 +12,7 @@
  *               for details.
  *
  *               Development of this module was supported from
- *               science funding of University of Latvia (2020/2021).
+ *               science funding of University of Latvia (2020-2023).
  *
  *****************************************************************************/
 #include <stdlib.h>
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     struct Categories cats;
     struct History history;
     FILE *misc_file;
-    double *rescale;
+    DCELL *Ms, *Rs;
     struct Range crange;
     struct FPRange fprange;
     int cmin, cmax;
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     opt_subgroup = G_define_standard_option(G_OPT_I_SUBGROUP);
     opt_subgroup->required = NO;
 
-    opt_labels = G_define_standard_option(G_OPT_R_INPUTS);
+    opt_labels = G_define_standard_option(G_OPT_R_INPUT);
     opt_labels->key = "trainingmap";
     opt_labels->description = _("Map with training labels or target values");
 
@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
     opt_svm_cache_size->type = TYPE_INTEGER;
     opt_svm_cache_size->key_desc = "cache size";
     opt_svm_cache_size->required = NO;
-    opt_svm_cache_size->options = "1-999999999";
+    opt_svm_cache_size->options = "1-";
     opt_svm_cache_size->answer = "512";
     opt_svm_cache_size->description = _("Kernel cache size in MB");
 
@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
     opt_svm_degree->type = TYPE_INTEGER;
     opt_svm_degree->key_desc = "value";
     opt_svm_degree->required = NO;
-    opt_svm_degree->options = "0-9999";
+    opt_svm_degree->options = "0-";
     opt_svm_degree->answer = "3";
     opt_svm_degree->description = _("Degree in kernel function");
     opt_svm_degree->guisection = _("SVM options");
@@ -335,9 +335,9 @@ int main(int argc, char *argv[])
     }
 
     if (flag_svm_shrink->answer)
-        parameters.shrinking = 1;
-    else
         parameters.shrinking = 0;
+    else
+        parameters.shrinking = 1;
 
     if (flag_svm_prob->answer)
         parameters.probability = 1;
@@ -372,7 +372,8 @@ int main(int argc, char *argv[])
                           name_group, mapset_group);
     }
     semantic_labels = G_malloc(group_ref.nfiles * sizeof(char *));
-    rescale = G_malloc(group_ref.nfiles * sizeof(double));
+    Ms = G_malloc(group_ref.nfiles * sizeof(DCELL));
+    Rs = G_malloc(group_ref.nfiles * sizeof(DCELL));
     for (int n = 0; n < group_ref.nfiles; n++) {
         int ret;
         semantic_labels[n] = Rast_get_semantic_label_or_name(
@@ -382,7 +383,8 @@ int main(int argc, char *argv[])
                               &crange);
         if (ret == 1) {
             Rast_get_range_min_max(&crange, &cmin, &cmax);
-            rescale[n] = (double)(cmax - cmin);
+            Ms[n] = (cmin / 2.0) + (cmax / 2.0) + ((cmin % 2 + cmax % 2) / 2.0);
+            Rs[n] = (cmax - cmin) / 2.0;
         }
         else if (ret == 3) {
             ret = Rast_read_fp_range(group_ref.file[n].name,
@@ -393,13 +395,14 @@ int main(int argc, char *argv[])
                     group_ref.file[n].name, group_ref.file[n].mapset);
             }
             Rast_get_fp_range_min_max(&fprange, &dmin, &dmax);
-            rescale[n] = dmax - dmin;
+            Ms[n] = (dmin + dmax) / 2.0;
+            Rs[n] = (dmax - dmin) / 2.0;
         }
         else {
             G_fatal_error(_("Unable to get value range for raster map <%s@%s>"),
                           group_ref.file[n].name, group_ref.file[n].mapset);
         }
-        if (rescale[n] < GRASS_EPSILON) {
+        if (Rs[n] < GRASS_EPSILON) {
             G_fatal_error(_("Invalid value range for raster map <%s@%s>"),
                           group_ref.file[n].name, group_ref.file[n].mapset);
         }
@@ -410,7 +413,7 @@ int main(int argc, char *argv[])
 
     /* Fill svm_problem struct with training data */
     G_message(_("Reading training data"));
-    fill_problem(name_labels, mapset_labels, group_ref, mapset_group, rescale,
+    fill_problem(name_labels, mapset_labels, group_ref, mapset_group, Ms, Rs,
                  &problem);
 
     /* svm_check_parameter needs filled svm_problem struct thus checking only
@@ -462,16 +465,16 @@ int main(int argc, char *argv[])
 
     /* Write out rescaling value as the same value has to be used for prediction
      */
-    G_verbose_message("Writing out rescaling value");
-    misc_file = G_fopen_new_misc(sigfile_dir, "rescale", name_sigfile);
+    misc_file = G_fopen_new_misc(sigfile_dir, "scale", name_sigfile);
     if (!misc_file)
         G_fatal_error(_("Unable to write trained model to file '%s'."),
                       name_sigfile);
     for (int n = 0; n < group_ref.nfiles; n++) {
-        fprintf(misc_file, "%lf\n", rescale[n]);
+        fprintf(misc_file, "%lf %lf\n", Ms[n], Rs[n]);
     }
     fclose(misc_file);
-    G_free(rescale);
+    G_free(Ms);
+    G_free(Rs);
 
     /* Copy CATs file. Will be used for prediction result maps */
     G_verbose_message("Copying category information");

@@ -6,7 +6,8 @@ and stores them in a signature file for later usage by
 </p>
 
 <p>Internally the module performs input value rescaling of each of imagery
-group rasters by its minimum and maximum value. Rescaling parameters are
+group rasters by mean normalisation based on minimum and maximum value present
+in the raster metadata. Rescaling parameters are
 written into the signature file for use during prediction.</p>
 
 <h2>NOTES</h2>
@@ -30,6 +31,11 @@ In a case of large input raster files, use sparse label rasters
 <p>During the training process there is no progress output printed.
 Training with large number of data points can take significant time -
 just be patient.</p>
+
+<p>By default the shrinking heuristics option of libsvm is enabled.
+It should not impact the outcome, just the training time. On some
+input parameter and data combinations training with the shrinking
+heuristics disabled might be faster.</p>
 
 <h2>EXAMPLE</h2>
 

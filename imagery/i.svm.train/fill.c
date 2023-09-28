@@ -15,7 +15,7 @@
 
 void fill_problem(const char *name_labels, const char *mapset_labels,
                   struct Ref band_refs, const char *mapset_group,
-                  const double *rescale, struct svm_problem *problem)
+                  const DCELL *Ms, const DCELL *Rs, struct svm_problem *problem)
 {
     int label_num, label_max;
     int value_num, value_max;
@@ -82,7 +82,7 @@ void fill_problem(const char *name_labels, const char *mapset_labels,
                 }
                 problem->x[label_num][value_num].index = band;
                 problem->x[label_num][value_num].value =
-                    buf_bands[band][col] / rescale[band];
+                    (buf_bands[band][col] - Ms[band]) / Rs[band];
                 value_num++;
             }
             /* If label has no data */

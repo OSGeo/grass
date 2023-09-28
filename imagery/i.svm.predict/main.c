@@ -12,7 +12,7 @@
  *               for details.
  *
  *               Development of this module was supported from
- *               science funding of University of Latvia (2020/2021).
+ *               science funding of University of Latvia (2020-2023).
  *
  *****************************************************************************/
 #include <stdlib.h>
@@ -31,9 +31,6 @@
 #include <grass/raster.h>
 #include <grass/imagery.h>
 #include <grass/glocale.h>
-
-#define XSTR(s) STR(s)
-#define STR(s)  #s
 
 /* LIBSVM message wrapper */
 void print_func(const char *s)
@@ -64,8 +61,8 @@ int main(int argc, char *argv[])
     struct History history;
     FILE *misc_file;
     int sigfile_version;
-    double *rescale, r;
-    int rescale_count = 0;
+    DCELL *Ms, *Rs, M, R, *Ms_ordered, *Rs_ordered;
+    int scale_count = 0;
 
     G_gisinit(argv[0]);
 
@@ -176,7 +173,7 @@ int main(int argc, char *argv[])
     }
 
     I_get_signatures_dir(sigfile_dir, I_SIGFILE_TYPE_LIBSVM);
-    /* Reorder rasters to match the training order */
+    /* Read signature file version */
     misc_file =
         G_fopen_old_misc(sigfile_dir, "version", name_sigfile, mapset_sigfile);
     if (fscanf(misc_file, "%d", &sigfile_version) != 1) {
@@ -188,19 +185,23 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Invalid signature file version"));
     }
 
-    /* Reorder group items to match order from the signature file */
+    /* Reorder group items to match order from the signature file (=training
+     * order) */
     misc_file = G_fopen_old_misc(sigfile_dir, "semantic_label", name_sigfile,
                                  mapset_sigfile);
     if (!misc_file)
         G_fatal_error(_("Unable to read signature file '%s'."), name_sigfile);
     names_ordered = G_malloc(group_ref.nfiles * sizeof(char *));
     mapsets_ordered = G_malloc(group_ref.nfiles * sizeof(char *));
-    while (fscanf(misc_file, "%" XSTR(GNAME_MAX) "s", semantic_label) == 1) {
+
+    char frmt[10];
+    snprintf(frmt, sizeof(frmt), "%%%ds", GNAME_MAX - 1);
+    while (fscanf(misc_file, frmt, semantic_label) == 1) {
         semantic_label_count++;
         bool found = false;
 
         for (int n = 0; n < group_ref.nfiles; n++) {
-            if (semantic_label &&
+            if (semantic_label[0] != '\n' &&
                 strcmp(semantic_label, semantic_labels_group[n]) == 0) {
                 semantic_label_match_count++;
                 found = true;
@@ -225,21 +226,29 @@ int main(int argc, char *argv[])
                       semantic_label_match_count);
     }
 
-    /* Read rescaling parameter */
-    rescale = G_malloc(group_ref.nfiles * sizeof(double));
+    /* Read rescaling parameters */
     misc_file =
-        G_fopen_old_misc(sigfile_dir, "rescale", name_sigfile, mapset_sigfile);
-    while (fscanf(misc_file, "%lf", &r) == 1) {
-        if (rescale_count == group_ref.nfiles) {
-            G_fatal_error(_("Invalid signature file"));
-        }
-        rescale[rescale_count] = r;
-        rescale_count++;
+        G_fopen_old_misc(sigfile_dir, "scale", name_sigfile, mapset_sigfile);
+    if (!misc_file)
+        G_fatal_error(_("Unable to read signature file '%s'."), name_sigfile);
+    Ms = G_malloc(group_ref.nfiles * sizeof(DCELL));
+    Rs = G_malloc(group_ref.nfiles * sizeof(DCELL));
+    Ms_ordered = G_malloc(group_ref.nfiles * sizeof(DCELL));
+    Rs_ordered = G_malloc(group_ref.nfiles * sizeof(DCELL));
+    while (fscanf(misc_file, "%lf %lf", &M, &R) == 2) {
+        if (scale_count >= group_ref.nfiles)
+            G_fatal_error(_("Unable to read signature file '%s'."),
+                          name_sigfile);
+        Ms[scale_count] = M;
+        Rs[scale_count] = R;
+        if (R == 0)
+            G_fatal_error(_("Unable to read signature file '%s'."),
+                          name_sigfile);
+        scale_count++;
     }
     fclose(misc_file);
-    if (rescale_count < group_ref.nfiles) {
-        G_fatal_error(_("Invalid signature file"));
-    }
+    if (scale_count != group_ref.nfiles)
+        G_fatal_error(_("Unable to read signature file '%s'."), name_sigfile);
 
     /* Pass libsvm messages through GRASS */
     svm_set_print_string_function(&print_func);
@@ -280,7 +289,8 @@ int main(int argc, char *argv[])
     nodes = (struct svm_node *)G_malloc(((size_t)group_ref.nfiles + 1) *
                                         sizeof(struct svm_node));
 
-    /* Predict a class or calculate a value */
+    /* Predict a class (C_SVC, NU_SVC, ONE_CLASS)
+     * Other SVM types calculate a value */
     if (svm_type == C_SVC || svm_type == NU_SVC || svm_type == ONE_CLASS) {
         CELL *out_row;
         DCELL val;
@@ -299,7 +309,8 @@ int main(int argc, char *argv[])
                     if (Rast_is_d_null_value(&buf_bands[band][col]))
                         continue;
                     nodes[band].index = band;
-                    nodes[band].value = buf_bands[band][col] / rescale[band];
+                    nodes[band].value =
+                        (buf_bands[band][col] - Ms[band]) / Rs[band];
                 }
 
                 /* All values where NULLs */
@@ -336,7 +347,8 @@ int main(int argc, char *argv[])
                     if (Rast_is_d_null_value(&buf_bands[band][col]))
                         continue;
                     nodes[band].index = band;
-                    nodes[band].value = buf_bands[band][col] / rescale[band];
+                    nodes[band].value =
+                        (buf_bands[band][col] - Ms[band]) / Rs[band];
                 }
 
                 /* All values where NULLs */
@@ -363,7 +375,10 @@ int main(int argc, char *argv[])
         G_free(buf_bands[band]);
     }
     G_free(nodes);
-    G_free(rescale);
+    G_free(Ms);
+    G_free(Rs);
+    G_free(Ms_ordered);
+    G_free(Rs_ordered);
 
     /* Try to give full history */
     G_verbose_message("Writing out history");

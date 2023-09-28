@@ -97,7 +97,7 @@ class IOValidationTest(TestCase):
         isvm = SimpleModule(
             "i.svm.train",
             group=cls.group3,
-            _input=cls.rastt,
+            trainingmap=cls.rastt,
             signaturefile=cls.sig1,
             quiet=True,
         )

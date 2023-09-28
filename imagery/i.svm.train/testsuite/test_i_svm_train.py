@@ -88,13 +88,21 @@ class IOValidationTest(TestCase):
         cls.rast6 = grass.tempname(10)
         cls.runModule(
             "r.mapcalc",
-            expression=f"{cls.rast6}=if(row() == 1 && col() == 1, 10, if(row() == 2 && col() == 2, -10, rand(-10.0,10)))",
+            expression=f"{cls.rast6}=if(row() == 1 && col() == 1, 10, "
+            + "if(row() == 2 && col() == 2, -10, rand(-10.0,10)))",
             seed=1,
             quiet=True,
         )
         cls.tmp_rasts.append(cls.rast6)
         cls.runModule(
             "r.support", _map=cls.rast6, semantic_label="GRASS_RND5", quiet=True
+        )
+        # An empty raster
+        cls.rast7 = grass.tempname(10)
+        cls.runModule("r.mapcalc", expression=f"{cls.rast7}=null()", quiet=True)
+        cls.tmp_rasts.append(cls.rast7)
+        cls.runModule(
+            "r.support", _map=cls.rast7, semantic_label="GRASS_RND7", quiet=True
         )
         # An empty imagery group
         cls.group1 = grass.tempname(10)
@@ -115,6 +123,12 @@ class IOValidationTest(TestCase):
             "i.group", group=cls.group4, _input=(cls.rast5, cls.rast6), quiet=True
         )
         cls.tmp_groups.append(cls.group4)
+        # A group with empty raster
+        cls.group5 = grass.tempname(10)
+        cls.runModule(
+            "i.group", group=cls.group5, _input=(cls.rast6, cls.rast7), quiet=True
+        )
+        cls.tmp_groups.append(cls.group5)
 
     @classmethod
     def tearDownClass(cls):
@@ -134,7 +148,7 @@ class IOValidationTest(TestCase):
         isvm = SimpleModule(
             "i.svm.train",
             group=self.group1,
-            _input=self.rast1,
+            trainingmap=self.rast1,
             signaturefile=sigfile,
             quiet=True,
         )
@@ -150,7 +164,7 @@ class IOValidationTest(TestCase):
         isvm = SimpleModule(
             "i.svm.train",
             group=self.group3,
-            _input=self.rast1,
+            trainingmap=self.rast1,
             signaturefile=f"{sigfile}@{mapset}",
             quiet=True,
         )
@@ -165,7 +179,7 @@ class IOValidationTest(TestCase):
         isvm = SimpleModule(
             "i.svm.train",
             group=self.group3,
-            _input=self.rast1,
+            trainingmap=self.rast1,
             signaturefile=sigfile,
             eps=-1,
             quiet=True,
@@ -184,7 +198,7 @@ class IOValidationTest(TestCase):
         isvm = SimpleModule(
             "i.svm.train",
             group=self.group3,
-            _input=self.rast1,
+            trainingmap=self.rast1,
             signaturefile=sigfile,
             quiet=True,
         )
@@ -217,7 +231,7 @@ class IOValidationTest(TestCase):
         isvm = SimpleModule(
             "i.svm.train",
             group=self.group3,
-            _input=self.rast4,
+            trainingmap=self.rast4,
             signaturefile=sigfile,
             quiet=True,
         )
@@ -250,7 +264,7 @@ class IOValidationTest(TestCase):
         isvm = SimpleModule(
             "i.svm.train",
             group=self.group4,
-            _input=self.rast4,
+            trainingmap=self.rast4,
             signaturefile=sigfile,
             quiet=True,
         )
@@ -272,13 +286,33 @@ class IOValidationTest(TestCase):
         G_file_name_misc(cpath, sigdir, "history", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
         self.assertTrue(os.path.isfile(misc_file))
-        G_file_name_misc(cpath, sigdir, "rescale", sigfile, self.mapset_name)
+        G_file_name_misc(cpath, sigdir, "scale", sigfile, self.mapset_name)
         misc_file = utils.decode(cpath.value)
         self.assertTrue(os.path.isfile(misc_file))
         with open(misc_file) as rf:
             lines = rf.readlines()
-            val = float(lines[1].strip())
-            self.assertTrue(val - 20 < 0.001)
+            M, R = lines[0].strip().split(" ")
+            self.assertTrue(float(M) > -1 and float(M) < 1)
+            self.assertTrue(float(R) <= 2)
+            M, R = lines[1].strip().split(" ")
+            self.assertTrue(float(M) > -1 and float(M) < 1)
+            self.assertTrue(float(R) <= 20)
+
+    @unittest.skipIf(shutil.which("i.svm.train") is None, "i.svm.train not found.")
+    def test_fail_on_empty_raster(self):
+        """One of imagery group rasters is empty"""
+        sigfile = grass.tempname(10)
+        isvm = SimpleModule(
+            "i.svm.train",
+            group=self.group5,
+            trainingmap=self.rast4,
+            signaturefile=sigfile,
+            quiet=True,
+        )
+        self.assertModuleFail(isvm)
+        self.tmp_sigs.append(sigfile)
+        self.assertTrue(isvm.outputs.stderr)
+        self.assertIn("range", isvm.outputs.stderr)
 
 
 if __name__ == "__main__":
