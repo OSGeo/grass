@@ -404,8 +404,14 @@ class PsMapFrame(wx.Frame):
 
         if event.userData["pdfname"]:
             if sys.platform == "win32":
+                import platform
+
+                arch = platform.architecture()[0]
+                pdf_rendering_prog = "gswin64c"
+                if "32" in arch:
+                    pdf_rendering_prog = "gswin32c"
                 command = [
-                    "gswin32c",
+                    pdf_rendering_prog,
                     "-P-",
                     "-dSAFER",
                     "-dCompatibilityLevel=1.4",
@@ -427,14 +433,23 @@ class PsMapFrame(wx.Frame):
                     "-f",
                     event.userData["filename"],
                 ]
+                title = _("Program {} is not available.").format(pdf_rendering_prog)
+                message = _("{title} Please install it to create PDF.\n\n").format(
+                    title=title
+                )
             else:
+                pdf_rendering_prog = "ps2pdf"
                 command = [
-                    "ps2pdf",
+                    pdf_rendering_prog,
                     "-dPDFSETTINGS=/prepress",
                     "-r1200",
                     event.userData["filename"],
                     event.userData["pdfname"],
                 ]
+                message = _(
+                    "Program {} is not available."
+                    " Please install it to create PDF.\n\n "
+                ).format(pdf_rendering_prog)
             try:
                 proc = grass.Popen(command)
                 ret = proc.wait()
@@ -447,13 +462,20 @@ class PsMapFrame(wx.Frame):
                 else:
                     self.SetStatusText(_("PDF generated"), 0)
             except OSError as e:
-                GError(
-                    parent=self,
-                    message=_(
-                        "Program ps2pdf is not available. Please install it to create PDF.\n\n %s"
+                if sys.platform == "win32":
+                    dlg = HyperlinkDialog(
+                        self,
+                        title=title,
+                        message=message + str(e),
+                        hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
+                        hyperlinkLabel=_("You can download {} version here.").format(
+                            arch
+                        ),
                     )
-                    % e,
-                )
+                    dlg.ShowModal()
+                    dlg.Destroy()
+                    return
+                GError(parent=self, message=message + str(e))
 
         elif not event.userData["temp"]:
             self.SetStatusText(_("PostScript file generated"), 0)
