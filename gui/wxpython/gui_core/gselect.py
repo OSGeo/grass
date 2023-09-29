@@ -2670,25 +2670,19 @@ class GdalSelect(wx.Panel):
 
         :return list: list of Rasterlite DB rasters
         """
-        import subprocess
-
-        rasterlite_info = subprocess.run(
-            ["gdalinfo", "-json", dsn],
-            capture_output=True,
-        )
-        if rasterlite_info.stderr:
-            GError(parent=self, message=grass.decode(rasterlite_info.stderr))
-            return
-        if rasterlite_info.stdout:
-            import json
-
-            rasterlite_info = json.loads(grass.decode(rasterlite_info.stdout))
-            rasters = rasterlite_info["metadata"].get("SUBDATASETS")
-            if rasters:
-                return [
-                    v.rsplit("table=")[-1] for k, v in rasters.items() if "NAME" in k
-                ]
-            return [os.path.basename(rasterlite_info["files"][0]).rsplit(".")[0]]
+        try:
+            from osgeo import gdal
+        except ImportError:
+            GError(
+                parent=self,
+                message=_("The GDAL library is missing. Please install it."),
+            )
+            return []
+        rasterlite = gdal.Open(dsn)
+        rasters = rasterlite.GetSubDatasets()
+        if rasters:
+            return [r[0].rsplit("table=")[-1] for r in rasters]
+        return [os.path.basename(rasterlite.GetFileList()[0]).rsplit(".")[0]]
 
 
 class ProjSelect(wx.ComboBox):
