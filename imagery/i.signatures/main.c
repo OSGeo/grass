@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
         struct Option *type, *format, *mapset, *remove, *rename, *copy;
     } parms;
     struct Flag *print;
-    I_SIGFILE_TYPE sigtype;
+    I_SIGFILE_TYPE sigtype = -1;
     char *from, *to;
 
     G_gisinit(argv[0]);
