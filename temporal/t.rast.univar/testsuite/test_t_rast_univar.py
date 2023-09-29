@@ -13,7 +13,6 @@ from grass.gunittest.gmodules import SimpleModule
 
 
 class TestRasterUnivar(TestCase):
-
     default_region = {"s": 0, "n": 80, "w": 0, "e": 120, "b": 0, "t": 50}
 
     @classmethod
@@ -227,7 +226,6 @@ a_4@testing||2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400
                 self.assertLooksLike(ref_line, res_line)
 
     def test_subset_with_output(self):
-
         self.runModule("g.region", **self.default_region, res=10)
 
         self.assertModule(
