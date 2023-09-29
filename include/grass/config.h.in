@@ -107,12 +107,14 @@
 /* Define to 1 if you have the <liblas/capi/liblas.h> header file. */
 #undef HAVE_LIBLAS_CAPI_LIBLAS_H
 
-/* Define to 1 if libsvm header file is in a sub-folder or not. */
-#undef HAVE_SVM_H
-#undef HAVE_LIBSVM_SVM_H
-
 /* Define to 1 if you have the <libpq-fe.h> header file. */
 #undef HAVE_LIBPQ_FE_H
+
+/* Define to 1 if using LIBSVM. */
+#undef HAVE_LIBSVM
+
+/* Define to 1 if you have the <libsvm/svm.h> header file. */
+#undef HAVE_LIBSVM_SVM_H
 
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
@@ -230,6 +232,9 @@
 
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
+
+/* Define to 1 if you have the <svm.h> header file. */
+#undef HAVE_SVM_H
 
 /* Define to 1 if you have the <sys/ioctl.h> header file. */
 #undef HAVE_SYS_IOCTL_H
