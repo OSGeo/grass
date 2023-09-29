@@ -1708,22 +1708,13 @@ USE_LIBSVM=
 LOC_CHECK_USE(libsvm,LIBSVM,USE_LIBSVM)
 
 if test -n "$USE_LIBSVM"; then
-  if test "${LIBSVM_INC}" ; then
-    CFLAGS_backup="${CFLAGS}"
-    CFLAGS="${LIBSVM_INC} ${CFLAGS}"
-    AC_CHECK_HEADER([svm.h], [], [
-      AC_MSG_ERROR([svm.h file not found in specified include path.])
-    ])
-    CFLAGS="${CFLAGS_backup}"
-  else
-    LOC_CHECK_INC_PATH(libsvm,LIBSVM,LIBSVM_INC)
-    LOC_CHECK_INCLUDES(svm.h,LIBSVM,$LIBSVM_INC, [
-      LOC_CHECK_INCLUDES(libsvm/svm.h,LIBSVM,$LIBSVM_INC)
-    ])
-  fi
-  LOC_CHECK_LIB_PATH(libsvm,LIBSVM,LIBSVM_LIB)
+  LOC_CHECK_INC_PATH(libsvm,LIBSVM,LIBSVM_INC)
+  LOC_CHECK_INCLUDES(svm.h,LIBSVM,$LIBSVM_INC, [
+    LOC_CHECK_INCLUDES(libsvm/svm.h,LIBSVM,$LIBSVM_INC)
+  ])
+  LOC_CHECK_LIB_PATH(libsvm,libsvm,LIBSVM_LIB)
   LOC_CHECK_LIBS(svm,svm_load_model,LIBSVM,$LIBSVM_LIB,LIBSVM_LIB,,,)
-  AC_DEFINE(HAVE_LIBSVM,1,[define 1 if LIBSVM is found])
+  AC_DEFINE(HAVE_LIBSVM, 1, [Define to 1 if using LIBSVM.])
 fi
 
 AC_SUBST(LIBSVM_INC)
