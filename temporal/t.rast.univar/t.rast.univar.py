@@ -146,10 +146,11 @@ def main():
         output,
         where,
         extended,
+        percentile=percentile,
         no_header=no_header,
         fs=separator,
-        rast_region=rast_region,
         zones=zones,
+        rast_region=rast_region,
         region_relation=region_relation,
         nprocs=nprocs,
     )
