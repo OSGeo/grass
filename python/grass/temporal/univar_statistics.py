@@ -21,11 +21,12 @@ for details.
 from multiprocessing import Pool
 from subprocess import PIPE
 
+import grass.script as gs
+from grass.pygrass.modules import Module
+
 from .core import SQLDatabaseInterfaceConnection, get_current_mapset
 from .factory import dataset_factory
 from .open_stds import open_old_stds
-import grass.script as gs
-from grass.pygrass.modules import Module
 
 ###############################################################################
 
@@ -115,11 +116,14 @@ def print_gridded_dataset_univar_statistics(
     no_header=False,
     fs="|",
     rast_region=False,
+    region_relation=None,
     zones=None,
     percentile=None,
     nprocs=1,
 ):
-    """Print univariate statistics for a space time raster or raster3d dataset
+    """Print univariate statistics for a space time raster or raster3d dataset.
+    Returns None if the space time raster dataset is empty or if applied
+    filters (where, region_relation) do not return any maps to process.
 
     :param type: Type of Space-Time-Dataset, must be either strds or str3ds
     :param input: The name of the space time dataset
@@ -133,6 +137,12 @@ def print_gridded_dataset_univar_statistics(
     :param rast_region: If set True ignore the current region settings
            and use the raster map regions for univar statistical calculation.
            Only available for strds.
+    :param region_relation: Process only maps with the given spatial relation
+           to the computational region. A string with one of the following values:
+           "overlaps": maps that spatially overlap ("intersect")
+                       within the provided spatial extent
+           "is_contained": maps that are fully within the provided spatial extent
+           "contains": maps that contain (fully cover) the provided spatial extent
     :param zones: raster map with zones to calculate statistics for
     """
     # We need a database interface
@@ -144,21 +154,39 @@ def print_gridded_dataset_univar_statistics(
     if output is not None:
         out_file = open(output, "w")
 
+    spatial_extent = None
+    if region_relation:
+        spatial_extent = gs.parse_command("g.region", flags="3gu")
+
     strds_cols = (
         "id,start_time,end_time,semantic_label"
         if type == "strds"
         else "id,start_time,end_time"
     )
-    rows = sp.get_registered_maps(strds_cols, where, "start_time", dbif)
+    rows = sp.get_registered_maps(
+        strds_cols,
+        where,
+        "start_time",
+        dbif,
+        spatial_extent=spatial_extent,
+        spatial_relation=region_relation,
+    )
 
     if not rows and rows != [""]:
         dbif.close()
-        err = "Space time %(sp)s dataset <%(i)s> is empty"
-        if where:
-            err += " or where condition does not return any maps"
-        gs.fatal(
-            _(err) % {"sp": sp.get_new_map_instance(None).get_type(), "i": sp.get_id()}
+        gs.verbose(
+            _(
+                "No maps found to process. "
+                "Space time {type} dataset <{id}> is either empty "
+                "or the where condition (if used) does not return any maps "
+                "or no maps with the requested spatial relation to the "
+                "computational region exist in the dataset."
+            ).format(type=sp.get_new_map_instance(None).get_type(), id=sp.get_id())
         )
+
+        if output is not None:
+            out_file.close()
+        return
 
     if no_header is False:
         cols = (
@@ -316,7 +344,7 @@ def print_vector_dataset_univar_statistics(
             + fs
         )
         string += "min" + fs + "max" + fs + "range"
-        if type == "point" or type == "centroid":
+        if type in ("point", "centroid"):
             string += (
                 fs
                 + "mean"
