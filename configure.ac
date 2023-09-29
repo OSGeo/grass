@@ -1705,7 +1705,7 @@ LIBSVM_INC=
 LIBSVM_LIB=
 USE_LIBSVM=
 
-LOC_CHECK_USE(libsvm,libsvm,USE_LIBSVM)
+LOC_CHECK_USE(libsvm,LIBSVM,USE_LIBSVM)
 
 if test -n "$USE_LIBSVM"; then
   if test "${LIBSVM_INC}" ; then
@@ -1721,15 +1721,15 @@ if test -n "$USE_LIBSVM"; then
       LOC_CHECK_INCLUDES(libsvm/svm.h,LIBSVM,$LIBSVM_INC)
     ])
   fi
-  LOC_CHECK_LIB_PATH(libsvm,libsvm,LIBSVM_LIB)
-  LOC_CHECK_LIBS(svm,svm_load_model,libsvm,$LIBSVM_LIB,LIBSVM_LIB,,,)
-  AC_DEFINE(HAVE_LIBSVM)
+  LOC_CHECK_LIB_PATH(libsvm,LIBSVM,LIBSVM_LIB)
+  LOC_CHECK_LIBS(svm,svm_load_model,LIBSVM,$LIBSVM_LIB,LIBSVM_LIB,,,)
+  AC_DEFINE(HAVE_LIBSVM,1,[define 1 if LIBSVM is found])
 fi
 
 AC_SUBST(LIBSVM_INC)
 AC_SUBST(LIBSVM_LIB)
 AC_SUBST(USE_LIBSVM)
-# Done with libsvm
+# Done with LIBSVM
 
 # Enable Cairo display driver option
 

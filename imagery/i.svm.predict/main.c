@@ -250,7 +250,7 @@ int main(int argc, char *argv[])
     if (scale_count != group_ref.nfiles)
         G_fatal_error(_("Unable to read signature file '%s'."), name_sigfile);
 
-    /* Pass libsvm messages through GRASS */
+    /* Pass LIBSVM messages through GRASS */
     svm_set_print_string_function(&print_func);
 
     /* Load trained model from a file */

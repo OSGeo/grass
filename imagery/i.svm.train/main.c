@@ -32,7 +32,7 @@
 
 #include "fill.h"
 
-/* libsvm message wrapper */
+/* LIBSVM message wrapper */
 void print_func(const char *s)
 {
     G_verbose_message("%s", s);
@@ -408,7 +408,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    /* Pass libsvm messages through GRASS */
+    /* Pass LIBSVM messages through GRASS */
     svm_set_print_string_function(&print_func);
 
     /* Fill svm_problem struct with training data */
@@ -431,7 +431,7 @@ int main(int argc, char *argv[])
     /* Write out training results */
     G_verbose_message("Writing out trained SVM");
     /* This is a specific case as file is not written by GRASS but
-       by libsvm and thus "normal" GRASS lib functions can not be used. */
+       by LIBSVM and thus "normal" GRASS lib functions can not be used. */
     I_make_signatures_dir(I_SIGFILE_TYPE_LIBSVM);
     I_get_signatures_dir(sigfile_dir, I_SIGFILE_TYPE_LIBSVM);
     /* G_fopen_new_misc should create a directory for later use */
