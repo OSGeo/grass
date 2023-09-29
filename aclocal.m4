@@ -932,11 +932,3 @@ if test $ac_cv_func_ftello = yes; then
 fi])
 
 dnl XXXXXXXXXXX End Stolen from cdrtools-2.01 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
-
-AC_DEFUN([LOC_CHECK_HEADER],
-[
-  AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-  #include <$1>
-  ]])], [$2="found"], [$2="not found"])
-])
