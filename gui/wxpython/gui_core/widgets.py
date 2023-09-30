@@ -157,7 +157,11 @@ class NotebookController:
     def DeletePage(self, page):
         """Delete page
 
+        That method works correctly if AddPage() and InsertPage() method
+        was used with name parameter argument.
+
         :param page: name
+
         :return: True if page was deleted, False if not exists
         """
         delPageIndex = self.GetPageIndexByName(page)
