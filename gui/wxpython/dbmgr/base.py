@@ -1023,16 +1023,13 @@ class DbMgrNotebookBase(GNotebook):
         if layer not in self.layers:
             return False
 
-        GNotebook.DeleteNBPage(
-            self,
-            page=self._page_prefix_name.format(layer),
-        )
+        GNotebook.DeletePage(self, self.layers.index(layer))
 
         self.layers.remove(layer)
         del self.layerPage[layer]
 
         if self.GetSelection() >= 0:
-            self.selLayer = self.layers[-1]
+            self.selLayer = self.layers[self.GetSelection()]
         else:
             self.selLayer = None
 
@@ -1111,8 +1108,6 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         DbMgrNotebookBase.__init__(self, parent=parent, parentDbMgrBase=parentDbMgrBase)
 
-        self._page_prefix_name = "browse-{}"
-
         #   for Sql Query notebook adaptation on current width
         self.sqlBestSize = None
 
@@ -1183,7 +1178,6 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         self.InsertNBPage(
             index=pos,
             page=panel,
-            name=self._page_prefix_name.format(layer),
             text=" %d / %s %s"
             % (layer, label, self.dbMgrData["mapDBInfo"].layers[layer]["table"]),
         )
@@ -1366,9 +1360,6 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
     def OnSqlQuerySize(self, event, layer):
         """Adapts SQL Query Simple tab on current width"""
-
-        if not self.layerPage.get(layer):
-            return
 
         sqlNtb = event.GetEventObject()
         if not self.sqlBestSize:
@@ -2309,8 +2300,6 @@ class DbMgrTablesPage(DbMgrNotebookBase):
 
         DbMgrNotebookBase.__init__(self, parent=parent, parentDbMgrBase=parentDbMgrBase)
 
-        self._page_prefix_name = "table-{}"
-
         for layer in self.dbMgrData["mapDBInfo"].layers.keys():
             if onlyLayer > 0 and layer != onlyLayer:
                 continue
@@ -2346,7 +2335,6 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         self.InsertNBPage(
             index=pos,
             page=panel,
-            name=self._page_prefix_name.format(layer),
             text=" %d / %s %s"
             % (layer, label, self.dbMgrData["mapDBInfo"].layers[layer]["table"]),
         )
