@@ -18,7 +18,6 @@ for details.
 """
 
 import os
-import sys
 import shutil
 import locale
 import shlex
@@ -306,16 +305,27 @@ def get_num_suffix(number, max_number):
 
 
 def split(s):
-    """!Platform specific shlex.split
+    """Same shlex.split() func on all OS platforms
+
+    We don't use parameter posix=True on the OS MS Windows due incorrectly
+    splliting commandlines parameters.
+
+    e.g. d.vect where="cat < 10"
+
+    Is splitted incorectly as follow:
+
+    'where="cat', '<', '10"'
+
+    Should be:
+
+    'where=cat < 10'
+
 
     :param str s: cmd string
 
     return list: cmd list
     """
-    if sys.platform == "win32":
-        return shlex.split(s.replace("\\", r"\\"))
-    else:
-        return shlex.split(s)
+    return shlex.split(s)
 
 
 # source:
