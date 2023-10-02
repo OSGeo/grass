@@ -307,12 +307,12 @@ def get_num_suffix(number, max_number):
 def split(s):
     """Same shlex.split() func on all OS platforms
 
-    We don't use parameter posix=True on the OS MS Windows due incorrectly
-    splliting commandlines parameters.
+    We don't use parameter posix=True on the OS MS Windows due to incorrectly
+    splitting command line parameters:
 
     e.g. d.vect where="cat < 10"
 
-    Is splitted incorectly as follow:
+    is split incorrectly as follows:
 
     'where="cat', '<', '10"'
 
