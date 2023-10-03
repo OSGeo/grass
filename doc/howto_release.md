@@ -497,6 +497,7 @@ Add release article to news section:
 Add release to history page:
 
 - <https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md>
+
 ### Other notes
 
 - <https://trac.osgeo.org/grass/wiki/BuildHints>
