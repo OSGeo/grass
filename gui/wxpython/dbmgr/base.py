@@ -1029,7 +1029,7 @@ class DbMgrNotebookBase(GNotebook):
         del self.layerPage[layer]
 
         if self.GetSelection() >= 0:
-            self.selLayer = self.layers[self.GetSelection()]
+            self.selLayer = self.layers[-1]
         else:
             self.selLayer = None
 
@@ -1360,6 +1360,9 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
     def OnSqlQuerySize(self, event, layer):
         """Adapts SQL Query Simple tab on current width"""
+
+        if layer not in self.layers:
+            return
 
         sqlNtb = event.GetEventObject()
         if not self.sqlBestSize:
