@@ -11,9 +11,4 @@ include $(MODULE_TOPDIR)/include/Make/Module.make
 
 default: cmd
 
-thumbnails: $(BIN)/r.mapcalc$(EXE)
-	-$(call run_grass, $(GRASS_HOME)/utils/thumbnails.py)
-
-.PHONY: thumbnails
-
 .INTERMEDIATE: v.colors.tmp.html
