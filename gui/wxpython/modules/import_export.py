@@ -474,27 +474,20 @@ class GdalImportDialog(ImportDialog):
                 if "PG:" in dsn:
                     idsn = f"{dsn} table={layer}"
                 elif os.path.exists(idsn):
-                    import subprocess
-
-                    dataset_info = subprocess.run(
-                        ["gdalinfo", "-json", dsn],
-                        capture_output=True,
-                    )
-                    if dataset_info.stderr:
+                    try:
+                        from osgeo import gdal
+                    except ImportError:
                         GError(
                             parent=self,
-                            message=grass.decode(dataset_info.stderr),
+                            message=_(
+                                "The Python osgeo package is missing."
+                                " Please install it."
+                            ),
                         )
                         return
-                    if dataset_info.stdout:
-                        import json
-
-                        dataset_info = json.loads(
-                            grass.decode(dataset_info.stdout),
-                        )
-                        # Rasterlite DB
-                        if "Rasterlite" in dataset_info["driverShortName"]:
-                            idsn = f"RASTERLITE:{dsn},table={layer}"
+                    dataset = gdal.Open(dsn)
+                    if "Rasterlite" in dataset.GetDriver().ShortName:
+                        idsn = f"RASTERLITE:{dsn},table={layer}"
             else:
                 idsn = dsn
 
