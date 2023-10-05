@@ -35,7 +35,7 @@ def is_vector(layer):
     """Check that map is a vector"""
     test = gs.read_command("v.info", map=layer)
     if not test:
-        raise NameError(_("Could not find a vector named {}".format(layer)))
+        raise NameError(_("Could not find a vector named {}").format(layer))
 
 
 class SeriesMap:
@@ -202,11 +202,6 @@ class SeriesMap:
         for grass_module, kwargs in self._base_layer_calls:
             img.run(grass_module, **kwargs)
 
-    def _render_layer(self, img, calls):
-        """Add collected calls to Map instance"""
-        for grass_module, kwargs in calls:
-            img.run(grass_module, **kwargs)
-
     def render(self):
         """Renders image for each raster in series.
 
@@ -254,7 +249,9 @@ class SeriesMap:
                 env=self._env,
                 read_file=True,
             )
-            self._render_layer(img, self._calls[i])
+            for grass_module, kwargs in self._calls[i]:
+                img.run(grass_module, **kwargs)
+
         self._layers_rendered = True
 
     def show(self, slider_width=None):
