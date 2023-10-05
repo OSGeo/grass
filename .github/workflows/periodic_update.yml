@@ -17,19 +17,23 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
 
     - name: Install dependencies
       # Comment out this step if nothing else is needed
-      run: sudo apt-update && sudo apt install -y wget
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y wget git gawk findutils
+        xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+            sudo apt-get install -y --no-install-recommends --no-install-suggests
 
     - name: "Check that autoconf scripts are up-to-date:"
       run: |
         rm -f config.guess config.sub
         wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
         wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
-        git diff config.guess config.sub
-        autoconf
+    - run: git diff config.guess config.sub
+    - run: autoconf
     
     - name: Run configure
       run: ./configure
