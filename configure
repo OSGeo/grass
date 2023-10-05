@@ -619,6 +619,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
+ac_header_list=
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 GRASS_HOME
@@ -2607,6 +2608,7 @@ See \`config.log' for more details" "$LINENO" 5; }
 done
 
 
+as_fn_append ac_header_list " sys/time.h"
 # Check that the precious variables saved in the cache have kept the same
 # value.
 ac_cache_corrupted=false
@@ -5766,6 +5768,7 @@ $as_echo "no" >&6; }
 fi
 
 
+
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -6134,7 +6137,6 @@ $as_echo "#define STDC_HEADERS 1" >>confdefs.h
 
 fi
 
-#AC_CHECK_HEADERS(curses.h limits.h termio.h termios.h unistd.h values.h)
 # On IRIX 5.3, sys/types and inttypes.h are conflicting.
 for ac_header in sys/types.h sys/stat.h stdlib.h string.h memory.h strings.h \
 		  inttypes.h stdint.h unistd.h
@@ -6216,37 +6218,34 @@ fi
 
 done
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether time.h and sys/time.h may both be included" >&5
-$as_echo_n "checking whether time.h and sys/time.h may both be included... " >&6; }
 
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <sys/types.h>
-#include <sys/time.h>
-#include <time.h>
 
-int
-main ()
-{
-if ((struct tm *) 0)
-return 0;
-  ;
-  return 0;
-}
+
+  for ac_header in $ac_header_list
+do :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_compile "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default
+"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  ac_cv_header_time=yes
-else
-  ac_cv_header_time=no
+
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_header_time" >&5
-$as_echo "$ac_cv_header_time" >&6; }
-if test $ac_cv_header_time = yes; then
+
+done
+
+
+
+
+# Obsolete code to be removed.
+if test $ac_cv_header_sys_time_h = yes; then
 
 $as_echo "#define TIME_WITH_SYS_TIME 1" >>confdefs.h
 
 fi
+# End of obsolete code.
+
 
 ac_fn_c_check_type "$LINENO" "off_t" "ac_cv_type_off_t" "$ac_includes_default"
 if test "x$ac_cv_type_off_t" = xyes; then :

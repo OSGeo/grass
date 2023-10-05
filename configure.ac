@@ -32,7 +32,7 @@ $2
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
 AC_PREREQ([2.69])
-AC_CONFIG_HEADER(include/grass/config.h)
+AC_CONFIG_HEADERS([include/grass/config.h])
 AC_CANONICAL_HOST
 AC_PROG_CC
 
@@ -466,7 +466,7 @@ AC_SUBST(LIBRARY_DIRS)
 
 AC_PROG_INSTALL
 
-AC_PROG_LEX
+AC_PROG_LEX(noyywrap)
 if test "$LEX" = "lex"; then
     AC_PATH_PROG(LEXPATH, lex, no)
     if test "$LEXPATH" = "no"; then
@@ -486,14 +486,27 @@ AC_PROG_RANLIB
 AC_CHECK_PROGS(AR, ar)
 AC_CHECK_PROGS(ENV, env)
 AC_PATH_PROG(PERL, perl, no)
-AC_HEADER_STDC
-#AC_CHECK_HEADERS(curses.h limits.h termio.h termios.h unistd.h values.h)
+
 AC_CHECK_HEADERS(limits.h termio.h termios.h unistd.h values.h f2c.h g2c.h)
 AC_CHECK_HEADERS(sys/ioctl.h sys/mtio.h sys/resource.h sys/time.h)
 AC_CHECK_HEADERS(sys/timeb.h sys/types.h sys/utsname.h)
 AC_CHECK_HEADERS(libintl.h iconv.h)
 AC_CHECK_HEADERS(langinfo.h)
-AC_HEADER_TIME
+m4_warn([obsolete],
+[Update your code to rely only on HAVE_SYS_TIME_H,
+then remove this warning and the obsolete code below it.
+All current systems provide time.h; it need not be checked for.
+Not all systems provide sys/time.h, but those that do, all allow
+you to include it and time.h simultaneously.])dnl
+AC_CHECK_HEADERS_ONCE([sys/time.h])
+# Obsolete code to be removed.
+if test $ac_cv_header_sys_time_h = yes; then
+  AC_DEFINE([TIME_WITH_SYS_TIME],[1],[Define to 1 if you can safely include both <sys/time.h>
+	     and <time.h>.  This macro is obsolete.])
+fi
+# End of obsolete code.
+
+
 AC_TYPE_OFF_T
 AC_TYPE_UID_T
 
@@ -904,7 +917,7 @@ else
   CFLAGS="$CFLAGS $PNGINC"
 
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <png.h>]], [[png_read_image(NULL, NULL);]])],[],[
-  AC_TRY_LINK([#include <png.h>],[png_read_image(NULL, NULL);],PNGLIB="$PNGLIB",[
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <png.h>]], [[png_read_image(NULL, NULL);]])],[PNGLIB="$PNGLIB"],[
   AC_MSG_ERROR([*** Unable to locate libpng library.])
   ])
   ])
@@ -959,7 +972,7 @@ else
   CFLAGS="$CFLAGS $GDAL_CFLAGS"
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <gdal.h>]], [[GDALOpen("foo", GA_ReadOnly);]])],[],[
   LIBS="$LIBS $GDAL_DEP_LIBS"
-  AC_TRY_LINK([#include <gdal.h>],[GDALOpen("foo", GA_ReadOnly);],GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS",[
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <gdal.h>]], [[GDALOpen("foo", GA_ReadOnly);]])],[GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS"],[
   AC_MSG_ERROR([*** Unable to locate GDAL library.])
   ])
   ])
@@ -1012,7 +1025,7 @@ else
   CPPFLAGS="$CPPFLAGS $LIBLAS_INC"
   AC_CHECK_HEADERS(liblas/capi/liblas.h)
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <liblas/capi/liblas.h>]], [[LASReader_Create("foo");]])],[],[
-  AC_TRY_LINK([#include <liblas/capi/liblas.h>],[LASReader_Create("foo");],LAS_LIBS="$LAS_LIBS",[
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <liblas/capi/liblas.h>]], [[LASReader_Create("foo");]])],[LAS_LIBS="$LAS_LIBS"],[
   AC_MSG_ERROR([*** Unable to locate libLAS library.])
   ])
   ])
@@ -1060,9 +1073,9 @@ else
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
   class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],[],[
-  AC_TRY_LINK([#include <pdal/PointTable.hpp>
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
-  class St:public pdal::Streamable {};],[pdal::PointTable table;],PDAL_LIBS="$PDAL_LIBS",[
+  class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],[PDAL_LIBS="$PDAL_LIBS"],[
   AC_MSG_ERROR([*** Unable to locate suitable (>=1.7.1) PDAL library.])
   ])
   ])
@@ -1113,7 +1126,7 @@ else
   LIBS="$LIBS $NETCDF_LIBS"
   CFLAGS="$CFLAGS $NETCDF_CFLAGS"
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <netcdf.h>]], [[nc_create("foo", NC_CLOBBER, NULL);]])],[],[
-  AC_TRY_LINK([#include <netcdf.h>],[nc_create("foo", NC_CLOBBER, NULL);],NETCDF_LIBS="$NETCDF_LIBS",[
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <netcdf.h>]], [[nc_create("foo", NC_CLOBBER, NULL);]])],[NETCDF_LIBS="$NETCDF_LIBS"],[
   AC_MSG_ERROR([*** Unable to locate NetCDF library.])
   ])
   ])
