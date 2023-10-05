@@ -2,7 +2,9 @@
 
 ## Assumptions
 
-Given the creation of a new release branch will typically happen right before RC1 of a new release series, please see assumptions in the howto_release.md document.
+Given the creation of a new release branch will typically happen right
+before RC1 of a new release series, please see assumptions in the
+`howto_release.md` document.
 
 ## Create a New Branch
 
