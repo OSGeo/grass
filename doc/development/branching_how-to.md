@@ -95,4 +95,3 @@ Push the version to the upstream repo:
 
 ```bash
 git push upstream
-```
