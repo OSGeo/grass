@@ -1,0 +1,61 @@
+name: Periodic update
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API, or on a schedule.
+on:
+  workflow_dispatch:
+  schedule:
+  # At 10:32 on every day-of-month from 1 through 7 and on Wednesday.
+  # See https://crontab.guru/#32_10_1-7_*_WED
+  - cron: "32 10 1-7 * WED" 
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  update-configure:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install dependencies
+      # Comment out this step if nothing else is needed
+      run: sudo apt-update && sudo apt install -y wget
+
+    - name: "Check that autoconf scripts are up-to-date:"
+      run: |
+        rm -f config.guess config.sub
+        wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
+        wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
+        git diff config.guess config.sub
+        autoconf
+    
+    - name: Run configure
+      run: ./configure
+      
+    #- name: Manual commit
+    #  run: |
+    #    git add config.guess config.sub configure
+    #    git commit -m"config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/" config.guess config.sub configure
+  
+    - name: Double check
+      run: git status --ignored
+    
+    - name: Create Pull Request
+      id: cpr
+      uses: peter-evans/create-pull-request@v5
+      with:
+        commit-message: "config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/"
+        branch: periodic/update-configure
+        title: "configure: update to latest config.guess and config.sub"
+        labels: "CI,packaging,configure"
+        body: |
+          Automated changes by [create-pull-request](https://github.com/peter-evans/create-pull-request) GitHub action
+          This updates to latest config.guess and config.sub.
+      
+    - name: Check outputs
+      if: ${{ steps.cpr.outputs.pull-request-number }}
+      run: |
+        echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+        echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
