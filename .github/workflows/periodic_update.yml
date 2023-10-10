@@ -33,7 +33,7 @@ jobs:
         wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
         wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
     - run: git diff config.guess config.sub
-    - run: autoconf
+    # - run: autoconf
     
     - name: Run configure
       run: ./configure
