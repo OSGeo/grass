@@ -329,7 +329,7 @@ jumphost (managed by OSGeo-SAC) - see <https://wiki.osgeo.org/wiki/SAC_Service_S
 ```bash
 # Store the source tarball (twice) in (use scp -p FILES grass:):
 USER=neteler
-SERVER1=osgeo7-grass
+SERVER1=osgeo8-grass
 SERVER1DIR=/var/www/code_and_data/grass$MAJOR$MINOR/source/
 SERVER2=osgeo7-download
 SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
