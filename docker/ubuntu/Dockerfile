@@ -1,5 +1,8 @@
 # syntax=docker/dockerfile:1.4
 
+# Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
+#       Changes to this file must be copied over to the other file.  
+
 ARG GUI=without
 
 FROM ubuntu:22.04 as common_start
