@@ -768,7 +768,26 @@ class ModelFrame(wx.Frame):
 
     def OnExportPython(self, event=None, text=None):
         """Export model to Python script"""
+        orig_script_type = self.pythonPanel.body.script_type
+        self.pythonPanel.SetWriteObject("Python")
         filename = self.pythonPanel.SaveAs(force=True)
+        self.pythonPanel.SetWriteObject(orig_script_type)
+        self.SetStatusText(_("Model exported to <%s>") % filename)
+
+    def OnExportPyWPS(self, event=None, text=None):
+        """Export model to PyWPS script"""
+        orig_script_type = self.pythonPanel.body.script_type
+        self.pythonPanel.SetWriteObject("PyWPS")
+        filename = self.pythonPanel.SaveAs(force=True)
+        self.pythonPanel.SetWriteObject(orig_script_type)
+        self.SetStatusText(_("Model exported to <%s>") % filename)
+
+    def OnExportActinia(self, event=None, text=None):
+        """Export model to actinia script"""
+        orig_script_type = self.pythonPanel.body.script_type
+        self.pythonPanel.SetWriteObject("actinia")
+        filename = self.pythonPanel.SaveAs(force=True)
+        self.pythonPanel.SetWriteObject(orig_script_type)
         self.SetStatusText(_("Model exported to <%s>") % filename)
 
     def OnDefineRelation(self, event):
@@ -2074,6 +2093,32 @@ class PythonPanel(wx.Panel):
         sizer.SetSizeHints(self)
         self.SetSizer(sizer)
 
+    def GetScriptExt(self):
+        """Get extension for script exporting.
+
+        :return: script extension
+        """
+        if self.write_object == WriteActiniaFile:
+            ext = "json"
+        else:
+            # Python, PyWPS
+            ext = "py"
+
+        return ext
+
+    def SetWriteObject(self, script_type):
+        """Set correct self.write_object dependng on the script type.
+
+        :param script_type: script type name as a string
+        """
+        if script_type == "PyWPS":
+            self.write_object = WritePyWPSFile
+        elif script_type == "actinia":
+            self.write_object = WriteActiniaFile
+        else:
+            # script_type == "Python", fallback
+            self.write_object = WritePythonFile
+
     def RefreshScript(self):
         """Refresh the script.
 
@@ -2117,12 +2162,18 @@ class PythonPanel(wx.Panel):
         :return: filename
         """
         filename = ""
+        file_ext = self.GetScriptExt()
+        if file_ext == "py":
+            fn_wildcard = _("Python script (*.py)|*.py")
+        elif file_ext == "json":
+            fn_wildcard = _("JSON file (*.json)|*.json")
+
         dlg = wx.FileDialog(
             parent=self,
             message=_("Choose file to save"),
             defaultFile=os.path.basename(self.parent.GetModelFile(ext=False)),
             defaultDir=os.getcwd(),
-            wildcard=_("Python script (*.py)|*.py"),
+            wildcard=fn_wildcard,
             style=wx.FD_SAVE,
         )
 
@@ -2133,8 +2184,8 @@ class PythonPanel(wx.Panel):
             return ""
 
         # check for extension
-        if filename[-3:] != ".py":
-            filename += ".py"
+        if filename[-len(file_ext) - 1 :] != f".{file_ext}":
+            filename += f".{file_ext}"
 
         if os.path.exists(filename):
             dlg = wx.MessageDialog(
@@ -2204,12 +2255,8 @@ class PythonPanel(wx.Panel):
 
     def OnChangeScriptType(self, event):
         new_script_type = self.script_type_box.GetStringSelection()
-        if new_script_type == "Python":
-            self.write_object = WritePythonFile
-        elif new_script_type == "PyWPS":
-            self.write_object = WritePyWPSFile
-        elif new_script_type == "actinia":
-            self.write_object = WriteActiniaFile
+
+        self.SetWriteObject(new_script_type)
 
         if self.RefreshScript():
             self.body.script_type = new_script_type
@@ -2221,17 +2268,14 @@ class PythonPanel(wx.Panel):
         self.script_type_box.SetStringSelection(self.body.script_type)
 
         if self.body.script_type == "Python":
-            self.write_object = WritePythonFile
             self.btnRun.Enable()
             self.btnRun.SetToolTip(_("Run script"))
         elif self.body.script_type == "PyWPS":
-            self.write_object = WritePyWPSFile
             self.btnRun.Disable()
             self.btnRun.SetToolTip(
                 _("Run script - enabled only for basic Python scripts")
             )
         elif self.body.script_type == "actinia":
-            self.write_object = WriteActiniaFile
             self.btnRun.Disable()
             self.btnRun.SetToolTip(
                 _("Run script - enabled only for basic Python scripts")
