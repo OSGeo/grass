@@ -2698,7 +2698,7 @@ class WriteActiniaFile(WriteScriptFile):
 
         parameterized = False
         module_list_str = ""
-        for item in self.model.GetItems():
+        for item in self.model.GetItems(ModelAction):
             parameterizedParams = item.GetParameterizedParams()
             if len(parameterizedParams["params"]) > 0:
                 parameterized = True
@@ -2857,7 +2857,7 @@ class Model(Process):
 """
         )
 
-        for item in self.model.GetItems():
+        for item in self.model.GetItems(ModelAction):
             self._write_input_outputs(item, self.model.GetIntermediateData()[:3])
 
         self.fd.write(
