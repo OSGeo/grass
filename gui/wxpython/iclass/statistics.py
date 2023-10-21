@@ -18,7 +18,6 @@ for details.
 """
 
 import os
-import six
 from ctypes import *
 
 import grass.script as grass
@@ -173,7 +172,7 @@ class Statistics:
             self.bands.append(band)
 
     def SetStatistics(self, stats):
-        for st, val in six.iteritems(stats):
+        for st, val in stats.items():
             setattr(self, st, val)
 
         self.statisticsSet.emit(stats=stats)

@@ -17,7 +17,6 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 .. sectionauthor:: Michael Barton <michael.barton asu.edu>
 """
-from __future__ import absolute_import, print_function
 
 import os
 import sys

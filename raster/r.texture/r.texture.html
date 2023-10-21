@@ -159,7 +159,7 @@ r.colors ortho_2001_t792_1m color=grey
 # extract grey levels
 r.mapcalc "ortho_2001_t792_1m.greylevel = ortho_2001_t792_1m"
 # texture analysis
-r.texture ortho_2001_t792_1m.greylevel prefix=ortho_texture method=asm -s
+r.texture ortho_2001_t792_1m.greylevel output=ortho_texture method=asm -s
 # display
 g.region n=221461 s=221094 w=638279 e=638694
 d.shade color=ortho_texture_ASM_0 shade=ortho_2001_t792_1m
