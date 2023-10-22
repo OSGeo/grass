@@ -294,7 +294,9 @@ static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
         (*out_list)[base + i] = (char *)G_malloc(
             (strlen(dirlist[i]) + 1 + mapset_len + 1) * sizeof(char));
         sprintf((*out_list)[base + i], "%s@%s", dirlist[i], mapset);
+        G_free(dirlist[i]);
     }
+    G_free(dirlist);
 
     return count;
 }

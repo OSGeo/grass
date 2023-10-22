@@ -1559,6 +1559,10 @@
         <label>Sequential maximum a posteriori classification (SMAP)</label>
       </module-item>
       <separator/>
+      <module-item name="i.signatures">
+        <label>Manage signature files</label>
+      </module-item>
+      <separator/>
       <module-item name="i.segment">
         <label>Object segmentation</label>
       </module-item>
