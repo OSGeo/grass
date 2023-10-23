@@ -34,8 +34,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
     double ew_dist1, ew_dist2, ns_dist1, ns_dist2;
     double longitude, latitude;
 
-    if (print_flag & PRINT_SH)
+    if (print_flag & PRINT_SH) {
         x = G_projection() == PROJECTION_LL ? -1 : 0;
+        if (flat_flag)
+            sep = " ";
+    }
     else
         x = window->proj;
 
@@ -97,8 +100,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             prj = "** unknown **";
 
         if (print_flag & PRINT_SH) {
-            fprintf(stdout, "projection=%d\n", window->proj);
-            fprintf(stdout, "zone=%d\n", window->zone);
+            fprintf(stdout, "projection=%d%s", window->proj, sep);
+            fprintf(stdout, "zone=%d%s", window->zone, sep);
         }
         else {
             fprintf(stdout, "%-*s %d (%s)\n", width,
@@ -122,13 +125,13 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                if (print_flag & PRINT_SH)
                {
                if (datum[0] != '*')
-               fprintf(stdout, "datum=%s\n", datum);
+               fprintf(stdout, "datum=%s%s", datum, sep);
                else
-               fprintf(stdout, "datum=wgs84\n");
+               fprintf(stdout, "datum=wgs84%s", sep);
                if (ellps[0] != '*')
-               fprintf(stdout, "ellipsoid=%s\n", ellps);
+               fprintf(stdout, "ellipsoid=%s%s", ellps, sep);
                else
-               fprintf(stdout, "ellipsoid=wgs84\n");
+               fprintf(stdout, "ellipsoid=wgs84%s", sep);
                }
                else
                {
@@ -138,14 +141,12 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
              */
 
             if (!(print_flag & PRINT_SH)) {
-                fprintf(stdout, "%-*s %s\n", width, "datum:", datum);
-                fprintf(stdout, "%-*s %s\n", width, "ellipsoid:", ellps);
+                fprintf(stdout, "%-*s %s%s", width, "datum:", datum, sep);
+                fprintf(stdout, "%-*s %s%s", width, "ellipsoid:", ellps, sep);
             }
         }
 
         if (print_flag & PRINT_SH) {
-            if (flat_flag)
-                sep = " ";
             fprintf(stdout, "n=%s%s", north, sep);
             fprintf(stdout, "s=%s%s", south, sep);
             fprintf(stdout, "w=%s%s", west, sep);
