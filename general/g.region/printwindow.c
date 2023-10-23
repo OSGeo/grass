@@ -141,8 +141,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
              */
 
             if (!(print_flag & PRINT_SH)) {
-                fprintf(stdout, "%-*s %s%s", width, "datum:", datum, sep);
-                fprintf(stdout, "%-*s %s%s", width, "ellipsoid:", ellps, sep);
+                fprintf(stdout, "%-*s %s\n", width, "datum:", datum);
+                fprintf(stdout, "%-*s %s\n", width, "ellipsoid:", ellps);
             }
         }
 
