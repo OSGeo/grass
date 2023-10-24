@@ -210,6 +210,9 @@ class array(numpy.memmap):
         else:
             raise ValueError(_("Invalid kind <%s>") % kind)
 
+        # ensure all array content is written to the file
+        self.flush()
+
         reg = gcore.region(env=self._env)
 
         try:
@@ -314,6 +317,9 @@ class array3d(numpy.memmap):
             flags = "i"
         else:
             raise ValueError(_("Invalid kind <%s>") % kind)
+
+        # ensure all array content is written to the file
+        self.flush()
 
         reg = gcore.region(True, env=self._env)
 
