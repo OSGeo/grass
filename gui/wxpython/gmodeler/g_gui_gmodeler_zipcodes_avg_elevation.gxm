@@ -152,7 +152,14 @@
                 <value>zipcodes_avg</value>
             </parameter>
             <parameter name="color">
+                <parameterized />
                 <value>bgyr</value>
+            </parameter>
+            <parameter name="offset">
+                <value>0</value>
+            </parameter>
+            <parameter name="scale">
+                <value>1</value>
             </parameter>
         </task>
     </action>
@@ -303,6 +310,12 @@
             </parameter>
             <parameter name="fontsize">
                 <value>10</value>
+            </parameter>
+            <parameter name="border_color">
+                <value>black</value>
+            </parameter>
+            <parameter name="bgcolor">
+                <value>white</value>
             </parameter>
         </task>
     </action>
