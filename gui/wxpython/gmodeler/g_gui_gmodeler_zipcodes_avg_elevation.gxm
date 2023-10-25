@@ -22,7 +22,6 @@
         <task name="r.import">
             <flag name="overwrite" />
             <parameter name="input">
-                <parameterized />
                 <value>%raster</value>
             </parameter>
             <parameter name="memory">
@@ -48,7 +47,6 @@
             <flag name="o" />
             <flag name="overwrite" />
             <parameter name="input">
-                <parameterized />
                 <value>%vector</value>
             </parameter>
             <parameter name="output">
