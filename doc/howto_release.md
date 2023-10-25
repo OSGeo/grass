@@ -323,7 +323,7 @@ md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 
 ### Upload source code tarball to OSGeo servers
 
-Note: servers 'osgeo7-grass' and 'osgeo7-download' only reachable via
+Note: servers 'osgeo8-grass' and 'osgeo7-download' only reachable via
 jumphost (managed by OSGeo-SAC) - see <https://wiki.osgeo.org/wiki/SAC_Service_Status#grass>
 
 ```bash
@@ -360,13 +360,13 @@ For final minor and major releases (not release candidates and micro releases),
 update `grass-stable` redirect at `osgeo7-grass`:
 
 ```bash
-sudo vim /etc/apache2/sites-enabled/000-default.conf`
+sudo vim /etc/apache2/sites-enabled/000-default.conf
 ```
 
 Load the new configuration:
 
 ```bash
-sudo systemctl reload apache2`
+sudo systemctl reload apache2
 ```
 
 For new branches: Update `grass-devel` using the steps above.
