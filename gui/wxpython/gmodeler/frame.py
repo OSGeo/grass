@@ -26,6 +26,7 @@ import time
 import stat
 import tempfile
 import random
+import six
 import math
 
 import wx
