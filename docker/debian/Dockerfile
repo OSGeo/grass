@@ -35,14 +35,14 @@ RUN apt-get update && apt-get upgrade -y && \
     libcurl4-gnutls-dev \
     libfftw3-bin \
     libfftw3-dev \
-    libfreetype6-dev \
+    libfreetype-dev \
     libgdal-dev \
     libgeos-dev \
     libgsl0-dev \
     libjpeg-dev \
     libjsoncpp-dev \
     libnetcdf-dev \
-    libncurses5-dev \
+    libncurses-dev \
     libopenblas-dev \
     libopenjp2-7 \
     libopenjp2-7-dev \
