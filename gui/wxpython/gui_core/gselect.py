@@ -3098,7 +3098,7 @@ class SignatureSelect(wx.ComboBox):
     def UpdateItems(self, element):
         """Update list of signature files for given element
 
-        :param str element: signatures/sig or signatures/sigset
+        :param str element: signatures/sig, signatures/sigset or signatures/libsvm
         """
         items = []
         if self.mapsets:
@@ -3156,7 +3156,7 @@ class SignatureTypeSelect(wx.ComboBox):
     ):
         super(SignatureTypeSelect, self).__init__(parent, id, size=size, **kwargs)
         self.SetName("SignatureTypeSelect")
-        self.SetItems(["sig", "sigset"])
+        self.SetItems(["sig", "sigset", "libsvm"])
 
 
 class SeparatorSelect(wx.ComboBox):
