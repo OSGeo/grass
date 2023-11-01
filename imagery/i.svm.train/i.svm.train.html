@@ -58,10 +58,10 @@ i.group group=lsat7_2002 subgroup=res_30m \
 v.to.rast input=training output=training use=cat label_column=label
 # If you are just playing around and do not care about the accuracy of outcome,
 # just use one of existing maps instead e.g.
-# r.random input=landuse96_28m npoints=10000 raster=training
+# r.random input=landuse96_28m npoints=10000 raster=training -s
 
 # Train the SVM
-i.svm.train group=lsat7_2002 subgroup=lsat7_2002\
+i.svm.train group=lsat7_2002 subgroup=res_30m \
     trainingmap=training signaturefile=landuse96_rnd_points
 
 # Go to i.svm.predict for the next step.
