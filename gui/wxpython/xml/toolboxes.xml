@@ -1564,6 +1564,7 @@
       </module-item>
       <module-item name="i.svm.predict">
         <label>Support Vector Machines classification (SVM)</label>
+      </module-item>
       <separator/>
       <module-item name="i.signatures">
         <label>Manage signature files</label>
