@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2023-08-23 07:08+0000\n"
+"PO-Revision-Date: 2023-11-04 10:23+0000\n"
 "Last-Translator: Markus <neteler@osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/"
 "grasslibs/de/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 5.0\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -4891,7 +4891,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:555 ../lib/vector/Vlib/write_pg.c:1302
 #: ../lib/vector/Vlib/write_sfa.c:349
 msgid "Boundary is not closed. Skipping."
-msgstr ""
+msgstr "Die Begrenzung ist nicht geschlossen. Überspringen."
 
 #: ../lib/vector/Vlib/write_pg.c:613 ../lib/vector/Vlib/write_pg.c:881
 #: ../lib/vector/Vlib/open.c:1355 ../lib/vector/Vlib/build_pg.c:413
@@ -4996,7 +4996,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:1273
 #, c-format
 msgid "Boundary skipped (output feature type: %s)"
-msgstr ""
+msgstr "Übersprungene Grenze (Ausgabe-Featuretyp: %s)"
 
 #: ../lib/vector/Vlib/write_pg.c:1280
 #, c-format
@@ -6845,7 +6845,7 @@ msgstr "Polygone brechen (Durchgang 2: an ausgewählten Punkten brechen)..."
 #: ../lib/vector/Vlib/break_polygons.c:650
 #, c-format
 msgid "Breaks: %d"
-msgstr ""
+msgstr "Pausen: %d"
 
 #: ../lib/vector/Vlib/break_polygons.c:592
 msgid "Point not in search tree!"
