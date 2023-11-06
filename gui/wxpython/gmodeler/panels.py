@@ -85,6 +85,7 @@ class ModelerPanel(wx.Panel):
         id=wx.ID_ANY,
         title=_("Graphical Modeler"),
         statusbar=None,
+        dockable=False,
         **kwargs,
     ):
         """Graphical modeler main panel
@@ -184,6 +185,16 @@ class ModelerPanel(wx.Panel):
 
         # TODO:
         self.onFocus = Signal("ModelerPanel.onFocus")
+
+        # TODO: base class all below
+        self.canCloseCallback = None
+        # Emitted when closing page by closing its window.
+        self.closingPage = Signal("ModelerPanel.closingPage")
+        # distinquishes whether map panel is dockable (Single-Window)
+        self._dockable = dockable
+
+        # distinguishes whether map panel is docked or not
+        self._docked = True
 
     def _layout(self):
         """Do layout"""
@@ -1298,13 +1309,34 @@ class ModelerPanel(wx.Panel):
                 return
             dlg.Destroy()
 
-        # TODO: StandaloneGrassInterface -> _docked ???
-        if isinstance(self._giface, StandaloneGrassInterface):
-            self.parent.Destroy()
+        # TODO: base class
+        if self.canCloseCallback:
+            pgnum_dict = self.canCloseCallback()
+            if pgnum_dict is not None:
+                if pgnum_dict["layers"] > -1:
+                    if self.IsDockable():
+                        self.closingPage.emit(
+                            pgnum_dict=pgnum_dict, is_docked=self.IsDocked()
+                        )
+                        if not self.IsDocked():
+                            frame = self.GetParent()
+                            frame.Destroy()
+                    else:
+                        self.closingPage.emit(pgnum_dict=pgnum_dict)
+                    # Destroy is called when notebook page is deleted
         else:
-            # TODO: why the page is not removed completely
-            self.Destroy()
+            self.parent.Destroy()
 
+    # TODO: base class all below
+    def SetDockingCallback(self, function):
+        """Sets docking bound method to dock or undock"""
+        self._docking_callback = function
+
+    def IsDocked(self):
+        return self._docked
+
+    def IsDockable(self):
+        return self._dockable
 
 class VariablePanel(wx.Panel):
     def __init__(self, parent, id=wx.ID_ANY, **kwargs):

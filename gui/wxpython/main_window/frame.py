@@ -847,10 +847,26 @@ class GMFrame(wx.Frame):
         from gmodeler.panels import ModelerPanel
 
         gmodeler_panel = ModelerPanel(parent=self, giface=self._giface,
-                                      statusbar=self.statusbar)
+                                      statusbar=self.statusbar, dockable=True)
 
         # add map display panel to notebook and make it current
         self.mapnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))
+        self._setUpPage(gmodeler_panel)
+
+    # TODO: base class
+    def _setUpPage(self, panel):
+        def CanClosePage():
+            return {
+                "layers": self.notebookLayers.GetPageIndex(self.currentPage),
+                "mapnotebook": self.mapnotebook.GetPageIndex(panel)
+            }
+
+        # set callbacks
+        panel.canCloseCallback = CanClosePage
+        panel.SetDockingCallback(self.mapnotebook.UndockMapDisplay)
+
+        # bind various events
+        panel.closingPage.connect(self._closePageNoEvent)
 
     def OnPsMap(self, event=None, cmd=None):
         """Launch Cartographic Composer. See OnIClass documentation"""
