@@ -857,7 +857,6 @@ class GMFrame(wx.Frame):
     def _setUpPage(self, panel):
         def CanClosePage():
             return {
-                "layers": self.notebookLayers.GetPageIndex(self.currentPage),
                 "mapnotebook": self.mapnotebook.GetPageIndex(panel)
             }
 
@@ -1008,7 +1007,8 @@ class GMFrame(wx.Frame):
                                is undocked to independent frame
         """
         self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
-        self.notebookLayers.DeletePage(pgnum_dict["layers"])
+        if "layers" in pgnum_dict:
+            self.notebookLayers.DeletePage(pgnum_dict["layers"])
         self.notebookLayers.Bind(
             FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
             self.OnCBPageClosing,

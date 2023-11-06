@@ -1309,21 +1309,20 @@ class ModelerPanel(wx.Panel):
                 return
             dlg.Destroy()
 
-        # TODO: base class
+        # TODO: baseclass
         if self.canCloseCallback:
             pgnum_dict = self.canCloseCallback()
             if pgnum_dict is not None:
-                if pgnum_dict["layers"] > -1:
-                    if self.IsDockable():
-                        self.closingPage.emit(
-                            pgnum_dict=pgnum_dict, is_docked=self.IsDocked()
-                        )
-                        if not self.IsDocked():
-                            frame = self.GetParent()
-                            frame.Destroy()
-                    else:
-                        self.closingPage.emit(pgnum_dict=pgnum_dict)
-                    # Destroy is called when notebook page is deleted
+                if self.IsDockable():
+                    self.closingPage.emit(
+                        pgnum_dict=pgnum_dict, is_docked=self.IsDocked()
+                    )
+                    if not self.IsDocked():
+                        frame = self.GetParent()
+                        frame.Destroy()
+                else:
+                    self.closingPage.emit(pgnum_dict=pgnum_dict)
+                # Destroy is called when notebook page is deleted
         else:
             self.parent.Destroy()
 
