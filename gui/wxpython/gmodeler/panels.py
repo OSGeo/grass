@@ -1070,7 +1070,7 @@ class ModelerPanel(wx.Panel):
         # show properties dialog
         win = action.GetPropDialog()
         if not win:
-           gmodule = GUI(
+            gmodule = GUI(
                 parent=self,
                 show=True,
                 giface=GraphicalModelerGrassInterface(self.model),
