@@ -75,21 +75,19 @@ class ModelCanvas(ogl.ShapeCanvas):
 
         self.Refresh()
 
-    def GetNewShapePos(self):
+    def GetNewShapePos(self, yoffset=50):
         """Determine optimal position for newly added object
 
         :return: x,y
         """
-        xNew, yNew = map(lambda x: x / 2, self.GetSize())
         diagram = self.GetDiagram()
+        if diagram.GetShapeList():
+            last = diagram.GetShapeList()[-1]
+            y = last.GetY() + last.GetBoundingBoxMin()[1]
+        else:
+            y = 20
 
-        for shape in diagram.GetShapeList():
-            y = shape.GetY()
-            yBox = shape.GetBoundingBoxMin()[1] / 2
-            if yBox > 0 and y < yNew + yBox and y > yNew - yBox:
-                yNew += yBox * 3
-
-        return xNew, yNew
+        return (self.GetSize()[0] // 2, y + yoffset)
 
     def GetShapesSelected(self):
         """Get list of selected shapes"""

@@ -24,6 +24,7 @@ import stat
 import tempfile
 import random
 import six
+import math
 
 import wx
 
@@ -436,9 +437,10 @@ class ModelerPanel(wx.Panel):
     def GetOptData(self, dcmd, layer, params, propwin):
         """Process action data"""
         if params:  # add data items
-            width, height = self.canvas.GetSize()
-            x = width / 2 - 200 + self._randomShift()
-            y = height / 2 + self._randomShift()
+            data_items = []
+            x = layer.GetX()
+            y = layer.GetY()
+
             for p in params["params"]:
                 if p.get("prompt", "") not in (
                     "raster",
@@ -487,9 +489,10 @@ class ModelerPanel(wx.Panel):
                         x=x,
                         y=y,
                     )
+                    data_items.append(data)
                     self._addEvent(data)
                     self.canvas.diagram.AddShape(data)
-                    data.Show(True)
+                    data.Show(False)
 
                     if p.get("age", "old") == "old":
                         rel = ModelRelation(
@@ -525,11 +528,21 @@ class ModelerPanel(wx.Panel):
             # valid / parameterized ?
             layer.SetValid(params)
 
-            self.canvas.Refresh()
+            # arrange data items
+            if data_items:
+                dc = wx.ClientDC(self.canvas)
+                p = 360 / len(data_items)
+                r = 200
+                alpha = 270 * (math.pi / 180)
+                for data in data_items:
+                    data.Move(dc, x + r * math.sin(alpha), y + r * math.cos(alpha))
+                    alpha += p * (math.pi / 180)
+                    data.Show(True)
 
         if dcmd:
             layer.SetProperties(params, propwin)
 
+        self.canvas.Refresh()
         self.SetStatusText(layer.GetLog(), 0)
 
     def AddLine(self, rel):
@@ -1034,8 +1047,8 @@ class ModelerPanel(wx.Panel):
         action = ModelAction(
             self.model,
             cmd=cmd,
-            x=x + self._randomShift(),
-            y=y + self._randomShift(),
+            x=x,
+            y=y,
             id=self.model.GetNextId(),
             label=label,
             comment=comment,
@@ -1057,24 +1070,15 @@ class ModelerPanel(wx.Panel):
         # show properties dialog
         win = action.GetPropDialog()
         if not win:
-            cmdLength = len(action.GetLog(string=False))
-            if cmdLength > 1 and action.IsValid():
-                self.GetOptData(
-                    dcmd=action.GetLog(string=False),
-                    layer=action,
-                    params=action.GetParams(),
-                    propwin=None,
-                )
-            else:
-                gmodule = GUI(
-                    parent=self,
-                    show=True,
-                    giface=GraphicalModelerGrassInterface(self.model),
-                )
-                gmodule.ParseCommand(
-                    action.GetLog(string=False),
-                    completed=(self.GetOptData, action, action.GetParams()),
-                )
+           gmodule = GUI(
+                parent=self,
+                show=True,
+                giface=GraphicalModelerGrassInterface(self.model),
+            )
+            gmodule.ParseCommand(
+                action.GetLog(string=False),
+                completed=(self.GetOptData, action, action.GetParams()),
+            )
         elif win and not win.IsShown():
             win.Show()
 
@@ -1126,8 +1130,8 @@ class ModelerPanel(wx.Panel):
                 x, y = self.canvas.GetNewShapePos()
                 commentObj = ModelComment(
                     self.model,
-                    x=x + self._randomShift(),
-                    y=y + self._randomShift(),
+                    x=x,
+                    y=y,
                     id=self.model.GetNextId(),
                     label=comment,
                 )
