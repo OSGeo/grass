@@ -846,7 +846,8 @@ class GMFrame(wx.Frame):
         """Launch Graphical Modeler. See OnIClass documentation"""
         from gmodeler.panels import ModelerPanel
 
-        gmodeler_panel = ModelerPanel(parent=self, giface=self._giface)
+        gmodeler_panel = ModelerPanel(parent=self, giface=self._giface,
+                                      statusbar=self.statusbar)
 
         # add map display panel to notebook and make it current
         self.mapnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))
