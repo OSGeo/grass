@@ -6,6 +6,7 @@ panes for display management and access to command console.
 
 Classes:
  - frame::GMFrame
+ - frame::SingleWindowAuiManager
 
 (C) 2006-2021 by the GRASS Development Team
 
@@ -76,10 +77,7 @@ from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
 from lmgr.statusbar import SbMain
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
-from lmgr.giface import (
-    LayerManagerGrassInterface,
-    LayerManagerGrassInterfaceForMapDisplay,
-)
+from lmgr.giface import LayerManagerGrassInterface
 from mapdisp.frame import MapPanel
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
@@ -93,6 +91,18 @@ from startup.guiutils import (
 from grass.grassdb.checks import is_first_time_user
 
 
+class SingleWindowAuiManager(aui.AuiManager):
+    """Custom AuiManager class which override OnClose window
+    close event handler method to prevent prematurely uninitialize
+    manager
+
+    https://github.com/wxWidgets/Phoenix/pull/2460
+    """
+
+    def OnClose(self, event):
+        event.Skip()
+
+
 class GMFrame(wx.Frame):
     """Single Window Layout which will be parallelly developed next to the
     current Multi Window layout solution."""
@@ -103,7 +113,7 @@ class GMFrame(wx.Frame):
         id=wx.ID_ANY,
         title=None,
         workspace=None,
-        size=wx.Display().GetGeometry().GetSize(),
+        size=wx.GetClientDisplayRect().GetSize(),
         style=wx.DEFAULT_FRAME_STYLE,
         **kwargs,
     ):
@@ -153,7 +163,7 @@ class GMFrame(wx.Frame):
         self._menuTreeBuilder = LayerManagerMenuData(message_handler=add_menu_error)
         # the search tree and command console
         self._moduleTreeBuilder = LayerManagerModuleTree(message_handler=add_menu_error)
-        self._auimgr = aui.AuiManager(self)
+        self._auimgr = SingleWindowAuiManager(self)
 
         # list of open dialogs
         self.dialogs = dict()
@@ -179,30 +189,32 @@ class GMFrame(wx.Frame):
 
         # use default window layout ?
         if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
-            dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
-            try:
-                x, y = map(int, dim.split(",")[0:2])
-                w, h = map(int, dim.split(",")[2:4])
-                client_disp = wx.ClientDisplayRect()
-                if x == 1:
-                    # Get client display x offset (OS panel)
-                    x = client_disp[0]
-                if y == 1:
-                    # Get client display y offset (OS panel)
-                    y = client_disp[1]
-                self.SetPosition((x, y))
-                self.SetSize((w, h))
-            except Exception:
-                pass
-            self.Layout()
-            if w <= globalvar.GM_WINDOW_SIZE[0] or h <= globalvar.GM_WINDOW_SIZE[1]:
-                self.Fit()
-        else:
-            self.Layout()
-            self.Fit()
-            # does center (of screen) make sense for lmgr?
-            self.Centre()
+            single_window_dim = {
+                "group": "general",
+                "key": "defWindowPos",
+                "subkey": "dimSingleWindow",
+            }
+            dim = UserSettings.Get(**single_window_dim)
+            default_dim = UserSettings.Get(**single_window_dim, settings_type="default")
 
+            if dim != default_dim:
+                try:
+                    x, y, w, h = map(int, dim.split(",")[:4])
+                    client_disp = wx.ClientDisplayRect()
+                    if x == 1:
+                        # Get client display x offset (OS panel)
+                        x = client_disp[0]
+                    if y == 1:
+                        # Get client display y offset (OS panel)
+                        y = client_disp[1]
+                    self.SetPosition((x, y))
+                    self.SetSize((w, h))
+                except Exception:
+                    pass
+            else:
+                self.Maximize(True)
+        else:
+            self.Maximize(True)
         self.Show()
 
         # load workspace file if requested
@@ -413,20 +425,17 @@ class GMFrame(wx.Frame):
         self.currentPageNum = self.notebookLayers.GetSelection()
         self.notebookLayers.EnsureVisible(self.currentPageNum)
 
-        def CreateNewMapDisplay(layertree):
+        def CreateNewMapDisplay(giface, layertree):
             """Callback function which creates a new Map Display window
+            :param giface: giface for map display
             :param layertree: layer tree object
             :return: reference to mapdisplay instance
             """
-            # create instance of Map Display interface
-            self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
-                self._giface, layertree
-            )
 
             # create Map Display
             mapdisplay = MapPanel(
                 parent=self.mapnotebook,
-                giface=self._gifaceForDisplay,
+                giface=giface,
                 id=wx.ID_ANY,
                 tree=layertree,
                 lmgr=self,

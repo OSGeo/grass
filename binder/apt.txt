@@ -1,4 +1,4 @@
-autoconf2.13
+autoconf
 autotools-dev
 bison
 flex
@@ -16,9 +16,10 @@ libgeos-dev
 libglu1-mesa-dev
 libjpeg-dev
 liblapack-dev
-liblas-c-dev
 libncurses5-dev
 libnetcdf-dev
+libpdal-dev
+libgeos-dev
 libpng-dev
 libpq-dev
 libproj-dev
@@ -31,6 +32,7 @@ make
 netcdf-bin
 p7zip
 proj-bin
+python3-pip
 sqlite3
 unixodbc-dev
 xvfb

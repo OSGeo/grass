@@ -1,16 +1,11 @@
 """Refactored "safe reference" from dispatcher.py"""
-from __future__ import print_function
 
 import weakref
 import traceback
 import sys
 
-if sys.hexversion >= 0x3000000:
-    im_func = "__func__"
-    im_self = "__self__"
-else:
-    im_func = "im_func"
-    im_self = "im_self"
+im_func = "__func__"
+im_self = "__self__"
 
 
 def safeRef(target, onDelete=None):

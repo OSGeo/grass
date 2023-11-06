@@ -12,31 +12,18 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import copy
 import xml.etree.ElementTree as etree
 from xml.parsers import expat
 
-# Get the XML parsing exceptions to catch. The behavior chnaged with Python 2.7
-# and ElementTree 1.3.
-if hasattr(etree, "ParseError"):
-    ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
-else:
-    ETREE_EXCEPTIONS = expat.ExpatError
-
-if sys.version_info[0:2] > (2, 6):
-    has_xpath = True
-else:
-    has_xpath = False
-
 import grass.script.task as gtask
 import grass.script.core as gcore
 from grass.script.utils import try_remove, decode
 from grass.exceptions import ScriptError, CalledModuleError
 
+ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
 
 # duplicating code from core/globalvar.py
 # if this will become part of grass Python library or module, this should be
@@ -430,18 +417,7 @@ def _expandToolboxes(node, toolboxes):
             items = n.find("./items")
             idx = list(items).index(subtoolbox)
 
-            if has_xpath:
-                toolbox = toolboxes.find(
-                    './/toolbox[@name="%s"]' % subtoolbox.get("name")
-                )
-            else:
-                toolbox = None
-                potentialToolboxes = toolboxes.findall(".//toolbox")
-                sName = subtoolbox.get("name")
-                for pToolbox in potentialToolboxes:
-                    if pToolbox.get("name") == sName:
-                        toolbox = pToolbox
-                        break
+            toolbox = toolboxes.find('.//toolbox[@name="%s"]' % subtoolbox.get("name"))
 
             if toolbox is None:  # not in file
                 continue
@@ -576,15 +552,7 @@ def _expandItems(node, items, itemTag):
     """
     for moduleItem in node.findall(".//" + itemTag):
         itemName = moduleItem.get("name")
-        if has_xpath:
-            moduleNode = items.find('.//%s[@name="%s"]' % (itemTag, itemName))
-        else:
-            moduleNode = None
-            potentialModuleNodes = items.findall(".//%s" % itemTag)
-            for mNode in potentialModuleNodes:
-                if mNode.get("name") == itemName:
-                    moduleNode = mNode
-                    break
+        moduleNode = items.find('.//%s[@name="%s"]' % (itemTag, itemName))
 
         if moduleNode is None:  # module not available in dist
             continue

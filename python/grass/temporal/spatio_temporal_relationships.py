@@ -17,7 +17,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 from datetime import datetime
 from .core import init_dbif
 from .abstract_dataset import AbstractDatasetComparisonKeyStartTime

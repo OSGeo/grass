@@ -26,10 +26,11 @@ Classes:
  - :class:`CoordinatesSelect`
  - :class:`VectorCategorySelect`
  - :class:`SignatureSelect`
+ - :class:`SignatureTypeSelect`
  - :class:`SeparatorSelect`
  - :class:`SqlWhereSelect`
 
-(C) 2007-2018 by the GRASS Development Team
+(C) 2007-2023 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -41,12 +42,9 @@ This program is free software under the GNU General Public License
 @author Matej Krejci <matejkrejci gmail.com> (VectorCategorySelect)
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import glob
-import six
 import ctypes
 
 import wx
@@ -538,7 +536,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
         # add extra items first
         if self.extraItems:
-            for group, items in six.iteritems(self.extraItems):
+            for group, items in self.extraItems.items():
                 node = self.AddItem(group, node=True)
                 self.seltree.SetItemTextColour(node, wx.Colour(50, 50, 200))
                 for item in items:
@@ -1167,16 +1165,16 @@ class ColumnSelect(ComboCtrl):
             columnchoices = dbInfo.GetTableDesc(table)
             keyColumn = dbInfo.GetKeyColumn(layer)
             self.columns = len(columnchoices.keys()) * [""]
-            for key, val in six.iteritems(columnchoices):
+            for key, val in columnchoices.items():
                 self.columns[val["index"]] = key
             if excludeKey:  # exclude key column
                 self.columns.remove(keyColumn)
             if excludeCols:  # exclude key column
-                for key in six.iterkeys(columnchoices):
+                for key in columnchoices.keys():
                     if key in excludeCols:
                         self.columns.remove(key)
             if type:  # only selected column types
-                for key, value in six.iteritems(columnchoices):
+                for key, value in columnchoices.items():
                     if value["type"] not in type:
                         try:
                             self.columns.remove(key)
@@ -1728,7 +1726,7 @@ class GdalSelect(wx.Panel):
                     dsn = v
                     break
             optList = list()
-            for k, v in six.iteritems(data):
+            for k, v in data.items():
                 if k in ("format", "conninfo", "topology"):
                     continue
                 optList.append("%s=%s" % (k, v))
@@ -3093,10 +3091,18 @@ class SignatureSelect(wx.ComboBox):
         **kwargs,
     ):
         super(SignatureSelect, self).__init__(parent, id, size=size, **kwargs)
+        self.SetName("SignatureSelect")
+        self.mapsets = mapsets
+        self.UpdateItems(element)
 
+    def UpdateItems(self, element):
+        """Update list of signature files for given element
+
+        :param str element: signatures/sig or signatures/sigset
+        """
         items = []
-        if mapsets:
-            for mapset in mapsets:
+        if self.mapsets:
+            for mapset in self.mapsets:
                 self._append_mapset_signatures(mapset, element, items)
         else:
             self._append_mapset_signatures(None, element, items)
@@ -3137,6 +3143,17 @@ class SignatureSelect(wx.ComboBox):
         for n in range(count):
             items.append(grass.decode(sig_list[n]))
         I_free_signatures_list(count, ctypes.byref(sig_list))
+
+
+class SignatureTypeSelect(wx.ComboBox):
+    """Widget for selecting signature type"""
+
+    def __init__(
+        self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE, **kwargs
+    ):
+        super(SignatureTypeSelect, self).__init__(parent, id, size=size, **kwargs)
+        self.SetName("SignatureTypeSelect")
+        self.SetItems(["sig", "sigset"])
 
 
 class SeparatorSelect(wx.ComboBox):
