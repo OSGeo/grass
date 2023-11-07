@@ -1,4 +1,3 @@
-
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include "globals.h"
@@ -18,13 +17,13 @@ int f_ewres(int argc, const int *argt, void **args)
     int i;
 
     if (argc > 0)
-	return E_ARG_HI;
+        return E_ARG_HI;
 
     if (argt[0] != DCELL_TYPE)
-	return E_RES_TYPE;
+        return E_RES_TYPE;
 
     for (i = 0; i < columns; i++)
-	res[i] = current_region2.ew_res;
+        res[i] = current_region2.ew_res;
 
     return 0;
 }
@@ -35,13 +34,13 @@ int f_nsres(int argc, const int *argt, void **args)
     int i;
 
     if (argc > 0)
-	return E_ARG_HI;
+        return E_ARG_HI;
 
     if (argt[0] != DCELL_TYPE)
-	return E_RES_TYPE;
+        return E_RES_TYPE;
 
     for (i = 0; i < columns; i++)
-	res[i] = current_region2.ns_res;
+        res[i] = current_region2.ns_res;
 
     return 0;
 }
@@ -52,13 +51,13 @@ int f_tbres(int argc, const int *argt, void **args)
     int i;
 
     if (argc > 0)
-	return E_ARG_HI;
+        return E_ARG_HI;
 
     if (argt[0] != DCELL_TYPE)
-	return E_RES_TYPE;
+        return E_RES_TYPE;
 
     for (i = 0; i < columns; i++)
-	SET_NULL_D(&res[i]);
+        SET_NULL_D(&res[i]);
 
     return 0;
 }

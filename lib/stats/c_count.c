@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-void c_count(DCELL * result, DCELL * values, int n, const void *closure)
+void c_count(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
 {
     int count;
     int i;
@@ -9,13 +9,14 @@ void c_count(DCELL * result, DCELL * values, int n, const void *closure)
     count = 0;
 
     for (i = 0; i < n; i++)
-	if (!Rast_is_d_null_value(&values[i]))
-	    count++;
+        if (!Rast_is_d_null_value(&values[i]))
+            count++;
 
     *result = count;
 }
 
-void w_count(DCELL * result, DCELL(*values)[2], int n, const void *closure)
+void w_count(DCELL *result, DCELL (*values)[2], int n,
+             const void *closure UNUSED)
 {
     DCELL count;
     int i;
@@ -23,8 +24,8 @@ void w_count(DCELL * result, DCELL(*values)[2], int n, const void *closure)
     count = 0.0;
 
     for (i = 0; i < n; i++)
-	if (!Rast_is_d_null_value(&values[i][0]))
-	    count += values[i][1];
+        if (!Rast_is_d_null_value(&values[i][0]))
+            count += values[i][1];
 
     *result = count;
 }

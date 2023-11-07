@@ -5,8 +5,8 @@
 
    (C) 2001-2014 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -23,8 +23,8 @@
    \param[in] key   key value
    \param[in] value value to be updated
  */
-void G_update_key_value_file(const char *file,
-			     const char *key, const char *value)
+void G_update_key_value_file(const char *file, const char *key,
+                             const char *value)
 {
     struct Key_Value *kv;
 
@@ -45,8 +45,8 @@ void G_update_key_value_file(const char *file,
    \return 0 not found
    \return 1 ok
  */
-int G_lookup_key_value_from_file(const char *file,
-				 const char *key, char value[], int n)
+int G_lookup_key_value_from_file(const char *file, const char *key,
+                                 char value[], int n)
 {
     struct Key_Value *kv;
     const char *v;
@@ -57,8 +57,8 @@ int G_lookup_key_value_from_file(const char *file,
     v = G_find_key_value(key, kv);
 
     if (v) {
-	strncpy(value, v, n);
-	value[n - 1] = '\0';
+        strncpy(value, v, n);
+        value[n - 1] = '\0';
     }
 
     G_free_key_value(kv);

@@ -58,7 +58,7 @@ static int get_input_stream(char *buf, int max_size)
 		line_read = readline("mapcalc> ");
 		if (!line_read)
 			return YY_NULL;
-		if (strlen(line_read) > max_size - 2)
+		if ((ssize_t)strlen(line_read) > max_size - 2)
 			G_fatal_error("input line too long");
 		strcpy(buf, line_read);
 		strcat(buf, "\n");
@@ -92,6 +92,9 @@ static int get_input_stream(char *buf, int max_size)
 }
 
 %}
+
+%option nounput
+%option noinput
 
 W		[ \t\r]+
 N		[^ ^#@,"'\000-\037()\[\]+\-*/%><!=&|?:;~]+
@@ -138,14 +141,14 @@ F		[fF]
 
 {N}		{
 			yylval.sval = strdup(yytext);
-			return is_var(yytext) ? VARNAME : NAME; 
+			return is_var(yytext) ? VARNAME : NAME;
 		}
 
 \"[^"]+\"	|
 \'[^']+\'	{
 			yylval.sval = strdup(yytext + 1);
 			yylval.sval[yyleng - 2] = '\0';
-			return is_var(yytext) ? VARSTRING : STRING; 
+			return is_var(yytext) ? VARSTRING : STRING;
 		}
 
 \"[^"]+		|
@@ -237,4 +240,3 @@ void initialize_scanner_stream(FILE *fp)
 	input_stream = fp;
 	setbuf(fp, NULL);
 }
-

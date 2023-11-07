@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.edit
@@ -24,7 +23,7 @@
    \brief Set distance based on the current resolution
 
    This code comes from v.what/main.c
- 
+
    \param[in] maxdistance max distance
 
    \return result max distance
@@ -37,36 +36,37 @@ double max_distance(double maxdistance)
     double xres, yres, maxd;
 
     if (maxdistance < 0.0) {
-	G_get_window(&window);
+        G_get_window(&window);
 
-	G_begin_distance_calculations();
+        G_begin_distance_calculations();
 
-	ew_dist1 =
-	    G_distance(window.east, window.north, window.west, window.north);
-	/* EW Dist at South Edge */
-	ew_dist2 =
-	    G_distance(window.east, window.south, window.west, window.south);
-	/* NS Dist at East edge */
-	ns_dist1 =
-	    G_distance(window.east, window.north, window.east, window.south);
-	/* NS Dist at West edge */
-	ns_dist2 =
-	    G_distance(window.west, window.north, window.west, window.south);
+        ew_dist1 =
+            G_distance(window.east, window.north, window.west, window.north);
+        /* EW Dist at South Edge */
+        ew_dist2 =
+            G_distance(window.east, window.south, window.west, window.south);
+        /* NS Dist at East edge */
+        ns_dist1 =
+            G_distance(window.east, window.north, window.east, window.south);
+        /* NS Dist at West edge */
+        ns_dist2 =
+            G_distance(window.west, window.north, window.west, window.south);
 
-	xres = ((ew_dist1 + ew_dist2) / 2) / window.cols;
-	yres = ((ns_dist1 + ns_dist2) / 2) / window.rows;
+        xres = ((ew_dist1 + ew_dist2) / 2) / window.cols;
+        yres = ((ns_dist1 + ns_dist2) / 2) / window.rows;
 
-	if (xres > yres)
-	    maxd = xres;
-	else
-	    maxd = yres;
+        if (xres > yres)
+            maxd = xres;
+        else
+            maxd = yres;
 
-	/*
-	   G_important_message (_("Threshold distance set to %g map units (based on 2D resolution)"), maxd);
-	 */
+        /*
+           G_important_message (_("Threshold distance set to %g map units (based
+           on 2D resolution)"), maxd);
+         */
     }
     else {
-	maxd = maxdistance;
+        maxd = maxdistance;
     }
 
     G_debug(3, "max_distance(): threshold is %g", maxd);
@@ -86,7 +86,7 @@ double max_distance(double maxdistance)
    \return
 */
 void coord2bbox(double east, double north, double maxdist,
-		struct line_pnts *box)
+                struct line_pnts *box)
 {
     /* TODO: 3D */
     Vect_reset_line(box);

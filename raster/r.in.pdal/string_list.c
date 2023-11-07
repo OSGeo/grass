@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.in.pdal
@@ -24,7 +23,6 @@
 #include <stdio.h>
 #include <string.h>
 
-
 #define SIZE_INCREMENT 10
 
 static int string_list_add_item(struct StringList *string_list, char *item)
@@ -33,9 +31,9 @@ static int string_list_add_item(struct StringList *string_list, char *item)
 
     if (string_list->num_items >= string_list->max_items) {
         string_list->max_items += SIZE_INCREMENT;
-        string_list->items = G_realloc(string_list->items,
-                                       (size_t)string_list->max_items *
-                                       sizeof(char *));
+        string_list->items =
+            G_realloc(string_list->items,
+                      (size_t)string_list->max_items * sizeof(char *));
     }
     /* n contains the index */
     string_list->items[n] = item;
@@ -47,7 +45,7 @@ void string_list_from_file(struct StringList *string_list, char *filename)
     string_list->num_items = 0;
     string_list->max_items = 0;
     string_list->items = NULL;
-    FILE *file = fopen(filename, "r");  /* should check the result */
+    FILE *file = fopen(filename, "r"); /* should check the result */
 
     if (!file)
         G_fatal_error(_("Cannot open file %s for reading"), filename);

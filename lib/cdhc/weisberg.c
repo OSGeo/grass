@@ -3,7 +3,6 @@
 #include <math.h>
 #include "local_proto.h"
 
-
 double *Cdhc_weisberg_bingham(double *x, int n)
 {
     static double y[2];
@@ -11,21 +10,21 @@ double *Cdhc_weisberg_bingham(double *x, int n)
     int i;
 
     if ((xcopy = (double *)malloc(n * sizeof(double))) == NULL) {
-	fprintf(stderr, "Memory error in Cdhc_shapiro_francia\n");
-	exit(EXIT_FAILURE);
+        fprintf(stderr, "Memory error in Cdhc_shapiro_francia\n");
+        exit(EXIT_FAILURE);
     }
 
     for (i = 0; i < n; ++i)
-	xcopy[i] = x[i];
+        xcopy[i] = x[i];
 
     qsort(xcopy, n, sizeof(double), Cdhc_dcmp);
 
     for (i = 0; i < n; ++i) {
-	z = Cdhc_xinormal((i + 1 - 0.375) / (n + 0.25));
-	suma += z * xcopy[i];
-	sumb += z * z;
-	sumc += xcopy[i];
-	sumd += xcopy[i] * xcopy[i];
+        z = Cdhc_xinormal((i + 1 - 0.375) / (n + 0.25));
+        suma += z * xcopy[i];
+        sumb += z * z;
+        sumc += xcopy[i];
+        sumd += xcopy[i] * xcopy[i];
     }
 
     y[0] = suma * suma / sumb / (sumd - sumc * sumc / n);
@@ -37,4 +36,4 @@ double *Cdhc_weisberg_bingham(double *x, int n)
     free(xcopy);
 
     return y;
-}				/* test14_ */
+} /* test14_ */

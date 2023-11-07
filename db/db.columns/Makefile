@@ -9,4 +9,3 @@ PGM = db.columns
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
 default: cmd
-

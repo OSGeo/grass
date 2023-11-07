@@ -1,12 +1,11 @@
 #ifndef __PROTO_H__
 #define __PROTO_H__
-#define DEFAULT_WIDTH 720
+#define DEFAULT_WIDTH  720
 #define DEFAULT_HEIGHT 480
 
-
 /* start */
-int start_mon(const char *, const char *, int, int, int,
-	      const char *, int, int, int);
+int start_mon(const char *, const char *, int, int, int, const char *, int, int,
+              int);
 
 /* select.c */
 int select_mon(const char *);
@@ -15,7 +14,7 @@ int select_mon(const char *);
 int stop_mon(const char *);
 
 /* list.c */
-void list_mon();
+void list_mon(char ***, int *);
 void print_list(FILE *);
 int check_mon(const char *);
 void list_cmd(const char *, FILE *);

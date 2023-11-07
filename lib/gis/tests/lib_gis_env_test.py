@@ -3,7 +3,6 @@
 import multiprocessing
 
 import grass.script as gs
-import grass.script.setup as grass_setup
 
 
 def run_in_subprocess(function):
@@ -39,7 +38,7 @@ def test_reading_respects_change_of_session(tmp_path):
         for location_name in ["test1", "test2", "abc"]:
             # pylint: disable=protected-access
             gs.core._create_location_xy(tmp_path, location_name)
-            with grass_setup.init(tmp_path / location_name):
+            with gs.setup.init(tmp_path / location_name):
                 libgis.G__read_gisrc_path()
                 libgis.G__read_gisrc_env()
                 names.append((pygrass_utils.getenv("LOCATION_NAME"), location_name))

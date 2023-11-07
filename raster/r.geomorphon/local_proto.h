@@ -15,31 +15,28 @@
 #define GLOBAL extern
 #endif
 
-
-#ifndef PI2                     /* PI/2 */
-#define PI2 (2*atan(1))
+#ifndef PI2 /* PI/2 */
+#define PI2 (2 * atan(1))
 #endif
 
 #ifndef PI
-#define PI (4*atan(1))
+#define PI (4 * atan(1))
 #endif
 
-#define DEGREE2RAD(a) ((a)/(180/PI))
-#define RAD2DEGREE(a) ((a)*(180/PI))
+#define DEGREE2RAD(a) ((a) / (180 / PI))
+#define RAD2DEGREE(a) ((a) * (180 / PI))
 
 /* Number of cardinal directions. */
-#define NUM_DIRS 8
+#define NUM_DIRS      8
 
-typedef struct
-{
+typedef struct {
     char elevname[150];
     RASTER_MAP_TYPE raster_type;
     FCELL **elev;
-    int fd;                     /* file descriptor */
+    int fd; /* file descriptor */
 } MAPS;
 
-typedef struct
-{
+typedef struct {
     int num_positives;
     int num_negatives;
     unsigned char positives;
@@ -47,25 +44,24 @@ typedef struct
     int pattern[NUM_DIRS];
     float elevation[NUM_DIRS];
     double distance[NUM_DIRS];
-    double x[NUM_DIRS], y[NUM_DIRS];    /* cartesian coordinates of geomorphon */
-    double e[NUM_DIRS], n[NUM_DIRS];    /* projection-specific coordinates */
+    double x[NUM_DIRS], y[NUM_DIRS]; /* cartesian coordinates of geomorphon */
+    double e[NUM_DIRS], n[NUM_DIRS]; /* projection-specific coordinates */
 } PATTERN;
 
-typedef enum
-{
-    ZERO,                       /* zero cats do not accept zero category */
-    FL,                         /* flat */
-    PK,                         /* peak (summit) */
-    RI,                         /* ridge */
-    SH,                         /* shoulder */
-    SP,                         /* spur (convex slope) */
-    SL,                         /* slope */
-    HL,                         /* hollow (concave slope) */
-    FS,                         /* footslope */
-    VL,                         /* valley */
-    PT,                         /* pit (depression) */
-    __,                         /* error (impossible) */
-    CNT                         /* counter */
+typedef enum {
+    ZERO, /* zero cats do not accept zero category */
+    FL,   /* flat */
+    PK,   /* peak (summit) */
+    RI,   /* ridge */
+    SH,   /* shoulder */
+    SP,   /* spur (convex slope) */
+    SL,   /* slope */
+    HL,   /* hollow (concave slope) */
+    FS,   /* footslope */
+    VL,   /* valley */
+    PT,   /* pit (depression) */
+    __,   /* error (impossible) */
+    CNT   /* counter */
 } FORMS;
 
 /* main */
@@ -75,29 +71,25 @@ GLOBAL int skip_cells;
 GLOBAL double search_distance, flat_distance;
 GLOBAL double flat_threshold, flat_threshold_height;
 GLOBAL struct Cell_head window;
+
 /* Zenith/nadir comparison modes. */
-GLOBAL enum
-{
-    ANGLEV1,
-    ANGLEV2,
-    ANGLEV2_DISTANCE
-} compmode;
+GLOBAL enum { ANGLEV1, ANGLEV2, ANGLEV2_DISTANCE } compmode;
 
 /* memory */
-int open_map(MAPS * rast);
+int open_map(MAPS *rast);
 int shift_buffers(int row);
-int free_map(FCELL ** map, int n);
+int free_map(FCELL **map, int n);
 int write_form_cat_colors(char *raster);
 int write_contrast_colors(char *);
 const char *form_short_name(const FORMS);
 const char *form_long_name(const FORMS);
 
 /* pattern */
-int calc_pattern(PATTERN * pattern, int row, int cur_row, int col, const int);
+int calc_pattern(PATTERN *pattern, int row, int cur_row, int col, const int);
 extern const char *dirname[];
 
 /* geom */
-void generate_ternary_codes();
+void generate_ternary_codes(void);
 unsigned int ternary_rotate(unsigned int value);
 FORMS determine_form(int num_plus, int num_minus);
 int form_deviation(const unsigned, const unsigned);
@@ -109,14 +101,14 @@ float intensity(float *elevation, int pattern_size);
 float exposition(float *elevation);
 float range(float *elevation);
 float variance(float *elevation, int n);
-int shape(PATTERN * pattern, int pattern_size, float *azimuth,
-          float *elongation, float *width);
-float extends(PATTERN * pattern);
+int shape(PATTERN *pattern, int pattern_size, float *azimuth, float *elongation,
+          float *width);
+float extends(PATTERN *pattern);
 double octa_perimeter(const PATTERN *);
 double octa_area(const PATTERN *);
 double mesh_perimeter(const PATTERN *);
 double mesh_area(const PATTERN *);
-int radial2cartesian(PATTERN *);
+void radial2cartesian(PATTERN *);
 
 /* profile */
 void prof_int(const char *, const int);
@@ -126,8 +118,8 @@ void prof_mtr(const char *, const double);
 void prof_str(const char *, const char *);
 void prof_utc(const char *, const time_t);
 void prof_sso(const char *);
-void prof_eso();
+void prof_eso(void);
 void prof_pattern(const double, const PATTERN *);
-void prof_map_info();
+void prof_map_info(void);
 unsigned prof_write(FILE *, const char *);
 #endif
