@@ -3,7 +3,7 @@ Temporal topology dataset connector class
 
 Usage:
 
-.. code-block:: python:
+.. code-block:: python
 
     >>> import grass.temporal as tgis
     >>> tmr = tgis.TemporalTopologyDatasetConnector()
@@ -15,7 +15,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 import copy
 
 
@@ -43,7 +42,7 @@ class TemporalTopologyDatasetConnector(object):
     - finishes
     - finished
 
-    .. code-block:: python:
+    .. code-block:: python
 
         # We have build the temporal topology and we know the first map
         start = first

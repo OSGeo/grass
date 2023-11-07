@@ -20,7 +20,6 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-import six
 
 from core.settings import UserSettings
 from core.gcmd import GError
@@ -44,6 +43,8 @@ class MapWindowProperties(object):
         self.useDefinedProjectionChanged = Signal(
             "MapWindowProperties.useDefinedProjectionChanged"
         )
+        self._sbItem = None
+        self.sbItemChanged = Signal("MapWindowProperties.sbItemChanged")
 
     def setValuesFromUserSettings(self):
         """Convenient function to get values from user settings into this object."""
@@ -111,6 +112,16 @@ class MapWindowProperties(object):
     @property
     def epsg(self):
         return UserSettings.Get(group="projection", key="statusbar", subkey="epsg")
+
+    @property
+    def sbItem(self):
+        return self._sbItem
+
+    @sbItem.setter
+    def sbItem(self, mode):
+        if mode != self._sbItem:
+            self._sbItem = mode
+            self.sbItemChanged.emit(mode=mode)
 
 
 class MapWindowBase(object):
@@ -196,14 +207,14 @@ class MapWindowBase(object):
         """Binds helper functions, which calls all handlers
         registered to events with the events
         """
-        for ev, handlers in six.iteritems(self.handlersContainer):
+        for ev, handlers in self.handlersContainer.items():
             self.Bind(ev, self.EventTypeHandler(handlers))
 
     def EventTypeHandler(self, evHandlers):
         return lambda event: self.HandlersCaller(event, evHandlers)
 
     def HandlersCaller(self, event, handlers):
-        """Hepler function which calls all handlers registered for
+        """Helper function which calls all handlers registered for
         event
         """
         for handler in handlers:
@@ -269,7 +280,7 @@ class MapWindowBase(object):
         """
         self.mouseHandlerRegistered.emit()
         # inserts handler into list
-        for containerEv, handlers in six.iteritems(self.handlersContainer):
+        for containerEv, handlers in self.handlersContainer.items():
             if event == containerEv:
                 handlers.append(handler)
 
@@ -290,7 +301,7 @@ class MapWindowBase(object):
         Before each handler is unregistered it is called with string
         value "unregistered" of event parameter.
         """
-        for containerEv, handlers in six.iteritems(self.handlersContainer):
+        for containerEv, handlers in self.handlersContainer.items():
             for handler in handlers:
                 try:
                     handler("unregistered")
@@ -323,7 +334,7 @@ class MapWindowBase(object):
         :return: False if event cannot be unbind
         """
         # removes handler from list
-        for containerEv, handlers in six.iteritems(self.handlersContainer):
+        for containerEv, handlers in self.handlersContainer.items():
             if event != containerEv:
                 continue
             try:
@@ -371,7 +382,7 @@ class MapWindowBase(object):
         """
         try:
             self.lastEN = self.Pixel2Cell(event.GetPosition())
-        except (ValueError):
+        except ValueError:
             self.lastEN = None
 
         event.Skip()

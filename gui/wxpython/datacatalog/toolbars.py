@@ -114,24 +114,57 @@ class DataCatalogToolbar(BaseToolbar):
         # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
         return self._getToolbarData(
             (
-                ("reloadTree", icons["reloadTree"], self.parent.OnReloadTree),
                 (
-                    "reloadMapset",
+                    ("reloadTree", icons["reloadTree"].label),
+                    icons["reloadTree"],
+                    self.parent.OnReloadTree,
+                ),
+                (
+                    ("reloadMapset", icons["reloadMapset"].label),
                     icons["reloadMapset"],
                     self.parent.OnReloadCurrentMapset,
                 ),
-                ("lock", icons["locked"], self.OnSetRestriction, wx.ITEM_CHECK),
-                ("addGrassDB", icons["addGrassDB"], self.parent.OnAddGrassDB),
-                ("addLocation", icons["addLocation"], self.parent.OnCreateLocation),
                 (
-                    "downloadLocation",
+                    ("lock", icons["locked"].label),
+                    icons["locked"],
+                    self.OnSetRestriction,
+                    wx.ITEM_CHECK,
+                ),
+                (
+                    ("addGrassDB", icons["addGrassDB"].label),
+                    icons["addGrassDB"],
+                    self.parent.OnAddGrassDB,
+                ),
+                (
+                    ("addLocation", icons["addLocation"].label),
+                    icons["addLocation"],
+                    self.parent.OnCreateLocation,
+                ),
+                (
+                    ("downloadLocation", icons["downloadLocation"].label),
                     icons["downloadLocation"],
                     self.parent.OnDownloadLocation,
                 ),
-                ("addMapset", icons["addMapset"], self.parent.OnCreateMapset),
-                ("importRaster", icons["importRaster"], self.parent.OnImportGdalLayers),
-                ("importVector", icons["importVector"], self.parent.OnImportOgrLayers),
-                ("importLayer", icons["importLayer"], self.parent.OnImportMenu),
+                (
+                    ("addMapset", icons["addMapset"].label),
+                    icons["addMapset"],
+                    self.parent.OnCreateMapset,
+                ),
+                (
+                    ("importRaster", icons["importRaster"].label),
+                    icons["importRaster"],
+                    self.parent.OnImportGdalLayers,
+                ),
+                (
+                    ("importVector", icons["importVector"].label),
+                    icons["importVector"],
+                    self.parent.OnImportOgrLayers,
+                ),
+                (
+                    ("importLayer", icons["importLayer"].label),
+                    icons["importLayer"],
+                    self.parent.OnImportMenu,
+                ),
             )
         )
 

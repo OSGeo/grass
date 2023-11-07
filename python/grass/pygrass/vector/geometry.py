@@ -518,7 +518,7 @@ class Point(Geo):
     def __ne__(self, other):
         return not self == other
 
-    # Restore Python 2 hashing beaviour on Python 3
+    # Restore Python 2 hashing behaviour on Python 3
     __hash__ = object.__hash__
 
     def coords(self):
@@ -800,7 +800,7 @@ class Line(Geo):
 
         :param line: it is possible to extend a line, give a list of points,
                      or directly with a line_pnts struct.
-        :type line: Line object ot list of points
+        :type line: Line object of list of points
         :param forward: if forward is True the line is extend forward otherwise
                         is extend backward. The method use the
                         `Vect_append_points` C function.
@@ -871,7 +871,7 @@ class Line(Geo):
         return libvect.Vect_line_length(self.c_points)
 
     def length_geodesic(self):
-        """Calculate line length, usig `Vect_line_geodesic_length` C function.
+        """Calculate line length, using `Vect_line_geodesic_length` C function.
         ::
 
             >>> line = Line([(0, 0), (1, 1), (0, 1)])
@@ -1346,7 +1346,6 @@ class Node(object):
 
 
 class Boundary(Line):
-
     # geometry type
     gtype = libvect.GV_BOUNDARY
 

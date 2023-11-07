@@ -46,4 +46,3 @@ r.mapcalc "hemisphere = $HEIGHT"
 cleanup
 g.message "Generated raster map <hemisphere>"
 #echo "Now generate aspect + slope on <hemisphere>"
-

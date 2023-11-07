@@ -7,6 +7,7 @@ Classes:
  - mapdisp::MapPanelBase
  - mapdisp::SingleMapPanel
  - mapdisp::DoubleMapPanel
+ - mapdisp::FrameMixin
 
 (C) 2009-2014 by the GRASS Development Team
 
@@ -20,7 +21,6 @@ This program is free software under the GNU General Public License
 """
 
 import sys
-import six
 
 import wx
 
@@ -34,7 +34,7 @@ from grass.script import core as grass
 
 
 class MapPanelBase(wx.Panel):
-    """Base class for map display window
+    r"""Base class for map display window
 
     Derived class must use (create and initialize) \c statusbarManager
     or override
@@ -66,7 +66,7 @@ class MapPanelBase(wx.Panel):
         name="",
         **kwargs,
     ):
-        """
+        r"""
 
         .. warning::
             Use \a auimgr parameter only if you know what you are doing.
@@ -347,7 +347,6 @@ class MapPanelBase(wx.Panel):
         self.statusbarManager.AddStatusbarItem(
             sb.SbRender(self, statusbar=statusbar, position=2)
         )
-        self.statusbarManager.Update()
         return statusbar
 
     def AddStatusbarPane(self):
@@ -368,7 +367,7 @@ class MapPanelBase(wx.Panel):
         )
 
     def SetStatusText(self, *args):
-        """Overide wx.StatusBar method"""
+        """Override wx.StatusBar method"""
         self.statusbar.SetStatusText(*args)
 
     def ShowStatusbar(self, show):
@@ -387,7 +386,7 @@ class MapPanelBase(wx.Panel):
 
     def StatusbarEnableLongHelp(self, enable=True):
         """Enable/disable toolbars long help"""
-        for toolbar in six.itervalues(self.toolbars):
+        for toolbar in self.toolbars.values():
             if toolbar:
                 toolbar.EnableLongHelp(enable)
 
@@ -508,7 +507,7 @@ class MapPanelBase(wx.Panel):
 
 
 class SingleMapPanel(MapPanelBase):
-    """Panel with one map window.
+    r"""Panel with one map window.
 
     It is base class for panels which needs only one map.
 
@@ -610,11 +609,11 @@ class DoubleMapPanel(MapPanelBase):
         name=None,
         **kwargs,
     ):
-        """
+        r"""
 
         \a firstMap is set as active (by assign it to \c self.Map).
         Derived class should assging to \c self.MapWindow to make one
-        map window current by dafault.
+        map window current by default.
 
         :param parent: gui parent
         :param id: wx id
@@ -670,10 +669,10 @@ class DoubleMapPanel(MapPanelBase):
         return self.secondMapWindow
 
     def GetMap(self):
-        """Returns current map (renderer) instance
+        r"""Returns current map (renderer) instance
 
         @note Use this method to access current map renderer.
-        (It is not guarented that current map will be stored in
+        (It is not guaranteed that current map will be stored in
         \c self.Map in future versions.)
         """
         return self.Map
@@ -858,3 +857,18 @@ class FrameMixin:
 
     def Destroy(self):
         self.GetParent().Destroy()
+
+    def GetPosition(self):
+        return self.GetParent().GetPosition()
+
+    def SetPosition(self, pt):
+        self.GetParent().SetPosition(pt)
+
+    def GetSize(self):
+        return self.GetParent().GetSize()
+
+    def SetSize(self, *args):
+        self.GetParent().SetSize(*args)
+
+    def Close(self):
+        self.GetParent().Close()

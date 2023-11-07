@@ -27,11 +27,8 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (MapPanelBase)
 """
 
-from __future__ import print_function
-
 import os
 import sys
-import six
 import time
 import shutil
 import fileinput
@@ -270,7 +267,6 @@ class DMonMap(Map):
 
             reorderedLayers = [-1] * next_layer
             for i, layer in enumerate(existingLayers):
-
                 # owned layer was not found in cmd file -> is deleted
                 if layersOrder[i] == -1 and layer in self.ownedLayers:
                     self.ownedLayers.remove(layer)
@@ -598,7 +594,7 @@ class MapApp(wx.App):
             if self.timer.IsRunning:
                 self.timer.Stop()
             # terminate thread
-            for f in six.itervalues(monFile):
+            for f in monFile.values():
                 try_remove(f)
         return True
 
@@ -614,7 +610,7 @@ class MapApp(wx.App):
         # try:
         # GISBASE and other system environmental variables can not be used
         # since the process inherited them from GRASS
-        # raises exception when vaiable does not exists
+        # raises exception when viable does not exists
         # grass.gisenv()['GISDBASE']
         # except KeyError:
         #    self.timer.Stop()

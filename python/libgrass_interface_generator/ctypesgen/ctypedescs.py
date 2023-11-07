@@ -34,27 +34,41 @@ ctypes_type_map = {
     ("double", True, 0): "c_double",
     ("double", True, 1): "c_longdouble",
     ("int8_t", True, 0): "c_int8",
+    ("__int8_t", True, 0): "c_int8",
     ("__int8", True, 0): "c_int8",
     ("int16_t", True, 0): "c_int16",
+    ("__int16_t", True, 0): "c_int16",
     ("__int16", True, 0): "c_int16",
     ("int32_t", True, 0): "c_int32",
+    ("__int32_t", True, 0): "c_int32",
     ("__int32", True, 0): "c_int32",
     ("int64_t", True, 0): "c_int64",
     ("__int64", True, 0): "c_int64",
-    ("uint8_t", True, 0): "c_uint8",
-    ("uint16_t", True, 0): "c_uint16",
-    ("uint32_t", True, 0): "c_uint32",
-    ("uint64_t", True, 0): "c_uint64",
+    ("__int64_t", True, 0): "c_int64",
+    ("uint8_t", False, 0): "c_uint8",
+    ("__uint8", False, 0): "c_uint8",
+    ("__uint8_t", False, 0): "c_uint8",
+    ("uint16_t", False, 0): "c_uint16",
+    ("__uint16", False, 0): "c_uint16",
+    ("__uint16_t", False, 0): "c_uint16",
+    ("uint32_t", False, 0): "c_uint32",
+    ("__uint32", False, 0): "c_uint32",
+    ("__uint32_t", False, 0): "c_uint32",
+    ("uint64_t", False, 0): "c_uint64",
+    ("__uint64", False, 0): "c_uint64",
+    ("__uint64_t", False, 0): "c_uint64",
     ("_Bool", True, 0): "c_bool",
 }
 
 ctypes_type_map_python_builtin = {
+    ("int", True, -1): "c_short",
+    ("int", False, -1): "c_ushort",
     ("int", True, 2): "c_longlong",
     ("int", False, 2): "c_ulonglong",
     ("size_t", True, 0): "c_size_t",
     ("apr_int64_t", True, 0): "c_int64",
     ("off64_t", True, 0): "c_int64",
-    ("apr_uint64_t", True, 0): "c_uint64",
+    ("apr_uint64_t", False, 0): "c_uint64",
     ("wchar_t", True, 0): "c_wchar",
     ("ptrdiff_t", True, 0): "c_ptrdiff_t",  # Requires definition in preamble
     ("ssize_t", True, 0): "c_ptrdiff_t",  # Requires definition in preamble
@@ -109,7 +123,7 @@ def visit_type_and_collect_info(ctype):
     return structs, enums, typedefs, errors, identifiers
 
 
-# Remove one level of indirection from funtion pointer; needed for typedefs
+# Remove one level of indirection from function pointer; needed for typedefs
 # and function parameters.
 def remove_function_pointer(t):
     if type(t) == CtypesPointer and type(t.destination) == CtypesFunction:

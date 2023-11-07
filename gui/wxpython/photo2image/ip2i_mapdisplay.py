@@ -56,7 +56,7 @@ class MapPanel(SingleMapPanel):
         :param toolbars: array of activated toolbars, e.g. ['map', 'digit']
         :param map: instance of render.Map
         :param auimgs: AUI manager
-        :param kwargs: wx.Frame attribures
+        :param kwargs: wx.Frame attributes
         """
 
         SingleMapPanel.__init__(
@@ -104,7 +104,6 @@ class MapPanel(SingleMapPanel):
 
         # create statusbar and its manager
         self.statusbar = self.CreateStatusbar(statusbarItems)
-        self.statusbarManager.SetMode(5)  # goto GCP
 
         #
         # Init map display (buffered DC & set default cursor)
@@ -161,6 +160,9 @@ class MapPanel(SingleMapPanel):
         # windows
         self.list = self.CreateGCPList()
 
+        # set Go To GCP item as active in statusbar
+        self.mapWindowProperties.sbItem = 5
+
         # self.SrcMapWindow.SetSize((300, 300))
         # self.TgtMapWindow.SetSize((300, 300))
         self.list.SetSize((100, 150))
@@ -207,9 +209,6 @@ class MapPanel(SingleMapPanel):
         self.dialogs["legend"] = None
 
         self.decorationDialog = None  # decoration/overlays
-
-        # doing nice things in statusbar when other things are ready
-        self.statusbarManager.Update()
 
     def _setUpMapWindow(self, mapWindow):
         # TODO: almost the same implementation as for MapPanelBase (only names differ)

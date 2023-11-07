@@ -24,15 +24,15 @@ This program is free software under the GNU General Public License
 """
 
 from core.gcmd import RunCommand
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.toolbars import BaseToolbar, AuiToolbar, BaseIcons
 from icons.icon import MetaIcon
 
 
-class LMWorkspaceToolbar(BaseToolbar):
+class LMWorkspaceToolbar(AuiToolbar):
     """Layer Manager `workspace` toolbar"""
 
     def __init__(self, parent):
-        BaseToolbar.__init__(self, parent)
+        AuiToolbar.__init__(self, parent)
 
         self.InitToolbar(self._toolbarData())
 
@@ -54,9 +54,21 @@ class LMWorkspaceToolbar(BaseToolbar):
         }
         return self._getToolbarData(
             (
-                ("workspaceNew", icons["workspaceNew"], self.parent.OnWorkspaceNew),
-                ("workspaceOpen", icons["workspaceOpen"], self.parent.OnWorkspaceOpen),
-                ("workspaceSave", icons["workspaceSave"], self.parent.OnWorkspaceSave),
+                (
+                    ("workspaceNew", _("New workspace")),
+                    icons["workspaceNew"],
+                    self.parent.OnWorkspaceNew,
+                ),
+                (
+                    ("workspaceOpen", _("Open workspace")),
+                    icons["workspaceOpen"],
+                    self.parent.OnWorkspaceOpen,
+                ),
+                (
+                    ("workspaceSave", _("Save workspace")),
+                    icons["workspaceSave"],
+                    self.parent.OnWorkspaceSave,
+                ),
             )
         )
 
@@ -112,28 +124,72 @@ class DisplayPanelToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("addMulti", icons["addMulti"], self.parent.OnAddMaps),
-                ("addrast", icons["addRast"], self.parent.OnAddRaster),
-                ("rastmisc", icons["rastMisc"], self.parent.OnAddRasterMisc),
-                ("addvect", icons["addVect"], self.parent.OnAddVector),
-                ("vectmisc", icons["vectMisc"], self.parent.OnAddVectorMisc),
-                ("addovl", icons["addOverlay"], self.parent.OnAddOverlay),
-                ("addWS", icons["addWS"], self.parent.OnAddWS),
+                (
+                    ("addMulti", _("Add multiple map layers")),
+                    icons["addMulti"],
+                    self.parent.OnAddMaps,
+                ),
+                (
+                    ("addrast", _("Add raster map")),
+                    icons["addRast"],
+                    self.parent.OnAddRaster,
+                ),
+                (
+                    ("rastmisc", _("Add various raster maps")),
+                    icons["rastMisc"],
+                    self.parent.OnAddRasterMisc,
+                ),
+                (
+                    ("addvect", _("Add vector map")),
+                    icons["addVect"],
+                    self.parent.OnAddVector,
+                ),
+                (
+                    ("vectmisc", _("Add various vector maps")),
+                    icons["vectMisc"],
+                    self.parent.OnAddVectorMisc,
+                ),
+                (
+                    ("addovl", _("Add various overlays")),
+                    icons["addOverlay"],
+                    self.parent.OnAddOverlay,
+                ),
+                (
+                    ("addWS", _("Add web service map")),
+                    icons["addWS"],
+                    self.parent.OnAddWS,
+                ),
                 (None,),
-                ("addgrp", icons["addGroup"], self.parent.OnAddGroup),
-                ("delcmd", icons["delCmd"], self.parent.OnDeleteLayer),
+                (
+                    ("addgrp", icons["addGroup"].label),
+                    icons["addGroup"],
+                    self.parent.OnAddGroup,
+                ),
+                (
+                    ("delcmd", _("Delete map layer")),
+                    icons["delCmd"],
+                    self.parent.OnDeleteLayer,
+                ),
                 (None,),
-                ("vdigit", icons["vdigit"], self.parent.OnVDigit),
-                ("attribute", icons["attrTable"], self.parent.OnShowAttributeTable),
+                (
+                    ("vdigit", icons["vdigit"].label),
+                    icons["vdigit"],
+                    self.parent.OnVDigit,
+                ),
+                (
+                    ("attribute", icons["attrTable"].label),
+                    icons["attrTable"],
+                    self.parent.OnShowAttributeTable,
+                ),
             )
         )
 
 
-class LMToolsToolbar(BaseToolbar):
+class LMToolsToolbar(AuiToolbar):
     """Layer Manager `tools` toolbar"""
 
     def __init__(self, parent):
-        BaseToolbar.__init__(self, parent)
+        AuiToolbar.__init__(self, parent)
 
         self.InitToolbar(self._toolbarData())
 
@@ -162,24 +218,52 @@ class LMToolsToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("newdisplay", icons["newdisplay"], self.parent.OnNewDisplay),
+                (
+                    ("newdisplay", _("New display")),
+                    icons["newdisplay"],
+                    self.parent.OnNewDisplay,
+                ),
                 (None,),
-                ("mapCalc", icons["mapcalc"], self.parent.OnMapCalculator),
-                ("georect", icons["georectify"], self.parent.OnGCPManager),
-                ("modeler", icons["modeler"], self.parent.OnGModeler),
-                ("mapOutput", icons["composer"], self.parent.OnPsMap),
+                (
+                    ("mapCalc", icons["mapcalc"].label),
+                    icons["mapcalc"],
+                    self.parent.OnMapCalculator,
+                ),
+                (
+                    ("georect", icons["georectify"].label),
+                    icons["georectify"],
+                    self.parent.OnGCPManager,
+                ),
+                (
+                    ("modeler", icons["modeler"].label),
+                    icons["modeler"],
+                    self.parent.OnGModeler,
+                ),
+                (
+                    ("mapOutput", icons["composer"].label),
+                    icons["composer"],
+                    self.parent.OnPsMap,
+                ),
                 (None,),
-                ("script-load", icons["script-load"], self.parent.OnRunScript),
-                ("python", icons["python"], self.parent.OnSimpleEditor),
+                (
+                    ("script-load", icons["script-load"].label),
+                    icons["script-load"],
+                    self.parent.OnRunScript,
+                ),
+                (
+                    ("python", _("Python code editor")),
+                    icons["python"],
+                    self.parent.OnSimpleEditor,
+                ),
             )
         )
 
 
-class LMMiscToolbar(BaseToolbar):
+class LMMiscToolbar(AuiToolbar):
     """Layer Manager `misc` toolbar"""
 
     def __init__(self, parent):
-        BaseToolbar.__init__(self, parent)
+        AuiToolbar.__init__(self, parent)
 
         self.InitToolbar(self._toolbarData())
 
@@ -195,19 +279,27 @@ class LMMiscToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("settings", icons["settings"], self.parent.OnPreferences),
-                ("help", icons["help"], self.parent.OnHelp),
+                (
+                    ("settings", icons["settings"].label),
+                    icons["settings"],
+                    self.parent.OnPreferences,
+                ),
+                (
+                    ("help", icons["help"].label),
+                    icons["help"],
+                    self.parent.OnHelp,
+                ),
             )
         )
 
 
-class LMNvizToolbar(BaseToolbar):
+class LMNvizToolbar(AuiToolbar):
     """Nviz toolbar"""
 
     def __init__(self, parent):
         self.lmgr = parent
 
-        BaseToolbar.__init__(self, parent)
+        AuiToolbar.__init__(self, parent)
 
         # only one dialog can be open
         self.settingsDialog = None
@@ -235,10 +327,22 @@ class LMNvizToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
-                ("nvizCmd", icons["cmd"], self.OnNvizCmd),
+                (
+                    ("nvizCmd", icons["cmd"].label),
+                    icons["cmd"],
+                    self.OnNvizCmd,
+                ),
                 (None,),
-                ("settings", icons["settings"], self.parent.OnNvizPreferences),
-                ("help", icons["help"], self.OnHelp),
+                (
+                    ("settings", icons["settings"].label),
+                    icons["settings"],
+                    self.parent.OnNvizPreferences,
+                ),
+                (
+                    ("help", icons["help"].label),
+                    icons["help"],
+                    self.OnHelp,
+                ),
             )
         )
 

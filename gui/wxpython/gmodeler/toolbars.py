@@ -60,37 +60,106 @@ class ModelerToolbar(BaseToolbar):
             "comment": MetaIcon(img="label-add", label=_("Add comment to model")),
             "run": MetaIcon(img="execute", label=_("Run model")),
             "validate": MetaIcon(img="check", label=_("Validate model")),
-            "settings": BaseIcons["settings"].SetLabel(_("Modeler settings")),
+            "settings": BaseIcons["settings"],
             "properties": MetaIcon(img="options", label=_("Show model properties")),
             "variables": MetaIcon(
                 img="modeler-variables", label=_("Manage model variables")
             ),
             "redraw": MetaIcon(img="redraw", label=_("Redraw model canvas")),
-            "quit": BaseIcons["quit"].SetLabel(_("Quit Graphical Modeler")),
+            "help": BaseIcons["help"],
+            "quit": BaseIcons["quit"],
         }
 
         return self._getToolbarData(
             (
-                ("new", icons["new"], self.parent.OnModelNew),
-                ("open", icons["open"], self.parent.OnModelOpen),
-                ("save", icons["save"], self.parent.OnModelSave),
-                ("image", icons["toImage"], self.parent.OnExportImage),
-                ("python", icons["toPython"], self.parent.OnExportPython),
+                (
+                    ("new", icons["new"].label.rsplit(" ", 1)[0]),
+                    icons["new"],
+                    self.parent.OnModelNew,
+                ),
+                (
+                    ("open", icons["open"].label.rsplit(" ", 1)[0]),
+                    icons["open"],
+                    self.parent.OnModelOpen,
+                ),
+                (
+                    ("save", icons["save"].label.rsplit(" ", 1)[0]),
+                    icons["save"],
+                    self.parent.OnModelSave,
+                ),
+                (
+                    ("image", icons["toImage"].label.rsplit(" ", 1)[0]),
+                    icons["toImage"],
+                    self.parent.OnExportImage,
+                ),
+                (
+                    ("python", icons["toPython"].label),
+                    icons["toPython"],
+                    self.parent.OnExportPython,
+                ),
                 (None,),
-                ("action", icons["actionAdd"], self.parent.OnAddAction),
-                ("data", icons["dataAdd"], self.parent.OnAddData),
-                ("relation", icons["relation"], self.parent.OnDefineRelation),
-                ("loop", icons["loop"], self.parent.OnDefineLoop),
-                ("comment", icons["comment"], self.parent.OnAddComment),
+                (
+                    ("action", icons["actionAdd"].label),
+                    icons["actionAdd"],
+                    self.parent.OnAddAction,
+                ),
+                (
+                    ("data", icons["dataAdd"].label),
+                    icons["dataAdd"],
+                    self.parent.OnAddData,
+                ),
+                (
+                    ("relation", icons["relation"].label),
+                    icons["relation"],
+                    self.parent.OnDefineRelation,
+                ),
+                (
+                    ("loop", icons["loop"].label),
+                    icons["loop"],
+                    self.parent.OnDefineLoop,
+                ),
+                (
+                    ("comment", icons["comment"].label),
+                    icons["comment"],
+                    self.parent.OnAddComment,
+                ),
                 (None,),
-                ("redraw", icons["redraw"], self.parent.OnCanvasRefresh),
-                ("validate", icons["validate"], self.parent.OnValidateModel),
-                ("run", icons["run"], self.parent.OnRunModel),
+                (
+                    ("redraw", icons["redraw"].label),
+                    icons["redraw"],
+                    self.parent.OnCanvasRefresh,
+                ),
+                (
+                    ("validate", icons["validate"].label),
+                    icons["validate"],
+                    self.parent.OnValidateModel,
+                ),
+                (
+                    ("run", icons["run"].label),
+                    icons["run"],
+                    self.parent.OnRunModel,
+                ),
                 (None,),
-                ("variables", icons["variables"], self.parent.OnVariables),
-                ("settings", icons["settings"], self.parent.OnPreferences),
-                ("help", BaseIcons["help"], self.parent.OnHelp),
+                (
+                    ("variables", icons["variables"].label),
+                    icons["variables"],
+                    self.parent.OnVariables,
+                ),
+                (
+                    ("settings", icons["settings"].label),
+                    icons["settings"],
+                    self.parent.OnPreferences,
+                ),
+                (
+                    ("help", icons["help"].label),
+                    icons["help"],
+                    self.parent.OnHelp,
+                ),
                 (None,),
-                ("quit", icons["quit"], self.parent.OnCloseWindow),
+                (
+                    ("quit", icons["quit"].label),
+                    icons["quit"],
+                    self.parent.OnCloseWindow,
+                ),
             )
         )
