@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_bindupdate.c
- * 
+ *
  * \brief DBMI Library (driver) - bind update
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -22,7 +22,7 @@
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_d_bind_update()
+int db_d_bind_update(void)
 {
     dbToken token;
     dbCursor *cursor;
@@ -31,7 +31,7 @@ int db_d_bind_update()
 
     /* get the arg(s) */
     DB_RECV_TOKEN(&token);
-    cursor = (dbCursor *) db_find_token(token);
+    cursor = (dbCursor *)db_find_token(token);
     if (cursor == NULL || !db_test_cursor_type_update(cursor)) {
         db_error("** not an update cursor **");
         DB_SEND_FAILURE();

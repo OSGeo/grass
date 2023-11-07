@@ -1,4 +1,6 @@
-
+/* This file and its content is not used. */
+/* Could be removed at some point.       */
+#if 0
 /****************************************************************/
 /* disp_matrix()        Function to display the contents of     */
 /*                      the three matrices used in solving      */
@@ -10,10 +12,10 @@
 #include "param.h"
 
 void disp_matrix(double **a, double *x, double *z, int n)
-                        /* Displays matrices used to solve a 
-                           set of linear equations in the form 
+                        /* Displays matrices used to solve a
+                           set of linear equations in the form
 
-                           _                        _      _  _      _  _ 
+                           _                        _      _  _      _  _
                            | a(0,0) a(0,1) ... a(0,n) |    | x0 |    | z0 |
                            | a(1,0) a(1,1) ... a(1,n) |    | x1 |    | z1 |
                            |    :           :   ...   :    | .  | :  | =  | :  |
@@ -56,3 +58,5 @@ void disp_wind(CELL * z)
 
     fgets(dummy, 70, stdin);
 }
+#endif
+extern int dummy_for_iso_compilers; /* suppress -Wempty-translation-unit */

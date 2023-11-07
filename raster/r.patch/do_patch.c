@@ -1,5 +1,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
+
 /*
  * patch in non-zero data over zero data
  * keep track of the categories which are patched in
@@ -15,7 +16,9 @@ int is_zero_value(void *rast, RASTER_MAP_TYPE data_type)
     /* insert 0 check here */
 
     return Rast_is_null_value(rast, data_type) ||
-        Rast_get_d_value(rast, data_type) != 0.0 ? 0 : 1;
+                   Rast_get_d_value(rast, data_type) != 0.0
+               ? 0
+               : 1;
 }
 
 int do_patch(void *result, void *patch, struct Cell_stats *statf, int ncols,
@@ -26,7 +29,7 @@ int do_patch(void *result, void *patch, struct Cell_stats *statf, int ncols,
 
     more = 0;
     while (ncols-- > 0) {
-        if (use_zero) {         /* use 0 for transparency instead of NULL */
+        if (use_zero) { /* use 0 for transparency instead of NULL */
             if (is_zero_value(result, out_type) ||
                 Rast_is_null_value(result, out_type)) {
                 /* Don't patch hole with a null, just mark as more */
@@ -38,11 +41,11 @@ int do_patch(void *result, void *patch, struct Cell_stats *statf, int ncols,
                         more = 1;
                     Rast_raster_cpy(result, patch, 1, out_type);
                     if (out_type == CELL_TYPE && !no_support)
-                        Rast_update_cell_stats((CELL *) result, 1, statf);
+                        Rast_update_cell_stats((CELL *)result, 1, statf);
                 }
-            }                   /* ZERO support */
+            } /* ZERO support */
         }
-        else {                  /* use NULL for transparency instead of 0 */
+        else { /* use NULL for transparency instead of 0 */
 
             if (Rast_is_null_value(result, out_type)) {
                 if (Rast_is_null_value(patch, out_type))
@@ -50,9 +53,9 @@ int do_patch(void *result, void *patch, struct Cell_stats *statf, int ncols,
                 else {
                     Rast_raster_cpy(result, patch, 1, out_type);
                     if (out_type == CELL_TYPE && !no_support)
-                        Rast_update_cell_stats((CELL *) result, 1, statf);
+                        Rast_update_cell_stats((CELL *)result, 1, statf);
                 }
-            }                   /* NULL support */
+            } /* NULL support */
         }
         result = G_incr_void_ptr(result, out_cell_size);
         patch = G_incr_void_ptr(patch, out_cell_size);

@@ -51,7 +51,7 @@ FILTER *get_filter(char *name, int *nfilters, char *title)
             }
 
             count++;
-            filter = (FILTER *) G_realloc(filter, count * sizeof(FILTER));
+            filter = (FILTER *)G_realloc(filter, count * sizeof(FILTER));
             f = &filter[count - 1];
             f->size = n;
             f->divisor = 1;
@@ -62,9 +62,9 @@ FILTER *get_filter(char *name, int *nfilters, char *title)
             have_type = 0;
             have_start = 0;
 
-            f->matrix = (DCELL **) G_malloc(n * sizeof(DCELL *));
+            f->matrix = (DCELL **)G_malloc(n * sizeof(DCELL *));
             for (row = 0; row < n; row++)
-                f->matrix[row] = (DCELL *) G_malloc(n * sizeof(DCELL));
+                f->matrix[row] = (DCELL *)G_malloc(n * sizeof(DCELL));
 
             for (row = 0; row < n; row++)
                 for (col = 0; col < n; col++)
@@ -90,10 +90,10 @@ FILTER *get_filter(char *name, int *nfilters, char *title)
                     continue;
                 }
                 f->divisor = 0;
-                f->dmatrix = (DCELL **) G_malloc(f->size * sizeof(DCELL *));
+                f->dmatrix = (DCELL **)G_malloc(f->size * sizeof(DCELL *));
                 for (row = 0; row < f->size; row++)
                     f->dmatrix[row] =
-                        (DCELL *) G_malloc(f->size * sizeof(DCELL));
+                        (DCELL *)G_malloc(f->size * sizeof(DCELL));
 
                 for (row = 0; row < f->size; row++)
                     for (col = 0; col < f->size; col++)

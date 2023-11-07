@@ -1,4 +1,3 @@
-
 /***********************************************************************
  * I_get_ref_points()
  * I_put_ref_points()
@@ -8,7 +7,7 @@
 
 #define REF_POINT_FILE "REF_POINTS"
 
-int I_read_ref_points(FILE * fd, struct Ortho_Photo_Points *cp)
+int I_read_ref_points(FILE *fd, struct Ortho_Photo_Points *cp)
 {
     char buf[100];
     double e1, e2, n1, n2;
@@ -39,9 +38,8 @@ int I_read_ref_points(FILE * fd, struct Ortho_Photo_Points *cp)
     return 1;
 }
 
-int
-I_new_ref_point(struct Ortho_Photo_Points *cp, double e1, double n1,
-                double e2, double n2, int status)
+int I_new_ref_point(struct Ortho_Photo_Points *cp, double e1, double n1,
+                    double e2, double n2, int status)
 {
     int i;
     size_t size;
@@ -67,7 +65,7 @@ I_new_ref_point(struct Ortho_Photo_Points *cp, double e1, double n1,
     return 0;
 }
 
-int I_write_ref_points(FILE * fd, struct Ortho_Photo_Points *cp)
+int I_write_ref_points(FILE *fd, struct Ortho_Photo_Points *cp)
 {
     int i;
 
@@ -77,8 +75,7 @@ int I_write_ref_points(FILE * fd, struct Ortho_Photo_Points *cp)
     fprintf(fd, "#\n");
     for (i = 0; i < cp->count; i++)
         if (cp->status[i] >= 0)
-            fprintf(fd, "  %15f %15f %15f %15f %d\n",
-                    cp->e1[i], cp->n1[i],
+            fprintf(fd, "  %15f %15f %15f %15f %d\n", cp->e1[i], cp->n1[i],
                     cp->e2[i], cp->n2[i], cp->status[i]);
 
     return 0;
@@ -93,8 +90,7 @@ int I_get_ref_points(char *groupname, struct Ortho_Photo_Points *cp)
     /*fprintf (stderr, "Try to f_open_group_file_old \n"); */
     fd = I_fopen_group_file_old(groupname, REF_POINT_FILE);
     if (fd == NULL) {
-        sprintf(msg,
-                "unable to open reference point file for group [%s in %s]",
+        sprintf(msg, "unable to open reference point file for group [%s in %s]",
                 groupname, G_mapset());
         G_warning("%s", msg);
         return 0;
@@ -104,8 +100,7 @@ int I_get_ref_points(char *groupname, struct Ortho_Photo_Points *cp)
     stat = I_read_ref_points(fd, cp);
     fclose(fd);
     if (stat < 0) {
-        sprintf(msg,
-                "bad format in reference point file for group [%s in %s]",
+        sprintf(msg, "bad format in reference point file for group [%s in %s]",
                 groupname, G_mapset());
         G_warning("%s", msg);
         return 0;

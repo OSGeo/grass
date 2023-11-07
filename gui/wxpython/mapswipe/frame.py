@@ -411,8 +411,8 @@ class SwipeMapPanel(DoubleMapPanel):
                 secondLayerList=None,
             )
             dlg.applyChanges.connect(self.OnApplyInputChanges)
-            # connect to convertor object to convert to Map
-            # store reference to convertor is needed otherwise it would be
+            # connect to converter object to convert to Map
+            # store reference to converter is needed otherwise it would be
             # discarded
             self._firstConverter = self._connectSimpleLmgr(
                 dlg.GetFirstSimpleLmgr(), self.GetFirstMap()
@@ -752,29 +752,32 @@ class SwipeMapPanel(DoubleMapPanel):
 
         east, north = self.GetFirstWindow().Pixel2Cell((x, y))
 
-        # use display region settings instead of computation region settings
-        self.tmpreg = os.getenv("GRASS_REGION")
-        os.environ["GRASS_REGION"] = self.GetFirstMap().SetRegion(windres=False)
-
         result = []
+        env = os.environ.copy()
         if rasters[0]:
-            result.extend(
-                grass.raster_what(map=rasters[0], coord=(east, north), localized=True)
-            )
+            for raster in rasters[0]:
+                env["GRASS_REGION"] = grass.region_env(raster=raster)
+                result.extend(
+                    grass.raster_what(
+                        map=raster, coord=(east, north), localized=True, env=env
+                    )
+                )
         if vectors[0]:
             result.extend(
                 grass.vector_what(map=vectors[0], coord=(east, north), distance=qdist)
             )
         if rasters[1]:
-            result.extend(
-                grass.raster_what(map=rasters[1], coord=(east, north), localized=True)
-            )
+            for raster in rasters[1]:
+                env["GRASS_REGION"] = grass.region_env(raster=raster)
+                result.extend(
+                    grass.raster_what(
+                        map=raster, coord=(east, north), localized=True, env=env
+                    )
+                )
         if vectors[1]:
             result.extend(
                 grass.vector_what(map=vectors[1], coord=(east, north), distance=qdist)
             )
-
-        self._QueryMapDone()
 
         result = PrepareQueryResults(coordinates=(east, north), result=result)
         if self._queryDialog:
@@ -791,19 +794,6 @@ class SwipeMapPanel(DoubleMapPanel):
     def _oncloseQueryDialog(self, event):
         self._queryDialog = None
         event.Skip()
-
-    def _QueryMapDone(self):
-        """Restore settings after querying (restore GRASS_REGION)"""
-        if hasattr(self, "tmpreg"):
-            if self.tmpreg:
-                os.environ["GRASS_REGION"] = self.tmpreg
-            elif "GRASS_REGION" in os.environ:
-                del os.environ["GRASS_REGION"]
-        elif "GRASS_REGION" in os.environ:
-            del os.environ["GRASS_REGION"]
-
-        if hasattr(self, "tmpreg"):
-            del self.tmpreg
 
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""

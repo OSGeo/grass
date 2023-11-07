@@ -27,7 +27,7 @@ static void mystats(double, double, double, double, double *, double *);
  *  \param x array of x coordinates
  *  \param y array of y coordinates
  *  \param n number of coordinates
- * 
+ *
  * \return -1 if it contains the south pole
  * \return 1 if it contains the north pole
  * \return 0 if it contains neither pole.

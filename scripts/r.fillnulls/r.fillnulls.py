@@ -296,7 +296,16 @@ def main():
         os.remove(cats_file_name)
 
         if len(cat_list) < 1:
-            grass.fatal(_("Input map has no holes. Check region settings."))
+            # no holes found in current region
+            grass.run_command(
+                "g.copy", raster="%s,%sfilled" % (input, prefix), overwrite=True
+            )
+            grass.warning(
+                _(
+                    "Input map <%s> has no holes. Copying to output without modification."
+                )
+                % (input,)
+            )
 
         # GTC Hole is NULL area in a raster map
         grass.message(_("Processing %d map holes") % len(cat_list))

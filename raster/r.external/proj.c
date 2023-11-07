@@ -6,9 +6,8 @@
 #include <ogr_srs_api.h>
 
 /* keep in sync with r.in.gdal, v.in.ogr, v.external */
-void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
-                      char *outloc, int create_only, int override,
-                      int check_only)
+void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
+                      int create_only, int override, int check_only)
 {
     struct Cell_head loc_wind;
     struct Key_Value *proj_info = NULL, *proj_units = NULL;
@@ -51,7 +50,8 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 
         if (!hSRS || (!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS))) {
             G_important_message(_("Input contains an invalid SRS. "
-                                  "WKT definition:\n%s"), wkt);
+                                  "WKT definition:\n%s"),
+                                wkt);
 
             proj_trouble = 2;
         }
@@ -60,7 +60,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 
             if (OSRIsProjected(hSRS))
                 authkey = "PROJCS";
-            else                /* is geographic */
+            else /* is geographic */
                 authkey = "GEOGCS";
 
             authname = OSRGetAuthorityName(hSRS, authkey);
@@ -92,7 +92,8 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 
         if (!hSRS || (!OSRIsProjected(hSRS) && !OSRIsGeographic(hSRS))) {
             G_important_message(_("Input contains an invalid SRS. "
-                                  "WKT definition:\n%s"), wkt);
+                                  "WKT definition:\n%s"),
+                                wkt);
 
             proj_trouble = 2;
         }
@@ -101,7 +102,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
 
             if (OSRIsProjected(hSRS))
                 authkey = "PROJCS";
-            else                /* is geographic */
+            else /* is geographic */
                 authkey = "GEOGCS";
 
             authname = OSRGetAuthorityName(hSRS, authkey);
@@ -133,14 +134,13 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
                             "format; cannot create new location."));
         }
         else {
-            if (0 != G_make_location_crs(outloc, cellhd, proj_info,
-                                         proj_units, srid, wkt)) {
-                G_fatal_error(_("Unable to create new location <%s>"),
-                              outloc);
+            if (0 != G_make_location_crs(outloc, cellhd, proj_info, proj_units,
+                                         srid, wkt)) {
+                G_fatal_error(_("Unable to create new location <%s>"), outloc);
             }
             G_message(_("Location <%s> created"), outloc);
 
-            G_unset_window();   /* new location, projection, and window */
+            G_unset_window(); /* new location, projection, and window */
             G_get_window(cellhd);
         }
 
@@ -175,10 +175,9 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
             }
         }
 
-        /* -------------------------------------------------------------------- */
-        /*      Does the projection of the current location match the           */
-        /*      dataset?                                                        */
-        /* -------------------------------------------------------------------- */
+        /* -----------------------------------------------------------------*/
+        /*   Does the projection of the current location match the dataset? */
+        /* -----------------------------------------------------------------*/
         G_get_default_window(&loc_wind);
         /* fetch LOCATION PROJ info */
         if (loc_wind.proj != PROJECTION_XY) {
@@ -191,15 +190,13 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
             cellhd->zone = loc_wind.zone;
             G_message(_("Over-riding projection check"));
         }
-        else if (loc_wind.proj != cellhd->proj
-                 || (err =
-                     G_compare_projections(loc_proj_info, loc_proj_units,
-                                           proj_info, proj_units)) != 1) {
+        else if (loc_wind.proj != cellhd->proj ||
+                 (err = G_compare_projections(loc_proj_info, loc_proj_units,
+                                              proj_info, proj_units)) != 1) {
             int i_value;
 
-            strcpy(error_msg,
-                   _("Projection of dataset does not"
-                     " appear to match current location.\n\n"));
+            strcpy(error_msg, _("Projection of dataset does not"
+                                " appear to match current location.\n\n"));
 
             /* TODO: output this info sorted by key: */
             if (loc_wind.proj != cellhd->proj || err != -2) {
@@ -248,8 +245,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
                                 cellhd->proj);
                     else if (cellhd->proj == PROJECTION_LL)
                         sprintf(error_msg + strlen(error_msg),
-                                "Dataset proj = %d (lat/long)\n",
-                                cellhd->proj);
+                                "Dataset proj = %d (lat/long)\n", cellhd->proj);
                     else if (cellhd->proj == PROJECTION_UTM)
                         sprintf(error_msg + strlen(error_msg),
                                 "Dataset proj = %d (UTM), zone = %d\n",
@@ -322,13 +318,13 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS,
                 }
             }
             if (!check_only) {
-                strcat(error_msg,
-                       _("\nIn case of no significant differences in the projection definitions,"
-                        " use the -o flag to ignore them and use"
-                        " current location definition.\n"));
-                strcat(error_msg,
-                       _("Consider generating a new location from the input dataset using "
-                        "the 'location' parameter.\n"));
+                strcat(error_msg, _("\nIn case of no significant differences "
+                                    "in the projection definitions,"
+                                    " use the -o flag to ignore them and use"
+                                    " current location definition.\n"));
+                strcat(error_msg, _("Consider generating a new location from "
+                                    "the input dataset using "
+                                    "the 'location' parameter.\n"));
             }
 
             if (check_only)

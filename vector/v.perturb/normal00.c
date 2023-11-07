@@ -6,9 +6,9 @@
  * Read the file GPL.TXT coming with GRASS for details.
  */
 
-#include<stdio.h>
-#include<math.h>
-#include"zufall.h"
+#include <stdio.h>
+#include <math.h>
+#include "zufall.h"
 
 int normal00(void)
 {
@@ -30,4 +30,4 @@ int normal00(void)
         klotz1_1.xbuff[i] = t2 * r2;
     }
     return 0;
-}                               /* normal00 */
+} /* normal00 */

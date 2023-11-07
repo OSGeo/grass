@@ -57,9 +57,8 @@ void list_codes(char *authname)
     PROJ_CRS_INFO **proj_crs_info;
 
     crs_cnt = 0;
-    proj_crs_info = proj_get_crs_info_list_from_database(NULL,
-                                                         authname, NULL,
-                                                         &crs_cnt);
+    proj_crs_info =
+        proj_get_crs_info_list_from_database(NULL, authname, NULL, &crs_cnt);
     if (crs_cnt < 1)
         G_fatal_error(_("No codes found for authority %s"), authname);
 
@@ -69,15 +68,14 @@ void list_codes(char *authname)
         PJ *pj;
 
         emptystr = '\0';
-        pj = proj_create_from_database(NULL,
-                                       proj_crs_info[i]->auth_name,
-                                       proj_crs_info[i]->code,
-                                       PJ_CATEGORY_CRS, 0, NULL);
+        pj = proj_create_from_database(NULL, proj_crs_info[i]->auth_name,
+                                       proj_crs_info[i]->code, PJ_CATEGORY_CRS,
+                                       0, NULL);
         proj_definition = proj_as_proj_string(NULL, pj, PJ_PROJ_5, NULL);
         if (!proj_definition) {
             /* what to do with a CRS without proj string ? */
-            G_debug(1, "No proj string for %s:%s",
-                    proj_crs_info[i]->auth_name, proj_crs_info[i]->code);
+            G_debug(1, "No proj string for %s:%s", proj_crs_info[i]->auth_name,
+                    proj_crs_info[i]->code);
             proj_definition = &emptystr;
         }
 
@@ -126,8 +124,8 @@ void list_codes(char *authname)
 
     /* PROJ 4 / 5 */
 
-    /* the init files do not have a common structure, thus restrict to epsg 
-     * see pj_init.c get_init_string() in PROJ 4 / 5 for a 
+    /* the init files do not have a common structure, thus restrict to epsg
+     * see pj_init.c get_init_string() in PROJ 4 / 5 for a
      * generic init file parser, however without descriptive name */
     if (strcmp(authname, "epsg") != 0)
         G_fatal_error(_("Only epsg file is currently supported"));
@@ -156,7 +154,7 @@ void list_codes(char *authname)
         }
 
         /* name: could be text following '# ' */
-        /* code: <code> 
+        /* code: <code>
          * definition follows code until next '<' */
 
         if (*buf == '#' && buflen > 2) {

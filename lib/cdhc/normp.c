@@ -1,6 +1,5 @@
 #include <math.h>
 
-
 /*-
  *     SUBROUTINE Cdhc_normp(Z, P, Q, PDF)
  *
@@ -22,14 +21,14 @@
 
 double Cdhc_normp(double z)
 {
-    static double p[7] = { 220.2068679123761, 221.2135961699311,
-        112.079291497870, 33.91286607838300, 6.37396220353165,
-        0.7003830644436881, 0.352624965998910e-1
-    };
-    static double q[8] = { 440.4137358247522, 793.8265125199484,
-        637.3336333788311, 296.5642487796737, 86.78073220294608,
-        16.06417757920695, 1.755667163182642, 0.8838834764831844e-1
-    };
+    static double p[7] = {220.2068679123761,   221.2135961699311,
+                          112.079291497870,    33.91286607838300,
+                          6.37396220353165,    0.7003830644436881,
+                          0.352624965998910e-1};
+    static double q[8] = {440.4137358247522, 793.8265125199484,
+                          637.3336333788311, 296.5642487796737,
+                          86.78073220294608, 16.06417757920695,
+                          1.755667163182642, 0.8838834764831844e-1};
     static double cutoff = 7.071, root2pi = 2.506628274631001;
     double zabs, expntl;
     double pee, queue, pdf;
@@ -54,15 +53,26 @@ double Cdhc_normp(double z)
     pdf = expntl / root2pi;
 
     if (zabs < cutoff)
-        pee = expntl * ((((((p[6] * zabs + p[5]) * zabs + p[4])
-                           * zabs + p[3]) * zabs + p[2]) * zabs +
-                         p[1]) * zabs + p[0])
-            / (((((((q[7] * zabs + q[6]) * zabs + q[5]) * zabs + q[4])
-                  * zabs + q[3]) * zabs + q[2]) * zabs + q[1]) * zabs + q[0]);
+        pee = expntl *
+              ((((((p[6] * zabs + p[5]) * zabs + p[4]) * zabs + p[3]) * zabs +
+                 p[2]) *
+                    zabs +
+                p[1]) *
+                   zabs +
+               p[0]) /
+              (((((((q[7] * zabs + q[6]) * zabs + q[5]) * zabs + q[4]) * zabs +
+                  q[3]) *
+                     zabs +
+                 q[2]) *
+                    zabs +
+                q[1]) *
+                   zabs +
+               q[0]);
     else
-        pee = pdf / (zabs + 1.0 / (zabs + 2.0 / (zabs + 3.0 / (zabs + 4.0 /
-                                                               (zabs +
-                                                                0.65)))));
+        pee =
+            pdf /
+            (zabs +
+             1.0 / (zabs + 2.0 / (zabs + 3.0 / (zabs + 4.0 / (zabs + 0.65)))));
 
     if (z < 0.0)
         queue = 1.0 - pee;

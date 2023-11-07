@@ -1,12 +1,3 @@
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 import ctypes
 import numpy as np
 
@@ -634,7 +625,7 @@ def raster2numpy(rastname, mapset=""):
     """Return a numpy array from a raster map
 
     :param str rastname: the name of raster map
-    :parar str mapset: the name of mapset containig raster map
+    :parar str mapset: the name of mapset containing raster map
     """
     with RasterRow(rastname, mapset=mapset, mode="r") as rast:
         return np.array(rast)
@@ -729,7 +720,6 @@ def numpy2raster(array, mtype, rastname, overwrite=False):
 
 
 if __name__ == "__main__":
-
     import doctest
     from grass.pygrass.modules import Module
 

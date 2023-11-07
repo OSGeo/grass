@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       v.select
@@ -33,8 +32,9 @@ int main(int argc, char *argv[])
     int nskipped[2], native, nfound;
     int itype[2], ifield[2];
 
-    int *ALines;                /* List of lines: 0 do not output, 1 - write to output */
-    int *AAreas;                /* List of areas: 0 do not output, 1 - write area boundaries to output */
+    int *ALines; /* List of lines: 0 do not output, 1 - write to output */
+    int *AAreas; /* List of areas: 0 do not output, 1 - write area boundaries
+                    to output */
     int **cats, *ncats, *fields, nfields;
 
     struct GModule *module;
@@ -50,61 +50,59 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("spatial query"));
-    module->description =
-        _("Selects features from vector map (A) by features from other vector map (B).");
+    module->description = _("Selects features from vector map (A) by features "
+                            "from other vector map (B).");
 
     parse_options(&parm, &flag);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    if (parm.operator-> answer[0] == 'e')
-        operator = OP_EQUALS;
+    if (parm.operator->answer[0] == 'e')
+        operator= OP_EQUALS;
 
-    else if (parm.operator-> answer[0] == 'd') {
+    else if (parm.operator->answer[0] == 'd') {
         /* operator = OP_DISJOINT; */
-        operator = OP_INTERSECTS;
+        operator= OP_INTERSECTS;
 
         flag.reverse->answer = YES;
     }
-    else if (parm.operator-> answer[0] == 'i')
-        operator = OP_INTERSECTS;
+    else if (parm.operator->answer[0] == 'i')
+        operator= OP_INTERSECTS;
 
-    else if (parm.operator-> answer[0] == 't')
-        operator = OP_TOUCHES;
+    else if (parm.operator->answer[0] == 't')
+        operator= OP_TOUCHES;
 
-    else if (parm.operator-> answer[0] == 'c' &&
-             parm.operator-> answer[1] == 'r')
-        operator = OP_CROSSES;
+    else if (parm.operator->answer[0] == 'c' && parm.operator->answer[1] == 'r')
+        operator= OP_CROSSES;
 
-    else if (parm.operator-> answer[0] == 'w')
-        operator = OP_WITHIN;
+    else if (parm.operator->answer[0] == 'w')
+        operator= OP_WITHIN;
 
-    else if (parm.operator-> answer[0] == 'c' &&
-             parm.operator-> answer[1] == 'o')
-        operator = OP_CONTAINS;
+    else if (parm.operator->answer[0] == 'c' && parm.operator->answer[1] == 'o')
+        operator= OP_CONTAINS;
 
-    else if (parm.operator-> answer[0] == 'o') {
-        if (strcmp(parm.operator-> answer, "overlaps") == 0)
-            operator = OP_OVERLAPS;
+    else if (parm.operator->answer[0] == 'o') {
+        if (strcmp(parm.operator->answer, "overlaps") == 0)
+            operator= OP_OVERLAPS;
 
         else
-            operator = OP_OVERLAP;
+            operator= OP_OVERLAP;
     }
-    else if (parm.operator-> answer[0] == 'r')
-        operator = OP_RELATE;
+    else if (parm.operator->answer[0] == 'r')
+        operator= OP_RELATE;
 
     else
-        G_fatal_error(_("Unknown operator '%s'"), parm.operator-> answer);
+        G_fatal_error(_("Unknown operator '%s'"), parm.operator->answer);
 
 #ifdef HAVE_GEOS
-    if (operator == OP_RELATE && !parm.relate->answer) {
+    if (operator== OP_RELATE && !parm.relate->answer) {
         G_fatal_error(_("Required parameter <%s> not set"), parm.relate->key);
     }
 #else
-    if (operator != OP_OVERLAP) {
+    if (operator!= OP_OVERLAP) {
         G_warning(_("Operator can only be 'overlap'"));
-        operator = OP_OVERLAP;
+        operator= OP_OVERLAP;
     }
 #endif
     for (iopt = 0; iopt < 2; iopt++) {
@@ -136,15 +134,13 @@ int main(int argc, char *argv[])
 
     /* Select features */
 #ifdef HAVE_GEOS
-    nfound = select_lines(&(In[0]), itype[0], ifield[0],
-                          &(In[1]), itype[1], ifield[1],
-                          flag.cat->answer ? 1 : 0, operator,
+    nfound = select_lines(&(In[0]), itype[0], ifield[0], &(In[1]), itype[1],
+                          ifield[1], flag.cat->answer ? 1 : 0, operator,
                           parm.relate->answer, ALines, AAreas, nskipped);
 #else
-    nfound = select_lines(&(In[0]), itype[0], ifield[0],
-                          &(In[1]), itype[1], ifield[1],
-                          flag.cat->answer ? 1 : 0, operator,
-                          NULL, ALines, AAreas, nskipped);
+    nfound = select_lines(&(In[0]), itype[0], ifield[0], &(In[1]), itype[1],
+                          ifield[1], flag.cat->answer ? 1 : 0, operator, NULL,
+                          ALines, AAreas, nskipped);
 #endif
 
 #ifdef HAVE_GEOS
@@ -156,12 +152,10 @@ int main(int argc, char *argv[])
         AAreas = NULL;
     }
 
-
     if ((!flag.reverse->answer && nfound > 0) ||
         (flag.reverse->answer && nlines + nareas - nfound > 0)) {
         /* Open output */
-        if (Vect_open_new(&Out, parm.output->answer, Vect_is_3d(&(In[0]))) <
-            0)
+        if (Vect_open_new(&Out, parm.output->answer, Vect_is_3d(&(In[0]))) < 0)
             G_fatal_error(_("Unable to create vector map <%s>"),
                           parm.output->answer);
 
@@ -184,10 +178,9 @@ int main(int argc, char *argv[])
             Vect_copy_map_dblinks(&(In[0]), &Out, TRUE);
         }
 
-        write_lines(&(In[0]), IFi, ALines, AAreas,
-                    &Out, flag.table->answer ? 1 : 0,
-                    flag.reverse->answer ? 1 : 0, nfields, fields, ncats,
-                    cats);
+        write_lines(&(In[0]), IFi, ALines, AAreas, &Out,
+                    flag.table->answer ? 1 : 0, flag.reverse->answer ? 1 : 0,
+                    nfields, fields, ncats, cats);
 
         /* Copy tables */
         if (!flag.table->answer && native) {

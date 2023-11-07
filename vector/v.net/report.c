@@ -52,16 +52,16 @@ int report(struct Map_info *In, int afield, int nfield, int action)
 
                 nnodes = List->n_values;
                 if (nnodes > 0) {
-                    line = List->id[nnodes - 1];        /* last in list */
+                    line = List->id[nnodes - 1]; /* last in list */
                     Vect_read_line(In, NULL, Cats, line);
                     Vect_cat_get(Cats, nfield, &(cat_node[j]));
                 }
 
                 if (nnodes == 0) {
-                    /* this is ok, not every node needs to be 
+                    /* this is ok, not every node needs to be
                      * represented by a point */
-                    G_debug(4, "No point here: %g %g %.g line category: %d",
-                            x, y, z, cat_line);
+                    G_debug(4, "No point here: %g %g %.g line category: %d", x,
+                            y, z, cat_line);
                 }
                 else if (nnodes > 1)
                     G_warning(_("%d points found: %g %g %g line category: %d"),
@@ -70,12 +70,11 @@ int report(struct Map_info *In, int afield, int nfield, int action)
             fprintf(stdout, "%d %d %d\n", cat_line, cat_node[0], cat_node[1]);
         }
     }
-    else {                      /* node report */
+    else { /* node report */
         int elem, nelem, type, k, l;
         struct ilist *List;
 
         List = Vect_new_list();
-
 
         for (i = 1; i <= nlines; i++) {
 
@@ -91,8 +90,8 @@ int report(struct Map_info *In, int afield, int nfield, int action)
             nnodes = Vect_select_nodes_by_box(In, &box, List);
 
             if (nnodes > 1) {
-                G_warning(_("Duplicate nodes at x=%g y=%g z=%g "),
-                          Points->x[0], Points->y[0], Points->z[0]);
+                G_warning(_("Duplicate nodes at x=%g y=%g z=%g "), Points->x[0],
+                          Points->y[0], Points->z[0]);
             }
             if (nnodes > 0) {
                 node = List->value[0];

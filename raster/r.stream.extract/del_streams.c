@@ -5,13 +5,13 @@
 #include "local_proto.h"
 
 /* get stream segment length */
-int seg_length(CELL stream_id, CELL * next_stream_id)
+int seg_length(CELL stream_id, CELL *next_stream_id)
 {
     int r, c, r_nbr, c_nbr;
     int slength = 1;
     CELL curr_stream;
-    int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
-    int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
+    int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
+    int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
     ASP_FLAG af;
 
     r = stream_node[stream_id].r;
@@ -52,8 +52,8 @@ int update_stream_id(CELL stream_id, CELL new_stream_id)
     int i, r, c, r_nbr, c_nbr;
     CELL new_stream = new_stream_id;
     CELL curr_stream;
-    int asp_r[9] = { 0, -1, -1, -1, 0, 1, 1, 1, 0 };
-    int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
+    int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
+    int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
     ASP_FLAG af;
 
     r = stream_node[stream_id].r;
@@ -101,10 +101,10 @@ int update_stream_id(CELL stream_id, CELL new_stream_id)
                 else {
                     stream_node[curr_stream].n_trib--;
                     stream_node[curr_stream].trib[i] =
-                        stream_node[curr_stream].
-                        trib[stream_node[curr_stream].n_trib];
-                    stream_node[curr_stream].trib[stream_node[curr_stream].
-                                                  n_trib] = 0;
+                        stream_node[curr_stream]
+                            .trib[stream_node[curr_stream].n_trib];
+                    stream_node[curr_stream]
+                        .trib[stream_node[curr_stream].n_trib] = 0;
                 }
                 last_i = i;
                 break;
@@ -133,7 +133,8 @@ int del_streams(int min_length)
 
     G_message(n_("Deleting stream segments shorter than %d cell...",
                  "Deleting stream segments shorter than %d cells...",
-                 min_length), min_length);
+                 min_length),
+              min_length);
 
     /* TODO: proceed from stream heads to outlets
      *       -> use depth first post order traversal */
@@ -195,7 +196,8 @@ int del_streams(int min_length)
     }
 
     G_verbose_message(n_("%d stream segment deleted",
-                         "%d stream segments deleted", n_deleted), n_deleted);
+                         "%d stream segments deleted", n_deleted),
+                      n_deleted);
 
     return n_deleted;
 }

@@ -10,5 +10,5 @@ double bb_alb_landsat(double bluechan, double greenchan, double redchan,
                       double nirchan, double chan5, double chan7);
 double bb_alb_noaa(double redchan, double nirchan);
 
-double bb_alb_modis(double redchan, double nirchan, double chan3,
-                    double chan4, double chan5, double chan6, double chan7);
+double bb_alb_modis(double redchan, double nirchan, double chan3, double chan4,
+                    double chan5, double chan6, double chan7);

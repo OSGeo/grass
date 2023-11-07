@@ -1,10 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       v.timestamp
- *  
+ *
  * AUTHOR(S):    Soeren Gebbert <soerengebbert googlemail.com>
- *               based on r.timestamp from Michael Shapiro, CERL (original contributor)
+ *               based on r.timestamp from Michael Shapiro, CERL (original
+ *               contributor)
  *
  * PURPOSE:      Print/add/remove a timestamp for a vector map
  * COPYRIGHT:    (C) 2012 by the GRASS Development Team

@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.generalize
@@ -34,7 +33,8 @@ int douglas_peucker(struct line_pnts *Points, double thresh, int with_z)
         return Points->n_points;
     }
 
-    int *index = G_malloc(sizeof(int) * Points->n_points);      /* Indices of points in output line */
+    int *index = G_malloc(
+        sizeof(int) * Points->n_points); /* Indices of points in output line */
 
     if (!index) {
         G_fatal_error(_("Out of memory"));
@@ -42,20 +42,20 @@ int douglas_peucker(struct line_pnts *Points, double thresh, int with_z)
         return Points->n_points;
     }
 
-    int top = 2;                /* first free slot in the stack */
-    int icount = 1;             /* number of indices stored */
+    int top = 2;    /* first free slot in the stack */
+    int icount = 1; /* number of indices stored */
     int i;
 
     thresh *= thresh;
 
-    index[0] = 0;               /* first point is always in output line */
+    index[0] = 0; /* first point is always in output line */
 
     /* stack contains pairs of elements: (beginning, end) */
 
     stack[0] = 0;
     stack[1] = Points->n_points - 1;
 
-    while (top > 0) {           /*there are still segments to consider */
+    while (top > 0) { /*there are still segments to consider */
         /*Pop indices of the segment from the stack */
         int last = stack[--top];
         int first = stack[--top];
@@ -71,26 +71,29 @@ int douglas_peucker(struct line_pnts *Points, double thresh, int with_z)
         int maxindex = -1;
         double maxdist = -1;
 
-        for (i = first + 1; i <= last - 1; i++) {       /* Find the furthermost point between first, last */
+        for (i = first + 1; i <= last - 1;
+             i++) { /* Find the furthermost point between first, last */
             double px, py, pz, pdist;
             int status;
-            double dist =
-                dig_distance2_point_to_line(Points->x[i], Points->y[i],
-                                            Points->z[i],
-                                            x1, y1, z1, x2, y2, z2, with_z,
-                                            &px, &py, &pz, &pdist, &status);
+            double dist = dig_distance2_point_to_line(
+                Points->x[i], Points->y[i], Points->z[i], x1, y1, z1, x2, y2,
+                z2, with_z, &px, &py, &pz, &pdist, &status);
 
-            if (maxindex == -1 || dist > maxdist) {     /* update the furthermost point so far seen */
+            if (maxindex == -1 ||
+                dist > maxdist) { /* update the furthermost point so far seen */
                 maxindex = i;
                 maxdist = dist;
             }
         }
 
-        if (maxindex == -1 || maxdist <= thresh) {      /* no points between or all point are inside the threshold */
+        if (maxindex == -1 ||
+            maxdist <= thresh) { /* no points between or all point are inside
+                                    the threshold */
             index[icount++] = last;
         }
         else {
-            /* break line into two parts, the order of pushing is crucial! It guarantees, that we are going to the left */
+            /* break line into two parts, the order of pushing is crucial! It
+             * guarantees, that we are going to the left */
             stack[top++] = maxindex;
             stack[top++] = last;
             stack[top++] = first;
@@ -116,22 +119,26 @@ int douglas_peucker(struct line_pnts *Points, double thresh, int with_z)
 int lang(struct line_pnts *Points, double thresh, int look_ahead, int with_z)
 {
 
-    int count = 1;              /* place where the next point will be added. i.e after the last point */
+    int count = 1; /* place where the next point will be added. i.e after the
+                      last point */
 
     int from = 0;
     int to = look_ahead;
 
     thresh *= thresh;
 
-    while (from < Points->n_points - 1) {       /* repeat until we reach the last point */
+    while (from <
+           Points->n_points - 1) { /* repeat until we reach the last point */
         int i;
-        int found = 0;          /* whether we have found the point outside the threshold */
+        int found =
+            0; /* whether we have found the point outside the threshold */
 
         double x1 = Points->x[from];
         double y1 = Points->y[from];
         double z1 = Points->z[from];
 
-        if (Points->n_points - 1 < to) {        /* check that we are always in the line */
+        if (Points->n_points - 1 <
+            to) { /* check that we are always in the line */
             to = Points->n_points - 1;
         }
 
@@ -143,9 +150,9 @@ int lang(struct line_pnts *Points, double thresh, int look_ahead, int with_z)
             double px, py, pz, pdist;
             int status;
 
-            if (dig_distance2_point_to_line
-                (Points->x[i], Points->y[i], Points->z[i], x1, y1, z1, x2, y2,
-                 z2, with_z, &px, &py, &pz, &pdist, &status) > thresh) {
+            if (dig_distance2_point_to_line(
+                    Points->x[i], Points->y[i], Points->z[i], x1, y1, z1, x2,
+                    y2, z2, with_z, &px, &py, &pz, &pdist, &status) > thresh) {
                 found = 1;
                 break;
             }
@@ -162,7 +169,6 @@ int lang(struct line_pnts *Points, double thresh, int look_ahead, int with_z)
             from = to;
             to += look_ahead;
         }
-
     }
     Points->n_points = count;
     return Points->n_points;
@@ -183,7 +189,7 @@ int vertex_reduction(struct line_pnts *Points, double eps, int with_z)
     start = 0;
 
     eps *= eps;
-    count = 1;                  /*we never remove the first point */
+    count = 1; /*we never remove the first point */
 
     for (i = 0; i < n - 1; i++) {
         double dx = Points->x[i] - Points->x[start];
@@ -203,7 +209,6 @@ int vertex_reduction(struct line_pnts *Points, double eps, int with_z)
             count++;
             start = i;
         }
-
     }
 
     /* last point is also always preserved */
@@ -216,7 +221,7 @@ int vertex_reduction(struct line_pnts *Points, double eps, int with_z)
     return Points->n_points;
 }
 
-/*Reumann-Witkam algorithm 
+/*Reumann-Witkam algorithm
  * Returns number of points in the output line
  */
 int reumann_witkam(struct line_pnts *Points, double thresh, int with_z)
@@ -240,7 +245,6 @@ int reumann_witkam(struct line_pnts *Points, double thresh, int with_z)
     point_subtract(x2, x1, &sub);
     subd = point_dist2(sub);
 
-
     for (i = 2; i < n; i++) {
 
         point_assign(Points, i, with_z, &x0, 0);
@@ -262,8 +266,6 @@ int reumann_witkam(struct line_pnts *Points, double thresh, int with_z)
             Points->z[count] = x0.z;
             count++;
         }
-
-
     }
 
     Points->x[count] = Points->x[n - 1];
@@ -272,12 +274,11 @@ int reumann_witkam(struct line_pnts *Points, double thresh, int with_z)
     Points->n_points = count + 1;
 
     return Points->n_points;
-
 }
 
 /* douglas-peucker algorithm which simplifies a line to a line with
  * at most reduction% of points.
- * returns the number of points in the output line. It is approx 
+ * returns the number of points in the output line. It is approx
  * reduction/100 * Points->n_points.
  */
 int douglas_peucker_reduction(struct line_pnts *Points, double thresh,
@@ -287,7 +288,7 @@ int douglas_peucker_reduction(struct line_pnts *Points, double thresh,
     int i;
     int n = Points->n_points;
 
-    /* the maximum number of points  which may be 
+    /* the maximum number of points  which may be
      * included in the output */
     int nexp = n * (reduction / (double)100.0);
 
@@ -339,7 +340,6 @@ int douglas_peucker_reduction(struct line_pnts *Points, double thresh,
         return n;
     }
 
-
     if (d > thresh) {
         index[0] = 0;
         index[1] = n - 1;
@@ -377,7 +377,6 @@ int douglas_peucker_reduction(struct line_pnts *Points, double thresh,
             index[indices++] = right;
             index[indices++] = mid;
         }
-
     }
 
     /* copy selected points */

@@ -1,10 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       g.filename
  * AUTHOR(S):    Michael Shapiro CERL (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
@@ -16,6 +15,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

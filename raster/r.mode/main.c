@@ -1,17 +1,16 @@
-
 /****************************************************************************
  *
  * MODULE:       r.mode
  * AUTHOR(S):    Michael Shapiro (CERL)  (original contributor),
  *               Markus Neteler <neteler itc.it>,
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Jachym Cepicky <jachym les-ejk.cz>, 
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      calculates the most frequently occurring value (i. e., mode)
- *               of data contained in a cover raster map layer for areas 
- *               assigned the same category value in the user-specified 
+ *               of data contained in a cover raster map layer for areas
+ *               assigned the same category value in the user-specified
  *               base raster map
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *
@@ -31,8 +30,7 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *base, *cover, *output;
     } parm;
     char *basemap;
@@ -55,10 +53,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("algebra"));
-    module->description =
-        _("Finds the mode of values in a cover map within "
-          "areas assigned the same category value in a "
-          "user-specified base map.");
+    module->description = _("Finds the mode of values in a cover map within "
+                            "areas assigned the same category value in a "
+                            "user-specified base map.");
 
     parm.base = G_define_option();
     parm.base->key = "base";
@@ -122,7 +119,7 @@ int main(int argc, char *argv[])
         }
         if (basecat != catb) {
             write_reclass(reclass, catb, catc,
-                          Rast_get_c_cat((CELL *) & catc, &cover_cats));
+                          Rast_get_c_cat((CELL *)&catc, &cover_cats));
             catb = basecat;
             catc = covercat;
             max = value;
@@ -136,7 +133,7 @@ int main(int argc, char *argv[])
         catb = catc = 0;
     }
     write_reclass(reclass, catb, catc,
-                  Rast_get_c_cat((CELL *) & catc, &cover_cats));
+                  Rast_get_c_cat((CELL *)&catc, &cover_cats));
 
     G_popen_close(&reclass_child);
     G_popen_close(&stats_child);

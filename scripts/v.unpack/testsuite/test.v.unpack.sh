@@ -5,7 +5,7 @@
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=70 w=0 e=100 b=0 t=50 -p
 
-# We need different vector maps, with and without tables 
+# We need different vector maps, with and without tables
 # and with multiple layers
 v.random --o -z output=probe_1 n=100 zmin=0 zmax=100 seed=1
 v.random --o -z output=probe_2 n=100 zmin=0 zmax=100 column=height seed=1
@@ -23,9 +23,9 @@ g.remove -f type=vector name=probe_orig
 v.db.droptable -f map=probe_3 table=probe_3 layer=1
 
 # Adding tables to layer
-v.db.addtable --o map=probe_3 table=probe_3_1 layer=1 
-v.db.addtable --o map=probe_3 table=probe_3_2 layer=2 
-v.db.addtable --o map=probe_3 table=probe_3_3 layer=3 
+v.db.addtable --o map=probe_3 table=probe_3_1 layer=1
+v.db.addtable --o map=probe_3 table=probe_3_2 layer=2
+v.db.addtable --o map=probe_3 table=probe_3_3 layer=3
 
 # First we @test the packing/export with v.pack
 v.pack --o input=probe_1

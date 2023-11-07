@@ -39,24 +39,24 @@ void G_init_tempfile(void)
 /*!
  * \brief Returns a temporary file name.
  *
- * This routine returns a pointer to a string containing a unique 
- * temporary file name that can be used as a temporary file within the 
- * module. Successive calls to G_tempfile() will generate new 
- * names. Only the file name is generated. The file itself is not 
- * created. To create the file, the module must use standard UNIX 
- * functions which create and open files, e.g., <i>creat()</i> or 
+ * This routine returns a pointer to a string containing a unique
+ * temporary file name that can be used as a temporary file within the
+ * module. Successive calls to G_tempfile() will generate new
+ * names. Only the file name is generated. The file itself is not
+ * created. To create the file, the module must use standard UNIX
+ * functions which create and open files, e.g., <i>creat()</i> or
  * <i>fopen()</i>.
  *
- * Successive calls will generate different names the names are of the 
- * form pid.n where pid is the programs process id number and n is a 
+ * Successive calls will generate different names the names are of the
+ * form pid.n where pid is the programs process id number and n is a
  * unique identifier.
  *
- * <b>Note:</b> It is recommended to <i>unlink()</i> (remove) the 
- * temp file on exit/error. Only if GRASS is left with 'exit', the GIS 
+ * <b>Note:</b> It is recommended to <i>unlink()</i> (remove) the
+ * temp file on exit/error. Only if GRASS is left with 'exit', the GIS
  * mapset management will clean up the temp directory (ETC/clean_temp).
  *
- * \return pointer to a character string containing the name. The name 
- * is copied to allocated memory and may be released by the unix free() 
+ * \return pointer to a character string containing the name. The name
+ * is copied to allocated memory and may be released by the unix free()
  * routine.
  */
 char *G_tempfile(void)
@@ -102,8 +102,7 @@ char *G_tempfile_pid(int pid)
 
         sprintf(name, "%d.%d", pid, uniq);
         G_file_name(path, element, name, G_mapset());
-    }
-    while (access(path, F_OK) == 0);
+    } while (access(path, F_OK) == 0);
 
     G_debug(2, "G_tempfile_pid(): %s", path);
 
@@ -133,8 +132,7 @@ char *G_tempfile_pid_basedir(int pid, const char *basedir)
 
         sprintf(name, "%d.%d", pid, uniq);
         G_file_name_basedir(path, element, name, G_mapset(), basedir);
-    }
-    while (access(path, F_OK) == 0);
+    } while (access(path, F_OK) == 0);
 
     G_debug(2, "G_tempfile_pid(): %s", path);
 
@@ -155,7 +153,8 @@ void G_temp_element(char *element)
  * \brief Populates element with a path string (internal use only!)
  *
  * \param[out] element element name
- * \param tmp TRUE to use G_make_mapset_element_tmp() instead of G_make_mapset_element()
+ * \param tmp TRUE to use G_make_mapset_element_tmp() instead of
+ * G_make_mapset_element()
  */
 void G__temp_element(char *element, int tmp)
 {
@@ -180,7 +179,8 @@ void G__temp_element(char *element, int tmp)
  * \brief Populates element with a path string (internal use only!)
  *
  * \param[out] element element name
- * \param tmp TRUE to use G_make_mapset_element_tmp() instead of G_make_mapset_element()
+ * \param tmp TRUE to use G_make_mapset_element_tmp() instead of
+ * G_make_mapset_element()
  */
 void G__temp_element_basedir(char *element, const char *basedir)
 {

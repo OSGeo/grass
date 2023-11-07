@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/done_msg.c
  *

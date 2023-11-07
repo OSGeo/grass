@@ -62,8 +62,8 @@ void trans3d(struct Map_info *In, struct Map_info *Out, int type,
         /* column type must numeric */
         ctype = db_column_Ctype(driver, Fi->table, zcolumn);
         if (ctype == -1) {
-            G_fatal_error(_("Column <%s> not found in table <%s>"),
-                          zcolumn, Fi->table);
+            G_fatal_error(_("Column <%s> not found in table <%s>"), zcolumn,
+                          Fi->table);
         }
         if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE) {
             G_fatal_error(_("Column must be numeric"));
@@ -84,7 +84,7 @@ void trans3d(struct Map_info *In, struct Map_info *Out, int type,
         if (ltype == -1) {
             G_fatal_error(_("Unable to read vector map"));
         }
-        if (ltype == -2) {      /* EOF */
+        if (ltype == -2) { /* EOF */
             break;
         }
 
@@ -102,19 +102,19 @@ void trans3d(struct Map_info *In, struct Map_info *Out, int type,
         }
         else if (Cats->n_cats > 1) {
             G_warning(_("Feature id %d has more categories. "
-                        "Using category %d."), line, cat);
+                        "Using category %d."),
+                      line, cat);
         }
 
         if (zcolumn && ltype & (GV_POINT | GV_LINE) && cat > -1) {
             /* category exist in table ? */
-            cex = (int *)bsearch((void *)&cat, cats, ncats, sizeof(int),
-                                 srch);
+            cex = (int *)bsearch((void *)&cat, cats, ncats, sizeof(int), srch);
 
             /* store height to the attribute table */
             if (ctype == DB_C_TYPE_INT)
-                sprintf(buf, "update %s set %s = %d where cat = %d",
-                        Fi->table, zcolumn, (int)Points->z[0], cat);
-            else                /* double */
+                sprintf(buf, "update %s set %s = %d where cat = %d", Fi->table,
+                        zcolumn, (int)Points->z[0], cat);
+            else /* double */
                 sprintf(buf, "update %s set %s = %.8f where cat = %d",
                         Fi->table, zcolumn, Points->z[0], cat);
 
@@ -126,7 +126,7 @@ void trans3d(struct Map_info *In, struct Map_info *Out, int type,
                     /* TODO */
                 }
             }
-            else {              /* cat does not exist in table */
+            else { /* cat does not exist in table */
                 G_warning(_("Record (cat %d) does not exist (not updated)"),
                           cat);
             }

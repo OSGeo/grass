@@ -2,8 +2,8 @@
 
 int cmp_near(const void *pa, const void *pb)
 {
-    NEAR *p1 = (NEAR *) pa;
-    NEAR *p2 = (NEAR *) pb;
+    NEAR *p1 = (NEAR *)pa;
+    NEAR *p2 = (NEAR *)pb;
 
     if (p1->from_cat < p2->from_cat)
         return -1;
@@ -14,8 +14,8 @@ int cmp_near(const void *pa, const void *pb)
 
 int cmp_near_to(const void *pa, const void *pb)
 {
-    NEAR *p1 = (NEAR *) pa;
-    NEAR *p2 = (NEAR *) pb;
+    NEAR *p1 = (NEAR *)pa;
+    NEAR *p2 = (NEAR *)pb;
 
     if (p1->from_cat < p2->from_cat)
         return -1;
@@ -31,7 +31,6 @@ int cmp_near_to(const void *pa, const void *pb)
 
     return 0;
 }
-
 
 int cmp_exist(const void *pa, const void *pb)
 {

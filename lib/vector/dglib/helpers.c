@@ -20,7 +20,6 @@
  * best view with tabstop=4
  */
 
-
 #include <stdlib.h>
 #include <string.h>
 
@@ -33,13 +32,13 @@
  * helpers for parametric stack
  */
 unsigned char *dgl_mempush(unsigned char *pstack, long *istack, long size,
-			   void *pv)
+                           void *pv)
 {
     if (*istack == 0)
-	pstack = NULL;
+        pstack = NULL;
     pstack = realloc(pstack, size * (1 + *istack));
     if (pstack == NULL)
-	return NULL;
+        return NULL;
     memcpy(&pstack[(*istack) * size], pv, size);
     (*istack)++;
     return pstack;
@@ -48,11 +47,11 @@ unsigned char *dgl_mempush(unsigned char *pstack, long *istack, long size,
 unsigned char *dgl_mempop(unsigned char *pstack, long *istack, long size)
 {
     if (*istack == 0)
-	return NULL;
+        return NULL;
     return &pstack[size * (--(*istack))];
 }
 
-void dgl_swapInt32Bytes(dglInt32_t * pn)
+void dgl_swapInt32Bytes(dglInt32_t *pn)
 {
     unsigned char *pb = (unsigned char *)pn;
 
@@ -65,7 +64,7 @@ void dgl_swapInt32Bytes(dglInt32_t * pn)
     pb[1] ^= pb[2];
 }
 
-void dgl_swapInt64Bytes(dglInt64_t * pn)
+void dgl_swapInt64Bytes(dglInt64_t *pn)
 {
     unsigned char *pb = (unsigned char *)pn;
 
@@ -89,8 +88,7 @@ void dgl_swapInt64Bytes(dglInt64_t * pn)
 /*
  * Keep the edge cost prioritizer in sync
  */
-int dgl_edge_prioritizer_del(dglGraph_s * pG, dglInt32_t nId,
-			     dglInt32_t nPriId)
+int dgl_edge_prioritizer_del(dglGraph_s *pG, dglInt32_t nId, dglInt32_t nPriId)
 {
     dglTreeEdgePri32_s findPriItem, *pPriItem;
     register int iEdge1, iEdge2;
@@ -98,69 +96,66 @@ int dgl_edge_prioritizer_del(dglGraph_s * pG, dglInt32_t nId,
 
     if (pG->edgePrioritizer.pvAVL) {
 
-	findPriItem.nKey = nPriId;
-	pPriItem = avl_find(pG->edgePrioritizer.pvAVL, &findPriItem);
+        findPriItem.nKey = nPriId;
+        pPriItem = avl_find(pG->edgePrioritizer.pvAVL, &findPriItem);
 
-	if (pPriItem && pPriItem->pnData) {
+        if (pPriItem && pPriItem->pnData) {
 
-	    pnNew = malloc(sizeof(dglInt32_t) * pPriItem->cnData);
+            pnNew = malloc(sizeof(dglInt32_t) * pPriItem->cnData);
 
-	    if (pnNew == NULL) {
-		pG->iErrno = DGL_ERR_MemoryExhausted;
-		return -pG->iErrno;
-	    }
+            if (pnNew == NULL) {
+                pG->iErrno = DGL_ERR_MemoryExhausted;
+                return -pG->iErrno;
+            }
 
-	    for (iEdge1 = 0, iEdge2 = 0; iEdge2 < pPriItem->cnData; iEdge2++) {
-		if (pPriItem->pnData[iEdge2] != nId) {
-		    pnNew[iEdge1++] = pPriItem->pnData[iEdge2];
-		}
-	    }
+            for (iEdge1 = 0, iEdge2 = 0; iEdge2 < pPriItem->cnData; iEdge2++) {
+                if (pPriItem->pnData[iEdge2] != nId) {
+                    pnNew[iEdge1++] = pPriItem->pnData[iEdge2];
+                }
+            }
 
-	    free(pPriItem->pnData);
-	    if (iEdge1 == 0) {
-		free(pnNew);
-		pPriItem->pnData = NULL;
-		pPriItem->cnData = 0;
-	    }
-	    else {
-		pPriItem->pnData = pnNew;
-		pPriItem->cnData = iEdge1;
-	    }
-	}
+            free(pPriItem->pnData);
+            if (iEdge1 == 0) {
+                free(pnNew);
+                pPriItem->pnData = NULL;
+                pPriItem->cnData = 0;
+            }
+            else {
+                pPriItem->pnData = pnNew;
+                pPriItem->cnData = iEdge1;
+            }
+        }
     }
     return 0;
 }
 
-int dgl_edge_prioritizer_add(dglGraph_s * pG, dglInt32_t nId,
-			     dglInt32_t nPriId)
+int dgl_edge_prioritizer_add(dglGraph_s *pG, dglInt32_t nId, dglInt32_t nPriId)
 {
     dglTreeEdgePri32_s *pPriItem;
 
     if (pG->edgePrioritizer.pvAVL == NULL) {
-	pG->edgePrioritizer.pvAVL =
-	    avl_create(dglTreeEdgePri32Compare, NULL, dglTreeGetAllocator());
-	if (pG->edgePrioritizer.pvAVL == NULL) {
-	    pG->iErrno = DGL_ERR_MemoryExhausted;
-	    return -pG->iErrno;
-	}
+        pG->edgePrioritizer.pvAVL =
+            avl_create(dglTreeEdgePri32Compare, NULL, dglTreeGetAllocator());
+        if (pG->edgePrioritizer.pvAVL == NULL) {
+            pG->iErrno = DGL_ERR_MemoryExhausted;
+            return -pG->iErrno;
+        }
     }
     pPriItem = dglTreeEdgePri32Add(pG->edgePrioritizer.pvAVL, nPriId);
     if (pPriItem == NULL) {
-	pG->iErrno = DGL_ERR_MemoryExhausted;
-	return -pG->iErrno;
+        pG->iErrno = DGL_ERR_MemoryExhausted;
+        return -pG->iErrno;
     }
     if (pPriItem->cnData == 0) {
-	pPriItem->pnData = (dglInt32_t *) malloc(sizeof(dglInt32_t));
+        pPriItem->pnData = (dglInt32_t *)malloc(sizeof(dglInt32_t));
     }
     else {
-	pPriItem->pnData =
-	    (dglInt32_t *) realloc(pPriItem->pnData,
-				   sizeof(dglInt32_t) * (pPriItem->cnData +
-							 1));
+        pPriItem->pnData = (dglInt32_t *)realloc(
+            pPriItem->pnData, sizeof(dglInt32_t) * (pPriItem->cnData + 1));
     }
     if (pPriItem->pnData == NULL) {
-	pG->iErrno = DGL_ERR_MemoryExhausted;
-	return -pG->iErrno;
+        pG->iErrno = DGL_ERR_MemoryExhausted;
+        return -pG->iErrno;
     }
     pPriItem->pnData[pPriItem->cnData] = nId;
     pPriItem->cnData++;

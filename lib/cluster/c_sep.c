@@ -14,7 +14,7 @@
 #include <math.h>
 #include <grass/cluster.h>
 
-#define FAR ((double) -1.0)
+#define FAR ((double)-1.0)
 
 /*!
    \brief ?
@@ -51,7 +51,6 @@ double I_cluster_separation(struct Cluster *C, int class1, int class2)
         q = m1 - m2;
         q = q * q;
         d += q;
-
 
         var = C->sum2[band][class1] - (s1 * m1);
         var /= n1 - 1;

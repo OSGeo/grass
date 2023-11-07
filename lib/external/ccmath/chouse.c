@@ -5,9 +5,11 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include <stdlib.h>
 #include "ccmath.h"
-void chouse(Cpx * a, double *d, double *dp, int n)
+
+void chouse(Cpx *a, double *d, double *dp, int n)
 {
     double sc, x, y;
 
@@ -17,7 +19,7 @@ void chouse(Cpx * a, double *d, double *dp, int n)
 
     Cpx *qw, *pc, *p;
 
-    q0 = (Cpx *) calloc(2 * n, sizeof(Cpx));
+    q0 = (Cpx *)calloc(2 * n, sizeof(Cpx));
     for (i = 0, p = q0 + n, pc = a; i < n; ++i, pc += n + 1)
         *p++ = *pc;
     for (j = 0, pc = a; j < n - 2; ++j, pc += n + 1) {
@@ -51,8 +53,8 @@ void chouse(Cpx * a, double *d, double *dp, int n)
             }
             for (i = 0, e = j + 2, p = pc + n + 1, y = 0.; i < m;
                  ++i, p += e++) {
-                q0[i].re += (u.re = qw[i].re) * p->re - (u.im =
-                                                         qw[i].im) * p->im;
+                q0[i].re +=
+                    (u.re = qw[i].re) * p->re - (u.im = qw[i].im) * p->im;
                 q0[i].im += u.re * p->im + u.im * p->re;
                 ++p;
                 for (k = i + 1; k < m; ++k, ++p) {
@@ -71,10 +73,10 @@ void chouse(Cpx * a, double *d, double *dp, int n)
             }
             for (i = 0, e = j + 2, p = pc + n + 1; i < m; ++i, p += e++) {
                 for (k = i; k < m; ++k, ++p) {
-                    p->re -= qw[i].re * q0[k].re + qw[i].im * q0[k].im
-                        + q0[i].re * qw[k].re + q0[i].im * qw[k].im;
-                    p->im -= qw[i].im * q0[k].re - qw[i].re * q0[k].im
-                        + q0[i].im * qw[k].re - q0[i].re * qw[k].im;
+                    p->re -= qw[i].re * q0[k].re + qw[i].im * q0[k].im +
+                             q0[i].re * qw[k].re + q0[i].im * qw[k].im;
+                    p->im -= qw[i].im * q0[k].re - qw[i].re * q0[k].im +
+                             q0[i].im * qw[k].re - q0[i].re * qw[k].im;
                 }
             }
         }

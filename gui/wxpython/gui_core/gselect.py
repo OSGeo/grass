@@ -26,10 +26,11 @@ Classes:
  - :class:`CoordinatesSelect`
  - :class:`VectorCategorySelect`
  - :class:`SignatureSelect`
+ - :class:`SignatureTypeSelect`
  - :class:`SeparatorSelect`
  - :class:`SqlWhereSelect`
 
-(C) 2007-2018 by the GRASS Development Team
+(C) 2007-2023 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -41,12 +42,9 @@ This program is free software under the GNU General Public License
 @author Matej Krejci <matejkrejci gmail.com> (VectorCategorySelect)
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import glob
-import six
 import ctypes
 
 import wx
@@ -107,7 +105,7 @@ class Select(ComboCtrl):
         validator=wx.DefaultValidator,
     ):
         """Custom control to create a ComboBox with a tree control to
-        display and select GIS elements within acessible mapsets.
+        display and select GIS elements within accessible mapsets.
         Elements can be selected with mouse. Can allow multiple
         selections, when argument <em>multiple</em> is True. Multiple
         selections are separated by commas.
@@ -436,7 +434,6 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
     # overridden ComboPopup methods
 
     def Init(self):
-
         ListCtrlComboPopup.Init(self)
         self.nmaps = 1
         self.type = None
@@ -539,7 +536,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
         # add extra items first
         if self.extraItems:
-            for group, items in six.iteritems(self.extraItems):
+            for group, items in self.extraItems.items():
                 node = self.AddItem(group, node=True)
                 self.seltree.SetItemTextColour(node, wx.Colour(50, 50, 200))
                 for item in items:
@@ -1021,7 +1018,6 @@ class DriverSelect(wx.ComboBox):
         size=globalvar.DIALOG_LAYER_SIZE,
         **kargs,
     ):
-
         super(DriverSelect, self).__init__(
             parent, id, value, pos, size, choices, style=wx.CB_READONLY
         )
@@ -1169,16 +1165,16 @@ class ColumnSelect(ComboCtrl):
             columnchoices = dbInfo.GetTableDesc(table)
             keyColumn = dbInfo.GetKeyColumn(layer)
             self.columns = len(columnchoices.keys()) * [""]
-            for key, val in six.iteritems(columnchoices):
+            for key, val in columnchoices.items():
                 self.columns[val["index"]] = key
             if excludeKey:  # exclude key column
                 self.columns.remove(keyColumn)
             if excludeCols:  # exclude key column
-                for key in six.iterkeys(columnchoices):
+                for key in columnchoices.keys():
                     if key in excludeCols:
                         self.columns.remove(key)
             if type:  # only selected column types
-                for key, value in six.iteritems(columnchoices):
+                for key, value in columnchoices.items():
                     if value["type"] not in type:
                         try:
                             self.columns.remove(key)
@@ -1730,7 +1726,7 @@ class GdalSelect(wx.Panel):
                     dsn = v
                     break
             optList = list()
-            for k, v in six.iteritems(data):
+            for k, v in data.items():
                 if k in ("format", "conninfo", "topology"):
                     continue
                 optList.append("%s=%s" % (k, v))
@@ -1956,7 +1952,6 @@ class GdalSelect(wx.Panel):
             self.dbPanel,
             self.protocolPanel,
         ):
-
             self.changingSizer.Add(panel, proportion=1, flag=wx.EXPAND)
 
         self.mainSizer.Add(
@@ -2003,8 +1998,11 @@ class GdalSelect(wx.Panel):
         if sourceType == "db":
             self.dbWidgets["format"].SetItems(list(self.dbFormats.values()))
             if self.dbFormats:
-                if "PostgreSQL" in self.dbFormats.values():
+                db_formats = self.dbFormats.values()
+                if "PostgreSQL" in db_formats:
                     self.dbWidgets["format"].SetStringSelection("PostgreSQL")
+                elif "PostgreSQL/PostGIS" in db_formats:
+                    self.dbWidgets["format"].SetStringSelection("PostgreSQL/PostGIS")
                 else:
                     self.dbWidgets["format"].SetSelection(0)
             self.dbWidgets["format"].Enable()
@@ -2102,6 +2100,7 @@ class GdalSelect(wx.Panel):
         if self._sourceType == "db":
             if self.dbWidgets["format"].GetStringSelection() in (
                 "PostgreSQL",
+                "PostgreSQL/PostGIS",
                 "PostGIS Raster driver",
             ):
                 ret = RunCommand("db.login", read=True, quiet=True, flags="p")
@@ -2167,14 +2166,23 @@ class GdalSelect(wx.Panel):
     def SetDatabase(self, db):
         """Update database panel."""
         sizer = self.dbPanel.GetSizer()
-        showBrowse = db in ("SQLite", "Rasterlite")
+        showBrowse = db in ("SQLite", "SQLite / Spatialite", "Rasterlite")
         showDirbrowse = db in ("FileGDB")
         showChoice = db in (
             "PostgreSQL",
+            "PostgreSQL/PostGIS",
             "PostGIS WKT Raster driver",
             "PostGIS Raster driver",
         )
-        enableFeatType = self.dest and self.ogr and db in ("PostgreSQL")
+        enableFeatType = (
+            self.dest
+            and self.ogr
+            and db
+            in (
+                "PostgreSQL",
+                "PostgreSQL/PostGIS",
+            )
+        )
         showText = not (showBrowse or showChoice or showDirbrowse)
 
         sizer.Show(self.dbWidgets["browse"], show=showBrowse)
@@ -2291,7 +2299,6 @@ class GdalSelect(wx.Panel):
             return projectionMatch
 
         def getProjMatchCaption(projectionMatch):
-
             if projectionMatch == "0":
                 projectionMatchCaption = _("No")
             else:
@@ -3011,7 +3018,6 @@ class VectorCategorySelect(wx.Panel):
                 self.buttonVecSelect.SetValue(False)
                 return
         if self._vectorSelect is None:
-
             if self.mapdisp:
                 if self.buttonVecSelect.IsEnabled():
                     switcher = self.mapdisp.GetToolSwitcher()
@@ -3085,10 +3091,18 @@ class SignatureSelect(wx.ComboBox):
         **kwargs,
     ):
         super(SignatureSelect, self).__init__(parent, id, size=size, **kwargs)
+        self.SetName("SignatureSelect")
+        self.mapsets = mapsets
+        self.UpdateItems(element)
 
+    def UpdateItems(self, element):
+        """Update list of signature files for given element
+
+        :param str element: signatures/sig or signatures/sigset
+        """
         items = []
-        if mapsets:
-            for mapset in mapsets:
+        if self.mapsets:
+            for mapset in self.mapsets:
                 self._append_mapset_signatures(mapset, element, items)
         else:
             self._append_mapset_signatures(None, element, items)
@@ -3096,6 +3110,14 @@ class SignatureSelect(wx.ComboBox):
         self.SetValue("")
 
     def _append_mapset_signatures(self, mapset, element, items):
+        # A workaround to list signature files before a separate
+        # signature management module is developed
+        try:
+            from grass.lib.gis import G_gisinit
+
+            G_gisinit("")
+        except Exception:
+            return
         try:
             from grass.lib.imagery import (
                 I_SIGFILE_TYPE_SIG,
@@ -3123,8 +3145,19 @@ class SignatureSelect(wx.ComboBox):
         I_free_signatures_list(count, ctypes.byref(sig_list))
 
 
+class SignatureTypeSelect(wx.ComboBox):
+    """Widget for selecting signature type"""
+
+    def __init__(
+        self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE, **kwargs
+    ):
+        super(SignatureTypeSelect, self).__init__(parent, id, size=size, **kwargs)
+        self.SetName("SignatureTypeSelect")
+        self.SetItems(["sig", "sigset"])
+
+
 class SeparatorSelect(wx.ComboBox):
-    """Widget for selecting seperator"""
+    """Widget for selecting separator"""
 
     def __init__(
         self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE, **kwargs

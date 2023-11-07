@@ -23,36 +23,34 @@ GRASS GIS developer mailing list.
   of the GitHub interface).
 * Clone your fork (use HTTPS or SSH URL, here we will use HTTPS):
 
-```
-git clone https://github.com/your_GitHub_account/grass.git
+```bash
+git clone git@github.com:your_GH_account/grass.git
 ```
 
 * Enter the directory
 
-```
+```bash
 cd grass/
 ```
 
 * Add main GRASS GIS repository as "upstream" (use HTTPS URL):
 
-```
+```bash
 git remote add upstream https://github.com/OSGeo/grass
 ```
 
 * Your remotes now should be "origin" which is your fork and "upstream" which
   is this main GRASS GIS repository. You can confirm that using:
 
-```
+```bash
 git remote -v
 ```
 
 * You should see something like:
 
-```
-origin	https://github.com/your_GH_account/grass.git (fetch)
-origin	https://github.com/your_GH_account/grass.git (push)
-upstream	https://github.com/OSGeo/grass.git (fetch)
-upstream	https://github.com/OSGeo/grass.git (push)
+```bash
+origin  git@github.com:your_GH_account/grass.git (fetch)
+origin  git@github.com:your_GH_account/grass.git (push)
 ```
 
 For the following workflow, it is important that
@@ -64,20 +62,20 @@ and "origin" to your fork
 
 * Make sure your are using the _main_ branch to create the new branch:
 
-```
-git switch main
+```bash
+git checkout main
 ```
 
 * Download updates from all branches from the _upstream_ remote:
 
-```
+```bash
 git fetch upstream
 ```
 
 * Update your local _main_ branch to match the _main_ branch
   in the _upstream_ repository:
 
-```
+```bash
 git rebase upstream/main
 ```
 
@@ -90,19 +88,19 @@ rebase or merge happens).
 If `rebase` fails with "error: cannot rebase: You have unstaged changes...",
 then move your uncommitted local changes to "stash" using:
 
-```
+```bash
 git stash
 ```
 
 * Now you can rebase:
 
-```
+```bash
 git rebase upstream/main
 ```
 
 * Get the changes back from stash:
 
-```
+```bash
 git stash pop
 ```
 
@@ -113,16 +111,15 @@ based on it.
 
 * Create a new feature branch and switch to it:
 
-```
+```bash
 git checkout -b new-feature
 ```
 
 ### Making changes
 
 You can use your favorite tools to change source code or other files
-in the local copy of the code. When making changes, please follow
-Submitting Guidelines at
-<http://trac.osgeo.org/grass/wiki/Submitting>.
+in the local copy of the code. When making changes, please follow the
+[Submitting Guidelines](./doc/development/submitting/submitting.md).
 
 ### Testing changes
 
@@ -142,21 +139,21 @@ request comment.
 
 Note that there are some steps you can do locally to improve your code.
 For Python, run `black .` to apply standardized formatting. You can
-also run linter tools such as Pylint which will suggest different improvements 
+also run linter tools such as Pylint which will suggest different improvements
 to your code.
 
 ### Committing
 
 * Add files to the commit (changed ones or new ones):
 
-```
+```bash
 git add file1
 git add file2
 ```
 
 * Commit the change (first word is the module name):
 
-```
+```bash
 git commit -m "module: added a new feature"
 ```
 
@@ -164,7 +161,7 @@ git commit -m "module: added a new feature"
 
 * Push your local feature branch to your fork:
 
-```
+```bash
 git push origin new-feature
 ```
 

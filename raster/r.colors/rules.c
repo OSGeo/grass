@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.colors
@@ -25,21 +24,22 @@
 
 /* color structure for default and null value */
 
-static int read_rule(void *, DCELL, DCELL, DCELL *, int *, int *, int *,
-                     int *, int *, int *);
+static int read_rule(void *, DCELL, DCELL, DCELL *, int *, int *, int *, int *,
+                     int *, int *);
 static void badrule(int, const char *, int);
 static int show_colors(FILE *);
 
 static int rule_is_percent = 0;
 
-int read_color_rules(FILE * fp, struct Colors *colors, DCELL min, DCELL max,
+int read_color_rules(FILE *fp, struct Colors *colors, DCELL min, DCELL max,
                      int is_fp, int *is_percent)
 {
     DCELL rulemin, rulemax;
 
     if (isatty(fileno(fp))) {
-        fprintf(stderr,
-                _("Enter rules, \"end\" when done, \"help\" if you need it.\n"));
+        fprintf(
+            stderr,
+            _("Enter rules, \"end\" when done, \"help\" if you need it.\n"));
 
         if (is_fp) {
             char minstr[64], maxstr[64];
@@ -48,8 +48,7 @@ int read_color_rules(FILE * fp, struct Colors *colors, DCELL min, DCELL max,
             sprintf(maxstr, "%.15g", (double)max);
             G_trim_decimal(minstr);
             G_trim_decimal(maxstr);
-            fprintf(stderr, _("fp: Data range is %s to %s\n"), minstr,
-                    maxstr);
+            fprintf(stderr, _("fp: Data range is %s to %s\n"), minstr, maxstr);
         }
         else
             fprintf(stderr, _("Data range is %ld to %ld\n"), (long)min,
@@ -63,7 +62,8 @@ int read_color_rules(FILE * fp, struct Colors *colors, DCELL min, DCELL max,
     G_debug(3, "rulemin=%.3f  rulemax=%.3f", rulemin, rulemax);
 
     if (rulemin > min || rulemax < max)
-        G_warning(_("Your color rules do not cover the whole range of data!\n (rules %f to %f but data %f to %f)"),
+        G_warning(_("Your color rules do not cover the whole range of data!\n "
+                    "(rules %f to %f but data %f to %f)"),
                   rulemin, rulemax, min, max);
 
     *is_percent = rule_is_percent;
@@ -127,21 +127,18 @@ void rescale_colors(struct Colors *colors_tmp, struct Colors *colors,
      * see lib/raster/color_write.c:write_rules() */
     for (i = rcount - 1; i >= 0; i--) {
 
-        Rast_get_fp_color_rule(&dmin, &r1, &g1, &b1,
-                               &dmax, &r2, &g2, &b2, colors, i);
+        Rast_get_fp_color_rule(&dmin, &r1, &g1, &b1, &dmax, &r2, &g2, &b2,
+                               colors, i);
 
         dmin = (dmin + offset) * scale;
         dmax = (dmax + offset) * scale;
 
-        Rast_add_d_color_rule(&dmin, r1, g1, b1,
-                              &dmax, r2, g2, b2, colors_tmp);
-
+        Rast_add_d_color_rule(&dmin, r1, g1, b1, &dmax, r2, g2, b2, colors_tmp);
     }
 }
 
-static int read_rule(void *closure, DCELL min, DCELL max,
-                     DCELL * val, int *r, int *g, int *b,
-                     int *norm, int *nval, int *dflt)
+static int read_rule(void *closure, DCELL min, DCELL max, DCELL *val, int *r,
+                     int *g, int *b, int *norm, int *nval, int *dflt)
 {
     FILE *fp = closure;
     int tty = isatty(fileno(fp));
@@ -194,9 +191,8 @@ static int read_rule(void *closure, DCELL min, DCELL max,
             }
         }
 
-        ret =
-            Rast_parse_color_rule(min, max, buf, val, r, g, b, norm, nval,
-                                  dflt);
+        ret = Rast_parse_color_rule(min, max, buf, val, r, g, b, norm, nval,
+                                    dflt);
         if (ret == 0)
             return 1;
 
@@ -216,7 +212,7 @@ static void badrule(int tty, const char *s, int code)
         G_fatal_error(_("bad rule (%s): [%s]"), err, s);
 }
 
-static int show_colors(FILE * fp)
+static int show_colors(FILE *fp)
 {
     int len;
     int i, n;

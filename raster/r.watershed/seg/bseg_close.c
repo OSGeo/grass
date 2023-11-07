@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include "Gwater.h"
 
-int bseg_close(BSEG * bseg)
+int bseg_close(BSEG *bseg)
 {
     Segment_close(&(bseg->seg));
     if (bseg->name) {

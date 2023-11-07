@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       g.rename
@@ -73,8 +72,7 @@ int main(int argc, char *argv[])
             old = parm[n]->answers[i++];
             new = parm[n]->answers[i++];
             if (!M_find(n, old, mapset)) {
-                G_warning(_("%s <%s> not found"), M_get_list(n)->maindesc,
-                          old);
+                G_warning(_("%s <%s> not found"), M_get_list(n)->maindesc, old);
                 continue;
             }
             if (M_find(n, new, mapset) && !(module->overwrite)) {
@@ -87,9 +85,11 @@ int main(int argc, char *argv[])
                 continue;
             }
             if (G_strcasecmp(old, new) == 0) {
-                /* avoid problems on case-insensitive file systems (FAT, NTFS, ...) */
-                G_warning(_("%s=%s,%s: files could be the same, no rename possible"),
-                          parm[n]->key, old, new);
+                /* avoid problems on case-insensitive file systems (FAT, NTFS,
+                 * ...) */
+                G_warning(
+                    _("%s=%s,%s: files could be the same, no rename possible"),
+                    parm[n]->key, old, new);
                 continue;
             }
 
@@ -119,7 +119,7 @@ void update_reclass_maps(const char *name, const char *mapset)
     for (; *rmaps; rmaps++) {
         char buf1[256], buf2[256], buf3[256], *str;
         FILE *fp;
-        int ptr, l;
+        off_t ptr, l;
 
         G_message(" %s", *rmaps);
         sprintf(buf3, "%s", *rmaps);
@@ -136,9 +136,12 @@ void update_reclass_maps(const char *name, const char *mapset)
         if (fp == NULL)
             continue;
 
-        fgets(buf2, 255, fp);
-        fgets(buf2, 255, fp);
-        fgets(buf2, 255, fp);
+        if (fgets(buf2, 255, fp) == NULL)
+            continue;
+        if (fgets(buf2, 255, fp) == NULL)
+            continue;
+        if (fgets(buf2, 255, fp) == NULL)
+            continue;
 
         ptr = G_ftell(fp);
         G_fseek(fp, 0L, SEEK_END);
@@ -146,14 +149,18 @@ void update_reclass_maps(const char *name, const char *mapset)
 
         str = (char *)G_malloc(l);
         G_fseek(fp, ptr, SEEK_SET);
-        fread(str, l, 1, fp);
+        if (fread(str, l, 1, fp) != 1) {
+            if (ferror(fp))
+                G_fatal_error(_("Failed to read reclass maps file"));
+        }
         fclose(fp);
 
         fp = fopen(buf1, "w");
         fprintf(fp, "reclass\n");
         fprintf(fp, "name: %s\n", name);
         fprintf(fp, "mapset: %s\n", mapset);
-        fwrite(str, l, 1, fp);
+        if ((fwrite(str, l, 1, fp) < 1) & (l > 0))
+            G_fatal_error(_("Failed to write full reclass maps file"));
         G_free(str);
         fclose(fp);
     }
@@ -183,7 +190,8 @@ void update_base_map(const char *old, const char *new, const char *mapset)
 
     if (!found) {
         G_fatal_error(_("Unable to find reclass information for <%s> in "
-                        "base map <%s@%s>"), xold, bname, bmapset);
+                        "base map <%s@%s>"),
+                      xold, bname, bmapset);
     }
 
     G_message(_("Updating base map <%s@%s>"), bname, bmapset);
@@ -192,8 +200,8 @@ void update_base_map(const char *old, const char *new, const char *mapset)
 
     fp = fopen(rpath, "w");
     if (fp == NULL) {
-        G_fatal_error(_("Unable to update dependency file in <%s@%s>"),
-                      bname, bmapset);
+        G_fatal_error(_("Unable to update dependency file in <%s@%s>"), bname,
+                      bmapset);
     }
 
     xnew = G_fully_qualified_name(new, mapset);
