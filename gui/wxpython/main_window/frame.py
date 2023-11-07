@@ -951,7 +951,7 @@ class GMFrame(wx.Frame):
         self.currentPageNum = self.notebookLayers.GetSelection()
 
         if hasattr(self.currentPage, "maptree") and self.mainnotebook.GetCurrentPage():
-            self.mainnotebook.SetSelectionToMapPage(self.GetMapDisplay())
+            self.mainnotebook.SetSelectionToMainPage(self.GetMapDisplay())
 
         event.Skip()
 
@@ -969,7 +969,7 @@ class GMFrame(wx.Frame):
 
         maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
         maptree.GetMapDisplay().CleanUp()
-        self.mainnotebook.DeleteMapPage(self.GetMapDisplay())
+        self.mainnotebook.DeleteMainPage(self.GetMapDisplay())
         maptree.Close(True)
 
         self.currentPage = None
@@ -978,7 +978,7 @@ class GMFrame(wx.Frame):
 
     def _renamePageNoEvent(self, pgnum_dict, is_docked, text):
         if is_docked:
-            self.mainnotebook.SetMapPageText(
+            self.mainnotebook.SetMainPageText(
                 self.mainnotebook.GetPage(pgnum_dict["mainnotebook"]), text)
 
     def _closePageNoEvent(self, pgnum_dict, is_docked):
@@ -1683,7 +1683,7 @@ class GMFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             name = dlg.GetValue()
             self.notebookLayers.SetPageText(page=self.currentPageNum, text=name)
-            self.mainnotebook.SetMapPageText(page=self.GetMapDisplay(), text=name)
+            self.mainnotebook.SetMainPageText(page=self.GetMapDisplay(), text=name)
         dlg.Destroy()
 
     def OnRasterRules(self, event):

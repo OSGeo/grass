@@ -4,7 +4,7 @@
 @brief Custom AuiNotebook class and class for undocked AuiNotebook frame
 
 Classes:
- - notebook::MapPageFrame
+ - notebook::MainPageFrame
  - notebook::MainNotebook
 
 (C) 2022 by the GRASS Development Team
@@ -64,11 +64,13 @@ class MainPageFrame(wx.Frame):
 
     def OnClose(self, event):
         """Close frame and associated layer notebook page."""
-        self.panel.OnCloseWindow(event=None, askIfSaveWorkspace=True) # TODO
-
+        if isinstance(self.panel, MapPanel):
+            self.panel.OnCloseWindow(event=None, askIfSaveWorkspace=True)
+        else:
+            self.panel.OnCloseWindow(event=None)
 
 class MainNotebook(aui.AuiNotebook):
-    """Map notebook class. Overrides some AuiNotebook classes.
+    """Main notebook class. Overrides some AuiNotebook classes.
     Takes into consideration the dock/undock functionality.
     """
 
@@ -90,7 +92,7 @@ class MainNotebook(aui.AuiNotebook):
         self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSE, self.OnClose)
 
     def UndockPage(self, page):
-        """Undock active page to independent MapFrame object"""
+        """Undock active page to independent MainFrame object"""
         index = self.GetPageIndex(page)
         text = self.GetPageText(index)
         original_size = page.GetSize()
@@ -108,7 +110,7 @@ class MainNotebook(aui.AuiNotebook):
         frame.SetDockingCallback(self.DockPage)
 
     def DockPage(self, page):
-        """Dock independent MapFrame object back to Aui.Notebook"""
+        """Dock independent MainFrame object back to Aui.Notebook"""
         frame = page.GetParent()
         page.Reparent(self)
         page.SetDockingCallback(self.UndockPage)
@@ -121,7 +123,7 @@ class MainNotebook(aui.AuiNotebook):
         super().AddPage(*args, **kwargs)
         self.SetSelection(self.GetPageCount() - 1)
 
-    def SetSelectionToMapPage(self, page):
+    def SetSelectionToMainPage(self, page):
         """Decides whether to set selection to a MainNotebook page
         or an undocked independent frame"""
         self.SetSelection(self.GetPageIndex(page))
@@ -130,7 +132,7 @@ class MainNotebook(aui.AuiNotebook):
             frame = page.GetParent()
             wx.CallLater(500, lambda: frame.Raise() if frame else None)
 
-    def DeleteMapPage(self, page):
+    def DeleteMainPage(self, page):
         """Decides whether to delete a MainNotebook page
         or close an undocked independent frame"""
         if page.IsDocked():
@@ -139,7 +141,7 @@ class MainNotebook(aui.AuiNotebook):
             frame = page.GetParent()
             frame.Destroy()
 
-    def SetMapPageText(self, page, text):
+    def SetMainPageText(self, page, text):
         """Decides whether sets title to MainNotebook page
         or an undocked independent frame"""
         if page.IsDocked():
