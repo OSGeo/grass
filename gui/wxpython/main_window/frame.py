@@ -56,7 +56,7 @@ from core.watchdog import (
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
-from main_window.notebook import MapNotebook
+from main_window.notebook import MainNotebook
 from gui_core.widgets import GNotebook
 from core.gconsole import GConsole, EVT_IGNORED_CMD_RUN
 from core.giface import Notification
@@ -317,10 +317,10 @@ class GMFrame(wx.Frame):
         """Override SbMain statusbar method"""
         self.statusbar.SetStatusText(*args)
 
-    def _createMapNotebook(self):
+    def _createMainNotebook(self):
         """Create Map Display notebook"""
         # create the notebook off-window to avoid flicker
-        self.mapnotebook = MapNotebook(parent=self)
+        self.mainnotebook = MainNotebook(parent=self)
 
     def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
@@ -434,7 +434,7 @@ class GMFrame(wx.Frame):
 
             # create Map Display
             mapdisplay = MapPanel(
-                parent=self.mapnotebook,
+                parent=self.mainnotebook,
                 giface=giface,
                 id=wx.ID_ANY,
                 tree=layertree,
@@ -445,7 +445,7 @@ class GMFrame(wx.Frame):
                 size=globalvar.MAP_WINDOW_SIZE,
             )
             # add map display panel to notebook and make it current
-            self.mapnotebook.AddPage(mapdisplay, name)
+            self.mainnotebook.AddPage(mapdisplay, name)
 
             # set map display properties
             self._setUpMapDisplay(mapdisplay)
@@ -496,13 +496,13 @@ class GMFrame(wx.Frame):
             :return dict/None pgnum_dict/None: dict "layers" key represent
                                                map display notebook layers
                                                tree page index and
-                                               "mapnotebook" key represent
+                                               "mainnotebook" key represent
                                                map display notebook page
                                                index (single window mode)
             """
             pgnum_dict = {}
             pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
-            pgnum_dict["mapnotebook"] = self.mapnotebook.GetPageIndex(mapdisplay)
+            pgnum_dict["mainnotebook"] = self.mainnotebook.GetPageIndex(mapdisplay)
             name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (
@@ -511,9 +511,7 @@ class GMFrame(wx.Frame):
                 return pgnum_dict
             return None
 
-        # set callbacks
-        mapdisplay.canCloseDisplayCallback = CanCloseDisplay
-        mapdisplay.SetDockingCallback(self.mapnotebook.UndockMapDisplay)
+        mapdisplay.SetUpPage(self, self.mainnotebook, CanCloseDisplay)
 
         # bind various events
         mapdisplay.onFocus.connect(
@@ -527,7 +525,6 @@ class GMFrame(wx.Frame):
         )
         mapdisplay.starting3dMode.connect(self.AddNvizTools)
         mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
-        mapdisplay.closingDisplay.connect(self._closePageNoEvent)
 
         # set default properties
         mapdisplay.SetProperties(
@@ -553,7 +550,7 @@ class GMFrame(wx.Frame):
         self._auimgr.SetAutoNotebookTabArt(SimpleTabArt())
         # initialize all main widgets
         self.statusbar = SbMain(parent=self, giface=self._giface)
-        self._createMapNotebook()
+        self._createMainNotebook()
         self._createDataCatalog(parent=self)
         self._createDisplay(parent=self)
         self._createSearchModule(parent=self)
@@ -600,7 +597,7 @@ class GMFrame(wx.Frame):
             )
 
         self._auimgr.AddPane(
-            self.mapnotebook,
+            self.mainnotebook,
             aui.AuiPaneInfo().Name("map display content").CenterPane().PaneBorder(True),
         )
 
@@ -848,24 +845,10 @@ class GMFrame(wx.Frame):
 
         gmodeler_panel = ModelerPanel(parent=self, giface=self._giface,
                                       statusbar=self.statusbar, dockable=True)
+        gmodeler_panel.SetUpPage(self, self.mainnotebook)
 
         # add map display panel to notebook and make it current
-        self.mapnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))
-        self._setUpPage(gmodeler_panel)
-
-    # TODO: base class
-    def _setUpPage(self, panel):
-        def CanClosePage():
-            return {
-                "mapnotebook": self.mapnotebook.GetPageIndex(panel)
-            }
-
-        # set callbacks
-        panel.canCloseCallback = CanClosePage
-        panel.SetDockingCallback(self.mapnotebook.UndockMapDisplay)
-
-        # bind various events
-        panel.closingPage.connect(self._closePageNoEvent)
+        self.mainnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))
 
     def OnPsMap(self, event=None, cmd=None):
         """Launch Cartographic Composer. See OnIClass documentation"""
@@ -967,8 +950,8 @@ class GMFrame(wx.Frame):
         self.currentPage = self.notebookLayers.GetCurrentPage()
         self.currentPageNum = self.notebookLayers.GetSelection()
 
-        if hasattr(self.currentPage, "maptree") and self.mapnotebook.GetCurrentPage():
-            self.mapnotebook.SetSelectionToMapPage(self.GetMapDisplay())
+        if hasattr(self.currentPage, "maptree") and self.mainnotebook.GetCurrentPage():
+            self.mainnotebook.SetSelectionToMapPage(self.GetMapDisplay())
 
         event.Skip()
 
@@ -986,7 +969,7 @@ class GMFrame(wx.Frame):
 
         maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
         maptree.GetMapDisplay().CleanUp()
-        self.mapnotebook.DeleteMapPage(self.GetMapDisplay())
+        self.mainnotebook.DeleteMapPage(self.GetMapDisplay())
         maptree.Close(True)
 
         self.currentPage = None
@@ -1000,7 +983,7 @@ class GMFrame(wx.Frame):
 
         :param dict pgnum_dict: dict "layers" key represent map display
                                 notebook layers tree page index and
-                                "mapnotebook" key represent map display
+                                "mainnotebook" key represent map display
                                 notebook page index (single window mode)
               boolean is_docked: "True" means that map display is docked in map
                                display notebook, "False" means that map display
@@ -1014,7 +997,7 @@ class GMFrame(wx.Frame):
             self.OnCBPageClosing,
         )
         if is_docked:
-            self.mapnotebook.DeletePage(pgnum_dict["mapnotebook"])
+            self.mainnotebook.DeletePage(pgnum_dict["mainnotebook"])
 
     def _focusPage(self, notification):
         """Focus the 'Console' notebook page according to event notification."""
@@ -1152,7 +1135,7 @@ class GMFrame(wx.Frame):
 
         :return: aui notebook instance
         """
-        return self.mapnotebook
+        return self.mainnotebook
 
     def GetLayerNotebook(self):
         """Get Layers Notebook"""
@@ -1695,7 +1678,7 @@ class GMFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             name = dlg.GetValue()
             self.notebookLayers.SetPageText(page=self.currentPageNum, text=name)
-            self.mapnotebook.SetMapPageText(page=self.GetMapDisplay(), text=name)
+            self.mainnotebook.SetMapPageText(page=self.GetMapDisplay(), text=name)
         dlg.Destroy()
 
     def OnRasterRules(self, event):

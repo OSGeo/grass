@@ -5,7 +5,7 @@
 
 Classes:
  - notebook::MapPageFrame
- - notebook::MapNotebook
+ - notebook::MainNotebook
 
 (C) 2022 by the GRASS Development Team
 
@@ -67,7 +67,7 @@ class MapPageFrame(wx.Frame):
         self.mapdisplay.OnCloseWindow(event=None, askIfSaveWorkspace=True)
 
 
-class MapNotebook(aui.AuiNotebook):
+class MainNotebook(aui.AuiNotebook):
     """Map notebook class. Overrides some AuiNotebook classes.
     Takes into consideration the dock/undock functionality.
     """
@@ -124,7 +124,7 @@ class MapNotebook(aui.AuiNotebook):
             self.currentDisplay = self.GetCurrentPage()
 
     def SetSelectionToMapPage(self, page):
-        """Decides whether to set selection to a MapNotebook page
+        """Decides whether to set selection to a MainNotebook page
         or an undocked independent frame"""
         self.SetSelection(self.GetPageIndex(page))
 
@@ -133,7 +133,7 @@ class MapNotebook(aui.AuiNotebook):
             wx.CallLater(500, lambda: frame.Raise() if frame else None)
 
     def DeleteMapPage(self, page):
-        """Decides whether to delete a MapNotebook page
+        """Decides whether to delete a MainNotebook page
         or close an undocked independent frame"""
         if page.IsDocked():
             self.DeletePage(self.GetPageIndex(page))
@@ -142,7 +142,7 @@ class MapNotebook(aui.AuiNotebook):
             frame.Destroy()
 
     def SetMapPageText(self, page, text):
-        """Decides whether sets title to MapNotebook page
+        """Decides whether sets title to MainNotebook page
         or an undocked independent frame"""
         if page.IsDocked():
             self.SetPageText(page_idx=self.GetPageIndex(page), text=text)
