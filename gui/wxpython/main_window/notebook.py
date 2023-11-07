@@ -82,8 +82,6 @@ class MainNotebook(aui.AuiNotebook):
 
         self.SetArtProvider(SimpleTabArt())
 
-        self.currentDisplay = None
-
         # bindings
         self.Bind(
             aui.EVT_AUINOTEBOOK_PAGE_CHANGED,
@@ -120,8 +118,6 @@ class MainNotebook(aui.AuiNotebook):
         Adds page to notebook and makes it current"""
         super().AddPage(*args, **kwargs)
         self.SetSelection(self.GetPageCount() - 1)
-        if isinstance(args[0], MapPanel):
-            self.currentDisplay = self.GetCurrentPage()
 
     def SetSelectionToMapPage(self, page):
         """Decides whether to set selection to a MainNotebook page
@@ -154,11 +150,8 @@ class MainNotebook(aui.AuiNotebook):
     def OnClose(self, event):
         """Page of map notebook is being closed"""
         page = self.GetCurrentPage()
-        if page == self.currentDisplay:
+        if isinstance(page, MapPanel):
             page.OnCloseWindow(event=None, askIfSaveWorkspace=True)
         else:
             page.OnCloseWindow(event=None)
         event.Veto()
-
-    def GetCurrentDisplay(self):
-        return self.currentDisplay
