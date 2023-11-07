@@ -11,15 +11,16 @@ msgstr ""
 "Project-Id-Version: grasslibs_pt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2013-12-22 16:37+0200\n"
-"Last-Translator: luisa <gem12lte@student.lu.se>\n"
-"Language-Team: gem12lte@student.lu.se\n"
+"PO-Revision-Date: 2023-04-29 23:52+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/"
+"grasslibs/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: ../lib/init/grass.py:209
 msgid "WARNING"
@@ -749,8 +750,8 @@ msgstr "A ignorar %d pontos (denso demais)"
 #: ../lib/rst/interp_float/vinput2d.c:277
 #, c-format
 msgid ""
-"%d points given for interpolation (after thinning) is less than given "
-"NPMIN=%d"
+"%d points given for interpolation (after thinning) is less than given NPMIN="
+"%d"
 msgstr ""
 "%d pontos dados para a interpolação (após afinamento) é menor que o NPMIN=%d "
 "definido"
@@ -3108,8 +3109,8 @@ msgid ""
 "Unable to create signature file <%s> for subgroup <%s> of group <%s> - <%s> "
 "is not current mapset"
 msgstr ""
-"Não foi possível criar o ficheiro <%s> para o subgrupo <%s> do grupo <%s> - "
-"<%s> não está no mapset actual"
+"Não foi possível criar o ficheiro <%s> para o subgrupo <%s> do grupo <%s> - <"
+"%s> não está no mapset actual"
 
 #: ../lib/imagery/sigsetfile.c:57
 #, c-format
@@ -3131,8 +3132,8 @@ msgstr "Não foi possível abrir o ficheiro [%s] do grupo [%s em %s]"
 #, c-format
 msgid "Unable to find file [%s] for subgroup [%s] of group [%s in %s]"
 msgstr ""
-"Não foi possível encontrar o ficheiro [%s] para o subgrupo [%s] do o grupo "
-"[%s em %s]"
+"Não foi possível encontrar o ficheiro [%s] para o subgrupo [%s] do o grupo ["
+"%s em %s]"
 
 #: ../lib/imagery/fopen.c:63 ../lib/imagery/fopen.c:164
 #, c-format
@@ -5792,8 +5793,8 @@ msgstr ""
 #, c-format
 msgid "Unable to open topology file for vector map <%s>"
 msgstr ""
-"Não foi possível abrir o ficheiro de topologia relativo ao mapa vectorial "
-"<%s>"
+"Não foi possível abrir o ficheiro de topologia relativo ao mapa vectorial <"
+"%s>"
 
 #: ../lib/vector/Vlib/open.c:393 ../lib/vector/Vlib/cindex.c:542
 #, c-format
@@ -5822,8 +5823,8 @@ msgstr ""
 #, c-format
 msgid "Unable to open history file for vector map <%s>"
 msgstr ""
-"Não foi possível abrir o ficheiro do histórico relativo ao mapa vectorial "
-"<%s>"
+"Não foi possível abrir o ficheiro do histórico relativo ao mapa vectorial <"
+"%s>"
 
 #: ../lib/vector/Vlib/open.c:777
 #, c-format
@@ -6509,8 +6510,8 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:364
 #, c-format
 msgid ""
-"There exists more than one point of node <%d> with unique category field  "
-"<%d>.\n"
+"There exists more than one point of node <%d> with unique category field  <"
+"%d>.\n"
 "The unique categories layer is not valid therefore you will probably get "
 "incorrect results."
 msgstr ""
@@ -7688,15 +7689,15 @@ msgstr ""
 #: ../lib/python/temporal/register.py:268
 #, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s> with layer %(l)s. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s> with layer %(l)s. Overwrite flag is not set."
 msgstr ""
 
 #: ../lib/python/temporal/register.py:275
 #, python-format
 msgid ""
-"Map is already registered in temporal database. Unable to update %(t)s map "
-"<%(id)s>. Overwrite flag is not set."
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s>. Overwrite flag is not set."
 msgstr ""
 
 #: ../lib/python/temporal/register.py:299
@@ -7919,8 +7920,8 @@ msgstr ""
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2312
 #, python-format
 msgid ""
-"Map <%(map)s> with layer %(l)s is not registered in space time dataset "
-"<%(base)s>"
+"Map <%(map)s> with layer %(l)s is not registered in space time dataset <"
+"%(base)s>"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2318
@@ -8058,8 +8059,8 @@ msgstr ""
 #: ../lib/python/temporal/temporal_algebra.py:1214
 #, python-format
 msgid ""
-"Wrong temporal type of space time dataset "
-"<%s>                                       <%s> time is required"
+"Wrong temporal type of space time dataset <"
+"%s>                                       <%s> time is required"
 msgstr ""
 
 #: ../lib/python/temporal/temporal_algebra.py:1234
@@ -9165,8 +9166,8 @@ msgstr "A carregar o mapa raster <%s>..."
 #, c-format
 msgid "Color table range doesn't match data (mincol=%d, maxcol=%d"
 msgstr ""
-"O intervalo de valores da tabela de cor não corresponde aos dados "
-"(mincol=%d, maxcol=%d"
+"O intervalo de valores da tabela de cor não corresponde aos dados ("
+"mincol=%d, maxcol=%d"
 
 #: ../lib/ogsf/gs3.c:658 ../lib/ogsf/gs3.c:730
 #, c-format
@@ -9211,7 +9212,7 @@ msgstr ""
 #: ../lib/ogsf/gsd_prim.c:642
 #, c-format
 msgid ""
-"gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please "
+"gsd_rot(): %c is an inconflictsvalid axis specification. Rotation ignored. Please "
 "advise GRASS developers of this error"
 msgstr ""
 "gsd_rot(): %c é uma especificação inválida de eixo. Rotação ignorada. Por "
@@ -9628,8 +9629,7 @@ msgstr "impossível escrever ficheiro f_format para mapas CELL"
 #: ../lib/raster/put_title.c:28
 #, c-format
 msgid "category information for [%s] in [%s] missing or invalid"
-msgstr ""
-"a informação da categoria para [%s] em [%s] está em falta ou é inválida"
+msgstr "a informação da categoria para [%s] em [%s] está em falta ou é inválida"
 
 #: ../lib/raster/put_title.c:37
 msgid "G_put_title - can't create a temp file"
@@ -9647,8 +9647,7 @@ msgstr "G_put_title - não foi possível reabrir o ficheiro temporário"
 #: ../lib/raster/put_title.c:67
 #, c-format
 msgid "can't write category information for [%s] in [%s]"
-msgstr ""
-"não foi possível escrever as informações da categoria para [%s] em [%s]"
+msgstr "não foi possível escrever as informações da categoria para [%s] em [%s]"
 
 #: ../lib/raster/get_cellhd.c:65
 msgid ""
@@ -9739,8 +9738,8 @@ msgstr ""
 #: ../lib/raster/open.c:192
 #, c-format
 msgid ""
-"Unable to open raster map <%s@%s> since it is a reclass of raster map "
-"<%s@%s> which does not exist"
+"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
+"%s> which does not exist"
 msgstr ""
 "Não foi possível abrir o mapa raster <%s@%s> porque este é uma "
 "reclassificação do mapa raster <%s@%s> que não existe"
@@ -10618,8 +10617,8 @@ msgid ""
 "Dev note: Adapted sites library used for vector points. (module should be "
 "updated to GRASS 6 vector library)"
 msgstr ""
-"Nota do Dev: Bibliotecas locais adaptadas usadas para os pontos vectoriais. "
-"(o módulo deverá ser atualizado para a biblioteca vectorial GRASS 6)"
+"Nota do Dev: Bibliotecas locais adaptadas usadas para os pontos vectoriais. ("
+"o módulo deverá ser atualizado para a biblioteca vectorial GRASS 6)"
 
 msgid "Cannot fetch row"
 msgstr "Não foi possível obter linha"
@@ -10705,3 +10704,125 @@ msgstr "Topo deve ser maior que Base"
 
 msgid "Unable to open header file for raster map <%s@%s>"
 msgstr "Não foi possível abrir o ficheiro de cabeçalho do mapa raster <%s@%s>"
+
+#: ../lib/init/grass.py:516
+#, python-brace-format
+msgid "Unable to create temporary directory <{tmpdir_name}>! Exiting."
+msgstr ""
+
+#: ../lib/init/grass.py:2573
+msgid ""
+"Failed to start GRASS GIS, grassdata directory cannot be found or created."
+msgstr ""
+
+#: ../lib/init/grass.py:2580
+msgid ""
+"Failed to start GRASS GIS, no default location to copy in the installation "
+"or copying failed."
+msgstr ""
+
+#: ../lib/manage/do_rename.c:99 ../lib/manage/do_remove.c:101
+#: ../lib/manage/do_copy.c:83
+msgid "String for secondary color table has been truncated"
+msgstr ""
+
+#: ../lib/vector/Vlib/map.c:496
+#, c-format
+msgid "Filepath '%s/%s' exceeds max length"
+msgstr ""
+
+#: ../lib/raster/put_row.c:391 ../lib/raster/put_row.c:397
+#, c-format
+msgid "Error writing compressed data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:407
+#, c-format
+msgid "Error writing uncompressed data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:521 ../lib/raster/put_row.c:526
+#, c-format
+msgid "Error writing compressed null data for row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/put_row.c:564
+#, c-format
+msgid "Error writing null row %d of <%s>: %s"
+msgstr ""
+
+#: ../lib/raster/raster_metadata.c:158
+msgid "Semantic label is too long"
+msgstr ""
+
+#: ../lib/raster/raster_metadata.c:169
+#, c-format
+msgid "Character '%c' not allowed in a semantic label."
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:181
+#, c-format
+msgid "%s or <%s>"
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:181
+#, c-format
+msgid "%s and <%s>"
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:275
+#, c-format
+msgid "Option <%s> requires %s"
+msgstr ""
+
+#: ../lib/gis/parser.c:1273
+#, c-format
+msgid "Invalid value <%s> for parameter <%s>"
+msgstr ""
+
+#: ../lib/gis/parser.c:1817
+#, c-format
+msgid "Unable to open %s file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/parser.c:1823
+#, c-format
+msgid "Unable to create %s file <%s>: %s"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:771
+msgid "Number of threads for parallel computing"
+msgstr ""
+
+#: ../lib/imagery/manage_signatures.c:83 ../lib/imagery/manage_signatures.c:128
+#: ../lib/imagery/manage_signatures.c:184
+#: ../lib/imagery/manage_signatures.c:193
+#, c-format
+msgid "%s is not in the current mapset (%s)"
+msgstr ""
+
+#: ../lib/imagery/manage_signatures.c:93
+#, c-format
+msgid "Unable to remove %s signature"
+msgstr ""
+
+#: ../lib/imagery/manage_signatures.c:214
+#, c-format
+msgid "Unable to rename <%s> to <%s>"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:150 ../lib/imagery/sig.c:151
+msgid "Invalid signature file"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:154 ../lib/imagery/sig.c:156
+msgid "Invalid signature file version"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:220 ../lib/imagery/sig.c:194
+msgid "Invalid signature file: semantic label length limit exceeded"
+msgstr ""
+
+#: ../lib/imagery/sigset.c:228 ../lib/imagery/sig.c:203
+msgid "Signature file does not contain bands"
+msgstr ""

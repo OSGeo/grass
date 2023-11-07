@@ -7,7 +7,7 @@ PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
 DSTDIR = $(GDIR)/pygrass
 
-MODULES = errors utils orderdict
+MODULES = errors utils
 
 CLEAN_SUBDIRS = messages modules raster vector gis shell tests rpc
 

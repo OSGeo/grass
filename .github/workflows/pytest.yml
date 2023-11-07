@@ -30,7 +30,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -72,7 +72,7 @@ jobs:
       - name: Run pytest
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass83/lib:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
           pytest .
 
       - name: Print installed versions

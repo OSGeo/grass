@@ -17,6 +17,7 @@ import sys
 import unittest
 
 from pathlib import Path
+from urllib import request as urlrequest
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
@@ -40,6 +41,10 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         install_prefix / "scripts" / "r.example.plus",
         install_prefix / "docs" / "html" / "r.example.plus.html",
     ]
+
+    request_headers = {
+        "User-Agent": "Mozilla/5.0",
+    }
 
     def setUp(self):
         """Make sure we are not dealing with some old files"""
@@ -184,6 +189,50 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         ext_path = Path(ext_path_str.group(2))
         self.assertTrue(ext_path.exists())
         self.assertIn(ext_path / "Makefile", list(ext_path.iterdir()))
+
+    def test_github_official_module_man_page_src_code_links_exists(self):
+        """Test if the installed extension HTML manual page from the
+        official GitHub repository contains the source code link and
+        the source code history link and if they exists
+        """
+        extension = "db.join"
+        self.assertModule(
+            "g.extension",
+            extension=extension,
+            prefix=str(self.install_prefix),
+        )
+        html_man_page = self.install_prefix / "docs" / "html" / "db.join.html"
+        self.assertFileExists(str(html_man_page))
+        with open(html_man_page) as f:
+            content = f.read()
+        for link_name in [f"{extension} source code", "history"]:
+            url = re.search(rf"<a href=\"(.*)\">{link_name}</a>", content).group(1)
+            self.assertTrue(url)
+            try:
+                request = urlrequest.Request(url, headers=self.request_headers)
+                response = urlrequest.urlopen(request).code
+            except urlrequest.HTTPError as e:
+                response = e.code
+            except urlrequest.URLError as e:
+                response = e.args
+            self.assertEqual(response, 200)
+
+    def test_github_install_official_multimodule_and_check_metadata(self):
+        """Test installing multi-module extension from official addons
+        repository without printing warning no metadata available message
+        for module wich install HTML page file only"""
+        extension = "i.sentinel"
+        gextension = SimpleModule(
+            "g.extension",
+            extension=extension,
+            prefix=str(self.install_prefix),
+        )
+        self.assertModule(gextension)
+        self.assertTrue(gextension.outputs.stderr)
+        self.assertNotIn(
+            _("No metadata available for module '{}':").format(extension),
+            gextension.outputs.stderr,
+        )
 
 
 if __name__ == "__main__":
