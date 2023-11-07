@@ -20,10 +20,18 @@ module:
   - temporal/**/*
   - vector/**/*
 
-# helperscripts:
-#  - utils/*
-#  - utils/**/*
+vector:
+  - vector/**/*
 
+raster:
+  - raster/**/*
+
+temporal:
+  - temporal/**/*
+
+database:
+  - db/**/*
+  
 GUI:
   - gui/**/*
 
@@ -50,7 +58,7 @@ translation:
 
 CI:
   - ".github/**/*"
-
+  - ".travis/**/*"
 
 # based on file types
 Python:
