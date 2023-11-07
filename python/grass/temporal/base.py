@@ -24,7 +24,6 @@ for details.
 
 :author: Soeren Gebbert
 """
-from __future__ import print_function
 from datetime import datetime
 from .core import (
     get_tgis_message_interface,

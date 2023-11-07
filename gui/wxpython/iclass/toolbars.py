@@ -18,8 +18,6 @@ for details.
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-from __future__ import print_function
-
 import wx
 
 from gui_core.toolbars import BaseToolbar, BaseIcons
@@ -253,7 +251,6 @@ class IClassToolbar(BaseToolbar):
         self.parent.CategoryChanged(currentCat=cat)
 
     def _updateColor(self, cat):
-
         if cat:
             stat = self.stats_data.GetStatistics(cat)
             back_c = wx.Colour([int(x) for x in stat.color.split(":")])

@@ -1,5 +1,6 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
+
 /*
  * patch in non-zero data over zero data
  * keep track of the categories which are patched in
@@ -21,7 +22,8 @@ int is_zero_value(void *rast, RASTER_MAP_TYPE data_type)
 }
 
 int do_patch(void *result, void *patch, struct Cell_stats *statf, int ncols,
-             RASTER_MAP_TYPE out_type, size_t out_cell_size, int use_zero)
+             RASTER_MAP_TYPE out_type, size_t out_cell_size, int use_zero,
+             int no_support)
 {
     int more;
 
@@ -38,19 +40,20 @@ int do_patch(void *result, void *patch, struct Cell_stats *statf, int ncols,
                     if (is_zero_value(patch, out_type))
                         more = 1;
                     Rast_raster_cpy(result, patch, 1, out_type);
-                    if (out_type == CELL_TYPE)
-                        Rast_update_cell_stats((CELL *) result, 1, statf);
+                    if (out_type == CELL_TYPE && !no_support)
+                        Rast_update_cell_stats((CELL *)result, 1, statf);
                 }
-            }    /* ZERO support */
-        } else { /* use NULL for transparency instead of 0 */
+            } /* ZERO support */
+        }
+        else { /* use NULL for transparency instead of 0 */
 
             if (Rast_is_null_value(result, out_type)) {
                 if (Rast_is_null_value(patch, out_type))
                     more = 1;
                 else {
                     Rast_raster_cpy(result, patch, 1, out_type);
-                    if (out_type == CELL_TYPE)
-                        Rast_update_cell_stats((CELL *) result, 1, statf);
+                    if (out_type == CELL_TYPE && !no_support)
+                        Rast_update_cell_stats((CELL *)result, 1, statf);
                 }
             } /* NULL support */
         }

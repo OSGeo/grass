@@ -5,7 +5,7 @@
  *
  * (C) 2001-2009 GRASS Development Team
  *
- * This program is free software under the GNU General Public License 
+ * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Original author CERL
@@ -69,7 +69,7 @@ void Rast_construct_default_range(struct Range *range)
  * \return -1 on error
  */
 int Rast_read_fp_range(const char *name, const char *mapset,
-		       struct FPRange *drange)
+                       struct FPRange *drange)
 {
     struct Range range;
     int fd;
@@ -80,51 +80,51 @@ int Rast_read_fp_range(const char *name, const char *mapset,
     Rast_init_fp_range(drange);
 
     if (Rast_map_type(name, mapset) == CELL_TYPE) {
-	/* if map is integer
-	   read integer range and convert it to double */
+        /* if map is integer
+           read integer range and convert it to double */
 
-	if (Rast_read_range(name, mapset, &range) >= 0) {
-	    /* if the integer range is empty */
-	    if (range.first_time)
-		return 2;
+        if (Rast_read_range(name, mapset, &range) >= 0) {
+            /* if the integer range is empty */
+            if (range.first_time)
+                return 2;
 
-	    Rast_update_fp_range((DCELL) range.min, drange);
-	    Rast_update_fp_range((DCELL) range.max, drange);
-	    return 1;
-	}
-	return -1;
+            Rast_update_fp_range((DCELL)range.min, drange);
+            Rast_update_fp_range((DCELL)range.max, drange);
+            return 1;
+        }
+        return -1;
     }
 
     fd = -1;
 
     if (G_find_file2_misc("cell_misc", "f_range", name, mapset)) {
-	fd = G_open_old_misc("cell_misc", "f_range", name, mapset);
-	if (fd < 0) {
-	    G_warning(_("Unable to read fp range file for <%s>"),
-		      G_fully_qualified_name(name, mapset));
-	    return -1;
-	}
+        fd = G_open_old_misc("cell_misc", "f_range", name, mapset);
+        if (fd < 0) {
+            G_warning(_("Unable to read fp range file for <%s>"),
+                      G_fully_qualified_name(name, mapset));
+            return -1;
+        }
 
-	if (read(fd, xdr_buf, sizeof(xdr_buf)) != sizeof(xdr_buf)) {
-	    /* if the f_range file exists, but empty file, meaning Nulls */
-	    close(fd);
-	    G_debug(1, "Empty fp range file meaning Nulls for <%s>",
-		      G_fully_qualified_name(name, mapset));
-	    return 2;
-	}
+        if (read(fd, xdr_buf, sizeof(xdr_buf)) != sizeof(xdr_buf)) {
+            /* if the f_range file exists, but empty file, meaning Nulls */
+            close(fd);
+            G_debug(1, "Empty fp range file meaning Nulls for <%s>",
+                    G_fully_qualified_name(name, mapset));
+            return 2;
+        }
 
-	G_xdr_get_double(&dcell1, xdr_buf[0]);
-	G_xdr_get_double(&dcell2, xdr_buf[1]);
+        G_xdr_get_double(&dcell1, xdr_buf[0]);
+        G_xdr_get_double(&dcell2, xdr_buf[1]);
 
-	Rast_update_fp_range(dcell1, drange);
-	Rast_update_fp_range(dcell2, drange);
-	close(fd);
+        Rast_update_fp_range(dcell1, drange);
+        Rast_update_fp_range(dcell2, drange);
+        close(fd);
     }
     else {
-	/* "f_range" file does not exist */
-	G_warning(_("Missing fp range file for <%s> (run r.support -s)"),
-		  G_fully_qualified_name(name, mapset));
-	return -1;
+        /* "f_range" file does not exist */
+        G_warning(_("Missing fp range file for <%s> (run r.support -s)"),
+                  G_fully_qualified_name(name, mapset));
+        return -1;
     }
 
     return 1;
@@ -165,89 +165,90 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
     int n, count;
     struct Quant quant;
     struct FPRange drange;
+
     Rast_init_range(range);
     fd = NULL;
 
     /* if map is not integer, read quant rules, and get limits */
     if (Rast_map_type(name, mapset) != CELL_TYPE) {
-	DCELL dmin, dmax;
+        DCELL dmin, dmax;
 
-	if (Rast_read_quant(name, mapset, &quant) < 0) {
-	    G_warning(_("Unable to read quant rules for raster map <%s>"),
-		      G_fully_qualified_name(name, mapset));
-	    return -1;
-	}
-	if (Rast_quant_is_truncate(&quant) || Rast_quant_is_round(&quant)) {
-	    if (Rast_read_fp_range(name, mapset, &drange) >= 0) {
-		Rast_get_fp_range_min_max(&drange, &dmin, &dmax);
-		if (Rast_quant_is_truncate(&quant)) {
-		    x[0] = (CELL) dmin;
-		    x[1] = (CELL) dmax;
-		}
-		else {		/* round */
+        if (Rast_read_quant(name, mapset, &quant) < 0) {
+            G_warning(_("Unable to read quant rules for raster map <%s>"),
+                      G_fully_qualified_name(name, mapset));
+            return -1;
+        }
+        if (Rast_quant_is_truncate(&quant) || Rast_quant_is_round(&quant)) {
+            if (Rast_read_fp_range(name, mapset, &drange) >= 0) {
+                Rast_get_fp_range_min_max(&drange, &dmin, &dmax);
+                if (Rast_quant_is_truncate(&quant)) {
+                    x[0] = (CELL)dmin;
+                    x[1] = (CELL)dmax;
+                }
+                else { /* round */
 
-		    if (dmin > 0)
-			x[0] = (CELL) (dmin + .5);
-		    else
-			x[0] = (CELL) (dmin - .5);
-		    if (dmax > 0)
-			x[1] = (CELL) (dmax + .5);
-		    else
-			x[1] = (CELL) (dmax - .5);
-		}
-	    }
-	    else
-		return -1;
-	}
-	else
-	    Rast_quant_get_limits(&quant, &dmin, &dmax, &x[0], &x[1]);
+                    if (dmin > 0)
+                        x[0] = (CELL)(dmin + .5);
+                    else
+                        x[0] = (CELL)(dmin - .5);
+                    if (dmax > 0)
+                        x[1] = (CELL)(dmax + .5);
+                    else
+                        x[1] = (CELL)(dmax - .5);
+                }
+            }
+            else
+                return -1;
+        }
+        else
+            Rast_quant_get_limits(&quant, &dmin, &dmax, &x[0], &x[1]);
 
-	Rast_update_range(x[0], range);
-	Rast_update_range(x[1], range);
-	return 3;
+        Rast_update_range(x[0], range);
+        Rast_update_range(x[1], range);
+        return 3;
     }
 
     if (G_find_file2_misc("cell_misc", "range", name, mapset)) {
-	fd = G_fopen_old_misc("cell_misc", "range", name, mapset);
-	if (!fd) {
-	    G_warning(_("Unable to read range file for <%s>"),
-		      G_fully_qualified_name(name, mapset));
-	    return -1;
-	}
+        fd = G_fopen_old_misc("cell_misc", "range", name, mapset);
+        if (!fd) {
+            G_warning(_("Unable to read range file for <%s>"),
+                      G_fully_qualified_name(name, mapset));
+            return -1;
+        }
 
-	/* if range file exists but empty */
+        /* if range file exists but empty */
         if (!fgets(buf, sizeof buf, fd)) {
             if (fd)
                 fclose(fd);
-	    return 2;
+            return 2;
         }
 
-	x[0] = x[1] = x[2] = x[3] = 0;
-	count = sscanf(buf, "%d%d%d%d", &x[0], &x[1], &x[2], &x[3]);
+        x[0] = x[1] = x[2] = x[3] = 0;
+        count = sscanf(buf, "%d%d%d%d", &x[0], &x[1], &x[2], &x[3]);
 
-	/* if wrong format */
-	if (count <= 0) {
-	    if (fd)
-		fclose(fd);
+        /* if wrong format */
+        if (count <= 0) {
+            if (fd)
+                fclose(fd);
 
-	    G_warning(_("Unable to read range file for <%s>"),
-		      G_fully_qualified_name(name, mapset));
-	    return -1;
-	}
+            G_warning(_("Unable to read range file for <%s>"),
+                      G_fully_qualified_name(name, mapset));
+            return -1;
+        }
 
-	for (n = 0; n < count; n++) {
-	    /* if count==4, the range file is old (4.1) and 0's in it
-	       have to be ignored */
-	    if (count < 4 || x[n])
-		Rast_update_range((CELL) x[n], range);
-	}
-	fclose(fd);
+        for (n = 0; n < count; n++) {
+            /* if count==4, the range file is old (4.1) and 0's in it
+               have to be ignored */
+            if (count < 4 || x[n])
+                Rast_update_range((CELL)x[n], range);
+        }
+        fclose(fd);
     }
     else {
-	/* "range" file does not exist */
-	G_warning(_("Missing range file for <%s> (run r.support -s)"),
-		  G_fully_qualified_name(name, mapset));
-	return -1;
+        /* "range" file does not exist */
+        G_warning(_("Missing range file for <%s> (run r.support -s)"),
+                  G_fully_qualified_name(name, mapset));
+        return -1;
     }
 
     return 1;
@@ -273,7 +274,7 @@ int Rast_read_range(const char *name, const char *mapset, struct Range *range)
  * \return -1 on error or stats file does not exist
  */
 int Rast_read_rstats(const char *name, const char *mapset,
-		       struct R_stats *rstats)
+                     struct R_stats *rstats)
 {
     int fd;
     char xdr_buf[2][XDR_DOUBLE_NBYTES];
@@ -289,23 +290,23 @@ int Rast_read_rstats(const char *name, const char *mapset,
     fd = -1;
 
     if (!G_find_file2_misc("cell_misc", "stats", name, mapset)) {
-	G_debug(1, "Stats file does not exist");
-	return -1;
+        G_debug(1, "Stats file does not exist");
+        return -1;
     }
 
     fd = G_open_old_misc("cell_misc", "stats", name, mapset);
     if (fd < 0) {
-	G_warning(_("Unable to read stats file for <%s>"),
-		  G_fully_qualified_name(name, mapset));
-	return -1;
+        G_warning(_("Unable to read stats file for <%s>"),
+                  G_fully_qualified_name(name, mapset));
+        return -1;
     }
 
     if (read(fd, xdr_buf, sizeof(xdr_buf)) != sizeof(xdr_buf)) {
-	/* if the stats file exists, but empty file, meaning Nulls */
-	close(fd);
-	G_debug(1, "Empty stats file meaning Nulls for <%s>",
-		  G_fully_qualified_name(name, mapset));
-	return 2;
+        /* if the stats file exists, but empty file, meaning Nulls */
+        close(fd);
+        G_debug(1, "Empty stats file meaning Nulls for <%s>",
+                G_fully_qualified_name(name, mapset));
+        return 2;
     }
 
     G_xdr_get_double(&dcell1, xdr_buf[0]);
@@ -317,35 +318,35 @@ int Rast_read_rstats(const char *name, const char *mapset,
     /* count; see cell_values_int() in get_row.c */
     nbytes = 1;
     if (read(fd, &nbytes, 1) != 1) {
-	/* if the stats file exists, but empty file, meaning Nulls */
-	close(fd);
-	G_debug(1, "Unable to read byte count in stats file for <%s>",
-		  G_fully_qualified_name(name, mapset));
-	return -1;
+        /* if the stats file exists, but empty file, meaning Nulls */
+        close(fd);
+        G_debug(1, "Unable to read byte count in stats file for <%s>",
+                G_fully_qualified_name(name, mapset));
+        return -1;
     }
 
     count = 0;
     if (nbytes == 0)
-	return 1;
+        return 1;
 
-    if (nbytes < 1 || nbytes > sizeof(grass_int64)) {
-	close(fd);
-	G_debug(1, "Invalid byte count in stats file for <%s>",
-		  G_fully_qualified_name(name, mapset));
-	return -1;
+    if (nbytes < 1 || (unsigned char)nbytes > sizeof(grass_int64)) {
+        close(fd);
+        G_debug(1, "Invalid byte count in stats file for <%s>",
+                G_fully_qualified_name(name, mapset));
+        return -1;
     }
     if (read(fd, cc, nbytes) != nbytes) {
-	/* incorrect number of bytes for count */
-	close(fd);
-	G_debug(1, "Unable to read count in stats file for <%s>",
-		  G_fully_qualified_name(name, mapset));
-	return -1;
+        /* incorrect number of bytes for count */
+        close(fd);
+        G_debug(1, "Unable to read count in stats file for <%s>",
+                G_fully_qualified_name(name, mapset));
+        return -1;
     }
 
     /* copy byte by byte */
     for (i = nbytes - 1; i >= 0; i--) {
-	count = (count << 8);
-	count = count + cc[i];
+        count = (count << 8);
+        count = count + cc[i];
     }
     rstats->count = count;
 
@@ -376,19 +377,21 @@ void Rast_write_range(const char *name, const struct Range *range)
     Rast_write_rstats(name, &(range->rstats));
 
     if (Rast_map_type(name, G_mapset()) != CELL_TYPE) {
-	G_remove_misc("cell_misc", "range", name);	/* remove the old file with this name */
-	G_fatal_error(_("Unable to write range file for <%s>"), name);
+        G_remove_misc("cell_misc", "range",
+                      name); /* remove the old file with this name */
+        G_fatal_error(_("Unable to write range file for <%s>"), name);
     }
 
     fp = G_fopen_new_misc("cell_misc", "range", name);
     if (!fp) {
-	G_remove_misc("cell_misc", "range", name);	/* remove the old file with this name */
-	G_fatal_error(_("Unable to write range file for <%s>"), name);
+        G_remove_misc("cell_misc", "range",
+                      name); /* remove the old file with this name */
+        G_fatal_error(_("Unable to write range file for <%s>"), name);
     }
 
     /* if range has been updated */
     if (!range->first_time)
-	fprintf(fp, "%ld %ld\n", (long)range->min, (long)range->max);
+        fprintf(fp, "%ld %ld\n", (long)range->min, (long)range->max);
 
     fclose(fp);
 }
@@ -414,22 +417,22 @@ void Rast_write_fp_range(const char *name, const struct FPRange *range)
 
     fd = G_open_new_misc("cell_misc", "f_range", name);
     if (fd < 0) {
-	G_remove_misc("cell_misc", "f_range", name);
-	G_fatal_error(_("Unable to write range file for <%s>"), name);
+        G_remove_misc("cell_misc", "f_range", name);
+        G_fatal_error(_("Unable to write range file for <%s>"), name);
     }
 
     /* if range hasn't been updated, write empty file meaning Nulls */
     if (range->first_time) {
-	close(fd);
-	return;
+        close(fd);
+        return;
     }
 
     G_xdr_put_double(xdr_buf[0], &range->min);
     G_xdr_put_double(xdr_buf[1], &range->max);
 
     if (write(fd, xdr_buf, sizeof(xdr_buf)) != sizeof(xdr_buf)) {
-	G_remove_misc("cell_misc", "f_range", name);
-	G_fatal_error(_("Unable to write range file for <%s>"), name);
+        G_remove_misc("cell_misc", "f_range", name);
+        G_fatal_error(_("Unable to write range file for <%s>"), name);
     }
 
     close(fd);
@@ -451,29 +454,29 @@ void Rast_write_rstats(const char *name, const struct R_stats *rstats)
     char xdr_buf[2][XDR_DOUBLE_NBYTES];
     unsigned char cc[8];
     char nbytes;
-    int i;
+    unsigned int i;
     grass_int64 count;
 
     Rast_init();
 
     fd = G_open_new_misc("cell_misc", "stats", name);
     if (fd < 0) {
-	G_remove_misc("cell_misc", "stats", name);
-	G_fatal_error(_("Unable to write stats file for <%s>"), name);
+        G_remove_misc("cell_misc", "stats", name);
+        G_fatal_error(_("Unable to write stats file for <%s>"), name);
     }
 
     /* if count is zero, write empty file meaning Nulls */
     if (rstats->count < 1) {
-	close(fd);
-	return;
+        close(fd);
+        return;
     }
 
     G_xdr_put_double(xdr_buf[0], &rstats->sum);
     G_xdr_put_double(xdr_buf[1], &rstats->sumsq);
 
     if (write(fd, xdr_buf, sizeof(xdr_buf)) != sizeof(xdr_buf)) {
-	G_remove_misc("cell_misc", "stats", name);
-	G_fatal_error(_("Unable to write stats file for <%s>"), name);
+        G_remove_misc("cell_misc", "stats", name);
+        G_fatal_error(_("Unable to write stats file for <%s>"), name);
     }
 
     /* count; see convert_int() in put_row.c */
@@ -481,22 +484,22 @@ void Rast_write_rstats(const char *name, const struct R_stats *rstats)
     nbytes = 0;
     /* copy byte by byte */
     for (i = 0; i < sizeof(grass_int64); i++) {
-	cc[i] = count & 0xff;
-	count >>= 8;
-	if (cc[i])
-	    nbytes = i;
+        cc[i] = count & 0xff;
+        count >>= 8;
+        if (cc[i])
+            nbytes = i;
     }
     nbytes++;
 
     /* number of bytes needed for count */
     if (write(fd, &nbytes, 1) != 1) {
-	G_remove_misc("cell_misc", "stats", name);
-	G_fatal_error(_("Unable to write stats file for <%s>"), name);
+        G_remove_misc("cell_misc", "stats", name);
+        G_fatal_error(_("Unable to write stats file for <%s>"), name);
     }
 
     if (nbytes > 0 && write(fd, cc, nbytes) != nbytes) {
-	G_remove_misc("cell_misc", "stats", name);
-	G_fatal_error(_("Unable to write stats file for <%s>"), name);
+        G_remove_misc("cell_misc", "stats", name);
+        G_fatal_error(_("Unable to write stats file for <%s>"), name);
     }
 
     close(fd);
@@ -517,16 +520,16 @@ void Rast_write_rstats(const char *name, const struct R_stats *rstats)
 void Rast_update_range(CELL cat, struct Range *range)
 {
     if (!Rast_is_c_null_value(&cat)) {
-	if (range->first_time) {
-	    range->first_time = 0;
-	    range->min = cat;
-	    range->max = cat;
-	    return;
-	}
-	if (cat < range->min)
-	    range->min = cat;
-	if (cat > range->max)
-	    range->max = cat;
+        if (range->first_time) {
+            range->first_time = 0;
+            range->min = cat;
+            range->max = cat;
+            return;
+        }
+        if (cat < range->min)
+            range->min = cat;
+        if (cat > range->max)
+            range->max = cat;
     }
 }
 
@@ -545,16 +548,16 @@ void Rast_update_range(CELL cat, struct Range *range)
 void Rast_update_fp_range(DCELL val, struct FPRange *range)
 {
     if (!Rast_is_d_null_value(&val)) {
-	if (range->first_time) {
-	    range->first_time = 0;
-	    range->min = val;
-	    range->max = val;
-	    return;
-	}
-	if (val < range->min)
-	    range->min = val;
-	if (val > range->max)
-	    range->max = val;
+        if (range->first_time) {
+            range->first_time = 0;
+            range->min = val;
+            range->max = val;
+            return;
+        }
+        if (val < range->min)
+            range->min = val;
+        if (val > range->max)
+            range->max = val;
     }
 }
 
@@ -569,7 +572,7 @@ void Rast_update_fp_range(DCELL val, struct FPRange *range)
  * \param n number of values
  * \param range pointer to Range structure which holds range info
  */
-void Rast_row_update_range(const CELL * cell, int n, struct Range *range)
+void Rast_row_update_range(const CELL *cell, int n, struct Range *range)
 {
     Rast__row_update_range(cell, n, range, 0);
 }
@@ -584,34 +587,36 @@ void Rast_row_update_range(const CELL * cell, int n, struct Range *range)
  * \param range pointer to Range structure which holds range info
  * \param ignore_zeros ignore zeros
  */
-void Rast__row_update_range(const CELL * cell, int n,
-			    struct Range *range, int ignore_zeros)
+void Rast__row_update_range(const CELL *cell, int n, struct Range *range,
+                            int ignore_zeros)
 {
     CELL cat;
 
     while (n-- > 0) {
-	cat = *cell++;
-	if (Rast_is_c_null_value(&cat) || (ignore_zeros && !cat))
-	    continue;
-	if (range->first_time) {
-	    range->first_time = 0;
-	    range->min = cat;
-	    range->max = cat;
+        cat = *cell++;
+        if (Rast_is_c_null_value(&cat) || (ignore_zeros && !cat))
+            continue;
+        if (range->first_time) {
+            range->first_time = 0;
+            range->min = cat;
+            range->max = cat;
 
-	    range->rstats.sum = cat;
-	    range->rstats.sumsq = (DCELL) cat * cat;
-	    range->rstats.count = 1;
+            range->rstats.sum = cat;
+            range->rstats.sumsq = (DCELL)cat * cat;
 
-	    continue;
-	}
-	if (cat < range->min)
-	    range->min = cat;
-	if (cat > range->max)
-	    range->max = cat;
+            range->rstats.count = 1;
 
-	range->rstats.sum += cat;
-	range->rstats.sumsq += (DCELL) cat * cat;
-	range->rstats.count += 1;
+            continue;
+        }
+        if (cat < range->min)
+            range->min = cat;
+        if (cat > range->max)
+            range->max = cat;
+
+        range->rstats.sum += cat;
+        range->rstats.sumsq += (DCELL)cat * cat;
+
+        range->rstats.count += 1;
     }
 }
 
@@ -627,51 +632,50 @@ void Rast__row_update_range(const CELL * cell, int n,
  * \param range pointer to Range structure which holds range info
  * \param data_type raster type (CELL, FCELL, DCELL)
  */
-void Rast_row_update_fp_range(const void *rast, int n,
-			      struct FPRange *range,
-			      RASTER_MAP_TYPE data_type)
+void Rast_row_update_fp_range(const void *rast, int n, struct FPRange *range,
+                              RASTER_MAP_TYPE data_type)
 {
     size_t size = Rast_cell_size(data_type);
     DCELL val = 0.0;
 
     while (n-- > 0) {
-	switch (data_type) {
-	case CELL_TYPE:
-	    val = (DCELL) * ((CELL *) rast);
-	    break;
-	case FCELL_TYPE:
-	    val = (DCELL) * ((FCELL *) rast);
-	    break;
-	case DCELL_TYPE:
-	    val = *((DCELL *) rast);
-	    break;
-	}
+        switch (data_type) {
+        case CELL_TYPE:
+            val = (DCELL) * ((CELL *)rast);
+            break;
+        case FCELL_TYPE:
+            val = (DCELL) * ((FCELL *)rast);
+            break;
+        case DCELL_TYPE:
+            val = *((DCELL *)rast);
+            break;
+        }
 
-	if (Rast_is_null_value(rast, data_type)) {
-	    rast = G_incr_void_ptr(rast, size);
-	    continue;
-	}
-	if (range->first_time) {
-	    range->first_time = 0;
-	    range->min = val;
-	    range->max = val;
+        if (Rast_is_null_value(rast, data_type)) {
+            rast = G_incr_void_ptr(rast, size);
+            continue;
+        }
+        if (range->first_time) {
+            range->first_time = 0;
+            range->min = val;
+            range->max = val;
 
-	    range->rstats.sum = val;
-	    range->rstats.sumsq = val * val;
-	    range->rstats.count = 1;
-	}
-	else {
-	    if (val < range->min)
-		range->min = val;
-	    if (val > range->max)
-		range->max = val;
+            range->rstats.sum = val;
+            range->rstats.sumsq = val * val;
+            range->rstats.count = 1;
+        }
+        else {
+            if (val < range->min)
+                range->min = val;
+            if (val > range->max)
+                range->max = val;
 
-	    range->rstats.sum += val;
-	    range->rstats.sumsq += val * val;
-	    range->rstats.count += 1;
-	}
+            range->rstats.sum += val;
+            range->rstats.sumsq += val * val;
+            range->rstats.count += 1;
+        }
 
-	rast = G_incr_void_ptr(rast, size);
+        rast = G_incr_void_ptr(rast, size);
     }
 }
 
@@ -711,22 +715,22 @@ void Rast_init_range(struct Range *range)
  * \param[out] min minimum value
  * \param[out] max maximum value
  */
-void Rast_get_range_min_max(const struct Range *range, CELL * min, CELL * max)
+void Rast_get_range_min_max(const struct Range *range, CELL *min, CELL *max)
 {
     if (range->first_time) {
-	Rast_set_c_null_value(min, 1);
-	Rast_set_c_null_value(max, 1);
+        Rast_set_c_null_value(min, 1);
+        Rast_set_c_null_value(max, 1);
     }
     else {
-	if (Rast_is_c_null_value(&(range->min)))
-	    Rast_set_c_null_value(min, 1);
-	else
-	    *min = range->min;
+        if (Rast_is_c_null_value(&(range->min)))
+            Rast_set_c_null_value(min, 1);
+        else
+            *min = range->min;
 
-	if (Rast_is_c_null_value(&(range->max)))
-	    Rast_set_c_null_value(max, 1);
-	else
-	    *max = range->max;
+        if (Rast_is_c_null_value(&(range->max)))
+            Rast_set_c_null_value(max, 1);
+        else
+            *max = range->max;
     }
 }
 
@@ -761,23 +765,23 @@ void Rast_init_fp_range(struct FPRange *range)
  * \param[out] min minimum value
  * \param[out] max maximum value
  */
-void Rast_get_fp_range_min_max(const struct FPRange *range,
-			       DCELL * min, DCELL * max)
+void Rast_get_fp_range_min_max(const struct FPRange *range, DCELL *min,
+                               DCELL *max)
 {
     if (range->first_time) {
-	Rast_set_d_null_value(min, 1);
-	Rast_set_d_null_value(max, 1);
+        Rast_set_d_null_value(min, 1);
+        Rast_set_d_null_value(max, 1);
     }
     else {
-	if (Rast_is_d_null_value(&(range->min)))
-	    Rast_set_d_null_value(min, 1);
-	else
-	    *min = range->min;
+        if (Rast_is_d_null_value(&(range->min)))
+            Rast_set_d_null_value(min, 1);
+        else
+            *min = range->min;
 
-	if (Rast_is_d_null_value(&(range->max)))
-	    Rast_set_d_null_value(max, 1);
-	else
-	    *max = range->max;
+        if (Rast_is_d_null_value(&(range->max)))
+            Rast_set_d_null_value(max, 1);
+        else
+            *max = range->max;
     }
 }
 

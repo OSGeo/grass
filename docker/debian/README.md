@@ -21,7 +21,8 @@ docker build \
          --tag grass-py3-pdal:latest-debian .
 ```
 
-View the images available using `sudo docker images` and open a bash terminal with:
+View the images available using `sudo docker images` and open a bash terminal
+with:
 
 ```bash
 $ docker run -it grass-py3-pdal:latest-debian /bin/bash
@@ -33,7 +34,7 @@ __To build a stable version__:
 change to the releasebranch or tag you want to build:
 
 ```bash
-git checkout remotes/origin/releasebranch_7_8
+git checkout remotes/origin/releasebranch_8_2
 ```
 
 and build and enter with:

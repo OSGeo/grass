@@ -15,7 +15,6 @@ import os
 
 
 class testRaster3dExtraction(TestCase):
-
     mapsets_to_remove = []
     outfile = "rast3dlist.txt"
     gisenv = SimpleModule("g.gisenv", get="MAPSET")

@@ -8,19 +8,19 @@ int get_aver_elev(struct Ortho_Control_Points *cpz, double *aver_z)
 
     /*  Need 1 control points */
     if (cpz->count <= 0) {
-	return (-1);
+        return (-1);
     }
 
     /* set average elevation from mean values of CONZ points */
     meanz = 0;
     n = 0;
     for (i = 0; i < cpz->count; i++) {
-	if (cpz->status[i] <= 0)
-	    continue;
+        if (cpz->status[i] <= 0)
+            continue;
 
-	n++;
-	meanz += *(cp++);
-	G_debug(3, "In ortho meanz = %f", meanz);
+        n++;
+        meanz += *(cp++);
+        G_debug(3, "In ortho meanz = %f", meanz);
     }
 
     *aver_z = meanz / n;

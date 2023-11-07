@@ -283,7 +283,7 @@ class Category(list):
         raise ImplementationError("set_cats_fmt() is not implemented yet.")
 
     def read_rules(self, filename, sep=":"):
-        """Copy categories from a rules file, default separetor is ':', the
+        """Copy categories from a rules file, default separator is ':', the
         columns must be: min and/or max and label. ::
 
             1:forest
@@ -312,7 +312,7 @@ class Category(list):
                 self.append((label, min_cat, max_cat))
 
     def write_rules(self, filename, sep=":"):
-        """Copy categories from a rules file, default separetor is ':', the
+        """Copy categories from a rules file, default separator is ':', the
         columns must be: min and/or max and label. ::
 
             1:forest

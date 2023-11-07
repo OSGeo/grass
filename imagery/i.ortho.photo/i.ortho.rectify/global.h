@@ -5,7 +5,7 @@
 #include "orthophoto.h"
 #include "defs.h"
 
-extern func interpolate;	/* interpolation routine */
+extern func interpolate; /* interpolation routine */
 
 extern int seg_mb_img, seg_mb_elev;
 extern char *elev_name;
