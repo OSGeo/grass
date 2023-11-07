@@ -17,7 +17,6 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
-import six
 import math
 import numpy
 
@@ -229,7 +228,7 @@ class ProfileFrame(BasePlotFrame):
         self.ylabel = ""
         i = 0
 
-        for r in six.iterkeys(self.raster):
+        for r in self.raster.keys():
             self.raster[r]["datalist"] = []
             datalist = self.CreateDatalist(r, self.coordstr)
             if len(datalist) > 0:
@@ -440,7 +439,7 @@ class ProfileFrame(BasePlotFrame):
         message = []
         title = _("Statistics for Profile(s)")
 
-        for r in six.iterkeys(self.raster):
+        for r in self.raster.keys():
             try:
                 rast = r.split("@")[0]
                 statstr = "Profile of %s\n\n" % rast

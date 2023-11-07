@@ -19,4 +19,4 @@ export SRC=$(pwd)
 export UNITTEST=1
 
 # Build according to OSGeo4W recipe
-${SRC}/mswindows/osgeo4w/build_osgeo4W.sh
+${SRC}/mswindows/osgeo4w/build_osgeo4w.sh

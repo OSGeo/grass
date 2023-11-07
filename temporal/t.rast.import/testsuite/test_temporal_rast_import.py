@@ -20,7 +20,6 @@ import os
 
 
 class TestRasterImport(TestCase):
-
     input_ = os.path.join("data", "precip_2000.tar.bzip2")
 
     @classmethod

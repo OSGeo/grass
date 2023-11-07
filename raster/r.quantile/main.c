@@ -1,8 +1,8 @@
-
 /****************************************************************************
  *
  * MODULE:       r.quantile
- * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor),
+ * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com>
+ *                 (original contributor),
  * PURPOSE:      Compute quantiles using two passes
  *
  *               This program is free software under the GNU General Public
@@ -10,6 +10,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -18,8 +19,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-struct bin
-{
+struct bin {
     size_t origin;
     DCELL min, max;
     size_t base, count;
@@ -46,9 +46,9 @@ static inline int get_slot(DCELL c)
     int i = (int)floor((c - min) / slot_size);
 
     if (i < 0)
-	i = 0;
+        i = 0;
     if (i > num_slots - 1)
-	i = num_slots - 1;
+        i = num_slots - 1;
     return i;
 }
 
@@ -73,15 +73,15 @@ static inline double get_quantile(int n)
     double rnk;
 
     if (n >= num_quants) {
-	/* stop condition for initialize_bins() */
-	return (double)total + total;
+        /* stop condition for initialize_bins() */
+        return (double)total + total;
     }
 
     rnk = quants[n] * (total - 1);
     if (rnk < 0)
-	rnk = 0;
+        rnk = 0;
     if (rnk > total - 1)
-	rnk = total - 1;
+        rnk = total - 1;
 
     return rnk;
 }
@@ -96,21 +96,21 @@ static void get_slot_counts(int infile)
     total = 0;
 
     for (row = 0; row < rows; row++) {
-	Rast_get_d_row(infile, inbuf, row);
+        Rast_get_d_row(infile, inbuf, row);
 
-	for (col = 0; col < cols; col++) {
-	    int i;
+        for (col = 0; col < cols; col++) {
+            int i;
 
-	    if (Rast_is_d_null_value(&inbuf[col]))
-		continue;
+            if (Rast_is_d_null_value(&inbuf[col]))
+                continue;
 
-	    i = get_slot(inbuf[col]);
+            i = get_slot(inbuf[col]);
 
-	    slots[i]++;
-	    total++;
-	}
+            slots[i]++;
+            total++;
+        }
 
-	G_percent(row, rows, 2);
+        G_percent(row, rows, 2);
     }
 
     G_percent(rows, rows, 2);
@@ -138,35 +138,34 @@ static void initialize_bins(void)
      * < accumulated count of next bin */
 
     for (slot = 0; slot < num_slots; slot++) {
-	size_t count = slots[slot];
-	size_t accum2 = accum + count;
+        size_t count = slots[slot];
+        size_t accum2 = accum + count;
 
-	if (count > 0 &&
-	    (accum2 > next || use_next_slot) &&
-	    bin < num_bins_alloc) {
-	    struct bin *b = &bins[bin];
+        if (count > 0 && (accum2 > next || use_next_slot) &&
+            bin < num_bins_alloc) {
+            struct bin *b = &bins[bin];
 
-	    slot_bins[slot] = ++bin;
+            slot_bins[slot] = ++bin;
 
-	    b->origin = accum;
-	    b->base = num_values;
-	    b->count = 0;
-	    b->min = min + slot_size * slot;
-	    b->max = min + slot_size * (slot + 1);
+            b->origin = accum;
+            b->base = num_values;
+            b->count = 0;
+            b->min = min + slot_size * slot;
+            b->max = min + slot_size * (slot + 1);
 
-	    use_next_slot = 0;
+            use_next_slot = 0;
 
-	    if (accum2 - next < 1) {
-		use_next_slot = 1;
-	    }
-	    else {
-		while (accum2 > next)
-		    next = get_quantile(++quant);
-	    }
+            if (accum2 - next < 1) {
+                use_next_slot = 1;
+            }
+            else {
+                while (accum2 > next)
+                    next = get_quantile(++quant);
+            }
 
-	    num_values += count;
-	}
-	accum = accum2;
+            num_values += count;
+        }
+        accum = accum2;
     }
 
     num_bins_used = bin;
@@ -183,26 +182,26 @@ static void fill_bins(int infile)
     G_message(_("Binning data"));
 
     for (row = 0; row < rows; row++) {
-	Rast_get_d_row(infile, inbuf, row);
+        Rast_get_d_row(infile, inbuf, row);
 
-	for (col = 0; col < cols; col++) {
-	    int i, bin;
-	    struct bin *b;
+        for (col = 0; col < cols; col++) {
+            int i, bin;
+            struct bin *b;
 
-	    if (Rast_is_d_null_value(&inbuf[col]))
-		continue;
+            if (Rast_is_d_null_value(&inbuf[col]))
+                continue;
 
-	    i = get_slot(inbuf[col]);
-	    if (!slot_bins[i])
-		continue;
+            i = get_slot(inbuf[col]);
+            if (!slot_bins[i])
+                continue;
 
-	    bin = slot_bins[i] - 1;
-	    b = &bins[bin];
+            bin = slot_bins[i] - 1;
+            b = &bins[bin];
 
-	    values[b->base + b->count++] = inbuf[col];
-	}
+            values[b->base + b->count++] = inbuf[col];
+        }
 
-	G_percent(row, rows, 2);
+        G_percent(row, rows, 2);
     }
 
     G_percent(rows, rows, 2);
@@ -215,9 +214,9 @@ static int compare_dcell(const void *aa, const void *bb)
     DCELL b = *(const DCELL *)bb;
 
     if (a < b)
-	return -1;
+        return -1;
     if (a > b)
-	return 1;
+        return 1;
     return 0;
 }
 
@@ -228,9 +227,9 @@ static void sort_bins(void)
     G_message(_("Sorting bins"));
 
     for (bin = 0; bin < num_bins_used; bin++) {
-	struct bin *b = &bins[bin];
+        struct bin *b = &bins[bin];
 
-	qsort(&values[b->base], b->count, sizeof(DCELL), compare_dcell);
+        qsort(&values[b->base], b->count, sizeof(DCELL), compare_dcell);
     }
 }
 
@@ -243,51 +242,49 @@ static void compute_quantiles(int recode)
     G_message(_("Computing quantiles"));
 
     for (quant = 0; quant < num_quants; quant++) {
-	struct bin *b = &bins[bin];
-	double next = get_quantile(quant);
-	double k, v;
-	size_t i0, i1;
+        struct bin *b = &bins[bin];
+        double next = get_quantile(quant);
+        double k, v;
+        size_t i0, i1;
 
-	for (; bin < num_bins_used; bin++) {
-	    b = &bins[bin];
-	    if (b->origin + b->count >= next)
-		break;
-	}
+        for (; bin < num_bins_used; bin++) {
+            b = &bins[bin];
+            if (b->origin + b->count >= next)
+                break;
+        }
 
-	if (bin < num_bins_used) {
-	    k = next - b->origin;
-	    i0 = (size_t)floor(k);
-	    i1 = (size_t)ceil(k);
+        if (bin < num_bins_used) {
+            k = next - b->origin;
+            i0 = (size_t)floor(k);
+            i1 = (size_t)ceil(k);
 
-	    v = (i0 == i1)
-		? values[b->base + i0]
-		: values[b->base + i0] * (i1 - k) +
-		  values[b->base + i1] * (k - i0);
-	}
-	else
-	    v = max;
+            v = (i0 == i1) ? values[b->base + i0]
+                           : values[b->base + i0] * (i1 - k) +
+                                 values[b->base + i1] * (k - i0);
+        }
+        else
+            v = max;
 
-	if (recode)
-	    fprintf(stdout, "%f:%f:%i\n", prev_v, v, quant + 1);
-	else
-	    fprintf(stdout, "%d:%f:%f\n", quant, 100 * quants[quant], v);
+        if (recode)
+            fprintf(stdout, "%f:%f:%i\n", prev_v, v, quant + 1);
+        else
+            fprintf(stdout, "%d:%f:%f\n", quant, 100 * quants[quant], v);
 
-	prev_v = v;
+        prev_v = v;
     }
 
     if (recode)
-	printf("%f:%f:%i\n", prev_v, max, num_quants + 1);
+        printf("%f:%f:%i\n", prev_v, max, num_quants + 1);
 }
 
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
-	struct Option *input, *quant, *perc, *slots, *file;
+    struct {
+        struct Option *input, *quant, *perc, *slots, *file;
     } opt;
     struct {
-	struct Flag *r;
+        struct Flag *r;
     } flag;
     int recode;
     int infile;
@@ -331,45 +328,48 @@ int main(int argc, char *argv[])
     opt.file->key = "file";
     opt.file->required = NO;
     opt.file->description =
-	_("Name for output file (if omitted or \"-\" output to stdout)");
+        _("Name for output file (if omitted or \"-\" output to stdout)");
 
     flag.r = G_define_flag();
     flag.r->key = 'r';
-    flag.r->description = _("Generate recode rules based on quantile-defined intervals");
+    flag.r->description =
+        _("Generate recode rules based on quantile-defined intervals");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     num_slots = atoi(opt.slots->answer);
     recode = flag.r->answer;
 
     if (opt.file->answer != NULL && strcmp(opt.file->answer, "-") != 0) {
-	if (NULL == freopen(opt.file->answer, "w", stdout)) {
-	    G_fatal_error(_("Unable to open file <%s> for writing"), opt.file->answer);
-	}
+        if (NULL == freopen(opt.file->answer, "w", stdout)) {
+            G_fatal_error(_("Unable to open file <%s> for writing"),
+                          opt.file->answer);
+        }
     }
 
     if (opt.perc->answer) {
-	int i;
+        int i;
 
-	for (i = 0; opt.perc->answers[i]; i++) ;
-	num_quants = i;
-	quants = G_calloc(num_quants, sizeof(DCELL));
-	for (i = 0; i < num_quants; i++)
-	    quants[i] = atof(opt.perc->answers[i]) / 100;
-	qsort(quants, num_quants, sizeof(DCELL), compare_dcell);
+        for (i = 0; opt.perc->answers[i]; i++)
+            ;
+        num_quants = i;
+        quants = G_calloc(num_quants, sizeof(DCELL));
+        for (i = 0; i < num_quants; i++)
+            quants[i] = atof(opt.perc->answers[i]) / 100;
+        qsort(quants, num_quants, sizeof(DCELL), compare_dcell);
     }
     else {
-	int i;
+        int i;
 
-	num_quants = atoi(opt.quant->answer) - 1;
-	quants = G_calloc(num_quants, sizeof(DCELL));
-	for (i = 0; i < num_quants; i++)
-	    quants[i] = 1.0 * (i + 1) / (num_quants + 1);
+        num_quants = atoi(opt.quant->answer) - 1;
+        quants = G_calloc(num_quants, sizeof(DCELL));
+        for (i = 0; i < num_quants; i++)
+            quants[i] = 1.0 * (i + 1) / (num_quants + 1);
     }
 
     if (num_quants > 65535)
-	G_fatal_error(_("Too many quantiles"));
+        G_fatal_error(_("Too many quantiles"));
 
     infile = Rast_open_old(opt.input->answer, "");
 
@@ -382,11 +382,11 @@ int main(int argc, char *argv[])
     /* minimum 1000 values per slot to reduce memory consumption */
     num_slots_max = ((size_t)rows * cols) / 1000;
     if (num_slots_max < 1)
-	num_slots_max = 1;
+        num_slots_max = 1;
     if (num_slots > num_slots_max) {
-	G_message(_("Reducing number of bins from %d to %d"),
-	            num_slots, num_slots_max);
-	num_slots = num_slots_max;
+        G_message(_("Reducing number of bins from %d to %d"), num_slots,
+                  num_slots_max);
+        num_slots = num_slots_max;
     }
 
     slots = G_calloc(num_slots, sizeof(size_t));

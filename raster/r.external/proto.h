@@ -1,8 +1,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-struct band_info
-{
+struct band_info {
     RASTER_MAP_TYPE data_type;
     GDALDataType gdal_type;
     int has_null;
@@ -21,16 +20,14 @@ enum flip {
 void transfer_colormap(GDALRasterBandH, const char *);
 
 /* link.c */
-void query_band(GDALRasterBandH, const char *,
-		struct Cell_head *, struct band_info *);
+void query_band(GDALRasterBandH, const char *, struct Cell_head *,
+                struct band_info *);
 void make_cell(const char *, const struct band_info *);
-void make_link(const char *, const char *, int,
-	       const struct band_info *, int);
+void make_link(const char *, const char *, int, const struct band_info *, int);
 void write_fp_format(const char *, const struct band_info *);
 void write_fp_quant(const char *);
-void create_map(const char *, int, const char *,
-		struct Cell_head *, struct band_info *,
-		const char *, int);
+void create_map(const char *, int, const char *, struct Cell_head *,
+                struct band_info *, const char *, int);
 
 /* list.c */
 void list_layers(FILE *, const char *);

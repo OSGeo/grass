@@ -12,9 +12,9 @@ void vmul(double *vp, double *mat, double *v, int n)
     int k, i;
 
     for (k = 0; k < n; ++k) {
-	for (i = 0, q = v, s = 0.; i < n; ++i)
-	    s += *mat++ * *q++;
-	*vp++ = s;
+        for (i = 0, q = v, s = 0.; i < n; ++i)
+            s += *mat++ * *q++;
+        *vp++ = s;
     }
 }
 
@@ -25,6 +25,6 @@ double vnrm(double *u, double *v, int n)
     int i;
 
     for (i = 0, s = 0.; i < n; ++i)
-	s += *u++ * *v++;
+        s += *u++ * *v++;
     return s;
 }

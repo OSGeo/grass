@@ -5,7 +5,6 @@ from types import SimpleNamespace
 import pytest
 
 import grass.script as gs
-import grass.script.setup as grass_setup
 
 
 def updates_as_transaction(table, cat_column, column, cats, values):
@@ -45,7 +44,7 @@ def simple_dataset(tmp_path_factory):
     column_name = "double_value"
     num_points = 10
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with grass_setup.init(tmp_path / location):
+    with gs.setup.init(tmp_path / location):
         gs.run_command("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
         gs.run_command("v.random", output=map_name, npoints=num_points, seed=42)
         gs.run_command(

@@ -1,10 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       v.timestamp
- *  
+ *
  * AUTHOR(S):    Soeren Gebbert <soerengebbert googlemail.com>
- *               based on r.timestamp from Michael Shapiro, CERL (original contributor)
+ *               based on r.timestamp from Michael Shapiro, CERL (original
+ *               contributor)
  *
  * PURPOSE:      Print/add/remove a timestamp for a vector map
  * COPYRIGHT:    (C) 2012 by the GRASS Development Team
@@ -48,40 +48,41 @@ int main(int argc, char *argv[])
     date->required = NO;
     date->type = TYPE_STRING;
     date->label = _("Datetime, datetime1/datetime2, or 'none' to remove");
-    date->description = _("Format: '15 jan 1994' (absolute) or '2 years' (relative)");
-    
+    date->description =
+        _("Format: '15 jan 1994' (absolute) or '2 years' (relative)");
+
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     name = map->answer;
 
     modify = date->answer != NULL;
 
     if (modify)
-	mapset = G_find_vector(name, G_mapset());
+        mapset = G_find_vector(name, G_mapset());
     else
-	mapset = G_find_vector(name, "");
+        mapset = G_find_vector(name, "");
 
     if (mapset == NULL) {
-	G_fatal_error(_("Vector map <%s> not found %s"), name,
-		      modify ? "in current mapset" : "");
-	exit(EXIT_FAILURE);
+        G_fatal_error(_("Vector map <%s> not found %s"), name,
+                      modify ? "in current mapset" : "");
+        exit(EXIT_FAILURE);
     }
 
     if (!modify) {
-	if (G_read_vector_timestamp(name, layer->answer, "", &ts) == 1) {
-	    G_write_timestamp(stdout, &ts);
-	    exit(EXIT_SUCCESS);
-	}
-	else
-	    exit(EXIT_FAILURE);
+        if (G_read_vector_timestamp(name, layer->answer, "", &ts) == 1) {
+            G_write_timestamp(stdout, &ts);
+            exit(EXIT_SUCCESS);
+        }
+        else
+            exit(EXIT_FAILURE);
     }
     if (strcmp(date->answer, "none") == 0) {
-	G_remove_vector_timestamp(name, layer->answer);
-	exit(EXIT_SUCCESS);
+        G_remove_vector_timestamp(name, layer->answer);
+        exit(EXIT_SUCCESS);
     }
 
-    if(G_scan_timestamp(&ts, date->answer) != 1)
+    if (G_scan_timestamp(&ts, date->answer) != 1)
         G_fatal_error("Timestamp format is invalid");
 
     G_write_vector_timestamp(name, layer->answer, &ts);
