@@ -305,6 +305,54 @@ class SearchModuleWindow(wx.Panel):
         self.showNotification.emit(message=label)
 
 
+class ModuleHistoryWindow(wx.Panel):
+    """Menu tree and search widget for searching modules.
+
+    Signal:
+        showNotification - attribute 'message'
+    """
+
+    def __init__(self, parent, handlerObj, giface, model, id=wx.ID_ANY, **kwargs):
+        self.parent = parent
+        self._handlerObj = handlerObj
+        self._giface = giface
+        self._model = model
+
+        wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
+
+        self._tree = CTreeView(model=model, parent=self)
+        self._tree.SetToolTip(_("Double-click to run the command"))
+
+    def _layout(self):
+        """Do dialog layout"""
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(
+            self._tree, proportion=1, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5
+        )
+        self.SetSizerAndFit(sizer)
+        self.SetAutoLayout(True)
+        self.Layout()
+
+    def OnItemSelected(self, node):
+        """Item selected"""
+        data = node.data
+        if not data or "command" not in data:
+            return
+
+        if data["command"]:
+            label = data["command"]
+            if data["description"]:
+                label += " -- " + data["description"]
+        else:
+            label = data["description"]
+
+        # create list of the executed command and its flags and parameters
+        lst = re.split('\s+', node.label)
+        command = lst[0]
+
+        self.showNotification.emit(message=label)
+
+
 class RecentFilesMenu:
     """Add recent files history menu
 

@@ -48,6 +48,10 @@ from core.settings import UserSettings
 from core.giface import Notification
 from gui_core.widgets import FormNotebook
 
+from grass.grassdb.checks import (
+    get_current_mapset_history_path
+)
+
 wxCmdOutput, EVT_CMD_OUTPUT = NewEvent()
 wxCmdProgress, EVT_CMD_PROGRESS = NewEvent()
 wxCmdRun, EVT_CMD_RUN = NewEvent()
@@ -816,11 +820,8 @@ class GConsole(wx.EvtHandler):
 
         :param command: the command given as a string
         """
-        env = grass.gisenv()
+        filePath = get_current_mapset_history_path()
         try:
-            filePath = os.path.join(
-                env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], ".wxgui_history"
-            )
             fileHistory = codecs.open(filePath, encoding="utf-8", mode="a")
         except IOError as e:
             GError(

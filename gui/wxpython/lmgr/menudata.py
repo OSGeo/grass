@@ -16,11 +16,18 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import re
+import copy
 
+from core.treemodel import TreeModel, ModuleNode
 from core.menutree import MenuTreeModelBuilder
 from core.toolboxes import getMenudataFile
 from core.globalvar import WXGUIDIR
 from core.gcmd import GError
+
+from grass.grassdb.checks import (
+    get_current_mapset_history_path
+)
 
 
 class LayerManagerMenuData(MenuTreeModelBuilder):
@@ -87,3 +94,31 @@ class LayerManagerModuleTree(MenuTreeModelBuilder):
             MenuTreeModelBuilder.__init__(
                 self, fallback, message_handler=message_handler
             )
+
+
+class ModuleHistoryTree():
+    """Data class for history of executed commands """
+
+    def __init__(self, message_handler=GError):
+
+        self.historyPath = get_current_mapset_history_path()
+        print(self.historyPath)
+
+        self.model = TreeModel(ModuleNode)
+        self._createModel()
+
+    def _createModel(self):
+        try:
+            with open(self.historyPath, "r") as f:
+                for label in f:
+                    data = dict(
+                        label=label
+                    )
+                    self.model.AppendNode(parent=self.model.root, label=label, data=data)
+        except:
+            return
+
+    def GetModel(self):
+        """Returns copy of model.
+        """
+        return copy.deepcopy(self.model)

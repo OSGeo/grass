@@ -69,7 +69,7 @@ from gui_core.dialogs import (
     MapLayersDialog,
     QuitDialog,
 )
-from gui_core.menu import SearchModuleWindow
+from gui_core.menu import SearchModuleWindow, ModuleHistoryWindow
 from gui_core.menu import Menu as GMenu
 from core.debug import Debug
 from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
@@ -163,6 +163,8 @@ class GMFrame(wx.Frame):
         self._menuTreeBuilder = LayerManagerMenuData(message_handler=add_menu_error)
         # the search tree and command console
         self._moduleTreeBuilder = LayerManagerModuleTree(message_handler=add_menu_error)
+        # the history tree of executed commands
+        self._historyTreeBuilder = ModuleHistoryTree(message_handler=add_menu_error)
         self._auimgr = SingleWindowAuiManager(self)
 
         # list of open dialogs
@@ -353,6 +355,15 @@ class GMFrame(wx.Frame):
             )
         else:
             self.search = None
+
+    def _createModuleHistory(self, parent):
+        """Initialize Module history widget"""
+        self.moduleHistory = ModuleHistoryWindow(
+            parent=parent,
+            handlerObj=self,
+            giface=self._giface,
+            model=self._historyTreeBuilder.GetModel()
+        )
 
     def _createConsole(self, parent):
         """Initialize Console widget"""
@@ -557,6 +568,7 @@ class GMFrame(wx.Frame):
         self._createDataCatalog(parent=self)
         self._createDisplay(parent=self)
         self._createSearchModule(parent=self)
+        self._createModuleHistory(parent=self)
         self._createConsole(parent=self)
         self._createPythonShell(parent=self)
         self.toolbars = {
@@ -662,6 +674,20 @@ class GMFrame(wx.Frame):
             .CloseButton(False)
             .MinimizeButton(True)
             .MaximizeButton(True),
+        )
+
+        self._auimgr.AddPane(
+            self.moduleHistory,
+            aui.AuiPaneInfo()
+            .Name("history")
+            .Caption(_("History"))
+            .Right()
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+            target=self._auimgr.GetPane("tools"),
         )
 
         self._auimgr.AddPane(
