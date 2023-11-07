@@ -1,6 +1,6 @@
 --#############################################################################
 -- This SQL script is to update the spatial and temporal extent as well as
--- the modifcation time and revision of a space time dataset. This script
+-- the modification time and revision of a space time dataset. This script
 -- should be called when maps inserted or deleted in a space time dataset.
 --
 --

@@ -30,7 +30,7 @@ def debug(*args, **kwargs):
     dependency if this is used from grass.script, so this is a wrapper which lazy
     imports the standard function.
     """
-    # Lazy import to avoding potential circular dependency.
+    # Lazy import to avoiding potential circular dependency.
     import grass.script as gs  # pylint: disable=import-outside-toplevel
 
     gs.debug(*args, **kwargs)

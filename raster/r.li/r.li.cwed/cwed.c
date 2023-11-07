@@ -130,7 +130,7 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
     }
 
     /*
-     * every row of a rigth file has this layout
+     * every row of a right file has this layout
      * CELL1,CELL2,dissimilarity
      */
 
@@ -590,7 +590,7 @@ int calculateF(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
         masked = TRUE;
     }
 
-    /* allocate and inizialize buffers */
+    /* allocate and initialize buffers */
     buf_null = Rast_allocate_f_buf();
     if (buf_null == NULL) {
         G_fatal_error("malloc buf_sup failed");

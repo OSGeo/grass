@@ -23,7 +23,6 @@ import platform
 import re
 import textwrap
 import sys
-import six
 import wx
 from wx.html import HtmlWindow
 
@@ -622,7 +621,7 @@ class AboutWindow(wx.Frame):
         # else:
         # panel.Collapse(True)
         pageSizer = wx.BoxSizer(wx.VERTICAL)
-        for k, v in six.iteritems(js):
+        for k, v in js.items():
             if k != "total" and k != "name":
                 box = self._langBox(win, k, v)
                 pageSizer.Add(box, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)

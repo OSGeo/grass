@@ -12,7 +12,7 @@ extern DCELL f_d(DCELL);
 /* constant definition */
 /* #define k_sb    4.903  //[MJ/m2*h]   Stefan Bolzman constant */
 #define cp      1.013  /* [kJ/kg*degC] specific heat of moist air */
-#define epsilon 0.622  /* [-] ratio of molecular weigth of water to dry air */
+#define epsilon 0.622  /* [-] ratio of molecular weight of water to dry air */
 #define Po      101.3  /* [kPa] atmospheric pressure at sea level */
 #define Tko     293.16 /* [K] reference temperature at sea level */
 #define eta     0.0065 /* [K/m] constant lapse rate */

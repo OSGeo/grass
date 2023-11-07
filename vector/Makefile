@@ -22,6 +22,7 @@ SUBDIRS = \
 	v.edit \
 	v.extract \
 	v.extrude \
+	v.fill.holes \
 	v.generalize \
 	v.hull \
 	v.info \

@@ -17,6 +17,7 @@
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
+#pragma clang diagnostic ignored "-Wunknown-pragmas"
 #endif
 #include <pdal/PointTable.hpp>
 #include <pdal/PointLayout.hpp>
@@ -215,7 +216,7 @@ int main(int argc, char *argv[])
     reproject_flag->description =
         _("Reprojects input dataset to the coordinate system of"
           " the GRASS location (by default only datasets with the"
-          " matching cordinate system can be imported");
+          " matching coordinate system can be imported");
     reproject_flag->guisection = _("Projection");
 
     Flag *over_flag = G_define_flag();

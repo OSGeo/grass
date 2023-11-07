@@ -6,7 +6,7 @@
    Higher level functions for reading/writing/manipulating vectors.
 
    See read_ogr.c (OGR interface) and read_pg.c (PostGIS interface)
-   for imlementation issues.
+   for implementation issues.
 
    (C) 2011-2012 by the GRASS Development Team
 

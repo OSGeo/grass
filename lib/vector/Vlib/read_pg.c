@@ -663,7 +663,7 @@ SF_FeatureType get_feature(struct Map_info *Map, int fid, int type)
                 force_type = GV_CENTROID;
         }
         else {
-            /* random access: check topological elemenent type consistency */
+            /* random access: check topological element type consistency */
             if (type & GV_POINTS) {
                 if (type == GV_POINT &&
                     strlen(PQgetvalue(pg_info->res, pg_info->next_line, 1)) !=
@@ -697,7 +697,8 @@ SF_FeatureType get_feature(struct Map_info *Map, int fid, int type)
     if (pg_info->toposchema_name) {
         int cat, col_idx;
 
-        col_idx = fid < 0 ? 3 : 2; /* TODO: dermine col_idx for random access */
+        col_idx =
+            fid < 0 ? 3 : 2; /* TODO: determine col_idx for random access */
 
         if (!PQgetisnull(pg_info->res, pg_info->next_line, col_idx))
             cat = atoi(PQgetvalue(pg_info->res, pg_info->next_line, col_idx));
@@ -1258,7 +1259,7 @@ int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info,
 
     /* set cursor name */
     G_asprintf(&(pg_info->cursor_name), "%s_%s_%p", pg_info->schema_name,
-               pg_info->table_name, pg_info->conn);
+               pg_info->table_name, (void *)pg_info->conn);
 
     if (!pg_info->toposchema_name) {
         /* simple feature access (geom, fid) */
@@ -1386,7 +1387,7 @@ int Vect__open_cursor_line_pg(struct Format_info_pg *pg_info, int fid, int type)
 
     pg_info->cursor_fid = fid;
     G_asprintf(&(pg_info->cursor_name), "%s_%s_%d_%p", pg_info->schema_name,
-               pg_info->table_name, fid, pg_info->conn);
+               pg_info->table_name, fid, (void *)pg_info->conn);
 
     if (!pg_info->toposchema_name) {
         /* simple feature access (geom) */

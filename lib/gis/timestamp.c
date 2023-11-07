@@ -7,7 +7,7 @@
  *
  * The timestamp values must use the format as described in the GRASS
  * datetime library. The source tree for this library should have a
- * description of the format. For convience, the formats as of Feb, 1996
+ * description of the format. For convenience, the formats as of Feb, 1996
  * are reproduced here:
  *
  * There are two types of datetime values: absolute and relative. Absolute

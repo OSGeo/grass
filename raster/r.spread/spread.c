@@ -9,7 +9,7 @@
  *                2) selects appropriate cells as links for the current
  *                   spread cell and stored in a linked list of type
  *                   cell_ptrHa - select() ;
- *                        A) caculates the cumulative cost (time) of the
+ *                        A) calculates the cumulative cost (time) of the
  *                           end cell of each link - calculate();
  *                        B) compares this new cumulative cost (time) with
  *                           the previously computed cumulative time/cost,

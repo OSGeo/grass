@@ -1100,7 +1100,6 @@ class VectorDataset(AbstractMapDataset):
         return self.ciface.vector_map_exists(self.get_name(), self.get_mapset())
 
     def load(self):
-
         """Load all info from an existing vector map into the internal structure
 
         This method checks first if the map exists, in case it exists
@@ -1259,7 +1258,6 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
         return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
     def reset(self, ident):
-
         """Reset the internal structure and set the identifier"""
         self.base = STRDSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))
@@ -1386,7 +1384,6 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
             return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
     def reset(self, ident):
-
         """Reset the internal structure and set the identifier"""
         self.base = STR3DSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))
@@ -1496,7 +1493,6 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
         return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
     def reset(self, ident):
-
         """Reset the internal structure and set the identifier"""
         self.base = STVDSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))
