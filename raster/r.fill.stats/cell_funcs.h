@@ -1,4 +1,3 @@
-
 /***************************************************************************
  *
  * MODULE:    r.fill.stats
@@ -19,7 +18,7 @@
 
 #include <grass/raster.h>
 
-void init_cell_funcs();
+void init_cell_funcs(void);
 
 extern RASTER_MAP_TYPE IN_TYPE; /* stuff for cell input and output data */
 extern RASTER_MAP_TYPE OUT_TYPE;
@@ -31,9 +30,11 @@ extern unsigned char CELL_OUT_SIZE;
 extern unsigned char CELL_OUT_PTR_SIZE;
 extern unsigned char CELL_ERR_SIZE;
 
-extern void (*WRITE_CELL_VAL) (void *, void *); /* write a cell value of any type into an output cell */
-extern void (*WRITE_DOUBLE_VAL) (void *, double);       /* write a double value into an output cell */
-extern int (*IS_NULL) (void *); /* check if a cell is "no data" */
-extern void (*SET_NULL) (void *, unsigned long);        /* write null value(s) */
+extern void (*WRITE_CELL_VAL)(
+    void *, void *); /* write a cell value of any type into an output cell */
+extern void (*WRITE_DOUBLE_VAL)(
+    void *, double);           /* write a double value into an output cell */
+extern int (*IS_NULL)(void *); /* check if a cell is "no data" */
+extern void (*SET_NULL)(void *, unsigned long); /* write null value(s) */
 
 #endif /* CELL_FUNCS_H */

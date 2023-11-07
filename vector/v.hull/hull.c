@@ -21,11 +21,11 @@ int cmpPoints(const void *v1, const void *v2)
     p1 = (struct Point *)v1;
     p2 = (struct Point *)v2;
     if (p1->x > p2->x)
-	return 1;
+        return 1;
     else if (p1->x < p2->x)
-	return -1;
+        return -1;
     else
-	return 0;
+        return 0;
 }
 
 int convexHull(struct Point *P, int numPoints, int **hull)
@@ -44,15 +44,14 @@ int convexHull(struct Point *P, int numPoints, int **hull)
     upHull[1] = 1;
     upPoints = 1;
     for (pointIdx = 2; pointIdx < numPoints; pointIdx++) {
-	upPoints++;
-	upHull[upPoints] = pointIdx;
-	while (upPoints > 1 &&
-	       !rightTurn(P, upHull[upPoints], upHull[upPoints - 1],
-			  upHull[upPoints - 2])
-	    ) {
-	    upHull[upPoints - 1] = upHull[upPoints];
-	    upPoints--;
-	}
+        upPoints++;
+        upHull[upPoints] = pointIdx;
+        while (upPoints > 1 &&
+               !rightTurn(P, upHull[upPoints], upHull[upPoints - 1],
+                          upHull[upPoints - 2])) {
+            upHull[upPoints - 1] = upHull[upPoints];
+            upPoints--;
+        }
     }
 
     /* compute lower hull, overwrite last point of upper hull */
@@ -61,26 +60,23 @@ int convexHull(struct Point *P, int numPoints, int **hull)
     loHull[1] = numPoints - 2;
     loPoints = 1;
     for (pointIdx = numPoints - 3; pointIdx >= 0; pointIdx--) {
-	loPoints++;
-	loHull[loPoints] = pointIdx;
-	while (loPoints > 1 &&
-	       !rightTurn(P, loHull[loPoints], loHull[loPoints - 1],
-			  loHull[loPoints - 2])
-	    ) {
-	    loHull[loPoints - 1] = loHull[loPoints];
-	    loPoints--;
-	}
+        loPoints++;
+        loHull[loPoints] = pointIdx;
+        while (loPoints > 1 &&
+               !rightTurn(P, loHull[loPoints], loHull[loPoints - 1],
+                          loHull[loPoints - 2])) {
+            loHull[loPoints - 1] = loHull[loPoints];
+            loPoints--;
+        }
     }
 
-    G_debug(3, "numPoints:%d loPoints:%d upPoints:%d",
-	    numPoints, loPoints, upPoints);
+    G_debug(3, "numPoints:%d loPoints:%d upPoints:%d", numPoints, loPoints,
+            upPoints);
 
     /* reclaim unneeded memory */
     *hull = (int *)G_realloc(*hull, (loPoints + upPoints) * sizeof(int));
     return loPoints + upPoints;
 }
-
-
 
 void convexHull3d(struct Point *P, const int numPoints, struct Map_info *Map)
 {
@@ -96,19 +92,18 @@ void convexHull3d(struct Point *P, const int numPoints, struct Map_info *Map)
     pz = G_malloc(sizeof(double) * numPoints);
 
     for (i = 0; i < numPoints; i++) {
-	px[i] = (P)[i].x;
-	py[i] = (P)[i].y;
-	pz[i] = (P)[i].z;
+        px[i] = (P)[i].x;
+        py[i] = (P)[i].y;
+        pz[i] = (P)[i].z;
     }
 
     /* make 3D hull */
     error = make3DHull(px, py, pz, numPoints, Map);
     if (error < 0) {
-	G_fatal_error(_("Simple planar hulls not implemented yet"));
+        G_fatal_error(_("Simple planar hulls not implemented yet"));
     }
 
     G_free(px);
     G_free(py);
     G_free(pz);
-
 }

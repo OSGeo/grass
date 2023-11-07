@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_version.c
- * 
+ *
  * \brief DBMI Library (client) - version info
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -16,20 +16,20 @@
 #include "macros.h"
 
 /*!
-  \brief Get version info
+   \brief Get version info
 
-  Note: renamed from db_version to db_gversion to avoid name conflict
-  with Berkeley DB etc.
-  
-  \param driver db driver
-  \param[out] client_version client version
-  \param[out] driver_version driver version
+   Note: renamed from db_version to db_gversion to avoid name conflict
+   with Berkeley DB etc.
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
-int db_gversion(dbDriver * driver, dbString * client_version,
-		dbString * driver_version)
+   \param driver db driver
+   \param[out] client_version client version
+   \param[out] driver_version driver version
+
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
+int db_gversion(dbDriver *driver, dbString *client_version,
+                dbString *driver_version)
 {
     int ret_code;
 
@@ -50,7 +50,7 @@ int db_gversion(dbDriver * driver, dbString * client_version,
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* get the driver version */
     DB_RECV_STRING(driver_version);

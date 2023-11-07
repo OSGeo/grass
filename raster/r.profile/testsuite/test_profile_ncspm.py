@@ -4,7 +4,7 @@ from grass.gunittest.gmodules import SimpleModule
 import grass.script.core as gcore
 
 # not used yet
-LOCATION = 'nc_spm'
+LOCATION = "nc_spm"
 
 output1 = """
  0.000000 88.370453
@@ -131,61 +131,92 @@ output5 = """
 
 
 class TestProfileNCSPM(TestCase):
-
     @classmethod
     def setUpClass(cls):
         gcore.use_temp_region()
-        gcore.run_command('g.region', raster='elevation')
+        gcore.run_command("g.region", raster="elevation")
 
     @classmethod
     def tearDownClass(cls):
         gcore.del_temp_region()
 
     def test_profile_default(self):
-        rprofile = SimpleModule('r.profile', input='elevation',
-                                coordinates=[637656, 224222, 637766, 224289])
+        rprofile = SimpleModule(
+            "r.profile", input="elevation", coordinates=[637656, 224222, 637766, 224289]
+        )
         self.assertModule(rprofile)
         self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output1.strip())
-        self.assertIn('128.798292 [meters]', rprofile.outputs.stderr)  # distance
-        self.assertIn('10 [meters]', rprofile.outputs.stderr)  # resolution
+        self.assertIn("128.798292 [meters]", rprofile.outputs.stderr)  # distance
+        self.assertIn("10 [meters]", rprofile.outputs.stderr)  # resolution
 
     def test_profile_m(self):
-        rprofile = SimpleModule('r.profile', input='elevation', units='meters',
-                                coordinates=[637656, 224222, 637766, 224289])
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            units="meters",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
         self.assertModule(rprofile)
-        self.assertIn('128.798292 [meters]', rprofile.outputs.stderr)  # distance
-        self.assertIn('10 [meters]', rprofile.outputs.stderr)  # resolution
+        self.assertIn("128.798292 [meters]", rprofile.outputs.stderr)  # distance
+        self.assertIn("10 [meters]", rprofile.outputs.stderr)  # resolution
 
     def test_profile_resolution(self):
-        rprofile = SimpleModule('r.profile', input='elevation', resolution=25,
-                                coordinates=[637656, 224222, 637766, 224289])
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            resolution=25,
+            coordinates=[637656, 224222, 637766, 224289],
+        )
         self.assertModule(rprofile)
         self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output4.strip())
-        self.assertIn('128.798292 [meters]', rprofile.outputs.stderr)  # distance
-        self.assertIn('25 [meters]', rprofile.outputs.stderr)  # resolution
+        self.assertIn("128.798292 [meters]", rprofile.outputs.stderr)  # distance
+        self.assertIn("25 [meters]", rprofile.outputs.stderr)  # resolution
 
     def test_profile_ne(self):
-        rprofile = SimpleModule('r.profile', input='elevation', flags='g',
-                                coordinates=[637656, 224222, 637766, 224289])
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="g",
+            coordinates=[637656, 224222, 637766, 224289],
+        )
         self.assertModule(rprofile)
         self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output2.strip())
 
     def test_profile_region(self):
-        rprofile = SimpleModule('r.profile', input='elevation', null_value='nodata',
-                                coordinates=[644914, 224579, 644986,
-                                             224627, 645091, 224549])
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            null_value="nodata",
+            coordinates=[644914, 224579, 644986, 224627, 645091, 224549],
+        )
         self.assertModule(rprofile)
         self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output3.strip())
-        self.assertIn("WARNING: Endpoint coordinates are outside of current region settings",
-                      rprofile.outputs.stderr)
+        self.assertIn(
+            "WARNING: Endpoint coordinates are outside of current region settings",
+            rprofile.outputs.stderr,
+        )
 
     def test_profile_directions(self):
-        rprofile = SimpleModule('r.profile', input='elevation', flags='g',
-                                coordinates=[635747, 222664, 635673, 222717, 635563,
-                                             222634, 635641, 222543, 635747, 222664])
+        rprofile = SimpleModule(
+            "r.profile",
+            input="elevation",
+            flags="g",
+            coordinates=[
+                635747,
+                222664,
+                635673,
+                222717,
+                635563,
+                222634,
+                635641,
+                222543,
+                635747,
+                222664,
+            ],
+        )
         self.assertModule(rprofile)
         self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output5.strip())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

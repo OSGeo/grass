@@ -5,7 +5,7 @@
  *
  * Each node has a entry in the node-buffer.
  * Links (arcs connecting couples of nodes) are grouped in the link-buffer into link-areas, that is: all
- * links departing from a given node are kept continuos in a link-area.
+ * links departing from a given node are kept continuous in a link-area.
  *
  * A node-entry has the fields:
  *  nodeid: a unique id for the node in the graph
@@ -25,20 +25,20 @@
  *
  * Nodes in the node buffer are kept sorted by ascending nodeid. Thus, given that a node entry has fixed size,
  * a node can be found using a binary search in the node buffer.
- * 
+ *
  * Node attributes are optionally stored by enlarging the node entry by a fixed amount of bytes (attr), as well as link
  * attributes, which are stored in the respective link entry extension (attr).
  * Sizes for node and link attributes are given at graph creation time and cannot be modified later on.
- * 
+ *
  *        +-------------------------------------------------------------------------------------------------------> ...
  *        | +---------------------------------------------------------------------+
  *        | | +-----------------------------------+                               |
  *        | | |                                   V                               V
  * Node Buffer   (nodeid|status|offset|attr)...  (nodeid|status|offset|attr)...  (nodeid|status|offset|attr)...
- *        | | |                   |                                                               |                     
+ *        | | |                   |                                                               |
  *        | | |   +---------------+                                      +------------------------+
- *        | | |   V                                                      V                              
- * Link Buffer   (tocnt|toarr) ...                                      (tocnt|toarr)                  
+ *        | | |   V                                                      V
+ * Link Buffer   (tocnt|toarr) ...                                      (tocnt|toarr)
  *        | | |        (offset|cost|user|attr)[0]... ()[tocnt-1]...           (offset|cost|user|attr)[0]... ()[tocnt-1]...
  *        | | |           |                           |                         |                            ...
  *        | | +-----------+                           |                         |
@@ -60,7 +60,7 @@
  *
  * Field                          Size/Type                     Value range          Description
  * [VERSION...................]   1 byte                        1                    Version 1 graphs always keep value 1
- * [ENDIANESS.................]   1 byte                        1 | 2                Integer words byte order 1=big 2=little
+ * [ENDIANNESS.................]   1 byte                       1 | 2                Integer words byte order 1=big 2=little
  * [NODE ATTRIBUTES BYTE SIZE.]   4 bytes integer               >= 0                 Byte size of attributes area for each node
  * [LINK ATTRIBUTES BYTE SIZE.]   4 bytes integer               >= 0                 Byte size of attributes area for each link
  * [OPAQUE SET................]   16 words of 4 bytes           -                    Free user's storage
@@ -75,5 +75,3 @@
  * [LINK BUFFER...............]   variable len array of bytes   V1 FDG LINK BUFFER   Link buffer
  *
  */
-
-

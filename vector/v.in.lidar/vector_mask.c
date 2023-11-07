@@ -13,7 +13,8 @@
 
 #include "vector_mask.h"
 
-void VectorMask_init(struct VectorMask *vector_mask, const char *name, const char *layer, int invert_mask)
+void VectorMask_init(struct VectorMask *vector_mask, const char *name,
+                     const char *layer, int invert_mask)
 {
     vector_mask->map_info = G_malloc(sizeof(struct Map_info));
     if (Vect_open_old2(vector_mask->map_info, name, "", layer) < 2)
@@ -21,10 +22,13 @@ void VectorMask_init(struct VectorMask *vector_mask, const char *name, const cha
     vector_mask->map_bbox = G_malloc(sizeof(struct bound_box));
     Vect_get_map_box(vector_mask->map_info, vector_mask->map_bbox);
     vector_mask->nareas = Vect_get_num_areas(vector_mask->map_info);
-    vector_mask->area_bboxes = G_malloc(vector_mask->nareas * sizeof(struct bound_box));
+    vector_mask->area_bboxes =
+        G_malloc(vector_mask->nareas * sizeof(struct bound_box));
     int i;
+
     for (i = 1; i <= vector_mask->nareas; i++) {
-        Vect_get_area_box(vector_mask->map_info, i, &vector_mask->area_bboxes[i - 1]);
+        Vect_get_area_box(vector_mask->map_info, i,
+                          &vector_mask->area_bboxes[i - 1]);
     }
     if (invert_mask)
         vector_mask->inverted = 1;
@@ -52,8 +56,10 @@ int VectorMask_point_in(struct VectorMask *vector_mask, double x, double y)
         return vector_mask->inverted;
     int is_out = TRUE;
     int i;
+
     for (i = 1; i <= vector_mask->nareas; i++) {
-        if (Vect_point_in_area(x, y, vector_mask->map_info, i, &vector_mask->area_bboxes[i - 1])) {
+        if (Vect_point_in_area(x, y, vector_mask->map_info, i,
+                               &vector_mask->area_bboxes[i - 1])) {
             is_out = FALSE;
             break;
         }

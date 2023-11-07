@@ -8,75 +8,73 @@
 #include "local_proto.h"
 #include "distance.h"
 
-
 int map_setup(void)
 {
     double w, h;
 
     /* set top of map */
     if (PS.set_y < PS.min_y)
-	PS.min_y = PS.set_y;
+        PS.min_y = PS.set_y;
     PS.map_y_orig = PS.min_y / 72.0;
 
     if (!PS.do_raster && !grp.do_group) {
-	/* if scale has been set... */
-	if (PS.scaletext[0]) {
-	    /* if scaled map will fit in map limits... */
-	    w = scale(PS.scaletext);
-	    h = w * (PS.w.north - PS.w.south) / (PS.w.east - PS.w.west);
-	    if (w <= PS.map_width && h <= PS.map_height) {
-		PS.map_width = w;
-		PS.map_height = h;
-		PS.map_pix_wide = 72.0 * PS.map_width;
-		PS.map_pix_high = 72.0 * PS.map_height;
-	    }
-	    else    /* kill the scale */
-		PS.scaletext[0] = 0;
-	}
+        /* if scale has been set... */
+        if (PS.scaletext[0]) {
+            /* if scaled map will fit in map limits... */
+            w = scale(PS.scaletext);
+            h = w * (PS.w.north - PS.w.south) / (PS.w.east - PS.w.west);
+            if (w <= PS.map_width && h <= PS.map_height) {
+                PS.map_width = w;
+                PS.map_height = h;
+                PS.map_pix_wide = 72.0 * PS.map_width;
+                PS.map_pix_high = 72.0 * PS.map_height;
+            }
+            else /* kill the scale */
+                PS.scaletext[0] = 0;
+        }
 
-	/* fit map to bounding box */
-	fit_map_to_box();
+        /* fit map to bounding box */
+        fit_map_to_box();
     }
 
     else {
-	if (PS.scaletext[0]) {
-	    /* if scaled map will fit in map limits... */
-	    w = scale(PS.scaletext);
-	    h = w * PS.w.ns_res * (double)PS.w.rows /
-		(PS.w.ew_res * (double)PS.w.cols);
-	    if (w <= PS.map_width && h <= PS.map_height) {
-		PS.map_width = w;
-		PS.map_height = h;
-		PS.map_pix_wide = 72.0 * PS.map_width;
-		PS.map_pix_high = 72.0 * PS.map_height;
-	    }
-	    else    /* kill the scale */
-		PS.scaletext[0] = 0;
-	}
+        if (PS.scaletext[0]) {
+            /* if scaled map will fit in map limits... */
+            w = scale(PS.scaletext);
+            h = w * PS.w.ns_res * (double)PS.w.rows /
+                (PS.w.ew_res * (double)PS.w.cols);
+            if (w <= PS.map_width && h <= PS.map_height) {
+                PS.map_width = w;
+                PS.map_height = h;
+                PS.map_pix_wide = 72.0 * PS.map_width;
+                PS.map_pix_high = 72.0 * PS.map_height;
+            }
+            else /* kill the scale */
+                PS.scaletext[0] = 0;
+        }
 
-	/* fit map to bounding box */
-	fit_map_to_box();
+        /* fit map to bounding box */
+        fit_map_to_box();
 
-	PS.cells_high = PS.w.rows;
-	PS.cells_wide = PS.w.cols;
-	PS.ew_res = PS.w.ew_res;
-	PS.ns_res = PS.w.ns_res;
+        PS.cells_high = PS.w.rows;
+        PS.cells_wide = PS.w.cols;
+        PS.ew_res = PS.w.ew_res;
+        PS.ns_res = PS.w.ns_res;
 
-	PS.row_delta = 1;
-	PS.col_delta = 1;
+        PS.row_delta = 1;
+        PS.col_delta = 1;
 
-	/* compute conversion factors */
-	PS.ew_to_x = PS.map_pix_wide / (PS.w.east - PS.w.west);
-	PS.ns_to_y = PS.map_pix_high / (PS.w.north - PS.w.south);
+        /* compute conversion factors */
+        PS.ew_to_x = PS.map_pix_wide / (PS.w.east - PS.w.west);
+        PS.ns_to_y = PS.map_pix_high / (PS.w.north - PS.w.south);
     }
 
     /* set the scale */
     /*   work from height not width to minimize lat/lon curvature problems?? */
     if (!PS.scaletext[0]) {
-	sprintf(PS.scaletext, "1 : %.0f",
-		METERS_TO_INCHES * distance(PS.w.east,
-					    PS.w.west) * 72.0 /
-		PS.map_pix_wide);
+        sprintf(PS.scaletext, "1 : %.0f",
+                METERS_TO_INCHES * distance(PS.w.east, PS.w.west) * 72.0 /
+                    PS.map_pix_wide);
     }
 
     G_message(_("Scale set to %s"), PS.scaletext);
@@ -93,7 +91,7 @@ int map_setup(void)
        until the first decimal point. Then in move() and cont() we will
        divide x and y by 10. to get double coordinates */
     G_setup_plot(PS.map_top * 10., PS.map_bot * 10., PS.map_left * 10.,
-		 PS.map_right * 10., move_local, cont_local);
+                 PS.map_right * 10., move_local, cont_local);
 
     /* debug fprintf (stdout,"t %.1f b %.1f l %.1f r %.1f\n", PS.map_top,
        PS.map_bot, PS.map_left, PS.map_right);
@@ -101,8 +99,7 @@ int map_setup(void)
 
     /* no need to go on if we're just here for a look-see. (-b flag) */
     if (!PS.fp)
-	return 0;
-
+        return 0;
 
     /* save original graphics state */
     fprintf(PS.fp, "gsave ");
@@ -110,12 +107,13 @@ int map_setup(void)
     /* compute conversion factor from meters to PostScript window coordinates */
     /*
        G_begin_distance_calculations();
-       meters_to_PS = (PS.map_top - PS.map_bot) / G_distance(0., PS.w.south, 0., PS.w.north);
+       meters_to_PS = (PS.map_top - PS.map_bot) / G_distance(0., PS.w.south, 0.,
+       PS.w.north);
      */
 
     /* clip to edge of border */
-    box_clip(PS.map_top - 1.0, PS.map_bot + 1.0,
-	     PS.map_left + 1.0, PS.map_right - 1.0);
+    box_clip(PS.map_top - 1.0, PS.map_bot + 1.0, PS.map_left + 1.0,
+             PS.map_right - 1.0);
 
     return 0;
 }

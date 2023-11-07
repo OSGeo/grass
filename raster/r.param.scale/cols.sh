@@ -103,6 +103,3 @@ r.colors c25 color=rules <<EOF
 2 red
 30 black
 EOF
-
-
-

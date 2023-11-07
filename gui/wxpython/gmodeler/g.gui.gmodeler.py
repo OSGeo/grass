@@ -18,21 +18,21 @@
 #
 ############################################################################
 
-#%module
-#% label: Graphical Modeler.
-#% description: Allows interactively creating, editing and managing models.
-#% keyword: general
-#% keyword: GUI
-#% keyword: graphical modeler
-#% keyword: workflow
-#%end
-#%option G_OPT_F_INPUT
-#% key: file
-#% description: Name of model file to be loaded
-#% key_desc: name.gxm
-#% required: no
-#% guisection: Model
-#%end
+# %module
+# % label: Graphical Modeler.
+# % description: Allows interactively creating, editing and managing models.
+# % keyword: general
+# % keyword: GUI
+# % keyword: graphical modeler
+# % keyword: workflow
+# %end
+# %option G_OPT_F_INPUT
+# % key: file
+# % description: Name of model file to be loaded
+# % key_desc: name.gxm
+# % required: no
+# % guisection: Model
+# %end
 
 import grass.script as gscript
 
@@ -43,18 +43,24 @@ def main():
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     from core.giface import StandaloneGrassInterface
     from gmodeler.frame import ModelFrame
 
     app = wx.App()
-    frame = ModelFrame(parent=None, giface=StandaloneGrassInterface())
-    if options['file']:
-        frame.LoadModelFile(options['file'])
+    frame = ModelFrame(
+        parent=None,
+        giface=StandaloneGrassInterface(),
+        title=_("Graphical Modeler - GRASS GIS"),
+    )
+    if options["file"]:
+        frame.LoadModelFile(options["file"])
     frame.Show()
 
     app.MainLoop()
+
 
 if __name__ == "__main__":
     main()

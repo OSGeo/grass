@@ -24,20 +24,20 @@
 
   This is a high level D call. It does a full setup for the current
   graphics frame.
- 
+
   Note: Connection to driver must already be made.
-  
+
   Sets the source coordinate system to the current region, and
   adjusts the destination coordinate system to preserve the aspect
   ratio.
-  
+
   Performs a full setup for the current graphics frame:
   - Makes sure there is a current graphics frame (will create a full-screen
   one, if not);
   - Sets the region coordinates so that the graphics frame and the active
-  module region agree (may change active module region to do this); and  
+  module region agree (may change active module region to do this); and
   - Performs graphic frame/region coordinate conversion initialization.
- 
+
   If <b>clear</b> is true, the frame is cleared (same as running
   <i>d.erase</i>.) Otherwise, it is not cleared.
 
@@ -58,21 +58,21 @@ void D_setup(int clear)
     D_set_clip_window_to_screen_window();
 
     if (clear)
-	D_erase(DEFAULT_BG_COLOR);
+        D_erase(DEFAULT_BG_COLOR);
 
     D_set_clip_window_to_map_window();
 }
 
 /*!
   \brief Graphics frame setup
- 
+
   Sets the source coordinate system to match the
   destination coordinate system, so that D_* functions use the same
   coordinate system as R_* functions.
- 
+
   If <b>clear</b> is true, the frame is cleared (same as running
   <i>d.erase</i>). Otherwise, it is not cleared.
-  
+
   \param clear non-zero code to clear the frame
 */
 void D_setup_unity(int clear)
@@ -89,21 +89,21 @@ void D_setup_unity(int clear)
     D_set_clip_window_to_screen_window();
 
     if (clear)
-	D_erase(DEFAULT_BG_COLOR);
+        D_erase(DEFAULT_BG_COLOR);
 
     D_set_clip_window_to_map_window();
 }
 
 /*!
   \brief Sets source coordinate system
-  
+
   Sets the source coordinate system to its arguments, and if
   the <b>fit</b> argument is non-zero, adjusts the destination coordinate
   system to preserve the aspect ratio.
-  
+
   If <b>clear</b> is true, the frame is cleared (same as running
   <i>d.erase</i>). Otherwise, it is not cleared.
-  
+
   \param clear non-zero code to clear the frame
   \param fit non-zero code to adjust destination coordinate system
   \param s_top
@@ -121,14 +121,14 @@ void D_setup2(int clear, int fit, double st, double sb, double sl, double sr)
     D_set_dst(dt, db, dl, dr);
 
     if (fit)
-	D_fit_d_to_u();
+        D_fit_d_to_u();
 
     D_update_conversions();
 
     D_set_clip_window_to_screen_window();
 
     if (clear)
-	D_erase(DEFAULT_BG_COLOR);
+        D_erase(DEFAULT_BG_COLOR);
 
     D_set_clip_window_to_map_window();
 }

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 @package animation.data
 
@@ -24,14 +23,17 @@ from grass.script import core as gcore
 
 from core.gcmd import GException
 from animation.nviztask import NvizTask
-from animation.utils import validateMapNames, getRegisteredMaps, \
-    checkSeriesCompatibility, validateTimeseriesName, interpolate
+from animation.utils import (
+    validateMapNames,
+    getRegisteredMaps,
+    checkSeriesCompatibility,
+    validateTimeseriesName,
+    interpolate,
+)
 from core.layerlist import LayerList, Layer
-import grass.temporal as tgis
 
 
 class AnimationData(object):
-
     def __init__(self):
         self._name = None
         self._windowIndex = 0
@@ -41,9 +43,8 @@ class AnimationData(object):
         self._firstStdsNameType = None
         self._mapCount = None
         self._cmdMatrix = None
-        self._viewModes = [('2d', _("2D view")),
-                           ('3d', _("3D view"))]
-        self.viewMode = '2d'
+        self._viewModes = [("2d", _("2D view")), ("3d", _("3D view"))]
+        self.viewMode = "2d"
 
         self.nvizTask = NvizTask()
         self._nvizParameters = self.nvizTask.ListMapParameters()
@@ -61,7 +62,7 @@ class AnimationData(object):
         return self._name
 
     def SetName(self, name):
-        if name == '':
+        if name == "":
             raise ValueError(_("No animation name selected."))
         self._name = name
 
@@ -82,8 +83,8 @@ class AnimationData(object):
         mapSeriesList = []
         timeseriesList = []
         for layer in layerList:
-            if layer.active and hasattr(layer, 'maps'):
-                if layer.mapType in ('strds', 'stvds', 'str3ds'):
+            if layer.active and hasattr(layer, "maps"):
+                if layer.mapType in ("strds", "stvds", "str3ds"):
                     timeseriesList.append((layer.name, layer.mapType))
                     self._firstStdsNameType = layer.name, layer.mapType
                 else:
@@ -91,8 +92,9 @@ class AnimationData(object):
         if not timeseriesList:
             self._firstStdsNameType = None, None
         # this throws GException
-        count = checkSeriesCompatibility(mapSeriesList=mapSeriesList,
-                                         timeseriesList=timeseriesList)
+        count = checkSeriesCompatibility(
+            mapSeriesList=mapSeriesList, timeseriesList=timeseriesList
+        )
         self._mapCount = count
         self._layerList = layerList
 
@@ -127,7 +129,7 @@ class AnimationData(object):
             self._workspaceFile = None
             return
 
-        if fileName == '':
+        if fileName == "":
             raise ValueError(_("No workspace file selected."))
 
         if not os.path.exists(fileName):
@@ -181,11 +183,12 @@ class AnimationData(object):
         if not self.workspaceFile or not self._layerList:
             return []
 
-        cmds = self.nvizTask.GetCommandSeries(layerList=self._layerList,
-                                              paramName=self.nvizParameter)
+        cmds = self.nvizTask.GetCommandSeries(
+            layerList=self._layerList, paramName=self.nvizParameter
+        )
         region = self.nvizTask.GetRegion()
 
-        return {'commands': cmds, 'region': region}
+        return {"commands": cmds, "region": region}
 
     def SetStartRegion(self, region):
         self._startRegion = region
@@ -209,34 +212,33 @@ class AnimationData(object):
     def GetZoomRegionValue(self):
         return self._zoomRegionValue
 
-    zoomRegionValue = property(
-        fset=SetZoomRegionValue,
-        fget=GetZoomRegionValue)
+    zoomRegionValue = property(fset=SetZoomRegionValue, fget=GetZoomRegionValue)
 
     def GetRegions(self):
-        self._computeRegions(self._mapCount, self._startRegion,
-                             self._endRegion, self._zoomRegionValue)
+        self._computeRegions(
+            self._mapCount, self._startRegion, self._endRegion, self._zoomRegionValue
+        )
         return self._regions
 
-    def _computeRegions(
-            self, count, startRegion, endRegion=None,
-            zoomValue=None):
+    def _computeRegions(self, count, startRegion, endRegion=None, zoomValue=None):
         """Computes regions based on start region and end region or zoom value
         for each of the animation frames."""
         region = dict(gcore.region())  # cast to dict, otherwise deepcopy error
         if startRegion:
-            region = dict(parse_key_val(gcore.read_command('g.region',
-                                                           flags='gu',
-                                                           region=startRegion),
-                                        val_type=float))
+            region = dict(
+                parse_key_val(
+                    gcore.read_command("g.region", flags="gu", region=startRegion),
+                    val_type=float,
+                )
+            )
 
-        del region['cells']
-        del region['cols']
-        del region['rows']
-        if 'projection' in region:
-            del region['projection']
-        if 'zone' in region:
-            del region['zone']
+        del region["cells"]
+        del region["cols"]
+        del region["rows"]
+        if "projection" in region:
+            del region["projection"]
+        if "zone" in region:
+            del region["zone"]
         regions = []
         for i in range(self._mapCount):
             regions.append(copy.copy(region))
@@ -245,36 +247,33 @@ class AnimationData(object):
             return
 
         startRegionDict = parse_key_val(
-            gcore.read_command(
-                'g.region',
-                flags='gu',
-                region=startRegion),
-            val_type=float)
+            gcore.read_command("g.region", flags="gu", region=startRegion),
+            val_type=float,
+        )
         if endRegion:
             endRegionDict = parse_key_val(
-                gcore.read_command(
-                    'g.region',
-                    flags='gu',
-                    region=endRegion),
-                val_type=float)
-            for key in ('n', 's', 'e', 'w', 'nsres', 'ewres'):
+                gcore.read_command("g.region", flags="gu", region=endRegion),
+                val_type=float,
+            )
+            for key in ("n", "s", "e", "w", "nsres", "ewres"):
                 values = interpolate(
-                    startRegionDict[key],
-                    endRegionDict[key],
-                    self._mapCount)
+                    startRegionDict[key], endRegionDict[key], self._mapCount
+                )
                 for value, region in zip(values, regions):
                     region[key] = value
 
         elif zoomValue:
             for i in range(self._mapCount):
-                regions[i]['n'] -= zoomValue[0] * i
-                regions[i]['e'] -= zoomValue[1] * i
-                regions[i]['s'] += zoomValue[0] * i
-                regions[i]['w'] += zoomValue[1] * i
+                regions[i]["n"] -= zoomValue[0] * i
+                regions[i]["e"] -= zoomValue[1] * i
+                regions[i]["s"] += zoomValue[0] * i
+                regions[i]["w"] += zoomValue[1] * i
 
                 # handle cases when north < south and similarly EW
-                if regions[i]['n'] < regions[i]['s'] or \
-                   regions[i]['e'] < regions[i]['w']:
+                if (
+                    regions[i]["n"] < regions[i]["s"]
+                    or regions[i]["e"] < regions[i]["w"]
+                ):
                     regions[i] = regions[i - 1]
 
         self._regions = regions
@@ -289,22 +288,23 @@ class AnimLayer(Layer):
 
     def __init__(self):
         Layer.__init__(self)
-        self._mapTypes.extend(['strds', 'stvds', 'str3ds'])
+        self._mapTypes.extend(["strds", "stvds", "str3ds"])
         self._maps = []
 
     def SetName(self, name):
         if not self.hidden:
             if self._mapType is None:
                 raise ValueError(
-                    "To set layer name, the type of layer must be specified.")
-            if self._mapType in ('strds', 'stvds', 'str3ds'):
+                    "To set layer name, the type of layer must be specified."
+                )
+            if self._mapType in ("strds", "stvds", "str3ds"):
                 try:
                     name = validateTimeseriesName(name, self._mapType)
                     self._maps = getRegisteredMaps(name, self._mapType)
                 except (GException, gcore.ScriptError) as e:
                     raise ValueError(str(e))
             else:
-                self._maps = validateMapNames(name.split(','), self._mapType)
+                self._maps = validateMapNames(name.split(","), self._mapType)
         self._name = name
         self.label = name
 

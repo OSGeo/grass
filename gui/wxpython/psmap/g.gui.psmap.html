@@ -1,5 +1,5 @@
 <!-- meta page description: wxGUI Cartographic Composer -->
-<!-- meta page index: topic_gui|GUI -->
+<!-- meta page index: topic_GUI|GUI -->
 <h2>DESCRIPTION</h2>
 
 <p>
@@ -57,25 +57,24 @@ Currently supported <em><a href="ps.map.html">ps.map</a></em> instructions:
   <li> labels
 </ul>
 
-
 <h3>CARTOGRAPHIC COMPOSER TOOLBAR</h3>
 <dl>
   <dt><img src="icons/script-save.png" alt="icon">&nbsp;
     <em>Generate instructions file</em></dt>
   <dd>Generates and saves text file with mapping instructions.</dd>
-  
+
   <dt><img src="icons/script-load.png" alt="icon">&nbsp;
     <em>Load instructions file</em></dt>
   <dd>Load text file with mapping instructions.</dd>
-  
+
   <dt><img src="icons/page-settings.png" alt="icon">&nbsp;
     <em>Page setup</em></dt>
   <dd>Specify paper size, margins and orientation.</dd>
-  
+
   <dt><img src="icons/pointer.png" alt="icon">&nbsp;
     <em>Pointer</em></dt>
   <dd>Select object on the paper by clicking, drag the cursor while pressing the left mouse button to move it or resize object (currently only map frame) by clicking on a small black box in its bottom right corner. Double click to show object properties dialog</dd>
-    
+
   <dt><img src="icons/pan.png" alt="icon">&nbsp;
     <em>Pan</em></dt>
   <dd>Drag the pan cursor while pressing the left mouse button to move your view. </dd>
@@ -89,27 +88,27 @@ Currently supported <em><a href="ps.map.html">ps.map</a></em> instructions:
   <dt><img src="icons/zoom-out.png" alt="icon">&nbsp;
     <em>Zoom out</em></dt>
   <dd>Interactive zooming with the mouse in both draft and preview mode. Drawing a box or just a left click with the mouse and zoom-out cursor causes the display to zoom out so that the area displayed shrinks to fill the area defined by the box.</dd>
-  
+
   <dt><img src="icons/zoom-extent.png" alt="icon">&nbsp;
     <em>Zoom to page</em></dt>
   <dd>Zoom to display the entire page </dd>
-  
-  
+
+
   <dt><img src="icons/layer-add.png" alt="icon">&nbsp;
     <em>Map frame</em></dt>
   <dd>Click and drag to place map frame. If map frame is already drawn, open a dialog to set its properties. </dd>
-  
+
   <dt><img src="icons/layer-raster-add.png" alt="icon">&nbsp;
     <em>Raster map</em></dt>
   <dd>Shows a dialog to add or change the raster map.</dd>
-  
+
   <dt><img src="icons/layer-vector-add.png" alt="icon">&nbsp;
     <em>Vector map</em></dt>
   <dd>Shows a dialog to add or change current vector maps and their properties:
     <dl>
       <dt><em>Data selection</em></dt>
         <dd>Select data to draw:
-        
+
         <dl>
           <dt><em>Feature type</em></dt>
             <dd> Select which data type to draw. In case of point data, points or centroids
@@ -118,23 +117,23 @@ Currently supported <em><a href="ps.map.html">ps.map</a></em> instructions:
             <dd>Select layer and limit data by a SQL query or chose only certain categories.</dd>
           <dt><em>Mask</em></dt>
             <dd>Whether to use mask or not.</dd>
-        </dl> 
+        </dl>
         </dd>
-      
+
       <dt><em>Colors</em></dt>
         <dd>Color settings:
-                
+
         <dl>
           <dt><em>Outline</em></dt>
             <dd> Select outline color and width in points. In case of lines, outline means highlighting.</dd>
           <dt><em>Fill</em></dt>
             <dd>Select fill color, one color for all vector elements or color from rgb column.</dd>
-        </dl> 
+        </dl>
       </dd>
       <dt><em>Size and style</em></dt>
         <dd>
         Sets size, style, symbols, pattern; depends on data type:
-        
+
         <dl>
           <dt><em>Symbology</em></dt>
             <dd> Available for point data. Choose symbol or EPS file to draw points with.</dd>
@@ -148,13 +147,13 @@ Currently supported <em><a href="ps.map.html">ps.map</a></em> instructions:
           <dd> Available for point data. Rotate symbols counterclockwise with the given value or with the value from a map table column</dd>
           <dt><em>Width</em></dt>
           <dd> Available for line data. Set line width in points or take the value from a map table column.</dd>
-        </dl> 
+        </dl>
       </dd>
-  
-  
+
+
     </dl>
     </dd>
-  
+
    <dt><img src="icons/layer-more.png" alt="icon">&nbsp;
     <em>Add overlays</em></dt>
    <dd>Add overlays: vector labels, grid (not yet implemented)
@@ -167,7 +166,7 @@ Currently supported <em><a href="ps.map.html">ps.map</a></em> instructions:
 
    <dt><img src="icons/overlay-add.png" alt="icon">&nbsp;
     <em>Add map elements</em></dt>
-   <dd>Add map elements: legend, scalebar, map info, text 
+   <dd>Add map elements: legend, scalebar, map info, text
     <dl>
       <dt><img src="icons/legend-add.png" alt="icon">&nbsp;
         <em>Add legend</em></dt>
@@ -180,27 +179,26 @@ Currently supported <em><a href="ps.map.html">ps.map</a></em> instructions:
       <dd>Add scalebar or edit its properties.</dd>
       <dt><img src="icons/text-add.png" alt="icon">&nbsp;
         <em>Add text</em></dt>
-      <dd>Add text label.</dd>    
+      <dd>Add text label.</dd>
     </dl>
     </dd>
   <dt><img src="icons/layer-remove.png" alt="icon">&nbsp;
     <em>Remove selected element</em></dt>
   <dd>Select an object and remove it. Pressing Delete key does the same. </dd>
-  
+
   <dt><img src="icons/execute.png" alt="icon">&nbsp;
     <em>Show preview</em></dt>
   <dd> Generates output and switches to Preview mode to see the result. Be patient, it can take a while.</dd>
-  
+
 
   <dt><img src="icons/ps-export.png" alt="icon">&nbsp;
     <em>Generate hardcopy map output in PS</em></dt>
   <dd> Generates hardcopy map output in PostScript/EPS file.</dd>
    <dt><img src="icons/pdf-export.png" alt="icon">&nbsp;
     <em>Generate hardcopy map output in PDF</em></dt>
-  <dd> Generates hardcopy map output in PDF using ps2pdf.</dd>
-  
-</dl>
+  <dd> Generates hardcopy map output in PDF using ps2pdf or <a href="https://www.ghostscript.com/releases/gsdnld.html">Ghostscript gswin32c/gswin64c</a> (OS MS Windows platform only).</dd>
 
+</dl>
 
 <h2>SEE ALSO</h2>
 
@@ -216,8 +214,3 @@ See also <a href="https://grasswiki.osgeo.org/wiki/WxGUI_Cartographic_Composer">
 
 Anna Kratochvilova, Czech Technical University in Prague, Czech
 Republic (bachelor's final project 2011, mentor: Martin Landa)
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

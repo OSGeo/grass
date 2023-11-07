@@ -7,6 +7,8 @@ MANPAGES := $(patsubst $(HTMLDIR)/%.html,$(MANDIR)/%.$(MANSECT),$(wildcard $(HTM
 DSTFILES := \
 	$(HTMLDIR)/grassdocs.css \
 	$(HTMLDIR)/grass_logo.png \
+	$(HTMLDIR)/hamburger_menu.svg \
+	$(HTMLDIR)/hamburger_menu_close.svg \
 	$(HTMLDIR)/grass_icon.png \
 	$(HTMLDIR)/jquery.fixedheadertable.min.js \
 	$(HTMLDIR)/parser_standard_options.css \
@@ -23,6 +25,8 @@ categories = \
 	r3:raster3d \
 	t:temporal \
 	v:vector
+
+EXTRA_CLEAN_DIRS := $(wildcard __pycache__)
 
 IDXCATS := $(foreach cat,$(categories),$(lastword $(subst :, ,$(cat))))
 
@@ -144,6 +148,12 @@ $(HTMLDIR)/grassdocs.css: grassdocs.css
 	$(INSTALL_DATA) $< $@
 
 $(HTMLDIR)/grass_logo.png: grass_logo.png
+	$(INSTALL_DATA) $< $@
+
+$(HTMLDIR)/hamburger_menu.svg: hamburger_menu.svg
+	$(INSTALL_DATA) $< $@
+
+$(HTMLDIR)/hamburger_menu_close.svg: hamburger_menu_close.svg
 	$(INSTALL_DATA) $< $@
 
 $(HTMLDIR)/grass_icon.png: grass_icon.png

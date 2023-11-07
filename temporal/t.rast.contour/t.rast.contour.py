@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.rast.contour
@@ -20,101 +20,101 @@
 #
 #############################################################################
 
-#%module
-#% description: Produces a space time vector dataset of specified contours from a space time raster dataset.
-#% keyword: temporal
-#% keyword: contour
-#% keyword: raster
-#% keyword: vector
-#% keyword: time
-#%end
+# %module
+# % description: Produces a space time vector dataset of specified contours from a space time raster dataset.
+# % keyword: temporal
+# % keyword: contour
+# % keyword: raster
+# % keyword: vector
+# % keyword: time
+# %end
 
-#%option G_OPT_STRDS_INPUT
-#%end
+# %option G_OPT_STRDS_INPUT
+# %end
 
-#%option G_OPT_STVDS_OUTPUT
-#%end
+# %option G_OPT_STVDS_OUTPUT
+# %end
 
-#%option G_OPT_T_WHERE
-#%end
+# %option G_OPT_T_WHERE
+# %end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
-#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: basename
+# % type: string
+# % label: Basename of the new generated output maps
+# % description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+# % required: yes
+# % multiple: no
+# %end
 
-#%option
-#% key: suffix
-#% type: string
-#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
-#% answer: gran
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: suffix
+# % type: string
+# % description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+# % answer: gran
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: step
-#% type: double
-#% description: Increment between contour levels
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: step
+# % type: double
+# % description: Increment between contour levels
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: levels
-#% type: double
-#% description: List of contour levels
-#% required: no
-#% multiple: yes
-#%end
+# %option
+# % key: levels
+# % type: double
+# % description: List of contour levels
+# % required: no
+# % multiple: yes
+# %end
 
-#%option
-#% key: minlevel
-#% type:  double
-#% description: Minimum contour level
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: minlevel
+# % type:  double
+# % description: Minimum contour level
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: maxlevel
-#% type: double
-#% description: Maximum contour level
-#% required: no
-#% multiple: no
-#%end
+# %option
+# % key: maxlevel
+# % type: double
+# % description: Maximum contour level
+# % required: no
+# % multiple: no
+# %end
 
-#%option
-#% key: cut
-#% type: integer
-#% description: Minimum number of points for a contour line (0 -> no limit)
-#% required: no
-#% multiple: no
-#% answer: 0
-#%end
+# %option
+# % key: cut
+# % type: integer
+# % description: Minimum number of points for a contour line (0 -> no limit)
+# % required: no
+# % multiple: no
+# % answer: 0
+# %end
 
-#%option
-#% key: nprocs
-#% type: integer
-#% description: Number of r.contour processes to run in parallel, more than 1 process works only in conjunction with flag -t
-#% required: no
-#% multiple: no
-#% answer: 1
-#%end
+# %option
+# % key: nprocs
+# % type: integer
+# % description: Number of r.contour processes to run in parallel, more than 1 process works only in conjunction with flag -t
+# % required: no
+# % multiple: no
+# % answer: 1
+# %end
 
-#%flag
-#% key: n
-#% description: Register empty vector maps
-#%end
+# %flag
+# % key: n
+# % description: Register empty vector maps
+# %end
 
-#%flag
-#% key: t
-#% description: Do not create attribute tables
-#%end
+# %flag
+# % key: t
+# % description: Do not create attribute tables
+# %end
 
 import sys
 import copy
@@ -123,6 +123,7 @@ from grass.exceptions import FatalError
 
 
 ############################################################################
+
 
 def main(options, flags):
     # lazy imports
@@ -145,7 +146,6 @@ def main(options, flags):
     register_null = flags["n"]
     t_flag = flags["t"]
 
-
     # Make sure the temporal database exists
     tgis.init()
     # We need a database interface
@@ -163,8 +163,7 @@ def main(options, flags):
         return
 
     # Check the new stvds
-    new_sp = tgis.check_new_stds(output, "stvds", dbif=dbif,
-                                 overwrite=overwrite)
+    new_sp = tgis.check_new_stds(output, "stvds", dbif=dbif, overwrite=overwrite)
 
     # Setup the flags
     flags = ""
@@ -172,11 +171,16 @@ def main(options, flags):
         flags += "t"
 
     # Configure the r.to.vect module
-    contour_module = pymod.Module("r.contour", input="dummy",
-                                   output="dummy", run_=False,
-                                   finish_=False, flags=flags,
-                                   overwrite=overwrite,
-                                   quiet=True)
+    contour_module = pymod.Module(
+        "r.contour",
+        input="dummy",
+        output="dummy",
+        run_=False,
+        finish_=False,
+        flags=flags,
+        overwrite=overwrite,
+        quiet=True,
+    )
 
     if step:
         contour_module.inputs.step = float(step)
@@ -194,9 +198,13 @@ def main(options, flags):
     if t_flag is False:
         if nprocs > 1:
             nprocs = 1
-            gscript.warning(_("The number of parellel r.contour processes was "\
-                              "reduced to 1 because of the table attribute "\
-                              "creation"))
+            gscript.warning(
+                _(
+                    "The number of parellel r.contour processes was "
+                    "reduced to 1 because of the table attribute "
+                    "creation"
+                )
+            )
     process_queue = pymod.ParallelModuleQueue(int(nprocs))
 
     count = 0
@@ -207,18 +215,24 @@ def main(options, flags):
     for map in maps:
         count += 1
 
-        if sp.get_temporal_type() == 'absolute' and time_suffix == 'gran':
-            suffix = tgis.create_suffix_from_datetime(map.temporal_extent.get_start_time(),
-                                                      sp.get_granularity())
+        if sp.get_temporal_type() == "absolute" and time_suffix == "gran":
+            suffix = tgis.create_suffix_from_datetime(
+                map.temporal_extent.get_start_time(), sp.get_granularity()
+            )
             map_name = "{ba}_{su}".format(ba=base, su=suffix)
-        elif sp.get_temporal_type() == 'absolute' and time_suffix == 'time':
+        elif sp.get_temporal_type() == "absolute" and time_suffix == "time":
             suffix = tgis.create_time_suffix(map)
             map_name = "{ba}_{su}".format(ba=base, su=suffix)
         else:
             map_name = tgis.create_numeric_suffix(base, count, time_suffix)
-        new_map = tgis.open_new_map_dataset(map_name, None, type="vector",
-                                            temporal_extent=map.get_temporal_extent(),
-                                            overwrite=overwrite, dbif=dbif)
+        new_map = tgis.open_new_map_dataset(
+            map_name,
+            None,
+            type="vector",
+            temporal_extent=map.get_temporal_extent(),
+            overwrite=overwrite,
+            dbif=dbif,
+        )
         new_maps.append(new_map)
 
         mod = copy.deepcopy(contour_module)
@@ -226,7 +240,7 @@ def main(options, flags):
         sys.stderr.write(mod.get_bash() + "\n")
         process_queue.put(mod)
 
-        if count%10 == 0:
+        if count % 10 == 0:
             gscript.percent(count, num_maps, 1)
 
     # Wait for unfinished processes
@@ -234,8 +248,9 @@ def main(options, flags):
 
     # Open the new space time vector dataset
     ttype, stype, title, descr = sp.get_initial_values()
-    new_sp = tgis.open_new_stds(output, "stvds", ttype, title,
-                                descr, stype, dbif, overwrite)
+    new_sp = tgis.open_new_stds(
+        output, "stvds", ttype, title, descr, stype, dbif, overwrite
+    )
     # collect empty maps to remove them
     num_maps = len(new_maps)
     empty_maps = []
@@ -245,7 +260,7 @@ def main(options, flags):
     for map in new_maps:
         count += 1
 
-        if count%10 == 0:
+        if count % 10 == 0:
             gscript.percent(count, num_maps, 1)
 
         # Do not register empty maps
@@ -278,10 +293,12 @@ def main(options, flags):
             else:
                 names += ",%s" % (map.get_name())
 
-        gscript.run_command("g.remove", flags='f', type='vector', name=names,
-                            quiet=True)
+        gscript.run_command(
+            "g.remove", flags="f", type="vector", name=names, quiet=True
+        )
 
     dbif.close()
+
 
 ############################################################################
 

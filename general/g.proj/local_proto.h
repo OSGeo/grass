@@ -6,6 +6,7 @@ extern struct Cell_head cellhd;
 
 /* input.c */
 void input_currloc(void);
+
 #ifdef HAVE_OGR
 int input_wkt(char *);
 int input_srid(char *);
@@ -18,6 +19,7 @@ int input_georef(char *);
 void print_projinfo(int);
 void print_datuminfo(void);
 void print_proj4(int);
+
 #ifdef HAVE_OGR
 void print_wkt(int, int);
 #endif
@@ -28,7 +30,7 @@ int set_datumtrans(int, int);
 
 /* create.c */
 void create_location(const char *);
-void modify_projinfo();
+void modify_projinfo(void);
 
 /* list_codes.c */
 char *get_authority_names(void);

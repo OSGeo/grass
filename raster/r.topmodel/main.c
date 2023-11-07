@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.topmodel
@@ -27,21 +26,19 @@
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
-	struct Option *params;
-	struct Option *topidxstats;
-	struct Option *input;
-	struct Option *output;
-	struct Option *timestep;
-	struct Option *topidxclass;
-	struct Option *topidx;
-	struct Option *ntopidxclasses;
-	struct Option *outtopidxstats;
+    struct {
+        struct Option *params;
+        struct Option *topidxstats;
+        struct Option *input;
+        struct Option *output;
+        struct Option *timestep;
+        struct Option *topidxclass;
+        struct Option *topidx;
+        struct Option *ntopidxclasses;
+        struct Option *outtopidxstats;
     } params;
-    struct
-    {
-	struct Flag *preprocess;
+    struct {
+        struct Flag *preprocess;
     } flags;
 
     /* Initialize GRASS and parse command line */
@@ -52,7 +49,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("hydrology"));
     G_add_keyword(_("model"));
     module->description =
-	_("Simulates TOPMODEL which is a physically based hydrologic model.");
+        _("Simulates TOPMODEL which is a physically based hydrologic model.");
 
     /* Parameter definitions */
     params.params = G_define_standard_option(G_OPT_F_INPUT);
@@ -62,11 +59,11 @@ int main(int argc, char **argv)
     params.topidxstats = G_define_standard_option(G_OPT_F_INPUT);
     params.topidxstats->key = "topidxstats";
     params.topidxstats->description =
-	_("Name of input topographic index statistics file");
+        _("Name of input topographic index statistics file");
 
     params.input = G_define_standard_option(G_OPT_F_INPUT);
     params.input->description =
-	_("Name of input rainfall and potential evapotranspiration data file");
+        _("Name of input rainfall and potential evapotranspiration data file");
 
     params.output = G_define_standard_option(G_OPT_F_OUTPUT);
     params.output->description = _("Name for output file");
@@ -82,16 +79,15 @@ int main(int argc, char **argv)
     params.topidxclass->key = "topidxclass";
     params.topidxclass->label = _("Topographic index class");
     params.topidxclass->description =
-	_("Generate output for this topographic index class");
+        _("Generate output for this topographic index class");
     params.topidxclass->type = TYPE_INTEGER;
     params.topidxclass->required = NO;
 
     params.topidx = G_define_standard_option(G_OPT_R_INPUT);
     params.topidx->key = "topidx";
-    params.topidx->label =
-	_("Name of input topographic index raster map");
-    params.topidx->description =
-	_("Must be clipped to the catchment boundary. Used for generating outtopidxstats");
+    params.topidx->label = _("Name of input topographic index raster map");
+    params.topidx->description = _("Must be clipped to the catchment boundary. "
+                                   "Used for generating outtopidxstats");
     params.topidx->required = NO;
     params.topidx->guisection = _("Preprocess");
 
@@ -99,7 +95,7 @@ int main(int argc, char **argv)
     params.ntopidxclasses->key = "ntopidxclasses";
     params.ntopidxclasses->label = _("Number of topographic index classes");
     params.ntopidxclasses->description =
-	_("Used for generating outtopidxstats");
+        _("Used for generating outtopidxstats");
     params.ntopidxclasses->type = TYPE_INTEGER;
     params.ntopidxclasses->required = NO;
     params.ntopidxclasses->answer = "30";
@@ -108,20 +104,20 @@ int main(int argc, char **argv)
     params.outtopidxstats = G_define_standard_option(G_OPT_F_OUTPUT);
     params.outtopidxstats->key = "outtopidxstats";
     params.outtopidxstats->label =
-	_("Name for output topographic index statistics file");
+        _("Name for output topographic index statistics file");
     params.outtopidxstats->description =
-	_("Requires topidx and ntopidxclasses");
+        _("Requires topidx and ntopidxclasses");
     params.outtopidxstats->required = NO;
     params.outtopidxstats->guisection = _("Preprocess");
 
     flags.preprocess = G_define_flag();
     flags.preprocess->key = 'p';
     flags.preprocess->description =
-	_("Preprocess only and stop after generating outtopidxstats");
+        _("Preprocess only and stop after generating outtopidxstats");
     flags.preprocess->suppress_required = YES;
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /* Store given parameters */
     file.params = params.params->answer;
@@ -130,32 +126,34 @@ int main(int argc, char **argv)
     file.output = params.output->answer;
 
     if (!params.timestep->answer)
-	params.timestep->answer = "0";
+        params.timestep->answer = "0";
     misc.timestep = atoi(params.timestep->answer);
 
     if (!params.topidxclass->answer)
-	params.topidxclass->answer = "0";
+        params.topidxclass->answer = "0";
     misc.topidxclass = atoi(params.topidxclass->answer);
 
     if (params.topidx->answer && params.outtopidxstats->answer) {
-	char *topidx;
-	int ntopidxclasses;
-	char *outtopidxstats;
+        char *topidx;
+        int ntopidxclasses;
+        char *outtopidxstats;
 
-	topidx = params.topidx->answer;
-	ntopidxclasses = atoi(params.ntopidxclasses->answer);
-	outtopidxstats = params.outtopidxstats->answer;
+        topidx = params.topidx->answer;
+        ntopidxclasses = atoi(params.ntopidxclasses->answer);
+        outtopidxstats = params.outtopidxstats->answer;
 
-	if (ntopidxclasses <= 1)
-	    G_fatal_error(_("%s must be greater than 1"), "ntopidxclasses");
+        if (ntopidxclasses <= 1)
+            G_fatal_error(_("%s must be greater than 1"), "ntopidxclasses");
 
-	create_topidxstats(topidx, ntopidxclasses, outtopidxstats);
-    } else if (params.topidx->answer) {
-	G_warning(_("Ignoring %s because %s is not specified"),
-			params.topidx->key, params.outtopidxstats->key);
-    } else if (params.outtopidxstats->answer) {
-	G_warning(_("Ignoring %s because %s is not specified"),
-			params.outtopidxstats->key, params.topidx->key);
+        create_topidxstats(topidx, ntopidxclasses, outtopidxstats);
+    }
+    else if (params.topidx->answer) {
+        G_warning(_("Ignoring %s because %s is not specified"),
+                  params.topidx->key, params.outtopidxstats->key);
+    }
+    else if (params.outtopidxstats->answer) {
+        G_warning(_("Ignoring %s because %s is not specified"),
+                  params.outtopidxstats->key, params.topidx->key);
     }
 
     if (flags.preprocess->answer)

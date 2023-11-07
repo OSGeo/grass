@@ -6,8 +6,7 @@
  * of points on the hull is guaranteed to be inside the hull, follow from the
  * definition of convex polygon)
  */
-int outputHull(struct Map_info *Map, struct Point *P, int *hull,
-	       int numPoints)
+int outputHull(struct Map_info *Map, struct Point *P, int *hull, int numPoints)
 {
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -20,13 +19,13 @@ int outputHull(struct Map_info *Map, struct Point *P, int *hull,
 
     xc = yc = 0;
     for (i = 0; i < numPoints; i++) {
-	pointIdx = hull[i];
-	tmpx[i] = P[pointIdx].x;
-	tmpy[i] = P[pointIdx].y;
-	/* average coordinates calculation... may introduce a little
-	   numerical error but guaratees that no overflow will occur */
-	xc = xc + tmpx[i] / numPoints;
-	yc = yc + tmpy[i] / numPoints;
+        pointIdx = hull[i];
+        tmpx[i] = P[pointIdx].x;
+        tmpy[i] = P[pointIdx].y;
+        /* average coordinates calculation... may introduce a little
+           numerical error but guaratees that no overflow will occur */
+        xc = xc + tmpx[i] / numPoints;
+        yc = yc + tmpy[i] / numPoints;
     }
     tmpx[numPoints] = P[hull[0]].x;
     tmpy[numPoints] = P[hull[0]].y;

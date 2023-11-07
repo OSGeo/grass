@@ -10,7 +10,7 @@ map=vector_map</tt>. There are a large variety of optional parameters
 which allow the user to specify vector type, colors, data fields, SQL
 queries, label size and justification, etc.
 
-<p>By default <em>d.vect</em> areas are filled with <b>fill_color</b> and 
+<p>By default <em>d.vect</em> areas are filled with <b>fill_color</b> and
 outlined with <b>color</b>. Area outlines can be suppressed with
 <div class="code"><pre>
 d.vect map=vector_map color=none
@@ -84,7 +84,7 @@ d.vect -c map=soils where="label='VBF'" display=shape attribute_column=label
 <p>3D points, 3D lines and 3D polygons colorized according to z height
 (for 3D lines and polygons a z height is computed by a midpoint of
 line/area bounding box):
-  
+
 <div class="code"><pre>
 g.region raster=elevation.10m
 r.random input=elevation.10m n=5000 vector=random3d -d
@@ -125,8 +125,3 @@ CERL<br>
 Radim Blazek, ITC-Irst, Trento, Italy<br>
 Support for color tables by Martin Landa, Czech Technical University in Prague (8/2011)<br>
 and many other GRASS developers
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

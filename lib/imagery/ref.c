@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       imagery library
@@ -13,13 +12,14 @@
  *****************************************************************************/
 
 /***********************************************************
-* I_fopen_group_ref_new (group)
-* I_fopen_group_ref_old (group)
-*
-* fopen() the imagery group reference file (containing the number
-* of files and the names of the cell files which comprise
-* the group)
-**********************************************************/
+ * I_fopen_group_ref_new (group)
+ * I_fopen_group_ref_old (group)
+ *
+ * fopen() the imagery group reference file (containing the number
+ * of files and the names of the cell files which comprise
+ * the group)
+ **********************************************************/
+
 #include <grass/imagery.h>
 
 FILE *I_fopen_group_ref_new(const char *group)
@@ -59,11 +59,11 @@ FILE *I_fopen_subgroup_ref_old(const char *group, const char *subgroup)
     return fd;
 }
 
-FILE *I_fopen_subgroup_ref_old2(const char *group, const char *subgroup, const char *mapset)
+FILE *I_fopen_subgroup_ref_old2(const char *group, const char *subgroup,
+                                const char *mapset)
 {
     FILE *fd;
 
     fd = I_fopen_subgroup_file_old2(group, subgroup, mapset, "REF");
     return fd;
 }
-

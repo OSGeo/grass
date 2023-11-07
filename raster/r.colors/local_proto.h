@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.colors
@@ -26,13 +25,12 @@
 #include <grass/raster3d.h>
 
 struct maps_info {
-	int num;
-	char **names;
-	char **mapsets;
-	int *map_types;
-	DCELL *min;
-	DCELL *max;
-
+    int num;
+    char **names;
+    char **mapsets;
+    int *map_types;
+    DCELL *min;
+    DCELL *max;
 };
 
 #define RASTER_TYPE   1
@@ -40,11 +38,11 @@ struct maps_info {
 
 /* stats.c */
 int get_stats(struct maps_info *, struct Cell_stats *);
-void get_fp_stats(struct maps_info *, struct FP_stats *statf,
-		  DCELL min, DCELL max, int geometric, int geom_abs, int);
+void get_fp_stats(struct maps_info *, struct FP_stats *statf, DCELL min,
+                  DCELL max, int geometric, int geom_abs, int);
 
 /* edit_colors.c */
-int edit_colors(int, char **, int, const char *, const char*);
+int edit_colors(int, char **, int, const char *, const char *);
 
 /* rules.c */
 int read_color_rules(FILE *, struct Colors *, DCELL, DCELL, int, int *);

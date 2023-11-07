@@ -1,13 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       i.gensigset
  * AUTHOR(S):    Charles Bouman, Purdue University and
  *               Michael Shapiro, USACERL (original contributors)
- *               Markus Neteler <neteler itc.it> 
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
+ *               Markus Neteler <neteler itc.it>
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Glynn Clements <glynn gclements.plus.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      non-interactive method for generating image signature files
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
@@ -17,6 +16,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/imagery.h>
@@ -27,8 +27,8 @@
 
 int main(int argc, char *argv[])
 {
-    struct parms parms;		/* command line parms */
-    struct files files;		/* file descriptors, io, buffers */
+    struct parms parms; /* command line parms */
+    struct files files; /* file descriptors, io, buffers */
     struct SigSet S;
     int i;
     int junk;
@@ -42,22 +42,20 @@ int main(int argc, char *argv[])
     G_add_keyword(_("supervised classification"));
     G_add_keyword(_("SMAP"));
     G_add_keyword(_("signatures"));
-    module->description =
-	_("Generates statistics for i.smap from raster map.");
+    module->description = _("Generates statistics for i.smap from raster map.");
 
     parse(argc, argv, &parms);
-    openfiles(&parms, &files);
+    openfiles(&parms, &files, &S);
     read_training_labels(&parms, &files);
 
     get_training_classes(&parms, &files, &S);
     read_data(&files, &S);
 
     for (i = 0; i < S.nclasses; i++) {
-	G_message(_("Clustering class %d (%d pixels)..."),
-		  i + 1, S.ClassSig[i].ClassData.npixels);
-	subcluster(&S, i, &junk, parms.maxsubclasses);
-	G_message(_("Number of subclasses is %d"),
-		  S.ClassSig[i].nsubclasses);
+        G_message(_("Clustering class %d (%d pixels)..."), i + 1,
+                  S.ClassSig[i].ClassData.npixels);
+        subcluster(&S, i, &junk, parms.maxsubclasses);
+        G_message(_("Number of subclasses is %d"), S.ClassSig[i].nsubclasses);
     }
     write_sigfile(&parms, &S);
 

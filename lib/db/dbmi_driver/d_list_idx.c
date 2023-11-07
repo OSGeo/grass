@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_list_idx.c
- * 
+ *
  * \brief DBMI Library (driver) - list indexes
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -18,10 +18,10 @@
 #include "dbstubs.h"
 
 /*!
-  \brief List indexes
+   \brief List indexes
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_d_list_indexes(void)
 {
@@ -40,8 +40,8 @@ int db_d_list_indexes(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

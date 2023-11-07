@@ -9,7 +9,6 @@ extern int NPT;
 
 extern int nsizr, nsizc, nsizl, total;
 
-
 extern char *input;
 extern char *cellinp;
 extern char *cellout;
@@ -20,13 +19,11 @@ extern char *devi;
 extern char *outz, *gradient, *aspect1, *aspect2, *ncurv, *gcurv, *mcurv;
 extern char *cvdev;
 
-
 extern double ns_res, ew_res, tb_res;
 extern struct BM *bitmask;
 extern double *az, *adx, *ady, *adz, *adxx, *adyy, *adxy, *adxz, *adyz, *adzz;
 extern double ertot, ertre, zminac, zmaxac, dmin, wmult, zmult, zminacell,
     zmaxacell;
-
 
 extern double DETERM;
 extern int NERROR, cond1, cond2;

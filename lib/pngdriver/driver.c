@@ -1,30 +1,30 @@
 /*!
-  \file lib/pngdriver/driver.c
+   \file lib/pngdriver/driver.c
 
-  \brief GRASS png display driver - driver initialization
+   \brief GRASS png display driver - driver initialization
 
-  (C) 2007-2014 by Glynn Clements and the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Glynn Clements  
-*/
+   (C) 2007-2014 by Glynn Clements and the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Glynn Clements
+ */
 
 #include "pngdriver.h"
 
 /*!
-  \brief Initialize display driver
+   \brief Initialize display driver
 
-  \return pointer driver structure
-*/
+   \return pointer driver structure
+ */
 const struct driver *PNG_Driver(void)
 {
     static struct driver drv;
     static int initialized;
 
     if (initialized)
-	return &drv;
+        return &drv;
 
     drv.name = "png";
     drv.Box = PNG_Box;

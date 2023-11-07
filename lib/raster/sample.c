@@ -11,7 +11,8 @@
    This program is free software under the GNU General Public License
    (>=v2).  Read the file COPYING that comes with GRASS for details.
 
-   \author James Darrell McCauley <darrell mccauley-usa.com>, http://mccauley-usa.com/
+   \author James Darrell McCauley <darrell mccauley-usa.com>,
+   http://mccauley-usa.com/
  */
 
 #include <string.h>
@@ -45,29 +46,26 @@ static double scancatlabel(const char *);
  *
  *  \return cell value at given position
  */
-DCELL Rast_get_sample(int fd,
-		      const struct Cell_head *window,
-		      struct Categories *cats,
-		      double north, double east,
-		      int usedesc, INTERP_TYPE itype)
+DCELL Rast_get_sample(int fd, const struct Cell_head *window,
+                      struct Categories *cats, double north, double east,
+                      int usedesc, INTERP_TYPE itype)
 {
     double retval;
 
     switch (itype) {
     case INTERP_NEAREST:
-	retval =
-	    Rast_get_sample_nearest(fd, window, cats, north, east, usedesc);
-	break;
+        retval =
+            Rast_get_sample_nearest(fd, window, cats, north, east, usedesc);
+        break;
     case INTERP_BILINEAR:
-	retval =
-	    Rast_get_sample_bilinear(fd, window, cats, north, east, usedesc);
-	break;
+        retval =
+            Rast_get_sample_bilinear(fd, window, cats, north, east, usedesc);
+        break;
     case INTERP_BICUBIC:
-	retval =
-	    Rast_get_sample_cubic(fd, window, cats, north, east, usedesc);
-	break;
+        retval = Rast_get_sample_cubic(fd, window, cats, north, east, usedesc);
+        break;
     default:
-	G_fatal_error("Rast_get_sample: %s", _("Unknown interpolation type"));
+        G_fatal_error("Rast_get_sample: %s", _("Unknown interpolation type"));
     }
 
     return retval;
@@ -88,10 +86,9 @@ DCELL Rast_get_sample(int fd,
  *
  *  \return cell value at given position
  */
-DCELL Rast_get_sample_nearest(int fd,
-			      const struct Cell_head * window,
-			      struct Categories * cats,
-			      double north, double east, int usedesc)
+DCELL Rast_get_sample_nearest(int fd, const struct Cell_head *window,
+                              struct Categories *cats, double north,
+                              double east, int usedesc)
 {
     int row, col;
     DCELL result;
@@ -101,34 +98,33 @@ DCELL Rast_get_sample_nearest(int fd,
     row = (int)floor(Rast_northing_to_row(north, window));
     col = (int)floor(Rast_easting_to_col(east, window));
 
-    if (row < 0 || row >= Rast_window_rows() ||
-	col < 0 || col >= Rast_window_cols()) {
-	Rast_set_d_null_value(&result, 1);
-	goto done;
+    if (row < 0 || row >= Rast_window_rows() || col < 0 ||
+        col >= Rast_window_cols()) {
+        Rast_set_d_null_value(&result, 1);
+        goto done;
     }
 
     Rast_get_d_row(fd, maprow, row);
 
     if (Rast_is_d_null_value(&maprow[col])) {
-	Rast_set_d_null_value(&result, 1);
-	goto done;
+        Rast_set_d_null_value(&result, 1);
+        goto done;
     }
 
     if (usedesc) {
-	char *buf = Rast_get_c_cat((CELL *) & (maprow[col]), cats);
+        char *buf = Rast_get_c_cat((CELL *)&(maprow[col]), cats);
 
-	G_squeeze(buf);
-	result = scancatlabel(buf);
+        G_squeeze(buf);
+        result = scancatlabel(buf);
     }
     else
-	result = maprow[col];
+        result = maprow[col];
 
-  done:
+done:
     G_free(maprow);
 
     return result;
 }
-
 
 /*!
  *  \brief Extract a cell value from raster map (bilinear interpolation).
@@ -145,10 +141,9 @@ DCELL Rast_get_sample_nearest(int fd,
  *
  *  \return cell value at given position
  */
-DCELL Rast_get_sample_bilinear(int fd,
-			       const struct Cell_head * window,
-			       struct Categories * cats,
-			       double north, double east, int usedesc)
+DCELL Rast_get_sample_bilinear(int fd, const struct Cell_head *window,
+                               struct Categories *cats, double north,
+                               double east, int usedesc)
 {
     int row, col;
     double grid[2][2];
@@ -167,21 +162,21 @@ DCELL Rast_get_sample_bilinear(int fd,
     trow = frow - row - 0.5;
     tcol = fcol - col - 0.5;
 
-    if (row < 0 || row + 1 >= Rast_window_rows() ||
-	col < 0 || col + 1 >= Rast_window_cols()) {
-	Rast_set_d_null_value(&result, 1);
-	goto done;
+    if (row < 0 || row + 1 >= Rast_window_rows() || col < 0 ||
+        col + 1 >= Rast_window_cols()) {
+        Rast_set_d_null_value(&result, 1);
+        goto done;
     }
 
     Rast_get_d_row(fd, arow, row);
     Rast_get_d_row(fd, brow, row + 1);
 
     if (Rast_is_d_null_value(&arow[col]) ||
-	Rast_is_d_null_value(&arow[col + 1]) ||
-	Rast_is_d_null_value(&brow[col]) ||
-	Rast_is_d_null_value(&brow[col + 1])) {
-	Rast_set_d_null_value(&result, 1);
-	goto done;
+        Rast_is_d_null_value(&arow[col + 1]) ||
+        Rast_is_d_null_value(&brow[col]) ||
+        Rast_is_d_null_value(&brow[col + 1])) {
+        Rast_set_d_null_value(&result, 1);
+        goto done;
     }
 
     /*-
@@ -191,29 +186,28 @@ DCELL Rast_get_sample_bilinear(int fd,
      */
 
     if (usedesc) {
-	char *buf;
+        char *buf;
 
-	G_squeeze(buf = Rast_get_c_cat((int *)&(arow[col]), cats));
-	grid[0][0] = scancatlabel(buf);
-	G_squeeze(buf = Rast_get_c_cat((CELL *) & (arow[col + 1]), cats));
-	grid[0][1] = scancatlabel(buf);
-	G_squeeze(buf = Rast_get_c_cat((CELL *) & (brow[col]), cats));
-	grid[1][0] = scancatlabel(buf);
-	G_squeeze(buf = Rast_get_c_cat((CELL *) & (brow[col + 1]), cats));
-	grid[1][1] = scancatlabel(buf);
+        G_squeeze(buf = Rast_get_c_cat((int *)&(arow[col]), cats));
+        grid[0][0] = scancatlabel(buf);
+        G_squeeze(buf = Rast_get_c_cat((CELL *)&(arow[col + 1]), cats));
+        grid[0][1] = scancatlabel(buf);
+        G_squeeze(buf = Rast_get_c_cat((CELL *)&(brow[col]), cats));
+        grid[1][0] = scancatlabel(buf);
+        G_squeeze(buf = Rast_get_c_cat((CELL *)&(brow[col + 1]), cats));
+        grid[1][1] = scancatlabel(buf);
     }
     else {
-	grid[0][0] = arow[col];
-	grid[0][1] = arow[col + 1];
-	grid[1][0] = brow[col];
-	grid[1][1] = brow[col + 1];
+        grid[0][0] = arow[col];
+        grid[0][1] = arow[col + 1];
+        grid[1][0] = brow[col];
+        grid[1][1] = brow[col + 1];
     }
 
-    result = Rast_interp_bilinear(tcol, trow,
-				  grid[0][0], grid[0][1], grid[1][0],
-				  grid[1][1]);
+    result = Rast_interp_bilinear(tcol, trow, grid[0][0], grid[0][1],
+                                  grid[1][0], grid[1][1]);
 
-  done:
+done:
     G_free(arow);
     G_free(brow);
 
@@ -235,10 +229,9 @@ DCELL Rast_get_sample_bilinear(int fd,
  *
  *  \return cell value at given position
  */
-DCELL Rast_get_sample_cubic(int fd,
-			    const struct Cell_head * window,
-			    struct Categories * cats,
-			    double north, double east, int usedesc)
+DCELL Rast_get_sample_cubic(int fd, const struct Cell_head *window,
+                            struct Categories *cats, double north, double east,
+                            int usedesc)
 {
     int i, j, row, col;
     double grid[4][4];
@@ -247,7 +240,7 @@ DCELL Rast_get_sample_cubic(int fd,
     DCELL result;
 
     for (i = 0; i < 4; i++)
-	rows[i] = Rast_allocate_d_buf();
+        rows[i] = Rast_allocate_d_buf();
 
     frow = Rast_northing_to_row(north, window);
     fcol = Rast_easting_to_col(east, window);
@@ -259,21 +252,21 @@ DCELL Rast_get_sample_cubic(int fd,
     trow = frow - row - 1.5;
     tcol = fcol - col - 1.5;
 
-    if (row < 0 || row + 3 >= Rast_window_rows() ||
-	col < 0 || col + 3 >= Rast_window_cols()) {
-	Rast_set_d_null_value(&result, 1);
-	goto done;
+    if (row < 0 || row + 3 >= Rast_window_rows() || col < 0 ||
+        col + 3 >= Rast_window_cols()) {
+        Rast_set_d_null_value(&result, 1);
+        goto done;
     }
 
     for (i = 0; i < 4; i++)
-	Rast_get_d_row(fd, rows[i], row + i);
+        Rast_get_d_row(fd, rows[i], row + i);
 
     for (i = 0; i < 4; i++)
-	for (j = 0; j < 4; j++)
-	    if (Rast_is_d_null_value(&rows[i][col + j])) {
-		Rast_set_d_null_value(&result, 1);
-		goto done;
-	    }
+        for (j = 0; j < 4; j++)
+            if (Rast_is_d_null_value(&rows[i][col + j])) {
+                Rast_set_d_null_value(&result, 1);
+                goto done;
+            }
 
     /*
      * now were ready to do cubic interpolation over
@@ -284,50 +277,44 @@ DCELL Rast_get_sample_cubic(int fd,
      */
 
     if (usedesc) {
-	char *buf;
+        char *buf;
 
-	for (i = 0; i < 4; i++) {
-	    for (j = 0; j < 4; j++) {
-		G_squeeze(buf =
-			  Rast_get_c_cat((CELL *) & (rows[i][col + j]),
-					 cats));
-		grid[i][j] = scancatlabel(buf);
-	    }
-	}
+        for (i = 0; i < 4; i++) {
+            for (j = 0; j < 4; j++) {
+                G_squeeze(
+                    buf = Rast_get_c_cat((CELL *)&(rows[i][col + j]), cats));
+                grid[i][j] = scancatlabel(buf);
+            }
+        }
     }
     else {
-	for (i = 0; i < 4; i++)
-	    for (j = 0; j < 4; j++)
-		grid[i][j] = rows[i][col + j];
+        for (i = 0; i < 4; i++)
+            for (j = 0; j < 4; j++)
+                grid[i][j] = rows[i][col + j];
     }
 
-    result = Rast_interp_bicubic(tcol, trow,
-				 grid[0][0], grid[0][1], grid[0][2],
-				 grid[0][3], grid[1][0], grid[1][1],
-				 grid[1][2], grid[1][3], grid[2][0],
-				 grid[2][1], grid[2][2], grid[2][3],
-				 grid[3][0], grid[3][1], grid[3][2],
-				 grid[3][3]);
+    result = Rast_interp_bicubic(
+        tcol, trow, grid[0][0], grid[0][1], grid[0][2], grid[0][3], grid[1][0],
+        grid[1][1], grid[1][2], grid[1][3], grid[2][0], grid[2][1], grid[2][2],
+        grid[2][3], grid[3][0], grid[3][1], grid[3][2], grid[3][3]);
 
-  done:
+done:
     for (i = 0; i < 4; i++)
-	G_free(rows[i]);
+        G_free(rows[i]);
 
     return result;
 }
-
 
 static double scancatlabel(const char *str)
 {
     double val;
 
     if (strcmp(str, "no data") != 0)
-	sscanf(str, "%lf", &val);
+        sscanf(str, "%lf", &val);
     else {
-	G_warning(_("\"no data\" label found; setting to zero"));
-	val = 0.0;
+        G_warning(_("\"no data\" label found; setting to zero"));
+        val = 0.0;
     }
 
     return val;
 }
-

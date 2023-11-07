@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_rows.c
- * 
+ *
  * \brief DBMI Library (client) - get number of records
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -16,14 +16,14 @@
 #include "macros.h"
 
 /*!
-  \brief Get number of selected rows
+   \brief Get number of selected rows
 
-  \param cursor db select cursor
+   \param cursor db select cursor
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
-int db_get_num_rows(dbCursor * cursor)
+int db_get_num_rows(dbCursor *cursor)
 {
     int nrows, ret_code;
 
@@ -38,7 +38,7 @@ int db_get_num_rows(dbCursor * cursor)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return -1;
+        return -1;
 
     /* get the results */
     DB_RECV_INT(&nrows);

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       front end
@@ -14,6 +13,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -32,9 +32,9 @@ static void do_opt(const struct Option *opt)
     char *buf;
 
     if (!opt->answer)
-	return;
+        return;
     buf = G_malloc(strlen(opt->key) + 1 + strlen(opt->answer) + 1);
-    sprintf(buf, "%s=%s", opt->key, opt->answer);
+    snprintf(buf, GPATH_MAX, "%s=%s", opt->key, opt->answer);
     new_argv[new_argc++] = buf;
 }
 
@@ -68,7 +68,6 @@ int main(int argc, char *argv[])
     struct Flag *flag_flat;
     struct GModule *module;
 
-
     G_gisinit(argv[0]);
 
     /* Set description */
@@ -82,7 +81,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("stream power index"));
     G_add_keyword(_("topographic index"));
     module->description =
-	_("Calculates hydrological parameters and RUSLE factors.");
+        _("Calculates hydrological parameters and RUSLE factors.");
 
     opt1 = G_define_standard_option(G_OPT_R_ELEV);
     opt1->guisection = _("Inputs");
@@ -91,14 +90,14 @@ int main(int argc, char *argv[])
     opt2->key = "depression";
     opt2->label = _("Name of input depressions raster map");
     opt2->description =
-	_("All non-NULL and non-zero cells are considered as real depressions");
+        _("All non-NULL and non-zero cells are considered as real depressions");
     opt2->required = NO;
     opt2->guisection = _("Inputs");
 
     opt3 = G_define_standard_option(G_OPT_R_INPUT);
     opt3->key = "flow";
     opt3->description =
-	_("Name of input raster representing amount of overland flow per cell");
+        _("Name of input raster representing amount of overland flow per cell");
     opt3->required = NO;
     opt3->guisection = _("Inputs");
 
@@ -111,10 +110,9 @@ int main(int argc, char *argv[])
 
     opt5 = G_define_standard_option(G_OPT_R_INPUT);
     opt5->key = "blocking";
-    opt5->label =
-	_("Name of input raster map blocking overland surface flow");
-    opt5->description =
-	_("For USLE. All non-NULL and non-zero cells are considered as blocking terrain.");
+    opt5->label = _("Name of input raster map blocking overland surface flow");
+    opt5->description = _("For USLE. All non-NULL and non-zero cells are "
+                          "considered as blocking terrain.");
     opt5->required = NO;
     opt5->guisection = _("Inputs");
 
@@ -150,7 +148,7 @@ int main(int argc, char *argv[])
     opt17 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt17->key = "tci";
     opt17->description =
-	_("Name for output topographic index ln(a / tan(b)) map");
+        _("Name for output topographic index ln(a / tan(b)) map");
     opt17->required = NO;
     opt17->guisection = _("Outputs");
 
@@ -207,7 +205,7 @@ int main(int argc, char *argv[])
     opt15->answer = "5";
     opt15->label = _("Convergence factor for MFD (1-10)");
     opt15->description =
-	_("1 = most diverging flow, 10 = most converging flow. Recommended: 5");
+        _("1 = most diverging flow, 10 = most converging flow. Recommended: 5");
 
     opt16 = G_define_standard_option(G_OPT_MEMORYMB);
 
@@ -215,31 +213,32 @@ int main(int argc, char *argv[])
     flag_sfd->key = 's';
     flag_sfd->label = _("SFD (D8) flow (default is MFD)");
     flag_sfd->description =
-	_("SFD: single flow direction, MFD: multiple flow direction");
+        _("SFD: single flow direction, MFD: multiple flow direction");
 
     flag_flow = G_define_flag();
     flag_flow->key = '4';
     flag_flow->description =
-	_("Allow only horizontal and vertical flow of water");
+        _("Allow only horizontal and vertical flow of water");
 
     flag_seg = G_define_flag();
     flag_seg->key = 'm';
     flag_seg->label = _("Enable disk swap memory option: Operation is slow");
     flag_seg->description =
-	_("Only needed if memory requirements exceed available RAM; see manual on how to calculate memory requirements");
+        _("Only needed if memory requirements exceed available RAM; see manual "
+          "on how to calculate memory requirements");
 
     flag_abs = G_define_flag();
     flag_abs->key = 'a';
     flag_abs->label =
-	_("Use positive flow accumulation even for likely underestimates");
+        _("Use positive flow accumulation even for likely underestimates");
     flag_abs->description =
-	_("See manual for a detailed description of flow accumulation output");
+        _("See manual for a detailed description of flow accumulation output");
 
     flag_flat = G_define_flag();
     flag_flat->key = 'b';
     flag_flat->label = _("Beautify flat areas");
     flag_flat->description =
-	_("Flow direction in flat areas is modified to look prettier");
+        _("Flow direction in flat areas is modified to look prettier");
 
     /* Some options requires threshold */
     G_option_requires(opt10, opt6, NULL);
@@ -249,36 +248,38 @@ int main(int argc, char *argv[])
     G_option_requires(opt14, opt6, NULL);
 
     /* Check for some output map */
-    G_option_required(opt8, opt17, opt18, opt9, opt10, opt11, opt12, opt13, opt14, NULL);
-      
+    G_option_required(opt8, opt17, opt18, opt9, opt10, opt11, opt12, opt13,
+                      opt14, NULL);
+
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /* basin threshold */
     if (opt6->answer) {
-	if (atoi(opt6->answer) <= 0)
-	    G_fatal_error(_("The basin threshold must be a positive number."));
+        if (atoi(opt6->answer) <= 0)
+            G_fatal_error(_("The basin threshold must be a positive number."));
     }
 
     /* Build command line */
-    sprintf(command, "%s/etc/r.watershed/%s",
-	    G_gisbase(), flag_seg->answer ? "seg" : "ram");
+    snprintf(command, GPATH_MAX, "%s/etc/r.watershed/%s", G_gisbase(),
+             flag_seg->answer ? "seg" : "ram");
     new_argv[new_argc++] = command;
 
     if (flag_sfd->answer)
-	new_argv[new_argc++] = "-s";
+        new_argv[new_argc++] = "-s";
 
     if (flag_flow->answer)
-	new_argv[new_argc++] = "-4";
+        new_argv[new_argc++] = "-4";
 
     if (flag_abs->answer)
-	new_argv[new_argc++] = "-a";
+        new_argv[new_argc++] = "-a";
 
     if (flag_flat->answer && !flag_seg->answer)
-	new_argv[new_argc++] = "-b";
+        new_argv[new_argc++] = "-b";
 
     if (flag_flat->answer && flag_seg->answer)
-	G_message(_("Beautify flat areas is not yet supported for disk swap mode"));
+        G_message(
+            _("Beautify flat areas is not yet supported for disk swap mode"));
 
     do_opt(opt1);
     do_opt(opt2);
@@ -299,63 +300,61 @@ int main(int argc, char *argv[])
     do_opt(opt14);
     do_opt(opt15);
     if (flag_seg->answer)
-	do_opt(opt16);
+        do_opt(opt16);
     new_argv[new_argc++] = NULL;
 
     G_debug(1, "Mode: %s", flag_seg->answer ? "Segmented" : "All in RAM");
     /*
-    if (flag_seg->answer)
-        G_message(_("Using memory cache size: %.1f MB"), atof(opt16->answer));
+       if (flag_seg->answer)
+       G_message(_("Using memory cache size: %.1f MB"), atof(opt16->answer));
      */
     ret = G_vspawn_ex(new_argv[0], new_argv);
 
     if (ret != EXIT_SUCCESS)
-	G_warning(_("Subprocess failed with exit code %d"), ret);
+        G_warning(_("Subprocess failed with exit code %d"), ret);
 
     /* record map metadata/history info */
     if (opt8->answer)
-	write_hist(opt8->answer,
-		   "Watershed accumulation: overland flow that traverses each cell",
-		   opt1->answer, flag_seg->answer, flag_sfd->answer);
+        write_hist(
+            opt8->answer,
+            "Watershed accumulation: overland flow that traverses each cell",
+            opt1->answer, flag_seg->answer, flag_sfd->answer);
     if (opt17->answer)
-	write_hist(opt17->answer,
-		   "Watershed accumulation: topographic index ln(a / tan b)",
-		   opt1->answer, flag_seg->answer, flag_sfd->answer);
+        write_hist(opt17->answer,
+                   "Watershed accumulation: topographic index ln(a / tan b)",
+                   opt1->answer, flag_seg->answer, flag_sfd->answer);
     if (opt18->answer)
-	write_hist(opt18->answer,
-		   "Watershed accumulation: stream power index a * tan b",
-		   opt1->answer, flag_seg->answer, flag_sfd->answer);
+        write_hist(opt18->answer,
+                   "Watershed accumulation: stream power index a * tan b",
+                   opt1->answer, flag_seg->answer, flag_sfd->answer);
     if (opt9->answer)
-	write_hist(opt9->answer,
-		   "Watershed drainage direction (CCW from East divided by 45deg)",
-		   opt1->answer, flag_seg->answer, flag_sfd->answer);
+        write_hist(
+            opt9->answer,
+            "Watershed drainage direction (CCW from East divided by 45deg)",
+            opt1->answer, flag_seg->answer, flag_sfd->answer);
     if (opt10->answer)
-	write_hist(opt10->answer,
-		   "Watershed basins", opt1->answer, flag_seg->answer,
-		   flag_sfd->answer);
+        write_hist(opt10->answer, "Watershed basins", opt1->answer,
+                   flag_seg->answer, flag_sfd->answer);
     if (opt11->answer)
-	write_hist(opt11->answer,
-		   "Watershed stream segments", opt1->answer,
-		   flag_seg->answer, flag_sfd->answer);
+        write_hist(opt11->answer, "Watershed stream segments", opt1->answer,
+                   flag_seg->answer, flag_sfd->answer);
     if (opt12->answer)
-	write_hist(opt12->answer,
-		   "Watershed half-basins", opt1->answer, flag_seg->answer,
-		   flag_sfd->answer);
+        write_hist(opt12->answer, "Watershed half-basins", opt1->answer,
+                   flag_seg->answer, flag_sfd->answer);
     if (opt13->answer)
-	write_hist(opt13->answer,
-		   "Watershed slope length and steepness (LS) factor",
-		   opt1->answer, flag_seg->answer, flag_sfd->answer);
+        write_hist(opt13->answer,
+                   "Watershed slope length and steepness (LS) factor",
+                   opt1->answer, flag_seg->answer, flag_sfd->answer);
     if (opt14->answer)
-	write_hist(opt14->answer,
-		   "Watershed slope steepness (S) factor",
-		   opt1->answer, flag_seg->answer, flag_sfd->answer);
+        write_hist(opt14->answer, "Watershed slope steepness (S) factor",
+                   opt1->answer, flag_seg->answer, flag_sfd->answer);
 
     exit(ret);
 }
 
 /* record map history info */
-static void write_hist(char *map_name, char *title, char *source_name,
-		       int mode, int sfd)
+static void write_hist(char *map_name, char *title, char *source_name, int mode,
+                       int sfd)
 {
     struct History history;
 
@@ -364,9 +363,9 @@ static void write_hist(char *map_name, char *title, char *source_name,
     Rast_short_history(map_name, "raster", &history);
     Rast_set_history(&history, HIST_DATSRC_1, source_name);
     Rast_append_format_history(&history, "Processing mode: %s",
-			       sfd ? "SFD (D8)" : "MFD");
+                               sfd ? "SFD (D8)" : "MFD");
     Rast_append_format_history(&history, "Memory mode: %s",
-			       mode ? "Segmented" : "All in RAM");
+                               mode ? "Segmented" : "All in RAM");
     Rast_command_history(&history);
 
     Rast_write_history(map_name, &history);

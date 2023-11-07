@@ -6,27 +6,28 @@
 
 static int cmp(const void *, const void *);
 
-char** get_available_mapsets(int *nmapsets)
+char **get_available_mapsets(int *nmapsets)
 {
     char **ms, **mapset_name;
     int i, n;
 
     ms = G_get_available_mapsets();
-    for (n = 0; ms[n]; n++);
+    for (n = 0; ms[n]; n++)
+        ;
 
     mapset_name = (char **)G_malloc(n * sizeof(char *));
-    for(i = 0; i < n; i++)
+    for (i = 0; i < n; i++)
         mapset_name[i] = G_store(ms[i]);
 
     /* sort mapsets */
     qsort(mapset_name, n, sizeof(char *), cmp);
 
     *nmapsets = n;
-    
+
     return mapset_name;
 }
 
-int cmp(const void *a, const void *b) 
+int cmp(const void *a, const void *b)
 {
     return (strcmp(*(char **)a, *(char **)b));
 }

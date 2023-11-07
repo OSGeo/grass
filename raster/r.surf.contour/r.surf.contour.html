@@ -22,18 +22,17 @@ the rasterized contour lines, thus ensuring that an uphill and downhill
 contour value will be the two values chosen.  <em>r.surf.contour</em>
 interpolates from the uphill and downhill values by the true distance.
 
-
 <h3>Parameters:</h3>
 
 <dl>
 
-<dt><b>input=</b><em>name</em> 
+<dt><b>input=</b><em>name</em>
 
-<dd>Name of an existing raster map that contains a set of 
+<dd>Name of an existing raster map that contains a set of
 initial category values (i.e., some cells contain known elevation
 values (denoting contours) while the rest contain NULL values).
 
-<dt><b>output=</b><em>name</em> 
+<dt><b>output=</b><em>name</em>
 
 <dd>Name to be assigned to new output raster map that represents
 a smooth (e.g., elevation) surface generated from
@@ -76,7 +75,7 @@ g.region raster=elevation -p
 # get minimum elevation value
 r.univar elevation
 
-# generate vector contour lines 
+# generate vector contour lines
 r.contour input=elevation output=contours_5m step=5 minlevel=50
 
 # rasterize contour lines
@@ -93,7 +92,6 @@ r.colors diff color=differences
 # analyze differences statistically
 r.univar diff
 </pre></div>
-
 
 <h2>SEE ALSO</h2>
 
@@ -113,8 +111,3 @@ Overview: <a href="https://grasswiki.osgeo.org/wiki/Interpolation">Interpolation
 <h2>AUTHOR</h2>
 
 Chuck Ehlschlaeger, U.S. Army Construction Engineering Research Laboratory
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

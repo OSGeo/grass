@@ -1,13 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       d.profile
  * AUTHOR(S):    Dave Johnson (original contributor)
  *               DBA Systems, Inc. 10560 Arrowhead Drive Fairfax, VA 22030
- *               Markus Neteler <neteler itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Huidae Cho <grass4u gmail.com>, 
- *               Eric G. Miller <egm2 jps.net>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Eric G. Miller <egm2 jps.net>,
  *               Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      user chooses transects path, and profile of raster data drawn
  * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
@@ -17,7 +16,6 @@
  *               for details.
  *
  *****************************************************************************/
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,8 +28,7 @@
 static char *mapname;
 static double min, max;
 
-struct point
-{
+struct point {
     double x, y;
     double d;
 };
@@ -48,37 +45,37 @@ static void get_region_range(int fd)
     max = -1e300;
 
     for (row = 0; row < nrows; row++) {
-	Rast_get_d_row(fd, buf, row);
-	for (col = 0; col < ncols; col++) {
-	    if (min > buf[col])
-		min = buf[col];
-	    if (max < buf[col])
-		max = buf[col];
-	}
+        Rast_get_d_row(fd, buf, row);
+        for (col = 0; col < ncols; col++) {
+            if (min > buf[col])
+                min = buf[col];
+            if (max < buf[col])
+                max = buf[col];
+        }
     }
 }
 
 static void get_map_range(void)
 {
     if (Rast_map_type(mapname, "") == CELL_TYPE) {
-	struct Range range;
-	CELL xmin, xmax;
+        struct Range range;
+        CELL xmin, xmax;
 
-	if (Rast_read_range(mapname, "", &range) <= 0)
-	    G_fatal_error(_("Unable to read range for %s"), mapname);
+        if (Rast_read_range(mapname, "", &range) <= 0)
+            G_fatal_error(_("Unable to read range for %s"), mapname);
 
-	Rast_get_range_min_max(&range, &xmin, &xmax);
+        Rast_get_range_min_max(&range, &xmin, &xmax);
 
-	max = xmax;
-	min = xmin;
+        max = xmax;
+        min = xmin;
     }
     else {
-	struct FPRange fprange;
+        struct FPRange fprange;
 
-	if (Rast_read_fp_range(mapname, "", &fprange) <= 0)
-	    G_fatal_error(_("Unable to read FP range for %s"), mapname);
+        if (Rast_read_fp_range(mapname, "", &fprange) <= 0)
+            G_fatal_error(_("Unable to read FP range for %s"), mapname);
 
-	Rast_get_fp_range_min_max(&fprange, &min, &max);
+        Rast_get_fp_range_min_max(&fprange, &min, &max);
     }
 }
 
@@ -124,8 +121,8 @@ static int get_cell(DCELL *result, int fd, double x, double y)
     DCELL *tmp;
 
     if (!row1) {
-	row1 = Rast_allocate_d_buf();
-	row2 = Rast_allocate_d_buf();
+        row1 = Rast_allocate_d_buf();
+        row2 = Rast_allocate_d_buf();
     }
 
     col = (int)floor(x - 0.5);
@@ -133,37 +130,42 @@ static int get_cell(DCELL *result, int fd, double x, double y)
     x -= col + 0.5;
     y -= row + 0.5;
 
-    if (row < 0 || row + 1 >= Rast_window_rows() ||
-	col < 0 || col + 1 >= Rast_window_cols()) {
-	Rast_set_d_null_value(result, 1);
-	return 0;
+    if (row < 0 || row + 1 >= Rast_window_rows() || col < 0 ||
+        col + 1 >= Rast_window_cols()) {
+        Rast_set_d_null_value(result, 1);
+        return 0;
     }
 
     if (cur_row != row) {
-	if (cur_row == row + 1) {
-	    tmp = row1; row1 = row2; row2 = tmp;
-	    Rast_get_d_row(fd, row1, row);
-	}
-	else if (cur_row == row - 1) {
-	    tmp = row1; row1 = row2; row2 = tmp;
-	    Rast_get_d_row(fd, row2, row + 1);
-	}
-	else {
-	    Rast_get_d_row(fd, row1, row);
-	    Rast_get_d_row(fd, row2, row + 1);
-	}
-	cur_row = row;
+        if (cur_row == row + 1) {
+            tmp = row1;
+            row1 = row2;
+            row2 = tmp;
+            Rast_get_d_row(fd, row1, row);
+        }
+        else if (cur_row == row - 1) {
+            tmp = row1;
+            row1 = row2;
+            row2 = tmp;
+            Rast_get_d_row(fd, row2, row + 1);
+        }
+        else {
+            Rast_get_d_row(fd, row1, row);
+            Rast_get_d_row(fd, row2, row + 1);
+        }
+        cur_row = row;
     }
 
-    if (Rast_is_d_null_value(&row1[col]) || Rast_is_d_null_value(&row1[col+1]) ||
-	Rast_is_d_null_value(&row2[col]) || Rast_is_d_null_value(&row2[col+1])) {
-	Rast_set_d_null_value(result, 1);
-	return 0;
+    if (Rast_is_d_null_value(&row1[col]) ||
+        Rast_is_d_null_value(&row1[col + 1]) ||
+        Rast_is_d_null_value(&row2[col]) ||
+        Rast_is_d_null_value(&row2[col + 1])) {
+        Rast_set_d_null_value(result, 1);
+        return 0;
     }
 
-    *result = Rast_interp_bilinear(x, y,
-				row1[col], row1[col+1],
-				row2[col], row2[col+1]);
+    *result = Rast_interp_bilinear(x, y, row1[col], row1[col + 1], row2[col],
+                                   row2[col + 1]);
 
     return 1;
 }
@@ -208,57 +210,58 @@ int main(int argc, char **argv)
     stored->description = _("Use map's range recorded range");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     mapname = map->answer;
 
     fd = Rast_open_old(mapname, "");
 
     if (stored->answer)
-	get_map_range();
+        get_map_range();
     else
-	get_region_range(fd);
+        get_region_range(fd);
 
     G_get_window(&window);
 
     num_points = 0;
     length = 0;
     for (i = 0; profile->answers[i]; i += 2) {
-	struct point *p;
-	double x, y;
+        struct point *p;
+        double x, y;
 
-	if (num_points >= max_points) {
-	    max_points = num_points + 100;
-	    points = G_realloc(points, max_points * sizeof(struct point));
-	}
+        if (num_points >= max_points) {
+            max_points = num_points + 100;
+            points = G_realloc(points, max_points * sizeof(struct point));
+        }
 
-	p = &points[num_points];
+        p = &points[num_points];
 
-	G_scan_easting( profile->answers[i+0], &x, G_projection());
-	G_scan_northing(profile->answers[i+1], &y, G_projection());
+        G_scan_easting(profile->answers[i + 0], &x, G_projection());
+        G_scan_northing(profile->answers[i + 1], &y, G_projection());
 
-	p->x = Rast_easting_to_col (x, &window);
-	p->y = Rast_northing_to_row(y, &window);
+        p->x = Rast_easting_to_col(x, &window);
+        p->y = Rast_northing_to_row(y, &window);
 
-	if (num_points > 0) {
-	    const struct point *prev = &points[num_points-1];
-	    double dx = fabs(p->x - prev->x);
-	    double dy = fabs(p->y - prev->y);
-	    double d = sqrt(dx * dx + dy * dy);
-	    length += d;
-	    p->d = length;
-	}
+        if (num_points > 0) {
+            const struct point *prev = &points[num_points - 1];
+            double dx = fabs(p->x - prev->x);
+            double dy = fabs(p->y - prev->y);
+            double d = sqrt(dx * dx + dy * dy);
 
-	num_points++;
+            length += d;
+            p->d = length;
+        }
+
+        num_points++;
     }
     points[0].d = 0;
 
     if (num_points < 2)
-	G_fatal_error(_("At least two points are required"));
+        G_fatal_error(_("At least two points are required"));
 
     /* establish connection with graphics driver */
     D_open_driver();
-    
+
     D_setup2(1, 0, 1.05, -0.05, -0.15, 1.05);
 
     plot_axes();
@@ -276,43 +279,42 @@ int main(int argc, char **argv)
     i = 0;
     last = 0;
     for (sx = 0; sx < 1; sx += D_get_d_to_u_xconv()) {
-	double d = length * (sx - l);
-	const struct point *p, *next;
-	double k, sy, x, y;
-	DCELL v;
+        double d = length * (sx - l);
+        const struct point *p, *next;
+        double k, sy, x, y;
+        DCELL v;
 
-	for (;;) {
-	    p = &points[i];
-	    next = &points[i + 1];
-	    k = (d - p->d) / (next->d - p->d);
-	    if (k < 1)
-		break;
-	    i++;
-	}
+        for (;;) {
+            p = &points[i];
+            next = &points[i + 1];
+            k = (d - p->d) / (next->d - p->d);
+            if (k < 1)
+                break;
+            i++;
+        }
 
-	x = p->x * (1 - k) + next->x * k;
-	y = p->y * (1 - k) + next->y * k;
+        x = p->x * (1 - k) + next->x * k;
+        y = p->y * (1 - k) + next->y * k;
 
-	if (!get_cell(&v, fd, x, y)) {
-	    last = 0;
-	    continue;
-	}
+        if (!get_cell(&v, fd, x, y)) {
+            last = 0;
+            continue;
+        }
 
-	sy = (v - min) / (max - min);
+        sy = (v - min) / (max - min);
 
-	if (last)
-	    D_cont_abs(sx, sy);
-	else
-	    D_move_abs(sx, sy);
+        if (last)
+            D_cont_abs(sx, sy);
+        else
+            D_move_abs(sx, sy);
 
-	last = 1;
+        last = 1;
     }
 
     D_end();
     D_stroke();
-    
+
     D_close_driver();
 
     exit(EXIT_SUCCESS);
 }
-

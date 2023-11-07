@@ -5,13 +5,13 @@
 
    \param[in] argc number of arguments
    \param[in] argv arguments array
-   \param[in] params GRASS paramenters
+   \param[in] params GRASS parameters
    \param[out] action mode selected tool
 
    \return 1
 */
 int parser(int argc, char *argv[], struct GParams *params,
-	   enum mode *action_mode)
+           enum mode *action_mode)
 {
     char *desc_tool, *desc_query, *desc_snap;
 
@@ -36,63 +36,62 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->tool->description = _("Tool");
     desc_tool = NULL;
     G_asprintf(&desc_tool,
-	       "create;%s;"
-	       "add;%s;"
-	       "delete;%s;"
-	       "move;%s;"
-	       "vertexmove;%s;"
-	       "vertexdel;%s;"
-	       "vertexadd;%s;"
-	       "merge;%s;"
-	       "break;%s;"
-	       "select;%s;"
-	       "catadd;%s;"
-	       "catdel;%s;"
-	       "copy;%s;"
-	       "snap;%s;"
-	       "flip;%s;"
-	       "connect;%s;"
-	       "extend;%s;"
-	       "extendstart;%s;"
-	       "extendend;%s;"
-	       "zbulk;%s;"
-	       "chtype;%s;"
-	       "areadel;%s",
-	       _("Create new (empty) vector map"),
-	       _("Add new features to existing vector map"),
-	       _("Delete selected features from vector map"),
-	       _("Move selected features in vector map"),
-	       _("Move vertex of selected vector lines"),
-	       _("Remove vertex from selected vector lines"),
-	       _("Add new vertex to selected vector lines"),
-	       _("Merge selected vector lines"),
-	       _("Break/split vector lines"),
-	       _("Select lines and print their ID's"),
-	       _("Set new categories to selected vector features "
-		 "for defined layer"),
-	       _("Delete categories from selected vector features "
-		 "for defined layer"),
-	       _("Copy selected features"),
-	       _("Snap vector features in given threshold"),
-	       _("Flip direction of selected vector lines"),
-	       _("Connect two lines"),
-	       _("Extend lines"),
-	       _("Extend start nodes"),
-	       _("Extend end nodes"),
-	       _("Z bulk-labeling (automated assignment of z coordinate to "
-		 "vector lines)"),
-	       _("Change feature type (point<->centroid, line<->boundary)"),
-	       _("Delete selected areas from vector map (based on selected centroids)"));
+               "create;%s;"
+               "add;%s;"
+               "delete;%s;"
+               "move;%s;"
+               "vertexmove;%s;"
+               "vertexdel;%s;"
+               "vertexadd;%s;"
+               "merge;%s;"
+               "break;%s;"
+               "select;%s;"
+               "catadd;%s;"
+               "catdel;%s;"
+               "copy;%s;"
+               "snap;%s;"
+               "flip;%s;"
+               "connect;%s;"
+               "extend;%s;"
+               "extendstart;%s;"
+               "extendend;%s;"
+               "zbulk;%s;"
+               "chtype;%s;"
+               "areadel;%s",
+               _("Create new (empty) vector map"),
+               _("Add new features to existing vector map"),
+               _("Delete selected features from vector map"),
+               _("Move selected features in vector map"),
+               _("Move vertex of selected vector lines"),
+               _("Remove vertex from selected vector lines"),
+               _("Add new vertex to selected vector lines"),
+               _("Merge selected vector lines"), _("Break/split vector lines"),
+               _("Select lines and print their ID's"),
+               _("Set new categories to selected vector features "
+                 "for defined layer"),
+               _("Delete categories from selected vector features "
+                 "for defined layer"),
+               _("Copy selected features"),
+               _("Snap vector features in given threshold"),
+               _("Flip direction of selected vector lines"),
+               _("Connect two lines"), _("Extend lines"),
+               _("Extend start nodes"), _("Extend end nodes"),
+               _("Z bulk-labeling (automated assignment of z coordinate to "
+                 "vector lines)"),
+               _("Change feature type (point<->centroid, line<->boundary)"),
+               _("Delete selected areas from vector map (based on selected "
+                 "centroids)"));
     params->tool->descriptions = desc_tool;
-    params->tool->options = "create,add,delete,copy,move,flip,catadd,catdel,"
-	"merge,break,snap,connect,extend,extendstart,extendend,chtype,"
-	"vertexadd,vertexdel,vertexmove,areadel,zbulk,select";
+    params->tool->options =
+        "create,add,delete,copy,move,flip,catadd,catdel,"
+        "merge,break,snap,connect,extend,extendstart,extendend,chtype,"
+        "vertexadd,vertexdel,vertexmove,areadel,zbulk,select";
 
     params->in = G_define_standard_option(G_OPT_F_INPUT);
     params->in->required = NO;
-    params->in->label = _("Name of file containing data in GRASS ASCII vector format");
-    params->in->description =
-	_("'-' for standard input");
+    params->in->label =
+        _("Name of file containing data in GRASS ASCII vector format");
+    params->in->description = _("'-' for standard input");
     params->in->guisection = _("Input");
 
     params->move = G_define_option();
@@ -102,7 +101,7 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->move->required = NO;
     params->move->multiple = NO;
     params->move->description =
-	_("Difference in x,y,z direction for moving feature or vertex");
+        _("Difference in x,y,z direction for moving feature or vertex");
 
     params->maxdist = G_define_option();
     params->maxdist->key = "threshold";
@@ -111,7 +110,7 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->maxdist->multiple = YES;
     params->maxdist->label = _("Threshold distance (coords,snap,query)");
     params->maxdist->description =
-	_("'-1' for threshold based on the current resolution settings");
+        _("'-1' for threshold based on the current resolution settings");
     params->maxdist->answer = "-1,0,0";
 
     params->id = G_define_standard_option(G_OPT_V_IDS);
@@ -157,15 +156,15 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->query->options = "length,dangle";
     params->query->label = _("Query tool");
     params->query->description =
-	_("For 'shorter' use negative threshold value, "
-	  "positive value for 'longer'");
+        _("For 'shorter' use negative threshold value, "
+          "positive value for 'longer'");
     desc_query = NULL;
     G_asprintf(&desc_query,
                "length;%s;"
-	       "dangle;%s",
-	       _("Select only lines or boundaries shorter"
-		 "/longer than threshold distance"),
-	       _("Select dangles shorter/longer than threshold distance"));
+               "dangle;%s",
+               _("Select only lines or boundaries shorter"
+                 "/longer than threshold distance"),
+               _("Select dangles shorter/longer than threshold distance"));
     params->query->descriptions = desc_query;
     params->query->guisection = _("Selection");
 
@@ -179,15 +178,15 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->snap->type = TYPE_STRING;
     params->snap->options = "no,node,vertex";
     params->snap->description =
-	_("Snap added or modified features in the given threshold to the nearest existing feature");
+        _("Snap added or modified features in the given threshold to the "
+          "nearest existing feature");
     desc_snap = NULL;
     G_asprintf(&desc_snap,
-	       "no;%s;"
-	       "node;%s;"
-	       "vertex;%s",
-	       _("Not apply snapping"),
-	       _("Snap only to node"),
-	       _("Allow snapping also to vertex"));
+               "no;%s;"
+               "node;%s;"
+               "vertex;%s",
+               _("Not apply snapping"), _("Snap only to node"),
+               _("Allow snapping also to vertex"));
     params->snap->descriptions = desc_snap;
     params->snap->answer = "no";
 
@@ -207,7 +206,7 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->close = G_define_flag();
     params->close->key = 'c';
     params->close->description =
-	_("Close added boundaries (using threshold distance)");
+        _("Close added boundaries (using threshold distance)");
 
     params->header = G_define_flag();
     params->header->key = 'n';
@@ -219,141 +218,142 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->move_first = G_define_flag();
     params->move_first->key = '1';
     params->move_first->description =
-	_("Modify only first found feature in bounding box");
+        _("Modify only first found feature in bounding box");
 
     params->extend_parallel = G_define_flag();
     params->extend_parallel->key = 'p';
     params->extend_parallel->description =
-	_("Connect parallel lines (using extend tools and threshold distance)");
+        _("Connect parallel lines (using extend tools and threshold distance)");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /* check for polygon param */
     if (params->poly->answers != NULL) {
-	int i = 0;
+        int i = 0;
 
-	while (params->poly->answers[i++]) ;
+        while (params->poly->answers[i++])
+            ;
 
-	if (i < 6)
-	    G_fatal_error(_("Polygon must have at least 3 coordinate pairs"));
+        if (i < 6)
+            G_fatal_error(_("Polygon must have at least 3 coordinate pairs"));
     }
 
     /*
        check that the given arguments makes sense together
      */
     if (strcmp(params->tool->answer, "create") == 0) {
-	*action_mode = MODE_CREATE;
+        *action_mode = MODE_CREATE;
     }
     else if (strcmp(params->tool->answer, "add") == 0) {
-	*action_mode = MODE_ADD;
+        *action_mode = MODE_ADD;
     }
     else if (strcmp(params->tool->answer, "delete") == 0) {
-	*action_mode = MODE_DEL;
+        *action_mode = MODE_DEL;
     }
     else if (strcmp(params->tool->answer, "move") == 0) {
-	*action_mode = MODE_MOVE;
+        *action_mode = MODE_MOVE;
     }
     else if (strcmp(params->tool->answer, "merge") == 0) {
-	*action_mode = MODE_MERGE;
+        *action_mode = MODE_MERGE;
     }
     else if (strcmp(params->tool->answer, "break") == 0) {
-	*action_mode = MODE_BREAK;
+        *action_mode = MODE_BREAK;
     }
     else if (strcmp(params->tool->answer, "connect") == 0) {
-	*action_mode = MODE_CONNECT;
+        *action_mode = MODE_CONNECT;
     }
     else if (strcmp(params->tool->answer, "extend") == 0) {
-	*action_mode = MODE_EXTEND;
+        *action_mode = MODE_EXTEND;
     }
     else if (strcmp(params->tool->answer, "extendstart") == 0) {
-	*action_mode = MODE_EXTEND_START;
+        *action_mode = MODE_EXTEND_START;
     }
     else if (strcmp(params->tool->answer, "extendend") == 0) {
-	*action_mode = MODE_EXTEND_END;
+        *action_mode = MODE_EXTEND_END;
     }
     else if (strcmp(params->tool->answer, "vertexadd") == 0) {
-	*action_mode = MODE_VERTEX_ADD;
+        *action_mode = MODE_VERTEX_ADD;
     }
     else if (strcmp(params->tool->answer, "vertexdel") == 0) {
-	*action_mode = MODE_VERTEX_DELETE;
+        *action_mode = MODE_VERTEX_DELETE;
     }
     else if (strcmp(params->tool->answer, "vertexmove") == 0) {
-	*action_mode = MODE_VERTEX_MOVE;
+        *action_mode = MODE_VERTEX_MOVE;
     }
     else if (strcmp(params->tool->answer, "select") == 0) {
-	*action_mode = MODE_SELECT;
+        *action_mode = MODE_SELECT;
     }
     else if (strcmp(params->tool->answer, "catadd") == 0) {
-	*action_mode = MODE_CATADD;
+        *action_mode = MODE_CATADD;
     }
     else if (strcmp(params->tool->answer, "catdel") == 0) {
-	*action_mode = MODE_CATDEL;
+        *action_mode = MODE_CATDEL;
     }
     else if (strcmp(params->tool->answer, "copy") == 0) {
-	*action_mode = MODE_COPY;
+        *action_mode = MODE_COPY;
     }
     else if (strcmp(params->tool->answer, "snap") == 0) {
-	*action_mode = MODE_SNAP;
+        *action_mode = MODE_SNAP;
     }
     else if (strcmp(params->tool->answer, "flip") == 0) {
-	*action_mode = MODE_FLIP;
+        *action_mode = MODE_FLIP;
     }
     else if (strcmp(params->tool->answer, "zbulk") == 0) {
-	*action_mode = MODE_ZBULK;
+        *action_mode = MODE_ZBULK;
     }
     else if (strcmp(params->tool->answer, "chtype") == 0) {
-	*action_mode = MODE_CHTYPE;
+        *action_mode = MODE_CHTYPE;
     }
     else if (strcmp(params->tool->answer, "areadel") == 0) {
-	*action_mode = MODE_AREA_DEL;
+        *action_mode = MODE_AREA_DEL;
     }
     else {
-	G_fatal_error(_("Operation '%s' not implemented"),
-		      params->tool->answer);
+        G_fatal_error(_("Operation '%s' not implemented"),
+                      params->tool->answer);
     }
 
     if ((*action_mode != MODE_CREATE && *action_mode != MODE_ADD &&
-	 *action_mode != MODE_ZBULK) && (params->cat->answers == NULL) &&
-	(params->coord->answers == NULL) && (params->poly->answers == NULL) &&
-	(params->id->answers == NULL) && (params->bbox->answers == NULL) &&
-	(params->where->answer == NULL) && (params->query->answer == NULL)) {
-	G_fatal_error(_("At least one option from %s must be specified"),
-		      "cats, ids, coords, bbox, polygon, where, query");
+         *action_mode != MODE_ZBULK) &&
+        (params->cat->answers == NULL) && (params->coord->answers == NULL) &&
+        (params->poly->answers == NULL) && (params->id->answers == NULL) &&
+        (params->bbox->answers == NULL) && (params->where->answer == NULL) &&
+        (params->query->answer == NULL)) {
+        G_fatal_error(_("At least one option from %s must be specified"),
+                      "cats, ids, coords, bbox, polygon, where, query");
     }
 
     if (*action_mode == MODE_MOVE || *action_mode == MODE_VERTEX_MOVE) {
-	if (params->move->answers == NULL) {
-	    G_fatal_error(_("Tool %s requires option %s"),
-			  params->tool->answer, params->move->key);
-	}
+        if (params->move->answers == NULL) {
+            G_fatal_error(_("Tool %s requires option %s"), params->tool->answer,
+                          params->move->key);
+        }
     }
 
-    if (*action_mode == MODE_VERTEX_ADD ||
-	*action_mode == MODE_VERTEX_DELETE ||
-	*action_mode == MODE_VERTEX_MOVE) {
-	if (params->coord->answers == NULL) {
-	    G_fatal_error(_("Tool %s requires option %s"),
-			  params->tool->answer, params->coord->key);
-	}
+    if (*action_mode == MODE_VERTEX_ADD || *action_mode == MODE_VERTEX_DELETE ||
+        *action_mode == MODE_VERTEX_MOVE) {
+        if (params->coord->answers == NULL) {
+            G_fatal_error(_("Tool %s requires option %s"), params->tool->answer,
+                          params->coord->key);
+        }
     }
 
     if (*action_mode == MODE_CATADD || *action_mode == MODE_CATDEL) {
-	if (params->cat->answers == NULL) {
-	    G_fatal_error(_("Tool %s requires option %s"),
-			  params->tool->answer, params->cat->key);
-	}
+        if (params->cat->answers == NULL) {
+            G_fatal_error(_("Tool %s requires option %s"), params->tool->answer,
+                          params->cat->key);
+        }
     }
 
     if (*action_mode == MODE_ZBULK) {
-	if (params->bbox->answers == NULL) {
-	    G_fatal_error(_("Tool %s requires option %s"),
-			  params->tool->answer, params->bbox->key);
-	}
-	if (params->zbulk->answers == NULL) {
-	    G_fatal_error(_("Tool %s requires option %s"),
-			  params->tool->answer, params->zbulk->key);
-	}
+        if (params->bbox->answers == NULL) {
+            G_fatal_error(_("Tool %s requires option %s"), params->tool->answer,
+                          params->bbox->key);
+        }
+        if (params->zbulk->answers == NULL) {
+            G_fatal_error(_("Tool %s requires option %s"), params->tool->answer,
+                          params->zbulk->key);
+        }
     }
 
     return 1;

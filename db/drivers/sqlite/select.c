@@ -1,4 +1,3 @@
-
 /**
  * \file select.c
  *
@@ -20,9 +19,9 @@
 #include "globals.h"
 #include "proto.h"
 
-
 /**
- * \fn int db__driver_open_select_cursor (dbString *sel, dbCursor *dbc, int mode)
+ * \fn int db__driver_open_select_cursor (dbString *sel, dbCursor *dbc, int
+ * mode)
  *
  * \brief Open SQLite cursor for select.
  *
@@ -32,7 +31,7 @@
  * \return int DB_FAILED on error; DB_OK on success
  */
 
-int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
+int db__driver_open_select_cursor(dbString *sel, dbCursor *dbc, int mode)
 {
     cursor *c;
     dbTable *table;
@@ -43,7 +42,7 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     /* allocate cursor */
     c = alloc_cursor();
     if (c == NULL)
-	return DB_FAILED;
+        return DB_FAILED;
 
     db_set_cursor_mode(dbc, mode);
     db_set_cursor_type_readonly(dbc);
@@ -56,46 +55,43 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
      * If the database schema has changed, sqlite can prepare a statement,
      * but sqlite can not step, the statement needs to be prepared anew again */
     while (1) {
-	ret = sqlite3_prepare(sqlite, str, -1, &(c->statement), &rest);
+        ret = sqlite3_prepare(sqlite, str, -1, &(c->statement), &rest);
 
-	if (ret != SQLITE_OK) {
-	    db_d_append_error("%s\n%s\n%s",
-			      _("Error in sqlite3_prepare():"),
-			      db_get_string(sel),
-			      (char *)sqlite3_errmsg(sqlite));
-	    db_d_report_error();
-	    return DB_FAILED;
-	}
+        if (ret != SQLITE_OK) {
+            db_d_append_error("%s\n%s\n%s", _("Error in sqlite3_prepare():"),
+                              db_get_string(sel),
+                              (char *)sqlite3_errmsg(sqlite));
+            db_d_report_error();
+            return DB_FAILED;
+        }
 
-	ret = sqlite3_step(c->statement);
-	/* get real result code */
-	ret = sqlite3_reset(c->statement);
+        ret = sqlite3_step(c->statement);
+        /* get real result code */
+        ret = sqlite3_reset(c->statement);
 
-	if (ret == SQLITE_SCHEMA) {
-	    sqlite3_finalize(c->statement);
-	    /* try again */
-	}
-	else if (ret != SQLITE_OK) {
-	    db_d_append_error("%s\n%s",
-			      _("Error in sqlite3_step():"),
-			      (char *)sqlite3_errmsg(sqlite));
-	    db_d_report_error();
-	    sqlite3_finalize(c->statement);
-	    return DB_FAILED;
-	}
-	else
-	    break;
+        if (ret == SQLITE_SCHEMA) {
+            sqlite3_finalize(c->statement);
+            /* try again */
+        }
+        else if (ret != SQLITE_OK) {
+            db_d_append_error("%s\n%s", _("Error in sqlite3_step():"),
+                              (char *)sqlite3_errmsg(sqlite));
+            db_d_report_error();
+            sqlite3_finalize(c->statement);
+            return DB_FAILED;
+        }
+        else
+            break;
     }
-    
+
     if (str)
-	G_free(str);
+        G_free(str);
 
     if (describe_table(c->statement, &table, c) == DB_FAILED) {
-	db_d_append_error("%s\n%s",
-			  _("Unable to describe table:"),
-			  (char *)sqlite3_errmsg(sqlite));
-	db_d_report_error();
-	return DB_FAILED;
+        db_d_append_error("%s\n%s", _("Unable to describe table:"),
+                          (char *)sqlite3_errmsg(sqlite));
+        db_d_report_error();
+        return DB_FAILED;
     }
 
     c->nrows = -1;

@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_closedb.c
- * 
+ *
  * \brief DBMI Library (driver) - close database connection
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -17,11 +17,11 @@
 #include "dbstubs.h"
 
 /*!
-  \brief Close database connection
+   \brief Close database connection
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
 int db_d_close_database(void)
 {
     int stat;
@@ -30,9 +30,9 @@ int db_d_close_database(void)
 
     /* see if a database is open */
     if (!db__test_database_open()) {
-	db_error("no database is open");
-	DB_SEND_FAILURE();
-	return DB_OK;
+        db_error("no database is open");
+        DB_SEND_FAILURE();
+        return DB_OK;
     };
     /* make sure all cursors are closed */
     db__close_all_cursors();
@@ -42,8 +42,8 @@ int db_d_close_database(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

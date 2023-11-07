@@ -36,7 +36,6 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 int main(int argc, char **argv)
 {
     char *map_name;
@@ -50,11 +49,10 @@ int main(int argc, char **argv)
     struct Categories cats;
     struct Colors colors;
     struct GModule *module;
-    struct Option *opt_rast2d, *opt_rast3d, *opt_color, *opt_lines,
-        *opt_thin, *opt_labelnum, *opt_at, *opt_use, *opt_range,
-        *opt_font, *opt_path, *opt_charset, *opt_fontsize, *opt_title,
-        *opt_ticks, *opt_tstep, *opt_brdcolor, *opt_bgcolor,
-        *opt_tit_fontsize, *opt_digits, *opt_units;
+    struct Option *opt_rast2d, *opt_rast3d, *opt_color, *opt_lines, *opt_thin,
+        *opt_labelnum, *opt_at, *opt_use, *opt_range, *opt_font, *opt_path,
+        *opt_charset, *opt_fontsize, *opt_title, *opt_ticks, *opt_tstep,
+        *opt_brdcolor, *opt_bgcolor, *opt_tit_fontsize, *opt_digits, *opt_units;
     struct Flag *hidestr, *hidenum, *hidenodata, *smooth, *flipit, *histo,
         *showtick, *showbg, *log_sc;
     double X0, X1, Y0, Y1;
@@ -131,8 +129,7 @@ int main(int argc, char **argv)
     opt_units->key = "units";
     opt_units->type = TYPE_STRING;
     opt_units->required = NO;
-    opt_units->description =
-            _("Units to display after labels (e.g. meters)");
+    opt_units->description = _("Units to display after labels (e.g. meters)");
     opt_units->guisection = _("Advanced");
 
     opt_labelnum = G_define_option();
@@ -172,18 +169,18 @@ int main(int argc, char **argv)
     opt_at = G_define_option();
     opt_at->key = "at";
     opt_at->key_desc = "bottom,top,left,right";
-    opt_at->type = TYPE_DOUBLE; /* needs to be TYPE_DOUBLE to get past options check */
+    opt_at->type =
+        TYPE_DOUBLE; /* needs to be TYPE_DOUBLE to get past options check */
     opt_at->required = NO;
     opt_at->options = "0-100";
-    opt_at->label =
-        _("Size and placement as percentage of screen coordinates "
-          "(0,0 is lower left)");
+    opt_at->label = _("Size and placement as percentage of screen coordinates "
+                      "(0,0 is lower left)");
     opt_at->description = opt_at->key_desc;
     opt_at->answer = NULL;
 
     opt_use = G_define_option();
     opt_use->key = "use";
-    opt_use->type = TYPE_DOUBLE;        /* string as it is fed through the parser? */
+    opt_use->type = TYPE_DOUBLE; /* string as it is fed through the parser? */
     opt_use->required = NO;
     opt_use->description =
         _("List of discrete category numbers/values for legend");
@@ -193,7 +190,7 @@ int main(int argc, char **argv)
     opt_range = G_define_option();
     opt_range->key = "range";
     opt_range->key_desc = "min,max";
-    opt_range->type = TYPE_DOUBLE;      /* should it be type_double or _string ?? */
+    opt_range->type = TYPE_DOUBLE; /* should it be type_double or _string ?? */
     opt_range->required = NO;
     opt_range->description =
         _("Use a subset of the map range for the legend (min,max)");
@@ -245,7 +242,6 @@ int main(int argc, char **argv)
     opt_bgcolor->answer = "white";
     opt_bgcolor->label = _("Background color");
     opt_bgcolor->guisection = _("Background");
-
 
     hidestr = G_define_flag();
     hidestr->key = 'v';
@@ -321,7 +317,8 @@ int main(int argc, char **argv)
     else
         units = "";
 
-    hide_catstr = hidestr->answer;      /* note hide_catstr gets changed and re-read below */
+    hide_catstr =
+        hidestr->answer; /* note hide_catstr gets changed and re-read below */
     hide_catnum = hidenum->answer;
     show_ticks = showtick->answer;
     hide_nodata = hidenodata->answer;
@@ -364,7 +361,7 @@ int main(int argc, char **argv)
     ticksCount = 0;
     if (opt_ticks->answer != NULL) {
         tick_values = (double *)G_calloc(100 + 1, sizeof(double));
-        for (i = 0; i < 100; i++)       /* fill with dummy values */
+        for (i = 0; i < 100; i++) /* fill with dummy values */
             tick_values[i] = 1.0 * (i + 1);
         tick_values[i] = 0;
 
@@ -374,11 +371,11 @@ int main(int argc, char **argv)
     }
 
     catlistCount = 0;
-    if (opt_use->answer != NULL) {      /* should this be answerS ? */
+    if (opt_use->answer != NULL) { /* should this be answerS ? */
         use_catlist = TRUE;
 
         catlist = (double *)G_calloc(100 + 1, sizeof(double));
-        for (i = 0; i < 100; i++)       /* fill with dummy values */
+        for (i = 0; i < 100; i++) /* fill with dummy values */
             catlist[i] = 1.0 * (i + 1);
         catlist[i] = 0;
 
@@ -390,9 +387,8 @@ int main(int argc, char **argv)
     else
         use_catlist = FALSE;
 
-
     UserRange = FALSE;
-    if (opt_range->answer != NULL) {    /* should this be answerS ? */
+    if (opt_range->answer != NULL) { /* should this be answerS ? */
         sscanf(opt_range->answers[0], "%lf", &UserRangeMin);
         sscanf(opt_range->answers[1], "%lf", &UserRangeMax);
         UserRange = TRUE;
@@ -416,7 +412,7 @@ int main(int argc, char **argv)
         if (Rast3d_read_colors(map_name, "", &colors) == -1)
             G_fatal_error(_("Color file for <%s> not available"), map_name);
 
-        fp = TRUE;              /* currently raster 3D is always floating point */
+        fp = TRUE; /* currently raster 3D is always floating point */
 
         Rast3d_read_cats(map_name, "", &cats);
     }
@@ -441,7 +437,7 @@ int main(int argc, char **argv)
     if (opt_fontsize->answer != NULL)
         fontsize = atof(opt_fontsize->answer);
     else
-        fontsize = 12;          /* dummy placeholder, should never be called */
+        fontsize = 12; /* dummy placeholder, should never be called */
 
     if (opt_charset->answer)
         D_encoding(opt_charset->answer);
@@ -457,7 +453,7 @@ int main(int argc, char **argv)
         sscanf(opt_at->answers[2], "%lf", &X0);
         sscanf(opt_at->answers[3], "%lf", &X1);
     }
-    else {                      /* default */
+    else { /* default */
         Y1 = 12;
         Y0 = 88;
         X0 = 3;
@@ -471,20 +467,20 @@ int main(int argc, char **argv)
 
     if (show_bg)
         draw(map_name, maptype, color, thin, lines, steps, fp, label_indent,
-             hide_catnum, hide_catstr, show_ticks, hide_nodata, do_smooth,
-             cats, colors, X0, X1, Y0, Y1, flip, UserRange, UserRangeMin,
+             hide_catnum, hide_catstr, show_ticks, hide_nodata, do_smooth, cats,
+             colors, X0, X1, Y0, Y1, flip, UserRange, UserRangeMin,
              UserRangeMax, catlist, catlistCount, use_catlist, ticksCount,
              fontsize, tit_fontsize, title, tick_values, t_step, colorb,
-             colorbg, opt_use, opt_at, opt_fontsize, opt_tstep,
-             opt_range, histo, hidestr, log_scale, 0, digits, units);
+             colorbg, opt_use, opt_at, opt_fontsize, opt_tstep, opt_range,
+             histo, hidestr, log_scale, 0, digits, units);
 
     draw(map_name, maptype, color, thin, lines, steps, fp, label_indent,
          hide_catnum, hide_catstr, show_ticks, hide_nodata, do_smooth, cats,
          colors, X0, X1, Y0, Y1, flip, UserRange, UserRangeMin, UserRangeMax,
-         catlist, catlistCount, use_catlist, ticksCount, fontsize,
-         tit_fontsize, title, tick_values, t_step, colorb, colorbg, opt_use,
-         opt_at, opt_fontsize, opt_tstep, opt_range, histo,
-         hidestr, log_scale, 1, digits, units);
+         catlist, catlistCount, use_catlist, ticksCount, fontsize, tit_fontsize,
+         title, tick_values, t_step, colorb, colorbg, opt_use, opt_at,
+         opt_fontsize, opt_tstep, opt_range, histo, hidestr, log_scale, 1,
+         digits, units);
 
     D_save_command(G_recreate_command());
     D_close_driver();

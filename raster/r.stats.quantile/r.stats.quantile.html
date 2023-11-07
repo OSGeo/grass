@@ -13,11 +13,15 @@ for floating-point cover maps. It provides quantile calculations,
 which are absent from
 <em><a href="r.stats.zonal.html">r.stats.zonal</a></em>.
 
+<p>
+Quantiles are calculated following algorithm 7 from Hyndman and Fan (1996),
+which is also the default in R and numpy.
+
 <h2>EXAMPLE</h2>
 
-In this example, the raster polygon map <tt>zipcodes</tt> in the North 
+In this example, the raster polygon map <tt>zipcodes</tt> in the North
 Carolina sample dataset is used to calculate quantile raster statistics using
-the <tt>elevation</tt> raster map: 
+the <tt>elevation</tt> raster map:
 
 <div class="code"><pre>
 g.region raster=zipcodes -p
@@ -37,6 +41,18 @@ r.stats.quantile base=zipcodes cover=elevation percentiles=25,50,75 \
   output=zipcodes_elev_q25,zipcodes_elev_q50,zipcodes_elev_q75
 </pre></div>
 
+<h2>REFERENCES</h2>
+
+<ul>
+<li>Hyndman and Fan (1996) <i>Sample Quantiles in Statistical
+Packages</i>, <b>American Statistician</b>. American Statistical
+Association. 50 (4): 361-365. DOI: <a
+href="https://doi.org/10.2307/2684934>10.2307/2684934">10.2307/2684934</a></li>
+<li><a
+href="https://www.itl.nist.gov/div898/handbook/prc/section2/prc262.htm"><i>Engineering
+Statistics Handbook: Percentile</i></a>, NIST</li>
+</ul>
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -45,13 +61,7 @@ r.stats.quantile base=zipcodes cover=elevation percentiles=25,50,75 \
 <a href="r.statistics.html">r.statistics</a>
 </em>
 
-
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Glynn Clements<br>
 Markus Metz
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

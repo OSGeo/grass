@@ -33,8 +33,6 @@
 
 #include "iclass_local_proto.h"
 
-
-
 /*!
    \brief Initialize signatures.
 
@@ -48,10 +46,13 @@ int I_iclass_init_signatures(struct Signature *sigs, struct Ref *refer)
 {
     G_debug(3, "I_iclass_init_signatures()");
 
-    if (!I_init_signatures(sigs, refer->nfiles))
-	return 1;		/* success */
+    I_init_signatures(sigs, refer->nfiles);
+    for (unsigned int i = refer->nfiles; i--;) {
+        sigs->semantic_labels[i] = Rast_get_semantic_label_or_name(
+            refer->file[i].name, refer->file[i].mapset);
+    }
 
-    return 0;
+    return 1;
 }
 
 /*!
@@ -61,7 +62,7 @@ int I_iclass_init_signatures(struct Signature *sigs, struct Ref *refer)
    \param statistics pointer to statistics structure
  */
 void I_iclass_add_signature(struct Signature *sigs,
-			    IClass_statistics * statistics)
+                            IClass_statistics *statistics)
 {
     int sn;
 
@@ -88,10 +89,10 @@ void I_iclass_add_signature(struct Signature *sigs,
     sigs->sig[sn - 1].b = b;
 
     for (b1 = 0; b1 < sigs->nbands; b1++) {
-	sigs->sig[sn - 1].mean[b1] = statistics->band_mean[b1];
-	for (b2 = 0; b2 <= b1; b2++) {
-	    sigs->sig[sn - 1].var[b1][b2] = var_signature(statistics, b1, b2);
-	}
+        sigs->sig[sn - 1].mean[b1] = statistics->band_mean[b1];
+        for (b2 = 0; b2 <= b1; b2++) {
+            sigs->sig[sn - 1].var[b1][b2] = var_signature(statistics, b1, b2);
+        }
     }
 }
 
@@ -99,26 +100,20 @@ void I_iclass_add_signature(struct Signature *sigs,
    \brief Write signtures to signature file.
 
    \param sigs pointer to signatures
-   \param group image group
-   \param sub_group image subgroup
    \param file_name name of signature file
 
    \return 1 on success
    \return 0 on failure
  */
-int I_iclass_write_signatures(struct Signature *sigs, const char *group,
-			      const char *sub_group, const char *file_name)
+int I_iclass_write_signatures(struct Signature *sigs, const char *file_name)
 {
     FILE *outsig_fd;
 
-    G_debug(3, "I_write_signatures(): group=%s, file_name=%s", group,
-	    file_name);
+    G_debug(3, "I_write_signatures(): file_name=%s", file_name);
 
-    if (!
-	(outsig_fd =
-	 I_fopen_signature_file_new(group, sub_group, file_name))) {
-	G_warning(_("Unable to open output signature file '%s'"), file_name);
-	return 0;
+    if (!(outsig_fd = I_fopen_signature_file_new(file_name))) {
+        G_warning(_("Unable to open output signature file '%s'"), file_name);
+        return 0;
     }
 
     I_write_signatures(outsig_fd, sigs);

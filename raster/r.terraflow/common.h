@@ -1,9 +1,9 @@
 /****************************************************************************
- * 
- *  MODULE:	r.terraflow
+ *
+ *  MODULE:        r.terraflow
  *
  *  COPYRIGHT (C) 2007 Laura Toma
- *   
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -15,7 +15,6 @@
  *  GNU General Public License for more details.
  *
  *****************************************************************************/
-
 
 #ifndef COMMON_H
 #define COMMON_H
@@ -33,13 +32,10 @@ extern "C" {
 #include <grass/glocale.h>
 }
 
-
-
 extern statsRecorder *stats;     /* stats file */
-extern userOptions *opt;          /* command-line options */
-extern struct  Cell_head *region; /* header of the region */
+extern userOptions *opt;         /* command-line options */
+extern struct Cell_head *region; /* header of the region */
 extern dimension_type nrows, ncols;
-
 
 #define MARKER(s) (stats->comment(__FILE__ ":" s))
 #define STRACE(s) MARKER(s)
@@ -51,15 +47,15 @@ size_t parse_number(const char *s);
 #ifdef USE_LARGEMEM
 
 class LargeMemory {
-  static void *ptr[LM_HIST];
-  static size_t len[LM_HIST];
-  static int next;
+    static void *ptr[LM_HIST];
+    static size_t len[LM_HIST];
+    static int next;
+
 public:
-  static void *alloc(size_t);
-  static void free(void *);
+    static void *alloc(size_t);
+    static void free(void *);
 };
 
 #endif /* USE_LARGEMEM */
 
 #endif
-

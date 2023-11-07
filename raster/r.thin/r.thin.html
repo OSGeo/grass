@@ -1,9 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.thin</em> scans the named <em>input</em> raster map layer and 
-thins non-NULL cells that denote linear features into linear features 
-having a single cell width. Raster lines often need to be thinned 
-(skeletonizing raster features) to a single pixel width before they can 
+<em>r.thin</em> scans the named <em>input</em> raster map layer and
+thins non-NULL cells that denote linear features into linear features
+having a single cell width. Raster lines often need to be thinned
+(skeletonizing raster features) to a single pixel width before they can
 be transformed to vector data.
 
 <p>
@@ -26,7 +26,7 @@ output map.
 <h2>NOTES</h2>
 
 <em>r.thin</em> only creates raster map layers. In order to
-create a vector map, the user will need to run 
+create a vector map, the user will need to run
 <em><a href="r.to.vect.html">r.to.vect</a></em>
 on the resultant raster map.
 
@@ -62,8 +62,8 @@ converge in &lt;= iterations.
 
 <h2>EXAMPLE</h2>
 
-To vectorize the raster map <em>streams_derived</em> in the North 
-Carolina sample dataset that represents the stream network derived from 
+To vectorize the raster map <em>streams_derived</em> in the North
+Carolina sample dataset that represents the stream network derived from
 the 10m resolution DEM by <em>r.watershed</em>, run:
 
 <div class="code"><pre>
@@ -120,14 +120,9 @@ d.vect streams color=blue width=2
 <a href="v.build.html">v.build</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Olga Waupotitsch, U.S.Army Construction Engineering Research Laboratory
 
 <p>The code for finding the bounding box as well as input/output code
 was written by Mike Baba (DBA Systems, 1990) and Jean Ezell (USACERL, 1988).
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

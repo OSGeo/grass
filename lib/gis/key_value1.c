@@ -23,8 +23,9 @@
 struct Key_Value *G_create_key_value(void)
 {
     struct Key_Value *kv = G_malloc(sizeof(struct Key_Value));
+
     G_zero(kv, sizeof(struct Key_Value));
-    
+
     return kv;
 }
 
@@ -40,34 +41,34 @@ void G_set_key_value(const char *key, const char *value, struct Key_Value *kv)
     int n;
 
     if (!key)
-	return;
+        return;
 
     for (n = 0; n < kv->nitems; n++)
-	if (strcmp(key, kv->key[n]) == 0)
-	    break;
+        if (strcmp(key, kv->key[n]) == 0)
+            break;
 
     if (n == kv->nitems) {
-	if (n >= kv->nalloc) {
-	    size_t size;
+        if (n >= kv->nalloc) {
+            size_t size;
 
-	    if (kv->nalloc <= 0)
-		kv->nalloc = 8;
-	    else
-		kv->nalloc *= 2;
+            if (kv->nalloc <= 0)
+                kv->nalloc = 8;
+            else
+                kv->nalloc *= 2;
 
-	    size = kv->nalloc * sizeof(char *);
-	    kv->key = G_realloc(kv->key, size);
-	    kv->value = G_realloc(kv->value, size);
-	}
+            size = kv->nalloc * sizeof(char *);
+            kv->key = G_realloc(kv->key, size);
+            kv->value = G_realloc(kv->value, size);
+        }
 
-	kv->key[n] = G_store(key);
-	kv->value[n] = G_store(value);
-	kv->nitems++;
-	return;
+        kv->key[n] = G_store(key);
+        kv->value[n] = G_store(value);
+        kv->nitems++;
+        return;
     }
 
     if (kv->value[n])
-	G_free(kv->value[n]);
+        G_free(kv->value[n]);
 
     kv->value[n] = value ? G_store(value) : NULL;
 }
@@ -86,12 +87,12 @@ const char *G_find_key_value(const char *key, const struct Key_Value *kv)
     int n;
 
     if (!kv)
-	return NULL;
-    
+        return NULL;
+
     for (n = 0; n < kv->nitems; n++)
-	if (strcmp(key, kv->key[n]) == 0)
-	    return kv->value[n][0] ? kv->value[n] : NULL;
-    
+        if (strcmp(key, kv->key[n]) == 0)
+            return kv->value[n][0] ? kv->value[n] : NULL;
+
     return NULL;
 }
 
@@ -105,15 +106,15 @@ void G_free_key_value(struct Key_Value *kv)
     int n;
 
     if (!kv)
-	return;
+        return;
 
     for (n = 0; n < kv->nitems; n++) {
-	G_free(kv->key[n]);
-	G_free(kv->value[n]);
+        G_free(kv->key[n]);
+        G_free(kv->value[n]);
     }
     G_free(kv->key);
     G_free(kv->value);
-    kv->nitems = 0;		/* just for safe measure */
+    kv->nitems = 0; /* just for safe measure */
     kv->nalloc = 0;
     G_free(kv);
 }

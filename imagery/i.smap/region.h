@@ -1,13 +1,11 @@
-struct Region
-{
+struct Region {
     int xmin, xmax;
     int ymin, ymax;
-    struct Free
-    {
-	int left;
-	int right;
-	int top;
-	int bottom;
+    struct Free {
+        int left;
+        int right;
+        int top;
+        int bottom;
     } free;
 };
 
@@ -20,8 +18,8 @@ void free_cubic_pyramid(char *, int, int, int);
 int levels(int, int);
 
 /* interp.c */
-void seq_MAP(unsigned char ***, struct Region *, LIKELIHOOD ****, int,
-	     double *, float **);
+void seq_MAP(unsigned char ***, struct Region *, LIKELIHOOD ****, int, double *,
+             float **);
 void MLE(unsigned char **, LIKELIHOOD ***, struct Region *, int, float **);
 
 /* reg_util.c */

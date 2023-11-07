@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       ps.map
@@ -54,9 +53,6 @@ struct scalebar sb;
 struct comment cmt;
 struct PS_group grp;
 
-
-
-
 FILE *tracefd;
 FILE *inputfd;
 int do_mapinfo;
@@ -101,21 +97,21 @@ int main(int argc, char *argv[])
 
     pflag = G_define_flag();
     pflag->key = 'p';
-    pflag->description =
-	_("List paper formats (name width height left right top bottom(margin))");
+    pflag->description = _(
+        "List paper formats (name width height left right top bottom(margin))");
     pflag->suppress_required = YES;
     pflag->guisection = _("Utility");
 
     eflag = G_define_flag();
     eflag->key = 'e';
     eflag->description =
-	_("Create EPS (Encapsulated PostScript) instead of PostScript file");
+        _("Create EPS (Encapsulated PostScript) instead of PostScript file");
     eflag->guisection = _("Output settings");
 
     bflag = G_define_flag();
     bflag->key = 'b';
-    bflag->description =
-	_("Describe map-box's position on the page and exit (inches from top-left of paper)");
+    bflag->description = _("Describe map-box's position on the page and exit "
+                           "(inches from top-left of paper)");
     bflag->suppress_required = YES;
     bflag->guisection = _("Utility");
 
@@ -135,8 +131,7 @@ int main(int argc, char *argv[])
     copies->guisection = _("Output settings");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
-
+        exit(EXIT_FAILURE);
 
     /* PS.map_* variables are set to 0 (not defined) and then may be
      * reset by 'maploc'.  When script is read, main() should call
@@ -146,8 +141,8 @@ int main(int argc, char *argv[])
 
     /* Print paper sizes to stdout */
     if (pflag->answer) {
-	print_papers();
-	exit(EXIT_SUCCESS);
+        print_papers();
+        exit(EXIT_SUCCESS);
     }
 
     rotate_plot = rflag->answer;
@@ -199,42 +194,42 @@ int main(int argc, char *argv[])
 
     /* arguments */
     if (input_file->answer) {
-	if (strcmp(input_file->answer, "-")) {
-	    inputfd = fopen(input_file->answer, "r");
-	    if (!inputfd)
-		G_fatal_error(_("Unable to open file '%s': %s"),
-			      input_file->answer, strerror(errno));
-	}
-	else {
-	    inputfd = stdin;
-	}
+        if (strcmp(input_file->answer, "-")) {
+            inputfd = fopen(input_file->answer, "r");
+            if (!inputfd)
+                G_fatal_error(_("Unable to open file '%s': %s"),
+                              input_file->answer, strerror(errno));
+        }
+        else {
+            inputfd = stdin;
+        }
     }
     else {
-	G_fatal_error(_("Required parameter <%s> not set:\n\t(%s)"),
-		      input_file->key, input_file->label);
+        G_fatal_error(_("Required parameter <%s> not set:\n\t(%s)"),
+                      input_file->key, input_file->label);
     }
 
     if (copies->answer) {
-	if (sscanf(copies->answer, "%d", &ps_copies) != 1) {
-	    ps_copies = 1;
-	    error(copies->answer, "", _("illegal copies request"));
-	}
-	copies_set = 1;
+        if (sscanf(copies->answer, "%d", &ps_copies) != 1) {
+            ps_copies = 1;
+            error(copies->answer, "", _("illegal copies request"));
+        }
+        copies_set = 1;
     }
 
     if (!bflag->answer) {
-	if (output_file->answer) {
-	    if ((PS.fp = fopen(output_file->answer, "w")) == NULL)
-		G_fatal_error("Unable to create file '%s': %s",
-			      output_file->answer, strerror(errno));
-	}
-	else {
-	    G_fatal_error(_("Required parameter <%s> not set:\n\t(%s)"),
-			  output_file->key, output_file->description);
-	}
+        if (output_file->answer) {
+            if ((PS.fp = fopen(output_file->answer, "w")) == NULL)
+                G_fatal_error("Unable to create file '%s': %s",
+                              output_file->answer, strerror(errno));
+        }
+        else {
+            G_fatal_error(_("Required parameter <%s> not set:\n\t(%s)"),
+                          output_file->key, output_file->description);
+        }
     }
     else
-	PS.fp = NULL;
+        PS.fp = NULL;
 
     /* get current mapset */
     PS.cell_mapset = G_mapset();
@@ -248,12 +243,12 @@ int main(int argc, char *argv[])
     reset_map_location();
 
     if (bflag->answer) {
-	map_setup();
-	fprintf(stdout, "bbox=%.3f,%.3f,%.3f,%.3f\n", PS.map_left / 72.0,
-		PS.page_height - (PS.map_bot / 72.0), PS.map_right / 72.0,
-		PS.page_height - (PS.map_top / 72.0));
-		/* +/- 0.5 ? see ps.map.c brd.* */
-	exit(EXIT_SUCCESS);
+        map_setup();
+        fprintf(stdout, "bbox=%.3f,%.3f,%.3f,%.3f\n", PS.map_left / 72.0,
+                PS.page_height - (PS.map_bot / 72.0), PS.map_right / 72.0,
+                PS.page_height - (PS.map_top / 72.0));
+        /* +/- 0.5 ? see ps.map.c brd.* */
+        exit(EXIT_SUCCESS);
     }
 
     /* write the PostScript output file */
@@ -263,16 +258,16 @@ int main(int argc, char *argv[])
     /* cleanup the tempfiles */
     unlink(ps_mask_file);
     if (PS.plfile)
-	unlink(PS.plfile);
+        unlink(PS.plfile);
     if (PS.commentfile)
-	unlink(PS.commentfile);
-    /*    if(sessionfile) unlink(sessionfile);    created in session.c (how to remove?) */
+        unlink(PS.commentfile);
+    /*    if(sessionfile) unlink(sessionfile);    created in session.c (how to
+     * remove?) */
     if (labels.other)
-	unlink(labels.other);
+        unlink(labels.other);
 
     G_done_msg(_("PostScript file '%s' successfully written."),
-	       output_file->answer);
+               output_file->answer);
 
     exit(EXIT_SUCCESS);
 }
-

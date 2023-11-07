@@ -19,10 +19,9 @@
 
 /* convert type "RASTER_MAP_TYPE" into index */
 #define F2I(map_type) \
-	(map_type == CELL_TYPE ? 0 : (map_type == FCELL_TYPE ? 1 : 2))
+    (map_type == CELL_TYPE ? 0 : (map_type == FCELL_TYPE ? 1 : 2))
 
-static const int type_size[3] =
-    { sizeof(CELL), sizeof(FCELL), sizeof(DCELL) };
+static const int type_size[3] = {sizeof(CELL), sizeof(FCELL), sizeof(DCELL)};
 
 /*!
  * \brief Returns size of a raster cell in bytes.
@@ -63,8 +62,8 @@ void *Rast_allocate_buf(RASTER_MAP_TYPE data_type)
  * Allocate an array of CELL based on the number of columns in the
  * current region.
  *
- * This routine allocates a buffer of type CELL just large enough to 
- * hold one row of raster data based on the number of columns in the 
+ * This routine allocates a buffer of type CELL just large enough to
+ * hold one row of raster data based on the number of columns in the
  * active region.
  *
  \code
@@ -81,20 +80,20 @@ void *Rast_allocate_buf(RASTER_MAP_TYPE data_type)
  */
 CELL *Rast_allocate_c_buf(void)
 {
-    return (CELL *) G_calloc(Rast_window_cols() + 1, sizeof(CELL));
+    return (CELL *)G_calloc(Rast_window_cols() + 1, sizeof(CELL));
 }
 
 /*!
  * \brief Allocates memory for a raster map of type FCELL.
  *
- * Allocate an array of FCELL based on the number of columns in the 
+ * Allocate an array of FCELL based on the number of columns in the
  * current region.
  *
  * \return pointer to allocated buffer
  */
 FCELL *Rast_allocate_f_buf(void)
 {
-    return (FCELL *) G_calloc(Rast_window_cols() + 1, sizeof(FCELL));
+    return (FCELL *)G_calloc(Rast_window_cols() + 1, sizeof(FCELL));
 }
 
 /*!
@@ -107,13 +106,13 @@ FCELL *Rast_allocate_f_buf(void)
  */
 DCELL *Rast_allocate_d_buf(void)
 {
-    return (DCELL *) G_calloc(Rast_window_cols() + 1, sizeof(DCELL));
+    return (DCELL *)G_calloc(Rast_window_cols() + 1, sizeof(DCELL));
 }
 
 /*!
  * \brief Allocates memory for a null buffer.
  *
- * Allocate an array of char based on the number of columns in the 
+ * Allocate an array of char based on the number of columns in the
  * current region.
  *
  * \return pointer to allocated buffer
@@ -129,13 +128,13 @@ char *Rast_allocate_null_buf(void)
  * Allocates an array of unsigned char based on <i>cols</i>.
  *
  * \param cols number of columns in region
- * 
+ *
  * \return pointer to allocated buffer
  */
 unsigned char *Rast__allocate_null_bits(int cols)
 {
     return (unsigned char *)G_calloc(Rast__null_bitstream_size(cols) + 1,
-				     sizeof(unsigned char));
+                                     sizeof(unsigned char));
 }
 
 /*!
@@ -143,13 +142,13 @@ unsigned char *Rast__allocate_null_bits(int cols)
  *
  * \param cols number of columns
  *
- * \return size of null bistream
+ * \return size of null bitstream
  */
 int Rast__null_bitstream_size(int cols)
 {
     if (cols <= 0)
-	G_fatal_error(_("Rast__null_bitstream_size: cols (%d) is negative"),
-		      cols);
+        G_fatal_error(_("Rast__null_bitstream_size: cols (%d) is negative"),
+                      cols);
 
     return (cols + 7) / 8;
 }
@@ -161,24 +160,23 @@ void *Rast_allocate_input_buf(RASTER_MAP_TYPE data_type)
 
 CELL *Rast_allocate_c_input_buf(void)
 {
-    return (CELL *) G_calloc(Rast_input_window_cols() + 1, sizeof(CELL));
+    return (CELL *)G_calloc(Rast_input_window_cols() + 1, sizeof(CELL));
 }
 
 FCELL *Rast_allocate_f_input_buf(void)
 {
-    return (FCELL *) G_calloc(Rast_input_window_cols() + 1, sizeof(FCELL));
+    return (FCELL *)G_calloc(Rast_input_window_cols() + 1, sizeof(FCELL));
 }
 
 DCELL *Rast_allocate_d_input_buf(void)
 {
-    return (DCELL *) G_calloc(Rast_input_window_cols() + 1, sizeof(DCELL));
+    return (DCELL *)G_calloc(Rast_input_window_cols() + 1, sizeof(DCELL));
 }
 
 char *Rast_allocate_null_input_buf(void)
 {
     return (char *)G_calloc(Rast_input_window_cols() + 1, sizeof(char));
 }
-
 
 void *Rast_allocate_output_buf(RASTER_MAP_TYPE data_type)
 {
@@ -187,17 +185,17 @@ void *Rast_allocate_output_buf(RASTER_MAP_TYPE data_type)
 
 CELL *Rast_allocate_c_output_buf(void)
 {
-    return (CELL *) G_calloc(Rast_output_window_cols() + 1, sizeof(CELL));
+    return (CELL *)G_calloc(Rast_output_window_cols() + 1, sizeof(CELL));
 }
 
 FCELL *Rast_allocate_f_output_buf(void)
 {
-    return (FCELL *) G_calloc(Rast_output_window_cols() + 1, sizeof(FCELL));
+    return (FCELL *)G_calloc(Rast_output_window_cols() + 1, sizeof(FCELL));
 }
 
 DCELL *Rast_allocate_d_output_buf(void)
 {
-    return (DCELL *) G_calloc(Rast_output_window_cols() + 1, sizeof(DCELL));
+    return (DCELL *)G_calloc(Rast_output_window_cols() + 1, sizeof(DCELL));
 }
 
 char *Rast_allocate_null_output_buf(void)

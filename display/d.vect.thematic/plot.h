@@ -1,7 +1,6 @@
 /* TODO: should use 24bit instead of 16 colors, maybe implement
    predefined color tables? */
-struct rgb_color
-{
+struct rgb_color {
     unsigned char R, G, B;
 };
 
@@ -15,8 +14,8 @@ extern struct rgb_color palette[16];
 #define DISP_ATTR  0x10
 #define DISP_ZCOOR 0x20
 
-#define RENDER_DP	2
-#define RENDER_DPC	3
-#define RENDER_DPL	4
+#define RENDER_DP  2
+#define RENDER_DPC 3
+#define RENDER_DPL 4
 
 extern int render;

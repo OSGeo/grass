@@ -34,19 +34,19 @@
    with comparison function |compare| using parameter |param|
    and memory allocator |allocator|.
    Returns |NULL| if memory allocation failed. */
-struct tavl_table *tavl_create(tavl_comparison_func * compare, void *param,
-			       struct libavl_allocator *allocator)
+struct tavl_table *tavl_create(tavl_comparison_func *compare, void *param,
+                               struct libavl_allocator *allocator)
 {
     struct tavl_table *tree;
 
     assert(compare != NULL);
 
     if (allocator == NULL)
-	allocator = &tavl_allocator_default;
+        allocator = &tavl_allocator_default;
 
     tree = allocator->libavl_malloc(allocator, sizeof *tree);
     if (tree == NULL)
-	return NULL;
+        return NULL;
 
     tree->tavl_root = NULL;
     tree->tavl_compare = compare;
@@ -67,17 +67,17 @@ void *tavl_find(const struct tavl_table *tree, const void *item)
 
     p = tree->tavl_root;
     while (p != NULL) {
-	int cmp, dir;
+        int cmp, dir;
 
-	cmp = tree->tavl_compare(item, p->tavl_data, tree->tavl_param);
-	if (cmp == 0)
-	    return p->tavl_data;
+        cmp = tree->tavl_compare(item, p->tavl_data, tree->tavl_param);
+        if (cmp == 0)
+            return p->tavl_data;
 
-	dir = cmp > 0;
-	if (p->tavl_tag[dir] == TAVL_CHILD)
-	    p = p->tavl_link[dir];
-	else
-	    p = NULL;
+        dir = cmp > 0;
+        if (p->tavl_tag[dir] == TAVL_CHILD)
+            p = p->tavl_link[dir];
+        else
+            p = NULL;
     }
 
     return NULL;
@@ -89,14 +89,15 @@ void *tavl_find(const struct tavl_table *tree, const void *item)
    Returns |NULL| in case of memory allocation failure. */
 void **tavl_probe(struct tavl_table *tree, void *item)
 {
-    struct tavl_node *y, *z;	/* Top node to update balance factor, and parent. */
-    struct tavl_node *p, *q;	/* Iterator, and parent. */
-    struct tavl_node *n;	/* Newly inserted node. */
-    struct tavl_node *w;	/* New root of rebalanced subtree. */
-    int dir;			/* Direction to descend. */
+    struct tavl_node *y,
+        *z; /* Top node to update balance factor, and parent. */
+    struct tavl_node *p, *q; /* Iterator, and parent. */
+    struct tavl_node *n;     /* Newly inserted node. */
+    struct tavl_node *w;     /* New root of rebalanced subtree. */
+    int dir;                 /* Direction to descend. */
 
-    unsigned char da[TAVL_MAX_HEIGHT];	/* Cached comparison results. */
-    int k = 0;			/* Number of cached results. */
+    unsigned char da[TAVL_MAX_HEIGHT]; /* Cached comparison results. */
+    int k = 0;                         /* Number of cached results. */
 
     assert(tree != NULL && item != NULL);
 
@@ -105,33 +106,32 @@ void **tavl_probe(struct tavl_table *tree, void *item)
     dir = 0;
     q = z, p = y;
     while (p != NULL) {
-	int cmp =
-	    tree->tavl_compare(item, p->tavl_data, tree->tavl_param);
-	if (cmp == 0)
-	    return &p->tavl_data;
+        int cmp = tree->tavl_compare(item, p->tavl_data, tree->tavl_param);
+        if (cmp == 0)
+            return &p->tavl_data;
 
-	if (p->tavl_balance != 0)
-	    z = q, y = p, k = 0;
-	da[k++] = dir = cmp > 0;
+        if (p->tavl_balance != 0)
+            z = q, y = p, k = 0;
+        da[k++] = dir = cmp > 0;
 
-	if (p->tavl_tag[dir] == TAVL_THREAD)
-	    break;
-	q = p, p = p->tavl_link[dir];
+        if (p->tavl_tag[dir] == TAVL_THREAD)
+            break;
+        q = p, p = p->tavl_link[dir];
     }
 
     n = tree->tavl_alloc->libavl_malloc(tree->tavl_alloc, sizeof *n);
     if (n == NULL)
-	return NULL;
+        return NULL;
 
     tree->tavl_count++;
     n->tavl_data = item;
     n->tavl_tag[0] = n->tavl_tag[1] = TAVL_THREAD;
     n->tavl_balance = 0;
     if (y == NULL) {
-	n->tavl_link[0] = n->tavl_link[1] = NULL;
-	tree->tavl_root = n;
+        n->tavl_link[0] = n->tavl_link[1] = NULL;
+        tree->tavl_root = n;
 
-	return &n->tavl_data;
+        return &n->tavl_data;
     }
     n->tavl_link[dir] = p->tavl_link[dir];
     n->tavl_link[!dir] = p;
@@ -140,97 +140,97 @@ void **tavl_probe(struct tavl_table *tree, void *item)
 
     p = y, k = 0;
     while (p != n) {
-	if (da[k] == 0)
-	    p->tavl_balance--;
-	else
-	    p->tavl_balance++;
-	p = p->tavl_link[da[k]], k++;
+        if (da[k] == 0)
+            p->tavl_balance--;
+        else
+            p->tavl_balance++;
+        p = p->tavl_link[da[k]], k++;
     }
 
     if (y->tavl_balance == -2) {
-	struct tavl_node *x = y->tavl_link[0];
+        struct tavl_node *x = y->tavl_link[0];
 
-	if (x->tavl_balance == -1) {
-	    w = x;
-	    if (x->tavl_tag[1] == TAVL_THREAD) {
-		x->tavl_tag[1] = TAVL_CHILD;
-		y->tavl_tag[0] = TAVL_THREAD;
-		y->tavl_link[0] = x;
-	    }
-	    else
-		y->tavl_link[0] = x->tavl_link[1];
-	    x->tavl_link[1] = y;
-	    x->tavl_balance = y->tavl_balance = 0;
-	}
-	else {
-	    assert(x->tavl_balance == +1);
-	    w = x->tavl_link[1];
-	    x->tavl_link[1] = w->tavl_link[0];
-	    w->tavl_link[0] = x;
-	    y->tavl_link[0] = w->tavl_link[1];
-	    w->tavl_link[1] = y;
-	    if (w->tavl_balance == -1)
-		x->tavl_balance = 0, y->tavl_balance = +1;
-	    else if (w->tavl_balance == 0)
-		x->tavl_balance = y->tavl_balance = 0;
-	    else		/* |w->tavl_balance == +1| */
-		x->tavl_balance = -1, y->tavl_balance = 0;
-	    w->tavl_balance = 0;
-	    if (w->tavl_tag[0] == TAVL_THREAD) {
-		x->tavl_tag[1] = TAVL_THREAD;
-		x->tavl_link[1] = w;
-		w->tavl_tag[0] = TAVL_CHILD;
-	    }
-	    if (w->tavl_tag[1] == TAVL_THREAD) {
-		y->tavl_tag[0] = TAVL_THREAD;
-		y->tavl_link[0] = w;
-		w->tavl_tag[1] = TAVL_CHILD;
-	    }
-	}
+        if (x->tavl_balance == -1) {
+            w = x;
+            if (x->tavl_tag[1] == TAVL_THREAD) {
+                x->tavl_tag[1] = TAVL_CHILD;
+                y->tavl_tag[0] = TAVL_THREAD;
+                y->tavl_link[0] = x;
+            }
+            else
+                y->tavl_link[0] = x->tavl_link[1];
+            x->tavl_link[1] = y;
+            x->tavl_balance = y->tavl_balance = 0;
+        }
+        else {
+            assert(x->tavl_balance == +1);
+            w = x->tavl_link[1];
+            x->tavl_link[1] = w->tavl_link[0];
+            w->tavl_link[0] = x;
+            y->tavl_link[0] = w->tavl_link[1];
+            w->tavl_link[1] = y;
+            if (w->tavl_balance == -1)
+                x->tavl_balance = 0, y->tavl_balance = +1;
+            else if (w->tavl_balance == 0)
+                x->tavl_balance = y->tavl_balance = 0;
+            else /* |w->tavl_balance == +1| */
+                x->tavl_balance = -1, y->tavl_balance = 0;
+            w->tavl_balance = 0;
+            if (w->tavl_tag[0] == TAVL_THREAD) {
+                x->tavl_tag[1] = TAVL_THREAD;
+                x->tavl_link[1] = w;
+                w->tavl_tag[0] = TAVL_CHILD;
+            }
+            if (w->tavl_tag[1] == TAVL_THREAD) {
+                y->tavl_tag[0] = TAVL_THREAD;
+                y->tavl_link[0] = w;
+                w->tavl_tag[1] = TAVL_CHILD;
+            }
+        }
     }
     else if (y->tavl_balance == +2) {
-	struct tavl_node *x = y->tavl_link[1];
+        struct tavl_node *x = y->tavl_link[1];
 
-	if (x->tavl_balance == +1) {
-	    w = x;
-	    if (x->tavl_tag[0] == TAVL_THREAD) {
-		x->tavl_tag[0] = TAVL_CHILD;
-		y->tavl_tag[1] = TAVL_THREAD;
-		y->tavl_link[1] = x;
-	    }
-	    else
-		y->tavl_link[1] = x->tavl_link[0];
-	    x->tavl_link[0] = y;
-	    x->tavl_balance = y->tavl_balance = 0;
-	}
-	else {
-	    assert(x->tavl_balance == -1);
-	    w = x->tavl_link[0];
-	    x->tavl_link[0] = w->tavl_link[1];
-	    w->tavl_link[1] = x;
-	    y->tavl_link[1] = w->tavl_link[0];
-	    w->tavl_link[0] = y;
-	    if (w->tavl_balance == +1)
-		x->tavl_balance = 0, y->tavl_balance = -1;
-	    else if (w->tavl_balance == 0)
-		x->tavl_balance = y->tavl_balance = 0;
-	    else		/* |w->tavl_balance == -1| */
-		x->tavl_balance = +1, y->tavl_balance = 0;
-	    w->tavl_balance = 0;
-	    if (w->tavl_tag[0] == TAVL_THREAD) {
-		y->tavl_tag[1] = TAVL_THREAD;
-		y->tavl_link[1] = w;
-		w->tavl_tag[0] = TAVL_CHILD;
-	    }
-	    if (w->tavl_tag[1] == TAVL_THREAD) {
-		x->tavl_tag[0] = TAVL_THREAD;
-		x->tavl_link[0] = w;
-		w->tavl_tag[1] = TAVL_CHILD;
-	    }
-	}
+        if (x->tavl_balance == +1) {
+            w = x;
+            if (x->tavl_tag[0] == TAVL_THREAD) {
+                x->tavl_tag[0] = TAVL_CHILD;
+                y->tavl_tag[1] = TAVL_THREAD;
+                y->tavl_link[1] = x;
+            }
+            else
+                y->tavl_link[1] = x->tavl_link[0];
+            x->tavl_link[0] = y;
+            x->tavl_balance = y->tavl_balance = 0;
+        }
+        else {
+            assert(x->tavl_balance == -1);
+            w = x->tavl_link[0];
+            x->tavl_link[0] = w->tavl_link[1];
+            w->tavl_link[1] = x;
+            y->tavl_link[1] = w->tavl_link[0];
+            w->tavl_link[0] = y;
+            if (w->tavl_balance == +1)
+                x->tavl_balance = 0, y->tavl_balance = -1;
+            else if (w->tavl_balance == 0)
+                x->tavl_balance = y->tavl_balance = 0;
+            else /* |w->tavl_balance == -1| */
+                x->tavl_balance = +1, y->tavl_balance = 0;
+            w->tavl_balance = 0;
+            if (w->tavl_tag[0] == TAVL_THREAD) {
+                y->tavl_tag[1] = TAVL_THREAD;
+                y->tavl_link[1] = w;
+                w->tavl_tag[0] = TAVL_CHILD;
+            }
+            if (w->tavl_tag[1] == TAVL_THREAD) {
+                x->tavl_tag[0] = TAVL_THREAD;
+                x->tavl_link[0] = w;
+                w->tavl_tag[1] = TAVL_CHILD;
+            }
+        }
     }
     else
-	return &n->tavl_data;
+        return &n->tavl_data;
     z->tavl_link[y != z->tavl_link[0]] = w;
 
     return &n->tavl_data;
@@ -256,58 +256,58 @@ void *tavl_replace(struct tavl_table *table, void *item)
     void **p = tavl_probe(table, item);
 
     if (p == NULL || *p == item)
-	return NULL;
+        return NULL;
     else {
-	void *r = *p;
+        void *r = *p;
 
-	*p = item;
+        *p = item;
 
-	return r;
+        return r;
     }
 }
 
 /* Returns the parent of |node| within |tree|,
    or a pointer to |tavl_root| if |s| is the root of the tree. */
 static struct tavl_node *find_parent(struct tavl_table *tree,
-				     struct tavl_node *node)
+                                     struct tavl_node *node)
 {
     if (node != tree->tavl_root) {
-	struct tavl_node *x, *y;
+        struct tavl_node *x, *y;
 
-	for (x = y = node;; x = x->tavl_link[0], y = y->tavl_link[1])
-	    if (y->tavl_tag[1] == TAVL_THREAD) {
-		struct tavl_node *p = y->tavl_link[1];
+        for (x = y = node;; x = x->tavl_link[0], y = y->tavl_link[1])
+            if (y->tavl_tag[1] == TAVL_THREAD) {
+                struct tavl_node *p = y->tavl_link[1];
 
-		if (p == NULL || p->tavl_link[0] != node) {
-		    while (x->tavl_tag[0] == TAVL_CHILD)
-			x = x->tavl_link[0];
-		    p = x->tavl_link[0];
-		}
-		return p;
-	    }
-	    else if (x->tavl_tag[0] == TAVL_THREAD) {
-		struct tavl_node *p = x->tavl_link[0];
+                if (p == NULL || p->tavl_link[0] != node) {
+                    while (x->tavl_tag[0] == TAVL_CHILD)
+                        x = x->tavl_link[0];
+                    p = x->tavl_link[0];
+                }
+                return p;
+            }
+            else if (x->tavl_tag[0] == TAVL_THREAD) {
+                struct tavl_node *p = x->tavl_link[0];
 
-		if (p == NULL || p->tavl_link[1] != node) {
-		    while (y->tavl_tag[1] == TAVL_CHILD)
-			y = y->tavl_link[1];
-		    p = y->tavl_link[1];
-		}
-		return p;
-	    }
+                if (p == NULL || p->tavl_link[1] != node) {
+                    while (y->tavl_tag[1] == TAVL_CHILD)
+                        y = y->tavl_link[1];
+                    p = y->tavl_link[1];
+                }
+                return p;
+            }
     }
     else
-	return (struct tavl_node *)&tree->tavl_root;
+        return (struct tavl_node *)&tree->tavl_root;
 }
 
 /* Deletes from |tree| and returns an item matching |item|.
    Returns a null pointer if no matching item found. */
 void *tavl_delete(struct tavl_table *tree, const void *item)
 {
-    struct tavl_node *p;	/* Traverses tree to find node to delete. */
-    struct tavl_node *q;	/* Parent of |p|. */
-    int dir;			/* Index into |q->tavl_link[]| to get |p|. */
-    int cmp;			/* Result of comparison between |item| and |p|. */
+    struct tavl_node *p; /* Traverses tree to find node to delete. */
+    struct tavl_node *q; /* Parent of |p|. */
+    int dir;             /* Index into |q->tavl_link[]| to get |p|. */
+    int cmp;             /* Result of comparison between |item| and |p|. */
 
     assert(tree != NULL && item != NULL);
 
@@ -315,225 +315,225 @@ void *tavl_delete(struct tavl_table *tree, const void *item)
     p = tree->tavl_root;
     dir = 0;
     while (p != NULL) {
-	cmp = tree->tavl_compare(item, p->tavl_data, tree->tavl_param);
+        cmp = tree->tavl_compare(item, p->tavl_data, tree->tavl_param);
 
-	if (cmp == 0)
-	    break;
+        if (cmp == 0)
+            break;
 
-	dir = cmp > 0;
+        dir = cmp > 0;
 
-	q = p;
-	if (p->tavl_tag[dir] == TAVL_CHILD)
-	    p = p->tavl_link[dir];
-	else
-	    p = NULL;
+        q = p;
+        if (p->tavl_tag[dir] == TAVL_CHILD)
+            p = p->tavl_link[dir];
+        else
+            p = NULL;
     }
     if (p == NULL)
-	return NULL;
+        return NULL;
 
     item = p->tavl_data;
 
     if (p->tavl_tag[1] == TAVL_THREAD) {
-	if (p->tavl_tag[0] == TAVL_CHILD) {
-	    struct tavl_node *t = p->tavl_link[0];
+        if (p->tavl_tag[0] == TAVL_CHILD) {
+            struct tavl_node *t = p->tavl_link[0];
 
-	    while (t->tavl_tag[1] == TAVL_CHILD)
-		t = t->tavl_link[1];
-	    t->tavl_link[1] = p->tavl_link[1];
-	    q->tavl_link[dir] = p->tavl_link[0];
-	}
-	else {
-	    q->tavl_link[dir] = p->tavl_link[dir];
-	    if (q != (struct tavl_node *)&tree->tavl_root)
-		q->tavl_tag[dir] = TAVL_THREAD;
-	}
+            while (t->tavl_tag[1] == TAVL_CHILD)
+                t = t->tavl_link[1];
+            t->tavl_link[1] = p->tavl_link[1];
+            q->tavl_link[dir] = p->tavl_link[0];
+        }
+        else {
+            q->tavl_link[dir] = p->tavl_link[dir];
+            if (q != (struct tavl_node *)&tree->tavl_root)
+                q->tavl_tag[dir] = TAVL_THREAD;
+        }
     }
     else {
-	struct tavl_node *r = p->tavl_link[1];
+        struct tavl_node *r = p->tavl_link[1];
 
-	if (r->tavl_tag[0] == TAVL_THREAD) {
-	    r->tavl_link[0] = p->tavl_link[0];
-	    r->tavl_tag[0] = p->tavl_tag[0];
-	    if (r->tavl_tag[0] == TAVL_CHILD) {
-		struct tavl_node *t = r->tavl_link[0];
+        if (r->tavl_tag[0] == TAVL_THREAD) {
+            r->tavl_link[0] = p->tavl_link[0];
+            r->tavl_tag[0] = p->tavl_tag[0];
+            if (r->tavl_tag[0] == TAVL_CHILD) {
+                struct tavl_node *t = r->tavl_link[0];
 
-		while (t->tavl_tag[1] == TAVL_CHILD)
-		    t = t->tavl_link[1];
-		t->tavl_link[1] = r;
-	    }
-	    q->tavl_link[dir] = r;
-	    r->tavl_balance = p->tavl_balance;
-	    q = r;
-	    dir = 1;
-	}
-	else {
-	    struct tavl_node *s;
+                while (t->tavl_tag[1] == TAVL_CHILD)
+                    t = t->tavl_link[1];
+                t->tavl_link[1] = r;
+            }
+            q->tavl_link[dir] = r;
+            r->tavl_balance = p->tavl_balance;
+            q = r;
+            dir = 1;
+        }
+        else {
+            struct tavl_node *s;
 
-	    while (r != NULL) {
-		s = r->tavl_link[0];
-		if (s->tavl_tag[0] == TAVL_THREAD)
-		    break;
+            while (r != NULL) {
+                s = r->tavl_link[0];
+                if (s->tavl_tag[0] == TAVL_THREAD)
+                    break;
 
-		r = s;
-	    }
+                r = s;
+            }
 
-	    if (s->tavl_tag[1] == TAVL_CHILD)
-		r->tavl_link[0] = s->tavl_link[1];
-	    else {
-		r->tavl_link[0] = s;
-		r->tavl_tag[0] = TAVL_THREAD;
-	    }
+            if (s->tavl_tag[1] == TAVL_CHILD)
+                r->tavl_link[0] = s->tavl_link[1];
+            else {
+                r->tavl_link[0] = s;
+                r->tavl_tag[0] = TAVL_THREAD;
+            }
 
-	    s->tavl_link[0] = p->tavl_link[0];
-	    if (p->tavl_tag[0] == TAVL_CHILD) {
-		struct tavl_node *t = p->tavl_link[0];
+            s->tavl_link[0] = p->tavl_link[0];
+            if (p->tavl_tag[0] == TAVL_CHILD) {
+                struct tavl_node *t = p->tavl_link[0];
 
-		while (t->tavl_tag[1] == TAVL_CHILD)
-		    t = t->tavl_link[1];
-		t->tavl_link[1] = s;
+                while (t->tavl_tag[1] == TAVL_CHILD)
+                    t = t->tavl_link[1];
+                t->tavl_link[1] = s;
 
-		s->tavl_tag[0] = TAVL_CHILD;
-	    }
+                s->tavl_tag[0] = TAVL_CHILD;
+            }
 
-	    s->tavl_link[1] = p->tavl_link[1];
-	    s->tavl_tag[1] = TAVL_CHILD;
+            s->tavl_link[1] = p->tavl_link[1];
+            s->tavl_tag[1] = TAVL_CHILD;
 
-	    q->tavl_link[dir] = s;
-	    s->tavl_balance = p->tavl_balance;
-	    q = r;
-	    dir = 0;
-	}
+            q->tavl_link[dir] = s;
+            s->tavl_balance = p->tavl_balance;
+            q = r;
+            dir = 0;
+        }
     }
 
     tree->tavl_alloc->libavl_free(tree->tavl_alloc, p);
 
     while (q != (struct tavl_node *)&tree->tavl_root) {
-	struct tavl_node *y = q;
+        struct tavl_node *y = q;
 
-	q = find_parent(tree, y);
+        q = find_parent(tree, y);
 
-	if (dir == 0) {
-	    dir = q->tavl_link[0] != y;
-	    y->tavl_balance++;
-	    if (y->tavl_balance == +1)
-		break;
-	    else if (y->tavl_balance == +2) {
-		struct tavl_node *x = y->tavl_link[1];
+        if (dir == 0) {
+            dir = q->tavl_link[0] != y;
+            y->tavl_balance++;
+            if (y->tavl_balance == +1)
+                break;
+            else if (y->tavl_balance == +2) {
+                struct tavl_node *x = y->tavl_link[1];
 
-		assert(x != NULL);
-		if (x->tavl_balance == -1) {
-		    struct tavl_node *w;
+                assert(x != NULL);
+                if (x->tavl_balance == -1) {
+                    struct tavl_node *w;
 
-		    assert(x->tavl_balance == -1);
-		    w = x->tavl_link[0];
-		    x->tavl_link[0] = w->tavl_link[1];
-		    w->tavl_link[1] = x;
-		    y->tavl_link[1] = w->tavl_link[0];
-		    w->tavl_link[0] = y;
-		    if (w->tavl_balance == +1)
-			x->tavl_balance = 0, y->tavl_balance = -1;
-		    else if (w->tavl_balance == 0)
-			x->tavl_balance = y->tavl_balance = 0;
-		    else	/* |w->tavl_balance == -1| */
-			x->tavl_balance = +1, y->tavl_balance = 0;
-		    w->tavl_balance = 0;
-		    if (w->tavl_tag[0] == TAVL_THREAD) {
-			y->tavl_tag[1] = TAVL_THREAD;
-			y->tavl_link[1] = w;
-			w->tavl_tag[0] = TAVL_CHILD;
-		    }
-		    if (w->tavl_tag[1] == TAVL_THREAD) {
-			x->tavl_tag[0] = TAVL_THREAD;
-			x->tavl_link[0] = w;
-			w->tavl_tag[1] = TAVL_CHILD;
-		    }
-		    q->tavl_link[dir] = w;
-		}
-		else {
-		    q->tavl_link[dir] = x;
+                    assert(x->tavl_balance == -1);
+                    w = x->tavl_link[0];
+                    x->tavl_link[0] = w->tavl_link[1];
+                    w->tavl_link[1] = x;
+                    y->tavl_link[1] = w->tavl_link[0];
+                    w->tavl_link[0] = y;
+                    if (w->tavl_balance == +1)
+                        x->tavl_balance = 0, y->tavl_balance = -1;
+                    else if (w->tavl_balance == 0)
+                        x->tavl_balance = y->tavl_balance = 0;
+                    else /* |w->tavl_balance == -1| */
+                        x->tavl_balance = +1, y->tavl_balance = 0;
+                    w->tavl_balance = 0;
+                    if (w->tavl_tag[0] == TAVL_THREAD) {
+                        y->tavl_tag[1] = TAVL_THREAD;
+                        y->tavl_link[1] = w;
+                        w->tavl_tag[0] = TAVL_CHILD;
+                    }
+                    if (w->tavl_tag[1] == TAVL_THREAD) {
+                        x->tavl_tag[0] = TAVL_THREAD;
+                        x->tavl_link[0] = w;
+                        w->tavl_tag[1] = TAVL_CHILD;
+                    }
+                    q->tavl_link[dir] = w;
+                }
+                else {
+                    q->tavl_link[dir] = x;
 
-		    if (x->tavl_balance == 0) {
-			y->tavl_link[1] = x->tavl_link[0];
-			x->tavl_link[0] = y;
-			x->tavl_balance = -1;
-			y->tavl_balance = +1;
-			break;
-		    }
-		    else {	/* |x->tavl_balance == +1| */
+                    if (x->tavl_balance == 0) {
+                        y->tavl_link[1] = x->tavl_link[0];
+                        x->tavl_link[0] = y;
+                        x->tavl_balance = -1;
+                        y->tavl_balance = +1;
+                        break;
+                    }
+                    else { /* |x->tavl_balance == +1| */
 
-			if (x->tavl_tag[0] == TAVL_CHILD)
-			    y->tavl_link[1] = x->tavl_link[0];
-			else {
-			    y->tavl_tag[1] = TAVL_THREAD;
-			    x->tavl_tag[0] = TAVL_CHILD;
-			}
-			x->tavl_link[0] = y;
-			y->tavl_balance = x->tavl_balance = 0;
-		    }
-		}
-	    }
-	}
-	else {
-	    dir = q->tavl_link[0] != y;
-	    y->tavl_balance--;
-	    if (y->tavl_balance == -1)
-		break;
-	    else if (y->tavl_balance == -2) {
-		struct tavl_node *x = y->tavl_link[0];
+                        if (x->tavl_tag[0] == TAVL_CHILD)
+                            y->tavl_link[1] = x->tavl_link[0];
+                        else {
+                            y->tavl_tag[1] = TAVL_THREAD;
+                            x->tavl_tag[0] = TAVL_CHILD;
+                        }
+                        x->tavl_link[0] = y;
+                        y->tavl_balance = x->tavl_balance = 0;
+                    }
+                }
+            }
+        }
+        else {
+            dir = q->tavl_link[0] != y;
+            y->tavl_balance--;
+            if (y->tavl_balance == -1)
+                break;
+            else if (y->tavl_balance == -2) {
+                struct tavl_node *x = y->tavl_link[0];
 
-		assert(x != NULL);
-		if (x->tavl_balance == +1) {
-		    struct tavl_node *w;
+                assert(x != NULL);
+                if (x->tavl_balance == +1) {
+                    struct tavl_node *w;
 
-		    assert(x->tavl_balance == +1);
-		    w = x->tavl_link[1];
-		    x->tavl_link[1] = w->tavl_link[0];
-		    w->tavl_link[0] = x;
-		    y->tavl_link[0] = w->tavl_link[1];
-		    w->tavl_link[1] = y;
-		    if (w->tavl_balance == -1)
-			x->tavl_balance = 0, y->tavl_balance = +1;
-		    else if (w->tavl_balance == 0)
-			x->tavl_balance = y->tavl_balance = 0;
-		    else	/* |w->tavl_balance == +1| */
-			x->tavl_balance = -1, y->tavl_balance = 0;
-		    w->tavl_balance = 0;
-		    if (w->tavl_tag[0] == TAVL_THREAD) {
-			x->tavl_tag[1] = TAVL_THREAD;
-			x->tavl_link[1] = w;
-			w->tavl_tag[0] = TAVL_CHILD;
-		    }
-		    if (w->tavl_tag[1] == TAVL_THREAD) {
-			y->tavl_tag[0] = TAVL_THREAD;
-			y->tavl_link[0] = w;
-			w->tavl_tag[1] = TAVL_CHILD;
-		    }
-		    q->tavl_link[dir] = w;
-		}
-		else {
-		    q->tavl_link[dir] = x;
+                    assert(x->tavl_balance == +1);
+                    w = x->tavl_link[1];
+                    x->tavl_link[1] = w->tavl_link[0];
+                    w->tavl_link[0] = x;
+                    y->tavl_link[0] = w->tavl_link[1];
+                    w->tavl_link[1] = y;
+                    if (w->tavl_balance == -1)
+                        x->tavl_balance = 0, y->tavl_balance = +1;
+                    else if (w->tavl_balance == 0)
+                        x->tavl_balance = y->tavl_balance = 0;
+                    else /* |w->tavl_balance == +1| */
+                        x->tavl_balance = -1, y->tavl_balance = 0;
+                    w->tavl_balance = 0;
+                    if (w->tavl_tag[0] == TAVL_THREAD) {
+                        x->tavl_tag[1] = TAVL_THREAD;
+                        x->tavl_link[1] = w;
+                        w->tavl_tag[0] = TAVL_CHILD;
+                    }
+                    if (w->tavl_tag[1] == TAVL_THREAD) {
+                        y->tavl_tag[0] = TAVL_THREAD;
+                        y->tavl_link[0] = w;
+                        w->tavl_tag[1] = TAVL_CHILD;
+                    }
+                    q->tavl_link[dir] = w;
+                }
+                else {
+                    q->tavl_link[dir] = x;
 
-		    if (x->tavl_balance == 0) {
-			y->tavl_link[0] = x->tavl_link[1];
-			x->tavl_link[1] = y;
-			x->tavl_balance = +1;
-			y->tavl_balance = -1;
-			break;
-		    }
-		    else {	/* |x->tavl_balance == -1| */
+                    if (x->tavl_balance == 0) {
+                        y->tavl_link[0] = x->tavl_link[1];
+                        x->tavl_link[1] = y;
+                        x->tavl_balance = +1;
+                        y->tavl_balance = -1;
+                        break;
+                    }
+                    else { /* |x->tavl_balance == -1| */
 
-			if (x->tavl_tag[1] == TAVL_CHILD)
-			    y->tavl_link[0] = x->tavl_link[1];
-			else {
-			    y->tavl_tag[0] = TAVL_THREAD;
-			    x->tavl_tag[1] = TAVL_CHILD;
-			}
-			x->tavl_link[1] = y;
-			y->tavl_balance = x->tavl_balance = 0;
-		    }
-		}
-	    }
-	}
+                        if (x->tavl_tag[1] == TAVL_CHILD)
+                            y->tavl_link[0] = x->tavl_link[1];
+                        else {
+                            y->tavl_tag[0] = TAVL_THREAD;
+                            x->tavl_tag[1] = TAVL_CHILD;
+                        }
+                        x->tavl_link[1] = y;
+                        y->tavl_balance = x->tavl_balance = 0;
+                    }
+                }
+            }
+        }
     }
 
     tree->tavl_count--;
@@ -559,12 +559,12 @@ void *tavl_t_first(struct tavl_traverser *trav, struct tavl_table *tree)
     trav->tavl_table = tree;
     trav->tavl_node = tree->tavl_root;
     if (trav->tavl_node != NULL) {
-	while (trav->tavl_node->tavl_tag[0] == TAVL_CHILD)
-	    trav->tavl_node = trav->tavl_node->tavl_link[0];
-	return trav->tavl_node->tavl_data;
+        while (trav->tavl_node->tavl_tag[0] == TAVL_CHILD)
+            trav->tavl_node = trav->tavl_node->tavl_link[0];
+        return trav->tavl_node->tavl_data;
     }
     else
-	return NULL;
+        return NULL;
 }
 
 /* Initializes |trav| for |tree|.
@@ -577,12 +577,12 @@ void *tavl_t_last(struct tavl_traverser *trav, struct tavl_table *tree)
     trav->tavl_table = tree;
     trav->tavl_node = tree->tavl_root;
     if (trav->tavl_node != NULL) {
-	while (trav->tavl_node->tavl_tag[1] == TAVL_CHILD)
-	    trav->tavl_node = trav->tavl_node->tavl_link[1];
-	return trav->tavl_node->tavl_data;
+        while (trav->tavl_node->tavl_tag[1] == TAVL_CHILD)
+            trav->tavl_node = trav->tavl_node->tavl_link[1];
+        return trav->tavl_node->tavl_data;
     }
     else
-	return NULL;
+        return NULL;
 }
 
 /* Searches for |item| in |tree|.
@@ -591,7 +591,7 @@ void *tavl_t_last(struct tavl_traverser *trav, struct tavl_table *tree)
    If there is no matching item, initializes |trav| to the null item
    and returns |NULL|. */
 void *tavl_t_find(struct tavl_traverser *trav, struct tavl_table *tree,
-		  void *item)
+                  void *item)
 {
     struct tavl_node *p;
 
@@ -602,20 +602,20 @@ void *tavl_t_find(struct tavl_traverser *trav, struct tavl_table *tree,
 
     p = tree->tavl_root;
     while (p != NULL) {
-	int cmp, dir;
+        int cmp, dir;
 
-	cmp = tree->tavl_compare(item, p->tavl_data, tree->tavl_param);
-	if (cmp == 0) {
-	    trav->tavl_node = p;
+        cmp = tree->tavl_compare(item, p->tavl_data, tree->tavl_param);
+        if (cmp == 0) {
+            trav->tavl_node = p;
 
-	    return p->tavl_data;
-	}
+            return p->tavl_data;
+        }
 
-	dir = cmp > 0;
-	if (p->tavl_tag[dir] == TAVL_CHILD)
-	    p = p->tavl_link[dir];
-	else
-	    p = NULL;
+        dir = cmp > 0;
+        if (p->tavl_tag[dir] == TAVL_CHILD)
+            p = p->tavl_link[dir];
+        else
+            p = NULL;
     }
 
     trav->tavl_node = NULL;
@@ -630,8 +630,8 @@ void *tavl_t_find(struct tavl_traverser *trav, struct tavl_table *tree,
    its location.  No replacement of the item occurs.
    If a memory allocation failure occurs, |NULL| is returned and |trav|
    is initialized to the null item. */
-void *tavl_t_insert(struct tavl_traverser *trav,
-		    struct tavl_table *tree, void *item)
+void *tavl_t_insert(struct tavl_traverser *trav, struct tavl_table *tree,
+                    void *item)
 {
     void **p;
 
@@ -639,22 +639,21 @@ void *tavl_t_insert(struct tavl_traverser *trav,
 
     p = tavl_probe(tree, item);
     if (p != NULL) {
-	trav->tavl_table = tree;
-	trav->tavl_node = ((struct tavl_node *)
-			   ((char *)p -
-			    offsetof(struct tavl_node, tavl_data)));
-	return *p;
+        trav->tavl_table = tree;
+        trav->tavl_node =
+            ((struct tavl_node *)((char *)p -
+                                  offsetof(struct tavl_node, tavl_data)));
+        return *p;
     }
     else {
-	tavl_t_init(trav, tree);
+        tavl_t_init(trav, tree);
 
-	return NULL;
+        return NULL;
     }
 }
 
 /* Initializes |trav| to have the same current node as |src|. */
-void *tavl_t_copy(struct tavl_traverser *trav,
-		  const struct tavl_traverser *src)
+void *tavl_t_copy(struct tavl_traverser *trav, const struct tavl_traverser *src)
 {
     assert(trav != NULL && src != NULL);
 
@@ -672,16 +671,16 @@ void *tavl_t_next(struct tavl_traverser *trav)
     assert(trav != NULL);
 
     if (trav->tavl_node == NULL)
-	return tavl_t_first(trav, trav->tavl_table);
+        return tavl_t_first(trav, trav->tavl_table);
     else if (trav->tavl_node->tavl_tag[1] == TAVL_THREAD) {
-	trav->tavl_node = trav->tavl_node->tavl_link[1];
-	return trav->tavl_node != NULL ? trav->tavl_node->tavl_data : NULL;
+        trav->tavl_node = trav->tavl_node->tavl_link[1];
+        return trav->tavl_node != NULL ? trav->tavl_node->tavl_data : NULL;
     }
     else {
-	trav->tavl_node = trav->tavl_node->tavl_link[1];
-	while (trav->tavl_node->tavl_tag[0] == TAVL_CHILD)
-	    trav->tavl_node = trav->tavl_node->tavl_link[0];
-	return trav->tavl_node->tavl_data;
+        trav->tavl_node = trav->tavl_node->tavl_link[1];
+        while (trav->tavl_node->tavl_tag[0] == TAVL_CHILD)
+            trav->tavl_node = trav->tavl_node->tavl_link[0];
+        return trav->tavl_node->tavl_data;
     }
 }
 
@@ -693,16 +692,16 @@ void *tavl_t_prev(struct tavl_traverser *trav)
     assert(trav != NULL);
 
     if (trav->tavl_node == NULL)
-	return tavl_t_last(trav, trav->tavl_table);
+        return tavl_t_last(trav, trav->tavl_table);
     else if (trav->tavl_node->tavl_tag[0] == TAVL_THREAD) {
-	trav->tavl_node = trav->tavl_node->tavl_link[0];
-	return trav->tavl_node != NULL ? trav->tavl_node->tavl_data : NULL;
+        trav->tavl_node = trav->tavl_node->tavl_link[0];
+        return trav->tavl_node != NULL ? trav->tavl_node->tavl_data : NULL;
     }
     else {
-	trav->tavl_node = trav->tavl_node->tavl_link[0];
-	while (trav->tavl_node->tavl_tag[1] == TAVL_CHILD)
-	    trav->tavl_node = trav->tavl_node->tavl_link[1];
-	return trav->tavl_node->tavl_data;
+        trav->tavl_node = trav->tavl_node->tavl_link[0];
+        while (trav->tavl_node->tavl_tag[1] == TAVL_CHILD)
+            trav->tavl_node = trav->tavl_node->tavl_link[1];
+        return trav->tavl_node->tavl_data;
     }
 }
 
@@ -734,15 +733,13 @@ void *tavl_t_replace(struct tavl_traverser *trav, void *new)
    Returns nonzero only if fully successful.
    Regardless of success, integrity of the tree structure is assured,
    though failure may leave a null pointer in a |tavl_data| member. */
-static int
-copy_node(struct tavl_table *tree,
-	  struct tavl_node *dst, int dir,
-	  const struct tavl_node *src, tavl_copy_func * copy)
+static int copy_node(struct tavl_table *tree, struct tavl_node *dst, int dir,
+                     const struct tavl_node *src, tavl_copy_func *copy)
 {
     struct tavl_node *new =
-	tree->tavl_alloc->libavl_malloc(tree->tavl_alloc, sizeof *new);
+        tree->tavl_alloc->libavl_malloc(tree->tavl_alloc, sizeof *new);
     if (new == NULL)
-	return 0;
+        return 0;
 
     new->tavl_link[dir] = dst->tavl_link[dir];
     new->tavl_tag[dir] = TAVL_THREAD;
@@ -753,11 +750,11 @@ copy_node(struct tavl_table *tree,
 
     new->tavl_balance = src->tavl_balance;
     if (copy == NULL)
-	new->tavl_data = src->tavl_data;
+        new->tavl_data = src->tavl_data;
     else {
-	new->tavl_data = copy(src->tavl_data, tree->tavl_param);
-	if (new->tavl_data == NULL)
-	    return 0;
+        new->tavl_data = copy(src->tavl_data, tree->tavl_param);
+        if (new->tavl_data == NULL)
+            return 0;
     }
 
     return 1;
@@ -766,15 +763,14 @@ copy_node(struct tavl_table *tree,
 /* Destroys |new| with |tavl_destroy (new, destroy)|,
    first initializing the right link in |new| that has
    not yet been initialized. */
-static void
-copy_error_recovery(struct tavl_node *p,
-		    struct tavl_table *new, tavl_item_func * destroy)
+static void copy_error_recovery(struct tavl_node *p, struct tavl_table *new,
+                                tavl_item_func *destroy)
 {
     new->tavl_root = p;
     if (p != NULL) {
-	while (p->tavl_tag[1] == TAVL_CHILD)
-	    p = p->tavl_link[1];
-	p->tavl_link[1] = NULL;
+        while (p->tavl_tag[1] == TAVL_CHILD)
+            p = p->tavl_link[1];
+        p->tavl_link[1] = NULL;
     }
     tavl_destroy(new, destroy);
 }
@@ -788,9 +784,9 @@ copy_error_recovery(struct tavl_node *p,
    and returns |NULL|.
    If |allocator != NULL|, it is used for allocation in the new tree.
    Otherwise, the same allocator used for |org| is used. */
-struct tavl_table *tavl_copy(const struct tavl_table *org,
-			     tavl_copy_func * copy, tavl_item_func * destroy,
-			     struct libavl_allocator *allocator)
+struct tavl_table *tavl_copy(const struct tavl_table *org, tavl_copy_func *copy,
+                             tavl_item_func *destroy,
+                             struct libavl_allocator *allocator)
 {
     struct tavl_table *new;
 
@@ -800,13 +796,13 @@ struct tavl_table *tavl_copy(const struct tavl_table *org,
 
     assert(org != NULL);
     new = tavl_create(org->tavl_compare, org->tavl_param,
-		      allocator != NULL ? allocator : org->tavl_alloc);
+                      allocator != NULL ? allocator : org->tavl_alloc);
     if (new == NULL)
-	return NULL;
+        return NULL;
 
     new->tavl_count = org->tavl_count;
     if (new->tavl_count == 0)
-	return new;
+        return new;
 
     p = &rp;
     rp.tavl_link[0] = org->tavl_root;
@@ -817,36 +813,36 @@ struct tavl_table *tavl_copy(const struct tavl_table *org,
     rq.tavl_tag[0] = TAVL_THREAD;
 
     while (p != NULL) {
-	if (p->tavl_tag[0] == TAVL_CHILD) {
-	    if (!copy_node(new, q, 0, p->tavl_link[0], copy)) {
-		copy_error_recovery(rq.tavl_link[0], new, destroy);
-		return NULL;
-	    }
+        if (p->tavl_tag[0] == TAVL_CHILD) {
+            if (!copy_node(new, q, 0, p->tavl_link[0], copy)) {
+                copy_error_recovery(rq.tavl_link[0], new, destroy);
+                return NULL;
+            }
 
-	    p = p->tavl_link[0];
-	    q = q->tavl_link[0];
-	}
-	else {
-	    while (p->tavl_tag[1] == TAVL_THREAD) {
-		p = p->tavl_link[1];
-		if (p == NULL) {
-		    q->tavl_link[1] = NULL;
-		    new->tavl_root = rq.tavl_link[0];
-		    return new;
-		}
+            p = p->tavl_link[0];
+            q = q->tavl_link[0];
+        }
+        else {
+            while (p->tavl_tag[1] == TAVL_THREAD) {
+                p = p->tavl_link[1];
+                if (p == NULL) {
+                    q->tavl_link[1] = NULL;
+                    new->tavl_root = rq.tavl_link[0];
+                    return new;
+                }
 
-		q = q->tavl_link[1];
-	    }
+                q = q->tavl_link[1];
+            }
 
-	    p = p->tavl_link[1];
-	    q = q->tavl_link[1];
-	}
+            p = p->tavl_link[1];
+            q = q->tavl_link[1];
+        }
 
-	if (p->tavl_tag[1] == TAVL_CHILD)
-	    if (!copy_node(new, q, 1, p->tavl_link[1], copy)) {
-		copy_error_recovery(rq.tavl_link[0], new, destroy);
-		return NULL;
-	    }
+        if (p->tavl_tag[1] == TAVL_CHILD)
+            if (!copy_node(new, q, 1, p->tavl_link[1], copy)) {
+                copy_error_recovery(rq.tavl_link[0], new, destroy);
+                return NULL;
+            }
     }
 
     return new;
@@ -854,28 +850,28 @@ struct tavl_table *tavl_copy(const struct tavl_table *org,
 
 /* Frees storage allocated for |tree|.
    If |destroy != NULL|, applies it to each data item in inorder. */
-void tavl_destroy(struct tavl_table *tree, tavl_item_func * destroy)
+void tavl_destroy(struct tavl_table *tree, tavl_item_func *destroy)
 {
-    struct tavl_node *p;	/* Current node. */
-    struct tavl_node *n;	/* Next node. */
+    struct tavl_node *p; /* Current node. */
+    struct tavl_node *n; /* Next node. */
 
     p = tree->tavl_root;
     if (p != NULL) {
-	while (p->tavl_tag[0] == TAVL_CHILD)
-	    p = p->tavl_link[0];
+        while (p->tavl_tag[0] == TAVL_CHILD)
+            p = p->tavl_link[0];
     }
 
     while (p != NULL) {
-	n = p->tavl_link[1];
-	if (p->tavl_tag[1] == TAVL_CHILD)
-	    while (n->tavl_tag[0] == TAVL_CHILD)
-		n = n->tavl_link[0];
+        n = p->tavl_link[1];
+        if (p->tavl_tag[1] == TAVL_CHILD)
+            while (n->tavl_tag[0] == TAVL_CHILD)
+                n = n->tavl_link[0];
 
-	if (destroy != NULL && p->tavl_data != NULL)
-	    destroy(p->tavl_data, tree->tavl_param);
-	tree->tavl_alloc->libavl_free(tree->tavl_alloc, p);
+        if (destroy != NULL && p->tavl_data != NULL)
+            destroy(p->tavl_data, tree->tavl_param);
+        tree->tavl_alloc->libavl_free(tree->tavl_alloc, p);
 
-	p = n;
+        p = n;
     }
 
     tree->tavl_alloc->libavl_free(tree->tavl_alloc, tree);
@@ -897,16 +893,13 @@ void tavl_free(struct libavl_allocator *allocator, void *block)
 }
 
 /* Default memory allocator that uses |malloc()| and |free()|. */
-struct libavl_allocator tavl_allocator_default = {
-    tavl_malloc,
-    tavl_free
-};
+struct libavl_allocator tavl_allocator_default = {tavl_malloc, tavl_free};
 
 #undef NDEBUG
 #include <assert.h>
 
 /* Asserts that |tavl_insert()| succeeds at inserting |item| into |table|. */
-void (tavl_assert_insert) (struct tavl_table * table, void *item)
+void(tavl_assert_insert)(struct tavl_table *table, void *item)
 {
     void **p = tavl_probe(table, item);
 
@@ -915,7 +908,7 @@ void (tavl_assert_insert) (struct tavl_table * table, void *item)
 
 /* Asserts that |tavl_delete()| really removes |item| from |table|,
    and returns the removed item. */
-void *(tavl_assert_delete) (struct tavl_table * table, void *item)
+void *(tavl_assert_delete)(struct tavl_table *table, void *item)
 {
     void *p = tavl_delete(table, item);
 

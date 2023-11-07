@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       d.vect.chart
@@ -48,15 +47,16 @@ int main(int argc, char **argv)
     /*   struct Flag *horizontal_bar_flag; */
     struct Map_info Map;
     char **tokens;
-    int ntokens;		/* number of tokens */
+    int ntokens; /* number of tokens */
 
-    COLOR defcols[] = { {0, 0, 0, 255},	/* blue */
-    {0, 0, 255, 255},		/* cyan */
-    {0, 0, 255, 0},		/* green */
-    {0, 255, 255, 0},		/* yellow */
-    {0, 255, 0, 0},		/* red */
-    {0, 255, 0, 255},		/* magenta */
-    {-1, 0, 0, 0}		/* END */
+    COLOR defcols[] = {
+        {0, 0, 0, 255},   /* blue */
+        {0, 0, 255, 255}, /* cyan */
+        {0, 0, 255, 0},   /* green */
+        {0, 255, 255, 0}, /* yellow */
+        {0, 255, 0, 0},   /* red */
+        {0, 255, 0, 255}, /* magenta */
+        {-1, 0, 0, 0}     /* END */
     };
 
     module = G_define_module();
@@ -64,8 +64,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("cartography"));
     G_add_keyword(_("chart maps"));
     module->description =
-	_("Displays charts of vector data in the active frame "
-	  "on the graphics monitor.");
+        _("Displays charts of vector data in the active frame "
+          "on the graphics monitor.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);
 
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     size_opt->type = TYPE_INTEGER;
     size_opt->answer = "40";
     size_opt->description =
-	_("Size of chart (diameter for pie, total width for bar)");
+        _("Size of chart (diameter for pie, total width for bar)");
     size_opt->guisection = _("Chart properties");
 
     scale_opt = G_define_option();
@@ -124,8 +124,7 @@ int main(int argc, char **argv)
 
     y_center_flag = G_define_flag();
     y_center_flag->key = 'c';
-    y_center_flag->description =
-	_("Center the bar chart around a data point");
+    y_center_flag->description = _("Center the bar chart around a data point");
     y_center_flag->guisection = _("Chart properties");
 
     max_reference_opt = G_define_option();
@@ -134,36 +133,36 @@ int main(int argc, char **argv)
     max_reference_opt->required = NO;
     max_reference_opt->multiple = YES;
     max_reference_opt->description =
-	_("Maximum value used for bar plot reference");
+        _("Maximum value used for bar plot reference");
 
     legend_flag = G_define_flag();
     legend_flag->key = 'l';
     legend_flag->description =
-	_("Create legend information and send to stdout");
+        _("Create legend information and send to stdout");
 
     chart3d_flag = G_define_flag();
     chart3d_flag->key = '3';
-    chart3d_flag->description =
-	_("Create 3D charts");
+    chart3d_flag->description = _("Create 3D charts");
     chart3d_flag->guisection = _("Chart properties");
 
     /*
        horizontal_bar_flag = G_define_flag();
        horizontal_bar_flag->key = 'h';
-       horizontal_bar_flag->description = _("Create a horizontal bar chart from left to right");
+       horizontal_bar_flag->description = _("Create a horizontal bar chart from
+       left to right");
      */
 
     G_gisinit(argv[0]);
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /* Center the barchart around the y coordinate?  */
     if (y_center_flag->answer)
-	y_center = 1;		/* center the bar graphs around the y_coord of a point */
+        y_center = 1; /* center the bar graphs around the y_coord of a point */
     else
-	y_center = 0;		/* do not center the bar graphs around the y_coord of a point */
-
+        y_center =
+            0; /* do not center the bar graphs around the y_coord of a point */
 
     /* Read options */
     type = Vect_option_to_types(type_opt);
@@ -172,27 +171,26 @@ int main(int argc, char **argv)
     /* Outline color */
     ret = G_str_to_color(ocolor_opt->answer, &r, &g, &b);
     if (ret == 1) {
-	ocolor.none = 0;
-	ocolor.r = r;
-	ocolor.g = g;
-	ocolor.b = b;
+        ocolor.none = 0;
+        ocolor.r = r;
+        ocolor.g = g;
+        ocolor.b = b;
     }
-    else if (ret == 2) {	/* none */
-	ocolor.none = 1;
+    else if (ret == 2) { /* none */
+        ocolor.none = 1;
     }
 
     /* Count input columns */
     p = columns_opt->answer;
     ncols = 1;
     while ((p = strchr(p, ',')) != NULL) {
-	ncols++;
-	p++;
+        ncols++;
+        p++;
     }
     G_debug(3, "ncols = %d", ncols);
 
-
     /* Fill colors */
-    colors = (COLOR *) G_malloc(ncols * sizeof(COLOR));
+    colors = (COLOR *)G_malloc(ncols * sizeof(COLOR));
 
     /* Fill max_reference values */
     max_reference = NULL;
@@ -200,41 +198,41 @@ int main(int argc, char **argv)
     /* default colors */
     j = 0;
     for (i = 0; i < ncols; i++) {
-	if (defcols[j].none == -1)
-	    j = 0;
-	colors[i].none = 0;
-	colors[i].r = defcols[j].r;
-	colors[i].g = defcols[j].g;
-	colors[i].b = defcols[j].b;
-	j++;
+        if (defcols[j].none == -1)
+            j = 0;
+        colors[i].none = 0;
+        colors[i].r = defcols[j].r;
+        colors[i].g = defcols[j].g;
+        colors[i].b = defcols[j].b;
+        j++;
     }
     /* user colors */
     if (colors_opt->answers != NULL) {
-	for (i = 0; i < ncols; i++) {
-	    if (colors_opt->answers[i] == NULL)
-		break;
+        for (i = 0; i < ncols; i++) {
+            if (colors_opt->answers[i] == NULL)
+                break;
 
-	    ret = G_str_to_color(colors_opt->answers[i], &r, &g, &b);
-	    if (ret == 1) {
-		colors[i].none = 0;
-		colors[i].r = r;
-		colors[i].g = g;
-		colors[i].b = b;
-	    }
-	    else if (ret == 2) {	/* none */
-		colors[i].none = 1;
-	    }
-	}
+            ret = G_str_to_color(colors_opt->answers[i], &r, &g, &b);
+            if (ret == 1) {
+                colors[i].none = 0;
+                colors[i].r = r;
+                colors[i].g = g;
+                colors[i].b = b;
+            }
+            else if (ret == 2) { /* none */
+                colors[i].none = 1;
+            }
+        }
     }
 
     if (legend_flag->answer) {
-	tokens = G_tokenize(columns_opt->answer, ",");
-	ntokens = G_number_of_tokens(tokens);
+        tokens = G_tokenize(columns_opt->answer, ",");
+        ntokens = G_number_of_tokens(tokens);
 
-	for (i = 0; i < ntokens; i++) {
-	    fprintf(stdout, "%d|%s|%d:%d:%d\n",
-		    i + 1, tokens[i], colors[i].r, colors[i].g, colors[i].b);
-	}
+        for (i = 0; i < ntokens; i++) {
+            fprintf(stdout, "%d|%s|%d:%d:%d\n", i + 1, tokens[i], colors[i].r,
+                    colors[i].g, colors[i].b);
+        }
     }
 
     size = atoi(size_opt->answer);
@@ -243,35 +241,34 @@ int main(int argc, char **argv)
     /* open vector */
     Vect_set_open_level(2);
     if (Vect_open_old(&Map, map_opt->answer, "") < 0)
-	G_fatal_error(_("Unable to open vector map <%s>"), map_opt->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), map_opt->answer);
 
     ctype = CTYPE_PIE;
     if (ctype_opt->answer[0] == 'b')
-	ctype = CTYPE_BAR;
+        ctype = CTYPE_BAR;
 
     D_open_driver();
-    
+
     /* should we plot the maximum reference on bar plots? */
     if (max_reference_opt->answer != NULL) {
-	max_reference = (double *)G_malloc(ncols * sizeof(double));
+        max_reference = (double *)G_malloc(ncols * sizeof(double));
 
-	/* loop through the given values */
-	for (i = 0; i < ncols; i++) {
-	    if (max_reference_opt->answers[i] == NULL)
-		break;
+        /* loop through the given values */
+        for (i = 0; i < ncols; i++) {
+            if (max_reference_opt->answers[i] == NULL)
+                break;
 
-	    max_reference[i] = atof(max_reference_opt->answers[i]);	/* remember to convert to float */
-	}
+            max_reference[i] =
+                atof(max_reference_opt
+                         ->answers[i]); /* remember to convert to float */
+        }
     }
-
 
     D_setup(0);
 
-    ret = plot(ctype, &Map, type, field,
-	       columns_opt->answer, ncols,
-	       sizecol_opt->answer, size, scale,
-	       &ocolor, colors, y_center, max_reference,
-	       chart3d_flag->answer);
+    ret = plot(ctype, &Map, type, field, columns_opt->answer, ncols,
+               sizecol_opt->answer, size, scale, &ocolor, colors, y_center,
+               max_reference, chart3d_flag->answer);
 
     D_save_command(G_recreate_command());
     D_close_driver();

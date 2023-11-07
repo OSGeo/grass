@@ -14,30 +14,32 @@ import os
 class TestROutXyz(TestCase):
     """Test r.out.xyz script"""
 
-    mapName = 'elev_lid792_1m'
-    csvFile = 'elev_lid792_1m.csv'
+    mapName = "elev_lid792_1m"
+    csvFile = "elev_lid792_1m.csv"
 
     @classmethod
     def setUpClass(cls):
         """Create maps in a small region."""
         cls.use_temp_region()
-        cls.runModule('g.region', raster=cls.mapName, flags='p')
+        cls.runModule("g.region", raster=cls.mapName, flags="p")
 
     @classmethod
     def tearDownClass(cls):
         """Remove temporary region"""
         cls.del_temp_region()
 
-        if (os.path.isfile(cls.csvFile)):
+        if os.path.isfile(cls.csvFile):
             os.remove(cls.csvFile)
 
     def test_r_out_xyz(self):
         """ASCII text file test"""
-        module = SimpleModule('r.out.xyz', input=self.mapName,
-                              output=self.csvFile, separator=",")
+        module = SimpleModule(
+            "r.out.xyz", input=self.mapName, output=self.csvFile, separator=","
+        )
         self.assertModule(module)
 
         self.assertFileExists(filename=self.csvFile)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     test()

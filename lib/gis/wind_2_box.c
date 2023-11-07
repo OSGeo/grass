@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/gis/wind_2_box.c
  *
@@ -16,11 +15,10 @@
 
 #include <grass/gis.h>
 
-
 /**
  * \brief Adjusts window to a rectangular box.
  *
- * Creates a new window <b>dst</b> from a window <b>src</b> which fits 
+ * Creates a new window <b>dst</b> from a window <b>src</b> which fits
  * into the rectangular box with dimensions <b>rows</b> by <b>cols</b>.
  *
  * \param[in] src source window
@@ -30,8 +28,8 @@
  * \return
  */
 
-void G_adjust_window_to_box(const struct Cell_head *src,
-			    struct Cell_head *dst, int rows, int cols)
+void G_adjust_window_to_box(const struct Cell_head *src, struct Cell_head *dst,
+                            int rows, int cols)
 {
     double ew, ns;
 
@@ -43,9 +41,9 @@ void G_adjust_window_to_box(const struct Cell_head *src,
 
     /* set both resolutions equal to the larger */
     if (ns > ew)
-	ew = ns;
+        ew = ns;
     else
-	ns = ew;
+        ns = ew;
 
     dst->ns_res = ns;
     dst->ew_res = ew;

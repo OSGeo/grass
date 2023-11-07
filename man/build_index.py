@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 
 # generates docs/html/index.html
-# (c) The GRASS Development Team, Markus Neteler, Glynn Clements 2003, 2004, 2005, 2006, 2009
+# (C) 2003-2009 Markus Neteler and the GRASS Development Team
+# Authors:
+#   Markus Neteler
+#   Glynn Clements
 
 import sys
 import os
-import string
 
 from build_html import *
 
 os.chdir(html_dir)
 
 filename = "index.html"
-f = open(filename + ".tmp", 'w')
+f = open(filename + ".tmp", "w")
 
 year = None
 if len(sys.argv) > 1:

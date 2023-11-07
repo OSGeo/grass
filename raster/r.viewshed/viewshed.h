@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.viewshed
@@ -10,16 +9,16 @@
  *               wkrichar@bowdoin.edu or willster3021@gmail.com
  *               Markus Metz: surface interpolation
  *
- * Date:         april 2011 
- * 
+ * Date:         april 2011
+ *
  * PURPOSE: To calculate the viewshed (the visible cells in the
  * raster) for the given viewpoint (observer) location.  The
  * visibility model is the following: Two points in the raster are
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the
  * line-of-sight that connects their centers does not intersect the
- * terrain. The terrain is NOT viewed as a tesselation of flat cells, 
- * i.e. if the line-of-sight does not pass through the cell center, 
+ * terrain. The terrain is NOT viewed as a tessellation of flat cells,
+ * i.e. if the line-of-sight does not pass through the cell center,
  * elevation is determined using bilinear interpolation.
  * The viewshed algorithm is efficient both in
  * terms of CPU operations and I/O operations. It has worst-case
@@ -35,7 +34,6 @@
  *
  *****************************************************************************/
 
-
 #ifndef _KREVELD_H
 #define _KREVELD_H
 
@@ -46,14 +44,10 @@
 #include "grass.h"
 #include <grass/iostream/ami.h>
 
-
 /* ------------------------------------------------------------ */
 /*return the memory usage in bytes of the algorithm when running in
    memory */
-long long get_viewshed_memory_usage(GridHeader * hd);
-
-
-
+long long get_viewshed_memory_usage(GridHeader *hd);
 
 /* ------------------------------------------------------------ */
 /* run Kreveld's algorithm on the grid stored in the given file, and
@@ -70,13 +64,9 @@ long long get_viewshed_memory_usage(GridHeader * hd);
    angle wrt to viewpoint
 
  */
-MemoryVisibilityGrid *viewshed_in_memory(char *inputfname,
-					 GridHeader * hd,
-					 Viewpoint * vp,
-					 ViewOptions viewOptions);
-
-
-
+MemoryVisibilityGrid *viewshed_in_memory(char *inputfname, GridHeader *hd,
+                                         Viewpoint *vp,
+                                         ViewOptions viewOptions);
 
 /* ------------------------------------------------------------ */
 /* compute viewshed on the grid stored in the given file, and with the
@@ -87,18 +77,13 @@ MemoryVisibilityGrid *viewshed_in_memory(char *inputfname,
 
    if it is NODATA, then x is set to NODATA if it is invisible, then x
    is set to INVISIBLE if it is visible, then x is set to the vertical
-   angle wrt to viewpoint. 
+   angle wrt to viewpoint.
 
  */
-IOVisibilityGrid *viewshed_external(char *inputfname,
-				    GridHeader * hd,
-				    Viewpoint * vp, ViewOptions viewOptions);
-
-
+IOVisibilityGrid *viewshed_external(char *inputfname, GridHeader *hd,
+                                    Viewpoint *vp, ViewOptions viewOptions);
 
 void print_viewshed_timings(Rtimer initEventTime, Rtimer sortEventTime,
-			    Rtimer sweepTime);
-
-
+                            Rtimer sweepTime);
 
 #endif

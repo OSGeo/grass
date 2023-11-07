@@ -13,9 +13,9 @@ int levels_reg(struct Region *region)
     D = 0;
     reg_to_wdht(region, &wd, &ht);
     while ((wd > 2) && (ht > 2)) {
-	D++;
-	dec_reg(region);
-	reg_to_wdht(region, &wd, &ht);
+        D++;
+        dec_reg(region);
+        reg_to_wdht(region, &wd, &ht);
     }
 
     /* restore region structure */

@@ -1,9 +1,9 @@
-Feb 2000 added cwidth, offset, coffset, lpos for vectors by Radim Blazek 
+Feb 2000 added cwidth, offset, coffset, lpos for vectors by Radim Blazek
 
-Jan 2000 added vector areas and legend label for vectors by Radim Blazek 
+Jan 2000 added vector areas and legend label for vectors by Radim Blazek
 
 1998
-Patch, which enables user to choose one vector category 
+Patch, which enables user to choose one vector category
 to print from a vector file (Janne Soimasuo, Finnland)
    -> line_cat additions
 
@@ -24,7 +24,7 @@ specify the width of the line in pixels, which is not true:
 they were actually interpreted as width in user space PostScript
 coordinates: 1/72 of inch. I made the width double, added width options
 for outline and grid, and also now the width ni is isnterpreted as n inches.
- 
+
 STATUS:
     FIXED and coming out with the next update
 
@@ -36,14 +36,14 @@ it was giving segmentation faults.
 It looks like ps.map is doing exactly what r.poly does: creating
 a vector file with boundaries of raster areas given a raster file.
 Seems like a lot to do just to plot a map. If the user makes 10
-different plots with the same raster file using outline, then 
+different plots with the same raster file using outline, then
 every time exact same vector file is created and deleted.
 
 Instead I want to draw little line segments between every pair of
 differing cells without worrying too much about topology.
 This will have one drawback: each vector line will be drawn as many
 little line segments, each with beginning and the end, instead of
-starting the PostScript path at each node and drawing a continuous line 
+starting the PostScript path at each node and drawing a continuous line
 through all the points of vector line like it is done when drawing vector
 maps.
 Also I am going to add a line width parameter to outline command
@@ -64,14 +64,14 @@ FIXED BUGS:
      in function do_labels.c so as not to restrict the choice of font size.
 
   3. increased the maximum number of pixels allowed on a page in function
-      map_setup.c : 
-          limit = 300000000L; 
-     if the total number of pixels is larger than "limit" then ps.map 
+      map_setup.c :
+          limit = 300000000L;
+     if the total number of pixels is larger than "limit" then ps.map
      reduces it to limit
      This change allows us to print layers at their actual resolution.
-     For example: an AVHRR layer at 151 cells per inch. 
+     For example: an AVHRR layer at 151 cells per inch.
 
-     NOTE: we are thinking about assigning different upper limits to different 
+     NOTE: we are thinking about assigning different upper limits to different
      Postscript devices, as an additional parameter in the ps.devices files.
 
   4. changed function plfile.c so that it accepts a line width of 0
@@ -88,7 +88,7 @@ The gridnumber size was set to zero if it was >50;
 Also I want to add linewidth for grid
 STATUS:
     FIXED and coming out with the next update
-     
+
 
 --------------------------------------------------------------------------
 DESCRIPTION:
@@ -97,11 +97,11 @@ ps.map is called with the following arguments:
 
     ps.map input=input_script [scale=xxxx] output=outputfile
 
-The scale is optional.  If no scale is given here and no scale request is 
-made in the input script, a scale equivalent to "1 panel" is used. 
+The scale is optional.  If no scale is given here and no scale request is
+made in the input script, a scale equivalent to "1 panel" is used.
 
 The program ps.select should be run to select a printer configuration file
-prior to running ps.map.  These files are located in the directory 
+prior to running ps.map.  These files are located in the directory
 $GISBASE/etc/paint/ps.devices.  The name of the file is the argument to
 ps.select.  These files contain the following printer info:
 
@@ -117,7 +117,7 @@ ps.select.  These files contain the following printer info:
 If ps.select is not run, the default values are as shown above, where page
 width and height are the paper dimensions (in inches) and the margins are
 the unprintable edges of the page.  The level is the PostScript level and
-the resolution is the effective resolution in pixels per inch.  
+the resolution is the effective resolution in pixels per inch.
 
 All of the p.map requests except for "colormode", "defpat" and "setpat"
 have been implemented.  Multiple panels are not supported at this time.
@@ -126,17 +126,17 @@ program (icons created with p.icon will not work).
 
 The following p.map requests have been modified in ps.map:
 
-    colortable (has the following additional sub-requests)   
+    colortable (has the following additional sub-requests)
       where x y (distance in inches from left and top edges of page - optional)
       width  tablewidth (maximum width of colortable in inches - optional)
-      cols table_columns (optional - defaullt = 1)
+      cols table_columns (optional - default = 1)
       font fontname (optional - default = Helvetica)
       fontsize fontsize (optional - default = 10)
       color textcolor (optional - default = black)
       end (required)
 
-    comments (has the following additional sub-requests)   
-      where x y (positions the comments x and y inches from the left and top 
+    comments (has the following additional sub-requests)
+      where x y (positions the comments x and y inches from the left and top
 	edges of the page - optonal - default is immediately below the last
 	item printed, starting at the left edge of the map)
       font fontname (optional - default = Helvetica)
@@ -144,18 +144,18 @@ The following p.map requests have been modified in ps.map:
       color textcolor (optional - default = black)
       end (required)
 
-    grid (has the following additional sub-requests)   
+    grid (has the following additional sub-requests)
       font fontname (optional - default = Helvetica)
       fontsize fontsize (optional - default = 10)
       end (required)
 
-    labels (has the following additional sub-requests)   
+    labels (has the following additional sub-requests)
       font fontname (optional - default = Helvetica)
       end (required)
 
     scale (except multiple panels are not yet implemented)
 
-    sites (has the following additional sub-request)   
+    sites (has the following additional sub-request)
       font fontname (optional - default = Helvetica.  The size of the
 	font is proportional to the size of the icon.  The default icon
 	size is 1.0, which is equivalent to a fontsize of 10.)
@@ -197,7 +197,7 @@ The following new script requests have been added:
 	request can appear up to 20 times in a ps.map script.)
 
     vlegend
-      where x y (positions the vector legend x and y inches from the left 
+      where x y (positions the vector legend x and y inches from the left
 	and top edges of the page - optonal - default is immediately below the
 	map_info, starting at the left edge of the map)
       font fontname (optional - default = Helvetica)

@@ -48,7 +48,7 @@ the third and so on.
 So the formal command line syntax can be also written as
 <b>input=</b><em>primary</em>,<em>secondary</em>,<em>tertiary</em>,...
 For two raster maps, the first one can be viewed as the primary one
-or the default one and the second one as the secondary one or a fallback. 
+or the default one and the second one as the secondary one or a fallback.
 
 <center>
 <img src="r_patch_zeros_as_nulls.png">
@@ -89,8 +89,8 @@ The example assumes zero values to be treated as NULLs (<b>-z</b> flag).
   0 0 0 0 0 0 0 0    4 4 4 4 4 4 4 4    4 4 4 4 4 4 4 4
 </pre></div>
 
-Switching the <em>patched</em> and the <em>patching</em> raster map layers 
-produces the following results: 
+Switching the <em>patched</em> and the <em>patching</em> raster map layers
+produces the following results:
 
 <div class="code"><pre>
   0 0 1 1 0 0 0 0    1 1 1 0 2 2 0 0    1 1 1 1 2 2 0 0
@@ -101,16 +101,15 @@ produces the following results:
   4 4 4 4 4 4 4 4    0 0 0 0 0 0 0 0    4 4 4 4 4 4 4 4
 </pre></div>
 
-
 <h2>NOTES</h2>
 
 Frequently, this program is used to patch together adjacent map layers which
-have been digitized separately.  The program 
+have been digitized separately.  The program
 <em><a href="v.mkgrid.html">v.mkgrid</a></em> can be used to make adjacent
 maps align neatly.
 
-<p>The user should check the current geographic region settings before running 
-<em>r.patch</em>, to ensure that the region boundaries encompass all 
+<p>The user should check the current geographic region settings before running
+<em>r.patch</em>, to ensure that the region boundaries encompass all
 of the data desired to be included in the composite map and to ensure that the
 region resolution is the resolution of the desired data. To set the
 geographic region settings to one or several raster maps, the <em>g.region</em>
@@ -121,8 +120,8 @@ g.region raster=map1[,map2[,...]]
 </pre></div>
 
 <p>
-Use of <em>r.patch</em> is generally followed by use of the GRASS programs 
-<em><a href="g.remove.html">g.remove</a></em> and 
+Use of <em>r.patch</em> is generally followed by use of the GRASS programs
+<em><a href="g.remove.html">g.remove</a></em> and
 <em><a href="g.rename.html">g.rename</a></em>;
 <em>g.remove</em> is used to remove the original (un-patched) raster map
 layers, while <em>g.rename</em> is used to then assign to the newly-created
@@ -131,11 +130,11 @@ layer.
 
 <p>
 <em>r.patch</em> reads the existing category label files and color tables
-from the <em>input</em> maps and creates these files for the patched, 
-composite <em>output</em> map.  This can be quite time consuming for 
-certain maps, especially if there are many different category values 
+from the <em>input</em> maps and creates these files for the patched,
+composite <em>output</em> map.  This can be quite time consuming for
+certain maps, especially if there are many different category values
 across the patched maps. The <em>-s</em> flag allows disabling the reading
-and creation of these support files,  meaning that the <em>output</em> 
+and creation of these support files,  meaning that the <em>output</em>
 map will have no category labels and no explicit color table.
 
 <p>
@@ -162,6 +161,22 @@ using the option <b>input</b>. In that case,
 <em><a href="r.series.html">r.series</a></em> can be used instead of
 <em>r.patch</em>.
 
+<h3>PERFORMANCE</h3>
+<p>By specifying the number of parallel processes with <b>nprocs</b> option,
+<em>r.patch</em> can run significantly faster, see benchmarks below.
+
+<div align="center" style="margin: 10px">
+     <img src="r_patch_benchmark_size.png" alt="benchmark for number of cells" border="0">
+     <img src="r_patch_benchmark_memory.png" alt="benchmark for memory size" border="0">
+     <br>
+     <i>Figure: Benchmark on the left shows execution time for different
+     number of cells, benchmark on the right shows execution time
+     for different memory size for 5000x5000 raster. See benchmark scripts in source code.
+     (Intel Core i9-10940X CPU @ 3.30GHz x 28) </i>
+     </div>
+<p>To reduce the memory requirements to minimum, set option <b>memory</b> to zero.
+To take advantage of the parallelization, GRASS GIS
+needs to compiled with OpenMP enabled.
 
 <h2>EXAMPLES</h2>
 
@@ -183,7 +198,7 @@ r.patch input=roads,water,forest output=result
 <h3>Map mosaic example using Bash syntax</h3>
 
 Create a list of maps matching a pattern, extend the region to include them
-all, and patch them together to create a mosaic. Overlapping maps will be 
+all, and patch them together to create a mosaic. Overlapping maps will be
 used in the order listed.
 
 <div class="code"><pre>
@@ -191,7 +206,6 @@ MAPS=`g.list type=raster separator=comma pat="map_*"`
 g.region raster=$MAPS -p
 r.patch input=$MAPS output=maps_mosaic
 </pre></div>
-
 
 <h2>SEE ALSO</h2>
 
@@ -207,14 +221,11 @@ r.patch input=$MAPS output=maps_mosaic
 <p>
 <a href="https://grasswiki.osgeo.org/wiki/Large_raster_data_processing">Hints for large raster data processing</a>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
-Michael Shapiro, 
+Michael Shapiro,
 U.S. Army Construction Engineering Research Laboratory
 <br>
--z flag and performance improvement by Huidae Cho
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Huidae Cho (-z flag and performance improvement)
+<br>
+Aaron Saw Min Sern (OpenMP support).

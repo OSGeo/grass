@@ -28,10 +28,10 @@ int check_scale(char *text)
     *unit1 = 0;
     *dummy = 0;
     if (sscanf(text, "%lf %s %1s", &u1, unit1, dummy) == 2 && *dummy == 0) {
-	if (strncmp(unit1, "panel", 5) == 0 && u1 > 0)
-	    return 1;
-	if (strncmp(unit1, "inch", 4) == 0 && u1 > 0)
-	    return 1;
+        if (strncmp(unit1, "panel", 5) == 0 && u1 > 0)
+            return 1;
+        if (strncmp(unit1, "inch", 4) == 0 && u1 > 0)
+            return 1;
     }
 
     /*
@@ -41,9 +41,9 @@ int check_scale(char *text)
     *dummy = 0;
     n1 = n2 = 0;
     if (sscanf(text, "%ld : %ld%1s", &n1, &n2, dummy) == 2) {
-	if (n1 <= 0 || n2 <= 0 || *dummy)
-	    return 0;
-	return 1;
+        if (n1 <= 0 || n2 <= 0 || *dummy)
+            return 0;
+        return 1;
     }
 
     /*
@@ -59,25 +59,24 @@ int check_scale(char *text)
     *equals = 0;
     n1 = n2 = 0;
     if (sscanf(text, "%ld %s %s %ld %s", &n1, unit1, equals, &n2, unit2) == 5) {
-	if (n1 <= 0 || n2 <= 0)
-	    return 0;
-	if (strcmp(equals, "=") != 0 && strncmp(equals, "equal", 5) != 0)
-	    return 0;
+        if (n1 <= 0 || n2 <= 0)
+            return 0;
+        if (strcmp(equals, "=") != 0 && strncmp(equals, "equal", 5) != 0)
+            return 0;
 
-	/* unit1: inches */
-	if (strncmp(unit1, "inch", 4) == 0)
-	    u1 = 1;
-	else
-	    return 0;
+        /* unit1: inches */
+        if (strncmp(unit1, "inch", 4) == 0)
+            u1 = 1;
+        else
+            return 0;
 
-	/* unit2: meters, miles, kilometers */
-	if (strncmp(unit2, "mile", 4) == 0)
-	    return 1;
-	if (strncmp(unit2, "meter", 5) == 0)
-	    return 1;
-	if (strncmp(unit2, "kilometer", 9) == 0)
-	    return 1;
-
+        /* unit2: meters, miles, kilometers */
+        if (strncmp(unit2, "mile", 4) == 0)
+            return 1;
+        if (strncmp(unit2, "meter", 5) == 0)
+            return 1;
+        if (strncmp(unit2, "kilometer", 9) == 0)
+            return 1;
     }
     return 0;
 }

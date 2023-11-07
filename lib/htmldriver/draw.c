@@ -1,4 +1,3 @@
-
 #include <grass/gis.h>
 #include "path.h"
 #include "htmlmap.h"
@@ -34,4 +33,3 @@ void HTML_Stroke(void)
 {
     path_reset(&path);
 }
-

@@ -13,6 +13,6 @@ New structure:
 - moved v.surf.rst to src/mapdev/
 - moved r.resamp.rst to src/raster/
 
-Spring 1999: changes which allows you to select 
-which attribute to interpolate and which 
+Spring 1999: changes which allows you to select
+which attribute to interpolate and which
 one to use for smoothing)

@@ -44,34 +44,43 @@ class FilterTest(TestCase):
     """
 
     # Setup variables to be used for outputs
-    vector_points = 'vinlidar_filters_original'
-    imported_points = 'vinlidar_filters_imported'
-    las_file = 'vinlidar_filters_points.las'
+    vector_points = "vinlidar_filters_original"
+    imported_points = "vinlidar_filters_imported"
+    las_file = "vinlidar_filters_points.las"
     npoints = 300
 
     @classmethod
     def setUpClass(cls):
         """Ensures expected computational region and generated data"""
         cls.use_temp_region()
-        cls.runModule('g.region', n=20, s=10, e=25, w=15, res=1)
-        cls.runModule('v.in.ascii', input='-', stdin_=POINTS,
-                      flags='z', z=3, cat=0, separator='comma',
-                      output=cls.vector_points,
-                      columns="x double precision, y double precision,"
-                              " z double precision, return_n integer,"
-                              " n_returns integer, class_n integer")
-        cls.runModule('v.out.lidar',
-                      input=cls.vector_points, layer=1,
-                      output=cls.las_file,
-                      return_column='return_n',
-                      n_returns_column='n_returns',
-                      class_column='class_n')
+        cls.runModule("g.region", n=20, s=10, e=25, w=15, res=1)
+        cls.runModule(
+            "v.in.ascii",
+            input="-",
+            stdin_=POINTS,
+            flags="z",
+            z=3,
+            cat=0,
+            separator="comma",
+            output=cls.vector_points,
+            columns="x double precision, y double precision,"
+            " z double precision, return_n integer,"
+            " n_returns integer, class_n integer",
+        )
+        cls.runModule(
+            "v.out.lidar",
+            input=cls.vector_points,
+            layer=1,
+            output=cls.las_file,
+            return_column="return_n",
+            n_returns_column="n_returns",
+            class_column="class_n",
+        )
 
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region and generated data"""
-        cls.runModule('g.remove', flags='f', type='vector',
-            name=cls.vector_points)
+        cls.runModule("g.remove", flags="f", type="vector", name=cls.vector_points)
         if os.path.isfile(cls.las_file):
             os.remove(cls.las_file)
         cls.del_temp_region()
@@ -81,52 +90,60 @@ class FilterTest(TestCase):
 
         This is executed after each test run.
         """
-        self.runModule('g.remove', flags='f', type='vector',
-            name=self.imported_points)
+        self.runModule("g.remove", flags="f", type="vector", name=self.imported_points)
 
     def test_no_filter(self):
         """Test to see if the standard outputs are created
 
         This shows if the inpute data are as expected.
         """
-        self.assertModule('v.in.lidar', input=self.las_file,
-            output=self.imported_points, flags='bt')
+        self.assertModule(
+            "v.in.lidar", input=self.las_file, output=self.imported_points, flags="bt"
+        )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points,
-            reference=dict(points=19))
+            vector=self.imported_points, reference=dict(points=19)
+        )
 
     def return_filter(self, name, npoints):
         """Mid return filter test"""
-        self.assertModule('v.in.lidar', input=self.las_file,
-            output=self.imported_points, flags='bt',
-            return_filter=name)
+        self.assertModule(
+            "v.in.lidar",
+            input=self.las_file,
+            output=self.imported_points,
+            flags="bt",
+            return_filter=name,
+        )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points,
-            reference=dict(points=npoints))
+            vector=self.imported_points, reference=dict(points=npoints)
+        )
 
     def test_first_return_filter(self):
         """First return filter test"""
-        self.return_filter('first', 9)
+        self.return_filter("first", 9)
 
     def test_mid_return_filter(self):
         """Mid return filter test"""
-        self.return_filter('mid', 5)
+        self.return_filter("mid", 5)
 
     def test_last_return_filter(self):
         """Last return filter test"""
-        self.return_filter('last', 5)
+        self.return_filter("last", 5)
 
     def class_filter(self, class_n, npoints):
         """Actual code for testing class filter"""
-        self.assertModule('v.in.lidar', input=self.las_file,
-            output=self.imported_points, flags='bt',
-            class_filter=class_n)
+        self.assertModule(
+            "v.in.lidar",
+            input=self.las_file,
+            output=self.imported_points,
+            flags="bt",
+            class_filter=class_n,
+        )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points,
-            reference=dict(points=npoints))
+            vector=self.imported_points, reference=dict(points=npoints)
+        )
 
     def test_class_2_filter(self):
         """Test to filter classes"""
@@ -146,31 +163,40 @@ class FilterTest(TestCase):
 
     def return_and_class_filter(self, return_name, class_n, npoints):
         """Return and class filter combined test code"""
-        self.assertModule('v.in.lidar', input=self.las_file,
-            output=self.imported_points, flags='bt',
-            return_filter=return_name, class_filter=class_n)
+        self.assertModule(
+            "v.in.lidar",
+            input=self.las_file,
+            output=self.imported_points,
+            flags="bt",
+            return_filter=return_name,
+            class_filter=class_n,
+        )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points,
-            reference=dict(points=npoints))
+            vector=self.imported_points, reference=dict(points=npoints)
+        )
 
     def test_first_return_and_class_filter(self):
         """Combined test for return and class"""
-        self.return_and_class_filter('first', 2, 2)
+        self.return_and_class_filter("first", 2, 2)
 
     def test_last_return_and_class_filter(self):
         """Combined test for return and class"""
-        self.return_and_class_filter('last', 5, 3)
+        self.return_and_class_filter("last", 5, 3)
 
     def zrange_filter(self, zrange, npoints):
         """Actual code for zrange option test"""
-        self.assertModule('v.in.lidar', input=self.las_file,
-            output=self.imported_points, flags='bt',
-            zrange=zrange)
+        self.assertModule(
+            "v.in.lidar",
+            input=self.las_file,
+            output=self.imported_points,
+            flags="bt",
+            zrange=zrange,
+        )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points,
-            reference=dict(points=npoints))
+            vector=self.imported_points, reference=dict(points=npoints)
+        )
 
     def test_zrange_filter(self):
         """Test zrange option"""
@@ -185,24 +211,34 @@ class FilterTest(TestCase):
 
     def test_zrange_and_class_filter(self):
         """zrange and class_filter option combined test"""
-        self.assertModule('v.in.lidar', input=self.las_file,
-            output=self.imported_points, flags='bt',
-            zrange=(141, 900), class_filter=5)
+        self.assertModule(
+            "v.in.lidar",
+            input=self.las_file,
+            output=self.imported_points,
+            flags="bt",
+            zrange=(141, 900),
+            class_filter=5,
+        )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points,
-            reference=dict(points=4))
+            vector=self.imported_points, reference=dict(points=4)
+        )
 
     def test_zrange_and_return_filter(self):
         """zrange and class_filter option combined test"""
-        self.assertModule('v.in.lidar', input=self.las_file,
-            output=self.imported_points, flags='bt',
-            zrange=(141, 900), return_filter='last')
+        self.assertModule(
+            "v.in.lidar",
+            input=self.las_file,
+            output=self.imported_points,
+            flags="bt",
+            zrange=(141, 900),
+            return_filter="last",
+        )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points,
-            reference=dict(points=2))
+            vector=self.imported_points, reference=dict(points=2)
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

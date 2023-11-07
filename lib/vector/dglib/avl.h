@@ -27,17 +27,16 @@
 
 /* Function types. */
 typedef int avl_comparison_func(const void *avl_a, const void *avl_b,
-				void *avl_param);
+                                void *avl_param);
 typedef void avl_item_func(void *avl_item, void *avl_param);
 typedef void *avl_copy_func(void *avl_item, void *avl_param);
 
 #ifndef LIBAVL_ALLOCATOR
 #define LIBAVL_ALLOCATOR
 /* Memory allocator. */
-struct libavl_allocator
-{
-    void *(*libavl_malloc) (struct libavl_allocator *, size_t libavl_size);
-    void (*libavl_free) (struct libavl_allocator *, void *libavl_block);
+struct libavl_allocator {
+    void *(*libavl_malloc)(struct libavl_allocator *, size_t libavl_size);
+    void (*libavl_free)(struct libavl_allocator *, void *libavl_block);
 };
 #endif
 
@@ -52,40 +51,37 @@ void avl_free(struct libavl_allocator *, void *);
 #endif
 
 /* Tree data structure. */
-struct avl_table
-{
-    struct avl_node *avl_root;	/* Tree's root. */
-    avl_comparison_func *avl_compare;	/* Comparison function. */
-    void *avl_param;		/* Extra argument to |avl_compare|. */
-    struct libavl_allocator *avl_alloc;	/* Memory allocator. */
-    size_t avl_count;		/* Number of items in tree. */
-    unsigned long avl_generation;	/* Generation number. */
+struct avl_table {
+    struct avl_node *avl_root;          /* Tree's root. */
+    avl_comparison_func *avl_compare;   /* Comparison function. */
+    void *avl_param;                    /* Extra argument to |avl_compare|. */
+    struct libavl_allocator *avl_alloc; /* Memory allocator. */
+    size_t avl_count;                   /* Number of items in tree. */
+    unsigned long avl_generation;       /* Generation number. */
 };
 
 /* An AVL tree node. */
-struct avl_node
-{
-    struct avl_node *avl_link[2];	/* Subtrees. */
-    void *avl_data;		/* Pointer to data. */
-    signed char avl_balance;	/* Balance factor. */
+struct avl_node {
+    struct avl_node *avl_link[2]; /* Subtrees. */
+    void *avl_data;               /* Pointer to data. */
+    signed char avl_balance;      /* Balance factor. */
 };
 
 /* AVL traverser structure. */
-struct avl_traverser
-{
-    struct avl_table *avl_table;	/* Tree being traversed. */
-    struct avl_node *avl_node;	/* Current node in tree. */
+struct avl_traverser {
+    struct avl_table *avl_table; /* Tree being traversed. */
+    struct avl_node *avl_node;   /* Current node in tree. */
     struct avl_node *avl_stack[AVL_MAX_HEIGHT];
     /* All the nodes above |avl_node|. */
-    size_t avl_height;		/* Number of nodes in |avl_parent|. */
-    unsigned long avl_generation;	/* Generation number. */
+    size_t avl_height;            /* Number of nodes in |avl_parent|. */
+    unsigned long avl_generation; /* Generation number. */
 };
 
 /* Table functions. */
 struct avl_table *avl_create(avl_comparison_func *, void *,
-			     struct libavl_allocator *);
+                             struct libavl_allocator *);
 struct avl_table *avl_copy(const struct avl_table *, avl_copy_func *,
-			   avl_item_func *, struct libavl_allocator *);
+                           avl_item_func *, struct libavl_allocator *);
 void avl_destroy(struct avl_table *, avl_item_func *);
 void **avl_probe(struct avl_table *, void *);
 void *avl_insert(struct avl_table *, void *);
@@ -95,7 +91,7 @@ void *avl_find(const struct avl_table *, const void *);
 void avl_assert_insert(struct avl_table *, void *);
 void *avl_assert_delete(struct avl_table *, void *);
 
-#define avl_count(table) ((size_t) (table)->avl_count)
+#define avl_count(table) ((size_t)(table)->avl_count)
 
 /* Table traverser functions. */
 void avl_t_init(struct avl_traverser *, struct avl_table *);

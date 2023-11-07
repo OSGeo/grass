@@ -1,16 +1,16 @@
 /*!
-  \file lib/db/dbmi_base/xdr.c
-  
-  \brief DBMI Library (base) - external data representation
-  
-  (C) 1999-2009, 2011 by the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Joel Jones (CERL/UIUC), Radim Blazek, Brad Douglas, Markus Neteler
-  \author Doxygenized by Martin Landa <landa.martin gmail.com> (2011)
-*/
+   \file lib/db/dbmi_base/xdr.c
+
+   \brief DBMI Library (base) - external data representation
+
+   (C) 1999-2009, 2011 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Joel Jones (CERL/UIUC), Radim Blazek, Brad Douglas, Markus Neteler
+   \author Doxygenized by Martin Landa <landa.martin gmail.com> (2011)
+ */
 
 #include "xdr.h"
 
@@ -35,13 +35,13 @@ static ssize_t readn(int fd, void *buf, size_t count)
     ssize_t total = 0;
 
     while (total < count) {
-	ssize_t n = read(fd, (char *)buf + total, count - total);
+        ssize_t n = read(fd, (char *)buf + total, count - total);
 
-	if (n < 0)
-	    return n;
-	if (n == 0)
-	    break;
-	total += n;
+        if (n < 0)
+            return n;
+        if (n == 0)
+            break;
+        total += n;
     }
 
     return total;
@@ -52,13 +52,13 @@ static ssize_t writen(int fd, const void *buf, size_t count)
     ssize_t total = 0;
 
     while (total < count) {
-	ssize_t n = write(fd, (const char *)buf + total, count - total);
+        ssize_t n = write(fd, (const char *)buf + total, count - total);
 
-	if (n < 0)
-	    return n;
-	if (n == 0)
-	    break;
-	total += n;
+        if (n < 0)
+            return n;
+        if (n == 0)
+            break;
+        total += n;
     }
 
     return total;
@@ -67,25 +67,25 @@ static ssize_t writen(int fd, const void *buf, size_t count)
 #endif
 
 /*!
-  \brief ?
-  
-  \param send
-  \param recv
-*/
-void db__set_protocol_fds(FILE * send, FILE * recv)
+   \brief ?
+
+   \param send
+   \param recv
+ */
+void db__set_protocol_fds(FILE *send, FILE *recv)
 {
     _send = send;
     _recv = recv;
 }
 
 /*!
-  \brief ?
+   \brief ?
 
-  \param buf
-  \param size
+   \param buf
+   \param size
 
-  \return
-*/
+   \return
+ */
 int db__send(const void *buf, size_t size)
 {
 #if USE_STDIO

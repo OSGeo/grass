@@ -91,7 +91,7 @@ access is provided by functions starting with <tt>V2_</tt> prefix.
 - Vect_open_topo_pg()
 - Vect__build_sfa()
 - Vect_build_pg()
- 
+
 \section vlibPgSeeAlso See Also
 
  - \ref vlibOgr

@@ -1,7 +1,6 @@
-
- /***************************************************************************
+/***************************************************************************
  *
- * MODULE:     v.out.vtk  
+ * MODULE:     v.out.vtk
  * AUTHOR(S):  Soeren Gebbert
  *
  * PURPOSE:    v.out.vtk: writes ASCII VTK file
@@ -22,9 +21,9 @@ extern double x_extent;
 extern double y_extent;
 
 /*Write the vtk output */
-int write_vtk(FILE * ascii, struct Map_info *, int layer, int *types,
-	      int typenum, int dp, double scale, int numatts, int labels );
+int write_vtk(FILE *ascii, struct Map_info *, int layer, int *types,
+              int typenum, int dp, double scale, int numatts, int labels);
 /*Write the VTK header */
-int write_vtk_head(FILE * ascii, struct Map_info *Map);
+int write_vtk_head(FILE *ascii, struct Map_info *Map);
 
 #endif

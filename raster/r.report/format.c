@@ -1,4 +1,3 @@
-
 /***************************************************
  * these routines determine the printf format used
  * by floating point values
@@ -6,39 +5,39 @@
  * format_parms() is called for each value.
  *     before first call set eformat=0,dp=6
  *
- * format_double() does the formating with the
+ * format_double() does the formatting with the
  *     parms determined by format_parms()
  ***************************************************/
+
 #include <string.h>
 #include "global.h"
 
 int format_parms(double v, int *n, int *dp, int *eformat, int e_option)
 {
     char buf[50];
-    int orig_length, scient_dp;
+    int scient_dp;
 
-    orig_length = *n;
     scient_dp = *dp;
     for (;;) {
-	if (!*eformat)
-	    format_double(v, buf, *n, *dp);
-	else
-	    scient_format(v, buf, *n, *dp);
+        if (!*eformat)
+            format_double(v, buf, *n, *dp);
+        else
+            scient_format(v, buf, *n, *dp);
 
-	if (strlen(buf) <= *n)
-	    break;
+        if ((int)strlen(buf) <= *n)
+            break;
 
-	if (*dp) {
-	    *dp -= 1;
-	}
-	else {
-	    if ((e_option) && (!*eformat)) {
-		*eformat = 1;
-		*dp = scient_dp;
-	    }
-	    else
-		*n = strlen(buf);
-	}
+        if (*dp) {
+            *dp -= 1;
+        }
+        else {
+            if ((e_option) && (!*eformat)) {
+                *eformat = 1;
+                *dp = scient_dp;
+            }
+            else
+                *n = strlen(buf);
+        }
     }
 
     return 0;

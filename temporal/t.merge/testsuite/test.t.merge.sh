@@ -1,8 +1,8 @@
 #!/bin/sh
-# Tests the merging of space time datasets 
+# Tests the merging of space time datasets
 
 # We need to set a specific region in the
-# @preprocess step of this test. 
+# @preprocess step of this test.
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
@@ -22,7 +22,7 @@ t.register -i --o maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
 # in several space time datasets
 t.create --o type=strds temporaltype=absolute output=precip_abs1 \
 	title="Test" descr="This is the 1 test strds" semantictype=sum
-t.register --o input=precip_abs1 maps=prec_1,prec_2,prec_3 
+t.register --o input=precip_abs1 maps=prec_1,prec_2,prec_3
 
 t.create --o type=strds temporaltype=absolute output=precip_abs2 \
 	title="Test" descr="This is the 2 test strds" semantictype=sum

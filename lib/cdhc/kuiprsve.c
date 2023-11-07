@@ -3,7 +3,6 @@
 #include <grass/cdhc.h>
 #include "local_proto.h"
 
-
 double *Cdhc_kuipers_v_exp(double *x, int n)
 {
     static double y[2];

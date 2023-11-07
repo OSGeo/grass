@@ -1,4 +1,4 @@
 all = [
-    'locdownload',
-    'utils',
+    "locdownload",
+    "utils",
 ]

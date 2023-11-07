@@ -6,13 +6,11 @@
  */
 #include <string.h>
 
-
 static int err_code = 0;
 static char err_msg[1024];
 
-
 /*!
- * \brief 
+ * \brief
  *
  * record 'code' and 'msg' as
  * error code/msg (in static variables)
@@ -32,13 +30,13 @@ int datetime_error(int code, char *msg)
     err_code = code;
     *err_msg = 0;
     if (code != 0 && msg)
-	strcpy(err_msg, msg);	/* hope err_msg is big enough */
+        strcpy(err_msg, msg); /* hope err_msg is big enough */
 
     return code;
 }
 
 /*!
- * \brief 
+ * \brief
  *
  * returns an error code
  *
@@ -51,7 +49,7 @@ int datetime_error_code(void)
 }
 
 /*!
- * \brief 
+ * \brief
  *
  * returns an error message
  *
@@ -63,9 +61,8 @@ char *datetime_error_msg(void)
     return err_msg;
 }
 
-
 /*!
- * \brief 
+ * \brief
  *
  *  clears error code and message
  *

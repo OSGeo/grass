@@ -1,4 +1,3 @@
-
 /* Vis5D version 5.0 */
 
 /*
@@ -21,17 +20,13 @@
    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-
 /*
  * This configuration file contains options which can be safely
  * changed by the user.
  */
 
-
-
 #ifndef VIS5D_H
 #define VIS5D_H
-
 
 /*
  * Amount of physical RAM in megabytes:
@@ -41,32 +36,25 @@
  * malloc/free and not deallocate graphics (ok for systems with a lot
  * of memory (>=128MB)).
  */
-#define MBS 32
-
-
+#define MBS               32
 
 /* Default topography file: */
-#define TOPOFILE "EARTH.TOPO"
-
+#define TOPOFILE          "EARTH.TOPO"
 
 /* Default map lines files: */
-#define WORLDFILE "OUTLSUPW"
-#define USAFILE "OUTLUSAM"
-
+#define WORLDFILE         "OUTLSUPW"
+#define USAFILE           "OUTLUSAM"
 
 /* Default directory to search for user functions: */
-#define FUNCTION_PATH "userfuncs"
-
+#define FUNCTION_PATH     "userfuncs"
 
 /* Default animation rate in milliseconds: */
-#define ANIMRATE 100
+#define ANIMRATE          100
 
-
-/* Default scale and exponent values for logrithmic vertical coordinate system: */
-#define DEFAULT_LOG_SCALE  1012.5
-#define DEFAULT_LOG_EXP  -7.2
-
-
+/* Default scale and exponent values for logrithmic vertical coordinate system:
+ */
+#define DEFAULT_LOG_SCALE 1012.5
+#define DEFAULT_LOG_EXP   -7.2
 
 /**********************************************************************/
 
@@ -88,13 +76,10 @@
 
 #define BIG_GFX
 
-
 /*
  * Shared by code above and below API:
  */
-#define MAX_LABEL   1000
-#define MAX_FUNCS   100
-
-
+#define MAX_LABEL 1000
+#define MAX_FUNCS 100
 
 #endif

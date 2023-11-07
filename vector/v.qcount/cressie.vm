@@ -36,7 +36,7 @@ Received: from bank.ecn.purdue.edu by pasture.ecn.purdue.edu (5.65/1.32jrs)
 	id AA18477; Sun, 23 Jan 94 12:31:44 -0500
 Received: from pv660d.vincent.iastate.edu by bank.ecn.purdue.edu (5.65/1.32jrs)
 	id AA14645; Sun, 23 Jan 94 12:31:42 -0500
-Received: by pv660d.vincent.iastate.edu with sendmail-5.65 
+Received: by pv660d.vincent.iastate.edu with sendmail-5.65
 	id <AA09115@pv660d.vincent.iastate.edu>; Sun, 23 Jan 1994 11:31:39 -0600
 Message-Id: <9401231731.AA09115@pv660d.vincent.iastate.edu>
 From: ncressie@iastate.edu
@@ -47,11 +47,8 @@ Date: Sun, 23 Jan 1994 11:31:39 -0600
 
 Mr McCauley,
             Thank you for your recent e-mail and for alerting me to a possible
-typo on p.590. You are correct - and I am happy to say I caught it for the 
-revised edition. There should be an 'n' before the summation symbol in the 
+typo on p.590. You are correct - and I am happy to say I caught it for the
+revised edition. There should be an 'n' before the summation symbol in the
 numerator of Morisita's I. The correct formula does appear in the revised edition.
             Sincerely,
              Noel Cressie
-
-
-

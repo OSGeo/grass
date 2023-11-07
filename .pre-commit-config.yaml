@@ -1,0 +1,70 @@
+---
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: |
+          (?x)^(
+                configure$|
+                .*\.ascii$|
+                .*\.asc$|
+                .*\.ref$|
+                raster3d/r3.null/testsuite/data/test_volume_.*|
+                mswindows/.*|
+                .*\.po$|
+                .*\.ps$|
+                .*\.svg$|
+                python/libgrass_interface_generator/ctypesgen/|
+                lib/fonts/fonts/.*
+          )
+      - id: end-of-file-fixer
+        exclude: |
+          (?x)^(
+                configure$|
+                .*\.ascii$|
+                .*\.asc$|
+                .*\.ref$|
+                python/grass/pygrass/raster/testsuite/data/geology_cats|
+                mswindows/.*|
+                .*\.po$|
+                .*\.ps$|
+                .*\.svg$|
+                python/libgrass_interface_generator/ctypesgen/|
+                lib/fonts/fonts/.*
+          )
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.33.0
+    hooks:
+      - id: markdownlint
+  - repo: https://github.com/psf/black
+    rev: 23.1.0
+    hooks:
+      - id: black
+        exclude: |
+          (?x)^(
+                python/libgrass_interface_generator/
+          )
+  - repo: https://github.com/pycqa/flake8
+    rev: 3.9.2
+    hooks:
+      - id: flake8
+        exclude: |
+          (?x)^(
+                python/libgrass_interface_generator/
+          )
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v15.0.6
+    hooks:
+      - id: clang-format
+        types_or: [c, c++, javascript, json, objective-c]
+        exclude: |
+          (?x)^(
+                man/jquery.fixedheadertable.min.js
+          )
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.29.0
+    hooks:
+      - id: yamllint
+        args: [--format, parsable, --strict, -d,
+               '{extends: default, rules: {truthy: disable, line-length: {max: 120, allow-non-breakable-words: true}}}']

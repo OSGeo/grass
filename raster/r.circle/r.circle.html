@@ -2,17 +2,16 @@
 
 This module creates an output raster map centered on the <em>x,y</em> values specified
 with the <em>coordinate</em> parameter, out to the edge of the current region.
-The output cell values increase linearly from the specified center. The <em>min</em> 
-and <em>max</em> parameters control the inner and outer output raster map radii, respectively. 
+The output cell values increase linearly from the specified center. The <em>min</em>
+and <em>max</em> parameters control the inner and outer output raster map radii, respectively.
 
 <p>The <em>mult</em> parameter can be used to multiply the output raster cells by a common factor.
 Note that this parameter does not affect the output raster position or size; only the z-values
-are changed with this parameter. 
+are changed with this parameter.
 <p>Binary-output raster maps (solid circles of one value) can be created
 with the <b>-b</b> flag. Raster maps so created can be used to create
 binary filters for use in <em>i.ifft</em> (inverse Fourier transformations;
 apply filter with <em>r.mask</em>).
-
 
 <h2>EXAMPLES</h2>
 
@@ -25,7 +24,7 @@ NORTHCENTER=`g.region -c | awk ' /center northing:/ { print $3 }'`
 r.circle output=circle coordinate=${EASTCENTER},${NORTHCENTER} max=300
 </pre></div>
 
-Generate a binary raster ring around current map center with an inner radius 
+Generate a binary raster ring around current map center with an inner radius
 of 500m and an outer radius of 1000m:
 
 <div class="code"><pre>
@@ -34,23 +33,18 @@ NORTHCENTER=`g.region -c | awk ' /center northing:/ { print $3 }'`
 r.circle -b output=circle coordinate=${EASTCENTER},${NORTHCENTER} min=500 max=1000
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="g.region.html">g.region</a>,
-<a href="g.remove.html">g.remove</a>, 
-<a href="g.rename.html">g.rename</a>, 
-<a href="i.fft.html">i.fft</a>, 
+<a href="g.remove.html">g.remove</a>,
+<a href="g.rename.html">g.rename</a>,
+<a href="i.fft.html">i.fft</a>,
 <a href="i.ifft.html">i.ifft</a>,
 <a href="r.mask.html">r.mask</a>
 </em>
 
+<h2>AUTHORS</h2>
 
-<h2>AUTHOR</h2>
 Bill Brown, U.S. Army Construction Engineering Research Laboratory<br>
 Additional flag/min/max parameter by Markus Neteler, University of Hannover
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

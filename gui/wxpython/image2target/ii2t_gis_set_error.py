@@ -11,10 +11,8 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-import os
 import sys
 
-from core import globalvar
 import wx
 
 
@@ -24,15 +22,14 @@ def main():
     if len(sys.argv) == 1:
         msg = "Unknown reason"
     else:
-        msg = ''
+        msg = ""
         for m in sys.argv[1:]:
             msg += m
 
-    wx.MessageBox(caption="Error",
-                  message=msg,
-                  style=wx.OK | wx.ICON_ERROR)
+    wx.MessageBox(caption="Error", message=msg, style=wx.OK | wx.ICON_ERROR)
 
     app.MainLoop()
+
 
 if __name__ == "__main__":
     main()

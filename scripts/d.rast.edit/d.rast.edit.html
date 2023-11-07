@@ -27,7 +27,6 @@ with ENTER, otherwise it is not yet active.
 To save the edited map, the "File" menu contains the entry <b>Save</b>.
 To leave <em>d.rast.edit</em>, use <b>Exit</b> in the menu.
 
-
 <h3>Map pan with arrow keys</h3>
 
 The map can be shifted using the arrow keys on the keyboard.
@@ -77,7 +76,7 @@ Editing raster values in a LiDAR DEM, North Carolina sample data:
 <div class="code"><pre>
 g.region raster=elev_lid792_1m -p
 
-# pan to area of interest and edit raster cells (I used "102" as value to modifiy cells
+# pan to area of interest and edit raster cells (I used "102" as value to modify cells
 # Use:  File > Save to save
 # then: File > Exit
 d.rast.edit input=elev_lid792_1m output=elev_lid792_1m_modified
@@ -127,23 +126,17 @@ would survive unscathed by an interrupt at most any point in execution.
 Beware of exiting the program
 by means other than using <em>exit</em> on the <em>Main Menu</em>.
 
-
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="d.rast.arrow.html">d.rast.arrow</a>,
-<a href="d.rast.num.html">d.rast.num</a>, 
+<a href="d.rast.num.html">d.rast.num</a>,
 <a href="wxGUI.rdigit.html">wxGUI.rdigit</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Tcl/Tk (2007) and wxPython versions (2008): Glynn Clements<br>
 <br>
 Replaces Xdriver version in C by Chris Rewerts, April 1991,
 Agricultural Engineering, Purdue University
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

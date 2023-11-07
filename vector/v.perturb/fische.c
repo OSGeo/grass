@@ -22,7 +22,7 @@ int fische(int n, double *mu, int *p)
     --p;
 
     if (n <= 0)
-	return 0;
+        return 0;
 
     pmu = exp(-(*mu));
     p0 = 0;
@@ -33,31 +33,30 @@ int fische(int n, double *mu, int *p)
     nl0 = left;
 
     for (k = 1; k <= nsegs; ++k) {
-	for (i = 1; i <= left; ++i) {
-	    indx[i - 1] = i;
-	    p[p0 + i] = 0;
-	    q[i - 1] = 1.0;
-	}
+        for (i = 1; i <= left; ++i) {
+            indx[i - 1] = i;
+            p[p0 + i] = 0;
+            q[i - 1] = 1.0;
+        }
 
-	do {			/* Begin iterative loop on segment of p's */
-	    zufall(left, u);	/* Get the needed uniforms */
-	    jj = 0;
+        do {                 /* Begin iterative loop on segment of p's */
+            zufall(left, u); /* Get the needed uniforms */
+            jj = 0;
 
-	    for (i = 1; i <= left; ++i) {
-		ii = indx[i - 1];
-		q0 = q[ii - 1] * u[i - 1];
-		q[ii - 1] = q0;
-		if (q0 > pmu) {
-		    indx[jj++] = ii;
-		    ++p[p0 + ii];
-		}
-	    }
-	    left = jj;		/* any left in this segment? */
-	}
-	while (left > 0);
+            for (i = 1; i <= left; ++i) {
+                ii = indx[i - 1];
+                q0 = q[ii - 1] * u[i - 1];
+                q[ii - 1] = q0;
+                if (q0 > pmu) {
+                    indx[jj++] = ii;
+                    ++p[p0 + ii];
+                }
+            }
+            left = jj; /* any left in this segment? */
+        } while (left > 0);
 
-	p0 += nl0;
-	nl0 = left = 1024;
+        p0 += nl0;
+        nl0 = left = 1024;
     }
     return 0;
-}				/* fische */
+} /* fische */

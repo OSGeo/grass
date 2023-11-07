@@ -60,7 +60,7 @@ which can create columnar output.  For example, the command:
 
 <p>    <b>r.stats input=</b>a,b,c | pr -3 | cat -s
 
-<p>will create a three-column output 
+<p>will create a three-column output
 <div class="code"><pre>
 1:4:4:10000.00       2:1:5:290000.00      2:4:5:2090000.00
 1:4:5:1340000.00     2:2:5:350000.00      3:1:2:450000.00
@@ -172,7 +172,7 @@ zipcode areas:
 <div class="code"><pre>
 g.region raster=zipcodes
 # landuse/landcover and zipcodes
-r.stats -c input=landclass96,zipcodes separator=comma 
+r.stats -c input=landclass96,zipcodes separator=comma
 
 # landuse/landcover, geology and zipcodes with category labels
 r.stats -c input=landclass96,zipcodes,geology_30m separator=comma -l
@@ -195,8 +195,3 @@ r.stats -c input=landclass96,zipcodes,geology_30m separator=comma -l
 
 Michael Shapiro, U.S. Army Construction Engineering Research Laboratory<br>
 Sort option by Martin Landa, Czech Technical University in Prague, 2013
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:       t.create
@@ -20,49 +20,49 @@
 #
 #############################################################################
 
-#%module
-#% description: Creates a space time dataset.
-#% keyword: temporal
-#% keyword: map management
-#% keyword: create
-#% keyword: time
-#%end
+# %module
+# % description: Creates a space time dataset.
+# % keyword: temporal
+# % keyword: map management
+# % keyword: create
+# % keyword: time
+# %end
 
-#%option G_OPT_STDS_OUTPUT
-#%end
+# %option G_OPT_STDS_OUTPUT
+# %end
 
-#%option G_OPT_STDS_TYPE
-#% description: Type of the output space time dataset
-#%end
+# %option G_OPT_STDS_TYPE
+# % description: Type of the output space time dataset
+# %end
 
-#%option G_OPT_T_TYPE
-#%end
+# %option G_OPT_T_TYPE
+# %end
 
-#%option
-#% key: semantictype
-#% type: string
-#% description: Semantic type of the space time dataset
-#% required: yes
-#% multiple: no
-#% options: min,max,sum,mean
-#% answer: mean
-#%end
+# %option
+# % key: semantictype
+# % type: string
+# % description: Semantic type of the space time dataset
+# % required: yes
+# % multiple: no
+# % options: min,max,sum,mean
+# % answer: mean
+# %end
 
-#%option
-#% key: title
-#% type: string
-#% description: Title of the new space time dataset
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: title
+# % type: string
+# % description: Title of the new space time dataset
+# % required: yes
+# % multiple: no
+# %end
 
-#%option
-#% key: description
-#% type: string
-#% description: Description of the new space time dataset
-#% required: yes
-#% multiple: no
-#%end
+# %option
+# % key: description
+# % type: string
+# % description: Description of the new space time dataset
+# % required: yes
+# % multiple: no
+# %end
 
 import grass.script as grass
 
@@ -83,9 +83,11 @@ def main():
 
     # Make sure the temporal database exists
     tgis.init()
-    
-    tgis.open_new_stds(name, type, temporaltype, title, descr, 
-                                     semantic, None, grass.overwrite())
+
+    tgis.open_new_stds(
+        name, type, temporaltype, title, descr, semantic, None, grass.overwrite()
+    )
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

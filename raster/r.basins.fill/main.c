@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.basins.fill
@@ -14,7 +13,7 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 /*====================================================================*/
 /* program to propagate the link label into the hillslope areas;      */
@@ -33,7 +32,6 @@
 #include "local_proto.h"
 
 #define NOMASK 1
-
 
 int main(int argc, char *argv[])
 {
@@ -54,8 +52,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
     G_add_keyword(_("watershed"));
-    module->description =
-	_("Generates watershed subbasins raster map.");
+    module->description = _("Generates watershed subbasins raster map.");
 
     drain_opt = G_define_standard_option(G_OPT_R_INPUT);
     drain_opt->key = "cnetwork";
@@ -63,10 +60,11 @@ int main(int argc, char *argv[])
 
     ridge_opt = G_define_standard_option(G_OPT_R_INPUT);
     ridge_opt->key = "tnetwork";
-    ridge_opt->description = _("Name of input thinned ridge network raster map");
+    ridge_opt->description =
+        _("Name of input thinned ridge network raster map");
 
     part_opt = G_define_standard_option(G_OPT_R_OUTPUT);
-    
+
     num_opt = G_define_option();
     num_opt->key = "number";
     num_opt->type = TYPE_INTEGER;
@@ -74,13 +72,14 @@ int main(int argc, char *argv[])
     num_opt->description = _("Number of passes through the dataset");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     sscanf(num_opt->answer, "%d", &tpass);
 
     drain_name = drain_opt->answer;
 
-    /* this isn't a nice thing to do. Rast_align_window() should be used first */
+    /* this isn't a nice thing to do. Rast_align_window() should be used first
+     */
     Rast_get_cellhd(drain_name, "", &window);
     Rast_set_window(&window);
 
@@ -96,52 +95,53 @@ int main(int argc, char *argv[])
 
     partfd = Rast_open_c_new(part_name);
 
-    /* run through file and set streams to zero at locations where ridges exist */
+    /* run through file and set streams to zero at locations where ridges exist
+     */
     for (row = 0; row < nrows; row++) {
-	for (col = 0; col < ncols; col++)
-	    if (ridge[row * ncols + col] != 0)
-		drain[row * ncols + col] = 0;
+        for (col = 0; col < ncols; col++)
+            if (ridge[row * ncols + col] != 0)
+                drain[row * ncols + col] = 0;
     }
 
     for (npass = 1; npass <= tpass; npass++) {
-	for (row = 1; row < nrows - 1; row++) {
-	    for (col = 1; col < ncols - 1; col++) {
-		if (drain[row * ncols + col] == 0 &&
-		    ridge[row * ncols + col] == 0) {
-		    if (drain[(row - 1) * ncols + col] != 0 &&
-			ridge[(row - 1) * ncols + col] == 0)
-			drain[row * ncols + col] =
-			    drain[(row - 1) * ncols + col];
-		    if (drain[row * ncols + (col - 1)] != 0 &&
-			ridge[row * ncols + (col - 1)] == 0)
-			drain[row * ncols + col] =
-			    drain[row * ncols + (col - 1)];
-		}
-	    }
-	}
-	G_message(_("Forward sweep complete"));
+        for (row = 1; row < nrows - 1; row++) {
+            for (col = 1; col < ncols - 1; col++) {
+                if (drain[row * ncols + col] == 0 &&
+                    ridge[row * ncols + col] == 0) {
+                    if (drain[(row - 1) * ncols + col] != 0 &&
+                        ridge[(row - 1) * ncols + col] == 0)
+                        drain[row * ncols + col] =
+                            drain[(row - 1) * ncols + col];
+                    if (drain[row * ncols + (col - 1)] != 0 &&
+                        ridge[row * ncols + (col - 1)] == 0)
+                        drain[row * ncols + col] =
+                            drain[row * ncols + (col - 1)];
+                }
+            }
+        }
+        G_message(_("Forward sweep complete"));
 
-	for (row = nrows - 3; row > 1; --row) {
-	    for (col = ncols - 3; col > 1; --col) {
-		if (drain[row * ncols + col] == 0 &&
-		    ridge[row * ncols + col] == 0) {
-		    if (drain[(row + 1) * ncols + col] != 0 &&
-			ridge[(row + 1) * ncols + col] == 0)
-			drain[row * ncols + col] =
-			    drain[(row + 1) * ncols + col];
-		    if (drain[row * ncols + (col + 1)] != 0 &&
-			ridge[row * ncols + (col + 1)] == 0)
-			drain[row * ncols + col] =
-			    drain[row * ncols + (col + 1)];
-		}
-	    }
-	}
-	G_message(_("Reverse sweep complete"));
+        for (row = nrows - 3; row > 1; --row) {
+            for (col = ncols - 3; col > 1; --col) {
+                if (drain[row * ncols + col] == 0 &&
+                    ridge[row * ncols + col] == 0) {
+                    if (drain[(row + 1) * ncols + col] != 0 &&
+                        ridge[(row + 1) * ncols + col] == 0)
+                        drain[row * ncols + col] =
+                            drain[(row + 1) * ncols + col];
+                    if (drain[row * ncols + (col + 1)] != 0 &&
+                        ridge[row * ncols + (col + 1)] == 0)
+                        drain[row * ncols + col] =
+                            drain[row * ncols + (col + 1)];
+                }
+            }
+        }
+        G_message(_("Reverse sweep complete"));
     }
 
     /* write out partitioned watershed map */
     for (row = 0; row < nrows; row++)
-	Rast_put_row(partfd, drain + (row * ncols), CELL_TYPE);
+        Rast_put_row(partfd, drain + (row * ncols), CELL_TYPE);
 
     G_message(_("Creating support files for <%s>..."), part_name);
     Rast_close(partfd);

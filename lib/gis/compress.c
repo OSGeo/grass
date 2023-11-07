@@ -5,15 +5,15 @@
  * MODULE:      GRASS gis library
  * FILENAME:    compress.c
  * AUTHOR(S):   Markus Metz
- * PURPOSE:     To provide an interface for compressing and 
- *              decompressing data using various methods.  Its primary 
+ * PURPOSE:     To provide an interface for compressing and
+ *              decompressing data using various methods.  Its primary
  *              use is in the storage and reading of GRASS rasters.
  *
  * DATE CREATED: Dec 17 2015
  * COPYRIGHT:   (C) 2015 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
- *              License (version 2 or greater). Read the file COPYING that 
+ *              License (version 2 or greater). Read the file COPYING that
  *              comes with GRASS for details.
  *
  *****************************************************************************/
@@ -91,7 +91,7 @@
 
 #include "compress.h"
 
-#define G_COMPRESSED_NO (unsigned char)'0'
+#define G_COMPRESSED_NO  (unsigned char)'0'
 #define G_COMPRESSED_YES (unsigned char)'1'
 
 /* get compressor number
@@ -100,13 +100,13 @@
 int G_compressor_number(char *name)
 {
     int i;
-    
-    if (!name)
-	return -1;
 
-    for (i = 0; compressor[i].name ; i++) {
-	if (G_strcasecmp(name, compressor[i].name) == 0)
-	    return i;
+    if (!name)
+        return -1;
+
+    for (i = 0; compressor[i].name; i++) {
+        if (G_strcasecmp(name, compressor[i].name) == 0)
+            return i;
     }
 
     return -1;
@@ -118,7 +118,7 @@ int G_compressor_number(char *name)
 char *G_compressor_name(int number)
 {
     if (number < 0 || number >= n_compressors)
-	return NULL;
+        return NULL;
 
     return compressor[number].name;
 }
@@ -140,8 +140,8 @@ int G_default_compressor(void)
 int G_check_compressor(int number)
 {
     if (number < 0 || number >= n_compressors) {
-	G_warning(_("Request for unsupported compressor"));
-	return -1;
+        G_warning(_("Request for unsupported compressor"));
+        return -1;
     }
 
     return compressor[number].available;
@@ -152,21 +152,20 @@ int G_no_compress_bound(int src_sz)
     return src_sz;
 }
 
-int
-G_no_compress(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz)
+int G_no_compress(unsigned char *src, int src_sz, unsigned char *dst,
+                  int dst_sz)
 {
     /* Catch errors early */
     if (src == NULL || dst == NULL)
-	return -1;
+        return -1;
 
     /* Don't do anything if src is empty */
     if (src_sz <= 0)
-	return 0;
+        return 0;
 
     /* dst too small */
     if (dst_sz < src_sz)
-	return -2;
+        return -2;
 
     /* Copy the data from src to dst */
     memcpy(dst, src, src_sz);
@@ -174,21 +173,19 @@ G_no_compress(unsigned char *src, int src_sz, unsigned char *dst,
     return src_sz;
 }
 
-int
-G_no_expand(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz)
+int G_no_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 {
     /* Catch errors early */
     if (src == NULL || dst == NULL)
-	return -1;
+        return -1;
 
     /* Don't do anything if src is empty */
     if (src_sz <= 0)
-	return 0;
+        return 0;
 
     /* dst too small */
     if (dst_sz < src_sz)
-	return -2;
+        return -2;
 
     /* Copy the data from src to dst */
     memcpy(dst, src, src_sz);
@@ -199,14 +196,14 @@ G_no_expand(unsigned char *src, int src_sz, unsigned char *dst,
 /* G_*_compress_bound() returns an upper bound on the compressed size
  * which can be larger than the input size
  * some compressors are a bit faster if the size of the destination
- * is at least the upper bound (no need to test for buffer overlflow)
- * read comments on the specific compressor interfaces 
+ * is at least the upper bound (no need to test for buffer overflow)
+ * read comments on the specific compressor interfaces
  */
 int G_compress_bound(int src_sz, int number)
 {
     if (number < 0 || number >= n_compressors) {
-	G_fatal_error(_("Request for unsupported compressor"));
-	return -1;
+        G_fatal_error(_("Request for unsupported compressor"));
+        return -1;
     }
 
     return compressor[number].bound(src_sz);
@@ -218,12 +215,12 @@ int G_compress_bound(int src_sz, int number)
  * -1: error
  * -2: dst too small
  */
-int G_compress(unsigned char *src, int src_sz, unsigned char *dst,
-	       int dst_sz, int number)
+int G_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz,
+               int number)
 {
     if (number < 0 || number >= n_compressors) {
-	G_fatal_error(_("Request for unsupported compressor"));
-	return -1;
+        G_fatal_error(_("Request for unsupported compressor"));
+        return -1;
     }
 
     return compressor[number].compress(src, src_sz, dst, dst_sz);
@@ -233,12 +230,12 @@ int G_compress(unsigned char *src, int src_sz, unsigned char *dst,
  * > 0: number of bytes in dst
  * -1: error
  */
-int G_expand(unsigned char *src, int src_sz, unsigned char *dst,
-	     int dst_sz, int number)
+int G_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz,
+             int number)
 {
     if (number < 0 || number >= n_compressors) {
-	G_fatal_error(_("Request for unsupported compressor"));
-	return -1;
+        G_fatal_error(_("Request for unsupported compressor"));
+        return -1;
     }
 
     return compressor[number].expand(src, src_sz, dst, dst_sz);
@@ -251,62 +248,62 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
     unsigned char *b;
 
     if (dst == NULL || nbytes <= 0) {
-	if (dst == NULL)
-	    G_warning(_("No destination buffer allocated"));
-	if (nbytes <= 0)
-	    G_warning(_("Invalid destination buffer size %d"), nbytes);
-	return -2;
+        if (dst == NULL)
+            G_warning(_("No destination buffer allocated"));
+        if (nbytes <= 0)
+            G_warning(_("Invalid destination buffer size %d"), nbytes);
+        return -2;
     }
 
     if (rbytes <= 0) {
-	G_warning(_("Invalid read size %d"), nbytes);
-	return -2;
+        G_warning(_("Invalid read size %d"), nbytes);
+        return -2;
     }
 
     bsize = rbytes;
 
     /* Our temporary input buffer for read */
-    if (NULL == (b = (unsigned char *)
-		 G_calloc(bsize, sizeof(unsigned char))))
-	return -1;
+    if (NULL == (b = (unsigned char *)G_calloc(bsize, sizeof(unsigned char))))
+        return -1;
 
     /* Read from the file until we get our bsize or an error */
     nread = 0;
     do {
-	err = read(fd, b + nread, bsize - nread);
-	if (err >= 0)
-	    nread += err;
+        err = read(fd, b + nread, bsize - nread);
+        if (err >= 0)
+            nread += err;
     } while (err > 0 && nread < bsize);
 
     if (err <= 0) {
-	if (err == 0)
-	    G_warning(_("Unable to read %d bytes: end of file"), rbytes);
-	else
-	    G_warning(_("Unable to read %d bytes: %s"), rbytes, strerror(errno));
-	return -1;
+        if (err == 0)
+            G_warning(_("Unable to read %d bytes: end of file"), rbytes);
+        else
+            G_warning(_("Unable to read %d bytes: %s"), rbytes,
+                      strerror(errno));
+        return -1;
     }
 
     /* If the bsize if less than rbytes and we didn't get an error.. */
     if (nread < rbytes) {
-	G_free(b);
-	G_warning("Unable to read %d bytes, got %d bytes", rbytes, nread);
-	return -1;
+        G_free(b);
+        G_warning("Unable to read %d bytes, got %d bytes", rbytes, nread);
+        return -1;
     }
 
     /* Test if row is compressed */
     if (b[0] == G_COMPRESSED_NO) {
-	/* Then just copy it to dst */
-	for (err = 0; err < nread - 1 && err < nbytes; err++)
-	    dst[err] = b[err + 1];
+        /* Then just copy it to dst */
+        for (err = 0; err < nread - 1 && err < nbytes; err++)
+            dst[err] = b[err + 1];
 
-	G_free(b);
-	return (nread - 1);
+        G_free(b);
+        return (nread - 1);
     }
     else if (b[0] != G_COMPRESSED_YES) {
-	/* We're not at the start of a row */
-	G_free(b);
-	G_warning("Read error: We're not at the start of a row");
-	return -1;
+        /* We're not at the start of a row */
+        G_free(b);
+        G_warning("Read error: We're not at the start of a row");
+        return -1;
     }
     /* Okay it's a compressed row */
 
@@ -321,28 +318,27 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
     /* Return whatever G_expand() returned */
     return err;
 
-}				/* G_read_compressed() */
+} /* G_read_compressed() */
 
-int G_write_compressed(int fd, unsigned char *src, int nbytes,
-                       int number)
+int G_write_compressed(int fd, unsigned char *src, int nbytes, int number)
 {
     int dst_sz, nwritten, err;
     unsigned char *dst, compressed;
 
     /* Catch errors */
     if (src == NULL || nbytes < 0) {
-	if (src == NULL)
-	    G_warning(_("No source buffer"));
-	if (nbytes <= 0)
-	    G_warning(_("Invalid source buffer size %d"), nbytes);
-	return -1;
+        if (src == NULL)
+            G_warning(_("No source buffer"));
+        if (nbytes <= 0)
+            G_warning(_("Invalid source buffer size %d"), nbytes);
+        return -1;
     }
 
     /* get upper bound of compressed size */
     dst_sz = G_compress_bound(nbytes, number);
-    if (NULL == (dst = (unsigned char *)
-		 G_calloc(dst_sz, sizeof(unsigned char))))
-	return -1;
+    if (NULL ==
+        (dst = (unsigned char *)G_calloc(dst_sz, sizeof(unsigned char))))
+        return -1;
 
     /* Now just call G_compress() */
     err = G_compress(src, nbytes, dst, dst_sz, number);
@@ -352,62 +348,66 @@ int G_write_compressed(int fd, unsigned char *src, int nbytes,
      * if dst is too small (i.e. compressed data is larger)
      */
     if (err > 0 && err < nbytes) {
-	dst_sz = err;
-	/* Write the compression flag */
-	compressed = G_COMPRESSED_YES;
-	if (write(fd, &compressed, 1) != 1) {
-	    G_free(dst);
-	    G_warning(_("Unable to write compression flag"));
-	    return -1;
-	}
-	nwritten = 0;
-	do {
-	    err = write(fd, dst + nwritten, dst_sz - nwritten);
-	    if (err >= 0)
-		nwritten += err;
-	} while (err > 0 && nwritten < dst_sz);
-	if (err <= 0) {
-	    if (err == 0)
-		G_warning(_("Unable to write %d bytes: nothing written"), dst_sz);
-	    else
-		G_warning(_("Unable to write %d bytes: %s"), dst_sz, strerror(errno));
-	}
-	/* Account for extra byte */
-	nwritten++;
+        dst_sz = err;
+        /* Write the compression flag */
+        compressed = G_COMPRESSED_YES;
+        if (write(fd, &compressed, 1) != 1) {
+            G_free(dst);
+            G_warning(_("Unable to write compression flag"));
+            return -1;
+        }
+        nwritten = 0;
+        do {
+            err = write(fd, dst + nwritten, dst_sz - nwritten);
+            if (err >= 0)
+                nwritten += err;
+        } while (err > 0 && nwritten < dst_sz);
+        if (err <= 0) {
+            if (err == 0)
+                G_warning(_("Unable to write %d bytes: nothing written"),
+                          dst_sz);
+            else
+                G_warning(_("Unable to write %d bytes: %s"), dst_sz,
+                          strerror(errno));
+        }
+        /* Account for extra byte */
+        nwritten++;
     }
     else {
-	/* Write compression flag */
-	compressed = G_COMPRESSED_NO;
-	if (write(fd, &compressed, 1) != 1) {
-	    G_free(dst);
-	    G_warning(_("Unable to write compression flag"));
-	    return -1;
-	}
-	nwritten = 0;
-	do {
-	    err = write(fd, src + nwritten, nbytes - nwritten);
-	    if (err >= 0)
-		nwritten += err;
-	} while (err > 0 && nwritten < nbytes);
-	if (err <= 0) {
-	    if (err == 0)
-		G_warning(_("Unable to write %d bytes: nothing written"), nbytes);
-	    else
-		G_warning(_("Unable to write %d bytes: %s"), nbytes, strerror(errno));
-	}
-	/* Account for extra byte */
-	nwritten++;
-    }				/* if (err > 0) */
+        /* Write compression flag */
+        compressed = G_COMPRESSED_NO;
+        if (write(fd, &compressed, 1) != 1) {
+            G_free(dst);
+            G_warning(_("Unable to write compression flag"));
+            return -1;
+        }
+        nwritten = 0;
+        do {
+            err = write(fd, src + nwritten, nbytes - nwritten);
+            if (err >= 0)
+                nwritten += err;
+        } while (err > 0 && nwritten < nbytes);
+        if (err <= 0) {
+            if (err == 0)
+                G_warning(_("Unable to write %d bytes: nothing written"),
+                          nbytes);
+            else
+                G_warning(_("Unable to write %d bytes: %s"), nbytes,
+                          strerror(errno));
+        }
+        /* Account for extra byte */
+        nwritten++;
+    } /* if (err > 0) */
 
     /* Done with the dst buffer */
     G_free(dst);
 
     /* If we didn't write all the data return an error */
     if (err < 0)
-	return -2;
+        return -2;
 
     return nwritten;
-}				/* G_write_compressed() */
+} /* G_write_compressed() */
 
 int G_write_uncompressed(int fd, const unsigned char *src, int nbytes)
 {
@@ -416,31 +416,32 @@ int G_write_uncompressed(int fd, const unsigned char *src, int nbytes)
 
     /* Catch errors */
     if (src == NULL || nbytes < 0)
-	return -1;
+        return -1;
 
     /* Write the compression flag */
     compressed = G_COMPRESSED_NO;
     if (write(fd, &compressed, 1) != 1) {
-	G_warning(_("Unable to write compression flag"));
-	return -1;
+        G_warning(_("Unable to write compression flag"));
+        return -1;
     }
 
     /* Now write the data */
     nwritten = 0;
     do {
-	err = write(fd, src + nwritten, nbytes - nwritten);
-	if (err > 0)
-	    nwritten += err;
+        err = write(fd, src + nwritten, nbytes - nwritten);
+        if (err > 0)
+            nwritten += err;
     } while (err > 0 && nwritten < nbytes);
     if (err <= 0) {
-	if (err == 0)
-	    G_warning(_("Unable to write %d bytes: nothing written"), nbytes);
-	else
-	    G_warning(_("Unable to write %d bytes: %s"), nbytes, strerror(errno));
+        if (err == 0)
+            G_warning(_("Unable to write %d bytes: nothing written"), nbytes);
+        else
+            G_warning(_("Unable to write %d bytes: %s"), nbytes,
+                      strerror(errno));
     }
 
     if (err < 0 || nwritten != nbytes)
-	return -1;
+        return -1;
 
     /* Account for extra compressed flag */
     nwritten++;
@@ -448,7 +449,6 @@ int G_write_uncompressed(int fd, const unsigned char *src, int nbytes)
     /* That's all */
     return nwritten;
 
-}				/* G_write_uncompressed() */
-
+} /* G_write_uncompressed() */
 
 /* vim: set softtabstop=4 shiftwidth=4 expandtab: */

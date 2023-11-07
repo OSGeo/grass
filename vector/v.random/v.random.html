@@ -16,15 +16,15 @@ calculated by rounding random floating point number.
 option <b>seed</b>.
 
 <h3>Restriction to vector areas</h3>
-<p>
+
 If an <b>restrict</b> vector map with areas is specified, the location
 of random points is restricted to the selected areas. By default, the
 requested number of points are distributed across all areas.
 
 <p>
-If the <b>-a</b> flag is given, the requested number of points is 
-generated for each individual area. For example, if 20 points should be 
-generated and the input map has 100 individual areas, 2000 points will 
+If the <b>-a</b> flag is given, the requested number of points is
+generated for each individual area. For example, if 20 points should be
+generated and the input map has 100 individual areas, 2000 points will
 be generated in total.
 
 <p>
@@ -37,8 +37,9 @@ below.
 
 Importantly, attributes will only be transferred if <b>layer</b> > 0
 (e.g., <tt>layer=1</tt>).
-  
+
 <h2>EXAMPLES</h2>
+
 All examples are based on the North Carolina sample dataset.
 
 <h3>Generating random points in 2D</h3>
@@ -118,7 +119,7 @@ Random points with different X, Y, and Z coordinates
 Generate 3 random points only in selected areas ("RALEIGH" related ZIP
 code areas):
 <div class="code"><pre>
-v.random restrict=zipcodes_wake output=zipcodes_local_random_n3 npoints=3 where="ZIPNAME = 'RALEIGH'" -a 
+v.random restrict=zipcodes_wake output=zipcodes_local_random_n3 npoints=3 where="ZIPNAME = 'RALEIGH'" -a
 
 # visualization
 d.mon wx0
@@ -171,7 +172,6 @@ r.colors randareas6k color=random
 d.rast randareas6k
 </pre></div>
 
-
 <h3>Random sampling from raster map</h3>
 
 Generate 20 random samples from a raster map:
@@ -195,7 +195,7 @@ Generate 20 random points and sample attribute data from geology (vector) map:
 g.region -p vector=geology
 v.random output=random_samples npoints=20
 v.db.addtable map=random_samples columns='cat integer, geology varchar(100)'
-v.what.vect map=random_samples column=geology query_map=geology query_layer=1 query_column=GEO_NAME 
+v.what.vect map=random_samples column=geology query_map=geology query_layer=1 query_column=GEO_NAME
 v.db.select random_samples
 cat|geology
 1|PzZm
@@ -231,7 +231,6 @@ d.vect random_samples color=white
 Random points only sampled in forested areas (stratified random sampling)
 </center>
 
-
 <h3>Stratified random sampling: Random sampling from vector map with spatial constraints</h3>
 
 Generating n points for each individual area: in this example two random
@@ -256,7 +255,6 @@ Two random points sampled in each individual water body (stratified
 random sampling)
 </center>
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -276,12 +274,6 @@ random sampling)
 
 <a href="http://mccauley-usa.com/">James Darrell McCauley</a>
 <a href="mailto:darrell@mccauley-usa.com">&lt;darrell@mccauley-usa.com&gt;</a>,
-<br>when he was at: 
-<a href="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural
-Engineering</a>
+<br>when he was at:
+<a href="http://ABE.www.ecn.purdue.edu/ABE/">Agricultural Engineering</a>
 <a href="http://www.purdue.edu/">Purdue University</a>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

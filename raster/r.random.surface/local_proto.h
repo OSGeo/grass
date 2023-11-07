@@ -10,7 +10,7 @@ void CalcSD(void);
 void CalcSurface(void);
 
 /* cpfilter.c */
-void CopyFilter(FILTER * FPtr, FILTER Filter);
+void CopyFilter(FILTER *FPtr, FILTER Filter);
 
 /* dd.c */
 double DD(double Dist);
@@ -34,8 +34,8 @@ void Init(void);
 void MakeBigF(void);
 
 /* makepp.c */
-double MakePP(int Row, int Col, int OutRows, int OutCols,
-	      double **Randoms, BIGF BigF);
+double MakePP(int Row, int Col, int OutRows, int OutCols, double **Randoms,
+              BIGF BigF);
 /* random.c */
 double ran1(void);
 

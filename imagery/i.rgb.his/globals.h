@@ -7,8 +7,8 @@
 int closefiles(char *, char *, char *, int[3], CELL *[3]);
 
 /* openfiles.c */
-void openfiles(char *, char *, char *, char *, char *, char *,
-	       int[3], int[3], CELL *[3]);
+void openfiles(char *, char *, char *, char *, char *, char *, int[3], int[3],
+               CELL *[3]);
 /* rgb2his.c */
 void rgb2his(CELL *[3], int);
 

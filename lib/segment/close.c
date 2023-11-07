@@ -22,7 +22,7 @@
  *
  * \brief Free memory allocated to segment, delete temp file.
  *
- * Releases the allocated memory associated with the segment file 
+ * Releases the allocated memory associated with the segment file
  * <b>seg</b> and deletes the temporary file.
  *
  * \param[in,out] SEG segment
@@ -33,18 +33,18 @@
 int Segment_close(SEGMENT *SEG)
 {
     if (SEG->open != 1)
-	return -1;
+        return -1;
 
     if (SEG->cache) {
-	G_free(SEG->cache);
+        G_free(SEG->cache);
     }
     else {
-	Segment_release(SEG);
-	close(SEG->fd);
-	unlink(SEG->fname);
+        Segment_release(SEG);
+        close(SEG->fd);
+        unlink(SEG->fname);
 
-	SEG->fd = -1;
-	SEG->fname = NULL;
+        SEG->fd = -1;
+        SEG->fname = NULL;
     }
 
     SEG->open = 0;

@@ -56,5 +56,3 @@ CREATE TRIGGER delete_vector_base AFTER DELETE ON vector_base
     DELETE FROM vector_metadata WHERE id = old.id;
     DELETE FROM vector_stds_register WHERE id = old.id;
   END;
-
-

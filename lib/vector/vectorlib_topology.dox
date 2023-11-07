@@ -37,7 +37,7 @@ The following rules apply to the vector data:
   in separate layers. However if area features and linear features
   must appear in one layer, common boundaries should be digitized only
   once. For example, a boundary that is also a line (e.g., a road which
-  is also a field boundary), should be digitized as a boundary to 
+  is also a field boundary), should be digitized as a boundary to
   complete the area(s), and a boundary which is functionally also a line
   should be labeled as a line by a distinct category number.
 

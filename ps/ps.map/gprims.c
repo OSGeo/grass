@@ -5,6 +5,7 @@
  */
 
 #include "ps_info.h"
+
 static int cur_x, cur_y;
 
 int draw_line(double x1, double y1, double x2, double y2)
@@ -40,31 +41,28 @@ int move_local(int x, int y)
 int cont_local(int x2, int y2)
 {
     if (((double)cur_x / 10. > PS.map_right &&
-	 (double)x2 / 10. > PS.map_right)
-	|| ((double)cur_x / 10. < PS.map_left &&
-	    (double)x2 / 10. < PS.map_left)
-	|| ((double)cur_y / 10. < PS.map_bot && (double)y2 / 10. < PS.map_bot)
-	|| ((double)cur_y / 10. > PS.map_top && (double)y2 / 10. > PS.map_top)
-	) {
-	if (sec_draw)
-	    return -2;
-	/* when both coordinates are outside window draw is called twice with the
-	   same line segment by plot_line in gis_libes if proj=Lat-Lon */
+         (double)x2 / 10. > PS.map_right) ||
+        ((double)cur_x / 10. < PS.map_left && (double)x2 / 10. < PS.map_left) ||
+        ((double)cur_y / 10. < PS.map_bot && (double)y2 / 10. < PS.map_bot) ||
+        ((double)cur_y / 10. > PS.map_top && (double)y2 / 10. > PS.map_top)) {
+        if (sec_draw)
+            return -2;
+        /* when both coordinates are outside window draw is called twice with
+           the same line segment by plot_line in gis_libes if proj=Lat-Lon */
 
-	else {
-	    fprintf(PS.fp, "%.1f %.1f M", (double)x2 / 10., (double)y2 / 10.);
-	    sec_draw = 1;
-	    return -1;
-	}
-
+        else {
+            fprintf(PS.fp, "%.1f %.1f M", (double)x2 / 10., (double)y2 / 10.);
+            sec_draw = 1;
+            return -1;
+        }
     }
     if (sec_draw) {
-	/* need to break cont. draw and move to new current point */
-	/* L is moveto lineto stroke */
-	fprintf(PS.fp, " D");	/* end line */
-	/* now start new path */
-	fprintf(PS.fp, " %.1f %.1f NM ", (double)cur_x / 10.,
-		(double)cur_y / 10.);
+        /* need to break cont. draw and move to new current point */
+        /* L is moveto lineto stroke */
+        fprintf(PS.fp, " D"); /* end line */
+        /* now start new path */
+        fprintf(PS.fp, " %.1f %.1f NM ", (double)cur_x / 10.,
+                (double)cur_y / 10.);
     }
     fprintf(PS.fp, "%.1f %.1f LN", (double)x2 / 10., (double)y2 / 10.);
     /* LN is lineto */

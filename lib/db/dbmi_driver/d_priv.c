@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_priv.c
- * 
+ *
  * \brief DBMI Library (driver) - privileges management
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -18,11 +18,11 @@
 #include "dbstubs.h"
 
 /*!
-  \brief Grant privileges on table 
-  
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
+   \brief Grant privileges on table
+
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
 int db_d_grant_on_table(void)
 {
     dbString tableName;
@@ -42,8 +42,8 @@ int db_d_grant_on_table(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

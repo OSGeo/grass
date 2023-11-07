@@ -1,16 +1,17 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.series.interp</em> 
-interpolates new raster maps located temporal or spatial in between existing raster maps. 
+<em>r.series.interp</em>
+interpolates new raster maps located temporal or spatial in between existing raster maps.
 The interpolation is performed at specific sampling positions. The sampling position for each output map must be specified,
-as well as the data position of the input maps. 
+as well as the data position of the input maps.
 
 The following interpolation methods are supported.
-<ul> 
- <li>linear: Linear interpolation. At least two input maps and data positions are required. 
-</ul> 
+<ul>
+ <li>linear: Linear interpolation. At least two input maps and data positions are required.
+</ul>
 
 <h2>EXAMPLES</h2>
+
 Interpolate linear three new maps at 3 sampling positions in the interval (0.0;1.0)
 <br>
 First prepare the input maps:
@@ -30,7 +31,7 @@ r.series.interp --v input=prec_1,prec_5 datapos=0.0,1.0 \
                   method=linear
 </pre></div>
 
-<p>Interpolate using the file option. 
+<p>Interpolate using the file option.
 First prepare the input file:
 <br>
 <div class="code"><pre>
@@ -47,7 +48,6 @@ r.series.interp --v input=prec_1,prec_5 datapos=0.0,1.0 file=outfile.txt method=
 
 The resulting maps will have the values 200, 300 and 400.
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -61,8 +61,3 @@ The resulting maps will have the values 200, 300 and 400.
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

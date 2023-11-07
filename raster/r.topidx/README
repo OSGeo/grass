@@ -22,4 +22,3 @@ from r.water.outlet then the following r.mapcalc statements will create
 study basin extracted elevation map.
 
 	r.mapcalc "belev = if(isnull(basin), basin, elev)"
-

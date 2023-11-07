@@ -35,9 +35,8 @@
  * \return 1 if color is set
  * \return 0 if color is not set
  */
-int Rast_get_color(const void *rast,
-		   int *red, int *grn, int *blu,
-		   struct Colors *colors, RASTER_MAP_TYPE map_type)
+int Rast_get_color(const void *rast, int *red, int *grn, int *blu,
+                   struct Colors *colors, RASTER_MAP_TYPE map_type)
 {
     unsigned char r, g, b, set;
 
@@ -65,8 +64,8 @@ int Rast_get_color(const void *rast,
  * \return 1 if color is set
  * \return 0 if color is not set
  */
-int Rast_get_c_color(const CELL * rast,
-		     int *red, int *grn, int *blu, struct Colors *colors)
+int Rast_get_c_color(const CELL *rast, int *red, int *grn, int *blu,
+                     struct Colors *colors)
 {
     return Rast_get_color(rast, red, grn, blu, colors, CELL_TYPE);
 }
@@ -86,8 +85,8 @@ int Rast_get_c_color(const CELL * rast,
  * \return 1 if color is set
  * \return 0 if color is not set
  */
-int Rast_get_f_color(const FCELL * rast,
-		     int *red, int *grn, int *blu, struct Colors *colors)
+int Rast_get_f_color(const FCELL *rast, int *red, int *grn, int *blu,
+                     struct Colors *colors)
 {
     return Rast_get_color(rast, red, grn, blu, colors, FCELL_TYPE);
 }
@@ -107,8 +106,8 @@ int Rast_get_f_color(const FCELL * rast,
  * \return 1 if color is set
  * \return 0 if color is not set
  */
-int Rast_get_d_color(const DCELL * rast,
-		     int *red, int *grn, int *blu, struct Colors *colors)
+int Rast_get_d_color(const DCELL *rast, int *red, int *grn, int *blu,
+                     struct Colors *colors)
 {
     return Rast_get_color(rast, red, grn, blu, colors, DCELL_TYPE);
 }
@@ -125,20 +124,20 @@ int Rast_get_d_color(const DCELL * rast,
  * \param colors pointer to Colors structure which holds color info
  */
 void Rast_get_null_value_color(int *red, int *grn, int *blu,
-			       const struct Colors *colors)
+                               const struct Colors *colors)
 {
     if (colors->null_set) {
-	*red = (int)colors->null_red;
-	*grn = (int)colors->null_grn;
-	*blu = (int)colors->null_blu;
+        *red = (int)colors->null_red;
+        *grn = (int)colors->null_grn;
+        *blu = (int)colors->null_blu;
     }
     else if (colors->undef_set) {
-	*red = (int)colors->undef_red;
-	*grn = (int)colors->undef_grn;
-	*blu = (int)colors->undef_blu;
+        *red = (int)colors->undef_red;
+        *grn = (int)colors->undef_grn;
+        *blu = (int)colors->undef_blu;
     }
     else
-	*red = *blu = *grn = 255;	/* white */
+        *red = *blu = *grn = 255; /* white */
 }
 
 /*!
@@ -153,13 +152,13 @@ void Rast_get_null_value_color(int *red, int *grn, int *blu,
  * \param colors pointer to Colors structure which holds color info
  */
 void Rast_get_default_color(int *red, int *grn, int *blu,
-			    const struct Colors *colors)
+                            const struct Colors *colors)
 {
     if (colors->undef_set) {
-	*red = (int)colors->undef_red;
-	*grn = (int)colors->undef_grn;
-	*blu = (int)colors->undef_blu;
+        *red = (int)colors->undef_red;
+        *grn = (int)colors->undef_grn;
+        *blu = (int)colors->undef_blu;
     }
     else
-	*red = *blu = *grn = 255;	/* white */
+        *red = *blu = *grn = 255; /* white */
 }

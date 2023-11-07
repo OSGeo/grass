@@ -17,20 +17,19 @@ double distance(double east, double west)
     G_begin_distance_calculations();
 
     if (east < west) {
-	double temp;
+        double temp;
 
-	temp = east;
-	east = west;
-	west = temp;
+        temp = east;
+        east = west;
+        west = temp;
     }
 
     incr = (east - west) / 3.0;
     e1 = west + incr;
     e2 = e1 + incr;
 
-    meters = G_distance(west, 0.0, e1, 0.0) +
-	     G_distance(e1, 0.0, e2, 0.0) +
-	     G_distance(e2, 0.0, east, 0.0);
+    meters = G_distance(west, 0.0, e1, 0.0) + G_distance(e1, 0.0, e2, 0.0) +
+             G_distance(e2, 0.0, east, 0.0);
 
     return meters;
 }

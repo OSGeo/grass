@@ -20,14 +20,18 @@ extern "C" {
 
 /* Function prototypes */
 extern void discom(const GeomCond &geom, const AtmosModel &atms,
-                   const AerosolModel &aero, const AerosolConcentration &aerocon,
-                   const Altitude &alt, const IWave &iwave);
-extern void specinterp(const double wl, double& tamoy, double& tamoyp, double& pizmoy, double& pizmoyp,
-                       const AerosolConcentration &aerocon, const Altitude &alt);
-extern void enviro (const double difr, const double difa, const double r, const double palt,
-		    const double xmuv, double& fra, double& fae, double& fr);
-void printOutput(); // forward declare this function so that it can be used in init_6S
-
+                   const AerosolModel &aero,
+                   const AerosolConcentration &aerocon, const Altitude &alt,
+                   const IWave &iwave);
+extern void specinterp(const double wl, double &tamoy, double &tamoyp,
+                       double &pizmoy, double &pizmoyp,
+                       const AerosolConcentration &aerocon,
+                       const Altitude &alt);
+extern void enviro(const double difr, const double difa, const double r,
+                   const double palt, const double xmuv, double &fra,
+                   double &fae, double &fr);
+void printOutput(); // forward declare this function so that it can be used in
+                    // init_6S
 
 /* Globals */
 static GeomCond geom;
@@ -37,18 +41,17 @@ static AerosolConcentration aerocon;
 static Altitude alt;
 static IWave iwave;
 
-
 /* The atmospheric model is modified after the first time it is loaded.
    Therefore we need to keep a copy of it just after it is loaded to be
    used in subsequent height changes. */
 static AtmosModel original_atms;
-int init_6S(char* icnd_name)
+int init_6S(char *icnd_name)
 {
     /* (atmospheric conditions input text file) */
     ifstream inText;
     inText.open(icnd_name);
-    if(!inText.is_open()) {
-	G_fatal_error(_("Unable to open file <%s>"), icnd_name);
+    if (!inText.is_open()) {
+        G_fatal_error(_("Unable to open file <%s>"), icnd_name);
     }
 
     /* redirect cin to the input text file */
@@ -66,40 +69,43 @@ int init_6S(char* icnd_name)
 
     /* read aerosol concentration */
     aerocon = AerosolConcentration::Parse(aero.iaer, atms);
-    
+
     /* read altitude */
     alt = Altitude::Parse();
     alt.init(atms, aerocon);
 
     /* read iwave stuff */
     iwave = IWave::Parse();
-   
-    /**********************************************************************c
-	c here, we first compute an equivalent wavelength which is the input   c
-	c value for monochromatic conditions or the integrated value for a     c
-	c filter function (call equivwl) then, the atmospheric properties are  c
-	c computed for that wavelength (call discom then call specinterp)      c
-	c molecular optical thickness is computed too (call odrayl). lastly    c
-	c the successive order of scattering code is called three times.       c
-	c first for a sun at thetas with the scattering properties of aerosols c
-	c and molecules, second with a pure molecular atmosphere, then with thec
-	c actual atmosphere for a sun at thetav. the iso code allows us to     c
-	c compute the scattering transmissions and the spherical albedo. all   c
-	c these computations are performed for checking the accuracy of the    c
-	c analytical expressions and in addition for computing the averaged    c
-	c directional reflectances                                             c
-	c**********************************************************************/
+
+    /***********************************************************************c
+     c here, we first compute an equivalent wavelength which is the input   c
+     c value for monochromatic conditions or the integrated value for a     c
+     c filter function (call equivwl) then, the atmospheric properties are  c
+     c computed for that wavelength (call discom then call specinterp)      c
+     c molecular optical thickness is computed too (call odrayl). lastly    c
+     c the successive order of scattering code is called three times.       c
+     c first for a sun at thetas with the scattering properties of aerosols c
+     c and molecules, second with a pure molecular atmosphere, then with thec
+     c actual atmosphere for a sun at thetav. the iso code allows us to     c
+     c compute the scattering transmissions and the spherical albedo. all   c
+     c these computations are performed for checking the accuracy of the    c
+     c analytical expressions and in addition for computing the averaged    c
+     c directional reflectances                                             c
+     c**********************************************************************/
 
     /* NOTE: wlmoy is not affected by a height and/or vis change */
     double wlmoy;
-    if(iwave.iwave != -1) wlmoy = iwave.equivwl();
-    else wlmoy = iwave.wl;
+    if (iwave.iwave != -1)
+        wlmoy = iwave.equivwl();
+    else
+        wlmoy = iwave.wl;
 
     iwave.wlmoy = wlmoy;
 
     discom(geom, atms, aero, aerocon, alt, iwave);
     double tamoy, tamoyp, pizmoy, pizmoyp;
-    if(aero.iaer != 0) specinterp(wlmoy, tamoy, tamoyp, pizmoy, pizmoyp, aerocon, alt);
+    if (aero.iaer != 0)
+        specinterp(wlmoy, tamoy, tamoyp, pizmoy, pizmoyp, aerocon, alt);
 
     printOutput();
     fflush(stderr);
@@ -113,12 +119,13 @@ void pre_compute_hv(const double height, const double vis)
     aerocon.set_visibility(vis, atms);
     alt.set_height(height);
     alt.init(atms, aerocon);
-   
+
     double wlmoy = iwave.wlmoy;
 
     discom(geom, atms, aero, aerocon, alt, iwave);
     double tamoy, tamoyp, pizmoy, pizmoyp;
-    if(aero.iaer != 0) specinterp(wlmoy, tamoy, tamoyp, pizmoy, pizmoyp, aerocon, alt);
+    if (aero.iaer != 0)
+        specinterp(wlmoy, tamoy, tamoyp, pizmoy, pizmoyp, aerocon, alt);
 }
 
 /* Only update those objects that are affected by a visibility change */
@@ -132,7 +139,8 @@ void pre_compute_v(const double vis)
 
     discom(geom, atms, aero, aerocon, alt, iwave);
     double tamoy, tamoyp, pizmoy, pizmoyp;
-    if(aero.iaer != 0) specinterp(wlmoy, tamoy, tamoyp, pizmoy, pizmoyp, aerocon, alt);
+    if (aero.iaer != 0)
+        specinterp(wlmoy, tamoy, tamoyp, pizmoy, pizmoyp, aerocon, alt);
 }
 
 /* Only update those objects that are affected by a height change */
@@ -146,19 +154,23 @@ void pre_compute_h(const double height)
 
     discom(geom, atms, aero, aerocon, alt, iwave);
     double tamoy, tamoyp, pizmoy, pizmoyp;
-    if(aero.iaer != 0) specinterp(wlmoy, tamoy, tamoyp, pizmoy, pizmoyp, aerocon, alt);
+    if (aero.iaer != 0)
+        specinterp(wlmoy, tamoy, tamoyp, pizmoy, pizmoyp, aerocon, alt);
 }
-
 
 void printOutput()
 {
     static const string head(" 6s version 4.2b ");
 
     if (G_verbose() <= G_verbose_std())
-	return;
-    
+        return;
+
     cout << endl << endl << endl;
-    Output::Begin(); Output::Repeat(30,'*'); Output::Print(head); Output::Repeat(30,'*'); Output::End();
+    Output::Begin();
+    Output::Repeat(30, '*');
+    Output::Print(head);
+    Output::Repeat(30, '*');
+    Output::End();
 
     /* ---- geometrical conditions ---- */
     geom.print();
@@ -178,71 +190,68 @@ void printOutput()
     /* --- ground reflectance (type and spectral variation) ---- */
 
     Output::Ln();
-    Output::WriteLn(22," target type  ");
-    Output::WriteLn(22," -----------  ");
-    Output::WriteLn(10," homogeneous ground ");
+    Output::WriteLn(22, " target type  ");
+    Output::WriteLn(22, " -----------  ");
+    Output::WriteLn(10, " homogeneous ground ");
 
     /* 12x a39 f6.3 */
     static const string reflec[8] = {
-	string(" user defined spectral reflectance     "),
-	string(" monochromatic reflectance "),
-	string(" constant reflectance over the spectra "),
-	string(" spectral vegetation ground reflectance"),
-	string(" spectral clear water reflectance      "),
-	string(" spectral dry sand ground reflectance  "),
-	string(" spectral lake water reflectance       "),
-	string(" spectral volcanic debris reflectance  ")
-    };
+        string(" user defined spectral reflectance     "),
+        string(" monochromatic reflectance "),
+        string(" constant reflectance over the spectra "),
+        string(" spectral vegetation ground reflectance"),
+        string(" spectral clear water reflectance      "),
+        string(" spectral dry sand ground reflectance  "),
+        string(" spectral lake water reflectance       "),
+        string(" spectral volcanic debris reflectance  ")};
 
-    double rocave = 0;       /* block of code in Fortran will always compute 0 */
+    double rocave = 0; /* block of code in Fortran will always compute 0 */
     ostringstream s;
     s.setf(ios::fixed, ios::floatfield);
     s << setprecision(3);
     s << reflec[2] << setw(9) << rocave << ends;
     Output::WriteLn(12, s.str());
 
-
     /* --- pressure at ground level (174) and altitude (175) ---- */
     Output::Ln();
-    Output::WriteLn(22," target elevation description ");
-    Output::WriteLn(22," ---------------------------- ");
+    Output::WriteLn(22, " target elevation description ");
+    Output::WriteLn(22, " ---------------------------- ");
 
     ostringstream s1;
     s1.setf(ios::fixed, ios::floatfield);
     s1 << setprecision(2);
     s1 << " ground pressure  [mb]     " << setw(9) << atms.p[0] << ends;
-    Output::WriteLn(10,s1.str());
+    Output::WriteLn(10, s1.str());
 
     ostringstream s2;
     s2.setf(ios::fixed, ios::floatfield);
     s2 << setprecision(3);
     s2 << " ground altitude  [km]    " << setw(9) << alt.xps << ends;
-    Output::WriteLn(10,s2.str());
+    Output::WriteLn(10, s2.str());
 
-    if( alt.xps > 0 )
-    {
-	Output::WriteLn(15," gaseous content at target level: ");
+    if (alt.xps > 0) {
+        Output::WriteLn(15, " gaseous content at target level: ");
 
-	ostringstream s3;
-	s3.setf(ios::fixed, ios::floatfield);
-	s3 << setprecision(3);
-	s3 << " uh2o=" << setw(9) << atms.uw << " g/cm2      "
-	   << "  uo3=" << setw(9) << atms.uo3 << " cm-atm" << ends;
-	Output::WriteLn(15,s3.str());
+        ostringstream s3;
+        s3.setf(ios::fixed, ios::floatfield);
+        s3 << setprecision(3);
+        s3 << " uh2o=" << setw(9) << atms.uw << " g/cm2      "
+           << "  uo3=" << setw(9) << atms.uo3 << " cm-atm" << ends;
+        Output::WriteLn(15, s3.str());
     }
 
     alt.print();
 
     /* ---- atmospheric correction  ---- */
     Output::Ln();
-    Output::WriteLn(23," atmospheric correction activated ");
-    Output::WriteLn(23," -------------------------------- ");
+    Output::WriteLn(23, " atmospheric correction activated ");
+    Output::WriteLn(23, " -------------------------------- ");
 }
 
 TransformInput compute()
 {
     const double accu3 = 1e-07;
-/* ---- initilialization	 very liberal :) */
+    /* ---- initilialization         very liberal :) */
     int i, j;
 
     double fr = 0;
@@ -307,89 +316,117 @@ TransformInput compute()
     double anr[2][3];
     double ainr[2][3];
 
-    for(i = 0; i < 2; i++)
-	for(j = 0; j < 3; j++)
-	{
-	    ani[i][j] = 0;
-	    aini[i][j] = 0;
-	    anr[i][j] = 0;
-	    ainr[i][j] = 0;
-	}
+    for (i = 0; i < 2; i++)
+        for (j = 0; j < 3; j++) {
+            ani[i][j] = 0;
+            aini[i][j] = 0;
+            anr[i][j] = 0;
+            ainr[i][j] = 0;
+        }
 
     /* ---- spectral loop ---- */
-    if (iwave.iwave == -2)
-    {
-	Output::WriteLn(1,"wave   total  total  total  total  atm.   swl    step   sbor   dsol   toar ");
-	Output::WriteLn(1,"       gas    scat   scat   spheri intr   ");
-	Output::WriteLn(1,"       trans  down   up     albedo refl   ");
+    if (iwave.iwave == -2) {
+        Output::WriteLn(1, "wave   total  total  total  total  atm.   swl    "
+                           "step   sbor   dsol   toar ");
+        Output::WriteLn(1, "       gas    scat   scat   spheri intr   ");
+        Output::WriteLn(1, "       trans  down   up     albedo refl   ");
     }
 
     int l;
-    for(l = iwave.iinf; l <= iwave.isup; l++)
-    {
+    for (l = iwave.iinf; l <= iwave.isup; l++) {
         double sbor = iwave.ffu.s[l];
 
-        if(l == iwave.iinf || l == iwave.isup) sbor *= 0.5f;
-        if(iwave.iwave == -1) sbor = 1.0f / step;
+        if (l == iwave.iinf || l == iwave.isup)
+            sbor *= 0.5f;
+        if (iwave.iwave == -1)
+            sbor = 1.0f / step;
 
         double roc = 0; /* rocl[l]; */
         double roe = 0; /* roel[l]; */
         double wl = 0.25f + l * step;
 
-	AbstraStruct as;
-	double uwus, uo3us;		/* initialized in abstra */
+        AbstraStruct as;
+        double uwus, uo3us; /* initialized in abstra */
 
-	abstra(atms, alt, wl, (double)geom.xmus, (double)geom.xmuv, atms.uw / 2.0f, atms.uo3,
-	       uwus, uo3us, alt.puw / 2.0f, alt.puo3, alt.puwus, alt.puo3us, as);
+        abstra(atms, alt, wl, (double)geom.xmus, (double)geom.xmuv,
+               atms.uw / 2.0f, atms.uo3, uwus, uo3us, alt.puw / 2.0f, alt.puo3,
+               alt.puwus, alt.puo3us, as);
 
-	double attwava = as.ttwava;
+        double attwava = as.ttwava;
 
-	abstra(atms, alt, wl, (double)geom.xmus, (double)geom.xmuv, atms.uw, atms.uo3,
-	       uwus, uo3us, alt.puw, alt.puo3, alt.puwus, alt.puo3us, as);
+        abstra(atms, alt, wl, (double)geom.xmus, (double)geom.xmuv, atms.uw,
+               atms.uo3, uwus, uo3us, alt.puw, alt.puo3, alt.puwus, alt.puo3us,
+               as);
 
-        if (as.dtwava < accu3) as.dtwava = 0;
-        if (as.dtozon < accu3) as.dtozon = 0;
-        if (as.dtdica < accu3) as.dtdica = 0;
-        if (as.dtniox < accu3) as.dtniox = 0;
-        if (as.dtmeth < accu3) as.dtmeth = 0;
-        if (as.dtmoca < accu3) as.dtmeth = 0;
-        if (as.utwava < accu3) as.utwava = 0;
-        if (as.utozon < accu3) as.utozon = 0;
-        if (as.utdica < accu3) as.utdica = 0;
-        if (as.utniox < accu3) as.utniox = 0;
-        if (as.utmeth < accu3) as.utmeth = 0;
-        if (as.utmoca < accu3) as.utmeth = 0;
-        if (as.ttwava < accu3) as.ttwava = 0;
-        if (as.ttozon < accu3) as.ttozon = 0;
-        if (as.ttdica < accu3) as.ttdica = 0;
-        if (as.ttniox < accu3) as.ttniox = 0;
-        if (as.ttmeth < accu3) as.ttmeth = 0;
-        if (as.ttmoca < accu3) as.ttmeth = 0;
+        if (as.dtwava < accu3)
+            as.dtwava = 0;
+        if (as.dtozon < accu3)
+            as.dtozon = 0;
+        if (as.dtdica < accu3)
+            as.dtdica = 0;
+        if (as.dtniox < accu3)
+            as.dtniox = 0;
+        if (as.dtmeth < accu3)
+            as.dtmeth = 0;
+        if (as.dtmoca < accu3)
+            as.dtmeth = 0;
+        if (as.utwava < accu3)
+            as.utwava = 0;
+        if (as.utozon < accu3)
+            as.utozon = 0;
+        if (as.utdica < accu3)
+            as.utdica = 0;
+        if (as.utniox < accu3)
+            as.utniox = 0;
+        if (as.utmeth < accu3)
+            as.utmeth = 0;
+        if (as.utmoca < accu3)
+            as.utmeth = 0;
+        if (as.ttwava < accu3)
+            as.ttwava = 0;
+        if (as.ttozon < accu3)
+            as.ttozon = 0;
+        if (as.ttdica < accu3)
+            as.ttdica = 0;
+        if (as.ttniox < accu3)
+            as.ttniox = 0;
+        if (as.ttmeth < accu3)
+            as.ttmeth = 0;
+        if (as.ttmoca < accu3)
+            as.ttmeth = 0;
 
         double swl = iwave.solirr(wl);
         swl = swl * geom.dsol;
         double coef = sbor * step * swl;
 
-	InterpStruct is;
-	memset(&is, 0, sizeof(is));
-	interp(aero.iaer, alt.idatmp, wl, aerocon.taer55, alt.taer55p, (double)geom.xmud, is);
+        InterpStruct is;
+        memset(&is, 0, sizeof(is));
+        interp(aero.iaer, alt.idatmp, wl, aerocon.taer55, alt.taer55p,
+               (double)geom.xmud, is);
 
-
-        double dgtot = as.dtwava * as.dtozon * as.dtdica * as.dtoxyg * as.dtniox * as.dtmeth * as.dtmoca;
-        double tgtot = as.ttwava * as.ttozon * as.ttdica * as.ttoxyg * as.ttniox * as.ttmeth * as.ttmoca;
-        double ugtot = as.utwava * as.utozon * as.utdica * as.utoxyg * as.utniox * as.utmeth * as.utmoca;
-        double tgp1 = as.ttozon * as.ttdica * as.ttoxyg * as.ttniox * as.ttmeth * as.ttmoca;
-        double tgp2 = attwava * as.ttozon * as.ttdica * as.ttoxyg * as.ttniox * as.ttmeth * as.ttmoca;
+        double dgtot = as.dtwava * as.dtozon * as.dtdica * as.dtoxyg *
+                       as.dtniox * as.dtmeth * as.dtmoca;
+        double tgtot = as.ttwava * as.ttozon * as.ttdica * as.ttoxyg *
+                       as.ttniox * as.ttmeth * as.ttmoca;
+        double ugtot = as.utwava * as.utozon * as.utdica * as.utoxyg *
+                       as.utniox * as.utmeth * as.utmoca;
+        double tgp1 = as.ttozon * as.ttdica * as.ttoxyg * as.ttniox *
+                      as.ttmeth * as.ttmoca;
+        double tgp2 = attwava * as.ttozon * as.ttdica * as.ttoxyg * as.ttniox *
+                      as.ttmeth * as.ttmoca;
         double edifr = (double)(is.utotr - exp(-is.trayp / geom.xmuv));
         double edifa = (double)(is.utota - exp(-is.taerp / geom.xmuv));
 
+        double fra, fae;
+        enviro(edifr, edifa, rad, alt.palt, (double)geom.xmuv, fra, fae, fr);
 
-	double fra, fae;
-	enviro(edifr, edifa, rad, alt.palt, (double)geom.xmuv, fra, fae, fr);
-
-	double avr = roc * fr + (1 - fr) * roe;
-	double rsurf = (double)(roc * is.dtott * exp(-(is.trayp + is.taerp) / geom.xmuv) / (1 - avr * is.astot)
-			      + avr * is.dtott * (is.utott - exp(-(is.trayp + is.taerp) / geom.xmuv)) / (1 - avr * is.astot));
+        double avr = roc * fr + (1 - fr) * roe;
+        double rsurf =
+            (double)(roc * is.dtott * exp(-(is.trayp + is.taerp) / geom.xmuv) /
+                         (1 - avr * is.astot) +
+                     avr * is.dtott *
+                         (is.utott - exp(-(is.trayp + is.taerp) / geom.xmuv)) /
+                         (1 - avr * is.astot));
         double ratm1 = (is.romix - is.rorayl) * tgtot + is.rorayl * tgp1;
         double ratm3 = is.romix * tgp1;
         double ratm2 = (is.romix - is.rorayl) * tgp2 + is.rorayl * tgp1;
@@ -397,28 +434,21 @@ TransformInput compute()
         double romeas2 = ratm2 + rsurf * tgtot;
         double romeas3 = ratm3 + rsurf * tgtot;
 
-	/* computing integrated values over the spectral band */
-        if (iwave.iwave == -2)
-	{
-	    Output::Begin();
-	    ostringstream s;
-	    s.setf(ios::fixed, ios::floatfield);
-	    s.precision(4);
-	    s	<< setw(10) << wl << " "
-		<< setw(10) << tgtot << " "
-		<< setw(10) << is.dtott << " "
-		<< setw(10) << is.utott << " "
-		<< setw(10) << is.astot << " "
-		<< setw(10) << ratm2 << " "
-		<< setprecision(1) << setw(7) << swl << " "
-		<< setprecision(4) << setw(10) << step << " "
-		<< setw(10) << sbor << " "
-		<< setw(10) << geom.dsol << " "
-		<< setw(10) << romeas2;
+        /* computing integrated values over the spectral band */
+        if (iwave.iwave == -2) {
+            Output::Begin();
+            ostringstream s;
+            s.setf(ios::fixed, ios::floatfield);
+            s.precision(4);
+            s << setw(10) << wl << " " << setw(10) << tgtot << " " << setw(10)
+              << is.dtott << " " << setw(10) << is.utott << " " << setw(10)
+              << is.astot << " " << setw(10) << ratm2 << " " << setprecision(1)
+              << setw(7) << swl << " " << setprecision(4) << setw(10) << step
+              << " " << setw(10) << sbor << " " << setw(10) << geom.dsol << " "
+              << setw(10) << romeas2;
         }
 
-        
-	double alumeas = (double)(geom.xmus * swl * romeas2 / M_PI);
+        double alumeas = (double)(geom.xmus * swl * romeas2 / M_PI);
         fophsa = fophsa + is.phaa * coef;
         fophsr = fophsr + is.phar * coef;
         sasr = sasr + is.asray * coef;
@@ -473,7 +503,7 @@ TransformInput compute()
         sb = sb + sbor * step;
         seb = seb + coef;
 
-	/* output at the ground level. */
+        /* output at the ground level. */
         double tdir = (double)exp(-(is.tray + is.taer) / geom.xmus);
         double tdif = is.dtott - tdir;
         double etn = is.dtott * dgtot / (1 - avr * is.astot);
@@ -482,33 +512,30 @@ TransformInput compute()
         double ea0n = tdif * dgtot;
         double ea0 = (double)(tdif * dgtot * geom.xmus * swl);
         double ee0n = dgtot * avr * is.astot * is.dtott / (1 - avr * is.astot);
-        double ee0 = (double)(geom.xmus * swl * dgtot * avr * is.astot * is.dtott / (1 - avr * is.astot));
+        double ee0 = (double)(geom.xmus * swl * dgtot * avr * is.astot *
+                              is.dtott / (1 - avr * is.astot));
 
-        if (etn > accu3)
-	{
-	    ani[0][0] = esn / etn;
-	    ani[0][1] = ea0n / etn;
-	    ani[0][2] = ee0n / etn;
-	}
-        else
-	{
-	    ani[0][0] = 0;
-	    ani[0][1] = 0;
-	    ani[0][2] = 0;
+        if (etn > accu3) {
+            ani[0][0] = esn / etn;
+            ani[0][1] = ea0n / etn;
+            ani[0][2] = ee0n / etn;
+        }
+        else {
+            ani[0][0] = 0;
+            ani[0][1] = 0;
+            ani[0][2] = 0;
         }
 
         ani[1][0] = es;
         ani[1][1] = ea0;
         ani[1][2] = ee0;
 
+        for (j = 0; j < 3; j++) {
+            aini[0][j] = aini[0][j] + ani[0][j] * coef;
+            aini[1][j] = aini[1][j] + ani[1][j] * sbor * step;
+        }
 
-	for(j = 0; j < 3; j++)
-	{
-	    aini[0][j] = aini[0][j] + ani[0][j] * coef;
-	    aini[1][j] = aini[1][j] + ani[1][j] * sbor * step;
-	}
-
-	/* output at satellite level */
+        /* output at satellite level */
         double tmdir = (double)exp(-(is.tray + is.taer) / geom.xmuv);
         double tmdif = is.utott - tmdir;
         double xla0n = ratm2;
@@ -524,17 +551,16 @@ TransformInput compute()
         anr[1][1] = xle;
         anr[1][2] = xlt;
 
-	for(j = 0; j < 3; j++)
-	{
-	    ainr[0][j] = ainr[0][j] + anr[0][j] * coef;
-	    ainr[1][j] = ainr[1][j] + anr[1][j] * sbor * step;
-	}
+        for (j = 0; j < 3; j++) {
+            ainr[0][j] = ainr[0][j] + anr[0][j] * coef;
+            ainr[1][j] = ainr[1][j] + anr[1][j] * sbor * step;
+        }
     }
 
     if (seb < accu3)
-	G_warning("compute(): variable seb is too small: %g", seb);
+        G_warning("compute(): variable seb is too small: %g", seb);
     if (sb < accu3)
-	G_warning("compute(): variable sb is too small: %g", sb);
+        G_warning("compute(): variable sb is too small: %g", sb);
 
     /* ---- integrated values of apparent reflectance, radiance          ----*/
     /* ---- and gaseous transmittances (total,downward,separately gases) ----*/
@@ -594,7 +620,7 @@ TransformInput compute()
     fophsa = fophsa / seb;
     fophsr = fophsr / seb;
 
-    for(j = 0; j < 3; j++)
+    for (j = 0; j < 3; j++)
 
     {
         aini[0][j] = aini[0][j] / seb;
@@ -617,7 +643,5 @@ TransformInput compute()
     ti.srotot = srotot;
     ti.xmus = geom.xmus;
 
- 
     return ti;
 }
-

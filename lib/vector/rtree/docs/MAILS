@@ -109,7 +109,7 @@ Radim Blazek wrote:
 > - added Makefile
 > - few modifications to get rid of compiler warnings, but warnings like:
 >     index.c:277: warning: `tmp_nptr' might be used uninitialized in this f.
->     were left because need deeper revision if may cause problems, insetad of
+>     were left because need deeper revision if may cause problems, instead of
 >     blindly init to 0/NULL
 > - '//' comments -> '/* */'
 > - printf() - > fprintf(stdout,)
@@ -141,5 +141,3 @@ Radim Blazek wrote:
 > Thanks
 >
 > Radim
-
-

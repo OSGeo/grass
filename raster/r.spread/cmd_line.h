@@ -1,4 +1,3 @@
-
 /****************************************************************/
 /*                                                              */
 /*      This header file declares the global variables and the  */

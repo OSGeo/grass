@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_priv.c
- * 
+ *
  * \brief DBMI Library (client) - privileges management
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -16,17 +16,17 @@
 #include "macros.h"
 
 /*!
-  \brief Grant privileges on table
+   \brief Grant privileges on table
 
-  \param driver db driver
-  \param tableName table name
-  \param priv privileges DB_PRIV_SELECT
-  \param to grant to DB_GROUP | DB_PUBLIC
+   \param driver db driver
+   \param tableName table name
+   \param priv privileges DB_PRIV_SELECT
+   \param to grant to DB_GROUP | DB_PUBLIC
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
-int db_grant_on_table(dbDriver * driver, const char *tableName, int priv, int to)
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
+int db_grant_on_table(dbDriver *driver, const char *tableName, int priv, int to)
 {
     int ret_code;
     dbString name;
@@ -49,7 +49,7 @@ int db_grant_on_table(dbDriver * driver, const char *tableName, int priv, int to
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* no results */
     return DB_OK;

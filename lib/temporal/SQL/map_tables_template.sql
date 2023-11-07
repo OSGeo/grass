@@ -2,7 +2,7 @@
 -- This SQL script generates the grass map tables to store time stamps, revision
 -- and spatial extent for SQL queries and temporal GIS support.
 -- Additionally several triggers are created for convenient functions
--- The grass map metadata is map specific (raster, raster3d and vector maps are 
+-- The grass map metadata is map specific (raster, raster3d and vector maps are
 -- supported)
 --
 -- The placeholder GRASS_MAP will be replaced by raster, raster3d and vector
@@ -27,8 +27,8 @@ CREATE TABLE  GRASS_MAP_base (
 -- Relative valid time interval with start and end time
 CREATE TABLE  GRASS_MAP_relative_time (
   id VARCHAR NOT NULL,          -- The id (PK) is the unique identifier for all tables, it is based on name and mapset (name@mapset) and is used as primary foreign key
-  start_time INTEGER,  -- The relative valid start time in 
-  end_time INTEGER,    -- The relative valid end time in 
+  start_time INTEGER,  -- The relative valid start time in
+  end_time INTEGER,    -- The relative valid end time in
   unit VARCHAR,                 -- The relative time unit, available are "years, months, days, minutes, seconds"
   PRIMARY KEY (id)
 );

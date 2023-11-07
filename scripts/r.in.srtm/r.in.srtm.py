@@ -11,9 +11,9 @@
 #
 # COPYRIGHT:	(C) 2004, 2006 by the GRASS Development Team
 #
-#		This program is free software under the GNU General Public
-#		License (>=v2). Read the file COPYING that comes with GRASS
-#		for details.
+# 		This program is free software under the GNU General Public
+# 		License (>=v2). Read the file COPYING that comes with GRASS
+# 		for details.
 #
 # Dec 2004: merged with srtm_generate_hdr.sh (M. Neteler)
 #           corrections and refinement (W. Kyngesburye)
@@ -38,37 +38,45 @@
 #  the lower left pixel, which in the case of SRTM-1 data will be about
 #  30 meters in extent."
 #
-#- SRTM 90 Tiles are 1 degree by 1 degree
-#- SRTM filename coordinates are said to be the *center* of the LL pixel.
+# - SRTM 90 Tiles are 1 degree by 1 degree
+# - SRTM filename coordinates are said to be the *center* of the LL pixel.
 #       N51E10 -> lower left cell center
 #
-#- BIL uses *center* of the UL (!) pixel:
+# - BIL uses *center* of the UL (!) pixel:
 #      http://downloads.esri.com/support/whitepapers/other_/eximgav.pdf
 #
-#- GDAL uses *corners* of pixels for its coordinates.
+# - GDAL uses *corners* of pixels for its coordinates.
 #
 # NOTE: Even, if small difference: SRTM is referenced to EGM96, not WGS84 ellps
 # http://earth-info.nga.mil/GandG/wgs84/gravitymod/egm96/intpt.html
 #
 #########################
 
-#%Module
-#% description: Imports SRTM HGT files into raster map.
-#% keyword: raster
-#% keyword: import
-#% keyword: SRTM
-#%End
-#%option G_OPT_F_INPUT
-#% description: Name of SRTM input tile (file without .hgt.zip extension)
-#%end
-#%option G_OPT_R_OUTPUT
-#% description: Name for output raster map (default: input tile)
-#% required : no
-#%end
-#%flag
-#% key: 1
-#% description: Input is a 1-arcsec tile (default: 3-arcsec)
-#%end
+# %Module
+# % description: Imports SRTM HGT files into raster map.
+# % keyword: raster
+# % keyword: import
+# % keyword: SRTM
+# %End
+# %option G_OPT_F_INPUT
+# % description: Name of SRTM input tile (file without .hgt.zip extension)
+# %end
+# %option G_OPT_R_OUTPUT
+# % description: Name for output raster map (default: input tile)
+# % required : no
+# %end
+# %flag
+# % key: 1
+# % description: Input is a 1-arcsec tile (default: 3-arcsec)
+# %end
+
+
+import os
+import shutil
+import atexit
+import grass.script as grass
+import zipfile as zfile
+
 
 tmpl1sec = """BYTEORDER M
 LAYOUT BIL
@@ -121,28 +129,24 @@ XDIM 0.000833333333333
 YDIM 0.000833333333333
 """
 
-proj = ''.join([
-    'GEOGCS[',
-    '"wgs84",',
-    'DATUM["WGS_1984",SPHEROID["wgs84",6378137,298.257223563],TOWGS84[0.000000,0.000000,0.000000]],',
-    'PRIMEM["Greenwich",0],',
-    'UNIT["degree",0.0174532925199433]',
-    ']'])
-
-import os
-import shutil
-import atexit
-import grass.script as grass
-from grass.exceptions import CalledModuleError
-import zipfile as zfile
+proj = "".join(
+    [
+        "GEOGCS[",
+        '"wgs84",',
+        'DATUM["WGS_1984",SPHEROID["wgs84",6378137,298.257223563],TOWGS84[0.000000,0.000000,0.000000]],',
+        'PRIMEM["Greenwich",0],',
+        'UNIT["degree",0.0174532925199433]',
+        "]",
+    ]
+)
 
 
 def cleanup():
     if not in_temp:
         return
-    for ext in ['.bil', '.hdr', '.prj', '.hgt.zip']:
+    for ext in [".bil", ".hdr", ".prj", ".hgt.zip"]:
         grass.try_remove(tile + ext)
-    os.chdir('..')
+    os.chdir("..")
     grass.try_rmdir(tmpdir)
 
 
@@ -150,23 +154,23 @@ def main():
     global tile, tmpdir, in_temp
 
     in_temp = False
-    
+
     # to support SRTM water body
     swbd = False
 
-    input = options['input']
-    output = options['output']
-    one = flags['1']
+    input = options["input"]
+    output = options["output"]
+    one = flags["1"]
 
     # are we in LatLong location?
-    s = grass.read_command("g.proj", flags='j')
+    s = grass.read_command("g.proj", flags="j")
     kv = grass.parse_key_val(s)
-    if '+proj' not in kv.keys() or kv['+proj'] != 'longlat':
+    if "+proj" not in kv.keys() or kv["+proj"] != "longlat":
         grass.fatal(_("This module only operates in LatLong locations"))
 
     # use these from now on:
     infile = input
-    while infile[-4:].lower() in ['.hgt', '.zip', '.raw']:
+    while infile[-4:].lower() in [".hgt", ".zip", ".raw"]:
         infile = infile[:-4]
     (fdir, tile) = os.path.split(infile)
 
@@ -175,10 +179,10 @@ def main():
     else:
         tileout = output
 
-    if '.hgt' in input:
-        suff = '.hgt'
+    if ".hgt" in input:
+        suff = ".hgt"
     else:
-        suff = '.raw'
+        suff = ".raw"
         swbd = True
 
     zipfile = "{im}{su}.zip".format(im=infile, su=suff)
@@ -201,17 +205,16 @@ def main():
     grass.try_remove(tmpdir)
     os.mkdir(tmpdir)
     if is_zip:
-        shutil.copyfile(zipfile, os.path.join(tmpdir,
-                                              "{im}{su}.zip".format(im=tile,
-                                                                    su=suff)))
+        shutil.copyfile(
+            zipfile, os.path.join(tmpdir, "{im}{su}.zip".format(im=tile, su=suff))
+        )
     else:
-        shutil.copyfile(hgtfile, os.path.join(tmpdir,
-                                              "{im}{su}".format(im=tile[:7],
-                                                                su=suff)))
+        shutil.copyfile(
+            hgtfile, os.path.join(tmpdir, "{im}{su}".format(im=tile[:7], su=suff))
+        )
     # change to temporary directory
     os.chdir(tmpdir)
     in_temp = True
-
 
     zipfile = "{im}{su}.zip".format(im=tile, su=suff)
     hgtfile = "{im}{su}".format(im=tile[:7], su=suff)
@@ -222,7 +225,7 @@ def main():
         # unzip & rename data file:
         grass.message(_("Extracting '%s'...") % infile)
         try:
-            zf=zfile.ZipFile(zipfile)
+            zf = zfile.ZipFile(zipfile)
             zf.extractall()
         except:
             grass.fatal(_("Unable to unzip file."))
@@ -258,31 +261,34 @@ def main():
         tmpl = tmpl1sec
 
     header = tmpl % (ulxmap, ulymap)
-    hdrfile = tile + '.hdr'
-    outf = open(hdrfile, 'w')
+    hdrfile = tile + ".hdr"
+    outf = open(hdrfile, "w")
     outf.write(header)
     outf.close()
 
     # create prj file: To be precise, we would need EGS96! But who really cares...
-    prjfile = tile + '.prj'
-    outf = open(prjfile, 'w')
+    prjfile = tile + ".prj"
+    outf = open(prjfile, "w")
     outf.write(proj)
     outf.close()
 
     try:
-        grass.run_command('r.in.gdal', input=bilfile, out=tileout)
+        grass.run_command("r.in.gdal", input=bilfile, out=tileout)
     except:
         grass.fatal(_("Unable to import data"))
 
     # nice color table
     if not swbd:
-        grass.run_command('r.colors', map=tileout, color='srtm')
+        grass.run_command("r.colors", map=tileout, color="srtm")
 
     # write cmd history:
     grass.raster_history(tileout)
 
     grass.message(_("Done: generated map ") + tileout)
-    grass.message(_("(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"))
+    grass.message(
+        _("(Note: Holes in the data can be closed with 'r.fillnulls' using splines)")
+    )
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

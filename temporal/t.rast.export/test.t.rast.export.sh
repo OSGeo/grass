@@ -2,7 +2,7 @@
 # Export of space time raster datasets
 
 # We need to set a specific region in the
-# @preprocess step of this test. 
+# @preprocess step of this test.
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
@@ -14,7 +14,7 @@ r.mapcalc --o expr="prec_4 = rand(0, 255)" -s
 r.mapcalc --o expr="prec_5 = rand(-1, 60000)" -s
 r.mapcalc --o expr="prec_6 = rand(0, 256)" -s
 
-n1=`g.tempfile pid=1 -d` 
+n1=`g.tempfile pid=1 -d`
 
 cat > "${n1}" << EOF
 prec_1|2001-01-01|2001-07-01

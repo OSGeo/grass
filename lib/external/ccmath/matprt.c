@@ -5,7 +5,9 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include <stdio.h>
+
 void matprt(double *a, int n, int m, char *fmt)
 {
     int i, j;
@@ -13,21 +15,21 @@ void matprt(double *a, int n, int m, char *fmt)
     double *p;
 
     for (i = 0, p = a; i < n; ++i) {
-	for (j = 0; j < m; ++j)
-	    printf(fmt, *p++);
-	printf("\n");
+        for (j = 0; j < m; ++j)
+            printf(fmt, *p++);
+        printf("\n");
     }
 }
 
-void fmatprt(FILE * fp, double *a, int n, int m, char *fmt)
+void fmatprt(FILE *fp, double *a, int n, int m, char *fmt)
 {
     int i, j;
 
     double *p;
 
     for (i = 0, p = a; i < n; ++i) {
-	for (j = 0; j < m; ++j)
-	    fprintf(fp, fmt, *p++);
-	fprintf(fp, "\n");
+        for (j = 0; j < m; ++j)
+            fprintf(fp, fmt, *p++);
+        fprintf(fp, "\n");
     }
 }

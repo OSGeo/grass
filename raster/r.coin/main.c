@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.coin
@@ -46,28 +45,27 @@ char *fill, *midline;
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
-	struct Option *map1, *map2, *units;
+    struct {
+        struct Option *map1, *map2, *units;
     } parm;
-    struct
-    {
-	struct Flag *w;
+    struct {
+        struct Flag *w;
     } flag;
 
     fill =
-	"                                                                                                                                       ";
+        "                                                                      "
+        "                                                                 ";
     midline =
-	"------------------------------------------------------------------------------------------------------------------------------------";
+        "----------------------------------------------------------------------"
+        "--------------------------------------------------------------";
 
     G_gisinit(argv[0]);
 
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("statistics"));
-    module->description =
-	_("Tabulates the mutual occurrence (coincidence) "
-	  "of categories for two raster map layers.");
+    module->description = _("Tabulates the mutual occurrence (coincidence) "
+                            "of categories for two raster map layers.");
 
     parm.map1 = G_define_standard_option(G_OPT_R_INPUT);
     parm.map1->key = "first";
@@ -83,9 +81,9 @@ int main(int argc, char *argv[])
     parm.units->type = TYPE_STRING;
     parm.units->label = _("Unit of measure");
     parm.units->description =
-	_("c(ells), p(ercent), x(percent of category [column]), "
-	  "y(percent of category [row]), a(cres), h(ectares), "
-	  "k(square kilometers), m(square miles)");
+        _("c(ells), p(ercent), x(percent of category [column]), "
+          "y(percent of category [row]), a(cres), h(ectares), "
+          "k(square kilometers), m(square miles)");
     parm.units->options = "c,p,x,y,a,h,k,m";
 
     flag.w = G_define_flag();
@@ -93,10 +91,10 @@ int main(int argc, char *argv[])
     flag.w->description = _("Wide report, 132 columns (default: 80)");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     G_get_window(&window);
-    /* now make a temorary region with the same boundaries only 1 x 1 */
+    /* now make a temporary region with the same boundaries only 1 x 1 */
     window.rows = 1;
     window.cols = 1;
     G_adjust_Cell_head(&window, 1, 1);
@@ -118,9 +116,9 @@ int main(int argc, char *argv[])
     map2name = parm.map2->answer;
 
     if (!G_find_raster2(map1name, ""))
-	G_fatal_error(_("Raster map <%s> not found"), map1name);
+        G_fatal_error(_("Raster map <%s> not found"), map1name);
     if (!G_find_raster2(map2name, ""))
-	G_fatal_error(_("Raster map <%s> not found"), map2name);
+        G_fatal_error(_("Raster map <%s> not found"), map2name);
 
     make_coin();
     print_coin(*parm.units->answer, flag.w->answer ? 132 : 80, 0);

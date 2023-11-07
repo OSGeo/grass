@@ -9,21 +9,19 @@ int ask_datum(char *datum, char *ellps, char *params)
 
     answer = G_ask_datum_name(datum, ellps);
     if (answer > 0) {
-	char *pparams;
+        char *pparams;
 
-	answer = GPJ_ask_datum_params(datum, &pparams);
+        answer = GPJ_ask_datum_params(datum, &pparams);
 
-	if (answer > 0) {
-	    strcpy(params, pparams);
-	    G_free(pparams);
-	    return 1;
-	}
+        if (answer > 0) {
+            strcpy(params, pparams);
+            G_free(pparams);
+            return 1;
+        }
 
-	else
-	    return -1;
+        else
+            return -1;
     }
     else
-	return -1;
-
-
+        return -1;
 }

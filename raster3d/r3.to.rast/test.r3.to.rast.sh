@@ -4,10 +4,10 @@
 
 # We need to set a specific region in the
 # @preprocess step of this test. We generate
-# voxel data with r3.mapcalc. The region setting 
+# voxel data with r3.mapcalc. The region setting
 # should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
-# Now create a voxel map with value = col + row + depth. 
+# Now create a voxel map with value = col + row + depth.
 r3.mapcalc --o expr="volume = double(col() + row() + depth())"
 # Add null value information
 r3.mapcalc --o expr="volume_null = if(row() == 1 || row() == 5, null(), volume)"
@@ -27,7 +27,7 @@ for i in `g.list type=raster pattern=test_raster_slice_float*` ; do r.out.ascii 
 # The next @preprocess step adjusts the raster region to increase the resolution by 2
 g.region res=7.5 -p3
 
-# This @test should show the via nearest neighbour resampled data.  
+# This @test should show the via nearest neighbour resampled data.
 # Reference data for all generated @raster maps are located in the r3.to.rast source directory.
 r3.to.rast --o input=volume_null output=test_raster_slice_2
 
@@ -37,7 +37,7 @@ for i in `g.list type=raster pattern=test_raster_slice_2*` ; do r.out.ascii inpu
 # The next @preprocess step adjusts the raster region to increase the resolution by 2 again
 g.region res=5 -p3
 
-# This @test should show the via nearest neighbour resampled data.  
+# This @test should show the via nearest neighbour resampled data.
 # Reference data for all generated @raster maps are located in the r3.to.rast source directory.
 r3.to.rast --o input=volume_null output=test_raster_slice_3
 
@@ -45,7 +45,7 @@ r3.to.rast --o input=volume_null output=test_raster_slice_3
 for i in `g.list type=raster pattern=test_raster_slice_3*` ; do r.out.ascii input=$i output=${i}.txt; done
 
 # Comparison of references and text files
-for i in `ls *.ref` ; do 
-    diff $i "`basename $i .ref`.txt" ; 
+for i in `ls *.ref` ; do
+    diff $i "`basename $i .ref`.txt" ;
 done
 rm *.txt

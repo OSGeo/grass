@@ -10,7 +10,7 @@ int closefiles(char *, char *, char *, int[3], CELL *[3]);
 void his2rgb(CELL *[3], int);
 
 /* openfiles.c */
-void openfiles(char *, char *, char *, char *, char *, char *,
-	       int[3], int[3], CELL *[3]);
+void openfiles(char *, char *, char *, char *, char *, char *, int[3], int[3],
+               CELL *[3]);
 
 #endif /* __GLOBALS_H__ */

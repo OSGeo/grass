@@ -24,9 +24,7 @@
 #include "type.h"
 #include "heap.h"
 
-
-
-void dglHeapInit(dglHeap_s * pheap)
+void dglHeapInit(dglHeap_s *pheap)
 {
     pheap->index = 0;
     pheap->count = 0;
@@ -34,39 +32,38 @@ void dglHeapInit(dglHeap_s * pheap)
     pheap->pnode = NULL;
 }
 
-void dglHeapFree(dglHeap_s * pheap, dglHeapCancelItem_fn pfnCancelItem)
+void dglHeapFree(dglHeap_s *pheap, dglHeapCancelItem_fn pfnCancelItem)
 {
     int iItem;
 
     if (pheap->pnode) {
-	if (pfnCancelItem) {
-	    for (iItem = 0; iItem <= pheap->index; iItem++) {
-		pfnCancelItem(pheap, &pheap->pnode[iItem]);
-	    }
-	}
-	free(pheap->pnode);
+        if (pfnCancelItem) {
+            for (iItem = 0; iItem <= pheap->index; iItem++) {
+                pfnCancelItem(pheap, &pheap->pnode[iItem]);
+            }
+        }
+        free(pheap->pnode);
     }
     pheap->pnode = NULL;
 }
 
-int dglHeapInsertMin(dglHeap_s * pheap,
-		     long key, unsigned char flags, dglHeapData_u value)
+int dglHeapInsertMin(dglHeap_s *pheap, long key, unsigned char flags,
+                     dglHeapData_u value)
 {
     long i;
 
     if (pheap->index >= pheap->count - 1) {
-	pheap->count += pheap->block;
-	if ((pheap->pnode =
-	     realloc(pheap->pnode,
-		     sizeof(dglHeapNode_s) * pheap->count)) == NULL)
-	    return -1;
+        pheap->count += pheap->block;
+        if ((pheap->pnode = realloc(pheap->pnode, sizeof(dglHeapNode_s) *
+                                                      pheap->count)) == NULL)
+            return -1;
     }
 
     i = ++pheap->index;
 
     while (i != 1 && key < pheap->pnode[i / 2].key) {
-	pheap->pnode[i] = pheap->pnode[i / 2];
-	i /= 2;
+        pheap->pnode[i] = pheap->pnode[i / 2];
+        i /= 2;
     }
 
     pheap->pnode[i].key = key;
@@ -76,13 +73,13 @@ int dglHeapInsertMin(dglHeap_s * pheap,
     return i;
 }
 
-int dglHeapExtractMin(dglHeap_s * pheap, dglHeapNode_s * pnoderet)
+int dglHeapExtractMin(dglHeap_s *pheap, dglHeapNode_s *pnoderet)
 {
     dglHeapNode_s temp;
     long iparent, ichild;
 
     if (pheap->index == 0)
-	return 0;		/* empty heap */
+        return 0; /* empty heap */
 
     *pnoderet = pheap->pnode[1];
 
@@ -92,40 +89,39 @@ int dglHeapExtractMin(dglHeap_s * pheap, dglHeapNode_s * pnoderet)
     ichild = 2;
 
     while (ichild <= pheap->index) {
-	if (ichild < pheap->index &&
-	    pheap->pnode[ichild].key > pheap->pnode[ichild + 1].key) {
-	    ichild++;
-	}
-	if (temp.key <= pheap->pnode[ichild].key)
-	    break;
+        if (ichild < pheap->index &&
+            pheap->pnode[ichild].key > pheap->pnode[ichild + 1].key) {
+            ichild++;
+        }
+        if (temp.key <= pheap->pnode[ichild].key)
+            break;
 
-	pheap->pnode[iparent] = pheap->pnode[ichild];
-	iparent = ichild;
-	ichild *= 2;
+        pheap->pnode[iparent] = pheap->pnode[ichild];
+        iparent = ichild;
+        ichild *= 2;
     }
     pheap->pnode[iparent] = temp;
 
     return 1;
 }
 
-int dglHeapInsertMax(dglHeap_s * pheap,
-		     long key, unsigned char flags, dglHeapData_u value)
+int dglHeapInsertMax(dglHeap_s *pheap, long key, unsigned char flags,
+                     dglHeapData_u value)
 {
     long i;
 
     if (pheap->index >= pheap->count - 1) {
-	pheap->count += pheap->block;
-	if ((pheap->pnode =
-	     realloc(pheap->pnode,
-		     sizeof(dglHeapNode_s) * pheap->count)) == NULL)
-	    return -1;
+        pheap->count += pheap->block;
+        if ((pheap->pnode = realloc(pheap->pnode, sizeof(dglHeapNode_s) *
+                                                      pheap->count)) == NULL)
+            return -1;
     }
 
     i = ++pheap->index;
 
     while (i != 1 && key > pheap->pnode[i / 2].key) {
-	pheap->pnode[i] = pheap->pnode[i / 2];
-	i /= 2;
+        pheap->pnode[i] = pheap->pnode[i / 2];
+        i /= 2;
     }
 
     pheap->pnode[i].key = key;
@@ -135,13 +131,13 @@ int dglHeapInsertMax(dglHeap_s * pheap,
     return i;
 }
 
-int dglHeapExtractMax(dglHeap_s * pheap, dglHeapNode_s * pnoderet)
+int dglHeapExtractMax(dglHeap_s *pheap, dglHeapNode_s *pnoderet)
 {
     dglHeapNode_s temp;
     long iparent, ichild;
 
     if (pheap->index == 0)
-	return 0;		/* empty heap */
+        return 0; /* empty heap */
 
     *pnoderet = pheap->pnode[1];
 
@@ -151,16 +147,16 @@ int dglHeapExtractMax(dglHeap_s * pheap, dglHeapNode_s * pnoderet)
     ichild = 2;
 
     while (ichild <= pheap->index) {
-	if (ichild < pheap->index &&
-	    pheap->pnode[ichild].key < pheap->pnode[ichild + 1].key) {
-	    ichild++;
-	}
-	if (temp.key >= pheap->pnode[ichild].key)
-	    break;
+        if (ichild < pheap->index &&
+            pheap->pnode[ichild].key < pheap->pnode[ichild + 1].key) {
+            ichild++;
+        }
+        if (temp.key >= pheap->pnode[ichild].key)
+            break;
 
-	pheap->pnode[iparent] = pheap->pnode[ichild];
-	iparent = ichild;
-	ichild *= 2;
+        pheap->pnode[iparent] = pheap->pnode[ichild];
+        iparent = ichild;
+        ichild *= 2;
     }
     pheap->pnode[iparent] = temp;
 

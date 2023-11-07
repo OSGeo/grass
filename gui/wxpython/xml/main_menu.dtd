@@ -9,4 +9,3 @@
 <!ELEMENT user-toolboxes-list EMPTY>
 
 <!ELEMENT label (#PCDATA)>
-

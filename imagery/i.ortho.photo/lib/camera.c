@@ -1,8 +1,7 @@
-
 /**********************************************************
-* I_get_group_camera (group, &Cam_Ref);
-* I_put_group_camera (group, &Cam_Ref);
-**********************************************************/
+ * I_get_group_camera (group, &Cam_Ref);
+ * I_put_group_camera (group, &Cam_Ref);
+ **********************************************************/
 #include "orthophoto.h"
 #include <grass/ortholib.h>
 #include <grass/glocale.h>
@@ -16,7 +15,7 @@ int I_put_group_camera(char *group, char *camera)
     fd = I_fopen_group_camera_new(group);
     G_suppress_warnings(0);
     if (!fd)
-	return 0;
+        return 0;
 
     fprintf(fd, "%s\n", camera);
 
@@ -33,11 +32,11 @@ int I_get_group_camera(char *group, char *camera)
     fd = I_fopen_group_camera_old(group);
     G_suppress_warnings(0);
     if (!fd) {
-	sprintf(buf,
-		_("Unable to open camera file for group <%s> in mapset <%s>"),
-		group, G_mapset());
-	G_warning("%s", buf);
-	return 0;
+        sprintf(buf,
+                _("Unable to open camera file for group <%s> in mapset <%s>"),
+                group, G_mapset());
+        G_warning("%s", buf);
+        return 0;
     }
     G_getl2(buf, sizeof(buf), fd);
     sscanf(buf, "%s", camera);

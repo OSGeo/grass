@@ -29,36 +29,36 @@
 int Rast_raster_cmp(const void *v1, const void *v2, RASTER_MAP_TYPE data_type)
 {
     if (Rast_is_null_value(v1, data_type)) {
-	if (Rast_is_null_value(v2, data_type))
-	    return 0;
-	else
-	    return -1;
+        if (Rast_is_null_value(v2, data_type))
+            return 0;
+        else
+            return -1;
     }
     else if (Rast_is_null_value(v2, data_type))
-	return 1;
+        return 1;
 
     switch (data_type) {
     case CELL_TYPE:
-	if (*((const CELL *)v1) > *((const CELL *)v2))
-	    return 1;
-	else if (*((const CELL *)v1) == *((const CELL *)v2))
-	    return 0;
-	else
-	    return -1;
+        if (*((const CELL *)v1) > *((const CELL *)v2))
+            return 1;
+        else if (*((const CELL *)v1) == *((const CELL *)v2))
+            return 0;
+        else
+            return -1;
     case FCELL_TYPE:
-	if (*((const FCELL *)v1) > *((const FCELL *)v2))
-	    return 1;
-	else if (*((const FCELL *)v1) == *((const FCELL *)v2))
-	    return 0;
-	else
-	    return -1;
+        if (*((const FCELL *)v1) > *((const FCELL *)v2))
+            return 1;
+        else if (*((const FCELL *)v1) == *((const FCELL *)v2))
+            return 0;
+        else
+            return -1;
     case DCELL_TYPE:
-	if (*((const DCELL *)v1) > *((const DCELL *)v2))
-	    return 1;
-	else if (*((const DCELL *)v1) == *((const DCELL *)v2))
-	    return 0;
-	else
-	    return -1;
+        if (*((const DCELL *)v1) > *((const DCELL *)v2))
+            return 1;
+        else if (*((const DCELL *)v1) == *((const DCELL *)v2))
+            return 0;
+        else
+            return -1;
     }
 
     return 0;
@@ -76,8 +76,7 @@ int Rast_raster_cmp(const void *v1, const void *v2, RASTER_MAP_TYPE data_type)
  * \param n number of values to copy
  * \param data_type raster type (CELL, FCELL, DCELL)
  */
-void Rast_raster_cpy(void *v1, const void *v2, int n,
-		     RASTER_MAP_TYPE data_type)
+void Rast_raster_cpy(void *v1, const void *v2, int n, RASTER_MAP_TYPE data_type)
 {
     memcpy(v1, v2, n * Rast_cell_size(data_type));
 }
@@ -99,19 +98,19 @@ void Rast_set_c_value(void *rast, CELL cval, RASTER_MAP_TYPE data_type)
 
     c = cval;
     if (Rast_is_c_null_value(&c)) {
-	Rast_set_null_value(rast, 1, data_type);
-	return;
+        Rast_set_null_value(rast, 1, data_type);
+        return;
     }
     switch (data_type) {
     case CELL_TYPE:
-	*((CELL *) rast) = cval;
-	break;
+        *((CELL *)rast) = cval;
+        break;
     case FCELL_TYPE:
-	*((FCELL *) rast) = (FCELL) cval;
-	break;
+        *((FCELL *)rast) = (FCELL)cval;
+        break;
     case DCELL_TYPE:
-	*((DCELL *) rast) = (DCELL) cval;
-	break;
+        *((DCELL *)rast) = (DCELL)cval;
+        break;
     }
 }
 
@@ -132,22 +131,21 @@ void Rast_set_f_value(void *rast, FCELL fval, RASTER_MAP_TYPE data_type)
 
     f = fval;
     if (Rast_is_f_null_value(&f)) {
-	Rast_set_null_value(rast, 1, data_type);
-	return;
+        Rast_set_null_value(rast, 1, data_type);
+        return;
     }
     switch (data_type) {
     case CELL_TYPE:
-	*((CELL *) rast) = (CELL) fval;
-	break;
+        *((CELL *)rast) = (CELL)fval;
+        break;
     case FCELL_TYPE:
-	*((FCELL *) rast) = fval;
-	break;
+        *((FCELL *)rast) = fval;
+        break;
     case DCELL_TYPE:
-	*((DCELL *) rast) = (DCELL) fval;
-	break;
+        *((DCELL *)rast) = (DCELL)fval;
+        break;
     }
 }
-
 
 /*!
  * \brief  Places a DCELL raster value
@@ -166,19 +164,19 @@ void Rast_set_d_value(void *rast, DCELL dval, RASTER_MAP_TYPE data_type)
 
     d = dval;
     if (Rast_is_d_null_value(&d)) {
-	Rast_set_null_value(rast, 1, data_type);
-	return;
+        Rast_set_null_value(rast, 1, data_type);
+        return;
     }
     switch (data_type) {
     case CELL_TYPE:
-	*((CELL *) rast) = (CELL) dval;
-	break;
+        *((CELL *)rast) = (CELL)dval;
+        break;
     case FCELL_TYPE:
-	*((FCELL *) rast) = (FCELL) dval;
-	break;
+        *((FCELL *)rast) = (FCELL)dval;
+        break;
     case DCELL_TYPE:
-	*((DCELL *) rast) = dval;
-	break;
+        *((DCELL *)rast) = dval;
+        break;
     }
 }
 
@@ -204,16 +202,16 @@ CELL Rast_get_c_value(const void *rast, RASTER_MAP_TYPE data_type)
     CELL c;
 
     if (Rast_is_null_value(rast, data_type)) {
-	Rast_set_c_null_value(&c, 1);
-	return c;
+        Rast_set_c_null_value(&c, 1);
+        return c;
     }
     switch (data_type) {
     case CELL_TYPE:
-	return *((const CELL *)rast);
+        return *((const CELL *)rast);
     case FCELL_TYPE:
-	return (CELL) * ((const FCELL *)rast);
+        return (CELL) * ((const FCELL *)rast);
     case DCELL_TYPE:
-	return (CELL) * ((const DCELL *)rast);
+        return (CELL) * ((const DCELL *)rast);
     }
 
     return 0;
@@ -238,21 +236,20 @@ FCELL Rast_get_f_value(const void *rast, RASTER_MAP_TYPE data_type)
     FCELL f;
 
     if (Rast_is_null_value(rast, data_type)) {
-	Rast_set_f_null_value(&f, 1);
-	return f;
+        Rast_set_f_null_value(&f, 1);
+        return f;
     }
     switch (data_type) {
     case CELL_TYPE:
-	return (FCELL) * ((const CELL *)rast);
+        return (FCELL) * ((const CELL *)rast);
     case FCELL_TYPE:
-	return *((const FCELL *)rast);
+        return *((const FCELL *)rast);
     case DCELL_TYPE:
-	return (FCELL) * ((const DCELL *)rast);
+        return (FCELL) * ((const DCELL *)rast);
     }
 
     return 0;
 }
-
 
 /*!
  * \brief Retrieves the value of given type from pointer p (DCELL)
@@ -273,16 +270,16 @@ DCELL Rast_get_d_value(const void *rast, RASTER_MAP_TYPE data_type)
     DCELL d;
 
     if (Rast_is_null_value(rast, data_type)) {
-	Rast_set_d_null_value(&d, 1);
-	return d;
+        Rast_set_d_null_value(&d, 1);
+        return d;
     }
     switch (data_type) {
     case CELL_TYPE:
-	return (DCELL) * ((const CELL *)rast);
+        return (DCELL) * ((const CELL *)rast);
     case FCELL_TYPE:
-	return (DCELL) * ((const FCELL *)rast);
+        return (DCELL) * ((const FCELL *)rast);
     case DCELL_TYPE:
-	return *((const DCELL *)rast);
+        return *((const DCELL *)rast);
     }
 
     return 0;

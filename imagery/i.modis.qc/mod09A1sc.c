@@ -7,11 +7,11 @@
  * 101 -> class 5: Deep inland water
  * 110 -> class 6: Continental/moderate ocean
  * 111 -> class 7: Deep ocean
- */  
+ */
 
 #include <grass/raster.h>
 
-CELL mod09A1sc(CELL pixel) 
+CELL mod09A1sc(CELL pixel)
 {
     CELL qctemp;
 
@@ -20,5 +20,3 @@ CELL mod09A1sc(CELL pixel)
 
     return qctemp;
 }
-
-

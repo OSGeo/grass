@@ -29,11 +29,11 @@ povray +Ispearfish.pov +Opovview.png +D +P +W1100 +H900 +A0.5
 light_source { < 604505.0, 29000, 4899930.0 > color White }
 
 fog {
- fog_type 2 
- fog_offset 20 
- fog_alt 65 
- color rgb <0.80, 0.88, 0.82> 
- distance 80 
+ fog_type 2
+ fog_offset 20
+ fog_alt 65
+ color rgb <0.80, 0.88, 0.82>
+ distance 80
  up y }
 
 camera {
@@ -46,19 +46,19 @@ camera {
 height_field  {
    tga "elevation.tga"
    smooth
-   texture { 
-      pigment { 
-          image_map { // image is always projected from -z, with front facing +z, top to +Y  			
-             png "landcover30m.png" 	     
-	     once  	
-	  } 
-	  rotate x*90 // align map to height_field 
-      } 
+   texture {
+      pigment {
+          image_map { // image is always projected from -z, with front facing +z, top to +Y
+             png "landcover30m.png"
+	     once
+	  }
+	  rotate x*90 // align map to height_field
+      }
    }
    finish {
 	  ambient 0.2         // Very dark shadows
 	  diffuse 0.8         // Whiten the whites
-	  phong 0.2           // shiny	  
+	  phong 0.2           // shiny
 	  phong_size 100.0    // with tight highlights
 	  specular 0.5
 	  roughness 0.05
@@ -75,4 +75,3 @@ sky_sphere{
     pigment {planar colour_map{[0,rgb <0.9,0.9,1>][1, rgb <0.1,0.2,1>]}}
     pigment{P_Cloud4}
 }
-

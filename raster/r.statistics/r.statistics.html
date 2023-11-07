@@ -3,9 +3,9 @@
 <em>r.statistics</em> is a tool to analyse exploratory statistics of a categorical
 "cover layer" according to how it intersects with objects in a "base layer".  A
 variety of standard statistical measures are possible (called "zonal statistics"
-in some GIS). 
+in some GIS).
 
-All cells in the base layer are considered one object for the analysis.  For 
+All cells in the base layer are considered one object for the analysis.  For
 some applications, one will first want to prepare the input data so that
 all areas of contiguous cell category values in the base layer are uniquely
 identified, which can be done with <em>r.clump</em>.
@@ -34,7 +34,7 @@ layer will be used.  This is nice to avoid the GRASS limitation to integer
 in raster maps because using category values floating point numbers can be
 stored.
 
-<p>All calculations create an output layer.  The output 
+<p>All calculations create an output layer.  The output
 layer is a reclassified version of the base layer with identical
 category values, but modified category labels - the results of the calculations
 are stored in the category labels of the output layer.
@@ -59,6 +59,7 @@ r.univar fieldelev
 </pre></div>
 
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="r.category.html">r.category</a>,
 <a href="r.clump.html">r.clump</a>,
@@ -71,9 +72,5 @@ r.univar fieldelev
 </em>
 
 <h2>AUTHOR</h2>
-Martin Schroeder, Geographisches Institut Heidelberg, Germany
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Martin Schroeder, Geographisches Institut Heidelberg, Germany

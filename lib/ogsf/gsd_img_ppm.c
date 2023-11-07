@@ -3,17 +3,17 @@
 
    \brief OGSF library - PPM stuff
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
    - added little/big endian test Markus Neteler
    - modified to PPM by Bob Covill <bcovill@tekmap.ns.ca>
    - changed 10/99 Jaro
-   - Created new function GS_write_ppm based on RGB dump 
+   - Created new function GS_write_ppm based on RGB dump
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -47,28 +47,27 @@ int GS_write_ppm(const char *name)
     unsigned char *pixbuf;
 
     if (0 == gsd_getimage(&pixbuf, &xsize, &ysize)) {
-	G_warning(_("Unable to get image of current GL screen"));
-	return (1);
+        G_warning(_("Unable to get image of current GL screen"));
+        return (1);
     }
 
     if (NULL == (fp = fopen(name, "w"))) {
-	G_warning(_("Unable to open file <%s> for writing"), name);
-	return (1);
+        G_warning(_("Unable to open file <%s> for writing"), name);
+        return (1);
     }
 
     fprintf(fp, "P6\n%d %d\n255\n", xsize, ysize);
 
     for (y = ysize - 1; y >= 0; y--) {
-	for (x = 0; x < xsize; x++) {
-	    unsigned char r = pixbuf[(y * xsize + x) * 4 + 0];
-	    unsigned char g = pixbuf[(y * xsize + x) * 4 + 1];
-	    unsigned char b = pixbuf[(y * xsize + x) * 4 + 2];
+        for (x = 0; x < xsize; x++) {
+            unsigned char r = pixbuf[(y * xsize + x) * 4 + 0];
+            unsigned char g = pixbuf[(y * xsize + x) * 4 + 1];
+            unsigned char b = pixbuf[(y * xsize + x) * 4 + 2];
 
-	    fputc((int)r, fp);
-	    fputc((int)g, fp);
-	    fputc((int)b, fp);
-	}
-
+            fputc((int)r, fp);
+            fputc((int)g, fp);
+            fputc((int)b, fp);
+        }
     }
     G_free(pixbuf);
     fclose(fp);
@@ -93,28 +92,27 @@ int GS_write_zoom(const char *name, unsigned int xsize, unsigned int ysize)
     unsigned char *pixbuf;
 
     if (0 == gsd_writeView(&pixbuf, xsize, ysize)) {
-	G_warning(_("Unable to write view"));
-	return (1);
+        G_warning(_("Unable to write view"));
+        return (1);
     }
 
     if (NULL == (fp = fopen(name, "w"))) {
-	G_warning(_("Unable to open file <%s> for writing"), name);
-	return (1);
+        G_warning(_("Unable to open file <%s> for writing"), name);
+        return (1);
     }
 
     fprintf(fp, "P6\n%d %d\n255\n", xsize, ysize);
 
     for (y = ysize - 1; y >= 0; y--) {
-	for (x = 0; x < xsize; x++) {
-	    unsigned char r = pixbuf[(y * xsize + x) * 4 + 0];
-	    unsigned char g = pixbuf[(y * xsize + x) * 4 + 1];
-	    unsigned char b = pixbuf[(y * xsize + x) * 4 + 2];
+        for (x = 0; x < xsize; x++) {
+            unsigned char r = pixbuf[(y * xsize + x) * 4 + 0];
+            unsigned char g = pixbuf[(y * xsize + x) * 4 + 1];
+            unsigned char b = pixbuf[(y * xsize + x) * 4 + 2];
 
-	    fputc((int)r, fp);
-	    fputc((int)g, fp);
-	    fputc((int)b, fp);
-	}
-
+            fputc((int)r, fp);
+            fputc((int)g, fp);
+            fputc((int)b, fp);
+        }
     }
     free(pixbuf);
     fclose(fp);

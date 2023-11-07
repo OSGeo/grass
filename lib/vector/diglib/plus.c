@@ -1,4 +1,3 @@
-
 /**
  * \file plus.c
  *
@@ -30,7 +29,7 @@
  */
 int dig_init_plus(struct Plus_head *Plus)
 {
-    
+
     G_debug(3, "dig_init_plus()");
 
     G_zero(Plus, sizeof(struct Plus_head));
@@ -56,15 +55,15 @@ void dig_free_plus_nodes(struct Plus_head *Plus)
     G_debug(2, "dig_free_plus_nodes()");
 
     /* Nodes */
-    if (Plus->Node) {		/* it may be that header only is loaded */
-	for (i = 1; i <= Plus->n_nodes; i++) {
-	    Node = Plus->Node[i];
-	    if (Node == NULL)
-		continue;
+    if (Plus->Node) { /* it may be that header only is loaded */
+        for (i = 1; i <= Plus->n_nodes; i++) {
+            Node = Plus->Node[i];
+            if (Node == NULL)
+                continue;
 
-	    dig_free_node(Node);
-	}
-	G_free(Plus->Node);
+            dig_free_node(Node);
+        }
+        G_free(Plus->Node);
     }
     Plus->Node = NULL;
     Plus->n_nodes = 0;
@@ -84,15 +83,15 @@ void dig_free_plus_lines(struct Plus_head *Plus)
     G_debug(2, "dig_free_plus_lines()");
 
     /* Lines */
-    if (Plus->Line) {		/* it may be that header only is loaded */
-	for (i = 1; i <= Plus->n_lines; i++) {
-	    Line = Plus->Line[i];
-	    if (Line == NULL)
-		continue;
+    if (Plus->Line) { /* it may be that header only is loaded */
+        for (i = 1; i <= Plus->n_lines; i++) {
+            Line = Plus->Line[i];
+            if (Line == NULL)
+                continue;
 
-	    dig_free_line(Line);
-	}
-	G_free(Plus->Line);
+            dig_free_line(Line);
+        }
+        G_free(Plus->Line);
     }
 
     Plus->Line = NULL;
@@ -120,15 +119,15 @@ void dig_free_plus_areas(struct Plus_head *Plus)
     G_debug(2, "dig_free_plus_areas()");
 
     /* Areas */
-    if (Plus->Area) {		/* it may be that header only is loaded */
-	for (i = 1; i <= Plus->n_areas; i++) {
-	    Area = Plus->Area[i];
-	    if (Area == NULL)
-		continue;
+    if (Plus->Area) { /* it may be that header only is loaded */
+        for (i = 1; i <= Plus->n_areas; i++) {
+            Area = Plus->Area[i];
+            if (Area == NULL)
+                continue;
 
-	    dig_free_area(Area);
-	}
-	G_free(Plus->Area);
+            dig_free_area(Area);
+        }
+        G_free(Plus->Area);
     }
     Plus->Area = NULL;
     Plus->n_areas = 0;
@@ -148,15 +147,15 @@ void dig_free_plus_isles(struct Plus_head *Plus)
     G_debug(2, "dig_free_plus_isles()");
 
     /* Isles */
-    if (Plus->Isle) {		/* it may be that header only is loaded */
-	for (i = 1; i <= Plus->n_isles; i++) {
-	    Isle = Plus->Isle[i];
-	    if (Isle == NULL)
-		continue;
+    if (Plus->Isle) { /* it may be that header only is loaded */
+        for (i = 1; i <= Plus->n_isles; i++) {
+            Isle = Plus->Isle[i];
+            if (Isle == NULL)
+                continue;
 
-	    dig_free_isle(Isle);
-	}
-	G_free(Plus->Isle);
+            dig_free_isle(Isle);
+        }
+        G_free(Plus->Isle);
     }
 
     Plus->Isle = NULL;
@@ -189,11 +188,11 @@ void dig_free_plus(struct Plus_head *Plus)
  * \param[in,out] Plus pointer to Plus_head structure
  * \param[in] plus topo file
  * \param[in] head_only read only head
- * 
+ *
  * \return 1 on success
  * \return 0 on error
  */
-int dig_load_plus(struct Plus_head *Plus, struct gvfile * plus, int head_only)
+int dig_load_plus(struct Plus_head *Plus, struct gvfile *plus, int head_only)
 {
     int i;
 
@@ -210,51 +209,51 @@ int dig_load_plus(struct Plus_head *Plus, struct gvfile * plus, int head_only)
     /* Now let's begin reading the Plus file nodes, lines, areas and isles */
 
     if (dig_Rd_Plus_head(plus, Plus) == -1)
-	return 0;
+        return 0;
 
     if (head_only)
-	return 1;
+        return 1;
 
     dig_set_cur_port(&(Plus->port));
 
     /* Nodes */
     if (dig_fseek(plus, Plus->Node_offset, 0) == -1)
-	G_fatal_error(_("Unable read topology for nodes"));
+        G_fatal_error(_("Unable read topology for nodes"));
 
     dig_alloc_nodes(Plus, Plus->n_nodes);
     for (i = 1; i <= Plus->n_nodes; i++) {
-	if (dig_Rd_P_node(Plus, i, plus) == -1)
-	    G_fatal_error(_("Unable to read topology for node %d"), i);
+        if (dig_Rd_P_node(Plus, i, plus) == -1)
+            G_fatal_error(_("Unable to read topology for node %d"), i);
     }
 
     /* Lines */
     if (dig_fseek(plus, Plus->Line_offset, 0) == -1)
-	G_fatal_error(_("Unable read topology for lines"));
+        G_fatal_error(_("Unable read topology for lines"));
 
     dig_alloc_lines(Plus, Plus->n_lines);
     for (i = 1; i <= Plus->n_lines; i++) {
-	if (dig_Rd_P_line(Plus, i, plus) == -1)
-	    G_fatal_error(_("Unable to read topology for line %d"), i);
+        if (dig_Rd_P_line(Plus, i, plus) == -1)
+            G_fatal_error(_("Unable to read topology for line %d"), i);
     }
 
     /* Areas */
     if (dig_fseek(plus, Plus->Area_offset, 0) == -1)
-	G_fatal_error(_("Unable to read topo for areas"));
+        G_fatal_error(_("Unable to read topo for areas"));
 
     dig_alloc_areas(Plus, Plus->n_areas);
     for (i = 1; i <= Plus->n_areas; i++) {
-	if (dig_Rd_P_area(Plus, i, plus) == -1)
-	    G_fatal_error(_("Unable read topology for area %d"), i);
+        if (dig_Rd_P_area(Plus, i, plus) == -1)
+            G_fatal_error(_("Unable read topology for area %d"), i);
     }
 
     /* Isles */
     if (dig_fseek(plus, Plus->Isle_offset, 0) == -1)
-	G_fatal_error(_("Unable to read topology for isles"));
+        G_fatal_error(_("Unable to read topology for isles"));
 
     dig_alloc_isles(Plus, Plus->n_isles);
     for (i = 1; i <= Plus->n_isles; i++) {
-	if (dig_Rd_P_isle(Plus, i, plus) == -1)
-	    G_fatal_error(_("Unable to read topology for isle %d"), i);
+        if (dig_Rd_P_isle(Plus, i, plus) == -1)
+            G_fatal_error(_("Unable to read topology for isle %d"), i);
     }
 
     return (1);
@@ -269,46 +268,46 @@ int dig_load_plus(struct Plus_head *Plus, struct gvfile * plus, int head_only)
  * \return 0 on success
  * \return -1 on error
  */
-int dig_write_plus_file(struct gvfile * fp_plus, struct Plus_head *Plus)
+int dig_write_plus_file(struct gvfile *fp_plus, struct Plus_head *Plus)
 {
 
     dig_set_cur_port(&(Plus->port));
     dig_rewind(fp_plus);
 
     if (dig_Wr_Plus_head(fp_plus, Plus) < 0) {
-	G_warning(_("Unable to write head to plus file"));
-	return (-1);
+        G_warning(_("Unable to write head to plus file"));
+        return (-1);
     }
 
     if (dig_write_nodes(fp_plus, Plus) < 0) {
-	G_warning(_("Unable to write nodes to plus file"));
-	return (-1);
+        G_warning(_("Unable to write nodes to plus file"));
+        return (-1);
     }
 
     if (dig_write_lines(fp_plus, Plus) < 0) {
-	G_warning(_("Unable to write lines to plus file"));
-	return (-1);
+        G_warning(_("Unable to write lines to plus file"));
+        return (-1);
     }
 
     if (dig_write_areas(fp_plus, Plus) < 0) {
-	G_warning(_("Unable to write areas to plus file"));
-	return (-1);
+        G_warning(_("Unable to write areas to plus file"));
+        return (-1);
     }
 
     if (dig_write_isles(fp_plus, Plus) < 0) {
-	G_warning(_("Unable to write isles to plus file"));
-	return (-1);
+        G_warning(_("Unable to write isles to plus file"));
+        return (-1);
     }
 
     dig_rewind(fp_plus);
     if (dig_Wr_Plus_head(fp_plus, Plus) < 0) {
-	G_warning(_("Unable to write head to plus file"));
-	return (-1);
+        G_warning(_("Unable to write head to plus file"));
+        return (-1);
     }
 
     dig_fflush(fp_plus);
     return (0);
-}				/*  write_plus_file()  */
+} /*  write_plus_file()  */
 
 /*!
  * \brief Writes topo structure (nodes) to topo file
@@ -319,20 +318,19 @@ int dig_write_plus_file(struct gvfile * fp_plus, struct Plus_head *Plus)
  * \return 0 on success
  * \return -1 on error
  */
-int dig_write_nodes(struct gvfile * plus, struct Plus_head *Plus)
+int dig_write_nodes(struct gvfile *plus, struct Plus_head *Plus)
 {
     int i;
-
 
     Plus->Node_offset = dig_ftell(plus);
 
     for (i = 1; i <= Plus->n_nodes; i++) {
-	if (dig_Wr_P_node(Plus, i, plus) < 0)
-	    return (-1);
+        if (dig_Wr_P_node(Plus, i, plus) < 0)
+            return (-1);
     }
 
     return (0);
-}				/*  write_nodes()  */
+} /*  write_nodes()  */
 
 /*!
  * \brief Writes topo structure (lines) to topo file
@@ -343,21 +341,20 @@ int dig_write_nodes(struct gvfile * plus, struct Plus_head *Plus)
  * \return 0 on success
  * \return -1 on error
  */
-int dig_write_lines(struct gvfile * plus, struct Plus_head *Plus)
+int dig_write_lines(struct gvfile *plus, struct Plus_head *Plus)
 {
     int i;
-
 
     Plus->Line_offset = dig_ftell(plus);
 
     for (i = 1; i <= Plus->n_lines; i++) {
-	if (dig_Wr_P_line(Plus, i, plus) < 0)
-	    return (-1);
+        if (dig_Wr_P_line(Plus, i, plus) < 0)
+            return (-1);
     }
 
     return (0);
 
-}				/*  write_line()  */
+} /*  write_line()  */
 
 /*!
  * \brief Writes topo structure (areas) to topo file
@@ -368,21 +365,20 @@ int dig_write_lines(struct gvfile * plus, struct Plus_head *Plus)
  * \return 0 on success
  * \return -1 on error
  */
-int dig_write_areas(struct gvfile * plus, struct Plus_head *Plus)
+int dig_write_areas(struct gvfile *plus, struct Plus_head *Plus)
 {
     int i;
-
 
     Plus->Area_offset = dig_ftell(plus);
 
     for (i = 1; i <= Plus->n_areas; i++) {
-	if (dig_Wr_P_area(Plus, i, plus) < 0)
-	    return (-1);
+        if (dig_Wr_P_area(Plus, i, plus) < 0)
+            return (-1);
     }
 
     return (0);
 
-}				/*  write_areas()  */
+} /*  write_areas()  */
 
 /*!
  * \brief Writes topo structure (isles) to topo file
@@ -393,18 +389,17 @@ int dig_write_areas(struct gvfile * plus, struct Plus_head *Plus)
  * \return 0 on success
  * \return -1 on error
  */
-int dig_write_isles(struct gvfile * plus, struct Plus_head *Plus)
+int dig_write_isles(struct gvfile *plus, struct Plus_head *Plus)
 {
     int i;
-
 
     Plus->Isle_offset = dig_ftell(plus);
 
     for (i = 1; i <= Plus->n_isles; i++) {
-	if (dig_Wr_P_isle(Plus, i, plus) < 0)
-	    return (-1);
+        if (dig_Wr_P_isle(Plus, i, plus) < 0)
+            return (-1);
     }
 
     return (0);
 
-}				/*  write_isles()  */
+} /*  write_isles()  */

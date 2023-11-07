@@ -1,7 +1,6 @@
 #include "local_proto.h"
 #include <grass/glocale.h>
 
-
 int check_ready(void)
 {
     FILE *fp;
@@ -10,9 +9,9 @@ int check_ready(void)
     retval = 0;
 
     if (!(fp = fopen(file, "r")))
-	retval = 1;
+        retval = 1;
     else
-	fclose(fp);
+        fclose(fp);
 
     return (retval);
 }

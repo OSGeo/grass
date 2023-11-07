@@ -14,7 +14,7 @@ TODO: here can be just a really short intro and instructions how to get doxygen 
 -->
 <em>r.li.daemon</em> provides support for landscape index calculations on raster
 maps. It hides the management of areas, defined using <a href="g.gui.rlisetup.html">g.gui.rlisetup</a>
-command. It is not used like a standalone program, but its functions are 
+command. It is not used like a standalone program, but its functions are
 a library used by all <em>r.li.[index]</em> commands.<br>
 This description is a tutorial for new index definition. <br><br>
 The developer has only to focus on a unique area, like in mathematical definitions, and
@@ -22,7 +22,7 @@ has to write a C implementation of it.<br>
 The areas are defined using a <em>struct</em> called <b>area_des</b> and it members are
 explained in the source code (doxygen) documentation.
 <p>
-To write a new index only two steps are needed: 
+To write a new index only two steps are needed:
 <ol>
 	<li>
 	Define a function and insert its declaration on file <b>index.h</b> in <em>r.li.daemon</em>
@@ -33,7 +33,7 @@ To write a new index only two steps are needed:
 	where: <ul>
 			<li><i>fd</i> is the raster map descriptor
 			<li><i>par</i> is a matrix for special parameter (like argv in main)
-			<li><i>ad</i> is the area descriptor 
+			<li><i>ad</i> is the area descriptor
 			<li><i>result</i> is where to put the index calculation result
 		</ul>
 	This function has to return 1 on success and 0 otherwise.
@@ -62,8 +62,8 @@ implementation of <i>r.li</i> modules for details and examples.
 
 <h2>NOTES</h2>
 
-Using GRASS library function to access raster rows can slow down moving windows 
-execution. It is recommended to use 
+Using GRASS library function to access raster rows can slow down moving windows
+execution. It is recommended to use
 <br><div class="code"><pre>
 RLI_get_cell_row(int, int, area_des)
 RLI_get_fcell_row(int, int, area_des)
@@ -72,30 +72,22 @@ RLI_get_dcell_row(int, int, area_des)
 to use an ad hoc build memory management developed to speed up the system.
 The documentation is in doxygen files.
 
-
 <h2>SEE ALSO</h2>
 
 <em><a href="https://grass.osgeo.org/gdp/landscape/r_le_manual5.pdf">old r.le manual</a></em><br>
 <em><a href="r.li.html">r.li</a></em> - package overview <br>
 <em><a href="g.gui.rlisetup.html">g.gui.rlisetup</a></em>
 
-
 <h2>REFERENCES</h2>
+
 McGarigal, K., and B. J. Marks. 1995. FRAGSTATS: spatial pattern
 analysis program for quantifying landscape structure. USDA For. Serv.
 Gen. Tech. Rep. PNW-351. (<a href="http://treesearch.fs.fed.us/pubs/3064">PDF</a>)
 
 <h2>AUTHORS</h2>
 
-Claudio Porta and Lucio Davide Spano, students of Computer Science 
+Claudio Porta and Lucio Davide Spano, students of Computer Science
 University of Pisa (Italy).<br>
 Commission from Faunalia Pontedera (PI)<br>
 Rewritten from "r.le.setup" by William L. Baker<br>
-Various bug fixes by Markus Metz<br>
-This program is free software under the GPL (>=v2)
-Read the COPYING file that comes with GRASS for details.
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Various bug fixes by Markus Metz

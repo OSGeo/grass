@@ -1,14 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       d.histogram
  * AUTHOR(S):    Dave Johnson, DBA Systems, Inc. (original contributor)
  *               10560 Arrowhead Drive Fairfax, Virginia 22030
- *               Markus Neteler <neteler itc.it> 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Eric G. Miller <egm2 jps.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
+ *               Markus Neteler <neteler itc.it>
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Eric G. Miller <egm2 jps.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      draw a bar-chart or a pie-chart representing the
  *               histogram statistics of a cell-file
@@ -73,8 +72,6 @@ int main(int argc, char **argv)
     struct Option *opt5;
     struct Flag *flag1;
     struct Flag *flag2;
-    struct Flag *flag3;
-
 
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
@@ -84,8 +81,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("histogram"));
     G_add_keyword(_("statistics"));
     module->description =
-	_("Displays a histogram in the form of a pie or bar chart "
-	  "for a user-specified raster map.");
+        _("Displays a histogram in the form of a pie or bar chart "
+          "for a user-specified raster map.");
 
     opt1 = G_define_standard_option(G_OPT_R_MAP);
     opt1->description = _("Raster map for which histogram will be displayed");
@@ -112,7 +109,7 @@ int main(int argc, char **argv)
     opt3 = G_define_option();
     opt3->key = "type";
     opt3->description =
-	_("Indicate if cell counts or map areas should be displayed");
+        _("Indicate if cell counts or map areas should be displayed");
     opt3->type = TYPE_STRING;
     opt3->required = NO;
     opt3->answer = "count";
@@ -122,7 +119,7 @@ int main(int argc, char **argv)
     opt5 = G_define_option();
     opt5->key = "nsteps";
     opt5->description =
-	_("Number of steps to divide the data range into (fp maps only)");
+        _("Number of steps to divide the data range into (fp maps only)");
     opt5->type = TYPE_INTEGER;
     opt5->required = NO;
     opt5->answer = "255";
@@ -131,14 +128,13 @@ int main(int argc, char **argv)
     flag1->key = 'n';
     flag1->description = _("Display information for null cells");
 
-    flag3 = G_define_flag();
-    flag3->key = 'c';
-    flag3->description =
-	_("Report for ranges defined in cats file (fp maps only)");
+    flag2 = G_define_flag();
+    flag2->key = 'c';
+    flag2->description =
+        _("Report for ranges defined in cats file (fp maps only)");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
-
+        exit(EXIT_FAILURE);
 
     map_name = opt1->answer;
 
@@ -147,35 +143,34 @@ int main(int argc, char **argv)
     type = COUNT;
 #ifdef CAN_DO_AREAS
     if (strcmp(opt3->answer, "count") == 0)
-	type = COUNT;
+        type = COUNT;
     else
-	type = AREA;
+        type = AREA;
 #endif
 
     if (strcmp(opt4->answer, "bar") == 0)
-	style = BAR;
+        style = BAR;
     else
-	style = PIE;
+        style = PIE;
 
     if (sscanf(opt5->answer, "%d", &nsteps) != 1)
-	G_fatal_error(_("Invalid number of steps: %s"), opt5->answer);
+        G_fatal_error(_("Invalid number of steps: %s"), opt5->answer);
 
-    cat_ranges = flag3->answer;
+    cat_ranges = flag2->answer;
 
     if (cat_ranges && nsteps != 255)
-	G_warning(_("When -C flag is set, the nsteps argument is ignored"));
+        G_warning(_("When -C flag is set, the nsteps argument is ignored"));
 
     nodata = flag1->answer;
 
     if (Rast_read_colors(map_name, "", &pcolors) == -1)
-	G_fatal_error(_("Color file for <%s> not available"), map_name);
+        G_fatal_error(_("Color file for <%s> not available"), map_name);
 
     if (Rast_read_cats(map_name, "", &cats) == -1)
-	G_fatal_error(_("Category file for <%s> not available"), map_name);
+        G_fatal_error(_("Category file for <%s> not available"), map_name);
 
     if (Rast_read_range(map_name, "", &range) == -1)
-	G_fatal_error(_("Range information for <%s> not available"),
-		      map_name);
+        G_fatal_error(_("Range information for <%s> not available"), map_name);
 
     /* get the distribution statistics */
 
@@ -184,13 +179,13 @@ int main(int argc, char **argv)
     /* set up the graphics driver and initialize its color-table */
 
     D_open_driver();
-    
-    D_setup_unity(0);			/* 0 = don't clear frame */
+
+    D_setup_unity(0); /* 0 = don't clear frame */
     D_get_src(&t, &b, &l, &r);
 
     /* clear the frame, if requested to do so */
     if (strcmp(bg_opt->answer, "none") != 0)
-	D_erase(bg_opt->answer);
+        D_erase(bg_opt->answer);
 
     /* draw a title for */
     sprintf(title, "%s", map_name);
@@ -198,16 +193,15 @@ int main(int argc, char **argv)
     text_width = (r - l) * 0.05 * 0.50;
     D_text_size(text_width, text_height);
     D_get_text_box(title, &tt, &tb, &tl, &tr);
-    D_pos_abs(l + (r - l) / 2 - (tr - tl) / 2,
-	      t + (b - t) * 0.07);
+    D_pos_abs(l + (r - l) / 2 - (tr - tl) / 2, t + (b - t) * 0.07);
     D_use_color(color);
     D_text(title);
 
     /* plot the distributrion statistics */
     if (style == PIE)
-	pie(&dist_stats, &pcolors);
+        pie(&dist_stats, &pcolors);
     else
-	bar(&dist_stats, &pcolors);
+        bar(&dist_stats, &pcolors);
 
     D_save_command(G_recreate_command());
     D_close_driver();

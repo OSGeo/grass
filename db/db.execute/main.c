@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       db.execute
@@ -25,8 +24,7 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-struct
-{
+struct {
     const char *driver, *database, *schema, *sql, *input;
     int i;
 } parms;
@@ -52,57 +50,57 @@ int main(int argc, char **argv)
 
     /* read from file or stdin ? */
     if (parms.input && strcmp(parms.input, "-") != 0) {
-	fd = fopen(parms.input, "r");
-	if (fd == NULL) {
-	    G_fatal_error(_("Unable to open file <%s>: %s"),
-                          parms.input, strerror(errno));
-	}
+        fd = fopen(parms.input, "r");
+        if (fd == NULL) {
+            G_fatal_error(_("Unable to open file <%s>: %s"), parms.input,
+                          strerror(errno));
+        }
     }
     else {
-	fd = stdin;
+        fd = stdin;
     }
-    
+
     /* open DB connection */
     db_init_string(&stmt);
-    
+
     driver = db_start_driver(parms.driver);
     if (driver == NULL) {
-	G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
+        G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
     }
 
     db_init_handle(&handle);
     db_set_handle(&handle, parms.database, parms.schema);
     if (db_open_database(driver, &handle) != DB_OK)
-	G_fatal_error(_("Unable to open database <%s>"), parms.database);
+        G_fatal_error(_("Unable to open database <%s>"), parms.database);
     G_add_error_handler(error_handler, driver);
-    
+
     if (parms.sql) {
         /* parms.sql */
         db_set_string(&stmt, parms.sql);
         ret = db_execute_immediate(driver, &stmt);
 
-	if (ret != DB_OK) {
-	    if (parms.i) {	/* ignore SQL errors */
-		G_warning(_("Error while executing: '%s'"),
-			  db_get_string(&stmt));
-		error++;
-	    }
-	    else {
-		G_fatal_error(_("Error while executing: '%s'"),
-			      db_get_string(&stmt));
-	    }
-	}
+        if (ret != DB_OK) {
+            if (parms.i) { /* ignore SQL errors */
+                G_warning(_("Error while executing: '%s'"),
+                          db_get_string(&stmt));
+                error++;
+            }
+            else {
+                G_fatal_error(_("Error while executing: '%s'"),
+                              db_get_string(&stmt));
+            }
+        }
     }
     else { /* parms.input */
         while (get_stmt(fd, &stmt)) {
             if (stmt_is_empty(&stmt))
                 continue;
             G_debug(3, "sql: %s", db_get_string(&stmt));
-                
+
             ret = db_execute_immediate(driver, &stmt);
-            
+
             if (ret != DB_OK) {
-                if (parms.i) {	/* ignore SQL errors */
+                if (parms.i) { /* ignore SQL errors */
                     G_warning(_("Error while executing: '%s'"),
                               db_get_string(&stmt));
                     error++;
@@ -114,13 +112,12 @@ int main(int argc, char **argv)
             }
         }
     }
-    
+
     db_close_database(driver);
     db_shutdown_driver(driver);
 
     exit(error ? EXIT_FAILURE : EXIT_SUCCESS);
 }
-
 
 static void parse_command_line(int argc, char **argv)
 {
@@ -142,9 +139,10 @@ static void parse_command_line(int argc, char **argv)
 
     sql = G_define_standard_option(G_OPT_DB_SQL);
     sql->label = _("SQL statement");
-    sql->description = _("Example: update rybniky set kapri = 'hodne' where kapri = 'malo'");
+    sql->description =
+        _("Example: update rybniky set kapri = 'hodne' where kapri = 'malo'");
     sql->guisection = _("SQL");
-    
+
     input = G_define_standard_option(G_OPT_F_INPUT);
     input->required = NO;
     input->label = _("Name of file containing SQL statement(s)");
@@ -155,31 +153,31 @@ static void parse_command_line(int argc, char **argv)
     driver->options = db_list_drivers();
     driver->guisection = _("Connection");
     if ((drv = db_get_default_driver_name()))
-	driver->answer = (char *) drv;
-    
+        driver->answer = (char *)drv;
+
     database = G_define_standard_option(G_OPT_DB_DATABASE);
     database->guisection = _("Connection");
     if ((db = db_get_default_database_name()))
-	database->answer = (char *) db;
+        database->answer = (char *)db;
 
     schema = G_define_standard_option(G_OPT_DB_SCHEMA);
     schema->guisection = _("Connection");
     if ((schema_name = db_get_default_schema_name()))
-	schema->answer = (char *) schema_name;
+        schema->answer = (char *)schema_name;
 
     i = G_define_flag();
     i->key = 'i';
     i->description = _("Ignore SQL errors and continue");
     i->guisection = _("Errors");
-    
+
     if (G_parser(argc, argv))
-	exit(EXIT_SUCCESS);
+        exit(EXIT_SUCCESS);
 
     if (!sql->answer && !input->answer) {
-        G_fatal_error(_("You must provide <%s> or <%s> option"),
-                      sql->key, input->key);
+        G_fatal_error(_("You must provide <%s> or <%s> option"), sql->key,
+                      input->key);
     }
-    
+
     parms.driver = driver->answer;
     parms.database = database->answer;
     parms.schema = schema->answer;
@@ -188,7 +186,7 @@ static void parse_command_line(int argc, char **argv)
     parms.i = i->answer ? TRUE : FALSE;
 }
 
-int get_stmt(FILE * fd, dbString * stmt)
+int get_stmt(FILE *fd, dbString *stmt)
 {
     char buf[DB_SQL_MAX], buf2[DB_SQL_MAX];
     size_t len;
@@ -197,21 +195,21 @@ int get_stmt(FILE * fd, dbString * stmt)
 
     if (G_getl2(buf, sizeof(buf), fd) == 0)
         return 0;
-    
+
     strcpy(buf2, buf);
     G_chop(buf2);
     len = strlen(buf2);
-        
+
     if (buf2[len - 1] == ';') { /* end of statement */
         buf2[len - 1] = 0;      /* truncate ';' */
     }
-    
+
     db_set_string(stmt, buf2);
 
     return 1;
 }
 
-int stmt_is_empty(dbString * stmt)
+int stmt_is_empty(dbString *stmt)
 {
     char dummy[2];
 
@@ -220,8 +218,8 @@ int stmt_is_empty(dbString * stmt)
 
 void error_handler(void *p)
 {
-    dbDriver *driver = (dbDriver *) p;
-    
+    dbDriver *driver = (dbDriver *)p;
+
     db_close_database(driver);
     db_shutdown_driver(driver);
 }

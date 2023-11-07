@@ -48,8 +48,8 @@
           <handler>OnSimpleScriptTemplate</handler>
         </menuitem>
         <menuitem>
-          <label>Load GRASS &amp;module template</label>
-          <help>Load full GRASS module template</help>
+          <label>Load GRASS &amp;tool template</label>
+          <help>Load full GRASS tool template</help>
           <handler>OnGrassModuleTemplate</handler>
         </menuitem>
       </items>
@@ -63,13 +63,13 @@
           <handler>OnSimpleScriptExample</handler>
         </menuitem>
         <menuitem>
-          <label>Load GRASS &amp;module example</label>
-          <help>Load full GRASS module example</help>
+          <label>Load GRASS &amp;tool example</label>
+          <help>Load full GRASS tool example</help>
           <handler>OnGrassModuleExample</handler>
         </menuitem>
         <menuitem>
-          <label>Load GRASS module error &amp;handling example</label>
-          <help>Load full GRASS module with error handling example</help>
+          <label>Load GRASS tool error &amp;handling example</label>
+          <help>Load full GRASS tool with error handling example</help>
           <handler>OnGrassModuleErrorHandlingExample</handler>
         </menuitem>
       </items>
@@ -88,8 +88,8 @@
           <handler>OnPythonHelp</handler>
         </menuitem>
         <menuitem>
-          <label>GRASS Modules help</label>
-          <help>Display the HTML man page index for all GRASS modules</help>
+          <label>GRASS Tools help</label>
+          <help>Display the HTML man page index for all GRASS tools</help>
           <handler>OnModulesHelp</handler>
         </menuitem>
         <menuitem>

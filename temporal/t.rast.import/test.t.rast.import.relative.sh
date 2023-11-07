@@ -19,7 +19,7 @@ r.mapcalc expr="prec_4 = rand(0, 510)" -s
 r.mapcalc expr="prec_5 = rand(0, 300)" -s
 r.mapcalc expr="prec_6 = rand(0, 650)" -s
 
-n1=`g.tempfile pid=1 -d` 
+n1=`g.tempfile pid=1 -d`
 
 cat > "${n1}" << EOF
 prec_1|1|2
@@ -36,7 +36,7 @@ t.create type=strds temporaltype=relative output=precip_rel \
     title="A test with input files" descr="A test with input files"
 
 # The first @test
-t.register type=raster input=precip_rel file="${n1}"  unit="years" 
+t.register type=raster input=precip_rel file="${n1}"  unit="years"
 
 t.rast.export input=precip_rel output=strds_export.tar.bz2 compression=bzip2 format=GTiff directory=test
 t.rast.export input=precip_rel output=strds_export.tar.gz compression=gzip format=GTiff directory=test
@@ -80,6 +80,6 @@ rm -rf test
 rm strds_export.tar.bz2
 rm strds_export.tar.gz
 rm strds_export.tar
-rm strds_export_pack.tar  
+rm strds_export_pack.tar
 rm strds_export_pack.tar.gz
 rm strds_export_pack.tar.bz2

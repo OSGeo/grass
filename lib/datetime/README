@@ -5,9 +5,9 @@
  *               (original contributors, 1995)
  *               Brad Douglas <rez touchofmadness.com>,
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
  *               Radim Blazek <radim.blazek gmail.com>
- *               Glynn Clements <glynn gclements.plus.com>, 
+ *               Glynn Clements <glynn gclements.plus.com>,
  * PURPOSE:      library for date time structure
  * COPYRIGHT:    (C) 2002-2007 by the GRASS Development Team
  *
@@ -17,9 +17,9 @@
  *
  *****************************************************************************/
 
-Note: The timestamp routines 
+Note: The timestamp routines
        G_read_grid3_timestamp +
-       G_remove_grid3_timestamp + 
+       G_remove_grid3_timestamp +
        G_write_grid3_timestamp
       are stored in src/libes/gis/timestamp.c
       (added 3/2001)
@@ -74,7 +74,7 @@ year,month,day
 hour,minute,second:
     These are non-negative values.
 
-    For ABSOLUTE types, these must be valid date/time values 
+    For ABSOLUTE types, these must be valid date/time values
       year    a complete year, all the digits (not just the last 2 digits)
 	      must be positive (since 0 isn't a legal year).
       month   [1,12]
@@ -103,14 +103,14 @@ tz:
     To get UTC from localtime: LT - TZ
 
     tz is expressed in minutes from -720 to 780
-    (720 == 12 hours, 780 minutes == 13 hours). 
+    (720 == 12 hours, 780 minutes == 13 hours).
     [See ANSI X3.51-1975, section 2.2.3]
 
     For a timezone to be allowed, the 'to' field must be one of
     {MINUTE, SECOND}
 
 positive:
-    this indicates if the datetime value is to considered 
+    this indicates if the datetime value is to considered
     "positive" (!=0) or "negative" (==0)
 
     For mode ABSOLUTE, positive==0 means BC
@@ -120,7 +120,7 @@ API
 
 (*) Error messages
     Guidelines:
-	All functions that return int status codes should return 
+	All functions that return int status codes should return
 	    0 (or positive) if OK;
 	    a negative integer if not;
 	and register the error with a call to datetime_error()
@@ -176,7 +176,7 @@ API
     int
 :+  datetime_check_type (DateTime *dt)
 
-	checks the mode/from/to/fracsec in dt. 
+	checks the mode/from/to/fracsec in dt.
 	returns:
 	    0: OK
 	   -1: mode is invalid - not one of {ABSOLUTE,RELATIVE}
@@ -203,7 +203,7 @@ API
 	'dt' must be  legal
 	The 'from/to' must be legal values for the mode of dt;
 	(if they are not legal, then the original values are preserved,
-	dt is not changed). 
+	dt is not changed).
 
 	returns 0 OK, -1 invalid 'dt', -2 invalid 'from/to'
 
@@ -232,7 +232,7 @@ API
 	    are set to zero.
 
 	If dt.to > 'to' (losing "higher" elements), the
-	    the new 'to' is adjusted according to the value for 'round'	
+	    the new 'to' is adjusted according to the value for 'round'
 	    After rounding the "lost" elements are set to zero.
 
 	    if 'round' < 0, then no change is made to the lower elements
@@ -243,20 +243,20 @@ API
 
 	    if round == 0, then if the doubling all higher elements
 		would cause a carry to occur, then the new 'to'
-		element is incremented, as follows 
+		element is incremented, as follows
 		create a DateTime will all higher elements
 		equal to their corresponding elements in 'dt'
 	        and then calling datetime_increment(dt,incr)
 
     int
 :+  datetime_is_absolute (DateTime *dt)
-	Returns 
+	Returns
 	    1 if dt.mode is absolute
 	    0 if not (even if dt.mode is not defined)
 
     int
 :+  datetime_is_relative (DateTime *dt)
-	Returns 
+	Returns
 	    1 if dt.mode is relative
 	    0 if not (even if dt.mode is not defined)
 
@@ -273,13 +273,13 @@ API
 		...
 
 (*) Same
-    
+
     int
 :+  datetime_is_same (DateTime *dt1, *dt2)
 
 	Returns
 	    1 if dt1 is exactly the same as dt2
-	    0 if they differ 
+	    0 if they differ
 
 (*) Ascii
 	The ascii representation of DateTime is
@@ -308,7 +308,7 @@ API
 
 	       1000 hours 0 minutes 35.34 seconds
 	       0 days 10 hours 0 minutes
-	    
+
 	    NOTE: when scanning the from/to are determined by the fields
 	    present. Compare:
 	       10 hours 0 minutes 35.34 seconds [from=HOUR,to=SECOND]
@@ -432,7 +432,7 @@ API
 :+  datetime_get_fracsec (DateTime *dt, int *fracsec)
 
 (*) Arithmetic
-These functions perform addition/subtraction on datetimes. 
+These functions perform addition/subtraction on datetimes.
 
     int
 :   datetime_increment (DateTime *src, *incr)
@@ -450,7 +450,7 @@ These functions perform addition/subtraction on datetimes.
 		 and 'src' is a date for which this function
 		 has not been implemented. NOTE: this should only happen
 		 if the total number of days in the 'src' would exceed 28
-		 since this would then cause date arithemtic to kick in
+		 since this would then cause date arithmetic to kick in
 		 to figure out if these are too many days for the month.
 ## BROWN - identify which dates you know how to handle, and which you do not.
 
@@ -559,7 +559,7 @@ These functions perform addition/subtraction on datetimes.
 	The type (mode/from/to) of the 'src' can be anything.
 	The incr.mode must be RELATIVE
 		(return -1 if not)
-	
+
 	incr.to is restricted based on the src.to:
 
 	    incr.to <= src.to (incr not more precise than src)
@@ -598,7 +598,7 @@ To aid in setting the 'incr' type, the following routine can be used
 	    if src.mode is ABSOLUTE
 		if src.to is in {YEAR,MONTH} then
 		    *from = YEAR
-		if src.to is in {DAY,HOUR,MINUTE,SECOND} then 
+		if src.to is in {DAY,HOUR,MINUTE,SECOND} then
 		    *from = DAY
 
 	    if src.mode is RELATIVE, then
@@ -609,7 +609,7 @@ To aid in setting the 'incr' type, the following routine can be used
 :+  datetime_set_increment_type (DateTime *src, *incr)
 
 	src must be legal
-	This is a convience routine which is implemented as follows:
+	This is a convenience routine which is implemented as follows:
 
 	    int mode, from ,to;
 	    int fracsec;
@@ -683,7 +683,7 @@ To aid in setting the 'incr' type, the following routine can be used
 :+  datetime_change_timezone (DateTime *dt; int minutes)
 	if dt has a timezone,
 	    increment dt by minutes-dt.tz MINUTES
-	    set dt.tz = minutes 
+	    set dt.tz = minutes
 
 	returns 0 OK, datetime_check_timezone(dt) if not,
 		or -4 if minues invalid
@@ -721,8 +721,8 @@ To aid in setting the 'incr' type, the following routine can be used
 
 	does not set timezone.
 
-(*) GRASS will probably have to have a function that returns the 
-    timezone of the database: 
+(*) GRASS will probably have to have a function that returns the
+    timezone of the database:
 
 ### BROWN
 ##   so a database only has one timezone?  Or can each map have its own?

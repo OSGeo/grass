@@ -90,4 +90,3 @@ time ./shortest_path --graph=graphfile --from=0 --to=59999
 real    0m4.579s
 user    0m3.940s
 sys     0m0.130s
-

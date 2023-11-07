@@ -13,4 +13,3 @@ default: parsubdirs
 
 
 $(SUBDIRS1): simlib
-

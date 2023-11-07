@@ -9,17 +9,17 @@ that cell. <em>r.cost</em> will produce 1) an <b>output</b> raster map in
 which each cell contains the lowest total cost of traversing the
 space between each cell and the user-specified points (diagonal
 costs are multiplied by a factor that depends on the dimensions of
-the cell) and 2) a second raster map layer showing the movement 
-direction to the next cell on the path back to the start point (see 
-<a href="#move">Movement Direction</a>). This module uses the current 
-geographic region settings. The <b>output</b> map will be of the same 
+the cell) and 2) a second raster map layer showing the movement
+direction to the next cell on the path back to the start point (see
+<a href="#move">Movement Direction</a>). This module uses the current
+geographic region settings. The <b>output</b> map will be of the same
 data format as the <b>input</b> map, integer or floating point.
 
 <h2>OPTIONS</h2>
 
 The <b>input</b> <em>name</em> is the name of a raster map whose category values
 represent the surface cost. The <b>output</b> <em>name</em> is the name of the
-resultant raster map of cumulative cost. The <b>outdir</b> <em>name</em> is the 
+resultant raster map of cumulative cost. The <b>outdir</b> <em>name</em> is the
 name of the resultant raster map of movement directions (see <a href="#move">Movement Direction</a>).
 <p>
 <em>r.cost</em> can be run with three different methods of identifying the
@@ -37,7 +37,7 @@ raster map through the <b>start_raster</b> option.
 <em>r.cost</em> will stop cumulating costs when either <b>max_cost</b> is reached,
 or one of the stop points given with <b>stop_coordinates</b> is reached.
 Alternatively, the stop points can be read from a vector points file with the
-<b>stop_points</b> option. During execution, once the cumulative cost to all 
+<b>stop_points</b> option. During execution, once the cumulative cost to all
 stopping points has been determined, processing stops.<br>
 Both sites read from a vector points file and those given on the command line
 will be processed.
@@ -49,7 +49,7 @@ option, the corresponding cells in the output map are no longer null
 cells. By using the <b>-n</b> flag, the null cells of the input map are
 retained as null cells in the output map.
 <p>
-As <em>r.cost</em> can run for a very long time, it can be useful to 
+As <em>r.cost</em> can run for a very long time, it can be useful to
 use the <b>--v</b> verbose flag to track progress.
 <p>
 The Knight's move (<b>-k</b> flag) may be used to improve the accuracy of
@@ -57,7 +57,7 @@ the output. In the diagram below, the center location (<tt>O</tt>) represents a
 grid cell from which cumulative distances are calculated. Those
 neighbors marked with an <tt>X</tt> are always considered for cumulative cost
 updates. With the <b>-k</b> option, the neighbors marked with a <tt>K</tt> are
-also considered. 
+also considered.
 
 <div class="code"><pre>
  . . . . . . . . . . . . . . .
@@ -86,17 +86,17 @@ Using the knight's move grows it outwards in 16 directions.</i>
 </center>
 
 <p>
-If the <b>nearest</b> output parameter is specified, the module will calculate 
+If the <b>nearest</b> output parameter is specified, the module will calculate
 for each cell its nearest starting point based on the minimized accumulative cost
 while moving over the cost map.
 
 <p>
-The <b>solver</b> option helps to select a particular direction in case 
-of multiple directions with equal costs. Sometimes fields with equal 
-cumulative costs exist and multiple paths with equal costs would lead 
-from a start point to a stop point. By default, a path along the edge 
-of such a field would be produced or multiple paths of equal costs with 
-the <b>-b</b> flag. An additional variable can be supplied with the 
+The <b>solver</b> option helps to select a particular direction in case
+of multiple directions with equal costs. Sometimes fields with equal
+cumulative costs exist and multiple paths with equal costs would lead
+from a start point to a stop point. By default, a path along the edge
+of such a field would be produced or multiple paths of equal costs with
+the <b>-b</b> flag. An additional variable can be supplied with the
 <b>solver</b> option to help the algorithm pick a particular direction.
 <p>
 Example for solving multiple directions:
@@ -104,28 +104,28 @@ Example for solving multiple directions:
 <img src="rcost_solvedir.png" border="1"><br>
 <table border="0" width="400" height="206">
 <tr><td><center>
-<i>A field of equal cumulative costs with multiple paths (black). By 
-default a path along the edge will be selected (red). Path selection 
+<i>A field of equal cumulative costs with multiple paths (black). By
+default a path along the edge will be selected (red). Path selection
 can be controlled with the solver option (blue).</i>
 </center></td></tr>
 </table>
 </center>
 
 <p>
-Multiple directions can be solved as in the above example with the 
+Multiple directions can be solved as in the above example with the
 following steps:
 <ol>
-    <li>Create multiple directions with <b>r.cost</b>/<b>r.walk</b> 
+    <li>Create multiple directions with <b>r.cost</b>/<b>r.walk</b>
     using the <b>-b</b> flag</li>
     <li>Extract paths using <b>r.path format=bitmask</b></li>
-    <li>Calculate the distance from NULL cells to paths using 
+    <li>Calculate the distance from NULL cells to paths using
     <b>r.grow.distance -n input=&lt;paths from r.path&gt;</b></li>
-    <li>Invert the sign of the distances with <b>r.mapcalc</b> because 
-    for the solver smaller is better, and here we want to get the 
+    <li>Invert the sign of the distances with <b>r.mapcalc</b> because
+    for the solver smaller is better, and here we want to get the
     center of an area with multiple directions</li>
-    <li>Use thise negative distances as solver for a second pass of 
+    <li>Use these negative distances as solver for a second pass of
     <b>r.cost</b></li>
-    <li>Extract paths again with <b>r.path</b> to get a geometrically 
+    <li>Extract paths again with <b>r.path</b> to get a geometrically
     optimized solution</li>
 </ol>
 
@@ -141,8 +141,8 @@ output map by using the <b>-n</b> flag.
 
 <h2>NOTES</h2>
 
-Paths from any point to the nearest starting point of <em>r.cost</em> 
-can be extracted with <em><a href="r.path.html">r.path</a></em> by 
+Paths from any point to the nearest starting point of <em>r.cost</em>
+can be extracted with <em><a href="r.path.html">r.path</a></em> by
 using the direction output map of <em>r.cost</em>.
 
 <h3>Algorithm notes</h3>
@@ -164,24 +164,23 @@ originating cell from the heap continues until the heap is empty.
 <p>
 The most time consuming aspect of this algorithm is the management of
 the heap of cells for which cumulative costs have been at least
-initially computed. <em>r.cost</em> uses a minimum heap for efficiently 
+initially computed. <em>r.cost</em> uses a minimum heap for efficiently
 tracking the next cell with the lowest cumulative costs.
 <p>
-<em>r.cost</em>, like most all GRASS raster programs, is also made to 
-be run on maps larger that can fit in available computer memory. As the 
-algorithm works through the dynamic heap of cells it can move almost 
-randomly around the entire area. <em>r.cost</em> divides the entire 
-area into a number of pieces and swaps these pieces in and out of 
-memory (to and from disk) as needed. This provides a virtual memory 
-approach optimally designed for 2-D raster maps. The amount of memory 
-to be used by <em>r.cost</em> can be controlled with the <b>memory</b> 
-option, default is 300 MB. For systems with less memory this value will 
+<em>r.cost</em>, like most all GRASS raster programs, is also made to
+be run on maps larger that can fit in available computer memory. As the
+algorithm works through the dynamic heap of cells it can move almost
+randomly around the entire area. <em>r.cost</em> divides the entire
+area into a number of pieces and swaps these pieces in and out of
+memory (to and from disk) as needed. This provides a virtual memory
+approach optimally designed for 2-D raster maps. The amount of memory
+to be used by <em>r.cost</em> can be controlled with the <b>memory</b>
+option, default is 300 MB. For systems with less memory this value will
 have to be set to a lower value.
-
 
 <h2>EXAMPLES</h2>
 
-<p>Consider the following example: 
+<p>Consider the following example:
 
 <div class="code"><pre>
        Input:
@@ -230,14 +229,14 @@ Knight's move (<b>-k</b>) option.
 
 The output map can be viewed, for example, as an elevation model in which
 the starting location(s) is/are the lowest point(s). Outputs from <em>r.cost</em>
-can be used as inputs to <em><a href="r.path.html">r.path</a></em> , 
-in order to trace the least-cost path given by this 
-model between any given cell and the <em>r.cost</em> starting location(s). The 
-two programs, when used together, generate least-cost paths or corridors between any 
+can be used as inputs to <em><a href="r.path.html">r.path</a></em> ,
+in order to trace the least-cost path given by this
+model between any given cell and the <em>r.cost</em> starting location(s). The
+two programs, when used together, generate least-cost paths or corridors between any
 two map locations (cells).
 
 <h3>Shortest distance surfaces</h3>
-The <em>r.cost</em> module allows for computing the shortest distance 
+The <em>r.cost</em> module allows for computing the shortest distance
 of each pixel from raster lines, such as determining the shortest distances
 of households to the nearby road. For this cost surfaces with cost value 1 are
 used. The calculation is done with <em>r.cost</em> as follows
@@ -257,17 +256,18 @@ used. The calculation is done with <em>r.cost</em> as follows
 
 <a name="move"></a>
 <h2>Movement Direction</h2>
+
 The movement direction surface is created to record the sequence of
-movements that created the cost accumulation surface. This movement 
-direction surface can be used by <em><a href="r.path.html">r.path</a></em> 
-to recover a path from an end point back to the start point. 
-The direction of each cell points towards the next cell. 
+movements that created the cost accumulation surface. This movement
+direction surface can be used by <em><a href="r.path.html">r.path</a></em>
+to recover a path from an end point back to the start point.
+The direction of each cell points towards the next cell.
 The directions are recorded as degrees CCW from East:
 
 <div class="code"><pre>
-       112.5      67.5         i.e. a cell with the value 135 
+       112.5      67.5         i.e. a cell with the value 135
 157.5  135   90   45   22.5    means the next cell is to the north-west
-       180   x   360           
+       180   x   360
 202.5  225  270  315  337.5
        247.5     292.5
 </pre></div>
@@ -282,9 +282,8 @@ cost raster map "costs":
 r.cost input=costs start_raster=sources output=costsurf nearest=costalloc
 </pre></div>
 
-
 <h3>Find the minimum cost path</h3>
-Once <em>r.cost</em> computes the cumulative cost map and an associated 
+Once <em>r.cost</em> computes the cumulative cost map and an associated
 movement direction map, <em><a href="r.path.html">r.path</a></em>
 can be used to find the minimum cost path.
 
@@ -305,8 +304,3 @@ James Westervelt, U.S.Army Construction Engineering Research Laboratory<br>
 Updated for Grass 5 by Pierre de Mouveaux (pmx@audiovu.com)<br>
 Markus Metz<br>
 Multiple path directions sponsored by <a href="https://www.mundialis.de">mundialis</a>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

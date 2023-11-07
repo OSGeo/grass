@@ -1,4 +1,3 @@
-
 #include <grass/gis.h>
 #include "path.h"
 
@@ -13,7 +12,7 @@ void path_init(struct path *p)
 void path_free(struct path *p)
 {
     if (p->vertices)
-	G_free(p->vertices);
+        G_free(p->vertices);
 
     p->count = 0;
     p->alloc = 0;
@@ -23,7 +22,7 @@ void path_free(struct path *p)
 void path_alloc(struct path *p, int n)
 {
     if (p->alloc >= n)
-	return;
+        return;
 
     p->alloc = n;
     p->vertices = G_realloc(p->vertices, p->alloc * sizeof(struct vertex));
@@ -40,7 +39,7 @@ void path_append(struct path *p, double x, double y, int mode)
     struct vertex *v;
 
     if (p->count >= p->alloc)
-	path_alloc(p, p->alloc ? p->alloc * 2 : 100);
+        path_alloc(p, p->alloc ? p->alloc * 2 : 100);
 
     v = &p->vertices[p->count++];
 
@@ -57,8 +56,8 @@ void path_copy(struct path *dst, const struct path *src)
     path_alloc(dst, src->count);
 
     for (i = 0; i < src->count; i++) {
-	struct vertex *v = &src->vertices[i];
-	path_append(dst, v->x, v->y, v->mode);
+        struct vertex *v = &src->vertices[i];
+        path_append(dst, v->x, v->y, v->mode);
     }
 
     dst->start = src->start;
@@ -86,7 +85,7 @@ void path_close(struct path *p)
     struct vertex *v;
 
     if (p->start < 0)
-	return;
+        return;
 
     v = &p->vertices[p->start];
     path_append(p, v->x, v->y, P_CLOSE);
@@ -99,13 +98,12 @@ void path_stroke(struct path *p, void (*line)(double, double, double, double))
     int i;
 
     for (i = 1; i < p->count; i++) {
-	struct vertex *v0 = &p->vertices[i-1];
-	struct vertex *v1 = &p->vertices[i];
+        struct vertex *v0 = &p->vertices[i - 1];
+        struct vertex *v1 = &p->vertices[i];
 
-	if (v1->mode != P_MOVE)
-	    (*line)(v0->x, v0->y, v1->x, v1->y);
+        if (v1->mode != P_MOVE)
+            (*line)(v0->x, v0->y, v1->x, v1->y);
     }
 
     path_reset(p);
 }
-

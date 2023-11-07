@@ -11,7 +11,6 @@
 
 #include <grass/gis.h>
 
-
 /*!
  * \brief Query cartographic zone.
  *

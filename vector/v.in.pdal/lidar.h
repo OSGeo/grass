@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       v.in.lidar
@@ -12,17 +11,15 @@
  *
  *****************************************************************************/
 
-
 #ifndef GRASS_LIDAR_H
 #define GRASS_LIDAR_H
 
-#define LAS_ALL 0
+#define LAS_ALL   0
 #define LAS_FIRST 1
-#define LAS_MID 2
-#define LAS_LAST 3
+#define LAS_MID   2
+#define LAS_LAST  3
 
-struct GLidarLayers
-{
+struct GLidarLayers {
     int id_layer;
     int return_layer;
     int class_layer;
@@ -67,8 +64,7 @@ void GLidarLayers_set_no_layers(struct GLidarLayers *layers);
 
 /* keep the comments above in sync with the .c file */
 
-struct class_table
-{
+struct class_table {
     int code;
     char *name;
 };

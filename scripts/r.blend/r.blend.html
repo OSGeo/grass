@@ -1,8 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.blend</em> blends color components of 2 raster maps by a
-specificed percentage of the first map.
-
+specified percentage of the first map.
 
 <h2>EXAMPLE</h2>
 
@@ -10,12 +9,17 @@ Blending the aspect map with the elevation map for a shaded map
 (North Carolina sample dataset):
 
 <div class="code"><pre>
-g.region raster=aspect -p
-r.blend first=aspect second=elevation output=elev_shade_blend
-d.mon wx0
-d.rgb blue=elev_shade_blend.b green=elev_shade_blend.g red=elev_shade_blend.r
+g.region raster=elevation
+r.relief input=elevation output=relief zscale=10
+r.blend -c first=elevation second=relief output=blend percent=75
 </pre></div>
 
+<div align="center" style="margin: 10px">
+<a href="r_blend.png">
+<img src="r_blend.png" width="600" height="540" alt="r.blend example" border="0">
+</a><br>
+<i>Figure: Elevation blended with shaded relief</i>
+</div>
 
 <h2>SEE ALSO</h2>
 
@@ -30,13 +34,7 @@ d.rgb blue=elev_shade_blend.b green=elev_shade_blend.g red=elev_shade_blend.r
 <a href="r.support.html">r.support</a>
 </em>
 
-
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Unknown: probably CERL<br>
 Updated to GRASS 5.7 by Michael Barton, Arizona State University
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

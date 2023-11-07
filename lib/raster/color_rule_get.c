@@ -14,8 +14,8 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-/*! 
-   \brief Get both modular and fixed rules count 
+/*!
+   \brief Get both modular and fixed rules count
 
    \param colors pointer to color table structure
 
@@ -27,27 +27,27 @@ int Rast_colors_count(const struct Colors *colors)
     struct _Color_Rule_ *rule;
 
     if (colors->fixed.rules) {
-	count++;
-	rule = colors->fixed.rules;
+        count++;
+        rule = colors->fixed.rules;
 
-	while (rule->next) {
-	    count++;
-	    rule = rule->next;
-	}
+        while (rule->next) {
+            count++;
+            rule = rule->next;
+        }
     }
     if (colors->modular.rules) {
-	count++;
-	rule = colors->modular.rules;
+        count++;
+        rule = colors->modular.rules;
 
-	while (rule->next) {
-	    count++;
-	    rule = rule->next;
-	}
+        while (rule->next) {
+            count++;
+            rule = rule->next;
+        }
     }
     return count;
 }
 
-/*! 
+/*!
    \brief Get color rule from both modular and fixed rules
 
    Rules are returned in the order as stored in the table
@@ -60,13 +60,13 @@ int Rast_colors_count(const struct Colors *colors)
    \param colors pointer to color table structure
    \param rule rule index from 0 to G_color_count()-1
 
-   \return 0 success 
-   \return 1 index out of range  
+   \return 0 success
+   \return 1 index out of range
  */
-int Rast_get_fp_color_rule(DCELL * val1, unsigned char *r1, unsigned char *g1,
-			   unsigned char *b1, DCELL * val2, unsigned char *r2,
-			   unsigned char *g2, unsigned char *b2,
-			   const struct Colors *colors, int rule)
+int Rast_get_fp_color_rule(DCELL *val1, unsigned char *r1, unsigned char *g1,
+                           unsigned char *b1, DCELL *val2, unsigned char *r2,
+                           unsigned char *g2, unsigned char *b2,
+                           const struct Colors *colors, int rule)
 {
     int index = -1;
     int found = 0;
@@ -77,34 +77,34 @@ int Rast_get_fp_color_rule(DCELL * val1, unsigned char *r1, unsigned char *g1,
 
     /* Find the rule */
     if (colors->fixed.rules) {
-	rl = colors->fixed.rules;
-	index++;
-	if (index == rule)
-	    found = 1;
+        rl = colors->fixed.rules;
+        index++;
+        if (index == rule)
+            found = 1;
 
-	while (!found && rl->next) {
-	    rl = rl->next;
-	    index++;
-	    if (index == rule)
-		found = 1;
-	}
+        while (!found && rl->next) {
+            rl = rl->next;
+            index++;
+            if (index == rule)
+                found = 1;
+        }
     }
     if (!found && colors->modular.rules) {
-	rl = colors->modular.rules;
-	index++;
-	if (index == rule)
-	    found = 1;
+        rl = colors->modular.rules;
+        index++;
+        if (index == rule)
+            found = 1;
 
-	while (!found && rl->next) {
-	    rl = rl->next;
-	    index++;
-	    if (index == rule)
-		found = 1;
-	}
+        while (!found && rl->next) {
+            rl = rl->next;
+            index++;
+            if (index == rule)
+                found = 1;
+        }
     }
 
     if (!found)
-	return 1;
+        return 1;
 
     /* Set values */
     *val1 = rl->low.value;

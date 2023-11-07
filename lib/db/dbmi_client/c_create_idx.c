@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_client/c_create_idx.c
- * 
+ *
  * \brief DBMI Library (client) - create index
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -17,15 +17,15 @@
 #include "macros.h"
 
 /*!
-  \brief Create index
+   \brief Create index
 
-  \param driver db driver
-  \param index index info (pointer to dbIndex structure)
+   \param driver db driver
+   \param index index info (pointer to dbIndex structure)
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
-int db_create_index(dbDriver * driver, dbIndex * index)
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
+int db_create_index(dbDriver *driver, dbIndex *index)
 {
     int ret_code;
 
@@ -40,7 +40,7 @@ int db_create_index(dbDriver * driver, dbIndex * index)
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-	return ret_code;	/* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* get results */
     DB_RECV_STRING(&index->indexName);
@@ -49,17 +49,17 @@ int db_create_index(dbDriver * driver, dbIndex * index)
 }
 
 /*!
-  \brief Create unique index
+   \brief Create unique index
 
-  \param driver db driver
-  \param table_name table name
-  \param column_name column name (where to create index)
+   \param driver db driver
+   \param table_name table name
+   \param column_name column name (where to create index)
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
-int db_create_index2(dbDriver * driver, const char *table_name,
-		     const char *column_name)
+int db_create_index2(dbDriver *driver, const char *table_name,
+                     const char *column_name)
 {
     int ret;
     dbIndex index;
@@ -71,9 +71,9 @@ int db_create_index2(dbDriver * driver, const char *table_name,
 
     tbl = strchr(table_name, '.');
     if (tbl == NULL)
-	tbl = table_name;
+        tbl = table_name;
     else
-	tbl++;
+        tbl++;
 
     sprintf(buf, "%s_%s", tbl, column_name);
     db_set_index_name(&index, buf);

@@ -27,11 +27,10 @@
  * local endianess
  */
 #ifdef WORDS_BIGENDIAN
-#define  G_XDR 1
+#define G_XDR 1
 #else
-#define  G_NDR 1
+#define G_NDR 1
 #endif
-
 
 typedef unsigned char dglByte_t;
 typedef long dglInt32_t;

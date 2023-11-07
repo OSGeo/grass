@@ -1,12 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       v.perturb
  * AUTHOR(S):    James Darrell McCauley darrell@mccauley-usa.com
- * 	         http://mccauley-usa.com/
+ *                  http://mccauley-usa.com/
  * PURPOSE:      Random location perturbations of vector points
  *
- * COPYRIGHT:    (C) 1994-2009 by James Darrell McCauley and the GRASS Development Team
+ * COPYRIGHT:    (C) 1994-2009 by James Darrell McCauley and the GRASS
+ *               Development Team
  *
  * Modification History:
  * 3/2006              added min and seed MN/SM ITC-irst
@@ -36,10 +36,11 @@
 int main(int argc, char **argv)
 {
     double p1, p2, numbers[1000], numbers2[1000];
-    int (*rng) ();
+    int (*rng)(int, double *);
     int i;
     int line, nlines, ttype, n, ret, seed, field;
     struct field_info *Fi, *Fin;
+    int out_is_3d;
     double min = 0.;
     int debuglevel = 3;
 
@@ -50,10 +51,9 @@ int main(int argc, char **argv)
 
     struct Cell_head window;
     struct GModule *module;
-    struct
-    {
-	struct Option *in, *out, *dist, *pars, *min, *seed, *field;
-	struct Flag *no_topo;
+    struct {
+        struct Option *in, *out, *dist, *pars, *min, *seed, *field;
+        struct Flag *gen_seed, *no_topo;
     } parm;
 
     G_gisinit(argv[0]);
@@ -65,14 +65,13 @@ int main(int argc, char **argv)
     G_add_keyword(_("random"));
     G_add_keyword(_("point pattern"));
     G_add_keyword(_("level1"));
- 
-    module->description =
-	_("Random location perturbations of vector points.");
+
+    module->description = _("Random location perturbations of vector points.");
 
     parm.in = G_define_standard_option(G_OPT_V_INPUT);
 
     parm.field = G_define_standard_option(G_OPT_V_FIELD_ALL);
-    
+
     parm.out = G_define_standard_option(G_OPT_V_OUTPUT);
 
     parm.dist = G_define_option();
@@ -89,10 +88,11 @@ int main(int argc, char **argv)
     parm.pars->required = YES;
     parm.pars->multiple = YES;
     parm.pars->label = _("Parameter(s) of distribution");
-    parm.pars->description = _("If the distribution "
-			       "is uniform, only one parameter, the maximum, is needed. "
-			       "For a normal distribution, two parameters, the mean and "
-			       "standard deviation, are required.");
+    parm.pars->description =
+        _("If the distribution "
+          "is uniform, only one parameter, the maximum, is needed. "
+          "For a normal distribution, two parameters, the mean and "
+          "standard deviation, are required.");
 
     parm.min = G_define_option();
     parm.min->key = "minimum";
@@ -105,39 +105,55 @@ int main(int argc, char **argv)
     parm.seed->key = "seed";
     parm.seed->type = TYPE_INTEGER;
     parm.seed->required = NO;
-    parm.seed->answer = "0";
     parm.seed->description = _("Seed for random number generation");
-    
+
+    parm.gen_seed = G_define_flag();
+    parm.gen_seed->key = 's';
+    parm.gen_seed->description =
+        _("Generate random seed (result is non-deterministic)");
+
     parm.no_topo = G_define_standard_flag(G_FLG_V_TOPO);
 
+    /* Either explicit seed or explicitly generate seed, but not both. */
+    G_option_exclusive(parm.seed, parm.gen_seed, NULL);
+    G_option_required(parm.seed, parm.gen_seed, NULL);
+
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     min = atof(parm.min->answer);
-    seed = atoi(parm.seed->answer);
+    if (parm.seed->answer) {
+        seed = atol(parm.seed->answer);
+        G_debug(3, "Read random seed from seed=: %d", seed);
+    }
+    else {
+        seed = G_srand48_auto();
+        G_debug(3, "Generated random seed (-s): %d", seed);
+    }
 
     switch (parm.dist->answer[0]) {
     case 'u':
-	rng = zufall;
-	break;
+        rng = zufall;
+        break;
     case 'n':
-	rng = normalen;
-	break;
+        rng = normalen;
+        break;
     }
     if (rng == zufall) {
-	i = sscanf(parm.pars->answer, "%lf", &p1);
-	if (i != 1) {
-	    G_fatal_error(_("Error scanning arguments"));
-	}
-	else if (p1 <= 0)
-	    G_fatal_error(_("Maximum of uniform distribution must be >= zero"));
+        i = sscanf(parm.pars->answer, "%lf", &p1);
+        if (i != 1) {
+            G_fatal_error(_("Error scanning arguments"));
+        }
+        else if (p1 <= 0)
+            G_fatal_error(_("Maximum of uniform distribution must be >= zero"));
     }
     else {
-	if ((i = sscanf(parm.pars->answer, "%lf,%lf", &p1, &p2)) != 2) {
-	    G_fatal_error(_("Error scanning arguments"));
-	}
-	if (p2 <= 0)
-	    G_fatal_error(_("Standard deviation of normal distribution must be >= zero"));
+        if ((i = sscanf(parm.pars->answer, "%lf,%lf", &p1, &p2)) != 2) {
+            G_fatal_error(_("Error scanning arguments"));
+        }
+        if (p2 <= 0)
+            G_fatal_error(
+                _("Standard deviation of normal distribution must be >= zero"));
     }
 
     G_get_window(&window);
@@ -145,13 +161,18 @@ int main(int argc, char **argv)
     /* Open input */
     Vect_set_open_level(2);
     if (Vect_open_old_head2(&In, parm.in->answer, "", parm.field->answer) < 0)
-	G_fatal_error(_("Unable to open vector map <%s>"), parm.in->answer);
-    
+        G_fatal_error(_("Unable to open vector map <%s>"), parm.in->answer);
+
     field = Vect_get_field_number(&In, parm.field->answer);
-    
+
+    out_is_3d = WITHOUT_Z;
+    if (Vect_is_3d(&In))
+        out_is_3d = WITH_Z;
+
     /* Open output */
-    if (Vect_open_new(&Out, parm.out->answer, WITHOUT_Z) < 0)	/* TODO add z support ? */
-	G_fatal_error(_("Unable to create vector map <%s>"), parm.out->answer);
+    if (Vect_open_new(&Out, parm.out->answer, out_is_3d) < 0)
+        G_fatal_error(_("Unable to create vector map <%s>"), parm.out->answer);
+    /* TODO: Add also optional z perturb support */
 
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
@@ -170,66 +191,67 @@ int main(int argc, char **argv)
     Vect_close(&In);
     Vect_set_open_level(1);
     if (Vect_open_old2(&In, parm.in->answer, "", parm.field->answer) < 0)
-	G_fatal_error(_("Unable to open vector map <%s>"), parm.in->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), parm.in->answer);
 
     i = 0;
     line = 0;
     while (1) {
-	int type = Vect_read_next_line(&In, Points, Cats);
+        int type = Vect_read_next_line(&In, Points, Cats);
 
-	/* Note: check for dead lines is not needed, because they are skipped by V1_read_next_line_nat() */
-	if (type == -1) {
-	    G_fatal_error(_("Unable to read vector map"));
-	}
-	else if (type == -2) {
-	    break;
-	}
-	G_percent(line++, nlines, 4);
+        /* Note: check for dead lines is not needed, because they are skipped by
+         * V1_read_next_line_nat() */
+        if (type == -1) {
+            G_fatal_error(_("Unable to read vector map"));
+        }
+        else if (type == -2) {
+            break;
+        }
+        G_percent(line++, nlines, 4);
 
-	if (type & GV_POINT) {
-	    if (field != -1 && !Vect_cat_get(Cats, field, NULL))
-		continue;
+        if (type & GV_POINT) {
+            if (field != -1 && !Vect_cat_get(Cats, field, NULL))
+                continue;
 
-	    if (i >= 800) {
-		/* Generate some more random numbers */
-		myrng(numbers, 1000, rng, p1 - min, p2);
-		myrng(numbers2, 1000, rng, p1, p2);
-		i = 0;
-	    }
+            if (i >= 800) {
+                /* Generate some more random numbers */
+                myrng(numbers, 1000, rng, p1 - min, p2);
+                myrng(numbers2, 1000, rng, p1, p2);
+                i = 0;
+            }
 
-	    G_debug(debuglevel, "x:      %f y:      %f", Points->x[0],
-		    Points->y[0]);
+            G_debug(debuglevel, "x:      %f y:      %f", Points->x[0],
+                    Points->y[0]);
 
-	    /* perturb */
-	    /* TODO: tends to concentrate in box corners when min is used */
-	    if (numbers2[i] >= 0) {
-		if (numbers[i] >= 0) {
-		    G_debug(debuglevel, "deltax: %f", numbers[i] + min);
-		    Points->x[0] += numbers[i++] + min;
-		}
-		else {
-		    G_debug(debuglevel, "deltax: %f", numbers[i] - min);
-		    Points->x[0] += numbers[i++] - min;
-		}
-		Points->y[0] += numbers2[i++];
-	    }
-	    else {
-		if (numbers[i] >= 0) {
-		    G_debug(debuglevel, "deltay: %f", numbers[i] + min);
-		    Points->y[0] += numbers[i++] + min;
-		}
-		else {
-		    G_debug(debuglevel, "deltay: %f", numbers[i] - min);
-		    Points->y[0] += numbers[i++] - min;
-		}
-		Points->x[0] += numbers2[i++];
-	    }
+            /* perturb */
+            /* TODO: tends to concentrate in box corners when min is used */
+            if (numbers2[i] >= 0) {
+                if (numbers[i] >= 0) {
+                    G_debug(debuglevel, "deltax: %f", numbers[i] + min);
+                    Points->x[0] += numbers[i++] + min;
+                }
+                else {
+                    G_debug(debuglevel, "deltax: %f", numbers[i] - min);
+                    Points->x[0] += numbers[i++] - min;
+                }
+                Points->y[0] += numbers2[i++];
+            }
+            else {
+                if (numbers[i] >= 0) {
+                    G_debug(debuglevel, "deltay: %f", numbers[i] + min);
+                    Points->y[0] += numbers[i++] + min;
+                }
+                else {
+                    G_debug(debuglevel, "deltay: %f", numbers[i] - min);
+                    Points->y[0] += numbers[i++] - min;
+                }
+                Points->x[0] += numbers2[i++];
+            }
 
-	    G_debug(debuglevel, "x_pert: %f y_pert: %f", Points->x[0],
-		    Points->y[0]);
-	}
+            G_debug(debuglevel, "x_pert: %f y_pert: %f", Points->x[0],
+                    Points->y[0]);
+        }
 
-	Vect_write_line(&Out, type, Points, Cats);
+        Vect_write_line(&Out, type, Points, Cats);
     }
     G_percent(1, 1, 1);
 
@@ -237,29 +259,28 @@ int main(int argc, char **argv)
     n = Vect_get_num_dblinks(&In);
     ttype = GV_1TABLE;
     if (n > 1)
-	ttype = GV_MTABLE;
+        ttype = GV_MTABLE;
 
     for (i = 0; i < n; i++) {
-	Fi = Vect_get_dblink(&In, i);
-	if (Fi == NULL) {
-	    G_fatal_error(_("Cannot get db link info"));
-	}
-	Fin = Vect_default_field_info(&Out, Fi->number, Fi->name, ttype);
-	Vect_map_add_dblink(&Out, Fi->number, Fi->name, Fin->table, Fi->key,
-			    Fin->database, Fin->driver);
+        Fi = Vect_get_dblink(&In, i);
+        if (Fi == NULL) {
+            G_fatal_error(_("Cannot get db link info"));
+        }
+        Fin = Vect_default_field_info(&Out, Fi->number, Fi->name, ttype);
+        Vect_map_add_dblink(&Out, Fi->number, Fi->name, Fin->table, Fi->key,
+                            Fin->database, Fin->driver);
 
-	ret = db_copy_table(Fi->driver, Fi->database, Fi->table,
-			    Fin->driver, Vect_subst_var(Fin->database, &Out),
-			    Fin->table);
-	if (ret == DB_FAILED) {
-	    G_warning("Cannot copy table");
-	}
+        ret = db_copy_table(Fi->driver, Fi->database, Fi->table, Fin->driver,
+                            Vect_subst_var(Fin->database, &Out), Fin->table);
+        if (ret == DB_FAILED) {
+            G_warning("Cannot copy table");
+        }
     }
 
     Vect_close(&In);
 
     if (!parm.no_topo->answer)
-	Vect_build(&Out);
+        Vect_build(&Out);
     Vect_close(&Out);
 
     return (EXIT_SUCCESS);

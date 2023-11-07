@@ -9,7 +9,7 @@ r.mapcalc --o expr="test_int = 1"
 r.mapcalc --o expr="test_float = float(2.0)"
 r.mapcalc --o expr="test_double = double(3.0)"
 
-# @test packing and unpacking with @precision=1 
+# @test packing and unpacking with @precision=1
 # First we pack the different raster maps with and without compression
 
 r.pack --o --v input=test_int

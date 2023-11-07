@@ -11,15 +11,13 @@
  *
  *****************************************************************************/
 
-
 #include "grid_decimation.h"
 
 #include <stdlib.h>
 
-
 /* max size: rows * cols < max of size_t (using 1D array) */
-void grid_decimation_create(struct GridDecimation *grid_decimation,
-                            size_t rows, size_t cols)
+void grid_decimation_create(struct GridDecimation *grid_decimation, size_t rows,
+                            size_t cols)
 {
     grid_decimation->grid_points =
         G_calloc(rows * cols, sizeof(struct DecimationPoint *));
@@ -32,16 +30,17 @@ void grid_decimation_create(struct GridDecimation *grid_decimation,
     grid_decimation->on_context = NULL;
 }
 
-
 void grid_decimation_destroy(struct GridDecimation *grid_decimation)
 {
     /* TODO: we could also offer mode without dealloc (faster) */
     int row, col;
     size_t point, npoints;
+
     for (row = 0; row < grid_decimation->rows; row++) {
         for (col = 0; col < grid_decimation->cols; col++) {
             /* TODO: make index function */
             size_t index = row * grid_decimation->cols + col;
+
             if ((npoints = grid_decimation->grid_sizes[index])) {
                 /* delete points in list */
                 for (point = 0; point < npoints; point++)
@@ -55,10 +54,8 @@ void grid_decimation_destroy(struct GridDecimation *grid_decimation)
     G_free(grid_decimation->grid_sizes);
 }
 
-
 /* TODO: use Cell_head as storage? */
-void grid_decimation_create_from_region(struct GridDecimation
-                                        *grid_decimation,
+void grid_decimation_create_from_region(struct GridDecimation *grid_decimation,
                                         struct Cell_head *region)
 {
     grid_decimation_create(grid_decimation, region->rows, region->cols);
@@ -66,7 +63,6 @@ void grid_decimation_create_from_region(struct GridDecimation
                                region->south, region->north, region->ew_res,
                                region->ns_res);
 }
-
 
 /* TODO: change order of ns_res and ew_res to match xy */
 void grid_decimation_set_region(struct GridDecimation *grid_decimation,
@@ -81,11 +77,9 @@ void grid_decimation_set_region(struct GridDecimation *grid_decimation,
     grid_decimation->ew_res = ew_res;
 }
 
-
-void grid_decimation_create_list_with_point(struct GridDecimation
-                                            *grid_decimation, size_t index,
-                                            struct DecimationPoint *point,
-                                            size_t npoints)
+void grid_decimation_create_list_with_point(
+    struct GridDecimation *grid_decimation, size_t index,
+    struct DecimationPoint *point, size_t npoints UNUSED)
 {
     struct DecimationPoint **point_list =
         G_malloc(1 * sizeof(struct DecimationPoint *));
@@ -94,14 +88,14 @@ void grid_decimation_create_list_with_point(struct GridDecimation
     grid_decimation->grid_sizes[index] = 1;
 }
 
-
 void grid_decimation_add_point_to_list(struct GridDecimation *grid_decimation,
                                        size_t index,
                                        struct DecimationPoint *point,
                                        size_t npoints)
 {
     /* TODO: this might be too much reallocation */
-    /* TODO: line_ptns struct could be reused, it is not meant for this but it would work */
+    /* TODO: line_ptns struct could be reused, it is not meant for this but it
+     * would work */
     struct DecimationPoint **point_list =
         G_realloc(grid_decimation->grid_points[index],
                   (npoints + 1) * sizeof(struct DecimationPoint *));
@@ -111,10 +105,9 @@ void grid_decimation_add_point_to_list(struct GridDecimation *grid_decimation,
     grid_decimation->grid_sizes[index] = npoints + 1;
 }
 
-
-static size_t grid_decimation_xy_to_index(struct GridDecimation
-                                          *grid_decimation, double x,
-                                          double y)
+static size_t
+grid_decimation_xy_to_index(struct GridDecimation *grid_decimation, double x,
+                            double y)
 {
     /* TODO: test x, y */
     int row = (y - grid_decimation->miny) / grid_decimation->ns_res;
@@ -122,9 +115,9 @@ static size_t grid_decimation_xy_to_index(struct GridDecimation
 
     if (row < 0 || row > grid_decimation->rows || col < 0 ||
         col > grid_decimation->cols) {
-        G_fatal_error
-            ("Row (%d) or column (%d) outside of range (0 - %d, 0 - %d)", row,
-             col, grid_decimation->rows, grid_decimation->cols);
+        G_fatal_error(
+            "Row (%d) or column (%d) outside of range (0 - %d, 0 - %d)", row,
+            col, grid_decimation->rows, grid_decimation->cols);
     }
     size_t index = row * grid_decimation->cols + col;
 
@@ -138,9 +131,9 @@ static size_t grid_decimation_xy_to_index(struct GridDecimation
     return index;
 }
 
-
 void grid_decimation_try_add_point(struct GridDecimation *grid_decimation,
-                                   int cat, double x, double y, double z, void *point_data)
+                                   int cat, double x, double y, double z,
+                                   void *point_data)
 {
     size_t index = grid_decimation_xy_to_index(grid_decimation, x, y);
     int npoints = grid_decimation->grid_sizes[index];
@@ -160,12 +153,13 @@ void grid_decimation_try_add_point(struct GridDecimation *grid_decimation,
         grid_decimation_create_list_with_point(grid_decimation, index, point,
                                                npoints);
         if (grid_decimation->on_add_point)
-            grid_decimation->on_add_point(point, point_data, grid_decimation->on_context);
+            grid_decimation->on_add_point(point, point_data,
+                                          grid_decimation->on_context);
     }
     else {
-        if (grid_decimation->if_add_point
-            (point, point_data, grid_decimation->grid_points[index], npoints,
-             grid_decimation->if_context)) {
+        if (grid_decimation->if_add_point(
+                point, point_data, grid_decimation->grid_points[index], npoints,
+                grid_decimation->if_context)) {
             grid_decimation_add_point_to_list(grid_decimation, index, point,
                                               npoints);
             if (grid_decimation->on_add_point)
