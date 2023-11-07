@@ -1,7 +1,11 @@
+---
+name: Labeler
+
 libraries:
   - lib/**/*
   - include/grass/*
   - include/grass/**/*
+  - python/**/*
 
 module:
   - db/**/*
@@ -15,6 +19,10 @@ module:
   - scripts/**/*
   - temporal/**/*
   - vector/**/*
+
+# helperscripts:
+#  - utils/*
+#  - utils/**/*
 
 GUI:
   - gui/**/*
@@ -62,3 +70,6 @@ HTML:
 
 JavaScript:
   - "**/*.js"
+
+Markdown:
+  - "**/*.md"
