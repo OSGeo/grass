@@ -37,7 +37,7 @@ raster_HDRS     = raster.h defs/raster.h
 gmath_HDRS      = gmath.h defs/gmath.h
 proj_HDRS       = gprojects.h defs/gprojects.h
 imagery_HDRS    = imagery.h defs/imagery.h
-vector_HDRS     = vector.h defs/vector.h vect/dig_structs.h vect/dig_defines.h vect/dig_externs.h 
+vector_HDRS     = vector.h defs/vector.h vect/dig_structs.h vect/dig_defines.h vect/dig_externs.h
 rtree_HDRS	= rtree.h
 display_HDRS    = display.h defs/display.h
 stats_HDRS      = stats.h defs/stats.h
@@ -64,6 +64,7 @@ CTYPESGEN = ./run.py
 CTYPESFLAGS = --no-embed-preamble --strip-build-path "$(ARCH_DISTDIR)" \
 	--cpp "$(CC) -E $(CPPFLAGS) $(LFS_CFLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC) -D__GLIBC_HAVE_LONG_LONG"
 EXTRA_CLEAN_FILES := $(wildcard ctypesgen/*.pyc) $(wildcard ctypesgen/*/*.pyc)
+EXTRA_CLEAN_DIRS := $(wildcard ctypesgen/__pycache__) $(wildcard ctypesgen/*/__pycache__)
 
 include $(MODULE_TOPDIR)/include/Make/Python.make
 

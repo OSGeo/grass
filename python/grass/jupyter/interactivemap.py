@@ -165,6 +165,16 @@ class InteractiveMap:
         folium documentation:
         https://python-visualization.github.io/folium/modules.html
 
+        Raster and vector data are always reprojected to Pseudo-Mercator.
+        With use_region=True or saved_region=myregion, the region extent
+        is reprojected and the number of rows and columns of that region
+        is kept the same. This region is then used for reprojection.
+        By default, use_region is False, which results in the
+        reprojection of the entire raster in its native resolution.
+        The reprojected resolution is estimated with r.proj.
+        Vector data are always reprojected without any clipping,
+        i.e., region options don't do anything.
+
         :param int height: height in pixels of figure (default 400)
         :param int width: width in pixels of figure (default 400)
         :param str tiles: map tileset to use
@@ -234,7 +244,7 @@ class InteractiveMap:
 
     def show(self):
         """This function returns a folium figure object with a GRASS raster
-        overlayed on a basemap.
+        overlaid on a basemap.
 
         If map has layer control enabled, additional layers cannot be
         added after calling show()."""

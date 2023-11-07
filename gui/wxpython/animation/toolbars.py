@@ -245,7 +245,7 @@ class AnimationToolbar(BaseToolbar):
         self.ToggleTool(self.bothDirectionReplay, both)
 
     def EnableAnimTools(self, enable):
-        """Enable or diable animation tools"""
+        """Enable or disable animation tools"""
         self.EnableTool(self.playForward, enable)
         self.EnableTool(self.playBack, enable)
         self.EnableTool(self.pause, enable)

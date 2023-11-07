@@ -1,13 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       d.rhumbline
  * AUTHOR(S):    Michael Shapiro (CERL) (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Eric G. Miller <egm2 jps.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Eric G. Miller <egm2 jps.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      displays the rhumbline joining two user-specified points
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
@@ -33,9 +32,8 @@ int main(int argc, char *argv[])
     int text_color = 0;
     double lon1, lat1, lon2, lat2;
     struct GModule *module;
-    struct
-    {
-	struct Option *lcolor, *tcolor, *coor;
+    struct {
+        struct Option *lcolor, *tcolor, *coor;
     } parm;
 
     G_gisinit(argv[0]);
@@ -45,7 +43,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("distance"));
     G_add_keyword(_("rhumbline"));
     module->description =
-	_("Displays the rhumbline joining two longitude/latitude coordinates.");
+        _("Displays the rhumbline joining two longitude/latitude coordinates.");
 
     parm.coor = G_define_standard_option(G_OPT_M_COORDS);
     parm.coor->key_desc = "lon1,lat1,lon2,lat2";
@@ -69,11 +67,11 @@ int main(int argc, char *argv[])
 #endif
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     if (G_projection() != PROJECTION_LL)
-	G_fatal_error(_("Location is not %s"),
-		      G_projection_name(PROJECTION_LL));
+        G_fatal_error(_("Location is not %s"),
+                      G_projection_name(PROJECTION_LL));
 
 #ifdef CAN_DO_DISTANCES
     /* get conversion factor and unit name */
@@ -83,40 +81,38 @@ int main(int argc, char *argv[])
 #endif
 
     if (parm.coor->answers[0] == NULL)
-	G_fatal_error(_("No coordinates given"));
+        G_fatal_error(_("No coordinates given"));
 
     if (!G_scan_easting(parm.coor->answers[0], &lon1, G_projection()))
-	G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[0]);
+        G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[0]);
 
     if (!G_scan_northing(parm.coor->answers[1], &lat1, G_projection()))
-	G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[1]);
+        G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[1]);
 
     if (!G_scan_easting(parm.coor->answers[2], &lon2, G_projection()))
-	G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[2]);
+        G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[2]);
 
     if (!G_scan_northing(parm.coor->answers[3], &lat2, G_projection()))
-	G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[3]);
-
+        G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[3]);
 
     D_open_driver();
-    
+
     line_color = D_translate_color(parm.lcolor->answer);
     if (!line_color)
-	line_color = D_translate_color(parm.lcolor->answer =
-				       DEFAULT_FG_COLOR);
+        line_color = D_translate_color(parm.lcolor->answer = DEFAULT_FG_COLOR);
 
 #ifdef CAN_DO_DISTANCES
     if (strcmp(parm.lcolor->answer, DEFAULT_FG_COLOR) == 0)
-	deftcolor = "red";
+        deftcolor = "red";
     else
-	deftcolor = DEFAULT_FG_COLOR;
+        deftcolor = DEFAULT_FG_COLOR;
 
     if (parm.tcolor->answer == NULL)
-	text_color = D_translate_color(deftcolor);
+        text_color = D_translate_color(deftcolor);
     else if (strcmp(parm.tcolor->answer, "none") == 0)
-	text_color = -1;
+        text_color = -1;
     else
-	text_color = D_translate_color(parm.tcolor->answer);
+        text_color = D_translate_color(parm.tcolor->answer);
 #endif
 
     plot(lon1, lat1, lon2, lat2, line_color, text_color);

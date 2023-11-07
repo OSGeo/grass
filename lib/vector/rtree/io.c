@@ -1,20 +1,19 @@
-
 /****************************************************************************
-* MODULE:       R-Tree library 
-*              
-* AUTHOR(S):    Antonin Guttman - original code
-*               Daniel Green (green@superliminal.com) - major clean-up
-*                               and implementation of bounding spheres
-*               Markus Metz - file-based and memory-based R*-tree
-*               
-* PURPOSE:      Multidimensional index
-*
-* COPYRIGHT:    (C) 2001 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*****************************************************************************/
+ * MODULE:       R-Tree library
+ *
+ * AUTHOR(S):    Antonin Guttman - original code
+ *               Daniel Green (green@superliminal.com) - major clean-up
+ *                               and implementation of bounding spheres
+ *               Markus Metz - file-based and memory-based R*-tree
+ *
+ * PURPOSE:      Multidimensional index
+ *
+ * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -34,37 +33,37 @@ void RTreeAddNodePos(off_t pos, int level, struct RTree *t)
     int which, i;
 
     if (t->free_nodes.avail >= t->free_nodes.alloc) {
-	size_t size;
+        size_t size;
 
-	t->free_nodes.alloc += 100;
-	size = t->free_nodes.alloc * sizeof(off_t);
-	t->free_nodes.pos = (off_t *)realloc((void *)t->free_nodes.pos, size);
-	assert(t->free_nodes.pos);
+        t->free_nodes.alloc += 100;
+        size = t->free_nodes.alloc * sizeof(off_t);
+        t->free_nodes.pos = (off_t *)realloc((void *)t->free_nodes.pos, size);
+        assert(t->free_nodes.pos);
     }
     t->free_nodes.pos[t->free_nodes.avail++] = pos;
 
     /* check mru first */
     i = 0;
-    while (t->nb[level][t->used[level][i]].pos != pos &&
-           i < NODE_BUFFER_SIZE)
-	i++;
+    while (t->nb[level][t->used[level][i]].pos != pos && i < NODE_BUFFER_SIZE)
+        i++;
 
     /* is it possible that this node is not in the buffer? */
     assert(i < NODE_BUFFER_SIZE);
     which = t->used[level][i];
     t->nb[level][which].pos = -1;
     t->nb[level][which].dirty = 0;
-    
+
     /* make it lru */
-    if (i < NODE_BUFFER_SIZE - 1) { /* which != t->used[level][NODE_BUFFER_SIZE - 1] */
-	/* simple swap does not work here */
-	while (i < NODE_BUFFER_SIZE - 1 &&
-	       t->nb[level][t->used[level][i + 1]].pos != -1) {
-	    t->used[level][i] = t->used[level][i + 1];
-	    i++;
-	}
-	assert(i < NODE_BUFFER_SIZE);
-	t->used[level][i] = which;
+    if (i < NODE_BUFFER_SIZE -
+                1) { /* which != t->used[level][NODE_BUFFER_SIZE - 1] */
+        /* simple swap does not work here */
+        while (i < NODE_BUFFER_SIZE - 1 &&
+               t->nb[level][t->used[level][i + 1]].pos != -1) {
+            t->used[level][i] = t->used[level][i + 1];
+            i++;
+        }
+        assert(i < NODE_BUFFER_SIZE);
+        t->used[level][i] = which;
     }
 }
 
@@ -72,11 +71,11 @@ void RTreeAddNodePos(off_t pos, int level, struct RTree *t)
 off_t RTreeGetNodePos(struct RTree *t)
 {
     if (t->free_nodes.avail > 0) {
-	t->free_nodes.avail--;
-	return lseek(t->fd, t->free_nodes.pos[t->free_nodes.avail], SEEK_SET);
+        t->free_nodes.avail--;
+        return lseek(t->fd, t->free_nodes.pos[t->free_nodes.avail], SEEK_SET);
     }
     else {
-	return lseek(t->fd, 0, SEEK_END);
+        return lseek(t->fd, 0, SEEK_END);
     }
 }
 
@@ -102,7 +101,7 @@ size_t RTreeReadNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
     size += read(t->fd, &(n->level), sizeof(int));
 
     for (i = 0; i < MAXCARD; i++) {
-	size += RTreeReadBranch(&(n->branch[i]), t);
+        size += RTreeReadBranch(&(n->branch[i]), t);
     }
 
     return size;
@@ -115,38 +114,37 @@ struct RTree_Node *RTreeGetNode(off_t nodepos, int level, struct RTree *t)
 
     /* check mru first */
     while (t->nb[level][t->used[level][i]].pos != nodepos &&
-           t->nb[level][t->used[level][i]].pos >= 0 &&
-	   i < NODE_BUFFER_SIZE - 1)
-	i++;
+           t->nb[level][t->used[level][i]].pos >= 0 && i < NODE_BUFFER_SIZE - 1)
+        i++;
 
     which = t->used[level][i];
 
     if (t->nb[level][which].pos != nodepos) {
-	/* rewrite node in buffer */
-	if (t->nb[level][which].dirty) {
-	    RTreeRewriteNode(&(t->nb[level][which].n),
-	                     t->nb[level][which].pos, t);
-	    t->nb[level][which].dirty = 0;
-	}
-	RTreeReadNode(&(t->nb[level][which].n), nodepos, t);
-	t->nb[level][which].pos = nodepos;
+        /* rewrite node in buffer */
+        if (t->nb[level][which].dirty) {
+            RTreeRewriteNode(&(t->nb[level][which].n), t->nb[level][which].pos,
+                             t);
+            t->nb[level][which].dirty = 0;
+        }
+        RTreeReadNode(&(t->nb[level][which].n), nodepos, t);
+        t->nb[level][which].pos = nodepos;
     }
     /* make it mru */
     if (i) { /* t->used[level][0] != which */
 #ifdef USAGE_SWAP
-	t->used[level][i] = t->used[level][0];
-	t->used[level][0] = which;
+        t->used[level][i] = t->used[level][0];
+        t->used[level][0] = which;
 #else
-	while (i) {
-	    t->used[level][i] = t->used[level][i - 1];
-	    i--;
-	}
-	t->used[level][0] = which;
+        while (i) {
+            t->used[level][i] = t->used[level][i - 1];
+            i--;
+        }
+        t->used[level][0] = which;
 #endif
     }
 
     /* RTreeCopyNode(n, &(t->nb[level][which].n), t); */
-    
+
     return &(t->nb[level][which].n);
 }
 
@@ -156,10 +154,13 @@ size_t RTreeWriteBranch(struct RTree_Branch *b, struct RTree *t)
     size_t size = 0;
 
     if (write(t->fd, b->rect.boundary, t->rectsize) != t->rectsize)
-	G_fatal_error("RTreeWriteBranch(): Unable to write (%s)", strerror(errno));
+        G_fatal_error("RTreeWriteBranch(): Unable to write (%s)",
+                      strerror(errno));
     size += t->rectsize;
-    if (write(t->fd, &(b->child), sizeof(union RTree_Child)) != sizeof(union RTree_Child))
-	G_fatal_error("RTreeWriteBranch(): Unable to write (%s)", strerror(errno));
+    if (write(t->fd, &(b->child), sizeof(union RTree_Child)) !=
+        sizeof(union RTree_Child))
+        G_fatal_error("RTreeWriteBranch(): Unable to write (%s)",
+                      strerror(errno));
     size += sizeof(union RTree_Child);
 
     return size;
@@ -173,14 +174,16 @@ size_t RTreeWriteNode(struct RTree_Node *n, struct RTree *t)
 
     /* file position must be set first with RTreeGetFNodePos() */
     if (write(t->fd, &(n->count), sizeof(int)) != sizeof(int))
-	G_fatal_error("RTreeWriteNode(): Unable to write (%s)", strerror(errno));
+        G_fatal_error("RTreeWriteNode(): Unable to write (%s)",
+                      strerror(errno));
     size += sizeof(int);
     if (write(t->fd, &(n->level), sizeof(int)) != sizeof(int))
-	G_fatal_error("RTreeWriteNode(): Unable to write (%s)", strerror(errno));
+        G_fatal_error("RTreeWriteNode(): Unable to write (%s)",
+                      strerror(errno));
     size += sizeof(int);
 
     for (i = 0; i < MAXCARD; i++) {
-	size += RTreeWriteBranch(&(n->branch[i]), t);
+        size += RTreeWriteBranch(&(n->branch[i]), t);
     }
 
     return size;
@@ -202,7 +205,7 @@ void RTreeNodeChanged(struct RTree_Node *n, off_t nodepos, struct RTree *t)
     /* check mru first */
     while (t->nb[n->level][t->used[n->level][i]].pos != nodepos &&
            i < NODE_BUFFER_SIZE)
-	i++;
+        i++;
 
     assert(i < NODE_BUFFER_SIZE);
     /* as it is used, it should always be mru */
@@ -214,14 +217,14 @@ void RTreeNodeChanged(struct RTree_Node *n, off_t nodepos, struct RTree *t)
     /* make it mru */
     if (i) { /* t->used[level][0] != which */
 #ifdef USAGE_SWAP
-	t->used[n->level][i] = t->used[n->level][0];
-	t->used[n->level][0] = which;
+        t->used[n->level][i] = t->used[n->level][0];
+        t->used[n->level][0] = which;
 #else
-	while (i) {
-	    t->used[n->level][i] = t->used[n->level][i - 1];
-	    i--;
-	}
-	t->used[n->level][0] = which;
+        while (i) {
+            t->used[n->level][i] = t->used[n->level][i - 1];
+            i--;
+        }
+        t->used[n->level][0] = which;
 #endif
     }
 }
@@ -230,13 +233,13 @@ void RTreeNodeChanged(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 void RTreeFlushBuffer(struct RTree *t)
 {
     int i, j;
-    
+
     for (i = 0; i <= t->rootlevel; i++) {
-	for (j = 0; j < NODE_BUFFER_SIZE; j++) {
-	    if (t->nb[i][j].dirty) {
-		RTreeRewriteNode(&(t->nb[i][j].n), t->nb[i][j].pos, t);
-		t->nb[i][j].dirty = 0;
-	    }
-	}
+        for (j = 0; j < NODE_BUFFER_SIZE; j++) {
+            if (t->nb[i][j].dirty) {
+                RTreeRewriteNode(&(t->nb[i][j].n), t->nb[i][j].pos, t);
+                t->nb[i][j].dirty = 0;
+            }
+        }
     }
 }

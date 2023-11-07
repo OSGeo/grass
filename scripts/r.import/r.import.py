@@ -325,7 +325,6 @@ def main():
     vreg = TMP_REG_NAME
 
     for outfile in outfiles:
-
         n = region["n"]
         s = region["s"]
         e = region["e"]

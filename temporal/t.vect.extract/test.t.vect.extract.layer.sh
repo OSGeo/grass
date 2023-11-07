@@ -26,13 +26,13 @@ t.vect.list input=prec_observer
 
 t.vect.extract --o input=prec_observer output=test_extract_1 base=test_1
 t.info type=stvds input=test_extract_1
-t.vect.univar input=test_extract_1 column=prec 
+t.vect.univar input=test_extract_1 column=prec
 t.vect.extract --o input=prec_observer expr="prec > 400" output=test_extract_2 base=test_2
 t.info type=stvds input=test_extract_2
-t.vect.univar input=test_extract_2 column=prec 
+t.vect.univar input=test_extract_2 column=prec
 t.vect.extract --o input=prec_observer where="start_time >= '2001-05-01'" expr="prec > 400" output=test_extract_3 base=test_3
 t.info type=stvds input=test_extract_3
-t.vect.univar input=test_extract_3 column=prec 
+t.vect.univar input=test_extract_3 column=prec
 
 
 

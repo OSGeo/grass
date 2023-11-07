@@ -89,7 +89,6 @@ def get_dataset_list(
     result = {}
 
     for mapset in mapsets.keys():
-
         if temporal_type == "absolute":
             table = sp.get_type() + "_view_abs_time"
         else:
@@ -228,7 +227,7 @@ def _write_csv(rows, column_names, separator, file=sys.stdout):
     # pylint: disable=import-outside-toplevel
     import csv
 
-    # Newlines handled by the CSV writter. Set according to the package doc.
+    # Newlines handled by the CSV writer. Set according to the package doc.
     with _open_output_file(file, newline="") as stream:
         spamwriter = csv.writer(
             stream,
@@ -302,7 +301,6 @@ def _get_get_registered_maps_as_objects_delta_gran(
 
     records = []
     for map_object in maps:
-
         if isinstance(map_object, list):
             if len(map_object) > 0:
                 map_object = map_object[0]

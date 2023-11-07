@@ -1,11 +1,11 @@
 /* BRDF correction performed unsigned int bits[14]
  * 0 -> class 0: No
  * 1 -> class 1: Yes
- */  
+ */
 
 #include <grass/raster.h>
 
-CELL mod09A1sj(CELL pixel) 
+CELL mod09A1sj(CELL pixel)
 {
     CELL qctemp;
 
@@ -14,5 +14,3 @@ CELL mod09A1sj(CELL pixel)
 
     return qctemp;
 }
-
-

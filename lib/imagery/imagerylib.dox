@@ -1,5 +1,5 @@
 /*! \page imagerylib GRASS Imagery Library
-<!-- doxygenized from "GRASS 5 Programmer's Manual" 
+<!-- doxygenized from "GRASS 5 Programmer's Manual"
      by M. Neteler 2/2004
   -->
 
@@ -39,7 +39,7 @@ The group is the key database structure which permits integration of
 image processing in GRASS. As GRASS during import splits up multiband
 image into separate rasters, groups allow to keep them together to
 ease workflows. Groups do not store data themselves, only references
-to group members and auxilary data.
+to group members and auxiliary data.
 
 \subsection Finding_Groups_in_the_Database Finding Groups in the Database
 
@@ -48,8 +48,8 @@ Sometimes it is necessary to determine if a given group already
 exists. The following routine provides this service:
 
 <P>
-int I_find_group() does group exist in current mapset?  
-int I_find_group2() does group exist in the specified mapset?  
+int I_find_group() does group exist in current mapset?
+int I_find_group2() does group exist in the specified mapset?
 
 Returns 1 if the specified <B>group</B> exists in the mapset;
 0 otherwise.
@@ -67,17 +67,17 @@ The contents of the REF file are read or updated by the following
 routines:
 
 <P>
-int I_get_group_ref() read group REF file from current mapset  
-int I_get_group_ref2() read group REF file from the specified mapset  
+int I_get_group_ref() read group REF file from current mapset
+int I_get_group_ref2() read group REF file from the specified mapset
 
 Reads the contents of the REF file for the specified <B>group</B> into
-the <B>ref</B> structure. 
+the <B>ref</B> structure.
 
 <P>
 Returns 1 if successful; 0 otherwise (but no error messages are printed).
 
 <P>
-int I_put_group_ref() write group REF file 
+int I_put_group_ref() write group REF file
 
 Writes the contents of the <B>ref</B> structure to the REF file for
 the specified <B>group.</B>
@@ -90,8 +90,8 @@ Returns 1 if successful; 0 otherwise (and prints a diagnostic error).
 already exist.
 
 <P>
-int I_get_subgroup_ref() read subgroup REF file in current mapset  
-int I_get_subgroup_ref2() read subgroup REF file in the specified mapset  
+int I_get_subgroup_ref() read subgroup REF file in current mapset
+int I_get_subgroup_ref2() read subgroup REF file in the specified mapset
 
 Reads the contents of the REF file for the specified <B>subgroup</B>
 of the specified <B>group</B> into the <B>ref</B> structure.
@@ -355,13 +355,13 @@ for (i = 0; i<ref.nfiles; i++)
   fprintf(stdout, "%s in %s\n", ref.file[i].name, ref.file[i].mapset);
 \endverbatim
 
-\subsection struct_Control_Points struct Control_Points 
+\subsection struct_Control_Points struct Control_Points
 
 The <I>Control_Points</I> structure is used to hold the control points
 from the group POINTS file. The structure is:
 
 \verbatim
-struct 
+struct
 Control_Points
 {
 int count; /* number of control points */

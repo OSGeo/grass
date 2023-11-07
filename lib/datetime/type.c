@@ -6,11 +6,10 @@
  */
 #include <grass/datetime.h>
 
-
 /*!
- * \brief 
+ * \brief
  *
- * 
+ *
  * <ul>
  <li> This routine must be called can be made with other datetime functions.
  * </li>
@@ -34,7 +33,7 @@
  *  \return int
  */
 
-int datetime_set_type(DateTime * dt, int mode, int from, int to, int fracsec)
+int datetime_set_type(DateTime *dt, int mode, int from, int to, int fracsec)
 {
     dt->mode = mode;
     dt->from = from;
@@ -54,9 +53,8 @@ int datetime_set_type(DateTime * dt, int mode, int from, int to, int fracsec)
     return datetime_check_type(dt);
 }
 
-int
-datetime_get_type(const DateTime * dt, int *mode, int *from, int *to,
-		  int *fracsec)
+int datetime_get_type(const DateTime *dt, int *mode, int *from, int *to,
+                      int *fracsec)
 {
     *mode = dt->mode;
     *to = dt->to;
@@ -65,34 +63,32 @@ datetime_get_type(const DateTime * dt, int *mode, int *from, int *to,
     return datetime_check_type(dt);
 }
 
-
 /*!
- * \brief 
+ * \brief
  *
- * Returns:  
- * 1 if <b>datetime_check_type()</b> returns 0  
- * 0 if not. 
+ * Returns:
+ * 1 if <b>datetime_check_type()</b> returns 0
+ * 0 if not.
  *
  *  \param dt
  *  \return int
  */
 
-int datetime_is_valid_type(const DateTime * dt)
+int datetime_is_valid_type(const DateTime *dt)
 {
     /* Returns 0 if DateTime structure is not valid. */
     return datetime_check_type(dt) == 0;
 }
 
-
 /*!
- * \brief 
+ * \brief
  *
  * checks the mode/from/to/fracsec in dt.
- * Returns: 
+ * Returns:
  * <ul>
  <li> 0: OK
  </li>
- <li> -1: mode is invalid - not one of {ABSOLUTE,RELATIVE} 
+ <li> -1: mode is invalid - not one of {ABSOLUTE,RELATIVE}
  </li>
  <li> -2: from is invalid - not one of {YEAR,MONTH,DAY,HOUR,MINUTE,SECOND}
  </li>
@@ -100,7 +96,7 @@ int datetime_is_valid_type(const DateTime * dt)
  </li>
  <li> -4: from/to are reversed (from>to is illegal)
  </li>
- <li> -5: invalid from/to combination for RELATIVE mode:  
+ <li> -5: invalid from/to combination for RELATIVE mode:
  * from in {YEAR,MONTH} but to is not, or
  * from in {DAY,HOUR,MINUTE,SECOND} but to is not
  </li>
@@ -113,7 +109,7 @@ int datetime_is_valid_type(const DateTime * dt)
  *  \return int
  */
 
-int datetime_check_type(const DateTime * dt)
+int datetime_check_type(const DateTime *dt)
 {
     /* Returns 0 for a valid DateTime structure.
        Sets the error code and error message if the structure is not
@@ -121,29 +117,29 @@ int datetime_check_type(const DateTime * dt)
     switch (dt->mode) {
     case DATETIME_ABSOLUTE:
     case DATETIME_RELATIVE:
-	break;
+        break;
     default:
-	return datetime_error(-1, "invalid datetime 'mode'");
+        return datetime_error(-1, "invalid datetime 'mode'");
     }
 
     if (!datetime_is_between(dt->from, DATETIME_YEAR, DATETIME_SECOND))
-	return datetime_error(-2, "invalid datetime 'from'");
+        return datetime_error(-2, "invalid datetime 'from'");
     if (!datetime_is_between(dt->to, DATETIME_YEAR, DATETIME_SECOND))
-	return datetime_error(-3, "invalid datetime 'to'");
+        return datetime_error(-3, "invalid datetime 'to'");
     if (dt->from > dt->to)
-	return datetime_error(-4, "invalid datetime 'from-to'");
+        return datetime_error(-4, "invalid datetime 'from-to'");
     if (dt->mode == DATETIME_RELATIVE) {
-	if (datetime_in_interval_year_month(dt->from)
-	    && !datetime_in_interval_year_month(dt->to))
-	    return datetime_error(-5, "invalid relative datetime 'from-to'");
-	if (datetime_in_interval_day_second(dt->from)
-	    && !datetime_in_interval_day_second(dt->to))
-	    return datetime_error(-5, "invalid relative datetime 'from-to'");
+        if (datetime_in_interval_year_month(dt->from) &&
+            !datetime_in_interval_year_month(dt->to))
+            return datetime_error(-5, "invalid relative datetime 'from-to'");
+        if (datetime_in_interval_day_second(dt->from) &&
+            !datetime_in_interval_day_second(dt->to))
+            return datetime_error(-5, "invalid relative datetime 'from-to'");
     }
     if (dt->mode == DATETIME_ABSOLUTE && dt->from != DATETIME_YEAR)
-	return datetime_error(-6, "invalid absolute datetime 'from'");
+        return datetime_error(-6, "invalid absolute datetime 'from'");
     if (dt->to == DATETIME_SECOND && dt->fracsec < 0)
-	return datetime_error(-7, "invalid datetime 'fracsec'");
+        return datetime_error(-7, "invalid datetime 'fracsec'");
 
     return 0;
 }
@@ -158,36 +154,34 @@ int datetime_in_interval_day_second(int x)
     return datetime_is_between(x, DATETIME_DAY, DATETIME_SECOND);
 }
 
-
 /*!
- * \brief 
+ * \brief
  *
- * Returns:  
- * 1 if dt.mode is absolute  
- * 0 if not (even if dt.mode is not defined) 
+ * Returns:
+ * 1 if dt.mode is absolute
+ * 0 if not (even if dt.mode is not defined)
  *
  *  \param dt
  *  \return int
  */
 
-int datetime_is_absolute(const DateTime * dt)
+int datetime_is_absolute(const DateTime *dt)
 {
     return (dt->mode == DATETIME_ABSOLUTE);
 }
 
-
 /*!
- * \brief 
+ * \brief
  *
  * Returns:
- * 1 if dt.mode is relative  
- * 0 if not (even if dt.mode is not defined) 
+ * 1 if dt.mode is relative
+ * 0 if not (even if dt.mode is not defined)
  *
  *  \param dt
  *  \return int
  */
 
-int datetime_is_relative(const DateTime * dt)
+int datetime_is_relative(const DateTime *dt)
 {
     return (dt->mode == DATETIME_RELATIVE);
 }

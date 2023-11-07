@@ -2,7 +2,7 @@
 this program has not been tested and may have
 bugs in segmenting procedure and colortables
 
-Resolution bug: 
+Resolution bug:
 
 r.resamp.rst N46E011.meters.90 el=N46E011.meters.1425 ew=14.25 ns=14.25
 GRASS 5.7.cvs:/nfsmnt/levi0/ssi/srtm_DEM90m_egm96geoid/original > g.region raster=N46E011.meters.1425 -p
@@ -20,4 +20,3 @@ rows:       2122
 cols:       2173
 
 -> should use the functionality of 'g.region -a'
-

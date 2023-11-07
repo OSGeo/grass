@@ -3,15 +3,6 @@ Created on Tue Apr  2 18:31:47 2013
 
 @author: pietro
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 import re
 
 from grass.pygrass.modules.interface.docstring import docstring_property
@@ -53,7 +44,7 @@ def _check_value(param, value):
     if value is None:
         return param.default, param.default
 
-    # find errors with multiple parmeters
+    # find errors with multiple parameters
     if isinstance(value, (list, tuple)):
         if param.keydescvalues:
             return (
@@ -98,11 +89,22 @@ def _check_value(param, value):
             if (param.min is not None and newvalue < param.min) or (
                 param.max is not None and newvalue > param.max
             ):
-                err_str = (
-                    "The Parameter <%s>, must be between: "
-                    "%g<=value<=%g, %r is outside."
-                )
-                raise ValueError(err_str % (param.name, param.min, param.max, newvalue))
+                if param.min is None:
+                    err_str = (
+                        f"The Parameter <{param.name}> must be lower than "
+                        f"{param.max}, {newvalue} is outside."
+                    )
+                elif param.max is None:
+                    err_str = (
+                        f"The Parameter <{param.name}> must be higher than "
+                        f"{param.min}, {newvalue} is out of range."
+                    )
+                else:
+                    err_str = (
+                        f"The Parameter <{param.name}> must be between: "
+                        f"{param.min}<=value<={param.max}, {newvalue} is outside."
+                    )
+                raise ValueError(err_str)
         # check if value is in the list of valid values
         if param.values is not None and newvalue not in param.values:
             raise ValueError(must_val % (param.name, param.values))
