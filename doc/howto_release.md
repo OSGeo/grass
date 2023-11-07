@@ -11,8 +11,8 @@
 - You don't have any local un-pushed or un-committed changes.
 - You are using Bash or a similar shell.
 
-*Note: Some later steps in this text are to be done by the development coordinator
-(currently Markus Neteler and Martin Landa) due to needed logins.*
+_Note: Some later steps in this text are to be done by the development coordinator
+(currently Markus Neteler and Martin Landa) due to needed logins._
 
 ## Prepare the local repo
 
@@ -63,11 +63,17 @@ git show
 
 ## Update VERSION file to release version number
 
-Modify the VERSION file use the dedicated script, for RC1, e.g.:
+For RCs, modify the VERSION file use the dedicated script. E.g., for RC1:
 
 ```bash
 ./utils/update_version.py status
 ./utils/update_version.py rc 1
+```
+
+For a release, change the version after the RC cycle to an official release:
+
+```bash
+./utils/update_version.py release
 ```
 
 The script will compute the correct version string and print a message
@@ -91,7 +97,7 @@ git status
 git show
 ```
 
-Push the tag to the upstream repo:
+Push the commit to the upstream repo:
 
 ```bash
 git push upstream
@@ -139,7 +145,8 @@ git log --max-count=5
 ```
 
 Create an annotated tag (a lightweight tag is okay too, but there is more metadata
-stored for annotated tags including a date; message is suggested by the version script):
+stored for annotated tags including a date; message is suggested by the
+`./utils/update_version.py` script):
 
 ```bash
 git tag $TAG -a -m "..."
@@ -152,7 +159,8 @@ git tag -n --sort=-creatordate
 git tag -n --sort=-taggerdate
 ```
 
-Now push the tag upstream - this will trigger the automated workflows linked to tags:
+Now push the tag upstream - this will trigger the
+[automated workflows](https://github.com/OSGeo/grass/actions) linked to tags:
 
 ```bash
 git push upstream $TAG
@@ -165,13 +173,13 @@ so that you can continue in the release process.
 
 Generate a draft of release notes using a script. The script the script needs to
 run from the top directory and will expect its configuration files
-to be in the *utils* directory.
+to be in the _utils_ directory.
 
 #### Major and minor releases
 
-For major and minor releases, GitHub API gives good results for the first
-release candidate because it contains contributor handles and can identify
-new contributors, so use with the *api* backend, e.g.:
+For major (X.y.z) and minor (x.Y.z) releases, GitHub API gives good results for the
+first release candidate because it contains contributor handles and can identify
+new contributors, so use with the _api_ backend, e.g.:
 
 ```bash
 python ./utils/generate_release_notes.py api releasebranch_8_4 8.3.0 $VERSION
@@ -179,9 +187,9 @@ python ./utils/generate_release_notes.py api releasebranch_8_4 8.3.0 $VERSION
 
 #### Micro releases
 
-For micro releases, GitHub API does not give good results because it uses PRs
-while the backports are usually direct commits without PRs.
-The *git log* command operates on commits, so use use the *log* backend:
+For micro releases (x.y.Z), GitHub API does not give good results because it uses
+PRs while the backports are usually direct commits without PRs.
+The _git log_ command operates on commits, so use use the _log_ backend:
 
 ```bash
 python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0 $VERSION
@@ -189,7 +197,7 @@ python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0 $VERSION
 
 #### RCs
 
-In between RCs and between last RC and final release, the *log* backend is useful
+In between RCs and between last RC and final release, the _log_ backend is useful
 for showing updates since the last RC:
 
 ```bash
@@ -199,13 +207,13 @@ python ./utils/generate_release_notes.py log releasebranch_8_4 8.4.0RC1 $VERSION
 #### Finalizing the release notes
 
 For the final release, the changes accumulated since the first RC need to be
-added manually to the result from the *api* backend.
+added manually to the result from the _api_ backend.
 
-The script sorts them into categories defined in *utils/release.yml*.
+The script sorts them into categories defined in _utils/release.yml_.
 However, these notes need to be manually edited to collapse related items into
-one. Additionally, a *Highlights* section needs to be added with manually
+one. Additionally, a _Highlights_ section needs to be added with manually
 identified new major features for major and minor releases. For all releases, a
-*Major* section may need to be added showing critical fixes or breaking changes
+_Major_ section may need to be added showing critical fixes or breaking changes
 if there are any.
 
 ### Modify the release draft
@@ -225,27 +233,27 @@ If RC, mark it as a pre-release, check:
 
 Save the modified draft, but do not publish the release yet.
 
-## Reset include/VERSION file to git development version
+## Update include/VERSION file
 
 Use the dedicated `update_version.py` script to edit the VERSION file.
 
-After an RC, switch to development version:
+After a RC, update to development version:
 
 ```bash
 ./utils/update_version.py dev
 ```
 
-Next switch back to the development version for the next micro, minor,
-or major version, e.g., for micro version, use:
+After a final release, update to the next micro (x.y.Z), minor (x.Y.z),
+or major (X.y.y) version. E.g., for micro version, use:
 
 ```bash
 ./utils/update_version.py micro
 ```
 
-Use *major* and *minor* operations for the other version updates.
+Use _major_ and _minor_ operations for the other version updates.
 Use `--help` for details about the options.
 
-Commit with the suggested commit message and push, e.g.:
+Eventually, commit with the suggested commit message and push, e.g.:
 
 ```bash
 git show
@@ -261,10 +269,16 @@ you can get the same or similar message again using the script
 ./utils/update_version.py suggest
 ```
 
-## Publish release
+## Publishing a final release
 
-For the final release, edit the draft release again and publish it using the
-"Publish release" button.
+The published RC releases has the initial release notes (based on locally
+auto-generated notes) which need to be refined further:
+
+- add highlights
+- verify that the subsections are well sorted
+
+For the final release, edit these draft release again in order to publish it
+using the "Publish release" button.
 
 ## Upload to OSGeo servers
 
@@ -321,7 +335,7 @@ md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 ### Upload source code tarball to OSGeo servers
 
 Note: servers 'osgeo7-grass' and 'osgeo7-download' only reachable via
-      jumphost (managed by OSGeo-SAC) - see <https://wiki.osgeo.org/wiki/SAC_Service_Status#grass>
+jumphost (managed by OSGeo-SAC) - see <https://wiki.osgeo.org/wiki/SAC_Service_Status#grass>
 
 ```bash
 # Store the source tarball (twice) in (use scp -p FILES grass:):
@@ -479,6 +493,22 @@ Subsequently, verify the software pages:
 - Create milestone and release: <https://launchpad.net/grass/+series>
 - Upload tarball for created release
 
+### Update grass.osgeo.org
+
+These updates are for final releases only.
+
+Update version:
+
+- <https://github.com/OSGeo/grass-website/blob/master/data/grass.json>
+
+Add release article to news section:
+
+- <https://github.com/OSGeo/grass-website/tree/master/content/news>
+
+Add release to history page:
+
+- <https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md>
+
 ### Other notes
 
 - <https://trac.osgeo.org/grass/wiki/BuildHints>
@@ -506,24 +536,3 @@ Note: Do not use relative links.
 Via web and social media:
 
 - See: <https://grass.osgeo.org/wiki/Contact_Databases>
-
-## Update VERSION file to next version number
-
-After the final release whole is done, modify the VERSION file use
-the dedicated script, e.g., for next micro version, run:
-
-```bash
-./utils/update_version.py micro
-./utils/update_version.py status
-```
-
-Now commit the change to the branch with the commit message generated above
-by the script:
-
-```bash
-git diff
-git commit include/VERSION -m "..."
-```
-
-If you lost the script output with the suggested message use
-`./utils/update_version.py suggest` to get it.

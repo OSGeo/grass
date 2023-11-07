@@ -30,6 +30,7 @@ SUBDIRS = \
 	i.rectify \
 	i.rgb.his \
 	i.segment \
+	i.signatures \
 	i.smap \
 	i.target \
 	i.topo.corr \

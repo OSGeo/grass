@@ -2727,7 +2727,7 @@ class Model(Process):
 
         self._writeHandler()
 
-        for item in self.model.GetItems():
+        for item in self.model.GetItems(ModelAction):
             if item.GetParameterizedParams()["flags"]:
                 self.fd.write(
                     r"""
@@ -2860,7 +2860,7 @@ if __name__ == "__main__":
         )
 
     def _writeHandler(self):
-        for item in self.model.GetItems():
+        for item in self.model.GetItems(ModelAction):
             self._writeItem(item, variables=item.GetParameterizedParams())
 
         self.fd.write("\n{}return response\n".format(" " * self.indent))
@@ -3128,7 +3128,7 @@ class WritePythonFile(WriteScriptFile):
             )
         )
 
-        modelItems = self.model.GetItems()
+        modelItems = self.model.GetItems(ModelAction)
         for item in modelItems:
             for flag in item.GetParameterizedParams()["flags"]:
                 if flag["label"]:
@@ -3224,7 +3224,7 @@ def cleanup():
             self.fd.write("    pass\n")
 
         self.fd.write("\ndef main(options, flags):\n")
-        for item in self.model.GetItems():
+        for item in self.model.GetItems(ModelAction):
             self._writeItem(item, variables=item.GetParameterizedParams())
 
         self.fd.write("    return 0\n")

@@ -1367,15 +1367,22 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         In case more map information are needed, use the select()
         method for each listed object.
 
+        The combination of the spatial_extent and spatial_relation parameters
+        can be used to return only map objects with the given spatial relation
+        to the provided spatial extent.
+
         :param where: The SQL where statement to select a
                      subset of the registered maps without "WHERE"
         :param dbif: The database interface to be used
-        :param spatial_extent: Return only maps with the provided spatial
-                     relation to the given spatial extent (requires
-                     spatial_relation parameter)
-        :param spatial_relation: Return only maps with the given spatial
-                     relation to the provided spatial extent (requires
-                     spatial_extent parameter)
+        :param spatial_extent: Spatial extent dict and projection information
+            e.g. from g.region -ug3 with GRASS GIS region keys
+            "n", "s", "e", "w", "b", "t", and  "projection".
+        :param spatial_relation: Spatial relation to the provided
+            spatial extent as a string with one of the following values:
+            "overlaps": maps that spatially overlap ("intersect")
+                        within the provided spatial extent
+            "is_contained": maps that are fully within the provided spatial extent
+            "contains": maps that contain (fully cover) the provided spatial extent
 
         :return: ordered object list, in case nothing found None is returned
         """
@@ -1436,17 +1443,24 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         In case more map information are needed, use the select()
         method for each listed object.
 
+        The combination of the spatial_extent and spatial_relation parameters
+        can be used to return only maps with the given spatial relation to
+        the provided spatial extent
+
         :param where: The SQL where statement to select a subset of
                      the registered maps without "WHERE"
         :param order: The SQL order statement to be used to order the
                      objects in the list without "ORDER BY"
         :param dbif: The database interface to be used
-        :param spatial_extent: Return only maps with the provided spatial
-                     relation to the given spatial extent (requires
-                     spatial_relation parameter)
-        :param spatial_relation: Return only maps with the given spatial
-                     relation to the provided spatial extent (requires
-                     spatial_extent parameter)
+        :param spatial_extent: Spatial extent dict and projection information
+            e.g. from g.region -ug3 with GRASS GIS region keys
+            "n", "s", "e", "w", "b", "t", and  "projection".
+        :param spatial_relation: Spatial relation to the provided
+            spatial extent as a string with one of the following values:
+            "overlaps": maps that spatially overlap ("intersect")
+                        within the provided spatial extent
+            "is_contained": maps that are fully within the provided spatial extent
+            "contains": maps that contain (fully cover) the provided spatial extent
 
         :return: The ordered map object list,
                 In case nothing found None is returned
@@ -1483,17 +1497,24 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         In case more map information are needed, use the select()
         method for each listed object.
 
+        The combination of the spatial_extent and spatial_relation parameters
+        can be used to return only maps with the given spatial relation to
+        the provided spatial extent
+
         :param where: The SQL where statement to select a subset of
                       the registered maps without "WHERE"
         :param order: The SQL order statement to be used to order the
                       objects in the list without "ORDER BY"
         :param dbif: The database interface to be used
-        :param spatial_extent: Return only maps with the provided spatial
-                     relation to the given spatial extent (requires
-                     spatial_relation parameter)
-        :param spatial_relation: Return only maps with the given spatial
-                     relation to the provided spatial extent (requires
-                     spatial_extent parameter)
+        :param spatial_extent: Spatial extent dict and projection information
+            e.g. from g.region -ug3 with GRASS GIS region keys
+            "n", "s", "e", "w", "b", "t", and  "projection".
+        :param spatial_relation: Spatial relation to the provided
+            spatial extent as a string with one of the following values:
+            "overlaps": maps that spatially overlap ("intersect")
+                        within the provided spatial extent
+            "is_contained": maps that are fully within the provided spatial extent
+            "contains": maps that contain (fully cover) the provided spatial extent
 
         :return: The ordered map object list,
                 In case nothing found None is returned
@@ -1657,7 +1678,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param str where: SQL WHERE statement to be updated
         :param dict spatial_extent: Spatial extent dict and projection information
             e.g. from g.region -ug3
-        :param dict spatial_relation: Spatial relation to the provided
+        :param str spatial_relation: Spatial relation to the provided
             spatial extent as a string with one of the following values:
             "overlaps": maps that spatially overlap ("intersect")
                         within the provided spatial extent
@@ -1715,10 +1736,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if self.get_type() == "str3ds":
             if spatial_relation == "overlaps":
                 spatial_where_template += " AND top > {b}" " AND bottom < {t}"
-        elif spatial_relation == "is_contained":
-            spatial_where_template += " AND top <= {t}" " AND bottom >= {b}"
-        elif spatial_relation == "contains":
-            spatial_where_template += " AND top >= {t}" " AND bottom <= {b}"
+            elif spatial_relation == "is_contained":
+                spatial_where_template += " AND top <= {t}" " AND bottom >= {b}"
+            elif spatial_relation == "contains":
+                spatial_where_template += " AND top >= {t}" " AND bottom <= {b}"
         spatial_where_template += ")"
 
         spatial_where_list = [spatial_where_template.format(**spatial_extent)]
@@ -1757,18 +1778,25 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         In case columns are not specified, each row includes all columns
         specified in the datatype specific view.
 
+        The combination of the spatial_extent and spatial_relation parameters
+        can be used to return only SQL rows of maps with the given spatial
+        relation to the provided spatial extent
+
         :param columns: Columns to be selected as SQL compliant string
         :param where: The SQL where statement to select a subset
                      of the registered maps without "WHERE"
         :param order: The SQL order statement to be used to order the
                      objects in the list without "ORDER BY"
         :param dbif: The database interface to be used
-        :param spatial_extent: Return only maps with the provided spatial
-                     relation to the given spatial extent (requires
-                     spatial_relation parameter)
-        :param spatial_relation: Return only maps with the given spatial
-                     relation to the provided spatial extent (requires
-                     spatial_extent parameter)
+        :param spatial_extent: Spatial extent dict and projection information
+            e.g. from g.region -ug3 with GRASS GIS region keys
+            "n", "s", "e", "w", "b", "t", and  "projection".
+        :param spatial_relation: Spatial relation to the provided
+            spatial extent as a string with one of the following values:
+            "overlaps": maps that spatially overlap ("intersect")
+                        within the provided spatial extent
+            "is_contained": maps that are fully within the provided spatial extent
+            "contains": maps that contain (fully cover) the provided spatial extent
 
         :return: SQL rows of all registered maps,
                 In case nothing found None is returned
