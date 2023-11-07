@@ -71,11 +71,11 @@ sample dataset:
 
 <div class="code"><pre>
 g.region raster=erode.index -p
-r.to.vect -s input=erode.index output=erode_index type=area 
-v.extract input=erode_index output=erode_index_ctrds type=centroid 
+r.to.vect -s input=erode.index output=erode_index type=area
+v.extract input=erode_index output=erode_index_ctrds type=centroid
 d.rast aspect
 d.vect.chart map=erode_index_ctrds chart_type=bar columns=cat \
-             size=10 max_ref=12 scale=0.05 colors=yellow 
+             size=10 max_ref=12 scale=0.05 colors=yellow
 d.vect erode_index_ctrds icon=basic/circle fcol=black col=black size=5
 </pre></div>
 
@@ -97,8 +97,3 @@ Bar charts of an erodibiliy index (spatial subset)
 <h2>AUTHOR</h2>
 
 Radim Blazek, ITC-Irst, Trento, Italy
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

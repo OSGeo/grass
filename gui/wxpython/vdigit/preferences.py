@@ -15,7 +15,6 @@ This program is free software under the GNU General Public License
 """
 
 import textwrap
-import six
 
 import wx
 import wx.lib.colourselect as csel
@@ -23,7 +22,7 @@ import wx.lib.colourselect as csel
 from gui_core.gselect import ColumnSelect
 from core.units import Units
 from core.settings import UserSettings
-from gui_core.wrap import Button, CheckBox, SpinCtrl, StaticBox, StaticText
+from gui_core.wrap import Button, CheckBox, FloatSpin, SpinCtrl, StaticBox, StaticText
 
 
 class VDigitSettingsDialog(wx.Dialog):
@@ -38,7 +37,7 @@ class VDigitSettingsDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title, style=style)
 
         self._giface = giface
-        self.parent = parent  # MapFrame
+        self.parent = parent  # MapPanel
         self.digit = self.parent.MapWindow.digit
 
         # notebook
@@ -179,13 +178,14 @@ class VDigitSettingsDialog(wx.Dialog):
 
         # snapping
         text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Snapping threshold"))
-        self.snappingValue = SpinCtrl(
+        self.snappingValue = FloatSpin(
             parent=panel,
             id=wx.ID_ANY,
             size=(75, -1),
-            initial=UserSettings.Get(group="vdigit", key="snapping", subkey="value"),
-            min=-1,
-            max=1e6,
+            value=UserSettings.Get(group="vdigit", key="snapping", subkey="value"),
+            min_val=-1,
+            max_val=1e6,
+            digits=7,
         )
         self.snappingValue.Bind(wx.EVT_SPINCTRL, self.OnChangeSnappingValue)
         self.snappingValue.Bind(wx.EVT_TEXT, self.OnChangeSnappingValue)
@@ -429,8 +429,14 @@ class VDigitSettingsDialog(wx.Dialog):
         self.queryLengthSL.SetSelection(
             UserSettings.Get(group="vdigit", key="queryLength", subkey="than-selection")
         )
-        self.queryLengthValue = SpinCtrl(
-            parent=panel, id=wx.ID_ANY, size=(100, -1), initial=1, min=0, max=1e6
+        self.queryLengthValue = FloatSpin(
+            parent=panel,
+            id=wx.ID_ANY,
+            size=(100, -1),
+            value=1,
+            min_val=0,
+            max_val=1e6,
+            digits=7,
         )
         self.queryLengthValue.SetValue(
             UserSettings.Get(group="vdigit", key="queryLength", subkey="thresh")
@@ -521,22 +527,19 @@ class VDigitSettingsDialog(wx.Dialog):
         settings = ((_("Layer"), 1), (_("Category"), 1), (_("Mode"), _("Next to use")))
         # layer
         text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Layer"))
-        self.layer = SpinCtrl(
-            parent=panel, id=wx.ID_ANY, size=(125, -1), min=1, max=1e3
-        )
+        self.layer = SpinCtrl(parent=panel, id=wx.ID_ANY, min=1, max=1e3)
         self.layer.SetValue(
             int(UserSettings.Get(group="vdigit", key="layer", subkey="value"))
         )
         flexSizer.Add(text, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(
-            self.layer, proportion=0, flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL
+            self.layer, proportion=0, flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL
         )
         # category number
         text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Category number"))
         self.category = SpinCtrl(
             parent=panel,
             id=wx.ID_ANY,
-            size=(125, -1),
             initial=UserSettings.Get(group="vdigit", key="category", subkey="value"),
             min=-1e9,
             max=1e9,
@@ -550,7 +553,7 @@ class VDigitSettingsDialog(wx.Dialog):
         flexSizer.Add(
             self.category,
             proportion=0,
-            flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL,
+            flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL,
         )
         # category mode
         text = StaticText(parent=panel, id=wx.ID_ANY, label=_("Category mode"))
@@ -567,7 +570,7 @@ class VDigitSettingsDialog(wx.Dialog):
         flexSizer.Add(
             self.categoryMode,
             proportion=0,
-            flag=wx.FIXED_MINSIZE | wx.ALIGN_CENTER_VERTICAL,
+            flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL,
         )
 
         sizer.Add(flexSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=1)
@@ -748,7 +751,7 @@ class VDigitSettingsDialog(wx.Dialog):
         checked = event.IsChecked()
         id = event.GetId()
         key = None
-        for attrb, val in six.iteritems(self.geomAttrb):
+        for attrb, val in self.geomAttrb.items():
             if val["check"] == id:
                 key = attrb
                 break
@@ -897,10 +900,9 @@ class VDigitSettingsDialog(wx.Dialog):
         .. todo::
             Needs refactoring
         """
-        if self.parent.GetLayerManager():
-            self._giface.workspaceChanged.emit()
+        self._giface.workspaceChanged.emit()
         # symbology
-        for key, (enabled, color) in six.iteritems(self.symbology):
+        for key, (enabled, color) in self.symbology.items():
             if enabled:
                 UserSettings.Set(
                     group="vdigit",
@@ -934,7 +936,7 @@ class VDigitSettingsDialog(wx.Dialog):
             group="vdigit",
             key="snapping",
             subkey="value",
-            value=int(self.snappingValue.GetValue()),
+            value=self.snappingValue.GetValue(),
         )
         UserSettings.Set(
             group="vdigit",
@@ -990,7 +992,7 @@ class VDigitSettingsDialog(wx.Dialog):
             item = tree.FindItemByData("maplayer", mapLayer)
         else:
             item = None
-        for key, val in six.iteritems(self.geomAttrb):
+        for key, val in self.geomAttrb.items():
             checked = self.FindWindowById(val["check"]).IsChecked()
             column = self.FindWindowById(val["column"]).GetValue()
             unitsIdx = self.FindWindowById(val["units"]).GetSelection()
@@ -1033,7 +1035,7 @@ class VDigitSettingsDialog(wx.Dialog):
             group="vdigit",
             key="queryLength",
             subkey="thresh",
-            value=int(self.queryLengthValue.GetValue()),
+            value=self.queryLengthValue.GetValue(),
         )
         UserSettings.Set(
             group="vdigit",

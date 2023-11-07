@@ -118,8 +118,8 @@ class IClassVDigitWindow(VDigitWindow):
 class IClassVDigit(IVDigit):
     """Class similar to IVDigit but specialized for wxIClass."""
 
-    def __init__(self, mapwindow):
-        IVDigit.__init__(self, mapwindow, driver=IClassDisplayDriver)
+    def __init__(self, giface, mapwindow):
+        IVDigit.__init__(self, giface, mapwindow, driver=IClassDisplayDriver)
         self._settings["closeBoundary"] = True  # snap to the first node
 
     def _getNewFeaturesLayer(self):

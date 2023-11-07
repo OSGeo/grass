@@ -1,9 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.extract</em> allows a user to select vector objects from an existing 
-vector map and creates a new map containing only the selected objects. 
+<em>v.extract</em> allows a user to select vector objects from an existing
+vector map and creates a new map containing only the selected objects.
 Database tables can be queried with SQL statements, if a connection is
-established. 
+established.
 Dissolving (optional) is based on the output categories. If 2 adjacent
 areas have the same output category, the boundary is removed.
 
@@ -14,11 +14,11 @@ extracted. Categories are not changed in that case.
 
 <h2>NOTES</h2>
 
-Only features with a category number in the selected layer will be 
-extracted. So if you want to extract boundaries (which are usually 
-without category, as that information is normally held in the area's 
-centroid) you must first use 
-<em><a href="v.category.html">v.category</a></em> to add them, or use 
+Only features with a category number in the selected layer will be
+extracted. So if you want to extract boundaries (which are usually
+without category, as that information is normally held in the area's
+centroid) you must first use
+<em><a href="v.category.html">v.category</a></em> to add them, or use
 <b>layer=-1</b>.
 
 <h2>EXAMPLES</h2>
@@ -65,7 +65,7 @@ fulfilled.
 
 <h3>Extract vector features which have the given field empty:</h3>
 <div class="code"><pre>
-v.extract input=lakes output=lakes_gaps where="FTYPE is NULL"                    
+v.extract input=lakes output=lakes_gaps where="FTYPE is NULL"
 </pre></div>
 
 <h3>Extract vector features which have the given field not empty:</h3>
@@ -87,7 +87,6 @@ v.extract -r input=precip_30ynormals output=precip_30ynormals_lowland \
 # verify
 v.db.select precip_30ynormals_lowland
 </pre></div>
-
 
 <h3>Dissolving based on column attributes:</h3>
 <div class="code"><pre>
@@ -129,8 +128,3 @@ Note that there may be more than one feature with the same category.
 
 R.L. Glenn, USDA, SCS, NHQ-CGIS<br>
 GRASS 6 port by Radim Blazek
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

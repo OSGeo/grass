@@ -5,7 +5,15 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 
 DSTDIR = $(ETC)/python/grass/jupyter
 
-MODULES = setup display
+MODULES = \
+	setup \
+	map \
+	interactivemap \
+	region \
+	map3d \
+	reprojection_renderer \
+	utils \
+	timeseriesmap
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)

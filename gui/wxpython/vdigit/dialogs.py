@@ -19,7 +19,6 @@ This program is free software under the GNU General Public License
 """
 
 import copy
-import six
 
 import wx
 import wx.lib.mixins.listctrl as listmix
@@ -425,7 +424,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         newfid = -1
 
         # add/delete new category
-        for action, catsCurr in six.iteritems(check):
+        for action, catsCurr in check.items():
             for layer in catsCurr[0].keys():
                 catList = []
                 for cat in catsCurr[0][layer]:
@@ -626,17 +625,13 @@ class VDigitZBulkDialog(wx.Dialog):
 
         # starting value
         txt = StaticText(parent=self, label=_("Starting value"))
-        self.value = SpinCtrl(
-            parent=self, id=wx.ID_ANY, size=(150, -1), initial=0, min=-1e6, max=1e6
-        )
+        self.value = SpinCtrl(parent=self, id=wx.ID_ANY, initial=0, min=-1e6, max=1e6)
         flexSizer.Add(txt, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(self.value, proportion=0, flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
 
         # step
         txt = StaticText(parent=self, label=_("Step"))
-        self.step = SpinCtrl(
-            parent=self, id=wx.ID_ANY, size=(150, -1), initial=0, min=0, max=1e6
-        )
+        self.step = SpinCtrl(parent=self, id=wx.ID_ANY, initial=0, min=0, max=1e6)
         flexSizer.Add(txt, proportion=0, flag=wx.ALIGN_CENTER_VERTICAL)
         flexSizer.Add(self.step, proportion=0, flag=wx.ALIGN_CENTER | wx.FIXED_MINSIZE)
 

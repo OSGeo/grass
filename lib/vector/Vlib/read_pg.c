@@ -21,6 +21,7 @@
    \author Martin Landa <landa.martin gmail.com>
  */
 
+#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
@@ -39,8 +40,8 @@
 static unsigned char *wkb_data;
 static unsigned int wkb_data_length;
 
-static int read_next_line_pg(struct Map_info *,
-                             struct line_pnts *, struct line_cats *, int);
+static int read_next_line_pg(struct Map_info *, struct line_pnts *,
+                             struct line_cats *, int);
 SF_FeatureType get_feature(struct Map_info *, int, int);
 static unsigned char *hex_to_wkb(const char *, int *);
 static int point_from_wkb(const unsigned char *, int, int, int,
@@ -54,8 +55,13 @@ static int geometry_collection_from_wkb(const unsigned char *, int, int, int,
                                         struct feat_parts *);
 static int error_corrupted_data(const char *);
 static void add_fpart(struct feat_parts *, SF_FeatureType, int, int);
-static int get_centroid(struct Map_info *, int, struct line_pnts *, struct line_cats *);
+static int get_centroid(struct Map_info *, int, struct line_pnts *,
+                        struct line_cats *);
 static void error_tuples(struct Format_info_pg *);
+
+#define NOPG_UNUSED
+#else
+#define NOPG_UNUSED UNUSED
 #endif
 
 /*!
@@ -79,8 +85,9 @@ static void error_tuples(struct Format_info_pg *);
    \return -2 no more features (EOF)
    \return -1 out of memory
  */
-int V1_read_next_line_pg(struct Map_info *Map,
-                         struct line_pnts *line_p, struct line_cats *line_c)
+int V1_read_next_line_pg(struct Map_info *Map NOPG_UNUSED,
+                         struct line_pnts *line_p NOPG_UNUSED,
+                         struct line_cats *line_c NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     G_debug(3, "V1_read_next_line_pg()");
@@ -109,8 +116,9 @@ int V1_read_next_line_pg(struct Map_info *Map,
    \return -2 no more features (EOF)
    \return -1 on failure
  */
-int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
-                         struct line_cats *line_c)
+int V2_read_next_line_pg(struct Map_info *Map NOPG_UNUSED,
+                         struct line_pnts *line_p NOPG_UNUSED,
+                         struct line_cats *line_c NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     int line, ret;
@@ -118,11 +126,11 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
     struct bound_box lbox, mbox;
 
     struct Format_info_pg *pg_info;
-    
+
     G_debug(3, "V2_read_next_line_pg()");
 
     pg_info = &(Map->fInfo.pg);
-    
+
     if (Map->constraint.region_flag)
         Vect_get_constraint_box(Map, &mbox);
 
@@ -134,7 +142,7 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
             return -2;
 
         Line = Map->plus.Line[line];
-        if (Line == NULL) {     /* skip dead features */
+        if (Line == NULL) { /* skip dead features */
             Map->next_line++;
             continue;
         }
@@ -147,8 +155,7 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
             }
         }
 
-        if (!pg_info->toposchema_name &&
-            Line->type == GV_CENTROID) {
+        if (!pg_info->toposchema_name && Line->type == GV_CENTROID) {
             G_debug(4, "Determine centroid for simple features");
 
             if (line_p != NULL) {
@@ -205,38 +212,40 @@ int V2_read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
         }
 
         /* skip by field ignored */
-        
+
         Map->next_line++; /* read next */
-                    
+
         return ret;
     }
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
 #endif
 
-    return -1;                  /* not reached */
+    return -1; /* not reached */
 }
 
 /*!
-   \brief Read feature from PostGIS layer at given offset (level 1 without topology)
+   \brief Read feature from PostGIS layer at given offset (level 1 without
+   topology)
 
    This function implements random access on level 1.
 
-   \param Map pointer to Map_info structure 
+   \param Map pointer to Map_info structure
    \param[out] line_p container used to store line points within
    (pointer line_pnts struct)
    \param[out] line_c container used to store line categories within
    (pointer line_cats struct)
-   \param offset given offset 
+   \param offset given offset
 
    \return line type
    \return 0 dead line
    \return -2 no more features
    \return -1 out of memory
  */
-int V1_read_line_pg(struct Map_info *Map,
-                    struct line_pnts *line_p, struct line_cats *line_c,
-                    off_t offset)
+int V1_read_line_pg(struct Map_info *Map NOPG_UNUSED,
+                    struct line_pnts *line_p NOPG_UNUSED,
+                    struct line_cats *line_c NOPG_UNUSED,
+                    off_t offset NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     long fid;
@@ -246,11 +255,11 @@ int V1_read_line_pg(struct Map_info *Map,
 
     pg_info = &(Map->fInfo.pg);
 
-    G_debug(3, "V1_read_line_pg(): offset = %lu offset_num = %lu",
-            (long)offset, (long)pg_info->offset.array_num);
+    G_debug(3, "V1_read_line_pg(): offset = %lu offset_num = %lu", (long)offset,
+            (long)pg_info->offset.array_num);
 
     if (offset >= pg_info->offset.array_num)
-        return -2;              /* nothing to read */
+        return -2; /* nothing to read */
 
     if (line_p != NULL)
         Vect_reset_line(line_p);
@@ -274,7 +283,7 @@ int V1_read_line_pg(struct Map_info *Map,
         }
 
         type = (int)pg_info->cache.sf_type;
-        if (type < 0)           /* -1 || - 2 */
+        if (type < 0) /* -1 || - 2 */
             return type;
     }
 
@@ -306,41 +315,42 @@ int V1_read_line_pg(struct Map_info *Map,
    This function implements random access on level 2.
 
    Note: Topology must be built at level >= GV_BUILD_BASE
-    
-   \param Map pointer to Map_info structure 
-   \param[out] line_p container used to store line points within (pointer line_pnts struct)
-   \param[out] line_c container used to store line categories within (pointer line_cats struct)
-   \param line feature id to read
+
+   \param Map pointer to Map_info structure
+   \param[out] line_p container used to store line points within (pointer
+   line_pnts struct) \param[out] line_c container used to store line categories
+   within (pointer line_cats struct) \param line feature id to read
 
    \return feature type
    \return 0 dead feature
    \return -1 on error
  */
-int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
-                    struct line_cats *line_c, int line)
+int V2_read_line_pg(struct Map_info *Map NOPG_UNUSED,
+                    struct line_pnts *line_p NOPG_UNUSED,
+                    struct line_cats *line_c NOPG_UNUSED, int line NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     int fid, cache_idx;
-    
+
     struct Format_info_pg *pg_info;
     struct P_line *Line;
 
     pg_info = &(Map->fInfo.pg);
-    
+
     if (line < 1 || line > Map->plus.n_lines) {
         G_warning(_("Attempt to access feature with invalid id (%d)"), line);
         return -1;
     }
-    
+
     Line = Map->plus.Line[line];
     if (Line == NULL) {
         G_warning(_("Attempt to access dead feature %d"), line);
         return 0;
     }
-    
-    G_debug(4, "V2_read_line_pg() line = %d type = %d offset = %"PRI_OFF_T,
-            line, Line->type, Line->offset);
-    
+
+    G_debug(4, "V2_read_line_pg() line = %d type = %d offset = %" PRId64, line,
+            Line->type, Line->offset);
+
     if (!line_p && !line_c)
         return Line->type;
 
@@ -350,7 +360,7 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
         /* simple features access: get centroid from sidx */
         return get_centroid(Map, line, line_p, line_c);
     }
-    
+
     /* get feature id */
     if (pg_info->toposchema_name)
         fid = Line->offset;
@@ -360,12 +370,13 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
     /* read feature */
     if (pg_info->cache.ctype == CACHE_MAP) {
         cache_idx = line - 1;
-        
+
         if (cache_idx >= pg_info->cache.lines_num)
-            G_fatal_error(_("Requesting invalid feature from cache (%d). Number of features in cache: %d"),
+            G_fatal_error(_("Requesting invalid feature from cache (%d). "
+                            "Number of features in cache: %d"),
                           cache_idx, pg_info->cache.lines_num);
         if (pg_info->cache.lines_types[cache_idx] != Line->type)
-            G_warning(_("Feature %d: unexpected type (%d) - should be %d"), 
+            G_warning(_("Feature %d: unexpected type (%d) - should be %d"),
                       line, pg_info->cache.lines_types[cache_idx], Line->type);
     }
     else {
@@ -388,20 +399,20 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
         if (!pg_info->toposchema_name) { /* simple features access */
             cat = fid;
         }
-        else {                           /* PostGIS Topology (cats are cached) */
+        else { /* PostGIS Topology (cats are cached) */
             cat = pg_info->cache.lines_cats[cache_idx];
             if (cat == 0) { /* not cached yet */
                 int col_idx;
 
                 Vect__select_line_pg(pg_info, fid, Line->type);
-             
+
                 col_idx = Line->type & GV_POINTS ? 2 : 3;
-                
+
                 if (!PQgetisnull(pg_info->res, 0, col_idx))
                     cat = pg_info->cache.lines_cats[cache_idx] =
-                        atoi(PQgetvalue(pg_info->res, 0, col_idx)); 
+                        atoi(PQgetvalue(pg_info->res, 0, col_idx));
                 else
-                    pg_info->cache.lines_cats[cache_idx] = -1; /* no cat */   
+                    pg_info->cache.lines_cats[cache_idx] = -1; /* no cat */
             }
         }
         if (cat > 0)
@@ -410,7 +421,7 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
 
     if (line_p)
         Vect_append_points(line_p, pg_info->cache.lines[cache_idx], GV_FORWARD);
-    
+
     return Line->type;
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
@@ -420,7 +431,7 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
 
 #ifdef HAVE_POSTGRES
 /*!
-   \brief Read next feature from PostGIS layer. 
+   \brief Read next feature from PostGIS layer.
 
    \param Map pointer to Map_info structure
    \param[out] line_p container used to store line points within
@@ -433,9 +444,8 @@ int V2_read_line_pg(struct Map_info *Map, struct line_pnts *line_p,
    \return -2 no more features (EOF)
    \return -1 out of memory
  */
-int read_next_line_pg(struct Map_info *Map,
-                      struct line_pnts *line_p, struct line_cats *line_c,
-                      int ignore_constraints)
+int read_next_line_pg(struct Map_info *Map, struct line_pnts *line_p,
+                      struct line_cats *line_c, int ignore_constraints)
 {
     int itype;
     SF_FeatureType sf_type;
@@ -458,21 +468,21 @@ int read_next_line_pg(struct Map_info *Map,
 
         /* read feature to cache if necessary */
         while (pg_info->cache.lines_next == pg_info->cache.lines_num) {
-            if (pg_info->cache.ctype == CACHE_MAP &&
-                pg_info->cache.fid == -2) {
+            if (pg_info->cache.ctype == CACHE_MAP && pg_info->cache.fid == -2) {
                 /* stop reading - last cached line */
                 return -2;
             }
-            
+
             /* cache feature -> line_p & line_c */
             sf_type = get_feature(Map, -1, -1);
-            
+
             if (sf_type == SF_NONE) {
-                G_warning(_("Feature %ld without geometry skipped"), pg_info->cache.fid);
+                G_warning(_("Feature %ld without geometry skipped"),
+                          pg_info->cache.fid);
                 return -1;
             }
 
-            if ((int)sf_type < 0) {      /* -1 || - 2 */
+            if ((int)sf_type < 0) { /* -1 || - 2 */
                 if (pg_info->cache.ctype == CACHE_MAP)
                     pg_info->cache.fid = -2; /* last line cached */
                 return (int)sf_type;
@@ -522,21 +532,26 @@ int read_next_line_pg(struct Map_info *Map,
 
         if (line_c) {
             int cat;
+
             if (!pg_info->toposchema_name) { /* simple features access */
                 cat = (int)pg_info->cache.fid;
             }
-            else {                           /* PostGIS Topology (cats are cached) */
-                cat = pg_info->cache.lines_cats[pg_info->cache.lines_next-1];
+            else { /* PostGIS Topology (cats are cached) */
+                cat = pg_info->cache.lines_cats[pg_info->cache.lines_next - 1];
                 if (cat == 0) { /* not cached yet */
                     int col_idx;
-                    
+
                     col_idx = itype & GV_POINTS ? 2 : 3;
-                
-                    if (!PQgetisnull(pg_info->res, pg_info->cache.lines_next-1, col_idx))
-                        cat = pg_info->cache.lines_cats[Map->next_line-1] =
-                        atoi(PQgetvalue(pg_info->res, pg_info->cache.lines_next-1, col_idx)); 
+
+                    if (!PQgetisnull(pg_info->res,
+                                     pg_info->cache.lines_next - 1, col_idx))
+                        cat = pg_info->cache.lines_cats[Map->next_line - 1] =
+                            atoi(PQgetvalue(pg_info->res,
+                                            pg_info->cache.lines_next - 1,
+                                            col_idx));
                     else
-                        pg_info->cache.lines_cats[Map->next_line-1] = -1; /* no cat */ 
+                        pg_info->cache.lines_cats[Map->next_line - 1] =
+                            -1; /* no cat */
                 }
             }
             if (cat > 0)
@@ -546,7 +561,7 @@ int read_next_line_pg(struct Map_info *Map,
         return itype;
     }
 
-    return -1;                  /* not reached */
+    return -1; /* not reached */
 }
 
 /*!
@@ -556,31 +571,34 @@ int read_next_line_pg(struct Map_info *Map,
 
    \param[in,out] Map pointer to Map_info struct
    \param fid feature id to be read (-1 for next)
-   \param type feature type (GV_POINT, GV_LINE, ...) - use only for topological access
-   
+   \param type feature type (GV_POINT, GV_LINE, ...) - use only for topological
+   access
+
    \return simple feature type (SF_POINT, SF_LINESTRING, ...)
    \return -1 on error
  */
 SF_FeatureType get_feature(struct Map_info *Map, int fid, int type)
 {
     int seq_type;
-    int force_type; /* force type (GV_BOUNDARY or GV_CENTROID) for topo access only */
+    int force_type; /* force type (GV_BOUNDARY or GV_CENTROID) for topo access
+                       only */
     char *data;
-    
+
     struct Format_info_pg *pg_info;
 
     pg_info = &(Map->fInfo.pg);
-    
+
     if (!pg_info->geom_column && !pg_info->topogeom_column) {
         G_warning(_("No geometry or topo geometry column defined"));
         return -1;
     }
     if (fid < 1) { /* sequantial access */
         if (pg_info->cursor_name == NULL &&
-            Vect__open_cursor_next_line_pg(pg_info, FALSE, Map->plus.built) != 0)
-        return -1;
+            Vect__open_cursor_next_line_pg(pg_info, FALSE, Map->plus.built) !=
+                0)
+            return -1;
     }
-    else {         /* random access */
+    else { /* random access */
         if (!pg_info->fid_column && !pg_info->toposchema_name) {
             G_warning(_("Random access not supported. "
                         "Primary key not defined."));
@@ -592,10 +610,10 @@ SF_FeatureType get_feature(struct Map_info *Map, int fid, int type)
             pg_info->next_line = fid - pg_info->cursor_fid;
         else
             pg_info->next_line = 0;
-        
+
         if (pg_info->next_line < 0 || pg_info->next_line > CURSOR_PAGE)
             Vect__close_cursor_pg(pg_info);
-        
+
         if (pg_info->cursor_name == NULL &&
             Vect__open_cursor_line_pg(pg_info, fid, type) != 0)
             return -1;
@@ -624,12 +642,12 @@ SF_FeatureType get_feature(struct Map_info *Map, int fid, int type)
     }
 
     G_debug(3, "get_feature(): next_line = %d", pg_info->next_line);
-    
+
     /* out of results ? */
     if (PQntuples(pg_info->res) == pg_info->next_line) {
         if (Vect__close_cursor_pg(pg_info) != 0)
             return -1; /* failure */
-        else 
+        else
             return -2; /* nothing to read */
     }
 
@@ -645,58 +663,62 @@ SF_FeatureType get_feature(struct Map_info *Map, int fid, int type)
                 force_type = GV_CENTROID;
         }
         else {
-            /* random access: check topological elemenent type consistency */
+            /* random access: check topological element type consistency */
             if (type & GV_POINTS) {
                 if (type == GV_POINT &&
-                    strlen(PQgetvalue(pg_info->res, pg_info->next_line, 1)) != 0)
-                    G_warning(_("Inconsistency in topology: detected centroid (should be point)"));
+                    strlen(PQgetvalue(pg_info->res, pg_info->next_line, 1)) !=
+                        0)
+                    G_warning(_("Inconsistency in topology: detected centroid "
+                                "(should be point)"));
             }
             else {
                 int left_face, right_face;
-                
-                left_face  = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 1));
-                right_face = atoi(PQgetvalue(pg_info->res, pg_info->next_line, 2));
-                
-                if (type == GV_LINE &&
-                    (left_face != 0 || right_face != 0)) 
-                    G_warning(_("Inconsistency in topology: detected boundary (should be line)"));
+
+                left_face =
+                    atoi(PQgetvalue(pg_info->res, pg_info->next_line, 1));
+                right_face =
+                    atoi(PQgetvalue(pg_info->res, pg_info->next_line, 2));
+
+                if (type == GV_LINE && (left_face != 0 || right_face != 0))
+                    G_warning(_("Inconsistency in topology: detected boundary "
+                                "(should be line)"));
             }
         }
     }
 
     /* get geometry data */
     data = (char *)PQgetvalue(pg_info->res, pg_info->next_line, 0);
-    
+
     /* load feature to the cache */
-    pg_info->cache.sf_type = Vect__cache_feature_pg(data,
-                                                    FALSE, force_type,
+    pg_info->cache.sf_type = Vect__cache_feature_pg(data, FALSE, force_type,
                                                     &(pg_info->cache), NULL);
-    
+
     /* cache also categories (only for PostGIS Topology) */
     if (pg_info->toposchema_name) {
         int cat, col_idx;
 
-        col_idx = fid < 0 ? 3 : 2; /* TODO: dermine col_idx for random access */
-            
+        col_idx =
+            fid < 0 ? 3 : 2; /* TODO: determine col_idx for random access */
+
         if (!PQgetisnull(pg_info->res, pg_info->next_line, col_idx))
-            cat = atoi(PQgetvalue(pg_info->res, pg_info->next_line, col_idx)); 
+            cat = atoi(PQgetvalue(pg_info->res, pg_info->next_line, col_idx));
         else
             cat = -1; /* no cat */
         pg_info->cache.lines_cats[pg_info->cache.lines_next] = cat;
-        G_debug(3, "line=%d, type=%d -> cat=%d", pg_info->cache.lines_next+1,
+        G_debug(3, "line=%d, type=%d -> cat=%d", pg_info->cache.lines_next + 1,
                 pg_info->cache.lines_types[pg_info->cache.lines_next], cat);
     }
 
     /* set feature id */
     if (fid < 0) {
         pg_info->cache.fid =
-            atoi(PQgetvalue(pg_info->res, pg_info->next_line, 1)); 
+            atoi(PQgetvalue(pg_info->res, pg_info->next_line, 1));
         pg_info->next_line++;
     }
     else {
         pg_info->cache.fid = fid;
     }
-    
+
     return pg_info->cache.sf_type;
 }
 
@@ -722,16 +744,15 @@ unsigned char *hex_to_wkb(const char *hex_data, int *nbytes)
     *nbytes = length - 1;
     for (i = 0; i < (*nbytes); i++) {
         wkb_data[i] =
-            (unsigned char)((hex_data[2 * i] >
-                    'F' ? hex_data[2 * i] - 0x57 : hex_data[2 * i] >
-                    '9' ? hex_data[2 * i] - 0x37 : hex_data[2 * i] -
-                    0x30) << 4);
-        wkb_data[i] |=
-            (unsigned char)(hex_data[2 * i + 1] >
-                            'F' ? hex_data[2 * i + 1] -
-                            0x57 : hex_data[2 * i + 1] >
-                            '9' ? hex_data[2 * i + 1] -
-                            0x37 : hex_data[2 * i + 1] - 0x30);
+            (unsigned char)((hex_data[2 * i] > 'F'   ? hex_data[2 * i] - 0x57
+                             : hex_data[2 * i] > '9' ? hex_data[2 * i] - 0x37
+                                                     : hex_data[2 * i] - 0x30)
+                            << 4);
+        wkb_data[i] |= (unsigned char)(hex_data[2 * i + 1] > 'F'
+                                           ? hex_data[2 * i + 1] - 0x57
+                                       : hex_data[2 * i + 1] > '9'
+                                           ? hex_data[2 * i + 1] - 0x37
+                                           : hex_data[2 * i + 1] - 0x30);
     }
 
     wkb_data[(*nbytes)] = 0;
@@ -747,9 +768,9 @@ unsigned char *hex_to_wkb(const char *hex_data, int *nbytes)
 
    \param data HEX data
    \param skip_polygon skip polygons (level 1)
-   \param force_type force GV_BOUNDARY or GV_CENTROID (used for PostGIS topology only)
-   \param[out] cache lines cache
-   \param[out] fparts used for building pseudo-topology (or NULL)
+   \param force_type force GV_BOUNDARY or GV_CENTROID (used for PostGIS topology
+   only) \param[out] cache lines cache \param[out] fparts used for building
+   pseudo-topology (or NULL)
 
    \return simple feature type
    \return SF_GEOMETRY on error
@@ -757,7 +778,7 @@ unsigned char *hex_to_wkb(const char *hex_data, int *nbytes)
 SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
                                       int force_type,
                                       struct Format_info_cache *cache,
-                                      struct feat_parts * fparts)
+                                      struct feat_parts *fparts)
 {
     int ret, byte_order, nbytes, is3D;
     unsigned char *wkb_data;
@@ -806,13 +827,12 @@ SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
         return SF_GEOMETRY;
     }
 
-    /* PostGIS EWKB format includes an  SRID, but this won't be       
-       understood by OGR, so if the SRID flag is set, we remove the    
-       SRID (bytes at offset 5 to 8).                                 
+    /* PostGIS EWKB format includes an  SRID, but this won't be
+       understood by OGR, so if the SRID flag is set, we remove the
+       SRID (bytes at offset 5 to 8).
      */
-    if (nbytes > 9 &&
-        ((byte_order == ENDIAN_BIG && (wkb_data[1] & 0x20)) ||
-         (byte_order == ENDIAN_LITTLE && (wkb_data[4] & 0x20)))) {
+    if (nbytes > 9 && ((byte_order == ENDIAN_BIG && (wkb_data[1] & 0x20)) ||
+                       (byte_order == ENDIAN_LITTLE && (wkb_data[4] & 0x20)))) {
         memmove(wkb_data + 5, wkb_data + 9, nbytes - 9);
         nbytes -= 4;
         if (byte_order == ENDIAN_BIG)
@@ -830,11 +850,11 @@ SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
        type is between 0 and 255 so we only have to fetch one byte.
      */
     if (byte_order == ENDIAN_LITTLE) {
-        ftype = (SF_FeatureType) wkb_data[1];
+        ftype = (SF_FeatureType)wkb_data[1];
         is3D = wkb_data[4] & 0x80 || wkb_data[2] & 0x80;
     }
     else {
-        ftype = (SF_FeatureType) wkb_data[4];
+        ftype = (SF_FeatureType)wkb_data[4];
         is3D = wkb_data[1] & 0x80 || wkb_data[3] & 0x80;
     }
     G_debug(3, "Vect__cache_feature_pg(): sf_type = %d", ftype);
@@ -852,33 +872,34 @@ SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
             Vect__reallocate_cache(cache, 1, FALSE);
         }
     }
-    
+
     ret = -1;
     if (ftype == SF_POINT) {
-        cache->lines_types[cache->lines_num-1] = force_type == GV_CENTROID ? force_type : GV_POINT;
-        ret = point_from_wkb(wkb_data, nbytes, byte_order,
-                             is3D, cache->lines[cache->lines_num-1]);
+        cache->lines_types[cache->lines_num - 1] =
+            force_type == GV_CENTROID ? force_type : GV_POINT;
+        ret = point_from_wkb(wkb_data, nbytes, byte_order, is3D,
+                             cache->lines[cache->lines_num - 1]);
         add_fpart(fparts, ftype, 0, 1);
     }
     else if (ftype == SF_LINESTRING) {
-        cache->lines_types[cache->lines_num-1] = force_type == GV_BOUNDARY ? force_type : GV_LINE;
-        ret = linestring_from_wkb(wkb_data, nbytes, byte_order,
-                                  is3D, cache->lines[cache->lines_num-1], FALSE);
+        cache->lines_types[cache->lines_num - 1] =
+            force_type == GV_BOUNDARY ? force_type : GV_LINE;
+        ret = linestring_from_wkb(wkb_data, nbytes, byte_order, is3D,
+                                  cache->lines[cache->lines_num - 1], FALSE);
         add_fpart(fparts, ftype, 0, 1);
     }
     else if (ftype == SF_POLYGON && !skip_polygon) {
         int nrings;
 
         cache->lines_num = 0; /* reset before reading rings */
-        ret = polygon_from_wkb(wkb_data, nbytes, byte_order,
-                               is3D, cache, &nrings);
+        ret = polygon_from_wkb(wkb_data, nbytes, byte_order, is3D, cache,
+                               &nrings);
         add_fpart(fparts, ftype, 0, nrings);
     }
-    else if (ftype == SF_MULTIPOINT ||
-             ftype == SF_MULTILINESTRING ||
+    else if (ftype == SF_MULTIPOINT || ftype == SF_MULTILINESTRING ||
              ftype == SF_MULTIPOLYGON || ftype == SF_GEOMETRYCOLLECTION) {
-        ret = geometry_collection_from_wkb(wkb_data, nbytes, byte_order,
-                                           is3D, cache, fparts);
+        ret = geometry_collection_from_wkb(wkb_data, nbytes, byte_order, is3D,
+                                           cache, fparts);
     }
     else {
         G_warning(_("Unsupported feature type %d"), ftype);
@@ -1036,9 +1057,8 @@ int linestring_from_wkb(const unsigned char *wkb_data, int nbytes,
    \return wkb size
    \return -1 on error
  */
-int polygon_from_wkb(const unsigned char *wkb_data, int nbytes,
-                     int byte_order, int with_z,
-                     struct Format_info_cache *cache, int *nrings)
+int polygon_from_wkb(const unsigned char *wkb_data, int nbytes, int byte_order,
+                     int with_z, struct Format_info_cache *cache, int *nrings)
 {
     int data_offset, i, nsize, isize;
     int num_of_rings;
@@ -1056,7 +1076,7 @@ int polygon_from_wkb(const unsigned char *wkb_data, int nbytes,
         return -1;
     }
     num_of_rings = *nrings;
-    
+
     /* reallocate space for islands if needed */
     Vect__reallocate_cache(cache, num_of_rings, FALSE);
     cache->lines_num += num_of_rings;
@@ -1079,8 +1099,8 @@ int polygon_from_wkb(const unsigned char *wkb_data, int nbytes,
         line_i = cache->lines[cache->lines_next];
         cache->lines_types[cache->lines_next++] = GV_BOUNDARY;
 
-        linestring_from_wkb(wkb_data + data_offset, nbytes, byte_order,
-                            with_z, line_i, TRUE);
+        linestring_from_wkb(wkb_data + data_offset, nbytes, byte_order, with_z,
+                            line_i, TRUE);
 
         if (nbytes != -1) {
             isize = 4 + 8 * (with_z == WITH_Z ? 3 : 2) * line_i->n_points;
@@ -1151,10 +1171,10 @@ int geometry_collection_from_wkb(const unsigned char *wkb_data, int nbytes,
             return error_corrupted_data(NULL);
 
         if (byte_order == ENDIAN_LITTLE) {
-            ftype = (SF_FeatureType) wkb_subdata[1];
+            ftype = (SF_FeatureType)wkb_subdata[1];
         }
         else {
-            ftype = (SF_FeatureType) wkb_subdata[4];
+            ftype = (SF_FeatureType)wkb_subdata[4];
         }
 
         if (ftype == SF_POINT) {
@@ -1167,9 +1187,8 @@ int geometry_collection_from_wkb(const unsigned char *wkb_data, int nbytes,
         }
         else if (ftype == SF_LINESTRING) {
             cache->lines_types[cache->lines_next] = GV_LINE;
-            nsize =
-                linestring_from_wkb(wkb_subdata, nbytes, byte_order, with_z,
-                                    cache->lines[cache->lines_next], FALSE);
+            nsize = linestring_from_wkb(wkb_subdata, nbytes, byte_order, with_z,
+                                        cache->lines[cache->lines_next], FALSE);
             cache->lines_num++;
             add_fpart(fparts, ftype, cache->lines_next, 1);
             cache->lines_next++;
@@ -1178,12 +1197,11 @@ int geometry_collection_from_wkb(const unsigned char *wkb_data, int nbytes,
             int idx, nrings;
 
             idx = cache->lines_next;
-            nsize = polygon_from_wkb(wkb_subdata, nbytes, byte_order,
-                                     with_z, cache, &nrings);
+            nsize = polygon_from_wkb(wkb_subdata, nbytes, byte_order, with_z,
+                                     cache, &nrings);
             add_fpart(fparts, ftype, idx, nrings);
         }
-        else if (ftype == SF_GEOMETRYCOLLECTION ||
-                 ftype == SF_MULTIPOLYGON ||
+        else if (ftype == SF_GEOMETRYCOLLECTION || ftype == SF_MULTIPOLYGON ||
                  ftype == SF_MULTILINESTRING || ftype == SF_MULTIPOLYGON) {
             geometry_collection_from_wkb(wkb_subdata, nbytes, byte_order,
                                          with_z, cache, fparts);
@@ -1220,84 +1238,106 @@ int error_corrupted_data(const char *msg)
 }
 
 /*!
-  \brief Create select cursor for sequential access (internal use only)
-  
-  Allocated cursor name should be freed by G_free().
-  
-  \param pg_info pointer to Format_info_pg struct
-  \param fetch_all TRUE to fetch all records
-  \param[out] cursor name
-  
-  \return 0 on success
-  \return -1 on failure
-*/
-int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info, int fetch_all, int built_level)
+   \brief Create select cursor for sequential access (internal use only)
+
+   Allocated cursor name should be freed by G_free().
+
+   \param pg_info pointer to Format_info_pg struct
+   \param fetch_all TRUE to fetch all records
+   \param[out] cursor name
+
+   \return 0 on success
+   \return -1 on failure
+ */
+int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info,
+                                   int fetch_all, int built_level)
 {
     char stmt[DB_SQL_MAX];
-    
+
     if (Vect__execute_pg(pg_info->conn, "BEGIN") == -1)
         return -1;
-    
+
     /* set cursor name */
-    G_asprintf(&(pg_info->cursor_name),
-               "%s_%s_%p",  pg_info->schema_name, pg_info->table_name, pg_info->conn);
-    
+    G_asprintf(&(pg_info->cursor_name), "%s_%s_%p", pg_info->schema_name,
+               pg_info->table_name, (void *)pg_info->conn);
+
     if (!pg_info->toposchema_name) {
         /* simple feature access (geom, fid) */
         /* TODO: start_fid */
         if (pg_info->where) {
             /* set attribute filter if where sql statement defined */
             char **tokens = G_tokenize(pg_info->where, "=");
+
             if (G_number_of_tokens(tokens) != 2) {
                 G_warning(_("Unable to parse '%s'"), pg_info->where);
                 return -1;
             }
             sprintf(stmt,
-                    "DECLARE %s CURSOR FOR SELECT \"%s\",\"%s\" FROM \"%s\".\"%s\" WHERE \"%s\"=%s ORDER BY \"%s\"",
-                    pg_info->cursor_name, pg_info->geom_column, pg_info->fid_column, pg_info->schema_name,
-                    pg_info->table_name, tokens[0], tokens[1], pg_info->fid_column);
+                    "DECLARE %s CURSOR FOR SELECT \"%s\",\"%s\" FROM "
+                    "\"%s\".\"%s\" WHERE \"%s\"=%s ORDER BY \"%s\"",
+                    pg_info->cursor_name, pg_info->geom_column,
+                    pg_info->fid_column, pg_info->schema_name,
+                    pg_info->table_name, tokens[0], tokens[1],
+                    pg_info->fid_column);
             G_free_tokens(tokens);
         }
         else {
             sprintf(stmt,
-                    "DECLARE %s CURSOR FOR SELECT \"%s\",\"%s\" FROM \"%s\".\"%s\" ORDER BY \"%s\"",
-                    pg_info->cursor_name, pg_info->geom_column, pg_info->fid_column, pg_info->schema_name,
+                    "DECLARE %s CURSOR FOR SELECT \"%s\",\"%s\" FROM "
+                    "\"%s\".\"%s\" ORDER BY \"%s\"",
+                    pg_info->cursor_name, pg_info->geom_column,
+                    pg_info->fid_column, pg_info->schema_name,
                     pg_info->table_name, pg_info->fid_column);
         }
     }
     else {
         /* topology access (geom,id,fid,type) */
         /* TODO: optimize SQL statement (for points/centroids) */
-        sprintf(stmt,
-                "DECLARE %s CURSOR FOR "
-                "SELECT geom,id,type,fid FROM ("
-                "SELECT tt.node_id AS id,tt.geom, %d AS type, ft.%s AS fid FROM \"%s\".node AS tt "
-                "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 1 AND (%s).id = node_id "
-                "WHERE containing_face IS NULL AND node_id NOT IN "
-                "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge GROUP BY start_node UNION ALL "
-                "SELECT end_node AS node FROM \"%s\".edge GROUP BY end_node) AS foo) UNION ALL "
-                "SELECT tt.node_id AS id,tt.geom, %d AS type, ft.%s AS fid FROM \"%s\".node AS tt "
-                "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 3 AND (%s).id = %s "
-                "WHERE containing_face IS NOT NULL AND node_id NOT IN "
-                "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge GROUP BY start_node UNION ALL "
-                "SELECT end_node AS node FROM \"%s\".edge GROUP BY end_node) AS foo) UNION ALL "
-                "SELECT tt.edge_id AS id, tt.geom, %d AS type, ft.%s AS fid FROM \"%s\".edge AS tt "
-                "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 2 AND (%s).id = edge_id "
-                "WHERE left_face = 0 AND right_face = 0 UNION ALL "
-                "SELECT tt.edge_id AS id, tt.geom, %d AS type, ft.%s AS fid FROM \"%s\".edge AS tt "
-                "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 2 AND (%s).id = edge_id "
-                "WHERE left_face != 0 OR right_face != 0 ) AS foo ORDER BY type,id",
-                pg_info->cursor_name, 
-                GV_POINT, pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
-                pg_info->topogeom_column, pg_info->topogeom_column, pg_info->toposchema_name, pg_info->toposchema_name,
-                GV_CENTROID, pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
-                pg_info->topogeom_column, pg_info->topogeom_column, 
-                built_level >= GV_BUILD_CENTROIDS ? "containing_face" : "node_id",
-                pg_info->toposchema_name, pg_info->toposchema_name,
-                GV_LINE, pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
-                pg_info->topogeom_column, pg_info->topogeom_column,
-                GV_BOUNDARY, pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
-                pg_info->topogeom_column, pg_info->topogeom_column);
+        sprintf(
+            stmt,
+            "DECLARE %s CURSOR FOR "
+            "SELECT geom,id,type,fid FROM ("
+            "SELECT tt.node_id AS id,tt.geom, %d AS type, ft.%s AS fid FROM "
+            "\"%s\".node AS tt "
+            "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 1 AND (%s).id = "
+            "node_id "
+            "WHERE containing_face IS NULL AND node_id NOT IN "
+            "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
+            "GROUP BY start_node UNION ALL "
+            "SELECT end_node AS node FROM \"%s\".edge GROUP BY end_node) AS "
+            "foo) UNION ALL "
+            "SELECT tt.node_id AS id,tt.geom, %d AS type, ft.%s AS fid FROM "
+            "\"%s\".node AS tt "
+            "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 3 AND (%s).id = %s "
+            "WHERE containing_face IS NOT NULL AND node_id NOT IN "
+            "(SELECT node FROM (SELECT start_node AS node FROM \"%s\".edge "
+            "GROUP BY start_node UNION ALL "
+            "SELECT end_node AS node FROM \"%s\".edge GROUP BY end_node) AS "
+            "foo) UNION ALL "
+            "SELECT tt.edge_id AS id, tt.geom, %d AS type, ft.%s AS fid FROM "
+            "\"%s\".edge AS tt "
+            "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 2 AND (%s).id = "
+            "edge_id "
+            "WHERE left_face = 0 AND right_face = 0 UNION ALL "
+            "SELECT tt.edge_id AS id, tt.geom, %d AS type, ft.%s AS fid FROM "
+            "\"%s\".edge AS tt "
+            "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 2 AND (%s).id = "
+            "edge_id "
+            "WHERE left_face != 0 OR right_face != 0 ) AS foo ORDER BY type,id",
+            pg_info->cursor_name, GV_POINT, pg_info->fid_column,
+            pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
+            pg_info->topogeom_column, pg_info->topogeom_column,
+            pg_info->toposchema_name, pg_info->toposchema_name, GV_CENTROID,
+            pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name,
+            pg_info->table_name, pg_info->topogeom_column,
+            pg_info->topogeom_column,
+            built_level >= GV_BUILD_CENTROIDS ? "containing_face" : "node_id",
+            pg_info->toposchema_name, pg_info->toposchema_name, GV_LINE,
+            pg_info->fid_column, pg_info->toposchema_name, pg_info->schema_name,
+            pg_info->table_name, pg_info->topogeom_column,
+            pg_info->topogeom_column, GV_BOUNDARY, pg_info->fid_column,
+            pg_info->toposchema_name, pg_info->schema_name, pg_info->table_name,
+            pg_info->topogeom_column, pg_info->topogeom_column);
     }
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
@@ -1309,7 +1349,8 @@ int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info, int fetch_all
     else
         sprintf(stmt, "FETCH %d in %s", CURSOR_PAGE, pg_info->cursor_name);
     G_debug(3, "SQL: %s", stmt);
-    pg_info->res = PQexec(pg_info->conn, stmt); /* fetch records from select cursor */
+    pg_info->res =
+        PQexec(pg_info->conn, stmt); /* fetch records from select cursor */
     if (!pg_info->res || PQresultStatus(pg_info->res) != PGRES_TUPLES_OK) {
         error_tuples(pg_info);
         return -1;
@@ -1320,41 +1361,42 @@ int Vect__open_cursor_next_line_pg(struct Format_info_pg *pg_info, int fetch_all
 }
 
 /*!
-  \brief Open select cursor for random access (internal use only)
+   \brief Open select cursor for random access (internal use only)
 
-  Fetch number of feature (given by CURSOR_PAGE) starting with
-  <em>fid</em>.
+   Fetch number of feature (given by CURSOR_PAGE) starting with
+   <em>fid</em>.
 
-  Allocated cursor name should be freed by G_free().
+   Allocated cursor name should be freed by G_free().
 
-  \param pg_info pointer to Format_info_pg struct
-  \param fid feature id to get
-  \param type feature type
+   \param pg_info pointer to Format_info_pg struct
+   \param fid feature id to get
+   \param type feature type
 
-  \return 0 on success
-  \return -1 on failure
-*/
+   \return 0 on success
+   \return -1 on failure
+ */
 int Vect__open_cursor_line_pg(struct Format_info_pg *pg_info, int fid, int type)
 {
     char stmt[DB_SQL_MAX];
-    
-    G_debug(3, "Vect__open_cursor_line_pg(): fid range = %d-%d, type = %d",
-            fid, fid + CURSOR_PAGE, type);
+
+    G_debug(3, "Vect__open_cursor_line_pg(): fid range = %d-%d, type = %d", fid,
+            fid + CURSOR_PAGE, type);
 
     if (Vect__execute_pg(pg_info->conn, "BEGIN") == -1)
         return -1;
 
     pg_info->cursor_fid = fid;
-    G_asprintf(&(pg_info->cursor_name),
-               "%s_%s_%d_%p",  pg_info->schema_name, pg_info->table_name, fid, pg_info->conn);
-    
+    G_asprintf(&(pg_info->cursor_name), "%s_%s_%d_%p", pg_info->schema_name,
+               pg_info->table_name, fid, (void *)pg_info->conn);
+
     if (!pg_info->toposchema_name) {
         /* simple feature access (geom) */
         sprintf(stmt,
                 "DECLARE %s CURSOR FOR SELECT %s FROM \"%s\".\"%s\" "
-                "WHERE %s BETWEEN %d AND %d ORDER BY %s", pg_info->cursor_name,
-                pg_info->geom_column, pg_info->schema_name, pg_info->table_name,
-                pg_info->fid_column, fid, fid + CURSOR_PAGE, pg_info->fid_column);
+                "WHERE %s BETWEEN %d AND %d ORDER BY %s",
+                pg_info->cursor_name, pg_info->geom_column,
+                pg_info->schema_name, pg_info->table_name, pg_info->fid_column,
+                fid, fid + CURSOR_PAGE, pg_info->fid_column);
     }
     else {
         /* topological access */
@@ -1363,22 +1405,24 @@ int Vect__open_cursor_line_pg(struct Format_info_pg *pg_info, int fid, int type)
             Vect__execute_pg(pg_info->conn, "ROLLBACK");
             return -1;
         }
-        
+
         if (type & GV_POINTS) {
             /* points (geom,containing_face) */
             sprintf(stmt,
                     "DECLARE %s CURSOR FOR SELECT geom,containing_face "
-                    " FROM \"%s\".node WHERE node_id BETWEEN %d AND %d ORDER BY node_id",
-                    pg_info->cursor_name,
-                    pg_info->toposchema_name, fid, fid + CURSOR_PAGE);
+                    " FROM \"%s\".node WHERE node_id BETWEEN %d AND %d ORDER "
+                    "BY node_id",
+                    pg_info->cursor_name, pg_info->toposchema_name, fid,
+                    fid + CURSOR_PAGE);
         }
         else {
             /* edges (geom,left_face,right_face) */
             sprintf(stmt,
                     "DECLARE %s CURSOR FOR SELECT geom,left_face,right_face "
-                    " FROM \"%s\".edge WHERE edge_id BETWEEN %d AND %d ORDER BY edge_id",
-                    pg_info->cursor_name,
-                    pg_info->toposchema_name, fid, fid + CURSOR_PAGE);
+                    " FROM \"%s\".edge WHERE edge_id BETWEEN %d AND %d ORDER "
+                    "BY edge_id",
+                    pg_info->cursor_name, pg_info->toposchema_name, fid,
+                    fid + CURSOR_PAGE);
         }
     }
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
@@ -1393,28 +1437,28 @@ int Vect__open_cursor_line_pg(struct Format_info_pg *pg_info, int fid, int type)
         error_tuples(pg_info);
         return -1;
     }
-    
+
     return 0;
 }
 
 /*!
-  \brief Close select cursor
+   \brief Close select cursor
 
-  \param pg_info pointer to Format_info_pg struct
+   \param pg_info pointer to Format_info_pg struct
 
-  \return 0 on success
-  \return -1 on failure
-*/ 
+   \return 0 on success
+   \return -1 on failure
+ */
 int Vect__close_cursor_pg(struct Format_info_pg *pg_info)
 {
     if (pg_info->res) {
         PQclear(pg_info->res);
         pg_info->res = NULL;
     }
-    
+
     if (pg_info->cursor_name) {
         char stmt[DB_SQL_MAX];
-        
+
         sprintf(stmt, "CLOSE %s", pg_info->cursor_name);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             G_warning(_("Unable to close cursor %s"), pg_info->cursor_name);
@@ -1424,28 +1468,27 @@ int Vect__close_cursor_pg(struct Format_info_pg *pg_info)
         G_free(pg_info->cursor_name);
         pg_info->cursor_name = NULL;
     }
-    
+
     return 0;
 }
 
 /*!
-  \brief Select feature (internal use only)
+   \brief Select feature (internal use only)
 
-  \param pg_info pointer to Format_info_pg struct
-  \param fid feature id to get
-  \param type feature type
+   \param pg_info pointer to Format_info_pg struct
+   \param fid feature id to get
+   \param type feature type
 
-  \return 0 on success
-  \return -1 on failure
-*/
+   \return 0 on success
+   \return -1 on failure
+ */
 int Vect__select_line_pg(struct Format_info_pg *pg_info, int fid, int type)
 {
     char stmt[DB_SQL_MAX];
-    
+
     if (!pg_info->toposchema_name) {
         /* simple feature access */
-        sprintf(stmt,
-                "SELECT %s FROM \"%s\".\"%s\" WHERE %s = %d",
+        sprintf(stmt, "SELECT %s FROM \"%s\".\"%s\" WHERE %s = %d",
                 pg_info->geom_column, pg_info->schema_name, pg_info->table_name,
                 pg_info->fid_column, fid);
     }
@@ -1455,11 +1498,11 @@ int Vect__select_line_pg(struct Format_info_pg *pg_info, int fid, int type)
             G_warning(_("Unsupported feature type %d"), type);
             return -1;
         }
-        
+
         if (type & GV_POINTS) {
             int topotype;
             char *nodeid;
-            
+
             if (type == GV_POINT) {
                 topotype = 1;
                 nodeid = pg_info->fid_column;
@@ -1468,35 +1511,40 @@ int Vect__select_line_pg(struct Format_info_pg *pg_info, int fid, int type)
                 topotype = 3;
                 nodeid = "containing_face";
             }
-            
+
             sprintf(stmt,
-                    "SELECT tt.geom,tt.containing_face,ft.%s FROM \"%s\".node AS tt "
-                    "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = %d and (%s).id = %s "
+                    "SELECT tt.geom,tt.containing_face,ft.%s FROM \"%s\".node "
+                    "AS tt "
+                    "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = %d and "
+                    "(%s).id = %s "
                     "WHERE node_id = %d",
                     pg_info->fid_column, pg_info->toposchema_name,
-                    pg_info->schema_name, pg_info->table_name, pg_info->topogeom_column,
-                    topotype, pg_info->topogeom_column, nodeid, fid);
+                    pg_info->schema_name, pg_info->table_name,
+                    pg_info->topogeom_column, topotype,
+                    pg_info->topogeom_column, nodeid, fid);
         }
         else {
             sprintf(stmt,
-                    "SELECT tt.geom,tt.left_face,tt.right_face,ft.%s FROM \"%s\".edge AS tt "
-                    "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 2 and (%s).id = edge_id "
+                    "SELECT tt.geom,tt.left_face,tt.right_face,ft.%s FROM "
+                    "\"%s\".edge AS tt "
+                    "LEFT JOIN \"%s\".\"%s\" AS ft ON (%s).type = 2 and "
+                    "(%s).id = edge_id "
                     "WHERE edge_id = %d",
-                    pg_info->fid_column,  pg_info->toposchema_name, 
-                    pg_info->schema_name, pg_info->table_name, pg_info->topogeom_column,
-                    pg_info->topogeom_column, fid);
+                    pg_info->fid_column, pg_info->toposchema_name,
+                    pg_info->schema_name, pg_info->table_name,
+                    pg_info->topogeom_column, pg_info->topogeom_column, fid);
         }
     }
     G_debug(3, "SQL: %s", stmt);
-    
+
     pg_info->next_line = 0;
-    
+
     pg_info->res = PQexec(pg_info->conn, stmt);
     if (!pg_info->res || PQresultStatus(pg_info->res) != PGRES_TUPLES_OK) {
         error_tuples(pg_info);
         return -1;
     }
-    
+
     return 0;
 }
 
@@ -1511,7 +1559,7 @@ int Vect__select_line_pg(struct Format_info_pg *pg_info, int fid, int type)
    \return 0 on success
    \return -1 on error
  */
-int Vect__execute_pg(PGconn * conn, const char *stmt)
+int Vect__execute_pg(PGconn *conn, const char *stmt)
 {
     PGresult *result;
 
@@ -1522,7 +1570,7 @@ int Vect__execute_pg(PGconn * conn, const char *stmt)
     if (!result || PQresultStatus(result) != PGRES_COMMAND_OK) {
         size_t stmt_len;
         char stmt_prt[512];
-        
+
         PQclear(result);
         stmt_len = strlen(stmt);
         strncpy(stmt_prt, stmt, stmt_len > 511 ? 511 : stmt_len);
@@ -1565,7 +1613,7 @@ int Vect__execute_get_value_pg(PGconn *conn, const char *stmt)
 
     ret = atoi(PQgetvalue(result, 0, 0));
     PQclear(result);
-    
+
     return ret;
 }
 
@@ -1587,13 +1635,12 @@ void Vect__reallocate_cache(struct Format_info_cache *cache, int num, int incr)
         cache->lines_alloc += num;
     }
 
-    cache->lines = (struct line_pnts **)G_realloc(cache->lines,
-                                                  cache->lines_alloc *
-                                                  sizeof(struct line_pnts *));
-    cache->lines_types = (int *)G_realloc(cache->lines_types,
-                                          cache->lines_alloc * sizeof(int));
-    cache->lines_cats = (int *)G_realloc(cache->lines_cats,
-                                         cache->lines_alloc * sizeof(int));
+    cache->lines = (struct line_pnts **)G_realloc(
+        cache->lines, cache->lines_alloc * sizeof(struct line_pnts *));
+    cache->lines_types =
+        (int *)G_realloc(cache->lines_types, cache->lines_alloc * sizeof(int));
+    cache->lines_cats =
+        (int *)G_realloc(cache->lines_cats, cache->lines_alloc * sizeof(int));
 
     if (cache->lines_alloc > 1) {
         for (i = cache->lines_alloc - num; i < cache->lines_alloc; i++) {
@@ -1609,8 +1656,8 @@ void Vect__reallocate_cache(struct Format_info_cache *cache, int num, int incr)
     }
 }
 
-void add_fpart(struct feat_parts *fparts, SF_FeatureType ftype,
-               int idx, int nlines)
+void add_fpart(struct feat_parts *fparts, SF_FeatureType ftype, int idx,
+               int nlines)
 {
     if (!fparts)
         return;
@@ -1621,9 +1668,8 @@ void add_fpart(struct feat_parts *fparts, SF_FeatureType ftype,
         else
             fparts->a_parts += fparts->n_parts;
 
-        fparts->ftype = (SF_FeatureType *) G_realloc(fparts->ftype,
-                                                     fparts->a_parts *
-                                                     sizeof(SF_FeatureType));
+        fparts->ftype = (SF_FeatureType *)G_realloc(
+            fparts->ftype, fparts->a_parts * sizeof(SF_FeatureType));
         fparts->nlines =
             (int *)G_realloc(fparts->nlines, fparts->a_parts * sizeof(int));
         fparts->idx =
@@ -1638,33 +1684,33 @@ void add_fpart(struct feat_parts *fparts, SF_FeatureType ftype,
 }
 
 /*
-  \brief Get centroid
-  
-  \param pg_info pointer to Format_info_pg
-  \param centroid centroid id
-  \param[out] line_p output geometry
+   \brief Get centroid
 
-  \return GV_CENTROID on success
-  \return -1 on error
-*/
-int get_centroid(struct Map_info *Map, int centroid,
-                 struct line_pnts *line_p, struct line_cats *line_c)
+   \param pg_info pointer to Format_info_pg
+   \param centroid centroid id
+   \param[out] line_p output geometry
+
+   \return GV_CENTROID on success
+   \return -1 on error
+ */
+int get_centroid(struct Map_info *Map, int centroid, struct line_pnts *line_p,
+                 struct line_cats *line_c)
 {
     int i, found;
     struct bound_box box;
     struct boxlist list;
     struct P_line *Line;
     struct P_topo_c *topo;
-        
+
     Line = Map->plus.Line[centroid];
     topo = (struct P_topo_c *)Line->topo;
-    
+
     /* get area bbox */
     Vect_get_area_box(Map, topo->area, &box);
     /* search in spatial index for centroid with area bbox */
     dig_init_boxlist(&list, TRUE);
     Vect_select_lines_by_box(Map, &box, Line->type, &list);
-    
+
     found = -1;
     for (i = 0; i < list.n_values; i++) {
         if (list.id[i] == centroid) {
@@ -1672,10 +1718,10 @@ int get_centroid(struct Map_info *Map, int centroid,
             break;
         }
     }
-    
+
     if (found == -1)
         return -1;
-    
+
     if (line_p) {
         Vect_reset_line(line_p);
         Vect_append_point(line_p, list.box[found].E, list.box[found].N, 0.0);
@@ -1683,7 +1729,7 @@ int get_centroid(struct Map_info *Map, int centroid,
     if (line_c) {
         Vect_cat_set(line_c, 1, Line->offset);
     }
-    
+
     return GV_CENTROID;
 }
 

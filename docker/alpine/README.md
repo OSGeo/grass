@@ -17,7 +17,7 @@ __Build the docker with__:
 
 ```bash
 docker build \
-         --file docker/alpine/Dockerfile_alpine \
+         --file docker/alpine/Dockerfile \
          --tag grass-py3-pdal:latest-alpine .
 ```
 
@@ -34,14 +34,14 @@ __To build a stable version__:
 change to the releasebranch or tag you want to build:
 
 ```bash
-git checkout remotes/origin/releasebranch_7_8
+git checkout remotes/origin/releasebranch_8_2
 ```
 
 and build and enter with:
 
 ```bash
 $ docker build \
-         -f docker/alpine/Dockerfile_alpine \
+         -f docker/alpine/Dockerfile \
          -t grass-py3-pdal:stable-alpine .
 
 $ docker run -it grass-py3-pdal:stable-alpine /bin/bash

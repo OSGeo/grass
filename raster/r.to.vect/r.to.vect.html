@@ -6,8 +6,8 @@ to GRASS vector format.
 
 <h3>Point conversion</h3>
 
-The <em>r.to.vect</em> program extracts data from a GRASS raster map 
-layer and stores output in a new GRASS <em>vector</em> file.  
+The <em>r.to.vect</em> program extracts data from a GRASS raster map
+layer and stores output in a new GRASS <em>vector</em> file.
 
 <h3>Line conversion</h3>
 <em>r.to.vect</em> assumes that the <em>input</em> map has been thinned
@@ -18,7 +18,7 @@ using <em><a href="r.thin.html">r.thin</a></em>.
 raster map.  These arcs may represent linear features
 (like roads or streams), or may represent area edge
 features (like political boundaries, or soil mapping
-units).  
+units).
 
 <p>
 <em><a href="r.thin.html">r.thin</a></em> and <em>r.to.vect</em>
@@ -26,7 +26,6 @@ may create excessive nodes at every junction, and may create small spurs
 or "dangling lines" during the thinning and vectorization process.
 These excessive nodes and spurs may be removed using
 <em><a href="v.clean.html">v.clean</a></em>.
-
 
 <h3>Area conversion</h3>
 
@@ -54,8 +53,8 @@ region (and the original data) to estimate the possible
 error introduced by smoothing.
 
 <p>
-<em>r.to.vect</em> extracts only area edges from the named raster 
-input file. If the raster map contains other data (i.e., line edges, 
+<em>r.to.vect</em> extracts only area edges from the named raster
+input file. If the raster map contains other data (i.e., line edges,
 or point data) the output may be wrong.
 
 <h2>EXAMPLES</h2>
@@ -117,6 +116,7 @@ if not, <em>r.to.vect</em> may crash.
 </em>
 
 <h2>AUTHORS</h2>
+
 <b>Point support</b><br>
 Bill Brown<br>
 <br>
@@ -129,16 +129,16 @@ Fairfax, Virginia 22030<br>
 <br>
 
 <b>Area support</b><br>
-<em>Original</em> version of <em>r.poly</em>: 
+<em>Original</em> version of <em>r.poly</em>:
 <br>
-Jean Ezell and Andrew Heekin, 
+Jean Ezell and Andrew Heekin,
 <br>
-U.S. Army Construction Engineering 
+U.S. Army Construction Engineering
 Research Laboratory
 
-<p><em>Modified</em> program for smoothed lines: 
+<p><em>Modified</em> program for smoothed lines:
 <br>
-David Satnik, 
+David Satnik,
 Central Washington University
 <br>
 Updated 2001 by Andrea Aime, Modena, Italy<br>
@@ -146,8 +146,3 @@ Updated 2001 by Andrea Aime, Modena, Italy<br>
 
 <b>Update</b><br>
 Original r.to.sites, r.line and r.poly merged and updated to 5.7 by Radim Blazek
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

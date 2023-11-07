@@ -22,7 +22,6 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
-import six
 
 import wx
 import wx.lib.colourselect as csel
@@ -51,7 +50,13 @@ from gui_core.gselect import VectorDBInfo
 from core.gcmd import GMessage, RunCommand
 from modules.colorrules import ThematicVectorTable
 from core.settings import UserSettings
-from gui_core.widgets import ScrolledPanel, NumTextCtrl, FloatSlider, SymbolButton
+from gui_core.widgets import (
+    ScrolledPanel,
+    NumTextCtrl,
+    FloatSlider,
+    SymbolButton,
+    GNotebook,
+)
 from gui_core.gselect import Select
 from gui_core.wrap import (
     Window,
@@ -60,6 +65,7 @@ from gui_core.wrap import (
     ToggleButton,
     Button,
     TextCtrl,
+    Slider,
     StaticText,
     StaticBox,
     CheckListBox,
@@ -75,7 +81,7 @@ from nviz.mapwindow import (
 from .wxnviz import DM_FLAT, DM_GOURAUD, MAX_ISOSURFS
 
 
-class NvizToolWindow(FN.FlatNotebook):
+class NvizToolWindow(GNotebook):
     """Nviz (3D view) tools panel"""
 
     def __init__(
@@ -94,12 +100,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.mapWindow = display.GetWindow()
         self._display = self.mapWindow.GetDisplay()
 
-        if globalvar.hasAgw:
-            kwargs["agwStyle"] = style
-        else:
-            kwargs["style"] = style
-        FN.FlatNotebook.__init__(self, parent, id, **kwargs)
-        self.SetTabAreaColour(globalvar.FNPageColor)
+        GNotebook.__init__(self, parent, style=style)
 
         self.win = {}  # window ids
         self.page = {}  # page ids
@@ -142,10 +143,6 @@ class NvizToolWindow(FN.FlatNotebook):
 
         self.Update()
         wx.CallAfter(self.SetPage, "view")
-        wx.CallAfter(
-            self.UpdateScrolling,
-            (self.foldpanelData, self.foldpanelAppear, self.foldpanelAnalysis),
-        )
         wx.CallAfter(self.SetInitialMaps)
 
     def SetInitialMaps(self):
@@ -204,6 +201,10 @@ class NvizToolWindow(FN.FlatNotebook):
     def OnPageChanged(self, event):
         new = event.GetSelection()
         # self.ChangeSelection(new)
+        # Data, Appearance, Analysis page
+        if new in (1, 2, 3):
+            foldpanel = self.GetPage(new).GetChildren()[0]
+            wx.CallLater(100, self.UpdateScrolling, (foldpanel,))
 
     def PostViewEvent(self, zExag=False):
         """Change view settings"""
@@ -241,7 +242,7 @@ class NvizToolWindow(FN.FlatNotebook):
     def _createViewPage(self):
         """Create view settings page"""
         panel = SP.ScrolledPanel(parent=self, id=wx.ID_ANY)
-        panel.SetupScrolling(scroll_x=False)
+        panel.SetupScrolling()
         self.page["view"] = {"id": 0, "notebook": self.GetId()}
 
         pageSizer = wx.BoxSizer(wx.VERTICAL)
@@ -476,7 +477,7 @@ class NvizToolWindow(FN.FlatNotebook):
     def _createAnimationPage(self):
         """Create view settings page"""
         panel = SP.ScrolledPanel(parent=self, id=wx.ID_ANY)
-        panel.SetupScrolling(scroll_x=False)
+        panel.SetupScrolling()
         self.page["animation"] = {"id": 0, "notebook": self.GetId()}
 
         pageSizer = wx.BoxSizer(wx.VERTICAL)
@@ -660,7 +661,6 @@ class NvizToolWindow(FN.FlatNotebook):
 
     def _createDataPage(self):
         """Create data (surface, vector, volume) settings page"""
-
         self.mainPanelData = ScrolledPanel(parent=self)
         self.mainPanelData.SetupScrolling(scroll_x=False)
         try:  # wxpython <= 2.8.10
@@ -818,7 +818,7 @@ class NvizToolWindow(FN.FlatNotebook):
 
     def _createSurfacePage(self, parent):
         """Create view settings page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
         self.page["surface"] = {"id": 0, "notebook": self.foldpanelData.GetId()}
         pageSizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -1133,12 +1133,13 @@ class NvizToolWindow(FN.FlatNotebook):
 
         panel.Layout()
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
     def _createCPlanePage(self, parent):
         """Create cutting planes page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
         self.page["cplane"] = {"id": 4, "notebook": self.foldpanelData.GetId()}
         self.win["cplane"] = {}
 
@@ -1377,12 +1378,13 @@ class NvizToolWindow(FN.FlatNotebook):
 
         panel.SetSizer(pageSizer)
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
     def _createConstantPage(self, parent):
         """Create constant page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
         self.page["constant"] = {"id": 1, "notebook": self.foldpanelData.GetId()}
         self.win["constant"] = {}
 
@@ -1469,12 +1471,13 @@ class NvizToolWindow(FN.FlatNotebook):
 
         panel.SetSizer(pageSizer)
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
     def _createVectorPage(self, parent):
         """Create view settings page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
         self.page["vector"] = {"id": 2, "notebook": self.foldpanelData.GetId()}
         pageSizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -1901,6 +1904,7 @@ class NvizToolWindow(FN.FlatNotebook):
 
         panel.SetSizer(pageSizer)
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
@@ -1913,7 +1917,7 @@ class NvizToolWindow(FN.FlatNotebook):
 
     def _createVolumePage(self, parent):
         """Create view settings page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
         self.page["volume"] = {"id": 3, "notebook": self.foldpanelData.GetId()}
         pageSizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -2115,12 +2119,13 @@ class NvizToolWindow(FN.FlatNotebook):
         )
         panel.SetSizer(pageSizer)
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
     def _createLightPage(self, parent):
         """Create light page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
 
         self.page["light"] = {"id": 0, "notebook": self.foldpanelAppear.GetId()}
         self.win["light"] = {}
@@ -2296,12 +2301,13 @@ class NvizToolWindow(FN.FlatNotebook):
         panel.SetSizer(pageSizer)
         panel.Layout()
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
     def _createFringePage(self, parent):
         """Create fringe page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
 
         self.page["fringe"] = {"id": 1, "notebook": self.foldpanelAppear.GetId()}
         self.win["fringe"] = {}
@@ -2392,12 +2398,13 @@ class NvizToolWindow(FN.FlatNotebook):
         panel.SetSizer(pageSizer)
         panel.Layout()
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
     def _createDecorationPage(self, parent):
         """Create decoration (north arrow, scalebar, legend) page"""
-        panel = wx.Panel(parent=parent, id=wx.ID_ANY)
+        panel = ScrolledPanel(parent=parent)
 
         self.page["decoration"] = {"id": 2, "notebook": self.foldpanelAppear.GetId()}
         self.win["decoration"] = {}
@@ -2526,6 +2533,7 @@ class NvizToolWindow(FN.FlatNotebook):
         panel.SetSizer(pageSizer)
         panel.Layout()
         panel.Fit()
+        panel.SetupScrolling(scroll_y=False)
 
         return panel
 
@@ -2816,7 +2824,7 @@ class NvizToolWindow(FN.FlatNotebook):
             return
         name = _("constant#") + str(layerIdx + 1)
         data = self.mapWindow.constants[layerIdx]
-        for attr, value in six.iteritems(data["constant"]):
+        for attr, value in data["constant"].items():
             if attr == "color":
                 value = self._getColorFromString(value)
             if attr in ("color", "value", "resolution", "transp"):
@@ -2875,7 +2883,7 @@ class NvizToolWindow(FN.FlatNotebook):
         if not winName:
             return
         data[winName] = self.FindWindowById(event.GetId()).GetValue()
-        for w in six.itervalues(win[winName]):
+        for w in win[winName].values():
             self.FindWindowById(w).SetValue(data[winName])
 
         event.Skip()
@@ -3059,7 +3067,7 @@ class NvizToolWindow(FN.FlatNotebook):
         gridSizer.Add(label, pos=(4, 0), flag=wx.ALIGN_CENTER_VERTICAL)
         # sliders
         for i, coord in enumerate(("x1", "x2")):
-            slider = wx.Slider(
+            slider = Slider(
                 parent=panel, id=wx.ID_ANY, minValue=0, maxValue=100, value=0
             )
             self.win["volume"]["slice"]["slider_" + coord] = slider.GetId()
@@ -3068,7 +3076,7 @@ class NvizToolWindow(FN.FlatNotebook):
             gridSizer.Add(slider, pos=(1, i + 1), flag=wx.ALIGN_CENTER | wx.EXPAND)
 
         for i, coord in enumerate(("y1", "y2")):
-            slider = wx.Slider(
+            slider = Slider(
                 parent=panel, id=wx.ID_ANY, minValue=0, maxValue=100, value=0
             )
             self.win["volume"]["slice"]["slider_" + coord] = slider.GetId()
@@ -3077,7 +3085,7 @@ class NvizToolWindow(FN.FlatNotebook):
             gridSizer.Add(slider, pos=(2, i + 1), flag=wx.ALIGN_CENTER | wx.EXPAND)
 
         for i, coord in enumerate(("z1", "z2")):
-            slider = wx.Slider(
+            slider = Slider(
                 parent=panel, id=wx.ID_ANY, minValue=0, maxValue=100, value=0
             )
             self.win["volume"]["slice"]["slider_" + coord] = slider.GetId()
@@ -3156,7 +3164,7 @@ class NvizToolWindow(FN.FlatNotebook):
         if floatSlider:
             slider = FloatSlider(**kwargs)
         else:
-            slider = wx.Slider(**kwargs)
+            slider = Slider(**kwargs)
 
         slider.SetName("slider")
         if bind[0]:
@@ -3210,9 +3218,9 @@ class NvizToolWindow(FN.FlatNotebook):
         sizer.Add(w, pos=(1, 0), flag=wx.ALIGN_CENTER)
 
     def __GetWindowName(self, data, id):
-        for name in six.iterkeys(data):
+        for name in data.keys():
             if isinstance(data[name], type({})):
-                for win in six.itervalues(data[name]):
+                for win in data[name].values():
                     if win == id:
                         return name
             else:
@@ -3225,7 +3233,7 @@ class NvizToolWindow(FN.FlatNotebook):
         """Update view from settings values
         stored in self.mapWindow.view dictionary"""
         for control in ("height", "persp", "twist", "z-exag"):
-            for win in six.itervalues(self.win["view"][control]):
+            for win in self.win["view"][control].values():
                 try:
                     if control == "height":
                         value = int(self.mapWindow.iview[control]["value"])
@@ -3266,7 +3274,7 @@ class NvizToolWindow(FN.FlatNotebook):
         value = self.FindWindowById(event.GetId()).GetValue()
 
         self.mapWindow.light["position"]["z"] = value
-        for win in six.itervalues(self.win["light"][winName]):
+        for win in self.win["light"][winName].values():
             self.FindWindowById(win).SetValue(value)
 
         self.PostLightEvent()
@@ -3385,7 +3393,7 @@ class NvizToolWindow(FN.FlatNotebook):
 
         view[winName]["value"] = convert(value)
 
-        for win in six.itervalues(self.win["view"][winName]):
+        for win in self.win["view"][winName].values():
             self.FindWindowById(win).SetValue(value)
 
         self.mapWindow.iview["dir"]["use"] = False
@@ -3447,7 +3455,7 @@ class NvizToolWindow(FN.FlatNotebook):
     def OnResetSurfacePosition(self, event):
         """Reset position of surface"""
 
-        for win in six.itervalues(self.win["surface"]["position"]):
+        for win in self.win["surface"]["position"].values():
             if win == self.win["surface"]["position"]["axis"]:
                 self.FindWindowById(win).SetSelection(2)  # Z
             elif win == self.win["surface"]["position"]["reset"]:
@@ -3584,13 +3592,13 @@ class NvizToolWindow(FN.FlatNotebook):
 
     def EnablePage(self, name, enabled=True):
         """Enable/disable all widgets on page"""
-        for key, item in six.iteritems(self.win[name]):
+        for key, item in self.win[name].items():
             if key in ("map", "surface", "new", "planes"):
                 continue
             if isinstance(item, dict):
-                for skey, sitem in six.iteritems(self.win[name][key]):
+                for skey, sitem in self.win[name][key].items():
                     if isinstance(sitem, dict):
-                        for ssitem in six.itervalues(self.win[name][key][skey]):
+                        for ssitem in self.win[name][key][skey].values():
                             if not isinstance(ssitem, bool) and isinstance(ssitem, int):
                                 self.FindWindowById(ssitem).Enable(enabled)
                     else:
@@ -3782,7 +3790,6 @@ class NvizToolWindow(FN.FlatNotebook):
         cvalue = self._getColorString(color)
 
         for name in self.mapWindow.GetLayerNames(type="raster"):
-
             data = self._getLayerPropertiesByName(name, mapType="raster")
             if not data:
                 continue  # shouldy no happen
@@ -3901,7 +3908,7 @@ class NvizToolWindow(FN.FlatNotebook):
         slider = self.FindWindowById(self.win["surface"][winName]["slider"])
         self.AdjustSliderRange(slider=slider, value=value)
 
-        for win in six.itervalues(self.win["surface"]["position"]):
+        for win in self.win["surface"]["position"].values():
             if win in (
                 self.win["surface"]["position"]["axis"],
                 self.win["surface"]["position"]["reset"],
@@ -4123,7 +4130,7 @@ class NvizToolWindow(FN.FlatNotebook):
         slider = self.FindWindowById(self.win["vector"][vtype]["height"]["slider"])
         self.AdjustSliderRange(slider=slider, value=value)
 
-        for win in six.itervalues(self.win["vector"][vtype]["height"]):
+        for win in self.win["vector"][vtype]["height"].values():
             self.FindWindowById(win).SetValue(value)
 
         data = self.GetLayerData("vector")
@@ -4749,7 +4756,7 @@ class NvizToolWindow(FN.FlatNotebook):
         slider = self.FindWindowById(self.win["volume"][winName]["slider"])
         self.AdjustSliderRange(slider=slider, value=value)
 
-        for win in six.itervalues(self.win["volume"]["position"]):
+        for win in self.win["volume"]["position"].values():
             if win in (
                 self.win["volume"]["position"]["axis"],
                 self.win["volume"]["position"]["reset"],
@@ -4817,7 +4824,7 @@ class NvizToolWindow(FN.FlatNotebook):
 
     def OnResetVolumePosition(self, event):
         """Reset position of volume"""
-        for win in six.itervalues(self.win["volume"]["position"]):
+        for win in self.win["volume"]["position"].values():
             if win == self.win["volume"]["position"]["axis"]:
                 self.FindWindowById(win).SetSelection(2)  # Z
             elif win == self.win["volume"]["position"]["reset"]:
@@ -5143,10 +5150,10 @@ class NvizToolWindow(FN.FlatNotebook):
 
         if pageId == "view":
             self.SetPage("view")
-            hmin = self.mapWindow.iview["height"]["min"]
-            hmax = self.mapWindow.iview["height"]["max"]
-            hval = self.mapWindow.iview["height"]["value"]
-            zmin = self.mapWindow.view["z-exag"]["min"]
+            hmin = int(self.mapWindow.iview["height"]["min"])
+            hmax = int(self.mapWindow.iview["height"]["max"])
+            hval = int(self.mapWindow.iview["height"]["value"])
+            zmin = int(self.mapWindow.view["z-exag"]["min"])
             zmax = self.mapWindow.view["z-exag"]["max"]
             zval = self.mapWindow.view["z-exag"]["value"]
 
@@ -5365,7 +5372,7 @@ class NvizToolWindow(FN.FlatNotebook):
         #
         # draw
         #
-        for control, drawData in six.iteritems(data["draw"]):
+        for control, drawData in data["draw"].items():
             if control == "all":  # skip 'all' property
                 continue
             if control == "resolution":
@@ -5574,7 +5581,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.FindWindowById(self.win["volume"]["map"]).SetValue(layer.name)
 
         # draw
-        for control, idata in six.iteritems(data["draw"]):
+        for control, idata in data["draw"].items():
             if control == "all":  # skip 'all' property
                 continue
 
@@ -5776,7 +5783,7 @@ class NvizToolWindow(FN.FlatNotebook):
 
 class PositionWindow(Window):
     """Abstract position control window, see subclasses
-    ViewPostionWindow and LightPositionWindow"""
+    ViewPositionWindow and LightPositionWindow"""
 
     def __init__(self, parent, mapwindow, id=wx.ID_ANY, **kwargs):
         self.mapWindow = mapwindow
@@ -5804,8 +5811,8 @@ class PositionWindow(Window):
             y = y * h
         self.pdc.Clear()
         self.pdc.BeginDrawing()
-        self.pdc.DrawLine(w / 2, h / 2, x, y)
-        self.pdc.DrawCircle(x, y, 5)
+        self.pdc.DrawLine(w // 2, h // 2, int(x), int(y))
+        self.pdc.DrawCircle(int(x), int(y), 5)
         self.pdc.EndDrawing()
 
     def OnPaint(self, event):

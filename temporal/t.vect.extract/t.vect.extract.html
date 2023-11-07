@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
-The purpose of <b>t.vect.extract</b> is to extract a subset of a space 
-time vector dataset and to store that subset in a different space time 
+The purpose of <b>t.vect.extract</b> is to extract a subset of a space
+time vector dataset and to store that subset in a different space time
 vector dataset.
 
 <h2>EXAMPLE</h2>
@@ -59,11 +59,11 @@ t.info shoreline_later_2000@shoreline type=stvds
  | Description:
  | North Caroline shoreline from 2000 to 2009
  | Command history:
- | # 2014-11-29 08:43:50 
+ | # 2014-11-29 08:43:50
  | t.vect.extract input="shoreline"
  |     where="start_time > 2000" output="shoreline_later_2000"
  |     basename="new_shoreline"
- | # 2014-11-29 08:44:14 
+ | # 2014-11-29 08:44:14
  | t.support type="stvds"
  |     input="shoreline_later_2000@shoreline"
  |     descr="North Caroline shoreline from 2000 to 2009"
@@ -86,9 +86,3 @@ shoreline_2009|None|shoreline|2009|None
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
-

@@ -7593,7 +7593,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.maxent.swd_to_translate.c:5
 #, fuzzy
-msgid "vector map(s) of species occurence"
+msgid "vector map(s) of species occurrence"
 msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #: ../locale/scriptstrings/v.maxent.swd_to_translate.c:6
@@ -9640,7 +9640,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.what.spoly_to_translate.c:1
 msgid ""
-"Queries vector map with overlaping \"spaghetti\" polygons (e.g. Landsat "
+"Queries vector map with overlapping \"spaghetti\" polygons (e.g. Landsat "
 "footprints) at given location. Polygons must have not intersected boundaries."
 msgstr ""
 
@@ -10472,11 +10472,11 @@ msgid "Spectral bandwidths to test"
 msgstr ""
 
 #: ../locale/scriptstrings/i.segment.uspo_to_translate.c:39
-msgid "Lowest spectral bandwith to test"
+msgid "Lowest spectral bandwidth to test"
 msgstr ""
 
 #: ../locale/scriptstrings/i.segment.uspo_to_translate.c:41
-msgid "Spectral bandwith at which to stop (not included)"
+msgid "Spectral bandwidth at which to stop (not included)"
 msgstr ""
 
 #: ../locale/scriptstrings/i.segment.uspo_to_translate.c:43
@@ -15141,7 +15141,7 @@ msgid ""
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.pyupdate_to_translate.c:18
-msgid "Import all functions from specificed packages"
+msgid "Import all functions from specified packages"
 msgstr ""
 
 #: ../locale/scriptstrings/v.db.pyupdate_to_translate.c:19
@@ -15639,7 +15639,7 @@ msgid "Factor for hindrances expenses"
 msgstr ""
 
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:95
-msgid "Maintenace costs per kW"
+msgid "Maintenance costs per kW"
 msgstr ""
 
 #: ../locale/scriptstrings/r.green.hydro.financial_to_translate.c:96
@@ -16435,7 +16435,7 @@ msgid "Print list of protected area site types"
 msgstr ""
 
 #: ../locale/scriptstrings/r.mcda.topsis_to_translate.c:1
-msgid "Generates a MCDA map based on TOPSIS algorthm."
+msgid "Generates a MCDA map based on TOPSIS algorithm."
 msgstr ""
 
 #: ../locale/scriptstrings/r.mcda.topsis_to_translate.c:5
@@ -17628,7 +17628,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.landscape.evol.old_to_translate.c:51
 #: ../locale/scriptstrings/r.landscape.evol_to_translate.c:47
 msgid ""
-"-k Keep ALL temporary maps (overides flags -drst). This will make A LOT of "
+"-k Keep ALL temporary maps (overrides flags -drst). This will make A LOT of "
 "maps!"
 msgstr ""
 
@@ -17895,7 +17895,7 @@ msgstr "Ime datoteke s filtrom"
 
 #: ../locale/scriptstrings/v.link.precip_to_translate.c:11
 #, fuzzy
-msgid "Print attribut table"
+msgid "Print attribute table"
 msgstr "Izpiši etikete kategorij"
 
 #: ../locale/scriptstrings/v.link.precip_to_translate.c:12
@@ -18351,12 +18351,12 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.class.mlpy_to_translate.c:6
 #, fuzzy
-msgid "Input vector map (attribut table required)"
+msgid "Input vector map (attribute table required)"
 msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #: ../locale/scriptstrings/v.class.mlpy_to_translate.c:7
 #, fuzzy
-msgid "Training vector map (attribut table required)"
+msgid "Training vector map (attribute table required)"
 msgstr "Izpiši etikete kategorij"
 
 #: ../locale/scriptstrings/v.class.mlpy_to_translate.c:8
@@ -18835,7 +18835,8 @@ msgstr "Ime rastrskega sloja nadmorskih višin"
 #: ../locale/scriptstrings/r.viewshed.cva_to_translate.c:7
 #, fuzzy
 msgid ""
-"Name of input vector points map containg the set of points for this analysis."
+"Name of input vector points map containing the set of points for this "
+"analysis."
 msgstr "Vhodni sloj vsebuje linije."
 
 #: ../locale/scriptstrings/r.viewshed.cva_to_translate.c:8
@@ -20716,7 +20717,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.out.ntv2_to_translate.c:2
 #, fuzzy
-msgid "Input raster map of lattitude datum shift values"
+msgid "Input raster map of latitude datum shift values"
 msgstr "Ime rastrskega sloja iz katerega kopirati barvno paleto"
 
 #: ../locale/scriptstrings/r.out.ntv2_to_translate.c:3
@@ -20806,7 +20807,7 @@ msgid "Source populations"
 msgstr "Ne najdem vhodne datoteke %s\n"
 
 #: ../locale/scriptstrings/r.fidimo_to_translate.c:13
-msgid "Or: Source population raster (relative or absolute occurence)"
+msgid "Or: Source population raster (relative or absolute occurrence)"
 msgstr ""
 
 #: ../locale/scriptstrings/r.fidimo_to_translate.c:15
@@ -21237,7 +21238,7 @@ msgid "Unacceptable conditions for Water Confidence (bit 4-5)"
 msgstr ""
 
 #: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:12
-msgid "Unacceptable conditions for Cloud Shaddow Confidence (bit 6-7)"
+msgid "Unacceptable conditions for Cloud Shadow Confidence (bit 6-7)"
 msgstr ""
 
 #: ../locale/scriptstrings/i.landsat8.qc_to_translate.c:13
@@ -21551,19 +21552,19 @@ msgid "Index of the classifiers to optimize the training set"
 msgstr ""
 
 #: ../locale/scriptstrings/v.class.ml_to_translate.c:27
-msgid "Column pattern:Value or Numpy funtion to use to substitute NaN values"
+msgid "Column pattern:Value or Numpy function to use to substitute NaN values"
 msgstr ""
 
 #: ../locale/scriptstrings/v.class.ml_to_translate.c:28
-msgid "Key:Value or Numpy funtion to use to substitute Inf values"
+msgid "Key:Value or Numpy function to use to substitute Inf values"
 msgstr ""
 
 #: ../locale/scriptstrings/v.class.ml_to_translate.c:29
-msgid "Key:Value or Numpy funtion to use to substitute neginf values"
+msgid "Key:Value or Numpy function to use to substitute neginf values"
 msgstr ""
 
 #: ../locale/scriptstrings/v.class.ml_to_translate.c:30
-msgid "Key:Value or Numpy funtion to use to substitute posinf values"
+msgid "Key:Value or Numpy function to use to substitute posinf values"
 msgstr ""
 
 #: ../locale/scriptstrings/v.class.ml_to_translate.c:31
@@ -22317,7 +22318,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.green.gshp.technical_to_translate.c:36
 #: ../locale/scriptstrings/r.green.gshp.theoretical_to_translate.c:22
-msgid "Borehole thermal resistence [m K W-1]"
+msgid "Borehole thermal resistance [m K W-1]"
 msgstr ""
 
 #: ../locale/scriptstrings/r.green.gshp.technical_to_translate.c:38
@@ -22843,7 +22844,7 @@ msgstr "Vhodni sloj vsebuje linije."
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:13
 msgid ""
 "Vector points map where each point is used as training sample. Handling of "
-"missing values in training data can be choosen later."
+"missing values in training data can be chosen later."
 msgstr ""
 
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:15
@@ -22865,7 +22866,7 @@ msgstr "Izhodni sloj"
 #: ../locale/scriptstrings/r.learn.ml_to_translate.c:19
 msgid ""
 "Raster layer name to store result from classification or regression model. "
-"The name will also used as a perfix if class probabilities or intermediate "
+"The name will also used as a prefix if class probabilities or intermediate "
 "of cross-validation results are ordered as maps."
 msgstr ""
 
@@ -23440,7 +23441,7 @@ msgid "x-y extent of the Gaussian filter (i.zc)"
 msgstr ""
 
 #: ../locale/scriptstrings/i.cutlines_to_translate.c:16
-msgid "Low treshold for edges (i.edge)"
+msgid "Low threshold for edges (i.edge)"
 msgstr ""
 
 #: ../locale/scriptstrings/i.cutlines_to_translate.c:17
@@ -23451,7 +23452,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.cutlines_to_translate.c:18
 #, fuzzy
-msgid "High treshold for edges (i.edge)"
+msgid "High threshold for edges (i.edge)"
 msgstr "Ime datoteke z rezultatom klasifikacije"
 
 #: ../locale/scriptstrings/i.cutlines_to_translate.c:20
@@ -24723,12 +24724,12 @@ msgid "Interpolation command string"
 msgstr "Interpolacijska metoda, ki jo želite uporabiti"
 
 #: ../locale/scriptstrings/r.mwprecip_to_translate.c:36
-msgid "Additional settings for choosen interpolation (see manual)"
+msgid "Additional settings for chosen interpolation (see manual)"
 msgstr ""
 
 #: ../locale/scriptstrings/r.mwprecip_to_translate.c:38
 #, fuzzy
-msgid "Do not set region from modul settings"
+msgid "Do not set region from module settings"
 msgstr "Določi trenutno regijo iz imenovane regije (named region)"
 
 #: ../locale/scriptstrings/r.mwprecip_to_translate.c:42
@@ -26305,7 +26306,7 @@ msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
 
 #: ../locale/scriptstrings/t.rast.what.aggr_to_translate.c:12
 #, fuzzy
-msgid "Tha date format"
+msgid "The date format"
 msgstr "Izhodni sloj"
 
 #: ../locale/scriptstrings/t.rast.what.aggr_to_translate.c:15
@@ -26754,7 +26755,8 @@ msgid ""
 msgstr ""
 
 #: ../locale/scriptstrings/v.gsflow.export_to_translate.c:1
-msgid "Export databse tables and pour point for GSFLOW input and control files"
+msgid ""
+"Export database tables and pour point for GSFLOW input and control files"
 msgstr ""
 
 #: ../locale/scriptstrings/v.gsflow.export_to_translate.c:6
@@ -27734,7 +27736,7 @@ msgstr "Enote razdalje"
 
 #: ../locale/scriptstrings/i.segment.hierarchical_to_translate.c:6
 #, fuzzy
-msgid "Name of output sement raster map"
+msgid "Name of output segment raster map"
 msgstr "Ime izhodnega rastrskega sloja"
 
 #: ../locale/scriptstrings/i.segment.hierarchical_to_translate.c:7
@@ -31098,7 +31100,7 @@ msgid "Title for Graph"
 msgstr "Naslov novega rastrskega sloja"
 
 #: ../display/d.linegraph/main.c:311
-msgid "Minimum and maximun value for Y axis (min,max)"
+msgid "Minimum and maximum value for Y axis (min,max)"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:318
@@ -35173,7 +35175,7 @@ msgid "Closeness threshold in network generalization"
 msgstr ""
 
 #: ../vector/v.generalize/main.c:209
-msgid "Betweeness threshold in network generalization"
+msgid "Betweenness threshold in network generalization"
 msgstr ""
 
 #: ../vector/v.generalize/main.c:216
@@ -36255,12 +36257,12 @@ msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #: ../vector/v.profile/main.c:683
 #, fuzzy, c-format
-msgid "Unabale to get attribute data for cat %d"
+msgid "Unable to get attribute data for cat %d"
 msgstr "Ne morem izbrati (select) podatkov iz tabele"
 
 #: ../vector/v.profile/main.c:692
 #, fuzzy, c-format
-msgid "Error while retreiving database record for cat %d"
+msgid "Error while retrieving database record for cat %d"
 msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
 
 #: ../vector/v.profile/main.c:730
@@ -40166,7 +40168,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Vector map <%s> is 3D. Use format specific layer creation options (parameter "
-"'lco') to export <in 3D rather than 2D (default)."
+"'lco') to export in 3D rather than 2D (default)."
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:713 ../db/drivers/ogr/execute.c:56
@@ -47597,16 +47599,6 @@ msgstr ""
 #, fuzzy
 msgid "My first vector module"
 msgstr "Ime obstoječega rastrskega sloja."
-
-#: ../doc/vector/v.example/main.c:175
-#, fuzzy, c-format
-msgid "Unable to get attribute data for cat %d"
-msgstr "Ne morem izbrati (select) podatkov iz tabele"
-
-#: ../doc/vector/v.example/main.c:184
-#, fuzzy, c-format
-msgid "Error while retrieving database record for cat %d"
-msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
 
 #: ../doc/vector/v.example/main.c:217
 #, fuzzy, c-format
@@ -62355,7 +62347,7 @@ msgstr ""
 #: ../raster/r.geomorphon/memory.c:42
 #, c-format
 msgid ""
-"Region resolution shoudn't be lesser than map %s resolution. Run g.region "
+"Region resolution shouldn't be lesser than map %s resolution. Run g.region "
 "raster=%s to set proper resolution"
 msgstr ""
 
@@ -64842,7 +64834,7 @@ msgstr ""
 
 #: ../scripts/r.in.wms/r.in.wms.py:250
 msgid ""
-"The proxy will be ignored by the choosen GRASS driver. It is only used with "
+"The proxy will be ignored by the chosen GRASS driver. It is only used with "
 "the GDAL driver."
 msgstr ""
 
@@ -65427,12 +65419,12 @@ msgid "Using 8bit image channels"
 msgstr ""
 
 #: ../scripts/i.pansharpen/i.pansharpen.py:174
-msgid "Converting image chanels to 8bit for processing"
+msgid "Converting image channels to 8bit for processing"
 msgstr ""
 
 #: ../scripts/i.pansharpen/i.pansharpen.py:204
 #, fuzzy
-msgid "Rescaling image chanels to 8bit for processing"
+msgid "Rescaling image channels to 8bit for processing"
 msgstr "Interpolacijska metoda, ki jo želite uporabiti"
 
 #: ../scripts/i.pansharpen/i.pansharpen.py:255
@@ -66337,846 +66329,3 @@ msgstr ""
 #, python-format
 msgid "Imported table <%s> with %d rows"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Name of raster map to import by actinia"
-#~ msgstr "Rastrski sloj(i) za katere želimo poročilo"
-
-#, fuzzy
-#~ msgid "Name of vector map to import in actinia"
-#~ msgstr "Ime vhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Sorry, you must choose an output map."
-#~ msgstr "Ime izhodnega sloja"
-
-#, fuzzy
-#~ msgid "<%s> not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
-
-#, fuzzy
-#~ msgid "<%s> already exists. File not copied."
-#~ msgstr "Ime izhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Can not read control points for group <%s>"
-#~ msgstr "Ničesar nisem našel.\n"
-
-#, fuzzy
-#~ msgid "Area centroid without category"
-#~ msgstr "%-5d mrtvih kategorij točk preskočenih\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "WKT-style definition:\n"
-#~ "%s"
-#~ msgstr "Črta prereza"
-
-#, fuzzy
-#~ msgid "Key columns differ"
-#~ msgstr " Število kolon\n"
-
-#, fuzzy
-#~ msgid "Column types differ"
-#~ msgstr "Tip zapisa kolone ni podprt"
-
-#, fuzzy
-#~ msgid "invalid"
-#~ msgstr "neveljavna regija: %s"
-
-#, fuzzy
-#~ msgid "unspecified"
-#~ msgstr "Določena ni bila nobena vhodna datoteka."
-
-#, fuzzy
-#~ msgid "Choose only one auto-projection parameter method"
-#~ msgstr "ne morem posodobiti meja"
-
-#, fuzzy
-#~ msgid "One of <coordinates> and <input> must be given"
-#~ msgstr "Uporabiš lahko ali 'from_table' ali 'select'"
-
-#, fuzzy
-#~ msgid "Options <coordinates> and <input> are mutually exclusive"
-#~ msgstr "Uporabiš lahko ali 'from_table' ali 'select'"
-
-#, fuzzy
-#~ msgid "No addons metadata found for <%s>"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
-
-#, fuzzy
-#~ msgid "Unable to get monitor info (no %s found)"
-#~ msgstr "Izpiši etikete kategorij"
-
-#, fuzzy
-#~ msgid "Unable to load GDAL python bindings"
-#~ msgstr "ne morem posodobiti meja"
-
-#, fuzzy
-#~ msgid "Unable to load GDAL Python bindings"
-#~ msgstr "ne morem posodobiti meja"
-
-#, fuzzy
-#~ msgid "No output requested"
-#~ msgstr "Ime izhodnega vektorskega sloja"
-
-#, fuzzy
-#~ msgid "Unable to create segment file"
-#~ msgstr "Ime rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Unable to re-open segment file"
-#~ msgstr "Ime izhodne datoteke"
-
-#, fuzzy
-#~ msgid "dseg_open(): unable to create segment file"
-#~ msgstr "Vrednost, ki bo prirejena NULL vrednosti"
-
-#, fuzzy
-#~ msgid "Iillegal configuration parameter(s)"
-#~ msgstr "Ime izhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Unable to re-open file '%s'"
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
-
-#, fuzzy
-#~ msgid "Can not initialize temporary file"
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
-
-#, fuzzy
-#~ msgid "Setting grey color table for <%s> (data range)"
-#~ msgstr "Ime rastrskega sloja"
-
-#~ msgid ""
-#~ "column '%s', type 'string': unknown width -> stored as varchar(250) some "
-#~ "data may be lost"
-#~ msgstr ""
-#~ "kolona '%s', tip 'string': nepoznana širina -> shranjen kot "
-#~ "varchar(250),\n"
-#~ "nekateri podatki so lahko izgubljeni"
-
-#, fuzzy
-#~ msgid "Preprocessing input data..."
-#~ msgstr "Berem dig datoteko...\n"
-
-#, fuzzy
-#~ msgid "Group <%s> does not exist"
-#~ msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
-
-#, fuzzy
-#~ msgid ""
-#~ "Control Z Point file for group [%s] in [%s] \n"
-#~ " \n"
-#~ msgstr "Ničesar nisem našel.\n"
-
-#, fuzzy
-#~ msgid "Poorly placed Control Points!\n"
-#~ msgstr "Ime sloja, ki bo uporabljen za odtenek (HUE)"
-
-#, fuzzy
-#~ msgid "Can not generate the transformation equation.\n"
-#~ msgstr "Ne morem prebrati informacije polja"
-
-#, fuzzy
-#~ msgid "List available raster maps in target mapset and exit"
-#~ msgstr "Izpiši rastrske sloje v vhodni \"location\" in končaj"
-
-#, fuzzy
-#~ msgid "Elevation for group <%s> is already set to <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Reading data ..."
-#~ msgstr "Rišem ..."
-
-#, fuzzy
-#~ msgid "Writing to map ..."
-#~ msgstr "Zapisujem novo datoteko...\n"
-
-#, fuzzy
-#~ msgid "Calculating %s"
-#~ msgstr "Izračunavam sence iz DMR..."
-
-#, fuzzy
-#~ msgid "Proceeding with import of %d raster bands..."
-#~ msgstr "Berem dig_att datoteko...\n"
-
-#, fuzzy
-#~ msgid "%s= and %s= are mutually exclusive. %s= will be ignored."
-#~ msgstr "Uporabiš lahko ali 'from_table' ali 'select'"
-
-#, fuzzy
-#~ msgid "Unable to create PROJ_EPSG file: %s"
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
-
-#, fuzzy
-#~ msgid "Name of table created when the 'distance to all' flag is used"
-#~ msgstr "Ime rastrskega sloja, ki bo reklasificiran"
-
-#, fuzzy
-#~ msgid "Number of centers: [%d] (nlayer: [%d])"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ " Število točk: %d\n"
-
-#, fuzzy
-#~ msgid "Unknown EPSG code %s"
-#~ msgstr "%s - nepoznana barva\n"
-
-#, fuzzy
-#~ msgid "Unknown geometry type"
-#~ msgstr "Nepoznan tip"
-
-#, fuzzy
-#~ msgid "Name for output raster/vector map"
-#~ msgstr "Ime izhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "The <-%c> flag requires an input vector with areas"
-#~ msgstr "Ime novega sloja"
-
-#, fuzzy
-#~ msgid "Allocating memory for bilinear interpolation"
-#~ msgstr "Ne morem izračunati centroida območja."
-
-#, fuzzy
-#~ msgid "Allocating memory for bicubic interpolation"
-#~ msgstr "Število točk najbližjih točk, ki bodo upoštevane"
-
-#, fuzzy
-#~ msgid "Calculating costs from centre %d..."
-#~ msgstr "Izračunavam sence iz DMR..."
-
-#, fuzzy
-#~ msgid "Only 'terrain' points output vector map"
-#~ msgstr "Vektorski sloj začetnih točk"
-
-#, fuzzy
-#~ msgid "read vector region map"
-#~ msgstr "Ime izhodnega vektorskega točkovnega sloja"
-
-#, fuzzy
-#~ msgid "Output formating"
-#~ msgstr "Izhodni sloj"
-
-#, fuzzy
-#~ msgid "Unable to create 2D raster <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Unable to create 3D raster <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Error writing cell (%d,%d,%d) with value %f, nrows = %d"
-#~ msgstr "Napaka pri branju dbmscap datoteke\n"
-
-#, fuzzy
-#~ msgid "Unable to initialize G-submatrix..."
-#~ msgstr "Ne morem najti vhodne datoteke <%s>\n"
-
-#, fuzzy
-#~ msgid "Force 2D interpolation even if input is 3D"
-#~ msgstr "Izpiši v \"integer\" obliki"
-
-#, fuzzy
-#~ msgid "Name for output 2D/3D raster map"
-#~ msgstr "Ime izhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Vertical variogram function"
-#~ msgstr "Faktor previšanja"
-
-#, fuzzy
-#~ msgid "Attribute column containing input values for interpolation"
-#~ msgstr "Ime rastrskega sloja, ki vsebuje podatke o strošku premikanja"
-
-#, fuzzy
-#~ msgid "Number of horizontal lags"
-#~ msgstr " Število vrstic\n"
-
-#, fuzzy
-#~ msgid "Number of vertical lags (only for 3D variogram)"
-#~ msgstr "Število decimalk"
-
-#, fuzzy
-#~ msgid "Report is being written to %s..."
-#~ msgstr "%d točk je bilo zapisanih na izhodno datoteko\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "Number of vertical pieces must be at least 1. Default value will be "
-#~ "used..."
-#~ msgstr "Število točk najbližjih točk, ki bodo upoštevane"
-
-#, fuzzy
-#~ msgid "Coordinates of point no. %d are zeros."
-#~ msgstr "EASTING in NORTHING koordinate začetne točke"
-
-#, fuzzy
-#~ msgid "Computing %s variogram properties..."
-#~ msgstr "Izračunavam sence iz DMR..."
-
-#, fuzzy
-#~ msgid "Anisotropy ratio must be greater than zero..."
-#~ msgstr "navedena morata biti 2 sloja"
-
-#, fuzzy
-#~ msgid "Error writing file"
-#~ msgstr "Napaka pri branju dbmscap datoteke\n"
-
-#, fuzzy
-#~ msgid "Error closing file..."
-#~ msgstr "Nisem uspel odpreti vhodne datoteke."
-
-#, fuzzy
-#~ msgid "Unable to plot variogram"
-#~ msgstr "Ne morem odpreti baze podatkov %s"
-
-#, fuzzy
-#~ msgid "Memory allocation failed..."
-#~ msgstr "Interpolacijska metoda, ki jo želite uporabiti"
-
-#, fuzzy
-#~ msgid "Interpolating unknown values..."
-#~ msgstr "Interpolacijska metoda, ki jo želite uporabiti"
-
-#, fuzzy
-#~ msgid "%d features skipped, only points are accepted"
-#~ msgstr "Uvožene bodo vrednosti z zapisom \"integer\""
-
-#, fuzzy
-#~ msgid "Unused points: %d (out of region)"
-#~ msgstr "Uporabi trenutno regijo"
-
-#, fuzzy
-#~ msgid "Overlays two vector maps."
-#~ msgstr "Ime vhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Old auxiliar table could not be dropped"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
-
-#, fuzzy
-#~ msgid "Type of the aggregation space time dataset"
-#~ msgstr "Ime novega rastrskega sloja."
-
-#, fuzzy
-#~ msgid "Path to file location"
-#~ msgstr "Ime izhodnega vektorskega sloja"
-
-#, fuzzy
-#~ msgid "Mean shift is not yet implemented"
-#~ msgstr "ne najdem regije <%s>"
-
-#, fuzzy
-#~ msgid "Invalid value detected"
-#~ msgstr "neveljavna regija: %s"
-
-#, fuzzy
-#~ msgid "Grid-decimated point cloud"
-#~ msgstr "Ničesar nisem našel.\n"
-
-#, fuzzy
-#~ msgid "Layer number where red color is stored as category"
-#~ msgstr "Ne ustvari tabele z atributi."
-
-#, fuzzy
-#~ msgid "Layer number where blue color is stored as category"
-#~ msgstr "Ne ustvari tabele z atributi."
-
-#, fuzzy
-#~ msgid "Layer number to store number of returns as category"
-#~ msgstr "Ne ustvari tabele z atributi."
-
-#, fuzzy
-#~ msgid "Do not add categories to points and do not create attribute table"
-#~ msgstr "Ne ustvari tabele z atributi."
-
-#, fuzzy
-#~ msgid "Location: %s\n"
-#~ msgstr "ne morem odpreti %s"
-
-#, fuzzy
-#~ msgid "Could not rewind input file"
-#~ msgstr "Ne najdem vhodne datoteke %s\n"
-
-#, fuzzy
-#~ msgid "Name for basins raster map"
-#~ msgstr "Ime rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Raster map <%s> already exists in mapset <%s>"
-#~ msgstr "Ime izhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "output map <%s> exists"
-#~ msgstr "Izhodni sloj"
-
-#~ msgid "Page length (default: %d lines)"
-#~ msgstr "Dolžina strani (privzeto: %d vrstic)"
-
-#~ msgid "Page width (default: %d characters)"
-#~ msgstr "Širina strani (privzeto: %d znakov)"
-
-#~ msgid "Override projection (use location's projection)"
-#~ msgstr "Povozi projekcijo (uporabi projekcijo lokacije)"
-
-#, fuzzy
-#~ msgid "%s: Error writing temporary file"
-#~ msgstr "Napaka pri branju dbmscap datoteke\n"
-
-#, fuzzy
-#~ msgid "Output options"
-#~ msgstr "Izhodni sloj"
-
-#, fuzzy
-#~ msgid "[%s] not found"
-#~ msgstr "Ne najdem rastrskega sloja <%s>"
-
-#, fuzzy
-#~ msgid "Override dataset projection (use location's projection)"
-#~ msgstr "Povozi projekcijo (uporabi projekcijo lokacije)"
-
-#, fuzzy
-#~ msgid "Unpacks a vector map packed with v.pack."
-#~ msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
-
-#, fuzzy
-#~ msgid "Default: path to the current GRASS database"
-#~ msgstr "Uporabi nastavitve trenutne regije"
-
-#, fuzzy
-#~ msgid "OGR datasource name"
-#~ msgstr "ime baze podatkov"
-
-#, fuzzy
-#~ msgid "No flag given"
-#~ msgstr "Določena ni bila nobena vhodna datoteka."
-
-#, fuzzy
-#~ msgid "Unable to create file '%s'"
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
-
-#, fuzzy
-#~ msgid "Env file not found"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
-
-#, fuzzy
-#~ msgid "PID file not found"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
-
-#, fuzzy
-#~ msgid "Command file not found"
-#~ msgstr "ne najdem 3Dview datoteke <%s>"
-
-#, fuzzy
-#~ msgid "Renaming reclass maps"
-#~ msgstr "izhodni rastrski sloj"
-
-#, fuzzy
-#~ msgid "Unable to read REF file for group <%s>"
-#~ msgstr "ne morem prebrati regije <%s> v <%s>"
-
-#, fuzzy
-#~ msgid "Prefix for output raster maps (.base, .max, .maxdir, .spotdist)"
-#~ msgstr "Ime izhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Displays thematic vector map"
-#~ msgstr "Ime vhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid ""
-#~ "Displays a thematic vector area map in the active frame on the graphics "
-#~ "monitor."
-#~ msgstr "Izbere pisavo v kateri bo tekst zapisan na grafičnem monitorju"
-
-#, fuzzy
-#~ msgid "Text color or \"none\""
-#~ msgstr " privzeta barva\n"
-
-#, fuzzy
-#~ msgid "Color in GRASS format for drawing text"
-#~ msgstr "Izpiši podprte formate in končaj"
-
-#~ msgid "Failed opening input dig file."
-#~ msgstr "Nisem uspel odpreti vhodne datoteke."
-
-#~ msgid "dig_att file doesn't exist."
-#~ msgstr "dig_att datoteka ne obstaja."
-
-#~ msgid "Failed opening input dig_att file."
-#~ msgstr "Nisem mogel odpreti vhodne datoteke dig_att."
-
-#, fuzzy
-#~ msgid "Attaching categories..."
-#~ msgstr "Pripajam kategorije...\n"
-
-#~ msgid "Failed to attach an attribute (category %d) to a line."
-#~ msgstr "Nisem uspel pripojiti atributa (kategorije %d) liniji."
-
-#, fuzzy
-#~ msgid "Line %d label: %d matched another label: %d."
-#~ msgstr "OPOZORILO: linija %d etiketa: %d je enaka drugi etiketi: %d."
-
-#, fuzzy
-#~ msgid "Writing new file..."
-#~ msgstr "Zapisujem novo datoteko...\n"
-
-#, fuzzy
-#~ msgid "[%d] points and lines written to output file."
-#~ msgstr "%-5d točk in linij zapisanih v izhodno datoteko.\n"
-
-#, fuzzy
-#~ msgid "[%d] centroids written to output file."
-#~ msgstr "%-5d centroidov zapisanih v izhodno datoteko.\n"
-
-#, fuzzy
-#~ msgid "Imports older versions of GRASS vector maps."
-#~ msgstr "Ime vhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Endian of input vector map"
-#~ msgstr "Ime vhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "No category labels (dig_cats) found, no table created"
-#~ msgstr "Ne najdem etiket (dig_cats), tabela ni bi bila ustvarjena.\n"
-
-#, fuzzy
-#~ msgid "Unable to open dig_cats file"
-#~ msgstr "ne morem odpreti <%s>"
-
-#, fuzzy
-#~ msgid "Reading dig file..."
-#~ msgstr "Berem dig datoteko...\n"
-
-#, fuzzy
-#~ msgid "Input file is version 3."
-#~ msgstr "Vhodna datoteka je verzija 3.\n"
-
-#, fuzzy
-#~ msgid "Input file is version 4."
-#~ msgstr "Vhodna datoteka je verzija 4.\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "Input file is not portable. We will attempt to convert anyway but "
-#~ "conversion may fail. Please read manual for detail information."
-#~ msgstr ""
-#~ "OPOZORILO: Vhodna datoteka ni prenosljiva. Vseeno jo bom poskušal "
-#~ "preoblikovati,a lahko se ponesreči. Prosim preberi priročnik za "
-#~ "natančnejša navodila."
-
-#, fuzzy
-#~ msgid "[%d] points read to memory"
-#~ msgstr "%-5d točk prebranih v spomin\n"
-
-#, fuzzy
-#~ msgid "[%d] lines read to memory"
-#~ msgstr "%-5d linij prebranih v spomin\n"
-
-#, fuzzy
-#~ msgid "[%d] points read and written to output"
-#~ msgstr "%-5d prebranih in zapisanih na izhod\n"
-
-#, fuzzy
-#~ msgid "[%d] lines read and written to output"
-#~ msgstr "%-5d linij prebranih in zapisanih na izhod\n"
-
-#, fuzzy
-#~ msgid "[%d] area boundaries read and written to output"
-#~ msgstr "%-5d meja območij prebranih in zapisanih na izhod\n"
-
-#, fuzzy
-#~ msgid "[%d] dead points skipped"
-#~ msgstr "%-5d mrtvih točk preskočenih\n"
-
-#, fuzzy
-#~ msgid "[%d] dead lines skipped"
-#~ msgstr "%-5d mrtvih linij preskočenih\n"
-
-#, fuzzy
-#~ msgid "[%d] dead area boundaries skipped"
-#~ msgstr "%-5d mrtvih meja območij preskočenih\n"
-
-#, fuzzy
-#~ msgid "[%d] elements of unknown type skipped"
-#~ msgstr "%-5d elementov neznanega tipa preskočenih\n"
-
-#, fuzzy
-#~ msgid "[%d] elements read to memory"
-#~ msgstr "%-5d elementov prebranih v spomin.\n"
-
-#, fuzzy
-#~ msgid "Reading dig_att file..."
-#~ msgstr "Berem dig_att datoteko...\n"
-
-#~ msgid "Unknown type: %c"
-#~ msgstr "Nepoznan tip: %c"
-
-#, fuzzy
-#~ msgid "[%d] point categories read"
-#~ msgstr "%-5d kategorij točk prebranih\n"
-
-#, fuzzy
-#~ msgid "[%d] line categories read"
-#~ msgstr "%-5d kategorij linij prebranih\n"
-
-#, fuzzy
-#~ msgid "[%d] centroids read"
-#~ msgstr "%-5d centroidov prebranih\n"
-
-#, fuzzy
-#~ msgid "[%d] dead point categories skipped"
-#~ msgstr "%-5d mrtvih kategorij točk preskočenih\n"
-
-#, fuzzy
-#~ msgid "[%d] dead line categories skipped"
-#~ msgstr "%-5d mrtvih kategorij linij preskočenih\n"
-
-#, fuzzy
-#~ msgid "[%d] dead centroids skipped"
-#~ msgstr "%-5d mrtvih centroidov preskočenih\n"
-
-#, fuzzy
-#~ msgid "[%d] categories of unknown type skipped"
-#~ msgstr "%-5d kategorij neznanega tipa preskočenih\n"
-
-#, fuzzy
-#~ msgid "[%d] categories read into memory"
-#~ msgstr "%-5d kategorij prebranih v spomin.\n"
-
-#, fuzzy
-#~ msgid "OLD_T_NEW Got a bad type code [%x]"
-#~ msgstr "SISTEMSKA_NAPAKA: OLD_T_NEW ima napačno kodo za tip %x"
-
-#, fuzzy
-#~ msgid "NEW_T_OLD Got a bad type code [%x]"
-#~ msgstr "SISTEMSKA NAPAKA: OLD_T_NEW ima napačno kodo za tip %x"
-
-#~ msgid "Char string to represent no data cell"
-#~ msgstr "Znak, ki naj predstavlja NULL celice"
-
-#, fuzzy
-#~ msgid "Unknown metric: [%s]."
-#~ msgstr "Nepoznan tip: %c"
-
-#, fuzzy
-#~ msgid "Error in reading color file for <%s>"
-#~ msgstr "ne morem odpreti razpona za datoteko %s"
-
-#~ msgid "String representing no data cell value"
-#~ msgstr "Znak, ki bo predstavljal NULL vrednosti"
-
-#, fuzzy
-#~ msgid "Surface interpolation utility for raster map."
-#~ msgstr ""
-#~ "Interpolacija s pomočjo obteževanja glede na obratno razdaljo\n"
-#~ "(inverse distance weighting)"
-
-#, fuzzy
-#~ msgid "Outputs a raster map showing the anisotropic cumulative cost."
-#~ msgstr "Naslov izhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid ""
-#~ "Computes anisotropic cumulative cost of moving between different "
-#~ "geographic locations on an input elevation raster map whose cell category "
-#~ "values represent elevation combined with an input raster map layer whose "
-#~ "cell values represent friction cost."
-#~ msgstr ""
-#~ "Izdela rastrski sloj, ki prikazuje kumulativni strošek premikanja med \n"
-#~ "različnimi geografskimi lokacijami po vhodnem rastrskem sloju katerega\n"
-#~ "vrednosti predstavljajo strošek."
-
-#~ msgid "Name of layer to be used for INTENSITY"
-#~ msgstr "Ime sloja, ki bo uporabljen za svetlost (INTENSITY)"
-
-#~ msgid "Name of layer to be used for SATURATION"
-#~ msgstr "Ime sloja, ki bo uporabljen za nasičenost (SATURATION)"
-
-#~ msgid "Name of output layer to be used for GREEN"
-#~ msgstr "Ime izhodnega sloja, ki bo uporabljen za zeleno (GREEN)"
-
-#~ msgid "Name of output layer to be used for BLUE"
-#~ msgstr "Ime izhodnega sloja, ki bo uporabljen za modro (BLUE)"
-
-#~ msgid "Surface generation program."
-#~ msgstr ""
-#~ "Modul zapolni rastrsko matriko z interpoliranimi vrednostmi iz množice \n"
-#~ "neenakomerno razporejenih točk z uporabo tehnik numerične aproksimacije \n"
-#~ "(obteženo povprečenje)."
-
-#, fuzzy
-#~ msgid "%s=%s - illegal number of interpolation points"
-#~ msgstr "Število točk najbližjih točk, ki bodo upoštevane"
-
-#, fuzzy
-#~ msgid "Interpolating raster map <%s>... %d row... "
-#~ msgid_plural "Interpolating raster map <%s>... %d rows... "
-#~ msgstr[0] "izhodni rastrski sloj"
-#~ msgstr[1] "izhodni rastrski sloj"
-
-#, fuzzy
-#~ msgid "Output z-file (elevation) map"
-#~ msgstr "Izdelaj z-sloj (nadmorsko višino)"
-
-#, fuzzy
-#~ msgid "String to represent no data cell"
-#~ msgstr "Znak, ki naj predstavlja NULL celice"
-
-#, fuzzy
-#~ msgid "Character to represent no data cell"
-#~ msgstr "Znak, ki predstavlja odsotnost vrednosti (NULL)"
-
-#, fuzzy
-#~ msgid "Run verbosely"
-#~ msgstr "Poženi ukaz z dolgoveznim izpisom"
-
-#, fuzzy
-#~ msgid "%s available in mapset <%s>:"
-#~ msgstr "Izpiši podprte formate in končaj"
-
-#, fuzzy
-#~ msgid "Null value indicator"
-#~ msgstr "znak za vrednost NULL"
-
-#, fuzzy
-#~ msgid "Suppress warnings"
-#~ msgstr "Ne izpiši vzglavja"
-
-#, fuzzy
-#~ msgid "Create raster map from result (optional)"
-#~ msgstr "Ime obstoječega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Name of input raster map(s)"
-#~ msgstr "Ime vhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "The output type of the space time dataset"
-#~ msgstr "Ime novega rastrskega sloja."
-
-#, fuzzy
-#~ msgid "Type of the aggregation space time dataset, default is strds"
-#~ msgstr "Ime novega rastrskega sloja."
-
-#, fuzzy
-#~ msgid ""
-#~ "Calculates univariate statistics from the non-null cells for each "
-#~ "registered raster3d map of a space time raster3d dataset."
-#~ msgstr ""
-#~ "Izračuna univariatne statistične parametre za ne NULL celice rastrskega "
-#~ "sloja."
-
-#, fuzzy
-#~ msgid "Color in GRASS format for drawing grid or \"none\" not drawing"
-#~ msgstr "Izpiši podprte formate in končaj"
-
-#, fuzzy
-#~ msgid ""
-#~ "Color in GRASS format for drawing null values (X symbol) or \"none\" not "
-#~ "drawing"
-#~ msgstr "Izpiši podprte formate in končaj"
-
-#, fuzzy
-#~ msgid "allocation"
-#~ msgstr "ne morem odpreti %s"
-
-#, fuzzy
-#~ msgid "networking"
-#~ msgstr "Berem dig datoteko...\n"
-
-#, fuzzy
-#~ msgid "Either -p or output= must be given"
-#~ msgstr "Uporabiš lahko ali 'from_table' ali 'select'"
-
-#, fuzzy
-#~ msgid "Please specify output= or outfile="
-#~ msgstr "Vhodni rastrski sloj"
-
-#, fuzzy
-#~ msgid "Please specify output= and samplingpos="
-#~ msgstr "Vhodni rastrski sloj"
-
-#, fuzzy
-#~ msgid "Please specify input= or infile="
-#~ msgstr "Vhodni rastrski sloj"
-
-#, fuzzy
-#~ msgid "Please specify input= and datapos="
-#~ msgstr "Vhodni rastrski sloj"
-
-#, fuzzy
-#~ msgid "Display the "
-#~ msgstr "Rišem ..."
-
-#, fuzzy
-#~ msgid "Cannot create quaddata"
-#~ msgstr "Ne morem ustvariti indeksa"
-
-#, fuzzy
-#~ msgid "Cannot create quadfunc"
-#~ msgstr "Ne morem ustvariti indeksa"
-
-#, fuzzy
-#~ msgid "Cannot create tree"
-#~ msgstr "Ne morem ustvariti indeksa"
-
-#, fuzzy
-#~ msgid "Cannot create tree info"
-#~ msgstr "Ne morem ustvariti indeksa"
-
-#, fuzzy
-#~ msgid "Unable To create table: %s"
-#~ msgstr "Ne morem odpreti cellfile za [%s]"
-
-#, fuzzy
-#~ msgid "One of options <%s> or <%s> must be specified"
-#~ msgstr "Uporabiš lahko ali 'from_table' ali 'select'"
-
-#, fuzzy
-#~ msgid "Option <%s> must be specified"
-#~ msgstr "Uporabiš lahko ali 'from_table' ali 'select'"
-
-#, fuzzy
-#~ msgid "Converts a GRASS site_lists file into a vector map."
-#~ msgstr "Preoblikuje rastrski sloj v vektorskega."
-
-#, fuzzy
-#~ msgid "Unable to guess site_list format"
-#~ msgstr "Vhodni sloj"
-
-#, fuzzy
-#~ msgid "Failed to allocate site structure"
-#~ msgstr "Ne morem izračunati centroida območja."
-
-#, fuzzy
-#~ msgid "Transferring sites to vector point map..."
-#~ msgstr ""
-#~ "\n"
-#~ "Spreminjam vektorje ... \n"
-
-#, fuzzy
-#~ msgid "%d sites written."
-#~ msgstr "%d točk je bilo zapisanih na izhodno datoteko\n"
-
-#, fuzzy
-#~ msgid "Performing map %s + %s"
-#~ msgstr "Rastrski sloj nadmorskih višin"
-
-#, fuzzy
-#~ msgid "Can't call bad function"
-#~ msgstr "lokacija baze podatkov"
-
-#, fuzzy
-#~ msgid "Unable to create vector map"
-#~ msgstr "Ime izhodnega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Unknown raster map type"
-#~ msgstr "Izpiši le tip podatkovnega zapisa rastrskega sloja"

@@ -1,16 +1,16 @@
 /****************************************************************************
- * 
+ *
  *  MODULE:     iostream
  *
 
  *  COPYRIGHT (C) 2007 Laura Toma
- *   
- * 
+ *
+ *
 
  *  Iostream is a library that implements streams, external memory
  *  sorting on streams, and an external memory priority queue on
  *  streams. These are the fundamental components used in external
- *  memory algorithms.  
+ *  memory algorithms.
 
  * Credits: The library was developed by Laura Toma.  The kernel of
  * class STREAM is based on the similar class existent in the GPL TPIE
@@ -20,7 +20,7 @@
  * porting Terraflow to GRASS in 2001.  PEARL upgrades in 2003 by
  * Rajiv Wickremesinghe as part of the Terracost project.
 
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -33,18 +33,16 @@
  *  General Public License for more details.  *
  *  **************************************************************************/
 
-
 #ifndef MM_UTIL_H
 #define MM_UTIL_H
 
 #include "mm.h"
 #include <string>
 
-
-void  LOG_avail_memo();
+void LOG_avail_memo();
 
 size_t getAvailableMemory();
 
-void  MEMORY_LOG(std::string str);
+void MEMORY_LOG(const std::string &str);
 
 #endif

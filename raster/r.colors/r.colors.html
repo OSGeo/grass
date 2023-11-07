@@ -1,9 +1,9 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.colors</em> allows the user to create and/or modify the color
-table for a raster map or several raster maps at once. 
+table for a raster map or several raster maps at once.
 The raster maps (specified on the command line
-by <b>map</b> or as <b>file</b> using an input file with one map name per line) 
+by <b>map</b> or as <b>file</b> using an input file with one map name per line)
 must exist in the user's current mapset search path.
 
 <p>The <b>raster</b> option allows user to specify a raster map <i>name</i>
@@ -59,7 +59,7 @@ pre-defined color tables that <em>r.colors</em> knows how to create
 without any further input.
 
 <p>
-In case several input raster maps are provided the range (min, max) of all maps 
+In case several input raster maps are provided the range (min, max) of all maps
 will be used for color table creation. Hence the created color table will span from
 the smallest minimum to the largest maximum value of all input raster maps and
 will be applied to all input raster maps.
@@ -284,7 +284,7 @@ of LUT).
 100% 255:255:100
 </pre></div>
 
-<p>To invert the current rules: 
+<p>To invert the current rules:
 <div class="code"><pre>
 r.colors map=current_raster -n rast=current_raster
 </pre></div>
@@ -312,12 +312,7 @@ tables</a> (from GRASS User Wiki)
 <p><a href="http://colorbrewer.org">ColorBrewer</a> is an online tool designed to
 help people select good color schemes for maps and other graphics.
 
-
 <h2>AUTHORS</h2>
+
 Michael Shapiro and David Johnson<br>
 Support for 3D rasters by Soeren Gebbert
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

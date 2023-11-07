@@ -15,12 +15,14 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Michael Barton <michael.barton@asu.edu>
 @author Vaclav Petras <wenzeslaus gmail.com> (copy&paste customization)
+@author Wolf Bergenheim <wolf bergenheim.net> (#962)
 """
 
 import os
 import difflib
 import codecs
 import sys
+import shutil
 
 import wx
 import wx.stc
@@ -32,7 +34,7 @@ from grass.pydispatch.signal import Signal
 
 from core import globalvar
 from core import utils
-from core.gcmd import EncodeString, DecodeString
+from core.gcmd import EncodeString, DecodeString, GError
 
 
 class GPrompt(object):
@@ -85,7 +87,7 @@ class GPrompt(object):
                     env["GISDBASE"],
                     env["LOCATION_NAME"],
                     env["MAPSET"],
-                    ".bash_history",
+                    ".wxgui_history",
                 ),
                 encoding="utf-8",
                 mode="r",
@@ -133,10 +135,31 @@ class GPrompt(object):
             cmd = utils.split(EncodeString((cmdString)))
         cmd = list(map(DecodeString, cmd))
 
-        self.promptRunCmd.emit(cmd=cmd)
+        self.promptRunCmd.emit(cmd={"cmd": cmd, "cmdString": str(cmdString)})
 
-        self.OnCmdErase(None)
+        self.CmdErase()
         self.ShowStatusText("")
+
+    def CopyHistory(self, targetFile):
+        """Copy history file to the target location.
+        Returns True if file is successfully copied."""
+        env = grass.gisenv()
+        historyFile = os.path.join(
+            env["GISDBASE"],
+            env["LOCATION_NAME"],
+            env["MAPSET"],
+            ".wxgui_history",
+        )
+        try:
+            shutil.copyfile(historyFile, targetFile)
+        except (IOError, OSError) as e:
+            GError(
+                _("Unable to copy file {} to {}'.\n\nDetails: {}").format(
+                    historyFile, targetFile, e
+                )
+            )
+            return False
+        return True
 
     def GetCommands(self):
         """Get list of launched commands"""
@@ -195,6 +218,9 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetSelBackground(True, selection_color)
         self.StyleClearAll()
 
+        # show hint
+        self._showHint()
+
         #
         # bindings
         #
@@ -205,6 +231,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemChanged)
         if sys.platform != "darwin":  # unstable on Mac with wxPython 3
             self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+            self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
 
         # signal which requests showing of a notification
         self.showNotification = Signal("GPromptSTC.showNotification")
@@ -299,11 +326,34 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             except IOError:
                 self.cmdDesc = None
 
+    def _showHint(self):
+        """Shows usability hint"""
+        self.StyleSetForeground(0, wx.SystemSettings.GetColour(wx.SYS_COLOUR_GRAYTEXT))
+        self.WriteText(_("Type command here and press Enter"))
+        self._hint_shown = True
+
+    def _hideHint(self):
+        """Hides usability hint"""
+        if self._hint_shown:
+            self.ClearAll()
+            self.StyleSetForeground(
+                0, wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+            )
+            self._hint_shown = False
+
     def OnKillFocus(self, event):
-        """Hides autocomplete"""
+        """Hides autocomplete and shows hint"""
         # hide autocomplete
         if self.AutoCompActive():
             self.AutoCompCancel()
+        # show hint
+        if self.IsEmpty():
+            wx.CallAfter(self._showHint)
+        event.Skip()
+
+    def OnSetFocus(self, event):
+        """Prepares prompt for entering commands."""
+        self._hideHint()
         event.Skip()
 
     def SetTextAndFocus(self, text):
@@ -390,8 +440,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         """Get word left from current cursor position. The beginning
         of the word is given by space or chars: .,-=
 
-        :param withDelimiter: returns the word with the initial delimeter
-        :param ignoredDelimiter: finds the word ignoring certain delimeter
+        :param withDelimiter: returns the word with the initial delimiter
+        :param ignoredDelimiter: finds the word ignoring certain delimiter
         """
         textLeft = self.GetTextLeft()
 
@@ -653,7 +703,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             wx.TheClipboard.Flush()
         event.Skip()
 
-    def OnCmdErase(self, event):
+    def CmdErase(self):
         """Erase command prompt"""
         self.Home()
         self.DelLineRight()

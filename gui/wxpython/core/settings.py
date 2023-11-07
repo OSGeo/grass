@@ -19,13 +19,12 @@ This program is free software under the GNU General Public License
 @author Luca Delucchi <lucadeluge gmail.com> (language choice)
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import copy
 import wx
 import json
+import collections.abc
 
 from core import globalvar
 from core.gcmd import GException, GError
@@ -142,6 +141,7 @@ class Settings:
                         globalvar.MAP_WINDOW_SIZE[0],
                         globalvar.MAP_WINDOW_SIZE[1],
                     ),
+                    "dimSingleWindow": "1,1,1,1",
                 },
                 # workspace
                 "workspace": {
@@ -166,7 +166,7 @@ class Settings:
                 "changeOpacityLevel": {"enabled": False},
                 # ask when removing layer from layer tree
                 "askOnRemoveLayer": {"enabled": True},
-                # ask when quiting wxGUI or closing display
+                # ask when quitting wxGUI or closing display
                 "askOnQuit": {"enabled": True},
                 # hide tabs
                 "hideTabs": {
@@ -188,9 +188,8 @@ class Settings:
                 "menustyle": {"selection": 1},
                 "gSelectPopupHeight": {"value": 200},
                 "iconTheme": {"type": "grass"},
-                "commandNotebook": {
-                    "selection": 0 if sys.platform in ("win32", "darwin") else 1
-                },
+                "commandNotebook": {"selection": 0},
+                "singleWindow": {"enabled": True},
             },
             #
             # language
@@ -799,8 +798,8 @@ class Settings:
         self.internalSettings["appearance"]["iconTheme"]["choices"] = ("grass",)
         self.internalSettings["appearance"]["menustyle"]["choices"] = (
             _("Classic (labels only)"),
-            _("Combined (labels and module names)"),
-            _("Expert (module names only)"),
+            _("Combined (labels and tool names)"),
+            _("Expert (tool names only)"),
         )
         self.internalSettings["appearance"]["gSelectPopupHeight"]["min"] = 50
         # there is also maxHeight given to TreeCtrlComboPopup.GetAdjustedSize
@@ -808,7 +807,6 @@ class Settings:
         self.internalSettings["appearance"]["commandNotebook"]["choices"] = (
             _("Basic top"),
             _("Basic left"),
-            _("Fancy green"),
             _("List left"),
         )
 
@@ -900,9 +898,22 @@ class Settings:
 
         :param settings: dict where to store settings (None for self.userSettings)
         """
+
+        def update_nested_dict_by_dict(dictionary, update):
+            """Recursively update nested dictionary by another nested dictionary"""
+            for key, value in update.items():
+                if isinstance(value, collections.abc.Mapping):
+                    dictionary[key] = update_nested_dict_by_dict(
+                        dictionary.get(key, {}), value
+                    )
+                else:
+                    dictionary[key] = value
+            return dictionary
+
         try:
             with open(self.filePath, "r") as f:
-                settings.update(json.load(f, object_hook=settings_JSON_decode_hook))
+                update = json.load(f, object_hook=settings_JSON_decode_hook)
+                update_nested_dict_by_dict(settings, update)
         except json.JSONDecodeError as e:
             sys.stderr.write(
                 _("Unable to read settings file <{path}>:\n{err}").format(

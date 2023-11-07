@@ -20,14 +20,13 @@ This program is free software under the GNU General Public License
 import os
 import wx
 import wx.aui
-import six
 
 import grass.script as gcore
 import grass.temporal as tgis
 from grass.exceptions import FatalError
 from core import globalvar
 from gui_core.widgets import IntegerValidator
-from gui_core.wrap import StaticText, TextCtrl
+from gui_core.wrap import StaticText, TextCtrl, Slider
 from core.gcmd import RunCommand, GWarning
 
 from animation.mapwindow import AnimationWindow
@@ -143,7 +142,7 @@ class AnimationFrame(wx.Frame):
             .DestroyOnClose(True)
             .Layer(0),
         )
-        for name, slider in six.iteritems(self.animationSliders):
+        for name, slider in self.animationSliders.items():
             self._mgr.AddPane(
                 slider,
                 wx.aui.AuiPaneInfo()
@@ -420,7 +419,7 @@ class AnimationSliderBase(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY)
         self.label1 = StaticText(self, id=wx.ID_ANY)
-        self.slider = wx.Slider(self, id=wx.ID_ANY, style=wx.SL_HORIZONTAL)
+        self.slider = Slider(self, id=wx.ID_ANY, style=wx.SL_HORIZONTAL)
         self.indexField = TextCtrl(
             self,
             id=wx.ID_ANY,

@@ -3,10 +3,18 @@
 <em>r.mfilter</em> filters the raster <em>input</em> to produce the
 raster <em>output</em> according to the matrix <em>filter</em> designed
 by the user (see <em>FILTERS</em> below).
+
+<center>
+<img src="r_mfilter.png">
+<p><em>Figure: Illustration for a custom 3x3 filter</em></p>
+</center>
+
+<p>
 The filter is applied <em>repeat</em> times (default <em>value</em> is 1).
 The <em>output</em> raster map layer can be given a <em>TITLE</em> if desired.
 (This TITLE should be put in quotes if it contains more than one word.)
 
+<p>
 With <b>-z</b> flag the filter is applied only to null values in
 the input raster map layer.  The non-null category values are not changed.
 Note that if there is more than one filter step, this rule is applied to the
@@ -22,7 +30,7 @@ below, under FILTERS.
 The <b>repeat</b> parameter defines the number of times the <em>filter</em>
 is to be applied to the <em>input</em> data.
 
-<h2>FILTERS</h2>
+<h3>FILTERS</h3>
 
 The <em>filter</em> file is a normal UNIX ASCII file designed by the user.
 It has the following format:
@@ -37,28 +45,28 @@ It has the following format:
 </pre></div>
 
 <dl>
-<dt>TITLE 
+<dt>TITLE
 
 <dd>A one-line TITLE for the filter.
 If a TITLE was not specified on the command line, it can be specified here.
 This TITLE would be used to construct a TITLE for the resulting raster map
 layer.  It should be a one-line description of the filter.
 
-<dt>MATRIX 
+<dt>MATRIX
 
 <dd>The matrix (n x n) follows on the next n lines.  <em>n</em> must be
 an odd integer greater than or equal to 3.
 The matrix itself consists of n rows of n values.
 The values must be separated from each other by at least 1 blank.
 
-<dt>DIVISOR 
+<dt>DIVISOR
 
 <dd>The filter divisor is <em>d</em>.  If not specified, the default is 1.
 If the divisor is zero (0), then the divisor is dependent on the
 category values in the neighborhood
 (see HOW THE FILTER WORKS below).
 
-<dt>TYPE 
+<dt>TYPE
 
 <dd>The filter type.  <em>S</em> means sequential, while <em>P</em> mean parallel.
 If not specified, the default is S.
@@ -82,8 +90,7 @@ For example, the following describes two filters:
 
 </dl>
 
-
-<h2>EXAMPLE FILTER FILE</h2>
+<h3>EXAMPLE FILTER FILE</h3>
 
 <div class="code"><pre>
       TITLE     3x3 average, non-null data only, followed by 5x5 average
@@ -104,7 +111,7 @@ For example, the following describes two filters:
      TYPE      P
 </pre></div>
 
-<h2>HOW THE FILTER WORKS</h2>
+<h3>HOW THE FILTER WORKS</h3>
 
 The filter process produces a new category value for each cell
 in the input raster map layer by multiplying the category values of the
@@ -126,6 +133,23 @@ then the next filter is applied to the intermediate result to
 produce another intermediate result;  and so on, until the
 final filter is applied.  Then the output cell is written.
 
+<h3>PERFORMANCE</h3>
+<p>By specifying the number of parallel processes with <b>nprocs</b> option,
+<em>r.mfilter</em> can run significantly faster, see benchmarks below.
+
+<div align="center" style="margin: 10px">
+     <img src="r_mfilter_benchmark_1.png" alt="benchmark for number of cells" border="0">
+     <img src="r_mfilter_benchmark_2.png" alt="benchmark for window size" border="0">
+     <br>
+     <i>Figure: Benchmark on the left shows execution time for different
+     number of cells for 9x9 matrix, benchmark on the right shows execution time
+     for 16 billion cells for different matrix sizes. (Intel Core i9-10940X CPU @ 3.30GHz x 28) </i>
+     </div>
+<p> Note that parallelization is implemented only for the parallel filter,
+not the sequential one.
+To take advantage of the parallelization, GRASS GIS
+needs to compiled with OpenMP enabled.
+
 <h2>NOTES</h2>
 
 If the resolution of the geographic region does not agree with the
@@ -139,16 +163,13 @@ is set properly.
 <a href="g.region.html">g.region</a>,
 <a href="r.clump.html">r.clump</a>,
 <a href="r.neighbors.html">r.neighbors</a>,
-<a href="r.resamp.filter.html">r.resamp.filter</a>
+<a href="r.resamp.filter.html">r.resamp.filter</a>,<br>
+<a href="https://grasswiki.osgeo.org/wiki/Raster_Parallelization_with_OpenMP">Raster Parallelization with OpenMP</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Glynn Clements.
 Based upon r.mfilter, by Michael Shapiro,
-U.S.Army Construction Engineering Research Laboratory
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+U.S.Army Construction Engineering Research Laboratory.<br>
+Aaron Saw Min Sern (OpenMP support).

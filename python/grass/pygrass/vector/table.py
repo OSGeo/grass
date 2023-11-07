@@ -3,27 +3,13 @@ Created on Wed Aug  8 15:29:21 2012
 
 @author: pietro
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
-
-import os
-import sys
 
 import ctypes
+import os
+from collections import OrderedDict
+
 import numpy as np
 from sqlite3 import OperationalError
-
-try:
-    from collections import OrderedDict
-except ImportError:
-    from grass.pygrass.orderdict import OrderedDict
 
 import grass.lib.vector as libvect
 from grass.pygrass.gis import Mapset
@@ -33,18 +19,14 @@ from grass.script.db import db_table_in_vector
 from grass.script.core import warning
 
 from grass.pygrass.vector import sql
-from grass.lib.ctypes_preamble import String
-
-
-if sys.version_info.major >= 3:
-    long = int
-    unicode = str
+from grass.lib.ctypes_preamble import ReturnString
 
 
 # For test purposes
 test_vector_name = "table_doctest_map"
 
 DRIVERS = ("sqlite", "pg")
+UNSUPPORTED_DRIVERS = ("ogr", "dbf")
 
 
 def get_path(path, vect_name=None):
@@ -248,7 +230,7 @@ class Columns(object):
     def __ne__(self, other):
         return not self == other
 
-    # Restore Python 2 hashing beaviour on Python 3
+    # Restore Python 2 hashing behaviour on Python 3
     __hash__ = object.__hash__
 
     def is_pg(self):
@@ -451,14 +433,14 @@ class Columns(object):
             [
                 check(col_type),
             ]
-            if isinstance(col_type, (str, unicode))
+            if isinstance(col_type, str)
             else [check(col) for col in col_type]
         )
         col_name = (
             [
                 col_name,
             ]
-            if isinstance(col_name, (str, unicode))
+            if isinstance(col_name, str)
             else col_name
         )
         sqlcode = [
@@ -678,7 +660,7 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.name)
 
     def _set_name(self, name):
-        self.c_fieldinfo.contents.name = String(name)
+        self.c_fieldinfo.contents.name = ReturnString(name)
 
     name = property(fget=_get_name, fset=_set_name, doc="Set and obtain name vale")
 
@@ -686,7 +668,7 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.table)
 
     def _set_table(self, new_name):
-        self.c_fieldinfo.contents.table = String(new_name)
+        self.c_fieldinfo.contents.table = ReturnString(new_name)
 
     table_name = property(
         fget=_get_table, fset=_set_table, doc="Set and obtain table name value"
@@ -696,7 +678,7 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.key)
 
     def _set_key(self, key):
-        self.c_fieldinfo.contents.key = String(key)
+        self.c_fieldinfo.contents.key = ReturnString(key)
 
     key = property(fget=_get_key, fset=_set_key, doc="Set and obtain cat value")
 
@@ -704,7 +686,7 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.database)
 
     def _set_database(self, database):
-        self.c_fieldinfo.contents.database = String(database)
+        self.c_fieldinfo.contents.database = ReturnString(database)
 
     database = property(
         fget=_get_database, fset=_set_database, doc="Set and obtain database value"
@@ -714,10 +696,18 @@ class Link(object):
         return decode(self.c_fieldinfo.contents.driver)
 
     def _set_driver(self, driver):
-        if driver not in ("sqlite", "pg"):
-            str_err = "Driver not supported, use: %s." % ", ".join(DRIVERS)
-            raise TypeError(str_err)
-        self.c_fieldinfo.contents.driver = String(driver)
+        if driver in DRIVERS:
+            self.c_fieldinfo.contents.driver = ReturnString(driver)
+        elif driver in UNSUPPORTED_DRIVERS:
+            raise NotImplementedError(
+                "The database driver %s is not supported by PyGRASS, "
+                "use: %s." % (driver, ", ".join(DRIVERS))
+            )
+        else:
+            raise ValueError(
+                "The database driver %s is not known to PyGRASS, "
+                "use: %s." % (driver, ", ".join(DRIVERS))
+            )
 
     driver = property(
         fget=_get_driver,
@@ -773,7 +763,7 @@ class Link(object):
     def __ne__(self, other):
         return not self == other
 
-    # Restore Python 2 hashing beaviour on Python 3
+    # Restore Python 2 hashing behaviour on Python 3
     __hash__ = object.__hash__
 
     def connection(self):
@@ -812,7 +802,7 @@ class Link(object):
                 np.uint32,
                 np.uint64,
             ):
-                sqlite3.register_adapter(t, long)
+                sqlite3.register_adapter(t, int)
             dbpath = get_path(self.database, self.table_name)
             dbdirpath = os.path.split(dbpath)[0]
             if not os.path.exists(dbdirpath):
@@ -1000,7 +990,7 @@ class DBlinks(object):
             link = self.by_name(key)
             table = link.table()
             table.drop(force=force)
-        if isinstance(key, unicode):
+        if isinstance(key, str):
             key = self.from_name_to_num(key)
         libvect.Vect_map_del_dblink(self.c_mapinfo, key)
 

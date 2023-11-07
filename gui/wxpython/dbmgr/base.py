@@ -29,7 +29,6 @@ This program is free software under the GNU General Public License
 @author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
 """
 
-import sys
 import os
 import locale
 import tempfile
@@ -57,6 +56,7 @@ from dbmgr.sqlbuilder import SQLBuilderSelect, SQLBuilderUpdate
 from core.gcmd import RunCommand, GException, GError, GMessage, GWarning
 from core.utils import ListOfCatsToRange
 from gui_core.dialogs import CreateNewVector
+from gui_core.widgets import GNotebook
 from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, CreateDbInfoDesc, GetDbEncoding
 from core.debug import Debug
 from dbmgr.dialogs import ModifyTableRecord, AddColumnDialog
@@ -74,9 +74,6 @@ from gui_core.wrap import (
     TextCtrl,
 )
 from core.utils import cmp
-
-if sys.version_info.major >= 3:
-    unicode = str
 
 
 class Log:
@@ -480,7 +477,6 @@ class VirtualAttributeList(
             self.popupId = {
                 "sortAsc": NewId(),
                 "sortDesc": NewId(),
-                "calculate": NewId(),
                 "area": NewId(),
                 "length": NewId(),
                 "compact": NewId(),
@@ -498,8 +494,9 @@ class VirtualAttributeList(
         popupMenu.Append(self.popupId["sortDesc"], _("Sort descending"))
         popupMenu.AppendSeparator()
         subMenu = Menu()
-        popupMenu.AppendMenu(
-            self.popupId["calculate"], _("Calculate (only numeric columns)"), subMenu
+        subMenuItem = popupMenu.AppendSubMenu(
+            subMenu,
+            _("Calculate (only numeric columns)"),
         )
         popupMenu.Append(self.popupId["calculator"], _("Field calculator"))
         popupMenu.AppendSeparator()
@@ -518,7 +515,7 @@ class VirtualAttributeList(
         if not self.dbMgrData["editable"] or self.columns[
             self.GetColumn(self._col).GetText()
         ]["ctype"] not in (int, float):
-            popupMenu.Enable(self.popupId["calculate"], False)
+            subMenuItem.Enable(False)
 
         subMenu.Append(self.popupId["area"], _("Area size"))
         subMenu.Append(self.popupId["length"], _("Line length"))
@@ -559,18 +556,19 @@ class VirtualAttributeList(
     def OnColumnSort(self, event):
         """Column heading left mouse button -> sorting"""
         self._col = event.GetColumn()
-
+        self._updateColSortFlag()
         self.ColumnSort()
-
         event.Skip()
 
     def OnColumnSortAsc(self, event):
         """Sort values of selected column (ascending)"""
+        self._updateColSortFlag()
         self.SortListItems(col=self._col, ascending=True)
         event.Skip()
 
     def OnColumnSortDesc(self, event):
         """Sort values of selected column (descending)"""
+        self._updateColSortFlag()
         self.SortListItems(col=self._col, ascending=False)
         event.Skip()
 
@@ -688,7 +686,7 @@ class VirtualAttributeList(
             item1 = self.itemDataMap[key1][self._col]
             item2 = self.itemDataMap[key2][self._col]
 
-        if isinstance(item1, str) or isinstance(item2, unicode):
+        if isinstance(item1, str) or isinstance(item2, str):
             cmpVal = locale.strcoll(GetUnicodeValue(item1), GetUnicodeValue(item2))
         else:
             cmpVal = cmp(item1, item2)
@@ -716,6 +714,14 @@ class VirtualAttributeList(
             return False
 
         return True
+
+    def _updateColSortFlag(self):
+        """
+        Update listmix.ColumnSorterMixin class self._colSortFlag list
+        private variable for new column which was added (required for
+        sorting new added column values)
+        """
+        self._colSortFlag.extend([0] * (len(self.columns) - len(self._colSortFlag)))
 
 
 class DbMgrBase:
@@ -849,7 +855,7 @@ class DbMgrBase:
         # delete page
         if layer in self.dbMgrData["mapDBInfo"].layers.keys():
             # delete page
-            # draging pages disallowed
+            # dragging pages disallowed
             # if self.browsePage.GetPageText(page).replace('Layer ', '').strip() == str(layer):
             # self.browsePage.DeletePage(page)
             # break
@@ -885,7 +891,7 @@ class DbMgrBase:
         return self.dbMgrData["mapDBInfo"].layers.keys()
 
 
-class DbMgrNotebookBase(FN.FlatNotebook):
+class DbMgrNotebookBase(GNotebook):
     def __init__(self, parent, parentDbMgrBase):
         """Base class for notebook with attribute tables in tabs
 
@@ -922,12 +928,7 @@ class DbMgrNotebookBase(FN.FlatNotebook):
         # list which represents layers numbers in order of tabs
         self.layers = []
 
-        if globalvar.hasAgw:
-            dbmStyle = {"agwStyle": globalvar.FNPageStyle}
-        else:
-            dbmStyle = {"style": globalvar.FNPageStyle}
-
-        FN.FlatNotebook.__init__(self, parent=self.parent, id=wx.ID_ANY, **dbmStyle)
+        GNotebook.__init__(self, parent=self.parent, style=globalvar.FNPageStyle)
 
         self.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnLayerPageChanged)
 
@@ -1022,13 +1023,13 @@ class DbMgrNotebookBase(FN.FlatNotebook):
         if layer not in self.layers:
             return False
 
-        FN.FlatNotebook.DeletePage(self, self.layers.index(layer))
+        GNotebook.DeleteNBPage(self, self.layers.index(layer))
 
         self.layers.remove(layer)
         del self.layerPage[layer]
 
         if self.GetSelection() >= 0:
-            self.selLayer = self.layers[self.GetSelection()]
+            self.selLayer = self.layers[-1]
         else:
             self.selLayer = None
 
@@ -1036,7 +1037,7 @@ class DbMgrNotebookBase(FN.FlatNotebook):
 
     def DeleteAllPages(self):
         """Removes all layer pages"""
-        FN.FlatNotebook.DeleteAllPages(self)
+        GNotebook.DeleteAllPages(self)
         self.layerPage = {}
         self.layers = []
         self.selLayer = None
@@ -1174,8 +1175,8 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         if pos == -1:
             pos = self.GetPageCount()
-        self.InsertPage(
-            pos,
+        self.InsertNBPage(
+            index=pos,
             page=panel,
             text=" %d / %s %s"
             % (layer, label, self.dbMgrData["mapDBInfo"].layers[layer]["table"]),
@@ -1204,17 +1205,11 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         listSizer.Add(win, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
 
         # sql statement box
-        FNPageStyle = (
-            FN.FNB_NO_NAV_BUTTONS
-            | FN.FNB_NO_X_BUTTON
-            | FN.FNB_NODRAG
-            | FN.FNB_FANCY_TABS
+        sqlNtb = GNotebook(
+            parent=sqlQueryPanel,
+            style=FN.FNB_NO_NAV_BUTTONS | FN.FNB_NO_X_BUTTON | FN.FNB_NODRAG,
         )
-        if globalvar.hasAgw:
-            dbmStyle = {"agwStyle": FNPageStyle}
-        else:
-            dbmStyle = {"style": FNPageStyle}
-        sqlNtb = FN.FlatNotebook(parent=sqlQueryPanel, id=wx.ID_ANY, **dbmStyle)
+
         # Simple tab
         simpleSqlPanel = wx.Panel(parent=sqlNtb, id=wx.ID_ANY)
         sqlNtb.AddPage(page=simpleSqlPanel, text=_("Simple"))
@@ -1366,6 +1361,9 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
     def OnSqlQuerySize(self, event, layer):
         """Adapts SQL Query Simple tab on current width"""
 
+        if layer not in self.layers:
+            return
+
         sqlNtb = event.GetEventObject()
         if not self.sqlBestSize:
             self.sqlBestSize = sqlNtb.GetBestSize()
@@ -1384,14 +1382,18 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         if sqlReduce:
             self.layerPage[layer]["sqlIsReduced"] = True
-            sqlSimpleSizer.AddGrowableCol(0)
-            sqlSimpleSizer.RemoveGrowableCol(1)
+            if not sqlSimpleSizer.IsColGrowable(0):
+                sqlSimpleSizer.AddGrowableCol(0)
+            if sqlSimpleSizer.IsColGrowable(1):
+                sqlSimpleSizer.RemoveGrowableCol(1)
             sqlSimpleSizer.SetItemPosition(wherePanel, (1, 0))
             sqlSimpleSizer.SetItemPosition(btnApply, (1, 1))
         else:
             self.layerPage[layer]["sqlIsReduced"] = False
-            sqlSimpleSizer.AddGrowableCol(1)
-            sqlSimpleSizer.RemoveGrowableCol(0)
+            if not sqlSimpleSizer.IsColGrowable(1):
+                sqlSimpleSizer.AddGrowableCol(1)
+            if sqlSimpleSizer.IsColGrowable(0):
+                sqlSimpleSizer.RemoveGrowableCol(0)
             sqlSimpleSizer.SetItemPosition(wherePanel, (0, 1))
             sqlSimpleSizer.SetItemPosition(btnApply, (0, 2))
 
@@ -1838,7 +1840,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                 n, s, w, e = display.GetRegionSelected()
                 self.mapdisplay.Map.GetRegion(n=n, s=s, w=w, e=e, update=True)
         else:
-            # add map layer with higlighted vector features
+            # add map layer with highlighted vector features
             self.AddQueryMapLayer(selectedOnly)  # -> self.qlayer
 
             # set opacity based on queried layer
@@ -2026,7 +2028,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
     def OnDeleteSelected(self, event):
         """Delete vector objects selected in attribute browse window
-        (attribures and geometry)
+        (attributes and geometry)
         """
         tlist = self.FindWindowById(self.layerPage[self.selLayer]["data"])
         cats = tlist.GetSelectedItems()
@@ -2333,8 +2335,8 @@ class DbMgrTablesPage(DbMgrNotebookBase):
 
         if pos == -1:
             pos = self.GetPageCount()
-        self.InsertPage(
-            pos,
+        self.InsertNBPage(
+            index=pos,
             page=panel,
             text=" %d / %s %s"
             % (layer, label, self.dbMgrData["mapDBInfo"].layers[layer]["table"]),
@@ -2640,6 +2642,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         )
         self.FindWindowById(self.layerPage[self.selLayer]["renameCol"]).SetSelection(0)
         self.FindWindowById(self.layerPage[self.selLayer]["renameColTo"]).SetValue("")
+        self._updateTableColumnWidgetChoices(table=table)
 
         event.Skip()
 
@@ -2727,6 +2730,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             self.dbMgrData["mapDBInfo"].GetColumns(table)
         )
         self.FindWindowById(self.layerPage[self.selLayer]["renameCol"]).SetSelection(0)
+        self._updateTableColumnWidgetChoices(table=table)
 
         event.Skip()
 
@@ -2774,6 +2778,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             self.dbMgrData["mapDBInfo"].GetColumns(table)
         )
         self.FindWindowById(self.layerPage[self.selLayer]["renameCol"]).SetSelection(0)
+        self._updateTableColumnWidgetChoices(table=table)
 
         event.Skip()
 
@@ -2800,14 +2805,6 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             ).GetValue()
         )
 
-        # add item to the list of table columns
-        tlist = self.FindWindowById(self.layerPage[self.selLayer]["tableData"])
-
-        index = tlist.InsertItem(tlist.GetItemCount(), str(name))
-        tlist.SetItem(index, 0, str(name))
-        tlist.SetItem(index, 1, str(ctype))
-        tlist.SetItem(index, 2, str(length))
-
         self.AddColumn(name, ctype, length)
 
         # update widgets
@@ -2817,11 +2814,10 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             self.dbMgrData["mapDBInfo"].GetColumns(table)
         )
         self.FindWindowById(self.layerPage[self.selLayer]["renameCol"]).SetSelection(0)
-
+        self._updateTableColumnWidgetChoices(table=table)
         event.Skip()
 
     def UpdatePage(self, layer):
-
         if layer in self.layerPage.keys():
             table = self.dbMgrData["mapDBInfo"].layers[layer]["table"]
 
@@ -2832,6 +2828,26 @@ class DbMgrTablesPage(DbMgrNotebookBase):
                 columns=self.dbMgrData["mapDBInfo"].GetColumns(table),
             )
             self.OnTableReload(None)
+
+    def _updateTableColumnWidgetChoices(self, table):
+        """Update table column widget choices
+
+        :param str table: table name
+        """
+        cols = self.dbMgrData["mapDBInfo"].GetColumns(table)
+        # Browse data page SQL Query Simple page WHERE Combobox column names widget
+        self.FindWindowById(
+            self.pages["browse"].layerPage[self.selLayer]["whereColumn"]
+        ).SetItems(cols)
+        # Browse data page SQL Query Builder page SQL builder frame ListBox column names widget
+        if self.pages["browse"].builder:
+            self.pages["browse"].builder.list_columns.Set(cols)
+        # Browse data page column Field calculator frame ListBox column names widget
+        fieldCalc = self.FindWindowById(
+            self.pages["browse"].layerPage[self.selLayer]["data"],
+        ).fieldCalc
+        if fieldCalc:
+            fieldCalc.list_columns.Set(cols)
 
 
 class DbMgrLayersPage(wx.Panel):
@@ -2950,7 +2966,6 @@ class TableListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __init__(
         self, parent, id, table, columns, pos=wx.DefaultPosition, size=wx.DefaultSize
     ):
-
         self.parent = parent
         self.table = table
         self.columns = columns
@@ -3011,7 +3026,6 @@ class LayerListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
     """Layer description list"""
 
     def __init__(self, parent, id, layers, pos=wx.DefaultPosition, size=wx.DefaultSize):
-
         self.parent = parent
         self.layers = layers
         ListCtrl.__init__(
@@ -3078,6 +3092,7 @@ class LayerBook(wx.Notebook):
         self.parent = parent
         self.parentDialog = parentDialog
         self.mapDBInfo = self.parentDialog.dbMgrData["mapDBInfo"]
+        vectName = self.parentDialog.dbMgrData["vectName"]
 
         #
         # drivers
@@ -3092,7 +3107,24 @@ class LayerBook(wx.Notebook):
         # get default values
         #
         self.defaultConnect = {}
-        connect = RunCommand("db.connect", flags="p", read=True, quiet=True)
+        genv = grass.gisenv()
+        vectMap = grass.find_file(
+            name=vectName,
+            element="vector",
+        )
+        vectGisrc, vectEnv = grass.create_environment(
+            gisdbase=genv["GISDBASE"],
+            location=genv["LOCATION_NAME"],
+            mapset=vectMap["mapset"],
+        )
+        connect = RunCommand(
+            "db.connect",
+            flags="p",
+            env=vectEnv,
+            read=True,
+            quiet=True,
+        )
+        grass.utils.try_remove(vectGisrc)
 
         for line in connect.splitlines():
             item, value = line.split(":", 1)
@@ -3731,29 +3763,34 @@ class LayerBook(wx.Notebook):
             table=table,
             key=key,
             layer=layer,
+            getErrorMsg=True,
         )
 
-        # insert records into table if required
-        if self.addLayerWidgets["addCat"][0].IsChecked():
-            RunCommand(
-                "v.to.db",
-                parent=self,
-                quiet=True,
-                map=self.mapDBInfo.map,
-                layer=layer,
-                qlayer=layer,
-                option="cat",
-                columns=key,
-                overwrite=True,
-            )
-
-        if ret == 0:
+        if ret[0] == 0 and not ret[1]:
+            # insert records into table if required
+            if self.addLayerWidgets["addCat"][0].IsChecked():
+                RunCommand(
+                    "v.to.db",
+                    parent=self,
+                    quiet=True,
+                    map=self.mapDBInfo.map,
+                    layer=layer,
+                    qlayer=layer,
+                    option="cat",
+                    columns=key,
+                    overwrite=True,
+                )
             # update dialog (only for new layer)
             self.parentDialog.parentDbMgrBase.UpdateDialog(layer=layer)
             # update db info
             self.mapDBInfo = self.parentDialog.dbMgrData["mapDBInfo"]
             # increase layer number
             layerWin.SetValue(layer + 1)
+        elif ret[1]:
+            GWarning(
+                parent=self,
+                message=ret[1],
+            )
 
         if len(self.mapDBInfo.layers.keys()) == 1:
             # first layer add --- enable previously disabled widgets
@@ -3850,7 +3887,7 @@ class LayerBook(wx.Notebook):
         if (
             self.modifyLayerWidgets["driver"][1].GetStringSelection()
             != self.mapDBInfo.layers[layer]["driver"]
-            or self.modifyLayerWidgets["database"][1].GetStringSelection()
+            or self.modifyLayerWidgets["database"][1].GetValue()
             != self.mapDBInfo.layers[layer]["database"]
             or self.modifyLayerWidgets["table"][1].GetStringSelection()
             != self.mapDBInfo.layers[layer]["table"]

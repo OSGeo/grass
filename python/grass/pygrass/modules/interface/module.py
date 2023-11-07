@@ -1,13 +1,3 @@
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
-import sys
 from multiprocessing import cpu_count, Process, Queue
 import time
 from xml.etree.ElementTree import fromstring
@@ -22,12 +12,7 @@ from .typedict import TypeDict
 from .read import GETFROMTAG, DOC
 from .env import G_debug
 
-if sys.version_info[0] == 2:
-    from itertools import izip_longest as zip_longest
-else:
-    from itertools import zip_longest
-
-    unicode = str
+from itertools import zip_longest
 
 
 def _get_bash(self, *args, **kargs):
@@ -348,30 +333,30 @@ class Module(object):
     >>> neighbors.inputs.size = 5
     >>> neighbors.inputs.quantile = 0.5
     >>> neighbors.get_bash()
-    'r.neighbors input=mapA size=5 method=average weighting_function=none quantile=0.5 output=mapB'
+    'r.neighbors input=mapA size=5 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
 
     >>> new_neighbors1 = copy.deepcopy(neighbors)
     >>> new_neighbors1.inputs.input = "mapD"
     >>> new_neighbors1.inputs.size = 3
     >>> new_neighbors1.inputs.quantile = 0.5
     >>> new_neighbors1.get_bash()
-    'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 output=mapB'
+    'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
 
     >>> new_neighbors2 = copy.deepcopy(neighbors)
     >>> new_neighbors2(input="mapD", size=3, run_=False)
     Module('r.neighbors')
     >>> new_neighbors2.get_bash()
-    'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 output=mapB'
+    'r.neighbors input=mapD size=3 method=average weighting_function=none quantile=0.5 nprocs=1 memory=300 output=mapB'
 
     >>> neighbors = Module("r.neighbors")
     >>> neighbors.get_bash()
-    'r.neighbors size=3 method=average weighting_function=none'
+    'r.neighbors size=3 method=average weighting_function=none nprocs=1 memory=300'
 
     >>> new_neighbors3 = copy.deepcopy(neighbors)
     >>> new_neighbors3(input="mapA", size=3, output="mapB", run_=False)
     Module('r.neighbors')
     >>> new_neighbors3.get_bash()
-    'r.neighbors input=mapA size=3 method=average weighting_function=none output=mapB'
+    'r.neighbors input=mapA size=3 method=average weighting_function=none nprocs=1 memory=300 output=mapB'
 
     >>> mapcalc = Module("r.mapcalc", expression="test_a = 1",
     ...                  overwrite=True, run_=False)
@@ -528,9 +513,7 @@ class Module(object):
     """
 
     def __init__(self, cmd, *args, **kargs):
-        if isinstance(cmd, unicode):
-            self.name = str(cmd)
-        elif isinstance(cmd, str):
+        if isinstance(cmd, str):
             self.name = cmd
         else:
             raise GrassError("Problem initializing the module {s}".format(s=cmd))

@@ -26,9 +26,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-from __future__ import print_function
 
-import six
 import grass.script.core as grass
 
 from grass.pydispatch.signal import Signal
@@ -147,27 +145,23 @@ class VDigitError:
 
 
 class IVDigit:
-    def __init__(self, mapwindow, driver=DisplayDriver):
+    def __init__(self, giface, mapwindow, driver=DisplayDriver):
         """Base class for vector digitizer (ctypes interface)
 
         :param mapwindow: reference to a map window
         """
         self.poMapInfo = None  # pointer to Map_info
         self.mapWindow = mapwindow
+        self._giface = giface
 
         # background map
         self.bgMapInfo = Map_info()
         self.poBgMapInfo = self.popoBgMapInfo = None
-
-        # TODO: replace this by using giface
-        if not mapwindow.parent.IsStandalone():
-            goutput = mapwindow.parent.GetLayerManager().GetLogWindow()
-            log = goutput.GetLog(err=True)
-            progress = mapwindow.parent._giface.GetProgress()
-        else:
-            log = sys.stderr
+        try:
+            progress = self._giface.GetProgress()
+        except NotImplementedError:
             progress = None
-
+        log = self._giface.GetLog(err=True)
         self.toolbar = mapwindow.parent.toolbars["vdigit"]
 
         self._error = VDigitError(parent=self.mapWindow)
@@ -394,7 +388,6 @@ class IVDigit:
         return ret
 
     def _addChangeset(self):
-
         # disable redo
         changesetLast = len(self.changesets) - 1
         if self.changesetCurrent < changesetLast and len(self.changesets) > 0:
@@ -548,7 +541,6 @@ class IVDigit:
         old_areas_cats = []
         if deleteRec:
             for i in self._display.selected["ids"]:
-
                 if Vect_read_line(self.poMapInfo, None, self.poCats, i) < 0:
                     self._error.ReadLine(i)
 
@@ -647,7 +639,6 @@ class IVDigit:
         old_areas_cats = []
 
         for i in range(cList.n_values):
-
             if Vect_get_line_type(self.poMapInfo, cList.value[i]) != GV_CENTROID:
                 continue
 
@@ -719,7 +710,6 @@ class IVDigit:
 
         if b_list.n_values > 0:
             for i_line in range(b_list.n_values):
-
                 line = b_list.value[i_line]
 
                 geoms.append(self._getBbox(abs(line)))
@@ -1819,7 +1809,7 @@ class IVDigit:
             )
 
         # set default values
-        for field, cat in six.iteritems(self.cats):
+        for field, cat in self.cats.items():
             if cat is None:
                 self.cats[field] = 0  # first category 1
             Debug.msg(

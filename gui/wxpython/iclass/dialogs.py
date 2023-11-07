@@ -289,7 +289,7 @@ class IClassMapDialog(SimpleDialog):
 class IClassCategoryManagerDialog(wx.Dialog):
     """Dialog for managing categories (classes).
 
-    Alows adding, deleting class and changing its name and color.
+    Allows adding, deleting class and changing its name and color.
     """
 
     def __init__(self, parent, title=_("Class manager"), id=wx.ID_ANY):
@@ -570,14 +570,14 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdi
         text_c = wx.Colour(*ContrastColor(back_c))
 
         # if it is in scope of the method, gui falls, using self solved it
-        self.l = wx.ListItemAttr()
+        self.l = wx.ItemAttr()
         self.l.SetBackgroundColour(back_c)
         self.l.SetTextColour(text_c)
         return self.l
 
 
 def ContrastColor(color):
-    """Decides which value shoud have text to be contrast with background color
+    """Decides which value should have text to be contrast with background color
         (bright bg -> black, dark bg -> white)
 
     .. todo::
@@ -591,7 +591,7 @@ def ContrastColor(color):
         d = 0
     else:
         d = 255
-    # maybe return just bool if text shoud be dark or bright
+    # maybe return just bool if text should be dark or bright
     return (d, d, d)
 
 
@@ -599,8 +599,6 @@ class IClassSignatureFileDialog(wx.Dialog):
     def __init__(
         self,
         parent,
-        group,
-        subgroup,
         file=None,
         title=_("Save signature file"),
         id=wx.ID_ANY,
@@ -610,7 +608,6 @@ class IClassSignatureFileDialog(wx.Dialog):
         """Dialog for saving signature file
 
         :param parent: window
-        :param group: group name
         :param file: signature file name
         :param title: window title
         """
@@ -622,16 +619,9 @@ class IClassSignatureFileDialog(wx.Dialog):
 
         # inconsistent group and subgroup name
         # path:
-        # grassdata/nc_spm_08/landsat/group/test_group/subgroup/test_group/sig/sigFile
+        # grassdata/nc_spm_08/landsat/signatures/sig/sigFile
         self.baseFilePath = os.path.join(
-            env["GISDBASE"],
-            env["LOCATION_NAME"],
-            env["MAPSET"],
-            "group",
-            group,
-            "subgroup",
-            subgroup,
-            "sig",
+            env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], "signatures", "sig"
         )
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
@@ -766,7 +756,7 @@ class IClassExportAreasDialog(wx.Dialog):
     def OnTextChanged(self, event):
         """Name of new vector map given.
 
-        Enable/diable OK button.
+        Enable/disable OK button.
         """
         file = self.vectorNameCtrl.GetValue()
         if len(file) > 0:

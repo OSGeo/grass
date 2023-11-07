@@ -1352,7 +1352,7 @@ msgstr ""
 
 #: ../gui/wxpython/core/render.py:1072
 msgid ""
-"Unable to get current geographic extent. Force quiting wxGUI. Please "
+"Unable to get current geographic extent. Force quitting wxGUI. Please "
 "manually run g.region to fix the problem."
 msgstr ""
 
@@ -2662,8 +2662,8 @@ msgstr ""
 #, python-format
 msgid ""
 "Scatter plot cannot be added.\n"
-"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit <"
-"%d>.\n"
+"Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit "
+"<%d>.\n"
 msgstr ""
 
 #: ../gui/wxpython/iscatt/controllers.py:319
@@ -8543,7 +8543,7 @@ msgid "Random non overlapping"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:1235
-msgid "Systematic contiguos"
+msgid "Systematic contiguous"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:1236
@@ -8551,7 +8551,7 @@ msgid "Stratified random"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:1237
-msgid "Systematic non contiguos"
+msgid "Systematic non contiguous"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/wizard.py:1238
@@ -14532,7 +14532,7 @@ msgstr "Kļūda nolasot failu '%s'."
 #: ../gui/wxpython/startup/guiutils.py:450
 #, python-brace-format
 msgid ""
-"The following error occured when deleting mapset <{path}>:\n"
+"The following error occurred when deleting mapset <{path}>:\n"
 "\n"
 "{error}\n"
 "\n"
@@ -14578,7 +14578,7 @@ msgstr "Kļūda nolasot failu '%s'."
 #: ../gui/wxpython/startup/guiutils.py:535
 #, python-brace-format
 msgid ""
-"The following error occured when deleting location <{path}>:\n"
+"The following error occurred when deleting location <{path}>:\n"
 "\n"
 "{error}\n"
 "\n"
@@ -14623,7 +14623,7 @@ msgstr "Kļūda nolasot failu '%s'."
 #: ../gui/wxpython/startup/guiutils.py:599
 #, python-brace-format
 msgid ""
-"The following error occured when deleting database <{path}>:\n"
+"The following error occurred when deleting database <{path}>:\n"
 "\n"
 "{error}\n"
 "\n"
@@ -15005,8 +15005,8 @@ msgstr ""
 #: ../gui/wxpython/dbmgr/base.py:2558
 #, python-format
 msgid ""
-"Unable to rename column. Column <%(column)s> doesn't exist in the table <"
-"%(table)s>."
+"Unable to rename column. Column <%(column)s> doesn't exist in the table "
+"<%(table)s>."
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:2597
@@ -15877,7 +15877,7 @@ msgid "Couldn't read file <{}>."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:323
-msgid "Permission denied <{}>. Please change file permission for writting.{}"
+msgid "Permission denied <{}>. Please change file permission for writing.{}"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:334
@@ -15933,7 +15933,7 @@ msgid "Activate overwrite"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:636
-msgid "Deactive overwrite"
+msgid "Deactivate overwrite"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/pyedit.py:638
@@ -16503,7 +16503,7 @@ msgid "Ask when removing map layer from layer tree"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:306
-msgid "Ask when quiting wxGUI or closing display"
+msgid "Ask when quitting wxGUI or closing display"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:321
@@ -16703,7 +16703,7 @@ msgid "Line width (in pixels):"
 msgstr "Līnijas platums (pikseļos):"
 
 #: ../gui/wxpython/gui_core/preferences.py:1551
-msgid "Automatically hightlight selected features in map display"
+msgid "Automatically highlight selected features in map display"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1575
@@ -16752,7 +16752,7 @@ msgid "EPSG code:"
 msgstr "EPSG kods:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1739
-msgid "Proj.4 string (required):"
+msgid "PROJ string (required):"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1756
@@ -16761,8 +16761,7 @@ msgstr "EPSG datne:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1773
 msgid ""
-"Load EPSG codes (be patient), enter EPSG code or insert Proj.4 string "
-"directly."
+"Load EPSG codes (be patient), enter EPSG code or insert PROJ string directly."
 msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:1781
@@ -17317,7 +17316,7 @@ msgstr ""
 
 #: ../gui/wxpython/icons/icon.py:57
 #, python-format
-msgid "Unable to load icon theme. Reason: %s. Quiting wxGUI..."
+msgid "Unable to load icon theme. Reason: %s. Quitting wxGUI..."
 msgstr ""
 
 #: ../gui/wxpython/gcp/mapdisplay.py:48 ../gui/wxpython/gcp/manager.py:994
@@ -18246,8 +18245,8 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:715
 #, python-format
 msgid ""
-"Do you want to continue with deleting mapset <%(mapset)s> from location <"
-"%(location)s>?\n"
+"Do you want to continue with deleting mapset <%(mapset)s> from location "
+"<%(location)s>?\n"
 "\n"
 "ALL MAPS included in this mapset will be PERMANENTLY DELETED!"
 msgstr ""
@@ -19374,307 +19373,3 @@ msgstr ""
 #, fuzzy
 msgid "Cartographic Composer - GRASS GIS"
 msgstr "Kartogrāfisko salikumu veidotājs"
-
-#~ msgid "Common formats import"
-#~ msgstr "Biežāk sastopamo formātu imports"
-
-#~ msgid "Reports and Statistics"
-#~ msgstr "Atskaites un statistika"
-
-#~ msgid "GRASS GIS Graphical Modeler"
-#~ msgstr "GRASS GIS grafiskais modelētājs"
-
-#~ msgid "GRASS GIS %s Layer Manager"
-#~ msgstr "GRASS GIS %s slāņu pārvaldnieks"
-
-#~ msgid "Location <%s> created"
-#~ msgstr "Novietojums <%s> ir izveidots"
-
-#~ msgid "New GIS data directory"
-#~ msgstr "Jauna ĢIS datu mape"
-
-#~ msgid "GRASS GIS Simple Python Editor"
-#~ msgstr "GRASS GIS vienkāršais Python redaktors"
-
-#~ msgid "GRASS GIS Attribute Table Manager"
-#~ msgstr "GRASS GIS atribūtu tabulas pārvaldnieks"
-
-#~ msgid "READONLY - "
-#~ msgstr "TIKAI LASĀMS - "
-
-#~ msgid "Remove vector legend"
-#~ msgstr "Noņemt vektoru leģendu"
-
-#~ msgid "GRASS GIS Raster Map Calculator"
-#~ msgstr "GRASS GIS rastra kalkulators"
-
-#~ msgid "GRASS GIS 3D Raster Map Calculator"
-#~ msgstr "GRASS GIS 3D rastra kalkulators"
-
-#~ msgid "GRASS GIS Histogramming Tool"
-#~ msgstr "GRASS GIS histogrammu veidošanas rīks"
-
-#~ msgid "GRASS GIS Vector Network Analysis Tool"
-#~ msgstr "GRASS GIS vektordatu tīkla analīzes rīks"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to delete location.\n"
-#~ "\n"
-#~ "{}"
-#~ msgstr "Nav iespējams dzēst novietojumu"
-
-#~ msgid "Editing {name}"
-#~ msgstr "Rediģē {name}"
-
-#, fuzzy
-#~ msgid "Add new GRASS database"
-#~ msgstr "GRASS datubāze:"
-
-#~ msgid "GRASS GIS Data Catalog"
-#~ msgstr "GRASS GIS datu katalogs"
-
-#~ msgid "GRASS GIS - Map display"
-#~ msgstr "GRASS GIS - kartes skats"
-
-#~ msgid "GRASS GIS Map Display: %(name)s - %(loc)s/%(mapset)s"
-#~ msgstr "GRASS GIS kartes skats: %(name)s - %(loc)s/%(mapset)s"
-
-#~ msgid "GRASS GIS Animation tool"
-#~ msgstr "GRASS GIS animācijas rīks"
-
-#~ msgid "GRASS GIS Vector Digitizer"
-#~ msgstr "GRASS GIS vektoru digitizētājs"
-
-#~ msgid "Create user mapset"
-#~ msgstr "Izveidot lietotāja karšu kopu"
-
-#~ msgid "GIS Data Directory:"
-#~ msgstr "GIS datu mape:"
-
-#~ msgid "Project Location"
-#~ msgstr "Novietojuma nosaukums"
-
-#~ msgid "Location Title"
-#~ msgstr "Novietojuma virsraksts"
-
-#~ msgid ""
-#~ "Read projection and datum terms from a Well Known Text (WKT) .prj file"
-#~ msgstr "Nolasīt koordinātu sistēmas parametrus no WKT (.prj) datnes"
-
-#~ msgid "Simple methods:"
-#~ msgstr "Vienkāršas metodes:"
-
-#~ msgid "WKT .prj file:"
-#~ msgstr "WKT .prj datne:"
-
-#~ msgid "Choose EPSG Code"
-#~ msgstr "Izvēlēties EPSG kodu"
-
-#~ msgid "Path to the EPSG-codes file:"
-#~ msgstr "EPSG kodu datnes ceļš:"
-
-#~ msgid "Choose EPSG codes file"
-#~ msgstr "Izvēlēties EPSG kodu datni"
-
-#~ msgid "Location Title:"
-#~ msgstr "Novietojuma virsraksts:"
-
-#~ msgid "Documents"
-#~ msgstr "Dokumenti"
-
-#~ msgid "Start region:"
-#~ msgstr "Sākuma reģions:"
-
-#~ msgid "GRASS SVN revision"
-#~ msgstr "GRASS SVN revīzija"
-
-#~ msgid "GRASS locations in {0}"
-#~ msgstr "GRASS novietojumi iekš {0}"
-
-#~ msgid "Displaying {name}..."
-#~ msgstr "Attēlo {name}..."
-
-#~ msgid "layer"
-#~ msgstr "slānis"
-
-#~ msgid "style"
-#~ msgstr "stils"
-
-#~ msgid "&Fetch"
-#~ msgstr "&Saņemt"
-
-#~ msgid "Download completed"
-#~ msgstr "Lejupielāde ir pabeigta"
-
-#~ msgid "Download in progress"
-#~ msgstr "Notiek lejupielāde"
-
-#, fuzzy
-#~ msgid "Launches graphical attribute table manager."
-#~ msgstr "Atribūtu tabulas pārvaldnieks"
-
-#~ msgid "Copy map"
-#~ msgstr "Kopēt karti"
-
-#, fuzzy
-#~ msgid "The copied layer needs to be reprojected:"
-#~ msgstr "Noņemamais slānis"
-
-#~ msgid "Input Data"
-#~ msgstr "Ievades dati"
-
-#~ msgid "Point dataset:"
-#~ msgstr "Punktu datu kopa:"
-
-#~ msgid "Numeric column:"
-#~ msgstr "Skaitliska kolona:"
-
-#~ msgid "Kriging"
-#~ msgstr "Krīgings"
-
-#~ msgid "Kriging Module"
-#~ msgstr "Krīginga modulis"
-
-#~ msgid "Ready."
-#~ msgstr "Gatavs."
-
-#~ msgid ":"
-#~ msgstr ":"
-
-#~ msgid "Block size:"
-#~ msgstr "Bloka izmērs:"
-
-#~ msgid "Model: "
-#~ msgstr "Modelis: "
-
-#~ msgid "legend"
-#~ msgstr "leģenda"
-
-#~ msgid "Show text object"
-#~ msgstr "Rādīt teksta objektu"
-
-#~ msgid "Add text layer"
-#~ msgstr "Pievienot teksta slāni"
-
-#, fuzzy
-#~ msgid "Show/hide scale bar"
-#~ msgstr "Ziemeļu bulta"
-
-#, fuzzy
-#~ msgid "Show/hide north arrow"
-#~ msgstr "Ziemeļu bulta"
-
-#~ msgid ""
-#~ "Unable to import matplotlib (try to install it).\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Nebija iespējams importēt matplotlib. To ir nepieciešams instalēt.\n"
-#~ "%s"
-
-#~ msgid "Map layers"
-#~ msgstr "Kartes slāņi"
-
-#, fuzzy
-#~ msgid "Vector temporal dataset (strds)"
-#~ msgstr "Nederīga ievade"
-
-#, fuzzy
-#~ msgid ""
-#~ "Failed to query vector map <{map}>. Check database settings and topology."
-#~ msgstr ""
-#~ "SQL izteiksme ir nederīga.\n"
-#~ "\n"
-#~ "%s"
-
-#, fuzzy
-#~ msgid "GRASS GIS Data Catalog (experimetal)"
-#~ msgstr "GRASS GIS 3D rastra kalkulators"
-
-#, fuzzy
-#~ msgid "Select space time raster dataset(s):"
-#~ msgstr "Rastra datu importēšana"
-
-#, fuzzy
-#~ msgid "Invalid input data"
-#~ msgstr "Nederīga ievade"
-
-#, fuzzy
-#~ msgid "Multiple import formats using OGR"
-#~ msgstr "Importēt vairākus"
-
-#, fuzzy
-#~ msgid "Common export formats using OGR"
-#~ msgstr "Biežāk lietotie formāti"
-
-#, fuzzy
-#~ msgid "List raster3D dataset maps"
-#~ msgstr "3D rastra kartes"
-
-#, fuzzy
-#~ msgid "Raster3D calculations"
-#~ msgstr "Rastra aprēķini"
-
-#, fuzzy
-#~ msgid "No mapsets readable"
-#~ msgstr "Iestatījumi nav pieejami"
-
-#, fuzzy
-#~ msgid "Editing"
-#~ msgstr "Krīginga modulis"
-
-#, fuzzy
-#~ msgid "Renaming"
-#~ msgstr "Pārsaukt"
-
-#, fuzzy
-#~ msgid "Copying"
-#~ msgstr "Autortiesības"
-
-#, fuzzy
-#~ msgid "Deleting"
-#~ msgstr "Dzēst"
-
-#, fuzzy
-#~ msgid "Displaying"
-#~ msgstr "Rādīt"
-
-#, fuzzy
-#~ msgid "Load settings:"
-#~ msgstr "Fonta iestatījumi:"
-
-#, fuzzy
-#~ msgid "Unable to render map layer <%s>."
-#~ msgstr "Nav iespējams atvērt vektordatu karti <%s>."
-
-#, fuzzy
-#~ msgid "Unable to render overlay <%s>."
-#~ msgstr "Nav iespējams atvērt vektordatu karti <%s>."
-
-#, fuzzy
-#~ msgid "Temporary map '%s' with result "
-#~ msgstr "Karšu kopa <%s> jau eksistē."
-
-#, fuzzy
-#~ msgid "Vector map %s already exists. "
-#~ msgstr "Karšu kopa <%s> jau eksistē."
-
-#, fuzzy
-#~ msgid "Temporary map %s  already exists.\n"
-#~ msgstr "Karšu kopa <%s> jau eksistē."
-
-#, fuzzy
-#~ msgid "Temporary map '%s' was changed outside "
-#~ msgstr "Karšu kopa <%s> jau eksistē."
-
-#~ msgid "Quit wxGUI session."
-#~ msgstr "Iziet no wxGUI sesijas."
-
-#~ msgid "Region"
-#~ msgstr "Reģions"
-
-#~ msgid "Quit wxGUI session and exit GRASS shell."
-#~ msgstr "Iziet no wxGUI sesijas un GRASS čaulas."
-
-#~ msgid "Display region"
-#~ msgstr "Attēlot reģionu"
