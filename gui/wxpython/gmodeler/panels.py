@@ -72,7 +72,7 @@ from gmodeler.toolbars import ModelerToolbar
 from gmodeler.preferences import PreferencesDialog, PropertiesDialog
 
 wxModelDone, EVT_MODEL_DONE = NewEvent()
-
+0
 from grass.script.utils import try_remove
 from grass.script import core as grass
 from grass.pydispatch.signal import Signal
@@ -186,9 +186,6 @@ class ModelerPanel(wx.Panel, MainPageBase):
         if self.goutput:
             self.goutput.SetSashPosition(int(self.GetSize()[1] * 0.75))
 
-        # TODO:
-        self.onFocus = Signal("ModelerPanel.onFocus")
-
     def _layout(self):
         """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -213,19 +210,8 @@ class ModelerPanel(wx.Panel, MainPageBase):
         """Returns random value to shift layout"""
         return random.randint(-self.randomness, self.randomness)
 
-    # TODO:
-    def SetTitle(self, title):
-        if isinstance(self._giface, StandaloneGrassInterface):
-            self.parent.SetTitle(title)
-
-    # TODO:
     def SetStatusText(self, *args):
-        if isinstance(self._giface, StandaloneGrassInterface):
-            self.GetParent().SetStatusText(*args)
-        else:
-            # TODO: how to?
-            # self.SetStatusText(*args)
-            pass
+        self.statusbar.SetStatusText(*args)
 
     def GetStatusBar(self):
         """Get statusbar"""
@@ -245,13 +231,13 @@ class ModelerPanel(wx.Panel, MainPageBase):
 
         if self.modelFile:
             if self.modelChanged:
-                self.SetTitle(
+                self.RenamePage(
                     self.baseTitle + " - " + os.path.basename(self.modelFile) + "*"
                 )
             else:
-                self.SetTitle(self.baseTitle + " - " + os.path.basename(self.modelFile))
+                self.RenamePage(self.baseTitle + " - " + os.path.basename(self.modelFile))
         else:
-            self.SetTitle(self.baseTitle)
+            self.RenamePage(self.baseTitle)
 
     def OnPageChanged(self, event):
         """Page in notebook changed"""
@@ -593,7 +579,8 @@ class ModelerPanel(wx.Panel, MainPageBase):
             return
 
         self.modelFile = filename
-        self.SetTitle(self.baseTitle + " - " + os.path.basename(self.modelFile))
+
+        self.RenamePage(self.baseTitle + " - " + os.path.basename(self.modelFile))
 
         self.SetStatusText(_("Please wait, loading model..."), 0)
 
@@ -810,7 +797,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         # no model file loaded
         self.modelFile = None
         self.modelChanged = False
-        self.SetTitle(self.baseTitle)
+        self.RenamePage(self.baseTitle)
 
     def OnModelOpen(self, event):
         """Load model from file"""
@@ -835,7 +822,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         self.LoadModelFile(filename)
 
         self.modelFile = filename
-        self.SetTitle(self.baseTitle + " - " + os.path.basename(self.modelFile))
+        self.RenamePage(self.baseTitle + " - " + os.path.basename(self.modelFile))
         self.SetStatusText(
             _("%(items)d items (%(actions)d actions) loaded into model")
             % {
@@ -864,7 +851,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
                 Debug.msg(4, "ModelFrame.OnModelSave(): filename=%s" % self.modelFile)
                 self.WriteModelFile(self.modelFile)
                 self.SetStatusText(_("File <%s> saved") % self.modelFile, 0)
-                self.SetTitle(self.baseTitle + " - " + os.path.basename(self.modelFile))
+                self.RenamePage(self.baseTitle + " - " + os.path.basename(self.modelFile))
         elif not self.modelFile:
             self.OnModelSaveAs()
 
@@ -908,7 +895,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
 
         self.WriteModelFile(filename)
         self.modelFile = filename
-        self.SetTitle(self.baseTitle + " - " + os.path.basename(self.modelFile))
+        self.RenamePage(self.baseTitle + " - " + os.path.basename(self.modelFile))
         self.SetStatusText(_("File <%s> saved") % self.modelFile, 0)
 
     def OnModelClose(self, event=None):
@@ -940,7 +927,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
             dlg.Destroy()
 
         self.modelFile = None
-        self.SetTitle(self.baseTitle)
+        self.RenamePage(self.baseTitle)
 
         self.canvas.GetDiagram().DeleteAllShapes()
         self.model.Reset()

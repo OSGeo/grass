@@ -114,9 +114,6 @@ class MapPanel(SingleMapPanel, MainPageBase):
         # used for VDigit toolbar and window and GLWindow
         self.tree = tree
 
-        # Emitted when switching map notebook tabs (Single-Window)
-        self.onFocus = Signal("MapPanel.onFocus")
-
         # Emitted when starting (switching to) 3D mode.
         # Parameter firstTime specifies if 3D was already activated.
         self.starting3dMode = Signal("MapPanel.starting3dMode")

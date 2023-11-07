@@ -976,6 +976,11 @@ class GMFrame(wx.Frame):
 
         event.Skip()
 
+    def _renamePageNoEvent(self, pgnum_dict, is_docked, text):
+        if is_docked:
+            self.mainnotebook.SetMapPageText(
+                self.mainnotebook.GetPage(pgnum_dict["mainnotebook"]), text)
+
     def _closePageNoEvent(self, pgnum_dict, is_docked):
         """If map display is docked, close page and destroy map display without generating
         layer notebook page closing event. If map display is undocked, close only
