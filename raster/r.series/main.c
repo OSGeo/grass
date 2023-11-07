@@ -125,6 +125,7 @@ int main(int argc, char *argv[])
     int num_inputs;
     struct input **inputs = NULL;
     int bufrows;
+    size_t in_buf_size, out_buf_size;
 
 #if defined(_OPENMP)
     omp_lock_t fd_lock;
@@ -399,16 +400,6 @@ int main(int argc, char *argv[])
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
-    bufrows = atoi(parm.memory->answer) * (((1 << 20) / sizeof(DCELL)) / ncols);
-    /* set the output buffer rows to be at most covering the entire map */
-    if (bufrows > nrows) {
-        bufrows = nrows;
-    }
-    /* but at least the number of threads */
-    if (bufrows < nprocs) {
-        bufrows = nprocs;
-    }
-
     /* set the locks for lazily opening raster files */
 #if defined(_OPENMP)
     if (flag.lazy->answer && threaded) {
@@ -428,6 +419,26 @@ int main(int argc, char *argv[])
             _("output= and method= must have the same number of values"));
 
     outputs = G_calloc(num_outputs, sizeof(struct output));
+
+    /* memory reserved for input */
+    in_buf_size = ncols * sizeof(DCELL) * num_inputs * nprocs;
+    /* memory available for output buffer */
+    out_buf_size = (size_t)atoi(parm.memory->answer) * (1 << 20);
+    /* size_t is unsigned, check if any memory is left for output buffer */
+    if (out_buf_size <= in_buf_size)
+        out_buf_size = 0;
+    else
+        out_buf_size -= in_buf_size;
+    /* number of buffered rows for all output maps */
+    bufrows = out_buf_size / (sizeof(DCELL) * ncols * num_outputs);
+    /* set the output buffer rows to be at most covering the entire map */
+    if (bufrows > nrows) {
+        bufrows = nrows;
+    }
+    /* but at least the number of threads */
+    if (bufrows < nprocs) {
+        bufrows = nprocs;
+    }
 
     for (i = 0; i < num_outputs; i++) {
         struct output *out = &outputs[i];

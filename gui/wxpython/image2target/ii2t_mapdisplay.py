@@ -62,7 +62,7 @@ class MapPanel(SingleMapPanel):
         :param toolbars: array of activated toolbars, e.g. ['map', 'digit']
         :param map: instance of render.Map
         :param auimgs: AUI manager
-        :param kwargs: wx.Panel attribures
+        :param kwargs: wx.Panel attributes
         """
 
         SingleMapPanel.__init__(

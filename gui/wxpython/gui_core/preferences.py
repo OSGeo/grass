@@ -310,7 +310,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         askOnQuit = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
-            label=_("Ask when quiting wxGUI or closing display"),
+            label=_("Ask when quitting wxGUI or closing display"),
             name="IsChecked",
         )
         askOnQuit.SetValue(
@@ -1121,7 +1121,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         return panel
 
     def _createCmdPage(self, notebook):
-        """Create notebook page for commad dialog settings"""
+        """Create notebook page for command dialog settings"""
         panel = SP.ScrolledPanel(parent=notebook, id=wx.ID_ANY)
         panel.SetupScrolling(scroll_x=False, scroll_y=True)
         notebook.AddPage(page=panel, text=_("Tools"))
@@ -1535,7 +1535,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         autoHighlight = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
-            label=_("Automatically hightlight selected features in map display"),
+            label=_("Automatically highlight selected features in map display"),
         )
         autoHighlight.SetValue(
             self.settings.Get(group="atm", key="highlight", subkey="auto")
@@ -1830,32 +1830,47 @@ class PreferencesDialog(PreferencesBaseDialog):
         #
         # update default window dimension
         #
-        if (
-            self.settings.Get(group="general", key="defWindowPos", subkey="enabled")
-            is True
-        ):
-            dim = ""
-            # layer manager
+        windows_pos = self.settings.Get(
+            group="general",
+            key="defWindowPos",
+            subkey="enabled",
+        )
+        single_window = self.settings.Get(
+            group="appearance",
+            key="singleWindow",
+            subkey="enabled",
+        )
+        if windows_pos:
+            # get dimension of main window
             pos = self.parent.GetPosition()
             size = self.parent.GetSize()
-            dim = "%d,%d,%d,%d" % (pos[0], pos[1], size[0], size[1])
-            # opened displays
+            dim = f"{pos[0]},{pos[1]},{size[0]},{size[1]}"
+
+            # extend dimension by dimensions of opened displays
             for mapdisp in self._giface.GetAllMapDisplays():
                 pos = mapdisp.GetPosition()
                 size = mapdisp.GetSize()
 
                 # window size must be larger than zero, not minimized
-                # when mapdisp is inside single window (panel has no IsIconized), don't save dim
-                if (
-                    hasattr(mapdisp, "IsIconized")
-                    and not mapdisp.IsIconized()
-                    and (size[0] > 0 and size[1] > 0)
+                # do not save dim when mapdisp is docked within single window
+                if (not mapdisp.IsDockable() or not mapdisp.IsDocked()) and (
+                    size[0] > 0 and size[1] > 0
                 ):
-                    dim += ",%d,%d,%d,%d" % (pos[0], pos[1], size[0], size[1])
+                    dim += f",{pos[0]},{pos[1]},{size[0]},{size[1]}"
 
-            self.settings.Set(
-                group="general", key="defWindowPos", subkey="dim", value=dim
-            )
+            if single_window:
+                # single window mode
+                self.settings.Set(
+                    group="general",
+                    key="defWindowPos",
+                    subkey="dimSingleWindow",
+                    value=dim,
+                )
+            else:
+                # multi window mode
+                self.settings.Set(
+                    group="general", key="defWindowPos", subkey="dim", value=dim
+                )
 
         return True
 
@@ -2020,7 +2035,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         size = self.settings.Get(group="appearance", key="outputfont", subkey="size")
         if size is None or size == 0:
             size = 11
-        size = float(size)
         if type is None or type == "":
             type = "Courier"
 

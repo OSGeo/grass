@@ -3,21 +3,8 @@ Created on Tue Apr  2 18:37:02 2013
 
 @author: pietro
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
+from collections import OrderedDict
 from copy import deepcopy
-
-try:
-    from collections import OrderedDict
-except ImportError:
-    from grass.pygrass.orderdict import OrderedDict
 
 from grass.pygrass.modules.interface.docstring import docstring_property
 

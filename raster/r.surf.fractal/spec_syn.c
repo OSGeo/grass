@@ -108,7 +108,7 @@ int specsyn(double *data[2], /* Array holding complex data to transform. */
             *(data[1] + (nn - row) * nn + col) = -rad * sin(phase);
         }
 
-    /* Transfer random coeffients to array before ifft transform */
+    /* Transfer random coefficients to array before ifft transform */
     /* ========================================================= */
 
     for (coeff = 0; coeff < Steps; coeff++) {

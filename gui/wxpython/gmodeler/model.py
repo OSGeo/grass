@@ -34,12 +34,8 @@ import copy
 import re
 import mimetypes
 import time
-import six
 
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import xml.etree.ElementTree as etree
 
 import xml.sax.saxutils as saxutils
 
@@ -60,7 +56,7 @@ from core.gcmd import (
 from core.settings import UserSettings
 from gui_core.forms import GUI, CmdPanel
 from gui_core.widgets import GNotebook
-from gui_core.wrap import Button
+from gui_core.wrap import Button, IsDark
 from gmodeler.giface import GraphicalModelerGrassInterface
 
 from grass.script import task as gtask
@@ -131,7 +127,7 @@ class Model(object):
 
     def ReorderItems(self, idxList):
         items = list()
-        for oldIdx, newIdx in six.iteritems(idxList):
+        for oldIdx, newIdx in idxList.items():
             item = self.items.pop(oldIdx)
             items.append(item)
             self.items.insert(newIdx, item)
@@ -520,7 +516,7 @@ class Model(object):
         return errList
 
     def _substituteFile(self, item, params=None, checkOnly=False):
-        """Subsitute variables in command file inputs
+        """Substitute variables in command file inputs
 
         :param bool checkOnly: tuble - True to check variable, don't touch files
 
@@ -678,7 +674,7 @@ class Model(object):
                 return
 
             err = list()
-            for key, item in six.iteritems(params):
+            for key, item in params.items():
                 for p in item["params"]:
                     if p.get("value", "") == "":
                         err.append((key, p.get("name", ""), p.get("description", "")))
@@ -762,7 +758,7 @@ class Model(object):
 
         # discard values
         if params:
-            for item in six.itervalues(params):
+            for item in params.values():
                 for p in item["params"]:
                     p["value"] = ""
 
@@ -828,7 +824,7 @@ class Model(object):
         if self.variables:
             params = list()
             result["variables"] = {"flags": list(), "params": params, "idx": idx}
-            for name, values in six.iteritems(self.variables):
+            for name, values in self.variables.items():
                 gtype = values.get("type", "string")
                 if gtype in ("raster", "vector", "mapset", "file", "region", "dir"):
                     gisprompt = True
@@ -1622,14 +1618,15 @@ class ModelRelation(ogl.LineShape):
         """Get list of control points"""
         return self._points
 
-    def _setPen(self):
+    def _setPen(self, bg_white=False):
         """Set pen"""
-        pen = wx.Pen(wx.BLACK, 1, wx.SOLID)
-        self.SetPen(pen)
+        self.SetPen(
+            wx.Pen(wx.WHITE if IsDark() and not bg_white else wx.BLACK, 1, wx.SOLID)
+        )
 
     def OnDraw(self, dc):
         """Draw relation"""
-        self._setPen()
+        self._setPen(dc.GetBackground() == wx.WHITE_BRUSH)
         ogl.LineShape.OnDraw(self, dc)
 
     def SetName(self, param):
@@ -2317,7 +2314,7 @@ class WriteModelFile:
             return
         self.fd.write("%s<variables>\n" % (" " * self.indent))
         self.indent += 4
-        for name, values in six.iteritems(self.variables):
+        for name, values in self.variables.items():
             self.fd.write(
                 '%s<variable name="%s" type="%s">\n'
                 % (" " * self.indent, name, values["type"])
@@ -2373,7 +2370,7 @@ class WriteModelFile:
         self.indent += 4
         if not action.IsEnabled():
             self.fd.write("%s<disabled />\n" % (" " * self.indent))
-        for key, val in six.iteritems(action.GetParams()):
+        for key, val in action.GetParams().items():
             if key == "flags":
                 for f in val:
                     if f.get("value", False) or f.get("parameterized", False):
@@ -2553,7 +2550,7 @@ class WriteScriptFile(ABC):
 
     @abstractmethod
     def __init__(self, fd, model):
-        """Constructor to be overriden."""
+        """Constructor to be overridden."""
         self.fd = None
         self.model = None
         self.indent = None
@@ -2730,7 +2727,7 @@ class Model(Process):
 
         self._writeHandler()
 
-        for item in self.model.GetItems():
+        for item in self.model.GetItems(ModelAction):
             if item.GetParameterizedParams()["flags"]:
                 self.fd.write(
                     r"""
@@ -2820,7 +2817,7 @@ if __name__ == "__main__":
             value = param["value"]
             age = param["age"]
 
-            # ComplexOutput if: outputing a new non-intermediate layer and
+            # ComplexOutput if: outputting a new non-intermediate layer and
             # either not empty or parameterized
             if (
                 age == "new"
@@ -2863,7 +2860,7 @@ if __name__ == "__main__":
         )
 
     def _writeHandler(self):
-        for item in self.model.GetItems():
+        for item in self.model.GetItems(ModelAction):
             self._writeItem(item, variables=item.GetParameterizedParams())
 
         self.fd.write("\n{}return response\n".format(" " * self.indent))
@@ -2881,7 +2878,7 @@ if __name__ == "__main__":
             value = param["value"]
             age = param["age"]
 
-            # output if: outputing a new non-intermediate layer and
+            # output if: outputting a new non-intermediate layer and
             # either not empty or parameterized
             if (
                 age == "new"
@@ -3131,7 +3128,7 @@ class WritePythonFile(WriteScriptFile):
             )
         )
 
-        modelItems = self.model.GetItems()
+        modelItems = self.model.GetItems(ModelAction)
         for item in modelItems:
             for flag in item.GetParameterizedParams()["flags"]:
                 if flag["label"]:
@@ -3227,7 +3224,7 @@ def cleanup():
             self.fd.write("    pass\n")
 
         self.fd.write("\ndef main(options, flags):\n")
-        for item in self.model.GetItems():
+        for item in self.model.GetItems(ModelAction):
             self._writeItem(item, variables=item.GetParameterizedParams())
 
         self.fd.write("    return 0\n")
@@ -3430,7 +3427,7 @@ class ModelParamDialog(wx.Dialog):
     def _createPages(self):
         """Create for each parameterized module its own page"""
         nameOrdered = [""] * len(self.params.keys())
-        for name, params in six.iteritems(self.params):
+        for name, params in self.params.items():
             nameOrdered[params["idx"]] = name
         for name in nameOrdered:
             params = self.params[name]

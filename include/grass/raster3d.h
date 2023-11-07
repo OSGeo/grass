@@ -4,7 +4,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-/* Second version of the raster 3D map layout. Old maps withput version
+/* Second version of the raster 3D map layout. Old maps without version
  information are defined as version == 1 when reading the header. */
 #define RASTER3D_MAP_VERSION            2
 
@@ -105,7 +105,7 @@ typedef struct RASTER3D_Map {
     /* type in which data is stored on file */
     int type; /* DCELL_TYPE or FCELL_TYPE */
 
-    /* data concering the compression */
+    /* data concerning the compression */
     int precision;   /* RASTER3D_MAX_PRECISION or, 0 .. 23 for float,
                         0 .. 52 for double */
     int compression; /* RASTER3D_NO_COMPRESSION or RASTER3D_COMPRESSION */

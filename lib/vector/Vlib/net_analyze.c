@@ -164,7 +164,7 @@ static int find_shortest_path(struct Map_info *Map, int from, int to,
         Vect_reset_list(List);
 
     /* Check if from and to are identical, otherwise dglib returns path to
-     * neares node and back! */
+     * nearest node and back! */
     if (from == to) {
         if (cost != NULL)
             *cost = 0;
@@ -954,8 +954,8 @@ find_shortest_path_coor(struct Map_info *Map, double fx, double fy, double fz,
                     int node, node1, node2;
 
                     Vect_get_line_nodes(Map, abs(line), &node1, &node2);
-                    /* add the second node, the first of first segmet was alread
-                     * added */
+                    /* add the second node, the first of first segmet was
+                     * already added */
                     if (line > 0)
                         node = node2;
                     else

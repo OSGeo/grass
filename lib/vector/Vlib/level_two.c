@@ -445,7 +445,7 @@ int Vect_get_centroid_area(const struct Map_info *Map, int centroid)
 }
 
 /*!
-   \brief Enable/disable maintanance of list of updated lines/nodes
+   \brief Enable/disable maintenance of list of updated lines/nodes
 
    See Plus_head.uplist for details.
 

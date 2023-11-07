@@ -17,6 +17,11 @@ jobs:
   build-and-test:
     name: ${{ matrix.name }} tests
 
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
+        matrix.name }}
+      cancel-in-progress: true
+
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -33,7 +38,7 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
 
       - name: Get dependencies
         run: |

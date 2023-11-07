@@ -29,7 +29,7 @@ int RTreeValidChildF(union RTree_Child *child)
 }
 
 /*
- * Search in an index tree for all data retangles that
+ * Search in an index tree for all data rectangles that
  * overlap the argument rectangle.
  * Return the number of qualifying data rects.
  */

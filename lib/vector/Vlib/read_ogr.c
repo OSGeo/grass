@@ -446,7 +446,7 @@ int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
    \param Map pointer to Map_info structure
    \param hGeom OGR geometry
    \param offset given offset
-   \param[out] Points container used to store line pointes within
+   \param[out] Points container used to store line points within
 
    \return feature type
    \return -1 on error
@@ -524,7 +524,7 @@ int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
    \param Map pointer to Map_info structure
    \param hGeom OGR geometry
    \param offset given offset
-   \param[out] Points container used to store line pointes within
+   \param[out] Points container used to store line points within
 
    \return feature type
    \return -1 on error

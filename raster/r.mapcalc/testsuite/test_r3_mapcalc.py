@@ -7,7 +7,6 @@ from grass.gunittest.main import test
 
 
 class TestBasicOperations(TestCase):
-
     # TODO: replace by unified handing of maps
     to_remove = []
 
@@ -55,7 +54,7 @@ class TestBasicOperations(TestCase):
 
     def test_nrows_ncols_ndepths_sum(self):
         """Test if sum of nrows, ncols and ndepths matches one
-        expected from current region settigs"""
+        expected from current region settings"""
         self.assertModule(
             "r3.mapcalc",
             expression="nrows_ncols_ndepths_sum = nrows() + ncols() + ndepths()",
