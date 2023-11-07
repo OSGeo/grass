@@ -62,7 +62,7 @@ from gui_core.dialogs import (
     MapLayersDialog,
     QuitDialog,
 )
-from gui_core.menu import SearchModuleWindow
+from gui_core.menu import SearchModuleWindow, HistoryModuleWindow
 from gui_core.menu import Menu as GMenu
 from core.debug import Debug
 from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
@@ -414,6 +414,21 @@ class GMFrame(wx.Frame):
             )
         else:
             self.search = None
+
+    def _createHistoryModule(self, parent):
+        """Initialize Module history widget"""
+        if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
+            self.history = HistoryModuleWindow(
+                parent=parent,
+                handlerObj=self,
+                giface=self._giface,
+                model=self._historyTreeBuilder.GetModel()
+            )
+            self.history.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
+        else:
+            self.history = None
 
     def _createConsole(self, parent):
         """Initialize Console widget"""

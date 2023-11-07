@@ -55,7 +55,7 @@ from core.watchdog import (
 )
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
-from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
+from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree, HistoryModuleTree
 from main_window.notebook import MapNotebook
 from gui_core.widgets import GNotebook
 from core.gconsole import GConsole, EVT_IGNORED_CMD_RUN
@@ -69,7 +69,7 @@ from gui_core.dialogs import (
     MapLayersDialog,
     QuitDialog,
 )
-from gui_core.menu import SearchModuleWindow, ModuleHistoryWindow
+from gui_core.menu import SearchModuleWindow, HistoryModuleWindow
 from gui_core.menu import Menu as GMenu
 from core.debug import Debug
 from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
@@ -164,7 +164,7 @@ class GMFrame(wx.Frame):
         # the search tree and command console
         self._moduleTreeBuilder = LayerManagerModuleTree(message_handler=add_menu_error)
         # the history tree of executed commands
-        self._historyTreeBuilder = ModuleHistoryTree(message_handler=add_menu_error)
+        self._historyTreeBuilder = HistoryModuleTree()
         self._auimgr = SingleWindowAuiManager(self)
 
         # list of open dialogs
@@ -356,14 +356,26 @@ class GMFrame(wx.Frame):
         else:
             self.search = None
 
-    def _createModuleHistory(self, parent):
+    def _createHistoryModule(self, parent):
         """Initialize Module history widget"""
-        self.moduleHistory = ModuleHistoryWindow(
-            parent=parent,
-            handlerObj=self,
-            giface=self._giface,
-            model=self._historyTreeBuilder.GetModel()
-        )
+        if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
+            self.history = HistoryModuleWindow(
+                parent=parent,
+                handlerObj=self,
+                giface=self._giface,
+                model=self._historyTreeBuilder.GetModel()
+            )
+            self._giface.currentMapsetChanged.connect(self.UpdateHistoryModel)
+
+            self.history.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
+        else:
+            self.history = None
+
+    def UpdateHistoryModel(self):
+        self._historyTreeBuilder = HistoryModuleTree()
+        self.history.UpdateModel(self._historyTreeBuilder.GetModel())
 
     def _createConsole(self, parent):
         """Initialize Console widget"""
@@ -568,7 +580,7 @@ class GMFrame(wx.Frame):
         self._createDataCatalog(parent=self)
         self._createDisplay(parent=self)
         self._createSearchModule(parent=self)
-        self._createModuleHistory(parent=self)
+        self._createHistoryModule(parent=self)
         self._createConsole(parent=self)
         self._createPythonShell(parent=self)
         self.toolbars = {
@@ -677,7 +689,7 @@ class GMFrame(wx.Frame):
         )
 
         self._auimgr.AddPane(
-            self.moduleHistory,
+            self.history,
             aui.AuiPaneInfo()
             .Name("history")
             .Caption(_("History"))

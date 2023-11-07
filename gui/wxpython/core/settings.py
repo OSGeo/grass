@@ -172,6 +172,7 @@ class Settings:
                 "hideTabs": {
                     "search": False,
                     "pyshell": False,
+                    "history": False
                 },
                 "copySelectedTextToClipboard": {"enabled": False},
             },

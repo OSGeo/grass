@@ -6,6 +6,7 @@
 Classes:
  - menu::Menu
  - menu::SearchModuleWindow
+ - menu::HistoryModuleWindow
  - menu::RecentFilesMenu
 
 (C) 2010-2013 by the GRASS Development Team
@@ -305,8 +306,8 @@ class SearchModuleWindow(wx.Panel):
         self.showNotification.emit(message=label)
 
 
-class ModuleHistoryWindow(wx.Panel):
-    """Menu tree and search widget for searching modules.
+class HistoryModuleWindow(wx.Panel):
+    """History window for displaying and executing the commands from history log.
 
     Signal:
         showNotification - attribute 'message'
@@ -316,13 +317,18 @@ class ModuleHistoryWindow(wx.Panel):
         self.parent = parent
         self._handlerObj = handlerObj
         self._giface = giface
-        self._model = model
 
+        self.showNotification = Signal("ModuleHistoryWindow.showNotification")
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
 
         self._tree = CTreeView(model=model, parent=self)
         self._tree.SetToolTip(_("Double-click to run the command"))
 
+        self._tree.selectionChanged.connect(self.OnItemSelected)
+        self._tree.itemActivated.connect(lambda node: self.Run(node))
+        
+        self._layout()
+    
     def _layout(self):
         """Do dialog layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -332,7 +338,17 @@ class ModuleHistoryWindow(wx.Panel):
         self.SetSizerAndFit(sizer)
         self.SetAutoLayout(True)
         self.Layout()
+    
+    def UpdateModel(self, model):
+        """Create tree based on given model"""
+        self._tree = CTreeView(model=model, parent=self)
+        self._tree.SetToolTip(_("Double-click to run the command"))
 
+        self._tree.selectionChanged.connect(self.OnItemSelected)
+        self._tree.itemActivated.connect(lambda node: self.Run(node))
+        
+        self._layout()
+ 
     def OnItemSelected(self, node):
         """Item selected"""
         data = node.data
@@ -351,6 +367,40 @@ class ModuleHistoryWindow(wx.Panel):
         command = lst[0]
 
         self.showNotification.emit(message=label)
+
+    def _GetSelectedNode(self):
+        selection = self._tree.GetSelected()
+        if not selection:
+            return None
+        return selection[0]
+    
+    def Run(self, node=None):
+        """Run selected command.
+
+        :param node: a tree node associated with the module or other item
+        """
+        if not node:
+            node = self._GetSelectedNode()
+        # nothing selected
+        if not node:
+            return
+        data = node.data
+        # non-leaf nodes
+        if not data:
+            # expand/collapse location/mapset...
+            if self._tree.IsNodeExpanded(node):
+                self._tree.CollapseNode(node, recursive=False)
+            else:
+                self._tree.ExpandNode(node, recursive=False)
+            return
+
+        # extract name of the handler and create a new call
+        handler = "self._handlerObj." + data["handler"].lstrip("self.")
+
+        if data["command"]:
+            eval(handler)(event=None, cmd=data["command"].split())
+        else:
+            eval(handler)(event=None)
 
 
 class RecentFilesMenu:

@@ -25,9 +25,7 @@ from core.toolboxes import getMenudataFile
 from core.globalvar import WXGUIDIR
 from core.gcmd import GError
 
-from grass.grassdb.checks import (
-    get_current_mapset_history_path
-)
+from grass.grassdb.checks import get_current_mapset_history_path
 
 
 class LayerManagerMenuData(MenuTreeModelBuilder):
@@ -96,20 +94,18 @@ class LayerManagerModuleTree(MenuTreeModelBuilder):
             )
 
 
-class ModuleHistoryTree():
-    """Data class for history of executed commands """
+class HistoryModuleTree():
+    """Data class for history of executed commands."""
 
-    def __init__(self, message_handler=GError):
-
-        self.historyPath = get_current_mapset_history_path()
-        print(self.historyPath)
+    def __init__(self):
 
         self.model = TreeModel(ModuleNode)
-        self._createModel()
+        self.CreateModel()
 
-    def _createModel(self):
+    def CreateModel(self):
+        history_path = get_current_mapset_history_path()       
         try:
-            with open(self.historyPath, "r") as f:
+            with open(history_path, "r") as f:
                 for label in f:
                     data = dict(
                         label=label
