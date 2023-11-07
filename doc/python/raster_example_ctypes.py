@@ -11,7 +11,7 @@ cols=5`
 
 # FIXME: as an example it should make extensive use of code comments and document
 #  each and every step along the way.  (e.g. explain c_char_p().value memory pointer
-#  to string conversion for Python programmers not familar with C pointers)
+#  to string conversion for Python programmers not familiar with C pointers)
 #
 #  FIXME: explain at a basic level what ctypes is & does.
 
@@ -29,7 +29,7 @@ if "GISBASE" not in os.environ:
 if len(sys.argv) == 2:
     input = sys.argv[1]
 else:
-    input = raw_input("Name of raster map? ")
+    input = input("Name of raster map? ")
 
 # initialize GRASS library
 G_gisinit("")

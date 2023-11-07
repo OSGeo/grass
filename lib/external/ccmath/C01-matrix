@@ -541,7 +541,7 @@ mattr
      Transpose an m by n matrix A = B~.
 
      void mattr(double *a,double *b,int m,int n)
-       a = pointer to array containing output n by m matrix 
+       a = pointer to array containing output n by m matrix
        b = pointer to array containing input m by n matrix
             (matrices stored in row order)
        m,n = dimension parameters (dim(a)=dim(b)=n*m)
@@ -584,7 +584,7 @@ smgen
               (n by n with kth column the vector corresponding
                to the kth eigenvalue)
        n = system dimension
-           
+
           If D is the diagonal matrix of eigenvalues
           and  E[i,j] = evec[j+n*i] , then   A = E*D*E~.
 
@@ -678,7 +678,7 @@ fmatprt
      the decomposition algorithms have excellent numerical stability.
      The value of a 'zero' d[i] is no larger than a few times the
      computational rounding error e.
-     
+
      The matrix U1 is formed from the first n orthonormal column vectors
      of U.  U1[i,j] = U[i,j] for i = 1 to m and j = 1 to n. A singular
      value decomposition of A can also be expressed in terms of the m by\
@@ -724,7 +724,7 @@ svdval
 
 sv2val
 
-     Compute singular values when m >> n.                         
+     Compute singular values when m >> n.
 
      int sv2val(double *d,double *a,int m,int n)
        d = pointer to double array of dimension n
@@ -932,7 +932,7 @@ atou1
      ---------------------------------------------------------------
 
 atovm
- 
+
     Overload a Householder right-factored square matrix A with the
     Householder transformation matrix V.
 
@@ -1227,7 +1227,7 @@ hmgen
 
      Generate a Hermitian matrix with specified eigen values and
      eigenvectors.
-  
+
      void hmgen(Cpx *h,double *ev,Cpx *u,int n)
        h = pointer to complex array of output matrix H
        ev = pointer to real array of input eigen values

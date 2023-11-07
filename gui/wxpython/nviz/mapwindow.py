@@ -20,7 +20,6 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
-import six
 import time
 import copy
 import math
@@ -478,7 +477,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         and then to textures so that they can be rendered by OpenGL.
         Updates self.imagelist"""
         # update images (legend and text)
-        for oid, overlay in six.iteritems(self.overlays):
+        for oid, overlay in self.overlays.items():
             if not overlay.IsShown() or overlay.name in ("barscale", "northarrow"):
                 continue
             if oid not in [t.GetId() for t in self.imagelist]:  # new
@@ -719,7 +718,6 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         event.Skip()
 
     def OnDragging(self, event):
-
         if self.mouse["use"] == "pointer":
             if self.dragid >= 0:
                 self.DragItem(self.dragid, event.GetPosition())
@@ -1180,7 +1178,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
     def UpdateMap(self, render=True):
         """Updates the canvas anytime there is a change to the
-        underlaying images or to the geometry of the canvas.
+        underlying images or to the geometry of the canvas.
 
         :param render: re-render map composition
         :type render: bool
@@ -2252,7 +2250,6 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             or "update" in data["marker"]
             or "update" in data["color"]
         ):
-
             ret = self._display.SetVectorPointMode(
                 id,
                 data["color"]["value"],

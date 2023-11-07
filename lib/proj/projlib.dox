@@ -1,5 +1,5 @@
 /*! \page projlib GRASS and the PROJ projection library
-<!-- doxygenized from "GRASS 5 Programmer's Manual" 
+<!-- doxygenized from "GRASS 5 Programmer's Manual"
      by M. Neteler 11/2005
   -->
 
@@ -55,7 +55,7 @@ if a warning appears that a certain datum is not recognised by GRASS and
 no parameters found, the datum transformation parameters have to be
 added to $GISBASE/etc/proj/datum.table (and also $GISBASE/etc/proj/datumtransform.table
 if you have 7-parameter transformation parameters). No need to re-compile
-though. When adding to git, currently these files are still in lib/gis/. 
+though. When adding to git, currently these files are still in lib/gis/.
 <p>
 
 A list of datum equivalents is included in convert.c for geospatial files that
@@ -86,27 +86,27 @@ default: cmd
 \section Functions
 
  - GPJ_ask_datum_params()
- 
+
  - GPJ_get_datum_by_name()
 
  - GPJ__get_datum_params()
 
  - GPJ_get_datum_params()
- 
+
  - GPJ_get_datum_transform_by_name()
 
  - GPJ_get_default_datum_params_by_name()
 
  - GPJ_get_ellipsoid_by_name()
- 
+
  - GPJ__get_ellipsoid_params()
 
  - GPJ_get_ellipsoid_params()
- 
+
  - GPJ_get_equivalent_latlong()
- 
+
  - GPJ_grass_to_osr()
- 
+
  - GPJ_grass_to_osr2()
 
  - GPJ_grass_to_wkt()
@@ -118,9 +118,9 @@ default: cmd
  - GPJ_free_datum_transform()
 
  - GPJ_free_ellps()
- 
+
  - GPJ_set_csv_loc()
- 
+
  - GPJ_osr_to_grass()
 
  - GPJ_wkt_to_grass()
@@ -131,4 +131,3 @@ default: cmd
 
  - GPJ_transform_array()
 */
-

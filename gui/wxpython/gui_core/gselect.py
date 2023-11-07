@@ -26,10 +26,11 @@ Classes:
  - :class:`CoordinatesSelect`
  - :class:`VectorCategorySelect`
  - :class:`SignatureSelect`
+ - :class:`SignatureTypeSelect`
  - :class:`SeparatorSelect`
  - :class:`SqlWhereSelect`
 
-(C) 2007-2018 by the GRASS Development Team
+(C) 2007-2023 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -41,12 +42,9 @@ This program is free software under the GNU General Public License
 @author Matej Krejci <matejkrejci gmail.com> (VectorCategorySelect)
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import glob
-import six
 import ctypes
 
 import wx
@@ -62,7 +60,7 @@ from grass.exceptions import CalledModuleError
 
 from gui_core.widgets import ManageSettingsWidget, CoordinatesValidator
 
-from core.gcmd import RunCommand, GMessage, GWarning, GException
+from core.gcmd import RunCommand, GError, GMessage, GWarning, GException
 from core.utils import (
     GetListOfLocations,
     GetListOfMapsets,
@@ -107,7 +105,7 @@ class Select(ComboCtrl):
         validator=wx.DefaultValidator,
     ):
         """Custom control to create a ComboBox with a tree control to
-        display and select GIS elements within acessible mapsets.
+        display and select GIS elements within accessible mapsets.
         Elements can be selected with mouse. Can allow multiple
         selections, when argument <em>multiple</em> is True. Multiple
         selections are separated by commas.
@@ -436,7 +434,6 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
     # overridden ComboPopup methods
 
     def Init(self):
-
         ListCtrlComboPopup.Init(self)
         self.nmaps = 1
         self.type = None
@@ -539,7 +536,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
         # add extra items first
         if self.extraItems:
-            for group, items in six.iteritems(self.extraItems):
+            for group, items in self.extraItems.items():
                 node = self.AddItem(group, node=True)
                 self.seltree.SetItemTextColour(node, wx.Colour(50, 50, 200))
                 for item in items:
@@ -1021,7 +1018,6 @@ class DriverSelect(wx.ComboBox):
         size=globalvar.DIALOG_LAYER_SIZE,
         **kargs,
     ):
-
         super(DriverSelect, self).__init__(
             parent, id, value, pos, size, choices, style=wx.CB_READONLY
         )
@@ -1169,16 +1165,16 @@ class ColumnSelect(ComboCtrl):
             columnchoices = dbInfo.GetTableDesc(table)
             keyColumn = dbInfo.GetKeyColumn(layer)
             self.columns = len(columnchoices.keys()) * [""]
-            for key, val in six.iteritems(columnchoices):
+            for key, val in columnchoices.items():
                 self.columns[val["index"]] = key
             if excludeKey:  # exclude key column
                 self.columns.remove(keyColumn)
             if excludeCols:  # exclude key column
-                for key in six.iterkeys(columnchoices):
+                for key in columnchoices.keys():
                     if key in excludeCols:
                         self.columns.remove(key)
             if type:  # only selected column types
-                for key, value in six.iteritems(columnchoices):
+                for key, value in columnchoices.items():
                     if value["type"] not in type:
                         try:
                             self.columns.remove(key)
@@ -1454,6 +1450,7 @@ class GdalSelect(wx.Panel):
         self.link = link
         self.dest = dest
         self._sourceType = None
+        self._psql = "psql"
 
         wx.Panel.__init__(self, parent=panel, name="GdalSelect")
 
@@ -1729,7 +1726,7 @@ class GdalSelect(wx.Panel):
                     dsn = v
                     break
             optList = list()
-            for k, v in six.iteritems(data):
+            for k, v in data.items():
                 if k in ("format", "conninfo", "topology"):
                     continue
                 optList.append("%s=%s" % (k, v))
@@ -1955,7 +1952,6 @@ class GdalSelect(wx.Panel):
             self.dbPanel,
             self.protocolPanel,
         ):
-
             self.changingSizer.Add(panel, proportion=1, flag=wx.EXPAND)
 
         self.mainSizer.Add(
@@ -2002,8 +1998,11 @@ class GdalSelect(wx.Panel):
         if sourceType == "db":
             self.dbWidgets["format"].SetItems(list(self.dbFormats.values()))
             if self.dbFormats:
-                if "PostgreSQL" in self.dbFormats.values():
+                db_formats = self.dbFormats.values()
+                if "PostgreSQL" in db_formats:
                     self.dbWidgets["format"].SetStringSelection("PostgreSQL")
+                elif "PostgreSQL/PostGIS" in db_formats:
+                    self.dbWidgets["format"].SetStringSelection("PostgreSQL/PostGIS")
                 else:
                     self.dbWidgets["format"].SetSelection(0)
             self.dbWidgets["format"].Enable()
@@ -2101,10 +2100,38 @@ class GdalSelect(wx.Panel):
         if self._sourceType == "db":
             if self.dbWidgets["format"].GetStringSelection() in (
                 "PostgreSQL",
+                "PostgreSQL/PostGIS",
                 "PostGIS Raster driver",
             ):
+                ret = RunCommand("db.login", read=True, quiet=True, flags="p")
+                message = _(
+                    "PostgreSQL/PostGIS login was not set."
+                    " Set it via <db.login> module, please."
+                )
+                if not ret:
+                    GError(parent=self, message=message)
+                    return
 
-                dsn = "PG:dbname=%s" % self.dbWidgets["choice"].GetStringSelection()
+                connection_string = None
+                for conn in ret.splitlines():
+                    db_login = conn.split("|")
+                    if db_login[0] == "pg":
+                        user, password, host, port = db_login[2:]
+                        connection_string = (
+                            f"PG:dbname={self.dbWidgets['choice'].GetStringSelection()}"
+                        )
+                        if user:
+                            connection_string += f" user={user}"
+                        if password:
+                            connection_string += f" password={password}"
+                        if host:
+                            connection_string += f" host={host}"
+                        if port:
+                            connection_string += f" port={port}"
+                        return connection_string
+                if not connection_string:
+                    GError(parent=self, message=message)
+                    return
             else:
                 name = self._getCurrentDbWidgetName()
                 if name == "choice":
@@ -2139,14 +2166,23 @@ class GdalSelect(wx.Panel):
     def SetDatabase(self, db):
         """Update database panel."""
         sizer = self.dbPanel.GetSizer()
-        showBrowse = db in ("SQLite", "Rasterlite")
+        showBrowse = db in ("SQLite", "SQLite / Spatialite", "Rasterlite")
         showDirbrowse = db in ("FileGDB")
         showChoice = db in (
             "PostgreSQL",
+            "PostgreSQL/PostGIS",
             "PostGIS WKT Raster driver",
             "PostGIS Raster driver",
         )
-        enableFeatType = self.dest and self.ogr and db in ("PostgreSQL")
+        enableFeatType = (
+            self.dest
+            and self.ogr
+            and db
+            in (
+                "PostgreSQL",
+                "PostgreSQL/PostGIS",
+            )
+        )
         showText = not (showBrowse or showChoice or showDirbrowse)
 
         sizer.Show(self.dbWidgets["browse"], show=showBrowse)
@@ -2164,9 +2200,9 @@ class GdalSelect(wx.Panel):
             if dbNames is not None:
                 self.dbWidgets["choice"].SetItems(sorted(dbNames))
                 self.dbWidgets["choice"].SetSelection(0)
-            elif grass.find_program("psql", "--help"):
+            elif grass.find_program(self._psql, "--help"):
                 if not self.dbWidgets["choice"].GetItems():
-                    p = grass.Popen(["psql", "-ltA"], stdout=grass.PIPE)
+                    p = grass.Popen([self._psql, "-ltA"], stdout=grass.PIPE)
                     ret = p.communicate()[0]
                     if ret:
                         dbNames = list()
@@ -2195,24 +2231,74 @@ class GdalSelect(wx.Panel):
     def _reloadLayers(self):
         """Reload list of layers"""
 
-        def hasRastSameProjAsLocation(dsn):
+        def hasRastSameProjAsLocation(dsn, table=None):
+            """Check if raster has same projection as location
 
-            ret = RunCommand("r.external", quiet=True, read=True, flags="t", input=dsn)
+            :param str dsn: data source name
+            :param str table: PG DB table name, default value is None
 
-            # v.external returns info for individual bands, however projection is shared by all bands ->
-            # (it is possible to take first line)
-
-            lines = ret.splitlines()
+            :return str: 1 if raster projection match location
+                         projection else 0
+            """
             projectionMatch = "0"
-            if lines:
-                bandNumber, bandType, projectionMatch = map(
-                    lambda x: x.strip(), lines[0].split(",")
+
+            if "PG:" in dsn:
+                dsn = dsn.replace("PG:", "")
+                p = grass.Popen(
+                    [
+                        self._psql,
+                        "-t",
+                        "-A",
+                        dsn,
+                        "-c",
+                        f"SELECT ST_SRID(rast) AS srid FROM {table} WHERE rid=1;",
+                    ],
+                    stdout=grass.PIPE,
                 )
+                ret, error = p.communicate()
+                if error:
+                    GError(
+                        parent=self,
+                        message=_(
+                            "Getting raster <{table}> SRID from PostgreSQL"
+                            " DB <{db}>, host <{host}> failed."
+                            " {error}.".format(
+                                table=table,
+                                db=self._getPDDBConnectionParam(
+                                    dsn,
+                                    conn_param="dbname",
+                                ),
+                                host=self._getPDDBConnectionParam(
+                                    dsn,
+                                    conn_param="host",
+                                ),
+                                error=grass.utils.decode(error),
+                            ),
+                        ),
+                    )
+                if ret:
+                    raster_srid = grass.utils.decode(ret).replace(os.linesep, "")
+                    location_srid = grass.parse_command("g.proj", flags="g")
+                    if raster_srid == location_srid["srid"].split(":")[-1]:
+                        projectionMatch = "1"
+            else:
+                ret = RunCommand(
+                    "r.external", quiet=True, read=True, flags="t", input=dsn
+                )
+
+                # v.external returns info for individual bands, however projection is shared by all bands ->
+                # (it is possible to take first line)
+
+                lines = ret.splitlines()
+                projectionMatch = "0"
+                if lines:
+                    bandNumber, bandType, projectionMatch = map(
+                        lambda x: x.strip(), lines[0].split(",")
+                    )
 
             return projectionMatch
 
         def getProjMatchCaption(projectionMatch):
-
             if projectionMatch == "0":
                 projectionMatchCaption = _("No")
             else:
@@ -2271,6 +2357,19 @@ class GdalSelect(wx.Panel):
                         (layerId, baseName, projectionMatchCaption, grassName)
                     )
                     data.append((layerId, baseName, int(projectionMatch), grassName))
+                    layerId += 1
+            elif (
+                self.dbWidgets["format"].GetStringSelection() == "PostGIS Raster driver"
+            ):
+                rasters = self._getPGDBRasters(dsn)
+                for raster in rasters:
+                    grassName = GetValidLayerName(raster)
+                    projectionMatch = hasRastSameProjAsLocation(dsn, table=raster)
+                    projectionMatchCaption = getProjMatchCaption(projectionMatch)
+                    listData.append(
+                        (layerId, raster, projectionMatchCaption, grassName)
+                    )
+                    data.append((layerId, raster, int(projectionMatch), grassName))
                     layerId += 1
 
         # emit signal
@@ -2365,6 +2464,194 @@ class GdalSelect(wx.Panel):
                     cmd = "r.in.gdal"
 
         RunCommand("g.manual", entry=cmd)
+
+    def _getPGDBConnectionParam(self, dsn, conn_param):
+        """Get PostgreSQL DB connection parameter value
+
+        :param str dsn: PG DB connection string "dbname=<your_db_name>
+                        user=<your_user_name> password=<your_db_password>
+                        host=<your_host_name> port=<yor_port_number>"
+        :param str connn_param: PG DB connection string
+                                connection param name
+                                (dbname|user|password|host|port)
+
+        :return str: PG DB connection param value
+        """
+        Debug.msg(
+            3,
+            f"GdalSelect._getPGDBConnectionParam(): dsn='{dsn}'"
+            f" conn_param='{conn_param}'",
+        )
+        conn_param_val = [i for i in dsn.split(" ") if conn_param in i]
+        if conn_param_val:
+            Debug.msg(
+                3,
+                f"GdalSelect._getPGDBConnectionParam(): return"
+                f" {conn_param_val[0].split('=')[-1]}",
+            )
+            return conn_param_val[0].split("=")[-1]
+
+    def _getPGDBtables(self, dsn):
+        """Get PostgreSQL DB list of tables
+
+        :param str dsn: PG DB connection string "dbname=<your_db_name>
+                        user=<your_user_name> password=<your_db_password>
+                        host=<your_host_name> port=<yor_port_number>"
+
+        :return list tables: list of PG db tables
+        """
+        Debug.msg(3, f"GdalSelect._getPGDBtables(): dsn='{dsn}'")
+        tables = []
+        tables_list_sql = """
+            SELECT tablename FROM pg_catalog.pg_tables
+            WHERE schemaname != 'information_schema'
+              AND schemaname != 'pg_catalog';
+        """
+        # Get tables list
+        p = grass.Popen(
+            [
+                self._psql,
+                "-t",
+                "-A",
+                dsn,
+                "-c",
+                f"{tables_list_sql}",
+            ],
+            stdout=grass.PIPE,
+        )
+        ret, error = p.communicate()
+        if error:
+            GError(
+                parent=self,
+                message=_(
+                    "Getting list of tables from PostgreSQL DB <{db}>,"
+                    " host <{host}> failed. {error}.".format(
+                        db=self._getPGDBConnectionParam(
+                            dsn,
+                            conn_param="dbname",
+                        ),
+                        host=self._getPGDBConnectionParam(
+                            dsn,
+                            conn_param="host",
+                        ),
+                        error=grass.utils.decode(error),
+                    ),
+                ),
+            )
+        if ret:
+            ret = grass.utils.decode(ret)
+            tables = [i.strip() for i in ret.split(os.linesep) if i]
+        Debug.msg(3, f"GdalSelect._getPGDBtables(): return {tables}")
+        return tables
+
+    def _getPGDBTablesColumnsTypesSql(self, tables):
+        """Get PostGIS DB tables columns data type SQL command
+
+        :param list tables: list of PG DB tables with
+                            simple quotes ["'table'", ...]
+        :return str: SQL string for query all PG DB tables with
+                     columns data types
+        """
+        return f"""
+            SELECT
+              relname as name,
+              a.attname AS column,
+              pg_catalog.format_type(a.atttypid, a.atttypmod) AS datatype
+            FROM
+              pg_catalog.pg_attribute a
+              LEFT JOIN (
+                SELECT
+                  c.oid,
+                  relname
+                FROM
+                  pg_catalog.pg_class c
+                  LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+                WHERE
+                  pg_catalog.pg_table_is_visible(c.oid)
+              ) AS o ON a.attrelid = o.oid
+            WHERE
+              relname IN ({', '.join(tables)})
+              AND NOT a.attisdropped;
+        """
+
+    def _getPGDBRasters(self, dsn):
+        """Get PostGIS DB rasters
+
+        :param str dsn: PG DB connection string "dbname=<your_db_name>
+                        user=<your_user_name> password=<your_db_password>
+                        host=<your_host_name> port=<yor_port_number>"
+
+        :return list: list of PostGIS DB rasters
+        """
+        Debug.msg(3, f"GdalSelect._getPGDBRasters(): dsn='{dsn}'")
+        rasters = []
+        raster_col_type = "raster"
+        field_sep = ","
+
+        dsn = dsn.replace("PG:", "")
+        if grass.find_program(self._psql, "--help"):
+            tables = self._getPGDBtables(dsn)
+            # Get tables columns data types list
+            if tables:
+                tables_with_quotes = [f"'{t}'" for t in tables]
+                tables_cols_data_types_sql = self._getPGDBTablesColumnsTypesSql(
+                    tables=tables_with_quotes,
+                )
+                p = grass.Popen(
+                    [
+                        self._psql,
+                        "-t",
+                        "-A",
+                        "-F",
+                        field_sep,
+                        dsn,
+                        "-c",
+                        f"{tables_cols_data_types_sql}",
+                    ],
+                    stdout=grass.PIPE,
+                )
+                ret, error = p.communicate()
+                if error:
+                    GError(
+                        parent=self,
+                        message=_(
+                            "Getting list of tables columns data types"
+                            " from PostGIS DB <{db}>, host <{host}> failed."
+                            " {error}.".format(
+                                db=self._getPGDBConnectionParam(
+                                    dsn,
+                                    conn_param="dbname",
+                                ),
+                                host=self._getPGDBConnectionParam(
+                                    dsn,
+                                    conn_param="host",
+                                ),
+                                error=grass.utils.decode(error),
+                            ),
+                        ),
+                    )
+                if ret:
+                    import re
+
+                    tables_cols = grass.utils.decode(ret)
+                    rasters_cols = re.findall(
+                        rf".*.{raster_col_type}",
+                        tables_cols,
+                    )
+                    for col in rasters_cols:
+                        table, col_, col_type = col.split(field_sep)
+                        if col_type == raster_col_type:
+                            rasters.append(table)
+        else:
+            GError(
+                parent=self,
+                message=_(
+                    "PostgreSQL DB <{psql}> program was not found."
+                    " Please, install it.".format(psql=self._psql)
+                ),
+            )
+        Debug.msg(3, f"GdalSelect._getPGDBRasters(): return {rasters}")
+        return rasters
 
 
 class ProjSelect(wx.ComboBox):
@@ -2731,7 +3018,6 @@ class VectorCategorySelect(wx.Panel):
                 self.buttonVecSelect.SetValue(False)
                 return
         if self._vectorSelect is None:
-
             if self.mapdisp:
                 if self.buttonVecSelect.IsEnabled():
                     switcher = self.mapdisp.GetToolSwitcher()
@@ -2805,10 +3091,18 @@ class SignatureSelect(wx.ComboBox):
         **kwargs,
     ):
         super(SignatureSelect, self).__init__(parent, id, size=size, **kwargs)
+        self.SetName("SignatureSelect")
+        self.mapsets = mapsets
+        self.UpdateItems(element)
 
+    def UpdateItems(self, element):
+        """Update list of signature files for given element
+
+        :param str element: signatures/sig or signatures/sigset
+        """
         items = []
-        if mapsets:
-            for mapset in mapsets:
+        if self.mapsets:
+            for mapset in self.mapsets:
                 self._append_mapset_signatures(mapset, element, items)
         else:
             self._append_mapset_signatures(None, element, items)
@@ -2816,6 +3110,14 @@ class SignatureSelect(wx.ComboBox):
         self.SetValue("")
 
     def _append_mapset_signatures(self, mapset, element, items):
+        # A workaround to list signature files before a separate
+        # signature management module is developed
+        try:
+            from grass.lib.gis import G_gisinit
+
+            G_gisinit("")
+        except Exception:
+            return
         try:
             from grass.lib.imagery import (
                 I_SIGFILE_TYPE_SIG,
@@ -2843,8 +3145,19 @@ class SignatureSelect(wx.ComboBox):
         I_free_signatures_list(count, ctypes.byref(sig_list))
 
 
+class SignatureTypeSelect(wx.ComboBox):
+    """Widget for selecting signature type"""
+
+    def __init__(
+        self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE, **kwargs
+    ):
+        super(SignatureTypeSelect, self).__init__(parent, id, size=size, **kwargs)
+        self.SetName("SignatureTypeSelect")
+        self.SetItems(["sig", "sigset"])
+
+
 class SeparatorSelect(wx.ComboBox):
-    """Widget for selecting seperator"""
+    """Widget for selecting separator"""
 
     def __init__(
         self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE, **kwargs

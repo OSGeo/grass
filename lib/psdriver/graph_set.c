@@ -7,7 +7,7 @@
  * coordinate system used by the applications programs has the (0,0) origin
  * in the upper left-hand corner.  Hence,
  *    screen_left < screen_right
- *    screen_top  < screen_bottom 
+ *    screen_top  < screen_bottom
  */
 
 #include <string.h>
@@ -28,8 +28,7 @@ struct ps_state ps;
 static double width, height;
 static int landscape;
 
-struct paper
-{
+struct paper {
     const char *name;
     double width, height;
     double left, right, bot, top;
@@ -45,8 +44,7 @@ static const struct paper papers[] = {
     {"us-legal", 8.5, 14.0, 1.0, 1.0, 1.0, 1.0},
     {"us-letter", 8.5, 11.0, 1.0, 1.0, 1.0, 1.0},
     {"us-tabloid", 11.0, 17.0, 1.0, 1.0, 1.0, 1.0},
-    {NULL, 0, 0, 0, 0, 0, 0}
-};
+    {NULL, 0, 0, 0, 0, 0, 0}};
 
 static void write_prolog(void)
 {
@@ -62,32 +60,31 @@ static void write_prolog(void)
 
     prolog_fp = fopen(prolog_file, "r");
     if (!prolog_fp)
-	G_fatal_error("Unable to open prolog file");
+        G_fatal_error("Unable to open prolog file");
 
     if (ps.encapsulated)
-	output("%%!PS-Adobe-3.0 EPSF-3.0\n");
+        output("%%!PS-Adobe-3.0 EPSF-3.0\n");
     else
-	output("%%!PS-Adobe-3.0\n");
+        output("%%!PS-Adobe-3.0\n");
 
     output("%%%%LanguageLevel: %d\n", 3);
     output("%%%%Creator: GRASS PS Driver\n");
     output("%%%%Title: %s\n", ps.outfile);
     output("%%%%For: %s\n", G_whoami());
     output("%%%%Orientation: %s\n", landscape ? "Landscape" : "Portrait");
-    output("%%%%BoundingBox: %d %d %d %d\n",
-	   (int)floor(ps.left), (int)floor(ps.bot),
-	   (int)ceil(ps.right), (int)ceil(ps.top));
+    output("%%%%BoundingBox: %d %d %d %d\n", (int)floor(ps.left),
+           (int)floor(ps.bot), (int)ceil(ps.right), (int)ceil(ps.top));
     output("%%%%CreationDate: %s\n", date_str);
     output("%%%%EndComments\n");
 
     output("%%%%BeginProlog\n");
     while (!feof(prolog_fp)) {
-	char buf[256];
+        char buf[256];
 
-	if (!fgets(buf, sizeof(buf), prolog_fp))
-	    break;
+        if (!fgets(buf, sizeof(buf), prolog_fp))
+            break;
 
-	fputs(buf, ps.tempfp);
+        fputs(buf, ps.tempfp);
     }
     output("%%%%EndProlog\n");
 
@@ -101,9 +98,9 @@ void write_setup(void)
     output("%.1f %.1f translate\n", ps.left, ps.bot);
 
     if (landscape)
-	output("90 rotate 0 1 -1 scale\n");
+        output("90 rotate 0 1 -1 scale\n");
     else
-	output("0 %.1f translate 1 -1 scale\n", height);
+        output("0 %.1f translate 1 -1 scale\n", height);
 
     output("%.1f %.1f BEGIN\n", width, height);
 
@@ -139,19 +136,19 @@ static void get_paper(void)
     ps.top = height;
 
     if (landscape)
-	swap(&ps.right, &ps.top);
+        swap(&ps.right, &ps.top);
 
     if (!name)
-	return;
+        return;
 
     for (i = 0;; i++) {
-	paper = &papers[i];
+        paper = &papers[i];
 
-	if (!paper->name)
-	    return;
+        if (!paper->name)
+            return;
 
-	if (G_strcasecmp(name, paper->name) == 0)
-	    break;
+        if (G_strcasecmp(name, paper->name) == 0)
+            break;
     }
 
     ps.left = in2pt(paper->left);
@@ -163,7 +160,7 @@ static void get_paper(void)
     height = in2pt(paper->height) - in2pt(paper->top) - in2pt(paper->bot);
 
     if (landscape)
-	swap(&width, &height);
+        swap(&width, &height);
 
     ps.right = ps.left + width;
     ps.bot = ps.top + height;
@@ -177,7 +174,7 @@ int PS_Graph_set(void)
 
     p = getenv("GRASS_RENDER_FILE");
     if (!p || strlen(p) == 0)
-	p = FILE_NAME;
+        p = FILE_NAME;
 
     ps.outfile = p;
     p = ps.outfile + strlen(ps.outfile) - 4;
@@ -196,27 +193,26 @@ int PS_Graph_set(void)
     ps.no_trailer = p && strcmp(p, "FALSE") == 0;
 
     G_verbose_message(_("ps: truecolor status %s"),
-		      ps.true_color ? _("enabled") : _("disabled"));
+                      ps.true_color ? _("enabled") : _("disabled"));
 
     get_paper();
 
     ps.tempfile = G_tempfile();
     if (ps.no_header && access(ps.outfile, F_OK) == 0)
-	G_rename_file(ps.outfile, ps.tempfile);
+        G_rename_file(ps.outfile, ps.tempfile);
 
     ps.tempfp = fopen(ps.tempfile, ps.no_header ? "a" : "w");
 
     if (!ps.tempfp)
-	G_fatal_error("Unable to open output file: %s", ps.outfile);
+        G_fatal_error("Unable to open output file: %s", ps.outfile);
 
     if (!ps.no_header) {
-	write_prolog();
-	write_setup();
+        write_prolog();
+        write_setup();
     }
 
     G_verbose_message(_("ps: collecting to file '%s'"), ps.outfile);
-    G_verbose_message(_("ps: image size %dx%d"),
-		      screen_width, screen_height);
+    G_verbose_message(_("ps: image size %dx%d"), screen_width, screen_height);
 
     fflush(ps.tempfp);
 
@@ -224,10 +220,10 @@ int PS_Graph_set(void)
 }
 
 /*!
-  \brief Get render file
+   \brief Get render file
 
-  \return file name
-*/
+   \return file name
+ */
 const char *PS_Graph_get_file(void)
 {
     return ps.outfile;

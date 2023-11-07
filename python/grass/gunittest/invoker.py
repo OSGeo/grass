@@ -9,10 +9,11 @@ for details.
 :authors: Vaclav Petras
 """
 
+import collections
 import os
-import sys
 import shutil
 import subprocess
+import sys
 
 from .checkers import text_to_keyvalue
 
@@ -32,18 +33,7 @@ from .utils import silent_rmtree, ensure_dir
 import grass.script as gs
 from grass.script.utils import decode, _get_encoding
 
-try:
-    from string import maketrans
-except ImportError:
-    maketrans = str.maketrans
-
-# needed for write_gisrc
-# TODO: it would be good to find some way of writing rc without the need to
-# have GRASS proprly set (anything from grass.script requires translations to
-# be set, i.e. the GRASS environment properly set)
-import grass.script.setup as gsetup
-
-import collections
+maketrans = str.maketrans
 
 
 # TODO: this might be more extend then update
@@ -60,7 +50,7 @@ def update_keyval_file(filename, module, returncode):
     if test_file_authors is None:
         test_file_authors = ""
 
-    # always owerwrite name and status
+    # always overwrite name and status
     keyval["name"] = module.name
     keyval["tested_dir"] = module.tested_dir
     if "status" not in keyval.keys():
@@ -162,7 +152,7 @@ class GrassTestFilesInvoker(object):
         # TODO: put this to constructor and copy here again
         env = os.environ.copy()
         mapset, mapset_dir = self._create_mapset(gisdbase, location, module)
-        gisrc = gsetup.write_gisrc(gisdbase, location, mapset)
+        gisrc = gs.setup.write_gisrc(gisdbase, location, mapset)
 
         # here is special setting of environmental variables for running tests
         # some of them might be set from outside in the future and if the list

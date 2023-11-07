@@ -62,7 +62,6 @@ class Map:
         saved_region=None,
         read_file=False,
     ):
-
         """Creates an instance of the Map class.
 
         :param int height: height of map in pixels
@@ -193,3 +192,7 @@ class Map:
         from IPython.display import Image  # pylint: disable=import-outside-toplevel
 
         return Image(self._filename)
+
+    def save(self, filename):
+        """Saves a PNG image of map to the specified *filename*"""
+        shutil.copy(self._filename, filename)

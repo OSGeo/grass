@@ -1,18 +1,17 @@
-
 /****************************************************************************
  *
  * MODULE:       d.graph
  * AUTHOR(S):    Jim Westervelt (CERL) (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Cedric Shock <cedricgrass shockfamily.net>, 
- *               Huidae Cho <grass4u gmail.com>, 
- *               Eric G. Miller <egm2 jps.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Cedric Shock <cedricgrass shockfamily.net>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Eric G. Miller <egm2 jps.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
- * PURPOSE:      Draw graphics in a graphics window. Graph lines come from 
+ * PURPOSE:      Draw graphics in a graphics window. Graph lines come from
  *               stdin unless input specified.
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *
@@ -24,7 +23,7 @@
 /*
  *   d.graph
  *
- *   
+ *
  *
  */
 
@@ -58,20 +57,20 @@ int main(int argc, char **argv)
     G_add_keyword(_("display"));
     G_add_keyword(_("cartography"));
     module->description =
-	_("Program for generating and displaying simple graphics on the "
-	  "display monitor.");
+        _("Program for generating and displaying simple graphics on the "
+          "display monitor.");
 
     opt1 = G_define_standard_option(G_OPT_F_INPUT);
     opt1->required = NO;
     opt1->description = _("Name of file containing graphics commands, "
-			  "if not given reads from standard input");
-    
+                          "if not given reads from standard input");
+
     opt2 = G_define_option();
     opt2->key = "color";
     opt2->type = TYPE_STRING;
     opt2->required = NO;
     opt2->description = _("Color to draw with, either a standard GRASS color "
-			  "or R:G:B triplet");
+                          "or R:G:B triplet");
     opt2->answer = DEFAULT_FG_COLOR;
     opt2->gisprompt = "old_color,color,color";
 
@@ -81,43 +80,43 @@ int main(int argc, char **argv)
 
     /* Check command line */
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     /* default font scaling: 5% of active frame */
     hsize = vsize = 5.;
 
     if (opt1->answer != NULL) {
-	if ((infile = fopen(opt1->answer, "r")) == NULL)
-	    G_fatal_error(_("Graph file <%s> not found"), opt1->answer);
+        if ((infile = fopen(opt1->answer, "r")) == NULL)
+            G_fatal_error(_("Graph file <%s> not found"), opt1->answer);
     }
     else
-	infile = stdin;
+        infile = stdin;
 
     /* open graphics window */
     D_open_driver();
-    
+
     /* Parse and select color */
     if (opt2->answer != NULL) {
-	color = G_str_to_color(opt2->answer, &R, &G, &B);
+        color = G_str_to_color(opt2->answer, &R, &G, &B);
 
-	if (color == 0)
-	    G_fatal_error(_("[%s]: No such color"), opt2->answer);
+        if (color == 0)
+            G_fatal_error(_("[%s]: No such color"), opt2->answer);
 
-	if (color == 1) {
-	    D_RGB_color(R, G, B);
-	    set_last_color(R, G, B, RGBA_COLOR_OPAQUE);
-	}
-	else			/* (color==2) is "none" */
-	    set_last_color(0, 0, 0, RGBA_COLOR_NONE);
+        if (color == 1) {
+            D_RGB_color(R, G, B);
+            set_last_color(R, G, B, RGBA_COLOR_OPAQUE);
+        }
+        else /* (color==2) is "none" */
+            set_last_color(0, 0, 0, RGBA_COLOR_NONE);
     }
 
     if (mapcoords->answer) {
-	mapunits = TRUE;
-	D_setup(0);
+        mapunits = TRUE;
+        D_setup(0);
     }
     else {
-	D_setup2(0, 0, 100, 0, 0, 100);
-	mapunits = FALSE;
+        D_setup2(0, 0, 100, 0, 0, 100);
+        mapunits = FALSE;
     }
 
     /* Do the graphics */

@@ -1,15 +1,15 @@
 /*!
-  \file rowio/setup.c
-  
-  \brief RowIO library - Setup
-  
-  (C) 2001-2009 by the GRASS Development Team
-  
-  This program is free software under the GNU General Public License
-  (>=v2).  Read the file COPYING that comes with GRASS for details.
-  
-  \author Original author CERL
-*/
+   \file rowio/setup.c
+
+   \brief RowIO library - Setup
+
+   (C) 2001-2009 by the GRASS Development Team
+
+   This program is free software under the GNU General Public License
+   (>=v2).  Read the file COPYING that comes with GRASS for details.
+
+   \author Original author CERL
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,10 +41,9 @@
  * \return -1 no memory
  */
 
-int Rowio_setup(ROWIO * R,
-		int fd, int nrows, int len,
-		int (*getrow) (int, void *, int, int),
-		int (*putrow) (int, const void *, int, int))
+int Rowio_setup(ROWIO *R, int fd, int nrows, int len,
+                int (*getrow)(int, void *, int, int),
+                int (*putrow)(int, const void *, int, int))
 {
     int i;
 
@@ -56,18 +55,18 @@ int Rowio_setup(ROWIO * R,
     R->buf = NULL;
     R->fd = fd;
 
-    R->rcb = (struct ROWIO_RCB *) G_malloc(nrows * sizeof(struct ROWIO_RCB));
+    R->rcb = (struct ROWIO_RCB *)G_malloc(nrows * sizeof(struct ROWIO_RCB));
     if (R->rcb == NULL) {
-	G_warning(_("Out of memory"));
-	return -1;
+        G_warning(_("Out of memory"));
+        return -1;
     }
     for (i = 0; i < nrows; i++) {
-	R->rcb[i].buf = G_malloc(len);
-	if (R->rcb[i].buf == NULL) {
-	    G_warning(_("Out of memory"));
-	    return -1;
-	}
-	R->rcb[i].row = -1;	/* mark not used */
+        R->rcb[i].buf = G_malloc(len);
+        if (R->rcb[i].buf == NULL) {
+            G_warning(_("Out of memory"));
+            return -1;
+        }
+        R->rcb[i].row = -1; /* mark not used */
     }
     return 1;
 }

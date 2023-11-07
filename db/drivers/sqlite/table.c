@@ -29,15 +29,14 @@ int db__driver_drop_table(dbString *name)
     char cmd[DB_SQL_MAX];
 
     sprintf(cmd, "DROP TABLE %s", db_get_string(name));
-        
+
     ret = sqlite3_exec(sqlite, cmd, NULL, NULL, NULL);
 
     if (ret != SQLITE_OK) {
-	db_d_append_error("%s\n%s",
-			  _("Error in sqlite3_exec():"),
-			  (char *)sqlite3_errmsg(sqlite));
-	db_d_report_error();
-	return DB_FAILED;
+        db_d_append_error("%s\n%s", _("Error in sqlite3_exec():"),
+                          (char *)sqlite3_errmsg(sqlite));
+        db_d_report_error();
+        return DB_FAILED;
     }
 
     return DB_OK;

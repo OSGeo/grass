@@ -1,12 +1,12 @@
 /*!
-  \file db/driver/postgres/db.c
-  
-  \brief DBMI - Low Level PostgreSQL database driver - select cursor
-  
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-  
-  \author Radim Blazek
+   \file db/driver/postgres/db.c
+
+   \brief DBMI - Low Level PostgreSQL database driver - select cursor
+
+   This program is free software under the GNU General Public License
+   (>=v2). Read the file COPYING that comes with GRASS for details.
+
+   \author Radim Blazek
  */
 
 #include <stdlib.h>
@@ -17,7 +17,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
+int db__driver_open_select_cursor(dbString *sel, dbCursor *dbc, int mode)
 {
     PGresult *res;
     cursor *c;
@@ -28,10 +28,10 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     res = PQexec(pg_conn, "SET DATESTYLE TO ISO");
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-	db_d_append_error(_("Unable set DATESTYLE"));
-	db_d_report_error();
-	PQclear(res);
-	return DB_FAILED;
+        db_d_append_error(_("Unable set DATESTYLE"));
+        db_d_report_error();
+        PQclear(res);
+        return DB_FAILED;
     }
 
     PQclear(res);
@@ -39,7 +39,7 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     /* allocate cursor */
     c = alloc_cursor();
     if (c == NULL)
-	return DB_FAILED;
+        return DB_FAILED;
 
     db_set_cursor_mode(dbc, mode);
     db_set_cursor_type_readonly(dbc);
@@ -51,25 +51,23 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
     c->res = PQexec(pg_conn, str);
 
     if (!c->res || PQresultStatus(c->res) != PGRES_TUPLES_OK) {
-	db_d_append_error("%s\n%s\n%s",
-			  _("Unable to select:"),
-			  db_get_string(sel),
-			  PQerrorMessage(pg_conn));
-	db_d_report_error();
-	PQclear(c->res);
-	if (str)
-	    G_free(str);
-	return DB_FAILED;
+        db_d_append_error("%s\n%s\n%s", _("Unable to select:"),
+                          db_get_string(sel), PQerrorMessage(pg_conn));
+        db_d_report_error();
+        PQclear(c->res);
+        if (str)
+            G_free(str);
+        return DB_FAILED;
     }
 
     if (str)
-	G_free(str);
+        G_free(str);
 
     if (describe_table(c->res, &table, c) == DB_FAILED) {
-	db_d_append_error(_("Unable to describe table"));
-	db_d_report_error();
-	PQclear(res);
-	return DB_FAILED;
+        db_d_append_error(_("Unable to describe table"));
+        db_d_report_error();
+        PQclear(res);
+        return DB_FAILED;
     }
 
     c->nrows = PQntuples(c->res);

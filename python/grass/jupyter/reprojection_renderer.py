@@ -21,7 +21,6 @@ from pathlib import Path
 import grass.script as gs
 from .map import Map
 from .utils import (
-    estimate_resolution,
     get_location_proj_string,
     get_region,
     reproject_region,
@@ -99,13 +98,6 @@ class ReprojectionRenderer:
         self._region_manager.set_region_from_raster(full_name)
         # Reproject raster into WGS84/epsg3857 location
         env_info = gs.gisenv(env=self._src_env)
-        resolution = estimate_resolution(
-            raster=name,
-            mapset=mapset,
-            location=env_info["LOCATION_NAME"],
-            dbase=env_info["GISDBASE"],
-            env=self._psmerc_env,
-        )
         tgt_name = full_name.replace("@", "_")
         gs.run_command(
             "r.proj",
@@ -114,15 +106,15 @@ class ReprojectionRenderer:
             mapset=mapset,
             location=env_info["LOCATION_NAME"],
             dbase=env_info["GISDBASE"],
-            resolution=resolution,
+            resolution=self._region_manager.resolution,
             env=self._psmerc_env,
         )
         # Write raster to png file with Map
-        region_info = gs.region(env=self._src_env)
+        raster_info = gs.raster_info(tgt_name, env=self._psmerc_env)
         filename = os.path.join(self._tmp_dir.name, f"{tgt_name}.png")
         img = Map(
-            width=region_info["cols"],
-            height=region_info["rows"],
+            width=int(raster_info["cols"]),
+            height=int(raster_info["rows"]),
             env=self._psmerc_env,
             filename=filename,
             use_region=True,

@@ -27,7 +27,7 @@
  * when done.
  */
 void create_table_for_lidar(struct Map_info *vector_map, const char *name,
-                            int layer, dbDriver ** db_driver,
+                            int layer, dbDriver **db_driver,
                             struct field_info **finfo, int have_time,
                             int have_color)
 {
@@ -38,11 +38,11 @@ void create_table_for_lidar(struct Map_info *vector_map, const char *name,
 
     char *cat_col_name = GV_KEY_COLUMN;
 
-    struct field_info *Fi = Vect_default_field_info(vector_map, layer,
-                                                    NULL, GV_1TABLE);
+    struct field_info *Fi =
+        Vect_default_field_info(vector_map, layer, NULL, GV_1TABLE);
 
-    Vect_map_add_dblink(vector_map, layer, name, Fi->table,
-                        cat_col_name, Fi->database, Fi->driver);
+    Vect_map_add_dblink(vector_map, layer, name, Fi->table, cat_col_name,
+                        Fi->database, Fi->driver);
 
     /* check available LAS info, depends on POINT DATA RECORD FORMAT [0-5] */
     /* X (double),
@@ -120,10 +120,8 @@ void create_table_for_lidar(struct Map_info *vector_map, const char *name,
     db_append_string(&sql, ")");
     G_debug(3, "%s", db_get_string(&sql));
 
-    dbDriver *driver = db_start_driver_open_database(Fi->driver,
-                                                     Vect_subst_var
-                                                     (Fi->database,
-                                                      vector_map));
+    dbDriver *driver = db_start_driver_open_database(
+        Fi->driver, Vect_subst_var(Fi->database, vector_map));
 
     if (driver == NULL) {
         G_fatal_error(_("Unable open database <%s> by driver <%s>"),
@@ -139,10 +137,9 @@ void create_table_for_lidar(struct Map_info *vector_map, const char *name,
         G_warning(_("Unable to create index for table <%s>, key <%s>"),
                   Fi->table, cat_col_name);
 
-    if (db_grant_on_table
-        (driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
-        G_fatal_error(_("Unable to grant privileges on table <%s>"),
-                      Fi->table);
+    if (db_grant_on_table(driver, Fi->table, DB_PRIV_SELECT,
+                          DB_GROUP | DB_PUBLIC) != DB_OK)
+        G_fatal_error(_("Unable to grant privileges on table <%s>"), Fi->table);
 
     db_begin_transaction(driver);
 
@@ -150,11 +147,9 @@ void create_table_for_lidar(struct Map_info *vector_map, const char *name,
     *finfo = Fi;
 }
 
-
-void las_point_to_attributes(struct field_info *Fi, dbDriver * driver,
-                             int cat, LASPointH LAS_point, double x,
-                             double y, double z, int have_time,
-                             int have_color)
+void las_point_to_attributes(struct field_info *Fi, dbDriver *driver, int cat,
+                             LASPointH LAS_point, double x, double y, double z,
+                             int have_time, int have_color)
 {
     static char buf[2000];
     static dbString sql;

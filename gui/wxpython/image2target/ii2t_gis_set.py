@@ -56,7 +56,6 @@ class GRASSStartup(wx.Frame):
     """GRASS start-up screen"""
 
     def __init__(self, parent=None, id=wx.ID_ANY, style=wx.DEFAULT_FRAME_STYLE):
-
         #
         # GRASS variables
         #

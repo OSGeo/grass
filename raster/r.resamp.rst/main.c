@@ -6,18 +6,18 @@
  * US Army Construction Engineering Research Lab
  * Copyright 1993, H. Mitasova (University of Illinois),
  * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)
- * 
+ *
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
  *  as published by the Free Software Foundation; either version 2
  *  of the License, or (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
@@ -28,7 +28,6 @@
  * modified by Mitasova in November 1999
  *
  */
-
 
 #include <stdio.h>
 #include <math.h>
@@ -69,7 +68,7 @@ static double theta, scalex;
 static FCELL *zero_array_cell;
 static struct interp_params params;
 
-static FILE *fd4;			/* unused? */
+static FILE *fd4; /* unused? */
 static int fdinp, fdsmooth = -1;
 
 /*
@@ -78,7 +77,7 @@ static int fdinp, fdsmooth = -1;
  * interpolated values z for output grid adx,ady, ... - estimation of
  * derivatives for output grid nsizr,nsizc - number of rows and columns
  * for output grid xmin ... - coordinates of corners of output grid
- * 
+ *
  * subroutines input_data - input of data x,y,z (test function or measured
  * data) iterpolate - interpolation of z-values and derivatives to grid
  * secpar_loop- computation of secondary(morphometric) parameters output -
@@ -126,21 +125,18 @@ int main(int argc, char *argv[])
 {
     int m1;
     struct FPRange range;
-    DCELL cellmin, cellmax;
+    DCELL cellmin = 0.0, cellmax;
     FCELL *cellrow, fcellmin;
 
     struct GModule *module;
-    struct
-    {
-	struct Option *input, *elev, *slope, *aspect, *pcurv, *tcurv, *mcurv,
-	    *smooth, *maskmap, *zmult, *fi, *segmax, *npmin, *res_ew, *res_ns,
-	    *overlap, *theta, *scalex;
+    struct {
+        struct Option *input, *elev, *slope, *aspect, *pcurv, *tcurv, *mcurv,
+            *smooth, *maskmap, *zmult, *fi, *segmax, *npmin, *res_ew, *res_ns,
+            *overlap, *theta, *scalex;
     } parm;
-    struct
-    {
-	struct Flag *deriv, *cprght;
+    struct {
+        struct Flag *deriv, *cprght;
     } flag;
-
 
     G_gisinit(argv[0]);
 
@@ -150,10 +146,10 @@ int main(int argc, char *argv[])
     G_add_keyword(_("splines"));
     G_add_keyword(_("RST"));
     module->description =
-	_("Reinterpolates and optionally computes topographic analysis from "
-	  "input raster map to a new raster map (possibly with "
-	  "different resolution) using regularized spline with "
-	  "tension and smoothing.");
+        _("Reinterpolates and optionally computes topographic analysis from "
+          "input raster map to a new raster map (possibly with "
+          "different resolution) using regularized spline with "
+          "tension and smoothing.");
 
     parm.input = G_define_standard_option(G_OPT_R_INPUT);
 
@@ -190,13 +186,15 @@ int main(int argc, char *argv[])
     parm.pcurv = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.pcurv->key = "pcurvature";
     parm.pcurv->required = NO;
-    parm.pcurv->description = _("Name for output profile curvature map (or fxx)");
+    parm.pcurv->description =
+        _("Name for output profile curvature map (or fxx)");
     parm.pcurv->guisection = _("Output");
 
     parm.tcurv = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.tcurv->key = "tcurvature";
     parm.tcurv->required = NO;
-    parm.tcurv->description = _("Name for output tangential curvature map (or fyy)");
+    parm.tcurv->description =
+        _("Name for output tangential curvature map (or fyy)");
     parm.tcurv->guisection = _("Output");
 
     parm.mcurv = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -208,13 +206,15 @@ int main(int argc, char *argv[])
     parm.smooth = G_define_standard_option(G_OPT_R_INPUT);
     parm.smooth->key = "smooth";
     parm.smooth->required = NO;
-    parm.smooth->description = _("Name of input raster map containing smoothing");
+    parm.smooth->description =
+        _("Name of input raster map containing smoothing");
     parm.smooth->guisection = _("Settings");
 
     parm.maskmap = G_define_standard_option(G_OPT_R_INPUT);
     parm.maskmap->key = "maskmap";
     parm.maskmap->required = NO;
-    parm.maskmap->description = _("Name of input raster map to be used as mask");
+    parm.maskmap->description =
+        _("Name of input raster map to be used as mask");
     parm.maskmap->guisection = _("Settings");
 
     parm.overlap = G_define_option();
@@ -245,7 +245,8 @@ int main(int argc, char *argv[])
     parm.theta->key = "theta";
     parm.theta->type = TYPE_DOUBLE;
     parm.theta->required = NO;
-    parm.theta->description = _("Anisotropy angle (in degrees counterclockwise from East)");
+    parm.theta->description =
+        _("Anisotropy angle (in degrees counterclockwise from East)");
     parm.theta->guisection = _("Anisotropy");
 
     parm.scalex = G_define_option();
@@ -262,11 +263,11 @@ int main(int argc, char *argv[])
     flag.deriv = G_define_flag();
     flag.deriv->key = 'd';
     flag.deriv->description =
-	_("Output partial derivatives instead of topographic parameters");
+        _("Output partial derivatives instead of topographic parameters");
     flag.deriv->guisection = _("Output");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     G_get_set_window(&winhd);
 
@@ -296,29 +297,30 @@ int main(int argc, char *argv[])
     ertre = 0.1;
 
     if (!G_scan_resolution(parm.res_ew->answer, &ew_res, winhd.proj))
-	G_fatal_error(_("Unable to read ew_res value"));
+        G_fatal_error(_("Unable to read ew_res value"));
 
     if (!G_scan_resolution(parm.res_ns->answer, &ns_res, winhd.proj))
-	G_fatal_error(_("Unable to read ns_res value"));
+        G_fatal_error(_("Unable to read ns_res value"));
 
     if (sscanf(parm.fi->answer, "%lf", &fi) != 1)
-	G_fatal_error(_("Invalid value for tension"));
+        G_fatal_error(_("Invalid value for tension"));
 
     if (sscanf(parm.zmult->answer, "%lf", &zmult) != 1)
-	G_fatal_error(_("Invalid value for zmult"));
+        G_fatal_error(_("Invalid value for zmult"));
 
     if (sscanf(parm.overlap->answer, "%d", &overlap) != 1)
-	G_fatal_error(_("Invalid value for overlap"));
+        G_fatal_error(_("Invalid value for overlap"));
 
     if (parm.theta->answer) {
-	if (sscanf(parm.theta->answer, "%lf", &theta) != 1)
-	    G_fatal_error(_("Invalid value for theta"));
+        if (sscanf(parm.theta->answer, "%lf", &theta) != 1)
+            G_fatal_error(_("Invalid value for theta"));
     }
     if (parm.scalex->answer) {
-	if (sscanf(parm.scalex->answer, "%lf", &scalex) != 1)
-	    G_fatal_error(_("Invalid value for scalex"));
-	if (!parm.theta->answer)
-	    G_fatal_error(_("When using anisotropy both theta and scalex must be specified"));
+        if (sscanf(parm.scalex->answer, "%lf", &scalex) != 1)
+            G_fatal_error(_("Invalid value for scalex"));
+        if (!parm.theta->answer)
+            G_fatal_error(_("When using anisotropy both theta and scalex must "
+                            "be specified"));
     }
 
     /*
@@ -342,66 +344,70 @@ int main(int argc, char *argv[])
     az = G_alloc_vector(nsizc + 1);
 
     if (cond1) {
-	adx = G_alloc_vector(nsizc + 1);
-	ady = G_alloc_vector(nsizc + 1);
-	if (cond2) {
-	    adxx = G_alloc_vector(nsizc + 1);
-	    adyy = G_alloc_vector(nsizc + 1);
-	    adxy = G_alloc_vector(nsizc + 1);
-	}
+        adx = G_alloc_vector(nsizc + 1);
+        ady = G_alloc_vector(nsizc + 1);
+        if (cond2) {
+            adxx = G_alloc_vector(nsizc + 1);
+            adyy = G_alloc_vector(nsizc + 1);
+            adxy = G_alloc_vector(nsizc + 1);
+        }
     }
 
     if (smooth != NULL) {
 
-	Rast_get_cellhd(smooth, "", &smhd);
+        Rast_get_cellhd(smooth, "", &smhd);
 
-	if ((winhd.ew_res != smhd.ew_res) || (winhd.ns_res != smhd.ns_res))
-	    G_fatal_error(_("Map <%s> is the wrong resolution"), smooth);
+        if ((winhd.ew_res != smhd.ew_res) || (winhd.ns_res != smhd.ns_res))
+            G_fatal_error(_("Map <%s> is the wrong resolution"), smooth);
 
-	if (Rast_read_fp_range(smooth, "", &range) >= 0)
-	    Rast_get_fp_range_min_max(&range, &cellmin, &cellmax);
+        if (Rast_read_fp_range(smooth, "", &range) >= 0)
+            Rast_get_fp_range_min_max(&range, &cellmin, &cellmax);
 
-	fcellmin = (float)cellmin;
+        fcellmin = (float)cellmin;
 
-	if (Rast_is_f_null_value(&fcellmin) || fcellmin < 0.0)
-	    G_fatal_error(_("Smoothing values can not be negative or NULL"));
+        if (Rast_is_f_null_value(&fcellmin) || fcellmin < 0.0)
+            G_fatal_error(_("Smoothing values can not be negative or NULL"));
     }
 
     Rast_get_cellhd(input, "", &inphd);
 
     if ((winhd.ew_res != inphd.ew_res) || (winhd.ns_res != inphd.ns_res))
-	G_fatal_error(_("Input map resolution differs from current region resolution!"));
+        G_fatal_error(
+            _("Input map resolution differs from current region resolution!"));
 
     sdisk = 0;
     if (elev != NULL)
-	sdisk += disk;
+        sdisk += disk;
     if (slope != NULL)
-	sdisk += disk;
+        sdisk += disk;
     if (aspect != NULL)
-	sdisk += disk;
+        sdisk += disk;
     if (pcurv != NULL)
-	sdisk += disk;
+        sdisk += disk;
     if (tcurv != NULL)
-	sdisk += disk;
+        sdisk += disk;
     if (mcurv != NULL)
-	sdisk += disk;
+        sdisk += disk;
 
     G_message(_("Processing all selected output files will require"));
     if (sdisk > 1024) {
-	if (sdisk > 1024 * 1024) {
-	    if (sdisk > 1024 * 1024 * 1024) {
-		G_message(_("%.2f GB of disk space for temp files."), sdisk / (1024. * 1024. * 1024.));
-	    }
-	    else
-		G_message(_("%.2f MB of disk space for temp files."), sdisk / (1024. * 1024.));
-	}
-	else
-	    G_message(_("%.2f KB of disk space for temp files."), sdisk / 1024.);
+        if (sdisk > 1024 * 1024) {
+            if (sdisk > 1024 * 1024 * 1024) {
+                G_message(_("%.2f GB of disk space for temp files."),
+                          sdisk / (1024. * 1024. * 1024.));
+            }
+            else
+                G_message(_("%.2f MB of disk space for temp files."),
+                          sdisk / (1024. * 1024.));
+        }
+        else
+            G_message(_("%.2f KB of disk space for temp files."),
+                      sdisk / 1024.);
     }
     else
-	G_message(n_("%d byte of disk space for temp files.", 
-        "%d bytes of disk space for temp files.", (int)sdisk), (int)sdisk);
-
+        G_message(n_("%d byte of disk space for temp files.",
+                     "%d bytes of disk space for temp files.", (int)sdisk),
+                  (int)sdisk);
 
     fstar2 = fi * fi / 4.;
     tfsta2 = fstar2 + fstar2;
@@ -412,56 +418,54 @@ int main(int argc, char *argv[])
     ymin = winhd.south;
     ymax = winhd.north;
     if (smooth != NULL)
-	smc = -9999;
+        smc = -9999;
     else
-	smc = 0.01;
-
+        smc = 0.01;
 
     if (Rast_read_fp_range(input, "", &range) >= 0) {
-	Rast_get_fp_range_min_max(&range, &cellmin, &cellmax);
+        Rast_get_fp_range_min_max(&range, &cellmin, &cellmax);
     }
     else {
-	fdinp = Rast_open_old(input, "");
+        fdinp = Rast_open_old(input, "");
 
-	cellrow = Rast_allocate_f_buf();
-	for (m1 = 0; m1 < inp_rows; m1++) {
-	    Rast_get_f_row(fdinp, cellrow, m1);
-	    Rast_row_update_fp_range(cellrow, m1, &range, FCELL_TYPE);
-	}
-	Rast_get_fp_range_min_max(&range, &cellmin, &cellmax);
+        cellrow = Rast_allocate_f_buf();
+        for (m1 = 0; m1 < inp_rows; m1++) {
+            Rast_get_f_row(fdinp, cellrow, m1);
+            Rast_row_update_fp_range(cellrow, m1, &range, FCELL_TYPE);
+        }
+        Rast_get_fp_range_min_max(&range, &cellmin, &cellmax);
 
-	Rast_close(fdinp);
+        Rast_close(fdinp);
     }
 
     fcellmin = (float)cellmin;
     if (Rast_is_f_null_value(&fcellmin))
-	G_fatal_error(_("Maximum value of a raster map is NULL."));
+        G_fatal_error(_("Maximum value of a raster map is NULL."));
 
-    zmin = (double)cellmin *zmult;
-    zmax = (double)cellmax *zmult;
+    zmin = (double)cellmin * zmult;
+    zmax = (double)cellmax * zmult;
 
     G_debug(1, "zmin=%f, zmax=%f", zmin, zmax);
 
     if (fd4 != NULL)
-	fprintf(fd4, "deltx,delty %f %f \n", deltx, delty);
+        fprintf(fd4, "deltx,delty %f %f \n", deltx, delty);
     create_temp_files();
 
     IL_init_params_2d(&params, NULL, 1, 1, zmult, KMIN, KMAX, maskmap,
-		      outhd.rows, outhd.cols, az, adx, ady, adxx, adyy, adxy,
-		      fi, MAXPOINTS, SCIK1, SCIK2, SCIK3, smc, elev, slope,
-		      aspect, pcurv, tcurv, mcurv, dmin, inp_x_orig,
-		      inp_y_orig, deriv, theta, scalex, Tmp_fd_z, Tmp_fd_dx,
-		      Tmp_fd_dy, Tmp_fd_xx, Tmp_fd_yy, Tmp_fd_xy, false, NULL,
-		      0, NULL);
+                      outhd.rows, outhd.cols, az, adx, ady, adxx, adyy, adxy,
+                      fi, MAXPOINTS, SCIK1, SCIK2, SCIK3, smc, elev, slope,
+                      aspect, pcurv, tcurv, mcurv, dmin, inp_x_orig, inp_y_orig,
+                      deriv, theta, scalex, Tmp_fd_z, Tmp_fd_dx, Tmp_fd_dy,
+                      Tmp_fd_xx, Tmp_fd_yy, Tmp_fd_xy, false, NULL, 0, NULL);
 
-    /*  In the above line, the penultimate argument is supposed to be a 
+    /*  In the above line, the penultimate argument is supposed to be a
      * deviations file pointer.  None is obvious, so I used NULL. */
     /*  The 3rd and 4th argument are int-s, elatt and smatt (from the function
      * definition.  The value 1 seemed like a good placeholder...  or not. */
 
     IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,
-		    IL_check_at_points_2d,
-		    IL_secpar_loop_2d, IL_crst, IL_crstg, IL_write_temp_2d);
+                    IL_check_at_points_2d, IL_secpar_loop_2d, IL_crst, IL_crstg,
+                    IL_write_temp_2d);
 
     G_message(_("Temporarily changing the region to desired resolution ..."));
     Rast_set_window(&outhd);
@@ -473,57 +477,54 @@ int main(int argc, char *argv[])
 
     fdinp = Rast_open_old(input, "");
     if (smooth != NULL)
-	fdsmooth = Rast_open_old(smooth, "");
+        fdsmooth = Rast_open_old(smooth, "");
 
     ertot = 0.;
     cursegm = 0;
     G_message(_("Percent complete: "));
 
-
-    NPOINT =
-	IL_resample_interp_segments_2d(&params, bitmask, zmin, zmax, &zminac,
-				       &zmaxac, &gmin, &gmax, &c1min, &c1max,
-				       &c2min, &c2max, &ertot, nsizc, &dnorm,
-				       overlap, inp_rows, inp_cols, fdsmooth,
-				       fdinp, ns_res, ew_res, inp_ns_res,
-				       inp_ew_res, dtens);
-
+    NPOINT = IL_resample_interp_segments_2d(
+        &params, bitmask, zmin, zmax, &zminac, &zmaxac, &gmin, &gmax, &c1min,
+        &c1max, &c2min, &c2max, &ertot, nsizc, &dnorm, overlap, inp_rows,
+        inp_cols, fdsmooth, fdinp, ns_res, ew_res, inp_ns_res, inp_ew_res,
+        dtens);
 
     G_message(_("dnorm in mainc after grid before out1= %f"), dnorm);
 
     if (NPOINT < 0) {
-	clean();
-	G_fatal_error(_("split_and_interpolate() failed"));
+        clean();
+        G_fatal_error(_("split_and_interpolate() failed"));
     }
 
     if (fd4 != NULL)
-	fprintf(fd4, "max. error found = %f \n", ertot);
+        fprintf(fd4, "max. error found = %f \n", ertot);
     G_free_vector(az);
     if (cond1) {
-	G_free_vector(adx);
-	G_free_vector(ady);
-	if (cond2) {
-	    G_free_vector(adxx);
-	    G_free_vector(adyy);
-	    G_free_vector(adxy);
-	}
+        G_free_vector(adx);
+        G_free_vector(ady);
+        if (cond2) {
+            G_free_vector(adxx);
+            G_free_vector(adyy);
+            G_free_vector(adxy);
+        }
     }
     G_message(_("dnorm in mainc after grid before out2= %f"), dnorm);
 
-    if (IL_resample_output_2d(&params, zmin, zmax, zminac, zmaxac, c1min,
-			      c1max, c2min, c2max, gmin, gmax, ertot, input,
-			      &dnorm, &outhd, &winhd, smooth, NPOINT) < 0) {
-	clean();
-	G_fatal_error(_("Unable to write raster maps -- try increasing cell size"));
+    if (IL_resample_output_2d(&params, zmin, zmax, zminac, zmaxac, c1min, c1max,
+                              c2min, c2max, gmin, gmax, ertot, input, &dnorm,
+                              &outhd, &winhd, smooth, NPOINT) < 0) {
+        clean();
+        G_fatal_error(
+            _("Unable to write raster maps -- try increasing cell size"));
     }
 
     G_free(zero_array_cell);
     clean();
     if (fd4)
-	fclose(fd4);
+        fclose(fd4);
     Rast_close(fdinp);
     if (smooth != NULL)
-	Rast_close(fdsmooth);
+        Rast_close(fdsmooth);
 
     G_done_msg(" ");
     exit(EXIT_SUCCESS);
@@ -536,18 +537,19 @@ static FILE *create_temp_file(const char *name, char **tmpname)
     int i;
 
     if (!name)
-	return NULL;
+        return NULL;
 
     *tmpname = tmp = G_tempfile();
     fp = fopen(tmp, "w+");
     if (!fp)
-	G_fatal_error(_("Unable to open temporary file <%s>"), *tmpname);
+        G_fatal_error(_("Unable to open temporary file <%s>"), *tmpname);
 
     for (i = 0; i < nsizr; i++) {
-	if (fwrite(zero_array_cell, sizeof(FCELL), nsizc, fp) != nsizc) {
-	    clean();
-	    G_fatal_error(_("Error writing temporary file <%s>"), *tmpname);
-	}
+        if (fwrite(zero_array_cell, sizeof(FCELL), nsizc, fp) !=
+            (size_t)nsizc) {
+            clean();
+            G_fatal_error(_("Error writing temporary file <%s>"), *tmpname);
+        }
     }
 
     return fp;
@@ -555,29 +557,41 @@ static FILE *create_temp_file(const char *name, char **tmpname)
 
 static void create_temp_files(void)
 {
-    zero_array_cell = (FCELL *) G_calloc(nsizc, sizeof(FCELL));
+    zero_array_cell = (FCELL *)G_calloc(nsizc, sizeof(FCELL));
 
-    Tmp_fd_z  = create_temp_file(elev,   &Tmp_file_z );
-    Tmp_fd_dx = create_temp_file(slope,  &Tmp_file_dx);
+    Tmp_fd_z = create_temp_file(elev, &Tmp_file_z);
+    Tmp_fd_dx = create_temp_file(slope, &Tmp_file_dx);
     Tmp_fd_dy = create_temp_file(aspect, &Tmp_file_dy);
-    Tmp_fd_xx = create_temp_file(pcurv,  &Tmp_file_xx);
-    Tmp_fd_yy = create_temp_file(tcurv,  &Tmp_file_yy);
-    Tmp_fd_xy = create_temp_file(mcurv,  &Tmp_file_xy);
+    Tmp_fd_xx = create_temp_file(pcurv, &Tmp_file_xx);
+    Tmp_fd_yy = create_temp_file(tcurv, &Tmp_file_yy);
+    Tmp_fd_xy = create_temp_file(mcurv, &Tmp_file_xy);
 }
 
 static void clean(void)
 {
-    if (Tmp_fd_z)	fclose(Tmp_fd_z);
-    if (Tmp_fd_dx)	fclose(Tmp_fd_dx);
-    if (Tmp_fd_dy)	fclose(Tmp_fd_dy);
-    if (Tmp_fd_xx)	fclose(Tmp_fd_xx);
-    if (Tmp_fd_yy)	fclose(Tmp_fd_yy);
-    if (Tmp_fd_xy)	fclose(Tmp_fd_xy);
+    if (Tmp_fd_z)
+        fclose(Tmp_fd_z);
+    if (Tmp_fd_dx)
+        fclose(Tmp_fd_dx);
+    if (Tmp_fd_dy)
+        fclose(Tmp_fd_dy);
+    if (Tmp_fd_xx)
+        fclose(Tmp_fd_xx);
+    if (Tmp_fd_yy)
+        fclose(Tmp_fd_yy);
+    if (Tmp_fd_xy)
+        fclose(Tmp_fd_xy);
 
-    if (Tmp_file_z)	unlink(Tmp_file_z);
-    if (Tmp_file_dx)	unlink(Tmp_file_dx);
-    if (Tmp_file_dy)	unlink(Tmp_file_dy);
-    if (Tmp_file_xx)	unlink(Tmp_file_xx);
-    if (Tmp_file_yy)	unlink(Tmp_file_yy);
-    if (Tmp_file_xy)	unlink(Tmp_file_xy);
+    if (Tmp_file_z)
+        unlink(Tmp_file_z);
+    if (Tmp_file_dx)
+        unlink(Tmp_file_dx);
+    if (Tmp_file_dy)
+        unlink(Tmp_file_dy);
+    if (Tmp_file_xx)
+        unlink(Tmp_file_xx);
+    if (Tmp_file_yy)
+        unlink(Tmp_file_yy);
+    if (Tmp_file_xy)
+        unlink(Tmp_file_xy);
 }

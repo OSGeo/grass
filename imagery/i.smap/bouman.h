@@ -5,8 +5,7 @@
 
 #define LIKELIHOOD float
 
-struct files
-{
+struct files {
     int output_fd;
     int goodness_fd;
     struct Categories output_labels;
@@ -19,8 +18,7 @@ struct files
     char *isdata;
 };
 
-struct parms
-{
+struct parms {
     char *output_map;
     char *goodness_map;
     char *group;
@@ -66,8 +64,8 @@ int segment(struct SigSet *, struct parms *, struct files *);
 int create_output_labels(struct SigSet *, struct files *);
 
 /* write_img.c */
-int write_img(unsigned char **, float **, int, int, struct SigSet *, struct parms *,
-	      struct files *);
+int write_img(unsigned char **, float **, int, int, struct SigSet *,
+              struct parms *, struct files *);
 #endif
 
 /*  Look for prototypes that use the Region structure in region.h */
