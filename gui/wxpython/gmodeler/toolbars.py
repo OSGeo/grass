@@ -16,6 +16,8 @@ This program is free software under the GNU General Public License
 
 import sys
 
+import wx
+
 from gui_core.toolbars import BaseToolbar, BaseIcons
 
 from icons.icon import MetaIcon
@@ -70,15 +72,14 @@ class ModelerToolbar(BaseToolbar):
             "quit": BaseIcons["quit"],
         }
 
-        return self._getToolbarData(
+        data = (
             (
-                (
                     ("new", icons["new"].label.rsplit(" ", 1)[0]),
-                    icons["new"],
-                    self.parent.OnModelNew,
+                icons["new"],
+                self.parent.OnModelNew,
                 ),
-                (
-                    ("open", icons["open"].label.rsplit(" ", 1)[0]),
+            (
+                ("open", icons["open"].label.rsplit(" ", 1)[0]),
                     icons["open"],
                     self.parent.OnModelOpen,
                 ),
@@ -156,10 +157,22 @@ class ModelerToolbar(BaseToolbar):
                     self.parent.OnHelp,
                 ),
                 (None,),
+        )
+        if self.parent.IsDockable():
+            data += (
                 (
-                    ("quit", icons["quit"].label),
-                    icons["quit"],
-                    self.parent.OnCloseWindow,
+                    ("mapDispDocking", BaseIcons["mapDispDocking"].label),
+                    BaseIcons["mapDispDocking"],
+                    self.parent.OnDockUndock,
+                    wx.ITEM_CHECK,
                 ),
             )
+        data += (
+            (
+                ("quit", icons["quit"].label),
+                icons["quit"],
+                self.parent.OnCloseWindow,
+            ),
         )
+
+        return self._getToolbarData(data)

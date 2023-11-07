@@ -25,46 +25,46 @@ from core import globalvar
 from gui_core.wrap import SimpleTabArt
 from mapdisp.frame import MapPanel
 
-class MapPageFrame(wx.Frame):
+class MainPageFrame(wx.Frame):
     """Frame for independent map display window."""
 
-    def __init__(self, parent, mapdisplay, size, pos, title):
+    def __init__(self, parent, panel, size, pos, title, icon="grass"):
         wx.Frame.__init__(self, parent=parent, size=size, pos=pos, title=title)
-        self.mapdisplay = mapdisplay
-        self.mapdisplay.Reparent(self)
+        self.panel = panel
+        self.panel.Reparent(self)
 
         self._layout()
 
         # set system icon
         self.SetIcon(
             wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
+                os.path.join(globalvar.ICONDIR, icon + ".ico"), wx.BITMAP_TYPE_ICO
             )
         )
 
-        self.mapdisplay.onFocus.emit()
+        self.panel.onFocus.emit()
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
         self._show()
 
     def _layout(self):
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(self.mapdisplay, proportion=1, flag=wx.EXPAND)
+        sizer.Add(self.panel, proportion=1, flag=wx.EXPAND)
         self.SetSizer(sizer)
         self.CentreOnParent()
 
     def _show(self):
-        """Show frame and contained mapdisplay panel"""
-        self.mapdisplay.Show()
+        """Show frame and contained panel"""
+        self.panel.Show()
         self.Show()
 
     def SetDockingCallback(self, function):
-        """Set docking callback on reparented mapdisplay panel"""
-        self.mapdisplay.SetDockingCallback(function)
+        """Set docking callback on reparented panel"""
+        self.panel.SetDockingCallback(function)
 
     def OnClose(self, event):
         """Close frame and associated layer notebook page."""
-        self.mapdisplay.OnCloseWindow(event=None, askIfSaveWorkspace=True)
+        self.panel.OnCloseWindow(event=None, askIfSaveWorkspace=True) # TODO
 
 
 class MainNotebook(aui.AuiNotebook):
@@ -89,27 +89,29 @@ class MainNotebook(aui.AuiNotebook):
         )
         self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSE, self.OnClose)
 
-    def UndockMapDisplay(self, page):
-        """Undock active map display to independent MapFrame object"""
+    def UndockPage(self, page):
+        """Undock active page to independent MapFrame object"""
         index = self.GetPageIndex(page)
         text = self.GetPageText(index)
         original_size = page.GetSize()
         original_pos = page.GetPosition()
+        icon = "grass_map" if isinstance(page, MapPanel) else "grass"
         self.RemovePage(index)
-        frame = MapPageFrame(
+        frame = MainPageFrame(
             parent=self.parent,
-            mapdisplay=page,
+            panel=page,
             size=original_size,
             pos=original_pos,
             title=text,
+            icon=icon
         )
-        frame.SetDockingCallback(self.DockMapDisplay)
+        frame.SetDockingCallback(self.DockPage)
 
-    def DockMapDisplay(self, page):
+    def DockPage(self, page):
         """Dock independent MapFrame object back to Aui.Notebook"""
         frame = page.GetParent()
         page.Reparent(self)
-        page.SetDockingCallback(self.UndockMapDisplay)
+        page.SetDockingCallback(self.UndockPage)
         self.AddPage(page, frame.GetTitle())
         frame.Destroy()
 
