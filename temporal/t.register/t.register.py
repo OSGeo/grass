@@ -150,12 +150,6 @@ if __name__ == "__main__":
     import grass.temporal as tgis
 
     try:
-        from builtins import StandardError
-    except ImportError:
-        # python 3
-        StandardError = Exception
-
-    try:
         tgis.profile_function(main)
-    except StandardError as e:
+    except Exception as e:
         grass.fatal(e)

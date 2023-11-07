@@ -1,85 +1,65 @@
-#!/usr/bin/env python
-
 """Preprocess a C source file using gcc and convert the result into
    a token stream
 
-Reference is C99:
-  * http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1124.pdf
-
+Reference is C99 with additions from C11 and C2x:
+* http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1124.pdf
+* http://www.quut.com/c/ANSI-C-grammar-l-2011.html
+* http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2731.pdf
 """
 
 __docformat__ = "restructuredtext"
 
-import os, re, shlex, sys, tokenize, traceback
-import ctypes
-from .lex import TOKEN
+from ctypesgen.parser.lex import TOKEN
+from ctypesgen.parser import cgrammar
 
-tokens = (
-    "HEADER_NAME",
-    "IDENTIFIER",
-    "PP_NUMBER",
-    "CHARACTER_CONSTANT",
-    "STRING_LITERAL",
-    "OTHER",
-    "PTR_OP",
-    "INC_OP",
-    "DEC_OP",
-    "LEFT_OP",
-    "RIGHT_OP",
-    "LE_OP",
-    "GE_OP",
-    "EQ_OP",
-    "NE_OP",
-    "AND_OP",
-    "OR_OP",
-    "MUL_ASSIGN",
-    "DIV_ASSIGN",
-    "MOD_ASSIGN",
-    "ADD_ASSIGN",
-    "SUB_ASSIGN",
-    "LEFT_ASSIGN",
-    "RIGHT_ASSIGN",
-    "AND_ASSIGN",
-    "XOR_ASSIGN",
-    "OR_ASSIGN",
-    "PERIOD",
-    "ELLIPSIS",
-    "LPAREN",
-    "NEWLINE",
-    "PP_DEFINE",
-    "PP_DEFINE_NAME",
-    "PP_DEFINE_MACRO_NAME",
-    "PP_UNDEFINE",
-    "PP_MACRO_PARAM",
-    "PP_STRINGIFY",
-    "PP_IDENTIFIER_PASTE",
-    "PP_END_DEFINE",
-    "PRAGMA",
-    "PRAGMA_PACK",
-    "PRAGMA_END",
-)
+
+tokens = cgrammar.tokens
+keywords = cgrammar.keywords
+
 
 states = [("DEFINE", "exclusive"), ("PRAGMA", "exclusive")]
 
-subs = {
-    "D": "[0-9]",
-    "L": "[a-zA-Z_]",
-    "H": "[a-fA-F0-9]",
-    "E": "[Ee][+-]?\s*{D}+",
-    # new float suffixes supported in gcc 7
-    "FS": "([FflL]|D[FDL]|[fF]\d+x?)",
-    "IS": "[uUlL]*",
-}
-# Helper: substitute {foo} with subs[foo] in string (makes regexes more lexy)
-sub_pattern = re.compile("{([^}]*)}")
 
+_B_ = r"[0-1]"
+_O_ = r"[0-7]"
+_D_ = r"[0-9]"
+_NZ_ = r"[1-9]"
+_L_ = r"[a-zA-Z_]"
+_A_ = r"[a-zA-Z_0-9]"
+_H_ = r"[a-fA-F0-9]"
+_HP_ = r"0[xX]"
+_BP_ = r"0[bB]"
+_E_ = r"([Ee][+-]?" + _D_ + r"+)"
+_P_ = r"([Pp][+-]?" + _D_ + r"+)"
+_FS_ = r"(f|F|l|L)"
+_IS_ = r"(((u|U)(ll|LL|l|L)?)|((ll|LL|l|L)(u|U)?))"
+_CP_ = r"(u|U|L)"
+_SP_ = r"(u8|u|U|L)"
+_ES_ = r"(\\([\'\"\?\\abfnrtv]|[0-7]{1,3}|x[a-fA-F0-9]+))"
+_WS_ = r"[ \t\v\n\f]"
 
-def sub_repl_match(m):
-    return subs[m.groups()[0]]
+I_CONST_HEX = r"(?P<p1>" + _HP_ + _H_ + r"+" + r")" + _IS_ + r"?"
+I_CONST_DEC = r"(?P<p1>" + _NZ_ + _D_ + r"*" + r")" + _IS_ + r"?"
+I_CONST_OCT = r"0" + r"(?P<p1>" + _O_ + r"*)" + _IS_ + r"?"
+I_CONST_BIN = r"(?P<p1>" + _BP_ + _B_ + "*" + r")" + _IS_ + "?"
 
+F_CONST_1 = r"(?P<sig>" + _D_ + r"+" + r")(?P<exp>" + _E_ + r")" + _FS_ + r"?"
+F_CONST_2 = r"(?P<sig>" + _D_ + r"*\." + _D_ + r"+" + r")(?P<exp>" + _E_ + r"?)" + _FS_ + r"?"
+F_CONST_3 = r"(?P<sig>" + _D_ + r"+\." + r")(?P<exp>" + _E_ + r"?)" + _FS_ + r"?"
+F_CONST_4 = r"(?P<hex>" + _HP_ + _H_ + r"+" + _P_ + r")" + _FS_ + r"?"
+F_CONST_5 = r"(?P<hex>" + _HP_ + _H_ + r"*\." + _H_ + r"+" + _P_ + r")" + _FS_ + r"?"
+F_CONST_6 = r"(?P<hex>" + _HP_ + _H_ + r"+\." + _P_ + r")" + _FS_ + r"?"
 
-def sub(s):
-    return sub_pattern.sub(sub_repl_match, s)
+CHARACTER_CONSTANT = _SP_ + r"?'(?P<p1>\\.|[^\\'])+'"
+IDENTIFIER = _L_ + _A_ + r"*"
+
+escape_sequence_start_in_string = r"""(\\[0-9a-zA-Z._~!=&\^\-\\?'"])"""
+string_char = r"""([^"\\\n]|""" + escape_sequence_start_in_string + ")"
+STRING_LITERAL = '"' + string_char + '*"'
+
+# Process line-number directives from the preprocessor
+# See https://gcc.gnu.org/onlinedocs/cpp/Preprocessor-Output.html
+DIRECTIVE = r'\#\s+(?P<lineno>\d+)\s+"(?P<filename>[^"]+)"[ \d]*\n'
 
 
 # --------------------------------------------------------------------------
@@ -102,85 +82,173 @@ class StringLiteral(str):
 # Token declarations
 # --------------------------------------------------------------------------
 
-punctuators = {
-    # value: (regex, type)
-    r"...": (r"\.\.\.", "ELLIPSIS"),
-    r">>=": (r">>=", "RIGHT_ASSIGN"),
-    r"<<=": (r"<<=", "LEFT_ASSIGN"),
-    r"+=": (r"\+=", "ADD_ASSIGN"),
-    r"-=": (r"-=", "SUB_ASSIGN"),
-    r"*=": (r"\*=", "MUL_ASSIGN"),
-    r"/=": (r"/=", "DIV_ASSIGN"),
-    r"%=": (r"%=", "MOD_ASSIGN"),
-    r"&=": (r"&=", "AND_ASSIGN"),
-    r"^=": (r"\^=", "XOR_ASSIGN"),
-    r"|=": (r"\|=", "OR_ASSIGN"),
-    r">>": (r">>", "RIGHT_OP"),
-    r"<<": (r"<<", "LEFT_OP"),
-    r"++": (r"\+\+", "INC_OP"),
-    r"--": (r"--", "DEC_OP"),
-    r"->": (r"->", "PTR_OP"),
-    r"&&": (r"&&", "AND_OP"),
-    r"||": (r"\|\|", "OR_OP"),
-    r"<=": (r"<=", "LE_OP"),
-    r">=": (r">=", "GE_OP"),
-    r"==": (r"==", "EQ_OP"),
-    r"!=": (r"!=", "NE_OP"),
-    r"<:": (r"<:", "["),
-    r":>": (r":>", "]"),
-    r"<%": (r"<%", "{"),
-    r"%>": (r"%>", "}"),
-    r";": (r";", ";"),
-    r"{": (r"{", "{"),
-    r"}": (r"}", "}"),
-    r",": (r",", ","),
-    r":": (r":", ":"),
-    r"=": (r"=", "="),
-    r")": (r"\)", ")"),
-    r"[": (r"\[", "["),
-    r"]": (r"]", "]"),
-    r".": (r"\.", "PERIOD"),
-    r"&": (r"&", "&"),
-    r"!": (r"!", "!"),
-    r"~": (r"~", "~"),
-    r"-": (r"-", "-"),
-    r"+": (r"\+", "+"),
-    r"*": (r"\*", "*"),
-    r"/": (r"/", "/"),
-    r"%": (r"%", "%"),
-    r"<": (r"<", "<"),
-    r">": (r">", ">"),
-    r"^": (r"\^", "^"),
-    r"|": (r"\|", "|"),
-    r"?": (r"\?", "?"),
-}
+
+# Assignment operators
+t_ANY_EQUALS = r"="
+t_ANY_RIGHT_ASSIGN = r">>="
+t_ANY_LEFT_ASSIGN = r"<<="
+t_ANY_ADD_ASSIGN = r"\+="
+t_ANY_SUB_ASSIGN = r"-="
+t_ANY_MUL_ASSIGN = r"\*="
+t_ANY_DIV_ASSIGN = r"/="
+t_ANY_MOD_ASSIGN = r"%="
+t_ANY_AND_ASSIGN = r"&="
+t_ANY_XOR_ASSIGN = r"\^="
+t_ANY_OR_ASSIGN = r"\|="
+
+# Operators
+t_ANY_PLUS = r"\+"
+t_ANY_MINUS = r"-"
+t_ANY_TIMES = r"\*"
+t_ANY_DIVIDE = r"/"
+t_ANY_MOD = r"%"
+t_ANY_AND = r"&"
+t_ANY_OR = r"\|"
+t_ANY_NOT = r"~"
+t_ANY_XOR = r"\^"
+t_ANY_RIGHT_OP = r">>"
+t_ANY_LEFT_OP = r"<<"
+t_ANY_INC_OP = r"\+\+"
+t_ANY_DEC_OP = r"--"
+t_ANY_PTR_OP = r"->"
+t_ANY_AND_OP = r"&&"
+t_ANY_OR_OP = r"\|\|"
+t_ANY_LE_OP = r"<="
+t_ANY_GE_OP = r">="
+t_ANY_EQ_OP = r"=="
+t_ANY_NE_OP = r"!="
+t_ANY_LNOT = r"!"
+t_ANY_LT = r"<"
+t_ANY_GT = r">"
+t_ANY_CONDOP = r"\?"
 
 
-def punctuator_regex(punctuators):
-    punctuator_regexes = [v[0] for v in punctuators.values()]
-    punctuator_regexes.sort(key=len, reverse=True)
-    return "(%s)" % "|".join(punctuator_regexes)
-
-
-# Process line-number directives from the preprocessor
-# See http://docs.freebsd.org/info/cpp/cpp.info.Output.html
-DIRECTIVE = r'\#\s+(\d+)\s+"([^"]+)"[ \d]*\n'
+# Delimiters
+t_ANY_PERIOD = r"\."
+t_ANY_LPAREN = r"\("
+t_ANY_RPAREN = r"\)"
+t_ANY_ELLIPSIS = r"\.\.\."
+t_ANY_LBRACKET = r"\["
+t_ANY_RBRACKET = r"\]"
+t_ANY_LBRACE = r"\{"
+t_ANY_RBRACE = r"\}"
+t_ANY_COMMA = r","
+t_ANY_SEMI = r";"
+t_ANY_COLON = r":"
 
 
 @TOKEN(DIRECTIVE)
 def t_ANY_directive(t):
-    t.lexer.filename = t.groups[2]
-    t.lexer.lineno = int(t.groups[1])
+    m = t.lexer.lexmatch
+    t.lexer.filename = m.group("filename")
+    t.lexer.lineno = int(m.group("lineno"))
     return None
 
 
-@TOKEN(punctuator_regex(punctuators))
-def t_ANY_punctuator(t):
-    t.type = punctuators[t.value][1]
+@TOKEN(F_CONST_1)
+def t_ANY_f_const_1(t):
+    t.type = "F_CONST_1"
+    m = t.lexer.lexmatch
+    sig = m.group("sig")
+    exp = m.group("exp")
+    t.value = sig + exp
     return t
 
 
-IDENTIFIER = sub("{L}({L}|{D})*")
+@TOKEN(F_CONST_2)
+def t_ANY_f_const_2(t):
+    t.type = "F_CONST_2"
+    m = t.lexer.lexmatch
+    sig = m.group("sig")
+    exp = m.group("exp")
+    t.value = sig + exp
+    return t
+
+
+@TOKEN(F_CONST_3)
+def t_ANY_f_const_3(t):
+    t.type = "F_CONST_3"
+    m = t.lexer.lexmatch
+    sig = m.group("sig")
+    exp = m.group("exp")
+    t.value = sig + exp
+    return t
+
+
+@TOKEN(F_CONST_4)
+def t_ANY_f_const_4(t):
+    t.type = "F_CONST_4"
+    m = t.lexer.lexmatch
+    t.value = 'float.fromhex("' + m.group("hex") + '")'
+    return t
+
+
+@TOKEN(F_CONST_5)
+def t_ANY_f_const_5(t):
+    t.type = "F_CONST_5"
+    m = t.lexer.lexmatch
+    t.value = 'float.fromhex("' + m.group("hex") + '")'
+    return t
+
+
+@TOKEN(F_CONST_6)
+def t_ANY_f_const_6(t):
+    t.type = "F_CONST_6"
+    m = t.lexer.lexmatch
+    t.value = 'float.fromhex("' + m.group("hex") + '")'
+    return t
+
+
+@TOKEN(I_CONST_BIN)
+def t_ANY_i_const_bin(t):
+    t.type = "I_CONST_BIN"
+    m = t.lexer.lexmatch
+    t.value = m.group("p1")
+    return t
+
+
+@TOKEN(I_CONST_HEX)
+def t_ANY_i_const_hex(t):
+    t.type = "I_CONST_HEX"
+    m = t.lexer.lexmatch
+    t.value = m.group("p1")
+    return t
+
+
+@TOKEN(I_CONST_DEC)
+def t_ANY_i_const_dec(t):
+    t.type = "I_CONST_DEC"
+    m = t.lexer.lexmatch
+    t.value = m.group("p1")
+    return t
+
+
+@TOKEN(I_CONST_OCT)
+def t_ANY_i_const_oct(t):
+    t.type = "I_CONST_OCT"
+    m = t.lexer.lexmatch
+    p1 = m.group("p1")
+    if not p1:
+        t.value = "0"
+    else:
+        t.value = "0o" + m.group("p1")
+    return t
+
+
+@TOKEN(CHARACTER_CONSTANT)
+def t_ANY_character_constant(t):
+    t.type = "CHARACTER_CONSTANT"
+    m = t.lexer.lexmatch
+    p1 = m.group("p1")
+    t.value = p1
+    return t
+
+
+@TOKEN(STRING_LITERAL)
+def t_ANY_string_literal(t):
+    t.type = "STRING_LITERAL"
+    t.value = StringLiteral(t.value)
+    return t
 
 
 @TOKEN(IDENTIFIER)
@@ -218,92 +286,6 @@ def t_DEFINE_identifier(t):
         t.type = "PP_MACRO_PARAM"
     else:
         t.type = "IDENTIFIER"
-    return t
-
-
-FLOAT_LITERAL = sub(
-    r"(?P<p1>{D}+)?(?P<dp>[.]?)(?P<p2>(?(p1){D}*|{D}+))"
-    r"(?P<exp>(?:[Ee][+-]?{D}+)?)(?P<suf>{FS}?)(?!\w)"
-)
-
-
-@TOKEN(FLOAT_LITERAL)
-def t_ANY_float(t):
-    t.type = "PP_NUMBER"
-    m = t.lexer.lexmatch
-
-    p1 = m.group("p1")
-    dp = m.group("dp")
-    p2 = m.group("p2")
-    exp = m.group("exp")
-    suf = m.group("suf")
-
-    if dp or exp or (suf and re.match(subs["FS"] + "$", suf)):
-        s = m.group(0)
-        if suf:
-            s = s[: -len(suf)]
-        # Attach a prefix so the parser can figure out if should become an
-        # integer, float, or long
-        t.value = "f" + s
-    elif suf and suf in ("Ll"):
-        t.value = "l" + p1
-    else:
-        t.value = "i" + p1
-
-    return t
-
-
-INT_LITERAL = sub(r"(?P<p1>(?:0x{H}+)|(?:{D}+))(?P<suf>{IS})")
-
-
-@TOKEN(INT_LITERAL)
-def t_ANY_int(t):
-    t.type = "PP_NUMBER"
-    m = t.lexer.lexmatch
-
-    if "L" in m.group(3) or "l" in m.group(2):
-        prefix = "l"
-    else:
-        prefix = "i"
-
-    g1 = m.group(2)
-    if g1.startswith("0x"):
-        # Convert base from hexadecimal
-        g1 = str(int(g1[2:], 16))
-    elif g1[0] == "0":
-        # Convert base from octal
-        g1 = str(int(g1, 8))
-
-    t.value = prefix + g1
-
-    return t
-
-
-CHARACTER_CONSTANT = sub(r"L?'(\\.|[^\\'])+'")
-
-
-@TOKEN(CHARACTER_CONSTANT)
-def t_ANY_character_constant(t):
-    t.type = "CHARACTER_CONSTANT"
-    return t
-
-
-STRING_LITERAL = sub(r'L?"(\\.|[^\\"])*"')
-
-
-@TOKEN(STRING_LITERAL)
-def t_ANY_string_literal(t):
-    t.type = "STRING_LITERAL"
-    t.value = StringLiteral(t.value)
-    return t
-
-
-@TOKEN(r"\(")
-def t_ANY_lparen(t):
-    if t.lexpos == 0 or t.lexer.lexdata[t.lexpos - 1] not in (" \t\f\v\n"):
-        t.type = "LPAREN"
-    else:
-        t.type = "("
     return t
 
 

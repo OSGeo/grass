@@ -344,13 +344,6 @@
     <handler>OnNewVector</handler>
     <description>Create new empty vector map</description>
   </wxgui-item>
-  <wxgui-item name="CleanVectorMap">
-    <label>Clean vector map</label>
-    <handler>OnVectorCleaning</handler>
-    <related-module>v.clean</related-module>
-    <description>Toolset for cleaning topology of vector map.</description>
-    <keywords>vector,topology,geometry</keywords>
-  </wxgui-item>
   <wxgui-item name="ManageVectorColorRulesInteractively">
     <label>Manage color rules interactively</label>
     <handler>OnVectorRules</handler>
@@ -401,5 +394,11 @@
     <command>g.gui.vdigit</command>
     <description>Interactive editing and digitization of vector maps.</description>
     <keywords>general,gui,vector,editing,digitizer</keywords>
+  </wxgui-item>
+  <wxgui-item name="RDigit">
+    <label>Raster digitizer</label>
+    <command>g.gui.rdigit</command>
+    <description>Interactive editing and digitization of raster maps.</description>
+    <keywords>general,gui,raster,editing,digitizer</keywords>
   </wxgui-item>
 </wxgui-items>

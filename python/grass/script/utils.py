@@ -30,10 +30,6 @@ import random
 import string
 
 
-if sys.version_info.major >= 3:
-    unicode = str
-
-
 def float_or_dms(s):
     """Convert DMS to float.
 
@@ -48,7 +44,7 @@ def float_or_dms(s):
     """
     if s[-1] in ["E", "W", "N", "S"]:
         s = s[:-1]
-    return sum(float(x) / 60 ** n for (n, x) in enumerate(s.split(":")))
+    return sum(float(x) / 60**n for (n, x) in enumerate(s.split(":")))
 
 
 def separator(sep):
@@ -163,7 +159,11 @@ class KeyValue(dict):
 
 
 def _get_encoding():
-    encoding = locale.getdefaultlocale()[1]
+    try:
+        # Python >= 3.11
+        encoding = locale.getencoding()
+    except AttributeError:
+        encoding = locale.getdefaultlocale()[1]
     if not encoding:
         encoding = "UTF-8"
     return encoding
@@ -187,7 +187,7 @@ def decode(bytes_, encoding=None):
     >>> decode(1234)
     u'1234'
     """
-    if isinstance(bytes_, unicode):
+    if isinstance(bytes_, str):
         return bytes_
     if isinstance(bytes_, bytes):
         if encoding is None:
@@ -195,13 +195,8 @@ def decode(bytes_, encoding=None):
         else:
             enc = encoding
         return bytes_.decode(enc)
-    # if something else than text
-    if sys.version_info.major >= 3:
-        # only text should be used
-        raise TypeError("can only accept types str and bytes")
-    else:
-        # for backwards compatibility
-        return unicode(bytes_)
+    # only text should be used
+    raise TypeError("can only accept types str and bytes")
 
 
 def encode(string, encoding=None):
@@ -225,32 +220,21 @@ def encode(string, encoding=None):
     """
     if isinstance(string, bytes):
         return string
-    # this also tests str in Py3:
-    if isinstance(string, unicode):
+    if isinstance(string, str):
         if encoding is None:
             enc = _get_encoding()
         else:
             enc = encoding
         return string.encode(enc)
     # if something else than text
-    if sys.version_info.major >= 3:
-        # only text should be used
-        raise TypeError("can only accept types str and bytes")
-    else:
-        # for backwards compatibility
-        return bytes(string)
+    raise TypeError("can only accept types str and bytes")
 
 
 def text_to_string(text, encoding=None):
     """Convert text to str. Useful when passing text into environments,
     in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
     """
-    if sys.version[0] == "2":
-        # Python 2
-        return encode(text, encoding=encoding)
-    else:
-        # Python 3
-        return decode(text, encoding=encoding)
+    return decode(text, encoding=encoding)
 
 
 def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None):
@@ -323,12 +307,7 @@ def get_num_suffix(number, max_number):
 
 def split(s):
     """!Platform specific shlex.split"""
-    if sys.version_info >= (2, 6):
-        return shlex.split(s, posix=(sys.platform != "win32"))
-    elif sys.platform == "win32":
-        return shlex.split(s.replace("\\", r"\\"))
-    else:
-        return shlex.split(s)
+    return shlex.split(s, posix=(sys.platform != "win32"))
 
 
 # source:
@@ -458,7 +437,7 @@ def set_path(modulename, dirname=None, path="."):
     In this way we are executing the local code even if the module was already
     installed as grass-addons and it is available in GRASS standards path.
 
-    The function is cheching if the dirname is provided and if the
+    The function is checking if the dirname is provided and if the
     directory exists and it is available using the path
     provided as third parameter, if yes add the path to sys.path to be
     importable, otherwise it will check on GRASS GIS standard paths.
@@ -490,12 +469,9 @@ def set_path(modulename, dirname=None, path="."):
 def clock():
     """
     Return time counter to measure performance for chunks of code.
-    Uses time.clock() for Py < 3.3, time.perf_counter() for Py >= 3.3.
     Should be used only as difference between the calls.
     """
-    if sys.version_info > (3, 2):
-        return time.perf_counter()
-    return time.clock()
+    return time.perf_counter()
 
 
 def legalize_vector_name(name, fallback_prefix="x"):
@@ -596,7 +572,7 @@ def append_random(name, suffix_length=None, total_length=None):
 
     ..note::
 
-        Note that this will be influeced by the random seed set for the Python
+        Note that this will be influenced by the random seed set for the Python
         random package.
 
     ..note::

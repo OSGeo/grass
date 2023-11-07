@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_openupdate.c
- * 
+ *
  * \brief DBMI Library (driver) - open update cursor
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -18,10 +18,10 @@
 #include "dbstubs.h"
 
 /*!
-  \brief Open update cursor
+   \brief Open update cursor
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
+   \return DB_OK on success
+   \return DB_FAILED on failure
  */
 int db_d_open_update_cursor(void)
 {
@@ -40,12 +40,12 @@ int db_d_open_update_cursor(void)
     DB_RECV_INT(&mode);
 
     /* create a cursor */
-    cursor = (dbCursor *) db_malloc(sizeof(dbCursor));
+    cursor = (dbCursor *)db_malloc(sizeof(dbCursor));
     if (cursor == NULL)
-	return db_get_error_code();
-    token = db_new_token((dbAddress) cursor);
+        return db_get_error_code();
+    token = db_new_token((dbAddress)cursor);
     if (token < 0)
-	return db_get_error_code();
+        return db_get_error_code();
     db_init_cursor(cursor);
 
     /* call the procedure */
@@ -55,8 +55,8 @@ int db_d_open_update_cursor(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

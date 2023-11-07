@@ -22,10 +22,7 @@ from wx.lib.newevent import NewEvent
 
 import sys
 
-if sys.version_info.major == 2:
-    import Queue
-else:
-    import queue as Queue
+import queue as Queue
 
 from core.gconsole import EVT_CMD_DONE, wxCmdDone
 
@@ -58,7 +55,7 @@ class gThread(threading.Thread, wx.EvtHandler):
         else:
             self.resultQ = resultQ
 
-        self.setDaemon(True)
+        self.daemon = True
 
         self.Bind(EVT_CMD_DONE, self.OnDone)
         self.Bind(EVT_THD_TERMINATE, self.OnTerminate)

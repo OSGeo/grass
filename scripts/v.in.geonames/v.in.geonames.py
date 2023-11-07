@@ -35,10 +35,7 @@
 # %end
 
 import os
-import sys
 
-if sys.version_info.major == 2:
-    from io import open
 import grass.script as grass
 
 

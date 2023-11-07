@@ -175,7 +175,6 @@ def main():
             isvalid = True
             mapname_list = []
             for mapmatrix in mapmatrizes:
-
                 entry = mapmatrix[i]
 
                 if entry["samples"]:

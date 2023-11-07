@@ -1,18 +1,18 @@
 /****************************************************************************
  *
  * MODULE:       test.dbmi_base.lib
- *   	    	
- * AUTHOR(S):    Original author 
+ *
+ * AUTHOR(S):    Original author
  *               Soeren Gebbert soerengebbert <at> googlemail <dot> com
- * 		 2010 Braunschweig, Germany
+ *                  2010 Braunschweig, Germany
  *
  * PURPOSE:      Unit and integration tests for the dbmi_base library
  *
  * COPYRIGHT:    (C) 2007 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *   	    	License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	for details.
+ *               License (>=v2). Read the file COPYING that comes with
+ *               GRASS for details.
  *
  *****************************************************************************/
 
@@ -38,7 +38,8 @@ static void set_params(void); /*Fill the paramType structure */
 /* Set up the arguments we are expecting ********************************** */
 
 /* ************************************************************************* */
-void set_params(void) {
+void set_params(void)
+{
     param.unit = G_define_option();
     param.unit->key = "unit";
     param.unit->type = TYPE_STRING;
@@ -52,7 +53,7 @@ void set_params(void) {
     param.integration->required = NO;
     param.integration->options = "";
     param.integration->description = _("Choose the integration tests to run");
-    
+
     param.testunit = G_define_flag();
     param.testunit->key = 'u';
     param.testunit->description = _("Run all unit tests");
@@ -64,14 +65,14 @@ void set_params(void) {
     param.full = G_define_flag();
     param.full->key = 'a';
     param.full->description = _("Run all unit and integration tests");
-
 }
 
 /* ************************************************************************* */
 /* ************************************************************************* */
 
 /* ************************************************************************* */
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     struct GModule *module;
     int returnstat = 0, i;
 
@@ -79,8 +80,8 @@ int main(int argc, char *argv[]) {
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->description
-            = _("Performs unit and integration tests for the dbmi base library");
+    module->description =
+        _("Performs unit and integration tests for the dbmi base library");
 
     /* Get parameters from user */
     set_params();
@@ -112,7 +113,7 @@ int main(int argc, char *argv[]) {
                         returnstat += unit_test_table();
 
                     i++;
-            }
+                }
         }
         /*integration tests */
         if (!param.testint->answer) {
@@ -120,10 +121,10 @@ int main(int argc, char *argv[]) {
             if (param.integration->answers)
                 while (param.integration->answers[i]) {
                     ;
-            }
+                }
         }
     }
-    
+
     if (returnstat != 0)
         G_warning("Errors detected while testing the dbmi_base lib");
     else

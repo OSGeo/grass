@@ -9,12 +9,10 @@ the <b>column</b> option.
 <div class="code"><pre>
 keyword&nbsp;value
 </pre></div>
-(separated by space) or comment beginning with '#' (hash). 
+(separated by space) or comment beginning with '#' (hash).
 Definition of new category begins with keyword <I>cat</I> followed
 by the new category value.
 Keyword <I>where</I> specifies SQL where condition.
-
-
 
 <h2>NOTES</h2>
 
@@ -26,13 +24,12 @@ table is created containing the newly generated cat numbers and a single
 column containing the unique string column values, sorted in alphabetical
 order.
 
-<p>For dissolving common boundaries, see 
+<p>For dissolving common boundaries, see
 <em><a href="v.dissolve.html">v.dissolve</a></em>.
 
-
+<p>Either the <b>rules</b> or <b>column</b> option must be specified.
 
 <h2>EXAMPLES</h2>
-
 
 <h3>Example 1: Reclass by rules</h3>
 
@@ -40,7 +37,7 @@ order.
 v.reclass input=land output=land_u type=boundary rules=land.rcl
 </pre></div>
 
-the rules file contains :
+The rules file contains:
 
 <div class="code"><pre>
 # land reclass file
@@ -57,10 +54,9 @@ select statement:
 <tt>select id from tland where use = 'E13' and owner = 'Jara Cimrman'</tt>
 changed to category 1;
 <br>
-values selected from database by SQL select statement: 
+values selected from database by SQL select statement:
 <br>
 <tt>select id from tland where use = 'E14'</tt> changed to category 2.
-
 
 <h3>Example 2: Reclass by attribute column</h3>
 
@@ -75,11 +71,9 @@ cat|I_vs_P
 2|perennial
 </pre></div>
 
-
 <h2>KNOWN ISSUES</h2>
 
-No table is created for reclassed layer if <b>rules</b> option is used.
-
+No table is created for reclassed layer if the <b>rules</b> option is used.
 
 <h2>SEE ALSO</h2>
 
@@ -89,14 +83,8 @@ No table is created for reclassed layer if <b>rules</b> option is used.
 </em>
 <p><em><a href="sql.html">GRASS SQL interface</a></em>
 
-
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 R.L. Glenn, USDA, SCS, NHQ-CGIS<br>
 from v.reclass to v.db.reclass and later to v.reclass in 5.7 rewritten
 by Radim Blazek
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

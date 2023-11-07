@@ -50,12 +50,12 @@ Several environment variables affect the operation of the HTML driver:
   <li><b>GRASS_RENDER_HEIGHT=yyy</b><br>
     the height of the image map (default is 480).
   </li>
-  <li><b>GRASS_RENDER_HTMLTYPE=type</b><br> type of image mape to create
+  <li><b>GRASS_RENDER_HTMLTYPE=type</b><br> type of image map to create
     (default is CLIENT):
     <dl>
       <dd><tt><b>CLIENT</b></tt> &nbsp;&nbsp; Netscape/IE client-side
 	image map (NAME="map").</dd>
-      <dd><tt><b>APACHE</b></tt> &nbsp;&nbsp; Apache/NCSA server-side image 
+      <dd><tt><b>APACHE</b></tt> &nbsp;&nbsp; Apache/NCSA server-side image
 	map.</dd>
       <dd><tt><b>RAW</b></tt>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Raw url and polygon
@@ -100,7 +100,7 @@ Several environment variables affect the operation of the HTML driver:
 Start up the driver
 
 <div class="code"><pre>
-g.region vector=zipcodes_wake 
+g.region vector=zipcodes_wake
 d.mon start=html
 </pre></div>
 
@@ -120,7 +120,7 @@ a file named 'htmlmap' in your current directory:
 d.mon stop=html
 </pre></div>
 
-You will also want to create an image for your image map. Use the PNG 
+You will also want to create an image for your image map. Use the PNG
 driver and other utilities to create .gif or .jpg files.
 <i>The following example is somewhat out of date and refers to options
   available in GRASS 5.</i>
@@ -142,13 +142,13 @@ g.region raster=D_cell
 r.out.ppm -q input=D_cell output=alien.ppm
 
 # use the netpbm utilities to create a gif (quantize if needed)
-ppmquant 128 &lt;alien.ppm |  ppmtogif &gt;alien.gif 
+ppmquant 128 &lt;alien.ppm |  ppmtogif &gt;alien.gif
 
 # assemble some html with the image and the image map
 echo '&lt;html&gt;&lt;body&gt;&lt;img src="alien.gif" usemap="#map"&gt;' &gt;alien.html
 cat htmlmap                                           &gt;&gt;alien.html
 echo '&lt;/body&gt;&lt;/html&gt;'                                 &gt;&gt;alien.html
-	
+
 # don't forget to reset your region
 g.region region=saved.reg
 
@@ -193,7 +193,6 @@ sed -e 's/NAME="map"/NAME="foomap"/' &lt; htmlmap &gt; foomap.html
   <a href="d.redraw.html">d.redraw</a>
 </em>
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+<h2>AUTHOR</h2>
+
+Glynn Clements

@@ -105,7 +105,7 @@ def main():
     # change to temporary directory to later avoid removal problems (rm -r ...)
     os.chdir(tmpdir)
 
-    # check for binay E00 file (we can just check if import fails):
+    # check for binary E00 file (we can just check if import fails):
     # avcimport doesn't set exist status :-(
 
     if merging:

@@ -19,8 +19,6 @@ This program is free software under the GNU General Public License
 @author Luca Delucchi <lucadeluge gmail.com> (language choice)
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import copy
@@ -143,6 +141,7 @@ class Settings:
                         globalvar.MAP_WINDOW_SIZE[0],
                         globalvar.MAP_WINDOW_SIZE[1],
                     ),
+                    "dimSingleWindow": "1,1,1,1",
                 },
                 # workspace
                 "workspace": {
@@ -167,7 +166,7 @@ class Settings:
                 "changeOpacityLevel": {"enabled": False},
                 # ask when removing layer from layer tree
                 "askOnRemoveLayer": {"enabled": True},
-                # ask when quiting wxGUI or closing display
+                # ask when quitting wxGUI or closing display
                 "askOnQuit": {"enabled": True},
                 # hide tabs
                 "hideTabs": {
@@ -189,9 +188,8 @@ class Settings:
                 "menustyle": {"selection": 1},
                 "gSelectPopupHeight": {"value": 200},
                 "iconTheme": {"type": "grass"},
-                "commandNotebook": {
-                    "selection": 0 if sys.platform in ("win32", "darwin") else 1
-                },
+                "commandNotebook": {"selection": 0},
+                "singleWindow": {"enabled": True},
             },
             #
             # language
@@ -800,8 +798,8 @@ class Settings:
         self.internalSettings["appearance"]["iconTheme"]["choices"] = ("grass",)
         self.internalSettings["appearance"]["menustyle"]["choices"] = (
             _("Classic (labels only)"),
-            _("Combined (labels and module names)"),
-            _("Expert (module names only)"),
+            _("Combined (labels and tool names)"),
+            _("Expert (tool names only)"),
         )
         self.internalSettings["appearance"]["gSelectPopupHeight"]["min"] = 50
         # there is also maxHeight given to TreeCtrlComboPopup.GetAdjustedSize

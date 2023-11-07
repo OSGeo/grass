@@ -6,7 +6,7 @@
 # raster data with r.mapcalc
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=100 b=0 t=50 res=10 res3=10 -p3
-# We create several evlevation and value maps 
+# We create several evlevation and value maps
 r.mapcalc --o expr="elev_5_float = float(5)"
 r.mapcalc --o expr="elev_5_double = double(5)"
 r.mapcalc --o expr="elev_45_float = float(45)"
@@ -26,7 +26,7 @@ r.to.rast3elev --o upper=2         input=raster_float  elevation=elev_25_float  
 r.to.rast3elev --o upper=2         input=raster_double elevation=elev_25_double output=test_elev_volume_double_2
 r.to.rast3elev --o                 input=raster_float  elevation=elev_25_float  output=test_elev_volume_float_3
 r.to.rast3elev --o                 input=raster_double elevation=elev_25_double output=test_elev_volume_double_3
-r.to.rast3elev --o -u              input=raster_float  elevation=elev_25_float  output=test_elev_volume_float_4 
+r.to.rast3elev --o -u              input=raster_float  elevation=elev_25_float  output=test_elev_volume_float_4
 r.to.rast3elev --o -u              input=raster_double elevation=elev_25_double output=test_elev_volume_double_4
 r.to.rast3elev --o -l              input=raster_float  elevation=elev_25_float  output=test_elev_volume_float_5
 r.to.rast3elev --o -l              input=raster_double elevation=elev_25_double output=test_elev_volume_double_5
@@ -36,7 +36,7 @@ r.to.rast3elev --o -lu             input=raster_double elevation=elev_25_double 
 r.to.rast3elev --o                 input=raster_float  elevation=elev_20_float  output=test_elev_volume_float_6
 r.to.rast3elev --o                 input=raster_double elevation=elev_20_double output=test_elev_volume_double_6
 # Test with two to three elevation and value maps using different fill styles
-r.to.rast3elev --o -u  input=elev_25_float,elev_45_float   elevation=elev_25_float,elev_45_float   output=test_elev_volume_float_7 
+r.to.rast3elev --o -u  input=elev_25_float,elev_45_float   elevation=elev_25_float,elev_45_float   output=test_elev_volume_float_7
 r.to.rast3elev --o -u  input=elev_25_double,elev_45_double elevation=elev_25_double,elev_45_double output=test_elev_volume_double_7
 r.to.rast3elev --o -l  input=elev_45_float,elev_25_float,elev_5_float    elevation=elev_45_float,elev_25_float,elev_5_float    output=test_elev_volume_float_8
 r.to.rast3elev --o -l  input=elev_45_double,elev_25_double,elev_5_double elevation=elev_45_double,elev_25_double,elev_5_double output=test_elev_volume_double_8

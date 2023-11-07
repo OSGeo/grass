@@ -1,8 +1,8 @@
 <h2>DESCRIPTION</h2>
 
 <em>r3.out.ascii</em> exports a 3D raster map in ASCII format. The <em>input</em> parameter is
-a valid 3D raster map in the current mapset search path. The <em>output</em> 
-parameter is the name of an ASCII file which will be written in the 
+a valid 3D raster map in the current mapset search path. The <em>output</em>
+parameter is the name of an ASCII file which will be written in the
 current working directory.
 <p>If <em>output</em> is not specified then standard output (stdout) is used.
 The <em>-h</em> flag may be used to suppress header information. The
@@ -11,6 +11,7 @@ module is sensitive to region settings (set with <em>g.region</em>).
 output.
 
 <h2>NOTES</h2>
+
 The default format of the exported ASCII file is equivalent to that required
 by <em>r3.in.ascii</em>. In particular, files output by
 <em>r3.out.ascii</em> with header information may be converted back to
@@ -33,8 +34,8 @@ levels:  <i>integer</i>
 </pre></div>
 
 The <b>version</b> and <b>order</b> options have been introduced in GRASS 7 in June 2011.
-The <b>order</b> option describes the order of rows and depths in the output. 
-It is possible to create output of different row order using the <em>-r</em> flag 
+The <b>order</b> option describes the order of rows and depths in the output.
+It is possible to create output of different row order using the <em>-r</em> flag
 and output of different depths order using the  <em>-d</em> flag. The default order is:
 <p><div class="code"><pre>
 west -&gt; east for columns
@@ -42,7 +43,7 @@ north -&gt; south for rows
 bottom -&gt; top for depths
 </pre></div>
 <p>
-This header is followed by the cell values in <em>floating point</em> format 
+This header is followed by the cell values in <em>floating point</em> format
 organized in rows with constant <em>col</em> and <em>level</em> coordinate.
 The rows are organized by constant <em>level</em> coordinate. Individual cell
 values are separated by <em>space</em> or <em>CR</em>.
@@ -84,9 +85,10 @@ One level maps can be imported with <em>r.in.ascii</em> (2D raster) using
 the default <b>nsbt</b> order and removing the header lines "version",
 "order", "top", "bottom" and "levels".
 
-<h2>Example</h2>
+<h2>EXAMPLES</h2>
+
 We define a small region with 4 columns, 3 rows and 2 depths (4x3x2) and export
-it using different ordering definitions: 
+it using different ordering definitions:
 <div class="code"><pre>
 g.region res3=1 t=2 b=0 w=0 e=4 s=0 n=3
 r3.mapcalc "simple_example = row() + col() + depth()"
@@ -107,14 +109,14 @@ bottom: 0.000000
 rows: 3
 cols: 4
 levels: 2
-3 4 5 6 
-4 5 6 7 
-5 6 7 8 
-4 5 6 7 
-5 6 7 8 
-6 7 8 9 
+3 4 5 6
+4 5 6 7
+5 6 7 8
+4 5 6 7
+5 6 7 8
+6 7 8 9
 </pre></div>
-Inverse row order (-r) 
+Inverse row order (-r)
 <div class="code"><pre>
 r3.out.ascii input=simple_example dp=0 -r
 
@@ -129,14 +131,14 @@ bottom: 0.000000
 rows: 3
 cols: 4
 levels: 2
-5 6 7 8 
-4 5 6 7 
-3 4 5 6 
-6 7 8 9 
-5 6 7 8 
+5 6 7 8
+4 5 6 7
+3 4 5 6
+6 7 8 9
+5 6 7 8
 4 5 6 7
 </pre></div>
-Inverse depth order (-d) 
+Inverse depth order (-d)
 <div class="code"><pre>
 r3.out.ascii input=simple_example dp=0 -d
 version: grass7
@@ -150,14 +152,14 @@ bottom: 0.000000
 rows: 3
 cols: 4
 levels: 2
-4 5 6 7 
-5 6 7 8 
-6 7 8 9 
-3 4 5 6 
-4 5 6 7 
+4 5 6 7
+5 6 7 8
+6 7 8 9
+3 4 5 6
+4 5 6 7
 5 6 7 8
 </pre></div>
-Inverse row and depth order (-rd) 
+Inverse row and depth order (-rd)
 <div class="code"><pre>
 r3.out.ascii input=simple_example dp=0 -rd
 
@@ -172,11 +174,11 @@ bottom: 0.000000
 rows: 3
 cols: 4
 levels: 2
-6 7 8 9 
-5 6 7 8 
-4 5 6 7 
-5 6 7 8 
-4 5 6 7 
+6 7 8 9
+5 6 7 8
+4 5 6 7
+5 6 7 8
+4 5 6 7
 3 4 5 6
 </pre></div>
 
@@ -189,10 +191,6 @@ levels: 2
 </em>
 
 <h2>AUTHORS</h2>
-Roman Waupotitsch, Michael Shapiro, 
-Helena Mitasova, Bill Brown, Lubos Mitas, Jaro Hofierka, S&ouml;ren Gebbert
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Roman Waupotitsch, Michael Shapiro,
+Helena Mitasova, Bill Brown, Lubos Mitas, Jaro Hofierka, S&ouml;ren Gebbert

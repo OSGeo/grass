@@ -6,6 +6,7 @@ panes for display management and access to command console.
 
 Classes:
  - frame::GMFrame
+ - frame::SingleWindowAuiManager
 
 (C) 2006-2021 by the GRASS Development Team
 
@@ -47,9 +48,15 @@ from grass.script.utils import decode
 from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings, GetDisplayVectSettings
 from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype, get_shell_pid
+from core.watchdog import (
+    EVT_UPDATE_MAPSET,
+    EVT_CURRENT_MAPSET_CHANGED,
+    MapsetWatchdog,
+)
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
+from main_window.notebook import MapNotebook
 from gui_core.widgets import GNotebook
 from core.gconsole import GConsole, EVT_IGNORED_CMD_RUN
 from core.giface import Notification
@@ -67,16 +74,14 @@ from gui_core.menu import Menu as GMenu
 from core.debug import Debug
 from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
 from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
+from lmgr.statusbar import SbMain
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
-from lmgr.giface import (
-    LayerManagerGrassInterface,
-    LayerManagerGrassInterfaceForMapDisplay,
-)
+from lmgr.giface import LayerManagerGrassInterface
 from mapdisp.frame import MapPanel
 from datacatalog.catalog import DataCatalog
 from gui_core.forms import GUI
-from gui_core.wrap import Menu, TextEntryDialog
+from gui_core.wrap import Menu, TextEntryDialog, SimpleTabArt
 from startup.guiutils import (
     can_switch_mapset_interactive,
     switch_mapset_interactively,
@@ -84,6 +89,18 @@ from startup.guiutils import (
     create_location_interactively,
 )
 from grass.grassdb.checks import is_first_time_user
+
+
+class SingleWindowAuiManager(aui.AuiManager):
+    """Custom AuiManager class which override OnClose window
+    close event handler method to prevent prematurely uninitialize
+    manager
+
+    https://github.com/wxWidgets/Phoenix/pull/2460
+    """
+
+    def OnClose(self, event):
+        event.Skip()
 
 
 class GMFrame(wx.Frame):
@@ -96,7 +113,7 @@ class GMFrame(wx.Frame):
         id=wx.ID_ANY,
         title=None,
         workspace=None,
-        size=globalvar.GM_WINDOW_SIZE,
+        size=wx.GetClientDisplayRect().GetSize(),
         style=wx.DEFAULT_FRAME_STYLE,
         **kwargs,
     ):
@@ -107,6 +124,7 @@ class GMFrame(wx.Frame):
             self.baseTitle = _("GRASS GIS")
 
         self.iconsize = (16, 16)
+        self.size = size
 
         self.displayIndex = 0  # index value for map displays and layer trees
         self.currentPage = None  # currently selected page for layer tree notebook
@@ -136,7 +154,7 @@ class GMFrame(wx.Frame):
         def show_menu_errors(messages):
             if messages:
                 self._gconsole.WriteError(
-                    _("There were some issues when loading menu" " or Modules tab:")
+                    _("There were some issues when loading menu" " or Tools:")
                 )
                 for message in messages:
                     self._gconsole.WriteError(message)
@@ -145,7 +163,7 @@ class GMFrame(wx.Frame):
         self._menuTreeBuilder = LayerManagerMenuData(message_handler=add_menu_error)
         # the search tree and command console
         self._moduleTreeBuilder = LayerManagerModuleTree(message_handler=add_menu_error)
-        self._auimgr = aui.AuiManager(self)
+        self._auimgr = SingleWindowAuiManager(self)
 
         # list of open dialogs
         self.dialogs = dict()
@@ -154,13 +172,14 @@ class GMFrame(wx.Frame):
         self.dialogs["atm"] = list()
 
         # set pane sizes according to the full screen size of the primary monitor
-        size = wx.Display().GetGeometry().GetSize()
-        self.PANE_BEST_SIZE = tuple(t / 3 for t in size)
-        self.PANE_MIN_SIZE = tuple(t / 5 for t in size)
+        self.PANE_BEST_SIZE = tuple(t // 5 for t in self.size)
+        self.PANE_MIN_SIZE = tuple(t // 8 for t in self.size)
 
         # create widgets and build panes
         self.CreateMenuBar()
-        self.CreateStatusBar(number=1)
+        self.workspace_manager.CreateRecentFilesMenu(
+            menu=self.menubar,
+        )
         self.BuildPanes()
         self.BindEvents()
 
@@ -170,21 +189,33 @@ class GMFrame(wx.Frame):
 
         # use default window layout ?
         if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
-            dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
-            try:
-                x, y = map(int, dim.split(",")[0:2])
-                w, h = map(int, dim.split(",")[2:4])
-                self.SetPosition((x, y))
-                self.SetSize((w, h))
-            except Exception:
-                pass
-        else:
-            # does center (of screen) make sense for lmgr?
-            self.Centre()
+            single_window_dim = {
+                "group": "general",
+                "key": "defWindowPos",
+                "subkey": "dimSingleWindow",
+            }
+            dim = UserSettings.Get(**single_window_dim)
+            default_dim = UserSettings.Get(**single_window_dim, settings_type="default")
 
-        self.Layout()
+            if dim != default_dim:
+                try:
+                    x, y, w, h = map(int, dim.split(",")[:4])
+                    client_disp = wx.ClientDisplayRect()
+                    if x == 1:
+                        # Get client display x offset (OS panel)
+                        x = client_disp[0]
+                    if y == 1:
+                        # Get client display y offset (OS panel)
+                        y = client_disp[1]
+                    self.SetPosition((x, y))
+                    self.SetSize((w, h))
+                except Exception:
+                    pass
+            else:
+                self.Maximize(True)
+        else:
+            self.Maximize(True)
         self.Show()
-        self.Maximize(True)
 
         # load workspace file if requested
         if workspace:
@@ -202,6 +233,18 @@ class GMFrame(wx.Frame):
         # redirect stderr to log area
         self._gconsole.Redirect()
 
+        #  mapset watchdog
+        self._mapset_watchdog = MapsetWatchdog(
+            elements_dirs=(("raster", "cell"),),
+            evt_handler=self,
+            giface=self._giface,
+        )
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()
+        self.Bind(
+            EVT_UPDATE_MAPSET,
+            lambda evt: self._onMapsetWatchdog(evt.src_path, evt.dest_path),
+        )
+        self.Bind(EVT_CURRENT_MAPSET_CHANGED, self._onMapsetChanged)
         # fix goutput's pane size (required for Mac OSX)`
         self.goutput.SetSashPosition(int(self.GetSize()[1] * 0.8))
 
@@ -270,26 +313,14 @@ class GMFrame(wx.Frame):
             return self._auimgr.GetPane(name).IsShown()
         return False
 
+    def SetStatusText(self, *args):
+        """Override SbMain statusbar method"""
+        self.statusbar.SetStatusText(*args)
+
     def _createMapNotebook(self):
         """Create Map Display notebook"""
         # create the notebook off-window to avoid flicker
-        client_size = self.GetClientSize()
-        notebook_style = (
-            aui.AUI_NB_DEFAULT_STYLE | aui.AUI_NB_TAB_EXTERNAL_MOVE | wx.NO_BORDER
-        )
-        self.mapnotebook = aui.AuiNotebook(
-            self,
-            -1,
-            wx.Point(client_size.x, client_size.y),
-            wx.Size(430, 200),
-            agwStyle=notebook_style,
-        )
-        self.mapnotebook.SetArtProvider(aui.AuiDefaultTabArt())
-        # bindings
-        self.mapnotebook.Bind(
-            aui.EVT_AUINOTEBOOK_PAGE_CHANGED,
-            lambda evt: self.mapnotebook.GetCurrentPage().onFocus.emit(),
-        )
+        self.mapnotebook = MapNotebook(parent=self)
 
     def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
@@ -345,6 +376,9 @@ class GMFrame(wx.Frame):
         self.goutput.showNotification.connect(
             lambda message: self.SetStatusText(message)
         )
+        self.goutput.contentChanged.connect(
+            lambda notification: self._focusPage(notification)
+        )
 
         self._gconsole.mapCreated.connect(self.OnMapCreated)
         self._gconsole.Bind(
@@ -391,30 +425,27 @@ class GMFrame(wx.Frame):
         self.currentPageNum = self.notebookLayers.GetSelection()
         self.notebookLayers.EnsureVisible(self.currentPageNum)
 
-        def CreateNewMapDisplay(layertree):
+        def CreateNewMapDisplay(giface, layertree):
             """Callback function which creates a new Map Display window
+            :param giface: giface for map display
             :param layertree: layer tree object
             :return: reference to mapdisplay instance
             """
-            # create instance of Map Display interface
-            self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
-                self._giface, layertree
-            )
 
             # create Map Display
             mapdisplay = MapPanel(
                 parent=self.mapnotebook,
-                giface=self._gifaceForDisplay,
+                giface=giface,
                 id=wx.ID_ANY,
                 tree=layertree,
                 lmgr=self,
                 Map=layertree.Map,
+                dockable=True,
                 title=name,
                 size=globalvar.MAP_WINDOW_SIZE,
             )
             # add map display panel to notebook and make it current
             self.mapnotebook.AddPage(mapdisplay, name)
-            self.mapnotebook.SetSelection(self.currentPageNum)
 
             # set map display properties
             self._setUpMapDisplay(mapdisplay)
@@ -459,17 +490,30 @@ class GMFrame(wx.Frame):
         page = self.currentPage
 
         def CanCloseDisplay(askIfSaveWorkspace):
-            """Callback to check if user wants to close display"""
-            pgnum = self.notebookLayers.GetPageIndex(page)
-            name = self.notebookLayers.GetPageText(pgnum)
+            """Callback to check if user wants to close display. Map
+            Display index can be different from index in Display tab.
+
+            :return dict/None pgnum_dict/None: dict "layers" key represent
+                                               map display notebook layers
+                                               tree page index and
+                                               "mapnotebook" key represent
+                                               map display notebook page
+                                               index (single window mode)
+            """
+            pgnum_dict = {}
+            pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
+            pgnum_dict["mapnotebook"] = self.mapnotebook.GetPageIndex(mapdisplay)
+            name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (
                 askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
             ):
-                return pgnum
+                return pgnum_dict
             return None
 
+        # set callbacks
         mapdisplay.canCloseDisplayCallback = CanCloseDisplay
+        mapdisplay.SetDockingCallback(self.mapnotebook.UndockMapDisplay)
 
         # bind various events
         mapdisplay.onFocus.connect(
@@ -506,8 +550,9 @@ class GMFrame(wx.Frame):
 
     def BuildPanes(self):
         """Build panes - toolbars as well as panels"""
-
+        self._auimgr.SetAutoNotebookTabArt(SimpleTabArt())
         # initialize all main widgets
+        self.statusbar = SbMain(parent=self, giface=self._giface)
         self._createMapNotebook()
         self._createDataCatalog(parent=self)
         self._createDisplay(parent=self)
@@ -560,10 +605,25 @@ class GMFrame(wx.Frame):
         )
 
         self._auimgr.AddPane(
+            self.statusbar.GetWidget(),
+            aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
+        )
+
+        self._auimgr.AddPane(
             self.datacatalog,
             aui.AuiPaneInfo()
             .Name("datacatalog")
-            .Caption("Data Catalog")
+            .Caption(_("Data"))
             .Left()
             .Layer(1)
             .Position(1)
@@ -577,8 +637,8 @@ class GMFrame(wx.Frame):
         self._auimgr.AddPane(
             self.notebookLayers,
             aui.AuiPaneInfo()
-            .Name("display")
-            .Caption("Display")
+            .Name("layers")
+            .Caption(_("Layers"))
             .Left()
             .Layer(1)
             .Position(2)
@@ -592,8 +652,8 @@ class GMFrame(wx.Frame):
         self._auimgr.AddPane(
             self.search,
             aui.AuiPaneInfo()
-            .Name("modules")
-            .Caption("Modules")
+            .Name("tools")
+            .Caption(_("Tools"))
             .Right()
             .Layer(1)
             .Position(1)
@@ -608,40 +668,43 @@ class GMFrame(wx.Frame):
             self.goutput,
             aui.AuiPaneInfo()
             .Name("console")
-            .Caption("Console")
+            .Caption(_("Console"))
             .Right()
             .BestSize(self.PANE_BEST_SIZE)
             .MinSize(self.PANE_MIN_SIZE)
             .CloseButton(False)
             .MinimizeButton(True)
             .MaximizeButton(True),
-            target=self._auimgr.GetPane("modules"),
+            target=self._auimgr.GetPane("tools"),
         )
 
         self._auimgr.AddPane(
             self.pyshell,
             aui.AuiPaneInfo()
             .Name("python")
-            .Caption("Python")
+            .Caption(_("Python"))
             .Right()
             .BestSize(self.PANE_BEST_SIZE)
             .MinSize(self.PANE_MIN_SIZE)
             .CloseButton(False)
             .MinimizeButton(True)
             .MaximizeButton(True),
-            target=self._auimgr.GetPane("modules"),
+            target=self._auimgr.GetPane("tools"),
         )
 
         self._auimgr.GetPane("toolbarNviz").Hide()
 
-        # Set Modules as active tab
-        modules = self._auimgr.GetPane("modules")
-        notebook = self._auimgr.GetNotebooks()[0]
-        notebook.SetSelectionToPage(modules)
+        # Set Tools as active tab
+        notebooks = self._auimgr.GetNotebooks()
+        if notebooks:
+            notebook = notebooks[0]
+            tools = self._auimgr.GetPane("tools")
+            notebook.SetSelectionToPage(tools)
 
-        # Set the size for automatic notebook
-        pane = self._auimgr.GetPane(notebook)
-        pane.MinSize(self.search.GetMinSize())
+            # Set the size for automatic notebook
+            pane = self._auimgr.GetPane(notebook)
+            pane.BestSize(self.PANE_BEST_SIZE)
+            pane.MinSize(self.PANE_MIN_SIZE)
 
         wx.CallAfter(self.datacatalog.LoadItems)
 
@@ -650,7 +713,6 @@ class GMFrame(wx.Frame):
     def BindEvents(self):
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
-        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
     def _show_demo_map(self):
         """If in demolocation, add demo map to map display
@@ -722,7 +784,7 @@ class GMFrame(wx.Frame):
         self._auimgr.GetPane("nviz").Show()
         self._auimgr.Update()
 
-        # this is a bit strange here since a new window is created everytime
+        # this is a bit strange here since a new window is created every time
         if not firstTime:
             for page in ("view", "light", "fringe", "constant", "cplane", "animation"):
                 self.nviz.UpdatePage(page)
@@ -798,9 +860,15 @@ class GMFrame(wx.Frame):
 
     def OnMapSwipe(self, event=None, cmd=None):
         """Launch Map Swipe. See OnIClass documentation"""
-        from mapswipe.frame import SwipeMapFrame
+        from mapswipe.frame import SwipeMapDisplay
 
-        win = SwipeMapFrame(parent=self, giface=self._giface)
+        frame = wx.Frame(
+            parent=None, size=globalvar.MAP_WINDOW_SIZE, title=_("Map Swipe Tool")
+        )
+        win = SwipeMapDisplay(
+            parent=frame,
+            giface=self._giface,
+        )
 
         rasters = []
         tree = self.GetLayerTree()
@@ -881,17 +949,16 @@ class GMFrame(wx.Frame):
         Also change active map notebook tab."""
         self.currentPage = self.notebookLayers.GetCurrentPage()
         self.currentPageNum = self.notebookLayers.GetSelection()
-        try:
-            self.mapnotebook.SetSelection(self.GetMapDisplayIndex())
-        except Exception:
-            pass
+
+        if hasattr(self.currentPage, "maptree") and self.mapnotebook.GetCurrentPage():
+            self.mapnotebook.SetSelectionToMapPage(self.GetMapDisplay())
 
         event.Skip()
 
     def OnCBPageClosing(self, event):
         """Page of notebook is being closed
         from Layer Manager (x button next to arrows)
-        Also close associated map display.
+        Also close associated map display (whether docked or undocked).
         """
         # save changes in the workspace
         name = self.notebookLayers.GetPageText(event.GetSelection())
@@ -902,20 +969,51 @@ class GMFrame(wx.Frame):
 
         maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
         maptree.GetMapDisplay().CleanUp()
-        self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
+        self.mapnotebook.DeleteMapPage(self.GetMapDisplay())
         maptree.Close(True)
 
         self.currentPage = None
 
         event.Skip()
 
-    def _closePageNoEvent(self, page_index):
-        """Close page and destroy map display without
-        generating notebook page closing event"""
+    def _closePageNoEvent(self, pgnum_dict, is_docked):
+        """If map display is docked, close page and destroy map display without generating
+        layer notebook page closing event. If map display is undocked, close only
+        layer notebook page, not map notebook page.
+
+        :param dict pgnum_dict: dict "layers" key represent map display
+                                notebook layers tree page index and
+                                "mapnotebook" key represent map display
+                                notebook page index (single window mode)
+              boolean is_docked: "True" means that map display is docked in map
+                               display notebook, "False" means that map display
+                               is undocked to independent frame
+        """
         self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
-        self.notebookLayers.DeletePage(page_index)
-        self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
-        self.mapnotebook.DeletePage(page_index)
+        self.notebookLayers.DeletePage(pgnum_dict["layers"])
+        self.notebookLayers.Bind(
+            FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
+            self.OnCBPageClosing,
+        )
+        if is_docked:
+            self.mapnotebook.DeletePage(pgnum_dict["mapnotebook"])
+
+    def _focusPage(self, notification):
+        """Focus the 'Console' notebook page according to event notification."""
+        if (
+            notification == Notification.HIGHLIGHT
+            or notification == Notification.MAKE_VISIBLE
+            or notification == Notification.RAISE_WINDOW
+        ):
+            self.FocusPage("Console")
+
+    def FocusPage(self, page_text):
+        """Focus the page if part of any of aui notebooks"""
+        notebooks = self._auimgr.GetNotebooks()
+        for notebook in notebooks:
+            for i in range(notebook.GetPageCount()):
+                if notebook.GetPageText(i) == page_text:
+                    notebook.SetSelection(i)
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
@@ -1024,6 +1122,20 @@ class GMFrame(wx.Frame):
                 lcmd=command,
             )
 
+    def GetAuiManager(self):
+        """Get aui manager
+
+        :return: aui manager instance
+        """
+        return self._auimgr
+
+    def GetAuiNotebook(self):
+        """Get aui notebook
+
+        :return: aui notebook instance
+        """
+        return self.mapnotebook
+
     def GetLayerNotebook(self):
         """Get Layers Notebook"""
         return self.notebookLayers
@@ -1062,11 +1174,6 @@ class GMFrame(wx.Frame):
     def GetAllMapDisplays(self):
         """Get all (open) map displays"""
         return self.GetMapDisplay(onlyCurrent=False)
-
-    def GetMapDisplayIndex(self):
-        """Get the index of the currently active map display tab.
-        Can be different than index of related layertree."""
-        return self.mapnotebook.GetPageIndex(self.GetMapDisplay())
 
     def GetLogWindow(self):
         """Gets console for command output and messages"""
@@ -1335,6 +1442,7 @@ class GMFrame(wx.Frame):
         :param event: to be able to serve as a handler of wx event
         :param cmd: command as a list (must start with 'cd')
         """
+
         # local functions
         def write_beginning(parameter=None, command=None):
             if parameter:
@@ -1569,7 +1677,7 @@ class GMFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             name = dlg.GetValue()
             self.notebookLayers.SetPageText(page=self.currentPageNum, text=name)
-            self.mapnotebook.SetPageText(page_idx=self.GetMapDisplayIndex(), text=name)
+            self.mapnotebook.SetMapPageText(page=self.GetMapDisplay(), text=name)
         dlg.Destroy()
 
     def OnRasterRules(self, event):
@@ -1652,7 +1760,7 @@ class GMFrame(wx.Frame):
             This documentation is actually documentation of some
             component related to gui_core/menu.py file.
         """
-        from iclass.frame import IClassMapFrame, haveIClass, errMsg
+        from iclass.frame import IClassMapDisplay, haveIClass, errMsg
 
         if not haveIClass:
             GError(
@@ -1661,7 +1769,12 @@ class GMFrame(wx.Frame):
             )
             return
 
-        win = IClassMapFrame(parent=self, giface=self._giface)
+        frame = wx.Frame(
+            parent=None,
+            size=globalvar.MAP_WINDOW_SIZE,
+            title=_("Supervised Classification Tool"),
+        )
+        win = IClassMapDisplay(parent=frame, giface=self._giface)
         win.CentreOnScreen()
 
         win.Show()
@@ -1733,14 +1846,6 @@ class GMFrame(wx.Frame):
             except KeyError:
                 cmd = ["r.mapcalc"]
         win = MapCalcFrame(parent=self, giface=self._giface, cmd=cmd[0])
-        win.CentreOnScreen()
-        win.Show()
-
-    def OnVectorCleaning(self, event, cmd=""):
-        """Init interactive vector cleaning"""
-        from modules.vclean import VectorCleaningFrame
-
-        win = VectorCleaningFrame(parent=self)
         win.CentreOnScreen()
         win.Show()
 
@@ -1866,8 +1971,6 @@ class GMFrame(wx.Frame):
         # moved from mapdisp/frame.py
         # TODO: why it is called 3 times when getting focus?
         # and one times when loosing focus?
-        if self.workspace_manager.loadingWorkspace:
-            return
         pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)
         if pgnum > -1:
             self.notebookLayers.SetSelection(pgnum)
@@ -2195,30 +2298,12 @@ class GMFrame(wx.Frame):
             except ValueError:
                 pass
 
-    def OnKeyDown(self, event):
-        """Key pressed"""
-        kc = event.GetKeyCode()
-
-        try:
-            kc = chr(kc)
-        except ValueError:
-            event.Skip()
-            return
-
-        if event.CtrlDown():
-            if kc == "R":
-                self.OnAddRaster(None)
-            elif kc == "V":
-                self.OnAddVector(None)
-
-        event.Skip()
-
     def OnCloseWindow(self, event):
-        """Cleanup when wxGUI is quitted"""
+        """Cleanup when wxGUI is quit"""
         self._closeWindow(event)
 
     def OnCloseWindowOrExit(self, event):
-        """Cleanup when wxGUI is quitted
+        """Cleanup when wxGUI is quit
 
         Ask user also to quit GRASS including terminal
         """
@@ -2232,10 +2317,6 @@ class GMFrame(wx.Frame):
 
     def _closeWindow(self, event):
         """Close wxGUI"""
-        # save command protocol if actived
-        if self.goutput.btnCmdProtocol.GetValue():
-            self.goutput.CmdProtocolSave()
-
         if not self.currentPage:
             self._auimgr.UnInit()
             self.Destroy()
@@ -2293,3 +2374,17 @@ class GMFrame(wx.Frame):
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
         )
         return dlg
+
+    def _onMapsetWatchdog(self, map_path, map_dest):
+        """Current mapset watchdog event handler
+
+        :param str map_path: map path (map that is changed)
+        :param str map_dest: new map path
+        """
+        self.statusbar.mask.dbChanged(
+            map=os.path.basename(map_path) if map_path else map_path,
+            newname=os.path.basename(map_dest) if map_dest else map_dest,
+        )
+
+    def _onMapsetChanged(self, event):
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()

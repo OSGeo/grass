@@ -4,22 +4,22 @@
 #include <grass/gis.h>
 
 /*** defines ***/
-#define RECLASS_TABLE 1
-#define RECLASS_RULES 2
-#define RECLASS_SCALE 3
+#define RECLASS_TABLE   1
+#define RECLASS_RULES   2
+#define RECLASS_SCALE   3
 
-#define CELL_TYPE 0
-#define FCELL_TYPE 1
-#define DCELL_TYPE 2
+#define CELL_TYPE       0
+#define FCELL_TYPE      1
+#define DCELL_TYPE      2
 
 /*! \brief Interpolation methods
 
-  For G_get_raster_sample(), INTERP_TYPE
-*/
-#define INTERP_UNKNOWN   0
-#define INTERP_NEAREST   1		/* nearest neighbor interpolation  */
-#define INTERP_BILINEAR  2		/* bilinear interpolation          */
-#define INTERP_BICUBIC   3		/* bicubic interpolation           */
+   For G_get_raster_sample(), INTERP_TYPE
+ */
+#define INTERP_UNKNOWN  0
+#define INTERP_NEAREST  1 /* nearest neighbor interpolation  */
+#define INTERP_BILINEAR 2 /* bilinear interpolation          */
+#define INTERP_BICUBIC  3 /* bicubic interpolation           */
 
 /*** typedefs ***/
 typedef int RASTER_MAP_TYPE;
@@ -28,61 +28,56 @@ typedef int RASTER_MAP_TYPE;
 typedef int INTERP_TYPE;
 
 /*** structures ***/
-struct Reclass
-{
-    char *name;			/* name of raster map being reclassed    */
-    char *mapset;		/* mapset in which "name" is found      */
-    int type;			/* type of reclass                      */
-    int num;			/* size of reclass table                */
-    CELL min;			/* table min                            */
-    CELL max;			/* table max                            */
-    CELL *table;		/* reclass table                        */
+struct Reclass {
+    char *name;   /* name of raster map being reclassed    */
+    char *mapset; /* mapset in which "name" is found      */
+    int type;     /* type of reclass                      */
+    int num;      /* size of reclass table                */
+    CELL min;     /* table min                            */
+    CELL max;     /* table max                            */
+    CELL *table;  /* reclass table                        */
 };
 
-struct FPReclass_table
-{
-    DCELL dLow;			/* domain low */
-    DCELL dHigh;		/* domain high */
-    DCELL rLow;			/* range low */
-    DCELL rHigh;		/* range high */
+struct FPReclass_table {
+    DCELL dLow;  /* domain low */
+    DCELL dHigh; /* domain high */
+    DCELL rLow;  /* range low */
+    DCELL rHigh; /* range high */
 };
 
 /* reclass structure from double to double used by r.recode to reclass */
 /* between types: int to double, float to int,... */
-struct FPReclass
-{
-    int defaultDRuleSet;	/* 1 if default domain rule set */
-    int defaultRRuleSet;	/* 1 if default range rule set */
-    int infiniteLeftSet;	/* 1 if negative infinite interval rule exists */
-    int infiniteRightSet;	/* 1 if positive infinite interval rule exists */
-    int rRangeSet;		/* 1 if range range (i.e. interval) is set */
+struct FPReclass {
+    int defaultDRuleSet;  /* 1 if default domain rule set */
+    int defaultRRuleSet;  /* 1 if default range rule set */
+    int infiniteLeftSet;  /* 1 if negative infinite interval rule exists */
+    int infiniteRightSet; /* 1 if positive infinite interval rule exists */
+    int rRangeSet;        /* 1 if range range (i.e. interval) is set */
     int maxNofRules;
     int nofRules;
-    DCELL defaultDMin;		/* default domain minimum value */
-    DCELL defaultDMax;		/* default domain maximum value */
-    DCELL defaultRMin;		/* default range minimum value */
-    DCELL defaultRMax;		/* default range maximum value */
-    DCELL infiniteDLeft;	/* neg infinite rule */
-    DCELL infiniteDRight;	/* neg infinite rule */
-    DCELL infiniteRLeft;	/* pos infinite rule */
-    DCELL infiniteRRight;	/* pos infinite rule */
-    DCELL dMin;			/* minimum domain values in rules */
-    DCELL dMax;			/* maximum domain values in rules */
-    DCELL rMin;			/* minimum range values in rules */
-    DCELL rMax;			/* maximum range values in rules */
+    DCELL defaultDMin;    /* default domain minimum value */
+    DCELL defaultDMax;    /* default domain maximum value */
+    DCELL defaultRMin;    /* default range minimum value */
+    DCELL defaultRMax;    /* default range maximum value */
+    DCELL infiniteDLeft;  /* neg infinite rule */
+    DCELL infiniteDRight; /* neg infinite rule */
+    DCELL infiniteRLeft;  /* pos infinite rule */
+    DCELL infiniteRRight; /* pos infinite rule */
+    DCELL dMin;           /* minimum domain values in rules */
+    DCELL dMax;           /* maximum domain values in rules */
+    DCELL rMin;           /* minimum range values in rules */
+    DCELL rMax;           /* maximum range values in rules */
     struct FPReclass_table *table;
 };
 
-struct Quant_table
-{
+struct Quant_table {
     DCELL dLow;
     DCELL dHigh;
     CELL cLow;
     CELL cHigh;
 };
 
-struct Quant
-{
+struct Quant {
     int truncate_only;
     int round_only;
     int defaultDRuleSet;
@@ -106,40 +101,38 @@ struct Quant
     CELL cMax;
     struct Quant_table *table;
 
-    struct
-    {
-	DCELL *vals;
+    struct {
+        DCELL *vals;
 
-	/* pointers to quant rules corresponding to the intervals btwn vals */
-	struct Quant_table **rules;
-	int nalloc;
-	int active;
-	DCELL inf_dmin;
-	DCELL inf_dmax;
-	CELL inf_min;
-	CELL inf_max;
-	/* all values smaller than inf_dmin become inf_min */
-	/* all values larger than inf_dmax become inf_max */
-	/* inf_min and/or inf_max can be NULL if there are no inf rules */
+        /* pointers to quant rules corresponding to the intervals btwn vals */
+        struct Quant_table **rules;
+        int nalloc;
+        int active;
+        DCELL inf_dmin;
+        DCELL inf_dmax;
+        CELL inf_min;
+        CELL inf_max;
+        /* all values smaller than inf_dmin become inf_min */
+        /* all values larger than inf_dmax become inf_max */
+        /* inf_min and/or inf_max can be NULL if there are no inf rules */
     } fp_lookup;
 };
 
-struct Categories
-{
-    CELL ncats;			/* total number of categories              */
-    CELL num;			/* the highest cell values. Only exists    
-				   for backwards compatibility = (CELL)
-				   max_fp_values in quant rules          */
-    char *title;		/* name of data layer                      */
-    char *fmt;			/* printf-like format to generate labels   */
-    float m1;			/* Multiplication coefficient 1            */
-    float a1;			/* Addition coefficient 1                  */
-    float m2;			/* Multiplication coefficient 2            */
-    float a2;			/* Addition coefficient 2                  */
-    struct Quant q;		/* rules mapping cell values to index in
-				   list of labels                        */
-    char **labels;		/* array of labels of size num             */
-    int *marks;			/* was the value with this label was used? */
+struct Categories {
+    CELL ncats;     /* total number of categories              */
+    CELL num;       /* the highest cell values. Only exists
+                       for backwards compatibility = (CELL)
+                       max_fp_values in quant rules          */
+    char *title;    /* name of data layer                      */
+    char *fmt;      /* printf-like format to generate labels   */
+    float m1;       /* Multiplication coefficient 1            */
+    float a1;       /* Addition coefficient 1                  */
+    float m2;       /* Multiplication coefficient 2            */
+    float a2;       /* Addition coefficient 2                  */
+    struct Quant q; /* rules mapping cell values to index in
+                       list of labels                        */
+    char **labels;  /* array of labels of size num             */
+    int *marks;     /* was the value with this label was used? */
     int nalloc;
     int last_marked_rule;
     /* NOTE: to get a rule corresponfing to cats.labels[i], use */
@@ -152,17 +145,16 @@ struct Categories
 
 /*! \brief Raster history info (metadata)
 
-  See History structure for implementation issues.
-*/
-enum History_field
-{
+   See History structure for implementation issues.
+ */
+enum History_field {
     /*! \brief Raster name */
     HIST_MAPID,
     /*! \brief Raster title */
     HIST_TITLE,
     /*! \brief Raster mapset */
     HIST_MAPSET,
-    /*! \brief User who creater raster map */
+    /*! \brief User who creates raster map */
     HIST_CREATOR,
     /*! \brief Map type ("raster", "reclass", "GDAL-link", or "virtual") */
     HIST_MAPTYPE,
@@ -177,8 +169,7 @@ enum History_field
 };
 
 /*! \brief Raster history info (metadata) */
-struct History
-{
+struct History {
     /*! \brief Array of fields (see \ref History_field for details) */
     char *fields[HIST_NUM_FIELDS];
     /*! \brief Number of lines in lines array */
@@ -187,54 +178,47 @@ struct History
     char **lines;
 };
 
-struct Cell_stats
-{
-    struct Cell_stats_node
-    {
-	int idx;
-	long *count;
-	int left;
-	int right;
-    } *node;			/* tree of values */
+struct Cell_stats {
+    struct Cell_stats_node {
+        int idx;
+        long *count;
+        int left;
+        int right;
+    } *node; /* tree of values */
 
-    int tlen;			/* allocated tree size */
-    int N;			/* number of actual nodes in tree */
+    int tlen; /* allocated tree size */
+    int N;    /* number of actual nodes in tree */
     int curp;
     long null_data_count;
     int curoffset;
 };
 
-struct Histogram
-{
+struct Histogram {
     int num;
 
-    struct Histogram_list
-    {
-	CELL cat;
-	long count;
+    struct Histogram_list {
+        CELL cat;
+        long count;
     } *list;
 };
 
-struct R_stats
-{
+struct R_stats {
     DCELL sum;
     DCELL sumsq;
     grass_int64 count;
 };
 
-struct Range
-{
+struct Range {
     CELL min;
     CELL max;
-    int first_time;		/* whether or not range was updated */
+    int first_time; /* whether or not range was updated */
     struct R_stats rstats;
 };
 
-struct FPRange
-{
+struct FPRange {
     DCELL min;
     DCELL max;
-    int first_time;		/* whether or not range was updated */
+    int first_time; /* whether or not range was updated */
     struct R_stats rstats;
 };
 

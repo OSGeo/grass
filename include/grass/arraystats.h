@@ -8,8 +8,7 @@
 #include <grass/glocale.h>
 #include <grass/dbmi.h>
 
-struct GASTATS
-{
+struct GASTATS {
     double count;
     double min;
     double max;
@@ -27,7 +26,7 @@ struct GASTATS
 #define CLASS_QUANT    3
 #define CLASS_EQUIPROB 4
 #define CLASS_DISCONT  5
-      
+
 #include <grass/defs/arraystats.h>
 
 #endif

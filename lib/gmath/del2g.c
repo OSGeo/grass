@@ -15,7 +15,6 @@
    Author:         Bill Hoff,2-114C,8645,3563478 (hoff) at uicsl
  */
 
-
 #include <grass/config.h>
 
 #if defined(HAVE_FFTW_H) || defined(HAVE_DFFTW_H) || defined(HAVE_FFTW3_H)
@@ -25,17 +24,15 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-
-#define FORWARD  1
+#define FORWARD 1
 #define INVERSE -1
-#define SCALE    1
-#define NOSCALE  0
-
+#define SCALE   1
+#define NOSCALE 0
 
 /*!
  * \fn int del2g (double *img[2], int size, double w)
  *
- * \brief 
+ * \brief
  *
  * \param img
  * \param size
@@ -45,7 +42,7 @@
 
 int del2g(double *img[2], int size, double w)
 {
-    double *g[2];		/* the filter function */
+    double *g[2]; /* the filter function */
 
     G_message(_("    taking FFT of image..."));
     fft(FORWARD, img, size * size, size, size);

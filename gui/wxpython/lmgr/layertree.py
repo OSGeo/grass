@@ -36,7 +36,6 @@ from grass.script import utils as gutils
 from core import globalvar
 from gui_core.dialogs import SqlQueryFrame, SetOpacityDialog, TextEntryDialog
 from gui_core.forms import GUI
-from mapdisp.frame import MapFrame
 from core.render import Map
 from core.utils import GetLayerNameFromCmd, ltype2command
 from core.debug import Debug
@@ -95,6 +94,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self,
         parent,
         giface,
+        createNewMapDisplay,
         id=wx.ID_ANY,
         style=wx.SUNKEN_BORDER,
         ctstyle=CT.TR_HAS_BUTTONS
@@ -106,19 +106,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         title=None,
         **kwargs,
     ):
-
         if "style" in kwargs:
             ctstyle |= kwargs["style"]
             del kwargs["style"]
-        self.displayIndex = kwargs["idx"]
-        del kwargs["idx"]
         self.lmgr = kwargs["lmgr"]
         del kwargs["lmgr"]
         # GIS Manager notebook for layer tree
         self.notebook = kwargs["notebook"]
         del kwargs["notebook"]
-        showMapDisplay = kwargs["showMapDisplay"]
-        del kwargs["showMapDisplay"]
 
         self._giface = giface
         self.treepg = parent  # notebook page holding layer tree
@@ -158,28 +153,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self._setGradient()
 
         # init associated map display
-        pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
-        self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
-            self._giface, self
-        )
-        self.mapdisplay = MapFrame(
-            self,
-            giface=self._gifaceForDisplay,
-            id=wx.ID_ANY,
-            pos=pos,
-            size=globalvar.MAP_WINDOW_SIZE,
-            style=wx.DEFAULT_FRAME_STYLE,
-            tree=self,
-            lmgr=self.lmgr,
-            Map=self.Map,
-            title=title,
-        )
-
-        # show new display
-        if showMapDisplay is True:
-            self.mapdisplay.Show()
-            self.mapdisplay.Refresh()
-            self.mapdisplay.Update()
+        # create instance of Map Display interface
+        self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(giface, self)
+        self.mapdisplay = createNewMapDisplay(self._gifaceForDisplay, layertree=self)
 
         self.root = self.AddRoot(_("Map Layers"))
         self.SetPyData(self.root, (None, None))
@@ -340,7 +316,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         return array
 
     def GetMap(self):
-        """Get map instace"""
+        """Get map instance"""
         return self.Map
 
     def GetMapDisplay(self):
@@ -379,9 +355,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Only re-order and re-render a composite map image from GRASS during
         idle time instead of multiple times during layer changing.
         """
-        # no need to check for digitizer since it is handled internaly
+        # no need to check for digitizer since it is handled internally
         # no need to distinguish 2D and 3D since the interface is the same
-        # remove this comment when it is onl enough
+        # remove this comment when it is only enough
         if self.rerender:
             # restart rerender value here before wx.Yield
             # can cause another idle event
@@ -517,7 +493,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if ltype not in ("group", "command"):
             if numSelected == 1:
                 self.popupMenu.AppendSeparator()
-                if ltype != "raster_3d":
+                if not (ltype == "raster_3d" or self.mapdisplay.IsPaneShown("3d")):
                     item = wx.MenuItem(
                         self.popupMenu,
                         id=self.popupID["opacity"],
@@ -541,15 +517,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     wx.EVT_MENU, self.OnPopupProperties, id=self.popupID["properties"]
                 )
 
-                if (
-                    ltype
-                    in (
-                        "raster",
-                        "vector",
-                        "raster_3d",
-                    )
-                    and self.mapdisplay.IsPaneShown("3d")
-                ):
+                if ltype in (
+                    "raster",
+                    "vector",
+                    "raster_3d",
+                ) and self.mapdisplay.IsPaneShown("3d"):
                     self.popupMenu.Append(self.popupID["nviz"], _("3D view properties"))
                     self.Bind(
                         wx.EVT_MENU, self.OnNvizProperties, id=self.popupID["nviz"]
@@ -1117,7 +1089,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             )
             return
 
-        # lazy import to reduce dependecies and startup
+        # lazy import to reduce dependencies and startup
         from wxplot.histogram import HistogramPlotFrame
 
         win = HistogramPlotFrame(
@@ -1278,7 +1250,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         .. todo::
             vector/volume
         """
-        self.lmgr.notebook.SetSelectionByName("nviz")
+        if not UserSettings.Get(
+            group="appearance",
+            key="singleWindow",
+            subkey="enabled",
+        ):
+            self.lmgr.notebook.SetSelectionByName("nviz")
         ltype = self.GetLayerInfo(self.layer_selected, key="type")
         if ltype == "raster":
             self.lmgr.nviz.SetPage("surface")
@@ -1718,7 +1695,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # here was some dead code related to layer and nviz
         # however, in condition was rerender = False
-        # but rerender is alway True
+        # but rerender is always True
         # (here no change and also in UpdateListOfLayers and GetListOfLayers)
         # You can safely remove this comment after some testing.
 
@@ -1727,7 +1704,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnLayerChecking(self, event):
         """Layer checkbox is being checked.
 
-        Continue only if mouse is above checkbox or layer was checked programatically.
+        Continue only if mouse is above checkbox or layer was checked programmatically.
         """
         if self.hitCheckbox or self.forceCheck:
             self.forceCheck = False

@@ -17,7 +17,6 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
-import six
 import math
 import numpy
 
@@ -229,7 +228,7 @@ class ProfileFrame(BasePlotFrame):
         self.ylabel = ""
         i = 0
 
-        for r in six.iterkeys(self.raster):
+        for r in self.raster.keys():
             self.raster[r]["datalist"] = []
             datalist = self.CreateDatalist(r, self.coordstr)
             if len(datalist) > 0:
@@ -440,7 +439,7 @@ class ProfileFrame(BasePlotFrame):
         message = []
         title = _("Statistics for Profile(s)")
 
-        for r in six.iterkeys(self.raster):
+        for r in self.raster.keys():
             try:
                 rast = r.split("@")[0]
                 statstr = "Profile of %s\n\n" % rast
@@ -494,21 +493,73 @@ class ProfileToolbar(BaseToolbar):
         """Toolbar data"""
         return self._getToolbarData(
             (
-                ("addraster", BaseIcons["addRast"], self.parent.OnSelectRaster),
-                ("transect", PlotIcons["transect"], self.parent.OnDrawTransect),
+                (
+                    ("addraster", BaseIcons["addRast"].label),
+                    BaseIcons["addRast"],
+                    self.parent.OnSelectRaster,
+                ),
+                (
+                    ("transect", PlotIcons["transect"].label),
+                    PlotIcons["transect"],
+                    self.parent.OnDrawTransect,
+                ),
                 (None,),
-                ("draw", PlotIcons["draw"], self.parent.OnCreateProfile),
-                ("erase", BaseIcons["erase"], self.parent.OnErase),
-                ("drag", BaseIcons["pan"], self.parent.OnDrag),
-                ("zoom", BaseIcons["zoomIn"], self.parent.OnZoom),
-                ("unzoom", BaseIcons["zoomBack"], self.parent.OnRedraw),
+                (
+                    ("draw", PlotIcons["draw"].label),
+                    PlotIcons["draw"],
+                    self.parent.OnCreateProfile,
+                ),
+                (
+                    ("erase", BaseIcons["erase"].label),
+                    BaseIcons["erase"],
+                    self.parent.OnErase,
+                ),
+                (
+                    ("drag", BaseIcons["pan"].label),
+                    BaseIcons["pan"],
+                    self.parent.OnDrag,
+                ),
+                (
+                    ("zoom", BaseIcons["zoomIn"].label),
+                    BaseIcons["zoomIn"],
+                    self.parent.OnZoom,
+                ),
+                (
+                    ("unzoom", BaseIcons["zoomBack"].label),
+                    BaseIcons["zoomBack"],
+                    self.parent.OnRedraw,
+                ),
                 (None,),
-                ("statistics", PlotIcons["statistics"], self.parent.OnStats),
-                ("datasave", PlotIcons["save"], self.parent.SaveProfileToFile),
-                ("image", BaseIcons["saveFile"], self.parent.SaveToFile),
-                ("print", BaseIcons["print"], self.parent.PrintMenu),
+                (
+                    ("statistics", PlotIcons["statistics"].label),
+                    PlotIcons["statistics"],
+                    self.parent.OnStats,
+                ),
+                (
+                    ("datasave", PlotIcons["save"].label),
+                    PlotIcons["save"],
+                    self.parent.SaveProfileToFile,
+                ),
+                (
+                    ("image", BaseIcons["saveFile"].label),
+                    BaseIcons["saveFile"],
+                    self.parent.SaveToFile,
+                ),
+                (
+                    ("print", BaseIcons["print"].label),
+                    BaseIcons["print"],
+                    self.parent.PrintMenu,
+                ),
                 (None,),
-                ("settings", PlotIcons["options"], self.parent.PlotOptionsMenu),
-                ("quit", PlotIcons["quit"], self.parent.OnQuit),
+                (
+                    ("settings", PlotIcons["options"].label),
+                    PlotIcons["options"],
+                    self.parent.PlotOptionsMenu,
+                ),
+                (
+                    ("quit", PlotIcons["quit"].label),
+                    PlotIcons["quit"],
+                    self.parent.OnQuit,
+                ),
             )
         )
