@@ -202,6 +202,12 @@ class SpinCtrl(wx.SpinCtrl):
         else:
             wx.SpinCtrl.SetToolTipString(self, tip)
 
+    def SetRange(self, minVal, maxVal):
+        wx.SpinCtrl.SetRange(self, int(minVal), int(maxVal))
+
+    def SetValue(self, value):
+        wx.SpinCtrl.SetValue(self, int(value))
+
 
 class FloatSpin(fs.FloatSpin):
     """Wrapper around fs.FloatSpin to have more control
@@ -615,7 +621,7 @@ class Menu(wx.Menu):
 
     def AppendMenu(self, id, text, submenu, help=""):
         if wxPythonPhoenix:
-            wx.Menu.Append(self, id=id, item=text, subMenu=submenu, helpString=help)
+            wx.Menu.AppendSubMenu(self, submenu=submenu, text=text, help=help)
         else:
             wx.Menu.AppendMenu(self, id=id, text=text, submenu=submenu, help=help)
 
@@ -908,6 +914,14 @@ class ListBox(wx.ListBox):
             wx.ListBox.SetToolTip(self, tipString=tip)
         else:
             wx.ListBox.SetToolTipString(self, tip)
+
+    def DeselectAll(self):
+        for i in range(self.GetCount()):
+            self.Deselect(i)
+
+    def SelectAll(self):
+        for i in range(self.GetCount()):
+            self.Select(i)
 
 
 class HyperlinkCtrl(HyperlinkCtrl_):

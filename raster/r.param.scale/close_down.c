@@ -1,16 +1,20 @@
-
 /*****************************************************************************/
+
 /***                                                                       ***/
+
 /***                             close_down()                              ***/
-/***   	   Closes all input and output raster maps and frees memory.	   ***/
+
+/***      Closes all input and output raster maps and frees memory.        ***/
+
 /***               Jo Wood, Project ASSIST, 7th February 1993              ***/
+
 /***                                                                       ***/
+
 /*****************************************************************************/
 
 #include <string.h>
 #include <grass/raster.h>
 #include "param.h"
-
 
 void close_down(void)
 {
@@ -31,97 +35,85 @@ void close_down(void)
     switch (mparam) {
 
     case ELEV:
-	strcpy(map_type, "Generalised elevation value");
-	break;
+        strcpy(map_type, "Generalised elevation value");
+        break;
 
     case SLOPE:
-	strcpy(map_type, "Magnitude of maximum gradient");
-	Rast_write_units(rast_out_name, "degrees");
+        strcpy(map_type, "Magnitude of maximum gradient");
+        Rast_write_units(rast_out_name, "degrees");
 
-	Rast_append_history(
-	    &history,
-	    "Slope is given for steepest slope angle and measured in degrees.");
-	break;
+        Rast_append_history(
+            &history,
+            "Slope is given for steepest slope angle and measured in degrees.");
+        break;
 
     case ASPECT:
-	strcpy(map_type, "Direction of maximum gradient");
-	Rast_write_units(rast_out_name, "degrees");
+        strcpy(map_type, "Direction of maximum gradient");
+        Rast_write_units(rast_out_name, "degrees");
 
-	Rast_append_history(
-	    &history,
-	    "Flow direction (aspect): W=0, E=180, N=+90, S=-90 degrees");
-	break;
+        Rast_append_history(
+            &history,
+            "Flow direction (aspect): W=0, E=180, N=+90, S=-90 degrees");
+        break;
 
     case PROFC:
-	strcpy(map_type, "Profile curvature");
-	Rast_append_history(
-	    &history,
-	    "Curvature intersecting with the plane defined by the Z axis and");
-	Rast_append_history(
-	    &history,
-	    "maximum gradient direction. Positive values describe convex profile");
-	Rast_append_history(
-	    &history,
-	    "curvature, negative values concave profile.");
-	break;
+        strcpy(map_type, "Profile curvature");
+        Rast_append_history(
+            &history,
+            "Curvature intersecting with the plane defined by the Z axis and");
+        Rast_append_history(&history, "maximum gradient direction. Positive "
+                                      "values describe convex profile");
+        Rast_append_history(&history,
+                            "curvature, negative values concave profile.");
+        break;
 
     case PLANC:
-	strcpy(map_type, "Plan curvature");
-	Rast_append_history(
-	    &history,
-	    "Plan curvature is the horizontal curvature, intersecting with");
-	Rast_append_history(
-	    &history,
-	    "the XY plane.");
-	break;
+        strcpy(map_type, "Plan curvature");
+        Rast_append_history(
+            &history,
+            "Plan curvature is the horizontal curvature, intersecting with");
+        Rast_append_history(&history, "the XY plane.");
+        break;
 
     case LONGC:
-	strcpy(map_type, "Longitudinal curvature");
-	Rast_append_history(
-	    &history,
-	    "Longitudinal curvature is the profile curvature intersecting with the");
-	Rast_append_history(
-	    &history,
-	    "plane defined by the surfacenormal and maximum gradient direction.");
-	break;
+        strcpy(map_type, "Longitudinal curvature");
+        Rast_append_history(&history, "Longitudinal curvature is the profile "
+                                      "curvature intersecting with the");
+        Rast_append_history(&history, "plane defined by the surfacenormal and "
+                                      "maximum gradient direction.");
+        break;
 
     case CROSC:
-	strcpy(map_type, "Cross-sectional curvature");
-	Rast_append_history(
-	    &history,
-	    "Cross-sectional curvature is the tangential curvature intersecting");
-	Rast_append_history(
-	    &history,
-	    "with the plane defined by the surface normal and a tangent to the");
-	Rast_append_history(
-	    &history,
-	    "contour - perpendicular to maximum gradient direction.");
-	break;
+        strcpy(map_type, "Cross-sectional curvature");
+        Rast_append_history(&history, "Cross-sectional curvature is the "
+                                      "tangential curvature intersecting");
+        Rast_append_history(&history, "with the plane defined by the surface "
+                                      "normal and a tangent to the");
+        Rast_append_history(
+            &history, "contour - perpendicular to maximum gradient direction.");
+        break;
 
     case MINIC:
-	strcpy(map_type, "Minimum curvature");
-	Rast_append_history(
-	    &history,
-	    "Measured in direction perpendicular to the direction of of maximum curvature.");
-	break;
+        strcpy(map_type, "Minimum curvature");
+        Rast_append_history(&history, "Measured in direction perpendicular to "
+                                      "the direction of of maximum curvature.");
+        break;
 
     case MAXIC:
-	strcpy(map_type, "Maximum curvature");
-	Rast_append_history(
-	    &history,
-	    "The maximum curvature is measured in any direction");
-	break;
+        strcpy(map_type, "Maximum curvature");
+        Rast_append_history(
+            &history, "The maximum curvature is measured in any direction");
+        break;
 
     case FEATURE:
-	strcpy(map_type, "Morphometric features");
-	Rast_append_history(
-	    &history,
-	    "Morphometric features: peaks, ridges, passes, channels, pits and planes");
-	break;
+        strcpy(map_type, "Morphometric features");
+        Rast_append_history(&history, "Morphometric features: peaks, ridges, "
+                                      "passes, channels, pits and planes");
+        break;
 
     default:
-	strcpy(map_type, "?");
-	break;
+        strcpy(map_type, "?");
+        break;
     }
 
     Rast_command_history(&history);

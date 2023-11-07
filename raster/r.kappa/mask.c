@@ -1,21 +1,21 @@
 #include <string.h>
-#include "kappa.h"
-#include "local_proto.h"
+
+#include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/glocale.h>
 
+#include "local_proto.h"
 
-/* function prototypes */
-static int reclass_text(char *text, struct Reclass *reclass, int next);
-static void do_text(char *text, long first, long last);
 static char *append(char *results, char *text);
-
+static void do_text(char *text, long first, long last);
+static int reclass_text(char *text, struct Reclass *reclass, int next);
 
 char *maskinfo(void)
 {
     struct Reclass reclass;
-    char *results, text[100];
-    int first, next;
+    char *results;
+    char text[100];
+    int next;
+    int first;
 
     results = NULL;
     if (G_find_raster("MASK", G_mapset()) == NULL)
@@ -41,14 +41,14 @@ char *maskinfo(void)
         results = append(results, text);
     } while (next >= 0);
     Rast_free_reclass(&reclass);
-
     return results;
 }
 
-
 static int reclass_text(char *text, struct Reclass *reclass, int next)
 {
-    int i, n, first;
+    int i;
+    int n;
+    int first;
 
     *text = 0;
     n = reclass->num;
@@ -69,10 +69,8 @@ static int reclass_text(char *text, struct Reclass *reclass, int next)
     if (first >= 0)
         do_text(text, (long)(first + reclass->min),
                 (long)(i - 1 + reclass->min));
-
     return -1;
 }
-
 
 static void do_text(char *text, long first, long last)
 {
@@ -89,14 +87,11 @@ static void do_text(char *text, long first, long last)
     strcat(text, work);
 }
 
-
 static char *append(char *results, char *text)
 {
     if (results == NULL)
         return G_store(text);
-
     results = G_realloc(results, strlen(results) + strlen(text) + 1);
     strcat(results, text);
-
     return results;
 }

@@ -1,3 +1,4 @@
+---
 notes:
   categories:
     - title: Modules
@@ -34,12 +35,13 @@ notes:
       regexp: '[Ss]ingularity: '
 
     - title: Continuous Integration, Tests, Code Quality, and Checks
-      regexp: '(CI|ci|[Tt]ests|[Cc]hecks|pytest): '
+      regexp: '(CI|ci|CI\(deps\)|ci\(deps\)|[Tt]ests|[Cc]hecks|pytest): '
 
     - title: Contributing and Management
       regexp: '(contributing|CONTRIBUTING.md|contributors.csv): '
 
   exclude:
     regexp:
-      - "[Hh]appy [Nn]ew [Yy]ear"
-      - "version: "
+      - '[Hh]appy [Nn]ew [Yy]ear'
+      - 'version: '
+      - 'RFC: '

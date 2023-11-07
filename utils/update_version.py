@@ -46,16 +46,24 @@ def construct_version(version_info):
     return f"{version_info.major}.{version_info.minor}.{version_info.micro}"
 
 
-def suggest_commit_from_version_file(action):
+def suggest_commit_from_version_file(action, tag):
     """Using information in the version file, suggest a commit message"""
     version_file = read_version_file()
-    suggest_commit(action, construct_version(version_file))
+    suggest_commit(action, construct_version(version_file), tag=tag)
 
 
-def suggest_commit(action, version):
+def suggest_commit(action, version, tag):
     """Suggest a commit message for action and version"""
-    print("message: Use the provided title as a commit message")
-    print(f"title: 'version: {action} {version}'")
+    print("read:")
+    if tag:
+        print("  user_message: Use the provided messages for the commit and the tag.")
+        print("  note: Once all checks pass, you are expected to create a tag.")
+    else:
+        print("  user_message: Use the provided message for the commit")
+    print("use:")
+    print(f"  commit_message: 'version: {action} {version}'")
+    if tag:
+        print(f"  tag_message: 'GRASS GIS {version}'")
 
 
 def release_candidate(args):
@@ -78,7 +86,7 @@ def release_candidate(args):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("GRASS GIS")
+    suggest_commit_from_version_file("GRASS GIS", tag=True)
 
 
 def release(_unused):
@@ -98,7 +106,7 @@ def release(_unused):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("GRASS GIS")
+    suggest_commit_from_version_file("GRASS GIS", tag=True)
 
 
 def update_micro(_unused):
@@ -127,7 +135,7 @@ def update_micro(_unused):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("Start")
+    suggest_commit_from_version_file("Start", tag=False)
 
 
 def update_minor(args):
@@ -135,28 +143,15 @@ def update_minor(args):
     version_file = read_version_file()
     micro = version_file.micro
     minor = int(version_file.minor)
-    if args.dev:
-        if not minor % 2:
-            sys.exit(
-                "Updating to a development-only version "
-                f"from an even minor version '{minor}' is not possible"
-            )
-        minor += 2
-    else:
-        minor += 1
+    minor += 1
     if micro.endswith("dev"):
-        if minor % 2:
-            # Odd is development-only, never released and without micro version.
-            micro = "dev"
-        else:
-            # Even will be released, so adding micro version.
-            micro = "0dev"
+        micro = "0dev"
     else:
         sys.exit("Updating version from a non-dev VERSION file is not possible")
     write_version_file(
         major=version_file.major, minor=minor, micro=micro, year=this_year()
     )
-    suggest_commit_from_version_file("Start")
+    suggest_commit_from_version_file("Start", tag=False)
 
 
 def update_major(_unused):
@@ -171,7 +166,7 @@ def update_major(_unused):
     minor = 0
     major = int(version_file.major) + 1
     write_version_file(major=major, minor=minor, micro=micro, year=this_year())
-    suggest_commit_from_version_file("Start")
+    suggest_commit_from_version_file("Start", tag=False)
 
 
 def back_to_dev(_unused):
@@ -199,7 +194,7 @@ def back_to_dev(_unused):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file(action)
+    suggest_commit_from_version_file(action, tag=False)
 
 
 def status_as_yaml(version_info, today, version, tag):
@@ -241,6 +236,28 @@ def status(args):
         status_as_yaml(version_info=version_info, today=today, version=version, tag=tag)
 
 
+def suggest_message(args):
+    """Print suggestion for a commit message
+
+    Assumes that the version file was changed, but not commited yet,
+    but it does not check that assumption.
+
+    This shows a wrong commit message if going back from RCs,
+    but it is not likely this is needed because the suggestion
+    will be part of the message for the switch and there is
+    no other work to do afterwards except for the commit
+    (unlike updating the version number).
+    """
+    version_info = read_version_file()
+    if not version_info.micro.endswith("dev"):
+        tag = construct_version(version_info)
+        action = "GRASS GIS"
+    else:
+        tag = None
+        action = "Start"
+    suggest_commit_from_version_file(action, tag=tag)
+
+
 def main():
     """Translate sub-commands to function calls"""
     parser = argparse.ArgumentParser(
@@ -275,9 +292,6 @@ def main():
     subparser = subparsers.add_parser(
         "minor", help="increase minor (x.Y.z) version (uses dev in micro)"
     )
-    subparser.add_argument(
-        "--dev", action="store_true", help="increase development-only version"
-    )
     subparser.set_defaults(func=update_minor)
 
     subparser = subparsers.add_parser(
@@ -292,6 +306,11 @@ def main():
         "--bash", action="store_true", help="format as Bash variables for eval"
     )
     subparser.set_defaults(func=status)
+
+    subparser = subparsers.add_parser(
+        "suggest", help="suggest a commit message for new version"
+    )
+    subparser.set_defaults(func=suggest_message)
 
     args = parser.parse_args()
     args.func(args)

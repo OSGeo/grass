@@ -8,7 +8,7 @@ Usage:
     from grass.script import core as grass
     grass.parser()
 
-(C) 2008-2021 by the GRASS Development Team
+(C) 2008-2023 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -17,7 +17,6 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 .. sectionauthor:: Michael Barton <michael.barton asu.edu>
 """
-from __future__ import absolute_import, print_function
 
 import os
 import sys
@@ -27,15 +26,11 @@ import shutil
 import codecs
 import string
 import random
-import pipes
+import shlex
 from tempfile import NamedTemporaryFile
 
 from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
 from grass.exceptions import ScriptError, CalledModuleError
-
-# PY2/PY3 compat
-if sys.version_info.major >= 3:
-    unicode = str
 
 
 # subprocess wrapper that uses shell on Windows
@@ -54,7 +49,7 @@ class Popen(subprocess.Popen):
             and not kwargs.get("shell", False)
             and kwargs.get("executable") is None
         ):
-            cmd = shutil_which(args[0])
+            cmd = shutil.which(args[0])
             if cmd is None:
                 raise OSError(_("Cannot find the executable {0}").format(args[0]))
             args = [cmd] + args[1:]
@@ -97,16 +92,16 @@ _popen_args = [
 
 
 def _make_val(val):
-    """Convert value to unicode"""
-    if isinstance(val, (bytes, str, unicode)):
+    """Convert value to a unicode string"""
+    if isinstance(val, (bytes, str)):
         return decode(val)
     if isinstance(val, (int, float)):
-        return unicode(val)
+        return str(val)
     try:
         return ",".join(map(_make_val, iter(val)))
     except TypeError:
         pass
-    return unicode(val)
+    return str(val)
 
 
 def _make_unicode(val, enc):
@@ -166,87 +161,6 @@ def get_commands():
     return set(cmd), scripts
 
 
-# TODO: Please replace this function with shutil.which() before 8.0 comes out
-# replacement for which function from shutil (not available in all versions)
-# from http://hg.python.org/cpython/file/6860263c05b3/Lib/shutil.py#l1068
-# added because of Python scripts running Python scripts on MS Windows
-# see also ticket #2008 which is unrelated but same function was proposed
-def shutil_which(cmd, mode=os.F_OK | os.X_OK, path=None):
-    """Given a command, mode, and a PATH string, return the path which
-    conforms to the given mode on the PATH, or None if there is no such
-    file.
-
-    `mode` defaults to os.F_OK | os.X_OK. `path` defaults to the result
-    of os.environ.get("PATH"), or can be overridden with a custom search
-    path.
-
-    :param cmd: the command
-    :param mode:
-    :param path:
-
-    """
-    # Check that a given file can be accessed with the correct mode.
-    # Additionally check that `file` is not a directory, as on Windows
-    # directories pass the os.access check.
-    def _access_check(fn, mode):
-        return os.path.exists(fn) and os.access(fn, mode) and not os.path.isdir(fn)
-
-    # If we're given a path with a directory part, look it up directly rather
-    # than referring to PATH directories. This includes checking relative to the
-    # current directory, e.g. ./script
-    if os.path.dirname(cmd):
-        if _access_check(cmd, mode):
-            return cmd
-        return None
-
-    if path is None:
-        path = os.environ.get("PATH", os.defpath)
-    if not path:
-        return None
-    path = path.split(os.pathsep)
-
-    if sys.platform == "win32":
-        # The current directory takes precedence on Windows.
-        if os.curdir not in path:
-            path.insert(0, os.curdir)
-
-        # PATHEXT is necessary to check on Windows (force lowercase)
-        pathext = list(
-            map(lambda x: x.lower(), os.environ.get("PATHEXT", "").split(os.pathsep))
-        )
-        if ".py" not in pathext:
-            # we assume that PATHEXT contains always '.py'
-            pathext.insert(0, ".py")
-        # See if the given file matches any of the expected path extensions.
-        # This will allow us to short circuit when given "python3.exe".
-        # If it does match, only test that one, otherwise we have to try
-        # others.
-        if any(cmd.lower().endswith(ext) for ext in pathext):
-            files = [cmd]
-        else:
-            files = [cmd + ext for ext in pathext]
-    else:
-        # On other platforms you don't have things like PATHEXT to tell you
-        # what file suffixes are executable, so just pass on cmd as-is.
-        files = [cmd]
-
-    seen = set()
-    for dir in path:
-        normdir = os.path.normcase(dir)
-        if normdir not in seen:
-            seen.add(normdir)
-            for thefile in files:
-                name = os.path.join(dir, thefile)
-                if _access_check(name, mode):
-                    return name
-    return None
-
-
-if sys.version_info.major >= 3:
-    # Use shutil.which in Python 3, not the custom implementation.
-    shutil_which = shutil.which  # noqa: F811
-
-
 # Added because of scripts calling scripts on MS Windows.
 # Module name (here cmd) differs from the file name (does not have extension).
 # Additionally, we don't run scripts using system executable mechanism,
@@ -288,7 +202,7 @@ def get_real_command(cmd):
         if ".py" not in pathext:
             # we assume that PATHEXT contains always '.py'
             os.environ["PATHEXT"] = ".py;" + os.environ["PATHEXT"]
-        full_path = shutil_which(cmd + ".py")
+        full_path = shutil.which(cmd + ".py")
         if full_path:
             return full_path
 
@@ -317,6 +231,7 @@ def make_command(
     :param str flags: flags to be used (given as a string)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param options: module's parameters
 
@@ -460,6 +375,7 @@ def start_command(
     :param str flags: flags to be used (given as a string)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param kwargs: module's parameters
 
@@ -473,7 +389,15 @@ def start_command(
         else:
             options[opt] = val
 
-    args = make_command(prog, flags, overwrite, quiet, verbose, **options)
+    args = make_command(
+        prog,
+        flags=flags,
+        overwrite=overwrite,
+        quiet=quiet,
+        superquiet=superquiet,
+        verbose=verbose,
+        **options,
+    )
 
     if debug_level() > 0:
         sys.stderr.write(
@@ -712,12 +636,13 @@ def exec_command(
     :param str flags: flags to be used (given as a string)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param env: directory with environmental variables
     :param list kwargs: module's parameters
 
     """
-    args = make_command(prog, flags, overwrite, quiet, verbose, **kwargs)
+    args = make_command(prog, flags, overwrite, quiet, superquiet, verbose, **kwargs)
 
     if env is None:
         env = os.environ
@@ -737,10 +662,17 @@ def message(msg, flag=None):
 
 
 def debug(msg, debug=1):
-    """Display a debugging message using `g.message -d`
+    """Display a debugging message using `g.message -d`.
+
+    The visibility of a debug message at runtime is controlled by
+    setting the corresponding DEBUG level with `g.gisenv set="DEBUG=X"`
+    (with `X` set to the debug level specified in the function call).
 
     :param str msg: debugging message to be displayed
-    :param str debug: debug level (0-5)
+    :param str debug: debug level (0-5) with the following recommended levels:
+        Use 1 for messages generated once of few times,
+        3 for messages generated for each raster row or vector line,
+        5 for messages generated for each raster cell or vector point.
     """
     if debug_level() >= debug:
         # TODO: quite a random hack here, do we need it somewhere else too?
@@ -941,7 +873,7 @@ def parser():
         sys.exit(1)
 
     cmdline = [basename(sys.argv[0])]
-    cmdline += [pipes.quote(a) for a in sys.argv[1:]]
+    cmdline += [shlex.quote(a) for a in sys.argv[1:]]
     os.environ["CMDLINE"] = " ".join(cmdline)
 
     argv = sys.argv[:]
@@ -1404,9 +1336,26 @@ def del_temp_region():
 
 def find_file(name, element="cell", mapset=None, env=None):
     """Returns the output from running g.findfile as a
-    dictionary. Example:
+    dictionary.
+
+    Elements in g.findfile refer to mapset directories. However, in
+    parts of the code, different element terms like rast, raster, or rast3d
+    are used. For convenience the function translates such element types
+    to respective mapset elements. Current translations are:
+    "rast": "cell",
+    "raster": "cell",
+    "rast3d": "grid3",
+    "raster3d": "grid3",
+    "raster_3d": "grid3",
+
+    Example:
 
     >>> result = find_file('elevation', element='cell')
+    >>> print(result['fullname'])
+    elevation@PERMANENT
+    >>> print(result['file'])  # doctest: +ELLIPSIS
+    /.../PERMANENT/cell/elevation
+    >>> result = find_file('elevation', element='raster')
     >>> print(result['fullname'])
     elevation@PERMANENT
     >>> print(result['file'])  # doctest: +ELLIPSIS
@@ -1420,11 +1369,19 @@ def find_file(name, element="cell", mapset=None, env=None):
 
     :return: parsed output of g.findfile
     """
-    if element == "raster" or element == "rast":
-        verbose(_('Element type should be "cell" and not "%s"') % element)
-        element = "cell"
+    element_translation = {
+        "rast": "cell",
+        "raster": "cell",
+        "rast3d": "grid3",
+        "raster3d": "grid3",
+        "raster_3d": "grid3",
+    }
+
+    if element in element_translation:
+        element = element_translation[element]
+
     # g.findfile returns non-zero when file was not found
-    # se we ignore return code and just focus on stdout
+    # so we ignore return code and just focus on stdout
     process = start_command(
         "g.findfile",
         flags="n",

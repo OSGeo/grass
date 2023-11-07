@@ -24,7 +24,7 @@ ratio between the frequency and the amplitude of the corresponding
 interval, i.e. its density, this effectively tests whether the frequencies
 of the two newly proposed classes are different from those obtained by
 simply distributing the sum of their frequencies amongst them in
-proportion to the class amplitudes. 
+proportion to the class amplitudes.
 
 The algorithm described above creates class breaks which each are
 identical to a specific observation. It is thus necessary to decide to

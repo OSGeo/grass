@@ -3,8 +3,7 @@
 #include "local_proto.h"
 
 void create_ogr_layer(const char *dsn, const char *format, const char *layer,
-		      unsigned int wkbtype, char **papszDSCO,
-		      char **papszLCO)
+                      unsigned int wkbtype, char **papszDSCO, char **papszLCO)
 {
     char *pszDriverName;
     dr_t hDriver;
@@ -12,12 +11,12 @@ void create_ogr_layer(const char *dsn, const char *format, const char *layer,
     OGRLayerH hLayer;
 
     pszDriverName = G_store(format);
-    G_strchg(pszDriverName, '_', ' ');	/* '_' -> ' ' */
+    G_strchg(pszDriverName, '_', ' '); /* '_' -> ' ' */
 
     /* start driver */
     hDriver = get_driver_by_name(pszDriverName);
     if (hDriver == NULL) {
-	G_fatal_error(_("OGR driver <%s> not available"), pszDriverName);
+        G_fatal_error(_("OGR driver <%s> not available"), pszDriverName);
     }
 
     /* create datasource */
@@ -27,8 +26,7 @@ void create_ogr_layer(const char *dsn, const char *format, const char *layer,
     hDS = OGR_Dr_CreateDataSource(hDriver, dsn, papszDSCO);
 #endif
     if (hDS == NULL) {
-	G_fatal_error(_("Creation of output OGR datasource <%s> failed"),
-		      dsn);
+        G_fatal_error(_("Creation of output OGR datasource <%s> failed"), dsn);
     }
 
     G_free(pszDriverName);
@@ -41,7 +39,7 @@ void create_ogr_layer(const char *dsn, const char *format, const char *layer,
     hLayer = OGR_DS_CreateLayer(hDS, layer, NULL, wkbtype, papszLCO);
 #endif
     if (hLayer == NULL) {
-	G_fatal_error(_("Creation of OGR layer <%s> failed"), layer);
+        G_fatal_error(_("Creation of OGR layer <%s> failed"), layer);
     }
 
     ds_close(hDS);

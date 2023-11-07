@@ -1,10 +1,13 @@
 #include <string.h>
+
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-static char *append(char *, char *);
-static int do_text(char *, long, long);
-static int reclass_text(char *, struct Reclass *, int);
+#include "global.h"
+
+static char *append(char *results, char *text);
+static void do_text(char *text, long first, long last);
+static int reclass_text(char *text, struct Reclass *reclass, int next);
 
 char *maskinfo(void)
 {
@@ -36,8 +39,7 @@ char *maskinfo(void)
         }
         results = append(results, " ");
         results = append(results, text);
-    }
-    while (next >= 0);
+    } while (next >= 0);
     Rast_free_reclass(&reclass);
     return results;
 }
@@ -49,9 +51,7 @@ static int reclass_text(char *text, struct Reclass *reclass, int next)
     int first;
 
     *text = 0;
-
     n = reclass->num;
-
     first = -1;
     for (i = next; i < n; i++) {
         if (reclass->table[i]) {
@@ -72,7 +72,7 @@ static int reclass_text(char *text, struct Reclass *reclass, int next)
     return -1;
 }
 
-static int do_text(char *text, long first, long last)
+static void do_text(char *text, long first, long last)
 {
     char work[40];
 
@@ -85,8 +85,6 @@ static int do_text(char *text, long first, long last)
         sprintf(work, "%ld-%ld", first, last);
 
     strcat(text, work);
-
-    return 0;
 }
 
 static char *append(char *results, char *text)
