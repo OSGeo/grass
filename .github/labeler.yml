@@ -48,10 +48,9 @@ Linux:
 docker:
   - docker/**/*
 
-# docs:
-#   - doc/**/*
-# manual:
-#   - man/**/*
+docs:
+  - doc/**/*
+  - man/**/*
 
 translation:
   - locale/**/*
