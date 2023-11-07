@@ -16,6 +16,7 @@
  *
  *****************************************************************************/
 
+#include <cinttypes>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -331,13 +332,13 @@ void record_args(int argc, char **argv)
         stats->comment("MFD flow direction");
     }
 
-    sprintf(buf, "D8CUT=%f", opt->d8cut);
+    snprintf(buf, BUFSIZ, "D8CUT=%f", opt->d8cut);
     stats->comment(buf);
 
     size_t mm_size = (size_t)opt->mem << 20; /* (in bytes) */
     char tmp[100];
     formatNumber(tmp, mm_size);
-    sprintf(buf, "Memory size: %s bytes", tmp);
+    snprintf(buf, BUFSIZ, "Memory size: %s bytes", tmp);
     stats->comment(buf);
 }
 
@@ -411,13 +412,13 @@ void printMaxSortSize(long nodata_count)
     off_t maxneed = (fillmaxsize > flowmaxsize) ? fillmaxsize : flowmaxsize;
     maxneed = 2 * maxneed; /* need 2*N to sort */
 
-    G_debug(1, "total elements=%" PRI_OFF_T ", nodata elements=%ld",
+    G_debug(1, "total elements=%" PRId64 ", nodata elements=%ld",
             (off_t)nrows * ncols, nodata_count);
     G_debug(1, "largest temporary files: ");
-    G_debug(1, "\t\t FILL: %s [%" PRI_OFF_T " elements, %ldB each]",
+    G_debug(1, "\t\t FILL: %s [%" PRId64 " elements, %ldB each]",
             formatNumber(buf, fillmaxsize), (off_t)nrows * ncols,
             sizeof(waterWindowType));
-    G_debug(1, "\t\t FLOW: %s [%" PRI_OFF_T " elements, %ldB each]",
+    G_debug(1, "\t\t FLOW: %s [%" PRId64 " elements, %ldB each]",
             formatNumber(buf, flowmaxsize), (off_t)nrows * ncols - nodata_count,
             sizeof(sweepItem));
     G_debug(1, "Will need at least %s space available in %s",
@@ -488,7 +489,7 @@ int main(int argc, char *argv[])
     G_verbose_message(_("Region size is %d x %d"), nrows, ncols);
 
     /* check STREAM path (the place where intermediate STREAMs are placed) */
-    sprintf(buf, "%s=%s", STREAM_TMPDIR, opt->streamdir);
+    snprintf(buf, BUFSIZ, "%s=%s", STREAM_TMPDIR, opt->streamdir);
     /* don't pass an automatic variable; putenv() isn't guaranteed to make a
      * copy */
     putenv(G_store(buf));
@@ -584,7 +585,7 @@ int main(int argc, char *argv[])
     AMI_STREAM<waterWindowBaseType> *flowStream;
     char path[GPATH_MAX];
 
-    sprintf(path, "%s/flowStream", streamdir->answer);
+    snprintf(path, GPATH_MAX, "%s/flowStream", streamdir->answer);
     flowStream = new AMI_STREAM<waterWindowBaseType>(path);
   G_verbose_message(_("flowStream opened: len=%lld\n", flowStream->stream_len());
   G_verbose_message(_("jumping to flow accumulation computation\n");

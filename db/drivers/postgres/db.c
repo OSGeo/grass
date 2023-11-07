@@ -19,7 +19,7 @@
 #include "globals.h"
 #include "proto.h"
 
-static void notice_processor(void *arg, const char *message)
+static void notice_processor(void *arg UNUSED, const char *message)
 {
     /* print notice messages only on verbose level */
     if (G_verbose() > G_verbose_std()) {
@@ -27,7 +27,7 @@ static void notice_processor(void *arg, const char *message)
     }
 }
 
-static int create_delete_db();
+static int create_delete_db(dbHandle *, int);
 
 int db__driver_open_database(dbHandle *handle)
 {
@@ -183,7 +183,7 @@ int db__driver_open_database(dbHandle *handle)
     return DB_OK;
 }
 
-int db__driver_close_database()
+int db__driver_close_database(void)
 {
     PQfinish(pg_conn);
     return DB_OK;

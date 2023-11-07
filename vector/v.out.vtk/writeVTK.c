@@ -452,7 +452,7 @@ int write_vtk_cells(FILE *ascii, struct Map_info *Map, VTKInfo *info,
 /* This function writes the categories as vtk cell data ******************** */
 /* ************************************************************************* */
 int write_vtk_cat_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
-                       int layer, int *types, int typenum, int dp)
+                       int layer, int *types, int typenum, int dp UNUSED)
 {
     int type, cat, i, k, centroid;
     static struct line_pnts *Points;
@@ -556,7 +556,7 @@ int write_vtk_cat_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
    by the caller.
  */
 char *get_att(char *name, int cat, struct field_info *Fi, dbDriver *Driver,
-              int ncol)
+              int ncol UNUSED)
 {
     char buf[2000];
     int more;
@@ -605,7 +605,7 @@ char *get_att(char *name, int cat, struct field_info *Fi, dbDriver *Driver,
 /* This function writes numerical attribute table fields as VTK scalars **** */
 /* ************************************************************************* */
 int write_vtk_db_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
-                      int layer, int *types, int typenum, int dp)
+                      int layer, int *types, int typenum, int dp UNUSED)
 {
     int type, cat, i, k, centroid;
     struct line_cats *Cats;
@@ -614,7 +614,7 @@ int write_vtk_db_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
     int numcelldata =
         info->maxnumvertices + info->maxnumlines + info->maxnumpolygons;
     /* attribute table info */
-    int ncol = 0, colsqltype, colctype, num_atts, cur_att, progress;
+    int ncol = 0, colsqltype, colctype, num_atts, cur_att;
     struct field_info *Fi = NULL;
     dbDriver *Driver = NULL;
     dbHandle handle;
@@ -677,7 +677,6 @@ int write_vtk_db_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
 
     G_message("Writing %i scalar variables as cell data ...", num_atts);
 
-    progress = 0;
     for (cur_att = 0; cur_att < ncol; cur_att++) {
 
         if (numcelldata > 0) {
@@ -704,7 +703,6 @@ int write_vtk_db_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
                 }
 
                 fprintf(ascii, "LOOKUP_TABLE default\n");
-                progress++;
 
                 /*For every available vector type */
                 for (k = 0; k < typenum; k++) {
@@ -843,6 +841,7 @@ int write_vtk_db_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
     return 1;
 }
 
+#if 0
 /* ************************************************************************* */
 /* This function writes attribute table fields as VTK labels            **** */
 /* ************************************************************************* */
@@ -851,12 +850,13 @@ int write_vtk_db_labels(FILE *ascii, struct Map_info *Map, VTKInfo *info,
 {
     return 1;
 }
+#endif
 
 /* ************************************************************************* */
 /* This function writes the point coordinates and the geometric feature **** */
 /* ************************************************************************* */
 int write_vtk(FILE *ascii, struct Map_info *Map, int layer, int *types,
-              int typenum, int dp, double scale, int numatts, int labels)
+              int typenum, int dp, double scale, int numatts, int labels UNUSED)
 {
     VTKInfo *info;
     VTKTypeInfo **typeinfo;

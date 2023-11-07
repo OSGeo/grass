@@ -2,7 +2,7 @@
  *
  * MODULE:       r.out.gdal
  * AUTHOR(S):    Vytautas Vebra <olivership@gmail.com>, Markus Metz
- * PURPOSE:      Exports GRASS raster to GDAL suported formats;
+ * PURPOSE:      Exports GRASS raster to GDAL supported formats;
  *               based on GDAL library.
  *               Replaces r.out.gdal.sh script which used the gdal_translate
  *               executable and GDAL grass-format plugin.
@@ -1047,11 +1047,11 @@ double set_default_nodata_value(GDALDataType datatype, double min, double max)
 
     case GDT_Float32:
     case GDT_CFloat32:
-        return 0.0 / 0.0;
+        return NAN;
 
     case GDT_Float64:
     case GDT_CFloat64:
-        return 0.0 / 0.0;
+        return NAN;
 
     default:
         return 0;

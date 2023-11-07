@@ -70,7 +70,7 @@ typedef struct {
 static int fpoint;
 
 /* Function called from RTreeSearch for point found */
-static int srch(int id, const struct RTree_Rect *rect, void *arg)
+static int srch(int id, const struct RTree_Rect *rect UNUSED, void *arg UNUSED)
 {
     fpoint = id;
 
@@ -111,7 +111,7 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
     int i, j, k, ret, ltype, broken, last, nlines;
     int nbreaks;
     struct RTree *RTree;
-    int npoints, nallpoints, nmarks;
+    int npoints;
     XPNT2 XPnt;
     double dx, dy, a1 = 0, a2 = 0;
     int closed, last_point;
@@ -149,9 +149,7 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
      * points, if such point already exists check angles of segments and if
      * differ mark for break */
 
-    nmarks = 0;
     npoints = 1; /* index starts from 1 ! */
-    nallpoints = 0;
     XPnt.used = 0;
 
     G_message(_("Breaking polygons (pass 1: select break points)..."));
@@ -183,7 +181,6 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
 
         for (j = 0; j < Points->n_points; j++) {
             G_debug(3, "j =  %d", j);
-            nallpoints++;
 
             if (j == last_point && closed)
                 continue; /* do not register last of close polygon */
@@ -237,7 +234,6 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
                 /* Check angles */
                 if (cross) {
                     XPnt.cross = 1;
-                    nmarks++;
                     /* write point */
                     lseek(xpntfd, (off_t)(fpoint - 1) * sizeof(XPNT2),
                           SEEK_SET);
@@ -253,7 +249,6 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
                     }
                     else {
                         XPnt.cross = 1;
-                        nmarks++;
                         /* write point */
                         lseek(xpntfd, (off_t)(fpoint - 1) * sizeof(XPNT2),
                               SEEK_SET);
@@ -271,7 +266,6 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
                     XPnt.a1 = 0;
                     XPnt.a2 = 0;
                     XPnt.cross = 1;
-                    nmarks++;
                 }
                 else {
                     XPnt.a1 = a1;
@@ -319,7 +313,6 @@ void Vect_break_polygons_file(struct Map_info *Map, int type,
         G_debug(3, "n_points =  %d", Points->n_points);
         for (j = 1; j < Points->n_points; j++) {
             G_debug(3, "j =  %d", j);
-            nallpoints++;
 
             /* Box */
             rect.boundary[0] = Points->x[j];
@@ -425,7 +418,6 @@ void Vect_break_polygons_mem(struct Map_info *Map, int type,
     int i, j, k, ret, ltype, broken, last, nlines;
     int nbreaks;
     struct RB_TREE *RBTree;
-    int npoints, nallpoints, nmarks;
     XPNT *XPnt_found, XPnt_search;
     double dx, dy, a1 = 0, a2 = 0;
     int closed, last_point, cross;
@@ -446,9 +438,6 @@ void Vect_break_polygons_mem(struct Map_info *Map, int type,
      * points, if such point already exists check angles of segments and if
      * differ mark for break */
 
-    nmarks = 0;
-    npoints = 0;
-    nallpoints = 0;
     XPnt_search.used = 0;
 
     G_message(_("Breaking polygons (pass 1: select break points)..."));
@@ -480,7 +469,6 @@ void Vect_break_polygons_mem(struct Map_info *Map, int type,
 
         for (j = 0; j < Points->n_points; j++) {
             G_debug(3, "j =  %d", j);
-            nallpoints++;
 
             if (j == last_point && closed)
                 continue; /* do not register last of close polygon */
@@ -522,7 +510,6 @@ void Vect_break_polygons_mem(struct Map_info *Map, int type,
                 /* check angles */
                 if (cross) {
                     XPnt_found->cross = 1;
-                    nmarks++;
                 }
                 else {
                     G_debug(3, "a1 = %f xa1 = %f a2 = %f xa2 = %f", a1,
@@ -533,7 +520,6 @@ void Vect_break_polygons_mem(struct Map_info *Map, int type,
                     }
                     else {
                         XPnt_found->cross = 1;
-                        nmarks++;
                     }
                 }
             }
@@ -543,7 +529,6 @@ void Vect_break_polygons_mem(struct Map_info *Map, int type,
                     XPnt_search.a1 = 0;
                     XPnt_search.a2 = 0;
                     XPnt_search.cross = 1;
-                    nmarks++;
                 }
                 else {
                     XPnt_search.a1 = a1;
@@ -553,13 +538,11 @@ void Vect_break_polygons_mem(struct Map_info *Map, int type,
 
                 /* Add to tree */
                 rbtree_insert(RBTree, &XPnt_search);
-                npoints++;
             }
         }
     }
 
     nbreaks = 0;
-    nallpoints = 0;
     G_debug(2, "Break polygons: unique vertices: %ld", (long int)RBTree->count);
 
     /* uncomment to check if search tree is healthy */
@@ -594,7 +577,6 @@ void Vect_break_polygons_mem(struct Map_info *Map, int type,
         G_debug(3, "n_points =  %d", Points->n_points);
         for (j = 1; j < Points->n_points; j++) {
             G_debug(3, "j =  %d", j);
-            nallpoints++;
 
             if (Points->n_points <= 1 ||
                 (j == (Points->n_points - 1) && !broken))

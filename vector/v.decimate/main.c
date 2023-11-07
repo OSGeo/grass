@@ -30,14 +30,14 @@ struct DecimationContext {
     int unique_cats; /*!< TRUE or FALSE */
 };
 
-static int if_add_point(struct DecimationPoint *point, void *point_data,
+static int if_add_point(struct DecimationPoint *point, void *point_data UNUSED,
                         struct DecimationPoint **point_list, size_t npoints,
                         void *context)
 {
     /* according to cat (which could be cluster, return or class) */
     struct DecimationContext *dc = context;
     double zdiff = dc->zdiff;
-    int j;
+    unsigned int j;
 
     /* TODO: use something like Vect_cat_in_cat_list? */
     for (j = 0; j < npoints; j++) {
@@ -56,7 +56,7 @@ struct WriteContext {
     int write_cats;
 };
 
-static void write_point(struct WriteContext *context, int cat, double x,
+static void write_point(struct WriteContext *context, int cat UNUSED, double x,
                         double y, double z, struct line_cats *cats)
 {
     if (Vect_append_point(context->line, x, y, z) != 1)

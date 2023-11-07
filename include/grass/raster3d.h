@@ -4,7 +4,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-/* Second version of the raster 3D map layout. Old maps withput version
+/* Second version of the raster 3D map layout. Old maps without version
  information are defined as version == 1 when reading the header. */
 #define RASTER3D_MAP_VERSION            2
 
@@ -105,7 +105,7 @@ typedef struct RASTER3D_Map {
     /* type in which data is stored on file */
     int type; /* DCELL_TYPE or FCELL_TYPE */
 
-    /* data concering the compression */
+    /* data concerning the compression */
     int precision;   /* RASTER3D_MAX_PRECISION or, 0 .. 23 for float,
                         0 .. 52 for double */
     int compression; /* RASTER3D_NO_COMPRESSION or RASTER3D_COMPRESSION */
@@ -207,13 +207,16 @@ typedef struct {
     int first, last;  /* index (into next) of first and last elt in fifo */
     /* first == -1 iff fifo is empty */
 
-    int (*eltRemoveFun)();  /* callback activated if the contents of an
-                               elt needs to be removed */
-    void *eltRemoveFunData; /* pointer to user data passed along with
-                               eltRemoveFun */
-    int (*eltLoadFun)();    /* callback activated to load contents of an elt */
-    void *eltLoadFunData;   /* pointer to user data passed along with
-                               eltLoadFun */
+    int (*eltRemoveFun)(int, const void *,
+                        void *); /* callback activated if the contents of an elt
+                                    needs to be removed */
+    void *eltRemoveFunData;      /* pointer to user data passed along with
+                                    eltRemoveFun */
+    int (*eltLoadFun)(
+        int, void *,
+        void *);          /* callback activated to load contents of an elt */
+    void *eltLoadFunData; /* pointer to user data passed along with
+                             eltLoadFun */
 
     void *hash; /* ptr to hashTable used to relate external names to
                    internal indices (elts) */

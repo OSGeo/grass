@@ -140,7 +140,8 @@ int db_get_table_number_of_columns(dbTable *table)
     return table->numColumns;
 }
 
-static void set_all_column_privs(dbTable *table, void (*set_column_priv)())
+static void set_all_column_privs(dbTable *table,
+                                 void (*set_column_priv)(dbColumn *))
 {
     int col, ncols;
     dbColumn *column;
@@ -152,7 +153,8 @@ static void set_all_column_privs(dbTable *table, void (*set_column_priv)())
     }
 }
 
-static int get_all_column_privs(dbTable *table, int (*get_column_priv)())
+static int get_all_column_privs(dbTable *table,
+                                int (*get_column_priv)(dbColumn *))
 {
     int priv, col, ncols;
     dbColumn *column;
@@ -415,7 +417,7 @@ dbTable *db_clone_table(dbTable *src)
 }
 
 /*!
-   \brief Create SQL CREATE sring from table definition
+   \brief Create SQL CREATE string from table definition
 
    \param table pointer to dbTable
    \param sql dbString to store the SQL CREATE string

@@ -39,7 +39,7 @@
 #include "rsunglobals.h"
 
 int civilTimeFlag;
-int useCivilTime()
+int useCivilTime(void)
 {
     return civilTimeFlag;
 }
@@ -51,13 +51,13 @@ void setUseCivilTime(int val)
 
 double angular_loss_denom;
 
-void setAngularLossDenominator()
+void setAngularLossDenominator(void)
 {
     angular_loss_denom = 1. / (1 - exp(-1. / a_r));
 }
 
 int useShadowFlag;
-int useShadow()
+int useShadow(void)
 {
     return useShadowFlag;
 }
@@ -68,7 +68,7 @@ void setUseShadow(int val)
 }
 
 int useHorizonDataFlag;
-int useHorizonData()
+int useHorizonData(void)
 {
     return useHorizonDataFlag;
 }
@@ -79,7 +79,7 @@ void setUseHorizonData(int val)
 }
 
 double timeOffset;
-double getTimeOffset()
+double getTimeOffset(void)
 {
     return timeOffset;
 }
@@ -90,7 +90,7 @@ void setTimeOffset(double val)
 }
 
 double horizonInterval;
-double getHorizonInterval()
+double getHorizonInterval(void)
 {
     return horizonInterval;
 }
@@ -178,7 +178,8 @@ void com_par_const(double longitTime, struct SunGeometryConstDay *sungeom,
 
 void com_par(struct SunGeometryConstDay *sungeom,
              struct SunGeometryVarDay *sunVarGeom,
-             struct GridGeometry *gridGeom, double latitude, double longitude)
+             struct GridGeometry *gridGeom, double latitude,
+             double longitude UNUSED)
 {
     double pom, xpom, ypom;
     double costimeAngle;
@@ -325,6 +326,11 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
     /* func = cube; */
     sunVarGeom->isShadow = 0;
 
+    double timeOffset = 0;
+
+    if (sunSlopeGeom->shift12hrs)
+        timeOffset = M_PI;
+
     if (useShadow()) {
         length = 0;
 
@@ -364,7 +370,8 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
                    }
                  */
                 s = sunSlopeGeom->lum_C31_l *
-                        cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
+                        cos(-sungeom->timeAngle - sunSlopeGeom->longit_l +
+                            timeOffset) +
                     sunSlopeGeom->lum_C33_l; /* Jenco */
             }
 
@@ -389,7 +396,8 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
                    }
                  */
                 s = sunSlopeGeom->lum_C31_l *
-                        cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
+                        cos(-sungeom->timeAngle - sunSlopeGeom->longit_l +
+                            timeOffset) +
                     sunSlopeGeom->lum_C33_l; /* Jenco */
             }
         }
@@ -404,7 +412,7 @@ double lumcline2(struct SunGeometryConstDay *sungeom,
            }
          */
         s = sunSlopeGeom->lum_C31_l *
-                cos(-sungeom->timeAngle - sunSlopeGeom->longit_l) +
+                cos(-sungeom->timeAngle - sunSlopeGeom->longit_l + timeOffset) +
             sunSlopeGeom->lum_C33_l; /* Jenco */
     }
 

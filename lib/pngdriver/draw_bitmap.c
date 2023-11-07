@@ -49,7 +49,7 @@ void PNG_draw_bitmap(int ncols, int nrows, int threshold,
                 unsigned int k = buf[j * ncols + i];
                 unsigned int *p = &png.grid[y * png.width + x];
 
-                if (k > threshold)
+                if (k > (unsigned int)threshold)
                     *p = png.current_color;
             }
         }

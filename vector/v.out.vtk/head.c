@@ -25,7 +25,9 @@ int write_vtk_head(FILE *fp, struct Map_info *Map)
 {
     G_debug(3, _("writeVTKHeader: Writing VTK-Header"));
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS 7 vector map: %s\n", Map->name);
+    /* The header line describes the data. */
+    fprintf(fp, "GRASS GIS %d vector map: %s\n", GRASS_VERSION_MAJOR,
+            Map->name);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET POLYDATA\n"); /*We are using polydata. If Volume data
                                           is supported, uGrid should be used */

@@ -12,7 +12,7 @@ double solve(
 )
 {
     int signa, signb, signc;
-    double fa, fb, fc, c, signaling_nan();
+    double fa, fb, fc, c;
     double dist;
 
     fa = (*f)(a);

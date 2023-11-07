@@ -52,7 +52,7 @@ paramType param; /*params */
 
 /*- prototypes --------------------------------------------------------------*/
 void fatal_error(Database db, char *errorMsg); /*Simple Error message */
-void set_params();                             /*Fill the paramType structure */
+void set_params(void);                         /*Fill the paramType structure */
 void elev_raster_to_g3d(Database db,
                         RASTER3D_Region region); /*Write the raster */
 int open_input_raster_map(const char *name);     /*opens the outputmap */
@@ -158,7 +158,7 @@ void fatal_error(Database db, char *errorMsg)
 /* Set up the arguments **************************************************** */
 
 /* ************************************************************************* */
-void set_params()
+void set_params(void)
 {
 
     param.input = G_define_standard_option(G_OPT_R_INPUTS);
@@ -262,13 +262,13 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
 
             G_debug(
                 4,
-                "Caluclating position in 3d region -> height %g with value %g",
+                "Calculating position in 3d region -> height %g with value %g",
                 height, inval);
 
             /* Calculate if the RASTER3D cell is lower or upper the elevation
              * map and set the value.*/
             if (db.count == 0) {
-                /*Use this method if the 3d raster map was not touched befor */
+                /*Use this method if the 3d raster map was not touched before */
                 for (z = 0; z < depths; z++) {
 
                     /*Upper cells */

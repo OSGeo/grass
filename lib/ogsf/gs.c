@@ -550,7 +550,7 @@ int gs_free_surf(geosurf *fs)
 
    <i>fs</i> has already been taken out of the list
 
-   This function is fairly revealing about how shared datsets work
+   This function is fairly revealing about how shared datasets work
 
    \param fs pointer to geosurf struct
  */
@@ -1405,7 +1405,7 @@ int gs_point_is_masked(geosurf *gs, float *pt)
    \param gs pointer to geosurf struct
    \param p1 from point
    \param p2 to point
-   \param[out] dist distnace
+   \param[out] dist distance
    \param use_exag use exag for calculation
 
    \return 0 on error (points not in region)

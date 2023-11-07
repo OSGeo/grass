@@ -120,7 +120,7 @@ void main_loop(void)
 {
 
     int i, ii, l, k;
-    int icoub /*, nmult */;
+    /* int icoub, nmult */;
     int iw, iblock, lw;
     int itime, iter1;
 
@@ -141,7 +141,7 @@ void main_loop(void)
     float eff;
 
     nblock = 1;
-    icoub = 0;
+    /* icoub = 0; */
     /* icfl = 0; */
     nstack = 0;
 
@@ -157,7 +157,7 @@ void main_loop(void)
     G_debug(2, " maxwa, nblock %d %d", maxwa, nblock);
 
     for (iblock = 1; iblock <= nblock; iblock++) {
-        ++icoub;
+        /* ++icoub; */
 
         lw = 0;
         walkwe = 0.;
@@ -305,7 +305,7 @@ void main_loop(void)
                         }
 
                         if (zz[k][l] != UNDEF) {
-                            if (infil != NULL) { /* infiltration part */
+                            if (inf[k][l] != UNDEF) { /* infiltration part */
                                 if (inf[k][l] - si[k][l] > 0.) {
 
                                     decr = pow(

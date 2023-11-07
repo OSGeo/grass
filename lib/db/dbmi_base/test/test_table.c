@@ -26,11 +26,11 @@
 
 /* prototypes */
 static int test_table(void);
-static dbColumn *create_column(const char *name, const char *desctiption,
+static dbColumn *create_column(const char *name, const char *description,
                                int sqltype);
 
 /* ************************************************************************* */
-/* Performe the table unit tests  ****************************************** */
+/* Perform the table unit tests  ****************************************** */
 /* ************************************************************************* */
 int unit_test_table(void)
 {
@@ -164,7 +164,7 @@ int test_table(void)
 /* *************************************************************** */
 /* Simple table creation ***************************************** */
 /* *************************************************************** */
-dbColumn *create_column(const char *name, const char *desctiption, int sqltype)
+dbColumn *create_column(const char *name, const char *description, int sqltype)
 {
     dbColumn *column = (dbColumn *)db_calloc(sizeof(dbColumn), 1);
 
@@ -174,7 +174,7 @@ dbColumn *create_column(const char *name, const char *desctiption, int sqltype)
     db_set_value_double(&column->defaultValue, 0.5);
     db_set_value_double(&column->value, 10.5);
 
-    db_set_column_description(column, desctiption);
+    db_set_column_description(column, description);
     db_set_column_host_type(column, 1);
     db_set_column_length(column, 8);
     db_set_column_name(column, name);

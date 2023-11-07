@@ -14,7 +14,6 @@ import datetime
 import xml.sax.saxutils as saxutils
 import xml.etree.ElementTree as et
 import subprocess
-import sys
 import collections
 import re
 from collections.abc import Iterable
@@ -23,10 +22,7 @@ from .utils import ensure_dir
 from .checkers import text_to_keyvalue
 
 
-if sys.version_info[0] == 2:
-    from StringIO import StringIO
-else:
-    from io import StringIO
+from io import StringIO
 
 
 # TODO: change text_to_keyvalue to same sep as here
@@ -234,7 +230,7 @@ def get_svn_info():
 
 
 def years_ago(date, years):
-    # dateutil relative delte would be better but this is more portable
+    # dateutil relative date would be better but this is more portable
     return date - datetime.timedelta(weeks=years * 52)
 
 
@@ -335,7 +331,7 @@ class GrassTestFilesMultiReporter(object):
     def start(self, results_dir):
         # TODO: no directory cleaning (self.clean_before)? now cleaned by caller
         # TODO: perhaps only those whoe need it should do it (even multiple times)
-        # and there is also the delet problem
+        # and there is also the delete problem
         ensure_dir(os.path.abspath(results_dir))
         for reporter in self.reporters:
             try:
@@ -557,7 +553,6 @@ def success_to_html_percent(total, successes):
 
 
 class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
-
     unknown_number = UNKNOWN_NUMBER_HTML
 
     def __init__(self, file_anonymizer, main_page_name="index.html"):
@@ -751,7 +746,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         )
 
         # TODO: include optionally hyper link to test suite
-        # TODO: file_path is reconstucted in a naive way
+        # TODO: file_path is reconstructed in a naive way
         # file_path should be stored in the module/test file object and just used here
         summary_section = (
             "<table><tbody>"

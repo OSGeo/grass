@@ -63,7 +63,8 @@ export ARCH=x86_64-w64-mingw32
     --with-opengl=windows \
     --with-bzlib \
     --with-liblas=${SRC}/mswindows/osgeo4w/liblas-config \
-    --with-netcdf=${OSGEO4W_ROOT_MSYS}/bin/nc-config
+    --with-netcdf=${OSGEO4W_ROOT_MSYS}/bin/nc-config \
+    --without-pdal
 
 make
 

@@ -32,7 +32,7 @@ the small (basic) version of GRASS GIS sample Location for North Carolina
 Basic example
 -------------
 
-If you are writing a test of a GRASS module, 
+If you are writing a test of a GRASS module,
 create a Python script with the content derived from the example below.
 When using existing existing maps, suppose you are in North Carolina SPM
 GRASS sample location.
@@ -137,7 +137,7 @@ test case
     test case class.
 
     From another point of view, one test case class contains all tests
-    which require the same preparation and cleanup steps. 
+    which require the same preparation and cleanup steps.
     In other words, a *test case* class contains all tests which are
     using the same *test fixture*.
 
@@ -158,7 +158,7 @@ test suite
     The term *test suite* may also refer to ``TestSuite`` class
     which is part of Python `unittest`_ test invocation mechanism
     used by `gunittest` internally.
-    
+
     More generally, a *test suite* is a group of test cases or any tests
     (test methods, test cases and other test suites) in one or more files.
 
@@ -167,14 +167,14 @@ test file
     It does not set up any special environment and runs where it was invoked.
     The testing framework does not rely on the file to end in a standard
     way which means that if one file ends with segmentation fault
-    the testing framework can continue in testing of other test files. 
+    the testing framework can continue in testing of other test files.
     Test files are central part `gunittest` system and are also the biggest
     difference from Python `unittest`_. Test file name should be unique
     but does not have to contain all parent directory names, for example
     it can consist from a simplified name of a module plus a word or two
     describing which functionality is tested. The name should not contain
     dots (except for the ``.py`` suffix).
-    
+
     Alternatively, a test file could be called *test script* or
     *test module* (both in Python and GRASS sense) but note that
     none of these is used.
@@ -197,7 +197,7 @@ test fixture (test set up and tear down)
     class methods (in Python terminology) and should be defined using
     ``@classmethod`` decorator and with ``cls`` as first argument. These
     methods are executed once for the whole class while the methods
-    without ``Class`` are executed for each test method. 
+    without ``Class`` are executed for each test method.
 
     In GRASS GIS, the preparation may, but does not have to, contain imports
     of maps, using temporary region, setting computational region,
@@ -438,7 +438,7 @@ GRASS module (i.e., using ``G_parser``). The dedicated program can
 provide more direct interface to C and C++ functions used by
 a GRASS module then the module and can also serve for doing benchmarks
 which are not part of the testing.
-This can approach can be applied to both 
+This can approach can be applied to both
 
 See the example in ``lib/raster3d`` GRASS source code directory
 to create a proper Makefiles. A ``main()`` function should be written

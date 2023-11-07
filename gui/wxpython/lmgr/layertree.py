@@ -45,6 +45,7 @@ from core.gcmd import GWarning, GError, RunCommand
 from icons.icon import MetaIcon
 from gui_core.widgets import MapValidator
 from gui_core.wrap import Menu, GenBitmapButton, TextCtrl, NewId
+from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
 
 
 TREE_ITEM_HEIGHT = 25
@@ -105,7 +106,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         title=None,
         **kwargs,
     ):
-
         if "style" in kwargs:
             ctstyle |= kwargs["style"]
             del kwargs["style"]
@@ -153,7 +153,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self._setGradient()
 
         # init associated map display
-        self.mapdisplay = createNewMapDisplay(layertree=self)
+        # create instance of Map Display interface
+        self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(giface, self)
+        self.mapdisplay = createNewMapDisplay(self._gifaceForDisplay, layertree=self)
 
         self.root = self.AddRoot(_("Map Layers"))
         self.SetPyData(self.root, (None, None))
@@ -314,7 +316,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         return array
 
     def GetMap(self):
-        """Get map instace"""
+        """Get map instance"""
         return self.Map
 
     def GetMapDisplay(self):
@@ -353,9 +355,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Only re-order and re-render a composite map image from GRASS during
         idle time instead of multiple times during layer changing.
         """
-        # no need to check for digitizer since it is handled internaly
+        # no need to check for digitizer since it is handled internally
         # no need to distinguish 2D and 3D since the interface is the same
-        # remove this comment when it is onl enough
+        # remove this comment when it is only enough
         if self.rerender:
             # restart rerender value here before wx.Yield
             # can cause another idle event
@@ -1087,7 +1089,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             )
             return
 
-        # lazy import to reduce dependecies and startup
+        # lazy import to reduce dependencies and startup
         from wxplot.histogram import HistogramPlotFrame
 
         win = HistogramPlotFrame(
@@ -1249,7 +1251,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             vector/volume
         """
         if not UserSettings.Get(
-            group="general",
+            group="appearance",
             key="singleWindow",
             subkey="enabled",
         ):
@@ -1693,7 +1695,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # here was some dead code related to layer and nviz
         # however, in condition was rerender = False
-        # but rerender is alway True
+        # but rerender is always True
         # (here no change and also in UpdateListOfLayers and GetListOfLayers)
         # You can safely remove this comment after some testing.
 
@@ -1702,7 +1704,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnLayerChecking(self, event):
         """Layer checkbox is being checked.
 
-        Continue only if mouse is above checkbox or layer was checked programatically.
+        Continue only if mouse is above checkbox or layer was checked programmatically.
         """
         if self.hitCheckbox or self.forceCheck:
             self.forceCheck = False

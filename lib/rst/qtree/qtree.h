@@ -34,12 +34,12 @@
  * a class or a virtual table of functions/methods for a class.
  */
 struct multfunc {
-    int (*compare)();
-    struct quaddata **(*divide_data)();
-    int (*add_data)();
-    int (*intersect)();
-    int (*division_check)();
-    int (*get_points)();
+    int (*compare)(struct triple *, struct quaddata *);
+    struct quaddata **(*divide_data)(struct quaddata *, int, double);
+    int (*add_data)(struct triple *, struct quaddata *, double);
+    int (*intersect)(struct quaddata *, struct quaddata *);
+    int (*division_check)(struct quaddata *, int);
+    int (*get_points)(struct quaddata *, struct quaddata *, int);
 };
 
 struct tree_info {

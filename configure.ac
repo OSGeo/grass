@@ -307,6 +307,7 @@ LOC_ARG_WITH(openmp, OpenMP, no)
 LOC_ARG_WITH(opencl, OpenCL, no)
 LOC_ARG_WITH(bzlib, BZIP2, no)
 LOC_ARG_WITH(zstd, Zstandard)
+LOC_ARG_WITH(pdal, PDAL)
 
 AC_ARG_WITH(libpng,
 [  --with-libpng[=path/libpng-config]
@@ -323,12 +324,6 @@ AC_ARG_WITH(liblas,
                           enable libLAS support (liblas-config with path,
                           e.g. '--with-liblas=/usr/local/bin/liblas-config',
                           default: no)],, with_liblas="no")
-
-AC_ARG_WITH(pdal,
-[  --with-pdal[=path/pdal-config]
-                          enable PDAL support (pdal-config with path,
-                          e.g. '--with-pdal=/usr/local/bin/pdal-config',
-                          default: no)],, with_pdal="no")
 
 AC_ARG_WITH(netcdf,
 [  --with-netcdf[=path/nc-config]
@@ -1042,35 +1037,26 @@ AC_LANG_PUSH(C++)
 PDAL_LIBS=
 PDAL_CPPFLAGS=
 USE_PDAL=
-
-if test "`basename xx/$with_pdal`" = "pdal-config" ; then
-  PDAL_CONFIG="$with_pdal"
-fi
+pdal="pdal"
 
 if test "$with_pdal" = "no" ; then
   AC_MSG_RESULT(no)
 else
   AC_MSG_RESULT(yes)
-  AC_PATH_PROG(PDAL_CONFIG, pdal-config, no)
 
-  if test "$PDAL_CONFIG" = "no" ; then
-    AC_MSG_ERROR([*** could not find pdal-config])
+  if test -s "${PKG_CONFIG} --exists ${pdal}" ; then
+    AC_MSG_ERROR([*** Unable to locate PDAL package.])
   fi
 
-  if test "$PDAL_CONFIG" != "" ; then
-    PDAL_LIBS=`"$PDAL_CONFIG" --libs`
-    PDAL_CPPFLAGS=`"$PDAL_CONFIG" --cxxflags`
-    PDAL_INC=`"$PDAL_CONFIG" --includes`
-    USE_PDAL=1
-  fi
+  PDAL_LIBS=`${PKG_CONFIG} --libs "${pdal}"`
+  PDAL_INC=`${PKG_CONFIG} --cflags "${pdal}"`
+  USE_PDAL=1
 
   PDAL=
   ac_save_libs="$LIBS"
   ac_save_cflags="$CFLAGS"
-  ac_save_cppflags="$CPPFLAGS"
   LIBS="$LIBS $PDAL_LIBS"
   CFLAGS="$CFLAGS $PDAL_CFLAGS"
-  CPPFLAGS="$CPPFLAGS $PDAL_CPPFLAGS $PDAL_INC"
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
   class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],[],[
@@ -1082,9 +1068,8 @@ else
   ])
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
-  CPPFLAGS=${ac_save_cppflags}
 
-  AC_DEFINE(HAVE_PDAL, 1, [define if PDAL exists])
+  AC_DEFINE(HAVE_PDAL, 1, [Define to 1 if PDAL is to be used.])
 fi
 
 AC_SUBST(PDAL_LIBS)
@@ -1892,59 +1877,43 @@ AC_SUBST(USE_PTHREAD)
 
 LOC_CHECK_USE(openmp,OpenMP,USE_OPENMP)
 
-OMPINCPATH=
-OMPLIBPATH=
-OMPLIB=
-OMPCFLAGS=
+if test "$enable_openmp" != no; then
 
-if test -n "$USE_OPENMP"; then
+if test -n "${USE_OPENMP}"; then
 
-# With OpenMP includes directory
+OPENMP_INCPATH=
+OPENMP_LIBPATH=
+OPENMP_LIB=
+OPENMP_CFLAGS=
 
-LOC_CHECK_INC_PATH(openmp,OpenMP,OMPINCPATH)
+LOC_CHECK_INC_PATH(openmp,OpenMP,OPENMP_INCPATH)
+LOC_CHECK_LIB_PATH(openmp,OpenMP,OPENMP_LIBPATH)
+LOC_CHECK_INCLUDES(omp.h,OpenMP,$OPENMP_INCPATH)
 
-LOC_CHECK_INCLUDES(omp.h,OpenMP,$OMPINCPATH)
+LOC_CHECK_LIBS(omp,omp_get_num_threads,OpenMP,$OPENMP_LIBPATH,OPENMP_LIB,,,[
+LOC_CHECK_LIBS(gomp,GOMP_parallel_start,OpenMP,$OPENMP_LIBPATH,OPENMP_LIB,,,)])
 
-# With OpenMP library directory
-# GCC et al.: -lgomp
-# Solaris cc: -lmtsk
-# AIX xlc: -lxlsmp
-# SGI IRIX 6.5 MIPSpro C/C++: -lmp
+loc_save_cflags="$CFLAGS"
+CFLAGS="${CFLAGS} ${OPENMP_INCPATH} ${OPENMP_LIBPATH} ${OPENMP_LIB}"
+LOC_OPENMP
+CFLAGS="${loc_save_cflags}"
 
-LOC_CHECK_LIB_PATH(openmp,OpenMP,OMPLIBPATH)
+AC_SUBST(OPENMP_INCPATH)
+AC_SUBST(OPENMP_LIBPATH)
+AC_SUBST(OPENMP_LIB)
+AC_SUBST(OPENMP_CFLAGS)
 
-LOC_CHECK_FUNC(GOMP_parallel_start,OpenMP functions,OMPLIB,,,,,[
-LOC_CHECK_LIBS(gomp,GOMP_parallel_start,OpenMP,$OMPLIBPATH,OMPLIB,,,)
-])
+fi # USE_OPENMP
 
-# compiler dependent
-#if test ${CC} = "gcc" ; then
-if test x$GCC = xyes ; then
-	# GNU C compiler (>= 4.2.1)
-	OMPCFLAGS=-fopenmp
-elif test ${CC} = "icc" ; then
-	# Intel compiler
-	OMPCFLAGS=-openmp
-elif test ${CC} = "opencc" ; then
-	# AMD's x86 Open64 compiler
-	OMPCFLAGS=-mp
-elif test ${CC} = "pgcc" ; then
-	# Portland Group's compiler
-	OMPCFLAGS=-mp
-# ... anybody else?
+else # enable_openmp
+
+if test -n "${USE_OPENMP}"; then
+LOC_MSG(OpenMP explicitly disabled with --disable-openmp.)
 fi
+USE_OPENMP=
 
-# try to build a test program with "$CC $OMPCLFAGS" to confirm it works
-#...how?
-#echo "int main() {return 0;}" > test.c
-#$CC $OMPCLFAGS test.c -o test
+fi  # enable_openmp
 
-fi # $USE_OPENMP
-
-AC_SUBST(OMPINCPATH)
-AC_SUBST(OMPLIBPATH)
-AC_SUBST(OMPLIB)
-AC_SUBST(OMPCFLAGS)
 AC_SUBST(USE_OPENMP)
 
 # Done checking OpenMP

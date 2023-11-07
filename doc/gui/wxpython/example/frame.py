@@ -345,7 +345,7 @@ class ExampleMapPanel(SingleMapPanel):
         return gcore.parse_key_val(res, val_type=float)
 
     def UpdateStatistics(self):
-        """!Upadate statistic information.
+        """!Update statistic information.
 
         Called after changing raster map.
         """
@@ -357,7 +357,6 @@ class ExampleMapDisplay(FrameMixin, ExampleMapPanel):
     """Map display for wrapping map panel with frame methods"""
 
     def __init__(self, parent, giface, **kwargs):
-
         # init map panel
         ExampleMapPanel.__init__(
             self,

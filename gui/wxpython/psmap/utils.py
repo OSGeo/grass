@@ -374,7 +374,7 @@ def GetMapBounds(filename, env, portrait=True):
     """Run ps.map -b to get information about map bounding box
 
     :param filename: psmap input file
-    :param env: enironment with GRASS_REGION defined
+    :param env: environment with GRASS_REGION defined
     :param portrait: page orientation"""
     orient = ""
     if not portrait:

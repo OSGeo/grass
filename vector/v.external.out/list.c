@@ -65,7 +65,7 @@ char **format_list(int *count, size_t *len)
     return list;
 }
 
-char *format_options()
+char *format_options(void)
 {
     int i, count;
     char **list, *ret;

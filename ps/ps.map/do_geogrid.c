@@ -37,7 +37,7 @@ int do_geogrid(void)
     double east, west, north, south;
     double e1, e2, n1, n2;
     double lat, lon;
-    int j, ll;
+    int ll;
     double grid;
 
     if (PS.geogrid <= 0)
@@ -77,7 +77,7 @@ int do_geogrid(void)
     /* Lines of Latitude */
     g = floor(north / grid) * grid;
     e1 = east;
-    for (j = 0; g >= south; j++, g -= grid) {
+    for (; g >= south; g -= grid) {
         if (g == north || g == south)
             continue;
         for (ll = 0; ll < SEGS; ll++) {
@@ -106,7 +106,7 @@ int do_geogrid(void)
     /* Lines of Longitude */
     g = floor(east / grid) * grid;
     n1 = north;
-    for (j = 0; g > west; j++, g -= grid) {
+    for (; g > west; g -= grid) {
         if (g == east || g == west)
             continue;
         for (ll = 0; ll < SEGS; ll++) {

@@ -30,8 +30,8 @@ univar_stat *create_univar_stat_struct(int map_type, int n_perc)
     for (i = 0; i < n_zones; i++) {
         stats[i].sum = 0.0;
         stats[i].sumsq = 0.0;
-        stats[i].min = 0.0 / 0.0; /* set to nan as default */
-        stats[i].max = 0.0 / 0.0; /* set to nan as default */
+        stats[i].min = NAN;
+        stats[i].max = NAN;
         stats[i].n_perc = n_perc;
         if (n_perc > 0)
             stats[i].perc = (double *)G_malloc(n_perc * sizeof(double));
@@ -116,6 +116,10 @@ int print_stats(univar_stat *stats)
         unsigned int i;
         size_t qpos_25, qpos_75, *qpos_perc;
 
+        /* stats collected for this zone? */
+        if (stats[z].size == 0)
+            continue;
+
         /* all these calculations get promoted to doubles, so any DIV0 becomes
          * nan */
         mean = stats[z].sum / stats[z].n;
@@ -127,7 +131,7 @@ int print_stats(univar_stat *stats)
         var_coef = (stdev / mean) * 100.; /* perhaps stdev/fabs(mean) ? */
 
         if (stats[z].n == 0)
-            stats[z].sum = stats[z].sum_abs = 0.0 / 0.0;
+            stats[z].sum = stats[z].sum_abs = NAN;
         sprintf(sum_str, "%.15g", stats[z].sum);
         G_trim_decimal(sum_str);
 
@@ -154,7 +158,7 @@ int print_stats(univar_stat *stats)
             }
             fprintf(stdout, "n=%lu\n", stats[z].n);
             fprintf(stdout, "null_cells=%lu\n", stats[z].size - stats[z].n);
-            fprintf(stdout, "cells=%lu\n", stats->size);
+            fprintf(stdout, "cells=%lu\n", stats[z].size);
             fprintf(stdout, "min=%.15g\n", stats[z].min);
             fprintf(stdout, "max=%.15g\n", stats[z].max);
             fprintf(stdout, "range=%.15g\n", stats[z].max - stats[z].min);
@@ -186,9 +190,9 @@ int print_stats(univar_stat *stats)
             quartile_perc = (double *)G_calloc(stats[z].n_perc, sizeof(double));
 
             if (stats[z].n == 0) {
-                quartile_25 = median = quartile_75 = 0.0 / 0.0;
+                quartile_25 = median = quartile_75 = NAN;
                 for (i = 0; i < stats[z].n_perc; i++)
-                    quartile_perc[i] = 0.0 / 0.0;
+                    quartile_perc[i] = NAN;
             }
             else {
                 for (i = 0; i < stats[z].n_perc; i++) {
@@ -376,7 +380,7 @@ int print_stats_table(univar_stat *stats)
         char sum_str[100];
         double mean, variance, stdev, var_coef;
 
-        /* for extendet stats */
+        /* for extended stats */
         double quartile_25 = 0.0, quartile_75 = 0.0, *quartile_perc;
         double median = 0.0;
         int qpos_25, qpos_75, *qpos_perc;
@@ -398,7 +402,7 @@ int print_stats_table(univar_stat *stats)
         var_coef = (stdev / mean) * 100.; /* perhaps stdev/fabs(mean) ? */
 
         if (stats[z].n == 0)
-            stats[z].sum = stats[z].sum_abs = 0.0 / 0.0;
+            stats[z].sum = stats[z].sum_abs = NAN;
 
         if (zone_info.n_zones) {
             int z_cat = z + zone_info.min;
@@ -446,9 +450,9 @@ int print_stats_table(univar_stat *stats)
             quartile_perc = (double *)G_calloc(stats[z].n_perc, sizeof(double));
 
             if (stats[z].n == 0) {
-                quartile_25 = median = quartile_75 = 0.0 / 0.0;
+                quartile_25 = median = quartile_75 = NAN;
                 for (i = 0; i < stats[z].n_perc; i++)
-                    quartile_perc[i] = 0.0 / 0.0;
+                    quartile_perc[i] = NAN;
             }
             else {
                 for (i = 0; i < stats[z].n_perc; i++) {

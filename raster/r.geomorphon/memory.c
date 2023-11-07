@@ -53,7 +53,7 @@ int open_map(MAPS *rast)
     if (window.ew_res + 1e-10 < cellhd.ew_res ||
         window.ns_res + 1e-10 < cellhd.ns_res)
         G_warning(
-            _("Region resolution shoudn't be lesser than map %s resolution. "
+            _("Region resolution shouldn't be lesser than map %s resolution. "
               "Run g.region raster=%s to set proper resolution"),
             rast->elevname, rast->elevname);
 

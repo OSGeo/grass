@@ -137,7 +137,7 @@ public:
     {
         return (x.k == y.k);
     }
-    friend merge_key operator+(const merge_key &x, const merge_key &y)
+    friend merge_key operator+(const merge_key &x, const merge_key &y UNUSED)
     {
         assert(0);
         return x;
@@ -154,7 +154,7 @@ public:
  external_memory buffer
 
  Each level-i buffer can store up to <arity>^i * <basesize> items,
- where tipically <arity> is \theta(m) and <basesize> is \theta(M);
+ where typically <arity> is \theta(m) and <basesize> is \theta(M);
  therefore log_m{n/m} buffers are needed to store N items, one
  buffer for each level 1..log_m{n/m}. All buffers must have same
  values or <arity> and <basesize>.
@@ -202,7 +202,7 @@ private:
 
     // the buffers can be depleted to fill the internal pq;
     // keep an array which counts, for each stream, how many elements
-    // have been deleted (implicitely from the beginning of stream)
+    // have been deleted (implicitly from the beginning of stream)
     long *deleted;
 
     // nb of items in each substream; this can be found out by calling
@@ -411,31 +411,32 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
     : arity(ar), level(i), basesize(bs)
 {
 
-    assert((level >= 1) && (basesize >= 0));
+    assert(level >= 1);
 
     char str[100];
-    sprintf(str, "em_buffer: allocate %d AMI_STREAM*, total %ld\n", arity,
-            (long)(arity * sizeof(AMI_STREAM<T> *)));
+    snprintf(str, sizeof(str),
+             "em_buffer: allocate %d AMI_STREAM*, total %ld\n", arity,
+             (long)(arity * sizeof(AMI_STREAM<T> *)));
     MEMORY_LOG(str);
     // allocate STREAM* array
     data = new AMI_STREAM<T> *[arity];
 
     // allocate deleted array
-    sprintf(str, "em_buffer: allocate deleted array: %ld\n",
-            (long)(arity * sizeof(long)));
+    snprintf(str, sizeof(str), "em_buffer: allocate deleted array: %ld\n",
+             (long)(arity * sizeof(long)));
     MEMORY_LOG(str);
     deleted = new long[arity];
 
     // allocate streamsize array
-    sprintf(str, "em_buffer: allocate streamsize array: %ld\n",
-            (long)(arity * sizeof(long)));
+    snprintf(str, sizeof(str), "em_buffer: allocate streamsize array: %ld\n",
+             (long)(arity * sizeof(long)));
     MEMORY_LOG(str);
     streamsize = new unsigned long[arity];
 
 #ifdef SAVE_MEMORY
     // allocate name array
-    sprintf(str, "em_buffer: allocate name array: %ld\n",
-            (long)(arity * sizeof(char *)));
+    snprintf(str, sizeof(str), "em_buffer: allocate name array: %ld\n",
+             (long)(arity * sizeof(char *)));
     MEMORY_LOG(str);
     name = new char *[arity];
     assert(name);
@@ -532,7 +533,7 @@ em_buffer<T, Key>::~em_buffer()
 // memory (by a previous get_stream call, for instance) in order to
 // find its length
 template <class T, class Key>
-void em_buffer<T, Key>::check_name(unsigned int i)
+void em_buffer<T, Key>::check_name(unsigned int i UNUSED)
 {
 
 #ifdef EMBUF_CHECK_NAME
@@ -563,7 +564,7 @@ template <class T, class Key>
 AMI_STREAM<T> *em_buffer<T, Key>::get_stream(unsigned int i)
 {
 
-    assert(i >= 0 && i < index);
+    assert(i < index);
 
 #ifdef SAVE_MEMORY
     MY_LOG_DEBUG_ID("em_buffer::get_stream");
@@ -622,7 +623,7 @@ template <class T, class Key>
 void em_buffer<T, Key>::put_stream(unsigned int i)
 {
 
-    assert(i >= 0 && i < index);
+    assert(i < index);
 
 #ifdef SAVE_MEMORY
     MY_LOG_DEBUG_ID("em_buffer::put_stream");
@@ -885,7 +886,7 @@ AMI_STREAM<T> *em_buffer<T, Key>::sort()
     MEMORY_LOG("em_buffer::sort: allocate new AMI_STREAM\n");
 
     AMI_STREAM<T> *sorted_stream =
-        new AMI_STREAM<T>(); /* will be deleteed in insert() */
+        new AMI_STREAM<T>(); /* will be deleted in insert() */
     assert(sorted_stream);
 
     // merge the streams into sorted stream
@@ -937,9 +938,9 @@ AMI_err em_buffer<T, Key>::substream_merge(AMI_STREAM<T> **instreams,
     AMI_err ami_err;
 
     char str[200];
-    sprintf(str,
-            "em_buffer::substream_merge: allocate keys array, total %ldB\n",
-            (long)((long)arity * sizeof(merge_key<Key>)));
+    snprintf(str, sizeof(str),
+             "em_buffer::substream_merge: allocate keys array, total %ldB\n",
+             (long)((long)arity * sizeof(merge_key<Key>)));
     MEMORY_LOG(str);
 
     // keys array is initialized with smallest key from each stream (only
@@ -1018,7 +1019,7 @@ AMI_err em_buffer<T, Key>::substream_merge(AMI_STREAM<T> **instreams,
     // delete [] keys;
     //!!! KEYS BELONGS NOW TO MERGEHEAP, AND WILL BE DELETED BY THE
     // DESTRUCTOR OF MERGEHEAP (CALLED AUUTOMATICALLY ON FUNCTION EXIT) IF
-    // I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY DESTRUCTOR,
+    // I DELETE KEYS EXPLICITLY, THEY WILL BE DELETED AGAIN BY DESTRUCTOR,
     // AND EVERYTHING SCREWS UP..
 
     return AMI_ERROR_NO_ERROR;
@@ -1073,7 +1074,7 @@ long em_buffer<T, Key>::insert(T *a, long n)
    stream.
 
    stream is assume stream is sorted; bos = how many elements must be
-   skipped (were deleted) from the beginning fo stream;
+   skipped (were deleted) from the beginning of stream;
 
    return the number of items actually inserted */
 template <class T, class Key>

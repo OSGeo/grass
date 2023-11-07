@@ -97,7 +97,9 @@ def main():
                     for r in f.readlines():
                         map, mapset = r.split("@")
                         map_basedir = os.path.sep.join(
-                            os.path.normpath(map_file["file"],).split(
+                            os.path.normpath(
+                                map_file["file"],
+                            ).split(
                                 os.path.sep
                             )[:-2],
                         )

@@ -19,6 +19,7 @@
    \author Martin Landa <landa.martin gmail.com>
  */
 
+#include <inttypes.h>
 #include <string.h>
 
 #include <grass/vector.h>
@@ -79,6 +80,9 @@ static dbDriver *open_db(struct Format_info_pg *);
 
 static struct line_pnts *Points;
 
+#define NOPG_UNUSED
+#else
+#define NOPG_UNUSED UNUSED
 #endif
 
 /*!
@@ -102,9 +106,9 @@ static struct line_pnts *Points;
    \return feature offset into file
    \return -1 on error
  */
-off_t V1_write_line_pg(struct Map_info *Map, int type,
-                       const struct line_pnts *points,
-                       const struct line_cats *cats)
+off_t V1_write_line_pg(struct Map_info *Map NOPG_UNUSED, int type NOPG_UNUSED,
+                       const struct line_pnts *points NOPG_UNUSED,
+                       const struct line_cats *cats NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     struct Format_info_pg *pg_info;
@@ -145,9 +149,9 @@ off_t V1_write_line_pg(struct Map_info *Map, int type,
    \return feature offset into file
    \return -1 on error
  */
-off_t V2_write_line_pg(struct Map_info *Map, int type,
-                       const struct line_pnts *points,
-                       const struct line_cats *cats)
+off_t V2_write_line_pg(struct Map_info *Map NOPG_UNUSED, int type NOPG_UNUSED,
+                       const struct line_pnts *points NOPG_UNUSED,
+                       const struct line_cats *cats NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     struct Format_info_pg *pg_info;
@@ -183,12 +187,11 @@ off_t V2_write_line_pg(struct Map_info *Map, int type,
    \return feature offset (rewritten feature)
    \return -1 on error
  */
-off_t V1_rewrite_line_pg(struct Map_info *Map, off_t offset, int type,
-                         const struct line_pnts *points,
-                         const struct line_cats *cats)
+off_t V1_rewrite_line_pg(struct Map_info *Map NOPG_UNUSED, off_t offset,
+                         int type, const struct line_pnts *points NOPG_UNUSED,
+                         const struct line_cats *cats NOPG_UNUSED)
 {
-    G_debug(3, "V1_rewrite_line_pg(): type=%d offset=%" PRI_OFF_T, type,
-            offset);
+    G_debug(3, "V1_rewrite_line_pg(): type=%d offset=%" PRId64, type, offset);
 #ifdef HAVE_POSTGRES
     if (type != V1_read_line_pg(Map, NULL, NULL, offset)) {
         G_warning(_("Unable to rewrite feature (incompatible feature types)"));
@@ -218,14 +221,14 @@ off_t V1_rewrite_line_pg(struct Map_info *Map, off_t offset, int type,
    \param line feature id
    \param type feature type  (GV_POINT, GV_LINE, ...)
    \param points feature geometry
-   \param cats feature categories
+   \param cats feature categories (unused)
 
    \return offset where feature was rewritten
    \return -1 on error
  */
-off_t V2_rewrite_line_pg(struct Map_info *Map, off_t line, int type,
-                         const struct line_pnts *points,
-                         const struct line_cats *cats)
+off_t V2_rewrite_line_pg(struct Map_info *Map NOPG_UNUSED, off_t line, int type,
+                         const struct line_pnts *points NOPG_UNUSED,
+                         const struct line_cats *cats UNUSED)
 {
     G_debug(3, "V2_rewrite_line_pg(): line=%d type=%d", (int)line, type);
 #ifdef HAVE_POSTGRES
@@ -288,7 +291,7 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, off_t line, int type,
     geom_data = line_to_wkb(pg_info, &points, 1, type, Map->head.with_z);
     G_asprintf(&stmt,
                "UPDATE \"%s\".\"%s\" SET geom = '%s'::GEOMETRY WHERE %s_id = "
-               "%" PRI_OFF_T,
+               "%" PRId64,
                schema_name, table_name, geom_data, keycolumn, line);
     G_free(geom_data);
 
@@ -318,7 +321,8 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, off_t line, int type,
    \return  0 on success
    \return -1 on error
  */
-int V1_delete_line_pg(struct Map_info *Map, off_t offset)
+int V1_delete_line_pg(struct Map_info *Map NOPG_UNUSED,
+                      off_t offset NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     long fid;
@@ -334,7 +338,7 @@ int V1_delete_line_pg(struct Map_info *Map, off_t offset)
     }
 
     if (offset >= pg_info->offset.array_num) {
-        G_warning(_("Invalid offset (%" PRI_OFF_T ")"), offset);
+        G_warning(_("Invalid offset (%" PRId64 ")"), offset);
         return -1;
     }
 
@@ -380,7 +384,7 @@ int V1_delete_line_pg(struct Map_info *Map, off_t offset)
    \return 0 on success
    \return -1 on error
  */
-int V2_delete_line_pg(struct Map_info *Map, off_t line)
+int V2_delete_line_pg(struct Map_info *Map NOPG_UNUSED, off_t line NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     int ret;
@@ -1832,7 +1836,7 @@ char *line_to_wkb(struct Format_info_pg *pg_info,
     nsize = nbytes * 2 + 8 + 1;
     text_data = text_data_p = (char *)G_malloc(nsize);
 
-    /* convert the 1st byte, which is the endianess flag, to hex */
+    /* convert the 1st byte, which is the endianness flag, to hex */
     hex_data = binary_to_hex(1, wkb_data);
     strcpy(text_data_p, hex_data);
     G_free(hex_data);
@@ -1845,7 +1849,7 @@ char *line_to_wkb(struct Format_info_pg *pg_info,
     if (pg_info->srid > 0) {
         unsigned int srs_flag;
 
-        /* change the flag to little endianess */
+        /* change the flag to little endianness */
         srs_flag = LSBWORD32(WKBSRIDFLAG);
         /* apply the flag */
         sf_type = sf_type | srs_flag;
@@ -1861,7 +1865,7 @@ char *line_to_wkb(struct Format_info_pg *pg_info,
     if (pg_info->srid > 0) {
         unsigned int srs_id;
 
-        /* force the srsid to little endianess */
+        /* force the srsid to little endianness */
         srs_id = LSBWORD32(pg_info->srid);
         hex_data = binary_to_hex(sizeof(srs_id), (unsigned char *)&srs_id);
         strcpy(text_data_p, hex_data);
@@ -2659,7 +2663,7 @@ int delete_face(const struct Map_info *Map, int area)
    \brief Update lines (next left and right edges)
 
    - isolated edges
-   next left  edge: -edge 
+   next left  edge: -edge
    next right edge:  edge
 
    - connected edges
@@ -2667,7 +2671,7 @@ int delete_face(const struct Map_info *Map, int area)
    next right edge: next edge or  edge
 
    \param Map pointer to Map_info struct
-   \param line feature id 
+   \param line feature id
 
    \return 0  on success
    \return -1 on error
@@ -2995,7 +2999,7 @@ int set_constraint_to_deferrable(struct Format_info_pg *pg_info,
 
    \param pg_info pointer to Format_info_pg struct
 
-   \return pointer to dbDriver on succes
+   \return pointer to dbDriver on success
    \return NULL on failure
  */
 dbDriver *open_db(struct Format_info_pg *pg_info)

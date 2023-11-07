@@ -47,9 +47,6 @@ void report(struct Parms *parms)
     struct ReportLine *lines;
     int nlines;
 
-    extern void find_minimum_distance();
-    extern char *get_label();
-
     G_get_set_window(&region);
     G_begin_distance_calculations();
 

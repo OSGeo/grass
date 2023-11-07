@@ -2,7 +2,7 @@
 # This is a test to list vecter maps of a space time vecter dataset
 
 # We need to set a specific region in the
-# @preprocess step of this test. 
+# @preprocess step of this test.
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
@@ -23,13 +23,13 @@ db.copy from_table=soil_orig to_table=soils_3
 db.copy from_table=soil_orig to_table=soils_4
 db.copy from_table=soil_orig to_table=soils_5
 db.copy from_table=soil_orig to_table=soils_6
-v.db.addtable map=soils table=soils_2 layer=2 
-v.db.addtable map=soils table=soils_3 layer=3 
-v.db.addtable map=soils table=soils_4 layer=4 
-v.db.addtable map=soils table=soils_5 layer=5 
-v.db.addtable map=soils table=soils_6 layer=6 
+v.db.addtable map=soils table=soils_2 layer=2
+v.db.addtable map=soils table=soils_3 layer=3
+v.db.addtable map=soils table=soils_4 layer=4
+v.db.addtable map=soils table=soils_5 layer=5
+v.db.addtable map=soils table=soils_6 layer=6
 
-n1=`g.tempfile pid=1 -d` 
+n1=`g.tempfile pid=1 -d`
 n2=`g.tempfile pid=2 -d`
 n3=`g.tempfile pid=3 -d`
 n4=`g.tempfile pid=4 -d`

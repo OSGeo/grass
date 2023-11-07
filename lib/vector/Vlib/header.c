@@ -473,11 +473,12 @@ int Vect_set_zone(struct Map_info *Map, int zone)
 /*!
    \brief Get projection zone from map header
 
-   \param Map pointer to Map_info structure
+   \param Map pointer to Map_info structure (unused, returns the zone for
+          the active region)
 
    \return projection zone
  */
-int Vect_get_zone(const struct Map_info *Map)
+int Vect_get_zone(const struct Map_info *Map UNUSED)
 {
     /* return Map->head.plani_zone; */
 

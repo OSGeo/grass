@@ -10,7 +10,7 @@ static void insert_next_point(struct _points *p, double x, double y, int cat);
 
 /* ************************************************************************* */
 
-void create_observation_points()
+void create_observation_points(void)
 {
     int if_log = 0;
     struct Map_info Map;
@@ -68,7 +68,7 @@ void create_observation_points()
             y = pts->y[0];
             cat = cts->cat[0];
 
-            /* Check region bounds befor inserting point */
+            /* Check region bounds before inserting point */
             if (x <= cellhd.east && x >= cellhd.west && y <= cellhd.north &&
                 y >= cellhd.south) {
                 insert_next_point(&points, x, y, cat);

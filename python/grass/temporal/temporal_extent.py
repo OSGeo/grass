@@ -19,7 +19,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 from .base import SQLDatabaseInterface
 
 ###############################################################################
@@ -75,7 +74,6 @@ class TemporalExtent(SQLDatabaseInterface):
     """
 
     def __init__(self, table=None, ident=None, start_time=None, end_time=None):
-
         SQLDatabaseInterface.__init__(self, table, ident)
 
         self.set_id(ident)
@@ -1074,7 +1072,6 @@ class AbsoluteTemporalExtent(TemporalExtent):
     """
 
     def __init__(self, table=None, ident=None, start_time=None, end_time=None):
-
         TemporalExtent.__init__(self, table, ident, start_time, end_time)
 
     def print_info(self):
@@ -1291,7 +1288,6 @@ class RelativeTemporalExtent(TemporalExtent):
     def __init__(
         self, table=None, ident=None, start_time=None, end_time=None, unit=None
     ):
-
         TemporalExtent.__init__(self, table, ident, start_time, end_time)
         self.set_unit(unit)
 

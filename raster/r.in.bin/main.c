@@ -13,6 +13,7 @@
  *
  *****************************************************************************/
 
+#include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -254,7 +255,7 @@ int main(int argc, char *argv[])
     const char *outpre;
     char output[GNAME_MAX];
     const char *title;
-    double null_val = 0.0 / 0.0;
+    double null_val = NAN;
     int is_fp;
     int is_signed;
     int bytes, hbytes;
@@ -602,7 +603,7 @@ int main(int argc, char *argv[])
     expected = (off_t)ncols * nrows * bytes * nbands + hbytes;
 
     if (file_size != expected) {
-        G_warning(_("File Size %" PRI_OFF_T " ... Total Bytes %" PRI_OFF_T),
+        G_warning(_("File Size %" PRId64 " ... Total Bytes %" PRId64),
                   file_size, expected);
         G_fatal_error(_("Bytes do not match file size"));
     }
@@ -642,7 +643,7 @@ int main(int argc, char *argv[])
                         SEEK_SET);
             }
 
-            if (fread(in_buf, bytes, ncols, fp) != ncols)
+            if (fread(in_buf, bytes, ncols, fp) != (size_t)ncols)
                 G_fatal_error(_("Error reading data"));
 
             convert_row(out_buf, in_buf, ncols, is_fp, is_signed, bytes,

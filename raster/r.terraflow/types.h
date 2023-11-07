@@ -85,11 +85,8 @@ protected:
 public:
     static cclabel_type getNewLabel() { return ++label; }
     static cclabel_type getCurrentLabel() { return label; }
-    static const cclabel_type getLabelInit()
-    {
-        return cclabel_type(LABEL_START);
-    }
-    static const cclabel_type getLabelCount() { return label + 1; }
+    static cclabel_type getLabelInit() { return cclabel_type(LABEL_START); }
+    static cclabel_type getLabelCount() { return label + 1; }
     static void setLabelCount(int n) { label = n - 1; }
     static void reset() { label = getLabelInit(); }
 };
