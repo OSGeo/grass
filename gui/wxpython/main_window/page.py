@@ -19,7 +19,7 @@ from grass.pydispatch.signal import Signal
 
 class MainPageBase:
     def __init__(self, dockable):
-        self.notebook = None
+        self._mainnotebook = None
         
         self.canCloseCallback = None
 
@@ -44,11 +44,11 @@ class MainPageBase:
     def _pgnumDict(self):
         """Get dictionary containg page index"""
         return {
-            "mainnotebook": self.notebook.GetPageIndex(self)
+            "mainnotebook": self._mainnotebook.GetPageIndex(self)
         }
 
     def SetUpPage(self, parent, notebook, can_close=None):
-        self.notebook = notebook
+        self._mainnotebook = notebook
 
         def CanClosePage():
             return self._pgnumDict()
