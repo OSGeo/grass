@@ -19,7 +19,7 @@ _Note: Some later steps in this text are to be done by the development coordinat
 Update your remotes and switch to branch:
 
 ```bash
-git fetch --all --prune && git checkout releasebranch_8_4
+git fetch --prune upstream && git checkout releasebranch_8_4
 ```
 
 Confirm that you are on the right branch and have no local changes
@@ -33,7 +33,7 @@ git diff
 git diff --staged
 # Should give no output:
 git log upstream/releasebranch_8_4..HEAD
-# Should give the same as last commits visible on GitHub:
+# There should be no commits which are not visible on GitHub:
 git log --max-count=5
 ```
 
@@ -42,7 +42,7 @@ Above, you confirmed you have no local commits, so this should happen
 without rebasing any local commits, i.e., it should just add the new commits.
 
 ```bash
-git merge upstream/releasebranch_8_4 && git push origin releasebranch_8_4
+git rebase upstream/releasebranch_8_4
 ```
 
 Verify the result:
@@ -50,7 +50,8 @@ Verify the result:
 ```bash
 # Should give no output:
 git log upstream/releasebranch_8_4..HEAD
-# Should give the same as last commits visible on GitHub:
+git log HEAD..upstream/releasebranch_8_4
+# Should give exactly the same as last commits visible on GitHub:
 git log --max-count=5
 ```
 
@@ -423,7 +424,8 @@ Release is done.
 
 ## Improve release description
 
-For final releases only, go to Zenodo.org a get a Markdown badge for the release
+For final releases only, go to [Zenodo](https://doi.org/10.5281/zenodo.5176030)
+and get a Markdown badge for the release
 which Zenodo creates with a DOI for the published release.
 
 For all releases, click the Binder badge to get Binder to build. Use it to test
@@ -432,36 +434,44 @@ if there are any which show well specific features added or updated in the relea
 
 ## Create entries for the new release
 
-### Trac Wiki release page entry
+### Cron jobs
 
-Add entry in <https://trac.osgeo.org/grass/wiki/Release>
-
-### Update Hugo web site and other pages to show the new version
-
-For a (final) release (not release candidate), write announcement and publish it:
-
-- News section, <https://github.com/OSGeo/grass-website/tree/master/content/news>
-
-Increment the GRASS GIS version in
-
-- <https://github.com/OSGeo/grass-website/blob/master/data/grass.json>
-- <https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md>
-
-Update the version in the Wiki page: <https://grasswiki.osgeo.org/wiki/GRASS-Wiki>
-
-Subsequently, verify the software pages:
-
-- Linux: <https://github.com/OSGeo/grass-website/blob/master/content/download/linux.en.md>
-- Windows: <https://github.com/OSGeo/grass-website/blob/master/content/download/windows.en.md>
-- Mac: <https://github.com/OSGeo/grass-website/blob/master/content/download/mac.en.md>
-
-For major and minor releases:
+Only in case of major releases:
 
 - update '[cronjob(s)](https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/)'
   on grass.osgeo.org to next but one release tag for the differences
-- wiki updates, only when new major release:
+
+### Update Hugo web site
+
+Update website only for final releases (not release candidates) in one PR.
+
+Software pages:
+- Linux: https://github.com/OSGeo/grass-website/blob/master/content/download/linux.en.md
+- Windows: https://github.com/OSGeo/grass-website/blob/master/content/download/windows.en.md
+- Mac: https://github.com/OSGeo/grass-website/blob/master/content/download/mac.en.md
+- Releases: https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md
+- Website variables: <https://github.com/OSGeo/grass-website/blob/master/data/grass.json>
+
+Write announcement and publish it:
+- News section, https://github.com/OSGeo/grass-website/tree/master/content/news
+
+### GRASS Wiki
+
+For final releases (not release candidates), update the last version on the main page:
+
+- Wiki: https://grasswiki.osgeo.org/wiki/GRASS-Wiki
+
+- For major release only:
   - {{cmd|xxxx}} macro: <https://grasswiki.osgeo.org/wiki/Template:Cmd>
-  - update last version on main page
+
+### Trac wiki
+
+For all releases:
+
+- Add link to GitHub release page to <https://trac.osgeo.org/grass/wiki/Release>
+
+For major and minor releases:
+
 - Add trac Wiki Macro definitions for manual pages G8X:modulename
   - Edit: <https://trac.osgeo.org/grass/wiki/InterMapTxt>
 
@@ -490,11 +500,6 @@ For new branches and final releases (see additional instructions in the repo):
      copy_addon 840RC1 8.4.0RC1
 ```
 
-### Ubuntu Launchpad notes
-
-- Create milestone and release: <https://launchpad.net/grass/+series>
-- Upload tarball for created release
-
 ### Update grass.osgeo.org
 
 These updates are for final releases only.
@@ -519,21 +524,18 @@ Add release to history page:
 
 ## Tell others about release
 
-- If release candidate (send just a short invitation to test):
-  - <grass-announce@lists.osgeo.org>
-  - <grass-dev@lists.osgeo.org>
+- If release candidate (just a short invitation to test):
+    - <grass-dev@lists.osgeo.org>
+    - <grass-user@lists.osgeo.org>
 
-If final release, send out an announcement (press release) which is a shortened
-version of release desciption and website news item (under `/announces/`).
-Note: Do not use relative links.
+If final release, send out an announcement (press release)
+which is a shortened version of release desciption and website news item.
 
 - Our main mailing lists:
-  - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org>
-    (ask a development coordinator to be added)
-  - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
-  - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
-- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org> (send an email, then it
-  will be approved)
+    - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org> (ask a development coordinator to be added)
+    - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
+    - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
+- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org> (send an email, then it will be approved)
 
 Via web and social media:
 
