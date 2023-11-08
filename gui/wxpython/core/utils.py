@@ -305,7 +305,7 @@ def ListOfMapsets(get="ordered"):
         if get == "accessible":
             return mapsets_accessible
 
-        mapsets_ordered = mapsets_accessible
+        mapsets_ordered = mapsets_accessible.copy()
         for mapset in mapsets_all:
             if mapset not in mapsets_accessible:
                 mapsets_ordered.append(mapset)
