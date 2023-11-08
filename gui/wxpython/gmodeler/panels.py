@@ -44,7 +44,7 @@ from core.gconsole import GConsole, EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE
 from core.debug import Debug
 from core.gcmd import GMessage, GException, GWarning, GError
 from core.settings import UserSettings
-from core.giface import Notification, StandaloneGrassInterface
+from core.giface import Notification
 
 from gui_core.widgets import GNotebook
 from gui_core.goutput import GConsoleWindow
