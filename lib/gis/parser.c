@@ -496,6 +496,13 @@ int G_parser(int argc, char **argv)
             exit(EXIT_SUCCESS);
         }
 
+        /* If first arg is "--md-description" then print out
+         * a Markdown description of the task */
+        if (strcmp(argv[1], "--md-description") == 0) {
+            G__usage_markdown();
+            exit(EXIT_SUCCESS);
+        }
+        
         /* If first arg is "--wps-process-description" then print out
          * the wps process description of the task */
         if (strcmp(argv[1], "--wps-process-description") == 0) {

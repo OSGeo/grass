@@ -53,6 +53,7 @@ extern struct state *st;
 void G__usage_xml(void);
 void G__usage_html(void);
 void G__usage_rest(void);
+void G__usage_markdown(void);
 void G__usage_text(void);
 void G__script(void);
 char *G__json(void);
