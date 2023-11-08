@@ -446,20 +446,23 @@ Only in case of major releases:
 Update website only for final releases (not release candidates) in one PR.
 
 Software pages:
-- Linux: https://github.com/OSGeo/grass-website/blob/master/content/download/linux.en.md
-- Windows: https://github.com/OSGeo/grass-website/blob/master/content/download/windows.en.md
-- Mac: https://github.com/OSGeo/grass-website/blob/master/content/download/mac.en.md
-- Releases: https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md
+
+- Linux: <https://github.com/OSGeo/grass-website/blob/master/content/download/linux.en.md>
+- Windows: <https://github.com/OSGeo/grass-website/blob/master/content/download/windows.en.md>
+- Mac: <https://github.com/OSGeo/grass-website/blob/master/content/download/mac.en.md>
+- Releases: <https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md>
 - Website variables: <https://github.com/OSGeo/grass-website/blob/master/data/grass.json>
 
 Write announcement and publish it:
-- News section, https://github.com/OSGeo/grass-website/tree/master/content/news
+
+- News section: <https://github.com/OSGeo/grass-website/tree/master/content/news>
 
 ### GRASS Wiki
 
-For final releases (not release candidates), update the last version on the main page:
+For final releases (not release candidates), update the last version
+on the main page:
 
-- Wiki: https://grasswiki.osgeo.org/wiki/GRASS-Wiki
+- Wiki: <https://grasswiki.osgeo.org/wiki/GRASS-Wiki>
 
 - For major release only:
   - {{cmd|xxxx}} macro: <https://grasswiki.osgeo.org/wiki/Template:Cmd>
@@ -525,17 +528,19 @@ Add release to history page:
 ## Tell others about release
 
 - If release candidate (just a short invitation to test):
-    - <grass-dev@lists.osgeo.org>
-    - <grass-user@lists.osgeo.org>
+  - <grass-dev@lists.osgeo.org>
+  - <grass-user@lists.osgeo.org>
 
 If final release, send out an announcement (press release)
 which is a shortened version of release desciption and website news item.
 
 - Our main mailing lists:
-    - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org> (ask a development coordinator to be added)
-    - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
-    - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
-- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org> (send an email, then it will be approved)
+  - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org>
+    (ask a development coordinator to be added)
+  - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
+  - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
+- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org>
+  (send an email, then it will be approved)
 
 Via web and social media:
 
