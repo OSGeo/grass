@@ -1,9 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       db.dropdb
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Glynn Clements <glynn gclements.plus.com>, Markus Neteler <neteler itc.it>, Stephan Holl
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Markus Neteler <neteler itc.it>,
+ *               Stephan Holl
  * PURPOSE:      removes an existing database
  * COPYRIGHT:    (C) 2002-2006 by the GRASS Development Team
  *
@@ -18,16 +19,12 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-
-struct
-{
+struct {
     char *driver, *database;
 } parms;
 
-
 /* function prototypes */
 static void parse_command_line(int, char **);
-
 
 int main(int argc, char **argv)
 {
@@ -39,7 +36,7 @@ int main(int argc, char **argv)
 
     driver = db_start_driver(parms.driver);
     if (driver == NULL)
-	G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
+        G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
 
     db_init_handle(&handle);
     db_set_handle(&handle, parms.database, NULL);
@@ -48,7 +45,6 @@ int main(int argc, char **argv)
 
     exit(stat == DB_OK ? EXIT_SUCCESS : EXIT_FAILURE);
 }
-
 
 static void parse_command_line(int argc, char **argv)
 {
@@ -61,7 +57,7 @@ static void parse_command_line(int argc, char **argv)
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
     driver->required = YES;
-    driver->answer = (char *) db_get_default_driver_name();
+    driver->answer = (char *)db_get_default_driver_name();
 
     database = G_define_standard_option(G_OPT_DB_DATABASE);
     database->required = YES;
@@ -74,7 +70,7 @@ static void parse_command_line(int argc, char **argv)
     module->description = _("Removes an existing database.");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     parms.driver = driver->answer;
     parms.database = database->answer;

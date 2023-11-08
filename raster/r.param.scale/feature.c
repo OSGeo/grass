@@ -6,9 +6,9 @@
 
 /***                              feature()                                ***/
 
-/***     Returns a terrain feature based on the 6 quadratic coefficients    ***/
+/***     Returns a terrain feature based on the 6 quadratic coefficients   ***/
 
-/***	 that define a local trend surface. 			    	   ***/
+/***         that define a local trend surface.                            ***/
 
 /***     Jo Wood, Department of Geography, V2.1 30th March, 1995           ***/
 
@@ -19,27 +19,24 @@
 #include "param.h"
 #include <math.h>
 
-
 DCELL feature(double *coeff)
-{				/* Set of six quadratic coefficients.      */
+{ /* Set of six quadratic coefficients.      */
 
     /* Quadratic function in the form of
 
        z = ax^2 + by^2 + cxy + dx + ey +f                       */
 
-    double a = C_A * zscale,	/* Scale parameters if necessary.       */
-	b = C_B * zscale,
-	c = C_C * zscale, d = C_D * zscale, e = C_E * zscale;
+    double a = C_A * zscale, /* Scale parameters if necessary.       */
+        b = C_B * zscale, c = C_C * zscale, d = C_D * zscale, e = C_E * zscale;
 
-    double maxic, minic,	/* Minimium and maximum curvature.      */
-      slope,			/* Slope.                               */
-      crosc;			/* Cross-sectional curvature.           */
+    double maxic, minic, /* Minimum and maximum curvature.      */
+        slope,           /* Slope.                               */
+        crosc;           /* Cross-sectional curvature.           */
 
     minic = (-a - b - sqrt((a - b) * (a - b) + c * c));
     maxic = (-a - b + sqrt((a - b) * (a - b) + c * c));
     slope = RAD2DEG * atan(sqrt((d * d) + (e * e)));
     crosc = -2.0 * (b * d * d + a * e * e - c * d * e) / (d * d + e * e);
-
 
     /*
        Feature slope crosc maxic minic
@@ -64,46 +61,45 @@ DCELL feature(double *coeff)
        channel, ridge or planar.                                   */
 
     if (slope > slope_tol) {
-	if (crosc > curve_tol) {
-	    return (RIDGE);
-	}
-	else if (crosc < -curve_tol) {
-	    return (CHANNEL);
-	}
-	else {
-	    return (FLAT);
-	}
+        if (crosc > curve_tol) {
+            return (RIDGE);
+        }
+        else if (crosc < -curve_tol) {
+            return (CHANNEL);
+        }
+        else {
+            return (FLAT);
+        }
     }
     else {
 
+        /* Case 2: Surface has (approximately) vertical slope normal. Feature
+           can be of any type.                                        */
 
-	/* Case 2: Surface has (approximately) vertical slope normal. Feature
-	   can be of any type.                                        */
-
-	if (maxic > curve_tol) {
-	    if (minic > curve_tol) {
-		return (PEAK);
-	    }
-	    else if (minic < -curve_tol) {
-		return (PASS);
-	    }
-	    else {
-		return (RIDGE);
-	    }
-	}
-	else if (maxic < -curve_tol) {
-	    if (minic < -curve_tol) {
-		return (PIT);
-	    }
-	}
-	else {
-	    if (minic < -curve_tol) {
-		return (CHANNEL);
-	    }
-	    else if (minic > curve_tol && minic < -curve_tol) {
-		return (FLAT);
-	    }
-	}
+        if (maxic > curve_tol) {
+            if (minic > curve_tol) {
+                return (PEAK);
+            }
+            else if (minic < -curve_tol) {
+                return (PASS);
+            }
+            else {
+                return (RIDGE);
+            }
+        }
+        else if (maxic < -curve_tol) {
+            if (minic < -curve_tol) {
+                return (PIT);
+            }
+        }
+        else {
+            if (minic < -curve_tol) {
+                return (CHANNEL);
+            }
+            else if (minic > curve_tol && minic < -curve_tol) {
+                return (FLAT);
+            }
+        }
     }
     return (FLAT);
 }

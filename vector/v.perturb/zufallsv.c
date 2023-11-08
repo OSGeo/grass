@@ -1,6 +1,6 @@
-#include<stdio.h>
-#include<math.h>
-#include"zufall.h"
+#include <stdio.h>
+#include <math.h>
+#include "zufall.h"
 
 /*
  * saves common blocks klotz0, containing seeds and pointer to position in
@@ -16,6 +16,6 @@ int zufallsv(double *svblk)
 
     svblk[0] = (double)klotz0_1.ptr;
     for (i = 0; i < 607; ++i)
-	svblk[i + 1] = klotz0_1.buff[i];
+        svblk[i + 1] = klotz0_1.buff[i];
     return 0;
-}				/* zufallsv */
+} /* zufallsv */

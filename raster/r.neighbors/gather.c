@@ -15,17 +15,17 @@ void circle_mask(void)
     int i, j;
 
     if (ncb.mask)
-	return;
+        return;
 
     ncb.mask = G_malloc(ncb.nsize * sizeof(char *));
 
     for (i = 0; i < ncb.nsize; i++)
-	ncb.mask[i] = G_malloc(ncb.nsize);
+        ncb.mask[i] = G_malloc(ncb.nsize);
 
     for (i = 0; i < ncb.nsize; i++)
-	for (j = 0; j < ncb.nsize; j++)
-	    ncb.mask[i][j] =
-		sqr(i - ncb.dist) + sqr(j - ncb.dist) <= sqr(ncb.dist);
+        for (j = 0; j < ncb.nsize; j++)
+            ncb.mask[i][j] =
+                sqr(i - ncb.dist) + sqr(j - ncb.dist) <= sqr(ncb.dist);
 }
 
 void weights_mask(void)
@@ -33,16 +33,16 @@ void weights_mask(void)
     int i, j;
 
     if (ncb.mask)
-	return;
+        return;
 
     ncb.mask = G_malloc(ncb.nsize * sizeof(char *));
 
     for (i = 0; i < ncb.nsize; i++)
-	ncb.mask[i] = G_malloc(ncb.nsize);
+        ncb.mask[i] = G_malloc(ncb.nsize);
 
     for (i = 0; i < ncb.nsize; i++)
-	for (j = 0; j < ncb.nsize; j++)
-	    ncb.mask[i][j] = ncb.weights[i][j] != 0;
+        for (j = 0; j < ncb.nsize; j++)
+            ncb.mask[i][j] = ncb.weights[i][j] != 0;
 }
 
 int gather(DCELL *values, int offset, int thread_id)
@@ -53,15 +53,15 @@ int gather(DCELL *values, int offset, int thread_id)
     *values = 0;
 
     for (row = 0; row < ncb.nsize; row++) {
-	for (col = 0; col < ncb.nsize; col++) {
+        for (col = 0; col < ncb.nsize; col++) {
 
-	    if (ncb.mask && !ncb.mask[row][col])
-		continue;
+            if (ncb.mask && !ncb.mask[row][col])
+                continue;
 
-	    values[n] = ncb.buf[thread_id][row][offset + col];
+            values[n] = ncb.buf[thread_id][row][offset + col];
 
-	    n++;
-	}
+            n++;
+        }
     }
 
     return n;
@@ -76,12 +76,12 @@ int gather_w(DCELL *values, DCELL (*values_w)[2], int offset, int thread_id)
     values_w[0][1] = 1;
 
     for (row = 0; row < ncb.nsize; row++) {
-	for (col = 0; col < ncb.nsize; col++) {
-	    values[n] = values_w[n][0] = ncb.buf[thread_id][row][offset + col];
-	    values_w[n][1] = ncb.weights[row][col];
+        for (col = 0; col < ncb.nsize; col++) {
+            values[n] = values_w[n][0] = ncb.buf[thread_id][row][offset + col];
+            values_w[n][1] = ncb.weights[row][col];
 
-	    n++;
-	}
+            n++;
+        }
     }
 
     return n;

@@ -22,7 +22,7 @@ import grass.script as gs
 
 
 def benchmark_single(module, label, repeat=5):
-    """Benchmark module as is without chaning anything.
+    """Benchmark module as is without changing anything.
 
     *module* is an instance of PyGRASS Module class or any object which
     has a *run* method which takes no arguments and executes the benchmarked code,

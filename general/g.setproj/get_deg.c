@@ -12,6 +12,7 @@
  *                    g.get_stp       g.get_fips      g.stp_proj  geo
  *
  */
+
 #include <stdio.h>
 #include <unistd.h>
 #include <ctype.h>
@@ -24,27 +25,23 @@ int get_deg(char *strng, int ll_swt)
     double degrees;
 
     switch (ll_swt) {
-    case 0:
-	{
-	    if (!G_scan_easting(strng, &degrees, PROJECTION_LL)) {
-		fprintf(stderr,
-			"\n\t** %s is invalid for longitude **\n", strng);
-		G_sleep(2);
-		return (0);
-	    }
-	    break;
-	}
-    case 1:
-	{
-	    if (G_scan_northing(strng, &degrees, PROJECTION_LL) == 0) {
-		fprintf(stderr,
-			"\n\t** %s is invalid for latitude **\n", strng);
-		G_sleep(2);
-		return (0);
-	    }
-	    break;
-	}
-    }				/* end of switch */
+    case 0: {
+        if (!G_scan_easting(strng, &degrees, PROJECTION_LL)) {
+            fprintf(stderr, "\n\t** %s is invalid for longitude **\n", strng);
+            G_sleep(2);
+            return (0);
+        }
+        break;
+    }
+    case 1: {
+        if (G_scan_northing(strng, &degrees, PROJECTION_LL) == 0) {
+            fprintf(stderr, "\n\t** %s is invalid for latitude **\n", strng);
+            G_sleep(2);
+            return (0);
+        }
+        break;
+    }
+    } /* end of switch */
     sprintf(strng, "%.10f", degrees);
     return (1);
 }

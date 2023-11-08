@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_list_tabs.c
- * 
+ *
  * \brief DBMI Library (driver) - list tables
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -37,8 +37,8 @@ int db_d_list_tables(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	DB_SEND_FAILURE();
-	return DB_OK;
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

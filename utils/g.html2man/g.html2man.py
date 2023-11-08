@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 import sys
 import re
-from ghtml import HTMLParser, HTMLParseError
+from ghtml import HTMLParser
 from ggroff import Formatter
 
-try:
-    # Python 2 str - bytes version
-    from StringIO import StringIO
-except ImportError:
-    # Python 3 str - unicode version
-    from io import StringIO
+from io import StringIO
 
 entities = {"nbsp": " ", "bull": "*"}
 
@@ -37,12 +32,6 @@ def main():
     for n, line in enumerate(inf):
         try:
             p.feed(line)
-        except HTMLParseError as err:
-            sys.stderr.write(
-                "%s:%d:%d: Parse error: %s\n"
-                % (infile, err.lineno, err.offset, err.msg)
-            )
-            sys.exit(1)
         except Exception as err:
             sys.stderr.write(
                 "%s:%d:0: Error (%s): %s\n" % (infile, n + 1, repr(err), line)
@@ -65,8 +54,7 @@ def main():
 
     # write groff
     with open(sys.argv[2], "wb") as outf:
-        if sys.version_info.major >= 3:
-            s = s.encode("UTF-8")
+        s = s.encode("UTF-8")
         outf.write(s)
 
 

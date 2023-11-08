@@ -6,5 +6,5 @@
   -.600                        (target at 600 m above sea level)
   -1000                        (sensor on board of satellite)
   64                           (fourth band of ETM+ Landsat 7)
-  -1                           (ETM+ image with reflectance scalled between 0 and 255)
+  -1                           (ETM+ image with reflectance scaled between 0 and 255)
   160000                       (number of pixels of the image=number of bytes)

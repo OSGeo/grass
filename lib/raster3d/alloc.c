@@ -6,9 +6,8 @@
 
 /*---------------------------------------------------------------------------*/
 
-
 /*!
- * \brief 
+ * \brief
  *
  *  Same as <em>malloc (nBytes)</em>, except that in case of error
  * <tt>Rast3d_error()</tt> is invoked.
@@ -24,20 +23,19 @@ void *Rast3d_malloc(int nBytes)
     void *buf;
 
     if (nBytes <= 0)
-	nBytes = 1;
+        nBytes = 1;
     if ((buf = malloc(nBytes)) != NULL)
-	return buf;
+        return buf;
 
     Rast3d_error("Rast3d_malloc: out of memory");
     return (void *)NULL;
 }
 
-
 /*!
- * \brief 
+ * \brief
  *
  *  Same as <em>realloc (ptr, nBytes)</em>, except that in case of error
- *  <tt>Rast3d_error()</tt> is invoked. 
+ *  <tt>Rast3d_error()</tt> is invoked.
  *
  *  \param ptr
  *  \param nBytes
@@ -48,17 +46,16 @@ void *Rast3d_malloc(int nBytes)
 void *Rast3d_realloc(void *ptr, int nBytes)
 {
     if (nBytes <= 0)
-	nBytes = 1;
+        nBytes = 1;
     if ((ptr = realloc(ptr, nBytes)) != NULL)
-	return ptr;
+        return ptr;
 
     Rast3d_error("Rast3d_realloc: out of memory");
     return (void *)NULL;
 }
 
-
 /*!
- * \brief 
+ * \brief
  *
  *  Same as <em>free (ptr)</em>.
  *

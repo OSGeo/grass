@@ -2,13 +2,12 @@
 
 #include "orthophoto.h"
 
-
-FILE *I_fopen_group_init_old();
-FILE *I_fopen_group_init_new();
+FILE *I_fopen_group_init_old(char *);
+FILE *I_fopen_group_init_new(char *);
 
 #define INITIAL_FILE "INIT_EXP"
 
-int I_read_init_info(FILE * fd, struct Ortho_Camera_Exp_Init *init_info)
+int I_read_init_info(FILE *fd, struct Ortho_Camera_Exp_Init *init_info)
 {
     char buf[100];
     double XC, YC, ZC, omega, phi, kappa;
@@ -18,60 +17,60 @@ int I_read_init_info(FILE * fd, struct Ortho_Camera_Exp_Init *init_info)
     G_getl(buf, sizeof buf, fd);
     G_strip(buf);
     if (sscanf(buf, "INITIAL XC %lf \n", &XC) == 1)
-	init_info->XC_init = XC;
+        init_info->XC_init = XC;
     G_getl(buf, sizeof buf, fd);
     G_strip(buf);
     if (sscanf(buf, "INITIAL YC %lf \n", &YC) == 1)
-	init_info->YC_init = YC;
+        init_info->YC_init = YC;
     G_getl(buf, sizeof buf, fd);
     G_strip(buf);
     if (sscanf(buf, "INITIAL ZC %lf \n", &ZC) == 1)
-	init_info->ZC_init = ZC;
+        init_info->ZC_init = ZC;
     G_getl(buf, sizeof buf, fd);
     G_strip(buf);
     if (sscanf(buf, "INITIAL OMEGA %lf \n", &omega) == 1)
-	init_info->omega_init = omega;
+        init_info->omega_init = omega;
     G_getl(buf, sizeof buf, fd);
     G_strip(buf);
     if (sscanf(buf, "INITIAL PHI %lf \n", &phi) == 1)
-	init_info->phi_init = phi;
+        init_info->phi_init = phi;
     G_getl(buf, sizeof buf, fd);
     G_strip(buf);
     if (sscanf(buf, "INITIAL KAPPA %lf \n", &kappa) == 1)
-	init_info->kappa_init = kappa;
+        init_info->kappa_init = kappa;
 
     G_getl(buf, sizeof buf, fd);
     G_strip(buf);
     if (sscanf(buf, "VARIANCE XC %lf \n", &XCv) == 1)
-	init_info->XC_var = XCv;
+        init_info->XC_var = XCv;
     G_getl(buf, sizeof buf, fd);
     G_strip(buf);
     if (sscanf(buf, "VARIANCE YC %lf \n", &YCv) == 1)
-	init_info->YC_var = YCv;
+        init_info->YC_var = YCv;
     G_getl(buf, sizeof buf, fd);
     G_strip(buf);
     if (sscanf(buf, "VARIANCE ZC %lf \n", &ZCv) == 1)
-	init_info->ZC_var = ZCv;
+        init_info->ZC_var = ZCv;
     G_getl(buf, sizeof buf, fd);
     G_strip(buf);
     if (sscanf(buf, "VARIANCE OMEGA %lf \n", &omegav) == 1)
-	init_info->omega_var = omegav;
+        init_info->omega_var = omegav;
     G_getl(buf, sizeof buf, fd);
     G_strip(buf);
     if (sscanf(buf, "VARIANCE PHI %lf \n", &phiv) == 1)
-	init_info->phi_var = phiv;
+        init_info->phi_var = phiv;
     G_getl(buf, sizeof buf, fd);
     G_strip(buf);
     if (sscanf(buf, "VARIANCE KAPPA %lf \n", &kappav) == 1)
-	init_info->kappa_var = kappav;
+        init_info->kappa_var = kappav;
     G_getl(buf, sizeof buf, fd);
     G_strip(buf);
     if (sscanf(buf, "STATUS (1=OK, 0=NOT OK) %d \n", &status) == 1)
-	init_info->status = status;
+        init_info->status = status;
     return 1;
 }
 
-int I_write_init_info(FILE * fd, struct Ortho_Camera_Exp_Init *init_info)
+int I_write_init_info(FILE *fd, struct Ortho_Camera_Exp_Init *init_info)
 {
     fprintf(fd, "INITIAL XC    %f \n", init_info->XC_init);
     fprintf(fd, "INITIAL YC    %f \n", init_info->YC_init);
@@ -99,19 +98,19 @@ int I_get_init_info(char *group, struct Ortho_Camera_Exp_Init *init_info)
 
     fd = I_fopen_group_init_old(group);
     if (fd == NULL) {
-	sprintf(msg, "unable to open camera initial file %s in %s",
-		group, G_mapset());
-	G_warning("%s", msg);
-	return 0;
+        sprintf(msg, "unable to open camera initial file %s in %s", group,
+                G_mapset());
+        G_warning("%s", msg);
+        return 0;
     }
 
     stat = I_read_init_info(fd, init_info);
     fclose(fd);
     if (stat < 0) {
-	sprintf(msg, "bad format in camera initial file %s in %s",
-		group, G_mapset());
-	G_warning("%s", msg);
-	return 0;
+        sprintf(msg, "bad format in camera initial file %s in %s", group,
+                G_mapset());
+        G_warning("%s", msg);
+        return 0;
     }
     return 1;
 }
@@ -123,10 +122,10 @@ int I_put_init_info(char *group, struct Ortho_Camera_Exp_Init *init_info)
 
     fd = I_fopen_group_init_new(group);
     if (fd == NULL) {
-	sprintf(msg, "unable to open camera initial file %s in %s",
-		group, G_mapset());
-	G_warning("%s", msg);
-	return 0;
+        sprintf(msg, "unable to open camera initial file %s in %s", group,
+                G_mapset());
+        G_warning("%s", msg);
+        return 0;
     }
 
     I_write_init_info(fd, init_info);

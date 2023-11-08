@@ -1,25 +1,24 @@
-
 /*****************************************************************************
-*
-* MODULE:       DBF driver 
-*   	    	
-* AUTHOR(S):    Radim Blazek
-*
-* PURPOSE:      Simple driver for reading and writing dbf files     
-*
-* COPYRIGHT:    (C) 2000 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       DBF driver
+ *
+ * AUTHOR(S):    Radim Blazek
+ *
+ * PURPOSE:      Simple driver for reading and writing dbf files
+ *
+ * COPYRIGHT:    (C) 2000 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <grass/dbmi.h>
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
+int db__driver_list_tables(dbString **tlist, int *tcount, int system UNUSED)
 {
     dbString *list;
     int i;
@@ -29,14 +28,13 @@ int db__driver_list_tables(dbString ** tlist, int *tcount, int system)
 
     list = db_alloc_string_array(db.ntables);
     if (list == NULL && db.ntables > 0)
-	return DB_FAILED;
+        return DB_FAILED;
 
     for (i = 0; i < db.ntables; i++) {
-	if (db_set_string(&list[i], (char *)db.tables[i].name) != DB_OK) {
-	    return DB_FAILED;
-	}
+        if (db_set_string(&list[i], (char *)db.tables[i].name) != DB_OK) {
+            return DB_FAILED;
+        }
     }
-
 
     *tlist = list;
     *tcount = db.ntables;

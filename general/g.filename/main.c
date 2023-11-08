@@ -1,10 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       g.filename
  * AUTHOR(S):    Michael Shapiro CERL (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
@@ -16,6 +15,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -69,18 +69,18 @@ int main(int argc, char *argv[])
         _("If element directory for database file does not exist, create it");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     element = opt1->answer;
     name = opt3->answer;
 
     if (opt2->answer)
-	mapset = opt2->answer;
+        mapset = opt2->answer;
     else
-	mapset = G_mapset();
+        mapset = G_mapset();
 
     if (strcmp(mapset, ".") == 0 || strcmp(mapset, "") == 0)
-	mapset = G_mapset();
+        mapset = G_mapset();
 
     /* Create element directory if requested and in current mapset. */
     if (flag_create) {

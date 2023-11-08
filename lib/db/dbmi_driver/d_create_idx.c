@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_create_idx.c
- * 
+ *
  * \brief DBMI Library (driver) - create index
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -18,11 +18,11 @@
 #include "dbstubs.h"
 
 /*!
-  \brief Create index
+   \brief Create index
 
-  \return DB_OK on success
-  \return DB_FAILED on failure
-*/
+   \return DB_OK on success
+   \return DB_FAILED on failure
+ */
 int db_d_create_index(void)
 {
     dbIndex index;
@@ -37,9 +37,9 @@ int db_d_create_index(void)
 
     /* send the return code */
     if (stat != DB_OK) {
-	db_free_index(&index);
-	DB_SEND_FAILURE();
-	return DB_OK;
+        db_free_index(&index);
+        DB_SEND_FAILURE();
+        return DB_OK;
     }
     DB_SEND_SUCCESS();
 

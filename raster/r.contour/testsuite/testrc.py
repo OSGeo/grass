@@ -1,7 +1,7 @@
 """
 Name:       r.contour test
 Purpose:    Tests r.contour and its flags/options.
-    
+
 Author:     Sunveer Singh, Google Code-in 2018
 Copyright:  (C) 2018 by Sunveer Singh and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public

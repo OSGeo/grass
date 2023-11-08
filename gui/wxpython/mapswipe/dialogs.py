@@ -55,7 +55,6 @@ class SwipeMapDialog(wx.Dialog):
         firstLayerList=None,
         secondLayerList=None,
     ):
-
         wx.Dialog.__init__(
             self,
             parent=parent,
