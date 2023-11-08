@@ -6413,7 +6413,7 @@ void IWave::parse()
 
     cin >> iwave;
     cin.ignore(numeric_limits<int>::max(), '\n');
-
+    printf("iwave = %d\n",iwave);
     if (iwave == 0 || iwave == -2) {
         cin >> ffu.wlinf;
         cin >> ffu.wlsup;
@@ -6502,6 +6502,8 @@ void IWave::parse()
             planetscope0f10(iwave - 199);
         else if (iwave <= 208)
             worldview4(iwave - 203);
+        else if (iwave <= 432)
+            aviris(iwave - 208);
         else
             G_warning(_("Unsupported iwave value: %d"), iwave);
 

@@ -382,6 +382,7 @@ void Altitude::parse()
     cin >> original_xpp;
     cin.ignore(numeric_limits<int>::max(), '\n'); /* ignore comments */
     original_xpp = -original_xpp;
+    printf("Original Alt: XPS = %.2f\t XPP = %.2f\n",original_xps, original_xpp);
 }
 
 /* --- plane simulation output if selected ---- */
