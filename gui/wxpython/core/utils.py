@@ -279,38 +279,39 @@ def ListOfCatsToRange(cats):
 
 
 def ListOfMapsets(get="ordered"):
-    """Get list of available/accessible mapsets
+    """Get list of available/accessible mapsets.
+    Option 'ordered' returns list of all mapsets, first accessible
+    then not accessible. Raises ValueError for wrong paramater value.
 
     :param str get: method ('all', 'accessible', 'ordered')
 
     :return: list of mapsets
-    :return: None on error
+    :return: [] on error
     """
-    mapsets = []
-
     if get == "all" or get == "ordered":
         ret = RunCommand("g.mapsets", read=True, quiet=True, flags="l", sep="newline")
-
-        if ret:
-            mapsets = ret.splitlines()
-            ListSortLower(mapsets)
-        else:
-            return None
+        if not ret:
+            return []
+        mapsets_all = ret.splitlines()
+        ListSortLower(mapsets_all)
+        if get == "all":
+            return mapsets_all
 
     if get == "accessible" or get == "ordered":
         ret = RunCommand("g.mapsets", read=True, quiet=True, flags="p", sep="newline")
-        if ret:
-            if get == "accessible":
-                mapsets = ret.splitlines()
-            else:
-                mapsets_accessible = ret.splitlines()
-                for mapset in mapsets_accessible:
-                    mapsets.remove(mapset)
-                mapsets = mapsets_accessible + mapsets
-        else:
-            return None
+        if not ret:
+            return []
+        mapsets_accessible = ret.splitlines()
+        if get == "accessible":
+            return mapsets_accessible
 
-    return mapsets
+        mapsets_ordered = mapsets_accessible
+        for mapset in mapsets_all:
+            if mapset not in mapsets_accessible:
+                mapsets_ordered.append(mapset)
+        return mapsets_ordered
+
+    raise ValueError("Invalid value for 'get' parameter of ListOfMapsets()")
 
 
 def ListSortLower(list):
