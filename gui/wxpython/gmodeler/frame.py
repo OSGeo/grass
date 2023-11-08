@@ -26,6 +26,7 @@ from gui_core.menu import Menu as Menubar
 from gmodeler.menudata import ModelerMenuData
 from gmodeler.panels import ModelerPanel
 
+
 class ModelerFrame(wx.Frame):
     def __init__(
         self, parent, giface, id=wx.ID_ANY, title=_("Graphical Modeler"), **kwargs
@@ -46,7 +47,7 @@ class ModelerFrame(wx.Frame):
 
         self.statusbar = self.CreateStatusBar(number=1)
         self.panel = ModelerPanel(parent=self, giface=giface, statusbar=self.statusbar)
-        
+
         self.menubar = Menubar(
             parent=self, model=ModelerMenuData().GetModel(separators=True)
         )

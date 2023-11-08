@@ -22,6 +22,7 @@ from wx.lib import ogl
 from gmodeler.model import *
 from gmodeler.dialogs import *
 
+
 class ModelCanvas(ogl.ShapeCanvas):
     """Canvas where model is drawn"""
 

@@ -17,10 +17,11 @@ This program is free software under the GNU General Public License
 
 from grass.pydispatch.signal import Signal
 
+
 class MainPageBase:
     def __init__(self, dockable):
         self._mainnotebook = None
-        
+
         self.canCloseCallback = None
 
         # distinquishes whether map panel is dockable (Single-Window)
@@ -34,7 +35,7 @@ class MainPageBase:
 
         # Emitted when switching map notebook tabs (Single-Window)
         self.onFocus = Signal("MainPage.onFocus")
-        
+
         # Emitted when closing page by closing its window.
         self.closingPage = Signal("MainPage.closingPage")
 
@@ -43,9 +44,7 @@ class MainPageBase:
 
     def _pgnumDict(self):
         """Get dictionary containg page index"""
-        return {
-            "mainnotebook": self._mainnotebook.GetPageIndex(self)
-        }
+        return {"mainnotebook": self._mainnotebook.GetPageIndex(self)}
 
     def SetUpPage(self, parent, notebook, can_close=None):
         self._mainnotebook = notebook
@@ -60,7 +59,7 @@ class MainPageBase:
         # bind various events
         self.closingPage.connect(parent._closePageNoEvent)
         self.renamingPage.connect(parent._renamePageNoEvent)
-        
+
     def SetDockingCallback(self, function):
         """Sets docking bound method to dock or undock"""
         self._docking_callback = function

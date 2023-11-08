@@ -843,8 +843,9 @@ class GMFrame(wx.Frame):
         """Launch Graphical Modeler. See OnIClass documentation"""
         from gmodeler.panels import ModelerPanel
 
-        gmodeler_panel = ModelerPanel(parent=self, giface=self._giface,
-                                      statusbar=self.statusbar, dockable=True)
+        gmodeler_panel = ModelerPanel(
+            parent=self, giface=self._giface, statusbar=self.statusbar, dockable=True
+        )
         gmodeler_panel.SetUpPage(self, self.mainnotebook)
 
         # add map display panel to notebook and make it current
@@ -979,7 +980,8 @@ class GMFrame(wx.Frame):
     def _renamePageNoEvent(self, pgnum_dict, is_docked, text):
         if is_docked:
             self.mainnotebook.SetMainPageText(
-                self.mainnotebook.GetPage(pgnum_dict["mainnotebook"]), text)
+                self.mainnotebook.GetPage(pgnum_dict["mainnotebook"]), text
+            )
 
     def _closePageNoEvent(self, pgnum_dict, is_docked):
         """If map display is docked, close page and destroy map display without generating

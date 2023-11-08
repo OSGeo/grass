@@ -25,6 +25,7 @@ from core import globalvar
 from gui_core.wrap import SimpleTabArt
 from mapdisp.frame import MapPanel
 
+
 class MainPageFrame(wx.Frame):
     """Frame for independent map display window."""
 
@@ -37,9 +38,7 @@ class MainPageFrame(wx.Frame):
 
         # set system icon
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, icon + ".ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, icon + ".ico"), wx.BITMAP_TYPE_ICO)
         )
 
         self.panel.onFocus.emit()
@@ -68,6 +67,7 @@ class MainPageFrame(wx.Frame):
             self.panel.OnCloseWindow(event=None, askIfSaveWorkspace=True)
         else:
             self.panel.OnCloseWindow(event=None)
+
 
 class MainNotebook(aui.AuiNotebook):
     """Main notebook class. Overrides some AuiNotebook classes.
@@ -105,7 +105,7 @@ class MainNotebook(aui.AuiNotebook):
             size=original_size,
             pos=original_pos,
             title=text,
-            icon=icon
+            icon=icon,
         )
         frame.SetDockingCallback(self.DockPage)
 

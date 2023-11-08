@@ -235,7 +235,9 @@ class ModelerPanel(wx.Panel, MainPageBase):
                     self.baseTitle + " - " + os.path.basename(self.modelFile) + "*"
                 )
             else:
-                self.RenamePage(self.baseTitle + " - " + os.path.basename(self.modelFile))
+                self.RenamePage(
+                    self.baseTitle + " - " + os.path.basename(self.modelFile)
+                )
         else:
             self.RenamePage(self.baseTitle)
 
@@ -851,7 +853,9 @@ class ModelerPanel(wx.Panel, MainPageBase):
                 Debug.msg(4, "ModelFrame.OnModelSave(): filename=%s" % self.modelFile)
                 self.WriteModelFile(self.modelFile)
                 self.SetStatusText(_("File <%s> saved") % self.modelFile, 0)
-                self.RenamePage(self.baseTitle + " - " + os.path.basename(self.modelFile))
+                self.RenamePage(
+                    self.baseTitle + " - " + os.path.basename(self.modelFile)
+                )
         elif not self.modelFile:
             self.OnModelSaveAs()
 
@@ -1290,6 +1294,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
             dlg.Destroy()
 
         self._onCloseWindow(event)
+
 
 class VariablePanel(wx.Panel):
     def __init__(self, parent, id=wx.ID_ANY, **kwargs):

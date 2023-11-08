@@ -74,95 +74,95 @@ class ModelerToolbar(BaseToolbar):
 
         data = (
             (
-                    ("new", icons["new"].label.rsplit(" ", 1)[0]),
+                ("new", icons["new"].label.rsplit(" ", 1)[0]),
                 icons["new"],
                 self.parent.OnModelNew,
-                ),
+            ),
             (
                 ("open", icons["open"].label.rsplit(" ", 1)[0]),
-                    icons["open"],
-                    self.parent.OnModelOpen,
-                ),
-                (
-                    ("save", icons["save"].label.rsplit(" ", 1)[0]),
-                    icons["save"],
-                    self.parent.OnModelSave,
-                ),
-                (
-                    ("image", icons["toImage"].label.rsplit(" ", 1)[0]),
-                    icons["toImage"],
-                    self.parent.OnExportImage,
-                ),
-                (
-                    ("python", icons["toPython"].label),
-                    icons["toPython"],
-                    self.parent.OnExportPython,
-                ),
-                (None,),
-                (
-                    ("action", icons["actionAdd"].label),
-                    icons["actionAdd"],
-                    self.parent.OnAddAction,
-                ),
-                (
-                    ("data", icons["dataAdd"].label),
-                    icons["dataAdd"],
-                    self.parent.OnAddData,
-                ),
-                (
-                    ("relation", icons["relation"].label),
-                    icons["relation"],
-                    self.parent.OnDefineRelation,
-                ),
-                (
-                    ("loop", icons["loop"].label),
-                    icons["loop"],
-                    self.parent.OnDefineLoop,
-                ),
-                (
-                    ("comment", icons["comment"].label),
-                    icons["comment"],
-                    self.parent.OnAddComment,
-                ),
-                (None,),
-                (
-                    ("redraw", icons["redraw"].label),
-                    icons["redraw"],
-                    self.parent.OnCanvasRefresh,
-                ),
-                (
-                    ("validate", icons["validate"].label),
-                    icons["validate"],
-                    self.parent.OnValidateModel,
-                ),
-                (
-                    ("run", icons["run"].label),
-                    icons["run"],
-                    self.parent.OnRunModel,
-                ),
-                (None,),
-                (
-                    ("variables", icons["variables"].label),
-                    icons["variables"],
-                    self.parent.OnVariables,
-                ),
-                (
-                    ("properties", icons["properties"].label),
-                    icons["properties"],
-                    self.parent.OnModelProperties,
-                ),
-                (None,),
-                (
-                    ("settings", icons["settings"].label),
-                    icons["settings"],
-                    self.parent.OnPreferences,
-                ),
-                (
-                    ("help", icons["help"].label),
-                    icons["help"],
-                    self.parent.OnHelp,
-                ),
-                (None,),
+                icons["open"],
+                self.parent.OnModelOpen,
+            ),
+            (
+                ("save", icons["save"].label.rsplit(" ", 1)[0]),
+                icons["save"],
+                self.parent.OnModelSave,
+            ),
+            (
+                ("image", icons["toImage"].label.rsplit(" ", 1)[0]),
+                icons["toImage"],
+                self.parent.OnExportImage,
+            ),
+            (
+                ("python", icons["toPython"].label),
+                icons["toPython"],
+                self.parent.OnExportPython,
+            ),
+            (None,),
+            (
+                ("action", icons["actionAdd"].label),
+                icons["actionAdd"],
+                self.parent.OnAddAction,
+            ),
+            (
+                ("data", icons["dataAdd"].label),
+                icons["dataAdd"],
+                self.parent.OnAddData,
+            ),
+            (
+                ("relation", icons["relation"].label),
+                icons["relation"],
+                self.parent.OnDefineRelation,
+            ),
+            (
+                ("loop", icons["loop"].label),
+                icons["loop"],
+                self.parent.OnDefineLoop,
+            ),
+            (
+                ("comment", icons["comment"].label),
+                icons["comment"],
+                self.parent.OnAddComment,
+            ),
+            (None,),
+            (
+                ("redraw", icons["redraw"].label),
+                icons["redraw"],
+                self.parent.OnCanvasRefresh,
+            ),
+            (
+                ("validate", icons["validate"].label),
+                icons["validate"],
+                self.parent.OnValidateModel,
+            ),
+            (
+                ("run", icons["run"].label),
+                icons["run"],
+                self.parent.OnRunModel,
+            ),
+            (None,),
+            (
+                ("variables", icons["variables"].label),
+                icons["variables"],
+                self.parent.OnVariables,
+            ),
+            (
+                ("properties", icons["properties"].label),
+                icons["properties"],
+                self.parent.OnModelProperties,
+            ),
+            (None,),
+            (
+                ("settings", icons["settings"].label),
+                icons["settings"],
+                self.parent.OnPreferences,
+            ),
+            (
+                ("help", icons["help"].label),
+                icons["help"],
+                self.parent.OnHelp,
+            ),
+            (None,),
         )
         if self.parent.IsDockable():
             data += (
