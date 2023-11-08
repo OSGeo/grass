@@ -86,13 +86,13 @@ class MainPageBase:
                         pgnum_dict=pgnum_dict, is_docked=self.IsDocked()
                     )
                     if not self.IsDocked():
-                        frame = self.GetParent()  # pylint: disable=E1101
+                        frame = self.GetParent()
                         frame.Destroy()
                 else:
                     self.closingPage.emit(pgnum_dict=pgnum_dict)
                 # Destroy is called when notebook page is deleted
         else:
-            self.parent.Destroy()  # pylint: disable=E1101
+            self.parent.Destroy()
 
     def RenamePage(self, title):
         """Rename page or change frame title"""
@@ -104,6 +104,6 @@ class MainPageBase:
                         pgnum_dict=pgnum_dict, is_docked=self.IsDocked(), text=title
                     )
                     if not self.IsDocked():
-                        self.GetParent().SetTitle(title)  # pylint: disable=E1101
+                        self.GetParent().SetTitle(title)
         else:
-            self.GetParent().SetTitle(title)  # pylint: disable=E1101
+            self.GetParent().SetTitle(title)
