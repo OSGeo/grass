@@ -19,6 +19,7 @@ from grass.pydispatch.signal import Signal
 
 class MainPageBase:
     def __init__(self, dockable):
+        self.notebook = None
         
         self.canCloseCallback = None
 
@@ -39,12 +40,18 @@ class MainPageBase:
 
         # Emitted when renaming page.
         self.renamingPage = Signal("MainPage.renamingPage")
-        
+
+    def _pgnumDict(self):
+        """Get dictionary containg page index"""
+        return {
+            "mainnotebook": self.notebook.GetPageIndex(self)
+        }
+
     def SetUpPage(self, parent, notebook, can_close=None):
+        self.notebook = notebook
+
         def CanClosePage():
-            return {
-                "mainnotebook": notebook.GetPageIndex(self)
-            }
+            return self._pgnumDict()
 
         # set callbacks
         self.canCloseCallback = CanClosePage if can_close is None else can_close
@@ -89,8 +96,9 @@ class MainPageBase:
             self.parent.Destroy()
 
     def RenamePage(self, title):
+        """Rename page or change frame title"""
         if self.canCloseCallback:
-            pgnum_dict = self.canCloseCallback() # TODO
+            pgnum_dict = self._pgnumDict()
             if pgnum_dict is not None:
                 if self.IsDockable():
                     self.renamingPage.emit(
