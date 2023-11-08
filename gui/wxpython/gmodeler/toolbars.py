@@ -6,7 +6,7 @@
 Classes:
  - toolbars::ModelerToolbar
 
-(C) 2010-2011 by the GRASS Development Team
+(C) 2010-2023 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -62,8 +62,8 @@ class ModelerToolbar(BaseToolbar):
             "comment": MetaIcon(img="label-add", label=_("Add comment to model")),
             "run": MetaIcon(img="execute", label=_("Run model")),
             "validate": MetaIcon(img="check", label=_("Validate model")),
-            "settings": BaseIcons["settings"],
-            "properties": MetaIcon(img="options", label=_("Show model properties")),
+            "settings": MetaIcon(img="modeler-settings", label=_("Modeler settings")),
+            "properties": MetaIcon(img="options", label=_("Set model properties")),
             "variables": MetaIcon(
                 img="modeler-variables", label=_("Manage model variables")
             ),
@@ -146,6 +146,12 @@ class ModelerToolbar(BaseToolbar):
                     icons["variables"],
                     self.parent.OnVariables,
                 ),
+                (
+                    ("properties", icons["properties"].label),
+                    icons["properties"],
+                    self.parent.OnModelProperties,
+                ),
+                (None,),
                 (
                     ("settings", icons["settings"].label),
                     icons["settings"],
