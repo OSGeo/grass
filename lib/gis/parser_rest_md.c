@@ -101,7 +101,7 @@ void usage_rest_md(bool rest)
     if (rest)
         fprintf(stdout, "----------------------\n");
     if (st->module_info.keywords) {
-        G__print_keywords(stdout, NULL);
+        G__print_keywords(stdout, G__print_escaped_for_html_keywords);
         fprintf(stdout, "\n");
     }
     fprintf(stdout, "\n");
@@ -247,8 +247,6 @@ void usage_rest_md(bool rest)
 
 void print_flag(const char *key, const char *label, const char *description, bool rest)
 {
-    static char *indent_right = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-    
     if (rest)
         fprintf(stdout, "| ");
     if (strlen(key) > 1)
@@ -260,20 +258,20 @@ void print_flag(const char *key, const char *label, const char *description, boo
     if (label != NULL) {
         if (rest)
             fprintf(stdout, "| ");
-        fprintf(stdout, "%s%s", indent_right, label);
+        print_escaped_for_rest(stdout, label);
         if (!rest)
             fprintf(stdout, "\\");
         fprintf(stdout, "\n");
     }
     if (rest)
         fprintf(stdout, "| ");
-    fprintf(stdout, "%s%s", indent_right, description);
+    print_escaped_for_rest(stdout, "\t");
+    print_escaped_for_rest(stdout, description);
 }
 
 void print_option(const struct Option *opt, bool rest)
 {
     const char *type;
-    static char *indent_right = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     
     /* TODO: make this a enumeration type? */
     if (opt->key_desc != NULL)
@@ -308,7 +306,7 @@ void print_option(const struct Option *opt, bool rest)
         fprintf(stdout, "\\");
     fprintf(stdout, "\n");
     if (opt->label) {
-        fprintf(stdout, indent_right);
+        print_escaped_for_rest(stdout, "\t");
         print_escaped_for_rest(stdout, opt->label);
         if (!rest)
             fprintf(stdout, "\\");
@@ -317,7 +315,7 @@ void print_option(const struct Option *opt, bool rest)
     if (opt->description) {
         if (rest)
             fprintf(stdout, "| ");
-        fprintf(stdout, indent_right);
+        print_escaped_for_rest(stdout, "\t");
         print_escaped_for_rest(stdout, opt->description);
     }
     
@@ -325,7 +323,8 @@ void print_option(const struct Option *opt, bool rest)
         if (!rest)
             fprintf(stdout, "\\");
         fprintf(stdout, "\n");
-        fprintf(stdout, "%s%s: *", indent_right, _("Options"));
+        print_escaped_for_rest(stdout, "\t");
+        fprintf(stdout, "%s: *", _("Options"));
         print_escaped_for_rest_options(stdout, opt->options);
     }
     
@@ -333,7 +332,8 @@ void print_option(const struct Option *opt, bool rest)
         if (!rest)
             fprintf(stdout, "\\");
         fprintf(stdout, "\n");
-        fprintf(stdout, "%s%s:", indent_right, _("Default"));
+        print_escaped_for_rest(stdout, "\t");
+        fprintf(stdout, "%s:", _("Default"));
         /* TODO check if value is empty
            if (!opt->def.empty()){ */
         fprintf(stdout, " *");
@@ -351,7 +351,8 @@ void print_option(const struct Option *opt, bool rest)
                 if (!rest)
                     fprintf(stdout, "\\");
                 fprintf(stdout, "\n");
-                fprintf(stdout, "%s%s**", indent_right, indent_right);
+                print_escaped_for_rest(stdout, "\t");
+                print_escaped_for_rest(stdout, "\t");
                 print_escaped_for_rest(stdout, opt->opts[i]);
                 fprintf(stdout, "** : ");
                 print_escaped_for_rest(stdout, opt->descs[i]);
@@ -375,6 +376,7 @@ void print_escaped_for_rest(FILE *f, const char *str)
     for (s = str; *s; s++) {
         switch (*s) {
             do_escape('\n', "\n\n");
+            do_escape('\t', "&nbsp;&nbsp;&nbsp;&nbsp;");
         default:
             fputc(*s, f);
         }

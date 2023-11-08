@@ -21,7 +21,6 @@
 
 static void print_escaped_for_html(FILE *, const char *);
 static void print_escaped_for_html_options(FILE *, const char *);
-static void print_escaped_for_html_keywords(FILE *, const char *);
 
 /*!
    \brief Print module usage description in HTML format.
@@ -87,7 +86,7 @@ void G__usage_html(void)
 
     fprintf(stdout, "<h2>%s</h2>\n", _("KEYWORDS"));
     if (st->module_info.keywords) {
-        G__print_keywords(stdout, print_escaped_for_html_keywords);
+        G__print_keywords(stdout, G__print_escaped_for_html_keywords);
         fprintf(stdout, "\n");
     }
     fprintf(stdout, "<h2>%s</h2>\n", _("SYNOPSIS"));
@@ -347,7 +346,7 @@ void print_escaped_for_html_options(FILE *f, const char *str)
     }
 }
 
-void print_escaped_for_html_keywords(FILE *f, const char *str)
+void G__print_escaped_for_html_keywords(FILE *f, const char *str)
 {
     /* generate HTML links */
 
