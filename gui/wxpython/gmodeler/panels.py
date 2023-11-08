@@ -72,10 +72,9 @@ from gmodeler.toolbars import ModelerToolbar
 from gmodeler.preferences import PreferencesDialog, PropertiesDialog
 
 wxModelDone, EVT_MODEL_DONE = NewEvent()
-0
+
 from grass.script.utils import try_remove
 from grass.script import core as grass
-from grass.pydispatch.signal import Signal
 
 
 class ModelerPanel(wx.Panel, MainPageBase):
