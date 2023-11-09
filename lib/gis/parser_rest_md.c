@@ -43,7 +43,8 @@ void usage_rest_md(bool rest)
     if (!st->pgm_name)
         st->pgm_name = "??";
 
-    /* main header */
+    /* main header not printed to be synced with HTML */
+    /* main header
     if (rest) {
         fprintf(stdout, "=================");
         for (s = 0; s <= strlen(st->pgm_name); s++) {
@@ -61,7 +62,7 @@ void usage_rest_md(bool rest)
         }
     }
     fprintf(stdout, "\n\n");
-    
+    */
     /* GRASS GIS logo */
     if (rest) {
         fprintf(stdout, ".. figure:: grass_logo.png\n");
@@ -69,7 +70,7 @@ void usage_rest_md(bool rest)
         fprintf(stdout, "   :alt: GRASS logo\n\n");
     }
     else {
-        fprintf(stdout, "![GRASS GIS logo](./grass_logo.png)\n");
+        fprintf(stdout, "![GRASS logo](./grass_logo.png)\n");
     }
     /* horizontal line */
     fprintf(stdout, "---");
@@ -118,7 +119,7 @@ void usage_rest_md(bool rest)
     fprintf(stdout, "\n");
     if (rest)
         fprintf(stdout, "| ");
-    fprintf(stdout, "**%s** --**help**", st->pgm_name);
+    fprintf(stdout, "**%s --help**", st->pgm_name);
     if (!rest)
         fprintf(stdout, "\\");
     fprintf(stdout, "\n**%s**", st->pgm_name);
@@ -171,11 +172,11 @@ void usage_rest_md(bool rest)
         }
     }
     if (new_prompt)
-        fprintf(stdout, " [--**overwrite**] ");
+        fprintf(stdout, " [**--overwrite**] ");
     
-    fprintf(stdout, " [--**verbose**] ");
-    fprintf(stdout, " [--**quiet**] ");
-    fprintf(stdout, " [--**ui**] ");    
+    fprintf(stdout, " [**--verbose**] ");
+    fprintf(stdout, " [**--quiet**] ");
+    fprintf(stdout, " [**--ui**] ");
     fprintf(stdout, "\n");
     
     /* now long version */
@@ -251,7 +252,7 @@ void print_flag(const char *key, const char *label, const char *description, boo
         fprintf(stdout, "| ");
     if (strlen(key) > 1)
         fprintf(stdout, "-");
-    fprintf(stdout, "-**%s**", key);
+    fprintf(stdout, "**-%s**", key);
     if (!rest)
         fprintf(stdout, "\\");
     fprintf(stdout, "\n");
@@ -326,6 +327,7 @@ void print_option(const struct Option *opt, bool rest)
         print_escaped_for_rest(stdout, "\t");
         fprintf(stdout, "%s: *", _("Options"));
         print_escaped_for_rest_options(stdout, opt->options);
+        fprintf(stdout, "*");
     }
     
     if (opt->def) {
@@ -338,9 +340,7 @@ void print_option(const struct Option *opt, bool rest)
            if (!opt->def.empty()){ */
         fprintf(stdout, " *");
         print_escaped_for_rest(stdout, opt->def);
-        if (!rest)
-            fprintf(stdout, "\\");
-        fprintf(stdout, "\n");
+        fprintf(stdout, "*");
     }
     
     if (opt->descs) {
