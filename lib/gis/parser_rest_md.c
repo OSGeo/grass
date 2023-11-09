@@ -22,11 +22,15 @@
 static void usage_rest_md(bool rest);
 static void print_flag(const char *key, const char *label, const char *description, bool rest);
 void print_option(const struct Option *opt, bool rest);
+static void print_escaped(FILE *f, const char *str, bool rest);
 static void print_escaped_for_rest(FILE *f, const char *str);
+static void print_escaped_for_md(FILE *f, const char *str);
 static void print_escaped_for_rest_options(FILE *f, const char *str);
 
 /*!
-   \brief Print module usage description in reStructuredText format.
+   \brief Print module usage description in reStructuredText or in Markdown format.
+
+   \param bool rest TRUE for reStructuredText otherwise Markdown
  */
 void usage_rest_md(bool rest)
 {
@@ -34,7 +38,6 @@ void usage_rest_md(bool rest)
     struct Flag *flag;
     const char *type;
     int new_prompt = 0;
-    unsigned int s;
 
     new_prompt = G__uses_new_gisprompt();
 
@@ -102,7 +105,10 @@ void usage_rest_md(bool rest)
     if (rest)
         fprintf(stdout, "----------------------\n");
     if (st->module_info.keywords) {
-        G__print_keywords(stdout, G__print_escaped_for_html_keywords);
+        if (rest)
+            G__print_keywords(stdout, NULL);
+        else
+            G__print_keywords(stdout, G__print_escaped_for_html_keywords);
         fprintf(stdout, "\n");
     }
     fprintf(stdout, "\n");
@@ -122,7 +128,10 @@ void usage_rest_md(bool rest)
     fprintf(stdout, "**%s --help**", st->pgm_name);
     if (!rest)
         fprintf(stdout, "\\");
-    fprintf(stdout, "\n**%s**", st->pgm_name);
+    fprintf(stdout, "\n");
+    if (rest)
+        fprintf(stdout, "| ");
+    fprintf(stdout, "**%s**", st->pgm_name);
     
     /* print short version first */
     if (st->n_flags) {
@@ -160,9 +169,15 @@ void usage_rest_md(bool rest)
                 }
             if (!opt->required)
                 fprintf(stdout, " [");
-            fprintf(stdout, "**%s**=*%s*", opt->key, type);
+            fprintf(stdout, "**%s**=", opt->key);
+            if (rest)
+                fprintf(stdout, "\\ ");
+            fprintf(stdout, "*%s*", type);
             if (opt->multiple) {
-                fprintf(stdout, " [, *%s* ,...]", type);
+                fprintf(stdout, " [,");
+                if (rest)
+                    fprintf(stdout, "\\ ");
+                fprintf(stdout, "*%s*,...]", type);
             }
             if (!opt->required)
                 fprintf(stdout, "] ");
@@ -259,15 +274,15 @@ void print_flag(const char *key, const char *label, const char *description, boo
     if (label != NULL) {
         if (rest)
             fprintf(stdout, "| ");
-        print_escaped_for_rest(stdout, label);
+        print_escaped(stdout, label, rest);
         if (!rest)
             fprintf(stdout, "\\");
         fprintf(stdout, "\n");
     }
     if (rest)
         fprintf(stdout, "| ");
-    print_escaped_for_rest(stdout, "\t");
-    print_escaped_for_rest(stdout, description);
+    print_escaped(stdout, "\t", rest);
+    print_escaped(stdout, description, rest);
 }
 
 void print_option(const struct Option *opt, bool rest)
@@ -295,9 +310,15 @@ void print_option(const struct Option *opt, bool rest)
 
     if (rest)
         fprintf(stdout, "| ");
-    fprintf(stdout, "**%s**=*%s*", opt->key, type);
+    fprintf(stdout, "**%s**=", opt->key);
+    if (rest)
+        fprintf(stdout, "\\ ");
+    fprintf(stdout, "*%s*", type);
     if (opt->multiple) {
-        fprintf(stdout, " [, *%s* ,...]", type);
+        fprintf(stdout, " [,");
+        if (rest)
+            fprintf(stdout, "\\ ");
+        fprintf(stdout, "*%s*,...]", type);
     }
     /* fprintf(stdout, "*"); */
     if (opt->required) {
@@ -307,8 +328,10 @@ void print_option(const struct Option *opt, bool rest)
         fprintf(stdout, "\\");
     fprintf(stdout, "\n");
     if (opt->label) {
-        print_escaped_for_rest(stdout, "\t");
-        print_escaped_for_rest(stdout, opt->label);
+        if (rest)
+            fprintf(stdout, "| ");
+        print_escaped(stdout, "\t", rest);
+        print_escaped(stdout, opt->label, rest);
         if (!rest)
             fprintf(stdout, "\\");
         fprintf(stdout, "\n");
@@ -316,15 +339,17 @@ void print_option(const struct Option *opt, bool rest)
     if (opt->description) {
         if (rest)
             fprintf(stdout, "| ");
-        print_escaped_for_rest(stdout, "\t");
-        print_escaped_for_rest(stdout, opt->description);
+        print_escaped(stdout, "\t", rest);
+        print_escaped(stdout, opt->description, rest);
     }
     
     if (opt->options) {
         if (!rest)
             fprintf(stdout, "\\");
         fprintf(stdout, "\n");
-        print_escaped_for_rest(stdout, "\t");
+        if (rest)
+            fprintf(stdout, "| ");
+        print_escaped(stdout, "\t", rest);
         fprintf(stdout, "%s: *", _("Options"));
         print_escaped_for_rest_options(stdout, opt->options);
         fprintf(stdout, "*");
@@ -334,12 +359,14 @@ void print_option(const struct Option *opt, bool rest)
         if (!rest)
             fprintf(stdout, "\\");
         fprintf(stdout, "\n");
-        print_escaped_for_rest(stdout, "\t");
+        if (rest)
+            fprintf(stdout, "| ");
+        print_escaped(stdout, "\t", rest);
         fprintf(stdout, "%s:", _("Default"));
         /* TODO check if value is empty
            if (!opt->def.empty()){ */
         fprintf(stdout, " *");
-        print_escaped_for_rest(stdout, opt->def);
+        print_escaped(stdout, opt->def, rest);
         fprintf(stdout, "*");
     }
     
@@ -351,11 +378,15 @@ void print_option(const struct Option *opt, bool rest)
                 if (!rest)
                     fprintf(stdout, "\\");
                 fprintf(stdout, "\n");
-                print_escaped_for_rest(stdout, "\t");
-                print_escaped_for_rest(stdout, "\t");
-                print_escaped_for_rest(stdout, opt->opts[i]);
-                fprintf(stdout, "** : ");
-                print_escaped_for_rest(stdout, opt->descs[i]);
+                if (rest)
+                    fprintf(stdout, "| ");
+                print_escaped(stdout, "\t\t", rest);
+                if (rest)
+                    fprintf(stdout, "\\ ");
+                fprintf(stdout, "**");
+                print_escaped(stdout, opt->opts[i], rest);
+                fprintf(stdout, "**: ");
+                print_escaped(stdout, opt->descs[i], rest);
             }
             i++;
         }
@@ -369,10 +400,33 @@ void print_option(const struct Option *opt, bool rest)
     case c:                   \
     fputs(escaped, f);        \
     break
+
+void print_escaped(FILE *f, const char *str, bool rest)
+{
+    if (rest)
+        print_escaped_for_rest(f, str);
+    else
+        print_escaped_for_md(f, str);
+}
+
 void print_escaped_for_rest(FILE *f, const char *str)
 {
     const char *s;
     
+    for (s = str; *s; s++) {
+        switch (*s) {
+            do_escape('\n', "\n\n");
+            do_escape('\t', "    ");
+        default:
+            fputc(*s, f);
+        }
+    }
+}
+
+void print_escaped_for_md(FILE *f, const char *str)
+{
+    const char *s;
+
     for (s = str; *s; s++) {
         switch (*s) {
             do_escape('\n', "\n\n");
@@ -390,6 +444,7 @@ void print_escaped_for_rest_options(FILE *f, const char *str)
     for (s = str; *s; s++) {
         switch (*s) {
             do_escape('\n', "\n\n");
+            do_escape(',', ", ");
         default:
             fputc(*s, f);
         }
@@ -403,7 +458,7 @@ void print_escaped_for_rest_options(FILE *f, const char *str)
 */
 void G__usage_rest(void)
 {
-    usage_rest_md(true);
+    usage_rest_md(TRUE);
 }
 
 /*!
@@ -411,5 +466,5 @@ void G__usage_rest(void)
 */
 void G__usage_markdown(void)
 {
-    usage_rest_md(false);
+    usage_rest_md(FALSE);
 }
