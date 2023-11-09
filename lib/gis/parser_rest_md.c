@@ -1,5 +1,5 @@
 /*!
-   \file lib/gis/parser_rest.c
+   \file lib/gis/parser_rest_md.c
 
    \brief GIS Library - Argument parsing functions (reStructuredText output)
 
