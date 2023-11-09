@@ -21,7 +21,7 @@
 
 static void usage_rest_md(bool rest);
 static void print_flag(const char *key, const char *label, const char *description, bool rest);
-void print_option(const struct Option *opt, bool rest);
+void print_option(const struct Option *opt, bool rest, char *);
 static void print_escaped(FILE *f, const char *str, bool rest);
 static void print_escaped_for_rest(FILE *f, const char *str);
 static void print_escaped_for_md(FILE *f, const char *str);
@@ -68,7 +68,7 @@ void usage_rest_md(bool rest)
     */
     /* GRASS GIS logo */
     if (rest) {
-        fprintf(stdout, ".. figure:: grass_logo.png\n");
+        fprintf(stdout, ".. image:: grass_logo.png\n");
         fprintf(stdout, "   :align: center\n");
         fprintf(stdout, "   :alt: GRASS logo\n\n");
     }
@@ -248,15 +248,21 @@ void usage_rest_md(bool rest)
         fprintf(stdout, "%s:\n", _("Parameters"));
         if (rest)
             fprintf(stdout, "~~~~~~~~~~~\n");
-        
+
+        char image_spec_rest[GPATH_MAX];
+        image_spec_rest[0] = '\0';
         while (opt != NULL) {
-            print_option(opt, rest);
+            print_option(opt, rest, image_spec_rest);
             opt = opt->next_opt;
             if (opt != NULL) {
                 if (!rest)
                     fprintf(stdout, "\\");
             }
             fprintf(stdout, "\n");
+        }
+        if (strlen(image_spec_rest) > 0) {
+            fprintf(stdout, "\n");
+            fprintf(stdout, image_spec_rest);
         }
     }
 }
@@ -285,7 +291,7 @@ void print_flag(const char *key, const char *label, const char *description, boo
     print_escaped(stdout, description, rest);
 }
 
-void print_option(const struct Option *opt, bool rest)
+void print_option(const struct Option *opt, bool rest, char *image_spec_rest)
 {
     const char *type;
     
@@ -378,11 +384,45 @@ void print_option(const struct Option *opt, bool rest)
                 if (!rest)
                     fprintf(stdout, "\\");
                 fprintf(stdout, "\n");
-                if (rest)
+                char *thumbnails = NULL;
+                if (opt->gisprompt) {
+                    if (strcmp(opt->gisprompt,
+                               "old,colortable,colortable") == 0)
+                        thumbnails = "colortables";
+                    else if (strcmp(opt->gisprompt,
+                                            "old,barscale,barscale") == 0)
+                        thumbnails = "barscales";
+                    else if (strcmp(opt->gisprompt,
+                                    "old,northarrow,northarrow") == 0)
+                        thumbnails = "northarrows";
+
+                    if (thumbnails) {
+                        if (rest) {
+                            char *image_spec;
+                            G_asprintf(&image_spec, ".. |%s| image:: %s/%s.png\n", opt->opts[i], thumbnails, opt->opts[i]);
+                            strcat(image_spec_rest, image_spec);
+                        }
+                        else {
+                            print_escaped(stdout, "\t\t", rest);
+                            fprintf(stdout,
+                                    "![%s](%s/%s.png) ",
+                                    opt->opts[i], thumbnails, opt->opts[i]);
+                        }
+                    }
+                    else {
+                        if (rest)
+                            fprintf(stdout, "| ");
+                        print_escaped(stdout, "\t\t", rest);
+                        if (rest)
+                            fprintf(stdout, "\\ ");
+                    }
+                }
+
+                if (rest && thumbnails) {
                     fprintf(stdout, "| ");
-                print_escaped(stdout, "\t\t", rest);
-                if (rest)
-                    fprintf(stdout, "\\ ");
+                    print_escaped(stdout, "\t\t", rest);
+                    fprintf(stdout, "|%s| ", opt->opts[i]);
+                }
                 fprintf(stdout, "**");
                 print_escaped(stdout, opt->opts[i], rest);
                 fprintf(stdout, "**: ");
