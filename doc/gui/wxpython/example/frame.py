@@ -415,7 +415,7 @@ class ExampleInfoTextManager:
         else:
             return
 
-        self.textCtrl.SetDefaultStyle(wx.TextAttr(font=self.font))
+        self.textCtrl.SetFont(self.font)
 
     def _writeLine(self, title, value):
         """!Formats text (key, value pair) with styles."""
@@ -437,5 +437,5 @@ class ExampleInfoTextManager:
         """
         self.GetControl().Clear()
         self._writeRasterTitle(name=name)
-        for key, value in statDict.iteritems():
+        for key, value in statDict.items():
             self._writeLine(title=key, value=value)
