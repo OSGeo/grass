@@ -1,7 +1,7 @@
 /*!
    \file lib/gis/parser_rest_md.c
 
-   \brief GIS Library - Argument parsing functions (reStructuredText output)
+   \brief GIS Library - Argument parsing functions (reStructuredText and Markdown output)
 
    (C) 2012-2023 by the GRASS Development Team
 
@@ -70,16 +70,16 @@ void usage_rest_md(bool rest)
     if (rest) {
         fprintf(stdout, ".. image:: grass_logo.png\n");
         fprintf(stdout, "   :align: center\n");
-        fprintf(stdout, "   :alt: GRASS logo\n\n");
+        fprintf(stdout, "   :alt: GRASS logo\n");
     }
     else {
         fprintf(stdout, "![GRASS logo](./grass_logo.png)\n");
     }
     /* horizontal line */
-    fprintf(stdout, "---");
+    fprintf(stdout, "\n---");
     if (rest)
         fprintf(stdout, "-");
-    fprintf(stdout, "\n");
+    fprintf(stdout, "\n\n");
     
     /* header - GRASS module */
     if (!rest)
@@ -104,6 +104,7 @@ void usage_rest_md(bool rest)
     fprintf(stdout, "%s\n", _("KEYWORDS"));
     if (rest)
         fprintf(stdout, "----------------------\n");
+    fprintf(stdout, "\n");
     if (st->module_info.keywords) {
         if (rest)
             G__print_keywords(stdout, NULL);
@@ -116,8 +117,11 @@ void usage_rest_md(bool rest)
         fprintf(stdout, "### ");
     fprintf(stdout, "%s\n", _("SYNOPSIS"));
     if (rest) {
-        fprintf(stdout, "----------------------\n");
+        fprintf(stdout, "----------------------\n\n");
         fprintf(stdout, "| ");
+    }
+    else {
+      fprintf(stdout, "\n");
     }
     fprintf(stdout, "**%s**", st->pgm_name);
     if (!rest)
@@ -191,8 +195,7 @@ void usage_rest_md(bool rest)
     
     fprintf(stdout, " [**--verbose**] ");
     fprintf(stdout, " [**--quiet**] ");
-    fprintf(stdout, " [**--ui**] ");
-    fprintf(stdout, "\n");
+    fprintf(stdout, " [**--ui**]\n");
     
     /* now long version */
     fprintf(stdout, "\n");
@@ -203,6 +206,7 @@ void usage_rest_md(bool rest)
         fprintf(stdout, "%s:\n", _("Flags"));
         if (rest)
             fprintf(stdout, "~~~~~~\n");
+        fprintf(stdout, "\n");
         while (st->n_flags && flag != NULL) {
             print_flag(&flag->key, flag->label,
                        flag->description, rest);
@@ -248,7 +252,7 @@ void usage_rest_md(bool rest)
         fprintf(stdout, "%s:\n", _("Parameters"));
         if (rest)
             fprintf(stdout, "~~~~~~~~~~~\n");
-
+        fprintf(stdout, "\n");
         char image_spec_rest[GPATH_MAX];
         image_spec_rest[0] = '\0';
         while (opt != NULL) {
