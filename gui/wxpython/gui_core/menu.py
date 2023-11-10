@@ -331,10 +331,8 @@ class HistoryModuleWindow(wx.Panel):
             self._tree, proportion=1, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5
         )
 
+        self.SetSizerAndFit(sizer)
         self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        self.FitInside()
-
         self.Layout()
 
     def _createTree(self):
@@ -354,7 +352,6 @@ class HistoryModuleWindow(wx.Panel):
         """Update the model and refresh the tree"""
         self._model.CreateModel()
         self._tree.SetModel(self._model.GetModel())
-        self.Layout()
 
     def OnItemSelected(self, node):
         """Item selected"""
