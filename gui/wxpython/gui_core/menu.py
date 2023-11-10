@@ -324,6 +324,8 @@ class HistoryModuleWindow(wx.Panel):
 
         self._createTree()
 
+        self._layout()
+
     def _layout(self):
         """Dialog layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -343,7 +345,6 @@ class HistoryModuleWindow(wx.Panel):
         self._tree.selectionChanged.connect(self.OnItemSelected)
         self._tree.itemActivated.connect(lambda node: self.Run(node))
         self._giface.currentMapsetChanged.connect(self._updateHistoryModel)
-        self._layout()
 
     def _getTreeInstance(self):
         return CTreeView(model=self._model.GetModel(), parent=self)

@@ -390,9 +390,7 @@ class GMFrame(wx.Frame):
     def _createHistoryModule(self, parent):
         """Initialize Module history widget"""
         if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
-            self.history = HistoryModuleWindow(
-                parent=parent, giface=self._giface
-            )
+            self.history = HistoryModuleWindow(parent=parent, giface=self._giface)
             self.history.showNotification.connect(
                 lambda message: self.SetStatusText(message)
             )
