@@ -159,7 +159,6 @@ class ExampleMapPanel(SingleMapPanel):
     def InitVariables(self):
         """!Initialize any variables nneded by application"""
         self.currentRaster = None
-        self.statitistics = dict()
 
         # use WIND_OVERRIDE region not to affect current region
         gcore.use_temp_region()
@@ -329,7 +328,7 @@ class ExampleMapPanel(SingleMapPanel):
 
         self.UpdateStatistics()
 
-    def ComputeStatitistics(self):
+    def ComputeStatistics(self):
         """!Computes statistics for raster map using 'r.univar' module.
 
         @return statistic in form of dictionary
@@ -349,7 +348,7 @@ class ExampleMapPanel(SingleMapPanel):
 
         Called after changing raster map.
         """
-        stats = self.ComputeStatitistics()
+        stats = self.ComputeStatistics()
         self.info.WriteStatistics(name=self.currentRaster, statDict=stats)
 
 
