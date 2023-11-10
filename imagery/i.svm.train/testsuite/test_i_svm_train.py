@@ -88,8 +88,10 @@ class IOValidationTest(TestCase):
         cls.rast6 = grass.tempname(10)
         cls.runModule(
             "r.mapcalc",
-            expression=f"{cls.rast6}=if(row() == 1 && col() == 1, 10, "
-            + "if(row() == 2 && col() == 2, -10, rand(-10.0,10)))",
+            expression=(
+                f"{cls.rast6}=if(row() == 1 && col() == 1, 10, if(row() == 2 "
+                "&& col() == 2, -10, rand(-10.0,10)))"
+            ),
             seed=1,
             quiet=True,
         )
