@@ -44,24 +44,6 @@ int main(int argc, char *argv[])
     struct Option *opt_group, *opt_subgroup, *opt_sigfile, *opt_values;
     struct Option *opt_svm_cache_size;
 
-    char name_values[GNAME_MAX], name_sigfile[GNAME_MAX];
-    char name_group[GNAME_MAX], name_subgroup[GNAME_MAX];
-    char mapset_values[GMAPSET_MAX], mapset_sigfile[GMAPSET_MAX];
-    char mapset_group[GMAPSET_MAX], mapset_subgroup[GMAPSET_MAX];
-    char sigfile_dir[GPATH_MAX], model_file[GPATH_MAX];
-
-    struct Ref group_ref;
-    char **names_ordered, **mapsets_ordered;
-    const char **semantic_labels_group;
-    char semantic_label[GNAME_MAX];
-    int semantic_label_count = 0, semantic_label_match_count = 0;
-
-    struct svm_model *model;
-
-    struct History history;
-    FILE *misc_file;
-    int sigfile_version;
-
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -107,6 +89,11 @@ int main(int argc, char *argv[])
 
     /* Input validation */
     /* Input maps */
+    char name_values[GNAME_MAX], name_sigfile[GNAME_MAX];
+    char name_group[GNAME_MAX], name_subgroup[GNAME_MAX];
+    char mapset_values[GMAPSET_MAX], mapset_sigfile[GMAPSET_MAX];
+    char mapset_group[GMAPSET_MAX], mapset_subgroup[GMAPSET_MAX];
+    char sigfile_dir[GPATH_MAX], model_file[GPATH_MAX];
     if (G_unqualified_name(opt_group->answer, NULL, name_group, mapset_group) ==
         0)
         strcpy(mapset_group, G_mapset());
@@ -141,6 +128,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("<%s> is an illegal file name"), name_values);
 
     /* Get bands */
+    struct Ref group_ref;
     if (opt_subgroup->answer) {
         if (!I_get_subgroup_ref2(name_group, opt_subgroup->answer, mapset_group,
                                  &group_ref)) {
@@ -164,7 +152,8 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Group <%s@%s> contains no raster maps."),
                           name_group, mapset_group);
     }
-    semantic_labels_group = G_malloc(group_ref.nfiles * sizeof(char *));
+    const char **semantic_labels_group =
+        G_malloc(group_ref.nfiles * sizeof(char *));
     for (int n = 0; n < group_ref.nfiles; n++) {
         semantic_labels_group[n] = Rast_get_semantic_label_or_name(
             group_ref.file[n].name, group_ref.file[n].mapset);
@@ -172,7 +161,8 @@ int main(int argc, char *argv[])
 
     I_get_signatures_dir(sigfile_dir, I_SIGFILE_TYPE_LIBSVM);
     /* Read signature file version */
-    misc_file =
+    int sigfile_version;
+    FILE *misc_file =
         G_fopen_old_misc(sigfile_dir, "version", name_sigfile, mapset_sigfile);
     if (fscanf(misc_file, "%d", &sigfile_version) != 1) {
         G_fatal_error(_("Invalid signature file"));
@@ -189,11 +179,13 @@ int main(int argc, char *argv[])
                                  mapset_sigfile);
     if (!misc_file)
         G_fatal_error(_("Unable to read signature file '%s'."), name_sigfile);
-    names_ordered = G_malloc(group_ref.nfiles * sizeof(char *));
-    mapsets_ordered = G_malloc(group_ref.nfiles * sizeof(char *));
+    char **names_ordered = G_malloc(group_ref.nfiles * sizeof(char *));
+    char **mapsets_ordered = G_malloc(group_ref.nfiles * sizeof(char *));
 
     char frmt[10];
     snprintf(frmt, sizeof(frmt), "%%%ds", GNAME_MAX - 1);
+    char semantic_label[GNAME_MAX];
+    int semantic_label_count = 0, semantic_label_match_count = 0;
     while (fscanf(misc_file, frmt, semantic_label) == 1) {
         semantic_label_count++;
         bool found = false;
@@ -252,6 +244,7 @@ int main(int argc, char *argv[])
     svm_set_print_string_function(&print_func);
 
     /* Load trained model from a file */
+    struct svm_model *model;
     G_verbose_message("Reading in trained SVM");
     G_file_name_misc(model_file, sigfile_dir, "sig", name_sigfile,
                      mapset_sigfile);
@@ -377,6 +370,7 @@ int main(int argc, char *argv[])
     G_free(ranges);
 
     /* Try to give full history */
+    struct History history;
     G_verbose_message("Writing out history");
     Rast_short_history(name_values, "raster", &history);
     misc_file =

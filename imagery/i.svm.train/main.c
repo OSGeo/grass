@@ -47,30 +47,6 @@ int main(int argc, char *argv[])
         *opt_svm_coef0, *opt_svm_eps, *opt_svm_cost, *opt_svm_nu, *opt_svm_p;
     struct Flag *flag_svm_shrink, *flag_svm_prob;
 
-    const char *mapset_labels;
-    char name_labels[GNAME_MAX + GMAPSET_MAX];
-    char name_group[GNAME_MAX], name_subgroup[GNAME_MAX],
-        name_sigfile[GNAME_MAX];
-    char mapset_group[GMAPSET_MAX], mapset_subgroup[GMAPSET_MAX],
-        mapset_sigfile[GMAPSET_MAX];
-    char sigfile_dir[GPATH_MAX];
-    char in_path[GPATH_MAX], out_path[GPATH_MAX];
-
-    struct Ref group_ref;
-    const char **semantic_labels;
-
-    struct svm_parameter parameters;
-    const char *parameters_error;
-
-    struct svm_problem problem;
-
-    struct svm_model *model;
-    int out_status;
-
-    struct Categories cats;
-    struct History history;
-    FILE *misc_file;
-
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -252,6 +228,12 @@ int main(int argc, char *argv[])
 
     /* Input validation */
     /* Input maps */
+    char name_group[GNAME_MAX], name_subgroup[GNAME_MAX],
+        name_sigfile[GNAME_MAX];
+    char mapset_group[GMAPSET_MAX], mapset_subgroup[GMAPSET_MAX],
+        mapset_sigfile[GMAPSET_MAX];
+    char sigfile_dir[GPATH_MAX];
+    char in_path[GPATH_MAX], out_path[GPATH_MAX];
     if (G_unqualified_name(opt_group->answer, NULL, name_group, mapset_group) ==
         0)
         strcpy(mapset_group, G_mapset());
@@ -271,6 +253,8 @@ int main(int argc, char *argv[])
                       name_subgroup, name_group, mapset_group);
     }
 
+    const char *mapset_labels;
+    char name_labels[GNAME_MAX + GMAPSET_MAX];
     strcpy(name_labels, opt_labels->answer);
     if ((mapset_labels = G_find_raster(name_labels, "")) == NULL) {
         G_fatal_error(_("Raster map <%s> not found"), opt_labels->answer);
@@ -286,6 +270,7 @@ int main(int argc, char *argv[])
     /* Input SVM parameters */
     /* TODO: Implement parameter checking duplicating svm_check_parameter() to
      * generate translatable errors */
+    struct svm_parameter parameters;
     parameters.cache_size = atoi(opt_svm_cache_size->answer);
     parameters.degree = atoi(opt_svm_degree->answer);
     parameters.gamma = atof(opt_svm_gamma->answer);
@@ -343,6 +328,7 @@ int main(int argc, char *argv[])
     parameters.nr_weight = 0;
 
     /* Get bands */
+    struct Ref group_ref;
     if (opt_subgroup->answer) {
         if (!I_get_subgroup_ref2(name_group, opt_subgroup->answer, mapset_group,
                                  &group_ref)) {
@@ -366,7 +352,7 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Group <%s@%s> contains no raster maps."),
                           name_group, mapset_group);
     }
-    semantic_labels = G_malloc(group_ref.nfiles * sizeof(char *));
+    const char **semantic_labels = G_malloc(group_ref.nfiles * sizeof(char *));
 
     /* Precompute values for mean normalization */
     DCELL *means, *ranges;
@@ -416,6 +402,7 @@ int main(int argc, char *argv[])
     svm_set_print_string_function(&print_func);
 
     /* Fill svm_problem struct with training data */
+    struct svm_problem problem;
     G_message(_("Reading training data"));
     fill_problem(name_labels, mapset_labels, group_ref, means, ranges,
                  &problem);
@@ -423,12 +410,13 @@ int main(int argc, char *argv[])
     /* svm_check_parameter needs filled svm_problem struct thus checking only
      * now */
     G_verbose_message("Checking SVM parametrization");
-    parameters_error = svm_check_parameter(&problem, &parameters);
+    const char *parameters_error = svm_check_parameter(&problem, &parameters);
     if (parameters_error)
         G_fatal_error(_("SVM parameter validation returned an error: %s\n"),
                       parameters_error);
 
     /* Train model. Might take some time. */
+    struct svm_model *model;
     G_message(_("Starting training process (it will take some time; "
                 "no progress is printed, be patient)"));
     model = svm_train(&problem, &parameters);
@@ -440,7 +428,7 @@ int main(int argc, char *argv[])
     I_make_signatures_dir(I_SIGFILE_TYPE_LIBSVM);
     I_get_signatures_dir(sigfile_dir, I_SIGFILE_TYPE_LIBSVM);
     /* G_fopen_new_misc should create a directory for later use */
-    misc_file = G_fopen_new_misc(sigfile_dir, "version", name_sigfile);
+    FILE *misc_file = G_fopen_new_misc(sigfile_dir, "version", name_sigfile);
     if (!misc_file)
         G_fatal_error(_("Unable to write trained model to file '%s'."),
                       name_sigfile);
@@ -449,7 +437,7 @@ int main(int argc, char *argv[])
 
     /* Write out SVM values in a signature file */
     G_file_name_misc(out_path, sigfile_dir, "sig", name_sigfile, G_mapset());
-    out_status = svm_save_model(out_path, model);
+    int out_status = svm_save_model(out_path, model);
     if (out_status != 0) {
         G_fatal_error(
             _("Unable to write trained model to file '%s'. Error code: %d"),
@@ -481,6 +469,7 @@ int main(int argc, char *argv[])
     G_free(ranges);
 
     /* Copy CATs file. Will be used for prediction result maps */
+    struct Categories cats;
     G_verbose_message("Copying category information");
     if (Rast_read_cats(name_labels, mapset_labels, &cats) == 0) {
         /* Path to training label map CATs file */
@@ -503,6 +492,7 @@ int main(int argc, char *argv[])
     }
 
     /* History will be appended to a prediction result map history */
+    struct History history;
     G_verbose_message("Writing out history");
     misc_file = G_fopen_new_misc(sigfile_dir, "history", name_sigfile);
     if (misc_file != NULL) {
