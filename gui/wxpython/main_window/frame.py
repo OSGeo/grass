@@ -55,7 +55,7 @@ from core.watchdog import (
 )
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
-from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree, HistoryModuleTree
+from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
 from main_window.notebook import MapNotebook
 from gui_core.widgets import GNotebook
 from core.gconsole import GConsole, EVT_IGNORED_CMD_RUN
@@ -163,8 +163,6 @@ class GMFrame(wx.Frame):
         self._menuTreeBuilder = LayerManagerMenuData(message_handler=add_menu_error)
         # the search tree and command console
         self._moduleTreeBuilder = LayerManagerModuleTree(message_handler=add_menu_error)
-        # the history tree of executed commands
-        self._historyTreeBuilder = HistoryModuleTree()
         self._auimgr = SingleWindowAuiManager(self)
 
         # list of open dialogs
@@ -356,27 +354,6 @@ class GMFrame(wx.Frame):
         else:
             self.search = None
 
-    def _createHistoryModule(self, parent):
-        """Initialize Module history widget"""
-        if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
-            self.history = HistoryModuleWindow(
-                parent=parent,
-                handlerObj=self,
-                giface=self._giface,
-                model=self._historyTreeBuilder.GetModel()
-            )
-            self._giface.currentMapsetChanged.connect(self.UpdateHistoryModel)
-
-            self.history.showNotification.connect(
-                lambda message: self.SetStatusText(message)
-            )
-        else:
-            self.history = None
-
-    def UpdateHistoryModel(self):
-        self._historyTreeBuilder = HistoryModuleTree()
-        self.history.UpdateModel(self._historyTreeBuilder.GetModel())
-
     def _createConsole(self, parent):
         """Initialize Console widget"""
         # create 'command output' text area
@@ -409,6 +386,18 @@ class GMFrame(wx.Frame):
         )
 
         self._setCopyingOfSelectedText()
+
+    def _createHistoryModule(self, parent):
+        """Initialize Module history widget"""
+        if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
+            self.history = HistoryModuleWindow(
+                parent=parent, giface=self._giface
+            )
+            self.history.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
+        else:
+            self.history = None
 
     def _createPythonShell(self, parent):
         """Initialize Python shell widget"""
@@ -580,8 +569,8 @@ class GMFrame(wx.Frame):
         self._createDataCatalog(parent=self)
         self._createDisplay(parent=self)
         self._createSearchModule(parent=self)
-        self._createHistoryModule(parent=self)
         self._createConsole(parent=self)
+        self._createHistoryModule(parent=self)
         self._createPythonShell(parent=self)
         self.toolbars = {
             "workspace": LMWorkspaceToolbar(parent=self),
@@ -689,10 +678,10 @@ class GMFrame(wx.Frame):
         )
 
         self._auimgr.AddPane(
-            self.history,
+            self.goutput,
             aui.AuiPaneInfo()
-            .Name("history")
-            .Caption(_("History"))
+            .Name("console")
+            .Caption(_("Console"))
             .Right()
             .BestSize(self.PANE_BEST_SIZE)
             .MinSize(self.PANE_MIN_SIZE)
@@ -703,10 +692,10 @@ class GMFrame(wx.Frame):
         )
 
         self._auimgr.AddPane(
-            self.goutput,
+            self.history,
             aui.AuiPaneInfo()
-            .Name("console")
-            .Caption(_("Console"))
+            .Name("history")
+            .Caption(_("History"))
             .Right()
             .BestSize(self.PANE_BEST_SIZE)
             .MinSize(self.PANE_MIN_SIZE)

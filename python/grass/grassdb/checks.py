@@ -137,22 +137,22 @@ def get_mapset_owner(mapset_path):
         return path.owner()
     except KeyError:
         return None
-    
+
+
 def get_mapset_history_path(mapset_path):
     """Returns path to the mapset history file or None if mapset has no history."""
     history_file_name = ".wxgui_history"
     history_file = os.path.join(mapset_path, history_file_name)
-    if os.path.exists(history_file):
-        return history_file
-    return None
+    return history_file if os.path.exists(history_file) else None
+
 
 def get_current_mapset_history_path():
-    """Returns path to the current mapset history file or None if current mapset has no history."""
+    """Returns path to the current mapset history file
+    or None if current mapset has no history."""
     genv = gisenv()
-    mapsetPath = os.path.join(
-                genv["GISDBASE"], genv["LOCATION_NAME"], genv["MAPSET"]
-            )
-    return get_mapset_history_path(mapsetPath)
+    mapset_path = Path(genv["GISDBASE"]) / genv["LOCATION_NAME"] / genv["MAPSET"]
+    return get_mapset_history_path(mapset_path)
+
 
 def is_fallback_session():
     """Checks if a user encounters a fallback GRASS session.

@@ -16,7 +16,6 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import re
 import copy
 
 from core.treemodel import TreeModel, ModuleNode
@@ -94,27 +93,34 @@ class LayerManagerModuleTree(MenuTreeModelBuilder):
             )
 
 
-class HistoryModuleTree():
-    """Data class for history of executed commands."""
+class HistoryModuleTree:
+    """Data class for the history of executed commands."""
 
-    def __init__(self):
-
+    def __init__(self, max_length=50):
         self.model = TreeModel(ModuleNode)
+        self.max_length = max_length
         self.CreateModel()
 
     def CreateModel(self):
-        history_path = get_current_mapset_history_path()       
+        self.model.RemoveNode(self.model.root)
+        history_path = get_current_mapset_history_path()
         try:
             with open(history_path, "r") as f:
                 for label in f:
-                    data = dict(
-                        label=label
-                    )
-                    self.model.AppendNode(parent=self.model.root, label=label, data=data)
-        except:
-            return
+                    self._addLabelToModel(label.strip())
+        except Exception:
+            pass
+
+    def _trim_text(self, text):
+        if len(text) > self.max_length:
+            return text[: self.max_length - 3] + "..."
+        else:
+            return text
+
+    def _addLabelToModel(self, label):
+        data = {"label": self._trim_text(label), "command": label}
+        self.model.AppendNode(parent=self.model.root, label=data["label"], data=data)
 
     def GetModel(self):
-        """Returns copy of model.
-        """
+        """Returns a deep copy of the model."""
         return copy.deepcopy(self.model)

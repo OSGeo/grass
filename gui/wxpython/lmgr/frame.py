@@ -164,6 +164,7 @@ class GMFrame(wx.Frame):
         self._createDisplay(self.notebook)
         self._createSearchModule(self.notebook)
         self._createConsole(self.notebook)
+        self._createHistoryModule(self.notebook)
         self._createPythonShell(self.notebook)
         self._addPagesToNotebook()
         self.toolbars = {
@@ -415,21 +416,6 @@ class GMFrame(wx.Frame):
         else:
             self.search = None
 
-    def _createHistoryModule(self, parent):
-        """Initialize Module history widget"""
-        if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
-            self.history = HistoryModuleWindow(
-                parent=parent,
-                handlerObj=self,
-                giface=self._giface,
-                model=self._historyTreeBuilder.GetModel()
-            )
-            self.history.showNotification.connect(
-                lambda message: self.SetStatusText(message)
-            )
-        else:
-            self.history = None
-
     def _createConsole(self, parent):
         """Initialize Console widget"""
         # create 'command output' text area
@@ -459,6 +445,16 @@ class GMFrame(wx.Frame):
         )
 
         self._setCopyingOfSelectedText()
+
+    def _createHistoryModule(self, parent):
+        """Initialize Module history widget"""
+        if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
+            self.history = HistoryModuleWindow(parent=parent, giface=self._giface)
+            self.history.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
+        else:
+            self.history = None
 
     def _createPythonShell(self, parent):
         """Initialize Python shell widget"""
@@ -642,6 +638,10 @@ class GMFrame(wx.Frame):
         self.goutput.contentChanged.connect(
             lambda notification: self._switchPage(notification)
         )
+
+        # add 'history module' widget to main notebook page
+        if self.history:
+            self.notebook.AddPage(page=self.history, text=_("History"), name="history")
 
         # add 'python shell' widget to main notebook page
         if self.pyshell:

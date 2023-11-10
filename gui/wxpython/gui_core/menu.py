@@ -31,7 +31,9 @@ from core.gcmd import EncodeString
 from gui_core.treeview import CTreeView
 from gui_core.wrap import Button, SearchCtrl
 from gui_core.wrap import Menu as MenuWidget
+from lmgr.menudata import HistoryModuleTree
 from icons.icon import MetaIcon
+from gui_core.forms import GUI
 
 from grass.pydispatch.signal import Signal
 
@@ -313,94 +315,70 @@ class HistoryModuleWindow(wx.Panel):
         showNotification - attribute 'message'
     """
 
-    def __init__(self, parent, handlerObj, giface, model, id=wx.ID_ANY, **kwargs):
+    def __init__(self, parent, giface, id=wx.ID_ANY, **kwargs):
         self.parent = parent
-        self._handlerObj = handlerObj
         self._giface = giface
 
         self.showNotification = Signal("ModuleHistoryWindow.showNotification")
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
 
-        self._tree = CTreeView(model=model, parent=self)
-        self._tree.SetToolTip(_("Double-click to run the command"))
+        self._createTree()
 
-        self._tree.selectionChanged.connect(self.OnItemSelected)
-        self._tree.itemActivated.connect(lambda node: self.Run(node))
-        
-        self._layout()
-    
     def _layout(self):
-        """Do dialog layout"""
+        """Dialog layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(
             self._tree, proportion=1, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5
         )
-        self.SetSizerAndFit(sizer)
-        self.SetAutoLayout(True)
-        self.Layout()
-    
-    def UpdateModel(self, model):
-        """Create tree based on given model"""
-        self._tree = CTreeView(model=model, parent=self)
-        self._tree.SetToolTip(_("Double-click to run the command"))
 
+        self.SetAutoLayout(True)
+        self.SetSizer(sizer)
+        self.FitInside()
+
+        self.Layout()
+
+    def _createTree(self):
+        """Create tree based on the model"""
+        self._model = HistoryModuleTree()
+        self._tree = self._getTreeInstance()
+        self._tree.SetToolTip(_("Double-click to run the command"))
         self._tree.selectionChanged.connect(self.OnItemSelected)
         self._tree.itemActivated.connect(lambda node: self.Run(node))
-        
+        self._giface.currentMapsetChanged.connect(self._updateHistoryModel)
         self._layout()
- 
+
+    def _getTreeInstance(self):
+        return CTreeView(model=self._model.GetModel(), parent=self)
+
+    def _updateHistoryModel(self):
+        """Update the model and refresh the tree"""
+        self._model.CreateModel()
+        self._tree.SetModel(self._model.GetModel())
+        self.Layout()
+
     def OnItemSelected(self, node):
         """Item selected"""
-        data = node.data
-        if not data or "command" not in data:
-            return
-
-        if data["command"]:
-            label = data["command"]
-            if data["description"]:
-                label += " -- " + data["description"]
-        else:
-            label = data["description"]
-
-        # create list of the executed command and its flags and parameters
-        lst = re.split('\s+', node.label)
-        command = lst[0]
-
-        self.showNotification.emit(message=label)
+        command = node.data["command"]
+        self.showNotification.emit(message=command)
 
     def _GetSelectedNode(self):
         selection = self._tree.GetSelected()
         if not selection:
             return None
         return selection[0]
-    
+
     def Run(self, node=None):
-        """Run selected command.
-
-        :param node: a tree node associated with the module or other item
-        """
-        if not node:
-            node = self._GetSelectedNode()
-        # nothing selected
-        if not node:
-            return
-        data = node.data
-        # non-leaf nodes
-        if not data:
-            # expand/collapse location/mapset...
-            if self._tree.IsNodeExpanded(node):
-                self._tree.CollapseNode(node, recursive=False)
-            else:
-                self._tree.ExpandNode(node, recursive=False)
-            return
-
-        # extract name of the handler and create a new call
-        handler = "self._handlerObj." + data["handler"].lstrip("self.")
-
-        if data["command"]:
-            eval(handler)(event=None, cmd=data["command"].split())
-        else:
-            eval(handler)(event=None)
+        """Parse selected history command into list and launch module dialog."""
+        node = node or self._GetSelectedNode()
+        if node:
+            command = node.data["command"]
+            lst = re.split("\s+", command)
+            try:
+                GUI(parent=self, giface=self._giface).ParseCommand(lst)
+            except Exception:
+                self.showNotification.emit(
+                    message=_("History record cound not be parsed into command")
+                )
 
 
 class RecentFilesMenu:

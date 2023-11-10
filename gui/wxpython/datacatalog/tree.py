@@ -1795,7 +1795,6 @@ class DataCatalogTree(TreeView):
         grassdb = self.selected_grassdb[0].data["name"]
         location = self.selected_location[0].data["name"]
         mapset = self.selected_mapset[0].data["name"]
-        print("call switch")
         self.SwitchMapset(grassdb, location, mapset)
 
     def _updateAfterGrassdbChanged(
