@@ -37,6 +37,12 @@ It should not impact the outcome, just the training time. On some
 input parameter and data combinations training with the shrinking
 heuristics disabled might be faster.</p>
 
+<p>The <em>cache</em> parameter determines the maximum memory allocated
+for kernel caching to enhance computational speed. It's important to
+note that the actual module's memory consumption may vary from this
+setting, as it solely impacts LIBSVM's internal caching. The cache is
+utilized on an as-needed basis, so it's unlikely to reach the specified value.</p>
+
 <h2>EXAMPLE</h2>
 
 <p>This is the first part of classification process. See
