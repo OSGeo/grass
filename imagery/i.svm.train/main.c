@@ -70,11 +70,6 @@ int main(int argc, char *argv[])
     struct Categories cats;
     struct History history;
     FILE *misc_file;
-    DCELL *Ms, *Rs;
-    struct Range crange;
-    struct FPRange fprange;
-    int cmin, cmax;
-    double dmin, dmax;
 
     G_gisinit(argv[0]);
 
@@ -372,9 +367,16 @@ int main(int argc, char *argv[])
                           name_group, mapset_group);
     }
     semantic_labels = G_malloc(group_ref.nfiles * sizeof(char *));
-    Ms = G_malloc(group_ref.nfiles * sizeof(DCELL));
-    Rs = G_malloc(group_ref.nfiles * sizeof(DCELL));
+
+    /* Precompute values for mean normalization */
+    DCELL *means, *ranges;
+    means = G_malloc(group_ref.nfiles * sizeof(DCELL));
+    ranges = G_malloc(group_ref.nfiles * sizeof(DCELL));
     for (int n = 0; n < group_ref.nfiles; n++) {
+        struct Range crange;
+        struct FPRange fprange;
+        int cmin, cmax;
+        double dmin, dmax;
         int ret;
         semantic_labels[n] = Rast_get_semantic_label_or_name(
             group_ref.file[n].name, group_ref.file[n].mapset);
@@ -383,8 +385,10 @@ int main(int argc, char *argv[])
                               &crange);
         if (ret == 1) {
             Rast_get_range_min_max(&crange, &cmin, &cmax);
-            Ms[n] = (cmin / 2.0) + (cmax / 2.0) + ((cmin % 2 + cmax % 2) / 2.0);
-            Rs[n] = (cmax - cmin) / 2.0;
+            /* Calculate mean without a risk of integer overflow */
+            means[n] =
+                (cmin / 2.0) + (cmax / 2.0) + ((cmin % 2 + cmax % 2) / 2.0);
+            ranges[n] = (cmax - cmin) / 2.0;
         }
         else if (ret == 3) {
             ret = Rast_read_fp_range(group_ref.file[n].name,
@@ -395,14 +399,14 @@ int main(int argc, char *argv[])
                     group_ref.file[n].name, group_ref.file[n].mapset);
             }
             Rast_get_fp_range_min_max(&fprange, &dmin, &dmax);
-            Ms[n] = (dmin + dmax) / 2.0;
-            Rs[n] = (dmax - dmin) / 2.0;
+            means[n] = (dmin + dmax) / 2.0;
+            ranges[n] = (dmax - dmin) / 2.0;
         }
         else {
             G_fatal_error(_("Unable to get value range for raster map <%s@%s>"),
                           group_ref.file[n].name, group_ref.file[n].mapset);
         }
-        if (Rs[n] < GRASS_EPSILON) {
+        if (ranges[n] < GRASS_EPSILON) {
             G_fatal_error(_("Invalid value range for raster map <%s@%s>"),
                           group_ref.file[n].name, group_ref.file[n].mapset);
         }
@@ -413,7 +417,8 @@ int main(int argc, char *argv[])
 
     /* Fill svm_problem struct with training data */
     G_message(_("Reading training data"));
-    fill_problem(name_labels, mapset_labels, group_ref, Ms, Rs, &problem);
+    fill_problem(name_labels, mapset_labels, group_ref, means, ranges,
+                 &problem);
 
     /* svm_check_parameter needs filled svm_problem struct thus checking only
      * now */
@@ -469,11 +474,11 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Unable to write trained model to file '%s'."),
                       name_sigfile);
     for (int n = 0; n < group_ref.nfiles; n++) {
-        fprintf(misc_file, "%lf %lf\n", Ms[n], Rs[n]);
+        fprintf(misc_file, "%lf %lf\n", means[n], ranges[n]);
     }
     fclose(misc_file);
-    G_free(Ms);
-    G_free(Rs);
+    G_free(means);
+    G_free(ranges);
 
     /* Copy CATs file. Will be used for prediction result maps */
     G_verbose_message("Copying category information");

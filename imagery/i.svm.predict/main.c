@@ -61,8 +61,6 @@ int main(int argc, char *argv[])
     struct History history;
     FILE *misc_file;
     int sigfile_version;
-    DCELL *Ms, *Rs, M, R, *Ms_ordered, *Rs_ordered;
-    int scale_count = 0;
 
     G_gisinit(argv[0]);
 
@@ -227,21 +225,21 @@ int main(int argc, char *argv[])
     }
 
     /* Read rescaling parameters */
+    DCELL *means, *ranges, mean, range;
+    int scale_count = 0;
     misc_file =
         G_fopen_old_misc(sigfile_dir, "scale", name_sigfile, mapset_sigfile);
     if (!misc_file)
         G_fatal_error(_("Unable to read signature file '%s'."), name_sigfile);
-    Ms = G_malloc(group_ref.nfiles * sizeof(DCELL));
-    Rs = G_malloc(group_ref.nfiles * sizeof(DCELL));
-    Ms_ordered = G_malloc(group_ref.nfiles * sizeof(DCELL));
-    Rs_ordered = G_malloc(group_ref.nfiles * sizeof(DCELL));
-    while (fscanf(misc_file, "%lf %lf", &M, &R) == 2) {
+    means = G_malloc(group_ref.nfiles * sizeof(DCELL));
+    ranges = G_malloc(group_ref.nfiles * sizeof(DCELL));
+    while (fscanf(misc_file, "%lf %lf", &mean, &range) == 2) {
         if (scale_count >= group_ref.nfiles)
             G_fatal_error(_("Unable to read signature file '%s'."),
                           name_sigfile);
-        Ms[scale_count] = M;
-        Rs[scale_count] = R;
-        if (R == 0)
+        means[scale_count] = mean;
+        ranges[scale_count] = range;
+        if (range == 0)
             G_fatal_error(_("Unable to read signature file '%s'."),
                           name_sigfile);
         scale_count++;
@@ -310,7 +308,7 @@ int main(int argc, char *argv[])
                         continue;
                     nodes[band].index = band;
                     nodes[band].value =
-                        (buf_bands[band][col] - Ms[band]) / Rs[band];
+                        (buf_bands[band][col] - means[band]) / ranges[band];
                 }
 
                 /* All values where NULLs */
@@ -348,7 +346,7 @@ int main(int argc, char *argv[])
                         continue;
                     nodes[band].index = band;
                     nodes[band].value =
-                        (buf_bands[band][col] - Ms[band]) / Rs[band];
+                        (buf_bands[band][col] - means[band]) / ranges[band];
                 }
 
                 /* All values where NULLs */
@@ -375,10 +373,8 @@ int main(int argc, char *argv[])
         G_free(buf_bands[band]);
     }
     G_free(nodes);
-    G_free(Ms);
-    G_free(Rs);
-    G_free(Ms_ordered);
-    G_free(Rs_ordered);
+    G_free(means);
+    G_free(ranges);
 
     /* Try to give full history */
     G_verbose_message("Writing out history");
