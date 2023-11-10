@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
     opt_svm_cache_size->required = NO;
     opt_svm_cache_size->options = "1-";
     opt_svm_cache_size->answer = "512";
-    opt_svm_cache_size->description = _("Kernel cache size in MB");
+    opt_svm_cache_size->description = _("LIBSVM kernel cache size in MB");
 
     opt_svm_degree = G_define_option();
     opt_svm_degree->key = "degree";
