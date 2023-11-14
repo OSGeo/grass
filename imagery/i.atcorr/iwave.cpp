@@ -6463,7 +6463,6 @@ void IWave::parse()
 
     cin >> iwave;
     cin.ignore(numeric_limits<int>::max(), '\n');
-    printf("iwave = %d\n", iwave);
     if (iwave == 0 || iwave == -2) {
         cin >> ffu.wlinf;
         cin >> ffu.wlsup;
