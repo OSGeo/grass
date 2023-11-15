@@ -44,7 +44,7 @@ jobs:
           echo Flake8: ${{ matrix.flake8-version }}
           echo Pylint: ${{ matrix.pylint-version }}
 
-      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -65,7 +65,7 @@ jobs:
           pip install -r .github/workflows/optional_requirements.txt
           pip install black==${{ matrix.black-version }}
           pip install flake8==${{ matrix.flake8-version }}
-          pip install pylint==${{ matrix.pylint-version }}
+          pip install pylint==${{ matrix.pylint-version }} pytest-github-actions-annotate-failures
 
       - name: Run Black
         run: |
@@ -113,7 +113,8 @@ jobs:
 
       - name: Run Pylint on other files using pytest
         run: |
-          pip install pytest pytest-pylint
+          pip install pytest pytest-pylint==0.19
+          echo "::warning file=.github/workflows/python-code-quality.yml,line=116,col=42,endColumn=48::Temporarily downgraded pytest-pylint to allow merging other PRs. The errors reported with a newer version seem legitimite and should be fixed (2023-10-18, see https://github.com/OSGeo/grass/pull/3205)"
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
           pytest --pylint -m pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) \
