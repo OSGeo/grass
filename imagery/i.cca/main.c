@@ -156,10 +156,10 @@ int main(int argc, char *argv[])
         cov[i] = G_alloc_matrix(bands, bands);
     }
 
-    outbandmax = (CELL *)G_calloc(nclass, sizeof(CELL));
-    outbandmin = (CELL *)G_calloc(nclass, sizeof(CELL));
-    datafds = (int *)G_calloc(nclass, sizeof(int));
-    outfds = (int *)G_calloc(nclass, sizeof(int));
+    outbandmax = (CELL *)G_calloc(bands, sizeof(CELL));
+    outbandmin = (CELL *)G_calloc(bands, sizeof(CELL));
+    datafds = (int *)G_calloc(bands, sizeof(int));
+    outfds = (int *)G_calloc(bands, sizeof(int));
 
     /*
        Here is where the information regarding
@@ -169,13 +169,14 @@ int main(int argc, char *argv[])
      */
 
     samptot = 0;
-    for (i = 1; i <= nclass; i++) {
-        nsamp[i] = sigs.sig[i - 1].npoints;
+    for (i = 0; i < nclass; i++) {
+        nsamp[i] = sigs.sig[i].npoints;
         samptot += nsamp[i];
-        for (j = 1; j <= bands; j++) {
-            mu[i][j] = sigs.sig[i - 1].mean[j - 1];
-            for (k = 1; k <= j; k++)
-                cov[i][j][k] = cov[i][k][j] = sigs.sig[i - 1].var[j - 1][k - 1];
+        for (j = 0; j < bands; j++) {
+            mu[i][j] = sigs.sig[i].mean[j];
+            for (k = 0; k < j; k++) {
+                cov[i][j][k] = cov[i][k][j] = sigs.sig[i].var[j][k];
+            }
         }
     }
 
@@ -200,14 +201,13 @@ int main(int argc, char *argv[])
     }
 
     /* open the cell maps */
-    for (i = 1; i <= bands; i++) {
+    for (i = 0; i < bands; i++) {
         outbandmax[i] = (CELL)0;
         outbandmin[i] = (CELL)0;
 
-        datafds[i] =
-            Rast_open_old(refs.file[i - 1].name, refs.file[i - 1].mapset);
+        datafds[i] = Rast_open_old(refs.file[i].name, refs.file[i].mapset);
 
-        sprintf(tempname, "%s.%d", out_opt->answer, i);
+        sprintf(tempname, "%s.%d", out_opt->answer, i + 1);
         outfds[i] = Rast_open_c_new(tempname);
     }
 
@@ -219,7 +219,7 @@ int main(int argc, char *argv[])
     Rast_init_colors(&color_tbl);
 
     /* close the cell maps */
-    for (i = 1; i <= bands; i++) {
+    for (i = 0; i < bands; i++) {
         Rast_close(datafds[i]);
         Rast_close(outfds[i]);
 
