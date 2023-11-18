@@ -30,23 +30,20 @@ class HistoryCatalogTree:
         self.max_length = max_length
         self.CreateModel()
 
-    def CreateModel(self):
-        self.model.RemoveNode(self.model.root)
-        history_path = get_current_mapset_history_path()
-        cmd_list = read_history(history_path)
-        for label in cmd_list:
-            self._addLabelToModel(label.strip())
-
-    def UpdateModel(self, command):
-        self._addLabelToModel(command)
-
     def _trim_text(self, text):
         if len(text) > self.max_length:
             return text[: self.max_length - 3] + "..."
         else:
             return text
+        
+    def CreateModel(self):
+        self.model.RemoveNode(self.model.root)
+        history_path = get_current_mapset_history_path()
+        cmd_list = read_history(history_path)
+        for label in cmd_list:
+            self.UpdateModel(label.strip())
 
-    def _addLabelToModel(self, label):
+    def UpdateModel(self, label):
         data = {"label": self._trim_text(label), "command": label}
         self.model.AppendNode(parent=self.model.root, label=data["label"], data=data)
 
