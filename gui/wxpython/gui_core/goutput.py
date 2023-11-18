@@ -25,7 +25,7 @@ import wx
 from wx import stc
 
 from grass.pydispatch.signal import Signal
-from grass.grassdb.history import read_history, update_history, copy_history
+from grass.grassdb.history import read_history, update_history, copy_history, get_current_mapset_history_path
 
 # needed just for testing
 if __name__ == "__main__":
@@ -254,7 +254,8 @@ class GConsoleWindow(wx.SplitterWindow):
 
     def _loadHistory(self):
         """Load history from a history file to data structures"""
-        self.cmdPrompt.cmdbuffer = read_history()
+        history_path = get_current_mapset_history_path()
+        self.cmdPrompt.cmdbuffer = read_history(history_path)
         self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
 
     def GetPanel(self, prompt=True):
@@ -450,7 +451,8 @@ class GConsoleWindow(wx.SplitterWindow):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            if copy_history(path):
+            history_path = get_current_mapset_history_path()
+            if copy_history(path, history_path):
                 self.showNotification.emit(
                     message=_("Command history saved to '{}'".format(path))
                 )

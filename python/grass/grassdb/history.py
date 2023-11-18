@@ -1,5 +1,5 @@
 """
-Managing existing history file included within current mapset
+Managing existing history files included within mapset
 
 (C) 2023 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -17,24 +17,26 @@ from grass.script import gisenv
 from core.gcmd import GError
 
 
+def get_mapset_history_path(mapset_path, history_file_name):
+    """Returns path to the mapset history file or None if mapset has no history."""
+    history_file = os.path.join(mapset_path, history_file_name)
+    return history_file if os.path.exists(history_file) else None
+
+
 def get_current_mapset_history_path():
     """Returns path to the current mapset history file
     or None if current mapset has no history."""
     env = gisenv()
-    return os.path.join(
-        env["GISDBASE"],
-        env["LOCATION_NAME"],
-        env["MAPSET"],
-        ".wxgui_history",
-    )
+    mapsetPath = os.path.join(env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"])
+    return get_mapset_history_path(mapsetPath, ".wxgui_history")
 
 
-def read_history():
-    """Get list of commands from history file"""
+def read_history(history_path):
+    """Get list of commands from history file."""
     hist = list()
     try:
         fileHistory = codecs.open(
-            get_current_mapset_history_path(),
+            history_path,
             encoding="utf-8",
             mode="r",
             errors="replace",
@@ -51,15 +53,15 @@ def read_history():
     return hist
 
 
-def update_history(command):
-    """Update history file
+def update_history(command, history_path=None):
+    """Update history file.
 
     :param command: the command given as a string
     """
+    if not history_path:
+        history_path = get_current_mapset_history_path()
     try:
-        fileHistory = codecs.open(
-            get_current_mapset_history_path(), encoding="utf-8", mode="a"
-        )
+        fileHistory = codecs.open(history_path, encoding="utf-8", mode="a")
     except IOError as e:
         GError(_("Unable to write file {}'.\n\nDetails: {}").format(fileHistory, e))
         return
@@ -70,16 +72,15 @@ def update_history(command):
         fileHistory.close()
 
 
-def copy_history(targetFile):
+def copy_history(target_path, history_path):
     """Copy history file to the target location.
     Returns True if file is successfully copied."""
-    historyFile = get_current_mapset_history_path()
     try:
-        shutil.copyfile(historyFile, targetFile)
+        shutil.copyfile(history_path, target_path)
     except (IOError, OSError) as e:
         GError(
             _("Unable to copy file {} to {}'.\n\nDetails: {}").format(
-                historyFile, targetFile, e
+                history_path, target_path, e
             )
         )
         return False

@@ -19,7 +19,7 @@ import copy
 
 from core.treemodel import TreeModel, ModuleNode
 
-from grass.grassdb.history import read_history
+from grass.grassdb.history import read_history, get_current_mapset_history_path
 
 
 class HistoryCatalogTree:
@@ -32,7 +32,8 @@ class HistoryCatalogTree:
 
     def CreateModel(self):
         self.model.RemoveNode(self.model.root)
-        cmd_list = read_history()
+        history_path = get_current_mapset_history_path()
+        cmd_list = read_history(history_path)
         for label in cmd_list:
             self._addLabelToModel(label.strip())
 
