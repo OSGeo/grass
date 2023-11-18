@@ -323,6 +323,9 @@ class HistoryModuleWindow(wx.Panel):
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
 
         self._createTree()
+    
+        self._giface.currentMapsetChanged.connect(self.UpdateHistoryModelFromScratch)
+        self._giface.updateHistory.connect(lambda cmd: self.UpdateHistoryModelByCommand(cmd))
 
         self._layout()
 
@@ -344,16 +347,20 @@ class HistoryModuleWindow(wx.Panel):
         self._tree.SetToolTip(_("Double-click to run the command"))
         self._tree.selectionChanged.connect(self.OnItemSelected)
         self._tree.itemActivated.connect(lambda node: self.Run(node))
-        self._giface.currentMapsetChanged.connect(self._updateHistoryModel)
 
     def _getTreeInstance(self):
         return CTreeView(model=self._model.GetModel(), parent=self)
 
-    def _updateHistoryModel(self):
-        """Update the model and refresh the tree"""
+    def UpdateHistoryModelFromScratch(self):
+        """Update the model from scratch and refresh the tree"""
         self._model.CreateModel()
         self._tree.SetModel(self._model.GetModel())
 
+    def UpdateHistoryModelByCommand(self, cmd):
+        """Update the model by the command and refresh the tree"""
+        self._model.UpdateModel(cmd)
+        self._tree.SetModel(self._model.GetModel())
+        
     def OnItemSelected(self, node):
         """Item selected"""
         command = node.data["command"]

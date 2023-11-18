@@ -110,6 +110,9 @@ class HistoryModuleTree:
                     self._addLabelToModel(label.strip())
         except Exception:
             pass
+    
+    def UpdateModel(self, command):
+        self._addLabelToModel(command)
 
     def _trim_text(self, text):
         if len(text) > self.max_length:

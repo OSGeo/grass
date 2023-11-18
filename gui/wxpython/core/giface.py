@@ -199,15 +199,6 @@ class GrassInterface:
         """
         raise NotImplementedError()
 
-    def UpdateCmdHistory(self, cmd):
-        """Add the command to the current history list shown to the user
-
-        .. note::
-
-            Some implementations may not implement this method or do nothing.
-        """
-        raise NotImplementedError()
-
 
 class StandaloneGrassInterface(GrassInterface):
     """@implements GrassInterface"""
@@ -240,6 +231,9 @@ class StandaloneGrassInterface(GrassInterface):
 
         # Signal emitted when workspace is changed
         self.workspaceChanged = Signal("StandaloneGrassInterface.workspaceChanged")
+
+        # Signal emitted when history should be updated
+        self.updateHistory = Signal("StandaloneGrassInterface.updateHistory")
 
         # workaround, standalone grass interface should be moved to sep. file
         from core.gconsole import GConsole, EVT_CMD_OUTPUT, EVT_CMD_PROGRESS
@@ -343,7 +337,3 @@ class StandaloneGrassInterface(GrassInterface):
         # TODO: implement some progress with same inface as gui one
         # (probably using g.message or similarly to Write... functions)
         raise NotImplementedError()
-
-    def UpdateCmdHistory(self, cmd):
-        """There is no history displayed to the user, doing nothing"""
-        pass

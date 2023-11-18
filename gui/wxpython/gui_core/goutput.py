@@ -84,6 +84,7 @@ class GConsoleWindow(wx.SplitterWindow):
         self.panelPrompt = wx.Panel(parent=self, id=wx.ID_ANY)
         # initialize variables
         self.parent = parent  # GMFrame | CmdPanel | ?
+        self.giface = giface
         self._gconsole = gconsole
         self._menuModel = menuModel
 
@@ -134,6 +135,10 @@ class GConsoleWindow(wx.SplitterWindow):
 
         if not self._gcstyle & GC_PROMPT:
             self.cmdPrompt.Hide()
+
+        if self._gcstyle == GC_PROMPT:
+            # connect update history signal only for main Console Window
+            self.giface.updateHistory.connect(lambda cmd: self.cmdPrompt.UpdateHistory(cmd))
 
         # buttons
         self.btnClear = ClearButton(parent=self.panelPrompt)

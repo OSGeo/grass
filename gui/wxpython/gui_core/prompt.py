@@ -109,6 +109,38 @@ class GPrompt(object):
         self.cmdbuffer = self._readHistory()
         self.cmdindex = len(self.cmdbuffer)
 
+    def UpdateHistory(self, command):
+        """Update history file
+
+        :param command: the command given as a string
+        """
+        env = grass.gisenv()
+        try:
+            fileHistory = codecs.open(
+                os.path.join(
+                    env["GISDBASE"],
+                    env["LOCATION_NAME"],
+                    env["MAPSET"],
+                    ".wxgui_history",
+                ),
+                encoding="utf-8",
+                mode="a")
+        except IOError as e:
+            GError(
+                _("Unable to write file {}'.\n\nDetails: {}").format(
+                    fileHistory, e
+                )
+            )
+            return
+
+        try:
+            fileHistory.write(command + os.linesep)
+        finally:
+            fileHistory.close()
+
+        # update wxGUI prompt
+        self._updateCmdHistory(command)
+
     def _getListOfMaps(self):
         """Get list of maps"""
         result = dict()
@@ -364,7 +396,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetCurrentPos(pos)
         self.SetFocus()
 
-    def UpdateCmdHistory(self, cmd):
+    def _updateCmdHistory(self, cmd):
         """Update command history
 
         :param cmd: command given as a string
