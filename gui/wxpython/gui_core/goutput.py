@@ -25,6 +25,7 @@ import wx
 from wx import stc
 
 from grass.pydispatch.signal import Signal
+from grass.grassdb.history import read_history, update_history, copy_history
 
 # needed just for testing
 if __name__ == "__main__":
@@ -136,9 +137,17 @@ class GConsoleWindow(wx.SplitterWindow):
         if not self._gcstyle & GC_PROMPT:
             self.cmdPrompt.Hide()
 
+        # read history file
+        self._loadHistory()
+        if self.giface:
+            self.giface.currentMapsetChanged.connect(self._loadHistory)
+
         if self._gcstyle == GC_PROMPT:
             # connect update history signal only for main Console Window
-            self.giface.updateHistory.connect(lambda cmd: self.cmdPrompt.UpdateHistory(cmd))
+            self.giface.updateHistory.connect(
+                lambda cmd: self.cmdPrompt.UpdateCmdHistory(cmd)
+            )
+            self.giface.updateHistory.connect(lambda cmd: update_history(cmd))
 
         # buttons
         self.btnClear = ClearButton(parent=self.panelPrompt)
@@ -242,6 +251,11 @@ class GConsoleWindow(wx.SplitterWindow):
         # layout
         self.SetAutoLayout(True)
         self.Layout()
+
+    def _loadHistory(self):
+        """Load history from a history file to data structures"""
+        self.cmdPrompt.cmdbuffer = read_history()
+        self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
 
     def GetPanel(self, prompt=True):
         """Get panel
@@ -436,7 +450,7 @@ class GConsoleWindow(wx.SplitterWindow):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            if self.cmdPrompt.CopyHistory(path):
+            if copy_history(path):
                 self.showNotification.emit(
                     message=_("Command history saved to '{}'".format(path))
                 )

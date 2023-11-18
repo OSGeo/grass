@@ -16,15 +16,11 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import copy
 
-from core.treemodel import TreeModel, ModuleNode
 from core.menutree import MenuTreeModelBuilder
 from core.toolboxes import getMenudataFile
 from core.globalvar import WXGUIDIR
 from core.gcmd import GError
-
-from grass.grassdb.checks import get_current_mapset_history_path
 
 
 class LayerManagerMenuData(MenuTreeModelBuilder):
@@ -91,39 +87,3 @@ class LayerManagerModuleTree(MenuTreeModelBuilder):
             MenuTreeModelBuilder.__init__(
                 self, fallback, message_handler=message_handler
             )
-
-
-class HistoryModuleTree:
-    """Data class for the history of executed commands."""
-
-    def __init__(self, max_length=50):
-        self.model = TreeModel(ModuleNode)
-        self.max_length = max_length
-        self.CreateModel()
-
-    def CreateModel(self):
-        self.model.RemoveNode(self.model.root)
-        history_path = get_current_mapset_history_path()
-        try:
-            with open(history_path, "r") as f:
-                for label in f:
-                    self._addLabelToModel(label.strip())
-        except Exception:
-            pass
-    
-    def UpdateModel(self, command):
-        self._addLabelToModel(command)
-
-    def _trim_text(self, text):
-        if len(text) > self.max_length:
-            return text[: self.max_length - 3] + "..."
-        else:
-            return text
-
-    def _addLabelToModel(self, label):
-        data = {"label": self._trim_text(label), "command": label}
-        self.model.AppendNode(parent=self.model.root, label=data["label"], data=data)
-
-    def GetModel(self):
-        """Returns a deep copy of the model."""
-        return copy.deepcopy(self.model)

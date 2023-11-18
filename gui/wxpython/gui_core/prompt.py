@@ -18,11 +18,8 @@ This program is free software under the GNU General Public License
 @author Wolf Bergenheim <wolf bergenheim.net> (#962)
 """
 
-import os
 import difflib
-import codecs
 import sys
-import shutil
 
 import wx
 import wx.stc
@@ -34,7 +31,7 @@ from grass.pydispatch.signal import Signal
 
 from core import globalvar
 from core import utils
-from core.gcmd import EncodeString, DecodeString, GError
+from core.gcmd import EncodeString, DecodeString
 
 
 class GPrompt(object):
@@ -65,10 +62,6 @@ class GPrompt(object):
         # command description (gtask.grassTask)
         self.cmdDesc = None
 
-        self._loadHistory()
-        if giface:
-            giface.currentMapsetChanged.connect(self._loadHistory)
-
         # list of traced commands
         self.commands = list()
 
@@ -76,70 +69,6 @@ class GPrompt(object):
         if giface:
             giface.currentMapsetChanged.connect(self._reloadListOfMaps)
             giface.grassdbChanged.connect(self._reloadListOfMaps)
-
-    def _readHistory(self):
-        """Get list of commands from history file"""
-        hist = list()
-        env = grass.gisenv()
-        try:
-            fileHistory = codecs.open(
-                os.path.join(
-                    env["GISDBASE"],
-                    env["LOCATION_NAME"],
-                    env["MAPSET"],
-                    ".wxgui_history",
-                ),
-                encoding="utf-8",
-                mode="r",
-                errors="replace",
-            )
-        except IOError:
-            return hist
-
-        try:
-            for line in fileHistory.readlines():
-                hist.append(line.replace("\n", ""))
-        finally:
-            fileHistory.close()
-
-        return hist
-
-    def _loadHistory(self):
-        """Load history from a history file to data structures"""
-        self.cmdbuffer = self._readHistory()
-        self.cmdindex = len(self.cmdbuffer)
-
-    def UpdateHistory(self, command):
-        """Update history file
-
-        :param command: the command given as a string
-        """
-        env = grass.gisenv()
-        try:
-            fileHistory = codecs.open(
-                os.path.join(
-                    env["GISDBASE"],
-                    env["LOCATION_NAME"],
-                    env["MAPSET"],
-                    ".wxgui_history",
-                ),
-                encoding="utf-8",
-                mode="a")
-        except IOError as e:
-            GError(
-                _("Unable to write file {}'.\n\nDetails: {}").format(
-                    fileHistory, e
-                )
-            )
-            return
-
-        try:
-            fileHistory.write(command + os.linesep)
-        finally:
-            fileHistory.close()
-
-        # update wxGUI prompt
-        self._updateCmdHistory(command)
 
     def _getListOfMaps(self):
         """Get list of maps"""
@@ -171,27 +100,6 @@ class GPrompt(object):
 
         self.CmdErase()
         self.ShowStatusText("")
-
-    def CopyHistory(self, targetFile):
-        """Copy history file to the target location.
-        Returns True if file is successfully copied."""
-        env = grass.gisenv()
-        historyFile = os.path.join(
-            env["GISDBASE"],
-            env["LOCATION_NAME"],
-            env["MAPSET"],
-            ".wxgui_history",
-        )
-        try:
-            shutil.copyfile(historyFile, targetFile)
-        except (IOError, OSError) as e:
-            GError(
-                _("Unable to copy file {} to {}'.\n\nDetails: {}").format(
-                    historyFile, targetFile, e
-                )
-            )
-            return False
-        return True
 
     def GetCommands(self):
         """Get list of launched commands"""
@@ -396,7 +304,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetCurrentPos(pos)
         self.SetFocus()
 
-    def _updateCmdHistory(self, cmd):
+    def UpdateCmdHistory(self, cmd):
         """Update command history
 
         :param cmd: command given as a string

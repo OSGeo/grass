@@ -48,8 +48,6 @@ from core.settings import UserSettings
 from core.giface import Notification
 from gui_core.widgets import FormNotebook
 
-from grass.grassdb.checks import get_current_mapset_history_path
-
 wxCmdOutput, EVT_CMD_OUTPUT = NewEvent()
 wxCmdProgress, EVT_CMD_PROGRESS = NewEvent()
 wxCmdRun, EVT_CMD_RUN = NewEvent()

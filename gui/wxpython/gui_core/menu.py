@@ -6,7 +6,6 @@
 Classes:
  - menu::Menu
  - menu::SearchModuleWindow
- - menu::HistoryModuleWindow
  - menu::RecentFilesMenu
 
 (C) 2010-2013 by the GRASS Development Team
@@ -31,9 +30,7 @@ from core.gcmd import EncodeString
 from gui_core.treeview import CTreeView
 from gui_core.wrap import Button, SearchCtrl
 from gui_core.wrap import Menu as MenuWidget
-from lmgr.menudata import HistoryModuleTree
 from icons.icon import MetaIcon
-from gui_core.forms import GUI
 
 from grass.pydispatch.signal import Signal
 
@@ -306,84 +303,6 @@ class SearchModuleWindow(wx.Panel):
             label = data["description"]
 
         self.showNotification.emit(message=label)
-
-
-class HistoryModuleWindow(wx.Panel):
-    """History window for displaying and executing the commands from history log.
-
-    Signal:
-        showNotification - attribute 'message'
-    """
-
-    def __init__(self, parent, giface, id=wx.ID_ANY, **kwargs):
-        self.parent = parent
-        self._giface = giface
-
-        self.showNotification = Signal("ModuleHistoryWindow.showNotification")
-        wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
-
-        self._createTree()
-    
-        self._giface.currentMapsetChanged.connect(self.UpdateHistoryModelFromScratch)
-        self._giface.updateHistory.connect(lambda cmd: self.UpdateHistoryModelByCommand(cmd))
-
-        self._layout()
-
-    def _layout(self):
-        """Dialog layout"""
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(
-            self._tree, proportion=1, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5
-        )
-
-        self.SetSizerAndFit(sizer)
-        self.SetAutoLayout(True)
-        self.Layout()
-
-    def _createTree(self):
-        """Create tree based on the model"""
-        self._model = HistoryModuleTree()
-        self._tree = self._getTreeInstance()
-        self._tree.SetToolTip(_("Double-click to run the command"))
-        self._tree.selectionChanged.connect(self.OnItemSelected)
-        self._tree.itemActivated.connect(lambda node: self.Run(node))
-
-    def _getTreeInstance(self):
-        return CTreeView(model=self._model.GetModel(), parent=self)
-
-    def UpdateHistoryModelFromScratch(self):
-        """Update the model from scratch and refresh the tree"""
-        self._model.CreateModel()
-        self._tree.SetModel(self._model.GetModel())
-
-    def UpdateHistoryModelByCommand(self, cmd):
-        """Update the model by the command and refresh the tree"""
-        self._model.UpdateModel(cmd)
-        self._tree.SetModel(self._model.GetModel())
-        
-    def OnItemSelected(self, node):
-        """Item selected"""
-        command = node.data["command"]
-        self.showNotification.emit(message=command)
-
-    def _GetSelectedNode(self):
-        selection = self._tree.GetSelected()
-        if not selection:
-            return None
-        return selection[0]
-
-    def Run(self, node=None):
-        """Parse selected history command into list and launch module dialog."""
-        node = node or self._GetSelectedNode()
-        if node:
-            command = node.data["command"]
-            lst = re.split("\s+", command)
-            try:
-                GUI(parent=self, giface=self._giface).ParseCommand(lst)
-            except Exception:
-                self.showNotification.emit(
-                    message=_("History record cound not be parsed into command")
-                )
 
 
 class RecentFilesMenu:
