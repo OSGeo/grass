@@ -25,7 +25,12 @@ import wx
 from wx import stc
 
 from grass.pydispatch.signal import Signal
-from grass.grassdb.history import read_history, update_history, copy_history, get_current_mapset_history_path
+from grass.grassdb.history import (
+    read_history,
+    update_history,
+    copy_history,
+    get_current_mapset_history_path,
+)
 
 # needed just for testing
 if __name__ == "__main__":

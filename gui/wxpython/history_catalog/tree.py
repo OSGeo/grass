@@ -35,7 +35,7 @@ class HistoryCatalogTree:
             return text[: self.max_length - 3] + "..."
         else:
             return text
-        
+
     def CreateModel(self):
         self.model.RemoveNode(self.model.root)
         history_path = get_current_mapset_history_path()
