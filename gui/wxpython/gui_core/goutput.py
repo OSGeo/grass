@@ -367,7 +367,7 @@ class GConsoleWindow(wx.SplitterWindow):
             try:
                 output = open(path, "w")
                 output.write(text)
-            except IOError as e:
+            except OSError as e:
                 GError(
                     _("Unable to write file '%(path)s'.\n\nDetails: %(error)s")
                     % {"path": path, "error": e}

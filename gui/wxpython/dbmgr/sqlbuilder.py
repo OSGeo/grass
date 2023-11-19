@@ -887,7 +887,7 @@ class SQLBuilderWhere(SQLBuilder):
             "map": vectmap,
         }
 
-        super(SQLBuilderWhere, self).__init__(
+        super().__init__(
             parent, title, vectmap, id=wx.ID_ANY, layer=layer
         )
 

@@ -1809,7 +1809,7 @@ class SetOpacityDialog(wx.Dialog):
         self.parent = parent  # GMFrame
         self.opacity = opacity  # current opacity
 
-        super(SetOpacityDialog, self).__init__(
+        super().__init__(
             parent, id=id, pos=pos, size=size, style=style, title=title
         )
 

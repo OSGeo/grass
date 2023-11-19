@@ -510,7 +510,7 @@ def read_file(name):
         with open(name) as f:
             s = f.read()
         return s
-    except IOError:
+    except OSError:
         return ""
 
 

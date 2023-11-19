@@ -54,7 +54,7 @@ class PreprocessorLexer(lex.Lexer):
 # --------------------------------------------------------------------------
 
 
-class PreprocessorParser(object):
+class PreprocessorParser:
     def __init__(self, options, cparser):
         self.defines = [
             "__extension__=",
@@ -188,7 +188,7 @@ class PreprocessorParser(object):
             try:
                 with open(self.options.save_preprocessed_headers, "w") as f:
                     f.write(text)
-            except IOError:
+            except OSError:
                 self.cparser.handle_error("Couldn't save headers.")
 
         self.lexer.input(text)

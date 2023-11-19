@@ -30,7 +30,7 @@ import logging
 ###############################################################################
 
 
-class RPCDefs(object):
+class RPCDefs:
     # Function identifier and index
     STOP = 0
     GET_VECTOR_TABLE_AS_DICT = 1

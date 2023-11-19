@@ -37,7 +37,7 @@ from core import utils
 from core.gcmd import EncodeString, DecodeString, GError
 
 
-class GPrompt(object):
+class GPrompt:
     """Abstract class for interactive wxGUI prompt
 
     Signal promptRunCmd - emitted to run command from prompt
@@ -93,7 +93,7 @@ class GPrompt(object):
                 mode="r",
                 errors="replace",
             )
-        except IOError:
+        except OSError:
             return hist
 
         try:
@@ -152,7 +152,7 @@ class GPrompt(object):
         )
         try:
             shutil.copyfile(historyFile, targetFile)
-        except (IOError, OSError) as e:
+        except OSError as e:
             GError(
                 _("Unable to copy file {} to {}'.\n\nDetails: {}").format(
                     historyFile, targetFile, e
@@ -323,7 +323,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         if not self.cmdDesc or cmd != self.cmdDesc.get_name():
             try:
                 self.cmdDesc = gtask.parse_interface(cmd)
-            except IOError:
+            except OSError:
                 self.cmdDesc = None
 
     def _showHint(self):
@@ -676,7 +676,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 ):
                     try:
                         self.cmdDesc = gtask.parse_interface(cmd)
-                    except IOError:
+                    except OSError:
                         self.cmdDesc = None
             event.Skip()
 

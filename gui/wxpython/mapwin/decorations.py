@@ -31,7 +31,7 @@ except ImportError:
 from gui_core.wrap import NewId
 
 
-class OverlayController(object):
+class OverlayController:
 
     """Base class for decorations (barscale, legend) controller."""
 

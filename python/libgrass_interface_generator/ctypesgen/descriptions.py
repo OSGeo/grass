@@ -7,7 +7,7 @@ lists of Description objects.
 """
 
 
-class DescriptionCollection(object):
+class DescriptionCollection:
     """Represents a collection of Descriptions."""
 
     def __init__(
@@ -24,12 +24,12 @@ class DescriptionCollection(object):
         self.output_order = output_order
 
 
-class Description(object):
+class Description:
     """Represents a constant, typedef, struct, function, variable, enum,
     or macro description. Description is an abstract base class."""
 
     def __init__(self, src=None):
-        super(Description, self).__init__()
+        super().__init__()
         self.src = src  # A tuple of (filename, lineno)
 
         # If object will be included in output file. Values are "yes", "never",
@@ -82,7 +82,7 @@ class ConstantDescription(Description):
     """Simple class to contain information about a constant."""
 
     def __init__(self, name, value, src=None):
-        super(ConstantDescription, self).__init__(src)
+        super().__init__(src)
         # Name of constant, a string
         self.name = name
         # Value of constant, as an ExpressionNode object
@@ -102,7 +102,7 @@ class TypedefDescription(Description):
     """Simple container class for a type definition."""
 
     def __init__(self, name, ctype, src=None):
-        super(TypedefDescription, self).__init__(src)
+        super().__init__(src)
         self.name = name  # Name, a string
         self.ctype = ctype  # The base type as a ctypedescs.CtypeType object
 
@@ -120,7 +120,7 @@ class StructDescription(Description):
     """Simple container class for a structure or union definition."""
 
     def __init__(self, tag, attrib, variety, members, opaque, ctype, src=None):
-        super(StructDescription, self).__init__(src)
+        super().__init__(src)
         # The name of the structure minus the "struct" or "union"
         self.tag = tag
         self.attrib = attrib
@@ -147,7 +147,7 @@ class EnumDescription(Description):
     """Simple container class for an enum definition."""
 
     def __init__(self, tag, members, ctype, src=None):
-        super(EnumDescription, self).__init__(src)
+        super().__init__(src)
         # The name of the enum, minus the "enum"
         self.tag = tag
         # A list of (name,value) pairs where value is a number
@@ -169,7 +169,7 @@ class FunctionDescription(Description):
     """Simple container class for a C function."""
 
     def __init__(self, name, restype, argtypes, errcheck, variadic, attrib, src):
-        super(FunctionDescription, self).__init__(src)
+        super().__init__(src)
         # Name, a string
         self.name = name
         # Name according to C - stored in case description is renamed
@@ -199,7 +199,7 @@ class VariableDescription(Description):
     """Simple container class for a C variable declaration."""
 
     def __init__(self, name, ctype, src=None):
-        super(VariableDescription, self).__init__(src)
+        super().__init__(src)
         # Name, a string
         self.name = name
         # Name according to C - stored in case description is renamed
@@ -221,7 +221,7 @@ class MacroDescription(Description):
     """Simple container class for a C macro."""
 
     def __init__(self, name, params, expr, src=None):
-        super(MacroDescription, self).__init__(src)
+        super().__init__(src)
         self.name = name
         self.params = params
         self.expr = expr  # ExpressionNode for the macro's body
@@ -240,7 +240,7 @@ class UndefDescription(Description):
     """Simple container class for a preprocessor #undef directive."""
 
     def __init__(self, macro, src=None):
-        super(UndefDescription, self).__init__(src)
+        super().__init__(src)
         self.include_rule = "if_needed"
 
         self.macro = macro

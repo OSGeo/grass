@@ -629,7 +629,7 @@ class GConsole(wx.EvtHandler):
                             skipInterface = False
                             break
                     sfile.close()
-                except IOError:
+                except OSError:
                     pass
 
             if len(command) == 1 and not skipInterface:
@@ -822,7 +822,7 @@ class GConsole(wx.EvtHandler):
                 env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], ".wxgui_history"
             )
             fileHistory = codecs.open(filePath, encoding="utf-8", mode="a")
-        except IOError as e:
+        except OSError as e:
             GError(
                 _("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s")
                 % {"filePath": filePath, "error": e},

@@ -66,7 +66,7 @@ class LibraryLoader:
         mode = ctypes.DEFAULT_MODE
 
         def __init__(self, path):
-            super(LibraryLoader.Lookup, self).__init__()
+            super().__init__()
             self.access = dict(cdecl=ctypes.CDLL(path, self.mode))
 
         def get(self, name, calling_convention="cdecl"):
@@ -279,7 +279,7 @@ class PosixLibraryLoader(LibraryLoader):
                     else:
                         for dir2 in glob.glob(match.group("pattern")):
                             self._get_ld_so_conf_dirs(dir2, dirs)
-        except IOError:
+        except OSError:
             pass
 
     def _create_ld_so_cache(self):
@@ -382,7 +382,7 @@ class WindowsLibraryLoader(LibraryLoader):
         """Lookup class for Windows libraries..."""
 
         def __init__(self, path):
-            super(WindowsLibraryLoader.Lookup, self).__init__(path)
+            super().__init__(path)
             self.access["stdcall"] = ctypes.windll.LoadLibrary(path)
 
 

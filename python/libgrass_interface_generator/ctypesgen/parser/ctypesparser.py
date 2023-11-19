@@ -82,7 +82,7 @@ class CtypesParser(CParser):
     """
 
     def __init__(self, options):
-        super(CtypesParser, self).__init__(options)
+        super().__init__(options)
         self.type_map = ctypes_type_map
         if not options.no_python_types:
             self.type_map.update(ctypes_type_map_python_builtin)

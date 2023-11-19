@@ -765,10 +765,10 @@ class HelpWindow(HtmlWindow):
         self.historyIdx += 1
         self.parent.OnHistory()
 
-        super(HelpWindow, self).OnLinkClicked(linkinfo)
+        super().OnLinkClicked(linkinfo)
 
     def LoadPage(self, path):
-        super(HelpWindow, self).LoadPage(path)
+        super().LoadPage(path)
         self.loaded = True
 
     def fillContentsFromFile(self, htmlFile, skipDescription=True):

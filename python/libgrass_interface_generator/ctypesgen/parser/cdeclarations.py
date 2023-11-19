@@ -11,7 +11,7 @@ __docformat__ = "restructuredtext"
 # --------------------------------------------------------------------------
 
 
-class Declaration(object):
+class Declaration:
     def __init__(self):
         self.declarator = None
         self.type = Type()
@@ -26,7 +26,7 @@ class Declaration(object):
         return "Declaration(%s)" % ", ".join(li)
 
 
-class Declarator(object):
+class Declarator:
     pointer = None
 
     def __init__(self):
@@ -57,7 +57,7 @@ class Pointer(Declarator):
     pointer = None
 
     def __init__(self):
-        super(Pointer, self).__init__()
+        super().__init__()
         self.qualifiers = []
 
     def __repr__(self):
@@ -67,7 +67,7 @@ class Pointer(Declarator):
         return "POINTER%s(%r)" % (q, self.pointer) + super(Pointer, self).__repr__()
 
 
-class Array(object):
+class Array:
     def __init__(self):
         self.size = None
         self.array = None
@@ -83,7 +83,7 @@ class Array(object):
             return a
 
 
-class Parameter(object):
+class Parameter:
     def __init__(self):
         self.type = Type()
         self.storage = None
@@ -100,7 +100,7 @@ class Parameter(object):
         return "Parameter(%s)" % ", ".join(li)
 
 
-class Type(object):
+class Type:
     def __init__(self):
         self.qualifiers = []
         self.specifiers = []
@@ -122,7 +122,7 @@ class TypeSpecifier(str):
         return "TypeSpecifier({})".format(str(self))
 
 
-class StructTypeSpecifier(object):
+class StructTypeSpecifier:
     def __init__(self, is_union, attrib, tag, declarations):
         self.is_union = is_union
         self.attrib = attrib
@@ -152,7 +152,7 @@ class StructTypeSpecifier(object):
         return s
 
 
-class EnumSpecifier(object):
+class EnumSpecifier:
     def __init__(self, tag, enumerators, src=None):
         self.tag = tag
         self.enumerators = enumerators
@@ -168,7 +168,7 @@ class EnumSpecifier(object):
         return s
 
 
-class Enumerator(object):
+class Enumerator:
     def __init__(self, name, expression):
         self.name = name
         self.expression = expression
@@ -185,7 +185,7 @@ class TypeQualifier(str):
         return "TypeQualifier({})".format(str(self))
 
 
-class PragmaPack(object):
+class PragmaPack:
     DEFAULT = None
 
     def __init__(self):
@@ -242,17 +242,17 @@ pragma_pack = PragmaPack()
 class Attrib(dict):
     def __init__(self, *a, **kw):
         if pragma_pack.current:
-            super(Attrib, self).__init__(packed=True, aligned=[pragma_pack.current])
-            super(Attrib, self).update(*a, **kw)
+            super().__init__(packed=True, aligned=[pragma_pack.current])
+            super().update(*a, **kw)
         else:
-            super(Attrib, self).__init__(*a, **kw)
+            super().__init__(*a, **kw)
         self._unalias()
 
     def __repr__(self):
         return "Attrib({})".format(dict(self))
 
     def update(self, *a, **kw):
-        super(Attrib, self).update(*a, **kw)
+        super().update(*a, **kw)
         self._unalias()
 
     def _unalias(self):

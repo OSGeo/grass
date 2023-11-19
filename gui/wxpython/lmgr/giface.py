@@ -20,7 +20,7 @@ from core.giface import Notification
 from core.utils import GetLayerNameFromCmd
 
 
-class Layer(object):
+class Layer:
     """@implements core::giface::Layer
 
     .. note::
@@ -47,7 +47,7 @@ class Layer(object):
         )
 
 
-class LayerList(object):
+class LayerList:
     """@implements core.giface.Layer"""
 
     def __init__(self, tree):
@@ -172,7 +172,7 @@ class LayerList(object):
             return Layer(item, self._tree.GetPyData(item))
 
 
-class LayerManagerGrassInterface(object):
+class LayerManagerGrassInterface:
     """@implements core::giface::GrassInterface"""
 
     def __init__(self, lmgr):
@@ -261,7 +261,7 @@ class LayerManagerGrassInterface(object):
         self.lmgr.goutput.GetPrompt().UpdateCmdHistory(cmd)
 
 
-class LayerManagerGrassInterfaceForMapDisplay(object):
+class LayerManagerGrassInterfaceForMapDisplay:
     """Provides reference only to the given layer list (according to tree),
     not to the current.
 

@@ -62,7 +62,7 @@ class SettingsJSONEncoder(json.JSONEncoder):
             else:
                 return item
 
-        return super(SettingsJSONEncoder, self).iterencode(color(obj))
+        return super().iterencode(color(obj))
 
 
 def settings_JSON_decode_hook(obj):
@@ -932,7 +932,7 @@ class Settings:
 
         try:
             fd = open(self.legacyFilePath, "r")
-        except IOError:
+        except OSError:
             sys.stderr.write(
                 _("Unable to read settings file <%s>\n") % self.legacyFilePath
             )
@@ -987,7 +987,7 @@ class Settings:
         try:
             with open(self.filePath, "w") as f:
                 json.dump(settings, f, indent=2, cls=SettingsJSONEncoder)
-        except IOError as e:
+        except OSError as e:
             raise GException(e)
         except Exception as e:
             raise GException(

@@ -120,7 +120,7 @@ class WrapperPrinter:
             path = self.options.header_template
             try:
                 template_file = open(path, "r")
-            except IOError:
+            except OSError:
                 error_message(
                     'Cannot load header template from file "%s" '
                     " - using default template." % path,
@@ -487,7 +487,7 @@ class WrapperPrinter:
     def insert_file(self, filename):
         try:
             inserted_file = open(filename, "r")
-        except IOError:
+        except OSError:
             error_message('Cannot open file "%s". Skipped it.' % filename, cls="missing-file")
 
         self.file.write(
