@@ -449,7 +449,8 @@ header_pgm_desc = """<h2>NAME</h2>
 """
 
 sourcecode = string.Template(
-    """<h2>SOURCE CODE</h2>
+    """
+<h2>SOURCE CODE</h2>
 <p>
   Available at:
   <a href="${URL_SOURCE}">${PGM} source code</a>
