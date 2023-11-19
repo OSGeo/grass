@@ -106,7 +106,6 @@
 # An array of points indexed by 0 for "x" and 4 for "y" + by number 0, 1, 2, and 3
 # A reprojector [0] is name of source projection, [1] is name of destination
 # A projection - [0] is proj.4 text, [1] is scale
-from __future__ import print_function
 
 import sys
 import tempfile

@@ -35,7 +35,6 @@ This program is free software under the GNU General Public License
 """
 import os
 import locale
-import six
 import functools
 
 import wx
@@ -905,7 +904,7 @@ class ProjParamsPage(TitledPage):
         """Go to next page"""
         if event.GetDirection():
             self.p4projparams = ""
-            for id, param in six.iteritems(self.pparam):
+            for id, param in self.pparam.items():
                 if param["type"] == "bool":
                     if param["value"] is False:
                         continue
@@ -1761,7 +1760,7 @@ class EPSGPage(TitledPage):
             return
 
         data = list()
-        for code, val in six.iteritems(self.epsgCodeDict):
+        for code, val in self.epsgCodeDict.items():
             if code is not None:
                 data.append((code, val[0], val[1]))
 
@@ -2037,7 +2036,7 @@ class IAUPage(TitledPage):
             return
 
         data = list()
-        for code, val in six.iteritems(self.epsgCodeDict):
+        for code, val in self.epsgCodeDict.items():
             if code is not None:
                 data.append((code, val[0], val[1]))
 

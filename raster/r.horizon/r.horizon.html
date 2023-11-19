@@ -134,9 +134,10 @@ cardinal directions caused by the projection (see above).
 
 <p>
 The output with the <b>-d</b> flag is azimuth degree (-90 to 90, where
-0 is parallel with the focal cell). In case of negative horizon values
-obtained this indicates that the horizon height is below the cell it is
-computed from.
+0 is parallel with the focal cell).
+
+<p> All horizon values are positive (or zero). While negative values are
+in theory possible, <b>r.horizon</b> currently does not support them.
 
 <h2>EXAMPLES</h2>
 
