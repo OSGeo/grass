@@ -492,9 +492,7 @@ class FloatSlider(Slider):
                 minValue *= 100
                 maxValue *= 100
                 self.coef *= 100
-            super().SetValue(
-                super().GetValue() * self.coef
-            )
+            super().SetValue(super().GetValue() * self.coef)
         super().SetRange(minValue, maxValue)
         Debug.msg(
             4,

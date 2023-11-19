@@ -253,9 +253,7 @@ class DataCatalogTree(TreeView):
         """Location Map Tree constructor."""
         self._model = TreeModel(DataCatalogNode)
         self._orig_model = self._model
-        super().__init__(
-            parent=parent, model=self._model, id=wx.ID_ANY, style=style
-        )
+        super().__init__(parent=parent, model=self._model, id=wx.ID_ANY, style=style)
 
         self._giface = giface
         self._restricted = True

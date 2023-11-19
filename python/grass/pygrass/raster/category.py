@@ -128,9 +128,7 @@ class Category(list):
         return super().__getitem__(self._chk_index(index))
 
     def __setitem__(self, index, value):
-        return super().__setitem__(
-            self._chk_index(index), self._chk_value(value)
-        )
+        return super().__setitem__(self._chk_index(index), self._chk_value(value))
 
     def _get_c_cat(self, index):
         """Returns i-th description and i-th data range from the list of

@@ -134,9 +134,7 @@ class SwipeBufferedWindow(BufferedMapWindow):
         if pdctype == "image":
             coords = self.GetImageCoords()
 
-        return super().Draw(
-            pdc, img, drawid, pdctype, coords, pen, brush
-        )
+        return super().Draw(pdc, img, drawid, pdctype, coords, pen, brush)
 
     def OnLeftDown(self, event):
         """Left mouse button pressed.

@@ -1018,9 +1018,7 @@ class DriverSelect(wx.ComboBox):
         size=globalvar.DIALOG_LAYER_SIZE,
         **kargs,
     ):
-        super().__init__(
-            parent, id, value, pos, size, choices, style=wx.CB_READONLY
-        )
+        super().__init__(parent, id, value, pos, size, choices, style=wx.CB_READONLY)
 
         self.SetName("DriverSelect")
 

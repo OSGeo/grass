@@ -44,9 +44,7 @@ class TestResult(unittest.TestResult):
     # where are also unused, so perhaps we can remove them
     # stream set to None and not included in interface, it would not make sense
     def __init__(self, stream=None, descriptions=None, verbosity=None):
-        super().__init__(
-            stream=stream, descriptions=descriptions, verbosity=verbosity
-        )
+        super().__init__(stream=stream, descriptions=descriptions, verbosity=verbosity)
         self.successes = []
 
     def addSuccess(self, test):
@@ -72,9 +70,7 @@ class TextTestResult(TestResult):
     separator2 = "-" * 70
 
     def __init__(self, stream, descriptions, verbosity):
-        super().__init__(
-            stream=stream, descriptions=descriptions, verbosity=verbosity
-        )
+        super().__init__(stream=stream, descriptions=descriptions, verbosity=verbosity)
         self.stream = _WritelnDecorator(stream)
         self.showAll = verbosity > 1
         self.dots = verbosity == 1
@@ -212,9 +208,7 @@ class KeyValueTestResult(TestResult):
     separator2 = "-" * 70
 
     def __init__(self, stream, test_type=None):
-        super().__init__(
-            stream=stream, descriptions=None, verbosity=None
-        )
+        super().__init__(stream=stream, descriptions=None, verbosity=None)
         self._stream = _WritelnDecorator(stream)
 
         self.start_time = None
@@ -310,9 +304,7 @@ class MultiTestResult(TestResult):
     # where are also unused, so perhaps we can remove them
     # stream set to None and not included in interface, it would not make sense
     def __init__(self, results, forgiving=False, descriptions=None, verbosity=None):
-        super().__init__(
-            descriptions=descriptions, verbosity=verbosity, stream=None
-        )
+        super().__init__(descriptions=descriptions, verbosity=verbosity, stream=None)
         self._results = results
         self._forgiving = forgiving
 

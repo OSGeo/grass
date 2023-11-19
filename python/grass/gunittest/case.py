@@ -176,9 +176,7 @@ class TestCase(unittest.TestCase):
                 first = first.replace(os.linesep, "\n")
             if os.linesep in second:
                 second = second.replace(os.linesep, "\n")
-        return super().assertMultiLineEqual(
-            first=first, second=second, msg=msg
-        )
+        return super().assertMultiLineEqual(first=first, second=second, msg=msg)
 
     def assertLooksLike(self, actual, reference, msg=None):
         r"""Test that ``actual`` text is the same as ``reference`` with ellipses.
