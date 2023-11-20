@@ -241,18 +241,10 @@ def save_gif(
         img = img.convert("RGBA", dither=None)
         draw = PIL.ImageDraw.Draw(img)
         if label:
-            if not font and sys.platform == "linux":
-                try:
-                    font_obj = PIL.ImageFont.truetype("DejaVuSans.ttf", text_size)
-                except OSError:
-                    font_obj = PIL.ImageFont.load_default()
-            elif not font:
-                try:
-                    font_obj = PIL.ImageFont.truetype("Arial.ttf", text_size)
-                except OSError:
-                    font_obj = PIL.ImageFont.load_default()
-            else:
+            if font:
                 font_obj = PIL.ImageFont.truetype(font, text_size)
+            else:
+                font_obj = PIL.ImageFont.load_default()
             draw.text(
                 (0, 0),
                 labels[i],
