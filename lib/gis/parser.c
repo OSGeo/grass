@@ -502,7 +502,7 @@ int G_parser(int argc, char **argv)
             G__usage_markdown();
             exit(EXIT_SUCCESS);
         }
-        
+
         /* If first arg is "--wps-process-description" then print out
          * the wps process description of the task */
         if (strcmp(argv[1], "--wps-process-description") == 0) {
