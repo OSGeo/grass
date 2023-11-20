@@ -10,7 +10,6 @@
 #            for details.
 
 """Utility functions warpping existing processes in a suitable way"""
-import sys
 from pathlib import Path
 import grass.script as gs
 
@@ -246,7 +245,7 @@ def save_gif(
             else:
                 try:
                     font_obj = PIL.ImageFont.load_default(size=text_size)
-                except:
+                except NameError:
                     font_obj = PIL.ImageFont.load_default()
             draw.text(
                 (0, 0),
