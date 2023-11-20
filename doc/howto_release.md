@@ -39,7 +39,7 @@ git log --max-count=5
 
 Now you can rebase updates from the remote your local branch.
 Above, you confirmed you have no local commits, so this should happen
-without rebasing any local commits, i.e., it should just add the new commits.
+without rebasing any local commits, i.e., it should just add the new commits:
 
 ```bash
 git rebase upstream/releasebranch_8_4
@@ -337,13 +337,13 @@ md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 
 ### Upload source code tarball to OSGeo servers
 
-Note: servers 'osgeo7-grass' and 'osgeo7-download' only reachable via
+Note: servers 'osgeo8-grass' and 'osgeo7-download' only reachable via
 jumphost (managed by OSGeo-SAC) - see <https://wiki.osgeo.org/wiki/SAC_Service_Status#grass>
 
 ```bash
 # Store the source tarball (twice) in (use scp -p FILES grass:):
 USER=neteler
-SERVER1=osgeo7-grass
+SERVER1=osgeo8-grass
 SERVER1DIR=/var/www/code_and_data/grass$MAJOR$MINOR/source/
 SERVER2=osgeo7-download
 SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
@@ -374,13 +374,13 @@ For final minor and major releases (not release candidates and micro releases),
 update `grass-stable` redirect at `osgeo7-grass`:
 
 ```bash
-sudo vim /etc/apache2/sites-enabled/000-default.conf`
+sudo vim /etc/apache2/sites-enabled/000-default.conf
 ```
 
 Load the new configuration:
 
 ```bash
-sudo systemctl reload apache2`
+sudo systemctl reload apache2
 ```
 
 For new branches: Update `grass-devel` using the steps above.
@@ -425,14 +425,14 @@ Release is done.
 ## Improve release description
 
 For final releases only, go to [Zenodo](https://doi.org/10.5281/zenodo.5176030)
-and get a Markdown badge for the release
-which Zenodo creates with a DOI for the published release.
+and get a Markdown badge for the release which Zenodo creates with a DOI
+for the published release.
 
 For all releases, click the Binder badge to get Binder to build. Use it to test
 it and to cache the built image. Add more links to (or badges for) more notebooks
 if there are any which show well specific features added or updated in the release.
 
-## Create entries for the new release
+## Create various entries for the new release
 
 ### Cron jobs
 
@@ -443,7 +443,8 @@ Only in case of major releases:
 
 ### Update Hugo web site
 
-Update website only for final releases (not release candidates) in one PR.
+Update website only for final releases (not release candidates). Submit the changes
+in a single PR.
 
 Software pages:
 
@@ -533,6 +534,7 @@ Add release to history page:
 
 If final release, send out an announcement (press release)
 which is a shortened version of release desciption and website news item.
+Note: Do not use relative links.
 
 - Our main mailing lists:
   - <https://lists.osgeo.org/mailman/listinfo/grass-announce> | <grass-announce@lists.osgeo.org>
