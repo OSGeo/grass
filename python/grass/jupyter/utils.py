@@ -244,7 +244,7 @@ def save_gif(
             if font:
                 font_obj = PIL.ImageFont.truetype(font, text_size)
             else:
-                font_obj = PIL.ImageFont.load_default()
+                font_obj = PIL.ImageFont.load_default(size=text_size)
             draw.text(
                 (0, 0),
                 labels[i],
