@@ -393,7 +393,7 @@ def UNCHECKED(type):
 
 # ctypes doesn't have direct support for variadic functions, so we have to write
 # our own wrapper class
-class _variadic_function:
+class _variadic_function(object):
     def __init__(self, func, restype, argtypes, errcheck):
         self.func = func
         self.func.restype = restype

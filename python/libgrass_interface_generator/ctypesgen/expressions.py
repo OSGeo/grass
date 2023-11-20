@@ -29,7 +29,7 @@ from ctypesgen.ctypedescs import (
 # On the other hand, this would be a challenge to write.
 
 
-class EvaluationContext:
+class EvaluationContext(object):
     """Interface for evaluating expression nodes."""
 
     def evaluate_identifier(self, name):
@@ -45,7 +45,7 @@ class EvaluationContext:
         return 0
 
 
-class ExpressionNode:
+class ExpressionNode(object):
     def __init__(self):
         self.errors = []
 

@@ -56,7 +56,7 @@ class LexError(Exception):
 
 
 # Token class.  This class is used to represent the tokens produced.
-class LexToken:
+class LexToken(object):
     def __str__(self):
         return 'LexToken(%s,%r,%d,%d)' % (self.type, self.value, self.lineno, self.lexpos)
 
@@ -67,7 +67,7 @@ class LexToken:
 # This object is a stand-in for a logging object created by the
 # logging module.
 
-class PlyLogger:
+class PlyLogger(object):
     def __init__(self, f):
         self.f = f
 
@@ -85,7 +85,7 @@ class PlyLogger:
 
 
 # Null logger is used when no output is generated. Does nothing.
-class NullLogger:
+class NullLogger(object):
     def __getattribute__(self, name):
         return self
 
@@ -168,7 +168,7 @@ class Lexer:
     # ------------------------------------------------------------
     def writetab(self, lextab, outputdir=''):
         if isinstance(lextab, types.ModuleType):
-            raise OSError("Won't overwrite existing lextab module")
+            raise IOError("Won't overwrite existing lextab module")
         basetabmodule = lextab.split('.')[-1]
         filename = os.path.join(outputdir, basetabmodule) + '.py'
         with open(filename, 'w') as tf:
@@ -549,7 +549,7 @@ def _statetoken(s, names):
 # This class represents information needed to build a lexer as extracted from a
 # user's input file.
 # -----------------------------------------------------------------------------
-class LexerReflect:
+class LexerReflect(object):
     def __init__(self, ldict, log=None, reflags=0):
         self.ldict      = ldict
         self.error_func = None
@@ -826,7 +826,7 @@ class LexerReflect:
     def validate_module(self, module):
         try:
             lines, linen = inspect.getsourcelines(module)
-        except OSError:
+        except IOError:
             return
 
         fre = re.compile(r'\s*def\s+(t_[a-zA-Z_0-9]*)\(')
@@ -1035,7 +1035,7 @@ def lex(module=None, object=None, debug=False, optimize=False, lextab='lextab',
             lexobj.writetab(lextab, outputdir)
             if lextab in sys.modules:
                 del sys.modules[lextab]
-        except OSError as e:
+        except IOError as e:
             errorlog.warning("Couldn't write lextab module %r. %s" % (lextab, e))
 
     return lexobj

@@ -77,7 +77,7 @@ ctypes_type_map_python_builtin = {
 
 
 # This protocol is used for walking type trees.
-class CtypesTypeVisitor:
+class CtypesTypeVisitor(object):
     def visit_struct(self, struct):
         pass
 
@@ -135,9 +135,9 @@ def remove_function_pointer(t):
         return t
 
 
-class CtypesType:
+class CtypesType(object):
     def __init__(self):
-        super().__init__()
+        super(CtypesType, self).__init__()
         self.errors = []
 
     def __repr__(self):
@@ -155,7 +155,7 @@ class CtypesSimple(CtypesType):
     """Represents a builtin type, like "char" or "int"."""
 
     def __init__(self, name, signed, longs):
-        super().__init__()
+        super(CtypesSimple, self).__init__()
         self.name = name
         self.signed = signed
         self.longs = longs
@@ -166,7 +166,7 @@ class CtypesSimple(CtypesType):
 
 class CtypesSpecial(CtypesType):
     def __init__(self, name):
-        super().__init__()
+        super(CtypesSpecial, self).__init__()
         self.name = name
 
     def py_string(self, ignore_can_be_ctype=None):
@@ -177,13 +177,13 @@ class CtypesTypedef(CtypesType):
     """Represents a type defined by a typedef."""
 
     def __init__(self, name):
-        super().__init__()
+        super(CtypesTypedef, self).__init__()
         self.name = name
 
     def visit(self, visitor):
         if not self.errors:
             visitor.visit_typedef(self.name)
-        super().visit(visitor)
+        super(CtypesTypedef, self).visit(visitor)
 
     def py_string(self, ignore_can_be_ctype=None):
         return self.name
@@ -191,13 +191,13 @@ class CtypesTypedef(CtypesType):
 
 class CtypesBitfield(CtypesType):
     def __init__(self, base, bitfield):
-        super().__init__()
+        super(CtypesBitfield, self).__init__()
         self.base = base
         self.bitfield = bitfield
 
     def visit(self, visitor):
         self.base.visit(visitor)
-        super().visit(visitor)
+        super(CtypesBitfield, self).visit(visitor)
 
     def py_string(self, ignore_can_be_ctype=None):
         return self.base.py_string()
@@ -205,14 +205,14 @@ class CtypesBitfield(CtypesType):
 
 class CtypesPointer(CtypesType):
     def __init__(self, destination, qualifiers):
-        super().__init__()
+        super(CtypesPointer, self).__init__()
         self.destination = destination
         self.qualifiers = qualifiers
 
     def visit(self, visitor):
         if self.destination:
             self.destination.visit(visitor)
-        super().visit(visitor)
+        super(CtypesPointer, self).visit(visitor)
 
     def py_string(self, ignore_can_be_ctype=None):
         return "POINTER(%s)" % self.destination.py_string()
@@ -220,7 +220,7 @@ class CtypesPointer(CtypesType):
 
 class CtypesArray(CtypesType):
     def __init__(self, base, count):
-        super().__init__()
+        super(CtypesArray, self).__init__()
         self.base = base
         self.count = count
 
@@ -228,7 +228,7 @@ class CtypesArray(CtypesType):
         self.base.visit(visitor)
         if self.count:
             self.count.visit(visitor)
-        super().visit(visitor)
+        super(CtypesArray, self).visit(visitor)
 
     def py_string(self, ignore_can_be_ctype=None):
         if self.count is None:
@@ -239,7 +239,7 @@ class CtypesArray(CtypesType):
             return "%s * int(%s)" % (self.base.py_string(), self.count.py_string(False))
 
 
-class CtypesNoErrorCheck:
+class CtypesNoErrorCheck(object):
     def py_string(self, ignore_can_be_ctype=None):
         return "None"
 
@@ -249,7 +249,7 @@ class CtypesNoErrorCheck:
     __nonzero__ = __bool__
 
 
-class CtypesPointerCast:
+class CtypesPointerCast(object):
     def __init__(self, target):
         self.target = target
 
@@ -259,7 +259,7 @@ class CtypesPointerCast:
 
 class CtypesFunction(CtypesType):
     def __init__(self, restype, parameters, variadic, attrib=dict()):
-        super().__init__()
+        super(CtypesFunction, self).__init__()
         self.restype = restype
         self.errcheck = CtypesNoErrorCheck()
 
@@ -291,7 +291,7 @@ class CtypesFunction(CtypesType):
         self.restype.visit(visitor)
         for a in self.argtypes:
             a.visit(visitor)
-        super().visit(visitor)
+        super(CtypesFunction, self).visit(visitor)
 
     def py_string(self, ignore_can_be_ctype=None):
         return "CFUNCTYPE(UNCHECKED(%s), %s)" % (
@@ -319,7 +319,7 @@ def anonymous_struct_tag():
 
 class CtypesStruct(CtypesType):
     def __init__(self, tag, attrib, variety, members, src=None):
-        super().__init__()
+        super(CtypesStruct, self).__init__()
         self.tag = tag
         self.attrib = attrib
         self.variety = variety  # "struct" or "union"
@@ -342,7 +342,7 @@ class CtypesStruct(CtypesType):
         self.src = src
 
     def get_required_types(self):
-        types = super().get_required_types()
+        types = super(CtypesStruct, self).get_required_types()
         types.add((self.variety, self.tag))
         return types
 
@@ -351,7 +351,7 @@ class CtypesStruct(CtypesType):
         if not self.opaque:
             for name, ctype in self.members:
                 ctype.visit(visitor)
-        super().visit(visitor)
+        super(CtypesStruct, self).visit(visitor)
 
     def get_subtypes(self):
         if self.opaque:
@@ -374,7 +374,7 @@ def anonymous_enum_tag():
 
 class CtypesEnum(CtypesType):
     def __init__(self, tag, enumerators, src=None):
-        super().__init__()
+        super(CtypesEnum, self).__init__()
         self.tag = tag
         self.enumerators = enumerators
 
@@ -393,7 +393,7 @@ class CtypesEnum(CtypesType):
 
     def visit(self, visitor):
         visitor.visit_enum(self)
-        super().visit(visitor)
+        super(CtypesEnum, self).visit(visitor)
 
     def py_string(self, ignore_can_be_ctype=None):
         return "enum_%s" % self.tag

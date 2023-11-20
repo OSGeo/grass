@@ -17,7 +17,7 @@ from ctypesgen.parser import cgrammar, preprocessor, yacc
 # --------------------------------------------------------------------------
 
 
-class CLexer:
+class CLexer(object):
     def __init__(self, cparser):
         self.cparser = cparser
         self.type_names = set()
@@ -77,7 +77,7 @@ class CLexer:
 # --------------------------------------------------------------------------
 
 
-class CParser:
+class CParser(object):
     """Parse a C source file.
 
     Subclass and override the handle_* methods.  Call `parse` with a string
@@ -85,7 +85,7 @@ class CParser:
     """
 
     def __init__(self, options):
-        super().__init__()
+        super(CParser, self).__init__()
         self.preprocessor_parser = preprocessor.PreprocessorParser(options, self)
         self.parser = yacc.yacc(
             method="LALR",
