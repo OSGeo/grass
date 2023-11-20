@@ -22,8 +22,6 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
-from __future__ import print_function
-
 import sys
 import locale
 import struct
@@ -77,8 +75,7 @@ def print_error(msg, type):
     """Redirect stderr"""
     global log
     if log:
-        if sys.version_info.major >= 3:
-            msg = DecodeString(msg.data)
+        msg = DecodeString(msg.data)
         log.write(msg)
     else:
         print(msg)

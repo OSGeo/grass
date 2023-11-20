@@ -20,7 +20,6 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
-import six
 import time
 import copy
 import math
@@ -478,7 +477,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         and then to textures so that they can be rendered by OpenGL.
         Updates self.imagelist"""
         # update images (legend and text)
-        for oid, overlay in six.iteritems(self.overlays):
+        for oid, overlay in self.overlays.items():
             if not overlay.IsShown() or overlay.name in ("barscale", "northarrow"):
                 continue
             if oid not in [t.GetId() for t in self.imagelist]:  # new

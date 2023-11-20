@@ -40,9 +40,8 @@ for details.
     LexToken(NAME,'B',1,23)
 
 """
-from __future__ import print_function
-
 import copy
+
 import grass.pygrass.modules as pymod
 from grass.exceptions import FatalError
 from .temporal_algebra import (
@@ -269,18 +268,19 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         a9@B
 
         """
-        print(
-            topolist,
-            assign_val,
-            count_map,
-            compare_bool,
-            compare_cmd,
-            compop,
-            aggregate,
-            new,
-            convert,
-            operator_cmd,
-        )
+        if self.debug:
+            print(
+                topolist,
+                assign_val,
+                count_map,
+                compare_bool,
+                compare_cmd,
+                compop,
+                aggregate,
+                new,
+                convert,
+                operator_cmd,
+            )
 
         # Check the topology definitions and return the list of temporal and spatial
         # topological relations that must be fulfilled
@@ -486,8 +486,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             cmd_value_str = "".join(map(str, cmd_value_list))
             # Add command list to result map.
             map_i.cmd_list = cmd_value_str
-
-            print(cmd_value_str)
+            if self.debug:
+                print(cmd_value_str)
 
             return cmd_value_str
 
@@ -536,8 +536,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                             )
         # Add command list to result map.
         map_i.cmd_list = cmdstring
-
-        print("map command string", cmdstring)
+        if self.debug:
+            print("map command string", cmdstring)
         return cmdstring
 
     def set_temporal_extent_list(
@@ -721,7 +721,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             return resultlist
         elif isinstance(conclusionlist, list):
             # Build result command map list between conditions and conclusions.
-            print("build_condition_cmd_list", condition_topolist)
+            if self.debug:
+                print("build_condition_cmd_list", condition_topolist)
             conditiontopolist = self.build_spatio_temporal_topology_list(
                 iflist, conclusionlist, topolist=condition_topolist
             )
@@ -1799,7 +1800,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             numelse = t[9] + t[10] + t[11]
         numthen = str(numthen)
         numelse = str(numelse)
-        print(numthen + " " + numelse)
+        if self.debug:
+            print(numthen + " " + numelse)
         # Create conditional command map list.
         resultlist = self.build_condition_cmd_list(
             ifmaplist,

@@ -17,10 +17,8 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-from __future__ import print_function
 
 import locale
-import six
 
 import os
 import sys
@@ -51,8 +49,7 @@ def print_error(msg, type):
     """Redirect stderr"""
     global log
     if log:
-        if sys.version_info.major >= 3:
-            msg = DecodeString(msg.data)
+        msg = DecodeString(msg.data)
         log.write(msg + os.linesep)
     else:
         print(msg)
@@ -1189,7 +1186,7 @@ class DisplayDriver:
             catsDict[layer].append(cats.cat[i])
 
         catsStr = ""
-        for l, c in six.iteritems(catsDict):
+        for l, c in catsDict.items():
             catsStr = "%d: (%s)" % (l, ",".join(map(str, c)))
 
         return catsStr

@@ -14,8 +14,9 @@ on:
 jobs:
   pytest:
     concurrency:
-      group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}-${{ matrix.os }}-${{ matrix.python-version }}
-      cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
+        matrix.os }}-${{ matrix.python-version }}
+      cancel-in-progress: true
 
     strategy:
       matrix:
@@ -29,7 +30,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -48,7 +49,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install pytest pytest-timeout
+          pip install pytest pytest-timeout pytest-github-actions-annotate-failures
 
       - name: Create installation directory
         run: |
@@ -71,7 +72,7 @@ jobs:
       - name: Run pytest
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass83/lib:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
           pytest .
 
       - name: Print installed versions

@@ -36,18 +36,10 @@ Numeric.arrayrange = Numeric.arange
 
 from math import pi, floor
 
-try:
-    from urllib2 import HTTPError
-    from httplib import HTTPException
-except ImportError:
-    # python3
-    from urllib.error import HTTPError
-    from http.client import HTTPException
+from urllib.error import HTTPError
+from http.client import HTTPException
 
-try:
-    from xml.etree.ElementTree import ParseError
-except ImportError:  # < Python 2.7
-    from xml.parsers.expat import ExpatError as ParseError
+from xml.etree.ElementTree import ParseError
 
 from wms_base import GetEpsg, GetSRSParamVal, WMSBase
 
