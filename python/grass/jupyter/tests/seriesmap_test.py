@@ -15,13 +15,6 @@ except ImportError:
     ipywidgets = None
 
 import grass.jupyter as gj
-from grass.jupyter.seriesmap import is_raster
-
-
-def test_is_raster(space_time_raster_dataset):
-    """Test that raster exists check works"""
-    layer = space_time_raster_dataset.raster_names[0]
-    is_raster(layer)
 
 
 def test_default_init(space_time_raster_dataset):

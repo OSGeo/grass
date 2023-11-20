@@ -18,24 +18,11 @@ import weakref
 import shutil
 
 import grass.script as gs
+from grass.grassdb.data import map_exists
 
 from .map import Map
 from .region import RegionManagerForSeries
 from .utils import save_gif
-
-
-def is_raster(layer):
-    """Check that map is a raster"""
-    test = gs.read_command("r.info", map=layer)
-    if not test:
-        raise NameError(_("Could not find a raster named {}").format(layer))
-
-
-def is_vector(layer):
-    """Check that map is a vector"""
-    test = gs.read_command("v.info", map=layer)
-    if not test:
-        raise NameError(_("Could not find a vector named {}").format(layer))
 
 
 class SeriesMap:
@@ -119,7 +106,9 @@ class SeriesMap:
         :param list rasters: list of raster layers to add to SeriesMap
         """
         for raster in rasters:
-            is_raster(raster)
+            assert map_exists(name=raster, element=raster), _(
+                "Could not find a raster named {}".format(raster)
+            )
         # Update region to rasters if not use_region or saved_region
         self._region_manager.set_region_from_rasters(rasters)
         if self._series_added:
@@ -144,7 +133,9 @@ class SeriesMap:
         :param list vectors: list of vector layers to add to SeriesMap
         """
         for vector in vectors:
-            is_vector(vector)
+            assert map_exists(name=vector, element=vector), _(
+                "Could not find a vector named {}".format(vector)
+            )
         # Update region extent to vectors if not use_region or saved_region
         self._region_manager.set_region_from_vectors(vectors)
         if self._series_added:
