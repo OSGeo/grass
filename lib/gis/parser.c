@@ -1224,6 +1224,7 @@ void set_option(const char *string)
                                  "option <%s> has been renamed to flag <%c>"),
                                G_program_name(), the_key, renamed_key[1]);
                 append_error(err);
+                return;
             }
 
             /* if renamed to a new option */
