@@ -984,7 +984,8 @@ int module_gui_wx(void)
 void set_flag(int f)
 {
     struct Flag *flag;
-    char *err;
+    char *key, *err;
+    const char *renamed_key;
 
     err = NULL;
 
@@ -1008,6 +1009,48 @@ void set_flag(int f)
             return;
         }
         flag = flag->next_flag;
+    }
+
+    /* First, check if key has been renamed in GRASS 7 */
+    G_asprintf(&key, "-%c", f);
+    renamed_key = get_renamed_option(key);
+    G_free(key);
+
+    if (renamed_key) {
+        /* if renamed to a new flag */
+        if (*renamed_key == '-') {
+            /* if renamed to a long flag */
+            if (renamed_key[1] == '-') {
+                G_warning(_("Please update the usage of <%s>: "
+                            "flag <%c> has been renamed to <%s>"),
+                          G_program_name(), f, renamed_key);
+                return;
+            }
+            /* if renamed to a short flag */
+            for (flag = &st->first_flag; flag; flag = flag->next_flag) {
+                if (renamed_key[1] == flag->key) {
+                    G_warning(_("Please update the usage of <%s>: "
+                                "flag <%c> has been renamed to <%s>"),
+                              G_program_name(), f, renamed_key);
+                    return;
+                }
+            }
+        }
+        else {
+            /* if renamed to a new option (less information given), fatal error
+             */
+            struct Option *opt = NULL;
+            for (opt = &st->first_option; opt; opt = opt->next_opt) {
+                if (strcmp(renamed_key, opt->key) == 0) {
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "flag <%c> has been renamed to option <%s>"),
+                               G_program_name(), f, renamed_key);
+                    append_error(err);
+                    return;
+                }
+            }
+        }
     }
 
     G_asprintf(&err, _("%s: Sorry, <%c> is not a valid flag"), G_program_name(),
@@ -1167,6 +1210,23 @@ void set_option(const char *string)
 
         renamed_key = get_renamed_option(the_key);
         if (renamed_key) {
+            /* if renamed to a new flag (information loss occurs), fatal error
+             */
+            if (*renamed_key == '-') {
+                if (renamed_key[1] == '-')
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "option <%s> has been renamed to flag <%s>"),
+                               G_program_name(), the_key, renamed_key);
+                else
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "option <%s> has been renamed to flag <%c>"),
+                               G_program_name(), the_key, renamed_key[1]);
+                append_error(err);
+            }
+
+            /* if renamed to a new option */
             for (at_opt = &st->first_option; at_opt;
                  at_opt = at_opt->next_opt) {
                 if (strcmp(renamed_key, at_opt->key) == 0) {
