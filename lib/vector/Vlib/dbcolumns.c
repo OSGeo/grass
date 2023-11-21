@@ -34,7 +34,7 @@
    \return list of column(s) names on success
    \return NULL on error
  */
-const char *Vect_get_column_names(const struct Map_info *Map, int field)
+const char *Vect_get_column_names(struct Map_info *Map, int field)
 {
     int num_dblinks, ncols, col;
     struct field_info *fi;
@@ -89,7 +89,7 @@ const char *Vect_get_column_names(const struct Map_info *Map, int field)
    \return list of column(s) types on success
    \return NULL on error
  */
-const char *Vect_get_column_types(const struct Map_info *Map, int field)
+const char *Vect_get_column_types(struct Map_info *Map, int field)
 {
     int num_dblinks, ncols, col;
     struct field_info *fi;
@@ -146,7 +146,7 @@ const char *Vect_get_column_types(const struct Map_info *Map, int field)
    \return list of column(s) types on success
    \return NULL on error
  */
-const char *Vect_get_column_names_types(const struct Map_info *Map, int field)
+const char *Vect_get_column_names_types(struct Map_info *Map, int field)
 {
     int num_dblinks, ncols, col;
     struct field_info *fi;

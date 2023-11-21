@@ -19,9 +19,9 @@
    API */
 
 /* area.c */
-int Vect__get_area_points(const struct Map_info *, const plus_t *, int,
+int Vect__get_area_points(struct Map_info *, const plus_t *, int,
                           struct line_pnts *);
-int Vect__get_area_points_nat(const struct Map_info *, const plus_t *, int,
+int Vect__get_area_points_nat(struct Map_info *, const plus_t *, int,
                               struct line_pnts *);
 
 /* close.c */
@@ -29,7 +29,7 @@ void Vect__free_cache(struct Format_info_cache *);
 void Vect__free_offset(struct Format_info_offset *);
 
 /* copy.c */
-int Vect__copy_areas(const struct Map_info *, int, struct Map_info *);
+int Vect__copy_areas(struct Map_info *, int, struct Map_info *);
 
 /* map.c */
 int Vect__delete(const char *, int);
@@ -37,15 +37,14 @@ int Vect__delete(const char *, int);
 /* open.c */
 int Vect__open_old(struct Map_info *, const char *, const char *, const char *,
                    int, int, int);
-char *Vect__get_path(char *, const struct Map_info *);
-char *Vect__get_element_path(char *, const struct Map_info *, const char *);
+char *Vect__get_path(char *, struct Map_info *);
+char *Vect__get_element_path(char *, struct Map_info *, const char *);
 
 /* write_nat.c */
 int V2__add_line_to_topo_nat(struct Map_info *, off_t, int,
                              const struct line_pnts *, const struct line_cats *,
                              int,
-                             int (*external_routine)(const struct Map_info *,
-                                                     int));
+                             int (*external_routine)(struct Map_info *, int));
 int V2__delete_line_from_topo_nat(struct Map_info *, int, int,
                                   const struct line_pnts *,
                                   const struct line_cats *);

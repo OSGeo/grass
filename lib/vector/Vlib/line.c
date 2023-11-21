@@ -926,7 +926,7 @@ void Vect_line_reverse(struct line_pnts *Points)
    \return -1 no category
    \return category number (>=0)
  */
-int Vect_get_line_cat(const struct Map_info *Map, int line, int field)
+int Vect_get_line_cat(struct Map_info *Map, int line, int field)
 {
 
     static struct line_cats *cats = NULL;

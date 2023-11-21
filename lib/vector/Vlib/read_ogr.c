@@ -21,9 +21,8 @@
 #include <ogr_api.h>
 
 static int cache_feature(struct Map_info *, OGRGeometryH, int);
-static int read_line(const struct Map_info *, OGRGeometryH, long,
-                     struct line_pnts *);
-static int get_line_type(const struct Map_info *, long);
+static int read_line(struct Map_info *, OGRGeometryH, long, struct line_pnts *);
+static int get_line_type(struct Map_info *, long);
 static int read_next_line_ogr(struct Map_info *, struct line_pnts *,
                               struct line_cats *, int);
 #endif
@@ -451,7 +450,7 @@ int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
    \return feature type
    \return -1 on error
  */
-int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
+int read_line(struct Map_info *Map, OGRGeometryH hGeom, long offset,
               struct line_pnts *Points)
 {
     int i, nPoints;
@@ -529,7 +528,7 @@ int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
    \return feature type
    \return -1 on error
  */
-int get_line_type(const struct Map_info *Map, long fid)
+int get_line_type(struct Map_info *Map, long fid)
 {
     int eType;
 

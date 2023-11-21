@@ -26,7 +26,7 @@
    \return open level
    \return -1 on error
  */
-int Vect_level(const struct Map_info *Map)
+int Vect_level(struct Map_info *Map)
 {
     if (Map->open != VECT_OPEN_CODE) {
         if (Map->open != VECT_CLOSED_CODE)
