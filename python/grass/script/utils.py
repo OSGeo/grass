@@ -326,13 +326,27 @@ def get_num_suffix(number, max_number):
 
 
 def split(s):
-    """!Platform specific shlex.split"""
-    if sys.version_info >= (2, 6):
-        return shlex.split(s, posix=(sys.platform != "win32"))
-    elif sys.platform == "win32":
-        return shlex.split(s.replace("\\", r"\\"))
-    else:
-        return shlex.split(s)
+    """Same shlex.split() func on all OS platforms
+
+    We don't use parameter posix=True on the OS MS Windows due to incorrectly
+    splitting command line parameters:
+
+    e.g. d.vect where="cat < 10"
+
+    is split incorrectly as follows:
+
+    'where="cat', '<', '10"'
+
+    Should be:
+
+    'where=cat < 10'
+
+
+    :param str s: cmd string
+
+    return list: cmd list
+    """
+    return shlex.split(s)
 
 
 # source:
