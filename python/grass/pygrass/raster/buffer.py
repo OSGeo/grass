@@ -3,7 +3,7 @@ import ctypes
 import numpy as np
 
 
-_CELL = ("int", "int0", "int8", "int16", "int32", "int64")
+_CELL = ("int", "intp", "int8", "int16", "int32", "int64")
 CELL = tuple([getattr(np, attr) for attr in _CELL if hasattr(np, attr)])
 _FCELL = "float", "float16", "float32"
 FCELL = tuple([getattr(np, attr) for attr in _FCELL if hasattr(np, attr)])

@@ -556,18 +556,19 @@ class VirtualAttributeList(
     def OnColumnSort(self, event):
         """Column heading left mouse button -> sorting"""
         self._col = event.GetColumn()
-
+        self._updateColSortFlag()
         self.ColumnSort()
-
         event.Skip()
 
     def OnColumnSortAsc(self, event):
         """Sort values of selected column (ascending)"""
+        self._updateColSortFlag()
         self.SortListItems(col=self._col, ascending=True)
         event.Skip()
 
     def OnColumnSortDesc(self, event):
         """Sort values of selected column (descending)"""
+        self._updateColSortFlag()
         self.SortListItems(col=self._col, ascending=False)
         event.Skip()
 
@@ -713,6 +714,14 @@ class VirtualAttributeList(
             return False
 
         return True
+
+    def _updateColSortFlag(self):
+        """
+        Update listmix.ColumnSorterMixin class self._colSortFlag list
+        private variable for new column which was added (required for
+        sorting new added column values)
+        """
+        self._colSortFlag.extend([0] * (len(self.columns) - len(self._colSortFlag)))
 
 
 class DbMgrBase:
@@ -1020,7 +1029,7 @@ class DbMgrNotebookBase(GNotebook):
         del self.layerPage[layer]
 
         if self.GetSelection() >= 0:
-            self.selLayer = self.layers[self.GetSelection()]
+            self.selLayer = self.layers[-1]
         else:
             self.selLayer = None
 
@@ -1351,6 +1360,9 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
     def OnSqlQuerySize(self, event, layer):
         """Adapts SQL Query Simple tab on current width"""
+
+        if layer not in self.layers:
+            return
 
         sqlNtb = event.GetEventObject()
         if not self.sqlBestSize:
@@ -2630,6 +2642,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         )
         self.FindWindowById(self.layerPage[self.selLayer]["renameCol"]).SetSelection(0)
         self.FindWindowById(self.layerPage[self.selLayer]["renameColTo"]).SetValue("")
+        self._updateTableColumnWidgetChoices(table=table)
 
         event.Skip()
 
@@ -2717,6 +2730,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             self.dbMgrData["mapDBInfo"].GetColumns(table)
         )
         self.FindWindowById(self.layerPage[self.selLayer]["renameCol"]).SetSelection(0)
+        self._updateTableColumnWidgetChoices(table=table)
 
         event.Skip()
 
@@ -2764,6 +2778,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             self.dbMgrData["mapDBInfo"].GetColumns(table)
         )
         self.FindWindowById(self.layerPage[self.selLayer]["renameCol"]).SetSelection(0)
+        self._updateTableColumnWidgetChoices(table=table)
 
         event.Skip()
 
@@ -2790,14 +2805,6 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             ).GetValue()
         )
 
-        # add item to the list of table columns
-        tlist = self.FindWindowById(self.layerPage[self.selLayer]["tableData"])
-
-        index = tlist.InsertItem(tlist.GetItemCount(), str(name))
-        tlist.SetItem(index, 0, str(name))
-        tlist.SetItem(index, 1, str(ctype))
-        tlist.SetItem(index, 2, str(length))
-
         self.AddColumn(name, ctype, length)
 
         # update widgets
@@ -2807,7 +2814,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             self.dbMgrData["mapDBInfo"].GetColumns(table)
         )
         self.FindWindowById(self.layerPage[self.selLayer]["renameCol"]).SetSelection(0)
-
+        self._updateTableColumnWidgetChoices(table=table)
         event.Skip()
 
     def UpdatePage(self, layer):
@@ -2821,6 +2828,26 @@ class DbMgrTablesPage(DbMgrNotebookBase):
                 columns=self.dbMgrData["mapDBInfo"].GetColumns(table),
             )
             self.OnTableReload(None)
+
+    def _updateTableColumnWidgetChoices(self, table):
+        """Update table column widget choices
+
+        :param str table: table name
+        """
+        cols = self.dbMgrData["mapDBInfo"].GetColumns(table)
+        # Browse data page SQL Query Simple page WHERE Combobox column names widget
+        self.FindWindowById(
+            self.pages["browse"].layerPage[self.selLayer]["whereColumn"]
+        ).SetItems(cols)
+        # Browse data page SQL Query Builder page SQL builder frame ListBox column names widget
+        if self.pages["browse"].builder:
+            self.pages["browse"].builder.list_columns.Set(cols)
+        # Browse data page column Field calculator frame ListBox column names widget
+        fieldCalc = self.FindWindowById(
+            self.pages["browse"].layerPage[self.selLayer]["data"],
+        ).fieldCalc
+        if fieldCalc:
+            fieldCalc.list_columns.Set(cols)
 
 
 class DbMgrLayersPage(wx.Panel):
@@ -3860,7 +3887,7 @@ class LayerBook(wx.Notebook):
         if (
             self.modifyLayerWidgets["driver"][1].GetStringSelection()
             != self.mapDBInfo.layers[layer]["driver"]
-            or self.modifyLayerWidgets["database"][1].GetStringSelection()
+            or self.modifyLayerWidgets["database"][1].GetValue()
             != self.mapDBInfo.layers[layer]["database"]
             or self.modifyLayerWidgets["table"][1].GetStringSelection()
             != self.mapDBInfo.layers[layer]["table"]
