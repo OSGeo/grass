@@ -21,7 +21,7 @@ r3.mapcalc --o expr="volume_null = if(row() == 2 || row() == 7, null(), volume)"
 r3.mapcalc --o expr="volume_rgb = volume_null * 5"
 
 # The first @test just exports the volume map as cell and point data
-# using alow precision and replaces the default null value with 0
+# using allow precision and replaces the default null value with 0
 # the created @files should be compared with the reference data.
 r3.out.vtk --o input=volume_null output=test_volume_null_1_cells.vtk precision=3 null=0
 r3.out.vtk -p --o input=volume_null output=test_volume_null_1_points.vtk precision=3 null=0

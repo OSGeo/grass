@@ -16,7 +16,6 @@ for details.
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
-from __future__ import absolute_import
 import os
 import sys
 
@@ -30,8 +29,6 @@ from .core import (
 )
 
 from grass.exceptions import CalledModuleError, ScriptError
-
-unicode = str
 
 
 def vector_db(map, env=None, **kwargs):
@@ -367,7 +364,7 @@ def vector_what(
     :param ttype: list of topology types (default of v.what are point, line,
                   area, face)
     :param encoding: attributes encoding
-    :param skip_attributes: True to skip quering attributes
+    :param skip_attributes: True to skip querying attributes
     :param layer: layer number or list of layers (one for each vector),
                   if None, all layers (-1) are used
     :param multiple: find multiple features within threshold distance
@@ -380,7 +377,7 @@ def vector_what(
     if "LC_ALL" in env:
         env["LC_ALL"] = "C"
 
-    if isinstance(map, (bytes, unicode)):
+    if isinstance(map, (bytes, str)):
         map_list = [map]
     else:
         map_list = map

@@ -570,7 +570,7 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
                                     "initialized range."));
                         continue;
                     }
-                    /* pixels meets condtion defined in scatter plot ->
+                    /* pixels meets condition defined in scatter plot ->
                        belongs to scatter plot category */
                     if (i_scatt_conds[array_idx])
                         belongs_pix[i_rows_pix] = 1;
@@ -830,7 +830,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
    \brief Merge arrays according to opacity.
    Every pixel in array must be represented by 4 values (RGBA).
 
-   Implementd for speeding up of scatter plots rendering.
+   Implemented for speeding up of scatter plots rendering.
 
    \param merged_arr array which will be overlayd with overlay_arr
    \param overlay_arr array to be merged_arr overlaid with
@@ -872,10 +872,10 @@ int I_merge_arrays(unsigned char *merged_arr, unsigned char *overlay_arr,
 /*!
    \brief Apply colromap to the raster.
 
-   Implementd for speeding up of scatter plots rendering.
+   Implemented for speeding up of scatter plots rendering.
 
    \param vals array of values for applying the colormap
-   \param vals_mask maks of vals array
+   \param vals_mask mask of vals array
    \param nvals number of items of vals_mask and vals array
    \param colmap colour map to be applied
    \param[out] col_vals output raster with applied color map (length is 4 *

@@ -104,7 +104,7 @@ double func(double x)
 
 double log_like(
     /* compute log likelihood being maximized. This subroutine *
-     * is useful for debuging since the log likelihood must be *
+     * is useful for debugging since the log likelihood must be *
      * monotonically decreasing.                               */
     double ***N, /* transition statistics */
     double a[3], /* transition parameters */

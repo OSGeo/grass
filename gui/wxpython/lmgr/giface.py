@@ -15,8 +15,6 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
-from __future__ import print_function
-
 from grass.pydispatch.signal import Signal
 from core.giface import Notification
 from core.utils import GetLayerNameFromCmd
@@ -178,7 +176,7 @@ class LayerManagerGrassInterface(object):
     """@implements core::giface::GrassInterface"""
 
     def __init__(self, lmgr):
-        """Costructor is specific to the current implementation.
+        """Constructor is specific to the current implementation.
 
         Uses Layer Manager object including its private attributes.
         (It encapsulates existing Layer Manager so access to private members

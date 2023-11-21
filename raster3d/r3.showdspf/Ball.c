@@ -1,7 +1,7 @@
 /***** Ball.c *****/
 /* This file contains code required to implement a trackball user
  * interface for manipulating a 3D scene.  This code was taken from
- * Graphics Gems 4, editted by Andrew Glassner
+ * Graphics Gems 4, edited by Andrew Glassner
  */
 
 #include "Ball.h"

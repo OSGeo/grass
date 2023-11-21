@@ -1,6 +1,6 @@
 /* calculate camera angle to local surface
  * 90 degrees: orthogonal to local surface
- * 0 degress: parallel to local surface
+ * 0 degrees: parallel to local surface
  * < 0 degrees: not visible by camera
  *
  * Earth curvature is not considered, assuming that the extends of the

@@ -108,7 +108,7 @@ to do both Black formatting and Flake8 file validation.
 The correct editor settings for Python indentation
 
 - [​Geany](https://www.geany.org/) editor:
-  - Edit > Preferences > Editor > Intentation tab > Type: Spaces
+  - Edit > Preferences > Editor > Indentation tab > Type: Spaces
 - [​PyCharm](https://www.jetbrains.com/pycharm/) IDE:
   - already fine and includes code-linting
 - [​atom](https://atom.io/) IDE:
@@ -301,7 +301,7 @@ output. This is reserved for standard module output if it has one.
 ### Translations
 
 To enable translating of messages to other languages (than English), use full
-strings, e.g.
+strings, e.g. (good example):
 
 ```py
 if ...:
@@ -310,7 +310,7 @@ else:
     win.SetLabel(_("Name for new raster map to create"))
 ```
 
-instead of constructing string from several parts:
+instead of constructing string from several parts (bad example):
 
 ```py
 if ...:

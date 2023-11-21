@@ -15,7 +15,6 @@ import os
 
 
 class TestRasterExport(TestCase):
-
     tmp = gscript.tempdir()
     float_ = os.path.join(tmp, "geotiffloat")
     int_ = os.path.join(tmp, "geotifint")

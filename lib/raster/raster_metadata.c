@@ -135,7 +135,7 @@ void Rast_write_semantic_label(const char *name, const char *str)
  * \brief Check for legal semantic label
  *
  * Legal semantic label must be a legal GRASS file name.
- * Semantic labels are capped in legth to GNAME_MAX.
+ * Semantic labels are capped in length to GNAME_MAX.
  *
  * This function will return false if provided semantic label is not
  * considered to be valid.

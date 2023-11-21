@@ -34,7 +34,6 @@ This program is free software under the GNU General Public License
 
 import os
 import string
-import six
 from math import ceil
 from time import strftime, localtime
 from io import open
@@ -58,7 +57,6 @@ class Instruction:
     """Class which represents instruction file"""
 
     def __init__(self, parent, objectsToDraw, env):
-
         self.parent = parent
         self.objectsToDraw = objectsToDraw
         # here are kept objects like mapinfo, rasterlegend, etc.
@@ -381,7 +379,6 @@ class Instruction:
             for vmap in vectorMaps:
                 for i, each in enumerate(vector["list"]):
                     if each[2] == vmap.id:
-
                         vector["list"][i][4] = vmap["label"]
                         vector["list"][i][3] = vmap["lpos"]
             if vectorLegend:
@@ -466,7 +463,6 @@ class Instruction:
                 )
                 or not instr
             ):
-
                 id = NewId()  # !vProperties expect subtype
                 if i == "vProperties":
                     id = kwargs["id"]
@@ -543,7 +539,7 @@ class Instruction:
 
 
 class InstructionObject:
-    """Abtract class representing single instruction"""
+    """Abstract class representing single instruction"""
 
     def __init__(self, id, env):
         self.id = id
@@ -828,7 +824,7 @@ class PageSetup(InstructionObject):
                         # e.g. paper a3
                         try:
                             instr["Format"] = pformat
-                            for key, value in six.iteritems(availableFormats[pformat]):
+                            for key, value in availableFormats[pformat].items():
                                 instr[key] = float(value)
                             break
                         except KeyError:

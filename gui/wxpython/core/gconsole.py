@@ -21,18 +21,13 @@ This program is free software under the GNU General Public License
 @author Wolf Bergenheim <wolf bergenheim.net> (#962)
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import re
 import time
 import threading
 
-if sys.version_info.major == 2:
-    import Queue
-else:
-    import queue as Queue
+import queue as Queue
 
 import codecs
 import locale
@@ -362,7 +357,7 @@ class GConsole(wx.EvtHandler):
         r"""
         :param guiparent: parent window for created GUI objects
         :param lmgr: layer manager window (TODO: replace by giface)
-        :param ignoredCmdPattern: regular expression specifying commads
+        :param ignoredCmdPattern: regular expression specifying commands
                                   to be ignored (e.g. @c '^d\..*' for
                                   display commands)
         """
@@ -414,13 +409,9 @@ class GConsole(wx.EvtHandler):
             except AttributeError:
                 enc = locale.getdefaultlocale()[1]
             if enc:
-                if sys.version_info.major == 2:
-                    sys.stdout = codecs.getwriter(enc)(sys.__stdout__)
-                    sys.stderr = codecs.getwriter(enc)(sys.__stderr__)
-                else:
-                    # https://stackoverflow.com/questions/4374455/how-to-set-sys-stdout-encoding-in-python-3
-                    sys.stdout = codecs.getwriter(enc)(sys.__stdout__.detach())
-                    sys.stderr = codecs.getwriter(enc)(sys.__stderr__.detach())
+                # https://stackoverflow.com/questions/4374455/how-to-set-sys-stdout-encoding-in-python-3
+                sys.stdout = codecs.getwriter(enc)(sys.__stdout__.detach())
+                sys.stderr = codecs.getwriter(enc)(sys.__stderr__.detach())
             else:
                 sys.stdout = sys.__stdout__
                 sys.stderr = sys.__stderr__
@@ -570,10 +561,7 @@ class GConsole(wx.EvtHandler):
                                 message=_("Module <%s> not found.") % command[0],
                             )
                         pymodule = imp.load_source(command[0].replace(".", "_"), pyPath)
-                        try:  # PY3
-                            pymain = inspect.getfullargspec(pymodule.main)
-                        except AttributeError:
-                            pymain = inspect.getargspec(pymodule.main)
+                        pymain = inspect.getfullargspec(pymodule.main)
                         if pymain and "giface" in pymain.args:
                             pymodule.main(self._giface)
                             return
@@ -717,7 +705,7 @@ class GConsole(wx.EvtHandler):
                     "sec": int(ctime - (mtime * 60)),
                 }
         except KeyError:
-            # stopped deamon
+            # stopped daemon
             stime = _("unknown")
 
         if event.aborted:

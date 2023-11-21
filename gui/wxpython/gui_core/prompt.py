@@ -348,7 +348,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.AutoCompCancel()
         # show hint
         if self.IsEmpty():
-            self._showHint()
+            wx.CallAfter(self._showHint)
         event.Skip()
 
     def OnSetFocus(self, event):
@@ -440,8 +440,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         """Get word left from current cursor position. The beginning
         of the word is given by space or chars: .,-=
 
-        :param withDelimiter: returns the word with the initial delimeter
-        :param ignoredDelimiter: finds the word ignoring certain delimeter
+        :param withDelimiter: returns the word with the initial delimiter
+        :param ignoredDelimiter: finds the word ignoring certain delimiter
         """
         textLeft = self.GetTextLeft()
 

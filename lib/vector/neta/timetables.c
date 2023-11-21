@@ -105,7 +105,7 @@ static int cmp_int(const void *a, const void *b)
    \param walk_length walk length as string
    \param timetable pointer to neta_timetable
    \param route_ids list of route ids
-   \param stop_ids lits of stop ids
+   \param stop_ids list of stop ids
 
    \return 0 on success
    \return non-zero value on failure

@@ -536,7 +536,7 @@ double get_key_neighbors(int nvk, double time, double range, int loop,
 /*!
    \brief Linear interpolation
 
-   \param dt coeficient
+   \param dt coefficient
    \param val2 value 2
    \param val1 value 1
 

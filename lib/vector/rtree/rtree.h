@@ -138,8 +138,8 @@ struct RTree {
     int rootlevel; /* root level = tree depth */
 
     /* settings for RTree building */
-    int nodecard;           /* max number of childs in node */
-    int leafcard;           /* max number of childs in leaf */
+    int nodecard;           /* max number of children in node */
+    int leafcard;           /* max number of children in leaf */
     int min_node_fill;      /* balance criteria for node removal */
     int min_leaf_fill;      /* balance criteria for leaf removal */
     int minfill_node_split; /* balance criteria for splitting */
@@ -149,7 +149,7 @@ struct RTree {
     /* free node positions for recycling */
     struct _recycle {
         int avail;  /* number of available positions */
-        int alloc;  /* number of allcoated positions in *pos */
+        int alloc;  /* number of allocated positions in *pos */
         off_t *pos; /* array of available positions */
     } free_nodes;
 

@@ -26,7 +26,7 @@ typedef struct {
     int lineoffset;
     int numpolygons; /* The number of polygons */
     int polygonoffset;
-    int generatedata; /* If 0 the categorie data is not complete */
+    int generatedata; /* If 0 the category data is not complete */
 } VTKTypeInfo;
 
 /* essential vtk file information */

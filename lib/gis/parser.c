@@ -996,7 +996,7 @@ void set_flag(int f)
         return;
     }
 
-    /* Find flag with corrrect keyword */
+    /* Find flag with correct keyword */
     flag = &st->first_flag;
     while (flag) {
         if (flag->key == f) {

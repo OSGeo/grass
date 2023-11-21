@@ -37,7 +37,6 @@ is not safe, i.e. it has side effects (this should be changed in the future).
 # (this makes it more stable since we have to set up paths first)
 # pylint: disable=too-many-lines
 
-from __future__ import print_function
 import sys
 import os
 import errno
@@ -49,7 +48,6 @@ import signal
 import string
 import subprocess
 import re
-import six
 import platform
 import tempfile
 import locale
@@ -118,9 +116,7 @@ def decode(bytes_, encoding=ENCODING):
     :param encoding: encoding to be used, default value is the system's default
         encoding or, if that cannot be determined, 'UTF-8'.
     """
-    if sys.version_info.major >= 3:
-        unicode = str
-    if isinstance(bytes_, unicode):
+    if isinstance(bytes_, str):
         return bytes_
     elif isinstance(bytes_, bytes):
         return bytes_.decode(encoding)
@@ -140,12 +136,9 @@ def encode(string, encoding=ENCODING):
     :param encoding: encoding to be used, default value is the system's default
         encoding or, if that cannot be determined, 'UTF-8'.
     """
-    if sys.version_info.major >= 3:
-        unicode = str
     if isinstance(string, bytes):
         return string
-    # this also tests str in Py3:
-    elif isinstance(string, unicode):
+    elif isinstance(string, str):
         return string.encode(encoding)
     else:
         # if something else than text
@@ -155,12 +148,7 @@ def encode(string, encoding=ENCODING):
 # see https://trac.osgeo.org/grass/ticket/3508
 def to_text_string(obj, encoding=ENCODING):
     """Convert `obj` to (unicode) text string"""
-    if six.PY2:
-        # Python 2
-        return encode(obj, encoding=encoding)
-    else:
-        # Python 3
-        return decode(obj, encoding=encoding)
+    return decode(obj, encoding=encoding)
 
 
 def try_remove(path):
@@ -252,7 +240,7 @@ def Popen(cmd, **kwargs):  # pylint: disable=C0103
 
 
 def gpath(*args):
-    """Costruct path to file or directory in GRASS GIS installation
+    """Construct path to file or directory in GRASS GIS installation
 
     Can be called only after GISBASE was set.
     """
@@ -260,7 +248,7 @@ def gpath(*args):
 
 
 def wxpath(*args):
-    """Costruct path to file or directory in GRASS wxGUI
+    """Construct path to file or directory in GRASS wxGUI
 
     Can be called only after GISBASE was set.
 
@@ -279,10 +267,7 @@ def count_wide_chars(s):
 
     :param str s: string
     """
-    return sum(
-        unicodedata.east_asian_width(c) in "WF"
-        for c in (s if sys.version_info.major >= 3 else unicode(s))
-    )
+    return sum(unicodedata.east_asian_width(c) in "WF" for c in s)
 
 
 def f(fmt, *args):
@@ -1185,9 +1170,12 @@ def set_mapset(
                                     " Did you mean to create a new location?"
                                 ).format(mapset=mapset, geofile=geofile)
                             )
-                        message(
-                            _("Creating new GRASS GIS mapset <{}>...").format(mapset)
-                        )
+                        if not tmp_mapset:
+                            message(
+                                _("Creating new GRASS GIS mapset <{}>...").format(
+                                    mapset
+                                )
+                            )
                         # create mapset directory
                         os.mkdir(path)
                         if tmp_mapset:
@@ -1534,7 +1522,7 @@ def set_language(grass_config_dir):
         encoding = None
 
         # XXX: In UN*X, LC_CTYPE needs to be set to *any* value before GRASS
-        # starts when the language setting is overriden by the user. For
+        # starts when the language setting is overridden by the user. For
         # example, 'LC_CTYPE= grass' will break the welcome message.
         # Interestingly, modules' help messages look fine.
     elif encoding:
@@ -1965,7 +1953,7 @@ def sh_like_startup(location, location_name, grass_env_file, sh):
         )
 
     # save command history in mapset dir and remember more
-    # bash histroy file handled in specific_addition
+    # bash history file handled in specific_addition
     if not sh == "bash":
         os.environ["HISTFILE"] = os.path.join(location, sh_history)
 
@@ -2388,7 +2376,7 @@ def classic_parser(argv, default_gui):
         params.exit_grass = True
     if parsed_args.exec:
         params.batch_job = parsed_args.exec
-    # Cases to execute immediatelly
+    # Cases to execute immediately
     if parsed_args.version:
         sys.stdout.write("GRASS GIS %s" % GRASS_VERSION)
         sys.stdout.write("\n" + readfile(gpath("etc", "license")))
@@ -2482,7 +2470,7 @@ def main():
     use_shell = io_is_interactive() or force_shell
     if not use_shell:
         # If no shell is used, always use actual GUI as GUI, even when "text" is set as
-        # a GUI in the gisrcrc becasue otherwise there would be nothing for the user
+        # a GUI in the gisrcrc because otherwise there would be nothing for the user
         # unless running in the batch mode. (The gisrcrc file is loaded later on in case
         # nothing was provided in the command line).
         grass_gui = default_gui

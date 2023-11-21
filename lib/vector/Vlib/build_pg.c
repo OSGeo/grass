@@ -220,7 +220,7 @@ int build_topo(struct Map_info *Map, int build)
             _("Inconsistency in topology: number of nodes %d (should be %d)"),
             Map->plus.n_nodes, n_nodes);
 
-    /* store map boundig box in DB */
+    /* store map bounding box in DB */
     save_map_bbox(pg_info, &(plus->box));
 
     /* begin transaction */
