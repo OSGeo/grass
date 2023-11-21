@@ -245,7 +245,7 @@ def save_gif(
             else:
                 try:
                     font_obj = PIL.ImageFont.load_default(size=text_size)
-                except NameError:
+                except TypeError:
                     font_obj = PIL.ImageFont.load_default()
             draw.text(
                 (0, 0),

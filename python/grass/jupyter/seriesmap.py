@@ -106,9 +106,8 @@ class SeriesMap:
         :param list rasters: list of raster layers to add to SeriesMap
         """
         for raster in rasters:
-            assert map_exists(name=raster, element=raster), _(
-                "Could not find a raster named {}".format(raster)
-            )
+            if not map_exists(name=raster, element=raster):
+                raise NameError(_("Could not find a raster named {}").format(raster))
         # Update region to rasters if not use_region or saved_region
         self._region_manager.set_region_from_rasters(rasters)
         if self._series_added:
@@ -133,9 +132,8 @@ class SeriesMap:
         :param list vectors: list of vector layers to add to SeriesMap
         """
         for vector in vectors:
-            assert map_exists(name=vector, element=vector), _(
-                "Could not find a vector named {}".format(vector)
-            )
+            if not map_exists(name=vector, element=vector):
+                raise NameError(_("Could not find a vector named {}").format(vector))
         # Update region extent to vectors if not use_region or saved_region
         self._region_manager.set_region_from_vectors(vectors)
         if self._series_added:
