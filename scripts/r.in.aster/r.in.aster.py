@@ -36,7 +36,7 @@
 # % key: proctype
 # % type: string
 # % description: ASTER imagery processing type (Level 1A, Level 1B, or relative DEM)
-# % options: L1A,L1B,DEM
+# % options: L1A,L1B,L1T,DEM
 # % answer: L1B
 # % required: yes
 # %end
@@ -82,6 +82,25 @@ bands = {
         "5": "SWIR_Swath:ImageData5",
         "6": "SWIR_Swath:ImageData6",
         "7": "SWIR_Swath:ImageData7",
+        "8": "SWIR_Swath:ImageData8",
+        "9": "SWIR_Swath:ImageData9",
+        "10": "TIR_Swath:ImageData10",
+        "11": "TIR_Swath:ImageData11",
+        "12": "TIR_Swath:ImageData12",
+        "13": "TIR_Swath:ImageData13",
+        "14": "TIR_Swath:ImageData14",
+    },
+    "L1T": {
+        "4": "SWIR_Swath:ImageData4",
+        "5": "SWIR_Swath:ImageData5",
+        "6": "SWIR_Swath:ImageData6",
+        "7": "SWIR_Swath:ImageData7",
+        "8": "SWIR_Swath:ImageData8",
+        "9": "SWIR_Swath:ImageData9",
+        "1": "VNIR_Swath:ImageData1",
+        "2": "VNIR_Swath:ImageData2",
+        "3n": "VNIR_Swath:ImageData3N",
+        "3b": "VNIR_Swath:ImageData3N", # A placeholder for consistency with other bands
         "8": "SWIR_Swath:ImageData8",
         "9": "SWIR_Swath:ImageData9",
         "10": "TIR_Swath:ImageData10",
@@ -138,8 +157,8 @@ def main():
     else:
         bandlist = band.split(",")
 
-    # initialize datasets for L1A and L1B
-    if proctype in ["L1A", "L1B"]:
+    # initialize datasets for L1A, L1B, L1T
+    if proctype in ["L1A", "L1B","L1T"]:
         for band in bandlist:
             if band in allbands:
                 dataset = bands[proctype][band]
@@ -166,7 +185,10 @@ def import_aster(proj, srcfile, tempfile, output, band):
     grass.debug("gdalwarp -t_srs %s %s %s" % (proj, srcfile, tempfile))
 
     if platform.system() == "Darwin":
-        cmd = ["arch", "-i386", "gdalwarp", "-t_srs", proj, srcfile, tempfile]
+        if platform.architecture()[0] == "32bit":
+            cmd = ["arch", "-i386", "gdalwarp", "-t_srs", proj, srcfile, tempfile]
+        if platform.architecture()[0] == "64bit":
+            cmd = ["arch", "-x86_64", "gdalwarp", "-t_srs", proj, srcfile, tempfile]
     else:
         cmd = ["gdalwarp", "-t_srs", proj, srcfile, tempfile]
     p = grass.call(cmd)
