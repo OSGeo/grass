@@ -49,7 +49,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install pytest pytest-timeout pytest-github-actions-annotate-failures
+          pip install pytest pytest-timeout pytest-github-actions-annotate-failures pytest-xdist
 
       - name: Create installation directory
         run: |
@@ -73,7 +73,7 @@ jobs:
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
-          pytest .
+          pytest --numprocesses auto .
 
       - name: Print installed versions
         if: always()
