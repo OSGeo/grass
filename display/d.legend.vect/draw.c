@@ -52,6 +52,7 @@ void draw(char *file_name, double LL, double LT, char *title, int cols,
 
     /* Draw title */
     title_h = 0;
+    title_w = 0;
     if (strlen(title) > 0) {
         D_font(tit_font);
         D_text_size(tit_size, tit_size);
