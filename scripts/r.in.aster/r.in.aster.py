@@ -100,9 +100,7 @@ bands = {
         "1": "VNIR_Swath:ImageData1",
         "2": "VNIR_Swath:ImageData2",
         "3n": "VNIR_Swath:ImageData3N",
-        "3b": "VNIR_Swath:ImageData3N", # A placeholder for consistency with other bands
-        "8": "SWIR_Swath:ImageData8",
-        "9": "SWIR_Swath:ImageData9",
+        "3b": "VNIR_Swath:ImageData3N", # A placeholder for consistency with other dataproducts
         "10": "TIR_Swath:ImageData10",
         "11": "TIR_Swath:ImageData11",
         "12": "TIR_Swath:ImageData12",
