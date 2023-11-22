@@ -1,4 +1,6 @@
 ---
+ci:
+  skip: [flake8]
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
@@ -60,11 +62,14 @@ repos:
         types_or: [c, c++, javascript, json, objective-c]
         exclude: |
           (?x)^(
-                man/jquery.fixedheadertable.min.js
+                man/jquery.fixedheadertable.min.js$|
+                .*\.ipynb$
           )
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.29.0
     hooks:
       - id: yamllint
         args: [--format, parsable, --strict, -d,
-               '{extends: default, rules: {truthy: disable, line-length: {max: 120, allow-non-breakable-words: true}}}']
+               '{extends: default, rules: {truthy: disable,
+                 line-length: {max: 120, allow-non-breakable-words: true},
+                 comments: {min-spaces-from-content: 1}}}']
