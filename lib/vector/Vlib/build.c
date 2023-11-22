@@ -754,7 +754,7 @@ int Vect_topo_check(struct Map_info *Map, struct Map_info *Err)
 
    \return current highest built level
  */
-int Vect_get_built(const struct Map_info *Map)
+int Vect_get_built(struct Map_info *Map)
 {
     return Map->plus.built;
 }
@@ -1051,7 +1051,7 @@ int Vect_save_topo(struct Map_info *Map)
    \return 1 on success
    \return 0 on error
  */
-int Vect_topo_dump(const struct Map_info *Map, FILE *out)
+int Vect_topo_dump(struct Map_info *Map, FILE *out)
 {
     int i, j, line, isle;
     float angle_deg;
@@ -1241,7 +1241,7 @@ int Vect_build_sidx(struct Map_info *Map)
 
    \return 1
  */
-int Vect_build_sidx_from_topo(const struct Map_info *Map)
+int Vect_build_sidx_from_topo(struct Map_info *Map)
 {
     G_debug(3, "Vect_build_sidx_from_topo(): name=%s", Vect_get_full_name(Map));
 
@@ -1312,7 +1312,7 @@ int Vect_save_sidx(struct Map_info *Map)
    \return 1 on success
    \return 0 on error
  */
-int Vect_sidx_dump(const struct Map_info *Map, FILE *out)
+int Vect_sidx_dump(struct Map_info *Map, FILE *out)
 {
     if (!(Map->plus.Spidx_built)) {
         Vect_build_sidx_from_topo(Map);
