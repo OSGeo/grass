@@ -1021,10 +1021,25 @@ void set_flag(int f)
         if (*renamed_key == '-') {
             /* if renamed to a long flag */
             if (renamed_key[1] == '-') {
-                G_warning(_("Please update the usage of <%s>: "
-                            "flag <%c> has been renamed to <%s>"),
-                          G_program_name(), f, renamed_key);
-                return;
+                if (strcmp(renamed_key, "--overwrite") == 0) {
+                    /* this is a special case for -? to --overwrite */
+                    G_warning(_("Please update the usage of <%s>: "
+                                "flag <%c> has been renamed to <%s>"),
+                              G_program_name(), f, renamed_key);
+                    st->overwrite = 1;
+                    return;
+                }
+                else {
+                    /* long flags other than --overwrite are usually specific to
+                     * GRASS internals, just print an error and let's not
+                     * support them */
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "flag <%c> has been renamed to <%s>"),
+                               G_program_name(), f, renamed_key);
+                    append_error(err);
+                    return;
+                }
             }
             /* if renamed to a short flag */
             for (flag = &st->first_flag; flag; flag = flag->next_flag) {
@@ -1032,6 +1047,11 @@ void set_flag(int f)
                     G_warning(_("Please update the usage of <%s>: "
                                 "flag <%c> has been renamed to <%s>"),
                               G_program_name(), f, renamed_key);
+                    flag->answer = 1;
+                    if (flag->suppress_required)
+                        st->suppress_required = 1;
+                    if (flag->suppress_overwrite)
+                        st->suppress_overwrite = 1;
                     return;
                 }
             }
