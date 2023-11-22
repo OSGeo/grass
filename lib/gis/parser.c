@@ -1027,7 +1027,6 @@ void set_flag(int f)
                                 "flag <%c> has been renamed to <%s>"),
                               G_program_name(), f, renamed_key);
                     st->overwrite = 1;
-                    return;
                 }
                 else {
                     /* long flags other than --overwrite are usually specific to
@@ -1038,8 +1037,8 @@ void set_flag(int f)
                                  "flag <%c> has been renamed to <%s>"),
                                G_program_name(), f, renamed_key);
                     append_error(err);
-                    return;
                 }
+                return;
             }
             /* if renamed to a short flag */
             for (flag = &st->first_flag; flag; flag = flag->next_flag) {
