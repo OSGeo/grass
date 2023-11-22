@@ -468,6 +468,8 @@ v.buffer|bufcolumn:column
 v.clean|thresh:threshold
 # v.colors
 v.colors|volume:raster_3d
+# v.db.connect
+v.db.connect|-o:--overwrite
 # v.db.join
 v.db.join|otable:other_table
 v.db.join|ocolumn:other_column
