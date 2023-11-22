@@ -1056,8 +1056,8 @@ void set_flag(int f)
             }
         }
         else {
-            /* if renamed to a new option (less information given), fatal error
-             */
+            /* if renamed to a new option (no option value given but will be
+             * required), fatal error */
             struct Option *opt = NULL;
             for (opt = &st->first_option; opt; opt = opt->next_opt) {
                 if (strcmp(renamed_key, opt->key) == 0) {
@@ -1229,8 +1229,8 @@ void set_option(const char *string)
 
         renamed_key = get_renamed_option(the_key);
         if (renamed_key) {
-            /* if renamed to a new flag (information loss occurs), fatal error
-             */
+            /* if renamed to a new flag (option value given but will be lost),
+             * fatal error */
             if (*renamed_key == '-') {
                 if (renamed_key[1] == '-')
                     G_asprintf(&err,
