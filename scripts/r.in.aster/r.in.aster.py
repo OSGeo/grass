@@ -182,13 +182,9 @@ def import_aster(proj, srcfile, tempfile, output, band):
     grass.message(_("Georeferencing aster image ..."))
     grass.debug("gdalwarp -t_srs %s %s %s" % (proj, srcfile, tempfile))
 
-    if platform.system() == "Darwin":
-        if platform.architecture()[0] == "32bit":
-            cmd = ["arch", "-i386", "gdalwarp", "-t_srs", proj, srcfile, tempfile]
-        elif platform.architecture()[0] == "64bit":
-            cmd = ["arch", "-x86_64", "gdalwarp", "-t_srs", proj, srcfile, tempfile]
-    else:
-        cmd = ["gdalwarp", "-t_srs", proj, srcfile, tempfile]
+    # We assume gdal is build natively for the platform GRASS is running on.
+	# See #3258
+    cmd = ["gdalwarp", "-t_srs", proj, srcfile, tempfile]
     p = grass.call(cmd)
     if p != 0:
         # check to see if gdalwarp executed properly
