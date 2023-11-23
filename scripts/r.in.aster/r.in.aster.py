@@ -150,7 +150,7 @@ def main():
         "14",
     ]
     
-    # Band 3b is included ASTER L1T
+    # Band 3b is not included ASTER L1T
     if proctype == 'L1T':
         allbands.pop(3)
     
