@@ -185,7 +185,7 @@ def import_aster(proj, srcfile, tempfile, output, band):
     if platform.system() == "Darwin":
         if platform.architecture()[0] == "32bit":
             cmd = ["arch", "-i386", "gdalwarp", "-t_srs", proj, srcfile, tempfile]
-        if platform.architecture()[0] == "64bit":
+        elif platform.architecture()[0] == "64bit":
             cmd = ["arch", "-x86_64", "gdalwarp", "-t_srs", proj, srcfile, tempfile]
     else:
         cmd = ["gdalwarp", "-t_srs", proj, srcfile, tempfile]
