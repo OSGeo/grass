@@ -100,7 +100,6 @@ bands = {
         "1": "VNIR_Swath:ImageData1",
         "2": "VNIR_Swath:ImageData2",
         "3n": "VNIR_Swath:ImageData3N",
-        "3b": "VNIR_Swath:ImageData3N",
         "10": "TIR_Swath:ImageData10",
         "11": "TIR_Swath:ImageData11",
         "12": "TIR_Swath:ImageData12",
@@ -150,6 +149,11 @@ def main():
         "13",
         "14",
     ]
+    
+    # Band 3b is included ASTER L1T
+    if proctype == 'L1T':
+        allbands.pop(3)
+    
     if band == "all":
         bandlist = allbands
     else:
@@ -158,12 +162,12 @@ def main():
     # initialize datasets for L1A, L1B, L1T
     if proctype in ["L1A", "L1B", "L1T"]:
         for band in bandlist:
-            if band in allbands:
+            if band in allbands :
                 dataset = bands[proctype][band]
                 srcfile = "HDF4_EOS:EOS_SWATH:%s:%s" % (input, dataset)
                 import_aster(proj, srcfile, tempfile, output, band)
             else:
-                grass.fatal(_("band %s is not an available Terra/ASTER band") % band)
+                grass.fatal(_("band %s is not an available Terra/ASTER band") % band)    
     elif proctype == "DEM":
         srcfile = input
         import_aster(proj, srcfile, tempfile, output, "DEM")
