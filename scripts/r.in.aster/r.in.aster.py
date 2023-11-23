@@ -43,7 +43,7 @@
 # %option
 # % key: band
 # % type: string
-# % description: List L1A or L1B band to translate (1,2,3n,...), or enter 'all' to translate all bands
+# % description: List L1A L1B or L1T band to translate (1,2,3n,...), or enter 'all' to translate all bands
 # % answer: all
 # % required: yes
 # %end
@@ -100,7 +100,7 @@ bands = {
         "1": "VNIR_Swath:ImageData1",
         "2": "VNIR_Swath:ImageData2",
         "3n": "VNIR_Swath:ImageData3N",
-        "3b": "VNIR_Swath:ImageData3N", # A placeholder for consistency with other dataproducts
+        "3b": "VNIR_Swath:ImageData3N",
         "10": "TIR_Swath:ImageData10",
         "11": "TIR_Swath:ImageData11",
         "12": "TIR_Swath:ImageData12",
@@ -156,7 +156,7 @@ def main():
         bandlist = band.split(",")
 
     # initialize datasets for L1A, L1B, L1T
-    if proctype in ["L1A", "L1B","L1T"]:
+    if proctype in ["L1A", "L1B", "L1T"]:
         for band in bandlist:
             if band in allbands:
                 dataset = bands[proctype][band]
