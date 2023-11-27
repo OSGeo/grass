@@ -264,7 +264,7 @@ void usage_rest_md(bool rest)
         }
         if (strlen(image_spec_rest) > 0) {
             fprintf(stdout, "\n");
-            fprintf(stdout, image_spec_rest);
+            fprintf(stdout, "%s", image_spec_rest);
         }
     }
 }
