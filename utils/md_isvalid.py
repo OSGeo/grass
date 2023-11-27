@@ -11,30 +11,33 @@ import tempfile
 
 import grass.script as gs
 
+
 def check_md(filename):
     p = subprocess.Popen(["mdl", filename])
     p.wait()
 
+
 def check_module(module):
-    print('-' * 80)
+    print("-" * 80)
     print(module)
-    print('-' * 80)
+    print("-" * 80)
     with tempfile.NamedTemporaryFile() as fp:
         p = subprocess.Popen([module, "--md-description"], stdout=fp)
         p.wait()
 
         p = subprocess.Popen(["mdl", fp.name])
         p.wait()
-        
+
         returncode = p.returncode
 
     return returncode
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description='A tool to check markdown files produced by --md-interface'
+        description="A tool to check markdown files produced by --md-interface"
     )
-    parser.add_argument('-m', '--module', required=False)
+    parser.add_argument("-m", "--module", required=False)
 
     args = parser.parse_args()
 
