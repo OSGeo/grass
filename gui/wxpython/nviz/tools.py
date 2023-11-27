@@ -59,7 +59,6 @@ from gui_core.widgets import (
 )
 from gui_core.gselect import Select
 from gui_core.wrap import (
-    Choice,
     Window,
     SpinCtrl,
     PseudoDC,
@@ -100,9 +99,6 @@ class NvizToolWindow(GNotebook):
         self.mapDisplay = display
         self.mapWindow = display.GetWindow()
         self._display = self.mapWindow.GetDisplay()
-        # Hidden Choice widgets which provide showing verticall scrollbar
-        # on notebook pages which contains FoldPanelBar widget
-        self._hiddenChoiceWidgets = []
 
         GNotebook.__init__(self, parent, style=style)
 
@@ -148,10 +144,6 @@ class NvizToolWindow(GNotebook):
         self.Update()
         wx.CallAfter(self.SetPage, "view")
         wx.CallAfter(self.SetInitialMaps)
-
-        # Show vertical scrollbar on the Notebok pages wich contains
-        # FoldPanelbar widget
-        self._showVerticalScrollbar()
 
     def SetInitialMaps(self):
         """Set initial raster and vector map"""
@@ -276,35 +268,6 @@ class NvizToolWindow(GNotebook):
                 scrolledPanel.SetVirtualSize(width=width, height=length[2])
                 scrolledPanel.Layout()
 
-    def _addHiddenChoiceWidget(self, parent):
-        """
-        Add hidden Choice widget which provide showing vertical scrollbar
-        on every notebook page which contain ScrolledPanel -> FoldPanelBar
-        -> first FoldPanel only -> ScrolledPanel -> hidden Choice widget
-
-        After notebook pages are added, the SetItems() method must be
-        called.
-
-        Notebook pages:
-
-        1. Data notebook page -> ScrolledPanel -> FoldPanelBar
-        -> Surface FoldPanel -> ScrolledPanel -> hidden Choice widget
-
-        2. Appearance notebook page -> ScrolledPanel -> FoldPanelBar
-        -> Lighting FoldPanel -> ScrolledPanel -> hidden Choice widget
-
-        3. Analysis notebook page -> ScrolledPanel -> FoldPanelBar
-        -> Cutting FoldPanel -> ScrolledPanel -> hidden Choice widget
-
-        :param obj parent: parent widget
-
-        :return obj choice: hidden Choice widget instance
-        """
-        choice = Choice(parent=parent, choices=[])
-        choice.Hide()
-        self._hiddenChoiceWidgets.append(choice)
-        return choice
-
     def _expandFoldPanelBarPanel(self, foldPanelBar, expandFoldPanelBarIdx=0):
         """
         Expand FoldPanelBar widget panel
@@ -341,15 +304,6 @@ class NvizToolWindow(GNotebook):
         length = foldPanelBar.GetPanelsLength(collapsed, expanded)
         scrolledPanel.SetSize(self.GetSize()[0], length[2])
         foldPanelBar.Collapse(foldPanelBar.GetFoldPanel(0))
-
-    def _showVerticalScrollbar(self):
-        """
-        Show ScrolledPanel widget vertical scrollbar on the notebook pages
-        which contains FoldPanelBar widget by calling hidden Choice widget
-        SetItems() method
-        """
-        for choice in self._hiddenChoiceWidgets:
-            choice.SetItems([])
 
     def _createViewPage(self):
         """Create view settings page"""
@@ -775,6 +729,7 @@ class NvizToolWindow(GNotebook):
         """Create data (surface, vector, volume) settings page"""
         self.mainPanelData = SP.ScrolledPanel(parent=self)
         self.mainPanelData.SetupScrolling(scroll_x=False)
+        self.mainPanelData.AlwaysShowScrollbars(hflag=False)
         try:  # wxpython <= 2.8.10
             self.foldpanelData = fpb.FoldPanelBar(
                 parent=self.mainPanelData,
@@ -854,7 +809,7 @@ class NvizToolWindow(GNotebook):
         """Create data (surface, vector, volume) settings page"""
         self.mainPanelAppear = SP.ScrolledPanel(parent=self)
         self.mainPanelAppear.SetupScrolling(scroll_x=False)
-
+        self.mainPanelAppear.AlwaysShowScrollbars(hflag=False)
         try:  # wxpython <= 2.8.10
             self.foldpanelAppear = fpb.FoldPanelBar(
                 parent=self.mainPanelAppear,
@@ -922,6 +877,7 @@ class NvizToolWindow(GNotebook):
         """Create data analysis (cutting planes, ...) page"""
         self.mainPanelAnalysis = SP.ScrolledPanel(parent=self)
         self.mainPanelAnalysis.SetupScrolling(scroll_x=False)
+        self.mainPanelAnalysis.AlwaysShowScrollbars(hflag=False)
         self.foldpanelAnalysis = fpb.FoldPanelBar(
             parent=self.mainPanelAnalysis, id=wx.ID_ANY, style=fpb.FPB_SINGLE_FOLD
         )
@@ -1226,13 +1182,6 @@ class NvizToolWindow(GNotebook):
         gridSizer.Add(pslide, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 1))
         gridSizer.Add(ptext, flag=wx.ALIGN_CENTER_VERTICAL, pos=(0, 2))
         gridSizer.Add(reset, flag=wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT, pos=(0, 3))
-        # Add hidden Choice widget wich provide showing FoldPanelBar widget
-        # vertical scrollbar
-        gridSizer.Add(
-            self._addHiddenChoiceWidget(parent=panel),
-            flag=wx.ALIGN_CENTER_VERTICAL,
-            pos=(1, 0),
-        )
         gridSizer.AddGrowableCol(3)
 
         boxSizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=3)
@@ -1502,13 +1451,6 @@ class NvizToolWindow(GNotebook):
         gridSizer.Add(
             self.FindWindowById(self.win["cplane"]["position"]["z"]["text"]),
             pos=(4, 2),
-            flag=wx.ALIGN_CENTER,
-        )
-        # Add hidden Choice widget wich provide showing FoldPanelBar widget
-        # vertical scrollbar
-        gridSizer.Add(
-            self._addHiddenChoiceWidget(parent=panel),
-            pos=(5, 0),
             flag=wx.ALIGN_CENTER,
         )
 
@@ -2427,13 +2369,6 @@ class NvizToolWindow(GNotebook):
         gridSizer.Add(
             self.FindWindowById(self.win["light"]["ambient"]["text"]),
             pos=(2, 2),
-            flag=wx.ALIGN_CENTER,
-        )
-        # Add hidden Choice widget wich provide showing FoldPanelBar widget
-        # vertical scrollbar
-        gridSizer.Add(
-            self._addHiddenChoiceWidget(parent=panel),
-            pos=(3, 0),
             flag=wx.ALIGN_CENTER,
         )
 
