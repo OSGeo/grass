@@ -260,8 +260,9 @@ class GConsoleWindow(wx.SplitterWindow):
     def _loadHistory(self):
         """Load history from a history file to data structures"""
         history_path = get_current_mapset_history_path()
-        self.cmdPrompt.cmdbuffer = read_history(history_path)
-        self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
+        if history_path:
+            self.cmdPrompt.cmdbuffer = read_history(history_path)
+            self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
 
     def GetPanel(self, prompt=True):
         """Get panel

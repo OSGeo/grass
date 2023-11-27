@@ -39,9 +39,10 @@ class HistoryCatalogTree:
     def CreateModel(self):
         self.model.RemoveNode(self.model.root)
         history_path = get_current_mapset_history_path()
-        cmd_list = read_history(history_path)
-        for label in cmd_list:
-            self.UpdateModel(label.strip())
+        if history_path:
+            cmd_list = read_history(history_path)
+            for label in cmd_list:
+                self.UpdateModel(label.strip())
 
     def UpdateModel(self, label):
         data = {"label": self._trim_text(label), "command": label}
