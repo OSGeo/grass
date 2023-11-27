@@ -239,6 +239,11 @@ class GMFrame(wx.Frame):
 
         self._show_demo_map()
 
+    def _repaintLayersPaneMapDisplayToolbar(self):
+        """Repaint Layers pane map display toolbar widget on the wxMac"""
+        if sys.platform == "darwin":
+            wx.CallLater(100, self.notebookLayers.Refresh)
+
     def _setTitle(self):
         """Set frame title"""
         gisenv = grass.gisenv()
@@ -340,6 +345,7 @@ class GMFrame(wx.Frame):
         # bindings
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnCBPageChanged)
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
+        self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSED, self.OnCBPageClosed)
 
     def _createSearchModule(self, parent):
         """Initialize Search module widget"""
@@ -482,6 +488,8 @@ class GMFrame(wx.Frame):
         cb_boxsizer.Fit(self.GetLayerTree())
         self.currentPage.Layout()
         self.GetLayerTree().Layout()
+        # Repaint Layers pane map display toolbar widget on the wxMac
+        self._repaintLayersPaneMapDisplayToolbar()
 
         self.displayIndex += 1
 
@@ -955,6 +963,12 @@ class GMFrame(wx.Frame):
             pass
 
         event.Skip()
+
+    def OnCBPageClosed(self, event):
+        """Page of notebook has been closed from the Layers pane via x
+        button or via closing map display notebook page"""
+        # Repaint Layers pane map display toolbar widget on the wxMac
+        self._repaintLayersPaneMapDisplayToolbar()
 
     def OnCBPageClosing(self, event):
         """Page of notebook is being closed
