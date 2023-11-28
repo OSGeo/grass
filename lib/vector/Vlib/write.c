@@ -174,7 +174,7 @@ static int (*Vect_restore_line_array[][3])(struct Map_info *, off_t, off_t) = {
 #endif
 };
 
-static int check_map(const struct Map_info *);
+static int check_map(struct Map_info *);
 
 /*!
    \brief Writes a new feature
@@ -329,7 +329,7 @@ int Vect_restore_line(struct Map_info *Map, off_t offset, off_t line)
     return ret;
 }
 
-int check_map(const struct Map_info *Map)
+int check_map(struct Map_info *Map)
 {
     if (!VECT_OPEN(Map)) {
         G_warning(_("Vector map <%s> is not opened"), Vect_get_name(Map));

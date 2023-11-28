@@ -149,7 +149,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # when some layers are not visible in layer tree
         # self.SetAutoLayout(True)
         self.SetGradientStyle(1)
-        self.EnableSelectionGradient(True)
+        if sys.platform != "darwin":
+            self.EnableSelectionGradient(True)
         self._setGradient()
 
         # init associated map display
