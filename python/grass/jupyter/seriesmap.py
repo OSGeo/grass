@@ -106,7 +106,7 @@ class SeriesMap:
         :param list rasters: list of raster layers to add to SeriesMap
         """
         for raster in rasters:
-            if not map_exists(name=raster, element=raster):
+            if not map_exists(name=raster, element="raster"):
                 raise NameError(_("Could not find a raster named {}").format(raster))
         # Update region to rasters if not use_region or saved_region
         self._region_manager.set_region_from_rasters(rasters)
