@@ -13,7 +13,7 @@ static double coss[NUM_DIRS] = {
 #define TERNARY_MAX 6561 /* 3**8 */
 static unsigned int global_ternary_codes[TERNARY_MAX];
 
-void generate_ternary_codes()
+void generate_ternary_codes(void)
 {
     unsigned i;
 
@@ -219,23 +219,23 @@ float variance(float *elevation, int pattern_size)
     return variance / (float)pattern_size;
 }
 
-int radial2cartesian(PATTERN *pattern)
+void radial2cartesian(PATTERN *pattern)
 {
     /* this function converts radial coordinates of geomorphon
      * (assuming center as 0,0) to cartezian coordinates
      * with the beginning in the central cell of geomorphon */
     int i;
 
-    for (i = 0; i < NUM_DIRS; ++i)
-        if (pattern->distance > 0) {
+    for (i = 0; i < NUM_DIRS; ++i) {
+        if (pattern->distance[0] > 0.) {
             pattern->x[i] = pattern->distance[i] * sins[i];
             pattern->y[i] = pattern->distance[i] * coss[i];
         }
         else {
-            pattern->x[i] = 0;
-            pattern->y[i] = 0;
+            pattern->x[i] = 0.;
+            pattern->y[i] = 0.;
         }
-    return 0;
+    }
 }
 
 /*

@@ -285,7 +285,9 @@ class RLiSetupMapPanel(wx.Panel):
             "r.to.vect", input=tmpraster, output=tmpvector, type="area", overwrite=True
         )
 
-        RunCommand("v.to.rast", input=tmpvector, output=rasterName, value=1, use="val")
+        RunCommand(
+            "v.to.rast", input=tmpvector, output=rasterName, value=1, use="value"
+        )
         wx.EndBusyCursor()
         grass.use_temp_region()
         grass.run_command("g.region", vector=tmpvector)

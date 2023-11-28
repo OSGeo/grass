@@ -16,4 +16,3 @@ New types have to be added in yac.y, lex.l, print.c and
 ../../../include/sqlp.h .
 In ./test/ is a test program to the the SQL parser (see
 README there).
-

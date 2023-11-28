@@ -1,4 +1,6 @@
+---
 name: Ubuntu
+
 # Build and run tests on Ubuntu
 
 on:
@@ -15,23 +17,28 @@ jobs:
   build-and-test:
     name: ${{ matrix.name }} tests
 
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
+        matrix.name }}
+      cancel-in-progress: true
+
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         include:
-          - name: "20.04"
-            os: ubuntu-20.04
-            config: ubuntu-20.04
+          - name: '22.04'
+            os: ubuntu-22.04
+            config: ubuntu-22.04
           # This is without optional things but it still keeps things useful,
           # so, e.g., without OpenMP, but with PDAL. Code or tests should be written
           # so that test pass even when these optional things are not present.
-          - name: "minimum config"
-            os: ubuntu-20.04
-            config: ubuntu-20.04_without_x
+          - name: minimum config
+            os: ubuntu-22.04
+            config: ubuntu-22.04_without_x
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: Get dependencies
         run: |
@@ -52,8 +59,20 @@ jobs:
         run: |
           echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
 
+      - name: Print build environment variables
+        shell: bash -el {0}
+        run: |
+          printenv | sort
+          gcc --version
+          ldd --version
+
       - name: Build
-        run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install
+        env:
+          # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
+          CFLAGS: -fPIC
+          # TODO: -pedantic-errors here won't compile
+          CXXFLAGS: -fPIC
+        run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install -Werror
 
       - name: Add the bin directory to PATH
         run: |

@@ -90,12 +90,12 @@ int max(int, int);
 void com_par(double angle);
 int is_shadow(void);
 double horizon_height(void);
-void calculate_shadow();
+void calculate_shadow(void);
 double calculate_shadow_onedirection(double shadow_angle);
 
-int new_point();
-double searching();
-int test_low_res();
+int new_point(void);
+double searching(void);
+int test_low_res(void);
 
 /*void where_is_point();
    void cube(int, int);
@@ -664,9 +664,7 @@ int OUTGR(int numrows, int numcols)
     return 1;
 }
 
-double amax1(arg1, arg2)
-double arg1;
-double arg2;
+double amax1(double arg1, double arg2)
 {
     double res;
 
@@ -679,9 +677,7 @@ double arg2;
     return res;
 }
 
-double amin1(arg1, arg2)
-double arg1;
-double arg2;
+double amin1(double arg1, double arg2)
 {
     double res;
 
@@ -694,9 +690,7 @@ double arg2;
     return res;
 }
 
-int min(arg1, arg2)
-int arg1;
-int arg2;
+int min(int arg1, int arg2)
 {
     int res;
 
@@ -709,9 +703,7 @@ int arg2;
     return res;
 }
 
-int max(arg1, arg2)
-int arg1;
-int arg2;
+int max(int arg1, int arg2)
 {
     int res;
 
@@ -754,7 +746,7 @@ double horizon_height(void)
 {
     double height;
 
-    tanh0 = -1.0 / 0.0; /* -inf */
+    tanh0 = 0.;
     length = 0;
 
     height = searching();
@@ -772,7 +764,7 @@ double calculate_shadow_onedirection(double shadow_angle)
     return shadow_angle;
 }
 
-void calculate_shadow()
+void calculate_shadow(void)
 {
     double dfr_rad;
 
@@ -881,7 +873,7 @@ void calculate_shadow()
 
 /*////////////////////////////////////////////////////////////////////// */
 
-int new_point()
+int new_point(void)
 {
     int iold, jold;
     int succes = 1, succes2 = 1;
@@ -922,7 +914,7 @@ int new_point()
     return -1;
 }
 
-int test_low_res()
+int test_low_res(void)
 {
     int iold100, jold100;
     double sx, sy;
@@ -990,7 +982,7 @@ int test_low_res()
     }
 }
 
-double searching()
+double searching(void)
 {
     double z2;
     double curvature_diff;

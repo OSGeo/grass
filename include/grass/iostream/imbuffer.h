@@ -91,7 +91,8 @@ public:
         assert(n >= 0);
 
         char str[100];
-        sprintf(str, "im_buffer: allocate %ld\n", (long)(maxsize * sizeof(T)));
+        snprintf(str, sizeof(str), "im_buffer: allocate %ld\n",
+                 (long)(maxsize * sizeof(T)));
         MEMORY_LOG(str);
 
         data = new T[maxsize];
@@ -111,7 +112,7 @@ public:
     // insert an item in buffer in next free position; fail if buffer full
     bool insert(T &x);
 
-    // insert n items in buffer; return the number of items acually inserted
+    // insert n items in buffer; return the number of items actually inserted
     unsigned long insert(T *x, unsigned long n);
 
     //(quick)sort (ascending order) the buffer (in place);
@@ -133,7 +134,7 @@ public:
     // return i'th item in buffer
     T get_item(unsigned long i) const
     {
-        assert((i >= 0) && (i < size));
+        assert(i < size);
         return data[i];
     }
 
@@ -239,7 +240,7 @@ bool im_buffer<T>::insert(T &x)
 }
 
 /************************************************************/
-// insert n items in buffer; return the number of items acually inserted
+// insert n items in buffer; return the number of items actually inserted
 template <class T>
 unsigned long im_buffer<T>::insert(T *x, unsigned long n)
 {
@@ -333,7 +334,7 @@ void im_buffer<T>::reset(unsigned long start, unsigned long n)
         sorted = false;
         return;
     }
-    assert((start >= 0) && (start + n <= size));
+    assert(start + n <= size);
     size = n;
     if (n) {
         memmove(data, data + start, n * sizeof(T));
@@ -371,7 +372,7 @@ void im_buffer<T>::print_range() const
 #endif
         assert(data);
 
-        // determin min and  max
+        // determine min and  max
         T min, max;
         min = data[0];
         if (sorted) {

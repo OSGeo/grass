@@ -368,7 +368,7 @@ PJ *get_pj_object(const struct pj_info *in_gpj, char **in_defstr)
      * the reverse projection, and no datum shift.
      * The easiest would probably to mess up with the PROJ string.
      * Otherwise with the PROJ API, you could
-     * instanciate a PJ object from the string,
+     * instantiate a PJ object from the string,
      * check if it is a BoundCRS with proj_get_source_crs(),
      * and in that case, take the source CRS with proj_get_source_crs(),
      * and do the inverse transform on it */
@@ -696,7 +696,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
         if (op_list)
             proj_list_destroy(op_list);
 
-        /* follwing code copied from proj_create_crs_to_crs_from_pj()
+        /* following code copied from proj_create_crs_to_crs_from_pj()
          * in proj src/4D_api.cpp
          * but using PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT */
 

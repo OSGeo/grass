@@ -1,12 +1,14 @@
 ---
-Language:        Cpp
-BasedOnStyle:  LLVM
+BasedOnStyle: LLVM
+IndentWidth: 4
+---
+Language: Cpp
 AccessModifierOffset: -4
 AlignConsecutiveMacros:
-  Enabled:         true
+  Enabled: true
   AcrossEmptyLines: true
-  AcrossComments:  true
-  PadOperators:    true
+  AcrossComments: true
+  PadOperators: true
 AlignEscapedNewlines: Left
 AllowShortFunctionsOnASingleLine: InlineOnly
 AlwaysBreakTemplateDeclarations: Yes
@@ -17,9 +19,12 @@ ForEachMacros:
   - BOOST_FOREACH
 IfMacros:
   - SORT_DEBUG
-IndentWidth:     4
 MacroBlockBegin: GNO_BEGIN
-MacroBlockEnd:   GNO_END
-SortIncludes:    Never
-...
-
+MacroBlockEnd: GNO_END
+SortIncludes: Never
+---
+Language: ObjC
+---
+Language: JavaScript
+---
+Language: Json

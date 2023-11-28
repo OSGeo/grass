@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE rtype;
     struct History history;
     char title[64];
-    void *n_array, *min_array, *max_array, *sum_array, *sumsq_array,
+    char *n_array, *min_array, *max_array, *sum_array, *sumsq_array,
         *index_array;
     void *raster_row, *ptr;
     struct Cell_head region;
@@ -124,8 +124,8 @@ int main(int argc, char *argv[])
     int arr_row, arr_col;
     unsigned long count, count_total;
 
-    double min = 0.0 / 0.0; /* init as nan */
-    double max = 0.0 / 0.0; /* init as nan */
+    double min = NAN;
+    double max = NAN;
     double zscale = 1.0;
     double vscale = 1.0;
     size_t offset, n_offset;
@@ -726,7 +726,7 @@ int main(int argc, char *argv[])
             }
 
             G_chop(buff); /* remove leading and trailing whitespace from the
-                             string.  unneded?? */
+                             string.  unneeded?? */
             tokens = G_tokenize(buff, fs);
             ntokens = G_number_of_tokens(tokens);
 
@@ -1235,7 +1235,7 @@ int scan_bounds(FILE *fp, int xcol, int ycol, int zcol, int vcol, char *fs,
             continue; /* line is a comment or blank */
         }
 
-        G_chop(buff); /* remove leading and trailing whitespace. unneded?? */
+        G_chop(buff); /* remove leading and trailing whitespace. unneeded?? */
         tokens = G_tokenize(buff, fs);
         ntokens = G_number_of_tokens(tokens);
 

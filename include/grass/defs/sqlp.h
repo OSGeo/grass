@@ -3,8 +3,8 @@
 
 int my_yyinput(char *buf, int max_size);
 void yyerror(const char *s);
-int yyparse();
-int yywrap();
+int yyparse(void);
+int yywrap(void);
 
 int sqpSaveStr(SQLPVALUE *st, char *c);
 void sqpInitValue(SQLPVALUE *val);

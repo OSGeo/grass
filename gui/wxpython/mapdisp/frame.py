@@ -78,6 +78,7 @@ class MapPanel(SingleMapPanel):
         lmgr=None,
         Map=None,
         auimgr=None,
+        dockable=False,
         name="MapWindow",
         **kwargs,
     ):
@@ -113,11 +114,20 @@ class MapPanel(SingleMapPanel):
         # checks for saving workspace
         self.canCloseDisplayCallback = None
 
+        # distinquishes whether map panel is dockable (Single-Window)
+        self._dockable = dockable
+
+        # distinguishes whether map panel is docked or not
+        self._docked = True
+
+        # undock/dock bound method
+        self._docking_callback = None
+
         # Emitted when switching map notebook tabs (Single-Window)
         self.onFocus = Signal("MapPanel.onFocus")
 
         # Emitted when starting (switching to) 3D mode.
-        # Parameter firstTime specifies if 3D was already actived.
+        # Parameter firstTime specifies if 3D was already activated.
         self.starting3dMode = Signal("MapPanel.starting3dMode")
 
         # Emitted when ending (switching from) 3D mode.
@@ -621,6 +631,11 @@ class MapPanel(SingleMapPanel):
                 .BestSize((self.toolbars["map"].GetBestSize())),
             )
 
+        # nviz
+        elif name == "nviz":
+            self.toolbars["map"].combo.SetValue(_("3D view"))
+            self.AddNviz()
+
         # vector digitizer
         elif name == "vdigit":
             self.toolbars["map"].combo.SetValue(_("Vector digitizer"))
@@ -658,6 +673,22 @@ class MapPanel(SingleMapPanel):
         qlayer = self.GetMap().GetListOfLayers(name=globalvar.QUERYLAYER)
         for layer in qlayer:
             self.GetMap().DeleteLayer(layer)
+
+    def SetDockingCallback(self, function):
+        """Sets docking bound method to dock or undock"""
+        self._docking_callback = function
+
+    def OnDockUndock(self, event=None):
+        """Dock or undock map display panel to independent MapFrame"""
+        if self._docking_callback:
+            self._docking_callback(self)
+            self._docked = not self._docked
+
+    def IsDocked(self):
+        return self._docked
+
+    def IsDockable(self):
+        return self._dockable
 
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
@@ -974,7 +1005,15 @@ class MapPanel(SingleMapPanel):
             if pgnum_dict is not None:
                 self.CleanUp()
                 if pgnum_dict["layers"] > -1:
-                    self.closingDisplay.emit(pgnum_dict=pgnum_dict)
+                    if self.IsDockable():
+                        self.closingDisplay.emit(
+                            pgnum_dict=pgnum_dict, is_docked=self.IsDocked()
+                        )
+                        if not self.IsDocked():
+                            frame = self.GetParent()
+                            frame.Destroy()
+                    else:
+                        self.closingDisplay.emit(pgnum_dict=pgnum_dict)
                     # Destroy is called when notebook page is deleted
         else:
             self.CleanUp()
@@ -1069,14 +1108,14 @@ class MapPanel(SingleMapPanel):
                 mapdisp=self._giface.GetMapDisplay(), giface=self._giface
             )
 
-        # use display region settings instead of computation region settings
-        self.tmpreg = os.getenv("GRASS_REGION")
-        os.environ["GRASS_REGION"] = self.Map.SetRegion(windres=False)
-
         rastQuery = []
         vectQuery = []
-        if rast:
-            rastQuery = grass.raster_what(map=rast, coord=(east, north), localized=True)
+        env = os.environ.copy()
+        for raster in rast:
+            env["GRASS_REGION"] = grass.region_env(raster=raster)
+            rastQuery += grass.raster_what(
+                map=raster, coord=(east, north), localized=True, env=env
+            )
         if vect:
             encoding = UserSettings.Get(group="atm", key="encoding", subkey="value")
             try:
@@ -1095,7 +1134,6 @@ class MapPanel(SingleMapPanel):
                         "Check database settings and topology."
                     ).format(maps=",".join(vect)),
                 )
-        self._QueryMapDone()
 
         self._highlighter_layer.Clear()
         if vectQuery and "Category" in vectQuery[0]:
@@ -1140,19 +1178,6 @@ class MapPanel(SingleMapPanel):
 
             self._highlighter_layer.SetCats(tmp)
             self._highlighter_layer.DrawSelected()
-
-    def _QueryMapDone(self):
-        """Restore settings after querying (restore GRASS_REGION)"""
-        if hasattr(self, "tmpreg"):
-            if self.tmpreg:
-                os.environ["GRASS_REGION"] = self.tmpreg
-            elif "GRASS_REGION" in os.environ:
-                del os.environ["GRASS_REGION"]
-        elif "GRASS_REGION" in os.environ:
-            del os.environ["GRASS_REGION"]
-
-        if hasattr(self, "tmpreg"):
-            del self.tmpreg
 
     def OnQuery(self, event):
         """Query tools menu"""

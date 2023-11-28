@@ -1214,6 +1214,9 @@
       <module-item name="v.clean">
         <label>Clean vector map</label>
       </module-item>
+      <module-item name="v.fill.holes">
+        <label>Fill holes in areas</label>
+      </module-item>
       <module-item name="v.generalize">
         <label>Smooth or simplify</label>
       </module-item>
@@ -1554,6 +1557,10 @@
       </module-item>
       <module-item name="i.smap">
         <label>Sequential maximum a posteriori classification (SMAP)</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.signatures">
+        <label>Manage signature files</label>
       </module-item>
       <separator/>
       <module-item name="i.segment">

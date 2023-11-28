@@ -163,7 +163,12 @@ class TestWatershed(TestCase):
         )
         # it is expected that 100k Threshold has a min=2 and max=12 for this
         # data
-        self.assertRasterMinMax(self.basin, 2, 12)
+        reference = "min=2\nmax=12"
+        self.assertRasterFitsUnivar(
+            self.basin,
+            reference=reference,
+            msg="Basin values must be in the range [2, 12]",
+        )
         # it is expected that 100k Threshold has a min=2 and max=256 for this
         # data
         self.assertModule(
@@ -173,7 +178,12 @@ class TestWatershed(TestCase):
             basin=self.basin,
             overwrite=True,
         )
-        self.assertRasterMinMax(self.basin, 2, 256)
+        reference = "min=2\nmax=256"
+        self.assertRasterFitsUnivar(
+            self.basin,
+            reference=reference,
+            msg="Basin values must be in the range [2, 256]",
+        )
 
     def test_drainageDirection(self):
         """Test if the drainage direction is between -8 and 8."""
@@ -198,11 +208,11 @@ class TestWatershed(TestCase):
         # TODO: test just min, max is theoretically unlimited
         # or set a lower value according to what is expected with this data
         # TODO: add test which tests that 'max basin id' == 'num of basins'
-        self.assertRasterMinMax(
+        reference = "min=2\nmax=256"
+        self.assertRasterFitsUnivar(
             self.basin,
-            0,
-            1000000,
-            msg="A basin value is less than 0 or greater than 1000000",
+            reference=reference,
+            msg="Basin values must be in the range [2, 256]",
         )
 
 

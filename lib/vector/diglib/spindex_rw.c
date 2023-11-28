@@ -15,6 +15,7 @@
    \author Update to GRASS 7 Markus Metz
  */
 
+#include <inttypes.h>
 #include <sys/types.h>
 #include <stdlib.h>
 #include <string.h>
@@ -56,18 +57,19 @@ int dig_Wr_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
     unsigned char buf[6];
     long length = 81; /* header length in bytes */
     struct RTree *t;
-    size_t size;
 
     dig_rewind(fp);
     dig_set_cur_port(&(ptr->spidx_port));
 
     /* use ptr->off_t_size = 4 if possible */
     if (sizeof(off_t) > 4) {
+        off_t size;
+
         size = 145; /* max header size, see below */
-        size += ptr->Node_spidx->n_nodes * ptr->Node_spidx->nodesize;
-        size += ptr->Line_spidx->n_nodes * ptr->Line_spidx->nodesize;
-        size += ptr->Area_spidx->n_nodes * ptr->Area_spidx->nodesize;
-        size += ptr->Isle_spidx->n_nodes * ptr->Isle_spidx->nodesize;
+        size += (off_t)ptr->Node_spidx->n_nodes * ptr->Node_spidx->nodesize;
+        size += (off_t)ptr->Line_spidx->n_nodes * ptr->Line_spidx->nodesize;
+        size += (off_t)ptr->Area_spidx->n_nodes * ptr->Area_spidx->nodesize;
+        size += (off_t)ptr->Isle_spidx->n_nodes * ptr->Isle_spidx->nodesize;
 
         if (size < PORT_INT_MAX)
             ptr->spidx_port.off_t_size = 4;
@@ -282,6 +284,7 @@ int dig_Rd_spidx_head(struct gvfile *fp, struct Plus_head *ptr)
         ptr->version.spidx.back_major, ptr->version.spidx.back_minor);
 
     G_debug(2, "  byte order %d", byte_order);
+    G_debug(2, "  off_t size %d", ptr->spidx_port.off_t_size);
 
     /* check version numbers */
     if (ptr->version.spidx.major > GV_SIDX_VER_MAJOR ||
@@ -742,8 +745,8 @@ static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
             /* write node to sidx file */
             if (G_ftell(fp->file) != nextfreepos)
                 G_fatal_error("Unable to write spatial index. "
-                              "Wrong node position (%" PRI_OFF_T
-                              ") in file (should be %" PRI_OFF_T ").",
+                              "Wrong node position (%" PRId64
+                              ") in file (should be %" PRId64 ").",
                               G_ftell(fp->file), nextfreepos);
 
             /* write with dig__fwrite_port_* fns */
@@ -861,8 +864,8 @@ static off_t rtree_write_from_file(struct gvfile *fp, off_t startpos,
             /* write node to sidx file */
             if (G_ftell(fp->file) != nextfreepos)
                 G_fatal_error("Unable to write spatial index. "
-                              "Wrong node position (%" PRI_OFF_T
-                              ") in file (should be %" PRI_OFF_T ").",
+                              "Wrong node position (%" PRId64
+                              ") in file (should be %" PRId64 ").",
                               G_ftell(fp->file), nextfreepos);
 
             /* write with dig__fwrite_port_* fns */
@@ -1158,9 +1161,9 @@ static void rtree_load_from_sidx(struct gvfile *fp, off_t rootpos,
                                  struct RTree *t, int off_t_size)
 {
     if (t->fd > -1)
-        return rtree_load_to_file(fp, rootpos, t, off_t_size);
+        rtree_load_to_file(fp, rootpos, t, off_t_size);
     else
-        return rtree_load_to_memory(fp, rootpos, t, off_t_size);
+        rtree_load_to_memory(fp, rootpos, t, off_t_size);
 }
 
 /*!

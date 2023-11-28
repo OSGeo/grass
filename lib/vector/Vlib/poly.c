@@ -26,10 +26,12 @@ struct Slink {
 };
 
 /* function prototypes */
-static int comp_double(double *, double *);
+static int comp_double(const void *, const void *);
 static int V__within(double, double, double);
-int Vect__intersect_y_line_with_poly();
-int Vect__intersect_x_line_with_poly();
+int Vect__intersect_y_line_with_poly(const struct line_pnts *, double,
+                                     struct line_pnts *);
+int Vect__intersect_x_line_with_poly(const struct line_pnts *, double,
+                                     struct line_pnts *);
 static void destroy_links(struct link_head *, struct Slink *);
 static int Vect__divide_and_conquer(struct Slink *, const struct line_pnts *,
                                     struct link_head *, double *, double *,
@@ -50,8 +52,7 @@ static int Vect__divide_and_conquer(struct Slink *, const struct line_pnts *,
    \return 0 on success
    \return -1 on error
  */
-int Vect_get_point_in_area(const struct Map_info *Map, int area, double *X,
-                           double *Y)
+int Vect_get_point_in_area(struct Map_info *Map, int area, double *X, double *Y)
 {
     static struct line_pnts *Points;
     static struct line_pnts **IPoints;
@@ -91,12 +92,12 @@ int Vect_get_point_in_area(const struct Map_info *Map, int area, double *X,
     return -1;
 }
 
-static int comp_double(double *i, double *j)
+static int comp_double(const void *i, const void *j)
 {
-    if (*i < *j)
+    if (*(const double *)i < *(const double *)j)
         return -1;
 
-    return (*i > *j);
+    return (*(const double *)i > *(const double *)j);
 }
 
 static int V__within(double a, double x, double b)
@@ -575,7 +576,7 @@ int Vect_get_point_in_poly_isl(const struct line_pnts *Points,
         return -1;
 
     qsort(Intersects->x, (size_t)Intersects->n_points, sizeof(double),
-          (void *)comp_double);
+          comp_double);
 
     max = 0;
     maxpos = 0;
@@ -627,7 +628,7 @@ int Vect_get_point_in_poly_isl(const struct line_pnts *Points,
             return -1;
 
         qsort(Intersects->y, (size_t)Intersects->n_points, sizeof(double),
-              (void *)comp_double);
+              comp_double);
 
         max = 0;
         maxpos = 0;
@@ -850,9 +851,8 @@ int Vect_point_in_poly(double X, double Y, const struct line_pnts *Points)
    \return 1 - inside
    \return 2 - on the boundary
  */
-int Vect_point_in_area_outer_ring(double X, double Y,
-                                  const struct Map_info *Map, int area,
-                                  struct bound_box *box)
+int Vect_point_in_area_outer_ring(double X, double Y, struct Map_info *Map,
+                                  int area, struct bound_box *box)
 {
     static int first = 1;
     int n_intersects, inter;
@@ -920,8 +920,8 @@ int Vect_point_in_area_outer_ring(double X, double Y,
    \return 1 - inside
    \return 2 - on the boundary
  */
-int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
-                         int isle, struct bound_box *box)
+int Vect_point_in_island(double X, double Y, struct Map_info *Map, int isle,
+                         struct bound_box *box)
 {
     static int first = 1;
     int n_intersects, inter;

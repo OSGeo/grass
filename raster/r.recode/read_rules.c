@@ -48,7 +48,7 @@ int read_rules(FILE *fp)
 {
     char buf[1024];
     DCELL oLow, oHigh, nLow, nHigh;
-    int line, n;
+    int n;
 
     in_type = DCELL_TYPE;
     out_type = CELL_TYPE;
@@ -61,7 +61,7 @@ int read_rules(FILE *fp)
         G_message(_("Enter the rule or 'help' for the format description"));
     }
     Rast_fpreclass_init(&rcl_struct);
-    for (line = 1;; line++) {
+    for (;;) {
         if (isatty(fileno(fp)))
             fprintf(stderr, "> ");
 

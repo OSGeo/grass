@@ -343,7 +343,8 @@ void get_col_def(SQLPSTMT *st, int col, int *type, int *width, int *decimals)
     }
 }
 
-void eval_val(int tab, int row, int col, SQLPVALUE *inval, SQLPVALUE *val)
+void eval_val(int tab, int row, int col UNUSED, SQLPVALUE *inval,
+              SQLPVALUE *val)
 {
 
     double retval;

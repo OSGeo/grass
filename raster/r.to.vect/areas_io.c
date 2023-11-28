@@ -126,9 +126,10 @@ int write_boundary(struct COOR *seed)
 
 /* write_bnd - actual writing part of write_line */
 /* writes binary and ASCII digit files and supplemental file */
-static int write_bnd(struct COOR *line_begin,
-                     struct COOR *line_end, /* start and end point of line */
-                     int n                  /* number of points to write */
+static int
+write_bnd(struct COOR *line_begin,
+          struct COOR *line_end UNUSED, /* start and end point of line */
+          int n                         /* number of points to write */
 )
 {
     static struct line_pnts *points = NULL;
@@ -174,8 +175,8 @@ static int write_bnd(struct COOR *line_begin,
 
 static int
 write_smooth_bnd(struct COOR *line_begin,
-                 struct COOR *line_end, /* start and end point of line */
-                 int n                  /* number of points to write */
+                 struct COOR *line_end UNUSED, /* start and end point of line */
+                 int n                         /* number of points to write */
 )
 {
     static struct line_pnts *points = NULL;

@@ -22,7 +22,7 @@ static int cur_x, cur_y;
 static int format;
 static CELL *cell;
 
-static int (*dot)();
+static int (*dot)(int, int);
 static int cell_dot(int, int);
 static int fcell_dot(int, int);
 static int dcell_dot(int, int);
@@ -167,7 +167,7 @@ int configure_plot(void)
     /* change the region */
     page.north = region.north - at_row * region.ns_res;
     page.south = page.north - nrows * region.ns_res;
-    /* Rast_set_[inpu|output]_window not working but G_set_window ??? */
+    /* Rast_set_[input|output]_window not working but G_set_window ??? */
     G_set_window(&page);
 
     /* configure the plot routines */

@@ -155,7 +155,7 @@ long int estimate_mem_needed(long int cols, char *mode)
 void print_weights_matrix(long int rows, long int cols)
 {
     int i, j;
-    int weight_matrix_line_length = 80;
+    size_t weight_matrix_line_length = 80;
     char weight_matrix_line_buf[weight_matrix_line_length + 1];
     char weight_matrix_weight_buf[weight_matrix_line_length + 1];
 
@@ -193,14 +193,14 @@ void print_weights_matrix(long int rows, long int cols)
 void *get_input_row(unsigned long row_idx)
 {
     unsigned long i;
-    void *my_cell = NULL;
+    char *my_cell = NULL;
 
     my_cell = CELL_INPUT_HANDLES[row_idx];
 
     for (i = 0; i < PADDING_WIDTH; i++)
         my_cell += CELL_IN_SIZE;
 
-    return (my_cell);
+    return (void *)my_cell;
 }
 
 /* NEIGHBORHOOD STATISTICS
@@ -232,8 +232,8 @@ void *get_input_row(unsigned long row_idx)
  * types of information to be collected.
  */
 
-void collect_values_unfiltered(double val1, double val2, double min, double max,
-                               stats_struct *stats)
+void collect_values_unfiltered(double val1, double val2, double min UNUSED,
+                               double max UNUSED, stats_struct *stats)
 {
     stats->values[stats->num_values] = val1;
     stats->certainty += val2;
@@ -248,8 +248,9 @@ void collect_values_filtered(double val1, double val2, double min, double max,
     }
 }
 
-void collect_values_and_weights_unfiltered(double val1, double val2, double min,
-                                           double max, stats_struct *stats)
+void collect_values_and_weights_unfiltered(double val1, double val2,
+                                           double min UNUSED, double max UNUSED,
+                                           stats_struct *stats)
 {
     stats->values[stats->num_values] = val1;
     stats->weights[stats->num_values] = val2;
@@ -266,7 +267,8 @@ void collect_values_and_weights_filtered(double val1, double val2, double min,
 }
 
 void collect_values_and_frequencies_unfiltered(double val1, double val2,
-                                               double min, double max,
+                                               double min UNUSED,
+                                               double max UNUSED,
                                                stats_struct *stats)
 {
     unsigned long i;
@@ -329,7 +331,7 @@ void read_neighborhood(unsigned long row_index, unsigned long col, double min,
                        double max, int preserve, stats_struct *stats)
 {
     unsigned long i, j;
-    void *cell;
+    char *cell;
     double cell_value;
 
     stats->overwrite = 0;
@@ -487,7 +489,7 @@ void get_statistics_mode(unsigned long row_index, unsigned long col, double min,
 /*
  * Initializes handlers to point to corresponding data rows.
  */
-void init_handles()
+void init_handles(void)
 {
     unsigned long i;
 
@@ -509,7 +511,7 @@ void init_handles()
 void advance_one_row(int file_desc, long current_row)
 {
     unsigned long i, j;
-    void *cell_input;
+    char *cell_input;
     static unsigned long replace_row =
         0; /* points to the row which will be replaced next */
     unsigned long replace_pos = 0;
@@ -554,7 +556,7 @@ void interpolate_row(unsigned long row_index, unsigned long cols, double min,
                      stats_struct *stats, int write_err)
 {
     unsigned long j;
-    void *cell_output;
+    char *cell_output;
     FCELL *err_output;
 
     cell_output = CELL_OUTPUT;
@@ -742,7 +744,7 @@ int main(int argc, char *argv[])
     int write_error;
 
     /* file handlers */
-    void *cell_input;
+    char *cell_input;
     int in_fd;
     int out_fd;
     int err_fd;

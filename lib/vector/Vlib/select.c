@@ -118,7 +118,8 @@ void Vect_spatial_index_del_item(struct spatial_index *si, int id,
 
 /************************* SELECT BY BOX *********************************/
 /* This function is called by  RTreeSearch() to add selected item to the list */
-static int _add_item(int id, const struct RTree_Rect *rect, struct ilist *list)
+static int _add_item(int id, const struct RTree_Rect *rect UNUSED,
+                     struct ilist *list)
 {
     G_ilist_add(list, id);
     return 1;
@@ -152,7 +153,7 @@ int Vect_spatial_index_select(const struct spatial_index *si,
     rect.boundary[3] = box->E;
     rect.boundary[4] = box->N;
     rect.boundary[5] = box->T;
-    RTreeSearch(si->si_tree, &rect, (void *)_add_item, list);
+    RTreeSearch(si->si_tree, &rect, (SearchHitCallback *)_add_item, list);
 
     G_debug(3, "Vect_spatial_index_select(): %d items selected",
             list->n_values);

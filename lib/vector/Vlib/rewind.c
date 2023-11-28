@@ -18,20 +18,20 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-static int rew_dummy()
+static int rew_dummy(struct Map_info *Map UNUSED)
 {
     return -1;
 }
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format()
+static int format(struct Map_info *Map UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
-static int (*Rewind_array[][4])() = {
+static int (*Rewind_array[][4])(struct Map_info *) = {
     {rew_dummy, V1_rewind_nat, V2_rewind_nat, rew_dummy}
 #ifdef HAVE_OGR
     ,

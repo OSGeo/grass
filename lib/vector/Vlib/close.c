@@ -27,39 +27,39 @@
 
 #include "local_proto.h"
 
-static int clo_dummy()
+static int clo_dummy(struct Map_info *map UNUSED)
 {
     return -1;
 }
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format()
+static int format(struct Map_info *map UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
-static int (*Close_array[][2])() = {{clo_dummy, V1_close_nat}
+static int (*Close_array[][2])(struct Map_info *) = {{clo_dummy, V1_close_nat}
 #ifdef HAVE_OGR
-                                    ,
-                                    {clo_dummy, V1_close_ogr},
-                                    {clo_dummy, V1_close_ogr}
+                                                     ,
+                                                     {clo_dummy, V1_close_ogr},
+                                                     {clo_dummy, V1_close_ogr}
 #else
-                                    ,
-                                    {clo_dummy, format},
-                                    {clo_dummy, format}
+                                                     ,
+                                                     {clo_dummy, format},
+                                                     {clo_dummy, format}
 #endif
 #ifdef HAVE_POSTGRES
-                                    ,
-                                    {clo_dummy, V1_close_pg}
+                                                     ,
+                                                     {clo_dummy, V1_close_pg}
 #else
-                                    ,
-                                    {clo_dummy, format}
+                                                     ,
+                                                     {clo_dummy, format}
 #endif
 };
 
-static void unlink_file(const struct Map_info *, const char *);
+static void unlink_file(struct Map_info *, const char *);
 
 /*!
    \brief Close vector map
@@ -317,7 +317,7 @@ void Vect__free_offset(struct Format_info_offset *offset)
     G_zero(offset, sizeof(struct Format_info_offset));
 }
 
-void unlink_file(const struct Map_info *Map, const char *name)
+void unlink_file(struct Map_info *Map, const char *name)
 {
     char path[GPATH_MAX];
 

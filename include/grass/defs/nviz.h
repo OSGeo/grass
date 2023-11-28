@@ -47,7 +47,7 @@ void Nviz_get_max_texture(int *);
 
 /* exag.c */
 int Nviz_get_exag_height(double *, double *, double *);
-double Nviz_get_exag();
+double Nviz_get_exag(void);
 
 /* lights.c */
 int Nviz_set_light_position(nv_data *, int, double, double, double, double);
@@ -61,9 +61,9 @@ void Nviz_draw_model(nv_data *);
 /* map_obj.c */
 int Nviz_new_map_obj(int, const char *, double, nv_data *);
 int Nviz_set_attr(int, int, int, int, const char *, double, nv_data *);
-void Nviz_set_surface_attr_default();
-int Nviz_set_vpoint_attr_default();
-int Nviz_set_volume_attr_default();
+void Nviz_set_surface_attr_default(void);
+int Nviz_set_vpoint_attr_default(int);
+int Nviz_set_volume_attr_default(int);
 int Nviz_unset_attr(int, int, int);
 
 /* nviz.c */
@@ -99,7 +99,7 @@ int Nviz_get_zrange(nv_data *, float *, float *);
 float Nviz_get_longdim(nv_data *);
 
 /* render.c */
-struct render_window *Nviz_new_render_window();
+struct render_window *Nviz_new_render_window(void);
 void Nviz_init_render_window(struct render_window *);
 void Nviz_destroy_render_window(struct render_window *);
 int Nviz_create_render_window(struct render_window *, void *, int, int);

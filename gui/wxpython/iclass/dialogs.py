@@ -289,7 +289,7 @@ class IClassMapDialog(SimpleDialog):
 class IClassCategoryManagerDialog(wx.Dialog):
     """Dialog for managing categories (classes).
 
-    Alows adding, deleting class and changing its name and color.
+    Allows adding, deleting class and changing its name and color.
     """
 
     def __init__(self, parent, title=_("Class manager"), id=wx.ID_ANY):
@@ -570,14 +570,14 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdi
         text_c = wx.Colour(*ContrastColor(back_c))
 
         # if it is in scope of the method, gui falls, using self solved it
-        self.l = wx.ListItemAttr()
+        self.l = wx.ItemAttr()
         self.l.SetBackgroundColour(back_c)
         self.l.SetTextColour(text_c)
         return self.l
 
 
 def ContrastColor(color):
-    """Decides which value shoud have text to be contrast with background color
+    """Decides which value should have text to be contrast with background color
         (bright bg -> black, dark bg -> white)
 
     .. todo::
@@ -591,7 +591,7 @@ def ContrastColor(color):
         d = 0
     else:
         d = 255
-    # maybe return just bool if text shoud be dark or bright
+    # maybe return just bool if text should be dark or bright
     return (d, d, d)
 
 
@@ -756,7 +756,7 @@ class IClassExportAreasDialog(wx.Dialog):
     def OnTextChanged(self, event):
         """Name of new vector map given.
 
-        Enable/diable OK button.
+        Enable/disable OK button.
         """
         file = self.vectorNameCtrl.GetValue()
         if len(file) > 0:

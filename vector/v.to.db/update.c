@@ -5,7 +5,7 @@
 #include <grass/glocale.h>
 #include "global.h"
 
-static int srch();
+static int srch(const void *, const void *);
 
 int update(struct Map_info *Map)
 {

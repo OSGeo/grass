@@ -51,7 +51,6 @@ TABLE_1 = """cat|x|y|ed_cat|field_estimate
 
 
 class SimpleCsvTestCase(TestCase):
-
     xyvector = "yxvetor_test"
 
     def tearDown(self):
@@ -181,7 +180,6 @@ TABLE_2 = """cat|x|y|ed_cat|field_estimate
 
 
 class AdvancedCsvTestCase(TestCase):
-
     xyvector = "yxvetor_test"
 
     def tearDown(self):

@@ -34,7 +34,7 @@ typedef struct {
 
 /* protos */
 static void fatalError(char *errorMsg);
-static void setParams();
+static void setParams(void);
 static void getParams(char **input, char **output, int *decim);
 static void writeHeaderString(FILE *fp, char *valueString, double value);
 static void writeHeaderString2(FILE *fp, char *valueString, int value);
@@ -66,7 +66,7 @@ void fatalError(char *errorMsg)
 
 /* Convenient way to set up the arguments we are expecting
  */
-void setParams()
+void setParams(void)
 {
     param.input = G_define_option();
     param.input->key = "input";
@@ -254,7 +254,7 @@ void G3dToascii(FILE *fp, RASTER3D_Region region, int decim)
                 if (param.depth->answer)
                     depth = depths - z - 1;
 
-                /* Get the data and resample if nessessary */
+                /* Get the data and resample if necessary */
 
                 if (typeIntern == FCELL_TYPE) {
 

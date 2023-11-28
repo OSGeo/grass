@@ -40,7 +40,7 @@
 # stop on errors
 set -e
 
-# default paths, but can be overriden from the command line
+# default paths, but can be overridden from the command line
 mxe_path=${MXE_PATH-$HOME/usr/local/src/mxe}
 addons_path=${ADDONS_PATH-../grass-addons}
 freetype_include=${FREETYPE_INCLUDE-/usr/include/freetype2}

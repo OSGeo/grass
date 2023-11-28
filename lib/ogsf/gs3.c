@@ -836,14 +836,14 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
 
    \param vname view name
    \param gv pointer to geoview struct
-   \param gd pointer to geodisplay struct
+   \param gd pointer to geodisplay struct (unused)
    \param w current window
    \param defsurf default geosurf struct
 
    \return -1 on error
    \return ?
  */
-int Gs_save_3dview(const char *vname, geoview *gv, geodisplay *gd,
+int Gs_save_3dview(const char *vname, geoview *gv, geodisplay *gd UNUSED,
                    struct Cell_head *w, geosurf *defsurf)
 {
     const char *mapset;
@@ -895,7 +895,7 @@ int Gs_save_3dview(const char *vname, geoview *gv, geodisplay *gd,
         v.twist = gv->twist;
         v.fringe = 0; /* not implemented here */
 
-        v.lightson = 1; /* always true, curently */
+        v.lightson = 1; /* always true, currently */
 
         if (gv->lights[0].position[W] == 1) {
             /* local */
@@ -924,7 +924,7 @@ int Gs_save_3dview(const char *vname, geoview *gv, geodisplay *gd,
         v.surfonly = 0; /* N/A - now uses constant color */
         strcpy((v.pgm_id), "Nvision-ALPHA!");
 
-        return (G_put_3dview(vname, mapset, &v, w));
+        return (G_put_3dview(vname, &v, w));
     }
     else {
         return (-1);
@@ -936,13 +936,13 @@ int Gs_save_3dview(const char *vname, geoview *gv, geodisplay *gd,
 
    \param vname view name
    \param gv pointer to geoview struct
-   \param gd pointer to geodisplay struct
+   \param gd pointer to geodisplay struct (unused)
    \param w current window
    \param defsurf default geosurf struct
 
    \return 1
  */
-int Gs_load_3dview(const char *vname, geoview *gv, geodisplay *gd,
+int Gs_load_3dview(const char *vname, geoview *gv, geodisplay *gd UNUSED,
                    struct Cell_head *w, const geosurf *defsurf)
 {
     const char *mapset;

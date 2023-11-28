@@ -213,7 +213,7 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
     /* To find intersection of two lines (Vect_line_intersection) is quite slow.
      * Fortunately usual lines/boundaries in GIS often forms a network where
      * lines are connected by end points, and touch by MBR. This function checks
-     * and occasionaly skips such cases. This is currently done for 2D only
+     * and occasionally skips such cases. This is currently done for 2D only
      */
 
     /* Go through all lines in vector, for each select lines which overlap MBR

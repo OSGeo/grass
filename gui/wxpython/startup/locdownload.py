@@ -16,8 +16,6 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail com>
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import shutil

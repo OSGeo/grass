@@ -17,7 +17,7 @@
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the
  * line-of-sight that connects their centers does not intersect the
- * terrain. The terrain is NOT viewed as a tesselation of flat cells,
+ * terrain. The terrain is NOT viewed as a tessellation of flat cells,
  * i.e. if the line-of-sight does not pass through the cell center,
  * elevation is determined using bilinear interpolation.
  * The viewshed algorithm is efficient both in
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 
     /* the maximum size of main memory that the program ca use. The
        user can specify it, otherwise the default value of 500MB is
-       used.  The program uses this value to decied in which mode to
+       used.  The program uses this value to decide in which mode to
        run --- in internal memory, or external memory.  */
 
     int vpRow, vpCol;
@@ -267,7 +267,8 @@ int main(int argc, char *argv[])
         }
         else {
             /*set it */
-            sprintf(buf, "%s=%s", STREAM_TMPDIR, viewOptions.streamdir);
+            snprintf(buf, sizeof(buf), "%s=%s", STREAM_TMPDIR,
+                     viewOptions.streamdir);
             G_debug(1, "setting %s ", buf);
             putenv(buf);
             if (getenv(STREAM_TMPDIR) == NULL) {
@@ -493,7 +494,7 @@ void parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
         _("Maximum visibility radius. By default infinity (-1)");
     char infdist[10];
 
-    sprintf(infdist, "%d", INFINITY_DISTANCE);
+    snprintf(infdist, sizeof(infdist), "%d", INFINITY_DISTANCE);
     maxDistOpt->answer = infdist;
     maxDistOpt->guisection = _("Settings");
 

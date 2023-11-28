@@ -208,7 +208,7 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
                 continue;
             }
 
-            if (sscanf(buff, "%u%u", &catn, &cat) != 2) {
+            if (sscanf(buff, "%d%d", &catn, &cat) != 2) {
                 G_warning(_("Error reading categories: [%s]"), buff);
                 return -1;
             }
@@ -886,7 +886,7 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
                 continue;
             }
             fprintf(ascii, "POLYGON(");
-            /* write outter ring */
+            /* write outer ring */
             Vect_sfa_line_astext(Points, GV_BOUNDARY, 0, dp,
                                  ascii); /* boundary is always 2D */
             /* get isles (holes) -> inner rings */

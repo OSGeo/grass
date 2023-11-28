@@ -81,7 +81,7 @@ int ami_single_temp_name(const std::string &base, char *tmp_path)
         assert(base_dir);
         exit(1);
     }
-    sprintf(tmp_path, "%s/%s_XXXXXX", base_dir, base.c_str());
+    snprintf(tmp_path, GPATH_MAX, "%s/%s_XXXXXX", base_dir, base.c_str());
 
     fd = G_mkstemp(tmp_path, O_RDWR, 0600);
 
