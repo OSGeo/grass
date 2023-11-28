@@ -66,12 +66,13 @@ CONFIGURE_FLAGS="\
   --with-readline-libs=${CONDA_PREFIX}/lib
 "
 
-export CFLAGS="-O2 -pipe -arch ${CONDA_ARCH} -DGL_SILENCE_DEPRECATION -Wall -Wextra"
-export CXXFLAGS="-O2 -pipe -stdlib=libc++ -arch ${CONDA_ARCH} -Wall -Wextra"
+export CFLAGS="-O2 -pipe -arch ${CONDA_ARCH} -DGL_SILENCE_DEPRECATION -Wall -Wextra -Wpedantic"
+export CXXFLAGS="-O2 -pipe -stdlib=libc++ -arch ${CONDA_ARCH} -Wall -Wextra -Wpedantic"
+export CPPFLAGS="-isystem${CONDA_PREFIX}/include"
 
 ./configure $CONFIGURE_FLAGS
 
-EXEMPT="-Wno-error=deprecated-non-prototype"
+EXEMPT="-Wno-error=deprecated-non-prototype -Wno-error=strict-prototypes"
 make -j$(sysctl -n hw.ncpu) CFLAGS="$CFLAGS -Werror $EXEMPT" \
   CXXFLAGS="$CXXFLAGS -Werror $EXEMPT"
 

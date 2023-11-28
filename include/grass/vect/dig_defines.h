@@ -225,6 +225,13 @@ typedef enum overlay_operator OVERLAY_OPERATOR;
 /*! \brief GRASS ASCII vector format - well-known-text format */
 #define GV_ASCII_FORMAT_WKT   2
 
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpedantic"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+#endif
 /*! \brief Simple feature types
 
    Taken from GDAL/OGR library (ogr/ogr_core.h)
@@ -252,6 +259,11 @@ typedef enum {
     SF_MULTIPOLYGON25D = 0x80000006,      /* 2.5D extension as per 99-402 */
     SF_GEOMETRYCOLLECTION25D = 0x80000007 /* 2.5D extension as per 99-402 */
 } SF_FeatureType;
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 #define HEADSTR               50
 
