@@ -132,7 +132,7 @@ class SeriesMap:
         :param list vectors: list of vector layers to add to SeriesMap
         """
         for vector in vectors:
-            if not map_exists(name=vector, element=vector):
+            if not map_exists(name=vector, element="vector"):
                 raise NameError(_("Could not find a vector named {}").format(vector))
         # Update region extent to vectors if not use_region or saved_region
         self._region_manager.set_region_from_vectors(vectors)
