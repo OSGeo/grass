@@ -148,11 +148,10 @@ def main():
         "13",
         "14",
     ]
-    
+
     # Band 3b is not included ASTER L1T
-    if proctype == 'L1T':
+    if proctype == "L1T":
         allbands.pop(3)
-    
     if band == "all":
         bandlist = allbands
     else:
@@ -161,12 +160,12 @@ def main():
     # initialize datasets for L1A, L1B, L1T
     if proctype in ["L1A", "L1B", "L1T"]:
         for band in bandlist:
-            if band in allbands :
+            if band in allbands:
                 dataset = bands[proctype][band]
                 srcfile = "HDF4_EOS:EOS_SWATH:%s:%s" % (input, dataset)
                 import_aster(proj, srcfile, tempfile, output, band)
             else:
-                grass.fatal(_("band %s is not an available Terra/ASTER band") % band)    
+                grass.fatal(_("band %s is not an available Terra/ASTER band") % band)
     elif proctype == "DEM":
         srcfile = input
         import_aster(proj, srcfile, tempfile, output, "DEM")
@@ -186,7 +185,7 @@ def import_aster(proj, srcfile, tempfile, output, band):
     grass.debug("gdalwarp -t_srs %s %s %s" % (proj, srcfile, tempfile))
 
     # We assume gdal is build natively for the platform GRASS is running on.
-	# See #3258
+    # see #3258
     cmd = ["gdalwarp", "-t_srs", proj, srcfile, tempfile]
     p = grass.call(cmd)
     if p != 0:
