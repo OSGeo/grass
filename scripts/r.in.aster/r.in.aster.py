@@ -151,7 +151,7 @@ def main():
 
     # Band 3b is not included ASTER L1T
     if proctype == "L1T":
-        allbands.pop(3)
+        allbands.remove("3b")
     if band == "all":
         bandlist = allbands
     else:
