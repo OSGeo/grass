@@ -13,7 +13,6 @@ def _check_value(param, value):
     """Function to check the correctness of a value and
     return the checked value and the original.
     """
-    must_val = "The Parameter <%s>, must be one of the following values: %r"
     req = "The Parameter <%s>, require: %s, get: %s instead: %r\n%s"
     string = (type(b""), type(""))
 
@@ -107,7 +106,17 @@ def _check_value(param, value):
                 raise ValueError(err_str)
         # check if value is in the list of valid values
         if param.values is not None and newvalue not in param.values:
-            raise ValueError(must_val % (param.name, param.values))
+            good = False
+            if param.type == str:
+                for param_value in param.values:
+                    if param_value.startswith(newvalue):
+                        good = True
+                        break
+            if not good:
+                raise ValueError(
+                    f"The Parameter <{param.name}>, must be one of the following values:"
+                    f" {param.values!r} not '{newvalue}'"
+                )
     return (
         (
             [
