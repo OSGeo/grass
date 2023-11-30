@@ -21,15 +21,17 @@ This program is free software under the GNU General Public License
 
 import textwrap
 
+import os
 import wx
 from wx import stc
 
 from grass.pydispatch.signal import Signal
 from grass.grassdb.history import (
     read_history,
+    create_history_file,
     update_history,
     copy_history,
-    get_current_mapset_history_path,
+    get_current_mapset_gui_history_path,
 )
 
 # needed just for testing
@@ -152,7 +154,7 @@ class GConsoleWindow(wx.SplitterWindow):
             self.giface.updateHistory.connect(
                 lambda cmd: self.cmdPrompt.UpdateCmdHistory(cmd)
             )
-            self.giface.updateHistory.connect(lambda cmd: update_history(cmd))
+            self.giface.updateHistory.connect(lambda cmd: self.UpdateHistory(cmd))
 
         # buttons
         self.btnClear = ClearButton(parent=self.panelPrompt)
@@ -259,10 +261,11 @@ class GConsoleWindow(wx.SplitterWindow):
 
     def _loadHistory(self):
         """Load history from a history file to data structures"""
-        history_path = get_current_mapset_history_path()
-        if history_path:
-            self.cmdPrompt.cmdbuffer = read_history(history_path)
-            self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
+        history_path = get_current_mapset_gui_history_path()
+        if not os.path.exists(history_path):
+            create_history_file(history_path)
+        self.cmdPrompt.cmdbuffer = read_history(history_path)
+        self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
 
     def GetPanel(self, prompt=True):
         """Get panel
@@ -442,6 +445,17 @@ class GConsoleWindow(wx.SplitterWindow):
         self.progressbar.SetValue(event.value)
         event.Skip()
 
+    def UpdateHistory(self, cmd):
+        """Update command history"""
+        history_path = get_current_mapset_gui_history_path()
+        try:
+            update_history(cmd, history_path)
+            self.showNotification.emit(
+                message=_("Command history saved to '{}'".format(history_path))
+            )
+        except Exception as e:
+            GError(_("Unable to update history file.\n\nDetails: {}").format(e))
+
     def OnCmdExportHistory(self, event):
         """Export the history of executed commands stored
         in a .wxgui_history file to a selected file."""
@@ -457,10 +471,17 @@ class GConsoleWindow(wx.SplitterWindow):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            history_path = get_current_mapset_history_path()
-            if copy_history(path, history_path):
+            history_path = get_current_mapset_gui_history_path()
+            try:
+                copy_history(path, history_path)
                 self.showNotification.emit(
                     message=_("Command history saved to '{}'".format(path))
+                )
+            except Exception as e:
+                GError(
+                    _("Unable to copy file {} to {}'.\n\nDetails: {}").format(
+                        history_path, path, e
+                    )
                 )
 
         dlg.Destroy()

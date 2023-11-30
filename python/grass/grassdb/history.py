@@ -14,21 +14,28 @@ import shutil
 import codecs
 
 from grass.script import gisenv
-from core.gcmd import GError
 
 
-def get_mapset_history_path(mapset_path, history_file_name):
-    """Returns path to the mapset history file or None if mapset has no history."""
-    history_file = os.path.join(mapset_path, history_file_name)
-    return history_file if os.path.exists(history_file) else None
-
-
-def get_current_mapset_history_path():
-    """Returns path to the current mapset history file
-    or None if current mapset has no history."""
+def get_current_mapset_gui_history_path():
+    """Return path to the current mapset history file."""
     env = gisenv()
-    mapsetPath = os.path.join(env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"])
-    return get_mapset_history_path(mapsetPath, ".wxgui_history")
+    return os.path.join(
+        env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], ".wxgui_history"
+    )
+
+
+def create_history_file(history_path):
+    """Set up a new GUI history file."""
+    try:
+        fileHistory = codecs.open(
+            history_path,
+            encoding="utf-8",
+            mode="w",
+        )
+    except OSError as e:
+        raise Exception(f"{e}")
+    finally:
+        fileHistory.close()
 
 
 def read_history(history_path):
@@ -41,7 +48,7 @@ def read_history(history_path):
             mode="r",
             errors="replace",
         )
-    except IOError:
+    except OSError:
         return hist
 
     try:
@@ -49,7 +56,6 @@ def read_history(history_path):
             hist.append(line.replace("\n", ""))
     finally:
         fileHistory.close()
-
     return hist
 
 
@@ -59,15 +65,15 @@ def update_history(command, history_path=None):
     :param command: the command given as a string
     """
     if not history_path:
-        history_path = get_current_mapset_history_path()
+        history_path = get_current_mapset_gui_history_path()
     try:
-        fileHistory = codecs.open(history_path, encoding="utf-8", mode="a")
-    except IOError as e:
-        GError(_("Unable to write file {}'.\n\nDetails: {}").format(fileHistory, e))
-        return
-
-    try:
-        fileHistory.write(command + os.linesep)
+        if os.path.exists(history_path):
+            fileHistory = codecs.open(history_path, encoding="utf-8", mode="a")
+        else:
+            fileHistory = codecs.open(history_path, encoding="utf-8", mode="w")
+        fileHistory.write(command + "\n")
+    except OSError as e:
+        raise Exception(f"{e}")
     finally:
         fileHistory.close()
 
@@ -78,10 +84,5 @@ def copy_history(target_path, history_path):
     try:
         shutil.copyfile(history_path, target_path)
     except (IOError, OSError) as e:
-        GError(
-            _("Unable to copy file {} to {}'.\n\nDetails: {}").format(
-                history_path, target_path, e
-            )
-        )
-        return False
+        raise Exception(f"{e}")
     return True

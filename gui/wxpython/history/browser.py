@@ -1,10 +1,10 @@
 """
-@package history_catalog::catalog
+@package history_browser::Browser
 
-@brief History catalog
+@brief History browser
 
 Classes:
- - history_catalog::HistoryCatalog
+ - history::HistoryBrowser
 
 (C) 2023 by Linda Karlovska, and the GRASS Development Team
 
@@ -20,13 +20,13 @@ import re
 
 from gui_core.forms import GUI
 from gui_core.treeview import CTreeView
-from history_catalog.tree import HistoryCatalogTree
+from history.tree import HistoryBrowserTree
 
 from grass.pydispatch.signal import Signal
 
 
-class HistoryCatalog(wx.Panel):
-    """History catalog for executing the commands from history log.
+class HistoryBrowser(wx.Panel):
+    """History browser for executing the commands from history log.
 
     Signal:
         showNotification - attribute 'message'
@@ -37,14 +37,14 @@ class HistoryCatalog(wx.Panel):
         parent,
         giface,
         id=wx.ID_ANY,
-        title=_("History catalog"),
+        title=_("History browser"),
         name="history",
         **kwargs,
     ):
         self.parent = parent
         self._giface = giface
 
-        self.showNotification = Signal("HistoryCatalog.showNotification")
+        self.showNotification = Signal("HistoryBrowser.showNotification")
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
 
         self._createTree()
@@ -69,7 +69,7 @@ class HistoryCatalog(wx.Panel):
 
     def _createTree(self):
         """Create tree based on the model"""
-        self._model = HistoryCatalogTree()
+        self._model = HistoryBrowserTree()
         self._tree = self._getTreeInstance()
         self._tree.SetToolTip(_("Double-click to run the command"))
         self._tree.selectionChanged.connect(self.OnItemSelected)

@@ -1,7 +1,7 @@
 """
 @package history_catalog::tree
 
-@brief History catalog tree classes
+@brief History browser tree classes
 
 Classes:
  - history_catalog::HistoryCatalogTree
@@ -19,11 +19,11 @@ import copy
 
 from core.treemodel import TreeModel, ModuleNode
 
-from grass.grassdb.history import read_history, get_current_mapset_history_path
+from grass.grassdb.history import read_history, get_current_mapset_gui_history_path
 
 
-class HistoryCatalogTree:
-    """Data class for the history catalog tree of executed commands."""
+class HistoryBrowserTree:
+    """Data class for the history browser tree of executed commands."""
 
     def __init__(self, max_length=50):
         self.model = TreeModel(ModuleNode)
@@ -38,7 +38,7 @@ class HistoryCatalogTree:
 
     def CreateModel(self):
         self.model.RemoveNode(self.model.root)
-        history_path = get_current_mapset_history_path()
+        history_path = get_current_mapset_gui_history_path()
         if history_path:
             cmd_list = read_history(history_path)
             for label in cmd_list:

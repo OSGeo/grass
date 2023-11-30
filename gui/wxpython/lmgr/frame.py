@@ -73,7 +73,7 @@ from lmgr.pyshell import PyShellWindow
 from lmgr.giface import LayerManagerGrassInterface
 from mapdisp.frame import MapDisplay
 from datacatalog.catalog import DataCatalog
-from history_catalog.catalog import HistoryCatalog
+from history.browser import HistoryBrowser
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
 from startup.guiutils import (
@@ -165,7 +165,7 @@ class GMFrame(wx.Frame):
         self._createDisplay(self.notebook)
         self._createSearchModule(self.notebook)
         self._createConsole(self.notebook)
-        self._createHistoryCatalog(self.notebook)
+        self._createHistoryBrowser(self.notebook)
         self._createPythonShell(self.notebook)
         self._addPagesToNotebook()
         self.toolbars = {
@@ -447,10 +447,10 @@ class GMFrame(wx.Frame):
 
         self._setCopyingOfSelectedText()
 
-    def _createHistoryCatalog(self, parent):
-        """Initialize history catalog widget"""
+    def _createHistoryBrowser(self, parent):
+        """Initialize history browser widget"""
         if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
-            self.history = HistoryCatalog(parent=parent, giface=self._giface)
+            self.history = HistoryBrowser(parent=parent, giface=self._giface)
             self.history.showNotification.connect(
                 lambda message: self.SetStatusText(message)
             )
