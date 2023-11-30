@@ -53,7 +53,6 @@ import os
 import sys
 import string
 import re
-import six
 from bisect import bisect
 from datetime import datetime
 from core.globalvar import wxPythonPhoenix
@@ -133,7 +132,17 @@ class NotebookController:
         self.widget.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnRemoveHighlight)
 
     def AddPage(self, *args, **kwargs):
-        """Add a new page"""
+        """Add a new page
+
+        :param str name: use this param if notebooks has ability to
+                         change position and then you must use page name
+                         param arg to correctly delete notebook page.
+                         If you do not use this parameter, make sure that
+                         the notebooks does not have the ability to change
+                         position, because in that case the deletion of
+                         the page based on the position index would not
+                         work correctly.
+        """
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
@@ -141,7 +150,17 @@ class NotebookController:
         self.classObject.AddPage(self.widget, *args, **kwargs)
 
     def InsertPage(self, *args, **kwargs):
-        """Insert a new page"""
+        """Insert a new page
+
+        :param str name: use this param if notebooks has ability to
+                         change position and then you must use page name
+                         param arg to correctly delete notebook page.
+                         If you do not use this parameter, make sure that
+                         the notebooks does not have the ability to change
+                         position, because in that case the deletion of
+                         the page based on the position index would not
+                         work correctly.
+        """
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
@@ -158,8 +177,9 @@ class NotebookController:
     def DeletePage(self, page):
         """Delete page
 
-        :param page: name
-        :return: True if page was deleted, False if not exists
+        :param str|int page: page name or page index position
+
+        :return bool: True if page was deleted, False if not exists
         """
         delPageIndex = self.GetPageIndexByName(page)
         if delPageIndex != -1:
@@ -216,8 +236,12 @@ class NotebookController:
     def GetPageIndexByName(self, page):
         """Get notebook page index
 
-        :param page: name
+        :param str|int page: page name or page index position
+
+        :return int: page index
         """
+        if not self.notebookPages:
+            return page
         if page not in self.notebookPages:
             return -1
         for pageIndex in range(self.classObject.GetPageCount(self.widget)):
@@ -260,8 +284,12 @@ class FlatNotebookController(NotebookController):
     def GetPageIndexByName(self, page):
         """Get notebook page index
 
-        :param page: name
+        :param str|int page: page name or page index position
+
+        :return int: page index
         """
+        if not self.notebookPages:
+            return page
         if page not in self.notebookPages:
             return -1
 
@@ -1506,7 +1534,7 @@ class ManageSettingsWidget(wx.Panel):
         try:
             fd = open(self.settingsFile, "w")
             fd.write("format_version=2.0\n")
-            for key, values in six.iteritems(self._settings):
+            for key, values in self._settings.items():
                 first = True
                 for v in values:
                     # escaping characters

@@ -109,8 +109,6 @@ for details.
 .. sectionauthor:: Glynn Clements
 """
 
-from __future__ import absolute_import
-
 import numpy
 
 from .utils import try_remove
@@ -209,6 +207,9 @@ class array(numpy.memmap):
             flags = None
         else:
             raise ValueError(_("Invalid kind <%s>") % kind)
+
+        # ensure all array content is written to the file
+        self.flush()
 
         reg = gcore.region(env=self._env)
 
@@ -314,6 +315,9 @@ class array3d(numpy.memmap):
             flags = "i"
         else:
             raise ValueError(_("Invalid kind <%s>") % kind)
+
+        # ensure all array content is written to the file
+        self.flush()
 
         reg = gcore.region(True, env=self._env)
 

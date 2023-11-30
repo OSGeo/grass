@@ -18,4 +18,3 @@ source_file = ../templates/grasswxpy.pot
 source_lang = en
 file_filter = ../po/grasswxpy_<lang>.po
 type        = PO
-

@@ -2,7 +2,7 @@
 
 ## GRASS GIS docker matrix
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/mundialis/grass-py3-pdal.svg)](https://grass.osgeo.org/download/software/docker-images/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/osgeo/grass-gis.svg)](https://grass.osgeo.org/download/docker/)
 
 Find out included version of GDAL, GEOS, PROJ, PDAL, Python and GRASS GIS using
 
@@ -22,7 +22,7 @@ To install a docker image, run (replace `<tag>` with the desired Docker tag from
 the table above):
 
 ```bash
-docker pull mundialis/grass-py3-pdal:<tag>
+docker pull osgeo/grass-gis:<tag>
 ```
 
 See also: <https://grass.osgeo.org/download/docker/>
