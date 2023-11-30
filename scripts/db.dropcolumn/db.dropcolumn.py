@@ -80,7 +80,13 @@ def main():
         return 0
 
     if driver == "sqlite":
-        sqlite3_version = gscript.read_command("sqlite3", "version")
+        sqlite3_version = gscript.read_command(
+            "db.select",
+            sql="SELECT sqlite_version();",
+            flags="c",
+            database=database,
+            driver=driver,
+        )
 
         if sqlite3_version >= "3.35.0":
             sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
