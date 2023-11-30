@@ -26,10 +26,11 @@ Classes:
  - :class:`CoordinatesSelect`
  - :class:`VectorCategorySelect`
  - :class:`SignatureSelect`
+ - :class:`SignatureTypeSelect`
  - :class:`SeparatorSelect`
  - :class:`SqlWhereSelect`
 
-(C) 2007-2018 by the GRASS Development Team
+(C) 2007-2023 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -3090,10 +3091,18 @@ class SignatureSelect(wx.ComboBox):
         **kwargs,
     ):
         super(SignatureSelect, self).__init__(parent, id, size=size, **kwargs)
+        self.SetName("SignatureSelect")
+        self.mapsets = mapsets
+        self.UpdateItems(element)
 
+    def UpdateItems(self, element):
+        """Update list of signature files for given element
+
+        :param str element: signatures/sig or signatures/sigset
+        """
         items = []
-        if mapsets:
-            for mapset in mapsets:
+        if self.mapsets:
+            for mapset in self.mapsets:
                 self._append_mapset_signatures(mapset, element, items)
         else:
             self._append_mapset_signatures(None, element, items)
@@ -3134,6 +3143,17 @@ class SignatureSelect(wx.ComboBox):
         for n in range(count):
             items.append(grass.decode(sig_list[n]))
         I_free_signatures_list(count, ctypes.byref(sig_list))
+
+
+class SignatureTypeSelect(wx.ComboBox):
+    """Widget for selecting signature type"""
+
+    def __init__(
+        self, parent, id=wx.ID_ANY, size=globalvar.DIALOG_GSELECT_SIZE, **kwargs
+    ):
+        super(SignatureTypeSelect, self).__init__(parent, id, size=size, **kwargs)
+        self.SetName("SignatureTypeSelect")
+        self.SetItems(["sig", "sigset"])
 
 
 class SeparatorSelect(wx.ComboBox):

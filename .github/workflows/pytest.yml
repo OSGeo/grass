@@ -30,12 +30,13 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+          cache: pip
 
       - name: Install non-Python dependencies
         run: |
@@ -49,7 +50,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install pytest pytest-timeout
+          pip install pytest pytest-timeout pytest-github-actions-annotate-failures pytest-xdist
 
       - name: Create installation directory
         run: |
@@ -73,7 +74,7 @@ jobs:
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
-          pytest .
+          pytest --numprocesses auto .
 
       - name: Print installed versions
         if: always()

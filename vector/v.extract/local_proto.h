@@ -1,5 +1,5 @@
 /* copy_tab.c */
-void copy_tabs(const struct Map_info *, int, int, struct Map_info *);
+void copy_tabs(struct Map_info *, int, int, struct Map_info *);
 
 /* extract.c */
 int cmp(const void *, const void *);

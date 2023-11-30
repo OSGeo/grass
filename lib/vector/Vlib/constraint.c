@@ -76,7 +76,7 @@ int Vect_set_constraint_region(struct Map_info *Map, double n, double s,
    \return 0 on success
    \return -1 no region constraint defined
  */
-int Vect_get_constraint_box(const struct Map_info *Map, struct bound_box *Box)
+int Vect_get_constraint_box(struct Map_info *Map, struct bound_box *Box)
 {
     if (!Map->constraint.region_flag)
         return -1;
