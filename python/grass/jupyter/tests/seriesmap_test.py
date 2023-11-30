@@ -1,0 +1,52 @@
+"""Test SeriesMap functions"""
+
+
+from pathlib import Path
+import pytest
+
+try:
+    import IPython
+except ImportError:
+    IPython = None
+
+try:
+    import ipywidgets
+except ImportError:
+    ipywidgets = None
+
+import grass.jupyter as gj
+
+
+def test_default_init(space_time_raster_dataset):
+    """Check that TimeSeriesMap init runs with default parameters"""
+    img = gj.SeriesMap()
+    img.add_rasters(space_time_raster_dataset.raster_names)
+    assert img._names == space_time_raster_dataset.raster_names
+
+
+def test_render_layers(space_time_raster_dataset):
+    """Check that layers are rendered"""
+    # create instance of TimeSeriesMap
+    img = gj.SeriesMap()
+    # test adding base layer and d_legend here too for efficiency (rendering is
+    # time-intensive)
+    img.d_rast(map=space_time_raster_dataset.raster_names[0])
+    img.add_rasters(space_time_raster_dataset.raster_names[1:])
+    img.d_barscale()
+    # Render layers
+    img.render()
+    # check files exist
+    # We need to check values which are only in protected attributes
+    # pylint: disable=protected-access
+    for unused_layer, filename in img._layer_filename_dict.items():
+        assert Path(filename).is_file()
+
+
+@pytest.mark.skipif(IPython is None, reason="IPython package not available")
+@pytest.mark.skipif(ipywidgets is None, reason="ipywidgets package not available")
+def test_save(space_time_raster_dataset, tmp_path):
+    """Test returns from animate and time_slider are correct object types"""
+    img = gj.SeriesMap()
+    img.add_rasters(space_time_raster_dataset.raster_names)
+    gif_file = img.save(tmp_path / "image.gif")
+    assert Path(gif_file).is_file()

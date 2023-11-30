@@ -16,12 +16,12 @@ import tempfile
 import os
 import weakref
 import shutil
-from pathlib import Path
 
 import grass.script as gs
 
 from .map import Map
 from .region import RegionManagerForTimeSeries
+from .utils import save_gif
 
 
 def fill_none_values(names):
@@ -131,6 +131,7 @@ class TimeSeriesMap:
 
     # pylint: disable=too-many-instance-attributes
     # Need more attributes to build timeseriesmap visuals
+    # pylint: disable=duplicate-code
 
     def __init__(
         self,
@@ -475,42 +476,24 @@ class TimeSeriesMap:
         param int text_size: size of date/time text
         param str text_color: color to use for the text.
         """
-        # Create a GIF from the PNG images
-        import PIL.Image  # pylint: disable=import-outside-toplevel
-        import PIL.ImageDraw  # pylint: disable=import-outside-toplevel
-        import PIL.ImageFont  # pylint: disable=import-outside-toplevel
 
         # Render images if they have not been already
         if not self._layers_rendered:
             self.render()
 
-        # filepath to output GIF
-        filename = Path(filename)
-        if filename.suffix.lower() != ".gif":
-            raise ValueError(_("filename must end in '.gif'"))
-
-        images = []
+        input_files = []
         for date in self._dates:
-            img_path = self._date_filename_dict[date]
-            img = PIL.Image.open(img_path)
-            img = img.convert("RGBA", dither=None)
-            draw = PIL.ImageDraw.Draw(img)
-            if label:
-                draw.text(
-                    (0, 0),
-                    date,
-                    fill=text_color,
-                    font=PIL.ImageFont.truetype(font, text_size),
-                )
-            images.append(img)
+            input_files.append(self._date_filename_dict[date])
 
-        images[0].save(
-            fp=filename,
-            format="GIF",
-            append_images=images[1:],
-            save_all=True,
+        save_gif(
+            input_files,
+            filename,
             duration=duration,
-            loop=0,
+            label=label,
+            labels=self._dates,
+            font=font,
+            text_size=text_size,
+            text_color=text_color,
         )
 
         # Display the GIF

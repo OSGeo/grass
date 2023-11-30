@@ -103,3 +103,4 @@ from .map import Map
 from .map3d import Map3D
 from .setup import init
 from .timeseriesmap import TimeSeriesMap
+from .seriesmap import SeriesMap
