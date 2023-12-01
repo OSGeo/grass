@@ -11,7 +11,6 @@ for details.
 
 import os
 import shutil
-import codecs
 
 from grass.script import gisenv
 
@@ -27,13 +26,13 @@ def get_current_mapset_gui_history_path():
 def create_history_file(history_path):
     """Set up a new GUI history file."""
     try:
-        fileHistory = codecs.open(
+        fileHistory = open(
             history_path,
             encoding="utf-8",
             mode="w",
         )
     except OSError as e:
-        raise Exception(f"{e}")
+        raise OSError(_("Unable to create history file {}").format(history_path)) from e
     finally:
         fileHistory.close()
 
@@ -42,15 +41,16 @@ def read_history(history_path):
     """Get list of commands from history file."""
     hist = list()
     try:
-        fileHistory = codecs.open(
+        fileHistory = open(
             history_path,
             encoding="utf-8",
             mode="r",
             errors="replace",
         )
-    except OSError:
-        return hist
-
+    except OSError as e:
+        raise OSError(
+            _("Unable to read commands from history file {}").format(history_path)
+        ) from e
     try:
         for line in fileHistory.readlines():
             hist.append(line.replace("\n", ""))
@@ -68,12 +68,12 @@ def update_history(command, history_path=None):
         history_path = get_current_mapset_gui_history_path()
     try:
         if os.path.exists(history_path):
-            fileHistory = codecs.open(history_path, encoding="utf-8", mode="a")
+            fileHistory = open(history_path, encoding="utf-8", mode="a")
         else:
-            fileHistory = codecs.open(history_path, encoding="utf-8", mode="w")
+            fileHistory = open(history_path, encoding="utf-8", mode="w")
         fileHistory.write(command + "\n")
     except OSError as e:
-        raise Exception(f"{e}")
+        raise OSError(_("Unable to update history file {}").format(history_path)) from e
     finally:
         fileHistory.close()
 
@@ -84,5 +84,7 @@ def copy_history(target_path, history_path):
     try:
         shutil.copyfile(history_path, target_path)
     except OSError as e:
-        raise Exception(f"{e}")
+        raise OSError(
+            _("Unable to copy file {} to {}").format(history_path, target_path)
+        ) from e
     return True
