@@ -86,9 +86,9 @@ def main():
             flags="c",
             database=database,
             driver=driver,
-        )
+        ).split(".")[0:2]
 
-        if sqlite3_version >= "3.35.0":
+        if [int(i) for i in sqlite3_version] >= [int(i) for i in "3.35".split(".")]:
             sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
             if column == "cat":
                 sql = "DROP INDEX %s_%s; %s" % (table, column, sql)
