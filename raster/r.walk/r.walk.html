@@ -63,7 +63,10 @@ Langmuir (0.72, 6.0, 1.9998, -1.9998), based on man walking effort in
 standard conditions.
 
 <p>The <b>friction</b> cost parameter represents a time penalty in seconds
-of additional walking time to cross 1 meter distance. Friction cost can be any floating point value but cannot be negative (ie, friction≥0). A friction map is a required parameter; if no friction costs are desired, a friction map should be a raster in which all cells have a value of 0.
+of additional walking time to cross 1 meter distance.
+Friction cost can be any floating point value &ge; 0. 
+A friction map is a required parameter; if no friction costs are desired,
+a friction map should be a raster in which all cells have a value of 0.
 <p>The <b>lambda</b> parameter is a dimensionless scaling factor of the friction cost:
 
 <div class="code"><pre>
