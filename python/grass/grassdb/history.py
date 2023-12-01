@@ -83,6 +83,6 @@ def copy_history(target_path, history_path):
     Returns True if file is successfully copied."""
     try:
         shutil.copyfile(history_path, target_path)
-    except (IOError, OSError) as e:
+    except OSError as e:
         raise Exception(f"{e}")
     return True
