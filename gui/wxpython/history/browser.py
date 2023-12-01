@@ -71,7 +71,7 @@ class HistoryBrowser(wx.Panel):
         """Create tree based on the model"""
         self._model = HistoryBrowserTree()
         self._tree = self._getTreeInstance()
-        self._tree.SetToolTip(_("Double-click to run the command"))
+        self._tree.SetToolTip(_("Double-click to open the tool"))
         self._tree.selectionChanged.connect(self.OnItemSelected)
         self._tree.itemActivated.connect(lambda node: self.Run(node))
 
