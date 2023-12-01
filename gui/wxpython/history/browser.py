@@ -112,5 +112,5 @@ class HistoryBrowser(wx.Panel):
                 GUI(parent=self, giface=self._giface).ParseCommand(lst)
             except Exception:
                 self.showNotification.emit(
-                    message=_("History record cound not be parsed into command")
+                    message=_("History record could not be parsed into command")
                 )
