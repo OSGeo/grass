@@ -262,10 +262,13 @@ class GConsoleWindow(wx.SplitterWindow):
     def _loadHistory(self):
         """Load history from a history file to data structures"""
         history_path = get_current_mapset_gui_history_path()
-        if not os.path.exists(history_path):
-            create_history_file(history_path)
-        self.cmdPrompt.cmdbuffer = read_history(history_path)
-        self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
+        try:
+            if not os.path.exists(history_path):
+                create_history_file(history_path)
+            self.cmdPrompt.cmdbuffer = read_history(history_path)
+            self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
+        except OSError as e:
+            GError("{}".format(e))
 
     def GetPanel(self, prompt=True):
         """Get panel
@@ -450,11 +453,8 @@ class GConsoleWindow(wx.SplitterWindow):
         history_path = get_current_mapset_gui_history_path()
         try:
             update_history(cmd, history_path)
-            self.showNotification.emit(
-                message=_("Command history saved to '{}'".format(history_path))
-            )
-        except Exception as e:
-            GError(_("Unable to update history file.\n\nDetails: {}").format(e))
+        except OSError as e:
+            GError("{}".format(e))
 
     def OnCmdExportHistory(self, event):
         """Export the history of executed commands stored
@@ -477,12 +477,8 @@ class GConsoleWindow(wx.SplitterWindow):
                 self.showNotification.emit(
                     message=_("Command history saved to '{}'".format(path))
                 )
-            except Exception as e:
-                GError(
-                    _("Unable to copy file {} to {}'.\n\nDetails: {}").format(
-                        history_path, path, e
-                    )
-                )
+            except OSError as e:
+                GError("{}".format(e))
 
         dlg.Destroy()
         event.Skip()
