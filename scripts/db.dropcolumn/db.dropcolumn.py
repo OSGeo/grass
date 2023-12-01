@@ -94,8 +94,6 @@ def main():
                 sql = "DROP INDEX %s_%s; %s" % (table, column, sql)
         else:
             # for older sqlite3 versions, use old way to remove column
-            # echo "Using special trick for SQLite"
-            # http://www.sqlite.org/faq.html#q13
             colnames = []
             coltypes = []
             for f in gscript.db_describe(table)["cols"]:
