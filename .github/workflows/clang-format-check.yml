@@ -17,9 +17,21 @@ jobs:
     name: Formatting Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-      - name: Run clang-format style check for C/C++/Protobuf programs.
-        uses: jidicula/clang-format-action@v4.11.0
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: DoozyX/clang-format-lint-action@v0.16.2
         with:
-          clang-format-version: '15'
-          check-path: .
+          source: "."
+          clangFormatVersion: 15
+          inplace: True
+      - name: Verify Changed files
+        uses: tj-actions/verify-changed-files@v16
+        id: verify-changed-files
+      - name: List all changed files tracked and untracked files
+        run: |
+          echo "Changed files: ${{ steps.verify-changed-files.outputs.changed_files }}"
+      - uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: |
+            .clang-format
+            ${{ steps.verify-changed-files.outputs.changed_files }}"
