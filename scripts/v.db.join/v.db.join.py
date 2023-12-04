@@ -104,19 +104,27 @@ def main():
 
     if not maptable:
         grass.fatal(
-            _("There is no table connected to this map. Unable to join any column.")
+            _(
+                "There is no table connected to this map. Unable to join any column."
+            )
         )
 
     # check if column is in map table
     if column not in grass.vector_columns(map, layer):
-        grass.fatal(_("Column <%s> not found in table <%s>") % (column, maptable))
+        grass.fatal(
+            _("Column <%s> not found in table <%s>") % (column, maptable)
+        )
 
     # describe other table
-    all_cols_ot = grass.db_describe(otable, driver=driver, database=database)["cols"]
+    all_cols_ot = grass.db_describe(otable, driver=driver, database=database)[
+        "cols"
+    ]
 
     # check if ocolumn is on other table
     if ocolumn not in [ocol[0] for ocol in all_cols_ot]:
-        grass.fatal(_("Column <%s> not found in table <%s>") % (ocolumn, otable))
+        grass.fatal(
+            _("Column <%s> not found in table <%s>") % (ocolumn, otable)
+        )
 
     # determine columns subset from other table
     if not scolumns:
@@ -133,11 +141,15 @@ def main():
                     cols_to_add.append(col_ot)
                     break
             if not found:
-                grass.warning(_("Column <%s> not found in table <%s>") % (scol, otable))
+                grass.warning(
+                    _("Column <%s> not found in table <%s>") % (scol, otable)
+                )
 
     # exclude columns from other table
     if ecolumns:
-        cols_to_add = list(filter(lambda col: col[0] not in ecolumns, cols_to_add))
+        cols_to_add = list(
+            filter(lambda col: col[0] not in ecolumns, cols_to_add)
+        )
 
     all_cols_tt = grass.vector_columns(map, int(layer)).keys()
     # This is used for testing presence (and potential name conflict) with
@@ -145,10 +157,11 @@ def main():
     # is SQL, so we lowercase the names here and in the test.
     all_cols_tt = [name.lower() for name in all_cols_tt]
 
-    select = "SELECT $colname FROM $otable WHERE $otable.$ocolumn=$table.$column"
-    template = string.Template("UPDATE $table SET $colname=(%s);" % select)
-
-    for col in cols_to_add:
+    # first create new columns in one v.db.addcolumn command
+    last_idx = len(cols_to_add) - 1
+    col_add_str = ""
+    cols_added = []
+    for i, col in enumerate(cols_to_add):
         # skip the vector column which is used for join
         colname = col[0]
         if colname == column:
@@ -173,28 +186,54 @@ def main():
 
         # add only the new column to the table
         if colname.lower() not in all_cols_tt:
-            try:
-                grass.run_command(
-                    "v.db.addcolumn", map=map, columns=colspec, layer=layer
-                )
-            except CalledModuleError:
-                grass.fatal(_("Error creating column <%s>") % colname)
-
-        stmt = template.substitute(
-            table=maptable,
-            column=column,
-            otable=otable,
-            ocolumn=ocolumn,
-            colname=colname,
+            col_add_str += colspec
+            if i < last_idx:
+                col_add_str += ","
+            cols_added.append(colname)
+    cols_added_str = ",".join(cols_added)
+    try:
+        grass.run_command(
+            "v.db.addcolumn", map=map, columns=col_add_str, layer=layer
         )
-        grass.debug(stmt, 1)
-        grass.verbose(_("Updating column <%s> of vector map <%s>...") % (colname, map))
+    except CalledModuleError:
+        grass.fatal(_(f"Error creating columns {cols_added_str}"))
+
+    # loop again to create a single SQL UPDATE statement
+    # break up into individual SQL statements if it gets too long
+    max_length = 10000
+    set_str_list = []
+    cols_list = []
+    cols_in_str = []
+    set_str = ""
+    last_idx = len(cols_added) - 1
+    for i, colname in enumerate(cols_added):
+        cur_set_str = (f"{colname}=(SELECT {colname} FROM {otable} WHERE "
+                       f"{otable}.{ocolumn}={maptable}.{column})")
+        set_str += cur_set_str
+        cols_in_str.append(colname)
+        if len(set_str) < max_length and i < last_idx:
+            set_str += ", "
+        else:
+            set_str_list.append(set_str)
+            set_str = ""
+            cols_list.append(cols_in_str)
+            cols_in_str = []
+
+    for set_str, cols_in_str in zip(set_str_list, cols_list):
+        cols_str = ",".join(cols_in_str)
+        update_str = f"UPDATE {maptable} SET {set_str};"
+        grass.debug(update_str, 1)
+        grass.verbose(_(f"Updating columns {cols_str} of vector map {map}..."))
         try:
             grass.write_command(
-                "db.execute", stdin=stmt, input="-", database=database, driver=driver
+                "db.execute",
+                stdin=update_str,
+                input="-",
+                database=database,
+                driver=driver,
             )
         except CalledModuleError:
-            grass.fatal(_("Error filling column <%s>") % colname)
+            grass.fatal(_(f"Error filling columns {cols_str}"))
 
     # write cmd history
     grass.vector_history(map)
