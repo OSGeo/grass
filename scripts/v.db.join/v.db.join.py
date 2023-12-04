@@ -219,6 +219,7 @@ def main():
             cols_list.append(cols_in_str)
             cols_in_str = []
 
+    # loop over all individual SQL UPDATE table commands
     for set_str, cols_in_str in zip(set_str_list, cols_list):
         cols_str = ",".join(cols_in_str)
         update_str = f"UPDATE {maptable} SET {set_str};"
