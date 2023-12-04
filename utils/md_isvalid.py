@@ -46,8 +46,7 @@ if __name__ == "__main__":
 
     if args.module is None:
         for cmd in gs.get_commands()[0]:
-            check_module(cmd)
+            if check_module(cmd) != 0:
+                sys.exit(1)
     else:
-        returncode = check_module(args.module)
-
-    sys.exit(returncode)
+        sys.exit(check_module(args.module))
