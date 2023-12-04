@@ -7,7 +7,6 @@
 import sys
 import argparse
 import subprocess
-import tempfile
 
 import grass.script as gs
 
@@ -21,7 +20,8 @@ def check_module(module):
     print("-" * 80)
     print(module)
     print("-" * 80)
-    with tempfile.NamedTemporaryFile() as fp:
+    tmp_file = gs.tempfile()
+    with open(tmp_file, 'w') as fp:
         p = subprocess.Popen([module, "--md-description"], stdout=fp)
         p.wait()
 
