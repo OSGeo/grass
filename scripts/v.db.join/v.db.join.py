@@ -64,7 +64,6 @@
 # %end
 
 import sys
-import string
 import grass.script as grass
 from grass.exceptions import CalledModuleError
 
