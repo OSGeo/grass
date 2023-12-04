@@ -40,6 +40,7 @@ void usage_rest_md(bool rest)
     struct Option *opt;
     struct Flag *flag;
     const char *type;
+    char *header = NULL;
     int new_prompt = 0;
 
     new_prompt = G__uses_new_gisprompt();
@@ -49,26 +50,21 @@ void usage_rest_md(bool rest)
     if (!st->pgm_name)
         st->pgm_name = "??";
 
-    /* main header not printed to be synced with HTML */
-    /* main header
+    /* main header */
+    G_asprintf(&header, "%s - GRASS GIS manual", st->pgm_name);
     if (rest) {
-        fprintf(stdout, "=================");
-        for (s = 0; s <= strlen(st->pgm_name); s++) {
+        size_t s;
+        fprintf(stdout, "%s\n", header);
+        for (s = 0; s < strlen(header); s++) {
             fprintf(stdout, "=");
         }
         fprintf(stdout, "\n");
     }
-    if (!rest)
-        fprintf(stdout, "# ");
-    fprintf(stdout, "%s - GRASS GIS manual\n", st->pgm_name);
-    if (rest) {
-        fprintf(stdout, "=================");
-        for (s = 0; s <= strlen(st->pgm_name); s++) {
-            fprintf(stdout, "=");
-        }
+    else {
+        fprintf(stdout, "# %s\n", header);
     }
-    fprintf(stdout, "\n\n");
-    */
+    fprintf(stdout, "\n");
+
     /* GRASS GIS logo */
     if (rest) {
         fprintf(stdout, ".. image:: grass_logo.png\n");
@@ -106,7 +102,7 @@ void usage_rest_md(bool rest)
         fprintf(stdout, "### ");
     fprintf(stdout, "%s\n", _("KEYWORDS"));
     if (rest)
-        fprintf(stdout, "----------------------\n");
+        fprintf(stdout, "--------\n");
     fprintf(stdout, "\n");
     if (st->module_info.keywords) {
         if (rest)
@@ -120,7 +116,7 @@ void usage_rest_md(bool rest)
         fprintf(stdout, "### ");
     fprintf(stdout, "%s\n", _("SYNOPSIS"));
     if (rest) {
-        fprintf(stdout, "----------------------\n\n");
+        fprintf(stdout, "--------\n\n");
         fprintf(stdout, "| ");
     }
     else {
