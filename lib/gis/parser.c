@@ -922,8 +922,9 @@ int G__uses_new_gisprompt(void)
 
    \param[out] fd file where to print
    \param format pointer to print function
+   \param newline TRUE to include newline
  */
-void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
+void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *), int newline)
 {
     int i;
 
@@ -934,8 +935,13 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
         else {
             format(fd, st->module_info.keywords[i]);
         }
-        if (i < st->n_keys - 1)
-            fprintf(fd, ", ");
+        if (i < st->n_keys - 1) {
+            fprintf(fd, ",");
+            if (!newline)
+                fprintf(fd, " ");
+        }
+        if (newline)
+            fprintf(fd, "\n");
     }
 
     fflush(fd);

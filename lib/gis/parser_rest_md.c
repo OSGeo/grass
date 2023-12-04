@@ -105,11 +105,13 @@ void usage_rest_md(bool rest)
         fprintf(stdout, "--------\n");
     fprintf(stdout, "\n");
     if (st->module_info.keywords) {
-        if (rest)
-            G__print_keywords(stdout, NULL);
-        else
-            G__print_keywords(stdout, G__print_escaped_for_html_keywords);
-        fprintf(stdout, "\n");
+        if (rest) {
+            G__print_keywords(stdout, NULL, FALSE);
+            fprintf(stdout, "\n");
+        }
+        else {
+            G__print_keywords(stdout, G__print_escaped_for_markdown_keywords, TRUE);
+        }
     }
     fprintf(stdout, "\n");
     if (!rest)
@@ -487,6 +489,48 @@ void print_escaped_for_rest_options(FILE *f, const char *str)
             do_escape(',', ", ");
         default:
             fputc(*s, f);
+        }
+    }
+}
+
+void G__print_escaped_for_markdown_keywords(FILE *f, const char *str)
+{
+    /* generate HTML links */
+
+    /* HTML link only for second keyword */
+    if (st->n_keys > 1 && strcmp(st->module_info.keywords[1], str) == 0) {
+
+        const char *s;
+
+        /* TODO: fprintf(f, _("topic: ")); */
+        fprintf(f, "[%s](topic_", str);
+        for (s = str; *s; s++) {
+            switch (*s) {
+                do_escape(' ', "_");
+            default:
+                fputc(*s, f);
+            }
+        }
+        fprintf(f, ".html)");
+    }
+    else { /* first and other than second keyword */
+        if (st->n_keys > 0 && strcmp(st->module_info.keywords[0], str) == 0) {
+            /* command family */
+            const char *s;
+
+            fprintf(f, "[%s](", str);
+            for (s = str; *s; s++) {
+                switch (*s) {
+                    do_escape(' ', "_");
+                default:
+                    fputc(*s, f);
+                }
+            }
+            fprintf(f, ".html)");
+        }
+        else {
+            /* keyword index */
+            fprintf(f, "[%s](keywords.html#%s)", str, str);
         }
     }
 }
