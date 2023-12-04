@@ -2,14 +2,14 @@
 #
 # Requirements:
 # - https://github.com/markdownlint/markdownlint
-#   (on Debian/Ubuntu - apt install ruby-mdl)
+#   (on Debian/Ubuntu - apt install markdownlint)
 
+import os
 import sys
 import argparse
 import subprocess
 
 import grass.script as gs
-
 
 def check_md(filename):
     p = subprocess.Popen(["mdl", filename])
@@ -25,7 +25,10 @@ def check_module(module):
         p = subprocess.Popen([module, "--md-description"], stdout=fp)
         p.wait()
 
-        p = subprocess.Popen(["mdl", fp.name])
+        p = subprocess.Popen(
+            ["mdl",
+              "--style", os.path.join(os.path.dirname(__file__) ,"mdl_style.rb"),
+             fp.name])
         p.wait()
 
         returncode = p.returncode
