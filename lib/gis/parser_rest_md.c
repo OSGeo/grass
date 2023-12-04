@@ -211,7 +211,7 @@ void usage_rest_md(bool rest)
         flag = &st->first_flag;
         if (!rest)
             fprintf(stdout, "#### ");
-        fprintf(stdout, "%s:\n", _("Flags"));
+        fprintf(stdout, "%s\n", _("Flags"));
         if (rest)
             fprintf(stdout, "~~~~~~\n");
         fprintf(stdout, "\n");
@@ -251,7 +251,7 @@ void usage_rest_md(bool rest)
         opt = &st->first_option;
         if (!rest)
             fprintf(stdout, "#### ");
-        fprintf(stdout, "%s:\n", _("Parameters"));
+        fprintf(stdout, "%s\n", _("Parameters"));
         if (rest)
             fprintf(stdout, "~~~~~~~~~~~\n");
         fprintf(stdout, "\n");
@@ -487,6 +487,7 @@ void print_escaped_for_md(FILE *f, const char *str)
             do_escape('\t', "&nbsp;&nbsp;&nbsp;&nbsp;");
             do_escape('<', "&lt;");
             do_escape('>', "&gt;");
+            do_escape('*', "\*");
         default:
             fputc(*s, f);
         }
