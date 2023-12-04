@@ -191,7 +191,7 @@ void usage_rest_md(bool rest)
             else
                 fprintf(stdout, "\n");
 
-            opt = opt->next_opt;            
+            opt = opt->next_opt;
         }
     }
     if (new_prompt)
