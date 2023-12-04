@@ -27,7 +27,7 @@ def check_module(module):
 
         p = subprocess.Popen(
             ["mdl",
-              "--style", os.path.join(os.path.dirname(__file__) ,"mdl_style.rb"),
+             "--style", os.path.join(os.path.dirname(__file__) ,"mdl_style.rb"),
              fp.name])
         p.wait()
 
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.module is None:
-        for cmd in gs.get_commands()[0]:
+        for cmd in sorted(gs.get_commands()[0]):
             if check_module(cmd) != 0:
                 sys.exit(1)
     else:

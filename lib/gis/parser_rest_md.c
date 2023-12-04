@@ -172,6 +172,7 @@ void usage_rest_md(bool rest)
                     type = "string";
                     break;
                 }
+            fprintf(stdout, " ");
             if (!opt->required)
                 fprintf(stdout, "[");
             fprintf(stdout, "**%s**=", opt->key);
@@ -195,7 +196,7 @@ void usage_rest_md(bool rest)
         }
     }
     if (new_prompt)
-        fprintf(stdout, "[**--overwrite**] ");
+        fprintf(stdout, " [**--overwrite**] ");
 
     fprintf(stdout, " [**--verbose**] ");
     fprintf(stdout, " [**--quiet**] ");
@@ -226,25 +227,24 @@ void usage_rest_md(bool rest)
                 fprintf(stdout, "\\");
             fprintf(stdout, "\n");
         }
-
-        print_flag("help", NULL, _("Print usage summary"), rest);
-        if (!rest)
-            fprintf(stdout, "\\");
-        fprintf(stdout, "\n");
-        print_flag("verbose", NULL, _("Verbose module output"), rest);
-        if (!rest)
-            fprintf(stdout, "\\");
-        fprintf(stdout, "\n");
-        print_flag("quiet", NULL, _("Quiet module output"), rest);
-        if (!rest)
-            fprintf(stdout, "\\");
-        fprintf(stdout, "\n");
-        print_flag("ui", NULL, _("Force launching GUI dialog"), rest);
-        fprintf(stdout, "\n");
     }
-
+    print_flag("help", NULL, _("Print usage summary"), rest);
+    if (!rest)
+        fprintf(stdout, "\\");
     fprintf(stdout, "\n");
+    print_flag("verbose", NULL, _("Verbose module output"), rest);
+    if (!rest)
+        fprintf(stdout, "\\");
+    fprintf(stdout, "\n");
+    print_flag("quiet", NULL, _("Quiet module output"), rest);
+    if (!rest)
+        fprintf(stdout, "\\");
+    fprintf(stdout, "\n");
+    print_flag("ui", NULL, _("Force launching GUI dialog"), rest);
+    fprintf(stdout, "\n");
+
     if (st->n_opts) {
+        fprintf(stdout, "\n");
         opt = &st->first_option;
         if (!rest)
             fprintf(stdout, "#### ");
@@ -275,9 +275,10 @@ void print_flag(const char *key, const char *label, const char *description,
 {
     if (rest)
         fprintf(stdout, "| ");
+    fprintf(stdout, "**");
     if (strlen(key) > 1)
         fprintf(stdout, "-");
-    fprintf(stdout, "**-%s**", key);
+    fprintf(stdout, "-%s**", key);
     if (!rest)
         fprintf(stdout, "\\");
     fprintf(stdout, "\n");
