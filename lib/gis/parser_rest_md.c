@@ -173,7 +173,7 @@ void usage_rest_md(bool rest)
                     break;
                 }
             if (!opt->required)
-                fprintf(stdout, " [");
+                fprintf(stdout, "[");
             fprintf(stdout, "**%s**=", opt->key);
             if (rest)
                 fprintf(stdout, "\\ ");
@@ -185,14 +185,17 @@ void usage_rest_md(bool rest)
                 fprintf(stdout, "*%s*,...]", type);
             }
             if (!opt->required)
-                fprintf(stdout, "] ");
+                fprintf(stdout, "]");
+            if (rest)
+                fprintf(stdout, " ");
+            else
+                fprintf(stdout, "\n");
 
-            opt = opt->next_opt;
-            fprintf(stdout, " ");
+            opt = opt->next_opt;            
         }
     }
     if (new_prompt)
-        fprintf(stdout, " [**--overwrite**] ");
+        fprintf(stdout, "[**--overwrite**] ");
 
     fprintf(stdout, " [**--verbose**] ");
     fprintf(stdout, " [**--quiet**] ");
