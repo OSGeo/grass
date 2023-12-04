@@ -45,8 +45,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.module is None:
+        blacklist = ["g.parser"]  # modules with no description
         for cmd in sorted(gs.get_commands()[0]):
-            if check_module(cmd) != 0:
-                sys.exit(1)
+            if cmd not in blacklist:
+                if check_module(cmd) != 0:
+                    sys.exit(1)
     else:
         sys.exit(check_module(args.module))

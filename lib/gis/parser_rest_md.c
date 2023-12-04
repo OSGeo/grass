@@ -93,10 +93,13 @@ void usage_rest_md(bool rest)
         fprintf(stdout, " - ");
 
     if (st->module_info.label)
-        fprintf(stdout, "%s\n\n", st->module_info.label);
+        fprintf(stdout, "%s\n", st->module_info.label);
 
-    if (st->module_info.description)
+    if (st->module_info.description) {
+        if (st->module_info.label)
+            fprintf(stdout, "\n");
         fprintf(stdout, "%s\n", st->module_info.description);
+    }
     fprintf(stdout, "\n");
     if (!rest)
         fprintf(stdout, "### ");
@@ -285,6 +288,7 @@ void print_flag(const char *key, const char *label, const char *description,
     if (label != NULL) {
         if (rest)
             fprintf(stdout, "| ");
+        print_escaped(stdout, "\t", rest);
         print_escaped(stdout, label, rest);
         if (!rest)
             fprintf(stdout, "\\");
@@ -343,11 +347,13 @@ void print_option(const struct Option *opt, bool rest, char *image_spec_rest)
             fprintf(stdout, "| ");
         print_escaped(stdout, "\t", rest);
         print_escaped(stdout, opt->label, rest);
-        if (!rest)
-            fprintf(stdout, "\\");
-        fprintf(stdout, "\n");
     }
     if (opt->description) {
+        if (opt->label) {
+            if (!rest)
+                fprintf(stdout, "\\");
+            fprintf(stdout, "\n");
+        }
         if (rest)
             fprintf(stdout, "| ");
         print_escaped(stdout, "\t", rest);
@@ -429,6 +435,8 @@ void print_option(const struct Option *opt, bool rest, char *image_spec_rest)
                     print_escaped(stdout, "\t\t", rest);
                     fprintf(stdout, "|%s| ", opt->opts[i]);
                 }
+                if (!rest)
+                    print_escaped(stdout, "\t", rest);
                 fprintf(stdout, "**");
                 print_escaped(stdout, opt->opts[i], rest);
                 fprintf(stdout, "**: ");
@@ -475,8 +483,10 @@ void print_escaped_for_md(FILE *f, const char *str)
 
     for (s = str; *s; s++) {
         switch (*s) {
-            do_escape('\n', "\n\n");
+            do_escape('\n', "\\\n");
             do_escape('\t', "&nbsp;&nbsp;&nbsp;&nbsp;");
+            do_escape('<', "&lt;");
+            do_escape('>', "&gt;");
         default:
             fputc(*s, f);
         }
