@@ -237,8 +237,7 @@ class LocationDownloadPanel(wx.Panel):
         self.choice = wx.Choice(parent=self, choices=choices)
 
         self.choice.Bind(wx.EVT_CHOICE, self.OnChangeChoice)
-        if hasattr(self.parent, "download_button"):
-            self.parent.download_button.Bind(wx.EVT_BUTTON, self.OnDownload)
+        self.parent.download_button.Bind(wx.EVT_BUTTON, self.OnDownload)
         # TODO: add button for a link to an associated website?
         # TODO: add thumbnail for each location?
 
@@ -318,8 +317,7 @@ class LocationDownloadPanel(wx.Panel):
             sys.stdout.write("Download aborted")
             self.thread = gThread()
             self._change_download_btn_label()
-            if not self.parent:
-                self.parent.Show(True)
+            self.parent.Show(True)
 
     def OnAbort(self, event):
         """Info bar widget abort button event handler
@@ -352,13 +350,12 @@ class LocationDownloadPanel(wx.Panel):
         :param list buttons: list of info bar widget buttons
                              [(button_label, button_click_event_handler),...]
         """
-        if not self.parent:
-            self.parent.showInfoBarMessage.emit(
-                message=message,
-                buttons=[(self._abort_btn_label, self.OnAbort)]
-                if buttons is None
-                else buttons,
-            )
+        self.parent.showInfoBarMessage.emit(
+            message=message,
+            buttons=[(self._abort_btn_label, self.OnAbort)]
+            if buttons is None
+            else buttons,
+        )
 
     def DownloadItem(self, item):
         """Download the selected item"""
@@ -391,8 +388,7 @@ class LocationDownloadPanel(wx.Panel):
                 )
                 self.parent.newLocationIsDownloaded.emit()
             self._change_download_btn_label()
-            if not self.parent:
-                self.parent.Show(True)
+            self.parent.Show(True)
 
         self._download_in_progress = True
         self._warning(_("Download in progress, wait until it is finished"))
@@ -404,8 +400,7 @@ class LocationDownloadPanel(wx.Panel):
             ondone=download_complete_callback,
             onterminate=self._terminateDownloadCallback,
         )
-        if not self.parent:
-            wx.CallLater(1000, self.parent.Show, False)
+        wx.CallLater(1000, self.parent.Show, False)
 
     def OnChangeChoice(self, event):
         """React to user changing the selection"""
@@ -424,12 +419,10 @@ class LocationDownloadPanel(wx.Panel):
                     name=dirname
                 )
             )
-            if not self.parent:
-                self.parent.download_button.SetLabel(label=_("Download"))
+            self.parent.download_button.SetLabel(label=_("Download"))
             return
         else:
-            if not self.parent:
-                self.parent.dismissShowInfoBarMessage.emit()
+            self.parent.dismissShowInfoBarMessage.emit()
             self._clearMessage()
 
     def GetLocation(self):
@@ -570,6 +563,7 @@ def main():
         location = window.GetLocation()
         if location:
             print(location)
+        window.Destroy()
     elif sys.argv[2] == "panel":
         window = wx.Dialog(parent=None)
         panel = LocationDownloadPanel(parent=window, database=database)
