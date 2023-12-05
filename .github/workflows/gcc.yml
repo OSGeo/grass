@@ -63,4 +63,6 @@ jobs:
           CFLAGS: -std=${{ matrix.c }} -fPIC -Wall -Wextra
           # TODO: -pedantic-errors here won't compile
           CXXFLAGS: -std=${{ matrix.cpp }} -fPIC -Wall -Wextra
-        run: .github/workflows/build_ubuntu-22.04.sh $HOME/install -Werror
+        run: |
+          .github/workflows/build_ubuntu-22.04.sh $HOME/install \
+              -isystem/usr/include/gdal -Wpedantic -Werror
