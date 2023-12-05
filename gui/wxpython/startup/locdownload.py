@@ -237,7 +237,8 @@ class LocationDownloadPanel(wx.Panel):
         self.choice = wx.Choice(parent=self, choices=choices)
 
         self.choice.Bind(wx.EVT_CHOICE, self.OnChangeChoice)
-        self.parent.download_button.Bind(wx.EVT_BUTTON, self.OnDownload)
+        if hasattr(self.parent, "download_button"):
+            self.parent.download_button.Bind(wx.EVT_BUTTON, self.OnDownload)
         # TODO: add button for a link to an associated website?
         # TODO: add thumbnail for each location?
 
@@ -350,12 +351,13 @@ class LocationDownloadPanel(wx.Panel):
         :param list buttons: list of info bar widget buttons
                              [(button_label, button_click_event_handler),...]
         """
-        self.parent.showInfoBarMessage.emit(
-            message=message,
-            buttons=[(self._abort_btn_label, self.OnAbort)]
-            if buttons is None
-            else buttons,
-        )
+        if hasattr(self.parent, "showInfoBarMessage"):
+            self.parent.showInfoBarMessage.emit(
+                message=message,
+                buttons=[(self._abort_btn_label, self.OnAbort)]
+                if buttons is None
+                else buttons,
+            )
 
     def DownloadItem(self, item):
         """Download the selected item"""
@@ -419,10 +421,12 @@ class LocationDownloadPanel(wx.Panel):
                     name=dirname
                 )
             )
-            self.parent.download_button.SetLabel(label=_("Download"))
+            if hasattr(self.parent, "download_button"):
+                self.parent.download_button.SetLabel(label=_("Download"))
             return
         else:
-            self.parent.dismissShowInfoBarMessage.emit()
+            if hasattr(self.parent, "dismissShowInfoBarMessage"):
+                self.parent.dismissShowInfoBarMessage.emit()
             self._clearMessage()
 
     def GetLocation(self):
@@ -486,11 +490,11 @@ class LocationDownloadDialog(wx.Dialog):
             "LocationDownloadDialog.dismissShowInfoBarMessage"
         )
 
-        cancel_button = Button(self, id=wx.ID_CANCEL)
+        self.cancel_button = Button(self, id=wx.ID_CANCEL)
         self.download_button = Button(parent=self, id=wx.ID_ANY, label=_("Do&wnload"))
         self.download_button.SetToolTip(_("Download selected dataset"))
         self.panel = LocationDownloadPanel(parent=self, database=database)
-        cancel_button.Bind(wx.EVT_BUTTON, self.OnCancel)
+        self.cancel_button.Bind(wx.EVT_BUTTON, self.OnCancel)
         self.Bind(wx.EVT_CLOSE, self.OnCancel)
 
         self.sizer = wx.BoxSizer(wx.VERTICAL)
@@ -498,7 +502,7 @@ class LocationDownloadDialog(wx.Dialog):
 
         button_sizer = wx.StdDialogButtonSizer()
         button_sizer.Add(
-            cancel_button,
+            self.cancel_button,
             proportion=0,
             flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
             border=5,
@@ -558,12 +562,21 @@ def main():
     app = wx.App()
 
     if len(sys.argv) == 2 or sys.argv[2] == "dialog":
-        window = LocationDownloadDialog(parent=None, database=database)
-        window.ShowModal()
-        location = window.GetLocation()
-        if location:
-            print(location)
-        window.Destroy()
+
+        def new_location_is_downloaded():
+            # Reset stdout
+            sys.stdout = sys.__stdout__
+            print(window.GetLocation())
+
+        def on_close(event):
+            parent_window.Destroy()
+
+        parent_window = wx.Dialog(parent=None)
+        window = LocationDownloadDialog(parent=parent_window, database=database)
+        window.Bind(wx.EVT_CLOSE, on_close)
+        window.cancel_button.Bind(wx.EVT_BUTTON, on_close)
+        window.newLocationIsDownloaded.connect(new_location_is_downloaded)
+        window.Show()
     elif sys.argv[2] == "panel":
         window = wx.Dialog(parent=None)
         panel = LocationDownloadPanel(parent=window, database=database)
