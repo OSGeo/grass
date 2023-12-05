@@ -28,6 +28,7 @@ static void print_escaped(FILE *f, const char *str, bool rest);
 static void print_escaped_for_rest(FILE *f, const char *str);
 static void print_escaped_for_md(FILE *f, const char *str);
 static void print_escaped_for_rest_options(FILE *f, const char *str);
+static void print_escaped_for_md_keywords(FILE *, const char *);
 
 /*!
    \brief Print module usage description in reStructuredText or in Markdown
@@ -113,8 +114,7 @@ void usage_rest_md(bool rest)
             fprintf(stdout, "\n");
         }
         else {
-            G__print_keywords(stdout, G__print_escaped_for_markdown_keywords,
-                              TRUE);
+            G__print_keywords(stdout, print_escaped_for_md_keywords, TRUE);
         }
     }
     fprintf(stdout, "\n");
@@ -509,7 +509,7 @@ void print_escaped_for_rest_options(FILE *f, const char *str)
     }
 }
 
-void G__print_escaped_for_markdown_keywords(FILE *f, const char *str)
+void print_escaped_for_md_keywords(FILE *f, const char *str)
 {
     /* generate HTML links */
 
