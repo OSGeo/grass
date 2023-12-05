@@ -693,7 +693,6 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     struct rast_row bands_rows[n_bands];
 
     RASTER_MAP_TYPE data_type;
-
     int nrows, i_band, n_a_bands, band_id;
     int i_row, head_nchars, i_cat, id_cat;
 

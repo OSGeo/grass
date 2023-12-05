@@ -20,8 +20,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
+#ifndef _MSC_VER
 #include <sys/time.h>
-#ifndef __MINGW32__
+#endif
+#ifndef _WIN32
 #include <sys/resource.h>
 #endif
 #include <stdio.h>

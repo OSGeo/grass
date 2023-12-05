@@ -27,7 +27,7 @@ int M__hold_signals(int hold)
 
     signal(SIGINT, sig);
 
-#ifndef __MINGW32__
+#ifndef _WIN32
     signal(SIGQUIT, sig);
 #endif
 

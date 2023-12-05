@@ -297,8 +297,8 @@ void record_args(int argc, char **argv)
         exit(1);
     }
 
-#ifdef __MINGW32__
-    strcpy(buf, ctime(&t));
+#ifdef _WIN32
+  strcpy(buf, ctime(&t));
 #else
     ctime_r(&t, buf);
     buf[24] = '\0';
