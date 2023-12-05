@@ -924,7 +924,8 @@ int G__uses_new_gisprompt(void)
    \param format pointer to print function
    \param newline TRUE to include newline
  */
-void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *), int newline)
+void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *),
+                       int newline)
 {
     int i;
 

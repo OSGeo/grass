@@ -70,8 +70,10 @@ int parse_command_line(int argc, char *argv[])
         "bbox;%s;",
         _("insert new row for each category if doesn't exist yet"),
         _("area size"),
-        _("compactness of an area, calculated as compactness = perimeter / (2 * sqrt(PI * area))"),
-        _("fractal dimension of boundary defining a polygon, calculated as fd = 2 * (log(perimeter) / log(area))"),
+        _("compactness of an area, calculated as compactness = perimeter / (2 "
+          "* sqrt(PI * area))"),
+        _("fractal dimension of boundary defining a polygon, calculated as fd "
+          "= 2 * (log(perimeter) / log(area))"),
         _("perimeter length of an area"), _("line length"),
         _("number of features for each category"),
         _("point coordinates, X,Y or X,Y,Z"),

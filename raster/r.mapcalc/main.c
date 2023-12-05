@@ -87,16 +87,15 @@ int main(int argc, char **argv)
     region->options = "current,intersect,union";
     region->description = _("The computational region that should be used.");
     desc = NULL;
-    G_asprintf(
-        &desc,
-        "current;%s;"
-        "intersect;%s;"
-        "union;%s;",
-        _("current uses the current region of the mapset"),
-        _("intersect computes the intersection region between "
-          "all input maps and uses the smallest resolution"),
-        _("union computes the union extent of all map regions "
-          "and uses the smallest resolution"));
+    G_asprintf(&desc,
+               "current;%s;"
+               "intersect;%s;"
+               "union;%s;",
+               _("current uses the current region of the mapset"),
+               _("intersect computes the intersection region between "
+                 "all input maps and uses the smallest resolution"),
+               _("union computes the union extent of all map regions "
+                 "and uses the smallest resolution"));
     region->descriptions = desc;
 
     file = G_define_standard_option(G_OPT_F_INPUT);

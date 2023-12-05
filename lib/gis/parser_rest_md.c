@@ -113,7 +113,8 @@ void usage_rest_md(bool rest)
             fprintf(stdout, "\n");
         }
         else {
-            G__print_keywords(stdout, G__print_escaped_for_markdown_keywords, TRUE);
+            G__print_keywords(stdout, G__print_escaped_for_markdown_keywords,
+                              TRUE);
         }
     }
     fprintf(stdout, "\n");
