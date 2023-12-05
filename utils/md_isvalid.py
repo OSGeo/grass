@@ -17,10 +17,13 @@ def check_md(filename):
     p.wait()
 
 
+def print_line():
+    print("-" * 80)
+
+
 def check_module(module):
-    print("-" * 80)
+    print_line()
     print(module)
-    print("-" * 80)
     tmp_file = gs.tempfile()
     with open(tmp_file, "w") as fp:
         p = subprocess.Popen([module, "--md-description"], stdout=fp)
@@ -51,9 +54,15 @@ if __name__ == "__main__":
 
     if args.module is None:
         blacklist = ["g.parser"]  # modules with no description
+        mcount = mcount_failed = 0
         for cmd in sorted(gs.get_commands()[0]):
             if cmd not in blacklist:
                 if check_module(cmd) != 0:
-                    sys.exit(1)
+                    mcount_failed += 1
+
+        print_line()
+        print("Modules processed {} ({} failed)".format(mcount, mcount_failed))
+        print_line()
+        sys.exit(mcount_failed == 0)
     else:
         sys.exit(check_module(args.module))
