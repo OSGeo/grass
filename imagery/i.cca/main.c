@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
         samptot += nsamp[i];
         for (j = 0; j < bands; j++) {
             mu[i][j] = sigs.sig[i].mean[j];
-            for (k = 0; k < j; k++) {
+            for (k = 0; k <= j; k++) {
                 cov[i][j][k] = cov[i][k][j] = sigs.sig[i].var[j][k];
             }
         }
