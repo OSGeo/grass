@@ -488,7 +488,7 @@ void print_escaped_for_md(FILE *f, const char *str)
             do_escape('\t', "&nbsp;&nbsp;&nbsp;&nbsp;");
             do_escape('<', "&lt;");
             do_escape('>', "&gt;");
-            do_escape('*', "\*");
+            do_escape('*', "\\*");
         default:
             fputc(*s, f);
         }
