@@ -1011,7 +1011,7 @@ void set_flag(int f)
         flag = flag->next_flag;
     }
 
-    /* First, check if key has been renamed in GRASS 7 */
+    /* First, check if key has been renamed */
     G_asprintf(&key, "-%c", f);
     renamed_key = get_renamed_option(key);
     G_free(key);
@@ -1223,7 +1223,7 @@ void set_option(const char *string)
     if (found)
         opt = matches[0];
 
-    /* First, check if key has been renamed in GRASS 7 */
+    /* First, check if key has been renamed */
     if (found == 0) {
         const char *renamed_key = NULL;
 
