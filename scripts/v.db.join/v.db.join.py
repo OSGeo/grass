@@ -64,6 +64,7 @@
 # %end
 
 import sys
+import string
 import grass.script as grass
 from grass.exceptions import CalledModuleError
 
@@ -145,10 +146,8 @@ def main():
     all_cols_tt = [name.lower() for name in all_cols_tt]
 
     # first create new columns in one v.db.addcolumn command
-    last_idx = len(cols_to_add) - 1
-    col_add_str = ""
     cols_added = []
-    for i, col in enumerate(cols_to_add):
+    for col in cols_to_add:
         # skip the vector column which is used for join
         colname = col[0]
         if colname == column:
@@ -170,20 +169,17 @@ def main():
             coltype = "%s" % col[1]
 
         colspec = "%s %s" % (colname, coltype)
-
         # add only the new column to the table
         if colname.lower() not in all_cols_tt:
-            col_add_str += colspec
-            if i < last_idx:
-                col_add_str += ","
+            try:
+                grass.run_command(
+                    "v.db.addcolumn", map=map, columns=colspec, layer=layer
+                )
+            except CalledModuleError:
+                grass.fatal(_(f"Error creating column {colspec}"))
             cols_added.append(colname)
-    cols_added_str = ",".join(cols_added)
-    try:
-        grass.run_command("v.db.addcolumn", map=map, columns=col_add_str, layer=layer)
-    except CalledModuleError:
-        grass.fatal(_(f"Error creating columns {cols_added_str}"))
 
-    # loop again to create a single SQL UPDATE statement
+    # loop to create a single SQL UPDATE statement
     # break up into individual SQL statements if it gets too long
     max_length = 10000
     set_str_list = []
@@ -206,7 +202,7 @@ def main():
             cols_list.append(cols_in_str)
             cols_in_str = []
 
-    # loop over all individual SQL UPDATE table commands
+    test_idx = 1
     for set_str, cols_in_str in zip(set_str_list, cols_list):
         cols_str = ",".join(cols_in_str)
         update_str = f"UPDATE {maptable} SET {set_str};"
@@ -223,6 +219,7 @@ def main():
         except CalledModuleError:
             grass.fatal(_(f"Error filling columns {cols_str}"))
 
+        test_idx += 1
     # write cmd history
     grass.vector_history(map)
 
