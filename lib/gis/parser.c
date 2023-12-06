@@ -1225,9 +1225,8 @@ void set_option(const char *string)
 
     /* First, check if key has been renamed */
     if (found == 0) {
-        const char *renamed_key = NULL;
+        const char *renamed_key = get_renamed_option(the_key);
 
-        renamed_key = get_renamed_option(the_key);
         if (renamed_key) {
             /* if renamed to a new flag (option value given but will be lost),
              * fatal error */
