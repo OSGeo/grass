@@ -546,7 +546,10 @@ void print_escaped_for_md_keywords(FILE *f, const char *str)
         }
         else {
             /* keyword index */
-            fprintf(f, "[%s](keywords.html#%s)", str, str);
+            char *str_link;
+            str_link = G_str_replace(str, " ", "%20");
+            fprintf(f, "[%s](keywords.html#%s)", str, str_link);
+            G_free(str_link);
         }
     }
 }
