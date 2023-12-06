@@ -28,7 +28,7 @@ static void print_escaped(FILE *f, const char *str, bool rest);
 static void print_escaped_for_rest(FILE *f, const char *str);
 static void print_escaped_for_md(FILE *f, const char *str);
 static void print_escaped_for_rest_options(FILE *f, const char *str);
-static void print_escaped_for_md_keywords(FILE *, const char *);
+static void print_escaped_for_md_keywords(FILE *f, const char *str);
 
 /*!
    \brief Print module usage description in reStructuredText or in Markdown
@@ -509,20 +509,23 @@ void print_escaped_for_rest_options(FILE *f, const char *str)
     }
 }
 
+/* generate HTML links */
 void print_escaped_for_md_keywords(FILE *f, const char *str)
 {
-    /* generate HTML links */
-    
-    /* removes all leading and trailing white space from keyword string, as spotted in Japanese and other locales. */
-    G_strip(str);
+    /* removes all leading and trailing white space from keyword
+       string, as spotted in Japanese and other locales. */
+    char *str_s;
+    str_s = G_store(str);
+    G_strip(str_s);
+
     /* HTML link only for second keyword */
     if (st->n_keys > 1 && strcmp(st->module_info.keywords[1], str) == 0) {
 
         const char *s;
 
         /* TODO: fprintf(f, _("topic: ")); */
-        fprintf(f, "[%s](topic_", str);
-        for (s = str; *s; s++) {
+        fprintf(f, "[%s](topic_", str_s);
+        for (s = str_s; *s; s++) {
             switch (*s) {
                 do_escape(' ', "_");
             default:
@@ -536,8 +539,8 @@ void print_escaped_for_md_keywords(FILE *f, const char *str)
             /* command family */
             const char *s;
 
-            fprintf(f, "[%s](", str);
-            for (s = str; *s; s++) {
+            fprintf(f, "[%s](", str_s);
+            for (s = str_s; *s; s++) {
                 switch (*s) {
                     do_escape(' ', "_");
                 default:
@@ -549,11 +552,13 @@ void print_escaped_for_md_keywords(FILE *f, const char *str)
         else {
             /* keyword index */
             char *str_link;
-            str_link = G_str_replace(str, " ", "%20");
-            fprintf(f, "[%s](keywords.html#%s)", str, str_link);
+            str_link = G_str_replace(str_s, " ", "%20");
+            fprintf(f, "[%s](keywords.html#%s)", str_s, str_link);
             G_free(str_link);
         }
     }
+
+    G_free(str_s);
 }
 
 #undef do_escape
