@@ -48,6 +48,7 @@ if __name__ == "__main__":
 
 from core import globalvar
 from core.gcmd import GError, DecodeString
+from core.settings import UserSettings
 from gui_core.widgets import FormNotebook, ScrolledPanel
 from gui_core.wrap import Button, StaticText, TextCtrl
 from core.debug import Debug
@@ -819,6 +820,32 @@ class HelpWindow(HtmlWindow):
             self.loaded = False
 
 
+class ManualPageHelpWindow(HelpWindow):
+    """Manual page help window
+
+    Sets the user-defined font size and face for manual pages
+    """
+
+    def __init__(self, parent, command, text, skipDescription, **kwargs):
+        super().__init__(parent, command, text, skipDescription, **kwargs)
+        font_face_name = UserSettings.Get(
+            group="appearance",
+            key="manualPageFont",
+            subkey="faceName",
+        )
+        font_size = UserSettings.Get(
+            group="appearance",
+            key="manualPageFont",
+            subkey="pointSize",
+        )
+        if font_size:
+            self.SetStandardFonts(
+                size=font_size,
+                normal_face=font_face_name,
+                fixed_face=font_face_name,
+            )
+
+
 class HelpPanel(wx.Panel):
     def __init__(
         self, parent, command="index", text=None, skipDescription=False, **kwargs
@@ -910,6 +937,31 @@ class HelpPanel(wx.Panel):
         self.OnHistory()
 
         event.Skip()
+
+
+class ManualPageHelpPanel(HelpPanel):
+    """Manual page help panel
+
+    Sets the user-defined font size and face for manual pages
+    """
+
+    def __init__(
+        self, parent, command="index", text=None, skipDescription=False, **kwargs
+    ):
+        self.command = command
+        wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY)
+
+        self.content = ManualPageHelpWindow(self, command, text, skipDescription)
+
+        self.btnNext = Button(parent=self, id=wx.ID_ANY, label=_("&Next"))
+        self.btnNext.Enable(False)
+        self.btnPrev = Button(parent=self, id=wx.ID_ANY, label=_("&Previous"))
+        self.btnPrev.Enable(False)
+
+        self.btnNext.Bind(wx.EVT_BUTTON, self.OnNext)
+        self.btnPrev.Bind(wx.EVT_BUTTON, self.OnPrev)
+
+        self._layout()
 
 
 def ShowAboutDialog(prgName, startYear):

@@ -183,6 +183,10 @@ class Settings:
                     "type": "Courier New",
                     "size": 10,
                 },
+                "manualPageFont": {
+                    "faceName": "",
+                    "pointSize": "",
+                },
                 # expand/collapse element list
                 "elementListExpand": {"selection": 0},
                 "menustyle": {"selection": 1},

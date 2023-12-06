@@ -90,7 +90,7 @@ from gui_core.widgets import (
     BarscalesComboBox,
     NArrowsComboBox,
 )
-from gui_core.ghelp import HelpPanel
+from gui_core.ghelp import ManualPageHelpPanel
 from gui_core import gselect
 from core import gcmd
 from core import utils
@@ -2521,7 +2521,9 @@ class CmdPanel(wx.Panel):
             self.goutput = None
             self._gconsole = None
 
-        self.manualTab = HelpPanel(parent=self.notebook, command=self.task.get_name())
+        self.manualTab = ManualPageHelpPanel(
+            parent=self.notebook, command=self.task.get_name()
+        )
         if not self.manualTab.GetFile():
             self.manualTab.Hide()
         else:
