@@ -512,7 +512,9 @@ void print_escaped_for_rest_options(FILE *f, const char *str)
 void print_escaped_for_md_keywords(FILE *f, const char *str)
 {
     /* generate HTML links */
-
+    
+    /* removes all leading and trailing white space from keyword string, as spotted in Japanese and other locales. */
+    G_strip(str);
     /* HTML link only for second keyword */
     if (st->n_keys > 1 && strcmp(st->module_info.keywords[1], str) == 0) {
 
