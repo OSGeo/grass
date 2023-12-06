@@ -3,6 +3,7 @@
 # Requirements:
 # - https://github.com/markdownlint/markdownlint
 #   (on Debian/Ubuntu - apt install markdownlint)
+#   (using Ruby installer - gem install mdl)
 
 import os
 import sys
