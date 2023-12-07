@@ -26,10 +26,6 @@
 #include <gdal_version.h>
 #include <ogr_api.h>
 
-typedef GDALDatasetH ds_t;
-#define ds_getlayerbyindex(ds, i) GDALDatasetGetLayer((ds), (i))
-#define ds_close(ds)              GDALClose(ds)
-
 extern int n_polygons;
 extern int n_polygon_boundaries;
 extern double split_distance;

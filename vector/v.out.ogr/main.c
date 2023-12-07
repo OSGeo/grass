@@ -64,8 +64,8 @@ int main(int argc, char *argv[])
     /* OGR */
     int drn;
     OGRFieldType ogr_ftype = OFTInteger;
-    ds_t hDS;
-    dr_t hDriver;
+    GDALDatasetH hDS;
+    GDALDriverH hDriver;
     OGRLayerH Ogr_layer;
     OGRFieldDefnH Ogr_field;
     OGRFeatureDefnH Ogr_featuredefn;
@@ -529,7 +529,7 @@ int main(int argc, char *argv[])
     }
     if (drn == -1)
         G_fatal_error(_("OGR driver <%s> not found"), options.format->answer);
-    hDriver = get_driver(drn);
+    hDriver = GDALGetDriver(drn);
 
     if (flags.append->answer) {
         G_debug(1, "Append to OGR layer");
@@ -860,7 +860,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    ds_close(hDS);
+    GDALClose(hDS);
 
     Vect_close(&In);
 

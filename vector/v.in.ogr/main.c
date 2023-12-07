@@ -50,17 +50,17 @@ char *get_datasource_name(const char *, int);
 
 void convert_osm_lines(struct Map_info *Map, double snap);
 
-int cmp_layer_srs(ds_t, int, int *, char **, char *);
-void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
+int cmp_layer_srs(GDALDatasetH, int, int *, char **, char *);
+void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                       char *geom_col, char *outloc, int create_only,
                       int override, int check_only);
 
-int create_spatial_filter(ds_t Ogr_ds, OGRGeometryH *, int, int *, char **,
-                          double *, double *, double *, double *, int,
+int create_spatial_filter(GDALDatasetH Ogr_ds, OGRGeometryH *, int, int *,
+                          char **, double *, double *, double *, double *, int,
                           struct Option *);
 
 struct OGR_iterator {
-    ds_t Ogr_ds;
+    GDALDatasetH Ogr_ds;
     char *dsn;
     int nlayers;
     int has_nonempty_layers;
@@ -72,8 +72,8 @@ struct OGR_iterator {
     int done;
 };
 
-void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t Ogr_ds, char *dsn,
-                       int nlayers, int ogr_interleaved_reading);
+void OGR_iterator_init(struct OGR_iterator *OGR_iter, GDALDatasetH Ogr_ds,
+                       char *dsn, int nlayers, int ogr_interleaved_reading);
 
 void OGR_iterator_reset(struct OGR_iterator *OGR_iter);
 OGRFeatureH ogr_getnextfeature(struct OGR_iterator *, int, char *, OGRGeometryH,
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
     int *key_idx;
 
     /* OGR */
-    ds_t Ogr_ds;
+    GDALDatasetH Ogr_ds;
     const char *ogr_driver_name;
     int ogr_interleaved_reading;
     OGRLayerH Ogr_layer;
@@ -598,7 +598,7 @@ int main(int argc, char *argv[])
                   ogr_driver_name, navailable_layers);
     }
     for (i = 0; i < navailable_layers; i++) {
-        Ogr_layer = ds_getlayerbyindex(Ogr_ds, i);
+        Ogr_layer = GDALDatasetGetLayer(Ogr_ds, i);
 
         available_layer_names[i] = G_store((char *)OGR_L_GetName(Ogr_layer));
 
@@ -607,7 +607,7 @@ int main(int argc, char *argv[])
     }
     if (flag.list->answer) {
         fflush(stdout);
-        ds_close(Ogr_ds);
+        GDALClose(Ogr_ds);
         exit(EXIT_SUCCESS);
     }
 
@@ -645,7 +645,7 @@ int main(int argc, char *argv[])
     /* compare SRS of the different layers to be imported */
     if (cmp_layer_srs(Ogr_ds, nlayers, layers, layer_names,
                       param.geom->answer)) {
-        ds_close(Ogr_ds);
+        GDALClose(Ogr_ds);
         G_fatal_error(_("Detected different projections of input layers. "
                         "Input layers must be imported separately."));
     }
@@ -684,13 +684,13 @@ int main(int argc, char *argv[])
 
     /* check output name */
     if (Vect_legal_filename(output) != 1) {
-        ds_close(Ogr_ds);
+        GDALClose(Ogr_ds);
         G_fatal_error(_("Illegal output name <%s>"), output);
     }
 
     /* Check if the output map exists */
     if (G_find_vector2(output, G_mapset()) && !overwrite) {
-        ds_close(Ogr_ds);
+        GDALClose(Ogr_ds);
         G_fatal_error(_("Vector map <%s> already exists"), output);
     }
 
@@ -730,7 +730,7 @@ int main(int argc, char *argv[])
         attr_filter) {
 
         for (layer = 0; layer < nlayers; layer++) {
-            Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
+            Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layers[layer]);
             if (param.geom->answer) {
                 Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
                 igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn,
@@ -780,7 +780,7 @@ int main(int argc, char *argv[])
 
         n_features[layer] = 0;
         layer_id = layers[layer];
-        Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
+        Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layer_id);
         Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
         igeom = -1;
         if (param.geom->answer) {
@@ -908,7 +908,7 @@ int main(int argc, char *argv[])
         key_column[layer] = GV_KEY_COLUMN;
         key_idx[layer] = -2; /* -1 for fid column */
         layer_id = layers[layer];
-        Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
+        Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layer_id);
         Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
         if (param.key->answer) {
@@ -1214,7 +1214,7 @@ int main(int argc, char *argv[])
             db_begin_transaction(driver);
         }
 
-        Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
+        Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layer_id);
         Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
         igeom = -1;
@@ -1553,7 +1553,7 @@ int main(int argc, char *argv[])
             G_message(_("Finding centroids for OGR layer <%s>..."),
                       layer_names[layer]);
             layer_id = layers[layer];
-            Ogr_layer = ds_getlayerbyindex(Ogr_ds, layer_id);
+            Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layer_id);
             Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
             igeom = -1;
@@ -1692,7 +1692,7 @@ int main(int argc, char *argv[])
         G_message("%s", separator);
     }
 
-    ds_close(Ogr_ds);
+    GDALClose(Ogr_ds);
     G_free(fid_cat_tree);
 
     if (use_tmp_vect) {
@@ -1986,8 +1986,8 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-void OGR_iterator_init(struct OGR_iterator *OGR_iter, ds_t Ogr_ds, char *dsn,
-                       int nlayers, int ogr_interleaved_reading)
+void OGR_iterator_init(struct OGR_iterator *OGR_iter, GDALDatasetH Ogr_ds,
+                       char *dsn, int nlayers, int ogr_interleaved_reading)
 {
     OGR_iter->Ogr_ds = Ogr_ds;
     OGR_iter->dsn = dsn;
@@ -2027,7 +2027,7 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
         if (!OGR_iter->ogr_interleaved_reading) {
             OGR_iter->curr_layer = layer;
             OGR_iter->Ogr_layer =
-                ds_getlayerbyindex(OGR_iter->Ogr_ds, OGR_iter->curr_layer);
+                GDALDatasetGetLayer(OGR_iter->Ogr_ds, OGR_iter->curr_layer);
             OGR_iter->Ogr_featuredefn = OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
             OGR_L_ResetReading(OGR_iter->Ogr_layer);
         }
@@ -2036,13 +2036,13 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
 
             /* clear filters */
             for (i = 0; i < OGR_iter->nlayers; i++) {
-                OGR_iter->Ogr_layer = ds_getlayerbyindex(OGR_iter->Ogr_ds, i);
+                OGR_iter->Ogr_layer = GDALDatasetGetLayer(OGR_iter->Ogr_ds, i);
                 OGR_L_SetSpatialFilter(OGR_iter->Ogr_layer, NULL);
                 OGR_L_SetAttributeFilter(OGR_iter->Ogr_layer, NULL);
             }
 
             GDALDatasetResetReading(OGR_iter->Ogr_ds);
-            OGR_iter->Ogr_layer = ds_getlayerbyindex(OGR_iter->Ogr_ds, layer);
+            OGR_iter->Ogr_layer = GDALDatasetGetLayer(OGR_iter->Ogr_ds, layer);
             OGR_iter->Ogr_featuredefn = OGR_L_GetLayerDefn(OGR_iter->Ogr_layer);
             OGR_L_SetSpatialFilter(OGR_iter->Ogr_layer, poSpatialFilter);
             if (OGR_L_SetAttributeFilter(OGR_iter->Ogr_layer, attr_filter) !=
@@ -2099,7 +2099,7 @@ OGRFeatureH ogr_getnextfeature(struct OGR_iterator *OGR_iter, int layer,
     return NULL;
 }
 
-int create_spatial_filter(ds_t Ogr_ds, OGRGeometryH *poSpatialFilter,
+int create_spatial_filter(GDALDatasetH Ogr_ds, OGRGeometryH *poSpatialFilter,
                           int nlayers, int *layers, char **layer_names,
                           double *xmin, double *ymin, double *xmax,
                           double *ymax, int use_region, struct Option *spat)
@@ -2121,7 +2121,7 @@ int create_spatial_filter(ds_t Ogr_ds, OGRGeometryH *poSpatialFilter,
     ymaxl = (double *)G_malloc(nlayers * sizeof(double));
 
     for (layer = 0; layer < nlayers; layer++) {
-        Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
+        Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layers[layer]);
         have_ogr_extent[layer] = 0;
         if ((OGR_L_GetExtent(Ogr_layer, &oExt, 1)) == OGRERR_NONE) {
             xminl[layer] = oExt.MinX;
