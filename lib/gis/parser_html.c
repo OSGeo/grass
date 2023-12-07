@@ -61,7 +61,7 @@ void G__usage_html(void)
     fprintf(stdout, "\n");
     if (st->module_info.keywords) {
         fprintf(stdout, " <meta name=\"keywords\" content=\"");
-        G__print_keywords(stdout, NULL);
+        G__print_keywords(stdout, NULL, FALSE);
         fprintf(stdout, "\">");
         fprintf(stdout, "\n");
     }
@@ -87,7 +87,7 @@ void G__usage_html(void)
 
     fprintf(stdout, "<h2>%s</h2>\n", _("KEYWORDS"));
     if (st->module_info.keywords) {
-        G__print_keywords(stdout, print_escaped_for_html_keywords);
+        G__print_keywords(stdout, print_escaped_for_html_keywords, FALSE);
         fprintf(stdout, "\n");
     }
     fprintf(stdout, "<h2>%s</h2>\n", _("SYNOPSIS"));

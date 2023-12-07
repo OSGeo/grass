@@ -101,7 +101,7 @@ static void usage(FILE *fp, int markers)
         if (markers)
             fprintf(fp, "{{{KEYWORDS}}}\n");
         fprintf(fp, "%s\n ", _("Keywords:"));
-        G__print_keywords(fp, NULL);
+        G__print_keywords(fp, NULL, FALSE);
         fprintf(fp, "\n");
     }
 

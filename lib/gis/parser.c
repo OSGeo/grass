@@ -496,6 +496,13 @@ int G_parser(int argc, char **argv)
             exit(EXIT_SUCCESS);
         }
 
+        /* If first arg is "--md-description" then print out
+         * a Markdown description of the task */
+        if (strcmp(argv[1], "--md-description") == 0) {
+            G__usage_markdown();
+            exit(EXIT_SUCCESS);
+        }
+
         /* If first arg is "--wps-process-description" then print out
          * the wps process description of the task */
         if (strcmp(argv[1], "--wps-process-description") == 0) {
@@ -915,8 +922,10 @@ int G__uses_new_gisprompt(void)
 
    \param[out] fd file where to print
    \param format pointer to print function
+   \param newline TRUE to include newline
  */
-void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
+void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *),
+                       int newline)
 {
     int i;
 
@@ -927,8 +936,13 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
         else {
             format(fd, st->module_info.keywords[i]);
         }
-        if (i < st->n_keys - 1)
-            fprintf(fd, ", ");
+        if (i < st->n_keys - 1) {
+            fprintf(fd, ",");
+            if (!newline)
+                fprintf(fd, " ");
+        }
+        if (newline)
+            fprintf(fd, "\n");
     }
 
     fflush(fd);
