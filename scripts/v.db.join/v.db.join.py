@@ -157,7 +157,7 @@ def main():
     all_cols_tt = [name.lower() for name in all_cols_tt]
 
     # loop over chunks of columns instead of single columns
-    chunk_size = 500
+    chunk_size = 100
     chunked_cols = list(
         cols_to_add[pos : pos + chunk_size]
         for pos in range(0, len(cols_to_add), chunk_size)
