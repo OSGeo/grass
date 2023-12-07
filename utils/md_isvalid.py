@@ -55,14 +55,15 @@ if __name__ == "__main__":
 
     if args.module is None:
         blacklist = ["g.parser"]  # modules with no description
-        mcount = mcount_failed = 0
-        for cmd in sorted(gs.get_commands()[0]):
+        mcount_failed = 0
+        list_cmd = sorted(gs.get_commands()[0])
+        for cmd in list_cmd:
             if cmd not in blacklist:
                 if check_module(cmd) != 0:
                     mcount_failed += 1
 
         print_line()
-        print("Modules processed {} ({} failed)".format(mcount, mcount_failed))
+        print("Modules processed {} ({} failed)".format(len(list_cmd), mcount_failed))
         print_line()
         sys.exit(mcount_failed == 0)
     else:
