@@ -1,10 +1,11 @@
 """
-@package history_catalog::tree
+@package history.tree
 
-@brief History browser tree classes
+@brief History browser tree
 
 Classes:
- - history_catalog::HistoryCatalogTree
+
+ - browser::HistoryBrowserTree
 
 (C) 2023 by Linda Karlovska, and the GRASS Development Team
 

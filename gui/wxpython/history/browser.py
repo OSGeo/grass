@@ -1,10 +1,10 @@
 """
-@package history_browser::Browser
+@package history.browser
 
 @brief History browser
 
 Classes:
- - history::HistoryBrowser
+ - browser::HistoryBrowser
 
 (C) 2023 by Linda Karlovska, and the GRASS Development Team
 
@@ -18,6 +18,7 @@ for details.
 import wx
 import re
 
+from core.gcmd import GError, GException
 from gui_core.forms import GUI
 from gui_core.treeview import CTreeView
 from history.tree import HistoryBrowserTree
@@ -110,7 +111,10 @@ class HistoryBrowser(wx.Panel):
             lst = re.split(r"\s+", command)
             try:
                 GUI(parent=self, giface=self._giface).ParseCommand(lst)
-            except Exception:
-                self.showNotification.emit(
-                    message=_("History record could not be parsed into command")
+            except GException as e:
+                GError(
+                    parent=self,
+                    message=str(e),
+                    caption=_("Cannot be parsed into command"),
+                    showTraceback=False,
                 )

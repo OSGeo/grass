@@ -268,7 +268,7 @@ class GConsoleWindow(wx.SplitterWindow):
             self.cmdPrompt.cmdbuffer = read_history(history_path)
             self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
         except OSError as e:
-            GError("{}".format(e))
+            GError(str(e))
 
     def GetPanel(self, prompt=True):
         """Get panel
@@ -454,7 +454,7 @@ class GConsoleWindow(wx.SplitterWindow):
         try:
             update_history(cmd, history_path)
         except OSError as e:
-            GError("{}".format(e))
+            GError(str(e))
 
     def OnCmdExportHistory(self, event):
         """Export the history of executed commands stored
@@ -478,7 +478,7 @@ class GConsoleWindow(wx.SplitterWindow):
                     message=_("Command history saved to '{}'".format(path))
                 )
             except OSError as e:
-                GError("{}".format(e))
+                GError(str(e))
 
         dlg.Destroy()
         event.Skip()
