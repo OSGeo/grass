@@ -212,6 +212,9 @@ class LayerManagerGrassInterface(object):
         # Signal emitted when workspace is changed
         self.workspaceChanged = Signal("LayerManagerGrassInterface.workspaceChanged")
 
+        # Signal emitted when history should be updated
+        self.updateHistory = Signal("LayerManagerGrassInterface.updateHistory")
+
     def RunCmd(self, *args, **kwargs):
         self.lmgr._gconsole.RunCmd(*args, **kwargs)
 
@@ -256,9 +259,6 @@ class LayerManagerGrassInterface(object):
 
     def GetProgress(self):
         return self.lmgr.goutput.GetProgressBar()
-
-    def UpdateCmdHistory(self, cmd):
-        self.lmgr.goutput.GetPrompt().UpdateCmdHistory(cmd)
 
 
 class LayerManagerGrassInterfaceForMapDisplay(object):

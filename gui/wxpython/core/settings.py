@@ -169,10 +169,7 @@ class Settings:
                 # ask when quitting wxGUI or closing display
                 "askOnQuit": {"enabled": True},
                 # hide tabs
-                "hideTabs": {
-                    "search": False,
-                    "pyshell": False,
-                },
+                "hideTabs": {"search": False, "pyshell": False, "history": False},
                 "copySelectedTextToClipboard": {"enabled": False},
             },
             #
