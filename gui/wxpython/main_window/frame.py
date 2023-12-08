@@ -80,6 +80,7 @@ from lmgr.pyshell import PyShellWindow
 from lmgr.giface import LayerManagerGrassInterface
 from mapdisp.frame import MapPanel
 from datacatalog.catalog import DataCatalog
+from history.browser import HistoryBrowser
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog, SimpleTabArt
 from startup.guiutils import (
@@ -393,6 +394,16 @@ class GMFrame(wx.Frame):
 
         self._setCopyingOfSelectedText()
 
+    def _createHistoryBrowser(self, parent):
+        """Initialize history browser widget"""
+        if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
+            self.history = HistoryBrowser(parent=parent, giface=self._giface)
+            self.history.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
+        else:
+            self.history = None
+
     def _createPythonShell(self, parent):
         """Initialize Python shell widget"""
         if not UserSettings.Get(group="manager", key="hideTabs", subkey="pyshell"):
@@ -566,6 +577,7 @@ class GMFrame(wx.Frame):
         self._createDisplay(parent=self)
         self._createSearchModule(parent=self)
         self._createConsole(parent=self)
+        self._createHistoryBrowser(parent=self)
         self._createPythonShell(parent=self)
         self.toolbars = {
             "workspace": LMWorkspaceToolbar(parent=self),
@@ -677,6 +689,20 @@ class GMFrame(wx.Frame):
             aui.AuiPaneInfo()
             .Name("console")
             .Caption(_("Console"))
+            .Right()
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+            target=self._auimgr.GetPane("tools"),
+        )
+
+        self._auimgr.AddPane(
+            self.history,
+            aui.AuiPaneInfo()
+            .Name("history")
+            .Caption(_("History"))
             .Right()
             .BestSize(self.PANE_BEST_SIZE)
             .MinSize(self.PANE_MIN_SIZE)

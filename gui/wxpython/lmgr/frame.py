@@ -73,6 +73,7 @@ from lmgr.pyshell import PyShellWindow
 from lmgr.giface import LayerManagerGrassInterface
 from mapdisp.frame import MapDisplay
 from datacatalog.catalog import DataCatalog
+from history.browser import HistoryBrowser
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
 from startup.guiutils import (
@@ -164,6 +165,7 @@ class GMFrame(wx.Frame):
         self._createDisplay(self.notebook)
         self._createSearchModule(self.notebook)
         self._createConsole(self.notebook)
+        self._createHistoryBrowser(self.notebook)
         self._createPythonShell(self.notebook)
         self._addPagesToNotebook()
         self.toolbars = {
@@ -445,6 +447,16 @@ class GMFrame(wx.Frame):
 
         self._setCopyingOfSelectedText()
 
+    def _createHistoryBrowser(self, parent):
+        """Initialize history browser widget"""
+        if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
+            self.history = HistoryBrowser(parent=parent, giface=self._giface)
+            self.history.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
+        else:
+            self.history = None
+
     def _createPythonShell(self, parent):
         """Initialize Python shell widget"""
         if not UserSettings.Get(group="manager", key="hideTabs", subkey="pyshell"):
@@ -627,6 +639,10 @@ class GMFrame(wx.Frame):
         self.goutput.contentChanged.connect(
             lambda notification: self._switchPage(notification)
         )
+
+        # add 'history module' widget to main notebook page
+        if self.history:
+            self.notebook.AddPage(page=self.history, text=_("History"), name="history")
 
         # add 'python shell' widget to main notebook page
         if self.pyshell:
