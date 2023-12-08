@@ -495,8 +495,8 @@ class GConsole(wx.EvtHandler):
             Debug.msg(2, "GPrompt:RunCmd(): empty command")
             return
 
-        # update history file
-        self.UpdateHistoryFile(cmd_save_to_history)
+        # update history file, command prompt history and history model
+        self._giface.updateHistory.emit(cmd=cmd_save_to_history)
 
         if command[0] in globalvar.grassCmd:
             # send GRASS command without arguments to GUI command interface
@@ -810,31 +810,3 @@ class GConsole(wx.EvtHandler):
 
     def OnProcessPendingOutputWindowEvents(self, event):
         wx.GetApp().ProcessPendingEvents()
-
-    def UpdateHistoryFile(self, command):
-        """Update history file
-
-        :param command: the command given as a string
-        """
-        env = grass.gisenv()
-        try:
-            filePath = os.path.join(
-                env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], ".wxgui_history"
-            )
-            fileHistory = codecs.open(filePath, encoding="utf-8", mode="a")
-        except IOError as e:
-            GError(
-                _("Unable to write file '%(filePath)s'.\n\nDetails: %(error)s")
-                % {"filePath": filePath, "error": e},
-                parent=self._guiparent,
-            )
-            return
-
-        try:
-            fileHistory.write(command + os.linesep)
-        finally:
-            fileHistory.close()
-
-        # update wxGUI prompt
-        if self._giface:
-            self._giface.UpdateCmdHistory(command)

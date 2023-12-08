@@ -335,6 +335,20 @@ class PreferencesDialog(PreferencesBaseDialog):
         gridSizer.Add(hideSearch, pos=(row, 0), span=(1, 2))
 
         row += 1
+        hideHistory = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Hide '%s' tab (requires GUI restart)") % _("History"),
+            name="IsChecked",
+        )
+        hideHistory.SetValue(
+            self.settings.Get(group="manager", key="hideTabs", subkey="history")
+        )
+        self.winId["manager:hideTabs:history"] = hideHistory.GetId()
+
+        gridSizer.Add(hideHistory, pos=(row, 0), span=(1, 2))
+
+        row += 1
         hidePyShell = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
