@@ -169,10 +169,7 @@ class Settings:
                 # ask when quitting wxGUI or closing display
                 "askOnQuit": {"enabled": True},
                 # hide tabs
-                "hideTabs": {
-                    "search": False,
-                    "pyshell": False,
-                },
+                "hideTabs": {"search": False, "pyshell": False, "history": False},
                 "copySelectedTextToClipboard": {"enabled": False},
             },
             #
@@ -182,6 +179,10 @@ class Settings:
                 "outputfont": {
                     "type": "Courier New",
                     "size": 10,
+                },
+                "manualPageFont": {
+                    "faceName": "",
+                    "pointSize": "",
                 },
                 # expand/collapse element list
                 "elementListExpand": {"selection": 0},
