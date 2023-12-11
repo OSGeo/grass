@@ -14,18 +14,12 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
 
-import os
-from math import ceil
-
 import base64
-
-try:
-    from urllib2 import Request, urlopen, HTTPError
-    from httplib import HTTPException
-except ImportError:
-    from urllib.request import Request, urlopen
-    from urllib.error import HTTPError
-    from http.client import HTTPException
+import os
+from http.client import HTTPException
+from math import ceil
+from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 
 
 import grass.script as grass
@@ -44,7 +38,6 @@ class WMSBase(object):
         self.temp_warpmap = None
 
     def __del__(self):
-
         # tries to remove temporary files, all files should be
         # removed before, implemented just in case of unexpected
         # stop of module
@@ -180,7 +173,7 @@ class WMSBase(object):
     def _modifyProj(self, proj):
         """!Modify proj.4 string for usage in this module"""
 
-        # add +wktext parameter to avoid droping of +nadgrids parameter (if presented) in gdalwarp
+        # add +wktext parameter to avoid dropping of +nadgrids parameter (if presented) in gdalwarp
         if "+nadgrids=" in proj and " +wktext" not in proj:
             proj += " +wktext"
 
@@ -191,7 +184,6 @@ class WMSBase(object):
 
         not_relevant_params = []
         for i_param in driver_props["ignored_params"]:
-
             if (
                 i_param in options
                 and options[i_param]
@@ -210,7 +202,6 @@ class WMSBase(object):
 
         not_relevant_flags = []
         for i_flag in driver_props["ignored_flags"]:
-
             if flags[i_flag]:
                 not_relevant_flags.append("<" + i_flag + ">")
 
@@ -506,7 +497,6 @@ class WMSBase(object):
 
 class GRASSImporter:
     def __init__(self, opt_output, cleanup_bands):
-
         self.cleanup_mask = False
         self.cleanup_bands = cleanup_bands
 
@@ -648,7 +638,7 @@ class GRASSImporter:
                 grass.fatal(_("%s failed") % "r.mask")
 
             if not self.cleanup_bands:
-                # use the MASK to set NULL vlues
+                # use the MASK to set NULL values
                 for suffix in (".red", ".green", ".blue"):
                     rast = self.opt_output + suffix
                     if grass.find_file(rast, element="cell", mapset=".")["file"]:
@@ -722,7 +712,6 @@ class WMSDriversInfo:
             return self._OnEarthProperties()
 
     def _OnEarthProperties(self):
-
         props = {}
         props["ignored_flags"] = ["o"]
         props["ignored_params"] = [
@@ -738,7 +727,6 @@ class WMSDriversInfo:
         return props
 
     def _WMSProperties(self):
-
         props = {}
         props["ignored_params"] = ["capfile"]
         props["ignored_flags"] = []
@@ -747,7 +735,6 @@ class WMSDriversInfo:
         return props
 
     def _WMTSProperties(self):
-
         props = {}
         props["ignored_flags"] = ["o"]
         props["ignored_params"] = ["urlparams", "bgcolor", "wms_version"]
@@ -756,7 +743,6 @@ class WMSDriversInfo:
         return props
 
     def _GDALDrvProperties(self):
-
         props = {}
         props["ignored_flags"] = []
         props["ignored_params"] = [

@@ -1,5 +1,4 @@
-/*
- **********************************************************************
+/***********************************************************************
  *
  * MODULE:        r.support.stats
  *
@@ -21,9 +20,8 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 /*
- * check_stats() - Check and update statistics 
+ * check_stats() - Check and update statistics
  *
  * RETURN: 0 on success / 1 on failure
  */
@@ -43,33 +41,33 @@ int check_stats(const char *name)
     G_message(_("Updating statistics for [%s]..."), name);
 
     if (!do_histogram(name))
-	return 1;
+        return 1;
     if (Rast_read_histogram(name, "", &histogram) <= 0)
-	return 1;
+        return 1;
 
     /* Init histogram range */
     if (data_type == CELL_TYPE)
-	Rast_init_range(&range);
+        Rast_init_range(&range);
     else
-	Rast_init_fp_range(&fprange);
+        Rast_init_fp_range(&fprange);
 
     G_message(_("Updating histogram range..."));
     i = histo_num = Rast_get_histogram_num(&histogram);
     while (i >= 0) {
-	G_percent(i, histo_num, 2);
+        G_percent(i, histo_num, 2);
 
-	if (data_type == CELL_TYPE)
-	    Rast_update_range(Rast_get_histogram_cat(i--, &histogram), &range);
-	else
-	    Rast_update_fp_range((DCELL) Rast_get_histogram_cat(i--, &histogram),
-			      &fprange);
+        if (data_type == CELL_TYPE)
+            Rast_update_range(Rast_get_histogram_cat(i--, &histogram), &range);
+        else
+            Rast_update_fp_range((DCELL)Rast_get_histogram_cat(i--, &histogram),
+                                 &fprange);
     }
 
     /* Write histogram range */
     if (data_type == CELL_TYPE)
-	Rast_write_range(name, &range);
+        Rast_write_range(name, &range);
     else
-	Rast_write_fp_range(name, &fprange);
+        Rast_write_fp_range(name, &fprange);
 
     /* Get category status and max */
     cats_ok = (Rast_read_cats(name, "", &cats) >= 0);
@@ -77,16 +75,16 @@ int check_stats(const char *name)
 
     /* Further category checks */
     if (!cats_ok)
-	Rast_init_cats("", &cats);
+        Rast_init_cats("", &cats);
     else if (cats.num != max) {
-	cats.num = max;
-	cats_ok = 0;
+        cats.num = max;
+        cats_ok = 0;
     }
 
     /* Update categories if needed */
     if (!cats_ok) {
-	G_message(_("Updating the number of categories for [%s]..."), name);
-	Rast_write_cats(name, &cats);
+        G_message(_("Updating the number of categories for [%s]..."), name);
+        Rast_write_cats(name, &cats);
     }
 
     Rast_free_histogram(&histogram);

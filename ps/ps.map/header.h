@@ -6,8 +6,7 @@
 #include <stdio.h>
 #include "clr.h"
 
-struct header
-{
+struct header {
     char *file;
     char *font;
     int fontsize;

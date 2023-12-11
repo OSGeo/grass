@@ -12,14 +12,14 @@ char *construct_pattern(char **names)
 
     len = 0;
     for (i = 0; names[i]; i++) {
-	if ((p = strchr(names[i], '@')))
-	    len += p - names[i];
-	else
-	    len += strlen(names[i]);
+        if ((p = strchr(names[i], '@')))
+            len += p - names[i];
+        else
+            len += strlen(names[i]);
 
-	/* make room for escaping special characters */
-	for (j = 0; names[i][j]; j++)
-	    len += !isalnum(names[i][j]);
+        /* make room for escaping special characters */
+        for (j = 0; names[i][j]; j++)
+            len += !isalnum(names[i][j]);
     }
     len += i; /* # names - 1 commas + \0 */
 
@@ -29,33 +29,34 @@ char *construct_pattern(char **names)
     found_illegal_names = 0;
 
     for (i = 0; names[i]; i++) {
-	char *name;
+        char *name;
 
-	name = names[i];
-	if (G_name_is_fully_qualified(name, xname, xmapset)) {
-	    if (strcmp(xmapset, mapset) != 0)
-		G_fatal_error(_("%s: Cannot remove or exclude files not in "
-				"the current mapset."), name);
-	    name = xname;
-	}
+        name = names[i];
+        if (G_name_is_fully_qualified(name, xname, xmapset)) {
+            if (strcmp(xmapset, mapset) != 0)
+                G_fatal_error(_("%s: Cannot remove or exclude files not in "
+                                "the current mapset."),
+                              name);
+            name = xname;
+        }
 
-	if (G_legal_filename(name) == -1)
-	    found_illegal_names = 1;
+        if (G_legal_filename(name) == -1)
+            found_illegal_names = 1;
 
-	if (i)
-	    *p++ = ',';
+        if (i)
+            *p++ = ',';
 
-	for (j = 0; name[j]; j++) {
-	    if (!isalnum(name[j]))
-		*p++ = '\\';
-	    *p++ = name[j];
-	}
+        for (j = 0; name[j]; j++) {
+            if (!isalnum(name[j]))
+                *p++ = '\\';
+            *p++ = name[j];
+        }
     }
     *p = '\0';
 
     if (found_illegal_names)
-	G_fatal_error(_("Illegal filenames not allowed in the name or ignore "
-			"option."));
+        G_fatal_error(_("Illegal filenames not allowed in the name or ignore "
+                        "option."));
 
     return pattern;
 }

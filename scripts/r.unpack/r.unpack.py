@@ -76,7 +76,7 @@ def main():
         data_names = [
             tarinfo.name for tarinfo in tar.getmembers() if "/" not in tarinfo.name
         ]
-    except:
+    except Exception:
         grass.fatal(_("Pack file unreadable"))
 
     if flags["p"]:
@@ -134,7 +134,6 @@ def main():
         )
 
     else:
-
         diff_result_1 = diff_result_2 = None
 
         proj_info_file_1 = "PROJ_INFO"
@@ -165,7 +164,6 @@ def main():
                 diff_result_2 = diff_files(proj_units_file_1, proj_units_file_2)
 
             if diff_result_1 or diff_result_2:
-
                 if diff_result_1:
                     grass.warning(
                         _(
@@ -192,7 +190,6 @@ def main():
     maps = []
     vrt_file = None
     for index, data in enumerate(data_names):
-
         if index > 0:
             map_name = data
 

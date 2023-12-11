@@ -88,9 +88,9 @@ the <b>accumulation</b> map. Flow direction is first calculated
 from <b>elevation</b> and then adjusted to
 <b>accumulation</b>. It is not necessary to provide <b>accumulation</b>
 as the number of cells, it can also be the optionally adjusted or
-weighed total contributing area in square meters or any other unit. 
-When an original flow accumulation map is adjusted or weighed, the 
-adjustment or weighing should not convert valid accumulation values to 
+weighed total contributing area in square meters or any other unit.
+When an original flow accumulation map is adjusted or weighed, the
+adjustment or weighing should not convert valid accumulation values to
 NULL (nodata) values.
 
 <p>
@@ -124,11 +124,11 @@ window determines whether narrow or broad valleys will be identified
 
 <h3>Defining a region of interest</h3>
 
-The stream extraction procedure can be restricted to a certain region of 
-interest, e.g. a subbasin, by setting the computational region with 
-<em><a href="g.region.html">g.region</a></em> and/or creating a MASK. Such region of interest should 
-be a complete catchment area, complete in the sense that the complete 
-area upstream of an outlet point is included and buffered with at least 
+The stream extraction procedure can be restricted to a certain region of
+interest, e.g. a subbasin, by setting the computational region with
+<em><a href="g.region.html">g.region</a></em> and/or creating a MASK. Such region of interest should
+be a complete catchment area, complete in the sense that the complete
+area upstream of an outlet point is included and buffered with at least
 one cell.
 
 <h3>Stream output</h3>
@@ -148,14 +148,14 @@ Output <b>stream_vector</b> vector map stores extracted stream segments
 and points. Points are written at the start location of each stream
 segment and at the outlet of a stream network. In layer 1, categories
 are unique IDs, identical to the cell value of the raster output. The
-attribute table for layer 1 holds information about the type of stream 
-segment: start segment, or intermediate segment with tributaries, and 
-about the stream network this stream or node belongs to. Columns are 
-<tt>cat int,stream_type varchar(),type_code int,network int</tt>. The 
-network attribute is the network ID of the stream/node. The encoding 
-for type_code is 0 = start, 1 = intermediate. In layer 2, categories 
-are identical to type_code in layer 1 with additional category 2 = 
-outlet for outlet points. Points with category 1 = intermediate in 
+attribute table for layer 1 holds information about the type of stream
+segment: start segment, or intermediate segment with tributaries, and
+about the stream network this stream or node belongs to. Columns are
+<tt>cat int,stream_type varchar(),type_code int,network int</tt>. The
+network attribute is the network ID of the stream/node. The encoding
+for type_code is 0 = start, 1 = intermediate. In layer 2, categories
+are identical to type_code in layer 1 with additional category 2 =
+outlet for outlet points. Points with category 1 = intermediate in
 layer 2 are at the location of confluences.
 
 <h2>EXAMPLE</h2>
@@ -230,7 +230,7 @@ r.stream.extract elevation=elev_ned_30m@PERMANENT \
 
 <p>
 Now display both stream maps and decide which one is more realistic.
-<!-- 
+<!--
 d.shade color=elev_ned_30m_streams_noweight shade=elevation_shade brighten=20
 -->
 <p>
