@@ -87,7 +87,7 @@ double amax1(double, double);
 double amin1(double, double);
 int min(int, int);
 int max(int, int);
-void com_par(double angle);
+void com_par(void);
 int is_shadow(void);
 double horizon_height(void);
 void calculate_shadow(void);
@@ -718,13 +718,11 @@ int max(int arg1, int arg2)
 
 /**********************************************************/
 
-void com_par(double angle)
+void com_par()
 {
-    sinangle = sin(angle);
     if (fabs(sinangle) < 0.0000001) {
         sinangle = 0.;
     }
-    cosangle = cos(angle);
     if (fabs(cosangle) < 0.0000001) {
         cosangle = 0.;
     }
@@ -836,8 +834,9 @@ void calculate_shadow(void)
 
         delt_dist = sqrt(delt_east * delt_east + delt_nor * delt_nor);
 
-        stepsinangle = stepxy * delt_nor / delt_dist;
-        stepcosangle = stepxy * delt_east / delt_dist;
+        sinangle = delt_nor / delt_dist;
+        cosangle = delt_east / delt_dist;
+        com_par();
 
         shadow_angle = horizon_height();
 
@@ -1190,25 +1189,8 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
                         sqrt(delt_east * delt_east + delt_nor * delt_nor);
 
                     sinangle = delt_nor / delt_dist;
-                    if (fabs(sinangle) < 0.0000001) {
-                        sinangle = 0.;
-                    }
                     cosangle = delt_east / delt_dist;
-                    if (fabs(cosangle) < 0.0000001) {
-                        cosangle = 0.;
-                    }
-                    distsinangle = 32000;
-                    distcosangle = 32000;
-
-                    if (sinangle != 0.) {
-                        distsinangle = 100. / (distxy * sinangle);
-                    }
-                    if (cosangle != 0.) {
-                        distcosangle = 100. / (distxy * cosangle);
-                    }
-
-                    stepsinangle = stepxy * sinangle;
-                    stepcosangle = stepxy * cosangle;
+                    com_par();
 
                     z_orig = zp = z[j][i];
                     maxlength = (zmax - z_orig) / TANMINANGLE;
