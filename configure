@@ -15409,69 +15409,76 @@ LDFLAGS=${ac_save_ldflags}
 
 loc_save_cflags="$CFLAGS"
 CFLAGS="${CFLAGS} ${OPENMP_INCPATH} ${OPENMP_LIBPATH} ${OPENMP_LIB}"
-
-  OPENMP_CFLAGS=
-  # Check whether --enable-openmp was given.
+if test -e penmp || test -e mp; then
+  as_fn_error $? "AC_OPENMP clobbers files named 'mp' and 'penmp'. Aborting configure because one of these files already exists." "$LINENO" 5
+fi
+# Check whether --enable-openmp was given.
 if test ${enable_openmp+y}
 then :
   enableval=$enable_openmp;
 fi
 
+  OPENMP_CFLAGS=
   if test "$enable_openmp" != no; then
     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $CC option to support OpenMP" >&5
 printf %s "checking for $CC option to support OpenMP... " >&6; }
 
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ac_cv_prog_c_openmp='not found'
+                                                                              for ac_option in '' -fopenmp -xopenmp -openmp -mp -omp -qsmp=omp -homp \
+                       -Popenmp --openmp '-Xclang -fopenmp'; do
+
+        ac_save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS $ac_option"
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 #ifndef _OPENMP
- choke me
+#error "OpenMP not supported"
 #endif
 #include <omp.h>
-int main () { return omp_get_num_threads (); }
+int main (void) { return omp_get_num_threads (); }
 
 _ACEOF
-if ac_fn_c_try_link "$LINENO"
+if ac_fn_c_try_compile "$LINENO"
 then :
-  ac_cv_prog_c_openmp='none needed'
-else $as_nop
-  ac_cv_prog_c_openmp='unsupported'
-	  	  	  	  	  	  	                                          	  	  	  	  	  	  for ac_option in -fopenmp -xopenmp -openmp -mp -omp -qsmp=omp -homp \
-                           -Popenmp --openmp '-Xclang -fopenmp'; do
-	    ac_save_CFLAGS=$CFLAGS
-	    CFLAGS="$CFLAGS $ac_option"
-	    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
 #ifndef _OPENMP
- choke me
+#error "OpenMP not supported"
 #endif
 #include <omp.h>
-int main () { return omp_get_num_threads (); }
+int main (void) { return omp_get_num_threads (); }
 
 _ACEOF
 if ac_fn_c_try_link "$LINENO"
 then :
   ac_cv_prog_c_openmp=$ac_option
+else $as_nop
+  ac_cv_prog_c_openmp='unsupported'
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.beam \
     conftest$ac_exeext conftest.$ac_ext
-	    CFLAGS=$ac_save_CFLAGS
-	    if test "$ac_cv_prog_c_openmp" != unsupported; then
-	      break
-	    fi
-	  done
 fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam \
-    conftest$ac_exeext conftest.$ac_ext
+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+        CFLAGS=$ac_save_CFLAGS
+
+        if test "$ac_cv_prog_c_openmp" != 'not found'; then
+          break
+        fi
+      done
+      if test "$ac_cv_prog_c_openmp" = 'not found'; then
+        ac_cv_prog_c_openmp='unsupported'
+      elif test "$ac_cv_prog_c_openmp" = ''; then
+        ac_cv_prog_c_openmp='none needed'
+      fi
+                        rm -f penmp mp
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_c_openmp" >&5
 printf "%s\n" "$ac_cv_prog_c_openmp" >&6; }
-    case $ac_cv_prog_c_openmp in #(
-      "none needed" | unsupported)
-	;; #(
-      *)
-	OPENMP_CFLAGS=$ac_cv_prog_c_openmp ;;
-    esac
+    if test "$ac_cv_prog_c_openmp" != 'unsupported' && \
+       test "$ac_cv_prog_c_openmp" != 'none needed'; then
+      OPENMP_CFLAGS="$ac_cv_prog_c_openmp"
+    fi
   fi
 
 
