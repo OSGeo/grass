@@ -19,7 +19,7 @@ This program is free software under the GNU General Public License
 from grass.script import core as gcore
 
 
-class LayerList(object):
+class LayerList:
     """Non GUI class managing list of layers.
 
     It provides API for handling layers. In the future,
@@ -162,7 +162,7 @@ class LayerList(object):
         return text
 
 
-class Layer(object):
+class Layer:
     """Object representing layer.
 
     Properties of the object are checked during setting.

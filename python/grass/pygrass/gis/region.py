@@ -16,7 +16,7 @@ test_vector_name = "Region_test_vector"
 test_raster_name = "Region_test_raster"
 
 
-class Region(object):
+class Region:
     """This class is design to easily access and modify GRASS computational
     region. ::
 

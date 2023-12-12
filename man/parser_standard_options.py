@@ -112,7 +112,7 @@ def parse_options(lines, startswith="Opt"):
     return result
 
 
-class OptTable(object):
+class OptTable:
     def __init__(self, list_of_dict):
         self.options = list_of_dict
         self.columns = sorted(set([key for _, d in self.options for key in d.keys()]))

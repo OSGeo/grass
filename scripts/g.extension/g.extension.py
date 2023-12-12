@@ -781,7 +781,7 @@ def get_available_toolboxes(url):
 
             for mnode in tnode.findall("task"):
                 mlist.append(mnode.get("name"))
-    except (HTTPError, IOError, OSError):
+    except (HTTPError, OSError):
         gs.fatal(_("Unable to fetch addons metadata file"))
 
     return tdict
@@ -811,7 +811,7 @@ def get_toolbox_extensions(url, name):
                     # list of files installed by this extension
                     edict[ename]["flist"] = list()
                 break
-    except (HTTPError, IOError, OSError):
+    except (HTTPError, OSError):
         gs.fatal(_("Unable to fetch addons metadata file"))
 
     return edict
@@ -893,7 +893,7 @@ def list_available_modules(url, mlist=None):
         )
         list_available_extensions_svn(url)
         return
-    except (HTTPError, URLError, IOError, OSError):
+    except (HTTPError, URLError, OSError):
         list_available_extensions_svn(url)
         return
 
@@ -956,7 +956,7 @@ def list_available_extensions_svn(url):
         gs.debug("url = %s" % file_url, debug=2)
         try:
             file_ = urlopen(url)
-        except (HTTPError, IOError, OSError):
+        except (HTTPError, OSError):
             gs.debug(_("Unable to fetch '%s'") % file_url, debug=1)
             continue
 
@@ -1267,7 +1267,7 @@ def get_toolboxes_metadata(url):
                 "correlate": clist,
                 "modules": mlist,
             }
-    except (HTTPError, IOError, OSError):
+    except (HTTPError, OSError):
         gs.error(_("Unable to read addons metadata file " "from the remote server"))
     return data
 
@@ -1337,7 +1337,7 @@ def get_addons_metadata(url, mlist):
     bin_list = []
     try:
         tree = etree_fromurl(url)
-    except (HTTPError, URLError, IOError, OSError) as error:
+    except (HTTPError, URLError, OSError) as error:
         gs.error(
             _(
                 "Unable to read addons metadata file" " from the remote server: {0}"
@@ -2398,7 +2398,7 @@ def update_manual_page(module):
     try:
         oldfile = open(htmlfile)
         shtml = oldfile.read()
-    except IOError as error:
+    except OSError as error:
         gs.fatal(_("Unable to read manual page: %s") % error)
     else:
         oldfile.close()
@@ -2443,7 +2443,7 @@ def update_manual_page(module):
     try:
         newfile = open(htmlfile, "w")
         newfile.write(ohtml)
-    except IOError as error:
+    except OSError as error:
         gs.fatal(_("Unable for write manual page: %s") % error)
     else:
         newfile.close()

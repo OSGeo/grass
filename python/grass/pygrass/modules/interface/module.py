@@ -19,7 +19,7 @@ def _get_bash(self, *args, **kargs):
     return self.get_bash()
 
 
-class ParallelModuleQueue(object):
+class ParallelModuleQueue:
     """This class is designed to run an arbitrary number of pygrass Module or MultiModule
     processes in parallel.
 
@@ -305,7 +305,7 @@ class ParallelModuleQueue(object):
         self._proc_count = 0
 
 
-class Module(object):
+class Module:
     """This class is design to wrap/run/interact with the GRASS modules.
 
     The class during the init phase read the XML description generate using
@@ -835,7 +835,7 @@ class Module(object):
         return self
 
 
-class MultiModule(object):
+class MultiModule:
     """This class is designed to run a list of modules in serial in the provided order
     within a temporary region environment.
 

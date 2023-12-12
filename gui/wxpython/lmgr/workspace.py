@@ -443,7 +443,7 @@ class WorkspaceManager:
             tmpfile.seek(0)
             for line in tmpfile.readlines():
                 mfile.write(line)
-        except IOError:
+        except OSError:
             GError(
                 parent=self.lmgr,
                 message=_("Unable to open file <%s> for writing.") % filename,

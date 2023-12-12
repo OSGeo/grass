@@ -36,7 +36,7 @@ class NullDevice:
 
 class WMSGdalDrv(WMSBase):
     def __init__(self, createopt):
-        super(WMSGdalDrv, self).__init__()
+        super().__init__()
         self.proxy = None
         self.proxy_user_pw = None
         self.createopt = createopt

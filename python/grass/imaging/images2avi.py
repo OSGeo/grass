@@ -171,7 +171,7 @@ def readAvi(filename, asNumpy=True):
 
     # Check whether it exists
     if not os.path.isfile(filename):
-        raise IOError("File not found: " + str(filename))
+        raise OSError("File not found: " + str(filename))
 
     # Determine temp dir, make sure it exists
     tempDir = os.path.join(os.path.expanduser("~"), ".tempIms")

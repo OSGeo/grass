@@ -148,7 +148,7 @@ class Instruction:
         # open file
         try:
             file = open(filename, encoding="Latin_1", errors="ignore")
-        except IOError:
+        except OSError:
             GError(message=_("Unable to open file\n%s") % filename)
             return
         # first read file to get information about region and scaletype

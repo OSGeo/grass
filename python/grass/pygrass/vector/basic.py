@@ -10,7 +10,7 @@ from collections.abc import Iterable
 from grass.pygrass.shell.conversion import dict2html
 
 
-class Bbox(object):
+class Bbox:
     """Instantiate a Bounding Box class that contains
     a ctypes pointer to the C struct bound_box, that could be used
     by C GRASS functions.
@@ -154,7 +154,7 @@ class Bbox(object):
             return (self.north, self.south, self.east, self.west)
 
 
-class BoxList(object):
+class BoxList:
     """Instantiate a BoxList class to create a list of Bounding Box"""
 
     def __init__(self, boxlist=None):
@@ -292,7 +292,7 @@ class BoxList(object):
         libvect.Vect_reset_boxlist(self.c_boxlist)
 
 
-class Ilist(object):
+class Ilist:
     """Instantiate a list of integer using the C GRASS struct ``ilist``,
     the class contains this struct as ``c_ilist`` attribute."""
 
@@ -374,7 +374,7 @@ class Ilist(object):
         return bool(libvect.Vect_val_in_list(self.c_ilist, value))
 
 
-class Cats(object):
+class Cats:
     """Instantiate a Category class that contains a ctypes pointer
     to the C line_cats struct.
 
@@ -494,7 +494,7 @@ class Cats(object):
         return ilist
 
 
-class CatsList(object):
+class CatsList:
     """
 
     >>> cats_list = CatsList()

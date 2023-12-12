@@ -47,7 +47,7 @@ class Circle:
         self.radius = r
 
 
-class MaskedArea(object):
+class MaskedArea:
     def __init__(self, region, raster, radius):
         self.region = region
         self.raster = raster

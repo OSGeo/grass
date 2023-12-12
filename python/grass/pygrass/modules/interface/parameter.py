@@ -121,7 +121,7 @@ def _check_value(param, value):
 
 
 # TODO add documentation
-class Parameter(object):
+class Parameter:
     """The Parameter object store all information about a parameter of a
     GRASS GIS module. ::
 

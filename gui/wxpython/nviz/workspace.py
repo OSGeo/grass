@@ -24,7 +24,7 @@ except ImportError:
     wxnviz = None
 
 
-class NvizSettings(object):
+class NvizSettings:
     def __init__(self):
         pass
 

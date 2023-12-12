@@ -98,7 +98,7 @@ def copyOfInitMap(map_, width, height):
     # self.Map.SetRegion() # adjust region to match display window
 
 
-class TextShower(object):
+class TextShower:
     def __init__(self, parent, title):
         self._cf = wx.Frame(parent=parent, title=title)
         self._cp = wx.Panel(parent=self._cf, id=wx.ID_ANY)
@@ -113,7 +113,7 @@ class TextShower(object):
         self._cl.SetLabel(text)
 
 
-class Tester(object):
+class Tester:
     def _listenToAllMapWindowSignals(self, window):
         output = sys.stderr
         # will make bad thigs after it is closed but who cares

@@ -119,7 +119,7 @@ from grass.exceptions import CalledModuleError
 ###############################################################################
 
 
-class _tempfile(object):
+class _tempfile:
     def __init__(self, env=None):
         self.filename = gcore.tempfile(env=env)
 

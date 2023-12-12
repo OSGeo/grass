@@ -14,7 +14,7 @@ from grass.pygrass.vector.geometry import read_line, Isle, Area, Node
 test_vector_name = "find_doctest_map"
 
 
-class AbstractFinder(object):
+class AbstractFinder:
     def __init__(self, c_mapinfo, table=None, writeable=False):
         """Abstract finder
         -----------------
@@ -59,7 +59,7 @@ class PointFinder(AbstractFinder):
         :param writable: True or False
         :type writeable: boolean
         """
-        super(PointFinder, self).__init__(c_mapinfo, table, writeable)
+        super().__init__(c_mapinfo, table, writeable)
 
     @must_be_open
     def node(self, point, maxdist):
@@ -409,7 +409,7 @@ class BboxFinder(AbstractFinder):
          :param writable: True or False
          :type writeable: boolean
         """
-        super(BboxFinder, self).__init__(c_mapinfo, table, writeable)
+        super().__init__(c_mapinfo, table, writeable)
 
     @must_be_open
     def geos(self, bbox, type="all", bboxlist_only=False):
@@ -665,7 +665,7 @@ class BboxFinder(AbstractFinder):
 
 class PolygonFinder(AbstractFinder):
     def __init__(self, c_mapinfo, table=None, writeable=False):
-        super(PolygonFinder, self).__init__(c_mapinfo, table, writeable)
+        super().__init__(c_mapinfo, table, writeable)
 
     def lines(self, polygon, isles=None):
         pass

@@ -30,14 +30,10 @@ from core.gcmd import DecodeString
 from gui_core.wrap import Rect
 
 try:
-    WindowsError
-except NameError:
-    WindowsError = OSError
-try:
     from grass.lib.gis import *
     from grass.lib.vector import *
     from grass.lib.vedit import *
-except (ImportError, WindowsError, TypeError) as e:
+except (ImportError, OSError, TypeError) as e:
     print("wxdigit.py: {}".format(e), file=sys.stderr)
 
 log = None

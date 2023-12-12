@@ -110,7 +110,7 @@ class WMSDrv(WMSBase):
                 wms_data = self._fetchDataFromServer(
                     query_url, self.params["username"], self.params["password"]
                 )
-            except (IOError, HTTPException) as e:
+            except (OSError, HTTPException) as e:
                 if isinstance(e, HTTPError) and e.code == 401:
                     grass.fatal(
                         _("Authorization failed to '%s' when fetching data.\n%s")
@@ -128,7 +128,7 @@ class WMSDrv(WMSBase):
             try:
                 temp_tile_opened = open(temp_tile, "wb")
                 temp_tile_opened.write(wms_data.read())
-            except IOError as e:
+            except OSError as e:
                 # some servers are not happy with many subsequent requests for tiles done immediately,
                 # if immediate request was unsuccessful, try to repeat the request after 5s and 30s breaks
                 # TODO probably servers can return more kinds of errors related to this
@@ -163,7 +163,7 @@ class WMSDrv(WMSBase):
                 try:
                     error_xml_opened = open(temp_tile, "rb")
                     err_str = error_xml_opened.read()
-                except IOError as e:
+                except OSError as e:
                     grass.fatal(_("Unable to read data from tempfile.\n%s") % str(e))
                 finally:
                     error_xml_opened.close()

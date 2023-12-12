@@ -101,7 +101,7 @@ def getSmallDnArrowImage():
     return img
 
 
-class GCPWizard(object):
+class GCPWizard:
     """
     Start wizard here and finish wizard here
     """
@@ -1575,7 +1575,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     + "\n"
                 )
 
-        except IOError as err:
+        except OSError as err:
             GError(
                 parent=self,
                 message="%s <%s>. %s%s"
@@ -1635,7 +1635,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     self.list.CheckItem(index, check)
                 GCPcnt += 1
 
-        except IOError as err:
+        except OSError as err:
             GError(
                 parent=self,
                 message="%s <%s>. %s%s"

@@ -769,7 +769,7 @@ class TaskFrame(wx.Frame):
             if not modal and hasattr(self, "_disabler"):
                 del self._disabler
         else:
-            super(TaskFrame, self).MakeModal(modal)
+            super().MakeModal(modal)
 
     def updateValuesHook(self, event=None):
         """Update status bar data"""
@@ -2571,7 +2571,7 @@ class CmdPanel(wx.Panel):
         data = ""
         try:
             f = open(path, "r")
-        except IOError as e:
+        except OSError as e:
             gcmd.GError(
                 parent=self,
                 showTraceback=False,

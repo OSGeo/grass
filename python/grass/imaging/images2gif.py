@@ -645,7 +645,7 @@ def readGif(filename, asNumpy=True):
 
     # Check whether it exists
     if not os.path.isfile(filename):
-        raise IOError("File not found: " + str(filename))
+        raise OSError("File not found: " + str(filename))
 
     # Load file using PIL
     pilIm = PIL.Image.open(filename)
@@ -801,9 +801,9 @@ class NeuQuant:
 
         # Check image
         if image.size[0] * image.size[1] < NeuQuant.MAXPRIME:
-            raise IOError("Image is too small")
+            raise OSError("Image is too small")
         if image.mode != "RGBA":
-            raise IOError("Image mode should be RGBA.")
+            raise OSError("Image mode should be RGBA.")
 
         # Initialize
         self.setconstants(samplefac, colors)

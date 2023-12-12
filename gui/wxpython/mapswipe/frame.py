@@ -152,14 +152,14 @@ class SwipeMapPanel(DoubleMapPanel):
 
     def ActivateFirstMap(self, event=None):
         """Switch tracking direction"""
-        super(SwipeMapPanel, self).ActivateFirstMap(event)
+        super().ActivateFirstMap(event)
 
         self.firstMapWindow.ClearLines()
         self.firstMapWindow.Refresh()
 
     def ActivateSecondMap(self, event=None):
         """Switch tracking direction"""
-        super(SwipeMapPanel, self).ActivateSecondMap(event)
+        super().ActivateSecondMap(event)
 
         self.secondMapWindow.ClearLines()
         self.secondMapWindow.Refresh()
@@ -223,7 +223,7 @@ class SwipeMapPanel(DoubleMapPanel):
     def OnSize(self, event):
         Debug.msg(4, "SwipeMapPanel.OnSize()")
         self.resize = grass.clock()
-        super(SwipeMapPanel, self).OnSize(event)
+        super().OnSize(event)
 
     def OnIdle(self, event):
         if self.resize and grass.clock() - self.resize > 0.2:

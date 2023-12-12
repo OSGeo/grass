@@ -174,7 +174,7 @@ class DataCatalogNode(DictNode):
     """Node representing item in datacatalog."""
 
     def __init__(self, data=None):
-        super(DataCatalogNode, self).__init__(data=data)
+        super().__init__(data=data)
 
     @property
     def label(self):
@@ -253,9 +253,7 @@ class DataCatalogTree(TreeView):
         """Location Map Tree constructor."""
         self._model = TreeModel(DataCatalogNode)
         self._orig_model = self._model
-        super(DataCatalogTree, self).__init__(
-            parent=parent, model=self._model, id=wx.ID_ANY, style=style
-        )
+        super().__init__(parent=parent, model=self._model, id=wx.ID_ANY, style=style)
 
         self._giface = giface
         self._restricted = True

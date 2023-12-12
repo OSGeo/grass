@@ -42,7 +42,7 @@ class BaseCapabilitiesTree(etree.ElementTree):
                 etree.ElementTree.__init__(self, file=cap_file)
             except ParseError:
                 raise ParseError(_("Unable to parse XML file"))
-            except IOError as error:
+            except OSError as error:
                 raise ParseError(
                     _("Unable to open XML file '%s'.\n%s\n" % (cap_file, error))
                 )

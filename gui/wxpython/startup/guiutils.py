@@ -609,7 +609,7 @@ def can_switch_mapset_interactive(guiparent, grassdb, location, mapset):
             # Remove lockfile
             try:
                 os.remove(lockpath)
-            except IOError as e:
+            except OSError as e:
                 wx.MessageBox(
                     parent=guiparent,
                     caption=_("Error when removing lock file"),

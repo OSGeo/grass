@@ -108,7 +108,7 @@ def message_server(lock, conn):
         lock.release()
 
 
-class Messenger(object):
+class Messenger:
     """Fast and exit-safe interface to GRASS C-library message functions
 
     This class implements a fast and exit-safe interface to the GRASS

@@ -34,7 +34,7 @@ from core import utils
 from core.gcmd import EncodeString, DecodeString
 
 
-class GPrompt(object):
+class GPrompt:
     """Abstract class for interactive wxGUI prompt
 
     Signal promptRunCmd - emitted to run command from prompt
@@ -263,7 +263,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         if not self.cmdDesc or cmd != self.cmdDesc.get_name():
             try:
                 self.cmdDesc = gtask.parse_interface(cmd)
-            except IOError:
+            except OSError:
                 self.cmdDesc = None
 
     def _showHint(self):
@@ -616,7 +616,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 ):
                     try:
                         self.cmdDesc = gtask.parse_interface(cmd)
-                    except IOError:
+                    except OSError:
                         self.cmdDesc = None
             event.Skip()
 
