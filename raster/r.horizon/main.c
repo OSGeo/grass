@@ -91,7 +91,6 @@ void com_par(void);
 int is_shadow(void);
 double horizon_height(void);
 void calculate_shadow(void);
-double calculate_shadow_onedirection(double shadow_angle);
 
 int new_point(void);
 double searching(void);
@@ -108,24 +107,20 @@ int ip, jp, ip100, jp100;
 int n, m, m100, n100;
 int degreeOutput, compassOutput = FALSE;
 float **z, **z100, **horizon_raster;
-double stepx, stepy, stepxhalf, stepyhalf, stepxy, xp, yp, op, dp, xg0, xx0,
-    yg0, yy0, deltx, delty;
+double stepx, stepy, stepxy, xg0, xx0, yg0, yy0;
 double invstepx, invstepy, distxy;
 double offsetx, offsety;
 double single_direction;
 
 /*int arrayNumInt; */
 double xmin, xmax, ymin, ymax, zmax = 0.;
-int d, day, tien = 0;
 
-double length, maxlength = BIG, zmult = 1.0, dist;
+double length, maxlength = BIG, dist;
 double fixedMaxLength = BIG, step = 0.0, start = 0.0, end = 0.0;
-char *tt, *lt;
 double z_orig, zp;
-double h0, tanh0, angle;
+double tanh0, angle;
 double stepsinangle, stepcosangle, sinangle, cosangle, distsinangle,
     distcosangle;
-double TOLER;
 const char *str_step;
 
 int mode;
@@ -317,8 +312,6 @@ int main(int argc, char *argv[])
 
     stepx = cellhd.ew_res;
     stepy = cellhd.ns_res;
-    stepxhalf = stepx / 2.;
-    stepyhalf = stepy / 2.;
     invstepx = 1. / stepx;
     invstepy = 1. / stepy;
     /*
@@ -340,8 +333,6 @@ int main(int argc, char *argv[])
     ymin = cellhd.south;
     xmax = cellhd.east;
     ymax = cellhd.north;
-    deltx = fabs(cellhd.east - cellhd.west);
-    delty = fabs(cellhd.north - cellhd.south);
 
     degreeOutput = flag.degreeOutput->answer;
     compassOutput = flag.compassOutput->answer;
@@ -484,7 +475,6 @@ int main(int argc, char *argv[])
 
     stepxy = dist * 0.5 * (stepx + stepy);
     distxy = dist;
-    TOLER = stepxy * EPS;
 
     if (bufferZone > 0. || ebufferZone > 0. || wbufferZone > 0. ||
         sbufferZone > 0. || nbufferZone > 0.) {
@@ -511,8 +501,6 @@ int main(int argc, char *argv[])
         ymin = new_cellhd.south;
         xmax = new_cellhd.east;
         ymax = new_cellhd.north;
-        deltx = fabs(new_cellhd.east - new_cellhd.west);
-        delty = fabs(new_cellhd.north - new_cellhd.south);
 
         n /* n_cols */ = new_cellhd.cols;
         m /* n_rows */ = new_cellhd.rows;
@@ -753,13 +741,6 @@ double horizon_height(void)
     yy0 = yg0;
 
     return height;
-}
-
-double calculate_shadow_onedirection(double shadow_angle)
-{
-    shadow_angle = horizon_height();
-
-    return shadow_angle;
 }
 
 void calculate_shadow(void)
