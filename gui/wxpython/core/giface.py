@@ -40,7 +40,7 @@ class Notification:
     RAISE_WINDOW = 3
 
 
-class Layer(object):
+class Layer:
     """Layer is generally usable layer object.
 
     .. note::
@@ -52,7 +52,7 @@ class Layer(object):
     pass
 
 
-class LayerList(object):
+class LayerList:
     def GetSelectedLayers(self, checkedOnly=True):
         """Returns list of selected layers.
 

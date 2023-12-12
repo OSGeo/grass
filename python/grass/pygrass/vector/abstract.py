@@ -30,7 +30,7 @@ def is_open(c_mapinfo):
 # =============================================
 
 
-class Info(object):
+class Info:
     """Basic vector info.
     To get access to the vector info the map must be opened. ::
 

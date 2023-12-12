@@ -629,7 +629,7 @@ class GConsole(wx.EvtHandler):
                             skipInterface = False
                             break
                     sfile.close()
-                except IOError:
+                except OSError:
                     pass
 
             if len(command) == 1 and not skipInterface:
