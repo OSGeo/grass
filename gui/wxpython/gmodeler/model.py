@@ -62,7 +62,7 @@ from gmodeler.giface import GraphicalModelerGrassInterface
 from grass.script import task as gtask
 
 
-class Model(object):
+class Model:
     """Class representing the model"""
 
     def __init__(self, canvas=None):
@@ -890,7 +890,7 @@ class Model(object):
         return result
 
 
-class ModelObject(object):
+class ModelObject:
     def __init__(self, id=-1, label=""):
         self.id = id  # internal id, should be not changed
         self.label = ""
