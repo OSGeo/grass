@@ -78,6 +78,15 @@ struct Key_value *in_proj_info, *in_unit_info;
 struct pj_info iproj, oproj, tproj;
 
 struct Cell_head new_cellhd;
+typedef struct {
+    double xg0, yg0;
+    double z_orig;
+    double stepsinangle, stepcosangle;
+    double sinangle, cosangle;
+    double distsinangle, distcosangle;
+    double coslatsq;
+} PointAngle;
+
 double bufferZone = 0., ebufferZone = 0., wbufferZone = 0., nbufferZone = 0.,
        sbufferZone = 0.;
 
@@ -87,14 +96,19 @@ double amax1(double, double);
 double amin1(double, double);
 int min(int, int);
 int max(int, int);
-void com_par(void);
+void com_par(PointAngle *point);
 int is_shadow(void);
-double horizon_height(void);
-void calculate_shadow(void);
+double horizon_height(PointAngle *point, int *ip, int *jp, int *ip100,
+                      int *jp100);
+void calculate_shadow(PointAngle *point);
 
-int new_point(void);
-double searching(void);
-int test_low_res(void);
+int new_point(PointAngle *point, double *xx0, double *yy0, double *length,
+              double *tanh0, double *zp, int *ip, int *jp, int *ip100,
+              int *jp100);
+double searching(PointAngle *point, double *length, double *tanh0, int *ip,
+                 int *jp, int *ip100, int *jp100);
+int test_low_res(PointAngle *point, double *xx0, double *yy0, double length,
+                 double tanh0, int ip, int jp, int *ip100, int *jp100);
 
 /*void where_is_point();
    void cube(int, int);
@@ -103,11 +117,10 @@ int test_low_res(void);
 void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
                int buffer_s, int buffer_n);
 
-int ip, jp, ip100, jp100;
 int n, m, m100, n100;
 int degreeOutput, compassOutput = FALSE;
 float **z, **z100, **horizon_raster;
-double stepx, stepy, stepxy, xg0, xx0, yg0, yy0;
+double stepx, stepy, stepxy;
 double invstepx, invstepy, distxy;
 double offsetx, offsety;
 double single_direction;
@@ -115,12 +128,9 @@ double single_direction;
 /*int arrayNumInt; */
 double xmin, xmax, ymin, ymax, zmax = 0.;
 
-double length, maxlength = BIG, dist;
+double maxlength = BIG, dist;
 double fixedMaxLength = BIG, step = 0.0, start = 0.0, end = 0.0;
-double z_orig, zp;
-double tanh0, angle;
-double stepsinangle, stepcosangle, sinangle, cosangle, distsinangle,
-    distcosangle;
+double angle;
 const char *str_step;
 
 int mode;
@@ -135,11 +145,10 @@ void setMode(int val)
 }
 
 int ll_correction = FALSE;
-double coslatsq;
 
 /* why not use G_distance() here which switches to geodesic/great
    circle distance as needed? */
-double distance(double x1, double x2, double y1, double y2)
+double distance(double x1, double x2, double y1, double y2, double coslatsq)
 {
     if (ll_correction) {
         return DEGREEINMETERS *
@@ -706,44 +715,41 @@ int max(int arg1, int arg2)
 
 /**********************************************************/
 
-void com_par()
+void com_par(PointAngle *point)
 {
-    if (fabs(sinangle) < 0.0000001) {
-        sinangle = 0.;
+    if (fabs(point->sinangle) < 0.0000001) {
+        point->sinangle = 0.;
     }
-    if (fabs(cosangle) < 0.0000001) {
-        cosangle = 0.;
+    if (fabs(point->cosangle) < 0.0000001) {
+        point->cosangle = 0.;
     }
-    distsinangle = 32000;
-    distcosangle = 32000;
+    point->distsinangle = 32000;
+    point->distcosangle = 32000;
 
-    if (sinangle != 0.) {
-        distsinangle = 100. / (distxy * sinangle);
+    if (point->sinangle != 0.) {
+        point->distsinangle = 100. / (distxy * point->sinangle);
     }
-    if (cosangle != 0.) {
-        distcosangle = 100. / (distxy * cosangle);
+    if (point->cosangle != 0.) {
+        point->distcosangle = 100. / (distxy * point->cosangle);
     }
 
-    stepsinangle = stepxy * sinangle;
-    stepcosangle = stepxy * cosangle;
+    point->stepsinangle = stepxy * point->sinangle;
+    point->stepcosangle = stepxy * point->cosangle;
 }
 
-double horizon_height(void)
+double horizon_height(PointAngle *point, int *ip, int *jp, int *ip100,
+                      int *jp100)
 {
     double height;
+    double tanh0 = 0.;
+    double length = 0;
 
-    tanh0 = 0.;
-    length = 0;
-
-    height = searching();
-
-    xx0 = xg0;
-    yy0 = yg0;
+    height = searching(point, &length, &tanh0, ip, jp, ip100, jp100);
 
     return height;
 }
 
-void calculate_shadow(void)
+void calculate_shadow(PointAngle *point)
 {
     double dfr_rad;
 
@@ -753,6 +759,7 @@ void calculate_shadow(void)
     double printangle;
     double sx, sy;
     double xp, yp;
+    int ip, jp, ip100, jp100;
     double latitude, longitude;
     double delt_lat, delt_lon;
     double delt_east, delt_nor;
@@ -764,11 +771,10 @@ void calculate_shadow(void)
 
     if (printCount < 1)
         printCount = 1;
-
     dfr_rad = step * deg2rad;
 
-    xp = xmin + xx0;
-    yp = ymin + yy0;
+    xp = xmin + point->xg0;
+    yp = ymin + point->yg0;
 
     angle = (single_direction * deg2rad) + pihalf;
 
@@ -779,8 +785,8 @@ void calculate_shadow(void)
 
         ip = jp = 0;
 
-        sx = xx0 * invstepx;
-        sy = yy0 * invstepy;
+        sx = point->xg0 * invstepx;
+        sy = point->yg0 * invstepy;
         ip100 = floor(sx / 100.);
         jp100 = floor(sy / 100.);
 
@@ -815,11 +821,11 @@ void calculate_shadow(void)
 
         delt_dist = sqrt(delt_east * delt_east + delt_nor * delt_nor);
 
-        sinangle = delt_nor / delt_dist;
-        cosangle = delt_east / delt_dist;
-        com_par();
+        point->sinangle = delt_nor / delt_dist;
+        point->cosangle = delt_east / delt_dist;
+        com_par(point);
 
-        shadow_angle = horizon_height();
+        shadow_angle = horizon_height(point, &ip, &jp, &ip100, &jp100);
 
         if (degreeOutput) {
             shadow_angle *= rad2deg;
@@ -853,40 +859,43 @@ void calculate_shadow(void)
 
 /*////////////////////////////////////////////////////////////////////// */
 
-int new_point(void)
+int new_point(PointAngle *point, double *xx0, double *yy0, double *length,
+              double *tanh0, double *zp, int *ip, int *jp, int *ip100,
+              int *jp100)
 {
     int iold, jold;
     int succes = 1, succes2 = 1;
     double sx, sy;
     double dx, dy;
 
-    iold = ip;
-    jold = jp;
+    iold = *ip;
+    jold = *jp;
 
     while (succes) {
-        yy0 += stepsinangle;
-        xx0 += stepcosangle;
+        *yy0 += point->stepsinangle;
+        *xx0 += point->stepcosangle;
 
         /* offset 0.5 cell size to get the right cell i, j */
-        sx = xx0 * invstepx + offsetx;
-        sy = yy0 * invstepy + offsety;
-        ip = (int)sx;
-        jp = (int)sy;
+        sx = *xx0 * invstepx + offsetx;
+        sy = *yy0 * invstepy + offsety;
+        *ip = (int)sx;
+        *jp = (int)sy;
 
         /* test outside of raster */
-        if ((ip < 0) || (ip >= n) || (jp < 0) || (jp >= m))
+        if ((*ip < 0) || (*ip >= n) || (*jp < 0) || (*jp >= m))
             return (3);
 
-        if ((ip != iold) || (jp != jold)) {
-            dx = (double)ip * stepx;
-            dy = (double)jp * stepy;
+        if ((*ip != iold) || (*jp != jold)) {
+            dx = (double)*ip * stepx;
+            dy = (double)*jp * stepy;
 
-            length = distance(
-                xg0, dx, yg0,
-                dy); /* dist from orig. grid point to the current grid point */
-            succes2 = test_low_res();
+            *length = distance(point->xg0, dx, point->yg0, dy,
+                               point->coslatsq); /* dist from orig. grid point
+                                                    to the current grid point */
+            succes2 = test_low_res(point, xx0, yy0, *length, *tanh0, *ip, *jp,
+                                   ip100, jp100);
             if (succes2 == 1) {
-                zp = z[jp][ip];
+                *zp = z[*jp][*ip];
                 return (1);
             }
         }
@@ -894,27 +903,28 @@ int new_point(void)
     return -1;
 }
 
-int test_low_res(void)
+int test_low_res(PointAngle *point, double *xx0, double *yy0, double length,
+                 double tanh0, int ip, int jp, int *ip100, int *jp100)
 {
     int iold100, jold100;
     double sx, sy;
     int delx, dely, mindel;
     double zp100, z2, curvature_diff;
 
-    iold100 = ip100;
-    jold100 = jp100;
-    ip100 = floor(ip / 100.);
-    jp100 = floor(jp / 100.);
+    iold100 = *ip100;
+    jold100 = *jp100;
+    *ip100 = floor(ip / 100.);
+    *jp100 = floor(jp / 100.);
     /*test the new position with low resolution */
-    if ((ip100 != iold100) || (jp100 != jold100)) {
+    if ((*ip100 != iold100) || (*jp100 != jold100)) {
         G_debug(2, "ip:%d jp:%d iold100:%d jold100:%d\n", ip, jp, iold100,
                 jold100);
         /*  replace with approximate version
            curvature_diff = EARTHRADIUS*(1.-cos(length/EARTHRADIUS));
          */
         curvature_diff = 0.5 * length * length * invEarth;
-        z2 = z_orig + curvature_diff + length * tanh0;
-        zp100 = z100[jp100][ip100];
+        z2 = point->z_orig + curvature_diff + length * tanh0;
+        zp100 = z100[*jp100][*ip100];
         G_debug(2, "ip:%d jp:%d z2:%lf zp100:%lf \n", ip, jp, z2, zp100);
 
         if (zp100 <= z2)
@@ -922,33 +932,34 @@ int test_low_res(void)
         {
             delx = 32000;
             dely = 32000;
-            if (cosangle > 0.) {
-                sx = xx0 * invstepx + offsetx;
-                delx =
-                    floor(fabs((ceil(sx / 100.) - (sx / 100.)) * distcosangle));
+            if (point->cosangle > 0.) {
+                sx = *xx0 * invstepx + offsetx;
+                delx = floor(fabs((ceil(sx / 100.) - (sx / 100.)) *
+                                  point->distcosangle));
             }
-            if (cosangle < 0.) {
-                sx = xx0 * invstepx + offsetx;
-                delx = floor(
-                    fabs((floor(sx / 100.) - (sx / 100.)) * distcosangle));
+            if (point->cosangle < 0.) {
+                sx = *xx0 * invstepx + offsetx;
+                delx = floor(fabs((floor(sx / 100.) - (sx / 100.)) *
+                                  point->distcosangle));
             }
-            if (sinangle > 0.) {
-                sy = yy0 * invstepy + offsety;
-                dely =
-                    floor(fabs((ceil(sy / 100.) - (sy / 100.)) * distsinangle));
+            if (point->sinangle > 0.) {
+                sy = *yy0 * invstepy + offsety;
+                dely = floor(fabs((ceil(sy / 100.) - (sy / 100.)) *
+                                  point->distsinangle));
             }
-            else if (sinangle < 0.) {
-                sy = yy0 * invstepy + offsety;
-                dely = floor(
-                    fabs((floor(jp / 100.) - (sy / 100.)) * distsinangle));
+            else if (point->sinangle < 0.) {
+                sy = *yy0 * invstepy + offsety;
+                dely = floor(fabs((floor(jp / 100.) - (sy / 100.)) *
+                                  point->distsinangle));
             }
 
             mindel = min(delx, dely);
-            G_debug(2, "%d %d %d %lf %lf\n", ip, jp, mindel, xg0, yg0);
+            G_debug(2, "%d %d %d %lf %lf\n", ip, jp, mindel, point->xg0,
+                    point->yg0);
 
-            yy0 = yy0 + (mindel * stepsinangle);
-            xx0 = xx0 + (mindel * stepcosangle);
-            G_debug(2, "  %lf %lf\n", xx0, yy0);
+            *yy0 = *yy0 + (mindel * point->stepsinangle);
+            *xx0 = *xx0 + (mindel * point->stepcosangle);
+            G_debug(2, "  %lf %lf\n", *xx0, *yy0);
 
             return (3);
         }
@@ -962,41 +973,47 @@ int test_low_res(void)
     }
 }
 
-double searching(void)
+double searching(PointAngle *point, double *length, double *tanh0, int *ip,
+                 int *jp, int *ip100, int *jp100)
 {
-    double z2;
+    double z2, zp;
+    double xx0, yy0;
     double curvature_diff;
     int succes = 1;
 
+    zp = point->z_orig;
+    xx0 = point->xg0;
+    yy0 = point->yg0;
     if (zp == UNDEFZ)
         return 0;
 
     while (1) {
-        succes = new_point();
+        succes = new_point(point, &xx0, &yy0, length, tanh0, &zp, ip, jp, ip100,
+                           jp100);
 
         if (succes != 1) {
             break;
         }
 
         /* curvature_diff = EARTHRADIUS*(1.-cos(length/EARTHRADIUS)); */
-        curvature_diff = 0.5 * length * length * invEarth;
+        curvature_diff = 0.5 * (*length) * (*length) * invEarth;
 
-        z2 = z_orig + curvature_diff + length * tanh0;
+        z2 = point->z_orig + curvature_diff + (*length) * (*tanh0);
 
         if (z2 < zp) {
-            tanh0 = (zp - z_orig - curvature_diff) / length;
+            *tanh0 = (zp - point->z_orig - curvature_diff) / (*length);
         }
 
         if (z2 >= zmax) {
             break;
         }
 
-        if (length >= maxlength) {
+        if (*length >= maxlength) {
             break;
         }
     }
 
-    return atan(tanh0);
+    return atan(*tanh0);
 }
 
 /*////////////////////////////////////////////////////////////////////// */
@@ -1013,6 +1030,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 
     double latitude, longitude;
     double xp, yp;
+    int ip, jp, ip100, jp100;
     double inputAngle;
     double delt_lat, delt_lon;
     double delt_east, delt_nor;
@@ -1031,9 +1049,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 
     int arrayNumInt;
     double dfr_rad, angle_deg;
-
-    xindex = (int)((xcoord - xmin) / stepx);
-    yindex = (int)((ycoord - ymin) / stepy);
+    PointAngle point;
 
     if ((G_projection() == PROJECTION_LL)) {
         ll_correction = TRUE;
@@ -1050,19 +1066,21 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
            xg0 = xx0 = xindex*stepx -0.5*stepx;
            yg0 = yy0 = yindex*stepy -0.5*stepy;
          */
-        xg0 = xx0 = xindex * stepx;
-        yg0 = yy0 = yindex * stepy;
 
+        xindex = (int)((xcoord - xmin) / stepx);
+        yindex = (int)((ycoord - ymin) / stepy);
+        point.xg0 = xindex * stepx;
+        point.yg0 = yindex * stepy;
         if (ll_correction) {
-            coslat = cos(deg2rad * (ymin + yy0));
-            coslatsq = coslat * coslat;
+            coslat = cos(deg2rad * (ymin + point.yg0));
+            point.coslatsq = coslat * coslat;
         }
 
-        z_orig = zp = z[yindex][xindex];
+        point.z_orig = z[yindex][xindex];
         G_debug(1, "yindex: %d, xindex %d, z_orig %.2f", yindex, xindex,
-                z_orig);
+                point.z_orig);
 
-        calculate_shadow();
+        calculate_shadow(&point);
         fclose(fp);
     }
     else {
@@ -1123,16 +1141,15 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
                     ip100 = floor(i / 100.);
                     jp100 = floor(j / 100.);
                     ip = jp = 0;
-                    xg0 = xx0 = (double)i * stepx;
+                    point.xg0 = (double)i * stepx;
 
-                    xp = xmin + xx0;
-                    yg0 = yy0 = (double)j * stepy;
+                    xp = xmin + point.xg0;
+                    point.yg0 = (double)j * stepy;
 
-                    yp = ymin + yy0;
-                    length = 0;
+                    yp = ymin + point.yg0;
                     if (ll_correction) {
                         coslat = cos(deg2rad * yp);
-                        coslatsq = coslat * coslat;
+                        point.coslatsq = coslat * coslat;
                     }
 
                     longitude = xp;
@@ -1169,19 +1186,20 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
                     delt_dist =
                         sqrt(delt_east * delt_east + delt_nor * delt_nor);
 
-                    sinangle = delt_nor / delt_dist;
-                    cosangle = delt_east / delt_dist;
-                    com_par();
+                    point.sinangle = delt_nor / delt_dist;
+                    point.cosangle = delt_east / delt_dist;
+                    com_par(&point);
 
-                    z_orig = zp = z[j][i];
-                    maxlength = (zmax - z_orig) / TANMINANGLE;
+                    point.z_orig = z[j][i];
+                    maxlength = (zmax - point.z_orig) / TANMINANGLE;
                     maxlength = (maxlength < fixedMaxLength) ? maxlength
                                                              : fixedMaxLength;
 
-                    if (z_orig != UNDEFZ) {
+                    if (point.z_orig != UNDEFZ) {
 
                         G_debug(4, "**************new line %d %d\n", i, j);
-                        shadow_angle = horizon_height();
+                        shadow_angle =
+                            horizon_height(&point, &ip, &jp, &ip100, &jp100);
 
                         if (degreeOutput) {
                             shadow_angle *= rad2deg;
