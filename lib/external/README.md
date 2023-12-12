@@ -1,12 +1,12 @@
 # How to add a new external library
 
-The follow procedure will walk you through adding a new third-party
+The following procedure will walk you through adding a new third-party
 library to GRASS GIS.
 
 ## License
 
-Before you begin make sure the library you want to include is complient with
-GRASS GIS's license.
+Before you start, make sure that the library you want to include is in
+compliance with the GRASS GIS licence.
 
 ### Approved Third-Party Licenses
 
@@ -22,7 +22,7 @@ GRASS GIS's license.
 * Create a directory that will contain the new library's files
 in `lib/external/<new-library>`
 
-* Add the new libraries header, c, license, and README to the newly
+* Add the new libraries header and source files, license, and README to the newly
 created directory.
 
 * Add a new `Makefile` to the directory.
