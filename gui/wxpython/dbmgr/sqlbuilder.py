@@ -887,9 +887,7 @@ class SQLBuilderWhere(SQLBuilder):
             "map": vectmap,
         }
 
-        super(SQLBuilderWhere, self).__init__(
-            parent, title, vectmap, id=wx.ID_ANY, layer=layer
-        )
+        super().__init__(parent, title, vectmap, id=wx.ID_ANY, layer=layer)
 
     def OnClear(self, event):
         self.text_sql.SetValue("")

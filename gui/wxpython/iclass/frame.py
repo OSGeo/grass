@@ -1354,17 +1354,17 @@ class IClassMapPanel(DoubleMapPanel):
 
     def OnZoomIn(self, event):
         """Enable zooming for plots"""
-        super(IClassMapPanel, self).OnZoomIn(event)
+        super().OnZoomIn(event)
         self.plotPanel.EnableZoom(type=1)
 
     def OnZoomOut(self, event):
         """Enable zooming for plots"""
-        super(IClassMapPanel, self).OnZoomOut(event)
+        super().OnZoomOut(event)
         self.plotPanel.EnableZoom(type=-1)
 
     def OnPan(self, event):
         """Enable panning for plots"""
-        super(IClassMapPanel, self).OnPan(event)
+        super().OnPan(event)
         self.plotPanel.EnablePan()
 
     def OnPointer(self, event):

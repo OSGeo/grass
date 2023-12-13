@@ -27,7 +27,7 @@ def _islambda(function):
     )
 
 
-class Signal(object):
+class Signal:
     """
 
     The signal object is created usually as a instance attribute.
