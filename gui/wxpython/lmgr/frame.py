@@ -451,6 +451,9 @@ class GMFrame(wx.Frame):
             self.history.showNotification.connect(
                 lambda message: self.SetStatusText(message)
             )
+            self.history.runIgnoredCmdPattern.connect(
+                lambda cmd: self.RunSpecialCmd(command=cmd),
+            )
         else:
             self.history = None
 
