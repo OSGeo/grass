@@ -423,10 +423,7 @@ class GMFrame(wx.Frame):
         self._gconsole = GConsole(
             guiparent=self,
             giface=self._giface,
-            ignoredCmdPattern="^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.import$|"
-            "^r.external$|^r.external.out$|"
-            "^v.import$|^v.external$|^v.external.out$|"
-            "^cd$|^cd .*",
+            ignoredCmdPattern=globalvar.ignoredCmdPattern,
         )
         # create 'console' widget
         self.goutput = GConsoleWindow(
