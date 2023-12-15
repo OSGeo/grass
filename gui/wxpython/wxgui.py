@@ -24,7 +24,7 @@ import getopt
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
 from grass.exceptions import Usage
-from grass.script.core import set_raise_on_error, warning, error
+from grass.script.core import run_command, set_raise_on_error, warning, error
 
 from core import globalvar
 from core.utils import registerPid, unregisterPid
@@ -89,6 +89,9 @@ class GMApp(wx.App):
                 from main_window.frame import GMFrame
             else:
                 from lmgr.frame import GMFrame
+            # Set gisenv MEMORYMB var value
+            memorymb = UserSettings.Get(group="cmd", key="memorymb", subkey="value")
+            run_command("g.gisenv", set=f"MEMORYMB={memorymb}")
             try:
                 mainframe = GMFrame(
                     parent=None, id=wx.ID_ANY, workspace=self.workspaceFile

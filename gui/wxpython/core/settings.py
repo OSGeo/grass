@@ -22,9 +22,11 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
-import wx
 import json
 import collections.abc
+
+import psutil
+import wx
 
 from core import globalvar
 from core.gcmd import GException, GError
@@ -124,6 +126,7 @@ class Settings:
             projFile = ""
 
         id_loc = self._generateLocale()
+        total_memory = psutil.virtual_memory().total / 1024**2
 
         self.defaultSettings = {
             #
@@ -266,6 +269,9 @@ class Settings:
                 },
                 "interactiveInput": {
                     "enabled": True,
+                },
+                "memorymb": {
+                    "value": int(total_memory - (1 / 6 * total_memory)),
                 },
             },
             #
