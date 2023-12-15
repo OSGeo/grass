@@ -128,7 +128,7 @@ class HistoryBrowser(wx.Panel):
         if expression_param not in "".join(command):
             expression_param_arg = f"{expression_param}{''.join(command[1:])}"
         else:
-            expression_param_arg = f"{''.join(command[1:])}"
+            expression_param_arg = "".join(command[1:])
 
         command = " ".join(
             [
