@@ -35,7 +35,6 @@ try:
 except ImportError:
     havePwd = False
 
-import psutil
 import wx
 import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
@@ -203,9 +202,6 @@ class PreferencesBaseDialog(wx.Dialog):
                     group="language", key="locale", subkey="lc_all", value=None
                 )
                 lang = None
-            # Set gisenv MEMORYMB var value
-            memorymb = self.settings.Get(group="cmd", key="memorymb", subkey="value")
-            grass.run_command("g.gisenv", set=f"MEMORYMB={memorymb}")
             self.settings.SaveToFile()
             Debug.msg(1, "Settings saved to file '%s'" % self.settings.filePath)
             self.settingsChanged.emit()
@@ -1248,34 +1244,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.winId["cmd:verbosity:selection"] = verbosity.GetId()
 
         gridSizer.Add(verbosity, pos=(row, 1), flag=wx.ALIGN_RIGHT)
-
-        row += 1
-        # memory
-        gridSizer.Add(
-            StaticText(
-                parent=panel,
-                id=wx.ID_ANY,
-                label=_("Maximum memory to be used (in MB):"),
-            ),
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
-            pos=(row, 0),
-        )
-        memory = SpinCtrl(
-            parent=panel,
-            id=wx.ID_ANY,
-            min=100,
-            max=int(psutil.virtual_memory().total / 1024**2),
-            name="Memory",
-        )
-        env = grass.gisenv()
-        memorymb = env.get(
-            "MEMORYMB",
-            int(self.settings.Get(group="cmd", key="memorymb", subkey="value")),
-        )
-        memory.SetValue(memorymb)
-        self.winId["cmd:memorymb:value"] = memory.GetId()
-
-        gridSizer.Add(memory, pos=(row, 1), flag=wx.ALIGN_RIGHT)
 
         gridSizer.AddGrowableCol(0)
         sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
