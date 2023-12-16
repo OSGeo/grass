@@ -202,6 +202,33 @@ class PreferencesBaseDialog(wx.Dialog):
                     group="language", key="locale", subkey="lc_all", value=None
                 )
                 lang = None
+            env = grass.gisenv()
+            nprocs_gisenv = "NPROCS"
+            memorydb_gisenv = "MEMORYMB"
+            # Set gisenv MEMORYMB var value
+            memorymb = self.memorymb.GetValue()
+            if memorymb:
+                grass.run_command(
+                    "g.gisenv",
+                    set=f"{memorydb_gisenv}={memorymb}",
+                )
+            elif env.get(memorydb_gisenv):
+                grass.run_command(
+                    "g.gisenv",
+                    unset=memorydb_gisenv,
+                )
+            # Set gisenv NPROCS var value
+            nprocs = self.nprocs.GetValue()
+            if nprocs:
+                grass.run_command(
+                    "g.gisenv",
+                    set=f"{nprocs_gisenv}={nprocs}",
+                )
+            elif env.get(nprocs_gisenv):
+                grass.run_command(
+                    "g.gisenv",
+                    unset=nprocs_gisenv,
+                )
             self.settings.SaveToFile()
             Debug.msg(1, "Settings saved to file '%s'" % self.settings.filePath)
             self.settingsChanged.emit()
@@ -1244,6 +1271,54 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.winId["cmd:verbosity:selection"] = verbosity.GetId()
 
         gridSizer.Add(verbosity, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+
+        row += 1
+        # nprocs
+        gridSizer.Add(
+            StaticText(
+                parent=panel,
+                id=wx.ID_ANY,
+                label=_("Number of threads for parallel computing:"),
+            ),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 0),
+        )
+        self.nprocs = TextCtrl(
+            parent=panel,
+            id=wx.ID_ANY,
+            value=grass.gisenv().get("NPROCS", ""),
+            validator=IntegerValidator(),
+            name="NumberOfProcs",
+        )
+        gridSizer.Add(
+            self.nprocs,
+            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 1),
+        )
+
+        row += 1
+        # memorymb
+        gridSizer.Add(
+            StaticText(
+                parent=panel,
+                id=wx.ID_ANY,
+                label=_("Maximum memory to be used (in MB):"),
+            ),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 0),
+        )
+        self.memorymb = TextCtrl(
+            parent=panel,
+            id=wx.ID_ANY,
+            value=grass.gisenv().get("MEMORYMB", ""),
+            validator=IntegerValidator(),
+            name="MemorySizeMB",
+        )
+        gridSizer.Add(
+            self.memorymb,
+            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 1),
+        )
 
         gridSizer.AddGrowableCol(0)
         sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
