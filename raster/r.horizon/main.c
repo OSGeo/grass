@@ -68,10 +68,7 @@ const double minAngle = DEG;
 
 const char *elevin;
 const char *horizon_basename = NULL;
-const char *mapset = NULL;
-const char *per;
 char *shad_filename;
-char *outfile;
 
 struct Cell_head cellhd;
 struct pj_info iproj, oproj, tproj;
@@ -366,7 +363,7 @@ int main(int argc, char *argv[])
          */
 
         /* Open ASCII file for output or stdout */
-        outfile = parm.output->answer;
+        char *outfile = parm.output->answer;
 
         if ((strcmp("-", outfile)) == 0) {
             fp = stdout;
