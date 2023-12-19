@@ -509,9 +509,9 @@ class GMFrame(wx.Frame):
         return self.GetMapDisplay()
 
     def ShowFullScreen(self, mapdisplay):
-        """Show fullscreen Map Display frame
+        """Switch Map Display frame to full-screen mode
 
-        :param Window mapdisplay: current Map Display page
+        :param object mapdisplay: current Map Display page instance
 
         :return bool: True if statusbar pane is shown
         """
@@ -525,29 +525,35 @@ class GMFrame(wx.Frame):
         return False if pane.IsShown() else True
 
     def ShowPanes(self, minimize):
-        """Show/hide datacatalog, layers, tools panes
+        """Minimize/restore datacatalog, layers, tools pane
 
-        :param bool minimize: show/hide pane
-
-        :return None
+        :param bool minimize: True if the pane is minimized
         """
         for pane in ["datacatalog", "layers", "tools"]:
-            if minimize:
-                # Hide
-                self._auimgr.MinimizePane(self._auimgr.GetPane(pane))
+            if pane == "tools":
+                notebooks = self._auimgr.GetNotebooks()
+                if notebooks:
+                    notebook = notebooks[0]
+                    pane = self._auimgr.GetPane(notebook)
+                else:
+                    return
             else:
-                # Show
-                self._auimgr.RestoreMinimizedPane(self._auimgr.GetPane(pane))
+                pane = self._auimgr.GetPane(pane)
+
+            if minimize:
+                self._auimgr.MinimizePane(pane)
+            else:
+                self._auimgr.RestoreMinimizedPane(pane)
 
     def OnFullScreen(self, event):
-        """Switches frame to fullscreen mode, hides toolbars, statusbar
-        and panes
+        """Switches Map Display frame to full-screen mode, hides toolbars,
+        statusbar and panes
         """
         mapdisplay = self.mapnotebook.GetCurrentPage()
-        show = self.ShowFullScreen(
+        minimize = self.ShowFullScreen(
             mapdisplay=mapdisplay,
         )
-        self.ShowPanes(minimize=show)
+        self.ShowPanes(minimize)
         event.Skip()
 
     def _setUpMapDisplay(self, mapdisplay):
