@@ -18,6 +18,7 @@ for details.
 import wx
 import re
 
+from core import globalvar
 from core.gcmd import GError, GException
 from gui_core.forms import GUI
 from gui_core.treeview import CTreeView
@@ -46,6 +47,7 @@ class HistoryBrowser(wx.Panel):
         self._giface = giface
 
         self.showNotification = Signal("HistoryBrowser.showNotification")
+        self.runIgnoredCmdPattern = Signal("HistoryBrowser.runIgnoredCmdPattern")
         wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
 
         self._createTree()
@@ -109,6 +111,14 @@ class HistoryBrowser(wx.Panel):
         if node:
             command = node.data["command"]
             lst = re.split(r"\s+", command)
+            if (
+                globalvar.ignoredCmdPattern
+                and re.compile(globalvar.ignoredCmdPattern).search(command)
+                and "--help" not in command
+                and "--ui" not in command
+            ):
+                self.runIgnoredCmdPattern.emit(cmd=lst)
+                return
             try:
                 GUI(parent=self, giface=self._giface).ParseCommand(lst)
             except GException as e:

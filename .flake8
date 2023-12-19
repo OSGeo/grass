@@ -50,6 +50,7 @@ per-file-ignores =
     gui/wxpython/core/giface.py: E501
     gui/wxpython/core/gthread.py: F841
     gui/wxpython/core/gconsole.py: E722, W605
+    gui/wxpython/core/globalvar.py: W605
     gui/wxpython/core/toolboxes.py: E722, E501
     gui/wxpython/core/utils.py: E722, F841, W605
     gui/wxpython/core/workspace.py: E722, E501
