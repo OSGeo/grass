@@ -61,7 +61,6 @@ int centroid(OGRGeometryH hGeomAny, CENTR *Centr, struct spatial_index *Sindex,
 
     hGeom = hGeomAny;
 
-#if GDAL_VERSION_NUM >= 2000000
     if (OGR_G_HasCurveGeometry(hGeom, 0)) {
         G_debug(2, "Approximating curves in a '%s'",
                 OGR_G_GetGeometryName(hGeom));
@@ -69,7 +68,6 @@ int centroid(OGRGeometryH hGeomAny, CENTR *Centr, struct spatial_index *Sindex,
         /* The ownership of the returned geometry belongs to the caller. */
         hGeom = OGR_G_GetLinearGeometry(hGeom, 0, NULL);
     }
-#endif
 
     eType = wkbFlatten(OGR_G_GetGeometryType(hGeom));
 
@@ -196,7 +194,6 @@ int poly_count(OGRGeometryH hGeomAny, int line2boundary)
 
     hGeom = hGeomAny;
 
-#if GDAL_VERSION_NUM >= 2000000
     if (OGR_G_HasCurveGeometry(hGeom, 0)) {
         G_debug(2, "Approximating curves in a '%s'",
                 OGR_G_GetGeometryName(hGeom));
@@ -204,7 +201,6 @@ int poly_count(OGRGeometryH hGeomAny, int line2boundary)
         /* The ownership of the returned geometry belongs to the caller. */
         hGeom = OGR_G_GetLinearGeometry(hGeom, 0, NULL);
     }
-#endif
 
     eType = wkbFlatten(OGR_G_GetGeometryType(hGeom));
 
@@ -290,7 +286,6 @@ int geom(OGRGeometryH hGeomAny, struct Map_info *Map, int field, int cat,
 
     hGeom = hGeomAny;
 
-#if GDAL_VERSION_NUM >= 2000000
     if (OGR_G_HasCurveGeometry(hGeom, 0)) {
         G_debug(2, "Approximating curves in a '%s'",
                 OGR_G_GetGeometryName(hGeom));
@@ -298,7 +293,6 @@ int geom(OGRGeometryH hGeomAny, struct Map_info *Map, int field, int cat,
         /* The ownership of the returned geometry belongs to the caller. */
         hGeom = OGR_G_GetLinearGeometry(hGeom, 0, NULL);
     }
-#endif
 
     eType = wkbFlatten(OGR_G_GetGeometryType(hGeom));
 
