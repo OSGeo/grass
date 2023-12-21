@@ -112,7 +112,6 @@ class HistoryBrowser(wx.Panel):
         if text:
             model = self._model.model.Filtered(key=["command"], value=text)
             self._tree.SetModel(model)
-            self._tree.ExpandAll()
         else:
             self._tree.SetModel(model)
 
