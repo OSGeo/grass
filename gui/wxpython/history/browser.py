@@ -133,13 +133,22 @@ class HistoryBrowser(wx.Panel):
                     self._selected_cmd_node,
                 )[0]
                 self.showNotification.emit(message=_("Deleting <{}>").format(cmd))
-                with open(history_path, "r+") as f:
-                    lines = f.readlines()
-                    f.seek(0)
-                    f.truncate()
-                    for number, line in enumerate(lines):
-                        if number not in [del_line_number]:
-                            f.write(line)
+                try:
+                    with open(history_path, "r+") as f:
+                        lines = f.readlines()
+                        f.seek(0)
+                        f.truncate()
+                        for number, line in enumerate(lines):
+                            if number not in [del_line_number]:
+                                f.write(line)
+                except OSError as e:
+                    GError(
+                        parent=self,
+                        message=str(e),
+                        caption=_("Cannot update history file"),
+                        showTraceback=False,
+                    )
+                    return
             self._model.CreateModel()
             self._refreshTree()
             self.showNotification.emit(message=_("<{}> deleted").format(cmd))
