@@ -6,6 +6,7 @@
 # AUTHOR(S):	Markus Neteler. neteler itc it
 #               Hamish Bowman
 #               Converted to Python by Glynn Clements
+#               edit by Veronica Köß
 # PURPOSE:	WFS support
 # COPYRIGHT:	(C) 2006-2012 Markus Neteler and the GRASS Development Team
 #
@@ -45,10 +46,24 @@
 # % required: no
 # %end
 # %option
+# % key: layer
+# % type: string
+# % description: name of data layers to import
+# % multiple: yes
+# % required: yes
+# %end
+# %option
 # % key: srs
 # % type: string
 # % label: Specify alternate spatial reference system (example: EPSG:4326)
 # % description: The given code must be supported by the server, consult the capabilities file
+# % required: no
+# %end
+# %option
+# % key: aoi
+# % type: string
+# % description: Comma separated coordinates e.g. 335719,5615930,354798,5636274 in the region srs
+# % multiple: yes
 # % required: no
 # %end
 # %option
@@ -62,6 +77,14 @@
 # % type: integer
 # % label: Skip earlier feature IDs and start downloading at this one
 # % description: (default: start with the first feature)
+# %end
+# %option
+# % key: version
+# % type: string
+# % required: no
+# % multiple: no
+# % description: version of wfs, e.g.:1.0.0 or 2.0.0
+# % answer: 1.0.0
 # %end
 # %option
 # % key: username
@@ -94,21 +117,37 @@ import sys
 from grass.script.utils import try_remove
 from grass.script import core as grass
 
-from urllib.request import urlopen
-from urllib.request import build_opener, install_opener
-from urllib.request import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler
-from urllib.error import URLError, HTTPError
+try:
+    from urllib2 import urlopen, URLError, HTTPError
+    from urllib2 import build_opener, install_opener
+    from urllib2 import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler
+except ImportError:
+    from urllib.request import urlopen
+    from urllib.request import build_opener, install_opener
+    from urllib.request import HTTPPasswordMgrWithDefaultRealm
+    from urllib.request import HTTPBasicAuthHandler
+    from urllib.error import URLError, HTTPError
 
 
 def main():
     out = options["output"]
     wfs_url = options["url"]
 
-    request_base = "REQUEST=GetFeature&SERVICE=WFS&VERSION=1.0.0"
+    request_base = "REQUEST=GetFeature&SERVICE=WFS"
     wfs_url += request_base
+    version_num = options["version"]
 
     if options["name"]:
-        wfs_url += "&TYPENAME=" + options["name"]
+        if tuple([int(x) for x in version_num.split(".")]) >= (2, 0, 0):
+            wfs_url += "&TYPENAMES=" + options["name"]
+        else:
+            wfs_url += "&TYPENAME=" + options["name"]
+
+    if options["aoi"]:
+        wfs_url += "&BBOX=" + options["aoi"]
+
+    if options["version"]:
+        wfs_url += "&VERSION=" + version_num
 
     if options["srs"]:
         wfs_url += "&SRS=" + options["srs"]
@@ -130,7 +169,12 @@ def main():
         wfs_url += "&BBOX=" + bbox
 
     if flags["l"]:
-        wfs_url = options["url"] + "REQUEST=GetCapabilities&SERVICE=WFS&VERSION=1.0.0"
+        if options["version"]:
+            wfs_url += "&VERSION=" + options["version"]
+        else:
+            wfs_url = options["url"] + "REQUEST=GetCapabilities&SERVICE=WFS"
+
+    print(wfs_url)
 
     tmp = grass.tempfile()
     tmpxml = tmp + ".xml"
@@ -169,9 +213,7 @@ def main():
         inf = urlopen(wfs_url)
     except HTTPError as e:
         # GTC WFS request HTTP failure
-        grass.fatal(
-            _("The server couldn't fulfill the request.\nError code: %s") % e.code
-        )
+        grass.fatal(_("Server couldn't fulfill the request.\nError code: %s") % e.code)
     except URLError as e:
         # GTC WFS request network failure
         grass.fatal(_("Failed to reach the server.\nReason: %s") % e.reason)
@@ -197,7 +239,16 @@ def main():
 
     grass.message(_("Importing data..."))
     try:
-        grass.run_command("v.in.ogr", flags="o", input=tmpxml, output=out)
+        if options["layer"]:
+            grass.run_command(
+                "v.in.ogr",
+                flags="o",
+                input=tmpxml,
+                output=out,
+                layer=options["layer"],
+            )
+        else:
+            grass.run_command("v.in.ogr", flags="o", input=tmpxml, output=out)
         grass.message(_("Vector map <%s> imported from WFS.") % out)
     except Exception:
         grass.message(_("WFS import failed"))
