@@ -36,6 +36,7 @@ except ImportError:
     havePwd = False
 
 import wx
+import wx.lib.agw.aui as aui
 import wx.lib.colourselect as csel
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as SP
@@ -472,6 +473,43 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.winId["general:defWindowPos:enabled"] = defaultPos.GetId()
 
         gridSizer.Add(defaultPos, pos=(row, 0), span=(1, 2))
+
+        #
+        # single window layout panes position
+        #
+        row += 1
+        singleWinPanesLayoutPos = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Save current single window panes layout as default"),
+            name="SingleWinPanesLayoutPos",
+        )
+        singleWinPanesLayoutPos.SetValue(
+            self.settings.Get(
+                group="general",
+                key="singleWinPanesLayoutPos",
+                subkey="enabled",
+            )
+        )
+        singleWinPanesLayoutPos.SetToolTip(
+            wx.ToolTip(
+                _(
+                    "Save current position and size of single-window mode panes"
+                    " and use as default for next sessions."
+                )
+            )
+        )
+        if not self.settings.Get(
+            group="appearance",
+            key="singleWindow",
+            subkey="enabled",
+        ):
+            singleWinPanesLayoutPos.Disable()
+        self.winId[
+            "general:singleWinPanesLayoutPos:enabled"
+        ] = singleWinPanesLayoutPos.GetId()
+
+        gridSizer.Add(singleWinPanesLayoutPos, pos=(row, 0), span=(1, 2))
 
         gridSizer.AddGrowableCol(0)
         sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
@@ -1900,6 +1938,24 @@ class PreferencesDialog(PreferencesBaseDialog):
                 # multi window mode
                 self.settings.Set(
                     group="general", key="defWindowPos", subkey="dim", value=dim
+                )
+
+        #
+        # update single window panes layout
+        #
+        single_win_panes_layout_pos = self.settings.Get(
+            group="general",
+            key="singleWinPanesLayoutPos",
+            subkey="enabled",
+        )
+        if single_window and single_win_panes_layout_pos:
+            aui_manager = aui.GetManager(self.parent)
+            if aui_manager:
+                self.settings.Set(
+                    group="general",
+                    key="singleWinPanesLayoutPos",
+                    subkey="pos",
+                    value=aui_manager.SavePerspective(),
                 )
 
         return True
