@@ -193,7 +193,7 @@ If you are unsure, please ask on the GRASS Developers list.
 
 If you need to add support for a different library in the 'configure' script, you
 should first seek consent in the grass-dev mailing list (see below), then you need
-to expand 'configure.in' and run subsequently `autoconf-2.69` (later versions
+to expand 'configure.ac' and subsequently run `autoconf-2.71` (later versions
 will not work) to re-generate 'configure'.
 
 ## Naming Conventions
