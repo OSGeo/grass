@@ -80,7 +80,7 @@ jobs:
                        nc_spm_full_v2alpha2.tar.gz"
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: testreport-macOS
           path: testreport
