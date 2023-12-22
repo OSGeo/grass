@@ -368,8 +368,9 @@ int geom(OGRGeometryH hGeomAny, struct Map_info *Map, int field, int cat,
             Points->z[0] != Points->z[lastidx]) {
             if (mk_centr) {
                 /* do not clean polygons */
-                G_fatal_error(_("Found unclosed outer polygon ring, can be "
-                                "closed when cleaning polygons is enabled"));
+                G_fatal_error(
+                    _("Found unclosed outer polygon ring, can be "
+                      "closed when cleaning polygons is not disabled"));
             }
             else {
                 G_warning(_("Closing unclosed outer polygon ring"));
@@ -435,7 +436,7 @@ int geom(OGRGeometryH hGeomAny, struct Map_info *Map, int field, int cat,
                         /* do not clean polygons */
                         G_fatal_error(
                             _("Found unclosed inner polygon ring, can be "
-                              "closed when cleaning polygons is enabled"));
+                              "closed when cleaning polygons is not disabled"));
                     }
                     else {
                         G_warning(_("Closing unclosed inner polygon ring"));
