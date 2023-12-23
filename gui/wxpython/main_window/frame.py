@@ -525,25 +525,38 @@ class GMFrame(wx.Frame):
         return False if pane.IsShown() else True
 
     def ShowPanes(self, minimize):
-        """Minimize/restore datacatalog, layers, tools pane
+        """Minimize/restore docked datacatalog, layers, tools, console,
+        history, python pane
 
         :param bool minimize: True if the pane is minimized
         """
-        for pane in ["datacatalog", "layers", "tools"]:
-            if pane == "tools":
-                notebooks = self._auimgr.GetNotebooks()
-                if notebooks:
-                    notebook = notebooks[0]
-                    pane = self._auimgr.GetPane(notebook)
-                else:
-                    return
-            else:
-                pane = self._auimgr.GetPane(pane)
-
+        # Notebooks panes
+        notebooks = self._auimgr.GetNotebooks()
+        for notebook in notebooks:
+            pane = self._auimgr.GetPane(notebook)
             if minimize:
                 self._auimgr.MinimizePane(pane)
             else:
                 self._auimgr.RestoreMinimizedPane(pane)
+
+        panes = [
+            "datacatalog",
+            "layers",
+            "tools",
+            "console",
+            "history",
+            "python",
+        ]
+        for pane in panes:
+            pane = self._auimgr.GetPane(pane)
+            if (
+                pane.dock_direction != aui.AUI_DOCK_NOTEBOOK_PAGE
+                and not pane.IsFloating()
+            ):
+                if minimize:
+                    self._auimgr.MinimizePane(pane)
+                else:
+                    self._auimgr.RestoreMinimizedPane(pane)
 
     def OnFullScreen(self, event):
         """Switches Map Display frame to full-screen mode, hides toolbars,
