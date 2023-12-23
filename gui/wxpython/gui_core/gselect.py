@@ -2675,7 +2675,7 @@ class GdalSelect(wx.Panel):
         except ImportError:
             GError(
                 parent=self,
-                message=_("The Python osgeo package is missing. Please install it."),
+                message=_("The Python GDAL package is missing. Please install it."),
             )
             return []
         rasterlite = gdal.Open(dsn)
