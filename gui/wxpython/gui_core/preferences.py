@@ -1278,7 +1278,9 @@ class PreferencesDialog(PreferencesBaseDialog):
             StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
-                label=_("Number of threads for parallel computing:"),
+                label=_(
+                    "Number of threads for parallel computing (supported tools only):"
+                ),
             ),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
             pos=(row, 0),
@@ -1302,7 +1304,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             StaticText(
                 parent=panel,
                 id=wx.ID_ANY,
-                label=_("Maximum memory to be used (in MB):"),
+                label=_("Maximum memory in MB to be used (supported tools only):"),
             ),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
             pos=(row, 0),
