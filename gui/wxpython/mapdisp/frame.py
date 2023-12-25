@@ -123,6 +123,9 @@ class MapPanel(SingleMapPanel):
         # undock/dock bound method
         self._docking_callback = None
 
+        # Saved Map Display output img size
+        self._saved_output_img_size = None
+
         # Emitted when switching map notebook tabs (Single-Window)
         self.onFocus = Signal("MapPanel.onFocus")
 
@@ -757,12 +760,12 @@ class MapPanel(SingleMapPanel):
             return
 
         # get size
-        dlg = ImageSizeDialog(self)
+        dlg = ImageSizeDialog(self, img_size=self._saved_output_img_size)
         dlg.CentreOnParent()
         if dlg.ShowModal() != wx.ID_OK:
             dlg.Destroy()
             return
-        width, height = dlg.GetValues()
+        self._saved_output_img_size = dlg.GetValues()
         dlg.Destroy()
 
         # get filename
@@ -787,7 +790,7 @@ class MapPanel(SingleMapPanel):
             if ext != extType:
                 path = base + "." + extType
 
-            self.MapWindow.SaveToFile(path, fileType, width, height)
+            self.MapWindow.SaveToFile(path, fileType, *self._saved_output_img_size)
 
         dlg.Destroy()
 
