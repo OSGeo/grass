@@ -25,7 +25,6 @@ from gui_core.treeview import CTreeView
 from gui_core.wrap import Menu
 from history.tree import HistoryBrowserTree
 
-from grass.grassdb.history import get_current_mapset_gui_history_path
 from grass.pydispatch.signal import Signal
 
 
@@ -47,7 +46,6 @@ class HistoryBrowser(wx.Panel):
     ):
         self.parent = parent
         self._giface = giface
-        self._selected_cmd_node = None
 
         self.showNotification = Signal("HistoryBrowser.showNotification")
         self.runIgnoredCmdPattern = Signal("HistoryBrowser.runIgnoredCmdPattern")
@@ -117,40 +115,39 @@ class HistoryBrowser(wx.Panel):
         self._model.CreateModel()
         self._refreshTree()
 
-    def UpdateHistoryModelByCommand(self, cmd):
-        """Update the model by the command and refresh the tree"""
-        self._model.UpdateModel(cmd)
+    def UpdateHistoryModelByCommand(self, cmd=None, node=None, update="add"):
+        """Update the model by the command and refresh the tree
+
+        :param str|Node cmd: model node label if update param arg is add
+        :param str update: type of model update operation add|delete
+                           model node
+        :param object|None node: selected tree node object instance if
+                                 update param arg is delete
+        """
+        self._model.UpdateModel(cmd, update, node)
         self._refreshTree()
 
     def OnDeleteCmd(self, event):
         """Delete cmd from the history file"""
-        cmd = self._selected_cmd_node.data["command"]
+        node = self._getSelectedNode()
+        cmd = node.data["command"]
         question = _("Do you really want to delete <{}> command?").format(cmd)
         if self._confirmDialog(question, title=_("Delete command")) == wx.ID_YES:
-            history_path = get_current_mapset_gui_history_path()
-            if history_path:
-                del_line_number = self._model.model.GetIndexOfNode(
-                    self._selected_cmd_node,
-                )[0]
-                self.showNotification.emit(message=_("Deleting <{}>").format(cmd))
-                try:
-                    with open(history_path, "r+") as f:
-                        lines = f.readlines()
-                        f.seek(0)
-                        f.truncate()
-                        for number, line in enumerate(lines):
-                            if number not in [del_line_number]:
-                                f.write(line)
-                except OSError as e:
-                    GError(
-                        parent=self,
-                        message=str(e),
-                        caption=_("Cannot update history file"),
-                        showTraceback=False,
-                    )
-                    return
-            self._model.CreateModel()
-            self._refreshTree()
+            self.showNotification.emit(message=_("Deleting <{}>").format(cmd))
+            try:
+                self._model.DeleteEntryFromHistory(node=node)
+            except OSError as e:
+                GError(
+                    parent=self,
+                    message=f"{e} {e.__cause__}",
+                    caption=_("Cannot update history file"),
+                    showTraceback=False,
+                )
+                return
+            self.UpdateHistoryModelByCommand(
+                update="delete",
+                node=node,
+            )
             self.showNotification.emit(message=_("<{}> deleted").format(cmd))
 
     def OnItemSelected(self, node):
@@ -160,7 +157,6 @@ class HistoryBrowser(wx.Panel):
 
     def OnRightClick(self, node):
         """Display popup menu"""
-        self._selected_cmd_node = node
         self._popupMenuLayer()
 
     def Run(self, node=None):
