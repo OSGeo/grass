@@ -36,7 +36,6 @@ import os
 import string
 from math import ceil
 from time import strftime, localtime
-from io import open
 
 import wx
 import grass.script as grass
