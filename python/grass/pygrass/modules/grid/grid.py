@@ -44,8 +44,7 @@ def select(parms, ptype):
         par = parms[k]
         if par.type == ptype or par.typedesc == ptype and par.value:
             if par.multiple:
-                for val in par.value:
-                    yield val
+                yield from par.value
             else:
                 yield par.value
 
