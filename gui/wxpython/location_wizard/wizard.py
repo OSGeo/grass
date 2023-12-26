@@ -2392,9 +2392,7 @@ class SummaryPage(TitledPage):
                 self.parent.custompage.customstring
                 + self.parent.custompage.custom_dtrans_string
             )
-            self.lproj4string.SetLabel(
-                ("%s" % combo_str.replace(" +", os.linesep + "+"))
-            )
+            self.lproj4string.SetLabel("%s" % combo_str.replace(" +", os.linesep + "+"))
 
         self.lprojection.SetLabel(label)
 
