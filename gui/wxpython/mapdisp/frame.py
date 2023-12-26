@@ -398,7 +398,7 @@ class MapPanel(SingleMapPanel):
             .TopDockable(True)
             .CloseButton(False)
             .Layer(2)
-            .BestSize((self.toolbars["vdigit"].GetBestSize())),
+            .BestSize(self.toolbars["vdigit"].GetBestSize()),
         )
         # change mouse to draw digitized line
         self.MapWindow.mouse["box"] = "point"
@@ -628,7 +628,7 @@ class MapPanel(SingleMapPanel):
                 .TopDockable(True)
                 .CloseButton(False)
                 .Layer(2)
-                .BestSize((self.toolbars["map"].GetBestSize())),
+                .BestSize(self.toolbars["map"].GetBestSize()),
             )
 
         # nviz
@@ -1683,7 +1683,7 @@ class MapPanel(SingleMapPanel):
             .CloseButton(False)
             .Layer(2)
             .DestroyOnClose()
-            .BestSize((self.toolbars["rdigit"].GetBestSize())),
+            .BestSize(self.toolbars["rdigit"].GetBestSize()),
         )
         self._mgr.Update()
 

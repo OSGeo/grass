@@ -203,7 +203,7 @@ class GMFrame(wx.Frame):
                 .TopDockable(True)
                 .CloseButton(False)
                 .Layer(2)
-                .BestSize((self.toolbars[toolbar].GetBestSize())),
+                .BestSize(self.toolbars[toolbar].GetBestSize()),
             )
 
         self._auimgr.GetPane("toolbarNviz").Hide()
