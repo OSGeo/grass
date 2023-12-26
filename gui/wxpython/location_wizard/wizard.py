@@ -763,7 +763,7 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
         item1 = self.itemDataMap[key1][self._col]
         item2 = self.itemDataMap[key2][self._col]
 
-        if isinstance(item1, type("")) or isinstance(item2, type("")):
+        if isinstance(item1, str) or isinstance(item2, str):
             cmpVal = locale.strcoll(str(item1), str(item2))
         else:
             cmpVal = cmp(item1, item2)
