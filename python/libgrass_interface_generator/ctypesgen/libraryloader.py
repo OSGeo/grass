@@ -126,7 +126,9 @@ class LibraryLoader:
             # then we search the directory where the generated python interface is stored
             if this_file is not None:
                 for fmt in self.name_formats:
-                    yield os.path.abspath(os.path.join(os.path.dirname(__file__), fmt % libname))
+                    yield os.path.abspath(
+                        os.path.join(os.path.dirname(__file__), fmt % libname)
+                    )
 
             # now, use the ctypes tools to try to find the library
             for fmt in self.name_formats:
@@ -357,11 +359,10 @@ class PosixLibraryLoader(LibraryLoader):
             self._create_ld_so_cache()
 
         result = self._ld_so_cache.get(libname, set())
-        for i in result:
-            # we iterate through all found paths for library, since we may have
-            # actually found multiple architectures or other library types that
-            # may not load
-            yield i
+        # we iterate through all found paths for library, since we may have
+        # actually found multiple architectures or other library types that
+        # may not load
+        yield from result
 
 
 # Windows
