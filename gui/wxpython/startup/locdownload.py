@@ -82,7 +82,7 @@ LOCATIONS = [
 ]
 
 
-class RedirectText(object):
+class RedirectText:
     def __init__(self, window):
         self.out = window
 

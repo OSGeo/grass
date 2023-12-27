@@ -555,7 +555,7 @@ def read_gisrc(filename):
     kv = {}
     try:
         f = open(filename, "r")
-    except IOError:
+    except OSError:
         return kv
 
     for line in f:
@@ -1212,7 +1212,7 @@ def set_mapset(
 
 # we don't follow the LOCATION_NAME legacy naming here but we have to still
 # translate to it, so always double check
-class MapsetSettings(object):
+class MapsetSettings:
     """Holds GRASS GIS database directory, Location and Mapset
 
     Provides few convenient functions.
@@ -2245,7 +2245,7 @@ def get_username():
     return user
 
 
-class Parameters(object):
+class Parameters:
     """Structure to hold standard part of command line parameters"""
 
     # we don't need to define any methods

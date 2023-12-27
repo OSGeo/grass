@@ -75,7 +75,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :return str: dataset name
 
         """
-        dataset_name = super(AbstractSpaceTimeDataset, self).get_name()
+        dataset_name = super().get_name()
 
         if semantic_label and self.semantic_label:
             return "{}.{}".format(dataset_name, self.semantic_label)

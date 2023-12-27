@@ -47,7 +47,7 @@ jobs:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -141,7 +141,7 @@ jobs:
           cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
 
       - name: Make Sphinx documentation available
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sphinx-grass
           path: sphinx-grass

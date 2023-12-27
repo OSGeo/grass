@@ -8,7 +8,7 @@ _CMDS = list(get_commands()[0])
 _CMDS.sort()
 
 
-class MetaModule(object):
+class MetaModule:
     """Example how to use MetaModule
 
     >>> g = MetaModule('g')

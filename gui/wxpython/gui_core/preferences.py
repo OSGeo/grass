@@ -335,6 +335,20 @@ class PreferencesDialog(PreferencesBaseDialog):
         gridSizer.Add(hideSearch, pos=(row, 0), span=(1, 2))
 
         row += 1
+        hideHistory = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Hide '%s' tab (requires GUI restart)") % _("History"),
+            name="IsChecked",
+        )
+        hideHistory.SetValue(
+            self.settings.Get(group="manager", key="hideTabs", subkey="history")
+        )
+        self.winId["manager:hideTabs:history"] = hideHistory.GetId()
+
+        gridSizer.Add(hideHistory, pos=(row, 0), span=(1, 2))
+
+        row += 1
         hidePyShell = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
@@ -546,6 +560,20 @@ class PreferencesDialog(PreferencesBaseDialog):
         outfontButton = Button(parent=panel, id=wx.ID_ANY, label=_("Set font"))
         gridSizer.Add(
             outfontButton, flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 1)
+        )
+
+        # module HTML manual page font settings
+        row = 1
+        gridSizer.Add(
+            StaticText(parent=panel, id=wx.ID_ANY, label=_("Font for manual pages:")),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 0),
+        )
+        manPageFontButton = Button(parent=panel, id=wx.ID_ANY, label=_("Set font"))
+        gridSizer.Add(
+            manPageFontButton,
+            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 1),
         )
         gridSizer.AddGrowableCol(0)
 
@@ -791,6 +819,8 @@ class PreferencesDialog(PreferencesBaseDialog):
             outfontButton.Bind(wx.EVT_BUTTON, self.OnSetOutputFontCustomDialog)
         else:
             outfontButton.Bind(wx.EVT_BUTTON, self.OnSetOutputFont)
+
+        manPageFontButton.Bind(wx.EVT_BUTTON, self.OnSetManualPageFontDialog)
 
         return panel
 
@@ -2069,6 +2099,49 @@ class PreferencesDialog(PreferencesBaseDialog):
             )
         dlg.Destroy()
 
+        event.Skip()
+
+    def OnSetManualPageFontDialog(self, event):
+        """Set font for module HTML manual page dialog"""
+        data = {}
+        font_point_size = self.settings.Get(
+            group="appearance",
+            key="manualPageFont",
+            subkey="pointSize",
+        )
+        font_face_name = self.settings.Get(
+            group="appearance",
+            key="manualPageFont",
+            subkey="faceName",
+        )
+        if font_point_size:
+            font_data = wx.FontData()
+            font = wx.Font(
+                pointSize=font_point_size,
+                family=wx.FONTFAMILY_MODERN,
+                style=wx.NORMAL,
+                weight=wx.FONTWEIGHT_NORMAL,
+                faceName=font_face_name,
+            )
+            font_data.SetInitialFont(font)
+            data["data"] = font_data
+        dlg = wx.FontDialog(parent=self, **data)
+        if dlg.ShowModal() == wx.ID_OK:
+            font_data = dlg.GetFontData()
+            font = font_data.GetChosenFont()
+            self.settings.Set(
+                group="appearance",
+                value=font.GetFaceName(),
+                key="manualPageFont",
+                subkey="faceName",
+            )
+            self.settings.Set(
+                group="appearance",
+                value=font.GetPointSize(),
+                key="manualPageFont",
+                subkey="pointSize",
+            )
+        dlg.Destroy()
         event.Skip()
 
     def OnSetSymbol(self, event):
