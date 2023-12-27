@@ -58,7 +58,6 @@ class TestRasterUnivar(TestCase):
         cls.del_temp_region()
 
     def test_with_all_maps(self):
-
         t_rast3d_univar = SimpleModule(
             "t.rast3d.univar",
             input="A",
@@ -83,7 +82,6 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
                 self.assertLooksLike(ref_line, res_line)
 
     def test_with_subset_of_maps(self):
-
         t_rast3d_univar = SimpleModule(
             "t.rast3d.univar",
             input="A",
@@ -107,7 +105,6 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
                 self.assertLooksLike(ref_line, res_line)
 
     def test_subset_with_output(self):
-
         self.assertModule(
             "t.rast3d.univar",
             input="A",
@@ -131,7 +128,6 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
                 self.assertLooksLike(ref_line, res_line)
 
     def test_subset_with_output_no_header(self):
-
         self.assertModule(
             "t.rast3d.univar",
             input="A",
@@ -154,9 +150,9 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
                 res_line = res.split("|", 1)[1]
                 self.assertLooksLike(ref_line, res_line)
 
-    def test_error_handling_empty_strds(self):
+    def test_handling_empty_strds(self):
         # Empty str3ds
-        self.assertModuleFail(
+        self.assertModule(
             "t.rast3d.univar",
             input="A",
             output="univar_output.txt",
@@ -177,6 +173,44 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|192000
             input="A",
             where="start_time >= '2001-01-01'",
             zones="zones",
+            overwrite=True,
+            verbose=True,
+        )
+        self.runModule("g.region", res=1)
+        self.assertModule(t_rast_univar_zones)
+
+        univar_text = """id|start|end|zone|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|non_null_cells
+a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|1|100|100|100|100|0|0|0|3000000|0|30000|30000
+a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|2|100|100|100|100|0|0|0|8400000|0|84000|84000
+a_1@PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|3|100|100|100|100|0|0|0|36600000|0|366000|366000
+a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|1|200|200|200|200|0|0|0|6000000|0|30000|30000
+a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|2|200|200|200|200|0|0|0|16800000|0|84000|84000
+a_2@PERMANENT|2001-04-01 00:00:00|2001-07-01 00:00:00|3|200|200|200|200|0|0|0|73200000|0|366000|366000
+a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|1|300|300|300|300|0|0|0|9000000|0|30000|30000
+a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|2|300|300|300|300|0|0|0|25200000|0|84000|84000
+a_3@PERMANENT|2001-07-01 00:00:00|2001-10-01 00:00:00|3|300|300|300|300|0|0|0|109800000|0|366000|366000
+a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|1|400|400|400|400|0|0|0|12000000|0|30000|30000
+a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|2|400|400|400|400|0|0|0|33600000|0|84000|84000
+a_4@PERMANENT|2001-10-01 00:00:00|2002-01-01 00:00:00|3|400|400|400|400|0|0|0|146400000|0|366000|366000
+"""
+
+        for ref, res in zip(
+            univar_text.split("\n"), t_rast_univar_zones.outputs.stdout.split("\n")
+        ):
+            if ref and res:
+                ref_line = ref.split("|", 1)[1]
+                res_line = res.split("|", 1)[1]
+                self.assertLooksLike(ref_line, res_line)
+
+    def test_with_zones_parallel(self):
+        """Test use of zones"""
+
+        t_rast_univar_zones = SimpleModule(
+            "t.rast3d.univar",
+            input="A",
+            where="start_time >= '2001-01-01'",
+            zones="zones",
+            nprocs=2,
             overwrite=True,
             verbose=True,
         )

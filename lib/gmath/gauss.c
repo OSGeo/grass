@@ -1,7 +1,6 @@
 #include <math.h>
 #include <grass/gmath.h>
 
-
 /*!
  * \fn double G_math_rand_gauss(const int seed, const double sigma)
  *
@@ -25,8 +24,7 @@ double G_math_rand_gauss(double sigma)
 
         /* see if it is in the unit circle */
         r2 = x * x + y * y;
-    }
-    while (r2 > 1.0 || r2 == 0);
+    } while (r2 > 1.0 || r2 == 0);
 
     /* Box-Muller transform */
     return sigma * y * sqrt(-2.0 * log(r2) / r2);

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.carve
@@ -15,7 +14,7 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include <stdio.h>
 #include <string.h>
@@ -25,19 +24,17 @@
 #include <grass/glocale.h>
 #include "enforce.h"
 
-
 #ifndef MAX
-#define MIN(a,b)      ((a<b) ? a : b)
-#define MAX(a,b)      ((a>b) ? a : b)
+#define MIN(a, b) ((a < b) ? a : b)
+#define MAX(a, b) ((a > b) ? a : b)
 #endif
-
 
 /* function prototypes */
 static void clear_bitmap(struct BM *bm);
 static int process_line(struct Map_info *Map, struct Map_info *outMap,
                         void *rbuf, const int line, const struct parms *parm);
-static void traverse_line_flat(Point2 * pgpts, const int pt, const int npts);
-static void traverse_line_noflat(Point2 * pgpts, const double depth,
+static void traverse_line_flat(Point2 *pgpts, const int pt, const int npts);
+static void traverse_line_noflat(Point2 *pgpts, const double depth,
                                  const int pt, const int npts);
 static void set_min_point(void *buf, const int col, const int row,
                           const double elev, const double depth,
@@ -45,19 +42,17 @@ static void set_min_point(void *buf, const int col, const int row,
 static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
                                      const double px, const double py,
                                      const double rad);
-static void process_line_segment(const int npts, void *rbuf, Point2 * pgxypts,
-                                 Point2 * pgpts, struct BM *bm,
+static void process_line_segment(const int npts, void *rbuf, Point2 *pgxypts,
+                                 Point2 *pgpts, struct BM *bm,
                                  struct Map_info *outMap,
                                  const struct parms *parm);
-
 
 /******************************************************************
  * Returns 0 on success, -1 on error, 1 on warning, writing message
  * to errbuf for -1 or 1 */
 
-int enforce_downstream(int infd, int outfd,
-                       struct Map_info *Map, struct Map_info *outMap,
-                       struct parms *parm)
+int enforce_downstream(int infd, int outfd, struct Map_info *Map,
+                       struct Map_info *outMap, struct parms *parm)
 {
     struct Cell_head wind;
     int retval = 0;
@@ -73,9 +68,8 @@ int enforce_downstream(int infd, int outfd,
                                wind.west, wind.top, wind.bottom);
 
     /* allocate and clear memory for entire raster */
-    rbuf =
-        G_calloc(Rast_window_rows() * Rast_window_cols(),
-                 Rast_cell_size(parm->raster_type));
+    rbuf = G_calloc(Rast_window_rows() * Rast_window_cols(),
+                    Rast_cell_size(parm->raster_type));
 
     /* first read whole elevation file into buf */
     read_raster(rbuf, infd, parm->raster_type);
@@ -94,7 +88,6 @@ int enforce_downstream(int infd, int outfd,
     return retval;
 }
 
-
 static int process_line(struct Map_info *Map, struct Map_info *outMap,
                         void *rbuf, const int line, const struct parms *parm)
 {
@@ -110,7 +103,7 @@ static int process_line(struct Map_info *Map, struct Map_info *outMap,
     static struct BM *bm = NULL;
     Point2 *pgpts, *pgxypts;
     PointGrp pg;
-    PointGrp pgxy;              /* copy any points in region to this one */
+    PointGrp pgxy; /* copy any points in region to this one */
 
     G_get_window(&wind);
 
@@ -138,8 +131,8 @@ static int process_line(struct Map_info *Map, struct Map_info *outMap,
         int col = Rast_easting_to_col(points->x[i], &wind);
 
         /* rough clipping */
-        if (row < 0 || row > Rast_window_rows() - 1 ||
-            col < 0 || col > Rast_window_cols() - 1) {
+        if (row < 0 || row > Rast_window_rows() - 1 || col < 0 ||
+            col > Rast_window_cols() - 1) {
             if (first_in != -1)
                 in_out = 1;
 
@@ -206,7 +199,6 @@ static int process_line(struct Map_info *Map, struct Map_info *outMap,
     return retval;
 }
 
-
 static void clear_bitmap(struct BM *bm)
 {
     int i, j;
@@ -216,8 +208,7 @@ static void clear_bitmap(struct BM *bm)
             BM_set(bm, i, j, 0);
 }
 
-
-static void traverse_line_flat(Point2 * pgpts, const int pt, const int npts)
+static void traverse_line_flat(Point2 *pgpts, const int pt, const int npts)
 {
     int j, k;
 
@@ -238,12 +229,11 @@ static void traverse_line_flat(Point2 * pgpts, const int pt, const int npts)
         for (k = (pt + 1); k < j; k++)
             pgpts[k][1] = LINTERP(pgpts[j][1], pgpts[pt][1],
                                   (pgpts[j][0] - pgpts[k][0]) /
-                                  (pgpts[j][0] - pgpts[pt][0]));
+                                      (pgpts[j][0] - pgpts[pt][0]));
     }
 }
 
-
-static void traverse_line_noflat(Point2 * pgpts, const double depth,
+static void traverse_line_noflat(Point2 *pgpts, const double depth,
                                  const int pt, const int npts)
 {
     int j, k;
@@ -263,11 +253,10 @@ static void traverse_line_noflat(Point2 * pgpts, const double depth,
 
     /* linear interp between point pt and the next < */
     for (k = (pt + 1); k < j; k++)
-        pgpts[k][1] = LINTERP(pgpts[j][1], pgpts[pt][1],
-                              (pgpts[j][0] - pgpts[k][0]) /
-                              (pgpts[j][0] - pgpts[pt][0]));
+        pgpts[k][1] =
+            LINTERP(pgpts[j][1], pgpts[pt][1],
+                    (pgpts[j][0] - pgpts[k][0]) / (pgpts[j][0] - pgpts[pt][0]));
 }
-
 
 /* sets value for a cell */
 static void set_min_point(void *data, const int col, const int row,
@@ -275,33 +264,26 @@ static void set_min_point(void *data, const int col, const int row,
                           const RASTER_MAP_TYPE rtype)
 {
     switch (rtype) {
-    case CELL_TYPE:
-        {
-            CELL *cbuf = data;
+    case CELL_TYPE: {
+        CELL *cbuf = data;
 
-            cbuf[row * Rast_window_cols() + col] =
-                MIN(cbuf[row * Rast_window_cols() + col], elev) - (int)depth;
-        }
-        break;
-    case FCELL_TYPE:
-        {
-            FCELL *fbuf = data;
+        cbuf[row * Rast_window_cols() + col] =
+            MIN(cbuf[row * Rast_window_cols() + col], elev) - (int)depth;
+    } break;
+    case FCELL_TYPE: {
+        FCELL *fbuf = data;
 
-            fbuf[row * Rast_window_cols() + col] =
-                MIN(fbuf[row * Rast_window_cols() + col], elev) - depth;
-        }
-        break;
-    case DCELL_TYPE:
-        {
-            DCELL *dbuf = data;
+        fbuf[row * Rast_window_cols() + col] =
+            MIN(fbuf[row * Rast_window_cols() + col], elev) - depth;
+    } break;
+    case DCELL_TYPE: {
+        DCELL *dbuf = data;
 
-            dbuf[row * Rast_window_cols() + col] =
-                MIN(dbuf[row * Rast_window_cols() + col], elev) - depth;
-        }
-        break;
+        dbuf[row * Rast_window_cols() + col] =
+            MIN(dbuf[row * Rast_window_cols() + col], elev) - depth;
+    } break;
     }
 }
-
 
 /* returns the lowest value cell within radius rad of px, py */
 static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
@@ -333,30 +315,24 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
     col2 = MIN(rastcols - 1, col + coloff);
 
     switch (rtype) {
-    case CELL_TYPE:
-        {
-            CELL *cbuf = data;
+    case CELL_TYPE: {
+        CELL *cbuf = data;
 
-            if (!(Rast_is_c_null_value(&cbuf[row1 * rastcols + col1])))
-                min = cbuf[row1 * rastcols + col1];
-        }
-        break;
-    case FCELL_TYPE:
-        {
-            FCELL *fbuf = data;
+        if (!(Rast_is_c_null_value(&cbuf[row1 * rastcols + col1])))
+            min = cbuf[row1 * rastcols + col1];
+    } break;
+    case FCELL_TYPE: {
+        FCELL *fbuf = data;
 
-            if (!(Rast_is_f_null_value(&fbuf[row1 * rastcols + col1])))
-                min = fbuf[row1 * rastcols + col1];
-        }
-        break;
-    case DCELL_TYPE:
-        {
-            DCELL *dbuf = data;
+        if (!(Rast_is_f_null_value(&fbuf[row1 * rastcols + col1])))
+            min = fbuf[row1 * rastcols + col1];
+    } break;
+    case DCELL_TYPE: {
+        DCELL *dbuf = data;
 
-            if (!(Rast_is_d_null_value(&dbuf[row1 * rastcols + col1])))
-                min = dbuf[row1 * rastcols + col1];
-        }
-        break;
+        if (!(Rast_is_d_null_value(&dbuf[row1 * rastcols + col1])))
+            min = dbuf[row1 * rastcols + col1];
+    } break;
     }
 
     for (r = row1; r < row2; r++) {
@@ -368,63 +344,45 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
 
             if (G_distance(px, py, cx, cy) <= SQR(rad)) {
                 switch (rtype) {
-                case CELL_TYPE:
-                    {
-                        CELL *cbuf = data;
+                case CELL_TYPE: {
+                    CELL *cbuf = data;
 
-                        if (Rast_is_d_null_value(&min)) {
-                            if (!
-                                (Rast_is_c_null_value
-                                 (&cbuf[r * rastcols + c])))
+                    if (Rast_is_d_null_value(&min)) {
+                        if (!(Rast_is_c_null_value(&cbuf[r * rastcols + c])))
+                            min = cbuf[r * rastcols + c];
+                    }
+                    else {
+                        if (!(Rast_is_c_null_value(&cbuf[r * rastcols + c])))
+                            if (cbuf[r * rastcols + c] < min)
                                 min = cbuf[r * rastcols + c];
-                        }
-                        else {
-                            if (!
-                                (Rast_is_c_null_value
-                                 (&cbuf[r * rastcols + c])))
-                                if (cbuf[r * rastcols + c] < min)
-                                    min = cbuf[r * rastcols + c];
-                        }
                     }
-                    break;
-                case FCELL_TYPE:
-                    {
-                        FCELL *fbuf = data;
+                } break;
+                case FCELL_TYPE: {
+                    FCELL *fbuf = data;
 
-                        if (Rast_is_d_null_value(&min)) {
-                            if (!
-                                (Rast_is_f_null_value
-                                 (&fbuf[r * rastcols + c])))
+                    if (Rast_is_d_null_value(&min)) {
+                        if (!(Rast_is_f_null_value(&fbuf[r * rastcols + c])))
+                            min = fbuf[r * rastcols + c];
+                    }
+                    else {
+                        if (!(Rast_is_f_null_value(&fbuf[r * rastcols + c])))
+                            if (fbuf[r * rastcols + c] < min)
                                 min = fbuf[r * rastcols + c];
-                        }
-                        else {
-                            if (!
-                                (Rast_is_f_null_value
-                                 (&fbuf[r * rastcols + c])))
-                                if (fbuf[r * rastcols + c] < min)
-                                    min = fbuf[r * rastcols + c];
-                        }
                     }
-                    break;
-                case DCELL_TYPE:
-                    {
-                        DCELL *dbuf = data;
+                } break;
+                case DCELL_TYPE: {
+                    DCELL *dbuf = data;
 
-                        if (Rast_is_d_null_value(&min)) {
-                            if (!
-                                (Rast_is_d_null_value
-                                 (&dbuf[r * rastcols + c])))
-                                min = dbuf[r * rastcols + c];
-                        }
-                        else {
-                            if (!
-                                (Rast_is_d_null_value
-                                 (&dbuf[r * rastcols + c])))
-                                if (dbuf[r * rastcols + c] < min)
-                                    min = dbuf[r * rastcols + c];
-                        }
+                    if (Rast_is_d_null_value(&min)) {
+                        if (!(Rast_is_d_null_value(&dbuf[r * rastcols + c])))
+                            min = dbuf[r * rastcols + c];
                     }
-                    break;
+                    else {
+                        if (!(Rast_is_d_null_value(&dbuf[r * rastcols + c])))
+                            if (dbuf[r * rastcols + c] < min)
+                                min = dbuf[r * rastcols + c];
+                    }
+                } break;
                 }
             }
         }
@@ -435,15 +393,14 @@ static double lowest_cell_near_point(void *data, const RASTER_MAP_TYPE rtype,
     return min;
 }
 
-
-/* Now for each segment in the line, use distance from segment 
+/* Now for each segment in the line, use distance from segment
  * to find beginning row from northernmost point, beginning
- * col from easternmost, ending row & col, then loop through 
+ * col from easternmost, ending row & col, then loop through
  * bounding box and use distance from segment to emboss
  * new elevations */
-static void process_line_segment(const int npts, void *rbuf,
-                                 Point2 * pgxypts, Point2 * pgpts,
-                                 struct BM *bm, struct Map_info *outMap,
+static void process_line_segment(const int npts, void *rbuf, Point2 *pgxypts,
+                                 Point2 *pgpts, struct BM *bm,
+                                 struct Map_info *outMap,
                                  const struct parms *parm)
 {
     int i, row1, row2, col1, col2;
@@ -485,38 +442,34 @@ static void process_line_segment(const int npts, void *rbuf,
                 double distance;
 
                 cellx = Rast_col_to_easting(c + 0.5, &wind);
-                celly = cy;     /* gets written over in distance2... */
+                celly = cy; /* gets written over in distance2... */
 
-                /* Thought about not going past endpoints (use 
-                 * status to check) but then pieces end up missing 
-                 * from outside corners - if it goes past ends, 
+                /* Thought about not going past endpoints (use
+                 * status to check) but then pieces end up missing
+                 * from outside corners - if it goes past ends,
                  * should probably do some interp or will get flats.
-                 * Here we use a bitmap and only change cells once 
+                 * Here we use a bitmap and only change cells once
                  * on the way down */
 
-                distance = sqrt(dig_distance2_point_to_line(cellx, celly, 0,
-                                                            pgxypts[i - 1][0],
-                                                            pgxypts[i - 1][1],
-                                                            0, pgxypts[i][0],
-                                                            pgxypts[i][1], 0,
-                                                            0, &cellx, &celly,
-                                                            NULL, NULL,
-                                                            NULL));
+                distance = sqrt(dig_distance2_point_to_line(
+                    cellx, celly, 0, pgxypts[i - 1][0], pgxypts[i - 1][1], 0,
+                    pgxypts[i][0], pgxypts[i][1], 0, 0, &cellx, &celly, NULL,
+                    NULL, NULL));
 
                 if (distance <= parm->swidth && !BM_get(bm, c, r)) {
                     double dist, elev;
 
                     Vect_reset_line(points);
 
-                    dist = G_distance(pgxypts[i][0], pgxypts[i][1],
-                                      cellx, celly);
+                    dist =
+                        G_distance(pgxypts[i][0], pgxypts[i][1], cellx, celly);
 
                     elev = LINTERP(pgpts[i][1], pgpts[i - 1][1],
                                    (dist / (pgpts[i][0] - pgpts[i - 1][0])));
 
                     BM_set(bm, c, r, 1);
 
-                    /* TODO - may want to use a function for the 
+                    /* TODO - may want to use a function for the
                      * cross section of stream */
                     set_min_point(rbuf, c, r, elev, parm->sdepth,
                                   parm->raster_type);

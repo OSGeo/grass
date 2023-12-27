@@ -3,7 +3,7 @@ BOX -10 -10 10 10
 STRING
   COLOR 190 125 64
   LINE
-    0 10 
+    0 10
     0 -10
   END
 END
@@ -11,7 +11,7 @@ STRING
   COLOR 0 255 0
   LINE
     -3 6
-    0 10 
+    0 10
     3 6
   END
 END
@@ -19,7 +19,7 @@ STRING
   COLOR 0 255 0
   LINE
     -6 0
-    0 6 
+    0 6
     6 0
   END
 END
@@ -27,7 +27,7 @@ STRING
   COLOR 0 255 0
   LINE
     -8 -6
-    0 2 
+    0 2
     8 -6
   END
 END

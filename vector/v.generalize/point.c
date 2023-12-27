@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.generalize
@@ -6,7 +5,7 @@
  * AUTHOR(S):  Daniel Bundala
  *
  * PURPOSE:    Definition of a point in 3D and basic operations
- *             with points 
+ *             with points
  *
  * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
  *
@@ -23,7 +22,7 @@
 #include <grass/glocale.h>
 #include "point.h"
 
-inline void point_subtract(POINT a, POINT b, POINT * res)
+inline void point_subtract(POINT a, POINT b, POINT *res)
 {
     res->x = a.x - b.x;
     res->y = a.y - b.y;
@@ -31,7 +30,7 @@ inline void point_subtract(POINT a, POINT b, POINT * res)
     return;
 }
 
-inline void point_add(POINT a, POINT b, POINT * res)
+inline void point_add(POINT a, POINT b, POINT *res)
 {
     res->x = a.x + b.x;
     res->y = a.y + b.y;
@@ -50,7 +49,7 @@ inline double point_dist2(POINT a)
 }
 
 inline void point_assign(struct line_pnts *Points, int index, int with_z,
-                         POINT * res, int is_loop)
+                         POINT *res, int is_loop)
 {
     if (is_loop) {
         while (index >= Points->n_points - 1)
@@ -67,7 +66,7 @@ inline void point_assign(struct line_pnts *Points, int index, int with_z,
     return;
 }
 
-inline void point_scalar(POINT a, double k, POINT * res)
+inline void point_scalar(POINT a, double k, POINT *res)
 {
     res->x = a.x * k;
     res->y = a.y * k;
@@ -95,7 +94,7 @@ inline double point_dist(POINT a, POINT b)
 inline double point_dist_square(POINT a, POINT b)
 {
     return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) +
-        (a.z - b.z) * (a.z - b.z);
+           (a.z - b.z) * (a.z - b.z);
 }
 
 inline double point_angle_between(POINT a, POINT b, POINT c)
@@ -110,9 +109,9 @@ inline double point_dist_segment_square(POINT a, POINT b, POINT c, int with_z)
     double px, py, pz, pdist;
     int status;
 
-    return dig_distance2_point_to_line(a.x, a.y, a.z, b.x, b.y, b.z,
-                                       c.x, c.y, c.z, with_z, &px, &py, &pz,
-                                       &pdist, &status);
+    return dig_distance2_point_to_line(a.x, a.y, a.z, b.x, b.y, b.z, c.x, c.y,
+                                       c.z, with_z, &px, &py, &pz, &pdist,
+                                       &status);
 }
 
 POINT_LIST *point_list_new(POINT p)
@@ -126,7 +125,7 @@ POINT_LIST *point_list_new(POINT p)
     return pl;
 }
 
-void point_list_add(POINT_LIST * l, POINT p)
+void point_list_add(POINT_LIST *l, POINT p)
 {
     POINT_LIST *n;
 
@@ -179,7 +178,7 @@ void point_list_free(POINT_LIST l)
     }
 }
 
-extern void point_list_delete_next(POINT_LIST * p)
+extern void point_list_delete_next(POINT_LIST *p)
 {
     POINT_LIST *t = p->next;
 

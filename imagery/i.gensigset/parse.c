@@ -53,8 +53,8 @@ int parse(int argc, char *argv[], struct parms *parms)
                       parms->subgroup, parms->group);
     }
 
-    if (G_unqualified_name
-        (sigfile->answer, G_mapset(), parms->sigfile, xmapset) < 0)
+    if (G_unqualified_name(sigfile->answer, G_mapset(), parms->sigfile,
+                           xmapset) < 0)
         G_fatal_error(_("<%s> does not match the current mapset"), xmapset);
 
     if (G_legal_filename(parms->sigfile) < 0)

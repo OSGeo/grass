@@ -39,8 +39,8 @@ int fische(int n, double *mu, int *p)
             q[i - 1] = 1.0;
         }
 
-        do {                    /* Begin iterative loop on segment of p's */
-            zufall(left, u);    /* Get the needed uniforms */
+        do {                 /* Begin iterative loop on segment of p's */
+            zufall(left, u); /* Get the needed uniforms */
             jj = 0;
 
             for (i = 1; i <= left; ++i) {
@@ -52,12 +52,11 @@ int fische(int n, double *mu, int *p)
                     ++p[p0 + ii];
                 }
             }
-            left = jj;          /* any left in this segment? */
-        }
-        while (left > 0);
+            left = jj; /* any left in this segment? */
+        } while (left > 0);
 
         p0 += nl0;
         nl0 = left = 1024;
     }
     return 0;
-}                               /* fische */
+} /* fische */

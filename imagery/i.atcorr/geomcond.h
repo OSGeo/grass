@@ -89,6 +89,12 @@
 /*                                                                        */
 /*         30      worldview4        * enter month,day,hh.ddd,long.,lat.  */
 /*                                                                        */
+/*         31      AVIRIS            * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         32      Hyperion VNIR     * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
+/*         33      Hyperion SWIR     * enter month,day,hh.ddd,long.,lat.  */
+/*                                                                        */
 /*     note:       for hrv and tm experiments long. and lat. are the      */
 /*                 coordinates of the scene center.                       */
 /*                 lat. must be > 0 for north lat., < 0 for south lat.    */
@@ -98,9 +104,8 @@
 /*                                                                        */
 /* *********************************************************************** */
 
-struct GeomCond
-{
-    long int igeom;             /* geometrical conditions */
+struct GeomCond {
+    long int igeom; /* geometrical conditions */
 
     /* primary */
     double asol;
@@ -125,7 +130,7 @@ struct GeomCond
 
     void print();
 
-  private:
+private:
     /* conversion routines */
     void possol(double tu);
     void landsat(double tu);
@@ -135,9 +140,10 @@ struct GeomCond
     void day_number(long int ia, long int &j);
     void pos_fft(long int j, double tu);
 
-    double varsol();            /* returns dsol as in fortran proggie */
+    double varsol(); /* returns dsol as in fortran proggie */
     void parse();
-  public:
+
+public:
     static GeomCond Parse();
 };
 

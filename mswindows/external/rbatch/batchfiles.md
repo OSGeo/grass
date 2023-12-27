@@ -44,7 +44,7 @@ used with `vim` or other text editor.
 
 ### Purpose ###
 
-The purpose of `R.bat` is to facilitiate the use of R from the Windows `cmd`
+The purpose of `R.bat` is to facilitate the use of R from the Windows `cmd`
 line by eliminating the need to make any system changes.  There is no need to
 modify the Windows path or to set any environment variables for standard
 configurations of R.  It will automatically locate R (and Rtools and

@@ -39,30 +39,25 @@ double Vedit_get_min_distance(struct line_pnts *Points1,
        distances[3] = last-last
      */
 
-    distances[0] =
-        Vect_points_distance(Points1->x[0], Points1->y[0], Points1->z[0],
-                             Points2->x[0], Points2->y[0], Points2->z[0],
-                             with_z);
+    distances[0] = Vect_points_distance(Points1->x[0], Points1->y[0],
+                                        Points1->z[0], Points2->x[0],
+                                        Points2->y[0], Points2->z[0], with_z);
 
-    distances[1] =
-        Vect_points_distance(Points1->x[0], Points1->y[0], Points1->z[0],
-                             Points2->x[Points2->n_points - 1],
-                             Points2->y[Points2->n_points - 1],
-                             Points2->z[Points2->n_points - 1], with_z);
+    distances[1] = Vect_points_distance(
+        Points1->x[0], Points1->y[0], Points1->z[0],
+        Points2->x[Points2->n_points - 1], Points2->y[Points2->n_points - 1],
+        Points2->z[Points2->n_points - 1], with_z);
 
-    distances[2] = Vect_points_distance(Points1->x[Points1->n_points - 1],
-                                        Points1->y[Points1->n_points - 1],
-                                        Points1->z[Points1->n_points - 1],
-                                        Points2->x[0], Points2->y[0],
-                                        Points2->z[0], with_z);
+    distances[2] = Vect_points_distance(
+        Points1->x[Points1->n_points - 1], Points1->y[Points1->n_points - 1],
+        Points1->z[Points1->n_points - 1], Points2->x[0], Points2->y[0],
+        Points2->z[0], with_z);
 
-    distances[3] = Vect_points_distance(Points1->x[Points1->n_points - 1],
-                                        Points1->y[Points1->n_points - 1],
-                                        Points1->z[Points1->n_points - 1],
-                                        Points2->x[Points2->n_points - 1],
-                                        Points2->y[Points2->n_points - 1],
-                                        Points2->z[Points2->n_points - 1],
-                                        with_z);
+    distances[3] = Vect_points_distance(
+        Points1->x[Points1->n_points - 1], Points1->y[Points1->n_points - 1],
+        Points1->z[Points1->n_points - 1], Points2->x[Points2->n_points - 1],
+        Points2->y[Points2->n_points - 1], Points2->z[Points2->n_points - 1],
+        with_z);
 
     /* find the minimal distance between first or last point of both lines */
     *mindistidx = 0;
@@ -71,8 +66,8 @@ double Vedit_get_min_distance(struct line_pnts *Points1,
             *mindistidx = i;
     }
 
-    G_debug(3, "Vedit_get_min_distance(): dists=%f,%f,%f,%f",
-            distances[0], distances[1], distances[2], distances[3]);
+    G_debug(3, "Vedit_get_min_distance(): dists=%f,%f,%f,%f", distances[0],
+            distances[1], distances[2], distances[3]);
 
     return distances[*mindistidx];
 }

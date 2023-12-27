@@ -40,5 +40,5 @@ int V1_rewind_nat(struct Map_info *Map)
 int V2_rewind_nat(struct Map_info *Map)
 {
     Map->next_line = 1;
-    return V1_rewind_nat(Map);  /* make sure level 1 reads are reset too */
+    return V1_rewind_nat(Map); /* make sure level 1 reads are reset too */
 }

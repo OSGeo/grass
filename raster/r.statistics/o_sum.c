@@ -19,7 +19,7 @@ int o_sum(const char *basemap, const char *covermap, const char *outputmap,
     stats = run_stats(&stats_child, basemap, covermap, "-cn");
     reclass = run_reclass(&reclass_child, basemap, outputmap);
 
-    sum_out(reclass, 0L, 0.0);  /* force at least one reclass rule */
+    sum_out(reclass, 0L, 0.0); /* force at least one reclass rule */
 
     catb = 0;
     sum1 = 0.0;
@@ -31,12 +31,11 @@ int o_sum(const char *basemap, const char *covermap, const char *outputmap,
             catb = basecat;
         }
         if (usecats)
-            sscanf(Rast_get_c_cat((CELL *) & covercat, cats), "%lf", &x);
+            sscanf(Rast_get_c_cat((CELL *)&covercat, cats), "%lf", &x);
         else
             x = covercat;
         sum1 += x * area;
         /*        fprintf(stderr,"sum: %d\n",(int)sum1); */
-
     }
     sum_out(reclass, basecat, sum1);
 
@@ -46,7 +45,7 @@ int o_sum(const char *basemap, const char *covermap, const char *outputmap,
     return 0;
 }
 
-static void sum_out(FILE * fp, long cat, double sum1)
+static void sum_out(FILE *fp, long cat, double sum1)
 {
     char buf[64];
 

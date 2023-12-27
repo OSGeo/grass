@@ -16,7 +16,6 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 import wx
-import six
 import numpy as np
 from math import ceil
 from multiprocessing import Process, Queue
@@ -55,7 +54,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
     def __init__(self, parent, scatt_id, scatt_mgr, transpose, id=wx.ID_ANY):
         # TODO should not be transpose and scatt_id but x, y
         wx.Panel.__init__(self, parent, id)
-        # bacause of aui (if floatable it can not take cursor from parent)
+        # because of aui (if floatable it can not take cursor from parent)
         ManageBusyCursorMixin.__init__(self, window=self)
 
         self.parent = parent
@@ -100,7 +99,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self.axes.draw_artist(self.zoom_rect)
 
     def _createWidgets(self):
-
         # Create the mpl Figure and FigCanvas objects.
         # 5x4 inches, 100 dots-per-inch
         #
@@ -153,7 +151,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self._stopCategoryEdit()
 
     def GetCoords(self):
-
         coords = self.polygon_drawer.GetCoords()
         if coords is None:
             return
@@ -200,7 +197,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         # self.canvas.mpl_disconnect(self.cidmotion)
 
     def _doLayout(self):
-
         self.main_sizer = wx.BoxSizer(wx.VERTICAL)
         self.main_sizer.Add(self.canvas, 1, wx.LEFT | wx.TOP | wx.GROW)
         self.SetSizer(self.main_sizer)
@@ -318,7 +314,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
     def CleanUp(self):
         self.plotClosed.emit(scatt_id=self.scatt_id)
-        self.Destroy()
 
     def ZoomWheel(self, event):
         # get the current x and y limits
@@ -448,7 +443,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
 
 def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
-
     _rendDtFilesToMemmaps(rend_dt)
 
     init = True
@@ -467,7 +461,6 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
                 del rend_dt[cat_id]
             continue
         if init:
-
             b2_i = scatt["bands_info"]["b1"]
             b1_i = scatt["bands_info"]["b2"]
 
@@ -547,16 +540,14 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
 
 
 def _rendDtMemmapsToFiles(rend_dt):
-
-    for k, v in six.iteritems(rend_dt):
+    for k, v in rend_dt.items():
         if "dt" in v:
             rend_dt[k]["sh"] = v["dt"].shape
             rend_dt[k]["dt"] = v["dt"].filename
 
 
 def _rendDtFilesToMemmaps(rend_dt):
-
-    for k, v in six.iteritems(rend_dt):
+    for k, v in rend_dt.items():
         if "dt" in v:
             rend_dt[k]["dt"] = np.memmap(filename=v["dt"], shape=v["sh"])
             del rend_dt[k]["sh"]
@@ -598,7 +589,6 @@ def _getColorMap(cat_id, styles):
 
 class ScatterPlotContextMenu:
     def __init__(self, plot):
-
         self.plot = plot
         self.canvas = plot.canvas
         self.cidpress = self.canvas.mpl_connect("button_press_event", self.ContexMenu)
@@ -627,7 +617,8 @@ class ScatterPlotContextMenu:
     def ShowMenu(self, menu):
         self.plot.PopupMenu(menu)
         menu.Destroy()
-        self.plot.ReleaseMouse()
+        if self.plot.HasCapture():
+            self.plot.ReleaseMouse()
 
 
 class PolygonDrawer:
@@ -692,7 +683,6 @@ class PolygonDrawer:
         self.mode = mode
 
     def SetSelectionPolygonMode(self, activate):
-
         self.Show(activate)
         if not activate and self.mode:
             self.SetMode(None)
@@ -722,7 +712,6 @@ class PolygonDrawer:
         self._show(not empty_pol)
 
     def _show(self, show):
-
         self.show = show
 
         self.line.set_visible(self.show)
@@ -738,7 +727,6 @@ class PolygonDrawer:
         self.canvas.draw()
 
     def DrawCallback(self, event):
-
         style = self._getPolygonStyle()
         self.pol.set_facecolor(style["sel_pol"])
         self.line.set_markerfacecolor(style["sel_pol_vertex"])
@@ -851,7 +839,6 @@ class PolygonDrawer:
         self.Redraw()
 
     def _addVertex(self, event):
-
         if self.empty_pol:
             pt = (event.xdata, event.ydata)
             self.pol.xy = np.array([pt, pt])
@@ -930,7 +917,7 @@ class ModestImage(mi.AxesImage):
         self.minx = minx
         self.miny = miny
 
-        super(ModestImage, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def set_data(self, A):
         """
@@ -941,7 +928,7 @@ class ModestImage(mi.AxesImage):
         self._full_res = A
         self._A = A
 
-        if self._A.dtype != np.uint8 and not np.can_cast(self._A.dtype, np.float):
+        if self._A.dtype != np.uint8 and not np.can_cast(self._A.dtype, float):
             raise TypeError("Image data can not convert to float")
 
         if self._A.ndim not in (2, 3) or (
@@ -1003,7 +990,7 @@ class ModestImage(mi.AxesImage):
 
     def draw(self, renderer, *args, **kwargs):
         self._scale_to_res()
-        super(ModestImage, self).draw(renderer, *args, **kwargs)
+        super().draw(renderer, *args, **kwargs)
 
 
 def imshow(
@@ -1032,8 +1019,7 @@ def imshow(
     @author: Chris Beaumont <beaumont@hawaii.edu>
     """
 
-    if not axes._hold:
-        axes.cla()
+    axes.cla()
     if norm is not None:
         assert isinstance(norm, mcolors.Normalize)
     if aspect is None:
@@ -1082,7 +1068,7 @@ def imshow(
     # to tightly fit the image, regardless of dataLim.
     im.set_extent(im.get_extent())
 
-    axes.images.append(im)
+    axes.add_image(im)
     im._remove_method = lambda h: axes.images.remove(h)
 
     return im

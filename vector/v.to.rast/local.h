@@ -5,26 +5,24 @@
 #include <grass/dbmi.h>
 #include <grass/vector.h>
 
-
 /* 2 * PI */
-#define M_2PI 6.283185307179586232
+#define M_2PI       6.283185307179586232
 
-#define ISNULL(x)   Rast_is_c_null_value (x)
-#define ISDNULL(x)  Rast_is_d_null_value (x)
-#define SETNULL(x)  Rast_set_c_null_value (x, 1)
-#define SETDNULL(x) Rast_set_d_null_value (x, 1)
+#define ISNULL(x)   Rast_is_c_null_value(x)
+#define ISDNULL(x)  Rast_is_d_null_value(x)
+#define SETNULL(x)  Rast_set_c_null_value(x, 1)
+#define SETDNULL(x) Rast_set_d_null_value(x, 1)
 
 /* value type */
-#define USE_ATTR  1
-#define USE_CAT   2
-#define USE_VAL   3
-#define USE_Z     4
-#define USE_D     5
-
+#define USE_ATTR    1
+#define USE_CAT     2
+#define USE_VAL     3
+#define USE_Z       4
+#define USE_D       5
 
 /* do_areas.c */
-int do_areas(struct Map_info *, struct line_pnts *, dbCatValArray *, int,
-             int, double, int);
+int do_areas(struct Map_info *, struct line_pnts *, dbCatValArray *, int, int,
+             double, int);
 int sort_areas(struct Map_info *, struct line_pnts *, int, struct cat_list *);
 
 /* do_lines.c */
@@ -33,7 +31,6 @@ int do_lines(struct Map_info *, struct line_pnts *, dbCatValArray *, int, int,
 
 void plot_line_dense(double, double, double, double);
 void setup_plot(double, double, double, double, int (*dot)(int, int));
-
 
 /* raster.c */
 int begin_rasterization(int, int, int);

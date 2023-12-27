@@ -20,7 +20,6 @@ import shlex
 import re
 import inspect
 import operator
-import six
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -41,7 +40,7 @@ def normalize_whitespace(text):
 
 
 def split(s):
-    """Platform spefic shlex.split"""
+    """Platform specific shlex.split"""
     try:
         if sys.platform == "win32":
             return shlex.split(s.replace("\\", r"\\"))
@@ -227,8 +226,10 @@ def GetValidLayerName(name):
         cIdx += 1
     retName = "".join(retNameList)
 
-    if not (retName[0] >= "A" and retName[0] <= "Z") and not (
-        retName[0] >= "a" and retName[0] <= "z"
+    if (
+        retName
+        and not (retName[0] >= "A" and retName[0] <= "Z")
+        and not (retName[0] >= "a" and retName[0] <= "z")
     ):
         retName = "x" + retName[1:]
 
@@ -278,38 +279,39 @@ def ListOfCatsToRange(cats):
 
 
 def ListOfMapsets(get="ordered"):
-    """Get list of available/accessible mapsets
+    """Get list of available/accessible mapsets.
+    Option 'ordered' returns list of all mapsets, first accessible
+    then not accessible. Raises ValueError for wrong paramater value.
 
     :param str get: method ('all', 'accessible', 'ordered')
 
     :return: list of mapsets
-    :return: None on error
+    :return: [] on error
     """
-    mapsets = []
-
     if get == "all" or get == "ordered":
         ret = RunCommand("g.mapsets", read=True, quiet=True, flags="l", sep="newline")
-
-        if ret:
-            mapsets = ret.splitlines()
-            ListSortLower(mapsets)
-        else:
-            return None
+        if not ret:
+            return []
+        mapsets_all = ret.splitlines()
+        ListSortLower(mapsets_all)
+        if get == "all":
+            return mapsets_all
 
     if get == "accessible" or get == "ordered":
         ret = RunCommand("g.mapsets", read=True, quiet=True, flags="p", sep="newline")
-        if ret:
-            if get == "accessible":
-                mapsets = ret.splitlines()
-            else:
-                mapsets_accessible = ret.splitlines()
-                for mapset in mapsets_accessible:
-                    mapsets.remove(mapset)
-                mapsets = mapsets_accessible + mapsets
-        else:
-            return None
+        if not ret:
+            return []
+        mapsets_accessible = ret.splitlines()
+        if get == "accessible":
+            return mapsets_accessible
 
-    return mapsets
+        mapsets_ordered = mapsets_accessible.copy()
+        for mapset in mapsets_all:
+            if mapset not in mapsets_accessible:
+                mapsets_ordered.append(mapset)
+        return mapsets_ordered
+
+    raise ValueError("Invalid value for 'get' parameter of ListOfMapsets()")
 
 
 def ListSortLower(list):
@@ -657,7 +659,7 @@ def _parseFormats(output, writableOnly=False):
 
     patt = None
     if writableOnly:
-        patt = re.compile("\(rw\+?\)$", re.IGNORECASE)
+        patt = re.compile(r"\(rw\+?\)$", re.IGNORECASE)
 
     for line in output.splitlines():
         key, name = map(lambda x: x.strip(), line.strip().split(":", 1))
@@ -800,7 +802,7 @@ def GetSettingsPath():
     try:
         verFd = open(os.path.join(ETCDIR, "VERSIONNUMBER"))
         version = int(verFd.readlines()[0].split(" ")[0].split(".")[0])
-    except (IOError, ValueError, TypeError, IndexError) as e:
+    except (OSError, ValueError, TypeError, IndexError) as e:
         sys.exit(_("ERROR: Unable to determine GRASS version. Details: %s") % e)
 
     verFd.close()
@@ -838,7 +840,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
     if os.path.exists(envFile):
         try:
             fd = open(envFile)
-        except IOError as e:
+        except OSError as e:
             sys.stderr.write(_("Unable to open file '%s'\n") % envFile)
             return
         for line in fd.readlines():
@@ -868,7 +870,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
     # write update env file
     try:
         fd = open(envFile, "w")
-    except IOError as e:
+    except OSError as e:
         sys.stderr.write(_("Unable to create file '%s'\n") % envFile)
         return
     if windows:
@@ -876,7 +878,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
     else:
         expCmd = "export"
 
-    for key, value in six.iteritems(environ):
+    for key, value in environ.items():
         fd.write("%s %s=%s\n" % (expCmd, key, value))
 
     # write also skipped lines
@@ -933,7 +935,7 @@ str2rgb = {
     "yellow": (255, 255, 0),
 }
 rgb2str = {}
-for (s, r) in str2rgb.items():
+for s, r in str2rgb.items():
     rgb2str[r] = s
 # ensure that gray value has 'gray' string and not 'grey'
 rgb2str[str2rgb["gray"]] = "gray"
@@ -989,7 +991,7 @@ command2ltype = {
     "d.legend.vect": "vectleg",
 }
 ltype2command = {}
-for (cmd, ltype) in command2ltype.items():
+for cmd, ltype in command2ltype.items():
     ltype2command[ltype] = cmd
 
 
@@ -1096,7 +1098,7 @@ def isInRegion(regionA, regionB):
     :param regionB: input region B as dictionary
 
     :return: True if region A is inside of region B
-    :return: False othewise
+    :return: False otherwise
     """
     if (
         regionA["s"] >= regionB["s"]

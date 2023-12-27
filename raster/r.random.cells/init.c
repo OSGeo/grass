@@ -12,12 +12,13 @@
 /* function prototypes */
 static int comp_array(const void *p1, const void *p2);
 
-void Init()
+void Init(void)
 {
     struct Cell_head Region;
     int Count;
     int FD, row, col;
-    double MinRes;
+
+    /* double MinRes; */
 
     G_debug(2, "Init()");
 
@@ -26,14 +27,14 @@ void Init()
     G_get_set_window(&Region);
     EW = Region.ew_res;
     NS = Region.ns_res;
-    if (EW < NS)
-        MinRes = EW;
-    else
-        MinRes = NS;
+    /* if (EW < NS)
+       MinRes = EW;
+       else
+       MinRes = NS; */
     CellBuffer = Rast_allocate_c_buf();
 
     /* Out = FlagCreate( Rs, Cs); */
-    Out = (CELL **) G_malloc(sizeof(CELL *) * Rs);
+    Out = (CELL **)G_malloc(sizeof(CELL *) * Rs);
     for (row = 0; row < Rs; row++) {
         Out[row] = Rast_allocate_c_buf();
         Rast_zero_buf(Out[row], CELL_TYPE);
@@ -93,7 +94,7 @@ void Init()
 
     G_message(_("Generating raster map <%s>..."), Output->answer);
 
-    DoNext = (CELLSORTER *) G_malloc(CellCount * sizeof(CELLSORTER));
+    DoNext = (CELLSORTER *)G_malloc(CellCount * sizeof(CELLSORTER));
     Count = 0;
     for (row = 0; row < Rs; row++) {
         G_percent(row, Rs, 2);
@@ -113,7 +114,6 @@ void Init()
 
     qsort(DoNext, CellCount, sizeof(CELLSORTER), comp_array);
 }
-
 
 static int comp_array(const void *q1, const void *q2)
 {

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -17,15 +16,14 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include <stdlib.h>
 #include "distance.h"
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-
-    /* write out result */
+/* write out result */
 
 int write_output_map(char *output, int offset)
 {
@@ -51,14 +49,14 @@ int write_output_map(char *output, int offset)
         col = window.cols;
         if (!offset) {
             while (col-- > 0)
-                *cell++ = (CELL) * ptr++;
+                *cell++ = (CELL)*ptr++;
         }
         else {
             Rast_get_c_row_nomask(fd_in, cell, row);
 
             while (col-- > 0) {
                 if (*cell == 0 && *ptr != 0)
-                    *cell = (CELL) * ptr + offset;
+                    *cell = (CELL)*ptr + offset;
                 cell++;
                 ptr++;
             }

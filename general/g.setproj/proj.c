@@ -63,8 +63,7 @@ struct proj_desc *get_proj_desc(const char *arg)
         if (!G_getl2(buf, sizeof(buf), fp))
             break;
 
-        if (sscanf(buf, "%[^:]:%[^:]:%[^:]:%[^\n]", name, type, key, desc) !=
-            4)
+        if (sscanf(buf, "%[^:]:%[^:]:%[^:]:%[^\n]", name, type, key, desc) != 4)
             continue;
 
         if (G_strcasecmp(arg, name) != 0)
@@ -105,7 +104,8 @@ struct proj_parm *get_proj_parms(const char *arg)
         if (!G_getl2(buf, sizeof(buf), fp))
             break;
 
-        for (p = buf; *p && *p != ':'; p++) ;
+        for (p = buf; *p && *p != ':'; p++)
+            ;
 
         if (*p != ':')
             break;
@@ -115,7 +115,8 @@ struct proj_parm *get_proj_parms(const char *arg)
         if (G_strcasecmp(buf, arg) != 0)
             continue;
 
-        for (; *p && *p != ':'; p++) ;
+        for (; *p && *p != ':'; p++)
+            ;
 
         if (*p != ':')
             break;
@@ -135,7 +136,8 @@ struct proj_parm *get_proj_parms(const char *arg)
         struct proj_parm *parm;
         char *p;
 
-        for (p = data; *p && *p != ';'; p++) ;
+        for (p = data; *p && *p != ';'; p++)
+            ;
 
         if (*p == ';')
             *p++ = '\0';
@@ -174,8 +176,7 @@ struct proj_parm *get_proj_parms(const char *arg)
             parm->def_exists = 1;
         else {
             parm->def_exists = 0;
-            G_warning(_("Unrecognized default value in parms.table: %s"),
-                      dfl);
+            G_warning(_("Unrecognized default value in parms.table: %s"), dfl);
         }
     }
 

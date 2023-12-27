@@ -1,19 +1,18 @@
 #include "vizual.h"
 /* #include "cell_table.h"  (in vizual.h)  */
 
-
 /* place vertex data into CUBEFAX structure */
-void fill_cfax(Cube_data * Cube, int flag, int index, float
-               TEMP_VERT[13][3], float TEMP_NORM[13][3])
+void fill_cfax(Cube_data *Cube, int flag, int index, float TEMP_VERT[13][3],
+               float TEMP_NORM[13][3])
 {
-    int p;                      /*loop variable */
-    int n;                      /*index into TEMP_VERT array */
-    int num = 0;                /*polygon number index into TEMP_NORM for flat shading */
+    int p;       /*loop variable */
+    int n;       /*index into TEMP_VERT array */
+    int num = 0; /*polygon number index into TEMP_NORM for flat shading */
     cube_info *CUBEFAX;
 
-    CUBEFAX = Cube->data;       /* make old code work w/ new structure */
+    CUBEFAX = Cube->data; /* make old code work w/ new structure */
 
-    /* DEBUG 
+    /* DEBUG
        fprintf(stderr,"%d npoly  %d flag\n",CUBEFAX[NTHRESH].npoly,flag);
        END DEBUG */
 
@@ -57,7 +56,8 @@ void fill_cfax(Cube_data * Cube, int flag, int index, float
             p++;
         }
     }
-    else if (flag == 1) {       /* this is for flat shading (NOTE: 1 normal per polygon) */
+    else if (flag ==
+             1) { /* this is for flat shading (NOTE: 1 normal per polygon) */
         for (p = 0, num = 0; num < CUBEFAX[NTHRESH].npoly; num++) {
             poly_info *CP;
 
@@ -86,7 +86,6 @@ void fill_cfax(Cube_data * Cube, int flag, int index, float
             CP->n1[0] = (TEMP_NORM[num][0] + 1.) * 127;
             CP->n1[1] = (TEMP_NORM[num][1] + 1.) * 127;
             CP->n1[2] = (TEMP_NORM[num][2] + 1.) * 127;
-
         }
     }
 }

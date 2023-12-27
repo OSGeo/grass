@@ -7,7 +7,8 @@
  *
  * MODULE:       LINKED LIST MEMORY MANAGER
  *
- * AUTHOR(S):    David Gerdes 1992, US Army Construction Engineering Research Lab
+ * AUTHOR(S):    David Gerdes 1992, US Army Construction Engineering Research
+ *               Lab
  *
  * PURPOSE:      Outputs a raster map layer showing the cumulative cost
  *               of moving between different geographic locations on an
@@ -21,6 +22,7 @@
  *               for details.
  *
  ***************************************************************************/
+
 #include <stdlib.h>
 #include <grass/linkm.h>
 
@@ -46,7 +48,7 @@ struct link_head *link_init(int size)
         return NULL;
 
     if (NULL ==
-        (Head->ptr_array = (VOID_T **) malloc(sizeof(VOID_T *) * PTR_CNT))) {
+        (Head->ptr_array = (VOID_T **)malloc(sizeof(VOID_T *) * PTR_CNT))) {
         free(Head);
         return NULL;
     }
@@ -54,7 +56,8 @@ struct link_head *link_init(int size)
     Head->max_ptr = 0;
     Head->Unused = NULL;
     Head->alloced = PTR_CNT;
-    Head->unit_size = size < sizeof(VOID_T *) ? sizeof(VOID_T *) : size;
+    Head->unit_size =
+        size < (int)sizeof(VOID_T *) ? (int)sizeof(VOID_T *) : size;
     Head->chunk_size = link_chunk_size;
     Head->exit_flag = link_exit_flag;
 

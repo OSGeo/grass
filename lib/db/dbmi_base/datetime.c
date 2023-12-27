@@ -28,8 +28,8 @@ static char ts = ':';
 
    \return DB_OK on success
  */
-int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
-                                          dbString * string)
+int db_convert_value_datetime_into_string(dbValue *value, int sqltype,
+                                          dbString *string)
 {
     int to, from;
     int year, month, day, hour, minute;
@@ -67,18 +67,16 @@ int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
             sprintf(buf, "%d%c%02d%c%02d", year, ds, month, ds, day);
             break;
         case DB_HOUR:
-            sprintf(buf, "%d%c%02d%c%02d %02d", year, ds, month, ds, day,
-                    hour);
+            sprintf(buf, "%d%c%02d%c%02d %02d", year, ds, month, ds, day, hour);
             break;
         case DB_MINUTE:
-            sprintf(buf, "%d%c%02d%c%02d %02d%c%02d",
-                    year, ds, month, ds, day, hour, ts, minute);
+            sprintf(buf, "%d%c%02d%c%02d %02d%c%02d", year, ds, month, ds, day,
+                    hour, ts, minute);
             break;
         case DB_SECOND:
         case DB_FRACTION:
-            sprintf(buf, "%d%c%02d%c%02d %02d%c%02d%c%s%.10g",
-                    year, ds, month, ds, day, hour, ts, minute, ts, xs,
-                    seconds);
+            sprintf(buf, "%d%c%02d%c%02d %02d%c%02d%c%s%.10g", year, ds, month,
+                    ds, day, hour, ts, minute, ts, xs, seconds);
             break;
         }
         break;
@@ -99,8 +97,8 @@ int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
             break;
         case DB_SECOND:
         case DB_FRACTION:
-            sprintf(buf, "%02d%c%02d %02d%c%02d%c%s%.10g",
-                    month, ds, day, hour, ts, minute, ts, xs, seconds);
+            sprintf(buf, "%02d%c%02d %02d%c%02d%c%s%.10g", month, ds, day, hour,
+                    ts, minute, ts, xs, seconds);
             break;
         }
         break;
@@ -117,8 +115,8 @@ int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
             break;
         case DB_SECOND:
         case DB_FRACTION:
-            sprintf(buf, "%02d %02d%c%02d%c%s%.10g",
-                    day, hour, ts, minute, ts, xs, seconds);
+            sprintf(buf, "%02d %02d%c%02d%c%s%.10g", day, hour, ts, minute, ts,
+                    xs, seconds);
             break;
         }
         break;
@@ -163,13 +161,12 @@ int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
             sprintf(buf, "%d%c%02d%c%02d", year, ds, month, ds, day);
             break;
         case DB_SQL_TYPE_TIME:
-            sprintf(buf, "%02d%c%02d%c%s%.10g",
-                    hour, ts, minute, ts, xs, seconds);
+            sprintf(buf, "%02d%c%02d%c%s%.10g", hour, ts, minute, ts, xs,
+                    seconds);
             break;
         case DB_SQL_TYPE_TIMESTAMP:
-            sprintf(buf, "%d%c%02d%c%02d %02d%c%02d%c%s%.10g",
-                    year, ds, month, ds, day, hour, ts, minute, ts, xs,
-                    seconds);
+            sprintf(buf, "%d%c%02d%c%02d %02d%c%02d%c%s%.10g", year, ds, month,
+                    ds, day, hour, ts, minute, ts, xs, seconds);
             break;
         }
     }
@@ -187,7 +184,7 @@ int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
    "hour*minute*second"
    - sqltype == DB_SQL_TYPE_TIMESTAMP
    "year*month*day hour*minute*second"
-   - otherwise the to and from markings in sqltype are used, 
+   - otherwise the to and from markings in sqltype are used,
    where "*" represents any non-whitespace character
 
    \param buf input string buffer
@@ -197,7 +194,7 @@ int db_convert_value_datetime_into_string(dbValue * value, int sqltype,
    \return DB_OK
  */
 int db_convert_Cstring_to_value_datetime(const char *buf, int sqltype,
-                                         dbValue * value)
+                                         dbValue *value)
 {
     int from, to;
     int year, month, day, hour, minute;
@@ -229,13 +226,13 @@ int db_convert_Cstring_to_value_datetime(const char *buf, int sqltype,
             sscanf(buf, "%d%*c%d%*c%d %d", &year, &month, &day, &hour);
             break;
         case DB_MINUTE:
-            sscanf(buf, "%d%*c%d%*c%d %d%*c%d",
-                   &year, &month, &day, &hour, &minute);
+            sscanf(buf, "%d%*c%d%*c%d %d%*c%d", &year, &month, &day, &hour,
+                   &minute);
             break;
         case DB_SECOND:
         case DB_FRACTION:
-            sscanf(buf, "%d%*c%d%*c%d %d%*c%d%*c%lf",
-                   &year, &month, &day, &hour, &minute, &seconds);
+            sscanf(buf, "%d%*c%d%*c%d %d%*c%d%*c%lf", &year, &month, &day,
+                   &hour, &minute, &seconds);
             break;
         }
         break;
@@ -255,8 +252,8 @@ int db_convert_Cstring_to_value_datetime(const char *buf, int sqltype,
             break;
         case DB_SECOND:
         case DB_FRACTION:
-            sscanf(buf, "%d%*c%d %d%*c%d%*c%lf",
-                   &month, &day, &hour, &minute, &seconds);
+            sscanf(buf, "%d%*c%d %d%*c%d%*c%lf", &month, &day, &hour, &minute,
+                   &seconds);
             break;
         }
         break;
@@ -315,8 +312,8 @@ int db_convert_Cstring_to_value_datetime(const char *buf, int sqltype,
             sscanf(buf, "%d%*c%d%*c%lf", &hour, &minute, &seconds);
             break;
         case DB_SQL_TYPE_TIMESTAMP:
-            sscanf(buf, "%d%*c%d%*c%d %d%*c%d%*c%lf",
-                   &year, &month, &day, &hour, &minute, &seconds);
+            sscanf(buf, "%d%*c%d%*c%d %d%*c%d%*c%lf", &year, &month, &day,
+                   &hour, &minute, &seconds);
             break;
         }
     }

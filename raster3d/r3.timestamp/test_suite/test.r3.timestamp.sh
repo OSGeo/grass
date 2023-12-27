@@ -11,41 +11,41 @@ r3.mapcalc --o expr="map3d = 1"
 
 # The first @test uses several different absolute datum formats
 r3.timestamp map=map3d date=none
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date="2003"
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date="Jul 2003"
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date="14 Jul 2003"
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date="14 Jul 2003 10"
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date="14 Jul 2003 10:30 +0700"
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date="14 Jul 2003 10:30:25"
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date="14 Jul 2003 10:30:25 +0700 / 15 Jul 2003 11:35:12 +0700"
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date="14 Jul 2003 10:30:25 +0700 / 15 Jul 2003"
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date=none
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 
 # The second @test uses several different relative datum formats
 r3.timestamp map=map3d date=none
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date="2 years"
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date="2 years 3 months"
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date="5 days"
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date="3 hours"
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date="5 minutes 30 seconds"
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date="2 years 2 months / 5 years 8 months"
-r3.timestamp map=map3d 
+r3.timestamp map=map3d
 r3.timestamp map=map3d date=none
 
 # The third @test to check @failure with wrong time stamps
@@ -54,4 +54,3 @@ r3.timestamp map=map3d date="2 years 3 months 8 days"
 r3.timestamp map=map3d date="1 month 5 days"
 r3.timestamp map=map3d date="July 2003"
 r3.timestamp map=map3d date="14 Jul 2003 +0700"
-

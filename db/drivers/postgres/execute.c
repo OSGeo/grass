@@ -18,7 +18,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_execute_immediate(dbString * sql)
+int db__driver_execute_immediate(dbString *sql)
 {
     PGresult *res;
     char *str;
@@ -38,9 +38,8 @@ int db__driver_execute_immediate(dbString * sql)
     res = PQexec(pg_conn, str);
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-        db_d_append_error("%s\n%s\n%s",
-                          _("Unable to execute:"),
-                          str, PQerrorMessage(pg_conn));
+        db_d_append_error("%s\n%s\n%s", _("Unable to execute:"), str,
+                          PQerrorMessage(pg_conn));
         db_d_report_error();
         PQclear(res);
         if (str)

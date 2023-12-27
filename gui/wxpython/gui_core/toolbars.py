@@ -83,11 +83,17 @@ BaseIcons = {
     "mapDispSettings": MetaIcon(
         img="monitor-settings", label=_("Map Display Settings")
     ),
+    "mapDispDocking": MetaIcon(img="monitor-dock", label=_("(Un)dock Map Display")),
 }
 
 
 class ToolbarController:
-    """Controller specialized for wx.ToolBar subclass."""
+    """Controller specialized for wx.ToolBar subclass.
+
+    Toolbar subclasses must delegate methods to controller.
+    Methods inherited from toolbar class must be delegated explicitly
+    and other methods can be delegated by @c __getattr__.
+    """
 
     def __init__(self, classObject, widget, parent, toolSwitcher):
         """
@@ -372,6 +378,10 @@ class BaseToolbar(ToolBar):
         """@copydoc ToolbarController::CreateTool()"""
         self.controller.CreateTool(*args, **kwargs)
 
+    def OnTool(self, event):
+        """@copydoc ToolbarController::OnTool()"""
+        self.controller.OnTool(event)
+
     def __getattr__(self, name):
         return getattr(self.controller, name)
 
@@ -415,6 +425,10 @@ class AuiToolbar(aui.AuiToolBar):
     def CreateTool(self, *args, **kwargs):
         """@copydoc ToolbarController::CreateTool()"""
         self.controller.CreateTool(*args, **kwargs)
+
+    def OnTool(self, event):
+        """@copydoc ToolbarController::OnTool()"""
+        self.controller.OnTool(event)
 
     def __getattr__(self, name):
         return getattr(self.controller, name)

@@ -1,10 +1,9 @@
-
 /***************************************************************
  *
  * MODULE:       v.delaunay
  *
  * AUTHOR(S):    Martin Pavlovsky (Google SoC 2008, Paul Kelly mentor)
- *               Based on "dct" by Geoff Leach, Department of Computer 
+ *               Based on "dct" by Geoff Leach, Department of Computer
  *               Science, RMIT.
  *
  * PURPOSE:      Creates a Delaunay triangulation vector map
@@ -15,7 +14,7 @@
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
  *               comes with GRASS for details.
- * 
+ *
  * The following notices apply to portions of the code originally
  * derived from work by Geoff Leach of RMIT:
  *
@@ -25,22 +24,22 @@
  *   Date: 6/10/93
  *
  *   Version 1.0
- *   
+ *
  *   Copyright (c) RMIT 1993. All rights reserved.
  *
- *   License to copy and use this software purposes is granted provided 
+ *   License to copy and use this software purposes is granted provided
  *   that appropriate credit is given to both RMIT and the author.
  *
  *   License is also granted to make and use derivative works provided
  *   that appropriate credit is given to both RMIT and the author.
  *
- *   RMIT makes no representations concerning either the merchantability 
- *   of this software or the suitability of this software for any particular 
- *   purpose.  It is provided "as is" without express or implied warranty 
+ *   RMIT makes no representations concerning either the merchantability
+ *   of this software or the suitability of this software for any particular
+ *   purpose.  It is provided "as is" without express or implied warranty
  *   of any kind.
  *
  *   These notices must be retained in any copies of any part of this software.
- * 
+ *
  **************************************************************/
 
 #include <stdlib.h>
@@ -57,7 +56,7 @@ static unsigned int n_free_e;
 void alloc_memory(unsigned int n)
 {
     struct edge *e;
-    int i;
+    unsigned int i;
 
     /* Sites storage. */
     sites = (struct vertex *)G_calloc(n, sizeof(struct vertex));
@@ -96,7 +95,7 @@ void realloc_sites(unsigned int n)
 void alloc_edges(unsigned int n)
 {
     struct edge *e;
-    int i;
+    unsigned int i;
 
     /* Edges. Euler's formula - at most 3n edges on a set of n sites */
     n_free_e = 3 * n;
@@ -111,15 +110,14 @@ void alloc_edges(unsigned int n)
         free_list_e[i] = e;
 }
 
-
-void free_memory()
+void free_memory(void)
 {
     G_free(sites);
     G_free(edges);
     G_free(free_list_e);
 }
 
-struct edge *get_edge()
+struct edge *get_edge(void)
 {
     if (n_free_e < 1)
         G_fatal_error(_("All allocated edges have been used."));

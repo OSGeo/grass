@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-int get_range(struct Cell_stats *statf, CELL * min, CELL * max, int zero)
+int get_range(struct Cell_stats *statf, CELL *min, CELL *max, int zero)
 {
     long count;
     int any;

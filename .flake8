@@ -1,7 +1,9 @@
 [flake8]
 ignore =
-    E203,  # whitespace before ':' (Black)
-    W503,  # line break before binary operator (Black)
+    # whitespace before ':' (Black)
+    E203,
+    # line break before binary operator (Black)
+    W503,
 
 per-file-ignores =
     # Files and directories which need fixes or specific exceptions
@@ -48,12 +50,14 @@ per-file-ignores =
     gui/wxpython/core/giface.py: E501
     gui/wxpython/core/gthread.py: F841
     gui/wxpython/core/gconsole.py: E722, W605
+    gui/wxpython/core/globalvar.py: W605
     gui/wxpython/core/toolboxes.py: E722, E501
     gui/wxpython/core/utils.py: E722, F841, W605
     gui/wxpython/core/workspace.py: E722, E501
     gui/wxpython/core/render.py: E722, F841, E501
     gui/wxpython/core/ws.py: F841, E501
     gui/wxpython/core/settings.py: E722
+    gui/wxpython/core/watchdog.py: E402
     gui/wxpython/datacatalog/tree.py: E731, E402, E501
     gui/wxpython/dbmgr/base.py: E501, E722, F841
     gui/wxpython/dbmgr/dialogs.py: E501, F841, E722
@@ -200,7 +204,7 @@ per-file-ignores =
     scripts/v.report/v.report.py: F841, E501
     scripts/db.out.ogr/db.out.ogr.py: F841
     scripts/g.extension/g.extension.py: F841, E722, E501
-    scripts/r.unpack/r.unpack.py: E722, E501
+    scripts/r.unpack/r.unpack.py: E501
     scripts/v.unpack/v.unpack.py: F841, E722, E501
     scripts/v.import/v.import.py: F841, E722, E501
     scripts/db.univar/db.univar.py: E741, E501
@@ -211,7 +215,7 @@ per-file-ignores =
     scripts/r.fillnulls/r.fillnulls.py: E722, E501
     scripts/d.rast.edit/d.rast.edit.py: E722, E501
     scripts/v.what.strds/v.what.strds.py: E722, E501
-    scripts/i.in.spotvgt/i.in.spotvgt.py: E722, E501
+    scripts/i.in.spotvgt/i.in.spotvgt.py: E501
     # Line too long (esp. module interface definitions)
     scripts/*/*.py: E501
     # local variable 'column' is assigned to but never used

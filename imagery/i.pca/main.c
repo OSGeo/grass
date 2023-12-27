@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       i.pca
@@ -17,7 +16,6 @@
  *
  ***************************************************************************/
 
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -29,31 +27,28 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 #undef PCA_DEBUG
-
 
 /* function prototypes */
 static CELL round_c(double);
 static int set_output_scale(struct Option *, int *, int *, int *);
 static int calc_mu_cov(int *, double **, double *, double *, int);
-static int write_pca(double **, double *, double *, int *, char *, int,
-                     int, int, int, int);
+static int write_pca(double **, double *, double *, int *, char *, int, int,
+                     int, int, int);
 
 #ifdef PCA_DEBUG
 static int dump_eigen(int, double **, double *);
 #endif
 
-
 int main(int argc, char *argv[])
 {
-    int i;                      /* Loop control variables */
-    int bands;                  /* Number of image bands */
-    int pcbands;                /* Number of pc scores to use for filtering */
-    int pcperc;                 /* cumulative percent to use for filtering */
-    double *mu;                 /* Mean vector for image bands */
-    double *stddev;             /* Stddev vector for image bands */
-    double **covar;             /* Covariance Matrix */
+    int i;          /* Loop control variables */
+    int bands;      /* Number of image bands */
+    int pcbands;    /* Number of pc scores to use for filtering */
+    int pcperc;     /* cumulative percent to use for filtering */
+    double *mu;     /* Mean vector for image bands */
+    double *stddev; /* Stddev vector for image bands */
+    double **covar; /* Covariance Matrix */
     double *eigval;
     double **eigmat;
     int *inp_fd;
@@ -120,9 +115,9 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     /* determine number of bands passed in */
-    for (bands = 0; opt_in->answers[bands] != NULL; bands++) ;
+    for (bands = 0; opt_in->answers[bands] != NULL; bands++)
+        ;
 
     /* input can be either several raster maps or a group */
     if (bands > 1) {
@@ -227,7 +222,8 @@ int main(int argc, char *argv[])
         if (pcbands == bands)
             pcbands--;
         if (pcbands < 2)
-            G_fatal_error(_("Not enough principal components left for filtering"));
+            G_fatal_error(
+                _("Not enough principal components left for filtering"));
 
         G_message(_("Using %d of %d principal components for filtering"),
                   pcbands, bands);
@@ -235,8 +231,8 @@ int main(int argc, char *argv[])
     }
 
     /* write output images */
-    write_pca(eigmat, mu, stddev, inp_fd, opt_out->answer, bands,
-              scale, scale_min, scale_max, pcbands);
+    write_pca(eigmat, mu, stddev, inp_fd, opt_out->answer, bands, scale,
+              scale_min, scale_max, pcbands);
 
     /* write colors and history to output */
     for (i = 0; i < bands; i++) {
@@ -264,7 +260,6 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-
 static CELL round_c(double x)
 {
     CELL n;
@@ -279,10 +274,8 @@ static CELL round_c(double x)
     return n;
 }
 
-
-static int
-set_output_scale(struct Option *scale_opt, int *scale, int *scale_min,
-                 int *scale_max)
+static int set_output_scale(struct Option *scale_opt, int *scale,
+                            int *scale_min, int *scale_max)
 {
     if (scale_opt->answer) {
         sscanf(scale_opt->answers[0], "%d", (int *)scale_min);
@@ -310,16 +303,15 @@ set_output_scale(struct Option *scale_opt, int *scale, int *scale_min,
     return 0;
 }
 
-
-static int calc_mu_cov(int *fds, double **covar, double *mu,
-                       double *stddev, int bands)
+static int calc_mu_cov(int *fds, double **covar, double *mu, double *stddev,
+                       int bands)
 {
     int i, j;
     int row, col;
     int rows = Rast_window_rows();
     int cols = Rast_window_cols();
     off_t count = 0;
-    DCELL **rowbuf = (DCELL **) G_malloc(bands * sizeof(DCELL *));
+    DCELL **rowbuf = (DCELL **)G_malloc(bands * sizeof(DCELL *));
     double **sum2 = (double **)G_calloc(bands, sizeof(double *));
     double *sumsq, *sd, *sum;
 
@@ -372,16 +364,16 @@ static int calc_mu_cov(int *fds, double **covar, double *mu,
     for (i = 0; i < bands; i++) {
         if (stddev) {
             sd[i] = sqrt(count * sumsq[i] - sum[i] * sum[i]);
-            stddev[i] = sqrt((sumsq[i] - sum[i] * sum[i] / count) /
-                             (count - 1));
+            stddev[i] =
+                sqrt((sumsq[i] - sum[i] * sum[i] / count) / (count - 1));
         }
         for (j = 0; j <= i; j++) {
             if (stddev)
-                covar[i][j] = (count * sum2[i][j] - sum[i] * sum[j]) /
-                    (sd[i] * sd[j]);
+                covar[i][j] =
+                    (count * sum2[i][j] - sum[i] * sum[j]) / (sd[i] * sd[j]);
             else
-                covar[i][j] = (sum2[i][j] - sum[i] * sum[j] / count) /
-                    (count - 1);
+                covar[i][j] =
+                    (sum2[i][j] - sum[i] * sum[j] / count) / (count - 1);
             G_debug(3, "covar[%d][%d] = %f", i, j, covar[i][j]);
             if (j != i)
                 covar[j][i] = covar[i][j];
@@ -404,11 +396,9 @@ static int calc_mu_cov(int *fds, double **covar, double *mu,
     return 1;
 }
 
-
-static int
-write_pca(double **eigmat, double *mu, double *stddev,
-          int *inp_fd, char *out_basename, int bands,
-          int scale, int scale_min, int scale_max, int fbands)
+static int write_pca(double **eigmat, double *mu, double *stddev, int *inp_fd,
+                     char *out_basename, int bands, int scale, int scale_min,
+                     int scale_max, int fbands)
 {
     int i, j;
     void **outbuf = (void **)G_malloc(bands * sizeof(void *));
@@ -425,14 +415,14 @@ write_pca(double **eigmat, double *mu, double *stddev,
     int outmap_type = (scale) ? CELL_TYPE : DCELL_TYPE;
     int outcell_mapsiz = Rast_cell_size(outmap_type);
     int *out_fd = (int *)G_malloc(bands * sizeof(int));
-    DCELL **inbuf = (DCELL **) G_malloc(bands * sizeof(DCELL *));
+    DCELL **inbuf = (DCELL **)G_malloc(bands * sizeof(DCELL *));
     DCELL *pcs = NULL;
 
     /* 2 passes for rescale.  1 pass for no rescale */
     int PASSES = (scale) ? 2 : 1;
 
     if (fbands)
-        pcs = (DCELL *) G_malloc(fbands * sizeof(DCELL));
+        pcs = (DCELL *)G_malloc(fbands * sizeof(DCELL));
 
     /* allocate memory for row buffers */
     for (i = 0; i < bands; i++) {
@@ -479,8 +469,7 @@ write_pca(double **eigmat, double *mu, double *stddev,
                 if (i != bands) {
                     for (i = 0; i < bands; i++) {
                         Rast_set_null_value(outptr[i], 1, outmap_type);
-                        outptr[i] =
-                            G_incr_void_ptr(outptr[i], outcell_mapsiz);
+                        outptr[i] = G_incr_void_ptr(outptr[i], outcell_mapsiz);
                     }
                     continue;
                 }
@@ -494,10 +483,9 @@ write_pca(double **eigmat, double *mu, double *stddev,
                             /* corresp. cell of j-th band */
                             if (stddev)
                                 dval += eigmat[i][j] *
-                                    ((inbuf[j][col] - mu[j]) / stddev[j]);
+                                        ((inbuf[j][col] - mu[j]) / stddev[j]);
                             else
-                                dval +=
-                                    eigmat[i][j] * (inbuf[j][col] - mu[j]);
+                                dval += eigmat[i][j] * (inbuf[j][col] - mu[j]);
                         }
                         pcs[i] = dval;
                     }
@@ -521,10 +509,9 @@ write_pca(double **eigmat, double *mu, double *stddev,
                             /* corresp. cell of j-th band */
                             if (stddev)
                                 dval += eigmat[i][j] *
-                                    ((inbuf[j][col] - mu[j]) / stddev[j]);
+                                        ((inbuf[j][col] - mu[j]) / stddev[j]);
                             else
-                                dval +=
-                                    eigmat[i][j] * (inbuf[j][col] - mu[j]);
+                                dval += eigmat[i][j] * (inbuf[j][col] - mu[j]);
                         }
                     }
 
@@ -544,15 +531,16 @@ write_pca(double **eigmat, double *mu, double *stddev,
                             Rast_set_c_value(outptr[i], 1, CELL_TYPE);
                         }
                         else {
-                            /* map data to 0, (new_range-1) and then adding new_min */
-                            CELL tmpcell =
-                                round_c((new_range * (dval - min[i]) /
-                                         old_range[i]) + scale_min);
+                            /* map data to 0, (new_range-1) and then adding
+                             * new_min */
+                            CELL tmpcell = round_c(
+                                (new_range * (dval - min[i]) / old_range[i]) +
+                                scale_min);
 
                             Rast_set_c_value(outptr[i], tmpcell, outmap_type);
                         }
                     }
-                    else {      /* (!scale) */
+                    else { /* (!scale) */
 
                         Rast_set_d_value(outptr[i], dval, outmap_type);
                     }
@@ -586,7 +574,6 @@ write_pca(double **eigmat, double *mu, double *stddev,
 
     return 0;
 }
-
 
 #ifdef PCA_DEBUG
 static int dump_eigen(int bands, double **eigmat, double *eigval)

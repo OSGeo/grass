@@ -22,7 +22,7 @@
    \brief Read color table of vector map
 
    The color table for the vector map <i>name</i> in the specified
-   <i>mapset</i> is read into the <i>colors</i> structure. 
+   <i>mapset</i> is read into the <i>colors</i> structure.
 
    Note: If a secondary color file for map name <i>name</i> exists in
    the current mapset, that color file is read. This allows the user to

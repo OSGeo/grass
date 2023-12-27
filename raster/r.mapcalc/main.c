@@ -1,10 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       r.mapcalc
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
  *               rewritten 2002: Glynn Clements <glynn gclements.plus.com>
- * PURPOSE:      
+ * PURPOSE:
  * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -63,6 +62,7 @@ int main(int argc, char **argv)
     struct Option *expr, *file, *seed, *region;
     struct Flag *random, *describe;
     int all_ok;
+    char *desc;
 
     G_gisinit(argv[0]);
 
@@ -85,12 +85,18 @@ int main(int argc, char **argv)
     region->required = NO;
     region->answer = "current";
     region->options = "current,intersect,union";
-    region->description = _("The computational region that should be used.\n"
-                            "               - current uses the current region of the mapset.\n"
-                            "               - intersect computes the intersection region between\n"
-                            "                 all input maps and uses the smallest resolution\n"
-                            "               - union computes the union extent of all map regions\n"
-                            "                 and uses the smallest resolution");
+    region->description = _("The computational region that should be used.");
+    desc = NULL;
+    G_asprintf(&desc,
+               "current;%s;"
+               "intersect;%s;"
+               "union;%s;",
+               _("current uses the current region of the mapset"),
+               _("intersect computes the intersection region between "
+                 "all input maps and uses the smallest resolution"),
+               _("union computes the union extent of all map regions "
+                 "and uses the smallest resolution"));
+    region->descriptions = desc;
 
     file = G_define_standard_option(G_OPT_F_INPUT);
     file->key = "file";
@@ -129,12 +135,12 @@ int main(int argc, char **argv)
     overwrite_flag = module->overwrite;
 
     if (expr->answer && file->answer)
-        G_fatal_error(_("%s= and %s= are mutually exclusive"),
-                      expr->key, file->key);
+        G_fatal_error(_("%s= and %s= are mutually exclusive"), expr->key,
+                      file->key);
 
     if (seed->answer && random->answer)
-        G_fatal_error(_("%s= and -%c are mutually exclusive"),
-                      seed->key, random->key);
+        G_fatal_error(_("%s= and -%c are mutually exclusive"), seed->key,
+                      random->key);
 
     if (expr->answer)
         result = parse_string(expr->answer);

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.stats
@@ -66,38 +65,36 @@ int main(int argc, char *argv[])
     CELL min, max, null_set = 0;
     DCELL dmin, dmax;
     struct GModule *module;
-    struct
-    {
-        struct Flag *A;         /* print averaged values instead of intervals */
-        struct Flag *a;         /* area */
-        struct Flag *c;         /* cell counts */
-        struct Flag *p;         /* percents */
-        struct Flag *l;         /* with labels */
-        struct Flag *n;         /* Suppress reporting of any NULLs */
-        struct Flag *N;         /* Suppress reporting of NULLs when 
-                                   all values are NULL */
-        struct Flag *one;       /* one cell per line */
-        struct Flag *x;         /*    with row/col */
-        struct Flag *g;         /*    with east/north */
-        struct Flag *i;         /* use quant rules for fp map, i.e. read it as int */
-        struct Flag *r;         /*    raw output: when nsteps option is used,
-                                   report indexes of ranges instead of ranges
-                                   themselves; when -C (cats) option is used
-                                   reports indexes of fp ranges = ind. of labels */
-        struct Flag *C;         /* report stats for labeled ranges in cats files */
+    struct {
+        struct Flag *A;   /* print averaged values instead of intervals */
+        struct Flag *a;   /* area */
+        struct Flag *c;   /* cell counts */
+        struct Flag *p;   /* percents */
+        struct Flag *l;   /* with labels */
+        struct Flag *n;   /* Suppress reporting of any NULLs */
+        struct Flag *N;   /* Suppress reporting of NULLs when
+                             all values are NULL */
+        struct Flag *one; /* one cell per line */
+        struct Flag *x;   /*    with row/col */
+        struct Flag *g;   /*    with east/north */
+        struct Flag *i;   /* use quant rules for fp map, i.e. read it as int */
+        struct Flag *r;   /*    raw output: when nsteps option is used,
+                             report indexes of ranges instead of ranges
+                             themselves; when -C (cats) option is used
+                             reports indexes of fp ranges = ind. of labels */
+        struct Flag *C;   /* report stats for labeled ranges in cats files */
     } flag;
-    struct
-    {
+    struct {
         struct Option *cell;
         struct Option *fs;
         struct Option *nv;
         struct Option *output;
-        struct Option *nsteps;  /* divide data range into nsteps and report stats
-                                   for these ranges: only for fp maps
-                                   NOTE: when -C flag is used, and there are 
-                                   explicit fp ranges in cats or when the map 
-                                   is int, nsteps is ignored */
-        struct Option *sort;    /* sort by cell counts */
+        struct Option *nsteps; /* divide data range into nsteps and report stats
+                                  for these ranges: only for fp maps
+                                  NOTE: when -C flag is used, and there are
+                                  explicit fp ranges in cats or when the map
+                                  is int, nsteps is ignored */
+        struct Option *sort;   /* sort by cell counts */
     } option;
 
     G_gisinit(argv[0]);
@@ -141,11 +138,9 @@ int main(int argc, char *argv[])
     option.sort->required = NO;
     option.sort->multiple = NO;
     option.sort->label = _("Sort output statistics by cell counts");
-    option.sort->description =
-        _("Default: sorted by categories or intervals");
+    option.sort->description = _("Default: sorted by categories or intervals");
     option.sort->options = "asc,desc";
-    G_asprintf((char **)&(option.sort->descriptions),
-               "asc;%s;desc;%s",
+    G_asprintf((char **)&(option.sort->descriptions), "asc;%s;desc;%s",
                _("Sort by cell counts in ascending order"),
                _("Sort by cell counts in descending order"));
     option.sort->guisection = _("Formatting");
@@ -190,14 +185,14 @@ int main(int argc, char *argv[])
 
     flag.A = G_define_flag();
     flag.A->key = 'A';
-    flag.A->description =
-        _("Print averaged values instead of intervals (floating-point maps only)");
+    flag.A->description = _("Print averaged values instead of intervals "
+                            "(floating-point maps only)");
     flag.A->guisection = _("Floating point");
 
     flag.r = G_define_flag();
     flag.r->key = 'r';
-    flag.r->description =
-        _("Print raw indexes of floating-point ranges (floating-point maps only)");
+    flag.r->description = _("Print raw indexes of floating-point ranges "
+                            "(floating-point maps only)");
     flag.r->guisection = _("Floating point");
 
     flag.n = G_define_flag();
@@ -207,8 +202,7 @@ int main(int argc, char *argv[])
 
     flag.N = G_define_flag();
     flag.N->key = 'N';
-    flag.N->description =
-        _("Do not report cells where all maps have no data");
+    flag.N->description = _("Do not report cells where all maps have no data");
     flag.N->guisection = _("No data");
 
     flag.C = G_define_flag();
@@ -223,10 +217,8 @@ int main(int argc, char *argv[])
         _("Read floating-point map as integer (use map's quant rules)");
     flag.i->guisection = _("Floating point");
 
-
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
 
     name = option.output->answer;
     if (name != NULL && strcmp(name, "-") != 0) {
@@ -259,7 +251,7 @@ int main(int argc, char *argv[])
     with_labels = flag.l->answer;
 
     /* determine sorting method */
-    do_sort = SORT_DEFAULT;     /* sort by cats by default */
+    do_sort = SORT_DEFAULT; /* sort by cats by default */
     if (option.sort->answer) {
         switch (option.sort->answer[0]) {
         case 'a':
@@ -297,8 +289,8 @@ int main(int argc, char *argv[])
         name = *names;
         fd = (int *)G_realloc(fd, (nfiles + 1) * sizeof(int));
         is_fp = (int *)G_realloc(is_fp, (nfiles + 1) * sizeof(int));
-        DMAX = (DCELL *) G_realloc(DMAX, (nfiles + 1) * sizeof(DCELL));
-        DMIN = (DCELL *) G_realloc(DMIN, (nfiles + 1) * sizeof(DCELL));
+        DMAX = (DCELL *)G_realloc(DMAX, (nfiles + 1) * sizeof(DCELL));
+        DMIN = (DCELL *)G_realloc(DMIN, (nfiles + 1) * sizeof(DCELL));
 
         fd[nfiles] = Rast_open_old(name, "");
 
@@ -312,31 +304,33 @@ int main(int argc, char *argv[])
                           name, flag.C->key, option.nsteps->key);
         }
         if (with_labels || (cat_ranges && is_fp[nfiles])) {
-            labels = (struct Categories *)
-                G_realloc(labels, (nfiles + 1) * sizeof(struct Categories));
+            labels = (struct Categories *)G_realloc(
+                labels, (nfiles + 1) * sizeof(struct Categories));
             if (Rast_read_cats(name, "", &labels[nfiles]) < 0)
                 Rast_init_cats("", &labels[nfiles]);
         }
         if (is_fp[nfiles])
-            /* floating point map */
+        /* floating point map */
         {
             Rast_quant_init(&q);
             if (cat_ranges) {
                 if (!Rast_quant_nof_rules(&labels[nfiles].q)) {
-                    G_warning(_("Cats for raster map <%s> are either missing or have no explicit labels. "
-                               "Using %s=%d."), name, option.nsteps->key,
-                              nsteps);
+                    G_warning(_("Cats for raster map <%s> are either missing "
+                                "or have no explicit labels. "
+                                "Using %s=%d."),
+                              name, option.nsteps->key, nsteps);
                     cat_ranges = 0;
                 }
                 else if (nsteps != 255)
-                    G_warning(_("Flag '-%c' was given, using cats fp ranges of raster map <%s>, "
-                               "ignoring '%s' option"), flag.C->key, name,
-                              option.nsteps->key);
+                    G_warning(_("Flag '-%c' was given, using cats fp ranges of "
+                                "raster map <%s>, "
+                                "ignoring '%s' option"),
+                              flag.C->key, name, option.nsteps->key);
             }
-            if (!cat_ranges) {  /* DO NOT use else here, cat_ranges can change */
+            if (!cat_ranges) { /* DO NOT use else here, cat_ranges can change */
                 if (Rast_read_fp_range(name, "", &fp_range) < 0)
-                    G_fatal_error(_("Unable to read fp range of raster map <%s>"),
-                                  name);
+                    G_fatal_error(
+                        _("Unable to read fp range of raster map <%s>"), name);
                 Rast_get_fp_range_min_max(&fp_range, &DMIN[nfiles],
                                           &DMAX[nfiles]);
                 G_debug(3, "file %2d: dmin=%f  dmax=%f", nfiles, DMIN[nfiles],
@@ -348,12 +342,12 @@ int main(int argc, char *argv[])
                 /* set the quant rules for reading the map */
                 Rast_set_quant_rules(fd[nfiles], &q);
                 Rast_quant_get_limits(&q, &dmin, &dmax, &min, &max);
-                G_debug(2, "overall: dmin=%f  dmax=%f,  qmin=%d  qmax=%d",
-                        dmin, dmax, min, max);
+                G_debug(2, "overall: dmin=%f  dmax=%f,  qmin=%d  qmax=%d", dmin,
+                        dmax, min, max);
 
                 Rast_quant_free(&q);
             }
-            else {              /* cats ranges */
+            else { /* cats ranges */
 
                 /* set the quant rules for reading the map */
                 Rast_set_quant_rules(fd[nfiles], &labels[nfiles].q);

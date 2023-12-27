@@ -1,7 +1,7 @@
 /*!
    \file lib/vector/Vlib/area.c
 
-   \brief Vector library - area-related functions 
+   \brief Vector library - area-related functions
 
    Higher level functions for reading/writing/manipulating vectors.
 
@@ -34,8 +34,8 @@
    \return number of points
    \return -1 on error
  */
-int Vect_get_area_points(const struct Map_info *Map,
-                         int area, struct line_pnts *BPoints)
+int Vect_get_area_points(struct Map_info *Map, int area,
+                         struct line_pnts *BPoints)
 {
     const struct Plus_head *Plus;
     struct P_area *Area;
@@ -46,9 +46,9 @@ int Vect_get_area_points(const struct Map_info *Map,
     Plus = &(Map->plus);
     Area = Plus->Area[area];
 
-    if (Area == NULL) {         /* dead area */
+    if (Area == NULL) { /* dead area */
         G_warning(_("Attempt to read points of nonexistent area"));
-        return -1;              /* error, because we should not read dead areas */
+        return -1; /* error, because we should not read dead areas */
     }
 
     G_debug(3, "  n_lines = %d", Area->n_lines);
@@ -65,8 +65,8 @@ int Vect_get_area_points(const struct Map_info *Map,
    \return number of points
    \return -1 on error
  */
-int Vect_get_isle_points(const struct Map_info *Map,
-                         int isle, struct line_pnts *BPoints)
+int Vect_get_isle_points(struct Map_info *Map, int isle,
+                         struct line_pnts *BPoints)
 {
     const struct Plus_head *Plus;
     struct P_isle *Isle;
@@ -77,15 +77,14 @@ int Vect_get_isle_points(const struct Map_info *Map,
     Plus = &(Map->plus);
     Isle = Plus->Isle[isle];
 
-    if (Isle == NULL) {         /* dead isle */
+    if (Isle == NULL) { /* dead isle */
         G_warning(_("Attempt to read points of nonexistent isle"));
-        return -1;              /* error, because we should not read dead isles */
+        return -1; /* error, because we should not read dead isles */
     }
 
     G_debug(3, "  n_lines = %d", Isle->n_lines);
 
-    if (Map->format == GV_FORMAT_POSTGIS &&
-        Map->fInfo.pg.toposchema_name &&
+    if (Map->format == GV_FORMAT_POSTGIS && Map->fInfo.pg.toposchema_name &&
         Map->fInfo.pg.cache.ctype != CACHE_MAP) {
 #ifdef HAVE_POSTGRES
         /* PostGIS Topology */
@@ -96,8 +95,7 @@ int Vect_get_isle_points(const struct Map_info *Map,
 #endif
     }
     /* native format */
-    return Vect__get_area_points_nat(Map, Isle->lines, Isle->n_lines,
-                                     BPoints);
+    return Vect__get_area_points_nat(Map, Isle->lines, Isle->n_lines, BPoints);
 }
 
 /*!
@@ -109,7 +107,7 @@ int Vect_get_isle_points(const struct Map_info *Map,
    \return centroid id of area
    \return 0 if no centroid found
  */
-int Vect_get_area_centroid(const struct Map_info *Map, int area)
+int Vect_get_area_centroid(struct Map_info *Map, int area)
 {
     const struct Plus_head *Plus;
     struct P_area *Area;
@@ -138,8 +136,7 @@ int Vect_get_area_centroid(const struct Map_info *Map, int area)
 
    \return number of boundaries
  */
-int Vect_get_area_boundaries(const struct Map_info *Map, int area,
-                             struct ilist *List)
+int Vect_get_area_boundaries(struct Map_info *Map, int area, struct ilist *List)
 {
     int i, line;
     const struct Plus_head *Plus;
@@ -169,14 +166,13 @@ int Vect_get_area_boundaries(const struct Map_info *Map, int area,
    Note that ids in <b>List</b> can be negative. The sign indicates in
    which direction the boundary should be read (negative for forward).
 
-   \param Map pointer to Map_info structur
+   \param Map pointer to Map_info structure
    \param isle island number
    \param[out] List pointer to list where boundaries are stored
 
    \return number of boundaries
  */
-int Vect_get_isle_boundaries(const struct Map_info *Map, int isle,
-                             struct ilist *List)
+int Vect_get_isle_boundaries(struct Map_info *Map, int isle, struct ilist *List)
 {
     int i, line;
     const struct Plus_head *Plus;
@@ -209,7 +205,7 @@ int Vect_get_isle_boundaries(const struct Map_info *Map, int isle,
    \return number of isles for area
    \return 0 if area not found
  */
-int Vect_get_area_num_isles(const struct Map_info *Map, int area)
+int Vect_get_area_num_isles(struct Map_info *Map, int area)
 {
     const struct Plus_head *Plus;
     struct P_area *Area;
@@ -225,7 +221,6 @@ int Vect_get_area_num_isles(const struct Map_info *Map, int area)
     G_debug(3, "  n_isles = %d", Area->n_isles);
 
     return (Area->n_isles);
-
 }
 
 /*!
@@ -238,7 +233,7 @@ int Vect_get_area_num_isles(const struct Map_info *Map, int area)
    \return isle id
    \return 0 if no isle found
  */
-int Vect_get_area_isle(const struct Map_info *Map, int area, int isle)
+int Vect_get_area_isle(struct Map_info *Map, int area, int isle)
 {
     const struct Plus_head *Plus;
     struct P_area *Area;
@@ -265,7 +260,7 @@ int Vect_get_area_isle(const struct Map_info *Map, int area, int isle)
    \return area id
    \return 0 area not found
  */
-int Vect_get_isle_area(const struct Map_info *Map, int isle)
+int Vect_get_isle_area(struct Map_info *Map, int isle)
 {
     const struct Plus_head *Plus;
     struct P_isle *Isle;
@@ -292,7 +287,7 @@ int Vect_get_isle_area(const struct Map_info *Map, int isle)
    \return perimeter of area with perimeters of isles in meters
  */
 
-double Vect_get_area_perimeter(const struct Map_info *Map, int area)
+double Vect_get_area_perimeter(struct Map_info *Map, int area)
 {
     const struct Plus_head *Plus;
     struct P_area *Area;
@@ -336,8 +331,8 @@ double Vect_get_area_perimeter(const struct Map_info *Map, int area)
    \return 1 if point is inside area
    \return 2 if point is on the area's outer ring
  */
-int Vect_point_in_area(double x, double y, const struct Map_info *Map,
-                       int area, struct bound_box *box)
+int Vect_point_in_area(double x, double y, struct Map_info *Map, int area,
+                       struct bound_box *box)
 {
     int i, isle;
     const struct Plus_head *Plus;
@@ -354,7 +349,7 @@ int Vect_point_in_area(double x, double y, const struct Map_info *Map,
     if (poly == 0)
         return 0;
 
-    if (poly == 2)              /* includes area boundary, OK? */
+    if (poly == 2) /* includes area boundary, OK? */
         return 2;
 
     /* check if in islands */
@@ -363,7 +358,7 @@ int Vect_point_in_area(double x, double y, const struct Map_info *Map,
         Vect_get_isle_box(Map, isle, &ibox);
         poly = Vect_point_in_island(x, y, Map, isle, &ibox);
         if (poly >= 1)
-            return 0;           /* excludes island boundary (poly == 2), OK? */
+            return 0; /* excludes island boundary (poly == 2), OK? */
     }
 
     return 1;
@@ -377,7 +372,7 @@ int Vect_point_in_area(double x, double y, const struct Map_info *Map,
 
    \return area of area without areas of isles
  */
-double Vect_get_area_area(const struct Map_info *Map, int area)
+double Vect_get_area_area(struct Map_info *Map, int area)
 {
     const struct Plus_head *Plus;
     struct P_area *Area;
@@ -425,8 +420,7 @@ double Vect_get_area_area(const struct Map_info *Map, int area)
    \return 0 centroid found (but may be without categories)
    \return 1 no centroid found
  */
-int Vect_get_area_cats(const struct Map_info *Map, int area,
-                       struct line_cats *Cats)
+int Vect_get_area_cats(struct Map_info *Map, int area, struct line_cats *Cats)
 {
     int centroid;
 
@@ -437,9 +431,8 @@ int Vect_get_area_cats(const struct Map_info *Map, int area,
         Vect_read_line(Map, NULL, Cats, centroid);
     }
     else {
-        return 1;               /* no centroid */
+        return 1; /* no centroid */
     }
-
 
     return 0;
 }
@@ -454,7 +447,7 @@ int Vect_get_area_cats(const struct Map_info *Map, int area,
    \return first found category of given field
    \return -1 no centroid or no category found
  */
-int Vect_get_area_cat(const struct Map_info *Map, int area, int field)
+int Vect_get_area_cat(struct Map_info *Map, int area, int field)
 {
     int i;
     static struct line_cats *Cats = NULL;
@@ -491,11 +484,10 @@ int Vect_get_area_cat(const struct Map_info *Map, int area, int field)
    \return number of points
    \return -1 on error
  */
-int Vect__get_area_points(const struct Map_info *Map, const plus_t * lines,
+int Vect__get_area_points(struct Map_info *Map, const plus_t *lines,
                           int n_lines, struct line_pnts *BPoints)
 {
-    if (Map->format == GV_FORMAT_POSTGIS &&
-        Map->fInfo.pg.toposchema_name &&
+    if (Map->format == GV_FORMAT_POSTGIS && Map->fInfo.pg.toposchema_name &&
         Map->fInfo.pg.cache.ctype != CACHE_MAP) {
 #ifdef HAVE_POSTGRES
         /* PostGIS Topology */
@@ -507,7 +499,6 @@ int Vect__get_area_points(const struct Map_info *Map, const plus_t * lines,
     /* native format */
     return Vect__get_area_points_nat(Map, lines, n_lines, BPoints);
 }
-
 
 /*!
    \brief Get area boundary points (native format)
@@ -522,9 +513,8 @@ int Vect__get_area_points(const struct Map_info *Map, const plus_t * lines,
    \return number of points
    \return -1 on error
  */
-int Vect__get_area_points_nat(const struct Map_info *Map,
-                              const plus_t * lines, int n_lines,
-                              struct line_pnts *BPoints)
+int Vect__get_area_points_nat(struct Map_info *Map, const plus_t *lines,
+                              int n_lines, struct line_pnts *BPoints)
 {
     int i, line, aline, dir;
     static struct line_pnts *Points;
@@ -543,9 +533,9 @@ int Vect__get_area_points_nat(const struct Map_info *Map,
 
         dir = line > 0 ? GV_FORWARD : GV_BACKWARD;
         Vect_append_points(BPoints, Points, dir);
-        BPoints->n_points--;    /* skip last point, avoids duplicates */
+        BPoints->n_points--; /* skip last point, avoids duplicates */
     }
-    BPoints->n_points++;        /* close polygon */
+    BPoints->n_points++; /* close polygon */
 
     return BPoints->n_points;
 }

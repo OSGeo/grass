@@ -1,7 +1,6 @@
-
 /*****************************************************************************
-* just a test for debugging purpose, imitating dbf driver -a.sh.
-*****************************************************************************/
+ * just a test for debugging purpose, imitating dbf driver -a.sh.
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <grass/dbmi.h>
@@ -45,18 +44,19 @@ int main(int argc, char *argv[])
                            db_get_handle_dbpath(&handle));
     /* DO NOT free the handle since we saved the pointers to the name,path */
 
-    select = (dbString *) G_malloc(1024);
+    select = (dbString *)G_malloc(1024);
 
     db_init_string(select);
 
     db_set_string(select,
-                  "select id, quality, flow from river where (flow = 10) or (flow = 20) or (flow = 30) or (flow = 5) or (flow = 7)");
+                  "select id, quality, flow from river where (flow = 10) or "
+                  "(flow = 20) or (flow = 30) or (flow = 5) or (flow = 7)");
 
     /* create a cursor */
-    cursor = (dbCursor *) db_malloc(sizeof(dbCursor));
+    cursor = (dbCursor *)db_malloc(sizeof(dbCursor));
     if (cursor == NULL)
         return db_get_error_code();
-    token = db_new_token((dbAddress) cursor);
+    token = db_new_token((dbAddress)cursor);
     if (token < 0)
         return db_get_error_code();
     db_init_cursor(cursor);
@@ -100,8 +100,6 @@ int main(int argc, char *argv[])
     db__mark_database_closed();
     db__init_driver_state();
 
-
     G_debug(3, "main(): ok");
     return DB_OK;
-
 }

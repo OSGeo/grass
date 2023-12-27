@@ -1,12 +1,4 @@
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
+import contextlib
 import os
 import sys
 import multiprocessing as mltp
@@ -22,7 +14,10 @@ from grass.pygrass.gis.region import Region
 from grass.pygrass.modules import Module
 from grass.pygrass.utils import get_mapset_raster, findmaps
 
-from grass.pygrass.modules.grid.split import split_region_tiles
+from grass.pygrass.modules.grid.split import (
+    split_region_tiles,
+    split_region_in_overlapping_tiles,
+)
 from grass.pygrass.modules.grid.patch import rpatch_map, rpatch_map_r_patch_backend
 
 
@@ -406,7 +401,7 @@ def cmd_exe(args):
     os.remove(gisrc_dst)
 
 
-class GridModule(object):
+class GridModule:
     # TODO maybe also i.* could be supported easily
     """Run GRASS raster commands in a multiprocessing mode.
 
@@ -514,7 +509,7 @@ class GridModule(object):
             groups = [g for g in select(self.module.inputs, "group")]
             if groups:
                 copy_groups(groups, self.gisrc_src, self.gisrc_dst, region=self.region)
-        self.bboxes = split_region_tiles(
+        self.bboxes = split_region_in_overlapping_tiles(
             region=region, width=self.width, height=self.height, overlap=overlap
         )
         if mapset_prefix:
@@ -645,8 +640,19 @@ class GridModule(object):
                       created by GridModule
         :type clean: bool
         """
+        with contextlib.ExitStack() as stack:
+            if clean:
+                stack.callback(self._clean)
+            self._actual_run(patch=patch)
+
+    def _actual_run(self, patch):
+        """Run the GRASS command
+
+        :param patch: set False if you does not want to patch the results
+        """
         self.module.flags.overwrite = True
         self.define_mapset_inputs()
+
         if self.debug:
             for wrk in self.get_works():
                 cmd_exe(wrk)
@@ -689,17 +695,18 @@ class GridModule(object):
                     fil = open(os.path.join(dirpath, self.out_prefix + par.value), "w+")
                     fil.close()
 
-        if clean:
-            self.clean_location()
-            self.rm_tiles()
-            if self.n_mset:
-                gisdbase, location = os.path.split(self.move)
-                self.clean_location(Location(location, gisdbase))
-                # rm temporary gis_rc
-                os.remove(self.gisrc_dst)
-                self.gisrc_dst = None
-                sht.rmtree(os.path.join(self.move, "PERMANENT"))
-                sht.rmtree(os.path.join(self.move, self.mset.name))
+    def _clean(self):
+        """Cleanup temporary data"""
+        self.clean_location()
+        self.rm_tiles()
+        if self.n_mset:
+            gisdbase, location = os.path.split(self.move)
+            self.clean_location(Location(location, gisdbase))
+            # rm temporary gis_rc
+            os.remove(self.gisrc_dst)
+            self.gisrc_dst = None
+            sht.rmtree(os.path.join(self.move, "PERMANENT"))
+            sht.rmtree(os.path.join(self.move, self.mset.name))
 
     def patch(self):
         """Patch the final results."""

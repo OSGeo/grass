@@ -1,20 +1,18 @@
-
 /***************************************************************************
-* MODULE:       r3.null
-*
-* AUTHOR(S):    Roman Waupotitsch, Michael Shapiro, Helena Mitasova,
-*               Bill Brown, Lubos Mitas, Jaro Hofierka
-*
-* PURPOSE:      Explicitly create the 3D NULL-value bitmap file.
-*
-* COPYRIGHT:    (C) 2005 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
-
+ * MODULE:       r3.null
+ *
+ * AUTHOR(S):    Roman Waupotitsch, Michael Shapiro, Helena Mitasova,
+ *               Bill Brown, Lubos Mitas, Jaro Hofierka
+ *
+ * PURPOSE:      Explicitly create the 3D NULL-value bitmap file.
+ *
+ * COPYRIGHT:    (C) 2005 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,20 +21,17 @@
 #include <grass/raster3d.h>
 #include <grass/glocale.h>
 
-
-typedef struct
-{
+typedef struct {
     struct Option *map, *setNull, *null;
 } paramType;
 
 static paramType params;
 
-
 /* function prototypes */
 static void setParams(void);
-static void getParams(char **name, d_Mask ** maskRules, int *changeNull,
+static void getParams(char **name, d_Mask **maskRules, int *changeNull,
                       double *newNullVal);
-static void modifyNull(char *name, d_Mask * maskRules, int changeNull,
+static void modifyNull(char *name, d_Mask *maskRules, int changeNull,
                        double newNullVal);
 
 static void setParams(void)
@@ -68,9 +63,8 @@ static void setParams(void)
 
 /*--------------------------------------------------------------------------*/
 
-static void
-getParams(char **name, d_Mask ** maskRules, int *changeNull,
-          double *newNullVal)
+static void getParams(char **name, d_Mask **maskRules, int *changeNull,
+                      double *newNullVal)
 {
     *name = params.map->answer;
     Rast3d_parse_vallist(params.setNull->answers, maskRules);
@@ -83,8 +77,8 @@ getParams(char **name, d_Mask ** maskRules, int *changeNull,
 
 /*-------------------------------------------------------------------------*/
 
-static void
-modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
+static void modifyNull(char *name, d_Mask *maskRules, int changeNull,
+                       double newNullVal)
 {
     void *map, *mapOut;
     RASTER3D_Region region;
@@ -139,7 +133,7 @@ modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
                         value = newNullVal;
                     }
                 }
-                else if (Rast3d_mask_d_select((DCELL *) & value, maskRules)) {
+                else if (Rast3d_mask_d_select((DCELL *)&value, maskRules)) {
                     Rast3d_set_null_value(&value, 1, DCELL_TYPE);
                 }
 
@@ -178,8 +172,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("null data"));
     G_add_keyword(_("no-data"));
     G_add_keyword(_("voxel"));
-    module->description =
-        _("Explicitly create the 3D NULL-value bitmap file.");
+    module->description = _("Explicitly create the 3D NULL-value bitmap file.");
 
     setParams();
     if (G_parser(argc, argv))

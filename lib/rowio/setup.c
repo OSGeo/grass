@@ -41,10 +41,9 @@
  * \return -1 no memory
  */
 
-int Rowio_setup(ROWIO * R,
-                int fd, int nrows, int len,
+int Rowio_setup(ROWIO *R, int fd, int nrows, int len,
                 int (*getrow)(int, void *, int, int),
-                int(*putrow)(int, const void *, int, int))
+                int (*putrow)(int, const void *, int, int))
 {
     int i;
 
@@ -67,7 +66,7 @@ int Rowio_setup(ROWIO * R,
             G_warning(_("Out of memory"));
             return -1;
         }
-        R->rcb[i].row = -1;     /* mark not used */
+        R->rcb[i].row = -1; /* mark not used */
     }
     return 1;
 }

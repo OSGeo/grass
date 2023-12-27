@@ -8,8 +8,8 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
-   \author Glynn Clements  
+   \author Lars Ahlzen <lars ahlzen.com> (original contributor)
+   \author Glynn Clements
  */
 
 #include <grass/glocale.h>
@@ -25,8 +25,7 @@ void cairo_read_ppm(void)
 
     input = fopen(ca.file_name, "rb");
     if (!input)
-        G_fatal_error(_("Cairo: unable to open input file <%s>"),
-                      ca.file_name);
+        G_fatal_error(_("Cairo: unable to open input file <%s>"), ca.file_name);
 
     if (fscanf(input, "P6 %d %d %d", &i_width, &i_height, &maxval) != 3)
         G_fatal_error(_("Cairo: invalid input file <%s>"), ca.file_name);

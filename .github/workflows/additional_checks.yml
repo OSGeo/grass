@@ -1,3 +1,4 @@
+---
 name: Additional Checks
 
 # Checks which are not in standardized tools such as custom checks by scripts
@@ -15,14 +16,18 @@ on:
       - main
       - releasebranch_*
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
 jobs:
   additional-checks:
     name: Additional checks
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout repository contents
-        uses: actions/checkout@v2
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
           fetch-depth: 31
 
@@ -33,9 +38,13 @@ jobs:
           exclude: mswindows .*\.bat .*/testsuite/data/.*
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: '3.10'
+
+      - name: Check that files with the same content are the same
+        run: |
+          diff Dockerfile docker/ubuntu/Dockerfile
 
       - name: Generate core modules with last commit JSON file and test it
         run: |

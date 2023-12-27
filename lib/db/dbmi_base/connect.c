@@ -25,7 +25,7 @@
 
    \return DB_OK
  */
-int db_set_connection(dbConnection * connection)
+int db_set_connection(dbConnection *connection)
 {
     /* TODO: add checks and return DB_* error code if needed */
 
@@ -70,7 +70,7 @@ int db_set_connection(dbConnection * connection)
    \return DB_OK
    \return DB_FAILED
  */
-int db_get_connection(dbConnection * connection)
+int db_get_connection(dbConnection *connection)
 {
     G_zero(connection, sizeof(dbConnection));
 

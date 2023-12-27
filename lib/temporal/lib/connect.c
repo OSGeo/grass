@@ -8,16 +8,17 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Soeren Gebbert 
-   Code is based on the dbmi library written by 
+   \author Soeren Gebbert
+   Code is based on the dbmi library written by
    Joel Jones (CERL/UIUC) and Radim Blazek
  */
+
 #include <grass/temporal.h>
 #include <grass/glocale.h>
 
 /*!
  * \brief Get TGIS driver name
- * 
+ *
  * \return pointer to TGIS driver name
  * \return NULL if not set
  */
@@ -33,7 +34,7 @@ char *tgis_get_driver_name(void)
 
 /*!
  * \brief Get TGIS database name
- * 
+ *
  * \return pointer to TGIS database name
  * \return NULL if not set
  */
@@ -56,7 +57,7 @@ char *tgis_get_database_name(void)
 
    \return DB_OK
  */
-int tgis_set_connection(dbConnection * connection)
+int tgis_set_connection(dbConnection *connection)
 {
     if (connection->driverName)
         G_setenv2("TGISDB_DRIVER", connection->driverName, G_VAR_MAPSET);
@@ -74,7 +75,7 @@ int tgis_set_connection(dbConnection * connection)
 
    \return DB_OK
  */
-int tgis_get_connection(dbConnection * connection)
+int tgis_get_connection(dbConnection *connection)
 {
     G_zero(connection, sizeof(dbConnection));
 
@@ -86,13 +87,14 @@ int tgis_get_connection(dbConnection * connection)
     return DB_OK;
 }
 
-#define DRIVER_NAME 0
+#define DRIVER_NAME   0
 #define DATABASE_NAME 1
 
 static char *get_mapset_connection_name(const char *mapset, int contype)
 {
     const char *val = NULL;
-    char *ret_val = NULL;;
+    char *ret_val = NULL;
+    ;
     const char *gisdbase = G_getenv_nofatal("GISDBASE");
     const char *location = G_getenv_nofatal("LOCATION_NAME");
     int ret;
@@ -100,9 +102,10 @@ static char *get_mapset_connection_name(const char *mapset, int contype)
     G_debug(1, "Checking mapset <%s>", mapset);
     ret = G_mapset_permissions2(gisdbase, location, mapset);
     switch (ret) {
-    case 0:                    /* Check if the mapset exists and user is owner */
+    case 0: /* Check if the mapset exists and user is owner */
         /* We suppress this warning, since G_mapset_permission2() does not
-         * properly check the access privileges to the mapset of a different user.
+         * properly check the access privileges to the mapset of a different
+         user.
          * TODO: develop a dedicated G_mapset_permission3() for that
          G_warning(_("You are not the owner of mapset <%s>"),
          mapset);
@@ -135,17 +138,16 @@ static char *get_mapset_connection_name(const char *mapset, int contype)
     return ret_val;
 }
 
-
 /*!
  * \brief Get TGIS driver name from a specific mapset
  *
  * This function give a warning in case the mapset does not exists
  * or it is not allowed to access the mapset. NULL is returned in this case.
- * 
+ *
  * \param mapset The name of the mapset to receive the driver name from
  *
  * \return pointer to TGIS driver name
- * \return NULL if not set 
+ * \return NULL if not set
  */
 char *tgis_get_mapset_driver_name(const char *mapset)
 {
@@ -154,10 +156,10 @@ char *tgis_get_mapset_driver_name(const char *mapset)
 
 /*!
  * \brief Get TGIS database name
- * 
+ *
  * This function give a warning in case the mapset does not exists
  * or it is not allowed to access the mapset. NULL is returned in this case..
- * 
+ *
  * \param mapset The name of the mapset to receive the driver name from
 
  * \return pointer to TGIS database name

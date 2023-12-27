@@ -28,6 +28,7 @@
 # % keyword: raster3d
 # % keyword: voxel
 # % keyword: time
+# % keyword: parallel
 # %end
 
 # %option G_OPT_STR3DS_INPUT
@@ -35,8 +36,12 @@
 
 # %option G_OPT_R_INPUT
 # % key: zones
-# % label: Raster map withh zones to compute statistics for
-# % description: Raster map withh zones to compute statistics for (needs to be CELL)
+# % label: Raster map with zones to compute statistics for
+# % description: Raster map with zones to compute statistics for (needs to be CELL)
+# % required: no
+# %end
+
+# %option G_OPT_M_NPROCS
 # % required: no
 # %end
 
@@ -81,6 +86,7 @@ def main():
     input = options["input"]
     zones = options["zones"]
     output = options["output"]
+    nprocs = int(options["nprocs"])
     where = options["where"]
     extended = flags["e"]
     no_header = flags["s"]
@@ -105,6 +111,7 @@ def main():
         fs=separator,
         rast_region=False,
         zones=zones,
+        nprocs=nprocs,
     )
 
 

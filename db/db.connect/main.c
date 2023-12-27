@@ -1,9 +1,8 @@
-
 /****************************************************************************
  *
  * MODULE:       db.connect
  * AUTHOR(S):    Radim Blazek <radim.blazek gmail.com> (original contributor)
- *               Alex Shevlakov <sixote yahoo.com>, 
+ *               Alex Shevlakov <sixote yahoo.com>,
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Markus Neteler <neteler itc.it>,
  *               Hamish Bowman <hamish_b yahoo com>
@@ -84,8 +83,7 @@ int main(int argc, char *argv[])
 
     database = G_define_standard_option(G_OPT_DB_DATABASE);
     if (strcmp(DB_DEFAULT_DRIVER, "sqlite") == 0) {
-        database->answer =
-            "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db";
+        database->answer = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db";
     }
     else {
         database->answer = "$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/";
@@ -110,7 +108,7 @@ int main(int argc, char *argv[])
        user->type       = TYPE_STRING ;
        user->required   = NO  ;
        user->multiple   = NO ;
-       user->description= "User:" ;    
+       user->description= "User:" ;
 
        password = G_define_option() ;
        password->key        = "password" ;
@@ -175,7 +173,8 @@ int main(int argc, char *argv[])
                                 conn.driverName, databaseName);
         }
         else {
-            G_important_message(_("DB settings already defined, nothing to do"));
+            G_important_message(
+                _("DB settings already defined, nothing to do"));
         }
 
         /* they must be a matched pair, so if one is set but not the other
@@ -197,8 +196,8 @@ int main(int argc, char *argv[])
 
         databaseName = substitute_variables(&conn);
         G_important_message(_("Default driver / database set to:\n"
-                              "driver: %s\ndatabase: %s"), conn.driverName,
-                            databaseName);
+                              "driver: %s\ndatabase: %s"),
+                            conn.driverName, databaseName);
         exit(EXIT_SUCCESS);
     }
 
@@ -228,7 +227,7 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-char *substitute_variables(dbConnection * conn)
+char *substitute_variables(dbConnection *conn)
 {
     char *database, *c, buf[GPATH_MAX];
 

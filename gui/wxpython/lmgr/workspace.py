@@ -32,7 +32,6 @@ class WorkspaceManager:
     """Workspace Manager for creating, loading and saving workspaces."""
 
     def __init__(self, lmgr, giface):
-
         self.lmgr = lmgr
         self.workspaceFile = None
         self._giface = giface
@@ -268,6 +267,8 @@ class WorkspaceManager:
             if "showToolbars" in display and not display["showToolbars"]:
                 for toolbar in mapdisp.GetToolbarNames():
                     mapdisp.RemoveToolbar(toolbar)
+            if "isDocked" in display and not display["isDocked"]:
+                mapdisp.OnDockUndock()
 
             displayId += 1
             mapdisp.Show()  # show mapdisplay
@@ -342,6 +343,15 @@ class WorkspaceManager:
                     self.lmgr.nvizUpdatePage(page)
                 self.lmgr.nvizUpdateSettings()
                 mapdisplay[i].toolbars["map"].combo.SetSelection(1)
+
+        #
+        # load layout
+        #
+        if UserSettings.Get(group="appearance", key="singleWindow", subkey="enabled"):
+            if gxwXml.layout["panes"]:
+                self.lmgr.GetAuiManager().LoadPerspective(gxwXml.layout["panes"])
+            if gxwXml.layout["notebook"]:
+                self.lmgr.GetAuiNotebook().LoadPerspective(gxwXml.layout["notebook"])
 
         self.workspaceFile = filename
         self.AddFileToHistory()
@@ -433,7 +443,7 @@ class WorkspaceManager:
             tmpfile.seek(0)
             for line in tmpfile.readlines():
                 mfile.write(line)
-        except IOError:
+        except OSError:
             GError(
                 parent=self.lmgr,
                 message=_("Unable to open file <%s> for writing.") % filename,

@@ -10,8 +10,6 @@ for details.
 :authors: Thomas Leppelt and Soeren Gebbert
 
 """
-from __future__ import print_function
-
 try:
     import ply.yacc as yacc
 except ImportError:
@@ -38,7 +36,6 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
         dry_run=False,
         nprocs=1,
     ):
-
         TemporalRasterBaseAlgebraParser.__init__(
             self,
             pid=pid,

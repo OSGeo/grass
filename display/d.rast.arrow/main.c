@@ -1,10 +1,9 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       d.rast.arrow
  * AUTHOR(S):    Chris Rewerts, Agricultural Engineering, Purdue University
- * PURPOSE:      Draw arrows on slope/aspect maps. 
- * COPYRIGHT:    (C) 2000, 2010 by the GRASS Development Team
+ * PURPOSE:      Draw arrows on slope/aspect maps.
+ * COPYRIGHT:    (C) 2000, 2010, 2023 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
@@ -13,10 +12,10 @@
  *****************************************************************************/
 
 /* some minor cleanup done by Andreas Lange, andreas.lange@rhein-main.de
- * Update to handle NULLs and floating point aspect maps: Hamish Bowman, Aug 2004
- * Update for 360 degree arrows and magnitude scaling:  Hamish Bowman, Oct 2005
- * Align grids with raster cells: Huidae Cho, Apr 2009
- * Drainage aspect type: Huidae Cho, Sep 2015
+ * Update to handle NULLs and floating point aspect maps: Hamish Bowman, Aug
+ * 2004; Update for 360 degree arrows and magnitude scaling:  Hamish Bowman, Oct
+ * 2005; Align grids with raster cells: Huidae Cho, Apr 2009; Drainage aspect
+ * type: Huidae Cho, Sep 2015; Terraflow type: Huidae Cho, May 2023
  */
 
 /*
@@ -26,9 +25,9 @@
  *   d.rast.arrow
  *
  *   Usage:  d.rast.arrow
- * 
+ *
  *   This program used Dgrid's sources as a beginning. Purpose of Darrow
- *   is to read an aspect layer produced by slope.aspect or by the 
+ *   is to read an aspect layer produced by slope.aspect or by the
  *   programs created for the ANSWERS or AGNPS Hydrology Toolbox
  *   endeavors.  d.rast.arrow draws an arrow on the graphic display
  *   of each cell, so that the flow pattern computed as an aspect
@@ -45,8 +44,8 @@
 #include <grass/colors.h>
 #include <grass/glocale.h>
 
-#define RpD ((2 * M_PI) / 360.) /* radians/degree */
-#define D2R(d) (double)(d * RpD)        /* degrees->radians */
+#define RpD    ((2 * M_PI) / 360.) /* radians/degree */
+#define D2R(d) (double)(d * RpD)   /* degrees->radians */
 
 static void arrow_mag(double, double);
 static void arrow_360(double);
@@ -85,8 +84,7 @@ int main(int argc, char **argv)
     double mag_min, mag_max;
 
     struct GModule *module;
-    struct Option *opt1, *opt2, *opt3, *opt4, *opt5,
-        *opt6, *opt7, *opt8, *opt9;
+    struct Option *opt1, *opt2, *opt3, *opt4, *opt5, *opt6, *opt7, *opt8, *opt9;
     struct Flag *align;
 
     double t, b, l, r;
@@ -98,9 +96,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("map annotations"));
     G_add_keyword(_("raster"));
     G_add_keyword(_("arrow"));
-    module->description =
-        _("Draws arrows representing cell aspect direction "
-          "for a raster map containing aspect data.");
+    module->description = _("Draws arrows representing cell aspect direction "
+                            "for a raster map containing aspect data.");
 
     opt1 = G_define_standard_option(G_OPT_R_MAP);
     opt1->description = _("Name of raster aspect map to be displayed");
@@ -110,7 +107,7 @@ int main(int argc, char **argv)
     opt2->type = TYPE_STRING;
     opt2->required = NO;
     opt2->answer = "grass";
-    opt2->options = "grass,compass,drainage,agnps,answers";
+    opt2->options = "grass,compass,drainage,agnps,answers,terraflow";
     opt2->description = _("Type of existing raster aspect map");
 
     opt3 = G_define_standard_option(G_OPT_C);
@@ -150,8 +147,7 @@ int main(int argc, char **argv)
     opt7->required = NO;
     opt7->multiple = NO;
     opt7->gisprompt = "old,cell,raster";
-    opt7->description =
-        _("Raster map containing values used for arrow length");
+    opt7->description = _("Raster map containing values used for arrow length");
 
     opt8 = G_define_option();
     opt8->key = "scale";
@@ -164,11 +160,9 @@ int main(int argc, char **argv)
     align->key = 'a';
     align->description = _("Align grids with raster cells");
 
-
     /* Check command line */
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
 
     layer_name = opt1->answer;
 
@@ -204,7 +198,8 @@ int main(int argc, char **argv)
         map_type = 4;
     else if (strcmp("drainage", opt2->answer) == 0)
         map_type = 5;
-
+    else if (strcmp("terraflow", opt2->answer) == 0)
+        map_type = 6;
 
     scale = atof(opt8->answer);
     if (scale <= 0.0)
@@ -214,16 +209,15 @@ int main(int argc, char **argv)
     if (skip <= 0)
         G_fatal_error(_("Illegal value for skip factor"));
 
-
     if (opt7->answer) {
         if (map_type != 1 && map_type != 4)
-            G_fatal_error(_("Magnitude is only supported for GRASS and compass aspect maps."));
+            G_fatal_error(_("Magnitude is only supported for GRASS and compass "
+                            "aspect maps."));
 
         mag_map = opt7->answer;
     }
     else if (scale != 1.0)
         G_warning(_("Scale option requires magnitude_map"));
-
 
     /* Setup driver and check important information */
     D_open_driver();
@@ -261,8 +255,8 @@ int main(int argc, char **argv)
         ncols = wind.cols;
 
         t = (wind.north - window.north) * nrows / (wind.north - wind.south);
-        b = t + (window.north - window.south) * nrows / (wind.north -
-                                                         wind.south);
+        b = t +
+            (window.north - window.south) * nrows / (wind.north - wind.south);
         l = (window.west - wind.west) * ncols / (wind.east - wind.west);
         r = l + (window.east - window.west) * ncols / (wind.east - wind.west);
     }
@@ -281,7 +275,7 @@ int main(int argc, char **argv)
 
     /* figure out arrow scaling if using a magnitude map */
     if (opt7->answer) {
-        Rast_init_fp_range(&range);     /* really needed? */
+        Rast_init_fp_range(&range); /* really needed? */
         if (Rast_read_fp_range(mag_map, "", &range) != 1)
             G_fatal_error(_("Problem reading range file"));
         Rast_get_fp_range_min_max(&range, &mag_min, &mag_max);
@@ -290,7 +284,7 @@ int main(int argc, char **argv)
         G_debug(3, "scaling=%.2f  rast_max=%.2f", scale, mag_max);
     }
 
-    if (grid_color > 0) {       /* ie not "none" */
+    if (grid_color > 0) { /* ie not "none" */
         /* Set color */
         D_use_color(grid_color);
 
@@ -311,7 +305,6 @@ int main(int argc, char **argv)
     /* allocate the cell array */
     raster_row = Rast_allocate_buf(raster_type);
 
-
     if (opt7->answer) {
         /* open the magnitude raster map */
         mag_fd = Rast_open_old(mag_map, "");
@@ -322,9 +315,9 @@ int main(int argc, char **argv)
         mag_raster_row = Rast_allocate_buf(mag_raster_type);
     }
 
-
-    /* loop through cells, find value, determine direction (n,s,e,w,ne,se,sw,nw),
-       and call appropriate function to draw an arrow on the cell */
+    /* loop through cells, find value, determine direction
+       (n,s,e,w,ne,se,sw,nw), and call appropriate function to draw an arrow on
+       the cell */
 
     for (row = 0; row < nrows; row++) {
         Rast_get_row(layer_fd, raster_row, row, raster_type);
@@ -347,21 +340,20 @@ int main(int argc, char **argv)
 
             /* find aspect direction based on cell value */
             if (raster_type == CELL_TYPE)
-                aspect_f = *((CELL *) ptr);
+                aspect_f = *((CELL *)ptr);
             else if (raster_type == FCELL_TYPE)
-                aspect_f = *((FCELL *) ptr);
+                aspect_f = *((FCELL *)ptr);
             else if (raster_type == DCELL_TYPE)
-                aspect_f = *((DCELL *) ptr);
-
+                aspect_f = *((DCELL *)ptr);
 
             if (opt7->answer) {
 
                 if (mag_raster_type == CELL_TYPE)
-                    length = *((CELL *) mag_ptr);
+                    length = *((CELL *)mag_ptr);
                 else if (mag_raster_type == FCELL_TYPE)
-                    length = *((FCELL *) mag_ptr);
+                    length = *((FCELL *)mag_ptr);
                 else if (mag_raster_type == DCELL_TYPE)
-                    length = *((DCELL *) mag_ptr);
+                    length = *((DCELL *)mag_ptr);
 
                 length *= scale;
 
@@ -369,7 +361,7 @@ int main(int argc, char **argv)
                     G_debug(5, "Invalid arrow length [NULL]. Skipping.");
                     no_arrow = TRUE;
                 }
-                else if (length <= 0.0) {       /* use fabs() or theta+=180? */
+                else if (length <= 0.0) { /* use fabs() or theta+=180? */
                     G_debug(5, "Illegal arrow length [%.3f]. Skipping.",
                             length);
                     no_arrow = TRUE;
@@ -379,16 +371,16 @@ int main(int argc, char **argv)
             if (no_arrow) {
                 ptr = G_incr_void_ptr(ptr, Rast_cell_size(raster_type));
                 if (opt7->answer)
-                    mag_ptr =
-                        G_incr_void_ptr(mag_ptr,
-                                        Rast_cell_size(mag_raster_type));
+                    mag_ptr = G_incr_void_ptr(mag_ptr,
+                                              Rast_cell_size(mag_raster_type));
                 no_arrow = FALSE;
                 continue;
             }
 
             /* treat AGNPS and ANSWERS data like old zero-as-null CELL */
             /*   TODO: update models */
-            if (map_type == 2 || map_type == 3 || map_type == 5) {
+            if (map_type == 2 || map_type == 3 || map_type == 5 ||
+                map_type == 6) {
                 if (Rast_is_null_value(ptr, raster_type))
                     aspect_c = 0;
                 else if (map_type == 5 && aspect_f < 0)
@@ -397,10 +389,9 @@ int main(int argc, char **argv)
                     aspect_c = (int)(aspect_f + 0.5);
             }
 
-
             /** Now draw the arrows **/
 
-            /* case switch for standard GRASS aspect map 
+            /* case switch for standard GRASS aspect map
                measured in degrees counter-clockwise from east */
             if (map_type == 1) {
                 D_use_color(arrow_color);
@@ -426,7 +417,6 @@ int main(int argc, char **argv)
                     D_use_color(arrow_color);
                 }
             }
-
 
             /* case switch for AGNPS type aspect map */
             else if (map_type == 2) {
@@ -475,11 +465,10 @@ int main(int argc, char **argv)
                 }
             }
 
-
             /* case switch for ANSWERS type aspect map */
             else if (map_type == 3) {
                 D_use_color(arrow_color);
-                if (aspect_c >= 15 && aspect_c <= 360)  /* start at zero? */
+                if (aspect_c >= 15 && aspect_c <= 360) /* start at zero? */
                     arrow_360((double)aspect_c);
                 else if (aspect_c == 400) {
                     if (unknown_color > 0) {
@@ -571,6 +560,53 @@ int main(int argc, char **argv)
                 }
             }
 
+            /* case switch for r.terraflow direction type aspect map */
+            else if (map_type == 6) {
+                D_use_color(arrow_color);
+                switch (aspect_c) {
+                case 0:
+                    /* only draw if x_color is not none (transparent) */
+                    if (x_color > 0) {
+                        D_use_color(x_color);
+                        draw_x();
+                        D_use_color(arrow_color);
+                    }
+                    break;
+                case 1:
+                    arrow_e();
+                    break;
+                case 2:
+                    arrow_se();
+                    break;
+                case 4:
+                    arrow_s();
+                    break;
+                case 8:
+                    arrow_sw();
+                    break;
+                case 16:
+                    arrow_w();
+                    break;
+                case 32:
+                    arrow_nw();
+                    break;
+                case 64:
+                    arrow_n();
+                    break;
+                case 128:
+                    arrow_ne();
+                    break;
+                default:
+                    /* only draw if unknown_color is not none */
+                    if (unknown_color > 0) {
+                        D_use_color(unknown_color);
+                        unknown_();
+                        D_use_color(arrow_color);
+                    }
+                    break;
+                }
+            }
+
             ptr = G_incr_void_ptr(ptr, Rast_cell_size(raster_type));
             if (opt7->answer)
                 mag_ptr =
@@ -592,13 +628,12 @@ int main(int argc, char **argv)
 
 /*---------------------------------------------------------------*/
 
-
 static void arrow_mag(double theta, double length)
-{                               /* angle is measured in degrees counter-clockwise from east */
+{ /* angle is measured in degrees counter-clockwise from east */
     double x, y, dx, dy, mid_x, mid_y;
     double theta_offset;
 
-    theta *= -1;                /* display coords use inverse y */
+    theta *= -1; /* display coords use inverse y */
 
     /* find the display coordinates of the middle of the cell */
     mid_x = col + (.5);
@@ -631,13 +666,12 @@ static void arrow_mag(double theta, double length)
     D_stroke();
 }
 
-
 static void arrow_360(double theta)
-{                               /* angle is measured in degrees counter-clockwise from east */
+{ /* angle is measured in degrees counter-clockwise from east */
     double x, y, dx, dy, mid_x, mid_y;
     double max_radius, theta_offset;
 
-    theta *= -1;                /* display coords use inverse y */
+    theta *= -1; /* display coords use inverse y */
     max_radius = 0.8 / 2;
 
     /* find the display coordinates of the middle of the cell */

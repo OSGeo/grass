@@ -1,8 +1,8 @@
-
 /****************************************************************************
  *
  * MODULE:       r.quantile
- * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor),
+ * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com>
+ *                 (original contributor),
  * PURPOSE:      Compute quantiles using two passes
  *
  *               This program is free software under the GNU General Public
@@ -10,6 +10,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -18,8 +19,7 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-struct bin
-{
+struct bin {
     size_t origin;
     DCELL min, max;
     size_t base, count;
@@ -141,8 +141,8 @@ static void initialize_bins(void)
         size_t count = slots[slot];
         size_t accum2 = accum + count;
 
-        if (count > 0 &&
-            (accum2 > next || use_next_slot) && bin < num_bins_alloc) {
+        if (count > 0 && (accum2 > next || use_next_slot) &&
+            bin < num_bins_alloc) {
             struct bin *b = &bins[bin];
 
             slot_bins[slot] = ++bin;
@@ -258,10 +258,9 @@ static void compute_quantiles(int recode)
             i0 = (size_t)floor(k);
             i1 = (size_t)ceil(k);
 
-            v = (i0 == i1)
-                ? values[b->base + i0]
-                : values[b->base + i0] * (i1 - k) +
-                values[b->base + i1] * (k - i0);
+            v = (i0 == i1) ? values[b->base + i0]
+                           : values[b->base + i0] * (i1 - k) +
+                                 values[b->base + i1] * (k - i0);
         }
         else
             v = max;
@@ -281,12 +280,10 @@ static void compute_quantiles(int recode)
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *quant, *perc, *slots, *file;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *r;
     } flag;
     int recode;
@@ -354,7 +351,8 @@ int main(int argc, char *argv[])
     if (opt.perc->answer) {
         int i;
 
-        for (i = 0; opt.perc->answers[i]; i++) ;
+        for (i = 0; opt.perc->answers[i]; i++)
+            ;
         num_quants = i;
         quants = G_calloc(num_quants, sizeof(DCELL));
         for (i = 0; i < num_quants; i++)
@@ -386,8 +384,8 @@ int main(int argc, char *argv[])
     if (num_slots_max < 1)
         num_slots_max = 1;
     if (num_slots > num_slots_max) {
-        G_message(_("Reducing number of bins from %d to %d"),
-                  num_slots, num_slots_max);
+        G_message(_("Reducing number of bins from %d to %d"), num_slots,
+                  num_slots_max);
         num_slots = num_slots_max;
     }
 

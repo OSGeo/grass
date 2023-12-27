@@ -7,18 +7,19 @@
 #include "global.h"
 
 void p_nearest(struct cache *ibuffer,   /* input buffer                  */
-               void *obufptr,   /* ptr in output buffer          */
-               int cell_type,   /* raster map type of obufptr    */
-               double *row_idx, /* row index in input matrix     */
-               double *col_idx, /* column index in input matrix  */
+               void *obufptr,           /* ptr in output buffer          */
+               int cell_type,           /* raster map type of obufptr    */
+               double *row_idx,         /* row index in input matrix     */
+               double *col_idx,         /* column index in input matrix  */
                struct Cell_head *cellhd /* cell header of input layer    */
-    )
+)
 {
-    int row, col;               /* row/col of nearest neighbor   */
+    int row, col; /* row/col of nearest neighbor   */
     DCELL *cellp;
 
     /* cut indices to integer and get nearest cell */
-    /* the row_idx, col_idx correction for bilinear/bicubic does not apply here */
+    /* the row_idx, col_idx correction for bilinear/bicubic does not apply here
+     */
     row = (int)floor(*row_idx);
     col = (int)floor(*col_idx);
 

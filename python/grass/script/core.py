@@ -8,7 +8,7 @@ Usage:
     from grass.script import core as grass
     grass.parser()
 
-(C) 2008-2022 by the GRASS Development Team
+(C) 2008-2023 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -17,7 +17,6 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 .. sectionauthor:: Michael Barton <michael.barton asu.edu>
 """
-from __future__ import absolute_import, print_function
 
 import os
 import sys
@@ -27,7 +26,7 @@ import shutil
 import codecs
 import string
 import random
-import pipes
+import shlex
 from tempfile import NamedTemporaryFile
 
 from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
@@ -232,6 +231,7 @@ def make_command(
     :param str flags: flags to be used (given as a string)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param options: module's parameters
 
@@ -375,6 +375,7 @@ def start_command(
     :param str flags: flags to be used (given as a string)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run extra quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param kwargs: module's parameters
 
@@ -388,7 +389,15 @@ def start_command(
         else:
             options[opt] = val
 
-    args = make_command(prog, flags, overwrite, quiet, verbose, **options)
+    args = make_command(
+        prog,
+        flags=flags,
+        overwrite=overwrite,
+        quiet=quiet,
+        superquiet=superquiet,
+        verbose=verbose,
+        **options,
+    )
 
     if debug_level() > 0:
         sys.stderr.write(
@@ -627,12 +636,13 @@ def exec_command(
     :param str flags: flags to be used (given as a string)
     :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
     :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool superquiet: True to run quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
     :param env: directory with environmental variables
     :param list kwargs: module's parameters
 
     """
-    args = make_command(prog, flags, overwrite, quiet, verbose, **kwargs)
+    args = make_command(prog, flags, overwrite, quiet, superquiet, verbose, **kwargs)
 
     if env is None:
         env = os.environ
@@ -863,7 +873,7 @@ def parser():
         sys.exit(1)
 
     cmdline = [basename(sys.argv[0])]
-    cmdline += [pipes.quote(a) for a in sys.argv[1:]]
+    cmdline += [shlex.quote(a) for a in sys.argv[1:]]
     os.environ["CMDLINE"] = " ".join(cmdline)
 
     argv = sys.argv[:]
@@ -1326,9 +1336,26 @@ def del_temp_region():
 
 def find_file(name, element="cell", mapset=None, env=None):
     """Returns the output from running g.findfile as a
-    dictionary. Example:
+    dictionary.
+
+    Elements in g.findfile refer to mapset directories. However, in
+    parts of the code, different element terms like rast, raster, or rast3d
+    are used. For convenience the function translates such element types
+    to respective mapset elements. Current translations are:
+    "rast": "cell",
+    "raster": "cell",
+    "rast3d": "grid3",
+    "raster3d": "grid3",
+    "raster_3d": "grid3",
+
+    Example:
 
     >>> result = find_file('elevation', element='cell')
+    >>> print(result['fullname'])
+    elevation@PERMANENT
+    >>> print(result['file'])  # doctest: +ELLIPSIS
+    /.../PERMANENT/cell/elevation
+    >>> result = find_file('elevation', element='raster')
     >>> print(result['fullname'])
     elevation@PERMANENT
     >>> print(result['file'])  # doctest: +ELLIPSIS
@@ -1342,11 +1369,19 @@ def find_file(name, element="cell", mapset=None, env=None):
 
     :return: parsed output of g.findfile
     """
-    if element == "raster" or element == "rast":
-        verbose(_('Element type should be "cell" and not "%s"') % element)
-        element = "cell"
+    element_translation = {
+        "rast": "cell",
+        "raster": "cell",
+        "rast3d": "grid3",
+        "raster3d": "grid3",
+        "raster_3d": "grid3",
+    }
+
+    if element in element_translation:
+        element = element_translation[element]
+
     # g.findfile returns non-zero when file was not found
-    # se we ignore return code and just focus on stdout
+    # so we ignore return code and just focus on stdout
     process = start_command(
         "g.findfile",
         flags="n",
