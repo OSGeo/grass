@@ -1,10 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       r.rescale
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
- *               Jachym Cepicky <jachym les-ejk.cz>, Jan-Oliver Wagner <jan intevation.de>
- * PURPOSE:      
+ *               Jachym Cepicky <jachym les-ejk.cz>,
+ *               Jan-Oliver Wagner <jan intevation.de>
+ * PURPOSE:
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -12,6 +12,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -21,9 +22,9 @@
 
 int main(int argc, char *argv[])
 {
-    char input[GNAME_MAX+8];
-    char output[GNAME_MAX+8];
-    char rules[GNAME_MAX+8];
+    char input[GNAME_MAX + 8];
+    char output[GNAME_MAX + 8];
+    char rules[GNAME_MAX + 8];
     char title[GPATH_MAX];
     const char *args[6];
     struct Popen child;
@@ -37,9 +38,8 @@ int main(int argc, char *argv[])
     char *old_name;
     char *new_name;
     struct GModule *module;
-    struct
-    {
-	struct Option *input, *from, *output, *to, *title;
+    struct {
+        struct Option *input, *from, *output, *to, *title;
     } parm;
 
     G_gisinit(argv[0]);
@@ -47,8 +47,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("rescale"));
-    module->description =
-	_("Rescales the range of category values " "in a raster map layer.");
+    module->description = _("Rescales the range of category values "
+                            "in a raster map layer.");
 
     /* Define the different options */
 
@@ -60,8 +60,8 @@ int main(int argc, char *argv[])
     parm.from->key_desc = "min,max";
     parm.from->type = TYPE_INTEGER;
     parm.from->required = NO;
-    parm.from->description =
-	_("The input data range to be rescaled (default: full range of input map)");
+    parm.from->description = _("The input data range to be rescaled (default: "
+                               "full range of input map)");
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.output->description = _("The resulting raster map name");
@@ -81,42 +81,41 @@ int main(int argc, char *argv[])
     parm.title->description = _("Title for new raster map");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     old_name = parm.input->answer;
     new_name = parm.output->answer;
 
     if (parm.from->answer) {
-	sscanf(parm.from->answers[0], "%ld", &old_min);
-	sscanf(parm.from->answers[1], "%ld", &old_max);
-
+        sscanf(parm.from->answers[0], "%ld", &old_min);
+        sscanf(parm.from->answers[1], "%ld", &old_max);
     }
     else
-	get_range(old_name, &old_min, &old_max);
+        get_range(old_name, &old_min, &old_max);
     if (old_min > old_max) {
-	value = old_min;	/* swap */
-	old_min = old_max;
-	old_max = value;
+        value = old_min; /* swap */
+        old_min = old_max;
+        old_max = value;
     }
 
     sscanf(parm.to->answers[0], "%ld", &new_min);
     sscanf(parm.to->answers[1], "%ld", &new_max);
     if (new_min > new_max) {
-	value = new_min;	/* swap */
-	new_min = new_max;
-	new_max = value;
+        value = new_min; /* swap */
+        new_min = new_max;
+        new_max = value;
     }
 
-    G_message(_("Rescale %s[%ld,%ld] to %s[%ld,%ld]"),
-	      old_name, old_min, old_max, new_name, new_min, new_max);
+    G_message(_("Rescale %s[%ld,%ld] to %s[%ld,%ld]"), old_name, old_min,
+              old_max, new_name, new_min, new_max);
 
     sprintf(input, "input=%s", old_name);
     sprintf(output, "output=%s", new_name);
 
     if (parm.title->answer)
-	sprintf(title, "title=%s", parm.title->answer);
+        sprintf(title, "title=%s", parm.title->answer);
     else
-	sprintf(title, "title=rescale of %s", old_name);
+        sprintf(title, "title=rescale of %s", old_name);
 
     sprintf(rules, "rules=-");
 
@@ -136,20 +135,19 @@ int main(int argc, char *argv[])
     prev = new_min;
     first = old_min;
     for (cat = old_min; cat <= old_max; cat++) {
-	value = (int)(divisor * (cat - old_min) + new_min + .5);
-	if (value != prev) {
-	    fprintf(fp, "%ld thru %ld = %ld %ld", first, cat - 1, prev,
-		    first);
-	    if (cat - 1 != first)
-		fprintf(fp, " thru %ld", cat - 1);
-	    fprintf(fp, "\n");
-	    prev = value;
-	    first = cat;
-	}
+        value = (int)(divisor * (cat - old_min) + new_min + .5);
+        if (value != prev) {
+            fprintf(fp, "%ld thru %ld = %ld %ld", first, cat - 1, prev, first);
+            if (cat - 1 != first)
+                fprintf(fp, " thru %ld", cat - 1);
+            fprintf(fp, "\n");
+            prev = value;
+            first = cat;
+        }
     }
     fprintf(fp, "%ld thru %ld = %ld %ld", first, cat - 1, prev, first);
     if (cat - 1 != first)
-	fprintf(fp, " thru %ld", cat - 1);
+        fprintf(fp, " thru %ld", cat - 1);
     fprintf(fp, "\n");
 
     G_popen_close(&child);

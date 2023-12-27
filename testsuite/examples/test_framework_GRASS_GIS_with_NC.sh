@@ -142,4 +142,3 @@ fi
 echo "Nightly ($NOW) GRASS GIS test finished: $(date $DATE_FLAGS)" >> ${LOGFILE}
 
 exit 0
-

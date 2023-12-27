@@ -438,7 +438,6 @@ for details.
     LexToken(RPAREN,')',1,48)
 
 """
-from __future__ import print_function
 
 try:
     import ply.lex as lex
@@ -447,9 +446,9 @@ except:
     pass
 
 import os
-import sys
 import copy
 from datetime import datetime
+
 import grass.pygrass.modules as pymod
 from .core import (
     init_dbif,
@@ -476,11 +475,8 @@ from .datetime_math import create_suffix_from_datetime
 from .datetime_math import create_time_suffix
 from .datetime_math import create_numeric_suffix
 
-if sys.version_info[0] >= 3:
-    unicode = str
 
-
-class TemporalAlgebraLexer(object):
+class TemporalAlgebraLexer:
     """Lexical analyzer for the GRASS GIS temporal algebra"""
 
     # Functions that defines an if condition, temporal buffering, snapping and
@@ -704,7 +700,7 @@ class TemporalAlgebraLexer(object):
             print(tok)
 
 
-class GlobalTemporalVar(object):
+class GlobalTemporalVar:
     """This class handles global temporal variable conditional expressions,
     like start_doy() == 3.
     The three parts of the statement are stored separately in
@@ -763,7 +759,7 @@ class FatalError(Exception):
         return self.value
 
 
-class TemporalAlgebraParser(object):
+class TemporalAlgebraParser:
     """The temporal algebra class"""
 
     # Get the tokens from the lexer class
@@ -1152,7 +1148,8 @@ class TemporalAlgebraParser(object):
                             returncode = self.overlay_map_extent(
                                 map_new, map_j, "and", temp_op=temporal
                             )
-                            print(map_new.get_id(), map_j.get_id())
+                            if self.debug:
+                                print(map_new.get_id(), map_j.get_id())
                             # Stop the loop if no temporal or spatial relationship exist.
                             if returncode == 0:
                                 break
@@ -1230,7 +1227,7 @@ class TemporalAlgebraParser(object):
 
         :return: List of maps.
         """
-        if isinstance(input, unicode) or isinstance(input, str):
+        if isinstance(input, str):
             # Check for mapset in given stds input.
             if input.find("@") >= 0:
                 id_input = input
@@ -1339,7 +1336,7 @@ class TemporalAlgebraParser(object):
                 if spatial_topology in spatial_relations.keys():
                     spatial_topo_check = True
 
-        if self.debug is True:
+        if self.debug:
             print("Spatial topology list", spatial_topo_list, spatial_topo_check)
 
         return spatial_topo_check
@@ -1366,7 +1363,7 @@ class TemporalAlgebraParser(object):
                     if map_b in map_a_sr[spatial_topology]:
                         spatial_topo_check = True
 
-        if self.debug is True:
+        if self.debug:
             print("Spatial topology list", spatial_topo_list, spatial_topo_check)
 
         return spatial_topo_check
@@ -2217,7 +2214,6 @@ class TemporalAlgebraParser(object):
             for expr in tvarexpr:
                 if isinstance(expr, list):
                     if all([issubclass(type(ele), AbstractMapDataset) for ele in expr]):
-
                         # Use method eval_map_list to evaluate map_list
                         resultlist = self.eval_map_list(expr, thenlist, topolist)
                     else:
@@ -2333,7 +2329,6 @@ class TemporalAlgebraParser(object):
                 count = 0
                 register_list = []
                 if num > 0:
-
                     # Compute the granularity for suffix creation
                     granularity = None
                     if len(t[3]) > 0 and self.time_suffix == "gran":
@@ -2382,7 +2377,6 @@ class TemporalAlgebraParser(object):
                         map_b.select(dbif)
                         map_b_extent = map_b.get_temporal_extent_as_tuple()
                         if map_a_extent != map_b_extent:
-
                             # Create new map with basename
                             newident = create_numeric_suffix(
                                 self.basename, count, "%0" + str(leadzero)
@@ -2600,7 +2594,8 @@ class TemporalAlgebraParser(object):
         expr : STVDS LPAREN stds RPAREN
         """
         if self.run:
-            print(t[3])
+            if self.debug:
+                print(t[3])
             t[0] = self.check_stds(t[3], stds_type="stvds", check_type=False)
         else:
             t[0] = t[3]
@@ -3325,8 +3320,50 @@ class TemporalAlgebraParser(object):
             elif len(t) == 7:
                 print(str(t[3]) + "* = tshift(", str(t[3]), ",", str(t[5]), ")")
 
-    # Handle errors.
+    def p_expr_time_const(self, t):
+        # Examples
+        # start_doy(A, -1)  # Get the start DOY from the preceding map
+        #                     of the time series as a numerical constant
+        #                     for the mapcalculator expression
+
+        """
+        expr : t_var LPAREN NAME COMMA INT RPAREN
+        """
+        if self.run:
+            # Check input stds.
+            map_list = self.check_stds(t[3])
+            result_list = []
+
+            # Get increment format.
+            t_neighbour = int(t[5])
+
+            max_index = len(map_list)
+            for map_i in map_list:
+                # Get map index and temporal extent.
+                map_index = map_list.index(map_i)
+                new_index = map_index + t_neighbour
+                if new_index < max_index and new_index >= 0:
+                    # Get neighbouring map and set temporal extent.
+                    map_n = map_list[new_index]
+                    map_i_t_extent = map_i.get_temporal_extent()
+                    # Create r.mapcalc expression string for the operation.
+                    tfuncdict = self.get_temporal_func_dict(map_n)
+                    # Generate an intermediate map for the result map list.
+                    map_new = self.generate_new_map(map_n, bool_op="and", copy=True)
+                    map_new.set_temporal_extent(map_i_t_extent)
+                    # Set new command list for map.
+                    map_new.cmd_list = str(tfuncdict[t[1].upper()])
+
+                    # Append map with updated command list to result list.
+                    result_list.append(map_new)
+
+            t[0] = result_list
+
+        if self.debug:
+            print(str(t[3]), "* = ", str(t[0]), "(", str(t[3]), ",", str(t[4]), ")")
+
     def p_error(self, t):
+        # Handle errors.
         if t:
             raise SyntaxError(
                 "syntax error on line %d, position %i token %s near '%s' expression '%s'"

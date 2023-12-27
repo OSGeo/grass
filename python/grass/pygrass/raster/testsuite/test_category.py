@@ -13,7 +13,6 @@ from grass.script.core import tempfile
 
 
 class RasterCategoryTestCase(TestCase):
-
     name = "RasterCategoryTestCase_map"
 
     @classmethod

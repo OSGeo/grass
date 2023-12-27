@@ -14,10 +14,7 @@ import sys
 import os
 import stat
 
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
+from io import StringIO
 import time
 
 import wx
@@ -271,7 +268,7 @@ def open_url(url):
     webbrowser.open(url)
 
 
-class PyEditController(object):
+class PyEditController:
     # using the naming GUI convention, change for controller?
     # pylint: disable=invalid-name
 
@@ -315,7 +312,7 @@ class PyEditController(object):
                 parent=self.guiparent,
                 showTraceback=False,
             )
-        except IOError:
+        except OSError:
             GError(
                 message=_("Couldn't read file <{}>.".format(file_path)),
                 parent=self.guiparent,
@@ -338,7 +335,7 @@ class PyEditController(object):
             GError(
                 message=_(
                     "Permission denied <{}>. Please change file "
-                    "permission for writting.{}".format(
+                    "permission for writing.{}".format(
                         file_path,
                         additional_err_message,
                     ),
@@ -346,7 +343,7 @@ class PyEditController(object):
                 parent=self.guiparent,
                 showTraceback=False,
             )
-        except IOError:
+        except OSError:
             GError(
                 message=_(
                     "Couldn't write file <{}>.{}".format(
@@ -662,7 +659,7 @@ class PyEditToolbar(BaseToolbar):
             "run": MetaIcon(img="execute", label=_("Run (Ctrl+R)")),
             # TODO: better icons for overwrite modes
             "overwriteTrue": MetaIcon(img="locked", label=_("Activate overwrite")),
-            "overwriteFalse": MetaIcon(img="unlocked", label=_("Deactive overwrite")),
+            "overwriteFalse": MetaIcon(img="unlocked", label=_("Deactivate overwrite")),
             "help": BaseIcons["help"],
             "quit": BaseIcons["quit"],
         }

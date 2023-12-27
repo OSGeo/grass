@@ -24,7 +24,7 @@ def docstring_property(class_doc):
     return wrapper
 
 
-class DocstringProperty(object):
+class DocstringProperty:
     """Property for the `__doc__` attribute.
 
     Different than `property` in the following two ways:

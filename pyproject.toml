@@ -33,3 +33,4 @@ addopts = """
     --doctest-glob='*doctest*.txt'
     --ignore='raster/r.category/test_rcategory_doctest.txt'
 """
+timeout = 300

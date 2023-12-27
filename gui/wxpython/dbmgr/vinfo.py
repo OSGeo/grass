@@ -15,8 +15,6 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
-import six
 
 import wx
 
@@ -26,37 +24,21 @@ from core.gcmd import RunCommand, GError
 from core.settings import UserSettings
 import grass.script as grass
 
-if sys.version_info.major >= 3:
-    unicode = str
 
-    def GetUnicodeValue(value):
-        """Get unicode value
+def GetUnicodeValue(value):
+    """Get unicode value
 
-        :param value: value to be recoded
+    :param value: value to be recoded
 
-        :return: unicode value
-        """
-        if isinstance(value, unicode):
-            return value
-        if isinstance(value, bytes):
-            enc = GetDbEncoding()
-            return str(value, enc, errors="replace")
-        else:
-            return str(value)
-
-else:
-
-    def GetUnicodeValue(value):
-        """Get unicode value
-
-        :param value: value to be recoded
-
-        :return: unicode value
-        """
-        if isinstance(value, unicode):
-            return value
+    :return: unicode value
+    """
+    if isinstance(value, str):
+        return value
+    if isinstance(value, bytes):
         enc = GetDbEncoding()
-        return unicode(str(value), enc, errors="replace")
+        return str(value, enc, errors="replace")
+    else:
+        return str(value)
 
 
 def GetDbEncoding():
@@ -111,7 +93,7 @@ class VectorDBInfo(VectorDBInfoBase):
         except KeyError:
             return []
 
-        for name, desc in six.iteritems(self.tables[table]):
+        for name, desc in self.tables[table].items():
             names[desc["index"]] = name
 
         return names
@@ -151,7 +133,7 @@ class VectorDBInfo(VectorDBInfoBase):
                 continue
 
             table = record["Table"]
-            for key, value in six.iteritems(record["Attributes"]):
+            for key, value in record["Attributes"].items():
                 if len(value) < 1:
                     value = None
                 else:
@@ -161,7 +143,7 @@ class VectorDBInfo(VectorDBInfoBase):
                         value = GetUnicodeValue(value)
                 self.tables[table][key]["values"].append(value)
 
-            for key, value in six.iteritems(record):
+            for key, value in record.items():
                 if key == "Attributes":
                     continue
                 if key in ret:

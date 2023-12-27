@@ -53,7 +53,7 @@ from .functions import (
 from core.gcmd import GError, GMessage, RunCommand
 
 
-class RLIWizard(object):
+class RLIWizard:
     """
     !Start wizard here and finish wizard here
     """
@@ -329,7 +329,7 @@ class RLIWizard(object):
         if samtype == SamplingType.WHOLE:
             cl = float(self.SF_CL) / float(self.rasterinfo["cols"])
             rl = float(self.SF_RL) / float(self.rasterinfo["rows"])
-            # this two variable are unused, problably to remove
+            # this two variable are unused, probably to remove
             x = float(self.SF_X) / float(self.rasterinfo["cols"])
             y = float(self.SF_Y) / float(self.rasterinfo["rows"])
             fil.write("SAMPLEAREA %r|%r|%r|%r\n" % (self.per_x, self.per_y, rl, cl))
@@ -1230,11 +1230,8 @@ class DrawRegionsPage(TitledPage):
             self.parent.wizard.ShowPage(self.parent.summarypage)
         else:
             self.title.SetLabel(
-                _(
-                    "Draw sample region "
-                    + str(self.regioncount)
-                    + " of "
-                    + str(numregions)
+                _("Draw sample region {count} of {num_regions}").format(
+                    count=self.regioncount, num_regions=numregions
                 )
             )
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
@@ -1352,9 +1349,9 @@ class SampleUnitsKeyPage(TitledPage):
             label=" %s " % _("Select method of sampling unit distribution"),
             choices=[
                 _("Random non overlapping"),
-                _("Systematic contiguos"),
+                _("Systematic contiguous"),
                 _("Stratified random"),
-                _("Systematic non contiguos"),
+                _("Systematic non contiguous"),
                 _("Centered over sites"),
             ],
         )
@@ -1731,13 +1728,10 @@ class DrawSampleUnitsPage(TitledPage):
             self.parent.wizard.ShowPage(self.parent.summarypage)
         else:
             self.title.SetLabel(
-                _(
-                    "Draw Sampling "
-                    + drawtype
-                    + " "
-                    + str(self.regioncount)
-                    + " of "
-                    + str(self.numregions)
+                _("Draw sampling {draw_type} {count} of {num_regions}").format(
+                    draw_type=drawtype,
+                    count=self.regioncount,
+                    num_regions=self.numregions,
                 )
             )
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
@@ -1833,11 +1827,8 @@ class VectorAreasPage(TitledPage):
             return True
         else:
             self.title.SetLabel(
-                _(
-                    "Select sample area "
-                    + str(self.areascount + 1)
-                    + " of "
-                    + str(self.areanum)
+                _("Select sample area {areas_count} of {area_num}").format(
+                    areas_count=self.areascount + 1, area_num=self.areanum
                 )
             )
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
