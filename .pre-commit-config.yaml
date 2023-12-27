@@ -56,7 +56,7 @@ repos:
   - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 23.12.1
     hooks:
-      - id: black
+      - id: black-jupyter
         # It is recommended to specify the latest version of Python
         # supported by your project here, or alternatively use
         # pre-commit's default_language_version, see
