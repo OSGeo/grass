@@ -39,10 +39,16 @@ repos:
     rev: v0.33.0
     hooks:
       - id: markdownlint
-  - repo: https://github.com/psf/black
-    rev: 23.1.0
+  # Using this mirror lets us use mypyc-compiled black, which is about 2x faster
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 23.12.1
     hooks:
       - id: black
+        # It is recommended to specify the latest version of Python
+        # supported by your project here, or alternatively use
+        # pre-commit's default_language_version, see
+        # https://pre-commit.com/#top_level-default_language_version
+        # language_version: python3.11
         exclude: |
           (?x)^(
                 python/libgrass_interface_generator/
