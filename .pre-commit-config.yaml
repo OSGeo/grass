@@ -35,6 +35,7 @@ repos:
                 python/libgrass_interface_generator/ctypesgen/|
                 lib/fonts/fonts/.*
           )
+      - id: destroyed-symlinks
   - repo: https://github.com/igorshubovych/markdownlint-cli
     rev: v0.33.0
     hooks:
