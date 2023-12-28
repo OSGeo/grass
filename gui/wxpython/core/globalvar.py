@@ -255,3 +255,10 @@ gtk3 = True if "gtk3" in wx.PlatformInfo else False
 
 """@Add GUIDIR/scripts into path"""
 os.environ["PATH"] = os.path.join(GUIDIR, "scripts") + os.pathsep + os.environ["PATH"]
+
+ignoredCmdPattern = (
+    "^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.import$|"
+    "^r.external$|^r.external.out$|"
+    "^v.import$|^v.external$|^v.external.out$|"
+    "^cd$|^cd .*"
+)

@@ -141,7 +141,7 @@ jobs:
           cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
 
       - name: Make Sphinx documentation available
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sphinx-grass
           path: sphinx-grass

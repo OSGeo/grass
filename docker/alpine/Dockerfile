@@ -1,4 +1,4 @@
-FROM alpine:3.18 as common
+FROM alpine:3.19 as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
