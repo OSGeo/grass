@@ -496,7 +496,7 @@ class IClassMapPanel(DoubleMapPanel):
         mapTb.Enable("zoomBack", enable=(len(self.MapWindow.zoomhistory) > 1))
 
         if mapTb.GetActiveMap() != (win == self.secondMapWindow):
-            mapTb.SetActiveMap((win == self.secondMapWindow))
+            mapTb.SetActiveMap(win == self.secondMapWindow)
         self.StatusbarUpdate()
 
     def ActivateFirstMap(self, event=None):
