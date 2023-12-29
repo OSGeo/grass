@@ -13,11 +13,10 @@ on:
 
 jobs:
   python-checks:
-    name: Python Code Quality
+    name: Python Code Quality Checks
 
     concurrency:
-      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
-        matrix.pylint-version }}
+      group: ${{ github.workflow }}-${{ github.job }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{ matrix.pylint-version }}
       cancel-in-progress: true
 
     # Using matrix just to get variables which are not environmental variables
@@ -45,11 +44,11 @@ jobs:
           echo Pylint: ${{ matrix.pylint-version }}
 
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+          cache: pip
 
       - name: Install non-Python dependencies
         run: |
@@ -146,3 +145,11 @@ jobs:
           name: sphinx-grass
           path: sphinx-grass
           retention-days: 3
+  python-success:
+    name: Python Code Quality Result
+    needs:
+      - python-checks
+    if: ${{ always() }}
+    uses: ./.github/workflows/verify-success.yml
+    with:
+      needs_context: ${{ toJson(needs) }}
