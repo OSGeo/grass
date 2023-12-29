@@ -132,7 +132,7 @@ class VectorSelectBase:
         if createButton:
             createMap = Button(self._dialog, wx.ID_ANY, _("Create a new map"))
             createMap.Bind(wx.EVT_BUTTON, self.OnExportMap)
-            self._dialog.AddWidget(createMap, proportion=0.1)
+            self._dialog.AddWidget(createMap, proportion=0)
         self.slist = VectorSelectList(self._dialog)
         self.slist.Bind(wx.EVT_LIST_KEY_DOWN, self.OnDelete)
         self.slist.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self.OnDeleteRow)

@@ -38,7 +38,7 @@ static char *format_zone(int zone_num)
     return zone_str;
 }
 
-void print_region(const struct Map_info *Map)
+void print_region(struct Map_info *Map)
 {
     char tmp1[1024], tmp2[1024];
 
@@ -59,7 +59,7 @@ void print_region(const struct Map_info *Map)
     fprintf(stdout, "bottom=%f\n", box.B);
 }
 
-void print_topo(const struct Map_info *Map)
+void print_topo(struct Map_info *Map)
 {
     int with_z;
     long nprimitives;
@@ -123,7 +123,7 @@ void print_topo(const struct Map_info *Map)
     fflush(stdout);
 }
 
-void print_columns(const struct Map_info *Map, const char *input_opt,
+void print_columns(struct Map_info *Map, const char *input_opt,
                    const char *field_opt)
 {
     int num_dblinks, col, ncols;
@@ -174,7 +174,7 @@ void print_columns(const struct Map_info *Map, const char *input_opt,
     db_shutdown_driver(driver);
 }
 
-void print_shell(const struct Map_info *Map, const char *field_opt)
+void print_shell(struct Map_info *Map, const char *field_opt)
 {
     int map_type;
     int time_ok, first_time_ok, second_time_ok;
@@ -272,7 +272,7 @@ void print_shell(const struct Map_info *Map, const char *field_opt)
     fprintf(stdout, "comment=%s\n", Vect_get_comment(Map));
 }
 
-void print_info(const struct Map_info *Map)
+void print_info(struct Map_info *Map)
 {
     int i, map_type;
     char line[1024];

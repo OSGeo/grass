@@ -7,6 +7,7 @@ Classes:
  - mapdisp::MapPanelBase
  - mapdisp::SingleMapPanel
  - mapdisp::DoubleMapPanel
+ - mapdisp::FrameMixin
 
 (C) 2009-2014 by the GRASS Development Team
 
@@ -20,7 +21,6 @@ This program is free software under the GNU General Public License
 """
 
 import sys
-import six
 
 import wx
 
@@ -386,7 +386,7 @@ class MapPanelBase(wx.Panel):
 
     def StatusbarEnableLongHelp(self, enable=True):
         """Enable/disable toolbars long help"""
-        for toolbar in six.itervalues(self.toolbars):
+        for toolbar in self.toolbars.values():
             if toolbar:
                 toolbar.EnableLongHelp(enable)
 
@@ -869,3 +869,6 @@ class FrameMixin:
 
     def SetSize(self, *args):
         self.GetParent().SetSize(*args)
+
+    def Close(self):
+        self.GetParent().Close()

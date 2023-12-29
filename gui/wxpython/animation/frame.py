@@ -20,7 +20,6 @@ This program is free software under the GNU General Public License
 import os
 import wx
 import wx.aui
-import six
 
 import grass.script as gcore
 import grass.temporal as tgis
@@ -143,7 +142,7 @@ class AnimationFrame(wx.Frame):
             .DestroyOnClose(True)
             .Layer(0),
         )
-        for name, slider in six.iteritems(self.animationSliders):
+        for name, slider in self.animationSliders.items():
             self._mgr.AddPane(
                 slider,
                 wx.aui.AuiPaneInfo()

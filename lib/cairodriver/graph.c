@@ -73,7 +73,7 @@ static void init_xlib(void)
     }
 
     p = getenv("GRASS_RENDER_CAIRO_VISUAL");
-    if (!p || sscanf(p, "%li", &xid) != 1) {
+    if (!p || sscanf(p, "%lu", &xid) != 1) {
         G_debug(1, "cairo: GRASS_RENDER_CAIRO_VISUAL=%s", p);
         xid = DefaultVisual(ca.dpy, scrn)->visualid;
     }

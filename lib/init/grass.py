@@ -37,7 +37,6 @@ is not safe, i.e. it has side effects (this should be changed in the future).
 # (this makes it more stable since we have to set up paths first)
 # pylint: disable=too-many-lines
 
-from __future__ import print_function
 import sys
 import os
 import errno
@@ -49,7 +48,6 @@ import signal
 import string
 import subprocess
 import re
-import six
 import platform
 import tempfile
 import locale
@@ -118,9 +116,7 @@ def decode(bytes_, encoding=ENCODING):
     :param encoding: encoding to be used, default value is the system's default
         encoding or, if that cannot be determined, 'UTF-8'.
     """
-    if sys.version_info.major >= 3:
-        unicode = str
-    if isinstance(bytes_, unicode):
+    if isinstance(bytes_, str):
         return bytes_
     elif isinstance(bytes_, bytes):
         return bytes_.decode(encoding)
@@ -140,12 +136,9 @@ def encode(string, encoding=ENCODING):
     :param encoding: encoding to be used, default value is the system's default
         encoding or, if that cannot be determined, 'UTF-8'.
     """
-    if sys.version_info.major >= 3:
-        unicode = str
     if isinstance(string, bytes):
         return string
-    # this also tests str in Py3:
-    elif isinstance(string, unicode):
+    elif isinstance(string, str):
         return string.encode(encoding)
     else:
         # if something else than text
@@ -155,12 +148,7 @@ def encode(string, encoding=ENCODING):
 # see https://trac.osgeo.org/grass/ticket/3508
 def to_text_string(obj, encoding=ENCODING):
     """Convert `obj` to (unicode) text string"""
-    if six.PY2:
-        # Python 2
-        return encode(obj, encoding=encoding)
-    else:
-        # Python 3
-        return decode(obj, encoding=encoding)
+    return decode(obj, encoding=encoding)
 
 
 def try_remove(path):
@@ -279,10 +267,7 @@ def count_wide_chars(s):
 
     :param str s: string
     """
-    return sum(
-        unicodedata.east_asian_width(c) in "WF"
-        for c in (s if sys.version_info.major >= 3 else unicode(s))
-    )
+    return sum(unicodedata.east_asian_width(c) in "WF" for c in s)
 
 
 def f(fmt, *args):
@@ -570,7 +555,7 @@ def read_gisrc(filename):
     kv = {}
     try:
         f = open(filename, "r")
-    except IOError:
+    except OSError:
         return kv
 
     for line in f:
@@ -1185,9 +1170,12 @@ def set_mapset(
                                     " Did you mean to create a new location?"
                                 ).format(mapset=mapset, geofile=geofile)
                             )
-                        message(
-                            _("Creating new GRASS GIS mapset <{}>...").format(mapset)
-                        )
+                        if not tmp_mapset:
+                            message(
+                                _("Creating new GRASS GIS mapset <{}>...").format(
+                                    mapset
+                                )
+                            )
                         # create mapset directory
                         os.mkdir(path)
                         if tmp_mapset:
@@ -1224,7 +1212,7 @@ def set_mapset(
 
 # we don't follow the LOCATION_NAME legacy naming here but we have to still
 # translate to it, so always double check
-class MapsetSettings(object):
+class MapsetSettings:
     """Holds GRASS GIS database directory, Location and Mapset
 
     Provides few convenient functions.
@@ -2257,7 +2245,7 @@ def get_username():
     return user
 
 
-class Parameters(object):
+class Parameters:
     """Structure to hold standard part of command line parameters"""
 
     # we don't need to define any methods

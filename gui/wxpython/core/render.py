@@ -60,7 +60,7 @@ def get_tempfile_name(suffix, create=False):
     return name
 
 
-class Layer(object):
+class Layer:
     """Virtual class which stores information about layers (map layers and
     overlays) of the map composition.
 
@@ -902,7 +902,7 @@ class Map(object):
         )
         try:
             windfile = open(filename, "r")
-        except IOError as e:
+        except OSError as e:
             sys.exit(
                 _("Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n")
                 % {"file": filename, "ret": e}

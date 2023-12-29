@@ -133,7 +133,6 @@ DLLS="
 	/mingw64/bin/libfftw3-3.dll
 	/mingw64/bin/libblas.dll
 	/mingw64/bin/liblapack.dll
-	/mingw64/bin/libomp.dll
 	/mingw64/bin/libquadmath-0.dll
 "
 
@@ -194,7 +193,8 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-cairo-includes=$OSGEO4W_ROOT_MSYS/include \
 		--with-cairo-ldflags="-L$PWD/mswindows/osgeo4w/lib -lcairo -lfontconfig" \
 		--with-bzlib \
-		--with-liblas=$PWD/mswindows/osgeo4w/liblas-config
+		--with-liblas=$PWD/mswindows/osgeo4w/liblas-config \
+		--without-pdal
 
 	touch mswindows/osgeo4w/configure-stamp
 fi
