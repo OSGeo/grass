@@ -16,7 +16,9 @@ jobs:
     name: Python Code Quality Checks
 
     concurrency:
-      group: ${{ github.workflow }}-${{ github.job }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{ matrix.pylint-version }}
+      group: ${{ github.workflow }}-${{ github.job }}-${{
+        github.event_name == 'pull_request' &&
+        github.head_ref || github.sha }}-${{ matrix.pylint-version }}
       cancel-in-progress: true
 
     # Using matrix just to get variables which are not environmental variables
@@ -55,7 +57,7 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y wget git gawk findutils
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
-              sudo apt-get install -y --no-install-recommends --no-install-suggests
+          sudo apt-get install -y --no-install-recommends --no-install-suggests
 
       - name: Install Python dependencies
         run: |
