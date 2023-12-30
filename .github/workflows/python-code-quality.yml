@@ -65,11 +65,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install pipx \
-            pylint==${{ matrix.pylint-version }} \
-            pytest-github-actions-annotate-failures
-          pipx install black[jupyter]==${{ matrix.black-version }}
-          pipx install flake8==${{ matrix.flake8-version }}
+          pip install black==${{ matrix.black-version }}
+          pip install flake8==${{ matrix.flake8-version }}
+          pip install pylint==${{ matrix.pylint-version }} pytest-github-actions-annotate-failures
 
       - name: Run Black
         run: |
