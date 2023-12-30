@@ -1,82 +1,88 @@
 ---
-name: Labeler
-
 libraries:
-  - lib/**/*
-  - include/grass/*
-  - include/grass/**/*
-  - python/**/*
-
+  - changed-files:
+      - any-glob-to-any-file:
+          - lib/**/*
+          - include/grass/*
+          - include/grass/**/*
+          - python/**/*
 module:
-  - db/**/*
-  - display/**/*
-  - general/**/*
-  - imagery/**/*
-  - misc/**/*
-  - ps/**/*
-  - raster/**/*
-  - raster3d/**/*
-  - scripts/**/*
-  - temporal/**/*
-  - vector/**/*
-
+  - changed-files:
+      - any-glob-to-any-file:
+          - db/**/*
+          - display/**/*
+          - general/**/*
+          - imagery/**/*
+          - misc/**/*
+          - ps/**/*
+          - raster/**/*
+          - raster3d/**/*
+          - scripts/**/*
+          - temporal/**/*
+          - vector/**/*
 vector:
-  - vector/**/*
-
+  - changed-files:
+      - any-glob-to-any-file: vector/**/*
 raster:
-  - raster/**/*
-
+  - changed-files:
+      - any-glob-to-any-file: raster/**/*
 temporal:
-  - temporal/**/*
-
+  - changed-files:
+      - any-glob-to-any-file: temporal/**/*
 database:
-  - db/**/*
-  
+  - changed-files:
+      - any-glob-to-any-file: db/**/*
 GUI:
-  - gui/**/*
-
+  - changed-files:
+      - any-glob-to-any-file: gui/**/*
 Windows:
-  - mswindows/**/*
-
+  - changed-files:
+      - any-glob-to-any-file: mswindows/**/*
 macOS:
-  - macosx/**/*
-
+  - changed-files:
+      - any-glob-to-any-file: macosx/**/*
 Linux:
-  - rpm/**/*
-  - singularity/**/*
-
+  - changed-files:
+      - any-glob-to-any-file: singularity/**/*
 docker:
-  - docker/**/*
-
+  - changed-files:
+      - any-glob-to-any-file: docker/**/*
 docs:
-  - doc/**/*
-  - man/**/*
-
+  - changed-files:
+      - any-glob-to-any-file:
+          - doc/**/*
+          - man/**/*
+RFC:
+  - changed-files:
+      - any-glob-to-any-file: doc/development/rfc/*
 translation:
-  - locale/**/*
-
+  - changed-files:
+      - any-glob-to-any-file: locale/**/*
 CI:
-  - ".github/**/*"
-  - ".travis/**/*"
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/**/*
+          - .travis/**/*
 
 # based on file types
 Python:
-  - "**/*.py"
-
+  - changed-files:
+      - any-glob-to-any-file: '**/*.py'
 C:
-  - "**/*.c"
-
+  - changed-files:
+      - any-glob-to-any-file: '**/*.c'
 C++:
-  - "**/*.cpp"
-
+  - changed-files:
+      - any-glob-to-any-file: '**/*.cpp'
 CSS:
-  - "**/*.css"
-
+  - changed-files:
+      - any-glob-to-any-file: '**/*.css'
 HTML:
-  - "**/*.html"
-
+  - changed-files:
+      - any-glob-to-any-file: '**/*.html'
 JavaScript:
-  - "**/*.js"
-
+  - changed-files:
+      - any-glob-to-any-file: '**/*.js'
 Markdown:
-  - "**/*.md"
+  - changed-files:
+      - any-glob-to-any-file: '**/*.md'
