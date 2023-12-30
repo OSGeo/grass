@@ -63,8 +63,30 @@ ref3 = """azimuth,horizon_height
 160.000000,0.015356
 """
 
+ref4 = """azimuth,horizon_height
+0.000000,0.197017
+20.000000,0.196832
+40.000000,0.196875
+60.000000,0.196689
+80.000000,0.196847
+100.000000,0.196645
+120.000000,0.196969
+140.000000,0.196778
+160.000000,0.196863
+180.000000,0.197017
+200.000000,0.196832
+220.000000,0.196875
+240.000000,0.196689
+260.000000,0.196847
+280.000000,0.196645
+300.000000,0.196969
+320.000000,0.196778
+340.000000,0.196863
+"""
+
 
 class TestHorizon(TestCase):
+    circle = "circle"
     horizon = "test_horizon_from_elevation"
     horizon_output = "test_horizon_output_from_elevation"
 
@@ -72,9 +94,19 @@ class TestHorizon(TestCase):
     def setUpClass(cls):
         cls.use_temp_region()
         cls.runModule("g.region", raster="elevation")
+        cls.runModule(
+            "r.circle",
+            flags="b",
+            output=cls.circle,
+            coordinates=(637505, 221755),
+            min=5000,
+            multiplier=1000,
+        )
+        cls.runModule("r.null", map=cls.circle, null=0)
 
     @classmethod
     def tearDownClass(cls):
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.circle)
         cls.del_temp_region()
 
     def tearDown(self):
@@ -111,6 +143,20 @@ class TestHorizon(TestCase):
         self.assertModule(module)
         stdout = module.outputs.stdout
         self.assertMultiLineEqual(first=ref2, second=stdout)
+
+    def test_point_mode_multiple_direction_artificial(self):
+        """Test mode with 1 point and multiple directions with artificial surface"""
+        module = SimpleModule(
+            "r.horizon",
+            elevation=self.circle,
+            coordinates=(637505, 221755),
+            output=self.horizon,
+            direction=0,
+            step=20,
+        )
+        self.assertModule(module)
+        stdout = module.outputs.stdout
+        self.assertMultiLineEqual(first=ref4, second=stdout)
 
     def test_raster_mode_one_direction(self):
         """Test mode with 1 point and one direction"""

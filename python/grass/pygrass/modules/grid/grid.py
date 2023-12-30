@@ -401,7 +401,7 @@ def cmd_exe(args):
     os.remove(gisrc_dst)
 
 
-class GridModule(object):
+class GridModule:
     # TODO maybe also i.* could be supported easily
     """Run GRASS raster commands in a multiprocessing mode.
 

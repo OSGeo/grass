@@ -2,7 +2,7 @@
 notes:
   categories:
     - title: Modules
-      regexp: '(d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*: |(modules|tools): '
+      regexp: '((d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)(, (d|db|g|i|m|ps|r|r3|t|v)\.[^ ]*)?: |(modules|tools): '
 
     - title: Graphical User Interface
       regexp: '(wxGUI.*|gui|GUI): '
@@ -20,16 +20,16 @@ notes:
       regexp: '(init|startup): '
 
     - title: Translations, Internationalization, and Localization
-      regexp: '(i18n|i18N|L10n|L10N|t9n|translations?): '
+      regexp: '(i18n|i18N|L10n|L10N|t9n|translations?): |Translations update from '
 
     - title: Windows
       regexp: '(winGRASS|win|[Ww]indows): '
 
     - title: Packaging, Configuration, Portability, and Compilation
-      regexp: '(pkg|rpm|deb|pkg-config|configure|config|[Mm]ake): '
+      regexp: '(packaging|pkg|rpm|deb|pkg-config|configure|config|[Mm]ake|build): '
 
     - title: Docker
-      regexp: '[Dd]ocker: '
+      regexp: '[Dd]ocker(/[^ ]+)?: '
 
     - title: Singularity
       regexp: '[Ss]ingularity: '
@@ -38,7 +38,7 @@ notes:
       regexp: '(CI|ci|CI\(deps\)|ci\(deps\)|[Tt]ests|[Cc]hecks|pytest): '
 
     - title: Contributing and Management
-      regexp: '(contributing|CONTRIBUTING.md|contributors.csv): '
+      regexp: '(contributing|CONTRIBUTING.md|contributors|contributors.csv): '
 
   exclude:
     regexp:

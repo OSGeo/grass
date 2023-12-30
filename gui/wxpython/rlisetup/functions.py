@@ -97,7 +97,7 @@ def convertFeature(vect, outrast, cat, origrast, layer="1", overwrite=False):
         input=tmp_vect,
         type="area",
         layer=layer,
-        use="val",
+        use="value",
         value=cat,
         output=outrast,
         overwrite=overwrite,
