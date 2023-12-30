@@ -1198,5 +1198,115 @@ def is_shell_running():
     return True
 
 
+def parse_mapcalc_cmd(command):
+    """Parse r.mapcalc/r3.mapcalc module command
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc map = 1")
+    "r.mapcalc expression='map = 1'"
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc map =    1")
+    "r.mapcalc expression='map = 1'"
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc map=1")
+    "r.mapcalc expression='map=1'"
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc map = a - b")
+    "r.mapcalc expression='map = a - b'"
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc expression=map = a - b")
+    "r.mapcalc expression='map = a - b'"
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc expression=map = a -     b")
+    "r.mapcalc expression='map = a - b'"
+
+    >>> cmd = "r.mapcalc expr='map = a - b' region=clip --overwrite"
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expr='map = a - b' region=clip"
+
+    >>> cmd = 'r.mapcalc expr="map = a - b" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expr='map = a - b' region=clip"
+
+    >>> cmd = "r.mapcalc -s map = (a - b) / c region=clip --overwrite --verbose"
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc -s --overwrite --verbose expression='map = (a - b) / c' region=clip"
+
+    :param str command: r.mapcalc command string
+
+    :return str: parsed r.mapcalc command string
+    """
+    flags = []
+    others_params_args = []
+    expr_param_regex = r"expression=|expr="
+    flag_regex = r"^-[a-z]|^--overwrite|^--quiet|^--verbose|^--o|^--v|^--h"
+
+    command = split(command)
+    module = command.pop(0)
+
+    for arg in command[:]:
+        flag = re.search(flag_regex, arg)
+        if flag:
+            flags.append(command.pop(command.index(flag.group())))
+        elif "region=" in arg or "file=" in arg or "seed=" in arg:
+            others_params_args.append(command.pop(command.index(arg)))
+
+    cmd = " ".join(command)
+    expr_param = re.search(expr_param_regex, cmd)
+    if not expr_param:
+        expr_param_name = expr_param_regex.split("|")[0]
+    else:
+        # Remove expression param
+        command = split(cmd.replace(expr_param.group(), ""))
+        expr_param_name = expr_param.group()
+    # Add quotes
+    if "'" not in cmd or '"' not in cmd:
+        cmd = f"'{' '.join(command)}'"
+    expression_param_arg = f"{expr_param_name}{cmd}"
+
+    return " ".join(
+        [
+            module,
+            *flags,
+            expression_param_arg,
+            *others_params_args,
+        ]
+    )
+
+
+def replace_module_cmd_special_flags(command):
+    """Replace module command special flags short version with
+    full version
+
+    Flags:
+
+    --o -> --overwrite
+    --q -> --quiet
+    --v -> --verbose
+
+    >>> cmd = "r.mapcalc -s --o --v expression='map = 1' region=clip"
+    >>> replace_module_cmd_special_flags(command=cmd)
+    "r.mapcalc -s --overwrite --verbose expression='map = 1' region=clip"
+
+    >>> cmd = "r.mapcalc -s --o --q expression='map = 1' region=clip"
+    >>> replace_module_cmd_special_flags(command=cmd)
+    "r.mapcalc -s --overwrite --quiet expression='map = 1' region=clip"
+
+    :param str command: module command string
+
+    :return str: module command string with replaced flags
+    """
+    flags_regex = re.compile(r"(--o(\s+|$))|(--q(\s+|$))|(--v(\s+|$))")
+    replace = {
+        "--o": "--overwrite ",
+        "--q": "--quiet ",
+        "--v": "--verbose ",
+    }
+    return re.sub(
+        flags_regex,
+        lambda flag: replace[flag.group().strip()],
+        command,
+    )
+
+
 if __name__ == "__main__":
     sys.exit(doc_test())
