@@ -1,0 +1,88 @@
+---
+libraries:
+  - changed-files:
+      - any-glob-to-any-file:
+          - lib/**/*
+          - include/grass/*
+          - include/grass/**/*
+          - python/**/*
+module:
+  - changed-files:
+      - any-glob-to-any-file:
+          - db/**/*
+          - display/**/*
+          - general/**/*
+          - imagery/**/*
+          - misc/**/*
+          - ps/**/*
+          - raster/**/*
+          - raster3d/**/*
+          - scripts/**/*
+          - temporal/**/*
+          - vector/**/*
+vector:
+  - changed-files:
+      - any-glob-to-any-file: vector/**/*
+raster:
+  - changed-files:
+      - any-glob-to-any-file: raster/**/*
+temporal:
+  - changed-files:
+      - any-glob-to-any-file: temporal/**/*
+database:
+  - changed-files:
+      - any-glob-to-any-file: db/**/*
+GUI:
+  - changed-files:
+      - any-glob-to-any-file: gui/**/*
+Windows:
+  - changed-files:
+      - any-glob-to-any-file: mswindows/**/*
+macOS:
+  - changed-files:
+      - any-glob-to-any-file: macosx/**/*
+Linux:
+  - changed-files:
+      - any-glob-to-any-file: singularity/**/*
+docker:
+  - changed-files:
+      - any-glob-to-any-file: docker/**/*
+docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - doc/**/*
+          - man/**/*
+RFC:
+  - changed-files:
+      - any-glob-to-any-file: doc/development/rfc/*
+translation:
+  - changed-files:
+      - any-glob-to-any-file: locale/**/*
+CI:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/**/*
+          - .travis/**/*
+
+# based on file types
+Python:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.py'
+C:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.c'
+C++:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.cpp'
+CSS:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.css'
+HTML:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.html'
+JavaScript:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.js'
+Markdown:
+  - changed-files:
+      - any-glob-to-any-file: '**/*.md'
