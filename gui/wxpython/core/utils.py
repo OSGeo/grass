@@ -1239,7 +1239,7 @@ def parse_mapcalc_cmd(command):
     others_params_args = []
     expr_param_regex = re.compile(r"expression=|expr=")
     flag_regex = re.compile(
-        r"-[a-z]|--overwrite|--quiet|--verbose|--o|--q|--v|--h",
+        r"^-[a-z]|^--overwrite|^--quiet|^--verbose|^--help|^--o|^--q|^--v|^--h",
     )
 
     command = split(command)
@@ -1284,6 +1284,7 @@ def replace_module_cmd_special_flags(command):
     --o -> --overwrite
     --q -> --quiet
     --v -> --verbose
+    --h -> --help
 
     >>> cmd = "r.mapcalc -s --o --v expression='map = 1' region=clip"
     >>> replace_module_cmd_special_flags(command=cmd)
@@ -1297,11 +1298,14 @@ def replace_module_cmd_special_flags(command):
 
     :return str: module command string with replaced flags
     """
-    flags_regex = re.compile(r"(--o(\s+|$))|(--q(\s+|$))|(--v(\s+|$))")
+    flags_regex = re.compile(
+        r"(--o(\s+|$))|(--q(\s+|$))|(--v(\s+|$))|(--h(\s+|$))",
+    )
     replace = {
         "--o": "--overwrite ",
         "--q": "--quiet ",
         "--v": "--verbose ",
+        "--h": "--help ",
     }
     return flags_regex.sub(
         lambda flag: replace[flag.group().strip()],
