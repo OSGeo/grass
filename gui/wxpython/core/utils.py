@@ -1237,23 +1237,25 @@ def parse_mapcalc_cmd(command):
     """
     flags = []
     others_params_args = []
-    expr_param_regex = r"expression=|expr="
-    flag_regex = r"^-[a-z]|^--overwrite|^--quiet|^--verbose|^--o|^--v|^--h"
+    expr_param_regex = re.compile(r"expression=|expr=")
+    flag_regex = re.compile(
+        r"-[a-z]|--overwrite|--quiet|--verbose|--o|--q|--v|--h",
+    )
 
     command = split(command)
     module = command.pop(0)
 
     for arg in command[:]:
-        flag = re.search(flag_regex, arg)
+        flag = flag_regex.search(arg)
         if flag:
             flags.append(command.pop(command.index(flag.group())))
         elif "region=" in arg or "file=" in arg or "seed=" in arg:
             others_params_args.append(command.pop(command.index(arg)))
 
     cmd = " ".join(command)
-    expr_param = re.search(expr_param_regex, cmd)
+    expr_param = expr_param_regex.search(cmd)
     if not expr_param:
-        expr_param_name = expr_param_regex.split("|")[0]
+        expr_param_name = expr_param_regex.pattern.split("|")[0]
     else:
         # Remove expression param
         command = split(cmd.replace(expr_param.group(), ""))
@@ -1301,8 +1303,7 @@ def replace_module_cmd_special_flags(command):
         "--q": "--quiet ",
         "--v": "--verbose ",
     }
-    return re.sub(
-        flags_regex,
+    return flags_regex.sub(
         lambda flag: replace[flag.group().strip()],
         command,
     )
