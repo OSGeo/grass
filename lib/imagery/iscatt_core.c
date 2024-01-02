@@ -690,8 +690,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     const char *mapset;
     char header[1024];
 
-    int *fd_cats_rasts =
-        G_malloc(scatt_conds->n_a_cats * sizeof(scatt_conds->n_a_cats));
+    int *fd_cats_rasts = G_malloc(scatt_conds->n_a_cats * sizeof(int));
     FILE **f_cats_rasts_conds =
         G_malloc(scatt_conds->n_a_cats * sizeof(FILE *));
 
@@ -702,9 +701,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     int nrows, i_band, n_a_bands, band_id;
     int i_row, head_nchars, i_cat, id_cat;
 
-    int *fd_bands = G_malloc(n_bands * sizeof(n_bands));
-    int *bands_ids = G_malloc(n_bands * sizeof(n_bands));
-    int *b_needed_bands = G_malloc(n_bands * sizeof(n_bands));
+    int *fd_bands = G_malloc(n_bands * sizeof(int));
+    int *bands_ids = G_malloc(n_bands * sizeof(int));
+    int *b_needed_bands = G_malloc(n_bands * sizeof(int));
 
     Rast_set_window(region);
 
