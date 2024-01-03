@@ -280,7 +280,7 @@ def f(fmt, *args):
     matches = []
     # https://docs.python.org/3/library/stdtypes.html#old-string-formatting
     for m in re.finditer(
-        "%([#0 +-]*)([0-9]*)(\.[0-9]*)?([hlL]?[diouxXeEfFgGcrsa%])", fmt
+        r"%([#0 +-]*)([0-9]*)(\.[0-9]*)?([hlL]?[diouxXeEfFgGcrsa%])", fmt
     ):
         matches.append(m)
 

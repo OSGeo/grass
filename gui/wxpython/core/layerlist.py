@@ -146,8 +146,7 @@ class LayerList:
             self._list.insert(idx + 1, lr)
 
     def __iter__(self):
-        for layer in self._list:
-            yield layer
+        yield from self._list
 
     def __getitem__(self, index):
         return self._list[index]

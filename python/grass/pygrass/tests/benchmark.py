@@ -302,7 +302,7 @@ def run_benchmark(resolution_list, runs, testdict, profile):
                         locals(),
                         filename=filename,
                     )
-                print(("    {0}: {1: 40.6f}s".format(oper, operdict["time"])))
+                print("    {0}: {1: 40.6f}s".format(oper, operdict["time"]))
                 del operdict["func"]
 
         regions.append(result)

@@ -2007,7 +2007,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             )
             return
 
-        if isinstance(self.epsgCodeDict, type("")):
+        if isinstance(self.epsgCodeDict, str):
             wx.MessageBox(
                 parent=self,
                 message=_("Unable to read EPSG codes: %s") % self.epsgCodeDict,

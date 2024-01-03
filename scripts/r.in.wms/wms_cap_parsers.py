@@ -136,7 +136,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
         if first:
             self._initLayer(parent_layer, None)
 
-        layers = parent_layer.findall((self.xml_ns.Ns("Layer")))
+        layers = parent_layer.findall(self.xml_ns.Ns("Layer"))
 
         for l in layers:
             self._initLayer(l, parent_layer)

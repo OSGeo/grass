@@ -222,7 +222,7 @@ class ExampleMapPanel(SingleMapPanel):
                 .CloseButton(False)
                 .Layer(1)
                 .Row(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "MiscToolbar":
@@ -243,7 +243,7 @@ class ExampleMapPanel(SingleMapPanel):
                 .CloseButton(False)
                 .Layer(1)
                 .Row(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "MainToolbar":
@@ -264,7 +264,7 @@ class ExampleMapPanel(SingleMapPanel):
                 .CloseButton(False)
                 .Layer(1)
                 .Row(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
     def GetMapToolbar(self):

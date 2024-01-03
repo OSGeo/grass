@@ -9,8 +9,6 @@ Copyright: (C) 2015 pietro
 
 Created on  Wed Jul 15 11:34:32 2015
 """
-from __future__ import absolute_import
-
 import sys
 import fnmatch
 

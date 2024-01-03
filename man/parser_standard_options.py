@@ -64,7 +64,7 @@ def parse_options(lines, startswith="Opt"):
             if line.startswith("/*"):
                 continue
             if line.startswith(startswith) and line.endswith(";"):
-                key, default = [w.strip() for w in split_opt_line(line[5:])]
+                key, default = (w.strip() for w in split_opt_line(line[5:]))
                 res[key] = default
             elif line.startswith(startswith):
                 key, default = split_opt_line(line[5:])
