@@ -54,7 +54,9 @@ int db__driver_open_database(dbHandle *handle)
 
         connection = mysql_init(NULL);
         res = mysql_real_connect(connection, host, user, password,
-                                 connpar.dbname, port, NULL, 0);
+                                 connpar.dbname,
+                                 port != NULL ? atoi(port) : 0,
+                                 NULL, 0);
 
         if (res == NULL) {
             db_d_append_error("%s\n%s", _("Connection failed."),
