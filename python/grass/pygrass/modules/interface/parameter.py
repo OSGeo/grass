@@ -14,7 +14,7 @@ def _check_value(param, value):
     return the checked value and the original.
     """
     req = "The Parameter <%s>, require: %s, get: %s instead: %r\n%s"
-    string = (type(b""), type(""))
+    string = (bytes, str)
 
     def raiseexcpet(exc, param, ptype, value):
         """Function to modifa the error message"""
