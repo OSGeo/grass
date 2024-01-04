@@ -1231,13 +1231,53 @@ def parse_mapcalc_cmd(command):
     >>> parse_mapcalc_cmd(command=cmd)
     "r.mapcalc -s --overwrite --verbose expression='map = (a - b) / c' region=clip"
 
+    >>> cmd = 'r.mapcalc e="map = 1" --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite e='map = 1'"
+
+    >>> cmd = 'r.mapcalc ex="map = 1" --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite ex='map = 1'"
+
+    >>> cmd = 'r.mapcalc exp="map = 1" --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite exp='map = 1'"
+
+    >>> cmd = 'r.mapcalc expr="map = 1" --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expr='map = 1'"
+
+    >>> cmd = 'r.mapcalc expre="map = 1" --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expre='map = 1'"
+
+    >>> cmd = 'r.mapcalc expres="map = 1" --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expres='map = 1'"
+
+    >>> cmd = 'r.mapcalc express="map = 1" --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite express='map = 1'"
+
+    >>> cmd = 'r.mapcalc expressi="map = 1" --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expressi='map = 1'"
+
+    >>> cmd = 'r.mapcalc expressio="map = 1" --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expressio='map = 1'"
+
+    >>> cmd = 'r.mapcalc expression="map = 1" --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expression='map = 1'"
+
     :param str command: r.mapcalc command string
 
     :return str: parsed r.mapcalc command string
     """
     flags = []
     others_params_args = []
-    expr_param_regex = re.compile(r"expression=|expr=")
+    expr_param_regex = re.compile(r"e.*?=")
     flag_regex = re.compile(
         r"^-[a-z]|^--overwrite|^--quiet|^--verbose|^--help|^--o|^--q|^--v|^--h",
     )
@@ -1255,7 +1295,7 @@ def parse_mapcalc_cmd(command):
     cmd = " ".join(command)
     expr_param = expr_param_regex.search(cmd)
     if not expr_param:
-        expr_param_name = expr_param_regex.pattern.split("|")[0]
+        expr_param_name = "expression="
     else:
         # Remove expression param
         command = split(cmd.replace(expr_param.group(), ""))
