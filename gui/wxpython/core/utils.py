@@ -1231,45 +1231,45 @@ def parse_mapcalc_cmd(command):
     >>> parse_mapcalc_cmd(command=cmd)
     "r.mapcalc -s --overwrite --verbose expression='map = (a - b) / c' region=clip"
 
-    >>> cmd = 'r.mapcalc e="map = 1" --overwrite'
+    >>> cmd = 'r.mapcalc e="map = 1" region=clip --overwrite'
     >>> parse_mapcalc_cmd(command=cmd)
-    "r.mapcalc --overwrite e='map = 1'"
+    "r.mapcalc --overwrite e='map = 1' region=clip"
 
-    >>> cmd = 'r.mapcalc ex="map = 1" --overwrite'
+    >>> cmd = 'r.mapcalc ex="map = 1" region=clip --overwrite'
     >>> parse_mapcalc_cmd(command=cmd)
-    "r.mapcalc --overwrite ex='map = 1'"
+    "r.mapcalc --overwrite ex='map = 1' region=clip"
 
-    >>> cmd = 'r.mapcalc exp="map = 1" --overwrite'
+    >>> cmd = 'r.mapcalc exp="map = 1" region=clip --overwrite'
     >>> parse_mapcalc_cmd(command=cmd)
-    "r.mapcalc --overwrite exp='map = 1'"
+    "r.mapcalc --overwrite exp='map = 1' region=clip"
 
-    >>> cmd = 'r.mapcalc expr="map = 1" --overwrite'
+    >>> cmd = 'r.mapcalc expr="map = 1" region=clip --overwrite'
     >>> parse_mapcalc_cmd(command=cmd)
-    "r.mapcalc --overwrite expr='map = 1'"
+    "r.mapcalc --overwrite expr='map = 1' region=clip"
 
-    >>> cmd = 'r.mapcalc expre="map = 1" --overwrite'
+    >>> cmd = 'r.mapcalc expre="map = 1" region=clip --overwrite'
     >>> parse_mapcalc_cmd(command=cmd)
-    "r.mapcalc --overwrite expre='map = 1'"
+    "r.mapcalc --overwrite expre='map = 1' region=clip"
 
-    >>> cmd = 'r.mapcalc expres="map = 1" --overwrite'
+    >>> cmd = 'r.mapcalc expres="map = 1" region=clip --overwrite'
     >>> parse_mapcalc_cmd(command=cmd)
-    "r.mapcalc --overwrite expres='map = 1'"
+    "r.mapcalc --overwrite expres='map = 1' region=clip"
 
-    >>> cmd = 'r.mapcalc express="map = 1" --overwrite'
+    >>> cmd = 'r.mapcalc express="map = 1" region=clip --overwrite'
     >>> parse_mapcalc_cmd(command=cmd)
-    "r.mapcalc --overwrite express='map = 1'"
+    "r.mapcalc --overwrite express='map = 1' region=clip"
 
-    >>> cmd = 'r.mapcalc expressi="map = 1" --overwrite'
+    >>> cmd = 'r.mapcalc expressi="map = 1" region=clip --overwrite'
     >>> parse_mapcalc_cmd(command=cmd)
-    "r.mapcalc --overwrite expressi='map = 1'"
+    "r.mapcalc --overwrite expressi='map = 1' region=clip"
 
-    >>> cmd = 'r.mapcalc expressio="map = 1" --overwrite'
+    >>> cmd = 'r.mapcalc expressio="map = 1" region=clip --overwrite'
     >>> parse_mapcalc_cmd(command=cmd)
-    "r.mapcalc --overwrite expressio='map = 1'"
+    "r.mapcalc --overwrite expressio='map = 1' region=clip"
 
-    >>> cmd = 'r.mapcalc expression="map = 1" --overwrite'
+    >>> cmd = 'r.mapcalc expression="map = 1" region=clip --overwrite'
     >>> parse_mapcalc_cmd(command=cmd)
-    "r.mapcalc --overwrite expression='map = 1'"
+    "r.mapcalc --overwrite expression='map = 1' region=clip"
 
     :param str command: r.mapcalc command string
 
