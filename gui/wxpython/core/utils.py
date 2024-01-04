@@ -1271,6 +1271,14 @@ def parse_mapcalc_cmd(command):
     >>> parse_mapcalc_cmd(command=cmd)
     "r.mapcalc --overwrite expression='map = 1' region=clip"
 
+    >>> cmd = 'r.mapcalc exp="map = a + e" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite exp='map = a + e' region=clip"
+
+    >>> cmd = 'r.mapcalc exp="map = a + exp(5)" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite exp='map = a + exp(5)' region=clip"
+
     :param str command: r.mapcalc command string
 
     :return str: parsed r.mapcalc command string
