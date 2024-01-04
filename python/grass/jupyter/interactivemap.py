@@ -17,6 +17,20 @@ import json
 from .reprojection_renderer import ReprojectionRenderer
 
 
+def get_backend(interactive_map):
+    """Identifies if interactive_map is of type folium.Map
+    or ipyleaflet.Map. Returns "folium" or "ipyleaflet".
+    """
+    try:
+        import folium  # pylint: disable=import-outside-toplevel
+    except ImportError:
+        return "ipyleaflet"
+    isfolium = isinstance(interactive_map, folium.Map)
+    if isfolium:
+        return "folium"
+    return "ipyleaflet"
+
+
 class Layer:
     """Base class for overlaing raster or vector layer
     on a folium or ipyleaflet map.
@@ -53,17 +67,6 @@ class Layer:
         else:
             self._renderer = renderer
 
-    def get_backend(self, interactive_map):
-        """Identifies backend used (returns "folium" or "ipyleaflet")"""
-        try:
-            import folium  # pylint: disable=import-outside-toplevel
-        except ImportError:
-            return "ipyleaflet"
-        isfolium = isinstance(interactive_map, folium.Map)
-        if isfolium:
-            return "folium"
-        return "ipyleaflet"
-
 
 class Raster(Layer):
     """Overlays rasters on a folium or ipyleaflet map.
@@ -98,7 +101,7 @@ class Raster(Layer):
     def add_to(self, interactive_map):
         """Add raster to map object which is an instance of either
         folium.Map or ipyleaflet.Map"""
-        if self.get_backend(interactive_map) == "folium":
+        if get_backend(interactive_map) == "folium":
             import folium  # pylint: disable=import-outside-toplevel
 
             # Overlay image on folium map
@@ -115,8 +118,8 @@ class Raster(Layer):
             # ImageOverlays don't work well with local files,
             # they need relative address and behavior differs
             # for notebooks and jupyterlab
-            with open(self._filename, "rb") as f:
-                data = base64.b64encode(f.read()).decode("ascii")
+            with open(self._filename, "rb") as file:
+                data = base64.b64encode(file.read()).decode("ascii")
                 url = "data:image/png;base64," + data
             image = ipyleaflet.ImageOverlay(
                 url=url, bounds=self._bounds, name=self._title, **self._layer_kwargs
@@ -152,7 +155,7 @@ class Vector(Layer):
 
     def add_to(self, interactive_map):
         """Add vector to map"""
-        if self.get_backend(interactive_map) == "folium":
+        if get_backend(interactive_map) == "folium":
             import folium  # pylint: disable=import-outside-toplevel
 
             folium.GeoJson(
@@ -161,8 +164,8 @@ class Vector(Layer):
         else:
             import ipyleaflet  # pylint: disable=import-outside-toplevel
 
-            with open(self._filename, "r") as f:
-                data = json.load(f)
+            with open(self._filename, "r", encoding="utf-8") as file:
+                data = json.load(file)
             # allow using opacity directly to keep interface
             # consistent for both backends
             if "opacity" in self._layer_kwargs:
@@ -242,9 +245,9 @@ class InteractiveMap:
                 import folium  # pylint: disable=import-outside-toplevel
 
                 return folium
-            except ImportError as e:
+            except ImportError as err:
                 if error:
-                    raise e
+                    raise err
                 return None
 
         def _import_ipyleaflet(error):
@@ -252,9 +255,9 @@ class InteractiveMap:
                 import ipyleaflet  # pylint: disable=import-outside-toplevel
 
                 return ipyleaflet
-            except ImportError as e:
+            except ImportError as err:
                 if error:
-                    raise e
+                    raise err
                 return None
 
         if not map_backend:
