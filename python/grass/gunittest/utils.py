@@ -57,7 +57,7 @@ def do_doctest_gettext_workaround():
 
     import builtins as __builtin__
 
-    __builtin__._ = new_translator
+    __builtin__.__dict__["_"] = new_translator
 
 
 _MAX_LENGTH = 80
