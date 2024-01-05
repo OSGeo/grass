@@ -959,7 +959,7 @@ int test_low_res(void)
             else if (sinangle < 0.) {
                 sy = yy0 * invstepy + offsety;
                 dely = floor(
-                    fabs((floor(jp / 100.) - (sy / 100.)) * distsinangle));
+                    fabs((floor(sy / 100.) - (sy / 100.)) * distsinangle));
             }
 
             mindel = min(delx, dely);
