@@ -20,6 +20,11 @@ import re
 
 from core import globalvar
 from core.gcmd import GError, GException
+from core.utils import (
+    parse_mapcalc_cmd,
+    replace_module_cmd_special_flags,
+    split,
+)
 from gui_core.forms import GUI
 from gui_core.treeview import CTreeView
 from history.tree import HistoryBrowserTree
@@ -110,15 +115,18 @@ class HistoryBrowser(wx.Panel):
         node = node or self._getSelectedNode()
         if node:
             command = node.data["command"]
-            lst = re.split(r"\s+", command)
             if (
                 globalvar.ignoredCmdPattern
                 and re.compile(globalvar.ignoredCmdPattern).search(command)
                 and "--help" not in command
                 and "--ui" not in command
             ):
-                self.runIgnoredCmdPattern.emit(cmd=lst)
+                self.runIgnoredCmdPattern.emit(cmd=split(command))
                 return
+            if re.compile(r"^r[3]?\.mapcalc").search(command):
+                command = parse_mapcalc_cmd(command)
+            command = replace_module_cmd_special_flags(command)
+            lst = split(command)
             try:
                 GUI(parent=self, giface=self._giface).ParseCommand(lst)
             except GException as e:
