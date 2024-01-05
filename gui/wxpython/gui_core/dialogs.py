@@ -1933,6 +1933,7 @@ class ImageSizeDialog(wx.Dialog):
         style=wx.DEFAULT_DIALOG_STYLE,
         **kwargs,
     ):
+        img_size = kwargs.pop("img_size", None)
         self.parent = parent
 
         wx.Dialog.__init__(self, parent, id=id, style=style, title=title, **kwargs)
@@ -1946,11 +1947,11 @@ class ImageSizeDialog(wx.Dialog):
         size = self.parent.GetWindow().GetClientSize()
         self.width = SpinCtrl(parent=self.panel, id=wx.ID_ANY, style=wx.SP_ARROW_KEYS)
         self.width.SetRange(20, 1e6)
-        self.width.SetValue(size.width)
+        self.width.SetValue(img_size[0] if img_size else size.width)
         wx.CallAfter(self.width.SetFocus)
         self.height = SpinCtrl(parent=self.panel, id=wx.ID_ANY, style=wx.SP_ARROW_KEYS)
         self.height.SetRange(20, 1e6)
-        self.height.SetValue(size.height)
+        self.height.SetValue(img_size[1] if img_size else size.height)
         self.template = wx.Choice(
             parent=self.panel,
             id=wx.ID_ANY,
