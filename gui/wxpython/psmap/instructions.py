@@ -36,7 +36,6 @@ import os
 import string
 from math import ceil
 from time import strftime, localtime
-from io import open
 
 import wx
 import grass.script as grass
@@ -179,7 +178,7 @@ class Instruction:
             toM = float(proj["meters"])
         units = UnitConversion(self.parent)
         w = units.convert(value=mapRect.Get()[2], fromUnit="inch", toUnit="meter") / toM
-        map["scale"] = w / abs((region["w"] - region["e"]))
+        map["scale"] = w / abs(region["w"] - region["e"])
 
         SetResolution(
             dpi=300, width=map["rect"].width, height=map["rect"].height, env=self.env

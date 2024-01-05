@@ -774,7 +774,7 @@ class WMTSRequestMgr(BaseRequestMgr):
 
         # get extend restriction in TileMatrixSetLink for the tile matrix, if exists
         tile_mat_set_limits = mat_set_link.find(
-            (self.xml_ns.NsWmts("TileMatrixSetLimits"))
+            self.xml_ns.NsWmts("TileMatrixSetLimits")
         )
         if tile_mat_set_limits is None:
             return mat_num_bbox
