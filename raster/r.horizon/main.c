@@ -64,7 +64,6 @@ const double twopi = M_PI * 2.;
 const double invEarth = 1. / EARTHRADIUS;
 const double deg2rad = M_PI / 180.;
 const double rad2deg = 180. / M_PI;
-const double minAngle = DEG;
 
 const char *elevin;
 const char *horizon_basename = NULL;
@@ -98,33 +97,37 @@ typedef struct {
     double length;
 } HorizonProperties;
 
-int INPUT(void);
+typedef struct {
+    int n, m, m100, n100;
+    double stepx, stepy, stepxy;
+    double invstepx, invstepy;
+    double offsetx, offsety;
+    double distxy;
+    double xmin, xmax, ymin, ymax, zmax;
+} Geometry;
+
+int INPUT(Geometry *geometry);
 int OUTGR(int numrows, int numcols);
 double amax1(double, double);
 int min(int, int);
-void com_par(OriginAngle *origin_angle, double, double, double);
-double horizon_height(const OriginPoint *origin_point,
+void com_par(const Geometry *geometry, OriginAngle *origin_angle, double,
+             double, double);
+double horizon_height(const Geometry *geometry, const OriginPoint *origin_point,
                       const OriginAngle *origin_angle);
-void calculate_point_mode(double xcoord, double ycoord,
-                          double single_direction);
-int new_point(const OriginPoint *origin_point, const OriginAngle *origin_angle,
-              SearchPoint *search_point, HorizonProperties *horizon);
-int test_low_res(const OriginPoint *origin_point,
+void calculate_point_mode(const Geometry *geometry, double xcoord,
+                          double ycoord, double single_direction);
+int new_point(const Geometry *geometry, const OriginPoint *origin_point,
+              const OriginAngle *origin_angle, SearchPoint *search_point,
+              HorizonProperties *horizon);
+int test_low_res(const Geometry *geometry, const OriginPoint *origin_point,
                  const OriginAngle *origin_angle, SearchPoint *search_point,
                  const HorizonProperties *horizon);
-void calculate_raster_mode(int buffer_e, int buffer_w, int buffer_s,
-                           int buffer_n, double bufferZone,
+void calculate_raster_mode(const Geometry *geometry, int buffer_e, int buffer_w,
+                           int buffer_s, int buffer_n, double bufferZone,
                            double single_direction);
 
-int n, m, m100, n100;
 int degreeOutput, compassOutput = FALSE;
 float **z, **z100, **horizon_raster;
-double stepx, stepy, stepxy;
-double invstepx, invstepy, distxy;
-double offsetx, offsety;
-
-/*int arrayNumInt; */
-double xmin, xmax, ymin, ymax, zmax = 0.;
 
 double maxlength = BIG;
 double fixedMaxLength = BIG, step = 0.0, start = 0.0, end = 0.0;
@@ -303,30 +306,31 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     G_get_set_window(&cellhd);
+    Geometry geometry;
 
-    stepx = cellhd.ew_res;
-    stepy = cellhd.ns_res;
-    invstepx = 1. / stepx;
-    invstepy = 1. / stepy;
+    geometry.stepx = cellhd.ew_res;
+    geometry.stepy = cellhd.ns_res;
+    geometry.invstepx = 1. / geometry.stepx;
+    geometry.invstepy = 1. / geometry.stepy;
     /*
        offsetx = 2. *  invstepx;
        offsety = 2. * invstepy;
        offsetx = 0.5*stepx;
        offsety = 0.5*stepy;
      */
-    offsetx = 0.5;
-    offsety = 0.5;
+    geometry.offsetx = 0.5;
+    geometry.offsety = 0.5;
 
-    n /*n_cols */ = cellhd.cols;
-    m /*n_rows */ = cellhd.rows;
+    geometry.n /*n_cols */ = cellhd.cols;
+    geometry.m /*n_rows */ = cellhd.rows;
 
-    n100 = ceil(n / 100.);
-    m100 = ceil(m / 100.);
+    geometry.n100 = ceil(geometry.n / 100.);
+    geometry.m100 = ceil(geometry.m / 100.);
 
-    xmin = cellhd.west;
-    ymin = cellhd.south;
-    xmax = cellhd.east;
-    ymax = cellhd.north;
+    geometry.xmin = cellhd.west;
+    geometry.ymin = cellhd.south;
+    geometry.xmax = cellhd.east;
+    geometry.ymax = cellhd.north;
 
     degreeOutput = flag.degreeOutput->answer;
     compassOutput = flag.compassOutput->answer;
@@ -464,13 +468,11 @@ int main(int argc, char *argv[])
        fixedMaxLength = (fixedMaxLength < AMAX1(deltx, delty)) ? fixedMaxLength
        : AMAX1(deltx, delty); G_debug(1,"Using maxdistance %f", fixedMaxLength);
      */
-    double dist;
-    sscanf(parm.dist->answer, "%lf", &dist);
-    if (dist < 0.5 || dist > 1.5)
+    sscanf(parm.dist->answer, "%lf", &geometry.distxy);
+    if (geometry.distxy < 0.5 || geometry.distxy > 1.5)
         G_fatal_error(_("The distance value must be 0.5-1.5. Aborting."));
 
-    stepxy = dist * 0.5 * (stepx + stepy);
-    distxy = dist;
+    geometry.stepxy = geometry.distxy * 0.5 * (geometry.stepx + geometry.stepy);
 
     if (bufferZone > 0. || ebufferZone > 0. || wbufferZone > 0. ||
         sbufferZone > 0. || nbufferZone > 0.) {
@@ -485,24 +487,25 @@ int main(int argc, char *argv[])
         if (nbufferZone == 0.)
             nbufferZone = bufferZone;
 
-        new_cellhd.rows += (int)((nbufferZone + sbufferZone) / stepy);
-        new_cellhd.cols += (int)((ebufferZone + wbufferZone) / stepx);
+        new_cellhd.rows += (int)((nbufferZone + sbufferZone) / geometry.stepy);
+        new_cellhd.cols += (int)((ebufferZone + wbufferZone) / geometry.stepx);
 
         new_cellhd.north += nbufferZone;
         new_cellhd.south -= sbufferZone;
         new_cellhd.east += ebufferZone;
         new_cellhd.west -= wbufferZone;
 
-        xmin = new_cellhd.west;
-        ymin = new_cellhd.south;
-        xmax = new_cellhd.east;
-        ymax = new_cellhd.north;
+        geometry.xmin = new_cellhd.west;
+        geometry.ymin = new_cellhd.south;
+        geometry.xmax = new_cellhd.east;
+        geometry.ymax = new_cellhd.north;
 
-        n /* n_cols */ = new_cellhd.cols;
-        m /* n_rows */ = new_cellhd.rows;
-        G_debug(1, "%lf %lf %lf %lf \n", ymax, ymin, xmin, xmax);
-        n100 = ceil(n / 100.);
-        m100 = ceil(m / 100.);
+        geometry.n /* n_cols */ = new_cellhd.cols;
+        geometry.m /* n_rows */ = new_cellhd.rows;
+        G_debug(1, "%lf %lf %lf %lf \n", geometry.ymax, geometry.ymin,
+                geometry.xmin, geometry.xmax);
+        geometry.n100 = ceil(geometry.n / 100.);
+        geometry.m100 = ceil(geometry.m / 100.);
 
         Rast_set_window(&new_cellhd);
     }
@@ -529,16 +532,17 @@ int main(int argc, char *argv[])
 
     /**********end of parser - ******************************/
 
-    INPUT();
+    INPUT(&geometry);
     if (mode == SINGLE_POINT) {
         /* Calculate the horizon for one single point */
-        calculate_point_mode(xcoord, ycoord, single_direction);
+        calculate_point_mode(&geometry, xcoord, ycoord, single_direction);
     }
     else {
-        calculate_raster_mode(
-            (int)(ebufferZone / stepx), (int)(wbufferZone / stepx),
-            (int)(sbufferZone / stepy), (int)(nbufferZone / stepy), bufferZone,
-            single_direction);
+        calculate_raster_mode(&geometry, (int)(ebufferZone / geometry.stepx),
+                              (int)(wbufferZone / geometry.stepx),
+                              (int)(sbufferZone / geometry.stepy),
+                              (int)(nbufferZone / geometry.stepy), bufferZone,
+                              single_direction);
     }
 
     exit(EXIT_SUCCESS);
@@ -546,28 +550,28 @@ int main(int argc, char *argv[])
 
 /**********************end of main.c*****************/
 
-int INPUT(void)
+int INPUT(Geometry *geometry)
 {
     FCELL *cell1 = Rast_allocate_f_buf();
 
-    z = (float **)G_malloc(sizeof(float *) * (m));
-    z100 = (float **)G_malloc(sizeof(float *) * (m100));
+    z = (float **)G_malloc(sizeof(float *) * (geometry->m));
+    z100 = (float **)G_malloc(sizeof(float *) * (geometry->m100));
 
-    for (int l = 0; l < m; l++) {
-        z[l] = (float *)G_malloc(sizeof(float) * (n));
+    for (int l = 0; l < geometry->m; l++) {
+        z[l] = (float *)G_malloc(sizeof(float) * (geometry->n));
     }
-    for (int l = 0; l < m100; l++) {
-        z100[l] = (float *)G_malloc(sizeof(float) * (n100));
+    for (int l = 0; l < geometry->m100; l++) {
+        z100[l] = (float *)G_malloc(sizeof(float) * (geometry->n100));
     }
     /*read Z raster */
 
     int fd1 = Rast_open_old(elevin, "");
 
-    for (int row = 0; row < m; row++) {
+    for (int row = 0; row < geometry->m; row++) {
         Rast_get_f_row(fd1, cell1, row);
 
-        for (int j = 0; j < n; j++) {
-            int row_rev = m - row - 1;
+        for (int j = 0; j < geometry->n; j++) {
+            int row_rev = geometry->m - row - 1;
 
             if (!Rast_is_f_null_value(cell1 + j))
                 z[row_rev][j] = (float)cell1[j];
@@ -578,30 +582,30 @@ int INPUT(void)
     Rast_close(fd1);
 
     /* create low resolution array 100 */
-    for (int i = 0; i < m100; i++) {
+    for (int i = 0; i < geometry->m100; i++) {
         int lmax = (i + 1) * 100;
-        if (lmax > m)
-            lmax = m;
+        if (lmax > geometry->m)
+            lmax = geometry->m;
 
-        for (int j = 0; j < n100; j++) {
-            zmax = SMALL;
+        for (int j = 0; j < geometry->n100; j++) {
+            geometry->zmax = SMALL;
             int kmax = (j + 1) * 100;
-            if (kmax > n)
-                kmax = n;
+            if (kmax > geometry->n)
+                kmax = geometry->n;
             for (int l = (i * 100); l < lmax; l++) {
                 for (int k = (j * 100); k < kmax; k++) {
-                    zmax = amax1(zmax, z[l][k]);
+                    geometry->zmax = amax1(geometry->zmax, z[l][k]);
                 }
             }
-            z100[i][j] = zmax;
+            z100[i][j] = geometry->zmax;
             G_debug(3, "%d %d %lf\n", i, j, z100[i][j]);
         }
     }
 
     /* find max Z */
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) {
-            zmax = amax1(zmax, z[i][j]);
+    for (int i = 0; i < geometry->m; i++) {
+        for (int j = 0; j < geometry->n; j++) {
+            geometry->zmax = amax1(geometry->zmax, z[i][j]);
         }
     }
 
@@ -675,7 +679,8 @@ int min(int arg1, int arg2)
 
 /**********************************************************/
 
-void com_par(OriginAngle *origin_angle, double angle, double xp, double yp)
+void com_par(const Geometry *geometry, OriginAngle *origin_angle, double angle,
+             double xp, double yp)
 {
     double longitude = xp;
     double latitude = yp;
@@ -717,17 +722,20 @@ void com_par(OriginAngle *origin_angle, double angle, double xp, double yp)
     origin_angle->distcosangle = 32000;
 
     if (origin_angle->sinangle != 0.) {
-        origin_angle->distsinangle = 100. / (distxy * origin_angle->sinangle);
+        origin_angle->distsinangle =
+            100. / (geometry->distxy * origin_angle->sinangle);
     }
     if (origin_angle->cosangle != 0.) {
-        origin_angle->distcosangle = 100. / (distxy * origin_angle->cosangle);
+        origin_angle->distcosangle =
+            100. / (geometry->distxy * origin_angle->cosangle);
     }
 
-    origin_angle->stepsinangle = stepxy * origin_angle->sinangle;
-    origin_angle->stepcosangle = stepxy * origin_angle->cosangle;
+    origin_angle->stepsinangle = geometry->stepxy * origin_angle->sinangle;
+    origin_angle->stepcosangle = geometry->stepxy * origin_angle->cosangle;
 }
 
-void calculate_point_mode(double xcoord, double ycoord, double single_direction)
+void calculate_point_mode(const Geometry *geometry, double xcoord,
+                          double ycoord, double single_direction)
 {
     /*
        xg0 = xx0 = (double)xcoord * stepx;
@@ -738,16 +746,16 @@ void calculate_point_mode(double xcoord, double ycoord, double single_direction)
        yg0 = yy0 = yindex*stepy -0.5*stepy;
      */
     OriginPoint origin_point;
-    int xindex = (int)((xcoord - xmin) / stepx);
-    int yindex = (int)((ycoord - ymin) / stepy);
-    origin_point.xg0 = xindex * stepx;
-    origin_point.yg0 = yindex * stepy;
+    int xindex = (int)((xcoord - geometry->xmin) / geometry->stepx);
+    int yindex = (int)((ycoord - geometry->ymin) / geometry->stepy);
+    origin_point.xg0 = xindex * geometry->stepx;
+    origin_point.yg0 = yindex * geometry->stepy;
     origin_point.coslatsq = 0;
     if ((G_projection() == PROJECTION_LL)) {
         ll_correction = TRUE;
     }
     if (ll_correction) {
-        double coslat = cos(deg2rad * (ymin + origin_point.yg0));
+        double coslat = cos(deg2rad * (geometry->ymin + origin_point.yg0));
         origin_point.coslatsq = coslat * coslat;
     }
 
@@ -761,8 +769,8 @@ void calculate_point_mode(double xcoord, double ycoord, double single_direction)
         printCount = 1;
     double dfr_rad = step * deg2rad;
 
-    double xp = xmin + origin_point.xg0;
-    double yp = ymin + origin_point.yg0;
+    double xp = geometry->xmin + origin_point.xg0;
+    double yp = geometry->ymin + origin_point.yg0;
 
     double angle = (single_direction * deg2rad) + pihalf;
 
@@ -771,9 +779,10 @@ void calculate_point_mode(double xcoord, double ycoord, double single_direction)
 
     for (int i = 0; i < printCount; i++) {
         OriginAngle origin_angle;
-        com_par(&origin_angle, angle, xp, yp);
+        com_par(geometry, &origin_angle, angle, xp, yp);
 
-        double shadow_angle = horizon_height(&origin_point, &origin_angle);
+        double shadow_angle =
+            horizon_height(geometry, &origin_point, &origin_angle);
 
         if (degreeOutput) {
             shadow_angle *= rad2deg;
@@ -808,8 +817,9 @@ void calculate_point_mode(double xcoord, double ycoord, double single_direction)
 
 /*////////////////////////////////////////////////////////////////////// */
 
-int new_point(const OriginPoint *origin_point, const OriginAngle *origin_angle,
-              SearchPoint *search_point, HorizonProperties *horizon)
+int new_point(const Geometry *geometry, const OriginPoint *origin_point,
+              const OriginAngle *origin_angle, SearchPoint *search_point,
+              HorizonProperties *horizon)
 {
     int iold = search_point->ip;
     int jold = search_point->jp;
@@ -819,26 +829,26 @@ int new_point(const OriginPoint *origin_point, const OriginAngle *origin_angle,
         search_point->xx0 += origin_angle->stepcosangle;
 
         /* offset 0.5 cell size to get the right cell i, j */
-        double sx = search_point->xx0 * invstepx + offsetx;
-        double sy = search_point->yy0 * invstepy + offsety;
+        double sx = search_point->xx0 * geometry->invstepx + geometry->offsetx;
+        double sy = search_point->yy0 * geometry->invstepy + geometry->offsety;
         search_point->ip = (int)sx;
         search_point->jp = (int)sy;
 
         /* test outside of raster */
-        if ((search_point->ip < 0) || (search_point->ip >= n) ||
-            (search_point->jp < 0) || (search_point->jp >= m))
+        if ((search_point->ip < 0) || (search_point->ip >= geometry->n) ||
+            (search_point->jp < 0) || (search_point->jp >= geometry->m))
             return (3);
 
         if ((search_point->ip != iold) || (search_point->jp != jold)) {
-            double dx = (double)search_point->ip * stepx;
-            double dy = (double)search_point->jp * stepy;
+            double dx = (double)search_point->ip * geometry->stepx;
+            double dy = (double)search_point->jp * geometry->stepy;
 
             horizon->length =
                 distance(origin_point->xg0, dx, origin_point->yg0, dy,
                          origin_point->coslatsq); /* dist from orig. grid point
                                               to the current grid point */
-            int succes2 =
-                test_low_res(origin_point, origin_angle, search_point, horizon);
+            int succes2 = test_low_res(geometry, origin_point, origin_angle,
+                                       search_point, horizon);
             if (succes2 == 1) {
                 search_point->zp = z[search_point->jp][search_point->ip];
                 return (1);
@@ -848,7 +858,7 @@ int new_point(const OriginPoint *origin_point, const OriginAngle *origin_angle,
     return -1;
 }
 
-int test_low_res(const OriginPoint *origin_point,
+int test_low_res(const Geometry *geometry, const OriginPoint *origin_point,
                  const OriginAngle *origin_angle, SearchPoint *search_point,
                  const HorizonProperties *horizon)
 {
@@ -877,22 +887,26 @@ int test_low_res(const OriginPoint *origin_point,
             int delx = 32000;
             int dely = 32000;
             if (origin_angle->cosangle > 0.) {
-                double sx = search_point->xx0 * invstepx + offsetx;
+                double sx =
+                    search_point->xx0 * geometry->invstepx + geometry->offsetx;
                 delx = floor(fabs((ceil(sx / 100.) - (sx / 100.)) *
                                   origin_angle->distcosangle));
             }
             if (origin_angle->cosangle < 0.) {
-                double sx = search_point->xx0 * invstepx + offsetx;
+                double sx =
+                    search_point->xx0 * geometry->invstepx + geometry->offsetx;
                 delx = floor(fabs((floor(sx / 100.) - (sx / 100.)) *
                                   origin_angle->distcosangle));
             }
             if (origin_angle->sinangle > 0.) {
-                double sy = search_point->yy0 * invstepy + offsety;
+                double sy =
+                    search_point->yy0 * geometry->invstepy + geometry->offsety;
                 dely = floor(fabs((ceil(sy / 100.) - (sy / 100.)) *
                                   origin_angle->distsinangle));
             }
             else if (origin_angle->sinangle < 0.) {
-                double sy = search_point->yy0 * invstepy + offsety;
+                double sy =
+                    search_point->yy0 * geometry->invstepy + geometry->offsety;
                 dely =
                     floor(fabs((floor(search_point->jp / 100.) - (sy / 100.)) *
                                origin_angle->distsinangle));
@@ -920,7 +934,7 @@ int test_low_res(const OriginPoint *origin_point,
     }
 }
 
-double horizon_height(const OriginPoint *origin_point,
+double horizon_height(const Geometry *geometry, const OriginPoint *origin_point,
                       const OriginAngle *origin_angle)
 {
     SearchPoint search_point;
@@ -931,8 +945,8 @@ double horizon_height(const OriginPoint *origin_point,
     search_point.xx0 = origin_point->xg0;
     search_point.yy0 = origin_point->yg0;
     search_point.zp = origin_point->z_orig;
-    search_point.ip100 = floor(origin_point->xg0 * invstepx / 100.);
-    search_point.jp100 = floor(origin_point->yg0 * invstepy / 100.);
+    search_point.ip100 = floor(origin_point->xg0 * geometry->invstepx / 100.);
+    search_point.jp100 = floor(origin_point->yg0 * geometry->invstepy / 100.);
 
     horizon.length = 0;
     horizon.tanh0 = 0;
@@ -941,8 +955,8 @@ double horizon_height(const OriginPoint *origin_point,
         return 0;
 
     while (1) {
-        int succes =
-            new_point(origin_point, origin_angle, &search_point, &horizon);
+        int succes = new_point(geometry, origin_point, origin_angle,
+                               &search_point, &horizon);
 
         if (succes != 1) {
             break;
@@ -961,7 +975,7 @@ double horizon_height(const OriginPoint *origin_point,
                 horizon.length;
         }
 
-        if (z2 >= zmax) {
+        if (z2 >= geometry->zmax) {
             break;
         }
 
@@ -975,18 +989,18 @@ double horizon_height(const OriginPoint *origin_point,
 
 /*////////////////////////////////////////////////////////////////////// */
 
-void calculate_raster_mode(int buffer_e, int buffer_w, int buffer_s,
-                           int buffer_n, double bufferZone,
+void calculate_raster_mode(const Geometry *geometry, int buffer_e, int buffer_w,
+                           int buffer_s, int buffer_n, double bufferZone,
                            double single_direction)
 {
     int hor_row_start = buffer_s;
-    int hor_row_end = m - buffer_n;
+    int hor_row_end = geometry->m - buffer_n;
 
     int hor_col_start = buffer_w;
-    int hor_col_end = n - buffer_e;
+    int hor_col_end = geometry->n - buffer_e;
 
-    int hor_numrows = m - (buffer_s + buffer_n);
-    int hor_numcols = n - (buffer_e + buffer_w);
+    int hor_numrows = geometry->m - (buffer_s + buffer_n);
+    int hor_numcols = geometry->n - (buffer_e + buffer_w);
 
     if ((G_projection() == PROJECTION_LL)) {
         ll_correction = TRUE;
@@ -1042,12 +1056,12 @@ void calculate_raster_mode(int buffer_e, int buffer_w, int buffer_s,
             for (int i = hor_col_start; i < hor_col_end; i++) {
                 OriginPoint origin_point;
                 OriginAngle origin_angle;
-                origin_point.xg0 = (double)i * stepx;
+                origin_point.xg0 = (double)i * geometry->stepx;
 
-                double xp = xmin + origin_point.xg0;
-                origin_point.yg0 = (double)j * stepy;
+                double xp = geometry->xmin + origin_point.xg0;
+                origin_point.yg0 = (double)j * geometry->stepy;
 
-                double yp = ymin + origin_point.yg0;
+                double yp = geometry->ymin + origin_point.yg0;
                 origin_point.coslatsq = 0;
                 if (ll_correction) {
                     double coslat = cos(deg2rad * yp);
@@ -1057,10 +1071,11 @@ void calculate_raster_mode(int buffer_e, int buffer_w, int buffer_s,
                 double inputAngle = angle + pihalf;
                 inputAngle =
                     (inputAngle >= twopi) ? inputAngle - twopi : inputAngle;
-                com_par(&origin_angle, inputAngle, xp, yp);
+                com_par(geometry, &origin_angle, inputAngle, xp, yp);
 
                 origin_point.z_orig = z[j][i];
-                maxlength = (zmax - origin_point.z_orig) / TANMINANGLE;
+                maxlength =
+                    (geometry->zmax - origin_point.z_orig) / TANMINANGLE;
                 maxlength =
                     (maxlength < fixedMaxLength) ? maxlength : fixedMaxLength;
 
@@ -1068,7 +1083,7 @@ void calculate_raster_mode(int buffer_e, int buffer_w, int buffer_s,
 
                     G_debug(4, "**************new line %d %d\n", i, j);
                     double shadow_angle =
-                        horizon_height(&origin_point, &origin_angle);
+                        horizon_height(geometry, &origin_point, &origin_angle);
 
                     if (degreeOutput) {
                         shadow_angle *= rad2deg;
@@ -1081,7 +1096,7 @@ void calculate_raster_mode(int buffer_e, int buffer_w, int buffer_s,
         }
 
         G_debug(1, "OUTGR() starts...");
-        OUTGR(cellhd.rows, cellhd.cols);
+        OUTGR(geometry->m, geometry->n);
 
         /* empty array */
         for (int j = 0; j < hor_numrows; j++) {
