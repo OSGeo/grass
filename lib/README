@@ -11,6 +11,7 @@ Current directory layout
 - display: library for CELL driver
 - edit: curses library
 - external: external libraries
+	- external/parson: JSON serialization and deserialization functions
 	- external/shapelib: SHAPE file management functions
 - fonts: fonts
 	- fonts/fonts
