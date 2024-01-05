@@ -573,7 +573,7 @@ int main(int argc, char *argv[])
                 _("Layer <%s> already exists in OGR data source '%s'"),
                 options.layer->answer, options.dsn->answer);
         }
-        else if (overwrite) {
+        else if (overwrite && !flags.append->answer) {
             G_warning(
                 _("OGR layer <%s> already exists and will be overwritten"),
                 options.layer->answer);
