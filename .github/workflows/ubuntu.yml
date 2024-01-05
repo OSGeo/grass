@@ -14,7 +14,7 @@ on:
       - releasebranch_*
 
 jobs:
-  build-and-test:
+  ubuntu:
     name: ${{ matrix.name }} tests
 
     concurrency:
@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: '22.04'
+          - name: "22.04"
             os: ubuntu-22.04
             config: ubuntu-22.04
           # This is without optional things but it still keeps things useful,
@@ -86,7 +86,7 @@ jobs:
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: testreport-${{ matrix.config }}
           path: testreport
@@ -95,3 +95,11 @@ jobs:
       - name: Print installed versions
         if: always()
         run: .github/workflows/print_versions.sh
+  build-and-test-success:
+    name: Build & Test Result
+    needs:
+      - ubuntu
+    if: ${{ always() }}
+    uses: ./.github/workflows/verify-success.yml
+    with:
+      needs_context: ${{ toJson(needs) }}

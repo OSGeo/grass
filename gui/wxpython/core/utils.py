@@ -802,7 +802,7 @@ def GetSettingsPath():
     try:
         verFd = open(os.path.join(ETCDIR, "VERSIONNUMBER"))
         version = int(verFd.readlines()[0].split(" ")[0].split(".")[0])
-    except (IOError, ValueError, TypeError, IndexError) as e:
+    except (OSError, ValueError, TypeError, IndexError) as e:
         sys.exit(_("ERROR: Unable to determine GRASS version. Details: %s") % e)
 
     verFd.close()
@@ -840,7 +840,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
     if os.path.exists(envFile):
         try:
             fd = open(envFile)
-        except IOError as e:
+        except OSError as e:
             sys.stderr.write(_("Unable to open file '%s'\n") % envFile)
             return
         for line in fd.readlines():
@@ -870,7 +870,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
     # write update env file
     try:
         fd = open(envFile, "w")
-    except IOError as e:
+    except OSError as e:
         sys.stderr.write(_("Unable to create file '%s'\n") % envFile)
         return
     if windows:
