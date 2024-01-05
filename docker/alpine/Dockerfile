@@ -1,4 +1,4 @@
-FROM alpine:3.18 as common
+FROM alpine:3.19 as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -24,6 +24,16 @@ ENV GRASS_RUN_PACKAGES="\
       gcc \
       gdal \
       gdal-dev \
+      gdal-driver-GMLAS \
+      gdal-driver-HDF5 \
+      gdal-driver-JP2OpenJPEG \
+      gdal-driver-LIBKML \
+      gdal-driver-MSSQLSpatial \
+      gdal-driver-netCDF \
+      gdal-driver-ODBC \
+      gdal-driver-PG \
+      gdal-driver-PNG \
+      gdal-driver-WMS \
       gdal-tools \
       gettext \
       geos \
@@ -46,7 +56,6 @@ ENV GRASS_RUN_PACKAGES="\
       openblas \
       py3-numpy \
       py3-pillow \
-      py3-six \
       pdal \
       pdal-dev \
       postgresql15-client \
@@ -166,14 +175,25 @@ RUN echo "  => Configure and compile grass" && \
     make install && \
     ldconfig /etc/ld.so.conf.d
 
+# Get rid of version number here, restore in next stage via symbolic link
+RUN mv $(grass --config path) /usr/local/grass
+
 # Reduce the image size - Remove unnecessary grass files
-RUN cp /usr/local/grass84/gui/wxpython/xml/module_items.xml module_items.xml; \
-    rm -rf /usr/local/grass84/demolocation; \
-    rm -rf /usr/local/grass84/fonts; \
-    rm -rf /usr/local/grass84/gui; \
-    rm -rf /usr/local/grass84/share; \
-    mkdir -p /usr/local/grass84/gui/wxpython/xml/; \
-    mv module_items.xml /usr/local/grass84/gui/wxpython/xml/module_items.xml;
+RUN cp /usr/local/grass/gui/wxpython/xml/module_items.xml module_items.xml; \
+    rm -rf /usr/local/grass/demolocation; \
+    rm -rf /usr/local/grass/fonts; \
+    rm -rf /usr/local/grass/gui; \
+    rm -rf /usr/local/grass/share; \
+    mkdir -p /usr/local/grass/gui/wxpython/xml/; \
+    mv module_items.xml /usr/local/grass/gui/wxpython/xml/module_items.xml;
+
+RUN git clone https://github.com/OSGeo/gdal-grass /src/gdal-grass
+WORKDIR /src/gdal-grass
+RUN ./configure \
+    --with-gdal=/usr/bin/gdal-config \
+    --with-grass=/usr/local/grass && \
+    make -j $NUMTHREADS && \
+    make install -j $NUMTHREADS
 
 
 FROM common as grass
@@ -188,9 +208,10 @@ ENV GRASSBIN="/usr/local/bin/grass" \
     GRASSBIN=grass \
     LC_ALL="en_US.UTF-8"
 
-# Copy GRASS GIS from build image
+# Copy GRASS GIS and GDAL GRASS driver from build image
 COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
 COPY --from=build /usr/local/grass* /usr/local/grass/
+COPY --from=build /usr/lib/gdalplugins/*_GRASS.so /usr/lib/gdalplugins/
 # run simple LAZ test
 COPY docker/testdata/simple.laz /tmp/
 COPY docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts/

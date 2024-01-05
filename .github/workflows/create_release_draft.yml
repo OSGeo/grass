@@ -22,12 +22,12 @@ jobs:
 
     steps:
       - name: Checks-out repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -93,7 +93,7 @@ jobs:
           asset_content_type: application/gzip
 
       - name: Make the created files available
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: artifacts

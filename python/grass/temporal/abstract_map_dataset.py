@@ -9,8 +9,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
-
 import grass.script as gs
 from grass.exceptions import ImplementationError
 from datetime import datetime

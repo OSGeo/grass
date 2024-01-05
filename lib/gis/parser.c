@@ -496,6 +496,13 @@ int G_parser(int argc, char **argv)
             exit(EXIT_SUCCESS);
         }
 
+        /* If first arg is "--md-description" then print out
+         * a Markdown description of the task */
+        if (strcmp(argv[1], "--md-description") == 0) {
+            G__usage_markdown();
+            exit(EXIT_SUCCESS);
+        }
+
         /* If first arg is "--wps-process-description" then print out
          * the wps process description of the task */
         if (strcmp(argv[1], "--wps-process-description") == 0) {
@@ -915,8 +922,10 @@ int G__uses_new_gisprompt(void)
 
    \param[out] fd file where to print
    \param format pointer to print function
+   \param newline TRUE to include newline
  */
-void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
+void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *),
+                       int newline)
 {
     int i;
 
@@ -927,8 +936,13 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
         else {
             format(fd, st->module_info.keywords[i]);
         }
-        if (i < st->n_keys - 1)
-            fprintf(fd, ", ");
+        if (i < st->n_keys - 1) {
+            fprintf(fd, ",");
+            if (!newline)
+                fprintf(fd, " ");
+        }
+        if (newline)
+            fprintf(fd, "\n");
     }
 
     fflush(fd);
@@ -984,7 +998,8 @@ int module_gui_wx(void)
 void set_flag(int f)
 {
     struct Flag *flag;
-    char *err;
+    char *key, *err;
+    const char *renamed_key;
 
     err = NULL;
 
@@ -1008,6 +1023,67 @@ void set_flag(int f)
             return;
         }
         flag = flag->next_flag;
+    }
+
+    /* First, check if key has been renamed */
+    G_asprintf(&key, "-%c", f);
+    renamed_key = get_renamed_option(key);
+    G_free(key);
+
+    if (renamed_key) {
+        /* if renamed to a new flag */
+        if (*renamed_key == '-') {
+            /* if renamed to a long flag */
+            if (renamed_key[1] == '-') {
+                if (strcmp(renamed_key, "--overwrite") == 0) {
+                    /* this is a special case for -? to --overwrite */
+                    G_warning(_("Please update the usage of <%s>: "
+                                "flag <%c> has been renamed to <%s>"),
+                              G_program_name(), f, renamed_key);
+                    st->overwrite = 1;
+                }
+                else {
+                    /* long flags other than --overwrite are usually specific to
+                     * GRASS internals, just print an error and let's not
+                     * support them */
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "flag <%c> has been renamed to <%s>"),
+                               G_program_name(), f, renamed_key);
+                    append_error(err);
+                }
+                return;
+            }
+            /* if renamed to a short flag */
+            for (flag = &st->first_flag; flag; flag = flag->next_flag) {
+                if (renamed_key[1] == flag->key) {
+                    G_warning(_("Please update the usage of <%s>: "
+                                "flag <%c> has been renamed to <%s>"),
+                              G_program_name(), f, renamed_key);
+                    flag->answer = 1;
+                    if (flag->suppress_required)
+                        st->suppress_required = 1;
+                    if (flag->suppress_overwrite)
+                        st->suppress_overwrite = 1;
+                    return;
+                }
+            }
+        }
+        else {
+            /* if renamed to a new option (no option value given but will be
+             * required), fatal error */
+            struct Option *opt = NULL;
+            for (opt = &st->first_option; opt; opt = opt->next_opt) {
+                if (strcmp(renamed_key, opt->key) == 0) {
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "flag <%c> has been renamed to option <%s>"),
+                               G_program_name(), f, renamed_key);
+                    append_error(err);
+                    return;
+                }
+            }
+        }
     }
 
     G_asprintf(&err, _("%s: Sorry, <%c> is not a valid flag"), G_program_name(),
@@ -1161,12 +1237,29 @@ void set_option(const char *string)
     if (found)
         opt = matches[0];
 
-    /* First, check if key has been renamed in GRASS 7 */
+    /* First, check if key has been renamed */
     if (found == 0) {
-        const char *renamed_key = NULL;
+        const char *renamed_key = get_renamed_option(the_key);
 
-        renamed_key = get_renamed_option(the_key);
         if (renamed_key) {
+            /* if renamed to a new flag (option value given but will be lost),
+             * fatal error */
+            if (*renamed_key == '-') {
+                if (renamed_key[1] == '-')
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "option <%s> has been renamed to flag <%s>"),
+                               G_program_name(), the_key, renamed_key);
+                else
+                    G_asprintf(&err,
+                               _("Please update the usage of <%s>: "
+                                 "option <%s> has been renamed to flag <%c>"),
+                               G_program_name(), the_key, renamed_key[1]);
+                append_error(err);
+                return;
+            }
+
+            /* if renamed to a new option */
             for (at_opt = &st->first_option; at_opt;
                  at_opt = at_opt->next_opt) {
                 if (strcmp(renamed_key, at_opt->key) == 0) {

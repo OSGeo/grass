@@ -98,11 +98,7 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *driver, int ncol,
                     if ((nocat && strcmp(Fi->key, colname[j]) == 0) == 0) {
                         /* if this is 'cat', then execute the following only if
                          * the '-s' flag was NOT given */
-#if GDAL_VERSION_NUM >= 2020000
                         OGR_F_SetFieldNull(Ogr_feature, ogrfieldnum);
-#else
-                        OGR_F_UnsetField(Ogr_feature, ogrfieldnum);
-#endif
                     }
 
                     /* prevent writing NULL values */
@@ -135,10 +131,8 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *driver, int ncol,
                             }
                         }
                     }
-#if GDAL_VERSION_NUM >= 2020000
                     else
                         OGR_F_SetFieldNull(Ogr_feature, ogrfieldnum);
-#endif
                 }
             }
             db_close_cursor(&cursor);

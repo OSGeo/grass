@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2023-04-03 17:08+0000\n"
+"PO-Revision-Date: 2023-08-23 07:08+0000\n"
 "Last-Translator: Markus <neteler@osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/"
 "grasswxpy/de/>\n"
@@ -16600,7 +16600,7 @@ msgstr "Nation"
 #: ../gui/wxpython/gui_core/ghelp.py:532
 #, python-format
 msgid "   %d translated"
-msgstr ""
+msgstr "   %d übersetzt"
 
 #: ../gui/wxpython/gui_core/ghelp.py:536 ../gui/wxpython/gui_core/ghelp.py:562
 #, python-format
@@ -20376,7 +20376,7 @@ msgstr ""
 #: ../gui/wxpython/gcp/toolbars.py:89
 #: ../gui/wxpython/image2target/ii2t_toolbars.py:89
 msgid " / Zoom to map"
-msgstr ""
+msgstr " / Zoom auf Karte"
 
 #: ../gui/wxpython/photo2image/ip2i_toolbars.py:106
 #: ../gui/wxpython/gcp/toolbars.py:106

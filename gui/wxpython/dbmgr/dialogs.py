@@ -17,8 +17,6 @@ This program is free software under the GNU General Public License
 @author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
 """
 
-import six
-
 import wx
 import wx.lib.scrolledpanel as scrolled
 
@@ -537,7 +535,7 @@ class DisplayAttributesDialog(wx.Dialog):
                     ctype = columns[name]["ctype"]
 
                     if columns[name]["values"][idx] is not None:
-                        if not isinstance(columns[name]["ctype"], six.string_types):
+                        if not isinstance(columns[name]["ctype"], str):
                             value = str(columns[name]["values"][idx])
                         else:
                             value = columns[name]["values"][idx]
@@ -598,7 +596,7 @@ class DisplayAttributesDialog(wx.Dialog):
         table = self.mapDBInfo.GetTable(layer)
         columns = self.mapDBInfo.GetTableDesc(table)
 
-        for key, col in six.iteritems(columns):
+        for key, col in columns.items():
             if key == column:
                 col["values"] = [
                     col["ctype"](value),

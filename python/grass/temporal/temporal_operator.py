@@ -139,8 +139,6 @@ for details.
     SyntaxError: Unknown optype rter, must be one of ['select', 'boolean', 'raster', 'hash', 'relation', 'overlay']
 
 """
-from __future__ import print_function
-
 try:
     import ply.lex as lex
     import ply.yacc as yacc
@@ -148,7 +146,7 @@ except ImportError:
     pass
 
 
-class TemporalOperatorLexer(object):
+class TemporalOperatorLexer:
     """Lexical analyzer for the GRASS GIS temporal operator"""
 
     # Functions that defines topological relations.
@@ -290,7 +288,7 @@ class TemporalOperatorLexer(object):
 ###############################################################################
 
 
-class TemporalOperatorParser(object):
+class TemporalOperatorParser:
     """The temporal operator class"""
 
     def __init__(self):

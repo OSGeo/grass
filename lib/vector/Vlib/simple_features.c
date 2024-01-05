@@ -297,7 +297,7 @@ int Vect_sfa_is_line_closed(const struct line_pnts *Points, int type,
    \return number of features
    \return -1 on error
  */
-int Vect_sfa_get_num_features(const struct Map_info *Map)
+int Vect_sfa_get_num_features(struct Map_info *Map)
 {
     int nfeat;
 

@@ -196,7 +196,7 @@ def readIms(filename, asNumpy=True):
 
     # Check dir exists
     if not os.path.isdir(dirname):
-        raise IOError("Directory not found: " + str(dirname))
+        raise OSError("Directory not found: " + str(dirname))
 
     # Get two parts of the filename
     part1, part2 = _getFilenameParts(filename)
