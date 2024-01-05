@@ -31,7 +31,7 @@ def get_backend(interactive_map):
     return "ipyleaflet"
 
 
-class Layer:
+class Layer:  # pylint: disable=too-few-public-methods
     """Base class for overlaing raster or vector layer
     on a folium or ipyleaflet map.
     """
