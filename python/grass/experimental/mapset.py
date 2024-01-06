@@ -36,7 +36,7 @@ class MapsetSession:
 
     The name argument is positional-only.
 
-    .. versionadded:: 8.3
+    .. versionadded:: 8.4
     """
 
     def __init__(self, name, *, create=False, overwrite=False, ensure=False, env=None):
@@ -140,7 +140,7 @@ class TemporaryMapsetSession:
 
     The name argument is positional-only.
 
-    .. versionadded:: 8.3
+    .. versionadded:: 8.4
     """
 
     def __init__(self, *, location=None, env=None):
