@@ -53,7 +53,7 @@ from .functions import (
 from core.gcmd import GError, GMessage, RunCommand
 
 
-class RLIWizard(object):
+class RLIWizard:
     """
     !Start wizard here and finish wizard here
     """
