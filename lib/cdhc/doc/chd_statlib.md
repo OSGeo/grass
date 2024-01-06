@@ -3,9 +3,10 @@
 Released in 1994 by Paul Johnson.
 
 Retrieved from the Internet Archive for
-[http://sunsite.univie.ac.at/statlib/general/cdh](https://web.archive.org/web/20001006232323/http://sunsite.univie.ac.at/statlib/general/cdh) -- 2000-10-06
+[http://sunsite.univie.ac.at/statlib/general/cdh](https://web.archive.org/web/20001006232323/http://sunsite.univie.ac.at/statlib/general/cdh)
+-- 2000-10-06
 
-
+<!-- markdownlint-disable -->
 ```txt
           TESTS OF COMPOSITE DISTRIBUTIONAL HYPOTHESES FOR
           THE ANALYSIS OF BIOLOGICAL & ENVIRONMENTAL DATA
@@ -1975,3 +1976,4 @@ C
       RETURN
       END
 ```
+<!-- markdownlint-enable -->
