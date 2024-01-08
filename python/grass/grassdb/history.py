@@ -59,11 +59,13 @@ def read_history(history_path):
     return hist
 
 
-def update_history(command, history_path=None):
-    """Update history file.
+def add_entry_to_history(command, history_path=None):
+    """Add entry to history file.
 
-    :param command: the command given as a string
+    :param str command: the command given as a string
+    :param str|None history_path: history file path string
     """
+    fileHistory = None
     if not history_path:
         history_path = get_current_mapset_gui_history_path()
     try:
@@ -73,9 +75,38 @@ def update_history(command, history_path=None):
             fileHistory = open(history_path, encoding="utf-8", mode="w")
         fileHistory.write(command + "\n")
     except OSError as e:
-        raise OSError(_("Unable to update history file {}").format(history_path)) from e
+        raise OSError(
+            _("Unable to add entry to history file {}").format(history_path)
+        ) from e
     finally:
-        fileHistory.close()
+        if fileHistory:
+            fileHistory.close()
+
+
+def remove_entry_from_history(del_line_number, history_path=None):
+    """Remove entry from history file.
+
+    :param int del_line_number: line number of deleted command
+    :param str|None history_path: history file path string
+    """
+    fileHistory = None
+    if not history_path:
+        history_path = get_current_mapset_gui_history_path()
+    try:
+        fileHistory = open(history_path, encoding="utf-8", mode="r+")
+        lines = fileHistory.readlines()
+        fileHistory.seek(0)
+        fileHistory.truncate()
+        for number, line in enumerate(lines):
+            if number not in [del_line_number]:
+                fileHistory.write(line)
+    except OSError as e:
+        raise OSError(
+            _("Unable to delete entry from history file {}").format(history_path)
+        ) from e
+    finally:
+        if fileHistory:
+            fileHistory.close()
 
 
 def copy_history(target_path, history_path):

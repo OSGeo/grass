@@ -232,8 +232,13 @@ class StandaloneGrassInterface(GrassInterface):
         # Signal emitted when workspace is changed
         self.workspaceChanged = Signal("StandaloneGrassInterface.workspaceChanged")
 
-        # Signal emitted when history should be updated
-        self.updateHistory = Signal("StandaloneGrassInterface.updateHistory")
+        # Signal emitted when entry to history is added
+        self.addEntryToHistory = Signal("StandaloneGrassInterface.addEntryToHistory")
+
+        # Signal emitted when entry from history is removed
+        self.removeEntryFromHistory = Signal(
+            "StandaloneGrassInterface.removeEntryFromHistory"
+        )
 
         # workaround, standalone grass interface should be moved to sep. file
         from core.gconsole import GConsole, EVT_CMD_OUTPUT, EVT_CMD_PROGRESS
