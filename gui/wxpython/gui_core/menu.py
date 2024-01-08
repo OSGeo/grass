@@ -105,7 +105,7 @@ class Menu(wx.MenuBar):
             try:
                 cmd = utils.split(str(command))
             except UnicodeError:
-                cmd = utils.split(EncodeString((command)))
+                cmd = utils.split(EncodeString(command))
             # disable only grass commands which are not present (e.g.
             # r.in.lidar)
             if (
