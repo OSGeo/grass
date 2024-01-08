@@ -12,6 +12,8 @@ This program was written in 2006 by Thomas Huld and Tomas Cebecauer,
 Joint Research Centre of the European Commission, based on bits of the r.sun
 module by Jaro Hofierka
 
+Program was refactored by Anna Petrasova to remove most global variables.
+
 *******************************************************************************/
 /*
  * This program is free software; you can redistribute it and/or
