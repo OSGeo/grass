@@ -921,9 +921,8 @@ int test_low_res(const Geometry *geometry, const OriginPoint *origin_point,
             else if (origin_angle->sinangle < 0.) {
                 double sy =
                     search_point->yy0 * geometry->invstepy + geometry->offsety;
-                dely =
-                    floor(fabs((floor(search_point->jp / 100.) - (sy / 100.)) *
-                               origin_angle->distsinangle));
+                dely = floor(fabs((floor(sy / 100.) - (sy / 100.)) *
+                                  origin_angle->distsinangle));
             }
 
             int mindel = min(delx, dely);

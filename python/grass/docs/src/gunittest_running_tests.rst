@@ -100,7 +100,7 @@ you would use::
     [gunittest]
     exclude =
         vector/*
-        raster/r.contour/testsuite/testrc.py
+        raster/r.contour/testsuite/test_broken.py
 
 
 Running tests and creating report

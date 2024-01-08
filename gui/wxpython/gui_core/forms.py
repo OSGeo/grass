@@ -875,7 +875,7 @@ class TaskFrame(wx.Frame):
                 )
                 print("parent window is: %s" % (str(self.parent)), file=sys.stderr)
         else:
-            gcmd.Command(cmd)
+            gcmd.Command(cmd, rerr=sys.stderr, stderr=sys.stderr)
 
         if ret != 0:
             self.notebookpanel.notebook.SetSelection(0)

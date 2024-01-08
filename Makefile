@@ -91,6 +91,7 @@ $(ARCH_DISTDIR)/%: %
 	$(INSTALL_DATA) $< $@
 
 LIBDIRS = \
+	lib/external/parson \
 	lib/external/shapelib \
 	lib/datetime \
 	lib/gis \
