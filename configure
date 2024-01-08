@@ -4585,7 +4585,7 @@ then :
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $CXX option to enable C++11 features" >&5
 printf %s "checking for $CXX option to enable C++11 features... " >&6; }
 
-ac_cv_prog_cxx_11=no
+ac_cv_prog_cxx_cxx11=no
 ac_save_CXX=$CXX
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -4627,7 +4627,7 @@ then :
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $CXX option to enable C++98 features" >&5
 printf %s "checking for $CXX option to enable C++98 features... " >&6; }
 
-ac_cv_prog_cxx_98=no
+ac_cv_prog_cxx_cxx98=no
 ac_save_CXX=$CXX
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
@@ -5479,9 +5479,10 @@ fi
 
 
 # Check whether --with-libsvm was given.
-if test "${with_libsvm+set}" = set; then :
+if test ${with_libsvm+y}
+then :
   withval=$with_libsvm;
-else
+else $as_nop
   with_libsvm=no
 fi
 
@@ -5942,7 +5943,8 @@ fi
 
 
 # Check whether --with-libsvm-includes was given.
-if test "${with_libsvm_includes+set}" = set; then :
+if test ${with_libsvm_includes+y}
+then :
   withval=$with_libsvm_includes;
 fi
 
@@ -5950,7 +5952,8 @@ fi
 
 
 # Check whether --with-libsvm-libs was given.
-if test "${with_libsvm_libs+set}" = set; then :
+if test ${with_libsvm_libs+y}
+then :
   withval=$with_libsvm_libs;
 fi
 
@@ -14562,10 +14565,10 @@ LIBSVM_LIB=
 USE_LIBSVM=
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to use LIBSVM" >&5
-$as_echo_n "checking whether to use LIBSVM... " >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: \"$with_libsvm\"" >&5
-$as_echo "\"$with_libsvm\"" >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether to use LIBSVM" >&5
+printf %s "checking whether to use LIBSVM... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: \"$with_libsvm\"" >&5
+printf "%s\n" "\"$with_libsvm\"" >&6; }
 case "$with_libsvm" in
 	"no")	USE_LIBSVM=	;;
 	"yes")	USE_LIBSVM="1"	;;
@@ -14576,15 +14579,15 @@ esac
 
 if test -n "$USE_LIBSVM"; then
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for location of LIBSVM includes" >&5
-$as_echo_n "checking for location of LIBSVM includes... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of LIBSVM includes" >&5
+printf %s "checking for location of LIBSVM includes... " >&6; }
 case "$with_libsvm_includes" in
 y | ye | yes | n | no)
 	as_fn_error $? "*** You must supply a directory to --with-libsvm-includes." "$LINENO" 5
 	;;
 esac
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $with_libsvm_includes" >&5
-$as_echo "$with_libsvm_includes" >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $with_libsvm_includes" >&5
+printf "%s\n" "$with_libsvm_includes" >&6; }
 
 if test -n "$with_libsvm_includes" ; then
     for dir in $with_libsvm_includes; do
@@ -14599,53 +14602,49 @@ fi
 
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$LIBSVM_INC $CPPFLAGS"
-for ac_header in svm.h
+       for ac_header in svm.h
 do :
-  ac_fn_c_check_header_mongrel "$LINENO" "svm.h" "ac_cv_header_svm_h" "$ac_includes_default"
-if test "x$ac_cv_header_svm_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_SVM_H 1
-_ACEOF
+  ac_fn_c_check_header_compile "$LINENO" "svm.h" "ac_cv_header_svm_h" "$ac_includes_default"
+if test "x$ac_cv_header_svm_h" = xyes
+then :
+  printf "%s\n" "#define HAVE_SVM_H 1" >>confdefs.h
 
-else
+else $as_nop
 
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$LIBSVM_INC $CPPFLAGS"
-for ac_header in libsvm/svm.h
+       for ac_header in libsvm/svm.h
 do :
-  ac_fn_c_check_header_mongrel "$LINENO" "libsvm/svm.h" "ac_cv_header_libsvm_svm_h" "$ac_includes_default"
-if test "x$ac_cv_header_libsvm_svm_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBSVM_SVM_H 1
-_ACEOF
+  ac_fn_c_check_header_compile "$LINENO" "libsvm/svm.h" "ac_cv_header_libsvm_svm_h" "$ac_includes_default"
+if test "x$ac_cv_header_libsvm_svm_h" = xyes
+then :
+  printf "%s\n" "#define HAVE_LIBSVM_SVM_H 1" >>confdefs.h
 
-else
+else $as_nop
 
     as_fn_error $? "*** Unable to locate LIBSVM includes." "$LINENO" 5
 
 fi
 
 done
-
 CPPFLAGS=$ac_save_cppflags
 
 
 fi
 
 done
-
 CPPFLAGS=$ac_save_cppflags
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for location of libsvm library" >&5
-$as_echo_n "checking for location of libsvm library... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of libsvm library" >&5
+printf %s "checking for location of libsvm library... " >&6; }
 case "$with_libsvm_libs" in
 y | ye | yes | n | no)
 	as_fn_error $? "*** You must supply a directory to --with-libsvm-libs." "$LINENO" 5
 	;;
 esac
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $with_libsvm_libs" >&5
-$as_echo "$with_libsvm_libs" >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $with_libsvm_libs" >&5
+printf "%s\n" "$with_libsvm_libs" >&6; }
 
 if test -n "$with_libsvm_libs"; then
     for dir in $with_libsvm_libs; do
@@ -14662,8 +14661,8 @@ ac_save_ldflags="$LDFLAGS"
 LDFLAGS="$LIBSVM_LIB $LDFLAGS"
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for svm_load_model in -lsvm" >&5
-$as_echo_n "checking for svm_load_model in -lsvm... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for svm_load_model in -lsvm" >&5
+printf %s "checking for svm_load_model in -lsvm... " >&6; }
 
 ac_check_lib_save_LIBS=$LIBS
 LIBS="-lsvm  $LIBS"
@@ -14673,31 +14672,30 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
    builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
 char svm_load_model ();
 int
-main ()
+main (void)
 {
 return svm_load_model ();
   ;
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_c_try_link "$LINENO"
+then :
   ac_cv_lib_svm_svm_load_model=yes
-else
+else $as_nop
   ac_cv_lib_svm_svm_load_model=no
 fi
-rm -f core conftest.err conftest.$ac_objext \
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_svm_svm_load_model" >&5
-$as_echo "$ac_cv_lib_svm_svm_load_model" >&6; }
-if test "x$ac_cv_lib_svm_svm_load_model" = xyes; then :
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_svm_svm_load_model" >&5
+printf "%s\n" "$ac_cv_lib_svm_svm_load_model" >&6; }
+if test "x$ac_cv_lib_svm_svm_load_model" = xyes
+then :
   LIBSVM_LIB="$LIBSVM_LIB -lsvm "
-else
+else $as_nop
 
 LDFLAGS=${ac_save_ldflags}
 
@@ -14711,7 +14709,7 @@ fi
 LDFLAGS=${ac_save_ldflags}
 
 
-$as_echo "#define HAVE_LIBSVM 1" >>confdefs.h
+printf "%s\n" "#define HAVE_LIBSVM 1" >>confdefs.h
 
 fi
 
