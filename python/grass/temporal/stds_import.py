@@ -277,7 +277,7 @@ def import_stds(
     # Extraction filters were added in Python 3.12,
     # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
     # See https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
-    tar.extractall(path=directory, filter='data')
+    tar.extractall(path=directory, filter="data")
     tar.close()
 
     # We use a new list file name for map registration
