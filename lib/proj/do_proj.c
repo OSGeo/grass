@@ -698,7 +698,15 @@ int GPJ_init_transform(const struct pj_info *info_in,
 
         /* following code copied from proj_create_crs_to_crs_from_pj()
          * in proj src/4D_api.cpp
-         * but using PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT */
+         * using PROJ_SPATIAL_CRITERION_PARTIAL_INTERSECTION
+         * this can cause problems and artefacts
+         * switch to PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT
+         * in case of problems
+         * but results can be different from gdalwarp:
+         * shifted geolocation in some areas
+         * in these cases there is no right or wrong,
+         * different pipelines are all regarded as valid by PROJ
+         * depending on the area of interest */
 
         /* now use the current region as area of interest */
         operation_ctx =
@@ -707,7 +715,7 @@ int GPJ_init_transform(const struct pj_info *info_in,
             PJ_DEFAULT_CTX, operation_ctx, xmin, ymin, xmax, ymax);
         proj_operation_factory_context_set_spatial_criterion(
             PJ_DEFAULT_CTX, operation_ctx,
-            PROJ_SPATIAL_CRITERION_STRICT_CONTAINMENT);
+            PROJ_SPATIAL_CRITERION_PARTIAL_INTERSECTION);
         proj_operation_factory_context_set_grid_availability_use(
             PJ_DEFAULT_CTX, operation_ctx,
             PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID);
