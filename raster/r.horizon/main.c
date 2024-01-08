@@ -499,6 +499,12 @@ int main(int argc, char *argv[])
         if (nbufferZone == 0.)
             nbufferZone = bufferZone;
 
+        /* adjust buffer to multiples of resolution */
+        ebufferZone = (int)(ebufferZone / stepx) * stepx;
+        wbufferZone = (int)(wbufferZone / stepx) * stepx;
+        sbufferZone = (int)(sbufferZone / stepy) * stepy;
+        nbufferZone = (int)(nbufferZone / stepy) * stepy;
+
         new_cellhd.rows += (int)((nbufferZone + sbufferZone) / stepy);
         new_cellhd.cols += (int)((ebufferZone + wbufferZone) / stepx);
 

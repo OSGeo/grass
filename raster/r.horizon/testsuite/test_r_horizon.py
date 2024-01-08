@@ -222,6 +222,65 @@ class TestHorizon(TestCase):
             second=stdout,
         )
 
+    def test_raster_mode_bufferzone(self):
+        """Test buffer 100 m and 109 m with resolution 10 gives the same result"""
+        self.runModule(
+            "g.region",
+            raster="elevation",
+            n="n-5000",
+            s="s+5000",
+            e="e-5000",
+            w="w+5000",
+        )
+
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            output=self.horizon_output,
+            direction=50,
+            bufferzone=100,
+        )
+        self.assertModule(module)
+        ref = {
+            "mean": 0.034479,
+        }
+        output = "test_horizon_output_from_elevation_050"
+        self.assertRasterFitsUnivar(
+            raster=output,
+            reference=ref,
+            precision=1e6,
+        )
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            output=self.horizon_output,
+            direction=50,
+            bufferzone=109,
+        )
+        self.assertModule(module)
+        self.assertRasterFitsUnivar(
+            raster=output,
+            reference=ref,
+            precision=1e6,
+        )
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            output=self.horizon_output,
+            direction=50,
+            bufferzone=99,
+        )
+        self.assertModule(module)
+        ref = {
+            "mean": 0.0344624,
+        }
+        self.assertRasterFitsUnivar(
+            raster=output,
+            reference=ref,
+            precision=1e6,
+        )
+        self.runModule("g.region", raster="elevation")
+
 
 if __name__ == "__main__":
     test()
