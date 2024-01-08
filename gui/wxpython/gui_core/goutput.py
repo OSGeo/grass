@@ -150,11 +150,11 @@ class GConsoleWindow(wx.SplitterWindow):
 
             if self._gcstyle == GC_PROMPT:
                 # connect update history signals only for main Console Window
-                self.giface.addEntryToHistory.connect(
-                    lambda cmd: self.cmdPrompt.AddEntryToCmdHistory(cmd)
+                self.giface.entryToHistoryAdded.connect(
+                    lambda cmd: self.cmdPrompt.AddEntryToCmdHistoryBuffer(cmd)
                 )
-                self.giface.removeEntryFromHistory.connect(
-                    lambda index: self.cmdPrompt.RemoveEntryFromCmdHistory(index)
+                self.giface.entryFromHistoryRemoved.connect(
+                    lambda index: self.cmdPrompt.RemoveEntryFromCmdHistoryBuffer(index)
                 )
 
         # buttons

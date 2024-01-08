@@ -304,7 +304,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetCurrentPos(pos)
         self.SetFocus()
 
-    def AddEntryToCmdHistory(self, cmd):
+    def AddEntryToCmdHistoryBuffer(self, cmd):
         """Add entry to command history buffer
 
         :param cmd: command given as a string
@@ -319,7 +319,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             del self.cmdbuffer[0]
         self.cmdindex = len(self.cmdbuffer)
 
-    def RemoveEntryFromCmdHistory(self, index):
+    def RemoveEntryFromCmdHistoryBuffer(self, index):
         """Remove entry from command history buffer
         :param index: index of deleted command
         """

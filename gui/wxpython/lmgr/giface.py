@@ -213,11 +213,13 @@ class LayerManagerGrassInterface:
         self.workspaceChanged = Signal("LayerManagerGrassInterface.workspaceChanged")
 
         # Signal emitted when entry to history is added
-        self.addEntryToHistory = Signal("LayerManagerGrassInterface.addEntryToHistory")
+        self.entryToHistoryAdded = Signal(
+            "LayerManagerGrassInterface.entryToHistoryAdded"
+        )
 
         # Signal emitted when entry from history is removed
-        self.removeEntryFromHistory = Signal(
-            "LayerManagerGrassInterface.removeEntryFromHistory"
+        self.entryFromHistoryRemoved = Signal(
+            "LayerManagerGrassInterface.entryFromHistoryRemoved"
         )
 
     def RunCmd(self, *args, **kwargs):

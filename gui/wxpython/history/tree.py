@@ -54,11 +54,9 @@ class HistoryBrowserTree(CTreeView):
         model=None,
         giface=None,
         style=wx.TR_HIDE_ROOT
-        | wx.TR_EDIT_LABELS
         | wx.TR_LINES_AT_ROOT
         | wx.TR_HAS_BUTTONS
-        | wx.TR_FULL_ROW_HIGHLIGHT
-        | wx.TR_MULTIPLE,
+        | wx.TR_FULL_ROW_HIGHLIGHT,
     ):
         """History Browser Tree constructor."""
         self._model = TreeModel(ModuleNode)
@@ -74,7 +72,7 @@ class HistoryBrowserTree(CTreeView):
         self.runIgnoredCmdPattern = Signal("HistoryBrowserTree.runIgnoredCmdPattern")
 
         self._giface.currentMapsetChanged.connect(self.UpdateHistoryModelFromScratch)
-        self._giface.addEntryToHistory.connect(
+        self._giface.entryToHistoryAdded.connect(
             lambda cmd: self.UpdateHistoryModelByCommand(cmd)
         )
 
@@ -196,7 +194,7 @@ class HistoryBrowserTree(CTreeView):
             model_tuple = self._model.GetIndexOfNode(tree_node)
             model_node = self._model.GetNodeByIndex(model_tuple)
             self.RemoveEntryFromHistory(model_tuple[0])
-            self._giface.removeEntryFromHistory.emit(index=model_tuple[0])
+            self._giface.entryFromHistoryRemoved.emit(index=model_tuple[0])
             self._model.RemoveNode(model_node)
             self._refreshTree()
             self.showNotification.emit(message=_("<{}> deleted").format(cmd))

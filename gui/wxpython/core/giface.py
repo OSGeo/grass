@@ -233,11 +233,13 @@ class StandaloneGrassInterface(GrassInterface):
         self.workspaceChanged = Signal("StandaloneGrassInterface.workspaceChanged")
 
         # Signal emitted when entry to history is added
-        self.addEntryToHistory = Signal("StandaloneGrassInterface.addEntryToHistory")
+        self.entryToHistoryAdded = Signal(
+            "StandaloneGrassInterface.entryToHistoryAdded"
+        )
 
         # Signal emitted when entry from history is removed
-        self.removeEntryFromHistory = Signal(
-            "StandaloneGrassInterface.removeEntryFromHistory"
+        self.entryFromHistoryRemoved = Signal(
+            "StandaloneGrassInterface.entryFromHistoryRemoved"
         )
 
         # workaround, standalone grass interface should be moved to sep. file
