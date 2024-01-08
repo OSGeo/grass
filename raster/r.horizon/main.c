@@ -114,8 +114,8 @@ typedef struct {
 } Settings;
 
 int INPUT(Geometry *geometry, const char *elevin);
-int OUTGR(const Settings *settings, int numrows, int numcols,
-          char *shad_filename, struct Cell_head *cellhd);
+int OUTGR(const Settings *settings, char *shad_filename,
+          struct Cell_head *cellhd);
 double amax1(double, double);
 int min(int, int);
 void com_par(const Geometry *geometry, OriginAngle *origin_angle, double angle,
@@ -625,12 +625,14 @@ int INPUT(Geometry *geometry, const char *elevin)
     return 1;
 }
 
-int OUTGR(const Settings *settings, int numrows, int numcols,
-          char *shad_filename, struct Cell_head *cellhd)
+int OUTGR(const Settings *settings, char *shad_filename,
+          struct Cell_head *cellhd)
 {
     FCELL *cell1 = NULL;
     int fd1 = 0;
 
+    int numrows = cellhd->rows;
+    int numcols = cellhd->cols;
     Rast_set_window(cellhd);
 
     if (settings->horizon_basename != NULL) {
@@ -1117,7 +1119,7 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
         }
 
         G_debug(1, "OUTGR() starts...");
-        OUTGR(settings, geometry->m, geometry->n, shad_filename, cellhd);
+        OUTGR(settings, shad_filename, cellhd);
 
         /* empty array */
         for (int j = 0; j < hor_numrows; j++) {
