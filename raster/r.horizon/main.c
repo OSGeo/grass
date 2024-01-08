@@ -116,8 +116,8 @@ int OUTGR(const Settings *settings, int numrows, int numcols,
           char *shad_filename, struct Cell_head *cellhd);
 double amax1(double, double);
 int min(int, int);
-void com_par(const Geometry *geometry, OriginAngle *origin_angle, double,
-             double, double);
+void com_par(const Geometry *geometry, OriginAngle *origin_angle, double angle,
+             double xp, double yp);
 double horizon_height(const Geometry *geometry, const OriginPoint *origin_point,
                       const OriginAngle *origin_angle);
 void calculate_point_mode(const Settings *settings, const Geometry *geometry,
