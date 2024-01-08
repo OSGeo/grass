@@ -467,10 +467,12 @@ AC_SUBST(LIBRARY_DIRS)
 AC_PROG_INSTALL
 
 AC_PROG_LEX(noyywrap)
-if test "$LEX" = "lex"; then
+if test "x$LEX" = "x:"; then
+    AC_MSG_ERROR([*** Unable to locate lex.])
+elif test "$LEX" = "lex"; then
     AC_PATH_PROG(LEXPATH, lex, no)
     if test "$LEXPATH" = "no"; then
-	AC_MSG_ERROR([*** Unable to locate lex.])
+        AC_MSG_ERROR([*** Unable to locate lex.])
     fi
 fi
 
