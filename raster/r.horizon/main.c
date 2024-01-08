@@ -67,7 +67,6 @@ const double rad2deg = 180. / M_PI;
 
 const char *elevin;
 const char *horizon_basename = NULL;
-char *shad_filename;
 
 struct Cell_head cellhd;
 struct pj_info iproj, oproj, tproj;
@@ -107,7 +106,7 @@ typedef struct {
 } Geometry;
 
 int INPUT(Geometry *geometry);
-int OUTGR(int numrows, int numcols);
+int OUTGR(int numrows, int numcols, char *shad_filename);
 double amax1(double, double);
 int min(int, int);
 void com_par(const Geometry *geometry, OriginAngle *origin_angle, double,
@@ -612,7 +611,7 @@ int INPUT(Geometry *geometry)
     return 1;
 }
 
-int OUTGR(int numrows, int numcols)
+int OUTGR(int numrows, int numcols, char *shad_filename)
 {
     FCELL *cell1 = NULL;
     int fd1 = 0;
@@ -1026,6 +1025,7 @@ void calculate_raster_mode(const Geometry *geometry, int buffer_e, int buffer_w,
     double dfr_rad;
     int arrayNumInt;
     /* definition of horizon angle in loop */
+    char *shad_filename = NULL;
     if (step == 0.0) {
         dfr_rad = 0;
         arrayNumInt = 1;
@@ -1096,7 +1096,7 @@ void calculate_raster_mode(const Geometry *geometry, int buffer_e, int buffer_w,
         }
 
         G_debug(1, "OUTGR() starts...");
-        OUTGR(geometry->m, geometry->n);
+        OUTGR(geometry->m, geometry->n, shad_filename);
 
         /* empty array */
         for (int j = 0; j < hor_numrows; j++) {
@@ -1132,6 +1132,7 @@ void calculate_raster_mode(const Geometry *geometry, int buffer_e, int buffer_w,
             angle * rad2deg);
 
         Rast_write_history(shad_filename, &history);
-        G_free(shad_filename);
+        if (shad_filename)
+            G_free(shad_filename);
     }
 }
