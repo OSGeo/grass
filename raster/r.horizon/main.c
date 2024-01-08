@@ -57,25 +57,21 @@ module by Jaro Hofierka
 #define DISTANCE1(x1, x2, y1, y2) \
     (sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)))
 
-FILE *fp;
-
 const double pihalf = M_PI * 0.5;
 const double twopi = M_PI * 2.;
 const double invEarth = 1. / EARTHRADIUS;
 const double deg2rad = M_PI / 180.;
 const double rad2deg = 180. / M_PI;
 
-const char *elevin;
-const char *horizon_basename = NULL;
-
-struct Cell_head cellhd;
 struct pj_info iproj, oproj, tproj;
+float **z, **z100, **horizon_raster;
+int ll_correction = FALSE;
 
-struct Cell_head new_cellhd;
 typedef struct {
     double xg0, yg0;
     double z_orig;
     double coslatsq;
+    double maxlength;
 } OriginPoint;
 
 typedef struct {
@@ -105,33 +101,38 @@ typedef struct {
     double xmin, xmax, ymin, ymax, zmax;
 } Geometry;
 
-int INPUT(Geometry *geometry);
-int OUTGR(int numrows, int numcols, char *shad_filename);
+typedef struct {
+    int degreeOutput;
+    int compassOutput;
+    double fixedMaxLength;
+    double start, end, step;
+    double single_direction;
+    const char *str_step;
+    const char *horizon_basename;
+} Settings;
+
+int INPUT(Geometry *geometry, const char *elevin);
+int OUTGR(const Settings *settings, int numrows, int numcols,
+          char *shad_filename, struct Cell_head *cellhd);
 double amax1(double, double);
 int min(int, int);
 void com_par(const Geometry *geometry, OriginAngle *origin_angle, double,
              double, double);
 double horizon_height(const Geometry *geometry, const OriginPoint *origin_point,
                       const OriginAngle *origin_angle);
-void calculate_point_mode(const Geometry *geometry, double xcoord,
-                          double ycoord, double single_direction);
+void calculate_point_mode(const Settings *settings, const Geometry *geometry,
+                          double xcoord, double ycoord, FILE *fp);
 int new_point(const Geometry *geometry, const OriginPoint *origin_point,
               const OriginAngle *origin_angle, SearchPoint *search_point,
               HorizonProperties *horizon);
 int test_low_res(const Geometry *geometry, const OriginPoint *origin_point,
                  const OriginAngle *origin_angle, SearchPoint *search_point,
                  const HorizonProperties *horizon);
-void calculate_raster_mode(const Geometry *geometry, int buffer_e, int buffer_w,
-                           int buffer_s, int buffer_n, double bufferZone,
-                           double single_direction);
-
-int degreeOutput, compassOutput = FALSE;
-float **z, **z100, **horizon_raster;
-
-double maxlength = BIG;
-double fixedMaxLength = BIG, step = 0.0, start = 0.0, end = 0.0;
-const char *str_step;
-int ll_correction = FALSE;
+void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
+                           struct Cell_head *cellhd,
+                           struct Cell_head *new_cellhd, int buffer_e,
+                           int buffer_w, int buffer_s, int buffer_n,
+                           double bufferZone);
 
 /* why not use G_distance() here which switches to geodesic/great
    circle distance as needed? */
@@ -304,6 +305,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    struct Cell_head cellhd;
+    struct Cell_head new_cellhd;
     G_get_set_window(&cellhd);
     Geometry geometry;
 
@@ -331,15 +334,16 @@ int main(int argc, char *argv[])
     geometry.xmax = cellhd.east;
     geometry.ymax = cellhd.north;
 
-    degreeOutput = flag.degreeOutput->answer;
-    compassOutput = flag.compassOutput->answer;
+    Settings settings;
+    settings.degreeOutput = flag.degreeOutput->answer;
+    settings.compassOutput = flag.compassOutput->answer;
 
     if (G_projection() == PROJECTION_LL)
         G_important_message(_("Note: In latitude-longitude coordinate system "
                               "specify buffers in degree unit"));
 
-    elevin = parm.elevin->answer;
-
+    const char *elevin = parm.elevin->answer;
+    FILE *fp = NULL;
     int mode;
     if (parm.coord->answer == NULL) {
         G_debug(1, "Setting mode: WHOLE_RASTER");
@@ -374,10 +378,14 @@ int main(int argc, char *argv[])
         else if (NULL == (fp = fopen(outfile, "w")))
             G_fatal_error(_("Unable to open file <%s>"), outfile);
     }
-    double single_direction = 0;
+    settings.single_direction = 0;
     if (parm.direction->answer != NULL)
-        sscanf(parm.direction->answer, "%lf", &single_direction);
+        sscanf(parm.direction->answer, "%lf", &settings.single_direction);
 
+    settings.step = 0;
+    settings.start = 0;
+    settings.end = 0;
+    settings.horizon_basename = NULL;
     if (WHOLE_RASTER == mode) {
         if ((parm.direction->answer == NULL) && (parm.step->answer == NULL)) {
             G_fatal_error(_("You didn't specify a direction value or step "
@@ -388,29 +396,30 @@ int main(int argc, char *argv[])
             G_fatal_error(
                 _("You didn't specify a horizon raster name. Aborting."));
         }
-        horizon_basename = parm.horizon->answer;
+        settings.horizon_basename = parm.horizon->answer;
         if (parm.step->answer != NULL) {
-            str_step = parm.step->answer;
-            sscanf(parm.step->answer, "%lf", &step);
+            settings.str_step = parm.step->answer;
+            sscanf(parm.step->answer, "%lf", &settings.step);
         }
         else {
-            step = 0;
-            str_step = "0";
+            settings.step = 0;
+            settings.str_step = "0";
         }
-        sscanf(parm.start->answer, "%lf", &start);
-        sscanf(parm.end->answer, "%lf", &end);
-        if (start < 0.0) {
+        sscanf(parm.start->answer, "%lf", &settings.start);
+        sscanf(parm.end->answer, "%lf", &settings.end);
+        if (settings.start < 0.0) {
             G_fatal_error(
                 _("Negative values of start angle are not allowed. Aborting."));
         }
-        if (end < 0.0 || end > 360.0) {
+        if (settings.end < 0.0 || settings.end > 360.0) {
             G_fatal_error(_("End angle is not between 0 and 360. Aborting."));
         }
-        if (start >= end) {
+        if (settings.start >= settings.end) {
             G_fatal_error(
                 _("You specify a start grater than the end angle. Aborting."));
         }
-        G_debug(1, "Angle step: %g, start: %g, end: %g", step, start, end);
+        G_debug(1, "Angle step: %g, start: %g, end: %g", settings.step,
+                settings.start, settings.end);
     }
     else {
 
@@ -418,11 +427,11 @@ int main(int argc, char *argv[])
             G_fatal_error(
                 _("You didn't specify an angle step size. Aborting."));
         }
-        sscanf(parm.step->answer, "%lf", &step);
+        sscanf(parm.step->answer, "%lf", &settings.step);
     }
 
-    if (step == 0.0) {
-        step = 360.;
+    if (settings.step == 0.0) {
+        settings.step = 360.;
     }
     double bufferZone = 0., ebufferZone = 0., wbufferZone = 0.,
            nbufferZone = 0., sbufferZone = 0.;
@@ -455,11 +464,14 @@ int main(int argc, char *argv[])
                           _("north"));
     }
 
+    settings.fixedMaxLength = BIG;
     if (parm.maxdistance->answer != NULL) {
-        if (sscanf(parm.maxdistance->answer, "%lf", &fixedMaxLength) != 1)
+        if (sscanf(parm.maxdistance->answer, "%lf", &settings.fixedMaxLength) !=
+            1)
             G_fatal_error(_("Could not read maximum distance. Aborting."));
     }
-    G_debug(1, "Using maxdistance %f", fixedMaxLength); /* predefined as BIG */
+    G_debug(1, "Using maxdistance %f",
+            settings.fixedMaxLength); /* predefined as BIG */
 
     /* TODO: fixing BIG, there is a bug with distant mountains not being seen:
        attempt to contrain to current region
@@ -531,17 +543,17 @@ int main(int argc, char *argv[])
 
     /**********end of parser - ******************************/
 
-    INPUT(&geometry);
+    INPUT(&geometry, elevin);
     if (mode == SINGLE_POINT) {
         /* Calculate the horizon for one single point */
-        calculate_point_mode(&geometry, xcoord, ycoord, single_direction);
+        calculate_point_mode(&settings, &geometry, xcoord, ycoord, fp);
     }
     else {
-        calculate_raster_mode(&geometry, (int)(ebufferZone / geometry.stepx),
+        calculate_raster_mode(&settings, &geometry, &cellhd, &new_cellhd,
+                              (int)(ebufferZone / geometry.stepx),
                               (int)(wbufferZone / geometry.stepx),
                               (int)(sbufferZone / geometry.stepy),
-                              (int)(nbufferZone / geometry.stepy), bufferZone,
-                              single_direction);
+                              (int)(nbufferZone / geometry.stepy), bufferZone);
     }
 
     exit(EXIT_SUCCESS);
@@ -549,7 +561,7 @@ int main(int argc, char *argv[])
 
 /**********************end of main.c*****************/
 
-int INPUT(Geometry *geometry)
+int INPUT(Geometry *geometry, const char *elevin)
 {
     FCELL *cell1 = Rast_allocate_f_buf();
 
@@ -611,14 +623,15 @@ int INPUT(Geometry *geometry)
     return 1;
 }
 
-int OUTGR(int numrows, int numcols, char *shad_filename)
+int OUTGR(const Settings *settings, int numrows, int numcols,
+          char *shad_filename, struct Cell_head *cellhd)
 {
     FCELL *cell1 = NULL;
     int fd1 = 0;
 
-    Rast_set_window(&cellhd);
+    Rast_set_window(cellhd);
 
-    if (horizon_basename != NULL) {
+    if (settings->horizon_basename != NULL) {
         cell1 = Rast_allocate_f_buf();
         fd1 = Rast_open_fp_new(shad_filename);
     }
@@ -634,7 +647,7 @@ int OUTGR(int numrows, int numcols, char *shad_filename)
     for (int iarc = 0; iarc < numrows; iarc++) {
         int i = numrows - iarc - 1;
 
-        if (horizon_basename != NULL) {
+        if (settings->horizon_basename != NULL) {
             for (int j = 0; j < numcols; j++) {
                 if (horizon_raster[i][j] == UNDEFZ)
                     Rast_set_f_null_value(cell1 + j, 1);
@@ -733,8 +746,8 @@ void com_par(const Geometry *geometry, OriginAngle *origin_angle, double angle,
     origin_angle->stepcosangle = geometry->stepxy * origin_angle->cosangle;
 }
 
-void calculate_point_mode(const Geometry *geometry, double xcoord,
-                          double ycoord, double single_direction)
+void calculate_point_mode(const Settings *settings, const Geometry *geometry,
+                          double xcoord, double ycoord, FILE *fp)
 {
     /*
        xg0 = xx0 = (double)xcoord * stepx;
@@ -762,18 +775,18 @@ void calculate_point_mode(const Geometry *geometry, double xcoord,
     G_debug(1, "yindex: %d, xindex %d, z_orig %.2f", yindex, xindex,
             origin_point.z_orig);
 
-    int printCount = 360. / fabs(step);
+    int printCount = 360. / fabs(settings->step);
 
     if (printCount < 1)
         printCount = 1;
-    double dfr_rad = step * deg2rad;
+    double dfr_rad = settings->step * deg2rad;
 
     double xp = geometry->xmin + origin_point.xg0;
     double yp = geometry->ymin + origin_point.yg0;
 
-    double angle = (single_direction * deg2rad) + pihalf;
+    double angle = (settings->single_direction * deg2rad) + pihalf;
 
-    maxlength = fixedMaxLength;
+    origin_point.maxlength = settings->fixedMaxLength;
     fprintf(fp, "azimuth,horizon_height\n");
 
     for (int i = 0; i < printCount; i++) {
@@ -783,7 +796,7 @@ void calculate_point_mode(const Geometry *geometry, double xcoord,
         double shadow_angle =
             horizon_height(geometry, &origin_point, &origin_angle);
 
-        if (degreeOutput) {
+        if (settings->degreeOutput) {
             shadow_angle *= rad2deg;
         }
         double printangle = angle * rad2deg - 90.;
@@ -792,7 +805,7 @@ void calculate_point_mode(const Geometry *geometry, double xcoord,
         else if (printangle >= 360.)
             printangle -= 360;
 
-        if (compassOutput) {
+        if (settings->compassOutput) {
             double tmpangle;
 
             tmpangle = 360. - printangle + 90.;
@@ -978,7 +991,7 @@ double horizon_height(const Geometry *geometry, const OriginPoint *origin_point,
             break;
         }
 
-        if (horizon.length >= maxlength) {
+        if (horizon.length >= origin_point->maxlength) {
             break;
         }
     }
@@ -988,9 +1001,11 @@ double horizon_height(const Geometry *geometry, const OriginPoint *origin_point,
 
 /*////////////////////////////////////////////////////////////////////// */
 
-void calculate_raster_mode(const Geometry *geometry, int buffer_e, int buffer_w,
-                           int buffer_s, int buffer_n, double bufferZone,
-                           double single_direction)
+void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
+                           struct Cell_head *cellhd,
+                           struct Cell_head *new_cellhd, int buffer_e,
+                           int buffer_w, int buffer_s, int buffer_n,
+                           double bufferZone)
 {
     int hor_row_start = buffer_s;
     int hor_row_end = geometry->m - buffer_n;
@@ -1010,7 +1025,7 @@ void calculate_raster_mode(const Geometry *geometry, int buffer_e, int buffer_w,
 
     /****************************************************************/
 
-    if (horizon_basename != NULL) {
+    if (settings->horizon_basename != NULL) {
         horizon_raster = (float **)G_malloc(sizeof(float *) * (hor_numrows));
         for (int l = 0; l < hor_numrows; l++) {
             horizon_raster[l] =
@@ -1026,27 +1041,30 @@ void calculate_raster_mode(const Geometry *geometry, int buffer_e, int buffer_w,
     int arrayNumInt;
     /* definition of horizon angle in loop */
     char *shad_filename = NULL;
-    if (step == 0.0) {
+    if (settings->step == 0.0) {
         dfr_rad = 0;
         arrayNumInt = 1;
-        sprintf(shad_filename, "%s", horizon_basename);
+        sprintf(shad_filename, "%s", settings->horizon_basename);
     }
     else {
-        dfr_rad = step * deg2rad;
-        arrayNumInt = (int)((end - start) / fabs(step));
+        dfr_rad = settings->step * deg2rad;
+        arrayNumInt =
+            (int)((settings->end - settings->start) / fabs(settings->step));
     }
 
-    size_t decimals = G_get_num_decimals(str_step);
+    size_t decimals = G_get_num_decimals(settings->str_step);
 
     for (int k = 0; k < arrayNumInt; k++) {
         struct History history;
 
-        double angle = (start + single_direction) * deg2rad + (dfr_rad * k);
+        double angle =
+            (settings->start + settings->single_direction) * deg2rad +
+            (dfr_rad * k);
         double angle_deg = angle * rad2deg + 0.0001;
 
-        if (step != 0.0)
-            shad_filename =
-                G_generate_basename(horizon_basename, angle_deg, 3, decimals);
+        if (settings->step != 0.0)
+            shad_filename = G_generate_basename(settings->horizon_basename,
+                                                angle_deg, 3, decimals);
         G_message(
             _("Calculating map %01d of %01d (angle %.2f, raster map <%s>)"),
             (k + 1), arrayNumInt, angle_deg, shad_filename);
@@ -1074,10 +1092,12 @@ void calculate_raster_mode(const Geometry *geometry, int buffer_e, int buffer_w,
                 com_par(geometry, &origin_angle, inputAngle, xp, yp);
 
                 origin_point.z_orig = z[j][i];
-                maxlength =
+                origin_point.maxlength =
                     (geometry->zmax - origin_point.z_orig) / TANMINANGLE;
-                maxlength =
-                    (maxlength < fixedMaxLength) ? maxlength : fixedMaxLength;
+                origin_point.maxlength =
+                    (origin_point.maxlength < settings->fixedMaxLength)
+                        ? origin_point.maxlength
+                        : settings->fixedMaxLength;
 
                 if (origin_point.z_orig != UNDEFZ) {
 
@@ -1085,7 +1105,7 @@ void calculate_raster_mode(const Geometry *geometry, int buffer_e, int buffer_w,
                     double shadow_angle =
                         horizon_height(geometry, &origin_point, &origin_angle);
 
-                    if (degreeOutput) {
+                    if (settings->degreeOutput) {
                         shadow_angle *= rad2deg;
                     }
 
@@ -1096,7 +1116,7 @@ void calculate_raster_mode(const Geometry *geometry, int buffer_e, int buffer_w,
         }
 
         G_debug(1, "OUTGR() starts...");
-        OUTGR(geometry->m, geometry->n, shad_filename);
+        OUTGR(settings, geometry->m, geometry->n, shad_filename, cellhd);
 
         /* empty array */
         for (int j = 0; j < hor_numrows; j++) {
@@ -1106,7 +1126,7 @@ void calculate_raster_mode(const Geometry *geometry, int buffer_e, int buffer_w,
 
         /* return back the buffered region */
         if (bufferZone > 0.)
-            Rast_set_window(&new_cellhd);
+            Rast_set_window(new_cellhd);
 
         /* write metadata */
         Rast_short_history(shad_filename, "raster", &history);
@@ -1116,7 +1136,7 @@ void calculate_raster_mode(const Geometry *geometry, int buffer_e, int buffer_w,
                 (k + 1), arrayNumInt);
         Rast_put_cell_title(shad_filename, msg_buff);
 
-        if (degreeOutput)
+        if (settings->degreeOutput)
             Rast_write_units(shad_filename, "degrees");
         else
             Rast_write_units(shad_filename, "radians");
