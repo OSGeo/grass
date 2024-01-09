@@ -817,7 +817,7 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
         item1 = self.itemDataMap[key1][self._col]
         item2 = self.itemDataMap[key2][self._col]
 
-        if isinstance(item1, type("")) or isinstance(item2, type("")):
+        if isinstance(item1, str) or isinstance(item2, str):
             cmpVal = locale.strcoll(str(item1), str(item2))
         else:
             cmpVal = cmp(item1, item2)
@@ -1754,7 +1754,7 @@ class EPSGPage(TitledPage):
     def OnTextChange(self, event):
         value = self.searchb.GetValue()
         if value == "":
-            self.tlink.SetURL(str("https://epsg.io/"))
+            self.tlink.SetURL("https://epsg.io/")
             self.epsgcode = None
             self.epsgdesc = self.epsgparams = ""
             self.searchb.ChangeValue("")
@@ -2537,9 +2537,7 @@ class SummaryPage(TitledPage):
                 self.parent.custompage.customstring
                 + self.parent.custompage.custom_dtrans_string
             )
-            self.lproj4string.SetLabel(
-                ("%s" % combo_str.replace(" +", os.linesep + "+"))
-            )
+            self.lproj4string.SetLabel("%s" % combo_str.replace(" +", os.linesep + "+"))
         elif coordsys == "projpicker":
             label = "EPSG code %s (%s)" % (
                 self.parent.projpickerpage.epsgcode,
