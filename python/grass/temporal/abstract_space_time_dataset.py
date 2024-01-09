@@ -24,9 +24,9 @@ from .core import (
 )
 from .abstract_dataset import (
     AbstractDataset,
-    AbstractMapDataset,
     AbstractDatasetComparisonKeyStartTime,
 )
+from .abstract_map_dataset import AbstractMapDataset
 from .temporal_granularity import (
     check_granularity_string,
     compute_absolute_time_granularity,
