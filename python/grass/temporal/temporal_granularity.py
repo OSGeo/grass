@@ -386,7 +386,7 @@ def compute_absolute_time_granularity(maps):
     has_months = False
     has_years = False
 
-    if issubclass(maps[0].__class__, tgis.AbstractMapDataset):
+    if issubclass(maps[0].__class__, AbstractMapDataset):
         get_time_tuple = _get_map_time_tuple
     else:
         get_time_tuple = _get_row_time_tuple
