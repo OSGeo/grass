@@ -441,7 +441,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
     def count_temporal_types(self, maps=None, dbif=None):
         """Return the temporal type of the registered maps as dictionary
 
-        The map list must be ordered by start time
+        The map list can be a list of AbstractDataset or database rows.
+        It must be ordered by start time
 
         The temporal type can be:
 
@@ -449,37 +450,44 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         - interval -> start and end time
         - invalid  -> No valid time point or interval found
 
-        :param maps: A sorted (start_time) list of AbstractDataset objects
+        :param maps: A sorted (start_time) list of AbstractDataset objects or database rows
         :param dbif: The database interface to be used
         """
 
         if maps is None:
-            maps = self.get_registered_maps_as_objects(
+            maps = self.get_registered_maps(
                 where=None, order="start_time", dbif=dbif
             )
 
-        time_invalid = 0
-        time_point = 0
-        time_interval = 0
+        def _get_map_time_tuple(map_object):
+            if map_object.is_time_absolute():
+                time_tuple = map_object.get_absolute_time()
+            if map_object.is_time_relative():
+                time_tuple = map_object.get_relative_time()
+            return time_tuple[0:2]
+        def _get_row_time_tuple(sqlite_row):
+            return sqlite_row["start_time"], sqlite_row["end_time"]
 
-        tcount = {}
-        for i in range(len(maps)):
+        if issubclass(maps[0].__class__, tgis.AbstractMapDataset):
+            get_time_tuple = _get_map_time_tuple
+        else:
+            get_time_tuple = _get_row_time_tuple
+
+        tcount = {
+            "point": 0,
+            "interval": 0,
+            "invalid": 0
+        }
+
+        for map_reference in maps:
             # Check for point and interval data
-            if maps[i].is_time_absolute():
-                start, end = maps[i].get_absolute_time()
-            if maps[i].is_time_relative():
-                start, end, unit = maps[i].get_relative_time()
-
+            start, end = get_time_tuple(map_reference)
             if start is not None and end is not None:
-                time_interval += 1
+                tcount["interval"] += 1
             elif start is not None and end is None:
-                time_point += 1
+                tcount["point"] += 1
             else:
-                time_invalid += 1
-
-        tcount["point"] = time_point
-        tcount["interval"] = time_interval
-        tcount["invalid"] = time_invalid
+                tcount["invalid"] += 1
 
         return tcount
 
@@ -2872,7 +2880,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             dbif.execute_transaction(sql, mapset=self.base.mapset)
 
         # Count the temporal map types
-        maps = self.get_registered_maps_as_objects(dbif=dbif)
+        maps = self.get_registered_maps(order="start_time", dbif=dbif)
         tlist = self.count_temporal_types(maps)
 
         if tlist["interval"] > 0 and tlist["point"] == 0 and tlist["invalid"] == 0:
