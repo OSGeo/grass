@@ -160,9 +160,3 @@ HTML:
 JavaScript:
   - changed-files:
       - any-glob-to-any-file: '**/*.js'
-Markdown:
-  - changed-files:
-      - any-glob-to-any-file:
-          - '**/*.md'
-      - all-globs-to-all-files:
-          - '!doc/development/rfc/*'
