@@ -78,6 +78,7 @@ docs:
       - any-glob-to-any-file:
           - doc/**/*
           - man/**/*
+          - '**/*.md'
           - '**/*.rst'
           - '**/*.html'
       - all-globs-to-all-files:
