@@ -1,7 +1,7 @@
 ---
 libraries:
   - changed-files:
-    - any-glob-to-any-file:
+      - any-glob-to-any-file:
           - lib/**/*
           - include/grass/*
           - include/grass/**/*
