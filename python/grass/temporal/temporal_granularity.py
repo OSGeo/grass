@@ -253,6 +253,8 @@ def compute_relative_time_granularity(maps):
 
     """
 
+    if maps is None:
+        return None
     if issubclass(maps[0].__class__, AbstractMapDataset):
         get_time_tuple = _get_map_time_tuple
     else:
