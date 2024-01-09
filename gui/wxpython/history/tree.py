@@ -66,7 +66,7 @@ class HistoryBrowserTree(CTreeView):
         self._giface = giface
         self.parent = parent
 
-        self.UpdateHistoryModelFromScratch()
+        self._initHistoryModel()
 
         self.showNotification = Signal("HistoryBrowserTree.showNotification")
         self.runIgnoredCmdPattern = Signal("HistoryBrowserTree.runIgnoredCmdPattern")
@@ -80,6 +80,20 @@ class HistoryBrowserTree(CTreeView):
         self.selectionChanged.connect(self.OnItemSelected)
         self.itemActivated.connect(lambda node: self.Run(node))
         self.contextMenu.connect(self.OnRightClick)
+
+    def _initHistoryModel(self):
+        """Fill tree history model based on the current history log."""
+        self._history_path = get_current_mapset_gui_history_path()
+        if self._history_path:
+            cmd_list = read_history(self._history_path)
+            for label in cmd_list:
+                data = {"command": label.strip()}
+                self._model.AppendNode(
+                    parent=self._model.root,
+                    label=data["command"],
+                    data=data,
+                )
+            self._refreshTree()
 
     def _refreshTree(self):
         """Refresh tree models"""
@@ -121,19 +135,9 @@ class HistoryBrowserTree(CTreeView):
         self.RefreshItems()
 
     def UpdateHistoryModelFromScratch(self):
-        """Fill tree history model based on the current history log from scratch."""
+        """Reload tree history model based on the current history log from scratch."""
         self._model.RemoveNode(self._model.root)
-        self._history_path = get_current_mapset_gui_history_path()
-        if self._history_path:
-            cmd_list = read_history(self._history_path)
-            for label in cmd_list:
-                data = {"command": label.strip()}
-                self._model.AppendNode(
-                    parent=self._model.root,
-                    label=data["command"],
-                    data=data,
-                )
-            self._refreshTree()
+        self._initHistoryModel()
 
     def UpdateHistoryModelByCommand(self, label):
         """Update the model by the command and refresh the tree.
@@ -191,11 +195,10 @@ class HistoryBrowserTree(CTreeView):
         question = _("Do you really want to delete <{}> command?").format(cmd)
         if self._confirmDialog(question, title=_("Delete command")) == wx.ID_YES:
             self.showNotification.emit(message=_("Deleting <{}>").format(cmd))
-            model_tuple = self._model.GetIndexOfNode(tree_node)
-            model_node = self._model.GetNodeByIndex(model_tuple)
-            self.RemoveEntryFromHistory(model_tuple[0])
-            self._giface.entryFromHistoryRemoved.emit(index=model_tuple[0])
-            self._model.RemoveNode(model_node)
+            tree_index = self._model.GetIndexOfNode(tree_node)[0]
+            self.RemoveEntryFromHistory(tree_index)
+            self._giface.entryFromHistoryRemoved.emit(index=tree_index)
+            self._model.RemoveNode(tree_node)
             self._refreshTree()
             self.showNotification.emit(message=_("<{}> deleted").format(cmd))
 
