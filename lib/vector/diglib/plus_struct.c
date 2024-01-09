@@ -656,6 +656,20 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     return (0);
 }
 
+/*!
+   \brief Write Plus_head to file
+
+   ptr->off_t_size is used for both coor and topo files, but their sizes
+   (ptr->coor_size for coor and no variable for topo) can be different. If
+   either file is greater than PORT_LONG_MAX, ptr->off_t_size must be 8. This
+   function determines this value of ptr->off_t_size and writes it to the file.
+
+   \param fp pointer to gvfile structure
+   \param[in,out] ptr pointer to Plus_head structure
+
+   \return -1 error
+   \return  0 OK
+ */
 int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
 {
     unsigned char buf[10];
