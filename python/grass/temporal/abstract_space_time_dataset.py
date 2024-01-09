@@ -455,9 +455,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """
 
         if maps is None:
-            maps = self.get_registered_maps(
-                where=None, order="start_time", dbif=dbif
-            )
+            maps = self.get_registered_maps(where=None, order="start_time", dbif=dbif)
 
         def _get_map_time_tuple(map_object):
             if map_object.is_time_absolute():
@@ -465,6 +463,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             if map_object.is_time_relative():
                 time_tuple = map_object.get_relative_time()
             return time_tuple[0:2]
+
         def _get_row_time_tuple(sqlite_row):
             return sqlite_row["start_time"], sqlite_row["end_time"]
 
@@ -473,11 +472,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         else:
             get_time_tuple = _get_row_time_tuple
 
-        tcount = {
-            "point": 0,
-            "interval": 0,
-            "invalid": 0
-        }
+        tcount = {"point": 0, "interval": 0, "invalid": 0}
 
         for map_reference in maps:
             # Check for point and interval data
