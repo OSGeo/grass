@@ -22,7 +22,11 @@ from .core import (
     get_current_mapset,
     get_tgis_db_version_from_metadata,
 )
-from .abstract_dataset import AbstractDataset, AbstractDatasetComparisonKeyStartTime
+from .abstract_dataset import (
+    AbstractDataset,
+    AbstractMapDataset,
+    AbstractDatasetComparisonKeyStartTime,
+)
 from .temporal_granularity import (
     check_granularity_string,
     compute_absolute_time_granularity,
@@ -454,10 +458,17 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param dbif: The database interface to be used
         """
 
+        tcount = {"point": 0, "interval": 0, "invalid": 0}
+
         if maps is None:
             maps = self.get_registered_maps(where=None, order="start_time", dbif=dbif)
 
+        if maps is None:
+            return tcount
+
         def _get_map_time_tuple(map_object):
+            """Helper function to return time tuple
+            from AbstractDataset object"""
             if map_object.is_time_absolute():
                 time_tuple = map_object.get_absolute_time()
             if map_object.is_time_relative():
@@ -465,14 +476,15 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             return time_tuple[0:2]
 
         def _get_row_time_tuple(sqlite_row):
+            """Helper function to return time tuple
+            from database row"""
             return sqlite_row["start_time"], sqlite_row["end_time"]
 
-        if issubclass(maps[0].__class__, self):
+        # Check if input is list of MapDataset objects or SQLite rows
+        if issubclass(maps[0].__class__, AbstractMapDataset):
             get_time_tuple = _get_map_time_tuple
         else:
             get_time_tuple = _get_row_time_tuple
-
-        tcount = {"point": 0, "interval": 0, "invalid": 0}
 
         for map_reference in maps:
             # Check for point and interval data
