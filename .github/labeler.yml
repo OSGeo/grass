@@ -20,41 +20,75 @@ module:
           - scripts/**/*
           - temporal/**/*
           - vector/**/*
+
+# Module categories
 database:
   - changed-files:
       - any-glob-to-any-file:
           - db/**/*
           - lib/db/**/*
-vector:
+          - scripts/db.*/**
+display:
   - changed-files:
       - any-glob-to-any-file:
-          - vector/**/*
-          - lib/vector/**/*
-raster:
+          - display/**/*
+          - lib/display/**/*
+          - scripts/d.*/**
+general:
   - changed-files:
       - any-glob-to-any-file:
-          - raster/**/*
-          - lib/raster/**/*
-raster3d:
+          - general/**/*
+          - scripts/g.*/**
+GUI:
   - changed-files:
       - any-glob-to-any-file:
-          - raster3d/**/*
-          - lib/raster3d/**/*
-temporal:
-  - changed-files:
-      - any-glob-to-any-file:
-          - temporal/**/*
-          - lib/temporal/**/*
+          - gui/**/*
 imagery:
   - changed-files:
       - any-glob-to-any-file:
           - imagery/**/*
           - lib/imagery/**/*
-
-GUI:
+          - scripts/i.*/**
+misc:
   - changed-files:
       - any-glob-to-any-file:
-          - gui/**/*
+          - misc/**/*
+          - scripts/m.*/**
+raster:
+  - changed-files:
+      - any-glob-to-any-file:
+          - raster/**/*
+          - lib/raster/**/*
+          - scripts/r.*/**
+raster3d:
+  - changed-files:
+      - any-glob-to-any-file:
+          - raster3d/**/*
+          - lib/raster3d/**/*
+          - scripts/r3.*/**
+temporal:
+  - changed-files:
+      - any-glob-to-any-file:
+          - temporal/**/*
+          - lib/temporal/**/*
+          - scripts/t.*/**
+vector:
+  - changed-files:
+      - any-glob-to-any-file:
+          - vector/**/*
+          - lib/vector/**/*
+          - scripts/v.*/**
+
+# Build, packaging, or OS related
+CI:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/**/*
+          - .travis/**/*
+          - binder/**
+          - .travis.yml
+          - renovate.json
+          - .pre-commit-config.yaml
 Windows:
   - changed-files:
       - any-glob-to-any-file:
@@ -67,12 +101,17 @@ Linux:
   - changed-files:
       - any-glob-to-any-file:
           - singularity/**/*
+          - rpm/** 
 docker:
   - changed-files:
       - any-glob-to-any-file:
           - docker/**/*
           - '**/*Dockerfile*'
           - '**/*dockerfile*'
+          - '*Dockerfile*'
+          - '*dockerfile*'
+          - .dockerignore
+
 docs:
   - changed-files:
       - any-glob-to-any-file:
@@ -81,6 +120,14 @@ docs:
           - '**/*.md'
           - '**/*.rst'
           - '**/*.html'
+          - '**/*.dox'
+          - '**/*.png'
+          - '**.cff'
+          - CITING
+          - CHANGES
+          - AUTHORS
+          - NEWS
+          - TODO
       - all-globs-to-all-files:
           - '!doc/development/rfc/*'
 RFC:
@@ -90,16 +137,14 @@ RFC:
 translation:
   - changed-files:
       - any-glob-to-any-file: locale/**/*
-CI:
-  - changed-files:
-      - any-glob-to-any-file:
-          - .github/**/*
-          - .travis/**/*
 
 # based on file types
 Python:
   - changed-files:
-      - any-glob-to-any-file: '**/*.py'
+      - any-glob-to-any-file: 
+        - '**/*.py'
+        - '**/pyproject.toml'
+        - 'pyproject.toml'
 C:
   - changed-files:
       - any-glob-to-any-file: '**/*.c'
