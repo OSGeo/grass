@@ -261,7 +261,7 @@ User settings:
 
 - The GRASS GIS CI user at Docker hub is "grassgis" (joined June 3, 2023),
   see also <https://hub.docker.com/u/grassgis>
-- Docker Hub access token are managed via grass-ci-admin@osgeo.org.
+- Docker Hub access token are managed via <grass-ci-admin@osgeo.org>.
 - The OSGeo Org membership is managed at <https://hub.docker.com/orgs>
   through OSGeo-SAC
 

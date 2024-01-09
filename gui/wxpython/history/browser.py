@@ -20,8 +20,14 @@ import re
 
 from core import globalvar
 from core.gcmd import GError, GException
+from core.utils import (
+    parse_mapcalc_cmd,
+    replace_module_cmd_special_flags,
+    split,
+)
 from gui_core.forms import GUI
 from gui_core.treeview import CTreeView
+from gui_core.wrap import SearchCtrl
 from history.tree import HistoryBrowserTree
 
 from grass.pydispatch.signal import Signal
@@ -57,11 +63,23 @@ class HistoryBrowser(wx.Panel):
             lambda cmd: self.UpdateHistoryModelByCommand(cmd)
         )
 
+        self.search = SearchCtrl(self)
+        self.search.SetDescriptiveText(_("Search"))
+        self.search.ShowCancelButton(True)
+        self.search.Bind(wx.EVT_TEXT, lambda evt: self.Filter(evt.GetString()))
+        self.search.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, lambda evt: self.Filter(""))
+
         self._layout()
 
     def _layout(self):
         """Dialog layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(
+            self.search,
+            proportion=0,
+            flag=wx.ALL | wx.EXPAND,
+            border=5,
+        )
         sizer.Add(
             self._tree, proportion=1, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5
         )
@@ -90,6 +108,18 @@ class HistoryBrowser(wx.Panel):
     def _refreshTree(self):
         self._tree.SetModel(self._model.GetModel())
 
+    def Filter(self, text):
+        """Filter history
+
+        :param str text: text string
+        """
+        model = self._model.GetModel()
+        if text:
+            model = self._model.model.Filtered(key=["command"], value=text)
+            self._tree.SetModel(model)
+        else:
+            self._tree.SetModel(model)
+
     def UpdateHistoryModelFromScratch(self):
         """Update the model from scratch and refresh the tree"""
         self._model.CreateModel()
@@ -110,15 +140,18 @@ class HistoryBrowser(wx.Panel):
         node = node or self._getSelectedNode()
         if node:
             command = node.data["command"]
-            lst = re.split(r"\s+", command)
             if (
                 globalvar.ignoredCmdPattern
                 and re.compile(globalvar.ignoredCmdPattern).search(command)
                 and "--help" not in command
                 and "--ui" not in command
             ):
-                self.runIgnoredCmdPattern.emit(cmd=lst)
+                self.runIgnoredCmdPattern.emit(cmd=split(command))
                 return
+            if re.compile(r"^r[3]?\.mapcalc").search(command):
+                command = parse_mapcalc_cmd(command)
+            command = replace_module_cmd_special_flags(command)
+            lst = split(command)
             try:
                 GUI(parent=self, giface=self._giface).ParseCommand(lst)
             except GException as e:

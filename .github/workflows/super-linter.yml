@@ -21,11 +21,19 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: read
+      # To report GitHub Actions status checks
+      statuses: write
+
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
       - name: Lint code base
-        uses: github/super-linter@v5
+        uses: super-linter/super-linter/slim@v5.7.2
         env:
+          DEFAULT_BRANCH: main
+          # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Listed but commented out linters would be nice to have.
           # (see https://github.com/github/super-linter#environment-variables)
