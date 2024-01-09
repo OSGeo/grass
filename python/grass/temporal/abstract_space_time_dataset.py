@@ -467,7 +467,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         def _get_row_time_tuple(sqlite_row):
             return sqlite_row["start_time"], sqlite_row["end_time"]
 
-        if issubclass(maps[0].__class__, tgis.AbstractMapDataset):
+        if issubclass(maps[0].__class__, self):
             get_time_tuple = _get_map_time_tuple
         else:
             get_time_tuple = _get_row_time_tuple
