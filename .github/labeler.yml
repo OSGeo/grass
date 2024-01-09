@@ -1,7 +1,7 @@
 ---
 libraries:
   - changed-files:
-      - any-glob-to-any-file:
+    - any-glob-to-any-file:
           - lib/**/*
           - include/grass/*
           - include/grass/**/*
@@ -20,41 +20,72 @@ module:
           - scripts/**/*
           - temporal/**/*
           - vector/**/*
-vector:
-  - changed-files:
-      - any-glob-to-any-file: vector/**/*
-raster:
-  - changed-files:
-      - any-glob-to-any-file: raster/**/*
-temporal:
-  - changed-files:
-      - any-glob-to-any-file: temporal/**/*
 database:
   - changed-files:
-      - any-glob-to-any-file: db/**/*
+      - any-glob-to-any-file:
+          - db/**/*
+          - lib/db/**/*
+vector:
+  - changed-files:
+      - any-glob-to-any-file:
+          - vector/**/*
+          - lib/vector/**/*
+raster:
+  - changed-files:
+      - any-glob-to-any-file:
+          - raster/**/*
+          - lib/raster/**/*
+raster3d:
+  - changed-files:
+      - any-glob-to-any-file:
+          - raster3d/**/*
+          - lib/raster3d/**/*
+temporal:
+  - changed-files:
+      - any-glob-to-any-file:
+          - temporal/**/*
+          - lib/temporal/**/*
+imagery:
+  - changed-files:
+      - any-glob-to-any-file:
+          - imagery/**/*
+          - lib/imagery/**/*
+
 GUI:
   - changed-files:
-      - any-glob-to-any-file: gui/**/*
+      - any-glob-to-any-file:
+          - gui/**/*
 Windows:
   - changed-files:
-      - any-glob-to-any-file: mswindows/**/*
+      - any-glob-to-any-file:
+          - mswindows/**/*
 macOS:
   - changed-files:
-      - any-glob-to-any-file: macosx/**/*
+      - any-glob-to-any-file:
+          - macosx/**/*
 Linux:
   - changed-files:
-      - any-glob-to-any-file: singularity/**/*
+      - any-glob-to-any-file:
+          - singularity/**/*
 docker:
   - changed-files:
-      - any-glob-to-any-file: docker/**/*
+      - any-glob-to-any-file:
+          - docker/**/*
+          - '**/*Dockerfile*'
+          - '**/*dockerfile*'
 docs:
   - changed-files:
       - any-glob-to-any-file:
           - doc/**/*
           - man/**/*
+          - '**/*.rst'
+          - '**/*.html'
+      - all-globs-to-all-files:
+          - '!doc/development/rfc/*'
 RFC:
   - changed-files:
-      - any-glob-to-any-file: doc/development/rfc/*
+      - any-glob-to-any-file: 
+          - doc/development/rfc/*
 translation:
   - changed-files:
       - any-glob-to-any-file: locale/**/*
@@ -85,4 +116,7 @@ JavaScript:
       - any-glob-to-any-file: '**/*.js'
 Markdown:
   - changed-files:
-      - any-glob-to-any-file: '**/*.md'
+      - any-glob-to-any-file:
+          - '**/*.md'
+      - all-globs-to-all-files:
+          - '!doc/development/rfc/*'
