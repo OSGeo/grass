@@ -463,7 +463,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if maps is None:
             maps = self.get_registered_maps(where=None, order="start_time", dbif=dbif)
 
-        if maps is None:
+        if not maps:
             return tcount
 
         def _get_map_time_tuple(map_object):
