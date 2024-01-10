@@ -271,11 +271,10 @@ def compute_relative_time_granularity(maps):
             t = abs(end - start)
             delta.append(int(t))
 
-    # Compute the timedelta of the gaps
-    for i in range(len(maps)):
+        # Compute the timedelta of the gaps
         if i < len(maps) - 1:
             start2, end2 = get_time_tuple(maps[i + 1])
-            if _is_after(start, start2, end2):
+            if _is_after(start2, start, end):
                 # Gaps are between intervals, intervals and
                 # points, points and points
                 if end and start2:
@@ -405,7 +404,7 @@ def compute_absolute_time_granularity(maps):
         # Compute the timedelta of the gaps
         if i < len(maps) - 1:
             start2, end2 = get_time_tuple(maps[i + 1])
-            if _is_after(start, start2, end2):
+            if _is_after(start2, start, end):
                 # Gaps are between intervals, intervals and
                 # points, points and points
                 if end and start2:
