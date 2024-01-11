@@ -2055,6 +2055,9 @@ def install_extension_std_platforms(name, source, url, branch):
 
     os.chdir(srcdir)
 
+    # add TMPDIR to PYTHONPATH
+    os.environ["PYTHONPATH"] = f"{TMPDIR}:{os.environ['PYTHONPATH']}"
+
     gs.message(_("Compiling..."))
     if not os.path.exists(os.path.join(gisbase, "include", "Make", "Module.make")):
         gs.fatal(_("Please install GRASS development package"))
