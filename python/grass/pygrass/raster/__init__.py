@@ -7,12 +7,6 @@ import numpy as np
 from grass.script import fatal
 from grass.exceptions import OpenError
 
-import grass.lib.gis as libgis
-import grass.lib.raster as libraster
-import grass.lib.rowio as librowio
-
-libgis.G_gisinit("")
-
 #
 # import pygrass modules
 #
@@ -28,6 +22,17 @@ from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.buffer import Buffer
 from grass.pygrass.raster.segment import Segment
 from grass.pygrass.raster.rowio import RowIO
+
+
+def import_grass_libs():
+    import grass.lib.gis as libgis
+    libgis.G_gisinit("")
+    import grass.lib.raster as libraster
+    import grass.lib.rowio as librowio
+    return libgis, libraster, librowio
+
+
+libgis, libraster, librowio = import_grass_libs()
 
 WARN_OVERWRITE = "Raster map <{0}> already exists and will be overwritten"
 

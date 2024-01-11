@@ -18,35 +18,23 @@ This program is free software under the GNU General Public License
 
 import re
 import os
+import wx
 import sys
 import shutil
+import grass.script as grass
+import wx.lib.colourselect as csel
 
 from copy import deepcopy
 from core import globalvar
-
 from xml.etree.ElementTree import ParseError
-
-import wx
-
-if globalvar.wxPythonPhoenix:
-    try:
-        import agw.flatnotebook as FN
-    except ImportError:  # if it's not there locally, try the wxPython lib.
-        import wx.lib.agw.flatnotebook as FN
-else:
-    import wx.lib.flatnotebook as FN
-import wx.lib.colourselect as csel
-
 from core.debug import Debug
 from core.gcmd import GMessage
 from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
-
 from web_services.cap_interface import (
     WMSCapabilities,
     WMTSCapabilities,
     OnEarthCapabilities,
 )
-
 from gui_core.widgets import GNotebook
 from gui_core.widgets import ManageSettingsWidget
 from gui_core.wrap import (
@@ -59,7 +47,20 @@ from gui_core.wrap import (
     TreeCtrl,
 )
 
-import grass.script as grass
+
+def import_flatnotebook():
+    if globalvar.wxPythonPhoenix:
+        try:
+            import agw.flatnotebook as FN
+        except ImportError:  # if it's not there locally, try the wxPython lib.
+            import wx.lib.agw.flatnotebook as FN
+    else:
+        import wx.lib.flatnotebook as FN
+    return FN
+
+
+FN = import_flatnotebook()
+
 
 rinwms_path = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
 if rinwms_path not in sys.path:

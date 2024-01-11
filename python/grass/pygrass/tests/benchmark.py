@@ -5,8 +5,6 @@ Created on Sat Jun 16 20:24:56 2012
 """
 
 import optparse
-
-# import numpy as np
 import time
 import collections
 import copy
@@ -15,14 +13,19 @@ import sys
 import os
 from jinja2 import Template
 
-sys.path.append(os.getcwd())
-sys.path.append("%s/.." % (os.getcwd()))
 
-import grass.lib.gis as libgis
-import grass.lib.raster as libraster
-import grass.script as core
-import grass.pygrass
-import ctypes
+def import_grass_libs():
+    sys.path.append(os.getcwd())
+    sys.path.append("%s/.." % (os.getcwd()))
+    import grass.lib.gis as libgis
+    import grass.lib.raster as libraster
+    import grass.script as core
+    import grass.pygrass
+    import ctypes
+    return libgis, libraster, core, grass.pygrass, ctypes
+
+
+libgis, libraster, core, pygrass, ctypes = import_grass_libs()
 
 
 def test__RasterSegment_value_access__if():

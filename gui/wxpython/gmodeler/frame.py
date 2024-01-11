@@ -73,11 +73,10 @@ from gui_core.wrap import (
     IsDark,
 )
 from gui_core.wrap import TextEntryDialog as wxTextEntryDialog
-
-wxModelDone, EVT_MODEL_DONE = NewEvent()
-
 from grass.script.utils import try_remove
 from grass.script import core as grass
+
+wxModelDone, EVT_MODEL_DONE = NewEvent()
 
 
 class ModelFrame(wx.Frame):

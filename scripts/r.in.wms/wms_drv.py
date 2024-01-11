@@ -18,8 +18,16 @@ This program is free software under the GNU General Public License
 
 import socket
 import grass.script as grass
+import numpy as Numeric
 
 from time import sleep
+from math import pi, floor
+from urllib.error import HTTPError
+from http.client import HTTPException
+from xml.etree.ElementTree import ParseError
+from wms_base import GetEpsg, GetSRSParamVal, WMSBase
+from wms_cap_parsers import WMTSCapabilitiesTree, OnEarthCapabilitiesTree
+from srs import Srs
 
 try:
     from osgeo import gdal
@@ -30,21 +38,7 @@ except:
         )
     )
 
-import numpy as Numeric
-
 Numeric.arrayrange = Numeric.arange
-
-from math import pi, floor
-
-from urllib.error import HTTPError
-from http.client import HTTPException
-
-from xml.etree.ElementTree import ParseError
-
-from wms_base import GetEpsg, GetSRSParamVal, WMSBase
-
-from wms_cap_parsers import WMTSCapabilitiesTree, OnEarthCapabilitiesTree
-from srs import Srs
 
 
 class WMSDrv(WMSBase):

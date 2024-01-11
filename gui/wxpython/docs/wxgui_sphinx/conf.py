@@ -16,6 +16,8 @@ from datetime import date
 import string
 from shutil import copy
 
+from grass.script import core
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -24,8 +26,6 @@ if not os.getenv("GISBASE"):
 sys.path.insert(
     0, os.path.abspath(os.path.join(os.environ["GISBASE"], "etc", "python", "grass"))
 )
-
-from grass.script import core
 
 footer_tmpl = string.Template(
     r"""

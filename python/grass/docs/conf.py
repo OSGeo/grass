@@ -12,15 +12,13 @@
 
 import sys
 import os
-from datetime import date
 import string
+from datetime import date
 from shutil import copy
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-if not os.getenv("GISBASE"):
-    sys.exit("GISBASE not defined")
 sys.path.insert(
     0, os.path.abspath(os.path.join(os.environ["GISBASE"], "etc", "python", "grass"))
 )
@@ -72,6 +70,9 @@ sys.path.insert(
         os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "temporal")
     ),
 )
+
+if not os.getenv("GISBASE"):
+    sys.exit("GISBASE not defined")
 
 from grass.script import core
 
