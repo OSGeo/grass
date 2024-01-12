@@ -47,20 +47,13 @@ from gui_core.wrap import (
     TreeCtrl,
 )
 
-
-def import_flatnotebook():
-    if globalvar.wxPythonPhoenix:
-        try:
-            import agw.flatnotebook as FN
-        except ImportError:  # if it's not there locally, try the wxPython lib.
-            import wx.lib.agw.flatnotebook as FN
-    else:
-        import wx.lib.flatnotebook as FN
-    return FN
-
-
-FN = import_flatnotebook()
-
+if globalvar.wxPythonPhoenix:
+    try:
+        import agw.flatnotebook as FN
+    except ImportError:  # if it's not there locally, try the wxPython lib.
+        import wx.lib.agw.flatnotebook as FN
+else:
+    import wx.lib.flatnotebook as FN
 
 rinwms_path = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
 if rinwms_path not in sys.path:

@@ -1,5 +1,9 @@
 from os.path import join, exists
+import grass.lib.gis as libgis
+import grass.lib.vector as libvect
 import ctypes
+
+libgis.G_gisinit("")
 
 #
 # import pygrass modules
@@ -14,15 +18,6 @@ from grass.pygrass.vector.geometry import Area as _Area
 from grass.pygrass.vector.abstract import Info
 from grass.pygrass.vector.basic import Bbox, Cats, Ilist
 
-
-def import_grass_libs():
-    import grass.lib.gis as libgis
-    libgis.G_gisinit("")
-    import grass.lib.vector as libvect
-    return libgis, libvect
-
-
-libgis, libvect = import_grass_libs()
 
 _NUMOF = {
     "areas": libvect.Vect_get_num_areas,

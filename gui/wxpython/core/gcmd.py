@@ -44,20 +44,13 @@ from grass.script.utils import decode, encode
 
 is_mswindows = sys.platform == "win32"
 
-
-def platform_specific_imports():
-    if is_mswindows:
-        global ReadFile, WriteFile, PeekNamedPipe, msvcrt
-        from win32file import ReadFile, WriteFile
-        from win32pipe import PeekNamedPipe
-        import msvcrt
-    else:
-        global select, fcntl
-        import select
-        import fcntl
-
-
-platform_specific_imports()
+if is_mswindows:
+    from win32file import ReadFile, WriteFile
+    from win32pipe import PeekNamedPipe
+    import msvcrt
+else:
+    import select
+    import fcntl
 
 
 def DecodeString(string):
