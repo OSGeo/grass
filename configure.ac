@@ -296,6 +296,7 @@ LOC_ARG_WITH(odbc, ODBC, no)
 LOC_ARG_WITH(fftw, FFTW)
 LOC_ARG_WITH(blas, BLAS, no)
 LOC_ARG_WITH(lapack, LAPACK, no)
+LOC_ARG_WITH(libsvm, LIBSVM, no)
 LOC_ARG_WITH(cairo, Cairo)
 LOC_ARG_WITH(freetype, FreeType)
 LOC_ARG_WITH(nls, NLS, no)
@@ -384,6 +385,9 @@ LOC_ARG_WITH_LIB(blas, BLAS)
 
 LOC_ARG_WITH_INC(lapack, LAPACK)
 LOC_ARG_WITH_LIB(lapack, LAPACK)
+
+LOC_ARG_WITH_INC(libsvm, LIBSVM)
+LOC_ARG_WITH_LIB(libsvm, LIBSVM)
 
 LOC_ARG_WITH_INC(cairo, cairo)
 LOC_ARG_WITH_LIB(cairo, cairo)
@@ -1696,6 +1700,28 @@ AC_SUBST(LAPACKINC)
 
 # Done checking LAPACK
 
+# libsvm option
+LIBSVM_INC=
+LIBSVM_LIB=
+USE_LIBSVM=
+
+LOC_CHECK_USE(libsvm,LIBSVM,USE_LIBSVM)
+
+if test -n "$USE_LIBSVM"; then
+  LOC_CHECK_INC_PATH(libsvm,LIBSVM,LIBSVM_INC)
+  LOC_CHECK_INCLUDES(svm.h,LIBSVM,$LIBSVM_INC, [
+    LOC_CHECK_INCLUDES(libsvm/svm.h,LIBSVM,$LIBSVM_INC)
+  ])
+  LOC_CHECK_LIB_PATH(libsvm,libsvm,LIBSVM_LIB)
+  LOC_CHECK_LIBS(svm,svm_load_model,LIBSVM,$LIBSVM_LIB,LIBSVM_LIB,,,)
+  AC_DEFINE(HAVE_LIBSVM, 1, [Define to 1 if using LIBSVM.])
+fi
+
+AC_SUBST(LIBSVM_INC)
+AC_SUBST(LIBSVM_LIB)
+AC_SUBST(USE_LIBSVM)
+# Done with LIBSVM
+
 # Enable Cairo display driver option
 
 LOC_CHECK_USE(cairo,Cairo,USE_CAIRO)
@@ -2022,6 +2048,7 @@ LOC_MSG_USE(GEOS support,USE_GEOS)
 LOC_MSG_USE(LAPACK support,USE_LAPACK)
 LOC_MSG_USE(Large File support (LFS), USE_LARGEFILES)
 LOC_MSG_USE(libLAS support,USE_LIBLAS)
+LOC_MSG_USE(LIBSVM support,USE_LIBSVM)
 LOC_MSG_USE(MySQL support,USE_MYSQL)
 LOC_MSG_USE(NetCDF support,USE_NETCDF)
 LOC_MSG_USE(NLS support,USE_NLS)
