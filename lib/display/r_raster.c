@@ -140,10 +140,9 @@ int D_open_driver(void)
           : (p && G_strcasecmp(p, "html") == 0) ? HTML_Driver()
           :
 #ifdef USE_CAIRO
-          (p && G_strcasecmp(p, "cairo") == 0) ? Cairo_Driver()
-                                               : Cairo_Driver();
+    Cairo_Driver();
 #else
-                                                PNG_Driver();
+    PNG_Driver();
 #endif
 
     if (p && G_strcasecmp(drv->name, p) != 0)

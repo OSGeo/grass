@@ -66,7 +66,7 @@ void add_row_area(DCELL *top, DCELL *bottom, double sz, struct Cell_head *w,
             /* upper */
             tedge2[X] = -w->ew_res;
             tedge2[Y] = 0.0;
-            tedge2[Z] = sz * (top[col + 1] - top[col + 1]);
+            tedge2[Z] = sz * (top[col + 1] - top[col]);
 
             v3cross(tedge1, tedge2, crossp);
             v3mag(crossp, &mag);

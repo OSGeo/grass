@@ -81,7 +81,7 @@ static void regression(DCELL *result, DCELL *values, int n, int which)
     }
 
     /* Check for NaN */
-    if (*result != *result)
+    if (isnan(*result))
         Rast_set_d_null_value(result, 1);
 }
 
@@ -175,7 +175,7 @@ static void regression_w(DCELL *result, DCELL (*values)[2], int n, int which)
     }
 
     /* Check for NaN */
-    if (*result != *result)
+    if (isnan(*result))
         Rast_set_d_null_value(result, 1);
 }
 

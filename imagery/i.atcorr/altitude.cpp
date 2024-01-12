@@ -187,7 +187,7 @@ void Altitude::presplane(AtmosModel &atms)
                                 (1013.25 * plane_sim.tpl[k]));
         rmwh[k] = atms.wh[k] / (roair * 1000);
         rmo3[k] = atms.wo[k] / (roair * 1000);
-        rt += (atms.p[k + 1] / atms.t[k + 1] + atms.p[k] / atms.p[k]) *
+        rt += (atms.p[k + 1] / atms.t[k + 1] + 1) *
               (atms.z[k + 1] - atms.z[k]);
         rp += (plane_sim.ppl[k + 1] / plane_sim.tpl[k + 1] +
                plane_sim.ppl[k] / plane_sim.tpl[k]) *

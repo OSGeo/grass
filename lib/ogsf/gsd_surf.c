@@ -2237,22 +2237,24 @@ int gsd_surf_map(geosurf *surf)
            datarow3 = (row + (step_val / 2)) * ymod;
          */
 
+        double half_step_val = step_val / 2.0;
+
         y1 = ymax - row * yres;
-        y2 = ymax - (row - (step_val / 2)) * yres;
-        y3 = ymax - (row + (step_val / 2)) * yres;
+        y2 = ymax - (row - half_step_val) * yres;
+        y3 = ymax - (row + half_step_val) * yres;
 
         y1off = row * ymod * surf->cols;
-        y2off = (row - (step_val / 2)) * ymod * surf->cols;
-        y3off = (row + (step_val / 2)) * ymod * surf->cols;
+        y2off = (row - half_step_val) * ymod * surf->cols;
+        y3off = (row + half_step_val) * ymod * surf->cols;
 
         for (col = start_val; col < xcnt; col += step_val) {
             datacol1 = col * xmod;
-            datacol2 = (col - (step_val / 2)) * xmod;
-            datacol3 = (col + (step_val / 2)) * xmod;
+            datacol2 = (col - half_step_val) * xmod;
+            datacol3 = (col + half_step_val) * xmod;
 
             x1 = col * xres;
-            x2 = (col - (step_val / 2)) * xres;
-            x3 = (col + (step_val / 2)) * xres;
+            x2 = (col - half_step_val) * xres;
+            x3 = (col + half_step_val) * xres;
 
             /* 0 */
             /*

@@ -303,7 +303,7 @@ int main(int argc, char *argv[])
                     /* do nothing        */
                 }
                 else {
-                    if (DOYbeforeETa[i] == 0 || DOYbeforeETa[i] == 0)
+                    if (DOYbeforeETa[i] == 0)
                         Rast_set_d_null_value(&outrast[col], 1);
                     else {
                         bfr = (int)DOYbeforeETa[i];
@@ -317,7 +317,7 @@ int main(int argc, char *argv[])
 
             d_out = 0.0;
             for (i = 0; i < nfiles1; i++) {
-                if (d_null == 1 || d_null == 1)
+                if (d_null == 1 || d1_null == 1)
                     Rast_set_d_null_value(&outrast[col], 1);
                 else {
                     d_out += d_ETrF[i] * sum[i];

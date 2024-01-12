@@ -180,7 +180,7 @@ inline void unionFind<T>::makeUnion(T x, T y)
         /* hook setx onto sety */
         parent[setx] = sety;
         /* if equal increase rank */
-        if (sety == sety) {
+        if (setx == sety) {
             rank[sety]++;
         }
     }

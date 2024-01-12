@@ -261,8 +261,7 @@ int I_init_ref_color_nums(struct Ref *ref)
     ref->grn.index = NULL;
     ref->blu.index = NULL;
 
-    if (ref->nfiles <= 0 || ref->red.n >= 0 || ref->blu.n >= 0 ||
-        ref->blu.n >= 0)
+    if (ref->nfiles <= 0 || ref->red.n >= 0 || ref->blu.n >= 0)
         return 1;
     switch (ref->nfiles) {
     case 1:

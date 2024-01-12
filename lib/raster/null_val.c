@@ -17,6 +17,7 @@
 
 /* System include files */
 #include <string.h>
+#include <math.h>
 
 /* Grass and local include files */
 #include <grass/gis.h>
@@ -238,7 +239,7 @@ int Rast_is_c_null_value(const CELL *cellVal)
 #ifndef Rast_is_f_null_value
 int Rast_is_f_null_value(const FCELL *fcellVal)
 {
-    return *fcellVal != *fcellVal;
+    return isnan(*fcellVal);
 }
 #endif
 
@@ -257,7 +258,7 @@ int Rast_is_f_null_value(const FCELL *fcellVal)
 #ifndef Rast_is_d_null_value
 int Rast_is_d_null_value(const DCELL *dcellVal)
 {
-    return *dcellVal != *dcellVal;
+    return isnan(*dcellVal);
 }
 #endif
 

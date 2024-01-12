@@ -216,7 +216,7 @@ int main(int argc, char **argv)
     }
     tmp = tmp2 = 1;
     for (i = 0; i < nat_off_t; i++) {
-        if (off_t_cnvrt[i] != (i + (nat_off_t - nat_off_t)))
+        if (off_t_cnvrt[i] != i)
             tmp = 0;
         if (off_t_cnvrt[i] != (nat_off_t - i - 1))
             tmp2 = 0;
