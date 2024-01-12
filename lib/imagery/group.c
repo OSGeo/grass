@@ -45,7 +45,7 @@ int I_get_group(char *group)
     G_suppress_warnings(0);
     if (fd == NULL)
         return 0;
-    stat = (fscanf(fd, "%s", group) == 1);
+    stat = (fscanf(fd, "%255s", group) == 1);
     fclose(fd);
     return stat;
 }
@@ -77,7 +77,7 @@ int I_get_subgroup(const char *group, char *subgroup)
     G_suppress_warnings(0);
     if (fd == NULL)
         return 0;
-    stat = (fscanf(fd, "%s", subgroup) == 1);
+    stat = (fscanf(fd, "%255s", subgroup) == 1);
     fclose(fd);
     return stat;
 }
@@ -174,7 +174,7 @@ int I_get_subgroup_ref2(const char *group, const char *subgroup,
 static int get_ref(const char *group, const char *subgroup, const char *gmapset,
                    struct Ref *ref)
 {
-    int n;
+int n;
     char buf[1024];
     char name[INAME_LEN], mapset[INAME_LEN];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
