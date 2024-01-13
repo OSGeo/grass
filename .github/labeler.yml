@@ -113,6 +113,7 @@ docker:
           - .dockerignore
 
 docs:
+- all:
   - changed-files:
       - any-glob-to-any-file:
           - doc/**/*
