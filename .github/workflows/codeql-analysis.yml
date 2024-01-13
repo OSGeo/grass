@@ -54,6 +54,10 @@ jobs:
         run: |
           echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
 
+      - name: Set number of cores for compilation
+        run: |
+          echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
+
       - name: Build
         env:
           CFLAGS: -std=gnu11
