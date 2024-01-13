@@ -174,7 +174,6 @@ int I_get_subgroup_ref2(const char *group, const char *subgroup,
 static int get_ref(const char *group, const char *subgroup, const char *gmapset,
                    struct Ref *ref)
 {
-int n;
     char buf[1024];
     char name[INAME_LEN], mapset[INAME_LEN];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
@@ -200,8 +199,8 @@ int n;
         return 0;
 
     while (G_getl2(buf, sizeof buf, fd)) {
-        n = sscanf(buf, "%255s %255s %15s", name, mapset,
-                   color); /* better use INAME_LEN */
+        int n = sscanf(buf, "%255s %255s %15s", name, mapset,
+                       color); /* better use INAME_LEN */
         if (n == 2 || n == 3) {
             I_add_file_to_group_ref(name, mapset, ref);
             if (n == 3)
