@@ -38,6 +38,6 @@ UPDATE stvds_metadata
            sum(islands) AS islands_new,
            sum(holes) AS holes_new,
            sum(volumes) volumes = volumes_new
-       FROM SPACETIME_REGISTER_TABLE INNER JOIN vector_metadata USING (id)
+       FROM SPACETIME_REGISTER_TABLE NATURAL INNER JOIN vector_metadata
        ) AS new_stats
  WHERE stvds_metadata.id = 'SPACETIME_ID';
