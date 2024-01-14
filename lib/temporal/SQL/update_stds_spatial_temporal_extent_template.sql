@@ -30,8 +30,10 @@ UPDATE STDS_absolute_time
        (SELECT
            min(start_time) AS start_time_new,
            max(end_time) AS end_time_new
-        FROM GRASS_MAP_absolute_time WHERE GRASS_MAP_absolute_time.id IN
-    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+        FROM
+            SPACETIME_REGISTER_TABLE INNER JOIN
+            GRASS_MAP_absolute_time ON
+            SPACETIME_REGISTER_TABLE.id = GRASS_MAP_absolute_time.id
        ) AS new_stats
  WHERE STDS_absolute_time.id = 'SPACETIME_ID';
 
@@ -43,8 +45,10 @@ UPDATE STDS_relative_time
        (SELECT
            min(start_time) AS start_time_new,
            max(end_time) AS end_time_new
-       FROM GRASS_MAP_relative_time WHERE GRASS_MAP_relative_time.id IN
-    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+       FROM
+           SPACETIME_REGISTER_TABLE INNER JOIN
+           GRASS_MAP_relative_time ON
+           SPACETIME_REGISTER_TABLE.id = GRASS_MAP_relative_time.id
        ) AS new_stats
  WHERE STDS_relative_time.id = 'SPACETIME_ID';
 
@@ -65,8 +69,11 @@ UPDATE STDS_spatial_extent
            max(east) AS east_new,
            min(west) AS west_new,
            max(top) AS top_new,
-           min(bottom) bottom = bottom_new,
+           min(bottom) AS bottom_new,
            min(proj) AS proj_new
-       FROM SPACETIME_REGISTER_TABLE INNER JOIN USING (id)
+       FROM
+           SPACETIME_REGISTER_TABLE INNER JOIN
+           GRASS_MAP_spatial_extent ON
+           SPACETIME_REGISTER_TABLE.id = GRASS_MAP_spatial_extent.id
        ) AS new_stats
  WHERE STDS_spatial_extent.id = 'SPACETIME_ID';

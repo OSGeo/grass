@@ -34,6 +34,9 @@ UPDATE strds_metadata
             max(nsres) AS nsres_max_new,
             min(ewres) AS ewres_min_new,
             max(ewres) AS ewres_max_new
-        FROM SPACETIME_REGISTER_TABLE NATURAL INNER JOIN raster_metadata
+        FROM
+            SPACETIME_REGISTER_TABLE INNER JOIN
+            raster_metadata ON
+            SPACETIME_REGISTER_TABLE.id = raster_metadata.id
        ) AS new_stats
  WHERE strds_metadata.id = 'SPACETIME_ID';
