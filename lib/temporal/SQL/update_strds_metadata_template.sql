@@ -12,17 +12,17 @@
 UPDATE strds_metadata
    SET
        -- Update the min and max values
-       strds_metadata.number_of_semantic_labels = number_of_semantic_labels_new,
+       number_of_semantic_labels = number_of_semantic_labels_new,
        -- Update the min and max values
-       strds_metadata.min_min = new_stats.min_min_new,
-       strds_metadata.min_max = new_stats.min_max_new,
-       strds_metadata.max_min = new_stats.max_min_new,
-       strds_metadata.max_max = new_stats.max_max_new,
+       min_min = new_stats.min_min_new,
+       min_max = new_stats.min_max_new,
+       max_min = new_stats.max_min_new,
+       max_max = new_stats.max_max_new,
        -- Update the resolution
-       strds_metadata.nsres_min = new_stats.nsres_min_new,
-       strds_metadata.nsres_max = new_stats.nsres_max_new,
-       strds_metadata.ewres_min = new_stats.ewres_min_new,
-       strds_metadata.ewres_max = new_stats.ewres_max_new
+       nsres_min = new_stats.nsres_min_new,
+       nsres_max = new_stats.nsres_max_new,
+       ewres_min = new_stats.ewres_min_new,
+       ewres_max = new_stats.ewres_max_new
   FROM
        (SELECT
             count(distinct semantic_label) AS number_of_semantic_labels_new,
@@ -34,7 +34,6 @@ UPDATE strds_metadata
             max(nsres) AS nsres_max_new,
             min(ewres) AS ewres_min_new,
             max(ewres) AS ewres_max_new
-        FROM raster_metadata WHERE raster_metadata.id IN
-    		(SELECT id FROM SPACETIME_REGISTER_TABLE)
+        FROM SPACETIME_REGISTER_TABLE INNER JOIN raster_metadata USING (id)
        ) AS new_stats
  WHERE strds_metadata.id = 'SPACETIME_ID';
