@@ -58,6 +58,7 @@ UPDATE STDS_spatial_extent
        top = new_stats.top_new,
        bottom = new_stats.bottom_new,
        proj = new_stats.proj_new
+  FROM
        (SELECT
            max(north) AS north_new,
            min(south) AS south_new,
