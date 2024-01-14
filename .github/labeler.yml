@@ -27,6 +27,7 @@ database:
           - db/**
           - lib/db/**
           - scripts/db.*/**
+          - '**.sql'
 display:
   - changed-files:
       - any-glob-to-any-file:
