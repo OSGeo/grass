@@ -10,7 +10,7 @@ Usage:
     tgis.compute_relative_time_granularity(maps)
 
 
-(C) 2012-2013 by the GRASS Development Team
+(C) 2012-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -112,25 +112,69 @@ def check_granularity_string(granularity, temporal_type):
 ###############################################################################
 
 
-def _get_map_time_tuple(map_object):
-    """Helper function to return time tuple
-    from AbstractDataset object"""
-    if map_object.is_time_absolute():
-        time_tuple = map_object.get_absolute_time()
-    if map_object.is_time_relative():
-        time_tuple = map_object.get_relative_time()
-    return time_tuple[0:2]
+def get_time_tuple_function(maps):
+    """Helper function to return the appropriate function to get
+        time tuple from either TGIS DB rows or AbstractDataset object
 
+    :param maps: a list of AbstractDataset objects or database rows
+    :return: A function
 
-def _get_row_time_tuple(sqlite_row):
-    """Helper function to return time tuple
-    from database row"""
-    return sqlite_row["start_time"], sqlite_row["end_time"]
+    .. code-block:: python
+
+        >>> from grass.temporal.abstract_map_dataset import AbstractMapDataset
+        >>> maps = AbstractMapDataset()
+        >>> get_time_tuple_function(maps).__name__
+        '_get_map_time_tuple'
+
+    """
+
+    def _get_map_time_tuple(map_object):
+        """Sub-function to return time tuple
+        from AbstractDataset object"""
+        if map_object.is_time_absolute():
+            time_tuple = map_object.get_absolute_time()
+        if map_object.is_time_relative():
+            time_tuple = map_object.get_relative_time()
+        return time_tuple[0:2]
+
+    def _get_row_time_tuple(db_table_row):
+        """Sub-function to return time tuple
+        from database row"""
+        return db_table_row["start_time"], db_table_row["end_time"]
+
+    # Check if input is list of MapDataset objects or SQLite rows
+    if issubclass(maps[0].__class__, AbstractMapDataset):
+        return _get_map_time_tuple
+    else:
+        return _get_row_time_tuple
 
 
 def _is_after(start, start1, end1):
     """Helper function that checks if start timestamp is
-    temporaly after the start1 and end1"""
+    temporaly after the start1 and end1, where start1 and end1
+    represent a temporal extent.
+
+    :param start: datetime object to check if it is after start1 and end1
+    :param start1: datetime object for comparison
+    :param end1: datetime object (>= start1) or None for comparison
+    :return: bool
+
+    .. code-block:: python
+
+        >>> from datetime import datetime
+        >>> start = datetime(2024, 1, 1)
+        >>> start1 = datetime(2023, 12, 12)
+        >>> end1 = None
+        >>> _is_after(start, start1, end1)
+        True
+
+        >>> start = datetime(2023, 12, 14)
+        >>> start1 = datetime(2023, 12, 12)
+        >>> end1 = datetime(2023, 12, 24)
+        >>> _is_after(start, start1, end1)
+        False
+
+    """
     if end1 is None:
         if start > start1:
             return True
@@ -256,10 +300,7 @@ def compute_relative_time_granularity(maps):
     if not maps:
         return None
 
-    if issubclass(maps[0].__class__, AbstractMapDataset):
-        get_time_tuple = _get_map_time_tuple
-    else:
-        get_time_tuple = _get_row_time_tuple
+    get_time_tuple = get_time_tuple_function(maps)
 
     # The interval time must be scaled to days resolution
     granularity = None
@@ -388,10 +429,7 @@ def compute_absolute_time_granularity(maps):
     has_months = False
     has_years = False
 
-    if issubclass(maps[0].__class__, AbstractMapDataset):
-        get_time_tuple = _get_map_time_tuple
-    else:
-        get_time_tuple = _get_row_time_tuple
+    get_time_tuple = get_time_tuple_function(maps)
 
     delta = []
     datetime_delta = []
