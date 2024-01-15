@@ -18,7 +18,6 @@ from abc import ABCMeta, abstractmethod
 from .core import (
     init_dbif,
     get_sql_template_path,
-    get_tgis_metadata,
     get_current_mapset,
     get_tgis_db_version_from_metadata,
 )
@@ -1514,24 +1513,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             "contains": maps that contain (fully cover) the provided spatial extent
 
         :return: The ordered map object list,
-                In case nothing found None is returned
+                In case nothing found an empty list is returned
         """
 
         dbif, connection_state_changed = init_dbif(dbif)
 
         obj_list = []
-
-        # Older temporal databases have no bottom and top columns
-        # in their views so we need a work around to set the full
-        # spatial extent as well
-
-        rows = get_tgis_metadata(dbif)
-        db_version = 0
-
-        if rows:
-            for row in rows:
-                if row["key"] == "tgis_db_version":
-                    db_version = int(float(row["value"]))
 
         # use all columns
         rows = self.get_registered_maps(
@@ -1539,20 +1526,17 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         )
 
         if rows is not None:
-            has_bt_columns = False
-            has_semantic_label = False
-            first_row = True
-            for row in rows:
-                if first_row:
-                    first_row = False
-                    # check keys in first row
-                    # note that 'if "bottom" in row' does not work
-                    # because row is not a dict but some db backend object
-                    if "bottom" in row.keys() and "top" in row.keys():
-                        has_bt_columns = True
-                    if "semantic_label" in row.keys():
-                        has_semantic_label = True
+            # Older temporal databases have no bottom and top columns
+            # in their views so we need a work around to set the full
+            # spatial extent as well
 
+            # check keys in first row
+            # note that 'if "bottom" in row' does not work
+            # because row is not a dict but some db backend object
+            has_bt_columns = "bottom" in rows[0].keys() and "top" in rows[0].keys()
+            has_semantic_label = "semantic_label" in rows[0].keys()
+
+            for row in rows:
                 map = self.get_new_map_instance(row["id"])
                 # time
                 if self.is_time_absolute():
