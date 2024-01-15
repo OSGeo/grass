@@ -1525,7 +1525,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             None, where, order, dbif, spatial_extent, spatial_relation
         )
 
-        if rows is not None:
+        if rows:
             # Older temporal databases have no bottom and top columns
             # in their views so we need a work around to set the full
             # spatial extent as well
