@@ -37,7 +37,7 @@ UPDATE stvds_metadata
            sum(areas) AS areas_new,
            sum(islands) AS islands_new,
            sum(holes) AS holes_new,
-           sum(volumes) volumes = volumes_new
+           sum(volumes) AS volumes_new
        FROM
            SPACETIME_REGISTER_TABLE INNER JOIN
            vector_metadata ON
