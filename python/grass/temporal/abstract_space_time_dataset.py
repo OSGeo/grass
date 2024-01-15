@@ -2,7 +2,7 @@
 The abstract_space_time_dataset module provides the AbstractSpaceTimeDataset
 class that is the base class for all space time datasets.
 
-(C) 2011-2013 by the GRASS Development Team
+(C) 2011-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -26,11 +26,11 @@ from .abstract_dataset import (
     AbstractDataset,
     AbstractDatasetComparisonKeyStartTime,
 )
-from .abstract_map_dataset import AbstractMapDataset
 from .temporal_granularity import (
     check_granularity_string,
     compute_absolute_time_granularity,
     compute_relative_time_granularity,
+    get_time_tuple_function,
 )
 from .spatio_temporal_relationships import (
     count_temporal_topology_relationships,
@@ -466,25 +466,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if not maps:
             return tcount
 
-        def _get_map_time_tuple(map_object):
-            """Helper function to return time tuple
-            from AbstractDataset object"""
-            if map_object.is_time_absolute():
-                time_tuple = map_object.get_absolute_time()
-            if map_object.is_time_relative():
-                time_tuple = map_object.get_relative_time()
-            return time_tuple[0:2]
-
-        def _get_row_time_tuple(sqlite_row):
-            """Helper function to return time tuple
-            from database row"""
-            return sqlite_row["start_time"], sqlite_row["end_time"]
-
-        # Check if input is list of MapDataset objects or SQLite rows
-        if issubclass(maps[0].__class__, AbstractMapDataset):
-            get_time_tuple = _get_map_time_tuple
-        else:
-            get_time_tuple = _get_row_time_tuple
+        get_time_tuple = get_time_tuple_function(maps)
 
         for map_reference in maps:
             # Check for point and interval data
