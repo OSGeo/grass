@@ -304,15 +304,17 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetCurrentPos(pos)
         self.SetFocus()
 
-    def AddEntryToCmdHistoryBuffer(self, cmd):
+    def AddEntryToCmdHistoryBuffer(self, entry):
         """Add entry to command history buffer
 
-        :param cmd: command given as a string
+        :param entry dict: entry with 'command' and 'command_info' keys
         """
+        print("AddEntryToCmdHistoryBuffer")
+        print(entry)
         # add command to history
-        self.cmdbuffer.append(cmd)
+        self.cmdbuffer.append(entry["command"])
         # update also traced commands
-        self.commands.append(cmd)
+        self.commands.append(entry["command"])
 
         # keep command history to a manageable size
         if len(self.cmdbuffer) > 200:

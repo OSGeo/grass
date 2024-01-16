@@ -4,6 +4,7 @@
 @brief History browser tree classes
 
 Classes:
+ - history::HistoryInfoDialog
  - history::HistoryBrowserTree
 
 (C) 2023 by Linda Karlovska, and the GRASS Development Team
@@ -17,9 +18,11 @@ for details.
 @author Tomas Zigo
 """
 
-import wx
 import re
 import copy
+
+import wx
+import wx.lib.scrolledpanel as SP
 
 from core import globalvar
 
@@ -32,15 +35,135 @@ from core.utils import (
 from gui_core.forms import GUI
 from core.treemodel import TreeModel, ModuleNode
 from gui_core.treeview import CTreeView
-from gui_core.wrap import Menu
+from gui_core.wrap import Menu, Button, StaticText
 
 from grass.pydispatch.signal import Signal
 
-from grass.grassdb.history import (
-    get_current_mapset_gui_history_path,
-    read_history,
-    remove_entry_from_history,
-)
+from grass.grassdb.history import create_history_manager
+
+
+class HistoryInfoDialog(wx.Dialog):
+    def __init__(
+        self,
+        parent,
+        command_info,
+        title=("Command Info"),
+        size=(-1, 400),
+        style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
+    ):
+        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title, style=style)
+
+        self.parent = parent
+        self.title = title
+        self.size = size
+        self.command_info = command_info
+
+        # notebook
+        self.notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
+        # create notebook pages
+        self._createGeneralInfoPage(parent=self.notebook)
+        self._createRegionSettingsPage(parent=self.notebook)
+
+        self.btnClose = Button(self, wx.ID_CLOSE)
+        self.SetEscapeId(wx.ID_CLOSE)
+
+        self._layout()
+
+    def _layout(self):
+        """Layout window"""
+        # sizers
+        btnStdSizer = wx.StdDialogButtonSizer()
+        btnStdSizer.AddButton(self.btnClose)
+        btnStdSizer.Realize()
+
+        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        mainSizer.Add(self.notebook, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
+        mainSizer.Add(btnStdSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
+
+        self.SetSizer(mainSizer)
+        self.SetMinSize(self.GetBestSize())
+        self.SetSize(self.size)
+
+    def _createGeneralInfoPage(self, parent):
+        """Create notebook page for general info about the command"""
+
+        panel = SP.ScrolledPanel(parent=parent, id=wx.ID_ANY)
+        panel.SetupScrolling(scroll_x=False, scroll_y=True)
+        parent.AddPage(page=panel, text=_("General info"))
+
+        # General settings
+        self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
+        self.sizer.SetCols(5)
+        self.sizer.SetRows(8)
+
+        for index, (key, value) in enumerate(self.command_info.items()):
+            if key != "Region settings":
+                self.sizer.Add(
+                    StaticText(
+                        parent=panel,
+                        id=wx.ID_ANY,
+                        label=_("{0}:".format(key)),
+                        style=wx.ALIGN_LEFT,
+                    ),
+                    flag=wx.ALIGN_LEFT | wx.ALL,
+                    border=5,
+                    pos=(index + 1, 0),
+                )
+                self.sizer.Add(
+                    StaticText(
+                        parent=panel,
+                        id=wx.ID_ANY,
+                        label=_("{0}".format(value)),
+                        style=wx.ALIGN_LEFT,
+                    ),
+                    flag=wx.ALIGN_LEFT | wx.ALL,
+                    border=5,
+                    pos=(index + 1, 1),
+                )
+
+        self.sizer.AddGrowableCol(1)
+        panel.SetSizer(self.sizer)
+
+    def _createRegionSettingsPage(self, parent):
+        """Create notebook page for displaying region settings of the command"""
+
+        region_settings = self.command_info["Region settings"]
+
+        panel = SP.ScrolledPanel(parent=parent, id=wx.ID_ANY)
+        panel.SetupScrolling(scroll_x=False, scroll_y=True)
+        parent.AddPage(page=panel, text=_("Region settings"))
+
+        # General settings
+        self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
+        self.sizer.SetCols(5)
+        self.sizer.SetRows(8)
+
+        for index, (key, value) in enumerate(region_settings.items()):
+            self.sizer.Add(
+                StaticText(
+                    parent=panel,
+                    id=wx.ID_ANY,
+                    label=_("{0}:".format(key)),
+                    style=wx.ALIGN_LEFT,
+                ),
+                flag=wx.ALIGN_LEFT | wx.ALL,
+                border=5,
+                pos=(index + 1, 0),
+            )
+            self.sizer.Add(
+                StaticText(
+                    parent=panel,
+                    id=wx.ID_ANY,
+                    label=_("{0}".format(value)),
+                    style=wx.ALIGN_LEFT,
+                ),
+                flag=wx.ALIGN_LEFT | wx.ALL,
+                border=5,
+                pos=(index + 1, 1),
+            )
+
+        self.sizer.AddGrowableCol(1)
+        panel.SetSizer(self.sizer)
 
 
 class HistoryBrowserTree(CTreeView):
@@ -73,7 +196,10 @@ class HistoryBrowserTree(CTreeView):
 
         self._giface.currentMapsetChanged.connect(self.UpdateHistoryModelFromScratch)
         self._giface.entryToHistoryAdded.connect(
-            lambda cmd: self.UpdateHistoryModelByCommand(cmd)
+            lambda entry: self.AppendNodeToHistoryModel(entry)
+        )
+        self._giface.entryInHistoryUpdated.connect(
+            lambda entry: self.UpdateNodeInHistoryModel(entry)
         )
 
         self.SetToolTip(_("Double-click to open the tool"))
@@ -83,17 +209,17 @@ class HistoryBrowserTree(CTreeView):
 
     def _initHistoryModel(self):
         """Fill tree history model based on the current history log."""
-        self._history_path = get_current_mapset_gui_history_path()
-        if self._history_path:
-            cmd_list = read_history(self._history_path)
-            for label in cmd_list:
-                data = {"command": label.strip()}
-                self._model.AppendNode(
-                    parent=self._model.root,
-                    label=data["command"],
-                    data=data,
-                )
-            self._refreshTree()
+        self.history_manager = create_history_manager()
+        content_list = self.history_manager.get_content()
+        print(content_list)
+        for data in content_list:
+            print(data)
+            self._model.AppendNode(
+                parent=self._model.root,
+                label=data["command"].strip(),
+                data=data,
+            )
+        self._refreshTree()
 
     def _refreshTree(self):
         """Refresh tree models"""
@@ -121,6 +247,11 @@ class HistoryBrowserTree(CTreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRemoveCmd, item)
 
+        if self.history_manager.filetype == "json":
+            item = wx.MenuItem(menu, wx.ID_ANY, _("&Show info"))
+            menu.AppendItem(item)
+            self.Bind(wx.EVT_MENU, self.OnShowInfo, item)
+
         self.PopupMenu(menu)
         menu.Destroy()
 
@@ -139,17 +270,30 @@ class HistoryBrowserTree(CTreeView):
         self._model.RemoveNode(self._model.root)
         self._initHistoryModel()
 
-    def UpdateHistoryModelByCommand(self, label):
-        """Update the model by the command and refresh the tree.
+    def AppendNodeToHistoryModel(self, entry):
+        """Append node to the model and refresh the tree.
 
-        :param label: model node label"""
-        data = {"command": label}
+        :param entry dict: entry with 'command' and 'command_info' keys
+        """
         self._model.AppendNode(
             parent=self._model.root,
-            label=data["command"],
-            data=data,
+            label=entry["command"],
+            data=entry,
         )
         self._refreshTree()
+
+    def UpdateNodeInHistoryModel(self, entry):
+        """Update last node in the model and refresh the tree.
+
+        :param entry dict: entry with 'command' and 'command_info' keys
+        """
+        # Remove last node
+        index = [self._model.GetLeafCount(self._model.root) - 1]
+        tree_node = self._model.GetNodeByIndex(index)
+        self._model.RemoveNode(tree_node)
+
+        # Add new node to the model
+        self.AppendNodeToHistoryModel(entry)
 
     def Run(self, node=None):
         """Parse selected history command into list and launch module dialog."""
@@ -181,12 +325,26 @@ class HistoryBrowserTree(CTreeView):
                 )
 
     def RemoveEntryFromHistory(self, del_line_number):
-        """Remove entry from command history log"""
-        history_path = get_current_mapset_gui_history_path()
+        """Remove entry from command history log.
+
+        :param int del_line_number: index of the entry which should be removed
+        """
         try:
-            remove_entry_from_history(del_line_number, history_path)
+            self.history_manager.remove_entry_from_history(del_line_number)
         except OSError as e:
             GError(str(e))
+
+    def GetCommandInfo(self, index):
+        """Get command info for the given command index.
+
+        :param int index: index of the command
+        """
+        command_info = {}
+        try:
+            command_info = self.history_manager.get_content()[index]["command_info"]
+        except OSError as e:
+            GError(str(e))
+        return command_info
 
     def OnRemoveCmd(self, event):
         """Remove cmd from the history file"""
@@ -201,6 +359,14 @@ class HistoryBrowserTree(CTreeView):
             self._model.RemoveNode(tree_node)
             self._refreshTree()
             self.showNotification.emit(message=_("<{}> removed").format(cmd))
+
+    def OnShowInfo(self, event):
+        """Show info about command in the small dialog"""
+        tree_node = self._getSelectedNode()
+        tree_index = self._model.GetIndexOfNode(tree_node)[0]
+        command_info = self.GetCommandInfo(tree_index)
+        dialog = HistoryInfoDialog(self, command_info)
+        dialog.ShowModal()
 
     def OnItemSelected(self, node):
         """Item selected"""

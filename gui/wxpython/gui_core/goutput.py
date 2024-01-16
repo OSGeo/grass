@@ -21,16 +21,11 @@ This program is free software under the GNU General Public License
 
 import textwrap
 
-import os
 import wx
 from wx import stc
 
 from grass.pydispatch.signal import Signal
-from grass.grassdb.history import (
-    read_history,
-    create_history_file,
-    get_current_mapset_gui_history_path,
-)
+from grass.grassdb.history import create_history_manager
 
 # needed just for testing
 if __name__ == "__main__":
@@ -150,7 +145,7 @@ class GConsoleWindow(wx.SplitterWindow):
             if self._gcstyle == GC_PROMPT:
                 # connect update history signals only for main Console Window
                 self.giface.entryToHistoryAdded.connect(
-                    lambda cmd: self.cmdPrompt.AddEntryToCmdHistoryBuffer(cmd)
+                    lambda entry: self.cmdPrompt.AddEntryToCmdHistoryBuffer(entry)
                 )
                 self.giface.entryFromHistoryRemoved.connect(
                     lambda index: self.cmdPrompt.RemoveEntryFromCmdHistoryBuffer(index)
@@ -246,11 +241,14 @@ class GConsoleWindow(wx.SplitterWindow):
 
     def _loadHistory(self):
         """Load history from a history file to data structures"""
-        history_path = get_current_mapset_gui_history_path()
         try:
-            if not os.path.exists(history_path):
-                create_history_file(history_path)
-            self.cmdPrompt.cmdbuffer = read_history(history_path)
+            self.history_manager = create_history_manager()
+            content_list = self.history_manager.get_content()
+            print(content_list)
+            if content_list:
+                self.cmdPrompt.cmdbuffer = [entry["command"] for entry in content_list]
+            else:
+                self.cmdPrompt.cmdbuffer = []
             self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
         except OSError as e:
             GError(str(e))
