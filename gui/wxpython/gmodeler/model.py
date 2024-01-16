@@ -2664,11 +2664,12 @@ class WriteScriptFile(ABC):
 class WritePyWPSFile(WriteScriptFile):
     """Class for exporting model to PyWPS script."""
 
-    def __init__(self, fd, model):
+    def __init__(self, fd, model, grass_api="script"):
         """Class for exporting model to PyWPS script."""
         self.fd = fd
         self.model = model
         self.indent = 8
+        self.grass_api = grass_api
 
         self._writePyWPS()
 
@@ -2683,8 +2684,15 @@ import sys
 import os
 import atexit
 import tempfile
-from grass.script import run_command
-from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format
+"""
+        )
+        if self.grass_api == "script":
+            self.fd.write("from grass.script import run_command\n")
+        else:
+            self.fd.write("from grass.pygrass.modules import Module\n")
+
+        self.fd.write(
+            r"""from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format
 
 
 class Model(Process):
@@ -2868,7 +2876,10 @@ if __name__ == "__main__":
     def _writePythonAction(self, item, variables={}, intermediates=None):
         """Write model action to Python file"""
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
-        strcmd = "\n%srun_command(" % (" " * self.indent)
+        strcmd = "\n%s%s(" % (
+            " " * self.indent,
+            "run_command" if self.grass_api == "script" else "Module",
+        )
         self.fd.write(
             strcmd + self._getPythonActionCmd(item, task, len(strcmd) - 1, variables)
         )
@@ -3061,14 +3072,17 @@ if __name__ == "__main__":
 
 
 class WritePythonFile(WriteScriptFile):
-    def __init__(self, fd, model):
+    def __init__(self, fd, model, grass_api="script"):
         """Class for exporting model to Python script
 
         :param fd: file descriptor
+        :param model: model to translate
+        :param grass_api: script or pygrass
         """
         self.fd = fd
         self.model = model
         self.indent = 4
+        self.grass_api = grass_api
 
         self._writePython()
 
@@ -3188,9 +3202,13 @@ import sys
 import os
 import atexit
 
-from grass.script import parser, run_command
+from grass.script import parser
 """
         )
+        if self.grass_api == "script":
+            self.fd.write("from grass.script import run_command\n")
+        else:
+            self.fd.write("from grass.pygrass.modules import Module\n")
 
         # cleanup()
         rast, vect, rast3d, msg = self.model.GetIntermediateData()
@@ -3199,26 +3217,27 @@ from grass.script import parser, run_command
 def cleanup():
 """
         )
+        run_command = "run_command" if self.grass_api == "script" else "Module"
         if rast:
             self.fd.write(
-                r"""    run_command("g.remove", flags="f", type="raster",
+                r"""    %s("g.remove", flags="f", type="raster",
                 name=%s)
 """
-                % ",".join(map(lambda x: '"' + x + '"', rast))
+                % (run_command, ",".join(map(lambda x: '"' + x + '"', rast)))
             )
         if vect:
             self.fd.write(
-                r"""    run_command("g.remove", flags="f", type="vector",
+                r"""    %s("g.remove", flags="f", type="vector",
                 name=%s)
 """
-                % ",".join(map(lambda x: '"' + x + '"', vect))
+                % (run_command, ",".join(map(lambda x: '"' + x + '"', vect)))
             )
         if rast3d:
             self.fd.write(
-                r"""    run_command("g.remove", flags="f", type="raster_3d",
+                r"""    %s("g.remove", flags="f", type="raster_3d",
                 name=%s)
 """
-                % ",".join(map(lambda x: '"' + x + '"', rast3d))
+                % (run_command, ",".join(map(lambda x: '"' + x + '"', rast3d)))
             )
         if not rast and not vect and not rast3d:
             self.fd.write("    pass\n")
@@ -3260,7 +3279,10 @@ if __name__ == "__main__":
     def _writePythonAction(self, item, variables={}, intermediates=None):
         """Write model action to Python file"""
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
-        strcmd = "%srun_command(" % (" " * self.indent)
+        strcmd = "%s%s(" % (
+            " " * self.indent,
+            "run_command" if self.grass_api == "script" else "Module",
+        )
         self.fd.write(
             strcmd + self._getPythonActionCmd(item, task, len(strcmd), variables) + "\n"
         )

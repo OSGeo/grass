@@ -2103,7 +2103,7 @@ class PythonPanel(wx.Panel):
                 return False
 
         fd = tempfile.TemporaryFile(mode="r+")
-        self.write_object(fd, self.parent.GetModel())
+        self.write_object(fd, self.parent.GetModel())  # TODO: grass_api
         fd.seek(0)
         self.body.SetText(fd.read())
         fd.close()
