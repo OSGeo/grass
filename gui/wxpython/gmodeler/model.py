@@ -3299,7 +3299,10 @@ if __name__ == "__main__":
 
         for p in opts["params"]:
             name = p.get("name", None)
-            value = p.get("value", None)
+            if self.grassAPI == "script" or p.get("multiple", False) is False:
+                value = p.get("value", None)
+            else:
+                value = str(p.get("values", []))
 
             if (name and value) or (name in parameterizedParams):
                 ptype = p.get("type", "string")
