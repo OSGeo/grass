@@ -19,7 +19,7 @@ Classes:
  - model::WritePythonFile
  - model::ModelParamDialog
 
-(C) 2010-2018 by the GRASS Development Team
+(C) 2010-2024 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -2664,12 +2664,12 @@ class WriteScriptFile(ABC):
 class WritePyWPSFile(WriteScriptFile):
     """Class for exporting model to PyWPS script."""
 
-    def __init__(self, fd, model, grass_api="script"):
+    def __init__(self, fd, model, grassAPI="script"):
         """Class for exporting model to PyWPS script."""
         self.fd = fd
         self.model = model
         self.indent = 8
-        self.grass_api = grass_api
+        self.grassAPI = grassAPI
 
         self._writePyWPS()
 
@@ -2686,7 +2686,7 @@ import atexit
 import tempfile
 """
         )
-        if self.grass_api == "script":
+        if self.grassAPI == "script":
             self.fd.write("from grass.script import run_command\n")
         else:
             self.fd.write("from grass.pygrass.modules import Module\n")
@@ -2878,7 +2878,7 @@ if __name__ == "__main__":
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
         strcmd = "\n%s%s(" % (
             " " * self.indent,
-            "run_command" if self.grass_api == "script" else "Module",
+            "run_command" if self.grassAPI == "script" else "Module",
         )
         self.fd.write(
             strcmd + self._getPythonActionCmd(item, task, len(strcmd) - 1, variables)
@@ -3072,17 +3072,17 @@ if __name__ == "__main__":
 
 
 class WritePythonFile(WriteScriptFile):
-    def __init__(self, fd, model, grass_api="script"):
+    def __init__(self, fd, model, grassAPI="script"):
         """Class for exporting model to Python script
 
         :param fd: file descriptor
         :param model: model to translate
-        :param grass_api: script or pygrass
+        :param grassAPI: script or pygrass
         """
         self.fd = fd
         self.model = model
         self.indent = 4
-        self.grass_api = grass_api
+        self.grassAPI = grassAPI
 
         self._writePython()
 
@@ -3205,7 +3205,7 @@ import atexit
 from grass.script import parser
 """
         )
-        if self.grass_api == "script":
+        if self.grassAPI == "script":
             self.fd.write("from grass.script import run_command\n")
         else:
             self.fd.write("from grass.pygrass.modules import Module\n")
@@ -3217,7 +3217,7 @@ from grass.script import parser
 def cleanup():
 """
         )
-        run_command = "run_command" if self.grass_api == "script" else "Module"
+        run_command = "run_command" if self.grassAPI == "script" else "Module"
         if rast:
             self.fd.write(
                 r"""    %s("g.remove", flags="f", type="raster",
@@ -3281,7 +3281,7 @@ if __name__ == "__main__":
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
         strcmd = "%s%s(" % (
             " " * self.indent,
-            "run_command" if self.grass_api == "script" else "Module",
+            "run_command" if self.grassAPI == "script" else "Module",
         )
         self.fd.write(
             strcmd + self._getPythonActionCmd(item, task, len(strcmd), variables) + "\n"
