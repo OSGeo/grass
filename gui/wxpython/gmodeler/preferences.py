@@ -21,7 +21,6 @@ import wx.lib.colourselect as csel
 from core import globalvar
 from gui_core.preferences import PreferencesBaseDialog
 from core.settings import UserSettings
-from core.debug import Debug
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, TextCtrl
 
 
@@ -671,11 +670,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
     def OnSave(self, event):
         """Button 'Save' pressed"""
-        if self._updateSettings():
-            self.settings.SaveToFile()
-            Debug.msg(1, "Settings saved to file '%s'" % self.settings.filePath)
-            self.settingsChanged.emit()
-            self.Close()
+        PreferencesBaseDialog.OnSave(self, event)
 
         self.parent.GetModel().Update()
         self.parent.GetCanvas().Refresh()
