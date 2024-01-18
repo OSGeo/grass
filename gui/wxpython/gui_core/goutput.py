@@ -29,7 +29,6 @@ from grass.pydispatch.signal import Signal
 from grass.grassdb.history import (
     read_history,
     create_history_file,
-    update_history,
     copy_history,
     get_current_mapset_gui_history_path,
 )
@@ -149,12 +148,14 @@ class GConsoleWindow(wx.SplitterWindow):
         if self.giface:
             self.giface.currentMapsetChanged.connect(self._loadHistory)
 
-        if self._gcstyle == GC_PROMPT:
-            # connect update history signal only for main Console Window
-            self.giface.updateHistory.connect(
-                lambda cmd: self.cmdPrompt.UpdateCmdHistory(cmd)
-            )
-            self.giface.updateHistory.connect(lambda cmd: self.UpdateHistory(cmd))
+            if self._gcstyle == GC_PROMPT:
+                # connect update history signals only for main Console Window
+                self.giface.entryToHistoryAdded.connect(
+                    lambda cmd: self.cmdPrompt.AddEntryToCmdHistoryBuffer(cmd)
+                )
+                self.giface.entryFromHistoryRemoved.connect(
+                    lambda index: self.cmdPrompt.RemoveEntryFromCmdHistoryBuffer(index)
+                )
 
         # buttons
         self.btnClear = ClearButton(parent=self.panelPrompt)
@@ -447,14 +448,6 @@ class GConsoleWindow(wx.SplitterWindow):
         """Update progress message info"""
         self.progressbar.SetValue(event.value)
         event.Skip()
-
-    def UpdateHistory(self, cmd):
-        """Update command history"""
-        history_path = get_current_mapset_gui_history_path()
-        try:
-            update_history(cmd, history_path)
-        except OSError as e:
-            GError(str(e))
 
     def OnCmdExportHistory(self, event):
         """Export the history of executed commands stored

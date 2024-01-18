@@ -26,7 +26,7 @@ def get_current_mapset_gui_history_path():
 def create_history_file(history_path):
     """Set up a new GUI history file."""
     try:
-        fileHistory = open(
+        file_history = open(
             history_path,
             encoding="utf-8",
             mode="w",
@@ -34,14 +34,14 @@ def create_history_file(history_path):
     except OSError as e:
         raise OSError(_("Unable to create history file {}").format(history_path)) from e
     finally:
-        fileHistory.close()
+        file_history.close()
 
 
 def read_history(history_path):
     """Get list of commands from history file."""
     hist = list()
     try:
-        fileHistory = open(
+        file_history = open(
             history_path,
             encoding="utf-8",
             mode="r",
@@ -52,30 +52,61 @@ def read_history(history_path):
             _("Unable to read commands from history file {}").format(history_path)
         ) from e
     try:
-        for line in fileHistory.readlines():
+        for line in file_history.readlines():
             hist.append(line.replace("\n", ""))
     finally:
-        fileHistory.close()
+        file_history.close()
     return hist
 
 
-def update_history(command, history_path=None):
-    """Update history file.
+def add_entry_to_history(command, history_path=None):
+    """Add entry to history file.
 
-    :param command: the command given as a string
+    :param str command: the command given as a string
+    :param str|None history_path: history file path string
     """
+    file_history = None
     if not history_path:
         history_path = get_current_mapset_gui_history_path()
     try:
         if os.path.exists(history_path):
-            fileHistory = open(history_path, encoding="utf-8", mode="a")
+            file_history = open(history_path, encoding="utf-8", mode="a")
         else:
-            fileHistory = open(history_path, encoding="utf-8", mode="w")
-        fileHistory.write(command + "\n")
+            file_history = open(history_path, encoding="utf-8", mode="w")
+        file_history.write(command + "\n")
     except OSError as e:
-        raise OSError(_("Unable to update history file {}").format(history_path)) from e
+        raise OSError(
+            _("Unable to add entry to history file {}").format(history_path)
+        ) from e
     finally:
-        fileHistory.close()
+        if file_history:
+            file_history.close()
+
+
+def remove_entry_from_history(del_line_number, history_path=None):
+    """Remove entry from history file.
+
+    :param int del_line_number: line number of the command to be removed
+    :param str|None history_path: history file path string
+    """
+    file_history = None
+    if not history_path:
+        history_path = get_current_mapset_gui_history_path()
+    try:
+        file_history = open(history_path, encoding="utf-8", mode="r+")
+        lines = file_history.readlines()
+        file_history.seek(0)
+        file_history.truncate()
+        for number, line in enumerate(lines):
+            if number not in [del_line_number]:
+                file_history.write(line)
+    except OSError as e:
+        raise OSError(
+            _("Unable to remove entry from history file {}").format(history_path)
+        ) from e
+    finally:
+        if file_history:
+            file_history.close()
 
 
 def copy_history(target_path, history_path):
