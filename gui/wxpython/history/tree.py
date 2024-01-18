@@ -117,9 +117,9 @@ class HistoryBrowserTree(CTreeView):
         """Create popup menu for commands"""
         menu = Menu()
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Remove"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnDeleteCmd, item)
+        self.Bind(wx.EVT_MENU, self.OnRemoveCmd, item)
 
         self.PopupMenu(menu)
         menu.Destroy()
@@ -188,19 +188,19 @@ class HistoryBrowserTree(CTreeView):
         except OSError as e:
             GError(str(e))
 
-    def OnDeleteCmd(self, event):
-        """Delete cmd from the history file"""
+    def OnRemoveCmd(self, event):
+        """Remove cmd from the history file"""
         tree_node = self._getSelectedNode()
         cmd = tree_node.data["command"]
-        question = _("Do you really want to delete <{}> command?").format(cmd)
-        if self._confirmDialog(question, title=_("Delete command")) == wx.ID_YES:
-            self.showNotification.emit(message=_("Deleting <{}>").format(cmd))
+        question = _("Do you really want to remove <{}> command?").format(cmd)
+        if self._confirmDialog(question, title=_("Remove command")) == wx.ID_YES:
+            self.showNotification.emit(message=_("Removing <{}>").format(cmd))
             tree_index = self._model.GetIndexOfNode(tree_node)[0]
             self.RemoveEntryFromHistory(tree_index)
             self._giface.entryFromHistoryRemoved.emit(index=tree_index)
             self._model.RemoveNode(tree_node)
             self._refreshTree()
-            self.showNotification.emit(message=_("<{}> deleted").format(cmd))
+            self.showNotification.emit(message=_("<{}> removed").format(cmd))
 
     def OnItemSelected(self, node):
         """Item selected"""
