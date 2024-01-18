@@ -194,41 +194,6 @@ class PreferencesBaseDialog(wx.Dialog):
         Emits signal settingsChanged.
         """
         if self._updateSettings():
-            lang = self.settings.Get(group="language", key="locale", subkey="lc_all")
-            if lang == "system":
-                # Most fool proof way to use system locale is to not provide
-                # any locale info at all
-                self.settings.Set(
-                    group="language", key="locale", subkey="lc_all", value=None
-                )
-                lang = None
-            env = grass.gisenv()
-            nprocs_gisenv = "NPROCS"
-            memorydb_gisenv = "MEMORYMB"
-            # Set gisenv MEMORYMB var value
-            memorymb = self.memorymb.GetValue()
-            if memorymb:
-                grass.run_command(
-                    "g.gisenv",
-                    set=f"{memorydb_gisenv}={memorymb}",
-                )
-            elif env.get(memorydb_gisenv):
-                grass.run_command(
-                    "g.gisenv",
-                    unset=memorydb_gisenv,
-                )
-            # Set gisenv NPROCS var value
-            nprocs = self.nprocs.GetValue()
-            if nprocs:
-                grass.run_command(
-                    "g.gisenv",
-                    set=f"{nprocs_gisenv}={nprocs}",
-                )
-            elif env.get(nprocs_gisenv):
-                grass.run_command(
-                    "g.gisenv",
-                    unset=nprocs_gisenv,
-                )
             self.settings.SaveToFile()
             Debug.msg(1, "Settings saved to file '%s'" % self.settings.filePath)
             self.settingsChanged.emit()
@@ -2375,3 +2340,45 @@ class CheckListMapset(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMix
         mapset = self.parent.all_mapsets_ordered[index]
         if mapset == self.parent.curr_mapset:
             self.CheckItem(index, True)
+
+    def OnSave(self, event):
+        """Button 'Save' pressed
+        Emits signal settingsChanged.
+        """
+        if self._updateSettings():
+            lang = self.settings.Get(group="language", key="locale", subkey="lc_all")
+            if lang == "system":
+                # Most fool proof way to use system locale is to not provide
+                # any locale info at all
+                self.settings.Set(
+                    group="language", key="locale", subkey="lc_all", value=None
+                )
+                lang = None
+            env = grass.gisenv()
+
+            # Set gisenv MEMORYMB var value
+            memorydb_gisenv = "MEMORYMB"
+            memorymb = self.memorymb.GetValue()
+            if memorymb:
+                grass.run_command(
+                    "g.gisenv",
+                    set=f"{memorydb_gisenv}={memorymb}",
+                )
+            elif env.get(memorydb_gisenv):
+                grass.run_command(
+                    "g.gisenv",
+                    unset=memorydb_gisenv,
+                )
+            # Set gisenv NPROCS var value
+            nprocs_gisenv = "NPROCS"
+            nprocs = self.nprocs.GetValue()
+            if nprocs:
+                grass.run_command(
+                    "g.gisenv",
+                    set=f"{nprocs_gisenv}={nprocs}",
+                )
+            elif env.get(nprocs_gisenv):
+                grass.run_command(
+                    "g.gisenv",
+                    unset=nprocs_gisenv,
+                )
