@@ -54,7 +54,7 @@ def read_file(name):
         s = f.read()
         f.close()
         return s
-    except IOError:
+    except OSError:
         return ""
 
 

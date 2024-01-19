@@ -1,4 +1,4 @@
-FROM alpine:3.18 as common
+FROM alpine:3.19 as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -56,7 +56,6 @@ ENV GRASS_RUN_PACKAGES="\
       openblas \
       py3-numpy \
       py3-pillow \
-      py3-six \
       pdal \
       pdal-dev \
       postgresql15-client \

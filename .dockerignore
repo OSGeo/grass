@@ -5,6 +5,8 @@ docker
 .github
 .travis
 .travis.yml
+# Do not copy files from previous compilations
+dist.*
 
 # The following git files are needed by GRASS GIS to extract the revision
 # during compilation. If you are not using one of the Dockerimages from this

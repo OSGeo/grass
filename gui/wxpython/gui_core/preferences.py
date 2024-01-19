@@ -202,6 +202,33 @@ class PreferencesBaseDialog(wx.Dialog):
                     group="language", key="locale", subkey="lc_all", value=None
                 )
                 lang = None
+            env = grass.gisenv()
+            nprocs_gisenv = "NPROCS"
+            memorydb_gisenv = "MEMORYMB"
+            # Set gisenv MEMORYMB var value
+            memorymb = self.memorymb.GetValue()
+            if memorymb:
+                grass.run_command(
+                    "g.gisenv",
+                    set=f"{memorydb_gisenv}={memorymb}",
+                )
+            elif env.get(memorydb_gisenv):
+                grass.run_command(
+                    "g.gisenv",
+                    unset=memorydb_gisenv,
+                )
+            # Set gisenv NPROCS var value
+            nprocs = self.nprocs.GetValue()
+            if nprocs:
+                grass.run_command(
+                    "g.gisenv",
+                    set=f"{nprocs_gisenv}={nprocs}",
+                )
+            elif env.get(nprocs_gisenv):
+                grass.run_command(
+                    "g.gisenv",
+                    unset=nprocs_gisenv,
+                )
             self.settings.SaveToFile()
             Debug.msg(1, "Settings saved to file '%s'" % self.settings.filePath)
             self.settingsChanged.emit()
@@ -333,6 +360,20 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.winId["manager:hideTabs:search"] = hideSearch.GetId()
 
         gridSizer.Add(hideSearch, pos=(row, 0), span=(1, 2))
+
+        row += 1
+        hideHistory = wx.CheckBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=_("Hide '%s' tab (requires GUI restart)") % _("History"),
+            name="IsChecked",
+        )
+        hideHistory.SetValue(
+            self.settings.Get(group="manager", key="hideTabs", subkey="history")
+        )
+        self.winId["manager:hideTabs:history"] = hideHistory.GetId()
+
+        gridSizer.Add(hideHistory, pos=(row, 0), span=(1, 2))
 
         row += 1
         hidePyShell = wx.CheckBox(
@@ -546,6 +587,20 @@ class PreferencesDialog(PreferencesBaseDialog):
         outfontButton = Button(parent=panel, id=wx.ID_ANY, label=_("Set font"))
         gridSizer.Add(
             outfontButton, flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 1)
+        )
+
+        # module HTML manual page font settings
+        row = 1
+        gridSizer.Add(
+            StaticText(parent=panel, id=wx.ID_ANY, label=_("Font for manual pages:")),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 0),
+        )
+        manPageFontButton = Button(parent=panel, id=wx.ID_ANY, label=_("Set font"))
+        gridSizer.Add(
+            manPageFontButton,
+            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 1),
         )
         gridSizer.AddGrowableCol(0)
 
@@ -791,6 +846,8 @@ class PreferencesDialog(PreferencesBaseDialog):
             outfontButton.Bind(wx.EVT_BUTTON, self.OnSetOutputFontCustomDialog)
         else:
             outfontButton.Bind(wx.EVT_BUTTON, self.OnSetOutputFont)
+
+        manPageFontButton.Bind(wx.EVT_BUTTON, self.OnSetManualPageFontDialog)
 
         return panel
 
@@ -1214,6 +1271,56 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.winId["cmd:verbosity:selection"] = verbosity.GetId()
 
         gridSizer.Add(verbosity, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+
+        row += 1
+        # nprocs
+        gridSizer.Add(
+            StaticText(
+                parent=panel,
+                id=wx.ID_ANY,
+                label=_(
+                    "Number of threads for parallel computing (supported tools only):"
+                ),
+            ),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 0),
+        )
+        self.nprocs = TextCtrl(
+            parent=panel,
+            id=wx.ID_ANY,
+            value=grass.gisenv().get("NPROCS", ""),
+            validator=IntegerValidator(),
+            name="NumberOfProcs",
+        )
+        gridSizer.Add(
+            self.nprocs,
+            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 1),
+        )
+
+        row += 1
+        # memorymb
+        gridSizer.Add(
+            StaticText(
+                parent=panel,
+                id=wx.ID_ANY,
+                label=_("Maximum memory in MB to be used (supported tools only):"),
+            ),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 0),
+        )
+        self.memorymb = TextCtrl(
+            parent=panel,
+            id=wx.ID_ANY,
+            value=grass.gisenv().get("MEMORYMB", ""),
+            validator=IntegerValidator(),
+            name="MemorySizeMB",
+        )
+        gridSizer.Add(
+            self.memorymb,
+            flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 1),
+        )
 
         gridSizer.AddGrowableCol(0)
         sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
@@ -1900,7 +2007,7 @@ class PreferencesDialog(PreferencesBaseDialog):
             )
             return
 
-        if isinstance(self.epsgCodeDict, type("")):
+        if isinstance(self.epsgCodeDict, str):
             wx.MessageBox(
                 parent=self,
                 message=_("Unable to read EPSG codes: %s") % self.epsgCodeDict,
@@ -2035,7 +2142,6 @@ class PreferencesDialog(PreferencesBaseDialog):
         size = self.settings.Get(group="appearance", key="outputfont", subkey="size")
         if size is None or size == 0:
             size = 11
-        size = float(size)
         if type is None or type == "":
             type = "Courier"
 
@@ -2070,6 +2176,49 @@ class PreferencesDialog(PreferencesBaseDialog):
             )
         dlg.Destroy()
 
+        event.Skip()
+
+    def OnSetManualPageFontDialog(self, event):
+        """Set font for module HTML manual page dialog"""
+        data = {}
+        font_point_size = self.settings.Get(
+            group="appearance",
+            key="manualPageFont",
+            subkey="pointSize",
+        )
+        font_face_name = self.settings.Get(
+            group="appearance",
+            key="manualPageFont",
+            subkey="faceName",
+        )
+        if font_point_size:
+            font_data = wx.FontData()
+            font = wx.Font(
+                pointSize=font_point_size,
+                family=wx.FONTFAMILY_MODERN,
+                style=wx.NORMAL,
+                weight=wx.FONTWEIGHT_NORMAL,
+                faceName=font_face_name,
+            )
+            font_data.SetInitialFont(font)
+            data["data"] = font_data
+        dlg = wx.FontDialog(parent=self, **data)
+        if dlg.ShowModal() == wx.ID_OK:
+            font_data = dlg.GetFontData()
+            font = font_data.GetChosenFont()
+            self.settings.Set(
+                group="appearance",
+                value=font.GetFaceName(),
+                key="manualPageFont",
+                subkey="faceName",
+            )
+            self.settings.Set(
+                group="appearance",
+                value=font.GetPointSize(),
+                key="manualPageFont",
+                subkey="pointSize",
+            )
+        dlg.Destroy()
         event.Skip()
 
     def OnSetSymbol(self, event):

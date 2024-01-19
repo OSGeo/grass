@@ -11,8 +11,6 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import locale
@@ -257,3 +255,10 @@ gtk3 = True if "gtk3" in wx.PlatformInfo else False
 
 """@Add GUIDIR/scripts into path"""
 os.environ["PATH"] = os.path.join(GUIDIR, "scripts") + os.pathsep + os.environ["PATH"]
+
+ignoredCmdPattern = (
+    r"^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.import$|"
+    r"^r.external$|^r.external.out$|"
+    r"^v.import$|^v.external$|^v.external.out$|"
+    r"^cd$|^cd .*"
+)
