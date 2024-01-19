@@ -1533,44 +1533,46 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             # check keys in first row
             # note that 'if "bottom" in row' does not work
             # because row is not a dict but some db backend object
-            has_bt_columns = "bottom" in rows[0].keys() and "top" in rows[0].keys()
+            has_bt_columns = "bottom" in rows[0].keys()
             has_semantic_label = "semantic_label" in rows[0].keys()
+        else:
+            return obj_list
 
-            for row in rows:
-                map = self.get_new_map_instance(row["id"])
-                # time
-                if self.is_time_absolute():
-                    map.set_absolute_time(row["start_time"], row["end_time"])
-                elif self.is_time_relative():
-                    map.set_relative_time(
-                        row["start_time"],
-                        row["end_time"],
-                        self.get_relative_time_unit(),
-                    )
-                # space
-                # The fast way
-                if has_bt_columns:
-                    map.set_spatial_extent_from_values(
-                        west=row["west"],
-                        east=row["east"],
-                        south=row["south"],
-                        top=row["top"],
-                        north=row["north"],
-                        bottom=row["bottom"],
-                    )
-                # The slow work around
-                else:
-                    map.spatial_extent.select(dbif)
+        for row in rows:
+            map = self.get_new_map_instance(row["id"])
+            # time
+            if self.is_time_absolute():
+                map.set_absolute_time(row["start_time"], row["end_time"])
+            elif self.is_time_relative():
+                map.set_relative_time(
+                    row["start_time"],
+                    row["end_time"],
+                    self.get_relative_time_unit(),
+                )
+            # space
+            # The fast way
+            if has_bt_columns:
+                map.set_spatial_extent_from_values(
+                    west=row["west"],
+                    east=row["east"],
+                    south=row["south"],
+                    top=row["top"],
+                    north=row["north"],
+                    bottom=row["bottom"],
+                )
+            # The slow work around
+            else:
+                map.spatial_extent.select(dbif)
 
-                # labels
-                if (
-                    has_semantic_label
-                    and row["semantic_label"] is not None
-                    and row["semantic_label"] != "None"
-                ):
-                    map.metadata.set_semantic_label(row["semantic_label"])
+            # labels
+            if (
+                has_semantic_label
+                and row["semantic_label"] is not None
+                and row["semantic_label"] != "None"
+            ):
+                map.metadata.set_semantic_label(row["semantic_label"])
 
-                obj_list.append(copy.copy(map))
+            obj_list.append(copy.copy(map))
 
         if connection_state_changed:
             dbif.close()
