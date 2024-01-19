@@ -304,34 +304,35 @@ def compute_relative_time_granularity(maps):
 
     # The interval time must be scaled to days resolution
     granularity = None
-    delta = []
+    delta = set()
+    previous_start, previous_end = get_time_tuple(maps[0])
     # First we compute the timedelta of the intervals
-    for i in range(len(maps)):
-        start, end = get_time_tuple(maps[i])
+    for stds_map in maps:
+        start, end = get_time_tuple(stds_map)
         if (start == 0 or start) and end:
             t = abs(end - start)
-            delta.append(int(t))
+            delta.add(int(t))
 
         # Compute the timedelta of the gaps
-        if i < len(maps) - 1:
-            start2, end2 = get_time_tuple(maps[i + 1])
-            if _is_after(start2, start, end):
-                # Gaps are between intervals, intervals and
-                # points, points and points
-                if end and start2:
-                    t = abs(end - start2)
-                    delta.append(int(t))
-                if not end and start2:
-                    t = abs(start - start2)
-                    delta.append(int(t))
+        if _is_after(start, previous_start, previous_end):
+            # Gaps are between intervals, intervals and
+            # points, points and points
+            # start time is required in TGIS and expected to be present
+            if previous_end:
+                # Gap between previous end and current start
+                t = abs(start - previous_end)
+                delta.add(int(t))
+            else:
+                # Gap between previous start and current start
+                t = abs(start - previous_start)
+                delta.add(int(t))
+        previous_start, previous_end = start, end
 
-    delta.sort()
-    ulist = list(set(delta))
-    if len(ulist) > 1:
+    if len(delta) > 1:
         # Find greatest common divisor
-        granularity = gcd_list(ulist)
-    elif len(ulist) == 1:
-        granularity = ulist[0]
+        granularity = gcd_list(delta)
+    elif len(delta) == 1:
+        granularity = delta.pop()
     else:
         granularity = 0
 
@@ -431,32 +432,39 @@ def compute_absolute_time_granularity(maps):
 
     get_time_tuple = get_time_tuple_function(maps)
 
-    delta = []
+    previous_start, previous_end = get_time_tuple(maps[0])
+
+    delta = set()
     datetime_delta = []
     # First we compute the timedelta of the intervals
-    for i in range(len(maps)):
-        start, end = get_time_tuple(maps[i])
-        if start and end:
-            delta.append(end - start)
+    for stds_map in maps:
+        start, end = get_time_tuple(stds_map)
+        # start time is required in TGIS and expected to be present
+        if end:
+            delta.add(end - start)
             datetime_delta.append(compute_datetime_delta(start, end))
         # Compute the timedelta of the gaps
-        if i < len(maps) - 1:
-            start2, end2 = get_time_tuple(maps[i + 1])
-            if _is_after(start2, start, end):
-                # Gaps are between intervals, intervals and
-                # points, points and points
-                if end and start2:
-                    delta.append(end - start2)
-                    datetime_delta.append(compute_datetime_delta(end, start2))
-                if not end and start2:
-                    delta.append(start2 - start)
-                    datetime_delta.append(compute_datetime_delta(start, start2))
+        if _is_after(start, previous_start, previous_end):
+            # Gaps are between intervals, intervals and
+            # points, points and points
+            # start time is required in TGIS and expected to be present
+            if previous_end:
+                delta.add(previous_end - start)
+                datetime_delta.append(compute_datetime_delta(previous_end, start))
+            else:
+                delta.add(start - previous_start)
+                datetime_delta.append(compute_datetime_delta(previous_start, start))
+        previous_start, previous_end = start, end
+
     # Check what changed
-    dlist = []
+    dlist = set()
     for d in datetime_delta:
         if "second" in d and d["second"] > 0:
             has_seconds = True
-            # print "has second"
+            # "second" is the smallest supported unit
+            # As soon as a time delta is found that contains seconds
+            # no other time deltas need to be checked
+            break
         if "minute" in d and d["minute"] > 0:
             has_minutes = True
             # print "has minute"
@@ -478,67 +486,64 @@ def compute_absolute_time_granularity(maps):
     if has_seconds:
         for d in datetime_delta:
             if "second" in d and d["second"] > 0:
-                dlist.append(d["second"])
+                dlist.add(d["second"])
             elif "minute" in d and d["minute"] > 0:
-                dlist.append(d["minute"] * 60)
+                dlist.add(d["minute"] * 60)
             elif "hour" in d and d["hour"] > 0:
-                dlist.append(d["hour"] * 3600)
+                dlist.add(d["hour"] * 3600)
             elif "day" in d and d["day"] > 0:
-                dlist.append(d["day"] * 24 * 3600)
+                dlist.add(d["day"] * 24 * 3600)
             else:
-                dlist.append(d["max_days"] * 24 * 3600)
+                dlist.add(d["max_days"] * 24 * 3600)
         time_unit = "second"
     elif has_minutes:
         for d in datetime_delta:
             if "minute" in d and d["minute"] > 0:
-                dlist.append(d["minute"])
+                dlist.add(d["minute"])
             elif "hour" in d and d["hour"] > 0:
-                dlist.append(d["hour"] * 60)
+                dlist.add(d["hour"] * 60)
             elif "day" in d:
-                dlist.append(d["day"] * 24 * 60)
+                dlist.add(d["day"] * 24 * 60)
             else:
-                dlist.append(d["max_days"] * 24 * 60)
+                dlist.add(d["max_days"] * 24 * 60)
         time_unit = "minute"
     elif has_hours:
         for d in datetime_delta:
             if "hour" in d and d["hour"] > 0:
-                dlist.append(d["hour"])
+                dlist.add(d["hour"])
             elif "day" in d and d["day"] > 0:
-                dlist.append(d["day"] * 24)
+                dlist.add(d["day"] * 24)
             else:
-                dlist.append(d["max_days"] * 24)
+                dlist.add(d["max_days"] * 24)
         time_unit = "hour"
     elif has_days:
         for d in datetime_delta:
             if "day" in d and d["day"] > 0:
-                dlist.append(d["day"])
+                dlist.add(d["day"])
             else:
-                dlist.append(d["max_days"])
+                dlist.add(d["max_days"])
         time_unit = "day"
     elif has_months:
         for d in datetime_delta:
             if "month" in d and d["month"] > 0:
-                dlist.append(d["month"])
+                dlist.add(d["month"])
             elif "year" in d and d["year"] > 0:
-                dlist.append(d["year"] * 12)
+                dlist.add(d["year"] * 12)
         time_unit = "month"
     elif has_years:
         for d in datetime_delta:
             if "year" in d:
-                dlist.append(d["year"])
+                dlist.add(d["year"])
         time_unit = "year"
 
-    dlist.sort()
-    ulist = list(set(dlist))
-
-    if len(ulist) == 0:
+    if len(dlist) == 0:
         return None
 
-    if len(ulist) > 1:
+    if len(dlist) > 1:
         # Find greatest common divisor
-        granularity = gcd_list(ulist)
+        granularity = gcd_list(dlist)
     else:
-        granularity = ulist[0]
+        granularity = dlist.pop()
 
     if granularity is None or time_unit is None:
         return None
