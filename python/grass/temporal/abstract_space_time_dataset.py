@@ -1513,7 +1513,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             "contains": maps that contain (fully cover) the provided spatial extent
 
         :return: The ordered map object list,
-                In case nothing found an empty list is returned
+                In case nothing is found, an empty list is returned
         """
 
         dbif, connection_state_changed = init_dbif(dbif)
