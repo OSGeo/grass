@@ -469,7 +469,7 @@ def compute_absolute_time_granularity(maps):
         if end:
             map_datetime_delta = compute_datetime_delta(start, end)
             has_units = _update_time_unit_dict(has_units, map_datetime_delta)
-            datetime_delta.add(tuple(map_datetime_delta.items()))
+            datetime_delta.add(sorted(tuple(map_datetime_delta.items())))
         # Compute the timedelta of the gaps
         if _is_after(start, previous_start, previous_end):
             # Gaps are between intervals, intervals and
@@ -480,7 +480,7 @@ def compute_absolute_time_granularity(maps):
             else:
                 gap_datetime_delta = compute_datetime_delta(previous_start, start)
             has_units = _update_time_unit_dict(has_units, gap_datetime_delta)
-            datetime_delta.add(tuple(gap_datetime_delta.items()))
+            datetime_delta.add(sorted(tuple(gap_datetime_delta.items())))
         previous_start, previous_end = start, end
 
     # Create a list with a single time unit only
