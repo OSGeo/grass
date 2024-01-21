@@ -3299,10 +3299,13 @@ if __name__ == "__main__":
 
         for p in opts["params"]:
             name = p.get("name", None)
-            if self.grassAPI == "script" or p.get("multiple", False) is False:
-                value = p.get("value", None)
-            else:
-                value = str(p.get("values", []))
+            value = p.get("value", None)
+            if (
+                self.grassAPI == "pygrass"
+                and p.get("multiple", False) is True
+                and "," in value
+            ):
+                value = value.split(",")
 
             if (name and value) or (name in parameterizedParams):
                 ptype = p.get("type", "string")
@@ -3312,7 +3315,7 @@ if __name__ == "__main__":
                     foundVar = True
                     value = 'options["{}"]'.format(self._getParamName(name, item))
 
-                if foundVar or ptype != "string":
+                if foundVar or ptype != "string" or isinstance(value, list):
                     params.append("{}={}".format(name, value))
                 else:
                     params.append('{}="{}"'.format(name, value))
