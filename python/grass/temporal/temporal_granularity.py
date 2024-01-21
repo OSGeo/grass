@@ -423,117 +423,124 @@ def compute_absolute_time_granularity(maps):
 
     """
 
-    has_seconds = False
-    has_minutes = False
-    has_hours = False
-    has_days = False
-    has_months = False
-    has_years = False
+    def _update_time_unit_dict(has_unit_dict, time_detla):
+        if time_detla["second"] > 0:
+            has_unit_dict["seconds"] = True
+            # "second" is the smallest supported unit
+            # As soon as a time delta is found that contains seconds
+            # no other time deltas need to be checked
+        elif time_detla["minute"] > 0:
+            has_unit_dict["minutes"] = True
+            # print "has minute"
+        elif time_detla["hour"] > 0:
+            has_unit_dict["hours"] = True
+            # print "has hour"
+        elif time_detla["day"] > 0:
+            has_unit_dict["days"] = True
+            # print "has day"
+        elif time_detla["month"] > 0:
+            has_unit_dict["months"] = True
+            # print "has month"
+        elif time_detla["year"] > 0:
+            has_unit_dict["years"] = True
+            # print "has year"
+        return has_unit_dict
+
+    has_units = {
+        "seconds": False,
+        "minutes": False,
+        "hours": False,
+        "days": False,
+        "months": False,
+        "years": False,
+    }
 
     get_time_tuple = get_time_tuple_function(maps)
 
     previous_start, previous_end = get_time_tuple(maps[0])
 
-    delta = set()
-    datetime_delta = []
+    datetime_delta = set()
+    dlist = set()
+
     # First we compute the timedelta of the intervals
     for stds_map in maps:
         start, end = get_time_tuple(stds_map)
         # start time is required in TGIS and expected to be present
         if end:
-            delta.add(end - start)
-            datetime_delta.append(compute_datetime_delta(start, end))
+            map_datetime_delta = compute_datetime_delta(start, end)
+            has_units = _update_time_unit_dict(has_units, map_datetime_delta)
+            datetime_delta.add(tuple(map_datetime_delta.items()))
         # Compute the timedelta of the gaps
         if _is_after(start, previous_start, previous_end):
             # Gaps are between intervals, intervals and
             # points, points and points
             # start time is required in TGIS and expected to be present
             if previous_end:
-                delta.add(previous_end - start)
-                datetime_delta.append(compute_datetime_delta(previous_end, start))
+                gap_datetime_delta = compute_datetime_delta(previous_end, start)
             else:
-                delta.add(start - previous_start)
-                datetime_delta.append(compute_datetime_delta(previous_start, start))
+                gap_datetime_delta = compute_datetime_delta(previous_start, start)
+            has_units = _update_time_unit_dict(has_units, gap_datetime_delta)
+            datetime_delta.add(tuple(gap_datetime_delta.items()))
         previous_start, previous_end = start, end
-
-    # Check what changed
-    dlist = set()
-    for d in datetime_delta:
-        if "second" in d and d["second"] > 0:
-            has_seconds = True
-            # "second" is the smallest supported unit
-            # As soon as a time delta is found that contains seconds
-            # no other time deltas need to be checked
-            break
-        if "minute" in d and d["minute"] > 0:
-            has_minutes = True
-            # print "has minute"
-        if "hour" in d and d["hour"] > 0:
-            has_hours = True
-            # print "has hour"
-        if "day" in d and d["day"] > 0:
-            has_days = True
-            # print "has day"
-        if "month" in d and d["month"] > 0:
-            has_months = True
-            # print "has month"
-        if "year" in d and d["year"] > 0:
-            has_years = True
-            # print "has year"
 
     # Create a list with a single time unit only
     time_unit = None
-    if has_seconds:
+    if has_units["seconds"]:
         for d in datetime_delta:
-            if "second" in d and d["second"] > 0:
+            d = dict(d)
+            if d["second"] > 0:
                 dlist.add(d["second"])
-            elif "minute" in d and d["minute"] > 0:
+            elif d["minute"] > 0:
                 dlist.add(d["minute"] * 60)
-            elif "hour" in d and d["hour"] > 0:
+            elif d["hour"] > 0:
                 dlist.add(d["hour"] * 3600)
-            elif "day" in d and d["day"] > 0:
+            elif d["day"] > 0:
                 dlist.add(d["day"] * 24 * 3600)
             else:
                 dlist.add(d["max_days"] * 24 * 3600)
         time_unit = "second"
-    elif has_minutes:
+    elif has_units["minutes"]:
         for d in datetime_delta:
-            if "minute" in d and d["minute"] > 0:
+            d = dict(d)
+            if d["minute"] > 0:
                 dlist.add(d["minute"])
-            elif "hour" in d and d["hour"] > 0:
+            elif d["hour"] > 0:
                 dlist.add(d["hour"] * 60)
-            elif "day" in d:
+            elif d["day"] > 0:
                 dlist.add(d["day"] * 24 * 60)
             else:
                 dlist.add(d["max_days"] * 24 * 60)
         time_unit = "minute"
-    elif has_hours:
+    elif has_units["hours"]:
         for d in datetime_delta:
-            if "hour" in d and d["hour"] > 0:
+            d = dict(d)
+            if d["hour"] > 0:
                 dlist.add(d["hour"])
-            elif "day" in d and d["day"] > 0:
+            elif d["day"] > 0:
                 dlist.add(d["day"] * 24)
             else:
                 dlist.add(d["max_days"] * 24)
         time_unit = "hour"
-    elif has_days:
+    elif has_units["days"]:
         for d in datetime_delta:
-            if "day" in d and d["day"] > 0:
+            d = dict(d)
+            if d["day"] > 0:
                 dlist.add(d["day"])
             else:
                 dlist.add(d["max_days"])
         time_unit = "day"
-    elif has_months:
+    elif has_units["months"]:
         for d in datetime_delta:
-            if "month" in d and d["month"] > 0:
+            d = dict(d)
+            if d["month"] > 0:
                 dlist.add(d["month"])
-            elif "year" in d and d["year"] > 0:
+            elif d["year"] > 0:
                 dlist.add(d["year"] * 12)
         time_unit = "month"
-    elif has_years:
+    elif has_units["years"]:
         for d in datetime_delta:
-            if "year" in d:
-                dlist.add(d["year"])
+            d = dict(d)
+            dlist.add(d["year"])
         time_unit = "year"
 
     if len(dlist) == 0:
