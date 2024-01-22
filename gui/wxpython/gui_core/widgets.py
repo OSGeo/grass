@@ -1347,6 +1347,7 @@ class SearchModuleWidget(wx.Panel):
         """Module selected from choice, update command prompt"""
         cmd = self._searchChoice.GetStringSelection()
         self.moduleSelected.emit(name=cmd)
+
         if self._showTip:
             for module in self._results:
                 if cmd == module.data["command"]:
