@@ -435,7 +435,7 @@ def compute_absolute_time_granularity(maps):
         elif time_delta["hour"] > 0:
             has_unit_dict["hours"] = True
             # print "has hour"
-        elif time_detla["day"] > 0:
+        elif time_delta["day"] > 0:
             has_unit_dict["days"] = True
             # print "has day"
         elif time_delta["month"] > 0:
