@@ -309,8 +309,6 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
         :param entry dict: entry with 'command' and 'command_info' keys
         """
-        print("AddEntryToCmdHistoryBuffer")
-        print(entry)
         # add command to history
         self.cmdbuffer.append(entry["command"])
         # update also traced commands

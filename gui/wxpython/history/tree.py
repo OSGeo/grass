@@ -210,10 +210,12 @@ class HistoryBrowserTree(CTreeView):
     def _initHistoryModel(self):
         """Fill tree history model based on the current history log."""
         self.history_manager = create_history_manager()
-        content_list = self.history_manager.get_content()
-        print(content_list)
+        try:
+            content_list = self.history_manager.get_content()
+        except (OSError, ValueError) as e:
+            GError(str(e))
+
         for data in content_list:
-            print(data)
             self._model.AppendNode(
                 parent=self._model.root,
                 label=data["command"].strip(),
@@ -324,14 +326,14 @@ class HistoryBrowserTree(CTreeView):
                     showTraceback=False,
                 )
 
-    def RemoveEntryFromHistory(self, del_line_number):
+    def RemoveEntryFromHistory(self, index):
         """Remove entry from command history log.
 
-        :param int del_line_number: index of the entry which should be removed
+        :param int index: index of the entry which should be removed
         """
         try:
-            self.history_manager.remove_entry_from_history(del_line_number)
-        except OSError as e:
+            self.history_manager.remove_entry_from_history(index)
+        except (OSError, ValueError) as e:
             GError(str(e))
 
     def GetCommandInfo(self, index):
@@ -342,8 +344,9 @@ class HistoryBrowserTree(CTreeView):
         command_info = {}
         try:
             command_info = self.history_manager.get_content()[index]["command_info"]
-        except OSError as e:
+        except (OSError, ValueError) as e:
             GError(str(e))
+
         return command_info
 
     def OnRemoveCmd(self, event):

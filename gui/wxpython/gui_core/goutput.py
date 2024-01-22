@@ -243,14 +243,11 @@ class GConsoleWindow(wx.SplitterWindow):
         """Load history from a history file to data structures"""
         try:
             self.history_manager = create_history_manager()
-            content_list = self.history_manager.get_content()
-            print(content_list)
-            if content_list:
-                self.cmdPrompt.cmdbuffer = [entry["command"] for entry in content_list]
-            else:
-                self.cmdPrompt.cmdbuffer = []
+            self.cmdPrompt.cmdbuffer = [
+                entry["command"] for entry in self.history_manager.get_content()
+            ] or []
             self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
-        except OSError as e:
+        except (OSError, ValueError) as e:
             GError(str(e))
 
     def GetPanel(self, prompt=True):

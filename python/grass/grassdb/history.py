@@ -99,7 +99,6 @@ class HistoryPlainTextManager(HistoryManager):
                     {"command": line.strip(), "command_info": None}
                     for line in file_history.readlines()
                 ]
-                print(content_list)
         except OSError as e:
             raise OSError(
                 _("Unable to read content from history file {}").format(
@@ -172,12 +171,12 @@ class HistoryJSONManager(HistoryManager):
                 if content:
                     try:
                         history_entries = json.loads(content)
-                    except json.JSONDecodeError as je:
-                        raise json.JSONDecodeError(
+                    except ValueError as ve:
+                        raise ValueError(
                             _("Error decoding JSON content in history file {}").format(
                                 self.history_path
                             )
-                        ) from je
+                        ) from ve
                     # Process the content as a list of dictionaries
                     content_list = [
                         {
@@ -195,21 +194,27 @@ class HistoryJSONManager(HistoryManager):
         return content_list
 
     def add_entry_to_history(self, entry):
-        """Add entry to the history file.
+        """Add entry to the list of dictionaries in the history file.
 
         :param dict entry: entry consisting of 'command' and 'command_info' keys
         """
         try:
             with open(self.history_path, encoding="utf-8", mode="r") as fileHistory:
                 existing_data = json.load(fileHistory)
-        except (OSError, json.JSONDecodeError):
+        except (OSError, ValueError):
             existing_data = []
 
         existing_data.append(entry)
         try:
             with open(self.history_path, encoding="utf-8", mode="w") as fileHistory:
                 json.dump(existing_data, fileHistory, indent=2)
-        except (OSError, json.JSONDecodeError) as e:
+        except ValueError as ve:
+            raise ValueError(
+                _("Error decoding JSON content in history file {}").format(
+                    self.history_path
+                )
+            ) from ve
+        except OSError as e:
             raise OSError(
                 _("Unable to add entry to history file {}").format(self.history_path)
             ) from e
@@ -231,12 +236,12 @@ class HistoryJSONManager(HistoryManager):
                     file_history.seek(0)
                     file_history.truncate()
                     json.dump(history_entries, file_history, indent=2)
-                except json.JSONDecodeError as je:
-                    raise OSError(
+                except ValueError as ve:
+                    raise ValueError(
                         _("Error decoding JSON content in history file {}").format(
                             self.history_path
                         )
-                    ) from je
+                    ) from ve
         except OSError as e:
             raise OSError(
                 _("Unable to add entry to history file {}").format(self.history_path)
@@ -263,12 +268,12 @@ class HistoryJSONManager(HistoryManager):
                         file_history.seek(0)
                         file_history.truncate()
                         json.dump(history_entries, file_history, indent=2)
-                except json.JSONDecodeError as je:
-                    raise OSError(
+                except ValueError as ve:
+                    raise ValueError(
                         _("Error decoding JSON content in history file {}").format(
                             self.history_path
                         )
-                    ) from je
+                    ) from ve
         except OSError as e:
             raise OSError(
                 _("Unable to add entry to history file {}").format(self.history_path)
@@ -277,6 +282,7 @@ class HistoryJSONManager(HistoryManager):
     def get_initial_command_info(self, env_run):
         """Get information about the launched command.
 
+        :param env_run: environment needed for processing grass command
         :return cmd_info dict: initial information about the launched command
         """
         from datetime import datetime
@@ -310,7 +316,7 @@ class HistoryJSONManager(HistoryManager):
         cmd_info = {
             "Execution time": exec_time,
             "Runtime duration": "-",
-            "Status code": "In process",
+            "Status": "In process",
             "2D mask set": mask2d_set,
             "Executor login": exec_login,
             "Region settings": region_settings_dict,

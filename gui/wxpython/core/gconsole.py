@@ -512,13 +512,11 @@ class GConsole(wx.EvtHandler):
                 "command_info": command_info,
             }
             self.history_manager.add_entry_to_history(entry)
-        except OSError as e:
+        except (OSError, ValueError) as e:
             GError(str(e))
 
         # update command prompt and history model
         if self._giface:
-            print("run")
-            print(entry)
             self._giface.entryToHistoryAdded.emit(entry=entry)
 
         if command[0] in globalvar.grassCmd:
@@ -749,9 +747,9 @@ class GConsole(wx.EvtHandler):
             msg = _("Command finished")
             status = "Successfully finished"
 
-        cmd_info = {"Runtime duration": stime, "Status code": status}
+        cmd_info = {"Runtime duration": stime, "Status": status}
 
-        # update command history log by status code and runtime duration
+        # update command history log by status and runtime duration
         try:
             if self.history_manager.filetype == "json":
                 self.history_manager.update_entry_in_history(cmd_info)
@@ -759,9 +757,8 @@ class GConsole(wx.EvtHandler):
                 # update history model
                 if self._giface:
                     entry = self.history_manager.get_content()[-1]
-                    print(entry)
                     self._giface.entryInHistoryUpdated.emit(entry=entry)
-        except OSError as e:
+        except (OSError, ValueError) as e:
             GError(str(e))
 
         self.WriteCmdLog(
