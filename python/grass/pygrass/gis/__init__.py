@@ -425,8 +425,7 @@ class VisibleMapset:
         return repr(self.read())
 
     def __iter__(self):
-        for mapset in self.read():
-            yield mapset
+        yield from self.read()
 
     def read(self):
         """Return the mapsets in the search path"""

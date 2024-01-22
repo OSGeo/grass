@@ -25,6 +25,7 @@ jobs:
         python-version:
           - '3.8'
           - '3.10'
+          - '3.12'
       fail-fast: true
 
     runs-on: ${{ matrix.os }}
@@ -79,3 +80,11 @@ jobs:
       - name: Print installed versions
         if: always()
         run: .github/workflows/print_versions.sh
+  pytest-success:
+    name: pytest Result
+    needs:
+      - pytest
+    if: ${{ always() }}
+    uses: ./.github/workflows/verify-success.yml
+    with:
+      needs_context: ${{ toJson(needs) }}

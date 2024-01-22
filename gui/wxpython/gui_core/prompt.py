@@ -93,7 +93,7 @@ class GPrompt:
         try:
             cmd = utils.split(str(cmdString))
         except UnicodeError:
-            cmd = utils.split(EncodeString((cmdString)))
+            cmd = utils.split(EncodeString(cmdString))
         cmd = list(map(DecodeString, cmd))
 
         self.promptRunCmd.emit(cmd={"cmd": cmd, "cmdString": str(cmdString)})
@@ -304,8 +304,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetCurrentPos(pos)
         self.SetFocus()
 
-    def UpdateCmdHistory(self, cmd):
-        """Update command history
+    def AddEntryToCmdHistoryBuffer(self, cmd):
+        """Add entry to command history buffer
 
         :param cmd: command given as a string
         """
@@ -317,6 +317,17 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         # keep command history to a manageable size
         if len(self.cmdbuffer) > 200:
             del self.cmdbuffer[0]
+        self.cmdindex = len(self.cmdbuffer)
+
+    def RemoveEntryFromCmdHistoryBuffer(self, index):
+        """Remove entry from command history buffer
+        :param index: index of deleted command
+        """
+        # remove command at the given index from history buffer
+        if index < len(self.cmdbuffer):
+            self.cmdbuffer.pop(index)
+
+        # update cmd index size
         self.cmdindex = len(self.cmdbuffer)
 
     def EntityToComplete(self):

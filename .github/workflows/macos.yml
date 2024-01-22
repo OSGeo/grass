@@ -36,7 +36,7 @@ jobs:
         run: echo "today=$(/bin/date -u '+%Y%m%d')" >> $GITHUB_OUTPUT
         shell: bash
       - name: Cache conda environment
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/miniconda3/envs/grass-env
           key: conda-macos-x86_64-${{
@@ -80,7 +80,7 @@ jobs:
                        nc_spm_full_v2alpha2.tar.gz"
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: testreport-macOS
           path: testreport
