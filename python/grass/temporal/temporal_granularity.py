@@ -441,7 +441,7 @@ def compute_absolute_time_granularity(maps):
         elif time_delta["month"] > 0:
             has_unit_dict["months"] = True
             # print "has month"
-        elif time_detla["year"] > 0:
+        elif time_delta["year"] > 0:
             has_unit_dict["years"] = True
             # print "has year"
         return has_unit_dict
