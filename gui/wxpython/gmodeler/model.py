@@ -3300,22 +3300,31 @@ if __name__ == "__main__":
         for p in opts["params"]:
             name = p.get("name", None)
             value = p.get("value", None)
+            ptype = p.get("type", "string")
+
             if (
                 self.grassAPI == "pygrass"
-                and p.get("multiple", False) is True
+                and (p.get("multiple", False) is True or len(p.get("key_desc", [])) > 1)
                 and "," in value
             ):
                 value = value.split(",")
+                if ptype == "integer":
+                    value = list(map(int, value))
+                elif ptype == "float":
+                    value = list(map(float, value))
 
             if (name and value) or (name in parameterizedParams):
-                ptype = p.get("type", "string")
                 foundVar = False
 
                 if name in parameterizedParams:
                     foundVar = True
                     value = 'options["{}"]'.format(self._getParamName(name, item))
 
-                if foundVar or ptype != "string" or isinstance(value, list):
+                if (
+                    foundVar
+                    or isinstance(value, list)
+                    or (ptype != "string" and len(p.get("key_desc", [])) < 2)
+                ):
                     params.append("{}={}".format(name, value))
                 else:
                     params.append('{}="{}"'.format(name, value))
