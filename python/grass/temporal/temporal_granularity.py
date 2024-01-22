@@ -151,7 +151,7 @@ def get_time_tuple_function(maps):
 
 def _is_after(start, start1, end1):
     """Helper function that checks if start timestamp is
-    temporaly after the start1 and end1, where start1 and end1
+    temporally after the start1 and end1, where start1 and end1
     represent a temporal extent.
 
     :param start: datetime object to check if it is after start1 and end1
@@ -425,14 +425,14 @@ def compute_absolute_time_granularity(maps):
 
     # Create a granularity dict with time units of increasing length
     # that covers all possible keys in the result of compute_datetime_delta
-    # The order of the keys is important so that loops over the dictionalry
+    # The order of the keys is important so that loops over the dictionary
     # can be aborted as soon as a non-zero value is encountered
     granularity_units = {
         "second": set(),
         "minute": set(),
         "hour": set(),
-        "day": set(),
         "max_days": set(),
+        "day": set(),
         "month": set(),
         "year": set(),
     }
@@ -453,7 +453,8 @@ def compute_absolute_time_granularity(maps):
                     and map_datetime_delta[time_unit] > 0
                 ):
                     granularity_units[time_unit].add(map_datetime_delta[time_unit])
-                    break
+                    if time_unit != "max_days":
+                        break
         # Compute the timedelta of the gaps
         if _is_after(start, previous_start, previous_end):
             # Gaps are between intervals, intervals and
@@ -470,18 +471,42 @@ def compute_absolute_time_granularity(maps):
                     and gap_datetime_delta[time_unit] > 0
                 ):
                     granularity_units[time_unit].add(gap_datetime_delta[time_unit])
-                    break
+                    if time_unit != "max_days":
+                        break
         # Keep the temporal extent to compare to the following/next map
         previous_start, previous_end = start, end
 
     # Create a list with a single time unit only
     dlist = set()
+    assigned_time_unit = None
+    time_unit_multipliers = {
+        "second": {"minute": 60, "hour": 3600, "day": 24 * 3600, "max_days": 24 * 3600},
+        "minute": {"hour": 60, "day": 24 * 60, "max_days": 24 * 60},
+        "hour": {"day": 24, "max_days": 24},
+        "day": {"max_days": 1},
+        "month": {"year": 12},
+    }
+
     for time_unit, granularity_set in granularity_units.items():
         # The smallest granularity unit is used so as soon as a non-zero
         # value / set is encountered, the loop can be aborted
         if granularity_set:
-            dlist.update(granularity_set)
+            # Skip max_days
+            if time_unit == "max_days":
+                continue
+            assigned_time_unit = time_unit
             break
+
+    if assigned_time_unit is None:
+        return None
+
+    dlist.update(granularity_units[assigned_time_unit])
+    if assigned_time_unit in time_unit_multipliers:
+        for unit, unit_factor in time_unit_multipliers[assigned_time_unit].items():
+            if granularity_units[unit]:
+                dlist.update(
+                    {time_value * unit_factor for time_value in granularity_units[unit]}
+                )
 
     if not dlist:
         return None
@@ -492,14 +517,14 @@ def compute_absolute_time_granularity(maps):
     else:
         granularity = dlist.pop()
 
-    if granularity is None or time_unit is None:
+    if granularity is None:
         return None
 
     plural = ""
     if granularity > 1:
         plural = "s"
 
-    return f"{granularity} {time_unit}{plural}"
+    return f"{granularity} {assigned_time_unit}{plural}"
 
 
 ###############################################################################
