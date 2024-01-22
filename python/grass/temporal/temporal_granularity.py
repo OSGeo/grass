@@ -423,44 +423,23 @@ def compute_absolute_time_granularity(maps):
 
     """
 
-    def _update_time_unit_dict(has_unit_dict, time_delta):
-        if time_delta["second"] > 0:
-            has_unit_dict["seconds"] = True
-            # "second" is the smallest supported unit
-            # As soon as a time delta is found that contains seconds
-            # no other time deltas need to be checked
-        elif time_delta["minute"] > 0:
-            has_unit_dict["minutes"] = True
-            # print "has minute"
-        elif time_delta["hour"] > 0:
-            has_unit_dict["hours"] = True
-            # print "has hour"
-        elif time_delta["day"] > 0:
-            has_unit_dict["days"] = True
-            # print "has day"
-        elif time_delta["month"] > 0:
-            has_unit_dict["months"] = True
-            # print "has month"
-        elif time_delta["year"] > 0:
-            has_unit_dict["years"] = True
-            # print "has year"
-        return has_unit_dict
-
-    has_units = {
-        "seconds": False,
-        "minutes": False,
-        "hours": False,
-        "days": False,
-        "months": False,
-        "years": False,
+    # Create a granularity dict with time units of increasing length
+    # that covers all possible keys in the result of compute_datetime_delta
+    # The order of the keys is important so that loops over the dictionalry
+    # can be aborted as soon as a non-zero value is encountered
+    granularity_units = {
+        "second": set(),
+        "minute": set(),
+        "hour": set(),
+        "day": set(),
+        "max_days": set(),
+        "month": set(),
+        "year": set(),
     }
 
     get_time_tuple = get_time_tuple_function(maps)
 
     previous_start, previous_end = get_time_tuple(maps[0])
-
-    datetime_delta = set()
-    dlist = set()
 
     # First we compute the timedelta of the intervals
     for stds_map in maps:
@@ -468,8 +447,13 @@ def compute_absolute_time_granularity(maps):
         # start time is required in TGIS and expected to be present
         if end:
             map_datetime_delta = compute_datetime_delta(start, end)
-            has_units = _update_time_unit_dict(has_units, map_datetime_delta)
-            datetime_delta.add(sorted(tuple(map_datetime_delta.items())))
+            for time_unit in granularity_units:
+                if (
+                    time_unit in map_datetime_delta
+                    and map_datetime_delta[time_unit] > 0
+                ):
+                    granularity_units[time_unit].add(map_datetime_delta[time_unit])
+                    break
         # Compute the timedelta of the gaps
         if _is_after(start, previous_start, previous_end):
             # Gaps are between intervals, intervals and
@@ -479,71 +463,27 @@ def compute_absolute_time_granularity(maps):
                 gap_datetime_delta = compute_datetime_delta(previous_end, start)
             else:
                 gap_datetime_delta = compute_datetime_delta(previous_start, start)
-            has_units = _update_time_unit_dict(has_units, gap_datetime_delta)
-            datetime_delta.add(sorted(tuple(gap_datetime_delta.items())))
+            # Add to the set of the smallest granularity in the granularity_units dict
+            for time_unit in granularity_units:
+                if (
+                    time_unit in gap_datetime_delta
+                    and gap_datetime_delta[time_unit] > 0
+                ):
+                    granularity_units[time_unit].add(gap_datetime_delta[time_unit])
+                    break
+        # Keep the temporal extent to compare to the following/next map
         previous_start, previous_end = start, end
 
     # Create a list with a single time unit only
-    time_unit = None
-    if has_units["seconds"]:
-        for d in datetime_delta:
-            d = dict(d)
-            if d["second"] > 0:
-                dlist.add(d["second"])
-            elif d["minute"] > 0:
-                dlist.add(d["minute"] * 60)
-            elif d["hour"] > 0:
-                dlist.add(d["hour"] * 3600)
-            elif d["day"] > 0:
-                dlist.add(d["day"] * 24 * 3600)
-            else:
-                dlist.add(d["max_days"] * 24 * 3600)
-        time_unit = "second"
-    elif has_units["minutes"]:
-        for d in datetime_delta:
-            d = dict(d)
-            if d["minute"] > 0:
-                dlist.add(d["minute"])
-            elif d["hour"] > 0:
-                dlist.add(d["hour"] * 60)
-            elif d["day"] > 0:
-                dlist.add(d["day"] * 24 * 60)
-            else:
-                dlist.add(d["max_days"] * 24 * 60)
-        time_unit = "minute"
-    elif has_units["hours"]:
-        for d in datetime_delta:
-            d = dict(d)
-            if d["hour"] > 0:
-                dlist.add(d["hour"])
-            elif d["day"] > 0:
-                dlist.add(d["day"] * 24)
-            else:
-                dlist.add(d["max_days"] * 24)
-        time_unit = "hour"
-    elif has_units["days"]:
-        for d in datetime_delta:
-            d = dict(d)
-            if d["day"] > 0:
-                dlist.add(d["day"])
-            else:
-                dlist.add(d["max_days"])
-        time_unit = "day"
-    elif has_units["months"]:
-        for d in datetime_delta:
-            d = dict(d)
-            if d["month"] > 0:
-                dlist.add(d["month"])
-            elif d["year"] > 0:
-                dlist.add(d["year"] * 12)
-        time_unit = "month"
-    elif has_units["years"]:
-        for d in datetime_delta:
-            d = dict(d)
-            dlist.add(d["year"])
-        time_unit = "year"
+    dlist = set()
+    for time_unit, granularity_set in granularity_units.items():
+        # The smallest granularity unit is used so as soon as a non-zero
+        # value / set is encountered, the loop can be aborted
+        if granularity_set:
+            dlist.update(granularity_set)
+            break
 
-    if len(dlist) == 0:
+    if not dlist:
         return None
 
     if len(dlist) > 1:
