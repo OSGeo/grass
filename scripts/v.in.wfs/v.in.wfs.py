@@ -6,9 +6,9 @@
 # AUTHOR(S):	Markus Neteler. neteler itc it
 #               Hamish Bowman
 #               Converted to Python by Glynn Clements
-#               edit by Veronica Köß
+#               German ALKIS support added by Veronica Köß
 # PURPOSE:	WFS support
-# COPYRIGHT:	(C) 2006-2012 Markus Neteler and the GRASS Development Team
+# COPYRIGHT:	(C) 2006-2023 Markus Neteler and the GRASS Development Team
 #
 # 		This program is free software under the GNU General
 # 		Public License (>=v2). Read the file COPYING that
@@ -48,22 +48,15 @@
 # %option
 # % key: layer
 # % type: string
-# % description: name of data layers to import
+# % description: Name of data layers to import
 # % multiple: yes
-# % required: yes
+# % required: no
 # %end
 # %option
 # % key: srs
 # % type: string
 # % label: Specify alternate spatial reference system (example: EPSG:4326)
 # % description: The given code must be supported by the server, consult the capabilities file
-# % required: no
-# %end
-# %option
-# % key: aoi
-# % type: string
-# % description: Comma separated coordinates e.g. 335719,5615930,354798,5636274 in the region srs
-# % multiple: yes
 # % required: no
 # %end
 # %option
@@ -117,37 +110,34 @@ import sys
 from grass.script.utils import try_remove
 from grass.script import core as grass
 
+"""
 try:
     from urllib2 import urlopen, URLError, HTTPError
     from urllib2 import build_opener, install_opener
     from urllib2 import HTTPPasswordMgrWithDefaultRealm, HTTPBasicAuthHandler
+
 except ImportError:
-    from urllib.request import urlopen
-    from urllib.request import build_opener, install_opener
-    from urllib.request import HTTPPasswordMgrWithDefaultRealm
-    from urllib.request import HTTPBasicAuthHandler
-    from urllib.error import URLError, HTTPError
+"""
+from urllib.request import urlopen
+from urllib.request import build_opener, install_opener
+from urllib.request import HTTPPasswordMgrWithDefaultRealm
+from urllib.request import HTTPBasicAuthHandler
+from urllib.error import URLError, HTTPError
 
 
 def main():
     out = options["output"]
     wfs_url = options["url"]
-
-    request_base = "REQUEST=GetFeature&SERVICE=WFS"
-    wfs_url += request_base
     version_num = options["version"]
+
+    request_base = "REQUEST=GetFeature&SERVICE=WFS&VERSION=" + version_num
+    wfs_url += request_base
 
     if options["name"]:
         if tuple([int(x) for x in version_num.split(".")]) >= (2, 0, 0):
             wfs_url += "&TYPENAMES=" + options["name"]
         else:
             wfs_url += "&TYPENAME=" + options["name"]
-
-    if options["aoi"]:
-        wfs_url += "&BBOX=" + options["aoi"]
-
-    if options["version"]:
-        wfs_url += "&VERSION=" + version_num
 
     if options["srs"]:
         wfs_url += "&SRS=" + options["srs"]
@@ -179,7 +169,7 @@ def main():
     tmp = grass.tempfile()
     tmpxml = tmp + ".xml"
 
-    grass.debug(wfs_url)
+    # grass.debug(wfs_url)
 
     # Set user and password if given
     if options["username"] and options["password"]:
