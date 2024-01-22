@@ -423,13 +423,13 @@ def compute_absolute_time_granularity(maps):
 
     """
 
-    def _update_time_unit_dict(has_unit_dict, time_detla):
-        if time_detla["second"] > 0:
+    def _update_time_unit_dict(has_unit_dict, time_delta):
+        if time_delta["second"] > 0:
             has_unit_dict["seconds"] = True
             # "second" is the smallest supported unit
             # As soon as a time delta is found that contains seconds
             # no other time deltas need to be checked
-        elif time_detla["minute"] > 0:
+        elif time_delta["minute"] > 0:
             has_unit_dict["minutes"] = True
             # print "has minute"
         elif time_detla["hour"] > 0:
