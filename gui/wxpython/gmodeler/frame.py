@@ -2107,7 +2107,7 @@ class PythonPanel(wx.Panel):
         self.write_object(
             fd,
             self.parent.GetModel(),
-            grassAPI="script" if grassAPI == 0 else "pygrass",
+            grassAPI="pygrass" if grassAPI == 0 else "script",
         )
 
         fd.seek(0)
