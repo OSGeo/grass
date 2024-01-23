@@ -188,8 +188,6 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                         (long)window->rows3 * window->cols3 * window->depths,
                         sep);
 #endif
-            if (flat_flag)
-                fprintf(stdout, "\n");
         }
         else {
             fprintf(stdout, "%-*s %s\n", width, "north:", north);
@@ -340,12 +338,12 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             lac = latitude;
 
             if (print_flag & PRINT_SH) {
-                fprintf(stdout, "nw_long=%.8f\nnw_lat=%.8f\n", lo1, la1);
-                fprintf(stdout, "ne_long=%.8f\nne_lat=%.8f\n", lo2, la2);
-                fprintf(stdout, "se_long=%.8f\nse_lat=%.8f\n", lo3, la3);
-                fprintf(stdout, "sw_long=%.8f\nsw_lat=%.8f\n", lo4, la4);
-                fprintf(stdout, "center_long=%.8f\n", loc);
-                fprintf(stdout, "center_lat=%.8f\n", lac);
+                fprintf(stdout, "nw_long=%.8f%snw_lat=%.8f%s", lo1, sep, la1, sep);
+                fprintf(stdout, "ne_long=%.8f%sne_lat=%.8f%s", lo2, sep, la2, sep);
+                fprintf(stdout, "se_long=%.8f%sse_lat=%.8f%s", lo3, sep, la3, sep);
+                fprintf(stdout, "sw_long=%.8f%ssw_lat=%.8f%s", lo4, sep, la4, sep);
+                fprintf(stdout, "center_long=%.8f%s", loc, sep);
+                fprintf(stdout, "center_lat=%.8f%s", lac, sep);
             }
             else {
                 G_format_easting(lo1, buf, PROJECTION_LL);
@@ -381,8 +379,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
             if (!(print_flag & PRINT_REG)) {
                 if (print_flag & PRINT_SH) {
-                    fprintf(stdout, "rows=%d\n", window->rows);
-                    fprintf(stdout, "cols=%d\n", window->cols);
+                    fprintf(stdout, "rows=%d%s", window->rows, sep);
+                    fprintf(stdout, "cols=%d%s", window->cols, sep);
                 }
                 else {
                     fprintf(stdout, "%-*s %d\n", width, "rows:", window->rows);
@@ -405,8 +403,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
     /* flag.eprint */
     if (print_flag & PRINT_EXTENT) {
         if (print_flag & PRINT_SH) {
-            fprintf(stdout, "ns_extent=%f\n", window->north - window->south);
-            fprintf(stdout, "ew_extent=%f\n", window->east - window->west);
+            fprintf(stdout, "ns_extent=%f%s", window->north - window->south, sep);
+            fprintf(stdout, "ew_extent=%f%s", window->east - window->west, sep);
         }
         else {
             if (G_projection() != PROJECTION_LL) {
@@ -429,10 +427,10 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
     /* flag.center */
     if (print_flag & PRINT_CENTER) {
         if (print_flag & PRINT_SH) {
-            fprintf(stdout, "center_easting=%f\n",
-                    (window->west + window->east) / 2.);
-            fprintf(stdout, "center_northing=%f\n",
-                    (window->north + window->south) / 2.);
+            fprintf(stdout, "center_easting=%f%s",
+                    (window->west + window->east) / 2., sep);
+            fprintf(stdout, "center_northing=%f%s",
+                    (window->north + window->south) / 2., sep);
         }
         else {
             if (G_projection() != PROJECTION_LL) {
@@ -538,7 +536,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
         }
 
         if (print_flag & PRINT_SH)
-            fprintf(stdout, "converge_angle=%f\n", convergence);
+            fprintf(stdout, "converge_angle=%f%s", convergence, sep);
         else
             fprintf(stdout, "%-*s %f\n", width,
                     "convergence angle:", convergence);
@@ -720,13 +718,13 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
             /* print the largest bounding box */
             if (print_flag & PRINT_SH) {
-                fprintf(stdout, "ll_n=%.8f\n", sh_ll_n);
-                fprintf(stdout, "ll_s=%.8f\n", sh_ll_s);
-                fprintf(stdout, "ll_w=%.8f\n", sh_ll_w);
-                fprintf(stdout, "ll_e=%.8f\n", sh_ll_e);
+                fprintf(stdout, "ll_n=%.8f%s", sh_ll_n, sep);
+                fprintf(stdout, "ll_s=%.8f%s", sh_ll_s, sep);
+                fprintf(stdout, "ll_w=%.8f%s", sh_ll_w, sep);
+                fprintf(stdout, "ll_e=%.8f%s", sh_ll_e, sep);
                 /* center of the largest bounding box */
-                fprintf(stdout, "ll_clon=%.8f\n", loc);
-                fprintf(stdout, "ll_clat=%.8f\n", (sh_ll_n + sh_ll_s) / 2.);
+                fprintf(stdout, "ll_clon=%.8f%s", loc, sep);
+                fprintf(stdout, "ll_clat=%.8f%s", (sh_ll_n + sh_ll_s) / 2., sep);
             }
             else {
                 G_format_northing(sh_ll_n, buf, PROJECTION_LL);
@@ -756,4 +754,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                         "XY system"));
         }
     }
+
+    if (flat_flag)
+	fprintf(stdout, "\n");
 }
