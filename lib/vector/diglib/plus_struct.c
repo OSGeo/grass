@@ -753,7 +753,7 @@ int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
                 size += 8 + 4 * p->n_lines;
         }
 
-        ptr->off_t_size = size > PORT_LONG_MAX ? 8 : 4;
+        ptr->off_t_size = size > (off_t)PORT_LONG_MAX ? 8 : 4;
     }
 
     /* add a new field with off_t_size after byte_order? */
