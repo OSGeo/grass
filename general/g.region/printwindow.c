@@ -460,7 +460,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
         G_format_northing(window->south, south, -1);
         G_format_easting(window->east, east, -1);
         G_format_easting(window->west, west, -1);
-        fprintf(stdout, "bbox=%s,%s,%s,%s\n", west, south, east, north);
+        fprintf(stdout, "bbox=%s,%s,%s,%s%s", west, south, east, north, sep);
     }
 
     /* flag.nangle */
