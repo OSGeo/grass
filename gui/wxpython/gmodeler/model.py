@@ -2928,6 +2928,7 @@ if __name__ == "__main__":
                 else:
                     overwrite_string = ""
 
+                strcmd_len = len(strcmd.strip())
                 self.fd.write(
                     """
 {run_command}"{cmd}",
@@ -2939,14 +2940,14 @@ if __name__ == "__main__":
 """.format(
                         run_command=strcmd,
                         cmd=command,
-                        indent1=" " * (self.indent + 12),
+                        indent1=" " * (self.indent + strcmd_len),
                         input=param_request,
-                        indent2=" " * (self.indent + 12),
-                        indent3=" " * (self.indent + 16),
-                        indent4=" " * (self.indent + 16),
+                        indent2=" " * (self.indent + strcmd_len),
+                        indent3=" " * (self.indent * 2 + strcmd_len),
+                        indent4=" " * (self.indent * 2 + strcmd_len),
                         out=param_request,
                         format_ext=extension,
-                        indent5=" " * (self.indent + 12),
+                        indent5=" " * (self.indent + strcmd_len),
                         format=format,
                         overwrite_string=overwrite_string,
                     )
