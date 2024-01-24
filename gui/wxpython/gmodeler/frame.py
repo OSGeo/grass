@@ -2103,7 +2103,13 @@ class PythonPanel(wx.Panel):
                 return False
 
         fd = tempfile.TemporaryFile(mode="r+")
-        self.write_object(fd, self.parent.GetModel())
+        grassAPI = UserSettings.Get(group="modeler", key="grassAPI", subkey="selection")
+        self.write_object(
+            fd,
+            self.parent.GetModel(),
+            grassAPI="script" if grassAPI == 0 else "pygrass",
+        )
+
         fd.seek(0)
         self.body.SetText(fd.read())
         fd.close()
