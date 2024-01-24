@@ -7,7 +7,7 @@ Classes:
  - preferences::PreferencesDialog
  - preferences::PropertiesDialog
 
-(C) 2010-2013 by the GRASS Development Team
+(C) 2010-2024 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -48,9 +48,9 @@ class PreferencesDialog(PreferencesBaseDialog):
         """Create notebook page for action settings"""
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("General"))
+        border = wx.BoxSizer(wx.VERTICAL)
 
         # colors
-        border = wx.BoxSizer(wx.VERTICAL)
         box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Item properties"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
@@ -73,6 +73,48 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         gridSizer.Add(
             rColor, flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 1)
+        )
+
+        gridSizer.AddGrowableCol(0)
+        sizer.Add(gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=5)
+        border.Add(
+            sizer,
+            proportion=0,
+            flag=wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND,
+            border=3,
+        )
+
+        # Python editor
+        box = StaticBox(parent=panel, id=wx.ID_ANY, label=" %s " % _("Python editor"))
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+
+        gridSizer = wx.GridBagSizer(hgap=3, vgap=3)
+
+        row = 0
+        gridSizer.Add(
+            StaticText(parent=panel, id=wx.ID_ANY, label=_("GRASS API:")),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 0),
+        )
+        grassAPI = wx.Choice(
+            parent=panel,
+            id=wx.ID_ANY,
+            size=(150, -1),
+            choices=self.settings.Get(
+                group="modeler",
+                key="grassAPI",
+                subkey="choices",
+                settings_type="internal",
+            ),
+            name="GetSelection",
+        )
+        grassAPI.SetSelection(
+            self.settings.Get(group="modeler", key="grassAPI", subkey="selection")
+        )
+        self.winId["modeler:grassAPI:selection"] = grassAPI.GetId()
+
+        gridSizer.Add(
+            grassAPI, flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 1)
         )
 
         gridSizer.AddGrowableCol(0)

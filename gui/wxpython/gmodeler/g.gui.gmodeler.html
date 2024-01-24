@@ -372,6 +372,12 @@ not to run it on itself.
 <i>Figure: Python editor in the wxGUI Graphical Modeler - set to PyWPS.</i>
 </center>
 
+<p>
+By default GRASS script package API is used
+(<tt>grass.script.core.run_command()</tt>). This can be changed in the
+settings. Alternatively also PyGRASS API is supported
+(<tt>grass.pygrass.modules.Module</tt>).
+
 <h3>Defining loops</h3>
 In the example below the <a href="https://e4ftl01.cr.usgs.gov/MOLT/MOD13Q1.006/">MODIS MOD13Q1</a>
 (NDVI) satellite data products are used in a loop. The original data are
