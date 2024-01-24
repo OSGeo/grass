@@ -52,7 +52,21 @@ def extract_tar(name, directory, tmpdir):
         tar = tarfile.open(name)
         extract_dir = os.path.join(tmpdir, "extract_dir")
         os.mkdir(extract_dir)
-        tar.extractall(path=extract_dir)
+
+        # Extraction filters were added in Python 3.12,
+        # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
+        # See
+        # https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
+        # and https://peps.python.org/pep-0706/
+        # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
+        # and in Python 3.14, `filter='data'` will be the default
+        if hasattr(tarfile, "data_filter"):
+            tar.extractall(path=extract_dir, filter="data")
+        else:
+            # Remove this when no longer needed
+            debug(_("Extracting may be unsafe; consider updating Python"))
+            tar.extractall(path=extract_dir)
+
         files = os.listdir(extract_dir)
         _move_extracted_files(
             extract_dir=extract_dir, target_dir=directory, files=files
