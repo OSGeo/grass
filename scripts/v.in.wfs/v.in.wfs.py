@@ -8,7 +8,7 @@
 #               Converted to Python by Glynn Clements
 #               German ALKIS support added by Veronica Köß
 # PURPOSE:	WFS support
-# COPYRIGHT:	(C) 2006-2023 Markus Neteler and the GRASS Development Team
+# COPYRIGHT:	(C) 2006-2024 Markus Neteler and the GRASS Development Team
 #
 # 		This program is free software under the GNU General
 # 		Public License (>=v2). Read the file COPYING that
@@ -159,17 +159,14 @@ def main():
         wfs_url += "&BBOX=" + bbox
 
     if flags["l"]:
-        if options["version"]:
-            wfs_url += "&VERSION=" + options["version"]
-        else:
-            wfs_url = options["url"] + "REQUEST=GetCapabilities&SERVICE=WFS"
+        wfs_url = options["url"] + "REQUEST=GetCapabilities&SERVICE=WFS"
 
     print(wfs_url)
 
     tmp = grass.tempfile()
     tmpxml = tmp + ".xml"
 
-    # grass.debug(wfs_url)
+    grass.debug(wfs_url)
 
     # Set user and password if given
     if options["username"] and options["password"]:
