@@ -636,9 +636,9 @@ class GConsole(wx.EvtHandler):
                 try:
                     sfile = open(command[0], "r")
                     for line in sfile.readlines():
-                        if len(line) < 2:
+                        if len(line) < 3:
                             continue
-                        if line[0] == "#" and line[1] == "%":
+                        if line.startswith(("#%", "# %")):
                             skipInterface = False
                             break
                     sfile.close()
