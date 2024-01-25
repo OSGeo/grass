@@ -287,38 +287,37 @@ class HistoryJSONManager(HistoryManager):
         """
         from datetime import datetime
         import grass.script as grass
-        from grass.grassdb.checks import get_mapset_owner
 
-        # Execution time
-        exec_time = datetime.now().strftime("%a %b %d %H:%M:%S")
+        # Execution timestamp in ISO 8601 format
+        exec_time = datetime.now().isoformat()
 
         # 2D mask set
         env = gisenv()
         mapset_path = os.path.join(env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"])
         mask2d_set = os.path.exists(os.path.join(mapset_path, "cell", "MASK"))
 
-        # Executor login
-        exec_login = get_mapset_owner(mapset_path)
-
         # Computational region settings
-        region_settings = grass.read_command("g.region", flags="p", env=env_run)
+        region_settings_g = grass.read_command("g.region", flags="g", env=env_run)
 
-        # Convert region settings output to dictionary
-        region_settings_dict = {}
-        for line in region_settings.split("\n"):
-            parts = line.split(":")
+        # Convert region settings output to dictionary with float/int values
+        region_settings = {}
+        for line in region_settings_g.split("\n"):
+            parts = line.split("=")
             if len(parts) == 2:
-                key = parts[0].strip()
-                value = parts[1].strip()
-                region_settings_dict[key] = value
+                key = parts[0]
+                value_str = parts[1]
+                try:
+                    value = float(value_str)
+                    if value.is_integer():
+                        value = int(value)
+                except ValueError:
+                    pass
+                region_settings[key] = value
 
         # Finalize the command info dictionary
         cmd_info = {
-            "Execution time": exec_time,
-            "Runtime duration": "-",
-            "Status": "In process",
-            "2D mask set": mask2d_set,
-            "Executor login": exec_login,
-            "Region settings": region_settings_dict,
+            "timestamp": exec_time,
+            "mask": mask2d_set,
+            "region": region_settings,
         }
         return cmd_info

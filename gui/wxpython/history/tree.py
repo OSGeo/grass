@@ -4,6 +4,7 @@
 @brief History browser tree classes
 
 Classes:
+ - history::CommandInfoMapper
  - history::HistoryInfoDialog
  - history::HistoryBrowserTree
 
@@ -20,6 +21,7 @@ for details.
 
 import re
 import copy
+from datetime import datetime
 
 import wx
 import wx.lib.scrolledpanel as SP
@@ -42,6 +44,29 @@ from grass.pydispatch.signal import Signal
 from grass.grassdb.history import create_history_manager
 
 
+class CommandInfoMapper:
+    """Class for mapping command info values to the structure used in GUI."""
+
+    def __init__(self, command_info):
+        self.command_info = command_info
+
+    def get_translated_value(self, key):
+        print(self.command_info[key])
+        if key == "timestamp":
+            exec_datetime = datetime.fromisoformat(self.command_info[key])
+            print(exec_datetime.strftime("%Y-%m-%d %H:%M:%S"))
+            return exec_datetime.strftime("%Y-%m-%d %H:%M:%S")
+        elif key == "runtime":
+            print("{} sec".format(self.command_info[key]))
+            return _("{} sec".format(self.command_info[key]))
+        elif key == "status":
+            print(self.command_info[key].capitalize())
+            return _(self.command_info[key].capitalize())
+        elif key == "mask":
+            print(str(self.command_info[key]))
+            return _(str(self.command_info[key]))
+
+
 class HistoryInfoDialog(wx.Dialog):
     def __init__(
         self,
@@ -57,6 +82,7 @@ class HistoryInfoDialog(wx.Dialog):
         self.title = title
         self.size = size
         self.command_info = command_info
+        self.mapper = CommandInfoMapper(command_info)
 
         # notebook
         self.notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
@@ -96,30 +122,32 @@ class HistoryInfoDialog(wx.Dialog):
         self.sizer.SetCols(5)
         self.sizer.SetRows(8)
 
-        for index, (key, value) in enumerate(self.command_info.items()):
-            if key != "Region settings":
+        idx = 1
+        for key in self.command_info.keys():
+            if key != "region":
                 self.sizer.Add(
                     StaticText(
                         parent=panel,
                         id=wx.ID_ANY,
-                        label=_("{0}:".format(key)),
+                        label=key,
                         style=wx.ALIGN_LEFT,
                     ),
                     flag=wx.ALIGN_LEFT | wx.ALL,
                     border=5,
-                    pos=(index + 1, 0),
+                    pos=(idx, 0),
                 )
                 self.sizer.Add(
                     StaticText(
                         parent=panel,
                         id=wx.ID_ANY,
-                        label=_("{0}".format(value)),
+                        label=self.mapper.get_translated_value(key),
                         style=wx.ALIGN_LEFT,
                     ),
                     flag=wx.ALIGN_LEFT | wx.ALL,
                     border=5,
-                    pos=(index + 1, 1),
+                    pos=(idx, 1),
                 )
+                idx += 1
 
         self.sizer.AddGrowableCol(1)
         panel.SetSizer(self.sizer)
@@ -127,7 +155,7 @@ class HistoryInfoDialog(wx.Dialog):
     def _createRegionSettingsPage(self, parent):
         """Create notebook page for displaying region settings of the command"""
 
-        region_settings = self.command_info["Region settings"]
+        region_settings = self.command_info["region"]
 
         panel = SP.ScrolledPanel(parent=parent, id=wx.ID_ANY)
         panel.SetupScrolling(scroll_x=False, scroll_y=True)
@@ -143,7 +171,7 @@ class HistoryInfoDialog(wx.Dialog):
                 StaticText(
                     parent=panel,
                     id=wx.ID_ANY,
-                    label=_("{0}:".format(key)),
+                    label=key,
                     style=wx.ALIGN_LEFT,
                 ),
                 flag=wx.ALIGN_LEFT | wx.ALL,
@@ -154,7 +182,7 @@ class HistoryInfoDialog(wx.Dialog):
                 StaticText(
                     parent=panel,
                     id=wx.ID_ANY,
-                    label=_("{0}".format(value)),
+                    label=str(value),
                     style=wx.ALIGN_LEFT,
                 ),
                 flag=wx.ALIGN_LEFT | wx.ALL,
