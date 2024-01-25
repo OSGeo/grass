@@ -1250,7 +1250,7 @@ class SearchModuleWidget(wx.Panel):
 
         if self._showTip:
             self._searchTip = StaticWrapText(
-                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 35)
+                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 40)
             )
 
         if self._showChoice:
@@ -1315,9 +1315,9 @@ class SearchModuleWidget(wx.Panel):
                 self._searchChoice.SetSelection(0)
                 self.OnSelectModule()
 
-        label = _("%d tools match") % len(commands)
+        label = _("{} tools matched").format(len(commands))
         if self._showTip:
-            self._searchTip.SetLabel(label)
+            self._searchTip.SetLabel(self._searchTip.GetLabel() + " [{}]".format(label))
 
         self.showNotification.emit(message=label)
 
