@@ -634,14 +634,13 @@ class GConsole(wx.EvtHandler):
             skipInterface = True
             if os.path.splitext(command[0])[1] in (".py", ".sh"):
                 try:
-                    sfile = open(command[0], "r")
-                    for line in sfile.readlines():
-                        if len(line) < 2:
-                            continue
-                        if line[0] == "#" and line[1] == "%":
-                            skipInterface = False
-                            break
-                    sfile.close()
+                    with open(command[0], "r") as sfile:
+                        for line in sfile.readlines():
+                            if len(line) < 3:
+                                continue
+                            if line.startswith(("#%", "# %")):
+                                skipInterface = False
+                                break
                 except OSError:
                     pass
 
