@@ -12,7 +12,6 @@ r3.mapcalc --o expr="plume = double(col() + row() + depth())"
 # v.out.ascii --o format=standard input=random_points output=random_points.txt
 
 v.in.ascii --o -z format=standard input=data/random_points.ref output=random_points
-v.out.ascii --o format=standard input=random_points > data/random_points.txt
 v.db.addtable --o map=random_points column="concentration double precision"
 
 # @test the voxel sampling with vector points
