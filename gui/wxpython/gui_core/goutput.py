@@ -21,10 +21,17 @@ This program is free software under the GNU General Public License
 
 import textwrap
 
+import os
 import wx
 from wx import stc
 
 from grass.pydispatch.signal import Signal
+from grass.grassdb.history import (
+    read_history,
+    create_history_file,
+    copy_history,
+    get_current_mapset_gui_history_path,
+)
 
 # needed just for testing
 if __name__ == "__main__":
@@ -84,6 +91,7 @@ class GConsoleWindow(wx.SplitterWindow):
         self.panelPrompt = wx.Panel(parent=self, id=wx.ID_ANY)
         # initialize variables
         self.parent = parent  # GMFrame | CmdPanel | ?
+        self.giface = giface
         self._gconsole = gconsole
         self._menuModel = menuModel
 
@@ -134,6 +142,20 @@ class GConsoleWindow(wx.SplitterWindow):
 
         if not self._gcstyle & GC_PROMPT:
             self.cmdPrompt.Hide()
+
+        # read history file
+        self._loadHistory()
+        if self.giface:
+            self.giface.currentMapsetChanged.connect(self._loadHistory)
+
+            if self._gcstyle == GC_PROMPT:
+                # connect update history signals only for main Console Window
+                self.giface.entryToHistoryAdded.connect(
+                    lambda cmd: self.cmdPrompt.AddEntryToCmdHistoryBuffer(cmd)
+                )
+                self.giface.entryFromHistoryRemoved.connect(
+                    lambda index: self.cmdPrompt.RemoveEntryFromCmdHistoryBuffer(index)
+                )
 
         # buttons
         self.btnClear = ClearButton(parent=self.panelPrompt)
@@ -237,6 +259,17 @@ class GConsoleWindow(wx.SplitterWindow):
         # layout
         self.SetAutoLayout(True)
         self.Layout()
+
+    def _loadHistory(self):
+        """Load history from a history file to data structures"""
+        history_path = get_current_mapset_gui_history_path()
+        try:
+            if not os.path.exists(history_path):
+                create_history_file(history_path)
+            self.cmdPrompt.cmdbuffer = read_history(history_path)
+            self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
+        except OSError as e:
+            GError(str(e))
 
     def GetPanel(self, prompt=True):
         """Get panel
@@ -367,7 +400,7 @@ class GConsoleWindow(wx.SplitterWindow):
             try:
                 output = open(path, "w")
                 output.write(text)
-            except IOError as e:
+            except OSError as e:
                 GError(
                     _("Unable to write file '%(path)s'.\n\nDetails: %(error)s")
                     % {"path": path, "error": e}
@@ -431,10 +464,14 @@ class GConsoleWindow(wx.SplitterWindow):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            if self.cmdPrompt.CopyHistory(path):
+            history_path = get_current_mapset_gui_history_path()
+            try:
+                copy_history(path, history_path)
                 self.showNotification.emit(
                     message=_("Command history saved to '{}'".format(path))
                 )
+            except OSError as e:
+                GError(str(e))
 
         dlg.Destroy()
         event.Skip()

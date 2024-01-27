@@ -25,11 +25,8 @@ This program is free software under the GNU General Public License
 @author Yann modified: graphical replacement of i.photo.2image (was in v6 using Vask lib)
 """
 
-from __future__ import print_function
-
 import os
 import sys
-import six
 import shutil
 from copy import copy
 
@@ -89,7 +86,7 @@ def getSmallDnArrowImage():
     return img
 
 
-class GCPWizard(object):
+class GCPWizard:
     """
     Not a wizard anymore
     """
@@ -452,7 +449,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     dataFiducialX.append(line.split()[1])
                     dataFiducialY.append(line.split()[2])
 
-        except IOError as err:
+        except OSError as err:
             GError(
                 parent=self,
                 message="%s <%s>. %s%s"
@@ -498,7 +495,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     + "\n"
                 )
 
-        except IOError as err:
+        except OSError as err:
             GError(
                 parent=self,
                 message="%s <%s>. %s%s"
@@ -760,7 +757,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         }
         wpx = UserSettings.Get(group="gcpman", key="symbol", subkey="width")
 
-        for k, v in six.iteritems(colours):
+        for k, v in colours.items():
             col = UserSettings.Get(group="gcpman", key="symbol", subkey=k)
             self.pointsToDrawSrc.GetPen(v).SetColour(
                 wx.Colour(col[0], col[1], col[2], 255)
@@ -923,7 +920,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     + "\n"
                 )
 
-        except IOError as err:
+        except OSError as err:
             GError(
                 parent=self,
                 message="%s <%s>. %s%s"
@@ -984,7 +981,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     self.list.CheckItem(index, check)
                 GCPcnt += 1
 
-        except IOError as err:
+        except OSError as err:
             GError(
                 parent=self,
                 message="%s <%s>. %s%s"

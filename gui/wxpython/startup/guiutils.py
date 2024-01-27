@@ -117,6 +117,13 @@ class LocationDialog(TextEntryDialog):
         return is_location_name_valid(self.database, text)
 
 
+def initialize_mapset(grassdb, location, mapset):
+    """Initialize mapset (database connection)"""
+    gisrc_file, env = create_environment(grassdb, location, mapset)
+    RunCommand("db.connect", flags="c", env=env)
+    try_remove(gisrc_file)
+
+
 def create_mapset_interactively(guiparent, grassdb, location):
     """
     Create new mapset
@@ -135,6 +142,7 @@ def create_mapset_interactively(guiparent, grassdb, location):
         mapset = dlg.GetValue()
         try:
             create_mapset(grassdb, location, mapset)
+            initialize_mapset(grassdb, location, mapset)
         except OSError as err:
             mapset = None
             GError(
@@ -601,7 +609,7 @@ def can_switch_mapset_interactive(guiparent, grassdb, location, mapset):
             # Remove lockfile
             try:
                 os.remove(lockpath)
-            except IOError as e:
+            except OSError as e:
                 wx.MessageBox(
                     parent=guiparent,
                     caption=_("Error when removing lock file"),

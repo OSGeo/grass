@@ -17,8 +17,6 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-from __future__ import print_function
-
 import datetime
 
 import grass.script as grass
@@ -38,7 +36,7 @@ class GranularityMode:
     ORIGINAL = 2
 
 
-class TemporalManager(object):
+class TemporalManager:
     """Class for temporal data processing."""
 
     def __init__(self):

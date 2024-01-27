@@ -49,7 +49,6 @@
 # %option G_OPT_T_WHERE
 # % key: t_where
 # %end
-from __future__ import print_function
 
 import grass.script as grass
 

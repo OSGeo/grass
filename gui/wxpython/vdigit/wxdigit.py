@@ -26,9 +26,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-from __future__ import print_function
 
-import six
 import grass.script.core as grass
 
 from grass.pydispatch.signal import Signal
@@ -39,15 +37,11 @@ from core.settings import UserSettings
 from vdigit.wxdisplay import DisplayDriver, GetLastError
 
 try:
-    WindowsError
-except NameError:
-    WindowsError = OSError
-try:
     from grass.lib.gis import *
     from grass.lib.vector import *
     from grass.lib.vedit import *
     from grass.lib.dbmi import *
-except (ImportError, WindowsError, TypeError) as e:
+except (ImportError, OSError, TypeError) as e:
     print("wxdigit.py: {}".format(e), file=sys.stderr)
 
 
@@ -1811,7 +1805,7 @@ class IVDigit:
             )
 
         # set default values
-        for field, cat in six.iteritems(self.cats):
+        for field, cat in self.cats.items():
             if cat is None:
                 self.cats[field] = 0  # first category 1
             Debug.msg(
