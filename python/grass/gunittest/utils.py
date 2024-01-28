@@ -55,9 +55,9 @@ def do_doctest_gettext_workaround():
 
     sys.displayhook = new_displayhook
 
-    import builtins as __builtin__
+    import builtins
 
-    __builtin__._ = new_translator
+    builtins.__dict__["_"] = new_translator
 
 
 _MAX_LENGTH = 80
