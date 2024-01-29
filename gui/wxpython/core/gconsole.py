@@ -491,10 +491,7 @@ class GConsole(wx.EvtHandler):
         :param userData: data defined for the command
         """
         if isinstance(command, dict):
-            cmd_save_to_history = command["cmdString"]
             command = command["cmd"]
-        else:
-            cmd_save_to_history = " ".join(command)
 
         if len(command) == 0:
             Debug.msg(2, "GPrompt:RunCmd(): empty command")
@@ -508,7 +505,7 @@ class GConsole(wx.EvtHandler):
                 else None
             )
             entry = {
-                "command": cmd_save_to_history,
+                "command": command,
                 "command_info": command_info,
             }
             self.history_manager.add_entry_to_history(entry)

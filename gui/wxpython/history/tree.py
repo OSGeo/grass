@@ -277,6 +277,7 @@ class HistoryBrowserTree(CTreeView):
             GError(str(e))
 
         for data in content_list:
+            data["command"] = " ".join(data["command"])
             self._model.AppendNode(
                 parent=self._model.root,
                 label=data["command"].strip(),
@@ -338,9 +339,11 @@ class HistoryBrowserTree(CTreeView):
 
         :param entry dict: entry with 'command' and 'command_info' keys
         """
+        entry["command"] = " ".join(entry["command"])
+
         self._model.AppendNode(
             parent=self._model.root,
-            label=entry["command"],
+            label=entry["command"].strip(),
             data=entry,
         )
         self._refreshTree()
