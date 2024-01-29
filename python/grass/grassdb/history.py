@@ -287,37 +287,38 @@ class HistoryJSONManager(HistoryManager):
         """
         from datetime import datetime
         import grass.script as grass
+        from grass.script.utils import parse_key_val
 
         # Execution timestamp in ISO 8601 format
         exec_time = datetime.now().isoformat()
 
-        # 2D mask set
+        # 2D raster MASK presence
         env = gisenv()
         mapset_path = os.path.join(env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"])
-        mask2d_set = os.path.exists(os.path.join(mapset_path, "cell", "MASK"))
+        mask2d_present = os.path.exists(os.path.join(mapset_path, "cell", "MASK"))
+
+        # 3D raster MASK presence
+        mask3d_present = os.path.exists(
+            os.path.join(mapset_path, "grid3", "RASTER3D_MASK")
+        )
 
         # Computational region settings
-        region_settings_g = grass.read_command("g.region", flags="g", env=env_run)
+        region_settings = dict(
+            parse_key_val(
+                grass.read_command("g.region", flags="g", env=env_run), val_type=float
+            )
+        )
 
-        # Convert region settings output to dictionary with float/int values
-        region_settings = {}
-        for line in region_settings_g.split("\n"):
-            parts = line.split("=")
-            if len(parts) == 2:
-                key = parts[0]
-                value_str = parts[1]
-                try:
-                    value = float(value_str)
-                    if value.is_integer():
-                        value = int(value)
-                except ValueError:
-                    pass
-                region_settings[key] = value
+        # Convert floats to integers if possible
+        for key, value in region_settings.items():
+            if value.is_integer():
+                region_settings[key] = int(value)
 
         # Finalize the command info dictionary
         cmd_info = {
             "timestamp": exec_time,
-            "mask": mask2d_set,
+            "mask2d": mask2d_present,
+            "mask3d": mask3d_present,
             "region": region_settings,
         }
         return cmd_info

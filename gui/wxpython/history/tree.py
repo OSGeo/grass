@@ -51,20 +51,45 @@ class CommandInfoMapper:
         self.command_info = command_info
 
     def get_translated_value(self, key):
-        print(self.command_info[key])
         if key == "timestamp":
             exec_datetime = datetime.fromisoformat(self.command_info[key])
-            print(exec_datetime.strftime("%Y-%m-%d %H:%M:%S"))
             return exec_datetime.strftime("%Y-%m-%d %H:%M:%S")
         elif key == "runtime":
-            print("{} sec".format(self.command_info[key]))
             return _("{} sec".format(self.command_info[key]))
         elif key == "status":
-            print(self.command_info[key].capitalize())
             return _(self.command_info[key].capitalize())
-        elif key == "mask":
-            print(str(self.command_info[key]))
+        elif key == "mask2d" or key == "mask3d":
             return _(str(self.command_info[key]))
+
+    def make_label(self, key):
+        if key == "timestamp":
+            return _("Timestamp: ")
+        elif key == "runtime":
+            return _("Runtime duration: ")
+        elif key == "status":
+            return _("Status: ")
+        elif key == "mask2d":
+            return _("Mask 2D: ")
+        elif key == "mask3d":
+            return _("Mask 3D: ")
+        elif key == "n":
+            return _("North: ")
+        elif key == "s":
+            return _("South: ")
+        elif key == "w":
+            return _("West: ")
+        elif key == "e":
+            return _("East: ")
+        elif key == "nsres":
+            return _("North-south resolution: ")
+        elif key == "ewres":
+            return _("East-west resolution: ")
+        elif key == "rows":
+            return _("Number of rows: ")
+        elif key == "cols":
+            return _("Number of columns: ")
+        elif key == "cells":
+            return _("Number of cells: ")
 
 
 class HistoryInfoDialog(wx.Dialog):
@@ -123,13 +148,18 @@ class HistoryInfoDialog(wx.Dialog):
         self.sizer.SetRows(8)
 
         idx = 1
-        for key in self.command_info.keys():
-            if key != "region":
+        for key, value in self.command_info.items():
+            if (
+                key == "timestamp"
+                or key == "runtime"
+                or key == "status"
+                or ((key == "mask2d" or key == "mask3d") and value is True)
+            ):
                 self.sizer.Add(
                     StaticText(
                         parent=panel,
                         id=wx.ID_ANY,
-                        label=key,
+                        label=self.mapper.make_label(key),
                         style=wx.ALIGN_LEFT,
                     ),
                     flag=wx.ALIGN_LEFT | wx.ALL,
@@ -166,29 +196,32 @@ class HistoryInfoDialog(wx.Dialog):
         self.sizer.SetCols(5)
         self.sizer.SetRows(8)
 
-        for index, (key, value) in enumerate(region_settings.items()):
-            self.sizer.Add(
-                StaticText(
-                    parent=panel,
-                    id=wx.ID_ANY,
-                    label=key,
-                    style=wx.ALIGN_LEFT,
-                ),
-                flag=wx.ALIGN_LEFT | wx.ALL,
-                border=5,
-                pos=(index + 1, 0),
-            )
-            self.sizer.Add(
-                StaticText(
-                    parent=panel,
-                    id=wx.ID_ANY,
-                    label=str(value),
-                    style=wx.ALIGN_LEFT,
-                ),
-                flag=wx.ALIGN_LEFT | wx.ALL,
-                border=5,
-                pos=(index + 1, 1),
-            )
+        idx = 1
+        for key, value in region_settings.items():
+            if (key != "projection") and (key != "zone"):
+                self.sizer.Add(
+                    StaticText(
+                        parent=panel,
+                        id=wx.ID_ANY,
+                        label=self.mapper.make_label(key),
+                        style=wx.ALIGN_LEFT,
+                    ),
+                    flag=wx.ALIGN_LEFT | wx.ALL,
+                    border=5,
+                    pos=(idx, 0),
+                )
+                self.sizer.Add(
+                    StaticText(
+                        parent=panel,
+                        id=wx.ID_ANY,
+                        label=str(value),
+                        style=wx.ALIGN_LEFT,
+                    ),
+                    flag=wx.ALIGN_LEFT | wx.ALL,
+                    border=5,
+                    pos=(idx, 1),
+                )
+                idx += 1
 
         self.sizer.AddGrowableCol(1)
         panel.SetSizer(self.sizer)
