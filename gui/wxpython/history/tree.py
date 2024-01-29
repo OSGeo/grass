@@ -4,8 +4,6 @@
 @brief History browser tree classes
 
 Classes:
- - history::CommandInfoMapper
- - history::HistoryInfoDialog
  - history::HistoryBrowserTree
 
 (C) 2023 by Linda Karlovska, and the GRASS Development Team
@@ -21,10 +19,8 @@ for details.
 
 import re
 import copy
-from datetime import datetime
 
 import wx
-import wx.lib.scrolledpanel as SP
 
 from core import globalvar
 
@@ -44,189 +40,6 @@ from grass.pydispatch.signal import Signal
 from grass.grassdb.history import create_history_manager
 
 
-class CommandInfoMapper:
-    """Class for mapping command info values to the structure used in GUI."""
-
-    def __init__(self, command_info):
-        self.command_info = command_info
-
-    def get_translated_value(self, key):
-        if key == "timestamp":
-            exec_datetime = datetime.fromisoformat(self.command_info[key])
-            return exec_datetime.strftime("%Y-%m-%d %H:%M:%S")
-        elif key == "runtime":
-            return _("{} sec".format(self.command_info[key]))
-        elif key == "status":
-            return _(self.command_info[key].capitalize())
-        elif key == "mask2d" or key == "mask3d":
-            return _(str(self.command_info[key]))
-
-    def make_label(self, key):
-        if key == "timestamp":
-            return _("Timestamp: ")
-        elif key == "runtime":
-            return _("Runtime duration: ")
-        elif key == "status":
-            return _("Status: ")
-        elif key == "mask2d":
-            return _("Mask 2D: ")
-        elif key == "mask3d":
-            return _("Mask 3D: ")
-        elif key == "n":
-            return _("North: ")
-        elif key == "s":
-            return _("South: ")
-        elif key == "w":
-            return _("West: ")
-        elif key == "e":
-            return _("East: ")
-        elif key == "nsres":
-            return _("North-south resolution: ")
-        elif key == "ewres":
-            return _("East-west resolution: ")
-        elif key == "rows":
-            return _("Number of rows: ")
-        elif key == "cols":
-            return _("Number of columns: ")
-        elif key == "cells":
-            return _("Number of cells: ")
-
-
-class HistoryInfoDialog(wx.Dialog):
-    def __init__(
-        self,
-        parent,
-        command_info,
-        title=("Command Info"),
-        size=(-1, 400),
-        style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
-    ):
-        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title, style=style)
-
-        self.parent = parent
-        self.title = title
-        self.size = size
-        self.command_info = command_info
-        self.mapper = CommandInfoMapper(command_info)
-
-        # notebook
-        self.notebook = wx.Notebook(parent=self, id=wx.ID_ANY, style=wx.BK_DEFAULT)
-        # create notebook pages
-        self._createGeneralInfoPage(parent=self.notebook)
-        self._createRegionSettingsPage(parent=self.notebook)
-
-        self.btnClose = Button(self, wx.ID_CLOSE)
-        self.SetEscapeId(wx.ID_CLOSE)
-
-        self._layout()
-
-    def _layout(self):
-        """Layout window"""
-        # sizers
-        btnStdSizer = wx.StdDialogButtonSizer()
-        btnStdSizer.AddButton(self.btnClose)
-        btnStdSizer.Realize()
-
-        mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(self.notebook, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
-        mainSizer.Add(btnStdSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
-
-        self.SetSizer(mainSizer)
-        self.SetMinSize(self.GetBestSize())
-        self.SetSize(self.size)
-
-    def _createGeneralInfoPage(self, parent):
-        """Create notebook page for general info about the command"""
-
-        panel = SP.ScrolledPanel(parent=parent, id=wx.ID_ANY)
-        panel.SetupScrolling(scroll_x=False, scroll_y=True)
-        parent.AddPage(page=panel, text=_("General info"))
-
-        # General settings
-        self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
-        self.sizer.SetCols(5)
-        self.sizer.SetRows(8)
-
-        idx = 1
-        for key, value in self.command_info.items():
-            if (
-                key == "timestamp"
-                or key == "runtime"
-                or key == "status"
-                or ((key == "mask2d" or key == "mask3d") and value is True)
-            ):
-                self.sizer.Add(
-                    StaticText(
-                        parent=panel,
-                        id=wx.ID_ANY,
-                        label=self.mapper.make_label(key),
-                        style=wx.ALIGN_LEFT,
-                    ),
-                    flag=wx.ALIGN_LEFT | wx.ALL,
-                    border=5,
-                    pos=(idx, 0),
-                )
-                self.sizer.Add(
-                    StaticText(
-                        parent=panel,
-                        id=wx.ID_ANY,
-                        label=self.mapper.get_translated_value(key),
-                        style=wx.ALIGN_LEFT,
-                    ),
-                    flag=wx.ALIGN_LEFT | wx.ALL,
-                    border=5,
-                    pos=(idx, 1),
-                )
-                idx += 1
-
-        self.sizer.AddGrowableCol(1)
-        panel.SetSizer(self.sizer)
-
-    def _createRegionSettingsPage(self, parent):
-        """Create notebook page for displaying region settings of the command"""
-
-        region_settings = self.command_info["region"]
-
-        panel = SP.ScrolledPanel(parent=parent, id=wx.ID_ANY)
-        panel.SetupScrolling(scroll_x=False, scroll_y=True)
-        parent.AddPage(page=panel, text=_("Region settings"))
-
-        # General settings
-        self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
-        self.sizer.SetCols(5)
-        self.sizer.SetRows(8)
-
-        idx = 1
-        for key, value in region_settings.items():
-            if (key != "projection") and (key != "zone"):
-                self.sizer.Add(
-                    StaticText(
-                        parent=panel,
-                        id=wx.ID_ANY,
-                        label=self.mapper.make_label(key),
-                        style=wx.ALIGN_LEFT,
-                    ),
-                    flag=wx.ALIGN_LEFT | wx.ALL,
-                    border=5,
-                    pos=(idx, 0),
-                )
-                self.sizer.Add(
-                    StaticText(
-                        parent=panel,
-                        id=wx.ID_ANY,
-                        label=str(value),
-                        style=wx.ALIGN_LEFT,
-                    ),
-                    flag=wx.ALIGN_LEFT | wx.ALL,
-                    border=5,
-                    pos=(idx, 1),
-                )
-                idx += 1
-
-        self.sizer.AddGrowableCol(1)
-        panel.SetSizer(self.sizer)
-
-
 class HistoryBrowserTree(CTreeView):
     """Tree structure visualizing and managing history of executed commands.
     Uses virtual tree and model defined in core/treemodel.py.
@@ -235,6 +48,7 @@ class HistoryBrowserTree(CTreeView):
     def __init__(
         self,
         parent,
+        infoPanel,
         model=None,
         giface=None,
         style=wx.TR_HIDE_ROOT
@@ -249,6 +63,7 @@ class HistoryBrowserTree(CTreeView):
 
         self._giface = giface
         self.parent = parent
+        self.infoPanel = infoPanel
 
         self._initHistoryModel()
 
@@ -427,18 +242,14 @@ class HistoryBrowserTree(CTreeView):
             self._refreshTree()
             self.showNotification.emit(message=_("<{}> removed").format(cmd))
 
-    def OnShowInfo(self, event):
-        """Show info about command in the small dialog"""
-        tree_node = self._getSelectedNode()
-        tree_index = self._model.GetIndexOfNode(tree_node)[0]
-        command_info = self.GetCommandInfo(tree_index)
-        dialog = HistoryInfoDialog(self, command_info)
-        dialog.ShowModal()
-
     def OnItemSelected(self, node):
         """Item selected"""
         command = node.data["command"]
         self.showNotification.emit(message=command)
+
+        tree_index = self._model.GetIndexOfNode(node)[0]
+        command_info = self.GetCommandInfo(tree_index)
+        self.infoPanel.showCommandInfo(command_info)
 
     def OnRightClick(self, node):
         """Display popup menu"""
