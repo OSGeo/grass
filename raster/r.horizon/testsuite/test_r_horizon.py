@@ -242,33 +242,33 @@ class TestHorizon(TestCase):
         )
         self.assertModule(module)
         ref = {
-            "mean": 0.034479,
+            "mean": 0.0344791,
         }
         output = "test_horizon_output_from_elevation_050"
         self.assertRasterFitsUnivar(
             raster=output,
             reference=ref,
-            precision=1e6,
+            precision=1e-6,
         )
         module = SimpleModule(
             "r.horizon",
             elevation="elevation",
             output=self.horizon_output,
             direction=50,
-            bufferzone=109,
+            bufferzone=103,
         )
         self.assertModule(module)
         self.assertRasterFitsUnivar(
             raster=output,
             reference=ref,
-            precision=1e6,
+            precision=1e-6,
         )
         module = SimpleModule(
             "r.horizon",
             elevation="elevation",
             output=self.horizon_output,
             direction=50,
-            bufferzone=99,
+            bufferzone=95,
         )
         self.assertModule(module)
         ref = {
@@ -277,7 +277,7 @@ class TestHorizon(TestCase):
         self.assertRasterFitsUnivar(
             raster=output,
             reference=ref,
-            precision=1e6,
+            precision=1e-6,
         )
         self.runModule("g.region", raster="elevation")
 
