@@ -8,12 +8,10 @@ for details.
 
 :authors: Vaclav Petras
 """
-from __future__ import print_function
 
 import os
 import shutil
 import subprocess
-import sys
 import hashlib
 import uuid
 import unittest
@@ -35,13 +33,7 @@ from .checkers import (
 from .utils import safe_repr
 from .gutils import is_map_in_mapset
 
-pyversion = sys.version_info[0]
-if pyversion == 2:
-    from StringIO import StringIO
-else:
-    from io import StringIO
-
-    unicode = str
+from io import StringIO
 
 
 class TestCase(unittest.TestCase):
@@ -62,7 +54,7 @@ class TestCase(unittest.TestCase):
     readable_names = False  # prefer shorter but unreadable map and file names
 
     def __init__(self, methodName):
-        super(TestCase, self).__init__(methodName)
+        super().__init__(methodName)
         self.grass_modules = []
         self.supplementary_files = []
         # Python unittest doc is saying that strings use assertMultiLineEqual
@@ -184,9 +176,7 @@ class TestCase(unittest.TestCase):
                 first = first.replace(os.linesep, "\n")
             if os.linesep in second:
                 second = second.replace(os.linesep, "\n")
-        return super(TestCase, self).assertMultiLineEqual(
-            first=first, second=second, msg=msg
-        )
+        return super().assertMultiLineEqual(first=first, second=second, msg=msg)
 
     def assertLooksLike(self, actual, reference, msg=None):
         r"""Test that ``actual`` text is the same as ``reference`` with ellipses.
@@ -199,11 +189,9 @@ class TestCase(unittest.TestCase):
         # actual is in the system codec while the passed reference is in utf-8;
         # re-decode reference into the system codec for proper comparison
         reference = decode(encode(reference, "utf-8"))
+        self.assertTrue(isinstance(actual, str), ("actual argument is not a string"))
         self.assertTrue(
-            isinstance(actual, (str, unicode)), ("actual argument is not a string")
-        )
-        self.assertTrue(
-            isinstance(reference, (str, unicode)),
+            isinstance(reference, str),
             ("reference argument is not a string"),
         )
         if os.linesep != "\n" and os.linesep in actual:

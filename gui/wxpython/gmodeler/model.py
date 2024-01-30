@@ -19,7 +19,7 @@ Classes:
  - model::WritePythonFile
  - model::ModelParamDialog
 
-(C) 2010-2018 by the GRASS Development Team
+(C) 2010-2024 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -34,12 +34,8 @@ import copy
 import re
 import mimetypes
 import time
-import six
 
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import xml.etree.ElementTree as etree
 
 import xml.sax.saxutils as saxutils
 
@@ -66,7 +62,7 @@ from gmodeler.giface import GraphicalModelerGrassInterface
 from grass.script import task as gtask
 
 
-class Model(object):
+class Model:
     """Class representing the model"""
 
     def __init__(self, canvas=None):
@@ -131,7 +127,7 @@ class Model(object):
 
     def ReorderItems(self, idxList):
         items = list()
-        for oldIdx, newIdx in six.iteritems(idxList):
+        for oldIdx, newIdx in idxList.items():
             item = self.items.pop(oldIdx)
             items.append(item)
             self.items.insert(newIdx, item)
@@ -678,7 +674,7 @@ class Model(object):
                 return
 
             err = list()
-            for key, item in six.iteritems(params):
+            for key, item in params.items():
                 for p in item["params"]:
                     if p.get("value", "") == "":
                         err.append((key, p.get("name", ""), p.get("description", "")))
@@ -762,7 +758,7 @@ class Model(object):
 
         # discard values
         if params:
-            for item in six.itervalues(params):
+            for item in params.values():
                 for p in item["params"]:
                     p["value"] = ""
 
@@ -828,7 +824,7 @@ class Model(object):
         if self.variables:
             params = list()
             result["variables"] = {"flags": list(), "params": params, "idx": idx}
-            for name, values in six.iteritems(self.variables):
+            for name, values in self.variables.items():
                 gtype = values.get("type", "string")
                 if gtype in ("raster", "vector", "mapset", "file", "region", "dir"):
                     gisprompt = True
@@ -894,7 +890,7 @@ class Model(object):
         return result
 
 
-class ModelObject(object):
+class ModelObject:
     def __init__(self, id=-1, label=""):
         self.id = id  # internal id, should be not changed
         self.label = ""
@@ -2318,7 +2314,7 @@ class WriteModelFile:
             return
         self.fd.write("%s<variables>\n" % (" " * self.indent))
         self.indent += 4
-        for name, values in six.iteritems(self.variables):
+        for name, values in self.variables.items():
             self.fd.write(
                 '%s<variable name="%s" type="%s">\n'
                 % (" " * self.indent, name, values["type"])
@@ -2374,7 +2370,7 @@ class WriteModelFile:
         self.indent += 4
         if not action.IsEnabled():
             self.fd.write("%s<disabled />\n" % (" " * self.indent))
-        for key, val in six.iteritems(action.GetParams()):
+        for key, val in action.GetParams().items():
             if key == "flags":
                 for f in val:
                     if f.get("value", False) or f.get("parameterized", False):
@@ -2668,11 +2664,12 @@ class WriteScriptFile(ABC):
 class WritePyWPSFile(WriteScriptFile):
     """Class for exporting model to PyWPS script."""
 
-    def __init__(self, fd, model):
+    def __init__(self, fd, model, grassAPI="script"):
         """Class for exporting model to PyWPS script."""
         self.fd = fd
         self.model = model
         self.indent = 8
+        self.grassAPI = grassAPI
 
         self._writePyWPS()
 
@@ -2687,8 +2684,15 @@ import sys
 import os
 import atexit
 import tempfile
-from grass.script import run_command
-from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format
+"""
+        )
+        if self.grassAPI == "script":
+            self.fd.write("from grass.script import run_command\n")
+        else:
+            self.fd.write("from grass.pygrass.modules import Module\n")
+
+        self.fd.write(
+            r"""from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format
 
 
 class Model(Process):
@@ -2731,7 +2735,7 @@ class Model(Process):
 
         self._writeHandler()
 
-        for item in self.model.GetItems():
+        for item in self.model.GetItems(ModelAction):
             if item.GetParameterizedParams()["flags"]:
                 self.fd.write(
                     r"""
@@ -2864,7 +2868,7 @@ if __name__ == "__main__":
         )
 
     def _writeHandler(self):
-        for item in self.model.GetItems():
+        for item in self.model.GetItems(ModelAction):
             self._writeItem(item, variables=item.GetParameterizedParams())
 
         self.fd.write("\n{}return response\n".format(" " * self.indent))
@@ -2872,7 +2876,10 @@ if __name__ == "__main__":
     def _writePythonAction(self, item, variables={}, intermediates=None):
         """Write model action to Python file"""
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
-        strcmd = "\n%srun_command(" % (" " * self.indent)
+        strcmd = "\n%s%s(" % (
+            " " * self.indent,
+            "run_command" if self.grassAPI == "script" else "Module",
+        )
         self.fd.write(
             strcmd + self._getPythonActionCmd(item, task, len(strcmd) - 1, variables)
         )
@@ -2921,6 +2928,7 @@ if __name__ == "__main__":
                 else:
                     overwrite_string = ""
 
+                strcmd_len = len(strcmd.strip())
                 self.fd.write(
                     """
 {run_command}"{cmd}",
@@ -2932,14 +2940,14 @@ if __name__ == "__main__":
 """.format(
                         run_command=strcmd,
                         cmd=command,
-                        indent1=" " * (self.indent + 12),
+                        indent1=" " * (self.indent + strcmd_len),
                         input=param_request,
-                        indent2=" " * (self.indent + 12),
-                        indent3=" " * (self.indent + 16),
-                        indent4=" " * (self.indent + 16),
+                        indent2=" " * (self.indent + strcmd_len),
+                        indent3=" " * (self.indent * 2 + strcmd_len),
+                        indent4=" " * (self.indent * 2 + strcmd_len),
                         out=param_request,
                         format_ext=extension,
-                        indent5=" " * (self.indent + 12),
+                        indent5=" " * (self.indent + strcmd_len),
                         format=format,
                         overwrite_string=overwrite_string,
                     )
@@ -3065,14 +3073,17 @@ if __name__ == "__main__":
 
 
 class WritePythonFile(WriteScriptFile):
-    def __init__(self, fd, model):
+    def __init__(self, fd, model, grassAPI="script"):
         """Class for exporting model to Python script
 
         :param fd: file descriptor
+        :param model: model to translate
+        :param grassAPI: script or pygrass
         """
         self.fd = fd
         self.model = model
         self.indent = 4
+        self.grassAPI = grassAPI
 
         self._writePython()
 
@@ -3132,7 +3143,7 @@ class WritePythonFile(WriteScriptFile):
             )
         )
 
-        modelItems = self.model.GetItems()
+        modelItems = self.model.GetItems(ModelAction)
         for item in modelItems:
             for flag in item.GetParameterizedParams()["flags"]:
                 if flag["label"]:
@@ -3192,9 +3203,13 @@ import sys
 import os
 import atexit
 
-from grass.script import parser, run_command
+from grass.script import parser
 """
         )
+        if self.grassAPI == "script":
+            self.fd.write("from grass.script import run_command\n")
+        else:
+            self.fd.write("from grass.pygrass.modules import Module\n")
 
         # cleanup()
         rast, vect, rast3d, msg = self.model.GetIntermediateData()
@@ -3203,32 +3218,33 @@ from grass.script import parser, run_command
 def cleanup():
 """
         )
+        run_command = "run_command" if self.grassAPI == "script" else "Module"
         if rast:
             self.fd.write(
-                r"""    run_command("g.remove", flags="f", type="raster",
+                r"""    %s("g.remove", flags="f", type="raster",
                 name=%s)
 """
-                % ",".join(map(lambda x: '"' + x + '"', rast))
+                % (run_command, ",".join(map(lambda x: '"' + x + '"', rast)))
             )
         if vect:
             self.fd.write(
-                r"""    run_command("g.remove", flags="f", type="vector",
+                r"""    %s("g.remove", flags="f", type="vector",
                 name=%s)
 """
-                % ",".join(map(lambda x: '"' + x + '"', vect))
+                % (run_command, ",".join(map(lambda x: '"' + x + '"', vect)))
             )
         if rast3d:
             self.fd.write(
-                r"""    run_command("g.remove", flags="f", type="raster_3d",
+                r"""    %s("g.remove", flags="f", type="raster_3d",
                 name=%s)
 """
-                % ",".join(map(lambda x: '"' + x + '"', rast3d))
+                % (run_command, ",".join(map(lambda x: '"' + x + '"', rast3d)))
             )
         if not rast and not vect and not rast3d:
             self.fd.write("    pass\n")
 
         self.fd.write("\ndef main(options, flags):\n")
-        for item in self.model.GetItems():
+        for item in self.model.GetItems(ModelAction):
             self._writeItem(item, variables=item.GetParameterizedParams())
 
         self.fd.write("    return 0\n")
@@ -3264,7 +3280,10 @@ if __name__ == "__main__":
     def _writePythonAction(self, item, variables={}, intermediates=None):
         """Write model action to Python file"""
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
-        strcmd = "%srun_command(" % (" " * self.indent)
+        strcmd = "%s%s(" % (
+            " " * self.indent,
+            "run_command" if self.grassAPI == "script" else "Module",
+        )
         self.fd.write(
             strcmd + self._getPythonActionCmd(item, task, len(strcmd), variables) + "\n"
         )
@@ -3282,16 +3301,31 @@ if __name__ == "__main__":
         for p in opts["params"]:
             name = p.get("name", None)
             value = p.get("value", None)
+            ptype = p.get("type", "string")
+
+            if (
+                self.grassAPI == "pygrass"
+                and (p.get("multiple", False) is True or len(p.get("key_desc", [])) > 1)
+                and "," in value
+            ):
+                value = value.split(",")
+                if ptype == "integer":
+                    value = list(map(int, value))
+                elif ptype == "float":
+                    value = list(map(float, value))
 
             if (name and value) or (name in parameterizedParams):
-                ptype = p.get("type", "string")
                 foundVar = False
 
                 if name in parameterizedParams:
                     foundVar = True
                     value = 'options["{}"]'.format(self._getParamName(name, item))
 
-                if foundVar or ptype != "string":
+                if (
+                    foundVar
+                    or isinstance(value, list)
+                    or (ptype != "string" and len(p.get("key_desc", [])) < 2)
+                ):
                     params.append("{}={}".format(name, value))
                 else:
                     params.append('{}="{}"'.format(name, value))
@@ -3431,7 +3465,7 @@ class ModelParamDialog(wx.Dialog):
     def _createPages(self):
         """Create for each parameterized module its own page"""
         nameOrdered = [""] * len(self.params.keys())
-        for name, params in six.iteritems(self.params):
+        for name, params in self.params.items():
             nameOrdered[params["idx"]] = name
         for name in nameOrdered:
             params = self.params[name]

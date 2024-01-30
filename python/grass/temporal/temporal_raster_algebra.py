@@ -51,7 +51,6 @@ for details.
     LexToken(FLOAT,2.45,1,42)
 
 """
-from __future__ import print_function
 
 try:
     import ply.yacc as yacc

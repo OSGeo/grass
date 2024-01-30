@@ -34,7 +34,7 @@ static PGresult *build_stmt(const struct Plus_head *,
    \return number of points
    \return -1 on error
  */
-int Vect__get_area_points_pg(const struct Map_info *Map, const plus_t *lines,
+int Vect__get_area_points_pg(struct Map_info *Map, const plus_t *lines,
                              int n_lines, struct line_pnts *APoints)
 {
     int i, direction;

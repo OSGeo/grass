@@ -23,7 +23,6 @@ import platform
 import re
 import textwrap
 import sys
-import six
 import wx
 from wx.html import HtmlWindow
 
@@ -49,6 +48,7 @@ if __name__ == "__main__":
 
 from core import globalvar
 from core.gcmd import GError, DecodeString
+from core.settings import UserSettings
 from gui_core.widgets import FormNotebook, ScrolledPanel
 from gui_core.wrap import Button, StaticText, TextCtrl
 from core.debug import Debug
@@ -622,7 +622,7 @@ class AboutWindow(wx.Frame):
         # else:
         # panel.Collapse(True)
         pageSizer = wx.BoxSizer(wx.VERTICAL)
-        for k, v in six.iteritems(js):
+        for k, v in js.items():
             if k != "total" and k != "name":
                 box = self._langBox(win, k, v)
                 pageSizer.Add(box, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
@@ -741,7 +741,7 @@ class HelpWindow(HtmlWindow):
         self.historyIdx = 0
         self.fspath = os.path.join(os.getenv("GISBASE"), "docs", "html")
 
-        self.SetStandardFonts(size=10)
+        self._setFont()
         self.SetBorders(10)
 
         if text is None:
@@ -758,6 +758,25 @@ class HelpWindow(HtmlWindow):
             self.SetPage(text)
             self.loaded = True
 
+    def _setFont(self):
+        """Set font size/face"""
+        font_face_name = UserSettings.Get(
+            group="appearance",
+            key="manualPageFont",
+            subkey="faceName",
+        )
+        font_size = UserSettings.Get(
+            group="appearance",
+            key="manualPageFont",
+            subkey="pointSize",
+        )
+        if font_size:
+            self.SetStandardFonts(
+                size=font_size,
+                normal_face=font_face_name,
+                fixed_face=font_face_name,
+            )
+
     def OnLinkClicked(self, linkinfo):
         url = linkinfo.GetHref()
         if url[:4] != "http":
@@ -766,10 +785,10 @@ class HelpWindow(HtmlWindow):
         self.historyIdx += 1
         self.parent.OnHistory()
 
-        super(HelpWindow, self).OnLinkClicked(linkinfo)
+        super().OnLinkClicked(linkinfo)
 
     def LoadPage(self, path):
-        super(HelpWindow, self).LoadPage(path)
+        super().LoadPage(path)
         self.loaded = True
 
     def fillContentsFromFile(self, htmlFile, skipDescription=True):
