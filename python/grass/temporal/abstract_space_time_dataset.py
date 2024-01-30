@@ -1630,8 +1630,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             shortcut_identifier = leading_zero(self.semantic_label)
             if shortcut_identifier:
                 where += (
-                    "{br} LIKE '{si}\_%' {esc} OR {br} LIKE '%\_{si}' {esc} OR "
-                    "{br} LIKE '{orig}\_%' {esc} OR {br} LIKE '%\_{orig}' {esc}".format(
+                    "{br} LIKE '{si}\\_%' {esc} OR {br} LIKE '%\\_{si}' {esc} OR "
+                    "{br} LIKE '{orig}\\_%' {esc} OR {br} LIKE '%\\_{orig}' {esc}".format(
                         br="semantic_label",
                         si=shortcut_identifier,
                         orig=self.semantic_label.upper(),
