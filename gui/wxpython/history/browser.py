@@ -97,29 +97,71 @@ class HistoryInfo(SP.ScrolledPanel):
         self.giface = giface
         self.title = title
 
+        self._createGeneralInfoBox()
+        self._createRegionSettingsBox()
+
+        self._layout()
+
     def _layout(self):
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(
-            self.general_info_box, proportion=1, flag=wx.EXPAND | wx.ALL, border=5
+            self.general_info_box_sizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5
         )
         mainSizer.Add(
-            self.region_settings_box, proportion=1, flag=wx.EXPAND | wx.ALL, border=5
+            self.region_settings_box_sizer,
+            proportion=0,
+            flag=wx.EXPAND | wx.ALL,
+            border=5,
         )
-
         self.SetSizer(mainSizer)
         self.SetMinSize(self.GetBestSize())
 
-    def _createGeneralInfoBox(self, command_info):
-        """Create static box for general info about the command"""
+        self.Layout()
 
+    def _createGeneralInfoBox(self):
+        """Create static box for general info about the command"""
         self.general_info_box = StaticBox(
             parent=self, id=wx.ID_ANY, label=_("General info")
         )
-        self.sizer_general_info = wx.GridBagSizer(vgap=0, hgap=0)
-        self.sizer_general_info.SetCols(5)
-        self.sizer_general_info.SetRows(8)
+        self.general_info_box_sizer = wx.StaticBoxSizer(
+            self.general_info_box, wx.VERTICAL
+        )
 
-        idx = 1
+        self.sizer_general_info = wx.GridBagSizer(hgap=0, vgap=0)
+        self.sizer_general_info.SetCols(2)
+        self.sizer_general_info.SetRows(5)
+
+        self.general_info_box_sizer.Add(
+            self.sizer_general_info, proportion=1, flag=wx.ALL | wx.EXPAND, border=5
+        )
+        self.sizer_general_info.AddGrowableCol(1)
+        self.general_info_box.Hide()
+
+    def _createRegionSettingsBox(self):
+        """Create a static box for displaying region settings of the command"""
+        self.region_settings_box = StaticBox(
+            parent=self, id=wx.ID_ANY, label=_("Region settings")
+        )
+        self.region_settings_box_sizer = wx.StaticBoxSizer(
+            self.region_settings_box, wx.VERTICAL
+        )
+
+        self.sizer_region_settings = wx.GridBagSizer(hgap=0, vgap=0)
+        self.sizer_region_settings.SetCols(2)
+        self.sizer_region_settings.SetRows(9)
+
+        self.region_settings_box_sizer.Add(
+            self.sizer_region_settings, proportion=1, flag=wx.ALL | wx.EXPAND, border=5
+        )
+        self.sizer_region_settings.AddGrowableCol(1)
+        self.region_settings_box.Hide()
+
+    def _updateGeneralInfoBox(self, command_info):
+        """Update a static box for displaying general info about the command"""
+        self.sizer_general_info.Clear(True)
+        self.mapper = CommandInfoMapper(command_info)
+
+        idx = 0
         for key, value in command_info.items():
             if (
                 key == "timestamp"
@@ -151,20 +193,16 @@ class HistoryInfo(SP.ScrolledPanel):
                 )
                 idx += 1
 
-        self.sizer_general_info.AddGrowableCol(1)
-        self.general_info_box.SetSizer(self.sizer_general_info)
+        self.general_info_box.Layout()
+        self.general_info_box.Show()
 
-    def _createRegionSettingsBox(self, command_info):
-        """Create a static box for displaying region settings of the command"""
+    def _updateRegionSettingsBox(self, command_info):
+        """Update a static box for displaying region settings of the command"""
+        self.sizer_region_settings.Clear(True)
+        self.mapper = CommandInfoMapper(command_info)
 
         region_settings = command_info["region"]
-
-        self.region_settings_box = wx.StaticBox(self, label=_("Region settings"))
-        self.sizer_region_settings = wx.GridBagSizer(vgap=0, hgap=0)
-        self.sizer_region_settings.SetCols(5)
-        self.sizer_region_settings.SetRows(8)
-
-        idx = 1
+        idx = 0
         for key, value in region_settings.items():
             if (key != "projection") and (key != "zone"):
                 self.sizer_region_settings.Add(
@@ -191,18 +229,23 @@ class HistoryInfo(SP.ScrolledPanel):
                 )
                 idx += 1
 
-        self.sizer_region_settings.AddGrowableCol(1)
-        self.region_settings_box.SetSizer(self.sizer_region_settings)
+        self.region_settings_box.Layout()
+        self.region_settings_box.Show()
 
     def showCommandInfo(self, command_info):
         """Show command info input."""
-        self.mapper = CommandInfoMapper(command_info)
+        self._updateGeneralInfoBox(command_info)
+        self._updateRegionSettingsBox(command_info)
 
-        # create static boxes
-        self._createGeneralInfoBox(command_info)
-        self._createRegionSettingsBox(command_info)
+        self.SetupScrolling(scroll_x=False, scroll_y=True)
+        self.Layout()
 
-        # layout static boxes
+    def clearCommandInfo(self):
+        """Clear command info."""
+        self.sizer_general_info.Clear(True)
+        self.sizer_region_settings.Clear(True)
+        self._createGeneralInfoBox()
+        self._createRegionSettingsBox()
         self._layout()
 
 
@@ -316,10 +359,12 @@ class HistoryBrowser(wx.SplitterWindow):
         self.infoSizer.Fit(self)
         self.infoSizer.SetSizeHints(self)
         self.panelInfo.SetSizer(self.infoSizer)
+        self.infoSizer.FitInside(self.panelInfo)
 
         # split window
         self.SplitHorizontally(self.panelBrowser, self.panelInfo, 0)
         self.SetMinimumPaneSize(100)
+        self.SetSashPosition(self.GetSize().y - 400)
         self.SetSashGravity(1.0)
 
         # layout

@@ -126,11 +126,6 @@ class HistoryBrowserTree(CTreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRemoveCmd, item)
 
-        if self.history_manager.filetype == "json":
-            item = wx.MenuItem(menu, wx.ID_ANY, _("&Show info"))
-            menu.AppendItem(item)
-            self.Bind(wx.EVT_MENU, self.OnShowInfo, item)
-
         self.PopupMenu(menu)
         menu.Destroy()
 
@@ -148,6 +143,7 @@ class HistoryBrowserTree(CTreeView):
         """Reload tree history model based on the current history log from scratch."""
         self._model.RemoveNode(self._model.root)
         self._initHistoryModel()
+        self.infoPanel.clearCommandInfo()
 
     def AppendNodeToHistoryModel(self, entry):
         """Append node to the model and refresh the tree.
@@ -246,10 +242,10 @@ class HistoryBrowserTree(CTreeView):
         """Item selected"""
         command = node.data["command"]
         self.showNotification.emit(message=command)
-
-        tree_index = self._model.GetIndexOfNode(node)[0]
-        command_info = self.GetCommandInfo(tree_index)
-        self.infoPanel.showCommandInfo(command_info)
+        if self.history_manager.filetype == "json":
+            tree_index = self._model.GetIndexOfNode(node)[0]
+            command_info = self.GetCommandInfo(tree_index)
+            self.infoPanel.showCommandInfo(command_info)
 
     def OnRightClick(self, node):
         """Display popup menu"""
