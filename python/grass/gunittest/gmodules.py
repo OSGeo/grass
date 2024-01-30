@@ -19,7 +19,7 @@ from .utils import do_doctest_gettext_workaround
 
 
 class SimpleModule(Module):
-    """Simple wrapper around pygrass.modules.Module to make sure that
+    r"""Simple wrapper around pygrass.modules.Module to make sure that
     run\_, finish\_, stdout and stderr are set correctly.
 
     >>> mapcalc = SimpleModule('r.mapcalc', expression='test_a = 1',

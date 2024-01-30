@@ -446,7 +446,7 @@ def convert_xml_to_utf8(xml_text):
 
     # modify: fetch encoding from the interface description text(xml)
     # e.g. <?xml version="1.0" encoding="GBK"?>
-    pattern = re.compile(b'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
+    pattern = re.compile(rb'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
     m = re.match(pattern, xml_text)
     if m is None:
         return xml_text.encode("utf-8") if xml_text else None

@@ -221,7 +221,7 @@ class ParallelModuleQueue:
         self._finished_modules = []  # Store all processed modules in a list
 
     def put(self, module):
-        """Put the next Module or MultiModule object in the queue
+        r"""Put the next Module or MultiModule object in the queue
 
         To run the Module objects in parallel the run\_ and finish\_ options
         of the Module must be set to False.

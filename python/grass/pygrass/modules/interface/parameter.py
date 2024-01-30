@@ -176,7 +176,8 @@ class Parameter:
             try:
                 # Check for integer ranges: "3-30" or float ranges: "0.0-1.0"
                 isrange = re.match(
-                    "(?P<min>-*\d+.*\d*)*-(?P<max>\d+.*\d*)*", diz["values"][0]
+                    r"(?P<min>-?(?:\d*\.)?\d+)?-(?P<max>-?(?:\d*\.)?\d+)?",
+                    diz["values"][0],
                 )
                 if isrange:
                     mn, mx = isrange.groups()

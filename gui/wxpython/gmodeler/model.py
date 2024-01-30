@@ -724,7 +724,7 @@ class Model:
                 # split condition
                 # TODO: this part needs some better solution
                 condVar, condText = map(
-                    lambda x: x.strip(), re.split("\s* in \s*", cond)
+                    lambda x: x.strip(), re.split(r"\s* in \s*", cond)
                 )
                 pattern = re.compile("%" + condVar)
                 # for vars()[condVar] in eval(condText): ?
@@ -2578,7 +2578,7 @@ class WriteScriptFile(ABC):
                     cond = pattern.sub(value, cond)
             if isinstance(item, ModelLoop):
                 condVar, condText = map(
-                    lambda x: x.strip(), re.split("\s* in \s*", cond)
+                    lambda x: x.strip(), re.split(r"\s* in \s*", cond)
                 )
                 cond = "%sfor %s in " % (" " * self.indent, condVar)
                 if condText[0] == "`" and condText[-1] == "`":
@@ -3362,7 +3362,7 @@ if __name__ == "__main__":
         :return: modified string
         """
         result = ""
-        ss = re.split("\w*(%" + variable + ")w*", string)
+        ss = re.split(r"\w*(%" + variable + ")w*", string)
 
         if not ss[0] and not ss[-1]:
             if data:
