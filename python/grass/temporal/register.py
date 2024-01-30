@@ -115,6 +115,7 @@ def register_maps_in_space_time_dataset(
 
     if not maps and not file:
         msgr.fatal(_("Please specify maps or file"))
+
     # We may need the mapset
     mapset = get_current_mapset()
     dbif, connection_state_changed = init_dbif(None)
@@ -260,10 +261,10 @@ def register_maps_in_space_time_dataset(
         else:
             semantic_label = None
 
-        is_in_db = map_object.is_in_db(dbif, mapset)
+        is_in_db = False
 
         # Put the map into the database of the current mapset
-        if not is_in_db:
+        if not map_object.is_in_db(dbif, mapset):
             # Break in case no valid time is provided
             if (start == "" or start is None) and not map_object.has_grass_timestamp():
                 dbif.close()
@@ -301,6 +302,7 @@ def register_maps_in_space_time_dataset(
                     map_object.set_time_to_absolute()
 
         else:
+            is_in_db = True
             # Check the overwrite flag
             if not overwrite:
                 if map_object.get_layer():
@@ -331,8 +333,8 @@ def register_maps_in_space_time_dataset(
                 # Jump to next map
                 continue
 
-            # Reload properties from GRASS file database
-            map_object.load()
+            # Reload properties from database
+            map_object.select()
 
             # Save the datasets that must be updated
             datasets = map_object.get_registered_stds(dbif)
@@ -428,13 +430,11 @@ def register_maps_in_space_time_dataset(
 
     # Finally Register the maps in the space time dataset
     if name and map_object_list:
-        count = 0
         num_maps = len(map_object_list)
-        for map_object in map_object_list:
+        for count, map_object in enumerate(map_object_list):
             if count % 50 == 0:
                 msgr.percent(count, num_maps, 1)
             sp.register_map(map=map_object, dbif=dbif)
-            count += 1
 
     # Update the space time tables
     if name and map_object_list:
@@ -607,34 +607,31 @@ def register_map_object_list(
     dbif, connection_state_changed = init_dbif(dbif)
 
     filename = gs.tempfile(True)
-    register_file = open(filename, "w")
+    with open(filename, "w") as register_file:
+        empty_maps = []
+        for map_layer in map_list:
+            # Read the map data
+            map_layer.load()
+            # In case of a empty map continue, do not register empty maps
+            if delete_empty:
+                if type in ["raster", "raster_3d", "rast", "rast3d"]:
+                    if (
+                        map_layer.metadata.get_min() is None
+                        and map_layer.metadata.get_max() is None
+                    ):
+                        empty_maps.append(map_layer)
+                        continue
+                if type == "vector":
+                    if map_layer.metadata.get_number_of_primitives() == 0:
+                        empty_maps.append(map_layer)
+                        continue
 
-    empty_maps = []
-    for map_layer in map_list:
-        # Read the map data
-        map_layer.load()
-        # In case of a empty map continue, do not register empty maps
-
-        if delete_empty:
-            if type in ["raster", "raster_3d", "rast", "rast3d"]:
-                if (
-                    map_layer.metadata.get_min() is None
-                    and map_layer.metadata.get_max() is None
-                ):
-                    empty_maps.append(map_layer)
-                    continue
-            if type == "vector":
-                if map_layer.metadata.get_number_of_primitives() == 0:
-                    empty_maps.append(map_layer)
-                    continue
-
-        start, end = map_layer.get_temporal_extent_as_tuple()
-        id = map_layer.get_id()
-        if not end:
-            end = start
-        string = f"{id}|{start}|{end}\n"
-        register_file.write(string)
-    register_file.close()
+            start, end = map_layer.get_temporal_extent_as_tuple()
+            id = map_layer.get_id()
+            if not end:
+                end = start
+            string = f"{id}|{start}|{end}\n"
+            register_file.write(string)
 
     if output_stds:
         output_stds_id = output_stds.get_id()
@@ -645,9 +642,8 @@ def register_map_object_list(
         type, output_stds_id, unit=unit, file=filename, dbif=dbif
     )
 
-    g_remove = pymod.Module("g.remove", flags="f", quiet=True, run_=False, finish_=True)
-
     # Remove empty maps and unregister them from the temporal database
+    g_remove = pymod.Module("g.remove", flags="f", quiet=True, run_=False, finish_=True)
     if len(empty_maps) > 0:
         for map_object in empty_maps:
             mod = copy.deepcopy(g_remove)
