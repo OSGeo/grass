@@ -1066,7 +1066,7 @@ def _read_raster3d_history(name, mapset):
         return None
 
     # Read the region information
-    hist = libraster3d.History()
+    hist = libraster.History()
     ret = libraster3d.Rast3d_read_history(name, mapset, byref(hist))
     if ret < 0:
         logging.warning(_("Unable to read history file"))
