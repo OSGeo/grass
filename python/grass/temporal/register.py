@@ -118,7 +118,7 @@ def register_maps_in_space_time_dataset(
 
     # We may need the mapset
     mapset = get_current_mapset()
-    dbif, connection_state_changed = init_dbif(None)
+    dbif, connection_state_changed = init_dbif(dbif)
 
     # create new stds only in the current mapset
     # remove all connections to any other mapsets
@@ -261,10 +261,10 @@ def register_maps_in_space_time_dataset(
         else:
             semantic_label = None
 
-        is_in_db = False
+        is_in_db = map_object.is_in_db(dbif, mapset)
 
         # Put the map into the database of the current mapset
-        if not map_object.is_in_db(dbif, mapset):
+        if not is_in_db:
             # Break in case no valid time is provided
             if (start == "" or start is None) and not map_object.has_grass_timestamp():
                 dbif.close()
@@ -302,7 +302,6 @@ def register_maps_in_space_time_dataset(
                     map_object.set_time_to_absolute()
 
         else:
-            is_in_db = True
             # Check the overwrite flag
             if not overwrite:
                 if map_object.get_layer():
@@ -334,7 +333,7 @@ def register_maps_in_space_time_dataset(
                 continue
 
             # Reload properties from database
-            map_object.select()
+            map_object.select(dbif)
 
             # Save the datasets that must be updated
             datasets = map_object.get_registered_stds(dbif)
@@ -604,7 +603,7 @@ def register_map_object_list(
     import grass.pygrass.modules as pymod
     import copy
 
-    dbif, connection_state_changed = init_dbif(dbif)
+    dbif, connection_state_changed = init_dbif(None)
 
     filename = gs.tempfile(True)
     with open(filename, "w") as register_file:
