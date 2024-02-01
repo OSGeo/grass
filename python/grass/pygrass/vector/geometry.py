@@ -24,8 +24,8 @@ test_vector_name = "geometry_doctest_map"
 LineDist = namedtuple("LineDist", "point dist spdist sldist")
 
 WKT = {
-    "POINT\((.*)\)": "point",  # 'POINT\(\s*([+-]*\d+\.*\d*)+\s*\)'
-    "LINESTRING\((.*)\)": "line",
+    r"POINT\((.*)\)": "point",  # 'POINT\(\s*([+-]*\d+\.*\d*)+\s*\)'
+    r"LINESTRING\((.*)\)": "line",
 }
 
 
@@ -1135,7 +1135,7 @@ class Line(Geo):
 
         ..
         """
-        match = re.match("LINESTRING\((.*)\)", wkt)
+        match = re.match(r"LINESTRING\((.*)\)", wkt)
         if match:
             self.reset()
             for coord in match.groups()[0].strip().split(","):
@@ -1682,7 +1682,7 @@ class Area(Geo):
 
     @mapinfo_must_be_set
     def area(self):
-        """Returns area of area without areas of isles.
+        r"""Returns area of area without areas of isles.
         double Vect_get_area_area (const struct Map_info \*Map, int area)
         """
         return libvect.Vect_get_area_area(self.c_mapinfo, self.id)
@@ -1763,7 +1763,7 @@ class Area(Geo):
 
     @mapinfo_must_be_set
     def boundaries(self, ilist=False):
-        """Creates list of boundaries for given area.
+        r"""Creates list of boundaries for given area.
 
         int Vect_get_area_boundaries(const struct Map_info \*Map,
                                      int area, struct ilist \*List)
@@ -1802,7 +1802,7 @@ class Area(Geo):
         return cats
 
     def get_first_cat(self):
-        """Find FIRST category of given field and area.
+        r"""Find FIRST category of given field and area.
 
         int Vect_get_area_cat(const struct Map_info \*Map, int area, int field)
 
@@ -1828,7 +1828,7 @@ class Area(Geo):
 
     @mapinfo_must_be_set
     def perimeter(self):
-        """Calculate area perimeter.
+        r"""Calculate area perimeter.
 
         :return: double Vect_area_perimeter (const struct line_pnts \*Points)
 

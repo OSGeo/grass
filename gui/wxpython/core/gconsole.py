@@ -40,6 +40,11 @@ from grass.script import task as gtask
 
 from grass.pydispatch.signal import Signal
 
+from grass.grassdb.history import (
+    get_current_mapset_gui_history_path,
+    add_entry_to_history,
+)
+
 from core import globalvar
 from core.gcmd import CommandThread, GError, GException
 from gui_core.forms import GUI
@@ -495,8 +500,16 @@ class GConsole(wx.EvtHandler):
             Debug.msg(2, "GPrompt:RunCmd(): empty command")
             return
 
-        # update history file, command prompt history and history model
-        self._giface.updateHistory.emit(cmd=cmd_save_to_history)
+        # add entry to command history log
+        history_path = get_current_mapset_gui_history_path()
+        try:
+            add_entry_to_history(cmd_save_to_history, history_path)
+        except OSError as e:
+            GError(str(e))
+
+        # update command prompt and history model
+        if self._giface:
+            self._giface.entryToHistoryAdded.emit(cmd=cmd_save_to_history)
 
         if command[0] in globalvar.grassCmd:
             # send GRASS command without arguments to GUI command interface
@@ -621,14 +634,13 @@ class GConsole(wx.EvtHandler):
             skipInterface = True
             if os.path.splitext(command[0])[1] in (".py", ".sh"):
                 try:
-                    sfile = open(command[0], "r")
-                    for line in sfile.readlines():
-                        if len(line) < 2:
-                            continue
-                        if line[0] == "#" and line[1] == "%":
-                            skipInterface = False
-                            break
-                    sfile.close()
+                    with open(command[0], "r") as sfile:
+                        for line in sfile.readlines():
+                            if len(line) < 3:
+                                continue
+                            if line.startswith(("#%", "# %")):
+                                skipInterface = False
+                                break
                 except OSError:
                     pass
 
