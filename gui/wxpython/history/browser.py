@@ -43,49 +43,40 @@ from core.gcmd import GError
 class CommandInfoMapper:
     """Class for mapping command info values to the structure used in GUI."""
 
+    TRANSLATION_KEYS = {
+        "timestamp": _("Timestamp: "),
+        "runtime": _("Runtime duration: "),
+        "status": _("Status: "),
+        "mask2d": _("Mask 2D: "),
+        "mask3d": _("Mask 3D: "),
+        "n": _("North: "),
+        "s": _("South: "),
+        "w": _("West: "),
+        "e": _("East: "),
+        "nsres": _("North-south resolution: "),
+        "ewres": _("East-west resolution: "),
+        "rows": _("Number of rows: "),
+        "cols": _("Number of columns: "),
+        "cells": _("Number of cells: "),
+    }
+
     def __init__(self, command_info):
         self.command_info = command_info
 
     def get_translated_value(self, key):
+        value = self.command_info.get(key, "")
         if key == "timestamp":
-            exec_datetime = datetime.fromisoformat(self.command_info[key])
+            exec_datetime = datetime.fromisoformat(value)
             return exec_datetime.strftime("%Y-%m-%d %H:%M:%S")
         elif key == "runtime":
-            return _("{} sec".format(self.command_info[key]))
+            return _("{} sec".format(value))
         elif key == "status":
-            return _(self.command_info[key].capitalize())
-        elif key == "mask2d" or key == "mask3d":
-            return _(str(self.command_info[key]))
+            return _(value.capitalize())
+        elif key in ("mask2d", "mask3d"):
+            return _(str(value))
 
     def make_label(self, key):
-        if key == "timestamp":
-            return _("Timestamp: ")
-        elif key == "runtime":
-            return _("Runtime duration: ")
-        elif key == "status":
-            return _("Status: ")
-        elif key == "mask2d":
-            return _("Mask 2D: ")
-        elif key == "mask3d":
-            return _("Mask 3D: ")
-        elif key == "n":
-            return _("North: ")
-        elif key == "s":
-            return _("South: ")
-        elif key == "w":
-            return _("West: ")
-        elif key == "e":
-            return _("East: ")
-        elif key == "nsres":
-            return _("North-south resolution: ")
-        elif key == "ewres":
-            return _("East-west resolution: ")
-        elif key == "rows":
-            return _("Number of rows: ")
-        elif key == "cols":
-            return _("Number of columns: ")
-        elif key == "cells":
-            return _("Number of cells: ")
+        return self.TRANSLATION_KEYS.get(key, "")
 
 
 class HistoryInfo(SP.ScrolledPanel):
@@ -156,6 +147,15 @@ class HistoryInfo(SP.ScrolledPanel):
         self.sizer_region_settings.AddGrowableCol(1)
         self.region_settings_box.Hide()
 
+    def _general_info_filter(self, key, value):
+        filter_keys = ["timestamp", "runtime", "status"]
+        return key in filter_keys or (
+            (key == "mask2d" or key == "mask3d") and value is True
+        )
+
+    def _region_settings_filter(self, key):
+        return (key != "projection") and (key != "zone")
+
     def _updateGeneralInfoBox(self, command_info):
         """Update a static box for displaying general info about the command"""
         self.sizer_general_info.Clear(True)
@@ -163,12 +163,7 @@ class HistoryInfo(SP.ScrolledPanel):
 
         idx = 0
         for key, value in command_info.items():
-            if (
-                key == "timestamp"
-                or key == "runtime"
-                or key == "status"
-                or ((key == "mask2d" or key == "mask3d") and value is True)
-            ):
+            if self._general_info_filter(key, value):
                 self.sizer_general_info.Add(
                     StaticText(
                         parent=self.general_info_box,
@@ -204,7 +199,7 @@ class HistoryInfo(SP.ScrolledPanel):
         region_settings = command_info["region"]
         idx = 0
         for key, value in region_settings.items():
-            if (key != "projection") and (key != "zone"):
+            if self._region_settings_filter(key):
                 self.sizer_region_settings.Add(
                     StaticText(
                         parent=self.region_settings_box,
