@@ -13,7 +13,6 @@ import os
 import json
 import shutil
 from pathlib import Path
-from abc import ABC, abstractmethod
 
 from grass.script import gisenv
 
@@ -21,7 +20,7 @@ from grass.script import gisenv
 def get_current_mapset_gui_history_path():
     """Return path to the current mapset history file.
     The standard long-term format is plain text.
-    Newly it can be also stored as JSON-formatted.
+    Newly it is stored as JSON-formatted.
     """
     env = gisenv()
     base_path = os.path.join(env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"])
@@ -35,118 +34,27 @@ def get_current_mapset_gui_history_path():
 
 
 def create_history_manager():
-    """Factory method which creates the class
+    """Prepares the instance of the class
     for managing existing history files based on the file format type.
     """
     history_path = get_current_mapset_gui_history_path()
     file_suffix = Path(history_path).suffix.lower()
+    history_manager = HistoryManager(history_path)
+    history_manager.set_filetype(
+        "json"
+    ) if file_suffix == ".json" else history_manager.set_filetype("plain")
+    return history_manager
 
-    if file_suffix == ".json":
-        return HistoryJSONManager(history_path, "json")
-    else:
-        return HistoryPlainTextManager(history_path, "plain")
 
+class HistoryManager:
+    """Class for managing history log file.
+    This API is capable of working with command history
+    in both plain text and JSON formats."""
 
-class HistoryManager(ABC):
-    """Abstract class for managing history log file."""
-
-    def __init__(self, history_path, filetype):
-        """Initialize HistoryManager with the given history file path and filetype."""
+    def __init__(self, history_path):
         self.history_path = history_path
-        self.filetype = filetype
+        self.filetype = None
 
-    @abstractmethod
-    def get_content(self):
-        pass
-
-    @abstractmethod
-    def add_entry_to_history(self, command, command_info=None):
-        pass
-
-    @abstractmethod
-    def remove_entry_from_history(self, entry):
-        pass
-
-    def copy_history(self, target_path):
-        """Copy history file to the target location.
-        Returns True if file is successfully copied."""
-        try:
-            shutil.copyfile(self.history_path, target_path)
-        except OSError as e:
-            raise OSError(
-                _("Unable to copy file {} to {}").format(self.history_path, target_path)
-            ) from e
-        return True
-
-
-class HistoryPlainTextManager(HistoryManager):
-    """Manager for plain text history log.
-    It ensures the backward compability
-    of existing mapsets that include history log as plain text.
-    """
-
-    def get_content(self):
-        """Get content of history file as a list of dicts
-        with 'command' and 'command_info' keys.
-        'command_info' is always None since plain text history file
-        stores only executed commands."""
-        content_list = list()
-        try:
-            with open(
-                self.history_path, encoding="utf-8", mode="r", errors="replace"
-            ) as file_history:
-                content_list = [
-                    {"command": line.strip(), "command_info": None}
-                    for line in file_history.readlines()
-                ]
-        except OSError as e:
-            raise OSError(
-                _("Unable to read content from history file {}").format(
-                    self.history_path
-                )
-            ) from e
-        return content_list
-
-    def add_entry_to_history(self, entry):
-        """Add entry to history file. It always appends to the existing plain text file.
-
-        :param dict entry: entry consisting of 'command' and 'command_info' keys
-        command value is of string type (not parsed command because of backward compability)
-        """
-        try:
-            with open(self.history_path, encoding="utf-8", mode="a") as file_history:
-                file_history.write(entry["command"] + "\n")
-        except OSError as e:
-            raise OSError(
-                _("Unable to add entry to history file {}").format(self.history_path)
-            ) from e
-
-    def remove_entry_from_history(self, index):
-        """Remove entry from history file.
-
-        :param int index: line number of the command to be removed
-        """
-        try:
-            with open(self.history_path, encoding="utf-8", mode="r+") as file_history:
-                lines = file_history.readlines()
-                file_history.seek(0)
-                file_history.truncate()
-                for number, line in enumerate(lines):
-                    if number not in [index]:
-                        file_history.write(line)
-        except OSError as e:
-            raise OSError(
-                _("Unable to remove entry from history file {}").format(
-                    self.history_path
-                )
-            ) from e
-
-
-class HistoryJSONManager(HistoryManager):
-    """Manager for currently used command history log format."""
-
-    def __init__(self, history_path, filetype):
-        super().__init__(history_path, filetype)
         if not os.path.exists(history_path):
             self.create_history_file()
 
@@ -160,10 +68,51 @@ class HistoryJSONManager(HistoryManager):
                 _("Unable to create history file {}").format(self.history_path)
             ) from e
 
-    def get_content(self):
-        """Get content of history file as a list of dictionaries
-        with 'command' and 'command_info' keys.
-        Command value is concatenated to string."""
+    def set_filetype(self, filetype):
+        """Set the filetype to 'plain' or 'json'."""
+        if filetype.lower() in ["plain", "json"]:
+            self.filetype = filetype
+        else:
+            raise ValueError("Invalid filetype. Supported options: 'plain' or 'json'.")
+
+    def change_history_path_to_JSON(self):
+        """Change history path to JSON path."""
+        # Extract file path and name without extension
+        file_path, file_name = os.path.split(self.history_path)
+        file_name_no_ext, _ = os.path.splitext(file_name)
+
+        # JSON file path
+        self.history_path = os.path.join(file_path, f"{file_name_no_ext}.json")
+        self.filetype = "json"
+
+    def _read_from_PT(self):
+        """Read content of plain text history file.
+        :return content_list: list of dictionaries
+        with 'command' and 'command_info' keys
+        'command_info' is always empty since plain text history file
+        stores only executed commands."""
+        content_list = list()
+        try:
+            with open(
+                self.history_path, encoding="utf-8", mode="r", errors="replace"
+            ) as file_history:
+                content_list = [
+                    {"command": line.strip(), "command_info": None}
+                    for line in file_history.readlines()
+                ]
+        except OSError as e:
+            raise OSError(
+                _("Unable to read from plain text history file {}").format(
+                    self.history_path
+                )
+            ) from e
+        return content_list
+
+    def _read_from_JSON(self):
+        """Read content of JSON history file.
+        :return content_list: list of dictionaries
+        with 'command' and 'command_info' keys
+        """
         content_list = list()
         try:
             with open(
@@ -175,57 +124,58 @@ class HistoryJSONManager(HistoryManager):
                         history_entries = json.loads(content)
                     except ValueError as ve:
                         raise ValueError(
-                            _("Error decoding JSON content in history file {}").format(
+                            _("Error decoding content of JSON history file {}").format(
                                 self.history_path
                             )
                         ) from ve
                     # Process the content as a list of dictionaries
                     content_list = [
                         {
-                            "command": " ".join(entry["command"]),
+                            "command": entry["command"],
                             "command_info": entry["command_info"],
                         }
                         for entry in history_entries
                     ]
         except OSError as e:
             raise OSError(
-                _("Unable to read content from history file {}").format(
-                    self.history_path
-                )
+                _("Unable to read from JSON history file {}").format(self.history_path)
             ) from e
         return content_list
 
-    def add_entry_to_history(self, entry):
-        """Add entry to the list of dictionaries in the history file.
+    def read(self):
+        """Read the content of the history file.
+        :return content_list: list of dictionaries
+        with 'command' and 'command_info' keys
+        """
+        if self.filetype == "plain":
+            return self._read_from_PT()
+        elif self.filetype == "json":
+            return self._read_from_JSON()
 
-        :param dict entry: entry consisting of 'command' and 'command_info' keys
-        command value is of list type (parsed command)
+    def _remove_entry_from_PT(self, index):
+        """Remove entry from plain-text history file.
+
+        :param int index: index of the command to be removed
         """
         try:
-            with open(self.history_path, encoding="utf-8", mode="r") as fileHistory:
-                existing_data = json.load(fileHistory)
-        except (OSError, ValueError):
-            existing_data = []
-
-        existing_data.append(entry)
-        try:
-            with open(self.history_path, encoding="utf-8", mode="w") as fileHistory:
-                json.dump(existing_data, fileHistory, indent=2)
-        except ValueError as ve:
-            raise ValueError(
-                _("Error decoding JSON content in history file {}").format(
-                    self.history_path
-                )
-            ) from ve
+            with open(self.history_path, encoding="utf-8", mode="r+") as file_history:
+                lines = file_history.readlines()
+                file_history.seek(0)
+                file_history.truncate()
+                for number, line in enumerate(lines):
+                    if number not in [index]:
+                        file_history.write(line)
         except OSError as e:
             raise OSError(
-                _("Unable to add entry to history file {}").format(self.history_path)
+                _("Unable to remove entry from plain text history file {}").format(
+                    self.history_path
+                )
             ) from e
 
-    def remove_entry_from_history(self, index):
-        """Remove entry from history file.
+    def _remove_entry_from_JSON(self, index):
+        """Remove entry from JSON history file.
 
-        :param int index: index of the command which should be removed
+        :param int index: index of the command to be removed
         """
         try:
             with open(self.history_path, encoding="utf-8", mode="r+") as file_history:
@@ -241,45 +191,55 @@ class HistoryJSONManager(HistoryManager):
                     json.dump(history_entries, file_history, indent=2)
                 except ValueError as ve:
                     raise ValueError(
-                        _("Error decoding JSON content in history file {}").format(
+                        _("Error decoding content of JSON history file {}").format(
                             self.history_path
                         )
                     ) from ve
         except OSError as e:
             raise OSError(
-                _("Unable to add entry to history file {}").format(self.history_path)
+                _("Unable to remove entry from JSON history file {}").format(
+                    self.history_path
+                )
             ) from e
 
-    def update_entry_in_history(self, command_info, index=None):
-        """Update entry in history file. If index is None it updates a last entry.
+    def remove_entry(self, index):
+        """Remove entry from history file.
 
-        :param dict command_info: command info entry for update
-        :param int|None index: index of the command which should be updated
+        :param int index: index of the command to be removed
         """
+        if self.filetype == "plain":
+            self._remove_entry_from_PT(index)
+        elif self.filetype == "json":
+            self._remove_entry_from_JSON(index)
+
+    def convert_PT_to_JSON(self):
+        """Convert plain text history log to JSON format."""
         try:
-            with open(self.history_path, encoding="utf-8", mode="r+") as file_history:
-                try:
-                    history_entries = json.load(file_history)
-                    if index is None:
-                        # Find index of last entry
-                        index = len(history_entries) - 1
-                    # Check if the index is valid
-                    if 0 <= index < len(history_entries):
-                        # Update entry
-                        history_entries[index]["command_info"].update(command_info)
-                        # Write the modified history back to the file
-                        file_history.seek(0)
-                        file_history.truncate()
-                        json.dump(history_entries, file_history, indent=2)
-                except ValueError as ve:
-                    raise ValueError(
-                        _("Error decoding JSON content in history file {}").format(
-                            self.history_path
-                        )
-                    ) from ve
+            lines = self._read_from_PT()
+
+            # Extract file path and name without extension
+            file_path, file_name = os.path.split(self.history_path)
+            file_name_no_ext, _ = os.path.splitext(file_name)
+
+            # JSON file path
+            json_file = os.path.join(file_path, f"{file_name_no_ext}.json")
+
+            # Write JSON data to a new file
+            with open(json_file, "w") as json_outfile:
+                json.dump(lines, json_outfile, indent=2)
+
+            # Remove the old plain text file
+            os.remove(self.history_path)
+
+            # Set history path to JSON file
+            self.history_path = json_file
+            self.filetype = "json"
+
         except OSError as e:
             raise OSError(
-                _("Unable to add entry to history file {}").format(self.history_path)
+                _("Unable to convert plain text history file {} to JSON format").format(
+                    self.history_path
+                )
             ) from e
 
     def get_initial_command_info(self, env_run):
@@ -325,3 +285,87 @@ class HistoryJSONManager(HistoryManager):
             "region": region_settings,
         }
         return cmd_info
+
+    def add_entry(self, entry):
+        """Add entry to JSON history file.
+
+        :param dict entry: entry consisting of 'command' and 'command_info' keys
+        """
+        try:
+            with open(self.history_path, encoding="utf-8", mode="r") as fileHistory:
+                existing_data = json.load(fileHistory)
+        except (OSError, ValueError):
+            existing_data = []
+
+        existing_data.append(entry)
+        try:
+            with open(self.history_path, encoding="utf-8", mode="w") as fileHistory:
+                json.dump(existing_data, fileHistory, indent=2)
+        except ValueError as ve:
+            raise ValueError(
+                _("Error decoding content of JSON history file {}").format(
+                    self.history_path
+                )
+            ) from ve
+        except OSError as e:
+            raise OSError(
+                _("Unable to add entry to JSON history file {}").format(
+                    self.history_path
+                )
+            ) from e
+
+    def _update_entry_in_JSON(self, command_info, index=None):
+        """Update entry in JSON history file. If index is None it updates a last entry.
+
+        :param dict command_info: command info entry for update
+        :param int|None index: index of the command to be updated
+        """
+        try:
+            with open(self.history_path, encoding="utf-8", mode="r+") as file_history:
+                try:
+                    history_entries = json.load(file_history)
+                    if index is None:
+                        # Find index of last entry
+                        index = len(history_entries) - 1
+                    # Check if the index is valid
+                    if 0 <= index < len(history_entries):
+                        # Update entry
+                        history_entries[index]["command_info"].update(command_info)
+                        # Write the modified history back to the file
+                        file_history.seek(0)
+                        file_history.truncate()
+                        json.dump(history_entries, file_history, indent=2)
+                except ValueError as ve:
+                    raise ValueError(
+                        _("Error decoding content of JSON history file {}").format(
+                            self.history_path
+                        )
+                    ) from ve
+        except OSError as e:
+            raise OSError(
+                _("Unable to update entry in JSON history file {}").format(
+                    self.history_path
+                )
+            ) from e
+
+    def update_entry(self, command_info, index=None):
+        """Update entry in history file. If index is None it updates a last entry.
+
+        :param dict command_info: command info entry for update
+        :param int|None index: index of the command to be updated
+        """
+        if self.filetype == "json":
+            self._update_entry_in_JSON(command_info, index)
+        else:
+            raise ValueError("Updating entries is supported only for JSON format.")
+
+    def copy_history(self, target_path):
+        """Copy history file to the target location.
+        Returns True if file is successfully copied."""
+        try:
+            shutil.copyfile(self.history_path, target_path)
+        except OSError as e:
+            raise OSError(
+                _("Unable to copy file {} to {}").format(self.history_path, target_path)
+            ) from e
+        return True

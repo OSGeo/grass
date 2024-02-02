@@ -244,8 +244,7 @@ class GConsoleWindow(wx.SplitterWindow):
         try:
             self.history_manager = create_history_manager()
             self.cmdPrompt.cmdbuffer = [
-                entry["command"]
-                for entry in self.history_manager.get_content()
+                entry["command"] for entry in self.history_manager.read()
             ] or []
             self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
         except (OSError, ValueError) as e:

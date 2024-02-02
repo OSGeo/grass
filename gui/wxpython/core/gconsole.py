@@ -491,34 +491,32 @@ class GConsole(wx.EvtHandler):
         :param userData: data defined for the command
         """
         if isinstance(command, dict):
-            command_concat = command["cmdString"]
+            cmd_save_to_history = command["cmdString"]
             command = command["cmd"]
         else:
-            command_concat = " ".join(command)
+            cmd_save_to_history = " ".join(command)
 
         if len(command) == 0:
             Debug.msg(2, "GPrompt:RunCmd(): empty command")
             return
 
+        # convert plain text history file to JSON format if needed
+        if self.history_manager.filetype == "plain":
+            self.history_manager.convert_PT_to_JSON()
+
         # add entry to command history log
+        command_info = self.history_manager.get_initial_command_info(env)
+        entry = {
+            "command": cmd_save_to_history,
+            "command_info": command_info,
+        }
         try:
-            command_info = (
-                self.history_manager.get_initial_command_info(env)
-                if self.history_manager.filetype == "json"
-                else None
-            )
-            entry = {
-                "command": command if self.history_manager.filetype == "json" else command_concat,
-                "command_info": command_info,
-            }
-            self.history_manager.add_entry_to_history(entry)
+            self.history_manager.add_entry(entry)
         except (OSError, ValueError) as e:
             GError(str(e))
 
         # update command prompt and history model
         if self._giface:
-            if isinstance(entry["command"], list):
-                entry["command"] = command_concat
             self._giface.entryToHistoryAdded.emit(entry=entry)
 
         if command[0] in globalvar.grassCmd:
@@ -753,13 +751,12 @@ class GConsole(wx.EvtHandler):
 
         # update command history log by status and runtime duration
         try:
-            if self.history_manager.filetype == "json":
-                self.history_manager.update_entry_in_history(cmd_info)
+            self.history_manager.update_entry(cmd_info)
 
-                # update history model
-                if self._giface:
-                    entry = self.history_manager.get_content()[-1]
-                    self._giface.entryInHistoryUpdated.emit(entry=entry)
+            # update history model
+            if self._giface:
+                entry = self.history_manager.read()[-1]
+                self._giface.entryInHistoryUpdated.emit(entry=entry)
         except (OSError, ValueError) as e:
             GError(str(e))
 

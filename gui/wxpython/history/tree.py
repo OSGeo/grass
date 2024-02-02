@@ -33,7 +33,7 @@ from core.utils import (
 from gui_core.forms import GUI
 from core.treemodel import TreeModel, ModuleNode
 from gui_core.treeview import CTreeView
-from gui_core.wrap import Menu, Button, StaticText
+from gui_core.wrap import Menu
 
 from grass.pydispatch.signal import Signal
 
@@ -87,7 +87,7 @@ class HistoryBrowserTree(CTreeView):
         """Fill tree history model based on the current history log."""
         self.history_manager = create_history_manager()
         try:
-            content_list = self.history_manager.get_content()
+            content_list = self.history_manager.read()
         except (OSError, ValueError) as e:
             GError(str(e))
 
@@ -149,6 +149,7 @@ class HistoryBrowserTree(CTreeView):
 
         :param entry dict: entry with 'command' and 'command_info' keys
         """
+        self.history_manager.change_history_path_to_JSON()
         new_node = self._model.AppendNode(
             parent=self._model.root,
             label=entry["command"].strip(),
@@ -156,9 +157,7 @@ class HistoryBrowserTree(CTreeView):
         )
         self._refreshTree()
         self.Select(new_node)
-
-        if self.history_manager.filetype == "json":
-            self.infoPanel.showCommandInfo(entry["command_info"])
+        self.infoPanel.showCommandInfo(entry["command_info"])
 
     def UpdateNodeInHistoryModel(self, entry):
         """Update last node in the model and refresh the tree.
@@ -208,7 +207,7 @@ class HistoryBrowserTree(CTreeView):
         :param int index: index of the entry which should be removed
         """
         try:
-            self.history_manager.remove_entry_from_history(index)
+            self.history_manager.remove_entry(index)
         except (OSError, ValueError) as e:
             GError(str(e))
 
@@ -219,10 +218,9 @@ class HistoryBrowserTree(CTreeView):
         """
         command_info = {}
         try:
-            command_info = self.history_manager.get_content()[index]["command_info"]
+            command_info = self.history_manager.read()[index]["command_info"]
         except (OSError, ValueError) as e:
             GError(str(e))
-
         return command_info
 
     def OnRemoveCmd(self, event):
@@ -244,10 +242,9 @@ class HistoryBrowserTree(CTreeView):
         """Item selected"""
         command = node.data["command"]
         self.showNotification.emit(message=command)
-        if self.history_manager.filetype == "json":
-            tree_index = self._model.GetIndexOfNode(node)[0]
-            command_info = self.GetCommandInfo(tree_index)
-            self.infoPanel.showCommandInfo(command_info)
+        tree_index = self._model.GetIndexOfNode(node)[0]
+        command_info = self.GetCommandInfo(tree_index)
+        self.infoPanel.showCommandInfo(command_info)
 
     def OnRightClick(self, node):
         """Display popup menu"""

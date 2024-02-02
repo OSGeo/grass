@@ -234,9 +234,11 @@ class HistoryInfo(SP.ScrolledPanel):
 
     def showCommandInfo(self, command_info):
         """Show command info input."""
-        self._updateGeneralInfoBox(command_info)
-        self._updateRegionSettingsBox(command_info)
-
+        if command_info:
+            self._updateGeneralInfoBox(command_info)
+            self._updateRegionSettingsBox(command_info)
+        else:
+            self.clearCommandInfo()
         self.SetupScrolling(scroll_x=False, scroll_y=True)
         self.Layout()
 
