@@ -491,7 +491,10 @@ class GConsole(wx.EvtHandler):
         :param userData: data defined for the command
         """
         if isinstance(command, dict):
+            command_concat = command["cmdString"]
             command = command["cmd"]
+        else:
+            command_concat = " ".join(command)
 
         if len(command) == 0:
             Debug.msg(2, "GPrompt:RunCmd(): empty command")
@@ -505,7 +508,7 @@ class GConsole(wx.EvtHandler):
                 else None
             )
             entry = {
-                "command": command,
+                "command": command if self.history_manager.filetype == "json" else command_concat,
                 "command_info": command_info,
             }
             self.history_manager.add_entry_to_history(entry)
@@ -514,6 +517,8 @@ class GConsole(wx.EvtHandler):
 
         # update command prompt and history model
         if self._giface:
+            if isinstance(entry["command"], list):
+                entry["command"] = command_concat
             self._giface.entryToHistoryAdded.emit(entry=entry)
 
         if command[0] in globalvar.grassCmd:

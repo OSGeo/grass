@@ -111,6 +111,7 @@ class HistoryPlainTextManager(HistoryManager):
         """Add entry to history file. It always appends to the existing plain text file.
 
         :param dict entry: entry consisting of 'command' and 'command_info' keys
+        command value is of string type (not parsed command because of backward compability)
         """
         try:
             with open(self.history_path, encoding="utf-8", mode="a") as file_history:
@@ -161,7 +162,8 @@ class HistoryJSONManager(HistoryManager):
 
     def get_content(self):
         """Get content of history file as a list of dictionaries
-        with 'command' and 'command_info' keys."""
+        with 'command' and 'command_info' keys.
+        Command value is concatenated to string."""
         content_list = list()
         try:
             with open(
@@ -180,7 +182,7 @@ class HistoryJSONManager(HistoryManager):
                     # Process the content as a list of dictionaries
                     content_list = [
                         {
-                            "command": entry["command"],
+                            "command": " ".join(entry["command"]),
                             "command_info": entry["command_info"],
                         }
                         for entry in history_entries
@@ -197,6 +199,7 @@ class HistoryJSONManager(HistoryManager):
         """Add entry to the list of dictionaries in the history file.
 
         :param dict entry: entry consisting of 'command' and 'command_info' keys
+        command value is of list type (parsed command)
         """
         try:
             with open(self.history_path, encoding="utf-8", mode="r") as fileHistory:

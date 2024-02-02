@@ -92,7 +92,6 @@ class HistoryBrowserTree(CTreeView):
             GError(str(e))
 
         for data in content_list:
-            data["command"] = " ".join(data["command"])
             self._model.AppendNode(
                 parent=self._model.root,
                 label=data["command"].strip(),
@@ -150,14 +149,16 @@ class HistoryBrowserTree(CTreeView):
 
         :param entry dict: entry with 'command' and 'command_info' keys
         """
-        entry["command"] = " ".join(entry["command"])
-
-        self._model.AppendNode(
+        new_node = self._model.AppendNode(
             parent=self._model.root,
             label=entry["command"].strip(),
             data=entry,
         )
         self._refreshTree()
+        self.Select(new_node)
+
+        if self.history_manager.filetype == "json":
+            self.infoPanel.showCommandInfo(entry["command_info"])
 
     def UpdateNodeInHistoryModel(self, entry):
         """Update last node in the model and refresh the tree.
@@ -233,6 +234,7 @@ class HistoryBrowserTree(CTreeView):
             self.showNotification.emit(message=_("Removing <{}>").format(cmd))
             tree_index = self._model.GetIndexOfNode(tree_node)[0]
             self.RemoveEntryFromHistory(tree_index)
+            self.infoPanel.clearCommandInfo()
             self._giface.entryFromHistoryRemoved.emit(index=tree_index)
             self._model.RemoveNode(tree_node)
             self._refreshTree()
