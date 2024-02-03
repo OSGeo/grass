@@ -2756,15 +2756,15 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             "r",
         ).read()
 
-        for version in range(3, get_tgis_db_version_from_metadata() + 1):
-            sqlfile = os.path.join(
-                sql_path,
-                "update_"
-                + self.get_type()
-                + "_metadata_template_v{}.sql".format(version),
+        # Comment out update of semantic labels for DB version < 3
+        if get_tgis_db_version_from_metadata() < 3:
+            sql = sql.replace(
+                "strds_metadata.number_of_semantic_labels =",
+                "-- number_of_semantic_labels =",
             )
-            if os.path.exists(sqlfile):
-                sql += open(sqlfile).read()
+            sql = sql.replace(
+                "count(distinct semantic_label)", "-- count(distinct semantic_label)"
+            )
 
         sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
         sql = sql.replace("SPACETIME_ID", self.base.get_id())
