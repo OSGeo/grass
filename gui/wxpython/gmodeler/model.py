@@ -1483,11 +1483,11 @@ class ModelData(ModelObject):
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "raster")
             )
-        elif self.prompt == "raster_3d":
+        elif self.prompt in ("raster_3d", "str3ds"):
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "raster3d")
             )
-        elif self.prompt == "vector":
+        elif self.prompt in ("vector", "stvds"):
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "vector")
             )
