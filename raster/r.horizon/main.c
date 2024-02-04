@@ -718,7 +718,7 @@ int max(int arg1, int arg2)
 
 /**********************************************************/
 
-void com_par()
+void com_par(void)
 {
     if (fabs(sinangle) < 0.0000001) {
         sinangle = 0.;
@@ -844,6 +844,8 @@ void calculate_shadow(void)
             shadow_angle *= rad2deg;
         }
         printangle = angle * rad2deg - 90.;
+        if (fabs(printangle) < GRASS_EPSILON)
+            printangle = fabs(printangle);
         if (printangle < 0.)
             printangle += 360;
         else if (printangle >= 360.)
