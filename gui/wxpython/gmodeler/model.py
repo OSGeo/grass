@@ -8,6 +8,8 @@ Classes:
  - model::ModelObject
  - model::ModelAction
  - model::ModelData
+ - model::ModelDataSingle
+ - model::ModelDataSeries
  - model::ModelRelation
  - model::ModelItem
  - model::ModelLoop
@@ -36,7 +38,6 @@ import mimetypes
 import time
 
 import xml.etree.ElementTree as etree
-
 import xml.sax.saxutils as saxutils
 
 import wx
@@ -356,7 +357,10 @@ class Model:
 
         # load data & relations
         for data in gxmXml.data:
-            dataItem = ModelData(
+            dataClass = (
+                ModelDataSeries if data["prompt"].startswith("st") else ModelDataSingle
+            )
+            dataItem = dataClass(
                 parent=self,
                 x=data["pos"][0],
                 y=data["pos"][1],
@@ -1350,7 +1354,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         ogl.RectangleShape.OnDraw(self, dc)
 
 
-class ModelData(ModelObject, ogl.EllipseShape):
+class ModelData(ModelObject):
     def __init__(self, parent, x, y, value="", prompt="", width=None, height=None):
         """Data item class
 
@@ -1378,15 +1382,20 @@ class ModelData(ModelObject, ogl.EllipseShape):
                 group="modeler", key="data", subkey=("size", "height")
             )
 
-        if self.parent.GetCanvas():
-            ogl.EllipseShape.__init__(self, width, height)
+        self._defineShape(width, height, x, y)
 
-            self.SetCanvas(self.parent)
-            self.SetX(x)
-            self.SetY(y)
-            self._setPen()
-            self._setBrush()
-            self.SetLabel()
+        self._setPen()
+        self._setBrush()
+        self.SetLabel()
+
+    @abstractmethod
+    def _defineShape(self, width, height, x, y):
+        """Define data item
+
+        :param width, height: dimension of the shape
+        :param x, y: position of the shape
+        """
+        pass
 
     def IsIntermediate(self):
         """Checks if data item is intermediate"""
@@ -1407,7 +1416,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
     def OnDraw(self, dc):
         self._setPen()
 
-        ogl.EllipseShape.OnDraw(self, dc)
+        super().OnDraw(dc)
 
     def GetLog(self, string=True):
         """Get logging info"""
@@ -1468,17 +1477,17 @@ class ModelData(ModelObject, ogl.EllipseShape):
         """Get properties dialog"""
         self.propWin = win
 
-    def _setBrush(self):
-        """Set brush"""
-        if self.prompt == "raster":
+    def _getBrush(self):
+        """Get brush"""
+        if self.prompt in ("raster", "strds"):
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "raster")
             )
-        elif self.prompt == "raster_3d":
+        elif self.prompt in ("raster_3d", "str3ds"):
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "raster3d")
             )
-        elif self.prompt == "vector":
+        elif self.prompt in ("vector", "stvds"):
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "vector")
             )
@@ -1491,10 +1500,15 @@ class ModelData(ModelObject, ogl.EllipseShape):
                 group="modeler", key="action", subkey=("color", "invalid")
             )
         wxColor = wx.Colour(color[0], color[1], color[2])
-        self.SetBrush(wx.Brush(wxColor))
 
-    def _setPen(self):
-        """Set pen"""
+        return wx.Brush(wxColor)
+
+    def _setBrush(self):
+        """Set brush"""
+        self.SetBrush(self._getBrush())
+
+    def _getPen(self):
+        """Get pen"""
         isParameterized = False
         for rel in self.GetRelations("from"):
             if rel.GetTo().IsParameterized():
@@ -1523,8 +1537,11 @@ class ModelData(ModelObject, ogl.EllipseShape):
         else:
             style = wx.SOLID
 
-        pen = wx.Pen(wx.BLACK, width, style)
-        self.SetPen(pen)
+        return wx.Pen(wx.BLACK, width, style)
+
+    def _setPen(self):
+        """Get pen"""
+        self.SetPen(self._getPen())
 
     def SetLabel(self):
         """Update text"""
@@ -1557,6 +1574,71 @@ class ModelData(ModelObject, ogl.EllipseShape):
         cmd.append("map=" + self.value)
 
         return cmd
+
+
+class ModelDataSingle(ModelData, ogl.EllipseShape):
+    def _defineShape(self, width, height, x, y):
+        """Define single data item (raster, raster_3d, vector)
+
+        :param width, height: dimension of the shape
+        :param x, y: position of the shape
+        """
+        ogl.EllipseShape.__init__(self, width, height)
+        if self.parent.GetCanvas():
+            self.SetCanvas(self.parent.GetCanvas())
+
+        self.SetX(x)
+        self.SetY(y)
+
+
+class ModelDataSeries(ModelData, ogl.CompositeShape):
+    def _defineShape(self, width, height, x, y):
+        """Define single data item (raster, raster_3d, vector)
+
+        :param width, height: dimension of the shape
+        :param x, y: position of the shape
+        """
+        ogl.CompositeShape.__init__(self)
+        if self.parent.GetCanvas():
+            self.SetCanvas(self.parent.GetCanvas())
+
+        self.constraining_shape = ogl.EllipseShape(width, height)
+        self.constrained_shape = ogl.EllipseShape(width - 20, height)
+        self.AddChild(self.constraining_shape)
+        self.AddChild(self.constrained_shape)
+
+        constraint = ogl.Constraint(
+            ogl.CONSTRAINT_CENTRED_BOTH,
+            self.constraining_shape,
+            [self.constrained_shape],
+        )
+        self.AddConstraint(constraint)
+        self.Recompute()
+
+        self.constraining_shape.SetDraggable(False)
+        self.constrained_shape.SetDraggable(False)
+        self.constrained_shape.SetSensitivityFilter(ogl.OP_CLICK_LEFT)
+
+        canvas = self.parent.GetCanvas()
+        if canvas:
+            dc = wx.ClientDC(canvas)
+            canvas.PrepareDC(dc)
+            self.Move(dc, x, y)
+
+        self.SetX(x)
+        self.SetY(y)
+
+    def _setBrush(self):
+        """Set brush"""
+        brush = self._getBrush()
+        self.constraining_shape.SetBrush(brush)
+        self.constrained_shape.SetBrush(brush)
+
+    def _setPen(self):
+        """Set brush"""
+        brush = self._getPen()
+        self.constraining_shape.SetPen(brush)
+        self.constrained_shape.SetPen(brush)
 
 
 class ModelRelation(ogl.LineShape):
