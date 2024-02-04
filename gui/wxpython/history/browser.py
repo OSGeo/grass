@@ -5,7 +5,7 @@
 
 Classes:
  - browser::CommandInfoMapper
- - browser::HistoryInfoDialog
+ - browser::HistoryInfoPanel
  - browser::HistoryBrowser
 
 (C) 2023 by Linda Karlovska, and the GRASS Development Team
@@ -41,7 +41,7 @@ from core.gcmd import GError
 
 
 class CommandInfoMapper:
-    """Class for mapping command info values to the structure used in GUI."""
+    """Class for mapping command info values and keys to the structure used in GUI."""
 
     TRANSLATION_KEYS = {
         "timestamp": _("Timestamp: "),
@@ -79,10 +79,9 @@ class CommandInfoMapper:
         return self.TRANSLATION_KEYS.get(key, "")
 
 
-class HistoryInfo(SP.ScrolledPanel):
+class HistoryInfoPanel(SP.ScrolledPanel):
     def __init__(self, parent, giface, title=("Command Info"), style=wx.TAB_TRAVERSAL):
         super().__init__(parent=parent, id=wx.ID_ANY, style=style)
-        self.SetupScrolling(scroll_x=False, scroll_y=True)
 
         self.parent = parent
         self.giface = giface
@@ -159,7 +158,7 @@ class HistoryInfo(SP.ScrolledPanel):
     def _updateGeneralInfoBox(self, command_info):
         """Update a static box for displaying general info about the command"""
         self.sizer_general_info.Clear(True)
-        self.mapper = CommandInfoMapper(command_info)
+        mapper = CommandInfoMapper(command_info)
 
         idx = 0
         for key, value in command_info.items():
@@ -168,7 +167,7 @@ class HistoryInfo(SP.ScrolledPanel):
                     StaticText(
                         parent=self.general_info_box,
                         id=wx.ID_ANY,
-                        label=self.mapper.make_label(key),
+                        label=mapper.make_label(key),
                         style=wx.ALIGN_LEFT,
                     ),
                     flag=wx.ALIGN_LEFT | wx.ALL,
@@ -179,7 +178,7 @@ class HistoryInfo(SP.ScrolledPanel):
                     StaticText(
                         parent=self.general_info_box,
                         id=wx.ID_ANY,
-                        label=self.mapper.get_translated_value(key),
+                        label=mapper.get_translated_value(key),
                         style=wx.ALIGN_LEFT,
                     ),
                     flag=wx.ALIGN_LEFT | wx.ALL,
@@ -194,7 +193,7 @@ class HistoryInfo(SP.ScrolledPanel):
     def _updateRegionSettingsBox(self, command_info):
         """Update a static box for displaying region settings of the command"""
         self.sizer_region_settings.Clear(True)
-        self.mapper = CommandInfoMapper(command_info)
+        mapper = CommandInfoMapper(command_info)
 
         region_settings = command_info["region"]
         idx = 0
@@ -204,7 +203,7 @@ class HistoryInfo(SP.ScrolledPanel):
                     StaticText(
                         parent=self.region_settings_box,
                         id=wx.ID_ANY,
-                        label=self.mapper.make_label(key),
+                        label=mapper.make_label(key),
                         style=wx.ALIGN_LEFT,
                     ),
                     flag=wx.ALIGN_LEFT | wx.ALL,
@@ -277,7 +276,7 @@ class HistoryBrowser(wx.SplitterWindow):
         self.panelInfo = wx.Panel(parent=self)
 
         # info panel
-        self.infoPanel = HistoryInfo(parent=self.panelInfo, giface=giface)
+        self.infoPanel = HistoryInfoPanel(parent=self.panelInfo, giface=giface)
 
         # tree with layers
         self.tree = HistoryBrowserTree(
