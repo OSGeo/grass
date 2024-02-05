@@ -274,7 +274,7 @@ Zenodo page with DOI (for all versions, shows latest release on top):
 
 **GitHub - Zenodo Integration**: The settings are accessible with any
 GitHub account which has write access to the GRASS GIS GitHub repo and
-is managed here:
+they are managed here:
 
 <https://zenodo.org/account/settings/github/repository/OSGeo/grass>
 
