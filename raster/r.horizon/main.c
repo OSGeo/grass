@@ -718,7 +718,7 @@ int max(int arg1, int arg2)
 
 /**********************************************************/
 
-void com_par()
+void com_par(void)
 {
     if (fabs(sinangle) < 0.0000001) {
         sinangle = 0.;
@@ -790,6 +790,7 @@ void calculate_shadow(void)
     yp = ymin + yy0;
 
     angle = (single_direction * deg2rad) + pihalf;
+    printangle = single_direction;
 
     maxlength = fixedMaxLength;
     fprintf(fp, "azimuth,horizon_height\n");
@@ -843,11 +844,6 @@ void calculate_shadow(void)
         if (degreeOutput) {
             shadow_angle *= rad2deg;
         }
-        printangle = angle * rad2deg - 90.;
-        if (printangle < 0.)
-            printangle += 360;
-        else if (printangle >= 360.)
-            printangle -= 360;
 
         if (compassOutput) {
             double tmpangle;
@@ -862,11 +858,17 @@ void calculate_shadow(void)
         }
 
         angle += dfr_rad;
+        printangle += step;
 
         if (angle < 0.)
             angle += twopi;
         else if (angle > twopi)
             angle -= twopi;
+
+        if (printangle < 0.)
+            printangle += 360;
+        else if (printangle > 360.)
+            printangle -= 360;
     } /* end of for loop over angles */
 }
 
