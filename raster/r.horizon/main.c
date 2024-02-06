@@ -790,7 +790,6 @@ void calculate_shadow(void)
     yp = ymin + yy0;
 
     angle = (single_direction * deg2rad) + pihalf;
-    printangle = single_direction;
 
     maxlength = fixedMaxLength;
     fprintf(fp, "azimuth,horizon_height\n");
@@ -844,6 +843,9 @@ void calculate_shadow(void)
         if (degreeOutput) {
             shadow_angle *= rad2deg;
         }
+        printangle = angle * rad2deg - 90.;
+        if (fabs(printangle) < GRASS_EPSILON)
+            printangle = fabs(printangle);
         if (printangle < 0.)
             printangle += 360;
         else if (printangle >= 360.)
@@ -862,7 +864,6 @@ void calculate_shadow(void)
         }
 
         angle += dfr_rad;
-        printangle += step;
 
         if (angle < 0.)
             angle += twopi;
