@@ -76,7 +76,7 @@
 # % type: string
 # % required: no
 # % multiple: no
-# % description: version of wfs, e.g.:1.0.0 or 2.0.0
+# % description: version of WFS, e.g.:1.0.0 or 2.0.0
 # % answer: 1.0.0
 # %end
 # %option
