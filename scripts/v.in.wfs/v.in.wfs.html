@@ -14,8 +14,9 @@ Import of Copernicus Sentinel-2 satellite scene footprints:
 # download "sentinel:mgrs" layer:
 v.in.wfs url="https://geoserver.mundialis.de/geoserver/sentinel/wfs?" name="sentinel:mgrs" output=sentinel2_mgrs
 # download  NRW ALKIS "ave:Flurstueck" attribute:
-v.in.wfs url="https://www.wfs.nrw.de/geobasis/wfs_nw_alkis_vereinfacht?" output=wfs_alkis_vereinfacht srs=25832
-name="ave:Flurstueck" version="2.0.0" aoi="335719,5615930,354798,5636274" layer="Flurstueck"
+# set the aoi before as region with g.region and fetch only for current reagion with r flag
+v.in.wfs url="https://www.wfs.nrw.de/geobasis/wfs_nw_alkis_vereinfacht?" -r output=wfs_alkis_vereinfacht srs=25832
+name="ave:Flurstueck" version="2.0.0" layer="Flurstueck"
 </pre></div>
 
 <h3>WFS import with API key</h3>
