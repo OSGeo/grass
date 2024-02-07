@@ -25,7 +25,6 @@ import wx
 from wx import stc
 
 from grass.pydispatch.signal import Signal
-from grass.grassdb.history import create_history_manager
 
 # needed just for testing
 if __name__ == "__main__":
@@ -137,19 +136,14 @@ class GConsoleWindow(wx.SplitterWindow):
         if not self._gcstyle & GC_PROMPT:
             self.cmdPrompt.Hide()
 
-        # read history file
-        self._loadHistory()
-        if self.giface:
-            self.giface.currentMapsetChanged.connect(self._loadHistory)
-
-            if self._gcstyle == GC_PROMPT:
-                # connect update history signals only for main Console Window
-                self.giface.entryToHistoryAdded.connect(
-                    lambda entry: self.cmdPrompt.AddEntryToCmdHistoryBuffer(entry)
-                )
-                self.giface.entryFromHistoryRemoved.connect(
-                    lambda index: self.cmdPrompt.RemoveEntryFromCmdHistoryBuffer(index)
-                )
+        if self.giface and self._gcstyle == GC_PROMPT:
+            # connect update history signals only for main Console Window
+            self.giface.entryToHistoryAdded.connect(
+                lambda entry: self.cmdPrompt.AddEntryToCmdHistoryBuffer(entry)
+            )
+            self.giface.entryFromHistoryRemoved.connect(
+                lambda index: self.cmdPrompt.RemoveEntryFromCmdHistoryBuffer(index)
+            )
 
         # buttons
         self.btnClear = ClearButton(parent=self.panelPrompt)
@@ -238,17 +232,6 @@ class GConsoleWindow(wx.SplitterWindow):
         # layout
         self.SetAutoLayout(True)
         self.Layout()
-
-    def _loadHistory(self):
-        """Load history from a history file to data structures"""
-        try:
-            self.history_manager = create_history_manager()
-            self.cmdPrompt.cmdbuffer = [
-                entry["command"] for entry in self.history_manager.read()
-            ] or []
-            self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
-        except (OSError, ValueError) as e:
-            GError(str(e))
 
     def GetPanel(self, prompt=True):
         """Get panel

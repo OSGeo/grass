@@ -27,11 +27,13 @@ import wx.stc
 from grass.script import core as grass
 from grass.script import task as gtask
 
+from grass.grassdb.history import create_history_manager
+
 from grass.pydispatch.signal import Signal
 
 from core import globalvar
 from core import utils
-from core.gcmd import EncodeString, DecodeString
+from core.gcmd import EncodeString, DecodeString, GError
 
 
 class GPrompt:
@@ -160,6 +162,11 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
 
         # show hint
         self._showHint()
+
+        # read history file
+        self._loadHistory()
+        if giface:
+            giface.currentMapsetChanged.connect(self._loadHistory)
 
         #
         # bindings
@@ -303,6 +310,17 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetSelectionStart(pos)
         self.SetCurrentPos(pos)
         self.SetFocus()
+
+    def _loadHistory(self):
+        """Load history from a history file to data structures"""
+        try:
+            self.history_manager = create_history_manager()
+            self.cmdbuffer = [
+                entry["command"] for entry in self.history_manager.read()
+            ] or []
+            self.cmdindex = len(self.cmdbuffer)
+        except (OSError, ValueError) as e:
+            GError(str(e))
 
     def AddEntryToCmdHistoryBuffer(self, entry):
         """Add entry to command history buffer.

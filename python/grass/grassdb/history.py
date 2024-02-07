@@ -286,7 +286,7 @@ class HistoryManager:
         }
         return cmd_info
 
-    def add_entry(self, entry):
+    def _add_entry_to_JSON(self, entry):
         """Add entry to JSON history file.
 
         :param dict entry: entry consisting of 'command' and 'command_info' keys
@@ -313,6 +313,16 @@ class HistoryManager:
                     self.history_path
                 )
             ) from e
+
+    def add_entry(self, entry):
+        """Add entry to history file.
+
+        :param dict entry: entry consisting of 'command' and 'command_info' keys
+        """
+        if self.filetype == "json":
+            self._add_entry_to_JSON(entry)
+        else:
+            raise ValueError("Adding entries is supported only for JSON format.")
 
     def _update_entry_in_JSON(self, command_info, index=None):
         """Update entry in JSON history file. If index is None it updates a last entry.
