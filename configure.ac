@@ -9,7 +9,7 @@
 # PURPOSE:	This configure runs all the tests to determine what components
 #		are installed on the current system. It also defines certain
 #		configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2023 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2024 by the GRASS Development Team
 #
 #		This program is free software under the GNU General
 #		Public License (>=v2). Read the file COPYING that
