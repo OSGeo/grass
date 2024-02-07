@@ -9,10 +9,12 @@ SUBDIRS = \
 	app \
 	benchmark \
 	exceptions \
+	getosm \
 	grassdb \
 	gunittest \
 	imaging \
 	jupyter \
+	projpicker \
 	pydispatch \
 	pygrass \
 	script \
