@@ -267,6 +267,24 @@ User settings:
 
 Helper files placed in .github/workflows/
 
+## GRASS Zenodo.org repository: citable source code with DOI
+
+Zenodo page with DOI (for all versions, shows latest release on top):
+[10.5281/zenodo.5176030](https://doi.org/10.5281/zenodo.5176030)
+
+**GitHub - Zenodo Integration**: The settings are accessible with any
+GitHub account which has write access to the GRASS GIS GitHub repo and
+they are managed here:
+
+<https://zenodo.org/account/settings/github/repository/OSGeo/grass>
+
+In the settings, the GRASS GIS GitHub repository needs to be enabled.
+
+Upcoming releases should automatically show up and get a DOI
+assigned.
+
+Explanations: <https://grasswiki.osgeo.org/wiki/GitHub-Zenodo_linkage>
+
 ## GRASS Coverity Scan
 
 Maintainer: Markus Neteler
