@@ -410,7 +410,7 @@ class ProfileFrame(BasePlotFrame):
 
                 try:
                     fd = open(pfile[-1], "w")
-                except IOError as e:
+                except OSError as e:
                     GError(
                         parent=self,
                         message=_(

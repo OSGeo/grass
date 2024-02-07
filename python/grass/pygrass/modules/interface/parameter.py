@@ -13,9 +13,8 @@ def _check_value(param, value):
     """Function to check the correctness of a value and
     return the checked value and the original.
     """
-    must_val = "The Parameter <%s>, must be one of the following values: %r"
     req = "The Parameter <%s>, require: %s, get: %s instead: %r\n%s"
-    string = (type(b""), type(""))
+    string = (bytes, str)
 
     def raiseexcpet(exc, param, ptype, value):
         """Function to modifa the error message"""
@@ -107,7 +106,17 @@ def _check_value(param, value):
                 raise ValueError(err_str)
         # check if value is in the list of valid values
         if param.values is not None and newvalue not in param.values:
-            raise ValueError(must_val % (param.name, param.values))
+            good = False
+            if param.type == str:
+                for param_value in param.values:
+                    if param_value.startswith(newvalue):
+                        good = True
+                        break
+            if not good:
+                raise ValueError(
+                    f"The Parameter <{param.name}>, must be one of the following values:"
+                    f" {param.values!r} not '{newvalue}'"
+                )
     return (
         (
             [
@@ -121,7 +130,7 @@ def _check_value(param, value):
 
 
 # TODO add documentation
-class Parameter(object):
+class Parameter:
     """The Parameter object store all information about a parameter of a
     GRASS GIS module. ::
 
@@ -134,7 +143,7 @@ class Parameter(object):
         >>> param.value = 3
         Traceback (most recent call last):
            ...
-        ValueError: The Parameter <int_number>, must be one of the following values: [2, 4, 6, 8]
+        ValueError: The Parameter <int_number>, must be one of the following values: [2, 4, 6, 8] not '3'
 
     ...
     """
@@ -167,7 +176,8 @@ class Parameter(object):
             try:
                 # Check for integer ranges: "3-30" or float ranges: "0.0-1.0"
                 isrange = re.match(
-                    "(?P<min>-*\d+.*\d*)*-(?P<max>\d+.*\d*)*", diz["values"][0]
+                    r"(?P<min>-?(?:\d*\.)?\d+)?-(?P<max>-?(?:\d*\.)?\d+)?",
+                    diz["values"][0],
                 )
                 if isrange:
                     mn, mx = isrange.groups()
