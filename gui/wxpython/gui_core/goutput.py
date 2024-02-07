@@ -194,13 +194,13 @@ class GConsoleWindow(wx.SplitterWindow):
             promptSizer.Add(helpText, proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
 
             btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+            btnSizer.AddStretchSpacer()
             btnSizer.Add(
                 self.btnOutputSave,
                 proportion=0,
                 flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
                 border=5,
             )
-            btnSizer.AddStretchSpacer()
             btnSizer.Add(self.btnClear, proportion=0, flag=wx.EXPAND, border=5)
             promptSizer.Add(btnSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 

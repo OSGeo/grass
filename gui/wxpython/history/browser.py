@@ -89,13 +89,13 @@ class HistoryBrowser(wx.Panel):
             border=5,
         )
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.AddStretchSpacer()
         btnSizer.Add(
             self.btnCmdExportHistory,
             proportion=0,
             flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
             border=5,
         )
-        btnSizer.AddStretchSpacer()
         sizer.Add(
             self.tree, proportion=1, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5
         )
