@@ -9,7 +9,7 @@
 # PURPOSE:  	It provides the commands necessary to compile, install,
 #   	    	clean, and uninstall GRASS
 #   	    	See INSTALL.md file for usage.
-# COPYRIGHT:    (C) 2002-2023 by the GRASS Development Team
+# COPYRIGHT:    (C) 2002-2024 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #   	    	License (>=v2). Read the file COPYING that comes with GRASS
