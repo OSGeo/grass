@@ -37,7 +37,7 @@ from gui_core.wrap import Menu
 
 from grass.pydispatch.signal import Signal
 
-from grass.grassdb.history import create_history_manager
+import grass.grassdb.history as history
 
 
 class HistoryBrowserTree(CTreeView):
@@ -85,11 +85,8 @@ class HistoryBrowserTree(CTreeView):
 
     def _initHistoryModel(self):
         """Fill tree history model based on the current history log."""
-        self.history_manager = create_history_manager()
-        if self.history_manager.filetype == "plain":
-            self.history_manager.change_history_path_to_PT()
         try:
-            content_list = self.history_manager.read()
+            content_list = history.read()
         except (OSError, ValueError) as e:
             GError(str(e))
 
@@ -151,7 +148,6 @@ class HistoryBrowserTree(CTreeView):
 
         :param entry dict: entry with 'command' and 'command_info' keys
         """
-        self.history_manager.change_history_path_to_JSON()
         new_node = self._model.AppendNode(
             parent=self._model.root,
             label=entry["command"].strip(),
@@ -209,7 +205,7 @@ class HistoryBrowserTree(CTreeView):
         :param int index: index of the entry which should be removed
         """
         try:
-            self.history_manager.remove_entry(index)
+            history.remove_entry(index)
         except (OSError, ValueError) as e:
             GError(str(e))
 
@@ -220,7 +216,7 @@ class HistoryBrowserTree(CTreeView):
         """
         command_info = {}
         try:
-            command_info = self.history_manager.read()[index]["command_info"]
+            command_info = history.read()[index]["command_info"]
         except (OSError, ValueError) as e:
             GError(str(e))
         return command_info

@@ -27,7 +27,7 @@ import wx.stc
 from grass.script import core as grass
 from grass.script import task as gtask
 
-from grass.grassdb.history import create_history_manager
+import grass.grassdb.history as history
 
 from grass.pydispatch.signal import Signal
 
@@ -314,10 +314,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
     def _loadHistory(self):
         """Load history from a history file to data structures"""
         try:
-            self.history_manager = create_history_manager()
-            self.cmdbuffer = [
-                entry["command"] for entry in self.history_manager.read()
-            ] or []
+            history.create_history_file()
+            self.cmdbuffer = [entry["command"] for entry in history.read()] or []
             self.cmdindex = len(self.cmdbuffer)
         except (OSError, ValueError) as e:
             GError(str(e))

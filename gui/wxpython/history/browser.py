@@ -27,6 +27,8 @@ import wx.lib.scrolledpanel as SP
 from gui_core.wrap import SearchCtrl, StaticText, StaticBox, Button
 from history.tree import HistoryBrowserTree
 
+import grass.grassdb.history as history
+
 from grass.pydispatch.signal import Signal
 
 from core.gcmd import GError
@@ -353,7 +355,7 @@ class HistoryBrowser(wx.SplitterWindow):
 
     def OnCmdExportHistory(self, event):
         """Export the history of executed commands to a selected file."""
-        if self.tree.history_manager.filetype == "json":
+        if history.get_extension() == ".json":
             defaultFile = "grass_cmd_log.json"
             wildcard = _("{json} (*.json)|*.txt|{files} (*)|*").format(
                 json=_("JSON files"), files=_("Files")
@@ -373,7 +375,7 @@ class HistoryBrowser(wx.SplitterWindow):
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             try:
-                self.tree.history_manager.copy(path)
+                history.copy(path)
                 self.showNotification.emit(
                     message=_("Command history saved to '{}'".format(path))
                 )

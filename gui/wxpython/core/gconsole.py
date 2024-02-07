@@ -40,7 +40,7 @@ from grass.script import task as gtask
 
 from grass.pydispatch.signal import Signal
 
-from grass.grassdb.history import create_history_manager
+import grass.grassdb.history as history
 
 from core import globalvar
 from core.gcmd import CommandThread, GError, GException
@@ -381,9 +381,6 @@ class GConsole(wx.EvtHandler):
         self._giface = giface
         self._ignoredCmdPattern = ignoredCmdPattern
 
-        # create history manager
-        self.history_manager = create_history_manager()
-
         # create queues
         self.requestQ = Queue.Queue()
         self.resultQ = Queue.Queue()
@@ -501,17 +498,17 @@ class GConsole(wx.EvtHandler):
             return
 
         # convert plain text history file to JSON format if needed
-        if self.history_manager.filetype == "plain":
-            self.history_manager.convert_PT_to_JSON()
+        if history.get_extension() != ".json":
+            history.convert_PT_to_JSON()
 
         # add entry to command history log
-        command_info = self.history_manager.get_initial_command_info(env)
+        command_info = history.get_initial_command_info(env)
         entry = {
             "command": cmd_save_to_history,
             "command_info": command_info,
         }
         try:
-            self.history_manager.add_entry(entry)
+            history.add_entry(entry)
         except (OSError, ValueError) as e:
             GError(str(e))
 
@@ -751,11 +748,11 @@ class GConsole(wx.EvtHandler):
 
         # update command history log by status and runtime duration
         try:
-            self.history_manager.update_entry(cmd_info)
+            history.update_entry(cmd_info)
 
             # update history model
             if self._giface:
-                entry = self.history_manager.read()[-1]
+                entry = history.read()[-1]
                 self._giface.entryInHistoryUpdated.emit(entry=entry)
         except (OSError, ValueError) as e:
             GError(str(e))
