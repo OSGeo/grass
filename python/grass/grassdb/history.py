@@ -85,6 +85,16 @@ class HistoryManager:
         self.history_path = os.path.join(file_path, f"{file_name_no_ext}.json")
         self.filetype = "json"
 
+    def change_history_path_to_PT(self):
+        """Change history path to plain-text path."""
+        # Extract file path and name without extension
+        file_path, file_name = os.path.split(self.history_path)
+        file_name_no_ext, _ = os.path.splitext(file_name)
+
+        # JSON file path
+        self.history_path = os.path.join(file_path, f"{file_name_no_ext}")
+        self.filetype = "plain"
+
     def _read_from_PT(self):
         """Read content of plain text history file.
         :return content_list: list of dictionaries
@@ -147,6 +157,7 @@ class HistoryManager:
         :return content_list: list of dictionaries
         with 'command' and 'command_info' keys
         """
+        print(self.filetype)
         if self.filetype == "plain":
             return self._read_from_PT()
         elif self.filetype == "json":
@@ -369,7 +380,7 @@ class HistoryManager:
         else:
             raise ValueError("Updating entries is supported only for JSON format.")
 
-    def copy_history(self, target_path):
+    def copy(self, target_path):
         """Copy history file to the target location.
         Returns True if file is successfully copied."""
         try:

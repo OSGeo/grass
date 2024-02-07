@@ -86,6 +86,8 @@ class HistoryBrowserTree(CTreeView):
     def _initHistoryModel(self):
         """Fill tree history model based on the current history log."""
         self.history_manager = create_history_manager()
+        if self.history_manager.filetype == "plain":
+            self.history_manager.change_history_path_to_PT()
         try:
             content_list = self.history_manager.read()
         except (OSError, ValueError) as e:

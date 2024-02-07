@@ -19,23 +19,15 @@ for details.
 @author Tomas Zigo
 """
 
+from datetime import datetime
+
 import wx
 import wx.lib.scrolledpanel as SP
 
-<<<<<<< HEAD
-from gui_core.wrap import SearchCtrl, Button
-=======
-from datetime import datetime
-
-from gui_core.wrap import SearchCtrl, StaticText, StaticBox
->>>>>>> 193e7de2f0 (first proposal for splitter window, WIP)
+from gui_core.wrap import SearchCtrl, StaticText, StaticBox, Button
 from history.tree import HistoryBrowserTree
 
 from grass.pydispatch.signal import Signal
-from grass.grassdb.history import (
-    copy_history,
-    get_current_mapset_gui_history_path,
-)
 
 from core.gcmd import GError
 
@@ -293,23 +285,14 @@ class HistoryBrowser(wx.SplitterWindow):
         self.search.Bind(wx.EVT_TEXT, lambda evt: self.tree.Filter(evt.GetString()))
         self.search.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, lambda evt: self.tree.Filter(""))
 
-<<<<<<< HEAD
         # buttons
-        self.btnCmdExportHistory = Button(parent=self, id=wx.ID_ANY)
+        self.btnCmdExportHistory = Button(parent=self.panelInfo, id=wx.ID_ANY)
         self.btnCmdExportHistory.SetLabel(_("&Export history"))
         self.btnCmdExportHistory.SetToolTip(
             _("Export history of executed commands to a file")
         )
         self.btnCmdExportHistory.Bind(wx.EVT_BUTTON, self.OnCmdExportHistory)
 
-        # tree with layers
-        self.tree = HistoryBrowserTree(self, giface=giface)
-        self.tree.SetToolTip(_("Double-click to run selected tool"))
-        self.tree.showNotification.connect(self.showNotification)
-        self.tree.runIgnoredCmdPattern.connect(self.runIgnoredCmdPattern)
-
-=======
->>>>>>> 193e7de2f0 (first proposal for splitter window, WIP)
         self._layout()
 
     def _layout(self):
@@ -323,7 +306,10 @@ class HistoryBrowser(wx.SplitterWindow):
             flag=wx.ALL | wx.EXPAND,
             border=5,
         )
-<<<<<<< HEAD
+        self.browserSizer.Add(
+            self.tree, proportion=1, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5
+        )
+
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.AddStretchSpacer()
         btnSizer.Add(
@@ -332,18 +318,16 @@ class HistoryBrowser(wx.SplitterWindow):
             flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
             border=5,
         )
-        sizer.Add(
-=======
-        self.browserSizer.Add(
->>>>>>> 193e7de2f0 (first proposal for splitter window, WIP)
-            self.tree, proportion=1, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5
-        )
-        sizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
-
         self.infoSizer.Add(
             self.infoPanel,
             proportion=1,
             flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP,
+            border=5,
+        )
+        self.infoSizer.Add(
+            btnSizer,
+            proportion=0,
+            flag=wx.ALL | wx.EXPAND,
             border=5,
         )
 
@@ -359,8 +343,8 @@ class HistoryBrowser(wx.SplitterWindow):
 
         # split window
         self.SplitHorizontally(self.panelBrowser, self.panelInfo, 0)
-        self.SetMinimumPaneSize(100)
-        self.SetSashPosition(self.GetSize().y - 400)
+        self.SetMinimumPaneSize(self.btnCmdExportHistory.GetSize()[1] + 100)
+        self.SetSashPosition(self.GetSize().y - 500)
         self.SetSashGravity(1.0)
 
         # layout
@@ -368,23 +352,28 @@ class HistoryBrowser(wx.SplitterWindow):
         self.Layout()
 
     def OnCmdExportHistory(self, event):
-        """Export the history of executed commands stored
-        in a .wxgui_history file to a selected file."""
+        """Export the history of executed commands to a selected file."""
+        if self.tree.history_manager.filetype == "json":
+            defaultFile = "grass_cmd_log.json"
+            wildcard = _("{json} (*.json)|*.txt|{files} (*)|*").format(
+                json=_("JSON files"), files=_("Files")
+            )
+        else:
+            defaultFile = "grass_cmd_log.txt"
+            wildcard = _("{txt} (*.txt)|*.txt|{files} (*)|*").format(
+                txt=_("Text files"), files=_("Files")
+            )
         dlg = wx.FileDialog(
             self,
             message=_("Save file as..."),
-            defaultFile="grass_cmd_log.txt",
-            wildcard=_("{txt} (*.txt)|*.txt|{files} (*)|*").format(
-                txt=_("Text files"), files=_("Files")
-            ),
+            defaultFile=defaultFile,
+            wildcard=wildcard,
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
         )
-
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            history_path = get_current_mapset_gui_history_path()
             try:
-                copy_history(path, history_path)
+                self.tree.history_manager.copy(path)
                 self.showNotification.emit(
                     message=_("Command history saved to '{}'".format(path))
                 )
