@@ -45,7 +45,10 @@ def get_history_file_extension(history_path):
 
 
 def create_history_file(history_path):
-    """Set up a new GUI history file which is always JSON-formatted."""
+    """Set up a new GUI history file which is always JSON-formatted.
+
+    :param str history_path: path to the history log file
+    """
     if not history_path.exists():
         try:
             with open(history_path, encoding="utf-8", mode="w"):
@@ -195,7 +198,10 @@ def remove_entry(history_path, index):
 
 
 def convert_plain_text_to_JSON(history_path):
-    """Convert plain text history log to JSON format."""
+    """Convert plain text history log to JSON format.
+
+    :param str history_path: path to the history log file
+    """
     if get_history_file_extension(history_path) != ".json":
         try:
             lines = _read_from_plain_text(history_path)
