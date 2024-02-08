@@ -24,8 +24,8 @@ test_vector_name = "geometry_doctest_map"
 LineDist = namedtuple("LineDist", "point dist spdist sldist")
 
 WKT = {
-    "POINT\((.*)\)": "point",  # 'POINT\(\s*([+-]*\d+\.*\d*)+\s*\)'
-    "LINESTRING\((.*)\)": "line",
+    r"POINT\((.*)\)": "point",  # 'POINT\(\s*([+-]*\d+\.*\d*)+\s*\)'
+    r"LINESTRING\((.*)\)": "line",
 }
 
 
@@ -137,7 +137,7 @@ def get_xyz(pnt):
     return x, y, z
 
 
-class Attrs(object):
+class Attrs:
     def __init__(self, cat, table, writeable=False):
         self._cat = None
         self.cond = ""
@@ -267,7 +267,7 @@ class Attrs(object):
         self.table.conn.commit()
 
 
-class Geo(object):
+class Geo:
     """
     Base object for different feature types
     """
@@ -454,7 +454,7 @@ class Point(Geo):
     gtype = libvect.GV_POINT
 
     def __init__(self, x=0, y=0, z=None, **kargs):
-        super(Point, self).__init__(**kargs)
+        super().__init__(**kargs)
         if self.id and self.c_mapinfo:
             self.read()
         else:
@@ -642,7 +642,7 @@ class Line(Geo):
     gtype = libvect.GV_LINE
 
     def __init__(self, points=None, **kargs):
-        super(Line, self).__init__(**kargs)
+        super().__init__(**kargs)
         if points is not None:
             for pnt in points:
                 self.append(pnt)
@@ -1135,7 +1135,7 @@ class Line(Geo):
 
         ..
         """
-        match = re.match("LINESTRING\((.*)\)", wkt)
+        match = re.match(r"LINESTRING\((.*)\)", wkt)
         if match:
             self.reset()
             for coord in match.groups()[0].strip().split(","):
@@ -1244,7 +1244,7 @@ class Line(Geo):
             return (Node(n1.value, self.c_mapinfo), Node(n2.value, self.c_mapinfo))
 
 
-class Node(object):
+class Node:
     """Node class for topological analysis of line neighbors.
 
     Objects of this class will be returned by the node() function
@@ -1350,7 +1350,7 @@ class Boundary(Line):
     gtype = libvect.GV_BOUNDARY
 
     def __init__(self, **kargs):
-        super(Boundary, self).__init__(**kargs)
+        super().__init__(**kargs)
         v_id = kargs.get("v_id", 0)
         # not sure what it means that v_id is None
         v_id = 0 if v_id is None else v_id
@@ -1445,7 +1445,7 @@ class Centroid(Point):
     gtype = libvect.GV_CENTROID
 
     def __init__(self, area_id=None, **kargs):
-        super(Centroid, self).__init__(**kargs)
+        super().__init__(**kargs)
         self.area_id = area_id
         if self.id and self.c_mapinfo and self.area_id is None:
             self.area_id = self._area_id()
@@ -1480,7 +1480,7 @@ class Isle(Geo):
     """An Isle is an area contained by another area."""
 
     def __init__(self, **kargs):
-        super(Isle, self).__init__(**kargs)
+        super().__init__(**kargs)
         # self.area_id = area_id
 
     def __repr__(self):
@@ -1568,7 +1568,7 @@ class Isle(Geo):
         return libvect.Vect_line_geodesic_length(border.c_points)
 
 
-class Isles(object):
+class Isles:
     def __init__(self, c_mapinfo, area_id=None):
         self.c_mapinfo = c_mapinfo
         self.area_id = area_id
@@ -1632,7 +1632,7 @@ class Area(Geo):
     gtype = libvect.GV_AREA
 
     def __init__(self, **kargs):
-        super(Area, self).__init__(**kargs)
+        super().__init__(**kargs)
 
         # set the attributes
         # if self.attrs and self.cat:
@@ -1682,7 +1682,7 @@ class Area(Geo):
 
     @mapinfo_must_be_set
     def area(self):
-        """Returns area of area without areas of isles.
+        r"""Returns area of area without areas of isles.
         double Vect_get_area_area (const struct Map_info \*Map, int area)
         """
         return libvect.Vect_get_area_area(self.c_mapinfo, self.id)
@@ -1763,7 +1763,7 @@ class Area(Geo):
 
     @mapinfo_must_be_set
     def boundaries(self, ilist=False):
-        """Creates list of boundaries for given area.
+        r"""Creates list of boundaries for given area.
 
         int Vect_get_area_boundaries(const struct Map_info \*Map,
                                      int area, struct ilist \*List)
@@ -1802,7 +1802,7 @@ class Area(Geo):
         return cats
 
     def get_first_cat(self):
-        """Find FIRST category of given field and area.
+        r"""Find FIRST category of given field and area.
 
         int Vect_get_area_cat(const struct Map_info \*Map, int area, int field)
 
@@ -1828,7 +1828,7 @@ class Area(Geo):
 
     @mapinfo_must_be_set
     def perimeter(self):
-        """Calculate area perimeter.
+        r"""Calculate area perimeter.
 
         :return: double Vect_area_perimeter (const struct line_pnts \*Points)
 

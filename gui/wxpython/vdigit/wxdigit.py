@@ -37,15 +37,11 @@ from core.settings import UserSettings
 from vdigit.wxdisplay import DisplayDriver, GetLastError
 
 try:
-    WindowsError
-except NameError:
-    WindowsError = OSError
-try:
     from grass.lib.gis import *
     from grass.lib.vector import *
     from grass.lib.vedit import *
     from grass.lib.dbmi import *
-except (ImportError, WindowsError, TypeError) as e:
+except (ImportError, OSError, TypeError) as e:
     print("wxdigit.py: {}".format(e), file=sys.stderr)
 
 
