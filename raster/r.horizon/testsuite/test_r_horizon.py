@@ -232,7 +232,28 @@ class TestHorizon(TestCase):
             e="e-5000",
             w="w+5000",
         )
-
+        # raises ValueError from pygrass parameter check
+        self.assertRaises(
+            ValueError,
+            SimpleModule,
+            "r.horizon",
+            elevation="elevation",
+            output=self.horizon_output,
+            direction=50,
+            bufferzone=-100,
+        )
+        self.assertRaises(
+            ValueError,
+            SimpleModule,
+            "r.horizon",
+            elevation="elevation",
+            output=self.horizon_output,
+            direction=50,
+            e_buff=100,
+            n_buff=0,
+            s_buff=-100,
+            w_buff=-100,
+        )
         module = SimpleModule(
             "r.horizon",
             elevation="elevation",
