@@ -167,7 +167,12 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self._loadHistory()
         if giface:
             giface.currentMapsetChanged.connect(self._loadHistory)
-
+            giface.entryToHistoryAdded.connect(
+                lambda entry: self.AddEntryToCmdHistoryBuffer(entry)
+            )
+            giface.entryFromHistoryRemoved.connect(
+                lambda index: self.RemoveEntryFromCmdHistoryBuffer(index)
+            )
         #
         # bindings
         #

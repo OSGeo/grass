@@ -136,15 +136,6 @@ class GConsoleWindow(wx.SplitterWindow):
         if not self._gcstyle & GC_PROMPT:
             self.cmdPrompt.Hide()
 
-        if self.giface and self._gcstyle == GC_PROMPT:
-            # connect update history signals only for main Console Window
-            self.giface.entryToHistoryAdded.connect(
-                lambda entry: self.cmdPrompt.AddEntryToCmdHistoryBuffer(entry)
-            )
-            self.giface.entryFromHistoryRemoved.connect(
-                lambda index: self.cmdPrompt.RemoveEntryFromCmdHistoryBuffer(index)
-            )
-
         # buttons
         self.btnClear = ClearButton(parent=self.panelPrompt)
         self.btnClear.SetToolTip(_("Clear prompt and output window"))
