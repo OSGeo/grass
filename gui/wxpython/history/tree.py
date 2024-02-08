@@ -37,7 +37,7 @@ from gui_core.wrap import Menu
 
 from grass.pydispatch.signal import Signal
 
-import grass.grassdb.history as history
+from grass.grassdb import history
 
 
 class HistoryBrowserTree(CTreeView):
@@ -86,7 +86,8 @@ class HistoryBrowserTree(CTreeView):
     def _initHistoryModel(self):
         """Fill tree history model based on the current history log."""
         try:
-            content_list = history.read()
+            history_path = history.get_current_mapset_gui_history_path()
+            content_list = history.read(history_path)
         except (OSError, ValueError) as e:
             GError(str(e))
 
@@ -205,7 +206,8 @@ class HistoryBrowserTree(CTreeView):
         :param int index: index of the entry which should be removed
         """
         try:
-            history.remove_entry(index)
+            history_path = history.get_current_mapset_gui_history_path()
+            history.remove_entry(history_path, index)
         except (OSError, ValueError) as e:
             GError(str(e))
 
@@ -216,7 +218,8 @@ class HistoryBrowserTree(CTreeView):
         """
         command_info = {}
         try:
-            command_info = history.read()[index]["command_info"]
+            history_path = history.get_current_mapset_gui_history_path()
+            command_info = history.read(history_path)[index]["command_info"]
         except (OSError, ValueError) as e:
             GError(str(e))
         return command_info

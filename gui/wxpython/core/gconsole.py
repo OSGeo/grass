@@ -40,7 +40,7 @@ from grass.script import task as gtask
 
 from grass.pydispatch.signal import Signal
 
-import grass.grassdb.history as history
+from grass.grassdb import history
 
 from core import globalvar
 from core.gcmd import CommandThread, GError, GException
@@ -498,8 +498,9 @@ class GConsole(wx.EvtHandler):
             return
 
         # convert plain text history file to JSON format if needed
-        if history.get_extension() != ".json":
-            history.convert_PT_to_JSON()
+        history_path = history.get_current_mapset_gui_history_path()
+        if history.get_history_file_extension(history_path) != ".json":
+            history.convert_plain_text_to_JSON(history_path)
 
         # add entry to command history log
         command_info = history.get_initial_command_info(env)
@@ -508,7 +509,8 @@ class GConsole(wx.EvtHandler):
             "command_info": command_info,
         }
         try:
-            history.add_entry(entry)
+            history_path = history.get_current_mapset_gui_history_path()
+            history.add_entry(history_path, entry)
         except (OSError, ValueError) as e:
             GError(str(e))
 
@@ -748,11 +750,12 @@ class GConsole(wx.EvtHandler):
 
         # update command history log by status and runtime duration
         try:
-            history.update_entry(cmd_info)
+            history_path = history.get_current_mapset_gui_history_path()
+            history.update_entry(history_path, cmd_info)
 
             # update history model
             if self._giface:
-                entry = history.read()[-1]
+                entry = history.read(history_path)[-1]
                 self._giface.entryInHistoryUpdated.emit(entry=entry)
         except (OSError, ValueError) as e:
             GError(str(e))

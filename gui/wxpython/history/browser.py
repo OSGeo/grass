@@ -4,11 +4,10 @@
 @brief History browser
 
 Classes:
- - browser::CommandInfoMapper
  - browser::HistoryInfoPanel
  - browser::HistoryBrowser
 
-(C) 2023 by Linda Karlovska, and the GRASS Development Team
+(C) 2023-2024 by Linda Karlovska, and the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -27,50 +26,46 @@ import wx.lib.scrolledpanel as SP
 from gui_core.wrap import SearchCtrl, StaticText, StaticBox, Button
 from history.tree import HistoryBrowserTree
 
-import grass.grassdb.history as history
+from grass.grassdb import history
 
 from grass.pydispatch.signal import Signal
 
 from core.gcmd import GError
 
 
-class CommandInfoMapper:
-    """Class for mapping command info values and keys to the structure used in GUI."""
+TRANSLATION_KEYS = {
+    "timestamp": _("Timestamp:"),
+    "runtime": _("Runtime duration:"),
+    "status": _("Status:"),
+    "mask2d": _("Mask 2D:"),
+    "mask3d": _("Mask 3D:"),
+    "n": _("North:"),
+    "s": _("South:"),
+    "w": _("West:"),
+    "e": _("East:"),
+    "nsres": _("North-south resolution:"),
+    "ewres": _("East-west resolution:"),
+    "rows": _("Number of rows:"),
+    "cols": _("Number of columns:"),
+    "cells": _("Number of cells:"),
+}
 
-    TRANSLATION_KEYS = {
-        "timestamp": _("Timestamp: "),
-        "runtime": _("Runtime duration: "),
-        "status": _("Status: "),
-        "mask2d": _("Mask 2D: "),
-        "mask3d": _("Mask 3D: "),
-        "n": _("North: "),
-        "s": _("South: "),
-        "w": _("West: "),
-        "e": _("East: "),
-        "nsres": _("North-south resolution: "),
-        "ewres": _("East-west resolution: "),
-        "rows": _("Number of rows: "),
-        "cols": _("Number of columns: "),
-        "cells": _("Number of cells: "),
-    }
 
-    def __init__(self, command_info):
-        self.command_info = command_info
+def get_translated_value(key, value):
+    """Function for mapping command info values to the structure used in GUI."""
+    if key == "timestamp":
+        exec_datetime = datetime.fromisoformat(value)
+        return exec_datetime.strftime("%Y-%m-%d %H:%M:%S")
+    elif key == "runtime":
+        return _("{} sec".format(value))
+    elif key == "status":
+        return _(value.capitalize())
+    elif key in ("mask2d", "mask3d"):
+        return _(str(value))
 
-    def get_translated_value(self, key):
-        value = self.command_info.get(key, "")
-        if key == "timestamp":
-            exec_datetime = datetime.fromisoformat(value)
-            return exec_datetime.strftime("%Y-%m-%d %H:%M:%S")
-        elif key == "runtime":
-            return _("{} sec".format(value))
-        elif key == "status":
-            return _(value.capitalize())
-        elif key in ("mask2d", "mask3d"):
-            return _(str(value))
 
-    def make_label(self, key):
-        return self.TRANSLATION_KEYS.get(key, "")
+def make_label(key):
+    return TRANSLATION_KEYS.get(key, "")
 
 
 class HistoryInfoPanel(SP.ScrolledPanel):
@@ -152,7 +147,6 @@ class HistoryInfoPanel(SP.ScrolledPanel):
     def _updateGeneralInfoBox(self, command_info):
         """Update a static box for displaying general info about the command"""
         self.sizer_general_info.Clear(True)
-        mapper = CommandInfoMapper(command_info)
 
         idx = 0
         for key, value in command_info.items():
@@ -161,7 +155,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
                     StaticText(
                         parent=self.general_info_box,
                         id=wx.ID_ANY,
-                        label=mapper.make_label(key),
+                        label=make_label(key),
                         style=wx.ALIGN_LEFT,
                     ),
                     flag=wx.ALIGN_LEFT | wx.ALL,
@@ -172,7 +166,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
                     StaticText(
                         parent=self.general_info_box,
                         id=wx.ID_ANY,
-                        label=mapper.get_translated_value(key),
+                        label=get_translated_value(key, value),
                         style=wx.ALIGN_LEFT,
                     ),
                     flag=wx.ALIGN_LEFT | wx.ALL,
@@ -187,7 +181,6 @@ class HistoryInfoPanel(SP.ScrolledPanel):
     def _updateRegionSettingsBox(self, command_info):
         """Update a static box for displaying region settings of the command"""
         self.sizer_region_settings.Clear(True)
-        mapper = CommandInfoMapper(command_info)
 
         region_settings = command_info["region"]
         idx = 0
@@ -197,7 +190,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
                     StaticText(
                         parent=self.region_settings_box,
                         id=wx.ID_ANY,
-                        label=mapper.make_label(key),
+                        label=make_label(key),
                         style=wx.ALIGN_LEFT,
                     ),
                     flag=wx.ALIGN_LEFT | wx.ALL,
@@ -355,7 +348,8 @@ class HistoryBrowser(wx.SplitterWindow):
 
     def OnCmdExportHistory(self, event):
         """Export the history of executed commands to a selected file."""
-        if history.get_extension() == ".json":
+        history_path = history.get_current_mapset_gui_history_path()
+        if history.get_history_file_extension(history_path) == ".json":
             defaultFile = "grass_cmd_log.json"
             wildcard = _("{json} (*.json)|*.txt|{files} (*)|*").format(
                 json=_("JSON files"), files=_("Files")
@@ -373,11 +367,11 @@ class HistoryBrowser(wx.SplitterWindow):
             style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
         )
         if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
+            target_path = dlg.GetPath()
             try:
-                history.copy(path)
+                history.copy(history_path, target_path)
                 self.showNotification.emit(
-                    message=_("Command history saved to '{}'".format(path))
+                    message=_("Command history saved to '{}'".format(target_path))
                 )
             except OSError as e:
                 GError(str(e))
