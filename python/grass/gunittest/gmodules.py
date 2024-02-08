@@ -19,7 +19,7 @@ from .utils import do_doctest_gettext_workaround
 
 
 class SimpleModule(Module):
-    """Simple wrapper around pygrass.modules.Module to make sure that
+    r"""Simple wrapper around pygrass.modules.Module to make sure that
     run\_, finish\_, stdout and stderr are set correctly.
 
     >>> mapcalc = SimpleModule('r.mapcalc', expression='test_a = 1',
@@ -47,7 +47,7 @@ class SimpleModule(Module):
         for banned in ["stdout_", "stderr_", "finish_", "run_"]:
             if banned in kargs:
                 raise ValueError(
-                    "Do not set %s parameter" ", it would be overriden" % banned
+                    "Do not set %s parameter" ", it would be overridden" % banned
                 )
         kargs["stdout_"] = subprocess.PIPE
         kargs["stderr_"] = subprocess.PIPE

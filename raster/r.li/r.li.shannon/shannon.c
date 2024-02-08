@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
                           output->answer);
 }
 
-int shannon(int fd, char **par, struct area_entry *ad, double *result)
+int shannon(int fd, char **par UNUSED, struct area_entry *ad, double *result)
 {
     int ris = RLI_OK;
     double indice = 0;

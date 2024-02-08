@@ -247,7 +247,7 @@ void createWaterWindows(AMI_STREAM<waterGridType> *mergedWaterStr,
 void generateWatersheds(AMI_STREAM<waterWindowType> **waterWindows,
                         const dimension_type nrows, const dimension_type ncols,
                         AMI_STREAM<labelElevType> *labeledWater,
-                        AMI_STREAM<boundaryType> *boundaryStr)
+                        AMI_STREAM<boundaryType> *boundaryStr UNUSED)
 {
     AMI_err ae;
     waterWindowType *winp, prevWin;

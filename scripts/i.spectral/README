@@ -1,4 +1,4 @@
- This GRASS module calculates the  spectral resonse
+ This GRASS module calculates the  spectral response
  for raster images at a user specified point (by mouse).
 
  Requirement:

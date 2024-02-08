@@ -16,6 +16,7 @@
  *
  *****************************************************************************/
 
+#include <cinttypes>
 #include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
@@ -195,8 +196,8 @@ AMI_STREAM<sweepOutput> *sweep(AMI_STREAM<sweepItem> *sweepstr,
         /* read next sweepItem = (prio, elevwin, topoRankwin, dir) */
         ae = sweepstr->read_item(&crtpoint);
         if (ae != AMI_ERROR_NO_ERROR) {
-            fprintf(stderr,
-                    "sweep: k=%" PRI_OFF_T ": cannot read next item..\n", k);
+            fprintf(stderr, "sweep: k=%" PRId64 ": cannot read next item..\n",
+                    k);
             exit(1);
         }
         /* cout << "k=" << k << " prio =" << crtpoint->getPriority() << "\n"; */

@@ -239,5 +239,6 @@ HANDLE G_pipe_connect(char *name)
     return (hPipe);
 }
 
-#endif /* __MINGW32__ */
-#endif /* __MINGW32__ */
+#endif                              /* __MINGW32__ */
+extern int dummy_for_iso_compilers; /* suppress -Wempty-translation-unit */
+#endif                              /* __MINGW32__ */

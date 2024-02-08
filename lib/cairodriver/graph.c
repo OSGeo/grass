@@ -8,7 +8,7 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+   \author Lars Ahlzen <lars ahlzen.com> (original contributor)
    \author Glynn Clements
  */
 
@@ -73,7 +73,7 @@ static void init_xlib(void)
     }
 
     p = getenv("GRASS_RENDER_CAIRO_VISUAL");
-    if (!p || sscanf(p, "%li", &xid) != 1) {
+    if (!p || sscanf(p, "%lu", &xid) != 1) {
         G_debug(1, "cairo: GRASS_RENDER_CAIRO_VISUAL=%s", p);
         xid = DefaultVisual(ca.dpy, scrn)->visualid;
     }

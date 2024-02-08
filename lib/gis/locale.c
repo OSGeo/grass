@@ -20,6 +20,12 @@
 #include <grass/glocale.h>
 #include <grass/gis.h>
 
+#if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
+#define NO_NLS_UNUSED
+#else
+#define NO_NLS_UNUSED UNUSED
+#endif
+
 void G_init_locale(void)
 {
     static int initialized;
@@ -57,7 +63,7 @@ void G_init_locale(void)
  * \retval char * Pointer to string
  */
 
-char *G_gettext(const char *package, const char *msgid)
+char *G_gettext(const char *package NO_NLS_UNUSED, const char *msgid)
 {
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
     G_init_locale();
@@ -78,8 +84,8 @@ char *G_gettext(const char *package, const char *msgid)
  * \retval char * Pointer to string
  */
 
-char *G_ngettext(const char *package, const char *msgids, const char *msgidp,
-                 unsigned long int n)
+char *G_ngettext(const char *package NO_NLS_UNUSED, const char *msgids,
+                 const char *msgidp, unsigned long int n)
 {
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
     G_init_locale();

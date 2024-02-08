@@ -13,7 +13,6 @@ from grass.script.utils import decode
 
 
 class RasterHistoryTestCate(TestCase):
-
     name = "RasterCategoryTestCase_map"
 
     @classmethod

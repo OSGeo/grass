@@ -30,7 +30,7 @@ Notes:      The memory returned by link_new() is NOT guaranteed to be zeroed.
 	    This could be added as an option later if there is demand.
 
             The key item for this library is that the linked list is
-            a list of homogenous elements all of the same size.  what
+            a list of homogeneous elements all of the same size.  what
             is returned by link_new() for a given token is always the
             same size.
 

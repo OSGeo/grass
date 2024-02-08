@@ -28,13 +28,13 @@
     "------------------------------------------------------------------------" \
     "------------------\n"
 
-static void check_status(const struct Map_info *Map)
+static void check_status(struct Map_info *Map)
 {
     if (!Map->plus.cidx_up_to_date)
         G_fatal_error(_("Category index is not up to date"));
 }
 
-static void check_index(const struct Map_info *Map, int index)
+static void check_index(struct Map_info *Map, int index)
 {
     if (index < 0 || index >= Map->plus.n_cidx)
         G_fatal_error(_("Layer index out of range"));
@@ -78,7 +78,7 @@ static int ci_search_cat(struct Cat_index *ci, int first, int cat)
 
    \return number of layers
  */
-int Vect_cidx_get_num_fields(const struct Map_info *Map)
+int Vect_cidx_get_num_fields(struct Map_info *Map)
 {
     check_status(Map);
 
@@ -95,7 +95,7 @@ int Vect_cidx_get_num_fields(const struct Map_info *Map)
 
    \return layer number
  */
-int Vect_cidx_get_field_number(const struct Map_info *Map, int index)
+int Vect_cidx_get_field_number(struct Map_info *Map, int index)
 {
     check_status(Map);
     check_index(Map, index);
@@ -112,7 +112,7 @@ int Vect_cidx_get_field_number(const struct Map_info *Map, int index)
    \return layer index
    \return -1 if not found
  */
-int Vect_cidx_get_field_index(const struct Map_info *Map, int field)
+int Vect_cidx_get_field_index(struct Map_info *Map, int field)
 {
     int i;
     const struct Plus_head *Plus;
@@ -141,8 +141,7 @@ int Vect_cidx_get_field_index(const struct Map_info *Map, int field)
    \return number of unique categories
    \return -1 on error
  */
-int Vect_cidx_get_num_unique_cats_by_index(const struct Map_info *Map,
-                                           int index)
+int Vect_cidx_get_num_unique_cats_by_index(struct Map_info *Map, int index)
 {
     check_status(Map);
     check_index(Map, index);
@@ -159,7 +158,7 @@ int Vect_cidx_get_num_unique_cats_by_index(const struct Map_info *Map,
    \return number of categories
    \return -1 on error
  */
-int Vect_cidx_get_num_cats_by_index(const struct Map_info *Map, int index)
+int Vect_cidx_get_num_cats_by_index(struct Map_info *Map, int index)
 {
     check_status(Map);
     check_index(Map, index);
@@ -178,8 +177,7 @@ int Vect_cidx_get_num_cats_by_index(const struct Map_info *Map, int index)
    \return number of feature types
    \return -1 on error
  */
-int Vect_cidx_get_num_types_by_index(const struct Map_info *Map,
-                                     int field_index)
+int Vect_cidx_get_num_types_by_index(struct Map_info *Map, int field_index)
 {
     check_status(Map);
     check_index(Map, field_index);
@@ -199,9 +197,8 @@ int Vect_cidx_get_num_types_by_index(const struct Map_info *Map,
    \return 1 on success
    \return 0 on error
  */
-int Vect_cidx_get_type_count_by_index(const struct Map_info *Map,
-                                      int field_index, int type_index,
-                                      int *type, int *count)
+int Vect_cidx_get_type_count_by_index(struct Map_info *Map, int field_index,
+                                      int type_index, int *type, int *count)
 {
     check_status(Map);
     check_index(Map, field_index);
@@ -223,7 +220,7 @@ int Vect_cidx_get_type_count_by_index(const struct Map_info *Map,
    \return feature count
    \return 0 if no features, no such field or no such type in category index
  */
-int Vect_cidx_get_type_count(const struct Map_info *Map, int field, int type)
+int Vect_cidx_get_type_count(struct Map_info *Map, int field, int type)
 {
     int i, fi, count = 0;
 
@@ -262,7 +259,7 @@ int Vect_cidx_get_type_count(const struct Map_info *Map, int field, int type)
    \return 1 on success
    \return 0 on error
  */
-int Vect_cidx_get_cat_by_index(const struct Map_info *Map, int field_index,
+int Vect_cidx_get_cat_by_index(struct Map_info *Map, int field_index,
                                int cat_index, int *cat, int *type, int *id)
 {
     check_status(Map); /* This check is slow ? */
@@ -327,7 +324,7 @@ int Vect_cidx_get_unique_cats_by_index(struct Map_info *Map, int field_index,
    \return index to array
    \return -1 not found
  */
-int Vect_cidx_find_next(const struct Map_info *Map, int field_index, int cat,
+int Vect_cidx_find_next(struct Map_info *Map, int field_index, int cat,
                         int type_mask, int start_index, int *type, int *id)
 {
     int cat_index;
@@ -373,8 +370,8 @@ int Vect_cidx_find_next(const struct Map_info *Map, int field_index, int cat,
    \param cat category number
    \param[out] lines array of ids of found lines/points
  */
-void Vect_cidx_find_all(const struct Map_info *Map, int layer, int type_mask,
-                        int cat, struct ilist *lines)
+void Vect_cidx_find_all(struct Map_info *Map, int layer, int type_mask, int cat,
+                        struct ilist *lines)
 {
     int type, line;
     struct Cat_index *ci;
@@ -420,7 +417,7 @@ void Vect_cidx_find_all(const struct Map_info *Map, int layer, int type_mask,
    \return 1 on success
    \return 0 on error
  */
-int Vect_cidx_dump(const struct Map_info *Map, FILE *out)
+int Vect_cidx_dump(struct Map_info *Map, FILE *out)
 {
     int i, field, nfields, ntypes;
 

@@ -1,5 +1,5 @@
 FROM debian:stable
-# currently Debian 11
+# currently Debian 12
 
 # docker run -it --rm debian:stable bash
 # apt-get update && apt-get install lsb-release -y && lsb_release -a
@@ -11,7 +11,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # define versions to be used (PDAL is not available on Debian, so we compile it here)
 # https://github.com/PDAL/PDAL/releases
-ARG PDAL_VERSION=2.4.3
+ARG PDAL_VERSION=2.5.5
 
 SHELL ["/bin/bash", "-c"]
 
@@ -35,15 +35,14 @@ RUN apt-get update && apt-get upgrade -y && \
     libcurl4-gnutls-dev \
     libfftw3-bin \
     libfftw3-dev \
-    libfreetype6-dev \
+    libfreetype-dev \
     libgdal-dev \
     libgeos-dev \
     libgsl0-dev \
     libjpeg-dev \
     libjsoncpp-dev \
     libnetcdf-dev \
-    libncurses5-dev \
-    libopenblas-base \
+    libncurses-dev \
     libopenblas-dev \
     libopenjp2-7 \
     libopenjp2-7-dev \
@@ -79,7 +78,8 @@ RUN apt-get update && apt-get upgrade -y && \
     vim \
     wget \
     zip \
-    zlib1g-dev
+    zlib1g-dev \
+    && apt-get clean all && rm -rf /var/lib/apt/lists/*
 
 RUN echo LANG="en_US.UTF-8" > /etc/default/locale
 RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen && locale-gen
@@ -190,8 +190,11 @@ ENV SHELL /bin/bash
 ENV LC_ALL "en_US.UTF-8"
 ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
 
+# https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
+ENV PROJ_NETWORK=ON
+
 # Create generic GRASS GIS lib name regardless of version number
-RUN ln -sf /usr/local/grass83 /usr/local/grass
+RUN ln -sf /usr/local/grass84 /usr/local/grass
 
 # show GRASS GIS, PROJ, GDAL etc versions
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \
@@ -206,7 +209,7 @@ RUN rm -r /src/grass_build/.git
 WORKDIR /scripts
 
 # install external GRASS GIS session Python API
-RUN pip3 install grass-session
+RUN pip3 install grass-session --break-system-packages
 
 # add GRASS GIS envs for python usage
 ENV GISBASE "/usr/local/grass/"

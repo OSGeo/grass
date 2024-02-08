@@ -7,7 +7,7 @@
  *
  * Improvements:
  * - added true coordinates support Markus Neteler 1/2001
- * - Region sensivity by MN 1/2001
+ * - Region sensitivity by MN 1/2001
  * - Fixed coordinate being reversed MN 1/2001
  *
  * BUGS: see BUG file
@@ -84,7 +84,7 @@ void setParams(void)
 /*---------------------------------------------------------------------------*/
 /* Set up the input and output file names from the user's responses
  */
-void getParams(char **input, char **output, int *decim)
+void getParams(char **input, char **output, int *decim UNUSED)
 {
     *input = param.input->answer;
     *output = param.output->answer;

@@ -56,7 +56,6 @@ class GRASSStartup(wx.Frame):
     """GRASS start-up screen"""
 
     def __init__(self, parent=None, id=wx.ID_ANY, style=wx.DEFAULT_FRAME_STYLE):
-
         #
         # GRASS variables
         #
@@ -1140,7 +1139,7 @@ class GRASSStartup(wx.Frame):
                 if ret == wx.ID_YES:
                     try:
                         os.remove(lockfile)
-                    except IOError as e:
+                    except OSError as e:
                         GError(
                             _("Unable to remove '%(lock)s'.\n\n" "Details: %(reason)s")
                             % {"lock": lockfile, "reason": e}

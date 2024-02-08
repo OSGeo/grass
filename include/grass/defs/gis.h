@@ -72,25 +72,6 @@
 #define RELDIR "?"
 #endif
 
-/* GDAL < 2.3 does not define HAVE_LONG_LONG when compiled with
- * Visual Studio as for OSGeo4W, even though long long is available,
- * and GIntBig falls back to long which is on Windows always 4 bytes.
- * This patch ensures that GIntBig is defined as long long (8 bytes)
- * if GDAL is compiled with Visual Studio and GRASS is compiled with
- * MinGW. This patch must be applied before other GDAL/OGR headers are
- * included, as done by gprojects.h and vector.h */
-#if defined(__MINGW32__) && HAVE_GDAL
-#include <gdal_version.h>
-#if GDAL_VERSION_NUM < 2030000
-#include <cpl_config.h>
-/* HAVE_LONG_LONG_INT comes from GRASS
- * HAVE_LONG_LONG comes from GDAL */
-#if HAVE_LONG_LONG_INT && !defined(HAVE_LONG_LONG)
-#define HAVE_LONG_LONG 1
-#endif
-#endif
-#endif
-
 /* adj_cellhd.c */
 void G_adjust_Cell_head(struct Cell_head *, int, int);
 void G_adjust_Cell_head3(struct Cell_head *, int, int, int);
@@ -690,8 +671,8 @@ double G_transverse_radius_of_curvature(double, double, double);
 double G_radius_of_conformal_tangent_sphere(double, double, double);
 
 /* rd_cellhd.c */
-void G__read_Cell_head(FILE *, struct Cell_head *, int);
-void G__read_Cell_head_array(char **, struct Cell_head *, int);
+void G__read_Cell_head(FILE *, struct Cell_head *);
+void G__read_Cell_head_array(char **, struct Cell_head *);
 
 /* remove.c */
 int G_remove(const char *, const char *);
@@ -818,7 +799,7 @@ int G_set_verbose(int);
 /* view.c */
 void G_3dview_warning(int);
 int G_get_3dview_defaults(struct G_3dview *, struct Cell_head *);
-int G_put_3dview(const char *, const char *, const struct G_3dview *,
+int G_put_3dview(const char *, const struct G_3dview *,
                  const struct Cell_head *);
 int G_get_3dview(const char *, const char *, struct G_3dview *);
 

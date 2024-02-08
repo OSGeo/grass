@@ -36,18 +36,10 @@ Numeric.arrayrange = Numeric.arange
 
 from math import pi, floor
 
-try:
-    from urllib2 import HTTPError
-    from httplib import HTTPException
-except ImportError:
-    # python3
-    from urllib.error import HTTPError
-    from http.client import HTTPException
+from urllib.error import HTTPError
+from http.client import HTTPException
 
-try:
-    from xml.etree.ElementTree import ParseError
-except ImportError:  # < Python 2.7
-    from xml.parsers.expat import ExpatError as ParseError
+from xml.etree.ElementTree import ParseError
 
 from wms_base import GetEpsg, GetSRSParamVal, WMSBase
 
@@ -99,7 +91,6 @@ class WMSDrv(WMSBase):
 
         # iterate through all tiles and download them
         while True:
-
             if fetch_try == 0:
                 # get url for request the tile and information for placing the tile into
                 # raster with other tiles
@@ -119,7 +110,7 @@ class WMSDrv(WMSBase):
                 wms_data = self._fetchDataFromServer(
                     query_url, self.params["username"], self.params["password"]
                 )
-            except (IOError, HTTPException) as e:
+            except (OSError, HTTPException) as e:
                 if isinstance(e, HTTPError) and e.code == 401:
                     grass.fatal(
                         _("Authorization failed to '%s' when fetching data.\n%s")
@@ -137,7 +128,7 @@ class WMSDrv(WMSBase):
             try:
                 temp_tile_opened = open(temp_tile, "wb")
                 temp_tile_opened.write(wms_data.read())
-            except IOError as e:
+            except OSError as e:
                 # some servers are not happy with many subsequent requests for tiles done immediately,
                 # if immediate request was unsuccessful, try to repeat the request after 5s and 30s breaks
                 # TODO probably servers can return more kinds of errors related to this
@@ -172,7 +163,7 @@ class WMSDrv(WMSBase):
                 try:
                     error_xml_opened = open(temp_tile, "rb")
                     err_str = error_xml_opened.read()
-                except IOError as e:
+                except OSError as e:
                     grass.fatal(_("Unable to read data from tempfile.\n%s") % str(e))
                 finally:
                     error_xml_opened.close()
@@ -443,7 +434,6 @@ class BaseRequestMgr:
     def _isGeoProj(self, proj):
         """!Is it geographic projection?"""
         if proj.find("+proj=latlong") != -1 or proj.find("+proj=longlat") != -1:
-
             return True
         return False
 
@@ -698,7 +688,6 @@ class WMTSRequestMgr(BaseRequestMgr):
         return suitable_mat_sets  # [[TileMatrixSet, TileMatrixSetLink], ....]
 
     def _getMatSetSrs(self, mat_set):
-
         return mat_set.find(self.xml_ns.NsOws("SupportedCRS")).text
 
     def _findTileMats(self, tile_mats, region, bbox):
@@ -785,7 +774,7 @@ class WMTSRequestMgr(BaseRequestMgr):
 
         # get extend restriction in TileMatrixSetLink for the tile matrix, if exists
         tile_mat_set_limits = mat_set_link.find(
-            (self.xml_ns.NsWmts("TileMatrixSetLimits"))
+            self.xml_ns.NsWmts("TileMatrixSetLimits")
         )
         if tile_mat_set_limits is None:
             return mat_num_bbox
@@ -1015,7 +1004,6 @@ class OnEarthRequestMgr(BaseRequestMgr):
             if (best_diff < tile_diff and tile_diff < 0) or (
                 best_diff > tile_diff and best_diff > 0
             ):
-
                 best_res = t_res[comp_res]
                 best_patt = pattern
 

@@ -419,7 +419,7 @@ void iso_calc_cube(geovol_isosurf *isosurf, int x, int y, int z,
                 /* edge vertex */
             }
             else {
-                /* set egdes verts */
+                /* set edges verts */
                 v1 = edge_vert[crnt][0];
                 v2 = edge_vert[crnt][1];
 
@@ -451,7 +451,7 @@ void iso_calc_cube(geovol_isosurf *isosurf, int x, int y, int z,
                 d3[2] = ((float)c) / 255.0;
             }
             else {
-                /* set egdes verts */
+                /* set edges verts */
                 v1 = edge_vert[crnt][0];
                 v2 = edge_vert[crnt][1];
 

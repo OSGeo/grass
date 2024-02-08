@@ -62,7 +62,7 @@ class MapPanel(SingleMapPanel):
         :param toolbars: array of activated toolbars, e.g. ['map', 'digit']
         :param map: instance of render.Map
         :param auimgs: AUI manager
-        :param kwargs: wx.Frame attribures
+        :param kwargs: wx.Frame attributes
         """
 
         SingleMapPanel.__init__(
@@ -253,7 +253,7 @@ class MapPanel(SingleMapPanel):
                 .TopDockable(True)
                 .CloseButton(False)
                 .Layer(2)
-                .BestSize((self.toolbars["map"].GetSize())),
+                .BestSize(self.toolbars["map"].GetSize()),
             )
 
         # GCP display

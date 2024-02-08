@@ -13,11 +13,10 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 import copy
 
 
-class SpatialTopologyDatasetConnector(object):
+class SpatialTopologyDatasetConnector:
     """This class implements a spatial topology access structure to connect
     spatial related datasets
 

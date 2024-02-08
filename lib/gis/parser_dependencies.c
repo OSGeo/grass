@@ -207,6 +207,8 @@ static void append_error(const char *msg)
    When running the module, at most one option from a set can be
    provided.
 
+   The last item of the list must be NULL.
+
    \param first first given option
  */
 void G_option_exclusive(void *first, ...)
@@ -232,6 +234,8 @@ static void check_exclusive(const struct rule *rule)
 /*! \brief Sets the options to be required.
 
    At least one option from a set must be given.
+
+   The last item of the list must be NULL.
 
    \param first first given option
  */
@@ -261,6 +265,8 @@ static void check_required(const struct rule *rule)
 
    If the first option is present, at least one of the other
    options must also be present.
+
+   The last item of the list must be NULL.
 
    If you want all options to be provided use G_option_requires_all()
    function.
@@ -300,6 +306,8 @@ static void check_requires(const struct rule *rule)
    If the first option is present, all the other options must also
    be present.
 
+   The last item of the list must be NULL.
+
    If it is enough if only one option from a set is present,
    use G_option_requires() function.
 
@@ -334,6 +342,8 @@ static void check_requires_all(const struct rule *rule)
    If the first option is present, none of the other options may also (should?)
    be present.
 
+   The last item of the list must be NULL.
+
    \param first first given option
  */
 void G_option_excludes(void *first, ...)
@@ -362,6 +372,8 @@ static void check_excludes(const struct rule *rule)
 
    If any option is present, all the other options must also be present
    all or nothing from a set.
+
+   The last item of the list must be NULL.
 
    \param first first given option
  */

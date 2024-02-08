@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     int nrows, ncols;
     int row, col;
 
-    /* parser stuctures definition */
+    /* parser structures definition */
     struct GModule *module;
     struct Option *input_RNET, *input_TEMPKA, *input_PATM, *input_G0, *input_PT;
     struct Option *output;

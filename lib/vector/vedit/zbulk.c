@@ -63,7 +63,7 @@ int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List, double x1,
     Vect_append_point(Points_se, x1, y1, -PORT_DOUBLE_MAX);
     Vect_append_point(Points_se, x2, y2, PORT_DOUBLE_MAX);
 
-    /* write temporaly line */
+    /* write temporary line */
     temp_line = Vect_write_line(Map, GV_LINE, Points_se, Cats);
     if (temp_line < 0) {
         return -1;

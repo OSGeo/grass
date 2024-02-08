@@ -22,7 +22,6 @@ class TestGdalImport(TestCase):
         )
 
     def test_1(self):
-
         self.assertModule(
             "r.in.gdal",
             "Import GTiff Format",
@@ -51,7 +50,6 @@ class TestGdalImport(TestCase):
         )
 
     def test_2(self):
-
         self.assertModule(
             "r.in.gdal",
             "Import GTiff Format",
@@ -80,7 +78,6 @@ class TestGdalImport(TestCase):
         )
 
     def test_3(self):
-
         self.assertModule(
             "r.in.gdal",
             "Import AAIGrid Format",
@@ -109,7 +106,6 @@ class TestGdalImport(TestCase):
         )
 
     def test_4(self):
-
         self.assertModule(
             "r.in.gdal",
             "Import netCDF Format",
@@ -138,7 +134,6 @@ class TestGdalImport(TestCase):
         )
 
     def test_netCDF_3d_1(self):
-
         self.assertModule(
             "r.in.gdal",
             "Import netCDF Format",
@@ -151,8 +146,8 @@ class TestGdalImport(TestCase):
         # Output of r.info
         info_string = """north=228500
                        south=215000
-                       east=644640
-                       west=629640
+                       east=645000
+                       west=630000
                        nsres=100
                        ewres=100
                        rows=135
@@ -178,7 +173,6 @@ class TestGdalImport(TestCase):
         )
 
     def test_netCDF_3d_2(self):
-
         self.assertModule(
             "r.in.gdal",
             "Import netCDF Format",
@@ -192,8 +186,8 @@ class TestGdalImport(TestCase):
         # Output of r.info
         info_string = """north=228500
                        south=215000
-                       east=644640
-                       west=629640
+                       east=645000
+                       west=630000
                        nsres=100
                        ewres=100
                        rows=135
@@ -219,7 +213,6 @@ class TestGdalImport(TestCase):
         )
 
     def test_netCDF_3d_3(self):
-
         self.assertModule(
             "r.in.gdal",
             "Import netCDF Format",
@@ -233,8 +226,8 @@ class TestGdalImport(TestCase):
         # Output of r.info
         info_string = """north=228500
                        south=215000
-                       east=644640
-                       west=629640
+                       east=645000
+                       west=630000
                        nsres=100
                        ewres=100
                        rows=135
@@ -260,7 +253,6 @@ class TestGdalImport(TestCase):
         )
 
     def test_netCDF_3d_4(self):
-
         self.assertModule(
             "r.in.gdal",
             "Import netCDF Format",
@@ -274,8 +266,8 @@ class TestGdalImport(TestCase):
         # Output of r.info
         info_string = """north=228500
                        south=215000
-                       east=644640
-                       west=629640
+                       east=645000
+                       west=630000
                        nsres=100
                        ewres=100
                        rows=135

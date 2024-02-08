@@ -96,7 +96,7 @@ class GMRemoveTest(TestCase):
         )
         self.assertModule(module)
         self.assertMultiLineEqual(module.outputs.stdout, "")
-        self.assertRegexpMatches(
+        self.assertRegex(
             module.outputs.stderr, "(.*<.+>[^\n]*\n){4}", msg="4 maps should be removed"
         )
 
