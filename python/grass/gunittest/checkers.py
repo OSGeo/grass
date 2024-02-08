@@ -271,6 +271,10 @@ def values_equal(value_a, value_b, precision=0.000001):
         # in Python 2 None is smaller than anything
         # in Python 3 None < 3 raises TypeError
         precision = float(precision)
+        if precision < 0:
+            raise ValueError(
+                "precision needs to be greater than or equal to zero: {precision} < 0"
+            )
         if abs(value_a - value_b) > precision:
             return False
 
