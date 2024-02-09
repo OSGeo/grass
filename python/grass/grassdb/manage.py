@@ -119,7 +119,7 @@ def split_mapset_path(mapset_path):
     return os.fspath(grassdb), location, mapset
 
 
-def resolve_mapset_path(path, location=None, mapset=None):
+def resolve_mapset_path(path, location=None, mapset=None) -> MapsetPath:
     """Resolve full path to mapset from given combination of parameters.
 
     Full or relative path to mapset can be provided as *path*. If the *path*

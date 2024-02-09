@@ -385,6 +385,10 @@ class SessionHandle:
         """True if session is active (not finished)"""
         return self._active
 
+    @property
+    def env(self):
+        return os.environ
+
     def __enter__(self):
         """Enter the context manager context.
 
