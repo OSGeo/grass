@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 06:51-0700\n"
-"PO-Revision-Date: 2023-08-23 07:08+0000\n"
+"PO-Revision-Date: 2024-02-09 11:45+0000\n"
 "Last-Translator: Markus <neteler@osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/"
 "grasswxpy/de/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 5.3\n"
 
 #: ../gui/wxpython/nviz/tools.py:109 ../gui/wxpython/nviz/preferences.py:65
 #: ../gui/wxpython/nviz/preferences.py:69
@@ -20652,6 +20652,17 @@ msgstr "Beschriftungen:"
 
 #~ msgid "GRASS GIS Raster Map Calculator"
 #~ msgstr "GRASS GIS Rasterkartenrechner"
+
+#: ../gui/wxpython/gmodeler/dialogs.py:318
+#, fuzzy, python-format
+msgid ""
+"'%s' is not a GRASS tool.\n"
+"\n"
+"Unable to add new action to the model."
+msgstr ""
+"'%s' ist kein GRASS Werkzeug.\n"
+"\n"
+"Kann keine neue Aktion zum Modell hinzufügen."
 
 #~ msgid "GRASS GIS 3D Raster Map Calculator"
 #~ msgstr "GRASS GIS 3D Raster Map Calculator"
