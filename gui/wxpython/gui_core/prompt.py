@@ -168,10 +168,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         if giface:
             giface.currentMapsetChanged.connect(self._loadHistory)
             giface.entryToHistoryAdded.connect(
-                lambda entry: self.AddEntryToCmdHistoryBuffer(entry)
+                lambda entry: self._addEntryToCmdHistoryBuffer(entry)
             )
             giface.entryFromHistoryRemoved.connect(
-                lambda index: self.RemoveEntryFromCmdHistoryBuffer(index)
+                lambda index: self._removeEntryFromCmdHistoryBuffer(index)
             )
         #
         # bindings
@@ -328,7 +328,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         except (OSError, ValueError) as e:
             GError(str(e))
 
-    def AddEntryToCmdHistoryBuffer(self, entry):
+    def _addEntryToCmdHistoryBuffer(self, entry):
         """Add entry to command history buffer.
 
         :param entry dict: entry with 'command' and 'command_info' keys
@@ -346,7 +346,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             del self.cmdbuffer[0]
         self.cmdindex = len(self.cmdbuffer)
 
-    def RemoveEntryFromCmdHistoryBuffer(self, index):
+    def _removeEntryFromCmdHistoryBuffer(self, index):
         """Remove entry from command history buffer.
         :param index: index of deleted command
         """
