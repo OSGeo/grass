@@ -126,7 +126,7 @@ int parse_command_line(int argc, char *argv[])
     flags.h->key = 'h';
     flags.h->description = _("Print header");
     flags.h->guisection = _("Print");
-    
+
     flags.s = G_define_flag();
     flags.s->key = 's';
     flags.s->description = _("Only print SQL statements");
@@ -140,7 +140,7 @@ int parse_command_line(int argc, char *argv[])
     flags.t->suppress_required = YES;
 
     G_option_requires(flags.h, flags.p, flags.t, NULL);
-    
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
