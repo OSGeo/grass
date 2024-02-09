@@ -107,7 +107,15 @@ class DataCatalogInfoManager:
         :param list buttons: list of info bar widget buttons
                              [(buton_label, button_click_event_handler),...]
         """
-        self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, buttons)
+        self.infoBar.ShowMessage(message, wx.ICON_INFORMATION, remove_buttons=False)
+        if buttons:
+            for btn in buttons:
+                if btn["btnsAction"]["addBtn"]:
+                    # Add btn widget here, to prevent blinking widget
+                    self.infoBar.AddButton(btnid=btn["id"], label=btn["label"])
+                    self.infoBar.Bind(wx.EVT_BUTTON, btn["handler"], id=btn["id"])
+                if btn["btnsAction"]["removeBtn"]:
+                    self.infoBar.RemoveButtons()
 
     def _text_from_reason_id(self, reason_id):
         """Get string for infobar message based on the reason."""
