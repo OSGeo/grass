@@ -3,6 +3,7 @@
 @author Anna Petrasova
 """
 from grass.gunittest.case import TestCase
+from grass.gunittest.gmodules import call_module
 import grass.script as gs
 
 
@@ -39,6 +40,10 @@ class TestRegion(TestCase):
         region = gs.region()
         self.assertEqual(n_default, region["n"])
         self.assertEqual(res_default, region["nsres"])
+
+    def test_f_flag(self):
+        line = call_module("g.region", flags="fglecn3", capture_stdout=True)
+        self.assertEqual(1, len(line.splitlines()))
 
 
 if __name__ == "__main__":
