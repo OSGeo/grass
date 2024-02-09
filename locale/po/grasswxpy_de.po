@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 23:13-0500\n"
-"PO-Revision-Date: 2023-08-23 07:08+0000\n"
+"PO-Revision-Date: 2024-02-09 11:45+0000\n"
 "Last-Translator: Markus <neteler@osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/"
 "grasswxpy/de/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 5.3\n"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:28
 #: ../gui/wxpython/mapswipe/toolbars.py:36
@@ -20461,12 +20461,15 @@ msgid "Redraw model canvas"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:318
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "'%s' is not a GRASS tool.\n"
 "\n"
 "Unable to add new action to the model."
 msgstr ""
+"'%s' ist kein GRASS Werkzeug.\n"
+"\n"
+"Kann keine neue Aktion zum Modell hinzufügen."
 
 #: ../gui/wxpython/modules/extensions.py:117
 msgid "Install selected add-ons GRASS tool"
