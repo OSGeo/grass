@@ -27,7 +27,7 @@ struct options {
     int type;
     int option;
     int print;        /* print only */
-    int print_header; /* print only */
+    int print_header; /* print header for print and total */
     int sql;          /* print only sql statements */
     int total;        /* print totals */
     int units;
