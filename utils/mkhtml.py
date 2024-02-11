@@ -923,7 +923,12 @@ git_commit = get_last_git_commit(
     is_addon=True if addon_path else False,
 )
 if git_commit["commit"] == "unknown":
-    date_tag = "Accessed: {date}".format(date=git_commit["date"])
+    sde = int(os.environ.get('SOURCE_DATE_EPOCH', 0))
+    if sde:
+        build_date = datetime.utcfromtimestamp(sde)
+    else:
+        build_date = git_commit["date"]
+    date_tag = "Accessed: {date}".format(date=build_date)
 else:
     date_tag = "Latest change: {date} in commit: {commit}".format(
         date=git_commit["date"], commit=git_commit["commit"]
