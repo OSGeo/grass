@@ -14,13 +14,13 @@ import shutil
 from pathlib import Path
 
 from datetime import datetime
-import grass.script as grass
+import grass.script as gs
 from grass.script.utils import parse_key_val
 
 
 def get_current_mapset_gui_history_path():
     """Return path to the current mapset history file."""
-    env = grass.gisenv()
+    env = gs.gisenv()
     base_path = Path(env["GISDBASE"]) / env["LOCATION_NAME"] / env["MAPSET"]
     history_filename = ".wxgui_history"
 
@@ -238,7 +238,7 @@ def get_initial_command_info(env_run):
     exec_time = datetime.now().isoformat()
 
     # 2D raster MASK presence
-    env = grass.gisenv()
+    env = gs.gisenv(env_run)
     mapset_path = Path(env["GISDBASE"]) / env["LOCATION_NAME"] / env["MAPSET"]
     mask2d_present = (mapset_path / "cell" / "MASK").exists()
 
@@ -248,14 +248,13 @@ def get_initial_command_info(env_run):
     # Computational region settings
     region_settings = dict(
         parse_key_val(
-            grass.read_command("g.region", flags="g", env=env_run), val_type=float
+            gs.read_command("g.region", flags="g", env=env_run), val_type=float
         )
     )
 
     # Convert floats to integers if possible
     for key, value in region_settings.items():
-        if value.is_integer():
-            region_settings[key] = int(value)
+        region_settings[key] = int(value) if value.is_integer() else value
 
     # Finalize the command info dictionary
     cmd_info = {
