@@ -923,7 +923,7 @@ git_commit = get_last_git_commit(
     is_addon=True if addon_path else False,
 )
 if git_commit["commit"] == "unknown":
-    sde = int(os.environ.get('SOURCE_DATE_EPOCH', 0))
+    sde = int(os.environ.get("SOURCE_DATE_EPOCH", 0))
     if sde:
         build_date = datetime.utcfromtimestamp(sde)
     else:
