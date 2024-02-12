@@ -563,7 +563,8 @@ def main():
         user_aggregate_methods, aggregate_backend, provide_defaults=not result_columns
     )
     if not result_columns:
-        aggregate_columns_exist_or_fatal(input_vector, layer, columns_to_aggregate)
+        if columns_to_aggregate:
+            aggregate_columns_exist_or_fatal(input_vector, layer, columns_to_aggregate)
         columns_to_aggregate, user_aggregate_methods = match_columns_and_methods(
             columns_to_aggregate, user_aggregate_methods
         )
