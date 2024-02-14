@@ -800,7 +800,7 @@ Function DownloadInstallMSRuntime
 		
 	download_ok:	
 	InitPluginsDir
-	untgz::extract "-d" "$TEMP\$ORIGINAL_UNTAR_FOLDER" "-zbz2" "$TEMP\$ARCHIVE_NAME"
+	untgz::extract -d "$TEMP\$ORIGINAL_UNTAR_FOLDER" -zbz2 "$TEMP\$ARCHIVE_NAME"
 	Pop $0
 	StrCmp $0 "success" untar_ok untar_failed
 	
@@ -872,7 +872,7 @@ Function DownloadDataSet
 		
 	download_ok:	
 	InitPluginsDir
-	untgz::extract "-d" "$GIS_DATABASE" "$TEMP\$ARCHIVE_NAME"
+	untgz::extract -d "$GIS_DATABASE" "$TEMP\$ARCHIVE_NAME"
 	Pop $0
 	StrCmp $0 "success" untar_ok untar_failed
 	

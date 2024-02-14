@@ -664,10 +664,12 @@ int do_cum_mfd(void)
                 else
                     af.asp = drain[r - r_max + 1][c - c_max + 1];
             }
+            /*
             if (mfd_cells == 1)
-                /* mfdir = (1 << nextmfd[max_side]); */
+                mfdir = (1 << nextmfd[max_side]);
+            */
 
-                is_swale = FLAG_GET(af.flag, SWALEFLAG);
+            is_swale = FLAG_GET(af.flag, SWALEFLAG);
             /* start new stream */
             if (!is_swale && fabs(value) >= threshold && stream_cells < 1 &&
                 swale_cells < 1 && !flat) {
