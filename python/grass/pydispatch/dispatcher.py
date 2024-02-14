@@ -442,8 +442,7 @@ def _removeBackrefs(senderkey):
 
         def allReceivers():
             for signal, set in items:
-                for item in set:
-                    yield item
+                yield from set
 
         for receiver in allReceivers():
             _killBackref(receiver, senderkey)

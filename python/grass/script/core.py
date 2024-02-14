@@ -8,7 +8,7 @@ Usage:
     from grass.script import core as grass
     grass.parser()
 
-(C) 2008-2023 by the GRASS Development Team
+(C) 2008-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -1950,7 +1950,7 @@ def sanitize_mapset_environment(env):
     return env
 
 
-def create_environment(gisdbase, location, mapset):
+def create_environment(gisdbase, location, mapset, env=None):
     """Creates environment to be passed in run_command for example.
     Returns tuple with temporary file path and the environment. The user
     of this function is responsible for deleting the file."""
@@ -1959,7 +1959,10 @@ def create_environment(gisdbase, location, mapset):
         f.write("GISDBASE: {g}\n".format(g=gisdbase))
         f.write("LOCATION_NAME: {l}\n".format(l=location))
         f.write("GUI: text\n")
-    env = os.environ.copy()
+    if env:
+        env = env.copy()
+    else:
+        env = os.environ.copy()
     env["GISRC"] = f.name
     # remove mapset-specific env vars
     env = sanitize_mapset_environment(env)

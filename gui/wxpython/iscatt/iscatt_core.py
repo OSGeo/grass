@@ -764,7 +764,7 @@ def idScattToidBands(scatt_id, n_bands):
     n_b1 = n_bands - 1
 
     band_1 = (int)(
-        (2 * n_b1 + 1 - sqrt(((2 * n_b1 + 1) * (2 * n_b1 + 1) - 8 * scatt_id))) / 2
+        (2 * n_b1 + 1 - sqrt((2 * n_b1 + 1) * (2 * n_b1 + 1) - 8 * scatt_id)) / 2
     )
 
     band_2 = int(

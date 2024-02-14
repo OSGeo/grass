@@ -115,7 +115,7 @@ def writeData(data, file=None):
 
     try:
         data.tree.write(file)
-    except IOError:
+    except OSError:
         print(
             "'%s' not found." " Please run the script from 'gui/wxpython'." % file,
             file=sys.stderr,
@@ -128,7 +128,7 @@ def writeData(data, file=None):
             f.write("\n")
         finally:
             f.close()
-    except IOError:
+    except OSError:
         print("ERROR: Unable to write to menudata file.", file=sys.stderr)
 
 

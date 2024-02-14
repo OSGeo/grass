@@ -3,12 +3,11 @@
 <em>i.topo.corr</em> is used to topographically correct reflectance
 from imagery files, e.g. obtained with <em>i.landsat.toar</em>, using a
 sun illumination terrain model. This illumination model represents the
-cosine of the incident angle <em>i</em>, i.e. the  angle between the normal to the
-ground and the sun rays.
+cosine of the incident angle <em>i</em>, i.e. the angle between the normal
+to the ground and the sun rays.
 <p>
-Note: If needed, the sun position can be calculated for a given date with
-<em>r.sunmask</em>.
-
+Note: If needed, the sun position can be calculated for a given date and
+time with <em>r.sunmask</em>.
 
 <center>
 <img src="i_topo_corr_angles.png" alt="Figure showing terrain and solar angles"><br>
@@ -18,15 +17,20 @@ Figure showing terrain and solar angles
 <p>
 Using the <b>-i</b> flag and given an elevation basemap (metric),
 <em>i.topo.corr</em> creates a simple illumination model using the formula:
+
 <ul>
   <li> cos_i = cos(s) * cos(z) + sin(s) * sin(z) * cos(a - o) </li>
 </ul>
+
 where,
-<em>i</em> is the incident angle to be calculated,
-<em>s</em> is the terrain slope angle,
-<em>z</em> is the solar zenith angle,
-<em>a</em> the solar azimuth angle,
-<em>o</em> the terrain aspect angle.
+
+<ul>
+  <li> <em>i</em> is the incident angle to be calculated,</li>
+  <li> <em>s</em> is the terrain slope angle (from <em>r.slope.aspect</em>),</li>
+  <li> <em>z</em> is the solar zenith angle (i.e., 90&deg; - solar horizon angle from <em>r.sunmask</em>),</li>
+  <li> <em>a</em> the solar azimuth angle (from <em>r.sunmask</em>),</li>
+  <li> <em>o</em> the terrain aspect angle (from <em>r.slope.aspect</em>).</li>
+</ul>
 
 <p>
 For each band file, the corrected reflectance (ref_c) is calculate from
