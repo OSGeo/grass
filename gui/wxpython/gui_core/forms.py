@@ -407,6 +407,14 @@ class UpdateThread(Thread):
                 if map:
                     self.data[win.GetParent().SetData] = {"vector": map, "layer": layer}
                 # TODO: table?
+            elif name == "SignatureSelect":
+                sigtype = self.task.get_param(
+                    "sigtype", element="element", raiseError=False
+                )
+                value = sigtype.get("value", "")
+                if value:
+                    value = f"signatures/{value}"
+                self.data[win.UpdateItems] = {"element": value}
 
 
 def UpdateDialog(parent, event, eventId, task):
@@ -761,7 +769,7 @@ class TaskFrame(wx.Frame):
             if not modal and hasattr(self, "_disabler"):
                 del self._disabler
         else:
-            super(TaskFrame, self).MakeModal(modal)
+            super().MakeModal(modal)
 
     def updateValuesHook(self, event=None):
         """Update status bar data"""
@@ -867,7 +875,7 @@ class TaskFrame(wx.Frame):
                 )
                 print("parent window is: %s" % (str(self.parent)), file=sys.stderr)
         else:
-            gcmd.Command(cmd)
+            gcmd.Command(cmd, rerr=sys.stderr, stderr=sys.stderr)
 
         if ret != 0:
             self.notebookpanel.notebook.SetSelection(0)
@@ -1444,6 +1452,7 @@ class CmdPanel(wx.Panel):
                     "cats",
                     "subgroup",
                     "sigfile",
+                    "sigtype",
                     "separator",
                     "dbdriver",
                     "dbname",
@@ -1721,6 +1730,27 @@ class CmdPanel(wx.Panel):
                     selection.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                     which_sizer.Add(
                         selection,
+                        proportion=0,
+                        flag=wx.ADJUST_MINSIZE
+                        | wx.BOTTOM
+                        | wx.LEFT
+                        | wx.RIGHT
+                        | wx.TOP,
+                        border=5,
+                    )
+                # signature type
+                elif prompt == "sigtype":
+                    win = gselect.SignatureTypeSelect(parent=which_panel)
+                    value = self._getValue(p)
+                    win.SetValue(value)
+                    p["wxId"] = [win.GetId()]
+                    if p.get("guidependency", ""):
+                        win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                        win.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
+                    win.Bind(wx.EVT_TEXT, self.OnSetValue)
+                    win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
+                    which_sizer.Add(
+                        win,
                         proportion=0,
                         flag=wx.ADJUST_MINSIZE
                         | wx.BOTTOM
@@ -2541,7 +2571,7 @@ class CmdPanel(wx.Panel):
         data = ""
         try:
             f = open(path, "r")
-        except IOError as e:
+        except OSError as e:
             gcmd.GError(
                 parent=self,
                 showTraceback=False,

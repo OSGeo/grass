@@ -62,7 +62,7 @@ class SettingsJSONEncoder(json.JSONEncoder):
             else:
                 return item
 
-        return super(SettingsJSONEncoder, self).iterencode(color(obj))
+        return super().iterencode(color(obj))
 
 
 def settings_JSON_decode_hook(obj):
@@ -169,10 +169,7 @@ class Settings:
                 # ask when quitting wxGUI or closing display
                 "askOnQuit": {"enabled": True},
                 # hide tabs
-                "hideTabs": {
-                    "search": False,
-                    "pyshell": False,
-                },
+                "hideTabs": {"search": False, "pyshell": False, "history": False},
                 "copySelectedTextToClipboard": {"enabled": False},
             },
             #
@@ -182,6 +179,10 @@ class Settings:
                 "outputfont": {
                     "type": "Courier New",
                     "size": 10,
+                },
+                "manualPageFont": {
+                    "faceName": "",
+                    "pointSize": "",
                 },
                 # expand/collapse element list
                 "elementListExpand": {"selection": 0},
@@ -732,6 +733,7 @@ class Settings:
                         "height": 100,
                     },
                 },
+                "grassAPI": {"selection": 0},  # script package
             },
             "mapswipe": {
                 "cursor": {
@@ -874,6 +876,11 @@ class Settings:
             _("circle"),
         )
 
+        self.internalSettings["modeler"]["grassAPI"]["choices"] = (
+            _("Script package"),
+            _("PyGRASS"),
+        )
+
     def ReadSettingsFile(self, settings=None):
         """Reads settings file (mapset, location, gisdbase)"""
         if settings is None:
@@ -932,7 +939,7 @@ class Settings:
 
         try:
             fd = open(self.legacyFilePath, "r")
-        except IOError:
+        except OSError:
             sys.stderr.write(
                 _("Unable to read settings file <%s>\n") % self.legacyFilePath
             )
@@ -987,7 +994,7 @@ class Settings:
         try:
             with open(self.filePath, "w") as f:
                 json.dump(settings, f, indent=2, cls=SettingsJSONEncoder)
-        except IOError as e:
+        except OSError as e:
             raise GException(e)
         except Exception as e:
             raise GException(
