@@ -654,6 +654,6 @@ This program is free software under the GNU General Public License (>=v2).
 
 \- William Kyngesburye
 
-kyngchaos@kyngchaos.com
+<kyngchaos@kyngchaos.com>
 
 <http://www.kyngchaos.com/>

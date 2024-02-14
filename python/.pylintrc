@@ -95,7 +95,8 @@ disable=raw-checker-failed,
         file-ignored,
         suppressed-message,
         deprecated-pragma,
-        use-symbolic-message-instead
+        use-symbolic-message-instead,
+        duplicate-code
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -293,7 +294,7 @@ init-import=no
 
 # List of qualified module names which can have objects that can redefine
 # builtins.
-redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
+redefining-builtins-modules=past.builtins,future.builtins,builtins,io
 
 
 [SIMILARITIES]

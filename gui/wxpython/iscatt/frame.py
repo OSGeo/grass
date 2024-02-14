@@ -18,10 +18,8 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 
-from __future__ import print_function
 
 import os
-import six
 
 import wx
 import wx.lib.scrolledpanel as scrolled
@@ -244,7 +242,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         self.scatt_mgr.cursorPlotMove.connect(self.CursorPlotMove)
 
     def SetBusy(self, busy):
-        for scatt in six.itervalues(self.scatts):
+        for scatt in self.scatts.values():
             scatt.UpdateCur(busy)
 
     def CursorPlotMove(self, x, y, scatt_id):
@@ -278,6 +276,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         del self.scatts[scatt_id]
 
         if pane.IsOk():
+            pane.DestroyOnClose()
             self._mgr.ClosePane(pane)
         self._mgr.Update()
 
@@ -545,7 +544,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
             text_c = wx.SystemSettings.GetColour(wx.SYS_COLOUR_INACTIVECAPTIONTEXT)
 
         # if it is in scope of the method, gui falls, using self solved it
-        self.l = wx.ListItemAttr()
+        self.l = wx.ItemAttr()
         self.l.SetBackgroundColour(back_c)
         self.l.SetTextColour(text_c)
         return self.l

@@ -1,14 +1,5 @@
 #!/usr/bin/env python3
 
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 from os import listdir
 from os.path import join, isdir
 import shutil
@@ -127,7 +118,7 @@ def make_mapset(mapset, location=None, gisdbase=None):
         raise GrassError("Illegal name")
 
 
-class Gisdbase(object):
+class Gisdbase:
     """Return Gisdbase object. ::
 
         >>> from grass.script.core import gisenv
@@ -201,7 +192,7 @@ class Gisdbase(object):
         )
 
 
-class Location(object):
+class Location:
     """Location object ::
 
         >>> from grass.script.core import gisenv
@@ -296,7 +287,7 @@ class Location(object):
         return join(self.gisdbase, self.name)
 
 
-class Mapset(object):
+class Mapset:
     """Mapset ::
 
         >>> from grass.script.core import gisenv
@@ -421,7 +412,7 @@ class Mapset(object):
         return join(self.gisdbase, self.location, self.name)
 
 
-class VisibleMapset(object):
+class VisibleMapset:
     """VisibleMapset object"""
 
     def __init__(self, mapset, location="", gisdbase=""):
@@ -434,8 +425,7 @@ class VisibleMapset(object):
         return repr(self.read())
 
     def __iter__(self):
-        for mapset in self.read():
-            yield mapset
+        yield from self.read()
 
     def read(self):
         """Return the mapsets in the search path"""

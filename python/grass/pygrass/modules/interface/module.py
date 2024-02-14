@@ -1,13 +1,3 @@
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
-import sys
 from multiprocessing import cpu_count, Process, Queue
 import time
 from xml.etree.ElementTree import fromstring
@@ -22,19 +12,14 @@ from .typedict import TypeDict
 from .read import GETFROMTAG, DOC
 from .env import G_debug
 
-if sys.version_info[0] == 2:
-    from itertools import izip_longest as zip_longest
-else:
-    from itertools import zip_longest
-
-    unicode = str
+from itertools import zip_longest
 
 
 def _get_bash(self, *args, **kargs):
     return self.get_bash()
 
 
-class ParallelModuleQueue(object):
+class ParallelModuleQueue:
     """This class is designed to run an arbitrary number of pygrass Module or MultiModule
     processes in parallel.
 
@@ -236,7 +221,7 @@ class ParallelModuleQueue(object):
         self._finished_modules = []  # Store all processed modules in a list
 
     def put(self, module):
-        """Put the next Module or MultiModule object in the queue
+        r"""Put the next Module or MultiModule object in the queue
 
         To run the Module objects in parallel the run\_ and finish\_ options
         of the Module must be set to False.
@@ -320,7 +305,7 @@ class ParallelModuleQueue(object):
         self._proc_count = 0
 
 
-class Module(object):
+class Module:
     """This class is design to wrap/run/interact with the GRASS modules.
 
     The class during the init phase read the XML description generate using
@@ -528,9 +513,7 @@ class Module(object):
     """
 
     def __init__(self, cmd, *args, **kargs):
-        if isinstance(cmd, unicode):
-            self.name = str(cmd)
-        elif isinstance(cmd, str):
+        if isinstance(cmd, str):
             self.name = cmd
         else:
             raise GrassError("Problem initializing the module {s}".format(s=cmd))
@@ -852,7 +835,7 @@ class Module(object):
         return self
 
 
-class MultiModule(object):
+class MultiModule:
     """This class is designed to run a list of modules in serial in the provided order
     within a temporary region environment.
 

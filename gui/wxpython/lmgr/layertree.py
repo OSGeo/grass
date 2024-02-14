@@ -45,6 +45,7 @@ from core.gcmd import GWarning, GError, RunCommand
 from icons.icon import MetaIcon
 from gui_core.widgets import MapValidator
 from gui_core.wrap import Menu, GenBitmapButton, TextCtrl, NewId
+from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
 
 
 TREE_ITEM_HEIGHT = 25
@@ -138,9 +139,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             pass
 
         if globalvar.hasAgw:
-            super(LayerTree, self).__init__(parent, id, agwStyle=ctstyle, **kwargs)
+            super().__init__(parent, id, agwStyle=ctstyle, **kwargs)
         else:
-            super(LayerTree, self).__init__(parent, id, style=ctstyle, **kwargs)
+            super().__init__(parent, id, style=ctstyle, **kwargs)
         self.SetName("LayerTree")
         self.SetBackgroundColour(wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW))
 
@@ -148,11 +149,14 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # when some layers are not visible in layer tree
         # self.SetAutoLayout(True)
         self.SetGradientStyle(1)
-        self.EnableSelectionGradient(True)
+        if sys.platform != "darwin":
+            self.EnableSelectionGradient(True)
         self._setGradient()
 
         # init associated map display
-        self.mapdisplay = createNewMapDisplay(layertree=self)
+        # create instance of Map Display interface
+        self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(giface, self)
+        self.mapdisplay = createNewMapDisplay(self._gifaceForDisplay, layertree=self)
 
         self.root = self.AddRoot(_("Map Layers"))
         self.SetPyData(self.root, (None, None))
