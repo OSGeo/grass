@@ -163,4 +163,4 @@ JavaScript:
 tests:
   - changed-files:
       - any-glob-to-any-file:
-          - */*/testsuite/**
+          - '**/testsuite/**'
