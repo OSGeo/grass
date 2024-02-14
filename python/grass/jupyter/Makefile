@@ -11,6 +11,7 @@ MODULES = \
 	interactivemap \
 	region \
 	map3d \
+	seriesmap \
 	reprojection_renderer \
 	utils \
 	timeseriesmap
