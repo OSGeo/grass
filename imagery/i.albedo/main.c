@@ -330,7 +330,7 @@ int main(int argc, char *argv[])
             }
         }
         /* Cloud/Snow histogram higher bound */
-        for (i = 100; i > i_peak3; i--) {
+        for (i = 99; i > i_peak3; i--) {
             if (histogram[i] < bottom3b) {
                 bottom3b = histogram[i];
                 /* i_bottom3b = i; */

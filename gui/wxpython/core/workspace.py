@@ -853,7 +853,7 @@ class ProcessWorkspaceFile:
         self.nviz_state["constants"] = constants
 
 
-class WriteWorkspaceFile(object):
+class WriteWorkspaceFile:
     """Generic class for writing workspace file"""
 
     def __init__(self, lmgr, file):
@@ -1721,7 +1721,7 @@ class WriteWorkspaceFile(object):
         self.indent -= 4
 
 
-class ProcessGrcFile(object):
+class ProcessGrcFile:
     def __init__(self, filename):
         """Process GRC file"""
         self.filename = filename
@@ -1747,7 +1747,7 @@ class ProcessGrcFile(object):
         """
         try:
             file = open(self.filename, "r")
-        except IOError:
+        except OSError:
             wx.MessageBox(
                 parent=parent,
                 message=_("Unable to open file <%s> for reading.") % self.filename,
