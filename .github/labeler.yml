@@ -101,7 +101,7 @@ Linux:
   - changed-files:
       - any-glob-to-any-file:
           - singularity/**
-          - rpm/** 
+          - rpm/**
 docker:
   - changed-files:
       - any-glob-to-any-file:
@@ -131,7 +131,7 @@ docs:
           - '!doc/development/rfc/**'
 RFC:
   - changed-files:
-      - any-glob-to-any-file: 
+      - any-glob-to-any-file:
           - doc/development/rfc/**
 translation:
   - changed-files:
@@ -140,7 +140,7 @@ translation:
 # based on file types
 Python:
   - changed-files:
-      - any-glob-to-any-file: 
+      - any-glob-to-any-file:
         - '**/*.py'
         - '**/pyproject.toml'
 C:
@@ -158,3 +158,9 @@ HTML:
 JavaScript:
   - changed-files:
       - any-glob-to-any-file: '**/*.js'
+
+# test suite
+tests:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/testsuite/**'
