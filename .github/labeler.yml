@@ -160,7 +160,7 @@ JavaScript:
       - any-glob-to-any-file: '**/*.js'
 
 # test suite
-testsuite:
+tests:
   - changed-files:
       - any-glob-to-any-file:
           - */*/testsuite/**
