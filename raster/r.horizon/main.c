@@ -233,6 +233,7 @@ int main(int argc, char *argv[])
     parm.bufferzone->description =
         _("For horizon rasters, read from the DEM an extra buffer around the "
           "present region");
+    parm.bufferzone->options = "0-";
     parm.bufferzone->guisection = _("Raster mode");
 
     parm.e_buff = G_define_option();
@@ -241,6 +242,7 @@ int main(int argc, char *argv[])
     parm.e_buff->required = NO;
     parm.e_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer eastward the present region");
+    parm.e_buff->options = "0-";
     parm.e_buff->guisection = _("Raster mode");
 
     parm.w_buff = G_define_option();
@@ -249,6 +251,7 @@ int main(int argc, char *argv[])
     parm.w_buff->required = NO;
     parm.w_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer westward the present region");
+    parm.w_buff->options = "0-";
     parm.w_buff->guisection = _("Raster mode");
 
     parm.n_buff = G_define_option();
@@ -257,6 +260,7 @@ int main(int argc, char *argv[])
     parm.n_buff->required = NO;
     parm.n_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer northward the present region");
+    parm.n_buff->options = "0-";
     parm.n_buff->guisection = _("Raster mode");
 
     parm.s_buff = G_define_option();
@@ -265,6 +269,7 @@ int main(int argc, char *argv[])
     parm.s_buff->required = NO;
     parm.s_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer southward the present region");
+    parm.s_buff->options = "0-";
     parm.s_buff->guisection = _("Raster mode");
 
     parm.maxdistance = G_define_option();
@@ -498,6 +503,12 @@ int main(int argc, char *argv[])
             sbufferZone = bufferZone;
         if (nbufferZone == 0.)
             nbufferZone = bufferZone;
+
+        /* adjust buffer to multiples of resolution */
+        ebufferZone = (int)(ebufferZone / stepx) * stepx;
+        wbufferZone = (int)(wbufferZone / stepx) * stepx;
+        sbufferZone = (int)(sbufferZone / stepy) * stepy;
+        nbufferZone = (int)(nbufferZone / stepy) * stepy;
 
         new_cellhd.rows += (int)((nbufferZone + sbufferZone) / stepy);
         new_cellhd.cols += (int)((ebufferZone + wbufferZone) / stepx);
