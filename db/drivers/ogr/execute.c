@@ -98,10 +98,7 @@ int db__driver_execute_immediate(dbString *sql)
             }
             else {
                 if ((cols[i].type != OFTInteger ||
-#if GDAL_VERSION_NUM >= 2000000
-                     cols[i].type != OFTInteger64 ||
-#endif
-                     cols[i].type != OFTReal) &&
+                     cols[i].type != OFTInteger64 || cols[i].type != OFTReal) &&
                     *(cols[i].value) == '\'') {
                     value = G_strchg(cols[i].value, '\'', ' ');
                     G_strip(value);

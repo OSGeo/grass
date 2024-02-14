@@ -27,7 +27,8 @@ struct Node {
 
 static struct Node **hashtable;
 static struct Node *node_list = NULL;
-static int node_count = 0, total_count = 0;
+static int node_count = 0;
+static long total_count = 0;
 
 int initialize_cell_stats(int n)
 {

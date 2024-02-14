@@ -1078,7 +1078,7 @@ class VectMap:
 
             head.close()
             return ""
-        except IOError:
+        except OSError:
             return ""
 
 
