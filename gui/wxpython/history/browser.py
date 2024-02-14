@@ -13,22 +13,26 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 @author Linda Karlovska (Kladivova) linda.karlovska@seznam.cz
+@author Anna Petrasova (kratochanna gmail com)
+@author Tomas Zigo
 """
 
 import wx
-import re
 
-from core import globalvar
-from core.gcmd import GError, GException
-from gui_core.forms import GUI
-from gui_core.treeview import CTreeView
+from gui_core.wrap import SearchCtrl, Button
 from history.tree import HistoryBrowserTree
 
 from grass.pydispatch.signal import Signal
+from grass.grassdb.history import (
+    copy_history,
+    get_current_mapset_gui_history_path,
+)
+
+from core.gcmd import GError
 
 
 class HistoryBrowser(wx.Panel):
-    """History browser for executing the commands from history log.
+    """History browser panel for executing the commands from history log.
 
     Signal:
         showNotification - attribute 'message'
@@ -46,16 +50,32 @@ class HistoryBrowser(wx.Panel):
         self.parent = parent
         self._giface = giface
 
+        wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
+        self.SetName("HistoryBrowser")
+
         self.showNotification = Signal("HistoryBrowser.showNotification")
         self.runIgnoredCmdPattern = Signal("HistoryBrowser.runIgnoredCmdPattern")
-        wx.Panel.__init__(self, parent=parent, id=id, **kwargs)
 
-        self._createTree()
+        # search box
+        self.search = SearchCtrl(self)
+        self.search.SetDescriptiveText(_("Search"))
+        self.search.ShowCancelButton(True)
+        self.search.Bind(wx.EVT_TEXT, lambda evt: self.tree.Filter(evt.GetString()))
+        self.search.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, lambda evt: self.tree.Filter(""))
 
-        self._giface.currentMapsetChanged.connect(self.UpdateHistoryModelFromScratch)
-        self._giface.updateHistory.connect(
-            lambda cmd: self.UpdateHistoryModelByCommand(cmd)
+        # buttons
+        self.btnCmdExportHistory = Button(parent=self, id=wx.ID_ANY)
+        self.btnCmdExportHistory.SetLabel(_("&Export history"))
+        self.btnCmdExportHistory.SetToolTip(
+            _("Export history of executed commands to a file")
         )
+        self.btnCmdExportHistory.Bind(wx.EVT_BUTTON, self.OnCmdExportHistory)
+
+        # tree with layers
+        self.tree = HistoryBrowserTree(self, giface=giface)
+        self.tree.SetToolTip(_("Double-click to run selected tool"))
+        self.tree.showNotification.connect(self.showNotification)
+        self.tree.runIgnoredCmdPattern.connect(self.runIgnoredCmdPattern)
 
         self._layout()
 
@@ -63,68 +83,51 @@ class HistoryBrowser(wx.Panel):
         """Dialog layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(
-            self._tree, proportion=1, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5
+            self.search,
+            proportion=0,
+            flag=wx.ALL | wx.EXPAND,
+            border=5,
         )
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.AddStretchSpacer()
+        btnSizer.Add(
+            self.btnCmdExportHistory,
+            proportion=0,
+            flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
+            border=5,
+        )
+        sizer.Add(
+            self.tree, proportion=1, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=5
+        )
+        sizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
         self.SetSizerAndFit(sizer)
         self.SetAutoLayout(True)
         self.Layout()
 
-    def _createTree(self):
-        """Create tree based on the model"""
-        self._model = HistoryBrowserTree()
-        self._tree = self._getTreeInstance()
-        self._tree.SetToolTip(_("Double-click to open the tool"))
-        self._tree.selectionChanged.connect(self.OnItemSelected)
-        self._tree.itemActivated.connect(lambda node: self.Run(node))
+    def OnCmdExportHistory(self, event):
+        """Export the history of executed commands stored
+        in a .wxgui_history file to a selected file."""
+        dlg = wx.FileDialog(
+            self,
+            message=_("Save file as..."),
+            defaultFile="grass_cmd_log.txt",
+            wildcard=_("{txt} (*.txt)|*.txt|{files} (*)|*").format(
+                txt=_("Text files"), files=_("Files")
+            ),
+            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
+        )
 
-    def _getTreeInstance(self):
-        return CTreeView(model=self._model.GetModel(), parent=self)
-
-    def _getSelectedNode(self):
-        selection = self._tree.GetSelected()
-        if not selection:
-            return None
-        return selection[0]
-
-    def _refreshTree(self):
-        self._tree.SetModel(self._model.GetModel())
-
-    def UpdateHistoryModelFromScratch(self):
-        """Update the model from scratch and refresh the tree"""
-        self._model.CreateModel()
-        self._refreshTree()
-
-    def UpdateHistoryModelByCommand(self, cmd):
-        """Update the model by the command and refresh the tree"""
-        self._model.UpdateModel(cmd)
-        self._refreshTree()
-
-    def OnItemSelected(self, node):
-        """Item selected"""
-        command = node.data["command"]
-        self.showNotification.emit(message=command)
-
-    def Run(self, node=None):
-        """Parse selected history command into list and launch module dialog."""
-        node = node or self._getSelectedNode()
-        if node:
-            command = node.data["command"]
-            lst = re.split(r"\s+", command)
-            if (
-                globalvar.ignoredCmdPattern
-                and re.compile(globalvar.ignoredCmdPattern).search(command)
-                and "--help" not in command
-                and "--ui" not in command
-            ):
-                self.runIgnoredCmdPattern.emit(cmd=lst)
-                return
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            history_path = get_current_mapset_gui_history_path()
             try:
-                GUI(parent=self, giface=self._giface).ParseCommand(lst)
-            except GException as e:
-                GError(
-                    parent=self,
-                    message=str(e),
-                    caption=_("Cannot be parsed into command"),
-                    showTraceback=False,
+                copy_history(path, history_path)
+                self.showNotification.emit(
+                    message=_("Command history saved to '{}'".format(path))
                 )
+            except OSError as e:
+                GError(str(e))
+
+        dlg.Destroy()
+        event.Skip()

@@ -65,7 +65,7 @@ Usage::
     session.finish()
 
 
-(C) 2010-2023 by the GRASS Development Team
+(C) 2010-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -384,6 +384,10 @@ class SessionHandle:
     def active(self):
         """True if session is active (not finished)"""
         return self._active
+
+    @property
+    def env(self):
+        return os.environ
 
     def __enter__(self):
         """Enter the context manager context.
