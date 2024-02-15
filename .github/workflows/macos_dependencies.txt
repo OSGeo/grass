@@ -1,5 +1,5 @@
-clang_osx-64
-clangxx_osx-64
+clang_osx-arm64
+clangxx_osx-arm64
 setuptools
 python
 python.app
@@ -32,7 +32,8 @@ zstd
 pdal
 ply
 postgresql
-postgis
+# postgis>=3.1.4
 cmake
 llvm-openmp
 flex
+git
