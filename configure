@@ -12133,6 +12133,9 @@ fi
   fi
 
   if test "$MYSQLD_CONFIG" != "" ; then
+    mysql_version=`"$MYSQLD_CONFIG" --version`
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: using MySQL/MariaDB version \"$mysql_version\"" >&5
+printf "%s\n" "using MySQL/MariaDB version \"$mysql_version\"" >&6; }
     ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -12146,10 +12149,10 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
     ac_fn_cxx_check_func "$LINENO" "mysql_server_init" "ac_cv_func_mysql_server_init"
 if test "x$ac_cv_func_mysql_server_init" = xyes
 then :
-
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: libmysqld found" >&5
+printf "%s\n" "libmysqld found" >&6; }
 else $as_nop
-  MYSQLDLIB="";
-                  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: libmysqld not found" >&5
+  MYSQLDLIB=""; { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: libmysqld not found" >&5
 printf "%s\n" "$as_me: WARNING: libmysqld not found" >&2;}
 fi
 

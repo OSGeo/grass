@@ -18,7 +18,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_list_tables(dbString **tlist, int *tcount, int system)
+int db__driver_list_tables(dbString **tlist, int *tcount, int system UNUSED)
 {
     int i;
     dbString *list;
@@ -32,7 +32,7 @@ int db__driver_list_tables(dbString **tlist, int *tcount, int system)
     res = mysql_list_tables(connection, NULL);
 
     if (res == NULL) {
-        db_d_append_error("%s\%s", _("Unable get list of tables:"),
+        db_d_append_error("%s\n%s", _("Unable get list of tables:"),
                           mysql_error(connection));
         db_d_report_error();
         return DB_FAILED;

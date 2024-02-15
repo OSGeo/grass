@@ -1287,13 +1287,16 @@ if test -n "$USE_MYSQL"; then
   fi
 
   if test "$MYSQLD_CONFIG" != "" ; then
+    mysql_version=`"$MYSQLD_CONFIG" --version`
+    AC_MSG_RESULT([using MySQL/MariaDB version "$mysql_version"])
     AC_LANG_PUSH([C++])
     ac_save_libs="$LIBS"
     MYSQLDLIB=`"$MYSQLD_CONFIG" --libmysqld-libs`
 
     LIBS="$MYSQLDLIB $LIBS"
-    AC_CHECK_FUNC(mysql_server_init,,[MYSQLDLIB="";
-                  AC_MSG_WARN([libmysqld not found])] )
+    AC_CHECK_FUNC(mysql_server_init,
+                  AC_MSG_RESULT([libmysqld found]),
+                  [MYSQLDLIB=""; AC_MSG_WARN([libmysqld not found])])
     LIBS=$ac_save_libs
     AC_LANG_POP([C++])
   fi
