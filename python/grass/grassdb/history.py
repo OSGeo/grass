@@ -19,7 +19,9 @@ from grass.script.utils import parse_key_val
 
 
 def get_current_mapset_gui_history_path():
-    """Return path to the current mapset history file."""
+    """Return path to the current mapset history file.
+    This function does not ensure that the file exists.
+    """
     env = gs.gisenv()
     base_path = Path(env["GISDBASE"]) / env["LOCATION_NAME"] / env["MAPSET"]
     history_filename = ".wxgui_history"
@@ -27,8 +29,8 @@ def get_current_mapset_gui_history_path():
     txt_path = base_path / history_filename
     json_path = base_path / (history_filename + ".json")
 
-    # Return path to JSON file if exists otherwise return path to plain text.
-    return json_path if json_path.exists() else txt_path
+    # Return path txt only if it exists and json does not
+    return txt_path if txt_path.exists() and not json_path.exists() else json_path
 
 
 def get_history_file_extension(history_path):
@@ -44,10 +46,10 @@ def get_history_file_extension(history_path):
     return extension
 
 
-def create_history_file(history_path):
-    """Set up a new GUI history file which is always JSON-formatted.
+def ensure_history_file(history_path):
+    """Set up a new GUI history file if it doesn't exist.
 
-    :param str history_path: path to the history log file
+    :param str history_path: path to the history file
     """
     if not history_path.exists():
         try:
@@ -201,27 +203,26 @@ def convert_plain_text_to_JSON(history_path):
 
     :param str history_path: path to the history log file
     """
-    if get_history_file_extension(history_path) != ".json":
-        try:
-            lines = _read_from_plain_text(history_path)
+    try:
+        lines = _read_from_plain_text(history_path)
 
-            # Extract file path and name without extension
-            file_path = history_path.parent
-            file_name_no_ext = history_path.stem
+        # Extract file path and name without extension
+        file_path = history_path.parent
+        file_name_no_ext = history_path.stem
 
-            # JSON file path
-            json_path = file_path / (file_name_no_ext + ".json")
+        # JSON file path
+        json_path = file_path / (file_name_no_ext + ".json")
 
-            # Write JSON data to a new file
-            with open(json_path, encoding="utf-8", mode="w") as json_outfile:
-                json.dump(lines, json_outfile, indent=2)
+        # Write JSON data to a new file
+        with open(json_path, encoding="utf-8", mode="w") as json_outfile:
+            json.dump(lines, json_outfile, indent=2)
 
-        except OSError as e:
-            raise OSError(
-                _("Unable to convert plain text history file {} to JSON format").format(
-                    history_path
-                )
-            ) from e
+    except OSError as e:
+        raise OSError(
+            _("Unable to convert plain text history file {} to JSON format").format(
+                history_path
+            )
+        ) from e
 
 
 def get_initial_command_info(env_run):

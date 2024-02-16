@@ -320,7 +320,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         """Load history from a history file to data structures"""
         try:
             history_path = history.get_current_mapset_gui_history_path()
-            history.create_history_file(history_path)
+            history.ensure_history_file(history_path)
             self.cmdbuffer = [
                 entry["command"] for entry in history.read(history_path)
             ] or []
