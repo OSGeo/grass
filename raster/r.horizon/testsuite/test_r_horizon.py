@@ -203,6 +203,7 @@ class TestHorizon(TestCase):
             self.assertAlmostEqual(first=first, second=second, delta=0.000001)
 
     def test_raster_mode_multiple_direction(self):
+        self.runModule("g.region", raster="elevation", res=100)
         module = SimpleModule(
             "r.horizon",
             elevation="elevation",
@@ -220,12 +221,14 @@ class TestHorizon(TestCase):
         self.assertMultiLineEqual(
             first=(
                 "test_horizon_output_from_elevation_010_000\n"
-                "test_horizon_output_from_elevation_025_512"
+                "test_horizon_output_from_elevation_025_512\n"
+                "test_horizon_output_from_elevation_041_024"
             ),
             second=stdout,
         )
 
     def test_raster_mode_multiple_direction_offset(self):
+        self.runModule("g.region", raster="elevation", res=100)
         module = SimpleModule(
             "r.horizon",
             elevation="elevation",
@@ -244,10 +247,91 @@ class TestHorizon(TestCase):
         self.assertMultiLineEqual(
             first=(
                 "test_horizon_output_from_elevation_090_000\n"
-                "test_horizon_output_from_elevation_105_512"
+                "test_horizon_output_from_elevation_105_512\n"
+                "test_horizon_output_from_elevation_121_024"
             ),
             second=stdout,
         )
+
+    def test_raster_mode_bufferzone(self):
+        """Test buffer 100 m and 109 m with resolution 10 gives the same result"""
+        self.runModule(
+            "g.region",
+            raster="elevation",
+            n="n-5000",
+            s="s+5000",
+            e="e-5000",
+            w="w+5000",
+        )
+        # raises ValueError from pygrass parameter check
+        self.assertRaises(
+            ValueError,
+            SimpleModule,
+            "r.horizon",
+            elevation="elevation",
+            output=self.horizon_output,
+            direction=50,
+            bufferzone=-100,
+        )
+        self.assertRaises(
+            ValueError,
+            SimpleModule,
+            "r.horizon",
+            elevation="elevation",
+            output=self.horizon_output,
+            direction=50,
+            e_buff=100,
+            n_buff=0,
+            s_buff=-100,
+            w_buff=-100,
+        )
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            output=self.horizon_output,
+            direction=50,
+            bufferzone=100,
+        )
+        self.assertModule(module)
+        ref = {
+            "mean": 0.0344791,
+        }
+        output = "test_horizon_output_from_elevation_050"
+        self.assertRasterFitsUnivar(
+            raster=output,
+            reference=ref,
+            precision=1e-6,
+        )
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            output=self.horizon_output,
+            direction=50,
+            bufferzone=103,
+        )
+        self.assertModule(module)
+        self.assertRasterFitsUnivar(
+            raster=output,
+            reference=ref,
+            precision=1e-6,
+        )
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            output=self.horizon_output,
+            direction=50,
+            bufferzone=95,
+        )
+        self.assertModule(module)
+        ref = {
+            "mean": 0.0344624,
+        }
+        self.assertRasterFitsUnivar(
+            raster=output,
+            reference=ref,
+            precision=1e-6,
+        )
+        self.runModule("g.region", raster="elevation")
 
 
 if __name__ == "__main__":

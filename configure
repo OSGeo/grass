@@ -679,6 +679,9 @@ CAIROLIB
 CAIROINC
 CAIRO_HAS_XRENDER_SURFACE
 CAIRO_HAS_XRENDER
+USE_LIBSVM
+LIBSVM_LIB
+LIBSVM_INC
 LAPACKINC
 LAPACKLIB
 BLASINC
@@ -902,6 +905,7 @@ with_odbc
 with_fftw
 with_blas
 with_lapack
+with_libsvm
 with_cairo
 with_freetype
 with_nls
@@ -948,6 +952,8 @@ with_blas_includes
 with_blas_libs
 with_lapack_includes
 with_lapack_libs
+with_libsvm_includes
+with_libsvm_libs
 with_cairo_includes
 with_cairo_libs
 with_cairo_ldflags
@@ -1634,6 +1640,7 @@ Optional Packages:
   --with-fftw             support FFTW functionality (default: yes)
   --with-blas             support BLAS functionality (default: no)
   --with-lapack           support LAPACK functionality (default: no)
+  --with-libsvm           support LIBSVM functionality (default: no)
   --with-cairo            support Cairo functionality (default: yes)
   --with-freetype         support FreeType functionality (default: yes)
   --with-nls              support NLS functionality (default: no)
@@ -1709,6 +1716,9 @@ Optional Packages:
   --with-lapack-includes=DIRS
                           LAPACK include files are in DIRS
   --with-lapack-libs=DIRS LAPACK library files are in DIRS
+  --with-libsvm-includes=DIRS
+                          LIBSVM include files are in DIRS
+  --with-libsvm-libs=DIRS LIBSVM library files are in DIRS
   --with-cairo-includes=DIRS
                           cairo include files are in DIRS
   --with-cairo-libs=DIRS  cairo library files are in DIRS
@@ -5468,6 +5478,17 @@ fi
 
 
 
+# Check whether --with-libsvm was given.
+if test ${with_libsvm+y}
+then :
+  withval=$with_libsvm;
+else $as_nop
+  with_libsvm=no
+fi
+
+
+
+
 # Check whether --with-cairo was given.
 if test ${with_cairo+y}
 then :
@@ -5915,6 +5936,25 @@ fi
 if test ${with_lapack_libs+y}
 then :
   withval=$with_lapack_libs;
+fi
+
+
+
+
+
+# Check whether --with-libsvm-includes was given.
+if test ${with_libsvm_includes+y}
+then :
+  withval=$with_libsvm_includes;
+fi
+
+
+
+
+# Check whether --with-libsvm-libs was given.
+if test ${with_libsvm_libs+y}
+then :
+  withval=$with_libsvm_libs;
 fi
 
 
@@ -6444,7 +6484,9 @@ fi
 rm -f conftest.l $LEX_OUTPUT_ROOT.c
 
 fi
-if test "$LEX" = "lex"; then
+if test "x$LEX" = "x:"; then
+    as_fn_error $? "*** Unable to locate lex." "$LINENO" 5
+elif test "$LEX" = "lex"; then
     # Extract the first word of "lex", so it can be a program name with args.
 set dummy lex; ac_word=$2
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
@@ -6488,7 +6530,7 @@ fi
 
 
     if test "$LEXPATH" = "no"; then
-	as_fn_error $? "*** Unable to locate lex." "$LINENO" 5
+        as_fn_error $? "*** Unable to locate lex." "$LINENO" 5
     fi
 fi
 
@@ -12091,6 +12133,9 @@ fi
   fi
 
   if test "$MYSQLD_CONFIG" != "" ; then
+    mysql_version=`"$MYSQLD_CONFIG" --version`
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: using MySQL/MariaDB version \"$mysql_version\"" >&5
+printf "%s\n" "using MySQL/MariaDB version \"$mysql_version\"" >&6; }
     ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -12104,10 +12149,10 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
     ac_fn_cxx_check_func "$LINENO" "mysql_server_init" "ac_cv_func_mysql_server_init"
 if test "x$ac_cv_func_mysql_server_init" = xyes
 then :
-
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: libmysqld found" >&5
+printf "%s\n" "libmysqld found" >&6; }
 else $as_nop
-  MYSQLDLIB="";
-                  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: libmysqld not found" >&5
+  MYSQLDLIB=""; { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: libmysqld not found" >&5
 printf "%s\n" "$as_me: WARNING: libmysqld not found" >&2;}
 fi
 
@@ -14518,6 +14563,165 @@ fi # $USE_BLAS
 
 
 # Done checking LAPACK
+
+# libsvm option
+LIBSVM_INC=
+LIBSVM_LIB=
+USE_LIBSVM=
+
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether to use LIBSVM" >&5
+printf %s "checking whether to use LIBSVM... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: \"$with_libsvm\"" >&5
+printf "%s\n" "\"$with_libsvm\"" >&6; }
+case "$with_libsvm" in
+	"no")	USE_LIBSVM=	;;
+	"yes")	USE_LIBSVM="1"	;;
+	*)	as_fn_error $? "*** You must answer yes or no." "$LINENO" 5	;;
+esac
+
+
+
+if test -n "$USE_LIBSVM"; then
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of LIBSVM includes" >&5
+printf %s "checking for location of LIBSVM includes... " >&6; }
+case "$with_libsvm_includes" in
+y | ye | yes | n | no)
+	as_fn_error $? "*** You must supply a directory to --with-libsvm-includes." "$LINENO" 5
+	;;
+esac
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $with_libsvm_includes" >&5
+printf "%s\n" "$with_libsvm_includes" >&6; }
+
+if test -n "$with_libsvm_includes" ; then
+    for dir in $with_libsvm_includes; do
+        if test -d "$dir"; then
+            LIBSVM_INC="$LIBSVM_INC -I$dir"
+        else
+            as_fn_error $? "*** LIBSVM includes directory $dir does not exist." "$LINENO" 5
+        fi
+    done
+fi
+
+
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$LIBSVM_INC $CPPFLAGS"
+       for ac_header in svm.h
+do :
+  ac_fn_c_check_header_compile "$LINENO" "svm.h" "ac_cv_header_svm_h" "$ac_includes_default"
+if test "x$ac_cv_header_svm_h" = xyes
+then :
+  printf "%s\n" "#define HAVE_SVM_H 1" >>confdefs.h
+
+else $as_nop
+
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$LIBSVM_INC $CPPFLAGS"
+       for ac_header in libsvm/svm.h
+do :
+  ac_fn_c_check_header_compile "$LINENO" "libsvm/svm.h" "ac_cv_header_libsvm_svm_h" "$ac_includes_default"
+if test "x$ac_cv_header_libsvm_svm_h" = xyes
+then :
+  printf "%s\n" "#define HAVE_LIBSVM_SVM_H 1" >>confdefs.h
+
+else $as_nop
+
+    as_fn_error $? "*** Unable to locate LIBSVM includes." "$LINENO" 5
+
+fi
+
+done
+CPPFLAGS=$ac_save_cppflags
+
+
+fi
+
+done
+CPPFLAGS=$ac_save_cppflags
+
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of libsvm library" >&5
+printf %s "checking for location of libsvm library... " >&6; }
+case "$with_libsvm_libs" in
+y | ye | yes | n | no)
+	as_fn_error $? "*** You must supply a directory to --with-libsvm-libs." "$LINENO" 5
+	;;
+esac
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $with_libsvm_libs" >&5
+printf "%s\n" "$with_libsvm_libs" >&6; }
+
+if test -n "$with_libsvm_libs"; then
+    for dir in $with_libsvm_libs; do
+        if test -d "$dir"; then
+            LIBSVM_LIB="$LIBSVM_LIB -L$dir"
+        else
+            as_fn_error $? "*** libsvm library directory $dir does not exist." "$LINENO" 5
+        fi
+    done
+fi
+
+
+ac_save_ldflags="$LDFLAGS"
+LDFLAGS="$LIBSVM_LIB $LDFLAGS"
+
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for svm_load_model in -lsvm" >&5
+printf %s "checking for svm_load_model in -lsvm... " >&6; }
+
+ac_check_lib_save_LIBS=$LIBS
+LIBS="-lsvm  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+char svm_load_model ();
+int
+main (void)
+{
+return svm_load_model ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"
+then :
+  ac_cv_lib_svm_svm_load_model=yes
+else $as_nop
+  ac_cv_lib_svm_svm_load_model=no
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_svm_svm_load_model" >&5
+printf "%s\n" "$ac_cv_lib_svm_svm_load_model" >&6; }
+if test "x$ac_cv_lib_svm_svm_load_model" = xyes
+then :
+  LIBSVM_LIB="$LIBSVM_LIB -lsvm "
+else $as_nop
+
+LDFLAGS=${ac_save_ldflags}
+
+    as_fn_error $? "*** Unable to locate LIBSVM library." "$LINENO" 5
+
+
+fi
+
+
+
+LDFLAGS=${ac_save_ldflags}
+
+
+printf "%s\n" "#define HAVE_LIBSVM 1" >>confdefs.h
+
+fi
+
+
+
+
+# Done with LIBSVM
 
 # Enable Cairo display driver option
 
@@ -17435,6 +17639,8 @@ echo "  LAPACK support:             `if test -n "${USE_LAPACK}" ; then echo yes 
 echo "  Large File support (LFS):   `if test -n "${USE_LARGEFILES}" ; then echo yes ; else echo no ; fi`"
 
 echo "  libLAS support:             `if test -n "${USE_LIBLAS}" ; then echo yes ; else echo no ; fi`"
+
+echo "  LIBSVM support:             `if test -n "${USE_LIBSVM}" ; then echo yes ; else echo no ; fi`"
 
 echo "  MySQL support:              `if test -n "${USE_MYSQL}" ; then echo yes ; else echo no ; fi`"
 

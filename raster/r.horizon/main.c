@@ -227,6 +227,7 @@ int main(int argc, char *argv[])
     parm.bufferzone->description =
         _("For horizon rasters, read from the DEM an extra buffer around the "
           "present region");
+    parm.bufferzone->options = "0-";
     parm.bufferzone->guisection = _("Raster mode");
 
     parm.e_buff = G_define_option();
@@ -235,6 +236,7 @@ int main(int argc, char *argv[])
     parm.e_buff->required = NO;
     parm.e_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer eastward the present region");
+    parm.e_buff->options = "0-";
     parm.e_buff->guisection = _("Raster mode");
 
     parm.w_buff = G_define_option();
@@ -243,6 +245,7 @@ int main(int argc, char *argv[])
     parm.w_buff->required = NO;
     parm.w_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer westward the present region");
+    parm.w_buff->options = "0-";
     parm.w_buff->guisection = _("Raster mode");
 
     parm.n_buff = G_define_option();
@@ -251,6 +254,7 @@ int main(int argc, char *argv[])
     parm.n_buff->required = NO;
     parm.n_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer northward the present region");
+    parm.n_buff->options = "0-";
     parm.n_buff->guisection = _("Raster mode");
 
     parm.s_buff = G_define_option();
@@ -259,6 +263,7 @@ int main(int argc, char *argv[])
     parm.s_buff->required = NO;
     parm.s_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer southward the present region");
+    parm.s_buff->options = "0-";
     parm.s_buff->guisection = _("Raster mode");
 
     parm.maxdistance = G_define_option();
@@ -499,6 +504,12 @@ int main(int argc, char *argv[])
             sbufferZone = bufferZone;
         if (nbufferZone == 0.)
             nbufferZone = bufferZone;
+
+        /* adjust buffer to multiples of resolution */
+        ebufferZone = (int)(ebufferZone / geometry.stepx) * geometry.stepx;
+        wbufferZone = (int)(wbufferZone / geometry.stepx) * geometry.stepx;
+        sbufferZone = (int)(sbufferZone / geometry.stepy) * geometry.stepy;
+        nbufferZone = (int)(nbufferZone / geometry.stepy) * geometry.stepy;
 
         new_cellhd.rows += (int)((nbufferZone + sbufferZone) / geometry.stepy);
         new_cellhd.cols += (int)((ebufferZone + wbufferZone) / geometry.stepx);
@@ -789,6 +800,7 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     double yp = geometry->ymin + origin_point.yg0;
 
     double angle = (settings->single_direction * deg2rad) + pihalf;
+    double printangle = settings->single_direction;
 
     origin_point.maxlength = settings->fixedMaxLength;
     fprintf(fp, "azimuth,horizon_height\n");
@@ -803,11 +815,6 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         if (settings->degreeOutput) {
             shadow_angle *= rad2deg;
         }
-        double printangle = angle * rad2deg - 90.;
-        if (printangle < 0.)
-            printangle += 360;
-        else if (printangle >= 360.)
-            printangle -= 360;
 
         if (settings->compassOutput) {
             double tmpangle;
@@ -822,11 +829,17 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         }
 
         angle += dfr_rad;
+        printangle += settings->step;
 
         if (angle < 0.)
             angle += twopi;
         else if (angle > twopi)
             angle -= twopi;
+
+        if (printangle < 0.)
+            printangle += 360;
+        else if (printangle > 360.)
+            printangle -= 360;
     } /* end of for loop over angles */
     fclose(fp);
 }
@@ -1051,8 +1064,10 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
     }
     else {
         dfr_rad = settings->step * deg2rad;
-        arrayNumInt =
-            (int)((settings->end - settings->start) / fabs(settings->step));
+        arrayNumInt = 0;
+        for (double tmp = 0; tmp < settings->end - settings->start;
+             tmp += fabs(settings->step))
+            ++arrayNumInt;
     }
 
     size_t decimals = G_get_num_decimals(settings->str_step);
