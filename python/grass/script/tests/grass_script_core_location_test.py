@@ -58,6 +58,25 @@ def test_with_init_in_subprocess(tmp_path):
     assert epsg == "EPSG:3358"
 
 
+def test_without_session(tmp_path):
+    """Check that creation works outside of session.
+
+    Assumes that there is no session for the test. This can be ensured by running only
+    this test with pylint outside a session.
+    """
+    name = "desired"
+    gs.create_location(tmp_path, name, epsg="3358")
+    assert (tmp_path / name).exists()
+    wkt_file = tmp_path / name / "PERMANENT" / "PROJ_WKT"
+    assert wkt_file.exists()
+    with gs.setup.init(tmp_path / name):
+        gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path}")
+        gs.run_command("g.gisenv", set=f"LOCATION_NAME={name}")
+        gs.run_command("g.gisenv", set="MAPSET=PERMANENT")
+        epsg = gs.parse_command("g.proj", flags="g")["srid"]
+        assert epsg == "EPSG:3358"
+
+
 def test_with_different_path(tmp_path):
     """Check correct EPSG is created with different path"""
     bootstrap_location = "bootstrap"

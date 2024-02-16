@@ -1733,9 +1733,20 @@ def create_location(
     if datum_trans:
         kwargs["datum_trans"] = datum_trans
 
+    # Lazy-importing to avoid circular dependencies.
+    # pylint: disable=import-outside-toplevel
+    if os.environ.get("GISBASE"):
+        env = os.environ
+    else:
+        from grass.script.setup import setup_runtime_env
+
+        env = setup_runtime_env(env=os.environ)
+
     if epsg or proj4 or filename or wkt:
         # The names don't really matter here.
-        tmp_gisrc, env = create_environment(dbase, "<placeholder>", "<placeholder>")
+        tmp_gisrc, env = create_environment(
+            dbase, "<placeholder>", "<placeholder>", env=env
+        )
 
     if epsg:
         ps = pipe_command(
