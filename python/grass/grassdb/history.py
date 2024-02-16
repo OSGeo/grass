@@ -27,8 +27,8 @@ def get_current_mapset_gui_history_path():
     txt_path = base_path / history_filename
     json_path = base_path / (history_filename + ".json")
 
-    # Return path to plain-text file if exists otherwise return JSON
-    return txt_path if txt_path.exists() else json_path
+    # Return path to JSON file if exists otherwise return path to plain text.
+    return json_path if json_path.exists() else txt_path
 
 
 def get_history_file_extension(history_path):
@@ -129,12 +129,11 @@ def read(history_path):
     """
     if get_history_file_extension(history_path) == ".json":
         return _read_from_JSON(history_path)
-    else:
-        return _read_from_plain_text(history_path)
+    return _read_from_plain_text(history_path)
 
 
 def _remove_entry_from_plain_text(history_path, index):
-    """Remove entry from plain-text history file.
+    """Remove entry from plain text history file.
 
     :param str history_path: path to the history log file
     :param int index: index of the command to be removed
@@ -214,11 +213,8 @@ def convert_plain_text_to_JSON(history_path):
             json_path = file_path / (file_name_no_ext + ".json")
 
             # Write JSON data to a new file
-            with open(json_path, "w") as json_outfile:
+            with open(json_path, encoding="utf-8", mode="w") as json_outfile:
                 json.dump(lines, json_outfile, indent=2)
-
-            # Remove the old plain text file
-            history_path.unlink()
 
         except OSError as e:
             raise OSError(
@@ -273,15 +269,15 @@ def _add_entry_to_JSON(history_path, entry):
     :param dict entry: entry consisting of 'command' and 'command_info' keys
     """
     try:
-        with open(history_path, encoding="utf-8", mode="r") as fileHistory:
-            existing_data = json.load(fileHistory)
+        with open(history_path, encoding="utf-8", mode="r") as file_history:
+            existing_data = json.load(file_history)
     except (OSError, ValueError):
         existing_data = []
 
     existing_data.append(entry)
     try:
-        with open(history_path, encoding="utf-8", mode="w") as fileHistory:
-            json.dump(existing_data, fileHistory, indent=2)
+        with open(history_path, encoding="utf-8", mode="w") as file_history:
+            json.dump(existing_data, file_history, indent=2)
     except ValueError as ve:
         raise ValueError(
             _("Error decoding content of JSON history file {}").format(history_path)
