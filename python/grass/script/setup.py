@@ -192,14 +192,18 @@ def get_install_path(path=None):
     return None
 
 
-def setup_runtime_env(gisbase=None, env=None):
+def setup_runtime_env(gisbase=None, *, env=None):
     """Setup the runtime environment.
 
     Modifies environment so that GRASS modules can run. It does not setup a session,
     but only the system environment to execute commands.
 
-    Returns modified copy of the environment provided with _env_. If _env_ is not
-    provided, modifies the global environment (os.environ).
+    Modifies the environment provided with _env_. If _env_ is not
+    provided, modifies the global environment (os.environ). Pass a copy of the
+    environment if you don't want the source environment modified.
+
+    If _gisbase_ is not provided, a heuristic is used to find the path to GRASS
+    installation (see the :func:`get_install_path` function for details).
     """
     if not gisbase:
         gisbase = get_install_path()
@@ -208,9 +212,7 @@ def setup_runtime_env(gisbase=None, env=None):
     gisbase = os.fspath(gisbase)
 
     # If environment is not provided, use the global one.
-    if env:
-        env = env.copy()
-    else:
+    if not env:
         env = os.environ
 
     # Set GISBASE
@@ -264,8 +266,6 @@ def setup_runtime_env(gisbase=None, env=None):
     else:
         path = etcpy
     env["PYTHONPATH"] = path
-
-    return env
 
 
 def init(path, location=None, mapset=None, grass_path=None):

@@ -1740,7 +1740,8 @@ def create_location(
     else:
         from grass.script.setup import setup_runtime_env
 
-        env = setup_runtime_env(env=os.environ)
+        env = os.environ.copy()
+        setup_runtime_env(env=env)
 
     if epsg or proj4 or filename or wkt:
         # The names don't really matter here.
