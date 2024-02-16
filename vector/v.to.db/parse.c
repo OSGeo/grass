@@ -24,7 +24,7 @@ int parse_command_line(int argc, char *argv[])
         struct Option *fs;
     } parms;
     struct {
-        struct Flag *p, *s, *t;
+        struct Flag *h, *p, *s, *t;
     } flags;
     char *desc;
 
@@ -122,6 +122,11 @@ int parse_command_line(int argc, char *argv[])
     flags.p->guisection = _("Print");
     flags.p->suppress_required = YES;
 
+    flags.h = G_define_flag();
+    flags.h->key = 'h';
+    flags.h->description = _("Print header");
+    flags.h->guisection = _("Print");
+
     flags.s = G_define_flag();
     flags.s->key = 's';
     flags.s->description = _("Only print SQL statements");
@@ -133,6 +138,8 @@ int parse_command_line(int argc, char *argv[])
         _("Print also totals for option length, area, or count");
     flags.t->guisection = _("Print");
     flags.t->suppress_required = YES;
+
+    G_option_requires(flags.h, flags.p, flags.t, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -146,6 +153,7 @@ int parse_command_line(int argc, char *argv[])
                       parms.option->key, parms.option->description);
 
     options.print = flags.p->answer;
+    options.print_header = flags.h->answer;
     options.sql = flags.s->answer;
     options.total = flags.t->answer;
 
