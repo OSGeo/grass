@@ -7,9 +7,6 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-# recommended in https://gitter.im/conda-forge/conda-forge.github.io?at=5c40da7f95e17b45256960ce
-find ${CONDA_PREFIX}/lib -name '*.la' -delete
-
 CONDA_ARCH=$(uname -m)
 INSTALL_PREFIX=$1
 
