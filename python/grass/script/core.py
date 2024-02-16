@@ -1714,16 +1714,11 @@ def create_location(
     # create dbase if not exists
     if not os.path.exists(dbase):
         os.mkdir(dbase)
-    if epsg or proj4 or filename or wkt:
-        # here the location shouldn't really matter
-        tmp_gisrc, env = create_environment(
-            dbase, gisenv()["LOCATION_NAME"], "PERMANENT"
-        )
+
     # check if location already exists
     if os.path.exists(os.path.join(dbase, location)):
         if not overwrite:
             warning(_("Location <%s> already exists. Operation canceled.") % location)
-            try_remove(tmp_gisrc)
             return
         else:
             warning(
@@ -1737,6 +1732,10 @@ def create_location(
         kwargs["datum"] = datum
     if datum_trans:
         kwargs["datum_trans"] = datum_trans
+
+    if epsg or proj4 or filename or wkt:
+        # The names don't really matter here.
+        tmp_gisrc, env = create_environment(dbase, "<placeholder>", "<placeholder>")
 
     if epsg:
         ps = pipe_command(
