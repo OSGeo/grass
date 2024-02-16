@@ -156,6 +156,7 @@ class HistoryBrowserTree(CTreeView):
         )
         self._refreshTree()
         self.Select(new_node)
+        self.ExpandNode(new_node)
         self.infoPanel.showCommandInfo(entry["command_info"])
 
     def UpdateNodeInHistoryModel(self, entry):
