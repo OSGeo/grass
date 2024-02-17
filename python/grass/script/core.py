@@ -652,16 +652,16 @@ def exec_command(
 # interface to g.message
 
 
-def message(msg, flag=None):
+def message(msg, flag=None, env=None):
     """Display a message using `g.message`
 
     :param str msg: message to be displayed
     :param str flag: flags (given as string)
     """
-    run_command("g.message", flags=flag, message=msg, errors="ignore")
+    run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
 
 
-def debug(msg, debug=1):
+def debug(msg, debug=1, env=None):
     """Display a debugging message using `g.message -d`.
 
     The visibility of a debug message at runtime is controlled by
@@ -679,26 +679,26 @@ def debug(msg, debug=1):
         if sys.platform == "win32":
             msg = msg.replace("&", "^&")
 
-        run_command("g.message", flags="d", message=msg, debug=debug)
+        run_command("g.message", flags="d", message=msg, debug=debug, env=env)
 
 
-def verbose(msg):
+def verbose(msg, env=None):
     """Display a verbose message using `g.message -v`
 
     :param str msg: verbose message to be displayed
     """
-    message(msg, flag="v")
+    message(msg, flag="v", env=env)
 
 
-def info(msg):
+def info(msg, env=None):
     """Display an informational message using `g.message -i`
 
     :param str msg: informational message to be displayed
     """
-    message(msg, flag="i")
+    message(msg, flag="i", env=env)
 
 
-def percent(i, n, s):
+def percent(i, n, s, env=None):
     """Display a progress info message using `g.message -p`
 
     ::
@@ -713,18 +713,18 @@ def percent(i, n, s):
     :param int n: total number of items
     :param int s: increment size
     """
-    message("%d %d %d" % (i, n, s), flag="p")
+    message("%d %d %d" % (i, n, s), flag="p", env=env)
 
 
-def warning(msg):
+def warning(msg, env=None):
     """Display a warning message using `g.message -w`
 
     :param str msg: warning message to be displayed
     """
-    message(msg, flag="w")
+    message(msg, flag="w", env=env)
 
 
-def error(msg):
+def error(msg, env=None):
     """Display an error message using `g.message -e`
 
     This function does not end the execution of the program.
@@ -733,10 +733,10 @@ def error(msg):
 
     :param str msg: error message to be displayed
     """
-    message(msg, flag="e")
+    message(msg, flag="e", env=env)
 
 
-def fatal(msg):
+def fatal(msg, env=None):
     """Display an error message using `g.message -e`, then abort or raise
 
     Raises exception when module global raise_on_error is 'True', abort
@@ -749,7 +749,7 @@ def fatal(msg):
     if raise_on_error:
         raise ScriptError(msg)
 
-    error(msg)
+    error(msg, env=None)
     sys.exit(1)
 
 
