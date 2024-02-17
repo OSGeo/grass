@@ -9,43 +9,38 @@
 
 /*---------------------------------------------------------------------------*/
 
-static int Rast3d_readWriteWindow(struct Key_Value *windowKeys, int doRead,
-                                  int *proj, int *zone, double *north,
-                                  double *south, double *east, double *west,
-                                  double *top, double *bottom, int *rows,
-                                  int *cols, int *depths, double *ew_res,
-                                  double *ns_res, double *tb_res)
+static int Rast3d__readWindow(struct Key_Value *windowKeys, int *proj,
+                              int *zone, double *north, double *south,
+                              double *east, double *west, double *top,
+                              double *bottom, int *rows, int *cols, int *depths,
+                              double *ew_res, double *ns_res, double *tb_res)
 {
     int returnVal;
-    int (*windowInt)(), (*windowDouble)();
-
-    if (doRead) {
-        windowDouble = Rast3d_key_get_double;
-        windowInt = Rast3d_key_get_int;
-    }
-    else {
-        windowDouble = Rast3d_key_set_double;
-        windowInt = Rast3d_key_set_int;
-    }
 
     returnVal = 1;
-    returnVal &= windowInt(windowKeys, RASTER3D_REGION_PROJ, proj);
-    returnVal &= windowInt(windowKeys, RASTER3D_REGION_ZONE, zone);
+    returnVal &= Rast3d_key_get_int(windowKeys, RASTER3D_REGION_PROJ, proj);
+    returnVal &= Rast3d_key_get_int(windowKeys, RASTER3D_REGION_ZONE, zone);
 
-    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_NORTH, north);
-    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_SOUTH, south);
-    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_EAST, east);
-    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_WEST, west);
-    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_TOP, top);
-    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_BOTTOM, bottom);
+    returnVal &=
+        Rast3d_key_get_double(windowKeys, RASTER3D_REGION_NORTH, north);
+    returnVal &=
+        Rast3d_key_get_double(windowKeys, RASTER3D_REGION_SOUTH, south);
+    returnVal &= Rast3d_key_get_double(windowKeys, RASTER3D_REGION_EAST, east);
+    returnVal &= Rast3d_key_get_double(windowKeys, RASTER3D_REGION_WEST, west);
+    returnVal &= Rast3d_key_get_double(windowKeys, RASTER3D_REGION_TOP, top);
+    returnVal &=
+        Rast3d_key_get_double(windowKeys, RASTER3D_REGION_BOTTOM, bottom);
 
-    returnVal &= windowInt(windowKeys, RASTER3D_REGION_ROWS, rows);
-    returnVal &= windowInt(windowKeys, RASTER3D_REGION_COLS, cols);
-    returnVal &= windowInt(windowKeys, RASTER3D_REGION_DEPTHS, depths);
+    returnVal &= Rast3d_key_get_int(windowKeys, RASTER3D_REGION_ROWS, rows);
+    returnVal &= Rast3d_key_get_int(windowKeys, RASTER3D_REGION_COLS, cols);
+    returnVal &= Rast3d_key_get_int(windowKeys, RASTER3D_REGION_DEPTHS, depths);
 
-    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_EWRES, ew_res);
-    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_NSRES, ns_res);
-    returnVal &= windowDouble(windowKeys, RASTER3D_REGION_TBRES, tb_res);
+    returnVal &=
+        Rast3d_key_get_double(windowKeys, RASTER3D_REGION_EWRES, ew_res);
+    returnVal &=
+        Rast3d_key_get_double(windowKeys, RASTER3D_REGION_NSRES, ns_res);
+    returnVal &=
+        Rast3d_key_get_double(windowKeys, RASTER3D_REGION_TBRES, tb_res);
 
     if (returnVal)
         return 1;
@@ -169,12 +164,12 @@ int Rast3d_read_window(RASTER3D_Region *window, const char *windowName)
 
         windowKeys = G_read_key_value_file(path);
 
-        if (!Rast3d_readWriteWindow(
-                windowKeys, 1, &(window->proj), &(window->zone),
-                &(window->north), &(window->south), &(window->east),
-                &(window->west), &(window->top), &(window->bottom),
-                &(window->rows), &(window->cols), &(window->depths),
-                &(window->ew_res), &(window->ns_res), &(window->tb_res))) {
+        if (!Rast3d__readWindow(
+                windowKeys, &(window->proj), &(window->zone), &(window->north),
+                &(window->south), &(window->east), &(window->west),
+                &(window->top), &(window->bottom), &(window->rows),
+                &(window->cols), &(window->depths), &(window->ew_res),
+                &(window->ns_res), &(window->tb_res))) {
             Rast3d_error(
                 "Rast3d_read_window: error extracting window key(s) of file %s",
                 path);
