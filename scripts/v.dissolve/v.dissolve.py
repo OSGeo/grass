@@ -595,7 +595,6 @@ def main():
             flags="d",
             input=input_vector,
             output=output,
-            type="area",
             layer=layer,
         )
     else:
@@ -640,7 +639,6 @@ def main():
                 flags="d",
                 input=tmpfile,
                 output=output,
-                type="area",
                 layer=layer,
             )
             if columns_to_aggregate:
