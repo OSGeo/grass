@@ -175,7 +175,9 @@ if test "$GIT" != "no" ; then
    if test -z "$GRASS_HEADERS_GIT_DATE"; then
       GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
    fi
-elif test "$ac_cv_file_include_VERSION_GIT" == "yes"; then
+fi
+if test $GRASS_VERSION_GIT == "exported" && \
+   test "$ac_cv_file_include_VERSION_GIT" == "yes"; then
       GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${GRASS_VERSION_GIT_FILE}")
       GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${GRASS_VERSION_GIT_FILE}")
 fi
