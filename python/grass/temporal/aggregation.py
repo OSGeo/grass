@@ -221,6 +221,7 @@ def aggregate_by_topology(
     nprocs=1,
     spatial=None,
     dbif=None,
+    weighting=False,
     overwrite=False,
     file_limit=1000,
 ):
@@ -288,7 +289,6 @@ def aggregate_by_topology(
         count += 1
 
         aggregation_list = []
-
         if "equal" in topo_list and granule.equal:
             for map_layer in granule.equal:
                 aggregation_list.append(map_layer.get_name())
@@ -316,7 +316,43 @@ def aggregate_by_topology(
         if "overlapped" in topo_list and granule.overlapped:
             for map_layer in granule.overlapped:
                 aggregation_list.append(map_layer.get_name())
-
+        if "related" in topo_list:
+            aggregation_weights = []
+            set_list = set()
+            if granule.overlaps:
+                for map_layer in granule.overlaps:
+                    set_list.add(map_layer)
+            if granule.overlapped:
+                for map_layer in granule.overlapped:
+                    set_list.add(map_layer)
+            if granule.contains:
+                for map_layer in granule.contains:
+                    set_list.add(map_layer)
+            if granule.equal:
+                for map_layer in granule.equal:
+                    set_list.add(map_layer)
+            if granule.during:
+                for map_layer in granule.during:
+                    set_list.add(map_layer)
+            if len(set_list) > 0:
+                for map_layer in set_list:
+                    aggregation_list.append(map_layer.get_name())
+                    t_granule_contained = map_layer.get_absolute_time()
+                    t_granule = granule.get_absolute_time()
+                    if None in t_granule_contained or None in t_granule:
+                        # no weight for this map_layer because no
+                        # overlap whatsoever
+                        aggregation_weights.append(0)
+                    else:
+                        # calculate the absolute temporal overlap between the
+                        # new granule and the map_layer
+                        overlap_abs = min(t_granule[1], t_granule_contained[1]) - max(
+                            t_granule[0], t_granule_contained[0]
+                        )
+                        # calculate the relative percentage of the overlap
+                        # with respect to the total granule duration
+                        overlap_rel = overlap_abs / (t_granule[1] - t_granule[0])
+                        aggregation_weights.append(overlap_rel)
         if aggregation_list:
             msgr.verbose(
                 _("Aggregating %(len)i raster maps from %(start)s to" " %(end)s")
@@ -359,12 +395,17 @@ def aggregate_by_topology(
             if len(aggregation_list) > 1:
                 # Create the r.series input file
                 filename = gscript.tempfile(True)
-                file = open(filename, "w")
-                for name in aggregation_list:
-                    string = "%s\n" % (name)
-                    file.write(string)
-                file.close()
-
+                with open(filename, "w") as file:
+                    if weighting:
+                        for i, name in enumerate(aggregation_list):
+                            string = name
+                            weight = aggregation_weights[i]
+                            file.write("%s|%f\n" % (string, weight))
+                    else:
+                        for name in aggregation_list:
+                            string = "%s\n" % (name)
+                            file.write(string)
+                # Perform aggregation
                 mod = copy.deepcopy(r_series)
                 mod(file=filename, output=output_name)
                 if len(aggregation_list) > int(file_limit):
@@ -380,8 +421,16 @@ def aggregate_by_topology(
                     mod(flags="z")
                 process_queue.put(mod)
             else:
-                mod = copy.deepcopy(g_copy)
-                mod(raster=[aggregation_list[0], output_name])
+                if weighting:
+                    mod = copy.deepcopy(r_series)
+                    mod(
+                        input=aggregation_list[0],
+                        output=output_name,
+                        weights=aggregation_weights[0],
+                    )
+                else:
+                    mod = copy.deepcopy(g_copy)
+                    mod(raster=[aggregation_list[0], output_name])
                 process_queue.put(mod)
 
     process_queue.wait()
