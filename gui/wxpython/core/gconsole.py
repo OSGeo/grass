@@ -40,10 +40,7 @@ from grass.script import task as gtask
 
 from grass.pydispatch.signal import Signal
 
-from grass.grassdb.history import (
-    get_current_mapset_gui_history_path,
-    add_entry_to_history,
-)
+from grass.grassdb import history
 
 from core import globalvar
 from core.gcmd import CommandThread, GError, GException
@@ -500,16 +497,26 @@ class GConsole(wx.EvtHandler):
             Debug.msg(2, "GPrompt:RunCmd(): empty command")
             return
 
+        # convert plain text history file to JSON format if needed
+        history_path = history.get_current_mapset_gui_history_path()
+        if history.get_history_file_extension(history_path) != ".json":
+            history.convert_plain_text_to_JSON(history_path)
+
         # add entry to command history log
-        history_path = get_current_mapset_gui_history_path()
+        command_info = history.get_initial_command_info(env)
+        entry = {
+            "command": cmd_save_to_history,
+            "command_info": command_info,
+        }
         try:
-            add_entry_to_history(cmd_save_to_history, history_path)
-        except OSError as e:
+            history_path = history.get_current_mapset_gui_history_path()
+            history.add_entry(history_path, entry)
+        except (OSError, ValueError) as e:
             GError(str(e))
 
         # update command prompt and history model
         if self._giface:
-            self._giface.entryToHistoryAdded.emit(cmd=cmd_save_to_history)
+            self._giface.entryToHistoryAdded.emit(entry=entry)
 
         if command[0] in globalvar.grassCmd:
             # send GRASS command without arguments to GUI command interface
@@ -729,12 +736,29 @@ class GConsole(wx.EvtHandler):
                 )
             )
             msg = _("Command aborted")
+            status = "aborted"
         elif event.returncode != 0:
             msg = _("Command ended with non-zero return code {returncode}").format(
                 returncode=event.returncode
             )
+            status = "failed"
         else:
             msg = _("Command finished")
+            status = "success"
+
+        cmd_info = {"runtime": int(ctime), "status": status}
+
+        # update command history log by status and runtime duration
+        try:
+            history_path = history.get_current_mapset_gui_history_path()
+            history.update_entry(history_path, cmd_info)
+
+            # update history model
+            if self._giface:
+                entry = history.read(history_path)[-1]
+                self._giface.entryInHistoryUpdated.emit(entry=entry)
+        except (OSError, ValueError) as e:
+            GError(str(e))
 
         self.WriteCmdLog(
             "(%s) %s (%s)" % (str(time.ctime()), msg, stime),

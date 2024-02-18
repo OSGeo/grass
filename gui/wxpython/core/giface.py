@@ -242,6 +242,11 @@ class StandaloneGrassInterface(GrassInterface):
             "StandaloneGrassInterface.entryFromHistoryRemoved"
         )
 
+        # Signal emitted when entry in history is updated
+        self.entryInHistoryUpdated = Signal(
+            "StandaloneGrassInterface.entryInHistoryUpdated"
+        )
+
         # workaround, standalone grass interface should be moved to sep. file
         from core.gconsole import GConsole, EVT_CMD_OUTPUT, EVT_CMD_PROGRESS
 

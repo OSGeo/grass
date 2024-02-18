@@ -27,11 +27,13 @@ import wx.stc
 from grass.script import core as grass
 from grass.script import task as gtask
 
+from grass.grassdb import history
+
 from grass.pydispatch.signal import Signal
 
 from core import globalvar
 from core import utils
-from core.gcmd import EncodeString, DecodeString
+from core.gcmd import EncodeString, DecodeString, GError
 
 
 class GPrompt:
@@ -161,6 +163,16 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         # show hint
         self._showHint()
 
+        # read history file
+        self._loadHistory()
+        if giface:
+            giface.currentMapsetChanged.connect(self._loadHistory)
+            giface.entryToHistoryAdded.connect(
+                lambda entry: self._addEntryToCmdHistoryBuffer(entry)
+            )
+            giface.entryFromHistoryRemoved.connect(
+                lambda index: self._removeEntryFromCmdHistoryBuffer(index)
+            )
         #
         # bindings
         #
@@ -304,23 +316,38 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetCurrentPos(pos)
         self.SetFocus()
 
-    def AddEntryToCmdHistoryBuffer(self, cmd):
-        """Add entry to command history buffer
+    def _loadHistory(self):
+        """Load history from a history file to data structures"""
+        try:
+            history_path = history.get_current_mapset_gui_history_path()
+            history.ensure_history_file(history_path)
+            self.cmdbuffer = [
+                entry["command"] for entry in history.read(history_path)
+            ] or []
+            self.cmdindex = len(self.cmdbuffer)
+        except (OSError, ValueError) as e:
+            GError(str(e))
 
-        :param cmd: command given as a string
+    def _addEntryToCmdHistoryBuffer(self, entry):
+        """Add entry to command history buffer.
+
+        :param entry dict: entry with 'command' and 'command_info' keys
+        command value is a string.
         """
+        # create command string
+        entry = entry["command"]
         # add command to history
-        self.cmdbuffer.append(cmd)
+        self.cmdbuffer.append(entry)
         # update also traced commands
-        self.commands.append(cmd)
+        self.commands.append(entry)
 
         # keep command history to a manageable size
         if len(self.cmdbuffer) > 200:
             del self.cmdbuffer[0]
         self.cmdindex = len(self.cmdbuffer)
 
-    def RemoveEntryFromCmdHistoryBuffer(self, index):
-        """Remove entry from command history buffer
+    def _removeEntryFromCmdHistoryBuffer(self, index):
+        """Remove entry from command history buffer.
         :param index: index of deleted command
         """
         # remove command at the given index from history buffer
