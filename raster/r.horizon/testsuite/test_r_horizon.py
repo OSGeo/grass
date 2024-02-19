@@ -110,6 +110,9 @@ class TestHorizon(TestCase):
         cls.runModule("g.remove", flags="f", type="raster", name=cls.circle)
         cls.del_temp_region()
 
+    def setUp(self):
+        self.runModule("g.region", raster="elevation")
+
     def tearDown(self):
         """Remove horizon map after each test method"""
         self.runModule("g.remove", flags="f", type="raster", name=self.horizon)
