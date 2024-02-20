@@ -179,6 +179,7 @@ fi
 if test $GRASS_VERSION_GIT == "exported" && \
    test "$ac_cv_file_include_VERSION_GIT" == "yes"; then
       GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${GRASS_VERSION_GIT_FILE}")
+      GRASS_VERSION_GIT=$GRASS_HEADERS_GIT_HASH
       GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${GRASS_VERSION_GIT_FILE}")
 fi
 
