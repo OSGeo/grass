@@ -6,9 +6,9 @@
 #               Markus Neteler for column support
 #               Converted to Python by Glynn Clements
 #               Vaclav Petras <wenzeslaus gmail com> (aggregate statistics)
-# PURPOSE:      Dissolve common boundaries between areas with common cat
-#                 (frontend to v.extract -d)
-# COPYRIGHT:    (c) 2006-2023 Hamish Bowman, and the GRASS Development Team
+# PURPOSE:      Dissolve adjacent or overlapping features
+#               with common cat (frontend to v.extract -d)
+# COPYRIGHT:    (c) 2006-2024 Hamish Bowman, and the GRASS Development Team
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
 #               for details.
@@ -16,7 +16,7 @@
 #############################################################################
 
 # %module
-# % description: Dissolves boundaries between adjacent areas sharing a common category number or attribute.
+# % description: Dissolves adjacent or overlaping features sharing a common category number or attribute.
 # % keyword: vector
 # % keyword: dissolve
 # % keyword: area
@@ -31,7 +31,7 @@
 # % guisection: Dissolving
 # %end
 # %option G_OPT_DB_COLUMN
-# % description: Name of attribute column used to dissolve common boundaries
+# % description: Name of attribute column used to dissolve features
 # % guisection: Dissolving
 # %end
 # %option G_OPT_V_OUTPUT
