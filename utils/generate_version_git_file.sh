@@ -24,5 +24,4 @@ grass_headers_git_date=$(echo "$gitdate_utc_local" \
 cat << EOF > "$version_git_file"
 $grass_version_git
 $grass_headers_git_date
-
 EOF
