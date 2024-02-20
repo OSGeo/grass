@@ -14,29 +14,17 @@ into one (second image).
 </center>
 
 <p>
+
 Instead of dissolving features based on the category values, the user 
 can define an integer or string column using the <b>column</b> 
 parameter. In that case, features that share the same value in that 
-column are dissolved. The categories of the newly created layer 
-correspond to the values used to dissolve the features. I.e., the newly 
-created layer does not retain the cat values from the input layer. The 
-name of the <i>key column</i> is the same as the name of the column 
-from the input vector layer that holds the values used to dissolve the 
-features. 
-
-<center>
-<img src="v_dissolve_1.png">
-<p><em>
-Figure: Dissolving features based on the category values of column 
-'Val'.
-</em></p>
-</center>
-
+column are dissolved. Note, the newly created layer does not retain the 
+cat values from the input layer, only the values of the new key column.
 
 <p>
 Note that multiple areas with the same category or the same attribute 
 value that are not adjacent are merged into one entity, which consists 
-of multiple areas. I.e., this results in multipart features.
+of multiple features. I.e., this results in multipart features.
 
 <h3>Attribute aggregation</h3>
 
