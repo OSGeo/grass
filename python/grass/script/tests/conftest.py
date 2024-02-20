@@ -1,9 +1,4 @@
-"""Fixtures for Jupyter tests
-
-Fixture for grass.jupyter.TimeSeries test
-
-Fixture for ReprojectionRenderer test with simple GRASS location, raster, vector.
-"""
+"""Fixtures for grass.script"""
 
 import pytest
 
