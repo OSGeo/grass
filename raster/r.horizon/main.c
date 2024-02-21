@@ -41,21 +41,20 @@ Program was refactored by Anna Petrasova to remove most global variables.
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
-#define WHOLE_RASTER      1
-#define SINGLE_POINT      0
-#define RAD               (180. / M_PI)
-#define DEG               ((M_PI) / 180.)
-#define EARTHRADIUS       6371000.
-#define UNDEF             0.     /* undefined value for terrain aspect */
-#define UNDEFZ            -9999. /* undefined value for elevation */
-#define BIG               1.e20
-#define SMALL             1.e-20
-#define EPS               1.e-4
-#define DIST              "1.0"
-#define DEGREEINMETERS    111120.  /* 1852m/nm * 60nm/degree = 111120 m/deg */
-#define TANMINANGLE       0.008727 /* tan of minimum horizon angle (0.5 deg) */
+#define WHOLE_RASTER   1
+#define SINGLE_POINT   0
+#define RAD            (180. / M_PI)
+#define DEG            ((M_PI) / 180.)
+#define EARTHRADIUS    6371000.
+#define UNDEF          0.     /* undefined value for terrain aspect */
+#define UNDEFZ         -9999. /* undefined value for elevation */
+#define BIG            1.e20
+#define SMALL          1.e-20
+#define EPS            1.e-4
+#define DIST           "1.0"
+#define DEGREEINMETERS 111120.  /* 1852m/nm * 60nm/degree = 111120 m/deg */
+#define TANMINANGLE    0.008727 /* tan of minimum horizon angle (0.5 deg) */
 
-#define AMAX1(arg1, arg2) ((arg1) >= (arg2) ? (arg1) : (arg2))
 #define DISTANCE1(x1, x2, y1, y2) \
     (sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)))
 
@@ -67,7 +66,7 @@ const double rad2deg = 180. / M_PI;
 
 struct pj_info iproj, oproj, tproj;
 float **z, **z100, **horizon_raster;
-int ll_correction = FALSE;
+bool ll_correction = false;
 
 typedef struct {
     double xg0, yg0;
@@ -116,8 +115,6 @@ typedef struct {
 int INPUT(Geometry *geometry, const char *elevin);
 int OUTGR(const Settings *settings, char *shad_filename,
           struct Cell_head *cellhd);
-double amax1(double, double);
-int min(int, int);
 void com_par(const Geometry *geometry, OriginAngle *origin_angle, double angle,
              double xp, double yp);
 double horizon_height(const Geometry *geometry, const OriginPoint *origin_point,
@@ -618,7 +615,7 @@ int INPUT(Geometry *geometry, const char *elevin)
                 kmax = geometry->n;
             for (int l = (i * 100); l < lmax; l++) {
                 for (int k = (j * 100); k < kmax; k++) {
-                    geometry->zmax = amax1(geometry->zmax, z[l][k]);
+                    geometry->zmax = MAX(geometry->zmax, z[l][k]);
                 }
             }
             z100[i][j] = geometry->zmax;
@@ -629,7 +626,7 @@ int INPUT(Geometry *geometry, const char *elevin)
     /* find max Z */
     for (int i = 0; i < geometry->m; i++) {
         for (int j = 0; j < geometry->n; j++) {
-            geometry->zmax = amax1(geometry->zmax, z[i][j]);
+            geometry->zmax = MAX(geometry->zmax, z[i][j]);
         }
     }
 
@@ -676,32 +673,6 @@ int OUTGR(const Settings *settings, char *shad_filename,
     Rast_close(fd1);
 
     return 1;
-}
-
-double amax1(double arg1, double arg2)
-{
-    double res;
-
-    if (arg1 >= arg2) {
-        res = arg1;
-    }
-    else {
-        res = arg2;
-    }
-    return res;
-}
-
-int min(int arg1, int arg2)
-{
-    int res;
-
-    if (arg1 <= arg2) {
-        res = arg1;
-    }
-    else {
-        res = arg2;
-    }
-    return res;
 }
 
 /**********************************************************/
@@ -779,7 +750,7 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     origin_point.yg0 = yindex * geometry->stepy;
     origin_point.coslatsq = 0;
     if ((G_projection() == PROJECTION_LL)) {
-        ll_correction = TRUE;
+        ll_correction = true;
     }
     if (ll_correction) {
         double coslat = cos(deg2rad * (geometry->ymin + origin_point.yg0));
@@ -940,7 +911,7 @@ int test_low_res(const Geometry *geometry, const OriginPoint *origin_point,
                                   origin_angle->distsinangle));
             }
 
-            int mindel = min(delx, dely);
+            int mindel = MIN(delx, dely);
             G_debug(2, "%d %d %d %lf %lf\n", search_point->ip, search_point->jp,
                     mindel, origin_point->xg0, origin_point->yg0);
 
@@ -1033,7 +1004,7 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
     int hor_numcols = geometry->n - (buffer_e + buffer_w);
 
     if ((G_projection() == PROJECTION_LL)) {
-        ll_correction = TRUE;
+        ll_correction = true;
     }
 
     /****************************************************************/
