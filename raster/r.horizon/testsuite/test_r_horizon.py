@@ -144,6 +144,12 @@ class TestHorizon(TestCase):
         stdout = module.outputs.stdout
         self.assertMultiLineEqual(first=ref2, second=stdout)
 
+        # include nulls along the edge
+        self.runModule("g.region", raster="elevation", w="w-100")
+        self.assertModule(module)
+        stdout = module.outputs.stdout
+        self.assertMultiLineEqual(first=ref2, second=stdout)
+
     def test_point_mode_multiple_direction_artificial(self):
         """Test mode with 1 point and multiple directions with artificial surface"""
         module = SimpleModule(

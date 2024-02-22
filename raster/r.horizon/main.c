@@ -757,6 +757,7 @@ double horizon_height(void)
 
     tanh0 = 0.;
     length = 0;
+    zp = z_orig;
 
     height = searching();
 
