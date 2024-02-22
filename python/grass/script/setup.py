@@ -97,8 +97,8 @@ VERSION_MINOR = "@GRASS_VERSION_MINOR@"
 
 def write_gisrc(dbase, location, mapset):
     """Write the ``gisrc`` file and return its path."""
-    gisrc = tmpfile.mktemp()
-    with open(gisrc, "w") as rc:
+    with tmpfile.NamedTemporaryFile(mode="w", delete=False) as rc:
+        gisrc = rc.name
         rc.write("GISDBASE: %s\n" % dbase)
         rc.write("LOCATION_NAME: %s\n" % location)
         rc.write("MAPSET: %s\n" % mapset)
