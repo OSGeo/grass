@@ -19,12 +19,12 @@ Instead of dissolving features based on the category values, the user
 can define an integer or string column using the <b>column</b> 
 parameter. In that case, features that share the same value in that 
 column are dissolved. Note, the newly created layer does not retain the 
-cat values from the input layer, only the values of the new key column.
+category (cat) values from the input layer, only the values of the new key column.
 
 <p>
 Note that multiple areas with the same category or the same attribute 
 value that are not adjacent are merged into one entity, which consists 
-of multiple features. I.e., this results in multipart features.
+of multiple features, i.e., a multipart feature.
 
 <h3>Attribute aggregation</h3>
 
@@ -103,8 +103,7 @@ future.
 
 <p>
 If the <b>result_columns</b> is not provided, each method is applied to 
-each column specified by <b>aggregate_columns</b>. This results in 
-columns for all combinations. These result columns have auto-generated 
+each column specified by <b>aggregate_columns</b>. This results in a column for each of the combinations. These result columns have auto-generated 
 names based on the aggregate column and method. For example, setting 
 the following parameters:
 
@@ -300,7 +299,7 @@ practice for scripting (unless SQL syntax is used for
 <h3>Aggregating using SQL syntax</h3>
 
 The aggregation can be done also using the full SQL syntax and set of 
-aggregate functions available for a given attribute database backend. 
+aggregate functions available for a given attribute database backend.
 Here, we will assume the default SQLite database backend for attribute.
 
 <p>
