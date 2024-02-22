@@ -57,7 +57,7 @@ LOCATIONS = [
     },
     {
         "label": "Piemonte, Italy data set",
-        "url": "http://geodati.fmach.it/gfoss_geodata/libro_gfoss/grassdata_piemonte_utm32n_wgs84_grass7.tar.gz",
+        "url": "https://grass.osgeo.org/sampledata/grassdata_piemonte_utm32n_wgs84_grass7.tar.gz",
     },
     {
         "label": "Slovakia 3D precipitation voxel data set",
