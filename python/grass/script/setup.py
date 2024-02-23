@@ -97,8 +97,8 @@ VERSION_MINOR = "@GRASS_VERSION_MINOR@"
 
 def write_gisrc(dbase, location, mapset):
     """Write the ``gisrc`` file and return its path."""
-    gisrc = tmpfile.mktemp()
-    with open(gisrc, "w") as rc:
+    with tmpfile.NamedTemporaryFile(mode="w", delete=False) as rc:
+        gisrc = rc.name
         rc.write("GISDBASE: %s\n" % dbase)
         rc.write("LOCATION_NAME: %s\n" % location)
         rc.write("MAPSET: %s\n" % mapset)
@@ -192,15 +192,31 @@ def get_install_path(path=None):
     return None
 
 
-def setup_runtime_env(gisbase):
+def setup_runtime_env(gisbase=None, *, env=None):
     """Setup the runtime environment.
 
-    Modifies the global environment (os.environ) so that GRASS modules can run.
+    Modifies environment so that GRASS modules can run. It does not setup a session,
+    but only the system environment to execute commands.
+
+    Modifies the environment provided with _env_. If _env_ is not
+    provided, modifies the global environment (os.environ). Pass a copy of the
+    environment if you don't want the source environment modified.
+
+    If _gisbase_ is not provided, a heuristic is used to find the path to GRASS
+    installation (see the :func:`get_install_path` function for details).
     """
+    if not gisbase:
+        gisbase = get_install_path()
+
     # Accept Path objects.
     gisbase = os.fspath(gisbase)
+
+    # If environment is not provided, use the global one.
+    if not env:
+        env = os.environ
+
     # Set GISBASE
-    os.environ["GISBASE"] = gisbase
+    env["GISBASE"] = gisbase
 
     # define PATH
     path_addition = os.pathsep + os.path.join(gisbase, "bin")
@@ -210,46 +226,46 @@ def setup_runtime_env(gisbase):
 
     # add addons to the PATH, use GRASS_ADDON_BASE if set
     # copied and simplified from lib/init/grass.py
-    addon_base = os.getenv("GRASS_ADDON_BASE")
+    addon_base = env.get("GRASS_ADDON_BASE")
     if not addon_base:
         if WINDOWS:
             config_dirname = f"GRASS{VERSION_MAJOR}"
-            addon_base = os.path.join(os.getenv("APPDATA"), config_dirname, "addons")
+            addon_base = os.path.join(env.get("APPDATA"), config_dirname, "addons")
         elif MACOS:
             version = f"{VERSION_MAJOR}.{VERSION_MINOR}"
             addon_base = os.path.join(
-                os.getenv("HOME"), "Library", "GRASS", version, "Addons"
+                env.get("HOME"), "Library", "GRASS", version, "Addons"
             )
         else:
             config_dirname = f".grass{VERSION_MAJOR}"
-            addon_base = os.path.join(os.getenv("HOME"), config_dirname, "addons")
-        os.environ["GRASS_ADDON_BASE"] = addon_base
+            addon_base = os.path.join(env.get("HOME"), config_dirname, "addons")
+        env["GRASS_ADDON_BASE"] = addon_base
 
     if not WINDOWS:
         path_addition += os.pathsep + os.path.join(addon_base, "scripts")
     path_addition += os.pathsep + os.path.join(addon_base, "bin")
 
-    os.environ["PATH"] = path_addition + os.pathsep + os.getenv("PATH")
+    env["PATH"] = path_addition + os.pathsep + env.get("PATH")
 
     # define LD_LIBRARY_PATH
-    if "@LD_LIBRARY_PATH_VAR@" not in os.environ:
-        os.environ["@LD_LIBRARY_PATH_VAR@"] = ""
-    os.environ["@LD_LIBRARY_PATH_VAR@"] += os.pathsep + os.path.join(gisbase, "lib")
+    if "@LD_LIBRARY_PATH_VAR@" not in env:
+        env["@LD_LIBRARY_PATH_VAR@"] = ""
+    env["@LD_LIBRARY_PATH_VAR@"] += os.pathsep + os.path.join(gisbase, "lib")
 
     # Set GRASS_PYTHON and PYTHONPATH to find GRASS Python modules
-    if not os.getenv("GRASS_PYTHON"):
+    if not env.get("GRASS_PYTHON"):
         if WINDOWS:
-            os.environ["GRASS_PYTHON"] = "python3.exe"
+            env["GRASS_PYTHON"] = "python3.exe"
         else:
-            os.environ["GRASS_PYTHON"] = "python3"
+            env["GRASS_PYTHON"] = "python3"
 
-    path = os.getenv("PYTHONPATH")
+    path = env.get("PYTHONPATH")
     etcpy = os.path.join(gisbase, "etc", "python")
     if path:
         path = etcpy + os.pathsep + path
     else:
         path = etcpy
-    os.environ["PYTHONPATH"] = path
+    env["PYTHONPATH"] = path
 
 
 def init(path, location=None, mapset=None, grass_path=None):
