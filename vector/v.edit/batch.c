@@ -418,6 +418,7 @@ static int get_flag(char *flags, char flag)
 static int get_snap(char *snap, double *thresh)
 {
     int snap_mode = NO_SNAP;
+
     if (snap) {
         if (strcmp(snap, "node") == 0)
             snap_mode = SNAP;
@@ -431,5 +432,6 @@ static int get_snap(char *snap, double *thresh)
             snap_mode = NO_SNAP;
         }
     }
+
     return snap_mode;
 }
