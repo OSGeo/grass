@@ -216,7 +216,7 @@ v.edit tool=create map=vectmap
 Create new vector map and read data from file 'roads.txt':
 
 <div class="code"><pre>
-v.out.ascii in=roads format=standard > roads.txt;
+v.out.ascii in=roads format=standard &gt; roads.txt;
 v.edit tool=create map=vectmap input=roads.txt
 </pre></div>
 
@@ -502,6 +502,8 @@ v.to.db -p map=roadsmajor option=end sep=space |
 # ...
 ) | v.edit map=roadsmajor_upper_half batch=-
 </pre></div>
+
+Red is the extracted upper halves of 'roadsmajor':
 
 <div align="center">
 <img src="v_edit_roadsmajor_upper_half.png" alt="Upper-half major roads">
