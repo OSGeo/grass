@@ -510,7 +510,7 @@ Red is the extracted upper halves of 'roadsmajor':
 </div>
 
 On the i9-12900 CPU, the above batch command performed the same edits in 2
-seconds compared to 18 seconds by this script:
+seconds compared to 12 seconds by this script:
 
 <div class="code"><pre>
 # copy roadsmajor
@@ -522,18 +522,16 @@ v.db.select map=roadsmajor -c col=cat |
         v.segment roadsmajor output=roadsmajor_center
 
 # break roads at their center
-for line in $(v.to.db -p map=roadsmajor_center option=coor sep=comma | sed '/^cat/d'); do
-	cat=$(echo $line | cut -d, -f1)
-	x=$(echo $line | cut -d, -f2)
-	y=$(echo $line | cut -d, -f3)
+v.to.db -p map=roadsmajor_center option=coor sep=comma |
+	sed '/^cat/d' |
+	while read cat x y; do
 	v.edit map=roadsmajor_upper_half tool=break cats=$cat coords=$x,$y
 done
 
 # delete lower halves
-for line in $(v.to.db -p map=roadsmajor option=end sep=comma | sed '/^cat/d'); do
-	cat=$(echo $line | cut -d, -f1)
-	x=$(echo $line | cut -d, -f2)
-	y=$(echo $line | cut -d, -f3)
+v.to.db -p map=roadsmajor option=end sep=comma |
+	sed '/^cat/d' |
+	while read cat x y; do
 	v.edit map=roadsmajor_upper_half tool=delete cats=$cat coords=$x,$y
 done
 </pre></div>
