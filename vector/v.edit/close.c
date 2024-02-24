@@ -1,4 +1,3 @@
-#include <string.h>
 #include "global.h"
 /*!
    \brief Close lines (boundaries)

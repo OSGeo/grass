@@ -31,7 +31,6 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->tool = G_define_option();
     params->tool->key = "tool";
     params->tool->type = TYPE_STRING;
-    params->tool->required = YES;
     params->tool->multiple = NO;
     params->tool->description = _("Tool");
     desc_tool = NULL;
@@ -225,6 +224,15 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->extend_parallel->description =
         _("Connect parallel lines (using extend tools and threshold distance)");
 
+    params->batch = G_define_standard_option(G_OPT_F_INPUT);
+    params->batch->key = "batch";
+    params->batch->required = NO;
+    params->batch->label = _("Name of command file for batching editing");
+
+    G_option_required(params->tool, params->batch, NULL);
+    G_option_exclusive(params->tool, params->batch, NULL);
+    G_option_exclusive(params->in, params->batch, NULL);
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -242,119 +250,128 @@ int parser(int argc, char *argv[], struct GParams *params,
     /*
        check that the given arguments makes sense together
      */
-    if (strcmp(params->tool->answer, "create") == 0) {
-        *action_mode = MODE_CREATE;
-    }
-    else if (strcmp(params->tool->answer, "add") == 0) {
-        *action_mode = MODE_ADD;
-    }
-    else if (strcmp(params->tool->answer, "delete") == 0) {
-        *action_mode = MODE_DEL;
-    }
-    else if (strcmp(params->tool->answer, "move") == 0) {
-        *action_mode = MODE_MOVE;
-    }
-    else if (strcmp(params->tool->answer, "merge") == 0) {
-        *action_mode = MODE_MERGE;
-    }
-    else if (strcmp(params->tool->answer, "break") == 0) {
-        *action_mode = MODE_BREAK;
-    }
-    else if (strcmp(params->tool->answer, "connect") == 0) {
-        *action_mode = MODE_CONNECT;
-    }
-    else if (strcmp(params->tool->answer, "extend") == 0) {
-        *action_mode = MODE_EXTEND;
-    }
-    else if (strcmp(params->tool->answer, "extendstart") == 0) {
-        *action_mode = MODE_EXTEND_START;
-    }
-    else if (strcmp(params->tool->answer, "extendend") == 0) {
-        *action_mode = MODE_EXTEND_END;
-    }
-    else if (strcmp(params->tool->answer, "vertexadd") == 0) {
-        *action_mode = MODE_VERTEX_ADD;
-    }
-    else if (strcmp(params->tool->answer, "vertexdel") == 0) {
-        *action_mode = MODE_VERTEX_DELETE;
-    }
-    else if (strcmp(params->tool->answer, "vertexmove") == 0) {
-        *action_mode = MODE_VERTEX_MOVE;
-    }
-    else if (strcmp(params->tool->answer, "select") == 0) {
-        *action_mode = MODE_SELECT;
-    }
-    else if (strcmp(params->tool->answer, "catadd") == 0) {
-        *action_mode = MODE_CATADD;
-    }
-    else if (strcmp(params->tool->answer, "catdel") == 0) {
-        *action_mode = MODE_CATDEL;
-    }
-    else if (strcmp(params->tool->answer, "copy") == 0) {
-        *action_mode = MODE_COPY;
-    }
-    else if (strcmp(params->tool->answer, "snap") == 0) {
-        *action_mode = MODE_SNAP;
-    }
-    else if (strcmp(params->tool->answer, "flip") == 0) {
-        *action_mode = MODE_FLIP;
-    }
-    else if (strcmp(params->tool->answer, "zbulk") == 0) {
-        *action_mode = MODE_ZBULK;
-    }
-    else if (strcmp(params->tool->answer, "chtype") == 0) {
-        *action_mode = MODE_CHTYPE;
-    }
-    else if (strcmp(params->tool->answer, "areadel") == 0) {
-        *action_mode = MODE_AREA_DEL;
-    }
-    else {
-        G_fatal_error(_("Operation '%s' not implemented"),
-                      params->tool->answer);
-    }
+    if (params->tool->answer) {
+        if (strcmp(params->tool->answer, "create") == 0) {
+            *action_mode = MODE_CREATE;
+        }
+        else if (strcmp(params->tool->answer, "add") == 0) {
+            *action_mode = MODE_ADD;
+        }
+        else if (strcmp(params->tool->answer, "delete") == 0) {
+            *action_mode = MODE_DEL;
+        }
+        else if (strcmp(params->tool->answer, "move") == 0) {
+            *action_mode = MODE_MOVE;
+        }
+        else if (strcmp(params->tool->answer, "merge") == 0) {
+            *action_mode = MODE_MERGE;
+        }
+        else if (strcmp(params->tool->answer, "break") == 0) {
+            *action_mode = MODE_BREAK;
+        }
+        else if (strcmp(params->tool->answer, "connect") == 0) {
+            *action_mode = MODE_CONNECT;
+        }
+        else if (strcmp(params->tool->answer, "extend") == 0) {
+            *action_mode = MODE_EXTEND;
+        }
+        else if (strcmp(params->tool->answer, "extendstart") == 0) {
+            *action_mode = MODE_EXTEND_START;
+        }
+        else if (strcmp(params->tool->answer, "extendend") == 0) {
+            *action_mode = MODE_EXTEND_END;
+        }
+        else if (strcmp(params->tool->answer, "vertexadd") == 0) {
+            *action_mode = MODE_VERTEX_ADD;
+        }
+        else if (strcmp(params->tool->answer, "vertexdel") == 0) {
+            *action_mode = MODE_VERTEX_DELETE;
+        }
+        else if (strcmp(params->tool->answer, "vertexmove") == 0) {
+            *action_mode = MODE_VERTEX_MOVE;
+        }
+        else if (strcmp(params->tool->answer, "select") == 0) {
+            *action_mode = MODE_SELECT;
+        }
+        else if (strcmp(params->tool->answer, "catadd") == 0) {
+            *action_mode = MODE_CATADD;
+        }
+        else if (strcmp(params->tool->answer, "catdel") == 0) {
+            *action_mode = MODE_CATDEL;
+        }
+        else if (strcmp(params->tool->answer, "copy") == 0) {
+            *action_mode = MODE_COPY;
+        }
+        else if (strcmp(params->tool->answer, "snap") == 0) {
+            *action_mode = MODE_SNAP;
+        }
+        else if (strcmp(params->tool->answer, "flip") == 0) {
+            *action_mode = MODE_FLIP;
+        }
+        else if (strcmp(params->tool->answer, "zbulk") == 0) {
+            *action_mode = MODE_ZBULK;
+        }
+        else if (strcmp(params->tool->answer, "chtype") == 0) {
+            *action_mode = MODE_CHTYPE;
+        }
+        else if (strcmp(params->tool->answer, "areadel") == 0) {
+            *action_mode = MODE_AREA_DEL;
+        }
+        else {
+            G_fatal_error(_("Operation '%s' not implemented"),
+                          params->tool->answer);
+        }
 
-    if ((*action_mode != MODE_CREATE && *action_mode != MODE_ADD &&
-         *action_mode != MODE_ZBULK) &&
-        (params->cat->answers == NULL) && (params->coord->answers == NULL) &&
-        (params->poly->answers == NULL) && (params->id->answers == NULL) &&
-        (params->bbox->answers == NULL) && (params->where->answer == NULL) &&
-        (params->query->answer == NULL)) {
-        G_fatal_error(_("At least one option from %s must be specified"),
-                      "cats, ids, coords, bbox, polygon, where, query");
-    }
+        if ((*action_mode != MODE_CREATE && *action_mode != MODE_ADD &&
+             *action_mode != MODE_ZBULK) &&
+            (params->cat->answers == NULL) &&
+            (params->coord->answers == NULL) &&
+            (params->poly->answers == NULL) && (params->id->answers == NULL) &&
+            (params->bbox->answers == NULL) &&
+            (params->where->answer == NULL) &&
+            (params->query->answer == NULL) &&
+            (params->batch->answer == NULL)) {
+            G_fatal_error(
+                _("At least one option from %s must be specified"),
+                "cats, ids, coords, bbox, polygon, where, query, batch");
+        }
 
-    if (*action_mode == MODE_MOVE || *action_mode == MODE_VERTEX_MOVE) {
-        if (params->move->answers == NULL) {
-            G_fatal_error(_("Tool %s requires option %s"), params->tool->answer,
-                          params->move->key);
+        if (*action_mode == MODE_MOVE || *action_mode == MODE_VERTEX_MOVE) {
+            if (params->move->answers == NULL) {
+                G_fatal_error(_("Tool %s requires option %s"),
+                              params->tool->answer, params->move->key);
+            }
+        }
+
+        if (*action_mode == MODE_VERTEX_ADD ||
+            *action_mode == MODE_VERTEX_DELETE ||
+            *action_mode == MODE_VERTEX_MOVE) {
+            if (params->coord->answers == NULL) {
+                G_fatal_error(_("Tool %s requires option %s"),
+                              params->tool->answer, params->coord->key);
+            }
+        }
+
+        if (*action_mode == MODE_CATADD || *action_mode == MODE_CATDEL) {
+            if (params->cat->answers == NULL) {
+                G_fatal_error(_("Tool %s requires option %s"),
+                              params->tool->answer, params->cat->key);
+            }
+        }
+
+        if (*action_mode == MODE_ZBULK) {
+            if (params->bbox->answers == NULL) {
+                G_fatal_error(_("Tool %s requires option %s"),
+                              params->tool->answer, params->bbox->key);
+            }
+            if (params->zbulk->answers == NULL) {
+                G_fatal_error(_("Tool %s requires option %s"),
+                              params->tool->answer, params->zbulk->key);
+            }
         }
     }
-
-    if (*action_mode == MODE_VERTEX_ADD || *action_mode == MODE_VERTEX_DELETE ||
-        *action_mode == MODE_VERTEX_MOVE) {
-        if (params->coord->answers == NULL) {
-            G_fatal_error(_("Tool %s requires option %s"), params->tool->answer,
-                          params->coord->key);
-        }
-    }
-
-    if (*action_mode == MODE_CATADD || *action_mode == MODE_CATDEL) {
-        if (params->cat->answers == NULL) {
-            G_fatal_error(_("Tool %s requires option %s"), params->tool->answer,
-                          params->cat->key);
-        }
-    }
-
-    if (*action_mode == MODE_ZBULK) {
-        if (params->bbox->answers == NULL) {
-            G_fatal_error(_("Tool %s requires option %s"), params->tool->answer,
-                          params->bbox->key);
-        }
-        if (params->zbulk->answers == NULL) {
-            G_fatal_error(_("Tool %s requires option %s"), params->tool->answer,
-                          params->zbulk->key);
-        }
-    }
+    else
+        *action_mode = MODE_BATCH;
 
     return 1;
 }

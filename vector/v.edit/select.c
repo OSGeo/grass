@@ -20,7 +20,7 @@
 #include <grass/dbmi.h>
 #include "global.h"
 
-static char first_selection = 1;
+static char first_selection;
 static int merge_lists(struct ilist *, struct ilist *);
 static int merge_lists2(struct ilist *, struct boxlist *);
 
@@ -35,39 +35,35 @@ static int merge_lists2(struct ilist *, struct boxlist *);
    \return list of newly selected features
 */
 struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
-                           struct GParams *params, double *thresh,
+                           struct SelectParams *selparams, double *thresh,
                            struct ilist *List)
 {
     int layer, type;
 
-    layer = Vect_get_field_number(Map, params->fld->answer);
-    type = Vect_option_to_types(params->type);
+    G_message(_("Selecting features..."));
+
+    first_selection = 1;
+
+    layer = selparams->layer;
+    type = selparams->type;
 
     /* select by id's */
-    if (params->id->answer != NULL) {
-        sel_by_id(Map, type, params->id->answer, List);
+    if (selparams->ids && *selparams->ids) {
+        sel_by_id(Map, type, selparams->ids, List);
     }
 
     /* select by category (ignore tools catdel and catadd) */
     if ((action_mode != MODE_CATADD && action_mode != MODE_CATDEL) &&
-        params->cat->answer != NULL) {
-        sel_by_cat(Map, NULL, layer, type, params->cat->answer, List);
+        selparams->cats && *selparams->cats) {
+        sel_by_cat(Map, NULL, layer, type, selparams->cats, List);
     }
 
     /* select by coordinates (+threshold) */
-    if (params->coord->answer != NULL) {
-        int i;
-        double east, north;
+    if (selparams->coords && *selparams->coords) {
         struct line_pnts *coords;
 
         coords = Vect_new_line_struct();
-        i = 0;
-        while (params->coord->answers[i]) {
-            east = atof(params->coord->answers[i]);
-            north = atof(params->coord->answers[i + 1]);
-            Vect_append_point(coords, east, north, 0.0);
-            i += 2;
-        }
+        str_to_coordinates(selparams->coords, coords);
 
         G_verbose_message(_("Threshold value for coordinates is %.2f"),
                           thresh[THRESH_COORDS]);
@@ -77,22 +73,11 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
     }
 
     /* select by bbox */
-    if (params->bbox->answer != NULL) {
+    if (selparams->bbox && *selparams->bbox) {
         struct line_pnts *bbox;
-        double x1, y1, x2, y2;
 
         bbox = Vect_new_line_struct();
-
-        x1 = atof(params->bbox->answers[0]);
-        y1 = atof(params->bbox->answers[1]);
-        x2 = atof(params->bbox->answers[2]);
-        y2 = atof(params->bbox->answers[3]);
-
-        Vect_append_point(bbox, x1, y1, -PORT_DOUBLE_MAX);
-        Vect_append_point(bbox, x2, y1, PORT_DOUBLE_MAX);
-        Vect_append_point(bbox, x2, y2, -PORT_DOUBLE_MAX);
-        Vect_append_point(bbox, x1, y2, PORT_DOUBLE_MAX);
-        Vect_append_point(bbox, x1, y1, -PORT_DOUBLE_MAX);
+        str_to_bbox(selparams->bbox, bbox);
 
         /* sel_by_bbox not used */
         /*
@@ -106,23 +91,11 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
     }
 
     /* select by polygon  */
-    if (params->poly->answer != NULL) {
-        int i;
+    if (selparams->polygon && *selparams->polygon) {
         struct line_pnts *Polygon;
 
         Polygon = Vect_new_line_struct();
-
-        for (i = 0; params->poly->answers[i]; i += 2) {
-            Vect_append_point(Polygon, atof(params->poly->answers[i]),
-                              atof(params->poly->answers[i + 1]), 0.0);
-        }
-
-        /* if first and last point of polygon does not match */
-        if (atof(params->poly->answers[i - 1]) !=
-            atof(params->poly->answers[0])) {
-            Vect_append_point(Polygon, atof(params->poly->answers[0]),
-                              atof(params->poly->answers[1]), 0.0);
-        }
+        str_to_polygon(selparams->polygon, Polygon);
 
         sel_by_polygon(Map, type, Polygon, List);
 
@@ -130,12 +103,12 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
     }
 
     /* select by where statement */
-    if (params->where->answer != NULL) {
-        sel_by_where(Map, layer, type, params->where->answer, List);
+    if (selparams->where && *selparams->where) {
+        sel_by_where(Map, layer, type, selparams->where, List);
     }
 
     /* selecy by query */
-    if (params->query->answer != NULL) {
+    if (selparams->query && *selparams->query) {
         int query_type;
         struct ilist *List_tmp;
 
@@ -148,10 +121,10 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
         }
 
         query_type = QUERY_UNKNOWN;
-        if (strcmp(params->query->answer, "length") == 0) {
+        if (strcmp(selparams->query, "length") == 0) {
             query_type = QUERY_LENGTH;
         }
-        else if (strcmp(params->query->answer, "dangle") == 0) {
+        else if (strcmp(selparams->query, "dangle") == 0) {
             query_type = QUERY_DANGLE;
         }
 
@@ -167,7 +140,7 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
         }
     }
 
-    if (params->reverse->answer) {
+    if (selparams->reverse) {
         reverse_selection(Map, type, &List);
     }
 
@@ -221,7 +194,6 @@ int sel_by_cat(struct Map_info *Map, struct cat_list *cl_orig, int layer,
 {
     struct ilist *List_tmp, *List_tmp1;
     struct cat_list *cl;
-
     int i, cat;
 
     if (first_selection || cl_orig) {
@@ -623,4 +595,86 @@ int reverse_selection(struct Map_info *Map, int type, struct ilist **List)
     *List = list_reverse;
 
     return 1;
+}
+
+/**
+  \brief Convert string of list of coordinates to line_pnts
+
+  \param[in] str list of coordinates as string
+  \param[in,out] coords pointer to line_pnts structure
+
+  \return number of parsed points
+*/
+int str_to_coordinates(const char *str, struct line_pnts *coords)
+{
+    char *p = (char *)str, *psep;
+    int npoints = 0, read_east = 1;
+    double east, north;
+
+    while ((psep = strchr(p, ',')) || (psep = strchr(p, 0))) {
+        if (read_east)
+            sscanf(p, "%lf", &east);
+        else {
+            sscanf(p, "%lf", &north);
+            Vect_append_point(coords, east, north, 0.0);
+            npoints++;
+        }
+
+        read_east = !read_east;
+        if (!*psep)
+            break;
+        p = psep + 1;
+    }
+
+    if (!read_east)
+        G_fatal_error(_("Coordinates must be provided in multiples of %d"), 2);
+
+    return npoints;
+}
+
+/**
+  \brief Convert string of list of coordinates to bbox
+
+  \param[in] str list of coordinates as string
+  \param[in,out] bbox pointer to line_pnts structure
+
+  \return number of parsed points
+*/
+int str_to_bbox(const char *str, struct line_pnts *bbox)
+{
+    double x1, y1, x2, y2;
+
+    if (sscanf(str, "%lf,%lf,%lf,%lf", &x1, &y1, &x2, &y2) != 4)
+        G_fatal_error(_("Bounding box must have 2 coordinate pairs"));
+
+    Vect_append_point(bbox, x1, y1, -PORT_DOUBLE_MAX);
+    Vect_append_point(bbox, x2, y1, PORT_DOUBLE_MAX);
+    Vect_append_point(bbox, x2, y2, -PORT_DOUBLE_MAX);
+    Vect_append_point(bbox, x1, y2, PORT_DOUBLE_MAX);
+    Vect_append_point(bbox, x1, y1, -PORT_DOUBLE_MAX);
+
+    return 2;
+}
+
+/**
+  \brief Convert string of list of coordinates to polygon
+
+  \param[in] str list of coordinates as string
+  \param[in,out] polygon pointer to line_pnts structure
+
+  \return number of parsed points
+*/
+int str_to_polygon(const char *str, struct line_pnts *Polygon)
+{
+    int npoints;
+
+    if ((npoints = str_to_coordinates(str, Polygon)) < 3)
+        G_fatal_error(_("Polygon must have at least 3 coordinate pairs"));
+
+    /* if first and last point of polygon does not match */
+    if (Polygon->x[Polygon->n_points - 1] != Polygon->x[0] ||
+        Polygon->y[Polygon->n_points - 1] != Polygon->y[0])
+        Vect_append_point(Polygon, Polygon->x[0], Polygon->y[0], 0.0);
+
+    return npoints;
 }

@@ -168,6 +168,41 @@ Additional parameters for vector feature specification are:
       id's. No editing is done.
 </ul>
 
+<h3>Batch editing</h3>
+
+With the <b>batch</b> option, <em>v.edit</em> supports batch editing using a
+pipe-separated table. The batch table supports the following column names:
+<ul>
+    <li><b>tool</b> (required) - Tool name from the <b>tool</b> option;
+        <b>create</b> and <b>add</b> tools are not supported</li>
+    <li><b>flags</b> - <b>-r</b>, <b>-1</b>, and/or <b>-p</b> flags as a
+        combination of <b>r</b>, <b>1</b>, and <b>p</b> without dashes</li>
+    <li><b>move</b> - <b>move</b> option</li>
+    <li><b>ids</b> - <b>ids</b> option</li>
+    <li><b>cats</b> - <b>cats</b> option</li>
+    <li><b>coords</b> - <b>coords</b> option</li>
+    <li><b>bbox</b> - <b>bbox</b> option</li>
+    <li><b>polygon</b> - <b>polygon</b> option</li>
+    <li><b>where</b> - <b>where</b> option</li>
+    <li><b>query</b> - <b>query</b> option</li>
+    <li><b>snap</b> - <b>snap</b> option</li>
+    <li><b>zbulk</b> - <b>zbulk</b> option</li>
+</ul>
+The <b>batch</b> option is exclusive to all the above and <b>input</b> options.
+
+For each of the following lines, <em>v.edit</em> edit commands can be
+specified. For example, this table when passed to the <b>batch</b> option
+<div class="code"><pre>
+tool|flags|cats|coords
+# break||1|637108.11963224,257241.783755701
+# delete|r|1|
+</pre></div>
+is equivalent to the following individual commands:
+<div class="code"><pre>
+v.edit map=vect_map tool=break cat=1 coords=637108.11963224,257241.783755701
+v.edit -r map=vect_map tool=delete cat=1
+</pre></div>
+
 <h2>EXAMPLES</h2>
 
 <h3>Create new vector map</h3>
@@ -430,6 +465,77 @@ v.edit a2 tool=zbulk bbox=586121.25049368,4911970.21547109,603092.60466035,49270
    zbulk=1000,10
 </pre></div>
 
+<h3>Batch editing</h3>
+
+Delete lower halves of roadsmajor:
+
+<div class="code"><pre>
+# copy roadsmajor
+g.copy vect=roadsmajor,roadsmajor_upper_half
+
+# find road centers
+v.db.select map=roadsmajor -c col=cat |
+        awk '{printf "P %d %d 50%%\n", $1, $1}' |
+        v.segment roadsmajor output=roadsmajor_center
+
+# create a batch table and pipe it to v.edit
+(
+# use these batch columns
+echo "tool|cats|coords"
+
+# break roads at their center
+v.to.db -p map=roadsmajor_center option=coor sep=space |
+        awk '!/^cat/{printf "break|%d|%s,%s\n", $1, $2, $3}'
+
+# delete lower halves
+v.to.db -p map=roadsmajor option=end sep=space |
+        awk '!/^cat/{printf "delete|%d|%s,%s\n", $1, $2, $3}'
+
+# tool|cats|coords
+# break|1|637108.11963224,257241.783755701
+# break|2|636792.27198317,254339.365766968
+# break|3|638449.758677739,248299.357582029
+# ...
+# delete|1|637209.083058167,257970.129540226
+# delete|2|636981.336042672,256517.602235172
+# delete|3|637960.264160529,248293.868427705
+# ...
+) | v.edit map=roadsmajor_upper_half batch=-
+</pre></div>
+
+<div align="center">
+<img src="v_edit_roadsmajor_upper_half.png" alt="Upper-half major roads">
+</div>
+
+On the i9-12900 CPU, the above batch command performed the same edits in 2
+seconds compared to 18 seconds by this script:
+
+<div class="code"><pre>
+# copy roadsmajor
+g.copy vect=roadsmajor,roadsmajor_upper_half
+
+# find road centers
+v.db.select map=roadsmajor -c col=cat |
+        awk '{printf "P %d %d 50%%\n", $1, $1}' |
+        v.segment roadsmajor output=roadsmajor_center
+
+# break roads at their center
+for line in $(v.to.db -p map=roadsmajor_center option=coor sep=comma | sed '/^cat/d'); do
+	cat=$(echo $line | cut -d, -f1)
+	x=$(echo $line | cut -d, -f2)
+	y=$(echo $line | cut -d, -f3)
+	v.edit map=roadsmajor_upper_half tool=break cats=$cat coords=$x,$y
+done
+
+# delete lower halves
+for line in $(v.to.db -p map=roadsmajor option=end sep=comma | sed '/^cat/d'); do
+	cat=$(echo $line | cut -d, -f1)
+	x=$(echo $line | cut -d, -f2)
+	y=$(echo $line | cut -d, -f3)
+	v.edit map=roadsmajor_upper_half tool=delete cats=$cat coords=$x,$y
+done
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -449,4 +555,4 @@ v.edit a2 tool=zbulk bbox=586121.25049368,4911970.21547109,603092.60466035,49270
 Original author: Wolf Bergenheim - independent developer<br>
 Initial updates: Jachym Cepicky, Mendel University of Agriculture and Forestry in Brno, Czech Republic<br>
 Major update by Martin Landa, FBK-irst (formerly ITC-irst), Trento, Italy<br>
-Extend tools by Huidae Cho
+Extend tools and batch editing by Huidae Cho
