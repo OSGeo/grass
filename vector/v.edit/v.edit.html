@@ -188,10 +188,15 @@ pipe-separated table. The batch table supports the following column names:
     <li><b>snap</b> - <b>snap</b> option</li>
     <li><b>zbulk</b> - <b>zbulk</b> option</li>
 </ul>
-The <b>batch</b> option is exclusive to all the above and <b>input</b> options.
 
-For each of the following lines, <em>v.edit</em> edit commands can be
-specified. For example, this table when passed to the <b>batch</b> option
+The <b>batch</b> option is exclusive to all the above and <b>input</b> options.
+Not all the columns are required, but all necessary columns for all used tools
+need to be declared even if some tools do not use certain options. In this
+case, columns for these unused options can be left blank. The only required
+column is <b>tool</b>. The order of columns is not important.
+
+<p>For each line of the table, <em>v.edit</em> commands can be specified. For
+example, this table when passed to the <b>batch</b> option
 <div class="code"><pre>
 tool|flags|cats|coords
 # break||1|637108.11963224,257241.783755701
