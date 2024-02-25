@@ -27,10 +27,59 @@ import codecs
 import string
 import random
 import shlex
+from copy import deepcopy
 from tempfile import NamedTemporaryFile
 
 from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
 from grass.exceptions import ScriptError, CalledModuleError
+
+
+class Env:
+    """Control environmental variables related to grass package.
+
+    Variables:
+     - subprocess.show_window: This variable affects GRASS commands
+       invoked in Python using grass.script.core.Popen class. If this
+       environment variable is set to True a new console window is
+       opened for each command. This behavior was defaulted to GRASS
+       GIS 8.3. Since version 8.4, new console windows are not
+       automatically opened.  Relevant only for MS Windows operating
+       system. Default: False
+    """
+
+    def __init__(self):
+        class _Subprocess:
+            show_window = False
+
+        self._setter("subprocess", _Subprocess())
+
+    def __enter__(self):
+        global env
+
+        self._setter("_env_global", deepcopy(env))
+        env = self
+
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        global env
+        env = self._env_global
+
+    def _setter(self, name, value):
+        """Provides way to intentionally bypass overloaded __setattr__."""
+        super().__setattr__(name, value)
+
+    def __setattr__(self, name, value):
+        print(self, name, value)
+        if hasattr(self, name):
+            super().__setattr__(name, value)
+        else:
+            raise AttributeError(
+                "{} object has no attribute '{}'".format(type(self), name)
+            )
+
+
+env = Env()
 
 
 # subprocess wrapper that uses shell on Windows
@@ -58,7 +107,7 @@ class Popen(subprocess.Popen):
                 kwargs["shell"] = True
                 args = [self._escape_for_shell(arg) for arg in args]
 
-            if os.environ.get("GRASS_SUBPROCESS_CREATE_NEW_CONSOLE", None) is None:
+            if env.subprocess.show_window:
                 si = subprocess.STARTUPINFO()
                 si.dwFlags = (
                     subprocess.CREATE_NEW_CONSOLE | subprocess.STARTF_USESHOWWINDOW
