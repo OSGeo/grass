@@ -210,6 +210,10 @@ v.edit map=vect_map tool=break cat=1 coords=637108.11963224,257241.783755701
 v.edit -r map=vect_map tool=delete cat=1
 </pre></div>
 
+<p>For batch editing, topology is always built whenever there are any changes
+in features because successive edits require properly built topology including
+feature ID changes.
+
 <h2>EXAMPLES</h2>
 
 <h3>Create new vector map</h3>
@@ -518,7 +522,7 @@ Red is the extracted upper halves of 'roadsmajor':
 </div>
 
 On the i9-12900 CPU, the above batch command performed the same edits in 2
-seconds compared to 12 seconds by this script:
+seconds compared to 12 seconds by this equivalent script:
 
 <div class="code"><pre>
 # copy roadsmajor

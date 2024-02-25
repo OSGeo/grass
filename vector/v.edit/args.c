@@ -227,12 +227,13 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->batch = G_define_standard_option(G_OPT_F_INPUT);
     params->batch->key = "batch";
     params->batch->required = NO;
-    params->batch->label = _("Name of command file for batch editing");
+    params->batch->label = _("Name of input file for batch editing");
     params->batch->description = _("'-' for standard input");
 
     G_option_required(params->tool, params->batch, NULL);
-    G_option_exclusive(params->tool, params->batch, NULL);
-    G_option_exclusive(params->in, params->batch, NULL);
+    G_option_excludes(params->batch, params->in, params->tool, params->reverse,
+                      params->close, params->header, params->topo,
+                      params->move_first, params->extend_parallel, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
