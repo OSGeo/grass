@@ -496,6 +496,7 @@ v.to.db -p map=roadsmajor_center option=coor sep=space |
 v.to.db -p map=roadsmajor option=end sep=space |
         awk '!/^cat/{printf "delete|%d|%s,%s\n", $1, $2, $3}'
 
+# the above three commands produce the following table:
 # tool|cats|coords
 # break|1|637108.11963224,257241.783755701
 # break|2|636792.27198317,254339.365766968
