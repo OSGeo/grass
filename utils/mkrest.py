@@ -81,8 +81,9 @@ tmp_data = read_file(tmp_file)
 if tmp_data:
     sys.stdout.write(tmp_data)
 
+arguments = ['pandoc', '-s', '-r', 'html', src_file, '-w', 'rst']
 process = subprocess.Popen(
-    "pandoc -s -r html %s -w rst" % src_file, shell=True, stdout=subprocess.PIPE
+    arguments, stdout=subprocess.PIPE
 )
 html_text = process.communicate()[0]
 if html_text:
