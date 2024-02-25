@@ -43,9 +43,8 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
         MODE_VERTEX_MOVE, MODE_AREA_DEL, MODE_ZBULK,      MODE_SELECT};
     FILE *fp;
     char buf[1024];
-    int first = 1;
+    int line = 0, first = 1;
     int cols[MAX_COLUMNS], ncols = 0;
-    int line = 0;
     int total_ret = 0;
 
     if (strcmp(file, "-") != 0) {
@@ -101,6 +100,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
             while (!last &&
                    ((psep = strchr(p, '|')) || (psep = strchr(p, 0)))) {
                 int known_col = 0;
+
                 last = !*psep;
                 *psep = 0;
                 for (i = 0; i < MAX_COLUMNS; i++) {
@@ -133,6 +133,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
         i = 0;
         while (!last && ((psep = strchr(p, '|')) || (psep = strchr(p, 0)))) {
             int j;
+
             last = !*psep;
             *psep = 0;
 
@@ -233,6 +234,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
             break;
         case MODE_MOVE: {
             double move_x, move_y, move_z;
+
             if (sscanf(p, "%lf,%lf,%lf", &move_x, &move_y, &move_z) != 3)
                 G_fatal_error(_("'%s' tool must have '%s' column"), "move",
                               "move");
@@ -321,6 +323,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
             break;
         case MODE_VERTEX_MOVE: {
             double move_x, move_y, move_z;
+
             if (sscanf(p, "%lf,%lf,%lf", &move_x, &move_y, &move_z) != 3)
                 G_fatal_error(_("'%s' tool must have '%s' column"),
                               "vertexmove", "move");
