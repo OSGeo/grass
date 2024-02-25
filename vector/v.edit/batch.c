@@ -221,10 +221,10 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
         case MODE_COPY:
             if (BgMap && BgMap[0]) {
                 if (nbgmaps > 1)
-                    G_warning(_("Multiple background maps were given. "
-                                "Selected features will be copied only from "
-                                "vector map <%s>."),
-                              Vect_get_full_name(BgMap[0]));
+                    G_warning(
+                        _("Multiple background maps were given. Selected "
+                          "features will be copied only from vector map <%s>."),
+                        Vect_get_full_name(BgMap[0]));
 
                 ret = Vedit_copy_lines(Map, BgMap[0], List);
             }
@@ -357,8 +357,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
             if (!Vect_is_3d(Map)) {
                 Vect_close(Map);
                 G_fatal_error(_("Vector map <%s> is not 3D. Tool '%s' requires "
-                                "3D vector map. "
-                                "Please convert the vector map "
+                                "3D vector map. Please convert the vector map "
                                 "to 3D using e.g. %s."),
                               Map->name, "zbulk", "v.extrude");
             }
@@ -426,8 +425,8 @@ static int get_snap(char *snap, double *thresh)
         else if (strcmp(snap, "no") != 0)
             G_fatal_error(_("Unsupported snap '%s'"), snap);
         if (snap_mode != NO_SNAP && thresh[THRESH_SNAP] <= 0) {
-            G_warning(_("Threshold for snapping must be > 0. No "
-                        "snapping applied."));
+            G_warning(
+                _("Threshold for snapping must be > 0. No snapping applied."));
             snap_mode = NO_SNAP;
         }
     }
