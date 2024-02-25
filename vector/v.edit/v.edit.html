@@ -171,7 +171,9 @@ Additional parameters for vector feature specification are:
 <h3>Batch editing</h3>
 
 With the <b>batch</b> option, <em>v.edit</em> supports batch editing using a
-pipe-separated table. The batch table supports the following column names:
+pipe-separated table. Batch editing can be faster than multiple independent
+<em>v.edit</em> commands because of reduced overheads. The batch table supports
+the following column names:
 <ul>
     <li><b>tool</b> (required) - Tool name from the <b>tool</b> option;
         <b>create</b> and <b>add</b> tools are not supported</li>
