@@ -231,9 +231,12 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->batch->description = _("'-' for standard input");
 
     G_option_required(params->tool, params->batch, NULL);
-    G_option_excludes(params->batch, params->in, params->tool, params->reverse,
-                      params->close, params->header, params->topo,
-                      params->move_first, params->extend_parallel, NULL);
+    G_option_excludes(params->batch, params->tool, params->in, params->move,
+                      params->id, params->cat, params->coord, params->bbox,
+                      params->poly, params->where, params->query, params->snap,
+                      params->zbulk, params->reverse, params->close,
+                      params->header, params->topo, params->move_first,
+                      params->extend_parallel, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
