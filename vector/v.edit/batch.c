@@ -1,22 +1,23 @@
 #include "global.h"
 
-#define MAX_COLUMNS    12
-#define NUM_TOOLS      20
+#define GET_FLAG(flags, flag) ((flags) && strchr(flags, flag))
 
-#define COLUMN_TOOL    0
-#define COLUMN_FLAGS   1
-#define COLUMN_MOVE    2
-#define COLUMN_IDS     3
-#define COLUMN_CATS    4
-#define COLUMN_COORDS  5
-#define COLUMN_BBOX    6
-#define COLUMN_POLYGON 7
-#define COLUMN_WHERE   8
-#define COLUMN_QUERY   9
-#define COLUMN_SNAP    10
-#define COLUMN_ZBULK   11
+#define MAX_COLUMNS           12
+#define NUM_TOOLS             20
 
-static int get_flag(char *, char);
+#define COLUMN_TOOL           0
+#define COLUMN_FLAGS          1
+#define COLUMN_MOVE           2
+#define COLUMN_IDS            3
+#define COLUMN_CATS           4
+#define COLUMN_COORDS         5
+#define COLUMN_BBOX           6
+#define COLUMN_POLYGON        7
+#define COLUMN_WHERE          8
+#define COLUMN_QUERY          9
+#define COLUMN_SNAP           10
+#define COLUMN_ZBULK          11
+
 static int get_snap(char *, double *thresh);
 
 int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
@@ -55,7 +56,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
         fp = stdin;
 
     while (fgets(buf, 1024, fp)) {
-        char *p = strchr(buf, '\n'), *psep;
+        char *p, *psep;
         int last = 0;
         enum mode action_mode;
         char *flags, *move, *snap, *zbulk;
@@ -72,7 +73,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
         flags = move = snap = zbulk = NULL;
 
         /* remove newline */
-        if (p) {
+        if ((p = strchr(buf, '\n'))) {
             *p = 0;
             if ((p = strchr(buf, '\r')))
                 *p = 0;
@@ -192,7 +193,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
 
         List = Vect_new_list();
 
-        selparams->reverse = get_flag(flags, 'r');
+        selparams->reverse = GET_FLAG(flags, 'r');
         if (action_mode == MODE_COPY && BgMap && BgMap[0])
             List = select_lines(BgMap[0], action_mode, selparams, thresh, List);
         else
@@ -283,21 +284,21 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
         case MODE_EXTEND:
             G_verbose_message(_("Threshold value for snapping is %.2f"),
                               thresh[THRESH_SNAP]);
-            ret = Vedit_extend_lines(Map, List, 0, get_flag(flags, 'p'),
+            ret = Vedit_extend_lines(Map, List, 0, GET_FLAG(flags, 'p'),
                                      thresh[THRESH_SNAP]);
             G_message(n_("%d line extended", "%d lines extended", ret), ret);
             break;
         case MODE_EXTEND_START:
             G_verbose_message(_("Threshold value for snapping is %.2f"),
                               thresh[THRESH_SNAP]);
-            ret = Vedit_extend_lines(Map, List, 1, get_flag(flags, 'p'),
+            ret = Vedit_extend_lines(Map, List, 1, GET_FLAG(flags, 'p'),
                                      thresh[THRESH_SNAP]);
             G_message(n_("%d line extended", "%d lines extended", ret), ret);
             break;
         case MODE_EXTEND_END:
             G_verbose_message(_("Threshold value for snapping is %.2f"),
                               thresh[THRESH_SNAP]);
-            ret = Vedit_extend_lines(Map, List, 2, get_flag(flags, 'p'),
+            ret = Vedit_extend_lines(Map, List, 2, GET_FLAG(flags, 'p'),
                                      thresh[THRESH_SNAP]);
             G_message(n_("%d line extended", "%d lines extended", ret), ret);
             break;
@@ -328,7 +329,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
             ret = Vedit_move_vertex(
                 Map, BgMap, nbgmaps, List, coord, thresh[THRESH_COORDS],
                 thresh[THRESH_SNAP], move_x, move_y, move_z,
-                get_flag(flags, '1'), get_snap(snap, thresh));
+                GET_FLAG(flags, '1'), get_snap(snap, thresh));
             G_message(n_("%d vertex moved", "%d vertices moved", ret), ret);
             break;
         }
@@ -408,11 +409,6 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
               total_ret);
 
     return total_ret;
-}
-
-static int get_flag(char *flags, char flag)
-{
-    return flags && strchr(flags, flag);
 }
 
 static int get_snap(char *snap, double *thresh)
