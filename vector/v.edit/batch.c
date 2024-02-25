@@ -387,7 +387,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
             break;
         }
 
-        if (ret && action_mode != MODE_SELECT) {
+        if (action_mode != MODE_SELECT && ret) {
             Vect_build_partial(Map, GV_BUILD_NONE);
             Vect_build(Map);
             total_ret += ret;
