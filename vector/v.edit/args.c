@@ -227,7 +227,8 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->batch = G_define_standard_option(G_OPT_F_INPUT);
     params->batch->key = "batch";
     params->batch->required = NO;
-    params->batch->description = _("Name of command file for batch editing");
+    params->batch->label = _("Name of command file for batch editing");
+    params->batch->description = _("'-' for standard input");
 
     G_option_required(params->tool, params->batch, NULL);
     G_option_exclusive(params->tool, params->batch, NULL);
