@@ -45,6 +45,7 @@ jobs:
           # Python (supported using Pylint) and C/C++ (not supported) are
           # handled separately due to the complexity of the settings.
           # VALIDATE_BASH: true
+          VALIDATE_BASH_EXEC: true
           # VALIDATE_CSS: true
           # VALIDATE_DOCKER: true
           VALIDATE_JAVASCRIPT_ES: true
