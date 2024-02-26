@@ -36,7 +36,7 @@ class GranularityMode:
     ORIGINAL = 2
 
 
-class TemporalManager(object):
+class TemporalManager:
     """Class for temporal data processing."""
 
     def __init__(self):
