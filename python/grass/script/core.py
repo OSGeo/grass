@@ -130,6 +130,7 @@ class Popen(subprocess.Popen):
 
             if env.subprocess.show_window is False or "--interface-description" in args:
                 # do not show new window on MS Windows
+                # always hide on "--interface-description" to avoid fast pop-up windows
                 si = subprocess.STARTUPINFO()
                 si.dwFlags = (
                     subprocess.CREATE_NEW_CONSOLE | subprocess.STARTF_USESHOWWINDOW
