@@ -523,7 +523,7 @@ int main(int argc, char *argv[])
         }
 
         /* build topology only if requested or if tool!=select */
-        if (action_mode != MODE_SELECT && action_mode != MODE_NONE &&
+        if (action_mode != MODE_SELECT && action_mode != MODE_NONE && ret > 0 &&
             params.topo->answer != 1) {
             Vect_build_partial(&Map, GV_BUILD_NONE);
             Vect_build(&Map);
@@ -569,9 +569,6 @@ static void error_handler(void *p)
 {
     struct Map_info *Map = (struct Map_info *)p;
 
-    /* level 2 vector requires topology building even if there are no
-     * changes (e.g., select) */
-    Vect_build_partial(Map, GV_BUILD_NONE);
-    Vect_build(Map);
+    /* if Map is not closed on fatal error, support files won't be updated */
     Vect_close(Map);
 }
