@@ -570,6 +570,8 @@ static void error_handler(void *p)
 {
     struct Map_info *Map = (struct Map_info *)p;
 
+    /* level 2 vector requires topology building even if there are no
+     * changes (e.g., select) */
     Vect_build_partial(Map, GV_BUILD_NONE);
     Vect_build(Map);
     Vect_close(Map);
