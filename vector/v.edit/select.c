@@ -48,18 +48,16 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
     type = selparams->type;
 
     /* select by id's */
-    if (selparams->ids && *selparams->ids) {
+    if (selparams->ids)
         sel_by_id(Map, type, selparams->ids, List);
-    }
 
     /* select by category (ignore tools catdel and catadd) */
-    if ((action_mode != MODE_CATADD && action_mode != MODE_CATDEL) &&
-        selparams->cats && *selparams->cats) {
+    if (action_mode != MODE_CATADD && action_mode != MODE_CATDEL &&
+        selparams->cats)
         sel_by_cat(Map, NULL, layer, type, selparams->cats, List);
-    }
 
     /* select by coordinates (+threshold) */
-    if (selparams->coords && *selparams->coords) {
+    if (selparams->coords) {
         struct line_pnts *coords;
 
         coords = Vect_new_line_struct();
@@ -73,7 +71,7 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
     }
 
     /* select by bbox */
-    if (selparams->bbox && *selparams->bbox) {
+    if (selparams->bbox) {
         struct line_pnts *bbox;
 
         bbox = Vect_new_line_struct();
@@ -91,7 +89,7 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
     }
 
     /* select by polygon  */
-    if (selparams->polygon && *selparams->polygon) {
+    if (selparams->polygon) {
         struct line_pnts *Polygon;
 
         Polygon = Vect_new_line_struct();
@@ -103,12 +101,11 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
     }
 
     /* select by where statement */
-    if (selparams->where && *selparams->where) {
+    if (selparams->where)
         sel_by_where(Map, layer, type, selparams->where, List);
-    }
 
     /* selecy by query */
-    if (selparams->query && *selparams->query) {
+    if (selparams->query) {
         int query_type;
         struct ilist *List_tmp;
 

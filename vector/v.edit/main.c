@@ -519,7 +519,7 @@ int main(int argc, char *argv[])
         }
 
         /* build topology only if requested or if tool!=select */
-        if (action_mode != MODE_SELECT && action_mode != MODE_NONE &&
+        if (action_mode != MODE_SELECT && action_mode != MODE_NONE && ret > 0 &&
             params.topo->answer != 1) {
             Vect_build_partial(&Map, GV_BUILD_NONE);
             Vect_build(&Map);

@@ -2,21 +2,22 @@
 
 #define GET_FLAG(flags, flag) ((flags) && strchr(flags, flag))
 
-#define MAX_COLUMNS           12
-#define NUM_TOOLS             20
+#define MAX_COLUMNS           13
+#define NUM_TOOLS             21
 
 #define COLUMN_TOOL           0
 #define COLUMN_FLAGS          1
-#define COLUMN_MOVE           2
-#define COLUMN_IDS            3
-#define COLUMN_CATS           4
-#define COLUMN_COORDS         5
-#define COLUMN_BBOX           6
-#define COLUMN_POLYGON        7
-#define COLUMN_WHERE          8
-#define COLUMN_QUERY          9
-#define COLUMN_SNAP           10
-#define COLUMN_ZBULK          11
+#define COLUMN_INPUT          2
+#define COLUMN_MOVE           3
+#define COLUMN_IDS            4
+#define COLUMN_CATS           5
+#define COLUMN_COORDS         6
+#define COLUMN_BBOX           7
+#define COLUMN_POLYGON        8
+#define COLUMN_WHERE          9
+#define COLUMN_QUERY          10
+#define COLUMN_SNAP           11
+#define COLUMN_ZBULK          12
 
 static char *read_column(char *, char, char **);
 static int get_snap(char *, double *thresh);
@@ -25,24 +26,26 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
                const char *file, char sep, struct SelectParams *selparams,
                double *thresh)
 {
-    char *col_names[MAX_COLUMNS] = {"tool",  "flags",  "move", "ids",
-                                    "cats",  "coords", "bbox", "polygon",
-                                    "where", "query",  "snap", "zbulk"};
-    int col_nums[MAX_COLUMNS] = {COLUMN_TOOL,  COLUMN_FLAGS,   COLUMN_MOVE,
-                                 COLUMN_IDS,   COLUMN_CATS,    COLUMN_COORDS,
-                                 COLUMN_BBOX,  COLUMN_POLYGON, COLUMN_WHERE,
-                                 COLUMN_QUERY, COLUMN_SNAP,    COLUMN_ZBULK};
+    char *col_names[MAX_COLUMNS] = {
+        "tool", "flags",   "input", "move",  "ids",  "cats", "coords",
+        "bbox", "polygon", "where", "query", "snap", "zbulk"};
+    int col_nums[MAX_COLUMNS] = {
+        COLUMN_TOOL,  COLUMN_FLAGS,  COLUMN_INPUT, COLUMN_MOVE,    COLUMN_IDS,
+        COLUMN_CATS,  COLUMN_COORDS, COLUMN_BBOX,  COLUMN_POLYGON, COLUMN_WHERE,
+        COLUMN_QUERY, COLUMN_SNAP,   COLUMN_ZBULK};
     char *tool_names[NUM_TOOLS] = {
-        "delete",    "copy",        "move",      "flip",   "catadd",
-        "catdel",    "merge",       "break",     "snap",   "connect",
-        "extend",    "extendstart", "extendend", "chtype", "vertexadd",
-        "vertexdel", "vertexmove",  "areadel",   "zbulk",  "select"};
+        "add",       "delete",    "copy",        "move",      "flip",
+        "catadd",    "catdel",    "merge",       "break",     "snap",
+        "connect",   "extend",    "extendstart", "extendend", "chtype",
+        "vertexadd", "vertexdel", "vertexmove",  "areadel",   "zbulk",
+        "select"};
     enum mode tool_modes[NUM_TOOLS] = {
-        MODE_DEL,         MODE_COPY,     MODE_MOVE,       MODE_FLIP,
-        MODE_CATADD,      MODE_CATDEL,   MODE_MERGE,      MODE_BREAK,
-        MODE_SNAP,        MODE_CONNECT,  MODE_EXTEND,     MODE_EXTEND_START,
-        MODE_EXTEND_END,  MODE_CHTYPE,   MODE_VERTEX_ADD, MODE_VERTEX_DELETE,
-        MODE_VERTEX_MOVE, MODE_AREA_DEL, MODE_ZBULK,      MODE_SELECT};
+        MODE_ADD,           MODE_DEL,         MODE_COPY,     MODE_MOVE,
+        MODE_FLIP,          MODE_CATADD,      MODE_CATDEL,   MODE_MERGE,
+        MODE_BREAK,         MODE_SNAP,        MODE_CONNECT,  MODE_EXTEND,
+        MODE_EXTEND_START,  MODE_EXTEND_END,  MODE_CHTYPE,   MODE_VERTEX_ADD,
+        MODE_VERTEX_DELETE, MODE_VERTEX_MOVE, MODE_AREA_DEL, MODE_ZBULK,
+        MODE_SELECT};
     FILE *fp;
     char buf[1024];
     int line = 0, first = 1;
@@ -59,7 +62,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
     while (fgets(buf, 1024, fp)) {
         char *p, *pnext;
         enum mode action_mode;
-        char *flags, *move, *snap, *zbulk;
+        char *flags, *input, *move, *snap, *zbulk;
         struct ilist *List;
         struct line_pnts *coord = NULL;
         struct cat_list *Clist = NULL;
@@ -70,7 +73,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
 
         selparams->ids = selparams->cats = selparams->coords = selparams->bbox =
             selparams->polygon = selparams->where = selparams->query = NULL;
-        flags = move = snap = zbulk = NULL;
+        flags = input = move = snap = zbulk = NULL;
 
         /* remove newline */
         if ((p = strchr(buf, '\n'))) {
@@ -143,50 +146,55 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
             if (i >= ncols)
                 G_fatal_error(_("Too many batch columns in line %d"), line);
 
-            switch (cols[i]) {
-            case COLUMN_TOOL:
-                for (j = 0; j < NUM_TOOLS; j++)
-                    if (strcmp(p, tool_names[j]) == 0) {
-                        action_mode = tool_modes[j];
-                        break;
-                    }
-                if (j == NUM_TOOLS)
-                    G_fatal_error(_("Unsupported tool '%s' in line %d"), p,
-                                  line);
-                break;
-            case COLUMN_FLAGS:
-                flags = p;
-                break;
-            case COLUMN_MOVE:
-                move = p;
-                break;
-            case COLUMN_IDS:
-                selparams->ids = p;
-                break;
-            case COLUMN_CATS:
-                selparams->cats = p;
-                break;
-            case COLUMN_COORDS:
-                selparams->coords = p;
-                break;
-            case COLUMN_BBOX:
-                selparams->bbox = p;
-                break;
-            case COLUMN_POLYGON:
-                selparams->polygon = p;
-                break;
-            case COLUMN_WHERE:
-                selparams->where = p;
-                break;
-            case COLUMN_QUERY:
-                selparams->query = p;
-                break;
-            case COLUMN_SNAP:
-                snap = p;
-                break;
-            case COLUMN_ZBULK:
-                zbulk = p;
-                break;
+            if (*p) {
+                switch (cols[i]) {
+                case COLUMN_TOOL:
+                    for (j = 0; j < NUM_TOOLS; j++)
+                        if (strcmp(p, tool_names[j]) == 0) {
+                            action_mode = tool_modes[j];
+                            break;
+                        }
+                    if (j == NUM_TOOLS)
+                        G_fatal_error(_("Unsupported tool '%s' in line %d"), p,
+                                      line);
+                    break;
+                case COLUMN_FLAGS:
+                    flags = p;
+                    break;
+                case COLUMN_INPUT:
+                    input = p;
+                    break;
+                case COLUMN_MOVE:
+                    move = p;
+                    break;
+                case COLUMN_IDS:
+                    selparams->ids = p;
+                    break;
+                case COLUMN_CATS:
+                    selparams->cats = p;
+                    break;
+                case COLUMN_COORDS:
+                    selparams->coords = p;
+                    break;
+                case COLUMN_BBOX:
+                    selparams->bbox = p;
+                    break;
+                case COLUMN_POLYGON:
+                    selparams->polygon = p;
+                    break;
+                case COLUMN_WHERE:
+                    selparams->where = p;
+                    break;
+                case COLUMN_QUERY:
+                    selparams->query = p;
+                    break;
+                case COLUMN_SNAP:
+                    snap = p;
+                    break;
+                case COLUMN_ZBULK:
+                    zbulk = p;
+                    break;
+                }
             }
 
             i++;
@@ -206,22 +214,80 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
         selparams->reverse = GET_FLAG(flags, 'r');
         if (action_mode == MODE_COPY && BgMap && BgMap[0])
             List = select_lines(BgMap[0], action_mode, selparams, thresh, List);
-        else
+        else if (action_mode != MODE_ADD)
             List = select_lines(Map, action_mode, selparams, thresh, List);
 
-        if (selparams->cats && *selparams->cats) {
+        if (action_mode != MODE_ADD && action_mode != MODE_SELECT &&
+            !List->n_values) {
+            G_warning(_("No features selected, nothing to edit"));
+            action_mode = MODE_NONE;
+            ret = 0;
+        }
+
+        if ((action_mode == MODE_CATADD || action_mode == MODE_CATDEL) &&
+            selparams->cats) {
             Clist = Vect_new_cat_list();
             if (Vect_str_to_cat_list(selparams->cats, Clist))
                 G_fatal_error(_("Unable to get category list <%s>"),
                               selparams->cats);
         }
 
-        if (selparams->coords && *selparams->coords) {
+        if (selparams->coords) {
             coord = Vect_new_line_struct();
             str_to_coordinates(selparams->coords, coord);
         }
 
         switch (action_mode) {
+        case MODE_ADD: {
+            FILE *ascii;
+            int num_lines;
+            int snap_mode = get_snap(snap, thresh);
+
+            if (!input)
+                G_fatal_error(_("Input file not specified in line %d"), line);
+
+            if (!(ascii = fopen(input, "r")))
+                G_fatal_error(_("Unable to open file <%s>"), input);
+
+            if (!GET_FLAG(flags, 'n'))
+                Vect_read_ascii_head(ascii, Map);
+
+            num_lines = Vect_get_num_lines(Map);
+            ret = Vect_read_ascii(ascii, Map);
+
+            fclose(ascii);
+
+            if (ret > 0) {
+                int iline;
+                struct ilist *List_added;
+
+                G_message(n_("%d feature added", "%d features added", ret),
+                          ret);
+
+                List_added = Vect_new_list();
+                for (iline = num_lines + 1; iline <= Vect_get_num_lines(Map);
+                     iline++)
+                    Vect_list_append(List_added, iline);
+
+                G_verbose_message(_("Threshold value for snapping is %.2f"),
+                                  thresh[THRESH_SNAP]);
+                if (snap_mode != NO_SNAP) { /* apply snapping */
+                    /* snap to vertex ? */
+                    Vedit_snap_lines(Map, BgMap, nbgmaps, List_added,
+                                     thresh[THRESH_SNAP],
+                                     snap_mode == SNAP ? FALSE : TRUE);
+                }
+                if (GET_FLAG(flags, 'c')) { /* close boundaries */
+                    int nclosed =
+                        close_lines(Map, GV_BOUNDARY, thresh[THRESH_SNAP]);
+                    G_message(n_("%d boundary closed", "%d boundaries closed",
+                                 nclosed),
+                              nclosed);
+                }
+                Vect_destroy_list(List_added);
+            }
+            break;
+        }
         case MODE_DEL:
             ret = Vedit_delete_lines(Map, List);
             G_message(n_("%d feature deleted", "%d features deleted", ret),
@@ -385,12 +451,12 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
         case MODE_SELECT:
             ret = print_selected(List);
             break;
-        case MODE_BATCH:
-            /* this mode */
         case MODE_CREATE:
-        case MODE_ADD:
-        case MODE_NONE:
             /* unsupported tools */
+        case MODE_NONE:
+            /* no features selected */
+        case MODE_BATCH:
+            /* this tool */
             break;
         }
 
