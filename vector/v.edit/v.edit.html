@@ -202,7 +202,7 @@ required column is <b>tool</b>. The order of columns is not important.
 file using empty lines to separate them.
 
 <p>For each line of the table, <em>v.edit</em> commands can be specified. For
-example, this table when passed to the <b>batch</b> option with
+example, these two tables when passed to the <b>batch</b> option with
 <b>separator=comma</b>
 <div class="code"><pre>
 tool,cats,coords
@@ -215,6 +215,14 @@ is equivalent to the following individual commands:
 <div class="code"><pre>
 v.edit map=vect_map tool=break cat=1 coords=637108.11963224,257241.783755701
 v.edit -r map=vect_map tool=delete cat=1
+</pre></div>
+
+<p>The above two tables can be merged into one by declaring the union of two
+column sets and leaving irrelevant columns empty:
+<div class="code"><pre>
+tool,flags,cats,coords
+break,,1,"637108.11963224,257241.783755701"
+delete,r,1,
 </pre></div>
 
 <p>For batch editing, topology is always built whenever there are any changes
