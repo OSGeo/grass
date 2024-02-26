@@ -29,12 +29,34 @@ import random
 import shlex
 from copy import deepcopy
 from tempfile import NamedTemporaryFile
+from dataclasses import dataclass
 
 from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
 from grass.exceptions import ScriptError, CalledModuleError
 
 
-class Env:
+class _Setter:
+    def _setter(self, name, value):
+        """Provides way to intentionally bypass overloaded __setattr__."""
+        super().__setattr__(name, value)
+
+    def __setattr__(self, name, value):
+        if hasattr(self, name):
+            current_value = getattr(self, name)
+            if type(current_value) != type(value):
+                raise AttributeError(
+                    "{} object attribute '{}' must be data type of {}".format(
+                        self.__class__, name, type(current_value)
+                    )
+                )
+            super().__setattr__(name, value)
+        else:
+            raise AttributeError(
+                "{} object has no attribute '{}'".format(self.__class__, name)
+            )
+
+
+class Env(_Setter):
     """Control environmental variables related to grass package.
 
     Variables:
@@ -43,13 +65,24 @@ class Env:
        environment variable is set to True a new console window is
        opened for each command. This behavior was defaulted to GRASS
        GIS 8.3. Since version 8.4, new console windows are not
-       automatically opened.  Relevant only for MS Windows operating
+       automatically opened. Relevant only for MS Windows operating
        system. Default: False
+
+    An example:
+
+    ::
+
+        import grass.script as gs
+
+        grass.subprocess.show_window = True
     """
 
     def __init__(self):
-        class _Subprocess:
-            show_window = False
+        @dataclass
+        class _Subprocess(_Setter):
+            """Class for handling subprocess settings."""
+
+            show_window: bool = False
 
         self._setter("subprocess", _Subprocess())
 
@@ -65,20 +98,8 @@ class Env:
         global env
         env = self._env_global
 
-    def _setter(self, name, value):
-        """Provides way to intentionally bypass overloaded __setattr__."""
-        super().__setattr__(name, value)
 
-    def __setattr__(self, name, value):
-        print(self, name, value)
-        if hasattr(self, name):
-            super().__setattr__(name, value)
-        else:
-            raise AttributeError(
-                "{} object has no attribute '{}'".format(type(self), name)
-            )
-
-
+# global environmental variables
 env = Env()
 
 
