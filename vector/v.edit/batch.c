@@ -98,30 +98,37 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
         if (first) {
             int bit_cols = 0, bit_col;
 
-            while (p && (p = read_column(p, sep, &pnext))) {
+            while ((p = read_column(p, sep, &pnext))) {
                 int known_col = 0;
 
                 for (i = 0; i < MAX_COLUMNS; i++) {
                     if (strcmp(p, col_names[i]) == 0) {
                         bit_col = 1 << col_nums[i];
                         if (bit_cols & bit_col)
-                            G_fatal_error(
-                                _("Duplicate batch column '%s' not allowed"),
-                                col_names[i]);
+                            G_fatal_error(_("Duplicate batch column '%s' not "
+                                            "allowed in line %d"),
+                                          col_names[i], line);
                         bit_cols |= bit_col;
                         cols[ncols++] = col_nums[i];
                         known_col = 1;
                     }
                 }
                 if (!known_col)
-                    G_fatal_error(_("Unknown batch column '%s'"), p);
+                    G_fatal_error(_("Unknown batch column '%s' in line %d"), p,
+                                  line);
 
+                if (!pnext)
+                    break;
                 p = pnext;
             }
 
+            if (!p)
+                G_fatal_error(_("Illegal batch column in line %d"), line);
+
             if (!(bit_cols & 1 << COLUMN_TOOL))
-                G_fatal_error(_("Required batch column '%s' missing"),
-                              col_names[COLUMN_TOOL]);
+                G_fatal_error(
+                    _("Required batch column '%s' missing in line %d"),
+                    col_names[COLUMN_TOOL], line);
 
             first = 0;
             continue;
@@ -130,7 +137,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
         G_message(_("Batch line %d..."), line);
 
         i = 0;
-        while (p && (p = read_column(p, sep, &pnext))) {
+        while ((p = read_column(p, sep, &pnext))) {
             int j;
 
             if (i >= ncols)
@@ -144,7 +151,8 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
                         break;
                     }
                 if (j == NUM_TOOLS)
-                    G_fatal_error(_("Unsupported tool '%s'"), p);
+                    G_fatal_error(_("Unsupported tool '%s' in line %d"), p,
+                                  line);
                 break;
             case COLUMN_FLAGS:
                 flags = p;
@@ -182,8 +190,13 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
             }
 
             i++;
+            if (!pnext)
+                break;
             p = pnext;
         }
+
+        if (!p)
+            G_fatal_error(_("Illegal batch column in line %d"), line);
 
         if (i < ncols)
             G_fatal_error(_("Too few batch columns in line %d"), line);

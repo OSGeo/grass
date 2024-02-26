@@ -198,7 +198,7 @@ int main(int argc, char *argv[])
     if (params.batch->answer) {
         char *sep = G_option_to_separator(params.sep);
 
-        if (sep[1])
+        if (*(sep + 1))
             G_fatal_error(_("Field separator must be a single character"));
         else if (*sep == '\n')
             G_fatal_error(_("Field separator cannot be a newline"));
