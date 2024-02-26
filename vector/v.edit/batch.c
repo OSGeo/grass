@@ -84,22 +84,24 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
         else if ((p = strchr(buf, '\r')))
             *p = 0;
 
-        /* remove comments starting with # */
-        if ((p = strchr(buf, '#'))) {
-            *p-- = 0;
-            while (p >= buf && (*p == ' ' || *p == '\t'))
-                *p-- = 0;
-        }
+        /* find the first non-whitespace character */
+        p = strchr(buf, 0);
+        while (--p >= buf && (*p == ' ' || *p == '\t'))
+            ;
 
-        /* skip empty line */
-        if (!*buf)
+        /* an empty line starts a new table */
+        if (p < buf) {
+            first = 1;
             continue;
+        }
 
         p = buf;
 
         /* read batch columns */
         if (first) {
             int bit_cols = 0, bit_col;
+
+            ncols = 0;
 
             while ((p = read_column(p, sep, &pnext))) {
                 int known_col = 0;

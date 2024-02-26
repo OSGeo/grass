@@ -194,17 +194,22 @@ the following column names:
 
 The <b>batch</b> option is exclusive to all the above and <b>input</b> options.
 Not all the columns are required, but all necessary columns for all used tools
-need to be declared even if some tools do not use certain options. In this
-case, columns for these unused options can be left blank. The only required
-column is <b>tool</b>. The order of columns is not important.
+in one table need to be declared even if some tools do not use certain options.
+In this case, columns for these unused options can be left blank. The only
+required column is <b>tool</b>. The order of columns is not important.
+
+<p>However, multiple tables with different columns can be defined in one batch
+file using empty lines to separate them.
 
 <p>For each line of the table, <em>v.edit</em> commands can be specified. For
 example, this table when passed to the <b>batch</b> option with
 <b>separator=comma</b>
 <div class="code"><pre>
-tool,flags,cats,coords
-break,,1,"637108.11963224,257241.783755701"
-delete,r,1,
+tool,cats,coords
+break,1,"637108.11963224,257241.783755701"
+
+tool,flags,cats
+delete,r,1
 </pre></div>
 is equivalent to the following individual commands:
 <div class="code"><pre>
