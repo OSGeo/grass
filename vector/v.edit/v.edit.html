@@ -192,14 +192,13 @@ the following column names:
     <li><b>zbulk</b> - <b>zbulk</b> option</li>
 </ul>
 
-The <b>batch</b> option is exclusive to all the above and <b>input</b> options.
-Not all the columns are required, but all necessary columns for all used tools
-in one table need to be declared even if some tools do not use certain options.
-In this case, columns for these unused options can be left blank. The only
-required column is <b>tool</b>. The order of columns is not important.
-
-<p>However, multiple tables with different columns can be defined in one batch
-file using empty lines to separate them.
+The <b>batch</b> option is exclusive to all the above options. The only
+required column is <b>tool</b> and the order of columns is not important.
+Multiple tables with different columns can be defined in one batch file using
+empty lines to separate them. Different tools can be used in one table, but all
+necessary columns for all used tools in that table need to be declared even if
+some tools do not use certain options. In this case, columns for these unused
+options can be left blank.
 
 <p>For each line of the table, <em>v.edit</em> commands can be specified. For
 example, these two tables when passed to the <b>batch</b> option with
