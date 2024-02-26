@@ -67,9 +67,7 @@ def main():
 
     # does map exist in CURRENT mapset?
     mapset = grass.gisenv()["MAPSET"]
-    exists = bool(
-        grass.find_file(map, element="vector", mapset=mapset)["file"]
-    )
+    exists = bool(grass.find_file(map, element="vector", mapset=mapset)["file"])
 
     if not exists:
         grass.fatal(_("Vector map <%s> not found in current mapset") % map)
@@ -99,14 +97,10 @@ def main():
     add_str = ""
     for col in columns:
         if not col:
-            grass.fatal(
-                _("There is an empty column. Did you leave a trailing comma?")
-            )
+            grass.fatal(_("There is an empty column. Did you leave a trailing comma?"))
         col_name = col.split(" ")[0].strip()
         if col_name in column_existing:
-            grass.error(
-                _("Column <%s> is already in the table. Skipping.") % col_name
-            )
+            grass.error(_("Column <%s> is already in the table. Skipping.") % col_name)
             continue
         grass.verbose(_("Adding column <%s> to the table") % col_name)
         add_str += "ALTER TABLE {} ADD COLUMN {};\n".format(table, col)
