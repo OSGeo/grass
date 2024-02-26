@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
         i++;
     }
 
-    if (params.batch->answer) {
+    if (action_mode == MODE_BATCH) {
         char *sep = G_option_to_separator(params.sep);
 
         if (*(sep + 1))
