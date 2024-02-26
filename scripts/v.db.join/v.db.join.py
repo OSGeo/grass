@@ -194,7 +194,7 @@ def main():
     except CalledModuleError:
         grass.fatal(_("Error creating columns <%s>") % cols_added_str)
 
-    update_str = ""
+    update_str = "BEGIN TRANSACTION\n"
     for col in cols_added:
         cur_up_str = (
             f"UPDATE {maptable} SET {col} = (SELECT {col} FROM "
@@ -202,6 +202,7 @@ def main():
             f"{otable}.{ocolumn}={maptable}.{column});\n"
         )
         update_str += cur_up_str
+    update_str += "END TRANSACTION"
     grass.debug(update_str, 1)
     grass.verbose(_(f"Updating columns {cols_added_str} of vector map {map}..."))
     sql_file = grass.tempfile()

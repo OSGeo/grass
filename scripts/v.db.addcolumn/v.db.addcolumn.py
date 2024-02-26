@@ -93,7 +93,7 @@ def main():
     driver = f["driver"]
     column_existing = grass.vector_columns(map, int(layer)).keys()
 
-    add_str = ""
+    add_str = "BEGIN TRANSACTION\n"
     for col in columns:
         if not col:
             grass.fatal(_("There is an empty column. Did you leave a trailing comma?"))
@@ -103,6 +103,7 @@ def main():
             continue
         grass.verbose(_("Adding column <%s> to the table") % col_name)
         add_str += "ALTER TABLE {} ADD COLUMN {};\n".format(table, col)
+    add_str += "END TRANSACTION"
     sql_file = grass.tempfile()
     rm_files.append(sql_file)
     cols_add_str = ",".join([col[0] for col in columns])
