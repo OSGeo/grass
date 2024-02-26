@@ -200,6 +200,8 @@ int main(int argc, char *argv[])
 
         if (sep[1])
             G_fatal_error(_("Field separator must be a single character"));
+        else if (*sep == '\n')
+            G_fatal_error(_("Field separator cannot be a newline"));
 
         if (Vect_open_update2(&Map, params.map->answer, G_mapset(),
                               params.fld->answer) < 0)

@@ -232,6 +232,7 @@ int parser(int argc, char *argv[], struct GParams *params,
 
     params->sep = G_define_standard_option(G_OPT_F_SEP);
     params->sep->label = _("Field separator for batch input file");
+    params->sep->description = _("Special characters: pipe, comma, space, tab");
 
     G_option_required(params->tool, params->batch, NULL);
     G_option_excludes(params->batch, params->tool, params->in, params->move,
