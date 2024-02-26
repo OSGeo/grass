@@ -44,7 +44,6 @@ import atexit
 import os
 from grass.exceptions import CalledModuleError
 import grass.script as grass
-from grass.script.utils import encode
 
 rm_files = []
 
