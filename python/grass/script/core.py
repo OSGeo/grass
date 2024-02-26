@@ -128,7 +128,8 @@ class Popen(subprocess.Popen):
                 kwargs["shell"] = True
                 args = [self._escape_for_shell(arg) for arg in args]
 
-            if env.subprocess.show_window:
+            if env.subprocess.show_window is False:
+                # do not show new window on MS Windows
                 si = subprocess.STARTUPINFO()
                 si.dwFlags = (
                     subprocess.CREATE_NEW_CONSOLE | subprocess.STARTF_USESHOWWINDOW
