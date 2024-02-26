@@ -18,10 +18,12 @@
 #define COLUMN_SNAP           10
 #define COLUMN_ZBULK          11
 
+static char *read_column(char *, char, char **);
 static int get_snap(char *, double *thresh);
 
 int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
-               const char *file, struct SelectParams *selparams, double *thresh)
+               const char *file, char sep, struct SelectParams *selparams,
+               double *thresh)
 {
     char *col_names[MAX_COLUMNS] = {"tool",  "flags",  "move", "ids",
                                     "cats",  "coords", "bbox", "polygon",
@@ -55,8 +57,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
         fp = stdin;
 
     while (fgets(buf, 1024, fp)) {
-        char *p, *psep;
-        int last = 0;
+        char *p, *pnext;
         enum mode action_mode;
         char *flags, *move, *snap, *zbulk;
         struct ilist *List;
@@ -97,12 +98,9 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
         if (first) {
             int bit_cols = 0, bit_col;
 
-            while (!last &&
-                   ((psep = strchr(p, '|')) || (psep = strchr(p, 0)))) {
+            while (p && (p = read_column(p, sep, &pnext))) {
                 int known_col = 0;
 
-                last = !*psep;
-                *psep = 0;
                 for (i = 0; i < MAX_COLUMNS; i++) {
                     if (strcmp(p, col_names[i]) == 0) {
                         bit_col = 1 << col_nums[i];
@@ -118,7 +116,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
                 if (!known_col)
                     G_fatal_error(_("Unknown batch column '%s'"), p);
 
-                p = psep + 1;
+                p = pnext;
             }
 
             if (!(bit_cols & 1 << COLUMN_TOOL))
@@ -131,11 +129,8 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
         G_message(_("Batch line %d..."), line);
 
         i = 0;
-        while (!last && ((psep = strchr(p, '|')) || (psep = strchr(p, 0)))) {
+        while (p && (p = read_column(p, sep, &pnext))) {
             int j;
-
-            last = !*psep;
-            *psep = 0;
 
             if (i >= ncols)
                 G_fatal_error(_("Too many batch columns in line %d"), line);
@@ -186,7 +181,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
             }
 
             i++;
-            p = psep + 1;
+            p = pnext;
         }
 
         if (i < ncols)
@@ -411,6 +406,67 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
               total_ret);
 
     return total_ret;
+}
+
+/**
+   \brief Read a column from pcol string based on
+   https://www.rfc-editor.org/rfc/rfc4180
+
+   \param[in] pcol pointer to the start of a new column; this buffer is modified
+   \param[in] sep separater character
+   \param[out] pnext pointer to the next column or NULL if last column
+
+   \return pointer to column
+   \return NULL if illegal column
+*/
+static char *read_column(char *pcol, char sep, char **pnext)
+{
+    if (*pcol == '"') {
+        char *p = ++pcol;
+
+        while ((*pnext = strchr(p, '"')) && *(*pnext + 1) == '"')
+            p = *pnext + 2;
+
+        if (*pnext) {
+            char s = *(*pnext + 1);
+
+            if (s == sep || !s) {
+                /* remove closing quote */
+                **pnext = 0;
+                if (s == sep)
+                    /* skip to next column */
+                    *pnext += 2;
+                else
+                    /* last column */
+                    *pnext = NULL;
+            }
+            else
+                /* extra characters after last column; illegal column */
+                pcol = NULL;
+
+            /* convert "" to " */
+            if ((p = pcol)) {
+                while (*p) {
+                    if (*p == '"') {
+                        char *q;
+
+                        for (q = p; *(q + 1); q++)
+                            *q = *(q + 1);
+                        *q = 0;
+                    }
+                    p++;
+                }
+            }
+        }
+        else
+            /* closing quote is missing; illegal column */
+            pcol = NULL;
+    }
+    else if ((*pnext = strchr(pcol, sep)))
+        *(*pnext)++ = 0;
+    /* else last column */
+
+    return pcol;
 }
 
 static int get_snap(char *snap, double *thresh)

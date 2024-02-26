@@ -196,6 +196,11 @@ int main(int argc, char *argv[])
     }
 
     if (params.batch->answer) {
+        char *sep = G_option_to_separator(params.sep);
+
+        if (sep[1])
+            G_fatal_error(_("Field separator must be a single character"));
+
         if (Vect_open_update2(&Map, params.map->answer, G_mapset(),
                               params.fld->answer) < 0)
             G_fatal_error(_("Unable to open vector map <%s>"),
@@ -206,7 +211,7 @@ int main(int argc, char *argv[])
                 Vect_get_field_number(BgMap[0], params.fld->answer);
         selparams.type = Vect_option_to_types(params.type);
 
-        batch_edit(&Map, BgMap, nbgmaps, params.batch->answer, &selparams,
+        batch_edit(&Map, BgMap, nbgmaps, params.batch->answer, *sep, &selparams,
                    thresh);
     }
     else {

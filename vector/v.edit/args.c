@@ -230,6 +230,9 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->batch->label = _("Name of input file for batch editing");
     params->batch->description = _("'-' for standard input");
 
+    params->sep = G_define_standard_option(G_OPT_F_SEP);
+    params->sep->label = _("Field separator for batch input file");
+
     G_option_required(params->tool, params->batch, NULL);
     G_option_excludes(params->batch, params->tool, params->in, params->move,
                       params->id, params->cat, params->coord, params->bbox,

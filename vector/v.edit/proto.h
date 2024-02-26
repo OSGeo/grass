@@ -36,7 +36,7 @@ double max_distance(double);
 void coord2bbox(double, double, double, struct line_pnts *);
 
 /* batch.c */
-int batch_edit(struct Map_info *, struct Map_info **, int, const char *,
+int batch_edit(struct Map_info *, struct Map_info **, int, const char *, char,
                struct SelectParams *, double *);
 
 #endif /* _V_EDIT_PROTO */
