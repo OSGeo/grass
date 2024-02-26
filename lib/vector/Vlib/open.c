@@ -552,7 +552,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
 
     /* DO NOT delete support files topo, sidx, cidx, fidx if native format
      * was opened for update (not head_only)
-     * they will be delted by Vect_close() if the map was actually updated */
+     * they will be deleted by Vect_close() if the map was actually updated */
 
     return level;
 }
