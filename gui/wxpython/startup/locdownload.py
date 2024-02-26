@@ -405,7 +405,7 @@ class LocationDownloadPanel(wx.Panel):
                 self._warning(
                     _(
                         "Download completed. The downloaded sample data is listed "
-                        "in the location/mapset tabs upon closing of this window"
+                        "in the location/mapset tree."
                     )
                 )
                 self.parent.newLocationIsDownloaded.emit()
@@ -413,7 +413,8 @@ class LocationDownloadPanel(wx.Panel):
                 dict(zip(("addBtn", "removeBtn"), (False, True))),
             )
             self._change_download_btn_label()
-            self.parent.Show(True)
+            if errors:
+                self.parent.Show(True)
 
         self._download_in_progress = True
         self._warning(_("Download in progress, wait until it is finished"))
