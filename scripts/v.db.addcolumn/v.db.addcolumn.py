@@ -97,7 +97,7 @@ def main():
     column_existing = grass.vector_columns(map, int(layer)).keys()
 
     add_str = ""
-    for i, col in enumerate(columns):
+    for col in columns:
         if not col:
             grass.fatal(
                 _("There is an empty column. Did you leave a trailing comma?")
