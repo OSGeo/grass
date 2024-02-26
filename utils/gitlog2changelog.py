@@ -7,6 +7,7 @@ import re
 import os
 from textwrap import TextWrapper
 import sys
+import subprocess
 
 rev_range = ""
 
@@ -15,7 +16,20 @@ if len(sys.argv) > 1:
     rev_range = "%s..HEAD" % base
 
 # Execute git log with the desired command line options.
-fin = os.popen("git log --summary --stat --no-merges --date=short %s" % rev_range, "r")
+# uses subproccess instead, more secure.
+command =  ["git", "log", "--summary", "--stat", "--no-merges", "--date=short", rev_range]
+
+fin = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+output, error = process.communicate()
+
+# Check for errors
+if process.returncode != 0:
+    # Handle error
+    print("Error:", error.decode("utf-8"))
+else:
+    # Process the output
+    print("Output:", output.decode("utf-8"))
+
 # Create a ChangeLog file in the current directory.
 fout = open("ChangeLog", "w")
 
