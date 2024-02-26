@@ -122,6 +122,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
             if (!(bit_cols & 1 << COLUMN_TOOL))
                 G_fatal_error(_("Required batch column '%s' missing"),
                               col_names[COLUMN_TOOL]);
+
             first = 0;
             continue;
         }
@@ -343,7 +344,6 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
                 ret += Vedit_delete_area_centroid(Map, List->value[i]);
             }
             G_message(n_("%d area removed", "%d areas removed", ret), ret);
-
             break;
         case MODE_ZBULK: {
             double start, step;
@@ -366,7 +366,6 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
                 G_fatal_error(_("ZBulk must have bbox"));
 
             ret = Vedit_bulk_labeling(Map, List, x1, y1, x2, y2, start, step);
-
             G_message(n_("%d line labeled", "%d lines labeled", ret), ret);
             break;
         }
