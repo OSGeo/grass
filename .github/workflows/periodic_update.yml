@@ -25,8 +25,8 @@ jobs:
       - name: "Check that autoconf scripts are up-to-date:"
         run: |
           rm -f config.guess config.sub
-          wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
-          wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
+          wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess && chmod +x config.guess
+          wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub && chmod +x config.sub
       # Display changes, only to follow along in the logs.
       - run: git diff config.guess config.sub
       - name: Double check if files are modified
