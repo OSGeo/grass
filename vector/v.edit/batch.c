@@ -324,7 +324,8 @@ static char *read_column(char *pcol, char sep, char **pnext)
             }
         }
         else
-            /* closing quote is missing; illegal column */
+            /* closing quote is missing; possibly unsupported multi-line column;
+             * treat it as illegal */
             pcol = NULL;
     }
     else if ((*pnext = strchr(pcol, sep)))
