@@ -23,8 +23,7 @@ static char *read_column(char *, char, char **);
 static int get_snap(char *, double *thresh);
 
 int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
-               const char *file, char sep, struct SelectParams *selparams,
-               double *thresh)
+               const char *file, char sep, struct SelectParams *selparams)
 {
     char *col_names[MAX_COLUMNS] = {
         "tool", "flags",   "input", "move",  "ids",  "cats", "coords",
@@ -50,6 +49,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
     char buf[1024];
     int line = 0, first = 1;
     int cols[MAX_COLUMNS], ncols = 0;
+    double *thresh = selparams->thresh;
     int total_ret = 0;
 
     if (strcmp(file, "-") != 0) {
@@ -215,9 +215,11 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
 
         selparams->reverse = GET_FLAG(flags, 'r');
         if (action_mode == MODE_COPY && BgMap && BgMap[0])
-            List = select_lines(BgMap[0], action_mode, selparams, thresh, List);
+            List = select_lines(BgMap[0], selparams->bglayer, action_mode,
+                                selparams, List);
         else if (action_mode != MODE_ADD)
-            List = select_lines(Map, action_mode, selparams, thresh, List);
+            List = select_lines(Map, selparams->layer, action_mode, selparams,
+                                List);
 
         if (action_mode != MODE_ADD && action_mode != MODE_SELECT &&
             !List->n_values) {

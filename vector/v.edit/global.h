@@ -58,6 +58,7 @@ struct GParams {
 struct SelectParams {
     int layer, bglayer, type, reverse;
     char *ids, *cats, *coords, *bbox, *polygon, *where, *query;
+    double *thresh;
 };
 
 #include "proto.h"

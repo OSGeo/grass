@@ -7,7 +7,7 @@
  * AUTHOR(S):  GRASS Development Team
  *             Wolf Bergenheim, Jachym Cepicky, Martin Landa
  *
- * COPYRIGHT:  (C) 2006-2008 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2006-2024 by the GRASS Development Team
  *
  *             This program is free software under the
  *             GNU General Public License (>=v2).
@@ -28,23 +28,23 @@ static int merge_lists2(struct ilist *, struct boxlist *);
    \brief Select vector features
 
    \param[in] Map vector map
+   \param[in] layer map layer
    \param[in] action_mode tool
-   \param[in] params GRASS parameters
+   \param[in] selparams select parameters
    \param[in] List list of selected features
 
    \return list of newly selected features
 */
-struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
-                           struct SelectParams *selparams, double *thresh,
-                           struct ilist *List)
+struct ilist *select_lines(struct Map_info *Map, int layer,
+                           enum mode action_mode,
+                           struct SelectParams *selparams, struct ilist *List)
 {
-    int layer, type;
+    int type;
 
     G_message(_("Selecting features..."));
 
     first_selection = 1;
 
-    layer = selparams->layer;
     type = selparams->type;
 
     /* select by id's */
@@ -64,8 +64,9 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
         str_to_coordinates(selparams->coords, coords);
 
         G_verbose_message(_("Threshold value for coordinates is %.2f"),
-                          thresh[THRESH_COORDS]);
-        sel_by_coordinates(Map, type, coords, thresh[THRESH_COORDS], List);
+                          selparams->thresh[THRESH_COORDS]);
+        sel_by_coordinates(Map, type, coords, selparams->thresh[THRESH_COORDS],
+                           List);
 
         Vect_destroy_line_struct(coords);
     }
@@ -113,21 +114,18 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
             List_tmp = List;
             first_selection = 0;
         }
-        else {
+        else
             List_tmp = Vect_new_list();
-        }
 
         query_type = QUERY_UNKNOWN;
-        if (strcmp(selparams->query, "length") == 0) {
+        if (strcmp(selparams->query, "length") == 0)
             query_type = QUERY_LENGTH;
-        }
-        else if (strcmp(selparams->query, "dangle") == 0) {
+        else if (strcmp(selparams->query, "dangle") == 0)
             query_type = QUERY_DANGLE;
-        }
 
         G_verbose_message(_("Threshold value for querying is %.2f"),
-                          thresh[THRESH_QUERY]);
-        Vedit_select_by_query(Map, type, layer, thresh[THRESH_QUERY],
+                          selparams->thresh[THRESH_QUERY]);
+        Vedit_select_by_query(Map, type, layer, selparams->thresh[THRESH_QUERY],
                               query_type, List_tmp);
 
         /* merge lists (only duplicate items) */
@@ -137,9 +135,8 @@ struct ilist *select_lines(struct Map_info *Map, enum mode action_mode,
         }
     }
 
-    if (selparams->reverse) {
+    if (selparams->reverse)
         reverse_selection(Map, type, &List);
-    }
 
     G_message(n_("%d of %d feature selected from vector map <%s>",
                  "%d of %d features selected from vector map <%s>",

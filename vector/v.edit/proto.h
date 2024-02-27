@@ -9,8 +9,8 @@ int close_lines(struct Map_info *, int, double);
 
 /* select.c */
 int print_selected(struct ilist *);
-struct ilist *select_lines(struct Map_info *, enum mode, struct SelectParams *,
-                           double *, struct ilist *);
+struct ilist *select_lines(struct Map_info *, int, enum mode,
+                           struct SelectParams *, struct ilist *);
 int sel_by_cat(struct Map_info *, struct cat_list *, int, int, char *,
                struct ilist *);
 int sel_by_coordinates(struct Map_info *, int, struct line_pnts *, double,
@@ -37,6 +37,6 @@ void coord2bbox(double, double, double, struct line_pnts *);
 
 /* batch.c */
 int batch_edit(struct Map_info *, struct Map_info **, int, const char *, char,
-               struct SelectParams *, double *);
+               struct SelectParams *);
 
 #endif /* _V_EDIT_PROTO */

@@ -217,8 +217,8 @@ int main(int argc, char *argv[])
                 Vect_get_field_number(BgMap[0], params.fld->answer);
         selparams.type = Vect_option_to_types(params.type);
 
-        batch_edit(&Map, BgMap, nbgmaps, params.batch->answer, *sep, &selparams,
-                   thresh);
+        batch_edit(&Map, BgMap, nbgmaps, params.batch->answer, *sep,
+                   &selparams);
     }
     else {
         /* get list of categories */
@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
         if (action_mode != MODE_CREATE && action_mode != MODE_ADD) {
             /* select lines */
             if (action_mode == MODE_COPY && BgMap && BgMap[0])
-                selparams.layer =
+                selparams.bglayer =
                     Vect_get_field_number(BgMap[0], params.fld->answer);
             else
                 selparams.layer =
@@ -261,15 +261,16 @@ int main(int argc, char *argv[])
             selparams.polygon = params.poly->answer;
             selparams.where = params.where->answer;
             selparams.query = params.query->answer;
+            selparams.thresh = thresh;
 
             List = Vect_new_list();
             if (action_mode == MODE_COPY && BgMap && BgMap[0]) {
-                List = select_lines(BgMap[0], action_mode, &selparams, thresh,
-                                    List);
+                List = select_lines(BgMap[0], selparams.bglayer, action_mode,
+                                    &selparams, List);
             }
             else {
-                List =
-                    select_lines(&Map, action_mode, &selparams, thresh, List);
+                List = select_lines(&Map, selparams.layer, action_mode,
+                                    &selparams, List);
             }
         }
 
