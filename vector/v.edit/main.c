@@ -20,6 +20,8 @@
 
 #include "global.h"
 
+static void error_handler(void *);
+
 int main(int argc, char *argv[])
 {
     struct GModule *module;
@@ -192,7 +194,7 @@ int main(int argc, char *argv[])
                               params.fld->answer) < 0)
             G_fatal_error(_("Unable to open vector map <%s>"),
                           params.map->answer);
-        Vect_set_error_handler_io(&Map, NULL);
+        G_add_error_handler(error_handler, &Map);
 
         selparams.layer = Vect_get_field_number(&Map, params.fld->answer);
         if (BgMap && BgMap[0])
@@ -310,4 +312,13 @@ int main(int argc, char *argv[])
     G_done_msg(" ");
 
     exit(ret > -1 ? EXIT_SUCCESS : EXIT_FAILURE);
+}
+
+static void error_handler(void *p)
+{
+    struct Map_info *Map = (struct Map_info *)p;
+
+    Vect_build_partial(Map, GV_BUILD_NONE);
+    Vect_build(Map);
+    Vect_close(Map);
 }
