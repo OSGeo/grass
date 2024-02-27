@@ -34,10 +34,8 @@ int main(int argc, char *argv[])
     int i;
     int ret;
     double thresh[3];
-    struct ilist *List;
 
     ascii = NULL;
-    List = NULL;
     BgMap = NULL;
     nbgmaps = 0;
 
@@ -207,6 +205,8 @@ int main(int argc, char *argv[])
                    &selparams);
     }
     else {
+        struct ilist *List = NULL;
+
         if (action_mode != MODE_CREATE && action_mode != MODE_ADD) {
             /* select lines */
             if (action_mode == MODE_COPY && BgMap && BgMap[0])
@@ -287,10 +287,10 @@ int main(int argc, char *argv[])
                 Vect_build(&Map);
             }
         }
-    }
 
-    if (List)
-        Vect_destroy_list(List);
+        if (List)
+            Vect_destroy_list(List);
+    }
 
     if (ascii && ascii != stdout)
         fclose(ascii);
