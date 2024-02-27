@@ -61,6 +61,13 @@ struct SelectParams {
     double *thresh;
 };
 
+struct EditParams {
+    FILE *input;
+    char *move, *cats, *coords, *snap, *zbulk, *bbox;
+    double *thresh;
+    int close, header, move_first, extend_parallel;
+};
+
 #include "proto.h"
 
 #endif

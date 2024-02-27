@@ -20,8 +20,6 @@
 
 #include "global.h"
 
-static void error_handler(void *);
-
 int main(int argc, char *argv[])
 {
     struct GModule *module;
@@ -32,24 +30,16 @@ int main(int argc, char *argv[])
     enum mode action_mode;
     FILE *ascii;
     struct SelectParams selparams;
-
+    struct EditParams editparams;
     int i;
-    int move_first, snap, extend_parallel;
-    int ret, layer;
-    double move_x, move_y, move_z, thresh[3];
-
-    struct line_pnts *coord;
-
+    int ret;
+    double thresh[3];
     struct ilist *List;
-
-    struct cat_list *Clist;
 
     ascii = NULL;
     List = NULL;
     BgMap = NULL;
     nbgmaps = 0;
-    coord = NULL;
-    Clist = NULL;
 
     G_gisinit(argv[0]);
 
@@ -77,9 +67,8 @@ int main(int argc, char *argv[])
             if (ascii == NULL)
                 G_fatal_error(_("Unable to open file <%s>"), params.in->answer);
         }
-        else {
+        else
             ascii = stdin;
-        }
     }
     if (!ascii && action_mode == MODE_ADD)
         G_fatal_error(_("Required parameter <%s> not set"), params.in->key);
@@ -99,10 +88,9 @@ int main(int argc, char *argv[])
         /* 3D vector maps? */
         putenv("GRASS_VECTOR_EXTERNAL_IMMEDIATE=1");
         ret = Vect_open_new(&Map, params.map->answer, WITHOUT_Z);
-        if (ret == -1) {
+        if (ret == -1)
             G_fatal_error(_("Unable to create vector map <%s>"),
                           params.map->answer);
-        }
         Vect_set_error_handler_io(NULL, &Map);
 
         /* native or external data source ? */
@@ -123,10 +111,8 @@ int main(int argc, char *argv[])
 
         G_debug(1, "Map created");
 
-        if (ascii) {
-            /* also add new vector features */
+        if (ascii) /* also add new vector features */
             action_mode = MODE_ADD;
-        }
     }
     else {                           /* open selected vector file */
         if (action_mode == MODE_ADD) /* write */
@@ -175,7 +161,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    layer = Vect_get_field_number(&Map, params.fld->answer);
     i = 0;
     while (params.maxdist->answers[i]) {
         switch (i) {
@@ -209,40 +194,19 @@ int main(int argc, char *argv[])
                               params.fld->answer) < 0)
             G_fatal_error(_("Unable to open vector map <%s>"),
                           params.map->answer);
-        G_add_error_handler(error_handler, &Map);
+        Vect_set_error_handler_io(&Map, NULL);
 
         selparams.layer = Vect_get_field_number(&Map, params.fld->answer);
         if (BgMap && BgMap[0])
             selparams.bglayer =
                 Vect_get_field_number(BgMap[0], params.fld->answer);
         selparams.type = Vect_option_to_types(params.type);
+        selparams.thresh = thresh;
 
         batch_edit(&Map, BgMap, nbgmaps, params.batch->answer, *sep,
                    &selparams);
     }
     else {
-        /* get list of categories */
-        if (action_mode == MODE_CATADD || action_mode == MODE_CATDEL) {
-            Clist = Vect_new_cat_list();
-            if (params.cat->answer &&
-                Vect_str_to_cat_list(params.cat->answer, Clist))
-                G_fatal_error(_("Unable to get category list <%s>"),
-                              params.cat->answer);
-        }
-
-        move_first = params.move_first->answer ? 1 : 0;
-        extend_parallel = params.extend_parallel->answer ? 1 : 0;
-        snap = NO_SNAP;
-        if (strcmp(params.snap->answer, "node") == 0)
-            snap = SNAP;
-        else if (strcmp(params.snap->answer, "vertex") == 0)
-            snap = SNAPVERTEX;
-        if (snap != NO_SNAP && thresh[THRESH_SNAP] <= 0) {
-            G_warning(
-                _("Threshold for snapping must be > 0. No snapping applied."));
-            snap = NO_SNAP;
-        }
-
         if (action_mode != MODE_CREATE && action_mode != MODE_ADD) {
             /* select lines */
             if (action_mode == MODE_COPY && BgMap && BgMap[0])
@@ -253,7 +217,6 @@ int main(int argc, char *argv[])
                     Vect_get_field_number(&Map, params.fld->answer);
             selparams.type = Vect_option_to_types(params.type);
             selparams.reverse = params.reverse->answer;
-
             selparams.ids = params.id->answer;
             selparams.cats = params.cat->answer;
             selparams.coords = params.coord->answer;
@@ -264,14 +227,12 @@ int main(int argc, char *argv[])
             selparams.thresh = thresh;
 
             List = Vect_new_list();
-            if (action_mode == MODE_COPY && BgMap && BgMap[0]) {
+            if (action_mode == MODE_COPY && BgMap && BgMap[0])
                 List = select_lines(BgMap[0], selparams.bglayer, action_mode,
                                     &selparams, List);
-            }
-            else {
+            else
                 List = select_lines(&Map, selparams.layer, action_mode,
                                     &selparams, List);
-            }
         }
 
         if ((action_mode != MODE_CREATE && action_mode != MODE_ADD &&
@@ -301,244 +262,40 @@ int main(int argc, char *argv[])
             }
         }
 
-        /* coords option -> array */
-        if (params.coord->answers) {
-            coord = Vect_new_line_struct();
-            int i = 0;
-            double east, north;
+        if (action_mode != MODE_NONE) {
+            editparams.input = ascii;
+            editparams.move = params.move->answer;
+            editparams.cats = params.cat->answer;
+            editparams.coords = params.coord->answer;
+            editparams.snap = params.snap->answer;
+            editparams.zbulk = params.zbulk->answer;
+            editparams.bbox = params.bbox->answer;
+            editparams.thresh = thresh;
+            editparams.close = params.close->answer ? 1 : 0;
+            editparams.header = params.header->answer ? 1 : 0;
+            editparams.move_first = params.move_first->answer ? 1 : 0;
+            editparams.extend_parallel = params.extend_parallel->answer ? 1 : 0;
 
-            while (params.coord->answers[i]) {
-                east = atof(params.coord->answers[i]);
-                north = atof(params.coord->answers[i + 1]);
-                Vect_append_point(coord, east, north, 0.0);
-                i += 2;
+            /* perform requested editation */
+            ret = edit(&Map, selparams.layer, BgMap, nbgmaps, List, action_mode,
+                       &editparams, 0);
+
+            /* build topology only if requested or if tool!=select */
+            if (action_mode != MODE_SELECT && ret > 0 &&
+                params.topo->answer != 1) {
+                Vect_build_partial(&Map, GV_BUILD_NONE);
+                Vect_build(&Map);
             }
-        }
-
-        /* perform requested editation */
-        switch (action_mode) {
-        case MODE_CREATE:
-            break;
-        case MODE_ADD:
-            if (!params.header->answer)
-                Vect_read_ascii_head(ascii, &Map);
-            int num_lines;
-
-            num_lines = Vect_get_num_lines(&Map);
-
-            ret = Vect_read_ascii(ascii, &Map);
-            if (ret > 0) {
-                int iline;
-                struct ilist *List_added;
-
-                G_message(n_("%d feature added", "%d features added", ret),
-                          ret);
-
-                List_added = Vect_new_list();
-                for (iline = num_lines + 1; iline <= Vect_get_num_lines(&Map);
-                     iline++)
-                    Vect_list_append(List_added, iline);
-
-                G_verbose_message(_("Threshold value for snapping is %.2f"),
-                                  thresh[THRESH_SNAP]);
-                if (snap != NO_SNAP) { /* apply snapping */
-                    /* snap to vertex ? */
-                    Vedit_snap_lines(&Map, BgMap, nbgmaps, List_added,
-                                     thresh[THRESH_SNAP],
-                                     snap == SNAP ? FALSE : TRUE);
-                }
-                if (params.close->answer) { /* close boundaries */
-                    int nclosed;
-
-                    nclosed =
-                        close_lines(&Map, GV_BOUNDARY, thresh[THRESH_SNAP]);
-                    G_message(n_("%d boundary closed", "%d boundaries closed",
-                                 nclosed),
-                              nclosed);
-                }
-                Vect_destroy_list(List_added);
-            }
-            break;
-        case MODE_DEL:
-            ret = Vedit_delete_lines(&Map, List);
-            G_message(n_("%d feature deleted", "%d features deleted", ret),
-                      ret);
-            break;
-        case MODE_MOVE:
-            move_x = atof(params.move->answers[0]);
-            move_y = atof(params.move->answers[1]);
-            move_z = atof(params.move->answers[2]);
-            G_verbose_message(_("Threshold value for snapping is %.2f"),
-                              thresh[THRESH_SNAP]);
-            ret = Vedit_move_lines(&Map, BgMap, nbgmaps, List, move_x, move_y,
-                                   move_z, snap, thresh[THRESH_SNAP]);
-            G_message(n_("%d feature moved", "%d features moved", ret), ret);
-            break;
-        case MODE_VERTEX_MOVE:
-            move_x = atof(params.move->answers[0]);
-            move_y = atof(params.move->answers[1]);
-            move_z = atof(params.move->answers[2]);
-            G_verbose_message(_("Threshold value for snapping is %.2f"),
-                              thresh[THRESH_SNAP]);
-            ret = Vedit_move_vertex(&Map, BgMap, nbgmaps, List, coord,
-                                    thresh[THRESH_COORDS], thresh[THRESH_SNAP],
-                                    move_x, move_y, move_z, move_first, snap);
-            G_message(n_("%d vertex moved", "%d vertices moved", ret), ret);
-            break;
-        case MODE_VERTEX_ADD:
-            ret = Vedit_add_vertex(&Map, List, coord, thresh[THRESH_COORDS]);
-            G_message(n_("%d vertex added", "%d vertices added", ret), ret);
-            break;
-        case MODE_VERTEX_DELETE:
-            ret = Vedit_remove_vertex(&Map, List, coord, thresh[THRESH_COORDS]);
-            G_message(n_("%d vertex removed", "%d vertices removed", ret), ret);
-            break;
-        case MODE_BREAK:
-            if (params.coord->answer) {
-                ret = Vedit_split_lines(&Map, List, coord,
-                                        thresh[THRESH_COORDS], NULL);
-            }
-            else {
-                ret = Vect_break_lines_list(&Map, List, NULL, GV_LINES, NULL);
-            }
-            G_message(n_("%d line broken", "%d lines broken", ret), ret);
-            break;
-        case MODE_CONNECT:
-            G_verbose_message(_("Threshold value for snapping is %.2f"),
-                              thresh[THRESH_SNAP]);
-            ret = Vedit_connect_lines(&Map, List, thresh[THRESH_SNAP]);
-            G_message(n_("%d line connected", "%d lines connected", ret), ret);
-            break;
-        case MODE_EXTEND:
-            G_verbose_message(_("Threshold value for snapping is %.2f"),
-                              thresh[THRESH_SNAP]);
-            ret = Vedit_extend_lines(&Map, List, 0, extend_parallel,
-                                     thresh[THRESH_SNAP]);
-            G_message(n_("%d line extended", "%d lines extended", ret), ret);
-            break;
-        case MODE_EXTEND_START:
-            G_verbose_message(_("Threshold value for snapping is %.2f"),
-                              thresh[THRESH_SNAP]);
-            ret = Vedit_extend_lines(&Map, List, 1, extend_parallel,
-                                     thresh[THRESH_SNAP]);
-            G_message(n_("%d line extended", "%d lines extended", ret), ret);
-            break;
-        case MODE_EXTEND_END:
-            G_verbose_message(_("Threshold value for snapping is %.2f"),
-                              thresh[THRESH_SNAP]);
-            ret = Vedit_extend_lines(&Map, List, 2, extend_parallel,
-                                     thresh[THRESH_SNAP]);
-            G_message(n_("%d line extended", "%d lines extended", ret), ret);
-            break;
-        case MODE_MERGE:
-            ret = Vedit_merge_lines(&Map, List);
-            G_message(n_("%d line merged", "%d lines merged", ret), ret);
-            break;
-        case MODE_SELECT:
-            ret = print_selected(List);
-            break;
-        case MODE_CATADD:
-            ret = Vedit_modify_cats(&Map, List, layer, 0, Clist);
-            G_message(n_("%d feature modified", "%d features modified", ret),
-                      ret);
-            break;
-        case MODE_CATDEL:
-            ret = Vedit_modify_cats(&Map, List, layer, 1, Clist);
-            G_message(n_("%d feature modified", "%d features modified", ret),
-                      ret);
-            break;
-        case MODE_COPY:
-            if (BgMap && BgMap[0]) {
-                if (nbgmaps > 1)
-                    G_warning(_("Multiple background maps were given. "
-                                "Selected features will be copied only from "
-                                "vector map <%s>."),
-                              Vect_get_full_name(BgMap[0]));
-
-                ret = Vedit_copy_lines(&Map, BgMap[0], List);
-            }
-            else {
-                ret = Vedit_copy_lines(&Map, NULL, List);
-            }
-            G_message(n_("%d feature copied", "%d features copied", ret), ret);
-            break;
-        case MODE_SNAP:
-            G_verbose_message(_("Threshold value for snapping is %.2f"),
-                              thresh[THRESH_SNAP]);
-            ret = snap_lines(&Map, List, thresh[THRESH_SNAP]);
-            break;
-        case MODE_FLIP:
-            ret = Vedit_flip_lines(&Map, List);
-            G_message(n_("%d line flipped", "%d lines flipped", ret), ret);
-            break;
-        case MODE_NONE:
-            break;
-        case MODE_ZBULK: {
-            double start, step;
-            double x1, y1, x2, y2;
-
-            start = atof(params.zbulk->answers[0]);
-            step = atof(params.zbulk->answers[1]);
-
-            x1 = atof(params.bbox->answers[0]);
-            y1 = atof(params.bbox->answers[1]);
-            x2 = atof(params.bbox->answers[2]);
-            y2 = atof(params.bbox->answers[3]);
-
-            ret = Vedit_bulk_labeling(&Map, List, x1, y1, x2, y2, start, step);
-
-            G_message(n_("%d line labeled", "%d lines labeled", ret), ret);
-            break;
-        }
-        case MODE_CHTYPE:
-            ret = Vedit_chtype_lines(&Map, List);
-
-            if (ret > 0) {
-                G_message(
-                    n_("%d feature converted", "%d features converted", ret),
-                    ret);
-            }
-            else {
-                G_message(_("No feature modified"));
-            }
-            break;
-        case MODE_AREA_DEL: {
-            ret = 0;
-            for (i = 0; i < List->n_values; i++) {
-                if (Vect_get_line_type(&Map, List->value[i]) != GV_CENTROID) {
-                    G_warning(
-                        _("Select feature %d is not centroid, ignoring..."),
-                        List->value[i]);
-                    continue;
-                }
-
-                ret += Vedit_delete_area_centroid(&Map, List->value[i]);
-            }
-            G_message(n_("%d area removed", "%d areas removed", ret), ret);
-            break;
-        }
-        default:
-            G_warning(_("Operation not implemented"));
-            ret = -1;
-            break;
-        }
-
-        /* build topology only if requested or if tool!=select */
-        if (action_mode != MODE_SELECT && action_mode != MODE_NONE && ret > 0 &&
-            params.topo->answer != 1) {
-            Vect_build_partial(&Map, GV_BUILD_NONE);
-            Vect_build(&Map);
         }
     }
+
+    if (List)
+        Vect_destroy_list(List);
 
     if (ascii && ascii != stdout)
         fclose(ascii);
 
     Vect_hist_command(&Map);
-
-    if (List)
-        Vect_destroy_list(List);
-
     Vect_close(&Map);
 
     G_debug(1, "Map closed");
@@ -550,26 +307,7 @@ int main(int argc, char *argv[])
     }
     G_free((void *)BgMap);
 
-    if (coord)
-        Vect_destroy_line_struct(coord);
-
-    if (Clist)
-        Vect_destroy_cat_list(Clist);
-
     G_done_msg(" ");
 
-    if (ret > -1) {
-        exit(EXIT_SUCCESS);
-    }
-    else {
-        exit(EXIT_FAILURE);
-    }
-}
-
-static void error_handler(void *p)
-{
-    struct Map_info *Map = (struct Map_info *)p;
-
-    /* if Map is not closed on fatal error, support files won't be updated */
-    Vect_close(Map);
+    exit(ret > -1 ? EXIT_SUCCESS : EXIT_FAILURE);
 }

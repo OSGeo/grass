@@ -39,4 +39,8 @@ void coord2bbox(double, double, double, struct line_pnts *);
 int batch_edit(struct Map_info *, struct Map_info **, int, const char *, char,
                struct SelectParams *);
 
+/* edit.c */
+int edit(struct Map_info *, int, struct Map_info **, int, struct ilist *,
+         enum mode, struct EditParams *, int);
+
 #endif /* _V_EDIT_PROTO */

@@ -39,13 +39,12 @@ struct ilist *select_lines(struct Map_info *Map, int layer,
                            enum mode action_mode,
                            struct SelectParams *selparams, struct ilist *List)
 {
-    int type;
+    int type = selparams->type;
+    double *thresh = selparams->thresh;
 
     G_message(_("Selecting features..."));
 
     first_selection = 1;
-
-    type = selparams->type;
 
     /* select by id's */
     if (selparams->ids)
@@ -64,9 +63,8 @@ struct ilist *select_lines(struct Map_info *Map, int layer,
         str_to_coordinates(selparams->coords, coords);
 
         G_verbose_message(_("Threshold value for coordinates is %.2f"),
-                          selparams->thresh[THRESH_COORDS]);
-        sel_by_coordinates(Map, type, coords, selparams->thresh[THRESH_COORDS],
-                           List);
+                          thresh[THRESH_COORDS]);
+        sel_by_coordinates(Map, type, coords, thresh[THRESH_COORDS], List);
 
         Vect_destroy_line_struct(coords);
     }
@@ -124,8 +122,8 @@ struct ilist *select_lines(struct Map_info *Map, int layer,
             query_type = QUERY_DANGLE;
 
         G_verbose_message(_("Threshold value for querying is %.2f"),
-                          selparams->thresh[THRESH_QUERY]);
-        Vedit_select_by_query(Map, type, layer, selparams->thresh[THRESH_QUERY],
+                          thresh[THRESH_QUERY]);
+        Vedit_select_by_query(Map, type, layer, thresh[THRESH_QUERY],
                               query_type, List_tmp);
 
         /* merge lists (only duplicate items) */
