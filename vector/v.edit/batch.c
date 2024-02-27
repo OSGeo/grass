@@ -253,8 +253,6 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
                 fclose(editparams.input);
         }
 
-        G_message(" ");
-
         Vect_destroy_list(List);
 
         if (action_mode != MODE_SELECT && ret > 0) {
@@ -262,6 +260,8 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
             Vect_build(Map);
             total_ret += ret;
         }
+
+        G_message(" ");
     }
 
     if (fp != stdin)
