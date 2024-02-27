@@ -552,16 +552,16 @@ v.db.select map=roadsmajor -c col=cat |
         v.segment roadsmajor output=roadsmajor_center
 
 # break roads at their center
-v.to.db -p map=roadsmajor_center option=coor sep=comma |
+v.to.db -p map=roadsmajor_center option=coor sep=space |
 	sed '/^cat/d' |
-	while read cat x y; do
+	while read cat x y z; do
 	v.edit map=roadsmajor_upper_half tool=break cats=$cat coords=$x,$y
 done
 
 # delete lower halves
-v.to.db -p map=roadsmajor option=end sep=comma |
+v.to.db -p map=roadsmajor option=end sep=space |
 	sed '/^cat/d' |
-	while read cat x y; do
+	while read cat x y z; do
 	v.edit map=roadsmajor_upper_half tool=delete cats=$cat coords=$x,$y
 done
 </pre></div>
