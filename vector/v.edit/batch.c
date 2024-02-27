@@ -275,7 +275,7 @@ int batch_edit(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
 
 /**
    \brief Read a column from pcol string based on
-   https://www.rfc-editor.org/rfc/rfc4180
+   https://www.rfc-editor.org/rfc/rfc4180; Does not support multi-line columns
 
    \param[in] pcol pointer to the start of a new column; this buffer is modified
    \param[in] sep separater character
