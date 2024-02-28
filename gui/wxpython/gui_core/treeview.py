@@ -56,7 +56,7 @@ class AbstractTreeViewMixin(VirtualTree):
 
     def __init__(self, model, parent, *args, **kw):
         self._model = model
-        super(AbstractTreeViewMixin, self).__init__(parent=parent, *args, **kw)
+        super().__init__(parent=parent, *args, **kw)
 
         self.selectionChanged = Signal("TreeView.selectionChanged")
         self.itemActivated = Signal("TreeView.itemActivated")
@@ -202,7 +202,7 @@ class TreeView(AbstractTreeViewMixin, wx.TreeCtrl):
     """Tree view class inheriting from wx.TreeCtrl"""
 
     def __init__(self, model, parent, *args, **kw):
-        super(TreeView, self).__init__(parent=parent, model=model, *args, **kw)
+        super().__init__(parent=parent, model=model, *args, **kw)
         self.RefreshItems()
 
 
@@ -223,7 +223,7 @@ class CTreeView(AbstractTreeViewMixin, CustomTreeCtrl):
                 | CT.TR_LINES_AT_ROOT
                 | CT.TR_SINGLE
             )
-        super(CTreeView, self).__init__(parent=parent, model=model, **kw)
+        super().__init__(parent=parent, model=model, **kw)
         self.SetBackgroundColour(wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW))
         self.RefreshItems()
 
@@ -235,7 +235,7 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, TreeListCtrl):
             flags = kw["style"]
             kw["agwStyle"] = flags
             del kw["style"]
-        super(TreeListView, self).__init__(parent=parent, model=model, **kw)
+        super().__init__(parent=parent, model=model, **kw)
         for column in columns:
             self.AddColumn(column)
         self.SetMainColumn(0)

@@ -352,9 +352,6 @@ class RasterMetadata(RasterMetadataBase):
             max,
         )
 
-        if get_tgis_db_version_from_metadata() > 2:
-            self.set_semantic_label(semantic_label)
-
     def set_semantic_label(self, semantic_label):
         """Set the semantic label identifier"""
         self.D["semantic_label"] = semantic_label

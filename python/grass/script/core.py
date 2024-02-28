@@ -8,7 +8,7 @@ Usage:
     from grass.script import core as grass
     grass.parser()
 
-(C) 2008-2023 by the GRASS Development Team
+(C) 2008-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -1714,16 +1714,11 @@ def create_location(
     # create dbase if not exists
     if not os.path.exists(dbase):
         os.mkdir(dbase)
-    if epsg or proj4 or filename or wkt:
-        # here the location shouldn't really matter
-        tmp_gisrc, env = create_environment(
-            dbase, gisenv()["LOCATION_NAME"], "PERMANENT"
-        )
+
     # check if location already exists
     if os.path.exists(os.path.join(dbase, location)):
         if not overwrite:
             warning(_("Location <%s> already exists. Operation canceled.") % location)
-            try_remove(tmp_gisrc)
             return
         else:
             warning(
@@ -1737,6 +1732,22 @@ def create_location(
         kwargs["datum"] = datum
     if datum_trans:
         kwargs["datum_trans"] = datum_trans
+
+    # Lazy-importing to avoid circular dependencies.
+    # pylint: disable=import-outside-toplevel
+    if os.environ.get("GISBASE"):
+        env = os.environ
+    else:
+        from grass.script.setup import setup_runtime_env
+
+        env = os.environ.copy()
+        setup_runtime_env(env=env)
+
+    if epsg or proj4 or filename or wkt:
+        # The names don't really matter here.
+        tmp_gisrc, env = create_environment(
+            dbase, "<placeholder>", "<placeholder>", env=env
+        )
 
     if epsg:
         ps = pipe_command(
@@ -1950,7 +1961,7 @@ def sanitize_mapset_environment(env):
     return env
 
 
-def create_environment(gisdbase, location, mapset):
+def create_environment(gisdbase, location, mapset, env=None):
     """Creates environment to be passed in run_command for example.
     Returns tuple with temporary file path and the environment. The user
     of this function is responsible for deleting the file."""
@@ -1959,7 +1970,10 @@ def create_environment(gisdbase, location, mapset):
         f.write("GISDBASE: {g}\n".format(g=gisdbase))
         f.write("LOCATION_NAME: {l}\n".format(l=location))
         f.write("GUI: text\n")
-    env = os.environ.copy()
+    if env:
+        env = env.copy()
+    else:
+        env = os.environ.copy()
     env["GISRC"] = f.name
     # remove mapset-specific env vars
     env = sanitize_mapset_environment(env)
