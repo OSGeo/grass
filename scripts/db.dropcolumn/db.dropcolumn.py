@@ -35,6 +35,13 @@
 # % required : yes
 # %end
 
+# %option G_OPT_DB_DATABASE
+# %end
+
+# %option G_OPT_DB_DRIVER
+# % options: dbf,odbc,ogr,sqlite,pg
+# %end
+
 import sys
 import string
 
@@ -45,14 +52,19 @@ import grass.script as gscript
 def main():
     table = options["table"]
     column = options["column"]
+    database = options["database"]
+    driver = options["driver"]
     force = flags["f"]
 
     # check if DB parameters are set, and if not set them.
     gscript.run_command("db.connect", flags="c")
 
-    kv = gscript.db_connection()
-    database = kv["database"]
-    driver = kv["driver"]
+    if not database or not driver:
+        kv = gscript.db_connection()
+        if not database:
+            database = kv["database"]
+        if not driver:
+            driver = kv["driver"]
     # schema needed for PG?
 
     if force:
@@ -67,7 +79,10 @@ def main():
             % column
         )
 
-    cols = [f[0] for f in gscript.db_describe(table)["cols"]]
+    cols = [
+        f[0]
+        for f in gscript.db_describe(table, database=database, driver=driver)["cols"]
+    ]
     if column not in cols:
         gscript.fatal(_("Column <%s> not found in table") % column)
 
