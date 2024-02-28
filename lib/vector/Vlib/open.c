@@ -550,9 +550,30 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
         Vect_rewind(Map);
     }
 
-    /* DO NOT delete support files topo, sidx, cidx, fidx if native format
-     * was opened for update (not head_only)
-     * they will be deleted by Vect_close() if the map was actually updated */
+    /* delete support files if native format was opened for update (not
+     * head_only) */
+    if (update && !head_only) {
+        char file_path[GPATH_MAX];
+
+        Vect__get_element_path(file_path, Map, GV_TOPO_ELEMENT);
+        if (access(file_path, F_OK) == 0) /* topo file exists? */
+            unlink(file_path);
+
+        Vect__get_element_path(file_path, Map, GV_SIDX_ELEMENT);
+        if (access(file_path, F_OK) == 0) /* sidx file exists? */
+            unlink(file_path);
+
+        Vect__get_element_path(file_path, Map, GV_CIDX_ELEMENT);
+        if (access(file_path, F_OK) == 0) /* cidx file exists? */
+            unlink(file_path);
+
+        if (format == GV_FORMAT_OGR || format == GV_FORMAT_POSTGIS) {
+            Vect__get_element_path(file_path, Map, GV_FIDX_ELEMENT);
+            if (access(file_path, F_OK) == 0) /* fidx file exists? */
+                unlink(file_path);
+        }
+        Map->support_updated = TRUE;
+    }
 
     return level;
 }
