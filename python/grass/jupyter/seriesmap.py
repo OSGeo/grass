@@ -19,13 +19,15 @@ import shutil
 
 import grass.script as gs
 from grass.grassdb.data import map_exists
+from grass.jupyter.baseseriesmap import BaseSeriesMap
 
 from .map import Map
 from .region import RegionManagerForSeries
 from .utils import save_gif
 
 
-class SeriesMap:
+
+class SeriesMap(BaseSeriesMap):
     """Creates visualizations from a series of rasters or vectors in Jupyter
     Notebooks.
 
@@ -63,12 +65,8 @@ class SeriesMap:
         :param saved_region: if name of saved_region is provided,
                             this region is then used for rendering
         """
+        super.__init__(width, height, env, use_region, saved_region)
 
-        # Copy Environment
-        if env:
-            self._env = env.copy()
-        else:
-            self._env = os.environ.copy()
 
         self._series_length = None
         self._base_layer_calls = []
@@ -77,20 +75,6 @@ class SeriesMap:
         self._layers_rendered = False
         self._layer_filename_dict = {}
         self._names = []
-        self._width = width
-        self._height = height
-
-        # Create a temporary directory for our PNG images
-        # Resource managed by weakref.finalize.
-        self._tmpdir = (
-            # pylint: disable=consider-using-with
-            tempfile.TemporaryDirectory()
-        )
-
-        def cleanup(tmpdir):
-            tmpdir.cleanup()
-
-        weakref.finalize(self, cleanup, self._tmpdir)
 
         # Handle Regions
         self._region_manager = RegionManagerForSeries(
@@ -188,8 +172,7 @@ class SeriesMap:
 
     def _render_baselayers(self, img):
         """Add collected baselayers to Map instance"""
-        for grass_module, kwargs in self._base_layer_calls:
-            img.run(grass_module, **kwargs)
+        super()._render_baselayers(img)
 
     def render(self):
         """Renders image for each raster in series.

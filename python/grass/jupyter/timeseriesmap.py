@@ -18,6 +18,7 @@ import weakref
 import shutil
 
 import grass.script as gs
+from grass.jupyter.baseseriesmap import BaseSeriesMap
 
 from .map import Map
 from .region import RegionManagerForTimeSeries
@@ -114,7 +115,7 @@ def check_timeseries_exists(timeseries, element_type):
         )
 
 
-class TimeSeriesMap:
+class TimeSeriesMap(BaseSeriesMap):
     """Creates visualizations of time-space raster and vector datasets in Jupyter
     Notebooks.
 
@@ -151,12 +152,7 @@ class TimeSeriesMap:
         :param saved_region: if name of saved_region is provided,
                             this region is then used for rendering
         """
-
-        # Copy Environment
-        if env:
-            self._env = env.copy()
-        else:
-            self._env = os.environ.copy()
+        super().__init__(width, height, env, use_region, saved_region)
 
         self.timeseries = None
         self._element_type = None
@@ -170,20 +166,6 @@ class TimeSeriesMap:
         self._dates = None
         self._date_layer_dict = {}
         self._date_filename_dict = {}
-        self._width = width
-        self._height = height
-
-        # Create a temporary directory for our PNG images
-        # Resource managed by weakref.finalize.
-        self._tmpdir = (
-            # pylint: disable=consider-using-with
-            tempfile.TemporaryDirectory()
-        )
-
-        def cleanup(tmpdir):
-            tmpdir.cleanup()
-
-        weakref.finalize(self, cleanup, self._tmpdir)
 
         # Handle Regions
         self._region_manager = RegionManagerForTimeSeries(
@@ -271,8 +253,7 @@ class TimeSeriesMap:
 
     def _render_baselayers(self, img):
         """Add collected baselayers to Map instance"""
-        for grass_module, kwargs in self._base_layer_calls:
-            img.run(grass_module, **kwargs)
+        super()._render_baselayers(img)
 
     def _render_legend(self, img):
         """Add legend to Map instance"""
