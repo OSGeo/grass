@@ -18,7 +18,6 @@
 
 void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
 {
-
     /* Copy initial data to the tmp file */
     int in_fd = Rast_open_old(pm_params->in_map, pm_params->in_mapset);
     RASTER_MAP_TYPE data_type =
@@ -85,6 +84,40 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
                     (rb[pcol - 1] - rc[pcol]) * pm_params->diag_cor;
                 gradients[7][pcol - 1] =
                     (rb[pcol + 1] - rc[pcol]) * pm_params->diag_cor;
+
+                /* Use 0 for nan gradients to not propogate holes */
+                gradients[0][pcol - 1] =
+                    gradients[0][pcol - 1] != gradients[0][pcol - 1]
+                        ? 0
+                        : gradients[0][pcol - 1];
+                gradients[1][pcol - 1] =
+                    gradients[1][pcol - 1] != gradients[1][pcol - 1]
+                        ? 0
+                        : gradients[1][pcol - 1];
+                gradients[2][pcol - 1] =
+                    gradients[2][pcol - 1] != gradients[2][pcol - 1]
+                        ? 0
+                        : gradients[2][pcol - 1];
+                gradients[3][pcol - 1] =
+                    gradients[3][pcol - 1] != gradients[3][pcol - 1]
+                        ? 0
+                        : gradients[3][pcol - 1];
+                gradients[4][pcol - 1] =
+                    gradients[4][pcol - 1] != gradients[4][pcol - 1]
+                        ? 0
+                        : gradients[4][pcol - 1];
+                gradients[5][pcol - 1] =
+                    gradients[5][pcol - 1] != gradients[5][pcol - 1]
+                        ? 0
+                        : gradients[5][pcol - 1];
+                gradients[6][pcol - 1] =
+                    gradients[6][pcol - 1] != gradients[6][pcol - 1]
+                        ? 0
+                        : gradients[6][pcol - 1];
+                gradients[7][pcol - 1] =
+                    gradients[7][pcol - 1] != gradients[7][pcol - 1]
+                        ? 0
+                        : gradients[7][pcol - 1];
             }
 
             /* Calculate conductance coefficient */
