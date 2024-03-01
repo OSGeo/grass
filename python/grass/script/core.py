@@ -57,6 +57,13 @@ class Popen(subprocess.Popen):
             if ext.lower() not in self._builtin_exts:
                 kwargs["shell"] = True
                 args = [self._escape_for_shell(arg) for arg in args]
+
+            # hides the window on MS Windows - another window will be activated
+            si = subprocess.STARTUPINFO()
+            si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            si.wShowWindow = subprocess.SW_HIDE
+            kwargs["startupinfo"] = si
+
         subprocess.Popen.__init__(self, args, **kwargs)
 
 
