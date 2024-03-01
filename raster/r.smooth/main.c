@@ -19,23 +19,14 @@
  *
  *****************************************************************************/
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <float.h>
 #include <math.h>
-#if defined(_OPENMP)
-#include <omp.h>
-#endif
 
 #include <grass/gis.h>
-#include <grass/rowio.h>
 #include <grass/raster.h>
-#include <grass/manage.h>
 #include <grass/glocale.h>
+
 #include "local_proto.h"
 
 int main(int argc, char *argv[])
