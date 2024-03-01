@@ -206,7 +206,8 @@ ENV GRASSBIN="/usr/local/bin/grass" \
     # https://proj.org/usage/environmentvars.html#envvar-PROJ_NETWORK
     PROJ_NETWORK=ON \
     GRASSBIN=grass \
-    LC_ALL="en_US.UTF-8"
+    LC_ALL="en_US.UTF-8" \
+    PYTHONPATH="/usr/local/grass/etc/python:$PYTHONPATH"
 
 # Copy GRASS GIS and GDAL GRASS driver from build image
 COPY --from=build /usr/local/bin/grass /usr/local/bin/grass
