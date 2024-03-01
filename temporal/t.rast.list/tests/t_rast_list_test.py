@@ -17,14 +17,21 @@ import grass.script as gs
 
 def test_defaults(space_time_raster_dataset):
     """Check that the module runs with default parameters"""
-    gs.run_command("t.rast.list", input=space_time_raster_dataset.name)
+    gs.run_command(
+        "t.rast.list",
+        input=space_time_raster_dataset.name,
+        env=space_time_raster_dataset.session.env,
+    )
 
 
 def test_line(space_time_raster_dataset):
     """Line format can be parsed and contains full names by default"""
     names = (
         gs.read_command(
-            "t.rast.list", input=space_time_raster_dataset.name, format="line"
+            "t.rast.list",
+            input=space_time_raster_dataset.name,
+            format="line",
+            env=space_time_raster_dataset.session.env,
         )
         .strip()
         .split(",")
@@ -36,7 +43,10 @@ def test_json(space_time_raster_dataset):
     """Check JSON can be parsed and contains the right values"""
     result = json.loads(
         gs.read_command(
-            "t.rast.list", input=space_time_raster_dataset.name, format="json"
+            "t.rast.list",
+            input=space_time_raster_dataset.name,
+            format="json",
+            env=space_time_raster_dataset.session.env,
         )
     )
     assert "data" in result
@@ -53,7 +63,10 @@ def test_yaml(space_time_raster_dataset):
     """Check JSON can be parsed and contains the right values"""
     result = yaml.safe_load(
         gs.read_command(
-            "t.rast.list", input=space_time_raster_dataset.name, format="yaml"
+            "t.rast.list",
+            input=space_time_raster_dataset.name,
+            format="yaml",
+            env=space_time_raster_dataset.session.env,
         )
     )
     assert "data" in result
@@ -80,6 +93,7 @@ def test_csv(space_time_raster_dataset, separator, delimiter):
         columns=columns,
         format="csv",
         separator=separator,
+        env=space_time_raster_dataset.session.env,
     )
     io_string = io.StringIO(text)
     reader = csv.DictReader(
@@ -128,6 +142,7 @@ def test_columns_list(space_time_raster_dataset):
             method="list",
             columns=columns,
             format="json",
+            env=space_time_raster_dataset.session.env,
         )
     )
     data = result["data"]
@@ -155,6 +170,7 @@ def test_columns_delta_gran(space_time_raster_dataset):
             method="gran",
             columns=columns,
             format="json",
+            env=space_time_raster_dataset.session.env,
         )
     )
     data = result["data"]
@@ -171,6 +187,7 @@ def test_json_empty_result(space_time_raster_dataset):
             input=space_time_raster_dataset.name,
             format="json",
             where="FALSE",
+            env=space_time_raster_dataset.session.env,
         )
     )
     assert "data" in result
@@ -187,6 +204,7 @@ def test_plain_empty_result(space_time_raster_dataset, output_format):
         format=output_format,
         where="FALSE",
         errors="status",
+        env=space_time_raster_dataset.session.env,
     )
     assert return_code != 0
 
@@ -195,7 +213,10 @@ def test_plain_empty_result(space_time_raster_dataset, output_format):
 def test_no_header_accepted(space_time_raster_dataset, output_format):
     """Check that the no column names flag is accepted"""
     gs.run_command(
-        "t.rast.list", input=space_time_raster_dataset.name, format=output_format
+        "t.rast.list",
+        input=space_time_raster_dataset.name,
+        format=output_format,
+        env=space_time_raster_dataset.session.env,
     )
 
 
@@ -212,6 +233,7 @@ def test_no_header_rejected(space_time_raster_dataset, output_format):
         format=output_format,
         flags="u",
         errors="status",
+        env=space_time_raster_dataset.session.env,
     )
     assert return_code != 0
 
@@ -225,6 +247,7 @@ def test_other_methods_json(space_time_raster_dataset, method):
             input=space_time_raster_dataset.name,
             format="json",
             method=method,
+            env=space_time_raster_dataset.session.env,
         )
     )
     assert "data" in result
@@ -245,6 +268,7 @@ def test_gran_json(space_time_raster_dataset):
             format="json",
             method="gran",
             gran="15 days",
+            env=space_time_raster_dataset.session.env,
         )
     )
     assert "data" in result
