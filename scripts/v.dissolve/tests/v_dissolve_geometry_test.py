@@ -19,9 +19,12 @@ def test_dissolve_discontinuous_str(discontinuous_dataset):
         input=dataset.vector_name,
         column=dataset.str_column_name,
         output=dissolved_vector,
+        env=discontinuous_dataset.session.env,
     )
 
-    vector_info = gs.vector_info(dissolved_vector)
+    vector_info = gs.vector_info(
+        dissolved_vector, env=discontinuous_dataset.session.env
+    )
     assert vector_info["level"] == 2
     assert vector_info["centroids"] == 5
     assert vector_info["areas"] == 5
@@ -40,7 +43,7 @@ def test_dissolve_discontinuous_str(discontinuous_dataset):
     assert vector_info["primitives"] == 23
     assert vector_info["map3d"] == 0
 
-    columns = gs.vector_columns(dissolved_vector)
+    columns = gs.vector_columns(dissolved_vector, env=discontinuous_dataset.session.env)
     assert len(columns) == 2
     assert sorted(columns.keys()) == sorted(["cat", dataset.str_column_name])
     column_info = columns[dataset.str_column_name]
@@ -51,6 +54,7 @@ def test_dissolve_discontinuous_str(discontinuous_dataset):
             "v.db.select",
             map=dissolved_vector,
             format="json",
+            env=dataset.session.env,
         )
     )["records"]
     ref_unique_values = set(dataset.str_column_values)

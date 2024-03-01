@@ -1,5 +1,7 @@
 """Fixture for v.fill.holes test"""
 
+import os
+
 from types import SimpleNamespace
 
 import pytest
@@ -168,9 +170,14 @@ AREAS_WITH_SPACE_ATTRIBUTE_TYPES = """\
 """
 
 
-def import_data(path, areas_name, areas_with_space_in_between):
+def import_data(path, areas_name, areas_with_space_in_between, env):
     gs.write_command(
-        "v.in.ascii", input="-", output=areas_name, stdin=DATA, format="standard"
+        "v.in.ascii",
+        input="-",
+        output=areas_name,
+        stdin=DATA,
+        format="standard",
+        env=env,
     )
     attributes = path / "test.csv"
     attributes.write_text(AREAS_WITH_SPACE_ATTRIBUTES)
@@ -179,13 +186,16 @@ def import_data(path, areas_name, areas_with_space_in_between):
     # Attributes need to be created first because no vector map of the same name
     # can exist when table is imported (interally using v.in.ogr and vector part
     # is deleted).
-    gs.run_command("db.in.ogr", input=attributes, output=areas_with_space_in_between)
+    gs.run_command(
+        "db.in.ogr", input=attributes, output=areas_with_space_in_between, env=env
+    )
     gs.write_command(
         "v.in.ascii",
         input="-",
         output=areas_with_space_in_between,
         stdin=AREAS_WITH_SPACE_GEOMETRY,
         format="standard",
+        env=env,
     )
     # Our old cat column is now called cat_, so we need to rename it to cat,
     # but that's possible only on vector map level, so connect, rename, and
@@ -194,15 +204,20 @@ def import_data(path, areas_name, areas_with_space_in_between):
         "v.db.connect",
         map=areas_with_space_in_between,
         table=areas_with_space_in_between,
+        env=env,
     )
     gs.run_command(
-        "v.db.renamecolumn", map=areas_with_space_in_between, column=("cat_", "cat")
+        "v.db.renamecolumn",
+        map=areas_with_space_in_between,
+        column=("cat_", "cat"),
+        env=env,
     )
     gs.run_command(
         "v.db.connect",
         map=areas_with_space_in_between,
         table=areas_with_space_in_between,
         flags="o",
+        env=env,
     )
 
 
@@ -216,12 +231,15 @@ def area_dataset(tmp_path_factory):
     areas_with_space_in_between = "areas_with_space_in_between"
 
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
-    with gs.setup.init(tmp_path / location):
+    with gs.setup.init(tmp_path / location, env=os.environ.copy()) as session:
         import_data(
             path=tmp_path,
             areas_name=areas_name,
             areas_with_space_in_between=areas_with_space_in_between,
+            env=session.env,
         )
         yield SimpleNamespace(
-            name=areas_name, areas_with_space_in_between=areas_with_space_in_between
+            name=areas_name,
+            areas_with_space_in_between=areas_with_space_in_between,
+            session=session,
         )
