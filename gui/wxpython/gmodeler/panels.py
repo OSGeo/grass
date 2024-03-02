@@ -335,7 +335,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
 
     def OnSize(self, event):
         """Window resized, save to the model"""
-        if not self._dockable:
+        if not self.IsDockable():
             # model changed: window resizing is applied only if the
             # window is not dockable
             self.ModelChanged()
