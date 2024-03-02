@@ -135,7 +135,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
 
         self.pythonPanel = PythonPanel(parent=self)
 
-        self._gconsole = GConsole(guiparent=self)
+        self._gconsole = GConsole(guiparent=self, giface=giface)
         self.goutput = GConsoleWindow(
             parent=self, giface=giface, gconsole=self._gconsole
         )
