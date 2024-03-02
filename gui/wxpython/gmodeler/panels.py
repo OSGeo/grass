@@ -658,7 +658,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
             tmpfile.seek(0)
             for line in tmpfile.readlines():
                 mfile.write(line)
-        except IOError:
+        except OSError:
             wx.MessageBox(
                 parent=self,
                 message=_("Unable to open file <%s> for writing.") % filename,
@@ -1712,7 +1712,7 @@ class PythonPanel(wx.Panel):
         try:
             fd = open(self.filename, "w")
             fd.write(self.body.GetText())
-        except IOError as e:
+        except OSError as e:
             GError(_("Unable to launch Python script. %s") % e, parent=self)
             return
         finally:
