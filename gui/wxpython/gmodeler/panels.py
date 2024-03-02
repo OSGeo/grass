@@ -522,11 +522,12 @@ class ModelerPanel(wx.Panel, MainPageBase):
             # arrange data items
             if data_items:
                 dc = wx.ClientDC(self.canvas)
-                p = 360 / len(data_items)
-                r = 200
+                p = 180 / (len(data_items) - 1) if len(data_items) > 1 else 0
+                rx = 200
+                ry = 100
                 alpha = 270 * (math.pi / 180)
                 for data in data_items:
-                    data.Move(dc, x + r * math.sin(alpha), y + r * math.cos(alpha))
+                    data.Move(dc, x + rx * math.sin(alpha), y + ry * math.cos(alpha))
                     alpha += p * (math.pi / 180)
                     data.Show(True)
 

@@ -81,14 +81,13 @@ class ModelCanvas(ogl.ShapeCanvas):
 
         :return: x,y
         """
-        diagram = self.GetDiagram()
-        if diagram.GetShapeList():
-            last = diagram.GetShapeList()[-1]
-            y = last.GetY() + last.GetBoundingBoxMin()[1]
-        else:
-            y = 20
+        ymax = 20
+        for item in self.GetDiagram().GetShapeList():
+            y = item.GetY() + item.GetBoundingBoxMin()[1]
+            if y > ymax:
+                ymax = y
 
-        return (self.GetSize()[0] // 2, y + yoffset)
+        return (self.GetSize()[0] // 2, ymax + yoffset)
 
     def GetShapesSelected(self):
         """Get list of selected shapes"""
