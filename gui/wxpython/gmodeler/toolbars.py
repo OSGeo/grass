@@ -40,11 +40,24 @@ class ModelerToolbar(BaseToolbar):
 
     def _toolbarData(self):
         """Toolbar data"""
+        # dockable window has no menu, so shortcuts doesn't work when
+        # window is dockable
+        show_shortcuts = not self.parent.IsDockable()
+
         icons = {
-            "new": MetaIcon(img="create", label=_("Create new model (Ctrl+N)")),
-            "open": MetaIcon(img="open", label=_("Load model from file (Ctrl+O)")),
+            "new": MetaIcon(
+                img="create",
+                label=_("Create new model") + (" (Ctrl+N)" if show_shortcuts else ""),
+            ),
+            "open": MetaIcon(
+                img="open",
+                label=_("Load model from file")
+                + (" (Ctrl+O)" if show_shortcuts else ""),
+            ),
             "save": MetaIcon(
-                img="save", label=_("Save current model to file (Ctrl+S)")
+                img="save",
+                label=_("Save current model to file")
+                + (" (Ctrl+S)" if show_shortcuts else ""),
             ),
             "toImage": MetaIcon(img="image-export", label=_("Export model to image")),
             "toPython": MetaIcon(
