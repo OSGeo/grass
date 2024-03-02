@@ -438,6 +438,10 @@ class ModelerPanel(wx.Panel, MainPageBase):
                     "vector",
                     "raster_3d",
                     "dbtable",
+                    "stds",
+                    "strds",
+                    "stvds",
+                    "str3ds",
                 ):
                     continue
 
@@ -473,7 +477,12 @@ class ModelerPanel(wx.Panel, MainPageBase):
                         data.Update()
                         continue
 
-                    data = ModelData(
+                    dataClass = (
+                        ModelDataSeries
+                        if p.get("prompt", "").startswith("st")
+                        else ModelDataSingle
+                    )
+                    data = dataClass(
                         self,
                         value=p.get("value", ""),
                         prompt=p.get("prompt", ""),
