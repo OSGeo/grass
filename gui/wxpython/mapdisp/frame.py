@@ -383,7 +383,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             .TopDockable(True)
             .CloseButton(False)
             .Layer(2)
-            .BestSize((self.toolbars["vdigit"].GetBestSize())),
+            .BestSize(self.toolbars["vdigit"].GetBestSize()),
         )
         # change mouse to draw digitized line
         self.MapWindow.mouse["box"] = "point"
@@ -613,7 +613,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 .TopDockable(True)
                 .CloseButton(False)
                 .Layer(2)
-                .BestSize((self.toolbars["map"].GetBestSize())),
+                .BestSize(self.toolbars["map"].GetBestSize()),
             )
 
         # nviz
@@ -726,12 +726,12 @@ class MapPanel(SingleMapPanel, MainPageBase):
             return
 
         # get size
-        dlg = ImageSizeDialog(self)
+        dlg = ImageSizeDialog(self, img_size=self._saved_output_img_size)
         dlg.CentreOnParent()
         if dlg.ShowModal() != wx.ID_OK:
             dlg.Destroy()
             return
-        width, height = dlg.GetValues()
+        self._saved_output_img_size = dlg.GetValues()
         dlg.Destroy()
 
         # get filename
@@ -756,7 +756,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             if ext != extType:
                 path = base + "." + extType
 
-            self.MapWindow.SaveToFile(path, fileType, width, height)
+            self.MapWindow.SaveToFile(path, fileType, *self._saved_output_img_size)
 
         dlg.Destroy()
 
@@ -1650,7 +1650,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
             .CloseButton(False)
             .Layer(2)
             .DestroyOnClose()
-            .BestSize((self.toolbars["rdigit"].GetBestSize())),
+            .BestSize(self.toolbars["rdigit"].GetBestSize()),
         )
         self._mgr.Update()
 

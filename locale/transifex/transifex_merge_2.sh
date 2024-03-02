@@ -7,7 +7,7 @@
 
 # Required installation:
 #  sudo pip3 install transifex-client
-# see also: https://grasswiki.osgeo.org/wiki/GRASS_messages_translation#Get_the_translated_po_files 
+# see also: https://grasswiki.osgeo.org/wiki/GRASS_messages_translation#Get_the_translated_po_files
 
 # Usage:
 # this script has to be launched in the `locale/` directory.
@@ -40,12 +40,12 @@ for fil in `ls $NEWLIBPODIR`;
 do
   # TODO: keep uppercase for pt_BR etc - rename in SVN as needed
   MYLANG=`echo $fil | sed 's+_translation++g'`
-  
+
   # LV is not translated in Tx thus skip it
   if [[ ${MYLANG} == "lv" ]]; then
     continue
   fi
-  
+
   # https://www.gnu.org/software/gettext/manual/html_node/msgmerge-Invocation.html#msgmerge-Invocation
   # if po file locally present, update it, otherwise copy over new file from transifex
   if [ -f grasslibs_${MYLANG}.po ]; then
