@@ -47,33 +47,39 @@ class ModelerToolbar(BaseToolbar):
         icons = {
             "new": MetaIcon(
                 img="create",
-                label=_("Create new model") + (" (Ctrl+N)" if show_shortcuts else ""),
+                label=_("Create new model") + " (Ctrl+Alt+N)",
             ),
             "open": MetaIcon(
                 img="open",
-                label=_("Load model from file")
-                + (" (Ctrl+O)" if show_shortcuts else ""),
+                label=_("Load model from file") + " (Ctrl+Alt+O)",
             ),
             "save": MetaIcon(
                 img="save",
-                label=_("Save current model to file")
-                + (" (Ctrl+S)" if show_shortcuts else ""),
+                label=_("Save current model to file") + " (Ctrl+Alt+S)",
             ),
             "toImage": MetaIcon(img="image-export", label=_("Export model to image")),
             "toPython": MetaIcon(
-                img="python-export", label=_("Export model to Python script")
+                img="python-export",
+                label=_("Export model to Python script") + " (Ctrl+Alt+P)",
             ),
             "actionAdd": MetaIcon(
-                img="module-add", label=_("Add GRASS tool (module) to model")
+                img="module-add",
+                label=_("Add GRASS tool (module) to model") + " (Ctrl+Alt+A)",
             ),
-            "dataAdd": MetaIcon(img="data-add", label=_("Add data to model")),
+            "dataAdd": MetaIcon(
+                img="data-add", label=_("Add data to model") + " (Ctrl+Alt+D)"
+            ),
             "relation": MetaIcon(
                 img="relation-create",
                 label=_("Manually define relation between data and commands"),
             ),
-            "loop": MetaIcon(img="loop-add", label=_("Add loop/series to model")),
-            "comment": MetaIcon(img="label-add", label=_("Add comment to model")),
-            "run": MetaIcon(img="execute", label=_("Run model")),
+            "loop": MetaIcon(
+                img="loop-add", label=_("Add loop/series to model") + " (Ctrl+Alt+L)"
+            ),
+            "comment": MetaIcon(
+                img="label-add", label=_("Add comment to model") + " (Ctrl+Alt+#)"
+            ),
+            "run": MetaIcon(img="execute", label=_("Run model") + " (Ctrl+Alt+R)"),
             "validate": MetaIcon(img="check", label=_("Validate model")),
             "settings": MetaIcon(img="modeler-settings", label=_("Modeler settings")),
             "properties": MetaIcon(img="options", label=_("Set model properties")),
