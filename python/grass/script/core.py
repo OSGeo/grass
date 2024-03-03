@@ -638,7 +638,7 @@ def exec_command(
     :param bool quiet: True to run quietly (<tt>--q</tt>)
     :param bool superquiet: True to run quietly (<tt>--qq</tt>)
     :param bool verbose: True to run verbosely (<tt>--v</tt>)
-    :param env: directory with environmental variables
+    :param env: dictionary with system environment variables (`os.environ` by default)
     :param list kwargs: module's parameters
 
     """
@@ -657,6 +657,7 @@ def message(msg, flag=None, env=None):
 
     :param str msg: message to be displayed
     :param str flag: flags (given as string)
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
     run_command("g.message", flags=flag, message=msg, errors="ignore", env=env)
 
@@ -673,6 +674,7 @@ def debug(msg, debug=1, env=None):
         Use 1 for messages generated once of few times,
         3 for messages generated for each raster row or vector line,
         5 for messages generated for each raster cell or vector point.
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
     if debug_level() >= debug:
         # TODO: quite a random hack here, do we need it somewhere else too?
@@ -686,6 +688,7 @@ def verbose(msg, env=None):
     """Display a verbose message using `g.message -v`
 
     :param str msg: verbose message to be displayed
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
     message(msg, flag="v", env=env)
 
@@ -694,6 +697,7 @@ def info(msg, env=None):
     """Display an informational message using `g.message -i`
 
     :param str msg: informational message to be displayed
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
     message(msg, flag="i", env=env)
 
@@ -712,6 +716,7 @@ def percent(i, n, s, env=None):
     :param int i: current item
     :param int n: total number of items
     :param int s: increment size
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
     message("%d %d %d" % (i, n, s), flag="p", env=env)
 
@@ -720,6 +725,7 @@ def warning(msg, env=None):
     """Display a warning message using `g.message -w`
 
     :param str msg: warning message to be displayed
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
     message(msg, flag="w", env=env)
 
@@ -732,6 +738,7 @@ def error(msg, env=None):
     For error handling using the standard mechanism use :func:`fatal()`.
 
     :param str msg: error message to be displayed
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
     message(msg, flag="e", env=env)
 
@@ -744,6 +751,7 @@ def fatal(msg, env=None):
     Use :func:`set_raise_on_error()` to set the behavior.
 
     :param str msg: error message to be displayed
+    :param env: dictionary with system environment variables (`os.environ` by default)
     """
     global raise_on_error
     if raise_on_error:
@@ -1145,7 +1153,7 @@ def gisenv(env=None):
     >>> print(env['GISDBASE'])  # doctest: +SKIP
     /opt/grass-data
 
-    :param env run with different environment
+    :param env: dictionary with system environment variables (`os.environ` by default)
     :return: list of GRASS variables
     """
     s = read_command("g.gisenv", flags="n", env=env)
@@ -1175,7 +1183,7 @@ def region(region3d=False, complete=False, env=None):
 
     :param bool region3d: True to get 3D region
     :param bool complete:
-    :param env env
+    :param env: dictionary with system environment variables (`os.environ` by default)
 
     >>> curent_region = region()
     >>> # obtain n, s, e and w values
@@ -1225,7 +1233,7 @@ def region_env(region3d=False, flags=None, env=None, **kwargs):
 
     :param bool region3d: True to get 3D region
     :param string flags: for example 'a'
-    :param env: different environment than current
+    :param env: dictionary with system environment variables (`os.environ` by default)
     :param kwargs: g.region's parameters like 'raster', 'vector' or 'region'
 
     ::
