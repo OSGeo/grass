@@ -69,8 +69,7 @@ from gui_core.dialogs import (
     MapLayersDialog,
     QuitDialog,
 )
-from gui_core.menu import SearchModuleWindow
-from gui_core.menu import Menu as GMenu
+from gui_core.menu import SearchModuleWindow, Menu as GMenu, MenuItem as GMenuItem
 from core.debug import Debug
 from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
 from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
@@ -876,11 +875,19 @@ class GMFrame(wx.Frame):
     def OnGModeler(self, event=None, cmd=None):
         """Launch Graphical Modeler. See OnIClass documentation"""
         from gmodeler.panels import ModelerPanel
+        from gmodeler.menudata import ModelerMenuData
 
         gmodeler_panel = ModelerPanel(
             parent=self, giface=self._giface, statusbar=self.statusbar, dockable=True
         )
-        gmodeler_panel.SetUpPage(self, self.mainnotebook)
+        gmodeler_menu = GMenuItem(
+            parent=self,
+            model=ModelerMenuData().GetModel(separators=True),
+            class_handler=gmodeler_panel,
+        )
+        gmodeler_panel.SetUpPage(
+            self, self.mainnotebook, menu=gmodeler_menu, menuName="&Graphical Modeler"
+        )
 
         # add map display panel to notebook and make it current
         self.mainnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))

@@ -85,11 +85,29 @@ class MainNotebook(aui.AuiNotebook):
         self.SetArtProvider(SimpleTabArt())
 
         # bindings
-        self.Bind(
-            aui.EVT_AUINOTEBOOK_PAGE_CHANGED,
-            lambda evt: self.GetCurrentPage().onFocus.emit(),
-        )
+        self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSE, self.OnClose)
+
+        # remember number of items in the menu
+        self._menuCount = self.parent.menubar.GetMenuCount()
+
+    def OnPageChanged(self, event):
+        page = self.GetCurrentPage()
+        page.onFocus.emit()
+
+        # set up menu
+        mbar = self.parent.menubar
+        if self.GetCurrentPage().HasMenu():
+            # add new (or replace if exists) additional menu item related to this page
+            menu, menuName = page.GetMenu()
+            if mbar.GetMenuCount() == self._menuCount:
+                appendMenu = mbar.Insert
+            else:
+                appendMenu = mbar.Replace
+            appendMenu(mbar.GetMenuCount() - 1, menu, menuName)
+        elif mbar.GetMenuCount() > self._menuCount:
+            # remove additional menu item
+            mbar.Remove(self._menuCount - 1)
 
     def UndockPage(self, page):
         """Undock active page to independent MainFrame object"""

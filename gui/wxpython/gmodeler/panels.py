@@ -774,7 +774,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
 
     def OnModelNew(self, event):
         """Create new model"""
-        Debug.msg(4, "ModelFrame.OnModelNew():")
+        Debug.msg(4, "ModelerPanel.OnModelNew():")
 
         # ask user to save current model
         if self.modelFile and self.modelChanged:
@@ -828,7 +828,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         if not filename:
             return
 
-        Debug.msg(4, "ModelFrame.OnModelOpen(): filename=%s" % filename)
+        Debug.msg(4, "ModelerPanel.OnModelOpen(): filename=%s" % filename)
 
         # close current model
         self.OnModelClose()
@@ -862,7 +862,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
             if dlg.ShowModal() == wx.ID_NO:
                 dlg.Destroy()
             else:
-                Debug.msg(4, "ModelFrame.OnModelSave(): filename=%s" % self.modelFile)
+                Debug.msg(4, "ModelerPanel.OnModelSave(): filename=%s" % self.modelFile)
                 self.WriteModelFile(self.modelFile)
                 self.SetStatusText(_("File <%s> saved") % self.modelFile, 0)
                 self.RenamePage(
@@ -916,7 +916,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
 
     def OnModelClose(self, event=None):
         """Close model file"""
-        Debug.msg(4, "ModelFrame.OnModelClose(): file=%s" % self.modelFile)
+        Debug.msg(4, "ModelerPanel.OnModelClose(): file=%s" % self.modelFile)
         # ask user to save current model
         if self.modelFile and self.modelChanged:
             self.OnModelSave()

@@ -22,6 +22,10 @@ class MainPageBase:
     def __init__(self, dockable):
         self._mainnotebook = None
 
+        # menu associated with the panel
+        self._menu = None
+        self._menuName = None
+
         self.canCloseCallback = None
 
         # distinquishes whether map panel is dockable (Single-Window)
@@ -46,7 +50,7 @@ class MainPageBase:
         """Get dictionary containg page index"""
         return {"mainnotebook": self._mainnotebook.GetPageIndex(self)}
 
-    def SetUpPage(self, parent, notebook, can_close=None):
+    def SetUpPage(self, parent, notebook, can_close=None, menu=None, menuName=None):
         self._mainnotebook = notebook
 
         def CanClosePage():
@@ -59,6 +63,10 @@ class MainPageBase:
         # bind various events
         self.closingPage.connect(parent._closePageNoEvent)
         self.renamingPage.connect(parent._renamePageNoEvent)
+
+        # set up menu if defined
+        self._menu = menu
+        self._menuName = menuName
 
     def SetDockingCallback(self, function):
         """Sets docking bound method to dock or undock"""
@@ -107,3 +115,9 @@ class MainPageBase:
                         self.GetParent().SetTitle(title)
         else:
             self.GetParent().SetTitle(title)
+
+    def HasMenu(self):
+        return self._menu is not None
+
+    def GetMenu(self):
+        return self._menu, self._menuName
