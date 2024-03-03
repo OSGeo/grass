@@ -886,7 +886,7 @@ class GMFrame(wx.Frame):
             class_handler=gmodeler_panel,
         )
         gmodeler_panel.SetUpPage(
-            self, self.mainnotebook, menu=gmodeler_menu, menuName="&Graphical Modeler"
+            self, self.mainnotebook, menu=gmodeler_menu, menuName="&Modeler"
         )
 
         # add map display panel to notebook and make it current
