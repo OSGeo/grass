@@ -102,11 +102,9 @@ class MainNotebook(aui.AuiNotebook):
             menu, menuName = page.GetMenu()
             if mbar.GetMenuCount() == self._menuCount:
                 appendMenu = mbar.Insert
-                idx = mbar.GetMenuCount() - 1
             else:
                 appendMenu = mbar.Replace
-                idx = mbar.GetMenuCount() - 2
-            appendMenu(idx, menu, menuName)
+            appendMenu(self._menuCount - 1, menu, menuName)
         elif mbar.GetMenuCount() > self._menuCount:
             # remove additional menu item
             mbar.Remove(self._menuCount - 1)
