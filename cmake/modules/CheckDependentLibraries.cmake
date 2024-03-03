@@ -1,97 +1,105 @@
+#[=======================================================================[.rst:
+CheckDependentLibraries.cmake
+-----------------------------
+
+Detect GRASS dependencies and set variable HAVE_*
+
+#]=======================================================================]
+
 find_package(FLEX REQUIRED)
 
 find_package(BISON REQUIRED)
 
 find_package(PROJ REQUIRED)
 add_library(PROJ INTERFACE IMPORTED GLOBAL)
-set_property(TARGET PROJ PROPERTY INTERFACE_LINK_LIBRARIES
-                                  ${PROJ_LIBRARY${find_library_suffix}})
-set_property(TARGET PROJ PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                  ${PROJ_INCLUDE_DIR})
+# set_property(TARGET PROJ PROPERTY INTERFACE_LINK_LIBRARIES
+#                                   ${PROJ_LIBRARY${find_library_suffix}})
+# set_property(TARGET PROJ PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+#                                   ${PROJ_INCLUDE_DIR})
 
 find_package(GDAL REQUIRED)
 add_library(GDAL INTERFACE IMPORTED GLOBAL)
-set_property(TARGET GDAL PROPERTY INTERFACE_LINK_LIBRARIES ${GDAL_LIBRARY})
-set_property(TARGET GDAL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                  ${GDAL_INCLUDE_DIR})
+# set_property(TARGET GDAL PROPERTY INTERFACE_LINK_LIBRARIES ${GDAL_LIBRARY})
+# set_property(TARGET GDAL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+#                                   ${GDAL_INCLUDE_DIR})
 
 find_package(PNG REQUIRED)
 add_library(LIBPNG INTERFACE IMPORTED GLOBAL)
-set_property(TARGET LIBPNG PROPERTY INTERFACE_LINK_LIBRARIES
-                                    ${PNG_LIBRARY${find_library_suffix}})
-set_property(TARGET LIBPNG PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${PNG_INCLUDE_DIR})
+# set_property(TARGET LIBPNG PROPERTY INTERFACE_LINK_LIBRARIES
+#                                     ${PNG_LIBRARY${find_library_suffix}})
+# set_property(TARGET LIBPNG PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+#                                     ${PNG_INCLUDE_DIR})
 
 find_package(JPEG)
 if(JPEG_FOUND)
   add_library(LIBJPEG INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET LIBJPEG PROPERTY INTERFACE_LINK_LIBRARIES
-                                       ${JPEG_LIBRARY${find_library_suffix}})
-  set_property(TARGET LIBJPEG PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                       ${JPEG_INCLUDE_DIR})
+  # set_property(TARGET LIBJPEG PROPERTY INTERFACE_LINK_LIBRARIES
+  #                                      ${JPEG_LIBRARY${find_library_suffix}})
+  # set_property(TARGET LIBJPEG PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                       # ${JPEG_INCLUDE_DIR})
 endif()
 find_package(ZLIB REQUIRED)
 add_library(ZLIB INTERFACE IMPORTED GLOBAL)
-set_property(TARGET ZLIB PROPERTY INTERFACE_LINK_LIBRARIES
-                                  ${ZLIB_LIBRARY${find_library_suffix}})
-set_property(TARGET ZLIB PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                  ${ZLIB_INCLUDE_DIR})
+# set_property(TARGET ZLIB PROPERTY INTERFACE_LINK_LIBRARIES
+#                                   ${ZLIB_LIBRARY${find_library_suffix}})
+# set_property(TARGET ZLIB PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+#                                   ${ZLIB_INCLUDE_DIR})
 if(UNIX)
   find_library(M_LIBRARY m)
   add_library(LIBM INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET LIBM PROPERTY INTERFACE_LINK_LIBRARIES ${M_LIBRARY})
+  # set_property(TARGET LIBM PROPERTY INTERFACE_LINK_LIBRARIES ${M_LIBRARY})
   mark_as_advanced(M_LIBRARY)
 endif()
 
 find_package(Freetype REQUIRED)
 add_library(FREETYPE INTERFACE IMPORTED GLOBAL)
-set_property(TARGET FREETYPE PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${FREETYPE_LIBRARY${find_library_suffix}})
-set_property(TARGET FREETYPE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${FREETYPE_INCLUDE_DIRS})
+# set_property(TARGET FREETYPE PROPERTY INTERFACE_LINK_LIBRARIES
+#                                       ${FREETYPE_LIBRARY${find_library_suffix}})
+# set_property(TARGET FREETYPE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+#                                       ${FREETYPE_INCLUDE_DIRS})
 
 find_package(FFTW REQUIRED)
 if(FFTW_FOUND)
   add_library(FFTW INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET FFTW PROPERTY INTERFACE_LINK_LIBRARIES ${FFTW_LIBRARIES})
-  set_property(TARGET FFTW PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${FFTW_INCLUDE_DIR})
+  # set_property(TARGET FFTW PROPERTY INTERFACE_LINK_LIBRARIES ${FFTW_LIBRARIES})
+  # set_property(TARGET FFTW PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+  #                                   ${FFTW_INCLUDE_DIR})
 endif()
 
 if(WITH_CAIRO)
   find_package(Cairo REQUIRED)
   add_library(CAIRO INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET CAIRO PROPERTY INTERFACE_LINK_LIBRARIES
-                                     ${CAIRO_LIBRARIES})
-  set_property(TARGET CAIRO PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                     ${CAIRO_INCLUDE_DIRS})
+  # set_property(TARGET CAIRO PROPERTY INTERFACE_LINK_LIBRARIES
+  #                                    ${CAIRO_LIBRARIES})
+  # set_property(TARGET CAIRO PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+  #                                    ${CAIRO_INCLUDE_DIRS})
 endif()
 
 if(WITH_X11)
   find_package(X11 REQUIRED)
   add_library(X11 INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET X11 PROPERTY INTERFACE_LINK_LIBRARIES ${X11_LIBRARIES})
-  set_property(TARGET X11 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                   ${X11_INCLUDE_DIR})
+  # set_property(TARGET X11 PROPERTY INTERFACE_LINK_LIBRARIES ${X11_LIBRARIES})
+  # set_property(TARGET X11 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+  #                                  ${X11_INCLUDE_DIR})
 endif()
 
 if(WIN32)
   find_package(ODBC QUIET)
   if(ODBC_FOUND)
     add_library(ODBC INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET ODBC PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${ODBC_LIBRARIES})
-    set_property(TARGET PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                 ${ODBC_INCLUDE_DIRS})
+    # set_property(TARGET ODBC PROPERTY INTERFACE_LINK_LIBRARIES
+    #                                   ${ODBC_LIBRARIES})
+    # set_property(TARGET PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+    #                              ${ODBC_INCLUDE_DIRS})
   endif()
 endif()
 
 find_package(TIFF REQUIRED)
 add_library(TIFF INTERFACE IMPORTED GLOBAL)
-set_property(TARGET TIFF PROPERTY INTERFACE_LINK_LIBRARIES
-                                  ${TIFF_LIBRARY${find_library_suffix}})
-set_property(TARGET TIFF PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                  ${TIFF_INCLUDE_DIR})
+# set_property(TARGET TIFF PROPERTY INTERFACE_LINK_LIBRARIES
+#                                   ${TIFF_LIBRARY${find_library_suffix}})
+# set_property(TARGET TIFF PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+#                                   ${TIFF_INCLUDE_DIR})
 
 find_package(Iconv QUIET)
 if(ICONV_FOUND)
@@ -222,3 +230,111 @@ endif()
 # find_package (PythonLibs REQUIRED )
 find_package(Python3 REQUIRED)
 # find_package ( Numpy )
+
+
+
+# no target ATLAS in thirdpary/CMakeLists.txt
+check_target(ATLAS HAVE_LIBATLAS)
+
+
+
+# set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}")
+check_target(ICONV HAVE_ICONV_H)
+check_target(BZIP2 HAVE_BZLIB_H)
+check_target(ZLIB HAVE_ZLIB_H)
+check_target(LIBJPEG HAVE_JPEGLIB_H)
+check_target(LIBPNG HAVE_PNG_H)
+check_target(TIFF HAVE_TIFFIO_H)
+check_target(GEOS HAVE_GEOS)
+check_target(GDAL HAVE_GDAL)
+check_target(GDAL HAVE_OGR)
+check_target(SQLITE HAVE_SQLITE)
+
+check_target(PROJ HAVE_PROJ_H)
+
+check_target(BLAS HAVE_LIBBLAS)
+check_target(BLAS HAVE_CBLAS_H)
+
+check_target(LAPACK HAVE_LIBLAPACK)
+check_target(LAPACK HAVE_CLAPACK_H)
+
+check_target(FREETYPE HAVE_FT2BUILD_H)
+check_target(POSTGRES HAVE_POSTGRES)
+check_target(ODBC HAVE_SQL_H)
+
+if(TARGET POSTGRES)
+  try_compile(
+    HAVE_PQCMDTUPLES ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_SOURCE_DIR}/cmake/tests/have_pqcmdtuples.c
+    CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${PostgreSQL_INCLUDE_DIR}" "-w"
+                "-DLINK_LIBRARIES:STRING=${PostgreSQL_LIBRARY}"
+    OUTPUT_VARIABLE COMPILE_HAVE_PQCMDTUPLES)
+  if(NOT COMPILE_HAVE_PQCMDTUPLES)
+    message(
+      "Performing Test HAVE_PQCMDTUPLES - Failed\n COMPILE_OUTPUT:${COMPILE_HAVE_PQCMDTUPLES}\n"
+    )
+  else()
+    message(STATUS "Performing Test HAVE_PQCMDTUPLES - Success")
+    set(HAVE_PQCMDTUPLES 1)
+  endif()
+endif()
+
+if(MSVC)
+  check_target(PCRE HAVE_PCRE_H)
+endif()
+
+check_target(POSTGRES HAVE_LIBPQ_FE_H)
+
+
+
+set(HAVE_PBUFFERS 0)
+set(HAVE_PIXMAPS 0)
+if(WITH_OPENGL)
+  try_compile(
+    HAVE_PBUFFERS ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_SOURCE_DIR}/cmake/tests/have_pbuffer.c
+    CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${OPENGL_INCLUDE_DIR}" "-w"
+                "-DLINK_LIBRARIES:STRING=${OPENGL_LIBRARIES}"
+    OUTPUT_VARIABLE COMPILE_HAVE_PBUFFERS)
+  if(NOT COMPILE_HAVE_PBUFFERS)
+    message(
+      FATAL_ERROR
+        "Performing Test HAVE_PBUFFERS - Failed\n COMPILE_OUTPUT:${COMPILE_HAVE_PBUFFERS}\n"
+    )
+  else()
+    message(STATUS "Performing Test HAVE_PBUFFERS - Success")
+    set(HAVE_PBUFFERS 1)
+  endif()
+
+  try_compile(
+    HAVE_PIXMAPS ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_SOURCE_DIR}/cmake/tests/have_pixmaps.c
+    CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${OPENGL_INCLUDE_DIR}" "-w"
+                "-DLINK_LIBRARIES:STRING=${OPENGL_LIBRARIES}"
+    OUTPUT_VARIABLE COMPILE_HAVE_PIXMAPS)
+
+  if(NOT COMPILE_HAVE_PIXMAPS)
+    message(
+      FATAL_ERROR
+        "Performing Test HAVE_PIXMAPS - Failed\n COMPILE_OUTPUT:${COMPILE_HAVE_PIXMAPS}\n"
+    )
+  else()
+    message(STATUS "Performing Test HAVE_PIXMAPS - Success")
+    set(HAVE_PIXMAPS 1)
+  endif()
+
+endif(WITH_OPENGL)
+
+set(OPENGL_X11 0)
+set(OPENGL_AQUA 0)
+set(OPENGL_WINDOWS 0)
+if(WITH_OPENGL)
+  if(APPLE)
+    set(OPENGL_AQUA 1)
+    set(OPENGL_AGL 1)
+  elseif(WIN32)
+    set(OPENGL_WINDOWS 1)
+  else()
+    set(OPENGL_X11 1)
+  endif()
+endif()

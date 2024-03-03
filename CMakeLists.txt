@@ -117,8 +117,24 @@ set(GRASS_VERSION_NUMBER
 message(STATUS "GRASS_VERSION_NUMBER  =  '${GRASS_VERSION_NUMBER}'")
 set(GRASS_VERSION_UPDATE_PKG "0.2")
 
+# setup install directories
+set(GISBASE_DIR "grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}")
+set(GRASS_BIN_DIR "${GISBASE_DIR}/bin")
+set(GRASS_DEMOLOCATION_DIR "${GISBASE_DIR}/demolocation")
+set(GRASS_DOCS_DIR "${GISBASE_DIR}/docs")
+set(GRASS_DRIVER_DIR "${GISBASE_DIR}/driver")
+set(GRASS_ETC_DIR "${GISBASE_DIR}/etc")
+set(GRASS_FONTS_DIR "${GISBASE_DIR}/fonts")
+set(GRASS_GUI_DIR "${GISBASE_DIR}/gui")
+set(GRASS_INCLUDE_DIR "${GISBASE_DIR}/include")
+set(GRASS_LIB_DIR "${GISBASE_DIR}/lib")
+set(GRASS_SCRIPTS_DIR "${GISBASE_DIR}/scripts")
+set(GRASS_SHARE_DIR "${GISBASE_DIR}/share")
+set(GRASS_UTILS_DIR "${GISBASE_DIR}/utils")
+
 include(set_compiler_flags)
 set_compiler_flags()
+include(Configure)
 
 include(repo_status)
 repo_status("${CMAKE_CURRENT_LIST_DIR}" GRASS_VERSION_GIT)
@@ -145,7 +161,8 @@ include(build_script_in_subdir)
 include(build_gui_in_subdir)
 include(check_target)
 
-add_subdirectory(thirdparty)
+include(CheckDependentLibraries)
+
 set(MKHTML_PY ${CMAKE_BINARY_DIR}/utils/mkhtml.py)
 
 set(GISBASE ${CMAKE_BINARY_DIR}/gisbase)
@@ -175,6 +192,7 @@ set(grass_env_command
     "VERSION_DATE=\"${GRASS_VERSION_DATE}\"")
 
 set(NO_HTML_DESCR_TARGETS "g.parser;ximgview;test.raster3d.lib")
+# include(Configure)
 add_subdirectory(include)
 
 include_directories("${CMAKE_BINARY_DIR}/include")

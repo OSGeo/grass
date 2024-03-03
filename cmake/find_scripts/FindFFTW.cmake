@@ -57,15 +57,9 @@ mark_as_advanced(
 
 # copy HAVE_ to parent scope so that we can use in include/CMakeLists.txt and
 # rest
-set(HAVE_FFTW3_H
-    ${HAVE_FFTW3_H}
-    PARENT_SCOPE)
-set(HAVE_FFTW_H
-    ${HAVE_FFTW_H}
-    PARENT_SCOPE)
-set(HAVE_DFFTW_H
-    ${HAVE_DFFTW_H}
-    PARENT_SCOPE)
+set(HAVE_FFTW3_H ${HAVE_FFTW3_H})
+set(HAVE_FFTW_H ${HAVE_FFTW_H})
+set(HAVE_DFFTW_H ${HAVE_DFFTW_H})
 include(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
 find_package_handle_standard_args(FFTW REQUIRED_VARS FFTW_LIBRARIES
                                                      FFTW_INCLUDE_DIR)
