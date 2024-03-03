@@ -27,9 +27,9 @@ from mapdisp.frame import MapPanel
 
 
 class MainPageFrame(wx.Frame):
-    """Frame for independent map display window."""
+    """Frame for independent window."""
 
-    def __init__(self, parent, panel, size, pos, title, icon="grass"):
+    def __init__(self, parent, panel, size, pos, title, icon="grass", menu=None):
         wx.Frame.__init__(self, parent=parent, size=size, pos=pos, title=title)
         self.panel = panel
         self.panel.Reparent(self)
@@ -40,6 +40,9 @@ class MainPageFrame(wx.Frame):
         self.SetIcon(
             wx.Icon(os.path.join(globalvar.ICONDIR, icon + ".ico"), wx.BITMAP_TYPE_ICO)
         )
+
+        if menu is not None:
+            self.SetMenuBar(menu)
 
         self.panel.onFocus.emit()
         self.Bind(wx.EVT_CLOSE, self.OnClose)
@@ -97,7 +100,7 @@ class MainNotebook(aui.AuiNotebook):
 
         # set up menu
         mbar = self.parent.menubar
-        if self.GetCurrentPage().HasMenu():
+        if page.HasMenu():
             # add new (or replace if exists) additional menu item related to this page
             menu, menuName = page.GetMenu()
             if mbar.GetMenuCount() == self._menuCount:
@@ -116,6 +119,8 @@ class MainNotebook(aui.AuiNotebook):
         original_size = page.GetSize()
         original_pos = page.GetPosition()
         icon = "grass_map" if isinstance(page, MapPanel) else "grass"
+        if page.HasMenu():
+            menu, _ = page.GetMenu()
         self.RemovePage(index)
         frame = MainPageFrame(
             parent=self.parent,
@@ -124,6 +129,7 @@ class MainNotebook(aui.AuiNotebook):
             pos=original_pos,
             title=text,
             icon=icon,
+            menu=menu,
         )
         frame.SetDockingCallback(self.DockPage)
 

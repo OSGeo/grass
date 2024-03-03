@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 """
 
 from grass.pydispatch.signal import Signal
+from gui_core.menu import MenuItem as GMenuItem, Menu as GMenu
 
 
 class MainPageBase:
@@ -24,6 +25,7 @@ class MainPageBase:
 
         # menu associated with the panel
         self._menu = None
+        self._menuModel = None
         self._menuName = None
 
         self.canCloseCallback = None
@@ -50,7 +52,9 @@ class MainPageBase:
         """Get dictionary containg page index"""
         return {"mainnotebook": self._mainnotebook.GetPageIndex(self)}
 
-    def SetUpPage(self, parent, notebook, can_close=None, menu=None, menuName=None):
+    def SetUpPage(
+        self, parent, notebook, can_close=None, menuModel=None, menuName=None
+    ):
         self._mainnotebook = notebook
 
         def CanClosePage():
@@ -65,7 +69,7 @@ class MainPageBase:
         self.renamingPage.connect(parent._renamePageNoEvent)
 
         # set up menu if defined
-        self._menu = menu
+        self._menuModel = menuModel
         self._menuName = menuName
 
     def SetDockingCallback(self, function):
@@ -117,7 +121,22 @@ class MainPageBase:
             self.GetParent().SetTitle(title)
 
     def HasMenu(self):
-        return self._menu is not None
+        """Check if menu is defined.
+
+        :return True if menu defined otherwise False
+        """
+        return self._menuModel is not None
 
     def GetMenu(self):
-        return self._menu, self._menuName
+        """Get menu object if defined.
+
+        :return: menu object (Menu for undocked window, MenuItem for docked window)
+        """
+        menu = None
+        if self._menuModel is not None:
+            menuClass = GMenuItem if self._docked else GMenu
+            menu = menuClass(
+                parent=self.parent, model=self._menuModel, class_handler=self
+            )
+
+        return menu, self._menuName

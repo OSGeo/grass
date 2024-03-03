@@ -69,7 +69,7 @@ from gui_core.dialogs import (
     MapLayersDialog,
     QuitDialog,
 )
-from gui_core.menu import SearchModuleWindow, Menu as GMenu, MenuItem as GMenuItem
+from gui_core.menu import SearchModuleWindow, Menu as GMenu
 from core.debug import Debug
 from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
 from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
@@ -880,13 +880,11 @@ class GMFrame(wx.Frame):
         gmodeler_panel = ModelerPanel(
             parent=self, giface=self._giface, statusbar=self.statusbar, dockable=True
         )
-        gmodeler_menu = GMenuItem(
-            parent=self,
-            model=ModelerMenuData().GetModel(separators=True),
-            class_handler=gmodeler_panel,
-        )
         gmodeler_panel.SetUpPage(
-            self, self.mainnotebook, menu=gmodeler_menu, menuName="&Modeler"
+            self,
+            self.mainnotebook,
+            menuModel=ModelerMenuData().GetModel(separators=True),
+            menuName="&Modeler",
         )
 
         # add map display panel to notebook and make it current
