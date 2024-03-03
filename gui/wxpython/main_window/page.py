@@ -23,8 +23,8 @@ class MainPageBase:
     def __init__(self, dockable):
         self._mainnotebook = None
 
-        # menu associated with the panel
-        self._menu = None
+        # menu(s) associated with the panel
+        self._menu = {}
         self._menuModel = None
         self._menuName = None
 
@@ -134,9 +134,12 @@ class MainPageBase:
         """
         menu = None
         if self._menuModel is not None:
-            menuClass = GMenuItem if self._docked else GMenu
-            menu = menuClass(
-                parent=self.parent, model=self._menuModel, class_handler=self
-            )
+            if self._docked not in self._menu:
+                menuClass = GMenuItem if self._docked else GMenu
+                menu = self._menu[self._docked] = menuClass(
+                    parent=self.parent, model=self._menuModel, class_handler=self
+                )
+            else:
+                menu = self._menu[self._docked]
 
         return menu, self._menuName

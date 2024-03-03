@@ -121,6 +121,8 @@ class MainNotebook(aui.AuiNotebook):
         icon = "grass_map" if isinstance(page, MapPanel) else "grass"
         if page.HasMenu():
             menu, _ = page.GetMenu()
+        else:
+            menu = None
         self.RemovePage(index)
         frame = MainPageFrame(
             parent=self.parent,
@@ -139,6 +141,9 @@ class MainNotebook(aui.AuiNotebook):
         page.Reparent(self)
         page.SetDockingCallback(self.UndockPage)
         self.AddPage(page, frame.GetTitle())
+        if frame.GetMenuBar():
+            # avoid destroying menu if defined
+            frame.SetMenuBar(None)
         frame.Destroy()
 
     def AddPage(self, *args, **kwargs):
