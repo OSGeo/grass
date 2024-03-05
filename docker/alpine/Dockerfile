@@ -79,7 +79,7 @@ RUN echo "Install Python";\
     apk add --no-cache $PYTHONBIN && \
     $PYTHONBIN -m ensurepip && \
     rm -r /usr/lib/python*/ensurepip && \
-    pip$PYTHON_VERSION install --upgrade pip setuptools && \
+    pip$PYTHON_VERSION install --no-cache-dir --upgrade pip setuptools && \
     if [ ! -e /usr/bin/pip ]; then ln -s pip$PYTHON_VERSION /usr/bin/pip ; fi && \
     if [ ! -e /usr/bin/python ]; then ln -sf /usr/bin/$PYTHONBIN /usr/bin/python; fi && \
     rm -r /root/.cache; \
@@ -219,7 +219,7 @@ COPY docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts
 COPY docker/testdata/test_grass_session.py /scripts/
 
 # install external Python API
-RUN pip3 install --upgrade pip six grass-session --ignore-installed six; \
+RUN pip3 install --no-cache-dir --upgrade pip six grass-session --ignore-installed six; \
     ln -sf /usr/local/grass $(grass --config path); \
     # run some tests and cleanup
     $SHELL /scripts/grass_tests.sh \
