@@ -134,6 +134,8 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
                 /* Black et al. 1998 Tukey's biweight function */
 #pragma omp parallel for
                 for (unsigned int col = 0; col < pm_params->ncols; col++) {
+                    /* Both variations of impact of scale are two ways
+                     * how to read 17th formula of Black et al. */
                     if (pm_params->preserve) {
                         if (pm_params->scale < fabs(gradients[0][col]) ||
                             pm_params->scale < fabs(gradients[1][col]) ||

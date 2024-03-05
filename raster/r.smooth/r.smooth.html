@@ -1,23 +1,54 @@
 <h2>DESCRIPTION</h2>
 
+<p>The module performs an adaptive (edge pereserving) raster smoothing.
+The module implements three diffusivity (conductance) functions:
+exponential and quadratic (as sugessted by Perona & Malik 1990) and
+Tukey's biweight (as suggested by Black et al. 1998).</p>
+<p>Implementation of the Tukey's biweight diffusivity function is quite
+agressive and tends to produce continuous smoothed areas. Its output is
+well suited for raster segmentation. The <em>-p</em> flag allows to switch
+into a more gentle variation of the function that better preserves minor
+details and thus is better suited e.g. for visualization.</p>
+<p>The <em>threshold</em> parameter is in map units (DN, meters, etc.)
+and serves an indicator on how small difference should be considered as
+just noise. It will be different for each map.</p>
+<p>The <em>lambda</em> parameter impacts smoothing speed. For exponential
+and quadratic diffusivity functions the value is authomatically bound
+to range of 0 to 0.25. For the Tukey diffusivity function full range is
+available.</p>
 
 <h2>NOTES</h2>
 
+<p>Internally calculations are performed in double precision and only at the end
+converted to the same type as the input map.</p>
 
 <h2>PERFORMANCE</h2>
 
+<p>The module will try to keep all temporary data in RAM. Thus it is important
+to set the <em>memory</em> parameter as high as possible.</p>
 
 <h2>EXAMPLE</h2>
 
 
 <h2>SEE ALSO</h2>
 
-<em>
-Smooth with statistics: <a href="r.neghbours.html">r.neighbours</a><br>
-</em>
+Smooth with statistics: <em><a href="r.neghbours.html">r.neighbours</a></em><br>
+The Mumford-Shah variational model for image segmentation (an add-on):
+<em><a href="https://grass.osgeo.org/grass84/manuals/addons/r.smooth.seg.html">r.smooth.seg</a></em><br>
 
 <h2>REFERENCES</h2>
 
+<ul>
+<li>
+Perona P. and Malik J. 1990. Scale-space and edge detection using anisotropic
+diffusion. <em>IEEE transactions on pattern analysis and machine intelligence</em>,
+12(7).
+</li>
+<li>
+Black M.J., Sapiro G., Marimont D.H. and Heeger D. 1998. Robust anisotropic
+diffusion. <em>IEEE transactions on image processing</em>, 7(3).
+</li>
+</ul>
 
 <h2>AUTHORS</h2>
 

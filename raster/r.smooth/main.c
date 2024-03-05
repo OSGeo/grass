@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     opt.l->key = "lambda";
     opt.l->type = TYPE_DOUBLE;
     opt.l->required = YES;
-    opt.l->description = _("Rate of diffusion (0,1]");
+    opt.l->description = _("Rate of diffusion");
     opt.l->guisection = _("Diffusion");
     opt.l->answer = "0.1";
     opt.l->options = "0-1";
