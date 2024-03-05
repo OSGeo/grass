@@ -111,6 +111,7 @@ void setup_row_cache(int nrows, int ncols, double max_ram,
                             "Either increase available memory with the "
                             "\"memory\" parameter "
                             "or reduce size of the computational region."));
+        G_verbose_message(_("Using disk for temporary data storage"));
         /* Store data for looping over in a temporary file */
         row_cache->tmp_name = G_tempfile();
         errno = 0;
@@ -130,6 +131,7 @@ void setup_row_cache(int nrows, int ncols, double max_ram,
         row_cache->fill = &fill_rowio;
     }
     else {
+        G_verbose_message(_("Keeping temporary data in RAM"));
         /* Everything fits into RAM, no need for disk access */
         row_cache->matrix =
             (DCELL **)G_malloc(row_cache->nrows * sizeof(DCELL *));

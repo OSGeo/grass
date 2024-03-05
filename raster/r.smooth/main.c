@@ -6,7 +6,7 @@
  *               Perona P. and Malik J. 1990. Scale-space and edge detection
  *               using anisotropic diffusion. IEEE transactions on pattern
  *               analysis and machine intelligence, 12(7).
- *               Tukey's conductance function according to:
+ *               Tukey's diffusivity function according to:
  *               Black M.J., Sapiro G., Marimont D.H. and Heeger D. 1998.
  *               Robust anisotropic diffusion. IEEE transactions on image
  *               processing, 7(3).
@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 
     struct {
         struct Option *input, *output, *K, *l, *t, *met, *mem;
-        struct Flag *old;
+        struct Flag *pres;
     } opt;
 
     G_gisinit(argv[0]);
@@ -79,19 +79,19 @@ int main(int argc, char *argv[])
     opt.t->options = "1-";
 
     opt.met = G_define_option();
-    opt.met->key = "conditional";
+    opt.met->key = "function";
     opt.met->type = TYPE_STRING;
     opt.met->required = YES;
-    opt.met->description = _("Conductance function");
+    opt.met->description = _("Diffusivity function");
     opt.met->options = "exponental,quadratic,tukey";
     opt.met->answer = "tukey";
 
     opt.mem = G_define_standard_option(G_OPT_MEMORYMB);
 
-    /* Temporary development option */
-    opt.old = G_define_flag();
-    opt.old->key = 'o';
-    opt.old->label = "Use old code";
+    opt.pres = G_define_flag();
+    opt.pres->key = 'p';
+    opt.pres->label = _("Preserve details with Tukey");
+    opt.pres->guisection = _("Diffusion");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -113,6 +113,7 @@ int main(int argc, char *argv[])
     /* Silence compiler warnings */
     pm_params.conditional = 3;
     pm_params.dt = 1;
+    pm_params.preserve = (bool)(opt.pres->answer);
 
     if (strncmp(opt.met->answer, "tuk", 3) == 0) {
         pm_params.conditional = 3;

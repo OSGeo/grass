@@ -55,6 +55,7 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
 
     /* A single step */
     for (int step = 0; step < pm_params->steps; step++) {
+        G_percent(step, pm_params->steps, 1);
         /* Prefill rows */
         rc = row_cache->get(0, row_cache);
         rb = row_cache->get(1, row_cache);
@@ -70,18 +71,26 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
 
 #pragma omp parallel for
             for (unsigned int pcol = 1; pcol <= pm_params->ncols; pcol++) {
+                // N
                 gradients[0][pcol - 1] =
                     (ra[pcol] - rc[pcol]) * pm_params->vert_cor;
+                // S
                 gradients[1][pcol - 1] =
                     (rb[pcol] - rc[pcol]) * pm_params->vert_cor;
+                // NW
                 gradients[2][pcol - 1] =
                     (ra[pcol - 1] - rc[pcol]) * pm_params->diag_cor;
+                // NE
                 gradients[3][pcol - 1] =
                     (ra[pcol + 1] - rc[pcol]) * pm_params->diag_cor;
+                // E
                 gradients[4][pcol - 1] = rc[pcol + 1] - rc[pcol];
+                // W
                 gradients[5][pcol - 1] = rc[pcol - 1] - rc[pcol];
+                // SW
                 gradients[6][pcol - 1] =
                     (rb[pcol - 1] - rc[pcol]) * pm_params->diag_cor;
+                // SE
                 gradients[7][pcol - 1] =
                     (rb[pcol + 1] - rc[pcol]) * pm_params->diag_cor;
 
@@ -120,27 +129,37 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
                         : gradients[7][pcol - 1];
             }
 
-            /* Calculate conductance coefficient */
+            /* Calculate diffusivity coefficient */
             if (pm_params->conditional == 3) {
                 /* Black et al. 1998 Tukey's biweight function */
 #pragma omp parallel for
                 for (unsigned int col = 0; col < pm_params->ncols; col++) {
-                    if (pm_params->scale < fabs(gradients[0][col]) ||
-                        pm_params->scale < fabs(gradients[1][col]) ||
-                        pm_params->scale < fabs(gradients[2][col]) ||
-                        pm_params->scale < fabs(gradients[3][col]) ||
-                        pm_params->scale < fabs(gradients[4][col]) ||
-                        pm_params->scale < fabs(gradients[5][col]) ||
-                        pm_params->scale < fabs(gradients[6][col]) ||
-                        pm_params->scale < fabs(gradients[7][col])) {
-                        gradients[0][col] = 0;
-                        gradients[1][col] = 0;
-                        gradients[2][col] = 0;
-                        gradients[3][col] = 0;
-                        gradients[4][col] = 0;
-                        gradients[5][col] = 0;
-                        gradients[6][col] = 0;
-                        gradients[7][col] = 0;
+                    if (pm_params->preserve) {
+                        if (pm_params->scale < fabs(gradients[0][col]) ||
+                            pm_params->scale < fabs(gradients[1][col]) ||
+                            pm_params->scale < fabs(gradients[2][col]) ||
+                            pm_params->scale < fabs(gradients[3][col]) ||
+                            pm_params->scale < fabs(gradients[4][col]) ||
+                            pm_params->scale < fabs(gradients[5][col]) ||
+                            pm_params->scale < fabs(gradients[6][col]) ||
+                            pm_params->scale < fabs(gradients[7][col])) {
+                            gradients[0][col] = 0;
+                            gradients[1][col] = 0;
+                            gradients[2][col] = 0;
+                            gradients[3][col] = 0;
+                            gradients[4][col] = 0;
+                            gradients[5][col] = 0;
+                            gradients[6][col] = 0;
+                            gradients[7][col] = 0;
+                        }
+                    }
+                    else {
+#pragma GCC unroll 8
+                        for (unsigned int i = 0; i < 8; i++) {
+                            if (pm_params->scale < fabs(gradients[i][col])) {
+                                gradients[i][col] = 0;
+                            }
+                        }
                     }
 #pragma GCC unroll 8
                     for (unsigned int i = 0; i < 8; i++) {
@@ -154,11 +173,11 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
                 }
             }
             else if (pm_params->conditional == 1) {
-/* Perona & Malik 1st conductance function = exponential */
+/* Perona & Malik 1st diffusivity function = exponential */
 #pragma omp parallel for
                 for (unsigned int col = 0; col < pm_params->ncols; col++) {
 #pragma GCC unroll 8
-                    for (unsigned int i = 1; i < 8; i++) {
+                    for (unsigned int i = 0; i < 8; i++) {
                         divs[i][col] =
                             gradients[i][col] *
                             exp(-1.0 *
@@ -168,15 +187,15 @@ void pm(const struct PM_params *pm_params, struct Row_cache *row_cache)
                 }
             }
             else if (pm_params->conditional == 2) {
-/* Perona & Malik 2nd conductance function = quadratic */
+/* Perona & Malik 2nd diffusivity function = quadratic */
 #pragma omp parallel for
                 for (unsigned int col = 0; col < pm_params->ncols; col++) {
 #pragma GCC unroll 8
-                    for (unsigned int i = 1; i < 8; i++) {
+                    for (unsigned int i = 0; i < 8; i++) {
                         divs[i][col] =
-                            gradients[i][col] * 1 /
-                            (1 + ((gradients[i][col] * gradients[i][col]) /
-                                  pm_params->contrast2));
+                            gradients[i][col] *
+                            (1 / (1 + ((gradients[i][col] * gradients[i][col]) /
+                                       pm_params->contrast2)));
                     }
                 }
             }

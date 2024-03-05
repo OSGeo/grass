@@ -36,6 +36,7 @@ struct PM_params {
     int nrows, ncols;
     int conditional;
     int steps;
+    bool preserve;
     double contrast2;
     double scale;
     double dt;
