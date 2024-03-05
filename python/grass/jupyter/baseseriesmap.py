@@ -3,7 +3,10 @@ import tempfile
 import weakref
 import shutil
 
+import grass.script as gs
+
 from .utils import save_gif
+from .map import Map
 
 
 class BaseSeriesMap:
@@ -17,11 +20,9 @@ class BaseSeriesMap:
             self._env = os.environ.copy()
 
         self._base_layer_calls = []
-        self._baseseries_added = False
         self._layers_rendered = False
         self._width = width
         self._height = height
-        self._dates = None
         # Create a temporary directory for our PNG images
         # Resource managed by weakref.finalize.
         self._tmpdir = (
@@ -37,10 +38,6 @@ class BaseSeriesMap:
         # Handle regions in respective classes
 
     def __getattr__(self, name):
-        """
-        Parse attribute to GRASS display module. Attribute should be in
-        the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
-        """
         # Check to make sure format is correct
         if not name.startswith("d_"):
             raise AttributeError(_("Module must begin with 'd_'"))
@@ -50,10 +47,40 @@ class BaseSeriesMap:
         if not shutil.which(grass_module):
             raise AttributeError(_("Cannot find GRASS module {}").format(grass_module))
 
+        # Wrapper function is in respective classes
+
     def _render_baselayers(self, img):
         """Add collected baselayers to Map instance"""
         for grass_module, kwargs in self._base_layer_calls:
             img.run(grass_module, **kwargs)
+
+    def render(self):
+        """Renders image for each time-step in space-time dataset.
+
+        Save PNGs to temporary directory. Must be run before creating a visualization
+        (i.e. show or save). Can be time-consuming to run with large
+        space-time datasets.
+        """
+        # Runtime error in respective classes
+
+        # Make base image (background and baselayers)
+        # Random name needed to avoid potential conflict with layer names
+        random_name_base = gs.append_random("base", 8) + ".png"
+        base_file = os.path.join(self._tmpdir.name, random_name_base)
+        img = Map(
+            width=self._width,
+            height=self._height,
+            filename=base_file,
+            use_region=True,
+            env=self._env,
+            read_file=True,
+        )
+        # We have to call d_erase to ensure the file is created. If there are no
+        # base layers, then there is nothing to render in random_base_name
+        img.d_erase()
+        # Add baselayers
+        self._render_baselayers(img)
+        self._layers_rendered = True
 
     def show(
         self,
@@ -132,27 +159,14 @@ class BaseSeriesMap:
     def save(
         self,
         filename,
+        save_files,
+        labels,
         duration=500,
         label=True,
         font=None,
         text_size=12,
         text_color="gray",
     ):
-        """
-        Creates a GIF animation of rendered layers.
-
-        Text color must be in a format accepted by PIL ImageColor module. For supported
-        formats, visit:
-        https://pillow.readthedocs.io/en/stable/reference/ImageColor.html#color-names
-
-        param str filename: name of output GIF file
-        param int duration: time to display each frame; milliseconds
-        param bool label: include date/time stamp on each frame
-        param str font: font file
-        param int text_size: size of date/time text
-        param str text_color: color to use for the text.
-        """
-
         # Render images if they have not been already
         if not self._layers_rendered:
             self.render()
@@ -162,11 +176,11 @@ class BaseSeriesMap:
             input_files.append(self._date_filename_dict[date])
 
         save_gif(
-            input_files,
+            save_files,
             filename,
             duration=duration,
             label=label,
-            labels=self._dates,
+            labels=labels,
             font=font,
             text_size=text_size,
             text_color=text_color,

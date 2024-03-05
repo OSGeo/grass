@@ -16,10 +16,10 @@ import os
 import shutil
 
 import grass.script as gs
-from grass.jupyter.baseseriesmap import BaseSeriesMap
 
 from .map import Map
 from .region import RegionManagerForTimeSeries
+from .baseseriesmap import BaseSeriesMap
 
 
 def fill_none_values(names):
@@ -155,10 +155,8 @@ class TimeSeriesMap(BaseSeriesMap):
         self._element_type = None
         self._fill_gaps = None
         self._legend = None
-        # self._base_layer_calls = []
         self._overlay_calls = []
-        self._timeseries_added = self._baseseries_added
-        # self._layers_rendered = False
+        self._timeseries_added = False
         self._layers = None
         self._dates = None
         self._date_layer_dict = {}
@@ -214,14 +212,13 @@ class TimeSeriesMap(BaseSeriesMap):
         self._region_manager.set_region_from_timeseries(self.timeseries)
 
     def __getattr__(self, name):
-        super.__getattr__(self, name)
-        grass_module = name.replace("_", ".")
+        super().__getattr__(self, name)
 
         def wrapper(**kwargs):
             if not self._timeseries_added:
-                self._base_layer_calls.append((grass_module, kwargs))
+                self._base_layer_calls.append((self.grass_module, kwargs))
             if self._timeseries_added:
-                self._overlay_calls.append((grass_module, kwargs))
+                self._overlay_calls.append((self.grass_module, kwargs))
 
         return wrapper
 
@@ -311,24 +308,7 @@ class TimeSeriesMap(BaseSeriesMap):
                 "TimeSeriesMap.add_vector_series() to add dataset"
             )
 
-        # Make base image (background and baselayers)
-        # Random name needed to avoid potential conflict with layer names
-        random_name_base = gs.append_random("base", 8) + ".png"
-        base_file = os.path.join(self._tmpdir.name, random_name_base)
-        img = Map(
-            width=self._width,
-            height=self._height,
-            filename=base_file,
-            use_region=True,
-            env=self._env,
-            read_file=True,
-        )
-        # We have to call d_erase to ensure the file is created. If there are no
-        # base layers, then there is nothing to render in random_base_name
-        img.d_erase()
-        # Add baselayers
-        self._render_baselayers(img)
-
+        super().render()
         # Create name for empty layers
         # Random name needed to avoid potential conflict with layer names
         # A new random_name_none is created each time the render function is run,
@@ -343,20 +323,19 @@ class TimeSeriesMap(BaseSeriesMap):
                 self._date_filename_dict[date] = filename
                 # Render blank layer if it hasn't been done already
                 if not os.path.exists(filename):
-                    shutil.copyfile(base_file, filename)
+                    shutil.copyfile(self.base_file, filename)
                     self._render_blank_layer(filename)
             else:
                 # Create file
                 filename = os.path.join(self._tmpdir.name, f"{layer}.png")
                 # Copying the base_file ensures that previous results are overwritten
-                shutil.copyfile(base_file, filename)
+                shutil.copyfile(self.base_file, filename)
                 self._date_filename_dict[date] = filename
                 # Render image
                 self._render_layer(layer, filename)
-        self._layers_rendered = True
 
     def show(self, slider_width=None):
-        super.show(
+        super().show(
             slider_width=slider_width,
             options=self._dates,
             value=self._dates[0],
@@ -365,5 +344,41 @@ class TimeSeriesMap(BaseSeriesMap):
             label="date",
         )
 
-    def save(self, font="DejaVuSans.ttf"):
-        super().save(font="DejaVuSans.ttf")
+    def save(
+        self,
+        filename,
+        duration=500,
+        label=True,
+        font="DejaVuSans.ttf",
+        text_size=12,
+        text_color="gray",
+    ):
+        """
+        Creates a GIF animation of rendered layers.
+
+        Text color must be in a format accepted by PIL ImageColor module. For supported
+        formats, visit:
+        https://pillow.readthedocs.io/en/stable/reference/ImageColor.html#color-names
+
+        param str filename: name of output GIF file
+        param int duration: time to display each frame; milliseconds
+        param bool label: include date/time stamp on each frame
+        param str font: font file
+        param int text_size: size of date/time text
+        param str text_color: color to use for the text.
+        """
+
+        input_files = []
+        for date in self._dates:
+            input_files.append(self._date_filename_dict[date])
+
+        super().save(
+            filename=filename,
+            save_files=input_files,
+            labels=self._dates,
+            duration=duration,
+            label=label,
+            font=font,
+            text_size=text_size,
+            text_color=text_color,
+        )

@@ -15,13 +15,11 @@
 import os
 import shutil
 
-
-import grass.script as gs
 from grass.grassdb.data import map_exists
-from grass.jupyter.baseseriesmap import BaseSeriesMap
 
 from .map import Map
 from .region import RegionManagerForSeries
+from .baseseriesmap import BaseSeriesMap
 
 
 class SeriesMap(BaseSeriesMap):
@@ -41,9 +39,6 @@ class SeriesMap(BaseSeriesMap):
     change at anytime.
     """
 
-    # pylint: disable=too-many-instance-attributes
-    # pylint: disable=duplicate-code
-
     def __init__(
         self,
         width=None,
@@ -62,12 +57,11 @@ class SeriesMap(BaseSeriesMap):
         :param saved_region: if name of saved_region is provided,
                             this region is then used for rendering
         """
-        super.__init__(width, height, env, use_region, saved_region)
+        super().__init__(width, height, env, use_region, saved_region)
 
         self._series_length = None
         self._calls = []
-        self._series_added = self._baseseries_added
-        # self._layers_rendered = False
+        self._series_added = False
         self._layer_filename_dict = {}
         self._names = []
 
@@ -133,16 +127,19 @@ class SeriesMap(BaseSeriesMap):
         self._layers_rendered = False
 
     def __getattr__(self, name):
-        super.__getattr__(self, name)
+        """
+        Parse attribute to GRASS display module. Attribute should be in
+        the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
+        """
+        super().__getattr__(name)
         self._layers_rendered = False
-        grass_module = name.replace("_", ".")
 
         def wrapper(**kwargs):
             if not self._series_added:
-                self._base_layer_calls.append((grass_module, kwargs))
+                self._base_layer_calls.append((self.grass_module, kwargs))
             else:
                 for row in self._calls:
-                    row.append((grass_module, kwargs))
+                    row.append((self.grass_module, kwargs))
 
         return wrapper
 
@@ -167,30 +164,13 @@ class SeriesMap(BaseSeriesMap):
                 "Use SeriesMap.add_rasters() or SeriesMap.add_vectors()"
             )
 
-        # Make base image (background and baselayers)
-        # Random name needed to avoid potential conflict with layer names
-        random_name_base = gs.append_random("base", 8) + ".png"
-        base_file = os.path.join(self._tmpdir.name, random_name_base)
-        img = Map(
-            width=self._width,
-            height=self._height,
-            filename=base_file,
-            use_region=True,
-            env=self._env,
-            read_file=True,
-        )
-        # We have to call d_erase to ensure the file is created. If there are no
-        # base layers, then there is nothing to render in random_base_name
-        img.d_erase()
-        # Add baselayers
-        self._render_baselayers(img)
-
+        super().render()
         # Render each layer
         for i in range(self._series_length):
             # Create file
             filename = os.path.join(self._tmpdir.name, f"{i}.png")
             # Copying the base_file ensures that previous results are overwritten
-            shutil.copyfile(base_file, filename)
+            shutil.copyfile(self.base_file, filename)
             self._layer_filename_dict[i] = filename
             # Render image
             img = Map(
@@ -204,14 +184,51 @@ class SeriesMap(BaseSeriesMap):
             for grass_module, kwargs in self._calls[i]:
                 img.run(grass_module, **kwargs)
 
-        self._layers_rendered = True
-
     def show(self, slider_width=None):
         lookup = list(zip(self._names, range(self._series_length)))
-        super.show(
+        super().show(
             slider_width,
             options=lookup,
             value=0,
             max=self._series_length - 1,
             label="index",
+        )
+
+    def save(
+        self,
+        filename,
+        duration=500,
+        label=True,
+        font=None,
+        text_size=12,
+        text_color="gray",
+    ):
+        """
+        Creates a GIF animation of rendered layers.
+
+        Text color must be in a format accepted by PIL ImageColor module. For supported
+        formats, visit:
+        https://pillow.readthedocs.io/en/stable/reference/ImageColor.html#color-names
+
+        param str filename: name of output GIF file
+        param int duration: time to display each frame; milliseconds
+        param bool label: include date/time stamp on each frame
+        param str font: font file
+        param int text_size: size of date/time text
+        param str text_color: color to use for the text.
+        """
+
+        tmp_files = []
+        for _, file in self._layer_filename_dict.items():
+            tmp_files.append(file)
+
+        super().save(
+            filename,
+            tmp_files,
+            self._names,
+            duration=duration,
+            label=label,
+            font=font,
+            text_size=text_size,
+            text_color=text_color,
         )
