@@ -25,7 +25,7 @@ jobs:
           clangFormatVersion: 15
           inplace: True
       - name: Verify Changed files
-        uses: tj-actions/verify-changed-files@v16
+        uses: tj-actions/verify-changed-files@d774a4c7ebe335445d79c7b44138f56a76058ba0 # v19.0.0
         id: verify-changed-files
       - name: List all changed files tracked and untracked files
         run: |
