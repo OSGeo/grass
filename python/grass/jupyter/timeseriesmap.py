@@ -212,7 +212,7 @@ class TimeSeriesMap(BaseSeriesMap):
         self._region_manager.set_region_from_timeseries(self.timeseries)
 
     def __getattr__(self, name):
-        super().__getattr__(self, name)
+        super().__getattr__(name)
 
         def wrapper(**kwargs):
             if not self._timeseries_added:
@@ -373,12 +373,12 @@ class TimeSeriesMap(BaseSeriesMap):
             input_files.append(self._date_filename_dict[date])
 
         super().save(
-            filename=filename,
-            save_files=input_files,
-            labels=self._dates,
-            duration=duration,
-            label=label,
-            font=font,
-            text_size=text_size,
-            text_color=text_color,
+            filename,
+            input_files,
+            self._dates,
+            duration,
+            label,
+            font,
+            text_size,
+            text_color,
         )
