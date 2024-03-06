@@ -160,7 +160,6 @@ class TimeSeriesMap(BaseSeriesMap):
         self._layers = None
         self._dates = None
         self._date_layer_dict = {}
-        self._date_filename_dict = {}
 
         # Handle Regions
         self._region_manager = RegionManagerForTimeSeries(
@@ -212,6 +211,9 @@ class TimeSeriesMap(BaseSeriesMap):
         self._region_manager.set_region_from_timeseries(self.timeseries)
 
     def __getattr__(self, name):
+        """Parse attribute to GRASS display module. Attribute should be in
+        the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
+        """
         super().__getattr__(name)
 
         def wrapper(**kwargs):
@@ -334,24 +336,38 @@ class TimeSeriesMap(BaseSeriesMap):
                 # Render image
                 self._render_layer(layer, filename)
 
-    def show(self, slider_width=None):
-        super().show(
+    def show(self, slider_width=None, *args, **kwargs):
+        """Create interactive timeline slider.
+
+        param str slider_width: width of datetime selection slider
+
+        The slider_width parameter sets the width of the slider in the output cell.
+        It should be formatted as a percentage (%) between 0 and 100 of the cell width
+        or in pixels (px). Values should be formatted as strings and include the "%"
+        or "px" suffix. For example, slider_width="80%" or slider_width="500px".
+        slider_width is passed to ipywidgets in ipywidgets.Layout(width=slider_width).
+        """
+        return super().show(
             slider_width=slider_width,
+            *args,
+            **kwargs,
             options=self._dates,
             value=self._dates[0],
             description=_("Date/Time"),
-            max=len(self._dates) - 1,
+            max_value=len(self._dates) - 1,
             label="date",
         )
 
     def save(
         self,
         filename,
+        *args,
         duration=500,
         label=True,
         font="DejaVuSans.ttf",
         text_size=12,
         text_color="gray",
+        **kwargs,
     ):
         """
         Creates a GIF animation of rendered layers.
@@ -372,13 +388,16 @@ class TimeSeriesMap(BaseSeriesMap):
         for date in self._dates:
             input_files.append(self._date_filename_dict[date])
 
-        super().save(
-            filename,
-            input_files,
-            self._dates,
-            duration,
-            label,
-            font,
-            text_size,
-            text_color,
+        return super().save(
+            filename=filename,
+            save_files=input_files,
+            labels=self._dates,
+            labels=self._names,
+            *args,
+            duration=duration,
+            label=label,
+            font=font,
+            text_size=text_size,
+            text_color=text_color,
+            **kwargs,
         )

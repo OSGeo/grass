@@ -10,9 +10,24 @@ from .map import Map
 
 
 class BaseSeriesMap:
+    """
+    Base class for SeriesMap and TimeSeriesMap
+    """
+
     def __init__(
         self, width=None, height=None, env=None, use_region=False, saved_region=None
     ):
+        """Creates an instance of the visualizations class.
+
+        :param int width: width of map in pixels
+        :param int height: height of map in pixels
+        :param str env: environment
+        :param use_region: if True, use either current or provided saved region,
+                          else derive region from rendered layers
+        :param saved_region: if name of saved_region is provided,
+                            this region is then used for rendering
+        """
+
         # Copy Environment
         if env:
             self._env = env.copy()
@@ -21,6 +36,8 @@ class BaseSeriesMap:
 
         self._base_layer_calls = []
         self._layers_rendered = False
+        self._layer_filename_dict = {}
+        self._date_filename_dict = {}
         self._width = width
         self._height = height
         # Create a temporary directory for our PNG images
@@ -36,16 +53,24 @@ class BaseSeriesMap:
         weakref.finalize(self, cleanup, self._tmpdir)
 
         # Handle regions in respective classes
+        self.use_region = use_region
+        self.saved_region = saved_region
 
     def __getattr__(self, name):
+        """
+        Parse attribute to GRASS display module. Attribute should be in
+        the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
+        """
         # Check to make sure format is correct
         if not name.startswith("d_"):
             raise AttributeError(_("Module must begin with 'd_'"))
         # Reformat string
-        grass_module = name.replace("_", ".")
+        self.grass_module = name.replace("_", ".")
         # Assert module exists
-        if not shutil.which(grass_module):
-            raise AttributeError(_("Cannot find GRASS module {}").format(grass_module))
+        if not shutil.which(self.grass_module):
+            raise AttributeError(
+                _("Cannot find GRASS module {}").format(self.grass_module)
+            )
 
         # Wrapper function is in respective classes
 
@@ -66,11 +91,11 @@ class BaseSeriesMap:
         # Make base image (background and baselayers)
         # Random name needed to avoid potential conflict with layer names
         random_name_base = gs.append_random("base", 8) + ".png"
-        base_file = os.path.join(self._tmpdir.name, random_name_base)
+        self.base_file = os.path.join(self._tmpdir.name, random_name_base)
         img = Map(
             width=self._width,
             height=self._height,
-            filename=base_file,
+            filename=self.base_file,
             use_region=True,
             env=self._env,
             read_file=True,
@@ -88,12 +113,17 @@ class BaseSeriesMap:
         options=None,
         value=None,
         description=None,
-        max=None,
+        max_value=None,
         label=None,
     ):
         """Create interactive timeline slider.
 
         param str slider_width: width of datetime selection slider
+        param list options: list of options for the slider
+        param str value: initial value of the slider
+        param str description: description of the slider
+        param int max_value: maximum value of the slider
+        param bool label: include date/time stamp on each frame
 
         The slider_width parameter sets the width of the slider in the output cell.
         It should be formatted as a percentage (%) between 0 and 100 of the cell width
@@ -127,7 +157,7 @@ class BaseSeriesMap:
             interval=500,
             value=0,
             min=0,
-            max=max,
+            max_value=max_value,
             step=1,
             description="Press play",
             disabled=False,
@@ -143,13 +173,15 @@ class BaseSeriesMap:
         play.observe(change_slider, names="value")
 
         # Display image associated with datetime
-        def change_image(date):
-            # Look up layer name for date
-            filename = self._date_filename_dict[date]
+        def change_image(parameter, is_date=True):
+            if is_date:
+                filename = self._date_filename_dict[parameter]
+            else:
+                filename = self._layer_filename_dict[parameter]
+
             with open(filename, "rb") as rfile:
                 out_img.value = rfile.read()
 
-        # Return interact widget with image and slider
         widgets.interactive_output(change_image, {label: slider})
         layout = widgets.Layout(
             width="100%", display="inline-flex", flex_flow="row wrap"
@@ -167,13 +199,25 @@ class BaseSeriesMap:
         text_size=12,
         text_color="gray",
     ):
+        """
+        Creates a GIF animation of rendered layers.
+
+        Text color must be in a format accepted by PIL ImageColor module. For supported
+        formats, visit:
+        https://pillow.readthedocs.io/en/stable/reference/ImageColor.html#color-names
+
+        param str filename: name of output GIF file
+        param list save_files: list containing the file paths
+        param list labels: list of layer labels
+        param int duration: time to display each frame; milliseconds
+        param bool label: include date/time stamp on each frame
+        param str font: font file
+        param int text_size: size of date/time text
+        param str text_color: color to use for the text.
+        """
         # Render images if they have not been already
         if not self._layers_rendered:
             self.render()
-
-        input_files = []
-        for date in self._dates:
-            input_files.append(self._date_filename_dict[date])
 
         save_gif(
             save_files,

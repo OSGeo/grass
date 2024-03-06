@@ -62,7 +62,6 @@ class SeriesMap(BaseSeriesMap):
         self._series_length = None
         self._calls = []
         self._series_added = False
-        self._layer_filename_dict = {}
         self._names = []
 
         # Handle Regions
@@ -184,24 +183,38 @@ class SeriesMap(BaseSeriesMap):
             for grass_module, kwargs in self._calls[i]:
                 img.run(grass_module, **kwargs)
 
-    def show(self, slider_width=None):
+    def show(self, slider_width=None, *args, **kwargs):
+        """Create interactive timeline slider.
+
+        param str slider_width: width of datetime selection slider
+
+        The slider_width parameter sets the width of the slider in the output cell.
+        It should be formatted as a percentage (%) between 0 and 100 of the cell width
+        or in pixels (px). Values should be formatted as strings and include the "%"
+        or "px" suffix. For example, slider_width="80%" or slider_width="500px".
+        slider_width is passed to ipywidgets in ipywidgets.Layout(width=slider_width).
+        """
         lookup = list(zip(self._names, range(self._series_length)))
-        super().show(
-            slider_width,
+        return super().show(
+            slider_width=slider_width,
+            *args,
+            **kwargs,
             options=lookup,
             value=0,
-            max=self._series_length - 1,
+            max_value=self._series_length - 1,
             label="index",
         )
 
     def save(
         self,
         filename,
+        *args,
         duration=500,
         label=True,
         font=None,
         text_size=12,
         text_color="gray",
+        **kwargs,
     ):
         """
         Creates a GIF animation of rendered layers.
@@ -217,18 +230,19 @@ class SeriesMap(BaseSeriesMap):
         param int text_size: size of date/time text
         param str text_color: color to use for the text.
         """
-
         tmp_files = []
         for _, file in self._layer_filename_dict.items():
             tmp_files.append(file)
 
-        super().save(
-            filename,
-            tmp_files,
-            self._names,
+        return super().save(
+            filename=filename,
+            save_files=tmp_files,
+            labels=self._names,
+            *args,
             duration=duration,
             label=label,
             font=font,
             text_size=text_size,
             text_color=text_color,
+            **kwargs,
         )
