@@ -1,0 +1,122 @@
+"""Test functions in grass.script.setup"""
+
+import multiprocessing
+
+import grass.script as gs
+
+
+# All init tests change the global environment, but when it really matters,
+# we use a separate process.
+# Ideally, the functions would support env parameter and the test
+# would mostly use that.
+def run_in_subprocess(function):
+    """Run function in a separate process
+
+    The function must take a Queue and put its result there.
+    The result is then returned from this function.
+    """
+    queue = multiprocessing.Queue()
+    process = multiprocessing.Process(target=function, args=(queue,))
+    process.start()
+    result = queue.get()
+    process.join()
+    return result
+
+
+def create_and_get_srid(tmp_path):
+    """Create location on the same path as the current one"""
+    bootstrap_location = "bootstrap"
+    desired_location = "desired"
+    gs.core._create_location_xy(
+        tmp_path, bootstrap_location
+    )  # pylint: disable=protected-access
+    with gs.setup.init(tmp_path / bootstrap_location):
+        gs.create_location(tmp_path, desired_location, epsg="3358")
+        assert (tmp_path / desired_location).exists()
+        wkt_file = tmp_path / desired_location / "PERMANENT" / "PROJ_WKT"
+        assert wkt_file.exists()
+        gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path}")
+        gs.run_command("g.gisenv", set=f"LOCATION_NAME={desired_location}")
+        gs.run_command("g.gisenv", set="MAPSET=PERMANENT")
+        return gs.parse_command("g.proj", flags="g")["srid"]
+
+
+def test_with_same_path(tmp_path):
+    """Check correct EPSG is created with same path as the current one"""
+    srid = create_and_get_srid(tmp_path)
+    assert srid == "EPSG:3358"
+
+
+def test_with_init_in_subprocess(tmp_path):
+    """Check creation when running in a subprocess"""
+
+    def workload(queue):
+        """Transfer the return value using queue"""
+        queue.put(create_and_get_srid(tmp_path))
+
+    epsg = run_in_subprocess(workload)
+    assert epsg == "EPSG:3358"
+
+
+def test_without_session(tmp_path):
+    """Check that creation works outside of session.
+
+    Assumes that there is no session for the test. This can be ensured by running only
+    this test with pylint outside a session.
+    """
+    name = "desired"
+    gs.create_location(tmp_path, name, epsg="3358")
+    assert (tmp_path / name).exists()
+    wkt_file = tmp_path / name / "PERMANENT" / "PROJ_WKT"
+    assert wkt_file.exists()
+    with gs.setup.init(tmp_path / name):
+        gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path}")
+        gs.run_command("g.gisenv", set=f"LOCATION_NAME={name}")
+        gs.run_command("g.gisenv", set="MAPSET=PERMANENT")
+        epsg = gs.parse_command("g.proj", flags="g")["srid"]
+        assert epsg == "EPSG:3358"
+
+
+def test_with_different_path(tmp_path):
+    """Check correct EPSG is created with different path"""
+    bootstrap_location = "bootstrap"
+    desired_location = "desired"
+    tmp_path_a = tmp_path / "a"
+    tmp_path_b = tmp_path / "b"
+    tmp_path_a.mkdir()
+    gs.core._create_location_xy(
+        tmp_path_a, bootstrap_location
+    )  # pylint: disable=protected-access
+    with gs.setup.init(tmp_path_a / bootstrap_location):
+        gs.create_location(tmp_path_b, desired_location, epsg="3358")
+        assert (tmp_path_b / desired_location).exists()
+        wkt_file = tmp_path_b / desired_location / "PERMANENT" / "PROJ_WKT"
+        assert wkt_file.exists()
+        gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path_b}")
+        gs.run_command("g.gisenv", set=f"LOCATION_NAME={desired_location}")
+        gs.run_command("g.gisenv", set="MAPSET=PERMANENT")
+        epsg = gs.parse_command("g.proj", flags="g")["srid"]
+        assert epsg == "EPSG:3358"
+
+
+def test_files(tmp_path):
+    """Check expected files are created"""
+    bootstrap_location = "bootstrap"
+    desired_location = "desired"
+    gs.core._create_location_xy(
+        tmp_path, bootstrap_location
+    )  # pylint: disable=protected-access
+    with gs.setup.init(tmp_path / bootstrap_location):
+        description = "This is a test (not Gauss-Krüger or Křovák)"
+        gs.create_location(tmp_path, desired_location, epsg="3358", desc=description)
+        assert (tmp_path / desired_location).exists()
+        base_path = tmp_path / desired_location / "PERMANENT"
+        assert (base_path / "PROJ_WKT").exists()
+        assert (base_path / "PROJ_SRID").exists()
+        assert (base_path / "PROJ_UNITS").exists()
+        assert (base_path / "PROJ_INFO").exists()
+        assert (base_path / "DEFAULT_WIND").exists()
+        assert (base_path / "WIND").exists()
+        description_file = base_path / "MYNAME"
+        assert description_file.exists()
+        assert description_file.read_text(encoding="utf-8").strip() == description

@@ -21,17 +21,10 @@ This program is free software under the GNU General Public License
 
 import textwrap
 
-import os
 import wx
 from wx import stc
 
 from grass.pydispatch.signal import Signal
-from grass.grassdb.history import (
-    read_history,
-    create_history_file,
-    copy_history,
-    get_current_mapset_gui_history_path,
-)
 
 # needed just for testing
 if __name__ == "__main__":
@@ -143,20 +136,6 @@ class GConsoleWindow(wx.SplitterWindow):
         if not self._gcstyle & GC_PROMPT:
             self.cmdPrompt.Hide()
 
-        # read history file
-        self._loadHistory()
-        if self.giface:
-            self.giface.currentMapsetChanged.connect(self._loadHistory)
-
-            if self._gcstyle == GC_PROMPT:
-                # connect update history signals only for main Console Window
-                self.giface.entryToHistoryAdded.connect(
-                    lambda cmd: self.cmdPrompt.AddEntryToCmdHistoryBuffer(cmd)
-                )
-                self.giface.entryFromHistoryRemoved.connect(
-                    lambda index: self.cmdPrompt.RemoveEntryFromCmdHistoryBuffer(index)
-                )
-
         # buttons
         self.btnClear = ClearButton(parent=self.panelPrompt)
         self.btnClear.SetToolTip(_("Clear prompt and output window"))
@@ -164,19 +143,10 @@ class GConsoleWindow(wx.SplitterWindow):
         self.btnOutputSave.SetToolTip(_("Save output to a file"))
         self.btnCmdAbort = Button(parent=self.panelProgress, id=wx.ID_STOP)
         self.btnCmdAbort.SetToolTip(_("Abort running command"))
-        self.btnCmdExportHistory = Button(parent=self.panelPrompt, id=wx.ID_ANY)
-        self.btnCmdExportHistory.SetLabel(_("&Export history"))
-        self.btnCmdExportHistory.SetToolTip(
-            _("Export history of executed commands to a file")
-        )
-
-        if not self._gcstyle & GC_PROMPT:
-            self.btnCmdExportHistory.Hide()
 
         self.btnClear.Bind(wx.EVT_BUTTON, self.OnClear)
         self.btnOutputSave.Bind(wx.EVT_BUTTON, self.OnOutputSave)
         self.btnCmdAbort.Bind(wx.EVT_BUTTON, self._gconsole.OnCmdAbort)
-        self.btnCmdExportHistory.Bind(wx.EVT_BUTTON, self.OnCmdExportHistory)
 
         self._layout()
 
@@ -204,19 +174,13 @@ class GConsoleWindow(wx.SplitterWindow):
             promptSizer.Add(helpText, proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
 
             btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+            btnSizer.AddStretchSpacer()
             btnSizer.Add(
                 self.btnOutputSave,
                 proportion=0,
                 flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
                 border=5,
             )
-            btnSizer.Add(
-                self.btnCmdExportHistory,
-                proportion=0,
-                flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
-                border=5,
-            )
-            btnSizer.AddStretchSpacer()
             btnSizer.Add(self.btnClear, proportion=0, flag=wx.EXPAND, border=5)
             promptSizer.Add(btnSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
@@ -259,17 +223,6 @@ class GConsoleWindow(wx.SplitterWindow):
         # layout
         self.SetAutoLayout(True)
         self.Layout()
-
-    def _loadHistory(self):
-        """Load history from a history file to data structures"""
-        history_path = get_current_mapset_gui_history_path()
-        try:
-            if not os.path.exists(history_path):
-                create_history_file(history_path)
-            self.cmdPrompt.cmdbuffer = read_history(history_path)
-            self.cmdPrompt.cmdindex = len(self.cmdPrompt.cmdbuffer)
-        except OSError as e:
-            GError(str(e))
 
     def GetPanel(self, prompt=True):
         """Get panel
@@ -447,33 +400,6 @@ class GConsoleWindow(wx.SplitterWindow):
     def OnCmdProgress(self, event):
         """Update progress message info"""
         self.progressbar.SetValue(event.value)
-        event.Skip()
-
-    def OnCmdExportHistory(self, event):
-        """Export the history of executed commands stored
-        in a .wxgui_history file to a selected file."""
-        dlg = wx.FileDialog(
-            self,
-            message=_("Save file as..."),
-            defaultFile="grass_cmd_log.txt",
-            wildcard=_("{txt} (*.txt)|*.txt|{files} (*)|*").format(
-                txt=_("Text files"), files=_("Files")
-            ),
-            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
-        )
-
-        if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
-            history_path = get_current_mapset_gui_history_path()
-            try:
-                copy_history(path, history_path)
-                self.showNotification.emit(
-                    message=_("Command history saved to '{}'".format(path))
-                )
-            except OSError as e:
-                GError(str(e))
-
-        dlg.Destroy()
         event.Skip()
 
     def OnCmdRun(self, event):
