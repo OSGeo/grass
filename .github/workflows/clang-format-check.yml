@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-      - uses: DoozyX/clang-format-lint-action@v0.16.2
+      - uses: DoozyX/clang-format-lint-action@11b773b1598aa4ae3b32f023701bca5201c3817d # v0.17
         with:
           source: "."
           clangFormatVersion: 15
