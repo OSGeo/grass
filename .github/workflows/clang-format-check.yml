@@ -36,6 +36,12 @@ jobs:
             echo '${{ steps.verify-changed-files.outputs.changed_files }}'
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
+      - uses: parkerbxyz/suggest-changes@f5b10bcbfe35840153c0e823095d260d5abad1f9 # v1.0.0
+        with:
+          comment: |
+            Please commit the suggested changes from clang-format.
+
+            Suggestions can only be added to lines near lines changed in this PR.
       - uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         if: always()
         with:
