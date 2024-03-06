@@ -11,24 +11,67 @@ into a more gentle variation of the function that better preserves minor
 details and thus is better suited e.g. for visualization.</p>
 <p>The <em>threshold</em> parameter is in map units (DN, meters, etc.)
 and serves an indicator on how small difference should be considered as
-just noise. It will be different for each map.</p>
+noise. It will be different for each map.</p>
 <p>The <em>lambda</em> parameter impacts smoothing speed. For exponential
 and quadratic diffusivity functions the value is authomatically bound
 to range of 0 to 0.25. For the Tukey diffusivity function full range is
 available.</p>
+<p>The <em>steps</em> parameter sets number of iterations for smoothing.
+Depending on selected diffusivity function, large number of iterations
+can result in a loss of fine details. In terms of detail preservation
+functions can be ordered with increasing preservation as <em>quadratic,
+exponental, Tukey, Tukey with the -p flag</em>.
 
 <h2>NOTES</h2>
 
 <p>Internally calculations are performed in double precision and only at the end
 converted to the same type as the input map.</p>
 
-<h2>PERFORMANCE</h2>
-
 <p>The module will try to keep all temporary data in RAM. Thus it is important
 to set the <em>memory</em> parameter as high as possible.</p>
 
+<p>The original Perona & Malik paper uses von Neumann (4-connected) neibourhood for
+value calculation, but this module uses Moore (8-connected) neibourhood.
+Computed gradients of neigbouring cells are adjusted to equalize distances for
+diagonals and non-square cells.</p>
+
 <h2>EXAMPLE</h2>
 
+<div><pre class="code">
+# Set computational region to orthophoto map
+g.region raster=ortho_2001_t792_1m -p
+
+# Smooth with average in a 3x3 window. Note how all edges have became blury
+# but at the same time streets and roofs are still noisy
+r.neighbors input=ortho_2001_t792_1m output=ortho_smoothed_avg\
+ size=3 method=average
+
+# Smooth with median in a 3x3 window. Although better than average smoothing,
+# thin lines still are lost and noise on streets and roofs is still present.
+r.neighbors input=ortho_2001_t792_1m output=ortho_smoothed_med\
+ size=3 method=median
+
+# Smooth with quadratic diffusivity function. Note better preservation of
+# small details and reduction of noise on streets and roofs.
+r.smooth function=quadratic input=ortho_2001_t792_1m output=ortho_smoothed_qa\
+ threshold=15 lambda=0.4 steps=20
+
+# Smooth with exponental diffusivity function. Even better edge delineation
+# but at the same time increase of noise in really noisy areas.
+r.smooth function=exponental input=ortho_2001_t792_1m output=ortho_smoothed_ex\
+ threshold=15 lambda=0.4 steps=20
+
+# Smooth with agressive Tukey's diffusivity function. Better preservation of
+# minor details e.g. as road markings but little smoothing in areas with
+# fine, well expressed texture.
+r.smooth function=tukey input=ortho_2001_t792_1m output=ortho_smoothed_ta\
+ threshold=15 lambda=0.4 steps=20
+
+# Smooth with preserving Tukey's diffusivity function. Only low noise areas
+# have been smoothed.
+r.smooth function=tukey input=ortho_2001_t792_1m output=ortho_smoothed_tp\
+ threshold=15 lambda=0.4 steps=20 -p
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
