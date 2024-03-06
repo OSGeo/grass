@@ -38,7 +38,7 @@ jobs:
             echo "### Changed files:"
             echo "No files were changed by clang-format"
           } >> "$GITHUB_STEP_SUMMARY"
-      - name: Add job summary without changed files
+      - name: Add job summary with changed files
         if: ${{ steps.verify-changed-files.outputs.files_changed }}
         run: |
           {
