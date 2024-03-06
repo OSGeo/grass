@@ -33,10 +33,16 @@ jobs:
       - name: Verify Changed files
         uses: tj-actions/verify-changed-files@d774a4c7ebe335445d79c7b44138f56a76058ba0 # v19.0.0
         id: verify-changed-files
-      - run: echo '${{toJson(steps.verify-changed-files.outputs)}}'
+      - id: git-changed-files
+        run: |
+          {
+            echo 'CHANGED_FILES<<EOF'
+            git ls-files --other --modified --exclude-standard
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
       - name: List all changed files tracked and untracked files
         run: |
-          echo "Changed files: ${{ steps.verify-changed-files.outputs.changed_files }}"
+          echo "Changed files: ${{ steps.git-changed-files.outputs.CHANGED_FILES }}"
       - name: Add job summary without changed files
         if: ${{ steps.verify-changed-files.outputs.files_changed == 'false' }}
         run: |
@@ -50,18 +56,21 @@ jobs:
           {
             echo '### Changed files:'
             echo '```'
-            echo '${{ steps.verify-changed-files.outputs.changed_files }}'
+            echo "${CHANGED_FILES}"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
-      - name: "Add code suggestions"
+        env:
+          CHANGED_FILES: ${{ steps.git-changed-files.outputs.CHANGED_FILES }}
+      - name: Add code suggestions
         uses: reviewdog/action-suggester@3d7fde6859623ad6174df5fd662677a0eb63310a # v1.11.0
         with:
           tool_name: clang-format
           fail_on_error: true
+          cleanup: false
       - uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         if: always()
         with:
           name: my-artifact
           path: |
             .clang-format
-            ${{ steps.verify-changed-files.outputs.changed_files }}
+            ${{ steps.git-changed-files.outputs.CHANGED_FILES }}
