@@ -11,6 +11,8 @@ on:
       - releasebranch_*
       - "*"
 concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref_protected != true }}
 permissions: {}
 jobs:
   formatting-check:
