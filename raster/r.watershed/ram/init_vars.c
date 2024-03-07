@@ -83,7 +83,7 @@ int init_vars(int argc, char *argv[])
         else if (sscanf(argv[r], "blocking=%s", ob_name) == 1)
             ob_flag++;
         else if (sscanf(argv[r], "disturbed_land=%s", ril_name) == 1) {
-            if (sscanf(ril_name, "%lf", &ril_value) == 0 ){
+            if (sscanf(ril_name, "%lf", &ril_value) == 0){
                 ril_value = -1.0;
                 ril_flag++;
             }
