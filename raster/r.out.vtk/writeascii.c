@@ -219,7 +219,7 @@ void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname UNUSED,
             _("write_vtk_polygonal_coordinates: Writing VTK Polygonal data"));
 
     /*the nullvalue */
-    if (!sscanf(null_value, "%lf", &nullvalue) || sscanf(null_value, "%lf", &nullvalue) = EOF ) {
+    if (!sscanf(null_value, "%lf", &nullvalue) || sscanf(null_value, "%lf", &nullvalue) == EOF ) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }
