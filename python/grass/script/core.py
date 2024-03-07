@@ -1821,14 +1821,19 @@ def create_location(
         if ps.returncode != 0 and error:
             raise ScriptError(repr(error))
 
+    _set_location_description(dbase, location, desc)
+
+
+def _set_location_description(path, location, text):
+    """Set description (aka title aka MYNAME) for a location"""
     try:
         fd = codecs.open(
-            os.path.join(dbase, location, "PERMANENT", "MYNAME"),
+            os.path.join(path, location, "PERMANENT", "MYNAME"),
             encoding="utf-8",
             mode="w",
         )
-        if desc:
-            fd.write(desc + os.linesep)
+        if text:
+            fd.write(text + os.linesep)
         else:
             fd.write(os.linesep)
         fd.close()
