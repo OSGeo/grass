@@ -339,7 +339,7 @@ void write_vtk_data(FILE *fp, RASTER3D_Map *map, RASTER3D_Region region,
     depths = region.depths;
 
     /*the nullvalue */
-    if (!sscanf(param.null_val->answer, "%lf", &nullvalue) || sscanf(param.null_val->answer, "%lf", &nullvalue) == EOF ) {
+    if (!sscanf(param.null_val->answer, "%lf", &nullvalue)) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }

@@ -92,7 +92,7 @@ int init_vars(int argc, char *argv[])
         else if (sscanf(argv[r], "memory=%lf", &segs_mb) == 1)
             ;
         else if (sscanf(argv[r], "disturbed_land=%s", ril_name) == 1) {
-            if (sscanf(ril_name, "%lf", &ril_value) == 0 || sscanf(ril_name, "%lf", &ril_value) == EOF ) {
+            if (sscanf(ril_name, "%lf", &ril_value) == 0 ) {
                 ril_value = -1.0;
                 ril_flag++;
             }
