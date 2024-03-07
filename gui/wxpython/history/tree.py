@@ -17,9 +17,10 @@ for details.
 @author Tomas Zigo
 """
 
-import wx
 import re
 import copy
+
+import wx
 
 from core import globalvar
 
@@ -36,11 +37,7 @@ from gui_core.wrap import Menu
 
 from grass.pydispatch.signal import Signal
 
-from grass.grassdb.history import (
-    get_current_mapset_gui_history_path,
-    read_history,
-    remove_entry_from_history,
-)
+from grass.grassdb import history
 
 
 class HistoryBrowserTree(CTreeView):
@@ -51,6 +48,7 @@ class HistoryBrowserTree(CTreeView):
     def __init__(
         self,
         parent,
+        infoPanel,
         model=None,
         giface=None,
         style=wx.TR_HIDE_ROOT
@@ -65,6 +63,7 @@ class HistoryBrowserTree(CTreeView):
 
         self._giface = giface
         self.parent = parent
+        self.infoPanel = infoPanel
 
         self._initHistoryModel()
 
@@ -73,7 +72,10 @@ class HistoryBrowserTree(CTreeView):
 
         self._giface.currentMapsetChanged.connect(self.UpdateHistoryModelFromScratch)
         self._giface.entryToHistoryAdded.connect(
-            lambda cmd: self.UpdateHistoryModelByCommand(cmd)
+            lambda entry: self.AppendNodeToHistoryModel(entry)
+        )
+        self._giface.entryInHistoryUpdated.connect(
+            lambda entry: self.UpdateNodeInHistoryModel(entry)
         )
 
         self.SetToolTip(_("Double-click to open the tool"))
@@ -83,17 +85,19 @@ class HistoryBrowserTree(CTreeView):
 
     def _initHistoryModel(self):
         """Fill tree history model based on the current history log."""
-        self._history_path = get_current_mapset_gui_history_path()
-        if self._history_path:
-            cmd_list = read_history(self._history_path)
-            for label in cmd_list:
-                data = {"command": label.strip()}
-                self._model.AppendNode(
-                    parent=self._model.root,
-                    label=data["command"],
-                    data=data,
-                )
-            self._refreshTree()
+        try:
+            history_path = history.get_current_mapset_gui_history_path()
+            content_list = history.read(history_path)
+        except (OSError, ValueError) as e:
+            GError(str(e))
+
+        for data in content_list:
+            self._model.AppendNode(
+                parent=self._model.root,
+                label=data["command"].strip(),
+                data=data,
+            )
+        self._refreshTree()
 
     def _refreshTree(self):
         """Refresh tree models"""
@@ -138,18 +142,35 @@ class HistoryBrowserTree(CTreeView):
         """Reload tree history model based on the current history log from scratch."""
         self._model.RemoveNode(self._model.root)
         self._initHistoryModel()
+        self.infoPanel.clearCommandInfo()
 
-    def UpdateHistoryModelByCommand(self, label):
-        """Update the model by the command and refresh the tree.
+    def AppendNodeToHistoryModel(self, entry):
+        """Append node to the model and refresh the tree.
 
-        :param label: model node label"""
-        data = {"command": label}
-        self._model.AppendNode(
+        :param entry dict: entry with 'command' and 'command_info' keys
+        """
+        new_node = self._model.AppendNode(
             parent=self._model.root,
-            label=data["command"],
-            data=data,
+            label=entry["command"].strip(),
+            data=entry,
         )
         self._refreshTree()
+        self.Select(new_node)
+        self.ExpandNode(new_node)
+        self.infoPanel.showCommandInfo(entry["command_info"])
+
+    def UpdateNodeInHistoryModel(self, entry):
+        """Update last node in the model and refresh the tree.
+
+        :param entry dict: entry with 'command' and 'command_info' keys
+        """
+        # Remove last node
+        index = [self._model.GetLeafCount(self._model.root) - 1]
+        tree_node = self._model.GetNodeByIndex(index)
+        self._model.RemoveNode(tree_node)
+
+        # Add new node to the model
+        self.AppendNodeToHistoryModel(entry)
 
     def Run(self, node=None):
         """Parse selected history command into list and launch module dialog."""
@@ -180,13 +201,29 @@ class HistoryBrowserTree(CTreeView):
                     showTraceback=False,
                 )
 
-    def RemoveEntryFromHistory(self, del_line_number):
-        """Remove entry from command history log"""
-        history_path = get_current_mapset_gui_history_path()
+    def RemoveEntryFromHistory(self, index):
+        """Remove entry from command history log.
+
+        :param int index: index of the entry which should be removed
+        """
         try:
-            remove_entry_from_history(del_line_number, history_path)
-        except OSError as e:
+            history_path = history.get_current_mapset_gui_history_path()
+            history.remove_entry(history_path, index)
+        except (OSError, ValueError) as e:
             GError(str(e))
+
+    def GetCommandInfo(self, index):
+        """Get command info for the given command index.
+
+        :param int index: index of the command
+        """
+        command_info = {}
+        try:
+            history_path = history.get_current_mapset_gui_history_path()
+            command_info = history.read(history_path)[index]["command_info"]
+        except (OSError, ValueError) as e:
+            GError(str(e))
+        return command_info
 
     def OnRemoveCmd(self, event):
         """Remove cmd from the history file"""
@@ -197,6 +234,7 @@ class HistoryBrowserTree(CTreeView):
             self.showNotification.emit(message=_("Removing <{}>").format(cmd))
             tree_index = self._model.GetIndexOfNode(tree_node)[0]
             self.RemoveEntryFromHistory(tree_index)
+            self.infoPanel.clearCommandInfo()
             self._giface.entryFromHistoryRemoved.emit(index=tree_index)
             self._model.RemoveNode(tree_node)
             self._refreshTree()
@@ -206,6 +244,9 @@ class HistoryBrowserTree(CTreeView):
         """Item selected"""
         command = node.data["command"]
         self.showNotification.emit(message=command)
+        tree_index = self._model.GetIndexOfNode(node)[0]
+        command_info = self.GetCommandInfo(tree_index)
+        self.infoPanel.showCommandInfo(command_info)
 
     def OnRightClick(self, node):
         """Display popup menu"""

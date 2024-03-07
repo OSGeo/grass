@@ -34,7 +34,7 @@ jobs:
           # list of files that changed across commits
           fetch-depth: 0
       - name: Lint code base
-        uses: super-linter/super-linter/slim@v6.0.0
+        uses: super-linter/super-linter/slim@v6.3.0
         env:
           DEFAULT_BRANCH: main
           # To report GitHub Actions status checks
@@ -45,6 +45,7 @@ jobs:
           # Python (supported using Pylint) and C/C++ (not supported) are
           # handled separately due to the complexity of the settings.
           # VALIDATE_BASH: true
+          VALIDATE_BASH_EXEC: true
           # VALIDATE_CSS: true
           # VALIDATE_DOCKER: true
           VALIDATE_JAVASCRIPT_ES: true

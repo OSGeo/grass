@@ -25,15 +25,15 @@ jobs:
       - name: "Check that autoconf scripts are up-to-date:"
         run: |
           rm -f config.guess config.sub
-          wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess
-          wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub
+          wget http://git.savannah.gnu.org/cgit/config.git/plain/config.guess && chmod +x config.guess
+          wget http://git.savannah.gnu.org/cgit/config.git/plain/config.sub && chmod +x config.sub
       # Display changes, only to follow along in the logs.
       - run: git diff config.guess config.sub
       - name: Double check if files are modified
         run: git status --ignored
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@b1ddad2c994a25fbc81a28b3ec0e368bb2021c50 # v6.0.0
+        uses: peter-evans/create-pull-request@a4f52f8033a6168103c2538976c07b467e8163bc # v6.0.1
         with:
           commit-message: "config.guess + config.sub: updated from http://git.savannah.gnu.org/cgit/config.git/plain/"
           branch: periodic/update-configure

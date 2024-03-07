@@ -62,7 +62,7 @@ void Rast3d_get_window(RASTER3D_Region *window)
 
 /*---------------------------------------------------------------------------*/
 
-RASTER3D_Region *Rast3d_window_ptr()
+RASTER3D_Region *Rast3d_window_ptr(void)
 {
     return &g3d_window;
 }
