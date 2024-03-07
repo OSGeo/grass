@@ -392,7 +392,6 @@ class TimeSeriesMap(BaseSeriesMap):
             filename=filename,
             save_files=input_files,
             labels=self._dates,
-            labels=self._names,
             *args,
             duration=duration,
             label=label,
