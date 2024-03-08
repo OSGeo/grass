@@ -463,9 +463,11 @@ def stop_subprocesses():
 atexit.register(stop_subprocesses)
 
 
-def get_available_temporal_mapsets():
+def get_available_temporal_mapsets(only_current_mapset=False):
     """Return a list of of mapset names with temporal database driver and names
     that are accessible from the current mapset.
+    Optionally, the list can be restricted to the current mapset
+    to avoid that temporal databases outside the current mapset are used
 
     :returns: A dictionary, mapset names are keys, the tuple (driver,
               database) are the values
@@ -473,7 +475,10 @@ def get_available_temporal_mapsets():
     global c_library_interface
     global message_interface
 
-    mapsets = c_library_interface.available_mapsets()
+    if only_current_mapset:
+        mapsets = [get_current_mapset()]
+    else:
+        mapsets = c_library_interface.available_mapsets()
 
     tgis_mapsets = {}
 
@@ -1059,8 +1064,10 @@ def _create_tgis_metadata_table(content, dbif=None):
 
 
 class SQLDatabaseInterfaceConnection:
-    def __init__(self):
-        self.tgis_mapsets = get_available_temporal_mapsets()
+    def __init__(self, only_current_mapset=False):
+        self.tgis_mapsets = get_available_temporal_mapsets(
+            only_current_mapset=only_current_mapset
+        )
         self.current_mapset = get_current_mapset()
         self.connections = {}
         self.connected = False
@@ -1587,7 +1594,7 @@ class DBConnection:
 ###############################################################################
 
 
-def init_dbif(dbif):
+def init_dbif(dbif, only_current_mapset=False):
     """This method checks if the database interface connection exists,
     if not a new one will be created, connected and True will be returned.
     If the database interface exists but is not connected, the connection
@@ -1612,7 +1619,7 @@ def init_dbif(dbif):
     connection_state_changed = False
 
     if dbif is None:
-        dbif = SQLDatabaseInterfaceConnection()
+        dbif = SQLDatabaseInterfaceConnection(only_current_mapset=only_current_mapset)
         dbif.connect()
         connection_state_changed = True
     elif dbif.is_connected() is False:

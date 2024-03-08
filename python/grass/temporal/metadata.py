@@ -1409,8 +1409,8 @@ class STRDSMetadata(STDSRasterMetadataBase):
 
         dbif = SQLDatabaseInterfaceConnection()
         dbif.connect()
-        dbif.execute(sql, mapset=self.mapset)
-        rows = dbif.fetchall(mapset=self.mapset)
+        dbif.execute(sql, mapset=self.tgis_mapset)
+        rows = dbif.fetchall(mapset=self.tgis_mapset)
         dbif.close()
 
         if rows:

@@ -86,10 +86,13 @@ def main():
     if datasets and file:
         grass.fatal(_("%s= and %s= are mutually exclusive") % ("input", "file"))
 
+    mapset = grass.gisenv()["MAPSET"]
+
     # Make sure the temporal database exists
     tgis.init()
 
-    dbif = tgis.SQLDatabaseInterfaceConnection()
+    # only use the TGIS db of the current mapset
+    dbif = tgis.SQLDatabaseInterfaceConnection(only_current_mapset=True)
     dbif.connect()
 
     dataset_list = []
@@ -149,7 +152,7 @@ def main():
             count = 1
             name_list = []
             for map in maps:
-                map.select(dbif)
+                map.select(dbif, mapset=mapset)
                 # We may have multiple layer for a single map, hence we need
                 # to avoid multiple deletation of the same map,
                 # but the database entries are still present and must be removed
@@ -159,12 +162,14 @@ def main():
                 if clean and force:
                     if map.get_name() not in name_list:
                         name_list.append(str(map.get_name()))
+                print("get delete statement...")
                 map_statement += map.delete(dbif=dbif, execute=False)
+                print("got delete statement")
 
                 count += 1
                 # Delete every 100 maps
                 if count % 100 == 0:
-                    dbif.execute_transaction(map_statement)
+                    dbif.execute_transaction(map_statement, mapset=mapset)
                     if clean:
                         if type == "strds":
                             remove(type="raster", name=name_list, run_=True)
@@ -176,7 +181,7 @@ def main():
                     name_list = []
 
             if map_statement:
-                dbif.execute_transaction(map_statement)
+                dbif.execute_transaction(map_statement, mapset=mapset)
             if clean and name_list:
                 if type == "strds":
                     remove(type="raster", name=name_list, run_=True)
@@ -196,7 +201,7 @@ def main():
         )
     else:
         # Execute the collected SQL statenents
-        dbif.execute_transaction(statement)
+        dbif.execute_transaction(statement, mapset=mapset)
         dbif.close()
 
 

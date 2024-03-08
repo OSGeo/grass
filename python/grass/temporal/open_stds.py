@@ -49,6 +49,7 @@ def open_old_stds(name, type, dbif=None):
         mapset = get_current_mapset()
     else:
         name, mapset = name.split("@")
+
     semantic_label = None
     if name.find(".") > -1:
         try:
@@ -75,7 +76,7 @@ def open_old_stds(name, type, dbif=None):
 
     dbif, connection_state_changed = init_dbif(dbif)
 
-    if not sp.is_in_db(dbif):
+    if not sp.is_in_db(dbif, mapset=mapset):
         dbif.close()
         msgr.fatal(
             _("Space time %(sp)s dataset <%(id)s> not found")
