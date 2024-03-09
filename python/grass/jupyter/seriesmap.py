@@ -62,7 +62,6 @@ class SeriesMap(BaseSeriesMap):
         self._series_length = None
         self._calls = []
         self._series_added = False
-        self._names = []
 
         # Handle Regions
         self._region_manager = RegionManagerForSeries(
@@ -183,9 +182,14 @@ class SeriesMap(BaseSeriesMap):
             for grass_module, kwargs in self._calls[i]:
                 img.run(grass_module, **kwargs)
 
-    def show(self, slider_width=None, *args, **kwargs):
+    def show(
+        self,
+        slider_width=None,
+        is_date=False,
+    ):
         """Create interactive timeline slider.
 
+        param bool is_date: True if timeseriesmap, False if seriesmap
         param str slider_width: width of datetime selection slider
 
         The slider_width parameter sets the width of the slider in the output cell.
@@ -194,27 +198,18 @@ class SeriesMap(BaseSeriesMap):
         or "px" suffix. For example, slider_width="80%" or slider_width="500px".
         slider_width is passed to ipywidgets in ipywidgets.Layout(width=slider_width).
         """
-        lookup = list(zip(self._names, range(self._series_length)))
-        return super().show(
-            slider_width=slider_width,
-            *args,
-            **kwargs,
-            options=lookup,
-            value=0,
-            max_value=self._series_length - 1,
-            label="index",
-        )
+
+        return super().show(slider_width=slider_width, is_date=is_date)
 
     def save(
         self,
         filename,
-        *args,
         duration=500,
         label=True,
         font=None,
         text_size=12,
         text_color="gray",
-        **kwargs,
+        is_date=False,
     ):
         """
         Creates a GIF animation of rendered layers.
@@ -229,20 +224,15 @@ class SeriesMap(BaseSeriesMap):
         param str font: font file
         param int text_size: size of date/time text
         param str text_color: color to use for the text.
+        param bool is_date: True if timeseriesmap, False if seriesmap
         """
-        tmp_files = []
-        for _, file in self._layer_filename_dict.items():
-            tmp_files.append(file)
 
         return super().save(
             filename=filename,
-            save_files=tmp_files,
-            labels=self._names,
-            *args,
             duration=duration,
             label=label,
             font=font,
             text_size=text_size,
             text_color=text_color,
-            **kwargs,
+            is_date=is_date,
         )

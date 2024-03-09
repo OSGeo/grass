@@ -158,7 +158,6 @@ class TimeSeriesMap(BaseSeriesMap):
         self._overlay_calls = []
         self._timeseries_added = False
         self._layers = None
-        self._dates = None
         self._date_layer_dict = {}
 
         # Handle Regions
@@ -336,10 +335,15 @@ class TimeSeriesMap(BaseSeriesMap):
                 # Render image
                 self._render_layer(layer, filename)
 
-    def show(self, slider_width=None, *args, **kwargs):
+    def show(
+        self,
+        slider_width=None,
+        is_date=True,
+    ):
         """Create interactive timeline slider.
 
         param str slider_width: width of datetime selection slider
+        param bool is_date: True if timeseriesmap, False if seriesmap
 
         The slider_width parameter sets the width of the slider in the output cell.
         It should be formatted as a percentage (%) between 0 and 100 of the cell width
@@ -349,25 +353,18 @@ class TimeSeriesMap(BaseSeriesMap):
         """
         return super().show(
             slider_width=slider_width,
-            *args,
-            **kwargs,
-            options=self._dates,
-            value=self._dates[0],
-            description=_("Date/Time"),
-            max_value=len(self._dates) - 1,
-            label="date",
+            is_date=is_date,
         )
 
     def save(
         self,
         filename,
-        *args,
         duration=500,
         label=True,
         font="DejaVuSans.ttf",
         text_size=12,
         text_color="gray",
-        **kwargs,
+        is_date=True,
     ):
         """
         Creates a GIF animation of rendered layers.
@@ -382,21 +379,15 @@ class TimeSeriesMap(BaseSeriesMap):
         param str font: font file
         param int text_size: size of date/time text
         param str text_color: color to use for the text.
+        param bool is_date: True if timeseriesmap, False if seriesmap
         """
-
-        input_files = []
-        for date in self._dates:
-            input_files.append(self._date_filename_dict[date])
 
         return super().save(
             filename=filename,
-            save_files=input_files,
-            labels=self._dates,
-            *args,
             duration=duration,
             label=label,
             font=font,
             text_size=text_size,
             text_color=text_color,
-            **kwargs,
+            is_date=is_date,
         )

@@ -1,3 +1,5 @@
+"""Base class for SeriesMap and TimeSeriesMap"""
+
 import os
 import tempfile
 import weakref
@@ -40,6 +42,10 @@ class BaseSeriesMap:
         self._date_filename_dict = {}
         self._width = width
         self._height = height
+        self._dates = None
+        self._names = []
+        self.base_file = None
+        self.grass_module = None
         # Create a temporary directory for our PNG images
         # Resource managed by weakref.finalize.
         self._tmpdir = (
@@ -107,15 +113,7 @@ class BaseSeriesMap:
         self._render_baselayers(img)
         self._layers_rendered = True
 
-    def show(
-        self,
-        slider_width=None,
-        options=None,
-        value=None,
-        description=None,
-        max_value=None,
-        label=None,
-    ):
+    def show(self, slider_width=None, is_date=None):
         """Create interactive timeline slider.
 
         param str slider_width: width of datetime selection slider
@@ -142,11 +140,23 @@ class BaseSeriesMap:
         if not slider_width:
             slider_width = "70%"
 
+        if is_date:
+            options = self._dates
+            value = self._dates[0]
+            description = _("Date/Time")
+            max_value = len(self._dates) - 1
+        else:
+            lookup = list(zip(self._names, range(self._series_length)))
+            options = lookup
+            value = 0
+            description = None
+            max_value = self._series_length - 1
+
         # Datetime selection slider
         slider = widgets.SelectionSlider(
-            options,
-            value,
-            description,
+            options=options,
+            value=value,
+            description=description,
             disabled=False,
             continuous_update=True,
             orientation="horizontal",
@@ -157,7 +167,7 @@ class BaseSeriesMap:
             interval=500,
             value=0,
             min=0,
-            max_value=max_value,
+            max=max_value,
             step=1,
             description="Press play",
             disabled=False,
@@ -165,24 +175,31 @@ class BaseSeriesMap:
         out_img = widgets.Image(value=b"", format="png")
 
         def change_slider(change):
-            if isinstance(slider.options[0], tuple):
-                slider.value = slider.options[change.new][1]
-            else:
+            if is_date:
                 slider.value = slider.options[change.new]
+            else:
+                slider.value = slider.options[change.new][1]
 
         play.observe(change_slider, names="value")
 
         # Display image associated with datetime
-        def change_image(parameter, is_date=True):
-            if is_date:
-                filename = self._date_filename_dict[parameter]
-            else:
-                filename = self._layer_filename_dict[parameter]
+        if is_date:
 
-            with open(filename, "rb") as rfile:
-                out_img.value = rfile.read()
+            def change_image(date):
+                filename = self._date_filename_dict[date]
+                with open(filename, "rb") as rfile:
+                    out_img.value = rfile.read()
 
-        widgets.interactive_output(change_image, {label: slider})
+            widgets.interactive_output(change_image, {"date": slider})
+        else:
+
+            def change_image(index):
+                filename = self._layer_filename_dict[index]
+                with open(filename, "rb") as rfile:
+                    out_img.value = rfile.read()
+
+            widgets.interactive_output(change_image, {"index": slider})
+
         layout = widgets.Layout(
             width="100%", display="inline-flex", flex_flow="row wrap"
         )
@@ -191,13 +208,12 @@ class BaseSeriesMap:
     def save(
         self,
         filename,
-        save_files,
-        labels,
         duration=500,
         label=True,
         font=None,
         text_size=12,
         text_color="gray",
+        is_date=None,
     ):
         """
         Creates a GIF animation of rendered layers.
@@ -207,17 +223,29 @@ class BaseSeriesMap:
         https://pillow.readthedocs.io/en/stable/reference/ImageColor.html#color-names
 
         param str filename: name of output GIF file
-        param list save_files: list containing the file paths
-        param list labels: list of layer labels
         param int duration: time to display each frame; milliseconds
         param bool label: include date/time stamp on each frame
         param str font: font file
         param int text_size: size of date/time text
         param str text_color: color to use for the text.
+        param bool is_date: True if timeseriesmap, False if seriesmap
         """
         # Render images if they have not been already
         if not self._layers_rendered:
             self.render()
+
+        if is_date:
+            input_files = []
+            for date in self._dates:
+                input_files.append(self._date_filename_dict[date])
+            save_files = input_files
+            labels = self._dates
+        else:
+            tmp_files = []
+            for _, file in self._layer_filename_dict.items():
+                tmp_files.append(file)
+            save_files = tmp_files
+            labels = self._names
 
         save_gif(
             save_files,
