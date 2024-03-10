@@ -152,6 +152,16 @@ int D_open_driver(void)
 
     init();
 
+    /* don't run display commands if GRASS_REGION (display extent) is not
+       defined from the terminal because they can be expensive computationally
+       and extremely slow even for a small region; rendering will be done by
+       the display driver for the current display extent defined by
+       GRASS_REGION */
+    if (!getenv("GRASS_REGION")) {
+        D_close_driver();
+        exit(0);
+    }
+
     return 0;
 }
 
