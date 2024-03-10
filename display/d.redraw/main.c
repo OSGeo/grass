@@ -104,6 +104,7 @@ int main(int argc, char **argv)
 
     for (i = 0; i < num_lines; i++)
         fprintf(fp, "%s\n", lines[i]);
+
     fclose(fp);
 
     exit(EXIT_SUCCESS);
