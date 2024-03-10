@@ -2,7 +2,6 @@ MODULE_TOPDIR = ../../..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
 include $(MODULE_TOPDIR)/include/Make/Python.make
-include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
@@ -26,6 +25,3 @@ $(DSTDIR): | $(GDIR)
 
 $(DSTDIR)/%: % | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
-
-#doxygen:
-DOXNAME = pythontemporal
