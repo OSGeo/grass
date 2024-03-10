@@ -72,7 +72,7 @@ int main(int argc, char **argv)
     while (G_getl2(line, LINE_LEN, fp)) {
         /* don't add d.redraw this time */
         if (strcmp(line, "d.redraw") == 0) {
-            /* remove its comment line */
+            /* remove its comment line above */
             num_lines--;
             continue;
         }
