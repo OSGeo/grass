@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     D_open_driver();
 
     /* the display driver will re-run this module with the current display
-     * extent in GRASS_REGION and render all layers using G_spawn() below */
+     * extent in GRASS_REGION and render all layers using G_vspawn_ex() below */
     D_close_driver();
 
     G_temp_element(element);
