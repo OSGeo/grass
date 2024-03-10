@@ -150,8 +150,6 @@ int D_open_driver(void)
     G_verbose_message(_("Using display driver <%s>..."), drv->name);
     LIB_init(drv);
 
-    init();
-
     /* don't run display commands if GRASS_REGION (display extent) is not
        defined from the terminal because they can be expensive computationally
        and extremely slow even for a small region; rendering will be done by
@@ -161,6 +159,8 @@ int D_open_driver(void)
         D_close_driver();
         exit(0);
     }
+
+    init();
 
     return 0;
 }
