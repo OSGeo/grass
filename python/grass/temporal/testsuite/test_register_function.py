@@ -711,7 +711,7 @@ class TestVectorRegisterFunctions(TestCase):
     def test_absolute_time_stvds_3(self):
         """Test the registration of maps with absolute time in a
         space time raster dataset. The timestamps are set via method
-        arguments and with the c-interface. The timestamps of the method
+        arguments and with the C-interface. The timestamps of the method
         arguments should overwrite the time stamps set via the C-interface.
         """
 
