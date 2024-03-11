@@ -78,6 +78,10 @@ static void init(void)
   Default display driver is Cairo, if not available PNG is used.
 
   \return 0 on success
+  \return -1 if GRASS_REGION is not defined; use this return value to decide
+  what to do when rendering the entire raster or computational region can be
+  slow without constraining to the display extent in GRASS_REGION from the
+  monitor
 */
 int D_open_driver(void)
 {
@@ -150,19 +154,16 @@ int D_open_driver(void)
     G_verbose_message(_("Using display driver <%s>..."), drv->name);
     LIB_init(drv);
 
-    /* don't run display commands if GRASS_REGION (display extent) is not
-       defined from the terminal because they can be expensive computationally
-       and extremely slow even for a small region; rendering will be done by
-       the display driver for the current display extent defined by
-       GRASS_REGION */
-    if (!getenv("GRASS_REGION")) {
-        D_close_driver();
-        exit(0);
-    }
-
     init();
 
-    return 0;
+    /* don't run display commands if GRASS_REGION (display extent) is not
+     * defined from the terminal because they can be expensive computationally
+     * and extremely slow even for a small region; rendering will be done by
+     * the display driver for the current display extent defined by
+     * GRASS_REGION; don't exit here because not all display modules render
+     * layers on the monitor (e.g., d.info), so let them decide what to do in
+     * this case */
+    return getenv("GRASS_REGION") ? 0 : -1;
 }
 
 /*!
