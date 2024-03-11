@@ -7,7 +7,7 @@ import re
 import os
 from textwrap import TextWrapper
 import sys
-import subprocess
+import subproccess
 
 rev_range = ""
 
@@ -15,20 +15,12 @@ if len(sys.argv) > 1:
     base = sys.argv[1]
     rev_range = "%s..HEAD" % base
 
+# Define the git command and its arguments as a list
+git_command = ["git", "log", "--summary", "--stat", "--no-merges", "--date=short", rev_range]
+
 # Execute git log with the desired command line options.
-# uses subproccess instead, more secure.
-command =  ["git", "log", "--summary", "--stat", "--no-merges", "--date=short", rev_range]
-
-fin = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-output, error = process.communicate()
-
-# Check for errors
-if process.returncode != 0:
-    # Handle error
-    print("Error:", error.decode("utf-8"))
-else:
-    # Process the output
-    print("Output:", output.decode("utf-8"))
+process = subprocess.Popen(git_command, stdout=subprocess.PIPE)
+fin = process.stdout
 
 # Create a ChangeLog file in the current directory.
 fout = open("ChangeLog", "w")
