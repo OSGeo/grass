@@ -513,7 +513,7 @@ class TestRasterRegisterFunctions(TestCase):
 
     def test_relative_time_3(self):
         """Test the registration of maps with relative time. The
-        timetsamps are set beforehand using the C-interface.
+        timestamps are set beforehand using the C-interface.
         """
         ciface = tgis.get_tgis_c_library_interface()
         ciface.write_raster_timestamp(
