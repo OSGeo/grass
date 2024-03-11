@@ -49,12 +49,15 @@ int main(int argc, char **argv)
         G_fatal_error(_("No graphics device selected. Use d.mon to select "
                         "graphics device."));
 
-    /* first time it runs, add d.redraw to cmd file and exit in D_open_driver()
-     */
-    D_open_driver();
+    if (D_open_driver() < 0) {
+        /* first time it runs, add d.redraw to cmd file and exit; this module
+         * will be rerun by the monitor with the display extent (D_open_driver()
+         * will return 0 then) and use that information to constrain rendering
+         */
+        D_close_driver();
+        exit(EXIT_SUCCESS);
+    }
 
-    /* the display driver will re-run this module with the current display
-     * extent in GRASS_REGION and render all layers using G_vspawn_ex() below */
     D_close_driver();
 
     G_temp_element(element);
