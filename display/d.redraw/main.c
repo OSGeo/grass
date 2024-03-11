@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 
         if (*line == '#') {
             /* render next command into the same existing file */
-            if (strstr(line, "# GRASS_RENDER_FILE=") == line)
+            if (strstr(line, "# GRASS_RENDER_") == line)
                 putenv(G_store(line + 2));
             continue;
         }
