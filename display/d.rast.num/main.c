@@ -137,6 +137,15 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    /* Setup driver and check important information */
+    if (D_open_driver() < 0) {
+        /* don't render the entire raster region; this module will be rerun by
+         * the monitor with the display extent (D_open_driver() will return 0
+         * then) and use that information to constrain rendering */
+        D_close_driver();
+        exit(EXIT_SUCCESS);
+    }
+
     map_name = opt.map->answer;
 
     if (strcmp("none", opt.grid_color->answer) == 0)
@@ -220,10 +229,6 @@ int main(int argc, char **argv)
         G_fatal_error(_("Aborting (region larger then 200 rows X 200 cols is "
                         "not allowed)"));
     }
-
-    /* Setup driver and check important information */
-
-    D_open_driver();
 
     if (opt.font->answer)
         D_font(opt.font->answer);
