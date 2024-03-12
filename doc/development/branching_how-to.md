@@ -73,7 +73,9 @@ the wrong version on the branch in case other PRs need to be merged.
 
 ## Website Updates
 
-(Here go things like addition of branch creation to history.)
+Add the branch creation to the following history:
+
+<https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md>
 
 ## Create by Command Line
 
