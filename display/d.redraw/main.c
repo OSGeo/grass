@@ -28,7 +28,7 @@ int main(int argc, char **argv)
     const char *mon;
     char element[GPATH_MAX], cmd_file[GPATH_MAX];
     FILE *fp;
-    int lines_size, num_lines;
+    int lines_size, num_lines, num_comment_lines;
     char **lines, line[LINE_LEN];
     char **cmd_argv;
     int i;
@@ -68,15 +68,15 @@ int main(int argc, char **argv)
     if (!(fp = fopen(cmd_file, "r")))
         G_fatal_error(_("Unable to open file '%s' for reading."), cmd_file);
 
-    num_lines = lines_size = 0;
+    lines_size = num_lines = num_comment_lines = 0;
     lines = NULL;
 
     /* read and save cmd lines; run display commands now */
     while (G_getl2(line, LINE_LEN, fp)) {
         /* don't add d.redraw this time */
         if (strcmp(line, "d.redraw") == 0) {
-            /* remove its comment line above */
-            num_lines--;
+            /* remove its comment lines above */
+            num_lines -= num_comment_lines;
             continue;
         }
         if (lines_size == num_lines) {
@@ -86,11 +86,13 @@ int main(int argc, char **argv)
         lines[num_lines++] = G_store(line);
 
         if (*line == '#') {
+	    num_comment_lines++;
             /* render next command into the same existing file */
             if (strstr(line, "# GRASS_RENDER_") == line)
                 putenv(G_store(line + 2));
             continue;
         }
+	num_comment_lines = 0;
 
         /* split line by space; double-quote delimiters protect spaces */
         cmd_argv = G_tokenize2(line, " ", "\"");
