@@ -220,13 +220,7 @@ int main(int argc, char **argv)
         G_warning(_("Scale option requires magnitude_map"));
 
     /* Setup driver and check important information */
-    if (D_open_driver() < 0) {
-        /* don't render the entire raster region; this module will be rerun by
-         * the monitor with the display extent (D_open_driver() will return 0
-         * then) and use that information to constrain rendering */
-        D_close_driver();
-        exit(EXIT_SUCCESS);
-    }
+    D_open_driver();
 
     D_setup(0);
 
