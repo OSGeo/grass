@@ -86,13 +86,13 @@ int main(int argc, char **argv)
         lines[num_lines++] = G_store(line);
 
         if (*line == '#') {
-	    num_comment_lines++;
+            num_comment_lines++;
             /* render next command into the same existing file */
             if (strstr(line, "# GRASS_RENDER_") == line)
                 putenv(G_store(line + 2));
             continue;
         }
-	num_comment_lines = 0;
+        num_comment_lines = 0;
 
         /* split line by space; double-quote delimiters protect spaces */
         cmd_argv = G_tokenize2(line, " ", "\"");
