@@ -148,6 +148,7 @@ notebook:
       - any-glob-to-any-file:
         - '**/*.ipynb'
         - doc/notebooks/**
+        - python/grass/jupyter/**
 C:
   - changed-files:
       - any-glob-to-any-file: '**/*.c'
