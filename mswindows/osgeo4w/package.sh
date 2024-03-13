@@ -110,7 +110,6 @@ DLLS="
 	/mingw64/bin/zlib1.dll
 	/mingw64/bin/libbz2-1.dll
 	/mingw64/bin/libiconv-2.dll
-	/mingw64/bin/libexpat-1.dll
 	/mingw64/bin/libfontconfig-1.dll
 	/mingw64/bin/libgfortran-5.dll
 	/mingw64/bin/libbrotlidec.dll
