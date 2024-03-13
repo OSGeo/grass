@@ -1036,6 +1036,8 @@ class VDigitToolbar(BaseToolbar):
         # select the given map layer for editing
         self.StartEditing(self.layers[selection])
 
+        wx.CallLater(100, self.MapWindow.SetFocus)
+
         event.Skip()
 
     def StartEditing(self, mapLayer):
