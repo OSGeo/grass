@@ -79,9 +79,8 @@ static void init(void)
 
   \return 0 on success
   \return -1 if GRASS_REGION is not defined; use this return value to decide
-  what to do when rendering the entire raster or computational region can be
-  slow without constraining to the display extent in GRASS_REGION from the
-  monitor
+  what to do when rendering for the entire computational region can be slow
+  without constraining to the display extent in GRASS_REGION from the monitor
 */
 int D_open_driver(void)
 {
@@ -156,13 +155,27 @@ int D_open_driver(void)
 
     init();
 
-    /* don't run display commands if GRASS_REGION (display extent) is not
-     * defined from the terminal because they can be expensive computationally
-     * and extremely slow even for a small region; rendering will be done by
-     * the display driver for the current display extent defined by
-     * GRASS_REGION; don't exit here because not all display modules render
-     * layers on the monitor (e.g., d.info), so let them decide what to do in
-     * this case */
+    /* if GRASS_REGION is not defined, a display module can choose to render
+     * for the entire computational region or wait for the monitor to call it
+     * with GRASS_REGION set to the current display extent (what is shown) in
+     * the monitor; the monitor defines GRASS_REGION to the display extent
+     * dynamically, but it's the display module who is responsible to contrain
+     * its rendering within this region to save computational time; if the
+     * display module does not check the return value of D_open_driver(), it
+     * will have to render the same content twice (once by the command line and
+     * once more by the monitor) and it is potentially more intensive
+     * computationally to render for the entire computational region, so it is
+     * recommended to exit from the module if D_open_driver() returns -1; upon
+     * exit, the module will be executed again automatically by the monitor
+     * with GRASS_REGION and D_open_driver() will return 0 then; now the module
+     * can proceed to render its content only for the display extent; here is
+     * the suggested pattern:
+     *
+       if (D_open_driver() == -1) {
+           D_close_driver();
+           exit(EXIT_SUCCESS);
+       }
+     */
     return getenv("GRASS_REGION") ? 0 : -1;
 }
 
