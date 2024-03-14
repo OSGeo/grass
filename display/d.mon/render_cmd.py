@@ -8,6 +8,20 @@ from grass.script import core as grass
 from grass.script import task as gtask
 from grass.exceptions import CalledModuleError
 
+non_rendering_modules = (
+    "d.colorlist",
+    "d.font",
+    "d.fontlist",
+    "d.frame",
+    "d.info",
+    "d.mon",
+    "d.out.file",
+    "d.to.rast",
+    "d.what.rast",
+    "d.what.vect",
+    "d.where",
+)
+
 
 # read environment variables from file
 def read_env_file(env_file):
@@ -49,19 +63,7 @@ def render(cmd, mapfile):
 
 # update cmd file
 def update_cmd_file(cmd_file, cmd, mapfile):
-    if cmd[0] in (
-        "d.colorlist",
-        "d.font",
-        "d.fontlist",
-        "d.frame",
-        "d.info",
-        "d.mon",
-        "d.out.file",
-        "d.to.rast",
-        "d.what.rast",
-        "d.what.vect",
-        "d.where",
-    ):
+    if cmd[0] in non_rendering_modules:
         return
 
     mode = "w" if cmd[0] == "d.erase" else "a"
@@ -165,8 +167,10 @@ if __name__ == "__main__":
 
     read_stdin(cmd)
 
-    # wx monitors will render new layers internally
-    if not mon.startswith("wx"):
+    # wx monitors will render new layers internally so don't render them here;
+    # also, some display modules print information to the terminal rather than
+    # rendering any contents on the monitor so allow them to run here
+    if not mon.startswith("wx") or cmd[0] in non_rendering_modules:
         render(cmd, mapfile)
 
     update_cmd_file(os.path.join(path, "cmd"), cmd, mapfile)
