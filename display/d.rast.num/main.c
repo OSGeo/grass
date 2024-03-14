@@ -138,13 +138,7 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
 
     /* Setup driver and check important information */
-    if (D_open_driver() == -1) {
-        /* don't render the entire raster region; this module will be rerun by
-         * the monitor with the display extent (D_open_driver() will return 0
-         * then) and use that information to constrain rendering */
-        D_close_driver();
-        exit(EXIT_SUCCESS);
-    }
+    D_open_driver();
 
     map_name = opt.map->answer;
 
