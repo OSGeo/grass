@@ -176,7 +176,7 @@ int D_open_driver(void)
            exit(EXIT_SUCCESS);
        }
      */
-    return getenv("GRASS_REGION") ? 0 : -1;
+    return !m || getenv("GRASS_REGION") ? 0 : -1;
 }
 
 /*!
