@@ -2,6 +2,7 @@
 import os
 import sys
 import tempfile
+from pathlib import Path
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -56,7 +57,6 @@ def update_cmd_file(cmd_file, cmd, mapfile):
         "d.info",
         "d.mon",
         "d.out.file",
-        "d.redraw",
         "d.to.rast",
         "d.what.rast",
         "d.what.vect",
@@ -157,13 +157,18 @@ if __name__ == "__main__":
             mapfile += ".png"
         else:
             mapfile += ".ppm"
+        # to force rendering by wx monitors
+        Path(mapfile).touch()
     else:
         mapfile = None
         adjust_region(width, height)
 
     read_stdin(cmd)
 
-    render(cmd, mapfile)
+    # wx monitors will render new layers internally
+    if not mon.startswith("wx"):
+        render(cmd, mapfile)
+
     update_cmd_file(os.path.join(path, "cmd"), cmd, mapfile)
     if cmd[0] == "d.erase" and os.path.exists(legfile):
         os.remove(legfile)
