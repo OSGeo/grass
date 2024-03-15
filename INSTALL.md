@@ -55,7 +55,6 @@ repository (<https://github.com/OSGeo/grass/>) or as a auto-generated snapshot
 contains the date when the snapshot was created (checked out from
 the GitHub repository), e.g. grass-3.7.git_src_snapshot_2022_04_27.tar.gz
 from <https://grass.osgeo.org/grass-devel/source/snapshot/>
-Further instructions at <https://trac.osgeo.org/grass/wiki/DownloadSource>
 
 ## (B) COMPILATION
 
@@ -331,10 +330,6 @@ Please see the README file and the files at:
 
 Please see ./SUBMITTING in this directory, or better,
 <https://trac.osgeo.org/grass/wiki/Submitting>
-
-## (N) TUTORIALS
-
-<https://grass.osgeo.org/learn/newcomers/>
 
 ## Authors
 
