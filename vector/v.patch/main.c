@@ -416,7 +416,7 @@ int main(int argc, char *argv[])
             Vect_copy_head_data(&InMap, &OutMap);
 
         if (do_table) {
-            add_cat = maxcat + 1;
+            add_cat = maxcat;
         }
         else {
             add_cat = 0;
