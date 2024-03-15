@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import os
 import sys
+import glob
 import tempfile
 from pathlib import Path
 
@@ -21,6 +22,19 @@ non_rendering_modules = (
     "d.what.vect",
     "d.where",
 )
+
+
+# remove empty mapfile from non-rendering modules
+def remove_mapfile(mapfile):
+    # adopted from Map.DeleteLayer() in gui/wxpython/core/render.py
+    base = os.path.split(mapfile)[0]
+    mapfile = os.path.split(mapfile)[1]
+    tempbase = mapfile.split(".")[0]
+    if base == "" or tempbase == "":
+        return
+    basefile = os.path.join(base, tempbase) + r".*"
+    for f in glob.glob(basefile):
+        os.remove(f)
 
 
 # read environment variables from file
@@ -57,6 +71,11 @@ def render(cmd, mapfile):
         env["GRASS_RENDER_FILE"] = mapfile
     try:
         grass.run_command(cmd[0], env=env, **cmd[1])
+        # display driver can generate a blank map file unnecessarily for
+        # non-rendering modules; delete it
+        if cmd[0] in non_rendering_modules and os.path.exists(mapfile):
+            remove_mapfile(mapfile)
+
     except CalledModuleError as e:
         grass.debug("Unable to render: {0}".format(e), 1)
 
@@ -159,8 +178,10 @@ if __name__ == "__main__":
             mapfile += ".png"
         else:
             mapfile += ".ppm"
-        # to force rendering by wx monitors
-        Path(mapfile).touch()
+        # to force rendering by wx monitors, but don't create a map file for
+        # non-rendering modules
+        if cmd[0] not in ("d.redraw",) + non_rendering_modules:
+            Path(mapfile).touch()
     else:
         mapfile = None
         adjust_region(width, height)
