@@ -6,3 +6,5 @@ paths-ignore:
   - dist.*
   - node_modules
   - python/grass/pygrass/tests
+queries:
+  - uses: security-and-quality
