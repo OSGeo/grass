@@ -7,7 +7,7 @@ import re
 import os
 from textwrap import TextWrapper
 import sys
-import subproccess
+import subprocess
 
 rev_range = ""
 
