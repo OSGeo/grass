@@ -757,6 +757,7 @@ double horizon_height(void)
 
     tanh0 = 0.;
     length = 0;
+    zp = z_orig;
 
     height = searching();
 
@@ -1126,7 +1127,9 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
         }
         else {
             dfr_rad = step * deg2rad;
-            arrayNumInt = (int)((end - start) / fabs(step));
+            arrayNumInt = 0;
+            for (double tmp = 0; tmp < end - start; tmp += fabs(step))
+                ++arrayNumInt;
         }
 
         decimals = G_get_num_decimals(str_step);

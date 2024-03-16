@@ -144,6 +144,12 @@ class TestHorizon(TestCase):
         stdout = module.outputs.stdout
         self.assertMultiLineEqual(first=ref2, second=stdout)
 
+        # include nulls along the edge
+        self.runModule("g.region", raster="elevation", w="w-100")
+        self.assertModule(module)
+        stdout = module.outputs.stdout
+        self.assertMultiLineEqual(first=ref2, second=stdout)
+
     def test_point_mode_multiple_direction_artificial(self):
         """Test mode with 1 point and multiple directions with artificial surface"""
         module = SimpleModule(
@@ -176,6 +182,7 @@ class TestHorizon(TestCase):
         )
 
     def test_raster_mode_multiple_direction(self):
+        self.runModule("g.region", raster="elevation", res=100)
         module = SimpleModule(
             "r.horizon",
             elevation="elevation",
@@ -193,12 +200,14 @@ class TestHorizon(TestCase):
         self.assertMultiLineEqual(
             first=(
                 "test_horizon_output_from_elevation_010_000\n"
-                "test_horizon_output_from_elevation_025_512"
+                "test_horizon_output_from_elevation_025_512\n"
+                "test_horizon_output_from_elevation_041_024"
             ),
             second=stdout,
         )
 
     def test_raster_mode_multiple_direction_offset(self):
+        self.runModule("g.region", raster="elevation", res=100)
         module = SimpleModule(
             "r.horizon",
             elevation="elevation",
@@ -217,7 +226,8 @@ class TestHorizon(TestCase):
         self.assertMultiLineEqual(
             first=(
                 "test_horizon_output_from_elevation_090_000\n"
-                "test_horizon_output_from_elevation_105_512"
+                "test_horizon_output_from_elevation_105_512\n"
+                "test_horizon_output_from_elevation_121_024"
             ),
             second=stdout,
         )

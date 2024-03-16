@@ -20,40 +20,34 @@ concurrency:
 jobs:
   macos_build:
     name: macOS build
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
+      - name: Info
+        run: |
+          echo "macOS version $(sw_vers -productVersion)"
+          echo "architecture $(uname -a)"
+      - name: Disabling Spotlight
+        run: sudo mdutil -a -i off
+      - name: Uninstalling Homebrew
+        run: |
+          echo "Moving directories..."
+          sudo mkdir /opt/off
+          /usr/bin/sudo /usr/bin/find /usr/local /opt/homebrew -mindepth 1 -maxdepth 1 \
+            -type d -print -exec /bin/mv {} /opt/off/ \;
+          echo "Removing files..."
+          /usr/bin/sudo /usr/bin/find /usr/local /opt/homebrew -mindepth 1 -maxdepth 1 \
+            -type f -print -delete
+          hash -r
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-      - name: Setup Mambaforge
-        uses: conda-incubator/setup-miniconda@v3
+      - name: Setup Mamba
+        uses: mamba-org/setup-micromamba@v1
         with:
-          channels: conda-forge
-          miniforge-variant: Mambaforge
-          miniforge-version: latest
-          activate-environment: grass-env
-          use-mamba: true
-      - name: Get cache date
-        id: get-date
-        run: echo "today=$(/bin/date -u '+%Y%m%d')" >> $GITHUB_OUTPUT
-        shell: bash
-      - name: Cache conda environment
-        uses: actions/cache@v4
-        with:
-          path: ~/miniconda3/envs/grass-env
-          key: conda-macos-x86_64-${{
-            steps.get-date.outputs.today }}-${{
-            hashFiles('.github/workflows/macos_dependencies.txt') }}-${{
-            env.CACHE_NUMBER }}
-        id: cache
-      - name: Update environment
-        run: mamba env update -n grass-env -f .github/workflows/macos_dependencies.txt
-        if: steps.cache.outputs.cache-hit != 'true'
-      - name: Conda info
+          init-shell: bash
+          environment-file: .github/workflows/macos_dependencies.txt
+          environment-name: grass-env
+      - name: Environment info
         shell: bash -el {0}
         run: |
-          conda info
-          conda list
-          conda config --show-sources
-          conda config --show
           printenv | sort
           $CC --version
       - name: Create installation directory
