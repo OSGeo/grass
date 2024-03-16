@@ -5,14 +5,14 @@ with certain structure which GRASS GIS works efficiently with.
 Project is a directory with data related to
 one geographic location or a project.
 All data within one project has the same coordinate reference system.
-A project contains Mapsets and each Mapset contains data related to
+A project contains mapsets and each mapset contains data related to
 a specific task, user or a smaller project.
-Within each project, a mandatory PERMANENT Mapset exists
+Within each project, a mandatory PERMANENT mapset exists
 which can contain commonly used data within one GRASS project
 such as base maps.
-PERMANENT Mapset also contains metadata related to the project
+PERMANENT mapset also contains metadata related to the project
 such as the coordinate reference system.
-When GRASS GIS is started it connects to a Database, Project and Mapset
+When GRASS GIS is started it connects to a database, project and mapset
 specified by the user.
 
 <p>
@@ -35,7 +35,7 @@ multiple users
 <h3>GRASS GIS Database</h3>
 
 All data for GRASS GIS must be in GRASS GIS Database which is a directory
-(visible on the disk) containing subdirectories which are GRASS Projects.
+(visible on the disk) containing subdirectories which are GRASS projects.
 User can have one or more of Databases on the disk. Typically users have
 one directory called <code>grassdata</code> in their home directory.
 In multi-user environment users often have a <code>grassdata</code> directory
@@ -55,9 +55,10 @@ GRASS GIS Databases is in GRASS GIS often called GISDBASE or DATABASE.
 
 <h3>GRASS Projects</h3>
 
-Project is a directory which contains GRASS Mapsets which are its subdirectories.
-All data in one Project have the same coordinate reference system (projection, datum).
-Each project must contain a Mapset called PERMANENT.
+Project is further organized into mapsets which are subdirectories of
+the project directory. All data in one project have the same coordinate
+reference system (projection, datum).
+Each project contains a mapset called PERMANENT.
 Typically, a project contains all data related to one real-world project
 or a geographic area (geographic location or region).
 Alternatively, a project can simply contain data in a given coordinate
@@ -70,10 +71,8 @@ when they want to share a lot of data.
 For example, GRASS GIS sample data are provided as projects.
 
 <p>
-Note that projects are referred to as <em>locations</em> in some places, such as older documentation.
-Location is an older name for GRASS projects
-and has not been completely removed from the code and documentation yet
-(contributions welcome).
+Note that a GRASS project used to be called <em>location</em> and
+this name has not been completely removed from code and documentation yet.
 
 <p>
 Users and programmers familiar with relational databases such as PostgreSQL
@@ -90,17 +89,17 @@ Mapsets are a tool for organizing maps in a transparent way
 as well as a tool for isolating different tasks to prevent data loss.
 
 <p>
-GRASS GIS is always connected to one particular Mapset.
+GRASS GIS is always connected to one particular mapset.
 GRASS GIS modules can create, modify, change, or delete a data only in
-the current Mapset.
-By default, only the data from the current Mapset and PERMANENT Mapset
+the current mapset.
+By default, only the data from the current mapset and PERMANENT mapset
 are visible. Using
 <a href="g.mapsets.html"><em>g.mapsets</em></a>
-module or in GUI other Mapsets can be made visible and seamlessly accessible.
-All data are available for reading when Mapset is specified explicitly,
-for example to access map <code>streets</code> in Mapset
+module or in GUI other mapsets can be made visible and seamlessly accessible.
+All data are available for reading when mapset is specified explicitly,
+for example to access map <code>streets</code> in mapset
 <code>new_highway</code> user can use <code>streets@new_highway</code>.
-For maps which are in the current or PERMAENT Mapsets or Mapsets
+For maps which are in the current or PERMAENT mapsets or mapsets
 sets as visible (accessible), there is no need to use
 <code>@mapset</code> syntax.
 
@@ -109,16 +108,16 @@ sets as visible (accessible), there is no need to use
 Mapsets are used to store maps related to one project, smaller project,
 specific task, issue or subregions.
 In a multi-user environment, where team members work together on a single project,
-Mapsets support simultaneous access of several users to the maps
+mapsets support simultaneous access of several users to the maps
 stored within the same project.
 Besides access to their own
-Mapset, each user can also read maps in PERMANENT Mapsent
-and in other users' Mapsets when set.
+mapset, each user can also read maps in PERMANENT Mapsent
+and in other users' mapsets when set.
 However, each user can modify or remove only the maps
-in his or her own Mapset.
+in his or her own mapset.
 
 <p>
-Besides the geospatial data, Mapset holds additional data such as
+Besides the geospatial data, mapset holds additional data such as
 color tables (managed e.g. by <a href="r.colors.html"><em>r.colors</em></a>)
 and the current computational region's extent and resolution
 stored in a file called <code>WIND</code>
@@ -126,7 +125,7 @@ and managed by <a href="g.region.html"><em>g.region</em></a>.
 
 <p>
 Mapsets can be copied and moved as directories only when it is clear
-that their projections
+that their coordinate reference systems
 (as reported by <a href="g.proj.html"><em>g.proj</em></a>)
 match. Since this is sometimes hard to to establish,
 it is recommended to use <a href="r.proj.html"><em>r.proj</em></a>
@@ -137,27 +136,27 @@ but only using GRASS GIS tools.
 <h3>The role of the PERMANENT Mapset</h3>
 
 When creating a new project, GRASS GIS automatically creates a special
-Mapset called PERMANENT where the core data for the project are stored.
+mapset called PERMANENT where the core data for the project are stored.
 
 <p>
-Since the maps in PERMANENT Mapset are visible from all the other Mapsets,
+Since the maps in PERMANENT mapset are visible from all the other mapsets,
 it can be used to store the base maps (base cartography), data common
-to all projects or needed for different analyses done is separate Mapsets.
+to all projects or needed for different analyses done is separate mapsets.
 
 <p>
-In multi-user environment, data in the PERMANENT Mapset can only be added,
-modified or removed by the owner of the PERMANENT Mapset; however, they can be
-accessed, analyzed, and copied into their own Mapset by the other
-users. The PERMANENT Mapset is useful for providing general spatial
+In multi-user environment, data in the PERMANENT mapset can only be added,
+modified or removed by the owner of the PERMANENT mapset; however, they can be
+accessed, analyzed, and copied into their own mapset by the other
+users. The PERMANENT mapset is useful for providing general spatial
 data (e.g. an elevation model), accessible but write-protected to all
 users who are working with the same GRASS project as the database owner.
 To manipulate or add data to PERMANENT, the owner can start
-GRASS GIS and choose the relevant project and the PERMANENT Mapset.
+GRASS GIS and choose the relevant project and the PERMANENT mapset.
 
 <p>
-The PERMANENT Mapset also contains the <code>DEFAULT_WIND</code> file which holds
+The PERMANENT mapset also contains the <code>DEFAULT_WIND</code> file which holds
 the default computational region's extent and resolution values
-for the project (which all Mapsets will inherit when they are created).
+for the project (which all mapsets will inherit when they are created).
 Users have the option of switching back to the default region at any time.
 
 <h3>Importing, exporting and linking data</h3>
@@ -172,7 +171,7 @@ Data in GRASS Datable can be exported using for example
 
 <p>
 For cases when import is not desirable, an option to link external data exists.
-Projection of the linked data must match the project's
+The coordinate reference system of the linked data must match the project's
 coordinate reference system
 otherwise the external data cannot be linked. (Linking data in different
 projection is not allowed as it would require on-the-fly reprojection
@@ -197,9 +196,9 @@ From there a new project can be created.
   <img src="grass_start.png" alt="GRASS GIS GUI after first start"><br>
 </center>
 
-GRASS GIS can be also started with a given Database, Project and Mapset
+GRASS GIS can be also started with a given database, project and mapset
 from the command line. For example, the following will start
-in a given Mapset with only command line interface:
+in a given mapset with only command line interface:
 
 <div class="code"><pre>
 # Linux, Mac, *BSD, ...:
@@ -234,7 +233,7 @@ define custom projections.
 <p>
 The most convenient way of using <em>Project Wizard</em> is creating new
 project based on a georeferenced file, such as Shapefile or GeoTIFF,
-or by selecting the corresponding EPSG projection code.
+or by selecting the corresponding EPSG code of the coordinate reference system.
 In case of using georeferenced file, you are asked whether the data itself
 should be imported into the new project.
 <!-- TODO: some of this should be or already is automatic

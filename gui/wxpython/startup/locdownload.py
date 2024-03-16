@@ -48,7 +48,7 @@ LOCATIONS = [
         "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.tar.gz",
     },
     {
-        "label": "World project in LatLong/WGS84",
+        "label": "World dataset in LatLong/WGS84",
         "url": "https://grass.osgeo.org/sampledata/worldlocation.tar.gz",
     },
     {
@@ -433,7 +433,7 @@ class LocationDownloadDialog(wx.Dialog):
     Contains the panel and Cancel button.
     """
 
-    def __init__(self, parent, database, title=_("Project Download")):
+    def __init__(self, parent, database, title=_("Dataset Download")):
         """
         :param database: database to download the location to
         :param title: window title if the default is not appropriate
@@ -441,7 +441,7 @@ class LocationDownloadDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent=parent, title=title)
         cancel_button = Button(self, id=wx.ID_CANCEL)
         self.download_button = Button(parent=self, id=wx.ID_ANY, label=_("Do&wnload"))
-        self.download_button.SetToolTip(_("Download selected project"))
+        self.download_button.SetToolTip(_("Download selected dataset"))
         self.panel = LocationDownloadPanel(parent=self, database=database)
         cancel_button.Bind(wx.EVT_BUTTON, self.OnCancel)
         self.Bind(wx.EVT_CLOSE, self.OnCancel)
@@ -484,7 +484,7 @@ class LocationDownloadDialog(wx.Dialog):
             # running thread
             dlg = wx.MessageDialog(
                 parent=self,
-                message=_("Do you want to cancel project download?"),
+                message=_("Do you want to cancel dataset download?"),
                 caption=_("Abort download"),
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
