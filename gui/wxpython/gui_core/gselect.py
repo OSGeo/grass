@@ -2681,7 +2681,7 @@ class ProjSelect(wx.ComboBox):
                 read=True,
                 flags="l",
                 dbase=dbase,
-                location=location,
+                project=location,
                 mapset=mapset,
             )
         else:
