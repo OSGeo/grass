@@ -231,7 +231,7 @@ class CatalogReprojectionDialog(wx.Dialog):
         else:
             cmd.append("v.proj")
             cmd.append("dbase=" + self.iGisdbase)
-            cmd.append("location=" + self.iLocation)
+            cmd.append("project=" + self.iLocation)
             cmd.append("mapset=" + self.iMapset)
             cmd.append("input=" + self.iLayer)
             cmd.append("output=" + self.oLayer)
