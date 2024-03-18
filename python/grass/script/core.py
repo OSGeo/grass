@@ -1700,12 +1700,15 @@ def mapsets(search_path=False, env=None):
 
 
 def create_location(*args, **kwargs):
+    if "location" in kwargs:
+        kwargs["name"] = kwargs["location"]
+        del kwargs["location"]
     return create_project(*args, **kwargs)
 
 
 def create_project(
     path,
-    location=None,
+    name=None,
     epsg=None,
     proj4=None,
     filename=None,
@@ -1720,7 +1723,7 @@ def create_project(
     Raise ScriptError on error.
 
     :param str path: path to GRASS database
-    :param str location: project name to create
+    :param str name: project name to create
     :param str mapset: mapset within given project (default: 'PERMANENT')
     :param epsg: if given create new project based on EPSG code
     :param proj4: if given create new project based on Proj4 definition
@@ -1736,13 +1739,13 @@ def create_project(
     # Support ~ in the path for user home directory.
     path = Path(path).expanduser()
 
-    if location:
+    if name:
         mapset = "PERMANENT"
     else:
         path = path / "PERMANENT"
         mapset = None
 
-    mapset_path = resolve_mapset_path(path=path, location=location, mapset=mapset)
+    mapset_path = resolve_mapset_path(path=path, location=name, mapset=mapset)
 
     # create dbase if not exists
     if not os.path.exists(mapset_path.directory):
