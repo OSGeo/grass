@@ -19,6 +19,7 @@ class TestRasterUnivar(TestCase):
     def tearDown(self):
         self.runModule("g.remove", flags="f", type="raster", name="map_a")
         self.runModule("g.remove", flags="f", type="raster", name="map_b")
+        self.runModule("g.remove", flags="f", type="raster", name="map_negative")
         self.runModule("g.remove", flags="f", type="raster", name="zone_map")
         self.runModule("g.remove", flags="f", type="raster", name="zone_map_with_gap")
 
