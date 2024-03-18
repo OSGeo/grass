@@ -1,4 +1,4 @@
-name: CI-Coverity-Basic
+name: Coverity Scan
 # Created using https://sig-product-docs.synopsys.com/bundle/bridge/page/documentation/c_github-coverity.html as a template
 # Author: Jaden Abrams <jadenabrams100@gmail.com>
 on:
