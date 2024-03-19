@@ -26,6 +26,9 @@ import wx.lib.scrolledpanel as SP
 from gui_core.wrap import SearchCtrl, StaticText, StaticBox, Button
 from history.tree import HistoryBrowserTree
 
+import grass.script as gs
+from grass.script.utils import parse_key_val
+
 from grass.grassdb import history
 
 from grass.pydispatch.signal import Signal
@@ -76,6 +79,8 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.giface = giface
         self.title = title
 
+        self.region_settings = None
+
         self._createGeneralInfoBox()
         self._createRegionSettingsBox()
 
@@ -119,20 +124,32 @@ class HistoryInfoPanel(SP.ScrolledPanel):
     def _createRegionSettingsBox(self):
         """Create a static box for displaying region settings of the command"""
         self.region_settings_box = StaticBox(
-            parent=self, id=wx.ID_ANY, label=_("Region settings")
+            parent=self,
+            id=wx.ID_ANY,
+            label=_("Computational region upon command execution"),
         )
         self.region_settings_box_sizer = wx.StaticBoxSizer(
             self.region_settings_box, wx.VERTICAL
         )
 
-        self.sizer_region_settings = wx.GridBagSizer(hgap=0, vgap=0)
-        self.sizer_region_settings.SetCols(2)
-        self.sizer_region_settings.SetRows(9)
+        self.sizer_region_settings_grid = wx.GridBagSizer(hgap=0, vgap=0)
+        self.sizer_region_settings_grid.SetCols(2)
+        self.sizer_region_settings_grid.SetRows(9)
 
         self.region_settings_box_sizer.Add(
-            self.sizer_region_settings, proportion=1, flag=wx.ALL | wx.EXPAND, border=5
+            self.sizer_region_settings_grid,
+            proportion=1,
+            flag=wx.ALL | wx.EXPAND,
+            border=5,
         )
-        self.sizer_region_settings.AddGrowableCol(1)
+
+        self.sizer_region_settings_grid.AddGrowableCol(1)
+
+        self.sizer_region_settings_text = wx.BoxSizer(wx.VERTICAL)
+        self.region_settings_box_sizer.Add(
+            self.sizer_region_settings_text, proportion=0, flag=wx.EXPAND, border=5
+        )
+
         self.region_settings_box.Hide()
 
     def _general_info_filter(self, key, value):
@@ -142,7 +159,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         )
 
     def _region_settings_filter(self, key):
-        return (key != "projection") and (key != "zone")
+        return (key != "projection") and (key != "zone") and (key != "cells")
 
     def _updateGeneralInfoBox(self, command_info):
         """Update a static box for displaying general info about the command"""
@@ -180,13 +197,13 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
     def _updateRegionSettingsBox(self, command_info):
         """Update a static box for displaying region settings of the command"""
-        self.sizer_region_settings.Clear(True)
+        self.sizer_region_settings_grid.Clear(True)
 
-        region_settings = command_info["region"]
+        self.region_settings = command_info["region"]
         idx = 0
-        for key, value in region_settings.items():
+        for key, value in self.region_settings.items():
             if self._region_settings_filter(key):
-                self.sizer_region_settings.Add(
+                self.sizer_region_settings_grid.Add(
                     StaticText(
                         parent=self.region_settings_box,
                         id=wx.ID_ANY,
@@ -197,7 +214,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
                     border=5,
                     pos=(idx, 0),
                 )
-                self.sizer_region_settings.Add(
+                self.sizer_region_settings_grid.Add(
                     StaticText(
                         parent=self.region_settings_box,
                         id=wx.ID_ANY,
@@ -209,6 +226,37 @@ class HistoryInfoPanel(SP.ScrolledPanel):
                     pos=(idx, 1),
                 )
                 idx += 1
+
+        self.sizer_region_settings_text.Clear(True)
+
+        textSetRegion = StaticText(
+            parent=self.region_settings_box,
+            id=wx.ID_ANY,
+            label=_("Region is same as the current region"),
+        )
+        textSetRegion.Wrap(self.GetSize()[0])
+        self.sizer_region_settings_text.Add(
+            textSetRegion,
+            proportion=1,
+            flag=wx.ALL | wx.EXPAND,
+            border=5,
+        )
+
+        if self.region_settings != self._get_current_region():
+            textSetRegion.SetLabel(_("Region is different from the current region"))
+            btnSetRegion = Button(parent=self.region_settings_box, id=wx.ID_ANY)
+            btnSetRegion.SetLabel(_("&Set as current region"))
+            btnSetRegion.SetToolTip(
+                _("Set current computational region to the region of executed command")
+            )
+            btnSetRegion.Bind(wx.EVT_BUTTON, self.OnSetCurrentRegionToHistory)
+
+            self.sizer_region_settings_text.Add(
+                btnSetRegion,
+                proportion=0,
+                flag=wx.ALL | wx.EXPAND,
+                border=5,
+            )
 
         self.region_settings_box.Layout()
         self.region_settings_box.Show()
@@ -226,10 +274,34 @@ class HistoryInfoPanel(SP.ScrolledPanel):
     def clearCommandInfo(self):
         """Clear command info."""
         self.sizer_general_info.Clear(True)
-        self.sizer_region_settings.Clear(True)
+        self.sizer_region_settings_grid.Clear(True)
+        self.sizer_region_settings_text.Clear(True)
         self._createGeneralInfoBox()
         self._createRegionSettingsBox()
         self._layout()
+
+    def _get_current_region(self):
+        """Get current computational region settings."""
+        current_region = dict(
+            parse_key_val(gs.read_command("g.region", flags="g"), val_type=float)
+        )
+        for key, value in current_region.items():
+            current_region[key] = int(value) if value.is_integer() else value
+        return current_region
+
+    def _get_history_region(self):
+        """Get computational region settings of executed command."""
+        history_region = {}
+        for key, value in self.region_settings.items():
+            if self._region_settings_filter(key):
+                history_region[key] = value
+        return history_region
+
+    def OnSetCurrentRegionToHistory(self, event):
+        """Set current region to the region of executed command."""
+        history_region = self._get_history_region()
+        gs.run_command("g.region", **history_region)
+        self.giface.updateMap.emit(render=False, renderVector=False)
 
 
 class HistoryBrowser(wx.SplitterWindow):
