@@ -44,10 +44,5 @@ jobs:
           # level: # optional, default is UNDEFINED
           # Report only issues of a given confidence level or higher. Can be LOW, MEDIUM or HIGH. Default is UNDEFINED (everything)
           confidence: HIGH # optional, default is UNDEFINED
-          # comma-separated list of paths (glob patterns supported) to exclude from scan (note that these are in addition to the excluded paths provided in the config file) (default: .svn,CVS,.bzr,.hg,.git,__pycache__,.tox,.eggs,*.egg)
-          excluded_paths: "./testsuite,*/tests/*,*/testsuite/*,utils/test_generate_last_commit_file.py"  # Exclude errors from test files
- # optional, default is DEFAULT
-          # comma-separated list of test IDs to skip
-          skips: B324,B110,B101,B112 #exclude weak hashes, try-excepts, and asserts from scan results
           # path to a .bandit file that supplies command line arguments
-          # ini_path: .bandit # optional, default is DEFAULT
+          ini_path: .bandit # optional, default is DEFAULT
