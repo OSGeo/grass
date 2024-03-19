@@ -19,6 +19,7 @@ on:
     branches: [ "main" ]
   schedule:
     - cron: '31 1 * * 5'
+  workflow_dispatch:
 
 jobs:
   bandit:
@@ -49,4 +50,4 @@ jobs:
           # comma-separated list of test IDs to skip
           skips: B324,B110,B101,B112 #exclude weak hashes, try-excepts, and asserts from scan results
           # path to a .bandit file that supplies command line arguments
-          # ini_path: # optional, default is DEFAULT
+          # ini_path: .bandit # optional, default is DEFAULT
