@@ -4,7 +4,6 @@
 # Distributed under the terms of the GNU General Public License v2 or later
 
 import re
-import os
 from textwrap import TextWrapper
 import sys
 import subprocess
