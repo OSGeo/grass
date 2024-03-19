@@ -9,6 +9,11 @@
 
 # https://github.com/marketplace/actions/bandit-scan is ISC licensed, by abirismyname
 # https://pypi.org/project/bandit/ is Apache v2.0 licensed, by PyCQA
+# Authors:
+# Nolan Peters <@Ntp9413>
+# Maryam Abkar <@naidneelttil>
+# Jaden Abrams <@jadenabrams100>
+# Kira Polchow <@kpolchow>
 
 name: Bandit
 on:
@@ -18,8 +23,7 @@ on:
     # The branches below must be a subset of the branches above
     branches: [ "main" ]
   schedule:
-    - cron: '31 1 * * 5'
-  workflow_dispatch:
+    - cron: '36 18 * * 6' # run at the same time CodeQL does
 
 jobs:
   bandit:
