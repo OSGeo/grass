@@ -1,3 +1,6 @@
+# configuration file for the bandit github action
 [bandit]
+# file paths to exclude from bandit analysis
 exclude = ./testsuite,*/tests/*,*/testsuite/*,utils/test_generate_last_commit_file.py
+# rules to skip in bandit analysis
 skips = B324,B110,B101,B112,B314
