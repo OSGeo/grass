@@ -22,7 +22,7 @@ git_command = [
     "--stat",
     "--no-merges",
     "--date=short",
-    rev_range,
+    "%s" % rev_range,
 ]
 
 # Execute git log with the desired command line options.
