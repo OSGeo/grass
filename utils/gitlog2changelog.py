@@ -25,7 +25,7 @@ git_command = [
 ]
 
 #add rev_range to the git command
-git_command.append("%s" % rev_range)
+#git_command.append("%s" % rev_range)
 
 # Execute git log with the desired command line options.
 process = subprocess.run(git_command, stdout=subprocess.PIPE)
