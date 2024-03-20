@@ -10,9 +10,6 @@ import subprocess
 
 rev_range = ""
 
-if len(sys.argv) > 1:
-    base = sys.argv[1]
-    rev_range = "%s..HEAD" % base
 
 # Define the git command and its arguments as a list
 git_command = [
@@ -22,11 +19,15 @@ git_command = [
     "--stat",
     "--no-merges",
     "--date=short",
-    rev_range,
 ]
 
+if len(sys.argv) > 1:
+    base = sys.argv[1]
+    rev_range = "%s..HEAD" % base
+    git_command.append(rev_range)
+
 # Execute git log with the desired command line options.
-process = subprocess.Popen(git_command, stdout=subprocess.PIPE)
+process = subprocess.Popen(git_command, stdout=subprocess.PIPE, encoding='utf8')
 fin = process.stdout
 
 # Create a ChangeLog file in the current directory.
