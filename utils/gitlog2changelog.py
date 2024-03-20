@@ -14,7 +14,6 @@ if len(sys.argv) > 1:
     base = sys.argv[1]
     rev_range = "%s..HEAD" % base
 
-rev_range = "" if rev_range is null else rev_range
 # Define the git command and its arguments as a list
 git_command = [
     "git",
@@ -22,9 +21,11 @@ git_command = [
     "--summary",
     "--stat",
     "--no-merges",
-    "--date=short",
-    rev_range,
+    "--date=short"
 ]
+
+#add rev_range to the git command
+git_command.append("%s" % rev_range)
 
 # Execute git log with the desired command line options.
 process = subprocess.run(git_command, stdout=subprocess.PIPE)
