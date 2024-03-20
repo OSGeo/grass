@@ -18,7 +18,7 @@ git_command = ["git", "log", "--summary", "--stat", "--no-merges", "--date=short
 if len(sys.argv) > 1:
     base = sys.argv[1]
     rev_range = "%s..HEAD" % base
-    git_command.append("%s" % rev_range)
+    git_command.append(rev_range)
 
 # Execute git log with the desired command line options.
 process = subprocess.Popen(git_command, stdout=subprocess.PIPE)
