@@ -10,22 +10,15 @@ import subprocess
 
 rev_range = ""
 
+
+# Define the git command and its arguments as a list
+git_command = ["git", "log", "--summary", "--stat", "--no-merges", "--date=short"]
+
+# add rev_range to the git command if arguments are given.
 if len(sys.argv) > 1:
     base = sys.argv[1]
     rev_range = "%s..HEAD" % base
-
-# Define the git command and its arguments as a list
-git_command = [
-    "git",
-    "log",
-    "--summary",
-    "--stat",
-    "--no-merges",
-    "--date=short"
-]
-
-#add rev_range to the git command
-#git_command.append("%s" % rev_range)
+    git_command.append("%s" % rev_range)
 
 # Execute git log with the desired command line options.
 process = subprocess.Popen(git_command, stdout=subprocess.PIPE)
