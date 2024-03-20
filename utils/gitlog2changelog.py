@@ -14,11 +14,12 @@ if len(sys.argv) > 1:
     base = sys.argv[1]
     rev_range = "%s..HEAD" % base
 
+rev_range = "" if rev_range is null else rev_range
 # Define the git command and its arguments as a list
-git_command = ["log --summary --stat --no-merges --date=short %s" % rev_range]
+git_command = ["git", "log", "--summary", "--stat", "--no-merges", "--date=short", rev_range]
 
 # Execute git log with the desired command line options.
-process = subprocess.run(["/usr/bin/git"] + git_command, stdout=subprocess.PIPE)
+process = subprocess.run(git_command, stdout=subprocess.PIPE)
 fin = process.stdout
 
 # Create a ChangeLog file in the current directory.
