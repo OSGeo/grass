@@ -78,7 +78,11 @@ def cleanup():
             try:
                 os.remove(file)
             except Exception as e:
-                grass.warning(_("Unable to remove file %s: %s" % (file, e)))
+                grass.warning(
+                    _("Unable to remove file {file}: {message}").format(
+                        file=file, message=e
+                    )
+                )
 
 
 def main():
@@ -122,14 +126,22 @@ def main():
 
     # check if column is in map table
     if column not in grass.vector_columns(map, layer):
-        grass.fatal(_("Column <%s> not found in table <%s>") % (column, maptable))
+        grass.fatal(
+            _("Column <{column}> not found in table <{table}>").format(
+                column=column, table=maptable
+            )
+        )
 
     # describe other table
     all_cols_ot = grass.db_describe(otable, driver=driver, database=database)["cols"]
 
     # check if ocolumn is on other table
     if ocolumn not in [ocol[0] for ocol in all_cols_ot]:
-        grass.fatal(_("Column <%s> not found in table <%s>") % (ocolumn, otable))
+        grass.fatal(
+            _("Column <{column}> not found in table <{table}>").format(
+                column=ocolumn, table=otable
+            )
+        )
 
     # determine columns subset from other table
     if not scolumns:
@@ -146,7 +158,11 @@ def main():
                     cols_to_add.append(col_ot)
                     break
             if not found:
-                grass.warning(_("Column <%s> not found in table <%s>") % (scol, otable))
+                grass.warning(
+                    _("Column <{column}> not found in table <{table}>").format(
+                        column=scol, table=otable
+                    )
+                )
 
     # exclude columns from other table
     if ecolumns:
@@ -192,7 +208,7 @@ def main():
             "v.db.addcolumn", map=map, columns=cols_to_add_final, layer=layer
         )
     except CalledModuleError:
-        grass.fatal(_("Error creating columns <%s>") % cols_added_str)
+        grass.fatal(_("Error creating columns <{}>").format(cols_added_str))
 
     update_str = "BEGIN TRANSACTION\n"
     for col in cols_added:
@@ -204,7 +220,11 @@ def main():
         update_str += cur_up_str
     update_str += "END TRANSACTION"
     grass.debug(update_str, 1)
-    grass.verbose(_(f"Updating columns {cols_added_str} of vector map {map}..."))
+    grass.verbose(
+        _("Updating columns {columns} of vector map {map_name}...").format(
+            columns=cols_added_str, map_name=map
+        )
+    )
     sql_file = grass.tempfile()
     rm_files.append(sql_file)
     with open(sql_file, "w") as write_file:
@@ -217,7 +237,7 @@ def main():
             driver=driver,
         )
     except CalledModuleError:
-        grass.fatal(_(f"Error filling columns {cols_added_str}"))
+        grass.fatal(_("Error filling columns {}").format(cols_added_str))
 
     # write cmd history
     grass.vector_history(map)

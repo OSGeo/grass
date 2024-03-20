@@ -54,7 +54,11 @@ def cleanup():
             try:
                 os.remove(file)
             except Exception as e:
-                grass.warning(_("Unable to remove file %s: %s" % (file, e)))
+                grass.warning(
+                    _("Unable to remove file {file}: {message}").format(
+                        file=file, message=e
+                    )
+                )
 
 
 def main():
@@ -69,7 +73,7 @@ def main():
     exists = bool(grass.find_file(map, element="vector", mapset=mapset)["file"])
 
     if not exists:
-        grass.fatal(_("Vector map <%s> not found in current mapset") % map)
+        grass.fatal(_("Vector map <{}> not found in current mapset").format(map))
 
     try:
         f = grass.vector_db(map)[int(layer)]
@@ -99,10 +103,12 @@ def main():
             grass.fatal(_("There is an empty column. Did you leave a trailing comma?"))
         col_name = col.split(" ")[0].strip()
         if col_name in column_existing:
-            grass.error(_("Column <%s> is already in the table. Skipping.") % col_name)
+            grass.error(
+                _("Column <{}> is already in the table. Skipping.").format(col_name)
+            )
             continue
-        grass.verbose(_("Adding column <%s> to the table") % col_name)
-        add_str += "ALTER TABLE {} ADD COLUMN {};\n".format(table, col)
+        grass.verbose(_("Adding column <{}> to the table").format(col_name))
+        add_str += f"ALTER TABLE {table} ADD COLUMN {col};\n"
     add_str += "END TRANSACTION"
     sql_file = grass.tempfile()
     rm_files.append(sql_file)
@@ -117,7 +123,7 @@ def main():
             driver=driver,
         )
     except CalledModuleError:
-        grass.fatal(_(f"Error adding columns {cols_add_str}"))
+        grass.fatal(_("Error adding columns {}").format(cols_add_str))
     # write cmd history:
     grass.vector_history(map)
 
