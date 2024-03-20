@@ -28,7 +28,7 @@ git_command = [
 #git_command.append("%s" % rev_range)
 
 # Execute git log with the desired command line options.
-process = subprocess.popen(git_command, stdout=subprocess.PIPE)
+process = subprocess.Popen(git_command, stdout=subprocess.PIPE)
 fin = process.stdout
 
 # Create a ChangeLog file in the current directory.
