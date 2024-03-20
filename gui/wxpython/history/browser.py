@@ -126,7 +126,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.region_settings_box = StaticBox(
             parent=self,
             id=wx.ID_ANY,
-            label=_("Computational region upon command execution"),
+            label=_("Computational region during command execution"),
         )
         self.region_settings_box_sizer = wx.StaticBoxSizer(
             self.region_settings_box, wx.VERTICAL
