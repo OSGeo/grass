@@ -27,7 +27,6 @@ from gui_core.wrap import SearchCtrl, StaticText, StaticBox, Button
 from history.tree import HistoryBrowserTree
 
 import grass.script as gs
-from grass.script.utils import parse_key_val
 
 from grass.grassdb import history
 
@@ -229,21 +228,21 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
         self.sizer_region_settings_text.Clear(True)
 
-        textSetRegion = StaticText(
-            parent=self.region_settings_box,
-            id=wx.ID_ANY,
-            label=_("Region is same as the current region"),
-        )
-        textSetRegion.Wrap(self.GetSize()[0])
-        self.sizer_region_settings_text.Add(
-            textSetRegion,
-            proportion=1,
-            flag=wx.ALL | wx.EXPAND,
-            border=5,
-        )
-
         if self.region_settings != self._get_current_region():
-            textSetRegion.SetLabel(_("Region is different from the current region"))
+            textSetRegion = StaticText(
+                parent=self.region_settings_box,
+                id=wx.ID_ANY,
+                label=_("Region is different from the current region"),
+            )
+            textSetRegion.Wrap(self.GetSize()[0])
+
+            self.sizer_region_settings_text.Add(
+                textSetRegion,
+                proportion=1,
+                flag=wx.ALL | wx.EXPAND,
+                border=5,
+            )
+
             btnSetRegion = Button(parent=self.region_settings_box, id=wx.ID_ANY)
             btnSetRegion.SetLabel(_("&Set as current region"))
             btnSetRegion.SetToolTip(
@@ -282,12 +281,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
     def _get_current_region(self):
         """Get current computational region settings."""
-        current_region = dict(
-            parse_key_val(gs.read_command("g.region", flags="g"), val_type=float)
-        )
-        for key, value in current_region.items():
-            current_region[key] = int(value) if value.is_integer() else value
-        return current_region
+        return gs.region()
 
     def _get_history_region(self):
         """Get computational region settings of executed command."""

@@ -15,7 +15,6 @@ from pathlib import Path
 
 from datetime import datetime
 import grass.script as gs
-from grass.script.utils import parse_key_val
 
 
 def get_current_mapset_gui_history_path():
@@ -243,15 +242,7 @@ def get_initial_command_info(env_run):
     mask3d_present = (mapset_path / "grid3" / "RASTER3D_MASK").exists()
 
     # Computational region settings
-    region_settings = dict(
-        parse_key_val(
-            gs.read_command("g.region", flags="g", env=env_run), val_type=float
-        )
-    )
-
-    # Convert floats to integers if possible
-    for key, value in region_settings.items():
-        region_settings[key] = int(value) if value.is_integer() else value
+    region_settings = gs.region(env=env_run)
 
     # Finalize the command info dictionary
     cmd_info = {
