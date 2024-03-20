@@ -27,7 +27,7 @@ if len(sys.argv) > 1:
     git_command.append(rev_range)
 
 # Execute git log with the desired command line options.
-process = subprocess.Popen(git_command, stdout=subprocess.PIPE, encoding='utf8')
+process = subprocess.Popen(git_command, stdout=subprocess.PIPE, encoding="utf8")
 fin = process.stdout
 
 # Create a ChangeLog file in the current directory.
