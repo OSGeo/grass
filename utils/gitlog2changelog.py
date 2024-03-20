@@ -21,12 +21,11 @@ git_command = [
     "--summary",
     "--stat",
     "--no-merges",
-    "--date=short",
-    "%s" % rev_range,
+    "--date=short"
 ]
 
 # Execute git log with the desired command line options.
-process = subprocess.Popen(git_command, stdout=subprocess.PIPE)
+process = subprocess.Popen(git_command + [rev_range], stdout=subprocess.PIPE)
 fin = process.stdout
 
 # Create a ChangeLog file in the current directory.
