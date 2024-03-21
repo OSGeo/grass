@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
     else {
         /* default as it used to be */
         seed_value = G_math_srand_auto();
-        G_verbose_message(_("Warning set flag s or option seed. Generated "
+        G_verbose_warning(_("Warning set flag s or option seed. Generated "
                             "random seed (-s): %ld"),
                           seed_value);
     }
