@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 
     s_flag = G_define_flag();
     s_flag->key = 's';
-    s_flag->label = _("Generate random seed");
+    s_flag->label = _("Generate random seed (result is non-deterministic)");
     s_flag->description =
         _("Automatically generates random seed for random number"
           " generator (use when you don't want to provide the seed option)");
