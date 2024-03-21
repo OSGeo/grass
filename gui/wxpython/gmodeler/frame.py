@@ -970,6 +970,10 @@ class ModelFrame(wx.Frame):
                     "vector",
                     "raster_3d",
                     "dbtable",
+                    "stds",
+                    "strds",
+                    "stvds",
+                    "str3ds",
                 ):
                     continue
 
@@ -1005,7 +1009,12 @@ class ModelFrame(wx.Frame):
                         data.Update()
                         continue
 
-                    data = ModelData(
+                    dataClass = (
+                        ModelDataSeries
+                        if p.get("prompt", "").startswith("st")
+                        else ModelDataSingle
+                    )
+                    data = dataClass(
                         self,
                         value=p.get("value", ""),
                         prompt=p.get("prompt", ""),
@@ -1444,7 +1453,15 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             )
 
         elif isinstance(shape, ModelData):
-            if shape.GetPrompt() in ("raster", "vector", "raster_3d"):
+            if shape.GetPrompt() in (
+                "raster",
+                "vector",
+                "raster_3d",
+                "stds",
+                "strds",
+                "stvds",
+                "str3ds",
+            ):
                 dlg = ModelDataDialog(parent=self.frame, shape=shape)
                 shape.SetPropDialog(dlg)
                 dlg.CentreOnParent()

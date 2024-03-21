@@ -9,7 +9,7 @@
 # PURPOSE:	This configure runs all the tests to determine what components
 #		are installed on the current system. It also defines certain
 #		configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2023 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2024 by the GRASS Development Team
 #
 #		This program is free software under the GNU General
 #		Public License (>=v2). Read the file COPYING that
@@ -1287,13 +1287,16 @@ if test -n "$USE_MYSQL"; then
   fi
 
   if test "$MYSQLD_CONFIG" != "" ; then
+    mysql_version=`"$MYSQLD_CONFIG" --version`
+    AC_MSG_RESULT([using MySQL/MariaDB version "$mysql_version"])
     AC_LANG_PUSH([C++])
     ac_save_libs="$LIBS"
     MYSQLDLIB=`"$MYSQLD_CONFIG" --libmysqld-libs`
 
     LIBS="$MYSQLDLIB $LIBS"
-    AC_CHECK_FUNC(mysql_server_init,,[MYSQLDLIB="";
-                  AC_MSG_WARN([libmysqld not found])] )
+    AC_CHECK_FUNC(mysql_server_init,
+                  AC_MSG_RESULT([libmysqld found]),
+                  [MYSQLDLIB=""; AC_MSG_WARN([libmysqld not found])])
     LIBS=$ac_save_libs
     AC_LANG_POP([C++])
   fi
