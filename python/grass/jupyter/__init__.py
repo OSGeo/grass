@@ -52,7 +52,7 @@ To use existing data, we start a GRASS session in an existing mapset::
 
 .. note::
     Contrary to typical command line / GUI module usage, grass.jupyter
-    enables output overwrite by default. The default command line behaviour can be
+    enables output overwrite by default to align with behaviour of other Python packages and to allow repeated executions of the same cells and of the whole notebook. The default command line behaviour can be
     restored by setting GRASS_OVERWRITE environmental variable to "0" after
     gj.init() call: `os.environ["GRASS_OVERWRITE"] = "0"`
 
