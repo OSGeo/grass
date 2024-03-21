@@ -3096,7 +3096,7 @@ class SignatureSelect(wx.ComboBox):
     def UpdateItems(self, element):
         """Update list of signature files for given element
 
-        :param str element: signatures/sig or signatures/sigset
+        :param str element: signatures/sig, signatures/sigset or signatures/libsvm
         """
         items = []
         if self.mapsets:
@@ -3120,6 +3120,7 @@ class SignatureSelect(wx.ComboBox):
             from grass.lib.imagery import (
                 I_SIGFILE_TYPE_SIG,
                 I_SIGFILE_TYPE_SIGSET,
+                I_SIGFILE_TYPE_LIBSVM,
                 I_signatures_list_by_type,
                 I_free_signatures_list,
             )
@@ -3133,6 +3134,8 @@ class SignatureSelect(wx.ComboBox):
             sig_type = I_SIGFILE_TYPE_SIG
         elif element == "signatures/sigset":
             sig_type = I_SIGFILE_TYPE_SIGSET
+        elif element == "signatures/libsvm":
+            sig_type = I_SIGFILE_TYPE_LIBSVM
         else:
             return
         list_ptr = ctypes.POINTER(ctypes.c_char_p)
@@ -3151,7 +3154,7 @@ class SignatureTypeSelect(wx.ComboBox):
     ):
         super().__init__(parent, id, size=size, **kwargs)
         self.SetName("SignatureTypeSelect")
-        self.SetItems(["sig", "sigset"])
+        self.SetItems(["sig", "sigset", "libsvm"])
 
 
 class SeparatorSelect(wx.ComboBox):

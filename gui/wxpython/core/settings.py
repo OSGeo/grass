@@ -733,6 +733,7 @@ class Settings:
                         "height": 100,
                     },
                 },
+                "grassAPI": {"selection": 0},  # script package
             },
             "mapswipe": {
                 "cursor": {
@@ -873,6 +874,11 @@ class Settings:
             _("cross"),
             _("box"),
             _("circle"),
+        )
+
+        self.internalSettings["modeler"]["grassAPI"]["choices"] = (
+            _("Script package"),
+            _("PyGRASS"),
         )
 
     def ReadSettingsFile(self, settings=None):

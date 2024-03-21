@@ -13,11 +13,12 @@ on:
 
 jobs:
   python-checks:
-    name: Python Code Quality
+    name: Python Code Quality Checks
 
     concurrency:
-      group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
-        matrix.pylint-version }}
+      group: ${{ github.workflow }}-${{ github.job }}-${{
+        github.event_name == 'pull_request' &&
+        github.head_ref || github.sha }}-${{ matrix.pylint-version }}
       cancel-in-progress: true
 
     # Using matrix just to get variables which are not environmental variables
@@ -26,11 +27,11 @@ jobs:
       matrix:
         include:
           - os: ubuntu-22.04
-            python-version: '3.10'
-            min-python-version: '3.7'
-            black-version: '23.1.0'
-            flake8-version: '3.9.2'
-            pylint-version: '2.12.2'
+            python-version: "3.10"
+            min-python-version: "3.7"
+            black-version: "23.1.0"
+            flake8-version: "3.9.2"
+            pylint-version: "2.12.2"
 
     runs-on: ${{ matrix.os }}
 
@@ -39,7 +40,7 @@ jobs:
         run: |
           echo OS: ${{ matrix.os }}
           echo Python: ${{ matrix.python-version }}
-          echo Minimimal Python version: ${{ matrix.min-python-version }}
+          echo Minimal Python version: ${{ matrix.min-python-version }}
           echo Black: ${{ matrix.black-version }}
           echo Flake8: ${{ matrix.flake8-version }}
           echo Pylint: ${{ matrix.pylint-version }}
@@ -50,13 +51,14 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+          cache: pip
 
       - name: Install non-Python dependencies
         run: |
           sudo apt-get update -y
           sudo apt-get install -y wget git gawk findutils
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
-              sudo apt-get install -y --no-install-recommends --no-install-suggests
+          sudo apt-get install -y --no-install-recommends --no-install-suggests
 
       - name: Install Python dependencies
         run: |
@@ -113,11 +115,12 @@ jobs:
 
       - name: Run Pylint on other files using pytest
         run: |
-          pip install pytest pytest-pylint==0.19
+          pip install pytest==7.4.4 pytest-pylint==0.19
           echo "::warning file=.github/workflows/python-code-quality.yml,line=116,col=42,endColumn=48::\
-            Temporarily downgraded pytest-pylint to allow merging other PRs. The errors reported\
-            with a newer version seem legitimite and should be fixed (2023-10-18,\
-            see https://github.com/OSGeo/grass/pull/3205)"
+            Temporarily downgraded pytest-pylint and pytest to allow merging other PRs.\
+            The errors reported with a newer version seem legitimite and should be fixed \
+            (2023-10-18, see https://github.com/OSGeo/grass/pull/3205)\
+            (2024-01-28, see https://github.com/OSGeo/grass/issues/3380)"
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
           pytest --pylint -m pylint --pylint-rcfile=.pylintrc --pylint-jobs=$(nproc) \
@@ -146,3 +149,11 @@ jobs:
           name: sphinx-grass
           path: sphinx-grass
           retention-days: 3
+  python-success:
+    name: Python Code Quality Result
+    needs:
+      - python-checks
+    if: ${{ always() }}
+    uses: ./.github/workflows/verify-success.yml
+    with:
+      needs_context: ${{ toJson(needs) }}

@@ -80,3 +80,11 @@ jobs:
       - name: Print installed versions
         if: always()
         run: .github/workflows/print_versions.sh
+  pytest-success:
+    name: pytest Result
+    needs:
+      - pytest
+    if: ${{ always() }}
+    uses: ./.github/workflows/verify-success.yml
+    with:
+      needs_context: ${{ toJson(needs) }}

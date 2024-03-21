@@ -140,7 +140,7 @@ class ModelFrame(wx.Frame):
 
         self.pythonPanel = PythonPanel(parent=self)
 
-        self._gconsole = GConsole(guiparent=self)
+        self._gconsole = GConsole(guiparent=self, giface=giface)
         self.goutput = GConsoleWindow(
             parent=self, giface=giface, gconsole=self._gconsole
         )
@@ -970,6 +970,10 @@ class ModelFrame(wx.Frame):
                     "vector",
                     "raster_3d",
                     "dbtable",
+                    "stds",
+                    "strds",
+                    "stvds",
+                    "str3ds",
                 ):
                     continue
 
@@ -1005,7 +1009,12 @@ class ModelFrame(wx.Frame):
                         data.Update()
                         continue
 
-                    data = ModelData(
+                    dataClass = (
+                        ModelDataSeries
+                        if p.get("prompt", "").startswith("st")
+                        else ModelDataSingle
+                    )
+                    data = dataClass(
                         self,
                         value=p.get("value", ""),
                         prompt=p.get("prompt", ""),
@@ -1054,11 +1063,12 @@ class ModelFrame(wx.Frame):
             # arrange data items
             if data_items:
                 dc = wx.ClientDC(self.canvas)
-                p = 360 / len(data_items)
-                r = 200
+                p = 180 / (len(data_items) - 1) if len(data_items) > 1 else 0
+                rx = 200
+                ry = 100
                 alpha = 270 * (math.pi / 180)
                 for data in data_items:
-                    data.Move(dc, x + r * math.sin(alpha), y + r * math.cos(alpha))
+                    data.Move(dc, x + rx * math.sin(alpha), y + ry * math.cos(alpha))
                     alpha += p * (math.pi / 180)
                     data.Show(True)
 
@@ -1349,14 +1359,13 @@ class ModelCanvas(ogl.ShapeCanvas):
 
         :return: x,y
         """
-        diagram = self.GetDiagram()
-        if diagram.GetShapeList():
-            last = diagram.GetShapeList()[-1]
-            y = last.GetY() + last.GetBoundingBoxMin()[1]
-        else:
-            y = 20
+        ymax = 20
+        for item in self.GetDiagram().GetShapeList():
+            y = item.GetY() + item.GetBoundingBoxMin()[1]
+            if y > ymax:
+                ymax = y
 
-        return (self.GetSize()[0] // 2, y + yoffset)
+        return (self.GetSize()[0] // 2, ymax + yoffset)
 
     def GetShapesSelected(self):
         """Get list of selected shapes"""
@@ -1444,7 +1453,15 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             )
 
         elif isinstance(shape, ModelData):
-            if shape.GetPrompt() in ("raster", "vector", "raster_3d"):
+            if shape.GetPrompt() in (
+                "raster",
+                "vector",
+                "raster_3d",
+                "stds",
+                "strds",
+                "stvds",
+                "str3ds",
+            ):
                 dlg = ModelDataDialog(parent=self.frame, shape=shape)
                 shape.SetPropDialog(dlg)
                 dlg.CentreOnParent()
@@ -2103,7 +2120,13 @@ class PythonPanel(wx.Panel):
                 return False
 
         fd = tempfile.TemporaryFile(mode="r+")
-        self.write_object(fd, self.parent.GetModel())
+        grassAPI = UserSettings.Get(group="modeler", key="grassAPI", subkey="selection")
+        self.write_object(
+            fd,
+            self.parent.GetModel(),
+            grassAPI="script" if grassAPI == 0 else "pygrass",
+        )
+
         fd.seek(0)
         self.body.SetText(fd.read())
         fd.close()
