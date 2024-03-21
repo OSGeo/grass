@@ -7,7 +7,7 @@
  * m_add: matrix addition (returns c = a + b)
  */
 
-int m_add(MATRIX * a, MATRIX * b, MATRIX * c)
+int m_add(MATRIX *a, MATRIX *b, MATRIX *c)
 {
     register int nr, nc;
     char message[256];

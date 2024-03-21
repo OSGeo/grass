@@ -1,9 +1,9 @@
-
 /****************************************************************************
- * 
- * MODULE:       r3.flow     
+ *
+ * MODULE:       r3.flow
  * AUTHOR(S):    Anna Petrasova kratochanna <at> gmail <dot> com
- * PURPOSE:      Computes 3D flow lines and flow accumulation based on 3D raster map(s)
+ * PURPOSE:      Computes 3D flow lines and flow accumulation based on 3D
+ *               raster map(s)
  * COPYRIGHT:    (C) 2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -11,6 +11,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,7 +27,7 @@
 #include "flowline.h"
 
 static void create_table(struct Map_info *flowline_vec,
-                         struct field_info **f_info, dbDriver ** driver,
+                         struct field_info **f_info, dbDriver **driver,
                          int write_scalar, int use_sampled_map)
 {
     dbString sql;
@@ -39,9 +40,8 @@ static void create_table(struct Map_info *flowline_vec,
     *f_info = fi;
     Vect_map_add_dblink(flowline_vec, 1, NULL, fi->table, GV_KEY_COLUMN,
                         fi->database, fi->driver);
-    drvr = db_start_driver_open_database(fi->driver,
-                                         Vect_subst_var(fi->database,
-                                                        flowline_vec));
+    drvr = db_start_driver_open_database(
+        fi->driver, Vect_subst_var(fi->database, flowline_vec));
     if (drvr == NULL) {
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                       Vect_subst_var(fi->database, flowline_vec), fi->driver);
@@ -67,10 +67,9 @@ static void create_table(struct Map_info *flowline_vec,
         G_warning(_("Unable to create index for table <%s>, key <%s>"),
                   fi->table, fi->key);
     /* Grant */
-    if (db_grant_on_table
-        (drvr, fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK) {
-        G_fatal_error(_("Unable to grant privileges on table <%s>"),
-                      fi->table);
+    if (db_grant_on_table(drvr, fi->table, DB_PRIV_SELECT,
+                          DB_GROUP | DB_PUBLIC) != DB_OK) {
+        G_fatal_error(_("Unable to grant privileges on table <%s>"), fi->table);
     }
 }
 
@@ -98,22 +97,19 @@ static void check_vector_input_maps(struct Option *vector_opt,
             G_fatal_error(_("Vector seed map <%s> not found"),
                           seed_opt->answer);
     }
-
 }
 
 static void load_input_raster3d_maps(struct Option *scalar_opt,
                                      struct Option *vector_opt,
                                      struct Gradient_info *gradient_info,
-                                     RASTER3D_Region * region)
+                                     RASTER3D_Region *region)
 {
     int i;
 
     if (scalar_opt->answer) {
-        gradient_info->scalar_map =
-            Rast3d_open_cell_old(scalar_opt->answer,
-                                 G_find_raster3d(scalar_opt->answer, ""),
-                                 region, RASTER3D_TILE_SAME_AS_FILE,
-                                 RASTER3D_USE_CACHE_DEFAULT);
+        gradient_info->scalar_map = Rast3d_open_cell_old(
+            scalar_opt->answer, G_find_raster3d(scalar_opt->answer, ""), region,
+            RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
         if (!gradient_info->scalar_map)
             Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
                                scalar_opt->answer);
@@ -121,12 +117,10 @@ static void load_input_raster3d_maps(struct Option *scalar_opt,
     }
     else {
         for (i = 0; i < 3; i++) {
-            gradient_info->velocity_maps[i] =
-                Rast3d_open_cell_old(vector_opt->answers[i],
-                                     G_find_raster3d(vector_opt->answers[i],
-                                                     ""), region,
-                                     RASTER3D_TILE_SAME_AS_FILE,
-                                     RASTER3D_USE_CACHE_DEFAULT);
+            gradient_info->velocity_maps[i] = Rast3d_open_cell_old(
+                vector_opt->answers[i],
+                G_find_raster3d(vector_opt->answers[i], ""), region,
+                RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
             if (!gradient_info->velocity_maps[i])
                 Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
@@ -136,7 +130,7 @@ static void load_input_raster3d_maps(struct Option *scalar_opt,
     }
 }
 
-static void init_flowaccum(RASTER3D_Region * region, RASTER3D_Map * flowacc)
+static void init_flowaccum(RASTER3D_Region *region, RASTER3D_Map *flowacc)
 {
     int c, r, d;
 
@@ -144,14 +138,15 @@ static void init_flowaccum(RASTER3D_Region * region, RASTER3D_Map * flowacc)
         for (r = 0; r < region->rows; r++)
             for (c = 0; c < region->cols; c++)
                 if (Rast3d_put_float(flowacc, c, r, d, 0) != 1)
-                    Rast3d_fatal_error(_("init_flowaccum: error in Rast3d_put_float"));
+                    Rast3d_fatal_error(
+                        _("init_flowaccum: error in Rast3d_put_float"));
 }
 
 int main(int argc, char *argv[])
 {
     struct Option *vector_opt, *seed_opt, *flowlines_opt, *flowacc_opt,
-        *sampled_opt, *scalar_opt, *unit_opt, *step_opt, *limit_opt,
-        *skip_opt, *dir_opt, *error_opt;
+        *sampled_opt, *scalar_opt, *unit_opt, *step_opt, *limit_opt, *skip_opt,
+        *dir_opt, *error_opt;
     struct Flag *table_fl;
     struct GModule *module;
     RASTER3D_Region region;
@@ -163,11 +158,11 @@ int main(int argc, char *argv[])
     struct line_pnts *seed_points;
     struct line_cats *seed_cats;
     struct Map_info fl_map;
-    struct line_cats *fl_cats;  /* for flowlines */
-    struct line_pnts *fl_points;        /* for flowlines */
+    struct line_cats *fl_cats;   /* for flowlines */
+    struct line_pnts *fl_points; /* for flowlines */
     struct field_info *finfo;
     dbDriver *driver;
-    int cat;                    /* cat of flowlines */
+    int cat; /* cat of flowlines */
     int if_table;
     int i, r, c, d;
     char *desc;
@@ -179,9 +174,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("hydrology"));
     G_add_keyword(_("voxel"));
-    module->description =
-        _("Computes 3D flow lines and 3D flow accumulation.");
-
+    module->description = _("Computes 3D flow lines and 3D flow accumulation.");
 
     scalar_opt = G_define_standard_option(G_OPT_R3_INPUT);
     scalar_opt->required = NO;
@@ -213,17 +206,15 @@ int main(int argc, char *argv[])
     flowacc_opt = G_define_standard_option(G_OPT_R3_OUTPUT);
     flowacc_opt->key = "flowaccumulation";
     flowacc_opt->required = NO;
-    flowacc_opt->description =
-        _("Name for output flowaccumulation 3D raster");
+    flowacc_opt->description = _("Name for output flowaccumulation 3D raster");
     flowacc_opt->guisection = _("Output");
 
     sampled_opt = G_define_standard_option(G_OPT_R3_INPUT);
     sampled_opt->key = "sampled";
     sampled_opt->required = NO;
     sampled_opt->label = _("Name for 3D raster sampled by flowlines");
-    sampled_opt->description =
-        _("Values of this 3D raster will be stored "
-          "as attributes of flowlines segments");
+    sampled_opt->description = _("Values of this 3D raster will be stored "
+                                 "as attributes of flowlines segments");
 
     unit_opt = G_define_option();
     unit_opt->key = "unit";
@@ -236,8 +227,8 @@ int main(int argc, char *argv[])
                "time;%s;"
                "length;%s;"
                "cell;%s",
-               _("elapsed time"),
-               _("length in map units"), _("length in cells (voxels)"));
+               _("elapsed time"), _("length in map units"),
+               _("length in cells (voxels)"));
     unit_opt->descriptions = desc;
     unit_opt->label = _("Unit of integration step");
     unit_opt->description = _("Default unit is cell");
@@ -332,11 +323,10 @@ int main(int argc, char *argv[])
     else
         integration.direction_type = FLOWDIR_BOTH;
 
-
     /* cell size is the diagonal */
-    integration.cell_size = sqrt(region.ns_res * region.ns_res +
-                                 region.ew_res * region.ew_res +
-                                 region.tb_res * region.tb_res);
+    integration.cell_size =
+        sqrt(region.ns_res * region.ns_res + region.ew_res * region.ew_res +
+             region.tb_res * region.tb_res);
 
     /* set default skip if needed */
     if (skip_opt->answers) {
@@ -345,7 +335,8 @@ int main(int argc, char *argv[])
                 skip[i] = atoi(skip_opt->answers[i]);
             }
             else {
-                G_fatal_error(_("Please provide 3 integer values for skip option."));
+                G_fatal_error(
+                    _("Please provide 3 integer values for skip option."));
             }
         }
     }
@@ -353,20 +344,17 @@ int main(int argc, char *argv[])
         skip[0] = fmax(1, region.cols / 10);
         skip[1] = fmax(1, region.rows / 10);
         skip[2] = fmax(1, region.depths / 10);
-
     }
 
     /* open raster 3D maps of velocity components */
     gradient_info.initialized = FALSE;
     load_input_raster3d_maps(scalar_opt, vector_opt, &gradient_info, &region);
 
-
     /* open new 3D raster map of flowacumulation */
     if (flowacc_opt->answer) {
         flowacc = Rast3d_open_new_opt_tile_size(flowacc_opt->answer,
                                                 RASTER3D_USE_CACHE_DEFAULT,
                                                 &region, FCELL_TYPE, 32);
-
 
         if (!flowacc)
             Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
@@ -376,11 +364,9 @@ int main(int argc, char *argv[])
 
     /* open 3D raster map used for sampling */
     if (sampled_opt->answer) {
-        sampled = Rast3d_open_cell_old(sampled_opt->answer,
-                                       G_find_raster3d(sampled_opt->answer,
-                                                       ""), &region,
-                                       RASTER3D_TILE_SAME_AS_FILE,
-                                       RASTER3D_USE_CACHE_DEFAULT);
+        sampled = Rast3d_open_cell_old(
+            sampled_opt->answer, G_find_raster3d(sampled_opt->answer, ""),
+            &region, RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
         if (!sampled)
             Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
                                sampled_opt->answer);
@@ -420,8 +406,8 @@ int main(int argc, char *argv[])
             n_seeds += region.cols * region.rows * region.depths;
         else {
             n_seeds += ceil(region.cols / (double)skip[0]) *
-                ceil(region.rows / (double)skip[1]) *
-                ceil(region.depths / (double)skip[2]);
+                       ceil(region.rows / (double)skip[1]) *
+                       ceil(region.depths / (double)skip[2]);
         }
     }
     G_debug(1, "Number of seeds is %d", n_seeds);
@@ -501,16 +487,16 @@ int main(int argc, char *argv[])
                             integration.actual_direction = FLOWDIR_UP;
                             compute_flowline(&region, &seed, &gradient_info,
                                              flowacc, sampled, &integration,
-                                             &fl_map, fl_cats, fl_points,
-                                             &cat, if_table, finfo, driver);
+                                             &fl_map, fl_cats, fl_points, &cat,
+                                             if_table, finfo, driver);
                         }
                         if (integration.direction_type == FLOWDIR_DOWN ||
                             integration.direction_type == FLOWDIR_BOTH) {
                             integration.actual_direction = FLOWDIR_DOWN;
                             compute_flowline(&region, &seed, &gradient_info,
                                              flowacc, sampled, &integration,
-                                             &fl_map, fl_cats, fl_points,
-                                             &cat, if_table, finfo, driver);
+                                             &fl_map, fl_cats, fl_points, &cat,
+                                             if_table, finfo, driver);
                         }
                         seed_count++;
                     }
@@ -532,7 +518,6 @@ int main(int argc, char *argv[])
 
     if (flowacc_opt->answer)
         Rast3d_close(flowacc);
-
 
     return EXIT_SUCCESS;
 }

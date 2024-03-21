@@ -34,9 +34,8 @@
 /*                                                                      c */
 /* **********************************************************************c */
 
-struct AtmosModel
-{
-    long int idatm;             /* atmospheric model */
+struct AtmosModel {
+    long int idatm; /* atmospheric model */
 
     /* secondary */
     double uw;
@@ -49,7 +48,7 @@ struct AtmosModel
     double wh[34];
     double wo[34];
 
-  private:
+private:
     /* methods to initialize each model */
     void us62();
     void tropic();
@@ -60,7 +59,7 @@ struct AtmosModel
 
     void parse();
 
-  public:
+public:
     void print();
     static AtmosModel Parse();
 };

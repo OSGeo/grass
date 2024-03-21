@@ -1,16 +1,15 @@
-
 /****** drawline.c *****************************************************
 
-	Function to draw a line segment defined by points (row, col) 
-	and (backrow, backcol) using Bresenham's Algorithm.
-	Note: 	do not draw the end point (backrow, backcol) 
-		except when it is the same as the beginning point 
-		(row, col) in order to be able utilize path segments
-		drawn before the current path segment.
-		 
- ***********************************************************************/
-#include <grass/segment.h>
+        Function to draw a line segment defined by points (row, col)
+        and (backrow, backcol) using Bresenham's Algorithm.
+        Note:         do not draw the end point (backrow, backcol)
+                except when it is the same as the beginning point
+                (row, col) in order to be able utilize path segments
+                drawn before the current path segment.
 
+ ***********************************************************************/
+
+#include <grass/segment.h>
 
 void drawline(int x1, int y1, int x2, int y2)
 {

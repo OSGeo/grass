@@ -13,19 +13,19 @@
 #include <math.h>
 #include "global.h"
 
-void p_bilinear(struct cache *ibuffer,  /* input buffer                */
-                void *obufptr,  /* ptr in output buffer        */
-                int cell_type,  /* raster map type of obufptr  */
-                double *row_idx,        /* row index                   */
-                double *col_idx,        /* column index                */
-                struct Cell_head *cellhd        /* information of output map   */
-    )
+void p_bilinear(struct cache *ibuffer,   /* input buffer                */
+                void *obufptr,           /* ptr in output buffer        */
+                int cell_type,           /* raster map type of obufptr  */
+                double *row_idx,         /* row index                   */
+                double *col_idx,         /* column index                */
+                struct Cell_head *cellhd /* information of output map   */
+)
 {
-    int row;                    /* row indices for interp        */
-    int col;                    /* column indices for interp     */
+    int row; /* row indices for interp        */
+    int col; /* column indices for interp     */
     int i, j;
-    double t, u;                /* intermediate slope            */
-    DCELL result;               /* result of interpolation       */
+    double t, u;  /* intermediate slope            */
+    DCELL result; /* result of interpolation       */
     DCELL c[2][2];
 
     /* cut indices to integer */

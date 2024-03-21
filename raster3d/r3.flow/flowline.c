@@ -11,6 +11,7 @@
 
    \author Anna Petrasova
  */
+
 #include <grass/raster3d.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
@@ -35,16 +36,15 @@ static void write_segment(struct Map_info *flowline_vec,
     Vect_append_point(points, point[0], point[1], point[2]);
 }
 
-static void write_segment_db(struct field_info *finfo, dbDriver * driver,
-                             dbString * sql, const double velocity,
+static void write_segment_db(struct field_info *finfo, dbDriver *driver,
+                             dbString *sql, const double velocity,
                              double scalar_value, double sampled_map_value,
                              int write_scalar, int use_sampled_map,
                              const int cat)
 {
     char buf[200];
 
-    sprintf(buf, "insert into %s values (%d, %e", finfo->table, cat,
-            velocity);
+    sprintf(buf, "insert into %s values (%d, %e", finfo->table, cat, velocity);
     db_set_string(sql, buf);
     if (write_scalar) {
         sprintf(buf, ", %e", scalar_value);
@@ -56,14 +56,13 @@ static void write_segment_db(struct field_info *finfo, dbDriver * driver,
     }
     db_append_string(sql, ")");
 
-
     if (db_execute_immediate(driver, sql) != DB_OK) {
         G_fatal_error(_("Unable to insert new record: '%s'"),
                       db_get_string(sql));
     }
 }
 
-static double get_map_value(RASTER3D_Region * region, RASTER3D_Map * map,
+static double get_map_value(RASTER3D_Region *region, RASTER3D_Map *map,
                             double north, double east, double top)
 {
     int col, row, depth;
@@ -88,13 +87,13 @@ static double get_map_value(RASTER3D_Region * region, RASTER3D_Map * map,
    \param[in,out] cat starting category of the newly created flow line
    \param if_table TRUE if attribute table should be created and filled
  */
-void compute_flowline(RASTER3D_Region * region, const struct Seed *seed,
+void compute_flowline(RASTER3D_Region *region, const struct Seed *seed,
                       struct Gradient_info *gradient_info,
-                      RASTER3D_Map * flowacc, RASTER3D_Map * sampled_map,
+                      RASTER3D_Map *flowacc, RASTER3D_Map *sampled_map,
                       struct Integration *integration,
                       struct Map_info *flowline_vec, struct line_cats *cats,
                       struct line_pnts *points, int *cat, int if_table,
-                      struct field_info *finfo, dbDriver * driver)
+                      struct field_info *finfo, dbDriver *driver)
 {
     int i, j, count;
     double delta_t;
@@ -132,11 +131,11 @@ void compute_flowline(RASTER3D_Region * region, const struct Seed *seed,
     while (count <= integration->limit) {
         if (get_velocity(region, gradient_info, point[0], point[1], point[2],
                          &vel_x, &vel_y, &vel_z) < 0)
-            break;              /* outside region */
+            break; /* outside region */
         velocity_norm = norm(vel_x, vel_y, vel_z);
 
         if (velocity_norm <= VELOCITY_EPSILON)
-            break;              /* zero velocity means end of propagation */
+            break; /* zero velocity means end of propagation */
 
         /* convert to time */
         delta_t = get_time_step(integration->unit, integration->step,
@@ -148,10 +147,9 @@ void compute_flowline(RASTER3D_Region * region, const struct Seed *seed,
         max_step = get_time_step("cell", integration->max_step, velocity_norm,
                                  integration->cell_size);
         delta_t *= (integration->actual_direction == FLOWDIR_UP ? 1 : -1);
-        if (rk45_integrate_next
-            (region, gradient_info, point, new_point,
-             &delta_t, &velocity, min_step, max_step,
-             integration->max_error) < 0)
+        if (rk45_integrate_next(region, gradient_info, point, new_point,
+                                &delta_t, &velocity, min_step, max_step,
+                                integration->max_error) < 0)
             break;
 
         if (seed->flowline) {
@@ -162,9 +160,8 @@ void compute_flowline(RASTER3D_Region * region, const struct Seed *seed,
                         get_map_value(region, gradient_info->scalar_map,
                                       point[1], point[0], point[2]);
                 if (sampled_map)
-                    sampled_map_value = get_map_value(region, sampled_map,
-                                                      point[1], point[0],
-                                                      point[2]);
+                    sampled_map_value = get_map_value(
+                        region, sampled_map, point[1], point[0], point[2]);
                 write_segment_db(finfo, driver, &sql, velocity, scalar_value,
                                  sampled_map_value,
                                  gradient_info->compute_gradient,
@@ -182,21 +179,18 @@ void compute_flowline(RASTER3D_Region * region, const struct Seed *seed,
                 if (last_col >= 0) {
                     coor_diff = (abs(last_col - col) + abs(last_row - row) +
                                  abs(last_depth - depth));
-                    /* if not run for the 1. time and previous and next point coordinates
-                       differ by more than 1 voxel coordinate */
+                    /* if not run for the 1. time and previous and next point
+                       coordinates differ by more than 1 voxel coordinate */
                     if (coor_diff > 1) {
-                        traverse(region, point, new_point, &trav_coords,
-                                 &size, &trav_count);
+                        traverse(region, point, new_point, &trav_coords, &size,
+                                 &trav_count);
                         for (j = 0; j < trav_count; j++) {
-                            value =
-                                Rast3d_get_float(flowacc,
-                                                 trav_coords[3 * j + 0],
-                                                 trav_coords[3 * j + 1],
-                                                 trav_coords[3 * j + 2]);
+                            value = Rast3d_get_float(
+                                flowacc, trav_coords[3 * j + 0],
+                                trav_coords[3 * j + 1], trav_coords[3 * j + 2]);
                             Rast3d_put_float(flowacc, trav_coords[3 * j + 0],
                                              trav_coords[3 * j + 1],
-                                             trav_coords[3 * j + 2],
-                                             value + 1);
+                                             trav_coords[3 * j + 2], value + 1);
                         }
                     }
                 }
@@ -209,7 +203,6 @@ void compute_flowline(RASTER3D_Region * region, const struct Seed *seed,
             point[i] = new_point[i];
         }
         count++;
-
     }
     if (seed->flowline) {
         if (points->n_points > 1) {

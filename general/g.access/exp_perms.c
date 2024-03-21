@@ -10,7 +10,7 @@ char *explain_perms(int group, int other, int will)
 
     verb = _("have");
     read = _("read ");
-    read = "";                  /* remove this to have "read" appear */
+    read = ""; /* remove this to have "read" appear */
     if (group && other) {
         who = _("Everyone");
         verb = _("has");
@@ -28,7 +28,7 @@ char *explain_perms(int group, int other, int will)
     if (will)
         verb = _("have");
 
-    sprintf(buf, _("%s %s %s %saccess to mapset %s"),
-            who, will ? _("will") : _("now"), verb, read, G_mapset());
+    sprintf(buf, _("%s %s %s %saccess to mapset %s"), who,
+            will ? _("will") : _("now"), verb, read, G_mapset());
     return buf;
 }

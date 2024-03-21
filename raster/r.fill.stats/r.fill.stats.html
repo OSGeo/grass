@@ -190,14 +190,14 @@ with different settings for <b>distance</b> and <b>power</b> might be required
 to achieve good results. In some cases (e.g. when dealing with low-noise or
 classified data), it might be desirable to turn off data smoothing by
 setting the <b>-k</b> (keep) flag. This will ensure that the original
-cell data is copied through to the result map without alteration. 
+cell data is copied through to the result map without alteration.
 
 <center>
 <a href="r_fill_stats_smoothing.png">
     <img src="r_fill_stats_smoothing.png" alt="Smooth versus preserve" width="600" height="300">
 </a>
 <p><em>
-Effect of smoothing the original data: The top row shows a gap-filled surface computed from a rasterized Lidar point  
+Effect of smoothing the original data: The top row shows a gap-filled surface computed from a rasterized Lidar point
 cloud (using <tt>mode=wmean</tt> and <tt>power=2</tt>), and the derived slope, aspect,
 and profile curvature maps. The smoothing effect is clearly visible.
 The bottom row shows the effect of setting the <b>-k</b> flag: Preserving the original
@@ -213,7 +213,7 @@ uses a window (kernel) for computations that considers only the
 immediate neighborhood of each cell. When performed on noisy data,
 such local operations result in equally noisy derivatives if the
 original data is preserved (by setting the <b>-k</b> flag) and no smoothing
-is performed.  
+is performed.
 
 <p>
 
@@ -504,7 +504,8 @@ d.legend diff_orig_idw
 <a href="r.surf.idw.html">r.surf.idw</a>,
 <a href="v.surf.bspline.html">v.surf.bspline</a>,
 <a href="v.surf.idw.html">v.surf.idw</a>,
-<a href="v.surf.rst.html">v.surf.rst</a>
+<a href="v.surf.rst.html">v.surf.rst</a>,
+<a href="v.fill.holes.html">v.fill.holes</a>
 </em>
 
 <p>
@@ -513,4 +514,3 @@ d.legend diff_orig_idw
 <h2>AUTHOR</h2>
 
 Benjamin Ducke
-

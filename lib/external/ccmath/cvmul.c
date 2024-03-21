@@ -5,8 +5,10 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include "ccmath.h"
-void cvmul(Cpx * u, Cpx * a, Cpx * v, int n)
+
+void cvmul(Cpx *u, Cpx *a, Cpx *v, int n)
 {
     Cpx *q;
 
@@ -21,7 +23,7 @@ void cvmul(Cpx * u, Cpx * a, Cpx * v, int n)
     }
 }
 
-Cpx cvnrm(Cpx * u, Cpx * v, int n)
+Cpx cvnrm(Cpx *u, Cpx *v, int n)
 {
     int k;
 

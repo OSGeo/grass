@@ -34,9 +34,8 @@ int I_cluster_exec_allocate(struct Cluster *C)
     C->sumdiff = I_alloc_double2(C->nbands, C->nclasses);
     C->sum2 = I_alloc_double2(C->nbands, C->nclasses);
     C->mean = I_alloc_double2(C->nbands, C->nclasses);
-    if (C->class == NULL || C->reclass == NULL ||
-        C->sum == NULL || C->sumdiff == NULL ||
-        C->count == NULL || C->countdiff == NULL ||
+    if (C->class == NULL || C->reclass == NULL || C->sum == NULL ||
+        C->sumdiff == NULL || C->count == NULL || C->countdiff == NULL ||
         C->sum2 == NULL || C->mean == NULL) {
         I_cluster_exec_free(C);
         return 0;

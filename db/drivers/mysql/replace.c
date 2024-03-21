@@ -1,11 +1,10 @@
-
 /**********************************************************
  * MODULE:    mysql
  * AUTHOR(S): Radim Blazek (radim.blazek@gmail.com)
  * PURPOSE:   MySQL database driver
  * COPYRIGHT: (C) 2001,2008 by the GRASS Development Team
- *            This program is free software under the 
- *            GNU General Public License (>=v2). 
+ *            This program is free software under the
+ *            GNU General Public License (>=v2).
  *            Read the file COPYING that comes with GRASS
  *            for details.
  **********************************************************/
@@ -30,7 +29,7 @@ int replace_variables(char *in, char **datadir, char **database)
     char **tokens;
     int no_tokens, n;
 
-    if (!strchr(in, '/')) {     /* no path */
+    if (!strchr(in, '/')) { /* no path */
         *datadir = G_store("./");
         *database = G_store(in);
     }

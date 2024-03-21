@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       i.ortho.camera (former i.photo.camera)
  * AUTHOR(S):    Mike Baba,  DBA Systems, Inc. (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
  *               Glynn Clements <glynn gclements.plus.com>
  *               Hamish Bowman
  *
@@ -18,7 +17,7 @@
  *
  *****************************************************************************/
 
-/* create/edit a camera reference file 
+/* create/edit a camera reference file
  * optionally set the camera for a given imagery group */
 
 #include <stdlib.h>
@@ -31,13 +30,13 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *group_opt,   /* group */
-     *camera_opt,               /* name of camera file camera */
-     *cname_opt,                /* camera name */
-     *cid_opt,                  /* camera id */
-     *cfl_opt,                  /* calibrated focal length */
-     *pp_opt,                   /* principal point of symmetry x,y */
-     *fid_opt;                  /* coordinates of fiducials */
+    struct Option *group_opt, /* group */
+        *camera_opt,          /* name of camera file camera */
+        *cname_opt,           /* camera name */
+        *cid_opt,             /* camera id */
+        *cfl_opt,             /* calibrated focal length */
+        *pp_opt,              /* principal point of symmetry x,y */
+        *fid_opt;             /* coordinates of fiducials */
 
     /* flag to print camera info */
     /* flag to print camera info in shell script style */
@@ -60,8 +59,7 @@ int main(int argc, char *argv[])
 
     group_opt = G_define_standard_option(G_OPT_I_GROUP);
     group_opt->required = NO;
-    group_opt->description =
-        _("Name of imagery group for ortho-rectification");
+    group_opt->description = _("Name of imagery group for ortho-rectification");
 
     camera_opt = G_define_standard_option(G_OPT_F_INPUT);
     camera_opt->key = "camera";
@@ -144,30 +142,34 @@ int main(int argc, char *argv[])
         }
 
         if (pp_opt->answers) {
-            G_message(_("Replacing coordinates of principal point '%.17g, %.17g' with '%.17g, %.17g'"),
+            G_message(_("Replacing coordinates of principal point '%.17g, "
+                        "%.17g' with '%.17g, %.17g'"),
                       cam_info.Xp, cam_info.Yp, ppx, ppy);
             cam_info.Xp = ppx;
             cam_info.Yp = ppy;
         }
-
     }
     else {
         /* create new camera file */
 
         if (!cam_name)
-            G_fatal_error(_("Please provide a camera name for a new camera definition"));
+            G_fatal_error(
+                _("Please provide a camera name for a new camera definition"));
         strcpy(cam_info.cam_name, cam_name);
 
         if (!cam_id)
-            G_fatal_error(_("Please provide a camera ID for a new camera definition"));
+            G_fatal_error(
+                _("Please provide a camera ID for a new camera definition"));
         strcpy(cam_info.cam_id, cam_id);
 
         if (!cfl_opt->answer)
-            G_fatal_error(_("Please provide calibrated focal length for a new camera definition"));
+            G_fatal_error(_("Please provide calibrated focal length for a new "
+                            "camera definition"));
         cam_info.CFL = atof(cfl_opt->answer);
 
         if (!pp_opt->answers)
-            G_message(_("Using default coordinates 0.0, 0.0 for the principal point"));
+            G_message(_(
+                "Using default coordinates 0.0, 0.0 for the principal point"));
         cam_info.Xp = ppx;
         cam_info.Yp = ppy;
     }
@@ -207,7 +209,8 @@ int main(int argc, char *argv[])
 
         I_put_group_camera(group, camera);
 
-        G_message(_("Group [%s] in location [%s] mapset [%s] now uses camera file [%s]"),
+        G_message(_("Group [%s] in location [%s] mapset [%s] now uses camera "
+                    "file [%s]"),
                   group, location, mapset, camera);
     }
 

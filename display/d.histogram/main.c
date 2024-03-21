@@ -1,14 +1,13 @@
-
 /****************************************************************************
  *
  * MODULE:       d.histogram
  * AUTHOR(S):    Dave Johnson, DBA Systems, Inc. (original contributor)
  *               10560 Arrowhead Drive Fairfax, Virginia 22030
- *               Markus Neteler <neteler itc.it> 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Eric G. Miller <egm2 jps.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
+ *               Markus Neteler <neteler itc.it>
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Eric G. Miller <egm2 jps.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      draw a bar-chart or a pie-chart representing the
  *               histogram statistics of a cell-file
@@ -74,7 +73,6 @@ int main(int argc, char **argv)
     struct Flag *flag1;
     struct Flag *flag2;
 
-
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
 
@@ -138,7 +136,6 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     map_name = opt1->answer;
 
     color = D_parse_color(opt2->answer, FALSE);
@@ -173,8 +170,7 @@ int main(int argc, char **argv)
         G_fatal_error(_("Category file for <%s> not available"), map_name);
 
     if (Rast_read_range(map_name, "", &range) == -1)
-        G_fatal_error(_("Range information for <%s> not available"),
-                      map_name);
+        G_fatal_error(_("Range information for <%s> not available"), map_name);
 
     /* get the distribution statistics */
 
@@ -184,7 +180,7 @@ int main(int argc, char **argv)
 
     D_open_driver();
 
-    D_setup_unity(0);           /* 0 = don't clear frame */
+    D_setup_unity(0); /* 0 = don't clear frame */
     D_get_src(&t, &b, &l, &r);
 
     /* clear the frame, if requested to do so */

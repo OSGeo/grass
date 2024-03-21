@@ -21,7 +21,6 @@
 #include <grass/dbmi.h>
 #include <grass/neta.h>
 
-
 /*!
    \brief Writes point
 
@@ -32,8 +31,8 @@
    \param node node id
    \param Cats pointer to line_cats structures
  */
-void NetA_add_point_on_node(struct Map_info *In, struct Map_info *Out,
-                            int node, struct line_cats *Cats)
+void NetA_add_point_on_node(struct Map_info *In, struct Map_info *Out, int node,
+                            struct line_cats *Cats)
 {
     static struct line_pnts *Points;
     double x, y, z;
@@ -47,7 +46,8 @@ void NetA_add_point_on_node(struct Map_info *In, struct Map_info *Out,
 }
 
 /* Returns the list of all points with the given category and field */
-/*void NetA_get_points_by_category(struct Map_info *In, int field, int cat, struct ilist *point_list)
+/*void NetA_get_points_by_category(struct Map_info *In, int field, int cat,
+ * struct ilist *point_list)
  * {
  * int i, nlines;
  * struct line_cats *Cats;
@@ -57,7 +57,7 @@ void NetA_add_point_on_node(struct Map_info *In, struct Map_info *Out,
  * int type = Vect_read_line(In, NULL, Cats, i);
  * if(type!=GV_POINT)continue;
  * }
- * 
+ *
  * Vect_destroy_cats_struct(Cats);
  * }
  */
@@ -78,8 +78,7 @@ void NetA_points_to_nodes(struct Map_info *In, struct ilist *point_list)
     for (i = 0; i < point_list->n_values; i++) {
         /* Vect_get_line_nodes(In, point_list->value[i], &node, NULL); */
         node =
-            Vect_find_node(In, Points->x[0], Points->y[0], Points->z[0], 0,
-                           0);
+            Vect_find_node(In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
         point_list->value[i] = node;
     }
     Vect_destroy_line_struct(Points);
@@ -93,7 +92,7 @@ void NetA_points_to_nodes(struct Map_info *In, struct ilist *point_list)
    the array node_costs. If there is no point with a category,
    node_costs=0.
 
-   node_costs are multiplied by the graph's cost multiplier and  
+   node_costs are multiplied by the graph's cost multiplier and
    truncated to integers (as is done in Vect_net_build_graph)
 
    \param In pointer to Map_info structure
@@ -130,8 +129,8 @@ int NetA_get_node_costs(struct Map_info *In, int layer, char *column,
 
     db_CatValArray_init(&vals);
 
-    if (db_select_CatValArray(driver, Fi->table, Fi->key, column, NULL, &vals)
-        == -1)
+    if (db_select_CatValArray(driver, Fi->table, Fi->key, column, NULL,
+                              &vals) == -1)
         return 0;
     for (i = 1; i <= nlines; i++) {
         int type = Vect_read_line(In, Points, Cats, i);
@@ -165,7 +164,7 @@ int NetA_get_node_costs(struct Map_info *In, int layer, char *column,
    nodes_to_features contains the index of a feature adjacent to each
    node or -1 if no such feature specified by varray
    exists. Nodes_to_features might be NULL, in which case it is left
-   unitialised. Nodes_to_features will be wrong if several lines connect 
+   unitialised. Nodes_to_features will be wrong if several lines connect
    to the same node.
 
    \param map pointer to Map_info structure
@@ -192,9 +191,8 @@ void NetA_varray_to_nodes(struct Map_info *map, struct varray *varray,
             if (type == GV_POINT) {
                 int node;
 
-                node =
-                    Vect_find_node(map, Points->x[0], Points->y[0],
-                                   Points->z[0], 0, 0);
+                node = Vect_find_node(map, Points->x[0], Points->y[0],
+                                      Points->z[0], 0, 0);
                 if (node) {
                     Vect_list_append(nodes, node);
                     if (nodes_to_features)
@@ -245,7 +243,8 @@ int NetA_initialise_varray(struct Map_info *In, int layer, int mask_type,
     /* parse filter option and select appropriate lines */
     if (where) {
         if (cat)
-            G_warning(_("'where' and 'cats' parameters were supplied, cat will be ignored"));
+            G_warning(_("'where' and 'cats' parameters were supplied, cat will "
+                        "be ignored"));
         ni = Vect_set_varray_from_db(In, layer, where, mask_type, 1, *varray);
         if (ni == -1) {
             G_warning(_("Unable to load data from database"));
@@ -260,9 +259,9 @@ int NetA_initialise_varray(struct Map_info *In, int layer, int mask_type,
         }
         return ni;
     }
-    else {                      /* all features of given layer */
+    else { /* all features of given layer */
         int i, cat;
-        int ltype;              /* line type */
+        int ltype; /* line type */
         struct line_cats *Cats;
 
         Cats = Vect_new_cats_struct();
@@ -271,7 +270,7 @@ int NetA_initialise_varray(struct Map_info *In, int layer, int mask_type,
             ltype = Vect_read_line(In, NULL, Cats, i);
 
             if (!(ltype & mask_type))
-                continue;       /* is not specified type */
+                continue; /* is not specified type */
 
             if (Vect_cat_get(Cats, layer, &cat)) {
                 (*varray)->c[i] = 1;

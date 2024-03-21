@@ -166,7 +166,7 @@ void Rast_close_vrt(struct R_vrt *vrt)
     G_free(vrt);
 }
 
-/* must only be called by get_map_row_nomask() 
+/* must only be called by get_map_row_nomask()
  * move to get_row.c as read_data_vrt() ? */
 int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
 {
@@ -194,8 +194,8 @@ int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
             int tfd;
             void *p1, *p2;
 
-            /* recurse into get_map_row(), collect data for all tiles 
-             * a mask is applied to the collected data 
+            /* recurse into get_map_row(), collect data for all tiles
+             * a mask is applied to the collected data
              * after this function returns */
             Rast_set_null_value(tmpbuf, rd_window->cols, data_type);
             /* avoid Rast__check_for_auto_masking() */
@@ -213,13 +213,13 @@ int Rast_get_vrt_row(int fd, void *buf, int row, RASTER_MAP_TYPE data_type)
                 if (!Rast_is_null_value(p2, data_type)) {
                     switch (data_type) {
                     case CELL_TYPE:
-                        *(CELL *) p1 = *(CELL *) p2;
+                        *(CELL *)p1 = *(CELL *)p2;
                         break;
                     case FCELL_TYPE:
-                        *(FCELL *) p1 = *(FCELL *) p2;
+                        *(FCELL *)p1 = *(FCELL *)p2;
                         break;
                     case DCELL_TYPE:
-                        *(DCELL *) p1 = *(DCELL *) p2;
+                        *(DCELL *)p1 = *(DCELL *)p2;
                         break;
                     default:
                         break;

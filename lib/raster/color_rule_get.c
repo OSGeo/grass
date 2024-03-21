@@ -14,8 +14,8 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-/*! 
-   \brief Get both modular and fixed rules count 
+/*!
+   \brief Get both modular and fixed rules count
 
    \param colors pointer to color table structure
 
@@ -47,7 +47,7 @@ int Rast_colors_count(const struct Colors *colors)
     return count;
 }
 
-/*! 
+/*!
    \brief Get color rule from both modular and fixed rules
 
    Rules are returned in the order as stored in the table
@@ -60,11 +60,11 @@ int Rast_colors_count(const struct Colors *colors)
    \param colors pointer to color table structure
    \param rule rule index from 0 to G_color_count()-1
 
-   \return 0 success 
-   \return 1 index out of range  
+   \return 0 success
+   \return 1 index out of range
  */
-int Rast_get_fp_color_rule(DCELL * val1, unsigned char *r1, unsigned char *g1,
-                           unsigned char *b1, DCELL * val2, unsigned char *r2,
+int Rast_get_fp_color_rule(DCELL *val1, unsigned char *r1, unsigned char *g1,
+                           unsigned char *b1, DCELL *val2, unsigned char *r2,
                            unsigned char *g2, unsigned char *b2,
                            const struct Colors *colors, int rule)
 {

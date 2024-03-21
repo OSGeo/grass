@@ -1,15 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       g.copy
  * AUTHOR(S):    CERL (original contributor)
- *               Radim Blazek <radim.blazek gmail.com>, 
- *               Cedric Shock <cedricgrass shockfamily.net>, 
- *               Huidae Cho <grass4u gmail.com>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Markus Neteler <neteler itc.it>, 
+ *               Radim Blazek <radim.blazek gmail.com>,
+ *               Cedric Shock <cedricgrass shockfamily.net>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Markus Neteler <neteler itc.it>,
  *               Martin Landa <landa.martin gmail.com>
- * PURPOSE:      lets users copy database files 
+ * PURPOSE:      lets users copy database files
  * COPYRIGHT:    (C) 2003-2007 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -43,9 +42,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("map management"));
     G_add_keyword(_("copy"));
     module->label = _("Creates copies of maps and other elements");
-    module->description =
-        _("Copies available data files in the current mapset "
-          "search path to the user's current mapset.");
+    module->description = _("Copies available data files in the current mapset "
+                            "search path to the user's current mapset.");
     module->overwrite = 1;
 
     parm = (struct Option **)G_calloc(nlist, sizeof(struct Option *));
@@ -71,13 +69,15 @@ int main(int argc, char *argv[])
             }
             if (G_strcasecmp(mapset, G_mapset()) == 0 &&
                 G_strcasecmp(from, to) == 0) {
-                G_warning(_("%s=%s,%s: files are the same, no copy required. Skipping."),
+                G_warning(_("%s=%s,%s: files are the same, no copy required. "
+                            "Skipping."),
                           parm[n]->key, from, to);
                 continue;
             }
             if (M_find(n, to, G_mapset()) && !(module->overwrite)) {
                 G_warning(_("<%s> already exists and"
-                            " overwrite is not enabled. Skipping."), to);
+                            " overwrite is not enabled. Skipping."),
+                          to);
                 continue;
             }
             if (G_legal_filename(to) < 0) {

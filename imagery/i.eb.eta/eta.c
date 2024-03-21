@@ -1,5 +1,5 @@
-#include<stdio.h>
-#include<math.h>
+#include <stdio.h>
+#include <math.h>
 
 double et_a(double r_net_day, double evap_fr, double tempk)
 {

@@ -14,7 +14,7 @@
  **
  **   BM_set (map, x, y, val)           Set array position to val [TRUE/FALSE]
  **
- **   BM_get (map, x, y)                        Return value at array position
+ **   BM_get (map, x, y)                Return value at array position
  */
 
 #include <stdio.h>
@@ -22,12 +22,10 @@
 #include <grass/linkm.h>
 #include <grass/bitmap.h>
 
-
-#define BM_col_to_byte(x)  ((x) >> 3)   /* x / 8 */
-#define BM_col_to_bit(x)   ((x) & 7)    /* x % 8 */
+#define BM_col_to_byte(x) ((x) >> 3) /* x / 8 */
+#define BM_col_to_bit(x)  ((x)&7)    /* x % 8 */
 
 static int depth;
-
 
 /*!
  * \brief
@@ -38,7 +36,7 @@ static int depth;
  *
  *  \param x
  *  \param y
- *  \return struct BM 
+ *  \return struct BM
  */
 
 struct BM *BM_create_sparse(int x, int y)
@@ -50,8 +48,8 @@ struct BM *BM_create_sparse(int x, int y)
         return (NULL);
     map->bytes = (x + 7) / 8;
 
-    if (NULL == (map->data = (unsigned char *)
-                 malloc(sizeof(struct BMlink *) * y))) {
+    if (NULL ==
+        (map->data = (unsigned char *)malloc(sizeof(struct BMlink *) * y))) {
         free(map);
         return (NULL);
     }
@@ -71,12 +69,10 @@ struct BM *BM_create_sparse(int x, int y)
         ((struct BMlink **)(map->data))[i]->next = NULL;
     }
 
-
     depth++;
 
     return map;
 }
-
 
 /*!
  * \brief
@@ -98,7 +94,7 @@ int BM_destroy_sparse(struct BM *map)
         p = ((struct BMlink **)(map->data))[i];
         while (p != NULL) {
             tmp = p->next;
-            link_dispose(map->token, (VOID_T *) p);
+            link_dispose(map->token, (VOID_T *)p);
             p = tmp;
         }
     }
@@ -111,7 +107,6 @@ int BM_destroy_sparse(struct BM *map)
 
     return 0;
 }
-
 
 /*!
  * \brief
@@ -134,19 +129,19 @@ int BM_set_sparse(struct BM *map, int x, int y, int val)
     int Tval;
     int dist_a, dist_b;
 
-    val = !(!val);              /* set val == 1 or 0 */
+    val = !(!val); /* set val == 1 or 0 */
 
     p = ((struct BMlink **)(map->data))[y];
     prev = NULL;
     while (p != NULL) {
         if (cur_x + p->count > x) {
-            if (p->val == val)  /* no change */
+            if (p->val == val) /* no change */
                 return 0;
 
             Tval = p->val;
 
-            /* if x is on edge, then we probably want to merge it with 
-             ** its neighbor for efficiency 
+            /* if x is on edge, then we probably want to merge it with
+             ** its neighbor for efficiency
              */
 
             /* dist_a is how far x is from Left  edge of group */
@@ -161,8 +156,8 @@ int BM_set_sparse(struct BM *map, int x, int y, int val)
                     if (prev != NULL && prev->val == val) {
                         prev->count += p->next->count + 1;
                         prev->next = p->next->next;
-                        link_dispose(map->token, (VOID_T *) p->next);
-                        link_dispose(map->token, (VOID_T *) p);
+                        link_dispose(map->token, (VOID_T *)p->next);
+                        link_dispose(map->token, (VOID_T *)p);
                         return 0;
                     }
                 }
@@ -179,7 +174,7 @@ int BM_set_sparse(struct BM *map, int x, int y, int val)
                     else {
                         ((struct BMlink **)(map->data))[y] = p->next;
                     }
-                    link_dispose(map->token, (VOID_T *) p);
+                    link_dispose(map->token, (VOID_T *)p);
                 }
                 return 0;
             }
@@ -192,7 +187,7 @@ int BM_set_sparse(struct BM *map, int x, int y, int val)
                     p->count--;
                     if (p->count == 0) {
                         prev->next = p->next;
-                        link_dispose(map->token, (VOID_T *) p);
+                        link_dispose(map->token, (VOID_T *)p);
                     }
                     return 0;
                 }
@@ -220,7 +215,6 @@ int BM_set_sparse(struct BM *map, int x, int y, int val)
             }
 
             return 0;
-
         }
         cur_x += p->count;
         prev = p;
@@ -229,7 +223,6 @@ int BM_set_sparse(struct BM *map, int x, int y, int val)
 
     return 0;
 }
-
 
 /*!
  * \brief
@@ -260,7 +253,6 @@ int BM_get_sparse(struct BM *map, int x, int y)
     return -1;
 }
 
-
 /*!
  * \brief
  *
@@ -287,7 +279,6 @@ size_t BM_get_map_size_sparse(struct BM *map)
 
     return size;
 }
-
 
 /*!
  * \brief
@@ -316,7 +307,6 @@ int BM_dump_map_sparse(struct BM *map)
 
     return 0;
 }
-
 
 /*!
  * \brief
@@ -348,7 +338,6 @@ int BM_dump_map_row_sparse(struct BM *map, int y)
     return 0;
 }
 
-
 /*!
  * \brief
  *
@@ -362,7 +351,7 @@ int BM_dump_map_row_sparse(struct BM *map, int y)
  *  \return int
  */
 
-int BM_file_write_sparse(FILE * fp, struct BM *map)
+int BM_file_write_sparse(FILE *fp, struct BM *map)
 {
     char c;
     int i, y;
@@ -392,7 +381,6 @@ int BM_file_write_sparse(FILE * fp, struct BM *map)
 
         i = cnt;
         fwrite(&i, sizeof(i), sizeof(char), fp);
-
 
         /* then write them out */
         p = ((struct BMlink **)(map->data))[y];

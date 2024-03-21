@@ -34,10 +34,10 @@ disabled (not recommended).
 <em>v.proj</em> supports general datum transformations, making use of the
 <em>PROJ</em> co-ordinate system translation library.
 
-<p>When projecting into a latlon location, east coordinates are wrapped 
-by the proj4 library to fit into the range -180,180. This is in most cases 
-appropriate, but can cause errors the input vector crosses the datum line 
-at 180E/W. In this case wrapping of east coordinates to -180,180 needs 
+<p>When projecting into a latlon location, east coordinates are wrapped
+by the proj4 library to fit into the range -180,180. This is in most cases
+appropriate, but can cause errors the input vector crosses the datum line
+at 180E/W. In this case wrapping of east coordinates to -180,180 needs
 to be disabled with the <b>-w</b> flag.
 
 <p>When reprojecting massive point clouds for which topology is not necessary,
@@ -50,7 +50,7 @@ vertex densification (as an alternative, <em><a href="v.split.html">v.split</a><
 could be used before reprojecting. Without vertex densification, depending on
 the source and target CRS (Coordinate Reference System), geometries can be
 substantially deformed (straight lines become curves, squares become
-trapezoids, etc). The densification of linear features can help to avoid 
+trapezoids, etc). The densification of linear features can help to avoid
 topological errors.
 
 <h2>EXAMPLE</h2>
@@ -81,7 +81,7 @@ v.proj in=mymap location=latlong mapset=user1
   <li> <a href="http://geotiff.maptools.org/proj_list/">Projections Transform List</a> (PROJ)
   <li> <a href="https://proj.org/operations/index.html">Coordinate operations</a> by PROJ (projections, conversions, transformations, pipeline operator)
   <li> <a href="http://www.mapref.org">MapRef -
-      The Collection of Map Projections and Reference Systems for Europe</a> 
+      The Collection of Map Projections and Reference Systems for Europe</a>
   <li> <a href="http://www.crs-geo.eu">Information and Service System for European Coordinate Reference Systems - CRS</a>
 </ul>
 

@@ -7,8 +7,8 @@
 #include "files.h"
 #include "parms.h"
 
-int get_training_classes(struct parms *parms,
-                         struct files *files, struct SigSet *S)
+int get_training_classes(struct parms *parms, struct files *files,
+                         struct SigSet *S)
 {
     int fd;
     CELL *cell;
@@ -44,8 +44,7 @@ int get_training_classes(struct parms *parms,
     while (Rast_next_cell_stat(&cat, &count, &cell_stats)) {
         if (count > 1) {
             Sig = I_NewClassSig(S);
-            I_SetClassTitle(Sig,
-                            Rast_get_c_cat(&cat, &files->training_labels));
+            I_SetClassTitle(Sig, Rast_get_c_cat(&cat, &files->training_labels));
             Sig->classnum = cat;
             /* initialize this class with maxsubclasses (by allocating them) */
             for (i = 0; i < parms->maxsubclasses; i++)
@@ -54,7 +53,8 @@ int get_training_classes(struct parms *parms,
             n++;
         }
         else
-            G_warning(_("Training class %d only has one cell - this class will be ignored"),
+            G_warning(_("Training class %d only has one cell - this class will "
+                        "be ignored"),
                       cat);
     }
 
@@ -62,7 +62,7 @@ int get_training_classes(struct parms *parms,
         G_fatal_error(_("Training map has no classes"));
     }
 
-    list = (CELL *) G_calloc(n, sizeof(CELL));
+    list = (CELL *)G_calloc(n, sizeof(CELL));
     n = 0;
     Rast_rewind_cell_stats(&cell_stats);
     while (Rast_next_cell_stat(&cat, &count, &cell_stats))

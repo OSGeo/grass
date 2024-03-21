@@ -1,12 +1,11 @@
-
 /****************************************************************************
  *
  * MODULE:       g.remove
  *
  * AUTHOR(S):    Huidae Cho <grass4u gmail.com>
  *
- * 		 Based on general/manage/cmd/remove.c by
- *               CERL (original contributor),
+ *               Based on general/manage/cmd/remove.c by
+ *                 CERL (original contributor),
  *               Radim Blazek <radim.blazek gmail.com>,
  *               Cedric Shock <cedricgrass shockfamily.net>,
  *               Glynn Clements <glynn gclements.plus.com>,
@@ -40,16 +39,14 @@ int check_reclass(const char *, const char *, int);
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *type;
         struct Option *pattern;
         struct Option *exclude;
         struct Option *name;
         struct Option *ignore;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *ignorecase;
         struct Flag *regex;
         struct Flag *extended;
@@ -108,8 +105,7 @@ int main(int argc, char *argv[])
     opt.exclude = G_define_option();
     opt.exclude->key = "exclude";
     opt.exclude->type = TYPE_STRING;
-    opt.exclude->description =
-        _("File name exclusion pattern (default: none)");
+    opt.exclude->description = _("File name exclusion pattern (default: none)");
     opt.exclude->guisection = _("Pattern");
 
     flag.ignorecase = G_define_flag();
@@ -173,8 +169,7 @@ int main(int argc, char *argv[])
             filter = G_ls_glob_filter(buf, 0, (int)flag.ignorecase->answer);
         }
         else
-            filter =
-                G_ls_glob_filter(pattern, 0, (int)flag.ignorecase->answer);
+            filter = G_ls_glob_filter(pattern, 0, (int)flag.ignorecase->answer);
     }
     if (!filter)
         G_fatal_error(_("Unable to compile pattern <%s>"), pattern);
@@ -182,9 +177,9 @@ int main(int argc, char *argv[])
     if (exclude) {
         if ((flag.regex->answer || flag.extended->answer) &&
             opt.exclude->answer)
-            exclude_filter = G_ls_regex_filter(exclude, 1,
-                                               (int)flag.extended->answer,
-                                               (int)flag.ignorecase->answer);
+            exclude_filter =
+                G_ls_regex_filter(exclude, 1, (int)flag.extended->answer,
+                                  (int)flag.ignorecase->answer);
         else {
             /* handle individual map names */
             if (strchr(exclude, ',')) {
@@ -193,14 +188,12 @@ int main(int argc, char *argv[])
                 buf = (char *)G_malloc(strlen(exclude) + 3);
                 sprintf(buf, "{%s}", exclude);
 
-                exclude_filter = G_ls_glob_filter(buf, 1,
-                                                  (int)flag.ignorecase->
-                                                  answer);
+                exclude_filter =
+                    G_ls_glob_filter(buf, 1, (int)flag.ignorecase->answer);
             }
             else
-                exclude_filter = G_ls_glob_filter(exclude, 1,
-                                                  (int)flag.ignorecase->
-                                                  answer);
+                exclude_filter =
+                    G_ls_glob_filter(exclude, 1, (int)flag.ignorecase->answer);
         }
         if (!exclude_filter)
             G_fatal_error(_("Unable to compile pattern <%s>"), exclude);
@@ -268,8 +261,10 @@ int main(int argc, char *argv[])
         G_free_ls_filter(exclude_filter);
 
     if (!flag.force->answer && num_removed > 0)
-        G_warning(_("Nothing removed. You must use the force flag (-%c) to actually "
-                   "remove them. Exiting."), flag.force->key);
+        G_warning(
+            _("Nothing removed. You must use the force flag (-%c) to actually "
+              "remove them. Exiting."),
+            flag.force->key);
 
     exit(result);
 }

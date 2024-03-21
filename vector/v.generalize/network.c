@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.generalize
@@ -23,14 +22,13 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-typedef struct
-{
-    int **edge;                 /* edge for each vertex */
-    int *degree;                /* degree of vertices */
+typedef struct {
+    int **edge;  /* edge for each vertex */
+    int *degree; /* degree of vertices */
     int vertices;
 } NdglGraph_s;
 
-void graph_free(NdglGraph_s * g)
+void graph_free(NdglGraph_s *g)
 {
     int i;
 
@@ -44,7 +42,7 @@ void graph_free(NdglGraph_s * g)
     return;
 }
 
-int graph_init(NdglGraph_s * g, int vertices)
+int graph_init(NdglGraph_s *g, int vertices)
 {
     g->edge = NULL;
     g->degree = NULL;
@@ -64,7 +62,7 @@ int graph_init(NdglGraph_s * g, int vertices)
 
 /* writes the most important part of the In network to Out network
  * according to the thresholds, output is bigger for smaller
- * thresholds. Function returns the number of points written 
+ * thresholds. Function returns the number of points written
  TODO: rewrite ilist by something more space and time efficient
  or at least, implement append which does not check whether
  the value is already in the list*/
@@ -85,8 +83,7 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
     double *betw, *betweeness;
     struct ilist **prev;
 
-    if (0 !=
-        Vect_net_build_graph(In, mask_type, 0, 0, NULL, NULL, NULL, 0, 0))
+    if (0 != Vect_net_build_graph(In, mask_type, 0, 0, NULL, NULL, NULL, 0, 0))
         G_fatal_error(_("Unable to build graph for vector map <%s>"),
                       Vect_get_full_name(In));
 
@@ -105,7 +102,7 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
         dglInt32_t *node, *edgeset, *edge;
         dglEdgesetTraverser_s et;
 
-        node = dglGetNode(gr, (dglInt32_t) i);
+        node = dglGetNode(gr, (dglInt32_t)i);
         edgeset = dglNodeGet_OutEdgeset(gr, node);
         dglEdgeset_T_Initialize(&et, gr, edgeset);
         for (edge = dglEdgeset_T_First(&et); edge;
@@ -119,15 +116,13 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
             to_edgeset = dglNodeGet_OutEdgeset(gr, to);
             dglEdgeset_T_Initialize(&to_et, gr, to_edgeset);
 
-
             to_degree = dglNodeGet_OutDegree(gr, to);
             from_degree = dglNodeGet_OutDegree(gr, from);
             id = labs(dglEdgeGet_Id(gr, edge));
 
             /* allocate memory, if it has not been not allocated already */
             if (!g.edge[id]) {
-                g.edge[id] =
-                    G_malloc(sizeof(int) * (to_degree + from_degree));
+                g.edge[id] = G_malloc(sizeof(int) * (to_degree + from_degree));
                 if (!g.edge[id]) {
                     graph_free(&g);
                     G_fatal_error(_("Out of memory"));
@@ -142,11 +137,9 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
                 g.edge[id][g.degree[id]++] = id2;
             }
 
-
             dglEdgeset_T_Release(&to_et);
         }
         dglEdgeset_T_Release(&et);
-
     }
 
     closeness = (int *)G_calloc(g.vertices, sizeof(int));
@@ -160,7 +153,6 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
     prev = (struct ilist **)G_calloc(g.vertices, sizeof(struct ilist *));
     for (i = 0; i < g.vertices; i++)
         prev[i] = Vect_new_list();
-
 
     /* run BFS from each vertex and find the sum
      * of the shortest paths from each vertex */
@@ -234,13 +226,11 @@ int graph_generalization(struct Map_info *In, struct Map_info *Out,
                     queue[back] = to;
                     back = (back + 1) % g.vertices;
                 }
-                betw[to] +=
-                    (betw[v] +
-                     (double)1.0) * ((double)paths[to] / (double)paths[v]);
+                betw[to] += (betw[v] + (double)1.0) *
+                            ((double)paths[to] / (double)paths[v]);
             }
         }
     }
-
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();

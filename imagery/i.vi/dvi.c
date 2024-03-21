@@ -1,8 +1,8 @@
-#include<stdio.h>
-#include<math.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
 
-    /* DVI: Difference Vegetation Index */
+/* DVI: Difference Vegetation Index */
 double d_vi(double redchan, double nirchan)
 {
     double result;

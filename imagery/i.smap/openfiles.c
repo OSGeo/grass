@@ -7,18 +7,17 @@
 #include "bouman.h"
 #include "local_proto.h"
 
-
 int openfiles(struct parms *parms, struct files *files, struct SigSet *S)
 {
     FILE *fd;
-    struct Ref Ref;             /* subgroup reference list */
+    struct Ref Ref; /* subgroup reference list */
     int n;
     char **err;
 
-
     if (!I_get_subgroup_ref(parms->group, parms->subgroup, &Ref))
-        G_fatal_error(_("Unable to read REF file for subgroup <%s> in group <%s>"),
-                      parms->subgroup, parms->group);
+        G_fatal_error(
+            _("Unable to read REF file for subgroup <%s> in group <%s>"),
+            parms->subgroup, parms->group);
 
     if (Ref.nfiles <= 0)
         G_fatal_error(_("Subgroup <%s> in group <%s> contains no raster maps"),
@@ -26,8 +25,7 @@ int openfiles(struct parms *parms, struct files *files, struct SigSet *S)
 
     fd = I_fopen_sigset_file_old(parms->sigfile);
     if (fd == NULL)
-        G_fatal_error(_("Unable to read signature file <%s>"),
-                      parms->sigfile);
+        G_fatal_error(_("Unable to read signature file <%s>"), parms->sigfile);
 
     if (I_ReadSigSet(fd, S) < 0 || Ref.nfiles != S->nbands)
         G_fatal_error(_("Signature file <%s> is invalid"), parms->sigfile);
@@ -42,8 +40,7 @@ int openfiles(struct parms *parms, struct files *files, struct SigSet *S)
         G_fatal_error(_("Signature - group member semantic label mismatch.\n"
                         "Extra signatures for bands: %s\n"
                         "Imagery group bands without signatures: %s"),
-                      err[0] ? err[0] : _("none"), err[1] ? err[1] : _("none")
-            );
+                      err[0] ? err[0] : _("none"), err[1] ? err[1] : _("none"));
 
     /* allocate file descriptors, and io buffer */
     files->cellbuf = Rast_allocate_d_buf();
@@ -56,8 +53,7 @@ int openfiles(struct parms *parms, struct files *files, struct SigSet *S)
 
     /* open all group maps for reading */
     for (n = 0; n < Ref.nfiles; n++)
-        files->band_fd[n] =
-            open_cell_old(Ref.file[n].name, Ref.file[n].mapset);
+        files->band_fd[n] = open_cell_old(Ref.file[n].name, Ref.file[n].mapset);
 
     /* open output map */
     files->output_fd = open_cell_new(parms->output_map);

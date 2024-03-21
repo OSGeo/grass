@@ -34,8 +34,8 @@
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_open_select_cursor(dbDriver * driver, dbString * select,
-                          dbCursor * cursor, int mode)
+int db_open_select_cursor(dbDriver *driver, dbString *select, dbCursor *cursor,
+                          int mode)
 {
     int ret_code;
 
@@ -54,7 +54,7 @@ int db_open_select_cursor(dbDriver * driver, dbString * select,
     DB_RECV_RETURN_CODE(&ret_code);
 
     if (ret_code != DB_OK)
-        return ret_code;        /* ret_code SHOULD == DB_FAILED */
+        return ret_code; /* ret_code SHOULD == DB_FAILED */
 
     /* get the results */
     DB_RECV_TOKEN(&cursor->token);

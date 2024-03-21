@@ -1,20 +1,21 @@
-
 /****************************************************************************
-*
-* MODULE:       r.gwflow 
-*   	    	
-* AUTHOR(S):    Original author 
-*               Soeren Gebbert soerengebbert <at> gmx <dot> de
-* 		27 11 2006 Berlin
-* PURPOSE:      Calculates confiend and unconfined transient two dimensional groundwater flow
-*
-* COPYRIGHT:    (C) 2006 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       r.gwflow
+ *
+ * AUTHOR(S):    Original author
+ *               Soeren Gebbert soerengebbert <at> gmx <dot> de
+ *                 27 11 2006 Berlin
+ * PURPOSE:      Calculates confiend and unconfined transient two dimensional
+ *               groundwater flow
+ *
+ * COPYRIGHT:    (C) 2006 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,26 +27,24 @@
 #include <grass/N_pde.h>
 #include <grass/N_gwflow.h>
 
-
 /*- Parameters and global variables -----------------------------------------*/
-typedef struct
-{
+typedef struct {
     struct Option *output, *phead, *status, *hc_x, *hc_y, *q, *s, *r, *top,
-        *bottom, *vector_x, *vector_y, *budget, *type,
-        *river_head, *river_bed, *river_leak, *drain_bed, *drain_leak,
-        *dt, *maxit, *innerit, *error, *solver;
+        *bottom, *vector_x, *vector_y, *budget, *type, *river_head, *river_bed,
+        *river_leak, *drain_bed, *drain_leak, *dt, *maxit, *innerit, *error,
+        *solver;
     struct Flag *full_les;
 } paramType;
 
-paramType param;                /*Parameters */
+paramType param; /*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
-static void set_params(void);   /*Fill the paramType structure */
-static void copy_result(N_array_2d * status, N_array_2d * phead_start,
+static void set_params(void); /*Fill the paramType structure */
+static void copy_result(N_array_2d *status, N_array_2d *phead_start,
                         double *result, struct Cell_head *region,
-                        N_array_2d * target);
-static N_les *create_solve_les(N_geom_data * geom, N_gwflow_data2d * data,
-                               N_les_callback_2d * call, const char *solver,
+                        N_array_2d *target);
+static N_les *create_solve_les(N_geom_data *geom, N_gwflow_data2d *data,
+                               N_les_callback_2d *call, const char *solver,
                                int maxit, double error);
 /* ************************************************************************* */
 /* Set up the arguments we are expecting ********************************** */
@@ -60,17 +59,18 @@ void set_params(void)
     param.status = G_define_standard_option(G_OPT_R_INPUT);
     param.status->key = "status";
     param.status->description =
-        _("Name of input raster map providing boundary condition status: 0-inactive, 1-active, 2-dirichlet");
+        _("Name of input raster map providing boundary condition status: "
+          "0-inactive, 1-active, 2-dirichlet");
 
     param.hc_x = G_define_standard_option(G_OPT_R_INPUT);
     param.hc_x->key = "hc_x";
-    param.hc_x->description =
-        _("Name of input raster map with x-part of the hydraulic conductivity tensor in [m/s]");
+    param.hc_x->description = _("Name of input raster map with x-part of the "
+                                "hydraulic conductivity tensor in [m/s]");
 
     param.hc_y = G_define_standard_option(G_OPT_R_INPUT);
     param.hc_y->key = "hc_y";
-    param.hc_y->description =
-        _("Name of input raster map with y-part of the hydraulic conductivity tensor in [m/s]");
+    param.hc_y->description = _("Name of input raster map with y-part of the "
+                                "hydraulic conductivity tensor in [m/s]");
 
     param.q = G_define_standard_option(G_OPT_R_INPUT);
     param.q->key = "q";
@@ -81,7 +81,8 @@ void set_params(void)
     param.s = G_define_standard_option(G_OPT_R_INPUT);
     param.s->key = "s";
     param.s->description =
-        _("Name of input raster map with storativity for confined or effective porosity for unconfined groundwater flow booth in [-] ");
+        _("Name of input raster map with storativity for confined or effective "
+          "porosity for unconfined groundwater flow booth in [-] ");
 
     param.r = G_define_standard_option(G_OPT_R_INPUT);
     param.r->key = "recharge";
@@ -92,13 +93,13 @@ void set_params(void)
 
     param.top = G_define_standard_option(G_OPT_R_INPUT);
     param.top->key = "top";
-    param.top->description =
-        _("Name of input raster map describing the top surface of the aquifer in [m]");
+    param.top->description = _("Name of input raster map describing the top "
+                               "surface of the aquifer in [m]");
 
     param.bottom = G_define_standard_option(G_OPT_R_INPUT);
     param.bottom->key = "bottom";
-    param.bottom->description =
-        _("Name of input raster map describing the bottom surface of the aquifer in [m]");
+    param.bottom->description = _("Name of input raster map describing the "
+                                  "bottom surface of the aquifer in [m]");
 
     param.output = G_define_standard_option(G_OPT_R_OUTPUT);
     param.output->key = "output";
@@ -109,19 +110,21 @@ void set_params(void)
     param.vector_x->key = "vx";
     param.vector_x->required = NO;
     param.vector_x->description =
-        _("Output raster map to store the groundwater filter velocity vector part in x direction [m/s]");
+        _("Output raster map to store the groundwater filter velocity vector "
+          "part in x direction [m/s]");
 
     param.vector_y = G_define_standard_option(G_OPT_R_OUTPUT);
     param.vector_y->key = "vy";
     param.vector_y->required = NO;
     param.vector_y->description =
-        _("Output raster map to store the groundwater filter velocity vector part in y direction [m/s]");
+        _("Output raster map to store the groundwater filter velocity vector "
+          "part in y direction [m/s]");
 
     param.budget = G_define_standard_option(G_OPT_R_OUTPUT);
     param.budget->key = "budget";
     param.budget->required = NO;
-    param.budget->description =
-        _("Output raster map to store the groundwater budget for each cell [m^3/s]");
+    param.budget->description = _("Output raster map to store the groundwater "
+                                  "budget for each cell [m^3/s]");
 
     param.type = G_define_option();
     param.type->key = "type";
@@ -135,8 +138,8 @@ void set_params(void)
     param.river_bed = G_define_standard_option(G_OPT_R_INPUT);
     param.river_bed->key = "river_bed";
     param.river_bed->required = NO;
-    param.river_bed->description =
-        _("Name of input raster map providing the height of the river bed in [m]");
+    param.river_bed->description = _("Name of input raster map providing the "
+                                     "height of the river bed in [m]");
     param.river_bed->guisection = "River";
 
     param.river_head = G_define_standard_option(G_OPT_R_INPUT);
@@ -144,14 +147,16 @@ void set_params(void)
     param.river_head->required = NO;
     param.river_head->guisection = "River";
     param.river_head->description =
-        _("Name of input raster map providing the water level (head) of the river with leakage connection in [m]");
+        _("Name of input raster map providing the water level (head) of the "
+          "river with leakage connection in [m]");
 
     param.river_leak = G_define_standard_option(G_OPT_R_INPUT);
     param.river_leak->key = "river_leak";
     param.river_leak->required = NO;
     param.river_leak->guisection = "River";
     param.river_leak->description =
-        _("Name of input raster map providing the leakage coefficient of the river bed in [1/s].");
+        _("Name of input raster map providing the leakage coefficient of the "
+          "river bed in [1/s].");
 
     param.drain_bed = G_define_standard_option(G_OPT_R_INPUT);
     param.drain_bed->key = "drain_bed";
@@ -159,15 +164,16 @@ void set_params(void)
     param.drain_bed->required = NO;
     param.drain_bed->gisprompt = "old,raster,raster";
     param.drain_bed->guisection = "Drainage";
-    param.drain_bed->description =
-        _("Name of input raster map providing the height of the drainage bed in [m]");
+    param.drain_bed->description = _("Name of input raster map providing the "
+                                     "height of the drainage bed in [m]");
 
     param.drain_leak = G_define_standard_option(G_OPT_R_INPUT);
     param.drain_leak->key = "drain_leak";
     param.drain_leak->required = NO;
     param.drain_leak->guisection = "Drainage";
     param.drain_leak->description =
-        _("Name of input raster map providing the leakage coefficient of the drainage bed in [1/s]");
+        _("Name of input raster map providing the leakage coefficient of the "
+          "drainage bed in [1/s]");
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
@@ -185,7 +191,6 @@ void set_params(void)
     param.full_les->description =
         _("Allocate a full quadratic linear equation system,"
           " default is a sparse linear equation system.");
-
 }
 
 /* ************************************************************************* */
@@ -210,7 +215,6 @@ int main(int argc, char *argv[])
     char *buff = NULL;
     int with_river = 0, with_drain = 0;
 
-
     /* Initialize GRASS */
     G_gisinit(argv[0]);
 
@@ -219,7 +223,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("groundwater flow"));
     G_add_keyword(_("hydrology"));
     module->description =
-        _("Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions.");
+        _("Numerical calculation program for transient, confined and "
+          "unconfined groundwater flow in two dimensions.");
 
     /* Get parameters from user */
     set_params();
@@ -229,7 +234,8 @@ int main(int argc, char *argv[])
 
     /* Make sure that the current projection is not lat/long */
     if ((G_projection() == PROJECTION_LL))
-        G_fatal_error(_("Lat/Long location is not supported by %s. Please reproject map first."),
+        G_fatal_error(_("Lat/Long location is not supported by %s. Please "
+                        "reproject map first."),
                       G_program_name());
 
     /*Check the river  parameters */
@@ -243,8 +249,8 @@ int main(int argc, char *argv[])
         with_river = 1;
     }
     else {
-        G_fatal_error
-            (_("Please provide river_head, river_leak and river_bed maps"));
+        G_fatal_error(
+            _("Please provide river_head, river_leak and river_bed maps"));
     }
 
     /*Check the drainage parameters */
@@ -259,7 +265,6 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Please provide drain_head and drain_leak maps"));
     }
 
-
     /*Set the maximum iterations */
     sscanf(param.maxit->answer, "%i", &(maxit));
     /*Set the maximum number of inner iterations */
@@ -271,9 +276,9 @@ int main(int argc, char *argv[])
 
     if (strcmp(solver, G_MATH_SOLVER_DIRECT_CHOLESKY) == 0 &&
         !param.full_les->answer)
-        G_fatal_error(_("The cholesky solver dos not work with sparse matrices. "
-                       "You may choose a full filled quadratic matrix, flag -f."));
-
+        G_fatal_error(
+            _("The cholesky solver dos not work with sparse matrices. "
+              "You may choose a full filled quadratic matrix, flag -f."));
 
     /*get the current region */
     G_get_set_window(&region);
@@ -283,7 +288,7 @@ int main(int argc, char *argv[])
 
     /*Set the function callback to the groundwater flow function */
     call = N_alloc_les_callback_2d();
-    N_set_les_callback_2d_func(call, (*N_callback_gwflow_2d));  /*gwflow 2d */
+    N_set_les_callback_2d_func(call, (*N_callback_gwflow_2d)); /*gwflow 2d */
 
     /*Allocate the groundwater flow data structure */
     data =
@@ -355,7 +360,7 @@ int main(int argc, char *argv[])
     for (y = 0; y < geom->rows; y++) {
         for (x = 0; x < geom->cols; x++) {
             stat = N_get_array_2d_c_value(data->status, x, y);
-            if (stat == N_CELL_INACTIVE) {      /*only inactive cells */
+            if (stat == N_CELL_INACTIVE) { /*only inactive cells */
                 N_put_array_2d_d_value(data->hc_x, x, y, 0);
                 N_put_array_2d_d_value(data->hc_y, x, y, 0);
                 N_put_array_2d_d_value(data->s, x, y, 0);
@@ -364,19 +369,18 @@ int main(int argc, char *argv[])
         }
     }
 
-
     /*assemble the linear equation system  and solve it */
     les = create_solve_les(geom, data, call, solver, maxit, error);
 
-    /* copy the result into the phead array for output or unconfined calculation */
-    copy_result(data->status, data->phead_start, les->x, &region,
-                data->phead);
+    /* copy the result into the phead array for output or unconfined calculation
+     */
+    copy_result(data->status, data->phead_start, les->x, &region, data->phead);
     N_convert_array_2d_null_to_zero(data->phead);
 
-  /****************************************************/
+    /****************************************************/
     /*explicite calculation of free groundwater surface */
 
-  /****************************************************/
+    /****************************************************/
     if (data->gwtype == N_GW_UNCONFINED) {
         /* allocate memory and copy the result into a new temporal vector */
         tmp_vect = (double *)G_calloc(les->rows, sizeof(double));
@@ -411,16 +415,16 @@ int main(int argc, char *argv[])
                 tmp_vect[i] = les->x[i];
             }
 
-            G_message(_("Maximum difference between this and last increment: %g"),
-                      max_norm);
+            G_message(
+                _("Maximum difference between this and last increment: %g"),
+                max_norm);
 
             /* copy the result into the phead array */
             copy_result(data->status, data->phead_start, les->x, &region,
                         data->phead);
             N_convert_array_2d_null_to_zero(data->phead);
-             /**/ inner_count++;
-        }
-        while (max_norm > 0.01 && inner_count < innerit);
+            /**/ inner_count++;
+        } while (max_norm > 0.01 && inner_count < innerit);
 
         if (tmp_vect)
             free(tmp_vect);
@@ -443,11 +447,11 @@ int main(int argc, char *argv[])
         N_write_array_2d_to_rast(budget, param.budget->answer);
     }
 
-    /*Compute the the velocity field if required and write the result into two raster maps */
+    /*Compute the the velocity field if required and write the result into two
+     * raster maps */
     if (param.vector_x->answer && param.vector_y->answer) {
-        field =
-            N_compute_gradient_field_2d(data->phead, data->hc_x, data->hc_y,
-                                        geom, NULL);
+        field = N_compute_gradient_field_2d(data->phead, data->hc_x, data->hc_y,
+                                            geom, NULL);
 
         xcomp = N_alloc_array_2d(geom->cols, geom->rows, 1, DCELL_TYPE);
         ycomp = N_alloc_array_2d(geom->cols, geom->rows, 1, DCELL_TYPE);
@@ -482,9 +486,8 @@ int main(int argc, char *argv[])
 /* ************************************************************************* */
 /* this function copies the result into a N_array_2d struct                  */
 /* ************************************************************************* */
-void
-copy_result(N_array_2d * status, N_array_2d * phead_start, double *result,
-            struct Cell_head *region, N_array_2d * target)
+void copy_result(N_array_2d *status, N_array_2d *phead_start, double *result,
+                 struct Cell_head *region, N_array_2d *target)
 {
     int y, x, rows, cols, count, stat;
     double d1 = 0;
@@ -498,14 +501,14 @@ copy_result(N_array_2d * status, N_array_2d * phead_start, double *result,
         G_percent(y, rows - 1, 10);
         for (x = 0; x < cols; x++) {
             stat = N_get_array_2d_c_value(status, x, y);
-            if (stat == N_CELL_ACTIVE) {        /*only active cells */
+            if (stat == N_CELL_ACTIVE) { /*only active cells */
                 d1 = result[count];
-                val = (DCELL) d1;
+                val = (DCELL)d1;
                 count++;
             }
-            else if (stat == N_CELL_DIRICHLET) {        /*dirichlet cells */
+            else if (stat == N_CELL_DIRICHLET) { /*dirichlet cells */
                 d1 = N_get_array_2d_d_value(phead_start, x, y);
-                val = (DCELL) d1;
+                val = (DCELL)d1;
                 count++;
             }
             else {
@@ -521,21 +524,19 @@ copy_result(N_array_2d * status, N_array_2d * phead_start, double *result,
 /* *************************************************************** */
 /* ***** create and solve the linear equation system ************* */
 /* *************************************************************** */
-N_les *create_solve_les(N_geom_data * geom, N_gwflow_data2d * data,
-                        N_les_callback_2d * call, const char *solver,
-                        int maxit, double error)
+N_les *create_solve_les(N_geom_data *geom, N_gwflow_data2d *data,
+                        N_les_callback_2d *call, const char *solver, int maxit,
+                        double error)
 {
     N_les *les;
 
     /*assemble the linear equation system */
     if (!param.full_les->answer)
-        les =
-            N_assemble_les_2d_dirichlet(N_SPARSE_LES, geom, data->status,
-                                        data->phead, (void *)data, call);
+        les = N_assemble_les_2d_dirichlet(N_SPARSE_LES, geom, data->status,
+                                          data->phead, (void *)data, call);
     else
-        les =
-            N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status,
-                                        data->phead, (void *)data, call);
+        les = N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status,
+                                          data->phead, (void *)data, call);
 
     N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead);
 
@@ -554,16 +555,16 @@ N_les *create_solve_les(N_geom_data * geom, N_gwflow_data2d * data,
     }
     else if (les && les->type == N_SPARSE_LES) {
         if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_CG) == 0)
-            G_math_solver_sparse_cg(les->Asp, les->x, les->b, les->rows,
-                                    maxit, error);
+            G_math_solver_sparse_cg(les->Asp, les->x, les->b, les->rows, maxit,
+                                    error);
 
         if (strcmp(solver, G_MATH_SOLVER_ITERATIVE_PCG) == 0)
-            G_math_solver_sparse_pcg(les->Asp, les->x, les->b, les->rows,
-                                     maxit, error,
-                                     G_MATH_DIAGONAL_PRECONDITION);
+            G_math_solver_sparse_pcg(les->Asp, les->x, les->b, les->rows, maxit,
+                                     error, G_MATH_DIAGONAL_PRECONDITION);
     }
     if (les == NULL)
-        G_fatal_error(_("Unable to create and solve the linear equation system"));
+        G_fatal_error(
+            _("Unable to create and solve the linear equation system"));
 
     return les;
 }

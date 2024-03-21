@@ -18,9 +18,9 @@ raster will have that resolution (see more below for more information
 about extent and resolution management).
 
 <p>
-<em>r.in.lidar</em> is designed for processing massive point cloud 
-datasets, for example raw LiDAR or sidescan sonar swath data. It has 
-been tested with large datasets (see below for memory management 
+<em>r.in.lidar</em> is designed for processing massive point cloud
+datasets, for example raw LiDAR or sidescan sonar swath data. It has
+been tested with large datasets (see below for memory management
 notes).
 
 <h3>Binning</h3>
@@ -184,10 +184,10 @@ is applied to Z values after the <b>base_raster</b> reduction.
 </center>
 
 <p>
-A LiDAR pulse can have multiple returns. The first return values can be 
-used to obtain a digital surface model (DSM) where e.g. canopy cover is 
-represented. The last return values can be used to obtain a digital 
-terrain model (DTM) where e.g. the forest floor instead of canopy 
+A LiDAR pulse can have multiple returns. The first return values can be
+used to obtain a digital surface model (DSM) where e.g. canopy cover is
+represented. The last return values can be used to obtain a digital
+terrain model (DTM) where e.g. the forest floor instead of canopy
 cover is represented. The <b>return_filter</b> option allows selecting
 one of first, mid, or last returns. Return number and number of returns
 in the pulse associated with each point are compared to determine
@@ -208,7 +208,7 @@ environment if the cells are oversampled.
 
 <p>
 The user can use a combination of <em>r.in.lidar</em> <b>output</b> maps
-to create custom raster-based filters, for examplee, use
+to create custom raster-based filters, for example, use
 <em><a href="r.mapcalc.html">r.mapcalc</a></em> to create
 a <tt>mean-(2*stddev)</tt> map. (In this example the user may want to
 include a lower bound filter in <em>r.mapcalc</em> to remove highly
@@ -252,10 +252,10 @@ top of the canopy.
 <h3>Setting extent and resolution</h3>
 
 <p>
-Since the creation of raster maps depends on the computational 
-region settings (extent and resolution), as default the current 
-region extents and resolution are used for the import. When using 
-the <em>-e</em> flag along with the <em>resolution=value</em> 
+Since the creation of raster maps depends on the computational
+region settings (extent and resolution), as default the current
+region extents and resolution are used for the import. When using
+the <em>-e</em> flag along with the <em>resolution=value</em>
 parameter, the region used for the new raster will be based
 the point cloud extent and the provided resolution. It is therefore
 recommended to first use the <em>-s</em> flag to get the extents of the
@@ -267,10 +267,10 @@ resolution. The best option is to know the point cloud extent ahead,
 e.g. from tiling scheme, and use it. See below for details.
 
 <p>
-Since the <em>r.in.lidar</em> generates a raster map through binning 
-from the original LiDAR points, the target computational region 
-extent and resolution have to be determined. A typical workflow 
-would involve the examination of the LAS data's associated 
+Since the <em>r.in.lidar</em> generates a raster map through binning
+from the original LiDAR points, the target computational region
+extent and resolution have to be determined. A typical workflow
+would involve the examination of the LAS data's associated
 documentation or the scan of the LAS data file with
 <em>r.in.lidar</em>'s <b>-s</b> (or <b>-g</b>) flag to find the input
 data's bounds.
@@ -454,8 +454,8 @@ g.region -e
 
 This example is analogous to the example used in the GRASS wiki page for
 <a href="https://grasswiki.osgeo.org/wiki/LIDAR#Import_LAS_as_raster_DEM">importing LAS as raster DEM</a>.
-<p>The sample LAS data are in the file "Serpent Mound Model LAS Data.las", 
-available at 
+<p>The sample LAS data are in the file "Serpent Mound Model LAS Data.las",
+available at
 <a href="http://www.appliedimagery.com/downloads/sampledata/Serpent%20Mound%20Model%20LAS%20Data.las">appliedimagery.com</a>:
 
 <div class="code"><pre>
@@ -501,7 +501,7 @@ to match the precision of the points rather than deriving it from the base raste
 
 <h3>Multiple file input</h3>
 
-The file option requres a file that contains a list of file names with the full 
+The file option requires a file that contains a list of file names with the full
 path. For example, a list of files in the directory /home/user/data:
 <div class="code"><pre>
 points1.laz
@@ -537,7 +537,7 @@ Python module:
 <div class="code"><pre>
 import glob
 import grass.script as gs
-    
+
 file_list_name = '/home/user/data/filelist.txt'
 with open(, mode='w') as file_list:
     for path in glob.iglob('/home/user/data/lidar/*.las'):

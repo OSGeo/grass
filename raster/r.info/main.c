@@ -1,19 +1,19 @@
-
 /***************************************************************************
-*
-* MODULE:       r.info
-*
-* AUTHOR(S):    Michael O'Shea
-*
-* PURPOSE:      Outputs basic information about a user-specified raster map layer.
-*
-* COPYRIGHT:    (C) 2005-2011 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       r.info
+ *
+ * AUTHOR(S):    Michael O'Shea
+ *
+ * PURPOSE:      Outputs basic information about a user-specified raster map
+ *layer.
+ *
+ * COPYRIGHT:    (C) 2005-2011 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <math.h>
 #include <sys/types.h>
@@ -27,17 +27,16 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-#define printline(x) fprintf (out," | %-74.74s |\n",x)
-#define divider(x) \
-    fprintf (out," %c",x);\
-    for (i = 0; i < 76; i++)\
-        fprintf(out,"-");\
-    fprintf (out,"%c\n",x)
+#define printline(x) fprintf(out, " | %-74.74s |\n", x)
+#define divider(x)           \
+    fprintf(out, " %c", x);  \
+    for (i = 0; i < 76; i++) \
+        fprintf(out, "-");   \
+    fprintf(out, "%c\n", x)
 
 /* local prototypes */
 static void format_double(const double, char *);
 static void compose_line(FILE *, const char *, ...);
-
 
 int main(int argc, char **argv)
 {
@@ -136,9 +135,8 @@ int main(int argc, char **argv)
 
     out = stdout;
 
-    if (eflag->answer ||
-        (!gflag->answer && !rflag->answer && !sflag->answer &&
-         !hflag->answer)) {
+    if (eflag->answer || (!gflag->answer && !rflag->answer && !sflag->answer &&
+                          !hflag->answer)) {
         title = "";
         /* empty title by default */
         /* use title from category file as the primary (and only) title */
@@ -153,15 +151,14 @@ int main(int argc, char **argv)
         }
     }
 
-    if (!gflag->answer && !rflag->answer && !sflag->answer &&
-        !eflag->answer && !hflag->answer) {
+    if (!gflag->answer && !rflag->answer && !sflag->answer && !eflag->answer &&
+        !hflag->answer) {
         divider('+');
 
         compose_line(out, "Map:      %-29.29s  Date: %s", name,
                      hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
-        compose_line(out, "Mapset:   %-29.29s  Login of Creator: %s",
-                     mapset, hist_ok ? Rast_get_history(&hist,
-                                                        HIST_CREATOR) : "??");
+        compose_line(out, "Mapset:   %-29.29s  Login of Creator: %s", mapset,
+                     hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??");
         compose_line(out, "Location: %s", G_location());
         compose_line(out, "DataBase: %s", G_gisdbase());
         compose_line(out, "Title:    %s", title);
@@ -181,15 +178,16 @@ int main(int argc, char **argv)
         if (cats_ok)
             format_double((double)cats.num, tmp1);
 
-        compose_line(out,
-                     "  Type of Map:  %-20.20s Number of Categories: %-9s",
+        compose_line(out, "  Type of Map:  %-20.20s Number of Categories: %-9s",
                      hist_ok ? Rast_get_history(&hist, HIST_MAPTYPE) : "??",
                      cats_ok ? tmp1 : "??");
 
         compose_line(out, "  Data Type:    %-20.20s Semantic label: %s ",
-                     (data_type == CELL_TYPE ? "CELL" :
-                      (data_type == DCELL_TYPE ? "DCELL" :
-                       (data_type == FCELL_TYPE ? "FCELL" : "??"))),
+                     (data_type == CELL_TYPE
+                          ? "CELL"
+                          : (data_type == DCELL_TYPE
+                                 ? "DCELL"
+                                 : (data_type == FCELL_TYPE ? "FCELL" : "??"))),
                      (semantic_label ? semantic_label : "(none)"));
 
         /* For now hide these unless they exist to keep the noise low. In
@@ -197,14 +195,13 @@ int main(int argc, char **argv)
          *   along with the standard set. */
         if (units || vdatum)
             compose_line(out, "  Data Units:   %-20.20s Vertical datum: %s",
-                         units ? units : "(none)",
-                         vdatum ? vdatum : "(none)");
+                         units ? units : "(none)", vdatum ? vdatum : "(none)");
 
         {
             compose_line(out, "  Rows:         %d", cellhd.rows);
             compose_line(out, "  Columns:      %d", cellhd.cols);
             compose_line(out, "  Total Cells:  %jd",
-                         (grass_int64) cellhd.rows * cellhd.cols);
+                         (grass_int64)cellhd.rows * cellhd.cols);
 
             /* This is printed as a guide to what the following eastings and
              * northings are printed in. This data is NOT from the values
@@ -221,14 +218,14 @@ int main(int argc, char **argv)
             G_format_northing(cellhd.north, tmp1, cellhd.proj);
             G_format_northing(cellhd.south, tmp2, cellhd.proj);
             G_format_resolution(cellhd.ns_res, tmp3, cellhd.proj);
-            compose_line(out, "           N: %10s    S: %10s   Res: %5s",
-                         tmp1, tmp2, tmp3);
+            compose_line(out, "           N: %10s    S: %10s   Res: %5s", tmp1,
+                         tmp2, tmp3);
 
             G_format_easting(cellhd.east, tmp1, cellhd.proj);
             G_format_easting(cellhd.west, tmp2, cellhd.proj);
             G_format_resolution(cellhd.ew_res, tmp3, cellhd.proj);
-            compose_line(out, "           E: %10s    W: %10s   Res: %5s",
-                         tmp1, tmp2, tmp3);
+            compose_line(out, "           E: %10s    W: %10s   Res: %5s", tmp1,
+                         tmp2, tmp3);
 
             if (data_type == CELL_TYPE) {
                 int ret;
@@ -243,8 +240,8 @@ int main(int argc, char **argv)
                     Rast_get_range_min_max(&crange, &min, &max);
 
                     if (Rast_is_c_null_value(&min)) {
-                        compose_line(out,
-                                     "  Range of data:    min = NULL  max = NULL");
+                        compose_line(
+                            out, "  Range of data:    min = NULL  max = NULL");
                     }
                     else {
                         compose_line(out,
@@ -267,19 +264,21 @@ int main(int argc, char **argv)
                     Rast_get_fp_range_min_max(&range, &min, &max);
 
                     if (Rast_is_d_null_value(&min)) {
-                        compose_line(out,
-                                     "  Range of data:    min = NULL  max = NULL");
+                        compose_line(
+                            out, "  Range of data:    min = NULL  max = NULL");
                     }
                     else {
                         if (data_type == FCELL_TYPE) {
-                            compose_line(out,
-                                         "  Range of data:    min = %.7g  max = %.7g",
-                                         min, max);
+                            compose_line(
+                                out,
+                                "  Range of data:    min = %.7g  max = %.7g",
+                                min, max);
                         }
                         else {
-                            compose_line(out,
-                                         "  Range of data:    min = %.15g  max = %.15g",
-                                         min, max);
+                            compose_line(
+                                out,
+                                "  Range of data:    min = %.15g  max = %.15g",
+                                min, max);
                         }
                     }
                 }
@@ -354,15 +353,14 @@ int main(int argc, char **argv)
                         compose_line(out, "     %5s              %s", num,
                                      text);
                         *num = 0;
-                    }
-                    while (next >= 0);
+                    } while (next >= 0);
                 }
         }
         divider('+');
 
         fprintf(out, "\n");
     }
-    else {                      /* g, r, s, e, or h flags */
+    else { /* g, r, s, e, or h flags */
         int need_range, have_range, need_stats, have_stats;
 
         need_range = rflag->answer;
@@ -404,7 +402,7 @@ int main(int argc, char **argv)
                         continue;
                     if (first) {
                         rstats.sum = val;
-                        rstats.sumsq = (DCELL) val *val;
+                        rstats.sumsq = (DCELL)val * val;
 
                         rstats.count = 1;
                         min = max = val;
@@ -413,7 +411,7 @@ int main(int argc, char **argv)
                     }
                     else {
                         rstats.sum += val;
-                        rstats.sumsq += (DCELL) val *val;
+                        rstats.sumsq += (DCELL)val * val;
 
                         rstats.count += 1;
                         if (min > val)
@@ -429,8 +427,8 @@ int main(int argc, char **argv)
             if (data_type == CELL_TYPE) {
                 Rast_init_range(&crange);
                 if (rstats.count > 0) {
-                    Rast_update_range((CELL) min, &crange);
-                    Rast_update_range((CELL) max, &crange);
+                    Rast_update_range((CELL)min, &crange);
+                    Rast_update_range((CELL)max, &crange);
                 }
             }
             else {
@@ -463,12 +461,14 @@ int main(int argc, char **argv)
             fprintf(out, "cols=%d\n", cellhd.cols);
 
             fprintf(out, "cells=%" PRId64 "\n",
-                    (grass_int64) cellhd.rows * cellhd.cols);
+                    (grass_int64)cellhd.rows * cellhd.cols);
 
             fprintf(out, "datatype=%s\n",
-                    (data_type == CELL_TYPE ? "CELL" :
-                     (data_type == DCELL_TYPE ? "DCELL" :
-                      (data_type == FCELL_TYPE ? "FCELL" : "??"))));
+                    (data_type == CELL_TYPE
+                         ? "CELL"
+                         : (data_type == DCELL_TYPE
+                                ? "DCELL"
+                                : (data_type == FCELL_TYPE ? "FCELL" : "??"))));
             if (cats_ok)
                 format_double((double)cats.num, tmp1);
             fprintf(out, "ncats=%s\n", cats_ok ? tmp1 : "??");
@@ -514,7 +514,7 @@ int main(int argc, char **argv)
             if (!gflag->answer) {
                 /* always report total number of cells */
                 fprintf(out, "cells=%" PRId64 "\n",
-                        (grass_int64) cellhd.rows * cellhd.cols);
+                        (grass_int64)cellhd.rows * cellhd.cols);
             }
 
             if (rstats.count > 0) {
@@ -522,7 +522,6 @@ int main(int argc, char **argv)
 
                 mean = (double)(rstats.sum / rstats.count);
                 sd = sqrt(rstats.sumsq / rstats.count - (mean * mean));
-
 
                 if (data_type == CELL_TYPE) {
                     CELL min, max;
@@ -578,7 +577,6 @@ int main(int argc, char **argv)
 
                 /*Create the r.info timestamp string */
                 fprintf(out, "timestamp=\"%s\"\n", timebuff);
-
             }
             else {
                 fprintf(out, "timestamp=\"none\"\n");
@@ -588,14 +586,14 @@ int main(int argc, char **argv)
             fprintf(out, "semantic_label=%s\n",
                     semantic_label ? semantic_label : "\"none\"");
             fprintf(out, "source1=\"%s\"\n",
-                    hist_ok ? Rast_get_history(&hist,
-                                               HIST_DATSRC_1) : "\"none\"");
+                    hist_ok ? Rast_get_history(&hist, HIST_DATSRC_1)
+                            : "\"none\"");
             fprintf(out, "source2=\"%s\"\n",
-                    hist_ok ? Rast_get_history(&hist,
-                                               HIST_DATSRC_2) : "\"none\"");
+                    hist_ok ? Rast_get_history(&hist, HIST_DATSRC_2)
+                            : "\"none\"");
             fprintf(out, "description=\"%s\"\n",
-                    hist_ok ? Rast_get_history(&hist,
-                                               HIST_KEYWRD) : "\"none\"");
+                    hist_ok ? Rast_get_history(&hist, HIST_KEYWRD)
+                            : "\"none\"");
             if (Rast_history_length(&hist)) {
                 fprintf(out, "comments=\"");
                 for (i = 0; i < Rast_history_length(&hist); i++)
@@ -607,10 +605,8 @@ int main(int argc, char **argv)
         if (hflag->answer) {
             if (hist_ok) {
                 fprintf(out, "Data Source:\n");
-                fprintf(out, "   %s\n",
-                        Rast_get_history(&hist, HIST_DATSRC_1));
-                fprintf(out, "   %s\n",
-                        Rast_get_history(&hist, HIST_DATSRC_2));
+                fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_1));
+                fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_DATSRC_2));
                 fprintf(out, "Data Description:\n");
                 fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_KEYWRD));
                 if (Rast_history_length(&hist)) {
@@ -620,11 +616,10 @@ int main(int argc, char **argv)
                 }
             }
         }
-    }                           /* else rflag or sflag or tflag or gflag or hflag or mflag */
+    } /* else rflag or sflag or tflag or gflag or hflag or mflag */
 
     return EXIT_SUCCESS;
 }
-
 
 static void format_double(const double value, char *buf)
 {
@@ -632,8 +627,7 @@ static void format_double(const double value, char *buf)
     G_trim_decimal(buf);
 }
 
-
-static void compose_line(FILE * out, const char *fmt, ...)
+static void compose_line(FILE *out, const char *fmt, ...)
 {
     char *line = NULL;
     va_list ap;

@@ -8,7 +8,7 @@ extern int rotate_bufs(int);
 extern void circle_mask(void);
 extern void weights_mask(void);
 extern int gather(DCELL *, int, int);
-extern int gather_w(DCELL *, DCELL(*)[2], int, int);
+extern int gather_w(DCELL *, DCELL (*)[2], int, int);
 
 /* readcell.c */
 extern int readcell(int, int, int, int, int);

@@ -1,10 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       g.gui
  *
  * AUTHOR(S):    Martin Landa <landa.martin gmail.com>
- *		 Hamish Bowman <hamish_b yahoo com> (fine tuning)
+ *               Hamish Bowman <hamish_b yahoo com> (fine tuning)
  *
  * PURPOSE:      Start GRASS GUI from command line.
  *
@@ -50,8 +49,7 @@ int main(int argc, char *argv[])
     type->type = TYPE_STRING;
     type->description = _("User interface");
     desc = NULL;
-    G_asprintf(&desc,
-               "wxpython;%s;text;%s;gtext;%s;",
+    G_asprintf(&desc, "wxpython;%s;text;%s;gtext;%s;",
                _("wxPython based GUI (wxGUI)"),
                _("command line interface only"),
                _("command line interface with GUI startup screen"));
@@ -70,9 +68,10 @@ int main(int argc, char *argv[])
     fglaunch = G_define_flag();
     fglaunch->key = 'f';
     fglaunch->label = _("Start GUI in the foreground");
-    fglaunch->description = _("By default the GUI starts in the background"
-                              " and control is immediately returned to the caller."
-                              " When GUI runs in foregreound, it blocks the command line");
+    fglaunch->description =
+        _("By default the GUI starts in the background"
+          " and control is immediately returned to the caller."
+          " When GUI runs in foregreound, it blocks the command line");
 
     update_ui = G_define_flag();
     update_ui->key = 'd';
@@ -81,8 +80,8 @@ int main(int argc, char *argv[])
 
     nolaunch = G_define_flag();
     nolaunch->key = 'n';
-    nolaunch->description =
-        _("Do not launch GUI after updating the default user interface settings");
+    nolaunch->description = _(
+        "Do not launch GUI after updating the default user interface settings");
     nolaunch->guisection = _("Default");
 
     if (G_parser(argc, argv))
@@ -99,7 +98,8 @@ int main(int argc, char *argv[])
 
     if (strcmp(type->answer, "wxpython") != 0 || nolaunch->answer) {
         if (!update_ui->answer)
-            G_warning(_("Nothing to do. For setting up <%s> as default UI use -%c flag."),
+            G_warning(_("Nothing to do. For setting up <%s> as default UI use "
+                        "-%c flag."),
                       type->answer, update_ui->key);
         exit(EXIT_SUCCESS);
     }
@@ -111,25 +111,24 @@ int main(int argc, char *argv[])
     if (fglaunch->answer) {
         G_message(_("Launching <%s> GUI, please wait..."), type->answer);
         if (rc_file->answer) {
-            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"),
-                       progname, "--workspace", rc_file->answer, NULL);
+            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
+                       "--workspace", rc_file->answer, NULL);
         }
         else {
-            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"),
-                       progname, NULL);
+            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
+                       NULL);
         }
     }
     else {
         G_message(_("Launching <%s> GUI in the background, please wait..."),
                   type->answer);
         if (rc_file->answer) {
-            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"),
-                       progname, "--workspace", rc_file->answer,
-                       SF_BACKGROUND, NULL);
+            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
+                       "--workspace", rc_file->answer, SF_BACKGROUND, NULL);
         }
         else {
-            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"),
-                       progname, SF_BACKGROUND, NULL);
+            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
+                       SF_BACKGROUND, NULL);
         }
         /* stop the impatient from starting it again
            before the splash screen comes up */

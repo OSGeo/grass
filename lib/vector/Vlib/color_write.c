@@ -88,8 +88,8 @@ void Vect_write_colors(const char *name, const char *mapset,
     }
 
     if (!(fd = G_fopen_new(element, cname)))
-        G_fatal_error(_("Unable to create <%s> file for map <%s>"),
-                      element, name);
+        G_fatal_error(_("Unable to create <%s> file for map <%s>"), element,
+                      name);
 
     Rast__write_colors(fd, colors);
     fclose(fd);

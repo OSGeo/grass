@@ -32,9 +32,9 @@
    \param field layer number
 
    \return list of column(s) names on success
-   \return NULL on error 
+   \return NULL on error
  */
-const char *Vect_get_column_names(const struct Map_info *Map, int field)
+const char *Vect_get_column_names(struct Map_info *Map, int field)
 {
     int num_dblinks, ncols, col;
     struct field_info *fi;
@@ -49,8 +49,7 @@ const char *Vect_get_column_names(const struct Map_info *Map, int field)
     if (num_dblinks <= 0)
         return (NULL);
 
-    G_debug(3,
-            "Displaying column names for database connection of layer %d:",
+    G_debug(3, "Displaying column names for database connection of layer %d:",
             field);
     if ((fi = Vect_get_field(Map, field)) == NULL)
         return (NULL);
@@ -88,9 +87,9 @@ const char *Vect_get_column_names(const struct Map_info *Map, int field)
    \param field layer number
 
    \return list of column(s) types on success
-   \return NULL on error 
+   \return NULL on error
  */
-const char *Vect_get_column_types(const struct Map_info *Map, int field)
+const char *Vect_get_column_types(struct Map_info *Map, int field)
 {
     int num_dblinks, ncols, col;
     struct field_info *fi;
@@ -105,8 +104,7 @@ const char *Vect_get_column_types(const struct Map_info *Map, int field)
     if (num_dblinks <= 0)
         return (NULL);
 
-    G_debug(3,
-            "Displaying column types for database connection of layer %d:",
+    G_debug(3, "Displaying column types for database connection of layer %d:",
             field);
     if ((fi = Vect_get_field(Map, field)) == NULL)
         return (NULL);
@@ -125,9 +123,8 @@ const char *Vect_get_column_types(const struct Map_info *Map, int field)
     ncols = db_get_table_number_of_columns(table);
     sqltype_names = G_malloc(ncols * sizeof(char *));
     for (col = 0; col < ncols; col++)
-        sqltype_names[col] = db_sqltype_name(db_get_column_sqltype
-                                             (db_get_table_column
-                                              (table, col)));
+        sqltype_names[col] = db_sqltype_name(
+            db_get_column_sqltype(db_get_table_column(table, col)));
     if ((list = G_str_concat(sqltype_names, ncols, ",", BUFF_MAX)) == NULL)
         list = G_store("");
     G_free(sqltype_names);
@@ -139,17 +136,17 @@ const char *Vect_get_column_types(const struct Map_info *Map, int field)
     return list;
 }
 
-
 /*!
-   \brief Fetches list of DB column names and types of vector map attribute table
+   \brief Fetches list of DB column names and types of vector map attribute
+   table
 
    \param Map vector map
    \param field layer number
 
    \return list of column(s) types on success
-   \return NULL on error 
+   \return NULL on error
  */
-const char *Vect_get_column_names_types(const struct Map_info *Map, int field)
+const char *Vect_get_column_names_types(struct Map_info *Map, int field)
 {
     int num_dblinks, ncols, col;
     struct field_info *fi;
@@ -164,8 +161,7 @@ const char *Vect_get_column_names_types(const struct Map_info *Map, int field)
     if (num_dblinks <= 0)
         return (NULL);
 
-    G_debug(3,
-            "Displaying column types for database connection of layer %d:",
+    G_debug(3, "Displaying column types for database connection of layer %d:",
             field);
     if ((fi = Vect_get_field(Map, field)) == NULL)
         return (NULL);
@@ -188,8 +184,8 @@ const char *Vect_get_column_names_types(const struct Map_info *Map, int field)
 
         sprintf(buf, "%s(%s)",
                 db_get_column_name(db_get_table_column(table, col)),
-                db_sqltype_name(db_get_column_sqltype
-                                (db_get_table_column(table, col))));
+                db_sqltype_name(
+                    db_get_column_sqltype(db_get_table_column(table, col))));
         col_type_names[col] = buf;
     }
     if ((list = G_str_concat(col_type_names, ncols, ",", BUFF_MAX)) == NULL)

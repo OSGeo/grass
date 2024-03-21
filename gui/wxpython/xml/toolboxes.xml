@@ -691,6 +691,9 @@
       <module-item name="r.tileset">
         <label>Tiling</label>
       </module-item>
+      <module-item name="r.buildvrt">
+        <label>Build a VRT (Virtual Raster)</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="ManageRasterColors">
@@ -803,6 +806,9 @@
       </module-item>
       <module-item name="r.cost">
         <label>Cost surface</label>
+      </module-item>
+      <module-item name="r.path">
+        <label>Trace a path</label>
       </module-item>
       <module-item name="r.walk">
         <label>Cumulative movement costs</label>
@@ -1205,7 +1211,12 @@
         <label>Split polylines</label>
       </module-item>
       <separator/>
-      <wxgui-item name="CleanVectorMap"/>
+      <module-item name="v.clean">
+        <label>Clean vector map</label>
+      </module-item>
+      <module-item name="v.fill.holes">
+        <label>Fill holes in areas</label>
+      </module-item>
       <module-item name="v.generalize">
         <label>Smooth or simplify</label>
       </module-item>
@@ -1546,6 +1557,17 @@
       </module-item>
       <module-item name="i.smap">
         <label>Sequential maximum a posteriori classification (SMAP)</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.svm.train">
+        <label>Input for supervised SVM</label>
+      </module-item>
+      <module-item name="i.svm.predict">
+        <label>Support Vector Machines classification (SVM)</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.signatures">
+        <label>Manage signature files</label>
       </module-item>
       <separator/>
       <module-item name="i.segment">

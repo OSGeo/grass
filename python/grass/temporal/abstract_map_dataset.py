@@ -9,8 +9,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
-
+import grass.script as gs
 from grass.exceptions import ImplementationError
 from datetime import datetime
 from abc import ABCMeta, abstractmethod
@@ -165,6 +164,74 @@ class AbstractMapDataset(AbstractDataset):
         return self.base.get_map_id()
 
     @staticmethod
+    def split_name(name, layer=None, mapset=None):
+        """Convenient method to split a map name into three potentially
+        contained parts: map name, map layer and mapset. For the layer and
+        mapset, default keyword arguments can be given if not present in
+        the name. Layer and mapset present in the name will overwrite
+        the keyword arguments.
+
+        :param name: The name of the map
+        :param layer: The layer of the vector map, use None in case no
+                      layer exists
+        :param mapset: The mapset in which the map is located
+
+        :return: tuple of three elements name, layer, mapset e(:layer)@mapset" while layer is
+                 optional
+        """
+
+        # Check if the name includes any mapset
+        if name.find("@") >= 0:
+            name, mapset = name.split("@")[0:2]
+
+        # Check for layer number in map name
+        if name.find(":") >= 0:
+            name, layer = name.split(":")[0:2]
+
+        return name, layer, mapset
+
+    @staticmethod
+    def build_id_from_search_path(name, element):
+        """Convenient method to build the unique identifier while
+        checking the current seach path for the correct mapset.
+
+        Existing mapset definitions in the name string will be reused.
+
+        If an element type is given and the mapset is not specified in
+        the name, the function will try to get the correct mapset by
+        searching for a map with the given name and of the given element
+        type on the current search path. If the combination is not found
+        on the current search path, it will fail and throw an error.
+
+        :param name: The name of the map
+        :param element: A mapset element type to be passed to g.findfile,
+                        e.g. "cell", "vector", "raster3d"
+
+        :return: the id of the map as "name(:layer)@mapset" where layer is
+                 optional
+        """
+
+        # Split given name into relevant parts
+        name, layer, mapset = AbstractMapDataset.split_name(name)
+
+        # Identify mapset of map with the given name of given element type
+        if element and not mapset:
+            result = gs.find_file(element=element, name=name)
+            if result["mapset"]:
+                mapset = result["mapset"]
+            else:
+                gs.fatal(
+                    _(
+                        "Map <{map_name}> of element tpye '{element}' not found on search path"
+                    ).format(element=element, map_name=name)
+                )
+
+        if layer is not None:
+            return f"{name}:{layer}@{mapset}"
+        else:
+            return f"{name}@{mapset}"
+
+    @staticmethod
     def build_id(name, mapset, layer=None):
         """Convenient method to build the unique identifier
 
@@ -176,22 +243,19 @@ class AbstractMapDataset(AbstractDataset):
         :param layer: The layer of the vector map, use None in case no
                       layer exists
 
-        :return: the id of the map as "name(:layer)@mapset" while layer is
+        :return: the id of the map as "name(:layer)@mapset" where layer is
                  optional
         """
 
-        # Check if the name includes any mapset
-        if name.find("@") >= 0:
-            name, mapset = name.split("@")
-
-        # Check for layer number in map name
-        if name.find(":") >= 0:
-            name, layer = name.split(":")
+        # Split given name into relevant parts
+        name, layer, mapset = AbstractMapDataset.split_name(
+            name, layer=layer, mapset=mapset
+        )
 
         if layer is not None:
-            return "%s:%s@%s" % (name, layer, mapset)
+            return f"{name}:{layer}@{mapset}"
         else:
-            return "%s@%s" % (name, mapset)
+            return f"{name}@{mapset}"
 
     def get_layer(self):
         """Return the layer of the map
@@ -930,7 +994,6 @@ class AbstractMapDataset(AbstractDataset):
         statement = ""
 
         if self.is_in_db(dbif, mapset=mapset):
-
             # SELECT all needed information from the database
             self.metadata.select(dbif)
 
@@ -1091,7 +1154,7 @@ class AbstractMapDataset(AbstractDataset):
         statement = ""
 
         if execute is True:
-            self.stds_register.update(dbif=dbif, mapset=mapset)
+            self.stds_register.update(dbif=dbif)
         else:
             statement = self.stds_register.get_update_statement_mogrified(dbif=dbif)
 

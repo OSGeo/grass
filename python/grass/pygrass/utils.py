@@ -452,7 +452,6 @@ def create_test_vector_map(map_name="test_vector"):
         ("value", "double precision"),
     ]
     with VectorTopo(map_name, mode="w", tab_name=map_name, tab_cols=cols) as vect:
-
         # Write 3 points
         vect.write(Point(10, 6), cat=1, attrs=("point", 1))
         vect.write(Point(12, 6), cat=1)
@@ -537,7 +536,6 @@ def create_test_stream_network_map(map_name="streams"):
 
     cols = [("cat", "INTEGER PRIMARY KEY"), ("id", "INTEGER")]
     with VectorTopo(map_name, mode="w", tab_name=map_name, tab_cols=cols) as streams:
-
         # First flow graph
         line = Line([(0, 2), (0.22, 1.75), (0.55, 1.5), (1, 1)])
         streams.write(line, cat=1, attrs=(1,))
@@ -573,7 +571,6 @@ def create_test_stream_network_map(map_name="streams"):
 
 
 if __name__ == "__main__":
-
     import doctest
     from grass.pygrass import utils
     from grass.script.core import run_command

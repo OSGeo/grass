@@ -1,4 +1,3 @@
-
 /*!
  * \file lib/vector/Vlib/list.c
  *
@@ -51,7 +50,7 @@ struct ilist *Vect_new_list(void)
  * previously been created with Vect_new_list().
  *
  * \param[in,out] list pointer to struct ilist
- * 
+ *
  * \return 0
  */
 int Vect_reset_list(struct ilist *list)
@@ -69,7 +68,7 @@ int Vect_reset_list(struct ilist *list)
  */
 void Vect_destroy_list(struct ilist *list)
 {
-    if (list) {                 /* probably a moot test */
+    if (list) { /* probably a moot test */
         if (list->alloc_values) {
             G_free((void *)list->value);
         }
@@ -79,7 +78,7 @@ void Vect_destroy_list(struct ilist *list)
 }
 
 /**
- * \brief Append new item to the end of list if not yet present 
+ * \brief Append new item to the end of list if not yet present
  *
  * \param[in,out] list pointer to ilist structure
  * \param val new item to append to the end of list
@@ -113,7 +112,7 @@ int Vect_list_append(struct ilist *list, int val)
 }
 
 /**
- * \brief Append new items to the end of list if not yet present 
+ * \brief Append new items to the end of list if not yet present
  *
  * \param[in,out] alist pointer to ilist structure where items will be appended
  * \param blist pointer to ilist structure with new items
@@ -164,7 +163,7 @@ int Vect_list_delete(struct ilist *list, int val)
 }
 
 /**
- * \brief Delete list from existing list 
+ * \brief Delete list from existing list
  *
  * \param[in,out] alist pointer to original ilist structure,
  * \param blist pointer to ilist structure with items to delete
@@ -193,7 +192,7 @@ int Vect_list_delete_list(struct ilist *alist, const struct ilist *blist)
  *
  * \return 1 if an item is found
  * \return 0 no found item in the list
-*/
+ */
 int Vect_val_in_list(const struct ilist *list, int val)
 {
     int i;
@@ -218,7 +217,7 @@ int Vect_val_in_list(const struct ilist *list, int val)
  * library routines handle all memory allocation.
  *
  * \param have_boxes if set to 0, the list will hold only ids and no boxes
- * 
+ *
  * \return pointer to struct boxlist
  * \return NULL on error
  */
@@ -246,7 +245,7 @@ struct boxlist *Vect_new_boxlist(int have_boxes)
  * previously been created with Vect_new_boxlist().
  *
  * \param[in,out] list pointer to struct boxlist
- * 
+ *
  * \return 0
  */
 int Vect_reset_boxlist(struct boxlist *list)
@@ -264,7 +263,7 @@ int Vect_reset_boxlist(struct boxlist *list)
  */
 void Vect_destroy_boxlist(struct boxlist *list)
 {
-    if (list) {                 /* probably a moot test */
+    if (list) { /* probably a moot test */
         if (list->alloc_values) {
             G_free((void *)list->id);
             if (list->box)
@@ -276,7 +275,7 @@ void Vect_destroy_boxlist(struct boxlist *list)
 }
 
 /**
- * \brief Append new item to the end of list if not yet present 
+ * \brief Append new item to the end of list if not yet present
  *
  * \param[in,out] list pointer to ilist structure
  * \param id new item to append to the end of list
@@ -305,8 +304,7 @@ int Vect_boxlist_append(struct boxlist *list, int id,
 
         if (list->have_boxes) {
             size = (list->n_values + 1000) * sizeof(struct bound_box);
-            list->box =
-                (struct bound_box *)G_realloc((void *)list->box, size);
+            list->box = (struct bound_box *)G_realloc((void *)list->box, size);
         }
 
         list->alloc_values = list->n_values + 1000;
@@ -321,10 +319,10 @@ int Vect_boxlist_append(struct boxlist *list, int id,
 }
 
 /**
- * \brief Append new items to the end of list if not yet present 
+ * \brief Append new items to the end of list if not yet present
  *
- * \param[in,out] alist pointer to boxlist structure where items will be appended
- * \param blist pointer to boxlist structure with new items
+ * \param[in,out] alist pointer to boxlist structure where items will be
+ * appended \param blist pointer to boxlist structure with new items
  *
  * \return 0 on success
  * \return 1 on error
@@ -385,7 +383,7 @@ int Vect_boxlist_delete(struct boxlist *list, int id)
 }
 
 /**
- * \brief Delete list from existing list 
+ * \brief Delete list from existing list
  *
  * \param[in,out] alist pointer to original boxlist structure,
  * \param blist pointer to boxlist structure with items to delete
@@ -415,7 +413,7 @@ int Vect_boxlist_delete_boxlist(struct boxlist *alist,
  *
  * \return 1 if an item is found
  * \return 0 no found item in the list
-*/
+ */
 int Vect_val_in_boxlist(const struct boxlist *list, int id)
 {
     int i;

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.cost
@@ -23,7 +22,7 @@
  *
  ***************************************************************************/
 
-/* These routines manage the list of grid-cell candidates for 
+/* These routines manage the list of grid-cell candidates for
  * visiting to calculate distances to surrounding cells.
  * A min-heap approach is used.  Components are
  * sorted first by distance then by the order in which they were added.
@@ -38,14 +37,13 @@
  *   retrieves the entry with the smallest distance value
  */
 
-
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include "cost.h"
 
-#define GET_PARENT(c) (((c) - 2) / 3 + 1)
-#define GET_CHILD(p) (((p) * 3) - 1)
+#define GET_PARENT(c) (((c)-2) / 3 + 1)
+#define GET_CHILD(p)  (((p)*3) - 1)
 
 static long next_point = 0;
 static long heap_size = 0;
@@ -57,8 +55,7 @@ int init_heap(void)
     next_point = 0;
     heap_size = 0;
     heap_alloced = 1000;
-    heap_index =
-        (struct cost **)G_malloc(heap_alloced * sizeof(struct cost *));
+    heap_index = (struct cost **)G_malloc(heap_alloced * sizeof(struct cost *));
 
     free_point = NULL;
 
@@ -138,9 +135,8 @@ struct cost *insert(double min_cost, int row, int col)
     heap_size++;
     if (heap_size >= heap_alloced) {
         heap_alloced += 1000;
-        heap_index =
-            (struct cost **)G_realloc((void *)heap_index,
-                                      heap_alloced * sizeof(struct cost *));
+        heap_index = (struct cost **)G_realloc(
+            (void *)heap_index, heap_alloced * sizeof(struct cost *));
     }
 
     heap_index[heap_size] = new_cell;
@@ -196,7 +192,8 @@ struct cost *get_lowest(void)
     if (parent < heap_size) {
         heap_index[parent] = heap_index[heap_size];
 
-        /* sift up last swapped point, only necessary if hole moved to heap end */
+        /* sift up last swapped point, only necessary if hole moved to heap end
+         */
         sift_up(parent, heap_index[parent]);
     }
 

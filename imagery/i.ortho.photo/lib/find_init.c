@@ -1,9 +1,8 @@
-
 /**************************************************************
-* I_find_init (group)
-*
-* Find the a camera initial file in the current group (if it exists)
-**************************************************************/
+ * I_find_init (group)
+ *
+ * Find the a camera initial file in the current group (if it exists)
+ **************************************************************/
 #include <grass/gis.h>
 
 int I_find_initial(char *group)

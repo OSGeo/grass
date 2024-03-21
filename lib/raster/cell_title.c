@@ -1,4 +1,3 @@
-
 /**************************************************************
  * char *Rast_get_cell_title (name, mapset)
  *   char *name        name of map file
@@ -8,7 +7,6 @@
  *************************************************************/
 
 #include <grass/gis.h>
-
 
 /*!
  * \brief get raster map title
@@ -21,7 +19,7 @@
  *
  *  \param name
  *  \param mapset
- *  \return char * 
+ *  \return char *
  */
 
 char *Rast_get_cell_title(const char *name, const char *mapset)
@@ -34,9 +32,9 @@ char *Rast_get_cell_title(const char *name, const char *mapset)
     fd = G_fopen_old("cats", name, mapset);
     if (fd) {
         stat = 1;
-        if (!fgets(title, sizeof title, fd))    /* skip number of cats */
+        if (!fgets(title, sizeof title, fd)) /* skip number of cats */
             stat = -1;
-        else if (!G_getl(title, sizeof title, fd))      /* read title */
+        else if (!G_getl(title, sizeof title, fd)) /* read title */
             stat = -1;
 
         fclose(fd);

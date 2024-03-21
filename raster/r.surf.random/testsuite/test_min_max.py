@@ -5,7 +5,7 @@ MODULE:    Test of r.surf.random
 
 AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 
-PURPOSE:   Test of min and max paramters
+PURPOSE:   Test of min and max parameters
 
 COPYRIGHT: (C) 2020 by Vaclav Petras and the GRASS Development Team
 
@@ -38,7 +38,7 @@ class MinMaxTestCase(TestCase):
     def setUpClass(cls):
         """Ensures expected computational region"""
         os.environ["GRASS_RANDOM_SEED"] = "42"
-        # modfying region just for this script
+        # modifying region just for this script
         cls.use_temp_region()
         # Only 100,000,000 seem to resonably (not 100%) ensure that all values
         # are generated, so exceeding of ranges actually shows up.

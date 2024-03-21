@@ -1,8 +1,8 @@
 /*
  ****************************************************************************
  *
- * MODULE:       Vector library 
- *              
+ * MODULE:       Vector library
+ *
  * AUTHOR(S):    Original author CERL, probably Dave Gerdes.
  *               Update to GRASS 5.7 Radim Blazek.
  *
@@ -11,16 +11,16 @@
  * COPYRIGHT:    (C) 2001 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <grass/vector.h>
 
 /*  functions - alloc_space(), falloc(), frealloc() _falloc() _frealloc() */
-
 
 /*   alloc_space ()    allocates space if needed.
  *    All allocated space is created by calloc (2).
@@ -30,9 +30,8 @@
  *   an element.
  */
 
-void *dig_alloc_space(int n_wanted,
-                      int *n_elements,
-                      int chunk_size, void *ptr, int element_size)
+void *dig_alloc_space(int n_wanted, int *n_elements, int chunk_size, void *ptr,
+                      int element_size)
 {
     char *p;
 
@@ -47,8 +46,10 @@ void *dig_alloc_space(int n_wanted,
     return (p);
 }
 
-void *dig__alloc_space(int n_wanted, int *n_elements, int chunk_size, void *ptr,        /* changed char -> void instead of casting.  WBH 8/16/1998  */
-                       int element_size)
+void *dig__alloc_space(
+    int n_wanted, int *n_elements, int chunk_size,
+    void *ptr, /* changed char -> void instead of casting.  WBH 8/16/1998  */
+    int element_size)
 {
     int to_alloc;
 
@@ -86,7 +87,6 @@ void *dig__alloc_space(int n_wanted, int *n_elements, int chunk_size, void *ptr,
 
     return (ptr);
 }
-
 
 void *dig_falloc(int nelem, int elsize)
 {

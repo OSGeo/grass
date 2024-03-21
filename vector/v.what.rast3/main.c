@@ -1,19 +1,20 @@
-/* ***************************************************************
+/****************************************************************
  *
  * MODULE:       v.what.rast3
- *  
- * AUTHOR(S):    Soeren Gebbert, this code is based on a slightly modified version of 
- *               v.what.rast from Radim Blazek and Michael Shapiro
- *                
- *  PURPOSE:      Uploads 3d raster values at positions of vector points to the table
- *                
- *  COPYRIGHT:    (C) 2001, 2011 by the GRASS Development Team
- * 
- *                This program is free software under the GNU General
- *                Public License (>=v2).  Read the file COPYING that
- *                comes with GRASS for details.
- * 
- * **************************************************************/
+ *
+ * AUTHOR(S):    Soeren Gebbert, this code is based on a slightly modified
+ *               version of v.what.rast from Radim Blazek and Michael Shapiro
+ *
+ *  PURPOSE:     Uploads 3d raster values at positions of vector points to the
+ *               table
+ *
+ *  COPYRIGHT:   (C) 2001, 2011 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General
+ *               Public License (>=v2).  Read the file COPYING that
+ *               comes with GRASS for details.
+ *
+ ***************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,8 +31,7 @@ int main(int argc, char *argv[])
     int i, j, nlines, type, field, cat;
 
     char buf[2048];
-    struct
-    {
+    struct {
         struct Option *vect, *rast3d, *field, *col, *where;
     } opt;
     int Cache_size;
@@ -45,10 +45,10 @@ int main(int argc, char *argv[])
     struct line_pnts *Points;
     struct line_cats *Cats;
     int point;
-    int point_cnt;              /* number of points in cache */
-    int outside_cnt;            /* points outside region */
-    int nocat_cnt;              /* points inside region but without category */
-    int dupl_cnt;               /* duplicate categories */
+    int point_cnt;   /* number of points in cache */
+    int outside_cnt; /* points outside region */
+    int nocat_cnt;   /* points inside region but without category */
+    int dupl_cnt;    /* duplicate categories */
     int typeIntern;
     int is_empty;
     struct bound_box box;
@@ -69,8 +69,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("querying"));
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("surface information"));
-    module->description =
-        _("Uploads 3D raster values at positions of vector points to the table.");
+    module->description = _(
+        "Uploads 3D raster values at positions of vector points to the table.");
 
     opt.vect = G_define_standard_option(G_OPT_V_MAP);
     opt.vect->label =
@@ -80,8 +80,7 @@ int main(int argc, char *argv[])
 
     opt.rast3d = G_define_standard_option(G_OPT_R3_MAP);
     opt.rast3d->key = "raster_3d";
-    opt.rast3d->description =
-        _("Name of existing 3D raster map to be queried");
+    opt.rast3d->description = _("Name of existing 3D raster map to be queried");
 
     opt.col = G_define_standard_option(G_OPT_DB_COLUMN);
     opt.col->required = YES;
@@ -119,8 +118,7 @@ int main(int argc, char *argv[])
 
     Fi = Vect_get_field(&Map, field);
     if (Fi == NULL)
-        G_fatal_error(_("Database connection not defined for layer %d"),
-                      field);
+        G_fatal_error(_("Database connection not defined for layer %d"), field);
 
     /* Open driver */
     driver = db_start_driver_open_database(Fi->driver, Fi->database);
@@ -130,11 +128,9 @@ int main(int argc, char *argv[])
     }
     db_set_error_handler_driver(driver);
 
-    map =
-        Rast3d_open_cell_old(opt.rast3d->answer,
-                             G_find_raster3d(opt.rast3d->answer, ""), &region,
-                             RASTER3D_TILE_SAME_AS_FILE,
-                             RASTER3D_USE_CACHE_DEFAULT);
+    map = Rast3d_open_cell_old(
+        opt.rast3d->answer, G_find_raster3d(opt.rast3d->answer, ""), &region,
+        RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
         G_fatal_error(_("Error opening 3D raster map <%s>"),
@@ -147,7 +143,8 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Column <%s> not found"), opt.col->answer);
 
     if (col_type != DB_C_TYPE_DOUBLE)
-        G_fatal_error(_("Column type not supported, please use a column with double type"));
+        G_fatal_error(_(
+            "Column type not supported, please use a column with double type"));
 
     /* Read vector points to cache */
     Cache_size = Vect_get_num_primitives(&Map, GV_POINT);
@@ -170,17 +167,17 @@ int main(int argc, char *argv[])
 
         /* check type */
         if (!(type & GV_POINT))
-            continue;           /* Points only */
+            continue; /* Points only */
 
         /* check region */
-        if (!Vect_point_in_box
-            (Points->x[0], Points->y[0], Points->z[0], &box)) {
+        if (!Vect_point_in_box(Points->x[0], Points->y[0], Points->z[0],
+                               &box)) {
             outside_cnt++;
             continue;
         }
 
         Vect_cat_get(Cats, field, &cat);
-        if (cat < 0) {          /* no category of given field */
+        if (cat < 0) { /* no category of given field */
             nocat_cnt++;
             continue;
         }
@@ -201,8 +198,8 @@ int main(int argc, char *argv[])
     Vect_close(&Map);
 
     G_debug(1, "Read %d vector points", point_cnt);
-    /* Cache may contain duplicate categories, sort by cat, find and remove duplicates 
-     * and recalc count and decrease point_cnt  */
+    /* Cache may contain duplicate categories, sort by cat, find and remove
+     * duplicates and recalc count and decrease point_cnt  */
     qsort(cache, point_cnt, sizeof(struct order), by_cat);
 
     G_debug(1, "Points are sorted, starting duplicate removal loop");
@@ -214,19 +211,19 @@ int main(int argc, char *argv[])
             cache[i].count++;
     point_cnt = i + 1;
 
-    G_debug(1, "%d vector points left after removal of duplicates",
-            point_cnt);
+    G_debug(1, "%d vector points left after removal of duplicates", point_cnt);
 
     /* Report number of points not used */
     if (outside_cnt)
         G_warning(n_("%d point outside current region was skipped",
                      "%d points outside current region were skipped",
-                     outside_cnt), outside_cnt);
+                     outside_cnt),
+                  outside_cnt);
 
     if (nocat_cnt)
         G_warning(n_("%d point without category was skipped",
-                     "%d points without category were skipped",
-                     nocat_cnt), nocat_cnt);
+                     "%d points without category were skipped", nocat_cnt),
+                  nocat_cnt);
 
     /* Extract raster values from file and store in cache */
     G_debug(1, "Extracting raster values");
@@ -237,7 +234,7 @@ int main(int argc, char *argv[])
     for (point = 0; point < point_cnt; point++) {
 
         if (cache[point].count > 1)
-            continue;           /* duplicate cats */
+            continue; /* duplicate cats */
 
         if (typeIntern == FCELL_TYPE) {
             Rast3d_get_window_value(map, cache[point].y, cache[point].x,
@@ -274,10 +271,9 @@ int main(int argc, char *argv[])
         G_percent(point, point_cnt, 2);
 
         /* category exist in DB ? */
-        cex =
-            (int *)bsearch((void *)&(cache[point].cat), catexst, select,
-                           sizeof(int), srch_cat);
-        if (cex == NULL) {      /* cat does not exist in DB */
+        cex = (int *)bsearch((void *)&(cache[point].cat), catexst, select,
+                             sizeof(int), srch_cat);
+        if (cex == NULL) { /* cat does not exist in DB */
             norec_cnt++;
             G_warning(_("No record for category %d in table <%s>"),
                       cache[point].cat, Fi->table);
@@ -341,23 +337,25 @@ int main(int argc, char *argv[])
 
     /* Report */
     G_verbose_message(n_("%d category loaded from table",
-                         "%d categories loaded from table", select), select);
+                         "%d categories loaded from table", select),
+                      select);
     G_verbose_message(n_("%d category loaded from vector",
-                         "%d categories loaded from vector",
-                         point_cnt), point_cnt);
+                         "%d categories loaded from vector", point_cnt),
+                      point_cnt);
     G_verbose_message(n_("%d category from vector missing in table",
                          "%d categories from vector missing in table",
-                         norec_cnt), norec_cnt);
+                         norec_cnt),
+                      norec_cnt);
     if (dupl_cnt > 0)
         G_message(n_("%d duplicate category in vector",
-                     "%d duplicate categories in vector",
-                     dupl_cnt), dupl_cnt);
+                     "%d duplicate categories in vector", dupl_cnt),
+                  dupl_cnt);
     if (upderr_cnt > 0)
-        G_warning(n_("%d update error",
-                     "%d update errors", upderr_cnt), upderr_cnt);
+        G_warning(n_("%d update error", "%d update errors", upderr_cnt),
+                  upderr_cnt);
 
-    G_done_msg(n_("%d record updated.",
-                  "%d records updated.", update_cnt), update_cnt);
+    G_done_msg(n_("%d record updated.", "%d records updated.", update_cnt),
+               update_cnt);
 
     exit(EXIT_SUCCESS);
 }

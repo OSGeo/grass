@@ -3,7 +3,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_create_table(dbTable * table)
+int db__driver_create_table(dbTable *table)
 {
     dbString sql;
     int ret;

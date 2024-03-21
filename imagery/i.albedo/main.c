@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       i.albedo
@@ -8,11 +7,11 @@
  *
  * COPYRIGHT:    (C) 2004-2014 by the GRASS Development Team
  *
- *               This program is free software under the GNU Lesser General Public
- *                License. Read the file COPYING that comes with GRASS for details.
+ *               This program is free software under the GNU Lesser General
+ *               Public License. Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,18 +28,18 @@ double bb_alb_aster(double greenchan, double nirchan, double swirchan2,
 double bb_alb_landsat(double bluechan, double greenchan, double redchan,
                       double nirchan, double chan5, double chan7);
 
-double bb_alb_landsat8(double shortbluechan, double bluechan,
-                       double greenchan, double redchan,
-                       double nirchan, double chan5, double chan7);
+double bb_alb_landsat8(double shortbluechan, double bluechan, double greenchan,
+                       double redchan, double nirchan, double chan5,
+                       double chan7);
 
 double bb_alb_noaa(double redchan, double nirchan);
 
-double bb_alb_modis(double redchan, double nirchan, double chan3,
-                    double chan4, double chan5, double chan6, double chan7);
+double bb_alb_modis(double redchan, double nirchan, double chan3, double chan4,
+                    double chan5, double chan6, double chan7);
 
 int main(int argc, char *argv[])
 {
-    struct Cell_head cellhd;    /*region+header info */
+    struct Cell_head cellhd; /*region+header info */
     int nrows, ncols;
     int row, col;
     struct GModule *module;
@@ -48,18 +47,17 @@ int main(int argc, char *argv[])
     struct Flag *flag1, *flag2, *flag3;
     struct Flag *flag4, *flag5, *flag6;
     struct Flag *flag7;
-    struct History history;     /*metadata */
-    struct Colors colors;       /*Color rules */
+    struct History history; /*metadata */
+    struct Colors colors;   /*Color rules */
 
     /************************************/
-    char *name;                 /*input raster name */
-    char *result;               /*output raster name */
+    char *name;   /*input raster name */
+    char *result; /*output raster name */
 
     /*File Descriptors */
     int nfiles;
     int infd[MAXFILES];
     int outfd;
-    char **names;
     char **ptr;
     int i = 0;
     int modis = 0, aster = 0, avhrr = 0;
@@ -67,7 +65,7 @@ int main(int argc, char *argv[])
     void *inrast[MAXFILES];
     unsigned char *outrast;
 
-    RASTER_MAP_TYPE in_data_type[MAXFILES];     /* 0=numbers  1=text */
+    RASTER_MAP_TYPE in_data_type[MAXFILES]; /* 0=numbers  1=text */
     RASTER_MAP_TYPE out_data_type = DCELL_TYPE;
     CELL val1, val2;
 
@@ -78,9 +76,10 @@ int main(int argc, char *argv[])
     int bottom1a, bottom1b;
     int bottom2a, bottom2b;
     int bottom3a, bottom3b;
-    int i_bottom1a, i_bottom1b;
-    int i_bottom2a, i_bottom2b;
-    int i_bottom3a, i_bottom3b;
+    int i_bottom1a /*, i_bottom1b */;
+    int /* i_bottom2a, */ i_bottom2b;
+
+    /* int i_bottom3a, i_bottom3b; */
 
     /************************************/
     int histogram[100];
@@ -136,16 +135,16 @@ int main(int argc, char *argv[])
     flag6 = G_define_flag();
     flag6->key = 'c';
     flag6->label = _("Aggressive mode (Landsat)");
-    flag6->description =
-        _("Albedo dry run to calculate some water to beach/sand/desert stretching, "
-         "a kind of simple atmospheric correction");
+    flag6->description = _("Albedo dry run to calculate some water to "
+                           "beach/sand/desert stretching, "
+                           "a kind of simple atmospheric correction");
 
     flag7 = G_define_flag();
     flag7->key = 'd';
     flag7->label = _("Soft mode (MODIS)");
-    flag7->description =
-        _("Albedo dry run to calculate some water to beach/sand/desert stretching, "
-         "a kind of simple atmospheric correction");
+    flag7->description = _("Albedo dry run to calculate some water to "
+                           "beach/sand/desert stretching, "
+                           "a kind of simple atmospheric correction");
 
     /* FMEO init nfiles */
     nfiles = 1;
@@ -153,7 +152,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    names = input->answers;
     ptr = input->answers;
 
     result = output->answer;
@@ -166,8 +164,7 @@ int main(int argc, char *argv[])
 
     for (; *ptr != NULL; ptr++) {
         if (nfiles >= MAXFILES)
-            G_fatal_error(_("Too many input maps. Only %d allowed."),
-                          MAXFILES);
+            G_fatal_error(_("Too many input maps. Only %d allowed."), MAXFILES);
         name = *ptr;
 
         /* Allocate input buffer */
@@ -213,19 +210,18 @@ int main(int argc, char *argv[])
                 for (i = 1; i <= nfiles; i++) {
                     switch (in_data_type[i]) {
                     case CELL_TYPE:
-                        d[i] = (double)((CELL *) inrast[i])[col];
+                        d[i] = (double)((CELL *)inrast[i])[col];
                         break;
                     case FCELL_TYPE:
-                        d[i] = (double)((FCELL *) inrast[i])[col];
+                        d[i] = (double)((FCELL *)inrast[i])[col];
                         break;
                     case DCELL_TYPE:
-                        d[i] = (double)((DCELL *) inrast[i])[col];
+                        d[i] = (double)((DCELL *)inrast[i])[col];
                         break;
                     }
                 }
                 if (modis) {
-                    de = bb_alb_modis(d[1], d[2], d[3], d[4], d[5], d[6],
-                                      d[7]);
+                    de = bb_alb_modis(d[1], d[2], d[3], d[4], d[5], d[6], d[7]);
                 }
                 else if (avhrr) {
                     de = bb_alb_noaa(d[1], d[2]);
@@ -293,11 +289,11 @@ int main(int argc, char *argv[])
         bottom3a = 100000;
         bottom3b = 100000;
         i_bottom1a = 100;
-        i_bottom1b = 100;
-        i_bottom2a = 100;
+        /* i_bottom1b = 100; */
+        /* i_bottom2a = 100; */
         i_bottom2b = 100;
-        i_bottom3a = 100;
-        i_bottom3b = 100;
+        /* i_bottom3a = 100; */
+        /* i_bottom3b = 100; */
         /* Water histogram lower bound */
         for (i = 0; i < i_peak1; i++) {
             if (histogram[i] <= bottom1a) {
@@ -309,14 +305,14 @@ int main(int argc, char *argv[])
         for (i = i_peak2; i > i_peak1; i--) {
             if (histogram[i] <= bottom1b) {
                 bottom1b = histogram[i];
-                i_bottom1b = i;
+                /* i_bottom1b = i; */
             }
         }
         /* Land histogram lower bound */
         for (i = i_peak1; i < i_peak2; i++) {
             if (histogram[i] <= bottom2a) {
                 bottom2a = histogram[i];
-                i_bottom2a = i;
+                /* i_bottom2a = i; */
             }
         }
         /* Land histogram higher bound */
@@ -330,14 +326,14 @@ int main(int argc, char *argv[])
         for (i = i_peak2; i < i_peak3; i++) {
             if (histogram[i] < bottom3a) {
                 bottom3a = histogram[i];
-                i_bottom3a = i;
+                /* i_bottom3a = i; */
             }
         }
         /* Cloud/Snow histogram higher bound */
-        for (i = 100; i > i_peak3; i--) {
+        for (i = 99; i > i_peak3; i--) {
             if (histogram[i] < bottom3b) {
                 bottom3b = histogram[i];
-                i_bottom3b = i;
+                /* i_bottom3b = i; */
             }
         }
         if (flag5->answer) {
@@ -354,7 +350,7 @@ int main(int argc, char *argv[])
             b = 0.05 - a * (i_bottom1a / 100.0);
             G_message("a= %f\tb= %f", a, b);
         }
-    }                           /*END OF FLAG1 */
+    } /*END OF FLAG1 */
     /* End of processing histogram */
 
     /* Process pixels */
@@ -372,13 +368,13 @@ int main(int argc, char *argv[])
             for (i = 1; i <= nfiles; i++) {
                 switch (in_data_type[i]) {
                 case CELL_TYPE:
-                    d[i] = (double)((CELL *) inrast[i])[col];
+                    d[i] = (double)((CELL *)inrast[i])[col];
                     break;
                 case FCELL_TYPE:
-                    d[i] = (double)((FCELL *) inrast[i])[col];
+                    d[i] = (double)((FCELL *)inrast[i])[col];
                     break;
                 case DCELL_TYPE:
-                    d[i] = (double)((DCELL *) inrast[i])[col];
+                    d[i] = (double)((DCELL *)inrast[i])[col];
                     break;
                 }
             }
@@ -392,8 +388,7 @@ int main(int argc, char *argv[])
                 de = bb_alb_landsat(d[1], d[2], d[3], d[4], d[5], d[6]);
             }
             else if (landsat8) {
-                de = bb_alb_landsat8(d[1], d[2], d[3], d[4], d[5], d[6],
-                                     d[7]);
+                de = bb_alb_landsat8(d[1], d[2], d[3], d[4], d[5], d[6], d[7]);
             }
             else if (aster) {
                 de = bb_alb_aster(d[1], d[2], d[3], d[4], d[5], d[6]);
@@ -402,7 +397,7 @@ int main(int argc, char *argv[])
                 /* Post-Process Albedo */
                 de = a * de + b;
             }
-            ((DCELL *) outrast)[col] = de;
+            ((DCELL *)outrast)[col] = de;
         }
         Rast_put_row(outfd, outrast, out_data_type);
     }

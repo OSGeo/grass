@@ -5,9 +5,11 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include <stdlib.h>
 #include "ccmath.h"
-void heigvec(Cpx * a, double *ev, int n)
+
+void heigvec(Cpx *a, double *ev, int n)
 {
     double *dp;
 

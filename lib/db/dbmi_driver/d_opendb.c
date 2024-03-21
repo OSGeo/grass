@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_opendb.c
- * 
+ *
  * \brief DBMI Library (driver) - open database connection
  *
  * (C) 1999-2008 by the GRASS Development Team

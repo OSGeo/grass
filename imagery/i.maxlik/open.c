@@ -5,7 +5,6 @@
 #include "global.h"
 #include "local_proto.h"
 
-
 int open_files(void)
 {
     char *name, *mapset, **err;
@@ -17,20 +16,22 @@ int open_files(void)
         G_fatal_error(_("Group <%s> not found in current mapset"), group);
 
     if (!I_find_subgroup(group, subgroup))
-        G_fatal_error(_("Subgroup <%s> in group <%s> not found"),
-                      subgroup, group);
+        G_fatal_error(_("Subgroup <%s> in group <%s> not found"), subgroup,
+                      group);
 
     I_get_subgroup_ref(group, subgroup, &Ref);
 
     if (Ref.nfiles <= 1) {
         if (Ref.nfiles <= 0)
-            G_fatal_error(_("Subgroup <%s> of group <%s> doesn't have any raster maps. "
-                           "The subgroup must have at least 2 raster maps."),
-                          subgroup, group);
+            G_fatal_error(
+                _("Subgroup <%s> of group <%s> doesn't have any raster maps. "
+                  "The subgroup must have at least 2 raster maps."),
+                subgroup, group);
         else
-            G_fatal_error(_("Subgroup <%s> of group <%s> only has 1 raster map. "
-                           "The subgroup must have at least 2 raster maps."),
-                          subgroup, group);
+            G_fatal_error(
+                _("Subgroup <%s> of group <%s> only has 1 raster map. "
+                  "The subgroup must have at least 2 raster maps."),
+                subgroup, group);
     }
 
     fd = I_fopen_signature_file_old(sigfile);
@@ -51,13 +52,12 @@ int open_files(void)
         G_fatal_error(_("Signature - group member semantic label mismatch.\n"
                         "Extra signatures for bands: %s\n"
                         "Imagery group bands without signatures: %s"),
-                      err[0] ? err[0] : _("none"), err[1] ? err[1] : _("none")
-            );
+                      err[0] ? err[0] : _("none"), err[1] ? err[1] : _("none"));
 
     B = (double *)G_malloc(S.nsigs * sizeof(double));
     invert_signatures();
 
-    cell = (DCELL **) G_malloc(Ref.nfiles * sizeof(DCELL *));
+    cell = (DCELL **)G_malloc(Ref.nfiles * sizeof(DCELL *));
     cellfd = (int *)G_malloc(Ref.nfiles * sizeof(int));
     P = (double *)G_malloc(Ref.nfiles * sizeof(double));
     for (n = 0; n < Ref.nfiles; n++) {

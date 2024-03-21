@@ -161,8 +161,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->required = NO;
         Opt->label =
             _("WHERE conditions of SQL statement without 'where' keyword");
-        Opt->description =
-            _("Example: income < 1000 and population >= 10000");
+        Opt->description = _("Example: income < 1000 and population >= 10000");
         break;
     case G_OPT_DB_TABLE:
         Opt->key = "table";
@@ -358,10 +357,8 @@ struct Option *G_define_standard_option(int opt)
         Opt->label = _("Type of raster map to be created");
         Opt->description = _("Storage type for resultant raster map");
         Opt->options = "CELL,FCELL,DCELL";
-        G_asprintf((char **)&(Opt->descriptions),
-                   "CELL;%s;FCELL;%s;DCELL;%s",
-                   _("Integer"),
-                   _("Single precision floating point"),
+        G_asprintf((char **)&(Opt->descriptions), "CELL;%s;FCELL;%s;DCELL;%s",
+                   _("Integer"), _("Single precision floating point"),
                    _("Double precision floating point"));
         break;
     case G_OPT_R_INTERP_TYPE:
@@ -453,7 +450,8 @@ struct Option *G_define_standard_option(int opt)
         Opt->multiple = NO;
         Opt->answer = "default";
         Opt->description =
-            _("Number of digits used as mantissa in the internal map storage, 0 -23 for float, 0 - 52 for double, max or default");
+            _("Number of digits used as mantissa in the internal map storage, "
+              "0 -23 for float, 0 - 52 for double, max or default");
         break;
     case G_OPT_R3_COMPRESSION:
         Opt->key = "compression";
@@ -472,8 +470,8 @@ struct Option *G_define_standard_option(int opt)
         Opt->multiple = NO;
         Opt->key_desc = "XxYxZ";
         Opt->answer = "default";
-        Opt->description =
-            _("The dimensions of the tiles used in the output raster3d map (XxYxZ or default: 16x16x8)");
+        Opt->description = _("The dimensions of the tiles used in the output "
+                             "raster3d map (XxYxZ or default: 16x16x8)");
         break;
 
         /*vector maps */
@@ -712,8 +710,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->required = NO;
         Opt->multiple = NO;
         Opt->label = _("GRASS GIS database directory");
-        Opt->description =
-            _("Default: path to the current GRASS GIS database");
+        Opt->description = _("Default: path to the current GRASS GIS database");
         Opt->gisprompt = "old,dbase,dbase";
         Opt->key_desc = "path";
         break;
@@ -872,8 +869,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->required = YES;
         Opt->multiple = YES;
         Opt->gisprompt = "old,str3ds,str3ds";
-        Opt->description =
-            _("Name of the input space time raster3d datasets");
+        Opt->description = _("Name of the input space time raster3d datasets");
         break;
     case G_OPT_STR3DS_OUTPUT:
         Opt->key = "output";
@@ -881,8 +877,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->key_desc = "name";
         Opt->required = YES;
         Opt->gisprompt = "new,str3ds,str3ds";
-        Opt->description =
-            _("Name of the output space time raster3d dataset");
+        Opt->description = _("Name of the output space time raster3d dataset");
         break;
     case G_OPT_STDS_TYPE:
         Opt->key = "type";
@@ -933,8 +928,8 @@ struct Option *G_define_standard_option(int opt)
         Opt->type = TYPE_STRING;
         Opt->key_desc = "sql_query";
         Opt->required = NO;
-        Opt->label =
-            _("WHERE conditions of SQL statement without 'where' keyword used in the temporal GIS framework");
+        Opt->label = _("WHERE conditions of SQL statement without 'where' "
+                       "keyword used in the temporal GIS framework");
         Opt->description = _("Example: start_time > '2001-01-01 12:30:00'");
         break;
     case G_OPT_T_SAMPLE:

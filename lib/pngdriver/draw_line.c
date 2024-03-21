@@ -1,4 +1,3 @@
-
 /*
  * draw a line between two given points in the current color.
  *

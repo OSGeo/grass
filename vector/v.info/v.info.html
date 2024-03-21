@@ -87,7 +87,7 @@ DOUBLE PRECISION|SHAPE_len
 <h3>Basic metadata information in shell script style</h3>
 
 <div class="code"><pre>
-v.info -get map=geology 
+v.info -get map=geology
 
 name=geology
 mapset=PERMANENT
@@ -142,7 +142,7 @@ following code:
 <p>
 <div class="code"><pre>
 import grass.script as gcore
-    
+
 gcore.vector_columns('geology')   # for `v.info -c`
 gcore.vector_info_topo('geology') # for `v.info shell=topo`
 </pre></div>

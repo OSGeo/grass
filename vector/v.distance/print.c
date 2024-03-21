@@ -3,14 +3,14 @@
 /*
    print out upload values
  */
-int print_upload(NEAR * Near, UPLOAD * Upload, int i,
-                 dbCatValArray * cvarr, dbCatVal * catval, char *sep)
+int print_upload(NEAR *Near, UPLOAD *Upload, int i, dbCatValArray *cvarr,
+                 dbCatVal *catval, char *sep)
 {
     int j;
 
     j = 0;
     while (Upload[j].upload != END) {
-        if (Near[i].count == 0) {       /* no nearest found */
+        if (Near[i].count == 0) { /* no nearest found */
             fprintf(stdout, "%snull", sep);
         }
         else {

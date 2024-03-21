@@ -1,8 +1,7 @@
-
 /****************************************************************************
  *
  * MODULE:       r.buildvrt
- *               
+ *
  * AUTHOR(S):    Markus Metz, based on r.external
  *
  * PURPOSE:      Build a VRT (Virtual Raster) that is a mosaic of the
@@ -59,8 +58,7 @@ int main(int argc, char *argv[])
     char *title;
     struct Cell_head cellhd;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *file, *output, *title;
     } parm;
     int i, j, num_inputs;
@@ -88,8 +86,7 @@ int main(int argc, char *argv[])
 
     parm.file = G_define_standard_option(G_OPT_F_INPUT);
     parm.file->key = "file";
-    parm.file->description =
-        _("Input file with one raster map name per line");
+    parm.file->description = _("Input file with one raster map name per line");
     parm.file->required = NO;
     parm.file->guisection = _("Input");
 
@@ -108,12 +105,12 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     if (parm.input->answer && parm.file->answer)
-        G_fatal_error(_("%s= and %s= are mutually exclusive"),
-                      parm.input->key, parm.file->key);
+        G_fatal_error(_("%s= and %s= are mutually exclusive"), parm.input->key,
+                      parm.file->key);
 
     if (!parm.input->answer && !parm.file->answer)
-        G_fatal_error(_("Please specify %s= or %s="),
-                      parm.input->key, parm.file->key);
+        G_fatal_error(_("Please specify %s= or %s="), parm.input->key,
+                      parm.file->key);
 
     /* read input maps from file */
     if (parm.file->answer) {
@@ -150,7 +147,8 @@ int main(int argc, char *argv[])
                 G_fatal_error(_("Input raster map <%s> not found"), name);
 
             if (strcmp(name, parm.output->answer) == 0)
-                G_fatal_error(_("Input and output raster map can not be identical"));
+                G_fatal_error(
+                    _("Input and output raster map can not be identical"));
 
             Rast_read_fp_range(name, mapset, &fprange);
             dmin = fprange.min;
@@ -180,7 +178,8 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Only one raster map name found in input file"));
     }
     else {
-        for (i = 0; parm.input->answers[i]; i++) ;
+        for (i = 0; parm.input->answers[i]; i++)
+            ;
         num_inputs = i;
 
         if (num_inputs < 1)
@@ -202,7 +201,8 @@ int main(int argc, char *argv[])
                 G_fatal_error(_("Input raster map <%s> not found"), name);
 
             if (strcmp(name, parm.output->answer) == 0)
-                G_fatal_error(_("Input and output raster map can not be identical"));
+                G_fatal_error(
+                    _("Input and output raster map can not be identical"));
 
             Rast_read_fp_range(name, mapset, &fprange);
             dmin = fprange.min;

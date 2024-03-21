@@ -6,7 +6,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_open_database(dbHandle * handle)
+int db__driver_open_database(dbHandle *handle)
 {
     SQLCHAR msg[OD_MSG];
     const char *name;
@@ -27,9 +27,9 @@ int db__driver_open_database(dbHandle * handle)
     }
 
     /* Connect to the datasource */
-    ret = SQLConnect(ODconn, (SQLCHAR *) name, SQL_NTS,
-                     (SQLCHAR *) connection.user, SQL_NTS,
-                     (SQLCHAR *) connection.password, SQL_NTS);
+    ret =
+        SQLConnect(ODconn, (SQLCHAR *)name, SQL_NTS, (SQLCHAR *)connection.user,
+                   SQL_NTS, (SQLCHAR *)connection.password, SQL_NTS);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
         SQLGetDiagRec(SQL_HANDLE_DBC, ODconn, 1, NULL, &err, msg, sizeof(msg),
                       NULL);

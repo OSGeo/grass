@@ -24,7 +24,7 @@
    Rule:  [A-Za-z][A-Za-z0-9_@]*
    \param s table name to be checked
 
-   \return 1 OK 
+   \return 1 OK
    \return -1 if name does not start with letter A..Za..z or if name does
    not continue with A..Za..z0..9_@
  */
@@ -35,8 +35,9 @@ int db_legal_tablename(const char *s)
     sprintf(buf, "%s", s);
 
     if (*s == '.' || *s == 0) {
-        G_warning(_("Illegal table map name <%s>. May not contain '.' or 'NULL'."),
-                  buf);
+        G_warning(
+            _("Illegal table map name <%s>. May not contain '.' or 'NULL'."),
+            buf);
         return DB_FAILED;
     }
 
@@ -48,11 +49,11 @@ int db_legal_tablename(const char *s)
     }
 
     for (s++; *s; s++)
-        if (!
-            ((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
-             (*s >= '0' && *s <= '9') || *s == '_' || *s == '@')) {
-            G_warning(_("Illegal table map name <%s>. Character <%c> not allowed."),
-                      buf, *s);
+        if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
+              (*s >= '0' && *s <= '9') || *s == '_' || *s == '@')) {
+            G_warning(
+                _("Illegal table map name <%s>. Character <%c> not allowed."),
+                buf, *s);
             return DB_FAILED;
         }
 

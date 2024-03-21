@@ -8,19 +8,17 @@ int parse_command_line(int argc, char *argv[])
 {
     int i;
     char *desc;
-    struct
-    {
+    struct {
         struct Option *cell;
         struct Option *units;
-        struct Option *pl;      /* page length */
-        struct Option *pw;      /* page width */
+        struct Option *pl; /* page length */
+        struct Option *pw; /* page width */
         struct Option *outfile;
         struct Option *nv;
         struct Option *nsteps;
         struct Option *sort;
     } parms;
-    struct
-    {
+    struct {
         struct Flag *f;
         struct Flag *m;
         struct Flag *h;
@@ -28,10 +26,10 @@ int parse_command_line(int argc, char *argv[])
         struct Flag *e;
         struct Flag *n;
         struct Flag *N;
-        struct Flag *i;         /* use quant rules for fp map, 
-                                   i.e. read it as int */
-        struct Flag *C;         /*  report for fp ranges in Cats file 
-                                   (fp maps only) */
+        struct Flag *i; /* use quant rules for fp map,
+                           i.e. read it as int */
+        struct Flag *C; /*  report for fp ranges in Cats file
+                           (fp maps only) */
     } flags;
 
     parms.cell = G_define_standard_option(G_OPT_R_MAPS);
@@ -45,13 +43,11 @@ int parse_command_line(int argc, char *argv[])
     parms.units->description = _("Units to report");
     desc = NULL;
     G_asprintf(&desc,
-               "miles;%s;meters;%s;kilometers;%s;acres;%s;hectares;%s;cells;%s;percent;%s",
-               _("area in square miles"),
-               _("area in square meters"),
-               _("area in square kilometers"),
-               _("area in acres"),
-               _("area in hectares"),
-               _("number of cells"), _("percent cover"));
+               "miles;%s;meters;%s;kilometers;%s;acres;%s;hectares;%s;cells;%s;"
+               "percent;%s",
+               _("area in square miles"), _("area in square meters"),
+               _("area in square kilometers"), _("area in acres"),
+               _("area in hectares"), _("number of cells"), _("percent cover"));
     parms.units->descriptions = desc;
     parms.units->options =
         "miles,meters,kilometers,acres,hectares,cells,percent";
@@ -102,8 +98,7 @@ int parse_command_line(int argc, char *argv[])
     parms.sort->label = _("Sort output statistics by cell counts");
     parms.sort->description = _("Default: sorted by categories or intervals");
     parms.sort->options = "asc,desc";
-    G_asprintf((char **)&(parms.sort->descriptions),
-               "asc;%s;desc;%s",
+    G_asprintf((char **)&(parms.sort->descriptions), "asc;%s;desc;%s",
                _("Sort by cell counts in ascending order"),
                _("Sort by cell counts in descending order"));
     parms.sort->guisection = _("Formatting");
@@ -130,8 +125,7 @@ int parse_command_line(int argc, char *argv[])
 
     flags.N = G_define_flag();
     flags.N->key = 'a';
-    flags.N->description =
-        _("Do not report cells where all maps have no data");
+    flags.N->description = _("Do not report cells where all maps have no data");
     flags.N->guisection = _("No data");
 
     flags.C = G_define_flag();
@@ -207,7 +201,7 @@ int parse_command_line(int argc, char *argv[])
     no_data_str = parms.nv->answer;
 
     /* determine sorting method */
-    do_sort = SORT_DEFAULT;     /* sort by cats by default */
+    do_sort = SORT_DEFAULT; /* sort by cats by default */
     if (parms.sort->answer) {
         switch (parms.sort->answer[0]) {
         case 'a':
@@ -248,8 +242,8 @@ int parse_units(char *s)
         exit(EXIT_FAILURE);
     }
     if (nunits >= MAX_UNITS) {
-        G_fatal_error(_("Only %d unit%s allowed"),
-                      MAX_UNITS, MAX_UNITS == 1 ? "" : "s");
+        G_fatal_error(_("Only %d unit%s allowed"), MAX_UNITS,
+                      MAX_UNITS == 1 ? "" : "s");
     }
     unit[nunits].type = x;
     nunits++;
@@ -271,10 +265,10 @@ int parse_layer(char *s)
         G_fatal_error(_("Raster map <%s> not found"), s);
 
     n = nlayers++;
-    layers = (LAYER *) G_realloc(layers, nlayers * sizeof(LAYER));
+    layers = (LAYER *)G_realloc(layers, nlayers * sizeof(LAYER));
     is_fp = (int *)G_realloc(is_fp, (nlayers + 1) * sizeof(int));
-    DMAX = (DCELL *) G_realloc(DMAX, (nlayers + 1) * sizeof(DCELL));
-    DMIN = (DCELL *) G_realloc(DMIN, (nlayers + 1) * sizeof(DCELL));
+    DMAX = (DCELL *)G_realloc(DMAX, (nlayers + 1) * sizeof(DCELL));
+    DMIN = (DCELL *)G_realloc(DMIN, (nlayers + 1) * sizeof(DCELL));
     if (!as_int)
         is_fp[n] = Rast_map_is_fp(name, mapset);
     else

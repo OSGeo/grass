@@ -8,7 +8,6 @@
 #include "signature.h"
 #include "files.h"
 
-
 int get_training_classes(struct files *files, struct Signature *S)
 {
     int fd;
@@ -47,21 +46,21 @@ int get_training_classes(struct files *files, struct Signature *S)
             S->sig[n].npoints = count;
             strncpy(S->sig[n].desc,
                     Rast_get_c_cat(&cat, &files->training_labels),
-                    sizeof(S->sig[n].desc)
-                );
+                    sizeof(S->sig[n].desc));
             S->sig[n].desc[255] = '\0'; /* desc is limited to 256 */
             S->sig[n].oclass = cat;
             n++;
         }
         else
-            G_warning(_("Training class %d only has one cell - this class will be ignored"),
+            G_warning(_("Training class %d only has one cell - this class will "
+                        "be ignored"),
                       cat);
     }
 
     if (n == 0)
         G_fatal_error(_("Training map has no classes"));
 
-    list = (CELL *) G_calloc(n, sizeof(CELL));
+    list = (CELL *)G_calloc(n, sizeof(CELL));
     n = 0;
     Rast_rewind_cell_stats(&cell_stats);
     while (Rast_next_cell_stat(&cat, &count, &cell_stats))

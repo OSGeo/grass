@@ -1,4 +1,3 @@
-
 /**
  * \file execute.c
  *
@@ -21,7 +20,6 @@
 #include "globals.h"
 #include "proto.h"
 
-
 /**
  * \fn int db__driver_execute_immediate (dbString *sql)
  *
@@ -31,7 +29,7 @@
  * \return int DB_FAILED on error; DB_OK on success
  */
 
-int db__driver_execute_immediate(dbString * sql)
+int db__driver_execute_immediate(dbString *sql)
 {
     char *s;
     int ret;
@@ -49,8 +47,7 @@ int db__driver_execute_immediate(dbString * sql)
         ret = sqlite3_prepare(sqlite, s, -1, &stmt, &rest);
 
         if (ret != SQLITE_OK) {
-            db_d_append_error("%s\n%s",
-                              _("Error in sqlite3_prepare():"),
+            db_d_append_error("%s\n%s", _("Error in sqlite3_prepare():"),
                               (char *)sqlite3_errmsg(sqlite));
             db_d_report_error();
             return DB_FAILED;
@@ -65,8 +62,7 @@ int db__driver_execute_immediate(dbString * sql)
             /* try again */
         }
         else if (ret != SQLITE_OK) {
-            db_d_append_error("%s\n%s",
-                              _("Error in sqlite3_step():"),
+            db_d_append_error("%s\n%s", _("Error in sqlite3_step():"),
                               (char *)sqlite3_errmsg(sqlite));
             db_d_report_error();
             sqlite3_finalize(stmt);
@@ -79,8 +75,7 @@ int db__driver_execute_immediate(dbString * sql)
     ret = sqlite3_finalize(stmt);
 
     if (ret != SQLITE_OK) {
-        db_d_append_error("%s\n%s",
-                          _("Error in sqlite3_finalize():"),
+        db_d_append_error("%s\n%s", _("Error in sqlite3_finalize():"),
                           (char *)sqlite3_errmsg(sqlite));
         db_d_report_error();
         return DB_FAILED;
@@ -88,7 +83,6 @@ int db__driver_execute_immediate(dbString * sql)
 
     return DB_OK;
 }
-
 
 /**
  * \fn int db__driver_begin_transaction (void)
@@ -107,8 +101,7 @@ int db__driver_begin_transaction(void)
     ret = sqlite3_exec(sqlite, "BEGIN", NULL, NULL, NULL);
 
     if (ret != SQLITE_OK) {
-        db_d_append_error("%s\n%s",
-                          _("'BEGIN' transaction failed:"),
+        db_d_append_error("%s\n%s", _("'BEGIN' transaction failed:"),
                           (char *)sqlite3_errmsg(sqlite));
         db_d_report_error();
         return DB_FAILED;
@@ -116,7 +109,6 @@ int db__driver_begin_transaction(void)
 
     return DB_OK;
 }
-
 
 /**
  * \fn int db__driver_commit_transaction (void)
@@ -135,8 +127,7 @@ int db__driver_commit_transaction(void)
     ret = sqlite3_exec(sqlite, "COMMIT", NULL, NULL, NULL);
 
     if (ret != SQLITE_OK) {
-        db_d_append_error("%s\n%s",
-                          _("'COMMIT' transaction failed:"),
+        db_d_append_error("%s\n%s", _("'COMMIT' transaction failed:"),
                           (char *)sqlite3_errmsg(sqlite));
         db_d_report_error();
         return DB_FAILED;

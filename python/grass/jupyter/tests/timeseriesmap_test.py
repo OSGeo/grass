@@ -70,9 +70,9 @@ def test_render_layers(space_time_raster_dataset, fill_gaps):
 
 @pytest.mark.skipif(IPython is None, reason="IPython package not available")
 @pytest.mark.skipif(ipywidgets is None, reason="ipywidgets package not available")
-def test_save(space_time_raster_dataset):
+def test_save(space_time_raster_dataset, tmp_path):
     """Test returns from animate and time_slider are correct object types"""
     img = gj.TimeSeriesMap()
     img.add_raster_series(space_time_raster_dataset.name)
-    gif_file = img.save("image.gif")
+    gif_file = img.save(tmp_path / "image.gif")
     assert Path(gif_file).is_file()

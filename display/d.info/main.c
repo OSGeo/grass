@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       d.info
  * AUTHOR(S):    Glynn Clements
@@ -34,8 +33,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("display"));
     G_add_keyword(_("graphics"));
     G_add_keyword(_("monitors"));
-    module->label =
-        _("Displays information about the active display monitor.");
+    module->label = _("Displays information about the active display monitor.");
     module->description = _("Display monitors are maintained by d.mon.");
 
     rflag = G_define_flag();
@@ -76,7 +74,6 @@ int main(int argc, char *argv[])
 
     if (fflag->answer || eflag->answer || gflag->answer)
         D_get_frame(&ft, &fb, &fl, &fr);
-
 
     if (rflag->answer)
         fprintf(stdout, "screen rectangle: %f %f %f %f\n", sl, sr, st, sb);
@@ -121,7 +118,6 @@ int main(int argc, char *argv[])
         fprintf(stdout, "ewres=%.15g\n", D_get_d_to_u_xconv());
         fprintf(stdout, "nsres=%.15g\n", -D_get_d_to_u_yconv());
     }
-
 
     D_close_driver();
 

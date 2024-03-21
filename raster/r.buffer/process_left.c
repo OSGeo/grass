@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -17,17 +16,15 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include "distance.h"
-
 
 int process_left(int from_row, int to_row, int start_col, int first_zone)
 {
     register int i, col, cur_zone;
     register MAPTYPE *to_ptr, *from_ptr;
     register int ncols, incr, farthest;
-
 
     /* find cells to the left
      * stop at left edge, or when ncols is bigger than the last zone,
@@ -38,7 +35,6 @@ int process_left(int from_row, int to_row, int start_col, int first_zone)
     from_ptr = map + MAPINDEX(from_row, col);
     to_ptr = map + MAPINDEX(to_row, col);
     farthest = distances[ndist - 1].ncols;
-
 
     /* planimetric grids will look for ncols^2
      * and can use fact that (n+1)^2 = n^2 + 2n + 1
@@ -51,9 +47,9 @@ int process_left(int from_row, int to_row, int start_col, int first_zone)
 
     ncols = 0;
     while (1) {
-        if (col == 0) {         /* global wrap-around */
+        if (col == 0) { /* global wrap-around */
             if (!wrap_ncols)
-                break;          /* only can happen with lat-lon */
+                break; /* only can happen with lat-lon */
             col = window.cols;
             ncols += wrap_ncols - 1;
             from_ptr = map + MAPINDEX(from_row, col);

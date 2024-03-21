@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r3.showdspf
@@ -6,8 +5,8 @@
  *               ported from IrisGL to OpenGL by Ken Sakai, Steve Hall,
  *               Lockheed Martin Space Systems,
  *               Sunnyale, California, Modification date: March 2000
- * PURPOSE:      Visualization program which loads the isosurfaces previously calculated
- *               using r3.mkdspf
+ * PURPOSE:      Visualization program which loads the isosurfaces previously
+ *               calculated using r3.mkdspf
  * COPYRIGHT:    (C) 2000 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -51,7 +50,7 @@
 #endif
 
 #ifndef WAIT_ANY
-#define WAIT_ANY ((pid_t) -1)
+#define WAIT_ANY ((pid_t)-1)
 #endif
 
 GLuint Material_1_Dlist;
@@ -60,11 +59,11 @@ OGLMotifWindowData ColormapWindow;
 GLuint MainDlist;
 XtAppContext App_context;
 
-file_info Headfax;              /* contains info about data itself */
-file_info G3header;             /* contains info about data itself */
+file_info Headfax;  /* contains info about data itself */
+file_info G3header; /* contains info about data itself */
 int G_sign;
 int X_sign;
-long D_offset;                  /*offset to data in grid3 file */
+long D_offset; /*offset to data in grid3 file */
 
 void set_threshold_button(int i);
 char *check_get_any_dspname();
@@ -74,7 +73,7 @@ void options();
 void Toggle_swapbuffers(struct dspec *D_spec);
 void clear_screen();
 void check_limits(struct dspec *D_spec, int axis);
-void copy_head(file_info * g3head, file_info * head);
+void copy_head(file_info *g3head, file_info *head);
 
 char *rindex();
 static char ctablefile[256];
@@ -90,12 +89,11 @@ void setSingleSelectionMode();
 void setMultipleSelectionMode();
 int isSingleSelectionMode();
 
-void do_draw_multiple_thresholds(file_info * Headp, file_info * G3p,
+void do_draw_multiple_thresholds(file_info *Headp, file_info *G3p,
                                  struct dspec *D_spec, struct Cap *Cap,
                                  unsigned int type);
 int dumpgif(char *name);
 void do_draw_with_display_list(struct dspec *D_spec);
-
 
 #define DEBUG 1
 int main(int argc, char **argv)
@@ -142,41 +140,36 @@ int main(int argc, char **argv)
     if (pipe(fdes))
         G_fatal_error("Unable to open pipe");
     pid = fork();
-    if (pid == (pid_t) 0) {     /* child */
+    if (pid == (pid_t)0) { /* child */
         close(fdes[1]);
 
         /* use this to name graphics window */
         strcpy(wname, g3->answer);
 
-        if (NULL == (dsp =
-                     check_get_any_dspname(dspf->answer, g3->answer, NULL)))
+        if (NULL ==
+            (dsp = check_get_any_dspname(dspf->answer, g3->answer, NULL)))
             exit(EXIT_FAILURE);
 
-
         /* TODO - check color file */
-
 
         /* changed 7/93; normals were pointing to interior as default */
         G_sign = 1;
         X_sign = -1;
 
-
-        /* opens grid3 file to read in original data 
+        /* opens grid3 file to read in original data
          */
 
         Rast3d_set_error_fun(Rast3d_print_error);
 
         /* open g3 file for reading */
         if (NULL == (mapset = G_find_file2("grid3", g3->answer, ""))) {
-            sprintf(buff, "Unable to find 3D raster map for <%s>",
-                    g3->answer);
+            sprintf(buff, "Unable to find 3D raster map for <%s>", g3->answer);
             G_fatal_error(buff);
         }
 
-        g3map =
-            Rast3d_open_cell_old(g3->answer, mapset, RASTER3D_DEFAULT_WINDOW,
-                                 RASTER3D_TILE_SAME_AS_FILE,
-                                 RASTER3D_USE_CACHE_DEFAULT);
+        g3map = Rast3d_open_cell_old(
+            g3->answer, mapset, RASTER3D_DEFAULT_WINDOW,
+            RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
         if (NULL == g3map) {
             sprintf(buff, "Unable to open 3D raster map <%s>", g3->answer);
@@ -230,7 +223,8 @@ int main(int argc, char **argv)
         /* INIT */
         init_dspec(&D_spec, colr->answer);
 
-        /* INITIALIZATION OF THE D_spec.B or D_spec.E CAN HAPPEN MORE THAN ONCE */
+        /* INITIALIZATION OF THE D_spec.B or D_spec.E CAN HAPPEN MORE THAN ONCE
+         */
         init_bounds(&D_spec);
 
         D_spec.Swap_buf = 1;
@@ -238,11 +232,10 @@ int main(int argc, char **argv)
         init_graphics(wname, argc, argv, &D_spec);
         draw_colortable(&D_spec, &Headfax, Window);
 
-
         winset_main();
 
-        D_spec.c_flag = 1;      /* reset flag */
-        Toggle_swapbuffers(&D_spec);    /* make sure they sync up */
+        D_spec.c_flag = 1;           /* reset flag */
+        Toggle_swapbuffers(&D_spec); /* make sure they sync up */
         Toggle_swapbuffers(&D_spec);
 
         for (;;) {
@@ -253,8 +246,8 @@ int main(int argc, char **argv)
             FD_ZERO(&set);
             FD_SET(fdes[0], &set);
 
-            if ((fdstatus =
-                 select(FD_SETSIZE, &set, NULL, NULL, &timeout)) == 1) {
+            if ((fdstatus = select(FD_SETSIZE, &set, NULL, NULL, &timeout)) ==
+                1) {
                 if (FD_ISSET(fdes[0], &set) &&
                     (nbytes = read(fdes[0], buff, 299)) > 0) {
                     p = buff;
@@ -270,13 +263,12 @@ int main(int argc, char **argv)
                 XtAppNextEvent(App_context, &event);
                 XtDispatchEvent(&event);
             }
-
         }
     }
-    else if (pid < (pid_t) 0) {
+    else if (pid < (pid_t)0) {
         G_fatal_error("Fork failed!");
     }
-    else {                      /* parent */
+    else { /* parent */
 
         close(fdes[0]);
 
@@ -284,7 +276,7 @@ int main(int argc, char **argv)
         /* get input from the keyboard */
         fprintf(stderr, "enter desired manipulations then press return\n\n");
         fprintf(stderr, "Q ? + - r d l L (xyz)# (XYZ)# S B(xyz)# "
-                "E(xyz)# R g C c w W i h t T# \n");
+                        "E(xyz)# R g C c w W i h t T# \n");
         fprintf(stderr, " > ");
         fflush(stderr);
 
@@ -292,7 +284,7 @@ int main(int argc, char **argv)
             int linelen;
 
             if (waitpid(WAIT_ANY, NULL, WNOHANG) != 0)
-                break;          /* Child exited */
+                break; /* Child exited */
 
             if (NULL == fgets(buff, 300, stdin))
                 break;
@@ -302,26 +294,22 @@ int main(int argc, char **argv)
                 G_fatal_error("Unable to write to child process.");
 
             if (waitpid(WAIT_ANY, NULL, WNOHANG) != 0)
-                break;          /* Child exited */
+                break; /* Child exited */
 
             /* get input from the keyboard */
             fprintf(stderr,
                     "enter desired manipulations then press return\n\n");
-            fprintf(stderr,
-                    "Q ? + - r d l L (xyz)# (XYZ)# S B(xyz)# "
-                    "E(xyz)# R g C c w W i h t T# \n");
+            fprintf(stderr, "Q ? + - r d l L (xyz)# (XYZ)# S B(xyz)# "
+                            "E(xyz)# R g C c w W i h t T# \n");
             fprintf(stderr, " > ");
             fflush(stderr);
         }
 
         fprintf(stderr, "Goodbye!\n\n");
-
     }
 
     return 0;
 }
-
-
 
 int dispatch_cmd(char *p)
 {
@@ -333,11 +321,11 @@ int dispatch_cmd(char *p)
     int tmp4;
 
     drawable_cmd = 0;
-    while (*p) {                /* assign valid keyboard entries to D_spec structure */
+    while (*p) { /* assign valid keyboard entries to D_spec structure */
         cmd = *p++;
         switch (cmd) {
-        case '#':              /* rest of line is a comment */
-            *p = 0;             /* throw away rest of line */
+        case '#':   /* rest of line is a comment */
+            *p = 0; /* throw away rest of line */
             break;
         case 'n':
             G_sign = -G_sign;
@@ -370,20 +358,18 @@ int dispatch_cmd(char *p)
             do_draw(&Headfax, &G3header, &D_spec, &D_Cap, DRAW_ISO | dobox);
             drawable_cmd = 1;
             break;
-        case '?':
-            {
-                int i;
+        case '?': {
+            int i;
 
-                for (i = 0; i < Headfax.linefax.nthres; i++)
-                    fprintf(stderr, "%c %3d for threshold value %5.2f\n",
-                            i == D_spec.Thresh ? '*' : ' ', i + 1,
-                            Headfax.linefax.tvalue[i]);
-                fprintf(stderr, "Rotations: X %d  Y %d  Z %d\n", D_spec.xrot,
-                        D_spec.yrot, D_spec.zrot);
-            }
-            break;
+            for (i = 0; i < Headfax.linefax.nthres; i++)
+                fprintf(stderr, "%c %3d for threshold value %5.2f\n",
+                        i == D_spec.Thresh ? '*' : ' ', i + 1,
+                        Headfax.linefax.tvalue[i]);
+            fprintf(stderr, "Rotations: X %d  Y %d  Z %d\n", D_spec.xrot,
+                    D_spec.yrot, D_spec.zrot);
+        } break;
 
-        case 'l':              /* list thresholds */
+        case 'l': /* list thresholds */
             D_spec.nt = 0;
             G_squeeze(p);
             while (isdigit(*p)) {
@@ -391,12 +377,11 @@ int dispatch_cmd(char *p)
 
                 i = atoi(p);
                 if (i < 1 || i > Headfax.linefax.nthres)
-                    fprintf(stderr,
-                            "Range is 1 to %d\n", Headfax.linefax.nthres);
+                    fprintf(stderr, "Range is 1 to %d\n",
+                            Headfax.linefax.nthres);
                 else {
                     D_spec.t[D_spec.nt] = i - 1;
                     D_spec.nt++;
-
                 }
                 p++;
                 if (i >= 10)
@@ -405,9 +390,9 @@ int dispatch_cmd(char *p)
                     p++;
                 G_squeeze(p);
             }
-            *p = 0;             /* throw away rest of line */
+            *p = 0; /* throw away rest of line */
             break;
-        case 'L':              /*display list */
+        case 'L': /*display list */
             if (!D_spec.nt)
                 break;
             if (D_spec.c_flag)
@@ -434,7 +419,7 @@ int dispatch_cmd(char *p)
             D_spec.Thresh = tmp2;
             drawable_cmd = 1;
             break;
-        case 't':              /* show only this threshold */
+        case 't': /* show only this threshold */
             G_squeeze(p);
             if (isdigit(*p)) {
                 int i;
@@ -448,43 +433,40 @@ int dispatch_cmd(char *p)
                     setSingleSelectionMode();
 
                 set_threshold_button(D_spec.Thresh + 1);
-                do_draw(&Headfax, &G3header, &D_spec, &D_Cap,
-                        DRAW_ISO | dobox);
+                do_draw(&Headfax, &G3header, &D_spec, &D_Cap, DRAW_ISO | dobox);
                 drawable_cmd = 1;
-                *p = 0;         /* throw away rest of line */
+                *p = 0; /* throw away rest of line */
             }
             else
-                fprintf(stderr, "check keyboard entry instructions \n"), *p =
-                    0;
+                fprintf(stderr, "check keyboard entry instructions \n"), *p = 0;
             break;
-        case 'T':              /* show thresholds between hi & lo */
+        case 'T': /* show thresholds between hi & lo */
             G_squeeze(p);
             if (2 != sscanf(p, "%d %d", &(D_spec.low), &(D_spec.hi))) {
-                 /*DEBUG*/
-                    fprintf(stderr, ":><>>>  T %d %d\n", (D_spec.low),
-                            (D_spec.hi));
+                /*DEBUG*/
+                fprintf(stderr, ":><>>>  T %d %d\n", (D_spec.low), (D_spec.hi));
                 fprintf(stderr, "check keyboard entry instructions \n");
                 *p = 0;
                 D_spec.low = 0;
                 D_spec.hi = Headfax.linefax.nthres - 1;
             }
             else {
-                D_spec.low--;   /* convert from user to internal #s */
+                D_spec.low--; /* convert from user to internal #s */
                 D_spec.hi--;
             }
             drawable_cmd = 1;
-            *p = 0;             /* throw away rest of line */
+            *p = 0; /* throw away rest of line */
             break;
 
-        case 'B':              /* initial value along specified axis */
-        case 'E':              /* ending  value along specified axis */
+        case 'B': /* initial value along specified axis */
+        case 'E': /* ending  value along specified axis */
             G_squeeze(p);
             axis = *p++;
             G_squeeze(p);
             if (isdigit(*p)) {
                 G_squeeze(p);
                 tmp = atoi(p);
-                *p = 0;         /*throw away rest of line */
+                *p = 0; /*throw away rest of line */
             }
             else {
                 fprintf(stderr, "enter number also\n");
@@ -518,7 +500,7 @@ int dispatch_cmd(char *p)
         case 'R':
             init_bounds(&D_spec);
             break;
-        case 'S':              /* Specular highlight */
+        case 'S': /* Specular highlight */
             G_squeeze(p);
             if (isdigit(*p)) {
                 D_spec.Specular = (float)atof(p);
@@ -526,26 +508,27 @@ int dispatch_cmd(char *p)
                 change_spec(D_spec.Specular);
             }
             else
-                fprintf(stderr, "check keyboard entry instructions \n"), *p =
-                    0;
+                fprintf(stderr, "check keyboard entry instructions \n"), *p = 0;
             break;
         case 'r':
-            fprintf(stderr, " - Rotation Mode -\n"
-                    " 1) Drag with LEFT mouse button to rotate\n"
-                    " 2) Drag right/left with MIDDLE mouse button to zoom in/out\n"
-                    " 3) Click RIGHT mouse button to exit Rotation Mode\n\n");
+            fprintf(
+                stderr,
+                " - Rotation Mode -\n"
+                " 1) Drag with LEFT mouse button to rotate\n"
+                " 2) Drag right/left with MIDDLE mouse button to zoom in/out\n"
+                " 3) Click RIGHT mouse button to exit Rotation Mode\n\n");
             tmp4 = D_spec.c_flag;
             D_spec.c_flag = 1;
             rotate_model(&D_spec);
             clear_screen();
             D_spec.c_flag = tmp4;
             break;
-        case 's':              /* use swapbuffers */
+        case 's': /* use swapbuffers */
             /*
                Toggle_swapbuffers (&D_spec);
              */
             break;
-        case 'd':              /* draw it */
+        case 'd': /* draw it */
             G_squeeze(p);
             if (isdigit(*p)) {
                 int i;
@@ -565,14 +548,14 @@ int dispatch_cmd(char *p)
             drawable_cmd = 1;
             *p = 0;
             break;
-        case 'u':              /* Update the screen in double buffer mode */
+        case 'u': /* Update the screen in double buffer mode */
             new_swapbuffers();
             break;
-        case 'D':              /* draw solid */
+        case 'D': /* draw solid */
             do_draw(&Headfax, &G3header, &D_spec, &D_Cap, DRAW_SOLID | dobox);
             drawable_cmd = 1;
             break;
-        case 'x':              /* rotate around x-axis */
+        case 'x': /* rotate around x-axis */
             G_squeeze(p);
             if (isdigit(*p) || *p == '-' || *p == '+') {
                 D_spec.xrot = atoi(p);
@@ -583,10 +566,9 @@ int dispatch_cmd(char *p)
                 *p = 0;
             }
             else
-                fprintf(stderr, "check keyboard entry instructions \n"), *p =
-                    0;
+                fprintf(stderr, "check keyboard entry instructions \n"), *p = 0;
             break;
-        case 'X':              /* scale in x-direction */
+        case 'X': /* scale in x-direction */
             G_squeeze(p);
             if (isdigit(*p) || *p == '-' || *p == '+') {
                 D_spec.xscale = atof(p);
@@ -594,10 +576,9 @@ int dispatch_cmd(char *p)
                 *p = 0;
             }
             else
-                fprintf(stderr, "check keyboard entry instructions \n"), *p =
-                    0;
+                fprintf(stderr, "check keyboard entry instructions \n"), *p = 0;
             break;
-        case 'y':              /* rotate around y-axis */
+        case 'y': /* rotate around y-axis */
             G_squeeze(p);
             if (isdigit(*p) || *p == '-' || *p == '+') {
                 D_spec.yrot = atoi(p);
@@ -608,10 +589,9 @@ int dispatch_cmd(char *p)
                 *p = 0;
             }
             else
-                fprintf(stderr, "check keyboard entry instructions \n"), *p =
-                    0;
+                fprintf(stderr, "check keyboard entry instructions \n"), *p = 0;
             break;
-        case 'Y':              /* scale in y direction */
+        case 'Y': /* scale in y direction */
             G_squeeze(p);
             if (isdigit(*p) || *p == '-' || *p == '+') {
                 D_spec.yscale = atof(p);
@@ -619,10 +599,9 @@ int dispatch_cmd(char *p)
                 *p = 0;
             }
             else
-                fprintf(stderr, "check keyboard entry instructions \n"), *p =
-                    0;
+                fprintf(stderr, "check keyboard entry instructions \n"), *p = 0;
             break;
-        case 'z':              /* rotate around z-axis */
+        case 'z': /* rotate around z-axis */
             G_squeeze(p);
             if (isdigit(*p) || *p == '-' || *p == '+') {
                 D_spec.zrot = atoi(p);
@@ -633,10 +612,9 @@ int dispatch_cmd(char *p)
                 *p = 0;
             }
             else
-                fprintf(stderr, "check keyboard entry instructions \n"), *p =
-                    0;
+                fprintf(stderr, "check keyboard entry instructions \n"), *p = 0;
             break;
-        case 'Z':              /* scale in z direction */
+        case 'Z': /* scale in z direction */
             G_squeeze(p);
             if (isdigit(*p) || *p == '-' || *p == '+') {
                 D_spec.zscale = atof(p);
@@ -644,25 +622,24 @@ int dispatch_cmd(char *p)
                 *p = 0;
             }
             else
-                fprintf(stderr, "check keyboard entry instructions \n"), *p =
-                    0;
+                fprintf(stderr, "check keyboard entry instructions \n"), *p = 0;
             break;
-        case 'g':              /* toggle grid */
+        case 'g': /* toggle grid */
             TOGGLE(D_spec.grid);
             do_draw(&Headfax, &G3header, &D_spec, &D_Cap, DRAW_ISO | dobox);
             break;
-        case 'C':              /* toggle clear flag */
+        case 'C': /* toggle clear flag */
             TOGGLE(D_spec.c_flag);
             break;
-        case 'c':              /* redraw the screen */
+        case 'c': /* redraw the screen */
             clear_screen();
             new_swapbuffers();
             break;
-        case 'w':              /* dump image to file */
+        case 'w': /* dump image to file */
             dumpgif(G_squeeze(++p));
             *p = 0;
             break;
-        case 'W':              /* TEST dump image to file */
+        case 'W': /* TEST dump image to file */
             dumprect(G_squeeze(++p));
             *p = 0;
             break;
@@ -671,16 +648,16 @@ int dispatch_cmd(char *p)
             loadrect(G_squeeze(++p));
             *p = 0;
             break;
-        case 'Q':              /* QUIT */
+        case 'Q': /* QUIT */
             if (D_spec.cfile != NULL)
                 fclose(D_spec.cfile);
             exit(0);
 
             break;
-        case 'h':              /* help */
+        case 'h': /* help */
             options();
             break;
-        case 'p':              /* display a single plane 1-6 */
+        case 'p': /* display a single plane 1-6 */
 #ifdef NEVER
             /* This code cores so I am taking it out.  Ken Sakai */
 
@@ -705,10 +682,10 @@ int dispatch_cmd(char *p)
             *p = 0;
 #endif
             break;
-        case 'I':              /* toggle in_out flag */
+        case 'I': /* toggle in_out flag */
             TOGGLE(D_spec.in_out);
             break;
-        case 'F':              /* new color File */
+        case 'F': /* new color File */
             G_squeeze(p);
             if (2 != sscanf(p, "%s %s", cfilename, ctablename))
                 no_color_file(&D_spec, ctablefile);
@@ -721,12 +698,10 @@ int dispatch_cmd(char *p)
         default:
             *p = 0;
             break;
-
         }
     }
     return (drawable_cmd ? 2 : 1);
 }
-
 
 void dspf_get_zscale(float *zscale)
 {
@@ -747,7 +722,7 @@ void dspf_getorigin(float *west, float *south, float *bottom)
 #ifdef DEBUG
     static int first = 1;
 
-    if (first < 10) {           /* DEBUG */
+    if (first < 10) { /* DEBUG */
         fprintf(stderr, "WEST = %f\nSOUTH = %f\nBOTTOM = %f\n", *west, *south,
                 *bottom);
         first++;
@@ -758,7 +733,6 @@ void dspf_getorigin(float *west, float *south, float *bottom)
     *south = G3header.south;
     *bottom = G3header.bottom;
 }
-
 
 /*-------------------------------------------------------------------
   do_draw ()
@@ -772,20 +746,18 @@ void dspf_getorigin(float *west, float *south, float *bottom)
   being done over the network.
   -------------------------------------------------------------------
 */
-void
-do_draw(file_info * Headp, file_info * G3p, struct dspec *D_spec,
-        struct Cap *Cap, unsigned int type)
+void do_draw(file_info *Headp, file_info *G3p, struct dspec *D_spec,
+             struct Cap *Cap, unsigned int type)
 {
     static double x, y, z;
     float mat[4][4];
-
 
     x = Headfax.xdim * D_spec->xscale / 2;
     y = Headfax.ydim * D_spec->yscale / 2;
     z = Headfax.zdim * D_spec->zscale / 2;
 
     glPushMatrix();
-    glTranslatef(0.0, 0.0, D_spec->ztrans);     /* move it away from eye */
+    glTranslatef(0.0, 0.0, D_spec->ztrans); /* move it away from eye */
 
     if (D_spec->c_flag)
         clear_screen();
@@ -811,19 +783,15 @@ do_draw(file_info * Headp, file_info * G3p, struct dspec *D_spec,
     /* bring over argument to DRAW_CAP in high 16 bits to low 16 */
     /*    and AND with   00111111  for sides 1-6 */
 
-
     /* todo, only draw visible sides, and dont use Zbuffer */
     if (type & DRAW_BBOX)
         do__bbox(D_spec);
 
     glEndList();
 
-
     if (D_spec->Swap_buf)
         new_swapbuffers();
     glPopMatrix();
-
-
 }
 
 /*-------------------------------------------------------------------
@@ -837,7 +805,6 @@ void draw_ctable()
 
     draw_colortable(&D_spec, &Headfax, a);
 }
-
 
 /*-------------------------------------------------------------------
   void draw_multiple()
@@ -859,7 +826,6 @@ void draw_multiple()
     new_swapbuffers();
     D_spec.Swap_buf = 1;
     D_spec.Thresh = temp;
-
 }
 
 /*-------------------------------------------------------------------
@@ -883,14 +849,12 @@ void do_draw_with_display_list(struct dspec *D_spec)
     static double x, y, z;
     float mat[4][4];
 
-
     x = Headfax.xdim * D_spec->xscale / 2;
     y = Headfax.ydim * D_spec->yscale / 2;
     z = Headfax.zdim * D_spec->zscale / 2;
 
-
     glPushMatrix();
-    glTranslatef(0.0, 0.0, D_spec->ztrans);     /* move it away from eye */
+    glTranslatef(0.0, 0.0, D_spec->ztrans); /* move it away from eye */
 
     if (D_spec->c_flag)
         clear_screen();
@@ -901,7 +865,6 @@ void do_draw_with_display_list(struct dspec *D_spec)
     get_trackball_rotation_matrix(mat);
     glMultMatrixf((float *)mat);
 
-
     glTranslatef(-x, -y, -z);
 
     glCallList(MainDlist);
@@ -909,12 +872,7 @@ void do_draw_with_display_list(struct dspec *D_spec)
     if (D_spec->Swap_buf)
         new_swapbuffers();
     glPopMatrix();
-
-
 }
-
-
-
 
 /*-------------------------------------------------------------------
   do_draw_no_transformations()
@@ -922,10 +880,9 @@ void do_draw_with_display_list(struct dspec *D_spec)
   rotational transformations.
   -------------------------------------------------------------------
 */
-void
-do_draw_no_transformations(file_info * Headp, file_info * G3p,
-                           struct dspec *D_spec, struct Cap *Cap,
-                           unsigned int type)
+void do_draw_no_transformations(file_info *Headp, file_info *G3p,
+                                struct dspec *D_spec, struct Cap *Cap,
+                                unsigned int type)
 {
 
     if (type & DRAW_BBOX)
@@ -939,19 +896,17 @@ do_draw_no_transformations(file_info * Headp, file_info * G3p,
         draw_cap_side(D_spec, Headp, G3p, Cap, (type >> 16) & 0x3f);
     /* bring over argument to DRAW_CAP in high 16 bits to low 16 */
     /*    and AND with   00111111  for sides 1-6 */
-
 }
 
 /*-------------------------------------------------------------------
   do_draw_multiple_thresholds()
-  This function computes and draws multiple thresholds at once. OpenGL 
+  This function computes and draws multiple thresholds at once. OpenGL
   drawing commands are stored in an OpenGL display list for later use.
   -------------------------------------------------------------------
 */
-void
-do_draw_multiple_thresholds(file_info * Headp, file_info * G3p,
-                            struct dspec *D_spec, struct Cap *Cap,
-                            unsigned int type)
+void do_draw_multiple_thresholds(file_info *Headp, file_info *G3p,
+                                 struct dspec *D_spec, struct Cap *Cap,
+                                 unsigned int type)
 {
     static int first = 1;
     static double x, y, z;
@@ -962,9 +917,8 @@ do_draw_multiple_thresholds(file_info * Headp, file_info * G3p,
     y = Headfax.ydim * D_spec->yscale / 2;
     z = Headfax.zdim * D_spec->zscale / 2;
 
-
     glPushMatrix();
-    glTranslatef(0.0, 0.0, D_spec->ztrans);     /* move it away from eye */
+    glTranslatef(0.0, 0.0, D_spec->ztrans); /* move it away from eye */
 
     if (D_spec->c_flag)
         clear_screen();
@@ -984,21 +938,16 @@ do_draw_multiple_thresholds(file_info * Headp, file_info * G3p,
     }
     glEndList();
 
-
     if (D_spec->Swap_buf)
         new_swapbuffers();
     glPopMatrix();
-
-
 }
-
-
 
 void do__bbox(struct dspec *D_spec)
 {
     static int first = 1;
     static float x, y, z;
-    static float c[8][3];       /*holds the corner points for bounding box */
+    static float c[8][3]; /*holds the corner points for bounding box */
     static float gxl[100][3], gxh[100][3], gyl[100][3], gyh[100][3];
     int gx, gy;
 
@@ -1042,11 +991,12 @@ void do__bbox(struct dspec *D_spec)
                 gxh[gx][2] = 0;
             }
 
-
             /*init_plane(c,p,sides); this is a much earlier idea JCM */
-            /* build plane vertex info (3verts)from the above info  used for normals */
+            /* build plane vertex info (3verts)from the above info  used for
+             * normals */
             /* based on the planes as defined in cap_data.c */
-            /* to have normals pointing the correct direction CCW ordering of vertices */
+            /* to have normals pointing the correct direction CCW ordering of
+             * vertices */
 
             /*side 0  xy plane z = zdim */
             D_spec->p[0][0][0] = c[0][0];
@@ -1137,7 +1087,6 @@ void do__bbox(struct dspec *D_spec)
     glVertex3fv(c[7]);
     glEnd();
 
-
     glBegin(GL_LINE_LOOP);
     glVertex3fv(c[4]);
     glVertex3fv(c[5]);
@@ -1192,10 +1141,9 @@ void do__bbox(struct dspec *D_spec)
         }
     }
     glEnable(GL_LIGHTING);
-
 }
 
-void do__draw(file_info * Headp, struct dspec *D_spec)
+void do__draw(file_info *Headp, struct dspec *D_spec)
 {
     static int first = 1;
 
@@ -1204,7 +1152,7 @@ void do__draw(file_info * Headp, struct dspec *D_spec)
     else
         reset_reads(&Headfax);
 
-    /*    fprintf (stderr, "Threshold %d = %f\n", 
+    /*    fprintf (stderr, "Threshold %d = %f\n",
        D_spec->Thresh + 1, Headp->linefax.tvalue[D_spec->Thresh]);
        fflush(stderr); */
     switch (Headp->linefax.litmodel) {
@@ -1212,32 +1160,29 @@ void do__draw(file_info * Headp, struct dspec *D_spec)
         fdraw_polys(D_spec);
         break;
     case 2:
-      case3:
+    case3:
         gdraw_polys(D_spec);
         break;
     }
 }
 
-void
-do__draw_solid(file_info * Headp, file_info * G3header, struct dspec *D_spec,
-               struct Cap *Cap)
+void do__draw_solid(file_info *Headp, file_info *G3header, struct dspec *D_spec,
+                    struct Cap *Cap)
 {
     int min, max;
 
     min = D_spec->low;
     max = D_spec->hi;
 
-
     D_spec->Thresh = min;
-    do__draw(Headp, D_spec);    /* Draw low thresh */
+    do__draw(Headp, D_spec); /* Draw low thresh */
     D_spec->Thresh = max;
-    do__draw(Headp, D_spec);    /* Draw hi  thresh */
+    do__draw(Headp, D_spec); /* Draw hi  thresh */
 
     build_thresh_arrays(D_spec, Headp);
     /*  draw_cap_side (D_spec, Headp, G3header, Cap, -1); */
     /* hey - so we cannot watch solids! MN 2001 */
 }
-
 
 /*************************** init_bounds *************************************/
 /* this subroutine resets the display boundaries along the xyz axis */
@@ -1255,27 +1200,26 @@ void init_bounds(struct dspec *D_spec)
 void init_dspec(struct dspec *D_spec, char *ctable)
 {
     D_spec->Thresh = 0;
-    D_spec->nt = 0;             /* number of indexes chosen (cumulative) */
+    D_spec->nt = 0; /* number of indexes chosen (cumulative) */
     D_spec->xscale = 1.0;
     D_spec->yscale = 1.0;
     D_spec->zscale = 1.0;
     D_spec->xrot = 0;
     D_spec->yrot = 0;
-    D_spec->zrot = 0;           /* angle in degrees */
+    D_spec->zrot = 0; /* angle in degrees */
     D_spec->Xrot = 0;
     D_spec->Yrot = 0;
-    D_spec->Zrot = 0;           /* indicates if do autorotate */
+    D_spec->Zrot = 0; /* indicates if do autorotate */
     D_spec->ztrans = 0;
     D_spec->Specular = 10;
     D_spec->low = 0;
     D_spec->hi = Headfax.linefax.nthres - 1;
-    D_spec->in_out = 0;         /*defined as INSIDE */
+    D_spec->in_out = 0; /*defined as INSIDE */
     D_spec->grid = 0;
     if (0 > get_color_table(ctable, D_spec->ctable)) {
         fprintf(stderr, "Using default color table\n");
         get_default_table(&Headfax, D_spec->ctable);
     }
-
 }
 
 /******************************* options ************************************/
@@ -1289,16 +1233,18 @@ void options()
     fprintf(stderr, "\nUSAGE AND MEANING:\n\n");
     fprintf(stderr, "?         lists available thresholds\n");
     fprintf(stderr, "l index# index# ...  add thresholds to display list\n");
-    fprintf(stderr,
-            "L        display list of thresholds entered with \"l\" directive\n");
+    fprintf(
+        stderr,
+        "L        display list of thresholds entered with \"l\" directive\n");
     /*
        fprintf(stderr,"t index#  add threshold to display list \n");
      */
     fprintf(stderr, "T index#  reset so only this threshold is displayed\n");
-    fprintf(stderr,
-            "+(+++)    display thresholds with consecutively increasing index#\n");
-    fprintf(stderr,
-            "-(---)    display thresholds with consecutively decreasing index#\n\n");
+    fprintf(
+        stderr,
+        "+(+++)    display thresholds with consecutively increasing index#\n");
+    fprintf(stderr, "-(---)    display thresholds with consecutively "
+                    "decreasing index#\n\n");
     fprintf(stderr,
             "x int#    absolute rotation around x-axis in degrees(int) \n");
     fprintf(stderr,
@@ -1328,7 +1274,6 @@ void options()
 void Toggle_swapbuffers(struct dspec *D_spec)
 {
     clear_screen();
-
 }
 
 void clear_screen()
@@ -1340,7 +1285,6 @@ void clear_screen()
     glClearDepth(1.);
     glClear(GL_DEPTH_BUFFER_BIT);
     glEnable(GL_LIGHTING);
-
 }
 
 /********************************************************************/
@@ -1354,8 +1298,9 @@ void check_limits(struct dspec *D_spec, int axis)
     int max;
     int tmp;
 
-    max = (axis == X) ? Headfax.xdim :
-        (axis == Y) ? Headfax.ydim : Headfax.zdim;
+    max = (axis == X)   ? Headfax.xdim
+          : (axis == Y) ? Headfax.ydim
+                        : Headfax.zdim;
 
     if (D_spec->B[axis] > D_spec->E[axis]) {
         tmp = D_spec->B[axis];
@@ -1369,7 +1314,7 @@ void check_limits(struct dspec *D_spec, int axis)
         D_spec->E[axis] = max;
 }
 
-void do_translate(file_info * Headp, struct dspec *D_spec)
+void do_translate(file_info *Headp, struct dspec *D_spec)
 {
     float xd, yd, zd, trd;
 
@@ -1388,7 +1333,7 @@ void do_translate(file_info * Headp, struct dspec *D_spec)
     glTranslatef(0.0, 0.0, -trd * 1.6); /* move it away from eye */
 }
 
-void copy_head(file_info * g3head, file_info * head)
+void copy_head(file_info *g3head, file_info *head)
 {
     head->north = g3head->north;
     head->south = g3head->south;

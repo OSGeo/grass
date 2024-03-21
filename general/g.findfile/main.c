@@ -1,10 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       g.findfile
  * AUTHOR(S):    Michael Shapiro CERL (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  *               Martin landa <landa.martin gmail.com>
@@ -16,6 +15,7 @@
  *               comes with GRASS for details.
  *
  *****************************************************************************/
+
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -38,9 +38,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
     G_add_keyword(_("scripts"));
-    module->description =
-        _("Searches for GRASS data base files "
-          "and sets variables for the shell.");
+    module->description = _("Searches for GRASS data base files "
+                            "and sets variables for the shell.");
 
     G_gisinit(argv[0]);
 
@@ -94,9 +93,10 @@ int main(int argc, char *argv[])
 
         if (G_number_of_tokens(map_mapset) > 1) {
             if (strcmp(map_mapset[1], mapset_opt->answer))
-                G_fatal_error(_("Parameter 'file' contains reference to <%s> mapset, "
-                               "but mapset parameter <%s> does not correspond"),
-                              map_mapset[1], mapset_opt->answer);
+                G_fatal_error(
+                    _("Parameter 'file' contains reference to <%s> mapset, "
+                      "but mapset parameter <%s> does not correspond"),
+                    map_mapset[1], mapset_opt->answer);
             else
                 strcpy(name, file_opt->answer);
         }

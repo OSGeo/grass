@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -108,7 +107,6 @@ static void get_pixel_indexed(unsigned int pixel, int *r, int *g, int *b,
     *a = png.palette[pixel][3];
 }
 
-
 void png_get_pixel(unsigned int pixel, int *r, int *g, int *b, int *a)
 {
     if (png.true_color)
@@ -120,5 +118,5 @@ void png_get_pixel(unsigned int pixel, int *r, int *g, int *b, int *a)
 unsigned int png_get_color(int r, int g, int b, int a)
 {
     return png.true_color ? get_color_rgb(r, g, b, a)
-        : get_color_indexed(r, g, b, a);
+                          : get_color_indexed(r, g, b, a);
 }

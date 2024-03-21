@@ -3,8 +3,7 @@
 #include <grass/glocale.h>
 #include "watershed.h"
 
-
-int valid_basins(char *accum_name, OUTPUT * output)
+int valid_basins(char *accum_name, OUTPUT *output)
 {
     int i, r, c, fd;
 

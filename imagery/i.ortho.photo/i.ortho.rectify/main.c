@@ -1,15 +1,14 @@
-
 /****************************************************************************
  *
  * MODULE:       i.ortho.rectify (former i.photo.rectify)
  * AUTHOR(S):    Mike Baba,  DBA Systems, Inc. (original contributor)
- *               Markus Neteler <neteler itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Markus Metz
  *
- * PURPOSE:      Rectifies an image by using the image to photo coordinate 
+ * PURPOSE:      Rectifies an image by using the image to photo coordinate
  *               and photo to target transformation matrices
  * COPYRIGHT:    (C) 1999-2010 by the GRASS Development Team
  *
@@ -43,15 +42,14 @@ struct menu menu[] = {
     {p_bilinear_f, "linear_f", "linear interpolation with fallback"},
     {p_cubic_f, "cubic_f", "cubic convolution with fallback"},
     {p_lanczos_f, "lanczos_f", "lanczos filter with fallback"},
-    {NULL, NULL, NULL}
-};
+    {NULL, NULL, NULL}};
 
 static char *make_ipol_list(void);
 
 int main(int argc, char *argv[])
 {
     char extension[INAME_LEN];
-    char *ipolname;             /* name of interpolation method */
+    char *ipolname; /* name of interpolation method */
     int method;
     char *seg_mb;
     int i, m, k = 0;
@@ -69,26 +67,25 @@ int main(int argc, char *argv[])
 
     struct Cell_head cellhd, elevhd;
 
-    struct Option *grp,         /* imagery group */
-     *ifile,                    /* input files */
-     *ext,                      /* extension */
-     *tres,                     /* target resolution */
-     *mem,                      /* amount of memory for cache */
-     *angle,                    /* camera angle relative to ground surface */
-     *interpol;                 /* interpolation method:
-                                   nearest neighbor, bilinear, cubic */
+    struct Option *grp, /* imagery group */
+        *ifile,         /* input files */
+        *ext,           /* extension */
+        *tres,          /* target resolution */
+        *mem,           /* amount of memory for cache */
+        *angle,         /* camera angle relative to ground surface */
+        *interpol;      /* interpolation method:
+                           nearest neighbor, bilinear, cubic */
 
     struct Flag *c, *a, *pan_flag;
     struct GModule *module;
-
 
     G_gisinit(argv[0]);
 
     module = G_define_module();
     G_add_keyword(_("imagery"));
     G_add_keyword(_("orthorectify"));
-    module->description =
-        _("Orthorectifies an image by using the image to photo coordinate transformation matrix.");
+    module->description = _("Orthorectifies an image by using the image to "
+                            "photo coordinate transformation matrix.");
 
     grp = G_define_standard_option(G_OPT_I_GROUP);
 
@@ -128,8 +125,8 @@ int main(int argc, char *argv[])
 
     c = G_define_flag();
     c->key = 'c';
-    c->description =
-        _("Use current region settings in target location (def.=calculate smallest area)");
+    c->description = _("Use current region settings in target location "
+                       "(def.=calculate smallest area)");
 
     a = G_define_flag();
     a->key = 'a';
@@ -148,8 +145,8 @@ int main(int argc, char *argv[])
             break;
 
     if (!ipolname)
-        G_fatal_error(_("<%s=%s> unknown %s"),
-                      interpol->key, interpol->answer, interpol->key);
+        G_fatal_error(_("<%s=%s> unknown %s"), interpol->key, interpol->answer,
+                      interpol->key);
     interpolate = menu[method].method;
 
     G_strip(grp->answer);
@@ -163,11 +160,12 @@ int main(int argc, char *argv[])
     }
 
     if (!ifile->answers)
-        a->answer = 1;          /* force all */
+        a->answer = 1; /* force all */
 
     /* Find out how many files on command line */
     if (!a->answer) {
-        for (k = 0; ifile->answers[k]; k++) ;
+        for (k = 0; ifile->answers[k]; k++)
+            ;
     }
 
     camera = (char *)G_malloc(GNAME_MAX * sizeof(char));
@@ -183,13 +181,12 @@ int main(int argc, char *argv[])
     if (!I_get_group_ref(group.name, &group.group_ref)) {
         G_warning(_("Location: %s"), G_location());
         G_warning(_("Mapset: %s"), G_mapset());
-        G_fatal_error(_("Could not read REF file for group <%s>"),
-                      group.name);
+        G_fatal_error(_("Could not read REF file for group <%s>"), group.name);
     }
 
     if (group.group_ref.nfiles <= 0) {
-        G_important_message(_("Group <%s> contains no raster maps; run i.group"),
-                            grp->answer);
+        G_important_message(
+            _("Group <%s> contains no raster maps; run i.group"), grp->answer);
         exit(EXIT_SUCCESS);
     }
 
@@ -252,8 +249,9 @@ int main(int argc, char *argv[])
     /* get initial camera exposure station, if any */
     if (I_find_initial(group.name)) {
         if (!I_get_init_info(group.name, &group.camera_exp))
-            G_warning(_("Bad format in initial exposure station file for group <%s>"),
-                      group.name);
+            G_warning(
+                _("Bad format in initial exposure station file for group <%s>"),
+                group.name);
     }
 
     /* panorama camera correction */
@@ -270,7 +268,7 @@ int main(int argc, char *argv[])
     get_conz_points(&group);
 
     /* Check the GRASS_OVERWRITE environment variable */
-    if ((overstr = getenv("GRASS_OVERWRITE")))  /* OK ? */
+    if ((overstr = getenv("GRASS_OVERWRITE"))) /* OK ? */
         target_overwrite = atoi(overstr);
 
     if (!target_overwrite) {
@@ -290,8 +288,8 @@ int main(int argc, char *argv[])
 
             if (G_find_raster2(result, G_mapset())) {
                 G_warning(_("The following raster map already exists in"));
-                G_warning(_("target LOCATION %s, MAPSET %s:"),
-                          G_location(), G_mapset());
+                G_warning(_("target LOCATION %s, MAPSET %s:"), G_location(),
+                          G_mapset());
                 G_warning("<%s>", result);
                 G_fatal_error(_("Orthorectification cancelled."));
             }
@@ -299,8 +297,8 @@ int main(int argc, char *argv[])
         if (angle->answer) {
             if (G_find_raster2(angle->answer, G_mapset())) {
                 G_warning(_("The following raster map already exists in"));
-                G_warning(_("target LOCATION %s, MAPSET %s:"),
-                          G_location(), G_mapset());
+                G_warning(_("target LOCATION %s, MAPSET %s:"), G_location(),
+                          G_mapset());
                 G_warning("<%s>", angle->answer);
                 G_fatal_error(_("Orthorectification cancelled."));
             }
@@ -331,8 +329,8 @@ int main(int argc, char *argv[])
     G_debug(1, "Looking for elevation file in group: <%s>", group.name);
 
     /* get the block elevation layer raster map in target location */
-    if (!I_get_group_elev(group.name, elev_name, elev_mapset, tl,
-                          math_exp, units, nd))
+    if (!I_get_group_elev(group.name, elev_name, elev_mapset, tl, math_exp,
+                          units, nd))
         G_fatal_error(_("No target elevation model selected for group <%s>"),
                       group.name);
 
@@ -375,30 +373,26 @@ int main(int argc, char *argv[])
 
         if ((seg_mb_total = atoi(seg_mb)) > 0) {
             seg_mb_elev =
-                max_mb_elev * (seg_mb_total / (max_mb_img + max_mb_elev)) +
-                0.5;
+                max_mb_elev * (seg_mb_total / (max_mb_img + max_mb_elev)) + 0.5;
             seg_mb_img =
-                max_mb_img * (seg_mb_total / (max_mb_img + max_mb_elev)) +
-                0.5;
+                max_mb_img * (seg_mb_total / (max_mb_img + max_mb_elev)) + 0.5;
         }
     }
 
     /* go do it */
-    exec_rectify(&group, ref_list, extension, interpol->answer,
-                 angle->answer);
+    exec_rectify(&group, ref_list, extension, interpol->answer, angle->answer);
 
     G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
 }
 
-
 void err_exit(struct Ref *ref, char *file, char *grp)
 {
     int n;
 
-    G_warning(_("Input raster map <%s> does not exist in group <%s>."),
-              file, grp);
+    G_warning(_("Input raster map <%s> does not exist in group <%s>."), file,
+              grp);
     G_message(_("Try:"));
 
     for (n = 0; n < ref->nfiles; n++)

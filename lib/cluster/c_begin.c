@@ -57,7 +57,7 @@ int I_cluster_begin(struct Cluster *C, int nbands)
     sprintf(C->S.title, _("produced by i.cluster"));
 
     /* allocate the data (points) arrays */
-    C->points = (DCELL **) malloc(C->nbands * sizeof(DCELL *));
+    C->points = (DCELL **)malloc(C->nbands * sizeof(DCELL *));
     if (C->points == NULL)
         return -1;
     for (band = 0; band < C->nbands; band++)
@@ -65,7 +65,7 @@ int I_cluster_begin(struct Cluster *C, int nbands)
 
     C->np = 128;
     for (band = 0; band < C->nbands; band++) {
-        C->points[band] = (DCELL *) malloc(C->np * sizeof(DCELL));
+        C->points[band] = (DCELL *)malloc(C->np * sizeof(DCELL));
         if (C->points[band] == NULL)
             return -1;
     }

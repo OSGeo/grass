@@ -1,12 +1,11 @@
-
 /****************************************************************
  *
  * MODULE:     v.hull
  *
  * AUTHOR(S):  Andrea Aime <aaime@libero.it>
  *             Updated 19 Dec 2003, Markus Neteler to 5.7
- *             Last updated 16 jan 2007, Benjamin Ducke to support 3D hull creation
- *             OGR support by Martin Landa <landa.martin gmail.com> (2009)
+ *             Last updated 16 jan 2007, Benjamin Ducke to support 3D hull
+ *creation OGR support by Martin Landa <landa.martin gmail.com> (2009)
  *
  * PURPOSE:    Creates the convex hull surrounding a vector points.
  *
@@ -40,8 +39,8 @@ int main(int argc, char **argv)
     char *sitefile;
 
     struct Map_info Map;
-    struct Point *points;       /* point loaded from site file */
-    int *hull;                  /* index of points located on the convex hull */
+    struct Point *points; /* point loaded from site file */
+    int *hull;            /* index of points located on the convex hull */
     int numSitePoints, numHullPoints;
 
     int MODE2D;
@@ -93,14 +92,14 @@ int main(int argc, char **argv)
 
     /* load site coordinates */
     G_get_window(&window);
-    numSitePoints =
-        loadSiteCoordinates(&Map, &points, region_flag->answer, &window,
-                            layer, cat_list);
+    numSitePoints = loadSiteCoordinates(&Map, &points, region_flag->answer,
+                                        &window, layer, cat_list);
     if (numSitePoints < 0)
         G_fatal_error(_("Error loading vector points from <%s>"), sitefile);
 
     if (numSitePoints < 3)
-        G_fatal_error(_("Convex hull calculation requires at least three points (%d found)"),
+        G_fatal_error(_("Convex hull calculation requires at least three "
+                        "points (%d found)"),
                       numSitePoints);
 
     G_verbose_message(_("%d points read from vector map <%s>"), numSitePoints,

@@ -17,7 +17,7 @@
  0 1 2 5
 
  will be converted into the symmetric band matrix
- 
+
  5 2 1
  5 2 1
  5 2 0
@@ -28,7 +28,7 @@
  * \param A (double**) the symmetric matrix
  * \param rows (int)
  * \param bandwidth (int)
- * \return B (double**) new created symmetric band matrix 
+ * \return B (double**) new created symmetric band matrix
  * */
 
 double **G_math_matrix_to_sband_matrix(double **A, int rows, int bandwidth)
@@ -52,13 +52,12 @@ double **G_math_matrix_to_sband_matrix(double **A, int rows, int bandwidth)
     return B;
 }
 
-
 /**
  * \brief Convert a symmetric band matrix into a symmetric matrix
  *
  * \verbatim
  Such a symmetric band matrix with banwidth 3
- 
+
  5 2 1
  5 2 1
  5 2 0
@@ -75,7 +74,7 @@ double **G_math_matrix_to_sband_matrix(double **A, int rows, int bandwidth)
  * \param A (double**) the symmetric band matrix
  * \param rows (int)
  * \param bandwidth (int)
- * \return B (double**) new created symmetric matrix 
+ * \return B (double**) new created symmetric matrix
  * */
 
 double **G_math_sband_matrix_to_matrix(double **A, int rows, int bandwidth)
@@ -103,17 +102,17 @@ double **G_math_sband_matrix_to_matrix(double **A, int rows, int bandwidth)
     return B;
 }
 
-
 /*!
- * \brief Compute the matrix - vector product  
+ * \brief Compute the matrix - vector product
  * of symmetric band matrix A and vector x.
  *
- * This function is multi-threaded with OpenMP and can be called within a parallel OpenMP region.
+ * This function is multi-threaded with OpenMP and can be called within a
+ * parallel OpenMP region.
  *
  * y = A * x
  *
  *
- * \param A (double **) 
+ * \param A (double **)
  * \param x (double) *)
  * \param y (double * )
  * \param rows (int)
@@ -121,14 +120,12 @@ double **G_math_sband_matrix_to_matrix(double **A, int rows, int bandwidth)
  * \return (void)
  *
  * */
-void G_math_Ax_sband(double **A, double *x, double *y, int rows,
-                     int bandwidth)
+void G_math_Ax_sband(double **A, double *x, double *y, int rows, int bandwidth)
 {
     int i, j;
     double tmp;
 
-
-#pragma omp for schedule (static) private(i, j, tmp)
+#pragma omp for schedule(static) private(i, j, tmp)
     for (i = 0; i < rows; i++) {
         tmp = 0;
         for (j = 0; j < bandwidth; j++) {

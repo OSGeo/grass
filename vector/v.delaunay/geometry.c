@@ -1,10 +1,9 @@
-
 /***************************************************************
  *
  * MODULE:       v.delaunay
  *
  * AUTHOR(S):    Martin Pavlovsky (Google SoC 2008, Paul Kelly mentor)
- *               Based on "dct" by Geoff Leach, Department of Computer 
+ *               Based on "dct" by Geoff Leach, Department of Computer
  *               Science, RMIT.
  *
  * PURPOSE:      Creates a Delaunay triangulation vector map
@@ -15,7 +14,7 @@
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
  *               comes with GRASS for details.
- * 
+ *
  * The following notices apply to portions of the code originally
  * derived from work by Geoff Leach of RMIT:
  *
@@ -25,22 +24,22 @@
  *   Date: 6/10/93
  *
  *   Version 1.0
- *   
+ *
  *   Copyright (c) RMIT 1993. All rights reserved.
  *
- *   License to copy and use this software purposes is granted provided 
+ *   License to copy and use this software purposes is granted provided
  *   that appropriate credit is given to both RMIT and the author.
  *
  *   License is also granted to make and use derivative works provided
  *   that appropriate credit is given to both RMIT and the author.
  *
- *   RMIT makes no representations concerning either the merchantability 
- *   of this software or the suitability of this software for any particular 
- *   purpose.  It is provided "as is" without express or implied warranty 
+ *   RMIT makes no representations concerning either the merchantability
+ *   of this software or the suitability of this software for any particular
+ *   purpose.  It is provided "as is" without express or implied warranty
  *   of any kind.
  *
  *   These notices must be retained in any copies of any part of this software.
- * 
+ *
  **************************************************************/
 
 #include <stddef.h>
@@ -58,12 +57,11 @@ static void find_lowest_cross_edge(struct edge *r_cw_l, struct vertex *s,
                                    struct edge **r_lower,
                                    struct vertex **org_r_lower);
 
-static void merge(struct edge *r_cw_l, struct vertex *s,
-                  struct edge *l_ccw_r, struct vertex *u,
-                  struct edge **l_tangent);
+static void merge(struct edge *r_cw_l, struct vertex *s, struct edge *l_ccw_r,
+                  struct vertex *u, struct edge **l_tangent);
 
-void divide(unsigned int l, unsigned int r,
-            struct edge **l_ccw, struct edge **r_cw)
+void divide(unsigned int l, unsigned int r, struct edge **l_ccw,
+            struct edge **r_cw)
 {
 
     unsigned int n;
@@ -74,7 +72,7 @@ void divide(unsigned int l, unsigned int r,
 
     n = r - l + 1;
     if (n == 2) {
-        /* Base case #1 - 2 sites in region. Construct an edge from 
+        /* Base case #1 - 2 sites in region. Construct an edge from
            two sites in the region       */
         *l_ccw = *r_cw = create_edge(&(sites[l]), &(sites[r]));
     }
@@ -98,7 +96,7 @@ void divide(unsigned int l, unsigned int r,
             *r_cw = c;
         }
         else {
-            /* Cross product is zero. Sites are located on a line. 
+            /* Cross product is zero. Sites are located on a line.
                Triangle cannot be created */
             *l_ccw = a;
             *r_cw = b;
@@ -118,7 +116,7 @@ void divide(unsigned int l, unsigned int r,
         merge(r_cw_l, &(sites[split]), l_ccw_r, &(sites[split + 1]),
               &l_tangent);
 
-        /* The lower tangent added by merge may have invalidated 
+        /* The lower tangent added by merge may have invalidated
            l_ccw_l or r_cw_r. Update them if necessary. */
         if (ORG(l_tangent) == &(sites[l]))
             l_ccw_l = l_tangent;
@@ -175,12 +173,11 @@ static void find_lowest_cross_edge(struct edge *r_cw_l, struct vertex *s,
     *org_r_lower = o_r;
 }
 
-/* 
+/*
  *  The most time-expensive function, most of the work gets done here.
  */
-static void merge(struct edge *r_cw_l, struct vertex *s,
-                  struct edge *l_ccw_r, struct vertex *u,
-                  struct edge **l_tangent)
+static void merge(struct edge *r_cw_l, struct vertex *s, struct edge *l_ccw_r,
+                  struct vertex *u, struct edge **l_tangent)
 {
     struct edge *base, *l_cand, *r_cand;
     struct vertex *org_base, *dest_base;
@@ -236,7 +233,7 @@ static void merge(struct edge *r_cw_l, struct vertex *s,
         if (!above_l_cand && !above_r_cand)
             break;
 
-        /* Move to next l_cand ccw, delete the old l_cand edge, until the 
+        /* Move to next l_cand ccw, delete the old l_cand edge, until the
            in_circle test gets invalid. */
         if (above_l_cand) {
             double u_n_o_b, v_n_o_b, u_n_d_b, v_n_d_b;
@@ -253,18 +250,17 @@ static void merge(struct edge *r_cw_l, struct vertex *s,
                 dest_next = OTHER_VERTEX(next, org_base);
                 CREATE_VECTOR(dest_next, org_base, u_n_o_b, v_n_o_b);
                 CREATE_VECTOR(dest_next, dest_base, u_n_d_b, v_n_d_b);
-                c_p_next =
-                    CROSS_PRODUCT_2V(u_n_o_b, v_n_o_b, u_n_d_b, v_n_d_b);
+                c_p_next = CROSS_PRODUCT_2V(u_n_o_b, v_n_o_b, u_n_d_b, v_n_d_b);
                 above_next = c_p_next > 0.0;
 
                 if (!above_next)
-                    break;      /* Terminate loop. */
+                    break; /* Terminate loop. */
 
                 d_p_next = DOT_PRODUCT_2V(u_n_o_b, v_n_o_b, u_n_d_b, v_n_d_b);
                 cot_next = d_p_next / c_p_next;
 
                 if (cot_next > cot_l_cand)
-                    break;      /* Terminate loop. */
+                    break; /* Terminate loop. */
 
                 delete_edge(l_cand);
                 l_cand = next;
@@ -273,7 +269,7 @@ static void merge(struct edge *r_cw_l, struct vertex *s,
         }
 
         /* Essentially the same done for r_cand symmetrically. */
-        /* Move to prev r_cand cw, delete the old r_cand edge, until the 
+        /* Move to prev r_cand cw, delete the old r_cand edge, until the
            in_circle test gets invalid. */
         if (above_r_cand) {
             double u_p_o_b, v_p_o_b, u_p_d_b, v_p_d_b;
@@ -290,18 +286,17 @@ static void merge(struct edge *r_cw_l, struct vertex *s,
                 dest_prev = OTHER_VERTEX(prev, dest_base);
                 CREATE_VECTOR(dest_prev, org_base, u_p_o_b, v_p_o_b);
                 CREATE_VECTOR(dest_prev, dest_base, u_p_d_b, v_p_d_b);
-                c_p_prev =
-                    CROSS_PRODUCT_2V(u_p_o_b, v_p_o_b, u_p_d_b, v_p_d_b);
+                c_p_prev = CROSS_PRODUCT_2V(u_p_o_b, v_p_o_b, u_p_d_b, v_p_d_b);
                 above_prev = c_p_prev > 0.0;
 
                 if (!above_prev)
-                    break;      /* Terminate. */
+                    break; /* Terminate. */
 
                 d_p_prev = DOT_PRODUCT_2V(u_p_o_b, v_p_o_b, u_p_d_b, v_p_d_b);
                 cot_prev = d_p_prev / c_p_prev;
 
                 if (cot_prev > cot_r_cand)
-                    break;      /* Terminate. */
+                    break; /* Terminate. */
 
                 delete_edge(r_cand);
                 r_cand = prev;
@@ -310,9 +305,9 @@ static void merge(struct edge *r_cw_l, struct vertex *s,
         }
 
         /*
-           Add a successive L-R cross edge from base 
-           If both candidates are valid, choose the one with smallest circumcircle. 
-           Set the base to the new L-R cross edge.
+           Add a successive L-R cross edge from base
+           If both candidates are valid, choose the one with smallest
+           circumcircle. Set the base to the new L-R cross edge.
          */
         dest_l_cand = OTHER_VERTEX(l_cand, org_base);
         dest_r_cand = OTHER_VERTEX(r_cand, dest_base);

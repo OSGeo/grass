@@ -210,7 +210,7 @@ def main():
                 pp.wait()
 
         else:
-            grass.message(_("Converting image chanels to 8bit for processing"))
+            grass.message(_("Converting image channels to 8bit for processing"))
             maxval = pow(2, bits) - 1
             if sproc:
                 # serial processing
@@ -296,7 +296,7 @@ def main():
                 pp.wait()
 
     else:
-        grass.message(_("Rescaling image chanels to 8bit for processing"))
+        grass.message(_("Rescaling image channels to 8bit for processing"))
 
         min_ms1 = int(grass.raster_info(ms1_orig)["min"])
         max_ms1 = int(grass.raster_info(ms1_orig)["max"])
@@ -581,7 +581,6 @@ def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
 
 
 def pca(pan, ms1, ms2, ms3, out, pid, sproc):
-
     grass.verbose(_("Using PCA/inverse PCA algorithm"))
     grass.message(_("Creating PCA images and calculating eigenvectors..."))
 

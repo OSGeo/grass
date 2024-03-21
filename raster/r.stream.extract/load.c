@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
@@ -57,7 +58,7 @@ int load_maps(int ele_fd, int acc_fd)
 
     ele_scale = 1;
     if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
-        ele_scale = 1000;       /* should be enough to do the trick */
+        ele_scale = 1000; /* should be enough to do the trick */
 
     wabuf = G_malloc(ncols * sizeof(WAT_ALT));
     afbuf = G_malloc(ncols * sizeof(ASP_FLAG));
@@ -92,13 +93,14 @@ int load_maps(int ele_fd, int acc_fd)
                 /* flow accumulation */
                 if (acc_fd >= 0) {
                     if (!Rast_is_null_value(acc_ptr, acc_map_type))
-                        G_fatal_error(_("Elevation raster map is NULL but accumulation map is not NULL"));
+                        G_fatal_error(_("Elevation raster map is NULL but "
+                                        "accumulation map is not NULL"));
                 }
                 Rast_set_d_null_value(&acc_value, 1);
             }
             else if (acc_fd >= 0 && Rast_is_null_value(acc_ptr, acc_map_type)) {
                 /* elevation is not NULL, but provided accumulation is NULL
-                 * this is ok after weighing or 
+                 * this is ok after weighing or
                  * when analysing a selected upstream catchment area */
                 FLAG_SET(afbuf[c].flag, NULLFLAG);
                 FLAG_SET(afbuf[c].flag, INLISTFLAG);
@@ -108,19 +110,19 @@ int load_maps(int ele_fd, int acc_fd)
                 Rast_set_d_null_value(&acc_value, 1);
             }
             else {
-                /* elevation is not NULL, and 
+                /* elevation is not NULL, and
                  * if accumulation is provided it is also not NULL */
                 switch (ele_map_type) {
                 case CELL_TYPE:
-                    ele_value = *((CELL *) ptr);
+                    ele_value = *((CELL *)ptr);
                     break;
                 case FCELL_TYPE:
-                    dvalue = *((FCELL *) ptr);
+                    dvalue = *((FCELL *)ptr);
                     dvalue *= ele_scale;
                     ele_value = ele_round(dvalue);
                     break;
                 case DCELL_TYPE:
-                    dvalue = *((DCELL *) ptr);
+                    dvalue = *((DCELL *)ptr);
                     dvalue *= ele_scale;
                     ele_value = ele_round(dvalue);
                     break;
@@ -130,13 +132,13 @@ int load_maps(int ele_fd, int acc_fd)
                 else {
                     switch (acc_map_type) {
                     case CELL_TYPE:
-                        acc_value = *((CELL *) acc_ptr);
+                        acc_value = *((CELL *)acc_ptr);
                         break;
                     case FCELL_TYPE:
-                        acc_value = *((FCELL *) acc_ptr);
+                        acc_value = *((FCELL *)acc_ptr);
                         break;
                     case DCELL_TYPE:
-                        acc_value = *((DCELL *) acc_ptr);
+                        acc_value = *((DCELL *)acc_ptr);
                         break;
                     }
                 }
@@ -167,7 +169,7 @@ int load_maps(int ele_fd, int acc_fd)
         G_free(acc_buf);
     }
 
-    G_debug(1, "%" PRI_OFF_T " non-NULL cells", n_points);
+    G_debug(1, "%" PRId64 " non-NULL cells", n_points);
 
     return (n_points > 0);
 }

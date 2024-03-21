@@ -32,11 +32,11 @@ void G_math_cholesky_sband_decomposition(double **A, double **T, int rows,
         for (k = 1; k < end; k++)
             sum -= T[i - k][k] * T[i - k][0 + k];
         if (sum <= 0.0)
-            G_fatal_error(_("Decomposition failed at row %i and col %i"), i,
-                          0);
+            G_fatal_error(_("Decomposition failed at row %i and col %i"), i, 0);
         T[i][0] = sqrt(sum);
 
-#pragma omp parallel for schedule (static) private(j, k, end, sum) shared(A, T, i, bandwidth)
+#pragma omp parallel for schedule(static) private(j, k, end, sum) \
+    shared(A, T, i, bandwidth)
         for (j = 1; j < bandwidth; j++) {
             sum = A[i][j];
             end = ((bandwidth - j) < (i + 1) ? (bandwidth - j) : (i + 1));
@@ -51,7 +51,8 @@ void G_math_cholesky_sband_decomposition(double **A, double **T, int rows,
 }
 
 /**
- * \brief Cholesky symmetric band matrix solver for linear equation systems of type Ax = b 
+ * \brief Cholesky symmetric band matrix solver for linear equation systems of
+ * type Ax = b
  *
  * \param A (double**) the input symmetric band matrix
  * \param x (double*) the resulting vector, result is written in here
@@ -69,7 +70,8 @@ void G_math_solver_cholesky_sband(double **A, double *x, double *b, int rows,
 
     T = G_alloc_matrix(rows, bandwidth);
 
-    G_math_cholesky_sband_decomposition(A, T, rows, bandwidth); /* T computation                */
+    G_math_cholesky_sband_decomposition(A, T, rows,
+                                        bandwidth); /* T computation */
     G_math_cholesky_sband_substitution(T, x, b, rows, bandwidth);
 
     G_free_matrix(T);
@@ -78,7 +80,8 @@ void G_math_solver_cholesky_sband(double **A, double *x, double *b, int rows,
 }
 
 /**
- * \brief Forward and backward substitution of a lower tringular symmetric band matrix of A from system Ax = b
+ * \brief Forward and backward substitution of a lower tringular symmetric band
+ * matrix of A from system Ax = b
  *
  * \param T (double**) the lower triangle symmetric band matrix
  * \param x (double*) the resulting vector

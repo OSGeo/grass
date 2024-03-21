@@ -20,8 +20,7 @@
 #include <grass/glocale.h>
 #include <grass/dgl/graph.h>
 
-struct union_find
-{
+struct union_find {
     int *parent;
 };
 
@@ -66,18 +65,17 @@ static void uf_union(struct union_find *uf, int u, int v)
         uf->parent[parent_u] = parent_v;
 }
 
-typedef struct
-{
+typedef struct {
     dglInt32_t cost;
     dglInt32_t *edge;
 } edge_cost_pair;
 
 static int cmp_edge(const void *pa, const void *pb)
 {
-    if (((edge_cost_pair *) pa)->cost < ((edge_cost_pair *) pb)->cost)
+    if (((edge_cost_pair *)pa)->cost < ((edge_cost_pair *)pb)->cost)
         return -1;
 
-    return (((edge_cost_pair *) pa)->cost > ((edge_cost_pair *) pb)->cost);
+    return (((edge_cost_pair *)pa)->cost > ((edge_cost_pair *)pb)->cost);
 }
 
 /*!
@@ -89,10 +87,10 @@ static int cmp_edge(const void *pa, const void *pb)
    \return number of edges
    \return -1 on failure
  */
-int NetA_spanning_tree(dglGraph_s * graph, struct ilist *tree_list)
+int NetA_spanning_tree(dglGraph_s *graph, struct ilist *tree_list)
 {
     int nnodes, edges, nedges, i, index;
-    edge_cost_pair *perm;       /*permutation of edges in ascending order */
+    edge_cost_pair *perm; /*permutation of edges in ascending order */
     struct union_find uf;
     dglEdgesetTraverser_s et;
 
@@ -100,12 +98,13 @@ int NetA_spanning_tree(dglGraph_s * graph, struct ilist *tree_list)
 
     nnodes = dglGet_NodeCount(graph);
     nedges = dglGet_EdgeCount(graph);
-    perm = (edge_cost_pair *) G_calloc(nedges, sizeof(edge_cost_pair));
+    perm = (edge_cost_pair *)G_calloc(nedges, sizeof(edge_cost_pair));
     if (!perm || !uf_initialize(&uf, nnodes + 1)) {
         G_fatal_error(_("Out of memory"));
         return -1;
     }
-    /* dglGetEdge is only supported with graphs version > 1. Therefore this complicated enumeration of the edges... */
+    /* dglGetEdge is only supported with graphs version > 1. Therefore this
+     * complicated enumeration of the edges... */
     index = 0;
     G_message(_("Computing minimum spanning tree..."));
     G_percent_reset();
@@ -113,11 +112,9 @@ int NetA_spanning_tree(dglGraph_s * graph, struct ilist *tree_list)
         G_percent(i, nnodes + nedges, 1);
         dglInt32_t *edge;
 
-        dglEdgeset_T_Initialize(&et, graph,
-                                dglNodeGet_OutEdgeset(graph,
-                                                      dglGetNode(graph,
-                                                                 (dglInt32_t)
-                                                                 i)));
+        dglEdgeset_T_Initialize(
+            &et, graph,
+            dglNodeGet_OutEdgeset(graph, dglGetNode(graph, (dglInt32_t)i)));
         for (edge = dglEdgeset_T_First(&et); edge;
              edge = dglEdgeset_T_Next(&et))
             if (dglEdgeGet_Id(graph, edge) > 0) {

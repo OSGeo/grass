@@ -23,7 +23,7 @@
  * \param name table name to drop
  * \return DB_FAILED on error; DB_OK on success
  */
-int db__driver_drop_table(dbString * name)
+int db__driver_drop_table(dbString *name)
 {
     int ret;
     char cmd[DB_SQL_MAX];
@@ -33,8 +33,7 @@ int db__driver_drop_table(dbString * name)
     ret = sqlite3_exec(sqlite, cmd, NULL, NULL, NULL);
 
     if (ret != SQLITE_OK) {
-        db_d_append_error("%s\n%s",
-                          _("Error in sqlite3_exec():"),
+        db_d_append_error("%s\n%s", _("Error in sqlite3_exec():"),
                           (char *)sqlite3_errmsg(sqlite));
         db_d_report_error();
         return DB_FAILED;

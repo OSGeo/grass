@@ -154,7 +154,7 @@ class SelectionTest(TestCase):
 
     @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
     def test_base_raster(self):
-        """Test Z adjustement by base raster"""
+        """Test Z adjustment by base raster"""
         self.imp_raster = "imp_base_adj"
         self.ref_raster = "ref_base_adj"
         self.base_raster = "base_raster"

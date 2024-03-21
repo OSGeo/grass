@@ -26,8 +26,8 @@ r, g, & b are integer 0 <= r, g, b <= 255,
 number of lines in table N <= 100.
 ******************************************************************************/
 int get_color_table(file, ctable)
-     char *file;
-     struct color_entry ctable[];
+char *file;
+struct color_entry ctable[];
 {
     FILE *fp;
     int tmp = 0;
@@ -40,16 +40,14 @@ int get_color_table(file, ctable)
     }
 
     for (i = 0; i < 100 && EOF != tmp; i++) {
-        tmp = fscanf(fp, "%f:%hd:%hd:%hd",
-                     &(ctable[i].data),
-                     &(ctable[i].color[0]),
-                     &(ctable[i].color[1]), &(ctable[i].color[2]));
+        tmp = fscanf(fp, "%f:%hd:%hd:%hd", &(ctable[i].data),
+                     &(ctable[i].color[0]), &(ctable[i].color[1]),
+                     &(ctable[i].color[2]));
         if (tmp != EOF && tmp != 4) {
             fclose(fp);
             fprintf(stderr, "Unable to read colortable file <%s>\n", file);
             return (-1);
         }
-
     }
     if (i == 100 && tmp != EOF) {
         fprintf(stderr, "Number of colortable entries may not exceed 100.\n");
@@ -65,8 +63,7 @@ int get_color_table(file, ctable)
 
     fclose(fp);
     if (!i) {
-        fprintf(stderr,
-                "Colortable file is empty, using default colortable\n");
+        fprintf(stderr, "Colortable file is empty, using default colortable\n");
         get_default_table(&Headfax, ctable);
     }
     return (0);
@@ -76,10 +73,9 @@ int get_color_table(file, ctable)
 get_cat_color (cat, ctable, color):
 fills color array with color value for cat calculated from values in ctable.
 ******************************************************************************/
-void get_cat_color(cat, ctable, color)
-     float cat;
-     struct color_entry ctable[];
-     short color[3];
+void get_cat_color(cat, ctable, color) float cat;
+struct color_entry ctable[];
+short color[3];
 {
     int curr;
     float cat1, cat2;
@@ -89,8 +85,8 @@ void get_cat_color(cat, ctable, color)
     /*DEBUG
        fprintf (stderr, "TABLE\n");
        for (i = 0; ctable[i].color[0] >= 0; i++)
-       fprintf (stderr, "%f:%hd:%hd:%hd\n", 
-       (ctable[i].data), 
+       fprintf (stderr, "%f:%hd:%hd:%hd\n",
+       (ctable[i].data),
        (ctable[i].color[0]),
        (ctable[i].color[1]),
        (ctable[i].color[2]));
@@ -109,7 +105,7 @@ void get_cat_color(cat, ctable, color)
         color[2] = color1[2];
         return;
     }
-    /* find the categories in the color table above & below 
+    /* find the categories in the color table above & below
        this cat & interpolate the color values *** */
 
     for (curr = 1; ctable[curr].color[0] >= 0; curr++) {
@@ -124,9 +120,9 @@ void get_cat_color(cat, ctable, color)
         }
         cat1 = cat2;
         color1 = color2;
-
     }
-    /* for any thresholds greater than last color table entry, use last entry * */
+    /* for any thresholds greater than last color table entry, use last entry *
+     */
     color[0] = color2[0];
     color[1] = color2[1];
     color[2] = color2[2];
@@ -136,13 +132,13 @@ void get_cat_color(cat, ctable, color)
 new_color_file (file, cfile, D_spec)
 gets new color values for D_spec->ctable from file cfile.
 If unable to open file (grid3 file) or cfile (colortable file),
-prints error message & uses original (per threshold) color table 
+prints error message & uses original (per threshold) color table
 (i.e. gets out of per cube color mode).
 ******************************************************************************/
 
 int new_color_file(file, cfile, D_spec)
-     char *file, *cfile;
-     struct dspec *D_spec;
+char *file, *cfile;
+struct dspec *D_spec;
 {
     if (D_spec->cfile != NULL)
         fclose(D_spec->cfile);
@@ -158,20 +154,18 @@ int new_color_file(file, cfile, D_spec)
         return (-1);
     }
     return (0);
-
 }
 
 /******************************************************************************
 no_color_file (D_spec, cfile)
 Gets new color values for D_spec->ctable from file cfile,
-which is the original (per threshold) color table 
+which is the original (per threshold) color table
 (i.e. gets out of per cube color mode).
-If unable to open cfile (colortable file), prints error message 
+If unable to open cfile (colortable file), prints error message
 and uses default color table.
 ******************************************************************************/
-void no_color_file(D_spec, cfile)
-     struct dspec *D_spec;
-     char *cfile;
+void no_color_file(D_spec, cfile) struct dspec *D_spec;
+char *cfile;
 {
     if (D_spec->cfile != NULL)
         fclose(D_spec->cfile);
@@ -187,9 +181,8 @@ get_default_table (head, ctable):
 Calculates values for ctable to produce a rainbow color table from
 range of  threshold values  stored in head.
 ******************************************************************************/
-void get_default_table(head, ctable)
-     file_info *head;
-     struct color_entry ctable[];
+void get_default_table(head, ctable) file_info *head;
+struct color_entry ctable[];
 {
     float min, max;
 
@@ -225,9 +218,8 @@ void get_default_table(head, ctable)
 get_min_max (head, min, max)
 assigns min & max the minimum & maximum threshold values stored in head.
 ******************************************************************************/
-void get_min_max(head, min, max)
-     file_info *head;
-     float *min, *max;
+void get_min_max(head, min, max) file_info *head;
+float *min, *max;
 {
 
     int i;
@@ -243,16 +235,11 @@ void get_min_max(head, min, max)
     }
 }
 
-void change_spec(spec)
-     float spec;
+void change_spec(spec) float spec;
 {
     static float material[] = {
-        GL_SPECULAR, 1.0, 1.0, 1.0,
-        GL_DIFFUSE, 0.8, 0.8, 0.8,
-        GL_AMBIENT, 0.8, 0.8, 0.8,
-        GL_SHININESS, 10,
-        0
-    };
+        GL_SPECULAR, 1.0, 1.0, 1.0, GL_DIFFUSE,   0.8, 0.8, 0.8,
+        GL_AMBIENT,  0.8, 0.8, 0.8, GL_SHININESS, 10,  0};
     material[1] = material[2] = material[3] = spec;
     glNewList(Material_1_Dlist, GL_COMPILE);
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, &material[9]);

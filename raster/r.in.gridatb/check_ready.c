@@ -1,7 +1,6 @@
 #include "local_proto.h"
 #include <grass/glocale.h>
 
-
 int check_ready(void)
 {
     FILE *fp;

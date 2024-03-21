@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.generalize
@@ -51,8 +50,7 @@ int boyle(struct line_pnts *Points, int look_ahead, int loop_support,
     is_loop = 0;
 
     /* is it loop ? */
-    if (Points->x[0] == Points->x[n - 1] &&
-        Points->y[0] == Points->y[n - 1] &&
+    if (Points->x[0] == Points->x[n - 1] && Points->y[0] == Points->y[n - 1] &&
         (Points->z[0] == Points->z[n - 1] || with_z == 0) && loop_support) {
         is_loop = 1;
         count = n;
@@ -125,8 +123,7 @@ int sliding_averaging(struct line_pnts *Points, double slide, int look_ahead,
     count = n - half;
 
     /* is it loop ? */
-    if (Points->x[0] == Points->x[n - 1] &&
-        Points->y[0] == Points->y[n - 1] &&
+    if (Points->x[0] == Points->x[n - 1] && Points->y[0] == Points->y[n - 1] &&
         (Points->z[0] == Points->z[n - 1] || with_z == 0) && loop_support) {
         is_loop = 1;
         count = n + half;
@@ -167,7 +164,6 @@ int sliding_averaging(struct line_pnts *Points, double slide, int look_ahead,
             point_add(p, tmp, &p);
         }
     }
-
 
     if (is_loop) {
         for (i = 0; i < half; i++) {
@@ -215,8 +211,7 @@ int distance_weighting(struct line_pnts *Points, double slide, int look_ahead,
 
     /* is it loop ? */
     is_loop = 0;
-    if (Points->x[0] == Points->x[n - 1] &&
-        Points->y[0] == Points->y[n - 1] &&
+    if (Points->x[0] == Points->x[n - 1] && Points->y[0] == Points->y[n - 1] &&
         (Points->z[0] == Points->z[n - 1] || with_z == 0) && loop_support) {
         is_loop = 1;
         count = n + half - 1;
@@ -227,7 +222,7 @@ int distance_weighting(struct line_pnts *Points, double slide, int look_ahead,
         return n;
     }
 
-    res = (POINT *) G_malloc(sizeof(POINT) * (n + half));
+    res = (POINT *)G_malloc(sizeof(POINT) * (n + half));
     if (!res) {
         G_fatal_error(_("Out of memory"));
         return n;
@@ -289,8 +284,7 @@ int distance_weighting(struct line_pnts *Points, double slide, int look_ahead,
     return Points->n_points;
 }
 
-
-/* Chaiken's algorithm. Return the number of points in smoothed line 
+/* Chaiken's algorithm. Return the number of points in smoothed line
  */
 int chaiken(struct line_pnts *Points, double thresh, int loop_support,
             int with_z)
@@ -309,8 +303,7 @@ int chaiken(struct line_pnts *Points, double thresh, int loop_support,
 
     is_loop = 0;
     /* is it loop ? */
-    if (Points->x[0] == Points->x[n - 1] &&
-        Points->y[0] == Points->y[n - 1] &&
+    if (Points->x[0] == Points->x[n - 1] && Points->y[0] == Points->y[n - 1] &&
         (Points->z[0] == Points->z[n - 1] || with_z == 0) && loop_support) {
         is_loop = 1;
     }
@@ -351,13 +344,13 @@ int chaiken(struct line_pnts *Points, double thresh, int loop_support,
             point_list_add(cur, m1);
 
             if (point_dist_square(p0, m1) > thresh) {
-                point_add(p1, m1, &tmp);        /* need to refine the partition */
+                point_add(p1, m1, &tmp); /* need to refine the partition */
                 point_scalar(tmp, 0.5, &p2);
                 point_add(p1, p0, &tmp);
                 point_scalar(tmp, 0.5, &p1);
             }
             else {
-                break;          /* good approximation */
+                break; /* good approximation */
             }
         }
 
@@ -369,7 +362,7 @@ int chaiken(struct line_pnts *Points, double thresh, int loop_support,
 
     if (!is_loop) {
         point_assign(Points, n - 1, with_z, &p0, 0);
-        point_list_add(cur, p0);        /* always keep last point */
+        point_list_add(cur, p0); /* always keep last point */
     }
 
     if (point_list_copy_to_line_pnts(head, Points) == -1) {
@@ -380,9 +373,8 @@ int chaiken(struct line_pnts *Points, double thresh, int loop_support,
     return Points->n_points;
 }
 
-
 /* use for refining tangent in hermite interpolation */
-void refine_tangent(POINT * p)
+void refine_tangent(POINT *p)
 {
     double l = point_dist2(*p);
 
@@ -421,8 +413,7 @@ int hermite(struct line_pnts *Points, double step, double angle_thresh,
     is_loop = 0;
 
     /* is it loop ? */
-    if (Points->x[0] == Points->x[n - 1] &&
-        Points->y[0] == Points->y[n - 1] &&
+    if (Points->x[0] == Points->x[n - 1] && Points->y[0] == Points->y[n - 1] &&
         (Points->z[0] == Points->z[n - 1] || with_z == 0) && loop_support) {
         is_loop = 1;
     }
@@ -472,25 +463,28 @@ int hermite(struct line_pnts *Points, double step, double angle_thresh,
     /* we always operate on the segment point[i]..point[i+1] */
     i = 0;
     while (i < n - 1) {
-        if (next > length || (length - length_begin < GRASS_EPSILON)) { /* segmet i..i+1 is finished or too short */
+        if (next > length ||
+            (length - length_begin <
+             GRASS_EPSILON)) { /* segmet i..i+1 is finished or too short */
             i++;
             if (i >= n - 1)
-                break;          /* we are already out of line */
+                break; /* we are already out of line */
             point_assign(Points, i, with_z, &p0, is_loop);
             point_assign(Points, i + 1, with_z, &p1, is_loop);
             length_begin = length;
             length += point_dist(p0, p1);
             ni = i + 2;
             if (!is_loop && ni > n - 1)
-                ni = n - 1;     /* ensure that we are in the line */
+                ni = n - 1; /* ensure that we are in the line */
             t0 = t1;
             point_assign(Points, ni, with_z, &tmp, is_loop);
             point_subtract(tmp, p0, &t1);
             refine_tangent(&t1);
         }
         else {
-            l = length - length_begin;  /* length of actual segment */
-            s = (next - length_begin) / l;      /* 0<=s<=1 where we want to add new point on the line */
+            l = length - length_begin; /* length of actual segment */
+            s = (next - length_begin) /
+                l; /* 0<=s<=1 where we want to add new point on the line */
 
             /* then we need to calculate 4 control polynomials */
             h1 = 2 * s * s * s - 3 * s * s + 1;
@@ -513,9 +507,9 @@ int hermite(struct line_pnts *Points, double step, double angle_thresh,
         /* if the angle between 2 vectors is less then eps, remove the
          * middle point */
         if (point->next && point->next->next && point->next->next->next) {
-            if (point_angle_between
-                (point->next->p, point->next->next->p,
-                 point->next->next->next->p) < angle_thresh) {
+            if (point_angle_between(point->next->p, point->next->next->p,
+                                    point->next->next->next->p) <
+                angle_thresh) {
                 point_list_delete_next(point->next);
             }
             else
@@ -534,15 +528,15 @@ int hermite(struct line_pnts *Points, double step, double angle_thresh,
     return Points->n_points;
 }
 
-/* snakes algorithm for line simplification/generalization 
+/* snakes algorithm for line simplification/generalization
  * returns the number of points in the output line. This is
  * always equal to the number of points in the original line
- * 
+ *
  * alpha, beta are 2 parameters which change the behaviour of the algorithm
- * 
- * TODO: Add parameter iterations, so the runnining time is O(N^3 * log iterations)
- * instead of O(N^3 * itearations). Probably not needed, for many iterations,
- * the result is almost straight line
+ *
+ * TODO: Add parameter iterations, so the runnining time is O(N^3 * log
+ * iterations) instead of O(N^3 * itearations). Probably not needed, for many
+ * iterations, the result is almost straight line
  */
 int snakes(struct line_pnts *Points, double alpha, double beta,
            int loop_support, int with_z)
@@ -555,7 +549,7 @@ int snakes(struct line_pnts *Points, double alpha, double beta,
     double a = 2.0 * alpha + 6.0 * beta;
     double b = -alpha - 4.0 * beta;
     double c = beta;
-    double val[5] = { c, b, a, b, c };
+    double val[5] = {c, b, a, b, c};
     int plus = 4;
     int is_loop = 0;
 
@@ -563,8 +557,7 @@ int snakes(struct line_pnts *Points, double alpha, double beta,
         return n;
 
     /* is it loop ? */
-    if (Points->x[0] == Points->x[n - 1] &&
-        Points->y[0] == Points->y[n - 1] &&
+    if (Points->x[0] == Points->x[n - 1] && Points->y[0] == Points->y[n - 1] &&
         (Points->z[0] == Points->z[n - 1] || with_z == 0) && loop_support) {
         is_loop = 1;
 
@@ -635,9 +628,12 @@ int snakes(struct line_pnts *Points, double alpha, double beta,
 
         /* add points from n - plus - 1 to n - 2 */
         for (i = 0, j = n - plus - 1; i < plus; i++, j++) {
-            xcoord.a[i][0] = Points->x[j] - x0;;
-            ycoord.a[i][0] = Points->y[j] - y0;;
-            zcoord.a[i][0] = Points->z[j] - z0;;
+            xcoord.a[i][0] = Points->x[j] - x0;
+            ;
+            ycoord.a[i][0] = Points->y[j] - y0;
+            ;
+            zcoord.a[i][0] = Points->z[j] - z0;
+            ;
         }
         /* add points from 1 to plus + 1 */
         for (i = n + plus, j = 1; i < n + 2 * plus; i++, j++) {
@@ -667,9 +663,9 @@ int snakes(struct line_pnts *Points, double alpha, double beta,
         return n;
     }
 
-    if (!matrix_mult(&ginv, &xcoord, &xout)
-        || !matrix_mult(&ginv, &ycoord, &yout)
-        || !matrix_mult(&ginv, &zcoord, &zout)) {
+    if (!matrix_mult(&ginv, &xcoord, &xout) ||
+        !matrix_mult(&ginv, &ycoord, &yout) ||
+        !matrix_mult(&ginv, &zcoord, &zout)) {
         G_fatal_error(_("Unable to calculate the output vectors"));
         return n;
     }

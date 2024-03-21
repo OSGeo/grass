@@ -1,4 +1,3 @@
-
 /**
  * \file table.c
  *
@@ -22,8 +21,7 @@
 #include "globals.h"
 #include "proto.h"
 
-
-/* NAME: db_driver_create_table 
+/* NAME: db_driver_create_table
  * INPUT:
  * OUTPUT:
  * PROCESSING: issue a CREATE TABLE tableName (column data_type [ DEFAULT
@@ -75,7 +73,7 @@
    sql_type = db_get_column_sqltype(col);
    db_append_string(cmd, db_sqltype_name(sql_type));
  */
-  /* append the (precision, scale) or (length) if necessary */
+/* append the (precision, scale) or (length) if necessary */
 /*  switch (sql_type) {
    case DB_SQL_TYPE_CHARACTER:
    sprintf(buf, "(%d)", db_get_column_length(col));
@@ -112,7 +110,6 @@
    }
    } */
 
-
 /**
  * \fn int db__driver_drop_table (dbString *name)
  *
@@ -122,7 +119,7 @@
  * \return int DB_FAILED on error; DB_OK on success
  */
 
-int db__driver_drop_table(dbString * name)
+int db__driver_drop_table(dbString *name)
 {
     char cmd[200];
     cursor *c;
@@ -132,13 +129,12 @@ int db__driver_drop_table(dbString * name)
     SQLCHAR ttype[50], *tname;
     SQLLEN nrow = 0;
 
-
     /* allocate cursor */
     c = alloc_cursor();
     if (c == NULL)
         return DB_FAILED;
 
-    tname = (SQLCHAR *) db_get_string(name);
+    tname = (SQLCHAR *)db_get_string(name);
 
     ret = SQLTables(c->stmt, NULL, 0, NULL, 0, tname, sizeof(tname), NULL, 0);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
@@ -159,7 +155,6 @@ int db__driver_drop_table(dbString * name)
         db_d_append_error(_("Table %s doesn't exist"), tname);
         db_d_report_error();
 
-
         return DB_FAILED;
     }
 
@@ -173,8 +168,8 @@ int db__driver_drop_table(dbString * name)
         sprintf(cmd, "DROP VIEW %s", tname);
     }
     else {
-        db_d_append_error(_("Table %s isn't 'TABLE' or 'VIEW' but %s"),
-                          tname, ttype);
+        db_d_append_error(_("Table %s isn't 'TABLE' or 'VIEW' but %s"), tname,
+                          ttype);
         db_d_report_error();
 
         return DB_FAILED;
@@ -182,12 +177,11 @@ int db__driver_drop_table(dbString * name)
 
     SQLCloseCursor(c->stmt);
 
-    ret = SQLExecDirect(c->stmt, (SQLCHAR *) cmd, SQL_NTS);
+    ret = SQLExecDirect(c->stmt, (SQLCHAR *)cmd, SQL_NTS);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
-        SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg,
-                      sizeof(msg), NULL);
-        db_d_append_error("SQLExecDirect():\n%s\n%s (%d)", cmd, msg,
-                          (int)err);
+        SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg, sizeof(msg),
+                      NULL);
+        db_d_append_error("SQLExecDirect():\n%s\n%s (%d)", cmd, msg, (int)err);
         db_d_report_error();
 
         return DB_FAILED;

@@ -23,7 +23,7 @@
 
    \return DB_OK
  */
-int db__send_success()
+int db__send_success(void)
 {
     DB_SEND_INT(DB_OK);
     return DB_OK;
@@ -34,7 +34,7 @@ int db__send_success()
 
    \return DB_OK
  */
-int db__send_failure()
+int db__send_failure(void)
 {
     DB_SEND_INT(DB_FAILED);
     DB_SEND_C_STRING(db_get_error_msg());

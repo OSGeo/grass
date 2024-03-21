@@ -23,7 +23,7 @@
 
    \return
  */
-int db__send_table_definition(dbTable * table)
+int db__send_table_definition(dbTable *table)
 {
     int i;
 
@@ -48,7 +48,7 @@ int db__send_table_definition(dbTable * table)
 
    \return
  */
-int db__recv_table_definition(dbTable ** table)
+int db__recv_table_definition(dbTable **table)
 {
     int i, ncols;
     dbTable *t;
@@ -78,7 +78,7 @@ int db__recv_table_definition(dbTable ** table)
 
    \return
  */
-int db__send_table_data(dbTable * table)
+int db__send_table_data(dbTable *table)
 {
     int i, ncols;
 
@@ -98,7 +98,7 @@ int db__send_table_data(dbTable * table)
 
    \return
  */
-int db__recv_table_data(dbTable * table)
+int db__recv_table_data(dbTable *table)
 {
     int i, ncols;
 

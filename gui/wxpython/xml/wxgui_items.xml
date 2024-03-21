@@ -344,13 +344,6 @@
     <handler>OnNewVector</handler>
     <description>Create new empty vector map</description>
   </wxgui-item>
-  <wxgui-item name="CleanVectorMap">
-    <label>Clean vector map</label>
-    <handler>OnVectorCleaning</handler>
-    <related-module>v.clean</related-module>
-    <description>Toolset for cleaning topology of vector map.</description>
-    <keywords>vector,topology,geometry</keywords>
-  </wxgui-item>
   <wxgui-item name="ManageVectorColorRulesInteractively">
     <label>Manage color rules interactively</label>
     <handler>OnVectorRules</handler>

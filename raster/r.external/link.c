@@ -53,10 +53,11 @@ void query_band(GDALRasterBandH hBand, const char *output,
     else if (info->have_minmax == 2) {
         double min, max, mean, stddev;
 
-        G_warning(_("Statistics in metadata are sometimes approximations: min and max can be wrong!"));
+        G_warning(_("Statistics in metadata are sometimes approximations: min "
+                    "and max can be wrong!"));
 
-        if (GDALGetRasterStatistics(hBand, false, true, &min, &max,
-                                    &mean, &stddev) != CE_None) {
+        if (GDALGetRasterStatistics(hBand, false, true, &min, &max, &mean,
+                                    &stddev) != CE_None) {
             G_fatal_error(_("Unable to get raster band statistics"));
         }
         info->minmax[0] = min;
@@ -81,15 +82,15 @@ void query_band(GDALRasterBandH hBand, const char *output,
             if (sEntry.c4 == 0)
                 continue;
 
-            Rast_set_c_color(i, sEntry.c1, sEntry.c2, sEntry.c3,
-                             &info->colors);
+            Rast_set_c_color(i, sEntry.c1, sEntry.c2, sEntry.c3, &info->colors);
         }
     }
     else {
         if (info->gdal_type == GDT_Byte) {
             /* set full 0..255 range to grey scale: */
-            G_verbose_message(_("Setting grey color table for <%s> (full 8bit range)"),
-                              output);
+            G_verbose_message(
+                _("Setting grey color table for <%s> (full 8bit range)"),
+                output);
             Rast_make_grey_scale_colors(&info->colors, 0, 255);
         }
     }
@@ -165,16 +166,14 @@ void write_fp_format(const char *output, const struct band_info *info)
 
     key_val = G_create_key_value();
 
-    type = (info->data_type == FCELL_TYPE)
-        ? "float" : "double";
+    type = (info->data_type == FCELL_TYPE) ? "float" : "double";
     G_set_key_value("type", type, key_val);
 
     G_set_key_value("byte_order", "xdr", key_val);
 
     fp = G_fopen_new_misc("cell_misc", "f_format", output);
     if (!fp)
-        G_fatal_error(_("Unable to create cell_misc/%s/f_format file"),
-                      output);
+        G_fatal_error(_("Unable to create cell_misc/%s/f_format file"), output);
 
     if (G_fwrite_key_value(fp, key_val) < 0)
         G_fatal_error(_("Error writing cell_misc/%s/f_format file"), output);
@@ -232,8 +231,8 @@ void create_map(const char *input, int band, const char *output,
             struct Range range;
 
             Rast_init_range(&range);
-            Rast_update_range((CELL) info->minmax[0], &range);
-            Rast_update_range((CELL) info->minmax[1], &range);
+            Rast_update_range((CELL)info->minmax[0], &range);
+            Rast_update_range((CELL)info->minmax[1], &range);
             Rast_write_range(output, &range);
         }
         else {

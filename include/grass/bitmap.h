@@ -1,7 +1,7 @@
 #ifndef GRASS_BITMAP_H
 #define GRASS_BITMAP_H
 
-#define BM_MAGIC  2
+#define BM_MAGIC     2
 
 #define BM_TEXT      "BITMAP"
 #define BM_TEXT_LEN  6
@@ -14,8 +14,7 @@
 #include <grass/linkm.h>
 #endif
 
-struct BM
-{
+struct BM {
     int rows;
     int cols;
     size_t bytes;
@@ -25,9 +24,7 @@ struct BM
     struct link_head *token;
 };
 
-
-struct BMlink
-{
+struct BMlink {
     short count;
     char val;
     struct BMlink *next;

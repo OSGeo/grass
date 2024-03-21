@@ -40,9 +40,8 @@ for details.
     LexToken(NAME,'B',1,23)
 
 """
-from __future__ import print_function
-
 import copy
+
 import grass.pygrass.modules as pymod
 from grass.exceptions import FatalError
 from .temporal_algebra import (
@@ -177,7 +176,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         nprocs=1,
         time_suffix=None,
     ):
-
         TemporalAlgebraParser.__init__(
             self,
             pid=pid,
@@ -270,18 +268,19 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         a9@B
 
         """
-        print(
-            topolist,
-            assign_val,
-            count_map,
-            compare_bool,
-            compare_cmd,
-            compop,
-            aggregate,
-            new,
-            convert,
-            operator_cmd,
-        )
+        if self.debug:
+            print(
+                topolist,
+                assign_val,
+                count_map,
+                compare_bool,
+                compare_cmd,
+                compop,
+                aggregate,
+                new,
+                convert,
+                operator_cmd,
+            )
 
         # Check the topology definitions and return the list of temporal and spatial
         # topological relations that must be fulfilled
@@ -487,8 +486,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             cmd_value_str = "".join(map(str, cmd_value_list))
             # Add command list to result map.
             map_i.cmd_list = cmd_value_str
-
-            print(cmd_value_str)
+            if self.debug:
+                print(cmd_value_str)
 
             return cmd_value_str
 
@@ -537,8 +536,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                             )
         # Add command list to result map.
         map_i.cmd_list = cmdstring
-
-        print("map command string", cmdstring)
+        if self.debug:
+            print("map command string", cmdstring)
         return cmdstring
 
     def set_temporal_extent_list(
@@ -722,7 +721,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             return resultlist
         elif isinstance(conclusionlist, list):
             # Build result command map list between conditions and conclusions.
-            print("build_condition_cmd_list", condition_topolist)
+            if self.debug:
+                print("build_condition_cmd_list", condition_topolist)
             conditiontopolist = self.build_spatio_temporal_topology_list(
                 iflist, conclusionlist, topolist=condition_topolist
             )
@@ -747,7 +747,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 process_queue = pymod.ParallelModuleQueue(int(self.nprocs))
 
             if isinstance(t[3], list):
-
                 granularity = None
                 if len(t[3]) > 0 and self.time_suffix == "gran":
                     map_i = t[3][0]
@@ -803,7 +802,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 count = 0
                 map_test_list = []
                 for map_i in t[3]:
-
                     # Create new map with basename
                     newident = create_numeric_suffix(
                         self.basename, count, "%0" + str(leadzero)
@@ -893,7 +891,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         overwrite=self.overwrite,
                     )
                 for map_i in register_list:
-
                     # Put the map into the process dictionary
                     start, end = map_i.get_temporal_extent_as_tuple()
                     self.process_chain_dict["register"].append(
@@ -1803,7 +1800,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             numelse = t[9] + t[10] + t[11]
         numthen = str(numthen)
         numelse = str(numelse)
-        print(numthen + " " + numelse)
+        if self.debug:
+            print(numthen + " " + numelse)
         # Create conditional command map list.
         resultlist = self.build_condition_cmd_list(
             ifmaplist,

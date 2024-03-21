@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       v.in.lidar
@@ -12,15 +11,13 @@
  *
  *****************************************************************************/
 
-
 #ifndef VECTOR_MASK_H
 #define VECTOR_MASK_H
 
 struct Map_info;
 struct bound_box;
 
-struct VectorMask
-{
+struct VectorMask {
     struct Map_info *map_info;
     struct bound_box *map_bbox;
     struct bound_box *area_bboxes;

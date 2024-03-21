@@ -1,21 +1,20 @@
-
 /****************************************************************************
-*
-* MODULE:       v.transform
-* AUTHOR(S):    Eric G. Miller <egm2@jps.net>
-*               Upgrade to 5.7 Radim Blazek
-*               Column support & OGR support added by Martin Landa (09/2007)
-*
-* PURPOSE:      To transform a vector map's coordinates via a set of tie
-*               points.
-*
-* COPYRIGHT:    (C) 2002-2014 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*   	    	License (>=v2). Read the file COPYING that comes with GRASS
-*   	    	for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       v.transform
+ * AUTHOR(S):    Eric G. Miller <egm2@jps.net>
+ *               Upgrade to 5.7 Radim Blazek
+ *               Column support & OGR support added by Martin Landa (09/2007)
+ *
+ * PURPOSE:      To transform a vector map's coordinates via a set of tie
+ *               points.
+ *
+ * COPYRIGHT:    (C) 2002-2014 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with
+ *               GRASS for details.
+ *
+ *****************************************************************************/
 /*
  *History:
  *- This takes an ascii digit file in one coordinate system and converts
@@ -45,8 +44,8 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
 
-    struct Option *vold, *vnew, *xshift, *yshift, *zshift,
-        *xscale, *yscale, *zscale, *zrot, *columns, *field_opt;
+    struct Option *vold, *vnew, *xshift, *yshift, *zshift, *xscale, *yscale,
+        *zscale, *zrot, *columns, *field_opt;
     struct Flag *tozero_flag, *no_topo;
     struct Flag *swap_flag, *swap_xz_flag, *swap_yz_flag, *swap_after_flag;
 
@@ -56,13 +55,14 @@ int main(int argc, char *argv[])
     struct bound_box box;
 
     double ztozero;
-    double trans_params[7];     /* xshift, ..., xscale, ..., zrot */
+    double trans_params[7]; /* xshift, ..., xscale, ..., zrot */
 
     /* columns */
     unsigned int i;
     int idx, out3d;
     char **tokens;
-    char *columns_name[7];      /* xshift, yshift, zshift, xscale, yscale, zscale, zrot */
+    char *columns_name[7]; /* xshift, yshift, zshift, xscale, yscale, zscale,
+                              zrot */
     int field;
 
     G_gisinit(argv[0]);
@@ -199,8 +199,9 @@ int main(int argc, char *argv[])
 
     field = Vect_get_field_number(&Old, field_opt->answer);
     if (field < 1 && columns->answer) {
-        G_fatal_error(_("Columns require a valid layer. Please use '%s' parameter."),
-                      field_opt->key);
+        G_fatal_error(
+            _("Columns require a valid layer. Please use '%s' parameter."),
+            field_opt->key);
     }
 
     out3d = Vect_is_3d(&Old);
@@ -255,7 +256,7 @@ int main(int argc, char *argv[])
     trans_params[IDX_ZSCALE] = atof(zscale->answer);
     trans_params[IDX_ZROT] = atof(zrot->answer);
 
-    /* should output be 3D ? 
+    /* should output be 3D ?
      * note that z-scale and ztozero have no effect with input 2D */
     if (trans_params[IDX_ZSHIFT] != 0. || columns_name[IDX_ZSHIFT])
         out3d = WITH_Z;

@@ -5,12 +5,12 @@
 void add_line(struct dxf_file *dxf, struct Map_info *Map)
 {
     int code;
-    char handle[DXF_BUF_SIZE];  /* entity handle, 16 hexadecimal digits */
-    char layer[DXF_BUF_SIZE];   /* layer name */
-    int layer_flag = 0;         /* indicates if a layer name has been found */
-    int xflag = 0;              /* indicates if a x value has been found */
-    int yflag = 0;              /* indicates if a y value has been found */
-    int zflag = 0;              /* indicates if a z value has been found */
+    char handle[DXF_BUF_SIZE]; /* entity handle, 16 hexadecimal digits */
+    char layer[DXF_BUF_SIZE];  /* layer name */
+    int layer_flag = 0;        /* indicates if a layer name has been found */
+    int xflag = 0;             /* indicates if a x value has been found */
+    int yflag = 0;             /* indicates if a y value has been found */
+    int zflag = 0;             /* indicates if a z value has been found */
     int arr_size = 0;
 
     handle[0] = 0;
@@ -22,10 +22,10 @@ void add_line(struct dxf_file *dxf, struct Map_info *Map)
             return;
 
         switch (code) {
-        case 5:                /* entity handle */
+        case 5: /* entity handle */
             strcpy(handle, dxf_buf);
             break;
-        case 8:                /* layer name */
+        case 8: /* layer name */
             if (!layer_flag && *dxf_buf) {
                 if (flag_list) {
                     if (!is_layer_in_list(dxf_buf))
@@ -43,27 +43,27 @@ void add_line(struct dxf_file *dxf, struct Map_info *Map)
                 layer_flag = 1;
             }
             break;
-        case 10:               /* start point x coordinate */
+        case 10: /* start point x coordinate */
             xpnts[arr_size] = atof(dxf_buf);
             xflag = 1;
             break;
-        case 11:               /* end point x coordinate */
+        case 11: /* end point x coordinate */
             xpnts[arr_size] = atof(dxf_buf);
             xflag = 1;
             break;
-        case 20:               /* start point y coordinate */
+        case 20: /* start point y coordinate */
             ypnts[arr_size] = atof(dxf_buf);
             yflag = 1;
             break;
-        case 21:               /* end point y coordinate */
+        case 21: /* end point y coordinate */
             ypnts[arr_size] = atof(dxf_buf);
             yflag = 1;
             break;
-        case 30:               /* start point z coordinate */
+        case 30: /* start point z coordinate */
             zpnts[arr_size] = atof(dxf_buf);
             zflag = 1;
             break;
-        case 31:               /* end point z coordinate */
+        case 31: /* end point z coordinate */
             zpnts[arr_size] = atof(dxf_buf);
             zflag = 1;
             break;
@@ -78,7 +78,7 @@ void add_line(struct dxf_file *dxf, struct Map_info *Map)
         }
     }
 
-    if (arr_size == 2)          /* have both start and stop */
+    if (arr_size == 2) /* have both start and stop */
         write_vect(Map, layer, "LINE", handle, "", arr_size, GV_LINE);
 
     return;

@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.coin
@@ -25,13 +24,11 @@
 
 static int cmp(const void *, const void *);
 
-
 int make_coin(void)
 {
     FILE *fp;
     FILE *stat_fp;
-    struct stats
-    {
+    struct stats {
         long cat1;
         long cat2;
         long count;
@@ -45,8 +42,8 @@ int make_coin(void)
     char buf[512];
     int count;
 
-    G_message(_("Tabulating Coincidence between '%s' and '%s'"),
-              map1name, map2name);
+    G_message(_("Tabulating Coincidence between '%s' and '%s'"), map1name,
+              map2name);
 
     sprintf(input, "input=%s,%s", map1name, map2name);
 
@@ -67,8 +64,8 @@ int make_coin(void)
     /* need to find the number of cats in each file */
     count = 0;
     while (fgets(buf, sizeof buf, fp)) {
-        if (sscanf(buf, "%ld:%ld:%lf:%ld",
-                   &stats.cat1, &stats.cat2, &stats.area, &stats.count) != 4)
+        if (sscanf(buf, "%ld:%ld:%lf:%ld", &stats.cat1, &stats.cat2,
+                   &stats.area, &stats.count) != 4)
             G_fatal_error(_("Unexpected output from r.stats"));
 
         fwrite(&stats, sizeof(stats), 1, stat_fp);

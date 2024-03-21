@@ -1,7 +1,7 @@
 """
 Name:       i.segment test
 Purpose:    Tests i.segment and its flags/options.
-    
+
 Author:     Markus Neteler
 Copyright:  (C) 2018 by Markus Neteler and the GRASS Development Team
 Licence:    This program is free software under the GNU General Public

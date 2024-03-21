@@ -29,7 +29,7 @@ static int G__remove(int misc, const char *dir, const char *element,
  *
  * The file or directory <i>name</i> under the database <i>element</i>
  * directory in the current mapset is removed.
- * 
+ *
  * If <i>name</i> is a directory, everything within the directory is
  * removed as well.
  *
@@ -51,7 +51,7 @@ int G_remove(const char *element, const char *name)
  *
  * The file or directory <i>name</i> under the database <i>element</i>
  * directory in the current mapset is removed.
- * 
+ *
  * If <i>name</i> is a directory, everything within the directory is
  * removed as well.
  *

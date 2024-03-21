@@ -4,9 +4,9 @@
 #include "proto.h"
 
 int db__driver_fetch(cn, position, more)
-     dbCursor *cn;
-     int position;
-     int *more;
+dbCursor *cn;
+int position;
+int *more;
 {
     cursor *c;
     dbToken token;
@@ -25,7 +25,7 @@ int db__driver_fetch(cn, position, more)
     token = db_get_cursor_token(cn);
 
     /* get the cursor by its token */
-    if (!(c = (cursor *) db_find_token(token))) {
+    if (!(c = (cursor *)db_find_token(token))) {
         db_error("cursor not found");
         return DB_FAILED;
     }
@@ -86,42 +86,37 @@ int db__driver_fetch(cn, position, more)
             if (htype == SQL_CHAR) {
                 len = db_get_column_length(column);
                 db_enlarge_string(&value->s, len + 1);
-                ret =
-                    SQLGetData(c->stmt, col, SQL_C_CHAR, value->s.string,
-                               len + 1, NULL);
+                ret = SQLGetData(c->stmt, col, SQL_C_CHAR, value->s.string,
+                                 len + 1, NULL);
             }
             else if (htype == SQL_VARCHAR) {
                 ret = SQLGetData(c->stmt, col, SQL_C_CHAR, NULL, 0, &len);
                 db_enlarge_string(&value->s, len + 1);
-                ret =
-                    SQLGetData(c->stmt, col, SQL_C_CHAR, value->s.string,
-                               len + 1, NULL);
+                ret = SQLGetData(c->stmt, col, SQL_C_CHAR, value->s.string,
+                                 len + 1, NULL);
             }
-            else {              /* now the same as SQL_VARCHAR, could differ for other htype ?  */
+            else { /* now the same as SQL_VARCHAR, could differ for other htype
+                      ?  */
                 ret = SQLGetData(c->stmt, col, SQL_C_CHAR, NULL, 0, &len);
                 db_enlarge_string(&value->s, len + 1);
-                ret =
-                    SQLGetData(c->stmt, col, SQL_C_CHAR, value->s.string,
-                               len + 1, NULL);
+                ret = SQLGetData(c->stmt, col, SQL_C_CHAR, value->s.string,
+                                 len + 1, NULL);
             }
             break;
         case DB_C_TYPE_INT:
-            ret =
-                SQLGetData(c->stmt, col, SQL_C_LONG, &value->i,
-                           sizeof(value->i), NULL);
+            ret = SQLGetData(c->stmt, col, SQL_C_LONG, &value->i,
+                             sizeof(value->i), NULL);
             break;
         case DB_C_TYPE_DOUBLE:
-            ret =
-                SQLGetData(c->stmt, col, SQL_C_DOUBLE, &value->d,
-                           sizeof(value->d), NULL);
+            ret = SQLGetData(c->stmt, col, SQL_C_DOUBLE, &value->d,
+                             sizeof(value->d), NULL);
             break;
 
         case DB_C_TYPE_DATETIME:
             switch (sqltype) {
             case DB_SQL_TYPE_DATE:
-                ret =
-                    SQLGetData(c->stmt, col, SQL_C_TYPE_DATE, &date,
-                               sizeof(date), NULL);
+                ret = SQLGetData(c->stmt, col, SQL_C_TYPE_DATE, &date,
+                                 sizeof(date), NULL);
                 value->t.year = date.year;
                 value->t.month = date.month;
                 value->t.day = date.day;
@@ -130,9 +125,8 @@ int db__driver_fetch(cn, position, more)
                 value->t.seconds = 0.0;
                 break;
             case DB_SQL_TYPE_TIME:
-                ret =
-                    SQLGetData(c->stmt, col, SQL_C_TYPE_TIME, &time,
-                               sizeof(time), NULL);
+                ret = SQLGetData(c->stmt, col, SQL_C_TYPE_TIME, &time,
+                                 sizeof(time), NULL);
                 value->t.year = 0;
                 value->t.month = 0;
                 value->t.day = 0;
@@ -141,9 +135,8 @@ int db__driver_fetch(cn, position, more)
                 value->t.seconds = time.second;
                 break;
             case DB_SQL_TYPE_TIMESTAMP:
-                ret =
-                    SQLGetData(c->stmt, col, SQL_C_TYPE_TIMESTAMP, &timestamp,
-                               sizeof(timestamp), NULL);
+                ret = SQLGetData(c->stmt, col, SQL_C_TYPE_TIMESTAMP, &timestamp,
+                                 sizeof(timestamp), NULL);
                 value->t.year = timestamp.year;
                 value->t.month = timestamp.month;
                 value->t.day = timestamp.day;
@@ -151,10 +144,10 @@ int db__driver_fetch(cn, position, more)
                 value->t.minute = timestamp.minute;
                 value->t.seconds = timestamp.second;
                 break;
-                /*  
+                /*
                    case DB_SQL_TYPE_INTERVAL:
                    break;
-                   default: 
+                   default:
                    break;
                  */
             }
@@ -162,9 +155,8 @@ int db__driver_fetch(cn, position, more)
         default:
             len = db_get_column_length(column);
             db_enlarge_string(&value->s, len + 1);
-            ret =
-                SQLGetData(c->stmt, col, SQL_C_CHAR, value->s.string, len + 1,
-                           NULL);
+            ret = SQLGetData(c->stmt, col, SQL_C_CHAR, value->s.string, len + 1,
+                             NULL);
             break;
         }
     }
@@ -172,7 +164,7 @@ int db__driver_fetch(cn, position, more)
 }
 
 int db__driver_get_num_rows(cn)
-     dbCursor *cn;
+dbCursor *cn;
 {
     cursor *c;
     dbToken token;
@@ -181,7 +173,7 @@ int db__driver_get_num_rows(cn)
     token = db_get_cursor_token(cn);
 
     /* get the cursor by its token */
-    if (!(c = (cursor *) db_find_token(token))) {
+    if (!(c = (cursor *)db_find_token(token))) {
         db_error("cursor not found");
         return DB_FAILED;
     }

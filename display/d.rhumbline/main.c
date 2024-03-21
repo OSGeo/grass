@@ -1,13 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       d.rhumbline
  * AUTHOR(S):    Michael Shapiro (CERL) (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Eric G. Miller <egm2 jps.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Eric G. Miller <egm2 jps.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      displays the rhumbline joining two user-specified points
  * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
@@ -33,8 +32,7 @@ int main(int argc, char *argv[])
     int text_color = 0;
     double lon1, lat1, lon2, lat2;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *lcolor, *tcolor, *coor;
     } parm;
 
@@ -97,13 +95,11 @@ int main(int argc, char *argv[])
     if (!G_scan_northing(parm.coor->answers[3], &lat2, G_projection()))
         G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[3]);
 
-
     D_open_driver();
 
     line_color = D_translate_color(parm.lcolor->answer);
     if (!line_color)
-        line_color = D_translate_color(parm.lcolor->answer =
-                                       DEFAULT_FG_COLOR);
+        line_color = D_translate_color(parm.lcolor->answer = DEFAULT_FG_COLOR);
 
 #ifdef CAN_DO_DISTANCES
     if (strcmp(parm.lcolor->answer, DEFAULT_FG_COLOR) == 0)

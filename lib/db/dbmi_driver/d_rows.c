@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_rows.c
- * 
+ *
  * \brief DBMI Library (driver) - get number of records
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -30,7 +30,7 @@ int db_d_get_num_rows(void)
 
     /* get the arg(s) */
     DB_RECV_TOKEN(&token);
-    cursor = (dbCursor *) db_find_token(token);
+    cursor = (dbCursor *)db_find_token(token);
 
     /* call the procedure */
     nrows = db_driver_get_num_rows(cursor);

@@ -48,7 +48,6 @@ class BitmapProvider:
     def __init__(
         self, bitmapPool, mapFilesPool, tempDir, imageWidth=640, imageHeight=480
     ):
-
         self._bitmapPool = bitmapPool
         self._mapFilesPool = mapFilesPool
         self.imageWidth = (

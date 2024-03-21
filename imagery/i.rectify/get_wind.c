@@ -54,8 +54,7 @@ int georef_window(struct Image_Group *group, struct Cell_head *w1,
                   struct Cell_head *w2, int order, double res)
 {
     double n, e, ad;
-    struct _corner
-    {
+    struct _corner {
         double n, e;
     } nw, ne, se, sw;
 
@@ -63,8 +62,8 @@ int georef_window(struct Image_Group *group, struct Cell_head *w1,
 
     /* compute geo ref of all corners */
     if (order == 0)
-        I_georef_tps(w1->west, w1->north, &e, &n, group->E12_t,
-                     group->N12_t, &group->control_points, 1);
+        I_georef_tps(w1->west, w1->north, &e, &n, group->E12_t, group->N12_t,
+                     &group->control_points, 1);
     else
         I_georef(w1->west, w1->north, &e, &n, group->E12, group->N12, order);
     w2->north = w2->south = n;
@@ -73,8 +72,8 @@ int georef_window(struct Image_Group *group, struct Cell_head *w1,
     nw.e = e;
 
     if (order == 0)
-        I_georef_tps(w1->east, w1->north, &e, &n, group->E12_t,
-                     group->N12_t, &group->control_points, 1);
+        I_georef_tps(w1->east, w1->north, &e, &n, group->E12_t, group->N12_t,
+                     &group->control_points, 1);
     else
         I_georef(w1->east, w1->north, &e, &n, group->E12, group->N12, order);
     ne.n = n;
@@ -89,8 +88,8 @@ int georef_window(struct Image_Group *group, struct Cell_head *w1,
         w2->west = e;
 
     if (order == 0)
-        I_georef_tps(w1->west, w1->south, &e, &n, group->E12_t,
-                     group->N12_t, &group->control_points, 1);
+        I_georef_tps(w1->west, w1->south, &e, &n, group->E12_t, group->N12_t,
+                     &group->control_points, 1);
     else
         I_georef(w1->west, w1->south, &e, &n, group->E12, group->N12, order);
     sw.n = n;
@@ -105,8 +104,8 @@ int georef_window(struct Image_Group *group, struct Cell_head *w1,
         w2->west = e;
 
     if (order == 0)
-        I_georef_tps(w1->east, w1->south, &e, &n, group->E12_t,
-                     group->N12_t, &group->control_points, 1);
+        I_georef_tps(w1->east, w1->south, &e, &n, group->E12_t, group->N12_t,
+                     &group->control_points, 1);
     else
         I_georef(w1->east, w1->south, &e, &n, group->E12, group->N12, order);
     se.n = n;
@@ -137,13 +136,15 @@ int georef_window(struct Image_Group *group, struct Cell_head *w1,
         w2->ns_res = (sqrt((nw.n - sw.n) * (nw.n - sw.n) +
                            (nw.e - sw.e) * (nw.e - sw.e)) +
                       sqrt((ne.n - se.n) * (ne.n - se.n) +
-                           (ne.e - se.e) * (ne.e - se.e))) / (2.0 * w1->rows);
+                           (ne.e - se.e) * (ne.e - se.e))) /
+                     (2.0 * w1->rows);
 
         /* E-W extends along northern and southern edge */
         w2->ew_res = (sqrt((nw.n - ne.n) * (nw.n - ne.n) +
                            (nw.e - ne.e) * (nw.e - ne.e)) +
                       sqrt((sw.n - se.n) * (sw.n - se.n) +
-                           (sw.e - se.e) * (sw.e - se.e))) / (2.0 * w1->cols);
+                           (sw.e - se.e) * (sw.e - se.e))) /
+                     (2.0 * w1->cols);
 
         /* make ew_res = ns_res */
         w2->ns_res = (w2->ns_res + w2->ew_res) / 2.0;
@@ -177,8 +178,8 @@ int georef_window(struct Image_Group *group, struct Cell_head *w1,
     w2->rows = (w2->north - w2->south + w2->ns_res / 2.0) / w2->ns_res;
     w2->cols = (w2->east - w2->west + w2->ew_res / 2.0) / w2->ew_res;
 
-    G_message(_("Region N=%f S=%f E=%f W=%f"), w2->north, w2->south,
-              w2->east, w2->west);
+    G_message(_("Region N=%f S=%f E=%f W=%f"), w2->north, w2->south, w2->east,
+              w2->west);
     G_message(_("Resolution EW=%f NS=%f"), w2->ew_res, w2->ns_res);
 
     return 0;

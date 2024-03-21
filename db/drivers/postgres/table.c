@@ -23,7 +23,7 @@
  * \param name table name to drop
  * \return DB_FAILED on error; DB_OK on success
  */
-int db__driver_drop_table(dbString * name)
+int db__driver_drop_table(dbString *name)
 {
     PGresult *res;
     char cmd[DB_SQL_MAX];
@@ -33,8 +33,8 @@ int db__driver_drop_table(dbString * name)
     res = PQexec(pg_conn, cmd);
 
     if (!res || PQresultStatus(res) != PGRES_COMMAND_OK) {
-        db_d_append_error("%s\n%s",
-                          _("Unable to execute():"), PQerrorMessage(pg_conn));
+        db_d_append_error("%s\n%s", _("Unable to execute():"),
+                          PQerrorMessage(pg_conn));
         db_d_report_error();
         return DB_FAILED;
     }

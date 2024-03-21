@@ -1,16 +1,11 @@
 """Refactored "safe reference" from dispatcher.py"""
-from __future__ import print_function
 
 import weakref
 import traceback
 import sys
 
-if sys.hexversion >= 0x3000000:
-    im_func = "__func__"
-    im_self = "__self__"
-else:
-    im_func = "im_func"
-    im_self = "im_self"
+im_func = "__func__"
+im_self = "__self__"
 
 
 def safeRef(target, onDelete=None):
@@ -41,7 +36,7 @@ def safeRef(target, onDelete=None):
         return weakref.ref(target)
 
 
-class BoundMethodWeakref(object):
+class BoundMethodWeakref:
     """'Safe' and reusable weak references to instance methods
 
     BoundMethodWeakref objects provide a mechanism for
@@ -95,7 +90,7 @@ class BoundMethodWeakref(object):
             current.deletionMethods.append(onDelete)
             return current
         else:
-            base = super(BoundMethodWeakref, cls).__new__(cls)
+            base = super().__new__(cls)
             cls._allInstances[key] = base
             base.__init__(target, onDelete, *arguments, **named)
             return base

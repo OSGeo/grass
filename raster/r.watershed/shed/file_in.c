@@ -3,8 +3,7 @@
 #include <grass/glocale.h>
 #include "watershed.h"
 
-
-int ar_file_in(char *file_name, OUTPUT * output)
+int ar_file_in(char *file_name, OUTPUT *output)
 {
     FILE *ar_file;
     int bas_num, down_bas, i1, i2, bas_alloc;
@@ -16,16 +15,15 @@ int ar_file_in(char *file_name, OUTPUT * output)
     }
     output->num_basins = 0;
     bas_alloc = INCR;
-    output->basin_facts = (B_FACTS *) G_malloc(INCR * sizeof(B_FACTS));
+    output->basin_facts = (B_FACTS *)G_malloc(INCR * sizeof(B_FACTS));
     while (!feof(ar_file)) {
-        fscanf(ar_file, "%d %s %s %d %s %d %d %lf %lf %lf %lf",
-               &bas_num, s1, s2, &down_bas, s3, &i1, &i2,
-               &easting, &northing, &str_slope, &str_length);
+        fscanf(ar_file, "%d %s %s %d %s %d %d %lf %lf %lf %lf", &bas_num, s1,
+               s2, &down_bas, s3, &i1, &i2, &easting, &northing, &str_slope,
+               &str_length);
         if (output->num_basins >= bas_alloc) {
             bas_alloc += INCR;
-            output->basin_facts =
-                (B_FACTS *) G_realloc(output->basin_facts,
-                                      bas_alloc * sizeof(B_FACTS));
+            output->basin_facts = (B_FACTS *)G_realloc(
+                output->basin_facts, bas_alloc * sizeof(B_FACTS));
         }
         output->basin_facts[output->num_basins].num_cells = 0;
         output->basin_facts[output->num_basins].str_length = str_length;

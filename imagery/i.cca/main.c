@@ -1,18 +1,17 @@
-
 /****************************************************************************
  *
  * MODULE:       i.cca
- * AUTHOR(S):    David Satnik, Central Washington University, and  
+ * AUTHOR(S):    David Satnik, Central Washington University, and
  *               Ali R. Vali, University of Texas (original contributors)
- *               Markus Neteler <neteler itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      canonical components transformation: takes any number of
  *               (raster) band files and a signature file, and outputs the same
- *               number of raster band files transformed to provide maximum 
- *               separability of the categories indicated by the signatures.  
+ *               number of raster band files transformed to provide maximum
+ *               separability of the categories indicated by the signatures.
  * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -44,29 +43,28 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 int main(int argc, char *argv[])
 {
     /* Global variable & function declarations */
 
-    int i, j, k;                /* Loop control variables */
-    int bands;                  /* Number of image bands */
-    int nclass;                 /* Number of classes */
-    int samptot;                /* Total number of sample points */
-    double **mu;                /* Mean vector for image classes */
-    double **w;                 /* Within Class Covariance Matrix */
-    double **p;                 /* Between class Covariance Matrix */
-    double **l;                 /* Diagonal matrix of eigenvalues */
-    double **q;                 /* Transformation matrix */
-    double ***cov;              /* Individual class Covariance Matrix */
-    double *nsamp;              /* Number of samples in a given class */
-    double *eigval;             /* Eigen value vector */
-    double **eigmat;            /* Eigen Matrix */
+    int i, j, k;     /* Loop control variables */
+    int bands;       /* Number of image bands */
+    int nclass;      /* Number of classes */
+    int samptot;     /* Total number of sample points */
+    double **mu;     /* Mean vector for image classes */
+    double **w;      /* Within Class Covariance Matrix */
+    double **p;      /* Between class Covariance Matrix */
+    double **l;      /* Diagonal matrix of eigenvalues */
+    double **q;      /* Transformation matrix */
+    double ***cov;   /* Individual class Covariance Matrix */
+    double *nsamp;   /* Number of samples in a given class */
+    double *eigval;  /* Eigen value vector */
+    double **eigmat; /* Eigen Matrix */
     char tempname[1024];
 
     /* used to make the color tables */
-    CELL *outbandmax;           /* will hold the maximums found in the out maps */
-    CELL *outbandmin;           /* will hold the minimums found in the out maps */
+    CELL *outbandmax; /* will hold the maximums found in the out maps */
+    CELL *outbandmin; /* will hold the minimums found in the out maps */
     struct Colors color_tbl;
     struct Signature sigs;
     FILE *sigfp;
@@ -78,7 +76,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *grp_opt, *subgrp_opt, *sig_opt, *out_opt;
 
-        /***** Start of main *****/
+    /***** Start of main *****/
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -86,9 +84,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("statistics"));
     G_add_keyword("CCA");
     G_add_keyword(_("canonical components analysis"));
-    module->description =
-        _("Canonical components analysis (CCA) "
-          "program for image processing.");
+    module->description = _("Canonical components analysis (CCA) "
+                            "program for image processing.");
 
     grp_opt = G_define_standard_option(G_OPT_I_GROUP);
 
@@ -139,8 +136,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Signature - group member semantic label mismatch.\n"
                         "Extra signatures for bands: %s\n"
                         "Imagery group bands without signatures: %s"),
-                      err[0] ? err[0] : _("none"), err[1] ? err[1] : _("none")
-            );
+                      err[0] ? err[0] : _("none"), err[1] ? err[1] : _("none"));
 
     /* check the number of input bands */
     bands = refs.nfiles;
@@ -160,11 +156,10 @@ int main(int argc, char *argv[])
         cov[i] = G_alloc_matrix(bands, bands);
     }
 
-    outbandmax = (CELL *) G_calloc(nclass, sizeof(CELL));
-    outbandmin = (CELL *) G_calloc(nclass, sizeof(CELL));
+    outbandmax = (CELL *)G_calloc(nclass, sizeof(CELL));
+    outbandmin = (CELL *)G_calloc(nclass, sizeof(CELL));
     datafds = (int *)G_calloc(nclass, sizeof(int));
     outfds = (int *)G_calloc(nclass, sizeof(int));
-
 
     /*
        Here is where the information regarding
@@ -180,8 +175,7 @@ int main(int argc, char *argv[])
         for (j = 1; j <= bands; j++) {
             mu[i][j] = sigs.sig[i - 1].mean[j - 1];
             for (k = 1; k <= j; k++)
-                cov[i][j][k] = cov[i][k][j] =
-                    sigs.sig[i - 1].var[j - 1][k - 1];
+                cov[i][j][k] = cov[i][k][j] = sigs.sig[i - 1].var[j - 1][k - 1];
         }
     }
 
@@ -203,25 +197,23 @@ int main(int argc, char *argv[])
         G_verbose_message("eigen vector:");
         for (j = 0; j < bands; j++)
             G_verbose_message("%+6.5f ", eigmat[i][j]);
-
     }
-
 
     /* open the cell maps */
     for (i = 1; i <= bands; i++) {
-        outbandmax[i] = (CELL) 0;
-        outbandmin[i] = (CELL) 0;
+        outbandmax[i] = (CELL)0;
+        outbandmin[i] = (CELL)0;
 
-        datafds[i] = Rast_open_old(refs.file[i - 1].name,
-                                   refs.file[i - 1].mapset);
+        datafds[i] =
+            Rast_open_old(refs.file[i - 1].name, refs.file[i - 1].mapset);
 
         sprintf(tempname, "%s.%d", out_opt->answer, i);
         outfds[i] = Rast_open_c_new(tempname);
     }
 
     /* do the transform */
-    transform(datafds, outfds, Rast_window_rows(), Rast_window_cols(), q,
-              bands, outbandmin, outbandmax);
+    transform(datafds, outfds, Rast_window_rows(), Rast_window_cols(), q, bands,
+              outbandmin, outbandmax);
 
     /* make grey scale color table */
     Rast_init_colors(&color_tbl);
@@ -231,9 +223,10 @@ int main(int argc, char *argv[])
         Rast_close(datafds[i]);
         Rast_close(outfds[i]);
 
-        if (outbandmin[i] < (CELL) 0 || outbandmax[i] > (CELL) 255) {
+        if (outbandmin[i] < (CELL)0 || outbandmax[i] > (CELL)255) {
             G_warning(_("The output cell map <%s.%d> has values "
-                        "outside the 0-255 range."), out_opt->answer, i);
+                        "outside the 0-255 range."),
+                      out_opt->answer, i);
         }
 
         Rast_make_grey_scale_colors(&color_tbl, 0, outbandmax[i]);

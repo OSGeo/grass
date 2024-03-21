@@ -1,20 +1,19 @@
-
 /****************************************************************************
-* MODULE:       R-Tree library 
-*              
-* AUTHOR(S):    Antonin Guttman - original code
-*               Daniel Green (green@superliminal.com) - major clean-up
-*                               and implementation of bounding spheres
-*               Markus Metz - file-based and memory-based R*-tree
-*               
-* PURPOSE:      Multidimensional index
-*
-* COPYRIGHT:    (C) 2010 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*****************************************************************************/
+ * MODULE:       R-Tree library
+ *
+ * AUTHOR(S):    Antonin Guttman - original code
+ *               Daniel Green (green@superliminal.com) - major clean-up
+ *                               and implementation of bounding spheres
+ *               Markus Metz - file-based and memory-based R*-tree
+ *
+ * PURPOSE:      Multidimensional index
+ *
+ * COPYRIGHT:    (C) 2010 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *****************************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,8 +24,7 @@
 #include <math.h>
 #include <grass/gis.h>
 
-#define BIG_NUM (FLT_MAX/4.0)
-
+#define BIG_NUM         (FLT_MAX / 4.0)
 
 #define Undefined(x, t) ((x)->boundary[0] > (x)->boundary[t->ndims_alloc])
 
@@ -82,7 +80,7 @@ void RTreeFreeRect(struct RTree_Rect *r)
  */
 RectReal *RTreeAllocBoundary(struct RTree *t)
 {
-    RectReal *boundary = (RectReal *) malloc(t->rectsize);
+    RectReal *boundary = (RectReal *)malloc(t->rectsize);
 
     assert(boundary);
 
@@ -113,7 +111,7 @@ void RTreeInitRect(struct RTree_Rect *r, struct RTree *t)
     register int i;
 
     for (i = 0; i < t->ndims_alloc; i++)
-        r->boundary[i] = r->boundary[i + t->ndims_alloc] = (RectReal) 0;
+        r->boundary[i] = r->boundary[i + t->ndims_alloc] = (RectReal)0;
 }
 
 /*!
@@ -131,8 +129,8 @@ void RTreeSetRect1D(struct RTree_Rect *r, struct RTree *t, double x_min,
                     double x_max)
 {
     RTreeInitRect(r, t);
-    r->boundary[0] = (RectReal) x_min;
-    r->boundary[t->ndims_alloc] = (RectReal) x_max;
+    r->boundary[0] = (RectReal)x_min;
+    r->boundary[t->ndims_alloc] = (RectReal)x_max;
 }
 
 /*!
@@ -152,10 +150,10 @@ void RTreeSetRect2D(struct RTree_Rect *r, struct RTree *t, double x_min,
                     double x_max, double y_min, double y_max)
 {
     RTreeInitRect(r, t);
-    r->boundary[0] = (RectReal) x_min;
-    r->boundary[t->ndims_alloc] = (RectReal) x_max;
-    r->boundary[1] = (RectReal) y_min;
-    r->boundary[1 + t->ndims_alloc] = (RectReal) y_max;
+    r->boundary[0] = (RectReal)x_min;
+    r->boundary[t->ndims_alloc] = (RectReal)x_max;
+    r->boundary[1] = (RectReal)y_min;
+    r->boundary[1 + t->ndims_alloc] = (RectReal)y_max;
 }
 
 /*!
@@ -178,12 +176,12 @@ void RTreeSetRect3D(struct RTree_Rect *r, struct RTree *t, double x_min,
                     double z_max)
 {
     RTreeInitRect(r, t);
-    r->boundary[0] = (RectReal) x_min;
-    r->boundary[t->ndims_alloc] = (RectReal) x_max;
-    r->boundary[1] = (RectReal) y_min;
-    r->boundary[1 + t->ndims_alloc] = (RectReal) y_max;
-    r->boundary[2] = (RectReal) z_min;
-    r->boundary[2 + t->ndims_alloc] = (RectReal) z_max;
+    r->boundary[0] = (RectReal)x_min;
+    r->boundary[t->ndims_alloc] = (RectReal)x_max;
+    r->boundary[1] = (RectReal)y_min;
+    r->boundary[1 + t->ndims_alloc] = (RectReal)y_max;
+    r->boundary[2] = (RectReal)z_min;
+    r->boundary[2 + t->ndims_alloc] = (RectReal)z_max;
 }
 
 /*!
@@ -210,14 +208,14 @@ void RTreeSetRect4D(struct RTree_Rect *r, struct RTree *t, double x_min,
     assert(t->ndims >= 4);
 
     RTreeInitRect(r, t);
-    r->boundary[0] = (RectReal) x_min;
-    r->boundary[t->ndims_alloc] = (RectReal) x_max;
-    r->boundary[1] = (RectReal) y_min;
-    r->boundary[1 + t->ndims_alloc] = (RectReal) y_max;
-    r->boundary[2] = (RectReal) z_min;
-    r->boundary[2 + t->ndims_alloc] = (RectReal) z_max;
-    r->boundary[3] = (RectReal) t_min;
-    r->boundary[3 + t->ndims_alloc] = (RectReal) t_max;
+    r->boundary[0] = (RectReal)x_min;
+    r->boundary[t->ndims_alloc] = (RectReal)x_max;
+    r->boundary[1] = (RectReal)y_min;
+    r->boundary[1 + t->ndims_alloc] = (RectReal)y_max;
+    r->boundary[2] = (RectReal)z_min;
+    r->boundary[2 + t->ndims_alloc] = (RectReal)z_max;
+    r->boundary[3] = (RectReal)t_min;
+    r->boundary[3 + t->ndims_alloc] = (RectReal)t_max;
 }
 
 /*
@@ -230,14 +228,13 @@ void RTreeNullRect(struct RTree_Rect *r, struct RTree *t)
 
     /* assert(r); */
 
-    r->boundary[0] = (RectReal) 1;
-    r->boundary[t->nsides_alloc - 1] = (RectReal) - 1;
+    r->boundary[0] = (RectReal)1;
+    r->boundary[t->nsides_alloc - 1] = (RectReal)-1;
     for (i = 1; i < t->ndims_alloc; i++)
-        r->boundary[i] = r->boundary[i + t->ndims_alloc] = (RectReal) 0;
+        r->boundary[i] = r->boundary[i + t->ndims_alloc] = (RectReal)0;
 
     return;
 }
-
 
 #if 0
 
@@ -327,12 +324,12 @@ RectReal RTreeRectVolume(struct RTree_Rect *R, struct RTree *t)
 {
     register struct RTree_Rect *r = R;
     register int i;
-    register RectReal volume = (RectReal) 1;
+    register RectReal volume = (RectReal)1;
 
     /* assert(r); */
 
     if (Undefined(r, t))
-        return (RectReal) 0;
+        return (RectReal)0;
 
     for (i = 0; i < t->ndims; i++)
         volume *= r->boundary[i + t->ndims_alloc] - r->boundary[i];
@@ -340,7 +337,6 @@ RectReal RTreeRectVolume(struct RTree_Rect *R, struct RTree *t)
 
     return volume;
 }
-
 
 /*
    Define the NUMDIMS-dimensional volume the unit sphere in that dimension into
@@ -370,36 +366,35 @@ static const double UnitSphereVolume = sphere_volume(20);
 
 /* Precomputed volumes of the unit spheres for the first few dimensions */
 const double UnitSphereVolumes[] = {
-    0.000000,                   /* dimension   0 */
-    2.000000,                   /* dimension   1 */
-    3.141593,                   /* dimension   2 */
-    4.188790,                   /* dimension   3 */
-    4.934802,                   /* dimension   4 */
-    5.263789,                   /* dimension   5 */
-    5.167713,                   /* dimension   6 */
-    4.724766,                   /* dimension   7 */
-    4.058712,                   /* dimension   8 */
-    3.298509,                   /* dimension   9 */
-    2.550164,                   /* dimension  10 */
-    1.884104,                   /* dimension  11 */
-    1.335263,                   /* dimension  12 */
-    0.910629,                   /* dimension  13 */
-    0.599265,                   /* dimension  14 */
-    0.381443,                   /* dimension  15 */
-    0.235331,                   /* dimension  16 */
-    0.140981,                   /* dimension  17 */
-    0.082146,                   /* dimension  18 */
-    0.046622,                   /* dimension  19 */
-    0.025807,                   /* dimension  20 */
+    0.000000, /* dimension   0 */
+    2.000000, /* dimension   1 */
+    3.141593, /* dimension   2 */
+    4.188790, /* dimension   3 */
+    4.934802, /* dimension   4 */
+    5.263789, /* dimension   5 */
+    5.167713, /* dimension   6 */
+    4.724766, /* dimension   7 */
+    4.058712, /* dimension   8 */
+    3.298509, /* dimension   9 */
+    2.550164, /* dimension  10 */
+    1.884104, /* dimension  11 */
+    1.335263, /* dimension  12 */
+    0.910629, /* dimension  13 */
+    0.599265, /* dimension  14 */
+    0.381443, /* dimension  15 */
+    0.235331, /* dimension  16 */
+    0.140981, /* dimension  17 */
+    0.082146, /* dimension  18 */
+    0.046622, /* dimension  19 */
+    0.025807, /* dimension  20 */
 };
 
 #if NUMDIMS > 20
-#	error "not enough precomputed sphere volumes"
+#error "not enough precomputed sphere volumes"
 #endif
 #define UnitSphereVolume UnitSphereVolumes[NUMDIMS]
 
 #endif
-
 
 /*
    Calculate the n-dimensional volume of the bounding sphere of a rectangle
@@ -442,7 +437,7 @@ RectReal RTreeRectSphericalVolume(struct RTree_Rect *r, struct RTree *t)
     /* assert(r); */
 
     if (Undefined(r, t))
-        return (RectReal) 0;
+        return (RectReal)0;
 
     for (i = 0; i < t->ndims; i++) {
         extent = (r->boundary[i + t->ndims_alloc] - r->boundary[i]);
@@ -451,10 +446,9 @@ RectReal RTreeRectSphericalVolume(struct RTree_Rect *r, struct RTree *t)
         sum_of_squares += extent * extent / 4.;
     }
 
-    return (RectReal) (pow(sqrt(sum_of_squares), t->ndims) *
-                       UnitSphereVolumes[t->ndims]);
+    return (RectReal)(pow(sqrt(sum_of_squares), t->ndims) *
+                      UnitSphereVolumes[t->ndims]);
 }
-
 
 /*
    Calculate the n-dimensional surface area of a rectangle
@@ -462,27 +456,25 @@ RectReal RTreeRectSphericalVolume(struct RTree_Rect *r, struct RTree *t)
 RectReal RTreeRectSurfaceArea(struct RTree_Rect *r, struct RTree *t)
 {
     int i, j;
-    RectReal face_area, sum = (RectReal) 0;
+    RectReal face_area, sum = (RectReal)0;
 
     /*assert(r); */
 
     if (Undefined(r, t))
-        return (RectReal) 0;
+        return (RectReal)0;
 
     for (i = 0; i < t->ndims; i++) {
-        face_area = (RectReal) 1;
+        face_area = (RectReal)1;
 
         for (j = 0; j < t->ndims; j++)
             /* exclude i extent from product in this dimension */
             if (i != j) {
-                face_area *=
-                    (r->boundary[j + t->ndims_alloc] - r->boundary[j]);
+                face_area *= (r->boundary[j + t->ndims_alloc] - r->boundary[j]);
             }
         sum += face_area;
     }
     return 2 * sum;
 }
-
 
 /*
    Calculate the n-dimensional margin of a rectangle
@@ -501,7 +493,6 @@ RectReal RTreeRectMargin(struct RTree_Rect *r, struct RTree *t)
 
     return margin;
 }
-
 
 /*
    Combine two rectangles, make one that includes both.
@@ -539,7 +530,6 @@ void RTreeCombineRect(struct RTree_Rect *r1, struct RTree_Rect *r2,
     }
 }
 
-
 /*
    Expand first rectangle to cover second rectangle.
  */
@@ -574,7 +564,6 @@ int RTreeExpandRect(struct RTree_Rect *r1, struct RTree_Rect *r2,
     return ret;
 }
 
-
 /*
    Decide whether two rectangles are identical.
  */
@@ -595,7 +584,6 @@ int RTreeCompareRect(struct RTree_Rect *r, struct RTree_Rect *s,
     return 1;
 }
 
-
 /*
    Decide whether two rectangles overlap or touch.
  */
@@ -615,12 +603,10 @@ int RTreeOverlap(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
     return TRUE;
 }
 
-
 /*
    Decide whether rectangle s is contained in rectangle r.
  */
-int RTreeContained(struct RTree_Rect *r, struct RTree_Rect *s,
-                   struct RTree *t)
+int RTreeContained(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
 {
     register int i, j;
 
@@ -636,13 +622,11 @@ int RTreeContained(struct RTree_Rect *r, struct RTree_Rect *s,
 
     for (i = 0; i < t->ndims; i++) {
         j = i + t->ndims_alloc; /* index for high sides */
-        if (s->boundary[i] < r->boundary[i] ||
-            s->boundary[j] > r->boundary[j])
+        if (s->boundary[i] < r->boundary[i] || s->boundary[j] > r->boundary[j])
             return FALSE;
     }
     return TRUE;
 }
-
 
 /*
    Decide whether rectangle s fully contains rectangle r.
@@ -663,8 +647,7 @@ int RTreeContains(struct RTree_Rect *r, struct RTree_Rect *s, struct RTree *t)
 
     for (i = 0; i < t->ndims; i++) {
         j = i + t->ndims_alloc; /* index for high sides */
-        if (s->boundary[i] > r->boundary[i] ||
-            s->boundary[j] < r->boundary[j])
+        if (s->boundary[i] > r->boundary[i] || s->boundary[j] < r->boundary[j])
             return FALSE;
     }
     return TRUE;

@@ -1,23 +1,22 @@
-
 /****************************************************************************
  *
  * MODULE:       r.texture
  * AUTHOR(S):    Carmine Basco - basco@unisannio.it
- *               with hints from: 
- * 			prof. Giulio Antoniol - antoniol@ieee.org
- * 			prof. Michele Ceccarelli - ceccarelli@unisannio.it
+ *               with hints from:
+ *                         prof. Giulio Antoniol - antoniol@ieee.org
+ *                         prof. Michele Ceccarelli - ceccarelli@unisannio.it
  *               Markus Metz (optimization and bug fixes)
  *
  * PURPOSE:      Create map raster with textural features.
  *
- * COPYRIGHT:    (C) 2003 by University of Sannio (BN) - Italy 
+ * COPYRIGHT:    (C) 2003 by University of Sannio (BN) - Italy
  *
  *               This program is free software under the GNU General Public
- *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
- *   	    	 for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  * Permission to use, copy, modify, and distribute this software and its
- * documentation for any purpose and without fee is hereby granted. This 
+ * documentation for any purpose and without fee is hereby granted. This
  * software is provided "as is" without express or implied warranty.
  *
  *****************************************************************************/
@@ -29,22 +28,22 @@
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-#define BL  "Direction             "
-#define F1  "Angular Second Moment "
-#define F2  "Contrast              "
-#define F3  "Correlation           "
-#define F4  "Variance              "
-#define F5  "Inverse Diff Moment   "
-#define F6  "Sum Average           "
-#define F7  "Sum Variance          "
-#define F8  "Sum Entropy           "
-#define F9  "Entropy               "
-#define F10 "Difference Variance   "
-#define F11 "Difference Entropy    "
-#define F12 "Measure of Correlation-1 "
-#define F13 "Measure of Correlation-2 "
+#define BL              "Direction             "
+#define F1              "Angular Second Moment "
+#define F2              "Contrast              "
+#define F3              "Correlation           "
+#define F4              "Variance              "
+#define F5              "Inverse Diff Moment   "
+#define F6              "Sum Average           "
+#define F7              "Sum Variance          "
+#define F8              "Sum Entropy           "
+#define F9              "Entropy               "
+#define F10             "Difference Variance   "
+#define F11             "Difference Entropy    "
+#define F12             "Measure of Correlation-1 "
+#define F13             "Measure of Correlation-2 "
 
-#define PGM_MAXMAXVAL 255
+#define PGM_MAXMAXVAL   255
 #define MAX_MATRIX_SIZE 512
 
 float **matrix(int nr, int nc);
@@ -75,7 +74,6 @@ static int Ng = 0;
 static float *px, *py;
 static float Pxpys[2 * PGM_MAXMAXVAL + 2];
 static float Pxpyd[2 * PGM_MAXMAXVAL + 2];
-
 
 void alloc_vars(int size)
 {
@@ -118,8 +116,8 @@ static int bsearch_gray(int *array, int n, int val)
     return -1;
 }
 
-int set_vars(int **grays, int curr_row, int curr_col,
-             int size, int offset, int t_d, int with_nulls)
+int set_vars(int **grays, int curr_row, int curr_col, int size, int offset,
+             int t_d, int with_nulls)
 {
     int R0, R45, R90, R135, x, y;
     int row, col, row2, col2, rows, cols;
@@ -149,7 +147,7 @@ int set_vars(int **grays, int curr_row, int curr_col,
         colmax = wcols - 1;
     for (row = rowmin; row <= rowmax; row++) {
         for (col = colmin; col <= colmax; col++) {
-            if (grays[row][col] < 0) {  /* No data pixel found */
+            if (grays[row][col] < 0) { /* No data pixel found */
                 continue;
             }
             if (grays[row][col] > PGM_MAXMAXVAL)
@@ -160,8 +158,8 @@ int set_vars(int **grays, int curr_row, int curr_col,
             cnt++;
         }
     }
-    /* what is the minimum number of pixels 
-     * to get reasonable texture measurements ? 
+    /* what is the minimum number of pixels
+     * to get reasonable texture measurements ?
      * at the very least, any of R0, R45, R90, R135 must be > 1 */
     if (cnt < size * size / 4 || (!with_nulls && cnt < size * size))
         return 0;
@@ -223,8 +221,8 @@ int set_vars(int **grays, int curr_row, int curr_col,
             }
             rowd = row2 + t_d;
             cold = col2 - t_d;
-            if (row + t_d < rows && rowd < wrows &&
-                col - t_d >= 0 && cold >= 0 && grays[rowd][cold] >= 0) {
+            if (row + t_d < rows && rowd < wrows && col - t_d >= 0 &&
+                cold >= 0 && grays[rowd][cold] >= 0) {
                 y = bsearch_gray(tone, Ng, grays[rowd][cold]);
                 P_matrix45[x][y]++;
                 P_matrix45[y][x]++;
@@ -232,8 +230,8 @@ int set_vars(int **grays, int curr_row, int curr_col,
             }
             rowd = row2 + t_d;
             cold = col2 + t_d;
-            if (row + t_d < rows && rowd < wrows &&
-                col + t_d < cols && cold < wcols && grays[rowd][cold] >= 0) {
+            if (row + t_d < rows && rowd < wrows && col + t_d < cols &&
+                cold < wcols && grays[rowd][cold] >= 0) {
                 y = bsearch_gray(tone, Ng, grays[rowd][cold]);
                 P_matrix135[x][y]++;
                 P_matrix135[y][x]++;
@@ -256,8 +254,8 @@ int set_vars(int **grays, int curr_row, int curr_col,
     return 1;
 }
 
-int set_angle_vars(int angle, int have_px, int have_py,
-                   int have_pxpys, int have_pxpyd)
+int set_angle_vars(int angle, int have_px, int have_py, int have_pxpys,
+                   int have_pxpyd)
 {
     int i, j;
     float **P;
@@ -440,12 +438,12 @@ float f1_asm(void)
  */
 float f2_contrast(void)
 {
-    int i, j /*, n */ ;
+    int i, j /*, n */;
     float /* sum, */ bigsum = 0;
     float **P = P_matrix;
 
-    /* the three-loop version does not work 
-     * when gray tones that do not occur in the current window 
+    /* the three-loop version does not work
+     * when gray tones that do not occur in the current window
      * have been removed in tone and P* */
     /*
        for (n = 0; n < Ng; n++) {
@@ -500,7 +498,7 @@ float f3_corr(void)
     }
     stddev = sqrt(sum_sqr - (mean * mean));
 
-    if (stddev == 0)            /* stddev < GRASS_EPSILON or similar ? */
+    if (stddev == 0) /* stddev < GRASS_EPSILON or similar ? */
         return 0;
 
     return (tmp - mean * mean) / (stddev * stddev);

@@ -1,7 +1,7 @@
 #include <string.h>
 #include "global.h"
 
-int conv_units()
+int conv_units(void)
 {
     int i, rad;
     double f, sq_f;
@@ -38,7 +38,6 @@ int conv_units()
             }
         }
         break;
-
     }
 
     return 0;

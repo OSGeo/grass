@@ -21,7 +21,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 from .base import SQLDatabaseInterface
 from .core import SQLDatabaseInterfaceConnection, get_tgis_db_version_from_metadata
 
@@ -89,7 +88,6 @@ class RasterMetadataBase(SQLDatabaseInterface):
         min=None,
         max=None,
     ):
-
         SQLDatabaseInterface.__init__(self, table, ident)
 
         self.set_id(ident)
@@ -340,7 +338,6 @@ class RasterMetadata(RasterMetadataBase):
         max=None,
         semantic_label=None,
     ):
-
         RasterMetadataBase.__init__(
             self,
             "raster_metadata",
@@ -354,9 +351,6 @@ class RasterMetadata(RasterMetadataBase):
             min,
             max,
         )
-
-        if get_tgis_db_version_from_metadata() > 2:
-            self.set_semantic_label(semantic_label)
 
     def set_semantic_label(self, semantic_label):
         """Set the semantic label identifier"""
@@ -468,7 +462,6 @@ class Raster3DMetadata(RasterMetadataBase):
         min=None,
         max=None,
     ):
-
         RasterMetadataBase.__init__(
             self,
             "raster3d_metadata",
@@ -630,7 +623,6 @@ class VectorMetadata(SQLDatabaseInterface):
         number_of_holes=None,
         number_of_volumes=None,
     ):
-
         SQLDatabaseInterface.__init__(self, "vector_metadata", ident)
 
         self.set_id(ident)
@@ -927,7 +919,6 @@ class STDSMetadataBase(SQLDatabaseInterface):
     def __init__(
         self, table=None, ident=None, title=None, description=None, command=None
     ):
-
         SQLDatabaseInterface.__init__(self, table, ident)
 
         self.set_id(ident)
@@ -1150,7 +1141,6 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         description=None,
         aggregation_type=None,
     ):
-
         STDSMetadataBase.__init__(self, table, ident, title, description)
 
         # Initialize the dict to select all values from the db
@@ -1370,7 +1360,6 @@ class STRDSMetadata(STDSRasterMetadataBase):
     """
 
     def __init__(self, ident=None, raster_register=None, title=None, description=None):
-
         STDSRasterMetadataBase.__init__(
             self, "strds_metadata", ident, title, description
         )
@@ -1549,7 +1538,6 @@ class STR3DSMetadata(STDSRasterMetadataBase):
     def __init__(
         self, ident=None, raster3d_register=None, title=None, description=None
     ):
-
         STDSRasterMetadataBase.__init__(
             self, "str3ds_metadata", ident, title, description
         )
@@ -1693,7 +1681,6 @@ class STVDSMetadata(STDSMetadataBase):
     """
 
     def __init__(self, ident=None, vector_register=None, title=None, description=None):
-
         STDSMetadataBase.__init__(self, "stvds_metadata", ident, title, description)
 
         self.set_vector_register(vector_register)

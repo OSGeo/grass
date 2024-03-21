@@ -1,19 +1,19 @@
-
 /****************************************************************************
  *
  * MODULE:       r.kappa
  * AUTHOR(S):    Tao Wen, UIUC (original contributor)
  *               Markus Neteler <neteler itc.it>,
- *               Roberto Flor <flor itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Jachym Cepicky <jachym les-ejk.cz>, 
+ *               Roberto Flor <flor itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>
+ *               Maris Nartiss <maris.gis gmail.com>
  * PURPOSE:      tabulates the error matrix of classification result by
- *               crossing classified map layer with respect to reference map 
+ *               crossing classified map layer with respect to reference map
  *               layer
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -45,6 +45,8 @@ int nlayers;
 GSTATS *Gstats;
 size_t nstats;
 
+METRICS *metrics;
+
 /* function prototypes */
 static void layer(const char *s);
 
@@ -52,13 +54,11 @@ int main(int argc, char **argv)
 {
     int i;
     struct GModule *module;
-    struct
-    {
-        struct Option *map, *ref, *output, *titles;
+    struct {
+        struct Option *map, *ref, *output, *titles, *format;
     } parms;
 
-    struct
-    {
+    struct {
         struct Flag *m, *w, *h;
     } flags;
 
@@ -97,6 +97,17 @@ int main(int argc, char **argv)
     parms.titles->answer = "ACCURACY ASSESSMENT";
     parms.titles->guisection = _("Output settings");
 
+    parms.format = G_define_option();
+    parms.format->key = "format";
+    parms.format->type = TYPE_STRING;
+    parms.format->required = YES;
+    parms.format->label = _("Output format");
+    parms.format->options = "plain,json";
+    parms.format->descriptions = "plain;Plain text output;"
+                                 "json;JSON (JavaScript Object Notation);";
+    parms.format->answer = "plain";
+    parms.format->guisection = _("Output settings");
+
     flags.w = G_define_flag();
     flags.w->key = 'w';
     flags.w->label = _("Wide report");
@@ -116,6 +127,11 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    if (strcmp(parms.format->answer, "json") == 0 &&
+        (flags.m->answer || flags.h->answer || flags.w->answer))
+        G_warning(_("When JSON output format is requested, all formatting "
+                    "flags are ignored"));
+
     G_get_window(&window);
 
     maps[0] = parms.ref->answer;
@@ -129,25 +145,28 @@ int main(int argc, char **argv)
 
     /* run r.stats to obtain statistics of map layers */
     stats();
+    /* calculate metrics from stats */
+    calc_metrics();
 
-    if (flags.m->answer) {
-        /* prepare the data for calculation */
-        prn2csv_error_mat(2048, flags.h->answer);
+    if (strcmp(parms.format->answer, "json") == 0) {
+        print_json();
+    }
+    else if (flags.m->answer) {
+        print2csv_error_mat(flags.h->answer);
     }
     else {
         /* print header of the output */
         if (!flags.h->answer)
-            prn_header();
+            print_header();
 
         /* prepare the data for calculation */
-        prn_error_mat(flags.w->answer ? 132 : 80, flags.h->answer);
+        print_error_mat(flags.w->answer ? 132 : 80, flags.h->answer);
 
         /* generate the error matrix, kappa and variance */
-        calc_kappa();
+        print_kappa();
     }
     return EXIT_SUCCESS;
 }
-
 
 static void layer(const char *s)
 {
@@ -160,7 +179,7 @@ static void layer(const char *s)
         G_fatal_error(_("Raster map <%s> not found"), s);
 
     n = nlayers++;
-    layers = (LAYER *) G_realloc(layers, 2 * sizeof(LAYER));
+    layers = (LAYER *)G_realloc(layers, 2 * sizeof(LAYER));
     layers[n].name = G_store(name);
     layers[n].mapset = mapset;
     Rast_read_cats(name, mapset, &layers[n].labels);

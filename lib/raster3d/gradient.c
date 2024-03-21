@@ -1,4 +1,3 @@
-
 /*!
    \file gradient.c
 
@@ -24,17 +23,18 @@
 
    \param array pointer to RASTER3D_Array with input values
    \param step array of x, y, z steps for gradient (resolution values)
-   \param[out] grad_x pointer to RASTER3D_Array_double with gradient in x direction
-   \param[out] grad_y pointer to RASTER3D_Array_double with gradient in y direction
-   \param[out] grad_z pointer to RASTER3D_Array_double with gradient in z direction
+   \param[out] grad_x pointer to RASTER3D_Array_double with gradient in x
+   direction \param[out] grad_y pointer to RASTER3D_Array_double with gradient
+   in y direction \param[out] grad_z pointer to RASTER3D_Array_double with
+   gradient in z direction
 
  */
 #include <grass/raster3d.h>
 
-void Rast3d_gradient_double(RASTER3D_Array_double * array, double *step,
-                            RASTER3D_Array_double * grad_x,
-                            RASTER3D_Array_double * grad_y,
-                            RASTER3D_Array_double * grad_z)
+void Rast3d_gradient_double(RASTER3D_Array_double *array, double *step,
+                            RASTER3D_Array_double *grad_x,
+                            RASTER3D_Array_double *grad_y,
+                            RASTER3D_Array_double *grad_z)
 {
     int col, row, depth;
     double val0, val1, val2;
@@ -46,10 +46,10 @@ void Rast3d_gradient_double(RASTER3D_Array_double * array, double *step,
             val1 = RASTER3D_ARRAY_ACCESS(array, 1, row, depth);
             val2 = RASTER3D_ARRAY_ACCESS(array, 2, row, depth);
             if (Rast_is_d_null_value(&val0))
-                Rast_set_null_value(&RASTER3D_ARRAY_ACCESS
-                                    (grad_x, 0, row, depth), 1, DCELL_TYPE);
-            else if (Rast_is_d_null_value(&val1) ||
-                     Rast_is_d_null_value(&val2))
+                Rast_set_null_value(
+                    &RASTER3D_ARRAY_ACCESS(grad_x, 0, row, depth), 1,
+                    DCELL_TYPE);
+            else if (Rast_is_d_null_value(&val1) || Rast_is_d_null_value(&val2))
                 RASTER3D_ARRAY_ACCESS(grad_x, 0, row, depth) = 0;
             else
                 RASTER3D_ARRAY_ACCESS(grad_x, 0, row, depth) =
@@ -60,11 +60,10 @@ void Rast3d_gradient_double(RASTER3D_Array_double * array, double *step,
             val1 = RASTER3D_ARRAY_ACCESS(array, array->sx - 2, row, depth);
             val2 = RASTER3D_ARRAY_ACCESS(array, array->sx - 1, row, depth);
             if (Rast_is_d_null_value(&val2))
-                Rast_set_null_value(&RASTER3D_ARRAY_ACCESS
-                                    (grad_x, array->sx - 1, row, depth), 1,
-                                    DCELL_TYPE);
-            else if (Rast_is_d_null_value(&val0) ||
-                     Rast_is_d_null_value(&val1))
+                Rast_set_null_value(
+                    &RASTER3D_ARRAY_ACCESS(grad_x, array->sx - 1, row, depth),
+                    1, DCELL_TYPE);
+            else if (Rast_is_d_null_value(&val0) || Rast_is_d_null_value(&val1))
                 RASTER3D_ARRAY_ACCESS(grad_x, array->sx - 1, row, depth) = 0;
             else
                 RASTER3D_ARRAY_ACCESS(grad_x, array->sx - 1, row, depth) =
@@ -76,9 +75,9 @@ void Rast3d_gradient_double(RASTER3D_Array_double * array, double *step,
                 val1 = RASTER3D_ARRAY_ACCESS(array, col, row, depth);
                 val2 = RASTER3D_ARRAY_ACCESS(array, col + 1, row, depth);
                 if (Rast_is_d_null_value(&val1))
-                    Rast_set_null_value(&RASTER3D_ARRAY_ACCESS
-                                        (grad_x, col, row, depth), 1,
-                                        DCELL_TYPE);
+                    Rast_set_null_value(
+                        &RASTER3D_ARRAY_ACCESS(grad_x, col, row, depth), 1,
+                        DCELL_TYPE);
                 else if (Rast_is_d_null_value(&val0) ||
                          Rast_is_d_null_value(&val2))
                     RASTER3D_ARRAY_ACCESS(grad_x, col, row, depth) = 0;
@@ -95,10 +94,10 @@ void Rast3d_gradient_double(RASTER3D_Array_double * array, double *step,
             val1 = RASTER3D_ARRAY_ACCESS(array, col, 1, depth);
             val2 = RASTER3D_ARRAY_ACCESS(array, col, 2, depth);
             if (Rast_is_d_null_value(&val0))
-                Rast_set_null_value(&RASTER3D_ARRAY_ACCESS
-                                    (grad_y, col, 0, depth), 1, DCELL_TYPE);
-            else if (Rast_is_d_null_value(&val1) ||
-                     Rast_is_d_null_value(&val2))
+                Rast_set_null_value(
+                    &RASTER3D_ARRAY_ACCESS(grad_y, col, 0, depth), 1,
+                    DCELL_TYPE);
+            else if (Rast_is_d_null_value(&val1) || Rast_is_d_null_value(&val2))
                 RASTER3D_ARRAY_ACCESS(grad_y, col, 0, depth) = 0;
             else
                 RASTER3D_ARRAY_ACCESS(grad_y, col, 0, depth) =
@@ -109,11 +108,10 @@ void Rast3d_gradient_double(RASTER3D_Array_double * array, double *step,
             val1 = RASTER3D_ARRAY_ACCESS(array, col, array->sy - 2, depth);
             val2 = RASTER3D_ARRAY_ACCESS(array, col, array->sy - 1, depth);
             if (Rast_is_d_null_value(&val2))
-                Rast_set_null_value(&RASTER3D_ARRAY_ACCESS
-                                    (grad_y, col, array->sy - 1, depth), 1,
-                                    DCELL_TYPE);
-            else if (Rast_is_d_null_value(&val0) ||
-                     Rast_is_d_null_value(&val1))
+                Rast_set_null_value(
+                    &RASTER3D_ARRAY_ACCESS(grad_y, col, array->sy - 1, depth),
+                    1, DCELL_TYPE);
+            else if (Rast_is_d_null_value(&val0) || Rast_is_d_null_value(&val1))
                 RASTER3D_ARRAY_ACCESS(grad_y, col, array->sy - 1, depth) = 0;
             else
                 RASTER3D_ARRAY_ACCESS(grad_y, col, array->sy - 1, depth) =
@@ -125,9 +123,9 @@ void Rast3d_gradient_double(RASTER3D_Array_double * array, double *step,
                 val1 = RASTER3D_ARRAY_ACCESS(array, col, row, depth);
                 val2 = RASTER3D_ARRAY_ACCESS(array, col, row + 1, depth);
                 if (Rast_is_d_null_value(&val1))
-                    Rast_set_null_value(&RASTER3D_ARRAY_ACCESS
-                                        (grad_y, col, row, depth), 1,
-                                        DCELL_TYPE);
+                    Rast_set_null_value(
+                        &RASTER3D_ARRAY_ACCESS(grad_y, col, row, depth), 1,
+                        DCELL_TYPE);
                 else if (Rast_is_d_null_value(&val0) ||
                          Rast_is_d_null_value(&val2))
                     RASTER3D_ARRAY_ACCESS(grad_y, col, row, depth) = 0;
@@ -144,10 +142,9 @@ void Rast3d_gradient_double(RASTER3D_Array_double * array, double *step,
             val1 = RASTER3D_ARRAY_ACCESS(array, col, row, 1);
             val2 = RASTER3D_ARRAY_ACCESS(array, col, row, 2);
             if (Rast_is_d_null_value(&val0))
-                Rast_set_null_value(&RASTER3D_ARRAY_ACCESS
-                                    (grad_z, col, row, 0), 1, DCELL_TYPE);
-            else if (Rast_is_d_null_value(&val1) ||
-                     Rast_is_d_null_value(&val2))
+                Rast_set_null_value(&RASTER3D_ARRAY_ACCESS(grad_z, col, row, 0),
+                                    1, DCELL_TYPE);
+            else if (Rast_is_d_null_value(&val1) || Rast_is_d_null_value(&val2))
                 RASTER3D_ARRAY_ACCESS(grad_z, col, row, 0) = 0;
             else
                 RASTER3D_ARRAY_ACCESS(grad_z, col, row, 0) =
@@ -158,11 +155,10 @@ void Rast3d_gradient_double(RASTER3D_Array_double * array, double *step,
             val1 = RASTER3D_ARRAY_ACCESS(array, col, row, array->sz - 2);
             val2 = RASTER3D_ARRAY_ACCESS(array, col, row, array->sz - 1);
             if (Rast_is_d_null_value(&val2))
-                Rast_set_null_value(&RASTER3D_ARRAY_ACCESS
-                                    (grad_z, col, row, array->sz - 1), 1,
-                                    DCELL_TYPE);
-            else if (Rast_is_d_null_value(&val0) ||
-                     Rast_is_d_null_value(&val1))
+                Rast_set_null_value(
+                    &RASTER3D_ARRAY_ACCESS(grad_z, col, row, array->sz - 1), 1,
+                    DCELL_TYPE);
+            else if (Rast_is_d_null_value(&val0) || Rast_is_d_null_value(&val1))
                 RASTER3D_ARRAY_ACCESS(grad_z, col, row, array->sz - 1) = 0;
             else
                 RASTER3D_ARRAY_ACCESS(grad_z, col, row, array->sz - 1) =
@@ -173,9 +169,9 @@ void Rast3d_gradient_double(RASTER3D_Array_double * array, double *step,
                 val1 = RASTER3D_ARRAY_ACCESS(array, col, row, depth);
                 val2 = RASTER3D_ARRAY_ACCESS(array, col, row, depth + 1);
                 if (Rast_is_d_null_value(&val1))
-                    Rast_set_null_value(&RASTER3D_ARRAY_ACCESS
-                                        (grad_z, col, row, depth), 1,
-                                        DCELL_TYPE);
+                    Rast_set_null_value(
+                        &RASTER3D_ARRAY_ACCESS(grad_z, col, row, depth), 1,
+                        DCELL_TYPE);
                 else if (Rast_is_d_null_value(&val0) ||
                          Rast_is_d_null_value(&val2))
                     RASTER3D_ARRAY_ACCESS(grad_z, col, row, depth) = 0;

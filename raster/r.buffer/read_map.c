@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.buffer
@@ -17,15 +16,14 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
-****************************************************************************/
+ ****************************************************************************/
 
 #include <stdlib.h>
 #include "distance.h"
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
-
-    /* read the input map. convert non-nulls to 1 */
+/* read the input map. convert non-nulls to 1 */
 
 int read_input_map(char *input, char *mapset, int ZEROFLAG)
 {
@@ -36,9 +34,8 @@ int read_input_map(char *input, char *mapset, int ZEROFLAG)
     register CELL *cell;
     register MAPTYPE *ptr;
 
-    map =
-        (MAPTYPE *) G_malloc((size_t)window.rows * window.cols *
-                             sizeof(MAPTYPE));
+    map = (MAPTYPE *)G_malloc((size_t)window.rows * window.cols *
+                              sizeof(MAPTYPE));
 
     fd = Rast_open_old(input, mapset);
 
@@ -78,7 +75,7 @@ int read_input_map(char *input, char *mapset, int ZEROFLAG)
                     }
                 }
             }
-            else {              /* use NULL */
+            else { /* use NULL */
 
                 if ((*ptr++ = !Rast_is_c_null_value(cell++))) {
                     if (minrow < 0)

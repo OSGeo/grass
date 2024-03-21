@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2000 by the GRASS Development Team
  * Author: Bob Covill <bcovill@tekmap.ns.ca>
- * 
+ *
  * This Program is free software under the GPL (>=v2)
  * Read the file COPYING coming with GRASS for details
  *
@@ -18,7 +18,6 @@ int clr;
 struct Colors colors;
 
 static double dist, e, n;
-
 
 int main(int argc, char *argv[])
 {
@@ -38,13 +37,11 @@ int main(int argc, char *argv[])
     double e1, e2, n1, n2;
     RASTER_MAP_TYPE data_type;
     struct Cell_head window;
-    struct
-    {
+    struct {
         struct Option *opt1, *profile, *res, *output, *null_str, *coord_file,
             *units;
         struct Flag *g, *c, *m;
-    }
-    parm;
+    } parm;
     struct GModule *module;
 
     G_gisinit(argv[0]);
@@ -75,9 +72,8 @@ int main(int argc, char *argv[])
     parm.coord_file->required = NO;
     parm.coord_file->label =
         _("Name of input file containing coordinate pairs");
-    parm.coord_file->description =
-        _("Use instead of the 'coordinates' option. "
-          "\"-\" reads from stdin.");
+    parm.coord_file->description = _("Use instead of the 'coordinates' option. "
+                                     "\"-\" reads from stdin.");
 
     parm.res = G_define_option();
     parm.res->key = "resolution";
@@ -91,8 +87,8 @@ int main(int argc, char *argv[])
 
     parm.g = G_define_flag();
     parm.g->key = 'g';
-    parm.g->description =
-        _("Output easting and northing in first two columns of four column output");
+    parm.g->description = _("Output easting and northing in first two columns "
+                            "of four column output");
 
     parm.c = G_define_flag();
     parm.c->key = 'c';
@@ -111,7 +107,7 @@ int main(int argc, char *argv[])
 
     clr = 0;
     if (parm.c->answer)
-        clr = 1;                /* color output */
+        clr = 1; /* color output */
 
     null_string = parm.null_str->answer;
 
@@ -144,8 +140,7 @@ int main(int argc, char *argv[])
         res = atof(parm.res->answer);
         /* Catch bad resolution ? */
         if (res <= 0)
-            G_fatal_error(_("Illegal resolution %g [%s]"), res / factor,
-                          unit);
+            G_fatal_error(_("Illegal resolution %g [%s]"), res / factor, unit);
     }
     else {
         /* Do average of EW and NS res */
@@ -204,7 +199,6 @@ int main(int argc, char *argv[])
         if (coor_fp == NULL)
             G_fatal_error(_("Could not open <%s>"), parm.coord_file->answer);
 
-
         for (n = 1; input(b1, ebuf, b2, nbuf, label, coor_fp); n++) {
             G_debug(4, "stdin line %d: ebuf=[%s]  nbuf=[%s]", n, ebuf, nbuf);
             if (!G_scan_easting(ebuf, &e2, G_projection()) ||
@@ -212,8 +206,8 @@ int main(int argc, char *argv[])
                 G_fatal_error(_("Invalid coordinates %s %s"), ebuf, nbuf);
 
             if (havefirst)
-                do_profile(e1, e2, n1, n2, coords, res, fd, data_type,
-                           fp, null_string, unit, factor);
+                do_profile(e1, e2, n1, n2, coords, res, fd, data_type, fp,
+                           null_string, unit, factor);
             e1 = e2;
             n1 = n2;
             havefirst = TRUE;
@@ -251,9 +245,8 @@ int main(int argc, char *argv[])
                                 G_projection());
 
                 /* Get profile info */
-                do_profile(e1, e2, n1, n2, coords, res, fd, data_type,
-                           fp, null_string, unit, factor);
-
+                do_profile(e1, e2, n1, n2, coords, res, fd, data_type, fp,
+                           null_string, unit, factor);
             }
         }
     }
@@ -265,13 +258,13 @@ int main(int argc, char *argv[])
         Rast_free_colors(&colors);
 
     exit(EXIT_SUCCESS);
-}                               /* Done with main */
+} /* Done with main */
 
 /* Calculate the Profile Now */
 /* Establish parameters */
-int do_profile(double e1, double e2, double n1, double n2,
-               int coords, double res, int fd, int data_type, FILE * fp,
-               char *null_string, const char *unit, double factor)
+int do_profile(double e1, double e2, double n1, double n2, int coords,
+               double res, int fd, int data_type, FILE *fp, char *null_string,
+               const char *unit, double factor)
 {
     double rows, cols, LEN;
     double Y, X, k;
@@ -283,15 +276,15 @@ int do_profile(double e1, double e2, double n1, double n2,
     G_message(_("Approx. transect length: %f [%s]"), LEN / factor, unit);
 
     if (!G_point_in_region(e2, n2))
-        G_warning(_("Endpoint coordinates are outside of current region settings"));
+        G_warning(
+            _("Endpoint coordinates are outside of current region settings"));
 
     /* Calculate Azimuth of Line */
     if (rows == 0 && cols == 0) {
         /* Special case for no movement */
         e = e1;
         n = n1;
-        read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                  null_string);
+        read_rast(e, n, dist / factor, fd, coords, data_type, fp, null_string);
     }
 
     k = res / hypot(rows, cols);
@@ -349,4 +342,4 @@ int do_profile(double e1, double e2, double n1, double n2,
      * return dist;
      */
     return 0;
-}                               /* done with do_profile */
+} /* done with do_profile */

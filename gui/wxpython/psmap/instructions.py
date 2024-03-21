@@ -34,10 +34,8 @@ This program is free software under the GNU General Public License
 
 import os
 import string
-import six
 from math import ceil
 from time import strftime, localtime
-from io import open
 
 import wx
 import grass.script as grass
@@ -58,7 +56,6 @@ class Instruction:
     """Class which represents instruction file"""
 
     def __init__(self, parent, objectsToDraw, env):
-
         self.parent = parent
         self.objectsToDraw = objectsToDraw
         # here are kept objects like mapinfo, rasterlegend, etc.
@@ -150,7 +147,7 @@ class Instruction:
         # open file
         try:
             file = open(filename, encoding="Latin_1", errors="ignore")
-        except IOError:
+        except OSError:
             GError(message=_("Unable to open file\n%s") % filename)
             return
         # first read file to get information about region and scaletype
@@ -181,7 +178,7 @@ class Instruction:
             toM = float(proj["meters"])
         units = UnitConversion(self.parent)
         w = units.convert(value=mapRect.Get()[2], fromUnit="inch", toUnit="meter") / toM
-        map["scale"] = w / abs((region["w"] - region["e"]))
+        map["scale"] = w / abs(region["w"] - region["e"])
 
         SetResolution(
             dpi=300, width=map["rect"].width, height=map["rect"].height, env=self.env
@@ -381,7 +378,6 @@ class Instruction:
             for vmap in vectorMaps:
                 for i, each in enumerate(vector["list"]):
                     if each[2] == vmap.id:
-
                         vector["list"][i][4] = vmap["label"]
                         vector["list"][i][3] = vmap["lpos"]
             if vectorLegend:
@@ -466,7 +462,6 @@ class Instruction:
                 )
                 or not instr
             ):
-
                 id = NewId()  # !vProperties expect subtype
                 if i == "vProperties":
                     id = kwargs["id"]
@@ -543,7 +538,7 @@ class Instruction:
 
 
 class InstructionObject:
-    """Abtract class representing single instruction"""
+    """Abstract class representing single instruction"""
 
     def __init__(self, id, env):
         self.id = id
@@ -828,7 +823,7 @@ class PageSetup(InstructionObject):
                         # e.g. paper a3
                         try:
                             instr["Format"] = pformat
-                            for key, value in six.iteritems(availableFormats[pformat]):
+                            for key, value in availableFormats[pformat].items():
                                 instr[key] = float(value)
                             break
                         except KeyError:

@@ -1,19 +1,18 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass PDE Numerical Library
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2007
-* 		soerengebbert <at> gmx <dot> de
-*               
-* PURPOSE:      Unit benchs for les creation
-*
-* COPYRIGHT:    (C) 2007 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass PDE Numerical Library
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2007
+ *                 soerengebbert <at> gmx <dot> de
+ *
+ * PURPOSE:      Unit benchs for les creation
+ *
+ * COPYRIGHT:    (C) 2007 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -24,7 +23,6 @@
 
 /* prototypes */
 static void bench_blas_level_3_double(int rows);
-
 
 /* *************************************************************** */
 /* Perfrome the blas level 3 benchs ****************************** */
@@ -60,7 +58,6 @@ void bench_blas_level_3_double(int rows)
     fill_d_vector_range_1(A[0], 1, rows * rows);
     fill_d_vector_range_1(B[0], 1, rows * rows);
 
-
     gettimeofday(&tstart, NULL);
 #pragma omp parallel default(shared)
     {
@@ -77,7 +74,6 @@ void bench_blas_level_3_double(int rows)
     gettimeofday(&tend, NULL);
     printf("Computation time G_math_d_AB: %g\n",
            compute_time_difference(tstart, tend));
-
 
     if (x)
         G_free_vector(x);

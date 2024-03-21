@@ -65,22 +65,20 @@
 #define BACKWARD_COMPATIBILITY
 #define DEFAULT_COLOR "gray"
 
-struct rectinfo
-{
+struct rectinfo {
     double t, b, l, r;
 };
 
 static void set_color(char *);
 static void get_coordinates(double *, double *, double *, double *,
                             struct rectinfo, char **, char, char);
-static void draw_text(char *, double *, double *, double, char *, double,
-                      char, int, int, int);
+static void draw_text(char *, double *, double *, double, char *, double, char,
+                      int, int, int);
 
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *text;
         struct Option *size;
         struct Option *fgcolor;
@@ -95,8 +93,7 @@ int main(int argc, char **argv)
         struct Option *charset;
         struct Option *input;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *p;
         struct Flag *g;
         struct Flag *b;
@@ -138,8 +135,8 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("display"));
     G_add_keyword(_("cartography"));
-    module->description =
-        _("Draws text in the active display frame on the graphics monitor using the current font.");
+    module->description = _("Draws text in the active display frame on the "
+                            "graphics monitor using the current font.");
 
     opt.text = G_define_option();
     opt.text->key = "text";
@@ -153,23 +150,18 @@ int main(int argc, char **argv)
     opt.input->description = _("Input file");
     opt.input->guisection = _("Input");
 
-    opt.fgcolor = G_define_option();
+    opt.fgcolor = G_define_standard_option(G_OPT_C);
     opt.fgcolor->key = "color";
-    opt.fgcolor->type = TYPE_STRING;
     opt.fgcolor->answer = DEFAULT_COLOR;
     opt.fgcolor->required = NO;
-    opt.fgcolor->description =
-        _("Text color, either a standard GRASS color or R:G:B triplet");
-    opt.fgcolor->gisprompt = "old_color,color,color";
+    opt.fgcolor->label = _("Text color");
     opt.fgcolor->guisection = _("Text");
 
-    opt.bgcolor = G_define_option();
+    opt.bgcolor = G_define_standard_option(G_OPT_CN);
     opt.bgcolor->key = "bgcolor";
-    opt.bgcolor->type = TYPE_STRING;
+    opt.bgcolor->answer = "none";
     opt.bgcolor->required = NO;
-    opt.bgcolor->description =
-        _("Text background color, either a standard GRASS color or R:G:B triplet");
-    opt.bgcolor->gisprompt = "old_color,color,color";
+    opt.bgcolor->label = _("Text background color");
     opt.bgcolor->guisection = _("Text");
 
     opt.rotation = G_define_option();
@@ -194,8 +186,8 @@ int main(int argc, char **argv)
     opt.at->key_desc = "x,y";
     opt.at->type = TYPE_DOUBLE;
     opt.at->required = NO;
-    opt.at->description =
-        _("Screen position at which text will begin to be drawn (percentage, [0,0] is lower left)");
+    opt.at->description = _("Screen position at which text will begin to be "
+                            "drawn (percentage, [0,0] is lower left)");
     opt.at->guisection = _("Position");
 
     opt.line = G_define_option();
@@ -325,7 +317,7 @@ int main(int argc, char **argv)
     if (opt.bgcolor->answer) {
         do_background = 1;
         bg_color = D_parse_color(opt.bgcolor->answer, TRUE);
-        if (bg_color == 0)      /* ie color="none" */
+        if (bg_color == 0) /* ie color="none" */
             do_background = 0;
     }
     else {
@@ -343,7 +335,7 @@ int main(int argc, char **argv)
         orig_y = y;
     }
     else {
-        x = win.l + (size * linespacing + 0.5) - size;  /* d.text: +5 */
+        x = win.l + (size * linespacing + 0.5) - size; /* d.text: +5 */
         y = win.t + line * (size * linespacing + 0.5);
     }
 
@@ -355,8 +347,8 @@ int main(int argc, char **argv)
 
     if (text) {
         if (text[0])
-            draw_text(text, &x, &y, size, align, rotation, bold,
-                      do_background, fg_color, bg_color);
+            draw_text(text, &x, &y, size, align, rotation, bold, do_background,
+                      fg_color, bg_color);
 
         /* reset */
         D_text_size(5, 5);
@@ -378,8 +370,8 @@ int main(int argc, char **argv)
     }
 
     if (isatty(fileno(cmd_fp)))
-        fprintf(stderr,
-                _("\nPlease enter text instructions.  Enter EOF (ctrl-d) on last line to quit\n"));
+        fprintf(stderr, _("\nPlease enter text instructions.  Enter EOF "
+                          "(ctrl-d) on last line to quit\n"));
 
     set_x = set_y = set_l = 0;
     first_text = 1;
@@ -390,15 +382,17 @@ int main(int argc, char **argv)
         char *buf_ptr, *ptr;
 
         buf_len = strlen(buf) - 1;
-        for (; buf[buf_len] == '\r' || buf[buf_len] == '\n'; buf_len--) ;
+        for (; buf[buf_len] == '\r' || buf[buf_len] == '\n'; buf_len--)
+            ;
         buf[buf_len + 1] = 0;
 
         if (buf[0] == '.' && buf[1] != '.') {
             int i;
             double d;
 
-            G_squeeze(buf);     /* added 6/91 DBS @ CWU */
-            for (buf_ptr = buf + 2; *buf_ptr == ' '; buf_ptr++) ;
+            G_squeeze(buf); /* added 6/91 DBS @ CWU */
+            for (buf_ptr = buf + 2; *buf_ptr == ' '; buf_ptr++)
+                ;
             buf_len = strlen(buf_ptr);
 
             switch (buf[1] & 0x7f) {
@@ -558,11 +552,11 @@ int main(int argc, char **argv)
 
 static void set_color(char *tcolor)
 {
-    int r, g, b, color;
+    unsigned int r, g, b, color;
 
-    if (sscanf(tcolor, "%d:%d:%d", &r, &g, &b) == 3 ||
+    if (sscanf(tcolor, "%u:%u:%u", &r, &g, &b) == 3 ||
         sscanf(tcolor, "0x%02x%02x%02x", &r, &g, &b) == 3) {
-        if (r >= 0 && r < 256 && g >= 0 && g < 256 && b >= 0 && b < 256) {
+        if (r < 256 && g < 256 && b < 256) {
             D_RGB_color(r, g, b);
         }
     }
@@ -679,13 +673,14 @@ static void draw_text(char *text, double *x, double *y, double size,
     }
 
     if (do_background) {
-        pl = D_d_to_u_col(*x - size / 2);       /* some pixels margin for both sides */
+        pl =
+            D_d_to_u_col(*x - size / 2); /* some pixels margin for both sides */
         pt = D_d_to_u_row(*y + size / 2);
         pr = D_d_to_u_col(*x + w + size / 2);
         pb = D_d_to_u_row(*y - h - size / 2);
         D_use_color(bg_color);
-        D_box_abs(pl, pt, pr, pb);      /* draw the box */
-        D_use_color(fg_color);  /* restore */
+        D_box_abs(pl, pt, pr, pb); /* draw the box */
+        D_use_color(fg_color);     /* restore */
     }
 
     D_pos_abs(D_d_to_u_col(*x), D_d_to_u_row(*y));

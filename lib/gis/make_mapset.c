@@ -22,7 +22,7 @@
 
 /*!
  * \brief Create a new mapset
- * 
+ *
  * This function creates a new mapset in the given location,
  * initializes default window and the current window.
  *
@@ -38,7 +38,7 @@
  *
  * \return 0 on success
  * \return -1 to indicate a system error (check errno).
- * \return -2 illegal name 
+ * \return -2 illegal name
  */
 int G_make_mapset(const char *gisdbase_name, const char *location_name,
                   const char *mapset_name)
@@ -54,7 +54,8 @@ int G_make_mapset(const char *gisdbase_name, const char *location_name,
     if (gisdbase_name == NULL)
         gisdbase_name = G_gisdbase();
 
-    /* TODO: Should probably check that user specified location and gisdbase are valid */
+    /* TODO: Should probably check that user specified location and gisdbase are
+     * valid */
 
     /* check if mapset name is legal */
     if (G_legal_filename(mapset_name) != 1)

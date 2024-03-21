@@ -14,7 +14,6 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 import wx
-import six
 
 from gui_core.treeview import TreeListView
 from gui_core.wrap import Button, StaticText, Menu, NewId
@@ -203,12 +202,12 @@ def QueryTreeBuilder(data, column):
     """
 
     def addNode(parent, data, model):
-        for k, v in six.iteritems(data):
+        for k, v in data.items():
             if isinstance(v, dict):
                 node = model.AppendNode(parent=parent, data={"label": k})
                 addNode(parent=node, data=v, model=model)
             else:
-                if not isinstance(v, six.string_types):
+                if not isinstance(v, str):
                     v = str(v)
                 node = model.AppendNode(parent=parent, data={"label": k, column: v})
 

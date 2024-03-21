@@ -5,7 +5,7 @@
  *
  * (C) 2001-2009 GRASS Development Team
  *
- * This program is free software under the GNU General Public License 
+ * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Original author CERL
@@ -56,7 +56,7 @@ void Rast_append_format_history(struct History *hist, const char *fmt, ...)
     hist->lines[hist->nlines++] = str;
 }
 
-int Rast__read_history(struct History *hist, FILE * fp)
+int Rast__read_history(struct History *hist, FILE *fp)
 {
     int i;
 
@@ -113,20 +113,19 @@ int Rast_read_history(const char *name, const char *mapset,
 
     fp = G_fopen_old("hist", name, mapset);
     if (!fp) {
-        G_warning(_("Unable to get history information for <%s@%s>"),
-                  name, mapset);
+        G_warning(_("Unable to get history information for <%s@%s>"), name,
+                  mapset);
         return -1;
     }
 
     if (Rast__read_history(hist, fp) == 0)
         return 0;
 
-    G_warning(_("Unable to get history information for <%s@%s>"),
-              name, mapset);
+    G_warning(_("Unable to get history information for <%s@%s>"), name, mapset);
     return -1;
 }
 
-void Rast__write_history(struct History *hist, FILE * fp)
+void Rast__write_history(struct History *hist, FILE *fp)
 {
     int i;
 
@@ -161,19 +160,18 @@ void Rast_write_history(const char *name, struct History *hist)
     FILE *fp = G_fopen_new("hist", name);
 
     if (!fp)
-        G_fatal_error(_("Unable to write history information for <%s>"),
-                      name);
+        G_fatal_error(_("Unable to write history information for <%s>"), name);
 
     Rast__write_history(hist, fp);
 }
-
 
 /*!
  * \brief Set the string of a specific history field
  *
  *
  * \param hist pointer to History structure which holds history info
- * \param field number of a specific history field, should be accessed with macros (HIST_MAPID, ...)
+ * \param field number of a specific history field, should be accessed with
+ * macros (HIST_MAPID, ...)
  *
  * \return string of the history field
  */
@@ -187,8 +185,8 @@ const char *Rast_get_history(struct History *hist, int field)
  *
  *
  * \param hist pointer to History structure which holds history info
- * \param field number of a specific history field, should be accessed with macros (HIST_MAPID, ...)
- * \param str string of the history field
+ * \param field number of a specific history field, should be accessed with
+ * macros (HIST_MAPID, ...) \param str string of the history field
  *
  * \return void
  */
@@ -199,8 +197,7 @@ void Rast_set_history(struct History *hist, int field, const char *str)
     hist->fields[field] = str ? G_store(str) : NULL;
 }
 
-void Rast_format_history(struct History *hist, int field, const char *fmt,
-                         ...)
+void Rast_format_history(struct History *hist, int field, const char *fmt, ...)
 {
     va_list ap;
 
@@ -253,7 +250,7 @@ void Rast_short_history(const char *name, const char *type,
  *  - First version had for loops of [i][j] character assignments and ending
  *    nulls, but using the string libraries is cleaner and less bug prone.
  *  - Second version had white space detection, intelligent wrapping, and
- *    indentation of continued lines, but this proved a pain in the neck for 
+ *    indentation of continued lines, but this proved a pain in the neck for
  *    things like r.patch which can have long strings without any
  *    parser-acceptable breaks.
  *  - This is MK-III, simplified, but that's good: it's cut & paste-able.
@@ -282,13 +279,13 @@ int Rast_command_history(struct History *hist)
     cmdlin = G_recreate_command();
     cmdlen = strlen(cmdlin);
 
-    if (hist->nlines > 0)       /* add a blank line if preceding history exists */
+    if (hist->nlines > 0) /* add a blank line if preceding history exists */
         Rast_append_history(hist, "");
 
-    if (cmdlen < 70)            /* ie if it will fit on a single line */
+    if (cmdlen < 70) /* ie if it will fit on a single line */
         Rast_append_history(hist, cmdlin);
-    else {                      /* multi-line required */
-        int j;                  /* j is the current position in the command line string */
+    else {     /* multi-line required */
+        int j; /* j is the current position in the command line string */
 
         for (j = 0; cmdlen - j > 70; j += 68) {
             char buf[80];
@@ -298,7 +295,7 @@ int Rast_command_history(struct History *hist)
             buf[69] = '\0';
             Rast_append_history(hist, buf);
         }
-        if (cmdlen - j > 0)     /* ie anything left */
+        if (cmdlen - j > 0) /* ie anything left */
             Rast_append_history(hist, &cmdlin[j]);
     }
 

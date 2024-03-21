@@ -164,7 +164,7 @@ int dig__fread_port_F(float *buf, size_t cnt, struct gvfile *fp)
    \return 0 error
    \return 1 OK
  */
-int dig__fread_port_O(off_t * buf, size_t cnt, struct gvfile *fp,
+int dig__fread_port_O(off_t *buf, size_t cnt, struct gvfile *fp,
                       size_t port_off_t_size)
 {
     unsigned int i, j;
@@ -172,12 +172,12 @@ int dig__fread_port_O(off_t * buf, size_t cnt, struct gvfile *fp,
     unsigned char *c1, *c2;
 
     if (Cur_Head->off_t_quick) {
-        if (nat_off_t == port_off_t_size) {
+        if ((size_t)nat_off_t == port_off_t_size) {
             ret = dig_fread(buf, port_off_t_size, cnt, fp);
             if (ret != (int)cnt)
                 return 0;
         }
-        else if (nat_off_t > port_off_t_size) {
+        else if ((size_t)nat_off_t > port_off_t_size) {
             /* read into buffer */
             buf_alloc(cnt * port_off_t_size);
             ret = dig_fread(buffer, port_off_t_size, cnt, fp);
@@ -205,13 +205,13 @@ int dig__fread_port_O(off_t * buf, size_t cnt, struct gvfile *fp,
                 c2 += sizeof(off_t);
             }
         }
-        else if (nat_off_t < port_off_t_size) {
+        else if ((size_t)nat_off_t < port_off_t_size) {
             /* should never happen */
             G_fatal_error(_("Vector exceeds supported file size limit"));
         }
     }
     else {
-        if (nat_off_t >= port_off_t_size) {
+        if ((size_t)nat_off_t >= port_off_t_size) {
             /* read into buffer */
             buf_alloc(cnt * port_off_t_size);
             ret = dig_fread(buffer, port_off_t_size, cnt, fp);
@@ -238,7 +238,7 @@ int dig__fread_port_O(off_t * buf, size_t cnt, struct gvfile *fp,
                 c2 += sizeof(off_t);
             }
         }
-        else if (nat_off_t < port_off_t_size) {
+        else if ((size_t)nat_off_t < port_off_t_size) {
             /* should never happen */
             G_fatal_error(_("Vector exceeds supported file size limit"));
         }
@@ -534,7 +534,7 @@ int dig__fread_port_C(char *buf, size_t cnt, struct gvfile *fp)
    \return 0 error
    \return 1 OK
  */
-int dig__fread_port_P(plus_t * buf, size_t cnt, struct gvfile *fp)
+int dig__fread_port_P(plus_t *buf, size_t cnt, struct gvfile *fp)
 {
     int *ibuf;
 
@@ -633,18 +633,18 @@ int dig__fwrite_port_F(const float *buf, size_t cnt, struct gvfile *fp)
    \return 0 error
    \return 1 OK
  */
-int dig__fwrite_port_O(const off_t * buf,
-                       size_t cnt, struct gvfile *fp, size_t port_off_t_size)
+int dig__fwrite_port_O(const off_t *buf, size_t cnt, struct gvfile *fp,
+                       size_t port_off_t_size)
 {
     unsigned int i, j;
     unsigned char *c1, *c2;
 
     if (Cur_Head->off_t_quick) {
-        if (nat_off_t == port_off_t_size) {
+        if ((size_t)nat_off_t == port_off_t_size) {
             if (dig_fwrite(buf, port_off_t_size, cnt, fp) == cnt)
                 return 1;
         }
-        else if (nat_off_t > port_off_t_size) {
+        else if ((size_t)nat_off_t > port_off_t_size) {
             buf_alloc(cnt * port_off_t_size);
             c1 = (unsigned char *)buf;
             c2 = (unsigned char *)buffer;
@@ -660,13 +660,13 @@ int dig__fwrite_port_O(const off_t * buf,
             if (dig_fwrite(buffer, port_off_t_size, cnt, fp) == cnt)
                 return 1;
         }
-        else if (nat_off_t < port_off_t_size) {
+        else if ((size_t)nat_off_t < port_off_t_size) {
             /* should never happen */
             G_fatal_error("Vector exceeds supported file size limit");
         }
     }
     else {
-        if (nat_off_t >= port_off_t_size) {
+        if ((size_t)nat_off_t >= port_off_t_size) {
             buf_alloc(cnt * port_off_t_size);
             c1 = (unsigned char *)buf;
             c2 = (unsigned char *)buffer;
@@ -679,7 +679,7 @@ int dig__fwrite_port_O(const off_t * buf,
             if (dig_fwrite(buffer, port_off_t_size, cnt, fp) == cnt)
                 return 1;
         }
-        else if (nat_off_t < port_off_t_size) {
+        else if ((size_t)nat_off_t < port_off_t_size) {
             /* should never happen */
             G_fatal_error(_("Vector exceeds supported file size limit"));
         }
@@ -852,7 +852,6 @@ int dig__fwrite_port_S(const short *buf, size_t cnt, struct gvfile *fp)
     return 0;
 }
 
-
 /*!
    \brief Write plus_t to the Portable Vector Format
 
@@ -866,7 +865,7 @@ int dig__fwrite_port_S(const short *buf, size_t cnt, struct gvfile *fp)
    \return 0 error
    \return 1 OK
  */
-int dig__fwrite_port_P(const plus_t * buf, size_t cnt, struct gvfile *fp)
+int dig__fwrite_port_P(const plus_t *buf, size_t cnt, struct gvfile *fp)
 {
     return (dig__fwrite_port_I((int *)buf, cnt, fp));
 }
@@ -977,7 +976,7 @@ void dig_init_portable(struct Port_info *port, int byte_order)
     else
         port->off_t_quick = FALSE;
 
-    for (i = 0; i < nat_off_t; i++) {
+    for (i = 0; i < (size_t)nat_off_t; i++) {
         if (port->byte_order == ENDIAN_BIG)
             port->off_t_cnvrt[i] = off_t_cnvrt[i];
         else
@@ -1006,7 +1005,7 @@ int dig_set_cur_port(struct Port_info *port)
    \return ENDIAN_LITTLE
    \return ENDIAN_BIG
  */
-int dig__byte_order_out()
+int dig__byte_order_out(void)
 {
     if (dbl_order == ENDIAN_LITTLE)
         return (ENDIAN_LITTLE);

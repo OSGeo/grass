@@ -1,8 +1,7 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
- * MODULE:       Vector library 
- *              
+ * MODULE:       Vector library
+ *
  * AUTHOR(S):    Original author CERL, probably Dave Gerdes.
  *               Update to GRASS 5.7 Radim Blazek.
  *
@@ -11,13 +10,14 @@
  * COPYRIGHT:    (C) 2001 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
  *****************************************************************************/
+
 #include <math.h>
 
-#define ZERO(x) ((x) < tolerance && (x) > -tolerance)
+#define ZERO(x)   ((x) < tolerance && (x) > -tolerance)
 #define TOLERANCE 1.0e-10
 static double tolerance = TOLERANCE;
 
@@ -39,15 +39,20 @@ int dig_set_distance_to_line_tolerance(double t)
  *   sets (if not NULL): *px, *py - nearest point on segment
  *                       *pdist - distance of px,py from segment start
  *                       *status = 0 if ok, -1 if t < 0  and 1 if t > 1
- *                                 (tells if point is w/in segment space, or past ends)
+ *                                 (tells if point is w/in segment space, or
+ * past ends)
  */
 
-double dig_distance2_point_to_line(double x, double y, double z,        /* point */
-                                   double x1, double y1, double z1,     /* line segment */
-                                   double x2, double y2, double z2, int with_z, /* use z coordinate, (3D calculation) */
-                                   double *px, double *py, double *pz,  /* point on segment */
-                                   double *pdist,       /* distance of point on segment from the first point of segment */
-                                   int *status)
+double
+dig_distance2_point_to_line(double x, double y, double z,    /* point */
+                            double x1, double y1, double z1, /* line segment */
+                            double x2, double y2, double z2,
+                            int with_z, /* use z coordinate, (3D calculation) */
+                            double *px, double *py,
+                            double *pz,    /* point on segment */
+                            double *pdist, /* distance of point on segment from
+                                              the first point of segment */
+                            int *status)
 {
     register double dx, dy, dz;
     register double dpx, dpy, dpz;
@@ -67,7 +72,7 @@ double dig_distance2_point_to_line(double x, double y, double z,        /* point
     dy = y2 - y1;
     dz = z2 - z1;
 
-    if (ZERO(dx) && ZERO(dy) && ZERO(dz)) {     /* line is degenerate */
+    if (ZERO(dx) && ZERO(dy) && ZERO(dz)) { /* line is degenerate */
         dx = x1 - x;
         dy = y1 - y;
         dz = z1 - z;
@@ -79,7 +84,7 @@ double dig_distance2_point_to_line(double x, double y, double z,        /* point
         t = (dx * (x - x1) + dy * (y - y1) + dz * (z - z1)) /
             (dx * dx + dy * dy + dz * dz);
 
-        if (t <= 0.0) {         /* go to x1,y1,z1 */
+        if (t <= 0.0) { /* go to x1,y1,z1 */
             if (t < 0.0) {
                 st = -1;
             }
@@ -87,7 +92,7 @@ double dig_distance2_point_to_line(double x, double y, double z,        /* point
             tpy = y1;
             tpz = z1;
         }
-        else if (t >= 1.0) {    /* go to x2,y2,z2 */
+        else if (t >= 1.0) { /* go to x2,y2,z2 */
             if (t > 1.0) {
                 st = 1;
             }

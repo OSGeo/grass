@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.edit
@@ -26,8 +25,8 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct GParams params;
     struct Map_info Map;
-    struct Map_info **BgMap;    /* background vector maps */
-    int nbgmaps;                /* number of registrated background maps */
+    struct Map_info **BgMap; /* background vector maps */
+    int nbgmaps;             /* number of registrated background maps */
     enum mode action_mode;
     FILE *ascii;
 
@@ -80,8 +79,7 @@ int main(int argc, char *argv[])
         if (strcmp(params.in->answer, "-") != 0) {
             ascii = fopen(params.in->answer, "r");
             if (ascii == NULL)
-                G_fatal_error(_("Unable to open file <%s>"),
-                              params.in->answer);
+                G_fatal_error(_("Unable to open file <%s>"), params.in->answer);
         }
         else {
             ascii = stdin;
@@ -118,8 +116,9 @@ int main(int argc, char *argv[])
 
             type = Vect_option_to_types(params.type);
             if (type != GV_POINT && !(type & GV_LINES))
-                G_fatal_error("%s: point,line,boundary",
-                              _("Supported feature types for non-native formats:"));
+                G_fatal_error(
+                    "%s: point,line,boundary",
+                    _("Supported feature types for non-native formats:"));
             /* create OGR or PostGIS layer */
             if (Vect_write_line(&Map, type, NULL, NULL) < 0)
                 G_fatal_error(_("Unable to create vector map <%s>"),
@@ -133,20 +132,19 @@ int main(int argc, char *argv[])
             action_mode = MODE_ADD;
         }
     }
-    else {                      /* open selected vector file */
-        if (action_mode == MODE_ADD)    /* write */
-            ret =
-                Vect_open_update2(&Map, params.map->answer, G_mapset(),
-                                  params.fld->answer);
-        else                    /* read-only -- select features */
-            ret =
-                Vect_open_old2(&Map, params.map->answer, G_mapset(),
-                               params.fld->answer);
+    else {                           /* open selected vector file */
+        if (action_mode == MODE_ADD) /* write */
+            ret = Vect_open_update2(&Map, params.map->answer, G_mapset(),
+                                    params.fld->answer);
+        else /* read-only -- select features */
+            ret = Vect_open_old2(&Map, params.map->answer, G_mapset(),
+                                 params.fld->answer);
 
         if (ret < 2)
-            G_fatal_error(_("Unable to open vector map <%s> on topological level. "
-                           "Try to rebuild vector topology by v.build."),
-                          params.map->answer);
+            G_fatal_error(
+                _("Unable to open vector map <%s> on topological level. "
+                  "Try to rebuild vector topology by v.build."),
+                params.map->answer);
     }
 
     G_debug(1, "Map opened");
@@ -164,21 +162,19 @@ int main(int argc, char *argv[])
 
             if (strcmp(G_fully_qualified_name(params.map->answer, G_mapset()),
                        G_fully_qualified_name(bmap, mapset)) == 0) {
-                G_fatal_error(_("Unable to open vector map <%s> as the background map. "
-                               "It is given as vector map to be edited."),
-                              bmap);
+                G_fatal_error(
+                    _("Unable to open vector map <%s> as the background map. "
+                      "It is given as vector map to be edited."),
+                    bmap);
             }
             nbgmaps++;
-            BgMap =
-                (struct Map_info **)G_realloc(BgMap,
-                                              nbgmaps *
-                                              sizeof(struct Map_info *));
+            BgMap = (struct Map_info **)G_realloc(
+                BgMap, nbgmaps * sizeof(struct Map_info *));
             BgMap[nbgmaps - 1] =
                 (struct Map_info *)G_malloc(sizeof(struct Map_info));
             if (Vect_open_old(BgMap[nbgmaps - 1], bmap, "") == -1)
                 G_fatal_error(_("Unable to open vector map <%s>"), bmap);
-            G_verbose_message(_("Background vector map <%s> registered"),
-                              bmap);
+            G_verbose_message(_("Background vector map <%s> registered"), bmap);
             i++;
         }
     }
@@ -190,16 +186,14 @@ int main(int argc, char *argv[])
         case THRESH_COORDS:
             thresh[THRESH_COORDS] =
                 max_distance(atof(params.maxdist->answers[THRESH_COORDS]));
-            thresh[THRESH_SNAP] = thresh[THRESH_QUERY] =
-                thresh[THRESH_COORDS];
+            thresh[THRESH_SNAP] = thresh[THRESH_QUERY] = thresh[THRESH_COORDS];
             break;
         case THRESH_SNAP:
             thresh[THRESH_SNAP] =
                 max_distance(atof(params.maxdist->answers[THRESH_SNAP]));
             break;
         case THRESH_QUERY:
-            thresh[THRESH_QUERY] =
-                atof(params.maxdist->answers[THRESH_QUERY]);
+            thresh[THRESH_QUERY] = atof(params.maxdist->answers[THRESH_QUERY]);
             break;
         default:
             break;
@@ -215,7 +209,8 @@ int main(int argc, char *argv[])
     else if (strcmp(params.snap->answer, "vertex") == 0)
         snap = SNAPVERTEX;
     if (snap != NO_SNAP && thresh[THRESH_SNAP] <= 0) {
-        G_warning(_("Threshold for snapping must be > 0. No snapping applied."));
+        G_warning(
+            _("Threshold for snapping must be > 0. No snapping applied."));
         snap = NO_SNAP;
     }
 
@@ -242,16 +237,17 @@ int main(int argc, char *argv[])
             /* reopen the map for updating */
             if (action_mode == MODE_ZBULK && !Vect_is_3d(&Map)) {
                 Vect_close(&Map);
-                G_fatal_error(_("Vector map <%s> is not 3D. Tool '%s' requires 3D vector map. "
-                               "Please convert the vector map "
-                               "to 3D using e.g. %s."), params.map->answer,
-                              params.tool->answer, "v.extrude");
+                G_fatal_error(_("Vector map <%s> is not 3D. Tool '%s' requires "
+                                "3D vector map. "
+                                "Please convert the vector map "
+                                "to 3D using e.g. %s."),
+                              params.map->answer, params.tool->answer,
+                              "v.extrude");
             }
             Vect_close(&Map);
 
-            if (Vect_open_update2
-                (&Map, params.map->answer, G_mapset(),
-                 params.fld->answer) < 0)
+            if (Vect_open_update2(&Map, params.map->answer, G_mapset(),
+                                  params.fld->answer) < 0)
                 G_fatal_error(_("Unable to open vector map <%s>"),
                               params.map->answer);
         }
@@ -296,7 +292,7 @@ int main(int argc, char *argv[])
 
             G_verbose_message(_("Threshold value for snapping is %.2f"),
                               thresh[THRESH_SNAP]);
-            if (snap != NO_SNAP) {      /* apply snapping */
+            if (snap != NO_SNAP) { /* apply snapping */
                 /* snap to vertex ? */
                 Vedit_snap_lines(&Map, BgMap, nbgmaps, List_added,
                                  thresh[THRESH_SNAP],
@@ -306,8 +302,9 @@ int main(int argc, char *argv[])
                 int nclosed;
 
                 nclosed = close_lines(&Map, GV_BOUNDARY, thresh[THRESH_SNAP]);
-                G_message(n_("%d boundary closed",
-                             "%d boundaries closed", nclosed), nclosed);
+                G_message(
+                    n_("%d boundary closed", "%d boundaries closed", nclosed),
+                    nclosed);
             }
             Vect_destroy_list(List_added);
         }
@@ -322,9 +319,8 @@ int main(int argc, char *argv[])
         move_z = atof(params.move->answers[2]);
         G_verbose_message(_("Threshold value for snapping is %.2f"),
                           thresh[THRESH_SNAP]);
-        ret =
-            Vedit_move_lines(&Map, BgMap, nbgmaps, List, move_x, move_y,
-                             move_z, snap, thresh[THRESH_SNAP]);
+        ret = Vedit_move_lines(&Map, BgMap, nbgmaps, List, move_x, move_y,
+                               move_z, snap, thresh[THRESH_SNAP]);
         G_message(n_("%d feature moved", "%d features moved", ret), ret);
         break;
     case MODE_VERTEX_MOVE:
@@ -333,10 +329,9 @@ int main(int argc, char *argv[])
         move_z = atof(params.move->answers[2]);
         G_verbose_message(_("Threshold value for snapping is %.2f"),
                           thresh[THRESH_SNAP]);
-        ret =
-            Vedit_move_vertex(&Map, BgMap, nbgmaps, List, coord,
-                              thresh[THRESH_COORDS], thresh[THRESH_SNAP],
-                              move_x, move_y, move_z, move_first, snap);
+        ret = Vedit_move_vertex(&Map, BgMap, nbgmaps, List, coord,
+                                thresh[THRESH_COORDS], thresh[THRESH_SNAP],
+                                move_x, move_y, move_z, move_first, snap);
         G_message(n_("%d vertex moved", "%d vertices moved", ret), ret);
         break;
     case MODE_VERTEX_ADD:
@@ -349,8 +344,8 @@ int main(int argc, char *argv[])
         break;
     case MODE_BREAK:
         if (params.coord->answer) {
-            ret = Vedit_split_lines(&Map, List,
-                                    coord, thresh[THRESH_COORDS], NULL);
+            ret = Vedit_split_lines(&Map, List, coord, thresh[THRESH_COORDS],
+                                    NULL);
         }
         else {
             ret = Vect_break_lines_list(&Map, List, NULL, GV_LINES, NULL);
@@ -393,13 +388,11 @@ int main(int argc, char *argv[])
         break;
     case MODE_CATADD:
         ret = Vedit_modify_cats(&Map, List, layer, 0, Clist);
-        G_message(n_("%d feature modified",
-                     "%d features modified", ret), ret);
+        G_message(n_("%d feature modified", "%d features modified", ret), ret);
         break;
     case MODE_CATDEL:
         ret = Vedit_modify_cats(&Map, List, layer, 1, Clist);
-        G_message(n_("%d feature modified",
-                     "%d features modified", ret), ret);
+        G_message(n_("%d feature modified", "%d features modified", ret), ret);
         break;
     case MODE_COPY:
         if (BgMap && BgMap[0]) {
@@ -427,49 +420,48 @@ int main(int argc, char *argv[])
         break;
     case MODE_NONE:
         break;
-    case MODE_ZBULK:{
-            double start, step;
-            double x1, y1, x2, y2;
+    case MODE_ZBULK: {
+        double start, step;
+        double x1, y1, x2, y2;
 
-            start = atof(params.zbulk->answers[0]);
-            step = atof(params.zbulk->answers[1]);
+        start = atof(params.zbulk->answers[0]);
+        step = atof(params.zbulk->answers[1]);
 
-            x1 = atof(params.bbox->answers[0]);
-            y1 = atof(params.bbox->answers[1]);
-            x2 = atof(params.bbox->answers[2]);
-            y2 = atof(params.bbox->answers[3]);
+        x1 = atof(params.bbox->answers[0]);
+        y1 = atof(params.bbox->answers[1]);
+        x2 = atof(params.bbox->answers[2]);
+        y2 = atof(params.bbox->answers[3]);
 
-            ret = Vedit_bulk_labeling(&Map, List,
-                                      x1, y1, x2, y2, start, step);
+        ret = Vedit_bulk_labeling(&Map, List, x1, y1, x2, y2, start, step);
 
-            G_message(n_("%d line labeled", "%d lines labeled", ret), ret);
-            break;
-        }
+        G_message(n_("%d line labeled", "%d lines labeled", ret), ret);
+        break;
+    }
     case MODE_CHTYPE:
         ret = Vedit_chtype_lines(&Map, List);
 
         if (ret > 0) {
-            G_message(n_("%d feature converted",
-                         "%d features converted", ret), ret);
+            G_message(n_("%d feature converted", "%d features converted", ret),
+                      ret);
         }
         else {
             G_message(_("No feature modified"));
         }
         break;
-    case MODE_AREA_DEL:{
-            ret = 0;
-            for (i = 0; i < List->n_values; i++) {
-                if (Vect_get_line_type(&Map, List->value[i]) != GV_CENTROID) {
-                    G_warning(_("Select feature %d is not centroid, ignoring..."),
-                              List->value[i]);
-                    continue;
-                }
-
-                ret += Vedit_delete_area_centroid(&Map, List->value[i]);
+    case MODE_AREA_DEL: {
+        ret = 0;
+        for (i = 0; i < List->n_values; i++) {
+            if (Vect_get_line_type(&Map, List->value[i]) != GV_CENTROID) {
+                G_warning(_("Select feature %d is not centroid, ignoring..."),
+                          List->value[i]);
+                continue;
             }
-            G_message(n_("%d area removed", "%d areas removed", ret), ret);
-            break;
+
+            ret += Vedit_delete_area_centroid(&Map, List->value[i]);
         }
+        G_message(n_("%d area removed", "%d areas removed", ret), ret);
+        break;
+    }
     default:
         G_warning(_("Operation not implemented"));
         ret = -1;

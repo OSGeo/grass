@@ -13,7 +13,7 @@
  *  Methods in Urban and Regional Analysis", (1971), pp. 143-153.
  */
 
-int inverse(MATRIX * a, MATRIX * b)
+int inverse(MATRIX *a, MATRIX *b)
 {
     int i, j, k, l, ir = 0, ic = 0, nr, nc;
     int ipivot[MAXROWS], itemp[MAXROWS][2];
@@ -28,9 +28,8 @@ int inverse(MATRIX * a, MATRIX * b)
 
     if (isnull(a)) {
         /* fprintf (stderr, " inv: matrix is singular\n"); */
-        return
-            matrix_error
-            ("inv: matrix is singular. Check camera definitions!\n");
+        return matrix_error(
+            "inv: matrix is singular. Check camera definitions!\n");
     }
     m_copy(&m, a);
     nr = a->nrows;
@@ -41,7 +40,7 @@ int inverse(MATRIX * a, MATRIX * b)
         ipivot[i] = 0;
 
     for (i = 0; i < nr; i++) {
-        t = 0.0;                /* search for pivot element */
+        t = 0.0; /* search for pivot element */
         for (j = 0; j < nr; j++) {
             if (ipivot[j] == 1) /* found pivot */
                 continue;
@@ -57,22 +56,19 @@ int inverse(MATRIX * a, MATRIX * b)
                     }
                     break;
                 case 1:
-                    return
-                        matrix_error
-                        ("inv: matrix is singular. Check camera definitions!\n");
+                    return matrix_error(
+                        "inv: matrix is singular. Check camera definitions!\n");
                     break;
-                default:       /* shouldn't get here */
-                    return
-                        matrix_error
-                        ("inv: matrix is singular. Check camera definitions!\n");
+                default: /* shouldn't get here */
+                    return matrix_error(
+                        "inv: matrix is singular. Check camera definitions!\n");
                     break;
                 }
         }
         ipivot[ic] += 1;
-        if (ipivot[ic] > 1)     /* check for dependency */
-            return
-                matrix_error
-                ("inv: matrix is singular. Check camera definitions!\n");
+        if (ipivot[ic] > 1) /* check for dependency */
+            return matrix_error(
+                "inv: matrix is singular. Check camera definitions!\n");
         /* interchange rows to put pivot element on diagonal */
         if (ir != ic)
             for (l = 0; l < nc; l++) {
@@ -87,9 +83,8 @@ int inverse(MATRIX * a, MATRIX * b)
 
         /* check for zero pivot */
         if (fabs(pivot[i]) < EPSILON)
-            return
-                matrix_error
-                ("inv: matrix is singular. Check camera definitions!\n");
+            return matrix_error(
+                "inv: matrix is singular. Check camera definitions!\n");
 
         /* divide pivot row by pivot element */
         m.x[ic][ic] = 1.0;

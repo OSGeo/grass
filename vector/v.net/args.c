@@ -19,8 +19,7 @@ void define_options(struct opt *opt)
     opt->points = G_define_standard_option(G_OPT_V_INPUT);
     opt->points->key = "points";
     opt->points->label = _("Name of input vector point map (nodes)");
-    opt->points->description =
-        _("Required for operation 'connect' and 'arcs'");
+    opt->points->description = _("Required for operation 'connect' and 'arcs'");
     opt->points->required = NO;
     opt->points->guisection = _("Nodes");
 
@@ -76,8 +75,8 @@ void define_options(struct opt *opt)
     opt->thresh_opt->required = NO;
     opt->thresh_opt->multiple = NO;
     opt->thresh_opt->label = "Threshold";
-    opt->thresh_opt->description =
-        _("Required for operation 'connect'. Connect points in given threshold.");
+    opt->thresh_opt->description = _(
+        "Required for operation 'connect'. Connect points in given threshold.");
 
     opt->file = G_define_standard_option(G_OPT_F_INPUT);
     opt->file->key = "file";
@@ -96,34 +95,35 @@ void define_options(struct opt *opt)
     opt->snap_flag->key = 's';
     opt->snap_flag->label = _("Snap points to network");
     opt->snap_flag->description =
-        _("For operation 'connect'. By default, a new line from the point to the network is created.");
+        _("For operation 'connect'. By default, a new line from the point to "
+          "the network is created.");
     opt->snap_flag->guisection = _("Nodes");
 
     opt->tfield = G_define_standard_option(G_OPT_V_FIELD);
     opt->tfield->label = _("Turntable layer");
-    opt->tfield->description =
-        _("Layer where turntable will be attached. Format: layer number[/layer name]."
-         "Required for operation 'turntable'.");
+    opt->tfield->description = _("Layer where turntable will be attached. "
+                                 "Format: layer number[/layer name]."
+                                 "Required for operation 'turntable'.");
     opt->tfield->answer = "3";
     opt->tfield->key = "turn_layer";
     opt->tfield->required = NO;
     opt->tfield->guisection = _("Turntable");
 
     opt->tucfield = G_define_standard_option(G_OPT_V_FIELD);
-    opt->tucfield->label =
-        _("Layer with unique categories used in turntable");
-    opt->tucfield->description =
-        _("Layer with unique categories for every line in arc_layer and point on every node. "
-         " The categories are used in turntable. Format: layer number[/layer name]. "
-         "Required for operation 'turntable'.");
+    opt->tucfield->label = _("Layer with unique categories used in turntable");
+    opt->tucfield->description = _("Layer with unique categories for every "
+                                   "line in arc_layer and point on every node. "
+                                   " The categories are used in turntable. "
+                                   "Format: layer number[/layer name]. "
+                                   "Required for operation 'turntable'.");
     opt->tucfield->answer = "4";
     opt->tucfield->key = "turn_cat_layer";
     opt->tucfield->required = NO;
     opt->tucfield->guisection = _("Turntable");
 }
 
-void parse_arguments(const struct opt *opt,
-                     int *afield, int *nfield, double *thresh, int *act)
+void parse_arguments(const struct opt *opt, int *afield, int *nfield,
+                     double *thresh, int *act)
 {
     *afield = atoi(opt->afield_opt->answer);
     *nfield = atoi(opt->nfield_opt->answer);
@@ -144,9 +144,8 @@ void parse_arguments(const struct opt *opt,
     else
         G_fatal_error(_("Unknown operation"));
 
-    if (*act == TOOL_NODES || *act == TOOL_CONNECT ||
-        *act == TOOL_REPORT || *act == TOOL_NREPORT ||
-        *act == TOOL_TURNTABLE) {
+    if (*act == TOOL_NODES || *act == TOOL_CONNECT || *act == TOOL_REPORT ||
+        *act == TOOL_NREPORT || *act == TOOL_TURNTABLE) {
         if (opt->input->answer == NULL)
             G_fatal_error(_("Required parameter <%s> not set"),
                           opt->input->key);

@@ -177,7 +177,7 @@ class Animation:
     def SaveAnimationFile(self, path, prefix, format):
         """Generate image files
 
-        :param path: path to direcory
+        :param path: path to directory
         :param prefix: file prefix
         :param format: index of image file format
         """

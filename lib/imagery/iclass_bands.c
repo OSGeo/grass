@@ -36,7 +36,7 @@
    \param[out] band_buffer buffer to read one row of each band
    \param[out] band_fd band files descriptors
  */
-void open_band_files(struct Ref *refer, CELL *** band_buffer, int **band_fd)
+void open_band_files(struct Ref *refer, CELL ***band_buffer, int **band_fd)
 {
     int n, nbands;
 
@@ -46,7 +46,7 @@ void open_band_files(struct Ref *refer, CELL *** band_buffer, int **band_fd)
 
     /* allocate row buffers and open raster maps */
     nbands = refer->nfiles;
-    *band_buffer = (CELL **) G_malloc(nbands * sizeof(CELL *));
+    *band_buffer = (CELL **)G_malloc(nbands * sizeof(CELL *));
     *band_fd = (int *)G_malloc(nbands * sizeof(int));
 
     for (n = 0; n < nbands; n++) {
@@ -64,7 +64,7 @@ void open_band_files(struct Ref *refer, CELL *** band_buffer, int **band_fd)
    \param band_buffer buffer to read one row of each band
    \param band_fd band files descriptors
  */
-void close_band_files(struct Ref *refer, CELL ** band_buffer, int *band_fd)
+void close_band_files(struct Ref *refer, CELL **band_buffer, int *band_fd)
 {
     int n, nbands;
 
@@ -88,7 +88,7 @@ void close_band_files(struct Ref *refer, CELL ** band_buffer, int *band_fd)
    \param nbands number of band files
    \param row data row
  */
-void read_band_row(CELL ** band_buffer, int *band_fd, int nbands, int row)
+void read_band_row(CELL **band_buffer, int *band_fd, int nbands, int row)
 {
     int i;
 

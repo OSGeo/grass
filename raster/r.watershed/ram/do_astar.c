@@ -18,8 +18,8 @@ int do_astar(void)
      * |2| |3|
      * |5|0|6|
      */
-    int nbr_ew[8] = { 0, 1, 2, 3, 1, 0, 0, 1 };
-    int nbr_ns[8] = { 0, 1, 2, 3, 3, 2, 3, 2 };
+    int nbr_ew[8] = {0, 1, 2, 3, 1, 0, 0, 1};
+    int nbr_ns[8] = {0, 1, 2, 3, 3, 2, 3, 2};
     double dx, dy, dist_to_nbr[8], ew_res, ns_res;
     double slope[8];
     int skip_diag;
@@ -48,8 +48,7 @@ int do_astar(void)
 
     if (flat_flag) {
         alt_bak =
-            (CELL *) G_malloc(sizeof(CELL) *
-                              size_array(&alt_seg, nrows, ncols));
+            (CELL *)G_malloc(sizeof(CELL) * size_array(&alt_seg, nrows, ncols));
         flat_done = flag_create(nrows, ncols);
         flat_is_done = 0;
 
@@ -131,9 +130,8 @@ int do_astar(void)
 
                 /* avoid diagonal flow direction bias */
                 if (!is_worked) {
-                    slope[ct_dir] =
-                        get_slope2(alt_val, alt_nbr[ct_dir],
-                                   dist_to_nbr[ct_dir]);
+                    slope[ct_dir] = get_slope2(alt_val, alt_nbr[ct_dir],
+                                               dist_to_nbr[ct_dir]);
                 }
                 if (!is_in_list || (!is_worked && asp[index_up] < 0)) {
                     if (ct_dir > 3 && slope[ct_dir] > 0) {
@@ -170,17 +168,18 @@ int do_astar(void)
                             if (wat[index_doer] > 0)
                                 wat[index_doer] = -1.0 * wat[index_doer];
                         }
-                        /* neighbour is inside real depression, not yet worked */
+                        /* neighbour is inside real depression, not yet worked
+                         */
                         else if (asp[index_up] == 0) {
                             asp[index_up] = drain[upr - r + 1][upc - c + 1];
                         }
                     }
                 }
-            }                   /* end if in region */
-        }                       /* end sides */
+            } /* end if in region */
+        }     /* end sides */
         FLAG_SET(worked, r, c);
     }
-    G_percent(count, do_points, 1);     /* finish it */
+    G_percent(count, do_points, 1); /* finish it */
     if (mfd == 0)
         flag_destroy(worked);
 
@@ -309,7 +308,8 @@ int drop_pt(void)
         astar_pts[parent] = astar_pts[heap_size];
 
         ele = alt[astar_pts[parent]];
-        /* sift up last swapped point, only necessary if hole moved to heap end */
+        /* sift up last swapped point, only necessary if hole moved to heap end
+         */
         sift_up(parent, ele);
     }
 

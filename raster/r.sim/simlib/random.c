@@ -12,8 +12,7 @@
 double simwe_rand(void)
 {
     return G_drand48();
-}                               /* ulec */
-
+} /* ulec */
 
 double gasdev(void)
 {
@@ -44,7 +43,7 @@ double gasdev(void)
         iset = 0;
     }
     return ret_val;
-}                               /* gasdev */
+} /* gasdev */
 
 void gasdev_for_paralel(double *x, double *y)
 {

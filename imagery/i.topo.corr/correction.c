@@ -19,8 +19,8 @@
 
 #include "local_proto.h"
 
-void eval_tcor(int method, Gfile * out, Gfile * cosi, Gfile * band,
-               double zenith, int do_scale)
+void eval_tcor(int method, Gfile *out, Gfile *cosi, Gfile *band, double zenith,
+               int do_scale)
 {
     int row, col, nrows, ncols;
     void *pref, *pcos;
@@ -29,7 +29,7 @@ void eval_tcor(int method, Gfile * out, Gfile * cosi, Gfile * band,
     double n, sx, sxx, sy, sxy, tx, ty;
     double a, m, cka, ckb, kk;
 
-    double imin, imax, omin, omax, factor;      /* for scaling to input */
+    double imin, imax, omin, omax, factor; /* for scaling to input */
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
@@ -79,15 +79,13 @@ void eval_tcor(int method, Gfile * out, Gfile * cosi, Gfile * band,
                             sxy += tx * ty;
                         }
                         break;
-                    case C_CORRECT:
-                        {
-                            n++;
-                            sx += cos_i;
-                            sxx += cos_i * cos_i;
-                            sy += ref_i;
-                            sxy += cos_i * ref_i;
-                        }
-                        break;
+                    case C_CORRECT: {
+                        n++;
+                        sx += cos_i;
+                        sxx += cos_i * cos_i;
+                        sy += ref_i;
+                        sxy += cos_i * ref_i;
+                    } break;
                     }
                 }
                 pref = G_incr_void_ptr(pref, Rast_cell_size(band->type));
@@ -105,7 +103,7 @@ void eval_tcor(int method, Gfile * out, Gfile * cosi, Gfile * band,
         G_message("Minnaert constant = %lf", kk);
         break;
     case C_CORRECT:
-        cka = ckb = a / m;      /* Richter changes to m/a */
+        cka = ckb = a / m; /* Richter changes to m/a */
         kk = 1.;
         G_message("C-factor constant = %lf (a=%.4f; m=%.4f)", cka, a, m);
         break;
@@ -114,7 +112,7 @@ void eval_tcor(int method, Gfile * out, Gfile * cosi, Gfile * band,
         ckb = 1.;
         kk = 1.;
         break;
-    default:                   /* COSINE */
+    default: /* COSINE */
         cka = ckb = 0.;
         kk = 1.;
     }
@@ -138,17 +136,17 @@ void eval_tcor(int method, Gfile * out, Gfile * cosi, Gfile * band,
                     !Rast_is_null_value(pcos, cosi->type)) {
 
                     ref_i = Rast_get_d_value(pref, band->type);
-                    result = (DCELL) (ref_i * pow((cos_z + cka) /
-                                                  (cos_i + ckb), kk));
+                    result =
+                        (DCELL)(ref_i * pow((cos_z + cka) / (cos_i + ckb), kk));
                     G_debug(3,
-                            "Old val: %f, cka: %f, cos_i: %f, ckb: %f, kk: %f, New val: %f",
+                            "Old val: %f, cka: %f, cos_i: %f, ckb: %f, kk: %f, "
+                            "New val: %f",
                             ref_i, cka, cos_i, ckb, kk, result);
 
                     if (omin > result)
                         omin = result;
                     if (omax < result)
                         omax = result;
-
                 }
                 pref = G_incr_void_ptr(pref, Rast_cell_size(band->type));
                 pcos = G_incr_void_ptr(pcos, Rast_cell_size(cosi->type));
@@ -177,17 +175,17 @@ void eval_tcor(int method, Gfile * out, Gfile * cosi, Gfile * band,
                 !Rast_is_null_value(pcos, cosi->type)) {
 
                 ref_i = Rast_get_d_value(pref, band->type);
-                result = (DCELL) (ref_i * pow((cos_z + cka) /
-                                              (cos_i + ckb), kk));
+                result =
+                    (DCELL)(ref_i * pow((cos_z + cka) / (cos_i + ckb), kk));
 
                 if (do_scale)
                     result = (result - omin) * factor + imin;
 
-                ((DCELL *) out->rast)[col] = result;
+                ((DCELL *)out->rast)[col] = result;
                 G_debug(3,
-                        "Old val: %f, cka: %f, cos_i: %f, ckb: %f, kk: %f, New val: %f",
-                        ref_i, cka, cos_i, ckb, kk,
-                        ((DCELL *) out->rast)[col]);
+                        "Old val: %f, cka: %f, cos_i: %f, ckb: %f, kk: %f, New "
+                        "val: %f",
+                        ref_i, cka, cos_i, ckb, kk, ((DCELL *)out->rast)[col]);
             }
             pref = G_incr_void_ptr(pref, Rast_cell_size(band->type));
             pcos = G_incr_void_ptr(pcos, Rast_cell_size(cosi->type));

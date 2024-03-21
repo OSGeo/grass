@@ -8,35 +8,37 @@ int close_array_seg(void)
     int incr, max, red, green, blue, rd, gr, bl, flag;
     int c, r, map_fd;
     CELL *cellrow, value;
-    CELL *theseg;
-    RAMSEG thesegseg;
+
+    /* CELL *theseg;
+       RAMSEG thesegseg; */
 
     cellrow = Rast_allocate_c_buf();
     if (seg_flag || bas_flag || haf_flag) {
-        if (seg_flag) {
-            theseg = bas;
-            thesegseg = bas_seg;
-        }
-        else if (bas_flag) {
-            theseg = bas;
-            thesegseg = bas_seg;
-        }
-        else {
-            theseg = haf;
-            thesegseg = haf_seg;
-        }
+        /* if (seg_flag) {
+           theseg = bas;
+           thesegseg = bas_seg;
+           }
+           else if (bas_flag) {
+           theseg = bas;
+           thesegseg = bas_seg;
+           }
+           else {
+           theseg = haf;
+           thesegseg = haf_seg;
+           } */
         max = n_basins;
         G_debug(1, "%d basins created", max);
         Rast_init_colors(&colors);
         if (max > 0)
             Rast_make_random_colors(&colors, 1, max);
         else {
-            G_warning(_("No basins were created. Verify threshold and region settings."));
+            G_warning(_("No basins were created. Verify threshold and region "
+                        "settings."));
             Rast_make_random_colors(&colors, 1, 2);
         }
 
         if (max < 1000 && max > 0) {
-            Rast_set_c_color((CELL) 0, 0, 0, 0, &colors);
+            Rast_set_c_color((CELL)0, 0, 0, 0, &colors);
             r = 1;
             incr = 0;
             while (incr >= 0) {
@@ -48,8 +50,8 @@ int close_array_seg(void)
                             while (flag) {
                                 Rast_get_c_color(&r, &red, &green, &blue,
                                                  &colors);
-                                /* if existing rule is too dark then append a new
-                                   rule to override it */
+                                /* if existing rule is too dark then append a
+                                   new rule to override it */
                                 if ((blue * .11 + red * .30 + green * .59) <
                                     100) {
                                     Rast_set_c_color(r, rd, gr, bl, &colors);
@@ -70,11 +72,12 @@ int close_array_seg(void)
                         incr = 7;
                 }
             }
-            G_percent(r - 1, max, 3);   /* finish it */
+            G_percent(r - 1, max, 3); /* finish it */
         }
         else if (max >= 1000)
-            G_debug(1,
-                    "Too many subbasins to reasonably check for color brightness");
+            G_debug(
+                1,
+                "Too many subbasins to reasonably check for color brightness");
         /* using the existing stack of while/for/for/for/while loops ... */
     }
 
@@ -82,7 +85,7 @@ int close_array_seg(void)
     if (seg_flag) {
         map_fd = Rast_open_c_new(seg_name);
         for (r = 0; r < nrows; r++) {
-            Rast_set_c_null_value(cellrow, ncols);      /* reset row to all NULL */
+            Rast_set_c_null_value(cellrow, ncols); /* reset row to all NULL */
             for (c = 0; c < ncols; c++) {
                 value = FLAG_GET(swale, r, c);
                 if (value)

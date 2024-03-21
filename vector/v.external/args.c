@@ -5,17 +5,19 @@
 
 #include "local_proto.h"
 
-void parse_args(int argc, char **argv,
-                struct _options *options, struct _flags *flags)
+void parse_args(int argc, char **argv, struct _options *options,
+                struct _flags *flags)
 {
     options->dsn = G_define_option();
     options->dsn->key = "input";
     options->dsn->type = TYPE_STRING;
     options->dsn->label = _("Name of input OGR or PostGIS data source");
-    options->dsn->description = _("Examples:\n"
-                                  "\t\tESRI Shapefile: directory containing a shapefile\n"
-                                  "\t\tMapInfo File: directory containing a mapinfo file\n"
-                                  "\t\tPostGIS database: connection string, eg. 'PG:dbname=db user=grass'");
+    options->dsn->description =
+        _("Examples:\n"
+          "\t\tESRI Shapefile: directory containing a shapefile\n"
+          "\t\tMapInfo File: directory containing a mapinfo file\n"
+          "\t\tPostGIS database: connection string, eg. 'PG:dbname=db "
+          "user=grass'");
     options->dsn->required = YES;
     options->dsn->gisprompt = "old,datasource,datasource";
 
@@ -26,10 +28,10 @@ void parse_args(int argc, char **argv,
     options->layer->multiple = NO;
     options->layer->label =
         _("Name of OGR layer or PostGIS feature table to be linked");
-    options->layer->description =
-        _("Examples:\n" "\t\tESRI Shapefile: shapefile name\n"
-          "\t\tMapInfo File: mapinfo file name\n"
-          "\t\tPostGIS database: table name");
+    options->layer->description = _("Examples:\n"
+                                    "\t\tESRI Shapefile: shapefile name\n"
+                                    "\t\tMapInfo File: mapinfo file name\n"
+                                    "\t\tPostGIS database: table name");
     options->layer->required = NO;
     options->layer->key_desc = "name";
     options->layer->gisprompt = "old,datasource_layer,datasource_layer";
@@ -45,8 +47,8 @@ void parse_args(int argc, char **argv,
     flags->override->key = 'o';
     flags->override->label =
         _("Override projection check (use current location's projection)");
-    flags->override->description =
-        _("Assume that the dataset has the same projection as the current location");
+    flags->override->description = _("Assume that the dataset has the same "
+                                     "projection as the current location");
 
     flags->proj = G_define_flag();
     flags->proj->key = 'j';

@@ -43,12 +43,11 @@
 static int _datetime_ymd_to_ddays(const DateTime *, double *);
 static int _datetime_compare(const DateTime *, const DateTime *);
 
-
 /*!
- * \brief 
+ * \brief
  *
- * 
- * This performs the formula:   result = a - b; 
+ *
+ * This performs the formula:   result = a - b;
  * <ul>
  <li> both a and b must be absolute.
  * </li>
@@ -63,7 +62,7 @@ static int _datetime_compare(const DateTime *, const DateTime *);
  * </li>
  <li> result will have the following from/to based
  * on a.to: result a.to      from    to YEAR      YEAR    YEAR MONTH     YEAR
- * MONTH DAY       DAY     DAY HOUR      DAY     HOUR MINUTE    DAY   
+ * MONTH DAY       DAY     DAY HOUR      DAY     HOUR MINUTE    DAY
  * MINUTE SECOND    DAY     SECOND [LAYOUT ??? - see HTML]
  * </li>
  <li> If either 'a' or 'b' has a timezone, both must have a timezone. The
@@ -77,8 +76,7 @@ static int _datetime_compare(const DateTime *, const DateTime *);
  *  \return int
  */
 
-int
-datetime_difference(const DateTime * a, const DateTime * b, DateTime * result)
+int datetime_difference(const DateTime *a, const DateTime *b, DateTime *result)
 {
     DateTime tb, ta, *early, *late;
     int compare, tzmin;
@@ -116,7 +114,7 @@ datetime_difference(const DateTime * a, const DateTime * b, DateTime * result)
         late = &tb;
         result->positive = 0;
     }
-    else {                      /* equal */
+    else { /* equal */
         return (0);
     }
 
@@ -175,13 +173,13 @@ datetime_difference(const DateTime * a, const DateTime * b, DateTime * result)
 }
 
 /*************************************************************/
-/* returns 1 if a is later than b, 
+/* returns 1 if a is later than b,
    -1 if a is earlier than a,
-   0 otherwise 
+   0 otherwise
  */
 /* only looks at from-to fields defined by a */
 
-static int _datetime_compare(const DateTime * a, const DateTime * b)
+static int _datetime_compare(const DateTime *a, const DateTime *b)
 {
     int i;
 
@@ -229,7 +227,7 @@ static int _datetime_compare(const DateTime * a, const DateTime * b)
                 return (-1);
             break;
 
-        case DATETIME_YEAR:    /* only place sign matters */
+        case DATETIME_YEAR: /* only place sign matters */
             if (a->positive) {
                 if (a->year > b->year)
                     return (1);
@@ -246,36 +244,34 @@ static int _datetime_compare(const DateTime * a, const DateTime * b)
         }
     }
     return (0);
-
-
 }
 
 /*************************************************************/
 
-static int _datetime_ymd_to_ddays(const DateTime * dtymd, double *days)
-{                               /* note extra precision! */
+static int _datetime_ymd_to_ddays(const DateTime *dtymd, double *days)
+{ /* note extra precision! */
     int yr, mo;
-
 
     *days = 0.0;
 
     if (dtymd->positive) {
-        *days = dtymd->day - 1; /* start w/ days - 1 */
-        for (mo = dtymd->month - 1; mo > 0; mo--) {     /* add earlier months */
+        *days = dtymd->day - 1;                     /* start w/ days - 1 */
+        for (mo = dtymd->month - 1; mo > 0; mo--) { /* add earlier months */
             *days += datetime_days_in_month(dtymd->year, mo, dtymd->positive);
         }
-        for (yr = dtymd->year - 1; yr > 0; yr--) {      /* add earlier years */
+        for (yr = dtymd->year - 1; yr > 0; yr--) { /* add earlier years */
             *days += datetime_days_in_year(yr, dtymd->positive);
         }
     }
     else {
-        for (yr = dtymd->year - 1; yr > 0; yr--) {      /* add later years */
+        for (yr = dtymd->year - 1; yr > 0; yr--) { /* add later years */
             *days += datetime_days_in_year(yr, dtymd->positive);
         }
-        for (mo = 12; mo >= dtymd->month; mo--) {       /*add current & later months */
+        for (mo = 12; mo >= dtymd->month;
+             mo--) { /*add current & later months */
             *days += datetime_days_in_month(dtymd->year, mo, dtymd->positive);
         }
-        *days -= dtymd->day;    /* subtract current days */
+        *days -= dtymd->day; /* subtract current days */
     }
 
     return 0;

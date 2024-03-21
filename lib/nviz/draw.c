@@ -10,8 +10,8 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
-   \author Textures by Anna Kratochvilova 
+   \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC
+           2008/2010) \author Textures by Anna Kratochvilova
  */
 
 #include <grass/nviz.h>
@@ -29,7 +29,7 @@ static int sort_surfs_max(int *, int *, int *, int);
 
    \return 1
  */
-int Nviz_draw_all_surf(nv_data * dc)
+int Nviz_draw_all_surf(nv_data *dc)
 {
     int i, nsurfs;
     int sortSurfs[MAX_SURFS], sorti[MAX_SURFS];
@@ -201,7 +201,7 @@ int Nviz_draw_all_vol(void)
 
    \param data nviz data
  */
-int Nviz_draw_all(nv_data * data)
+int Nviz_draw_all(nv_data *data)
 {
     int i;
     int draw_surf, draw_vect, draw_site, draw_vol;
@@ -220,7 +220,7 @@ int Nviz_draw_all(nv_data * data)
        draw_bar_x = 0;
      */
 
-    GS_set_draw(GSD_BACK);      /* needs to be BACK to avoid flickering */
+    GS_set_draw(GSD_BACK); /* needs to be BACK to avoid flickering */
 
     GS_ready_draw();
 
@@ -246,8 +246,8 @@ int Nviz_draw_all(nv_data * data)
 
     /* North Arrow */
     if (data->draw_arrow) {
-        gsd_north_arrow(data->arrow->where, data->arrow->size,
-                        0, data->arrow->color, data->arrow->color);
+        gsd_north_arrow(data->arrow->where, data->arrow->size, 0,
+                        data->arrow->color, data->arrow->color);
     }
 
     /* scale bar */
@@ -278,7 +278,7 @@ int Nviz_draw_all(nv_data * data)
 
    \return 1
  */
-int Nviz_draw_quick(nv_data * data, int draw_mode)
+int Nviz_draw_quick(nv_data *data, int draw_mode)
 {
     GS_set_draw(GSD_BACK);
 
@@ -311,11 +311,11 @@ int Nviz_draw_quick(nv_data * data, int draw_mode)
 /*!
    \brief Load image into texture
 
-   \param image_data image data 
-   \param width, height image screen size 
-   \param alpha has alpha channel 
+   \param image_data image data
+   \param width, height image screen size
+   \param alpha has alpha channel
  */
-int Nviz_load_image(GLubyte * image_data, int width, int height, int alpha)
+int Nviz_load_image(GLubyte *image_data, int width, int height, int alpha)
 {
     unsigned int texture_id;
     int in_format;
@@ -350,11 +350,11 @@ int Nviz_load_image(GLubyte * image_data, int width, int height, int alpha)
 /*!
    \brief Set ortho view for drawing images
 
-   \param width, height image screen size 
+   \param width, height image screen size
  */
 void Nviz_set_2D(int width, int height)
 {
-    glEnable(GL_BLEND);         /* images are transparent */
+    glEnable(GL_BLEND); /* images are transparent */
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glMatrixMode(GL_PROJECTION);
@@ -372,9 +372,9 @@ void Nviz_set_2D(int width, int height)
 /*!
    \brief Draw image as texture
 
-   \param x, y image coordinates 
-   \param width, height image size 
-   \param texture_id texture id 
+   \param x, y image coordinates
+   \param width, height image size
+   \param texture_id texture id
  */
 void Nviz_draw_image(int x, int y, int width, int height, int texture_id)
 {

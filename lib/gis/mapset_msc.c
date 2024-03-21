@@ -214,16 +214,19 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
                 }
             }
             if (access(path, 0) != 0 || (msg && !race_ok)) {
-                /* Directory is not accessible even after attempt to create it. */
+                /* Directory is not accessible even after attempt to create it.
+                 */
                 if (msg) {
                     /* Error already happened when mkdir. */
-                    G_fatal_error(_("Unable to make mapset element %s (%s): %s"),
-                                  p_element, path, strerror(errno));
+                    G_fatal_error(
+                        _("Unable to make mapset element %s (%s): %s"),
+                        p_element, path, strerror(errno));
                 }
                 else {
                     /* Access error is not related to mkdir. */
-                    G_fatal_error(_("Unable to access mapset element %s (%s): %s"),
-                                  p_element, path, strerror(errno));
+                    G_fatal_error(
+                        _("Unable to access mapset element %s (%s): %s"),
+                        p_element, path, strerror(errno));
                 }
             }
             if (*element == 0)
@@ -243,7 +246,6 @@ int make_mapset_element_no_fail_on_race(const char *p_path,
 {
     return make_mapset_element_impl(p_path, p_element, true);
 }
-
 
 /*!
    \brief Create misc element in the current mapset.

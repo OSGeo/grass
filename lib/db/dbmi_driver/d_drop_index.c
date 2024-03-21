@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_drop_index.c
- * 
+ *
  * \brief DBMI Library (driver) - drop index
  *
  * (C) 1999-2008 by the GRASS Development Team

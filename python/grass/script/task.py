@@ -20,27 +20,14 @@ for details.
 import os
 import re
 import sys
+import xml.etree.ElementTree as etree
+from xml.parsers import expat
 
 from grass.exceptions import ScriptError
 from .utils import decode, split
 from .core import Popen, PIPE, get_real_command
 
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
-from xml.parsers import expat  # TODO: works for any Python?
-
-# Get the XML parsing exceptions to catch. The behavior chnaged with Python 2.7
-# and ElementTree 1.3.
-if hasattr(etree, "ParseError"):
-    ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
-else:
-    ETREE_EXCEPTIONS = expat.ExpatError
-
-
-if sys.version_info.major >= 3:
-    unicode = str
+ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
 
 
 class grassTask:
@@ -160,7 +147,7 @@ class grassTask:
             if isinstance(val, (list, tuple)):
                 if value in val:
                     return p
-            elif isinstance(val, (bytes, unicode)):
+            elif isinstance(val, (bytes, str)):
                 if p[element][: len(value)] == value:
                     return p
             else:
@@ -459,7 +446,7 @@ def convert_xml_to_utf8(xml_text):
 
     # modify: fetch encoding from the interface description text(xml)
     # e.g. <?xml version="1.0" encoding="GBK"?>
-    pattern = re.compile(b'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
+    pattern = re.compile(rb'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
     m = re.match(pattern, xml_text)
     if m is None:
         return xml_text.encode("utf-8") if xml_text else None

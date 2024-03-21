@@ -1,4 +1,3 @@
-
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include "his.h"
@@ -15,18 +14,18 @@
  *    SATURATION:
  *       S     saturation val:  0 (gray) to 255 (full color)
  *
- * make_gray_scale() generates a gray-scale color lookup table 
+ * make_gray_scale() generates a gray-scale color lookup table
  ****************************************************************************/
 
-void HIS_to_RGB(int R,          /* red percent. for hue: value 0 - 255 */
-                int G,          /* grn percent. for hue: value 0 - 255 */
-                int B,          /* blu percent. for hue: value 0 - 255 */
-                int I,          /* intensity value: 0 (black) to 255 (white)     */
-                int S,          /* saturation val:  0 (gray) to 255 (full color) */
-                CELL * red,     /* resulting red value */
-                CELL * grn,     /* resulting green value */
-                CELL * blu      /* resulting blue value */
-    )
+void HIS_to_RGB(int R,     /* red percent. for hue: value 0 - 255 */
+                int G,     /* grn percent. for hue: value 0 - 255 */
+                int B,     /* blu percent. for hue: value 0 - 255 */
+                int I,     /* intensity value: 0 (black) to 255 (white)     */
+                int S,     /* saturation val:  0 (gray) to 255 (full color) */
+                CELL *red, /* resulting red value */
+                CELL *grn, /* resulting green value */
+                CELL *blu  /* resulting blue value */
+)
 {
     /* modify according to intensity */
     if (I != 255) {
@@ -69,7 +68,7 @@ int make_gray_scale(struct Colors *gray)
     Rast_init_colors(gray);
 
     for (i = 0; i < 256; i++)
-        Rast_set_c_color((CELL) i, i, i, i, gray);
+        Rast_set_c_color((CELL)i, i, i, i, gray);
 
     return 0;
 }

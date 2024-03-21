@@ -70,7 +70,7 @@ as <i>PROJ</i>'s <em><a href="https://proj.org/apps/cs2cs.html">cs2cs</a></em>
 [1]. This is an easy method for converting an ASCII file containing a list
 of coordinate points, since there is no topology to be preserved and
 <i>cs2cs</i> can be used to process simple lists using a one-line command.
-The <em>m.proj</em> module provides a handy front end to <tt>cs2cs</tt>. 
+The <em>m.proj</em> module provides a handy front end to <tt>cs2cs</tt>.
 
 <p>Vector maps is generally more complex, as parts of the data stored in
 the files will describe topology, and not just coordinates. In GRASS
@@ -102,7 +102,7 @@ cells. The <b>method=bilinear</b> method determines the new value of
 the cell based on a weighted distance average of the 4 surrounding
 cells in the input map. The <b>method=bicubic</b> method determines the
 new value of the cell based on a weighted distance average of the 16
-surrounding cells in the input map. The <b>method=lanzcos</b> method
+surrounding cells in the input map. The <b>method=lanczos</b> method
 determines the new value of the cell based on a weighted distance
 average of the 25 surrounding cells in the input map. Compared to
 bicubic, lanczos puts a higher weight on cells close to the center and a
@@ -263,13 +263,13 @@ r.proj input=elevation location=ll_wgs84 mapset=user1 memory=800
 
 v.in.region -d output=bounds type=area
 
-# Now switch to the target location and import the vector bounding box 
+# Now switch to the target location and import the vector bounding box
 # (you can run v.proj -l to get a list of vector maps in the source location):
 
 v.proj input=bounds location=source_location_name output=bounds_reprojected
 
 # Set the region in the target location with that of the newly-imported vector
-# bounds map, and align the resolution to the desired cell resolution of the 
+# bounds map, and align the resolution to the desired cell resolution of the
 # final, reprojected raster map:
 
 g.region vector=bounds_reprojected res=5 -a
@@ -300,7 +300,7 @@ location=source_location_name mapset=PERMANENT res=5 method=bicubic
   <li> <a href="http://geotiff.maptools.org/proj_list/">Projections Transform List</a> (PROJ)
   <li> <a href="https://proj.org/operations/index.html">Coordinate operations</a> by PROJ (projections, conversions, transformations, pipeline operator)
   <li> <a href="http://www.mapref.org">MapRef -
-      The Collection of Map Projections and Reference Systems for Europe</a> 
+      The Collection of Map Projections and Reference Systems for Europe</a>
   <li> <a href="http://www.crs-geo.eu">Information and Service System for European Coordinate Reference Systems - CRS</a>
 </ul>
 
@@ -318,12 +318,12 @@ location=source_location_name mapset=PERMANENT res=5 method=bicubic
 </em>
 
 <p>
-The 'gdalwarp' and 'gdal_translate' utilities are available from the 
+The 'gdalwarp' and 'gdal_translate' utilities are available from the
 <a href="https://www.gdal.org">GDAL</a> project.
-  
+
 <h2>AUTHORS</h2>
 
-  
+
 Martin Schroeder, University of Heidelberg, Germany<br>
 Man page text from S.J.D. Cox, AGCRC, CSIRO Exploration &amp; Mining, Nedlands, WA<br>
 Updated by <a href="mailto:morten@untamo.net">Morten Hulden</a><br>

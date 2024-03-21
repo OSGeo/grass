@@ -7,10 +7,8 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-
 static void set_min(struct RASTER_MAP_PTR *, int, struct RASTER_MAP_PTR *);
 static void set_max(struct RASTER_MAP_PTR *, int, struct RASTER_MAP_PTR *);
-
 
 /* get_stats() Find out the number of cells total, number of nulls
  * the min value, the max value and the create the null replacement
@@ -36,10 +34,8 @@ void get_stats(struct rr_state *theState)
     theState->max.type = theState->buf.type;
     theState->nulls.data.v =
         (void *)G_malloc(Rast_cell_size(theState->nulls.type));
-    theState->min.data.v =
-        (void *)G_malloc(Rast_cell_size(theState->min.type));
-    theState->max.data.v =
-        (void *)G_malloc(Rast_cell_size(theState->max.type));
+    theState->min.data.v = (void *)G_malloc(Rast_cell_size(theState->min.type));
+    theState->max.data.v = (void *)G_malloc(Rast_cell_size(theState->max.type));
 
     if (theState->docover == 1) {
         theState->cnulls.type = theState->cover.type;
@@ -55,13 +51,13 @@ void get_stats(struct rr_state *theState)
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
 
-    theState->nCells = (gcell_count) nrows *ncols;
+    theState->nCells = (gcell_count)nrows * ncols;
 
     theState->nNulls = 0;
     set_min(NULL, 0, &theState->min);
     set_max(NULL, 0, &theState->max);
     if (theState->docover == 1) {
-        theState->cnCells = (gcell_count) nrows *ncols;
+        theState->cnCells = (gcell_count)nrows * ncols;
 
         theState->cnNulls = 0;
         set_min(NULL, 0, &theState->cmin);
@@ -69,11 +65,11 @@ void get_stats(struct rr_state *theState)
     }
     G_message(_("Collecting Stats..."));
     for (row = 0; row < nrows; row++) {
-        Rast_get_row(theState->fd_old, theState->buf.data.v,
-                     row, theState->buf.type);
+        Rast_get_row(theState->fd_old, theState->buf.data.v, row,
+                     theState->buf.type);
         if (theState->docover == 1)
-            Rast_get_row(theState->fd_cold, theState->cover.data.v,
-                         row, theState->cover.type);
+            Rast_get_row(theState->fd_cold, theState->cover.data.v, row,
+                         theState->cover.type);
 
         for (col = 0; col < ncols; col++) {
             if (is_null_value(theState->buf, col)) {
@@ -121,11 +117,10 @@ void get_stats(struct rr_state *theState)
         if (theState->docover == 1)
             *theState->cnulls.data.d = floor(*theState->cmin.data.d - 1);
         break;
-    default:                   /* Huh? */
+    default: /* Huh? */
         G_fatal_error(_("Programmer error in get_stats/switch"));
     }
-}                               /* get_stats() */
-
+} /* get_stats() */
 
 static void set_min(struct RASTER_MAP_PTR *from, int col,
                     struct RASTER_MAP_PTR *to)
@@ -146,21 +141,20 @@ static void set_min(struct RASTER_MAP_PTR *from, int col,
     else {
         switch (to->type) {
         case CELL_TYPE:
-            *to->data.c = (*to->data.c < from->data.c[col]) ?
-                *to->data.c : from->data.c[col];
+            *to->data.c = (*to->data.c < from->data.c[col]) ? *to->data.c
+                                                            : from->data.c[col];
             break;
         case FCELL_TYPE:
-            *to->data.f = (*to->data.f < from->data.f[col]) ?
-                *to->data.f : from->data.f[col];
+            *to->data.f = (*to->data.f < from->data.f[col]) ? *to->data.f
+                                                            : from->data.f[col];
             break;
         case DCELL_TYPE:
-            *to->data.d = (*to->data.d < from->data.d[col]) ?
-                *to->data.d : from->data.d[col];
+            *to->data.d = (*to->data.d < from->data.d[col]) ? *to->data.d
+                                                            : from->data.d[col];
             break;
         }
     }
 }
-
 
 static void set_max(struct RASTER_MAP_PTR *from, int col,
                     struct RASTER_MAP_PTR *to)
@@ -181,16 +175,16 @@ static void set_max(struct RASTER_MAP_PTR *from, int col,
     else {
         switch (to->type) {
         case CELL_TYPE:
-            *to->data.c = (*to->data.c > from->data.c[col]) ?
-                *to->data.c : from->data.c[col];
+            *to->data.c = (*to->data.c > from->data.c[col]) ? *to->data.c
+                                                            : from->data.c[col];
             break;
         case FCELL_TYPE:
-            *to->data.f = (*to->data.f > from->data.f[col]) ?
-                *to->data.f : from->data.f[col];
+            *to->data.f = (*to->data.f > from->data.f[col]) ? *to->data.f
+                                                            : from->data.f[col];
             break;
         case DCELL_TYPE:
-            *to->data.d = (*to->data.d > from->data.d[col]) ?
-                *to->data.d : from->data.d[col];
+            *to->data.d = (*to->data.d > from->data.d[col]) ? *to->data.d
+                                                            : from->data.d[col];
             break;
         }
     }

@@ -3,7 +3,6 @@
 #include <math.h>
 #include "local_proto.h"
 
-
 double *Cdhc_chi_square(double *x, int n)
 {
     static double y[2];

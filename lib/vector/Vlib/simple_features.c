@@ -61,8 +61,8 @@ static void print_point(const struct line_pnts *, int, int, int, FILE *);
    \return SF type identificator (see list of supported types)
    \return -1 on error
  */
-SF_FeatureType Vect_sfa_get_line_type(const struct line_pnts *Points,
-                                      int type, int with_z)
+SF_FeatureType Vect_sfa_get_line_type(const struct line_pnts *Points, int type,
+                                      int with_z)
 {
     return get_sftype(Points, type, with_z);
 }
@@ -179,55 +179,55 @@ char *Vect_sfa_line_geometry_type(const struct line_pnts *Points, int type)
    \param Points    pointer to line_pnts structure
    \param type      feature type
    \param with_z    non-zero value for 3D data
-   \param precision floating number precision 
+   \param precision floating number precision
    \param[out] file file where to write the output
 
    \return 0 on success
    \return -1 unsupported feature type
  */
 int Vect_sfa_line_astext(const struct line_pnts *Points, int type, int with_z,
-                         int precision, FILE * file)
+                         int precision, FILE *file)
 {
     int i, sftype;
 
     sftype = Vect_sfa_get_line_type(Points, type, with_z);
 
     switch (sftype) {
-    case SF_POINT:{            /* point */
-            fprintf(file, "POINT(");
-            print_point(Points, 0, with_z, precision, file);
-            fprintf(file, ")\n");
-            break;
-        }
+    case SF_POINT: { /* point */
+        fprintf(file, "POINT(");
+        print_point(Points, 0, with_z, precision, file);
+        fprintf(file, ")\n");
+        break;
+    }
     case SF_LINESTRING:
-    case SF_LINEARRING:        /* line */  {
-            if (sftype == SF_LINESTRING)
-                fprintf(file, "LINESTRING(");
-            else
-                fprintf(file, "LINEARRING(");
-            for (i = 0; i < Points->n_points; i++) {
-                print_point(Points, i, with_z, precision, file);
-                if (i < Points->n_points - 1)
-                    fprintf(file, ", ");
-            }
-            fprintf(file, ")\n");
-            break;
+    case SF_LINEARRING: /* line */ {
+        if (sftype == SF_LINESTRING)
+            fprintf(file, "LINESTRING(");
+        else
+            fprintf(file, "LINEARRING(");
+        for (i = 0; i < Points->n_points; i++) {
+            print_point(Points, i, with_z, precision, file);
+            if (i < Points->n_points - 1)
+                fprintf(file, ", ");
         }
-    case SF_POLYGON:           /* polygon */  {
-            /* write only outter/inner ring */
-            fprintf(file, "(");
-            for (i = 0; i < Points->n_points; i++) {
-                print_point(Points, i, with_z, precision, file);
-                if (i < Points->n_points - 1)
-                    fprintf(file, ", ");
-            }
-            fprintf(file, ")");
-            break;
+        fprintf(file, ")\n");
+        break;
+    }
+    case SF_POLYGON: /* polygon */ {
+        /* write only outer/inner ring */
+        fprintf(file, "(");
+        for (i = 0; i < Points->n_points; i++) {
+            print_point(Points, i, with_z, precision, file);
+            if (i < Points->n_points - 1)
+                fprintf(file, ", ");
         }
-    default:{
-            G_warning(_("Unknown Simple Features type (%d)"), sftype);
-            return -1;
-        }
+        fprintf(file, ")");
+        break;
+    }
+    default: {
+        G_warning(_("Unknown Simple Features type (%d)"), sftype);
+        return -1;
+    }
     }
 
     fflush(file);
@@ -243,15 +243,17 @@ int Vect_sfa_line_astext(const struct line_pnts *Points, int type, int with_z,
    \return 1  feature simple
    \return 0  feature not simple
    \return -1 feature type not supported (GV_POINT, GV_CENTROID, ...)
+   \note Implementation is pending, now always returns 0
  */
-int Vect_sfa_is_line_simple(const struct line_pnts *Points, int type,
-                            int with_z)
+int Vect_sfa_is_line_simple(const struct line_pnts *Points UNUSED,
+                            int type UNUSED, int with_z UNUSED)
 {
-    SF_FeatureType sftype;
+    /* TODO:
+       SF_FeatureType sftype;
 
-    sftype = Vect_sfa_get_line_type(Points, type, with_z);
+       Vect_sfa_get_line_type(Points, type, with_z);
 
-    /* TODO */
+     */
 
     return 0;
 }
@@ -273,8 +275,7 @@ int Vect_sfa_is_line_closed(const struct line_pnts *Points, int type,
 
     if (type & (GV_LINES)) {
         npoints = Vect_get_num_line_points(Points);
-        if (npoints > 2 &&
-            Points->x[0] == Points->x[npoints - 1] &&
+        if (npoints > 2 && Points->x[0] == Points->x[npoints - 1] &&
             Points->y[0] == Points->y[npoints - 1]) {
             if (!with_z)
                 return 1;
@@ -296,7 +297,7 @@ int Vect_sfa_is_line_closed(const struct line_pnts *Points, int type,
    \return number of features
    \return -1 on error
  */
-int Vect_sfa_get_num_features(const struct Map_info *Map)
+int Vect_sfa_get_num_features(struct Map_info *Map)
 {
     int nfeat;
 
@@ -370,7 +371,8 @@ int check_sftype(const struct line_pnts *points, int type,
     }
 
     if (type == GV_BOUNDARY) {
-        if (sftype == SF_POLYGON && Vect_sfa_is_line_closed(points, type, 0))   /* force 2D */
+        if (sftype == SF_POLYGON &&
+            Vect_sfa_is_line_closed(points, type, 0)) /* force 2D */
             return 1;
     }
 
@@ -395,7 +397,7 @@ int get_sftype(const struct line_pnts *points, int type, int with_z)
 }
 
 void print_point(const struct line_pnts *Points, int index, int with_z,
-                 int precision, FILE * file)
+                 int precision, FILE *file)
 {
     fprintf(file, "%.*f %.*f", precision, Points->x[index], precision,
             Points->y[index]);

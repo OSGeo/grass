@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_createdb.c
- * 
+ *
  * \brief DBMI Library (driver) - create database
  *
  * (C) 1999-2008 by the GRASS Development Team

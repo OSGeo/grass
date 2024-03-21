@@ -3,7 +3,7 @@
 #include <grass/gis.h>
 #include "global.h"
 
-static int which_env = -1;      /* 0 = cur, 1 = target */
+static int which_env = -1; /* 0 = cur, 1 = target */
 
 int select_current_env(void)
 {
@@ -36,10 +36,11 @@ int select_target_env(void)
 int show_env(void)
 {
     fprintf(stderr, "env(%d) switch to LOCATION %s, MAPSET %s\n", which_env,
-            G_getenv_nofatal("LOCATION_NAME") ==
-            NULL ? "?" : G_getenv_nofatal("LOCATION_NAME"),
-            G_getenv_nofatal("MAPSET") ==
-            NULL ? "?" : G_getenv_nofatal("MAPSET"));
+            G_getenv_nofatal("LOCATION_NAME") == NULL
+                ? "?"
+                : G_getenv_nofatal("LOCATION_NAME"),
+            G_getenv_nofatal("MAPSET") == NULL ? "?"
+                                               : G_getenv_nofatal("MAPSET"));
     G_sleep(2);
 
     return 0;

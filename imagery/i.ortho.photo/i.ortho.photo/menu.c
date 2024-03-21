@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       menu
@@ -35,7 +34,6 @@ int main(int argc, char **argv)
     char *moduletorun;
     const char *grname;
     char tosystem[99];
-    int err = 0;
 
     /* initialize grass */
     G_gisinit(argv[0]);
@@ -48,8 +46,7 @@ int main(int argc, char **argv)
 
     group_opt = G_define_standard_option(G_OPT_I_GROUP);
     group_opt->required = YES;
-    group_opt->description =
-        _("Name of imagery group for ortho-rectification");
+    group_opt->description = _("Name of imagery group for ortho-rectification");
 
     ortho_opt = G_define_option();
     ortho_opt->key = "productname";
@@ -76,7 +73,8 @@ int main(int argc, char **argv)
                _("8 - Ortho-rectify imagery files"));
     ortho_opt->descriptions = desc_ortho_opt;
     ortho_opt->options =
-        "i.group,i.ortho.target,i.ortho.elev,i.ortho.camera,g.gui.photo2image,i.ortho.init,g.gui.image2target,i.ortho.rectify";
+        "i.group,i.ortho.target,i.ortho.elev,i.ortho.camera,g.gui.photo2image,"
+        "i.ortho.init,g.gui.image2target,i.ortho.rectify";
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -99,11 +97,11 @@ int main(int argc, char **argv)
     /* run the program chosen */
     if (strcmp(moduletorun, "g.gui.photo2image") == 0) {
         strcpy(tosystem, "g.gui.photo2image");
-        err = system((const char *)tosystem);
+        return system((const char *)tosystem);
     }
     else if (strcmp(moduletorun, "g.gui.image2target") == 0) {
         strcpy(tosystem, "g.gui.image2target");
-        err = system((const char *)tosystem);
+        return system((const char *)tosystem);
     }
     else {
         if (strcmp(moduletorun, "i.group") == 0)
@@ -119,6 +117,6 @@ int main(int argc, char **argv)
         if (strcmp(moduletorun, "i.ortho.rectify") == 0)
             strcpy(tosystem, "i.ortho.rectify --ui group=");
         strcat(tosystem, grname);
-        err = system((const char *)tosystem);
+        return system((const char *)tosystem);
     }
 }

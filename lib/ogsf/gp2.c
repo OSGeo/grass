@@ -1,7 +1,8 @@
 /*!
    \file lib/ogsf/gp2.c
 
-   \brief OGSF library - loading and manipulating point sets (higher level functions)
+   \brief OGSF library - loading and manipulating point sets (higher level
+   functions)
 
    (C) 1999-2008, 2011 by the GRASS Development Team
 
@@ -312,7 +313,8 @@ int GP_set_style_thematic(int id, int layer, const char *color,
     geosite *gp;
 
     G_debug(4,
-            "GP_set_style_thematic(id=%d, layer=%d, color=%s, width=%s, size=%s, symbol=%s)",
+            "GP_set_style_thematic(id=%d, layer=%d, color=%s, width=%s, "
+            "size=%s, symbol=%s)",
             id, layer, color, width, size, symbol);
 
     if (NULL == (gp = gp_get_site(id))) {
@@ -320,7 +322,7 @@ int GP_set_style_thematic(int id, int layer, const char *color,
     }
 
     if (!gp->tstyle)
-        gp->tstyle = (gvstyle_thematic *) G_malloc(sizeof(gvstyle_thematic));
+        gp->tstyle = (gvstyle_thematic *)G_malloc(sizeof(gvstyle_thematic));
     G_zero(gp->tstyle, sizeof(gvstyle_thematic));
 
     gp->tstyle->active = 1;
@@ -433,8 +435,8 @@ void GP_set_trans(int id, float xtrans, float ytrans, float ztrans)
 {
     geosite *gp;
 
-    G_debug(3, "GP_set_trans(): id=%d trans=%f,%f,%f",
-            id, xtrans, ytrans, ztrans);
+    G_debug(3, "GP_set_trans(): id=%d trans=%f,%f,%f", id, xtrans, ytrans,
+            ztrans);
 
     gp = gp_get_site(id);
     if (gp) {
@@ -464,8 +466,8 @@ void GP_get_trans(int id, float *xtrans, float *ytrans, float *ztrans)
         *ztrans = gp->z_trans;
     }
 
-    G_debug(3, "GP_get_trans(): id=%d, trans=%f,%f,%f",
-            id, *xtrans, *ytrans, *ztrans);
+    G_debug(3, "GP_get_trans(): id=%d, trans=%f,%f,%f", id, *xtrans, *ytrans,
+            *ztrans);
 
     return;
 }

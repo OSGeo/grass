@@ -25,7 +25,7 @@
 
    \return
  */
-int db__send_value(dbValue * value, int Ctype)
+int db__send_value(dbValue *value, int Ctype)
 {
     DB_SEND_CHAR(value->isNull);
     if (value->isNull)
@@ -59,7 +59,7 @@ int db__send_value(dbValue * value, int Ctype)
 
    \return
  */
-int db__recv_value(dbValue * value, int Ctype)
+int db__recv_value(dbValue *value, int Ctype)
 {
     DB_RECV_CHAR(&value->isNull);
     if (value->isNull)

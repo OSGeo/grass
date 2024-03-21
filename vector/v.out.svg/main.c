@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       v.out.svg
@@ -24,24 +23,24 @@
 #include <grass/dbmi.h>
 #include <grass/vector.h>
 
-#define SVG_NS   "http://www.w3.org/2000/svg"
-#define XLINK_NS "http://www.w3.org/1999/xlink"
-#define GRASS_NS "http:/grass.itc.it/2006/gg"
-#define RADIUS_SCALE	.003
-#define WIDTH_SCALE	.001
-#define G_Areas  "G_Areas"
-#define G_Lines  "G_Lines"
-#define G_Points "G_Points"
+#define SVG_NS       "http://www.w3.org/2000/svg"
+#define XLINK_NS     "http://www.w3.org/1999/xlink"
+#define GRASS_NS     "http:/grass.itc.it/2006/gg"
+#define RADIUS_SCALE .003
+#define WIDTH_SCALE  .001
+#define G_Areas      "G_Areas"
+#define G_Lines      "G_Lines"
+#define G_Points     "G_Points"
 
-#define TYPE_POINT    1
-#define TYPE_LINE     2
-#define TYPE_POLY     3
+#define TYPE_POINT   1
+#define TYPE_LINE    2
+#define TYPE_POLY    3
 
 FILE *fpsvg;
 
 static int mk_path(struct line_pnts *Points, int precision);
-static int mk_attribs(int cat, struct field_info *Fi, dbDriver * Driver,
-                      dbTable * Table, int attr_cols[], int attr_size,
+static int mk_attribs(int cat, struct field_info *Fi, dbDriver *Driver,
+                      dbTable *Table, int attr_cols[], int attr_size,
                       int do_attr);
 static int print_escaped_for_xml(char *str);
 
@@ -204,10 +203,9 @@ int main(int argc, char *argv[])
 
     fprintf(fpsvg, "<svg xmlns=\"%s\" xmlns:xlink=\"%s\" xmlns:gg=\"%s\" ",
             SVG_NS, XLINK_NS, GRASS_NS);
-    fprintf(fpsvg, "viewBox=\"%.*f %.*f %.*f %.*f\">\n",
-            precision, box.W,
-            precision, box.N * -1,
-            precision, box.E - box.W, precision, box.N - box.S);
+    fprintf(fpsvg, "viewBox=\"%.*f %.*f %.*f %.*f\">\n", precision, box.W,
+            precision, box.N * -1, precision, box.E - box.W, precision,
+            box.N - box.S);
     fprintf(fpsvg, "<title>v.out.svg %s %s</title>\n", in_opt->answer,
             out_opt->answer);
 
@@ -224,7 +222,8 @@ int main(int argc, char *argv[])
             nareas = Vect_get_num_areas(&In);
             /* extract area as paths */
             fprintf(fpsvg,
-                    " <g id=\"%s\" fill=\"#CCC\" stroke=\"#000\" stroke-width=\"%.*f\" >\n",
+                    " <g id=\"%s\" fill=\"#CCC\" stroke=\"#000\" "
+                    "stroke-width=\"%.*f\" >\n",
                     G_Areas, precision, width);
             for (i = 1; i <= nareas; i++) {
                 G_percent(i, nareas, 5);
@@ -268,8 +267,10 @@ int main(int argc, char *argv[])
         }
         else {
             /* extract points as circles */
-            fprintf(fpsvg, " <g id=\"%s\" fill=\"#FC0\" stroke=\"#000\" "
-                    "stroke-width=\"%.*f\" >\n", G_Points, precision, width);
+            fprintf(fpsvg,
+                    " <g id=\"%s\" fill=\"#FC0\" stroke=\"#000\" "
+                    "stroke-width=\"%.*f\" >\n",
+                    G_Points, precision, width);
             for (i = 1; i <= nlines; i++) {
                 G_percent(i, nlines, 5);
 
@@ -286,11 +287,10 @@ int main(int argc, char *argv[])
                                    attr_size, do_attr);
                     }
                     fprintf(fpsvg, "cx=\"%.*f\" cy=\"%.*f\" r=\"%.*f\" />\n",
-                            precision, Points->x[j],
-                            precision, Points->y[j] * -1, precision, radius);
+                            precision, Points->x[j], precision,
+                            Points->y[j] * -1, precision, radius);
                     cnt += 1;
                 }
-
             }
             fprintf(fpsvg, " </g>\n");
             G_message(_("%d points extracted"), cnt);
@@ -304,8 +304,10 @@ int main(int argc, char *argv[])
         }
         else {
             /* extract lines as paths */
-            fprintf(fpsvg, " <g id=\"%s\" fill=\"none\" stroke=\"#000\" "
-                    "stroke-width=\"%.*f\" >\n", G_Lines, precision, width);
+            fprintf(fpsvg,
+                    " <g id=\"%s\" fill=\"none\" stroke=\"#000\" "
+                    "stroke-width=\"%.*f\" >\n",
+                    G_Lines, precision, width);
             for (i = 1; i <= nlines; i++) {
                 G_percent(i, nlines, 5);
 
@@ -317,8 +319,8 @@ int main(int argc, char *argv[])
 
                 fprintf(fpsvg, "  <path ");
                 if (Cats->n_cats > 0) {
-                    mk_attribs(Cats->cat[0], Fi, Driver, Table,
-                               attr_cols, attr_size, do_attr);
+                    mk_attribs(Cats->cat[0], Fi, Driver, Table, attr_cols,
+                               attr_size, do_attr);
                 }
 
                 fprintf(fpsvg, "d=\"");
@@ -345,7 +347,6 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-
 static int mk_path(struct line_pnts *Points, int precision)
 {
     int i;
@@ -353,13 +354,13 @@ static int mk_path(struct line_pnts *Points, int precision)
     /* loop through points and create relative moves to save bandwidth */
     for (i = 0; i < Points->n_points; i++) {
         if (i == 0) {
-            fprintf(fpsvg, "M %.*f %.*f l",
-                    precision, Points->x[i], precision, Points->y[i] * -1);
+            fprintf(fpsvg, "M %.*f %.*f l", precision, Points->x[i], precision,
+                    Points->y[i] * -1);
         }
         else {
-            fprintf(fpsvg, " %.*f %.*f",
-                    precision, Points->x[i] - Points->x[i - 1],
-                    precision, Points->y[i] * -1 - Points->y[i - 1] * -1);
+            fprintf(fpsvg, " %.*f %.*f", precision,
+                    Points->x[i] - Points->x[i - 1], precision,
+                    Points->y[i] * -1 - Points->y[i - 1] * -1);
         }
     }
 
@@ -367,8 +368,8 @@ static int mk_path(struct line_pnts *Points, int precision)
 }
 
 /* extract custom-namespaced attributes if any */
-static int mk_attribs(int cat, struct field_info *Fi, dbDriver * Driver,
-                      dbTable * Table, int attr_cols[], int attr_size,
+static int mk_attribs(int cat, struct field_info *Fi, dbDriver *Driver,
+                      dbTable *Table, int attr_cols[], int attr_size,
                       int do_attr)
 {
     int i, more;

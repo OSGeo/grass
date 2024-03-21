@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <math.h>
 
-
 double *Cdhc_extreme(double *x, int n)
 {
     int i;

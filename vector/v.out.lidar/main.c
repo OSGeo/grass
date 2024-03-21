@@ -1,4 +1,3 @@
-
 /***********************************************************************
  *
  * MODULE:       v.out.lidar
@@ -14,7 +13,7 @@
  *               Read the file COPYING that comes with GRASS
  *               for details.
  *
-***********************************************************************/
+ ***********************************************************************/
 
 #include <stdlib.h>
 
@@ -29,11 +28,10 @@
 #include <liblas/capi/liblas.h>
 
 #define LAS_FIRST 1
-#define LAS_MID 2
-#define LAS_LAST 3
+#define LAS_MID   2
+#define LAS_LAST  3
 
-struct WriteContext
-{
+struct WriteContext {
     LASWriterH las_writer;
     LASPointH las_point;
     LASColorH las_color;
@@ -51,9 +49,7 @@ struct WriteContext
     dbCatValArray *blue_column_values;
 };
 
-
-struct LidarColumnNames
-{
+struct LidarColumnNames {
     const char *return_n;
     const char *n_returns;
     const char *class_n;
@@ -63,13 +59,12 @@ struct LidarColumnNames
     const char *blue;
 };
 
-
 /*! Open database and store driver and field info
- * 
+ *
  * Use close_database() when you are finished with queries
  */
-static void open_database(struct Map_info *vector, int field,
-                          dbDriver ** driver, struct field_info **f_info)
+static void open_database(struct Map_info *vector, int field, dbDriver **driver,
+                          struct field_info **f_info)
 {
     struct field_info *f_info_tmp = Vect_get_field(vector, field);
 
@@ -80,9 +75,8 @@ static void open_database(struct Map_info *vector, int field,
                       field);
     }
 
-    dbDriver *driver_tmp = db_start_driver_open_database(f_info_tmp->driver,
-                                                         f_info_tmp->
-                                                         database);
+    dbDriver *driver_tmp =
+        db_start_driver_open_database(f_info_tmp->driver, f_info_tmp->database);
     if (driver_tmp == NULL)
         G_fatal_error("Unable to open database <%s> by driver <%s>",
                       f_info_tmp->database, f_info_tmp->driver);
@@ -91,7 +85,7 @@ static void open_database(struct Map_info *vector, int field,
     *driver = driver_tmp;
 }
 
-static void close_database(dbDriver * driver)
+static void close_database(dbDriver *driver)
 {
     db_close_database_shutdown_driver(driver);
 }
@@ -105,7 +99,7 @@ static void close_database(dbDriver * driver)
  *
  * \returns cat-value array with column values for each category
  */
-static dbCatValArray *select_integers_from_database(dbDriver * driver,
+static dbCatValArray *select_integers_from_database(dbDriver *driver,
                                                     struct field_info *f_info,
                                                     const char *column,
                                                     const char *where)
@@ -117,19 +111,20 @@ static dbCatValArray *select_integers_from_database(dbDriver * driver,
     int ctype = db_column_Ctype(driver, f_info->table, column);
 
     if (ctype == -1)
-        G_fatal_error(_("Column <%s> not found in table <%s>"),
-                      column, f_info->table);
+        G_fatal_error(_("Column <%s> not found in table <%s>"), column,
+                      f_info->table);
     if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-        G_fatal_error(_("Only numeric column type is supported (column <%s> in table <%s>)"),
+        G_fatal_error(_("Only numeric column type is supported (column <%s> in "
+                        "table <%s>)"),
                       column, f_info->table);
     if (ctype == DB_C_TYPE_DOUBLE)
-        G_warning(_("Double values will be converted to integers (column <%s> in table <%s>)"),
+        G_warning(_("Double values will be converted to integers (column <%s> "
+                    "in table <%s>)"),
                   column, f_info->table);
 
     db_CatValArray_init(column_values);
-    int nrec =
-        db_select_CatValArray(driver, f_info->table, f_info->key, column,
-                              where, column_values);
+    int nrec = db_select_CatValArray(driver, f_info->table, f_info->key, column,
+                                     where, column_values);
 
     G_debug(2, "db_select_CatValArray() nrec = %d", nrec);
     if (nrec < 0)
@@ -144,7 +139,7 @@ static dbCatValArray *select_integers_from_database(dbDriver * driver,
  *
  * \returns cat-value array with column values for each category
  */
-static dbCatValArray *select_strings_from_database(dbDriver * driver,
+static dbCatValArray *select_strings_from_database(dbDriver *driver,
                                                    struct field_info *f_info,
                                                    const char *column,
                                                    const char *where)
@@ -156,15 +151,14 @@ static dbCatValArray *select_strings_from_database(dbDriver * driver,
     int ctype = db_column_Ctype(driver, f_info->table, column);
 
     if (ctype == -1)
-        G_fatal_error(_("Column <%s> not found in table <%s>"),
-                      column, f_info->table);
+        G_fatal_error(_("Column <%s> not found in table <%s>"), column,
+                      f_info->table);
     if (ctype != DB_C_TYPE_STRING)
         G_fatal_error(_("Only numeric column type is supported"));
 
     db_CatValArray_init(column_values);
-    int nrec =
-        db_select_CatValArray(driver, f_info->table, f_info->key, column,
-                              where, column_values);
+    int nrec = db_select_CatValArray(driver, f_info->table, f_info->key, column,
+                                     where, column_values);
 
     G_debug(2, "db_select_CatValArray() nrec = %d", nrec);
     if (nrec < 0)
@@ -179,7 +173,7 @@ static dbCatValArray *select_strings_from_database(dbDriver * driver,
  *
  * \returns The value of the column as an integer
  */
-static int get_integer_column_value(dbCatValArray * column_values, int cat)
+static int get_integer_column_value(dbCatValArray *column_values, int cat)
 {
     int val;
     dbCatVal *catval;
@@ -208,10 +202,10 @@ static int get_integer_column_value(dbCatValArray * column_values, int cat)
  *
  * Expects the column to be a string.
  */
-static void get_color_column_value(dbCatValArray * cvarr, int cat,
-                                   int *red, int *green, int *blue)
+static void get_color_column_value(dbCatValArray *cvarr, int cat, int *red,
+                                   int *green, int *blue)
 {
-    char colorstring[12];       /* RRR:GGG:BBB */
+    char colorstring[12]; /* RRR:GGG:BBB */
     dbCatVal *value = NULL;
 
     /* read RGB colors from db for current area # */
@@ -220,8 +214,8 @@ static void get_color_column_value(dbCatValArray * cvarr, int cat,
         if (*colorstring != '\0') {
             G_debug(5, "element: colorstring: %s", colorstring);
             if (G_str_to_color(colorstring, red, green, blue) == 1) {
-                G_debug(5, "element: cat %d r:%d g:%d b:%d",
-                        cat, *red, *green, *blue);
+                G_debug(5, "element: cat %d r:%d g:%d b:%d", cat, *red, *green,
+                        *blue);
                 /* TODO: handle return code 2 for none? */
             }
             else {
@@ -236,43 +230,36 @@ static void get_color_column_value(dbCatValArray * cvarr, int cat,
 }
 
 static void load_columns(struct WriteContext *write_context,
-                         dbDriver * db_driver, struct field_info *f_info,
+                         dbDriver *db_driver, struct field_info *f_info,
                          struct LidarColumnNames *columns, const char *where)
 {
     if (columns->return_n) {
-        write_context->return_column_values =
-            select_integers_from_database(db_driver, f_info,
-                                          columns->return_n, where);
+        write_context->return_column_values = select_integers_from_database(
+            db_driver, f_info, columns->return_n, where);
     }
     if (columns->n_returns) {
-        write_context->n_returns_column_values =
-            select_integers_from_database(db_driver, f_info,
-                                          columns->n_returns, where);
+        write_context->n_returns_column_values = select_integers_from_database(
+            db_driver, f_info, columns->n_returns, where);
     }
     if (columns->class_n) {
-        write_context->class_column_values =
-            select_integers_from_database(db_driver, f_info,
-                                          columns->class_n, where);
+        write_context->class_column_values = select_integers_from_database(
+            db_driver, f_info, columns->class_n, where);
     }
     if (columns->grass_rgb) {
-        write_context->grass_rgb_column_values =
-            select_strings_from_database(db_driver, f_info,
-                                         columns->grass_rgb, where);
+        write_context->grass_rgb_column_values = select_strings_from_database(
+            db_driver, f_info, columns->grass_rgb, where);
     }
     if (columns->red) {
-        write_context->red_column_values =
-            select_integers_from_database(db_driver, f_info,
-                                          columns->red, where);
+        write_context->red_column_values = select_integers_from_database(
+            db_driver, f_info, columns->red, where);
     }
     if (columns->green) {
-        write_context->green_column_values =
-            select_integers_from_database(db_driver, f_info,
-                                          columns->green, where);
+        write_context->green_column_values = select_integers_from_database(
+            db_driver, f_info, columns->green, where);
     }
     if (columns->blue) {
-        write_context->blue_column_values =
-            select_integers_from_database(db_driver, f_info,
-                                          columns->blue, where);
+        write_context->blue_column_values = select_integers_from_database(
+            db_driver, f_info, columns->blue, where);
     }
 }
 
@@ -341,15 +328,14 @@ static void set_point_attributes_from_table(struct WriteContext *context,
         if (context->grass_rgb_column_values) {
             int red, green, blue;
 
-            get_color_column_value(context->grass_rgb_column_values, cat,
-                                   &red, &green, &blue);
+            get_color_column_value(context->grass_rgb_column_values, cat, &red,
+                                   &green, &blue);
             LASColor_SetRed(las_color, red);
             LASColor_SetGreen(las_color, green);
             LASColor_SetBlue(las_color, blue);
         }
         if (context->red_column_values) {
-            int val =
-                get_integer_column_value(context->red_column_values, cat);
+            int val = get_integer_column_value(context->red_column_values, cat);
             LASColor_SetRed(las_color, val);
         }
         if (context->green_column_values) {
@@ -386,8 +372,8 @@ static void write_point(struct WriteContext *context, int cat, double x,
         int red, green, blue;
         LASColorH las_color = context->las_color;
 
-        if (Rast_get_c_color(&cat, &red, &green, &blue, context->color_table)
-            == 1) {
+        if (Rast_get_c_color(&cat, &red, &green, &blue, context->color_table) ==
+            1) {
             LASColor_SetRed(las_color, red);
             LASColor_SetGreen(las_color, green);
             LASColor_SetBlue(las_color, blue);
@@ -398,7 +384,7 @@ static void write_point(struct WriteContext *context, int cat, double x,
 
     if (context->return_layer) {
         if (!Vect_cat_get(cats, context->return_layer, &cat))
-            return;             /* TODO: is this an error? */
+            return; /* TODO: is this an error? */
         if (cat == LAS_FIRST) {
             LASPoint_SetReturnNumber(las_point, LAS_FIRST);
             LASPoint_SetNumberOfReturns(las_point, LAS_FIRST);
@@ -414,7 +400,7 @@ static void write_point(struct WriteContext *context, int cat, double x,
     }
     if (context->class_layer) {
         if (!Vect_cat_get(cats, context->class_layer, &cat))
-            return;             /* TODO: is this an error? */
+            return; /* TODO: is this an error? */
         LASPoint_SetClassification(las_point, cat);
     }
     if (context->rgb_layer) {
@@ -424,7 +410,7 @@ static void write_point(struct WriteContext *context, int cat, double x,
         /* TODO: check the range for RGB? */
         if (context->rgb_layer) {
             if (!Vect_cat_get(cats, context->rgb_layer, &cat))
-                return;         /* TODO: is this an error? */
+                return; /* TODO: is this an error? */
             /* cat 0 is not valid, so we are adding 1 when storing
              * now we need to subtract 1 */
             int rgb = cat - 1;
@@ -435,7 +421,7 @@ static void write_point(struct WriteContext *context, int cat, double x,
             LASColor_SetRed(las_color, red);
             LASColor_SetGreen(las_color, green);
             LASColor_SetBlue(las_color, blue);
-        }                       /* TODO: else all the others? */
+        } /* TODO: else all the others? */
         LASPoint_SetColor(las_point, las_color);
     }
 
@@ -445,7 +431,6 @@ static void write_point(struct WriteContext *context, int cat, double x,
         G_fatal_error("Failure when writing a point");
 }
 
-
 /* TODO: these have overlap with vector lib, really needed? */
 static int point_in_region_2d(struct Cell_head *region, double x, double y)
 {
@@ -454,7 +439,6 @@ static int point_in_region_2d(struct Cell_head *region, double x, double y)
         return FALSE;
     return TRUE;
 }
-
 
 int main(int argc, char **argv)
 {
@@ -528,7 +512,8 @@ int main(int argc, char **argv)
     rgb_layer_opt->answer = NULL;
     rgb_layer_opt->guisection = _("Categories");
 
-    /* TODO: probably replace the option by standardized/expected column names */
+    /* TODO: probably replace the option by standardized/expected column names
+     */
 
     return_column_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     return_column_opt->key = "return_column";
@@ -579,9 +564,10 @@ int main(int argc, char **argv)
     las_xyscale_opt->required = YES;
     las_xyscale_opt->answer = "0.01";
     las_xyscale_opt->label = _("Internal scale to apply to X and Y values");
-    las_xyscale_opt->description = _("This scale does not change"
-                                     " the values itself but only how precisely they are stored,"
-                                     " for example 0.01 will preserve two decimal places");
+    las_xyscale_opt->description =
+        _("This scale does not change"
+          " the values itself but only how precisely they are stored,"
+          " for example 0.01 will preserve two decimal places");
 
     las_zscale_opt = G_define_option();
     las_zscale_opt->key = "las_zscale";
@@ -589,9 +575,10 @@ int main(int argc, char **argv)
     las_zscale_opt->required = YES;
     las_zscale_opt->answer = "0.01";
     las_zscale_opt->label = _("Internal scale to apply to z values");
-    las_zscale_opt->description = _("This scale does not change"
-                                    " the values itself but only how precisely they are stored,"
-                                    " for example 0.01 will preserve two decimal places");
+    las_zscale_opt->description =
+        _("This scale does not change"
+          " the values itself but only how precisely they are stored,"
+          " for example 0.01 will preserve two decimal places");
 
     region_flag = G_define_flag();
     region_flag->key = 'r';
@@ -603,7 +590,6 @@ int main(int argc, char **argv)
     no_color_table_flag->label = _("Ignore color table");
     no_color_table_flag->description =
         _("Ignore color table even when set and not other options are present");
-
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -622,8 +608,8 @@ int main(int argc, char **argv)
     struct cat_list *allowed_cats = NULL;
 
     if (layer > 0)
-        allowed_cats = Vect_cats_set_constraint(&vinput, layer, NULL,
-                                                cats_opt->answer);
+        allowed_cats =
+            Vect_cats_set_constraint(&vinput, layer, NULL, cats_opt->answer);
 
     struct line_pnts *line = Vect_new_line_struct();
     struct line_cats *cats = Vect_new_cats_struct();
@@ -669,8 +655,7 @@ int main(int argc, char **argv)
     /* TODO: support append mode */
     int write_mode = 1;
 
-    las_writer = LASWriter_Create(foutput_opt->answer,
-                                  las_header, write_mode);
+    las_writer = LASWriter_Create(foutput_opt->answer, las_header, write_mode);
     write_context.las_writer = las_writer;
 
     /* to avoid allocation for each point we are writing */
@@ -691,10 +676,10 @@ int main(int argc, char **argv)
 
     int use_color_attributes = FALSE;
 
-    if (return_column_opt->answer || n_returns_column_opt->answer
-        || class_column_opt->answer || grass_rgb_column_opt->answer
-        || red_column_opt->answer || green_column_opt->answer
-        || blue_column_opt->answer) {
+    if (return_column_opt->answer || n_returns_column_opt->answer ||
+        class_column_opt->answer || grass_rgb_column_opt->answer ||
+        red_column_opt->answer || green_column_opt->answer ||
+        blue_column_opt->answer) {
         dbDriver *db_driver;
         struct field_info *f_info;
 
@@ -721,11 +706,10 @@ int main(int argc, char **argv)
     struct Colors color_table;
 
     write_context.color_table = 0;
-    if (!use_color_attributes && !no_color_table_flag->answer
-        && !(write_context.rgb_layer)) {
-        int has_colors = Vect_read_colors(Vect_get_name(&vinput),
-                                          Vect_get_mapset(&vinput),
-                                          &color_table);
+    if (!use_color_attributes && !no_color_table_flag->answer &&
+        !(write_context.rgb_layer)) {
+        int has_colors = Vect_read_colors(
+            Vect_get_name(&vinput), Vect_get_mapset(&vinput), &color_table);
 
         if (has_colors)
             write_context.color_table = &color_table;
@@ -745,7 +729,7 @@ int main(int argc, char **argv)
         if (ltype == -1)
             G_fatal_error(_("Unable to read vector map"));
         if (ltype == -2)
-            break;              /* end of the map */
+            break; /* end of the map */
 
         double x, y, z;
 
@@ -764,9 +748,10 @@ int main(int argc, char **argv)
          * - all points have category (correct)
          * - no categories for any point (correct, layer=-1 required)
          * - some points miss category (not handled)
-         * Here we assume that there is only one set of attributes for one point.
-         * If no layer available, cat contains junk and shouldn't be used.
-         * 
+         * Here we assume that there is only one set of attributes for one
+         * point. If no layer available, cat contains junk and shouldn't be
+         * used.
+         *
          * TODO: done
          */
         cat = -1;

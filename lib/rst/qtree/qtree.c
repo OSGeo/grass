@@ -29,16 +29,13 @@
 #include <grass/qtree.h>
 
 /*! Initializes multfunc structure with given arguments */
-struct multfunc
-    *MT_functions_new(int (*compare)(struct triple *, struct quaddata *),
-                      struct quaddata ** (*divide_data)(struct quaddata *,
-                                                        int, double),
-                      int(*add_data)(struct triple *, struct quaddata *,
-                                     double),
-                      int(*intersect)(struct quaddata *, struct quaddata *),
-                      int(*division_check)(struct quaddata *, int),
-                      int(*get_points)(struct quaddata *, struct quaddata *,
-                                       int))
+struct multfunc *MT_functions_new(
+    int (*compare)(struct triple *, struct quaddata *),
+    struct quaddata **(*divide_data)(struct quaddata *, int, double),
+    int (*add_data)(struct triple *, struct quaddata *, double),
+    int (*intersect)(struct quaddata *, struct quaddata *),
+    int (*division_check)(struct quaddata *, int),
+    int (*get_points)(struct quaddata *, struct quaddata *, int))
 {
     struct multfunc *functions;
 
@@ -72,9 +69,8 @@ struct tree_info *MT_tree_info_new(struct multtree *root,
 }
 
 /** Initializes multtree using given arguments */
-struct multtree *MT_tree_new(struct quaddata *data,
-                             struct multtree **leafs, struct multtree *parent,
-                             int multant)
+struct multtree *MT_tree_new(struct quaddata *data, struct multtree **leafs,
+                             struct multtree *parent, int multant)
 {
     struct multtree *tree;
 
@@ -87,7 +83,6 @@ struct multtree *MT_tree_new(struct quaddata *data,
     tree->multant = multant;
     return tree;
 }
-
 
 /*!
  * First checks for dividing cond. (if n_points>=KMAX) and tree
@@ -105,8 +100,8 @@ struct multtree *MT_tree_new(struct quaddata *data,
  * MT_insert() to insert the point into divided tree and returns the
  * result of MT_divide().
  */
-int MT_insert(struct triple *point,
-              struct tree_info *info, struct multtree *tree, int n_leafs)
+int MT_insert(struct triple *point, struct tree_info *info,
+              struct multtree *tree, int n_leafs)
 {
     int j = 0, i, k, comp;
 
@@ -146,15 +141,13 @@ int MT_insert(struct triple *point,
         }
         if (k < 0)
             return k;
-
     }
     return j;
 }
 
-
 /*!
  * Divide a tree
- * 
+ *
  * Divides the tree by calling one of tree's functions (divide_data())
  * and returns the result of divide_data()
  */
@@ -179,10 +172,6 @@ int MT_divide(struct tree_info *info, struct multtree *tree, int n_leafs)
     return 1;
 }
 
-
-
-
-
 /*!
  * Get points inside a region from a tree
  *
@@ -194,7 +183,9 @@ int MT_divide(struct tree_info *info, struct multtree *tree, int n_leafs)
  * Uses tree's functions intersect() to find leafs that intersect given region
  * and get_points() to get points from such leafs.
  */
-int MT_region_data(struct tree_info *info, struct multtree *tree, struct quaddata *data, int MAX,       /*!< max number of points we can add (KMAX2) */
+int MT_region_data(struct tree_info *info, struct multtree *tree,
+                   struct quaddata *data,
+                   int MAX, /*!< max number of points we can add (KMAX2) */
                    int n_leafs)
 {
     int n = 0, j;
@@ -210,9 +201,8 @@ int MT_region_data(struct tree_info *info, struct multtree *tree, struct quaddat
     if (info->functions->intersect(data, tree->data)) {
         if (tree->leafs != NULL) {
             for (j = 0; j < n_leafs; j++) {
-                if ((n =
-                     n + MT_region_data(info, tree->leafs[j], data, MAX - n,
-                                        n_leafs)) > MAX)
+                if ((n = n + MT_region_data(info, tree->leafs[j], data, MAX - n,
+                                            n_leafs)) > MAX)
                     return n;
             }
         }

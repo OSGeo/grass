@@ -18,7 +18,6 @@ from grass.gunittest.main import test
 
 
 class TestCounts(TestCase):
-
     # TODO: replace by unified handing of maps
     to_remove = []
     all_rast = "r_random_cells_all"

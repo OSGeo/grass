@@ -1,17 +1,16 @@
-
 /***************************************************************************
-* MODULE:       this structs/functions are used by r3.mask and r3.null
-*
-* AUTHOR(S):    Roman Waupotitsch, Michael Shapiro, Helena Mitasova,
-*		Bill Brown, Lubos Mitas, Jaro Hofierka
-*
-* COPYRIGHT:    (C) 2005 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ * MODULE:       this structs/functions are used by r3.mask and r3.null
+ *
+ * AUTHOR(S):    Roman Waupotitsch, Michael Shapiro, Helena Mitasova,
+ *                Bill Brown, Lubos Mitas, Jaro Hofierka
+ *
+ * COPYRIGHT:    (C) 2005 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 /*Helperfunctions */
 
 #include <stdio.h>
@@ -22,20 +21,20 @@
 #include <grass/glocale.h>
 
 /*local prototypes */
-static void add_d_mask_rule(d_Mask * d_mask, double a, double b, int inf);
-static void parse_d_mask_rule(char *vallist, d_Mask * d_mask, char *where);
-static void init_d_mask_rules(d_Mask * d_mask);
+static void add_d_mask_rule(d_Mask *d_mask, double a, double b, int inf);
+static void parse_d_mask_rule(char *vallist, d_Mask *d_mask, char *where);
+static void init_d_mask_rules(d_Mask *d_mask);
 
-void init_d_mask_rules(d_Mask * d_mask)
+void init_d_mask_rules(d_Mask *d_mask)
 {
     d_mask->list = NULL;
 }
 
-void add_d_mask_rule(d_Mask * d_mask, double a, double b, int inf)
+void add_d_mask_rule(d_Mask *d_mask, double a, double b, int inf)
 {
     d_Interval *I;
 
-    I = (d_Interval *) G_malloc(sizeof(d_Interval));
+    I = (d_Interval *)G_malloc(sizeof(d_Interval));
     I->low = a <= b ? a : b;
     I->high = a >= b ? a : b;
     I->inf = inf;
@@ -43,7 +42,7 @@ void add_d_mask_rule(d_Mask * d_mask, double a, double b, int inf)
     d_mask->list = I;
 }
 
-int Rast3d_mask_d_select(DCELL * x, d_Mask * mask)
+int Rast3d_mask_d_select(DCELL *x, d_Mask *mask)
 {
     d_Interval *I;
 
@@ -56,7 +55,7 @@ int Rast3d_mask_d_select(DCELL * x, d_Mask * mask)
     return 0;
 }
 
-DCELL Rast3d_mask_match_d_interval(DCELL x, d_Interval * I)
+DCELL Rast3d_mask_match_d_interval(DCELL x, d_Interval *I)
 {
     if (I->inf < 0)
         return x <= I->low;
@@ -67,7 +66,7 @@ DCELL Rast3d_mask_match_d_interval(DCELL x, d_Interval * I)
     return x >= I->low && x <= I->high;
 }
 
-void parse_d_mask_rule(char *vallist, d_Mask * d_mask, char *where)
+void parse_d_mask_rule(char *vallist, d_Mask *d_mask, char *where)
 {
     double a, b;
     char junk[128];
@@ -98,13 +97,13 @@ void parse_d_mask_rule(char *vallist, d_Mask * d_mask, char *where)
     }
 }
 
-void Rast3d_parse_vallist(char **vallist, d_Mask ** d_mask)
+void Rast3d_parse_vallist(char **vallist, d_Mask **d_mask)
 {
     char buf[1024];
     char x[2];
     FILE *fd;
 
-    *d_mask = (d_Mask *) G_malloc(sizeof(d_Mask));
+    *d_mask = (d_Mask *)G_malloc(sizeof(d_Mask));
 
     init_d_mask_rules(*d_mask);
     if (vallist == NULL)

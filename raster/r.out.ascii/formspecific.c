@@ -3,7 +3,7 @@
 #include <grass/raster.h>
 
 /* write the GRASS ASCII heading */
-int writeGRASSheader(FILE * fp)
+int writeGRASSheader(FILE *fp)
 {
     struct Cell_head region;
     char buf[128];
@@ -25,9 +25,8 @@ int writeGRASSheader(FILE * fp)
 }
 
 /* write GRASS ASCII GRID */
-int write_GRASS(int fd,
-                FILE * fp,
-                int nrows, int ncols, int out_type, int dp, char *null_str)
+int write_GRASS(int fd, FILE *fp, int nrows, int ncols, int out_type, int dp,
+                char *null_str)
 {
     int row, col;
     void *ptr, *raster;
@@ -40,19 +39,19 @@ int write_GRASS(int fd,
 
         Rast_get_row(fd, raster, row, out_type);
 
-        for (col = 0, ptr = raster; col < ncols; col++,
-             ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
+        for (col = 0, ptr = raster; col < ncols;
+             col++, ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
             if (!Rast_is_null_value(ptr, out_type)) {
                 if (out_type == CELL_TYPE)
-                    fprintf(fp, "%d", *((CELL *) ptr));
+                    fprintf(fp, "%d", *((CELL *)ptr));
 
                 else if (out_type == FCELL_TYPE) {
-                    sprintf(cell_buf, "%.*f", dp, *((FCELL *) ptr));
+                    sprintf(cell_buf, "%.*f", dp, *((FCELL *)ptr));
                     G_trim_decimal(cell_buf);
                     fprintf(fp, "%s", cell_buf);
                 }
                 else if (out_type == DCELL_TYPE) {
-                    sprintf(cell_buf, "%.*f", dp, *((DCELL *) ptr));
+                    sprintf(cell_buf, "%.*f", dp, *((DCELL *)ptr));
                     G_trim_decimal(cell_buf);
                     fprintf(fp, "%s", cell_buf);
                 }
@@ -67,7 +66,7 @@ int write_GRASS(int fd,
     return (0);
 }
 
-int writeMFheader(FILE * fp, int dp, int width, int out_type)
+int writeMFheader(FILE *fp, int dp, int width, int out_type)
 {
     if (out_type == CELL_TYPE)
         fprintf(fp, "INTERNAL  1  (FREE)  -1\n");
@@ -78,9 +77,8 @@ int writeMFheader(FILE * fp, int dp, int width, int out_type)
 }
 
 /* write MODFLOW ASCII ARRAY */
-int write_MODFLOW(int fd,
-                  FILE * fp,
-                  int nrows, int ncols, int out_type, int dp, int width)
+int write_MODFLOW(int fd, FILE *fp, int nrows, int ncols, int out_type, int dp,
+                  int width)
 {
     int row, col, colcnt;
     void *ptr, *raster;
@@ -93,22 +91,22 @@ int write_MODFLOW(int fd,
         Rast_get_row(fd, raster, row, out_type);
 
         colcnt = 0;
-        for (col = 0, ptr = raster; col < ncols; col++,
-             ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
+        for (col = 0, ptr = raster; col < ncols;
+             col++, ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
             if (out_type == CELL_TYPE) {
                 if (Rast_is_null_value(ptr, out_type))
-                    *((CELL *) ptr) = 0;
-                fprintf(fp, " %d", *((CELL *) ptr));
+                    *((CELL *)ptr) = 0;
+                fprintf(fp, " %d", *((CELL *)ptr));
             }
             else if (out_type == FCELL_TYPE) {
                 if (Rast_is_null_value(ptr, out_type))
-                    *((FCELL *) ptr) = 0;
-                fprintf(fp, "%*.*e", dp + 6, dp - 1, *((FCELL *) ptr));
+                    *((FCELL *)ptr) = 0;
+                fprintf(fp, "%*.*e", dp + 6, dp - 1, *((FCELL *)ptr));
             }
             else if (out_type == DCELL_TYPE) {
                 if (Rast_is_null_value(ptr, out_type))
-                    *((DCELL *) ptr) = 0;
-                fprintf(fp, "%*.*e", dp + 6, dp - 1, *((DCELL *) ptr));
+                    *((DCELL *)ptr) = 0;
+                fprintf(fp, "%*.*e", dp + 6, dp - 1, *((DCELL *)ptr));
             }
 
             colcnt += 1;
@@ -125,7 +123,7 @@ int write_MODFLOW(int fd,
 }
 
 /* write the Surfer grid heading */
-int writeGSheader(FILE * fp, const char *name)
+int writeGSheader(FILE *fp, const char *name)
 {
     struct Cell_head region;
     char fromc[128], toc[128];
@@ -157,14 +155,11 @@ int writeGSheader(FILE * fp, const char *name)
     fprintf(fp, "%f %f\n", (double)Z_MIN, (double)Z_MAX);
 
     return 0;
-
 }
 
 /* write Surfer Golden Software grid file */
-int write_GSGRID(int fd,
-                 FILE * fp,
-                 int nrows,
-                 int ncols, int out_type, int dp, char *null_str, int width)
+int write_GSGRID(int fd, FILE *fp, int nrows, int ncols, int out_type, int dp,
+                 char *null_str, int width)
 {
     int row, col, colcnt;
     void *ptr, *raster;
@@ -178,19 +173,19 @@ int write_GSGRID(int fd,
         Rast_get_row(fd, raster, row, out_type);
 
         colcnt = 0;
-        for (col = 0, ptr = raster; col < ncols; col++,
-             ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
+        for (col = 0, ptr = raster; col < ncols;
+             col++, ptr = G_incr_void_ptr(ptr, Rast_cell_size(out_type))) {
             colcnt += 1;
             if (!Rast_is_null_value(ptr, out_type)) {
                 if (out_type == CELL_TYPE)
-                    fprintf(fp, "%d", *((CELL *) ptr));
+                    fprintf(fp, "%d", *((CELL *)ptr));
                 else if (out_type == FCELL_TYPE) {
-                    sprintf(cell_buf, "%.*f", dp, *((FCELL *) ptr));
+                    sprintf(cell_buf, "%.*f", dp, *((FCELL *)ptr));
                     G_trim_decimal(cell_buf);
                     fprintf(fp, "%s", cell_buf);
                 }
                 else if (out_type == DCELL_TYPE) {
-                    sprintf(cell_buf, "%.*f", dp, *((DCELL *) ptr));
+                    sprintf(cell_buf, "%.*f", dp, *((DCELL *)ptr));
                     G_trim_decimal(cell_buf);
                     fprintf(fp, "%s", cell_buf);
                 }

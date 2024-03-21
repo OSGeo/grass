@@ -29,7 +29,7 @@ static int get_reclass_table(FILE *, struct Reclass *);
  * This function determines if the raster map <i>name</i> in
  * <i>mapset</i> is a reclass file. If it is, then the name and mapset
  * of the referenced raster map are copied into the <i>rname</i> and
- * <i>rmapset</i> buffers.  
+ * <i>rmapset</i> buffers.
  *
  * \param name map name
  * \param mapset mapset name
@@ -165,8 +165,8 @@ int Rast_get_reclass(const char *name, const char *mapset,
     fclose(fd);
     if (stat < 0) {
         if (stat == -2)
-            G_warning(_("Too many reclass categories for <%s@%s>"),
-                      name, mapset);
+            G_warning(_("Too many reclass categories for <%s@%s>"), name,
+                      mapset);
         else
             G_warning(_("Illegal reclass format in header file for <%s@%s>"),
                       name, mapset);
@@ -199,7 +199,7 @@ void Rast_free_reclass(struct Reclass *reclass)
     }
 }
 
-static int reclass_type(FILE * fd, char **rname, char **rmapset)
+static int reclass_type(FILE *fd, char **rname, char **rmapset)
 {
     char buf[128];
     char label[128], arg[128];
@@ -281,8 +281,8 @@ int Rast_put_reclass(const char *name, const struct Reclass *reclass)
 
     fd = fopen_cellhd_new(name);
     if (fd == NULL) {
-        G_warning(_("Unable to create header file for <%s@%s>"),
-                  name, G_mapset());
+        G_warning(_("Unable to create header file for <%s@%s>"), name,
+                  G_mapset());
         return -1;
     }
 
@@ -364,7 +364,7 @@ static FILE *fopen_cellhd_new(const char *name)
     return G_fopen_new("cellhd", name);
 }
 
-static int get_reclass_table(FILE * fd, struct Reclass *reclass)
+static int get_reclass_table(FILE *fd, struct Reclass *reclass)
 {
     char buf[128];
     int n;
@@ -397,14 +397,14 @@ static int get_reclass_table(FILE * fd, struct Reclass *reclass)
                 return -1;
         }
         n++;
-        len = (long)n *sizeof(CELL);
+        len = (long)n * sizeof(CELL);
 
-        if (len != (int)len) {  /* check for int overflow */
+        if (len != (int)len) { /* check for int overflow */
             if (reclass->table != NULL)
                 G_free(reclass->table);
             return -2;
         }
-        reclass->table = (CELL *) G_realloc((char *)reclass->table, (int)len);
+        reclass->table = (CELL *)G_realloc((char *)reclass->table, (int)len);
         reclass->table[n - 1] = cat;
     }
     reclass->max = reclass->min + n - 1;

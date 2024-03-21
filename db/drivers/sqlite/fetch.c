@@ -1,4 +1,3 @@
-
 /**
  * \file fetch.c
  *
@@ -20,7 +19,6 @@
 #include "globals.h"
 #include "proto.h"
 
-
 /**
  * \fn int db__driver_fetch (dbCursor *cn, int position, int *more)
  *
@@ -35,7 +33,7 @@
  * \return int
  */
 
-int db__driver_fetch(dbCursor * cn, int position, int *more)
+int db__driver_fetch(dbCursor *cn, int position, int *more)
 {
     cursor *c;
     dbToken token;
@@ -47,7 +45,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
     token = db_get_cursor_token(cn);
 
     /* get the cursor by its token */
-    if (!(c = (cursor *) db_find_token(token))) {
+    if (!(c = (cursor *)db_find_token(token))) {
         db_d_append_error(("Cursor not found"));
         db_d_report_error();
         return DB_FAILED;
@@ -68,8 +66,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
             /* get real result code */
             ret = sqlite3_reset(c->statement);
             if (ret != SQLITE_OK) {
-                db_d_append_error("%s\n%s",
-                                  _("Unable to fetch:"),
+                db_d_append_error("%s\n%s", _("Unable to fetch:"),
                                   (char *)sqlite3_errmsg(sqlite));
                 db_d_report_error();
                 return DB_FAILED;
@@ -108,12 +105,12 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
         const char *text;
         dbDateTime *dt;
 
-        col = c->kcols[i];      /* known cols */
+        col = c->kcols[i]; /* known cols */
 
         column = db_get_table_column(table, i);
         sqltype = db_get_column_sqltype(column);
-        /*      fails for dates: 
-           litetype  = db_get_column_host_type(column); 
+        /*      fails for dates:
+           litetype  = db_get_column_host_type(column);
          */
         litetype = sqlite3_column_type(c->statement, col);
         text = (const char *)sqlite3_column_text(c->statement, col);
@@ -130,8 +127,8 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
             value->isNull = 0;
         }
 
-        G_debug(3, "col %d, litetype %d, sqltype %d: val = '%s'",
-                col, litetype, sqltype, text);
+        G_debug(3, "col %d, litetype %d, sqltype %d: val = '%s'", col, litetype,
+                sqltype, text);
 
         /* http://www.sqlite.org/capi3ref.html#sqlite3_column_type
            SQLITE_INTEGER  1
@@ -144,8 +141,8 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
            DB_SQL_TYPE_*
          */
 
-        /* Note: we have set DATESTYLE TO ISO in db_driver_open_select_cursor() so datetime
-         *       format should be ISO */
+        /* Note: we have set DATESTYLE TO ISO in db_driver_open_select_cursor()
+         * so datetime format should be ISO */
 
         switch (sqltype) {
         case DB_SQL_TYPE_INTEGER:
@@ -179,8 +176,8 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
             dt->month = 0;
             dt->day = 0;
             G_debug(3, "sqlite fetched date: %s", text);
-            ns = sscanf(text, "%2d:%2d:%lf",
-                        &dt->hour, &dt->minute, &dt->seconds);
+            ns = sscanf(text, "%2d:%2d:%lf", &dt->hour, &dt->minute,
+                        &dt->seconds);
             if (ns != 3) {
                 db_d_append_error("%s %s", _("Unable to scan time:"), text);
                 db_d_report_error();
@@ -191,12 +188,11 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
         case DB_SQL_TYPE_TIMESTAMP:
             dt = &value->t;
             G_debug(3, "sqlite fetched timestamp: %s", text);
-            ns = sscanf(text, "%4d-%2d-%2d %2d:%2d:%lf",
-                        &dt->year, &dt->month, &dt->day,
-                        &dt->hour, &dt->minute, &dt->seconds);
+            ns = sscanf(text, "%4d-%2d-%2d %2d:%2d:%lf", &dt->year, &dt->month,
+                        &dt->day, &dt->hour, &dt->minute, &dt->seconds);
             if (ns != 6) {
-                db_d_append_error("%s %s",
-                                  _("Unable to scan timestamp:"), text);
+                db_d_append_error("%s %s", _("Unable to scan timestamp:"),
+                                  text);
                 db_d_report_error();
                 return DB_FAILED;
             }
@@ -214,8 +210,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
                         "not implemented; assuming seconds"));
             ns = sscanf(text, "%lf", &dt->seconds);
             if (ns != 1) {
-                db_d_append_error("%s %s",
-                                  _("Unable to scan interval:"), text);
+                db_d_append_error("%s %s", _("Unable to scan interval:"), text);
                 db_d_report_error();
                 return DB_FAILED;
             }
@@ -235,7 +230,6 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
     return DB_OK;
 }
 
-
 /**
  * \fn int db__driver_get_num_rows (dbCursor *cn)
  *
@@ -245,7 +239,7 @@ int db__driver_fetch(dbCursor * cn, int position, int *more)
  * \return int number of rows in table
  */
 
-int db__driver_get_num_rows(dbCursor * cn)
+int db__driver_get_num_rows(dbCursor *cn)
 {
     cursor *c;
     dbToken token;
@@ -255,7 +249,7 @@ int db__driver_get_num_rows(dbCursor * cn)
     token = db_get_cursor_token(cn);
 
     /* get the cursor by its token */
-    if (!(c = (cursor *) db_find_token(token))) {
+    if (!(c = (cursor *)db_find_token(token))) {
         db_d_append_error(_("Cursor not found"));
         db_d_report_error();
         return DB_FAILED;
@@ -276,8 +270,7 @@ int db__driver_get_num_rows(dbCursor * cn)
     ret = sqlite3_reset(c->statement);
 
     if (ret != SQLITE_OK) {
-        db_d_append_error("%s\n%s",
-                          _("Unable to get number of rows:"),
+        db_d_append_error("%s\n%s", _("Unable to get number of rows:"),
                           (char *)sqlite3_errmsg(sqlite));
         db_d_report_error();
         return DB_FAILED;

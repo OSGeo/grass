@@ -1,4 +1,3 @@
-
 /**
  * \file create_table.c
  *
@@ -18,7 +17,6 @@
 #include "globals.h"
 #include "proto.h"
 
-
 /**
  * \fn int db__driver_create_table (dbTable *table)
  *
@@ -28,7 +26,7 @@
  * \return int DB_FAILED on error; DB_OK on success
  */
 
-int db__driver_create_table(dbTable * table)
+int db__driver_create_table(dbTable *table)
 {
     int col, ncols;
     sqlite3_stmt *statement;
@@ -116,12 +114,10 @@ int db__driver_create_table(dbTable * table)
      * but sqlite can not step, the statement needs to be prepared anew again */
     while (1) {
         ret =
-            sqlite3_prepare(sqlite, db_get_string(&sql), -1, &statement,
-                            &rest);
+            sqlite3_prepare(sqlite, db_get_string(&sql), -1, &statement, &rest);
 
         if (ret != SQLITE_OK) {
-            db_d_append_error("%s\n%s\n%s",
-                              _("Unable to create table:"),
+            db_d_append_error("%s\n%s\n%s", _("Unable to create table:"),
                               db_get_string(&sql),
                               (char *)sqlite3_errmsg(sqlite));
             db_d_report_error();
@@ -139,8 +135,7 @@ int db__driver_create_table(dbTable * table)
             /* try again */
         }
         else if (ret != SQLITE_OK) {
-            db_d_append_error("%s\n%s",
-                              _("Error in sqlite3_step():"),
+            db_d_append_error("%s\n%s", _("Error in sqlite3_step():"),
                               (char *)sqlite3_errmsg(sqlite));
             db_d_report_error();
             sqlite3_finalize(statement);

@@ -1,8 +1,8 @@
-
 /****************************************************************************
  *
  * MODULE:       r.stats.quantile
- * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original contributor)
+ * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original
+ *                 contributor)
  *               Markus Metz: dynamic bins to reduce memory consumptions
  * PURPOSE:      Compute category or object oriented quantiles using two passes
  *
@@ -11,6 +11,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -19,14 +20,12 @@
 #include <grass/glocale.h>
 #include <grass/spawn.h>
 
-struct bin
-{
+struct bin {
     unsigned long origin;
     int base, count;
 };
 
-struct basecat
-{
+struct basecat {
     size_t *slots;
     size_t total;
     size_t num_values;
@@ -147,7 +146,8 @@ static void get_slot_counts(int basefile, int coverfile)
     G_percent(rows, rows, 2);
 
     if (allnull)
-        G_fatal_error(_("No cells found where both base and cover are not NULL"));
+        G_fatal_error(
+            _("No cells found where both base and cover are not NULL"));
 
     for (i = 0; i < num_cats; i++) {
         int num_slots_max;
@@ -236,8 +236,7 @@ static void initialize_bins(void)
             size_t count = bc->slots[slot];
             size_t accum2 = accum + count;
 
-            if (count > 0 &&
-                (accum2 > next || use_next_slot) &&
+            if (count > 0 && (accum2 > next || use_next_slot) &&
                 bin < bc->num_bins_alloc) {
                 struct bin *b = &bc->bins[bin];
 
@@ -348,8 +347,7 @@ static void sort_bins(void)
         for (bin = 0; bin < bc->num_bins_used; bin++) {
             struct bin *b = &bc->bins[bin];
 
-            qsort(&bc->values[b->base], b->count, sizeof(DCELL),
-                  compare_dcell);
+            qsort(&bc->values[b->base], b->count, sizeof(DCELL), compare_dcell);
         }
 
         G_percent(cat, num_cats, 2);
@@ -401,7 +399,6 @@ static void print_quantiles(char *fs, char *name, int table_frmt)
             fprintf(stdout, "\n");
         }
     }
-
 }
 
 static void compute_quantiles(void)
@@ -443,10 +440,9 @@ static void compute_quantiles(void)
                 if (i1 > b->count - 1)
                     i1 = b->count - 1;
 
-                v = (i0 == i1)
-                    ? bc->values[b->base + i0]
-                    : bc->values[b->base + i0] * (i1 - k) +
-                    bc->values[b->base + i1] * (k - i0);
+                v = (i0 == i1) ? bc->values[b->base + i0]
+                               : bc->values[b->base + i0] * (i1 - k) +
+                                     bc->values[b->base + i1] * (k - i0);
 
                 bc->quants[quant] = v;
             }
@@ -525,8 +521,7 @@ static void do_output(int base_fd, char **outputs, const char *covermap)
                 else if (basecats[base_buf[col] - cmin].total == 0)
                     Rast_set_d_null_value(&out_buf[col], 1);
                 else
-                    out_buf[col] =
-                        basecats[base_buf[col] - cmin].quants[quant];
+                    out_buf[col] = basecats[base_buf[col] - cmin].quants[quant];
 
             Rast_put_d_row(out_fd[quant], out_buf);
         }
@@ -549,13 +544,11 @@ static void do_output(int base_fd, char **outputs, const char *covermap)
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
-        struct Option *quant, *perc, *slots, *basemap, *covermap,
-            *output, *file, *fs;
+    struct {
+        struct Option *quant, *perc, *slots, *basemap, *covermap, *output,
+            *file, *fs;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *r, *p, *t;
     } flag;
     const char *basemap, *covermap;
@@ -622,8 +615,7 @@ int main(int argc, char *argv[])
 
     flag.p = G_define_flag();
     flag.p->key = 'p';
-    flag.p->description =
-        _("Do not create output maps; just print statistics");
+    flag.p->description = _("Do not create output maps; just print statistics");
 
     flag.t = G_define_flag();
     flag.t->key = 't';
@@ -639,12 +631,12 @@ int main(int argc, char *argv[])
     print = flag.p->answer || flag.t->answer;
 
     if (!print && !opt.output->answers)
-        G_fatal_error(_("Either -%c or %s= must be given"),
-                      flag.p->key, opt.output->key);
+        G_fatal_error(_("Either -%c or %s= must be given"), flag.p->key,
+                      opt.output->key);
 
     if (print && opt.output->answers)
-        G_fatal_error(_("-%c and %s= are mutually exclusive"),
-                      flag.p->key, opt.output->key);
+        G_fatal_error(_("-%c and %s= are mutually exclusive"), flag.p->key,
+                      opt.output->key);
 
     num_slots = atoi(opt.slots->answer);
 
@@ -655,7 +647,8 @@ int main(int argc, char *argv[])
             quants[i] = 1.0 * (i + 1) / (num_quants + 1);
     }
     else {
-        for (i = 0; opt.perc->answers[i]; i++) ;
+        for (i = 0; opt.perc->answers[i]; i++)
+            ;
         num_quants = i;
         quants = G_calloc(num_quants, sizeof(DCELL));
         for (i = 0; i < num_quants; i++)
@@ -664,9 +657,11 @@ int main(int argc, char *argv[])
     }
 
     if (opt.output->answer) {
-        for (i = 0; opt.output->answers[i]; i++) ;
+        for (i = 0; opt.output->answers[i]; i++)
+            ;
         if (i != num_quants)
-            G_fatal_error(_("Number of quantiles (%d) does not match number of output maps (%d)"),
+            G_fatal_error(_("Number of quantiles (%d) does not match number of "
+                            "output maps (%d)"),
                           num_quants, i);
     }
 
@@ -683,7 +678,8 @@ int main(int argc, char *argv[])
     Rast_get_range_min_max(&range, &cmin, &cmax);
     num_cats = cmax - cmin + 1;
     if (num_cats > 100000)
-        G_warning(_("Base map <%s> has many categories (%d), computation might be slow and might need a lot of memory"),
+        G_warning(_("Base map <%s> has many categories (%d), computation might "
+                    "be slow and might need a lot of memory"),
                   basemap, num_cats);
 
     Rast_read_fp_range(covermap, "", &fprange);

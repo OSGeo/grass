@@ -70,6 +70,11 @@ class AnalysisControllerBase:
 
         :param x,y: east north coordinates
         """
+        # avoid duplicating point in the beginning
+        begin = self._mapWindow.mouse["begin"]
+        end = self._mapWindow.mouse["end"]
+        if begin == end:
+            return
         # add new point and calculate distance
         item = self._registeredGraphics.GetItem(0)
         coords = item.GetCoords() + [[x, y]]
@@ -84,7 +89,7 @@ class AnalysisControllerBase:
 
     def _doAnalysis(self, coords):
         """Perform the required analysis
-        (compute distnace, update profile)
+        (compute distance, update profile)
 
         :param coords: EN coordinates
         """

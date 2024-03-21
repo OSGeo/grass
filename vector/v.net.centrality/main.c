@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.net.centrality
@@ -33,14 +32,14 @@ dbString sql, tmp;
 dbDriver *driver;
 struct field_info *Fi;
 
-void append_string(dbString * string, char *s)
+void append_string(dbString *string, char *s)
 {
     db_append_string(string, ", ");
     db_append_string(string, s);
     db_append_string(string, " double precision");
 }
 
-void append_double(dbString * string, double d)
+void append_double(dbString *string, double d)
 {
     char buf[50];
 
@@ -75,7 +74,7 @@ int main(int argc, char *argv[])
     struct Map_info In, Out;
     static struct line_pnts *Points;
     struct line_cats *Cats;
-    struct GModule *module;     /* GRASS module for parsing arguments */
+    struct GModule *module; /* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
     struct Option *cat_opt, *where_opt, *afield_opt, *nfield_opt, *abcol,
         *afcol, *ncol;
@@ -89,7 +88,8 @@ int main(int argc, char *argv[])
     char buf[2000], *covered;
 
     /* initialize GIS environment */
-    G_gisinit(argv[0]);         /* reads grass env, stores program name to G_program_name() */
+    G_gisinit(
+        argv[0]); /* reads grass env, stores program name to G_program_name() */
 
     /* initialize module */
     module = G_define_module();
@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("centrality measures"));
     module->description =
         _("Computes degree, centrality, betweeness, closeness and eigenvector "
-         "centrality measures in the network.");
+          "centrality measures in the network.");
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
@@ -200,8 +200,7 @@ int main(int argc, char *argv[])
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    Vect_check_input_output_name(map_in->answer, map_out->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(map_in->answer, map_out->answer, G_FATAL_EXIT);
 
     Vect_set_open_level(2);
 
@@ -214,7 +213,6 @@ int main(int argc, char *argv[])
         Vect_close(&In);
         G_fatal_error(_("Unable to create vector map <%s>"), map_out->answer);
     }
-
 
     if (geo_f->answer) {
         geo = 1;
@@ -229,9 +227,9 @@ int main(int argc, char *argv[])
     nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
     if (where_opt->answer || cat_opt->answer) {
-        chcat = (NetA_initialise_varray(&In, afield, GV_POINT,
-                                        where_opt->answer,
-                                        cat_opt->answer, &varray) > 0);
+        chcat =
+            (NetA_initialise_varray(&In, afield, GV_POINT, where_opt->answer,
+                                    cat_opt->answer, &varray) > 0);
     }
     else
         chcat = 0;
@@ -256,8 +254,8 @@ int main(int argc, char *argv[])
         append_string(&tmp, betw_opt->answer);
     if (eigen_opt->answer)
         append_string(&tmp, eigen_opt->answer);
-    sprintf(buf,
-            "create table %s(cat integer%s)", Fi->table, db_get_string(&tmp));
+    sprintf(buf, "create table %s(cat integer%s)", Fi->table,
+            db_get_string(&tmp));
 
     db_set_string(&sql, buf);
     G_debug(2, "%s", db_get_string(&sql));
@@ -269,8 +267,8 @@ int main(int argc, char *argv[])
     if (db_create_index2(driver, Fi->table, GV_KEY_COLUMN) != DB_OK)
         G_warning(_("Cannot create index"));
 
-    if (db_grant_on_table
-        (driver, Fi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
+    if (db_grant_on_table(driver, Fi->table, DB_PRIV_SELECT,
+                          DB_GROUP | DB_PUBLIC) != DB_OK)
         G_fatal_error(_("Cannot grant privileges on table <%s>"), Fi->table);
 
     db_begin_transaction(driver);
@@ -279,9 +277,8 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
-    if (0 !=
-        Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
-                             abcol->answer, ncol->answer, geo, 0))
+    if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+                                  abcol->answer, ncol->answer, geo, 0))
         G_fatal_error(_("Unable to build graph for vector map <%s>"),
                       Vect_get_full_name(&In));
 
@@ -318,13 +315,13 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Out of memory"));
     }
 
-
     if (deg_opt->answer) {
         G_message(_("Computing degree centrality measure"));
         NetA_degree_centrality(graph, deg);
     }
     if (betw_opt->answer || close_opt->answer) {
-        G_message(_("Computing betweenness and/or closeness centrality measure"));
+        G_message(
+            _("Computing betweenness and/or closeness centrality measure"));
         NetA_betweenness_closeness(graph, betw, closeness);
         if (closeness)
             for (i = 1; i <= nnodes; i++)
@@ -335,7 +332,6 @@ int main(int argc, char *argv[])
         NetA_eigenvector_centrality(graph, atoi(iter_opt->answer),
                                     atof(error_opt->answer), eigen);
     }
-
 
     nlines = Vect_get_num_lines(&In);
     G_message(_("Writing data into the table..."));
@@ -352,9 +348,8 @@ int main(int argc, char *argv[])
             Vect_reset_cats(Cats);
             Vect_cat_set(Cats, 1, cat);
             Vect_write_line(&Out, type, Points, Cats);
-            node =
-                Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0],
-                               0, 0);
+            node = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0],
+                                  0, 0);
             process_node(node, cat);
             covered[node] = 1;
         }
@@ -377,7 +372,6 @@ int main(int argc, char *argv[])
                 process_node(i, max_cat);
                 max_cat++;
             }
-
     }
 
     db_commit_transaction(driver);

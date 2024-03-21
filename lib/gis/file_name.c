@@ -17,8 +17,8 @@
 
 #include "gis_local_proto.h"
 
-static char *file_name(char *, const char *, const char *,
-                       const char *, const char *, const char *);
+static char *file_name(char *, const char *, const char *, const char *,
+                       const char *, const char *);
 static void append_char(char *, char);
 
 /*!
@@ -58,8 +58,8 @@ static void append_char(char *, char);
 
    \return pointer to <i>path</i> buffer
  */
-char *G_file_name(char *path,
-                  const char *element, const char *name, const char *mapset)
+char *G_file_name(char *path, const char *element, const char *name,
+                  const char *mapset)
 {
     return file_name(path, NULL, element, name, mapset, NULL);
 }
@@ -92,22 +92,21 @@ char *G_file_name(char *path,
 
    \param[out] path allocated buffer to hold resultant full path to file
    \param dir misc directory (e.g., "cell_misc", "group")
-   \param element database element (in this case – file to build path to e.g., "history", "REF")
-   \param name name of object (raster, group; fully qualified names allowed e.g., "my_raster@PERMANENT")
-   \param mapset mapset name
+   \param element database element (in this case – file to build path to e.g.,
+   "history", "REF") \param name name of object (raster, group; fully qualified
+   names allowed e.g., "my_raster@PERMANENT") \param mapset mapset name
 
    \return pointer to <i>path</i> buffer
  */
-char *G_file_name_misc(char *path,
-                       const char *dir,
-                       const char *element,
+char *G_file_name_misc(char *path, const char *dir, const char *element,
                        const char *name, const char *mapset)
 {
     return file_name(path, dir, element, name, mapset, NULL);
 }
 
 /*!
-   \brief Builds full path names to GIS data files in temporary directory (for internal use only)
+   \brief Builds full path names to GIS data files in temporary directory (for
+   internal use only)
 
    By default temporary directory is located
    $LOCATION/$MAPSET/.tmp/$HOSTNAME. If GRASS_VECTOR_TMPDIR_MAPSET is
@@ -123,9 +122,8 @@ char *G_file_name_misc(char *path,
 
    \return pointer to <i>path</i> buffer
  */
-char *G_file_name_tmp(char *path,
-                      const char *element,
-                      const char *name, const char *mapset)
+char *G_file_name_tmp(char *path, const char *element, const char *name,
+                      const char *mapset)
 {
     const char *env, *tmp_path;
 
@@ -139,7 +137,8 @@ char *G_file_name_tmp(char *path,
 }
 
 /*!
-   \brief Builds full path names to GIS data files in temporary directory (for internal use only)
+   \brief Builds full path names to GIS data files in temporary directory (for
+   internal use only)
 
    By default the GRASS temporary directory is located at
    $LOCATION/$MAPSET/.tmp/$HOSTNAME/. If basedir is provided, the
@@ -152,17 +151,14 @@ char *G_file_name_tmp(char *path,
 
    \return pointer to <i>path</i> buffer
  */
-char *G_file_name_basedir(char *path,
-                          const char *element,
-                          const char *name, const char *mapset,
-                          const char *basedir)
+char *G_file_name_basedir(char *path, const char *element, const char *name,
+                          const char *mapset, const char *basedir)
 {
     return file_name(path, NULL, element, name, mapset, basedir);
 }
 
-char *file_name(char *path,
-                const char *dir, const char *element, const char *name,
-                const char *mapset, const char *base)
+char *file_name(char *path, const char *dir, const char *element,
+                const char *name, const char *mapset, const char *base)
 {
     const char *pname = name;
 
@@ -190,7 +186,7 @@ char *file_name(char *path,
         G_free(location);
     }
 
-    if (dir && *dir) {          /* misc element */
+    if (dir && *dir) { /* misc element */
         append_char(path, HOST_DIRSEP);
         strcat(path, dir);
 

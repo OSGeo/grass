@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       imagery library
@@ -25,9 +24,8 @@
  *  Added printout of trnfile. Triggered by BDEBUG.
  *  Last Update:  1/27/92 Brian J. Buckley
  *  Fixed bug so that only the active control points were used.
- * 
+ *
  */
-
 
 #include <stdlib.h>
 #include <math.h>
@@ -38,24 +36,23 @@
 /* STRUCTURE FOR USE INTERNALLY WITH THESE FUNCTIONS.  THESE FUNCTIONS EXPECT
    SQUARE MATRICES SO ONLY ONE VARIABLE IS GIVEN (N) FOR THE MATRIX SIZE */
 
-struct MATRIX
-{
-    int n;                      /* SIZE OF THIS MATRIX (N x N) */
+struct MATRIX {
+    int n; /* SIZE OF THIS MATRIX (N x N) */
     double *v;
 };
 
 /* CALCULATE OFFSET INTO ARRAY BASED ON R/C */
 
-#define M(row,col) m->v[(((row)-1)*(m->n))+(col)-1]
+#define M(row, col) m->v[(((row)-1) * (m->n)) + (col)-1]
 
-#define MSUCCESS     1          /* SUCCESS */
-#define MNPTERR      0          /* NOT ENOUGH POINTS */
-#define MUNSOLVABLE -1          /* NOT SOLVABLE */
-#define MMEMERR     -2          /* NOT ENOUGH MEMORY */
-#define MPARMERR    -3          /* PARAMETER ERROR */
-#define MINTERR     -4          /* INTERNAL ERROR */
+#define MSUCCESS    1  /* SUCCESS */
+#define MNPTERR     0  /* NOT ENOUGH POINTS */
+#define MUNSOLVABLE -1 /* NOT SOLVABLE */
+#define MMEMERR     -2 /* NOT ENOUGH MEMORY */
+#define MPARMERR    -3 /* PARAMETER ERROR */
+#define MINTERR     -4 /* INTERNAL ERROR */
 
-#define MAXORDER 3              /* HIGHEST SUPPORTED ORDER OF TRANSFORMATION */
+#define MAXORDER    3 /* HIGHEST SUPPORTED ORDER OF TRANSFORMATION */
 
 /***********************************************************************
 
@@ -64,8 +61,8 @@ struct MATRIX
 ************************************************************************/
 
 static int calccoef(struct Control_Points *, double *, double *, int);
-static int calcls(struct Control_Points *, struct MATRIX *, double *,
-                  double *, double *, double *);
+static int calcls(struct Control_Points *, struct MATRIX *, double *, double *,
+                  double *, double *);
 static int exactdet(struct Control_Points *, struct MATRIX *, double *,
                     double *, double *, double *);
 static int solvemat(struct MATRIX *, double *, double *, double *, double *);
@@ -77,15 +74,15 @@ static double term(int, double, double);
 
 ************************************************************************/
 
-int I_georef(double e1,         /* EASTING TO BE TRANSFORMED */
-             double n1,         /* NORTHING TO BE TRANSFORMED */
-             double *e,         /* EASTING, TRANSFORMED */
-             double *n,         /* NORTHING, TRANSFORMED */
-             double E[],        /* EASTING COEFFICIENTS */
-             double N[],        /* NORTHING COEFFICIENTS */
-             int order          /* ORDER OF TRANSFORMATION TO BE PERFORMED, MUST MATCH THE
-                                   ORDER USED TO CALCULATE THE COEFFICIENTS */
-    )
+int I_georef(double e1,  /* EASTING TO BE TRANSFORMED */
+             double n1,  /* NORTHING TO BE TRANSFORMED */
+             double *e,  /* EASTING, TRANSFORMED */
+             double *n,  /* NORTHING, TRANSFORMED */
+             double E[], /* EASTING COEFFICIENTS */
+             double N[], /* NORTHING COEFFICIENTS */
+             int order   /* ORDER OF TRANSFORMATION TO BE PERFORMED, MUST MATCH
+                            THE   ORDER USED TO CALCULATE THE COEFFICIENTS */
+)
 {
     double e3, e2n, en2, n3, e2, en, n2;
 
@@ -113,14 +110,10 @@ int I_georef(double e1,         /* EASTING TO BE TRANSFORMED */
         en2 = e1 * n2;
         n3 = n1 * n2;
 
-        *e = E[0] +
-            E[1] * e1 + E[2] * n1 +
-            E[3] * e2 + E[4] * en + E[5] * n2 +
-            E[6] * e3 + E[7] * e2n + E[8] * en2 + E[9] * n3;
-        *n = N[0] +
-            N[1] * e1 + N[2] * n1 +
-            N[3] * e2 + N[4] * en + N[5] * n2 +
-            N[6] * e3 + N[7] * e2n + N[8] * en2 + N[9] * n3;
+        *e = E[0] + E[1] * e1 + E[2] * n1 + E[3] * e2 + E[4] * en + E[5] * n2 +
+             E[6] * e3 + E[7] * e2n + E[8] * en2 + E[9] * n3;
+        *n = N[0] + N[1] * e1 + N[2] * n1 + N[3] * e2 + N[4] * en + N[5] * n2 +
+             N[6] * e3 + N[7] * e2n + N[8] * en2 + N[9] * n3;
         break;
 
     default:
@@ -192,7 +185,7 @@ static int calccoef(struct Control_Points *cp, double E[], double N[],
     struct MATRIX m;
     double *a;
     double *b;
-    int numactive;              /* NUMBER OF ACTIVE CONTROL POINTS */
+    int numactive; /* NUMBER OF ACTIVE CONTROL POINTS */
     int status, i;
 
     /* CALCULATE THE NUMBER OF VALID CONTROL POINTS */
@@ -235,9 +228,10 @@ static int calccoef(struct Control_Points *cp, double E[], double N[],
 
 ************************************************************************/
 
-static int exactdet(struct Control_Points *cp, struct MATRIX *m, double a[], double b[], double E[],    /* EASTING COEFFICIENTS */
-                    double N[]  /* NORTHING COEFFICIENTS */
-    )
+static int exactdet(struct Control_Points *cp, struct MATRIX *m, double a[],
+                    double b[], double E[], /* EASTING COEFFICIENTS */
+                    double N[]              /* NORTHING COEFFICIENTS */
+)
 {
     int pntnow, currow, j;
 
@@ -272,9 +266,10 @@ static int exactdet(struct Control_Points *cp, struct MATRIX *m, double a[], dou
 
 ************************************************************************/
 
-static int calcls(struct Control_Points *cp, struct MATRIX *m, double a[], double b[], double E[],      /* EASTING COEFFICIENTS */
-                  double N[]    /* NORTHING COEFFICIENTS */
-    )
+static int calcls(struct Control_Points *cp, struct MATRIX *m, double a[],
+                  double b[], double E[], /* EASTING COEFFICIENTS */
+                  double N[]              /* NORTHING COEFFICIENTS */
+)
 {
     int i, j, n, numactive = 0;
 
@@ -294,9 +289,8 @@ static int calcls(struct Control_Points *cp, struct MATRIX *m, double a[], doubl
             numactive++;
             for (i = 1; i <= m->n; i++) {
                 for (j = i; j <= m->n; j++)
-                    M(i, j) +=
-                        term(i, cp->e1[n], cp->n1[n]) * term(j, cp->e1[n],
-                                                             cp->n1[n]);
+                    M(i, j) += term(i, cp->e1[n], cp->n1[n]) *
+                               term(j, cp->e1[n], cp->n1[n]);
 
                 a[i - 1] += cp->e2[n] * term(i, cp->e1[n], cp->n1[n]);
                 b[i - 1] += cp->n2[n] * term(i, cp->e1[n], cp->n1[n]);
@@ -379,7 +373,7 @@ static int solvemat(struct MATRIX *m, double a[], double b[], double E[],
 {
     int i, j, i2, j2, imark;
     double factor, temp;
-    double pivot;               /* ACTUAL VALUE OF THE LARGEST PIVOT CANDIDATE */
+    double pivot; /* ACTUAL VALUE OF THE LARGEST PIVOT CANDIDATE */
 
     for (i = 1; i <= m->n; i++) {
         j = i;

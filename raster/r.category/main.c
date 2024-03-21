@@ -1,13 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       r.category (formerly r.cats)
  *
  * AUTHOR(S):    Michael Shapiro - CERL
- *		 Hamish Bowman, Dunedin, New Zealand  (label creation opts)
+ *                 Hamish Bowman, Dunedin, New Zealand  (label creation opts)
  *
  * PURPOSE:      Prints category values and labels associated with
- *		 user-specified raster map layers.
+ *                 user-specified raster map layers.
  *
  * COPYRIGHT:    (C) 2006-2019 by the GRASS Development Team
  *
@@ -40,8 +39,7 @@ int main(int argc, char *argv[])
     int from_stdin = FALSE;
     struct GModule *module;
 
-    struct
-    {
+    struct {
         struct Option *map, *fs, *cats, *vals, *raster, *file, *fmt_str,
             *fmt_coeff;
     } parm;
@@ -51,9 +49,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("category"));
-    module->description =
-        _("Manages category values and labels associated "
-          "with user-specified raster map layers.");
+    module->description = _("Manages category values and labels associated "
+                            "with user-specified raster map layers.");
 
     parm.map = G_define_standard_option(G_OPT_R_MAP);
 
@@ -109,7 +106,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-
     name = parm.map->answer;
 
     fs = G_option_to_separator(parm.fs);
@@ -120,10 +116,9 @@ int main(int argc, char *argv[])
 
     map_type = Rast_map_type(name, mapset);
 
-
     /* create category labels */
-    if (parm.raster->answer || parm.file->answer ||
-        parm.fmt_str->answer || parm.fmt_coeff->answer) {
+    if (parm.raster->answer || parm.file->answer || parm.fmt_str->answer ||
+        parm.fmt_coeff->answer) {
 
         /* restrict editing to current mapset */
         if (strcmp(mapset, G_mapset()) != 0)
@@ -145,12 +140,13 @@ int main(int argc, char *argv[])
             Rast_init_cats("", &cats);
 
             if (0 > Rast_read_cats(parm.raster->answer, cmapset, &cats))
-                G_fatal_error(_("Unable to read category file of raster map <%s@%s>"),
-                              parm.raster->answer, cmapset);
+                G_fatal_error(
+                    _("Unable to read category file of raster map <%s@%s>"),
+                    parm.raster->answer, cmapset);
 
             Rast_write_cats(name, &cats);
-            G_message(_("Category table for <%s> set from <%s>"),
-                      name, parm.raster->answer);
+            G_message(_("Category table for <%s> set from <%s>"), name,
+                      parm.raster->answer);
 
             Rast_close(fd);
         }
@@ -192,9 +188,10 @@ int main(int argc, char *argv[])
                 if (ntokens == 3) {
                     d1 = strtod(tokens[0], &e1);
                     d2 = strtod(tokens[1], &e2);
-                    G_debug(1,
-                            "d1: <%f>, d2: <%f>, tokens[0]: <%s>, tokens[1]: <%s>",
-                            d1, d2, tokens[0], tokens[1]);
+                    G_debug(
+                        1,
+                        "d1: <%f>, d2: <%f>, tokens[0]: <%s>, tokens[1]: <%s>",
+                        d1, d2, tokens[0], tokens[1]);
                     if (*e1 == 0 && *e2 == 0)
                         Rast_set_d_cat(&d1, &d2, tokens[2], &cats);
                     else
@@ -202,8 +199,8 @@ int main(int argc, char *argv[])
                 }
                 else if (ntokens == 2) {
                     d1 = strtod(tokens[0], &e1);
-                    G_debug(1, "d1: <%f>, tokens[0]: <%s>, tokens[1]: <%s>",
-                            d1, tokens[0], tokens[1]);
+                    G_debug(1, "d1: <%f>, tokens[0]: <%s>, tokens[1]: <%s>", d1,
+                            tokens[0], tokens[1]);
                     if (*e1 == 0)
                         Rast_set_d_cat(&d1, &d1, tokens[1], &cats);
                     else
@@ -216,7 +213,8 @@ int main(int argc, char *argv[])
 
                 if (parse_error)
                     G_fatal_error(_("Incorrect format of input rules. "
-                                    "Is the first column numeric? Or check separators. Invalid line is:\n%s"),
+                                    "Is the first column numeric? Or check "
+                                    "separators. Invalid line is:\n%s"),
                                   buf);
             }
             G_free_tokens(tokens);
@@ -235,14 +233,15 @@ int main(int argc, char *argv[])
             Rast_init_cats("", &cats);
 
             if (0 > Rast_read_cats(name, G_mapset(), &cats))
-                G_warning(_("Unable to read category file of raster map <%s@%s>"),
-                          name, G_mapset());
+                G_warning(
+                    _("Unable to read category file of raster map <%s@%s>"),
+                    name, G_mapset());
 
             if (parm.fmt_str->answer) {
                 fmt_str =
                     G_malloc(strlen(parm.fmt_str->answer) > strlen(cats.fmt)
-                             ? strlen(parm.fmt_str->answer) +
-                             1 : strlen(cats.fmt) + 1);
+                                 ? strlen(parm.fmt_str->answer) + 1
+                                 : strlen(cats.fmt) + 1);
                 strcpy(fmt_str, parm.fmt_str->answer);
             }
             else {
@@ -272,8 +271,9 @@ int main(int argc, char *argv[])
     }
     else {
         if (Rast_read_cats(name, mapset, &cats) < 0)
-            G_fatal_error(_("Unable to read category file of raster map <%s> in <%s>"),
-                          name, mapset);
+            G_fatal_error(
+                _("Unable to read category file of raster map <%s> in <%s>"),
+                name, mapset);
     }
 
     /* describe the category labels */
@@ -288,8 +288,9 @@ int main(int argc, char *argv[])
     }
     else {
         if (map_type != CELL_TYPE)
-            G_warning(_("The map is floating point! Ignoring cats list, using values list"));
-        else {                  /* integer map */
+            G_warning(_("The map is floating point! Ignoring cats list, using "
+                        "values list"));
+        else { /* integer map */
 
             for (i = 0; parm.cats->answers[i]; i++)
                 if (!scan_cats(parm.cats->answers[i], &x, &y)) {
@@ -305,7 +306,8 @@ int main(int argc, char *argv[])
         }
     }
     if (parm.vals->answer == NULL)
-        G_fatal_error(_("Parameter 'values' is required for floating point map!"));
+        G_fatal_error(
+            _("Parameter 'values' is required for floating point map!"));
     for (i = 0; parm.vals->answers[i]; i++)
         if (!scan_vals(parm.vals->answers[i], &dx)) {
             G_usage();
@@ -318,13 +320,11 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-
-
 int print_label(long x)
 {
     char *label;
 
-    G_squeeze(label = Rast_get_c_cat((CELL *) & x, &cats));
+    G_squeeze(label = Rast_get_c_cat((CELL *)&x, &cats));
     fprintf(stdout, "%ld%s%s\n", x, fs, label);
 
     return 0;

@@ -54,6 +54,9 @@ class VDigitToolbar(BaseToolbar):
             self.editingStopped.connect(layerTree.StopEditing)
             self.editingBgMap.connect(layerTree.SetBgMapForEditing)
 
+        # replace OnTool from controller
+        self.controller.OnTool = self.OnTool
+
         # bind events
         self.Bind(wx.EVT_SHOW, self.OnShow)
 
@@ -446,14 +449,15 @@ class VDigitToolbar(BaseToolbar):
             3,
             f"VDigitToolbar.OnTool(): id = {event.GetId() if event else event}",
         )
+        if self.toolSwitcher and event:
+            self.toolSwitcher.ToolChanged(event.GetId())
+
         # set cursor
         self.MapWindow.SetNamedCursor("cross")
         self.MapWindow.mouse["box"] = "point"
         self.MapWindow.mouse["use"] = "pointer"
 
         aId = self.action.get("id", -1)
-        if event:
-            BaseToolbar.OnTool(self, event)
 
         # clear tmp canvas
         if self.action["id"] != aId or aId == -1:
@@ -467,8 +471,8 @@ class VDigitToolbar(BaseToolbar):
         if self.action["id"] == -1:
             self.action = {"desc": "", "type": "", "id": -1}
 
-        # set focus
-        self.MapWindow.SetFocus()
+        if event:
+            event.Skip()
 
     def OnAddPoint(self, event):
         """Add point to the vector map Laier"""
@@ -1026,7 +1030,7 @@ class VDigitToolbar(BaseToolbar):
             return
 
         if self.mapLayer:
-            # deactive map layer for editing
+            # deactivate map layer for editing
             self.StopEditing()
 
         # select the given map layer for editing
@@ -1062,7 +1066,7 @@ class VDigitToolbar(BaseToolbar):
             else:
                 return
 
-        # deactive layer
+        # deactivate layer
         self.Map.ChangeLayerActive(mapLayer, False)
 
         # clean map canvas

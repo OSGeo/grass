@@ -5,7 +5,6 @@
 #include <grass/glocale.h>
 #include "ransurf.h"
 
-
 void SaveMap(int NumMap, int MapSeed)
 {
     int Index, Row, Col, NormIndex;
@@ -142,7 +141,7 @@ void SaveMap(int NumMap, int MapSeed)
             for (Col = 0; Col < Cs; Col++) {
                 Value = RSurface[Row][Col];
                 Ratio = (double)(Value - MIN_INTERVAL) /
-                    (MAX_INTERVAL - MIN_INTERVAL);
+                        (MAX_INTERVAL - MIN_INTERVAL);
                 Index = (int)(Ratio * (SIZE_OF_DISTRIBUTION - 1));
                 /* Norm[Index] is always smaller than 1.  */
                 NormIndex = (int)(Norm[Index] * CatInfo.NumCat);
@@ -165,7 +164,7 @@ void SaveMap(int NumMap, int MapSeed)
     for (Row = 0; Row < Rs; Row++) {
         G_percent(Row, Rs, 2);
         for (Col = 0; Col < Cs; Col++) {
-            CellBuffer[Col] = (CELL) RSurface[Row][Col];
+            CellBuffer[Col] = (CELL)RSurface[Row][Col];
         }
         Rast_put_row(OutFD, CellBuffer, CELL_TYPE);
     }
@@ -189,8 +188,7 @@ void SaveMap(int NumMap, int MapSeed)
     for (Index = 0; Index < CatInfo.NumCat; Index++) {
         if (CatInfo.NumValue[Index] != 0) {
             CatInfo.Average[Index] /= CatInfo.NumValue[Index];
-            sprintf(Label, "%+lf %+lf to %+lf",
-                    CatInfo.Average[Index],
+            sprintf(Label, "%+lf %+lf to %+lf", CatInfo.Average[Index],
                     CatInfo.Min[Index], CatInfo.Max[Index]);
             cat = Index + 1;
             Rast_set_c_cat(&cat, &cat, Label, &Cats);
@@ -200,8 +198,9 @@ void SaveMap(int NumMap, int MapSeed)
     Rast_write_cats(OutNames[NumMap], &Cats);
     Rast_init_colors(&Colr);
     LowColor = (int)(127.5 * (CatInfo.Average[0] + 3.5) / 3.5);
-    HighColor = (int)(255.0 - 127.5 *
-                      (3.5 - CatInfo.Average[CatInfo.NumCat - 1]) / 3.5);
+    HighColor =
+        (int)(255.0 -
+              127.5 * (3.5 - CatInfo.Average[CatInfo.NumCat - 1]) / 3.5);
 
     if (Uniform->answer || LowColor < 0)
         LowColor = 0;
@@ -210,8 +209,8 @@ void SaveMap(int NumMap, int MapSeed)
     G_debug(3, "(LowColor):%d", LowColor);
     G_debug(3, "(HighColor):%d", HighColor);
 
-    Rast_add_c_color_rule(&Low, LowColor, LowColor, LowColor,
-                          &High, HighColor, HighColor, HighColor, &Colr);
+    Rast_add_c_color_rule(&Low, LowColor, LowColor, LowColor, &High, HighColor,
+                          HighColor, HighColor, &Colr);
 
     Rast_write_colors(OutNames[NumMap], G_mapset(), &Colr);
 }

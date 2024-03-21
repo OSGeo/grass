@@ -15,7 +15,6 @@
 #include <grass/dbmi.h>
 #include "macros.h"
 
-
 /*!
    \brief Send index
 
@@ -23,7 +22,7 @@
 
    \return
  */
-int db__send_index(dbIndex * index)
+int db__send_index(dbIndex *index)
 {
     int i;
 
@@ -48,7 +47,7 @@ int db__send_index(dbIndex * index)
 
    \return
  */
-int db__send_index_array(dbIndex * list, int count)
+int db__send_index_array(dbIndex *list, int count)
 {
     int i;
 
@@ -66,7 +65,7 @@ int db__send_index_array(dbIndex * list, int count)
 
    \return
  */
-int db__recv_index(dbIndex * index)
+int db__recv_index(dbIndex *index)
 {
     int i, ncols;
 
@@ -93,7 +92,7 @@ int db__recv_index(dbIndex * index)
    \param list
    \param count
  */
-int db__recv_index_array(dbIndex ** list, int *count)
+int db__recv_index_array(dbIndex **list, int *count)
 {
     int i;
 

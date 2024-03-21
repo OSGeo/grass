@@ -1,5 +1,4 @@
-/*
- ******************************************************************************
+/******************************************************************************
  *
  * MODULE:       gproj library
  * AUTHOR(S):    Original Author unknown, probably Soil Conservation Service
@@ -21,19 +20,22 @@
 /* TODO: clean up support for PROJ 5+ */
 #ifdef HAVE_PROJ_H
 #include <proj.h>
-#define RAD_TO_DEG    57.295779513082321
-#define DEG_TO_RAD   .017453292519943296
+#define RAD_TO_DEG 57.295779513082321
+#define DEG_TO_RAD .017453292519943296
 
 /* adapted from gdal_version.h */
 #ifndef PROJ_COMPUTE_VERSION
-#define PROJ_COMPUTE_VERSION(maj,min,rev) ((maj)*1000000+(min)*10000+(rev)*100)
+#define PROJ_COMPUTE_VERSION(maj, min, rev) \
+    ((maj)*1000000 + (min)*10000 + (rev)*100)
 #endif
 
 /* just in case PROJ introduces PROJ_VERSION_NUM in a future version */
 #ifdef PROJ_VERSION_NUM
 #undef PROJ_VERSION_NUM
 #endif
-#define PROJ_VERSION_NUM      (PROJ_COMPUTE_VERSION(PROJ_VERSION_MAJOR,PROJ_VERSION_MINOR,PROJ_VERSION_PATCH))
+#define PROJ_VERSION_NUM                                          \
+    (PROJ_COMPUTE_VERSION(PROJ_VERSION_MAJOR, PROJ_VERSION_MINOR, \
+                          PROJ_VERSION_PATCH))
 
 #ifndef PJ_WKT2_LATEST
 /* update if new PROJ versions support new WKT2 standards */
@@ -46,8 +48,8 @@
 
 #else
 #include <proj_api.h>
-#define PJ_FWD 	 1
-#define PJ_INV 	-1
+#define PJ_FWD             1
+#define PJ_INV             -1
 /* PROJ_VERSION_MAJOR is not set in the old PROJ API */
 #define PROJ_VERSION_MAJOR 4
 #endif
@@ -59,15 +61,14 @@
 #endif
 
 /* Data Files */
-#define ELLIPSOIDTABLE "/etc/proj/ellipse.table"
-#define DATUMTABLE "/etc/proj/datum.table"
+#define ELLIPSOIDTABLE      "/etc/proj/ellipse.table"
+#define DATUMTABLE          "/etc/proj/datum.table"
 #define DATUMTRANSFORMTABLE "/etc/proj/datumtransform.table"
 /* GRASS relative location of datum conversion lookup tables */
-#define GRIDDIR "/etc/proj/nad"
+#define GRIDDIR             "/etc/proj/nad"
 
 /* TODO: rename pj_ to gpj_ to avoid symbol clash with PROJ lib */
-struct pj_info
-{
+struct pj_info {
 #ifdef HAVE_PROJ_H
     PJ *pj;
 #else
@@ -81,31 +82,29 @@ struct pj_info
     char *wkt;
 };
 
-struct gpj_datum
-{
+struct gpj_datum {
     char *name, *longname, *ellps;
     double dx, dy, dz;
 };
 
 /* no longer needed with PROJ6+ */
-struct gpj_datum_transform_list
-{
+struct gpj_datum_transform_list {
 
-    int count;                  /**< Transform Number (ordered list) */
+    int count; /**< Transform Number (ordered list) */
 
-    char *params;               /**< PROJ.4-style datum transform parameters */
+    char *params; /**< PROJ.4-style datum transform parameters */
 
-    char *where_used;           /**< Comment text describing where (geographically)
-				 * the transform is valid */
+    char *where_used; /**< Comment text describing where (geographically)
+                       * the transform is valid */
 
-    char *comment;              /**< Additional Comments */
+    char *comment; /**< Additional Comments */
 
-    struct gpj_datum_transform_list *next;      /**< Pointer to next set of 
-					 * transform parameters in linked list */
+    struct gpj_datum_transform_list
+        *next; /**< Pointer to next set of
+                * transform parameters in linked list */
 };
 
-struct gpj_ellps
-{
+struct gpj_ellps {
     char *name, *longname;
     double a, es, rf;
 };
@@ -118,26 +117,23 @@ struct gpj_ellps
 /* In PROJ 5, the 'struct FACTORS' is back in as 'struct P5_FACTORS',
  * and old 'struct LP' is now back in as 'PJ_UV' */
 
-typedef struct
-{
+typedef struct {
     double u, v;
 } LP;
 
-struct DERIVS
-{
-    double x_l, x_p;            /* derivatives of x for lambda-phi */
-    double y_l, y_p;            /* derivatives of y for lambda-phi */
+struct DERIVS {
+    double x_l, x_p; /* derivatives of x for lambda-phi */
+    double y_l, y_p; /* derivatives of y for lambda-phi */
 };
 
-struct FACTORS
-{
+struct FACTORS {
     struct DERIVS der;
-    double h, k;                /* meridinal, parallel scales */
-    double omega, thetap;       /* angular distortion, theta prime */
-    double conv;                /* convergence */
-    double s;                   /* areal scale factor */
-    double a, b;                /* max-min scale error */
-    int code;                   /* info as to analytics, see following */
+    double h, k;          /* meridinal, parallel scales */
+    double omega, thetap; /* angular distortion, theta prime */
+    double conv;          /* convergence */
+    double s;             /* areal scale factor */
+    double a, b;          /* max-min scale error */
+    int code;             /* info as to analytics, see following */
 };
 
 /* end of copy */

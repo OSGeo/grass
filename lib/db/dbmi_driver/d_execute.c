@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_execute.c
- * 
+ *
  * \brief DBMI Library (driver) - execute SQL statements
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -77,7 +77,7 @@ int db_d_begin_transaction(void)
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_d_commit_transaction()
+int db_d_commit_transaction(void)
 {
     int stat;
 

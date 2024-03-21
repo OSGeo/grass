@@ -4,11 +4,11 @@
  * DATE:    September 29, 2001
  * PURPOSE: Translates simple COordinate GeOmetry with a format of
  *          "[label] <bearing> <distance>" to "X Y [label]".
- *          
+ *
  *          Example:  "P0001 S 88-44-56 W 6.7195"
  *                    "-6.7178980970 -0.1467153972 P0001"
- *                   
- *          The input formats are very limited.  
+ *
+ *          The input formats are very limited.
  * --------------------------------------------------------------------
  * COPYRIGHT: (C) 2000 by the GRASS Development Team
  *
@@ -24,16 +24,14 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#define DEG2RAD(a) ((a) * M_PI / 180.0)
-#define RAD2DEG(a) ((a) * 180.0 / M_PI)
-#define DMS2DD(d,m,s) ((d) + ((m) / 60.0) + ((s) / 3600.0))
-#define FORMAT_1 " %s %1[NS] %d%c%d%c%lf %1[EW] %lf "
-#define FORMAT_2 " %1[NS] %d%c%d%c%lf %1[EW] %lf "
-#define FORMAT_3 " %lf %lf %s "
+#define DEG2RAD(a)      ((a)*M_PI / 180.0)
+#define RAD2DEG(a)      ((a)*180.0 / M_PI)
+#define DMS2DD(d, m, s) ((d) + ((m) / 60.0) + ((s) / 3600.0))
+#define FORMAT_1        " %s %1[NS] %d%c%d%c%lf %1[EW] %lf "
+#define FORMAT_2        " %1[NS] %d%c%d%c%lf %1[EW] %lf "
+#define FORMAT_3        " %lf %lf %s "
 
-
-struct survey_record
-{
+struct survey_record {
     char label[20];
     int haslabel;
     char n_s[2];
@@ -48,8 +46,7 @@ struct survey_record
     double y;
 };
 
-
-static void print_coordinates(FILE * outfile, struct survey_record *in)
+static void print_coordinates(FILE *outfile, struct survey_record *in)
 {
     if (in->haslabel == YES)
         fprintf(outfile, "%.15g %.15g %s\n", in->x, in->y, in->label);
@@ -57,31 +54,27 @@ static void print_coordinates(FILE * outfile, struct survey_record *in)
         fprintf(outfile, "%.15g %.15g\n", in->x, in->y);
 }
 
-
-static void print_cogo(FILE * outfile, struct survey_record *in)
+static void print_cogo(FILE *outfile, struct survey_record *in)
 {
     if (in->haslabel == YES)
-        fprintf(outfile, "%s %s %02d:%02d:%02.9g %s %.13g\n",
-                in->label, in->n_s, in->deg, in->min, in->sec,
-                in->e_w, in->dist);
-    else
-        fprintf(outfile, "%s %02d:%02d:%02.9g %s %.13g\n",
+        fprintf(outfile, "%s %s %02d:%02d:%02.9g %s %.13g\n", in->label,
                 in->n_s, in->deg, in->min, in->sec, in->e_w, in->dist);
-
+    else
+        fprintf(outfile, "%s %02d:%02d:%02.9g %s %.13g\n", in->n_s, in->deg,
+                in->min, in->sec, in->e_w, in->dist);
 }
 
-
-static const char *next_line(FILE * infile)
+static const char *next_line(FILE *infile)
 {
     static char line[512];
     const char *cptr;
 
     memset(line, 0, sizeof(line));
-    /* TODO: update to G_getl2(), but this fn needs to return pointer to string not ok/EOF int */
+    /* TODO: update to G_getl2(), but this fn needs to return pointer to string
+     * not ok/EOF int */
     cptr = fgets(line, 512, infile);
     return cptr;
 }
-
 
 static int parse_forward(const char *in, struct survey_record *out)
 {
@@ -89,13 +82,12 @@ static int parse_forward(const char *in, struct survey_record *out)
     int status;
 
     if (out->haslabel == YES) {
-        status =
-            sscanf(in, FORMAT_1, out->label, out->n_s, &out->deg, &dummy1,
-                   &out->min, &dummy1, &out->sec, out->e_w, &out->dist);
+        status = sscanf(in, FORMAT_1, out->label, out->n_s, &out->deg, &dummy1,
+                        &out->min, &dummy1, &out->sec, out->e_w, &out->dist);
     }
     else {
-        status = sscanf(in, FORMAT_2, out->n_s, &out->deg, &dummy1,
-                        &out->min, &dummy1, &out->sec, out->e_w, &out->dist);
+        status = sscanf(in, FORMAT_2, out->n_s, &out->deg, &dummy1, &out->min,
+                        &dummy1, &out->sec, out->e_w, &out->dist);
     }
 
     if ((status != 9 && out->haslabel == YES) ||
@@ -134,7 +126,6 @@ static int parse_forward(const char *in, struct survey_record *out)
 
     return status;
 }
-
 
 static int parse_reverse(const char *in, struct survey_record *out)
 {
@@ -201,7 +192,6 @@ static int parse_reverse(const char *in, struct survey_record *out)
     return status;
 }
 
-
 int main(int argc, char **argv)
 {
     struct Option *input;
@@ -258,7 +248,6 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv) != 0)
         exit(EXIT_FAILURE);
 
-
     if (input->answer && input->answer[0] != '-') {
         infile = fopen(input->answer, "r");
         if (infile == NULL)
@@ -271,8 +260,7 @@ int main(int argc, char **argv)
     if (output->answer && output->answer[0] != '-') {
         outfile = fopen(output->answer, "w");
         if (outfile == NULL)
-            G_fatal_error(_("Couldn't open output file <%s>"),
-                          output->answer);
+            G_fatal_error(_("Couldn't open output file <%s>"), output->answer);
     }
     else {
         outfile = stdout;
@@ -312,7 +300,7 @@ int main(int argc, char **argv)
 
         if ((cptr[0] == '#') || (cptr[0] == '\0') || (cptr[0] == '\n')) {
             /* remove \n check once module is updated to use G_getl2() */
-            continue;           /* line is a comment or blank */
+            continue; /* line is a comment or blank */
         }
 
         if (!parse_line(cptr, &record)) {
@@ -330,7 +318,6 @@ int main(int argc, char **argv)
 
     if (close->answer)
         print_func(outfile, &first_record);
-
 
     if (infile != stdin)
         fclose(infile);

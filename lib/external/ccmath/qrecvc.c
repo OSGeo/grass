@@ -5,8 +5,10 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include "ccmath.h"
-void qrecvc(double *ev, Cpx * evec, double *dp, int n)
+
+void qrecvc(double *ev, Cpx *evec, double *dp, int n)
 {
     double cc, sc = 0.0, d, x = 0.0, y, h = 0.0, tzr = 1.e-15;
 

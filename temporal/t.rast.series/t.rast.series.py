@@ -74,6 +74,14 @@
 # %option G_OPT_R_OUTPUTS
 # %end
 
+# %option
+# % key: file_limit
+# % type: integer
+# % description: The maximum number of open files allowed for each r.series process
+# % required: no
+# % answer: 1000
+# %end
+
 # %flag
 # % key: t
 # % description: Do not assign the space time raster dataset start and end time to the output map
@@ -83,7 +91,6 @@
 # % key: n
 # % description: Propagate NULLs
 # %end
-
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError
@@ -104,6 +111,7 @@ def main():
     memory = options["memory"]
     nprocs = options["nprocs"]
     where = options["where"]
+    max_files_open = int(options["file_limit"])
     add_time = flags["t"]
     nulls = flags["n"]
 
@@ -137,10 +145,12 @@ def main():
         file.close()
 
         flag = ""
-        if len(rows) > 1000:
+        if len(rows) > max_files_open:
             grass.warning(
                 _(
-                    "Processing over 1000 maps: activating -z flag of r.series which slows down processing"
+                    "Processing over {} maps: activating -z flag of r.series which slows down processing.".format(
+                        max_files_open
+                    )
                 )
             )
             flag += "z"
@@ -163,7 +173,6 @@ def main():
             grass.fatal(_("%s failed. Check above error messages.") % "r.series")
 
         if not add_time:
-
             # We need to set the temporal extent from the subset of selected maps
             maps = sp.get_registered_maps_as_objects(
                 where=where, order=order, dbif=None
@@ -186,7 +195,6 @@ def main():
                 )
 
             for out_map in output.split(","):
-
                 # Create the time range for the output map
                 if out_map.find("@") >= 0:
                     id = out_map

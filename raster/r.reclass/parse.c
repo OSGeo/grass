@@ -12,13 +12,12 @@ int default_to_itself = 0;
 char *default_label;
 CELL DEFAULT;
 
-int parse(const char *line, RULE ** rules, RULE ** tail,
-          struct Categories *cats)
+int parse(const char *line, RULE **rules, RULE **tail, struct Categories *cats)
 {
     const char *label;
     const char *save;
     CELL v;
-    CELL lo[1024], hi[1024], new = (CELL) 0;
+    CELL lo[1024], hi[1024], new = (CELL)0;
     int count;
     int i, last_null = 0;
 
@@ -38,7 +37,7 @@ int parse(const char *line, RULE ** rules, RULE ** tail,
         switch (state) {
         case 0:
             save = cur;
-            if (!strncmp(cur, "help", 4)) {     /* help text */
+            if (!strncmp(cur, "help", 4)) { /* help text */
                 fprintf(stderr, _("Enter a rule in one of these formats:\n"));
                 fprintf(stderr, "1 3 5      = 1   %s\n", _("poor quality"));
                 fprintf(stderr, "1 thru 10  = 1\n");
@@ -48,7 +47,7 @@ int parse(const char *line, RULE ** rules, RULE ** tail,
                 cur += 4;
                 continue;
             }
-            if (*cur == '*') {  /* default rule */
+            if (*cur == '*') { /* default rule */
                 default_rule = 1;
                 state = 1;
                 cur++;
@@ -57,7 +56,8 @@ int parse(const char *line, RULE ** rules, RULE ** tail,
             if (!scan_value(&v))
                 return -1;
             if (Rast_is_c_null_value(&v)) {
-                G_warning(_("Can't have null on the left-hand side of the rule"));
+                G_warning(
+                    _("Can't have null on the left-hand side of the rule"));
                 return -1;
             }
             state = 1;
@@ -86,7 +86,8 @@ int parse(const char *line, RULE ** rules, RULE ** tail,
             if (strncmp(cur, "thru", 4) != 0)
                 continue;
             if (last_null) {
-                G_warning(_("Can't have null on the right-hand side of the rule"));
+                G_warning(
+                    _("Can't have null on the right-hand side of the rule"));
                 return -1;
             }
             cur += 4;
@@ -98,7 +99,8 @@ int parse(const char *line, RULE ** rules, RULE ** tail,
             if (!scan_value(&v))
                 return -1;
             if (Rast_is_c_null_value(&v)) {
-                G_warning(_("Can't have null on the right-hand side of the rule"));
+                G_warning(
+                    _("Can't have null on the right-hand side of the rule"));
                 return -1;
             }
 
@@ -127,7 +129,7 @@ int parse(const char *line, RULE ** rules, RULE ** tail,
             continue;
         case 5:
             label = cur;
-            cur = "";           /* force break from while */
+            cur = ""; /* force break from while */
         }
     }
     if (state > 0 && state < 5)
@@ -148,7 +150,7 @@ int parse(const char *line, RULE ** rules, RULE ** tail,
     return count;
 }
 
-static int scan_value(CELL * v)
+static int scan_value(CELL *v)
 {
     int i, sign, dec;
     double fv, fd;
@@ -191,7 +193,7 @@ static int scan_value(CELL * v)
 
         if (dec)
             fv += 0.5;
-        *v = sign * (CELL) fv;
+        *v = sign * (CELL)fv;
 
         if (dec && state)
             fprintf(stderr, _("%f rounded up to %d\n"), sign * fv, *v);

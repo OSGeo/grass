@@ -1,18 +1,17 @@
-
 /*!
  * \file lib/gis/user_config.c
  *
- * \brief GIS Library - Routines related to user's GRASS configuration, tmp, and 
+ * \brief GIS Library - Routines related to user's GRASS configuration, tmp, and
  * miscellaneous files.
  *
- * Functions related to the user's GRASS configuration, tmp, and 
- * miscellaneous files. Provides a set of routines for creating and 
- * accessing elements within the user's "rc" directory. The 
+ * Functions related to the user's GRASS configuration, tmp, and
+ * miscellaneous files. Provides a set of routines for creating and
+ * accessing elements within the user's "rc" directory. The
  * directory is in $HOME/.grass.<br>
  *
- * <b>NOTE:</b> As of 2001-03-25 this file is not hooked up.  It is 
- * provided as a candidate for handling $HOME/.grass files and 
- * subdirectories. There may be more functionality desired (such as 
+ * <b>NOTE:</b> As of 2001-03-25 this file is not hooked up.  It is
+ * provided as a candidate for handling $HOME/.grass files and
+ * subdirectories. There may be more functionality desired (such as
  * deletion routines, directory globs).<br>
  *
  * (C) 2001-2014 by the GRASS Development Team
@@ -31,6 +30,8 @@
 #include <assert.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdint.h>
+#include <stddef.h>
 #ifndef __MINGW32__
 #include <pwd.h>
 #endif
@@ -39,14 +40,13 @@
 #include <errno.h>
 #include <grass/gis.h>
 
-
 /**************************************************************************
  * _make_toplevel(): make user's toplevel config directory if it doesn't
  * already exist.  Adjust perms to 1700. Returns the toplevel directory
  * path [caller must G_free ()] on success, or NULL on failure
  *************************************************************************/
 
-#ifndef __MINGW32__             /* TODO */
+#ifndef __MINGW32__ /* TODO */
 static char *_make_toplevel(void)
 {
     size_t len;
@@ -70,7 +70,7 @@ static char *_make_toplevel(void)
         homedir = defaulthomedir;
     }
 
-    len = strlen(homedir) + 8;  /* + "/.grass\0" */
+    len = strlen(homedir) + 8; /* + "/.grass\0" */
     if (NULL == (path = G_calloc(1, len))) {
         return NULL;
     }
@@ -81,7 +81,7 @@ static char *_make_toplevel(void)
     if (my_passwd == NULL)
         return NULL;
 
-    len = strlen(my_passwd->pw_dir) + 8;        /* + "/.grass\0" */
+    len = strlen(my_passwd->pw_dir) + 8; /* + "/.grass\0" */
     if (NULL == (path = G_calloc(1, len)))
         return NULL;
 
@@ -95,7 +95,7 @@ static char *_make_toplevel(void)
         if (errno == ENOENT) {
             status = G_mkdir(path);
 
-            if (status != 0) {  /* mkdir failed */
+            if (status != 0) { /* mkdir failed */
                 G_free(path);
                 return NULL;
             }
@@ -115,18 +115,16 @@ static char *_make_toplevel(void)
 
     /* Examine the stat "buf" */
     /* It better be a directory */
-    if (!S_ISDIR(buf.st_mode)) {        /* File, link, something else */
-        errno = ENOTDIR;        /* element is not a directory, but should be */
+    if (!S_ISDIR(buf.st_mode)) { /* File, link, something else */
+        errno = ENOTDIR;         /* element is not a directory, but should be */
         G_free(path);
         return NULL;
     }
 
     /* No read/write/execute ??? */
-    if (!((S_IRUSR & buf.st_mode) &&
-          (S_IWUSR & buf.st_mode) && (S_IXUSR & buf.st_mode)
-        )
-        ) {
-        errno = EACCES;         /* Permissions error */
+    if (!((S_IRUSR & buf.st_mode) && (S_IWUSR & buf.st_mode) &&
+          (S_IXUSR & buf.st_mode))) {
+        errno = EACCES; /* Permissions error */
         G_free(path);
         return NULL;
     }
@@ -138,7 +136,6 @@ static char *_make_toplevel(void)
 
     return path;
 }
-
 
 /**************************************************************************
  * _elem_count_split: Does a couple things:
@@ -160,10 +157,11 @@ static int _elem_count_split(char *elems)
     /* Some basic assertions */
     assert(elems != NULL);
     assert((len = strlen(elems)) > 0);
+    assert(len < PTRDIFF_MAX);
     assert(*elems != '/');
 
     begin = elems;
-    for (i = 0; begin != NULL && len > begin - elems; i++) {
+    for (i = 0; begin != NULL && (ptrdiff_t)len > begin - elems; i++) {
         /* check '.' condition */
         if (*begin == '.')
             return 0;
@@ -174,15 +172,14 @@ static int _elem_count_split(char *elems)
         /* okay, change '/' into '\0' */
         begin = end;
         if (begin != NULL) {
-            *begin = '\0';      /* begin points at '/', change it */
-            begin++;            /* increment begin to next char */
+            *begin = '\0'; /* begin points at '/', change it */
+            begin++;       /* increment begin to next char */
         }
     }
 
     /* That's it */
     return i;
 }
-
 
 /**************************************************************************
  * _make_sublevels(): creates subelements as necessary from the passed
@@ -244,17 +241,15 @@ static char *_make_sublevels(const char *elems)
         else {
             /* Examine the stat "buf" */
             /* It better be a directory */
-            if (!S_ISDIR(buf.st_mode)) {        /* File, link, something else */
-                errno = ENOTDIR;        /* element is not a directory, but should be */
+            if (!S_ISDIR(buf.st_mode)) { /* File, link, something else */
+                errno = ENOTDIR; /* element is not a directory, but should be */
                 G_free(path);
                 return NULL;
             }
 
             /* No read/write/execute ??? */
-            if (!((S_IRUSR & buf.st_mode) &&
-                  (S_IWUSR & buf.st_mode) && (S_IXUSR & buf.st_mode)
-                )
-                ) {
+            if (!((S_IRUSR & buf.st_mode) && (S_IWUSR & buf.st_mode) &&
+                  (S_IXUSR & buf.st_mode))) {
                 errno = EACCES; /* Permissions error */
                 G_free(path);
                 return NULL;
@@ -274,14 +269,13 @@ static char *_make_sublevels(const char *elems)
     return path;
 }
 
-
 /**
  * \brief Returns path to <b>element</b> and <b>item</b>.
  *
- * Either <b>element</b> or <b>item</b> can be NULL, but not both.  If 
- * <b>element</b> is NULL, then the file is assumed to live at the top 
- * level. If file is NULL, then it is assumed the caller is not 
- * interested in the file.  If the element or rc dir do not exist, they 
+ * Either <b>element</b> or <b>item</b> can be NULL, but not both.  If
+ * <b>element</b> is NULL, then the file is assumed to live at the top
+ * level. If file is NULL, then it is assumed the caller is not
+ * interested in the file.  If the element or rc dir do not exist, they
  * are created. However, the file is never checked for.
  *
  * \param[in] element
@@ -307,10 +301,9 @@ char *G_rc_path(const char *element, const char *item)
         path = _make_sublevels(element);
     }
 
-
     assert(*item != '.');
     assert(path != NULL);
-    ptr = strchr(item, '/');    /* should not have slashes */
+    ptr = strchr(item, '/'); /* should not have slashes */
     assert(ptr == NULL);
     len = strlen(path) + strlen(item) + 2;
     if ((ptr = G_realloc(path, len)) == NULL) {
@@ -322,8 +315,7 @@ char *G_rc_path(const char *element, const char *item)
     sprintf(ptr, "/%s", item);
 
     return path;
-}                               /* G_rc_path */
-
+} /* G_rc_path */
 
 /* vim: set softtabstop=4 shiftwidth=4 expandtab: */
 #endif

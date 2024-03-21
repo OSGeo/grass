@@ -166,7 +166,7 @@ class RegionDef(BaseClass, wx.Dialog):
         self.cells3 = int(region["cells3"])
 
         #
-        # 3D box collapsable
+        # 3D box collapsible
         #
         self.infoCollapseLabelExp = _("Click here to show 3D settings")
         self.infoCollapseLabelCol = _("Click here to hide 3D settings")
@@ -648,7 +648,6 @@ class SelectTransformDialog(wx.Dialog):
         size=wx.DefaultSize,
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
     ):
-
         wx.Dialog.__init__(self, parent, wx.ID_ANY, title, pos, size, style)
 
         global transformlist

@@ -28,7 +28,6 @@ def main():
 
 
 def benchmark(memory, label, results, reference):
-
     slope = "benchmark_slope"
     aspect = "benchmark_aspect"
     pcurv = "benchmark_pcurv"

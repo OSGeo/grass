@@ -45,7 +45,6 @@ class CatalogReprojectionDialog(wx.Dialog):
         title=_("Reprojection"),
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
     ):
-
         self.parent = parent
         self._giface = giface
 

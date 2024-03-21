@@ -190,10 +190,10 @@ v.surf.rst in=lidar_min_pt elev=lidar_min.rst
 
 <h3>Import of x,y,string data</h3>
 
-<em>r.in.xyz</em> is expecting numeric values as z column. In order to 
-perform a occurrence count operation even on x,y data with non-numeric 
-attribute(s), the data can be imported using either the x or y 
-coordinate as a fake z column for <b>method</b>=<tt>n</tt> (count 
+<em>r.in.xyz</em> is expecting numeric values as z column. In order to
+perform a occurrence count operation even on x,y data with non-numeric
+attribute(s), the data can be imported using either the x or y
+coordinate as a fake z column for <b>method</b>=<tt>n</tt> (count
 number of points per grid cell), the z values are ignored anyway.
 
 <h2>EXAMPLES</h2>
@@ -210,8 +210,8 @@ Note: if the z column is separated by several spaces from the coordinate columns
 it may be sufficient to adapt the <b>z</b> position value.
 
 <!-- NC: preparation for this example
-g.region raster=elevation res=15 -p 
-# 
+g.region raster=elevation res=15 -p
+#
 r.stats -1g elevation > elevation.xyz
 -->
 
@@ -269,7 +269,7 @@ g.region n=35:57:56.25N s=35:57:13.575N w=75:38:23.7W e=75:37:15.675W
 # check number of non-null cells (try and keep under a few million)
 r.univar lidar_min
 
-# convert to points 
+# convert to points
 r.to.vect -z type=point in=lidar_min out=lidar_min_pt
 
 # interpolate using a regularized spline fit

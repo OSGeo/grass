@@ -35,8 +35,7 @@ int V1_close_nat(struct Map_info *Map)
 {
     struct Coor_info CInfo;
 
-    G_debug(1, "V1_close_nat(): name = %s mapset= %s", Map->name,
-            Map->mapset);
+    G_debug(1, "V1_close_nat(): name = %s mapset= %s", Map->name, Map->mapset);
     if (!VECT_OPEN(Map))
         return 1;
 
@@ -64,14 +63,16 @@ int V1_close_nat(struct Map_info *Map)
                 /* copy temporary vector map to the current mapset */
                 char path_tmp[GPATH_MAX], path_map[GPATH_MAX];
 
-                G_debug(1, "V1_close_nat(): temporary map <%s> TO BE MOVED TO"
-                        " CURRENT MAPSET", Map->name);
+                G_debug(1,
+                        "V1_close_nat(): temporary map <%s> TO BE MOVED TO"
+                        " CURRENT MAPSET",
+                        Map->name);
                 Vect__get_element_path(path_tmp, Map, NULL);
 
                 G_file_name(path_map, GV_DIRECTORY, NULL, Map->mapset);
                 if (access(path_map, 0) != 0 && G_mkdir(path_map) != 0)
-                    G_fatal_error(_("Unable to create '%s': %s"),
-                                  path_map, strerror(errno));
+                    G_fatal_error(_("Unable to create '%s': %s"), path_map,
+                                  strerror(errno));
 
                 G_file_name(path_map, GV_DIRECTORY, Map->name, Map->mapset);
 
@@ -95,17 +96,16 @@ int V1_close_nat(struct Map_info *Map)
                 ndblinks = Vect_get_num_dblinks(Map);
                 for (i = 0; i < ndblinks; i++) {
                     fi = Vect_get_dblink(Map, i);
-                    if (DB_OK !=
-                        db_copy_table(fi->driver, fi->database, fi->table,
-                                      connection.driverName,
-                                      connection.databaseName, fi->table)) {
+                    if (DB_OK != db_copy_table(fi->driver, fi->database,
+                                               fi->table, connection.driverName,
+                                               connection.databaseName,
+                                               fi->table)) {
                         G_warning(_("Unable to copy table <%s>"), fi->table);
                         continue;
                     }
 
-                    Vect_add_dblink(dblinks, fi->number, fi->name,
-                                    fi->table, fi->key,
-                                    connection.databaseName,
+                    Vect_add_dblink(dblinks, fi->number, fi->name, fi->table,
+                                    fi->key, connection.databaseName,
                                     connection.driverName);
                     G_free(fi);
                 }
@@ -124,8 +124,7 @@ int V1_close_nat(struct Map_info *Map)
             }
             else {
                 /* do not delete temporary vector map */
-                G_debug(1,
-                        "V1_close_nat(): temporary map <%s> IS NOT DELETED",
+                G_debug(1, "V1_close_nat(): temporary map <%s> IS NOT DELETED",
                         Map->name);
                 delete = FALSE;
             }
@@ -160,11 +159,11 @@ int V1_close_nat(struct Map_info *Map)
                     fi = Vect_get_dblink(Map, i);
 
                     driver =
-                        db_start_driver_open_database(fi->driver,
-                                                      fi->database);
+                        db_start_driver_open_database(fi->driver, fi->database);
                     if (driver == NULL) {
-                        G_warning(_("Unable to open database <%s> by driver <%s>"),
-                                  fi->database, fi->driver);
+                        G_warning(
+                            _("Unable to open database <%s> by driver <%s>"),
+                            fi->database, fi->driver);
                         continue;
                     }
 

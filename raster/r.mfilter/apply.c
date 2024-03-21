@@ -7,7 +7,7 @@
  *  filter:    filter to be applied
  *  input:     input buffers
  **************************************************************/
-DCELL apply_filter(FILTER * filter, DCELL ** input)
+DCELL apply_filter(FILTER *filter, DCELL **input)
 {
     int size = filter->size;
     double **matrix = filter->matrix;

@@ -8,7 +8,7 @@
  *
  * (C) 2001-2009 GRASS Development Team
  *
- * This program is free software under the GNU General Public License 
+ * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author Original author unknown - probably CERL
@@ -41,23 +41,23 @@ void EmbedGivenNulls(void *cell, char *nulls, RASTER_MAP_TYPE map_type,
     DCELL *d;
     int i;
 
-    c = (CELL *) cell;
-    f = (FCELL *) cell;
-    d = (DCELL *) cell;
+    c = (CELL *)cell;
+    f = (FCELL *)cell;
+    d = (DCELL *)cell;
 
     for (i = 0; i < ncols; i++) {
         if (nulls[i]) {
             switch (map_type) {
             case CELL_TYPE:
-                Rast_set_c_null_value((CELL *) (c + i), 1);
+                Rast_set_c_null_value((CELL *)(c + i), 1);
                 break;
 
             case FCELL_TYPE:
-                Rast_set_f_null_value((FCELL *) (f + i), 1);
+                Rast_set_f_null_value((FCELL *)(f + i), 1);
                 break;
 
             case DCELL_TYPE:
-                Rast_set_d_null_value((DCELL *) (d + i), 1);
+                Rast_set_d_null_value((DCELL *)(d + i), 1);
                 break;
 
             default:
@@ -99,15 +99,15 @@ void Rast_set_null_value(void *buf, int numVals, RASTER_MAP_TYPE data_type)
 {
     switch (data_type) {
     case CELL_TYPE:
-        Rast_set_c_null_value((CELL *) buf, numVals);
+        Rast_set_c_null_value((CELL *)buf, numVals);
         break;
 
     case FCELL_TYPE:
-        Rast_set_f_null_value((FCELL *) buf, numVals);
+        Rast_set_f_null_value((FCELL *)buf, numVals);
         break;
 
     case DCELL_TYPE:
-        Rast_set_d_null_value((DCELL *) buf, numVals);
+        Rast_set_d_null_value((DCELL *)buf, numVals);
         break;
 
     default:
@@ -121,9 +121,9 @@ void Rast_set_null_value(void *buf, int numVals, RASTER_MAP_TYPE data_type)
    \param cellVals pointer to CELL values to set to null
    \param numVals  number of values to set to null
  */
-void Rast_set_c_null_value(CELL * cellVals, int numVals)
+void Rast_set_c_null_value(CELL *cellVals, int numVals)
 {
-    int i;                      /* counter */
+    int i; /* counter */
 
     for (i = 0; i < numVals; i++)
         cellVals[i] = (int)0x80000000;
@@ -135,11 +135,9 @@ void Rast_set_c_null_value(CELL * cellVals, int numVals)
    \param fcellVals pointer to FCELL values to set to null
    \param numVals number of values to set to null
  */
-void Rast_set_f_null_value(FCELL * fcellVals, int numVals)
+void Rast_set_f_null_value(FCELL *fcellVals, int numVals)
 {
-    static const unsigned char null_bits[4] = {
-        0xFF, 0xFF, 0xFF, 0xFF
-    };
+    static const unsigned char null_bits[4] = {0xFF, 0xFF, 0xFF, 0xFF};
     int i;
 
     for (i = 0; i < numVals; i++)
@@ -152,11 +150,10 @@ void Rast_set_f_null_value(FCELL * fcellVals, int numVals)
    \param dcellVals pointer to DCELL values to set to null
    \param numVals number of values to set to null
  */
-void Rast_set_d_null_value(DCELL * dcellVals, int numVals)
+void Rast_set_d_null_value(DCELL *dcellVals, int numVals)
 {
-    static const unsigned char null_bits[8] = {
-        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
-    };
+    static const unsigned char null_bits[8] = {0xFF, 0xFF, 0xFF, 0xFF,
+                                               0xFF, 0xFF, 0xFF, 0xFF};
     int i;
 
     for (i = 0; i < numVals; i++)
@@ -170,7 +167,7 @@ void Rast_set_d_null_value(DCELL * dcellVals, int numVals)
    - If the <em>data_type</em> is FCELL_TYPE, calls Rast_is_f_null_value()
    - If the <em>data_type</em> is DCELL_TYPE, calls Rast_is_d_null_value()
 
-   \param rast raster value to check 
+   \param rast raster value to check
    \param data_type type of raster - CELL, FCELL, DCELL
 
    \return TRUE if raster value is NULL
@@ -180,13 +177,13 @@ int Rast_is_null_value(const void *rast, RASTER_MAP_TYPE data_type)
 {
     switch (data_type) {
     case CELL_TYPE:
-        return (Rast_is_c_null_value((CELL *) rast));
+        return (Rast_is_c_null_value((CELL *)rast));
 
     case FCELL_TYPE:
-        return (Rast_is_f_null_value((FCELL *) rast));
+        return (Rast_is_f_null_value((FCELL *)rast));
 
     case DCELL_TYPE:
-        return (Rast_is_d_null_value((DCELL *) rast));
+        return (Rast_is_d_null_value((DCELL *)rast));
 
     default:
         G_warning("Rast_is_null_value: wrong data type!");
@@ -206,10 +203,10 @@ int Rast_is_null_value(const void *rast, RASTER_MAP_TYPE data_type)
    \return FALSE otherwise
  */
 #ifndef Rast_is_c_null_value
-int Rast_is_c_null_value(const CELL * cellVal)
+int Rast_is_c_null_value(const CELL *cellVal)
 {
     /* Check if the CELL value matches the null pattern */
-    return *cellVal == (CELL) 0x80000000;
+    return *cellVal == (CELL)0x80000000;
 }
 #endif
 
@@ -239,7 +236,7 @@ int Rast_is_c_null_value(const CELL * cellVal)
    \return FALSE otherwise
  */
 #ifndef Rast_is_f_null_value
-int Rast_is_f_null_value(const FCELL * fcellVal)
+int Rast_is_f_null_value(const FCELL *fcellVal)
 {
     return *fcellVal != *fcellVal;
 }
@@ -258,7 +255,7 @@ int Rast_is_f_null_value(const FCELL * fcellVal)
    \return FALSE otherwise
  */
 #ifndef Rast_is_d_null_value
-int Rast_is_d_null_value(const DCELL * dcellVal)
+int Rast_is_d_null_value(const DCELL *dcellVal)
 {
     return *dcellVal != *dcellVal;
 }
@@ -292,7 +289,7 @@ void Rast_insert_null_values(void *rast, char *null_row, int ncols,
    \param null_row null row
    \param ncols number of columns
  */
-void Rast_insert_c_null_values(CELL * cellVal, char *null_row, int ncols)
+void Rast_insert_c_null_values(CELL *cellVal, char *null_row, int ncols)
 {
     EmbedGivenNulls((void *)cellVal, null_row, CELL_TYPE, ncols);
 }
@@ -304,7 +301,7 @@ void Rast_insert_c_null_values(CELL * cellVal, char *null_row, int ncols)
    \param null_row null row
    \param ncols number of columns
  */
-void Rast_insert_f_null_values(FCELL * fcellVal, char *null_row, int ncols)
+void Rast_insert_f_null_values(FCELL *fcellVal, char *null_row, int ncols)
 {
     EmbedGivenNulls((void *)fcellVal, null_row, FCELL_TYPE, ncols);
 }
@@ -319,7 +316,7 @@ void Rast_insert_f_null_values(FCELL * fcellVal, char *null_row, int ncols)
    \param null_row null row
    \param ncols number of columns
  */
-void Rast_insert_d_null_values(DCELL * dcellVal, char *null_row, int ncols)
+void Rast_insert_d_null_values(DCELL *dcellVal, char *null_row, int ncols)
 {
     EmbedGivenNulls((void *)dcellVal, null_row, DCELL_TYPE, ncols);
 }
@@ -342,10 +339,9 @@ int Rast__check_null_bit(const unsigned char *flags, int bit_num, int n)
 
     /* check that bit_num is in range */
     if (bit_num < 0 || bit_num >= n)
-        G_fatal_error
-            ("Rast__check_null_bit: index %d out of range (size = %d).",
-             bit_num, n);
-
+        G_fatal_error(
+            "Rast__check_null_bit: index %d out of range (size = %d).", bit_num,
+            n);
 
     /* find the index of the unsigned char in which this bit appears */
     ind = bit_num / 8;
@@ -421,8 +417,7 @@ int G__set_flags_from_01_random(const char *zero_ones, unsigned char *flags,
    \param flags
    \param n
  */
-void Rast__convert_01_flags(const char *zero_ones, unsigned char *flags,
-                            int n)
+void Rast__convert_01_flags(const char *zero_ones, unsigned char *flags, int n)
 {
     unsigned char *v;
     int count;
@@ -459,8 +454,7 @@ void Rast__convert_01_flags(const char *zero_ones, unsigned char *flags,
    \param flags
    \param n
  */
-void Rast__convert_flags_01(char *zero_ones, const unsigned char *flags,
-                            int n)
+void Rast__convert_flags_01(char *zero_ones, const unsigned char *flags, int n)
 {
     const unsigned char *v;
     int count;

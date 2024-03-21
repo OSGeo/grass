@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.net.connectivity
@@ -24,12 +23,11 @@
 #include <grass/dbmi.h>
 #include <grass/neta.h>
 
-
 int main(int argc, char *argv[])
 {
     struct Map_info In, Out;
     struct line_cats *Cats;
-    struct GModule *module;     /* GRASS module for parsing arguments */
+    struct GModule *module; /* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
     struct Option *afield_opt, *nfield_opt, *abcol, *afcol, *ncol;
     struct Option *catset1_opt, *whereset1_opt;
@@ -45,15 +43,16 @@ int main(int argc, char *argv[])
     dglGraph_s vg;
 
     /* initialize GIS environment */
-    G_gisinit(argv[0]);         /* reads grass env, stores program name to G_program_name() */
+    G_gisinit(
+        argv[0]); /* reads grass env, stores program name to G_program_name() */
 
     /* initialize module */
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("network"));
     G_add_keyword(_("connectivity"));
-    module->description =
-        _("Computes vertex connectivity between two sets of nodes in the network.");
+    module->description = _("Computes vertex connectivity between two sets of "
+                            "nodes in the network.");
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
@@ -121,8 +120,7 @@ int main(int argc, char *argv[])
 
     Cats = Vect_new_cats_struct();
 
-    Vect_check_input_output_name(map_in->answer, map_out->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(map_in->answer, map_out->answer, G_FATAL_EXIT);
 
     Vect_set_open_level(2);
 
@@ -140,16 +138,14 @@ int main(int argc, char *argv[])
     afield = Vect_get_field_number(&In, afield_opt->answer);
     nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
-    if (NetA_initialise_varray
-        (&In, nfield, GV_POINT, whereset1_opt->answer,
-         catset1_opt->answer, &varray_set1) <= 0) {
+    if (NetA_initialise_varray(&In, nfield, GV_POINT, whereset1_opt->answer,
+                               catset1_opt->answer, &varray_set1) <= 0) {
         G_fatal_error(_("No features for %s selected. "
                         "Please check options '%s', '%s'."),
                       "set1", catset1_opt->key, whereset1_opt->key);
     }
-    if (NetA_initialise_varray
-        (&In, nfield, GV_POINT, whereset2_opt->answer,
-         catset2_opt->answer, &varray_set2) <= 0) {
+    if (NetA_initialise_varray(&In, nfield, GV_POINT, whereset2_opt->answer,
+                               catset2_opt->answer, &varray_set2) <= 0) {
         G_fatal_error(_("No features for %s selected. "
                         "Please check options '%s', '%s'."),
                       "set2", catset2_opt->key, whereset2_opt->key);
@@ -173,9 +169,8 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
-    if (0 !=
-        Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
-                             abcol->answer, ncol->answer, 0, 0))
+    if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+                                  abcol->answer, ncol->answer, 0, 0))
         G_fatal_error(_("Unable to build graph for vector map <%s>"),
                       Vect_get_full_name(&In));
 
@@ -195,9 +190,9 @@ int main(int argc, char *argv[])
     graph = &vg;
 
     for (i = 0; i < set1_list->n_values; i++)
-        set1_list->value[i] = set1_list->value[i] * 2;  /*out vertex */
+        set1_list->value[i] = set1_list->value[i] * 2; /*out vertex */
     for (i = 0; i < set2_list->n_values; i++)
-        set2_list->value[i] = set2_list->value[i] * 2 - 1;      /*in vertex */
+        set2_list->value[i] = set2_list->value[i] * 2 - 1; /*in vertex */
 
     flow = (int *)G_calloc(nedges + 1, sizeof(int));
     if (!flow)

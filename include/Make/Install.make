@@ -161,7 +161,7 @@ install-strip:
 	$(MAKE) strip
 	$(MAKE) install
 
-bindist:  
+bindist:
 ifeq ($(strip $(MACOSX_APP)),1)
 	$(MAKE) bindist-macosx
 else
@@ -212,6 +212,7 @@ srclibsdist: distclean
 	-cp -rL utils ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL demolocation ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL include ./grass-lib-$(GRASS_VERSION_NUMBER)
+	-cp -rL --parents lib/external/parson ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL --parents lib/external/shapelib ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL --parents lib/external/bwidget ./grass-lib-$(GRASS_VERSION_NUMBER)
 	-cp -rL --parents lib/datetime ./grass-lib-$(GRASS_VERSION_NUMBER)

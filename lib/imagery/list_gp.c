@@ -23,7 +23,7 @@
  * \param fd where to print (typically stdout)
  * \return 0
  */
-int I_list_group(const char *group, const struct Ref *ref, FILE * fd)
+int I_list_group(const char *group, const struct Ref *ref, FILE *fd)
 {
     char buf[80];
     int i;
@@ -41,8 +41,7 @@ int I_list_group(const char *group, const struct Ref *ref, FILE * fd)
         if (len > max)
             max = len;
     }
-    fprintf(fd, _("group <%s> references the following raster maps\n"),
-            group);
+    fprintf(fd, _("group <%s> references the following raster maps\n"), group);
     fprintf(fd, "-------------\n");
     tot_len = 0;
     for (i = 0; i < ref->nfiles; i++) {
@@ -71,7 +70,7 @@ int I_list_group(const char *group, const struct Ref *ref, FILE * fd)
  * \param fd where to print (typically stdout)
  * \return 0
  */
-int I_list_group_simple(const struct Ref *ref, FILE * fd)
+int I_list_group_simple(const struct Ref *ref, FILE *fd)
 {
     int i;
 

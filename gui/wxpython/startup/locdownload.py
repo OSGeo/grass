@@ -16,8 +16,6 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail com>
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import shutil
@@ -59,7 +57,7 @@ LOCATIONS = [
     },
     {
         "label": "Piemonte, Italy data set",
-        "url": "http://geodati.fmach.it/gfoss_geodata/libro_gfoss/grassdata_piemonte_utm32n_wgs84_grass7.tar.gz",
+        "url": "https://grass.osgeo.org/sampledata/grassdata_piemonte_utm32n_wgs84_grass7.tar.gz",
     },
     {
         "label": "Slovakia 3D precipitation voxel data set",
@@ -84,7 +82,7 @@ LOCATIONS = [
 ]
 
 
-class RedirectText(object):
+class RedirectText:
     def __init__(self, window):
         self.out = window
 

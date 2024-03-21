@@ -1,25 +1,26 @@
 /*
- **  Original Algorithm:    H. Mitasova, L. Mitas, J. Hofierka, M. Zlocha 
+ **  Original Algorithm:    H. Mitasova, L. Mitas, J. Hofierka, M. Zlocha
  **  New GRASS Implementation:  J. Caplan, M. Ruesink  1995
  **
- **  US Army Construction Engineering Research Lab, University of Illinois 
+ **  US Army Construction Engineering Research Lab, University of Illinois
  **
- **  Copyright  J. Caplan, H. Mitasova, L. Mitas, M.Ruesink, J. Hofierka, 
+ **  Copyright  J. Caplan, H. Mitasova, L. Mitas, M.Ruesink, J. Hofierka,
  **     M. Zlocha  1995
  **
- **This program is free software; you can redistribute it and/or
- **modify it under the terms of the GNU General Public License
- **as published by the Free Software Foundation; either version 2
- **of the License, or (at your option) any later version.
+ ** This program is free software; you can redistribute it and/or
+ ** modify it under the terms of the GNU General Public License
+ ** as published by the Free Software Foundation; either version 2
+ ** of the License, or (at your option) any later version.
  **
- **This program is distributed in the hope that it will be useful,
- **but WITHOUT ANY WARRANTY; without even the implied warranty of
- **MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- **GNU General Public License for more details.
+ ** This program is distributed in the hope that it will be useful,
+ ** but WITHOUT ANY WARRANTY; without even the implied warranty of
+ ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ ** GNU General Public License for more details.
  **
- **You should have received a copy of the GNU General Public License
- **along with this program; if not, write to the Free Software
- **Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ ** You should have received a copy of the GNU General Public License
+ ** along with this program; if not, write to the Free Software
+ ** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ ** MA 02110-1301 USA
  **
  **  version 13 for GRASS5.0
  **  FP related bugs in slope length output fixed by Helena oct. 1999)
@@ -35,52 +36,46 @@
 #include "aspect.h"
 #include "precomp.h"
 
-#define HORIZ	1               /* \            */
-#define VERT	0               /* |            */
-#define EAST	1               /* |            */
-#define WEST	0               /* |_ magic     */
-#define NORTH	1               /* |  numbers   */
-#define SOUTH	0               /* |            */
-#define ROW	1               /* |            */
-#define COL	0               /* /            */
+#define HORIZ 1 /* \            */
+#define VERT  0 /* |            */
+#define EAST  1 /* |            */
+#define WEST  0 /* |_ magic     */
+#define NORTH 1 /* |  numbers   */
+#define SOUTH 0 /* |            */
+#define ROW   1 /* |            */
+#define COL   0 /* /            */
 
-CELL v;                         /* address for segment retrieval macros */
+CELL v; /* address for segment retrieval macros */
 
 /* heap memory */
-struct Cell_head region;        /* resolution and boundaries            */
-struct Map_info fl;             /* output vector file header            */
-struct BM *bitbar;              /* space-efficient barrier matrix       */
-int lgfd;                       /* output length file descriptor        */
-char string[1024];              /* space for strings                    */
-layer el, as, ds;               /* elevation, aspect, density (accumulation) */
-double *ew_dist;                /* east-west distances for rows         */
-double *epsilon[2];             /* quantization errors for rows         */
+struct Cell_head region; /* resolution and boundaries            */
+struct Map_info fl;      /* output vector file header            */
+struct BM *bitbar;       /* space-efficient barrier matrix       */
+int lgfd;                /* output length file descriptor        */
+char string[1024];       /* space for strings                    */
+layer el, as, ds;        /* elevation, aspect, density (accumulation) */
+double *ew_dist;         /* east-west distances for rows         */
+double *epsilon[2];      /* quantization errors for rows         */
 
 /* command-line parameters */
 params parm;
 
-typedef struct
-{
-    int row, col;               /* current matrix address       */
-}
-addr;
+typedef struct {
+    int row, col; /* current matrix address       */
+} addr;
 
-typedef int bbox[2][2];         /* current bounding box         */
+typedef int bbox[2][2]; /* current bounding box         */
 
-typedef struct
-{
-    double x, y, z;             /* exact earth coordinates      */
-    double theta;               /* aspect                       */
-    double r, c;                /* cell matrix coordinates      */
-}
-point;
+typedef struct {
+    double x, y, z; /* exact earth coordinates      */
+    double theta;   /* aspect                       */
+    double r, c;    /* cell matrix coordinates      */
+} point;
 
-typedef struct
-{
-    double *px, *py;            /* x/y point arrays             */
-    int index;                  /* index of next point          */
-}
-flowline;
+typedef struct {
+    double *px, *py; /* x/y point arrays             */
+    int index;       /* index of next point          */
+} flowline;
 
 /***************************** CALCULATION ******************************/
 
@@ -90,8 +85,8 @@ flowline;
  * globals r: o, z, parm
  * params  w: p, b
  */
-static void
-height_angle_bounding_box(int sub, double cut, int horiz, point * p, bbox b)
+static void height_angle_bounding_box(int sub, double cut, int horiz, point *p,
+                                      bbox b)
 {
     int c, f = (int)cut;
     double r = cut - (double)f;
@@ -105,19 +100,17 @@ height_angle_bounding_box(int sub, double cut, int horiz, point * p, bbox b)
     if (horiz) {
         a1 = (double)aspect(sub, f);
         a2 = (double)aspect(sub, c);
-        p->z = (double)get(el, sub, f) * (1. - r) +
-            (double)get(el, sub, c) * r;
+        p->z = (double)get(el, sub, f) * (1. - r) + (double)get(el, sub, c) * r;
     }
     else {
         a1 = (double)aspect(f, sub);
         a2 = (double)aspect(c, sub);
-        p->z = (double)get(el, f, sub) * (1. - r) +
-            (double)get(el, c, sub) * r;
+        p->z = (double)get(el, f, sub) * (1. - r) + (double)get(el, c, sub) * r;
     }
 
     if (!(a1 == UNDEF || a2 == UNDEF) &&
         !(Rast_is_d_null_value(&a1) || Rast_is_d_null_value(&a2)))
-        /*    if (!(Rast_is_d_null_value(&a1) || Rast_is_d_null_value(&a2))) */
+    /*    if (!(Rast_is_d_null_value(&a1) || Rast_is_d_null_value(&a2))) */
     {
         if ((d = a1 - a2) >= D_PI || d <= -D_PI) {
             if (a2 > D_PI)
@@ -145,10 +138,10 @@ height_angle_bounding_box(int sub, double cut, int horiz, point * p, bbox b)
  */
 static int on_map(int sub, double cut, int horiz)
 {
-    return
-        (sub >= 0 && cut >= 0.0 &&
-         ((horiz && sub < region.rows && cut <= (double)(region.cols - 1)) ||
-          (!horiz && sub < region.cols && cut <= (double)(region.rows - 1))));
+    return (
+        sub >= 0 && cut >= 0.0 &&
+        ((horiz && sub < region.rows && cut <= (double)(region.cols - 1)) ||
+         (!horiz && sub < region.cols && cut <= (double)(region.rows - 1))));
 }
 
 /*
@@ -156,7 +149,7 @@ static int on_map(int sub, double cut, int horiz)
  * globals r:  parm
  * params  w:  f
  */
-static void add_to_line(point * p, flowline * f)
+static void add_to_line(point *p, flowline *f)
 {
     if (parm.flout) {
         f->px[f->index] = (double)p->x;
@@ -194,11 +187,11 @@ static double rectify(double delta, double bd[2], double e)
  * params  w:  p, a, l
  * globals w:  density
  */
-static int next_point(point * p,        /* current/next point               */
-                      addr * a, /* current/next matrix address      */
+static int next_point(point *p, /* current/next point               */
+                      addr *a,  /* current/next matrix address      */
                       bbox b,   /* current/next bounding box        */
                       double *l /* current/eventual length          */
-    )
+)
 {
     int sub;
     double cut;
@@ -225,7 +218,7 @@ static int next_point(point * p,        /* current/next point               */
     semi = oldtheta < 90 || oldtheta >= 270;
     tangent = tan(oldtheta * DEG2RAD);
 
-    if (oldtheta != 90 && oldtheta != 270 &&    /* north/south */
+    if (oldtheta != 90 && oldtheta != 270 && /* north/south */
         (delta = (bdy[semi] * tangent)) < bdx[EAST] && delta > bdx[WEST]) {
         delta = rectify(delta, bdx, epsilon[HORIZ][ads.row]);
         p->x += delta;
@@ -240,7 +233,7 @@ static int next_point(point * p,        /* current/next point               */
         if (parm.lgout)
             length = hypot(delta, bdy[semi]);
     }
-    else {                      /*  east/west  */
+    else { /*  east/west  */
 
         semi = oldtheta < 180;
         if (oldtheta == 90 || oldtheta == 270)
@@ -276,11 +269,12 @@ static int next_point(point * p,        /* current/next point               */
         !(parm.barin && BM_get(bitbar, a->col, a->row))) {
         if (parm.dsout && (ads.row != a->row || ads.col != a->col))
             put(ds, a->row, a->col, get(ds, a->row, a->col) + 1);
-        /*      if (parm.lgout) 
-         *      *l += parm.l3d ? hypot(length, oldz - p->z) : length; this did not work, helena*/
+        /*      if (parm.lgout)
+         *      *l += parm.l3d ? hypot(length, oldz - p->z) : length; this did
+         * not work, helena*/
         if (parm.lgout) {
             if (parm.l3d) {
-                deltaz = oldz - p->z;   /*fix by helena Dec. 06 */
+                deltaz = oldz - p->z; /*fix by helena Dec. 06 */
                 *l += hypot(length, deltaz);
             }
             else
@@ -335,26 +329,26 @@ static void calculate(void)
             if (!(parm.barin && BM_get(bitbar, col, row))) {
 #ifdef OFFSET
                 /* disabled by helena June 2005 */
-                roffset = parm.offset * (double)region.ew_res
-                    * ((2. * G_drand48()) - 1.);
-                coffset = parm.offset * (double)region.ns_res
-                    * ((2. * G_drand48()) - 1.);
+                roffset = parm.offset * (double)region.ew_res *
+                          ((2. * G_drand48()) - 1.);
+                coffset = parm.offset * (double)region.ns_res *
+                          ((2. * G_drand48()) - 1.);
 #endif
                 pts.x = x;
                 pts.y = y;
                 pts.z = (double)get(el, row, col);
                 pts.theta = (double)aspect(row, col);
-                pts.r = (double)row;    /* + roffset; */
-                pts.c = (double)col;    /*+ coffset; */
+                pts.r = (double)row; /* + roffset; */
+                pts.c = (double)col; /*+ coffset; */
 
                 ads.row = row;
                 ads.col = col;
 
 #ifdef OFFSET
-                G_debug(3, "dx: %f  x: %f %f  row: %f %f\n",
-                        roffset, x, pts.x, (double)row, pts.r);
-                G_debug(3, "dy: %f  y: %f %f  col: %f %f\n",
-                        roffset, y, pts.y, (double)col, pts.c);
+                G_debug(3, "dx: %f  x: %f %f  row: %f %f\n", roffset, x, pts.x,
+                        (double)row, pts.r);
+                G_debug(3, "dy: %f  y: %f %f  col: %f %f\n", roffset, y, pts.y,
+                        (double)col, pts.c);
 #endif
 
                 bbs[ROW][SOUTH] = row + 1;
@@ -364,18 +358,18 @@ static void calculate(void)
 
                 do
                     add_to_line(&pts, &fls);
-                while (fls.index <= parm.bound &&
-                       (pts.z != UNDEFZ && pts.theta >= 0 && pts.theta <= 360)
-                       &&
-                       /*  (!Rast_is_d_null_value(&pts.z) && pts.theta != UNDEF) && */
-                       next_point(&pts, &ads, bbs, &length));
+                while (
+                    fls.index <= parm.bound &&
+                    (pts.z != UNDEFZ && pts.theta >= 0 && pts.theta <= 360) &&
+                    /*  (!Rast_is_d_null_value(&pts.z) && pts.theta != UNDEF) &&
+                     */
+                    next_point(&pts, &ads, bbs, &length));
             }
 
             if (fls.index > 1 && parm.flout &&
                 (loopstep == parm.skip ||
                  !(row % parm.skip || col % parm.skip))) {
-                Vect_copy_xyz_to_pnts(points, fls.px, fls.py, NULL,
-                                      fls.index);
+                Vect_copy_xyz_to_pnts(points, fls.px, fls.py, NULL, fls.index);
                 Vect_write_line(&fl, GV_LINE, points, cats);
             }
 
@@ -390,7 +384,7 @@ static void calculate(void)
 
     G_free(fls.px);
     G_free(fls.py);
-    /*    G_free (fls); *//* commented 19/10/99 MN */
+    /*    G_free (fls); */ /* commented 19/10/99 MN */
     G_free(lg);
     Vect_destroy_line_struct(points);
     Vect_destroy_cats_struct(cats);
@@ -402,8 +396,8 @@ static void calculate(void)
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *pelevin, *paspin, *pbarin, *pskip, *pbound,
-        *pflout, *plgout, *pdsout;
+    struct Option *pelevin, *paspin, *pbarin, *pskip, *pbound, *pflout, *plgout,
+        *pdsout;
     struct Flag *fup, *flg, *fmem;
     int default_skip, larger, default_bound;
 
@@ -412,7 +406,6 @@ int main(int argc, char *argv[])
 #endif
     char *default_skip_ans, *default_bound_ans, *skip_opt;
     struct History history;
-
 
     /* Initialize GIS engine */
     G_gisinit(argv[0]);
@@ -498,19 +491,17 @@ int main(int argc, char *argv[])
     sprintf(default_skip_ans, "%d", default_skip);
     sprintf(skip_opt, "1-%d", larger);
 
-    default_bound = (int)(4. * hypot((double)region.rows,
-                                     (double)region.cols));
+    default_bound = (int)(4. * hypot((double)region.rows, (double)region.cols));
     default_bound_ans =
         G_calloc((int)log10((double)default_bound) + 4, sizeof(char));
     sprintf(default_bound_ans, "0-%d", default_bound);
 
 #ifdef OFFSET
-    /* below fix changed from 0.0 to 1.0 and its effect disabled in 
+    /* below fix changed from 0.0 to 1.0 and its effect disabled in
      * calc.c, Helena June 2005 */
 
-    default_offset = 1.0;       /* fixed 20. May 2001 Helena */
-    default_offset_ans =
-        G_calloc((int)log10(default_offset) + 2, sizeof(char));
+    default_offset = 1.0; /* fixed 20. May 2001 Helena */
+    default_offset_ans = G_calloc((int)log10(default_offset) + 2, sizeof(char));
     sprintf(default_offset_ans, "%f", default_offset);
 
     offset_opt = G_calloc((int)log10(default_offset) + 4, sizeof(char));
@@ -536,7 +527,8 @@ int main(int argc, char *argv[])
     parm.mem = fmem->answer;
 
     if (!pflout->answer && !plgout->answer && !pdsout->answer)
-        G_fatal_error(_("You must select one or more output maps (flout, lgout, dsout)"));
+        G_fatal_error(
+            _("You must select one or more output maps (flout, lgout, dsout)"));
 
     if (parm.seg)
         parm.mem = '\0';
@@ -551,7 +543,7 @@ int main(int argc, char *argv[])
     as.row_offset = as.col_offset = 0;
     ds.row_offset = ds.col_offset = 0;
 
-    if ((G_projection() == PROJECTION_LL))      /* added MN 2005 */
+    if ((G_projection() == PROJECTION_LL)) /* added MN 2005 */
         G_fatal_error(_("lat/long projection not supported by "
                         "r.flow. Please use 'r.watershed' for calculating "
                         "flow accumulation."));

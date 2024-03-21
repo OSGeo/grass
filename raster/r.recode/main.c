@@ -1,9 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       r.recode
  * AUTHOR(S):    CERL
- *               Bob Covill <bcovill tekmap.ns.ca>, Hamish Bowman <hamish_b yahoo.com>,
+ *               Bob Covill <bcovill tekmap.ns.ca>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      Recode categorical raster maps
  * COPYRIGHT:    (C) 1999-2011 by the GRASS Development Team
@@ -36,8 +36,7 @@ int main(int argc, char *argv[])
     char *title;
     FILE *srcfp;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *output, *title, *rules;
         struct Flag *a, *d;
     } parm;
@@ -68,13 +67,11 @@ int main(int argc, char *argv[])
 
     parm.a = G_define_flag();
     parm.a->key = 'a';
-    parm.a->description =
-        _("Align the current region to the input raster map");
+    parm.a->description = _("Align the current region to the input raster map");
 
     parm.d = G_define_flag();
     parm.d->key = 'd';
-    parm.d->description =
-        _("Force output to 'double' raster map type (DCELL)");
+    parm.d->description = _("Force output to 'double' raster map type (DCELL)");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);

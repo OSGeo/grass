@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_openselect.c
- * 
+ *
  * \brief DBMI Library (driver) - open select cursor
  *
  * (C) 1999-2008 by the GRASS Development Team
@@ -37,10 +37,10 @@ int db_d_open_select_cursor(void)
     DB_RECV_INT(&mode);
 
     /* create a cursor */
-    cursor = (dbCursor *) db_malloc(sizeof(dbCursor));
+    cursor = (dbCursor *)db_malloc(sizeof(dbCursor));
     if (cursor == NULL)
         return db_get_error_code();
-    token = db_new_token((dbAddress) cursor);
+    token = db_new_token((dbAddress)cursor);
     if (token < 0)
         return db_get_error_code();
     db_init_cursor(cursor);

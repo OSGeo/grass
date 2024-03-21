@@ -3,12 +3,12 @@
 
    \brief OGSF library - label management (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -36,7 +36,7 @@ GLuint label_id;
    \param fontbase fontbase settings
    \param size font size
    \param color font color
-   \param pt 
+   \param pt
  */
 void gs_put_label(const char *text, GLuint fontbase, int size,
                   unsigned long color, int *pt)
@@ -74,12 +74,10 @@ void gs_put_label(const char *text, GLuint fontbase, int size,
 
     gsd_bgn_legend_viewport(l, b, r, t);
 
-
     /* Set text color */
     gsd_color_func(color);
 
     do_label_display(fontbase, labpt, text);
-
 
     gsd_end_legend_viewport();
 
@@ -90,9 +88,8 @@ void gs_put_label(const char *text, GLuint fontbase, int size,
     return;
 }
 
-
 /*!
-   \brief Remove current label 
+   \brief Remove current label
  */
 void gsd_remove_curr(void)
 {
@@ -103,7 +100,6 @@ void gsd_remove_curr(void)
 
     return;
 }
-
 
 /*!
    \brief Remove all labels from display list
@@ -117,7 +113,8 @@ void gsd_remove_all(void)
 }
 
 /*!
-   \brief Call display list and draw defined labels -- called from gsd_prim (gsd_call_lists)
+   \brief Call display list and draw defined labels -- called from gsd_prim
+   (gsd_call_lists)
  */
 void gsd_call_label(void)
 {

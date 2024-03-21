@@ -3,7 +3,6 @@
 #include <grass/gmath.h>
 #include "local_proto.h"
 
-
 int print_matrix(double **matrix, int bands)
 {
     int i, j;
@@ -23,11 +22,10 @@ int product(double *vector, double factor, double **matrix1, int bands)
 
     for (i = 0; i < bands; i++)
         for (j = 0; j < bands; j++) {
-            matrix1[i][j] = (double)factor *(vector[i] * vector[j]);
+            matrix1[i][j] = (double)factor * (vector[i] * vector[j]);
         }
     return 0;
 }
-
 
 int setdiag(double *eigval, int bands, double **l)
 {
@@ -41,7 +39,6 @@ int setdiag(double *eigval, int bands, double **l)
                 l[i][j] = 0.0;
     return 0;
 }
-
 
 int getsqrt(double **w, int bands, double **l, double **eigmat)
 {
@@ -61,7 +58,6 @@ int getsqrt(double **w, int bands, double **l, double **eigmat)
 
     return 0;
 }
-
 
 int solveq(double **q, int bands, double **w, double **p)
 {

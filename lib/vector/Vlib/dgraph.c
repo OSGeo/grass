@@ -22,32 +22,29 @@
 #include "dgraph.h"
 #include "e_intersect.h"
 
-#define LENGTH(DX, DY) (sqrt((DX*DX)+(DY*DY)))
-#define PI M_PI
+#define LENGTH(DX, DY) (sqrt((DX * DX) + (DY * DY)))
+#define PI             M_PI
 
-struct intersection_point
-{
+struct intersection_point {
     double x;
     double y;
-    int group;                  /* IPs with very similar dist will be in the same group */
+    int group; /* IPs with very similar dist will be in the same group */
 };
 
-struct seg_intersection
-{
-    int with;                   /* second segment */
-    int ip;                     /* index of the IP */
-    double dist;                /* distance from first point of first segment to intersection point (IP) */
+struct seg_intersection {
+    int with;    /* second segment */
+    int ip;      /* index of the IP */
+    double dist; /* distance from first point of first segment to intersection
+                    point (IP) */
 };
 
-struct seg_intersection_list
-{
+struct seg_intersection_list {
     int count;
     int allocated;
     struct seg_intersection *a;
 };
 
-struct seg_intersections
-{
+struct seg_intersections {
     int ipcount;
     int ipallocated;
     struct intersection_point *ip;
@@ -99,8 +96,7 @@ void add_ipoint1(struct seg_intersection_list *il, int with, double dist,
     if (il->count == il->allocated) {
         il->allocated += 4;
         il->a =
-            G_realloc(il->a,
-                      (il->allocated) * sizeof(struct seg_intersection));
+            G_realloc(il->a, (il->allocated) * sizeof(struct seg_intersection));
     }
     s = &(il->a[il->count]);
     s->with = with;
@@ -123,9 +119,8 @@ void add_ipoint(const struct line_pnts *Points, int first_seg, int second_seg,
 
     if (si->ipcount == si->ipallocated) {
         si->ipallocated += 16;
-        si->ip =
-            G_realloc(si->ip,
-                      (si->ipallocated) * sizeof(struct intersection_point));
+        si->ip = G_realloc(si->ip, (si->ipallocated) *
+                                       sizeof(struct intersection_point));
     }
     ip = si->ipcount;
     t = &(si->ip[ip]);
@@ -135,12 +130,13 @@ void add_ipoint(const struct line_pnts *Points, int first_seg, int second_seg,
     si->ipcount++;
 
     add_ipoint1(&(si->il[first_seg]), second_seg,
-                LENGTH((Points->x[first_seg] - x),
-                       (Points->y[first_seg] - y)), ip);
+                LENGTH((Points->x[first_seg] - x), (Points->y[first_seg] - y)),
+                ip);
     if (second_seg >= 0)
-        add_ipoint1(&(si->il[second_seg]), first_seg,
-                    LENGTH((Points->x[second_seg] - x),
-                           (Points->y[second_seg] - y)), ip);
+        add_ipoint1(
+            &(si->il[second_seg]), first_seg,
+            LENGTH((Points->x[second_seg] - x), (Points->y[second_seg] - y)),
+            ip);
 }
 
 void sort_intersection_list(struct seg_intersection_list *il)
@@ -210,8 +206,7 @@ double get_epsilon(struct line_pnts *Points)
 }
 
 /* currently O(n*n); future implementation O(nlogn) */
-struct seg_intersections *find_all_intersections(const struct line_pnts
-                                                 *Points)
+struct seg_intersections *find_all_intersections(const struct line_pnts *Points)
 {
     int i, j, np;
     int group, t;
@@ -244,16 +239,18 @@ struct seg_intersections *find_all_intersections(const struct line_pnts
     for (i = 0; i < np - 1; i++) {
         for (j = i + 1; j < np - 1; j++) {
             G_debug(4, "        checking %d-%d %d-%d", i, i + 1, j, j + 1);
-            /*res = segment_intersection_2d_e(x[i], y[i], x[i+1], y[i+1], x[j], y[j], x[j+1], y[j+1], &x1, &y1, &x2, &y2); */
-            res =
-                segment_intersection_2d(x[i], y[i], x[i + 1], y[i + 1], x[j],
-                                        y[j], x[j + 1], y[j + 1], &x1, &y1,
-                                        &x2, &y2);
+            /*res = segment_intersection_2d_e(x[i], y[i], x[i+1], y[i+1], x[j],
+             * y[j], x[j+1], y[j+1], &x1, &y1, &x2, &y2); */
+            res = segment_intersection_2d(x[i], y[i], x[i + 1], y[i + 1], x[j],
+                                          y[j], x[j + 1], y[j + 1], &x1, &y1,
+                                          &x2, &y2);
 
-            /*            res2 = segment_intersection_2d_e(x[i], y[i], x[i+1], y[i+1], x[j], y[j], x[j+1], y[j+1], &x1_, &y1_, &x2_, &y2_);
-               if ((res != res2) || ((res != 0) && (x1!=x1_ || y1!=y1_)) ) {
+            /*            res2 = segment_intersection_2d_e(x[i], y[i], x[i+1],
+               y[i+1], x[j], y[j], x[j+1], y[j+1], &x1_, &y1_, &x2_, &y2_); if
+               ((res != res2) || ((res != 0) && (x1!=x1_ || y1!=y1_)) ) {
                G_debug(1, "exact=%d orig=%d", res, res2);
-               segment_intersection_2d_test(x[i], y[i], x[i+1], y[i+1], x[j], y[j], x[j+1], y[j+1], &x1, &y1, &x2, &y2);
+               segment_intersection_2d_test(x[i], y[i], x[i+1], y[i+1], x[j],
+               y[j], x[j+1], y[j+1], &x1, &y1, &x2, &y2);
                }
              */
             G_debug(4, "        intersection type = %d", res);
@@ -277,17 +274,15 @@ struct seg_intersections *find_all_intersections(const struct line_pnts
     G_debug(3, "    postprocessing...");
     if (si->ipallocated > si->ipcount) {
         si->ipallocated = si->ipcount;
-        si->ip =
-            G_realloc(si->ip,
-                      (si->ipcount) * sizeof(struct intersection_point));
+        si->ip = G_realloc(si->ip,
+                           (si->ipcount) * sizeof(struct intersection_point));
     }
     for (i = 0; i < si->ilcount; i++) {
         il = &(si->il[i]);
         if (il->allocated > il->count) {
             il->allocated = il->count;
             il->a =
-                G_realloc(il->a,
-                          (il->count) * sizeof(struct seg_intersection));
+                G_realloc(il->a, (il->count) * sizeof(struct seg_intersection));
         }
 
         if (il->count > 0) {
@@ -304,16 +299,18 @@ struct seg_intersections *find_all_intersections(const struct line_pnts
     qsort(sorted, si->ipcount, sizeof(struct intersection_point *), compare);
 
     /* assign groups */
-    group = 0;                  /* next available group number */
+    group = 0; /* next available group number */
     for (i = 0; i < si->ipcount; i++) {
 
         t = group;
         for (j = i - 1; j >= 0; j--) {
             if (!FEQUAL(sorted[j]->x, sorted[i]->x, EPSILON))
-                /*            if (!almost_equal(sorted[j]->x, sorted[i]->x, 16)) */
+                /*            if (!almost_equal(sorted[j]->x, sorted[i]->x, 16))
+                 */
                 break;
             if (FEQUAL(sorted[j]->y, sorted[i]->y, EPSILON)) {
-                /*            if (almost_equal(sorted[j]->y, sorted[i]->y, 16)) { */
+                /*            if (almost_equal(sorted[j]->y, sorted[i]->y, 16))
+                 * { */
                 t = sorted[j]->group;
                 break;
             }
@@ -432,7 +429,8 @@ void pg_addedge(struct planar_graph *pg, int v1, int v2)
     e = &(pg->e[pg->ecount]);
     e->v1 = v1;
     e->v2 = v2;
-    e->winding_left = 0;        /* winding is undefined if the corresponding side is not visited */
+    e->winding_left =
+        0; /* winding is undefined if the corresponding side is not visited */
     e->winding_right = 0;
     e->visited_left = 0;
     e->visited_right = 0;
@@ -472,7 +470,7 @@ struct planar_graph *pg_create(const struct line_pnts *Points)
         for (j = 1; j < si->il[i].count; j++) {
             t = si->ip[si->il[i].a[j].ip].group;
             if (t != v) {
-                pg_addedge(pg, v, t);   /* edge direction is v ---> t */
+                pg_addedge(pg, v, t); /* edge direction is v ---> t */
                 v = t;
             }
         }
@@ -485,18 +483,16 @@ struct planar_graph *pg_create(const struct line_pnts *Points)
         for (j = 0; j < vert->ecount; j++) {
             edge = vert->edges[j];
             t = (edge->v1 != i) ? (edge->v1) : (edge->v2);
-            vert->angles[j] =
-                atan2(pg->v[t].y - vert->y, pg->v[t].x - vert->x);
+            vert->angles[j] = atan2(pg->v[t].y - vert->y, pg->v[t].x - vert->x);
         }
     }
 
     destroy_si_struct(si);
     /*
-       I'm not sure if shrinking of the allocated memory always preserves it's physical place.
-       That's why I don't want to do this:
-       if (pg->ecount < pg->eallocated) {
-       pg->eallocated = pg->ecount;
-       pg->e = G_realloc(pg->e, (pg->ecount)*sizeof(struct pg_edge));
+       I'm not sure if shrinking of the allocated memory always preserves it's
+       physical place. That's why I don't want to do this: if (pg->ecount <
+       pg->eallocated) { pg->eallocated = pg->ecount; pg->e = G_realloc(pg->e,
+       (pg->ecount)*sizeof(struct pg_edge));
        }
      */
 
@@ -505,7 +501,8 @@ struct planar_graph *pg_create(const struct line_pnts *Points)
        for (i = 0; i < pg->vcount; i++) {
        if (pg->v[i].ecount < pg->v[i].eallocated) {
        pg->v[i].eallocated = pg->v[i].ecount;
-       pg->v[i].edges = G_realloc(pg->v[i].edges, (pg->v[i].ecount)*sizeof(struct pg_edges));
+       pg->v[i].edges = G_realloc(pg->v[i].edges,
+       (pg->v[i].ecount)*sizeof(struct pg_edges));
        }
        }
      */

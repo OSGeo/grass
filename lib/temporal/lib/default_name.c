@@ -8,8 +8,8 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Soeren Gebbert 
-   Code is based on the dbmi library written by 
+   \author Soeren Gebbert
+   Code is based on the dbmi library written by
    Joel Jones (CERL/UIUC) and Radim Blazek
  */
 
@@ -40,8 +40,7 @@ char *tgis_get_default_database_name(void)
 {
     char default_connection[2048];
 
-    G_snprintf(default_connection, 2048,
-               "$GISDBASE/$LOCATION_NAME/$MAPSET/%s",
+    G_snprintf(default_connection, 2048, "$GISDBASE/$LOCATION_NAME/$MAPSET/%s",
                TGISDB_DEFAULT_SQLITE_PATH);
 
     return G_store(default_connection);
@@ -50,7 +49,7 @@ char *tgis_get_default_database_name(void)
 /*!
    \brief Sets up TGIS database connection settings using GRASS default
 
-   \return returns DB_OK 
+   \return returns DB_OK
  */
 int tgis_set_default_connection(void)
 {
@@ -67,8 +66,8 @@ int tgis_set_default_connection(void)
         tgis_set_connection(&connection);
     }
     else
-        G_fatal_error(_("Programmer error - only SQLite driver is currently supported"));
-
+        G_fatal_error(
+            _("Programmer error - only SQLite driver is currently supported"));
 
     return DB_OK;
 }

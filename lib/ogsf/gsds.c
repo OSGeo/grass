@@ -1,9 +1,9 @@
 /*!
    \file lib/ogsf/gsds.c
 
-   \brief OGSF library - dataset loading and management (lower level functions) 
+   \brief OGSF library - dataset loading and management (lower level functions)
 
-   GRASS OpenGL gsurf OGSF Library 
+   GRASS OpenGL gsurf OGSF Library
 
    The idea here is to treat datasets as separate objects, which SHOULD:
    - allow easier reuse of data for different attributes.
@@ -44,8 +44,8 @@
 
    (C) 1999-2008 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -60,8 +60,8 @@
 #include <grass/glocale.h>
 #include <grass/ogsf.h>
 
-#define LUCKY 33
-#define BLOC 20
+#define LUCKY  33
+#define BLOC   20
 #define MAX_DS 100
 
 static int init_gsds(void);
@@ -70,7 +70,7 @@ static dataset *get_dataset(int);
 static int get_type(dataset *);
 
 static dataset *Data[MAX_DS];
-static dataset Ds[MAX_DS];      /* trying to avoid allocation */
+static dataset Ds[MAX_DS]; /* trying to avoid allocation */
 
 static int Numsets = 0;
 
@@ -141,7 +141,7 @@ static dataset *get_dataset(int id)
    \return type code
    \return -1 unsupported type
  */
-static int get_type(dataset * ds)
+static int get_type(dataset *ds)
 {
     if (ds) {
         if (ds->databuff.bm) {
@@ -169,9 +169,9 @@ static int get_type(dataset * ds)
 }
 
 /*!
-   \brief Get handle to gsds.   
+   \brief Get handle to gsds.
 
-   Successive calls will continue search until "begin" is set   
+   Successive calls will continue search until "begin" is set
    (problem here is, unique_name no longer uniquely identifies
    dataset, since changes may be made; but unique_name should still
    be useful for reloading dataset)
@@ -185,7 +185,7 @@ static int get_type(dataset * ds)
    \return data id
    \return -1 not found
  */
-int gsds_findh(const char *name, IFLAG * changes, IFLAG * types, int begin)
+int gsds_findh(const char *name, IFLAG *changes, IFLAG *types, int begin)
 {
     static int i;
     int start;
@@ -390,7 +390,7 @@ int gsds_free_data_buff(int id, int typ)
 
    \return freed size
  */
-size_t free_data_buffs(dataset * ds, int typ)
+size_t free_data_buffs(dataset *ds, int typ)
 {
     int i;
     size_t siz, nsiz = 1, freed = 0;
@@ -457,10 +457,8 @@ size_t free_data_buffs(dataset * ds, int typ)
     ds->numbytes -= freed;
 
     if (freed) {
-        G_debug(5, "free_data_buffs(): freed data from id no. %d",
-                ds->data_id);
-        G_debug(5,
-                "free_data_buffs(): %.3f Kbytes freed, current total = %.3f",
+        G_debug(5, "free_data_buffs(): freed data from id no. %d", ds->data_id);
+        G_debug(5, "free_data_buffs(): %.3f Kbytes freed, current total = %.3f",
                 freed / 1000., Tot_mem / 1000.);
     }
 
@@ -487,10 +485,10 @@ size_t gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
 
     if ((ds = get_dataset(id))) {
         /*
-           free_data_buffs(ds); 
-           careful here - allowing > 1 type to coexist (for float -> color conv.)
-           now also use this to allocate a null mask
-           (then if not used, use gsds_free_data_buff(id, ATTY_NULL))
+           free_data_buffs(ds);
+           careful here - allowing > 1 type to coexist (for float -> color
+           conv.) now also use this to allocate a null mask (then if not used,
+           use gsds_free_data_buff(id, ATTY_NULL))
          */
 
         for (i = 0; i < ndims; i++) {
@@ -588,7 +586,7 @@ size_t gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
             return 0;
         }
 
-        ds->changed = 0;        /* starting with clean slate */
+        ds->changed = 0; /* starting with clean slate */
         ds->need_reload = 1;
         ds->numbytes += siz;
         ds->ndims = ndims;
@@ -610,7 +608,7 @@ size_t gsds_alloc_typbuff(int id, int *dims, int ndims, int type)
    \param id
 
    \return -1 on error
-   \return 
+   \return
  */
 int gsds_get_changed(int id)
 {
@@ -643,7 +641,7 @@ int gsds_set_changed(int id, IFLAG reason)
     return (-1);
 }
 
-/*!                                             
+/*!
    \brief ADD
 
    \param id

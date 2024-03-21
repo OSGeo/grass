@@ -1,12 +1,11 @@
-
 /****************************************************************************
  *
  * MODULE:       d.paint.labels
  * AUTHOR(S):    Jim Westervelt (CERL) (original contributor)
- *               Radim Blazek <radim.blazek gmail.com>, 
- *               Stephan Holl <sholl gmx net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Hamish Bowman <hamish_b yahoo.com>, 
+ *               Radim Blazek <radim.blazek gmail.com>,
+ *               Stephan Holl <sholl gmx net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
  *               Markus Neteler <neteler itc.it>
  * PURPOSE:      displays a paint label file in the active display frame
  * COPYRIGHT:    (C) 2003-2006 by the GRASS Development Team
@@ -16,6 +15,7 @@
  *               for details.
  *
  *****************************************************************************/
+
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gis.h>
@@ -42,9 +42,8 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("display"));
     G_add_keyword(_("paint labels"));
-    module->description =
-        _("Displays text labels (created with v.label) "
-          "to the active frame on the graphics monitor.");
+    module->description = _("Displays text labels (created with v.label) "
+                            "to the active frame on the graphics monitor.");
 
     horiz_flag = G_define_flag();
     horiz_flag->key = 'i';
@@ -94,7 +93,8 @@ int main(int argc, char **argv)
     if (minreg_opt->answer) {
         minreg = atof(minreg_opt->answer);
         if (reg < minreg) {
-            G_warning(_("Region size is lower than minreg, nothing displayed."));
+            G_warning(
+                _("Region size is lower than minreg, nothing displayed."));
             D_close_driver();
             exit(0);
         }
@@ -102,7 +102,8 @@ int main(int argc, char **argv)
     if (maxreg_opt->answer) {
         maxreg = atof(maxreg_opt->answer);
         if (reg > maxreg) {
-            G_warning(_("Region size is greater than maxreg, nothing displayed."));
+            G_warning(
+                _("Region size is greater than maxreg, nothing displayed."));
             D_close_driver();
             exit(0);
         }

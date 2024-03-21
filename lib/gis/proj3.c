@@ -20,7 +20,7 @@
 
 static const char *lookup_proj(const char *);
 static const char *lookup_units(const char *);
-static const char *lookup_epsg();
+static const char *lookup_epsg(void);
 static int equal(const char *, const char *);
 static int lower(char);
 
@@ -63,7 +63,7 @@ const char *G_database_unit_name(int plural)
 
    \return units id
  */
-int G_database_unit()
+int G_database_unit(void)
 {
     int units;
     const char *name;
@@ -75,9 +75,8 @@ int G_database_unit()
         if (!name)
             return U_UNKNOWN;
 
-        if (strcasecmp(name, "meter") == 0 || strcasecmp(name, "metre") == 0
-            || strcasecmp(name, "meters") == 0 ||
-            strcasecmp(name, "metres") == 0)
+        if (strcasecmp(name, "meter") == 0 || strcasecmp(name, "metre") == 0 ||
+            strcasecmp(name, "meters") == 0 || strcasecmp(name, "metres") == 0)
             units = U_METERS;
         else if (strcasecmp(name, "kilometer") == 0 ||
                  strcasecmp(name, "kilometre") == 0 ||
@@ -93,8 +92,7 @@ int G_database_unit()
         else if (strcasecmp(name, "mile") == 0 ||
                  strcasecmp(name, "miles") == 0)
             units = U_MILES;
-        else if (strcasecmp(name, "foot") == 0 ||
-                 strcasecmp(name, "feet") == 0)
+        else if (strcasecmp(name, "foot") == 0 || strcasecmp(name, "feet") == 0)
             units = U_FEET;
         else if (strcasecmp(name, "foot_us") == 0 ||
                  strcasecmp(name, "foot_uss") == 0)
@@ -153,18 +151,12 @@ double G_database_units_to_meters_factor(void)
     int n;
 
     /* TODO: sync with definitions in ../proj/units.table */
-    static const struct
-    {
+    static const struct {
         char *unit;
         double factor;
-    } table[] = {
-        {"unit", 1.0},
-        {"meter", 1.0},
-        {"foot", .3048},
-        {"foot_us", 1200 / 3937.},
-        {"inch", .0254},
-        {NULL, 0.0}
-    };
+    } table[] = {{"unit", 1.0},   {"meter", 1.0},
+                 {"foot", .3048}, {"foot_us", 1200 / 3937.},
+                 {"inch", .0254}, {NULL, 0.0}};
 
     factor = 0.0;
     buf = lookup_units("meters");
@@ -258,7 +250,7 @@ const char *lookup_units(const char *key)
     return G_find_key_value(key, proj_units);
 }
 
-const char *lookup_epsg()
+const char *lookup_epsg(void)
 {
     init();
     return G_find_key_value("epsg", proj_epsg);

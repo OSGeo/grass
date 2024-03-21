@@ -1,9 +1,8 @@
-
 /****************************************************************************
  *
  * MODULE:       r.sunhours
  * AUTHOR(S):    Markus Metz
- * PURPOSE:      Calculates solar azimuth and angle, and 
+ * PURPOSE:      Calculates solar azimuth and angle, and
  *               sunshine hours (also called daytime period)
  *               Uses NREL SOLPOS
  * COPYRIGHT:    (C) 2010-2013 by the GRASS Development Team
@@ -35,10 +34,9 @@ int roundoff(double *);
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
-        struct Option *elev, *azimuth, *sunhours, *year,
-            *month, *day, *hour, *minutes, *seconds;
+    struct {
+        struct Option *elev, *azimuth, *sunhours, *year, *month, *day, *hour,
+            *minutes, *seconds;
         struct Flag *lst_time, *no_solpos;
     } parm;
     struct Cell_head window;
@@ -47,19 +45,19 @@ int main(int argc, char *argv[])
 
     /* projection information of input map */
     struct Key_Value *in_proj_info, *in_unit_info;
-    struct pj_info iproj;       /* input map proj parameters  */
-    struct pj_info oproj;       /* output map proj parameters  */
-    struct pj_info tproj;       /* transformation parameters  */
+    struct pj_info iproj; /* input map proj parameters  */
+    struct pj_info oproj; /* output map proj parameters  */
+    struct pj_info tproj; /* transformation parameters  */
     char *elev_name, *azimuth_name, *sunhour_name;
     int elev_fd, azimuth_fd, sunhour_fd;
     double ha, ha_cos, s_gamma, s_elevation, s_azimuth;
     double s_declination, sd_sin, sd_cos;
     double se_sin, sa_cos;
     double east, east_ll, north, north_ll;
-    double north_gc, north_gc_sin, north_gc_cos;        /* geocentric latitude */
+    double north_gc, north_gc_sin, north_gc_cos; /* geocentric latitude */
     double ba2;
     int year, month, day, hour, minutes, seconds;
-    int doy;                    /* day of year */
+    int doy; /* day of year */
     int row, col, nrows, ncols;
     int do_reproj = 0;
     int lst_time = 1;
@@ -76,9 +74,10 @@ int main(int argc, char *argv[])
     module->label =
         _("Calculates solar elevation, solar azimuth, and sun hours.");
     module->description =
-        _("Solar elevation: the angle between the direction of the geometric center "
-         "of the sun's apparent disk and the (idealized) horizon. "
-         "Solar azimuth: the angle from due north in clockwise direction.");
+        _("Solar elevation: the angle between the direction of the geometric "
+          "center "
+          "of the sun's apparent disk and the (idealized) horizon. "
+          "Solar azimuth: the angle from due north in clockwise direction.");
 
     parm.elev = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.elev->key = "elevation";
@@ -204,7 +203,8 @@ int main(int argc, char *argv[])
         if (lst_time)
             G_message(_("Time will be interpreted as local sidereal time."));
         else
-            G_message(_("Time will be interpreted as Greenwich standard time."));
+            G_message(
+                _("Time will be interpreted as Greenwich standard time."));
 
         if (sunhour_name)
             G_fatal_error(_("Sunshine hours require NREL SOLPOS."));
@@ -224,7 +224,8 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Cannot get projection units of current location"));
 
         if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
-            G_fatal_error(_("Cannot get projection key values of current location"));
+            G_fatal_error(
+                _("Cannot get projection key values of current location"));
 
         G_free_key_value(in_proj_info);
         G_free_key_value(in_unit_info);
@@ -260,13 +261,13 @@ int main(int argc, char *argv[])
         /* hour angle */
 
         /***************************************************************
-	 * The hour angle of a point on the Earth's surface is the angle
-	 * through which the earth would turn to bring the meridian of
-	 * the point directly under the sun. This angular displacement
-	 * represents time (1 hour = 15 degrees).
-	 * The hour angle is negative in the morning, zero at 12:00,
-	 * and positive in the afternoon
-	 ***************************************************************/
+         * The hour angle of a point on the Earth's surface is the angle
+         * through which the earth would turn to bring the meridian of
+         * the point directly under the sun. This angular displacement
+         * represents time (1 hour = 15 degrees).
+         * The hour angle is negative in the morning, zero at 12:00,
+         * and positive in the afternoon
+         ***************************************************************/
 
         ha = 15.0 * (hour + minutes / 60.0 + seconds / 3600.0) - 180.;
         G_debug(1, "Solar hour angle, degrees: %.2f", ha);
@@ -279,9 +280,9 @@ int main(int argc, char *argv[])
         /* sun declination */
 
         /***************************************************************
-	 * The declination of the sun is the angle between
-	 * the rays of the sun and the plane of the Earth's equator.
-	 ***************************************************************/
+         * The declination of the sun is the angle between
+         * the rays of the sun and the plane of the Earth's equator.
+         ***************************************************************/
 
         s_gamma = (2 * M_PI * (doy - 1)) / 365;
         G_debug(1, "fractional year in radians: %.2f", s_gamma);
@@ -299,10 +300,11 @@ int main(int argc, char *argv[])
             north_ll = (window.north + window.south) / 2;
             east_ll = (window.east + window.west) / 2;
             if (do_reproj) {
-                if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                                  &east_ll, &north_ll, NULL) < 0)
-                    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
-                                  "GPJ_transform()");
+                if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &east_ll,
+                                  &north_ll, NULL) < 0)
+                    G_fatal_error(
+                        _("Error in %s (projection of input coordinate pair)"),
+                        "GPJ_transform()");
             }
             pd.timezone = east_ll / 15.;
             pd.time_updated = 1;
@@ -341,8 +343,7 @@ int main(int argc, char *argv[])
 
     if (azimuth_name) {
         if ((azimuth_fd = Rast_open_new(azimuth_name, FCELL_TYPE)) < 0)
-            G_fatal_error(_("Unable to create raster map <%s>"),
-                          azimuth_name);
+            G_fatal_error(_("Unable to create raster map <%s>"), azimuth_name);
 
         azimuthbuf = Rast_allocate_f_buf();
     }
@@ -353,8 +354,7 @@ int main(int argc, char *argv[])
 
     if (sunhour_name) {
         if ((sunhour_fd = Rast_open_new(sunhour_name, FCELL_TYPE)) < 0)
-            G_fatal_error(_("Unable to create raster map <%s>"),
-                          sunhour_name);
+            G_fatal_error(_("Unable to create raster map <%s>"), sunhour_name);
 
         sunhourbuf = Rast_allocate_f_buf();
     }
@@ -398,10 +398,11 @@ int main(int argc, char *argv[])
 
             if (do_reproj) {
                 north_ll = north;
-                if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                                  &east_ll, &north_ll, NULL) < 0)
-                    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
-                                  "GPJ_transform()");
+                if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &east_ll,
+                                  &north_ll, NULL) < 0)
+                    G_fatal_error(
+                        _("Error in %s (projection of input coordinate pair)"),
+                        "GPJ_transform()");
             }
 
             /* geocentric latitude */
@@ -426,12 +427,11 @@ int main(int argc, char *argv[])
                     ha_cos = cos(ha * DEG2RAD);
                     roundoff(&ha_cos);
                 }
-                se_sin =
-                    ha_cos * sd_cos * north_gc_cos + sd_sin * north_gc_sin;
+                se_sin = ha_cos * sd_cos * north_gc_cos + sd_sin * north_gc_sin;
                 roundoff(&se_sin);
                 s_elevation = RAD2DEG * asin(se_sin);
             }
-            else                /* use_solpos && !lst_time */
+            else /* use_solpos && !lst_time */
                 s_elevation = pd.elevetr;
 
             if (elev_name)
@@ -441,7 +441,7 @@ int main(int argc, char *argv[])
                 /* solar azimuth angle */
                 if (!use_solpos) {
                     sa_cos = (se_sin * north_gc_sin - sd_sin) /
-                        (cos(DEG2RAD * s_elevation) * north_gc_cos);
+                             (cos(DEG2RAD * s_elevation) * north_gc_cos);
                     roundoff(&sa_cos);
                     s_azimuth = RAD2DEG * acos(sa_cos);
 
@@ -463,7 +463,6 @@ int main(int argc, char *argv[])
                 if (sunhourbuf[col] < 0.)
                     sunhourbuf[col] = 0.;
             }
-
         }
         if (elev_name)
             Rast_put_f_row(elev_fd, elevbuf);

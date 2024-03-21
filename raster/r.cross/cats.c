@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.cross
@@ -22,8 +21,7 @@
 
 static char *get_label(CELL, struct Categories *);
 
-
-int set_cat(CELL result, CELL * cat, struct Categories *pcats)
+int set_cat(CELL result, CELL *cat, struct Categories *pcats)
 {
     int i, n;
     static char *buf = NULL;

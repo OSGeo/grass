@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       g.dirseps
@@ -34,17 +33,17 @@ int main(int argc, char *argv[])
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
     G_add_keyword(_("scripts"));
-    module->label =
-        _("Internal GRASS utility for converting directory separator characters.");
+    module->label = _("Internal GRASS utility for converting directory "
+                      "separator characters.");
     module->description =
         "Converts any directory separator characters in "
-        "the input string to or from native host format, and writes the changed "
+        "the input string to or from native host format, and writes the "
+        "changed "
         "path to standard output. Useful in scripts for Windows compatibility.";
 
     tohost = G_define_flag();
     tohost->key = 'h';
-    tohost->description =
-        "Convert directory separators to native host format";
+    tohost->description = "Convert directory separators to native host format";
 
     tograss = G_define_flag();
     tograss->key = 'g';
@@ -62,8 +61,8 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     if (!tohost->answer && !tograss->answer)
-        G_fatal_error("One of flags -%c or -%c must be specified!",
-                      tohost->key, tograss->key);
+        G_fatal_error("One of flags -%c or -%c must be specified!", tohost->key,
+                      tograss->key);
 
     if (tohost->answer && tograss->answer)
         G_fatal_error("Only one of flags -%c or -%c can be specified!",
@@ -80,7 +79,6 @@ int main(int argc, char *argv[])
             G_convert_dirseps_from_host(pathstring);
 
         puts(pathstring);
-
     }
     else {
         char inchar;
@@ -99,12 +97,10 @@ int main(int argc, char *argv[])
             }
 
             putchar(inchar);
-
         }
     }
 
     fflush(stdout);
 
     exit(EXIT_SUCCESS);
-
 }

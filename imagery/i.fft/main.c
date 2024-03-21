@@ -1,11 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       i.fft
  * AUTHOR(S):    David B. Satnik and Ali R. Vali (original contributors),
  *               Markus Neteler <neteler itc.it>
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Brad Douglas <rez touchofmadness.com>, 
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Brad Douglas <rez touchofmadness.com>,
  *               Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      processes a single input raster map layer
  *               and constructs the real and imaginary Fourier
@@ -59,19 +58,19 @@ int main(int argc, char *argv[])
 {
     /* Global variable & function declarations */
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *orig, *real, *imag;
     } opt;
     const char *Cellmap_real, *Cellmap_imag;
     const char *Cellmap_orig;
-    int inputfd, realfd, imagfd;        /* the input and output file descriptors */
+    int inputfd, realfd, imagfd; /* the input and output file descriptors */
     struct Cell_head window;
     DCELL *cell_real, *cell_imag;
-    int rows, cols;             /* number of rows & columns */
-    long totsize;               /* Total number of data points */
-    double (*data)[2];          /* Data structure containing real & complex values of FFT */
-    int i, j;                   /* Loop control variables */
+    int rows, cols; /* number of rows & columns */
+    long totsize;   /* Total number of data points */
+    double(
+        *data)[2]; /* Data structure containing real & complex values of FFT */
+    int i, j;      /* Loop control variables */
 
     G_gisinit(argv[0]);
 
@@ -109,7 +108,7 @@ int main(int argc, char *argv[])
         G_warning(_("Raster MASK found, consider to remove "
                     "(see man-page). Will continue..."));
 
-    G_get_set_window(&window);  /* get the current window for later */
+    G_get_set_window(&window); /* get the current window for later */
 
     /* get the rows and columns in the current window */
     rows = Rast_window_rows();
@@ -126,7 +125,7 @@ int main(int argc, char *argv[])
     cell_real = Rast_allocate_d_buf();
     cell_imag = Rast_allocate_d_buf();
 
-#define C(i, j) ((i) * cols + (j))
+#define C(i, j) ((i)*cols + (j))
 
     /* Read in cell map values */
     G_message(_("Reading the raster map <%s>..."), Cellmap_orig);
@@ -151,17 +150,17 @@ int main(int argc, char *argv[])
     realfd = Rast_open_fp_new(Cellmap_real);
     imagfd = Rast_open_fp_new(Cellmap_imag);
 
-#define SWAP1(a, b)				\
-    do {					\
-	double temp = (a);			\
-	(a) = (b);				\
-	(b) = temp;				\
+#define SWAP1(a, b)        \
+    do {                   \
+        double temp = (a); \
+        (a) = (b);         \
+        (b) = temp;        \
     } while (0)
 
-#define SWAP2(a, b)				\
-    do {					\
-	SWAP1(data[(a)][0], data[(b)][0]);	\
-	SWAP1(data[(a)][1], data[(b)][1]);	\
+#define SWAP2(a, b)                        \
+    do {                                   \
+        SWAP1(data[(a)][0], data[(b)][0]); \
+        SWAP1(data[(a)][1], data[(b)][1]); \
     } while (0)
 
     /* rotate the data array for standard display */

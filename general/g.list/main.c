@@ -1,10 +1,9 @@
-
 /****************************************************************************
  *
  * MODULE:       g.list
  *
  * AUTHOR(S):    Huidae Cho
- * 		 Based on general/manage/cmd/list.c by Michael Shapiro.
+ *                  Based on general/manage/cmd/list.c by Michael Shapiro.
  *
  * PURPOSE:      Lists available GRASS data base files of the
  *               user-specified data type to standard output
@@ -29,8 +28,7 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *type;
         struct Option *pattern;
         struct Option *exclude;
@@ -39,8 +37,7 @@ int main(int argc, char *argv[])
         struct Option *region;
         struct Option *output;
     } opt;
-    struct
-    {
+    struct {
         struct Flag *ignorecase;
         struct Flag *regex;
         struct Flag *extended;
@@ -91,8 +88,7 @@ int main(int argc, char *argv[])
     opt.exclude->type = TYPE_STRING;
     opt.exclude->required = NO;
     opt.exclude->multiple = NO;
-    opt.exclude->description =
-        _("Map name exclusion pattern (default: none)");
+    opt.exclude->description = _("Map name exclusion pattern (default: none)");
     opt.exclude->guisection = _("Pattern");
 
     opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);
@@ -177,8 +173,8 @@ int main(int argc, char *argv[])
                 pattern = (char *)G_malloc(strlen(opt.pattern->answer) + 3);
                 sprintf(pattern, "{%s}", opt.pattern->answer);
 
-                filter = G_ls_glob_filter(pattern, 0,
-                                          (int)flag.ignorecase->answer);
+                filter =
+                    G_ls_glob_filter(pattern, 0, (int)flag.ignorecase->answer);
             }
             else
                 filter = G_ls_glob_filter(opt.pattern->answer, 0,
@@ -204,8 +200,8 @@ int main(int argc, char *argv[])
                 pattern = (char *)G_malloc(strlen(opt.exclude->answer) + 3);
                 sprintf(pattern, "{%s}", opt.exclude->answer);
 
-                exclude = G_ls_glob_filter(pattern, 1,
-                                           (int)flag.ignorecase->answer);
+                exclude =
+                    G_ls_glob_filter(pattern, 1, (int)flag.ignorecase->answer);
             }
             else
                 exclude = G_ls_glob_filter(opt.exclude->answer, 1,
@@ -276,7 +272,7 @@ int main(int argc, char *argv[])
     }
 
     use_pager = !opt.output->answer || !opt.output->answer[0] ||
-        strcmp(opt.output->answer, "-") == 0;
+                strcmp(opt.output->answer, "-") == 0;
 
     if (use_pager)
         fp = G_open_pager(&pager);
@@ -298,16 +294,16 @@ int main(int argc, char *argv[])
         if (flag.full->answer) {
             char lister[GPATH_MAX];
 
-            sprintf(lister, "%s/etc/lister/%s", G_gisbase(),
-                    elem->element[0]);
+            sprintf(lister, "%s/etc/lister/%s", G_gisbase(), elem->element[0]);
 
             G_debug(3, "lister CMD: %s", lister);
 
-            if (access(lister, X_OK) == 0) {    /* execute permission? */
+            if (access(lister, X_OK) == 0) { /* execute permission? */
                 const char **args;
                 const char *mapset;
 
-                for (j = 0; (mapset = G_get_mapset_name(j)); j++) ;
+                for (j = 0; (mapset = G_get_mapset_name(j)); j++)
+                    ;
                 args = (const char **)G_calloc(j + 2, sizeof(char *));
 
                 args[0] = lister;

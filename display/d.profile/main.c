@@ -1,13 +1,12 @@
-
 /****************************************************************************
  *
  * MODULE:       d.profile
  * AUTHOR(S):    Dave Johnson (original contributor)
  *               DBA Systems, Inc. 10560 Arrowhead Drive Fairfax, VA 22030
- *               Markus Neteler <neteler itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Huidae Cho <grass4u gmail.com>, 
- *               Eric G. Miller <egm2 jps.net>, 
+ *               Markus Neteler <neteler itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Eric G. Miller <egm2 jps.net>,
  *               Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      user chooses transects path, and profile of raster data drawn
  * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
@@ -17,7 +16,6 @@
  *               for details.
  *
  *****************************************************************************/
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,8 +28,7 @@
 static char *mapname;
 static double min, max;
 
-struct point
-{
+struct point {
     double x, y;
     double d;
 };
@@ -116,7 +113,7 @@ static void plot_axes(void)
     D_text(str);
 }
 
-static int get_cell(DCELL * result, int fd, double x, double y)
+static int get_cell(DCELL *result, int fd, double x, double y)
 {
     static DCELL *row1, *row2;
     static int cur_row = -1;
@@ -133,8 +130,8 @@ static int get_cell(DCELL * result, int fd, double x, double y)
     x -= col + 0.5;
     y -= row + 0.5;
 
-    if (row < 0 || row + 1 >= Rast_window_rows() ||
-        col < 0 || col + 1 >= Rast_window_cols()) {
+    if (row < 0 || row + 1 >= Rast_window_rows() || col < 0 ||
+        col + 1 >= Rast_window_cols()) {
         Rast_set_d_null_value(result, 1);
         return 0;
     }
@@ -167,9 +164,8 @@ static int get_cell(DCELL * result, int fd, double x, double y)
         return 0;
     }
 
-    *result = Rast_interp_bilinear(x, y,
-                                   row1[col], row1[col + 1],
-                                   row2[col], row2[col + 1]);
+    *result = Rast_interp_bilinear(x, y, row1[col], row1[col + 1], row2[col],
+                                   row2[col + 1]);
 
     return 1;
 }

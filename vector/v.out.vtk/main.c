@@ -1,7 +1,6 @@
-
- /***************************************************************************
+/***************************************************************************
  *
- * MODULE:     v.out.vtk  
+ * MODULE:     v.out.vtk
  * AUTHOR(S):  Soeren Gebbert
  *
  * PURPOSE:    v.out.vtk: writes ASCII VTK file
@@ -32,14 +31,13 @@ int main(int argc, char *argv[])
 {
     FILE *ascii;
     struct Option *input, *output, *type_opt, *dp_opt, *layer_opt, *scale;
-    struct Flag *coorcorr, *numatts, *labels;
+    struct Flag *coorcorr, *numatts /* , *labels */;
     int itype, *types = NULL, typenum = 0, dp, i;
     struct Map_info Map;
     struct bound_box box;
     struct GModule *module;
     int layer, level;
     double zscale = 1.0, llscale = 1.0;
-
 
     G_gisinit(argv[0]);
 
@@ -66,8 +64,7 @@ int main(int argc, char *argv[])
     dp_opt->key = "precision";
     dp_opt->type = TYPE_INTEGER;
     dp_opt->required = NO;
-    dp_opt->description =
-        _("Number of significant digits (floating point only)");
+    dp_opt->description = _("Number of significant digits");
 
     scale = G_define_option();
     scale->key = "zscale";
@@ -75,8 +72,6 @@ int main(int argc, char *argv[])
     scale->required = NO;
     scale->description = _("Scale factor for elevation");
     scale->answer = "1.0";
-
-
 
     coorcorr = G_define_flag();
     coorcorr->key = 'c';
@@ -88,11 +83,12 @@ int main(int argc, char *argv[])
     numatts->description =
         _("Export numeric attribute table fields as VTK scalar variables");
 
-    labels = NULL;              /* to avoid compiler warning about "unused variable" */
     /* not yet supported
+       labels = NULL;
        labels = G_define_flag();
        labels->key = 'l';
-       labels->description = _("Export text attribute table fields as VTK labels");
+       labels->description = _("Export text attribute table fields as VTK
+       labels");
      */
 
     if (G_parser(argc, argv))
@@ -150,18 +146,21 @@ int main(int argc, char *argv[])
     /*The precision of the output */
     if (dp_opt->answer) {
         if (sscanf(dp_opt->answer, "%d", &dp) != 1)
-            G_fatal_error(_("Failed to interpret 'dp' parameter as an integer"));
-        if (dp > 8 || dp < 0)
-            G_fatal_error(_("dp has to be from 0 to 8"));
+            G_fatal_error(
+                _("Failed to interpret 'dp' parameter as an integer"));
+        if (dp > 16 || dp < 0)
+            G_fatal_error(_("dp has to be from 0 to 16"));
     }
     else {
-        dp = 8;                 /*This value is taken from the lib settings in G_feature_easting */
+        dp = 8; /*This value is taken from the lib settings in G_feature_easting
+                 */
     }
 
     /*The Layer */
     if (layer_opt->answer) {
         if (sscanf(layer_opt->answer, "%d", &layer) != 1)
-            G_fatal_error(_("Failed to interpret 'layer' parameter as an integer"));
+            G_fatal_error(
+                _("Failed to interpret 'layer' parameter as an integer"));
     }
     else {
         layer = 1;
@@ -237,7 +236,8 @@ int main(int argc, char *argv[])
     write_vtk(ascii, &Map, layer, types, typenum, dp, zscale, numatts->answer,
               0);
     /* change to this, when labels get supported:
-       write_vtk(ascii, &Map, layer, types, typenum, dp, zscale, numatts->answer, labels->answer );
+       write_vtk(ascii, &Map, layer, types, typenum, dp, zscale,
+       numatts->answer, labels->answer );
      */
 
     if (ascii != NULL)

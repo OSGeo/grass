@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       i.rectify
@@ -6,14 +5,14 @@
  *               Luca Palmeri <palmeri ux1.unipd.it>
  *               Bill Hughes,
  *               Pierre de Mouveaux <pmx audiovu.com>,
- *               Bob Covill (original CMD version), 
- *               Markus Neteler <neteler itc.it>, 
- *               Bernhard Reiter <bernhard intevation.de>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
+ *               Bob Covill (original CMD version),
+ *               Markus Neteler <neteler itc.it>,
+ *               Bernhard Reiter <bernhard intevation.de>,
+ *               Glynn Clements <glynn gclements.plus.com>,
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Markus Metz
- * PURPOSE:      calculate a transformation matrix and then convert x,y cell 
- *               coordinates to standard map coordinates for each pixel in the 
+ * PURPOSE:      calculate a transformation matrix and then convert x,y cell
+ *               coordinates to standard map coordinates for each pixel in the
  *               image (control points can come from g.gui.gcp)
  * COPYRIGHT:    (C) 2002-2020 by the GRASS Development Team
  *
@@ -44,16 +43,15 @@ struct menu menu[] = {
     {p_bilinear_f, "linear_f", "linear interpolation with fallback"},
     {p_cubic_f, "cubic_f", "cubic convolution with fallback"},
     {p_lanczos_f, "lanczos_f", "lanczos filter with fallback"},
-    {NULL, NULL, NULL}
-};
+    {NULL, NULL, NULL}};
 
 static char *make_ipol_list(void);
 
 int main(int argc, char *argv[])
 {
     char extension[INAME_LEN];
-    int order;                  /* ADDED WITH CRS MODIFICATIONS */
-    char *ipolname;             /* name of interpolation method */
+    int order;      /* ADDED WITH CRS MODIFICATIONS */
+    char *ipolname; /* name of interpolation method */
     int method;
     char *seg_mb;
     int i, m, k = 0;
@@ -66,17 +64,16 @@ int main(int argc, char *argv[])
 
     struct Cell_head cellhd;
 
-    struct Option *grp,         /* imagery group */
-     *val,                      /* transformation order */
-     *ifile,                    /* input files */
-     *ext,                      /* extension */
-     *tres,                     /* target resolution */
-     *mem,                      /* amount of memory for cache */
-     *interpol;                 /* interpolation method:
-                                   nearest neighbor, bilinear, cubic */
+    struct Option *grp, /* imagery group */
+        *val,           /* transformation order */
+        *ifile,         /* input files */
+        *ext,           /* extension */
+        *tres,          /* target resolution */
+        *mem,           /* amount of memory for cache */
+        *interpol;      /* interpolation method:
+                           nearest neighbor, bilinear, cubic */
     struct Flag *c, *a, *t;
     struct GModule *module;
-
 
     G_gisinit(argv[0]);
 
@@ -129,8 +126,8 @@ int main(int argc, char *argv[])
 
     c = G_define_flag();
     c->key = 'c';
-    c->description =
-        _("Use current region settings in target location (def.=calculate smallest area)");
+    c->description = _("Use current region settings in target location "
+                       "(def.=calculate smallest area)");
 
     a = G_define_flag();
     a->key = 'a';
@@ -149,8 +146,8 @@ int main(int argc, char *argv[])
             break;
 
     if (!ipolname)
-        G_fatal_error(_("<%s=%s> unknown %s"),
-                      interpol->key, interpol->answer, interpol->key);
+        G_fatal_error(_("<%s=%s> unknown %s"), interpol->key, interpol->answer,
+                      interpol->key);
     interpolate = menu[method].method;
 
     G_strip(grp->answer);
@@ -165,16 +162,17 @@ int main(int argc, char *argv[])
     }
 
     if (!ifile->answers)
-        a->answer = 1;          /* force all */
+        a->answer = 1; /* force all */
 
     /* Find out how many files on command line */
     if (!a->answer) {
-        for (k = 0; ifile->answers[k]; k++) ;
+        for (k = 0; ifile->answers[k]; k++)
+            ;
     }
 
-    if (!t->answer && (order < 1 || order > 3)) /* MAXORDER in lib/imagery/georef.c */
-        G_fatal_error(_("Invalid order (%d); please enter 1 to %d"), order,
-                      3);
+    if (!t->answer &&
+        (order < 1 || order > 3)) /* MAXORDER in lib/imagery/georef.c */
+        G_fatal_error(_("Invalid order (%d); please enter 1 to %d"), order, 3);
     if (t->answer)
         order = 0;
 
@@ -187,13 +185,12 @@ int main(int argc, char *argv[])
     if (!I_get_group_ref(group.name, &group.ref)) {
         G_warning(_("Location: %s"), G_location());
         G_warning(_("Mapset: %s"), G_mapset());
-        G_fatal_error(_("Could not read REF file for group <%s>"),
-                      group.name);
+        G_fatal_error(_("Could not read REF file for group <%s>"), group.name);
     }
 
     if (group.ref.nfiles <= 0) {
-        G_important_message(_("Group <%s> contains no raster maps; run i.group"),
-                            grp->answer);
+        G_important_message(
+            _("Group <%s> contains no raster maps; run i.group"), grp->answer);
         exit(EXIT_SUCCESS);
     }
 
@@ -251,7 +248,7 @@ int main(int argc, char *argv[])
     get_target(group.name);
 
     /* Check the GRASS_OVERWRITE environment variable */
-    if ((overstr = getenv("GRASS_OVERWRITE")))  /* OK ? */
+    if ((overstr = getenv("GRASS_OVERWRITE"))) /* OK ? */
         target_overwrite = atoi(overstr);
 
     if (!target_overwrite) {
@@ -271,8 +268,8 @@ int main(int argc, char *argv[])
 
             if (G_find_raster2(result, G_mapset())) {
                 G_warning(_("The following raster map already exists in"));
-                G_warning(_("target LOCATION %s, MAPSET %s:"),
-                          G_location(), G_mapset());
+                G_warning(_("target LOCATION %s, MAPSET %s:"), G_location(),
+                          G_mapset());
                 G_warning("<%s>", result);
                 G_fatal_error(_("Orthorectification cancelled."));
             }
@@ -314,13 +311,12 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-
 void err_exit(struct Ref *ref, char *file, char *grp)
 {
     int n;
 
-    G_warning(_("Input raster map <%s> does not exist in group <%s>."),
-              file, grp);
+    G_warning(_("Input raster map <%s> does not exist in group <%s>."), file,
+              grp);
     G_message(_("Try:"));
 
     for (n = 0; n < ref->nfiles; n++)

@@ -19,52 +19,52 @@
 #
 ############################################################################
 
-#%module
-#% description: Corrects scanning distortions of a paper photo.
-#% keyword: imagery
-#% keyword: GUI
-#% keyword: aerial
-#% keyword: photo
-#% keyword: georectification
-#% keyword: geometry
-#% keyword: GCP
-#%end
+# %module
+# % description: Corrects scanning distortions of a paper photo.
+# % keyword: imagery
+# % keyword: GUI
+# % keyword: aerial
+# % keyword: photo
+# % keyword: georectification
+# % keyword: geometry
+# % keyword: GCP
+# %end
 
-#%option G_OPT_I_GROUP
-#% key: group
-#% required: yes
-#%end
+# %option G_OPT_I_GROUP
+# % key: group
+# % required: yes
+# %end
 
-#%option G_OPT_R_INPUT
-#% key: raster
-#% required: yes
-#%end
+# %option G_OPT_R_INPUT
+# % key: raster
+# % required: yes
+# %end
 
-#%option
-#% key: camera
-#% type: string
-#% label: The name of the camera (generated in i.ortho.camera)
-#% description: The name of the camera (generated in i.ortho.camera)
-#% required: yes
-#%end
+# %option
+# % key: camera
+# % type: string
+# % label: The name of the camera (generated in i.ortho.camera)
+# % description: The name of the camera (generated in i.ortho.camera)
+# % required: yes
+# %end
 
-#%option
-#% key: order
-#% type: string
-#% label: The rectification order (no of Fiducial=4 -> order=1, no of Fiducial=8 -> order=2)
-#% description: The rectification order (no of Fiducial=4 -> order=1, no of Fiducial=8 -> order=2)
-#% required: yes
-#% answer: 1
-#%end
+# %option
+# % key: order
+# % type: string
+# % label: The rectification order (no of Fiducial=4 -> order=1, no of Fiducial=8 -> order=2)
+# % description: The rectification order (no of Fiducial=4 -> order=1, no of Fiducial=8 -> order=2)
+# % required: yes
+# % answer: 1
+# %end
 
-#%option
-#% key: extension
-#% type: string
-#% label: The name of the output files extension (used in i.rectify)
-#% description: The name of the output files extension (used in i.rectify)
-#% required: yes
-#% answer: _ip2i_out
-#%end
+# %option
+# % key: extension
+# % type: string
+# % label: The name of the output files extension (used in i.rectify)
+# % description: The name of the output files extension (used in i.rectify)
+# % required: yes
+# % answer: _ip2i_out
+# %end
 
 """
 Module to run GCP management tool as stadalone application.

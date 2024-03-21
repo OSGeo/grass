@@ -1,4 +1,3 @@
-
 /*!
  * \file input2d.c
  *
@@ -17,7 +16,6 @@
  * for details.
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -28,7 +26,6 @@
 #include <grass/linkm.h>
 #include <grass/interpf.h>
 #include <grass/glocale.h>
-
 
 /*!
  * Creates a bitmap mask from given raster map
@@ -71,10 +68,9 @@ struct BM *IL_create_bitmask(struct interp_params *params)
             if (MASK)
                 Rast_get_c_row(MASKfd, MASK, i);
             for (j = 0; j < params->nsizc; j++) {
-                if ((cellmask &&
-                     (cellmask[j] == 0 || Rast_is_c_null_value(&cellmask[j])))
-                    || (MASK &&
-                        (MASK[j] == 0 || Rast_is_c_null_value(&MASK[j]))))
+                if ((cellmask && (cellmask[j] == 0 ||
+                                  Rast_is_c_null_value(&cellmask[j]))) ||
+                    (MASK && (MASK[j] == 0 || Rast_is_c_null_value(&MASK[j]))))
                     BM_set(bitmask, j, irev, 0);
                 else
                     BM_set(bitmask, j, irev, 1);
@@ -91,9 +87,8 @@ struct BM *IL_create_bitmask(struct interp_params *params)
     return bitmask;
 }
 
-int translate_quad(struct multtree *tree,
-                   double numberx,
-                   double numbery, double numberz, int n_leafs)
+int translate_quad(struct multtree *tree, double numberx, double numbery,
+                   double numberz, int n_leafs)
 {
     int total = 0, i, ii;
 
@@ -108,9 +103,8 @@ int translate_quad(struct multtree *tree,
         ((struct quaddata *)(tree->data))->xmax -= numberx;
         ((struct quaddata *)(tree->data))->ymax -= numbery;
         for (ii = 0; ii < n_leafs; ii++)
-            total +=
-                translate_quad(tree->leafs[ii], numberx, numbery, numberz,
-                               n_leafs);
+            total += translate_quad(tree->leafs[ii], numberx, numbery, numberz,
+                                    n_leafs);
     }
     else {
         ((struct quaddata *)(tree->data))->x_orig -= numberx;

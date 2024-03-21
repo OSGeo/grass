@@ -4,7 +4,7 @@
 
 Run locally using Docker:
 
-```
+```bash
 docker run --rm -e RUN_LOCAL=true -e VALIDATE_PERL=true -v $PWD:/tmp/lint github/super-linter
 ```
 

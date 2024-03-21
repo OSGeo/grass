@@ -27,8 +27,8 @@
    \return number of modified primitives
    \return -1 on error
  */
-int Vedit_modify_cats(struct Map_info *Map, struct ilist *List,
-                      int layer, int del, struct cat_list *Clist)
+int Vedit_modify_cats(struct Map_info *Map, struct ilist *List, int layer,
+                      int del, struct cat_list *Clist)
 {
     int i, j;
     struct line_cats *Cats;
@@ -60,14 +60,15 @@ int Vedit_modify_cats(struct Map_info *Map, struct ilist *List,
                 /* add new category */
                 if (!del) {
                     if (Vect_cat_set(Cats, layer, cat) < 1) {
-                        G_warning(_("Unable to set category %d for (feature id %d)"),
-                                  cat, line);
+                        G_warning(
+                            _("Unable to set category %d for (feature id %d)"),
+                            cat, line);
                     }
                     else {
                         rewrite = 1;
                     }
                 }
-                else {          /* delete old category */
+                else { /* delete old category */
                     if (Vect_field_cat_del(Cats, layer, cat) > 0) {
                         rewrite = 1;
                     }
@@ -83,7 +84,6 @@ int Vedit_modify_cats(struct Map_info *Map, struct ilist *List,
         }
 
         nlines_modified++;
-
     }
 
     /* destroy structures */

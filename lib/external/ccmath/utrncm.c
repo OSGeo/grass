@@ -5,15 +5,17 @@
  *  public license (LGPL). ( See the lgpl.license file for details.)
  * ------------------------------------------------------------------------
  */
+
 #include <stdlib.h>
 #include "ccmath.h"
-void utrncm(Cpx * cm, Cpx * a, Cpx * b, int n)
+
+void utrncm(Cpx *cm, Cpx *a, Cpx *b, int n)
 {
     Cpx z, *q0, *p, *s, *t;
 
     int i, j, k;
 
-    q0 = (Cpx *) calloc(n, sizeof(Cpx));
+    q0 = (Cpx *)calloc(n, sizeof(Cpx));
     for (i = 0; i < n; ++i, ++cm) {
         for (j = 0, t = b; j < n; ++j) {
             z.re = z.im = 0.;

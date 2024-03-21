@@ -1,5 +1,4 @@
-/*
- ****************************************************************************
+/*****************************************************************************
  *
  * MODULE:       d.erase
  * AUTHOR(S):    James Westervelt - USA CERL
@@ -29,8 +28,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("display"));
     G_add_keyword(_("graphics"));
     G_add_keyword(_("monitors"));
-    module->description =
-        _("Erases the contents of the active graphics display frame with user defined color.");
+    module->description = _("Erases the contents of the active graphics "
+                            "display frame with user defined color.");
 
     color = G_define_standard_option(G_OPT_C);
     color->key = "bgcolor";

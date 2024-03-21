@@ -1,10 +1,10 @@
 #include "mat.h"
 
 /*
- * zero: returns arg2 zero filled 
+ * zero: returns arg2 zero filled
  */
 
-int zero(MATRIX * a)
+int zero(MATRIX *a)
 {
     register int i, j;
 

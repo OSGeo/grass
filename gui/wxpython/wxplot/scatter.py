@@ -132,7 +132,7 @@ class ScatterFrame(BasePlotFrame):
         dlg.Destroy()
 
     def SetupScatterplot(self):
-        """Build data list for ploting each raster"""
+        """Build data list for plotting each raster"""
 
         #
         # initialize title string

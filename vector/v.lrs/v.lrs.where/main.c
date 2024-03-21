@@ -3,7 +3,7 @@
  *                using linear reference system
  */
 
- /******************************************************************************
+/******************************************************************************
  * Copyright (c) 2004, Radim Blazek (blazek@itc.it)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -115,10 +115,9 @@ int main(int argc, char **argv)
     LPoints = Vect_new_line_struct();
     PPoints = Vect_new_line_struct();
 
-
     lfield = atoi(lfield_opt->answer);
     pfield = atoi(pfield_opt->answer);
-    multip = 1000;              /* Number of map units per MP unit */
+    multip = 1000; /* Number of map units per MP unit */
     thresh = atof(thresh_opt->answer);
 
     /* Open input lines */
@@ -137,8 +136,7 @@ int main(int argc, char **argv)
 
     Vect_set_open_level(2);
     if (Vect_open_old(&PMap, points_opt->answer, mapset) < 0)
-        G_fatal_error(_("Unable to open vector map <%s>"),
-                      points_opt->answer);
+        G_fatal_error(_("Unable to open vector map <%s>"), points_opt->answer);
 
     db_init_handle(&rshandle);
     db_init_string(&rsstmt);
@@ -165,9 +163,8 @@ int main(int argc, char **argv)
             continue;
         n_points++;
 
-        nearest =
-            Vect_find_line(&LMap, PPoints->x[0], PPoints->y[0], 0.0, GV_LINE,
-                           thresh, 0, 0);
+        nearest = Vect_find_line(&LMap, PPoints->x[0], PPoints->y[0], 0.0,
+                                 GV_LINE, thresh, 0, 0);
 
         fprintf(stdout, "%d", pcat);
 
@@ -181,17 +178,16 @@ int main(int argc, char **argv)
         Vect_read_line(&LMap, LPoints, LCats, nearest);
         Vect_cat_get(LCats, lfield, &lcat);
 
-        Vect_line_distance(LPoints, PPoints->x[0], PPoints->y[0], 0.0, 0,
-                           NULL, NULL, NULL, NULL, NULL, &along);
+        Vect_line_distance(LPoints, PPoints->x[0], PPoints->y[0], 0.0, 0, NULL,
+                           NULL, NULL, NULL, NULL, &along);
 
-        G_debug(3, "  nearest = %d lcat = %d along = %f", nearest, lcat,
-                along);
+        G_debug(3, "  nearest = %d lcat = %d along = %f", nearest, lcat, along);
 
         if (lcat >= 0) {
             ret = LR_get_milepost(rsdriver, table_opt->answer, "lcat", "lid",
                                   "start_map", "end_map", "start_mp",
-                                  "start_off", "end_mp", "end_off", lcat,
-                                  along, multip, &lid, &mpost, &offset);
+                                  "start_off", "end_mp", "end_off", lcat, along,
+                                  multip, &lid, &mpost, &offset);
         }
         else {
             ret = 0;
@@ -220,21 +216,23 @@ int main(int argc, char **argv)
     Vect_close(&LMap);
     Vect_close(&PMap);
 
-    G_message(n_("[%d] point read from input",
-                 "[%d] points read from input", n_points), n_points);
-    G_message(n_("[%d] position found",
-                 "[%d] positions found", n_found), n_found);
+    G_message(n_("[%d] point read from input", "[%d] points read from input",
+                 n_points),
+              n_points);
+    G_message(n_("[%d] position found", "[%d] positions found", n_found),
+              n_found);
     if (n_outside)
         G_message(n_("[%d] point outside threshold",
-                     "[%d] points outside threshold", n_outside), n_outside);
+                     "[%d] points outside threshold", n_outside),
+                  n_outside);
     if (n_no_record)
         G_message(n_("[%d] point - no record found",
-                     "[%d] points - no record found",
-                     n_no_record), n_no_record);
+                     "[%d] points - no record found", n_no_record),
+                  n_no_record);
     if (n_many_records)
         G_message(n_("[%d] point - too many records found",
-                     "[%d] points - too many records found",
-                     n_many_records), n_many_records);
+                     "[%d] points - too many records found", n_many_records),
+                  n_many_records);
 
     exit(EXIT_SUCCESS);
 }

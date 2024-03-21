@@ -1,13 +1,12 @@
-
 /***************************************************************************/
 
 /***                                                                     ***/
 
 /***                             process()                               ***/
 
-/***          Reads in a raster maps row by row for processing          ***/
+/***          Reads in a raster maps row by row for processing           ***/
 
-/***                  Jo Wood, V1.0, 13th September, 1994		 ***/
+/***                  Jo Wood, V1.0, 13th September, 1994                ***/
 
 /***                                                                     ***/
 
@@ -27,12 +26,11 @@ int process(void)
 
     /*-------------------------------------------------------------------*/
 
-    int nrows,                  /* Will store the current number of     */
-      ncols,                    /* rows and columns in the raster.      */
-      nn;                       /* Size of raster to nearest power of 2. */
+    int nrows, /* Will store the current number of     */
+        ncols, /* rows and columns in the raster.      */
+        nn;    /* Size of raster to nearest power of 2. */
 
-    double *data[2];            /* Array holding complex data.          */
-
+    double *data[2]; /* Array holding complex data.          */
 
     /*------------------------------------------------------------------*/
     /*                       GET DETAILS OF INPUT RASTER                */
@@ -42,7 +40,7 @@ int process(void)
     nrows = Rast_window_rows(); /* Find out the number of rows and */
     ncols = Rast_window_cols(); /* columns of the raster view.     */
 
-    nn = G_math_max_pow2(MAX(nrows, ncols));    /* Find smallest power of 2 that   */
+    nn = G_math_max_pow2(MAX(nrows, ncols)); /* Find smallest power of 2 that */
     /* largest side of raster will fit. */
 
     /*------------------------------------------------------------------*/

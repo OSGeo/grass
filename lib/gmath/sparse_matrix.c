@@ -1,21 +1,21 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass numerical math interface
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> googlemail <dot> com
-*               
-* PURPOSE:      linear equation system solvers
-* 		part of the gmath library
-*               
-* COPYRIGHT:    (C) 2010 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass numerical math interface
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> googlemail <dot> com
+ *
+ * PURPOSE:      linear equation system solvers
+ *                 part of the gmath library
+ *
+ * COPYRIGHT:    (C) 2010 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
+#include <assert.h>
 #include <stdlib.h>
 #include <math.h>
 #include <grass/gmath.h>
@@ -27,18 +27,19 @@
  * Return 1 for success and -1 for failure
  *
  * \param Asp G_math_spvector **
- * \param spvector G_math_spvector * 
+ * \param spvector G_math_spvector *
  * \param row int
  * \return int 1 success, -1 failure
  *
  * */
-int G_math_add_spvector(G_math_spvector ** Asp, G_math_spvector * spvector,
+int G_math_add_spvector(G_math_spvector **Asp, G_math_spvector *spvector,
                         int row)
 {
     if (Asp != NULL) {
         G_debug(5,
-                "Add sparse vector %p to the sparse linear equation system at row %i\n",
-                spvector, row);
+                "Add sparse vector %p to the sparse linear equation system at "
+                "row %i\n",
+                (void *)spvector, row);
         Asp[row] = spvector;
     }
     else {
@@ -61,7 +62,7 @@ G_math_spvector **G_math_alloc_spmatrix(int rows)
 
     G_debug(4, "Allocate memory for a sparse matrix with %i rows\n", rows);
 
-    spmatrix = (G_math_spvector **) G_calloc(rows, sizeof(G_math_spvector *));
+    spmatrix = (G_math_spvector **)G_calloc(rows, sizeof(G_math_spvector *));
 
     return spmatrix;
 }
@@ -79,7 +80,7 @@ G_math_spvector *G_math_alloc_spvector(int cols)
 
     G_debug(4, "Allocate memory for a sparse vector with %i cols\n", cols);
 
-    spvector = (G_math_spvector *) G_calloc(1, sizeof(G_math_spvector));
+    spvector = (G_math_spvector *)G_calloc(1, sizeof(G_math_spvector));
 
     spvector->cols = cols;
     spvector->index = (unsigned int *)G_calloc(cols, sizeof(unsigned int));
@@ -95,7 +96,7 @@ G_math_spvector *G_math_alloc_spvector(int cols)
  * \return void
  *
  * */
-void G_math_free_spvector(G_math_spvector * spvector)
+void G_math_free_spvector(G_math_spvector *spvector)
 {
     if (spvector) {
         if (spvector->values)
@@ -118,7 +119,7 @@ void G_math_free_spvector(G_math_spvector * spvector)
  * \return void
  *
  * */
-void G_math_free_spmatrix(G_math_spvector ** Asp, int rows)
+void G_math_free_spmatrix(G_math_spvector **Asp, int rows)
 {
     int i;
 
@@ -141,17 +142,18 @@ void G_math_free_spmatrix(G_math_spvector ** Asp, int rows)
  * \param Asp (G_math_spvector **)
  * \param rows (int)
  * \return void
- *  
+ *
  * */
-void G_math_print_spmatrix(G_math_spvector ** Asp, int rows)
+void G_math_print_spmatrix(G_math_spvector **Asp, int rows)
 {
-    int i, j, k, out;
+    int i, j, out;
+    unsigned int k;
 
     for (i = 0; i < rows; i++) {
         for (j = 0; j < rows; j++) {
             out = 0;
             for (k = 0; k < Asp[i]->cols; k++) {
-                if (Asp[i]->index[k] == j) {
+                if (Asp[i]->index[k] == (unsigned int)j) {
                     fprintf(stdout, "%4.5f ", Asp[i]->values[k]);
                     out = 1;
                 }
@@ -165,26 +167,27 @@ void G_math_print_spmatrix(G_math_spvector ** Asp, int rows)
     return;
 }
 
-
 /*!
  * \brief Convert a sparse matrix into a quadratic matrix
  *
- * This function is multi-threaded with OpenMP. It creates its own parallel OpenMP region.
+ * This function is multi-threaded with OpenMP. It creates its own parallel
+ * OpenMP region.
  *
- * \param Asp (G_math_spvector **) 
+ * \param Asp (G_math_spvector **)
  * \param rows (int)
  * \return (double **)
  *
  * */
-double **G_math_Asp_to_A(G_math_spvector ** Asp, int rows)
+double **G_math_Asp_to_A(G_math_spvector **Asp, int rows)
 {
-    int i, j;
+    int i;
+    unsigned int j;
 
     double **A = NULL;
 
     A = G_alloc_matrix(rows, rows);
 
-#pragma omp parallel for schedule (static) private(i, j)
+#pragma omp parallel for schedule(static) private(i, j)
     for (i = 0; i < rows; i++) {
         for (j = 0; j < Asp[i]->cols; j++) {
             A[i][Asp[i]->index[j]] = Asp[i]->values[j];
@@ -212,22 +215,24 @@ double **G_math_Asp_to_A(G_math_spvector ** Asp, int rows)
  5 0 0
 
  \endverbatim
- * \param Asp (G_math_spvector **) 
+ * \param Asp (G_math_spvector **)
  * \param rows (int)
  * \param bandwidth (int)
  * \return (double **) the resulting ymmetric band matrix [rows][bandwidth]
  *
  * */
-double **G_math_Asp_to_sband_matrix(G_math_spvector ** Asp, int rows,
+double **G_math_Asp_to_sband_matrix(G_math_spvector **Asp, int rows,
                                     int bandwidth)
 {
-    int i, j;
+    unsigned int i, j;
 
     double **A = NULL;
 
+    assert(rows >= 0 && bandwidth >= 0);
+
     A = G_alloc_matrix(rows, bandwidth);
 
-    for (i = 0; i < rows; i++) {
+    for (i = 0; i < (unsigned int)rows; i++) {
         for (j = 0; j < Asp[i]->cols; j++) {
             if (Asp[i]->index[j] == i) {
                 A[i][0] = Asp[i]->values[j];
@@ -240,13 +245,13 @@ double **G_math_Asp_to_sband_matrix(G_math_spvector ** Asp, int rows,
     return A;
 }
 
-
 /*!
  * \brief Convert a quadratic matrix into a sparse matrix
  *
- * This function is multi-threaded with OpenMP. It creates its own parallel OpenMP region.
+ * This function is multi-threaded with OpenMP. It creates its own parallel
+ * OpenMP region.
  *
- * \param A (double **) 
+ * \param A (double **)
  * \param rows (int)
  * \param epsilon (double) -- non-zero values are greater then epsilon
  * \return (G_math_spvector **)
@@ -262,7 +267,7 @@ G_math_spvector **G_math_A_to_Asp(double **A, int rows, double epsilon)
 
     Asp = G_math_alloc_spmatrix(rows);
 
-#pragma omp parallel for schedule (static) private(i, j, nonull, count)
+#pragma omp parallel for schedule(static) private(i, j, nonull, count)
     for (i = 0; i < rows; i++) {
         nonull = 0;
         /*Count the number of non zero entries */
@@ -287,14 +292,12 @@ G_math_spvector **G_math_A_to_Asp(double **A, int rows, double epsilon)
     return Asp;
 }
 
-
-
 /*!
  * \brief Convert a symmetric band matrix into a sparse matrix
  *
  * WARNING:
  * This function is experimental, do not use.
- * Only the upper triangle matrix of the band strcuture is copied.
+ * Only the upper triangle matrix of the band structure is copied.
  *
  * \param A (double **) the symmetric band matrix
  * \param rows (int)
@@ -346,30 +349,31 @@ G_math_spvector **G_math_sband_matrix_to_Asp(double **A, int rows,
     return Asp;
 }
 
-
 /*!
- * \brief Compute the matrix - vector product  
+ * \brief Compute the matrix - vector product
  * of sparse matrix **Asp and vector x.
  *
- * This function is multi-threaded with OpenMP and can be called within a parallel OpenMP region.
+ * This function is multi-threaded with OpenMP and can be called within a
+ * parallel OpenMP region.
  *
  * y = A * x
  *
  *
- * \param Asp (G_math_spvector **) 
+ * \param Asp (G_math_spvector **)
  * \param x (double) *)
  * \param y (double * )
  * \param rows (int)
  * \return (void)
  *
  * */
-void G_math_Ax_sparse(G_math_spvector ** Asp, double *x, double *y, int rows)
+void G_math_Ax_sparse(G_math_spvector **Asp, double *x, double *y, int rows)
 {
-    int i, j;
+    int i;
+    unsigned int j;
 
     double tmp;
 
-#pragma omp for schedule (static) private(i, j, tmp)
+#pragma omp for schedule(static) private(i, j, tmp)
     for (i = 0; i < rows; i++) {
         tmp = 0;
         for (j = 0; j < Asp[i]->cols; j++) {

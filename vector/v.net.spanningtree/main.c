@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.net.spanningtree
@@ -28,7 +27,7 @@ int main(int argc, char *argv[])
     struct Map_info In, Out;
     static struct line_pnts *Points;
     struct line_cats *Cats;
-    struct GModule *module;     /* GRASS module for parsing arguments */
+    struct GModule *module; /* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
     struct Option *afield_opt, *nfield_opt, *afcol, *ncol;
     struct Flag *geo_f;
@@ -39,15 +38,15 @@ int main(int argc, char *argv[])
     struct ilist *tree_list;
 
     /* initialize GIS environment */
-    G_gisinit(argv[0]);         /* reads grass env, stores program name to G_program_name() */
+    G_gisinit(
+        argv[0]); /* reads grass env, stores program name to G_program_name() */
 
     /* initialize module */
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("network"));
     G_add_keyword(_("spanning tree"));
-    module->description =
-        _("Computes minimum spanning tree for the network.");
+    module->description = _("Computes minimum spanning tree for the network.");
 
     /* Define the different options as defined in gis.h */
     map_in = G_define_standard_option(G_OPT_V_INPUT);
@@ -92,8 +91,7 @@ int main(int argc, char *argv[])
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    Vect_check_input_output_name(map_in->answer, map_out->answer,
-                                 G_FATAL_EXIT);
+    Vect_check_input_output_name(map_in->answer, map_out->answer, G_FATAL_EXIT);
 
     Vect_set_open_level(2);
 
@@ -119,9 +117,8 @@ int main(int argc, char *argv[])
     afield = Vect_get_field_number(&In, afield_opt->answer);
     nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
-    if (0 !=
-        Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
-                             NULL, ncol->answer, geo, 0))
+    if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
+                                  NULL, ncol->answer, geo, 0))
         G_fatal_error(_("Unable to build graph for vector map <%s>"),
                       Vect_get_full_name(&In));
 
@@ -135,8 +132,7 @@ int main(int argc, char *argv[])
     edges = NetA_spanning_tree(graph, tree_list);
     G_debug(3, "Edges: %d", edges);
     for (i = 0; i < edges; i++) {
-        int type =
-            Vect_read_line(&In, Points, Cats, abs(tree_list->value[i]));
+        int type = Vect_read_line(&In, Points, Cats, abs(tree_list->value[i]));
         Vect_write_line(&Out, type, Points, Cats);
     }
     Vect_destroy_list(tree_list);

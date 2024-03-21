@@ -7,8 +7,8 @@
 
    (C) 2001-2009 by the GRASS Development Team
 
-   This program is free software under the 
-   GNU General Public License (>=v2). 
+   This program is free software under the
+   GNU General Public License (>=v2).
    Read the file COPYING that comes with GRASS
    for details.
 
@@ -72,16 +72,16 @@ void Vect_chtype_bridges(struct Map_info *Map, struct Map_info *Err,
     remove_bridges(Map, 1, Err, lines_changed, bridges_changed);
 }
 
-/* 
+/*
    Called by Vect_remove_bridges() and Vect_chtype_bridges():
    chtype = 0 -> works like Vect_remove_bridges()
    chtype = 1 -> works like Vect_chtype_bridges()
 
-   Algorithm: Go thorough all lines, 
+   Algorithm: Go thorough all lines,
    if both sides of the line have left and side 0 (candidate) do this check:
-   follow adjacent lines in one direction (nearest to the right at the end node),
-   if we reach this line again without dangle in the way, but with this line 
-   traversed from other side it is a bridge.
+   follow adjacent lines in one direction (nearest to the right at the end
+   node), if we reach this line again without dangle in the way, but with this
+   line traversed from other side it is a bridge.
 
    List of all lines in chain is created during the cycle.
  */
@@ -90,8 +90,8 @@ void remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err,
 {
     int type, nlines, line, *bline;
     int left, right, node1, node2, current_line, next_line, abs_line;
-    int bridges_removed = 0;    /* number of removed bridges */
-    int lines_removed = 0;      /* number of lines removed */
+    int bridges_removed = 0; /* number of removed bridges */
+    int lines_removed = 0;   /* number of lines removed */
     struct Plus_head *Plus;
     struct line_pnts *Points;
     struct line_cats *Cats;
@@ -124,16 +124,16 @@ void remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err,
         Vect_get_line_areas(Map, line, &left, &right);
 
         if (left != 0 || right != 0)
-            continue;           /* Cannot be bridge */
+            continue; /* Cannot be bridge */
 
         G_debug(2, "line %d - bridge candidate", line);
 
         Vect_get_line_nodes(Map, line, &node1, &node2);
 
         if (abs(node1) == abs(node2))
-            continue;           /* either zero length or loop -> cannot be a bridge */
+            continue; /* either zero length or loop -> cannot be a bridge */
 
-        current_line = -line;   /* we start with negative (go forward, node2 ) */
+        current_line = -line; /* we start with negative (go forward, node2 ) */
 
         G_debug(3, "current line: %d", line);
         dangle = 0;
@@ -142,9 +142,8 @@ void remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err,
         rbtree_clear(BridgeTree);
 
         while (1) {
-            next_line =
-                dig_angle_next_line(Plus, current_line, GV_RIGHT,
-                                    GV_BOUNDARY, NULL);
+            next_line = dig_angle_next_line(Plus, current_line, GV_RIGHT,
+                                            GV_BOUNDARY, NULL);
             abs_line = abs(next_line);
 
             /* Add this line to the list */
@@ -162,18 +161,19 @@ void remove_bridges(struct Map_info *Map, int chtype, struct Map_info *Err,
                 dangle = 1;
                 break;
             }
-            if (abs(next_line) == line) {       /* start line reached */
+            if (abs(next_line) == line) { /* start line reached */
                 /* which side */
-                if (next_line < 0) {    /* other side (connected by node 2) */
+                if (next_line < 0) { /* other side (connected by node 2) */
                     G_debug(5, "  other side reached");
                     other_side = 1;
                 }
-                else {          /* start side */
+                else { /* start side */
                     break;
                 }
             }
 
-            current_line = -next_line;  /* change the sign to look at the next node in following cycle */
+            current_line = -next_line; /* change the sign to look at the next
+                                          node in following cycle */
         }
 
         if (!dangle && other_side) {

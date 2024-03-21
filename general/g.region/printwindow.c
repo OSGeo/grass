@@ -5,8 +5,8 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-#define DEG2RAD(a) ((a) * M_PI / 180.0)
-#define RAD2DEG(a) ((a) * 180.0 / M_PI)
+#define DEG2RAD(a) ((a)*M_PI / 180.0)
+#define RAD2DEG(a) ((a)*180.0 / M_PI)
 
 static double get_shift(double east)
 {
@@ -34,8 +34,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
     double ew_dist1, ew_dist2, ns_dist1, ns_dist2;
     double longitude, latitude;
 
-    if (print_flag & PRINT_SH)
+    if (print_flag & PRINT_SH) {
         x = G_projection() == PROJECTION_LL ? -1 : 0;
+        if (flat_flag)
+            sep = " ";
+    }
     else
         x = window->proj;
 
@@ -86,8 +89,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
         G_trim_decimal(nsres);
         sprintf(nsres3, "%.8f", ((ns_dist1 + ns_dist2) / 2) / window->rows3);
         G_trim_decimal(nsres3);
-        sprintf(tbres, "%.8f",
-                (window->top - window->bottom) / window->depths);
+        sprintf(tbres, "%.8f", (window->top - window->bottom) / window->depths);
         G_trim_decimal(tbres);
     }
 
@@ -98,12 +100,12 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             prj = "** unknown **";
 
         if (print_flag & PRINT_SH) {
-            fprintf(stdout, "projection=%d\n", window->proj);
-            fprintf(stdout, "zone=%d\n", window->zone);
+            fprintf(stdout, "projection=%d%s", window->proj, sep);
+            fprintf(stdout, "zone=%d%s", window->zone, sep);
         }
         else {
-            fprintf(stdout, "%-*s %d (%s)\n", width, "projection:",
-                    window->proj, prj);
+            fprintf(stdout, "%-*s %d (%s)\n", width,
+                    "projection:", window->proj, prj);
             fprintf(stdout, "%-*s %d\n", width, "zone:", window->zone);
         }
 
@@ -123,13 +125,13 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                if (print_flag & PRINT_SH)
                {
                if (datum[0] != '*')
-               fprintf(stdout, "datum=%s\n", datum);
+               fprintf(stdout, "datum=%s%s", datum, sep);
                else
-               fprintf(stdout, "datum=wgs84\n");
+               fprintf(stdout, "datum=wgs84%s", sep);
                if (ellps[0] != '*')
-               fprintf(stdout, "ellipsoid=%s\n", ellps);
+               fprintf(stdout, "ellipsoid=%s%s", ellps, sep);
                else
-               fprintf(stdout, "ellipsoid=wgs84\n");
+               fprintf(stdout, "ellipsoid=wgs84%s", sep);
                }
                else
                {
@@ -145,8 +147,6 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
         }
 
         if (print_flag & PRINT_SH) {
-            if (flat_flag)
-                sep = " ";
             fprintf(stdout, "n=%s%s", north, sep);
             fprintf(stdout, "s=%s%s", south, sep);
             fprintf(stdout, "w=%s%s", west, sep);
@@ -178,7 +178,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             if (print_flag & PRINT_3D)
                 fprintf(stdout, "cells3=%lld%s",
                         (long long)window->rows3 * window->cols3 *
-                        window->depths, sep);
+                            window->depths,
+                        sep);
 #else
             fprintf(stdout, "cells=%ld%s", (long)window->rows * window->cols,
                     sep);
@@ -187,8 +188,6 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                         (long)window->rows3 * window->cols3 * window->depths,
                         sep);
 #endif
-            if (flat_flag)
-                fprintf(stdout, "\n");
         }
         else {
             fprintf(stdout, "%-*s %s\n", width, "north:", north);
@@ -197,8 +196,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             fprintf(stdout, "%-*s %s\n", width, "east:", east);
             if (print_flag & PRINT_3D) {
                 fprintf(stdout, "%-*s %.8f\n", width, "top:", window->top);
-                fprintf(stdout, "%-*s %.8f\n", width, "bottom:",
-                        window->bottom);
+                fprintf(stdout, "%-*s %.8f\n", width,
+                        "bottom:", window->bottom);
             }
             fprintf(stdout, "%-*s %s\n", width, "nsres:", nsres);
             if (print_flag & PRINT_3D) {
@@ -217,19 +216,18 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             fprintf(stdout, "%-*s %d\n", width, "cols:", window->cols);
             if (print_flag & PRINT_3D) {
                 fprintf(stdout, "%-*s %d\n", width, "cols3:", window->cols3);
-                fprintf(stdout, "%-*s %d\n", width, "depths:",
-                        window->depths);
+                fprintf(stdout, "%-*s %d\n", width, "depths:", window->depths);
             }
 #ifdef HAVE_LONG_LONG_INT
-            fprintf(stdout, "%-*s %lld\n", width, "cells:",
-                    (long long)window->rows * window->cols);
+            fprintf(stdout, "%-*s %lld\n", width,
+                    "cells:", (long long)window->rows * window->cols);
             if (print_flag & PRINT_3D)
                 fprintf(stdout, "%-*s %lld\n", width, "cells3:",
                         (long long)window->rows3 * window->cols3 *
-                        window->depths);
+                            window->depths);
 #else
-            fprintf(stdout, "%-*s %ld\n", width, "cells:",
-                    (long)window->rows * window->cols);
+            fprintf(stdout, "%-*s %ld\n", width,
+                    "cells:", (long)window->rows * window->cols);
             if (print_flag & PRINT_3D)
                 fprintf(stdout, "%-*s %ld\n", width, "cells3:",
                         (long)window->rows3 * window->cols3 * window->depths);
@@ -249,13 +247,16 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
             /* read current projection info */
             if ((in_proj_info = G_get_projinfo()) == NULL)
-                G_fatal_error(_("Can't get projection info of current location"));
+                G_fatal_error(
+                    _("Can't get projection info of current location"));
 
             if ((in_unit_info = G_get_projunits()) == NULL)
-                G_fatal_error(_("Can't get projection units of current location"));
+                G_fatal_error(
+                    _("Can't get projection units of current location"));
 
             if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
-                G_fatal_error(_("Can't get projection key values of current location"));
+                G_fatal_error(
+                    _("Can't get projection key values of current location"));
 
             G_free_key_value(in_proj_info);
             G_free_key_value(in_unit_info);
@@ -264,7 +265,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             tproj.def = NULL;
 
             if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
-                G_fatal_error(_("Unable to initialize coordinate transformation"));
+                G_fatal_error(
+                    _("Unable to initialize coordinate transformation"));
 
             /*
              *  1 ------ 2
@@ -276,10 +278,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             latitude = window->north;
             longitude = window->west;
             /* get lat/long w/ same datum/ellipsoid as input */
-            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                              &longitude, &latitude, NULL) < 0)
-                G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
-                              "GPJ_transform()");
+            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
+                              &latitude, NULL) < 0)
+                G_fatal_error(
+                    _("Error in %s (projection of input coordinate pair)"),
+                    "GPJ_transform()");
 
             lo1 = longitude;
             la1 = latitude;
@@ -287,10 +290,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             latitude = window->north;
             longitude = window->east;
             /* get lat/long w/ same datum/ellipsoid as input */
-            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                              &longitude, &latitude, NULL) < 0)
-                G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
-                              "GPJ_transform()");
+            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
+                              &latitude, NULL) < 0)
+                G_fatal_error(
+                    _("Error in %s (projection of input coordinate pair)"),
+                    "GPJ_transform()");
 
             lo2 = longitude;
             la2 = latitude;
@@ -298,10 +302,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             latitude = window->south;
             longitude = window->east;
             /* get lat/long w/ same datum/ellipsoid as input */
-            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                              &longitude, &latitude, NULL) < 0)
-                G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
-                              "GPJ_transform()");
+            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
+                              &latitude, NULL) < 0)
+                G_fatal_error(
+                    _("Error in %s (projection of input coordinate pair)"),
+                    "GPJ_transform()");
 
             lo3 = longitude;
             la3 = latitude;
@@ -309,10 +314,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             latitude = window->south;
             longitude = window->west;
             /* get lat/long w/ same datum/ellipsoid as input */
-            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                              &longitude, &latitude, NULL) < 0)
-                G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
-                              "GPJ_transform()");
+            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
+                              &latitude, NULL) < 0)
+                G_fatal_error(
+                    _("Error in %s (projection of input coordinate pair)"),
+                    "GPJ_transform()");
 
             lo4 = longitude;
             la4 = latitude;
@@ -322,98 +328,100 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             latitude = (window->north + window->south) / 2.;
             longitude = (window->west + window->east) / 2.;
             /* get lat/long w/ same datum/ellipsoid as input */
-            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                              &longitude, &latitude, NULL) < 0)
-                G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
-                              "GPJ_transform()");
+            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
+                              &latitude, NULL) < 0)
+                G_fatal_error(
+                    _("Error in %s (projection of input coordinate pair)"),
+                    "GPJ_transform()");
 
             loc = longitude;
             lac = latitude;
 
             if (print_flag & PRINT_SH) {
-                fprintf(stdout, "nw_long=%.8f\nnw_lat=%.8f\n", lo1, la1);
-                fprintf(stdout, "ne_long=%.8f\nne_lat=%.8f\n", lo2, la2);
-                fprintf(stdout, "se_long=%.8f\nse_lat=%.8f\n", lo3, la3);
-                fprintf(stdout, "sw_long=%.8f\nsw_lat=%.8f\n", lo4, la4);
-                fprintf(stdout, "center_long=%.8f\n", loc);
-                fprintf(stdout, "center_lat=%.8f\n", lac);
-
+                fprintf(stdout, "nw_long=%.8f%snw_lat=%.8f%s", lo1, sep, la1,
+                        sep);
+                fprintf(stdout, "ne_long=%.8f%sne_lat=%.8f%s", lo2, sep, la2,
+                        sep);
+                fprintf(stdout, "se_long=%.8f%sse_lat=%.8f%s", lo3, sep, la3,
+                        sep);
+                fprintf(stdout, "sw_long=%.8f%ssw_lat=%.8f%s", lo4, sep, la4,
+                        sep);
+                fprintf(stdout, "center_long=%.8f%s", loc, sep);
+                fprintf(stdout, "center_lat=%.8f%s", lac, sep);
             }
             else {
                 G_format_easting(lo1, buf, PROJECTION_LL);
-                fprintf(stdout, "%-*s long: %s ", width, "north-west corner:",
-                        buf);
+                fprintf(stdout, "%-*s long: %s ", width,
+                        "north-west corner:", buf);
                 G_format_northing(la1, buf, PROJECTION_LL);
                 fprintf(stdout, "lat: %s\n", buf);
 
                 G_format_easting(lo2, buf, PROJECTION_LL);
-                fprintf(stdout, "%-*s long: %s ", width, "north-east corner:",
-                        buf);
+                fprintf(stdout, "%-*s long: %s ", width,
+                        "north-east corner:", buf);
                 G_format_northing(la2, buf, PROJECTION_LL);
                 fprintf(stdout, "lat: %s\n", buf);
 
                 G_format_easting(lo3, buf, PROJECTION_LL);
-                fprintf(stdout, "%-*s long: %s ", width, "south-east corner:",
-                        buf);
+                fprintf(stdout, "%-*s long: %s ", width,
+                        "south-east corner:", buf);
                 G_format_northing(la3, buf, PROJECTION_LL);
                 fprintf(stdout, "lat: %s\n", buf);
 
                 G_format_easting(lo4, buf, PROJECTION_LL);
-                fprintf(stdout, "%-*s long: %s ", width, "south-west corner:",
-                        buf);
+                fprintf(stdout, "%-*s long: %s ", width,
+                        "south-west corner:", buf);
                 G_format_northing(la4, buf, PROJECTION_LL);
                 fprintf(stdout, "lat: %s\n", buf);
 
                 G_format_easting(loc, buf, PROJECTION_LL);
-                fprintf(stdout, "%-*s %11s\n", width, "center longitude:",
-                        buf);
+                fprintf(stdout, "%-*s %11s\n", width, "center longitude:", buf);
 
                 G_format_northing(lac, buf, PROJECTION_LL);
-                fprintf(stdout, "%-*s %11s\n", width, "center latitude:",
-                        buf);
+                fprintf(stdout, "%-*s %11s\n", width, "center latitude:", buf);
             }
 
             if (!(print_flag & PRINT_REG)) {
                 if (print_flag & PRINT_SH) {
-                    fprintf(stdout, "rows=%d\n", window->rows);
-                    fprintf(stdout, "cols=%d\n", window->cols);
+                    fprintf(stdout, "rows=%d%s", window->rows, sep);
+                    fprintf(stdout, "cols=%d%s", window->cols, sep);
                 }
                 else {
-                    fprintf(stdout, "%-*s %d\n", width, "rows:",
-                            window->rows);
-                    fprintf(stdout, "%-*s %d\n", width, "cols:",
-                            window->cols);
+                    fprintf(stdout, "%-*s %d\n", width, "rows:", window->rows);
+                    fprintf(stdout, "%-*s %d\n", width, "cols:", window->cols);
                 }
             }
         }
-        else {                  /* in lat/long already */
+        else { /* in lat/long already */
 
             if (window->proj != 0)
-                G_message(_("You are already in Lat/Long. Use the -p flag instead."));
+                G_message(
+                    _("You are already in Lat/Long. Use the -p flag instead."));
             else
-                G_message(_("You are in a simple XY location, projection to Lat/Lon "
-                           "is not possible. Use the -p flag instead."));
+                G_message(
+                    _("You are in a simple XY location, projection to Lat/Lon "
+                      "is not possible. Use the -p flag instead."));
         }
     }
 
     /* flag.eprint */
     if (print_flag & PRINT_EXTENT) {
         if (print_flag & PRINT_SH) {
-            fprintf(stdout, "ns_extent=%f\n", window->north - window->south);
-            fprintf(stdout, "ew_extent=%f\n", window->east - window->west);
+            fprintf(stdout, "ns_extent=%f%s", window->north - window->south,
+                    sep);
+            fprintf(stdout, "ew_extent=%f%s", window->east - window->west, sep);
         }
         else {
             if (G_projection() != PROJECTION_LL) {
-                fprintf(stdout, "%-*s %f\n", width, "north-south extent:",
-                        window->north - window->south);
-                fprintf(stdout, "%-*s %f\n", width, "east-west extent:",
-                        window->east - window->west);
+                fprintf(stdout, "%-*s %f\n", width,
+                        "north-south extent:", window->north - window->south);
+                fprintf(stdout, "%-*s %f\n", width,
+                        "east-west extent:", window->east - window->west);
             }
             else {
                 G_format_northing(window->north - window->south, buf,
                                   PROJECTION_LL);
-                fprintf(stdout, "%-*s %s\n", width, "north-south extent:",
-                        buf);
+                fprintf(stdout, "%-*s %s\n", width, "north-south extent:", buf);
                 G_format_easting(window->east - window->west, buf,
                                  PROJECTION_LL);
                 fprintf(stdout, "%-*s %s\n", width, "east-west extent:", buf);
@@ -424,30 +432,28 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
     /* flag.center */
     if (print_flag & PRINT_CENTER) {
         if (print_flag & PRINT_SH) {
-            fprintf(stdout, "center_easting=%f\n",
-                    (window->west + window->east) / 2.);
-            fprintf(stdout, "center_northing=%f\n",
-                    (window->north + window->south) / 2.);
+            fprintf(stdout, "center_easting=%f%s",
+                    (window->west + window->east) / 2., sep);
+            fprintf(stdout, "center_northing=%f%s",
+                    (window->north + window->south) / 2., sep);
         }
         else {
             if (G_projection() != PROJECTION_LL) {
-                fprintf(stdout, "%-*s %f\n", width, "center easting:",
-                        (window->west + window->east) / 2.);
+                fprintf(stdout, "%-*s %f\n", width,
+                        "center easting:", (window->west + window->east) / 2.);
                 fprintf(stdout, "%-*s %f\n", width, "center northing:",
                         (window->north + window->south) / 2.);
             }
             else {
-                G_format_northing((window->north + window->south) / 2.,
-                                  buf, PROJECTION_LL);
-                fprintf(stdout, "%-*s %s\n", width, "north-south center:",
-                        buf);
-                G_format_easting((window->west + window->east) / 2.,
-                                 buf, PROJECTION_LL);
+                G_format_northing((window->north + window->south) / 2., buf,
+                                  PROJECTION_LL);
+                fprintf(stdout, "%-*s %s\n", width, "north-south center:", buf);
+                G_format_easting((window->west + window->east) / 2., buf,
+                                 PROJECTION_LL);
                 fprintf(stdout, "%-*s %s\n", width, "east-west center:", buf);
             }
         }
     }
-
 
     /* flag.gmt_style */
     if (print_flag & PRINT_GMT)
@@ -459,16 +465,15 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
         G_format_northing(window->south, south, -1);
         G_format_easting(window->east, east, -1);
         G_format_easting(window->west, west, -1);
-        fprintf(stdout, "bbox=%s,%s,%s,%s\n", west, south, east, north);
+        fprintf(stdout, "bbox=%s,%s,%s,%s%s", west, south, east, north, sep);
     }
-
 
     /* flag.nangle */
     if (print_flag & PRINT_NANGLE) {
         double convergence;
 
         if (G_projection() == PROJECTION_XY)
-            convergence = 0. / 0.;
+            convergence = NAN;
         else if (G_projection() == PROJECTION_LL)
             convergence = 0.0;
         else {
@@ -487,13 +492,16 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
             /* read current projection info */
             if ((in_proj_info = G_get_projinfo()) == NULL)
-                G_fatal_error(_("Can't get projection info of current location"));
+                G_fatal_error(
+                    _("Can't get projection info of current location"));
 
             if ((in_unit_info = G_get_projunits()) == NULL)
-                G_fatal_error(_("Can't get projection units of current location"));
+                G_fatal_error(
+                    _("Can't get projection units of current location"));
 
             if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
-                G_fatal_error(_("Can't get projection key values of current location"));
+                G_fatal_error(
+                    _("Can't get projection key values of current location"));
 
             G_free_key_value(in_proj_info);
             G_free_key_value(in_unit_info);
@@ -502,17 +510,19 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             tproj.def = NULL;
 
             if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
-                G_fatal_error(_("Unable to initialize coordinate transformation"));
+                G_fatal_error(
+                    _("Unable to initialize coordinate transformation"));
 
             /* center coordinates of the current region,
              * not average of the projected corner coordinates */
             latitude = (window->north + window->south) / 2.;
             longitude = (window->west + window->east) / 2.;
             /* get lat/long w/ same datum/ellipsoid as input */
-            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                              &longitude, &latitude, NULL) < 0)
-                G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
-                              "GPJ_transform()");
+            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
+                              &latitude, NULL) < 0)
+                G_fatal_error(
+                    _("Error in %s (projection of input coordinate pair)"),
+                    "GPJ_transform()");
 
 #ifdef HAVE_PROJ_H
             c.lpzt.lam = DEG2RAD(longitude);
@@ -531,10 +541,10 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
         }
 
         if (print_flag & PRINT_SH)
-            fprintf(stdout, "converge_angle=%f\n", convergence);
+            fprintf(stdout, "converge_angle=%f%s", convergence, sep);
         else
-            fprintf(stdout, "%-*s %f\n", width, "convergence angle:",
-                    convergence);
+            fprintf(stdout, "%-*s %f\n", width,
+                    "convergence angle:", convergence);
     }
 
     /* flag.bbox
@@ -549,14 +559,15 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             /* projection information of input and output map */
             struct Key_Value *in_proj_info, *in_unit_info, *out_proj_info,
                 *out_unit_info;
-            struct pj_info iproj;       /* input map proj parameters  */
-            struct pj_info oproj;       /* output map proj parameters  */
-            struct pj_info tproj;       /* transformation parameters  */
+            struct pj_info iproj; /* input map proj parameters  */
+            struct pj_info oproj; /* output map proj parameters  */
+            struct pj_info tproj; /* transformation parameters  */
             int r, c;
 
             /* read current projection info */
             if ((in_proj_info = G_get_projinfo()) == NULL)
-                G_fatal_error(_("Can't get projection info of current location"));
+                G_fatal_error(
+                    _("Can't get projection info of current location"));
             /* do not wrap to -180, 180, otherwise east can be < west */
             /* TODO: for PROJ 6+, the +over switch must be added to the
              * transformation pipeline if authority:name or WKt are used
@@ -564,10 +575,12 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             G_set_key_value("over", "defined", in_proj_info);
 
             if ((in_unit_info = G_get_projunits()) == NULL)
-                G_fatal_error(_("Can't get projection units of current location"));
+                G_fatal_error(
+                    _("Can't get projection units of current location"));
 
             if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
-                G_fatal_error(_("Can't get projection key values of current location"));
+                G_fatal_error(
+                    _("Can't get projection key values of current location"));
 
             /*  output projection to lat/long and wgs84 ellipsoid */
             out_proj_info = G_create_key_value();
@@ -580,8 +593,10 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
             /* PROJ6+ has its own datum transformation parameters */
             if (G_get_datumparams_from_projinfo(in_proj_info, buff, dum) < 0)
-                G_fatal_error(_("WGS84 output not possible as this location does not contain "
-                               "datum transformation parameters. Try running g.setproj."));
+                G_fatal_error(_(
+                    "WGS84 output not possible as this location does not "
+                    "contain "
+                    "datum transformation parameters. Try running g.setproj."));
             else
 #endif
                 G_set_key_value("datum", "wgs84", out_proj_info);
@@ -591,7 +606,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             G_set_key_value("meters", "1.0", out_unit_info);
 
             if (pj_get_kv(&oproj, out_proj_info, out_unit_info) < 0)
-                G_fatal_error(_("Unable to update lat/long projection parameters"));
+                G_fatal_error(
+                    _("Unable to update lat/long projection parameters"));
 
             G_free_key_value(in_proj_info);
             G_free_key_value(in_unit_info);
@@ -601,17 +617,19 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             tproj.def = NULL;
 
             if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
-                G_fatal_error(_("Unable to initialize coordinate transformation"));
+                G_fatal_error(
+                    _("Unable to initialize coordinate transformation"));
 
             /*Calculate the largest bounding box */
 
             /* center */
             latitude = (window->north + window->south) / 2.;
             longitude = (window->west + window->east) / 2.;
-            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                              &longitude, &latitude, NULL) < 0)
-                G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
-                              "GPJ_transform()");
+            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
+                              &latitude, NULL) < 0)
+                G_fatal_error(
+                    _("Error in %s (projection of input coordinate pair)"),
+                    "GPJ_transform()");
 
             sh_ll_w = sh_ll_e = longitude;
             sh_ll_n = sh_ll_s = latitude;
@@ -622,10 +640,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                 if (r == window->rows)
                     latitude = window->south;
                 longitude = window->west;
-                if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                                  &longitude, &latitude, NULL) < 0)
-                    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
-                                  "GPJ_transform()");
+                if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
+                                  &latitude, NULL) < 0)
+                    G_fatal_error(
+                        _("Error in %s (projection of input coordinate pair)"),
+                        "GPJ_transform()");
 
                 if (sh_ll_n < latitude)
                     sh_ll_n = latitude;
@@ -641,10 +660,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                 if (r == window->rows)
                     latitude = window->south;
                 longitude = window->east;
-                if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                                  &longitude, &latitude, NULL) < 0)
-                    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
-                                  "GPJ_transform()");
+                if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
+                                  &latitude, NULL) < 0)
+                    G_fatal_error(
+                        _("Error in %s (projection of input coordinate pair)"),
+                        "GPJ_transform()");
 
                 if (sh_ll_n < latitude)
                     sh_ll_n = latitude;
@@ -661,10 +681,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             for (c = 1; c < window->cols; c++) {
                 latitude = window->north;
                 longitude = window->west + c * window->ew_res;
-                if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                                  &longitude, &latitude, NULL) < 0)
-                    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
-                                  "GPJ_transform()");
+                if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
+                                  &latitude, NULL) < 0)
+                    G_fatal_error(
+                        _("Error in %s (projection of input coordinate pair)"),
+                        "GPJ_transform()");
 
                 if (sh_ll_n < latitude)
                     sh_ll_n = latitude;
@@ -678,10 +699,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
                 latitude = window->south;
                 longitude = window->west + c * window->ew_res;
-                if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                                  &longitude, &latitude, NULL) < 0)
-                    G_fatal_error(_("Error in %s (projection of input coordinate pair)"),
-                                  "GPJ_transform()");
+                if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
+                                  &latitude, NULL) < 0)
+                    G_fatal_error(
+                        _("Error in %s (projection of input coordinate pair)"),
+                        "GPJ_transform()");
 
                 if (sh_ll_n < latitude)
                     sh_ll_n = latitude;
@@ -701,13 +723,14 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
             /* print the largest bounding box */
             if (print_flag & PRINT_SH) {
-                fprintf(stdout, "ll_n=%.8f\n", sh_ll_n);
-                fprintf(stdout, "ll_s=%.8f\n", sh_ll_s);
-                fprintf(stdout, "ll_w=%.8f\n", sh_ll_w);
-                fprintf(stdout, "ll_e=%.8f\n", sh_ll_e);
+                fprintf(stdout, "ll_n=%.8f%s", sh_ll_n, sep);
+                fprintf(stdout, "ll_s=%.8f%s", sh_ll_s, sep);
+                fprintf(stdout, "ll_w=%.8f%s", sh_ll_w, sep);
+                fprintf(stdout, "ll_e=%.8f%s", sh_ll_e, sep);
                 /* center of the largest bounding box */
-                fprintf(stdout, "ll_clon=%.8f\n", loc);
-                fprintf(stdout, "ll_clat=%.8f\n", (sh_ll_n + sh_ll_s) / 2.);
+                fprintf(stdout, "ll_clon=%.8f%s", loc, sep);
+                fprintf(stdout, "ll_clat=%.8f%s", (sh_ll_n + sh_ll_s) / 2.,
+                        sep);
             }
             else {
                 G_format_northing(sh_ll_n, buf, PROJECTION_LL);
@@ -721,19 +744,23 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                 /* center of the largest bounding box */
                 G_format_easting(loc, buf, PROJECTION_LL);
                 fprintf(stdout, "%-*s %s\n", width, "center longitude:", buf);
-                G_format_northing((sh_ll_n + sh_ll_s) / 2., buf,
-                                  PROJECTION_LL);
+                G_format_northing((sh_ll_n + sh_ll_s) / 2., buf, PROJECTION_LL);
                 fprintf(stdout, "%-*s  %s\n", width, "center latitude:", buf);
             }
 
-            /*It should be calculated which number of rows and cols we have in LL */
+            /*It should be calculated which number of rows and cols we have in
+             * LL */
             /*
                fprintf (stdout, "LL_ROWS=%f \n",sh_ll_rows);
                fprintf (stdout, "LL_COLS=%f \n",sh_ll_cols);
              */
         }
         else {
-            G_warning(_("Lat/Long calculations are not possible from a simple XY system"));
+            G_warning(_("Lat/Long calculations are not possible from a simple "
+                        "XY system"));
         }
     }
+
+    if (flat_flag)
+        fprintf(stdout, "\n");
 }

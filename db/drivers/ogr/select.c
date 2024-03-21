@@ -30,7 +30,7 @@
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
+int db__driver_open_select_cursor(dbString *sel, dbCursor *dbc, int mode)
 {
     cursor *c;
     dbTable *table;

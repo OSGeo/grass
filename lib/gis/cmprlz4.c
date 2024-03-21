@@ -6,7 +6,7 @@
  * FILENAME:    cmprlz4.c
  * AUTHOR(S):   Eric G. Miller <egm2@jps.net>
  *              Markus Metz
- * PURPOSE:     To provide an interface to lz4 for compressing and 
+ * PURPOSE:     To provide an interface to lz4 for compressing and
  *              decompressing data using LZ4.  It's primary use is in
  *              the storage and reading of GRASS floating point rasters.
  *
@@ -15,7 +15,7 @@
  * COPYRIGHT:   (C) 2015 by the GRASS Development Team
  *
  *              This program is free software under the GNU General Public
- *              License (version 2 or greater). Read the file COPYING that 
+ *              License (version 2 or greater). Read the file COPYING that
  *              comes with GRASS for details.
  *
  *****************************************************************************/
@@ -69,14 +69,14 @@
 
 int G_lz4_compress_bound(int src_sz)
 {
-    /* LZ4 has a fast version if destLen is large enough 
+    /* LZ4 has a fast version if destLen is large enough
      * to hold a worst case result
      */
     return LZ4_compressBound(src_sz);
 }
 
-int
-G_lz4_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
+int G_lz4_compress(unsigned char *src, int src_sz, unsigned char *dst,
+                   int dst_sz)
 {
     int err, nbytes, buf_sz;
     unsigned char *buf;
@@ -104,10 +104,10 @@ G_lz4_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
     buf = dst;
     buf_sz = G_lz4_compress_bound(src_sz);
     if (buf_sz > dst_sz) {
-        G_warning
-            ("G_lz4_compress(): programmer error, destination is too small");
-        if (NULL == (buf = (unsigned char *)
-                     G_calloc(buf_sz, sizeof(unsigned char))))
+        G_warning(
+            "G_lz4_compress(): programmer error, destination is too small");
+        if (NULL ==
+            (buf = (unsigned char *)G_calloc(buf_sz, sizeof(unsigned char))))
             return -1;
     }
     else
@@ -143,8 +143,7 @@ G_lz4_compress(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
     return nbytes;
 }
 
-int
-G_lz4_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
+int G_lz4_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 {
     int err, nbytes;
 
@@ -188,6 +187,5 @@ G_lz4_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
 
     return nbytes;
 }
-
 
 /* vim: set softtabstop=4 shiftwidth=4 expandtab: */

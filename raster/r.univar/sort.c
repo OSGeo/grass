@@ -10,6 +10,7 @@
  */
 
 #include "globals.h"
+
 static void downheap_int(int *array, size_t n, size_t k);
 static void downheap_float(float *array, size_t n, size_t k);
 static void downheap_double(double *array, size_t n, size_t k);
@@ -107,7 +108,6 @@ void heapsort_int(int *array, size_t n)
     }
     return;
 }
-
 
 /* *************************************************************** */
 /* ****** heapsort for float arrays of size n ******************** */

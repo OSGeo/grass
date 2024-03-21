@@ -62,7 +62,7 @@ with <em><a href="r.mapcalc.html">r.mapcalc</a></em> and using
 suitable masking or clump maps, very interesting applications can be
 done with <em>r.volume</em>.  Such as, calculating the volume of rock
 in a potential quarry; calculating cut/fill volumes for roads; finding
-water volumes in potential reservoirs. 
+water volumes in potential reservoirs.
 
 <h2>EXAMPLE</h2>
 
@@ -73,7 +73,7 @@ The example is based on the North Carolina sample dataset:
 <div class="code"><pre>
 # set computational region to small basin within extent of LiDAR elevation model
 g.region n=220361 s=220123 w=638527 e=638894 align=elev_lid792_1m -p
-# generate shared relief map for better terrain visualization 
+# generate shared relief map for better terrain visualization
 r.relief input=elev_lid792_1m output=elev_lid792_1m_shaded
 d.shade shade=elev_lid792_1m_shaded color=elev_lid792_1m
 

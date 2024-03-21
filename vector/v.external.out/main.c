@@ -1,13 +1,12 @@
-
 /****************************************************************
  *
  * MODULE:       v.external.out
- * 
+ *
  * AUTHOR(S):    Martin Landa <landa.martin gmail.com>
- *               
+ *
  * PURPOSE:      Make GRASS write vector maps utilizing the OGR library.
  *               (Partly based on r.external.out code)
- *               
+ *
  * COPYRIGHT:    (C) 2010-2014 by Martin Landa and the GRASS Development Team
  *
  *               This program is free software under the GNU General
@@ -77,8 +76,8 @@ int main(int argc, char *argv[])
     }
 
     if (options.dsn->answer) {
-        make_link(options.dsn->answer, format,
-                  options.opts->answer, options.opts->answers);
+        make_link(options.dsn->answer, format, options.opts->answer,
+                  options.opts->answers);
     }
     else if (options.input->answer) {
         read_status_file(options.input);

@@ -8,7 +8,7 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-#define WDTH 5
+#define WDTH    5
 
 #define M_START 1
 #define M_ADD   2
@@ -42,7 +42,8 @@ int extract(struct Map_info *In, struct Map_info *Out, int type,
     mode = M_START;
     G_message(_("Select vector(s) with mouse"));
     G_message(_(" - L: draw box with left mouse button to select"));
-    G_message(_(" - M: draw box with middle mouse button to remove from display"));
+    G_message(
+        _(" - M: draw box with middle mouse button to remove from display"));
     G_message(_(" - R: quit and save selected vectors to new map\n"));
     while (1) {
         G_message(_("L: add  M: remove  R: quit and save\n"));
@@ -80,7 +81,8 @@ int extract(struct Map_info *In, struct Map_info *Out, int type,
                     box.W);
         }
 
-        /* TODO: check if line really intersects box, not only box intersects box */
+        /* TODO: check if line really intersects box, not only box intersects
+         * box */
         switch (button) {
         case 1:
             if (mode == M_START) {
@@ -123,15 +125,14 @@ int extract(struct Map_info *In, struct Map_info *Out, int type,
     return 1;
 }
 
-int
-display(struct Map_info *Map, struct boxlist *List,
-        const struct color_rgb *color)
+int display(struct Map_info *Map, struct boxlist *List,
+            const struct color_rgb *color)
 {
     int i, j, line, type;
     struct line_pnts *Points;
     double msize;
 
-    msize = 10 * (D_d_to_u_col(2) - D_d_to_u_col(1));   /* do it better */
+    msize = 10 * (D_d_to_u_col(2) - D_d_to_u_col(1)); /* do it better */
     G_debug(1, "msize = %f\n", msize);
 
     Points = Vect_new_line_struct();

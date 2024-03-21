@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.describe
@@ -22,14 +21,12 @@
 
 static int show(CELL, CELL, int *, DCELL, DCELL, RASTER_MAP_TYPE, int);
 
-
-int long_list(struct Cell_stats *statf,
-              DCELL dmin, DCELL dmax,
-              char *no_data_str, int skip_nulls,
-              RASTER_MAP_TYPE map_type, int nsteps)
+int long_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
+              char *no_data_str, int skip_nulls, RASTER_MAP_TYPE map_type,
+              int nsteps)
 {
     CELL cat;
-    long count;                 /* not used, but required by cell stats call */
+    long count; /* not used, but required by cell stats call */
 
     Rast_get_stats_for_null_value(&count, statf);
     if (count != 0 && !skip_nulls)
@@ -46,15 +43,13 @@ int long_list(struct Cell_stats *statf,
     return (0);
 }
 
-
-int compact_list(struct Cell_stats *statf,
-                 DCELL dmin, DCELL dmax,
-                 char *no_data_str, int skip_nulls,
-                 RASTER_MAP_TYPE map_type, int nsteps)
+int compact_list(struct Cell_stats *statf, DCELL dmin, DCELL dmax,
+                 char *no_data_str, int skip_nulls, RASTER_MAP_TYPE map_type,
+                 int nsteps)
 {
     CELL cat1, cat2, temp;
     int len;
-    long count;                 /* not used, but required by cell stats call */
+    long count; /* not used, but required by cell stats call */
 
     len = 0;
     Rast_get_stats_for_null_value(&count, statf);
@@ -67,7 +62,7 @@ int compact_list(struct Cell_stats *statf,
 
     cat2 = cat1;
     while (Rast_next_cell_stat(&temp, &count, statf)) {
-        if (temp != cat2 + (CELL) 1) {
+        if (temp != cat2 + (CELL)1) {
             show(cat1, cat2, &len, dmin, dmax, map_type, nsteps);
             cat1 = temp;
         }
@@ -78,9 +73,8 @@ int compact_list(struct Cell_stats *statf,
     return (0);
 }
 
-
-static int show(CELL low, CELL high, int *len,
-                DCELL dmin, DCELL dmax, RASTER_MAP_TYPE map_type, int nsteps)
+static int show(CELL low, CELL high, int *len, DCELL dmin, DCELL dmax,
+                RASTER_MAP_TYPE map_type, int nsteps)
 {
     char text[100];
     char xlen;
@@ -114,7 +108,6 @@ static int show(CELL low, CELL high, int *len,
     return (0);
 }
 
-
 int compact_range_list(CELL negmin, CELL negmax, CELL zero, CELL posmin,
                        CELL posmax, CELL null, char *no_data_str,
                        int skip_nulls)
@@ -139,7 +132,6 @@ int compact_range_list(CELL negmin, CELL negmax, CELL zero, CELL posmin,
 
     return (0);
 }
-
 
 int range_list(CELL negmin, CELL negmax, CELL zero, CELL posmin, CELL posmax,
                CELL null, char *no_data_str, int skip_nulls)

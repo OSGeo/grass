@@ -1,11 +1,10 @@
-
 /**********************************************************
  * MODULE:    mysql
  * AUTHOR(S): Radim Blazek (radim.blazek@gmail.com)
  * PURPOSE:   MySQL database driver
  * COPYRIGHT: (C) 2001 by the GRASS Development Team
- *            This program is free software under the 
- *            GNU General Public License (>=v2). 
+ *            This program is free software under the
+ *            GNU General Public License (>=v2).
  *            Read the file COPYING that comes with GRASS
  *            for details.
  **********************************************************/
@@ -16,7 +15,7 @@
 #include "globals.h"
 #include "proto.h"
 
-int db__driver_describe_table(dbString * table_name, dbTable ** table)
+int db__driver_describe_table(dbString *table_name, dbTable **table)
 {
     dbString sql;
     MYSQL_RES *res;
@@ -28,8 +27,7 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
     db_append_string(&sql, " where 1 = 0");
 
     if (mysql_query(connection, db_get_string(&sql)) != 0) {
-        db_d_append_error("%s\n%s\n%s",
-                          _("Unable to describe table:"),
+        db_d_append_error("%s\n%s\n%s", _("Unable to describe table:"),
                           db_get_string(&sql), mysql_error(connection));
         db_d_report_error();
         return DB_FAILED;
@@ -38,8 +36,8 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
     res = mysql_store_result(connection);
 
     if (res == NULL) {
-        db_d_append_error("%s\n%s",
-                          db_get_string(&sql), mysql_error(connection));
+        db_d_append_error("%s\n%s", db_get_string(&sql),
+                          mysql_error(connection));
         db_d_report_error();
         return DB_FAILED;
     }
@@ -59,7 +57,7 @@ int db__driver_describe_table(dbString * table_name, dbTable ** table)
 }
 
 /* describe table, if c is not NULL cur->cols and cur->ncols is also set */
-int describe_table(MYSQL_RES * res, dbTable ** table, cursor * c)
+int describe_table(MYSQL_RES *res, dbTable **table, cursor *c)
 {
     int i, ncols, kcols;
     char *name;
@@ -80,7 +78,7 @@ int describe_table(MYSQL_RES * res, dbTable ** table, cursor * c)
         if (sqltype == DB_SQL_TYPE_UNKNOWN)
             continue;
 
-        kcols++;                /* known types */
+        kcols++; /* known types */
     }
 
     G_debug(3, "kcols = %d", kcols);
@@ -117,13 +115,15 @@ int describe_table(MYSQL_RES * res, dbTable ** table, cursor * c)
         if (sqltype == DB_SQL_TYPE_UNKNOWN) {
             /* Print warning and continue */
             G_warning(_("MySQL driver: column '%s', type %d "
-                        "is not supported"), name, fields[i].type);
+                        "is not supported"),
+                      name, fields[i].type);
             continue;
         }
 
         if (fields[i].type == MYSQL_TYPE_LONGLONG)
             G_warning(_("column '%s' : type BIGINT is stored as "
-                        "integer (4 bytes) some data may be damaged"), name);
+                        "integer (4 bytes) some data may be damaged"),
+                      name);
 
         column = db_get_table_column(*table, kcols);
 
@@ -145,7 +145,7 @@ int describe_table(MYSQL_RES * res, dbTable ** table, cursor * c)
         /*
            db_set_column_select_priv_granted (column);
            db_set_column_update_priv_granted (column);
-           db_set_column_update_priv_not_granted (column); 
+           db_set_column_update_priv_not_granted (column);
          */
 
         if (c) {
@@ -159,7 +159,7 @@ int describe_table(MYSQL_RES * res, dbTable ** table, cursor * c)
 }
 
 /* Get sqltype for field */
-void field_info(MYSQL_FIELD * field, int *sqltype, int *length)
+void field_info(MYSQL_FIELD *field, int *sqltype, int *length)
 {
     *length = field->length;
 

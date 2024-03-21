@@ -3,7 +3,7 @@
 #include <string.h>
 #include <grass/gis.h>
 
-int input(FILE * fp, int tty, char *buf)
+int input(FILE *fp, int tty, char *buf)
 {
     char temp1[10], temp2[2];
 

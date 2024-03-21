@@ -1,21 +1,21 @@
-
 /*****************************************************************************
-*
-* MODULE:       Grass numerical math interface
-* AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
-* 		soerengebbert <at> googlemail <dot> com
-*               
-* PURPOSE:      linear equation system solvers
-* 		part of the gmath library
-*               
-* COPYRIGHT:    (C) 2010 by the GRASS Development Team
-*
-*               This program is free software under the GNU General Public
-*               License (>=v2). Read the file COPYING that comes with GRASS
-*               for details.
-*
-*****************************************************************************/
+ *
+ * MODULE:       Grass numerical math interface
+ * AUTHOR(S):    Soeren Gebbert, Berlin (GER) Dec 2006
+ *                 soerengebbert <at> googlemail <dot> com
+ *
+ * PURPOSE:      linear equation system solvers
+ *                 part of the gmath library
+ *
+ * COPYRIGHT:    (C) 2010 by the GRASS Development Team
+ *
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ *****************************************************************************/
 
+#include <assert.h>
 #include <math.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -24,16 +24,16 @@
 #include <grass/glocale.h>
 #include <grass/gmath.h>
 
-
 /*!
  * \brief The iterative jacobi solver for sparse matrices
  *
  * The Jacobi solver solves the linear equation system Ax = b
  * The result is written to the vector x.
  *
- * The parameter <i>maxit</i> specifies the maximum number of iterations. If the maximum is reached, the
- * solver will abort the calculation and writes the current result into the vector x.
- * The parameter <i>err</i> defines the error break criteria for the solver.
+ * The parameter <i>maxit</i> specifies the maximum number of iterations. If the
+ * maximum is reached, the solver will abort the calculation and writes the
+ * current result into the vector x. The parameter <i>err</i> defines the error
+ * break criteria for the solver.
  *
  * \param Asp G_math_spvector ** -- the sparse matrix
  * \param x double * -- the vector of unknowns
@@ -45,14 +45,18 @@
  * \return int -- 1=success, -1=could not solve the les
  *
  * */
-int G_math_solver_sparse_jacobi(G_math_spvector ** Asp, double *x, double *b,
+int G_math_solver_sparse_jacobi(G_math_spvector **Asp, double *x, double *b,
                                 int rows, int maxit, double sor, double error)
 {
-    int i, j, k, center, finished = 0;
+    unsigned int i, j, center, finished = 0;
+
+    int k;
 
     double *Enew;
 
     double E, err = 0;
+
+    assert(rows >= 0);
 
     Enew = G_alloc_vector(rows);
 
@@ -60,11 +64,11 @@ int G_math_solver_sparse_jacobi(G_math_spvector ** Asp, double *x, double *b,
         err = 0;
         {
             if (k == 0) {
-                for (j = 0; j < rows; j++) {
+                for (j = 0; j < (unsigned int)rows; j++) {
                     Enew[j] = x[j];
                 }
             }
-            for (i = 0; i < rows; i++) {
+            for (i = 0; i < (unsigned int)rows; i++) {
                 E = 0;
                 center = 0;
                 for (j = 0; j < Asp[i]->cols; j++) {
@@ -74,7 +78,7 @@ int G_math_solver_sparse_jacobi(G_math_spvector ** Asp, double *x, double *b,
                 }
                 Enew[i] = x[i] - sor * (E - b[i]) / Asp[i]->values[center];
             }
-            for (j = 0; j < rows; j++) {
+            for (j = 0; j < (unsigned int)rows; j++) {
                 err += (x[j] - Enew[j]) * (x[j] - Enew[j]);
 
                 x[j] = Enew[j];
@@ -94,16 +98,16 @@ int G_math_solver_sparse_jacobi(G_math_spvector ** Asp, double *x, double *b,
     return finished;
 }
 
-
 /*!
  * \brief The iterative gauss seidel solver for sparse matrices
  *
  * The Jacobi solver solves the linear equation system Ax = b
  * The result is written to the vector x.
  *
- * The parameter <i>maxit</i> specifies the maximum number of iterations. If the maximum is reached, the
- * solver will abort the calculation and writes the current result into the vector x.
- * The parameter <i>err</i> defines the error break criteria for the solver.
+ * The parameter <i>maxit</i> specifies the maximum number of iterations. If the
+ * maximum is reached, the solver will abort the calculation and writes the
+ * current result into the vector x. The parameter <i>err</i> defines the error
+ * break criteria for the solver.
  *
  * \param Asp G_math_spvector ** -- the sparse matrix
  * \param x double * -- the vector of unknowns
@@ -115,10 +119,12 @@ int G_math_solver_sparse_jacobi(G_math_spvector ** Asp, double *x, double *b,
  * \return int -- 1=success, -1=could not solve the les
  *
  * */
-int G_math_solver_sparse_gs(G_math_spvector ** Asp, double *x, double *b,
+int G_math_solver_sparse_gs(G_math_spvector **Asp, double *x, double *b,
                             int rows, int maxit, double sor, double error)
 {
-    int i, j, k, finished = 0;
+    unsigned int i, j, finished = 0;
+
+    int k;
 
     double *Enew;
 
@@ -126,17 +132,19 @@ int G_math_solver_sparse_gs(G_math_spvector ** Asp, double *x, double *b,
 
     int center;
 
+    assert(rows >= 0);
+
     Enew = G_alloc_vector(rows);
 
     for (k = 0; k < maxit; k++) {
         err = 0;
         {
             if (k == 0) {
-                for (j = 0; j < rows; j++) {
+                for (j = 0; j < (unsigned int)rows; j++) {
                     Enew[j] = x[j];
                 }
             }
-            for (i = 0; i < rows; i++) {
+            for (i = 0; i < (unsigned int)rows; i++) {
                 E = 0;
                 center = 0;
                 for (j = 0; j < Asp[i]->cols; j++) {
@@ -146,7 +154,7 @@ int G_math_solver_sparse_gs(G_math_spvector ** Asp, double *x, double *b,
                 }
                 Enew[i] = x[i] - sor * (E - b[i]) / Asp[i]->values[center];
             }
-            for (j = 0; j < rows; j++) {
+            for (j = 0; j < (unsigned int)rows; j++) {
                 err += (x[j] - Enew[j]) * (x[j] - Enew[j]);
 
                 x[j] = Enew[j];
@@ -166,16 +174,16 @@ int G_math_solver_sparse_gs(G_math_spvector ** Asp, double *x, double *b,
     return finished;
 }
 
-
 /*!
  * \brief The iterative jacobi solver for quadratic matrices
  *
  * The Jacobi solver solves the linear equation system Ax = b
  * The result is written to the vector x.
  *
- * The parameter <i>maxit</i> specifies the maximum number of iterations. If the maximum is reached, the
- * solver will abort the calculation and writes the current result into the vector x.
- * The parameter <i>err</i> defines the error break criteria for the solver.
+ * The parameter <i>maxit</i> specifies the maximum number of iterations. If the
+ * maximum is reached, the solver will abort the calculation and writes the
+ * current result into the vector x. The parameter <i>err</i> defines the error
+ * break criteria for the solver.
  *
  * \param A double ** -- the dense matrix
  * \param x double * -- the vector of unknowns
@@ -187,8 +195,8 @@ int G_math_solver_sparse_gs(G_math_spvector ** Asp, double *x, double *b,
  * \return int -- 1=success, -1=could not solve the les
  *
  * */
-int G_math_solver_jacobi(double **A, double *x, double *b, int rows,
-                         int maxit, double sor, double error)
+int G_math_solver_jacobi(double **A, double *x, double *b, int rows, int maxit,
+                         double sor, double error)
 {
     int i, j, k;
 
@@ -223,16 +231,16 @@ int G_math_solver_jacobi(double **A, double *x, double *b, int rows,
     return 1;
 }
 
-
 /*!
  * \brief The iterative gauss seidel solver for quadratic matrices
  *
  * The Jacobi solver solves the linear equation system Ax = b
  * The result is written to the vector x.
  *
- * The parameter <i>maxit</i> specifies the maximum number of iterations. If the maximum is reached, the
- * solver will abort the calculation and writes the current result into the vector x.
- * The parameter <i>err</i> defines the error break criteria for the solver.
+ * The parameter <i>maxit</i> specifies the maximum number of iterations. If the
+ * maximum is reached, the solver will abort the calculation and writes the
+ * current result into the vector x. The parameter <i>err</i> defines the error
+ * break criteria for the solver.
  *
  * \param A double ** -- the dense matrix
  * \param x double * -- the vector of unknowns

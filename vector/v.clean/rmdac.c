@@ -1,19 +1,19 @@
-/* ***************************************************************
- * *
- * * MODULE:       v.clean
- * * 
- * * AUTHOR(S):    Radim Blazek
- * *               
- * * PURPOSE:      Clean lines - remove duplicate centroids
- * *               
- * * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- * *
- * *               This program is free software under the 
- * *               GNU General Public License (>=v2). 
- * *               Read the file COPYING that comes with GRASS
- * *               for details.
- * *
- * **************************************************************/
+/***************************************************************
+ *
+ * MODULE:       v.clean
+ *
+ * AUTHOR(S):    Radim Blazek
+ *
+ * PURPOSE:      Clean lines - remove duplicate centroids
+ *
+ * COPYRIGHT:    (C) 2001 by the GRASS Development Team
+ *
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
+ *               Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ **************************************************************/
 #include <stdlib.h>
 #include <grass/gis.h>
 #include <grass/vector.h>

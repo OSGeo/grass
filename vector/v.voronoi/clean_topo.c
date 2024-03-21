@@ -36,8 +36,7 @@ int clean_topo(void)
             Vect_get_line_areas(&Out, line, &left, &right);
 
             if (left == 0 || right == 0) {
-                G_debug(3, "line = %d left = %d right = %d", line,
-                        left, right);
+                G_debug(3, "line = %d left = %d right = %d", line, left, right);
                 err_boundaries++;
             }
         }
@@ -102,8 +101,8 @@ int clean_topo(void)
                 Vect_get_line_areas(&Out, line, &left, &right);
 
                 if (left == 0 || right == 0) {
-                    G_debug(3, "line = %d left = %d right = %d", line,
-                            left, right);
+                    G_debug(3, "line = %d left = %d right = %d", line, left,
+                            right);
                     err_boundaries++;
                 }
             }
@@ -126,8 +125,8 @@ int clean_topo(void)
 
                 /* &&, not ||, no typo */
                 if (left == 0 && right == 0) {
-                    G_debug(3, "line = %d left = %d right = %d", line,
-                            left, right);
+                    G_debug(3, "line = %d left = %d right = %d", line, left,
+                            right);
                     Vect_delete_line(&Out, line);
                 }
             }

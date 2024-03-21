@@ -1,10 +1,10 @@
-
 /****************************************************************************
  *
  * MODULE:       r.external
  *
  * AUTHOR(S):    Glynn Clements, based on r.in.gdal
- *               List GDAL layers by Martin Landa <landa.martin gmail.com> 8/2011
+ *               List GDAL layers by Martin Landa <landa.martin gmail.com>
+ *               8/2011
  *
  * PURPOSE:      Link raster map into GRASS utilizing the GDAL library.
  *
@@ -40,12 +40,10 @@ int main(int argc, char *argv[])
     GDALDatasetH hDS;
     GDALRasterBandH hBand;
     struct GModule *module;
-    struct
-    {
+    struct {
         struct Option *input, *source, *output, *band, *title;
     } parm;
-    struct
-    {
+    struct {
         struct Flag *o, *j, *f, *e, *h, *v, *t, *a, *m, *r;
     } flag;
     int min_band, max_band, band;
@@ -102,8 +100,8 @@ int main(int argc, char *argv[])
     flag.o->key = 'o';
     flag.o->label =
         _("Override projection check (use current location's projection)");
-    flag.o->description =
-        _("Assume that the dataset has same projection as the current location");
+    flag.o->description = _(
+        "Assume that the dataset has same projection as the current location");
 
     flag.j = G_define_flag();
     flag.j->key = 'j';
@@ -141,14 +139,14 @@ int main(int argc, char *argv[])
     flag.m = G_define_flag();
     flag.m->key = 'm';
     flag.m->label = _("Read data range from metadata");
-    flag.m->description =
-        _("WARNING: metadata are sometimes approximations with wrong data range");
+    flag.m->description = _(
+        "WARNING: metadata are sometimes approximations with wrong data range");
 
     flag.r = G_define_flag();
     flag.r->key = 'r';
     flag.r->label = _("Create fast link without data range");
-    flag.r->description =
-        _("WARNING: some modules do not work correctly without known data range");
+    flag.r->description = _(
+        "WARNING: some modules do not work correctly without known data range");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -178,12 +176,12 @@ int main(int argc, char *argv[])
         title = NULL;
 
     if (!input && !source)
-        G_fatal_error(_("%s= or %s= must be given"),
-                      parm.input->key, parm.source->key);
+        G_fatal_error(_("%s= or %s= must be given"), parm.input->key,
+                      parm.source->key);
 
     if (input && source)
-        G_fatal_error(_("%s= and %s= are mutually exclusive"),
-                      parm.input->key, parm.source->key);
+        G_fatal_error(_("%s= and %s= are mutually exclusive"), parm.input->key,
+                      parm.source->key);
 
     if (input && !G_is_absolute_path(input)) {
         char path[GPATH_MAX], *cwd;
@@ -231,8 +229,9 @@ int main(int argc, char *argv[])
 
     if (max_band > min_band) {
         if (I_find_group(output) == 1)
-            G_warning(_("Imagery group <%s> already exists and will be overwritten."),
-                      output);
+            G_warning(
+                _("Imagery group <%s> already exists and will be overwritten."),
+                output);
         I_init_group_ref(&reference);
     }
 
@@ -242,8 +241,7 @@ int main(int argc, char *argv[])
     for (band = min_band; band <= max_band; band++) {
         char *output2, *title2 = NULL;
 
-        G_message(_("Reading band %d of %d..."),
-                  band, GDALGetRasterCount(hDS));
+        G_message(_("Reading band %d of %d..."), band, GDALGetRasterCount(hDS));
 
         hBand = GDALGetRasterBand(hDS, band);
         if (!hBand)
@@ -253,8 +251,7 @@ int main(int argc, char *argv[])
             G_asprintf(&output2, "%s.%d", output, band);
             if (title)
                 G_asprintf(&title2, "%s (band %d)", title, band);
-            G_debug(1, "Adding raster map <%s> to group <%s>", output2,
-                    output);
+            G_debug(1, "Adding raster map <%s> to group <%s>", output2, output);
             I_add_file_to_group_ref(output2, G_mapset(), &reference);
         }
         else {

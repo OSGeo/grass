@@ -1,6 +1,6 @@
 /*!
  * \file db/dbmi_driver/d_listdb.c
- * 
+ *
  * \brief DBMI Library (driver) - list databases
  *
  * (C) 1999-2008 by the GRASS Development Team

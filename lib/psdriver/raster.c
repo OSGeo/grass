@@ -1,4 +1,3 @@
-
 #include <string.h>
 
 #include "psdriver.h"
@@ -8,7 +7,7 @@ static int masked;
 void PS_begin_raster(int mask, int src[2][2], double dst[2][2])
 {
     const char *type = ps.true_color ? (mask ? "RASTERRGBMASK" : "RASTERRGB")
-        : (mask ? "RASTERGRAYMASK" : "RASTERGRAY");
+                                     : (mask ? "RASTERGRAYMASK" : "RASTERGRAY");
 
     int ssx = src[0][1] - src[0][0];
     int ssy = src[1][1] - src[1][0];
@@ -24,13 +23,12 @@ void PS_begin_raster(int mask, int src[2][2], double dst[2][2])
 
     output("gsave\n");
     output("%f %f translate %f %f scale\n", dox, doy, dsx, dsy);
-    output("%d %d [%d 0 0 %d %d %d] %s\n", ssx, ssy, ssx, ssy, sox, soy,
-           type);
+    output("%d %d [%d 0 0 %d %d %d] %s\n", ssx, ssy, ssx, ssy, sox, soy, type);
 }
 
-int PS_raster(int n, int row,
-              const unsigned char *red, const unsigned char *grn,
-              const unsigned char *blu, const unsigned char *nul)
+int PS_raster(int n, int row, const unsigned char *red,
+              const unsigned char *grn, const unsigned char *blu,
+              const unsigned char *nul)
 {
     int i;
 
@@ -43,9 +41,8 @@ int PS_raster(int n, int row,
                 output("%02X%02X%02X", red[i], grn[i], blu[i]);
         }
         else {
-            unsigned int gray =
-                (unsigned int)(red[i] * 0.299 + grn[i] * 0.587 +
-                               blu[i] * 0.114);
+            unsigned int gray = (unsigned int)(red[i] * 0.299 + grn[i] * 0.587 +
+                                               blu[i] * 0.114);
 
             if (masked)
                 output("%02X%02X", (nul && nul[i]) ? 0xFF : 0x00, gray);

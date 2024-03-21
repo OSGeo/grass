@@ -8,8 +8,8 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
-   \author Glynn Clements  
+   \author Lars Ahlzen <lars ahlzen.com> (original contributor)
+   \author Glynn Clements
  */
 
 #include "cairodriver.h"
@@ -52,9 +52,8 @@ void Cairo_Point(double x, double y)
     double half_point_size = point_size / 2;
 
     cairo_new_path(cairo);
-    cairo_rectangle(cairo,
-                    x - half_point_size, y - half_point_size,
-                    point_size, point_size);
+    cairo_rectangle(cairo, x - half_point_size, y - half_point_size, point_size,
+                    point_size);
     cairo_fill(cairo);
     ca.modified = 1;
 }

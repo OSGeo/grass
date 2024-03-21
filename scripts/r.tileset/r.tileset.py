@@ -106,7 +106,6 @@
 # An array of points indexed by 0 for "x" and 4 for "y" + by number 0, 1, 2, and 3
 # A reprojector [0] is name of source projection, [1] is name of destination
 # A projection - [0] is proj.4 text, [1] is scale
-from __future__ import print_function
 
 import sys
 import tempfile
@@ -335,7 +334,7 @@ def main():
     # Find the skewedness of the two directions.
     # Define it to be greater than one
     # In the direction (x or y) in which the world is least skewed (ie north south in lat long)
-    # Divide the world into strips. These strips are as big as possible contrained by max_
+    # Divide the world into strips. These strips are as big as possible constrained by max_
     # In the other direction do the same thing.
     # There's some recomputation of the size of the world that's got to come in
     # here somewhere.

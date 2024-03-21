@@ -15,7 +15,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <dirent.h>
+
 #include <grass/dbmi.h>
+
 /* NOTE: these should come from <unistd.h> or from <sys/file.h> */
 #ifndef R_OK
 #define R_OK 4
@@ -26,18 +30,6 @@
 #ifndef X_OK
 #define X_OK 1
 #endif
-
-#include <sys/types.h>
-#ifdef USE_DIRECT
-#include <sys/dir.h>
-typedef struct direct dir_entry;
-#else
-#include <dirent.h>
-typedef struct dirent dir_entry;
-#endif
-
-extern DIR *opendir();
-extern dir_entry *readdir();
 
 static int cmp_dirent(const void *, const void *);
 static int get_perm(char *);
@@ -57,8 +49,8 @@ static void sort_dirent(dbDirent *, int);
 dbDirent *db_dirent(const char *dirname, int *n)
 {
     DIR *dp;
-    dir_entry *entry;
-    dbDirent *dirent;
+    struct dirent *entry;
+    dbDirent *db_dirent;
     int i, count;
     char *path;
     int len, max;
@@ -69,9 +61,8 @@ dbDirent *db_dirent(const char *dirname, int *n)
     dp = opendir(dirname);
     if (dp == NULL) {
         db_syserror(dirname);
-        return (dbDirent *) NULL;
+        return (dbDirent *)NULL;
     }
-
 
     /* count the number of entries and get the strlen of the longest name */
     count = 0;
@@ -84,50 +75,50 @@ dbDirent *db_dirent(const char *dirname, int *n)
     }
     rewinddir(dp);
 
-    path = db_malloc(strlen(dirname) + max + 2);        /* extra 2 for / and NULL */
+    path = db_malloc(strlen(dirname) + max + 2); /* extra 2 for / and NULL */
     if (path == NULL) {
         closedir(dp);
-        return (dbDirent *) NULL;
+        return (dbDirent *)NULL;
     }
-    dirent = db_alloc_dirent_array(count);
-    if (dirent == NULL) {
+    db_dirent = db_alloc_dirent_array(count);
+    if (db_dirent == NULL) {
         closedir(dp);
-        return (dbDirent *) NULL;
+        return (dbDirent *)NULL;
     }
     *n = count;
     for (i = 0; i < count; i++) {
         entry = readdir(dp);
-        if (entry == NULL)      /* this shouldn't happen */
+        if (entry == NULL) /* this shouldn't happen */
             break;
 
-        if (DB_OK != db_set_string(&dirent[i].name, entry->d_name))
+        if (DB_OK != db_set_string(&db_dirent[i].name, entry->d_name))
             break;
         sprintf(path, "%s/%s", dirname, entry->d_name);
-        dirent[i].perm = get_perm(path);
-        dirent[i].isdir = (db_isdir(path) == DB_OK);
+        db_dirent[i].perm = get_perm(path);
+        db_dirent[i].isdir = (db_isdir(path) == DB_OK);
     }
     closedir(dp);
     db_free(path);
 
-    sort_dirent(dirent, *n);
+    sort_dirent(db_dirent, *n);
 
-    return dirent;
+    return db_dirent;
 }
 
 /*!
    \brief Free dbDirent
 
-   \param dirent pointer to dbDirent
+   \param db_dirent pointer to dbDirent
    \param count number of entities in the array
  */
-void db_free_dirent_array(dbDirent * dirent, int count)
+void db_free_dirent_array(dbDirent *db_dirent, int count)
 {
     int i;
 
-    if (dirent) {
+    if (db_dirent) {
         for (i = 0; i < count; i++)
-            db_free_string(&dirent[i].name);
-        db_free(dirent);
+            db_free_string(&db_dirent[i].name);
+        db_free(db_dirent);
     }
 }
 
@@ -152,11 +143,11 @@ static int cmp_dirent(const void *aa, const void *bb)
     const dbDirent *a = aa;
     const dbDirent *b = bb;
 
-    return strcmp(db_get_string((dbString *) & a->name),
-                  db_get_string((dbString *) & b->name));
+    return strcmp(db_get_string((dbString *)&a->name),
+                  db_get_string((dbString *)&b->name));
 }
 
-static void sort_dirent(dbDirent * a, int n)
+static void sort_dirent(dbDirent *a, int n)
 {
     qsort(a, n, sizeof(dbDirent), cmp_dirent);
 }
@@ -172,14 +163,14 @@ static void sort_dirent(dbDirent * a, int n)
 dbDirent *db_alloc_dirent_array(int count)
 {
     int i;
-    dbDirent *dirent;
+    dbDirent *db_dirent;
 
-    dirent = (dbDirent *) db_calloc(count, sizeof(dbDirent));
-    if (dirent == NULL)
-        return dirent;
+    db_dirent = (dbDirent *)db_calloc(count, sizeof(dbDirent));
+    if (db_dirent == NULL)
+        return db_dirent;
 
     for (i = 0; i < count; i++)
-        db_init_string(&dirent[i].name);
+        db_init_string(&db_dirent[i].name);
 
-    return dirent;
+    return db_dirent;
 }

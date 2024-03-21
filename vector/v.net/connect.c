@@ -5,21 +5,22 @@
 #include "proto.h"
 
 /**
- * \brief Consolidate network arcs (edge) based on given point vector map (nodes)
+ * \brief Consolidate network arcs (edge) based on given point vector map
+ * (nodes)
  *
  * If there is no connection between network edge and point, new edge
  * is added, the line broken, and new point added to nfield layer
  *
  * \param In,Points input vector maps
  * \param Out output vector map
- * \param nfield nodes layer 
+ * \param nfield nodes layer
  * \param thresh threshold value to find neareast line
  *
  * \return number of new arcs
  */
 int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
-                 struct Map_info *Out, int afield, int nfield,
-                 double thresh, int snap)
+                 struct Map_info *Out, int afield, int nfield, double thresh,
+                 int snap)
 {
     int narcs;
     int type, line, seg, i, ltype, broken;
@@ -51,7 +52,6 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
     ncats = Vect_cidx_get_num_cats_by_index(In, findex);
     Vect_cidx_get_cat_by_index(In, findex, ncats - 1, &maxcat, &type, &line);
 
-
     /* go thorough all points in point map and write a new arcs if missing */
     pz = 0.0;
     while ((type = Vect_read_next_line(Pnts, Points, Cats)) >= 0) {
@@ -59,10 +59,9 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
             continue;
 
         /* find the nearest line in given threshold */
-        line =
-            Vect_find_line_list(Out, Points->x[0], Points->y[0], Points->z[0],
-                                GV_LINES, thresh, WITHOUT_Z, exclude_list,
-                                NULL);
+        line = Vect_find_line_list(Out, Points->x[0], Points->y[0],
+                                   Points->z[0], GV_LINES, thresh, WITHOUT_Z,
+                                   exclude_list, NULL);
 
         if (line < 1 || !Vect_line_alive(Out, line))
             continue;
@@ -70,10 +69,9 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
         ltype = Vect_read_line(Out, Pline, Cline, line);
 
         /* find point on the line */
-        seg = Vect_line_distance(Pline,
-                                 Points->x[0], Points->y[0], Points->z[0],
-                                 WITHOUT_Z, &px, &py, &pz, &dist, &spdist,
-                                 NULL);
+        seg =
+            Vect_line_distance(Pline, Points->x[0], Points->y[0], Points->z[0],
+                               WITHOUT_Z, &px, &py, &pz, &dist, &spdist, NULL);
 
         if (seg == 0)
             G_fatal_error(_("Failed to find intersection segment"));
@@ -132,7 +130,7 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
 
         /* add points to 'nfield' layer */
         for (i = 0; i < Cats->n_cats; i++) {
-            Cats->field[i] = nfield;    /* all points to 'nfield' layer */
+            Cats->field[i] = nfield; /* all points to 'nfield' layer */
         }
 
         Vect_write_line(Out, type, Points, Cats);

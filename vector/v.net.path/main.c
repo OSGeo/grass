@@ -1,17 +1,16 @@
-
 /****************************************************************
  *
  * MODULE:       v.net.path
- * 
+ *
  * AUTHOR(S):    Radim Blazek
  *               Stepan Turek <stepan.turek seznam.cz> (turns support)
  *
  * PURPOSE:      Shortest path on vector network
- *               
+ *
  * COPYRIGHT:    (C) 2002, 2014 by the GRASS Development Team
  *
- *               This program is free software under the 
- *               GNU General Public License (>=v2). 
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
  *               Read the file COPYING that comes with GRASS
  *               for details.
  *
@@ -21,8 +20,8 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-int path(struct Map_info *, struct Map_info *, char *, int, double, int,
-         int, int);
+int path(struct Map_info *, struct Map_info *, char *, int, double, int, int,
+         int);
 
 int main(int argc, char **argv)
 {
@@ -100,11 +99,12 @@ int main(int argc, char **argv)
     max_dist->required = NO;
     max_dist->answer = "1000";
     max_dist->label = _("Maximum distance to the network");
-    max_dist->description = _("If start/end are given as coordinates. "
-                              "If start/end point is outside this threshold, "
-                              "the path is not found "
-                              "and error message is printed. To speed up the process, keep this "
-                              "value as low as possible.");
+    max_dist->description =
+        _("If start/end are given as coordinates. "
+          "If start/end point is outside this threshold, "
+          "the path is not found "
+          "and error message is printed. To speed up the process, keep this "
+          "value as low as possible.");
 
     turntable_f = G_define_flag();
     turntable_f->key = 't';
