@@ -87,7 +87,7 @@ double amax1(double, double);
 double amin1(double, double);
 int min(int, int);
 int max(int, int);
-void com_par(double angle);
+void com_par(void);
 int is_shadow(void);
 double horizon_height(void);
 void calculate_shadow(void);
@@ -233,6 +233,7 @@ int main(int argc, char *argv[])
     parm.bufferzone->description =
         _("For horizon rasters, read from the DEM an extra buffer around the "
           "present region");
+    parm.bufferzone->options = "0-";
     parm.bufferzone->guisection = _("Raster mode");
 
     parm.e_buff = G_define_option();
@@ -241,6 +242,7 @@ int main(int argc, char *argv[])
     parm.e_buff->required = NO;
     parm.e_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer eastward the present region");
+    parm.e_buff->options = "0-";
     parm.e_buff->guisection = _("Raster mode");
 
     parm.w_buff = G_define_option();
@@ -249,6 +251,7 @@ int main(int argc, char *argv[])
     parm.w_buff->required = NO;
     parm.w_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer westward the present region");
+    parm.w_buff->options = "0-";
     parm.w_buff->guisection = _("Raster mode");
 
     parm.n_buff = G_define_option();
@@ -257,6 +260,7 @@ int main(int argc, char *argv[])
     parm.n_buff->required = NO;
     parm.n_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer northward the present region");
+    parm.n_buff->options = "0-";
     parm.n_buff->guisection = _("Raster mode");
 
     parm.s_buff = G_define_option();
@@ -265,6 +269,7 @@ int main(int argc, char *argv[])
     parm.s_buff->required = NO;
     parm.s_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer southward the present region");
+    parm.s_buff->options = "0-";
     parm.s_buff->guisection = _("Raster mode");
 
     parm.maxdistance = G_define_option();
@@ -499,6 +504,12 @@ int main(int argc, char *argv[])
         if (nbufferZone == 0.)
             nbufferZone = bufferZone;
 
+        /* adjust buffer to multiples of resolution */
+        ebufferZone = (int)(ebufferZone / stepx) * stepx;
+        wbufferZone = (int)(wbufferZone / stepx) * stepx;
+        sbufferZone = (int)(sbufferZone / stepy) * stepy;
+        nbufferZone = (int)(nbufferZone / stepy) * stepy;
+
         new_cellhd.rows += (int)((nbufferZone + sbufferZone) / stepy);
         new_cellhd.cols += (int)((ebufferZone + wbufferZone) / stepx);
 
@@ -718,13 +729,11 @@ int max(int arg1, int arg2)
 
 /**********************************************************/
 
-void com_par(double angle)
+void com_par(void)
 {
-    sinangle = sin(angle);
     if (fabs(sinangle) < 0.0000001) {
         sinangle = 0.;
     }
-    cosangle = cos(angle);
     if (fabs(cosangle) < 0.0000001) {
         cosangle = 0.;
     }
@@ -748,6 +757,7 @@ double horizon_height(void)
 
     tanh0 = 0.;
     length = 0;
+    zp = z_orig;
 
     height = searching();
 
@@ -792,6 +802,7 @@ void calculate_shadow(void)
     yp = ymin + yy0;
 
     angle = (single_direction * deg2rad) + pihalf;
+    printangle = single_direction;
 
     maxlength = fixedMaxLength;
     fprintf(fp, "azimuth,horizon_height\n");
@@ -836,19 +847,15 @@ void calculate_shadow(void)
 
         delt_dist = sqrt(delt_east * delt_east + delt_nor * delt_nor);
 
-        stepsinangle = stepxy * delt_nor / delt_dist;
-        stepcosangle = stepxy * delt_east / delt_dist;
+        sinangle = delt_nor / delt_dist;
+        cosangle = delt_east / delt_dist;
+        com_par();
 
         shadow_angle = horizon_height();
 
         if (degreeOutput) {
             shadow_angle *= rad2deg;
         }
-        printangle = angle * rad2deg - 90.;
-        if (printangle < 0.)
-            printangle += 360;
-        else if (printangle >= 360.)
-            printangle -= 360;
 
         if (compassOutput) {
             double tmpangle;
@@ -863,11 +870,17 @@ void calculate_shadow(void)
         }
 
         angle += dfr_rad;
+        printangle += step;
 
         if (angle < 0.)
             angle += twopi;
         else if (angle > twopi)
             angle -= twopi;
+
+        if (printangle < 0.)
+            printangle += 360;
+        else if (printangle > 360.)
+            printangle -= 360;
     } /* end of for loop over angles */
 }
 
@@ -960,7 +973,7 @@ int test_low_res(void)
             else if (sinangle < 0.) {
                 sy = yy0 * invstepy + offsety;
                 dely = floor(
-                    fabs((floor(jp / 100.) - (sy / 100.)) * distsinangle));
+                    fabs((floor(sy / 100.) - (sy / 100.)) * distsinangle));
             }
 
             mindel = min(delx, dely);
@@ -1114,7 +1127,9 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
         }
         else {
             dfr_rad = step * deg2rad;
-            arrayNumInt = (int)((end - start) / fabs(step));
+            arrayNumInt = 0;
+            for (double tmp = 0; tmp < end - start; tmp += fabs(step))
+                ++arrayNumInt;
         }
 
         decimals = G_get_num_decimals(str_step);
@@ -1190,25 +1205,8 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
                         sqrt(delt_east * delt_east + delt_nor * delt_nor);
 
                     sinangle = delt_nor / delt_dist;
-                    if (fabs(sinangle) < 0.0000001) {
-                        sinangle = 0.;
-                    }
                     cosangle = delt_east / delt_dist;
-                    if (fabs(cosangle) < 0.0000001) {
-                        cosangle = 0.;
-                    }
-                    distsinangle = 32000;
-                    distcosangle = 32000;
-
-                    if (sinangle != 0.) {
-                        distsinangle = 100. / (distxy * sinangle);
-                    }
-                    if (cosangle != 0.) {
-                        distcosangle = 100. / (distxy * cosangle);
-                    }
-
-                    stepsinangle = stepxy * sinangle;
-                    stepcosangle = stepxy * cosangle;
+                    com_par();
 
                     z_orig = zp = z[j][i];
                     maxlength = (zmax - z_orig) / TANMINANGLE;

@@ -2,7 +2,7 @@ from grass.pygrass.modules.interface.docstring import docstring_property
 from grass.pygrass.modules.interface import read
 
 
-class Flag(object):
+class Flag:
     """The Flag object store all information about a flag of module.
 
     It is possible to set flags of command using this object.

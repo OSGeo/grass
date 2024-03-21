@@ -43,7 +43,7 @@ def read_ppm(src):
     i = 0
     j = text.find("\n", i)
     if text[i:j] != "P6":
-        raise IOError(text[i:j] + " != P6. Is the file PPM?")
+        raise OSError(text[i:j] + " != P6. Is the file PPM?")
     i = j + 1
     j = text.find("\n", i)
     w, h = text[i:j].split()
@@ -53,7 +53,7 @@ def read_ppm(src):
     j = text.find("\n", i)
     maxval = text[i:j]
     if int(maxval) != 255:
-        raise IOError("Max value in image != 255")
+        raise OSError("Max value in image != 255")
     i = j + 1
     return array.array("B", text[i:])
 

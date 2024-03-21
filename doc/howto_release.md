@@ -19,7 +19,7 @@ _Note: Some later steps in this text are to be done by the development coordinat
 Update your remotes and switch to branch:
 
 ```bash
-git fetch --all --prune && git checkout releasebranch_8_4
+git fetch --prune upstream && git checkout releasebranch_8_4
 ```
 
 Confirm that you are on the right branch and have no local changes
@@ -33,15 +33,16 @@ git diff
 git diff --staged
 # Should give no output:
 git log upstream/releasebranch_8_4..HEAD
-# Should give the same as last commits visible on GitHub:
+# There should be no commits which are not visible on GitHub:
 git log --max-count=5
 ```
 
-Now you can merge (or rebase) updates from the remote your local branch
-and optionally update your own fork:
+Now you can rebase updates from the remote your local branch.
+Above, you confirmed you have no local commits, so this should happen
+without rebasing any local commits, i.e., it should just add the new commits:
 
 ```bash
-git merge upstream/releasebranch_8_4 && git push origin releasebranch_8_4
+git rebase upstream/releasebranch_8_4
 ```
 
 Verify the result:
@@ -49,14 +50,16 @@ Verify the result:
 ```bash
 # Should give no output:
 git log upstream/releasebranch_8_4..HEAD
-# Should give the same as last commits visible on GitHub:
+git log HEAD..upstream/releasebranch_8_4
+# Should give exactly the same as last commits visible on GitHub:
 git log --max-count=5
 ```
 
-Now or any time later, you can use `git log` and `git show` to see the latest
-commits and the last commit including the changes.
+Now or any time later, you can use `git status`, `git log`, and `git show`
+to see a branch, latest commits and a last commit including the changes.
 
 ```bash
+git status
 git log --max-count=5
 git show
 ```
@@ -334,13 +337,13 @@ md5sum grass-${VERSION}.tar.gz > grass-${VERSION}.md5sum
 
 ### Upload source code tarball to OSGeo servers
 
-Note: servers 'osgeo7-grass' and 'osgeo7-download' only reachable via
+Note: servers 'osgeo8-grass' and 'osgeo7-download' only reachable via
 jumphost (managed by OSGeo-SAC) - see <https://wiki.osgeo.org/wiki/SAC_Service_Status#grass>
 
 ```bash
 # Store the source tarball (twice) in (use scp -p FILES grass:):
 USER=neteler
-SERVER1=osgeo7-grass
+SERVER1=osgeo8-grass
 SERVER1DIR=/var/www/code_and_data/grass$MAJOR$MINOR/source/
 SERVER2=osgeo7-download
 SERVER2DIR=/osgeo/download/grass/grass$MAJOR$MINOR/source/
@@ -371,13 +374,13 @@ For final minor and major releases (not release candidates and micro releases),
 update `grass-stable` redirect at `osgeo7-grass`:
 
 ```bash
-sudo vim /etc/apache2/sites-enabled/000-default.conf`
+sudo vim /etc/apache2/sites-enabled/000-default.conf
 ```
 
 Load the new configuration:
 
 ```bash
-sudo systemctl reload apache2`
+sudo systemctl reload apache2
 ```
 
 For new branches: Update `grass-devel` using the steps above.
@@ -421,51 +424,64 @@ Release is done.
 
 ## Improve release description
 
-For final releases only, go to Zenodo.org a get a Markdown badge for the release
-which Zenodo creates with a DOI for the published release.
+For final releases only, go to [Zenodo](https://doi.org/10.5281/zenodo.5176030)
+and get a Markdown badge for the release which Zenodo creates with a DOI
+for the published release.
 
 For all releases, click the Binder badge to get Binder to build. Use it to test
 it and to cache the built image. Add more links to (or badges for) more notebooks
 if there are any which show well specific features added or updated in the release.
 
-## Create entries for the new release
+## Create various entries for the new release
 
-### Trac Wiki release page entry
+### Cron jobs
 
-Add entry in <https://trac.osgeo.org/grass/wiki/Release>
+Only in case of major releases:
 
-### Update Hugo web site and other pages to show the new version
+- update '[cronjob(s)](https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/)'
+  on grass.osgeo.org to next but one release tag for the differences
 
-For a (final) release (not release candidate), write announcement and publish it:
+### Update Hugo web site
 
-- News section, <https://github.com/OSGeo/grass-website/tree/master/content/news>
+Update website only for final releases (not release candidates). Submit the changes
+in a single PR.
 
-Increment the GRASS GIS version in
-
-- <https://github.com/OSGeo/grass-website/blob/master/data/grass.json>
-- <https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md>
-
-Update the version in the Wiki page: <https://grasswiki.osgeo.org/wiki/GRASS-Wiki>
-
-Subsequently, verify the software pages:
+Software pages:
 
 - Linux: <https://github.com/OSGeo/grass-website/blob/master/content/download/linux.en.md>
 - Windows: <https://github.com/OSGeo/grass-website/blob/master/content/download/windows.en.md>
 - Mac: <https://github.com/OSGeo/grass-website/blob/master/content/download/mac.en.md>
+- Releases: <https://github.com/OSGeo/grass-website/blob/master/content/about/history/releases.md>
+- Website variables: <https://github.com/OSGeo/grass-website/blob/master/data/grass.json>
 
-### Only in case of new major release
+Write announcement and publish it:
 
-- update '[cronjob(s)](https://github.com/OSGeo/grass-addons/tree/grass8/utils/cronjobs_osgeo_lxd/)'
-  on grass.osgeo.org to next but one release tag for the differences
-- wiki updates, only when new major release:
+- News section: <https://github.com/OSGeo/grass-website/tree/master/content/news>
+
+### GRASS Wiki
+
+For final releases (not release candidates), update the last version
+on the main page:
+
+- Wiki: <https://grasswiki.osgeo.org/wiki/GRASS-Wiki>
+
+- For major release only:
   - {{cmd|xxxx}} macro: <https://grasswiki.osgeo.org/wiki/Template:Cmd>
-  - update last version on main page
+
+### Trac wiki
+
+For all releases:
+
+- Add link to GitHub release page to <https://trac.osgeo.org/grass/wiki/Release>
+
+For major and minor releases:
+
 - Add trac Wiki Macro definitions for manual pages G8X:modulename
   - Edit: <https://trac.osgeo.org/grass/wiki/InterMapTxt>
 
-## Packaging notes
+## WinGRASS notes
 
-### WinGRASS notes
+For new branches and final releases (see additional instructions in the repo):
 
 - Go to <https://github.com/landam/wingrass-maintenance-scripts/>
 - Update grass_packager_release.bat, eg.
@@ -487,11 +503,6 @@ Subsequently, verify the software pages:
 ```bash
      copy_addon 840RC1 8.4.0RC1
 ```
-
-### Ubuntu Launchpad notes
-
-- Create milestone and release: <https://launchpad.net/grass/+series>
-- Upload tarball for created release
 
 ### Update grass.osgeo.org
 
@@ -517,12 +528,12 @@ Add release to history page:
 
 ## Tell others about release
 
-- If release candidate (send just a short invitation to test):
-  - <grass-announce@lists.osgeo.org>
+- If release candidate (just a short invitation to test):
   - <grass-dev@lists.osgeo.org>
+  - <grass-user@lists.osgeo.org>
 
-If final release, send out an announcement (press release) which is a shortened
-version of release desciption and website news item (under `/announces/`).
+If final release, send out an announcement (press release)
+which is a shortened version of release desciption and website news item.
 Note: Do not use relative links.
 
 - Our main mailing lists:
@@ -530,8 +541,8 @@ Note: Do not use relative links.
     (ask a development coordinator to be added)
   - <https://lists.osgeo.org/mailman/listinfo/grass-dev> | <grass-dev@lists.osgeo.org>
   - <https://lists.osgeo.org/mailman/listinfo/grass-user> | <grass-user@lists.osgeo.org>
-- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org> (send an email, then it
-  will be approved)
+- OSGeo.org: <news_item@osgeo.org>, <info@osgeo.org>
+  (send an email, then it will be approved)
 
 Via web and social media:
 

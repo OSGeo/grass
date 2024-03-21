@@ -54,7 +54,7 @@ class TestCase(unittest.TestCase):
     readable_names = False  # prefer shorter but unreadable map and file names
 
     def __init__(self, methodName):
-        super(TestCase, self).__init__(methodName)
+        super().__init__(methodName)
         self.grass_modules = []
         self.supplementary_files = []
         # Python unittest doc is saying that strings use assertMultiLineEqual
@@ -176,9 +176,7 @@ class TestCase(unittest.TestCase):
                 first = first.replace(os.linesep, "\n")
             if os.linesep in second:
                 second = second.replace(os.linesep, "\n")
-        return super(TestCase, self).assertMultiLineEqual(
-            first=first, second=second, msg=msg
-        )
+        return super().assertMultiLineEqual(first=first, second=second, msg=msg)
 
     def assertLooksLike(self, actual, reference, msg=None):
         r"""Test that ``actual`` text is the same as ``reference`` with ellipses.

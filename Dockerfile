@@ -1,7 +1,7 @@
-# syntax=docker/dockerfile:1.4
+# syntax=docker/dockerfile:1.7
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
-#       Changes to this file must be copied over to the other file.  
+#       Changes to this file must be copied over to the other file.
 
 ARG GUI=without
 

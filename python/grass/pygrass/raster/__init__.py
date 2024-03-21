@@ -135,7 +135,7 @@ class RasterRow(RasterAbstractBase):
     """
 
     def __init__(self, name, mapset="", *args, **kargs):
-        super(RasterRow, self).__init__(name, mapset, *args, **kargs)
+        super().__init__(name, mapset, *args, **kargs)
 
     # mode = "r", method = "row",
     @must_be_open
@@ -231,7 +231,7 @@ class RasterRowIO(RasterRow):
 
     def __init__(self, name, *args, **kargs):
         self.rowio = RowIO()
-        super(RasterRowIO, self).__init__(name, *args, **kargs)
+        super().__init__(name, *args, **kargs)
 
     def open(self, mode=None, mtype=None, overwrite=False):
         """Open the raster if exist or created a new one.
@@ -246,7 +246,7 @@ class RasterRowIO(RasterRow):
                           raster maps
         :type overwrite: bool
         """
-        super(RasterRowIO, self).open(mode, mtype, overwrite)
+        super().open(mode, mtype, overwrite)
         self.rowio.open(self._fd, self._rows, self._cols, self.mtype)
 
     @must_be_open
@@ -311,7 +311,7 @@ class RasterSegment(RasterAbstractBase):
 
     def __init__(self, name, srows=64, scols=64, maxmem=100, *args, **kargs):
         self.segment = Segment(srows, scols, maxmem)
-        super(RasterSegment, self).__init__(name, *args, **kargs)
+        super().__init__(name, *args, **kargs)
 
     def _get_mode(self):
         return self._mode

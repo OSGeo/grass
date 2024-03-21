@@ -66,7 +66,7 @@ def get_table_random_values(nrows, columns):
     return np.array([v for v in zip(*vals)], dtype=dtype)
 
 
-class DBconnection(object):
+class DBconnection:
     """Define a class to share common methods between TestCase."""
 
     path = os.path.join(tmp.gettempdir(), randstr(prefix="temp", suffix=".db"))

@@ -374,24 +374,6 @@ g.region raster=srtmgl1_v003_30m -p
 r.colors srtmgl1_v003_30m color=srtm_plus
 </pre></div>
 
-<h3>Worldclim.org data</h3>
-
-To import the BIL data from <a href="http://www.worldclim.org">Worldclim</a>, the following
-line has to be added to each .hdr file:
-<div class="code"><pre>
-PIXELTYPE SIGNEDINT
-</pre></div>
-<p>
-
-To import the ESRI Grd data from <a href="http://www.worldclim.org">Worldclim</a>, the
-broken spatial extent (exceeding the boundaries) needs to be fixed prior to import:
-
-<div class="code"><pre>
-# example: tmean dataset
-gdal_translate -a_ullr -180 90 180 -60 tmean_1 tmean_1_fixed.tif
-r.in.gdal input=tmean_1_fixed.tif output=tmean_1
-</pre></div>
-
 <h3>HDF</h3>
 
 The import of HDF bands requires the specification of the individual bands
