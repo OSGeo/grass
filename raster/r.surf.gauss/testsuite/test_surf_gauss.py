@@ -46,7 +46,15 @@ class MeanSigmaTestCase(TestCase):
 
     def test_defaut_settings(self):
         """Check to see if double output has the expected range"""
+        default_mean = 0.0
+        default_sigma = 1.0
         self.assertModule("r.surf.gauss", output=self.output)
+        self.assertRasterFitsUnivar(
+            self.output,
+            reference=dict(mean=default_mean, stddev=default_sigma),
+            msg="The mean and sigma values are not within the expected range.",
+            precision=0.01,
+        )
 
     def test_mean_sigma_params(self):
         """Check if mean and sigma params are accepted"""
@@ -74,6 +82,12 @@ class MeanSigmaTestCase(TestCase):
         )
 
         self.assertRasterExists(self.output, msg="Output was not created")
+        self.assertRasterFitsUnivar(
+            self.output,
+            reference=dict(mean=mean_value, stddev=sigma_value),
+            msg="The mean and sigma values are not within the expected range.",
+            precision=0.01,
+        )
 
     def test_random_seed_option(self):
         """Checks if random seed option sets random number"""
