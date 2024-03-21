@@ -68,6 +68,7 @@ jobs:
           pip install black==${{ matrix.black-version }}
           pip install flake8==${{ matrix.flake8-version }}
           pip install pylint==${{ matrix.pylint-version }} pytest-github-actions-annotate-failures
+          pip install bandit
 
       - name: Run Black
         run: |
@@ -149,6 +150,22 @@ jobs:
           name: sphinx-grass
           path: sphinx-grass
           retention-days: 3
+
+      - name: Bandit Vulnerability Scan
+        run: |
+          bandit -c pyproject.toml -iii -r . -f sarif -o bandit.sarif --exit-zero
+
+      - name: Upload Bandit Scan Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: bandit.sarif
+          path: bandit.sarif
+
+      - name: Upload SARIF File into Security Tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: bandit.sarif
+
   python-success:
     name: Python Code Quality Result
     needs:
