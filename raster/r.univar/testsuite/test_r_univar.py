@@ -19,6 +19,7 @@ class TestRasterUnivar(TestCase):
     def tearDown(self):
         self.runModule("g.remove", flags="f", type="raster", name="map_a")
         self.runModule("g.remove", flags="f", type="raster", name="map_b")
+        self.runModule("g.remove", flags="f", type="raster", name="map_negative")
         self.runModule("g.remove", flags="f", type="raster", name="zone_map")
         self.runModule("g.remove", flags="f", type="raster", name="zone_map_with_gap")
 
@@ -47,6 +48,11 @@ class TestRasterUnivar(TestCase):
         self.runModule(
             "r.mapcalc",
             expression="map_double = double(400) + row() + col()",
+            overwrite=True,
+        )
+        self.runModule(
+            "r.mapcalc",
+            expression="map_negative = -double(10) - row() - col()",
             overwrite=True,
         )
 
@@ -283,6 +289,44 @@ class TestRasterUnivar(TestCase):
         self.assertModuleKeyValue(
             module="r.univar",
             map=["map_a", "map_b"],
+            flags="rg",
+            nprocs=4,
+            reference=univar_string,
+            precision=6,
+            sep="=",
+        )
+
+    def test_negative(self):
+        """
+        check map with only negative values
+        :return:
+        """
+
+        univar_string = """n=8100
+        null_cells=0
+        cells=8100
+        min=-190
+        max=-12
+        range=178
+        mean=-101
+        mean_of_abs=101
+        stddev=36.7400780256838
+        variance=1349.83333333333
+        coeff_var=-36.3763148769146
+        sum=-818100"""
+
+        self.runModule("g.region", res=10)
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map="map_negative",
+            flags="rg",
+            reference=univar_string,
+            precision=6,
+            sep="=",
+        )
+        self.assertModuleKeyValue(
+            module="r.univar",
+            map="map_negative",
             flags="rg",
             nprocs=4,
             reference=univar_string,
