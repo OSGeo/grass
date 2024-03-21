@@ -34,11 +34,7 @@
 #define OP_ADD 2
 #define OP_REM 3
 
-enum OutputFormat
-{
-    PLAIN,
-    JSON
-};
+enum OutputFormat { PLAIN, JSON };
 
 void fatal_error_option_value_excludes_flag(struct Option *option,
                                             struct Flag *excluded,
@@ -79,8 +75,7 @@ int main(int argc, char *argv[])
     int nmapsets;
 
     struct GModule *module;
-    struct _opt
-    {
+    struct _opt {
         struct Option *mapset, *op, *format, *fsep;
         struct Flag *print, *list, *dialog;
     } opt;
@@ -116,9 +111,8 @@ int main(int argc, char *argv[])
     opt.format->required = YES;
     opt.format->label = _("Output format for printing (-l and -p flags)");
     opt.format->options = "plain,json";
-    opt.format->descriptions =
-        "plain;Configurable plain text output;"
-        "json;JSON (JavaScript Object Notation);";
+    opt.format->descriptions = "plain;Configurable plain text output;"
+                               "json;JSON (JavaScript Object Notation);";
     opt.format->answer = "plain";
     opt.format->guisection = _("Format");
 
@@ -174,8 +168,8 @@ int main(int argc, char *argv[])
     else
         format = PLAIN;
     if (format == JSON) {
-        fatal_error_option_value_excludes_option(opt.format, opt.fsep,
-                                                 _("Separator is part of the format"));
+        fatal_error_option_value_excludes_option(
+            opt.format, opt.fsep, _("Separator is part of the format"));
     }
 
     /* the field separator */
@@ -188,7 +182,7 @@ int main(int argc, char *argv[])
             fsep = G_store("|");
         }
         else
-            fsep = NULL;        /* Something like a separator is part of the format. */
+            fsep = NULL; /* Something like a separator is part of the format. */
     }
 
     /* list available mapsets */
@@ -204,8 +198,7 @@ int main(int argc, char *argv[])
             list_avaliable_mapsets_json((const char **)mapset_name, nmapsets);
         }
         else {
-            list_available_mapsets((const char **)mapset_name, nmapsets,
-                                   fsep);
+            list_available_mapsets((const char **)mapset_name, nmapsets, fsep);
         }
 
         exit(EXIT_SUCCESS);
