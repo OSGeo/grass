@@ -15,17 +15,8 @@ for details.
 """
 
 import os
-
-import grass.script as gs
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-
-def get_raster_min_max(raster_map):
-    """Get minimum and maximum value from raster metadata as a tuple"""
-    info = gs.raster_info(raster_map)
-    return info["min"], info["max"]
 
 
 class MeanSigmaTestCase(TestCase):
@@ -68,6 +59,8 @@ class MeanSigmaTestCase(TestCase):
             output=self.output,
         )
 
+        self.assertRasterExists(self.output, msg="Output was not created")
+
     def test_random_flag(self):
         """Checks if random flag sets random number"""
         mean_value = 3.0
@@ -80,8 +73,10 @@ class MeanSigmaTestCase(TestCase):
             flags="s",
         )
 
+        self.assertRasterExists(self.output, msg="Output was not created")
+
     def test_random_seed_option(self):
-        """Checks if random flag sets random number"""
+        """Checks if random seed option sets random number"""
         mean_value = 3.0
         sigma_value = 5.8
         self.assertModule(
@@ -90,6 +85,14 @@ class MeanSigmaTestCase(TestCase):
             sigma=sigma_value,
             output=self.output,
             seed=22,
+        )
+
+        self.assertRasterExists(self.output, msg="Output was not created")
+        self.assertRasterFitsUnivar(
+            self.output,
+            reference=dict(mean=mean_value, stddev=sigma_value),
+            msg="The mean and sigma values are not within the expected range.",
+            precision=0.01,
         )
 
 
