@@ -200,6 +200,7 @@ void print_shell(struct Map_info *Map, const char *field_opt)
     fprintf(stdout, "name=%s\n", Vect_get_name(Map));
     fprintf(stdout, "mapset=%s\n", Vect_get_mapset(Map));
     fprintf(stdout, "location=%s\n", G_location());
+    fprintf(stdout, "project=%s\n", G_location());
     fprintf(stdout, "database=%s\n", G_gisdbase());
     fprintf(stdout, "title=%s\n", Vect_get_map_name(Map));
     fprintf(stdout, "scale=1:%d\n", Vect_get_scale(Map));
@@ -302,7 +303,7 @@ void print_info(struct Map_info *Map)
     G_saprintf(line, "%-17s%s", _("Mapset:"), Vect_get_mapset(Map));
     printline(line);
 
-    G_saprintf(line, "%-17s%s", _("Location:"), G_location());
+    G_saprintf(line, "%-17s%s", _("Project:"), G_location());
     printline(line);
     G_saprintf(line, "%-17s%s", _("Database:"), G_gisdbase());
     printline(line);

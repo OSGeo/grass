@@ -64,7 +64,7 @@ def get_path(path, vect_name=None):
         return path
 
 
-class Filters(object):
+class Filters:
     """Help user to build a simple sql query.
 
     >>> filter = Filters('table')
@@ -163,7 +163,7 @@ class Filters(object):
         self._groupby = None
 
 
-class Columns(object):
+class Columns:
     """Object to work with columns table.
 
     It is possible to instantiate a Columns object given the table name and
@@ -596,7 +596,7 @@ class Columns(object):
         self.update_odict()
 
 
-class Link(object):
+class Link:
     """Define a Link between vector map and the attributes table.
 
     It is possible to define a Link object or given all the information
@@ -862,7 +862,7 @@ class Link(object):
         print("driver:   ", self.driver)
 
 
-class DBlinks(object):
+class DBlinks:
     """Interface containing link to the table DB.
 
     >>> from grass.pygrass.vector import VectorTopo
@@ -1001,7 +1001,7 @@ class DBlinks(object):
         return libvect.Vect_get_field_number(self.c_mapinfo, name)
 
 
-class Table(object):
+class Table:
     """
 
     >>> import sqlite3

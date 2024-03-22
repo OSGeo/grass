@@ -656,6 +656,20 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     return (0);
 }
 
+/*!
+   \brief Write Plus_head to file
+
+   ptr->off_t_size is used for both coor and topo files, but their sizes
+   (ptr->coor_size for coor and no variable for topo) can be different. If
+   either file is greater than PORT_LONG_MAX, ptr->off_t_size must be 8. This
+   function determines this value of ptr->off_t_size and writes it to the file.
+
+   \param fp pointer to gvfile structure
+   \param[in,out] ptr pointer to Plus_head structure
+
+   \return -1 error
+   \return  0 OK
+ */
 int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
 {
     unsigned char buf[10];
@@ -678,8 +692,69 @@ int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
         /* can only happen when sizeof(off_t) == 8 */
         ptr->off_t_size = 8;
     }
-    else
-        ptr->off_t_size = 4;
+    else if (ptr->off_t_size == 0) {
+        /* calculate the total size of topo file to get the correct off_t_size
+         * if coor file is less than PORT_LONG_MAX */
+        off_t size = length;
+        int i;
+
+        for (i = 1; i <= ptr->n_nodes; i++) {
+            /* from dig_Wr_P_node() */
+            struct P_node *p = ptr->Node[i];
+
+            if (p == NULL)
+                size += 4;
+            else {
+                size += 20 + 8 * p->n_lines;
+                if (ptr->with_z)
+                    size += 12;
+            }
+        }
+
+        for (i = 1; i <= ptr->n_lines; i++) {
+            /* from dig_Wr_P_line() */
+            struct P_line *p = ptr->Line[i];
+
+            if (p == NULL)
+                size += 1;
+            else {
+                /* for now, off_t_size = 4 */
+                size += 5;
+                if (p->type & GV_CENTROID)
+                    size += 4;
+                else if (p->type & GV_LINE)
+                    size += 8;
+                else if (p->type & GV_BOUNDARY)
+                    size += 16;
+                else if ((p->type & GV_FACE) && ptr->with_z)
+                    size += 12;
+                else if ((p->type & GV_KERNEL) && ptr->with_z)
+                    size += 4;
+            }
+        }
+
+        for (i = 1; i <= ptr->n_areas; i++) {
+            /* from dig_Wr_P_area() */
+            struct P_area *p = ptr->Area[i];
+
+            if (p == NULL)
+                size += 4;
+            else
+                size += 12 + 4 * p->n_lines + 4 * p->n_isles;
+        }
+
+        for (i = 1; i <= ptr->n_isles; i++) {
+            /* from dig_Wr_P_isle() */
+            struct P_isle *p = ptr->Isle[i];
+
+            if (p == NULL)
+                size += 4;
+            else
+                size += 8 + 4 * p->n_lines;
+        }
+
+        ptr->off_t_size = size > (off_t)PORT_LONG_MAX ? 8 : 4;
+    }
 
     /* add a new field with off_t_size after byte_order? */
 

@@ -29,7 +29,7 @@ from grass.script import core as grass
 from grass.pydispatch.signal import Signal
 
 
-class MapWindowProperties(object):
+class MapWindowProperties:
     def __init__(self):
         self._resolution = None
         self.resolutionChanged = Signal("MapWindowProperties.resolutionChanged")
@@ -124,7 +124,7 @@ class MapWindowProperties(object):
             self.sbItemChanged.emit(mode=mode)
 
 
-class MapWindowBase(object):
+class MapWindowBase:
     """Abstract map display window class
 
     Superclass for BufferedWindow class (2D display mode), and GLWindow

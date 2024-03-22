@@ -24,8 +24,8 @@
 struct Cell_head window;
 
 int mfd, c_fac, abs_acc, ele_scale;
-int *heap_index, heap_size;
-int first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
+size_t *heap_index, heap_size;
+size_t first_astar, first_cum, nxt_avail_pt, total_cells, do_points;
 int nrows, ncols;
 double half_res, diag, max_length, dep_slope;
 int bas_thres, tot_parts;
@@ -36,7 +36,7 @@ FLAG *worked, *in_list, *s_b, *swale, *flat_done;
 RAMSEG dis_seg, alt_seg, wat_seg, asp_seg, bas_seg, haf_seg;
 RAMSEG r_h_seg, dep_seg, rtn_seg;
 RAMSEG slp_seg, s_l_seg, s_g_seg, l_s_seg;
-int *astar_pts;
+size_t *astar_pts;
 CELL *dis, *alt, *asp, *bas, *haf, *r_h, *dep;
 char *rtn;
 DCELL *wat, *sca, *tanb;

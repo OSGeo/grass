@@ -20,7 +20,7 @@ void write_into_legend_file(const char *legfile, const char *icon,
                             double stats_max, double *breakpoints, int nbreaks,
                             int size, struct color_rgb bcolor,
                             struct color_rgb *colors, int default_width,
-                            int *frequencies, const char *topo)
+                            int *frequencies, int c_type, const char *topo)
 {
     FILE *fd;
     int i;
@@ -33,29 +33,34 @@ void write_into_legend_file(const char *legfile, const char *icon,
     /* Title */
     fprintf(fd, "||||||%s\n", title);
 
+    // Do not show decimal places for integers.
+    int n_places = c_type == DB_C_TYPE_INT ? 0 : 2;
+
     /* First line */
     if (stats_min > breakpoints[0]) {
-        fprintf(fd, "< %.2f|", breakpoints[0]);
+        fprintf(fd, "< %.*f|", n_places, breakpoints[0]);
     }
     else {
-        fprintf(fd, "%.2f - %.2f|", stats_min, breakpoints[0]);
+        fprintf(fd, "%.*f - %.*f|", n_places, stats_min, n_places,
+                breakpoints[0]);
     }
     fprintf(fd, "%s|%d|ps|%d:%d:%d|%d:%d:%d|%d|%s|%d\n", icon, size,
             colors[0].r, colors[0].g, colors[0].b, bcolor.r, bcolor.g, bcolor.b,
             default_width, topo, frequencies[0]);
     /* Middle lines */
     for (i = 1; i < nbreaks; i++) {
-        fprintf(fd, "%.2f - %.2f|%s|%d|ps|%d:%d:%d|%d:%d:%d|%d|%s|%d\n",
-                breakpoints[i - 1], breakpoints[i], icon, size, colors[i].r,
-                colors[i].g, colors[i].b, bcolor.r, bcolor.g, bcolor.b,
-                default_width, topo, frequencies[i]);
+        fprintf(fd, "%.*f - %.*f|%s|%d|ps|%d:%d:%d|%d:%d:%d|%d|%s|%d\n",
+                n_places, breakpoints[i - 1], n_places, breakpoints[i], icon,
+                size, colors[i].r, colors[i].g, colors[i].b, bcolor.r, bcolor.g,
+                bcolor.b, default_width, topo, frequencies[i]);
     }
     /* Last one */
     if (stats_max < breakpoints[nbreaks - 1]) {
-        fprintf(fd, ">%.2f|", breakpoints[nbreaks - 1]);
+        fprintf(fd, ">%.*f|", n_places, breakpoints[nbreaks - 1]);
     }
     else {
-        fprintf(fd, "%.2f - %.2f|", breakpoints[nbreaks - 1], stats_max);
+        fprintf(fd, "%.*f - %.*f|", n_places, breakpoints[nbreaks - 1],
+                n_places, stats_max);
     }
     fprintf(fd, "%s|%d|ps|%d:%d:%d|%d:%d:%d|%d|%s|%d\n", icon, size,
             colors[nbreaks].r, colors[nbreaks].g, colors[nbreaks].b, bcolor.r,

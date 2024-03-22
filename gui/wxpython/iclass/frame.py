@@ -313,7 +313,7 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(1)
                 .Position(0)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "iClass":
@@ -335,7 +335,7 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(2)
                 .Position(0)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "iClassMisc":
@@ -357,7 +357,7 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(1)
                 .Position(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "vdigit":
@@ -397,7 +397,7 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(2)
                 .Position(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         self._mgr.Update()
@@ -445,7 +445,7 @@ class IClassMapPanel(DoubleMapPanel):
             .Center()
             .Layer(0)
             .Position(position)
-            .BestSize((self.toolbars[name].GetBestSize())),
+            .BestSize(self.toolbars[name].GetBestSize()),
         )
 
     def _addPaneMapWindow(self, name, position):
@@ -496,7 +496,7 @@ class IClassMapPanel(DoubleMapPanel):
         mapTb.Enable("zoomBack", enable=(len(self.MapWindow.zoomhistory) > 1))
 
         if mapTb.GetActiveMap() != (win == self.secondMapWindow):
-            mapTb.SetActiveMap((win == self.secondMapWindow))
+            mapTb.SetActiveMap(win == self.secondMapWindow)
         self.StatusbarUpdate()
 
     def ActivateFirstMap(self, event=None):
@@ -1354,17 +1354,17 @@ class IClassMapPanel(DoubleMapPanel):
 
     def OnZoomIn(self, event):
         """Enable zooming for plots"""
-        super(IClassMapPanel, self).OnZoomIn(event)
+        super().OnZoomIn(event)
         self.plotPanel.EnableZoom(type=1)
 
     def OnZoomOut(self, event):
         """Enable zooming for plots"""
-        super(IClassMapPanel, self).OnZoomOut(event)
+        super().OnZoomOut(event)
         self.plotPanel.EnableZoom(type=-1)
 
     def OnPan(self, event):
         """Enable panning for plots"""
-        super(IClassMapPanel, self).OnPan(event)
+        super().OnPan(event)
         self.plotPanel.EnablePan()
 
     def OnPointer(self, event):

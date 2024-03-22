@@ -63,13 +63,13 @@ def replace_in_file(file_path, pattern, repl):
     os.rename(tmp_file_path, file_path)
 
 
-class NoopFileAnonymizer(object):
+class NoopFileAnonymizer:
     def anonymize(self, filenames):
         pass
 
 
 # TODO: why not remove GISDBASE by default?
-class FileAnonymizer(object):
+class FileAnonymizer:
     def __init__(self, paths_to_remove, remove_gisbase=True, remove_gisdbase=False):
         self._paths_to_remove = []
         if remove_gisbase:
@@ -314,7 +314,7 @@ def get_html_test_authors_table(directory, tests_authors):
     return test_authors
 
 
-class GrassTestFilesMultiReporter(object):
+class GrassTestFilesMultiReporter:
     """Interface to multiple repoter objects
 
     For start and finish of the tests and of a test of one file,
@@ -381,7 +381,7 @@ class GrassTestFilesMultiReporter(object):
         raise AttributeError
 
 
-class GrassTestFilesCountingReporter(object):
+class GrassTestFilesCountingReporter:
     def __init__(self):
         self.test_files = None
         self.files_fail = None
@@ -556,13 +556,13 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
     unknown_number = UNKNOWN_NUMBER_HTML
 
     def __init__(self, file_anonymizer, main_page_name="index.html"):
-        super(GrassTestFilesHtmlReporter, self).__init__()
+        super().__init__()
         self.main_index = None
         self._file_anonymizer = file_anonymizer
         self._main_page_name = main_page_name
 
     def start(self, results_dir):
-        super(GrassTestFilesHtmlReporter, self).start(results_dir)
+        super().start(results_dir)
         # having all variables public although not really part of API
         main_page_name = os.path.join(results_dir, self._main_page_name)
         self.main_index = open(main_page_name, "w")
@@ -606,7 +606,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         )
 
     def finish(self):
-        super(GrassTestFilesHtmlReporter, self).finish()
+        super().finish()
 
         pass_per = success_to_html_percent(total=self.total, successes=self.successes)
         tfoot = (
@@ -657,13 +657,13 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         self.main_index.close()
 
     def start_file_test(self, module):
-        super(GrassTestFilesHtmlReporter, self).start_file_test(module)
+        super().start_file_test(module)
         self.main_index.flush()  # to get previous lines to the report
 
     def end_file_test(
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
     ):
-        super(GrassTestFilesHtmlReporter, self).end_file_test(
+        super().end_file_test(
             module=module,
             cwd=cwd,
             returncode=returncode,
@@ -833,12 +833,12 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
 # allows overwriting what was collected
 class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
     def __init__(self, info=None):
-        super(GrassTestFilesKeyValueReporter, self).__init__()
+        super().__init__()
         self.result_dir = None
         self._info = info
 
     def start(self, results_dir):
-        super(GrassTestFilesKeyValueReporter, self).start(results_dir)
+        super().start(results_dir)
         # having all variables public although not really part of API
         self.result_dir = results_dir
 
@@ -861,7 +861,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
         self.test_files_authors = set()
 
     def finish(self):
-        super(GrassTestFilesKeyValueReporter, self).finish()
+        super().finish()
 
         # this shoul be moved to some additional meta passed in constructor
         svn_info = get_svn_info()
@@ -914,7 +914,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
     def end_file_test(
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
     ):
-        super(GrassTestFilesKeyValueReporter, self).end_file_test(
+        super().end_file_test(
             module=module,
             cwd=cwd,
             returncode=returncode,
@@ -974,14 +974,14 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
 
 class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
     def __init__(self, stream):
-        super(GrassTestFilesTextReporter, self).__init__()
+        super().__init__()
         self._stream = stream
 
     def start(self, results_dir):
-        super(GrassTestFilesTextReporter, self).start(results_dir)
+        super().start(results_dir)
 
     def finish(self):
-        super(GrassTestFilesTextReporter, self).finish()
+        super().finish()
 
         def format_percentage(percentage):
             if percentage is not None:
@@ -1005,7 +1005,7 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
         self._stream.write(summary_sentence)
 
     def start_file_test(self, module):
-        super(GrassTestFilesTextReporter, self).start_file_test(module)
+        super().start_file_test(module)
         self._stream.write("Running {file}...\n".format(file=module.file_path))
         # get the above line and all previous ones to the report
         self._stream.flush()
@@ -1013,7 +1013,7 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
     def end_file_test(
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
     ):
-        super(GrassTestFilesTextReporter, self).end_file_test(
+        super().end_file_test(
             module=module,
             cwd=cwd,
             returncode=returncode,
@@ -1050,7 +1050,7 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
 # TODO: document: do not use it for two reports, it accumulates the results
 # TODO: add also keyvalue summary generation?
 # wouldn't this conflict with collecting data from report afterwards?
-class TestsuiteDirReporter(object):
+class TestsuiteDirReporter:
     def __init__(
         self,
         main_page_name,

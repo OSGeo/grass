@@ -1,0 +1,45 @@
+---
+name: Post PR code suggestions
+
+on:
+  workflow_run:
+    workflows: ["ClangFormat Check"]
+    types:
+      - completed
+permissions: {}
+jobs:
+  post-suggestions:
+    runs-on: ubuntu-latest
+    # Only run on failures, since no changes are needed on success
+    if: >
+      (github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'failure')
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Create a .git directory needed by reviewdog
+        run: git init
+      - uses: actions/download-artifact@c850b930e6ba138125429b7e5c93fc707a7f8427 # v4.1.4
+        id: diff
+        continue-on-error: true
+        with:
+          name: diff
+          github-token: ${{ github.token }}
+          run-id: ${{github.event.workflow_run.id }}
+      - uses: reviewdog/action-setup@3f401fe1d58fe77e10d665ab713057375e39b887 # v1.3.0
+      - run: |
+          GITHUB_ACTIONS="" reviewdog \
+              -name="${INPUT_TOOL_NAME:-reviewdog-suggester}" \
+              -f=diff \
+              -f.diff.strip=1 \
+              -filter-mode=nofilter \
+              -guess \
+              -reporter="github-pr-review" < "${TMPFILE}"
+        env:
+          TMPFILE: diff-clang-format.patch
+          INPUT_TOOL_NAME: clang-format
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI_COMMIT: ${{ github.event.workflow_run.head_sha }}
+          CI_REPO_OWNER: ${{ github.event.workflow_run.repository.owner.login }}
+          CI_REPO_NAME: ${{ github.event.workflow_run.repository.name }}
+          # CI_PULL_REQUEST: "" # Populated from reviewdog's "-guess" flag since hard to get

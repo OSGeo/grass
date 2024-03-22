@@ -181,7 +181,7 @@ class AnimationFrame(wx.Frame):
             .Layer(2)
             .Row(1)
             .Position(0)
-            .BestSize((self.toolbars["mainToolbar"].GetBestSize())),
+            .BestSize(self.toolbars["mainToolbar"].GetBestSize()),
         )
 
         self.toolbars["animationToolbar"] = AnimationToolbar(self)
@@ -200,7 +200,7 @@ class AnimationFrame(wx.Frame):
             .Layer(2)
             .Row(1)
             .Position(1)
-            .BestSize((self.toolbars["animationToolbar"].GetBestSize())),
+            .BestSize(self.toolbars["animationToolbar"].GetBestSize()),
         )
         self.controller.SetAnimationToolbar(self.toolbars["animationToolbar"])
 
@@ -220,7 +220,7 @@ class AnimationFrame(wx.Frame):
             .Layer(2)
             .Row(1)
             .Position(2)
-            .BestSize((self.toolbars["miscToolbar"].GetBestSize())),
+            .BestSize(self.toolbars["miscToolbar"].GetBestSize()),
         )
 
     def SetAnimations(self, layerLists):

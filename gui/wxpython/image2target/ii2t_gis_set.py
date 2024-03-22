@@ -909,7 +909,7 @@ class GRASSStartup(wx.Frame):
             "g.mapset",
             read=True,
             flags="l",
-            location=locationName,
+            project=locationName,
             gisdbase=self.gisdbase,
         )
 
@@ -1139,7 +1139,7 @@ class GRASSStartup(wx.Frame):
                 if ret == wx.ID_YES:
                     try:
                         os.remove(lockfile)
-                    except IOError as e:
+                    except OSError as e:
                         GError(
                             _("Unable to remove '%(lock)s'.\n\n" "Details: %(reason)s")
                             % {"lock": lockfile, "reason": e}

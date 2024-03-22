@@ -28,7 +28,7 @@ import grass.lib.gis as gis
 ###############################################################################
 
 
-class SpatioTemporalTopologyBuilder(object):
+class SpatioTemporalTopologyBuilder:
     """This class is designed to build the spatio-temporal topology
     of spatio-temporally related abstract dataset objects.
 

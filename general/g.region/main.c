@@ -371,6 +371,7 @@ int main(int argc, char *argv[])
                       flag.eprint, flag.center, flag.gmt_style, flag.wms_style,
                       flag.dist_res, flag.nangle, flag.z, flag.bbox,
                       flag.gprint, parm.save, NULL);
+    G_option_requires(flag.flprint, flag.gprint, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);

@@ -10,8 +10,6 @@ Licence:    This program is free software under the GNU General Public
             for details.
 """
 
-import os
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -110,6 +108,29 @@ class TestClipling(TestCase):
         self.assertVectorExists(self.outdiss)
         topology = dict(areas=276)
         self.assertVectorFitsTopoInfo(self.outdiss, topology)
+
+    def test_poly_notable(self):
+        """Test clipping polygon with no table attached"""
+
+        def run_poly_notable(vmaps):
+            for vmap in vmaps:
+                self.runModule("g.copy", vector=[vmap + "@PERMANENT", vmap])
+                self.runModule("v.db.connect", map=vmap, flags="d")
+            self.assertModule(
+                "v.clip",
+                input=self.inpoly,
+                clip=self.inpclip,
+                output=self.outpoly,
+                overwrite=True,
+            )
+            for vmap in vmaps:
+                self.runModule("g.remove", flags="f", type="vector", name=vmap)
+            self.assertVectorExists(self.outpoly)
+            topology = dict(areas=275)
+            self.assertVectorFitsTopoInfo(self.outpoly, topology)
+
+        for vmaps in ([self.inpoly], [self.inpclip], [self.inpoly, self.inpclip]):
+            run_poly_notable(vmaps)
 
 
 if __name__ == "__main__":

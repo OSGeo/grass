@@ -146,7 +146,7 @@ except ImportError:
     pass
 
 
-class TemporalOperatorLexer(object):
+class TemporalOperatorLexer:
     """Lexical analyzer for the GRASS GIS temporal operator"""
 
     # Functions that defines topological relations.
@@ -288,7 +288,7 @@ class TemporalOperatorLexer(object):
 ###############################################################################
 
 
-class TemporalOperatorParser(object):
+class TemporalOperatorParser:
     """The temporal operator class"""
 
     def __init__(self):

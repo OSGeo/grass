@@ -143,6 +143,13 @@ def main():
         else:
             grass.fatal(_("Input DSN <%s> not found or not readable") % input)
 
+    # save db connection settings of the output
+    f = grass.vector_layer_db(output, "1")
+
+    table = f["table"]
+    database = f["database"]
+    driver = f["driver"]
+
     # rename ID col if requested from cat to new name
     if key:
         grass.write_command(
@@ -173,14 +180,16 @@ def main():
         "db.dropcolumn",
         quiet=True,
         flags="f",
-        table=output,
+        table=table,
+        database=database,
+        driver=driver,
         column="cat",
         stdout=nuldev,
         stderr=nuldev,
     )
     nuldev.close()
 
-    records = grass.db_describe(output)["nrows"]
+    records = grass.db_describe(table, database=database, driver=driver)["nrows"]
     grass.message(_("Imported table <%s> with %d rows") % (output, records))
 
 

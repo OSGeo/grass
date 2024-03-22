@@ -84,6 +84,7 @@ class GConsoleWindow(wx.SplitterWindow):
         self.panelPrompt = wx.Panel(parent=self, id=wx.ID_ANY)
         # initialize variables
         self.parent = parent  # GMFrame | CmdPanel | ?
+        self.giface = giface
         self._gconsole = gconsole
         self._menuModel = menuModel
 
@@ -142,19 +143,10 @@ class GConsoleWindow(wx.SplitterWindow):
         self.btnOutputSave.SetToolTip(_("Save output to a file"))
         self.btnCmdAbort = Button(parent=self.panelProgress, id=wx.ID_STOP)
         self.btnCmdAbort.SetToolTip(_("Abort running command"))
-        self.btnCmdExportHistory = Button(parent=self.panelPrompt, id=wx.ID_ANY)
-        self.btnCmdExportHistory.SetLabel(_("&Export history"))
-        self.btnCmdExportHistory.SetToolTip(
-            _("Export history of executed commands to a file")
-        )
-
-        if not self._gcstyle & GC_PROMPT:
-            self.btnCmdExportHistory.Hide()
 
         self.btnClear.Bind(wx.EVT_BUTTON, self.OnClear)
         self.btnOutputSave.Bind(wx.EVT_BUTTON, self.OnOutputSave)
         self.btnCmdAbort.Bind(wx.EVT_BUTTON, self._gconsole.OnCmdAbort)
-        self.btnCmdExportHistory.Bind(wx.EVT_BUTTON, self.OnCmdExportHistory)
 
         self._layout()
 
@@ -182,19 +174,13 @@ class GConsoleWindow(wx.SplitterWindow):
             promptSizer.Add(helpText, proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
 
             btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+            btnSizer.AddStretchSpacer()
             btnSizer.Add(
                 self.btnOutputSave,
                 proportion=0,
                 flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
                 border=5,
             )
-            btnSizer.Add(
-                self.btnCmdExportHistory,
-                proportion=0,
-                flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
-                border=5,
-            )
-            btnSizer.AddStretchSpacer()
             btnSizer.Add(self.btnClear, proportion=0, flag=wx.EXPAND, border=5)
             promptSizer.Add(btnSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
 
@@ -367,7 +353,7 @@ class GConsoleWindow(wx.SplitterWindow):
             try:
                 output = open(path, "w")
                 output.write(text)
-            except IOError as e:
+            except OSError as e:
                 GError(
                     _("Unable to write file '%(path)s'.\n\nDetails: %(error)s")
                     % {"path": path, "error": e}
@@ -414,29 +400,6 @@ class GConsoleWindow(wx.SplitterWindow):
     def OnCmdProgress(self, event):
         """Update progress message info"""
         self.progressbar.SetValue(event.value)
-        event.Skip()
-
-    def OnCmdExportHistory(self, event):
-        """Export the history of executed commands stored
-        in a .wxgui_history file to a selected file."""
-        dlg = wx.FileDialog(
-            self,
-            message=_("Save file as..."),
-            defaultFile="grass_cmd_log.txt",
-            wildcard=_("{txt} (*.txt)|*.txt|{files} (*)|*").format(
-                txt=_("Text files"), files=_("Files")
-            ),
-            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
-        )
-
-        if dlg.ShowModal() == wx.ID_OK:
-            path = dlg.GetPath()
-            if self.cmdPrompt.CopyHistory(path):
-                self.showNotification.emit(
-                    message=_("Command history saved to '{}'".format(path))
-                )
-
-        dlg.Destroy()
         event.Skip()
 
     def OnCmdRun(self, event):

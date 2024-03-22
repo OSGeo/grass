@@ -250,8 +250,7 @@ int db__driver_fetch(dbCursor *cn, int position, int *more)
     return DB_OK;
 }
 
-int db__driver_get_num_rows(cn)
-dbCursor *cn;
+int db__driver_get_num_rows(dbCursor *cn)
 {
     cursor *c;
     dbToken token;

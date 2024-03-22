@@ -48,7 +48,7 @@ def main():
             if cmd.startswith("#"):
                 continue
             grass.call(split(cmd))
-    except IOError as e:
+    except OSError as e:
         grass.fatal(
             _("Unable to open file '%s' for reading. Details: %s") % (monCmd, e)
         )
@@ -59,7 +59,7 @@ def main():
     try:
         fd = open(monCmd, "w")
         fd.writelines(cmdList)
-    except IOError as e:
+    except OSError as e:
         grass.fatal(
             _("Unable to open file '%s' for writing. Details: %s") % (monCmd, e)
         )

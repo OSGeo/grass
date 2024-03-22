@@ -47,7 +47,7 @@ class Circle:
         self.radius = r
 
 
-class MaskedArea(object):
+class MaskedArea:
     def __init__(self, region, raster, radius):
         self.region = region
         self.raster = raster
@@ -107,7 +107,7 @@ class RLiSetupMapPanel(wx.Panel):
             .CloseButton(False)
             .Layer(1)
             .Gripper(False)
-            .BestSize((self.toolbar.GetBestSize())),
+            .BestSize(self.toolbar.GetBestSize()),
         )
         self._mgr.Update()
 

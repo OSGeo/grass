@@ -41,27 +41,27 @@ from gui_core.wrap import Button, StaticText
 # TODO: labels (and descriptions) translatable?
 LOCATIONS = [
     {
-        "label": "Complete NC location",
+        "label": "Complete North Carolina dataset",
         "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_spm_08_grass7.tar.gz",
     },
     {
-        "label": "Basic NC location",
+        "label": "Basic North Carolina dataset",
         "url": "https://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.tar.gz",
     },
     {
-        "label": "World location in LatLong/WGS84",
+        "label": "World dataset in LatLong/WGS84",
         "url": "https://grass.osgeo.org/sampledata/worldlocation.tar.gz",
     },
     {
-        "label": "Spearfish (SD) location",
+        "label": "Spearfish (SD) dataset",
         "url": "https://grass.osgeo.org/sampledata/spearfish_grass70data-0.3.tar.gz",
     },
     {
-        "label": "Piemonte, Italy data set",
-        "url": "http://geodati.fmach.it/gfoss_geodata/libro_gfoss/grassdata_piemonte_utm32n_wgs84_grass7.tar.gz",
+        "label": "Piemonte, Italy dataset",
+        "url": "https://grass.osgeo.org/sampledata/grassdata_piemonte_utm32n_wgs84_grass7.tar.gz",
     },
     {
-        "label": "Slovakia 3D precipitation voxel data set",
+        "label": "Slovakia 3D precipitation voxel dataset",
         "url": "https://grass.osgeo.org/sampledata/slovakia3d_grass7.tar.gz",
     },
     {
@@ -69,7 +69,7 @@ LOCATIONS = [
         "url": "https://grass.osgeo.org/sampledata/fire_grass6data.tar.gz",
     },
     {
-        "label": "GISMentors location, Czech Republic",
+        "label": "GISMentors dataset, Czech Republic",
         "url": "http://training.gismentors.eu/geodata/grass/gismentors.zip",
     },
     {
@@ -179,7 +179,7 @@ def download_location(url, name, database):
         directory = download_and_extract(source=url, reporthook=reporthook)
         destination = os.path.join(database, name)
         if not is_location_valid(directory):
-            return _("Downloaded location is not valid")
+            return _("Downloaded project is not valid")
         shutil.copytree(src=directory, dst=destination)
         try_rmdir(directory)
     except DownloadError as error:
@@ -224,7 +224,7 @@ class LocationDownloadPanel(wx.Panel):
         self.database = database
         self.locations = locations
         self._abort_btn_label = _("Abort")
-        self._abort_btn_tooltip = _("Abort download location")
+        self._abort_btn_tooltip = _("Abort download")
         self._infobar_message_btn_id = wx.NewIdRef()
         self._infobar_message_btns = {
             "addBtn": None,
@@ -232,7 +232,7 @@ class LocationDownloadPanel(wx.Panel):
         }
 
         self.label = StaticText(
-            parent=self, label=_("Select sample location to download:")
+            parent=self, label=_("Select sample project to download:")
         )
 
         choices = []
@@ -298,7 +298,7 @@ class LocationDownloadPanel(wx.Panel):
         self.SetMinSize(self.GetBestSize())
 
     def _change_download_btn_label(
-        self, label=_("Do&wnload"), tooltip=_("Download selected location")
+        self, label=_("Do&wnload"), tooltip=_("Download selected project")
     ):
         """Change download button label/tooltip"""
         if self.parent.download_button:
@@ -386,7 +386,9 @@ class LocationDownloadPanel(wx.Panel):
         destination = os.path.join(self.database, dirname)
         if os.path.exists(destination):
             self._error(
-                _("Location named <%s> already exists," " download canceled") % dirname
+                _(
+                    "Project name {name} already exists in {path}, download canceled"
+                ).format(name=dirname, path=self.database)
             )
             self._infobar_message_btns.update(
                 dict(zip(("addBtn", "removeBtn"), (False, True))),
@@ -404,8 +406,8 @@ class LocationDownloadPanel(wx.Panel):
                 self._last_downloaded_location_name = dirname
                 self._warning(
                     _(
-                        "Download completed. The downloaded sample data is listed "
-                        "in the location/mapset tree."
+                        "Download completed. The downloaded sample data is available "
+                        "now in the data tree"
                     )
                 )
                 self.parent.newLocationIsDownloaded.emit()
@@ -442,7 +444,9 @@ class LocationDownloadPanel(wx.Panel):
         destination = os.path.join(self.database, dirname)
         if os.path.exists(destination):
             self._warning(
-                _("Location named <%s> already exists," " rename it first") % dirname
+                _("Project named {name} already exists, rename it first").format(
+                    name=dirname
+                )
             )
             self._infobar_message_btns["addBtn"] = False
             if hasattr(self.parent, "download_button"):
@@ -499,9 +503,9 @@ class LocationDownloadDialog(wx.Dialog):
     Contains the panel and Cancel button.
     """
 
-    def __init__(self, parent, database, title=_("Location Download")):
+    def __init__(self, parent, database, title=_("Dataset Download")):
         """
-        :param database: database to download the location to
+        :param database: database to download the project (location) to
         :param title: window title if the default is not appropriate
         """
         wx.Dialog.__init__(self, parent=parent, title=title)
@@ -516,7 +520,7 @@ class LocationDownloadDialog(wx.Dialog):
 
         self.cancel_button = Button(self, id=wx.ID_CANCEL)
         self.download_button = Button(parent=self, id=wx.ID_ANY, label=_("Do&wnload"))
-        self.download_button.SetToolTip(_("Download selected location"))
+        self.download_button.SetToolTip(_("Download selected dataset"))
         self.panel = LocationDownloadPanel(parent=self, database=database)
         self.cancel_button.Bind(wx.EVT_BUTTON, self.OnCancel)
         self.Bind(wx.EVT_CLOSE, self.OnCancel)
@@ -559,7 +563,7 @@ class LocationDownloadDialog(wx.Dialog):
             # running thread
             dlg = wx.MessageDialog(
                 parent=self,
-                message=_("Do you want to cancel location download?"),
+                message=_("Do you want to cancel dataset download?"),
                 caption=_("Abort download"),
                 style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )

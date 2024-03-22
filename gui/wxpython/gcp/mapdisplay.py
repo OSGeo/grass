@@ -253,7 +253,7 @@ class MapPanel(SingleMapPanel):
                 .TopDockable(True)
                 .CloseButton(False)
                 .Layer(2)
-                .BestSize((self.toolbars["map"].GetSize())),
+                .BestSize(self.toolbars["map"].GetSize()),
             )
 
         # GCP display

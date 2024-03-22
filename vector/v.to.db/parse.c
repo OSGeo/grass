@@ -24,7 +24,7 @@ int parse_command_line(int argc, char *argv[])
         struct Option *fs;
     } parms;
     struct {
-        struct Flag *p, *s, *t;
+        struct Flag *h, *p, *s, *t;
     } flags;
     char *desc;
 
@@ -70,10 +70,10 @@ int parse_command_line(int argc, char *argv[])
         "bbox;%s;",
         _("insert new row for each category if doesn't exist yet"),
         _("area size"),
-        _("compactness of an area, calculated as \n"
-          "              compactness = perimeter / (2 * sqrt(PI * area))"),
-        _("fractal dimension of boundary defining a polygon, calculated as \n"
-          "              fd = 2 * (log(perimeter) / log(area))"),
+        _("compactness of an area, calculated as compactness = perimeter / (2 "
+          "* sqrt(PI * area))"),
+        _("fractal dimension of boundary defining a polygon, calculated as fd "
+          "= 2 * (log(perimeter) / log(area))"),
         _("perimeter length of an area"), _("line length"),
         _("number of features for each category"),
         _("point coordinates, X,Y or X,Y,Z"),
@@ -81,7 +81,7 @@ int parse_command_line(int argc, char *argv[])
         _("line/boundary end point coordinates, X,Y or X,Y,Z"),
         _("categories of areas on the left and right side of the boundary, "
           "'query_layer' is used for area category"),
-        _("result of a database query for all records of the geometry"
+        _("result of a database query for all records of the geometry "
           "(or geometries) from table specified by 'query_layer' option"),
         _("slope steepness of vector line or boundary"),
         _("line sinuousity, calculated as line length / distance between end "
@@ -122,6 +122,11 @@ int parse_command_line(int argc, char *argv[])
     flags.p->guisection = _("Print");
     flags.p->suppress_required = YES;
 
+    flags.h = G_define_flag();
+    flags.h->key = 'h';
+    flags.h->description = _("Print header");
+    flags.h->guisection = _("Print");
+
     flags.s = G_define_flag();
     flags.s->key = 's';
     flags.s->description = _("Only print SQL statements");
@@ -133,6 +138,8 @@ int parse_command_line(int argc, char *argv[])
         _("Print also totals for option length, area, or count");
     flags.t->guisection = _("Print");
     flags.t->suppress_required = YES;
+
+    G_option_requires(flags.h, flags.p, flags.t, NULL);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -146,6 +153,7 @@ int parse_command_line(int argc, char *argv[])
                       parms.option->key, parms.option->description);
 
     options.print = flags.p->answer;
+    options.print_header = flags.h->answer;
     options.sql = flags.s->answer;
     options.total = flags.t->answer;
 

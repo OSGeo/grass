@@ -117,7 +117,7 @@ def _copy_startup_location(startup_location, location_in_grassdb):
             ignore=ignore_patterns("*.tmpl", "Makefile*"),
         )
         return True
-    except (IOError, OSError):
+    except OSError:
         pass
     return False
 

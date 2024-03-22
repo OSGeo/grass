@@ -22,6 +22,10 @@
 #include <grass/glocale.h>
 #include <grass/config.h>
 
+#ifdef HAVE_OGR
+#include <cpl_csv.h>
+#endif
+
 #include "local_proto.h"
 
 static int check_xy(int shell);
@@ -274,7 +278,7 @@ void print_wkt(int esristyle, int dontprettify)
 
     if (outwkt != NULL) {
         fprintf(stdout, "%s\n", outwkt);
-        G_free(outwkt);
+        CPLFree(outwkt);
     }
     else
         G_warning(_("Unable to convert to WKT"));

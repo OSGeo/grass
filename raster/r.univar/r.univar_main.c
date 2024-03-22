@@ -371,7 +371,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
             zd->sum_abs = 0;
             zd->size = 0;
             zd->min = DBL_MAX;
-            zd->max = DBL_MIN;
+            zd->max = -DBL_MAX;
             zd->bucket.n = 0;
             zd->bucket.n_alloc = 0;
             zd->bucket.nextp = NULL;

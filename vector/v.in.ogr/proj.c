@@ -24,7 +24,6 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
     *proj_wkt = NULL;
 
     /* Fetch input layer projection in GRASS form. */
-#if GDAL_VERSION_NUM >= 1110000
     if (geom_col) {
         int igeom;
         OGRGeomFieldDefnH Ogr_geomdefn;
@@ -42,9 +41,6 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
     else {
         hSRS = OGR_L_GetSpatialRef(Ogr_layer);
     }
-#else
-    hSRS = OGR_L_GetSpatialRef(Ogr_layer); /* should not be freed later */
-#endif
 
     /* verbose is used only when comparing input SRS to GRASS projection,
      * not when comparing SRS's of several input layers */
@@ -133,8 +129,8 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
 /* compare projections of all OGR layers
  * return 0 if all layers have the same projection
  * return 1 if layer projections differ */
-int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers, char **layer_names,
-                  char *geom_col)
+int cmp_layer_srs(GDALDatasetH Ogr_ds, int nlayers, int *layers,
+                  char **layer_names, char *geom_col)
 {
     int layer;
     struct Key_Value *proj_info1, *proj_units1;
@@ -156,7 +152,7 @@ int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers, char **layer_names,
     layer = 0;
     do {
         /* Get first SRS */
-        Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
+        Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layers[layer]);
 
         if (get_layer_proj(Ogr_layer, &cellhd1, &proj_info1, &proj_units1,
                            &proj_srid1, &proj_wkt1, geom_col, 0) == 0) {
@@ -201,7 +197,7 @@ int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers, char **layer_names,
 
     for (layer = 1; layer < nlayers; layer++) {
         /* Get SRS of other layer(s) */
-        Ogr_layer = ds_getlayerbyindex(Ogr_ds, layers[layer]);
+        Ogr_layer = GDALDatasetGetLayer(Ogr_ds, layers[layer]);
         G_get_window(&cellhd2);
         if (get_layer_proj(Ogr_layer, &cellhd2, &proj_info2, &proj_units2,
                            &proj_srid2, &proj_wkt2, geom_col, 0) != 0) {
@@ -265,7 +261,7 @@ int cmp_layer_srs(ds_t Ogr_ds, int nlayers, int *layers, char **layer_names,
 }
 
 /* keep in sync with r.in.gdal, r.external, v.external */
-void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
+void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                       char *geom_col, char *outloc, int create_only,
                       int override, int check_only)
 {
@@ -278,7 +274,7 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
     OGRLayerH Ogr_layer;
 
     /* Get first layer to be imported to use for projection check */
-    Ogr_layer = ds_getlayerbyindex(hDS, layer);
+    Ogr_layer = GDALDatasetGetLayer(hDS, layer);
 
     /* -------------------------------------------------------------------- */
     /*      Fetch the projection in GRASS form, SRID, and WKT.              */
@@ -317,7 +313,7 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
 
         /* If create only, clean up and exit here */
         if (create_only) {
-            ds_close(hDS);
+            GDALClose(hDS);
             exit(EXIT_SUCCESS);
         }
     }
@@ -339,7 +335,7 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
             }
             else {
                 msg_fn = G_fatal_error;
-                ds_close(hDS);
+                GDALClose(hDS);
             }
             msg_fn(error_msg);
             if (!override) {
@@ -506,7 +502,7 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
                 msg_fn = G_fatal_error;
             msg_fn("%s", error_msg);
             if (check_only) {
-                ds_close(hDS);
+                GDALClose(hDS);
                 exit(EXIT_FAILURE);
             }
         }
@@ -518,7 +514,7 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
             msg_fn(_("Projection of input dataset and current location "
                      "appear to match"));
             if (check_only) {
-                ds_close(hDS);
+                GDALClose(hDS);
                 exit(EXIT_SUCCESS);
             }
         }

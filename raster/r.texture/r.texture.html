@@ -52,8 +52,8 @@ It can be used in supervised classification algorithms such as
 or for the identification of objects in <a href="i.segment.html">i.segment</a>,
 and/or for the characterization of these objects and thus, for example, as one
 of the raster inputs of the
-<a href="https://grass.osgeo.org/grass8/manuals/addons/i.segment.stats.html">
-	i.segment.stats</a> addon.
+<a href="https://grass.osgeo.org/grass-stable/manuals/addons/i.segment.stats.html">i.segment.stats</a>
+addon.
 
 <p>
 In general, several variables constitute texture: differences in grey level values,
@@ -68,7 +68,15 @@ level co-occurrence matrix as described by Haralick et al (1973). This matrix
 is a two-dimensional histogram of grey levels for a pair of pixels which are
 separated by a fixed spatial relationship. The matrix approximates the joint
 probability distribution of a pair of pixels. Several texture measures are
-directly computed from the grey level co-occurrence matrix.
+directly computed from the Grey Level Co-occurrence Matrix (GLCM).
+
+The provided measures can be categorized under first-order and
+second-order statistics, with each playing a unique role in texture
+analysis. First-order statistics consider the distribution of
+individual pixel values without regard to spatial relationships, while
+second-order statistics, particularly those derived from the Grey Level
+Co-occurrence Matrix (GLCM), consider the spatial relationship of
+pixels.
 
 <p>
 The following part offers brief explanations of the Haralick et al texture
@@ -76,24 +84,45 @@ measures (after Jensen 1996).
 
 <h3>First-order statistics in the spatial domain</h3>
 <ul>
-<li> Sum Average (SA)</li>
+<li> Sum Average (SA):
+ Sum Average measures the average gray level intensity of the sum of
+ pixel pairs within the moving window. It reflects the average intensity
+ of pixel pairs at specific distances and orientations, highlighting the
+ overall brightness level within the area.</li>
 
 <li> Entropy (ENT):
  This measure analyses the randomness. It is high when the values of the
  moving window have similar values. It is low when the values are close
- to either 0 or 1 (i.e. when the pixels in the local window are uniform).</li>
+ to either 0 or 1 (i.e. when the pixels in the local window are
+ uniform).</li>
 
-<li> Difference Entropy (DE)</li>
+<li> Difference Entropy (DE):
+ This metric quantifies the randomness or unpredictability in the
+ distribution of differences between the grey levels of pixel pairs. It
+ is a measure of the entropy of the pixel-pair difference histogram,
+ capturing texture granularity.</li>
 
-<li> Sum Entropy (SE)</li>
+<li> Sum Entropy (SE): Similar to Difference Entropy, Sum Entropy measures
+ the randomness or unpredictability, but in the context of the sum of the
+ grey levels of pixel pairs. It evaluates the entropy of the pixel-pair
+ sum distribution, providing insight into the complexity of texture in
+ terms of intensity variation.</li>
 
 <li> Variance (VAR):
-  A measure of gray tone variance within the moving window (second-order
-moment about the mean)</li>
+ A measure of gray tone variance within the moving window (second-order
+ moment about the mean)</li>
 
-<li> Difference Variance (DV)</li>
+<li> Difference Variance (DV):
+ This is a measure of the variance or spread of the differences in grey
+ levels between pairs of pixels within the moving window. It quantifies
+ the contrast variability between pixels, indicating texture smoothness
+ or roughness.</li>
 
-<li> Sum Variance (SV)</li>
+<li> Sum Variance (SV):
+ In contrast to Difference Variance, Sum Variance measures the variance
+ of the sum of grey levels of pixel pairs. It assesses the variability
+ in the intensity levels of pairs of pixels, contributing to an
+ understanding of texture brightness or intensity variation.</li>
 </ul>
 
 Note that measures "mean", "kurtosis", "range", "skewness", and "standard
@@ -128,9 +157,19 @@ level co-occurrence matrices (GLCM; after Haralick 1979).
  pixels. Typically high, when the scale of local texture is larger than the
  <em>distance</em>.</li>
 
-<li> Information Measures of Correlation (MOC)</li>
+<li> Information Measures of Correlation (MOC):
+ These measures evaluate the complexity of the texture in terms of the
+ mutual dependence between the grey levels of pixel pairs. They
+ quantify how one pixel value informs or correlates with another,
+ offering insight into pattern predictability and structure regularity.</li>
 
-<li> Maximal Correlation Coefficient (MCC)</li>
+<li> Maximal Correlation Coefficient (MCC):
+ This statistic measures the highest correlation between any two
+ features of the texture, providing a single value that summarizes the
+ degree of linear dependency between grey levels in the texture. It's
+ often used to assess the overall correlation in the image, indicating
+ how predictable the texture patterns are from one pixel to the
+ next.</li>
 </ul>
 
 <p>

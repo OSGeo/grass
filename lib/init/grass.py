@@ -18,7 +18,7 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2023 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2024 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -280,7 +280,7 @@ def f(fmt, *args):
     matches = []
     # https://docs.python.org/3/library/stdtypes.html#old-string-formatting
     for m in re.finditer(
-        "%([#0 +-]*)([0-9]*)(\.[0-9]*)?([hlL]?[diouxXeEfFgGcrsa%])", fmt
+        r"%([#0 +-]*)([0-9]*)(\.[0-9]*)?([hlL]?[diouxXeEfFgGcrsa%])", fmt
     ):
         matches.append(m)
 
@@ -555,7 +555,7 @@ def read_gisrc(filename):
     kv = {}
     try:
         f = open(filename, "r")
-    except IOError:
+    except OSError:
         return kv
 
     for line in f:
@@ -1212,7 +1212,7 @@ def set_mapset(
 
 # we don't follow the LOCATION_NAME legacy naming here but we have to still
 # translate to it, so always double check
-class MapsetSettings(object):
+class MapsetSettings:
     """Holds GRASS GIS database directory, Location and Mapset
 
     Provides few convenient functions.
@@ -1787,8 +1787,18 @@ def start_gui(grass_gui):
     debug("GRASS GUI should be <%s>" % grass_gui)
     # Check for gui interface
     if grass_gui == "wxpython":
-        # TODO: report failures
-        return Popen([os.getenv("GRASS_PYTHON"), wxpath("wxgui.py")])
+        # Lazy-import to avoid dependency during standard import time.
+        # pylint: disable=import-outside-toplevel
+        import grass.script as gs
+
+        if is_debug() or "WX_DEBUG" in gs.gisenv():
+            stderr_redirect = None
+        else:
+            stderr_redirect = subprocess.DEVNULL
+        # TODO: report start failures?
+        return Popen(
+            [os.getenv("GRASS_PYTHON"), wxpath("wxgui.py")], stderr=stderr_redirect
+        )
     return None
 
 
@@ -2245,7 +2255,7 @@ def get_username():
     return user
 
 
-class Parameters(object):
+class Parameters:
     """Structure to hold standard part of command line parameters"""
 
     # we don't need to define any methods

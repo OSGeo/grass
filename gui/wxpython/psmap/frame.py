@@ -498,7 +498,7 @@ class PsMapFrame(wx.Frame):
                     im_array = np.array(im)
                     im = PILImage.fromarray(np.rot90(im_array, 3))
                 im.save(self.imgName, format="PNG")
-            except (IOError, OSError):
+            except OSError:
                 del busy
                 program = self._getGhostscriptProgramName()
                 dlg = HyperlinkDialog(

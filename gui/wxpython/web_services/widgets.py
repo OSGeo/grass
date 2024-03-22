@@ -556,7 +556,7 @@ class WSPanel(wx.Panel):
         """
         try:
             self.cap = self.ws_drvs[self.ws]["cap_parser"](cap_file)
-        except (IOError, ParseError) as error:
+        except (OSError, ParseError) as error:
             error_msg = _(
                 "%s web service was not found in fetched capabilities file from <%s>:\n%s\n"
                 % (self.ws, self.conn["url"], str(error))
@@ -1000,7 +1000,7 @@ class LayersList(TreeCtrl):
         # self.ExpandAll(self.GetRootItem())
 
     def GetSelectedLayers(self):
-        """Get selected layers/styles in LayersList
+        r"""Get selected layers/styles in LayersList
 
         :return: dict with these items:
                  * 'name'  : layer name used for request

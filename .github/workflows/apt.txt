@@ -13,6 +13,7 @@ libpdal-dev
 libpng-dev
 libproj-dev
 libreadline-dev
+libsvm-dev
 libzstd-dev
 pdal
 proj-bin

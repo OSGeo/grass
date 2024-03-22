@@ -10,7 +10,7 @@ from grass.script.utils import encode
 from grass.pygrass.utils import decode
 
 
-class History(object):
+class History:
     """History class help to manage all the metadata of a raster map"""
 
     def __init__(

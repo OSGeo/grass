@@ -67,7 +67,7 @@ def update_keyval_file(filename, module, returncode):
     return keyval
 
 
-class GrassTestFilesInvoker(object):
+class GrassTestFilesInvoker:
     """A class used to invoke test files and create the main report"""
 
     # TODO: it is not clear what clean_outputs mean, if should be split

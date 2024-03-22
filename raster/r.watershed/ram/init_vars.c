@@ -16,7 +16,7 @@ int init_vars(int argc, char *argv[])
     int fd, ele_map_type;
     size_t ele_size;
     char MASK_flag;
-    int seg_idx;
+    size_t seg_idx;
 
     G_gisinit(argv[0]);
     /* input */
@@ -135,7 +135,7 @@ int init_vars(int argc, char *argv[])
     G_get_set_window(&window);
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    total_cells = nrows * ncols;
+    total_cells = (size_t)nrows * ncols;
     if (max_length <= d_zero)
         max_length = 10 * nrows * window.ns_res + 10 * ncols * window.ew_res;
     if (window.ew_res < window.ns_res)
@@ -184,7 +184,7 @@ int init_vars(int argc, char *argv[])
 
     /* read elevation input and mark NULL/masked cells */
     /* initialize accumulation and drainage direction */
-    do_points = nrows * ncols;
+    do_points = (size_t)nrows * ncols;
     for (r = 0; r < nrows; r++) {
         Rast_get_row(fd, elebuf, r, ele_map_type);
         ptr = elebuf;
@@ -236,7 +236,7 @@ int init_vars(int argc, char *argv[])
     }
     Rast_close(fd);
     G_free(elebuf);
-    MASK_flag = (do_points < nrows * ncols);
+    MASK_flag = (do_points < (size_t)nrows * ncols);
 
     /* read flow accumulation from input map flow: amount of overland flow per
      * cell */
@@ -331,11 +331,11 @@ int init_vars(int argc, char *argv[])
                                  sizeof(double));
     }
 
-    astar_pts = (int *)G_malloc((do_points + 1) * sizeof(int));
+    astar_pts = (size_t *)G_malloc((do_points + 1) * sizeof(size_t));
 
     /* heap_index will track astar_pts in ternary min-heap */
     /* heap_index is one-based */
-    heap_index = (int *)G_malloc((do_points + 1) * sizeof(int));
+    heap_index = (size_t *)G_malloc((do_points + 1) * sizeof(size_t));
 
     G_message(_("SECTION 1b (of %1d): Determining Offmap Flow."), tot_parts);
 
@@ -348,7 +348,7 @@ int init_vars(int argc, char *argv[])
     }
     else
         buf = NULL;
-    first_astar = first_cum = -1;
+    first_astar = first_cum = 0;
     for (r = 0; r < nrows; r++) {
         G_percent(r, nrows, 3);
         if (pit_flag)

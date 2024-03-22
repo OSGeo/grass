@@ -237,13 +237,11 @@ def main():
                 "db.execute", input=sqltmp, database=fi["database"], driver=fi["driver"]
             )
             grass.verbose(
-                (
-                    _(
-                        "Statistics calculated from raster map <{raster}>"
-                        " and uploaded to attribute table"
-                        " of vector map <{vector}>."
-                    ).format(raster=raster, vector=vector)
-                )
+                _(
+                    "Statistics calculated from raster map <{raster}>"
+                    " and uploaded to attribute table"
+                    " of vector map <{vector}>."
+                ).format(raster=raster, vector=vector)
             )
         except CalledModuleError:
             grass.warning(
