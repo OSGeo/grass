@@ -20,7 +20,6 @@ This program is free software under the GNU General Public License
 import os
 import wx
 import hashlib
-import six
 from multiprocessing import cpu_count
 
 try:
@@ -99,7 +98,7 @@ def validateMapNames(names, etype):
                 raise GException(_("Map <%s> not found.") % name)
         else:
             found = False
-            for mapset, mapNames in six.iteritems(mapDict):
+            for mapset, mapNames in mapDict.items():
                 if name in mapNames:
                     found = True
                     newNames.append(name + "@" + mapset)

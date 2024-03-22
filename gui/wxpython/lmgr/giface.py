@@ -15,14 +15,12 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
-from __future__ import print_function
-
 from grass.pydispatch.signal import Signal
 from core.giface import Notification
 from core.utils import GetLayerNameFromCmd
 
 
-class Layer(object):
+class Layer:
     """@implements core::giface::Layer
 
     .. note::
@@ -49,7 +47,7 @@ class Layer(object):
         )
 
 
-class LayerList(object):
+class LayerList:
     """@implements core.giface.Layer"""
 
     def __init__(self, tree):
@@ -174,7 +172,7 @@ class LayerList(object):
             return Layer(item, self._tree.GetPyData(item))
 
 
-class LayerManagerGrassInterface(object):
+class LayerManagerGrassInterface:
     """@implements core::giface::GrassInterface"""
 
     def __init__(self, lmgr):
@@ -213,6 +211,21 @@ class LayerManagerGrassInterface(object):
 
         # Signal emitted when workspace is changed
         self.workspaceChanged = Signal("LayerManagerGrassInterface.workspaceChanged")
+
+        # Signal emitted when entry to history is added
+        self.entryToHistoryAdded = Signal(
+            "LayerManagerGrassInterface.entryToHistoryAdded"
+        )
+
+        # Signal emitted when entry from history is removed
+        self.entryFromHistoryRemoved = Signal(
+            "LayerManagerGrassInterface.entryFromHistoryRemoved"
+        )
+
+        # Signal emitted when entry in history is updated
+        self.entryInHistoryUpdated = Signal(
+            "LayerManagerGrassInterface.entryInHistoryUpdated"
+        )
 
     def RunCmd(self, *args, **kwargs):
         self.lmgr._gconsole.RunCmd(*args, **kwargs)
@@ -259,11 +272,8 @@ class LayerManagerGrassInterface(object):
     def GetProgress(self):
         return self.lmgr.goutput.GetProgressBar()
 
-    def UpdateCmdHistory(self, cmd):
-        self.lmgr.goutput.GetPrompt().UpdateCmdHistory(cmd)
 
-
-class LayerManagerGrassInterfaceForMapDisplay(object):
+class LayerManagerGrassInterfaceForMapDisplay:
     """Provides reference only to the given layer list (according to tree),
     not to the current.
 

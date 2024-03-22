@@ -20,8 +20,6 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-from __future__ import print_function
-
 import os
 import wx
 import copy
@@ -751,7 +749,7 @@ class InputDialog(wx.Dialog):
             self._update()
             self.UnInit()
             self.EndModal(wx.ID_OK)
-        except (GException, ValueError, IOError) as e:
+        except (GException, ValueError, OSError) as e:
             GError(message=str(e), showTraceback=False, caption=_("Invalid input"))
 
 

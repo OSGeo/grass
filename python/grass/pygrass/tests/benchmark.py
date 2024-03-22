@@ -3,15 +3,6 @@ Created on Sat Jun 16 20:24:56 2012
 
 @author: soeren
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 
 import optparse
 
@@ -311,7 +302,7 @@ def run_benchmark(resolution_list, runs, testdict, profile):
                         locals(),
                         filename=filename,
                     )
-                print(("    {0}: {1: 40.6f}s".format(oper, operdict["time"])))
+                print("    {0}: {1: 40.6f}s".format(oper, operdict["time"]))
                 del operdict["func"]
 
         regions.append(result)

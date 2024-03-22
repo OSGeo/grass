@@ -2,7 +2,7 @@
 
 Author: Vaclav Petras
 
-Status: Draft
+Status: Adopted (5 June 2023)
 
 ## Summary
 

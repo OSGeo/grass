@@ -14,13 +14,12 @@
 #
 #############################################################################
 
-from __future__ import print_function
-
-import os, sys
-import subprocess
-import json
-import glob
 import codecs
+import glob
+import json
+import os
+import subprocess
+import sys
 
 
 def read_po_files(inputdirpath):

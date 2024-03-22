@@ -21,7 +21,6 @@ This program is free software under the GNU General Public License
 import wx
 
 import os
-import six
 import shutil
 
 from copy import deepcopy
@@ -140,7 +139,7 @@ class WSDialogBase(wx.Dialog):
         )
         self.layerName = TextCtrl(parent=self.reqDataPanel, id=wx.ID_ANY)
 
-        for ws in six.iterkeys(self.ws_panels):
+        for ws in self.ws_panels.keys():
             # set class WSPanel argument layerNameTxtCtrl
             self.ws_panels[ws]["panel"] = WSPanel(
                 parent=self.reqDataPanel, web_service=ws
@@ -225,7 +224,7 @@ class WSDialogBase(wx.Dialog):
             self.ch_ws_sizer, proportion=0, flag=wx.TOP | wx.EXPAND, border=5
         )
 
-        for ws in six.iterkeys(self.ws_panels):
+        for ws in self.ws_panels.keys():
             reqDataSizer.Add(
                 self.ws_panels[ws]["panel"],
                 proportion=1,
@@ -339,7 +338,7 @@ class WSDialogBase(wx.Dialog):
 
     def _getCapFiles(self):
         ws_cap_files = {}
-        for v in six.itervalues(self.ws_panels):
+        for v in self.ws_panels.values():
             ws_cap_files[v["panel"].GetWebService()] = v["panel"].GetCapFile()
 
         return ws_cap_files
@@ -360,7 +359,7 @@ class WSDialogBase(wx.Dialog):
     def OnOutputLayerName(self, event):
         """Update layer name to web service panel"""
         lname = event.GetString()
-        for v in six.itervalues(self.ws_panels):
+        for v in self.ws_panels.values():
             v["panel"].SetOutputLayerName(lname.strip())
 
     def OnConnect(self, event):
@@ -384,7 +383,7 @@ class WSDialogBase(wx.Dialog):
 
         # number of panels already connected
         self.finished_panels_num = 0
-        for ws in six.iterkeys(self.ws_panels):
+        for ws in self.ws_panels.keys():
             self.ws_panels[ws]["panel"].ConnectToServer(
                 url=server,
                 username=self.username.GetValue(),
@@ -418,7 +417,7 @@ class WSDialogBase(wx.Dialog):
         :return: list of found web services on server (identified as keys in self.ws_panels)
         """
         conn_ws = []
-        for ws, data in six.iteritems(self.ws_panels):
+        for ws, data in self.ws_panels.items():
             if data["panel"].IsConnected():
                 conn_ws.append(ws)
 
@@ -660,7 +659,7 @@ class WSPropertiesDialog(WSDialogBase):
         self.revert_cmd = cmd
 
         ws_cap = self._getWSfromCmd(cmd)
-        for ws in six.iterkeys(self.ws_panels):
+        for ws in self.ws_panels.keys():
             # cap file used in cmd will be deleted, thanks to the dialogs
             # destructor
             if ws == ws_cap and "capfile" in cmd[1]:
@@ -675,11 +674,11 @@ class WSPropertiesDialog(WSDialogBase):
         self.btn_ok.SetDefault()
 
     def __del__(self):
-        for f in six.itervalues(self.revert_ws_cap_files):
+        for f in self.revert_ws_cap_files.values():
             grass.try_remove(f)
 
     def _setRevertCapFiles(self, ws_cap_files):
-        for ws, f in six.iteritems(ws_cap_files):
+        for ws, f in ws_cap_files.items():
             if os.path.isfile(ws_cap_files[ws]):
                 shutil.copyfile(f, self.revert_ws_cap_files[ws])
             else:
@@ -734,7 +733,7 @@ class WSPropertiesDialog(WSDialogBase):
 
         self.layerName.SetValue(cmd[1]["map"])
 
-        for ws, data in six.iteritems(self.ws_panels):
+        for ws, data in self.ws_panels.items():
             cap_file = None
 
             if ws in ws_cap_files:
@@ -751,7 +750,7 @@ class WSPropertiesDialog(WSDialogBase):
         """Get url/server/passwod from cmd tuple"""
         conn = {"url": "", "username": "", "password": ""}
 
-        for k in six.iterkeys(conn):
+        for k in conn.keys():
             if k in cmd[1]:
                 conn[k] = cmd[1][k]
         return conn

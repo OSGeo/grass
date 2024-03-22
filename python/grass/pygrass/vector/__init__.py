@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 from os.path import join, exists
 import grass.lib.gis as libgis
 
@@ -64,7 +62,7 @@ class Vector(Info):
 
     def __init__(self, name, mapset="", *args, **kwargs):
         # Set map name and mapset
-        super(Vector, self).__init__(name, mapset, *args, **kwargs)
+        super().__init__(name, mapset, *args, **kwargs)
         self._topo_level = 1
         self._class_name = "Vector"
         self.overwrite = False
@@ -292,7 +290,7 @@ class VectorTopo(Vector):
     """
 
     def __init__(self, name, mapset="", *args, **kwargs):
-        super(VectorTopo, self).__init__(name, mapset, *args, **kwargs)
+        super().__init__(name, mapset, *args, **kwargs)
         self._topo_level = 2
         self._class_name = "VectorTopo"
 
@@ -690,7 +688,7 @@ class VectorTopo(Vector):
         occupied by spatial index is released"""
         if release:
             libvect.Vect_set_release_support(self.c_mapinfo)
-        super(VectorTopo, self).close(build=build)
+        super().close(build=build)
 
     @must_be_open
     def table_to_dict(self, where=None):

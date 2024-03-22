@@ -32,7 +32,7 @@ class TestVDbDropColumn(TestCase):
 
         m = SimpleModule("v.info", map="myroads", flags="c")
         self.assertModule(m)
-        self.assertNotRegexpMatches(decode(m.outputs.stdout), "SHAPE_LEN")
+        self.assertNotRegex(decode(m.outputs.stdout), "SHAPE_LEN")
 
 
 if __name__ == "__main__":

@@ -16,7 +16,6 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 import wx
-import six
 import numpy as np
 from math import ceil
 from multiprocessing import Process, Queue
@@ -315,7 +314,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
     def CleanUp(self):
         self.plotClosed.emit(scatt_id=self.scatt_id)
-        self.Destroy()
 
     def ZoomWheel(self, event):
         # get the current x and y limits
@@ -542,14 +540,14 @@ def MergeImg(cats_order, scatts, styles, rend_dt, output_queue):
 
 
 def _rendDtMemmapsToFiles(rend_dt):
-    for k, v in six.iteritems(rend_dt):
+    for k, v in rend_dt.items():
         if "dt" in v:
             rend_dt[k]["sh"] = v["dt"].shape
             rend_dt[k]["dt"] = v["dt"].filename
 
 
 def _rendDtFilesToMemmaps(rend_dt):
-    for k, v in six.iteritems(rend_dt):
+    for k, v in rend_dt.items():
         if "dt" in v:
             rend_dt[k]["dt"] = np.memmap(filename=v["dt"], shape=v["sh"])
             del rend_dt[k]["sh"]
@@ -619,7 +617,8 @@ class ScatterPlotContextMenu:
     def ShowMenu(self, menu):
         self.plot.PopupMenu(menu)
         menu.Destroy()
-        self.plot.ReleaseMouse()
+        if self.plot.HasCapture():
+            self.plot.ReleaseMouse()
 
 
 class PolygonDrawer:
@@ -918,7 +917,7 @@ class ModestImage(mi.AxesImage):
         self.minx = minx
         self.miny = miny
 
-        super(ModestImage, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def set_data(self, A):
         """
@@ -991,7 +990,7 @@ class ModestImage(mi.AxesImage):
 
     def draw(self, renderer, *args, **kwargs):
         self._scale_to_res()
-        super(ModestImage, self).draw(renderer, *args, **kwargs)
+        super().draw(renderer, *args, **kwargs)
 
 
 def imshow(
@@ -1020,8 +1019,7 @@ def imshow(
     @author: Chris Beaumont <beaumont@hawaii.edu>
     """
 
-    if not axes._hold:
-        axes.cla()
+    axes.cla()
     if norm is not None:
         assert isinstance(norm, mcolors.Normalize)
     if aspect is None:
@@ -1070,7 +1068,7 @@ def imshow(
     # to tightly fit the image, regardless of dataLim.
     im.set_extent(im.get_extent())
 
-    axes.images.append(im)
+    axes.add_image(im)
     im._remove_method = lambda h: axes.images.remove(h)
 
     return im

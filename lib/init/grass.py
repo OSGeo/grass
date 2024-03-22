@@ -18,7 +18,7 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2023 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2024 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -37,7 +37,6 @@ is not safe, i.e. it has side effects (this should be changed in the future).
 # (this makes it more stable since we have to set up paths first)
 # pylint: disable=too-many-lines
 
-from __future__ import print_function
 import sys
 import os
 import errno
@@ -49,7 +48,6 @@ import signal
 import string
 import subprocess
 import re
-import six
 import platform
 import tempfile
 import locale
@@ -118,9 +116,7 @@ def decode(bytes_, encoding=ENCODING):
     :param encoding: encoding to be used, default value is the system's default
         encoding or, if that cannot be determined, 'UTF-8'.
     """
-    if sys.version_info.major >= 3:
-        unicode = str
-    if isinstance(bytes_, unicode):
+    if isinstance(bytes_, str):
         return bytes_
     elif isinstance(bytes_, bytes):
         return bytes_.decode(encoding)
@@ -140,12 +136,9 @@ def encode(string, encoding=ENCODING):
     :param encoding: encoding to be used, default value is the system's default
         encoding or, if that cannot be determined, 'UTF-8'.
     """
-    if sys.version_info.major >= 3:
-        unicode = str
     if isinstance(string, bytes):
         return string
-    # this also tests str in Py3:
-    elif isinstance(string, unicode):
+    elif isinstance(string, str):
         return string.encode(encoding)
     else:
         # if something else than text
@@ -155,12 +148,7 @@ def encode(string, encoding=ENCODING):
 # see https://trac.osgeo.org/grass/ticket/3508
 def to_text_string(obj, encoding=ENCODING):
     """Convert `obj` to (unicode) text string"""
-    if six.PY2:
-        # Python 2
-        return encode(obj, encoding=encoding)
-    else:
-        # Python 3
-        return decode(obj, encoding=encoding)
+    return decode(obj, encoding=encoding)
 
 
 def try_remove(path):
@@ -279,10 +267,7 @@ def count_wide_chars(s):
 
     :param str s: string
     """
-    return sum(
-        unicodedata.east_asian_width(c) in "WF"
-        for c in (s if sys.version_info.major >= 3 else unicode(s))
-    )
+    return sum(unicodedata.east_asian_width(c) in "WF" for c in s)
 
 
 def f(fmt, *args):
@@ -295,7 +280,7 @@ def f(fmt, *args):
     matches = []
     # https://docs.python.org/3/library/stdtypes.html#old-string-formatting
     for m in re.finditer(
-        "%([#0 +-]*)([0-9]*)(\.[0-9]*)?([hlL]?[diouxXeEfFgGcrsa%])", fmt
+        r"%([#0 +-]*)([0-9]*)(\.[0-9]*)?([hlL]?[diouxXeEfFgGcrsa%])", fmt
     ):
         matches.append(m)
 
@@ -570,7 +555,7 @@ def read_gisrc(filename):
     kv = {}
     try:
         f = open(filename, "r")
-    except IOError:
+    except OSError:
         return kv
 
     for line in f:
@@ -1227,7 +1212,7 @@ def set_mapset(
 
 # we don't follow the LOCATION_NAME legacy naming here but we have to still
 # translate to it, so always double check
-class MapsetSettings(object):
+class MapsetSettings:
     """Holds GRASS GIS database directory, Location and Mapset
 
     Provides few convenient functions.
@@ -1802,8 +1787,18 @@ def start_gui(grass_gui):
     debug("GRASS GUI should be <%s>" % grass_gui)
     # Check for gui interface
     if grass_gui == "wxpython":
-        # TODO: report failures
-        return Popen([os.getenv("GRASS_PYTHON"), wxpath("wxgui.py")])
+        # Lazy-import to avoid dependency during standard import time.
+        # pylint: disable=import-outside-toplevel
+        import grass.script as gs
+
+        if is_debug() or "WX_DEBUG" in gs.gisenv():
+            stderr_redirect = None
+        else:
+            stderr_redirect = subprocess.DEVNULL
+        # TODO: report start failures?
+        return Popen(
+            [os.getenv("GRASS_PYTHON"), wxpath("wxgui.py")], stderr=stderr_redirect
+        )
     return None
 
 
@@ -2260,7 +2255,7 @@ def get_username():
     return user
 
 
-class Parameters(object):
+class Parameters:
     """Structure to hold standard part of command line parameters"""
 
     # we don't need to define any methods

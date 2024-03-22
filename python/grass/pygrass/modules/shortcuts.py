@@ -1,12 +1,3 @@
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 import fnmatch
 
 
@@ -17,7 +8,7 @@ _CMDS = list(get_commands()[0])
 _CMDS.sort()
 
 
-class MetaModule(object):
+class MetaModule:
     """Example how to use MetaModule
 
     >>> g = MetaModule('g')

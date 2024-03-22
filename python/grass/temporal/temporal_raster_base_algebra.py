@@ -40,9 +40,8 @@ for details.
     LexToken(NAME,'B',1,23)
 
 """
-from __future__ import print_function
-
 import copy
+
 import grass.pygrass.modules as pymod
 from grass.exceptions import FatalError
 from .temporal_algebra import (

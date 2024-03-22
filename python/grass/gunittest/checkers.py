@@ -271,6 +271,10 @@ def values_equal(value_a, value_b, precision=0.000001):
         # in Python 2 None is smaller than anything
         # in Python 3 None < 3 raises TypeError
         precision = float(precision)
+        if precision < 0:
+            raise ValueError(
+                "precision needs to be greater than or equal to zero: {precision} < 0"
+            )
         if abs(value_a - value_b) > precision:
             return False
 
@@ -615,7 +619,7 @@ def text_file_md5(
         regexp = re.compile(exclude_re)
     if prepend_lines:
         for line in prepend_lines:
-            hasher.update(line if sys.version_info[0] == 2 else encode(line))
+            hasher.update(encode(line))
     with open(filename, "r") as f:
         for line in f:
             # replace platform newlines by standard newline
@@ -625,10 +629,10 @@ def text_file_md5(
                 continue
             if exclude_re and regexp.match(line):
                 continue
-            hasher.update(line if sys.version_info[0] == 2 else encode(line))
+            hasher.update(encode(line))
     if append_lines:
         for line in append_lines:
-            hasher.update(line if sys.version_info[0] == 2 else encode(line))
+            hasher.update(encode(line))
     return hasher.hexdigest()
 
 

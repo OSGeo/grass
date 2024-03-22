@@ -21,7 +21,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 from .base import SQLDatabaseInterface
 from .core import SQLDatabaseInterfaceConnection, get_tgis_db_version_from_metadata
 
@@ -352,9 +351,6 @@ class RasterMetadata(RasterMetadataBase):
             min,
             max,
         )
-
-        if get_tgis_db_version_from_metadata() > 2:
-            self.set_semantic_label(semantic_label)
 
     def set_semantic_label(self, semantic_label):
         """Set the semantic label identifier"""

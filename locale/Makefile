@@ -32,7 +32,7 @@ WXPYDOMAIN = grasswxpy
 DOMAINS = $(LIBDOMAIN) $(MODDOMAIN) $(WXPYDOMAIN)
 
 LIB_POTFILES = find ../lib \( -name "*.c" -o -name "*.py" \) | xargs grep -l "_(\"\|n_(\""
-MOD_POTFILES = find ../ -name '*.c' | grep -v '../lib' | xargs grep -l "_(\"\|n_(\""
+MOD_POTFILES = find ../ \( -name "*.c" -o -name "*.cpp" \) | grep -v '../lib' | xargs grep -l "_(\"\|n_(\""
 WXPY_POTFILES = find ../gui/wxpython -name '*.py' | xargs grep -l "_(\"\|n_(\""
 #For Python script module messages
 MOD_PYFILES = find ../scripts -name '*.py' | xargs grep -l "_(\"\|n_(\""

@@ -16,9 +16,7 @@ for details.
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
-from __future__ import absolute_import
 import os
-import sys
 
 from .utils import parse_key_val
 from .core import (
@@ -30,8 +28,6 @@ from .core import (
 )
 
 from grass.exceptions import CalledModuleError, ScriptError
-
-unicode = str
 
 
 def vector_db(map, env=None, **kwargs):
@@ -380,7 +376,7 @@ def vector_what(
     if "LC_ALL" in env:
         env["LC_ALL"] = "C"
 
-    if isinstance(map, (bytes, unicode)):
+    if isinstance(map, (bytes, str)):
         map_list = [map]
     else:
         map_list = map
@@ -449,8 +445,7 @@ def vector_what(
     if encoding:
         kwargs["encoding"] = encoding
 
-    if sys.version_info[0:2] > (2, 6):
-        kwargs["object_pairs_hook"] = orderedDict
+    kwargs["object_pairs_hook"] = orderedDict
 
     try:
         result = json.loads(ret, **kwargs)

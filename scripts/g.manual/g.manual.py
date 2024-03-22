@@ -48,12 +48,7 @@
 
 import sys
 import os
-
-try:
-    from urllib2 import urlopen
-except ImportError:
-    # python3
-    from urllib.request import urlopen
+from urllib.request import urlopen
 
 import webbrowser
 

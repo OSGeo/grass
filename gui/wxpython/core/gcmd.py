@@ -25,8 +25,6 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import time
@@ -52,9 +50,6 @@ from core.globalvar import SCT_EXT
 
 from grass.script import core as grass
 from grass.script.utils import decode, encode
-
-if sys.version_info.major == 2:
-    bytes = str
 
 
 def DecodeString(string):
@@ -407,7 +402,7 @@ class Command:
             Debug.msg(
                 3,
                 "Command(): cmd='%s', wait=%s, returncode=%d, alive=%s"
-                % (" ".join(cmd), wait, self.returncode, self.cmdThread.isAlive()),
+                % (" ".join(cmd), wait, self.returncode, self.cmdThread.is_alive()),
             )
             if rerr is not None and self.returncode != 0:
                 if rerr is False:  # GUI dialog
@@ -435,7 +430,7 @@ class Command:
             Debug.msg(
                 3,
                 "Command(): cmd='%s', wait=%s, returncode=?, alive=%s"
-                % (" ".join(cmd), wait, self.cmdThread.isAlive()),
+                % (" ".join(cmd), wait, self.cmdThread.is_alive()),
             )
 
         if verbose_orig:

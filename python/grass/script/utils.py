@@ -18,7 +18,6 @@ for details.
 """
 
 import os
-import sys
 import shutil
 import locale
 import shlex
@@ -28,10 +27,6 @@ import platform
 import uuid
 import random
 import string
-
-
-if sys.version_info.major >= 3:
-    unicode = str
 
 
 def float_or_dms(s):
@@ -191,7 +186,7 @@ def decode(bytes_, encoding=None):
     >>> decode(1234)
     u'1234'
     """
-    if isinstance(bytes_, unicode):
+    if isinstance(bytes_, str):
         return bytes_
     if isinstance(bytes_, bytes):
         if encoding is None:
@@ -199,13 +194,8 @@ def decode(bytes_, encoding=None):
         else:
             enc = encoding
         return bytes_.decode(enc)
-    # if something else than text
-    if sys.version_info.major >= 3:
-        # only text should be used
-        raise TypeError("can only accept types str and bytes")
-    else:
-        # for backwards compatibility
-        return unicode(bytes_)
+    # only text should be used
+    raise TypeError("can only accept types str and bytes")
 
 
 def encode(string, encoding=None):
@@ -229,32 +219,21 @@ def encode(string, encoding=None):
     """
     if isinstance(string, bytes):
         return string
-    # this also tests str in Py3:
-    if isinstance(string, unicode):
+    if isinstance(string, str):
         if encoding is None:
             enc = _get_encoding()
         else:
             enc = encoding
         return string.encode(enc)
     # if something else than text
-    if sys.version_info.major >= 3:
-        # only text should be used
-        raise TypeError("can only accept types str and bytes")
-    else:
-        # for backwards compatibility
-        return bytes(string)
+    raise TypeError("can only accept types str and bytes")
 
 
 def text_to_string(text, encoding=None):
     """Convert text to str. Useful when passing text into environments,
     in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
     """
-    if sys.version[0] == "2":
-        # Python 2
-        return encode(text, encoding=encoding)
-    else:
-        # Python 3
-        return decode(text, encoding=encoding)
+    return decode(text, encoding=encoding)
 
 
 def parse_key_val(s, sep="=", dflt=None, val_type=None, vsep=None):
@@ -326,13 +305,27 @@ def get_num_suffix(number, max_number):
 
 
 def split(s):
-    """!Platform specific shlex.split"""
-    if sys.version_info >= (2, 6):
-        return shlex.split(s, posix=(sys.platform != "win32"))
-    elif sys.platform == "win32":
-        return shlex.split(s.replace("\\", r"\\"))
-    else:
-        return shlex.split(s)
+    """Same shlex.split() func on all OS platforms
+
+    We don't use parameter posix=True on the OS MS Windows due to incorrectly
+    splitting command line parameters:
+
+    e.g. d.vect where="cat < 10"
+
+    is split incorrectly as follows:
+
+    'where="cat', '<', '10"'
+
+    Should be:
+
+    'where=cat < 10'
+
+
+    :param str s: cmd string
+
+    return list: cmd list
+    """
+    return shlex.split(s)
 
 
 # source:
@@ -494,12 +487,9 @@ def set_path(modulename, dirname=None, path="."):
 def clock():
     """
     Return time counter to measure performance for chunks of code.
-    Uses time.clock() for Py < 3.3, time.perf_counter() for Py >= 3.3.
     Should be used only as difference between the calls.
     """
-    if sys.version_info > (3, 2):
-        return time.perf_counter()
-    return time.clock()
+    return time.perf_counter()
 
 
 def legalize_vector_name(name, fallback_prefix="x"):

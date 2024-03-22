@@ -30,7 +30,6 @@ for details.
 """
 # import traceback
 import os
-import sys
 import grass.script as gscript
 
 from .c_libraries_interface import CLibrariesInterface
@@ -53,9 +52,6 @@ except:
 import atexit
 from datetime import datetime
 
-if sys.version_info.major >= 3:
-    long = int
-
 ###############################################################################
 
 
@@ -66,11 +62,8 @@ def profile_function(func):
     if do_profiling == "True" or do_profiling == "1":
         import cProfile
         import pstats
+        import io
 
-        try:
-            import StringIO as io
-        except ImportError:
-            import io
         pr = cProfile.Profile()
         pr.enable()
         func()
@@ -1065,7 +1058,7 @@ def _create_tgis_metadata_table(content, dbif=None):
 ###############################################################################
 
 
-class SQLDatabaseInterfaceConnection(object):
+class SQLDatabaseInterfaceConnection:
     def __init__(self):
         self.tgis_mapsets = get_available_temporal_mapsets()
         self.current_mapset = get_current_mapset()
@@ -1259,7 +1252,7 @@ class SQLDatabaseInterfaceConnection(object):
 ###############################################################################
 
 
-class DBConnection(object):
+class DBConnection:
     """This class represents the database interface connection
     and provides access to the chosen backend modules.
 
@@ -1449,7 +1442,7 @@ class DBConnection(object):
                             statement[0:pos],
                             statement[pos + 1 :],
                         )
-                    elif isinstance(args[count], (int, long)):
+                    elif isinstance(args[count], int):
                         statement = "%s%d%s" % (
                             statement[0:pos],
                             args[count],

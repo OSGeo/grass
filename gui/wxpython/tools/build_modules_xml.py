@@ -12,8 +12,6 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-from __future__ import print_function
-
 import sys
 
 import grass.script.core as gcore
@@ -45,9 +43,9 @@ def do_doctest_gettext_workaround():
     sys.displayhook = new_displayhook
     sys.__displayhook__ = new_displayhook
 
-    import __builtin__
+    import builtins
 
-    __builtin__._ = new_translator
+    builtins.__dict__["_"] = new_translator
 
 
 def parse_modules(fd):

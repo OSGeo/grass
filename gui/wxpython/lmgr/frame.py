@@ -70,12 +70,10 @@ from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
 from lmgr.statusbar import SbMain
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
-from lmgr.giface import (
-    LayerManagerGrassInterface,
-    LayerManagerGrassInterfaceForMapDisplay,
-)
+from lmgr.giface import LayerManagerGrassInterface
 from mapdisp.frame import MapDisplay
 from datacatalog.catalog import DataCatalog
+from history.browser import HistoryBrowser
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
 from startup.guiutils import (
@@ -167,6 +165,7 @@ class GMFrame(wx.Frame):
         self._createDisplay(self.notebook)
         self._createSearchModule(self.notebook)
         self._createConsole(self.notebook)
+        self._createHistoryBrowser(self.notebook)
         self._createPythonShell(self.notebook)
         self._addPagesToNotebook()
         self.toolbars = {
@@ -204,7 +203,7 @@ class GMFrame(wx.Frame):
                 .TopDockable(True)
                 .CloseButton(False)
                 .Layer(2)
-                .BestSize((self.toolbars[toolbar].GetBestSize())),
+                .BestSize(self.toolbars[toolbar].GetBestSize()),
             )
 
         self._auimgr.GetPane("toolbarNviz").Hide()
@@ -424,10 +423,7 @@ class GMFrame(wx.Frame):
         self._gconsole = GConsole(
             guiparent=self,
             giface=self._giface,
-            ignoredCmdPattern="^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.import$|"
-            "^r.external$|^r.external.out$|"
-            "^v.import$|^v.external$|^v.external.out$|"
-            "^cd$|^cd .*",
+            ignoredCmdPattern=globalvar.ignoredCmdPattern,
         )
         # create 'console' widget
         self.goutput = GConsoleWindow(
@@ -447,6 +443,19 @@ class GMFrame(wx.Frame):
         )
 
         self._setCopyingOfSelectedText()
+
+    def _createHistoryBrowser(self, parent):
+        """Initialize history browser widget"""
+        if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
+            self.history = HistoryBrowser(parent=parent, giface=self._giface)
+            self.history.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
+            self.history.runIgnoredCmdPattern.connect(
+                lambda cmd: self.RunSpecialCmd(command=cmd),
+            )
+        else:
+            self.history = None
 
     def _createPythonShell(self, parent):
         """Initialize Python shell widget"""
@@ -484,10 +493,10 @@ class GMFrame(wx.Frame):
         self.notebookLayers.AddPage(page=self.pg_panel, text=name, select=True)
         self.currentPage = self.notebookLayers.GetCurrentPage()
 
-        def CreateNewMapDisplay(layertree):
+        def CreateNewMapDisplay(giface, layertree):
             """Callback function which creates a new Map Display window
+            :param giface: giface for map display
             :param layertree: layer tree object
-            :param name: name of new map display window
             :return: reference to mapdisplay instance
             """
             # count map display frame position
@@ -503,14 +512,10 @@ class GMFrame(wx.Frame):
                 title=name,
             )
 
-            # create instance of Map Display interface
-            self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
-                self._giface, layertree
-            )
             # create Map Display
             mapdisplay = MapDisplay(
                 parent=mapframe,
-                giface=self._gifaceForDisplay,
+                giface=giface,
                 id=wx.ID_ANY,
                 size=globalvar.MAP_WINDOW_SIZE,
                 tree=layertree,
@@ -634,6 +639,10 @@ class GMFrame(wx.Frame):
         self.goutput.contentChanged.connect(
             lambda notification: self._switchPage(notification)
         )
+
+        # add 'history module' widget to main notebook page
+        if self.history:
+            self.notebook.AddPage(page=self.history, text=_("History"), name="history")
 
         # add 'python shell' widget to main notebook page
         if self.pyshell:
@@ -938,9 +947,9 @@ class GMFrame(wx.Frame):
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
-        if re.compile("^d\..*").search(command[0]):
+        if re.compile(r"^d\..*").search(command[0]):
             self.RunDisplayCmd(command)
-        elif re.compile("r[3]?\.mapcalc").search(command[0]):
+        elif re.compile(r"r[3]?\.mapcalc").search(command[0]):
             self.OnMapCalculator(event=None, cmd=command)
         elif command[0] == "i.group":
             self.OnEditImageryGroups(event=None, cmd=command)
