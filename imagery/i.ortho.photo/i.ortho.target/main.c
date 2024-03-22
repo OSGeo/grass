@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     location_opt->key = "target_project";
     location_opt->required = YES;
     location_opt->description =
-        _("Name of target location (project) for ortho-rectification");
+        _("Name of target project (location) for ortho-rectification");
 
     mapset_opt = G_define_standard_option(G_OPT_M_MAPSET);
     mapset_opt->key = "target_mapset";
