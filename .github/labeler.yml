@@ -143,6 +143,12 @@ Python:
       - any-glob-to-any-file:
         - '**/*.py'
         - '**/pyproject.toml'
+notebook:
+  - changed-files:
+      - any-glob-to-any-file:
+        - '**/*.ipynb'
+        - doc/notebooks/**
+        - python/grass/jupyter/**
 C:
   - changed-files:
       - any-glob-to-any-file: '**/*.c'
