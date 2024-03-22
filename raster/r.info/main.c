@@ -159,7 +159,7 @@ int main(int argc, char **argv)
                      hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
         compose_line(out, "Mapset:   %-29.29s  Login of Creator: %s", mapset,
                      hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??");
-        compose_line(out, "Location: %s", G_location());
+        compose_line(out, "Project:  %s", G_location());
         compose_line(out, "DataBase: %s", G_gisdbase());
         compose_line(out, "Title:    %s", title);
 
@@ -565,6 +565,7 @@ int main(int argc, char **argv)
                     hist_ok ? Rast_get_history(&hist, HIST_MAPTYPE) : "??");
             fprintf(out, "mapset=%s\n", mapset);
             fprintf(out, "location=%s\n", G_location());
+            fprintf(out, "project=%s\n", G_location());
             fprintf(out, "database=%s\n", G_gisdbase());
             fprintf(out, "date=\"%s\"\n",
                     hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
