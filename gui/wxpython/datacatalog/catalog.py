@@ -208,11 +208,13 @@ class DataCatalog(wx.Panel):
 
             # Offer to create a new location
             if grassdb_node and not os.listdir(grassdatabase):
-                message = _("Do you want to create a location?")
+                message = _(
+                    "Do you want to create a new project (also known as location)?"
+                )
                 dlg2 = wx.MessageDialog(
                     self,
                     message=message,
-                    caption=_("Create location?"),
+                    caption=_("Create project?"),
                     style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
                 )
                 if dlg2.ShowModal() == wx.ID_YES:
