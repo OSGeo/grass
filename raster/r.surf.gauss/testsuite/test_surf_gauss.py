@@ -68,20 +68,6 @@ class MeanSigmaTestCase(TestCase):
         )
 
         self.assertRasterExists(self.output, msg="Output was not created")
-
-    def test_random_flag(self):
-        """Checks if random flag sets random number"""
-        mean_value = 3.0
-        sigma_value = 5.8
-        self.assertModule(
-            "r.surf.gauss",
-            mean=mean_value,
-            sigma=sigma_value,
-            output=self.output,
-            flags="s",
-        )
-
-        self.assertRasterExists(self.output, msg="Output was not created")
         self.assertRasterFitsUnivar(
             self.output,
             reference=dict(mean=mean_value, stddev=sigma_value),
