@@ -360,7 +360,7 @@ def import_stds(
             gscript.run_command(
                 "g.mapset",
                 mapset="PERMANENT",
-                location=location,
+                project=location,
                 dbase=old_env["GISDBASE"],
             )
         except CalledModuleError:
@@ -601,7 +601,7 @@ def import_stds(
                 gscript.run_command(
                     "g.mapset",
                     mapset=old_env["MAPSET"],
-                    location=old_env["LOCATION_NAME"],
+                    project=old_env["LOCATION_NAME"],
                     gisdbase=old_env["GISDBASE"],
                 )
             except CalledModuleError:

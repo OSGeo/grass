@@ -120,3 +120,34 @@ def test_files(tmp_path):
         description_file = base_path / "MYNAME"
         assert description_file.exists()
         assert description_file.read_text(encoding="utf-8").strip() == description
+
+
+def set_and_test_description(tmp_path, text):
+    """Set text as description and check the result"""
+    name = "test"
+    gs.core._create_location_xy(tmp_path, name)  # pylint: disable=protected-access
+    gs.core._set_location_description(tmp_path, name, text)
+    description_file = tmp_path / name / "PERMANENT" / "MYNAME"
+    assert description_file.exists()
+    text = text if text else ""  # None and empty should both yield empty.
+    assert description_file.read_text(encoding="utf-8").strip() == text
+
+
+def test_location_description_setter_ascii(tmp_path):
+    """Check ASCII text"""
+    set_and_test_description(tmp_path, "This is a test")
+
+
+def test_location_description_setter_unicode(tmp_path):
+    """Check unicode text"""
+    set_and_test_description(tmp_path, "This is a test (not Gauss-Krüger or Křovák)")
+
+
+def test_location_description_setter_empty(tmp_path):
+    """Check empty text"""
+    set_and_test_description(tmp_path, "")
+
+
+def test_location_description_setter_none(tmp_path):
+    """Check None in place of text"""
+    set_and_test_description(tmp_path, None)
