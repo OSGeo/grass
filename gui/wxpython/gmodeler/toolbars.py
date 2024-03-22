@@ -186,8 +186,8 @@ class ModelerToolbar(BaseToolbar):
         if self.parent.IsDockable():
             data += (
                 (
-                    ("mapDispDocking", BaseIcons["mapDispDocking"].label),
-                    BaseIcons["mapDispDocking"],
+                    ("docking", BaseIcons["docking"].label),
+                    BaseIcons["docking"],
                     self.parent.OnDockUndock,
                     wx.ITEM_CHECK,
                 ),
