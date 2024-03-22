@@ -720,6 +720,9 @@ v.what.vect|qcolumn:query_column
 v.what.vect|vector:map
 ### Renamed options for location to project rename (8.3->8.4)
 #############################################################
+g.gui.image2target|source_location:source_project
+i.ortho.target|target_location:target_project
+i.ortho.target|mapset_location:target_mapset
 g.mapset|location:project
 r.proj|location:project
 i.ortho.elev|location:project
