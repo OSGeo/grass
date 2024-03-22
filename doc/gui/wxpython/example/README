@@ -24,12 +24,15 @@ or it can be launched from the console.
 
 3. Edit ./gui/wxpython/Makefile:
 
- SRCFILES := $(wildcard icons/*.* scripts/* xml/*) \
--	$(wildcard core/* dbmgr/* gcp/* gmodeler/* ... \
-+	$(wildcard core/* dbmgr/* example/* gcp/* gmodeler/* ... \
+-SUBDIRS = docs animation datacatalog mapswipe gmodeler rlisetup psmap dbmgr vdigit rdigit iclass gcp timeline tplot photo2image image2target
++SUBDIRS = docs animation datacatalog example mapswipe gmodeler rlisetup psmap dbmgr vdigit rdigit iclass gcp timeline tplot photo2image image2target
 
--PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,core dbmgr gcp gmodeler ... \
-+PYDSTDIRS := $(patsubst %,$(ETCDIR)/%,core dbmgr example gcp gmodeler ... \
+ SRCFILES := $(wildcard icons/*.* scripts/* xml/*) \
+-       $(wildcard animation/*.py core/*.py datacatalog/*.py dbmgr/*.py gcp/*.py gmodeler/*.py \
++       $(wildcard animation/*.py core/*.py datacatalog/*.py dbmgr/*.py example/*.py gcp/*.py gmodeler/*.py \
+
+-PYDSTDIRS := $(patsubst %,$(DSTDIR)/%,animation core datacatalog dbmgr gcp gmodeler \
++PYDSTDIRS := $(patsubst %,$(DSTDIR)/%,animation core datacatalog dbmgr example gcp gmodeler \
 
 4. Run make (in ./gui/wxpython)
 
