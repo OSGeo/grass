@@ -1757,7 +1757,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                 "displayed in the lower-left of the Map "
                 "Display\nwindow's status bar. It is purely "
                 "cosmetic and does not affect the working "
-                "location's\nprojection in any way. You will "
+                "project's\ncoordinate reference system in any way. You will "
                 "need to enable the Projection check box in "
                 "the drop-down\nmenu located at the bottom "
                 "of the Map Display window.\n"

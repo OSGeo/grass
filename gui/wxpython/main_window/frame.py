@@ -1417,7 +1417,7 @@ class GMFrame(wx.Frame):
             if not location or not mapset:
                 GError(
                     parent=self,
-                    message=_("No location/mapset provided. Operation canceled."),
+                    message=_("No project provided. Operation canceled."),
                 )
                 return  # this should not happen
             if can_switch_mapset_interactive(
