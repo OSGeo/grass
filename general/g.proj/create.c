@@ -25,7 +25,7 @@ void create_location(const char *location)
         G_fatal_error(_("Unable to create location <%s>"), location);
 
     G_message(_("You can switch to the new location by\n`%s=%s`"),
-              "g.mapset mapset=PERMANENT location", location);
+              "g.mapset mapset=PERMANENT project", location);
 }
 
 void modify_projinfo(void)
