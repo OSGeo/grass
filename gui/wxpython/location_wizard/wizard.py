@@ -198,7 +198,7 @@ class DatabasePage(TitledPage):
 
         # text controls
         self.tgisdbase = self.MakeLabel(grassdatabase)
-        self.tlocation = self.MakeTextCtrl("newLocation")
+        self.tlocation = self.MakeTextCtrl("newProject")
         self.tlocation.SetFocus()
 
         checks = [
