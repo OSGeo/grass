@@ -681,7 +681,7 @@ def switch_mapset_interactively(
             RunCommand(
                 "g.mapset",
                 parent=guiparent,
-                location=location,
+                project=location,
                 mapset=mapset,
                 dbase=dbase,
             )
@@ -702,7 +702,7 @@ def switch_mapset_interactively(
             )
     elif location:
         if (
-            RunCommand("g.mapset", parent=guiparent, location=location, mapset=mapset)
+            RunCommand("g.mapset", parent=guiparent, project=location, mapset=mapset)
             == 0
         ):
             if show_confirmation:

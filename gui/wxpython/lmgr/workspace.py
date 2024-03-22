@@ -127,7 +127,7 @@ class WorkspaceManager:
         returncode, errors = RunCommand(
             "g.mapset",
             dbase=gxwXml.database,
-            location=gxwXml.location,
+            project=gxwXml.location,
             mapset=gxwXml.mapset,
             getErrorMsg=True,
         )

@@ -283,7 +283,7 @@ def main():
     if "r" in region_flag:
         grass.run_command(
             "v.proj",
-            location=tgtloc,
+            project=tgtloc,
             mapset=tgtmapset,
             input=tgtregion,
             output=tgtregion,
@@ -336,7 +336,7 @@ def main():
             try:
                 tgtextents = grass.read_command(
                     "r.proj",
-                    location=TMPLOC,
+                    project=TMPLOC,
                     mapset="PERMANENT",
                     input=outfile,
                     flags="g",
@@ -378,7 +378,7 @@ def main():
                 "v.proj",
                 input=vreg,
                 output=vreg,
-                location=tgtloc,
+                project=tgtloc,
                 mapset=tgtmapset,
                 quiet=True,
                 env=src_env,
@@ -445,7 +445,7 @@ def main():
         try:
             grass.run_command(
                 "r.proj",
-                location=TMPLOC,
+                project=TMPLOC,
                 mapset="PERMANENT",
                 input=outfile,
                 method=method,

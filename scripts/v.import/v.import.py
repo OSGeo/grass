@@ -324,7 +324,7 @@ def main():
                 "v.proj",
                 input=vreg,
                 output=vreg,
-                location=tgtloc,
+                project=tgtloc,
                 mapset=tgtmapset,
                 quiet=True,
                 overwrite=overwrite,
@@ -378,7 +378,7 @@ def main():
     try:
         grass.run_command(
             "v.proj",
-            location=TMPLOC,
+            project=TMPLOC,
             mapset="PERMANENT",
             input=output,
             overwrite=overwrite,

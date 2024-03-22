@@ -206,7 +206,7 @@ the reprojection:
 
 <div class="code"><pre>
 # calculate where output map will be
-r.proj input=elevation location=ll_wgs84 mapset=user1 -p
+r.proj input=elevation project=ll_wgs84 mapset=user1 -p
 Source cols: 8162
 Source rows: 12277
 Local north: -4265502.30382993
@@ -215,7 +215,7 @@ Local west: 14271663.19157564
 Local east: 14409956.2693866
 
 # same calculation, but in a form which can be cut and pasted into a g.region call
-r.proj input=elevation location=ll_wgs84 mapset=user1 -g
+r.proj input=elevation project=ll_wgs84 mapset=user1 -g
 n=-4265502.30382993 s=-4473453.15255565 w=14271663.19157564 e=14409956.2693866 rows=12277 cols=8162
 
 g.region n=-4265502.30382993 s=-4473453.15255565 \
@@ -251,7 +251,7 @@ cols:       8136
 cells:      99535824
 
 # finally, perform the reprojection
-r.proj input=elevation location=ll_wgs84 mapset=user1 memory=800
+r.proj input=elevation project=ll_wgs84 mapset=user1 memory=800
 </pre></div>
 
 <h3>v.in.region method</h3>
@@ -266,7 +266,7 @@ v.in.region -d output=bounds type=area
 # Now switch to the target location and import the vector bounding box
 # (you can run v.proj -l to get a list of vector maps in the source location):
 
-v.proj input=bounds location=source_location_name output=bounds_reprojected
+v.proj input=bounds project=source_location_name output=bounds_reprojected
 
 # Set the region in the target location with that of the newly-imported vector
 # bounds map, and align the resolution to the desired cell resolution of the
@@ -277,7 +277,7 @@ g.region vector=bounds_reprojected res=5 -a
 # Now reproject the raster into the target location
 
 r.proj input=elevation.dem output=elevation.dem.reproj \
-location=source_location_name mapset=PERMANENT res=5 method=bicubic
+  project=source_location_name mapset=PERMANENT res=5 method=bicubic
 </pre></div>
 
 <h2>REFERENCES</h2>
