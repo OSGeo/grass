@@ -119,7 +119,7 @@ class SimpleDialog(wx.Dialog):
 class LocationDialog(SimpleDialog):
     """Dialog used to select location"""
 
-    def __init__(self, parent, title=_("Select GRASS location and mapset")):
+    def __init__(self, parent, title=_("Select GRASS project and mapset")):
         SimpleDialog.__init__(self, parent, title)
 
         self.element1 = LocationSelect(
@@ -139,7 +139,7 @@ class LocationDialog(SimpleDialog):
             validator=SimpleValidator(callback=self.ValidatorCallback),
         )
         self.element1.SetFocus()
-        self.warning = _("Location or mapset is not defined.")
+        self.warning = _("Project or mapset is not defined.")
         self._layout()
         self.SetMinSize(self.GetSize())
 
@@ -147,7 +147,7 @@ class LocationDialog(SimpleDialog):
         """Do layout"""
         self.dataSizer.Add(
             StaticText(
-                parent=self.panel, id=wx.ID_ANY, label=_("Name of GRASS location:")
+                parent=self.panel, id=wx.ID_ANY, label=_("Name of GRASS project:")
             ),
             proportion=0,
             flag=wx.ALL,
@@ -190,7 +190,7 @@ class MapsetDialog(SimpleDialog):
     """Dialog used to select mapset"""
 
     def __init__(
-        self, parent, title=_("Select mapset in GRASS location"), location=None
+        self, parent, title=_("Select mapset in GRASS project"), location=None
     ):
         SimpleDialog.__init__(self, parent, title)
 

@@ -723,3 +723,8 @@ v.what.vect|vector:map
 g.gui.image2target|source_location:source_project
 i.ortho.target|target_location:target_project
 i.ortho.target|mapset_location:target_mapset
+g.mapset|location:project
+r.proj|location:project
+i.ortho.elev|location:project
+g.download.location|location:project
+v.proj|location:project
