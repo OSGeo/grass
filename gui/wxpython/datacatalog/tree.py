@@ -2261,7 +2261,7 @@ class DataCatalogTree(TreeView):
     def _popupMenuMultipleLocations(self):
         """Create popup menu for multiple selected locations"""
         menu = Menu()
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete projects"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete projects (locations)"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteLocation, item)
         if self._restricted:

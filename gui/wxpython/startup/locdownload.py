@@ -435,7 +435,7 @@ class LocationDownloadDialog(wx.Dialog):
 
     def __init__(self, parent, database, title=_("Dataset Download")):
         """
-        :param database: database to download the location to
+        :param database: database to download the project (location) to
         :param title: window title if the default is not appropriate
         """
         wx.Dialog.__init__(self, parent=parent, title=title)
