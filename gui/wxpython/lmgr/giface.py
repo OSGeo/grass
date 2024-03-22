@@ -222,6 +222,11 @@ class LayerManagerGrassInterface:
             "LayerManagerGrassInterface.entryFromHistoryRemoved"
         )
 
+        # Signal emitted when entry in history is updated
+        self.entryInHistoryUpdated = Signal(
+            "LayerManagerGrassInterface.entryInHistoryUpdated"
+        )
+
     def RunCmd(self, *args, **kwargs):
         self.lmgr._gconsole.RunCmd(*args, **kwargs)
 
