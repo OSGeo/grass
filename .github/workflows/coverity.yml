@@ -10,7 +10,7 @@ jobs:
     runs-on: [ ubuntu-latest ]
     steps:
       - name: Checkout Source
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 #v3.0.0
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
       - name: Coverity Scan
         uses: synopsys-sig/synopsys-action@45ec794c72a1dff9baba58ff356386bbbfeb32c7 #v1.6.0
         with:
