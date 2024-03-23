@@ -15,11 +15,9 @@ Please read _all_ text below.
 - (H) COMPILING INDIVIDUAL MODULES - OWN MODULES
 - (I) CODE OPTIMIZATION
 - (J) DEBUGGING OPTIONS
-- (K) LARGE FILE SUPPORT (for raster maps)
-- (L) SUPPORT
-- (M) GRASS GIS PROGRAMMER'S MANUAL
-- (N) CONTRIBUTING CODE AND PATCHES
-- (O) DRAFT TUTORIAL
+- (K) SUPPORT
+- (L) GRASS GIS PROGRAMMER'S MANUAL
+- (M) CONTRIBUTING CODE AND PATCHES
 
 ## PREREQUISITES
 
@@ -56,7 +54,6 @@ repository (<https://github.com/OSGeo/grass/>) or as a auto-generated snapshot
 contains the date when the snapshot was created (checked out from
 the GitHub repository), e.g. grass-3.7.git_src_snapshot_2022_04_27.tar.gz
 from <https://grass.osgeo.org/grass-devel/source/snapshot/>
-Further instructions at <https://trac.osgeo.org/grass/wiki/DownloadSource>
 
 ## (B) COMPILATION
 
@@ -148,18 +145,6 @@ CFLAGS="-fPIC" ./configure
 make
 make install
 ```
-
-To fully enable 64bit library usage for GRASS on 64bit platforms,
-the following additional parameters are recommended/required:
-
-```bash
-./configure \
-   --enable-64bit \
-   --with-libs=/usr/lib64 \
-   ...
-```
-
-See also CODE OPTIMIZATION below.
 
 ## (D) INSTALLATION (first time)
 
@@ -325,25 +310,7 @@ CFLAGS="-g -Wall" ./configure
 See also the file ./doc/debugging.txt and the Wiki page
 <https://grasswiki.osgeo.org/wiki/GRASS_Debugging>
 
-## (K) LARGE FILE SUPPORT (for raster maps)
-
-GRASS GIS includes improved support for reading and writing large files
-(> 2GB) if it is possible in your operating system. If you compile with
-
-```bash
-configure [...] --enable-largefile
-```
-
-you should be able to have raster and vector maps which are larger than 2GB.
-
-While most code has been updated, individual programs may not yet work with
-large files - please report.
-
-See also
-<https://grasswiki.osgeo.org/wiki/GRASS_GIS_Performance>
-<https://grasswiki.osgeo.org/wiki/Software_requirements_specification>
-
-## (L) SUPPORT
+## (K) SUPPORT
 
 Note that this code is still actively being developed and errors inevitably
 turn up. If you find a bug, please report it to the GRASS bug tracking system
@@ -352,20 +319,16 @@ so we can fix it. See <https://grass.osgeo.org/contribute/>
 If you are interested in helping to develop GRASS, please join the GRASS
 developers mailing list. See <https://grass.osgeo.org/development/>
 
-## (M) GRASS PROGRAMMER'S MANUAL
+## (L) GRASS PROGRAMMER'S MANUAL
 
 The Programmer's manual is generated with doxygen from the source code.
 Please see the README file and the files at:
 <https://grass.osgeo.org/programming8/>
 
-## (N) CONTRIBUTING CODE AND PATCHES
+## (M) CONTRIBUTING CODE AND PATCHES
 
 Please see ./SUBMITTING in this directory, or better,
 <https://trac.osgeo.org/grass/wiki/Submitting>
-
-## (O) TUTORIALS
-
-<https://grass.osgeo.org/learn/newcomers/>
 
 ## Authors
 
