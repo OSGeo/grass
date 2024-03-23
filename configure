@@ -5016,6 +5016,8 @@ then :
 
 fi
 
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for GRASS GIS headers commit date" >&5
+printf %s "checking for GRASS GIS headers commit date... " >&6; }
 if test "$GIT" != "no" ; then
    GRASS_VERSION_GIT=`$GIT rev-parse --short HEAD 2>/dev/null`
    if test -z "$GRASS_VERSION_GIT"; then
@@ -5025,7 +5027,8 @@ if test "$GIT" != "no" ; then
    if test -z "$GRASS_HEADERS_GIT_HASH"; then
       GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
    fi
-   GRASS_HEADERS_GIT_DATE=`date -d $($GIT log -1 --pretty=format:"%cI" -- "${SRCDIR}/include") -u +%FT%T%z | sed 's/\(..\)$/:\1/'` 2>/dev/null
+   gitdate_utc_local=$(TZ=UTC0 git log -1 --date=iso-local --pretty=format:"%cd" -- include)
+   GRASS_HEADERS_GIT_DATE=$(echo "$gitdate_utc_local" | sed 's/ /T/' | sed 's/ //' | sed 's/\(..\)$/:\1/')
    if test -z "$GRASS_HEADERS_GIT_DATE"; then
       GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
    fi
@@ -5036,6 +5039,8 @@ if test $GRASS_VERSION_GIT == "exported" && \
       GRASS_VERSION_GIT=$GRASS_HEADERS_GIT_HASH
       GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${GRASS_VERSION_GIT_FILE}")
 fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $GRASS_HEADERS_GIT_DATE" >&5
+printf "%s\n" "$GRASS_HEADERS_GIT_DATE" >&6; }
 
 
 
