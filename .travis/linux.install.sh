@@ -1,53 +1,22 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # Author: Ivan Mincik, ivan.mincik@gmail.com
 
 set -e
+set -x
+dpkg -l
+dpkg -l --selected-only
+sudo apt-get update -y
+    sudo apt-get install -y wget git gawk findutils pkg-config libpdal-plugins
+    xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+        sudo apt-get install -y --no-install-recommends --no-install-suggests
 
-sudo apt-get install --no-install-recommends \
-        libcairo2-dev \
-        libfftw3-dev \
-        libfreetype6-dev \
-        libgdal-dev \
-        libgeos-dev \
-        libglu1-mesa-dev \
-        libgsl-dev \
-        libjpeg-dev \
-        liblapack-dev \
-        libncurses5-dev \
-        libnetcdf-dev \
-        libopenjp2-7 \
-        libopenjp2-7-dev \
-        libpdal-dev \
-        libpdal-plugin-python \
-        libpng-dev \
-        libmysqlclient-dev \
-        libpq-dev \
-        libproj-dev \
-        libreadline-dev \
-        libsqlite3-dev \
-        libtiff-dev \
-        libxmu-dev \
-        libzstd-dev \
-        python3 \
-        python3-dateutil \
-        python3-dev \
-        python3-numpy \
-        python3-pil \
-        python3-pip \
-        python3-ply \
-        python-wxgtk3.0 \
-        unixodbc-dev \
-        libnetcdf-dev   \
-        autoconf2.13 \
-        autotools-dev \
-        debhelper \
-        ccache \
-        fakeroot \
-        flex \
-        bison \
-       netcdf-bin \
-        dpatch \
-        libblas-dev \
-        pdal \
-        proj-bin \
-        proj-data
+# https://github.com/qgis/QGIS/issues/56285
+dpkg -l | grep pdal
+apt rdepends libpdal-util13 || echo "not found"
+apt depends libpdal-base13 || echo "not found"
+apt depends libpdal16 || echo "not found"
+apt depends libpdal-dev || echo "not found"
+apt policy libpdal-dev || echo "not found"
+apt policy pdal || echo "not found"
+dpkg -l
+dpkg -l --selected-only

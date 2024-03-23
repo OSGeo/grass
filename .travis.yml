@@ -8,13 +8,13 @@ cache: ccache
 matrix:
   include:
     - os: linux
-      dist: focal
+      dist: jammy
       compiler: gcc
       sudo: required
       env: CC=gcc CXX=g++
 
     - os: linux
-      dist: focal
+      dist: jammy
       compiler: clang
       sudo: required
       env: CC=clang CXX=clang++

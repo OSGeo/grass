@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # Author: Ivan Mincik, ivan.mincik@gmail.com
 
 set -e
@@ -29,6 +29,7 @@ export CXX="ccache $CXX"
             --with-postgres-includes=/usr/include/postgresql/ \
             --with-proj-share=/usr/share/proj \
             --with-python \
-            --with-cairo
+            --with-cairo \
+            --with-pdal
 
 make -j2
