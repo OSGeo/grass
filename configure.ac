@@ -144,6 +144,7 @@ AC_SUBST(GRASS_BIN)
 # Set GRASS_VERSION_*
 
 GRASS_VERSION_FILE=include/VERSION
+GRASS_VERSION_GIT_FILE=include/VERSION_GIT
 GRASS_VERSION_MAJOR=`sed -n 1p "${GRASS_VERSION_FILE}"`
 GRASS_VERSION_MINOR=`sed -n 2p "${GRASS_VERSION_FILE}"`
 GRASS_VERSION_RELEASE=`sed -n 3p "${GRASS_VERSION_FILE}"`
@@ -160,6 +161,8 @@ GRASS_VERSION_GIT="exported"
 GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
 GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
 AC_PATH_PROG(GIT, git, no)
+AC_CHECK_FILE([$GRASS_VERSION_GIT_FILE])
+AC_MSG_CHECKING(for GRASS GIS headers commit date)
 if test "$GIT" != "no" ; then
    GRASS_VERSION_GIT=`$GIT rev-parse --short HEAD 2>/dev/null`
    if test -z "$GRASS_VERSION_GIT"; then
@@ -169,11 +172,19 @@ if test "$GIT" != "no" ; then
    if test -z "$GRASS_HEADERS_GIT_HASH"; then
       GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
    fi
-   GRASS_HEADERS_GIT_DATE=`date -d $($GIT log -1 --pretty=format:"%cI" -- "${SRCDIR}/include") -u +%FT%T%z | sed 's/\(..\)$/:\1/'` 2>/dev/null
+   gitdate_utc_local=$(TZ=UTC0 git log -1 --date=iso-local --pretty=format:"%cd" -- include)
+   GRASS_HEADERS_GIT_DATE=$(echo "$gitdate_utc_local" | sed 's/ /T/' | sed 's/ //' | sed 's/\(..\)$/:\1/')
    if test -z "$GRASS_HEADERS_GIT_DATE"; then
       GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
    fi
 fi
+if test $GRASS_VERSION_GIT == "exported" && \
+   test "$ac_cv_file_include_VERSION_GIT" == "yes"; then
+      GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${GRASS_VERSION_GIT_FILE}")
+      GRASS_VERSION_GIT=$GRASS_HEADERS_GIT_HASH
+      GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${GRASS_VERSION_GIT_FILE}")
+fi
+AC_MSG_RESULT($GRASS_HEADERS_GIT_DATE)
 
 AC_SUBST(GRASS_VERSION_FILE)
 AC_SUBST(GRASS_VERSION_MAJOR)

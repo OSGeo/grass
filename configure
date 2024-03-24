@@ -4939,6 +4939,7 @@ GRASS_BIN="${DSTDIR}/bin.${ARCH}"
 # Set GRASS_VERSION_*
 
 GRASS_VERSION_FILE=include/VERSION
+GRASS_VERSION_GIT_FILE=include/VERSION_GIT
 GRASS_VERSION_MAJOR=`sed -n 1p "${GRASS_VERSION_FILE}"`
 GRASS_VERSION_MINOR=`sed -n 2p "${GRASS_VERSION_FILE}"`
 GRASS_VERSION_RELEASE=`sed -n 3p "${GRASS_VERSION_FILE}"`
@@ -4996,6 +4997,27 @@ printf "%s\n" "no" >&6; }
 fi
 
 
+as_ac_File=`printf "%s\n" "ac_cv_file_$GRASS_VERSION_GIT_FILE" | $as_tr_sh`
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $GRASS_VERSION_GIT_FILE" >&5
+printf %s "checking for $GRASS_VERSION_GIT_FILE... " >&6; }
+
+test "$cross_compiling" = yes &&
+  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
+if test -r "$GRASS_VERSION_GIT_FILE"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+eval ac_res=\$$as_ac_File
+	       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+printf "%s\n" "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_File"\" = x"yes"
+then :
+
+fi
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for GRASS GIS headers commit date" >&5
+printf %s "checking for GRASS GIS headers commit date... " >&6; }
 if test "$GIT" != "no" ; then
    GRASS_VERSION_GIT=`$GIT rev-parse --short HEAD 2>/dev/null`
    if test -z "$GRASS_VERSION_GIT"; then
@@ -5005,11 +5027,20 @@ if test "$GIT" != "no" ; then
    if test -z "$GRASS_HEADERS_GIT_HASH"; then
       GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
    fi
-   GRASS_HEADERS_GIT_DATE=`date -d $($GIT log -1 --pretty=format:"%cI" -- "${SRCDIR}/include") -u +%FT%T%z | sed 's/\(..\)$/:\1/'` 2>/dev/null
+   gitdate_utc_local=$(TZ=UTC0 git log -1 --date=iso-local --pretty=format:"%cd" -- include)
+   GRASS_HEADERS_GIT_DATE=$(echo "$gitdate_utc_local" | sed 's/ /T/' | sed 's/ //' | sed 's/\(..\)$/:\1/')
    if test -z "$GRASS_HEADERS_GIT_DATE"; then
       GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
    fi
 fi
+if test $GRASS_VERSION_GIT == "exported" && \
+   test "$ac_cv_file_include_VERSION_GIT" == "yes"; then
+      GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${GRASS_VERSION_GIT_FILE}")
+      GRASS_VERSION_GIT=$GRASS_HEADERS_GIT_HASH
+      GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${GRASS_VERSION_GIT_FILE}")
+fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $GRASS_HEADERS_GIT_DATE" >&5
+printf "%s\n" "$GRASS_HEADERS_GIT_DATE" >&6; }
 
 
 
