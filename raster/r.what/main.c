@@ -29,6 +29,7 @@
 #include <grass/raster.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
+#include <grass/parson.h>
 
 struct order {
     int point;
@@ -74,7 +75,7 @@ int main(int argc, char *argv[])
     char buffer[1024];
     char **ptr;
     struct _opt {
-        struct Option *input, *cache, *null, *coords, *fs, *points, *output;
+        struct Option *input, *cache, *null, *coords, *fs, *points, *output, *format;
     } opt;
     struct _flg {
         struct Flag *label, *cache, *cat_int, *color, *header, *cat;
@@ -92,6 +93,11 @@ int main(int argc, char *argv[])
     char tmp_buf[500], *null_str;
     int red, green, blue;
     struct GModule *module;
+
+    JSON_Value *root_value, *point_value;
+    JSON_Array *root_array;
+    JSON_Object *point_object;
+    char **names, **label_names, **color_names;
 
     G_gisinit(argv[0]);
 
@@ -129,6 +135,17 @@ int main(int argc, char *argv[])
 
     opt.fs = G_define_standard_option(G_OPT_F_SEP);
     opt.fs->guisection = _("Print");
+
+    opt.format = G_define_option();
+    opt.format->key = "format";
+    opt.format->type = TYPE_STRING;
+    opt.format->required = NO;
+    opt.format->label = _("Output format");
+    opt.format->options = "plain,json";
+    opt.format->descriptions = "plain;Plain text output;"
+                               "json;JSON (JavaScript Object Notation);";
+    opt.format->answer = "plain";
+    opt.format->guisection = _("Output settings");
 
     opt.cache = G_define_option();
     opt.cache->key = "cache";
@@ -255,8 +272,13 @@ int main(int argc, char *argv[])
     Cats = Vect_new_cats_struct();
     G_get_window(&window);
 
+    if (strcmp(opt.format->answer, "json") == 0) {
+        root_value = json_value_init_array();
+        root_array = json_array(root_value);
+    }
+
     /* print header row */
-    if (flg.header->answer) {
+    if (strcmp(opt.format->answer, "plain") == 0 && flg.header->answer) {
         if (flg.cat->answer) {
             fprintf(stdout, "cat%s", fs);
         }
@@ -277,6 +299,27 @@ int main(int argc, char *argv[])
         }
 
         fprintf(stdout, "\n");
+    } else if (strcmp(opt.format->answer, "json") == 0) {
+        i = 0;
+        names = G_malloc(nfiles * sizeof(char *));
+        label_names = G_malloc(nfiles * sizeof(char *));
+        color_names = G_malloc(nfiles * sizeof(char *));
+
+        ptr = opt.input->answers;
+        for (; *ptr != NULL; ptr++) {
+            names[i] = G_malloc(GNAME_MAX);
+            label_names[i] = G_malloc(GNAME_MAX + 6 /* 6 for _label suffix */);
+            color_names[i] = G_malloc(GNAME_MAX + 6 /* 6 for _color suffix */);
+
+            strcpy(names[i], *ptr);
+
+            if (flg.label->answer)
+                sprintf(label_names[i], "%s_label", *ptr);
+
+            if (flg.color->answer)
+                sprintf(color_names[i], "%s_color", *ptr);
+            i++;
+        }
     }
 
     line = 0;
@@ -472,50 +515,102 @@ int main(int argc, char *argv[])
             G_debug(1, "%s|%s at col %d, row %d\n", cache[point].east_buf,
                     cache[point].north_buf, cache[point].col, cache[point].row);
 
-            if (flg.cat->answer) {
-                fprintf(stdout, "%d%s", cache[point].cat, fs);
-            }
-            fprintf(stdout, "%s%s%s%s%s", cache[point].east_buf, fs,
-                    cache[point].north_buf, fs, cache[point].lab_buf);
+            if (strcmp(opt.format->answer, "plain") == 0) {
 
-            for (i = 0; i < nfiles; i++) {
-                if (out_type[i] == CELL_TYPE) {
-                    if (Rast_is_c_null_value(&cache[point].value[i])) {
-                        fprintf(stdout, "%s%s", fs, null_str);
-                        if (flg.label->answer)
-                            fprintf(stdout, "%s", fs);
-                        if (flg.color->answer)
-                            fprintf(stdout, "%s", fs);
-                        continue;
-                    }
-                    fprintf(stdout, "%s%ld", fs, (long)cache[point].value[i]);
-                    cache[point].dvalue[i] = cache[point].value[i];
+                if (flg.cat->answer) {
+                    fprintf(stdout, "%d%s", cache[point].cat, fs);
                 }
-                else { /* FCELL or DCELL */
+                fprintf(stdout, "%s%s%s%s%s", cache[point].east_buf, fs,
+                        cache[point].north_buf, fs, cache[point].lab_buf);
 
-                    if (Rast_is_d_null_value(&cache[point].dvalue[i])) {
-                        fprintf(stdout, "%s%s", fs, null_str);
-                        if (flg.label->answer)
-                            fprintf(stdout, "%s", fs);
-                        if (flg.color->answer)
-                            fprintf(stdout, "%s", fs);
-                        continue;
+                for (i = 0; i < nfiles; i++) {
+                    if (out_type[i] == CELL_TYPE) {
+                        if (Rast_is_c_null_value(&cache[point].value[i])) {
+                            fprintf(stdout, "%s%s", fs, null_str);
+                            if (flg.label->answer)
+                                fprintf(stdout, "%s", fs);
+                            if (flg.color->answer)
+                                fprintf(stdout, "%s", fs);
+                            continue;
+                        }
+                        fprintf(stdout, "%s%ld", fs, (long)cache[point].value[i]);
+                        cache[point].dvalue[i] = cache[point].value[i];
                     }
-                    if (out_type[i] == FCELL_TYPE)
-                        sprintf(tmp_buf, "%.7g", cache[point].dvalue[i]);
-                    else /* DCELL */
-                        sprintf(tmp_buf, "%.15g", cache[point].dvalue[i]);
-                    G_trim_decimal(tmp_buf); /* not needed with %g? */
-                    fprintf(stdout, "%s%s", fs, tmp_buf);
+                    else { /* FCELL or DCELL */
+
+                        if (Rast_is_d_null_value(&cache[point].dvalue[i])) {
+                            fprintf(stdout, "%s%s", fs, null_str);
+                            if (flg.label->answer)
+                                fprintf(stdout, "%s", fs);
+                            if (flg.color->answer)
+                                fprintf(stdout, "%s", fs);
+                            continue;
+                        }
+                        if (out_type[i] == FCELL_TYPE)
+                            sprintf(tmp_buf, "%.7g", cache[point].dvalue[i]);
+                        else /* DCELL */
+                            sprintf(tmp_buf, "%.15g", cache[point].dvalue[i]);
+                        G_trim_decimal(tmp_buf); /* not needed with %g? */
+                        fprintf(stdout, "%s%s", fs, tmp_buf);
+                    }
+                    if (flg.label->answer)
+                        fprintf(
+                            stdout, "%s%s", fs,
+                            Rast_get_d_cat(&(cache[point].dvalue[i]), &cats[i]));
+                    if (flg.color->answer)
+                        fprintf(stdout, "%s%s", fs, cache[point].clr_buf[i]);
                 }
-                if (flg.label->answer)
-                    fprintf(
-                        stdout, "%s%s", fs,
-                        Rast_get_d_cat(&(cache[point].dvalue[i]), &cats[i]));
-                if (flg.color->answer)
-                    fprintf(stdout, "%s%s", fs, cache[point].clr_buf[i]);
+                fprintf(stdout, "\n");
             }
-            fprintf(stdout, "\n");
+            else {
+                point_value = json_value_init_object();
+                point_object = json_object(point_value);
+
+                if (flg.cat->answer) {
+                    json_object_set_number(point_object, "cat",  cache[point].cat);
+                }
+
+                json_object_set_string(point_object, "easting", cache[point].east_buf);
+                json_object_set_string(point_object, "northing", cache[point].north_buf);
+                json_object_set_string(point_object, "site_name", cache[point].lab_buf);
+
+                for (i = 0; i < nfiles; i++) {
+                    if (out_type[i] == CELL_TYPE) {
+                        if (Rast_is_c_null_value(&cache[point].value[i])) {
+                            json_object_set_null(point_object, names[i]);
+                            if (flg.label->answer)
+                                json_object_set_null(point_object, label_names[i]);
+                            if (flg.color->answer)
+                                json_object_set_null(point_object, color_names[i]);
+                            continue;
+                        }
+                        json_object_set_number(point_object, names[i],
+                                               (long)cache[point].value[i]);
+                        cache[point].dvalue[i] = cache[point].value[i];
+                    }
+                    else { /* FCELL or DCELL */
+                        if (Rast_is_d_null_value(&cache[point].dvalue[i])) {
+                            json_object_set_null(point_object, names[i]);
+                            if (flg.label->answer)
+                                json_object_set_null(point_object, label_names[i]);
+                            if (flg.color->answer)
+                                json_object_set_null(point_object, color_names[i]);
+                            continue;
+                        }
+                        json_object_set_number(point_object, names[i], cache[point].dvalue[i]);
+                    }
+                    if (flg.label->answer)
+                        json_object_set_string(
+                            point_object, label_names[i],
+                            Rast_get_d_cat(&(cache[point].dvalue[i]), &cats[i])
+                        );
+                    if (flg.color->answer)
+                        json_object_set_string(point_object, color_names[i],
+                                               cache[point].clr_buf[i]);
+                }
+
+                json_array_append_value(root_array, point_value);
+            }
         }
 
         if (cache_report & !tty)
@@ -525,6 +620,11 @@ int main(int argc, char *argv[])
         cache_hit_tot += cache_hit;
         cache_miss_tot += cache_miss;
         cache_hit = cache_miss = 0;
+    }
+
+    if (strcmp(opt.format->answer, "json") == 0) {
+        fprintf(stdout, "%s\n", json_serialize_to_string(root_value));
+        json_value_free(root_value);
     }
 
     if (!opt.coords->answers && !opt.points->answers && tty)
