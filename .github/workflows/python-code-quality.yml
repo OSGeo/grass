@@ -75,8 +75,16 @@ jobs:
           pip install bandit[sarif]==${{matrix.bandit-version}}
 
       - name: Run Black
-        run: |
-          black --check --diff .
+        run: black .
+
+      - name: Create and uploads code suggestions to apply for black
+        # Will fail fast here if there are changes required
+        id: diff-black
+        uses: ./.github/actions/create-upload-suggestions
+        with:
+          tool-name: black
+          # To keep repo's file structure in formatted changes artifact
+          extra-upload-changes: .clang-format
 
       - name: Run Flake8
         run: |
