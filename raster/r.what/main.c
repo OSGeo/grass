@@ -75,7 +75,8 @@ int main(int argc, char *argv[])
     char buffer[1024];
     char **ptr;
     struct _opt {
-        struct Option *input, *cache, *null, *coords, *fs, *points, *output, *format;
+        struct Option *input, *cache, *null, *coords, *fs, *points, *output,
+            *format;
     } opt;
     struct _flg {
         struct Flag *label, *cache, *cat_int, *color, *header, *cat;
@@ -299,7 +300,8 @@ int main(int argc, char *argv[])
         }
 
         fprintf(stdout, "\n");
-    } else if (strcmp(opt.format->answer, "json") == 0) {
+    }
+    else if (strcmp(opt.format->answer, "json") == 0) {
         i = 0;
         names = G_malloc(nfiles * sizeof(char *));
         label_names = G_malloc(nfiles * sizeof(char *));
@@ -533,7 +535,8 @@ int main(int argc, char *argv[])
                                 fprintf(stdout, "%s", fs);
                             continue;
                         }
-                        fprintf(stdout, "%s%ld", fs, (long)cache[point].value[i]);
+                        fprintf(stdout, "%s%ld", fs,
+                                (long)cache[point].value[i]);
                         cache[point].dvalue[i] = cache[point].value[i];
                     }
                     else { /* FCELL or DCELL */
@@ -554,9 +557,9 @@ int main(int argc, char *argv[])
                         fprintf(stdout, "%s%s", fs, tmp_buf);
                     }
                     if (flg.label->answer)
-                        fprintf(
-                            stdout, "%s%s", fs,
-                            Rast_get_d_cat(&(cache[point].dvalue[i]), &cats[i]));
+                        fprintf(stdout, "%s%s", fs,
+                                Rast_get_d_cat(&(cache[point].dvalue[i]),
+                                               &cats[i]));
                     if (flg.color->answer)
                         fprintf(stdout, "%s%s", fs, cache[point].clr_buf[i]);
                 }
@@ -567,21 +570,27 @@ int main(int argc, char *argv[])
                 point_object = json_object(point_value);
 
                 if (flg.cat->answer) {
-                    json_object_set_number(point_object, "cat",  cache[point].cat);
+                    json_object_set_number(point_object, "cat",
+                                           cache[point].cat);
                 }
 
-                json_object_set_string(point_object, "easting", cache[point].east_buf);
-                json_object_set_string(point_object, "northing", cache[point].north_buf);
-                json_object_set_string(point_object, "site_name", cache[point].lab_buf);
+                json_object_set_string(point_object, "easting",
+                                       cache[point].east_buf);
+                json_object_set_string(point_object, "northing",
+                                       cache[point].north_buf);
+                json_object_set_string(point_object, "site_name",
+                                       cache[point].lab_buf);
 
                 for (i = 0; i < nfiles; i++) {
                     if (out_type[i] == CELL_TYPE) {
                         if (Rast_is_c_null_value(&cache[point].value[i])) {
                             json_object_set_null(point_object, names[i]);
                             if (flg.label->answer)
-                                json_object_set_null(point_object, label_names[i]);
+                                json_object_set_null(point_object,
+                                                     label_names[i]);
                             if (flg.color->answer)
-                                json_object_set_null(point_object, color_names[i]);
+                                json_object_set_null(point_object,
+                                                     color_names[i]);
                             continue;
                         }
                         json_object_set_number(point_object, names[i],
@@ -592,18 +601,21 @@ int main(int argc, char *argv[])
                         if (Rast_is_d_null_value(&cache[point].dvalue[i])) {
                             json_object_set_null(point_object, names[i]);
                             if (flg.label->answer)
-                                json_object_set_null(point_object, label_names[i]);
+                                json_object_set_null(point_object,
+                                                     label_names[i]);
                             if (flg.color->answer)
-                                json_object_set_null(point_object, color_names[i]);
+                                json_object_set_null(point_object,
+                                                     color_names[i]);
                             continue;
                         }
-                        json_object_set_number(point_object, names[i], cache[point].dvalue[i]);
+                        json_object_set_number(point_object, names[i],
+                                               cache[point].dvalue[i]);
                     }
                     if (flg.label->answer)
                         json_object_set_string(
                             point_object, label_names[i],
-                            Rast_get_d_cat(&(cache[point].dvalue[i]), &cats[i])
-                        );
+                            Rast_get_d_cat(&(cache[point].dvalue[i]),
+                                           &cats[i]));
                     if (flg.color->answer)
                         json_object_set_string(point_object, color_names[i],
                                                cache[point].clr_buf[i]);
