@@ -5950,7 +5950,7 @@ class ImageDialog(PsmapDialog):
             try:
                 pImg = PILImage.open(file)
                 img = PilImageToWxImage(pImg)
-            except IOError as e:
+            except OSError as e:
                 GError(message=_("Unable to read file %s") % file)
                 self.ClearPreview()
                 return

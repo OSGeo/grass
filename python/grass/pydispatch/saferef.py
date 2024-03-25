@@ -36,7 +36,7 @@ def safeRef(target, onDelete=None):
         return weakref.ref(target)
 
 
-class BoundMethodWeakref(object):
+class BoundMethodWeakref:
     """'Safe' and reusable weak references to instance methods
 
     BoundMethodWeakref objects provide a mechanism for
@@ -90,7 +90,7 @@ class BoundMethodWeakref(object):
             current.deletionMethods.append(onDelete)
             return current
         else:
-            base = super(BoundMethodWeakref, cls).__new__(cls)
+            base = super().__new__(cls)
             cls._allInstances[key] = base
             base.__init__(target, onDelete, *arguments, **named)
             return base

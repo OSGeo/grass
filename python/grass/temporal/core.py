@@ -1058,7 +1058,7 @@ def _create_tgis_metadata_table(content, dbif=None):
 ###############################################################################
 
 
-class SQLDatabaseInterfaceConnection(object):
+class SQLDatabaseInterfaceConnection:
     def __init__(self):
         self.tgis_mapsets = get_available_temporal_mapsets()
         self.current_mapset = get_current_mapset()
@@ -1252,7 +1252,7 @@ class SQLDatabaseInterfaceConnection(object):
 ###############################################################################
 
 
-class DBConnection(object):
+class DBConnection:
     """This class represents the database interface connection
     and provides access to the chosen backend modules.
 

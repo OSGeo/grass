@@ -193,12 +193,12 @@ struct scdScattData {
 typedef enum {
     I_SIGFILE_TYPE_SIG,    /*! Signature files used by i.maxlik */
     I_SIGFILE_TYPE_SIGSET, /*! Signature files used by i.smap */
-
+    I_SIGFILE_TYPE_LIBSVM, /*! Signature files used by i.svm */
 } I_SIGFILE_TYPE;
 
 #define SIGNATURE_TYPE_MIXED 1 /* Unused? */
 #define I_SIGFILE_TYPE_COUNT \
-    2 /*! Total count of supported signature file types */
+    3 /*! Total count of supported signature file types */
 
 #define GROUPFILE    "CURGROUP"
 #define SUBGROUPFILE "CURSUBGROUP"

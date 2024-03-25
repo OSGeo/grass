@@ -300,7 +300,7 @@ class AnimationController(wx.EvtHandler):
                     anim.SetLayerList(layerLists[i])
                     animationData.append(anim)
 
-        except (GException, ValueError, IOError) as e:
+        except (GException, ValueError, OSError) as e:
             GError(
                 parent=self.frame,
                 message=str(e),

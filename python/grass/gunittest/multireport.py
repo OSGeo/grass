@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.dates import date2num  # noqa: E402
 
 
-class TestResultSummary(object):
+class TestResultSummary:
     def __init__(self):
         self.timestamp = None
         self.svn_revision = None

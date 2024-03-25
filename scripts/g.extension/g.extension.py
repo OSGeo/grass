@@ -781,7 +781,7 @@ def get_available_toolboxes(url):
 
             for mnode in tnode.findall("task"):
                 mlist.append(mnode.get("name"))
-    except (HTTPError, IOError, OSError):
+    except (HTTPError, OSError):
         gs.fatal(_("Unable to fetch addons metadata file"))
 
     return tdict
@@ -811,7 +811,7 @@ def get_toolbox_extensions(url, name):
                     # list of files installed by this extension
                     edict[ename]["flist"] = list()
                 break
-    except (HTTPError, IOError, OSError):
+    except (HTTPError, OSError):
         gs.fatal(_("Unable to fetch addons metadata file"))
 
     return edict
@@ -893,7 +893,7 @@ def list_available_modules(url, mlist=None):
         )
         list_available_extensions_svn(url)
         return
-    except (HTTPError, URLError, IOError, OSError):
+    except (HTTPError, URLError, OSError):
         list_available_extensions_svn(url)
         return
 
@@ -956,7 +956,7 @@ def list_available_extensions_svn(url):
         gs.debug("url = %s" % file_url, debug=2)
         try:
             file_ = urlopen(url)
-        except (HTTPError, IOError, OSError):
+        except (HTTPError, OSError):
             gs.debug(_("Unable to fetch '%s'") % file_url, debug=1)
             continue
 
@@ -1267,7 +1267,7 @@ def get_toolboxes_metadata(url):
                 "correlate": clist,
                 "modules": mlist,
             }
-    except (HTTPError, IOError, OSError):
+    except (HTTPError, OSError):
         gs.error(_("Unable to read addons metadata file " "from the remote server"))
     return data
 
@@ -1337,7 +1337,7 @@ def get_addons_metadata(url, mlist):
     bin_list = []
     try:
         tree = etree_fromurl(url)
-    except (HTTPError, URLError, IOError, OSError) as error:
+    except (HTTPError, URLError, OSError) as error:
         gs.error(
             _(
                 "Unable to read addons metadata file" " from the remote server: {0}"
@@ -1839,17 +1839,33 @@ def extract_tar(name, directory, tmpdir):
         " tmpdir={tmpdir})".format(name=name, directory=directory, tmpdir=tmpdir),
         3,
     )
-    try:
-        import tarfile  # we don't need it anywhere else
+    import tarfile
 
+    try:
         tar = tarfile.open(name)
         extract_dir = os.path.join(tmpdir, "extract_dir")
         os.mkdir(extract_dir)
-        tar.extractall(path=extract_dir)
+
+        # Extraction filters were added in Python 3.12,
+        # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
+        # See
+        # https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
+        # and https://peps.python.org/pep-0706/
+        # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
+        # and in Python 3.14, `filter='data'` will be the default
+        if hasattr(tarfile, "data_filter"):
+            tar.extractall(path=extract_dir, filter="data")
+        else:
+            # Remove this when no longer needed
+            gs.warning(_("Extracting may be unsafe; consider updating Python"))
+            tar.extractall(path=extract_dir)
+
         files = os.listdir(extract_dir)
         move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
     except tarfile.TarError as error:
         gs.fatal(_("Archive file is unreadable: {0}").format(error))
+
+    del tarfile  # we don't need it anywhere else
 
 
 extract_tar.supported_formats = ["tar.gz", "gz", "bz2", "tar", "gzip", "targz"]
@@ -2398,7 +2414,7 @@ def update_manual_page(module):
     try:
         oldfile = open(htmlfile)
         shtml = oldfile.read()
-    except IOError as error:
+    except OSError as error:
         gs.fatal(_("Unable to read manual page: %s") % error)
     else:
         oldfile.close()
@@ -2443,7 +2459,7 @@ def update_manual_page(module):
     try:
         newfile = open(htmlfile, "w")
         newfile.write(ohtml)
-    except IOError as error:
+    except OSError as error:
         gs.fatal(_("Unable for write manual page: %s") % error)
     else:
         newfile.close()

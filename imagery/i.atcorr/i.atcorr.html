@@ -252,6 +252,24 @@ the ascendant node at equator</td>
 <td>enter month,day,hh.ddd,long.,lat. *</td>
 </tr>
 
+<tr>
+<td>31</td>
+<td><b>AVIRIS</b></td>
+<td>enter month,day,hh.ddd,long.,lat. *</td>
+</tr>
+
+<tr>
+<td>32</td>
+<td><b>Hyperion VNIR</b></td>
+<td>enter month,day,hh.ddd,long.,lat. *</td>
+</tr>
+
+<tr>
+<td>33</td>
+<td><b>Hyperion SWIR</b></td>
+<td>enter month,day,hh.ddd,long.,lat. *</td>
+</tr>
+
 </table>
 
 <p>
@@ -471,7 +489,8 @@ Sensor platform (xpp, in negative [km] or -1000):
 
 <p>For aircraft simulations only (xpp is neither equal to 0 nor equal to -1000):
 <blockquote>
-puw,po3 (water vapor content,ozone content between the aircraft and the surface)
+puw (water vapor content between the aircraft and the surface)
+<br>po3 (ozone content between the aircraft and the surface)
 <br>taerp (the aerosol optical thickness at 550nm between the aircraft and the
 surface)
 <p>If these data are not available, enter negative values for all of them.
@@ -766,6 +785,24 @@ but step by step output will be printed.</td>
 <tr><td>206</td><td>Worldview4 Green band (488nm - 626nm)</td></tr>
 <tr><td>207</td><td>Worldview4 Red band (639nm - 711nm)</td></tr>
 <tr><td>208</td><td>Worldview4 NIR1 band (732nm - 962nm)</td></tr>
+
+<tr><td>208</td><td>AVIRIS b1 band (365nm)</td></tr>
+<tr><td>209</td><td>AVIRIS b2 band (375nm)</td></tr>
+<tr><td>.</td><td>AVIRIS b. band (+10nm)</td></tr>
+<tr><td>431</td><td>AVIRIS b223 band (2486nm)</td></tr>
+<tr><td>432</td><td>AVIRIS b224 band (2496nm)</td></tr>
+
+<tr><td>433</td><td>Hyperion VNIR b8 band (427nm)</td></tr>
+<tr><td>434</td><td>Hyperion VNIR b9 band (437.16326nm)</td></tr>
+<tr><td>.</td><td>Hyperion VNIR b. band (+10.16326nm)</td></tr>
+<tr><td>480</td><td>Hyperion VNIR b56 band (914.83648nm)</td></tr>
+<tr><td>481</td><td>Hyperion VNIR b57 band (924.99974nm)</td></tr>
+
+<tr><td>482</td><td>Hyperion SWIR b77 band (912nm)</td></tr>
+<tr><td>483</td><td>Hyperion SWIR b78 band (922.0884nm)</td></tr>
+<tr><td>.</td><td>Hyperion SWIR b. band (+10.0884nm)</td></tr>
+<tr><td>627</td><td>Hyperion SWIR b223 band (2384.9064nm)</td></tr>
+<tr><td>628</td><td>Hyperion SWIR b224 band (2394.9948nm)</td></tr>
 
 </table>
 
@@ -1137,3 +1174,6 @@ GRASS Wiki page about <a href="https://grasswiki.osgeo.org/wiki/Atmospheric_corr
 
 <p><em>Worldview4 addition 12/2018:</em>
 <br>Markus Neteler, mundialis.de, Germany
+
+<p><em>AVIRIS/Hyperion addition 11/2023:</em>
+<br>Yann Chemin, SOPHIA Engineering, FR
