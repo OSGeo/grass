@@ -40,6 +40,7 @@ Program was refactored by Anna Petrasova to remove most global variables.
 #include <grass/raster.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
+#include <grass/parson.h>
 
 #define WHOLE_RASTER   1
 #define SINGLE_POINT   0
@@ -112,6 +113,8 @@ typedef struct {
     const char *horizon_basename;
 } Settings;
 
+enum OutputFormat { PLAIN, JSON };
+
 int INPUT(Geometry *geometry, const char *elevin);
 int OUTGR(const Settings *settings, char *shad_filename,
           struct Cell_head *cellhd);
@@ -120,7 +123,8 @@ void com_par(const Geometry *geometry, OriginAngle *origin_angle, double angle,
 double horizon_height(const Geometry *geometry, const OriginPoint *origin_point,
                       const OriginAngle *origin_angle);
 void calculate_point_mode(const Settings *settings, const Geometry *geometry,
-                          double xcoord, double ycoord, FILE *fp);
+                          double xcoord, double ycoord, FILE *fp,
+                          enum OutputFormat format);
 int new_point(const Geometry *geometry, const OriginPoint *origin_point,
               const OriginAngle *origin_angle, SearchPoint *search_point,
               HorizonProperties *horizon);
@@ -149,12 +153,13 @@ double distance(double x1, double x2, double y1, double y2, double coslatsq)
 int main(int argc, char *argv[])
 {
     double xcoord, ycoord;
+    enum OutputFormat format;
 
     struct GModule *module;
     struct {
         struct Option *elevin, *dist, *coord, *direction, *horizon, *step,
             *start, *end, *bufferzone, *e_buff, *w_buff, *n_buff, *s_buff,
-            *maxdistance, *output;
+            *maxdistance, *format, *output;
     } parm;
 
     struct {
@@ -288,6 +293,17 @@ int main(int argc, char *argv[])
     parm.dist->description = _("Sampling distance step coefficient (0.5-1.5)");
     parm.dist->guisection = _("Optional");
 
+    parm.format = G_define_option();
+    parm.format->key = "format";
+    parm.format->type = TYPE_STRING;
+    parm.format->required = YES;
+    parm.format->label = _("Output format used for point mode");
+    parm.format->options = "plain,json";
+    parm.format->descriptions = "plain;Plain text output;"
+                                "json;JSON (JavaScript Object Notation);";
+    parm.format->answer = "plain";
+    parm.format->guisection = _("Point mode");
+
     parm.output = G_define_standard_option(G_OPT_F_OUTPUT);
     parm.output->key = "file";
     parm.output->required = NO;
@@ -356,6 +372,10 @@ int main(int argc, char *argv[])
     else {
         G_debug(1, "Setting mode: SINGLE_POINT");
         mode = SINGLE_POINT;
+        if (strcmp(parm.format->answer, "json") == 0)
+            format = JSON;
+        else
+            format = PLAIN;
         if (sscanf(parm.coord->answer, "%lf,%lf", &xcoord, &ycoord) != 2) {
             G_fatal_error(_(
                 "Can't read the coordinates from the \"coordinate\" option."));
@@ -556,7 +576,7 @@ int main(int argc, char *argv[])
     INPUT(&geometry, elevin);
     if (mode == SINGLE_POINT) {
         /* Calculate the horizon for one single point */
-        calculate_point_mode(&settings, &geometry, xcoord, ycoord, fp);
+        calculate_point_mode(&settings, &geometry, xcoord, ycoord, fp, format);
     }
     else {
         calculate_raster_mode(&settings, &geometry, &cellhd, &new_cellhd,
@@ -733,7 +753,8 @@ void com_par(const Geometry *geometry, OriginAngle *origin_angle, double angle,
 }
 
 void calculate_point_mode(const Settings *settings, const Geometry *geometry,
-                          double xcoord, double ycoord, FILE *fp)
+                          double xcoord, double ycoord, FILE *fp,
+                          enum OutputFormat format)
 {
     /*
        xg0 = xx0 = (double)xcoord * stepx;
@@ -774,7 +795,24 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     double printangle = settings->single_direction;
 
     origin_point.maxlength = settings->fixedMaxLength;
-    fprintf(fp, "azimuth,horizon_height\n");
+    /* JSON variables and formating */
+    JSON_Value *origin_value, *azimuths_value, *horizons_value;
+    JSON_Array *azimuths, *horizons;
+    JSON_Object *origin;
+    json_set_float_serialization_format("%lf");
+
+    if (format == PLAIN)
+        fprintf(fp, "azimuth,horizon_height\n");
+    else {
+        origin_value = json_value_init_object();
+        origin = json_value_get_object(origin_value);
+        json_object_set_number(origin, "x", xcoord);
+        json_object_set_number(origin, "y", ycoord);
+        azimuths_value = json_value_init_array();
+        azimuths = json_value_get_array(azimuths_value);
+        horizons_value = json_value_init_array();
+        horizons = json_value_get_array(horizons_value);
+    }
 
     for (int i = 0; i < printCount; i++) {
         OriginAngle origin_angle;
@@ -793,10 +831,20 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
             tmpangle = 360. - printangle + 90.;
             if (tmpangle >= 360.)
                 tmpangle = tmpangle - 360.;
-            fprintf(fp, "%lf,%lf\n", tmpangle, shadow_angle);
+            if (format == PLAIN)
+                fprintf(fp, "%lf,%lf\n", tmpangle, shadow_angle);
+            else {
+                json_array_append_number(azimuths, tmpangle);
+                json_array_append_number(horizons, shadow_angle);
+            }
         }
         else {
-            fprintf(fp, "%lf,%lf\n", printangle, shadow_angle);
+            if (format == PLAIN)
+                fprintf(fp, "%lf,%lf\n", printangle, shadow_angle);
+            else {
+                json_array_append_number(azimuths, printangle);
+                json_array_append_number(horizons, shadow_angle);
+            }
         }
 
         angle += dfr_rad;
@@ -812,6 +860,15 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         else if (printangle > 360.)
             printangle -= 360;
     } /* end of for loop over angles */
+
+    if (format == JSON) {
+        json_object_set_value(origin, "azimuth", azimuths_value);
+        json_object_set_value(origin, "horizon_height", horizons_value);
+        char *json_string = json_serialize_to_string_pretty(origin_value);
+        fprintf(fp, "%s\n", json_string);
+        json_free_serialized_string(json_string);
+        json_value_free(origin_value);
+    }
     fclose(fp);
 }
 
