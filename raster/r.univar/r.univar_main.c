@@ -362,7 +362,7 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
         double *max = G_malloc(n_alloc * sizeof(double));
 
         for (i = 0; i < n_alloc; i++) {
-            max[i] = DBL_MIN;
+            max[i] = -DBL_MAX;
             min[i] = DBL_MAX;
         }
 
