@@ -180,7 +180,7 @@ class TestHorizon(TestCase):
         reference["azimuth"] = azimuths
         reference["horizon_height"] = horizons
 
-        self.assertDictEqual(reference, stdout)
+        self.assertListEqual([reference], stdout)
 
     def test_point_mode_multiple_direction_artificial(self):
         """Test mode with 1 point and multiple directions with artificial surface"""

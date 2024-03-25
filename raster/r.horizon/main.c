@@ -796,14 +796,16 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
 
     origin_point.maxlength = settings->fixedMaxLength;
     /* JSON variables and formating */
-    JSON_Value *origin_value, *azimuths_value, *horizons_value;
-    JSON_Array *azimuths, *horizons;
+    JSON_Value *root_value, *origin_value, *azimuths_value, *horizons_value;
+    JSON_Array *coordinates, *azimuths, *horizons;
     JSON_Object *origin;
     json_set_float_serialization_format("%lf");
 
     if (format == PLAIN)
         fprintf(fp, "azimuth,horizon_height\n");
     else {
+        root_value = json_value_init_array();
+        coordinates = json_value_get_array(root_value);
         origin_value = json_value_init_object();
         origin = json_value_get_object(origin_value);
         json_object_set_number(origin, "x", xcoord);
@@ -864,10 +866,11 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     if (format == JSON) {
         json_object_set_value(origin, "azimuth", azimuths_value);
         json_object_set_value(origin, "horizon_height", horizons_value);
-        char *json_string = json_serialize_to_string_pretty(origin_value);
+        json_array_append_value(coordinates, origin_value);
+        char *json_string = json_serialize_to_string_pretty(root_value);
         fprintf(fp, "%s\n", json_string);
         json_free_serialized_string(json_string);
-        json_value_free(origin_value);
+        json_value_free(root_value);
     }
     fclose(fp);
 }
