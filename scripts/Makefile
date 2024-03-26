@@ -9,7 +9,6 @@ SUBDIRS = \
 	d.polar \
 	d.rast.edit \
 	d.rast.leg \
-	d.redraw \
 	d.shade \
 	d.what.rast \
 	d.what.vect \
