@@ -8,10 +8,13 @@ on:
 jobs:
     track-dismissals:
         runs-on: ubuntu-latest  # Replace with your preferred runner
-     
+        permissions: write-all
+        
         steps:
-           - uses: actions/checkout@v4 # Checkout repository code
      
+     
+           - uses: actions/checkout@v4 # Checkout repository code
+    
            - name: Install dependencies (if needed for parsing security tool response)
              run: |
                 # Add any package installation commands here (e.g., pip install requests)
@@ -19,6 +22,7 @@ jobs:
                  
    
            - name: Get Security Alerts
+          
              run: |
              
               curl -L \
