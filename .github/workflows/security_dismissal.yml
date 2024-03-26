@@ -5,61 +5,62 @@ on:
     branches: 
      - dismissalCheckout   # Trigger only test branch
 
-jobs:
-  track-dismissals:
-    runs-on: ubuntu-latest  # Replace with your preferred runner
-
-    steps:
-      - uses: actions/checkout@v3  # Checkout repository code
-
-      - uses: actions/github-script@v6  # Use the actions/github-script action
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |  # Multi-line script for code execution
-            // Fetch current code scanning alerts
-            const alerts = await github.issues.listForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              filter: 'security'
-            });
-
-            // Identify dismissed alerts
-            const dismissedAlerts = alerts.data.filter(alert => alert.state === 'dismissed');
-
-            // Maintain a map to store previously dismissed alerts (initialize on first run)
-            let dismissedAlertMap = {};
-            const stateFilePath = '.dismissed_alert_state.json';  // Filepath to store state
-
-            try {
-              // Attempt to read dismissed alert state from previous run
-              dismissedAlertMap = JSON.parse(fs.readFileSync(stateFilePath, 'utf8')) || {};
-            } catch (error) {
-              console.log('Error reading dismissed alert state:', error);
-              // Handle potential errors gracefully (optional)
-            }
-
-            // Filter newly dismissed alerts based on previous dismissal state
-            const newlyDismissedAlerts = dismissedAlerts.filter(alert => {
-              const alertNumber = alert.number.toString();
-              return !dismissedAlertMap[alertNumber] || dismissedAlertMap[alertNumber] !== alert.dismissal_commit.sha;
-            });
-
-            // Update dismissedAlertMap for future runs
-            dismissedAlertMap = dismissedAlerts.reduce((map, alert) => {
-              map[alert.number.toString()] = alert.dismissal_commit.sha;
-              return map;
-            }, {});
-            fs.writeFileSync(stateFilePath, JSON.stringify(dismissedAlertMap, null, 2));
-
-            // Option 1: Create Issues for newlyDismissedAlerts (if desired)
-            if (newlyDismissedAlerts.length > 0) {
-              for (const alert of newlyDismissedAlerts) {
-                await github.issues.create({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  title: `Dismissed Code Scanning Alert: ${alert.number}`,
-                  body: `Alert details:\n* Number: ${alert.number}\n* Message: ${alert.title}\n* Dismissed reason: ${alert.dismissal_reason}\n* Dismissed by: ${alert.dismissal_commit.committer.login}`,
-                  labels: ['code-scanning', 'dismissed']  # Add relevant labels
-                });
-              }
-            }
+     jobs:
+       track-dismissals:
+         runs-on: ubuntu-latest  # Replace with your preferred runner
+     
+         steps:
+           - uses: actions/checkout@v3  # Checkout repository code
+     
+           - uses: actions/github-script@v6  # Use the actions/github-script action
+             with:
+               github-token: ${{ secrets.GITHUB_TOKEN }}
+               script: |  # Multi-line script for code execution
+                 // Fetch current code scanning alerts
+                 const alerts = await github.issues.listForRepo({
+                   owner: context.repo.owner,
+                   repo: context.repo.repo,
+                   filter: 'security'
+                 });
+     
+                 // Identify dismissed alerts
+                 const dismissedAlerts = alerts.data.filter(alert => alert.state === 'dismissed');
+     
+                 // Maintain a map to store previously dismissed alerts (initialize on first run)
+                 let dismissedAlertMap = {};
+                 const stateFilePath = '.dismissed_alert_state.json';  # Filepath to store state
+     
+                 try {
+                   // Attempt to read dismissed alert state from previous run
+                   dismissedAlertMap = JSON.parse(fs.readFileSync(stateFilePath, 'utf8')) || {};
+                 } catch (error) {
+                   console.log('Error reading dismissed alert state:', error);
+                   // Handle potential errors gracefully (optional)
+                 }
+     
+                 // Filter newly dismissed alerts based on previous dismissal state
+                 const newlyDismissedAlerts = dismissedAlerts.filter(alert => {
+                   const alertNumber = alert.number.toString();
+                   return !dismissedAlertMap[alertNumber] || dismissedAlertMap[alertNumber] !== alert.dismissal_commit.sha;
+                 });
+     
+                 // Update dismissedAlertMap for future runs
+                 dismissedAlertMap = dismissedAlerts.reduce((map, alert) => {
+                   map[alert.number.toString()] = alert.dismissal_commit.sha;
+                   return map;
+                 }, {});
+                 fs.writeFileSync(stateFilePath, JSON.stringify(dismissedAlertMap, null, 2));
+     
+                 // Create Issues for newlyDismissedAlerts
+                 if (newlyDismissedAlerts.length > 0) {
+                   for (const alert of newlyDismissedAlerts) {
+                     await github.issues.create({
+                       owner: context.repo.owner,
+                       repo: context.repo.repo,
+                       title: `Dismissed Code Scanning Alert: ${alert.number}`,
+                       body: `Alert details:\n* Number: ${alert.number}\n* Message: ${alert.title}\n* Dismissed reason: ${alert.dismissal_reason}\n* Dismissed by: ${alert.dismissal_commit.committer.login}`,
+                       labels: ['code-scanning', 'dismissed']  # Add relevant labels
+                     });
+                   }
+                 }
+     
