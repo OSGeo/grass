@@ -16,7 +16,7 @@ jobs:
              run: |
                 # Add any package installation commands here (e.g., pip install requests)
                  echo "Installing dependencies..."  # Placeholder
-                 apt-get install curl
+                 
    
            - name: Get Security Alerts
              run: |
