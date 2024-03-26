@@ -11,6 +11,7 @@ COPYRIGHT: (C) 2015-2024 Anna Petrasova
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.
 """
+import json
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -153,6 +154,33 @@ class TestHorizon(TestCase):
         self.assertModule(module)
         stdout = module.outputs.stdout
         self.assertMultiLineEqual(first=ref2, second=stdout)
+
+    def test_point_mode_multiple_direction_json(self):
+        """Test mode with 1 point and multiple directions with JSON"""
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            coordinates=(634720, 216180),
+            output=self.horizon,
+            direction=180,
+            step=20,
+            format="json",
+        )
+        self.assertModule(module)
+        stdout = json.loads(module.outputs.stdout)
+        azimuths = []
+        horizons = []
+        reference = {}
+        for line in ref2.splitlines()[1:]:
+            azimuth, horizon = line.split(",")
+            azimuths.append(float(azimuth))
+            horizons.append(float(horizon))
+        reference["x"] = 634720.0
+        reference["y"] = 216180.0
+        reference["azimuth"] = azimuths
+        reference["horizon_height"] = horizons
+
+        self.assertListEqual([reference], stdout)
 
     def test_point_mode_multiple_direction_artificial(self):
         """Test mode with 1 point and multiple directions with artificial surface"""
