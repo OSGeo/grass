@@ -95,10 +95,10 @@ int main(int argc, char *argv[])
     int red, green, blue;
     struct GModule *module;
 
-    JSON_Value *root_value, *point_value;
+    JSON_Value *root_value = NULL, *point_value, *layer_value;
     JSON_Array *root_array;
-    JSON_Object *point_object;
-    char **names, **label_names, **color_names;
+    JSON_Object *point_object, *layer_object;
+    char **names;
 
     G_gisinit(argv[0]);
 
@@ -275,6 +275,9 @@ int main(int argc, char *argv[])
 
     if (strcmp(opt.format->answer, "json") == 0) {
         root_value = json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
         root_array = json_array(root_value);
     }
 
@@ -304,22 +307,11 @@ int main(int argc, char *argv[])
     else if (strcmp(opt.format->answer, "json") == 0) {
         i = 0;
         names = G_malloc(nfiles * sizeof(char *));
-        label_names = G_malloc(nfiles * sizeof(char *));
-        color_names = G_malloc(nfiles * sizeof(char *));
 
         ptr = opt.input->answers;
         for (; *ptr != NULL; ptr++) {
             names[i] = G_malloc(GNAME_MAX);
-            label_names[i] = G_malloc(GNAME_MAX + 6 /* 6 for _label suffix */);
-            color_names[i] = G_malloc(GNAME_MAX + 6 /* 6 for _color suffix */);
-
             strcpy(names[i], *ptr);
-
-            if (flg.label->answer)
-                sprintf(label_names[i], "%s_label", *ptr);
-
-            if (flg.color->answer)
-                sprintf(color_names[i], "%s_color", *ptr);
             i++;
         }
     }
@@ -582,45 +574,39 @@ int main(int argc, char *argv[])
                                        cache[point].lab_buf);
 
                 for (i = 0; i < nfiles; i++) {
-                    if (out_type[i] == CELL_TYPE) {
-                        if (Rast_is_c_null_value(&cache[point].value[i])) {
-                            json_object_set_null(point_object, names[i]);
-                            if (flg.label->answer)
-                                json_object_set_null(point_object,
-                                                     label_names[i]);
-                            if (flg.color->answer)
-                                json_object_set_null(point_object,
-                                                     color_names[i]);
-                            continue;
-                        }
-                        json_object_set_number(point_object, names[i],
-                                               (long)cache[point].value[i]);
-                        cache[point].dvalue[i] = cache[point].value[i];
-                    }
-                    else { /* FCELL or DCELL */
-                        if (Rast_is_d_null_value(&cache[point].dvalue[i])) {
-                            json_object_set_null(point_object, names[i]);
-                            if (flg.label->answer)
-                                json_object_set_null(point_object,
-                                                     label_names[i]);
-                            if (flg.color->answer)
-                                json_object_set_null(point_object,
-                                                     color_names[i]);
-                            continue;
-                        }
-                        json_object_set_number(point_object, names[i],
-                                               cache[point].dvalue[i]);
-                    }
-                    if (flg.label->answer)
-                        json_object_set_string(
-                            point_object, label_names[i],
-                            Rast_get_d_cat(&(cache[point].dvalue[i]),
-                                           &cats[i]));
-                    if (flg.color->answer)
-                        json_object_set_string(point_object, color_names[i],
-                                               cache[point].clr_buf[i]);
-                }
+                    layer_value = json_value_init_object();
+                    layer_object = json_object(layer_value);
 
+                    if (Rast_is_c_null_value(&cache[point].value[i]) ||
+                        Rast_is_d_null_value(&cache[point].dvalue[i])) {
+                        json_object_set_null(layer_object, "value");
+                        if (flg.label->answer)
+                            json_object_set_null(layer_object, "label");
+                        if (flg.color->answer)
+                            json_object_set_null(layer_object, "color");
+                    }
+                    else {
+                        if (out_type[i] == CELL_TYPE) {
+                            json_object_set_number(layer_object, "value",
+                                                   (long)cache[point].value[i]);
+                            cache[point].dvalue[i] = cache[point].value[i];
+                        }
+                        else { /* FCELL or DCELL */
+                            json_object_set_number(layer_object, "value",
+                                                   cache[point].dvalue[i]);
+                        }
+                        if (flg.label->answer)
+                            json_object_set_string(
+                                layer_object, "label",
+                                Rast_get_d_cat(&(cache[point].dvalue[i]),
+                                               &cats[i]));
+                        if (flg.color->answer)
+                            json_object_set_string(layer_object, "color",
+                                                   cache[point].clr_buf[i]);
+                    }
+
+                    json_object_set_value(point_object, names[i], layer_value);
+                }
                 json_array_append_value(root_array, point_value);
             }
         }
@@ -635,7 +621,13 @@ int main(int argc, char *argv[])
     }
 
     if (strcmp(opt.format->answer, "json") == 0) {
-        fprintf(stdout, "%s\n", json_serialize_to_string(root_value));
+        char *serialized_string = NULL;
+        serialized_string = json_serialize_to_string_pretty(root_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        json_free_serialized_string(serialized_string);
         json_value_free(root_value);
     }
 
