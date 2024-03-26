@@ -5,11 +5,11 @@ on:
     branches: 
      - dismissalCheckout   # Trigger only test branch
 
-     jobs:
-       track-dismissals:
-         runs-on: ubuntu-latest  # Replace with your preferred runner
+jobs:
+    track-dismissals:
+        runs-on: ubuntu-latest  # Replace with your preferred runner
      
-         steps:
+        steps:
            - uses: actions/checkout@v3  # Checkout repository code
      
            - uses: actions/github-script@v6  # Use the actions/github-script action
