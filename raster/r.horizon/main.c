@@ -801,9 +801,11 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     JSON_Object *origin;
     json_set_float_serialization_format("%lf");
 
-    if (format == PLAIN)
+    switch (format) {
+    case PLAIN:
         fprintf(fp, "azimuth,horizon_height\n");
-    else {
+        break;
+    case JSON:
         root_value = json_value_init_array();
         coordinates = json_value_get_array(root_value);
         origin_value = json_value_init_object();
@@ -814,8 +816,8 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         azimuths = json_value_get_array(azimuths_value);
         horizons_value = json_value_init_array();
         horizons = json_value_get_array(horizons_value);
+        break;
     }
-
     for (int i = 0; i < printCount; i++) {
         OriginAngle origin_angle;
         com_par(geometry, &origin_angle, angle, xp, yp);
@@ -833,19 +835,25 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
             tmpangle = 360. - printangle + 90.;
             if (tmpangle >= 360.)
                 tmpangle = tmpangle - 360.;
-            if (format == PLAIN)
+            switch (format) {
+            case PLAIN:
                 fprintf(fp, "%lf,%lf\n", tmpangle, shadow_angle);
-            else {
+                break;
+            case JSON:
                 json_array_append_number(azimuths, tmpangle);
                 json_array_append_number(horizons, shadow_angle);
+                break;
             }
         }
         else {
-            if (format == PLAIN)
+            switch (format) {
+            case PLAIN:
                 fprintf(fp, "%lf,%lf\n", printangle, shadow_angle);
-            else {
+                break;
+            case JSON:
                 json_array_append_number(azimuths, printangle);
                 json_array_append_number(horizons, shadow_angle);
+                break;
             }
         }
 
