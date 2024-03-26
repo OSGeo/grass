@@ -19,6 +19,7 @@ per-file-ignores =
     # F821 undefined name 'unicode'
     # F841 local variable assigned to but never used
     # E741 ambiguous variable name 'l'
+    __init__.py: F401, F403
     lib/init/grass.py: E501, E722, F821, F841, W605
     utils/mkrest.py: E501, W605
     utils/gitlog2changelog.py: E722, E712, W605
