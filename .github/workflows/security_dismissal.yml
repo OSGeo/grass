@@ -10,21 +10,20 @@ jobs:
         runs-on: ubuntu-latest  # Replace with your preferred runner
      
         steps:
-           - uses: actions/checkout@v3  # Checkout repository code
+           - uses: actions/checkout@v4 # Checkout repository code
      
-           - uses: actions/github-script@v6  # Use the actions/github-script action
-             with:
-               github-token: ${{ secrets.GITHUB_TOKEN }}
-               script: |  # Multi-line script for code execution
-                 // Fetch current code scanning alerts
-                 const alerts = await github.issues.listForRepo({
-                   owner: context.repo.owner,
-                   repo: context.repo.repo,
-                   filter: 'security'
-                 });
-
-                 //only get dismissed alerts and print them to the consol
-                 const dismissedAlerts = alerts.data.filter(alert => alert.dismissed);
-
-                 // Log dismissed alerts
-                 console.log(dismissedAlerts);
+           - name: Install dependencies (if needed for parsing security tool response)
+             run: |
+                # Add any package installation commands here (e.g., pip install requests)
+                 echo "Installing dependencies..."  # Placeholder
+   
+           - name: Get Security Alerts
+             run: |
+             
+              curl -L \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer <YOUR-TOKEN>" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/code-scanning/analyses
+              echo "Security Alerts retrieved successfully!"
+   
