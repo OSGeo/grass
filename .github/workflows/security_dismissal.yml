@@ -2,7 +2,8 @@ name: Track Dismissed Code Scanning Alerts
 
 on:
   push:
-    branches: [ dismissalCheckout/* ]  # Trigger only test branch
+    branches: 
+     - dismissalCheckout   # Trigger only test branch
 
 jobs:
   track-dismissals:
