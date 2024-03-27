@@ -70,6 +70,7 @@ jobs:
     track-dismissals:
      runs-on: ubuntu-latest  
      permissions: write-all
+     needs: get-dismissals-data
     
      steps:
                    
