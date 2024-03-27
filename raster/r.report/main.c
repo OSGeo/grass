@@ -44,7 +44,7 @@ int do_sort = SORT_DEFAULT;
 char *stats_file;
 char *no_data_str;
 int stats_flag;
-int nsteps, cat_ranges, as_int;
+int nsteps, cat_ranges, as_int, as_json;
 int *is_fp;
 DCELL *DMAX, *DMIN;
 
