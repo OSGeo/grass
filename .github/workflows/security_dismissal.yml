@@ -74,20 +74,21 @@ jobs:
      steps:
                    
      - uses: actions/checkout@v4 # Checkout repository code
+
      - name: Download inssues artifacts
        uses: actions/download-artifact@v3
        with:
-         name: issues-data  # Match the name used for upload
+         name: issues-data.zip  # Match the name used for upload
        
      - name: Download alerts artifacts
        uses: actions/download-artifact@v3
        with:
-         name: workflow-data
+         name: workflow-data.zip
 
          
      - name: Use downloaded artifact
        run: |
-         cat issues.json # Access the downloaded artifact
-         cat alerts.json
+         ls # Access the downloaded artifact
+        
           
        
