@@ -1,0 +1,237 @@
+name: "Create and upload suggestions"
+description: "Creates a file containing changes applied by a tool"
+author: echoix
+inputs:
+  tool-name:
+    description: "The tool name, used for creating the file names"
+    required: true
+  upload-suggestions:
+    description: >-
+      If "true", the suggestions diff file will be uploaded here.
+      Otherwise, with "false" or any other value, the diff artifact won't be
+      uploaded. Not uploading directly could be used when multiple tools are
+      used, and each has a diff file that would be uploaded into one artifact.
+    default: "true"
+    required: false
+  extra-upload-suggestions:
+    description: >-
+      Extra paths to add to the diff artifact upload containing suggestions.
+    default: ""
+    required: false
+  upload-changes:
+    description: >-
+      If "true", the changed files will be uploaded to an artifact.
+      Otherwise, with "false" or any other value, the artifact containing
+      changed files won't be uploaded.
+    default: "true"
+    required: false
+  extra-upload-changes:
+    description: >-
+      Extra paths to add to the artifact containing changed files.
+      It is recommended to add at least one file from the root of the repo to
+      prevent flattening of the repo structure.
+    default: ""
+    required: false
+  fail-if-changed:
+    description: >-
+      If "true", the action will exit with a failure if there are some
+      uncommitted changed files.
+    default: "true"
+    required: false
+  fail-message:
+    description: >-
+      Message to display when files have changed and the `fail-if-changed`
+      input is set to `true`.
+    default: "Files have changed."
+    required: false
+outputs:
+  changed-files:
+    description: List of files that were changed, line separated
+    value: ${{ steps.git-changed-files.outputs.CHANGED_FILES }}
+  files_changed:
+    description: '"true" if some files were changed, "false" otherwise.'
+    value: ${{ steps.files_changed.outputs.files_changed }}
+  diff-file-name:
+    description: Name of the diff file created
+    value: ${{ steps.diff-patch.outputs.diff-file-name }}
+  tool-name:
+    description: Name of the tool, sanitized
+    value: ${{ steps.tool-name-safe.outputs.tool-name }}
+  suggestions-artifact-id:
+    description: Artifact id of the suggestions if uploaded
+    value: ${{ steps.upload-diff.outputs.artifact-id }}
+  suggestions-artifact-url:
+    description: Artifact url of the suggestions if uploaded
+    value: ${{ steps.upload-diff.outputs.artifact-url }}
+  changes-artifact-id:
+    description: Artifact id of the changes if uploaded
+    value: ${{ steps.upload-changes.outputs.artifact-id }}
+  changes-artifact-url:
+    description: Artifact url of the changes if uploaded
+    value: ${{ steps.upload-changes.outputs.artifact-url }}
+runs:
+  using: "composite"
+  steps:
+    - name: Pass inputs through environment variables
+      # To avoid directly using the inputs in scripts
+      id: inputs
+      shell: bash
+      run: |
+        echo "tool-name=${INPUT_TOOL_NAME}" >> "${GITHUB_OUTPUT}"
+        echo "upload-suggestions=${INPUT_UPLOAD_SUGGESTIONS}" >> "${GITHUB_OUTPUT}"
+        {
+          echo 'extra-upload-suggestions<<EOF'
+          echo "${INPUT_EXTRA_UPLOAD_SUGGESTIONS}"
+          echo EOF
+        } >> "${GITHUB_OUTPUT}"
+        echo "upload-changes=${INPUT_UPLOAD_CHANGES}" >> "${GITHUB_OUTPUT}"
+        {
+          echo 'extra-upload-changes<<EOF'
+          echo "${INPUT_EXTRA_UPLOAD_CHANGES}"
+          echo EOF
+        } >> "${GITHUB_OUTPUT}"
+        echo "fail-if-changed=${INPUT_FAIL_IF_CHANGED}" >> "${GITHUB_OUTPUT}"
+        {
+          echo 'fail-message<<EOF'
+          echo "${INPUT_FAIL_MESSAGE}"
+          echo EOF
+        } >> "${GITHUB_OUTPUT}"
+      env:
+        INPUT_TOOL_NAME: ${{ inputs.tool-name }}
+        INPUT_UPLOAD_SUGGESTIONS: ${{ inputs.upload-suggestions }}
+        INPUT_EXTRA_UPLOAD_SUGGESTIONS: ${{ inputs.extra-upload-suggestions }}
+        INPUT_UPLOAD_CHANGES: ${{ inputs.upload-changes }}
+        INPUT_EXTRA_UPLOAD_CHANGES: ${{ inputs.extra-upload-changes }}
+        INPUT_FAIL_IF_CHANGED: ${{ inputs.fail-if-changed }}
+        INPUT_FAIL_MESSAGE: ${{ inputs.fail-message }}
+    - name: Sanitize tool name for file name and diff file name
+      id: tool-name-safe
+      shell: bash
+      env:
+        INPUT_TOOL_NAME: ${{ steps.inputs.outputs.tool-name }}
+      run: |
+        sanitize() { # https://stackoverflow.com/a/44811468
+          local s="${1?need a string}" # receive input in first argument
+          s="${s//[^[:alnum:]]/-}"     # replace all non-alnum characters to -
+          s="${s//+(-)/-}"             # convert multiple - to single -
+          s="${s/#-}"                  # remove - from start
+          s="${s/%-}"                  # remove - from end
+          echo "${s,,}"                # convert to lowercase
+        }
+        tool_name_safe=$(sanitize "${INPUT_TOOL_NAME}")
+        echo "New tool name value: ${tool_name_safe}"
+        echo "tool-name=${tool_name_safe}" >> "${GITHUB_OUTPUT}"
+        echo "diff-file-name=diff-${tool_name_safe}.patch" >> "${GITHUB_OUTPUT}"
+    - id: git-changed-files
+      shell: bash
+      run: |
+        {
+          echo 'CHANGED_FILES<<EOF'
+          git ls-files --other --modified --exclude-standard
+          echo EOF
+        } >> "${GITHUB_OUTPUT}"
+    - name: Get if has changed files (list of changed files is not empty)
+      id: files_changed
+      shell: bash
+      run: |
+        if [[ -n "$CHANGED_FILES" ]]; then
+          echo "files_changed=true" >> "${GITHUB_OUTPUT}"
+        else
+          echo "files_changed=false" >> "${GITHUB_OUTPUT}"
+        fi
+      env:
+        CHANGED_FILES: ${{ steps.git-changed-files.outputs.CHANGED_FILES }}
+    - name: List all changed files tracked and untracked files
+      shell: bash
+      run: |
+        echo "Changed files: ${{ steps.git-changed-files.outputs.CHANGED_FILES }}"
+    - name: Add job summary without changed files
+      shell: bash
+      if: ${{ steps.files_changed.outputs.files_changed == 'false' }}
+      run: |
+        {
+          echo "### Changed files:"
+          echo "No files were changed by ${INPUT_TOOL_NAME}"
+        } >> "${GITHUB_STEP_SUMMARY}"
+      env:
+        INPUT_TOOL_NAME: ${{ steps.inputs.outputs.tool-name }}
+    - name: Add job summary with changed files
+      if: ${{ steps.files_changed.outputs.files_changed == 'true' }}
+      shell: bash
+      run: |
+        {
+          echo '### Changed files:'
+          echo '```'
+          echo "${CHANGED_FILES}"
+          echo '```'
+        } >> "${GITHUB_STEP_SUMMARY}"
+      env:
+        CHANGED_FILES: ${{ steps.git-changed-files.outputs.CHANGED_FILES }}
+    - name: Create unified diff of changes
+      if: ${{ steps.files_changed.outputs.files_changed == 'true' }}
+      id: diff-patch
+      shell: bash
+      run: |
+        git diff --unified=0 --no-color --output="${INPUT_DIFF_FILE_NAME}"
+        echo "diff-file-name=${INPUT_DIFF_FILE_NAME}" >> "${GITHUB_OUTPUT}"
+      env:
+        INPUT_DIFF_FILE_NAME: ${{ steps.tool-name-safe.outputs.diff-file-name }}
+    - uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+      id: upload-diff
+      if: >-
+        ${{ (steps.files_changed.outputs.files_changed == 'true') &&
+            (steps.inputs.outputs.upload-suggestions == 'true') }}
+      with:
+        name: diff
+        if-no-files-found: ignore
+        retention-days: 1
+        path: |
+          ${{ steps.diff-patch.outputs.diff-file-name }}
+          ${{ steps.inputs.outputs.extra-upload-suggestions }}
+    - name: Add note to summary explaining that code suggestions will be applied if it is a PR
+      if: >-
+        ${{ (github.event_name == 'pull_request') &&
+            (steps.files_changed.outputs.files_changed == 'true') }}
+      shell: bash
+      run: |
+        {
+          echo ''
+          echo 'Suggestions can only be added near to lines changed in this PR.'
+          echo 'If any fixes can be added as code suggestions, they will be added shortly from another workflow.'
+        } >> "${GITHUB_STEP_SUMMARY}"
+    - uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+      id: upload-changes
+      if: >-
+        ${{ always() &&
+        (steps.inputs.outputs.upload-changes == 'true') }}
+      with:
+        name: formatted-${{ steps.tool-name-safe.outputs.tool-name }}
+        if-no-files-found: ignore
+        retention-days: 10
+        path: |
+          ${{ steps.inputs.outputs.extra-upload-changes }}
+          ${{ steps.git-changed-files.outputs.CHANGED_FILES }}
+    - name: Explain that more files need to be fixed
+      if: ${{ steps.files_changed.outputs.files_changed == 'true' }}
+      shell: bash
+      run: |
+        {
+          echo ''
+          echo 'All fixed files are included in the '"${FORMATTED_URL}"' artifact. This artifact can be downloaded and copied to the repository to replace unformatted files with the formatted files.'
+        } >> "${GITHUB_STEP_SUMMARY}"
+      env:
+        FORMATTED_URL: >-
+          [`formatted-${{ steps.tool-name-safe.outputs.tool-name }}`](${{
+             steps.upload-changes.outputs.artifact-url }})
+    - name: Fail action if some files were changed
+      if: >-
+        ${{ (steps.files_changed.outputs.files_changed == 'true') && 
+            (steps.inputs.outputs.fail-if-changed == 'true') }}
+      shell: bash
+      run: |
+        if [[ -n "$INPUT_FAIL_MESSAGE" ]]; then
+          echo "::error::$INPUT_FAIL_MESSAGE"
+        fi
+        exit 1
+      env:
+        INPUT_FAIL_MESSAGE: ${{ steps.inputs.outputs.fail-message }}
