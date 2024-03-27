@@ -70,10 +70,10 @@ jobs:
     track-dismissals:
      runs-on: ubuntu-latest  
      permissions: write-all
-              
+    
      steps:
                    
-
+     - uses: actions/checkout@v4 # Checkout repository code
      - name: Download artifacts
        uses: actions/download-artifact@v3
        with:
