@@ -184,7 +184,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
         :param extent: The spatial extent to check overlapping with
         :return: True or False
-        """
+        """  # noqa: E501
 
         if not self.overlapping_2d(extent):
             return False
@@ -326,7 +326,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
          :param extent: The spatial extent to intersect with
          :return: The intersection spatial extent
-        """
+        """  # noqa: E501
 
         if not self.overlapping(extent):
             return None
@@ -509,7 +509,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
          :param extent: The spatial extent to create a disjoint union with
          :return: The union spatial extent
-        """
+        """  # noqa: E501
 
         new = self.disjoint_union_2d(extent)
 
@@ -1571,7 +1571,7 @@ class SpatialExtent(SQLDatabaseInterface):
             >>> A.spatial_relation(B)
             'meet'
 
-        """
+        """  # noqa: E501
 
         if self.equivalent(extent):
             return "equivalent"
@@ -1824,7 +1824,8 @@ class SpatialExtent(SQLDatabaseInterface):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(
-            " +-------------------- Spatial extent ----------------------------------------+"
+            " +-------------------- Spatial extent ------------------------------------\
+                ----+"
         )
         print(" | North:...................... " + str(self.get_north()))
         print(" | South:...................... " + str(self.get_south()))

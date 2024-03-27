@@ -71,7 +71,7 @@ class DictSQLSerializer:
             :param where: The optional where statement
             :return: a tuple containing the SQL string and the arguments
 
-        """
+        """  # noqa: E501
 
         sql = ""
         args = []
@@ -240,7 +240,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
          >>> t.get_update_all_statement_mogrified()
          "UPDATE raster SET  creation_time = '2001-01-01 00:00:00'  ,mapset = 'PERMANENT'  ,name = 'soil'  ,creator = 'soeren' WHERE id = 'soil@PERMANENT';\\n"
 
-    """
+    """  # noqa: E501
 
     def __init__(self, table=None, ident=None):
         """Constructor of this class
@@ -619,7 +619,7 @@ class DatasetBase(SQLDatabaseInterface):
         temporal_type=absolute
         creation_time='2001-01-01 00:00:00'
 
-    """
+    """  # noqa: E501
 
     def __init__(
         self,
@@ -829,7 +829,8 @@ class DatasetBase(SQLDatabaseInterface):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(
-            " +-------------------- Basic information -------------------------------------+"
+            " +-------------------- Basic information ---------------------------------\
+                ----+"
         )
         print(" | Id: ........................ " + str(self.get_id()))
         print(" | Name: ...................... " + str(self.get_name()))
@@ -977,7 +978,7 @@ class STDSBase(DatasetBase):
         modification_time='2001-01-01 00:00:00'
         semantic_type=average
 
-    """
+    """  # noqa: E501
 
     def __init__(
         self,

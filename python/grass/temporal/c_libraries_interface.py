@@ -1316,7 +1316,7 @@ class CLibrariesInterface(RPCServerBase):
 
         >>> gscript.del_temp_region()
 
-    """
+    """  # noqa: E501
 
     def __init__(self):
         RPCServerBase.__init__(self)

@@ -85,7 +85,7 @@ class Vector(Info):
             >>> test_vect.close()
 
         ..
-        """
+        """  # noqa: E501
         # return (self.read(f_id) for f_id in xrange(self.num_of_features()))
         return self
 
@@ -307,7 +307,7 @@ class VectorTopo(Vector):
             >>> test_vect.close()
 
         ..
-        """
+        """  # noqa: E501
         if isinstance(key, slice):
             return [
                 self.read(indx)
@@ -568,7 +568,7 @@ class VectorTopo(Vector):
         IndexError: Index out of range
         >>> test_vect.close()
 
-        """
+        """  # noqa: E501
         return read_line(
             feature_id,
             self.c_mapinfo,
@@ -823,7 +823,7 @@ class VectorTopo(Vector):
 
          >>> test_vect.close()
 
-        """
+        """  # noqa: E501
 
         supported = ["point", "line", "boundary", "centroid"]
 

@@ -344,7 +344,7 @@ class TemporalExtent(SQLDatabaseInterface):
              | Start time:................. 2001-01-10 00:00:00
              | End time:................... 2008-01-01 00:00:00
 
-        """
+        """  # noqa: E501
 
         start = None
         end = None
@@ -1078,7 +1078,8 @@ class AbsoluteTemporalExtent(TemporalExtent):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(
-            " +-------------------- Absolute time -----------------------------------------+"
+            " +-------------------- Absolute time -------------------------------------\
+                ----+"
         )
         TemporalExtent.print_info(self)
 
@@ -1336,7 +1337,8 @@ class RelativeTemporalExtent(TemporalExtent):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(
-            " +-------------------- Relative time -----------------------------------------+"
+            " +-------------------- Relative time -------------------------------------\
+                ----+"
         )
         TemporalExtent.print_info(self)
         print(" | Relative time unit:......... " + str(self.get_unit()))

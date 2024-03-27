@@ -15,7 +15,7 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :author: Soeren Gebbert
-"""
+"""  # noqa: E501
 
 import grass.script as gscript
 from grass.exceptions import CalledModuleError

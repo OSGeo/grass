@@ -489,7 +489,8 @@ def get_available_temporal_mapsets():
         )
         if driver and database:
             # Check if the temporal sqlite database exists
-            # We need to set non-existing databases in case the mapset is the current mapset
+            # We need to set non-existing databases in case the mapset is the current
+            # mapset
             # to create it
             if (
                 driver == "sqlite" and os.path.exists(database)
@@ -1397,7 +1398,7 @@ class DBConnection:
             ... ["soil@PERMANENT",]])
             "SELECT ctime FROM raster_base WHERE id = 'soil@PERMANENT'"
 
-        """
+        """  # noqa: E501
         sql = content[0]
         args = content[1]
 

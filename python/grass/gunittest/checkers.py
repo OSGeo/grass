@@ -23,7 +23,8 @@ except (ImportError, AttributeError):
     # TODO: we are silent about the error and use a object with different
     # interface, should be replaced by central keyvalue module
     # this can happen when translations are not available
-    # TODO: grass should survive are give better error when tranlsations are not available
+    # TODO: grass should survive are give better error when tranlsations are not
+    # available
     # even the lazy loading after first _ call would be interesting
     # File "...grass/script/core.py", line 40, in <module>
     # AttributeError: 'NoneType' object has no attribute 'endswith'

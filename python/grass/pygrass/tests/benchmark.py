@@ -356,7 +356,7 @@ TXT = """
         {{ "%-30s - %5s % 12.6fs"|format(execmode, 'if', operation.if.time) }}
     {%- endfor %}
 {%- endfor %}
-"""
+"""  # noqa: E501
 
 
 CSV = """Class; Mode; Operation;

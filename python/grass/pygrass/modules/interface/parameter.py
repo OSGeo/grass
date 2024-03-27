@@ -114,8 +114,8 @@ def _check_value(param, value):
                         break
             if not good:
                 raise ValueError(
-                    f"The Parameter <{param.name}>, must be one of the following values:"
-                    f" {param.values!r} not '{newvalue}'"
+                    f"The Parameter <{param.name}>, must be one of the following "
+                    f"values: {param.values!r} not '{newvalue}'"
                 )
     return (
         (
@@ -146,7 +146,7 @@ class Parameter:
         ValueError: The Parameter <int_number>, must be one of the following values: [2, 4, 6, 8] not '3'
 
     ...
-    """
+    """  # noqa: E501
 
     def __init__(self, xparameter=None, diz=None):
         self._value = None

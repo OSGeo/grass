@@ -336,7 +336,7 @@ class DataProvider(RPCServerBase):
          >>> provider.stop()
 
          ..
-        """
+        """  # noqa: E501
         self.check_server()
         self.client_conn.send([RPCDefs.GET_VECTOR_TABLE_AS_DICT, name, mapset, where])
         return self.safe_receive("get_vector_table_as_dict")

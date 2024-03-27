@@ -248,7 +248,7 @@ class Columns:
         >>> cols_pg.is_pg() #doctest: +SKIP
         True
 
-        """
+        """  # noqa: E501
         return hasattr(self.conn, "xid")
 
     def update_odict(self):
@@ -310,7 +310,7 @@ class Columns:
         ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
         >>> cols_pg.sql_descr()                 # doctest: +ELLIPSIS +SKIP
         'cat INTEGER, name varchar(50), value double precision'
-        """
+        """  # noqa: E501
         if remove:
             return ", ".join(
                 ["%s %s" % (key, val) for key, val in self.items() if key != remove]
@@ -333,7 +333,7 @@ class Columns:
         >>> cols_pg.types()                     # doctest: +ELLIPSIS +SKIP
         ['INTEGER', 'varchar(50)', 'double precision']
 
-        """
+        """  # noqa: E501
         return list(self.odict.values())
 
     def names(self, remove=None, unicod=True):
@@ -378,7 +378,7 @@ class Columns:
         >>> cols_pg.items()                     # doctest: +ELLIPSIS +SKIP
         [('cat', 'INTEGER'), ('name', 'varchar(50)'), ('value', 'double precision')]
 
-        """
+        """  # noqa: E501
         return list(self.odict.items())
 
     def add(self, col_name, col_type):
@@ -406,7 +406,7 @@ class Columns:
         True
         >>> remove('mycensus', 'vect')
 
-        """
+        """  # noqa: E501
 
         def check(col_type):
             """Check the column type if it is supported by GRASS
@@ -486,7 +486,7 @@ class Columns:
         True
         >>> remove('mycensus', 'vect')
 
-        """
+        """  # noqa: E501
         cur = self.conn.cursor()
         if self.is_pg():
             cur.execute(
@@ -542,7 +542,7 @@ class Columns:
 
            It is not possible to cast a column with sqlite
 
-        """
+        """  # noqa: E501
         if self.is_pg():
             cur = self.conn.cursor()
             cur.execute(
@@ -579,7 +579,7 @@ class Columns:
         False
         >>> remove('mycensus','vect')
 
-        """
+        """  # noqa: E501
         cur = self.conn.cursor()
         if self.is_pg():
             cur.execute(sql.DROP_COL.format(tname=self.tname, cname=col_name))

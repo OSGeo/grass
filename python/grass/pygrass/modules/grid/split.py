@@ -87,7 +87,7 @@ def split_region_in_overlapping_tiles(region=None, width=100, height=100, overla
     >>> split_region_in_overlapping_tiles(region=reg, width=1000, height=700, overlap=10) # doctest: +NORMALIZE_WHITESPACE
     [[Bbox(1350.0, 640.0, 1010.0, 0.0), Bbox(1350.0, 640.0, 1500.0, 990.0)],
      [Bbox(660.0, 0.0, 1010.0, 0.0), Bbox(660.0, 0.0, 1500.0, 990.0)]]
-    """
+    """  # noqa: E501
     reg = region if region else Region()
     ncols = (reg.cols + width - 1) // width
     nrows = (reg.rows + height - 1) // height
@@ -103,7 +103,8 @@ def split_region_in_overlapping_tiles(region=None, width=100, height=100, overla
 
 
 def split_region_tiles(region=None, width=100, height=100):
-    """Split a region into a list of tiles defined as (start_row, end_row, start_col, end_col).
+    """Split a region into a list of tiles defined as (start_row, end_row, start_col,
+    end_col).
 
     :param region: a Region object to split
     :type region: Region object

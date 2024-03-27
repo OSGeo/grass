@@ -421,7 +421,7 @@ def compute_absolute_time_granularity(maps):
         >>> tgis.compute_absolute_time_granularity(maps)
         '6 hours'
 
-    """
+    """  # noqa: E501
 
     # Create a granularity dict with time units of increasing length
     # that covers all possible keys in the result of compute_datetime_delta

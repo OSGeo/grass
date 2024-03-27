@@ -78,7 +78,7 @@ def get_dataset_list(
         True
         >>> check = sp.delete()
 
-    """
+    """  # noqa: E501
     id = None
     sp = dataset_factory(type, id)
 
@@ -249,7 +249,8 @@ def _write_table(rows, column_names, output_format, separator, file):
     elif output_format == "yaml":
         _write_yaml(rows=rows, column_names=column_names, file=file)
     elif output_format == "plain":
-        # No particular reason for this separator expect that this is the original behavior.
+        # No particular reason for this separator expect that this is the original
+        # behavior.
         if not separator:
             separator = "\t"
         _write_plain(rows=rows, header=column_names, separator=separator, file=file)
@@ -444,7 +445,8 @@ def _get_list_of_maps_stds(
                     name=dataset.get_id(),
                     element_type=element_type,
                     detail=_(
-                        "Dataset is empty or where clause is too constrained or incorrect"
+                        "Dataset is empty or where clause is too constrained or \
+                            incorrect"
                     )
                     if where
                     else _("Dataset is empty"),

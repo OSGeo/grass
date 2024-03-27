@@ -176,8 +176,8 @@ class AbstractMapDataset(AbstractDataset):
                       layer exists
         :param mapset: The mapset in which the map is located
 
-        :return: tuple of three elements name, layer, mapset e(:layer)@mapset" while layer is
-                 optional
+        :return: tuple of three elements name, layer, mapset e(:layer)@mapset" while
+                 layer is optional
         """
 
         # Check if the name includes any mapset
@@ -222,7 +222,8 @@ class AbstractMapDataset(AbstractDataset):
             else:
                 gs.fatal(
                     _(
-                        "Map <{map_name}> of element tpye '{element}' not found on search path"
+                        "Map <{map_name}> of element tpye '{element}' not found on \
+                            search path"
                     ).format(element=element, map_name=name)
                 )
 
@@ -276,25 +277,25 @@ class AbstractMapDataset(AbstractDataset):
         """Print information about this object in human readable style"""
 
         if self.get_type() == "raster":
-            #                1         2         3         4         5         6         7
-            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            #                1         2         3         4         5         6         7  # noqa: E501
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678  # noqa: E501
             print(
-                " +-------------------- Raster Dataset ----------------------------------------+"
+                " +-------------------- Raster Dataset ----------------------------------------+"  # noqa: E501
             )
         if self.get_type() == "raster3d":
-            #                1         2         3         4         5         6         7
-            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            #                1         2         3         4         5         6         7  # noqa: E501
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678  # noqa: E501
             print(
-                " +-------------------- 3D Raster Dataset -------------------------------------+"
+                " +-------------------- 3D Raster Dataset -------------------------------------+"  # noqa: E501
             )
         if self.get_type() == "vector":
-            #                1         2         3         4         5         6         7
-            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            #                1         2         3         4         5         6         7  # noqa: E501
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678  # noqa: E501
             print(
-                " +-------------------- Vector Dataset ----------------------------------------+"
+                " +-------------------- Vector Dataset ----------------------------------------+"  # noqa: E501
             )
         print(
-            " |                                                                            |"
+            " |                                                                            |"  # noqa: E501
         )
         self.base.print_info()
         self.temporal_extent.print_info()
@@ -317,7 +318,7 @@ class AbstractMapDataset(AbstractDataset):
                 count += 1
         print(" | Registered datasets ........ " + string)
         print(
-            " +----------------------------------------------------------------------------+"
+            " +----------------------------------------------------------------------------+"  # noqa: E501
         )
 
     def print_shell_info(self):
@@ -707,7 +708,7 @@ class AbstractMapDataset(AbstractDataset):
             >>> print(map2.get_temporal_extent_as_tuple())
             (datetime.datetime(2000, 5, 5, 0, 0), datetime.datetime(2005, 6, 6, 0, 0))
 
-        """
+        """  # noqa: E501
         if issubclass(type(extent), RelativeTemporalExtent):
             start = extent.get_start_time()
             end = extent.get_end_time()
@@ -796,7 +797,7 @@ class AbstractMapDataset(AbstractDataset):
              | Start time:................. 2001-03-25 00:00:00
              | End time:................... 2001-05-08 00:00:00
 
-        """
+        """  # noqa: E501
 
         if self.is_time_absolute():
             start, end = self.get_absolute_time()
@@ -860,7 +861,7 @@ class AbstractMapDataset(AbstractDataset):
             >>> print(map.get_spatial_extent_as_tuple())
             (10.0, -10.0, 20.0, -20.0, 5.0, -5.0)
 
-        """
+        """  # noqa: E501
         self.spatial_extent.set_spatial_extent(spatial_extent)
 
     def spatial_buffer(self, size, update=False, dbif=None):
@@ -882,7 +883,7 @@ class AbstractMapDataset(AbstractDataset):
             >>> print(map.get_spatial_extent_as_tuple())
             (20.0, -20.0, 30.0, -30.0, 15.0, -15.0)
 
-        """
+        """  # noqa: E501
         self.spatial_extent.north += size
         self.spatial_extent.south -= size
         self.spatial_extent.east += size
@@ -912,7 +913,7 @@ class AbstractMapDataset(AbstractDataset):
             >>> print(map.get_spatial_extent_as_tuple())
             (20.0, -20.0, 30.0, -30.0, 5.0, -5.0)
 
-        """
+        """  # noqa: E501
         self.spatial_extent.north += size
         self.spatial_extent.south -= size
         self.spatial_extent.east += size

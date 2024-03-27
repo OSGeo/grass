@@ -503,7 +503,8 @@ class TemporalTopologyDatasetConnector:
         """Print information about this class in human readable style"""
 
         print(
-            " +-------------------- Temporal Topology -------------------------------------+"
+            " +-------------------- Temporal Topology ---------------------------------\
+                ----+"
         )
         #          0123456789012345678901234567890
         if self.next() is not None:

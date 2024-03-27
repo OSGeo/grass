@@ -525,7 +525,9 @@ class TemporalAlgebraLexer:
         # and in relative units in case of relative time.
         # The end_time() will be represented by null() in case of a time instance.
         "start_doy": "START_DOY",  # Day of year (doy) from the start time [1 - 366]
-        "start_dow": "START_DOW",  # Day of week (dow) from the start time [1 - 7], the start of the week is Monday == 1
+        # Day of week (dow) from the start time [1 - 7], the start of the week is
+        # Monday == 1
+        "start_dow": "START_DOW",
         "start_year": "START_YEAR",  # The year of the start time [0 - 9999]
         "start_month": "START_MONTH",  # The month of the start time [1 - 12]
         "start_week": "START_WEEK",  # Week of year of the start time [1 - 54]
@@ -534,7 +536,9 @@ class TemporalAlgebraLexer:
         "start_minute": "START_MINUTE",  # The minute of the start time [0 - 59]
         "start_second": "START_SECOND",  # The second of the start time [0 - 59]
         "end_doy": "END_DOY",  # Day of year (doy) from the end time [1 - 366]
-        "end_dow": "END_DOW",  # Day of week (dow) from the end time [1 - 7], the start of the week is Monday == 1
+        # Day of week (dow) from the end time [1 - 7], the start of the week is
+        # Monday == 1
+        "end_dow": "END_DOW",
         "end_year": "END_YEAR",  # The year of the end time [0 - 9999]
         "end_month": "END_MONTH",  # The month of the end time [1 - 12]
         "end_week": "END_WEEK",  # Week of year of the end time [1 - 54]
@@ -583,11 +587,11 @@ class TemporalAlgebraLexer:
     )
 
     # Regular expression rules for simple tokens
-    t_T_SELECT_OPERATOR = r"\{[!]?[:][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"
+    t_T_SELECT_OPERATOR = r"\{[!]?[:][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"  # noqa: E501
     t_T_HASH_OPERATOR = (
-        r"\{[#][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"
+        r"\{[#][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"  # noqa: E501
     )
-    t_T_COMP_OPERATOR = r"\{(\|\||&&)[,][a-zA-Z\| ]*[,]?[\|&]?([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"
+    t_T_COMP_OPERATOR = r"\{(\|\||&&)[,][a-zA-Z\| ]*[,]?[\|&]?([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"  # noqa: E501
     t_T_REL_OPERATOR = r"\{([a-zA-Z\| ])+\}"
     t_T_SELECT = r":"
     t_T_NOT_SELECT = r"!:"
@@ -611,7 +615,7 @@ class TemporalAlgebraLexer:
 
     # Read time string and convert it into a date object
     def t_DATETIME(self, t):
-        r'"\d\d\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[ T](0[0-9]|1(0-9)|2[0-4]):(0[0-9]|[1-5][0-9]|60):(0[0-9]|[1-5][0-9]|60)"'
+        r'"\d\d\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[ T](0[0-9]|1(0-9)|2[0-4]):(0[0-9]|[1-5][0-9]|60):(0[0-9]|[1-5][0-9]|60)"'  # noqa: E501
         # t.value = int(t.value)
         return t
 
@@ -793,9 +797,11 @@ class TemporalAlgebraParser:
         self.dry_run = (
             dry_run  # Compute the processes and output but Do not start the processes
         )
+        # This dictionary stores all processes, as well as the maps to register and
+        # remove
         self.process_chain_dict = (
             {}
-        )  # This dictionary stores all processes, as well as the maps to register and remove
+        )
         self.process_chain_dict[
             "processes"
         ] = []  # The mapcalc and v.patch module calls
@@ -856,7 +862,8 @@ class TemporalAlgebraParser:
         space time datasets in the expression to generate the map lists.
 
         This function will analyze the expression to detect space time datasets
-        and computes the common granularity from all granularities of the input space time datasets.
+        and computes the common granularity from all granularities of the input space
+        time datasets.
 
         This granularity is then be used to generate the map lists. Hence, all
         maps from all STDS will have equidistant temporal extents. The only meaningful
@@ -864,8 +871,9 @@ class TemporalAlgebraParser:
 
         :param expression: The algebra expression to analyze
 
-        :param lexer: The temporal algebra lexer (select, raster, voxel, vector) that should be used to
-                               parse the expression, default is TemporalAlgebraLexer
+        :param lexer: The temporal algebra lexer (select, raster, voxel, vector) that
+                      should be used to parse the expression, default is
+                      TemporalAlgebraLexer
 
         :return: True if successful, False otherwise
         """
@@ -921,7 +929,8 @@ class TemporalAlgebraParser:
             if stds.check_temporal_topology() is False:
                 self.msgr.error(
                     _(
-                        "All input space time datasets must have a valid temporal topology."
+                        "All input space time datasets must have a valid temporal \
+                            topology."
                     )
                 )
                 return False
@@ -1010,7 +1019,8 @@ class TemporalAlgebraParser:
                copied to mapA
         :param rename: Specifies if the generated map get a random name or get
                the id from the base map.
-         :param remove: Set this True if this map is an intermediate or empty map that should be removed
+        :param remove: Set this True if this map is an intermediate or empty map that
+               should be removed
         :return: Map object
         """
         # Generate an intermediate name for the result map list.
@@ -1126,7 +1136,8 @@ class TemporalAlgebraParser:
             map_new = self.generate_new_map(
                 base_map=map_i, bool_op="and", copy=True, rename=True
             )
-            # Combine temporal and spatial extents of intermediate map with related maps.
+            # Combine temporal and spatial extents of intermediate map with related
+            # maps.
             for topo in topolist:
                 if topo in tbrelations.keys():
                     for map_j in tbrelations[topo]:
@@ -1150,21 +1161,23 @@ class TemporalAlgebraParser:
                             )
                             if self.debug:
                                 print(map_new.get_id(), map_j.get_id())
-                            # Stop the loop if no temporal or spatial relationship exist.
+                            # Stop the loop if no temporal or spatial relationship
+                            # exist.
                             if returncode == 0:
                                 break
                             # Append map to result map list.
                             elif returncode == 1:
-                                # print(map_new.get_id() + " " + str(map_new.get_temporal_extent_as_tuple()))
+                                # print(map_new.get_id() + " " + str(
+                                # map_new.get_temporal_extent_as_tuple()))
                                 # print(map_new.condition_value)
                                 # print(map_new.cmd_list)
                                 # resultlist.append(map_new)
                                 resultdict[map_new.get_id()] = map_new
 
                             # Create r.mapcalc expression string for the operation.
-                            # cmdstring = self.build_command_string(s_expr_a = map_new,
-                            #                                                                s_expr_b = map_j,
-                            #                                                                operator = function)
+                            # cmdstring = self.build_command_string(
+                            #   s_expr_a = map_new, s_expr_b = map_j,
+                            #    operator = function)
                             # Conditional append of module command.
                             # map_new.cmd_list = cmdstring
                     if returncode == 0:
@@ -1221,9 +1234,10 @@ class TemporalAlgebraParser:
 
         :param input: Name of space time data set as string or list of maps.
         :param clear: Reset the stored conditional values to empty list.
-        :param check_type: Check the type of the space time dataset to match the global stds type
-        :param stds_type: The type of the space time dataset to be opened, if not provided
-                                      then self.stdstype will be used
+        :param check_type: Check the type of the space time dataset to match the global
+                           stds type
+        :param stds_type: The type of the space time dataset to be opened, if not
+                          provided then self.stdstype will be used
 
         :return: List of maps.
         """
@@ -1321,7 +1335,8 @@ class TemporalAlgebraParser:
         Return True if no spatial relation list is provided or if one spatial relation
         was found
 
-        :param spatial_topo_list: The spatial relations that were defined in the expression
+        :param spatial_topo_list: The spatial relations that were defined in the
+                                  expression
         :param spatial_relations: The spatial relations of a single map object
 
         :return: True if a spatial  topological relation was found, False if not
@@ -1342,8 +1357,8 @@ class TemporalAlgebraParser:
         return spatial_topo_check
 
     def _check_spatial_topology_relation(self, spatial_topo_list, map_a, map_b):
-        """Check if map_b has one of the spatial topological relations to map_a that is defined
-        in spatial_topo_list
+        """Check if map_b has one of the spatial topological relations to map_a that is
+        defined in spatial_topo_list
 
         :param spatial_topo_list:
         :param map_a:
@@ -1373,9 +1388,11 @@ class TemporalAlgebraParser:
 
         :param topolist: List of strings of temporal and spatial relations.
 
-        :return: A tuple of spatial and temporal topology lists (temporal_topo_list, spatial_topo_list)
+        :return: A tuple of spatial and temporal topology lists
+                (temporal_topo_list, spatial_topo_list)
 
-        :raises: This method will raise a syntax error in case the topology name is unknown
+        :raises: This method will raise a syntax error in case the topology name is
+                 unknown
         """
         temporal_topo_list = []
         spatial_topo_list = []
@@ -1556,7 +1573,7 @@ class TemporalAlgebraParser:
             >>> for map in resultlist:
             ...     print(map.get_id())
 
-        """
+        """  # noqa: E501
         # Check the topology definitions and return the list of temporal and spatial
         # topological relations that must be fulfilled
         temporal_topo_list, spatial_topo_list = self._check_topology(topolist=topolist)
@@ -1678,7 +1695,8 @@ class TemporalAlgebraParser:
 
         temporal_relations = map_i.get_temporal_relations()
 
-        # Build conditional list with elements from related maps and given relation operator.
+        # Build conditional list with elements from related maps and given relation
+        # operator.
         leftbool = map_i.condition_value[0]
         condition_value_list = [leftbool]
         count = 0
@@ -1809,7 +1827,7 @@ class TemporalAlgebraParser:
             Map a3 has no equal relation to mapset mapsB
             Map a4 has no equal relation to mapset mapsB
 
-        """
+        """  # noqa: E501
         if not inverse:
             topolist = self.build_spatio_temporal_topology_list(
                 maplistA, maplistB, topolist, assign_val=assign_val
@@ -1877,7 +1895,7 @@ class TemporalAlgebraParser:
             a9@B - start: 8 end: 10
             a8@B - start: 8 end: 10
 
-        """
+        """  # noqa: E501
         topologylist = [
             "EQUAL",
             "FOLLOWS",
@@ -1933,7 +1951,8 @@ class TemporalAlgebraParser:
                         if newextent is not None:
                             start = newextent.get_start_time()
                             end = newextent.get_end_time()
-                            # print(map_i.get_id() + ' - start: ' + str(start) + ' end: ' + str(end))
+                            # print(map_i.get_id() + ' - start: ' + str(start) + ' end:
+                            # ' + str(end))
                             # Track changes in temporal extents of maps.
                             if map_start != start or map_end != end:
                                 unchanged = False
@@ -2161,16 +2180,16 @@ class TemporalAlgebraParser:
     def build_condition_list(self, tvarexpr, thenlist, topolist=["EQUAL"]):
         """This function evaluates temporal variable expressions of a conditional
         expression in two steps.
-        At first it combines stepwise the single conditions by their relations with LALR.
-        In this process sub condition map lists will be created which will include
+        At first it combines stepwise the single conditions by their relations with
+        LALR. In this process sub condition map lists will be created which will include
         information of the underlying single conditions. Important: The temporal
         relations between conditions are evaluated by implicit aggregation.
         In the second step the aggregated condition map list will be compared with the
         map list of conclusion statements by the given temporal relation.
 
-        The result is written as 'condition_value' attribute to the resulting map objects.
-        These attribute consists of boolean expressions and operators which can be
-        evaluated with the eval_condition_list function.
+        The result is written as 'condition_value' attribute to the resulting map
+        objects. These attribute consists of boolean expressions and operators which
+        can be evaluated with the eval_condition_list function.
         [True,  '||', False, '&&', True]
 
         For example: td(A) == 1 && start_day() > 5 --> [True || False]
@@ -2315,7 +2334,8 @@ class TemporalAlgebraParser:
 
     def p_statement_assign(self, t):
         # The expression should always return a list of maps
-        # This function starts all the work and is the last one that is called from the parser
+        # This function starts all the work and is the last one that is called from the
+        # parser
         """
         statement : stds EQUALS expr
 
@@ -2353,8 +2373,8 @@ class TemporalAlgebraParser:
                             if maps_stds_type != self.stdstype:
                                 self.msgr.warning(
                                     _(
-                                        "The resulting space time dataset type <%(a)s> is "
-                                        "different from the requested type <%(b)s>"
+                                        "The resulting space time dataset type <%(a)s> "
+                                        "is different from the requested type <%(b)s>"
                                         % ({"a": maps_stds_type, "b": self.stdstype})
                                     )
                                 )
@@ -2364,7 +2384,8 @@ class TemporalAlgebraParser:
                                 self.msgr.fatal(
                                     _(
                                         "Maps that should be registered in the "
-                                        "resulting space time dataset have different types."
+                                        "resulting space time dataset have different \
+                                            types."
                                     )
                                 )
                         count += 1
@@ -2490,7 +2511,8 @@ class TemporalAlgebraParser:
                                 if self.dry_run is False:
                                     map_i.update_all(dbif)
                             elif map_i.is_in_db(dbif) and self.overwrite is False:
-                                # Raise error if map exists and no overwrite flag is given.
+                                # Raise error if map exists and no overwrite flag is
+                                # given.
                                 self.msgr.fatal(
                                     "Error map %s exist in temporal database. "
                                     "Use overwrite flag." % map_i.get_map_id()
@@ -2669,14 +2691,16 @@ class TemporalAlgebraParser:
             elif len(maplistA) == 0:
                 self.msgr.message(
                     _(
-                        "First Map list is empty, can't merge it. Return only last map list"
+                        "First Map list is empty, can't merge it. Return only last map \
+                            list"
                     )
                 )
                 resultlist = maplistB
             elif len(maplistB) == 0:
                 self.msgr.message(
                     _(
-                        "Second Map list is empty, can't merge it. Return only first map list"
+                        "Second Map list is empty, can't merge it. Return only first \
+                            map list"
                     )
                 )
                 resultlist = maplistA
@@ -2688,7 +2712,8 @@ class TemporalAlgebraParser:
                 if typeA != typeB:
                     raise FatalError(
                         _(
-                            "Space time datasets to merge must have the same temporal type"
+                            "Space time datasets to merge must have the same temporal \
+                                type"
                         )
                     )
 
@@ -2832,7 +2857,8 @@ class TemporalAlgebraParser:
                         map_i.condition_value = boolname
                 except:
                     self.msgr.fatal(
-                        "Error: the given expression does not contain a correct time difference object."
+                        "Error: the given expression does not contain a correct time \
+                            difference object."
                     )
 
             t[0] = maplist
@@ -3028,10 +3054,13 @@ class TemporalAlgebraParser:
         # Examples:
         #    A {!:} B  # Select the part of A that is temporally unequal to B
         #    A { :} B  # Select the part of A that is temporally equal B
-        #    A {!:, equals} B          # Select the part of A that is temporally unequal to B
-        #    A {!:, during} B          # Select the part of A that is temporally not during B
+        #    A {!:, equals} B          # Select the part of A that is temporally unequal
+        #                              # to B
+        #    A {!:, during} B          # Select the part of A that is temporally not
+        #                              # during B
         #    A {:, overlaps} B         # Select the part of A that temporally overlaps B
-        #    A {:, overlaps|equals} B  # Select the part of A that temporally overlaps or equals B
+        #    A {:, overlaps|equals} B  # Select the part of A that temporally overlaps
+        #                              # or equals B
         """
         expr : stds T_SELECT_OPERATOR stds
              | expr T_SELECT_OPERATOR stds
@@ -3164,7 +3193,8 @@ class TemporalAlgebraParser:
 
     def p_expr_condition_elif_relation(self, t):
         # Examples
-        # if({equal}, start_date() < "2005-06-01", if(start_time() < "12:30:00", A:B), A!:B)
+        # if({equal}, start_date() < "2005-06-01",
+        #                               if(start_time() < "12:30:00", A:B), A!:B)
         # The then and else statement using the same topological relationships.
         # Feature request: Independent relationships for then and else to conditions.
         """
@@ -3225,7 +3255,8 @@ class TemporalAlgebraParser:
     def p_expr_t_buff(self, t):
         # Examples
         # buff_t(A : B, "10 minutes")  # Select the part of A that is temporally
-        #                                equal to B and create a buffer of 10 minutes around
+        #                                equal to B and create a buffer of 10 minutes
+        #                                around
         """
         expr : BUFF_T LPAREN stds COMMA QUOTE  number NAME QUOTE RPAREN
              | BUFF_T LPAREN expr COMMA QUOTE  number NAME QUOTE RPAREN
@@ -3366,8 +3397,8 @@ class TemporalAlgebraParser:
         # Handle errors.
         if t:
             raise SyntaxError(
-                "syntax error on line %d, position %i token %s near '%s' expression '%s'"
-                % (t.lineno, t.lexpos, t.type, t.value, self.expression)
+                "syntax error on line %d, position %i token %s near '%s' expression \
+                    '%s'" % (t.lineno, t.lexpos, t.type, t.value, self.expression)
             )
         else:
             raise SyntaxError("Unexpected syntax error")

@@ -1014,7 +1014,8 @@ class STDSMetadataBase(SQLDatabaseInterface):
         """
         if not shell:
             print(
-                " +-------------------- Metadata information ----------------------------------+"
+                " +-------------------- Metadata information --------------------------\
+                    --------+"
             )
 
     def _print_info_tail(self, shell=False):

@@ -211,7 +211,7 @@ def increment_datetime_by_string(mydate, increment, mult=1):
                       datetime 2003-02-18 12:05:00
     :param mult: A multiplier, default is 1
     :return: The new datetime object or none in case of an error
-    """
+    """  # noqa: E501
     return modify_datetime_by_string(mydate, increment, mult, sign=1)
 
 
@@ -422,7 +422,7 @@ def adjust_datetime_to_granularity(mydate, granularity):
         >>> adjust_datetime_to_granularity(dt, "3 weeks, 5 days")
         datetime.datetime(2001, 8, 8, 0, 0)
 
-    """
+    """  # noqa: E501
 
     if granularity:
         has_seconds = False
@@ -642,7 +642,7 @@ def compute_datetime_delta(start, end):
 
     :return: A dictionary with year, month, day, hour, minute and second as
              keys()
-    """
+    """  # noqa: E501
     comp = {}
 
     day_diff = (end - start).days
@@ -992,7 +992,8 @@ def create_numeric_suffix(base, count, zeros):
 
     :param base: the basename for new map
     :param count: a number
-    :param zeros: a string containing the expected number, coming from suffix option like "%05"
+    :param zeros: a string containing the expected number, coming from suffix option
+                  like "%05"
     """
     spli = zeros.split("%")
     if len(spli) == 2:

@@ -103,7 +103,7 @@ def call_module(
     .. note::
         The data read is buffered in memory, so do not use this method
         if the data size is large or unlimited.
-    """
+    """  # noqa: E501
     # TODO: remove this:
     do_doctest_gettext_workaround()
     # implementation inspired by subprocess.check_output() function

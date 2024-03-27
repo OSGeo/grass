@@ -288,10 +288,12 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
     :param raster: raster object
     :param str column: column name to update in the attrinute table,
                        if set to None a list of sampled values will be returned
-    :param region: The region to work with, if not set the current computational region will be used
+    :param region: The region to work with, if not set the current computational region
+                   will be used
 
     :return: True in case of success and a specified column for update,
-             if column name for update was not set a list of (id, x, y, value) is returned
+             if column name for update was not set a list of (id, x, y, value) is
+             returned
     """
     from math import isnan
 

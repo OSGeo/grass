@@ -142,32 +142,32 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         """Print information about this class in human readable style"""
 
         if self.get_type() == "strds":
-            #                1         2         3         4         5         6         7
-            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            #                1         2         3         4         5         6         7  # noqa: E501
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678  # noqa: E501
             print(
-                " +-------------------- Space Time Raster Dataset -----------------------------+"
+                " +-------------------- Space Time Raster Dataset -----------------------------+"  # noqa: E501
             )
         if self.get_type() == "str3ds":
-            #                1         2         3         4         5         6         7
-            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            #                1         2         3         4         5         6         7  # noqa: E501
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678  # noqa: E501
             print(
-                " +-------------------- Space Time 3D Raster Dataset --------------------------+"
+                " +-------------------- Space Time 3D Raster Dataset --------------------------+"  # noqa: E501
             )
         if self.get_type() == "stvds":
-            #                1         2         3         4         5         6         7
-            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            #                1         2         3         4         5         6         7  # noqa: E501
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678  # noqa: E501
             print(
-                " +-------------------- Space Time Vector Dataset -----------------------------+"
+                " +-------------------- Space Time Vector Dataset -----------------------------+"  # noqa: E501
             )
         print(
-            " |                                                                            |"
+            " |                                                                            |"  # noqa: E501
         )
         self.base.print_info()
         self.temporal_extent.print_info()
         self.spatial_extent.print_info()
         self.metadata.print_info()
         print(
-            " +----------------------------------------------------------------------------+"
+            " +----------------------------------------------------------------------------+"  # noqa: E501
         )
 
     def print_shell_info(self):
@@ -395,7 +395,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             # Create table name
             stds_register_table = self.create_map_register_name()
             # Assure that the table and index do not exist
-            # dbif.execute_transaction("DROP INDEX IF EXISTS %s; DROP TABLE IF EXISTS   %s;"%(stds_register_table + "_index", stds_register_table))
+            # dbif.execute_transaction("DROP INDEX IF EXISTS %s; DROP TABLE IF EXISTS
+            # %s;"%(stds_register_table + "_index", stds_register_table))
 
             # Read the SQL template
             sql = open(
@@ -1278,7 +1279,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
              None (datetime.datetime(2001, 2, 1, 0, 0), datetime.datetime(2001, 3, 1, 0, 0))
              None (datetime.datetime(2001, 3, 1, 0, 0), datetime.datetime(2001, 4, 1, 0, 0))
 
-        """
+        """  # noqa: E501
 
         if not maps:
             return None
@@ -1676,7 +1677,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
              >>> spatial_extent = gs.parse_command("g.region", flags="ug3")
              >>> _update_where_statement_by_spatial_extent(where, spatial_extent, "overlaps")
              ((north > 0 AND south < 1 AND east > 0 AND west < 1))
-        """
+        """  # noqa: E501
 
         # initialized WHERE statement
         if where:
@@ -1690,7 +1691,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             self.msgr.error(
                 _(
                     "Invalid spatial relation <{}> requested."
-                    "Only values 'overlaps', 'is_contained', and 'contains' are allowed."
+                    "Only values 'overlaps', 'is_contained', and 'contains' are \
+                        allowed."
                 ).format(spatial_relation)
             )
             raise
@@ -1909,7 +1911,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
              | End time:................... 10
              | Relative time unit:......... years
 
-        """
+        """  # noqa: E501
         if maps is None:
             return None
 
@@ -2061,7 +2063,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
              | End time:................... 5
              | Relative time unit:......... years
 
-        """
+        """  # noqa: E501
         if maps is None or len(maps) == 0:
             return None
 

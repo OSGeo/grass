@@ -198,7 +198,7 @@ def vector_info(map, layer=1, env=None):
     :param env: environment
 
     :return: parsed vector info
-    """
+    """  # noqa: E501
 
     s = read_command("v.info", flags="get", layer=layer, map=map, env=env)
 
@@ -246,7 +246,7 @@ def vector_db_select(map, layer=1, env=None, **kwargs):
     :param env: environment
 
     :return: dictionary ('columns' and 'values')
-    """
+    """  # noqa: E501
     try:
         key = vector_db(map=map, env=env)[layer]["key"]
     except KeyError:

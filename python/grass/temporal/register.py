@@ -220,7 +220,8 @@ def register_maps_in_space_time_dataset(
             increment = None
             msgr.warning(
                 _(
-                    "The increment option will be ignored because of time stamps in input file"
+                    "The increment option will be ignored because of time stamps in \
+                        input file"
                 )
             )
 
@@ -228,7 +229,8 @@ def register_maps_in_space_time_dataset(
             increment = None
             msgr.warning(
                 _(
-                    "The interval flag will be ignored because of time stamps in input file"
+                    "The interval flag will be ignored because of time stamps in input \
+                        file"
                 )
             )
         fd.close()
@@ -386,7 +388,8 @@ def register_maps_in_space_time_dataset(
 
         # Try to read an existing time stamp from the grass spatial database
         # in case this map wasn't already registered in the temporal database
-        # Read the spatial database time stamp only, if no time stamp was provided for this map
+        # Read the spatial database time stamp only, if no time stamp was provided for
+        # this map
         # as method argument or in the input file
         if not is_in_db and not start:
             map.read_timestamp_from_grass()

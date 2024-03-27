@@ -318,7 +318,8 @@ class SpatialTopologyDatasetConnector:
         """Print information about this class in human readable style"""
 
         print(
-            " +-------------------- Spatial Topology --------------------------------------+"
+            " +-------------------- Spatial Topology ----------------------------------\
+                ----+"
         )
         #          0123456789012345678901234567890
         if self.equivalent is not None:

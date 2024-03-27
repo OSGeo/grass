@@ -569,7 +569,7 @@ class Raster3DDataset(AbstractMapDataset):
         0
         >>> gs.del_temp_region()
 
-    """
+    """  # noqa: E501
 
     def __init__(self, ident):
         AbstractMapDataset.__init__(self)

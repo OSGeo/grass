@@ -125,7 +125,7 @@ def db_connection(force=False, env=None):
     :param env: environment
 
     :return: parsed output of db.connect
-    """
+    """  # noqa: E501
     try:
         nuldev = open(os.devnull, "w")
         conn = parse_command("db.connect", flags="g", stderr=nuldev, env=env)
@@ -176,7 +176,8 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
     else:
         fatal(
             _(
-                "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
+                "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be \
+                    provided"
             )
             % {"sql": "sql", "filename": "filename", "table": "table"}
         )
