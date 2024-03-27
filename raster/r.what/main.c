@@ -50,6 +50,8 @@ static int by_point(const void *, const void *);
 
 static int tty = 0;
 
+enum OutputFormat { PLAIN, JSON };
+
 int main(int argc, char *argv[])
 {
     int i, j;
@@ -98,7 +100,8 @@ int main(int argc, char *argv[])
     JSON_Value *root_value = NULL, *point_value, *layer_value;
     JSON_Array *root_array;
     JSON_Object *point_object, *layer_object;
-    char **names;
+
+    enum OutputFormat format;
 
     G_gisinit(argv[0]);
 
@@ -146,7 +149,7 @@ int main(int argc, char *argv[])
     opt.format->descriptions = "plain;Plain text output;"
                                "json;JSON (JavaScript Object Notation);";
     opt.format->answer = "plain";
-    opt.format->guisection = _("Output settings");
+    opt.format->guisection = _("Print");
 
     opt.cache = G_define_option();
     opt.cache->key = "cache";
@@ -273,7 +276,12 @@ int main(int argc, char *argv[])
     Cats = Vect_new_cats_struct();
     G_get_window(&window);
 
-    if (strcmp(opt.format->answer, "json") == 0) {
+    if (strcmp(opt.format->answer, "json") == 0)
+        format = JSON;
+    else
+        format = PLAIN;
+
+    if (format == JSON) {
         root_value = json_value_init_array();
         if (root_value == NULL) {
             G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
@@ -282,7 +290,7 @@ int main(int argc, char *argv[])
     }
 
     /* print header row */
-    if (strcmp(opt.format->answer, "plain") == 0 && flg.header->answer) {
+    if (format == PLAIN && flg.header->answer) {
         if (flg.cat->answer) {
             fprintf(stdout, "cat%s", fs);
         }
@@ -303,17 +311,6 @@ int main(int argc, char *argv[])
         }
 
         fprintf(stdout, "\n");
-    }
-    else if (strcmp(opt.format->answer, "json") == 0) {
-        i = 0;
-        names = G_malloc(nfiles * sizeof(char *));
-
-        ptr = opt.input->answers;
-        for (; *ptr != NULL; ptr++) {
-            names[i] = G_malloc(GNAME_MAX);
-            strcpy(names[i], *ptr);
-            i++;
-        }
     }
 
     line = 0;
@@ -503,13 +500,12 @@ int main(int argc, char *argv[])
             qsort(cache, point_cnt, sizeof(struct order), by_point);
 
         /* report data from re-ordered cache */
-
         for (point = 0; point < point_cnt; point++) {
 
             G_debug(1, "%s|%s at col %d, row %d\n", cache[point].east_buf,
                     cache[point].north_buf, cache[point].col, cache[point].row);
 
-            if (strcmp(opt.format->answer, "plain") == 0) {
+            if (format == PLAIN) {
 
                 if (flg.cat->answer) {
                     fprintf(stdout, "%d%s", cache[point].cat, fs);
@@ -566,10 +562,10 @@ int main(int argc, char *argv[])
                                            cache[point].cat);
                 }
 
-                json_object_set_string(point_object, "easting",
-                                       cache[point].east_buf);
-                json_object_set_string(point_object, "northing",
-                                       cache[point].north_buf);
+                json_object_set_number(point_object, "easting",
+                                       atof(cache[point].east_buf));
+                json_object_set_number(point_object, "northing",
+                                       atof(cache[point].north_buf));
                 json_object_set_string(point_object, "site_name",
                                        cache[point].lab_buf);
 
@@ -605,7 +601,8 @@ int main(int argc, char *argv[])
                                                    cache[point].clr_buf[i]);
                     }
 
-                    json_object_set_value(point_object, names[i], layer_value);
+                    json_object_set_value(point_object, opt.input->answers[i],
+                                          layer_value);
                 }
                 json_array_append_value(root_array, point_value);
             }
@@ -620,7 +617,7 @@ int main(int argc, char *argv[])
         cache_hit = cache_miss = 0;
     }
 
-    if (strcmp(opt.format->answer, "json") == 0) {
+    if (format == JSON) {
         char *serialized_string = NULL;
         serialized_string = json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {

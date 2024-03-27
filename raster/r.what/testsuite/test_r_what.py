@@ -447,8 +447,8 @@ class TestRasterWhat(TestCase):
             if line:
                 parts = line.split("|")
                 item = {
-                    "easting": parts[0],
-                    "northing": parts[1],
+                    "easting": float(parts[0]),
+                    "northing": float(parts[1]),
                     "site_name": parts[2],
                     "boundary_county_500m": {"value": int(parts[3])},
                 }
