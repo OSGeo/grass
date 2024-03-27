@@ -30,12 +30,11 @@ from grass.utils.download import download_and_extract, name_from_url, DownloadEr
 from grass.grassdb.checks import is_location_valid
 from grass.script.setup import set_gui_path
 
-set_gui_path()
-
 from core.debug import Debug
 from core.gthread import gThread
 from gui_core.wrap import Button, StaticText
 
+set_gui_path()
 
 # TODO: labels (and descriptions) translatable?
 LOCATIONS = [

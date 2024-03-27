@@ -12,8 +12,8 @@
 
 import sys
 import os
-from datetime import date
 import string
+from datetime import date
 from shutil import copy
 
 # If extensions (or modules to document with autodoc) are in another directory,

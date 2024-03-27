@@ -26,17 +26,24 @@ This program is free software under the GNU General Public License
 """
 
 import os
+import wx
 import sys
 import time
 import errno
 import signal
-import traceback
 import locale
+import traceback
 import subprocess
+
 from threading import Thread
-import wx
+from core.debug import Debug
+from core.globalvar import SCT_EXT
+
+from grass.script import core as grass
+from grass.script.utils import decode, encode
 
 is_mswindows = sys.platform == "win32"
+
 if is_mswindows:
     from win32file import ReadFile, WriteFile
     from win32pipe import PeekNamedPipe
@@ -44,12 +51,6 @@ if is_mswindows:
 else:
     import select
     import fcntl
-
-from core.debug import Debug
-from core.globalvar import SCT_EXT
-
-from grass.script import core as grass
-from grass.script.utils import decode, encode
 
 
 def DecodeString(string):
