@@ -35,6 +35,7 @@ void list_accessible_mapsets(const char *fs)
     const char *name;
 
     G_message(_("Accessible mapsets:"));
+
     for (n = 0; (name = G_get_mapset_name(n)); n++) {
         /* match each mapset to its numeric equivalent */
         fprintf(stdout, "%s", name);
@@ -52,4 +53,33 @@ void list_accessible_mapsets(const char *fs)
         }
     }
     fprintf(stdout, "\n");
+}
+
+void list_accessible_mapsets_json(const char *fs)
+{
+    int n;
+    const char *name;
+
+    fprintf(stdout, "{\"mapsets\": [");
+    for (n = 0; (name = G_get_mapset_name(n)); n++) {
+        fprintf(stdout, "\"%s\"", name);
+        if (G_get_mapset_name(n + 1)) {
+            fprintf(stdout, ",");
+        }
+    }
+    fprintf(stdout, "]}\n");
+}
+
+void list_avaliable_mapsets_json(const char **mapset_name, int nmapsets)
+{
+    int n;
+
+    fprintf(stdout, "{\"mapsets\": [");
+    for (n = 0; n < nmapsets; n++) {
+        fprintf(stdout, "\"%s\"", mapset_name[n]);
+        if (n < nmapsets - 1) {
+            fprintf(stdout, ",");
+        }
+    }
+    fprintf(stdout, "]}\n");
 }
