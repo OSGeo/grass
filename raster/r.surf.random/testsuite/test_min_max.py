@@ -14,8 +14,6 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 """
 
-import os
-
 import grass.script as gs
 
 from grass.gunittest.case import TestCase
@@ -37,7 +35,6 @@ class MinMaxTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         """Ensures expected computational region"""
-        os.environ["GRASS_RANDOM_SEED"] = "42"
         # modifying region just for this script
         cls.use_temp_region()
         # Only 100,000,000 seem to resonably (not 100%) ensure that all values
@@ -60,7 +57,7 @@ class MinMaxTestCase(TestCase):
         # arbitrary, but with more cells, we expect higher precision
         precision = 0.00001
         self.assertModule(
-            "r.surf.random", min=min_value, max=max_value, output=self.output
+            "r.surf.random", min=min_value, max=max_value, output=self.output, seed=42
         )
         self.assertRasterExists(self.output, msg="Output was not created")
         self.assertRasterMinMax(
@@ -84,7 +81,12 @@ class MinMaxTestCase(TestCase):
         max_value = 13
         precision = 0
         self.assertModule(
-            "r.surf.random", min=min_value, max=max_value, output=self.output, flags="i"
+            "r.surf.random",
+            min=min_value,
+            max=max_value,
+            output=self.output,
+            seed=42,
+            flags="i",
         )
         self.assertRasterExists(self.output, msg="Output was not created")
         self.assertRasterMinMax(
@@ -105,7 +107,12 @@ class MinMaxTestCase(TestCase):
         min_value = -3.3
         max_value = 5.8
         self.assertModuleFail(
-            "r.surf.random", min=min_value, max=max_value, output=self.output, flags="i"
+            "r.surf.random",
+            min=min_value,
+            max=max_value,
+            output=self.output,
+            seed=42,
+            flags="i",
         )
 
     def test_min_greater_than_max(self):
@@ -113,7 +120,27 @@ class MinMaxTestCase(TestCase):
         min_value = 10
         max_value = 5.8
         self.assertModuleFail(
-            "r.surf.random", min=min_value, max=max_value, output=self.output
+            "r.surf.random", min=min_value, max=max_value, output=self.output, seed=42
+        )
+
+    def test_auto_seed(self):
+        """Check if random seed is generated with seed flag"""
+        min_value = -3.3
+        max_value = 5.8
+        self.assertModule(
+            "r.surf.random",
+            min=min_value,
+            max=max_value,
+            output=self.output,
+            flags="s",
+        )
+
+    def test_explicit_seed(self):
+        """Check if user defined seed is used"""
+        min_value = -3.3
+        max_value = 5.8
+        self.assertModule(
+            "r.surf.random", min=min_value, max=max_value, output=self.output, seed=33
         )
 
 
