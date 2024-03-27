@@ -46,9 +46,8 @@ jobs:
 
 
 # get the repository issues 
-           - name: Get Current Issues
-          
-            run: |
+           - name: Get Current Issues        
+             run: |
               
                curl -L \
                -H "Accept: application/vnd.github+json" \
@@ -63,8 +62,8 @@ jobs:
                #trigger a rerun
  
            - name: Upload the issues as artifact
-            uses: actions/upload-artifact@v4
-            with:
-                name: workflow-data
-                path: issues.json
+             uses: actions/upload-artifact@v4
+             with:
+                 name: workflow-data
+                 path: issues.json
        
