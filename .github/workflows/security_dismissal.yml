@@ -77,12 +77,12 @@ jobs:
      - name: Download artifacts
        uses: actions/download-artifact@v3
        with:
-         name: issues-data  # Match the name used for upload
+         name: issues.json  # Match the name used for upload
        
      - name: Download artifacts
        uses: actions/download-artifact@v3
        with:
-         name: workflow-data
+         name: alerts.json
 
          
      - name: Use downloaded artifact
