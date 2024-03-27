@@ -7,7 +7,7 @@ on:
      - dismissalCheckout   # Trigger only test branch, remember to remove before PRing to grass
 
 jobs:
-    track-dismissals:
+    get-dismissals-data:
         runs-on: ubuntu-latest  
         permissions: write-all
 
@@ -66,4 +66,28 @@ jobs:
              with:
                  name: issues-data
                  path: issues.json
+
+    track-dismissals:
+     runs-on: ubuntu-latest  
+     permissions: write-all
+              
+     steps:
+                   
+
+     - name: Download artifacts
+       uses: actions/download-artifact@v3
+       with:
+         name: issues-data  # Match the name used for upload
+       
+     - name: Download artifacts
+       uses: actions/download-artifact@v3
+       with:
+         name: workflow-data
+
+         
+     - name: Use downloaded artifact
+       run: |
+         cat issues.json # Access the downloaded artifact
+         cat alerts.json
+          
        
