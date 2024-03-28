@@ -138,7 +138,8 @@ for details.
     Traceback (most recent call last):
     SyntaxError: Unknown optype rter, must be one of ['select', 'boolean', 'raster', 'hash', 'relation', 'overlay']
 
-""" # noqa: E501
+"""  # noqa: E501
+
 try:
     import ply.lex as lex
     import ply.yacc as yacc

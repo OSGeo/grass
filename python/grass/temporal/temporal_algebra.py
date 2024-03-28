@@ -588,9 +588,7 @@ class TemporalAlgebraLexer:
 
     # Regular expression rules for simple tokens
     t_T_SELECT_OPERATOR = r"\{[!]?[:][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"  # noqa: E501
-    t_T_HASH_OPERATOR = (
-        r"\{[#][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"  # noqa: E501
-    )
+    t_T_HASH_OPERATOR = r"\{[#][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"  # noqa: E501
     t_T_COMP_OPERATOR = r"\{(\|\||&&)[,][a-zA-Z\| ]*[,]?[\|&]?([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"  # noqa: E501
     t_T_REL_OPERATOR = r"\{([a-zA-Z\| ])+\}"
     t_T_SELECT = r":"
@@ -799,15 +797,13 @@ class TemporalAlgebraParser:
         )
         # This dictionary stores all processes, as well as the maps to register and
         # remove
-        self.process_chain_dict = (
-            {}
-        )
-        self.process_chain_dict[
-            "processes"
-        ] = []  # The mapcalc and v.patch module calls
-        self.process_chain_dict[
-            "register"
-        ] = []  # Maps that must be registered/updated or inserted in a new STDS
+        self.process_chain_dict = {}
+        self.process_chain_dict["processes"] = (
+            []
+        )  # The mapcalc and v.patch module calls
+        self.process_chain_dict["register"] = (
+            []
+        )  # Maps that must be registered/updated or inserted in a new STDS
         self.process_chain_dict["remove"] = []  # The g.remove module calls
         self.process_chain_dict["STDS"] = {}  # The STDS that must be created
 
@@ -3398,7 +3394,8 @@ class TemporalAlgebraParser:
         if t:
             raise SyntaxError(
                 "syntax error on line %d, position %i token %s near '%s' expression \
-                    '%s'" % (t.lineno, t.lexpos, t.type, t.value, self.expression)
+                    '%s'"
+                % (t.lineno, t.lexpos, t.type, t.value, self.expression)
             )
         else:
             raise SyntaxError("Unexpected syntax error")

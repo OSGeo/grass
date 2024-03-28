@@ -435,7 +435,7 @@ def _read_timestamp(lock, conn, data):
             check = libgis.G_read_raster3d_timestamp(name, mapset, byref(ts))
 
         dates = _convert_timestamp_from_grass(ts)
-    except Exception
+    except Exception:
         raise
     finally:
         conn.send((check, dates))
