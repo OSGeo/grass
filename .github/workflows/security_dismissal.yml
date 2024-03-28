@@ -19,14 +19,12 @@ jobs:
            - name: Install dependencies (if needed for parsing security tool response)
              run: |
                 # Add any package installation commands here (e.g., pip install requests)
-                 echo "Installing dependencies..."  # Placeholder
+                  sudo apt-get install jq  # Install jq for parsing JSON
                  
    
            - name: Get Security Alerts
           
              run: |
-             
-
 
                #get only dismissed alerts using curl
 
