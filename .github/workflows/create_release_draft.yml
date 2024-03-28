@@ -16,89 +16,76 @@ on:
       - .github/**
       - utils/**
 
+env:
+  OUT_DIR: ${{ github.workspace }}/../grass_outdir
+  GRASS: grass-${{ github.ref_name }}
+permissions: {}
 jobs:
   build:
-    runs-on: ubuntu-22.04
-
+    name: Package and create release draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checks-out repository
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
+          ref: ${{ github.ref }}
           fetch-depth: 0
-
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
         with:
-          python-version: '3.10'
-
-      - name: Generate core modules with last commit JSON file and patch file
+          python-version: '3.11'
+      - name: Create output directory
         run: |
-          python utils/generate_last_commit_file.py .
-          git add core_modules_with_last_commit.json
-          git diff --cached > core_modules_with_last_commit.patch
-
+          mkdir ${{ env.OUT_DIR }}
       - name: Generate ChangeLog file
         run: |
-          sudo apt-get install -y gzip
           python utils/gitlog2changelog.py
-          gzip ChangeLog
-
-      - name: Create new release draft (for tags only)
-        id: create_release
+          mv ChangeLog ${{ env.OUT_DIR }}/ChangeLog
+          gzip ${{ env.OUT_DIR }}/ChangeLog
+      - name: Generate Git derived data files
+        run: |
+          echo "Generate VERSION_GIT file:"
+          ./utils/generate_version_git_file.sh
+          cat include/VERSION_GIT
+          echo "Generate GENERATE_LAST_COMMIT_FILE:"
+          python utils/generate_last_commit_file.py .
+          cat core_modules_with_last_commit.json
+          echo "Create core modules patch file:"
+          git add core_modules_with_last_commit.json
+          git diff --cached > \
+            ${{ env.OUT_DIR }}/core_modules_with_last_commit.patch
+      - name: Create tarballs (for tags only)
         if: startsWith(github.ref, 'refs/tags/')
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd ..
+          tar -cvf ${{ env.OUT_DIR }}/${{ env.GRASS }}.tar \
+            --exclude=".gi*" --exclude=".tr*" grass
+          cd ${{ env.OUT_DIR }}
+          gzip -9k ${{ env.GRASS }}.tar
+          md5sum ${{ env.GRASS }}.tar.gz > ${{ env.GRASS }}.tar.gz.md5
+          sha256sum ${{ env.GRASS }}.tar.gz > ${{ env.GRASS }}.tar.gz.sha256
+          xz -9e ${{ env.GRASS }}.tar
+          md5sum ${{ env.GRASS }}.tar.xz > ${{ env.GRASS }}.tar.xz.md5
+          sha256sum ${{ env.GRASS }}.tar.xz > ${{ env.GRASS }}.tar.xz.sha256
+      - name: Publish draft distribution to GitHub (for tags only)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564 # v2.0.4
         with:
-          tag_name: ${{ github.ref }}
-          release_name: GRASS GIS ${{ github.ref }}
+          name: GRASS GIS ${{ github.ref_name }}
           body: |
             Overview of changes
             - First change
             - Second change
           draft: true
           prerelease: ${{ contains(github.ref, 'RC') }}
-
-      - name: Upload core_modules_with_last_commit.json file (for tags only)
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: core_modules_with_last_commit.json
-          asset_name: core_modules_with_last_commit.json
-          asset_content_type: application/json
-
-      - name: Upload core_modules_with_last_commit.patch file (for tags only)
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: core_modules_with_last_commit.patch
-          asset_name: core_modules_with_last_commit.patch
-          asset_content_type: text/plain
-
-      - name: Upload ChangeLog file (for tags only)
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ChangeLog.gz
-          asset_name: ChangeLog.gz
-          asset_content_type: application/gzip
-
-      - name: Make the created files available
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: artifacts
-          path: |
-            core_modules_with_last_commit.*
-            ChangeLog.gz
-          if-no-files-found: warn
-          retention-days: 10
+          files: |
+              ${{ env.OUT_DIR }}/${{ env.GRASS }}.tar.gz
+              ${{ env.OUT_DIR }}/${{ env.GRASS }}.tar.gz.md5
+              ${{ env.OUT_DIR }}/${{ env.GRASS }}.tar.gz.sha256
+              ${{ env.OUT_DIR }}/${{ env.GRASS }}.tar.xz
+              ${{ env.OUT_DIR }}/${{ env.GRASS }}.tar.xz.md5
+              ${{ env.OUT_DIR }}/${{ env.GRASS }}.tar.xz.sha256
+              ${{ env.OUT_DIR }}/ChangeLog.gz
+              ${{ env.OUT_DIR }}/core_modules_with_last_commit.patch
