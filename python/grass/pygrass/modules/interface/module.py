@@ -851,7 +851,7 @@ class MultiModule:
                       modules without waiting for them to finish. The user must call
                       the wait() method to wait for the modules to finish.
                       Asynchronously called module can be optionally run in a temporary
-                      region environment, hence invokeing g.region will not alter the
+                      region environment, hence invoking g.region will not alter the
                       current region or the region of other MultiModule runs.
 
                       Note:
