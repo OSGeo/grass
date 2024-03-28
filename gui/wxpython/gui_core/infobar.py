@@ -99,11 +99,12 @@ class InfoBar(IB.InfoBar):
             else:
                 sizer.Detach(i)
 
-    def ShowMessage(self, message, icon, buttons=None):
+    def ShowMessage(self, message, icon, buttons=None, remove_buttons=True):
         """Show message with buttons (optional).
         Buttons are list of tuples (label, handler)"""
         self.Hide()
-        self.RemoveButtons()
+        if remove_buttons:
+            self.RemoveButtons()
         if buttons:
             self.SetButtons(buttons)
         super().ShowMessage(message, icon)
@@ -122,6 +123,7 @@ class InfoBar(IB.InfoBar):
             self._button.Hide()
 
         button = wx.Button(self, btnid, label)
+        self.button_ids.append(btnid)
         button.SetBackgroundColour(self._background_color)
         button.SetForegroundColour(self._foreground_color)
 

@@ -321,23 +321,17 @@ def download_location_interactively(guiparent, grassdb):
     """
     Download new location using Location Wizard.
 
-    Returns tuple (database, location, mapset) where mapset is "PERMANENT"
-    by default or in future it could be the mapset the user may want to
-    switch to.
+    :param guiparent object: gui parent object
+    :param str grassdb: GRASS GIS database path string
+
+    :return object loc_download: Download location dialog instance object
     """
     from startup.locdownload import LocationDownloadDialog
 
-    result = (None, None, None)
     loc_download = LocationDownloadDialog(parent=guiparent, database=grassdb)
     loc_download.Centre()
-    loc_download.ShowModal()
-
-    if loc_download.GetLocation() is not None:
-        # Returns database and location created by user
-        # and a mapset user may want to switch to
-        result = (grassdb, loc_download.GetLocation(), "PERMANENT")
-    loc_download.Destroy()
-    return result
+    loc_download.Show()
+    return loc_download
 
 
 def delete_mapset_interactively(guiparent, grassdb, location, mapset):
