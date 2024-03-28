@@ -37,6 +37,7 @@ jobs:
 
               jq '[.[] | select(.state == "dismissed")]' alerts.json > dismissed_alerts.json
               echo "Filtered dismissed alerts!"
+              rm alerts.json
               mv dismissed_alerts.json alerts.json
 
               echo "Security Alerts retrieved successfully!"
