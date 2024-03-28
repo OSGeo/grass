@@ -95,7 +95,7 @@ jobs:
        run: |
          ls # Access the downloaded artifact
 
-
+         touch dismissed.json
          jq -c '.[]' alerts.json | while read i; do
           alert_name=$(echo $i | jq -r '.rule.id')
           issue_name="${alert_name}_DISMISSED"
