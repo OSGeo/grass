@@ -34,6 +34,11 @@ jobs:
 
               # remember to change the path above before uploading to grass!
 
+
+              jq '[.[] | select(.state == "dismissed")]' alerts.json > dismissed_alerts.json
+              echo "Filtered dismissed alerts!"
+              mv dismissed_alerts.json alerts.json
+
               echo "Security Alerts retrieved successfully!"
 
               #trigger a rerun
@@ -56,7 +61,6 @@ jobs:
                https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues > issues.json  
  
                # remember to change the path above before uploading to grass!
- 
                echo "issues retrieved successfully!"
  
                #trigger a rerun
@@ -90,6 +94,22 @@ jobs:
      - name: Use downloaded artifact
        run: |
          ls # Access the downloaded artifact
+
+
+         jq -c '.[]' alerts.json | while read i; do
+          alert_name=$(echo $i | jq -r '.rule.id')
+          issue_name="${alert_name}_DISMISSED"
+          if grep -q "$issue_name" issues.json; then
+            echo $i >> dismissed.json
+          fi
+         done
+         echo "Dismissed alerts saved to dismissed.json!"
+
+     - name: Upload the issues as artifact
+       uses: actions/upload-artifact@v4
+       with:
+        name: dismissed-data
+        path: dismissed.json
         
           
        
