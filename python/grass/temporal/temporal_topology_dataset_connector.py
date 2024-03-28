@@ -156,47 +156,47 @@ class TemporalTopologyDatasetConnector:
         relations = {}
         try:
             relations["equal"] = len(self._temporal_topology["EQUAL"])
-        except:
+        except Exception:
             relations["equal"] = 0
         try:
             relations["follows"] = len(self._temporal_topology["FOLLOWS"])
-        except:
+        except Exception:
             relations["follows"] = 0
         try:
             relations["precedes"] = len(self._temporal_topology["PRECEDES"])
-        except:
+        except Exception:
             relations["precedes"] = 0
         try:
             relations["overlaps"] = len(self._temporal_topology["OVERLAPS"])
-        except:
+        except Exception:
             relations["overlaps"] = 0
         try:
             relations["overlapped"] = len(self._temporal_topology["OVERLAPPED"])
-        except:
+        except Exception:
             relations["overlapped"] = 0
         try:
             relations["during"] = len(self._temporal_topology["DURING"])
-        except:
+        except Exception:
             relations["during"] = 0
         try:
             relations["contains"] = len(self._temporal_topology["CONTAINS"])
-        except:
+        except Exception:
             relations["contains"] = 0
         try:
             relations["starts"] = len(self._temporal_topology["STARTS"])
-        except:
+        except Exception:
             relations["starts"] = 0
         try:
             relations["started"] = len(self._temporal_topology["STARTED"])
-        except:
+        except Exception:
             relations["started"] = 0
         try:
             relations["finishes"] = len(self._temporal_topology["FINISHES"])
-        except:
+        except Exception:
             relations["finishes"] = 0
         try:
             relations["finished"] = len(self._temporal_topology["FINISHED"])
-        except:
+        except Exception:
             relations["finished"] = 0
 
         return relations

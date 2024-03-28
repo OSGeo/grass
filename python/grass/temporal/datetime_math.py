@@ -16,7 +16,7 @@ try:
     import dateutil.parser as parser
 
     has_dateutil = True
-except:
+except Exception:
     has_dateutil = False
 
 
@@ -321,7 +321,7 @@ def modify_datetime(
 
         try:
             dt1 = dt1.replace(year=year + years_to_add, month=residual_months)
-        except:
+        except Exception:
             raise
 
         tdelta_months = dt1 - mydate
@@ -348,7 +348,7 @@ def modify_datetime(
 
         try:
             dt1 = dt1.replace(year=year - years_to_remove, month=residual_months)
-        except:
+        except Exception:
             raise
 
         tdelta_months = dt1 - mydate
@@ -827,7 +827,7 @@ def check_datetime_string(time_string, use_dateutil=True):
 
     try:
         return datetime.strptime(time_string, time_format)
-    except:
+    except Exception:
         return _("Unable to parse time string: %s" % time_string)
 
 

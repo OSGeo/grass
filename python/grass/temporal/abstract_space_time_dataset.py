@@ -1829,7 +1829,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             try:
                 dbif.execute(sql, mapset=self.base.mapset)
                 rows = dbif.fetchall(mapset=self.base.mapset)
-            except:
+            except Exception:
                 if connection_state_changed:
                     dbif.close()
                 self.msgr.error(
@@ -2385,7 +2385,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             try:
                 dbif.execute(sql, (map_id,), mapset=self.base.mapset)
                 row = dbif.fetchone(mapset=self.base.mapset)
-            except:
+            except Exception:
                 self.msgr.warning(_("Error in register table request"))
                 raise
 

@@ -46,7 +46,7 @@ except ImportError:
 try:
     import psycopg2
     import psycopg2.extras
-except:
+except ImportError:
     pass
 
 import atexit
@@ -408,7 +408,7 @@ def get_tgis_metadata(dbif=None):
         statement = "SELECT * FROM tgis_metadata;\n"
         dbif.execute(statement)
         rows = dbif.fetchall()
-    except:
+    except Exception:
         rows = None
 
     if connection_state_changed:
@@ -1530,7 +1530,7 @@ class DBConnection:
                 self.cursor.execute(statement, args)
             else:
                 self.cursor.execute(statement)
-        except:
+        except Exception:
             if connected:
                 self.close()
             self.msgr.error(_("Unable to execute :\n %(sql)s" % {"sql": statement}))
@@ -1573,7 +1573,7 @@ class DBConnection:
             else:
                 self.cursor.execute(statement)
             self.connection.commit()
-        except:
+        except Exception:
             if connected:
                 self.close()
             self.msgr.error(
