@@ -378,8 +378,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             map_new = self.generate_new_map(
                 base_map=map_i, bool_op="and", copy=True, rename=False, remove=True
             )
-            # Combine temporal and spatial extents of intermediate map with related
-            # maps.
+            # Combine temporal and spatial extents of intermediate map with related maps
             for topo in topolist:
                 if topo in tbrelations.keys():
                     for map_j in tbrelations[topo]:
