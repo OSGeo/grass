@@ -26,12 +26,17 @@ jobs:
           
              run: |
              
-               curl --request GET \
-               --url "https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/code-scanning/alerts?state=dismissed" \
-               --header "Accept: application/vnd.github+json" \
-               --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-               --header "X-GitHub-Api-Version: 2022-11-28" \
-               https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/code-scanning/alerts > alerts.json  
+
+
+               #get only dismissed alerts using curl
+
+               curl -L \
+                -H "Accept: application/vnd.github+json" \
+                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/code-scanning/alerts?state=dismissed > alerts.json
+                echo "alerts retrieved successfully!"
+
 
               # remember to change the path above before uploading to grass!
 
