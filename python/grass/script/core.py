@@ -1722,9 +1722,9 @@ def create_project(
 
     Raise ScriptError on error.
 
-    :param str path: path to GRASS database
+    :param str path: path to GRASS database or project; if path to database, project
+                     name must be specified with name parameter
     :param str name: project name to create
-    :param str mapset: mapset within given project (default: 'PERMANENT')
     :param epsg: if given create new project based on EPSG code
     :param proj4: if given create new project based on Proj4 definition
     :param str filename: if given create new project based on georeferenced file
@@ -1733,7 +1733,7 @@ def create_project(
     :param datum: GRASS format datum code
     :param datum_trans: datum transformation parameters (used for epsg and proj4)
     :param desc: description of the project (creates MYNAME file)
-    :param bool overwrite: True to overwrite project if exists(WARNING:
+    :param bool overwrite: True to overwrite project if exists (WARNING:
                            ALL DATA from existing project ARE DELETED!)
     """
     # Support ~ in the path for user home directory.
@@ -1768,7 +1768,7 @@ def create_project(
         )
 
     # check if location already exists
-    if os.path.exists(os.path.join(mapset_path.directory, mapset_path.location)):
+    if Path(mapset_path.directory, mapset_path.location).exists():
         if not overwrite:
             warning(
                 _("Location <%s> already exists. Operation canceled.")
