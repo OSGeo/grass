@@ -556,7 +556,7 @@ def _read_semantic_label(lock, conn, data):
                 "Unable to read semantic label. " "Unsupported map type %s" % maptype
             )
             return -1
-    except:
+    except Exception:
         raise
     finally:
         conn.send(semantic_label)
