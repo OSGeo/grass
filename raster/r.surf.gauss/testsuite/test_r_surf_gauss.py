@@ -31,8 +31,7 @@ class MeanSigmaTestCase(TestCase):
         os.environ["GRASS_RANDOM_SEED"] = "42"
         # modifying region just for this script
         cls.use_temp_region()
-        # Only 100,000,000 seem to resonably (not 100%) ensure that all values
-        # are generated, so exceeding of ranges actually shows up.
+
         cls.runModule("g.region", rows=1000, cols=1000)
 
     @classmethod
