@@ -3,7 +3,7 @@ name: Post PR code suggestions
 
 on:
   workflow_run:
-    workflows: ["ClangFormat Check"]
+    workflows: ["ClangFormat Check", "Python Code Quality"]
     types:
       - completed
 permissions: {}
@@ -27,7 +27,30 @@ jobs:
           github-token: ${{ github.token }}
           run-id: ${{github.event.workflow_run.id }}
       - uses: reviewdog/action-setup@3f401fe1d58fe77e10d665ab713057375e39b887 # v1.3.0
-      - run: |
+      - name: Check what tools have suggestions to post
+        # Using this pattern to have expected file names explicitly named
+        id: tools
+        run: |
+          for tool_name in $INPUT_TOOL_NAMES
+          do
+            INPUT_TOOL_NAME_FILE="diff-${tool_name}.patch"
+            echo "Checking if tool ${tool_name} left suggestions in ${INPUT_TOOL_NAME_FILE}..."
+            if [[ -f "${INPUT_TOOL_NAME_FILE}" ]]; then
+              echo "   ${INPUT_TOOL_NAME_FILE} was found for tool ${tool_name}"
+              echo "$tool_name=true" >> "${GITHUB_OUTPUT}"
+            else
+              echo "   ${INPUT_TOOL_NAME_FILE} was not found for tool ${tool_name}"
+              echo "$tool_name=false" >> "${GITHUB_OUTPUT}"
+            fi
+          done
+        env:
+          INPUT_TOOL_NAMES: >-
+            black
+            clang-format
+      - name: Post Black suggestions
+        if: ${{ steps.tools.outputs.black == 'true' }}
+        run: |
+          TMPFILE="diff-${INPUT_TOOL_NAME}.patch"
           GITHUB_ACTIONS="" reviewdog \
               -name="${INPUT_TOOL_NAME:-reviewdog-suggester}" \
               -f=diff \
@@ -36,7 +59,24 @@ jobs:
               -guess \
               -reporter="github-pr-review" < "${TMPFILE}"
         env:
-          TMPFILE: diff-clang-format.patch
+          INPUT_TOOL_NAME: black
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI_COMMIT: ${{ github.event.workflow_run.head_sha }}
+          CI_REPO_OWNER: ${{ github.event.workflow_run.repository.owner.login }}
+          CI_REPO_NAME: ${{ github.event.workflow_run.repository.name }}
+          # CI_PULL_REQUEST: "" # Populated from reviewdog's "-guess" flag since hard to get
+      - name: Post ClangFormat suggestions
+        if: ${{ steps.tools.outputs.clang-format == 'true' }}
+        run: |
+          TMPFILE="diff-${INPUT_TOOL_NAME}.patch"
+          GITHUB_ACTIONS="" reviewdog \
+              -name="${INPUT_TOOL_NAME:-reviewdog-suggester}" \
+              -f=diff \
+              -f.diff.strip=1 \
+              -filter-mode=nofilter \
+              -guess \
+              -reporter="github-pr-review" < "${TMPFILE}"
+        env:
           INPUT_TOOL_NAME: clang-format
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CI_COMMIT: ${{ github.event.workflow_run.head_sha }}
