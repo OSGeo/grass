@@ -3,7 +3,7 @@
 ## Reporting a Vulnerability
 At GRASS GIS, we take security vulnerabilities seriously. We appreciate your efforts in responsibly disclosing any issues you may find. To report a security vulnerability, please follow these steps:
 1. **Privately disclose the issue** by emailing our [Security Team](vpetras@ncsu.edu). Please do not create publicly viewable issues for security vulnerabilities.
-2. **Provide detailed information** regarding the vulnerability, including: 
+2. **Provide detailed information** regarding the vulnerability, including:
     - Description of the vulnerability
     - Steps to reproduce
     - Versions affected
@@ -28,18 +28,15 @@ We prioritize the most recent stable release of GRASS GIS for security patches. 
 
 
 ## Security Measures
-
 - Code Review: We conduct regular code reviews to catch potential vulnerabilities.
 - Dependency Management: We track dependencies and update them regularly to mitigate known security issues.
 - Secure Development Practices: Our developers are trained in secure coding practices to minimize the introduction of vulnerabilities.
 
 
 ## Vulnerability Scope
-
 Our security policy covers vulnerabilities in the GRASS GIS core codebase, official plugins, and any official distributions provided by the GRASS GIS team.
 
 ## Responsible Disclosure
-
 We adhere to responsible disclosure practices. We appreciate your cooperation in allowing us time to address any reported vulnerabilities before disclosing them publicly. We ask that you refrain from disclosing any details of the vulnerability until we have had adequate time to provide a fix.
 
 Thank you for helping to keep GRASS GIS secure!
