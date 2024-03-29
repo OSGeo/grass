@@ -1947,8 +1947,6 @@ class TemporalAlgebraParser:
                         if newextent is not None:
                             start = newextent.get_start_time()
                             end = newextent.get_end_time()
-                            # print(map_i.get_id() + ' - start: ' + str(start) + ' end:
-                            # ' + str(end))
                             # Track changes in temporal extents of maps.
                             if map_start != start or map_end != end:
                                 unchanged = False
