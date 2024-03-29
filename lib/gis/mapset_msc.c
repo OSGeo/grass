@@ -183,8 +183,9 @@ int G_make_mapset_object_group_basedir(const char *type, const char *basedir)
 int make_mapset_element_impl(const char *p_path, const char *p_element,
                              bool race_ok)
 {
-    char path[GPATH_MAX], *p;
+    char path[GPATH_MAX + 1], *p;
     const char *element;
+    path[GPATH_MAX] = 0;
 
     element = p_element;
     if (*element == 0)

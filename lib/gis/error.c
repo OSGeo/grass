@@ -368,9 +368,9 @@ void G_init_logging(void)
 
     logfile = getenv("GIS_ERROR_LOG");
     if (!logfile) {
-        char buf[GPATH_MAX];
+        char buf[GPATH_MAX + 1];
 
-        sprintf(buf, "%s/GIS_ERROR_LOG", G__home());
+        snprintf(buf, GPATH_MAX, "%s/GIS_ERROR_LOG", G__home());
         logfile = G_store(buf);
     }
 
