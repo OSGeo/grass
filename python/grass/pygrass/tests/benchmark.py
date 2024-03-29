@@ -22,16 +22,17 @@ import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 import grass.script as core
 import ctypes
+from grass.pygrass import raster
 
 
 def test__RasterSegment_value_access__if():
-    test_a = pygrass.RasterSegment(name="test_a")
+    test_a = raster.RasterSegment(name="test_a")
     test_a.open(mode="r")
 
-    test_c = pygrass.RasterSegment(name="test_c")
+    test_c = raster.RasterSegment(name="test_c")
     test_c.open(mode="w", mtype="CELL", overwrite=True)
 
-    buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
+    buff_a = raster.Buffer(test_a.cols, test_a.mtype)
 
     for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
@@ -43,17 +44,17 @@ def test__RasterSegment_value_access__if():
 
 
 def test__RasterSegment_value_access__add():
-    test_a = pygrass.RasterSegment(name="test_a")
+    test_a = raster.RasterSegment(name="test_a")
     test_a.open(mode="r")
 
-    test_b = pygrass.RasterSegment(name="test_b")
+    test_b = raster.RasterSegment(name="test_b")
     test_b.open(mode="r")
 
-    test_c = pygrass.RasterSegment(name="test_c")
+    test_c = raster.RasterSegment(name="test_c")
     test_c.open(mode="w", mtype="DCELL", overwrite=True)
 
-    buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
-    buff_b = pygrass.Buffer(test_b.cols, test_b.mtype)
+    buff_a = raster.Buffer(test_a.cols, test_a.mtype)
+    buff_b = raster.Buffer(test_b.cols, test_b.mtype)
 
     for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
@@ -67,13 +68,13 @@ def test__RasterSegment_value_access__add():
 
 
 def test__RasterSegment_row_access__if():
-    test_a = pygrass.RasterSegment(name="test_a")
+    test_a = raster.RasterSegment(name="test_a")
     test_a.open(mode="r")
 
-    test_c = pygrass.RasterSegment(name="test_c")
+    test_c = raster.RasterSegment(name="test_c")
     test_c.open(mode="w", mtype="CELL", overwrite=True)
 
-    buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
+    buff_a = raster.Buffer(test_a.cols, test_a.mtype)
 
     for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
@@ -84,17 +85,17 @@ def test__RasterSegment_row_access__if():
 
 
 def test__RasterSegment_row_access__add():
-    test_a = pygrass.RasterSegment(name="test_a")
+    test_a = raster.RasterSegment(name="test_a")
     test_a.open(mode="r")
 
-    test_b = pygrass.RasterSegment(name="test_b")
+    test_b = raster.RasterSegment(name="test_b")
     test_b.open(mode="r")
 
-    test_c = pygrass.RasterSegment(name="test_c")
+    test_c = raster.RasterSegment(name="test_c")
     test_c.open(mode="w", mtype="DCELL", overwrite=True)
 
-    buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
-    buff_b = pygrass.Buffer(test_b.cols, test_b.mtype)
+    buff_a = raster.Buffer(test_a.cols, test_a.mtype)
+    buff_b = raster.Buffer(test_b.cols, test_b.mtype)
 
     for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
@@ -107,18 +108,18 @@ def test__RasterSegment_row_access__add():
 
 
 def test__RasterRow_value_access__add():
-    test_a = pygrass.RasterRow(name="test_a")
+    test_a = raster.RasterRow(name="test_a")
     test_a.open(mode="r")
 
-    test_b = pygrass.RasterRow(name="test_b")
+    test_b = raster.RasterRow(name="test_b")
     test_b.open(mode="r")
 
-    test_c = pygrass.RasterRow(name="test_c")
+    test_c = raster.RasterRow(name="test_c")
     test_c.open(mode="w", mtype="FCELL", overwrite=True)
 
-    buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
-    buff_b = pygrass.Buffer(test_b.cols, test_b.mtype)
-    buff_c = pygrass.Buffer(test_b.cols, test_b.mtype)
+    buff_a = raster.Buffer(test_a.cols, test_a.mtype)
+    buff_b = raster.Buffer(test_b.cols, test_b.mtype)
+    buff_c = raster.Buffer(test_b.cols, test_b.mtype)
 
     for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
@@ -135,14 +136,14 @@ def test__RasterRow_value_access__add():
 
 
 def test__RasterRow_value_access__if():
-    test_a = pygrass.RasterRow(name="test_a")
+    test_a = raster.RasterRow(name="test_a")
     test_a.open(mode="r")
 
-    test_c = pygrass.RasterRow(name="test_c")
+    test_c = raster.RasterRow(name="test_c")
     test_c.open(mode="w", mtype="CELL", overwrite=True)
 
-    buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
-    buff_c = pygrass.Buffer(test_a.cols, test_a.mtype)
+    buff_a = raster.Buffer(test_a.cols, test_a.mtype)
+    buff_c = raster.Buffer(test_a.cols, test_a.mtype)
 
     for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
@@ -157,17 +158,17 @@ def test__RasterRow_value_access__if():
 
 
 def test__RasterRowIO_row_access__add():
-    test_a = pygrass.RasterRowIO(name="test_a")
+    test_a = raster.RasterRowIO(name="test_a")
     test_a.open(mode="r")
 
-    test_b = pygrass.RasterRowIO(name="test_b")
+    test_b = raster.RasterRowIO(name="test_b")
     test_b.open(mode="r")
 
-    test_c = pygrass.RasterRowIO(name="test_c")
+    test_c = raster.RasterRowIO(name="test_c")
     test_c.open(mode="w", mtype="FCELL", overwrite=True)
 
-    buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
-    buff_b = pygrass.Buffer(test_b.cols, test_b.mtype)
+    buff_a = raster.Buffer(test_a.cols, test_a.mtype)
+    buff_b = raster.Buffer(test_b.cols, test_b.mtype)
 
     for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
@@ -180,13 +181,13 @@ def test__RasterRowIO_row_access__add():
 
 
 def test__RasterRowIO_row_access__if():
-    test_a = pygrass.RasterRowIO(name="test_a")
+    test_a = raster.RasterRowIO(name="test_a")
     test_a.open(mode="r")
 
-    test_c = pygrass.RasterRowIO(name="test_c")
+    test_c = raster.RasterRowIO(name="test_c")
     test_c.open(mode="w", mtype="CELL", overwrite=True)
 
-    buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
+    buff_a = raster.Buffer(test_a.cols, test_a.mtype)
 
     for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
@@ -197,17 +198,17 @@ def test__RasterRowIO_row_access__if():
 
 
 def test__RasterRow_row_access__add():
-    test_a = pygrass.RasterRow(name="test_a")
+    test_a = raster.RasterRow(name="test_a")
     test_a.open(mode="r")
 
-    test_b = pygrass.RasterRow(name="test_b")
+    test_b = raster.RasterRow(name="test_b")
     test_b.open(mode="r")
 
-    test_c = pygrass.RasterRow(name="test_c")
+    test_c = raster.RasterRow(name="test_c")
     test_c.open(mode="w", mtype="FCELL", overwrite=True)
 
-    buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
-    buff_b = pygrass.Buffer(test_b.cols, test_b.mtype)
+    buff_a = raster.Buffer(test_a.cols, test_a.mtype)
+    buff_b = raster.Buffer(test_b.cols, test_b.mtype)
 
     for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
@@ -220,13 +221,13 @@ def test__RasterRow_row_access__add():
 
 
 def test__RasterRow_row_access__if():
-    test_a = pygrass.RasterRow(name="test_a")
+    test_a = raster.RasterRow(name="test_a")
     test_a.open(mode="r")
 
-    test_c = pygrass.RasterRow(name="test_c")
+    test_c = raster.RasterRow(name="test_c")
     test_c.open(mode="w", mtype="CELL", overwrite=True)
 
-    buff_a = pygrass.Buffer(test_a.cols, test_a.mtype)
+    buff_a = raster.Buffer(test_a.cols, test_a.mtype)
 
     for row in range(test_a.rows):
         test_a.get_row(row, buff_a)
