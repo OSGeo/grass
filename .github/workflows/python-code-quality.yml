@@ -29,7 +29,7 @@ jobs:
           - os: ubuntu-22.04
             python-version: "3.10"
             min-python-version: "3.7"
-            black-version: "23.1.0"
+            black-version: "24.3.0"
             flake8-version: "3.9.2"
             pylint-version: "2.12.2"
             bandit-version: "1.7.8"
@@ -60,7 +60,7 @@ jobs:
         run: python -m pip install --upgrade pip
 
       - name: Install Black only
-        run: pip install black==${{ matrix.black-version }}
+        run: pip install black[jupyter]==${{ matrix.black-version }}
 
       - name: Run Black
         run: black .
