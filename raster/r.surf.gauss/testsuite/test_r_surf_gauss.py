@@ -20,7 +20,7 @@ from grass.gunittest.main import test
 
 
 class MeanSigmaTestCase(TestCase):
-    """Test min and max of r.surf.random module"""
+    """Test r.surf.gauss module"""
 
     # Raster map name be used as output
     output = "random_result"
@@ -31,8 +31,7 @@ class MeanSigmaTestCase(TestCase):
         os.environ["GRASS_RANDOM_SEED"] = "42"
         # modifying region just for this script
         cls.use_temp_region()
-
-        cls.runModule("g.region", rows=1000, cols=1000)
+        cls.runModule("g.region", rows=10, cols=10)
 
     @classmethod
     def tearDownClass(cls):
@@ -44,15 +43,12 @@ class MeanSigmaTestCase(TestCase):
         self.runModule("g.remove", flags="f", type="raster", name=[self.output])
 
     def test_defaut_settings(self):
-        """Check to see if double output has the expected range"""
-        default_mean = 0.0
-        default_sigma = 1.0
+        """Check to see if univariate statistics match for default"""
         self.assertModule("r.surf.gauss", output=self.output)
         self.assertRasterFitsUnivar(
             self.output,
-            reference=dict(mean=default_mean, stddev=default_sigma),
-            msg="The mean and sigma values are not within the expected range.",
-            precision=0.01,
+            reference=dict(mean=-0.044860, stddev=1.019485),
+            precision=1e-6,
         )
 
     def test_mean_sigma_params(self):
@@ -65,13 +61,11 @@ class MeanSigmaTestCase(TestCase):
             sigma=sigma_value,
             output=self.output,
         )
-
         self.assertRasterExists(self.output, msg="Output was not created")
         self.assertRasterFitsUnivar(
             self.output,
-            reference=dict(mean=mean_value, stddev=sigma_value),
-            msg="The mean and sigma values are not within the expected range.",
-            precision=0.01,
+            reference=dict(mean=2.739812, stddev=5.913014),
+            precision=1e-6,
         )
 
     def test_random_seed_option(self):
@@ -85,13 +79,11 @@ class MeanSigmaTestCase(TestCase):
             output=self.output,
             seed=22,
         )
-
         self.assertRasterExists(self.output, msg="Output was not created")
         self.assertRasterFitsUnivar(
             self.output,
-            reference=dict(mean=mean_value, stddev=sigma_value),
-            msg="The mean and sigma values are not within the expected range.",
-            precision=0.01,
+            reference=dict(mean=3.183532, stddev=6.050756),
+            precision=1e-6,
         )
 
 
