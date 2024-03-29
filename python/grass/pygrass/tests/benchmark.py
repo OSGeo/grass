@@ -18,11 +18,12 @@ from jinja2 import Template
 sys.path.append(os.getcwd())
 sys.path.append("%s/.." % (os.getcwd()))
 
-import grass.lib.gis as libgis
-import grass.lib.raster as libraster
-import grass.script as core
-import ctypes
-from grass.pygrass import raster
+if True:
+    import grass.lib.gis as libgis
+    import grass.lib.raster as libraster
+    import grass.script as core
+    import ctypes
+    from grass.pygrass import raster
 
 
 def test__RasterSegment_value_access__if():

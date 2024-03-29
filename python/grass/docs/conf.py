@@ -73,7 +73,8 @@ sys.path.insert(
     ),
 )
 
-from grass.script import core
+if True:
+    from grass.script import core
 
 footer_tmpl = string.Template(
     r"""
