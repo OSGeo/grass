@@ -2292,10 +2292,10 @@ class PsMapBufferedWindow(wx.Window):
                         rot = float(self.instruction[id]["rotate"])
                     else:
                         rot = 0
-                    self.instruction[id][
-                        "rect"
-                    ] = bounds = self.parent.getModifiedTextBounds(
-                        coords[0], coords[1], extent, rot
+                    self.instruction[id]["rect"] = bounds = (
+                        self.parent.getModifiedTextBounds(
+                            coords[0], coords[1], extent, rot
+                        )
                     )
                     self.DrawRotText(
                         pdc=self.pdcObj,

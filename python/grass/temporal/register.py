@@ -16,6 +16,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 from datetime import datetime
 import grass.script as gscript
 from .core import get_tgis_message_interface, init_dbif, get_current_mapset

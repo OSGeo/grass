@@ -3,6 +3,7 @@ Created on Tue Jul 31 13:06:20 2012
 
 @author: pietro
 """
+
 import ctypes
 import grass.lib.vector as libvect
 from collections.abc import Iterable

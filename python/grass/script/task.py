@@ -17,6 +17,7 @@ for details.
 
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
+
 import os
 import re
 import sys

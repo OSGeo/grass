@@ -3,6 +3,7 @@ Created on Wed Jun 18 17:21:42 2014
 
 @author: pietro
 """
+
 import numpy as np
 
 from grass.gunittest.case import TestCase
