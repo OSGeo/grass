@@ -438,7 +438,6 @@ for details.
     LexToken(RPAREN,')',1,48)
 
 """
-from __future__ import print_function
 
 try:
     import ply.lex as lex
@@ -447,9 +446,9 @@ except:
     pass
 
 import os
-import sys
 import copy
 from datetime import datetime
+
 import grass.pygrass.modules as pymod
 from .core import (
     init_dbif,
@@ -476,11 +475,8 @@ from .datetime_math import create_suffix_from_datetime
 from .datetime_math import create_time_suffix
 from .datetime_math import create_numeric_suffix
 
-if sys.version_info[0] >= 3:
-    unicode = str
 
-
-class TemporalAlgebraLexer(object):
+class TemporalAlgebraLexer:
     """Lexical analyzer for the GRASS GIS temporal algebra"""
 
     # Functions that defines an if condition, temporal buffering, snapping and
@@ -704,7 +700,7 @@ class TemporalAlgebraLexer(object):
             print(tok)
 
 
-class GlobalTemporalVar(object):
+class GlobalTemporalVar:
     """This class handles global temporal variable conditional expressions,
     like start_doy() == 3.
     The three parts of the statement are stored separately in
@@ -763,7 +759,7 @@ class FatalError(Exception):
         return self.value
 
 
-class TemporalAlgebraParser(object):
+class TemporalAlgebraParser:
     """The temporal algebra class"""
 
     # Get the tokens from the lexer class
@@ -1152,7 +1148,8 @@ class TemporalAlgebraParser(object):
                             returncode = self.overlay_map_extent(
                                 map_new, map_j, "and", temp_op=temporal
                             )
-                            print(map_new.get_id(), map_j.get_id())
+                            if self.debug:
+                                print(map_new.get_id(), map_j.get_id())
                             # Stop the loop if no temporal or spatial relationship exist.
                             if returncode == 0:
                                 break
@@ -1230,7 +1227,7 @@ class TemporalAlgebraParser(object):
 
         :return: List of maps.
         """
-        if isinstance(input, unicode) or isinstance(input, str):
+        if isinstance(input, str):
             # Check for mapset in given stds input.
             if input.find("@") >= 0:
                 id_input = input
@@ -1339,7 +1336,7 @@ class TemporalAlgebraParser(object):
                 if spatial_topology in spatial_relations.keys():
                     spatial_topo_check = True
 
-        if self.debug is True:
+        if self.debug:
             print("Spatial topology list", spatial_topo_list, spatial_topo_check)
 
         return spatial_topo_check
@@ -1366,7 +1363,7 @@ class TemporalAlgebraParser(object):
                     if map_b in map_a_sr[spatial_topology]:
                         spatial_topo_check = True
 
-        if self.debug is True:
+        if self.debug:
             print("Spatial topology list", spatial_topo_list, spatial_topo_check)
 
         return spatial_topo_check
@@ -2597,7 +2594,8 @@ class TemporalAlgebraParser(object):
         expr : STVDS LPAREN stds RPAREN
         """
         if self.run:
-            print(t[3])
+            if self.debug:
+                print(t[3])
             t[0] = self.check_stds(t[3], stds_type="stvds", check_type=False)
         else:
             t[0] = t[3]

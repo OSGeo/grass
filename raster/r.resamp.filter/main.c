@@ -355,7 +355,6 @@ static void filter(void)
                 if (row0 >= read_row && row0 < read_row + num_rows) {
                     int m = row0 - read_row;
                     int n = read_row + num_rows - row0;
-                    int i;
 
                     for (i = 0; i < n; i++) {
                         DCELL *tmp = bufs[t_id][i];
@@ -415,6 +414,7 @@ int main(int argc, char *argv[])
     char title[64];
     int i, t;
     int nprocs;
+    size_t in_buf_size, out_buf_size;
 
     G_gisinit(argv[0]);
 
@@ -623,10 +623,24 @@ int main(int argc, char *argv[])
     Rast_set_input_window(&src_w);
     Rast_set_output_window(&dst_w);
 
-    bufrows =
-        atoi(parm.memory->answer) * (((1 << 20) / sizeof(DCELL)) / dst_w.cols);
+    /* memory reserved for input */
+    in_buf_size = dst_w.cols * sizeof(DCELL) * row_scale * nprocs;
+    /* memory available for output buffer */
+    out_buf_size = (size_t)atoi(parm.memory->answer) * (1 << 20);
+    /* size_t is unsigned, check if any memory is left for output buffer */
+    if (out_buf_size <= in_buf_size)
+        out_buf_size = 0;
+    else
+        out_buf_size -= in_buf_size;
+    /* number of buffered output rows */
+    bufrows = out_buf_size / (sizeof(DCELL) * dst_w.cols);
+    /* set the output buffer rows to be at most covering the entire map */
     if (bufrows > dst_w.rows) {
         bufrows = dst_w.rows;
+    }
+    /* but at least the number of threads */
+    if (bufrows < nprocs) {
+        bufrows = nprocs;
     }
 
     inbuf = G_malloc(nprocs * sizeof(DCELL *));

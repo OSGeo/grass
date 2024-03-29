@@ -105,16 +105,24 @@ PERMANENT
     specify paths where support files (etc/) may be found external to
     standard distribution.</dd>
 
+  <dt>GRASS_COMPATIBILITY_TEST</dt>
+  <dd>[libgis]<br>
+    By default it is not possible to run C modules with a libgis that has a
+    different <tt>GIS_H_VERSION</tt>, the compatibility test will exit with a
+    fatal error. Setting this variable to 0 (zero) with
+    <tt>GRASS_COMPATIBILITY_TEST=0</tt> allows the test to be passed with a
+    warning.</dd>
+
   <dt>GRASS_COMPRESSOR</dt>
   <dd>[libraster]<br>
     the compression method for new raster maps can be set with the
     environment variable GRASS_COMPRESSOR. Supported methods are RLE,
     ZLIB, LZ4, BZIP2, and ZSTD. The default is ZSTD if available,
     otherwise ZLIB, which can be changed with e.g.
-    <tt>GRASS_COMPRESSOR=ZSTD</tt></dd>, granted that GRASS has been
+    <tt>GRASS_COMPRESSOR=ZSTD</tt>, granted that GRASS has been
     compiled with the requested compressor. Compressors that are always
     available are RLE, ZLIB, and LZ4. The compressors BZIP2 and ZSTD
-    must be enabled when configuring GRASS for compilation.
+    must be enabled when configuring GRASS for compilation.</dd>
 
   <dt>GRASS_DB_ENCODING</dt>
   <dd>[various modules, wxGUI]<br>

@@ -6,7 +6,8 @@
 [![General linting](https://github.com/OSGeo/grass/workflows/General%20linting/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3A%22General+linting%22)
 [![Ubuntu](https://github.com/OSGeo/grass/workflows/Ubuntu/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3AUbuntu)
 [![OSGeo4W](https://github.com/OSGeo/grass/workflows/OSGeo4W/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3AOSGeo4W)
-[![CentOS](https://github.com/OSGeo/grass/workflows/CentOS/badge.svg)](https://github.com/OSGeo/grass/actions?query=workflow%3ACentOS)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/OSGeo/grass/badge)](https://securityscorecards.dev/viewer/?uri=github.com/OSGeo/grass)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/2470/badge)](https://www.bestpractices.dev/projects/2470)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5176030.svg)](https://doi.org/10.5281/zenodo.5176030)
 [![Join the chat at https://gitter.im/grassgis/community](https://badges.gitter.im/grassgis/community.svg)](https://gitter.im/grassgis/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -107,3 +108,7 @@ this issue, clean all the compiled files from the source code:
 ```bash
 make distclean
 ```
+
+## Thanks to all contributors ❤
+
+[![GRASS contributors](https://contrib.rocks/image?repo=OSGeo/grass "GRASS contributors")](https://github.com/OSGeo/grass/graphs/contributors)

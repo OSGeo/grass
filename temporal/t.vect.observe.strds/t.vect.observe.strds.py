@@ -60,7 +60,7 @@ from grass.exceptions import CalledModuleError
 ############################################################################
 
 
-class Sample(object):
+class Sample:
     def __init__(self, start=None, end=None, raster_names=None):
         self.start = start
         self.end = end

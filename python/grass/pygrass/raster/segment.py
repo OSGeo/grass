@@ -10,7 +10,7 @@ import grass.lib.segment as libseg
 from grass.pygrass.raster.raster_type import TYPE as RTYPE
 
 
-class Segment(object):
+class Segment:
     def __init__(self, srows=64, scols=64, maxmem=100):
         self.srows = srows
         self.scols = scols

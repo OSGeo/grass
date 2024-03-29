@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:22.04@sha256:77906da86b60585ce12215807090eb327e7386c8fafb5402369e421f44eff17e
 
 LABEL authors="Carmen Tawalika,Markus Neteler,Anika Weinmann,Tomas Zigo"
 LABEL maintainer="tawalika@mundialis.de,neteler@mundialis.de,weinmann@mundialis.de"
@@ -230,7 +230,7 @@ ENV GRASS_SKIP_MAPSET_OWNER_CHECK 1
 ENV PROJ_NETWORK=ON
 
 # Create generic GRASS GIS lib name regardless of version number
-RUN ln -sf /usr/local/grass83 /usr/local/grass
+RUN ln -sf /usr/local/grass84 /usr/local/grass
 
 # show GRASS GIS, PROJ, GDAL etc versions
 RUN grass --tmp-location EPSG:4326 --exec g.version -rge && \

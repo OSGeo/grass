@@ -41,8 +41,6 @@ for details.
     LexToken(RPAREN,')',1,16)
 
 """
-from __future__ import print_function
-
 try:
     import ply.yacc as yacc
 except ImportError:
@@ -573,7 +571,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             # Map is original from an input STVDS
                             map_i.load()
                         # Register map in result space time dataset.
-                        print(map_i.get_temporal_extent_as_tuple())
+                        if self.debug:
+                            print(map_i.get_temporal_extent_as_tuple())
                         success = resultstds.register_map(map_i, dbif=dbif)
                     resultstds.update_from_registered_maps(dbif)
 
@@ -628,7 +627,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
             t[0] = resultlist
         if self.debug:
-            str(t[1]) + t[2] + str(t[3])
+            print(str(t[1]) + t[2] + str(t[3]))
 
     def p_overlay_operation_relation(self, t):
         """
@@ -659,7 +658,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
             t[0] = resultlist
         if self.debug:
-            str(t[1]) + t[2] + str(t[3])
+            print(str(t[1]) + t[2] + str(t[3]))
 
     def p_buffer_operation(self, t):
         """

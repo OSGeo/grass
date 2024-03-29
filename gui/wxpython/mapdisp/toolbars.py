@@ -167,91 +167,99 @@ class MapToolbar(BaseToolbar):
 
     def _toolbarData(self):
         """Toolbar data"""
-        return self._getToolbarData(
+        data = (
             (
+                ("renderMap", BaseIcons["render"].label),
+                BaseIcons["render"],
+                self.parent.OnRender,
+            ),
+            (
+                ("pointer", BaseIcons["pointer"].label),
+                BaseIcons["pointer"],
+                self.parent.OnPointer,
+                wx.ITEM_CHECK,
+            ),
+            (
+                ("select", MapIcons["select"].label),
+                MapIcons["select"],
+                self.parent.OnSelect,
+                wx.ITEM_CHECK,
+            ),
+            (
+                ("query", MapIcons["query"].label),
+                MapIcons["query"],
+                self.parent.OnQuery,
+                wx.ITEM_CHECK,
+            ),
+            (
+                ("pan", BaseIcons["pan"].label),
+                BaseIcons["pan"],
+                self.parent.OnPan,
+                wx.ITEM_CHECK,
+            ),
+            (
+                ("zoomIn", BaseIcons["zoomIn"].label),
+                BaseIcons["zoomIn"],
+                self.parent.OnZoomIn,
+                wx.ITEM_CHECK,
+            ),
+            (
+                ("zoomOut", BaseIcons["zoomOut"].label),
+                BaseIcons["zoomOut"],
+                self.parent.OnZoomOut,
+                wx.ITEM_CHECK,
+            ),
+            (
+                ("zoomExtent", BaseIcons["zoomExtent"].label),
+                BaseIcons["zoomExtent"],
+                self.parent.OnZoomToMap,
+            ),
+            (
+                ("zoomRegion", BaseIcons["zoomRegion"].label),
+                BaseIcons["zoomRegion"],
+                self.parent.OnZoomToWind,
+            ),
+            (
+                ("zoomBack", BaseIcons["zoomBack"].label),
+                BaseIcons["zoomBack"],
+                self.parent.OnZoomBack,
+            ),
+            (
+                ("zoomMenu", BaseIcons["zoomMenu"].label),
+                BaseIcons["zoomMenu"],
+                self.parent.OnZoomMenu,
+            ),
+            (
+                ("analyze", MapIcons["analyze"].label),
+                MapIcons["analyze"],
+                self.OnAnalyze,
+            ),
+            (
+                ("overlay", BaseIcons["overlay"].label),
+                BaseIcons["overlay"],
+                self.OnDecoration,
+            ),
+            (
+                ("saveFile", BaseIcons["saveFile"].label),
+                BaseIcons["saveFile"],
+                self.parent.SaveToFile,
+            ),
+            (
+                ("mapDispSettings", BaseIcons["mapDispSettings"].label),
+                BaseIcons["mapDispSettings"],
+                self.parent.OnMapDisplayProperties,
+            ),
+        )
+        if self.parent.IsDockable():
+            data = data + (
                 (
-                    ("renderMap", BaseIcons["render"].label),
-                    BaseIcons["render"],
-                    self.parent.OnRender,
-                ),
-                (
-                    ("pointer", BaseIcons["pointer"].label),
-                    BaseIcons["pointer"],
-                    self.parent.OnPointer,
+                    ("mapDispDocking", BaseIcons["mapDispDocking"].label),
+                    BaseIcons["mapDispDocking"],
+                    self.parent.OnDockUndock,
                     wx.ITEM_CHECK,
-                ),
-                (
-                    ("select", MapIcons["select"].label),
-                    MapIcons["select"],
-                    self.parent.OnSelect,
-                    wx.ITEM_CHECK,
-                ),
-                (
-                    ("query", MapIcons["query"].label),
-                    MapIcons["query"],
-                    self.parent.OnQuery,
-                    wx.ITEM_CHECK,
-                ),
-                (
-                    ("pan", BaseIcons["pan"].label),
-                    BaseIcons["pan"],
-                    self.parent.OnPan,
-                    wx.ITEM_CHECK,
-                ),
-                (
-                    ("zoomIn", BaseIcons["zoomIn"].label),
-                    BaseIcons["zoomIn"],
-                    self.parent.OnZoomIn,
-                    wx.ITEM_CHECK,
-                ),
-                (
-                    ("zoomOut", BaseIcons["zoomOut"].label),
-                    BaseIcons["zoomOut"],
-                    self.parent.OnZoomOut,
-                    wx.ITEM_CHECK,
-                ),
-                (
-                    ("zoomExtent", BaseIcons["zoomExtent"].label),
-                    BaseIcons["zoomExtent"],
-                    self.parent.OnZoomToMap,
-                ),
-                (
-                    ("zoomRegion", BaseIcons["zoomRegion"].label),
-                    BaseIcons["zoomRegion"],
-                    self.parent.OnZoomToWind,
-                ),
-                (
-                    ("zoomBack", BaseIcons["zoomBack"].label),
-                    BaseIcons["zoomBack"],
-                    self.parent.OnZoomBack,
-                ),
-                (
-                    ("zoomMenu", BaseIcons["zoomMenu"].label),
-                    BaseIcons["zoomMenu"],
-                    self.parent.OnZoomMenu,
-                ),
-                (
-                    ("analyze", MapIcons["analyze"].label),
-                    MapIcons["analyze"],
-                    self.OnAnalyze,
-                ),
-                (
-                    ("overlay", BaseIcons["overlay"].label),
-                    BaseIcons["overlay"],
-                    self.OnDecoration,
-                ),
-                (
-                    ("saveFile", BaseIcons["saveFile"].label),
-                    BaseIcons["saveFile"],
-                    self.parent.SaveToFile,
-                ),
-                (
-                    ("mapDispSettings", BaseIcons["mapDispSettings"].label),
-                    BaseIcons["mapDispSettings"],
-                    self.parent.OnMapDisplayProperties,
                 ),
             )
-        )
+        return self._getToolbarData(data)
 
     def InsertTool(self, data):
         """Insert tool to toolbar

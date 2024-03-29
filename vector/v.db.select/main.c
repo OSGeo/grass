@@ -337,8 +337,32 @@ int main(int argc, char **argv)
     if (format == JSON) {
         if (flags.region->answer)
             fprintf(stdout, "{\"extent\":\n");
-        else
-            fprintf(stdout, "{\"records\":[\n");
+        else {
+            fprintf(stdout, "{\"info\":\n{\"columns\":[\n");
+            for (col = 0; col < ncols; col++) {
+                column = db_get_table_column(table, col);
+                if (col)
+                    fprintf(stdout, "},\n");
+                fprintf(stdout, "{\"name\":\"%s\",",
+                        db_get_column_name(column));
+                int sql_type = db_get_column_sqltype(column);
+                fprintf(stdout, "\"sql_type\":\"%s\",",
+                        db_sqltype_name(sql_type));
+
+                int c_type = db_sqltype_to_Ctype(sql_type);
+                fprintf(stdout, "\"is_number\":");
+                /* Same rules as for quoting, i.e., number only as
+                 * JSON or Python would see it and not numeric which may
+                 * include, e.g., date. */
+                if (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE)
+                    fprintf(stdout, "true");
+                else
+                    fprintf(stdout, "false");
+            }
+
+            fprintf(stdout, "}\n]},\n");
+            fprintf(stdout, "\"records\":[\n");
+        }
     }
 
     /* fetch the data */

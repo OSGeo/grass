@@ -17,7 +17,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 from datetime import datetime
 from .core import init_dbif
 from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
@@ -29,7 +28,7 @@ import grass.lib.gis as gis
 ###############################################################################
 
 
-class SpatioTemporalTopologyBuilder(object):
+class SpatioTemporalTopologyBuilder:
     """This class is designed to build the spatio-temporal topology
     of spatio-temporally related abstract dataset objects.
 

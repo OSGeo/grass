@@ -16,7 +16,6 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-import six
 from math import ceil
 from itertools import cycle
 import numpy as np
@@ -30,6 +29,7 @@ try:
     # The recommended way to use wx with mpl is with the WXAgg
     # backend.
     matplotlib.use("WXAgg")
+    from matplotlib import gridspec
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_wxagg import (
         FigureCanvasWxAgg as FigCanvas,
@@ -424,6 +424,30 @@ class TimelineFrame(wx.Frame):
         self.datasets = datasets
         self._redraw()
 
+    def _change_figure_geometry(self, nrows=1, ncols=1, num=1):
+        """Change figure geometry
+
+        https://github.com/kecnry/autofig/commit/93e6debb953f5b2afe05f463064d60b9566afa59
+
+        :param int rows: number of rows
+        :param int cols: number of cols
+        :param int num: subplot order
+        """
+        if not check_version(3, 4, 0):
+            self.axes2d.change_geometry(nrows, ncols, num)
+        else:
+            for i, ax in enumerate(self.fig.axes):
+                ax.set_subplotspec(
+                    gridspec.SubplotSpec(
+                        gridspec.GridSpec(
+                            nrows,
+                            ncols,
+                            figure=self.fig,
+                        ),
+                        i,
+                    )
+                )
+
     def _redraw(self):
         """Readraw data.
 
@@ -437,7 +461,7 @@ class TimelineFrame(wx.Frame):
         self._draw2dFigure()
         if check_version(1, 0, 0):
             if self.view3dCheck.IsChecked():
-                self.axes2d.change_geometry(2, 1, 1)
+                self._change_figure_geometry(nrows=2, ncols=1, num=1)
                 if not self.axes3d:
                     # do not remove this import - unused but it is required for
                     # 3D
@@ -451,7 +475,8 @@ class TimelineFrame(wx.Frame):
                 if self.axes3d:
                     self.fig.delaxes(self.axes3d)
                     self.axes3d = None
-                self.axes2d.change_geometry(1, 1, 1)
+                    self._change_figure_geometry()
+                    self._draw2dFigure()
                 self.canvas.draw()
 
     def _checkDatasets(self, datasets):
@@ -467,9 +492,9 @@ class TimelineFrame(wx.Frame):
         allDatasets = [
             [
                 [(map, mapset, etype) for map in maps]
-                for etype, maps in six.iteritems(etypesDict)
+                for etype, maps in etypesDict.items()
             ]
-            for mapset, etypesDict in six.iteritems(tDict)
+            for mapset, etypesDict in tDict.items()
         ]
         # flatten this list
         if allDatasets:
@@ -615,7 +640,7 @@ def InfoFormat(timeData, datasetName, mapIndex):
     return "\n".join(text)
 
 
-class DataCursor(object):
+class DataCursor:
     """A simple data cursor widget that displays the x,y location of a
     matplotlib artist when it is selected.
 
@@ -652,8 +677,8 @@ class DataCursor(object):
             artists = [artists]
         self.artists = artists
 
-        self.axes = tuple(set(art.axes for art in self.artists))
-        self.figures = tuple(set(ax.figure for ax in self.axes))
+        self.axes = tuple({art.axes for art in self.artists})
+        self.figures = tuple({ax.figure for ax in self.axes})
 
         self.annotations = {}
         for ax in self.axes:

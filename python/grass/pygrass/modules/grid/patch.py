@@ -3,15 +3,6 @@ Created on Tue Apr  2 18:57:42 2013
 
 @author: pietro
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 from grass.pygrass.gis.region import Region
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.utils import coor2pixel

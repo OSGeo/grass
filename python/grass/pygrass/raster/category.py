@@ -59,7 +59,7 @@ class Category(list):
         libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
         self._mtype = mtype
         self._gtype = None if mtype is None else RTYPE[mtype]["grass type"]
-        super(Category, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
     def _get_mtype(self):
         return self._mtype
@@ -125,12 +125,10 @@ class Category(list):
         return value
 
     def __getitem__(self, index):
-        return super(Category, self).__getitem__(self._chk_index(index))
+        return super().__getitem__(self._chk_index(index))
 
     def __setitem__(self, index, value):
-        return super(Category, self).__setitem__(
-            self._chk_index(index), self._chk_value(value)
-        )
+        return super().__setitem__(self._chk_index(index), self._chk_value(value))
 
     def _get_c_cat(self, index):
         """Returns i-th description and i-th data range from the list of

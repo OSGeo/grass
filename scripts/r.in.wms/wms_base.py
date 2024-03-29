@@ -14,25 +14,19 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
 
-import os
-from math import ceil
-
 import base64
-
-try:
-    from urllib2 import Request, urlopen, HTTPError
-    from httplib import HTTPException
-except ImportError:
-    from urllib.request import Request, urlopen
-    from urllib.error import HTTPError
-    from http.client import HTTPException
+import os
+from http.client import HTTPException
+from math import ceil
+from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 
 
 import grass.script as grass
 from grass.exceptions import CalledModuleError
 
 
-class WMSBase(object):
+class WMSBase:
     def __init__(self):
         # these variables are information for destructor
         self.temp_files_to_cleanup = []
@@ -262,7 +256,7 @@ class WMSBase(object):
             cap = self._fetchDataFromServer(
                 cap_url, options["username"], options["password"]
             )
-        except (IOError, HTTPException) as e:
+        except (OSError, HTTPException) as e:
             if isinstance(e, HTTPError) and e.code == 401:
                 grass.fatal(
                     _("Authorization failed to <%s> when fetching capabilities")
@@ -308,7 +302,7 @@ class WMSBase(object):
                 with open(capfile_output, "w") as temp:
                     temp.write(cap)
                 return
-            except IOError as error:
+            except OSError as error:
                 grass.fatal(
                     _("Unable to open file '%s'.\n%s\n" % (capfile_output, error))
                 )
@@ -352,7 +346,7 @@ class WMSBase(object):
                         self.region["s"],
                     )
                 )
-            except IOError:
+            except OSError:
                 grass.fatal(_("Unable to write data into tempfile"))
             finally:
                 temp_region_opened.close()

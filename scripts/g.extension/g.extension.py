@@ -132,16 +132,9 @@
 # % key: o
 # % description: url refers to a fork of the official extension repository
 # %end
-# %flag
-# % key: j
-# % description: Generates JSON file containing the download URLs of the official Addons
-# % guisection: Install
-# % suppress_required: yes
-# %end
-
 
 # %rules
-# % required: extension, -l, -c, -g, -a, -j
+# % required: extension, -l, -c, -g, -a
 # % exclusive: extension, -l, -c, -g
 # % exclusive: extension, -l, -c, -a
 # % requires: -o, url
@@ -151,7 +144,6 @@
 # TODO: solve addon-extension(-module) confusion
 
 import fileinput
-import http
 import os
 import codecs
 import sys
@@ -174,7 +166,7 @@ from pathlib import Path
 from subprocess import PIPE
 from urllib import request as urlrequest
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 # Get the XML parsing exceptions to catch. The behavior changed with Python 2.7
 # and ElementTree 1.3.
@@ -195,8 +187,7 @@ PROXIES = {}
 HEADERS = {
     "User-Agent": "Mozilla/5.0",
 }
-HTTP_STATUS_CODES = list(http.HTTPStatus)
-GIT_URL = "https://github.com/OSGeo/grass-addons"
+GIT_URL = "https://github.com/OSGeo/grass-addons/"
 
 # MAKE command
 # GRASS Makefile are type of GNU Make and not BSD Make
@@ -218,6 +209,7 @@ class GitAdapter:
         self,
         addons=[],
         url="https://github.com/osgeo/grass-addons",
+        git="git",
         working_directory=None,
         official_repository_structure=True,
         major_grass_version=None,
@@ -227,6 +219,8 @@ class GitAdapter:
     ):
         #: Attribute containing list of addons names
         self._addons = addons
+        #: Attribute containing Git command name
+        self._git = git
         #: Attribute containing the URL to the online repository
         self.url = url
         self.major_grass_version = major_grass_version
@@ -240,6 +234,8 @@ class GitAdapter:
 
         # Check if working directory is writable
         self.__check_permissions()
+        # Check if Git is installed
+        self._is_git_installed()
 
         #: Attribute containing available branches
         self.branches = self._get_branch_list()
@@ -256,15 +252,21 @@ class GitAdapter:
 
     def _get_version(self):
         """Get the installed git version"""
-        git_version = gs.Popen(["git", "--version"], stdout=PIPE)
-        return float(
-            ".".join(
-                gs.decode(git_version.communicate()[0])
-                .rstrip()
-                .rsplit(" ", 1)[-1]
-                .split(".")[0:2]
+        git_version = gs.Popen([self._git, "--version"], stdout=PIPE, stderr=PIPE)
+        git_version, stderr = git_version.communicate()
+        if stderr:
+            gs.fatal(
+                _("Failed to get Git version.\n{}").format(
+                    gs.decode(stderr),
+                )
             )
-        )
+        git_version = re.search(r"\d+.(\d+.\d+|\d+)", gs.decode(git_version))
+        if not git_version:
+            gs.fatal(_("Failed to get Git version."))
+        git_version = git_version.group()
+        if git_version.count(".") == 2:
+            git_version = git_version.rsplit(".", 1)[0]
+        return float(git_version)
 
     def _initialize_clone(self):
         """Get a minimal working copy of a git repository without content"""
@@ -273,17 +275,24 @@ class GitAdapter:
             self.working_directory.mkdir(exist_ok=True, parents=True)
         gs.call(
             [
-                "git",
+                self._git,
                 "clone",
                 "-q",
                 "--no-checkout",
-                "--filter=tree:0",
+                "--filter=blob:none",
                 self.url,
                 repo_directory,
             ],
             cwd=self.working_directory,
         )
         self.local_copy = self.working_directory / repo_directory
+
+    def _is_git_installed(self):
+        """Check if Git command is installed"""
+        try:
+            gs.call([self._git], stdout=PIPE)
+        except OSError:
+            gs.fatal(_("Could not found Git. Please install it."))
 
     def __check_permissions(self):
         """"""
@@ -305,7 +314,7 @@ class GitAdapter:
                     addon repository
         """
         branch_list = gs.Popen(
-            ["git", "ls-remote", "--heads", self.url],
+            [self._git, "ls-remote", "--heads", self.url],
             stdout=PIPE,
         )
         branch_list = gs.decode(branch_list.communicate()[0])
@@ -322,7 +331,7 @@ class GitAdapter:
                     addon repository
         """
         default_branch = gs.Popen(
-            ["git", "symbolic-ref", "refs/remotes/origin/HEAD"],
+            [self._git, "symbolic-ref", "refs/remotes/origin/HEAD"],
             cwd=self.local_copy,
             stdout=PIPE,
         )
@@ -366,7 +375,7 @@ class GitAdapter:
         """Build a dictionary with addon name as key and path to directory with
         Makefile in repository"""
         file_list = gs.Popen(
-            ["git", "ls-tree", "--name-only", "-r", self.branch],
+            [self._git, "ls-tree", "--name-only", "-r", self.branch],
             cwd=self.local_copy,
             stdout=PIPE,
             stderr=PIPE,
@@ -376,7 +385,7 @@ class GitAdapter:
             gs.fatal(
                 _(
                     "Failed to get addons files list from the"
-                    " Git repository <{repo_path}>. <{error}>."
+                    " Git repository <{repo_path}>.\n{error}"
                 ).format(
                     repo_path=self.local_copy,
                     error=gs.decode(stderr),
@@ -410,12 +419,12 @@ class GitAdapter:
         if addon_list:
             if self.git_version >= 2.25 and not all_addons:
                 gs.call(
-                    ["git", "sparse-checkout", "init", "--cone"],
+                    [self._git, "sparse-checkout", "init", "--cone"],
                     cwd=self.local_copy,
                 )
                 gs.call(
                     [
-                        "git",
+                        self._git,
                         "sparse-checkout",
                         "set",
                         *[self.addons[addon] for addon in addon_list],
@@ -423,9 +432,29 @@ class GitAdapter:
                     cwd=self.local_copy,
                 )
         gs.call(
-            ["git", "checkout", self.branch],
+            [self._git, "checkout", self.branch],
             cwd=self.local_copy,
         )
+
+    def get_addons_src_code_git_repo_url_path(self):
+        """Get addons official GitHub repository source code URL path
+
+        :return dict addons_url: dictionary of addons official GitHub
+                                 repository source code URL path
+        """
+        addons_url = {}
+        for addon in self.addons:
+            addons_url[addon] = urljoin(
+                self.url,
+                urljoin(
+                    "tree/",
+                    urljoin(
+                        f"{self.branch}/",
+                        self.addons[addon],
+                    ),
+                ),
+            )
+        return addons_url
 
 
 def replace_shebang_win(python_file):
@@ -473,32 +502,29 @@ def get_version_branch(major_version):
     if not, take branch for the previous version
     For the official repo we assume that at least one version branch is present"""
     version_branch = f"grass{major_version}"
-    try:
-        urlrequest.urlopen(f"{GIT_URL}/tree/{version_branch}/src")
-    except URLError:
+    if sys.platform == "win32":
+        return version_branch
+    else:
+        branch = gs.Popen(
+            ["git", "ls-remote", "--heads", GIT_URL, f"refs/heads/{version_branch}"],
+            stdout=PIPE,
+            stderr=PIPE,
+        )
+        branch, stderr = branch.communicate()
+        if stderr:
+            gs.fatal(
+                _(
+                    "Failed to get branch from the Git repository <{repo_path}>.\n"
+                    "{error}"
+                ).format(
+                    repo_path=GIT_URL,
+                    error=gs.decode(stderr),
+                )
+            )
+        branch = gs.decode(branch)
+    if version_branch not in branch:
         version_branch = "grass{}".format(int(major_version) - 1)
     return version_branch
-
-
-def get_github_branches(
-    github_api_url="https://api.github.com/repos/OSGeo/grass-addons/branches",
-    version_only=True,
-):
-    """Get ordered list of branch names in repo using github API
-    For the official repo we assume that at least one version branch is present
-    Due to strict rate limits in the github API (60 calls per hour) this function
-    is currently not used."""
-    req = urlrequest.urlopen(github_api_url)
-    content = json.loads(req.read())
-    branches = [repo_branch["name"] for repo_branch in content]
-    if version_only:
-        branches = [
-            version_branch
-            for version_branch in branches
-            if version_branch.startswith("grass")
-        ]
-    branches.sort()
-    return branches
 
 
 def get_default_branch(full_url):
@@ -538,70 +564,6 @@ def get_default_branch(full_url):
     except URLError:
         default_branch = "main"
     return default_branch
-
-
-def download_addons_paths_file(url, response_format, *args, **kwargs):
-    """Generates JSON file containing the download URLs of the official
-    Addons
-
-    :param str url: url address
-    :param str response_format: content type
-
-    :return response: urllib.request.urlopen response object or None
-    """
-    try:
-        response = urlopen(url, *args, **kwargs)
-
-        if not response.code == 200:
-            index = HTTP_STATUS_CODES.index(response.code)
-            desc = HTTP_STATUS_CODES[index].description
-            gs.fatal(
-                _(
-                    "Download file from <{url}>, "
-                    "return status code {code}, "
-                    "{desc}".format(
-                        url=url,
-                        code=response.code,
-                        desc=desc,
-                    ),
-                ),
-            )
-        if response_format not in response.getheader("Content-Type"):
-            gs.fatal(
-                _(
-                    "Wrong downloaded file format. "
-                    "Check url <{url}>. Allowed file format is "
-                    "{response_format}.".format(
-                        url=url,
-                        response_format=response_format,
-                    ),
-                ),
-            )
-        return response
-    except HTTPError as err:
-        if err.code == 403 and err.msg == "rate limit exceeded":
-            gs.warning(
-                _(
-                    "The download of the json file with add-ons paths "
-                    "from the github server wasn't successful, "
-                    "{}. The previous downloaded json file "
-                    " will be used if exists.".format(err.msg)
-                ),
-            )
-        else:
-            return download_addons_paths_file(
-                url=url.replace("main", "master"),
-                response_format=response_format,
-            )
-    except URLError:
-        gs.fatal(
-            _(
-                "Download file from <{url}>, "
-                "failed. Check internet connection.".format(
-                    url=url,
-                ),
-            ),
-        )
 
 
 def etree_fromfile(filename):
@@ -819,7 +781,7 @@ def get_available_toolboxes(url):
 
             for mnode in tnode.findall("task"):
                 mlist.append(mnode.get("name"))
-    except (HTTPError, IOError, OSError):
+    except (HTTPError, OSError):
         gs.fatal(_("Unable to fetch addons metadata file"))
 
     return tdict
@@ -849,7 +811,7 @@ def get_toolbox_extensions(url, name):
                     # list of files installed by this extension
                     edict[ename]["flist"] = list()
                 break
-    except (HTTPError, IOError, OSError):
+    except (HTTPError, OSError):
         gs.fatal(_("Unable to fetch addons metadata file"))
 
     return edict
@@ -931,7 +893,7 @@ def list_available_modules(url, mlist=None):
         )
         list_available_extensions_svn(url)
         return
-    except (HTTPError, URLError, IOError, OSError):
+    except (HTTPError, URLError, OSError):
         list_available_extensions_svn(url)
         return
 
@@ -994,7 +956,7 @@ def list_available_extensions_svn(url):
         gs.debug("url = %s" % file_url, debug=2)
         try:
             file_ = urlopen(url)
-        except (HTTPError, IOError, OSError):
+        except (HTTPError, OSError):
             gs.debug(_("Unable to fetch '%s'") % file_url, debug=1)
             continue
 
@@ -1048,9 +1010,6 @@ def cleanup():
     """Cleanup after the downloads and copilation"""
     if REMOVE_TMPDIR:
         try_rmdir(TMPDIR)
-    else:
-        gs.message("\n%s\n" % _("Path to the source code:"))
-        sys.stderr.write("%s\n" % os.path.join(TMPDIR, options["extension"]))
 
 
 def write_xml_modules(name, tree=None):
@@ -1190,7 +1149,7 @@ def write_xml_toolboxes(name, tree=None):
     file_.close()
 
 
-def install_extension(source, url, xmlurl, branch):
+def install_extension(source=None, url=None, xmlurl=None, branch=None):
     """Install extension (e.g. one module) or a toolbox (list of modules)"""
     gisbase = os.getenv("GISBASE")
     if not gisbase:
@@ -1308,7 +1267,7 @@ def get_toolboxes_metadata(url):
                 "correlate": clist,
                 "modules": mlist,
             }
-    except (HTTPError, IOError, OSError):
+    except (HTTPError, OSError):
         gs.error(_("Unable to read addons metadata file " "from the remote server"))
     return data
 
@@ -1378,7 +1337,7 @@ def get_addons_metadata(url, mlist):
     bin_list = []
     try:
         tree = etree_fromurl(url)
-    except (HTTPError, URLError, IOError, OSError) as error:
+    except (HTTPError, URLError, OSError) as error:
         gs.error(
             _(
                 "Unable to read addons metadata file" " from the remote server: {0}"
@@ -1500,35 +1459,22 @@ def get_multi_addon_addons_which_install_only_html_man_page():
     :return list addons: list of multi-addon addons which install
                          only manual html page
     """
-    addons = []
     all_addon_dirs = []
-    addon_dirs_with_source_module = []  # *.py, *.c file
-    addon_pattern = re.compile(r".*{}".format(options["extension"]))
-    addon_src_file_pattern = re.compile(r".*.py$|.*.c$")
-
-    addons_paths_file = os.path.join(
-        options["prefix"],
-        get_addons_paths.json_file,
+    addon_paths = re.findall(
+        rf".*{options['extension']}*.",
+        get_addons_paths(gg_addons_base_dir=options["prefix"]),
     )
-    if not os.path.exists(addons_paths_file):
-        get_addons_paths(gg_addons_base_dir=options["prefix"])
-    with open(addons_paths_file) as f:
-        addons_paths = json.loads(f.read())
-
-    for addon in addons_paths["tree"]:
-        if re.match(addon_pattern, addon["path"]) and addon["type"] == "blob":
-            if re.match(addon_src_file_pattern, addon["path"]):
-                # Add addon dirs which contains source module *.py, *.c file
-                addon_dirs_with_source_module.append(
-                    os.path.dirname(addon["path"]),
-                )
-        elif re.match(addon_pattern, addon["path"]) and addon["type"] == "tree":
-            # Add all addon dirs
-            all_addon_dirs.append(addon["path"])
-
-    for addon in set(all_addon_dirs) ^ set(addon_dirs_with_source_module):
-        addons.append(os.path.basename(addon))
-    return addons
+    addon_dir_paths = set([os.path.dirname(i) for i in addon_paths])
+    for addon_dir in addon_dir_paths:
+        addon_src_files = list(
+            re.finditer(rf"{addon_dir}/(.*py)|(.*c)\n", "\n".join(addon_paths)),
+        )
+        if not addon_src_files:
+            all_addon_dirs.append(os.path.basename(addon_dir))
+        else:
+            for addon_src_file in addon_src_files:
+                addon_paths.pop(addon_paths.index(addon_src_file.group(0)))
+    return all_addon_dirs
 
 
 def filter_multi_addon_addons(mlist):
@@ -1570,11 +1516,12 @@ def install_module_xml(mlist):
     # read XML file
     tree = etree_fromfile(xml_file)
 
-    # Filter multi-addon addons
-    if len(mlist) > 1:
-        mlist = filter_multi_addon_addons(
-            mlist.copy()
-        )  # mlist.copy() keep the original list of add-ons
+    if sys.platform != "win32":
+        # Filter multi-addon addons
+        if len(mlist) > 1:
+            mlist = filter_multi_addon_addons(
+                mlist.copy()
+            )  # mlist.copy() keep the original list of add-ons
 
     # update tree
     for name in mlist:
@@ -1686,10 +1633,13 @@ def install_extension_win(name):
 
     # collect module names and file names
     module_list = list()
+    module_name_pattern = re.compile(
+        r"^([d,g,i,m,p,r,s,t,v]|^db|^ps|^r3|^wx)\..*[\.py,\.exe]$"
+    )
     for r, d, f in os.walk(srcdir):
         for file in f:
             # Filter GRASS module name patterns
-            if re.search(r"^[d,db,g,i,m,p,ps,r,r3,s,t,v,wx]\..*[\.py,\.exe]$", file):
+            if re.search(module_name_pattern, file):
                 modulename = os.path.splitext(file)[0]
                 module_list.append(modulename)
     # remove duplicates in case there are .exe wrappers for python scripts
@@ -1770,9 +1720,11 @@ def download_source_code_official_github(url, name, branch, directory=None):
     :param directory: directory where the source code will be downloaded
         (default is the current directory with name attached)
 
-    :returns: full path to the directory with the source code
-        (useful when you not specify directory, if *directory* is specified
-        the return value is equal to it)
+    :return str, str: full path to the directory with the source code
+                      (useful when you not specify directory, if
+                      *directory* is specified the return value is equal
+                      to it),
+                      addon official GitHub repository source code URL path
     """
 
     try:
@@ -1789,7 +1741,10 @@ def download_source_code_official_github(url, name, branch, directory=None):
 
     ga.fetch_addons([name])
 
-    return str(ga.local_copy / ga.addons[name])
+    return (
+        str(ga.local_copy / ga.addons[name]),
+        ga.get_addons_src_code_git_repo_url_path()[name],
+    )
 
 
 def move_extracted_files(extract_dir, target_dir, files):
@@ -1884,17 +1839,33 @@ def extract_tar(name, directory, tmpdir):
         " tmpdir={tmpdir})".format(name=name, directory=directory, tmpdir=tmpdir),
         3,
     )
-    try:
-        import tarfile  # we don't need it anywhere else
+    import tarfile
 
+    try:
         tar = tarfile.open(name)
         extract_dir = os.path.join(tmpdir, "extract_dir")
         os.mkdir(extract_dir)
-        tar.extractall(path=extract_dir)
+
+        # Extraction filters were added in Python 3.12,
+        # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
+        # See
+        # https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
+        # and https://peps.python.org/pep-0706/
+        # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
+        # and in Python 3.14, `filter='data'` will be the default
+        if hasattr(tarfile, "data_filter"):
+            tar.extractall(path=extract_dir, filter="data")
+        else:
+            # Remove this when no longer needed
+            gs.warning(_("Extracting may be unsafe; consider updating Python"))
+            tar.extractall(path=extract_dir)
+
         files = os.listdir(extract_dir)
         move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
     except tarfile.TarError as error:
         gs.fatal(_("Archive file is unreadable: {0}").format(error))
+
+    del tarfile  # we don't need it anywhere else
 
 
 extract_tar.supported_formats = ["tar.gz", "gz", "bz2", "tar", "gzip", "targz"]
@@ -1903,7 +1874,12 @@ extract_tar.supported_formats = ["tar.gz", "gz", "bz2", "tar", "gzip", "targz"]
 def download_source_code(
     source, url, name, outdev, directory=None, tmpdir=None, branch=None
 ):
-    """Get source code to a local directory for compilation"""
+    """Get source code to a local directory for compilation
+
+    :return dictionary, url: addon source code directory path,
+                             addon official GitHub repository source code
+                             URL path
+    """
     gs.verbose(_("Type of source identified as '{source}'.").format(source=source))
     if source in ("official", "official_fork"):
         gs.message(
@@ -1911,7 +1887,7 @@ def download_source_code(
                 name=name, url=url
             )
         )
-        directory = download_source_code_official_github(
+        directory, url = download_source_code_official_github(
             url, name, branch, directory=directory
         )
     elif source == "svn":
@@ -1984,12 +1960,13 @@ def download_source_code(
             ).format(source)
         )
     assert os.path.isdir(directory)
-    return directory
+    return directory, url
 
 
 def install_extension_std_platforms(name, source, url, branch):
     """Install extension on standard platforms"""
     gisbase = os.getenv("GISBASE")
+    path_to_src_code_message = _("Path to the source code:")
 
     # to hide non-error messages from subprocesses
     if gs.verbosity() <= 2:
@@ -1999,7 +1976,7 @@ def install_extension_std_platforms(name, source, url, branch):
 
     os.chdir(TMPDIR)  # this is just to not leave something behind
     srcdir = os.path.join(TMPDIR, name)
-    srcdir = download_source_code(
+    srcdir, url = download_source_code(
         source,
         url,
         name,
@@ -2049,16 +2026,16 @@ def install_extension_std_platforms(name, source, url, branch):
                 )
 
     dirs = {
-        "bin": os.path.join(TMPDIR, name, "bin"),
-        "docs": os.path.join(TMPDIR, name, "docs"),
-        "html": os.path.join(TMPDIR, name, "docs", "html"),
-        "rest": os.path.join(TMPDIR, name, "docs", "rest"),
-        "man": os.path.join(TMPDIR, name, "docs", "man"),
-        "script": os.path.join(TMPDIR, name, "scripts"),
+        "bin": os.path.join(srcdir, "bin"),
+        "docs": os.path.join(srcdir, "docs"),
+        "html": os.path.join(srcdir, "docs", "html"),
+        "rest": os.path.join(srcdir, "docs", "rest"),
+        "man": os.path.join(srcdir, "docs", "man"),
+        "script": os.path.join(srcdir, "scripts"),
         # TODO: handle locales also for addons
-        #             'string'  : os.path.join(TMPDIR, name, 'locale'),
-        "string": os.path.join(TMPDIR, name),
-        "etc": os.path.join(TMPDIR, name, "etc"),
+        #             'string'  : os.path.join(srcdir, 'locale'),
+        "string": srcdir,
+        "etc": os.path.join(srcdir, "etc"),
     }
 
     make_cmd = [
@@ -2078,7 +2055,7 @@ def install_extension_std_platforms(name, source, url, branch):
     install_cmd = [
         MAKE,
         "MODULE_TOPDIR=%s" % gisbase,
-        "ARCH_DISTDIR=%s" % os.path.join(TMPDIR, name),
+        "ARCH_DISTDIR=%s" % srcdir,
         "INST_DIR=%s" % options["prefix"],
         "install",
     ]
@@ -2088,6 +2065,8 @@ def install_extension_std_platforms(name, source, url, branch):
         sys.stderr.write(" ".join(make_cmd) + "\n")
         gs.message("\n%s\n" % _("To install run:"))
         sys.stderr.write(" ".join(install_cmd) + "\n")
+        gs.message(f"\n{path_to_src_code_message}\n")
+        sys.stderr.write(f"{srcdir}\n")
         return 0, None, None, None
 
     os.chdir(srcdir)
@@ -2100,6 +2079,8 @@ def install_extension_std_platforms(name, source, url, branch):
         gs.fatal(_("Compilation failed, sorry." " Please check above error messages."))
 
     if flags["i"]:
+        gs.message(f"\n{path_to_src_code_message}\n")
+        sys.stderr.write(f"{srcdir}\n")
         return 0, None, None, None
 
     # collect old files
@@ -2120,7 +2101,7 @@ def install_extension_std_platforms(name, source, url, branch):
             if fullname not in old_file_list:
                 file_list.append(fullname)
 
-    return ret, module_list, file_list, os.path.join(TMPDIR, name)
+    return ret, module_list, file_list, os.path.join(srcdir)
 
 
 def remove_extension(force=False):
@@ -2375,6 +2356,8 @@ def check_style_file(name):
 
     try:
         shutil.copyfile(dist_file, addons_file)
+    except shutil.SameFileError:
+        pass
     except OSError as error:
         gs.warning(
             _(
@@ -2431,7 +2414,7 @@ def update_manual_page(module):
     try:
         oldfile = open(htmlfile)
         shtml = oldfile.read()
-    except IOError as error:
+    except OSError as error:
         gs.fatal(_("Unable to read manual page: %s") % error)
     else:
         oldfile.close()
@@ -2448,11 +2431,12 @@ def update_manual_page(module):
     # find URIs
     pattern = r"""<a href="([^"]+)">([^>]+)</a>"""
     addons = get_installed_extensions(force=True)
-    # Multi-addon
-    if len(addons) > 1:
-        for a in get_multi_addon_addons_which_install_only_html_man_page():
-            # Add multi-addon addons which install only manual html page
-            addons.append(a)
+    if sys.platform != "win32":
+        # Multi-addon
+        if len(addons) > 1:
+            for a in get_multi_addon_addons_which_install_only_html_man_page():
+                # Add multi-addon addons which install only manual html page
+                addons.append(a)
 
     for match in re.finditer(pattern, shtml):
         if match.group(1)[:4] == "http":
@@ -2475,7 +2459,7 @@ def update_manual_page(module):
     try:
         newfile = open(htmlfile, "w")
         newfile.write(ohtml)
-    except IOError as error:
+    except OSError as error:
         gs.fatal(_("Unable for write manual page: %s") % error)
     else:
         newfile.close()
@@ -2507,7 +2491,10 @@ def resolve_install_prefix(path, to_system):
     # together with file names
     if not path.endswith(os.path.sep):
         path = path + os.path.sep
-    return os.path.abspath(path)  # make likes absolute paths
+    os.environ["GRASS_PREFIX_ADDON_BASE"] = os.path.abspath(
+        path
+    )  # make likes absolute paths
+    return os.environ["GRASS_PREFIX_ADDON_BASE"]
 
 
 def resolve_xmlurl_prefix(url, source=None):
@@ -2760,30 +2747,47 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
 
 
 def get_addons_paths(gg_addons_base_dir):
-    """Get and save addons paths from GRASS GIS Addons GitHub repo API
-    as 'addons_paths.json' file in the gg_addons_base_dir. The file
-    serves as a list of all addons, and their paths (required for
-    mkhmtl.py tool)
+    """Make or update list of the official addons source code paths
+    prefix parameter plus /grass-addons directory using Git repository
 
     :param str gg_addons_base_dir: dir path where addons are installed
+
+    :return str: list of all addons source code paths
     """
-    # Define branch to fetch from (latest or current version)
     addons_branch = get_version_branch(VERSION[0])
-    url = f"https://api.github.com/repos/OSGeo/grass-addons/git/trees/{addons_branch}?recursive=1"
-
-    response = download_addons_paths_file(
-        url=url,
-        response_format="application/json",
+    grass_addons_dir = Path(gg_addons_base_dir) / "grass-addons"
+    if grass_addons_dir.exists():
+        try_rmdir(grass_addons_dir)
+    gs.call(
+        [
+            "git",
+            "clone",
+            "-q",
+            "--no-checkout",
+            f"--branch={addons_branch}",
+            "--filter=blob:none",
+            GIT_URL,
+        ],
+        cwd=gg_addons_base_dir,
     )
-    if response:
-        addons_paths = json.loads(gs.decode(response.read()))
-        with open(
-            os.path.join(gg_addons_base_dir, get_addons_paths.json_file), "w"
-        ) as f:
-            json.dump(addons_paths, f)
-
-
-get_addons_paths.json_file = "addons_paths.json"
+    addons_file_list = gs.Popen(
+        ["git", "ls-tree", "--name-only", "-r", addons_branch],
+        cwd=grass_addons_dir,
+        stdout=PIPE,
+        stderr=PIPE,
+    )
+    addons_file_list, stderr = addons_file_list.communicate()
+    if stderr:
+        gs.fatal(
+            _(
+                "Failed to get addons files list from the"
+                " Git repository <{repo_path}>.\n{error}"
+            ).format(
+                repo_path=grass_addons_dir,
+                error=gs.decode(stderr),
+            )
+        )
+    return gs.decode(addons_file_list)
 
 
 def main():
@@ -2810,10 +2814,6 @@ def main():
     options["prefix"] = resolve_install_prefix(
         path=options["prefix"], to_system=flags["s"]
     )
-
-    if flags["j"]:
-        get_addons_paths(gg_addons_base_dir=options["prefix"])
-        return 0
 
     # list available extensions
     if flags["l"] or flags["c"] or (flags["g"] and not flags["a"]):
@@ -2845,17 +2845,23 @@ def main():
 
     if options["operation"] == "add":
         check_dirs()
-        if original_url == "" or flags["o"]:
-            """
-            Query GitHub API only if extension will be downloaded
-            from official GRASS GIS addon repository
-            """
-            get_addons_paths(gg_addons_base_dir=options["prefix"])
-        source, url = resolve_source_code(
-            name=options["extension"], url=original_url, branch=branch, fork=flags["o"]
-        )
-        xmlurl = resolve_xmlurl_prefix(original_url, source=source)
-        install_extension(source=source, url=url, xmlurl=xmlurl, branch=branch)
+        if sys.platform == "win32":
+            install_extension()
+        else:
+            if original_url == "" or flags["o"]:
+                """
+                Query GitHub API only if extension will be downloaded
+                from official GRASS GIS addon repository
+                """
+                get_addons_paths(gg_addons_base_dir=options["prefix"])
+            source, url = resolve_source_code(
+                name=options["extension"],
+                url=original_url,
+                branch=branch,
+                fork=flags["o"],
+            )
+            xmlurl = resolve_xmlurl_prefix(original_url, source=source)
+            install_extension(source=source, url=url, xmlurl=xmlurl, branch=branch)
     else:  # remove
         remove_extension(force=flags["f"])
 

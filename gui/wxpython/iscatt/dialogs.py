@@ -18,8 +18,6 @@ This program is free software under the GNU General Public License
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
 
-import six
-
 import wx
 from gui_core.gselect import Select
 import wx.lib.colourselect as csel
@@ -378,7 +376,7 @@ class SettingsDialog(wx.Dialog):
             "sel_area": ["selection", _("Selected area color:")],
         }
 
-        for settKey, sett in six.iteritems(self.colorsSetts):
+        for settKey, sett in self.colorsSetts.items():
             settsLabels[settKey] = StaticText(parent=self, id=wx.ID_ANY, label=sett[1])
             col = UserSettings.Get(group="scatt", key=sett[0], subkey=settKey)
             self.settings[settKey] = csel.ColourSelect(
@@ -390,7 +388,7 @@ class SettingsDialog(wx.Dialog):
             "sel_area_opacty": ["selection", _("Selected area opacity:")],
         }
 
-        for settKey, sett in six.iteritems(self.sizeSetts):
+        for settKey, sett in self.sizeSetts.items():
             settsLabels[settKey] = StaticText(parent=self, id=wx.ID_ANY, label=sett[1])
             self.settings[settKey] = SpinCtrl(parent=self, id=wx.ID_ANY, min=0, max=100)
             size = int(UserSettings.Get(group="scatt", key=sett[0], subkey=settKey))
@@ -497,14 +495,14 @@ class SettingsDialog(wx.Dialog):
 
     def UpdateSettings(self):
         chanaged_setts = []
-        for settKey, sett in six.iteritems(self.colorsSetts):
+        for settKey, sett in self.colorsSetts.items():
             col = tuple(self.settings[settKey].GetColour())
             col_s = UserSettings.Get(group="scatt", key=sett[0], subkey=settKey)
             if col_s != col:
                 UserSettings.Set(group="scatt", key=sett[0], subkey=settKey, value=col)
                 chanaged_setts.append([settKey, sett[0]])
 
-        for settKey, sett in six.iteritems(self.sizeSetts):
+        for settKey, sett in self.sizeSetts.items():
             val = self.settings[settKey].GetValue()
             val_s = UserSettings.Get(group="scatt", key=sett[0], subkey=settKey)
 

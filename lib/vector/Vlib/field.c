@@ -202,7 +202,7 @@ int Vect_map_del_dblink(struct Map_info *Map, int field)
    \param first_only TRUE to copy only first link otherwise all DB links are
    copied
  */
-void Vect_copy_map_dblinks(const struct Map_info *In, struct Map_info *Out,
+void Vect_copy_map_dblinks(struct Map_info *In, struct Map_info *Out,
                            int first_only)
 {
     int i, ndblinks;
@@ -234,8 +234,7 @@ void Vect_copy_map_dblinks(const struct Map_info *In, struct Map_info *Out,
    \return 1 dblink for field exists
    \return 0 dblink does not exist for field
  */
-int Vect_map_check_dblink(const struct Map_info *Map, int field,
-                          const char *name)
+int Vect_map_check_dblink(struct Map_info *Map, int field, const char *name)
 {
     return Vect_check_dblink(Map->dblnk, field, name);
 }
@@ -473,7 +472,7 @@ struct field_info *Vect_default_field_info(struct Map_info *Map, int field,
 
    \return pointer to new field_info structure
  */
-struct field_info *Vect_get_dblink(const struct Map_info *Map, int link)
+struct field_info *Vect_get_dblink(struct Map_info *Map, int link)
 {
     struct field_info *fi;
 
@@ -513,7 +512,7 @@ struct field_info *Vect_get_dblink(const struct Map_info *Map, int link)
    \return pointer to new field_info structure
    \return NULL if not found
  */
-struct field_info *Vect_get_field(const struct Map_info *Map, int field)
+struct field_info *Vect_get_field(struct Map_info *Map, int field)
 {
     int i;
     struct field_info *fi = NULL;
@@ -539,7 +538,7 @@ struct field_info *Vect_get_field(const struct Map_info *Map, int field)
    \return pointer to new field_info structure
    \return NULL if not found
  */
-struct field_info *Vect_get_field_by_name(const struct Map_info *Map,
+struct field_info *Vect_get_field_by_name(struct Map_info *Map,
                                           const char *field)
 {
     int i;
@@ -569,8 +568,7 @@ struct field_info *Vect_get_field_by_name(const struct Map_info *Map,
    \return pointer to new field_info structure
    \return NULL if not found
  */
-struct field_info *Vect_get_field2(const struct Map_info *Map,
-                                   const char *field)
+struct field_info *Vect_get_field2(struct Map_info *Map, const char *field)
 {
     int ifield;
     struct field_info *fi;
@@ -607,7 +605,7 @@ struct field_info *Vect_get_field2(const struct Map_info *Map,
    \return -1 for all layers
    \return 0 if layer not found
  */
-int Vect_get_field_number(const struct Map_info *Map, const char *field)
+int Vect_get_field_number(struct Map_info *Map, const char *field)
 {
     struct field_info *fi;
 
@@ -733,8 +731,6 @@ static int read_dblinks_ogr(struct Map_info *Map)
 #ifndef HAVE_OGR
     G_warning(_("GRASS is not compiled with OGR support"));
 #else
-#if GDAL_VERSION_NUM > 1320 && \
-    HAVE_OGR /* seems to be fixed after 1320 release */
     int nLayers;
     char *ogr_fid_col;
 
@@ -779,112 +775,6 @@ static int read_dblinks_ogr(struct Map_info *Map)
     Vect_add_dblink(dbl, 1, Map->fInfo.ogr.layer_name,
                     Map->fInfo.ogr.layer_name, ogr_fid_col, Map->fInfo.ogr.dsn,
                     "ogr");
-#else
-    dbDriver *driver;
-    dbCursor cursor;
-    dbString sql;
-    int FID = 0, OGC_FID = 0, OGR_FID = 0, GID = 0;
-
-    G_debug(3, "GDAL_VERSION_NUM: %d", GDAL_VERSION_NUM);
-
-    /* FID is not available for all OGR drivers */
-    db_init_string(&sql);
-
-    driver = db_start_driver_open_database("ogr", Map->fInfo.ogr.dsn);
-
-    if (driver == NULL) {
-        G_warning(_("Unable to open OGR DBMI driver"));
-        return -1;
-    }
-
-    /* this is a bit stupid, but above FID auto-detection doesn't work yet...:
-     */
-    db_auto_print_errors(0);
-    sprintf(buf, "select FID from %s where FID > 0", Map->fInfo.ogr.layer_name);
-    db_set_string(&sql, buf);
-
-    if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK) {
-        /* FID not available, so we try ogc_fid */
-        G_debug(3, "Failed. Now searching for ogc_fid column in OGR DB");
-        sprintf(buf, "select ogc_fid from %s where ogc_fid > 0",
-                Map->fInfo.ogr.layer_name);
-        db_set_string(&sql, buf);
-
-        if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) !=
-            DB_OK) {
-            /* Neither FID nor ogc_fid available, so we try ogr_fid */
-            G_debug(3, "Failed. Now searching for ogr_fid column in OGR DB");
-            sprintf(buf, "select ogr_fid from %s where ogr_fid > 0",
-                    Map->fInfo.ogr.layer_name);
-            db_set_string(&sql, buf);
-
-            if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) !=
-                DB_OK) {
-                /* Neither FID nor ogc_fid available, so we try gid */
-                G_debug(3, "Failed. Now searching for gid column in OGR DB");
-                sprintf(buf, "select gid from %s where gid > 0",
-                        Map->fInfo.ogr.layer_name);
-                db_set_string(&sql, buf);
-
-                if (db_open_select_cursor(driver, &sql, &cursor,
-                                          DB_SEQUENTIAL) != DB_OK) {
-                    /* neither FID nor ogc_fid nor ogr_fid nor gid available */
-                    G_warning(
-                        _("All FID tests failed. Neither 'FID' nor 'ogc_fid' "
-                          "nor 'ogr_fid' nor 'gid' available in OGR DB table"));
-                    db_close_database_shutdown_driver(driver);
-                    return 0;
-                }
-                else
-                    GID = 1;
-            }
-            else
-                OGR_FID = 1;
-        }
-        else
-            OGC_FID = 1;
-    }
-    else
-        FID = 1;
-
-    G_debug(3, "FID: %d, OGC_FID: %d, OGR_FID: %d, GID: %d", FID, OGC_FID,
-            OGR_FID, GID);
-
-    db_close_cursor(&cursor);
-    db_close_database_shutdown_driver(driver);
-    db_auto_print_errors(1);
-
-    if (FID) {
-        G_debug(3, "Using FID column in OGR DB");
-        Vect_add_dblink(dbl, 1, Map->fInfo.ogr.layer_name,
-                        Map->fInfo.ogr.layer_name, "FID", Map->fInfo.ogr.dsn,
-                        "ogr");
-    }
-    else {
-        if (OGC_FID) {
-            G_debug(3, "Using ogc_fid column in OGR DB");
-            Vect_add_dblink(dbl, 1, Map->fInfo.ogr.layer_name,
-                            Map->fInfo.ogr.layer_name, "ogc_fid",
-                            Map->fInfo.ogr.dsn, "ogr");
-        }
-        else {
-            if (OGR_FID) {
-                G_debug(3, "Using ogr_fid column in OGR DB");
-                Vect_add_dblink(dbl, 1, Map->fInfo.ogr.layer_name,
-                                Map->fInfo.ogr.layer_name, "ogr_fid",
-                                Map->fInfo.ogr.dsn, "ogr");
-            }
-            else {
-                if (GID) {
-                    G_debug(3, "Using gid column in OGR DB");
-                    Vect_add_dblink(dbl, 1, Map->fInfo.ogr.layer_name,
-                                    Map->fInfo.ogr.layer_name, "gid",
-                                    Map->fInfo.ogr.dsn, "ogr");
-                }
-            }
-        }
-    }
-#endif /* GDAL_VERSION_NUM > 1320 && HAVE_OGR */
     return 1;
 #endif /* HAVE_GDAL */
 }
@@ -1019,7 +909,7 @@ int Vect_write_dblinks(struct Map_info *Map)
 
    \return pointer to new string
  */
-char *Vect_subst_var(const char *in, const struct Map_info *Map)
+char *Vect_subst_var(const char *in, struct Map_info *Map)
 {
     char *c;
     char buf[1000], str[1000];

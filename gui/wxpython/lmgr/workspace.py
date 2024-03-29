@@ -127,7 +127,7 @@ class WorkspaceManager:
         returncode, errors = RunCommand(
             "g.mapset",
             dbase=gxwXml.database,
-            location=gxwXml.location,
+            project=gxwXml.location,
             mapset=gxwXml.mapset,
             getErrorMsg=True,
         )
@@ -267,6 +267,8 @@ class WorkspaceManager:
             if "showToolbars" in display and not display["showToolbars"]:
                 for toolbar in mapdisp.GetToolbarNames():
                     mapdisp.RemoveToolbar(toolbar)
+            if "isDocked" in display and not display["isDocked"]:
+                mapdisp.OnDockUndock()
 
             displayId += 1
             mapdisp.Show()  # show mapdisplay
@@ -441,7 +443,7 @@ class WorkspaceManager:
             tmpfile.seek(0)
             for line in tmpfile.readlines():
                 mfile.write(line)
-        except IOError:
+        except OSError:
             GError(
                 parent=self.lmgr,
                 message=_("Unable to open file <%s> for writing.") % filename,

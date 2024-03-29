@@ -16,7 +16,6 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import six
 
 import wx
 from random import randint
@@ -117,7 +116,7 @@ class BasePlotFrame(wx.Frame):
         for assigning colors to images in imagery groups"""
 
         self.colorDict = {}
-        for clr in six.iterkeys(grass.named_colors):
+        for clr in grass.named_colors.keys():
             if clr == "white":
                 continue
             r = int(grass.named_colors[clr][0] * 255)

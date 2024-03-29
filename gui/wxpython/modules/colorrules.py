@@ -26,7 +26,6 @@ import os
 import shutil
 import copy
 import tempfile
-import six
 
 import wx
 import wx.lib.colourselect as csel
@@ -679,7 +678,7 @@ class ColorTable(wx.Frame):
                 return
 
         rulestxt = ""
-        for rule in six.itervalues(self.rulesPanel.ruleslines):
+        for rule in self.rulesPanel.ruleslines.values():
             if "value" not in rule:
                 continue
             rulestxt += rule["value"] + " " + rule["color"] + "\n"
@@ -783,7 +782,7 @@ class ColorTable(wx.Frame):
         """
         rulestxt = ""
 
-        for rule in six.itervalues(self.rulesPanel.ruleslines):
+        for rule in self.rulesPanel.ruleslines.values():
             if "value" not in rule:  # skip empty rules
                 continue
 
@@ -1830,7 +1829,7 @@ class VectorColorTable(ColorTable):
         """
         rulestxt = ""
 
-        for rule in six.itervalues(self.rulesPanel.ruleslines):
+        for rule in self.rulesPanel.ruleslines.values():
             if "value" not in rule:  # skip empty rules
                 break
 

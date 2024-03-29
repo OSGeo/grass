@@ -570,7 +570,7 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdi
         text_c = wx.Colour(*ContrastColor(back_c))
 
         # if it is in scope of the method, gui falls, using self solved it
-        self.l = wx.ListItemAttr()
+        self.l = wx.ItemAttr()
         self.l.SetBackgroundColour(back_c)
         self.l.SetTextColour(text_c)
         return self.l

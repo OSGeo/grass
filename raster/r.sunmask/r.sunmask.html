@@ -1,34 +1,57 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.sunmask</em> creates an output map layer based on an input elevation
-raster map layer and the sun position. The output map layer contains the
-cast shadow areas arising from sun shine and elevations. The user can define
-the sun position either directly or the module calculates it from given
-location and date/time parameters using the
-<a href="http://rredc.nrel.gov/">NREL</a> sun position algorithm. So either
-"A:"-parameters to specify the exact known sun position or "B:-parameters"
-to specify date/time for sun position calculation by <em>r.sunmask</em> itself
-have to be used.
+raster map layer and the position of the sun. The output map layer contains the
+cast shadow areas resulting from sunlight and elevation. The user can either
+specify the sun position directly or the module calculates it from given
+location and date/time parameters using the SOLPOS (Solar and Moon Position Algorithm)
+developed by the
+<a href="https://www.nrel.gov/">National Renewable Energy Laboratory</a>
+(NREL). SOLPOS operates in two modes, either
 
-<p>The module performs sunset/sunrise checks and refraction correction for sun
-position calculation. Local coordinate systems are internally transformed to
-latitude/longitude for the SOLPOS algorithm. The elevation is not considered
-in the sunset/sunrise calculations.
+<ul>
+<li>(A) parameters to specify the exact known position of the sun, or</li>
+<li>(B) parameters to specify the date/time for the sun position calculation
+     by <em>r.sunmask</em> itself</li>
+</ul>
+must be used.
+
+<p>
+The module performs sunset/sunrise checks and refraction correction for
+sun position calculation. Local coordinate systems are internally transformed
+to latitude/longitude for the SOLPOS algorithm. Elevation is not taken into
+account for sunset/sunrise calculations.
+
+<p>
+The solar zenith angle ("sun angle above horizon") is defined as the angle
+between the horizon and the vertical (directly overhead or zenith). Its
+values can range from 90&deg;, when the sun is directly overhead, to 0&deg;,
+when the sun is on the horizon. Values lower than 0&deg; indicate that the
+sun is below the horizon.
+
+<p>
+The solar azimuth angle ("sun azimuth") defines the direction of the sun.
+It is the angle between north and the projection of the sun's rays onto the
+horizontal plane. This angle is measured in a clockwise direction and can
+vary between 0&deg; and 360&deg;. Specifically, an azimuth of 0&deg; means
+the sun is in the north, 90&deg; in the east, 180&deg; in the south and
+270&deg; in the west.
 
 <h2>NOTES</h2>
 
-<em>r.sunmask</em> and daylight savings: Rather than converting the
-local time to GMT, the SOLPOS algorithm uses what is called Local
-Standard Time, which is generally politically defined as an offset
-from GMT.  So the key is the offset from GMT, which the solpos Time
+<em>r.sunmask</em> and daylight saving time: Instead of converting the
+local time to GMT, the SOLPOS algorithm uses what is known as Local
+Standard Time, which is generally defined as an offset from GMT.
+So the key is the offset from GMT, which is the solpos Time
 Zone parameter. If the user specifies clock time (different for
-winter and summer), s/he would have to change the Time Zone
-parameter seasonally in <em>r.sunmask</em> (timezone parameter). See also
-<a href="http://en.wikipedia.org/wiki/Daylight_saving_time_by_country">Daylight saving time by region and country</a>.
+winter and summer), s/he would have to change the Time Zone parameter in
+<em>r.sunmask</em> (<b>timezone</b> parameter) seasonally. See also
+<a href="https://en.wikipedia.org/wiki/Daylight_saving_time_by_country">Daylight saving time by region and country</a>.
+<p>
 
 <p>
 Note: In latitude/longitude locations the position coordinates pair
-(east/west) has to be specified in decimal degree (not D:M:S). If
+(east/west) has to be specified in decimal degree (not DD:MM:SS). If
 not specified, the map center's coordinates will be used.
 Also <em>g.region -l</em> displays the map center's coordinates in
 latitude/longitude (or <em>g.region -c</em> in the actual coordinate
@@ -98,7 +121,7 @@ sunset=17:58:47
 <h2>Acknowledgements</h2>
 
 Acknowledgements: National Renewable Energy Laboratory for their
-<a href="http://rredc.nrel.gov/solar/codesandalgorithms/solpos/">SOLPOS 2.0</a> sun position
+<a href="https://www.nrel.gov/grid/solar-resource/solpos.html">SOLPOS 2.0</a> sun position
 algorithm.
 
 <h2>SEE ALSO</h2>
@@ -112,6 +135,6 @@ algorithm.
 
 <h2>AUTHORS</h2>
 
-Janne Soimasuo, Finland 1994<br>
-update to FP by Huidae Cho 2001<br>
-SOLPOS algorithm feature added by Markus Neteler 2001
+Janne Soimasuo, Finland, 1994<br>
+update to FP by Huidae Cho, 2001<br>
+SOLPOS algorithm feature added by Markus Neteler, 2001
