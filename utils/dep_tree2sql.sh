@@ -167,9 +167,9 @@ find ./* -type f -name '*.o' -print0 \
 	| awk -vOFS='\t' '{print $1,$3}' \
 	> "$tmpdir/obj_imp.lst"
 
-libs=$(awk '{print $3}' "$tmpdir/ldd.lst" | uniq | sort | uniq)
+mapfile -t libs < <(awk '{print $3}' "$tmpdir/ldd.lst" | uniq | sort | uniq)
 
-nm -AD $libs \
+nm -AD "${libs[@]}" \
 	| grep -E ':[0-9a-f]{8}{1,2} [TWDRC] ' \
 	| sed 's/:/ /g' \
 	| awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$4}' \
