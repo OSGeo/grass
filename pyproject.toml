@@ -2,7 +2,6 @@
 required-version = '24'
 line-length = 88
 target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
-include = '\.pyi?$'
 # 'extend-exclude' excludes files or directories in addition to the defaults
 extend-exclude = '''
 (
