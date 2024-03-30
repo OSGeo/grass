@@ -167,7 +167,7 @@ find * -type f -name '*.o' \
 	| awk -vOFS='\t' '{print $1,$3}' \
 	> "$tmpdir/obj_imp.lst"
 
-libs=`awk '{print $3}' "$tmpdir/ldd.lst" | uniq | sort | uniq`
+libs=$(awk '{print $3}' "$tmpdir/ldd.lst" | uniq | sort | uniq)
 
 nm -AD $libs \
 	| egrep ':[0-9a-f]{8}{1,2} [TWDRC] ' \
