@@ -102,21 +102,21 @@ cd "$builddir" || exit 1
 #LD_LIBRARY_PATH=`pwd`/lib
 #export LD_LIBRARY_PATH
 
-find . -type f -perm +111 \! -name '*.so.*' \
+find . -type f -perm /a+x \! -name '*.so.*' \
 	| while read -r file ; do ldd "$file" | sed 's!^!'"$file"'!' ; done 2>/dev/null \
 	| sed -e 's/^\.\///' -e 's/ (0x.*)$//' -e 's/ => \(.*\)$/	\1/' -e 's/ => .*$//' \
 	| grep -F -v 'not a dynamic executable' \
 	| awk -vOFS='\t' '{print $1,$2,$3 ? $3 : $2}' \
 	> "$tmpdir/ldd.lst"
 
-find . -type f -perm +111 \! -name '*.so' -print0 \
+find . -type f -perm /a+x \! -name '*.so' -print0 \
 	| xargs -0 nm -AD 2>/dev/null \
 	| grep -E ': {8}{1,2} U ' \
 	| sed -e 's/:/ /g' -e 's/\.\///' \
 	| awk -vOFS='\t' '{print $1,$3}' \
 	> "$tmpdir/prog_imp.lst"
 
-find . -type f -perm +111 \! -name '*.so' -print0 \
+find . -type f -perm /a+x \! -name '*.so' -print0 \
 	| xargs -0 nm -AD 2>/dev/null \
 	| grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
 	| sed -e 's/:/ /g' -e 's/\.\///' \
