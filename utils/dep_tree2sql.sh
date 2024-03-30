@@ -111,14 +111,14 @@ find . -type f -perm +111 \! -name '*.so.*' \
 
 find . -type f -perm +111 \! -name '*.so' \
 	| xargs nm -AD 2>/dev/null \
-	| egrep ': {8}{1,2} U ' \
+	| grep -E ': {8}{1,2} U ' \
 	| sed -e 's/:/ /g' -e 's/\.\///' \
 	| awk -vOFS='\t' '{print $1,$3}' \
 	> "$tmpdir/prog_imp.lst"
 
 find . -type f -perm +111 \! -name '*.so' \
 	| xargs nm -AD 2>/dev/null \
-	| egrep ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
+	| grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
 	| sed -e 's/:/ /g' -e 's/\.\///' \
 	| awk -vOFS='\t' '{print $1,$4}' \
 	> "$tmpdir/prog_exp.lst"
@@ -127,42 +127,42 @@ find . -type f -perm +111 \! -name '*.so' \
 
 find * -type f -name 'lib?*.a' \
 	| xargs nm -A \
-	| egrep ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
+	| grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
 	| sed 's/:/ /g' \
 	| awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$2,$5}' \
 	> "$tmpdir/stlib_exp.lst"
 
 find * -type f -name 'lib?*.so' \
 	| xargs nm -AD \
-	| egrep ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
+	| grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
 	| sed 's/:/ /g' \
 	| awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$4}' \
 	> "$tmpdir/shlib_exp.lst"
 
 find * -type f -name '*.o' \
 	| xargs nm -A \
-	| egrep ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
+	| grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
 	| sed 's/:/ /g' \
 	| awk -vOFS='\t' '{print $1,$4}' \
 	> "$tmpdir/obj_exp.lst"
 
 find * -type f -name 'lib?*.a' \
 	| xargs nm -A \
-	| egrep ': {8}{1,2} U ' \
+	| grep -E ': {8}{1,2} U ' \
 	| sed 's/:/ /g' \
 	| awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$2,$4}' \
 	> "$tmpdir/stlib_imp.lst"
 
 find * -type f -name 'lib?*.so' \
 	| xargs nm -AD \
-	| egrep ': {8}{1,2} U ' \
+	| grep -E ': {8}{1,2} U ' \
 	| sed 's/:/ /g' \
 	| awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$3}' \
 	> "$tmpdir/shlib_imp.lst"
 
 find * -type f -name '*.o' \
 	| xargs nm -A \
-	| egrep ': {8}{1,2} U ' \
+	| grep -E ': {8}{1,2} U ' \
 	| sed 's/:/ /g' \
 	| awk -vOFS='\t' '{print $1,$3}' \
 	> "$tmpdir/obj_imp.lst"
@@ -170,7 +170,7 @@ find * -type f -name '*.o' \
 libs=$(awk '{print $3}' "$tmpdir/ldd.lst" | uniq | sort | uniq)
 
 nm -AD $libs \
-	| egrep ':[0-9a-f]{8}{1,2} [TWDRC] ' \
+	| grep -E ':[0-9a-f]{8}{1,2} [TWDRC] ' \
 	| sed 's/:/ /g' \
 	| awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$4}' \
 	> "$tmpdir/libs.lst"
