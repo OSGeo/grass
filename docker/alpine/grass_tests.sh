@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 # to be used in alpine Dockerfile
 
