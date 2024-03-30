@@ -110,8 +110,8 @@ for DIR in bin scripts ; do
 	;;
     esac
 
-    eval $($MODULE --interface-description | head -n 5 | tail -n 1 | \
-        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/' -e 's/[^\."]"$/&./')
+    eval "$($MODULE --interface-description | head -n 5 | tail -n 1 | \
+        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/' -e 's/[^\."]"$/&./')"
 
     if [ -z "$label" ] && [ -z "$desc" ] ; then
 	continue
@@ -142,8 +142,8 @@ for MODULE in ps.map ; do
     unset label
     unset desc
 
-    eval $($MODULE --interface-description | head -n 5 | tail -n 1 | \
-        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/' -e 's/[^\."]"$/&./')
+    eval "$($MODULE --interface-description | head -n 5 | tail -n 1 | \
+        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/' -e 's/[^\."]"$/&./')"
 
     if [ -z "$label" ] && [ -z "$desc" ] ; then
 	continue
@@ -473,7 +473,7 @@ EOF
 g.message "Converting LaTeX to PDF (writing to \$GISBASE/docs/pdf/) ..."
 
 for PGM in pdflatex ; do
-   if [ ! -x $(which $PGM) ] ; then
+   if [ ! -x "$(which $PGM)" ] ; then
 	g.message -e "pdflatex needed for this PDF conversion."
 	g.message "Done."
 	exit 1
