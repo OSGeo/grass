@@ -43,7 +43,7 @@ for FILE in html pdf ; do
 done
 
 
-TMP="`g.tempfile pid=$$`"
+TMP="$(g.tempfile pid=$$)"
 if [ $? -ne 0 ] || [ -z "$TMP" ] ; then
     g.message -e "Unable to create temporary files"
     exit 1
@@ -83,13 +83,13 @@ find_menu_hierarchy()
     MODL="v.type_wrapper.py"
   fi
 
-  PLACEMENT=`grep "^$MODL|" "$TMP.menu_hierarchy" | cut -f2 -d'|' | head -n 1`
+  PLACEMENT=$(grep "^$MODL|" "$TMP.menu_hierarchy" | cut -f2 -d'|' | head -n 1)
 
   # combine some modules which are listed twice
   if [ "$MODL" = "g.region" ] ; then
-      PLACEMENT=`echo "$PLACEMENT" | sed -e 's/Display/Set or Display/'`
+      PLACEMENT=$(echo "$PLACEMENT" | sed -e 's/Display/Set or Display/')
   elif  [ "$MODL" = "r.reclass" ] || [ "$MODL" = "v.reclass" ] ; then
-      PLACEMENT=`echo "$PLACEMENT" | sed -e 's/Reclassify.*$/Reclassify/'`
+      PLACEMENT=$(echo "$PLACEMENT" | sed -e 's/Reclassify.*$/Reclassify/')
   fi
 
   echo "$PLACEMENT"
@@ -110,14 +110,14 @@ for DIR in bin scripts ; do
 	;;
     esac
 
-    eval `$MODULE --interface-description | head -n 5 | tail -n 1 | \
-        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/' -e 's/[^\."]"$/&./'`
+    eval $($MODULE --interface-description | head -n 5 | tail -n 1 | \
+        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/' -e 's/[^\."]"$/&./')
 
     if [ -z "$label" ] && [ -z "$desc" ] ; then
 	continue
     fi
 
-    MODULE_MENU_LOC=`find_menu_hierarchy "$MODULE"`
+    MODULE_MENU_LOC=$(find_menu_hierarchy "$MODULE")
 
     BUFF=""
     if [ -z "$label" ] ; then
@@ -142,14 +142,14 @@ for MODULE in ps.map ; do
     unset label
     unset desc
 
-    eval `$MODULE --interface-description | head -n 5 | tail -n 1 | \
-        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/' -e 's/[^\."]"$/&./'`
+    eval $($MODULE --interface-description | head -n 5 | tail -n 1 | \
+        tr '"' "'" | sed -e 's/^[ \t]./desc="/' -e 's/$/"/' -e 's/[^\."]"$/&./')
 
     if [ -z "$label" ] && [ -z "$desc" ] ; then
 	continue
     fi
 
-    MODULE_MENU_LOC=`find_menu_hierarchy "$MODULE"`
+    MODULE_MENU_LOC=$(find_menu_hierarchy "$MODULE")
 
     BUFF=""
     if [ -z "$label" ] ; then
@@ -473,14 +473,14 @@ EOF
 g.message "Converting LaTeX to PDF (writing to \$GISBASE/docs/pdf/) ..."
 
 for PGM in pdflatex ; do
-   if [ ! -x `which $PGM` ] ; then
+   if [ ! -x $(which $PGM) ] ; then
 	g.message -e "pdflatex needed for this PDF conversion."
 	g.message "Done."
 	exit 1
    fi
 done
 
-TMPDIR="`dirname "$TMP"`"
+TMPDIR="$(dirname "$TMP")"
 cp "$OLDDIR/../man/grasslogo_vector.pdf" "$TMPDIR"
 cd "$TMPDIR"
 
