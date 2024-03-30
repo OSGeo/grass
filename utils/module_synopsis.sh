@@ -138,6 +138,7 @@ for DIR in bin scripts ; do
 done
 
 # ps.map doesn't jive with the above loop.
+# shellcheck disable=SC2043
 for MODULE in ps.map ; do
     unset label
     unset desc
@@ -337,6 +338,7 @@ EOF
 g.message "Generating LaTeX source (writing to \$GISBASE/etc/) ..."
 
 #### write header
+# shellcheck disable=SC2154 # $n$ is latex syntax
 cat << EOF > "${TMP}.tex"
 %% Adapted from LyX 1.3 LaTeX export. (c) 2009 The GRASS Development Team
 \documentclass[a4paper]{article}
@@ -472,6 +474,7 @@ EOF
 
 g.message "Converting LaTeX to PDF (writing to \$GISBASE/docs/pdf/) ..."
 
+# shellcheck disable=SC2043
 for PGM in pdflatex ; do
    if [ ! -x "$(which $PGM)" ] ; then
 	g.message -e "pdflatex needed for this PDF conversion."
