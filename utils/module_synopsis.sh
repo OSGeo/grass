@@ -43,8 +43,7 @@ for FILE in html pdf ; do
 done
 
 
-TMP="$(g.tempfile pid=$$)"
-if [ $? -ne 0 ] || [ -z "$TMP" ] ; then
+if ! TMP="$(g.tempfile pid=$$)" || [ -z "$TMP" ] ; then
     g.message -e "Unable to create temporary files"
     exit 1
 fi
