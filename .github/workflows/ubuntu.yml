@@ -96,7 +96,7 @@ jobs:
 
       - name: Add extra exclusions to a gunittest config file
         run: |
-          sed 's:exclude =:exclude = ${{ 
+          sed 's:exclude =:exclude = ${{
             steps.get-exclude.outputs.extra-exclude
           }}:g' .gunittest.cfg > .gunittest.extra.cfg
           cat .gunittest.extra.cfg
