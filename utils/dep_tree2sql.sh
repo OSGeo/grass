@@ -103,7 +103,7 @@ cd "$builddir" || exit 1
 #export LD_LIBRARY_PATH
 
 find . -type f -perm +111 \! -name '*.so.*' \
-	| while read file ; do ldd "$file" | sed 's!^!'"$file"'!' ; done 2>/dev/null \
+	| while read -r file ; do ldd "$file" | sed 's!^!'"$file"'!' ; done 2>/dev/null \
 	| sed -e 's/^\.\///' -e 's/ (0x.*)$//' -e 's/ => \(.*\)$/	\1/' -e 's/ => .*$//' \
 	| grep -F -v 'not a dynamic executable' \
 	| awk -vOFS='\t' '{print $1,$2,$3 ? $3 : $2}' \
