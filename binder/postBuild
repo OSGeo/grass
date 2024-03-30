@@ -20,9 +20,9 @@ make
 
 # put command on path
 # ensure the user specific bin dir exists (already on path)
-mkdir -p $HOME/.local/bin/
+mkdir -p "$HOME/.local/bin/"
 # create link to build
-ln -s $HOME/bin.*/grass* $HOME/.local/bin/grass
+ln -s "$HOME"/bin.*/grass* "$HOME/.local/bin/grass"
 
 # download a sample dataset
 mkdir -p data/grassdata \
