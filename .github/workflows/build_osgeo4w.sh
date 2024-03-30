@@ -15,8 +15,9 @@ set -e
 test -d "$1" && cd "$1"
 
 export OSGEO4W_ROOT_MSYS=/c/OSGeo4W
-export SRC=$(pwd)
+SRC="$(pwd)"
+export SRC
 export UNITTEST=1
 
 # Build according to OSGeo4W recipe
-${SRC}/mswindows/osgeo4w/build_osgeo4w.sh
+"${SRC}"/mswindows/osgeo4w/build_osgeo4w.sh
