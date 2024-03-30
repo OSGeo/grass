@@ -212,8 +212,20 @@ class LayerManagerGrassInterface:
         # Signal emitted when workspace is changed
         self.workspaceChanged = Signal("LayerManagerGrassInterface.workspaceChanged")
 
-        # Signal emitted when history should be updated
-        self.updateHistory = Signal("LayerManagerGrassInterface.updateHistory")
+        # Signal emitted when entry to history is added
+        self.entryToHistoryAdded = Signal(
+            "LayerManagerGrassInterface.entryToHistoryAdded"
+        )
+
+        # Signal emitted when entry from history is removed
+        self.entryFromHistoryRemoved = Signal(
+            "LayerManagerGrassInterface.entryFromHistoryRemoved"
+        )
+
+        # Signal emitted when entry in history is updated
+        self.entryInHistoryUpdated = Signal(
+            "LayerManagerGrassInterface.entryInHistoryUpdated"
+        )
 
     def RunCmd(self, *args, **kwargs):
         self.lmgr._gconsole.RunCmd(*args, **kwargs)

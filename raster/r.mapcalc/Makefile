@@ -20,7 +20,7 @@ default: multi
 $(BIN)/$(PGM2)$(EXE): LIBES = $(LIBES2)
 $(BIN)/$(PGM3)$(EXE): LIBES = $(LIBES3)
 
-$(OBJDIR)/mapcalc.yy.o: mapcalc.tab.h
+$(OBJDIR)/*.o $(OBJDIR)/mapcalc.yy.o: mapcalc.tab.h mapcalc.tab.c
 
 .SECONDARY: mapcalc.tab.c mapcalc.tab.h mapcalc.output
 

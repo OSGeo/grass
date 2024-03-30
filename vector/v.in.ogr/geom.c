@@ -419,7 +419,7 @@ int geom(OGRGeometryH hGeomAny, struct Map_info *Map, int field, int cat,
                 }
                 Vect_line_prune(IPoints[valid_isles]);
 
-                lastidx = Points->n_points - 1;
+                lastidx = IPoints[valid_isles]->n_points - 1;
                 if (IPoints[valid_isles]->x[0] !=
                         IPoints[valid_isles]->x[lastidx] ||
                     IPoints[valid_isles]->y[0] !=

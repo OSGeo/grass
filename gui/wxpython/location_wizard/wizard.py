@@ -180,7 +180,7 @@ class DatabasePage(TitledPage):
     """Wizard page for setting GIS data directory and location name"""
 
     def __init__(self, wizard, parent, grassdatabase):
-        TitledPage.__init__(self, wizard, _("Define new GRASS Location"))
+        TitledPage.__init__(self, wizard, _("Define new GRASS project"))
 
         # grid definition
         self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
@@ -198,7 +198,7 @@ class DatabasePage(TitledPage):
 
         # text controls
         self.tgisdbase = self.MakeLabel(grassdatabase)
-        self.tlocation = self.MakeTextCtrl("newLocation")
+        self.tlocation = self.MakeTextCtrl("newProject")
         self.tlocation.SetFocus()
 
         checks = [
@@ -225,7 +225,7 @@ class DatabasePage(TitledPage):
         self.sizer.Add(
             self.MakeLabel(
                 "%s:" % _("Name"),
-                tooltip=_("Name of location directory in GIS Data Directory"),
+                tooltip=_("Name of project directory in GIS Data Directory"),
             ),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
@@ -247,7 +247,7 @@ class DatabasePage(TitledPage):
         self.sizer.Add(
             self.MakeLabel(
                 "%s:" % _("Description"),
-                tooltip=_("Description of location directory in GIS Data Directory"),
+                tooltip=_("Description of project directory in GIS Data Directory"),
             ),
             flag=wx.ALIGN_LEFT | wx.ALIGN_TOP | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
@@ -267,7 +267,7 @@ class DatabasePage(TitledPage):
         )
 
         self.sizer.Add(
-            self.MakeLabel(_("Location will be created in GRASS database:")),
+            self.MakeLabel(_("Project will be created in GRASS database:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=2,
             pos=(5, 1),
@@ -293,7 +293,7 @@ class DatabasePage(TitledPage):
 
     def _nameValidationFailed(self, ctrl):
         message = _(
-            "Name '{}' is not a valid name for location. "
+            "Name '{}' is not a valid name for project. "
             "Please use only ASCII characters excluding characters {} "
             "and space."
         ).format(ctrl.GetValue(), "/\"'@,=*~")
@@ -307,10 +307,10 @@ class DatabasePage(TitledPage):
 
     def _locationAlreadyExists(self, ctrl):
         message = _(
-            "Location '{}' already exists. Please consider using "
-            "another name for your location."
+            "Project '{}' already exists. Please consider using "
+            "another name for your project."
         ).format(ctrl.GetValue())
-        GError(parent=self, message=message, caption=_("Existing location path"))
+        GError(parent=self, message=message, caption=_("Existing project path"))
 
     def OnChangeName(self, event):
         """Name for new location was changed"""
@@ -342,7 +342,7 @@ class DatabasePage(TitledPage):
             GWarning(
                 parent=self,
                 message=_(
-                    "Title of the location is limited only to one line and "
+                    "Title of the project is limited only to one line and "
                     "256 characters. The rest of the text will be ignored."
                 ),
             )
@@ -2235,7 +2235,7 @@ class SummaryPage(TitledPage):
             self.ldatabase, flag=wx.ALIGN_LEFT | wx.ALL, border=5, pos=(1, 1)
         )
         self.sizer.Add(
-            self.MakeLabel(_("Location Name:")),
+            self.MakeLabel(_("Project Name:")),
             flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
             pos=(2, 0),
@@ -2428,7 +2428,7 @@ class LocationWizard(wx.Object):
         # define wizard pages
         #
         self.wizard = WizardWithHelpButton(
-            parent, id=wx.ID_ANY, title=_("Define new GRASS Location")
+            parent, id=wx.ID_ANY, title=_("Define new GRASS project")
         )
         self.wizard.Bind(wiz.EVT_WIZARD_HELP, self.OnHelp)
 
@@ -2527,8 +2527,8 @@ class LocationWizard(wx.Object):
                     parent=self.parent,
                     message="%s"
                     % _(
-                        "Unable to create new location. "
-                        "Location <%(loc)s> not created.\n\n"
+                        "Unable to create new project. "
+                        "Project <%(loc)s> not created.\n\n"
                         "Details: %(err)s"
                     )
                     % {"loc": self.startpage.location, "err": msg},
@@ -2660,9 +2660,9 @@ class LocationWizard(wx.Object):
                 parent=self.wizard,
                 message="%s <%s>: %s"
                 % (
-                    _("Unable to create new location"),
+                    _("Unable to create new project"),
                     os.path.join(database, location),
-                    _("Location already exists in GRASS Database."),
+                    _("Project already exists in GRASS Database."),
                 ),
             )
             return None

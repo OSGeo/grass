@@ -189,46 +189,11 @@ class PreferencesBaseDialog(wx.Dialog):
         """Button 'Cancel' pressed"""
         self.Close()
 
-    def OnSave(self, event):
+    def OnSave(self, event, force=False):
         """Button 'Save' pressed
         Emits signal settingsChanged.
         """
-        if self._updateSettings():
-            lang = self.settings.Get(group="language", key="locale", subkey="lc_all")
-            if lang == "system":
-                # Most fool proof way to use system locale is to not provide
-                # any locale info at all
-                self.settings.Set(
-                    group="language", key="locale", subkey="lc_all", value=None
-                )
-                lang = None
-            env = grass.gisenv()
-            nprocs_gisenv = "NPROCS"
-            memorydb_gisenv = "MEMORYMB"
-            # Set gisenv MEMORYMB var value
-            memorymb = self.memorymb.GetValue()
-            if memorymb:
-                grass.run_command(
-                    "g.gisenv",
-                    set=f"{memorydb_gisenv}={memorymb}",
-                )
-            elif env.get(memorydb_gisenv):
-                grass.run_command(
-                    "g.gisenv",
-                    unset=memorydb_gisenv,
-                )
-            # Set gisenv NPROCS var value
-            nprocs = self.nprocs.GetValue()
-            if nprocs:
-                grass.run_command(
-                    "g.gisenv",
-                    set=f"{nprocs_gisenv}={nprocs}",
-                )
-            elif env.get(nprocs_gisenv):
-                grass.run_command(
-                    "g.gisenv",
-                    unset=nprocs_gisenv,
-                )
+        if force is True or self._updateSettings():
             self.settings.SaveToFile()
             Debug.msg(1, "Settings saved to file '%s'" % self.settings.filePath)
             self.settingsChanged.emit()
@@ -1792,7 +1757,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                 "displayed in the lower-left of the Map "
                 "Display\nwindow's status bar. It is purely "
                 "cosmetic and does not affect the working "
-                "location's\nprojection in any way. You will "
+                "project's\ncoordinate reference system in any way. You will "
                 "need to enable the Projection check box in "
                 "the drop-down\nmenu located at the bottom "
                 "of the Map Display window.\n"
@@ -2244,6 +2209,50 @@ class PreferencesDialog(PreferencesBaseDialog):
             enable = True
         scrollId = self.winId["display:scrollDirection:selection"]
         self.FindWindowById(scrollId).Enable(enable)
+
+    def OnSave(self, event):
+        """Button 'Save' pressed
+        Emits signal settingsChanged.
+        """
+        if self._updateSettings():
+            lang = self.settings.Get(group="language", key="locale", subkey="lc_all")
+            if lang == "system":
+                # Most fool proof way to use system locale is to not provide
+                # any locale info at all
+                self.settings.Set(
+                    group="language", key="locale", subkey="lc_all", value=None
+                )
+                lang = None
+            env = grass.gisenv()
+
+            # Set gisenv MEMORYMB var value
+            memorydb_gisenv = "MEMORYMB"
+            memorymb = self.memorymb.GetValue()
+            if memorymb:
+                grass.run_command(
+                    "g.gisenv",
+                    set=f"{memorydb_gisenv}={memorymb}",
+                )
+            elif env.get(memorydb_gisenv):
+                grass.run_command(
+                    "g.gisenv",
+                    unset=memorydb_gisenv,
+                )
+            # Set gisenv NPROCS var value
+            nprocs_gisenv = "NPROCS"
+            nprocs = self.nprocs.GetValue()
+            if nprocs:
+                grass.run_command(
+                    "g.gisenv",
+                    set=f"{nprocs_gisenv}={nprocs}",
+                )
+            elif env.get(nprocs_gisenv):
+                grass.run_command(
+                    "g.gisenv",
+                    unset=nprocs_gisenv,
+                )
+
+        PreferencesBaseDialog.OnSave(self, event, force=True)
 
 
 class MapsetAccess(wx.Dialog):

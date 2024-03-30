@@ -10,7 +10,7 @@ Usage:
     tgis.compute_relative_time_granularity(maps)
 
 
-(C) 2012-2013 by the GRASS Development Team
+(C) 2012-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -18,6 +18,7 @@ for details.
 :authors: Soeren Gebbert
 """
 from .datetime_math import compute_datetime_delta
+from .abstract_map_dataset import AbstractMapDataset
 from functools import reduce
 from collections import OrderedDict
 import ast
@@ -109,6 +110,81 @@ def check_granularity_string(granularity, temporal_type):
 
 
 ###############################################################################
+
+
+def get_time_tuple_function(maps):
+    """Helper function to return the appropriate function to get
+        time tuple from either TGIS DB rows or AbstractDataset object
+
+    :param maps: a list of AbstractDataset objects or database rows
+    :return: A function
+
+    .. code-block:: python
+
+        >>> from grass.temporal.abstract_map_dataset import AbstractMapDataset
+        >>> maps = AbstractMapDataset()
+        >>> get_time_tuple_function(maps).__name__
+        '_get_map_time_tuple'
+
+    """
+
+    def _get_map_time_tuple(map_object):
+        """Sub-function to return time tuple
+        from AbstractDataset object"""
+        if map_object.is_time_absolute():
+            time_tuple = map_object.get_absolute_time()
+        if map_object.is_time_relative():
+            time_tuple = map_object.get_relative_time()
+        return time_tuple[0:2]
+
+    def _get_row_time_tuple(db_table_row):
+        """Sub-function to return time tuple
+        from database row"""
+        return db_table_row["start_time"], db_table_row["end_time"]
+
+    # Check if input is list of MapDataset objects or SQLite rows
+    if issubclass(maps[0].__class__, AbstractMapDataset):
+        return _get_map_time_tuple
+    else:
+        return _get_row_time_tuple
+
+
+def _is_after(start, start1, end1):
+    """Helper function that checks if start timestamp is
+    temporally after the start1 and end1, where start1 and end1
+    represent a temporal extent.
+
+    :param start: datetime object to check if it is after start1 and end1
+    :param start1: datetime object for comparison
+    :param end1: datetime object (>= start1) or None for comparison
+    :return: bool
+
+    .. code-block:: python
+
+        >>> from datetime import datetime
+        >>> start = datetime(2024, 1, 1)
+        >>> start1 = datetime(2023, 12, 12)
+        >>> end1 = None
+        >>> _is_after(start, start1, end1)
+        True
+
+        >>> start = datetime(2023, 12, 14)
+        >>> start1 = datetime(2023, 12, 12)
+        >>> end1 = datetime(2023, 12, 24)
+        >>> _is_after(start, start1, end1)
+        False
+
+    """
+    if end1 is None:
+        if start > start1:
+            return True
+        else:
+            return False
+
+    if start > end1:
+        return True
+    else:
+        return False
 
 
 def compute_relative_time_granularity(maps):
@@ -221,39 +297,42 @@ def compute_relative_time_granularity(maps):
 
     """
 
+    if not maps:
+        return None
+
+    get_time_tuple = get_time_tuple_function(maps)
+
     # The interval time must be scaled to days resolution
     granularity = None
-    delta = []
+    delta = set()
+    previous_start, previous_end = get_time_tuple(maps[0])
     # First we compute the timedelta of the intervals
-    for map in maps:
-        start, end = map.get_temporal_extent_as_tuple()
+    for stds_map in maps:
+        start, end = get_time_tuple(stds_map)
         if (start == 0 or start) and end:
             t = abs(end - start)
-            delta.append(int(t))
+            delta.add(int(t))
 
-    # Compute the timedelta of the gaps
-    for i in range(len(maps)):
-        if i < len(maps) - 1:
-            relation = maps[i + 1].temporal_relation(maps[i])
-            if relation == "after":
-                start1, end1 = maps[i].get_temporal_extent_as_tuple()
-                start2, end2 = maps[i + 1].get_temporal_extent_as_tuple()
-                # Gaps are between intervals, intervals and
-                # points, points and points
-                if end1 and start2:
-                    t = abs(end1 - start2)
-                    delta.append(int(t))
-                if not end1 and start2:
-                    t = abs(start1 - start2)
-                    delta.append(int(t))
+        # Compute the timedelta of the gaps
+        if _is_after(start, previous_start, previous_end):
+            # Gaps are between intervals, intervals and
+            # points, points and points
+            # start time is required in TGIS and expected to be present
+            if previous_end:
+                # Gap between previous end and current start
+                t = abs(start - previous_end)
+                delta.add(int(t))
+            else:
+                # Gap between previous start and current start
+                t = abs(start - previous_start)
+                delta.add(int(t))
+        previous_start, previous_end = start, end
 
-    delta.sort()
-    ulist = list(set(delta))
-    if len(ulist) > 1:
+    if len(delta) > 1:
         # Find greatest common divisor
-        granularity = gcd_list(ulist)
-    elif len(ulist) == 1:
-        granularity = ulist[0]
+        granularity = gcd_list(delta)
+    elif len(delta) == 1:
+        granularity = delta.pop()
     else:
         granularity = 0
 
@@ -273,7 +352,7 @@ def compute_absolute_time_granularity(maps):
     The computed granularity is returned as number of seconds or minutes
     or hours or days or months or years.
 
-    :param maps: a ordered by start_time list of map objects
+    :param maps: a ordered by start_time list of map objects or database rows
     :return: The temporal topology as string "integer unit"
 
     .. code-block:: python
@@ -344,164 +423,108 @@ def compute_absolute_time_granularity(maps):
 
     """
 
-    has_seconds = False
-    has_minutes = False
-    has_hours = False
-    has_days = False
-    has_months = False
-    has_years = False
+    # Create a granularity dict with time units of increasing length
+    # that covers all possible keys in the result of compute_datetime_delta
+    # The order of the keys is important so that loops over the dictionary
+    # can be aborted as soon as a non-zero value is encountered
+    granularity_units = {
+        "second": set(),
+        "minute": set(),
+        "hour": set(),
+        "max_days": set(),
+        "day": set(),
+        "month": set(),
+        "year": set(),
+    }
 
-    use_seconds = False
-    use_minutes = False
-    use_hours = False
-    use_days = False
-    use_months = False
-    use_years = False
+    get_time_tuple = get_time_tuple_function(maps)
 
-    delta = []
-    datetime_delta = []
+    previous_start, previous_end = get_time_tuple(maps[0])
+
     # First we compute the timedelta of the intervals
-    for map in maps:
-        start, end = map.get_temporal_extent_as_tuple()
-        if start and end:
-            delta.append(end - start)
-            datetime_delta.append(compute_datetime_delta(start, end))
-
-    # Compute the timedelta of the gaps
-    for i in range(len(maps)):
-        if i < len(maps) - 1:
-            relation = maps[i + 1].temporal_relation(maps[i])
-            if relation == "after":
-                start1, end1 = maps[i].get_temporal_extent_as_tuple()
-                start2, end2 = maps[i + 1].get_temporal_extent_as_tuple()
-                # Gaps are between intervals, intervals and
-                # points, points and points
-                if end1 and start2:
-                    delta.append(end1 - start2)
-                    datetime_delta.append(compute_datetime_delta(end1, start2))
-                if not end1 and start2:
-                    delta.append(start2 - start1)
-                    datetime_delta.append(compute_datetime_delta(start1, start2))
-    # Check what changed
-    dlist = []
-    for d in datetime_delta:
-        if "second" in d and d["second"] > 0:
-            has_seconds = True
-            # print "has second"
-        if "minute" in d and d["minute"] > 0:
-            has_minutes = True
-            # print "has minute"
-        if "hour" in d and d["hour"] > 0:
-            has_hours = True
-            # print "has hour"
-        if "day" in d and d["day"] > 0:
-            has_days = True
-            # print "has day"
-        if "month" in d and d["month"] > 0:
-            has_months = True
-            # print "has month"
-        if "year" in d and d["year"] > 0:
-            has_years = True
-            # print "has year"
+    for stds_map in maps:
+        start, end = get_time_tuple(stds_map)
+        # start time is required in TGIS and expected to be present
+        if end:
+            map_datetime_delta = compute_datetime_delta(start, end)
+            for time_unit in granularity_units:
+                if (
+                    time_unit in map_datetime_delta
+                    and map_datetime_delta[time_unit] > 0
+                ):
+                    granularity_units[time_unit].add(map_datetime_delta[time_unit])
+                    if time_unit != "max_days":
+                        break
+        # Compute the timedelta of the gaps
+        if _is_after(start, previous_start, previous_end):
+            # Gaps are between intervals, intervals and
+            # points, points and points
+            # start time is required in TGIS and expected to be present
+            if previous_end:
+                gap_datetime_delta = compute_datetime_delta(previous_end, start)
+            else:
+                gap_datetime_delta = compute_datetime_delta(previous_start, start)
+            # Add to the set of the smallest granularity in the granularity_units dict
+            for time_unit in granularity_units:
+                if (
+                    time_unit in gap_datetime_delta
+                    and gap_datetime_delta[time_unit] > 0
+                ):
+                    granularity_units[time_unit].add(gap_datetime_delta[time_unit])
+                    if time_unit != "max_days":
+                        break
+        # Keep the temporal extent to compare to the following/next map
+        previous_start, previous_end = start, end
 
     # Create a list with a single time unit only
-    if has_seconds:
-        for d in datetime_delta:
-            if "second" in d and d["second"] > 0:
-                dlist.append(d["second"])
-            elif "minute" in d and d["minute"] > 0:
-                dlist.append(d["minute"] * 60)
-            elif "hour" in d and d["hour"] > 0:
-                dlist.append(d["hour"] * 3600)
-            elif "day" in d and d["day"] > 0:
-                dlist.append(d["day"] * 24 * 3600)
-            else:
-                dlist.append(d["max_days"] * 24 * 3600)
-        use_seconds = True
-    elif has_minutes:
-        for d in datetime_delta:
-            if "minute" in d and d["minute"] > 0:
-                dlist.append(d["minute"])
-            elif "hour" in d and d["hour"] > 0:
-                dlist.append(d["hour"] * 60)
-            elif "day" in d:
-                dlist.append(d["day"] * 24 * 60)
-            else:
-                dlist.append(d["max_days"] * 24 * 60)
-        use_minutes = True
-    elif has_hours:
-        for d in datetime_delta:
-            if "hour" in d and d["hour"] > 0:
-                dlist.append(d["hour"])
-            elif "day" in d and d["day"] > 0:
-                dlist.append(d["day"] * 24)
-            else:
-                dlist.append(d["max_days"] * 24)
-        use_hours = True
-    elif has_days:
-        for d in datetime_delta:
-            if "day" in d and d["day"] > 0:
-                dlist.append(d["day"])
-            else:
-                dlist.append(d["max_days"])
-        use_days = True
-    elif has_months:
-        for d in datetime_delta:
-            if "month" in d and d["month"] > 0:
-                dlist.append(d["month"])
-            elif "year" in d and d["year"] > 0:
-                dlist.append(d["year"] * 12)
-        use_months = True
-    elif has_years:
-        for d in datetime_delta:
-            if "year" in d:
-                dlist.append(d["year"])
-        use_years = True
+    dlist = set()
+    assigned_time_unit = None
+    time_unit_multipliers = {
+        "second": {"minute": 60, "hour": 3600, "day": 24 * 3600, "max_days": 24 * 3600},
+        "minute": {"hour": 60, "day": 24 * 60, "max_days": 24 * 60},
+        "hour": {"day": 24, "max_days": 24},
+        "day": {"max_days": 1},
+        "month": {"year": 12},
+    }
 
-    dlist.sort()
-    ulist = list(set(dlist))
+    for time_unit, granularity_set in granularity_units.items():
+        # The smallest granularity unit is used so as soon as a non-zero
+        # value / set is encountered, the loop can be aborted
+        if granularity_set:
+            # Skip max_days
+            if time_unit == "max_days":
+                continue
+            assigned_time_unit = time_unit
+            break
 
-    if len(ulist) == 0:
+    if assigned_time_unit is None:
         return None
 
-    if len(ulist) > 1:
+    dlist.update(granularity_units[assigned_time_unit])
+    if assigned_time_unit in time_unit_multipliers:
+        for unit, unit_factor in time_unit_multipliers[assigned_time_unit].items():
+            if granularity_units[unit]:
+                dlist.update(
+                    {time_value * unit_factor for time_value in granularity_units[unit]}
+                )
+
+    if not dlist:
+        return None
+
+    if len(dlist) > 1:
         # Find greatest common divisor
-        granularity = gcd_list(ulist)
+        granularity = gcd_list(dlist)
     else:
-        granularity = ulist[0]
+        granularity = dlist.pop()
 
-    if use_seconds:
-        if granularity == 1:
-            return "%i second" % granularity
-        else:
-            return "%i seconds" % granularity
-    elif use_minutes:
-        if granularity == 1:
-            return "%i minute" % granularity
-        else:
-            return "%i minutes" % granularity
-    elif use_hours:
-        if granularity == 1:
-            return "%i hour" % granularity
-        else:
-            return "%i hours" % granularity
-    elif use_days:
-        if granularity == 1:
-            return "%i day" % granularity
-        else:
-            return "%i days" % granularity
-    elif use_months:
-        if granularity == 1:
-            return "%i month" % granularity
-        else:
-            return "%i months" % granularity
-    elif use_years:
-        if granularity == 1:
-            return "%i year" % granularity
-        else:
-            return "%i years" % granularity
+    if granularity is None:
+        return None
 
-    return None
+    plural = ""
+    if granularity > 1:
+        plural = "s"
+
+    return f"{granularity} {assigned_time_unit}{plural}"
 
 
 ###############################################################################
@@ -939,9 +962,9 @@ def compute_common_absolute_time_granularity_simple(gran_list):
         gran = "second"
         if num > 1:
             gran += "s"
-        return "%i %s" % (num, gran)
+        return f"{num} {gran}"
 
-    elif has_minutes:
+    if has_minutes:
         if has_hours:
             hours.sort()
             minutes.append(hours[0] * 60)
@@ -962,9 +985,9 @@ def compute_common_absolute_time_granularity_simple(gran_list):
         gran = "minute"
         if num > 1:
             gran += "s"
-        return "%i %s" % (num, gran)
+        return f"{num} {gran}"
 
-    elif has_hours:
+    if has_hours:
         if has_days:
             days.sort()
             hours.append(days[0] * 24)
@@ -982,9 +1005,9 @@ def compute_common_absolute_time_granularity_simple(gran_list):
         gran = "hour"
         if num > 1:
             gran += "s"
-        return "%i %s" % (num, gran)
+        return f"{num} {gran}"
 
-    elif has_days:
+    if has_days:
         if has_months:
             months.sort()
             days.append(months[0] * 28)
@@ -999,9 +1022,9 @@ def compute_common_absolute_time_granularity_simple(gran_list):
         gran = "day"
         if num > 1:
             gran += "s"
-        return "%i %s" % (num, gran)
+        return f"{num} {gran}"
 
-    elif has_months:
+    if has_months:
         if has_years:
             years.sort()
             months.append(years[0] * 12)
@@ -1009,14 +1032,14 @@ def compute_common_absolute_time_granularity_simple(gran_list):
         gran = "month"
         if num > 1:
             gran += "s"
-        return "%i %s" % (num, gran)
+        return f"{num} {gran}"
 
-    elif has_years:
+    if has_years:
         num = gcd_list(years)
         gran = "year"
         if num > 1:
             gran += "s"
-        return "%i %s" % (num, gran)
+        return f"{num} {gran}"
 
 
 #######################################################################
@@ -1055,8 +1078,8 @@ def gran_singular_unit(gran):
             print(
                 _(
                     "Output granularity seems not to be valid. Please use "
-                    "one of the following values : {gr}".format(gr=lists)
-                )
+                    "one of the following values : {gr}"
+                ).format(gr=lists)
             )
             return False
     else:
@@ -1094,14 +1117,14 @@ def gran_plural_unit(gran):
         if unit in PLURAL_GRAN:
             return unit
         elif unit in SINGULAR_GRAN:
-            return "{gr}s".format(gr=unit)
+            return f"{unit}s"
         else:
-            lists = "{gr}".format(gr=SUPPORTED_GRAN).replace("[", "").replace("]", "")
+            lists = ", ".join(SUPPORTED_GRAN)
             print(
                 _(
                     "Output granularity seems not to be valid. Please use "
-                    "one of the following values : {gr}".format(gr=lists)
-                )
+                    "one of the following values : {gr}"
+                ).format(gr=lists)
             )
     else:
         print(_("Invalid absolute granularity"))
@@ -1156,9 +1179,9 @@ def gran_to_gran(from_gran, to_gran="days", shell=False):
             return output
         else:
             if output == 1:
-                return "{val} {unit}".format(val=output, unit=tounit)
+                return f"{output} {tounit}"
             else:
-                return "{val} {unit}s".format(val=output, unit=tounit)
+                return f"{output} {tounit}s"
 
     # TODO check the leap second
     if check_granularity_string(from_gran, "absolute"):
