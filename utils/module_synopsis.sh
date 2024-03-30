@@ -54,7 +54,7 @@ g.message "Generating module synopsis (writing to \$GISBASE/etc/) ..."
 SYNOP="$GISBASE/etc/module_synopsis.txt"
 
 OLDDIR="$(pwd)"
-cd "$GISBASE"
+cd "$GISBASE" || exit 1
 
 ### generate menu hierarchy
 
@@ -97,7 +97,7 @@ find_menu_hierarchy()
 
 ### execute the loop for all modules
 for DIR in bin scripts ; do
-  cd $DIR
+  cd $DIR || exit 1
 
   for MODULE in ?\.* db.* r3.* ; do
     unset label
@@ -482,7 +482,7 @@ done
 
 TMPDIR="$(dirname "$TMP")"
 cp "$OLDDIR/../man/grasslogo_vector.pdf" "$TMPDIR"
-cd "$TMPDIR"
+cd "$TMPDIR" || exit 1
 
 #once working nicely make it quieter
 #pdflatex --interaction batchmode "$GISBASE/etc/module_synopsis.tex"
