@@ -95,9 +95,9 @@ fi
 rm -rf "$tmpdir"
 mkdir -m 711 "$tmpdir" || exit 1
 
-cd $builddir
+cd $builddir || exit 1
 
-( cd dist.*
+( cd dist.* || exit 1
 
 #LD_LIBRARY_PATH=`pwd`/lib
 #export LD_LIBRARY_PATH
