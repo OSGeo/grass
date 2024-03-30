@@ -86,10 +86,10 @@ tmpdir=/tmp/sql-grass
 dbname=grass
 
 if [ -n "$1" ]; then
-	builddir="$1"
+    builddir="$1"
 else
-	echo "Usage: del_tree2sql.sh <source directory>" >&2
-	exit 1
+    echo "Usage: del_tree2sql.sh <source directory>" >&2
+    exit 1
 fi
 
 rm -rf "$tmpdir"
@@ -97,85 +97,86 @@ mkdir -m 711 "$tmpdir" || exit 1
 
 cd "$builddir" || exit 1
 
-( cd dist.* || exit 1
+(
+    cd dist.* || exit 1
 
-#LD_LIBRARY_PATH=`pwd`/lib
-#export LD_LIBRARY_PATH
+    #LD_LIBRARY_PATH=`pwd`/lib
+    #export LD_LIBRARY_PATH
 
-find . -type f -perm /a+x \! -name '*.so.*' \
-	| while read -r file ; do ldd "$file" | sed 's!^!'"$file"'!' ; done 2>/dev/null \
-	| sed -e 's/^\.\///' -e 's/ (0x.*)$//' -e 's/ => \(.*\)$/	\1/' -e 's/ => .*$//' \
-	| grep -F -v 'not a dynamic executable' \
-	| awk -vOFS='\t' '{print $1,$2,$3 ? $3 : $2}' \
-	> "$tmpdir/ldd.lst"
+    find . -type f -perm /a+x \! -name '*.so.*' \
+        | while read -r file; do ldd "$file" | sed 's!^!'"$file"'!'; done 2> /dev/null \
+        | sed -e 's/^\.\///' -e 's/ (0x.*)$//' -e 's/ => \(.*\)$/	\1/' -e 's/ => .*$//' \
+        | grep -F -v 'not a dynamic executable' \
+        | awk -vOFS='\t' '{print $1,$2,$3 ? $3 : $2}' \
+            > "$tmpdir/ldd.lst"
 
-find . -type f -perm /a+x \! -name '*.so' -print0 \
-	| xargs -0 nm -AD 2>/dev/null \
-	| grep -E ': {8}{1,2} U ' \
-	| sed -e 's/:/ /g' -e 's/\.\///' \
-	| awk -vOFS='\t' '{print $1,$3}' \
-	> "$tmpdir/prog_imp.lst"
+    find . -type f -perm /a+x \! -name '*.so' -print0 \
+        | xargs -0 nm -AD 2> /dev/null \
+        | grep -E ': {8}{1,2} U ' \
+        | sed -e 's/:/ /g' -e 's/\.\///' \
+        | awk -vOFS='\t' '{print $1,$3}' \
+            > "$tmpdir/prog_imp.lst"
 
-find . -type f -perm /a+x \! -name '*.so' -print0 \
-	| xargs -0 nm -AD 2>/dev/null \
-	| grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
-	| sed -e 's/:/ /g' -e 's/\.\///' \
-	| awk -vOFS='\t' '{print $1,$4}' \
-	> "$tmpdir/prog_exp.lst"
+    find . -type f -perm /a+x \! -name '*.so' -print0 \
+        | xargs -0 nm -AD 2> /dev/null \
+        | grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
+        | sed -e 's/:/ /g' -e 's/\.\///' \
+        | awk -vOFS='\t' '{print $1,$4}' \
+            > "$tmpdir/prog_exp.lst"
 
 )
 
 find ./* -type f -name 'lib?*.a' -print0 \
-	| xargs -0 nm -A \
-	| grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
-	| sed 's/:/ /g' \
-	| awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$2,$5}' \
-	> "$tmpdir/stlib_exp.lst"
+    | xargs -0 nm -A \
+    | grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
+    | sed 's/:/ /g' \
+    | awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$2,$5}' \
+        > "$tmpdir/stlib_exp.lst"
 
 find ./* -type f -name 'lib?*.so' -print0 \
-	| xargs -0 nm -AD \
-	| grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
-	| sed 's/:/ /g' \
-	| awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$4}' \
-	> "$tmpdir/shlib_exp.lst"
+    | xargs -0 nm -AD \
+    | grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
+    | sed 's/:/ /g' \
+    | awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$4}' \
+        > "$tmpdir/shlib_exp.lst"
 
 find ./* -type f -name '*.o' -print0 \
-	| xargs -0 nm -A \
-	| grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
-	| sed 's/:/ /g' \
-	| awk -vOFS='\t' '{print $1,$4}' \
-	> "$tmpdir/obj_exp.lst"
+    | xargs -0 nm -A \
+    | grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
+    | sed 's/:/ /g' \
+    | awk -vOFS='\t' '{print $1,$4}' \
+        > "$tmpdir/obj_exp.lst"
 
 find ./* -type f -name 'lib?*.a' -print0 \
-	| xargs -0 nm -A \
-	| grep -E ': {8}{1,2} U ' \
-	| sed 's/:/ /g' \
-	| awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$2,$4}' \
-	> "$tmpdir/stlib_imp.lst"
+    | xargs -0 nm -A \
+    | grep -E ': {8}{1,2} U ' \
+    | sed 's/:/ /g' \
+    | awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$2,$4}' \
+        > "$tmpdir/stlib_imp.lst"
 
 find ./* -type f -name 'lib?*.so' -print0 \
-	| xargs -0 nm -AD \
-	| grep -E ': {8}{1,2} U ' \
-	| sed 's/:/ /g' \
-	| awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$3}' \
-	> "$tmpdir/shlib_imp.lst"
+    | xargs -0 nm -AD \
+    | grep -E ': {8}{1,2} U ' \
+    | sed 's/:/ /g' \
+    | awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$3}' \
+        > "$tmpdir/shlib_imp.lst"
 
 find ./* -type f -name '*.o' -print0 \
-	| xargs -0 nm -A \
-	| grep -E ': {8}{1,2} U ' \
-	| sed 's/:/ /g' \
-	| awk -vOFS='\t' '{print $1,$3}' \
-	> "$tmpdir/obj_imp.lst"
+    | xargs -0 nm -A \
+    | grep -E ': {8}{1,2} U ' \
+    | sed 's/:/ /g' \
+    | awk -vOFS='\t' '{print $1,$3}' \
+        > "$tmpdir/obj_imp.lst"
 
 mapfile -t libs < <(awk '{print $3}' "$tmpdir/ldd.lst" | uniq | sort | uniq)
 
 nm -AD "${libs[@]}" \
-	| grep -E ':[0-9a-f]{8}{1,2} [TWDRC] ' \
-	| sed 's/:/ /g' \
-	| awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$4}' \
-	> "$tmpdir/libs.lst"
+    | grep -E ':[0-9a-f]{8}{1,2} [TWDRC] ' \
+    | sed 's/:/ /g' \
+    | awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$4}' \
+        > "$tmpdir/libs.lst"
 
-cat > "$tmpdir/ansi.lst" <<EOF
+cat > "$tmpdir/ansi.lst" << EOF
 abort
 asctime
 atexit
@@ -281,7 +282,7 @@ EOF
 dropdb --if-exists "$dbname"
 createdb "$dbname"
 
-psql -n -q -d "$dbname" <<EOF
+psql -n -q -d "$dbname" << EOF
 
 -- ----------------------------------------------------------------------
 
