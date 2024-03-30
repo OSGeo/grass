@@ -278,7 +278,7 @@ fsetpos64
 tmpfile64
 EOF
 
-dropdb "$dbname"
+dropdb --if-exists "$dbname"
 createdb "$dbname"
 
 psql -n -q -d "$dbname" <<EOF
