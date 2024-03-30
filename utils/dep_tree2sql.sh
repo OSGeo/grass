@@ -109,15 +109,15 @@ find . -type f -perm +111 \! -name '*.so.*' \
 	| awk -vOFS='\t' '{print $1,$2,$3 ? $3 : $2}' \
 	> "$tmpdir/ldd.lst"
 
-find . -type f -perm +111 \! -name '*.so' \
-	| xargs nm -AD 2>/dev/null \
+find . -type f -perm +111 \! -name '*.so' -print0 \
+	| xargs -0 nm -AD 2>/dev/null \
 	| grep -E ': {8}{1,2} U ' \
 	| sed -e 's/:/ /g' -e 's/\.\///' \
 	| awk -vOFS='\t' '{print $1,$3}' \
 	> "$tmpdir/prog_imp.lst"
 
-find . -type f -perm +111 \! -name '*.so' \
-	| xargs nm -AD 2>/dev/null \
+find . -type f -perm +111 \! -name '*.so' -print0 \
+	| xargs -0 nm -AD 2>/dev/null \
 	| grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
 	| sed -e 's/:/ /g' -e 's/\.\///' \
 	| awk -vOFS='\t' '{print $1,$4}' \
@@ -125,43 +125,43 @@ find . -type f -perm +111 \! -name '*.so' \
 
 )
 
-find * -type f -name 'lib?*.a' \
-	| xargs nm -A \
+find * -type f -name 'lib?*.a' -print0 \
+	| xargs -0 nm -A \
 	| grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
 	| sed 's/:/ /g' \
 	| awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$2,$5}' \
 	> "$tmpdir/stlib_exp.lst"
 
-find * -type f -name 'lib?*.so' \
-	| xargs nm -AD \
+find * -type f -name 'lib?*.so' -print0 \
+	| xargs -0 nm -AD \
 	| grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
 	| sed 's/:/ /g' \
 	| awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$4}' \
 	> "$tmpdir/shlib_exp.lst"
 
-find * -type f -name '*.o' \
-	| xargs nm -A \
+find * -type f -name '*.o' -print0 \
+	| xargs -0 nm -A \
 	| grep -E ':[0-9a-f]{8}{1,2} [BCDGRSTW] ' \
 	| sed 's/:/ /g' \
 	| awk -vOFS='\t' '{print $1,$4}' \
 	> "$tmpdir/obj_exp.lst"
 
-find * -type f -name 'lib?*.a' \
-	| xargs nm -A \
+find * -type f -name 'lib?*.a' -print0 \
+	| xargs -0 nm -A \
 	| grep -E ': {8}{1,2} U ' \
 	| sed 's/:/ /g' \
 	| awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$2,$4}' \
 	> "$tmpdir/stlib_imp.lst"
 
-find * -type f -name 'lib?*.so' \
-	| xargs nm -AD \
+find * -type f -name 'lib?*.so' -print0 \
+	| xargs -0 nm -AD \
 	| grep -E ': {8}{1,2} U ' \
 	| sed 's/:/ /g' \
 	| awk -vOFS='\t' '{print gensub("^[^ ]*/","",1,$1),$3}' \
 	> "$tmpdir/shlib_imp.lst"
 
-find * -type f -name '*.o' \
-	| xargs nm -A \
+find * -type f -name '*.o' -print0 \
+	| xargs -0 nm -A \
 	| grep -E ': {8}{1,2} U ' \
 	| sed 's/:/ /g' \
 	| awk -vOFS='\t' '{print $1,$3}' \
