@@ -47,6 +47,7 @@ if ! TMP="$(g.tempfile pid=$$)" || [ -z "$TMP" ]; then
     exit 1
 fi
 
+# shellcheck disable=SC2016 # Expressions don't expand in single quotes.
 g.message 'Generating module synopsis (writing to $GISBASE/etc/) ...'
 
 SYNOP="$GISBASE/etc/module_synopsis.txt"
@@ -186,6 +187,7 @@ cp "$SYNOP" "${TMP}.txt"
 ####### create HTML source #######
 # poor cousin to full_index.html from build_html_index.sh
 # todo $MODULE.html links
+# shellcheck disable=SC2016 # Expressions don't expand in single quotes.
 g.message 'Generating HTML (writing to $GISBASE/docs/html/) ...'
 
 #### write header
@@ -336,6 +338,7 @@ EOF
 \mv "${TMP}.html" "$GISBASE/docs/html/module_synopsis.html"
 
 ####### create LaTeX source #######
+# shellcheck disable=SC2016 # Expressions don't expand in single quotes.
 g.message 'Generating LaTeX source (writing to $GISBASE/etc/) ...'
 
 #### write header
@@ -480,6 +483,7 @@ EOF
 #     fix: *.univar.sh, r.surf.idw2, v.to.rast3, r.out.ppm3, others..
 #####
 
+# shellcheck disable=SC2016 # Expressions don't expand in single quotes.
 g.message 'Converting LaTeX to PDF (writing to $GISBASE/docs/pdf/) ...'
 
 # shellcheck disable=SC2043
