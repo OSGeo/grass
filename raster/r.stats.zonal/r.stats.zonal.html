@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.stats.zonal</em> is a tool to analyse exploratory statistics of a 
+<em>r.stats.zonal</em> is a tool to analyse exploratory statistics of a
 floating-point "cover layer" according to how it intersects with objects
 in a "base layer". A variety of standard statistical measures are possible.
 This type of analysis is often called <em>zonal statistics</em>.
@@ -18,9 +18,9 @@ quantiles. For this, see <em><a href="r.stats.quantile.html">r.stats.quantile</a
 
 <h2>EXAMPLE</h2>
 
-In this example, the raster polygon map <tt>zipcodes</tt> in the North 
+In this example, the raster polygon map <tt>zipcodes</tt> in the North
 Carolina sample dataset is used to calculate zonal raster statistics using
-the <tt>elevation</tt> raster map: 
+the <tt>elevation</tt> raster map:
 
 <div class="code"><pre>
 g.region raster=zipcodes -p
@@ -33,6 +33,20 @@ r.colors zipcodes_elev_count color=gyr -g
 r.stats.zonal base=zipcodes cover=elevation method=average output=zipcodes_elev_avg
 r.colors zipcodes_elev_avg color=elevation -g
 </pre></div>
+
+<p>
+<!-- generated with graphics_for_description.ipynb -->
+<div align="center" style="margin: 10px">
+     <a href="r_stats.zonal.png">
+         <img src="r_stats.zonal.png" alt="Zonal (average) elevation statistics" border="0">
+     </a>
+     <br><br>
+     <i>Figure: ZIP code map on the left shows ZIP code areas,
+     elevation map the respective values per pixel,
+     zonal statistics map on the right shows the average elevation per zone
+     (all maps: spatial subset).</i>
+</div>
+
 
 <h2>SEE ALSO</h2>
 
@@ -60,9 +74,5 @@ r.colors zipcodes_elev_avg color=elevation -g
 </ul>
 
 <h2>AUTHOR</h2>
-Glynn Clements
 
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
+Glynn Clements

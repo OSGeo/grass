@@ -6,9 +6,9 @@
 #include <grass/raster3d.h>
 
 /*!
- * \brief 
+ * \brief
  *
- *  Writes the cell-values of <em>map</em> in ascii format to file 
+ *  Writes the cell-values of <em>map</em> in ascii format to file
  *  <em>fname</em>. The values are organized by horizontal slices.
  *
  *  \param map
@@ -29,7 +29,7 @@ void Rast3d_write_ascii(void *map, const char *fname)
     typeIntern = Rast3d_tile_type_map(map);
 
     d1p = &d1;
-    f1p = (FCELL *) &d1;
+    f1p = (FCELL *)&d1;
 
     if (fname == NULL)
         fp = stdout;

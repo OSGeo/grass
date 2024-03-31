@@ -1,6 +1,6 @@
 all = [
-    'controller',
-    'toolbars',
-    'dialogs',
-    'g.gui.rdigit',
+    "controller",
+    "toolbars",
+    "dialogs",
+    "g.gui.rdigit",
 ]

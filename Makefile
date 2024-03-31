@@ -8,8 +8,8 @@
 #   	    	Radim Blazek - Italy - blazek AT itc.it
 # PURPOSE:  	It provides the commands necessary to compile, install,
 #   	    	clean, and uninstall GRASS
-#   	    	See INSTALL file for explanations.
-# COPYRIGHT:    (C) 2002-2012 by the GRASS Development Team
+#   	    	See INSTALL.md file for usage.
+# COPYRIGHT:    (C) 2002-2024 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #   	    	License (>=v2). Read the file COPYING that comes with GRASS
@@ -26,9 +26,10 @@ DATE := $(shell date '+%d_%m_%Y')
 
 DIRS = \
 	demolocation \
-	tools \
+	utils \
 	include \
 	lib \
+	python \
 	db \
 	display \
 	general \
@@ -50,7 +51,7 @@ DIRS = \
 
 SUBDIRS = $(DIRS)
 
-FILES = AUTHORS CHANGES CITING COPYING GPL.TXT INSTALL REQUIREMENTS.html contributors.csv contributors_extra.csv translators.csv
+FILES = AUTHORS CHANGES CITING COPYING GPL.TXT INSTALL.md REQUIREMENTS.md contributors.csv contributors_extra.csv translators.csv
 FILES_DST = $(patsubst %,$(ARCH_DISTDIR)/%,$(FILES))
 
 default:
@@ -90,6 +91,7 @@ $(ARCH_DISTDIR)/%: %
 	$(INSTALL_DATA) $< $@
 
 LIBDIRS = \
+	lib/external/parson \
 	lib/external/shapelib \
 	lib/datetime \
 	lib/gis \
@@ -97,7 +99,7 @@ LIBDIRS = \
 	lib/db \
 	lib/vector \
 	db/drivers \
-	lib/python
+	python
 
 # Compile libraries only
 libs:
@@ -105,7 +107,7 @@ libs:
 	$(MAKE) subdirs SUBDIRS=$(LIBDIRS)
 	$(MAKE) $(FILES_DST)
 
-cleandistdirs: 
+cleandistdirs:
 	-rm -rf $(ARCH_DISTDIR)
 	-rm -rf $(ARCH_BINDIR)
 
@@ -121,7 +123,7 @@ libsclean: cleandistdirs
 distclean: clean
 	-rm -f config.cache config.log config.status config.status.$(ARCH) 2>/dev/null
 	-rm -f ChangeLog ChangeLog.bak $(ERRORLOG) grass.pc
-	-rm -f include/config.h include/version.h
+	-rm -f include/grass/config.h include/grass/version.h
 	-rm -f include/Make/Platform.make include/Make/Doxyfile_arch_html include/Make/Doxyfile_arch_latex 2>/dev/null
 
 include $(MODULE_TOPDIR)/include/Make/Install.make

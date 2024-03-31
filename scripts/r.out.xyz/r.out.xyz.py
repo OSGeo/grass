@@ -16,27 +16,27 @@
 #
 #############################################################################
 
-#%module
-#% description: Exports a raster map to a text file as x,y,z values based on cell centers.
-#% keyword: raster
-#% keyword: export
-#% keyword: output
-#% keyword: ASCII
-#% keyword: conversion
-#%end
-#%option G_OPT_R_INPUTS
-#% multiple: yes
-#%end
-#%option G_OPT_F_OUTPUT
-#% description: Name for output file (if omitted or "-" output to stdout)
-#% required: no
-#%end
-#%option G_OPT_F_SEP
-#%end
-#%flag
-#% key: i
-#% description: Include no data values
-#%end
+# %module
+# % description: Exports a raster map to a text file as x,y,z values based on cell centers.
+# % keyword: raster
+# % keyword: export
+# % keyword: output
+# % keyword: ASCII
+# % keyword: conversion
+# %end
+# %option G_OPT_R_INPUTS
+# % multiple: yes
+# %end
+# %option G_OPT_F_OUTPUT
+# % description: Name for output file (if omitted or "-" output to stdout)
+# % required: no
+# %end
+# %option G_OPT_F_SEP
+# %end
+# %flag
+# % key: i
+# % description: Include no data values
+# %end
 
 import sys
 from grass.script import core as grass
@@ -45,16 +45,16 @@ from grass.exceptions import CalledModuleError
 
 def main():
     # if no output filename, output to stdout
-    output = options['output']
-    donodata = flags['i']
+    output = options["output"]
+    donodata = flags["i"]
 
     if donodata:
-        statsflags="1g"
+        statsflags = "1g"
     else:
-        statsflags="1gn"
-    parameters = dict(flags=statsflags,
-                      input=options['input'],
-                      separator=options['separator'])
+        statsflags = "1gn"
+    parameters = dict(
+        flags=statsflags, input=options["input"], separator=options["separator"]
+    )
     if output:
         parameters.update(output=output)
 
@@ -64,6 +64,7 @@ def main():
     except CalledModuleError:
         ret = 1
     sys.exit(ret)
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

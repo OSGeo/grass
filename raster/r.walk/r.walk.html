@@ -8,11 +8,11 @@ map layer whose cell values represent friction cost.
 <p>
 <em>r.walk</em> outputs 1) a raster map showing the lowest
 cumulative cost (time) of moving between each cell and the user-specified
-starting points and 2) a second raster map showing the movement 
-direction to the next cell on the path back to the start point (see 
-<a href="#move">Movement Direction</a>). It uses an input elevation 
-raster map whose cell category values represent elevation, 
-combined with a second input raster map whose cell values 
+starting points and 2) a second raster map showing the movement
+direction to the next cell on the path back to the start point (see
+<a href="#move">Movement Direction</a>). It uses an input elevation
+raster map whose cell category values represent elevation,
+combined with a second input raster map whose cell values
 represent friction costs.
 
 <p>
@@ -64,6 +64,9 @@ standard conditions.
 
 <p>The <b>friction</b> cost parameter represents a time penalty in seconds
 of additional walking time to cross 1 meter distance.
+Friction cost can be any floating point value &ge; 0.
+A friction map is a required parameter; if no friction costs are desired,
+a friction map should be a raster in which all cells have a value of 0.
 <p>The <b>lambda</b> parameter is a dimensionless scaling factor of the friction cost:
 
 <div class="code"><pre>
@@ -79,7 +82,7 @@ considered for cumulative cost updates. With the "knight's move"
 option, the neighbours marked with a K are also considered.
 
 <div class="code"><pre>
-  K   K 
+  K   K
 K x x x K
   x O x
 K x x x K
@@ -92,18 +95,19 @@ algorithm, that find an optimum solution (for more details see
 
 <a name="move"></a>
 <h2>Movement Direction</h2>
+
 <p>
 The movement direction surface is created to record the sequence of
-movements that created the cost accumulation surface. This movement 
-direction surface can be used by <em><a href="r.path.html">r.path</a></em> 
-to recover a path from an end point back to the start point. 
-The direction of each cell points towards the next cell. 
+movements that created the cost accumulation surface. This movement
+direction surface can be used by <em><a href="r.path.html">r.path</a></em>
+to recover a path from an end point back to the start point.
+The direction of each cell points towards the next cell.
 The directions are recorded as degrees CCW from East:
 
 <div class="code"><pre>
-       112.5      67.5         i.e. a cell with the value 135 
+       112.5      67.5         i.e. a cell with the value 135
 157.5  135   90   45   22.5    means the next cell is to the north-west
-       180   x   360           
+       180   x   360
 202.5  225  270  315  337.5
        247.5     292.5
 </pre></div>
@@ -111,23 +115,24 @@ The directions are recorded as degrees CCW from East:
 <p>
 Once <em>r.walk</em> computes the cumulative cost map as a linear
 combination of friction cost (from friction map) and the altitude and
-distance covered (from the digital elevation model), the associated 
-movement direction map can be used by <em><a href="r.path.html">r.path</a></em> 
+distance covered (from the digital elevation model), the associated
+movement direction map can be used by <em><a href="r.path.html">r.path</a></em>
 to find the minimum cost path.
 
 <p>
-<em>r.walk</em>, like most all GRASS raster programs, is also made to 
-be run on maps larger that can fit in available computer memory. As the 
-algorithm works through the dynamic list of cells it can move almost 
-randomly around the entire area. <em>r.walk</em> divides the entire 
-area into a number of pieces and swaps these pieces in and out of 
-memory (to and from disk) as needed. This provides a virtual memory 
-approach optimally designed for 2-D raster maps. The amount of memory 
-to be used by <em>r.walk</em> can be controlled with the <b>memory</b> 
-option, default is 300 MB. For systems with less memory this value will 
+<em>r.walk</em>, like most all GRASS raster programs, is also made to
+be run on maps larger that can fit in available computer memory. As the
+algorithm works through the dynamic list of cells it can move almost
+randomly around the entire area. <em>r.walk</em> divides the entire
+area into a number of pieces and swaps these pieces in and out of
+memory (to and from disk) as needed. This provides a virtual memory
+approach optimally designed for 2-D raster maps. The amount of memory
+to be used by <em>r.walk</em> can be controlled with the <b>memory</b>
+option, default is 300 MB. For systems with less memory this value will
 have to be set to a lower value.
 
 <h2>EXAMPLES</h2>
+
 We compute a map showing how far a lost person could get from the
 point where he or she was last seen
 while taking into account the topography and landcover.
@@ -149,6 +154,13 @@ r.walk -k elevation=elev_ned_30m friction=friction output=walkcost \
 # how far the person can get in certain time (1000 is in seconds)
 r.contour walkcost output=walkcost step=1000
 </pre></div>
+
+<div align="center" style="margin: 10px">
+<a href="r_walk.png">
+<img src="r_walk.png" width="600" height="600" alt="r.walk example" border="0">
+</a><br>
+<i>Figure: Walkshed over a cost surface derived from topography and landcover</i>
+</div>
 
 <h2>REFERENCES</h2>
 
@@ -174,7 +186,6 @@ r.contour walkcost output=walkcost step=1000
 <a href="r.out.ascii.html">r.out.ascii</a>
 </em>
 
-
 <h2>AUTHORS</h2>
 
 <b>Based on r.cost written by :</b><br>
@@ -196,8 +207,3 @@ Roberto Flor and Markus Neteler
 <p><b>Updated for GRASS GIS 7:</b><br>
 Markus Metz<br>
 Multiple path directions sponsored by <a href="https://www.mundialis.de">mundialis</a>
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

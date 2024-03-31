@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 ############################################################################
 #
 # MODULE:	t.vect.univar
@@ -20,66 +20,67 @@
 #
 #############################################################################
 
-#%module
-#% description: Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset
-#% keyword: temporal
-#% keyword: statistics
-#% keyword: vector
-#% keyword: time
-#%end
+# %module
+# % description: Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset
+# % keyword: temporal
+# % keyword: statistics
+# % keyword: vector
+# % keyword: time
+# %end
 
-#%option G_OPT_STVDS_INPUT
-#%end
+# %option G_OPT_STVDS_INPUT
+# %end
 
-#%option G_OPT_F_OUTPUT
-#% required: no
-#%end
+# %option G_OPT_F_OUTPUT
+# % required: no
+# %end
 
-#%option G_OPT_V_FIELD
-#%end
+# %option G_OPT_V_FIELD
+# %end
 
-#%option G_OPT_DB_COLUMN
-#% required: yes
-#%end
+# %option G_OPT_DB_COLUMN
+# % required: yes
+# %end
 
-#%option G_OPT_T_WHERE
-#% guisection: Selection
-#% key: twhere
-#%end
+# %option G_OPT_T_WHERE
+# % guisection: Selection
+# % key: twhere
+# %end
 
-#%option G_OPT_DB_WHERE
-#% guisection: Selection
-#%end
+# %option G_OPT_DB_WHERE
+# % guisection: Selection
+# %end
 
-#%option G_OPT_V_TYPE
-#% options: point,line,boundary,centroid,area
-#% multiple: no
-#% answer: point
-#%end
+# %option G_OPT_V_TYPE
+# % options: point,line,boundary,centroid,area
+# % multiple: no
+# % answer: point
+# %end
 
-#%option G_OPT_F_SEP
-#% label: Field separator character between the output columns
-#% guisection: Formatting
-#%end
+# %option G_OPT_F_SEP
+# % label: Field separator character between the output columns
+# % guisection: Formatting
+# %end
 
-#%flag
-#% key: e
-#% description: Calculate extended statistics
-#%end
+# %flag
+# % key: e
+# % description: Calculate extended statistics
+# %end
 
-#%flag
-#% key: u
-#% description: Suppress printing of column names
-#% guisection: Formatting
-#%end
+# %flag
+# % key: u
+# % description: Suppress printing of column names
+# % guisection: Formatting
+# %end
 
 import grass.script as grass
 
 
 ############################################################################
 
+
 def main():
-    #lazy imports
+    # lazy imports
     import grass.temporal as tgis
 
     # Get the options
@@ -103,7 +104,9 @@ def main():
         output = None
 
     tgis.print_vector_dataset_univar_statistics(
-        input, output, twhere, layer, type, column, where, extended, header, separator)
+        input, output, twhere, layer, type, column, where, extended, header, separator
+    )
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

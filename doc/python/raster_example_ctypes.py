@@ -11,31 +11,31 @@ cols=5`
 
 # FIXME: as an example it should make extensive use of code comments and document
 #  each and every step along the way.  (e.g. explain c_char_p().value memory pointer
-#  to string conversion for Python programmers not familar with C pointers)
+#  to string conversion for Python programmers not familiar with C pointers)
 #
 #  FIXME: explain at a basic level what ctypes is & does.
 
 import os
 import sys
 
-from grass.lib.gis    import *
+from grass.lib.gis import *
 from grass.lib.raster import *
 
 # check if GRASS is running or not
-if not os.environ.has_key("GISBASE"):
+if "GISBASE" not in os.environ:
     sys.exit("You must be in GRASS GIS to run this program")
 
 # parse command line arguments, prompt user for a raster map name if one wasn't given
 if len(sys.argv) == 2:
-  input = sys.argv[1]
+    input = sys.argv[1]
 else:
-  input = raw_input("Name of raster map? ")
+    input = input("Name of raster map? ")
 
 # initialize GRASS library
-G_gisinit('')
+G_gisinit("")
 
 # find map in search path
-mapset = G_find_raster2(input, '')
+mapset = G_find_raster2(input, "")
 if not mapset:
     sys.exit("Raster map <%s> not found" % input)
 
@@ -44,17 +44,17 @@ data_type = Rast_map_type(input, mapset)
 
 if data_type == CELL_TYPE:
     ptype = POINTER(c_int)
-    type_name = 'CELL'
+    type_name = "CELL"
 elif data_type == FCELL_TYPE:
     ptype = POINTER(c_float)
-    type_name = 'FCELL'
+    type_name = "FCELL"
 elif data_type == DCELL_TYPE:
     ptype = POINTER(c_double)
-    type_name = 'DCELL'
+    type_name = "DCELL"
 
 print("Raster map <%s> contains data type %s." % (input, type_name))
 
-in_fd   = Rast_open_old(input, mapset)
+in_fd = Rast_open_old(input, mapset)
 in_rast = Rast_allocate_buf(data_type)
 in_rast = cast(c_void_p(in_rast), ptype)
 
@@ -74,7 +74,8 @@ for row_n in range(rows):
 Rast_close(in_fd)
 G_free(in_rast)
 
+
 def check_null(value):
     if math.isnan(value):
-        return 'null'
+        return "null"
     return value

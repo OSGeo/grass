@@ -33,15 +33,15 @@ const char *G_date(void)
     char *d;
 
     if (G_is_initialized(&initialized))
-	return date;
+        return date;
 
     time(&clock);
 
     local = localtime(&clock);
     tdate = asctime(local);
     for (d = tdate; *d; d++)
-	if (*d == '\n')
-	    *d = 0;
+        if (*d == '\n')
+            *d = 0;
 
     date = G_store(tdate);
 

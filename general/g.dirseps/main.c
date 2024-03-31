@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       g.dirseps
@@ -34,77 +33,74 @@ int main(int argc, char *argv[])
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
     G_add_keyword(_("scripts"));
-    module->label =
-	_("Internal GRASS utility for converting directory separator characters.");
+    module->label = _("Internal GRASS utility for converting directory "
+                      "separator characters.");
     module->description =
-	"Converts any directory separator characters in "
-	"the input string to or from native host format, and writes the changed "
-	"path to standard output. Useful in scripts for Windows compatibility.";
+        "Converts any directory separator characters in "
+        "the input string to or from native host format, and writes the "
+        "changed "
+        "path to standard output. Useful in scripts for Windows compatibility.";
 
     tohost = G_define_flag();
     tohost->key = 'h';
-    tohost->description =
-	"Convert directory separators to native host format";
+    tohost->description = "Convert directory separators to native host format";
 
     tograss = G_define_flag();
     tograss->key = 'g';
     tograss->description =
-	"Convert directory separators to GRASS internal format";
+        "Convert directory separators to GRASS internal format";
 
     path = G_define_option();
     path->key = "path";
     path->type = TYPE_STRING;
     path->required = NO;
     path->description =
-	"Path to be converted (read from stdin if not specified)";
+        "Path to be converted (read from stdin if not specified)";
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     if (!tohost->answer && !tograss->answer)
-	G_fatal_error("One of flags -%c or -%c must be specified!",
-		      tohost->key, tograss->key);
+        G_fatal_error("One of flags -%c or -%c must be specified!", tohost->key,
+                      tograss->key);
 
     if (tohost->answer && tograss->answer)
-	G_fatal_error("Only one of flags -%c or -%c can be specified!",
-		      tohost->key, tograss->key);
+        G_fatal_error("Only one of flags -%c or -%c can be specified!",
+                      tohost->key, tograss->key);
 
     if (path->answer) {
-	/* Take input from command-line option */
-	char *pathstring = G_store(path->answer);
+        /* Take input from command-line option */
+        char *pathstring = G_store(path->answer);
 
-	if (tohost->answer)
-	    G_convert_dirseps_to_host(pathstring);
+        if (tohost->answer)
+            G_convert_dirseps_to_host(pathstring);
 
-	if (tograss->answer)
-	    G_convert_dirseps_from_host(pathstring);
+        if (tograss->answer)
+            G_convert_dirseps_from_host(pathstring);
 
-	puts(pathstring);
-
+        puts(pathstring);
     }
     else {
-	char inchar;
+        char inchar;
 
-	while ((inchar = getc(stdin)) != EOF) {
-	    /* Read a character at a time from stdin until EOF
-	     * and copy to stdout after any conversion */
-	    if (tohost->answer) {
-		if (inchar == GRASS_DIRSEP)
-		    inchar = HOST_DIRSEP;
-	    }
+        while ((inchar = getc(stdin)) != EOF) {
+            /* Read a character at a time from stdin until EOF
+             * and copy to stdout after any conversion */
+            if (tohost->answer) {
+                if (inchar == GRASS_DIRSEP)
+                    inchar = HOST_DIRSEP;
+            }
 
-	    if (tograss->answer) {
-		if (inchar == HOST_DIRSEP)
-		    inchar = GRASS_DIRSEP;
-	    }
+            if (tograss->answer) {
+                if (inchar == HOST_DIRSEP)
+                    inchar = GRASS_DIRSEP;
+            }
 
-	    putchar(inchar);
-
-	}
+            putchar(inchar);
+        }
     }
 
     fflush(stdout);
 
     exit(EXIT_SUCCESS);
-
 }

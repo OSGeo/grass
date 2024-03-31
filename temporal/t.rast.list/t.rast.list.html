@@ -5,24 +5,41 @@ raster dataset. <em>t.rast.list</em> provides several options to list map layers
 and their metadata. Listing of map layer can be ordered by metadata,
 metadata columns can be specified and SQL where conditions can be
 provided to select a map layer subset of the input space time raster
-dataset. Most of the raster map  specific metadat is available for
+dataset. Most of the raster map  specific metadata is available for
 column selection, sorting and SQL where statements.
 
 Using the <b>method</b> option allows the specification of different
-methods to list map layers. Method <i>col</i> is the default option and
+methods to list map layers. Method <i>list</i> is the default option and
 sensitive to the <b>column</b>,<b>order</b> and <b>where</b> options.
-It will simply print user specified metadata columns of one map layer
-per line. The <i>comma</i> method will list the map layer as comma
-separated list that can be used as input for spatial modules.
 <p>
 To print interval length in days and distance from the begin use method
 <i>delta</i>. Method <i>deltagap</i> will additionally print temporal
 gaps between map layer. The <i>gran</i> method allows the listing of
 map layer sampled by a user defined <b>granule</b>. As default the
 granularity of the space time raster dataset is used for sampling.
+<p>
+While method <i>list</i> supports all columns except for
+interval_length and distance_from_begin,
+methods <i>delta</i>, <i>deltagap</i>, and <i>gran</i> support only the following
+columns: id, name, mapset, start_time, end_time, interval_length, and distance_from_begin.
+The option <b>order</b> is only available with method <i>list</i>.
+<p>
+Methods <i>cols</i> and <i>comma</i> are depreciated.
+The <i>cols</i> method is replaced by the <i>plain</i> format and
+the <i>comma</i> method is replaced by the <i>line</i> format.
+<p>
+The <b>format</b> option specifies the format of the output data.
+The default <i>plain</i> format will simply print user specified metadata
+columns of one map layer per line separated by a pipe by default.
+The <i>line</i> format will list fully qualified map names (name and mapset)
+as a comma-separated list of values that can be used as input for spatial modules.
+The <i>csv</i> format will print data in the CSV format using
+comma as the value separator (delimiter) and double quote for text field quoting.
+The <i>json</i> format generates JSON and, if the PyYAML package is installed,
+The <i>yaml</i> format generates YAML.
 
-The output column separator can be specified with the <b>separator</b>
-option.
+The column (or item) separator can be specified with the <b>separator</b>
+option for <i>plain</i>, <i>line</i>, and <i>csv</i>.
 
 <h2>EXAMPLES</h2>
 
@@ -95,7 +112,6 @@ name|start_time|min|max
 2012_07_tempmean|2012-07-01 00:00:00|18.455802|28.794653
 2012_08_tempmean|2012-08-01 00:00:00|15.718526|26.151115
 </pre></div>
-
 
 <h3>Filtering the result by selecting recurring timestamps</h3>
 
@@ -184,16 +200,28 @@ id|name|mapset|start_time|end_time|interval_length|distance_from_begin
 For the <em>deltagaps</em> value you can see the example for space time
 vector dataset <a href="t.vect.list.html#using-method-option">t.vect.list</a>
 
-<h3>Filtering the result by band references</h3>
+<h3>Reading raster names in Python</h3>
 
-Band reference can be assigned to raster maps
-by <em><a href="i.band.html">i.band</a></em> module or even when
+<div class="code"><pre>
+result = json.loads(
+    gs.read_command(
+        "t.rast.list", input="tempmean_monthly", format="json"
+    )
+)
+for item in result["data"]:
+    print(item["name"])
+</pre></div>
+
+<h3>Filtering the result by semantic label</h3>
+
+Semantic label can be assigned to raster maps
+by <em><a href="r.semantic.label.html">r.semantic.label</a></em> module or even when
 registrating raster maps into STRDS
-by <em><a href="t.register.html#support-for-band-references">t.register</a></em>.
+by <em><a href="t.register.html#support-for-semantic-labels">t.register</a></em>.
 
 <p>
-Name of STRDS can be extended by band reference identifier used for
-filtering. Name of STRDS and band reference is split by a <i>single
+Name of STRDS can be extended by semantic label used for
+filtering. Name of STRDS and semantic label is split by a <i>single
 dot</i>.
 
 <div class="code"><pre>
@@ -201,14 +229,13 @@ t.rast.list input=test.S2_1
 </pre></div>
 
 
-Note that band reference filtering is <i>supported by all temporal
+Note that semantic label filtering is <i>supported by all temporal
 modules</i>.
 
 <p>
-Also note that only STRDS can be filtered by band reference
-identifier, see <em><a href="i.band.html#known-issues">i.band</a></em> for
+Also note that only STRDS can be filtered by semantic label,
+see <em><a href="r.semantic.label.html#known-issues">r.semantic.label</a></em> for
 current limitations.
-
 
 <h2>SEE ALSO</h2>
 
@@ -223,13 +250,6 @@ current limitations.
 <p>
 <a href="https://grasswiki.osgeo.org/wiki/Temporal_data_processing">Temporal data processing Wiki</a>
 
-
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
-

@@ -18,12 +18,12 @@
 #
 ############################################################################
 
-#%module
-#% description: Tool for browsing, modifying and managing GRASS maps.
-#% keyword: general
-#% keyword: GUI
-#% keyword: map management
-#%end
+# %module
+# % description: Tool for browsing, modifying and managing GRASS maps.
+# % keyword: general
+# % keyword: GUI
+# % keyword: map management
+# %end
 
 import grass.script as gscript
 
@@ -36,6 +36,7 @@ def main():
     import wx
 
     from grass.script.setup import set_gui_path
+
     set_gui_path()
 
     from core.giface import StandaloneGrassInterface
@@ -43,10 +44,15 @@ def main():
 
     app = wx.App()
 
-    frame = DataCatalogFrame(parent=None, giface=StandaloneGrassInterface())
+    frame = DataCatalogFrame(
+        parent=None,
+        giface=StandaloneGrassInterface(),
+        title=_("Data Catalog - GRASS GIS"),
+    )
     frame.CentreOnScreen()
     frame.Show()
     app.MainLoop()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

@@ -1,4 +1,3 @@
-
 /**
  * \file auto_mask.c
  *
@@ -22,11 +21,10 @@
 
 #include "R.h"
 
-
 /**
  * \brief Checks for auto masking.
  *
- * On first call, opens the mask file if declared and available and 
+ * On first call, opens the mask file if declared and available and
  * allocates buffer for reading mask rows.
  * On second call, returns 0 or 1.
  *
@@ -44,7 +42,7 @@ int Rast__check_for_auto_masking(void)
        if R__.auto_mask is not set (-1) or set (>=0) recheck the MASK */
 
     if (R__.auto_mask < -1)
-	return R__.auto_mask;
+        return R__.auto_mask;
 
     /* if(R__.mask_fd > 0) G_free (R__.mask_buf); */
 
@@ -52,22 +50,22 @@ int Rast__check_for_auto_masking(void)
     R__.auto_mask = (G_find_raster("MASK", G_mapset()) != 0);
 
     if (R__.auto_mask <= 0)
-	return 0;
+        return 0;
 
     /* check MASK projection/zone against current region */
     Rast_get_cellhd("MASK", G_mapset(), &cellhd);
     if (cellhd.zone != G_zone() || cellhd.proj != G_projection()) {
-	R__.auto_mask = 0;
-	return 0;
+        R__.auto_mask = 0;
+        return 0;
     }
 
     if (R__.mask_fd >= 0)
-	Rast_unopen(R__.mask_fd);
+        Rast_unopen(R__.mask_fd);
     R__.mask_fd = Rast__open_old("MASK", G_mapset());
     if (R__.mask_fd < 0) {
-	R__.auto_mask = 0;
-	G_warning(_("Unable to open automatic MASK file"));
-	return 0;
+        R__.auto_mask = 0;
+        G_warning(_("Unable to open automatic MASK file"));
+        return 0;
     }
 
     /*    R__.mask_buf = Rast_allocate_c_buf(); */
@@ -76,7 +74,6 @@ int Rast__check_for_auto_masking(void)
 
     return 1;
 }
-
 
 /**
  * \brief Suppresses masking.
@@ -89,13 +86,12 @@ void Rast_suppress_masking(void)
     Rast__init();
 
     if (R__.auto_mask > 0) {
-	Rast_close(R__.mask_fd);
-	/* G_free (R__.mask_buf); */
-	R__.mask_fd = -1;
+        Rast_close(R__.mask_fd);
+        /* G_free (R__.mask_buf); */
+        R__.mask_fd = -1;
     }
     R__.auto_mask = -2;
 }
-
 
 /**
  * \brief Unsuppresses masking.
@@ -108,7 +104,7 @@ void Rast_unsuppress_masking(void)
     Rast__init();
 
     if (R__.auto_mask < -1) {
-	R__.mask_fd = -1;
-	Rast__check_for_auto_masking();
+        R__.mask_fd = -1;
+        Rast__check_for_auto_masking();
     }
 }

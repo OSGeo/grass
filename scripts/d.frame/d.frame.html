@@ -20,9 +20,9 @@ corner of the graphics monitor always is at location 0,0 while the
 monitor's lower-right corner is always at 100,100.
 
 <p>
-If the user has created multiple display frames that overlap one another, 
-whatever the user displays in the active frame will overwrite 
-those portions of the underlying frame where these frames overlap. 
+If the user has created multiple display frames that overlap one another,
+whatever the user displays in the active frame will overwrite
+those portions of the underlying frame where these frames overlap.
 
 <h2>EXAMPLE</h2>
 
@@ -38,7 +38,7 @@ g.region raster=elevation
 d.frame -e
 
 # create a first frame and display 'landuse96_28m' raster map including text label
-# order: bottom,top,left,right - in percent 
+# order: bottom,top,left,right - in percent
 d.frame -c frame=first at=0,50,0,50
 d.rast landuse96_28m
 d.text text='Landuse' bgcolor=220:220:220 color=black size=6
@@ -80,8 +80,8 @@ d.mon -r
 <p>
   <a href="variables.html#list-of-selected-grass-environment-variables-for-rendering">GRASS environment variables for
   rendering</a> (GRASS_RENDER_FRAME)
-  
-<h2>AUTHOR</h2>
+
+<h2>AUTHORS</h2>
 
 Martin Landa, Czech Technical University in Prague, Czech Republic
 
@@ -89,10 +89,5 @@ Martin Landa, Czech Technical University in Prague, Czech Republic
 Based on <em>d.frame</em> from GRASS 6:<br>
 James Westervelt, U.S. Army Construction Engineering Research
 Laboratory<br>
-Michael Shapiro, U.S. Army Construction Engineering 
+Michael Shapiro, U.S. Army Construction Engineering
 Research Laboratory
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

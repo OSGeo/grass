@@ -1,9 +1,9 @@
 /*
  * MODULE:       g.cairocomp
  * AUTHOR(S):    Glynn Clements
- * PURPOSE:      g.cairocomp isn't meant for end users. It's an internal tool for use by
- *               a wx GUI.
- *               g.cairocomp composites a series of X pixmaps.
+ * PURPOSE:      g.cairocomp isn't meant for end users. It's an internal tool
+ *               for use by a wx GUI. g.cairocomp composites a series of
+ *               X pixmaps.
  * COPYRIGHT:    (C) 2008 by Glynn Clements and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -43,17 +43,17 @@ static XID read_xid(const char *filename)
 
     fp = fopen(filename, "r");
     if (!fp)
-	G_fatal_error(_("Unable to open input file <%s>"), filename);
+        G_fatal_error(_("Unable to open input file <%s>"), filename);
 
     if (!fgets(buf, sizeof(buf), fp))
-	G_fatal_error(_("Unable to read input file <%s>"), filename);
+        G_fatal_error(_("Unable to read input file <%s>"), filename);
 
     if (sscanf(buf, "%li", &xid) != 1)
-	G_fatal_error(_("Unable to parse input file <%s>"), filename);
+        G_fatal_error(_("Unable to parse input file <%s>"), filename);
 
     fclose(fp);
 
-    return (XID) xid;
+    return (XID)xid;
 }
 
 static void write_xid(const char *filename, XID xid)
@@ -63,12 +63,12 @@ static void write_xid(const char *filename, XID xid)
 
     fp = fopen(filename, "w");
     if (!fp)
-	G_fatal_error(_("Unable to open output file <%s>"), filename);
+        G_fatal_error(_("Unable to open output file <%s>"), filename);
 
-    sprintf(buf, "0x%08lx\n", (unsigned long) xid);
+    sprintf(buf, "0x%08lx\n", (unsigned long)xid);
 
     if (fputs(buf, fp) < 0)
-	G_fatal_error(_("Unable to write output file <%s>"), filename);
+        G_fatal_error(_("Unable to write output file <%s>"), filename);
 
     fclose(fp);
 }
@@ -86,31 +86,34 @@ static void init_xlib(const char *scr, const char *vis)
 
     dpy = XOpenDisplay(NULL);
     if (!dpy)
-	G_fatal_error(_("Unable to open display"));
+        G_fatal_error(_("Unable to open display"));
 
     if (scr)
-	scrn = atoi(scr);
+        scrn = atoi(scr);
     else {
-	const char *p = getenv("GRASS_RENDER_CAIRO_SCREEN");
-	if (!p || sscanf(p, "%i", &scrn) != 1)
-	    scrn = DefaultScreen(dpy);
+        const char *p = getenv("GRASS_RENDER_CAIRO_SCREEN");
+
+        if (!p || sscanf(p, "%i", &scrn) != 1)
+            scrn = DefaultScreen(dpy);
     }
 
     screen = ScreenOfDisplay(dpy, scrn);
 
     if (vis)
-	visid = strtoul(vis, NULL, 0);
+        visid = strtoul(vis, NULL, 0);
     else {
-	const char *p = getenv("GRASS_RENDER_CAIRO_VISUAL");
-	if (!p || sscanf(p, "%li", &visid) != 1)
-	    visid = DefaultVisual(dpy, scrn)->visualid;
+        const char *p = getenv("GRASS_RENDER_CAIRO_VISUAL");
+
+        if (!p || sscanf(p, "%li", &visid) != 1)
+            visid = DefaultVisual(dpy, scrn)->visualid;
     }
 
     templ.visualid = visid;
     templ.screen = scrn;
-    vinfo = XGetVisualInfo(dpy, VisualIDMask|VisualScreenMask, &templ, &count);
+    vinfo =
+        XGetVisualInfo(dpy, VisualIDMask | VisualScreenMask, &templ, &count);
     if (!vinfo || !count)
-	G_fatal_error(_("Unable to obtain visual"));
+        G_fatal_error(_("Unable to obtain visual"));
     visual = vinfo[0].visual;
 
     pix = XCreatePixmap(dpy, RootWindow(dpy, scrn), 1, 1, vinfo[0].depth);
@@ -124,9 +127,10 @@ static void init_xlib(const char *scr, const char *vis)
 
     output = XCreatePixmap(dpy, RootWindow(dpy, scrn), width, height, depth);
 
-    surface = cairo_xlib_surface_create_with_xrender_format(dpy, output, screen, format, width, height);
+    surface = cairo_xlib_surface_create_with_xrender_format(
+        dpy, output, screen, format, width, height);
     if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS)
-	G_fatal_error(_("Failed to initialize output surface"));
+        G_fatal_error(_("Failed to initialize output surface"));
 
     cairo = cairo_create(surface);
 }
@@ -143,12 +147,12 @@ static void erase(const char *color)
 {
     int r, g, b, a;
     double fr, fg, fb, fa;
-    
+
     a = 255;
     if (sscanf(color, "%d:%d:%d:%d", &r, &g, &b, &a) != 4 ||
         G_str_to_color(color, &r, &g, &b) != 1)
-	G_fatal_error(_("Invalid color: %s"), color);
-    
+        G_fatal_error(_("Invalid color: %s"), color);
+
     fr = r / 255.0;
     fg = g / 255.0;
     fb = b / 255.0;
@@ -166,9 +170,9 @@ static void overlay(XID src, float alpha)
     cairo_surface_t *src_surf;
 
     src_surf = cairo_xlib_surface_create_with_xrender_format(
-	dpy, src, screen, format, width, height);
+        dpy, src, screen, format, width, height);
     if (cairo_surface_status(src_surf) != CAIRO_STATUS_SUCCESS)
-	G_fatal_error(_("Failed to initialize input surface"));
+        G_fatal_error(_("Failed to initialize input surface"));
 
     cairo_save(cairo);
     cairo_set_operator(cairo, CAIRO_OPERATOR_OVER);
@@ -183,9 +187,8 @@ static void overlay(XID src, float alpha)
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct
-    {
-	struct Option *in, *out, *visual, *screen, *alpha, *width, *height, *bg;
+    struct {
+        struct Option *in, *out, *visual, *screen, *alpha, *width, *height, *bg;
     } opt;
     struct Flag *flag_d;
     int i;
@@ -245,40 +248,41 @@ int main(int argc, char *argv[])
     flag_d->description = _("Do not composite; just delete input Pixmaps");
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     width = atoi(opt.width->answer);
     height = atoi(opt.height->answer);
 
     if (flag_d->answer) {
-	dpy = XOpenDisplay(NULL);
-	if (!dpy)
-	    G_fatal_error(_("Unable to open display"));
-	for (i = 0; opt.in->answers[i]; i++) {
-	    unsigned long xid = read_xid(opt.in->answers[i]);
-	    XKillClient(dpy, xid);
-	}
-	XFlush(dpy);
-	XCloseDisplay(dpy);
-	return 0;
+        dpy = XOpenDisplay(NULL);
+        if (!dpy)
+            G_fatal_error(_("Unable to open display"));
+        for (i = 0; opt.in->answers[i]; i++) {
+            unsigned long xid = read_xid(opt.in->answers[i]);
+
+            XKillClient(dpy, xid);
+        }
+        XFlush(dpy);
+        XCloseDisplay(dpy);
+        return 0;
     }
 
     init_xlib(opt.screen->answer, opt.visual->answer);
 
     if (opt.bg->answer)
-	erase(opt.bg->answer);
+        erase(opt.bg->answer);
 
     for (i = 0; opt.in->answers[i]; i++) {
-	XID input = read_xid(opt.in->answers[i]);
-	double alpha;
+        XID input = read_xid(opt.in->answers[i]);
+        double alpha;
 
-	if (opt.alpha->answer && !opt.alpha->answers[i])
-	    G_fatal_error(
-		_("input= and opacity= must have the same number of values"));
+        if (opt.alpha->answer && !opt.alpha->answers[i])
+            G_fatal_error(
+                _("input= and opacity= must have the same number of values"));
 
-	alpha = opt.alpha->answer ? atof(opt.alpha->answers[i]) : 1.0;
+        alpha = opt.alpha->answer ? atof(opt.alpha->answers[i]) : 1.0;
 
-	overlay(input, alpha);
+        overlay(input, alpha);
     }
 
     write_xid(opt.out->answer, output);
@@ -287,4 +291,3 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-

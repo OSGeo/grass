@@ -137,11 +137,11 @@ t.info input=2009_01_tempmean type=raster
  +----------------------------------------------------------------------------+
 </pre></div>
 
-<h3>Space time dataset with band references assigned</h3>
+<h3>Space time dataset with semantic labels assigned</h3>
 
-This information is printed only when band references have been assigned
-to registered raster maps by <em><a href="i.band.html">i.band</a></em>
-or <em><a href="t.register.html#support-for-band-references">t.register</a></em> module.
+This information is printed only when semantic labels have been assigned
+to registered raster maps by <em><a href="r.semantic.label.html">r.semantic.label</a></em>
+or <em><a href="t.register.html#support-for-semantic-labels">t.register</a></em> module.
 
 <div class="code"><pre>
 t.info input=test
@@ -158,7 +158,7 @@ Similarly for temporal maps information:
 t.info input=T33UYP_20190331T094039_B01 type=raster
 ...
  +-------------------- Metadata information ----------------------------------+
- | Band reference:............. S2_1
+ | Semantic label:............. S2_1
 ...
 </pre></div>
 
@@ -176,9 +176,3 @@ t.info input=T33UYP_20190331T094039_B01 type=raster
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
-

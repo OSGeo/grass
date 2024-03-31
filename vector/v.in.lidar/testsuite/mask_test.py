@@ -89,28 +89,35 @@ class VectorMaskTest(TestCase):
     """
 
     # Setup variables to be used for outputs
-    points = 'vinlidar_points'
-    areas = 'vinlidar_areas'
-    las_file = 'vinlidar_mask_points.las'
-    imported_points = 'vinlidar_imported_points'
+    points = "vinlidar_points"
+    areas = "vinlidar_areas"
+    las_file = "vinlidar_mask_points.las"
+    imported_points = "vinlidar_imported_points"
 
     @classmethod
     def setUpClass(cls):
         """Ensures expected computational region and generated data"""
         cls.use_temp_region()
-        cls.runModule('g.region', n=20, s=10, e=25, w=15, res=1)
-        cls.runModule('v.in.ascii', input='-', output=cls.points,
-                      separator='comma', format='point', stdin_=POINTS)
-        cls.runModule('v.in.ascii', input='-', output=cls.areas,
-                      format='standard', stdin_=AREAS)
-        cls.runModule('v.out.lidar', input=cls.points,
-            output=cls.las_file)
+        cls.runModule("g.region", n=20, s=10, e=25, w=15, res=1)
+        cls.runModule(
+            "v.in.ascii",
+            input="-",
+            output=cls.points,
+            separator="comma",
+            format="point",
+            stdin_=POINTS,
+        )
+        cls.runModule(
+            "v.in.ascii", input="-", output=cls.areas, format="standard", stdin_=AREAS
+        )
+        cls.runModule("v.out.lidar", input=cls.points, output=cls.las_file)
 
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region and generated data"""
-        cls.runModule('g.remove', flags='f', type='vector',
-            name=(cls.points, cls.areas))
+        cls.runModule(
+            "g.remove", flags="f", type="vector", name=(cls.points, cls.areas)
+        )
         if os.path.isfile(cls.las_file):
             os.remove(cls.las_file)
         cls.del_temp_region()
@@ -120,38 +127,46 @@ class VectorMaskTest(TestCase):
 
         This is executed after each test run.
         """
-        self.runModule('g.remove', flags='f', type='vector',
-            name=self.imported_points)
+        self.runModule("g.remove", flags="f", type="vector", name=self.imported_points)
 
     def test_no_mask(self):
         """Test to see if the standard outputs are created"""
-        self.assertModule('v.in.lidar', input=self.las_file,
-            output=self.imported_points, flags='bt')
+        self.assertModule(
+            "v.in.lidar", input=self.las_file, output=self.imported_points, flags="bt"
+        )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points,
-            reference=dict(points=19))
+            vector=self.imported_points, reference=dict(points=19)
+        )
 
     def test_mask(self):
         """Test to see if the standard outputs are created"""
-        self.assertModule('v.in.lidar', input=self.las_file,
-            output=self.imported_points, flags='bt',
-            mask=self.areas)
+        self.assertModule(
+            "v.in.lidar",
+            input=self.las_file,
+            output=self.imported_points,
+            flags="bt",
+            mask=self.areas,
+        )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points,
-            reference=dict(points=11))
+            vector=self.imported_points, reference=dict(points=11)
+        )
 
     def test_inverted_mask(self):
         """Test to see if the standard outputs are created"""
-        self.assertModule('v.in.lidar', input=self.las_file,
-            output=self.imported_points, flags='btu',
-            mask=self.areas)
+        self.assertModule(
+            "v.in.lidar",
+            input=self.las_file,
+            output=self.imported_points,
+            flags="btu",
+            mask=self.areas,
+        )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points,
-            reference=dict(points=8))
+            vector=self.imported_points, reference=dict(points=8)
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test()

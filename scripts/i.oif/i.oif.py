@@ -19,26 +19,26 @@
 # Ref.: Jensen: Introductory digital image processing 1996, p.98
 #############################################################################
 
-#% Module
-#% description: Calculates Optimum-Index-Factor table for spectral bands
-#% keyword: imagery
-#% keyword: multispectral
-#% keyword: statistics
-#% End
-#% option G_OPT_R_INPUTS
-#% end
-#% option G_OPT_F_OUTPUT
-#% description: Name for output file (if omitted or "-" output to stdout)
-#% required: no
-#% end
-#% Flag
-#% key: g
-#% description: Print in shell script style
-#% End
-#% Flag
-#% key: s
-#% description: Process bands serially (default: run in parallel)
-#% End
+# % Module
+# % description: Calculates Optimum-Index-Factor table for spectral bands
+# % keyword: imagery
+# % keyword: multispectral
+# % keyword: statistics
+# % End
+# % option G_OPT_R_INPUTS
+# % end
+# % option G_OPT_F_OUTPUT
+# % description: Name for output file (if omitted or "-" output to stdout)
+# % required: no
+# % end
+# % Flag
+# % key: g
+# % description: Print in shell script style
+# % End
+# % Flag
+# % key: s
+# % description: Process bands serially (default: run in parallel)
+# % End
 
 import sys
 import os
@@ -47,8 +47,7 @@ from grass.script import core as grass
 
 
 def oifcalc(sdev, corr, k1, k2, k3):
-    grass.debug(_("Calculating OIF for combination: %s, %s, %s" % (k1, k2,
-                                                                   k3)), 1)
+    grass.debug(_("Calculating OIF for combination: %s, %s, %s" % (k1, k2, k3)), 1)
     # calculate SUM of Stddeviations:
     ssdev = [sdev[k1], sdev[k2], sdev[k3]]
     numer = sum(ssdev)
@@ -71,14 +70,14 @@ def perms(bands):
 
 
 def main():
-    shell = flags['g']
-    serial = flags['s']
-    bands = options['input'].split(',')
+    shell = flags["g"]
+    serial = flags["s"]
+    bands = options["input"].split(",")
 
     if len(bands) < 4:
         grass.fatal(_("At least four input maps required"))
 
-    output = options['output']
+    output = options["output"]
     # calculate the Stddev for TM bands
     grass.message(_("Calculating standard deviations for all bands..."))
     stddev = {}
@@ -86,9 +85,9 @@ def main():
     if serial:
         for band in bands:
             grass.verbose("band %d" % band)
-            s = grass.read_command('r.univar', flags='g', map=band)
+            s = grass.read_command("r.univar", flags="g", map=band)
             kv = parse_key_val(s)
-            stddev[band] = float(kv['stddev'])
+            stddev[band] = float(kv["stddev"])
     else:
         # run all bands in parallel
         if "WORKERS" in os.environ:
@@ -101,7 +100,7 @@ def main():
         # spawn jobs in the background
         n = 0
         for band in bands:
-            proc[band] = grass.pipe_command('r.univar', flags='g', map=band)
+            proc[band] = grass.pipe_command("r.univar", flags="g", map=band)
             if n % workers == 0:
                 # wait for the ones launched so far to finish
                 for bandp in bands[:n]:
@@ -116,20 +115,21 @@ def main():
                 pout[band] = proc[band].communicate()[0]
             proc[band].wait()
 
-    # parse the results
+        # parse the results
         for band in bands:
             kv = parse_key_val(pout[band])
-            stddev[band] = float(kv['stddev'])
+            stddev[band] = float(kv["stddev"])
 
     grass.message(_("Calculating Correlation Matrix..."))
     correlation = {}
-    s = grass.read_command('r.covar', flags='r', map=[band for band in bands],
-                           quiet=True)
+    s = grass.read_command(
+        "r.covar", flags="r", map=[band for band in bands], quiet=True
+    )
 
     # We need to skip the first line, since r.covar prints the number of values
     lines = s.splitlines()
     for i, row in zip(bands, lines[1:]):
-        for j, cell in zip(bands, row.split(' ')):
+        for j, cell in zip(bands, row.split(" ")):
             correlation[i, j] = float(cell)
 
     # Calculate all combinations
@@ -140,22 +140,24 @@ def main():
         oif.append((oifcalc(stddev, correlation, *p), p))
     oif.sort(reverse=True)
 
-    grass.verbose(_("The Optimum Index Factor analysis result "
-                    "(best combination shown first):"))
+    grass.verbose(
+        _("The Optimum Index Factor analysis result " "(best combination shown first):")
+    )
 
     if shell:
         fmt = "%s,%s,%s:%.4f\n"
     else:
         fmt = "%s, %s, %s:  %.4f\n"
 
-    if not output or output == '-':
+    if not output or output == "-":
         for v, p in oif:
             sys.stdout.write(fmt % (p + (v,)))
     else:
-        outf = open(output, 'w')
+        outf = open(output, "w")
         for v, p in oif:
             outf.write(fmt % (p + (v,)))
         outf.close()
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

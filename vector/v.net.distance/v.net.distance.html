@@ -1,41 +1,41 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.net.distance</em> finds the nearest element in set <em>to</em> 
-for every point in set <em>from</em>. 
+<em>v.net.distance</em> finds the nearest element in set <em>to</em>
+for every point in set <em>from</em>.
 
 <h2>NOTES</h2>
 
 These two sets are given by the respective <b>layer</b>, <b>where</b>
-and <b>cats</b> parameters. The type of <em>to</em> features is 
-specified by <b>to_type</b> parameter. All <em>from</em> features 
-are <em>points</em>. A table is linked to <b>output</b> map 
-containing various information about the relation. More 
+and <b>cats</b> parameters. The type of <em>to</em> features is
+specified by <b>to_type</b> parameter. All <em>from</em> features
+are <em>points</em>. A table is linked to <b>output</b> map
+containing various information about the relation. More
 specifically, the table has three columns: <em>cat</em>, <em>tcat</em>
-and <em>dist</em> storing category of each <em>from</em> 
-feature, category of the nearest <em>to</em> feature and the 
+and <em>dist</em> storing category of each <em>from</em>
+feature, category of the nearest <em>to</em> feature and the
 distance between them respectively.
 <p>
-Furthemore, the <b>output</b> map contains the shortest path between 
-each <em>cat</em>, <em>tcat</em> pair. Each path consists of several 
-lines. If a line is on the shortest path from a point then the category 
-of this point is assigned to the line. Note that every line may contain 
-more than one category value since a single line may be on the shortest 
-path for more than one <em>from</em> feature. And so the shortest paths 
-can be easily obtained by querying lines with corresponding category 
-number. Alternatively, unique paths can be created with the <em>-l</em> 
+Furthermore, the <b>output</b> map contains the shortest path between
+each <em>cat</em>, <em>tcat</em> pair. Each path consists of several
+lines. If a line is on the shortest path from a point then the category
+of this point is assigned to the line. Note that every line may contain
+more than one category value since a single line may be on the shortest
+path for more than one <em>from</em> feature. And so the shortest paths
+can be easily obtained by querying lines with corresponding category
+number. Alternatively, unique paths can be created with the <em>-l</em>
 flag where each path will be a separate single line in the output.
 <p>
-The costs of arcs in forward and backward direction are specified by 
-<b>arc_column</b> and <b>arc_backward_column</b> columns respectively. 
-If <b>arc_backward_column</b> is not given, the same cost is used in 
-both directions.  
+The costs of arcs in forward and backward direction are specified by
+<b>arc_column</b> and <b>arc_backward_column</b> columns respectively.
+If <b>arc_backward_column</b> is not given, the same cost is used in
+both directions.
 <p>
-<em>v.net.distance</em> will not work if you are trying to find the 
-nearest neighbors within a group of nodes, i.e. where <em>to</em> 
-and <em>from</em> are the same set of nodes, as the closest node 
-will be the node itself and the result will be zero-length paths. In 
-order to find nearest neighbors within a group of nodes, you can 
-either loop through each node as <em>to</em> and all other nodes as 
+<em>v.net.distance</em> will not work if you are trying to find the
+nearest neighbors within a group of nodes, i.e. where <em>to</em>
+and <em>from</em> are the same set of nodes, as the closest node
+will be the node itself and the result will be zero-length paths. In
+order to find nearest neighbors within a group of nodes, you can
+either loop through each node as <em>to</em> and all other nodes as
 <em>from</em> or create a complete distance matrix with
 <a href="v.net.allpairs.html">v.net.allpairs</a> and select the
 lowest non-zero distance for each node.
@@ -44,11 +44,11 @@ lowest non-zero distance for each node.
 
 <h3>Shortest path and distance between school and nearest hospital</h3>
 
-Find shortest path and distance from every school to the nearest hospital 
+Find shortest path and distance from every school to the nearest hospital
 and show all paths.
 
 <p>
-Streets are grey lines, schools are green circles, hospitals are red 
+Streets are grey lines, schools are green circles, hospitals are red
 crosses, shortest paths are blue lines:
 <p><img src="vnetdistance.png" alt="v.net.distance example" border="1">
 
@@ -75,7 +75,6 @@ d.vect schools_wake color=green size=10
 d.vect map=hospitals icon=basic/cross3 size=15 color=black fcolor=red
 d.vect schools_to_hospitals
 </pre></div>
-
 
 <h3>Distance between point source of pollution and sample points along streams</h3>
 
@@ -105,12 +104,12 @@ v.db.addtable map=samples
 # connect samples and pollution to streams
 v.net -c input=streams points=samples output=streams_samples \
          operation=connect node_layer=3 threshold=10 \
-v.net -c input=streams_samples points=pollution 
+v.net -c input=streams_samples points=pollution
          output=streams_samples_pollution operation=connect \
          node_layer=4 threshold=10
 
 # check vector layers
-v.category input=streams_samples_pollution option=report               
+v.category input=streams_samples_pollution option=report
 Layer/table: 1/streams_samples_pollution
 type       count        min        max
 point          0          0          0
@@ -147,7 +146,7 @@ v.net.distance input=streams_samples_pollution \
       output=distance_samples_to_pollution from_layer=3 to_layer=4
 
 # check results
-v.report map=distance_samples_to_pollution@vnettest option=length               
+v.report map=distance_samples_to_pollution@vnettest option=length
 cat|tcat|dist|length
 1|1|100.0|100.0
 2|1|200.0|200.0
@@ -168,8 +167,3 @@ cat|tcat|dist|length
 Daniel Bundala, Google Summer of Code 2009, Student<br>
 Wolf Bergenheim, Mentor<br>
 Markus Metz
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

@@ -4,7 +4,7 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-static int blank_line();
+static int blank_line(void *);
 
 static char *error_prefix;
 static int first_read, last_read;
@@ -12,7 +12,6 @@ static char cell_name[256];
 static int in_file_d;
 static int raster_size, row_length, row_count, n_rows;
 static RASTER_MAP_TYPE map_type;
-
 
 int o_io_init(void)
 {
@@ -29,25 +28,25 @@ int o_read_row(void *buf)
 
     ptr = buf;
     if (last_read)
-	return (0);
+        return (0);
     if (first_read) {
-	blank_line(buf);
-	first_read = 0;
+        blank_line(buf);
+        first_read = 0;
     }
     else {
-	if (row_count >= n_rows) {
-	    last_read = 1;
-	    blank_line(buf);
-	}
-	else {
-	    Rast_set_null_value(ptr, 1, map_type);
-	    ptr = G_incr_void_ptr(ptr, raster_size);
+        if (row_count >= n_rows) {
+            last_read = 1;
+            blank_line(buf);
+        }
+        else {
+            Rast_set_null_value(ptr, 1, map_type);
+            ptr = G_incr_void_ptr(ptr, raster_size);
 
-	    Rast_get_row(in_file_d, ptr, row_count++, map_type);
+            Rast_get_row(in_file_d, ptr, row_count++, map_type);
 
-	    ptr = G_incr_void_ptr(ptr, raster_size * (row_length + 1));
-	    Rast_set_null_value(ptr, 1, map_type);
-	}
+            ptr = G_incr_void_ptr(ptr, raster_size * (row_length + 1));
+            Rast_set_null_value(ptr, 1, map_type);
+        }
     }
     return (row_length + 2);
 }
@@ -105,7 +104,7 @@ char *xrealloc(char *addr, int size, char *label)
 
     addr2 = G_realloc(addr, size);
     fprintf(stdout, "REALLOC:  %8d   %7d  (%8d)   %s\n", addr2, size, addr,
-	    label);
+            label);
     return (addr2);
 }
 #endif

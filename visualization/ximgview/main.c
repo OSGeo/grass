@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       ximgview
@@ -51,8 +50,7 @@ static XImage *ximg;
 static GC gc;
 
 extern Colormap InitColorTableFixed(Colormap cmap);
-extern unsigned long find_color(unsigned int r, unsigned int g,
-				unsigned int b);
+extern unsigned long find_color(unsigned int r, unsigned int g, unsigned int b);
 
 static void create_window(void)
 {
@@ -61,7 +59,7 @@ static void create_window(void)
 
     dpy = XOpenDisplay(NULL);
     if (!dpy)
-	G_fatal_error(_("Unable to open display"));
+        G_fatal_error(_("Unable to open display"));
 
     scrn = DefaultScreen(dpy);
 
@@ -69,19 +67,15 @@ static void create_window(void)
     xswa.backing_store = NotUseful;
     xswa.background_pixel = BlackPixel(dpy, scrn);
 
-    grwin = XCreateWindow(dpy, RootWindow(dpy, scrn),
-			  0, 0,
-			  800, 600,
-			  0,
-			  DefaultDepth(dpy, scrn),
-			  InputOutput,
-			  DefaultVisual(dpy, scrn),
-			  CWEventMask | CWBackingStore | CWBackPixel, &xswa);
+    grwin = XCreateWindow(dpy, RootWindow(dpy, scrn), 0, 0, 800, 600, 0,
+                          DefaultDepth(dpy, scrn), InputOutput,
+                          DefaultVisual(dpy, scrn),
+                          CWEventMask | CWBackingStore | CWBackPixel, &xswa);
 
     XMapWindow(dpy, grwin);
 
     if (!XGetWindowAttributes(dpy, grwin, &xwa))
-	G_fatal_error(_("Unable to get window attributes"));
+        G_fatal_error(_("Unable to get window attributes"));
 
     fixedcmap = InitColorTableFixed(DefaultColormap(dpy, scrn));
 
@@ -90,8 +84,8 @@ static void create_window(void)
     gc = XCreateGC(dpy, grwin, 0UL, NULL);
 
     xbuf = G_malloc(i_width * i_height * 4);
-    ximg = XCreateImage(dpy, xwa.visual, xwa.depth, ZPixmap,
-			0, xbuf, i_width, i_height, 32, 0);
+    ximg = XCreateImage(dpy, xwa.visual, xwa.depth, ZPixmap, 0, xbuf, i_width,
+                        i_height, 32, 0);
 
     w_width = xwa.width;
     w_height = xwa.height;
@@ -107,15 +101,15 @@ static void draw(void)
     int row, col;
 
     for (row = 0; row < i_height; row++) {
-	for (col = 0; col < i_width; col++) {
-	    unsigned char b = *p++;
-	    unsigned char g = *p++;
-	    unsigned char r = *p++;
-	    unsigned char a = *p++;
-	    unsigned long c = find_color(r, g, b);
+        for (col = 0; col < i_width; col++) {
+            unsigned char b = *p++;
+            unsigned char g = *p++;
+            unsigned char r = *p++;
+            /* unsigned char a = */ (void)*p++;
+            unsigned long c = find_color(r, g, b);
 
-	    XPutPixel(ximg, col, row, c);
-	}
+            XPutPixel(ximg, col, row, c);
+        }
     }
 
     XPutImage(dpy, grwin, gc, ximg, 0, 0, x0, y0, i_width, i_height);
@@ -134,7 +128,7 @@ static void redraw(void)
     last = (tv1.tv_sec - tv0.tv_sec) * 1000000L + (tv1.tv_usec - tv0.tv_usec);
 }
 
-static void dummy_handler(int sig)
+static void dummy_handler(int sig UNUSED)
 {
 }
 
@@ -149,40 +143,40 @@ static void main_loop(void)
     sigaction(SIGUSR1, &act, NULL);
 
     for (;;) {
-	fd_set waitset;
-	struct timeval tv;
-	unsigned long delay;
+        fd_set waitset;
+        struct timeval tv;
+        unsigned long delay = 0;
 
-	while (XPending(dpy) > 0) {
-	    XEvent event;
+        while (XPending(dpy) > 0) {
+            XEvent event;
 
-	    XNextEvent(dpy, &event);
+            XNextEvent(dpy, &event);
 
-	    switch (event.type) {
-	    case Expose:
-		draw();
-		break;
-	    case ConfigureNotify:
-		w_width = event.xconfigure.width;
-		w_height = event.xconfigure.height;
-		break;
-	    }
-	}
+            switch (event.type) {
+            case Expose:
+                draw();
+                break;
+            case ConfigureNotify:
+                w_width = event.xconfigure.width;
+                w_height = event.xconfigure.height;
+                break;
+            }
+        }
 
-	if (fraction > 0.001)
-	    delay = (unsigned long)(last / fraction);
+        if (fraction > 0.001)
+            delay = (unsigned long)(last / fraction);
 
-	tv.tv_sec = delay / 1000000;
-	tv.tv_usec = delay % 1000000;
+        tv.tv_sec = delay / 1000000;
+        tv.tv_usec = delay % 1000000;
 
-	FD_ZERO(&waitset);
-	FD_SET(xfd, &waitset);
-	errno = 0;
-	if (select(FD_SETSIZE, &waitset, NULL, NULL, &tv) < 0 && errno != EINTR)
-	    continue;
+        FD_ZERO(&waitset);
+        FD_SET(xfd, &waitset);
+        errno = 0;
+        if (select(FD_SETSIZE, &waitset, NULL, NULL, &tv) < 0 && errno != EINTR)
+            continue;
 
-	if (!FD_ISSET(xfd, &waitset) || errno == EINTR)
-	    redraw();
+        if (!FD_ISSET(xfd, &waitset) || errno == EINTR)
+            redraw();
     }
 }
 
@@ -209,34 +203,34 @@ static int read_bmp_header(const unsigned char *p)
     int size;
 
     if (*p++ != 'B')
-	return 0;
+        return 0;
     if (*p++ != 'M')
-	return 0;
+        return 0;
 
     size = get_4(&p);
 
     get_4(&p);
 
     if (get_4(&p) != HEADER_SIZE)
-	return 0;
+        return 0;
 
     if (get_4(&p) != 40)
-	return 0;
+        return 0;
 
     i_width = get_4(&p);
     i_height = -get_4(&p);
 
     get_2(&p);
     if (get_2(&p) != 32)
-	return 0;
+        return 0;
 
     if (get_4(&p) != 0)
-	return 0;
-    if (get_4(&p) != i_width * i_height * 4)
-	return 0;
+        return 0;
+    if (get_4(&p) != (unsigned int)i_width * i_height * 4)
+        return 0;
 
     if (size != HEADER_SIZE + i_width * i_height * 4)
-	return 0;
+        return 0;
 
     get_4(&p);
     get_4(&p);
@@ -248,26 +242,26 @@ static int read_bmp_header(const unsigned char *p)
 
 static void map_file(const char *filename)
 {
-    char header[HEADER_SIZE];
+    unsigned char header[HEADER_SIZE];
     size_t size;
     void *ptr;
     int fd;
 
     fd = open(filename, O_RDONLY);
     if (fd < 0)
-	G_fatal_error(_("Unable to open image file"));
+        G_fatal_error(_("Unable to open image file"));
 
     if (read(fd, header, sizeof(header)) != sizeof(header))
-	G_fatal_error(_("Unable to read BMP header"));
+        G_fatal_error(_("Unable to read BMP header"));
 
     if (!read_bmp_header(header))
-	G_fatal_error(_("Invalid BMP header"));
+        G_fatal_error(_("Invalid BMP header"));
 
     size = HEADER_SIZE + i_width * i_height * 4;
 
-    ptr = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, (off_t) 0);
+    ptr = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, (off_t)0);
     if (ptr == MAP_FAILED)
-	G_fatal_error(_("Unable to map image file"));
+        G_fatal_error(_("Unable to map image file"));
 
     imgbuf = (char *)ptr + HEADER_SIZE;
 
@@ -277,9 +271,8 @@ static void map_file(const char *filename)
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct
-    {
-	struct Option *image, *percent;
+    struct {
+        struct Option *image, *percent;
     } opt;
     const char *filename;
     int percent;
@@ -309,7 +302,7 @@ int main(int argc, char **argv)
     opt.percent->answer = "10";
 
     if (G_parser(argc, argv))
-	exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
 
     filename = opt.image->answer;
     percent = atoi(opt.percent->answer);

@@ -1,47 +1,48 @@
 <h2>DESCRIPTION</h2>
 
 <em>t.rast.aggregate.ds</em> works like
-<a href="t.rast.aggregate.html">t.rast.aggregate</a> but instead of 
-defining a fixed granularity for temporal aggregation the time 
-intervals of all maps registered in a second space time dataset (can be 
-STRDS, STR3DS or STVDS) are used to aggregate the maps of the input 
+<a href="t.rast.aggregate.html">t.rast.aggregate</a> but instead of
+defining a fixed granularity for temporal aggregation the time
+intervals of all maps registered in a second space time dataset (can be
+STRDS, STR3DS or STVDS) are used to aggregate the maps of the input
 space time raster dataset.
 
 <h2>NOTES</h2>
+
 The sampling method must be specified from the sampler dataset point of view.
-It defines the temporal relationships between intervals of the sampling 
+It defines the temporal relationships between intervals of the sampling
 dataset and the input space time raster dataset.
 
 <h2>EXAMPLES</h2>
 
 <h3>Precipitation aggregation</h3>
 
-In this example we create 7 raster maps that will be registered in a 
-single space time raster dataset named <em>precipitation_daily</em> 
-using a daily temporal granularity. The names of the raster maps are 
+In this example we create 7 raster maps that will be registered in a
+single space time raster dataset named <em>precipitation_daily</em>
+using a daily temporal granularity. The names of the raster maps are
 stored in a text file that is used for raster map registration.
 <p>
-A space time vector dataset is created out of two vector maps with 
-different temporal resolution. The maps are created using v.random. The 
-first map has a granule of 3 days the second a granule of 4 days.  
+A space time vector dataset is created out of two vector maps with
+different temporal resolution. The maps are created using v.random. The
+first map has a granule of 3 days the second a granule of 4 days.
 <p>
-The space time raster dataset <em>precipitation_daily</em> with daily 
-temporal granularity will be aggregated using the space time vector 
-dataset resulting in the output space time raster dataset 
-<em>precipitation_agg</em>. The aggregation method is set to 
-<em>sum</em> to accumulate the precipitation values of all intervals in 
-the space time vector dataset. The sampling option assures that only 
-raster maps that are temporally during the time intervals of the space 
-time vector dataset are considered for computation. Hence the option is set 
+The space time raster dataset <em>precipitation_daily</em> with daily
+temporal granularity will be aggregated using the space time vector
+dataset resulting in the output space time raster dataset
+<em>precipitation_agg</em>. The aggregation method is set to
+<em>sum</em> to accumulate the precipitation values of all intervals in
+the space time vector dataset. The sampling option assures that only
+raster maps that are temporally during the time intervals of the space
+time vector dataset are considered for computation. Hence the option is set
 to contains (time stamped vector map layers temporally <b>contain</b>
-the raster map layers): 
+the raster map layers):
 
 <div class="code"><pre>
 MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
 
 for map in ${MAPS} ; do
-    r.mapcalc expression="${map} = 1" 
-    echo ${map} >> map_list.txt 
+    r.mapcalc expression="${map} = 1"
+    echo ${map} >> map_list.txt
 done
 
 t.create type=strds temporaltype=absolute \
@@ -95,14 +96,14 @@ t.info type=strds input=precipitation_daily
  | Description:
  | Test dataset with daily precipitation
  | Command history:
- | # 2014-11-23 16:48:17 
+ | # 2014-11-23 16:48:17
  | t.create type="strds" temporaltype="absolute"
  |     output="precipitation_daily" title="Daily precipitation"
  |     description="Test dataset with daily precipitation"
- | # 2014-11-23 16:48:18 
+ | # 2014-11-23 16:48:18
  | t.register -i type="rast" input="precipitation_daily"
  |     file="map_list.txt" start="2012-08-20" increment="1 days"
- | 
+ |
  +----------------------------------------------------------------------------+
 
 
@@ -165,16 +166,16 @@ t.info type=stvds input=points
  | Description:
  | Points for aggregation
  | Command history:
- | # 2014-11-23 16:48:49 
+ | # 2014-11-23 16:48:49
  | t.create type="stvds" temporaltype="absolute"
  |     output="points" title="Points" description="Points for aggregation"
- | # 2014-11-23 16:48:49 
+ | # 2014-11-23 16:48:49
  | t.register -i type="vect" input="points"
  |     map="points_1" start="2012-08-20" increment="3 days"
- | # 2014-11-23 16:48:50 
+ | # 2014-11-23 16:48:50
  | t.register -i type="vect" input="points"
  |     map="points_2" start="2012-08-23" increment="4 days"
- | 
+ |
  +----------------------------------------------------------------------------+
 
 t.rast.aggregate.ds input=precipitation_daily \
@@ -186,7 +187,7 @@ t.rast.aggregate.ds input=precipitation_daily \
 t.support input=precipitation_agg \
           title="Aggregated precipitation" \
           description="Aggregated precipitation dataset"
-                 
+
 t.info type=strds input=precipitation_agg
 
  +-------------------- Space Time Raster Dataset -----------------------------+
@@ -230,15 +231,15 @@ t.info type=strds input=precipitation_agg
  | Description:
  | Aggregated precipitation dataset
  | Command history:
- | # 2014-11-23 16:53:23 
+ | # 2014-11-23 16:53:23
  | t.rast.aggregate.ds input="precipitation_daily"
  |     output="precipitation_agg" sample="points" type="stvds" basename="prec_agg"
  |     method="sum" sampling="contains"
- | # 2014-11-23 16:53:28 
+ | # 2014-11-23 16:53:28
  | t.support input="precipitation_agg"
  |     title="Aggregated precipitation"
  |     description="Aggregated precipitation dataset"
- | 
+ |
  +----------------------------------------------------------------------------+
 </pre></div>
 
@@ -252,7 +253,7 @@ This "eight-day week" is used in some MODIS satellite sensor products.
 
 # create maps every 8 days as seed maps
 for year in `seq 2000 2001` ; do
-   for doy in `seq -w 1 8 365` ; do 
+   for doy in `seq -w 1 8 365` ; do
       r.mapcalc -s expression="8day_${year}_${doy} = rand(0.0,40.0)"
    done
 done
@@ -264,18 +265,18 @@ done
 g.list type=raster pattern=8day_20??_* > names_list
 
 for NAME in `cat names_list` ; do
-   
+
    # Parse
    YEAR=`echo $NAME | cut -d'_' -f2`
    DOY=`echo $NAME | cut -d'_' -f3`
-   
+
    # convert YYYY_DOY to YYYY-MM-DD
    DOY=`echo "$DOY" | sed 's/^0*//'`
    doy_end=0
 
    if [ $DOY -le "353" ] ; then
       doy_end=$(( $DOY + 8 ))
-   elif [ $DOY -eq "361" ] ; then 
+   elif [ $DOY -eq "361" ] ; then
       if [ $[$YEAR % 4] -eq 0 ] && [ $[$YEAR % 100] -ne 0 ] || [ $[$YEAR % 400] -eq 0 ] ; then
          doy_end=$(( $DOY + 6 ))
       else
@@ -285,13 +286,13 @@ for NAME in `cat names_list` ; do
 
    DATE_START=`date -d "${YEAR}-01-01 +$(( ${DOY} - 1 ))days" +%Y-%m-%d`
    DATE_END=`date -d "${YEAR}-01-01 +$(( ${doy_end} -1 ))days" +%Y-%m-%d`
-   
+
    # text file with mapnames, start date and end date
    echo "$NAME|$DATE_START|$DATE_END" >> list_map_start_end_time.txt
-         
+
 done
 
-# check the list created. 
+# check the list created.
 cat list_map_start_end_time.txt
 8day_2000_001|2000-01-01|2000-01-09
 8day_2000_009|2000-01-09|2000-01-17
@@ -305,15 +306,15 @@ cat list_map_start_end_time.txt
 8day_2001_353|2001-12-19|2001-12-27
 8day_2001_361|2001-12-27|2002-01-01
 
-# all maps except for the last map in each year represent 8-days 
-# intervals. But the aggregation starts all over again every 
+# all maps except for the last map in each year represent 8-days
+# intervals. But the aggregation starts all over again every
 # January 1st.
 
 # create 8-day MODIS-like strds
 t.create type=strds temporaltype=absolute \
    output=8day_ts title="8 day time series" \
    description="STRDS with MODIS like 8 day aggregation"
- 
+
 # register maps
 t.register type=raster input=8day_ts \
    file=list_map_start_end_time.txt
@@ -349,7 +350,6 @@ name|mapset|start_time|end_time
 </pre></div>
 
 
-
 <h2>SEE ALSO</h2>
 
 <em>
@@ -361,9 +361,3 @@ name|mapset|start_time|end_time
 <h2>AUTHOR</h2>
 
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->
-

@@ -1,4 +1,3 @@
-
 /**
  * \file lib/vector/diglib/update.c
  *
@@ -36,31 +35,30 @@ void dig_line_reset_updated(struct Plus_head *Plus)
  */
 void dig_line_add_updated(struct Plus_head *Plus, int line, off_t offset)
 {
-    int i;
-    
     G_debug(3, "dig_line_add_updated(): line = %d", line);
 
-    /* undo/redo in the digitizer needs all steps, 
+    /* undo/redo in the digitizer needs all steps,
      * disable check */
 #if 0
+    int i;
+
     /* Check if already in list */
     for (i = 0; i < Plus->uplist.n_uplines; i++) {
-	if (Plus->uplist.uplines[i] == line) {
+        if (Plus->uplist.uplines[i] == line) {
             G_debug(3, "\tskipped");
-	    return;
+            return;
         }
     }
 #endif
-    
+
     /* Alloc space if needed */
     if (Plus->uplist.n_uplines == Plus->uplist.alloc_uplines) {
-	Plus->uplist.alloc_uplines += 1000;
-	Plus->uplist.uplines =
-	    (int *)G_realloc(Plus->uplist.uplines,
-			     Plus->uplist.alloc_uplines * sizeof(int));
-	Plus->uplist.uplines_offset =
-	    (off_t *)G_realloc(Plus->uplist.uplines_offset,
-			     Plus->uplist.alloc_uplines * sizeof(off_t));
+        Plus->uplist.alloc_uplines += 1000;
+        Plus->uplist.uplines = (int *)G_realloc(
+            Plus->uplist.uplines, Plus->uplist.alloc_uplines * sizeof(int));
+        Plus->uplist.uplines_offset =
+            (off_t *)G_realloc(Plus->uplist.uplines_offset,
+                               Plus->uplist.alloc_uplines * sizeof(off_t));
     }
 
     Plus->uplist.uplines[Plus->uplist.n_uplines] = line;
@@ -92,18 +90,17 @@ void dig_node_add_updated(struct Plus_head *Plus, int node)
 
     /* Check if already in list */
     for (i = 0; i < Plus->uplist.n_upnodes; i++) {
-	if (abs(Plus->uplist.upnodes[i]) == abs(node)) {
+        if (abs(Plus->uplist.upnodes[i]) == abs(node)) {
             G_debug(3, "\tskipped");
-	    return;
+            return;
         }
     }
 
     /* Alloc space if needed */
     if (Plus->uplist.n_upnodes == Plus->uplist.alloc_upnodes) {
-	Plus->uplist.alloc_upnodes += 1000;
-	Plus->uplist.upnodes =
-	    (int *)G_realloc(Plus->uplist.upnodes,
-			     Plus->uplist.alloc_upnodes * sizeof(int));
+        Plus->uplist.alloc_upnodes += 1000;
+        Plus->uplist.upnodes = (int *)G_realloc(
+            Plus->uplist.upnodes, Plus->uplist.alloc_upnodes * sizeof(int));
     }
 
     Plus->uplist.upnodes[Plus->uplist.n_upnodes] = node;

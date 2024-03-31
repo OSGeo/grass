@@ -1,21 +1,20 @@
 [main]
-host = https://www.transifex.com
-#type = PO
+host = https://app.transifex.com
 
-[grass7.grasslibspot]
-type = PO
-source_lang = en
+[o:grass-gis:p:grass7:r:grasslibspot]
 source_file = ../templates/grasslibs.pot
-#file_filter = ../po/<lang>/grasslibs.po
-
-[grass7.grassmodspot]
-type = PO
 source_lang = en
+file_filter = ../po/grasslibs_<lang>.po
+type        = PO
+
+[o:grass-gis:p:grass7:r:grassmodspot]
 source_file = ../templates/grassmods.pot
-#file_filter = ../po/<lang>/grassmods.po
-
-[grass7.grasswxpypot]
-type = PO
 source_lang = en
+file_filter = ../po/grassmods_<lang>.po
+type        = PO
+
+[o:grass-gis:p:grass7:r:grasswxpypot]
 source_file = ../templates/grasswxpy.pot
-#file_filter = ../po/<lang>/grasswxpy.po
+source_lang = en
+file_filter = ../po/grasswxpy_<lang>.po
+type        = PO

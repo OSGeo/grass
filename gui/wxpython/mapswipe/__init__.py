@@ -1,7 +1,7 @@
 all = [
-    'g.gui.mapswipe',
-    'dialogs',
-    'mapwindow',
-    'toolbars',
-    'frame',
+    "g.gui.mapswipe",
+    "dialogs",
+    "mapwindow",
+    "toolbars",
+    "frame",
 ]

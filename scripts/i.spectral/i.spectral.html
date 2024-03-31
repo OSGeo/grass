@@ -1,12 +1,11 @@
 <h2>DESCRIPTION</h2>
 
-<em>i.spectral</em> displays spectral response at user specified 
+<em>i.spectral</em> displays spectral response at user specified
 locations in images.
 
 <h2>NOTES</h2>
 
-This script needs gnuplot to be installed.
-
+This script requires the launch of one of the supported monitors (cairo, png, ps) or gnuplot to be installed.
 
 <h2>EXAMPLE</h2>
 
@@ -14,7 +13,7 @@ Analysis of LANDSAT TM7 channels (North Carolina dataset):
 
 <div class="code"><pre>
 g.region raster=lsat7_2002_10 -p
-i.spectral -g input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
+i.spectral -g raster=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
            coordinates=636069,215440,637958,223393,633277,223605
 </pre></div>
 
@@ -30,26 +29,25 @@ North Carolina sample dataset:
 <div class="code"><pre>
 g.region raster=lsat7_2002_10 -p
 LIST=`g.list type=raster pattern="lsat7_2002_[1-5,7]0" separator=","`
-i.spectral input=$LIST coordinates=637502.25,221744.25
+d.mon start=cairo output=plot.png
+i.spectral raster=$LIST coordinates=637502.25,221744.25
+d.mon stop=cairo
 </pre></div>
 
-This will search all LANDSAT map for 2002 but select only the B, G, R, 
+This will search all LANDSAT map for 2002 but select only the B, G, R,
 NIR, and MIR channels.
-
 
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="d.where.html">d.where</a>,
-<a href="r.what.html">r.what</a>
+<a href="r.what.html">r.what</a>,
+<a href="cairodriver.html">Cairo driver</a>,
+<a href="pngdriver.html">PNG driver</a>,
+<a href="psdriver.html">PS driver (Postscript)</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Markus Neteler<br>
 Francesco Pirotti
-
-<!--
-<p>
-<i>Last changed: $Date$</i>
--->

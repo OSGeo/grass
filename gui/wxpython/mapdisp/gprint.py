@@ -22,25 +22,24 @@ from core.gcmd import GMessage
 
 
 class MapPrint(wx.Printout):
-
     def __init__(self, canvas):
         wx.Printout.__init__(self)
         self.canvas = canvas
 
     def OnBeginDocument(self, start, end):
-        return super(MapPrint, self).OnBeginDocument(start, end)
+        return super().OnBeginDocument(start, end)
 
     def OnEndDocument(self):
-        super(MapPrint, self).OnEndDocument()
+        super().OnEndDocument()
 
     def OnBeginPrinting(self):
-        super(MapPrint, self).OnBeginPrinting()
+        super().OnBeginPrinting()
 
     def OnEndPrinting(self):
-        super(MapPrint, self).OnEndPrinting()
+        super().OnEndPrinting()
 
     def OnPreparePrinting(self):
-        super(MapPrint, self).OnPreparePrinting()
+        super().OnPreparePrinting()
 
     def HasPage(self, page):
         if page <= 2:
@@ -54,7 +53,7 @@ class MapPrint(wx.Printout):
     def OnPrintPage(self, page):
         dc = self.GetDC()
 
-        #-------------------------------------------
+        # -------------------------------------------
         # One possible method of setting scaling factors...
         maxX, maxY = self.canvas.GetSize()
 
@@ -84,7 +83,7 @@ class MapPrint(wx.Printout):
         dc.SetUserScale(actualScale, actualScale)
         dc.SetDeviceOrigin(int(posX), int(posY))
 
-        #-------------------------------------------
+        # -------------------------------------------
 
         self.canvas.pdc.DrawToDC(dc)
 
@@ -95,7 +94,6 @@ class MapPrint(wx.Printout):
 
 
 class PrintOptions(wx.Object):
-
     def __init__(self, parent, mapwin):
         self.mapframe = parent
         self.mapwin = mapwin
@@ -150,9 +148,12 @@ class PrintOptions(wx.Object):
         printout = MapPrint(self.mapwin)
 
         if not printer.Print(self.mapframe, printout, True):
-            GMessage(_("There was a problem printing.\n"
-                       "Perhaps your current printer is not set correctly?"))
+            GMessage(
+                _(
+                    "There was a problem printing.\n"
+                    "Perhaps your current printer is not set correctly?"
+                )
+            )
         else:
-            self.printData = wx.PrintData(
-                printer.GetPrintDialogData().GetPrintData())
+            self.printData = wx.PrintData(printer.GetPrintDialogData().GetPrintData())
         printout.Destroy()

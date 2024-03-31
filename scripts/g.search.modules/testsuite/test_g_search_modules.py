@@ -27,52 +27,50 @@ except ImportError:
 
 
 class TestSearchModule(TestCase):
-
     def test_all_output(self):
-        module = SimpleModule('g.search.modules', flags="g")
+        module = SimpleModule("g.search.modules", flags="g")
         self.assertModule(module)
         stdout = decode(module.outputs.stdout).split()
         # we expect at least 100 hits since we search for all modules
-        assert(len(stdout) > 100)
+        assert len(stdout) > 100
 
     def test_terminal_output(self):
         """ """
-        module = SimpleModule('g.search.modules', keyword="water")
+        module = SimpleModule("g.search.modules", keyword="water")
         self.assertModule(module)
         stdout = decode(module.outputs.stdout)
-        self.assertEqual(stdout.split()[0], 'r.basins.fill')
+        self.assertEqual(stdout.split()[0], "r.basins.fill")
 
     def test_json_output(self):
         import json
-        module = SimpleModule('g.search.modules', keyword="water", flags="j")
+
+        module = SimpleModule("g.search.modules", keyword="water", flags="j")
         self.assertModule(module)
         stdout = json.loads(decode(module.outputs.stdout))
-        self.assertEqual(len(stdout), 6, 'Six modules found')
-        self.assertEqual(stdout[3]['name'], 'r.water.outlet', 'r.water.outlet')
-        self.assertTrue('keywords' in stdout[3]['attributes'])
+        self.assertEqual(len(stdout), 6, "Six modules found")
+        self.assertEqual(stdout[3]["name"], "r.water.outlet", "r.water.outlet")
+        self.assertTrue("keywords" in stdout[3]["attributes"])
 
     def test_shell_output(self):
-        module = SimpleModule('g.search.modules', keyword="water", flags="g")
+        module = SimpleModule("g.search.modules", keyword="water", flags="g")
         self.assertModule(module)
         stdout = decode(module.outputs.stdout).split()
         self.assertEqual(len(stdout), 6)
-        self.assertEqual(stdout[3], 'r.water.outlet')
+        self.assertEqual(stdout[3], "r.water.outlet")
 
-    @unittest.skipUnless(has_termcolor,
-                         "not supported in this library version")
+    @unittest.skipUnless(has_termcolor, "not supported in this library version")
     def test_colored_terminal(self):
-        module = SimpleModule('g.search.modules', keyword="water", flags="c")
+        module = SimpleModule("g.search.modules", keyword="water", flags="c")
         self.assertModule(module)
         stdout = decode(module.outputs.stdout).split()
-        self.assertEqual(stdout[0],
-                         termcolor.colored('r.basins.fill',
-                                           attrs=['bold']))
+        self.assertEqual(stdout[0], termcolor.colored("r.basins.fill", attrs=["bold"]))
 
     def test_manual_pages(self):
-        module = SimpleModule('g.search.modules', keyword="kapri", flags="gm")
+        module = SimpleModule("g.search.modules", keyword="kapri", flags="gm")
         self.assertModule(module)
         stdout = decode(module.outputs.stdout).split()
         self.assertEqual(len(stdout), 2)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     test()

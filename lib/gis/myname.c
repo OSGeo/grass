@@ -22,7 +22,7 @@
  * read from the file MYNAME in the PERMANENT mapset. See also \ref
  * Permanent_Mapset for a discussion of the PERMANENT mapset.
  *
- * <b>Note:</b> This name is the first line in the file 
+ * <b>Note:</b> This name is the first line in the file
  * $GISDBASE/$LOCATION_NAME/PERMANENT/MYNAME
  *
  * \return pointer to a string
@@ -39,11 +39,11 @@ char *G_myname(void)
 
     G_file_name(path, "", "MYNAME", "PERMANENT");
     if ((fd = fopen(path, "r"))) {
-	ok = G_getl(name, sizeof name, fd);
-	fclose(fd);
+        ok = G_getl(name, sizeof name, fd);
+        fclose(fd);
     }
     if (!ok)
-	strcpy(name, _("This location has no description."));
+        strcpy(name, _("This location has no description."));
 
     return G_store(name);
 }
