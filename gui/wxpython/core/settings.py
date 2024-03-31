@@ -761,8 +761,8 @@ class Settings:
                     "nodata": {"enable": False},
                 },
             },
-            'rstudio': {
-                'path': '',
+            "rstudio": {
+                "path": "",
             },
         }
 

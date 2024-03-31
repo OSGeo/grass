@@ -768,19 +768,19 @@ class GMFrame(wx.Frame):
             caption=_("Set RStudio path"),
         )
 
-        rstudio_path = UserSettings.Get(group='rstudio', key='path')
+        rstudio_path = UserSettings.Get(group="rstudio", key="path")
         if rstudio_path:
             dlg.SetValue(value=rstudio_path)
 
         if dlg.ShowModal() == wx.ID_OK:
             rstudio_path = dlg.GetValue()
-            UserSettings.Set(group='rstudio', key='path', value=rstudio_path)
+            UserSettings.Set(group="rstudio", key="path", value=rstudio_path)
             fileSettings = {}
             UserSettings.ReadSettingsFile(settings=fileSettings)
-            fileSettings['rstudio'] = UserSettings.Get(group='rstudio')
+            fileSettings["rstudio"] = UserSettings.Get(group="rstudio")
             UserSettings.SaveToFile(fileSettings)
-            if rstudio_path not in os.environ['PATH']:
-                os.environ['PATH'] += os.pathsep + rstudio_path
+            if rstudio_path not in os.environ["PATH"]:
+                os.environ["PATH"] += os.pathsep + rstudio_path
 
         dlg.Destroy()
 

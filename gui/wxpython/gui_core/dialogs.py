@@ -51,7 +51,10 @@ from gui_core.gselect import (
     SubGroupSelect,
 )
 from gui_core.widgets import (
-    GenericValidator, GListCtrl, MapValidator, SimpleValidator,
+    GenericValidator,
+    GListCtrl,
+    MapValidator,
+    SimpleValidator,
     SingleSymbolPanel,
 )
 from core.settings import UserSettings
@@ -2637,17 +2640,21 @@ class DirBrowseDialog(wx.Dialog):
     """Simple dialog with DirBrowseButton widget."""
 
     def __init__(
-            self, parent, message, caption='', defaultValue='',
-            validator=wx.DefaultValidator, style=wx.OK | wx.CANCEL | wx.CENTRE,
-            textStyle=0, textSize=(300, -1), size=(400, -1),
-            **kwargs):
+        self,
+        parent,
+        message,
+        caption="",
+        defaultValue="",
+        validator=wx.DefaultValidator,
+        style=wx.OK | wx.CANCEL | wx.CENTRE,
+        textStyle=0,
+        textSize=(300, -1),
+        size=(400, -1),
+        **kwargs,
+    ):
         wx.Dialog.__init__(
-            self,
-            parent=parent,
-            id=wx.ID_ANY,
-            title=caption,
-            size=size,
-            **kwargs)
+            self, parent=parent, id=wx.ID_ANY, title=caption, size=size, **kwargs
+        )
 
         vbox = wx.BoxSizer(wx.VERTICAL)
 
@@ -2655,36 +2662,46 @@ class DirBrowseDialog(wx.Dialog):
         vbox.Add(stline, proportion=0, flag=wx.EXPAND | wx.ALL, border=10)
 
         self._dirBrowse = filebrowse.DirBrowseButton(
-            parent=self, id=wx.ID_ANY, labelText=_("Directory:"),
+            parent=self,
+            id=wx.ID_ANY,
+            labelText=_("Directory:"),
             dialogTitle=_("Choose directory for export"),
             buttonText=_("Browse"),
-            startDirectory=os.getcwd())
+            startDirectory=os.getcwd(),
+        )
         self._dirBrowse.SetValidator(
-            GenericValidator(condition=self._pathExists,
-                             callback=self._pathDoesNotExists))
+            GenericValidator(
+                condition=self._pathExists, callback=self._pathDoesNotExists
+            )
+        )
         wx.CallAfter(self._dirBrowse.SetFocus)
 
-        vbox.Add(self._dirBrowse,
-                 proportion=0,
-                 flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
-                 border=10)
+        vbox.Add(
+            self._dirBrowse,
+            proportion=0,
+            flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
+            border=10,
+        )
 
         sizer = self.CreateSeparatedButtonSizer(style)
         vbox.Add(sizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=10)
 
         self.SetSizerAndFit(vbox)
-        self.SetSizeHints(size[0], size[1], -1 , -1)
+        self.SetSizeHints(size[0], size[1], -1, -1)
 
-        self.Bind(wx.EVT_BUTTON, self.OnPathValidation,
-                  self.FindWindow(id=wx.ID_OK))
+        self.Bind(wx.EVT_BUTTON, self.OnPathValidation, self.FindWindow(id=wx.ID_OK))
 
     def _pathExists(self, path):
         return os.path.exists(path)
 
     def _pathDoesNotExists(self, ctrl):
-        GMessage(parent=self,
-                 message=_("RStudio path <{}> doesn't exists. "
-                           "Set correct path, please.".format(ctrl.GetValue())))
+        GMessage(
+            parent=self,
+            message=_(
+                "RStudio path <{}> doesn't exists. "
+                "Set correct path, please.".format(ctrl.GetValue())
+            ),
+        )
 
     def OnPathValidation(self, event):
         if self.Validate() and self.TransferDataFromWindow():
