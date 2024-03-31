@@ -511,9 +511,11 @@ class BufferedMapWindow(MapWindowBase, Window):
                 pdc.SetTextBackground(img["background"])
             coords, bbox = self.TextBounds(img)
             if rotation == 0:
-                pdc.DrawText(img["text"], coords[0], coords[1])
+                pdc.DrawText(img["text"], int(coords[0]), int(coords[1]))
             else:
-                pdc.DrawRotatedText(img["text"], coords[0], coords[1], rotation)
+                pdc.DrawRotatedText(
+                    img["text"], int(coords[0]), int(coords[1]), rotation
+                )
             pdc.SetIdBounds(drawid, bbox)
 
         pdc.EndDrawing()

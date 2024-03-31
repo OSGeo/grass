@@ -139,9 +139,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             pass
 
         if globalvar.hasAgw:
-            super(LayerTree, self).__init__(parent, id, agwStyle=ctstyle, **kwargs)
+            super().__init__(parent, id, agwStyle=ctstyle, **kwargs)
         else:
-            super(LayerTree, self).__init__(parent, id, style=ctstyle, **kwargs)
+            super().__init__(parent, id, style=ctstyle, **kwargs)
         self.SetName("LayerTree")
         self.SetBackgroundColour(wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW))
 
@@ -149,7 +149,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # when some layers are not visible in layer tree
         # self.SetAutoLayout(True)
         self.SetGradientStyle(1)
-        self.EnableSelectionGradient(True)
+        if sys.platform != "darwin":
+            self.EnableSelectionGradient(True)
         self._setGradient()
 
         # init associated map display

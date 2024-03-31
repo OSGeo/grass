@@ -12,21 +12,44 @@ on:
     branches:
       - main
       - releasebranch_*
+      - '*'
 
 jobs:
-  build-and-test:
-    name: ${{ matrix.name }} tests
-
+  ubuntu:
     concurrency:
       group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
-        matrix.name }}
+        matrix.name }}-${{ matrix.os }}-${{ matrix.extra-include }}
       cancel-in-progress: true
 
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        name:
+          - "22.04"
+          - minimum config
+
+        # Only run tests for these folders in this matrix job.
+        extra-include:
+          # All root folders that could contain tests are:
+          #   db display doc docker general gui
+          #   imagery lib misc ps python raster raster3d scripts
+          #   temporal testsuite utils vector visualization
+          #
+          # In order to split test executions, all these root folders are
+          # added as excluded folders, then items included for this matrix
+          # job are removed from that exclusion list.
+          #
+          # Using folded YAML multiline string block chomping (>-) to replace
+          # newlines with spaces, and strip newline at end.
+          # See https://yaml-multiline.info/
+          - temporal
+          - >-
+            db display doc docker general gui
+            imagery lib misc ps python raster raster3d scripts
+            testsuite utils vector visualization
+
         include:
-          - name: '22.04'
+          - name: "22.04"
             os: ubuntu-22.04
             config: ubuntu-22.04
           # This is without optional things but it still keeps things useful,
@@ -38,7 +61,45 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+
+      - name: Invert inclusion list to an exclusion list
+        id: get-exclude
+        run: |
+          array=(db display doc docker general gui \
+          imagery lib misc ps python raster raster3d scripts \
+          temporal testsuite utils vector visualization)
+          echo "Complete set of folders that can be included:"
+          echo "${array[@]}"
+          delete=( ${{ env.DELETE_ARRAY }} )
+          echo "Included folders to remove from the complete set:"
+          echo "${delete[@]}"
+          for target in "${delete[@]}"; do
+            for i in "${!array[@]}"; do
+              if [[ ${array[i]} = $target ]]; then
+                unset 'array[i]'
+              fi
+            done
+          done
+          unset new_array
+          for i in "${!array[@]}"; do
+              new_array+=( "${array[i]}" )
+          done
+          echo "Excluded folders:"
+          echo "${new_array[@]}"
+          printf -v extra_exclude './%s/* ' "${new_array[@]}"
+          echo "Exclusion string to add to gunittest config"
+          echo "${extra_exclude}"
+          echo "extra-exclude=${extra_exclude}" >> "${GITHUB_OUTPUT}"
+        env:
+          DELETE_ARRAY: ${{ matrix.extra-include }}
+
+      - name: Add extra exclusions to a gunittest config file
+        run: |
+          sed 's:exclude =:exclude = ${{
+            steps.get-exclude.outputs.extra-exclude
+          }}:g' .gunittest.cfg > .gunittest.extra.cfg
+          cat .gunittest.extra.cfg
 
       - name: Get dependencies
         run: |
@@ -69,7 +130,7 @@ jobs:
       - name: Build
         env:
           # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
-          CFLAGS: -fPIC
+          CFLAGS: -fPIC -Wvla
           # TODO: -pedantic-errors here won't compile
           CXXFLAGS: -fPIC
         run: .github/workflows/build_${{ matrix.config }}.sh $HOME/install -Werror
@@ -78,20 +139,29 @@ jobs:
         run: |
           echo "$HOME/install/bin" >> $GITHUB_PATH
 
+      - name: Print installed versions
+        if: always()
+        run: .github/workflows/print_versions.sh
+
       - name: Test executing of the grass command
         run: .github/workflows/test_simple.sh
 
       - name: Run tests
-        run: .github/workflows/test_thorough.sh
+        run: .github/workflows/test_thorough.sh --config .gunittest.extra.cfg
 
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
-          name: testreport-${{ matrix.config }}
+          name: testreport-${{ matrix.os }}-${{ matrix.config }}-${{ matrix.extra-include }}
           path: testreport
           retention-days: 3
 
-      - name: Print installed versions
-        if: always()
-        run: .github/workflows/print_versions.sh
+  build-and-test-success:
+    name: Build & Test Result
+    needs:
+      - ubuntu
+    if: ${{ always() }}
+    uses: ./.github/workflows/verify-success.yml
+    with:
+      needs_context: ${{ toJson(needs) }}

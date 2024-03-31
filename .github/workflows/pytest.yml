@@ -25,17 +25,19 @@ jobs:
         python-version:
           - '3.8'
           - '3.10'
+          - '3.12'
       fail-fast: true
 
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
         with:
           python-version: ${{ matrix.python-version }}
+          cache: pip
 
       - name: Install non-Python dependencies
         run: |
@@ -49,7 +51,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install pytest pytest-timeout
+          pip install pytest pytest-timeout pytest-github-actions-annotate-failures pytest-xdist
 
       - name: Create installation directory
         run: |
@@ -73,8 +75,16 @@ jobs:
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
-          pytest .
+          pytest --numprocesses auto .
 
       - name: Print installed versions
         if: always()
         run: .github/workflows/print_versions.sh
+  pytest-success:
+    name: pytest Result
+    needs:
+      - pytest
+    if: ${{ always() }}
+    uses: ./.github/workflows/verify-success.yml
+    with:
+      needs_context: ${{ toJson(needs) }}

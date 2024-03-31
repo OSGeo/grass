@@ -27,18 +27,18 @@ jobs:
 
     steps:
       - name: Checkout repository contents
-        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
           fetch-depth: 31
 
       - name: Check for CRLF endings
-        uses: erclu/check-crlf@v1
+        uses: erclu/check-crlf@94acb86c2a41b0a46bd8087b63a06f0457dd0c6c # v1.2.0
         with:
           # Ignore all test data, Windows-specific directories and scripts.
           exclude: mswindows .*\.bat .*/testsuite/data/.*
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
         with:
           python-version: '3.10'
 

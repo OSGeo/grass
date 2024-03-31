@@ -8,6 +8,8 @@ Classes:
  - model::ModelObject
  - model::ModelAction
  - model::ModelData
+ - model::ModelDataSingle
+ - model::ModelDataSeries
  - model::ModelRelation
  - model::ModelItem
  - model::ModelLoop
@@ -19,7 +21,7 @@ Classes:
  - model::WritePythonFile
  - model::ModelParamDialog
 
-(C) 2010-2018 by the GRASS Development Team
+(C) 2010-2024 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -36,7 +38,6 @@ import mimetypes
 import time
 
 import xml.etree.ElementTree as etree
-
 import xml.sax.saxutils as saxutils
 
 import wx
@@ -62,7 +63,7 @@ from gmodeler.giface import GraphicalModelerGrassInterface
 from grass.script import task as gtask
 
 
-class Model(object):
+class Model:
     """Class representing the model"""
 
     def __init__(self, canvas=None):
@@ -356,7 +357,10 @@ class Model(object):
 
         # load data & relations
         for data in gxmXml.data:
-            dataItem = ModelData(
+            dataClass = (
+                ModelDataSeries if data["prompt"].startswith("st") else ModelDataSingle
+            )
+            dataItem = dataClass(
                 parent=self,
                 x=data["pos"][0],
                 y=data["pos"][1],
@@ -724,7 +728,7 @@ class Model(object):
                 # split condition
                 # TODO: this part needs some better solution
                 condVar, condText = map(
-                    lambda x: x.strip(), re.split("\s* in \s*", cond)
+                    lambda x: x.strip(), re.split(r"\s* in \s*", cond)
                 )
                 pattern = re.compile("%" + condVar)
                 # for vars()[condVar] in eval(condText): ?
@@ -890,7 +894,7 @@ class Model(object):
         return result
 
 
-class ModelObject(object):
+class ModelObject:
     def __init__(self, id=-1, label=""):
         self.id = id  # internal id, should be not changed
         self.label = ""
@@ -1350,7 +1354,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         ogl.RectangleShape.OnDraw(self, dc)
 
 
-class ModelData(ModelObject, ogl.EllipseShape):
+class ModelData(ModelObject):
     def __init__(self, parent, x, y, value="", prompt="", width=None, height=None):
         """Data item class
 
@@ -1378,15 +1382,20 @@ class ModelData(ModelObject, ogl.EllipseShape):
                 group="modeler", key="data", subkey=("size", "height")
             )
 
-        if self.parent.GetCanvas():
-            ogl.EllipseShape.__init__(self, width, height)
+        self._defineShape(width, height, x, y)
 
-            self.SetCanvas(self.parent)
-            self.SetX(x)
-            self.SetY(y)
-            self._setPen()
-            self._setBrush()
-            self.SetLabel()
+        self._setPen()
+        self._setBrush()
+        self.SetLabel()
+
+    @abstractmethod
+    def _defineShape(self, width, height, x, y):
+        """Define data item
+
+        :param width, height: dimension of the shape
+        :param x, y: position of the shape
+        """
+        pass
 
     def IsIntermediate(self):
         """Checks if data item is intermediate"""
@@ -1407,7 +1416,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
     def OnDraw(self, dc):
         self._setPen()
 
-        ogl.EllipseShape.OnDraw(self, dc)
+        super().OnDraw(dc)
 
     def GetLog(self, string=True):
         """Get logging info"""
@@ -1468,17 +1477,17 @@ class ModelData(ModelObject, ogl.EllipseShape):
         """Get properties dialog"""
         self.propWin = win
 
-    def _setBrush(self):
-        """Set brush"""
-        if self.prompt == "raster":
+    def _getBrush(self):
+        """Get brush"""
+        if self.prompt in ("raster", "strds"):
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "raster")
             )
-        elif self.prompt == "raster_3d":
+        elif self.prompt in ("raster_3d", "str3ds"):
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "raster3d")
             )
-        elif self.prompt == "vector":
+        elif self.prompt in ("vector", "stvds"):
             color = UserSettings.Get(
                 group="modeler", key="data", subkey=("color", "vector")
             )
@@ -1491,10 +1500,15 @@ class ModelData(ModelObject, ogl.EllipseShape):
                 group="modeler", key="action", subkey=("color", "invalid")
             )
         wxColor = wx.Colour(color[0], color[1], color[2])
-        self.SetBrush(wx.Brush(wxColor))
 
-    def _setPen(self):
-        """Set pen"""
+        return wx.Brush(wxColor)
+
+    def _setBrush(self):
+        """Set brush"""
+        self.SetBrush(self._getBrush())
+
+    def _getPen(self):
+        """Get pen"""
         isParameterized = False
         for rel in self.GetRelations("from"):
             if rel.GetTo().IsParameterized():
@@ -1523,8 +1537,11 @@ class ModelData(ModelObject, ogl.EllipseShape):
         else:
             style = wx.SOLID
 
-        pen = wx.Pen(wx.BLACK, width, style)
-        self.SetPen(pen)
+        return wx.Pen(wx.BLACK, width, style)
+
+    def _setPen(self):
+        """Get pen"""
+        self.SetPen(self._getPen())
 
     def SetLabel(self):
         """Update text"""
@@ -1557,6 +1574,71 @@ class ModelData(ModelObject, ogl.EllipseShape):
         cmd.append("map=" + self.value)
 
         return cmd
+
+
+class ModelDataSingle(ModelData, ogl.EllipseShape):
+    def _defineShape(self, width, height, x, y):
+        """Define single data item (raster, raster_3d, vector)
+
+        :param width, height: dimension of the shape
+        :param x, y: position of the shape
+        """
+        ogl.EllipseShape.__init__(self, width, height)
+        if self.parent.GetCanvas():
+            self.SetCanvas(self.parent.GetCanvas())
+
+        self.SetX(x)
+        self.SetY(y)
+
+
+class ModelDataSeries(ModelData, ogl.CompositeShape):
+    def _defineShape(self, width, height, x, y):
+        """Define single data item (raster, raster_3d, vector)
+
+        :param width, height: dimension of the shape
+        :param x, y: position of the shape
+        """
+        ogl.CompositeShape.__init__(self)
+        if self.parent.GetCanvas():
+            self.SetCanvas(self.parent.GetCanvas())
+
+        self.constraining_shape = ogl.EllipseShape(width, height)
+        self.constrained_shape = ogl.EllipseShape(width - 20, height)
+        self.AddChild(self.constraining_shape)
+        self.AddChild(self.constrained_shape)
+
+        constraint = ogl.Constraint(
+            ogl.CONSTRAINT_CENTRED_BOTH,
+            self.constraining_shape,
+            [self.constrained_shape],
+        )
+        self.AddConstraint(constraint)
+        self.Recompute()
+
+        self.constraining_shape.SetDraggable(False)
+        self.constrained_shape.SetDraggable(False)
+        self.constrained_shape.SetSensitivityFilter(ogl.OP_CLICK_LEFT)
+
+        canvas = self.parent.GetCanvas()
+        if canvas:
+            dc = wx.ClientDC(canvas)
+            canvas.PrepareDC(dc)
+            self.Move(dc, x, y)
+
+        self.SetX(x)
+        self.SetY(y)
+
+    def _setBrush(self):
+        """Set brush"""
+        brush = self._getBrush()
+        self.constraining_shape.SetBrush(brush)
+        self.constrained_shape.SetBrush(brush)
+
+    def _setPen(self):
+        """Set brush"""
+        brush = self._getPen()
+        self.constraining_shape.SetPen(brush)
+        self.constrained_shape.SetPen(brush)
 
 
 class ModelRelation(ogl.LineShape):
@@ -2578,7 +2660,7 @@ class WriteScriptFile(ABC):
                     cond = pattern.sub(value, cond)
             if isinstance(item, ModelLoop):
                 condVar, condText = map(
-                    lambda x: x.strip(), re.split("\s* in \s*", cond)
+                    lambda x: x.strip(), re.split(r"\s* in \s*", cond)
                 )
                 cond = "%sfor %s in " % (" " * self.indent, condVar)
                 if condText[0] == "`" and condText[-1] == "`":
@@ -2664,11 +2746,12 @@ class WriteScriptFile(ABC):
 class WritePyWPSFile(WriteScriptFile):
     """Class for exporting model to PyWPS script."""
 
-    def __init__(self, fd, model):
+    def __init__(self, fd, model, grassAPI="script"):
         """Class for exporting model to PyWPS script."""
         self.fd = fd
         self.model = model
         self.indent = 8
+        self.grassAPI = grassAPI
 
         self._writePyWPS()
 
@@ -2683,8 +2766,15 @@ import sys
 import os
 import atexit
 import tempfile
-from grass.script import run_command
-from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format
+"""
+        )
+        if self.grassAPI == "script":
+            self.fd.write("from grass.script import run_command\n")
+        else:
+            self.fd.write("from grass.pygrass.modules import Module\n")
+
+        self.fd.write(
+            r"""from pywps import Process, LiteralInput, ComplexInput, ComplexOutput, Format
 
 
 class Model(Process):
@@ -2727,7 +2817,7 @@ class Model(Process):
 
         self._writeHandler()
 
-        for item in self.model.GetItems():
+        for item in self.model.GetItems(ModelAction):
             if item.GetParameterizedParams()["flags"]:
                 self.fd.write(
                     r"""
@@ -2860,7 +2950,7 @@ if __name__ == "__main__":
         )
 
     def _writeHandler(self):
-        for item in self.model.GetItems():
+        for item in self.model.GetItems(ModelAction):
             self._writeItem(item, variables=item.GetParameterizedParams())
 
         self.fd.write("\n{}return response\n".format(" " * self.indent))
@@ -2868,7 +2958,10 @@ if __name__ == "__main__":
     def _writePythonAction(self, item, variables={}, intermediates=None):
         """Write model action to Python file"""
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
-        strcmd = "\n%srun_command(" % (" " * self.indent)
+        strcmd = "\n%s%s(" % (
+            " " * self.indent,
+            "run_command" if self.grassAPI == "script" else "Module",
+        )
         self.fd.write(
             strcmd + self._getPythonActionCmd(item, task, len(strcmd) - 1, variables)
         )
@@ -2917,6 +3010,7 @@ if __name__ == "__main__":
                 else:
                     overwrite_string = ""
 
+                strcmd_len = len(strcmd.strip())
                 self.fd.write(
                     """
 {run_command}"{cmd}",
@@ -2928,14 +3022,14 @@ if __name__ == "__main__":
 """.format(
                         run_command=strcmd,
                         cmd=command,
-                        indent1=" " * (self.indent + 12),
+                        indent1=" " * (self.indent + strcmd_len),
                         input=param_request,
-                        indent2=" " * (self.indent + 12),
-                        indent3=" " * (self.indent + 16),
-                        indent4=" " * (self.indent + 16),
+                        indent2=" " * (self.indent + strcmd_len),
+                        indent3=" " * (self.indent * 2 + strcmd_len),
+                        indent4=" " * (self.indent * 2 + strcmd_len),
                         out=param_request,
                         format_ext=extension,
-                        indent5=" " * (self.indent + 12),
+                        indent5=" " * (self.indent + strcmd_len),
                         format=format,
                         overwrite_string=overwrite_string,
                     )
@@ -3061,14 +3155,17 @@ if __name__ == "__main__":
 
 
 class WritePythonFile(WriteScriptFile):
-    def __init__(self, fd, model):
+    def __init__(self, fd, model, grassAPI="script"):
         """Class for exporting model to Python script
 
         :param fd: file descriptor
+        :param model: model to translate
+        :param grassAPI: script or pygrass
         """
         self.fd = fd
         self.model = model
         self.indent = 4
+        self.grassAPI = grassAPI
 
         self._writePython()
 
@@ -3128,7 +3225,7 @@ class WritePythonFile(WriteScriptFile):
             )
         )
 
-        modelItems = self.model.GetItems()
+        modelItems = self.model.GetItems(ModelAction)
         for item in modelItems:
             for flag in item.GetParameterizedParams()["flags"]:
                 if flag["label"]:
@@ -3188,9 +3285,13 @@ import sys
 import os
 import atexit
 
-from grass.script import parser, run_command
+from grass.script import parser
 """
         )
+        if self.grassAPI == "script":
+            self.fd.write("from grass.script import run_command\n")
+        else:
+            self.fd.write("from grass.pygrass.modules import Module\n")
 
         # cleanup()
         rast, vect, rast3d, msg = self.model.GetIntermediateData()
@@ -3199,32 +3300,33 @@ from grass.script import parser, run_command
 def cleanup():
 """
         )
+        run_command = "run_command" if self.grassAPI == "script" else "Module"
         if rast:
             self.fd.write(
-                r"""    run_command("g.remove", flags="f", type="raster",
+                r"""    %s("g.remove", flags="f", type="raster",
                 name=%s)
 """
-                % ",".join(map(lambda x: '"' + x + '"', rast))
+                % (run_command, ",".join(map(lambda x: '"' + x + '"', rast)))
             )
         if vect:
             self.fd.write(
-                r"""    run_command("g.remove", flags="f", type="vector",
+                r"""    %s("g.remove", flags="f", type="vector",
                 name=%s)
 """
-                % ",".join(map(lambda x: '"' + x + '"', vect))
+                % (run_command, ",".join(map(lambda x: '"' + x + '"', vect)))
             )
         if rast3d:
             self.fd.write(
-                r"""    run_command("g.remove", flags="f", type="raster_3d",
+                r"""    %s("g.remove", flags="f", type="raster_3d",
                 name=%s)
 """
-                % ",".join(map(lambda x: '"' + x + '"', rast3d))
+                % (run_command, ",".join(map(lambda x: '"' + x + '"', rast3d)))
             )
         if not rast and not vect and not rast3d:
             self.fd.write("    pass\n")
 
         self.fd.write("\ndef main(options, flags):\n")
-        for item in self.model.GetItems():
+        for item in self.model.GetItems(ModelAction):
             self._writeItem(item, variables=item.GetParameterizedParams())
 
         self.fd.write("    return 0\n")
@@ -3260,7 +3362,10 @@ if __name__ == "__main__":
     def _writePythonAction(self, item, variables={}, intermediates=None):
         """Write model action to Python file"""
         task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
-        strcmd = "%srun_command(" % (" " * self.indent)
+        strcmd = "%s%s(" % (
+            " " * self.indent,
+            "run_command" if self.grassAPI == "script" else "Module",
+        )
         self.fd.write(
             strcmd + self._getPythonActionCmd(item, task, len(strcmd), variables) + "\n"
         )
@@ -3278,16 +3383,31 @@ if __name__ == "__main__":
         for p in opts["params"]:
             name = p.get("name", None)
             value = p.get("value", None)
+            ptype = p.get("type", "string")
+
+            if (
+                self.grassAPI == "pygrass"
+                and (p.get("multiple", False) is True or len(p.get("key_desc", [])) > 1)
+                and "," in value
+            ):
+                value = value.split(",")
+                if ptype == "integer":
+                    value = list(map(int, value))
+                elif ptype == "float":
+                    value = list(map(float, value))
 
             if (name and value) or (name in parameterizedParams):
-                ptype = p.get("type", "string")
                 foundVar = False
 
                 if name in parameterizedParams:
                     foundVar = True
                     value = 'options["{}"]'.format(self._getParamName(name, item))
 
-                if foundVar or ptype != "string":
+                if (
+                    foundVar
+                    or isinstance(value, list)
+                    or (ptype != "string" and len(p.get("key_desc", [])) < 2)
+                ):
                     params.append("{}={}".format(name, value))
                 else:
                     params.append('{}="{}"'.format(name, value))
@@ -3324,7 +3444,7 @@ if __name__ == "__main__":
         :return: modified string
         """
         result = ""
-        ss = re.split("\w*(%" + variable + ")w*", string)
+        ss = re.split(r"\w*(%" + variable + ")w*", string)
 
         if not ss[0] and not ss[-1]:
             if data:

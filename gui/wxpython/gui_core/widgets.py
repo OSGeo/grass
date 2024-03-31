@@ -132,7 +132,17 @@ class NotebookController:
         self.widget.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnRemoveHighlight)
 
     def AddPage(self, *args, **kwargs):
-        """Add a new page"""
+        """Add a new page
+
+        :param str name: use this param if notebooks has ability to
+                         change position and then you must use page name
+                         param arg to correctly delete notebook page.
+                         If you do not use this parameter, make sure that
+                         the notebooks does not have the ability to change
+                         position, because in that case the deletion of
+                         the page based on the position index would not
+                         work correctly.
+        """
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
@@ -140,7 +150,17 @@ class NotebookController:
         self.classObject.AddPage(self.widget, *args, **kwargs)
 
     def InsertPage(self, *args, **kwargs):
-        """Insert a new page"""
+        """Insert a new page
+
+        :param str name: use this param if notebooks has ability to
+                         change position and then you must use page name
+                         param arg to correctly delete notebook page.
+                         If you do not use this parameter, make sure that
+                         the notebooks does not have the ability to change
+                         position, because in that case the deletion of
+                         the page based on the position index would not
+                         work correctly.
+        """
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
@@ -157,8 +177,9 @@ class NotebookController:
     def DeletePage(self, page):
         """Delete page
 
-        :param page: name
-        :return: True if page was deleted, False if not exists
+        :param str|int page: page name or page index position
+
+        :return bool: True if page was deleted, False if not exists
         """
         delPageIndex = self.GetPageIndexByName(page)
         if delPageIndex != -1:
@@ -215,8 +236,12 @@ class NotebookController:
     def GetPageIndexByName(self, page):
         """Get notebook page index
 
-        :param page: name
+        :param str|int page: page name or page index position
+
+        :return int: page index
         """
+        if not self.notebookPages:
+            return page
         if page not in self.notebookPages:
             return -1
         for pageIndex in range(self.classObject.GetPageCount(self.widget)):
@@ -259,8 +284,12 @@ class FlatNotebookController(NotebookController):
     def GetPageIndexByName(self, page):
         """Get notebook page index
 
-        :param page: name
+        :param str|int page: page name or page index position
+
+        :return int: page index
         """
+        if not self.notebookPages:
+            return page
         if page not in self.notebookPages:
             return -1
 
@@ -412,10 +441,10 @@ class NumTextCtrl(TextCtrl):
         )
 
     def SetValue(self, value):
-        super(NumTextCtrl, self).SetValue(str(value))
+        super().SetValue(str(value))
 
     def GetValue(self):
-        val = super(NumTextCtrl, self).GetValue()
+        val = super().GetValue()
         if val == "":
             val = "0"
         try:
@@ -445,10 +474,10 @@ class FloatSlider(Slider):
             while abs(value) < 1:
                 value *= 100
                 self.coef *= 100
-            super(FloatSlider, self).SetRange(
+            super().SetRange(
                 self.minValueOrig * self.coef, self.maxValueOrig * self.coef
             )
-        super(FloatSlider, self).SetValue(value)
+        super().SetValue(value)
 
         Debug.msg(4, "FloatSlider.SetValue(): value = %f" % value)
 
@@ -463,10 +492,8 @@ class FloatSlider(Slider):
                 minValue *= 100
                 maxValue *= 100
                 self.coef *= 100
-            super(FloatSlider, self).SetValue(
-                super(FloatSlider, self).GetValue() * self.coef
-            )
-        super(FloatSlider, self).SetRange(minValue, maxValue)
+            super().SetValue(super().GetValue() * self.coef)
+        super().SetRange(minValue, maxValue)
         Debug.msg(
             4,
             "FloatSlider.SetRange(): minValue = %f, maxValue = %f"
@@ -474,7 +501,7 @@ class FloatSlider(Slider):
         )
 
     def GetValue(self):
-        val = super(FloatSlider, self).GetValue()
+        val = super().GetValue()
         Debug.msg(4, "FloatSlider.GetValue(): value = %f" % (val / self.coef))
         return val / self.coef
 
@@ -1223,7 +1250,7 @@ class SearchModuleWidget(wx.Panel):
 
         if self._showTip:
             self._searchTip = StaticWrapText(
-                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 35)
+                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 40)
             )
 
         if self._showChoice:
@@ -1288,9 +1315,9 @@ class SearchModuleWidget(wx.Panel):
                 self._searchChoice.SetSelection(0)
                 self.OnSelectModule()
 
-        label = _("%d tools match") % len(commands)
+        label = _("{} tools matched").format(len(commands))
         if self._showTip:
-            self._searchTip.SetLabel(label)
+            self._searchTip.SetLabel(self._searchTip.GetLabel() + " [{}]".format(label))
 
         self.showNotification.emit(message=label)
 
@@ -1523,7 +1550,7 @@ class ManageSettingsWidget(wx.Panel):
                         fd.write("%s;" % (v))
                 fd.write("\n")
 
-        except IOError:
+        except OSError:
             GError(parent=self, message=_("Unable to save settings"))
             return -1
         fd.close()
@@ -1545,7 +1572,7 @@ class ManageSettingsWidget(wx.Panel):
 
         try:
             fd = open(self.settingsFile, "r")
-        except IOError:
+        except OSError:
             return data
 
         fd_lines = fd.readlines()

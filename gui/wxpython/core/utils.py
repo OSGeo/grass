@@ -279,38 +279,39 @@ def ListOfCatsToRange(cats):
 
 
 def ListOfMapsets(get="ordered"):
-    """Get list of available/accessible mapsets
+    """Get list of available/accessible mapsets.
+    Option 'ordered' returns list of all mapsets, first accessible
+    then not accessible. Raises ValueError for wrong paramater value.
 
     :param str get: method ('all', 'accessible', 'ordered')
 
     :return: list of mapsets
-    :return: None on error
+    :return: [] on error
     """
-    mapsets = []
-
     if get == "all" or get == "ordered":
         ret = RunCommand("g.mapsets", read=True, quiet=True, flags="l", sep="newline")
-
-        if ret:
-            mapsets = ret.splitlines()
-            ListSortLower(mapsets)
-        else:
-            return None
+        if not ret:
+            return []
+        mapsets_all = ret.splitlines()
+        ListSortLower(mapsets_all)
+        if get == "all":
+            return mapsets_all
 
     if get == "accessible" or get == "ordered":
         ret = RunCommand("g.mapsets", read=True, quiet=True, flags="p", sep="newline")
-        if ret:
-            if get == "accessible":
-                mapsets = ret.splitlines()
-            else:
-                mapsets_accessible = ret.splitlines()
-                for mapset in mapsets_accessible:
-                    mapsets.remove(mapset)
-                mapsets = mapsets_accessible + mapsets
-        else:
-            return None
+        if not ret:
+            return []
+        mapsets_accessible = ret.splitlines()
+        if get == "accessible":
+            return mapsets_accessible
 
-    return mapsets
+        mapsets_ordered = mapsets_accessible.copy()
+        for mapset in mapsets_all:
+            if mapset not in mapsets_accessible:
+                mapsets_ordered.append(mapset)
+        return mapsets_ordered
+
+    raise ValueError("Invalid value for 'get' parameter of ListOfMapsets()")
 
 
 def ListSortLower(list):
@@ -601,7 +602,7 @@ def GetListOfMapsets(dbase, location, selectable=False):
 
     if selectable:
         ret = RunCommand(
-            "g.mapset", read=True, flags="l", location=location, dbase=dbase
+            "g.mapset", read=True, flags="l", project=location, dbase=dbase
         )
 
         if not ret:
@@ -801,7 +802,7 @@ def GetSettingsPath():
     try:
         verFd = open(os.path.join(ETCDIR, "VERSIONNUMBER"))
         version = int(verFd.readlines()[0].split(" ")[0].split(".")[0])
-    except (IOError, ValueError, TypeError, IndexError) as e:
+    except (OSError, ValueError, TypeError, IndexError) as e:
         sys.exit(_("ERROR: Unable to determine GRASS version. Details: %s") % e)
 
     verFd.close()
@@ -839,7 +840,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
     if os.path.exists(envFile):
         try:
             fd = open(envFile)
-        except IOError as e:
+        except OSError as e:
             sys.stderr.write(_("Unable to open file '%s'\n") % envFile)
             return
         for line in fd.readlines():
@@ -869,7 +870,7 @@ def StoreEnvVariable(key, value=None, envFile=None):
     # write update env file
     try:
         fd = open(envFile, "w")
-    except IOError as e:
+    except OSError as e:
         sys.stderr.write(_("Unable to create file '%s'\n") % envFile)
         return
     if windows:
@@ -1133,9 +1134,9 @@ def do_doctest_gettext_workaround():
 
     sys.displayhook = new_displayhook
 
-    import __builtin__
+    import builtins
 
-    __builtin__._ = new_translator
+    builtins.__dict__["_"] = new_translator
 
 
 def doc_test():
@@ -1195,6 +1196,169 @@ def is_shell_running():
     if get_shell_pid() is None:
         return False
     return True
+
+
+def parse_mapcalc_cmd(command):
+    """Parse r.mapcalc/r3.mapcalc module command
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc map = 1")
+    "r.mapcalc expression='map = 1'"
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc map =    1")
+    "r.mapcalc expression='map = 1'"
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc map=1")
+    "r.mapcalc expression='map=1'"
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc map = a - b")
+    "r.mapcalc expression='map = a - b'"
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc expression=map = a - b")
+    "r.mapcalc expression='map = a - b'"
+
+    >>> parse_mapcalc_cmd(command="r.mapcalc expression=map = a -     b")
+    "r.mapcalc expression='map = a - b'"
+
+    >>> cmd = "r.mapcalc expr='map = a - b' region=clip --overwrite"
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expr='map = a - b' region=clip"
+
+    >>> cmd = 'r.mapcalc expr="map = a - b" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expr='map = a - b' region=clip"
+
+    >>> cmd = "r.mapcalc -s map = (a - b) / c region=clip --overwrite --verbose"
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc -s --overwrite --verbose expression='map = (a - b) / c' region=clip"
+
+    >>> cmd = 'r.mapcalc e="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite e='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc ex="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite ex='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc exp="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite exp='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc expr="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expr='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc expre="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expre='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc expres="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expres='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc express="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite express='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc expressi="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expressi='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc expressio="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expressio='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc expression="map = 1" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite expression='map = 1' region=clip"
+
+    >>> cmd = 'r.mapcalc exp="map = a + e" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite exp='map = a + e' region=clip"
+
+    >>> cmd = 'r.mapcalc exp="map = a + exp(5)" region=clip --overwrite'
+    >>> parse_mapcalc_cmd(command=cmd)
+    "r.mapcalc --overwrite exp='map = a + exp(5)' region=clip"
+
+    :param str command: r.mapcalc command string
+
+    :return str: parsed r.mapcalc command string
+    """
+    flags = []
+    others_params_args = []
+    expr_param_regex = re.compile(r"e.*?=")
+    flag_regex = re.compile(
+        r"^-[a-z]|^--overwrite|^--quiet|^--verbose|^--help|^--o|^--q|^--v|^--h",
+    )
+
+    command = split(command)
+    module = command.pop(0)
+
+    for arg in command[:]:
+        flag = flag_regex.search(arg)
+        if flag:
+            flags.append(command.pop(command.index(flag.group())))
+        elif "region=" in arg or "file=" in arg or "seed=" in arg:
+            others_params_args.append(command.pop(command.index(arg)))
+
+    cmd = " ".join(command)
+    expr_param = expr_param_regex.search(cmd)
+    if not expr_param:
+        expr_param_name = "expression="
+    else:
+        # Remove expression param
+        command = split(cmd.replace(expr_param.group(), ""))
+        expr_param_name = expr_param.group()
+    # Add quotes
+    if "'" not in cmd or '"' not in cmd:
+        cmd = f"'{' '.join(command)}'"
+    expression_param_arg = f"{expr_param_name}{cmd}"
+
+    return " ".join(
+        [
+            module,
+            *flags,
+            expression_param_arg,
+            *others_params_args,
+        ]
+    )
+
+
+def replace_module_cmd_special_flags(command):
+    """Replace module command special flags short version with
+    full version
+
+    Flags:
+
+    --o -> --overwrite
+    --q -> --quiet
+    --v -> --verbose
+    --h -> --help
+
+    >>> cmd = "r.mapcalc -s --o --v expression='map = 1' region=clip"
+    >>> replace_module_cmd_special_flags(command=cmd)
+    "r.mapcalc -s --overwrite --verbose expression='map = 1' region=clip"
+
+    >>> cmd = "r.mapcalc -s --o --q expression='map = 1' region=clip"
+    >>> replace_module_cmd_special_flags(command=cmd)
+    "r.mapcalc -s --overwrite --quiet expression='map = 1' region=clip"
+
+    :param str command: module command string
+
+    :return str: module command string with replaced flags
+    """
+    flags_regex = re.compile(
+        r"(--o(\s+|$))|(--q(\s+|$))|(--v(\s+|$))|(--h(\s+|$))",
+    )
+    replace = {
+        "--o": "--overwrite ",
+        "--q": "--quiet ",
+        "--v": "--verbose ",
+        "--h": "--help ",
+    }
+    return flags_regex.sub(
+        lambda flag: replace[flag.group().strip()],
+        command,
+    )
 
 
 if __name__ == "__main__":

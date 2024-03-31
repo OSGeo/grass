@@ -31,9 +31,9 @@
 # %end
 
 ##%option G_OPT_M_LOCATION
-##% key: source_location
-##% label: The name of the source location (has no projection)
-##% description: The name of the source location (has no projection)
+##% key: source_project
+##% label: The name of the source project (has no projection)
+##% description: The source project (location) has no CRS
 ###% section: source
 ##% required: yes
 ##%end

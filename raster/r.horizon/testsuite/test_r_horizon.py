@@ -5,16 +5,18 @@ AUTHOR(S): Anna Petrasova <kratochanna at gmail>
 
 PURPOSE:   Test r.horizon
 
-COPYRIGHT: (C) 2015 Anna Petrasova
+COPYRIGHT: (C) 2015-2024 Anna Petrasova
 
            This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.
 """
+import json
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
+from grass.script import raster_what
 
 
 ref1 = """azimuth,horizon_height
@@ -63,8 +65,30 @@ ref3 = """azimuth,horizon_height
 160.000000,0.015356
 """
 
+ref4 = """azimuth,horizon_height
+0.000000,0.197017
+20.000000,0.196832
+40.000000,0.196875
+60.000000,0.196689
+80.000000,0.196847
+100.000000,0.196645
+120.000000,0.196969
+140.000000,0.196778
+160.000000,0.196863
+180.000000,0.197017
+200.000000,0.196832
+220.000000,0.196875
+240.000000,0.196689
+260.000000,0.196847
+280.000000,0.196645
+300.000000,0.196969
+320.000000,0.196778
+340.000000,0.196863
+"""
+
 
 class TestHorizon(TestCase):
+    circle = "circle"
     horizon = "test_horizon_from_elevation"
     horizon_output = "test_horizon_output_from_elevation"
 
@@ -72,10 +96,23 @@ class TestHorizon(TestCase):
     def setUpClass(cls):
         cls.use_temp_region()
         cls.runModule("g.region", raster="elevation")
+        cls.runModule(
+            "r.circle",
+            flags="b",
+            output=cls.circle,
+            coordinates=(637505, 221755),
+            min=5000,
+            multiplier=1000,
+        )
+        cls.runModule("r.null", map=cls.circle, null=0)
 
     @classmethod
     def tearDownClass(cls):
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.circle)
         cls.del_temp_region()
+
+    def setUp(self):
+        self.runModule("g.region", raster="elevation")
 
     def tearDown(self):
         """Remove horizon map after each test method"""
@@ -112,8 +149,55 @@ class TestHorizon(TestCase):
         stdout = module.outputs.stdout
         self.assertMultiLineEqual(first=ref2, second=stdout)
 
+        # include nulls along the edge
+        self.runModule("g.region", raster="elevation", w="w-100")
+        self.assertModule(module)
+        stdout = module.outputs.stdout
+        self.assertMultiLineEqual(first=ref2, second=stdout)
+
+    def test_point_mode_multiple_direction_json(self):
+        """Test mode with 1 point and multiple directions with JSON"""
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            coordinates=(634720, 216180),
+            output=self.horizon,
+            direction=180,
+            step=20,
+            format="json",
+        )
+        self.assertModule(module)
+        stdout = json.loads(module.outputs.stdout)
+        azimuths = []
+        horizons = []
+        reference = {}
+        for line in ref2.splitlines()[1:]:
+            azimuth, horizon = line.split(",")
+            azimuths.append(float(azimuth))
+            horizons.append(float(horizon))
+        reference["x"] = 634720.0
+        reference["y"] = 216180.0
+        reference["azimuth"] = azimuths
+        reference["horizon_height"] = horizons
+
+        self.assertListEqual([reference], stdout)
+
+    def test_point_mode_multiple_direction_artificial(self):
+        """Test mode with 1 point and multiple directions with artificial surface"""
+        module = SimpleModule(
+            "r.horizon",
+            elevation=self.circle,
+            coordinates=(637505, 221755),
+            output=self.horizon,
+            direction=0,
+            step=20,
+        )
+        self.assertModule(module)
+        stdout = module.outputs.stdout
+        self.assertMultiLineEqual(first=ref4, second=stdout)
+
     def test_raster_mode_one_direction(self):
-        """Test mode with 1 point and one direction"""
+        """Test mode with one direction and against point mode"""
         module = SimpleModule(
             "r.horizon", elevation="elevation", output=self.horizon_output, direction=50
         )
@@ -123,13 +207,40 @@ class TestHorizon(TestCase):
             "max": 0.70678365230560,
             "stddev": 0.0360724286360789,
         }
+        output = "test_horizon_output_from_elevation_050"
         self.assertRasterFitsUnivar(
-            raster="test_horizon_output_from_elevation_050",
+            raster=output,
             reference=ref,
             precision=1e6,
         )
 
+        # test if point mode matches raster mode
+        coordinates = [
+            (634725, 216185),
+            (633315, 217595),
+            (633555, 223405),
+            (639955, 220605),
+            (637505, 219705),
+            (641105, 222225),
+        ]
+        for coordinate in coordinates:
+            module = SimpleModule(
+                "r.horizon",
+                elevation="elevation",
+                coordinates=coordinate,
+                output=self.horizon,
+                direction=50,
+                step=0,
+            )
+            self.assertModule(module)
+            stdout = module.outputs.stdout
+            first = float(stdout.splitlines()[-1].split(",")[-1])
+            what = raster_what(output, coord=coordinate)
+            second = float(what[0][output]["value"])
+            self.assertAlmostEqual(first=first, second=second, delta=0.000001)
+
     def test_raster_mode_multiple_direction(self):
+        self.runModule("g.region", raster="elevation", res=100)
         module = SimpleModule(
             "r.horizon",
             elevation="elevation",
@@ -147,12 +258,14 @@ class TestHorizon(TestCase):
         self.assertMultiLineEqual(
             first=(
                 "test_horizon_output_from_elevation_010_000\n"
-                "test_horizon_output_from_elevation_025_512"
+                "test_horizon_output_from_elevation_025_512\n"
+                "test_horizon_output_from_elevation_041_024"
             ),
             second=stdout,
         )
 
     def test_raster_mode_multiple_direction_offset(self):
+        self.runModule("g.region", raster="elevation", res=100)
         module = SimpleModule(
             "r.horizon",
             elevation="elevation",
@@ -171,10 +284,91 @@ class TestHorizon(TestCase):
         self.assertMultiLineEqual(
             first=(
                 "test_horizon_output_from_elevation_090_000\n"
-                "test_horizon_output_from_elevation_105_512"
+                "test_horizon_output_from_elevation_105_512\n"
+                "test_horizon_output_from_elevation_121_024"
             ),
             second=stdout,
         )
+
+    def test_raster_mode_bufferzone(self):
+        """Test buffer 100 m and 109 m with resolution 10 gives the same result"""
+        self.runModule(
+            "g.region",
+            raster="elevation",
+            n="n-5000",
+            s="s+5000",
+            e="e-5000",
+            w="w+5000",
+        )
+        # raises ValueError from pygrass parameter check
+        self.assertRaises(
+            ValueError,
+            SimpleModule,
+            "r.horizon",
+            elevation="elevation",
+            output=self.horizon_output,
+            direction=50,
+            bufferzone=-100,
+        )
+        self.assertRaises(
+            ValueError,
+            SimpleModule,
+            "r.horizon",
+            elevation="elevation",
+            output=self.horizon_output,
+            direction=50,
+            e_buff=100,
+            n_buff=0,
+            s_buff=-100,
+            w_buff=-100,
+        )
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            output=self.horizon_output,
+            direction=50,
+            bufferzone=100,
+        )
+        self.assertModule(module)
+        ref = {
+            "mean": 0.0344791,
+        }
+        output = "test_horizon_output_from_elevation_050"
+        self.assertRasterFitsUnivar(
+            raster=output,
+            reference=ref,
+            precision=1e-6,
+        )
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            output=self.horizon_output,
+            direction=50,
+            bufferzone=103,
+        )
+        self.assertModule(module)
+        self.assertRasterFitsUnivar(
+            raster=output,
+            reference=ref,
+            precision=1e-6,
+        )
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            output=self.horizon_output,
+            direction=50,
+            bufferzone=95,
+        )
+        self.assertModule(module)
+        ref = {
+            "mean": 0.0344624,
+        }
+        self.assertRasterFitsUnivar(
+            raster=output,
+            reference=ref,
+            precision=1e-6,
+        )
+        self.runModule("g.region", raster="elevation")
 
 
 if __name__ == "__main__":

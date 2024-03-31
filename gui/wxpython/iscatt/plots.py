@@ -314,7 +314,6 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
 
     def CleanUp(self):
         self.plotClosed.emit(scatt_id=self.scatt_id)
-        self.Destroy()
 
     def ZoomWheel(self, event):
         # get the current x and y limits
@@ -618,7 +617,8 @@ class ScatterPlotContextMenu:
     def ShowMenu(self, menu):
         self.plot.PopupMenu(menu)
         menu.Destroy()
-        self.plot.ReleaseMouse()
+        if self.plot.HasCapture():
+            self.plot.ReleaseMouse()
 
 
 class PolygonDrawer:
@@ -917,7 +917,7 @@ class ModestImage(mi.AxesImage):
         self.minx = minx
         self.miny = miny
 
-        super(ModestImage, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def set_data(self, A):
         """
@@ -990,7 +990,7 @@ class ModestImage(mi.AxesImage):
 
     def draw(self, renderer, *args, **kwargs):
         self._scale_to_res()
-        super(ModestImage, self).draw(renderer, *args, **kwargs)
+        super().draw(renderer, *args, **kwargs)
 
 
 def imshow(

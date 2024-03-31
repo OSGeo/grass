@@ -21,11 +21,23 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: read
+      # To report GitHub Actions status checks
+      statuses: write
+
     steps:
-      - uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        with:
+          # super-linter needs the full git history to get the
+          # list of files that changed across commits
+          fetch-depth: 0
       - name: Lint code base
-        uses: github/super-linter@v5
+        uses: super-linter/super-linter/slim@e0fc164bba85f4b58c6cd17ba1dfd435d01e8a06 # v6.3.0
         env:
+          DEFAULT_BRANCH: main
+          # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Listed but commented out linters would be nice to have.
           # (see https://github.com/github/super-linter#environment-variables)
@@ -33,6 +45,7 @@ jobs:
           # Python (supported using Pylint) and C/C++ (not supported) are
           # handled separately due to the complexity of the settings.
           # VALIDATE_BASH: true
+          VALIDATE_BASH_EXEC: true
           # VALIDATE_CSS: true
           # VALIDATE_DOCKER: true
           VALIDATE_JAVASCRIPT_ES: true

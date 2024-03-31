@@ -27,6 +27,8 @@ order.
 <p>For dissolving common boundaries, see
 <em><a href="v.dissolve.html">v.dissolve</a></em>.
 
+<p>Either the <b>rules</b> or <b>column</b> option must be specified.
+
 <h2>EXAMPLES</h2>
 
 <h3>Example 1: Reclass by rules</h3>
@@ -35,7 +37,7 @@ order.
 v.reclass input=land output=land_u type=boundary rules=land.rcl
 </pre></div>
 
-the rules file contains :
+The rules file contains:
 
 <div class="code"><pre>
 # land reclass file
@@ -71,7 +73,7 @@ cat|I_vs_P
 
 <h2>KNOWN ISSUES</h2>
 
-No table is created for reclassed layer if <b>rules</b> option is used.
+No table is created for reclassed layer if the <b>rules</b> option is used.
 
 <h2>SEE ALSO</h2>
 

@@ -26,6 +26,7 @@ import time
 import stat
 import tempfile
 import random
+import math
 
 import wx
 from wx.lib import ogl
@@ -139,7 +140,7 @@ class ModelFrame(wx.Frame):
 
         self.pythonPanel = PythonPanel(parent=self)
 
-        self._gconsole = GConsole(guiparent=self)
+        self._gconsole = GConsole(guiparent=self, giface=giface)
         self.goutput = GConsoleWindow(
             parent=self, giface=giface, gconsole=self._gconsole
         )
@@ -353,7 +354,7 @@ class ModelFrame(wx.Frame):
                 message = _("Do you want to save changes in the model?")
             else:
                 message = _(
-                    "Do you want to store current model settings " "to model file?"
+                    "Do you want to store current model settings to model file?"
                 )
 
             # ask user to save current settings
@@ -370,7 +371,7 @@ class ModelFrame(wx.Frame):
             ret = dlg.ShowModal()
             if ret == wx.ID_YES:
                 if not self.modelFile:
-                    self.OnWorkspaceSaveAs()
+                    self.OnModelSaveAs()
                 else:
                     self.WriteModelFile(self.modelFile)
             elif ret == wx.ID_CANCEL:
@@ -559,9 +560,9 @@ class ModelFrame(wx.Frame):
                 self.SetStatusText(_("File <%s> saved") % self.modelFile, 0)
                 self.SetTitle(self.baseTitle + " - " + os.path.basename(self.modelFile))
         elif not self.modelFile:
-            self.OnModelSaveAs(None)
+            self.OnModelSaveAs()
 
-    def OnModelSaveAs(self, event):
+    def OnModelSaveAs(self, event=None):
         """Create model to file as"""
         filename = ""
         dlg = wx.FileDialog(
@@ -838,12 +839,13 @@ class ModelFrame(wx.Frame):
         action = ModelAction(
             self.model,
             cmd=cmd,
-            x=x + self._randomShift(),
-            y=y + self._randomShift(),
+            x=x,
+            y=y,
             id=self.model.GetNextId(),
             label=label,
             comment=comment,
         )
+
         overwrite = self.model.GetProperties().get("overwrite", None)
         if overwrite is not None:
             action.GetTask().set_flag("overwrite", overwrite)
@@ -861,24 +863,15 @@ class ModelFrame(wx.Frame):
         # show properties dialog
         win = action.GetPropDialog()
         if not win:
-            cmdLength = len(action.GetLog(string=False))
-            if cmdLength > 1 and action.IsValid():
-                self.GetOptData(
-                    dcmd=action.GetLog(string=False),
-                    layer=action,
-                    params=action.GetParams(),
-                    propwin=None,
-                )
-            else:
-                gmodule = GUI(
-                    parent=self,
-                    show=True,
-                    giface=GraphicalModelerGrassInterface(self.model),
-                )
-                gmodule.ParseCommand(
-                    action.GetLog(string=False),
-                    completed=(self.GetOptData, action, action.GetParams()),
-                )
+            gmodule = GUI(
+                parent=self,
+                show=True,
+                giface=GraphicalModelerGrassInterface(self.model),
+            )
+            gmodule.ParseCommand(
+                action.GetLog(string=False),
+                completed=(self.GetOptData, action, action.GetParams()),
+            )
         elif win and not win.IsShown():
             win.Show()
 
@@ -930,8 +923,8 @@ class ModelFrame(wx.Frame):
                 x, y = self.canvas.GetNewShapePos()
                 commentObj = ModelComment(
                     self.model,
-                    x=x + self._randomShift(),
-                    y=y + self._randomShift(),
+                    x=x,
+                    y=y,
                     id=self.model.GetNextId(),
                     label=comment,
                 )
@@ -967,15 +960,20 @@ class ModelFrame(wx.Frame):
     def GetOptData(self, dcmd, layer, params, propwin):
         """Process action data"""
         if params:  # add data items
-            width, height = self.canvas.GetSize()
-            x = width / 2 - 200 + self._randomShift()
-            y = height / 2 + self._randomShift()
+            data_items = []
+            x = layer.GetX()
+            y = layer.GetY()
+
             for p in params["params"]:
                 if p.get("prompt", "") not in (
                     "raster",
                     "vector",
                     "raster_3d",
                     "dbtable",
+                    "stds",
+                    "strds",
+                    "stvds",
+                    "str3ds",
                 ):
                     continue
 
@@ -1011,16 +1009,22 @@ class ModelFrame(wx.Frame):
                         data.Update()
                         continue
 
-                    data = ModelData(
+                    dataClass = (
+                        ModelDataSeries
+                        if p.get("prompt", "").startswith("st")
+                        else ModelDataSingle
+                    )
+                    data = dataClass(
                         self,
                         value=p.get("value", ""),
                         prompt=p.get("prompt", ""),
                         x=x,
                         y=y,
                     )
+                    data_items.append(data)
                     self._addEvent(data)
                     self.canvas.diagram.AddShape(data)
-                    data.Show(True)
+                    data.Show(False)
 
                     if p.get("age", "old") == "old":
                         rel = ModelRelation(
@@ -1056,11 +1060,22 @@ class ModelFrame(wx.Frame):
             # valid / parameterized ?
             layer.SetValid(params)
 
-            self.canvas.Refresh()
+            # arrange data items
+            if data_items:
+                dc = wx.ClientDC(self.canvas)
+                p = 180 / (len(data_items) - 1) if len(data_items) > 1 else 0
+                rx = 200
+                ry = 100
+                alpha = 270 * (math.pi / 180)
+                for data in data_items:
+                    data.Move(dc, x + rx * math.sin(alpha), y + ry * math.cos(alpha))
+                    alpha += p * (math.pi / 180)
+                    data.Show(True)
 
         if dcmd:
             layer.SetProperties(params, propwin)
 
+        self.canvas.Refresh()
         self.SetStatusText(layer.GetLog(), 0)
 
     def AddLine(self, rel):
@@ -1184,7 +1199,7 @@ class ModelFrame(wx.Frame):
             tmpfile.seek(0)
             for line in tmpfile.readlines():
                 mfile.write(line)
-        except IOError:
+        except OSError:
             wx.MessageBox(
                 parent=self,
                 message=_("Unable to open file <%s> for writing.") % filename,
@@ -1339,21 +1354,18 @@ class ModelCanvas(ogl.ShapeCanvas):
 
         self.Refresh()
 
-    def GetNewShapePos(self):
+    def GetNewShapePos(self, yoffset=50):
         """Determine optimal position for newly added object
 
         :return: x,y
         """
-        xNew, yNew = map(lambda x: x / 2, self.GetSize())
-        diagram = self.GetDiagram()
+        ymax = 20
+        for item in self.GetDiagram().GetShapeList():
+            y = item.GetY() + item.GetBoundingBoxMin()[1]
+            if y > ymax:
+                ymax = y
 
-        for shape in diagram.GetShapeList():
-            y = shape.GetY()
-            yBox = shape.GetBoundingBoxMin()[1] / 2
-            if yBox > 0 and y < yNew + yBox and y > yNew - yBox:
-                yNew += yBox * 3
-
-        return xNew, yNew
+        return (self.GetSize()[0] // 2, ymax + yoffset)
 
     def GetShapesSelected(self):
         """Get list of selected shapes"""
@@ -1441,7 +1453,15 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             )
 
         elif isinstance(shape, ModelData):
-            if shape.GetPrompt() in ("raster", "vector", "raster_3d"):
+            if shape.GetPrompt() in (
+                "raster",
+                "vector",
+                "raster_3d",
+                "stds",
+                "strds",
+                "stvds",
+                "str3ds",
+            ):
                 dlg = ModelDataDialog(parent=self.frame, shape=shape)
                 shape.SetPropDialog(dlg)
                 dlg.CentreOnParent()
@@ -2100,7 +2120,13 @@ class PythonPanel(wx.Panel):
                 return False
 
         fd = tempfile.TemporaryFile(mode="r+")
-        self.write_object(fd, self.parent.GetModel())
+        grassAPI = UserSettings.Get(group="modeler", key="grassAPI", subkey="selection")
+        self.write_object(
+            fd,
+            self.parent.GetModel(),
+            grassAPI="script" if grassAPI == 0 else "pygrass",
+        )
+
         fd.seek(0)
         self.body.SetText(fd.read())
         fd.close()
@@ -2170,7 +2196,7 @@ class PythonPanel(wx.Panel):
         try:
             fd = open(self.filename, "w")
             fd.write(self.body.GetText())
-        except IOError as e:
+        except OSError as e:
             GError(_("Unable to launch Python script. %s") % e, parent=self)
             return
         finally:

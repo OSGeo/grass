@@ -5950,7 +5950,7 @@ class ImageDialog(PsmapDialog):
             try:
                 pImg = PILImage.open(file)
                 img = PilImageToWxImage(pImg)
-            except IOError as e:
+            except OSError as e:
                 GError(message=_("Unable to read file %s") % file)
                 self.ClearPreview()
                 return
@@ -5971,10 +5971,10 @@ class ImageDialog(PsmapDialog):
             return img
         if w > h:
             newW = self.previewSize[0]
-            newH = self.previewSize[0] * h / w
+            newH = self.previewSize[0] * h // w
         else:
             newH = self.previewSize[0]
-            newW = self.previewSize[0] * w / h
+            newW = self.previewSize[0] * w // h
         return img.Scale(newW, newH, wx.IMAGE_QUALITY_HIGH)
 
     def DrawWarningText(self, warning):

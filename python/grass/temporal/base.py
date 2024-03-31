@@ -35,7 +35,7 @@ from .core import (
 ###############################################################################
 
 
-class DictSQLSerializer(object):
+class DictSQLSerializer:
     def __init__(self):
         self.D = {}
         self.dbmi_paramstyle = get_tgis_dbmi_paramstyle()

@@ -1,4 +1,4 @@
-FROM debian:stable
+FROM debian:stable@sha256:e8f0d90c2b8a7b8040aa032b166866a93431bb221494d938a826dd7ad3a476bd
 # currently Debian 12
 
 # docker run -it --rm debian:stable bash
@@ -35,14 +35,14 @@ RUN apt-get update && apt-get upgrade -y && \
     libcurl4-gnutls-dev \
     libfftw3-bin \
     libfftw3-dev \
-    libfreetype6-dev \
+    libfreetype-dev \
     libgdal-dev \
     libgeos-dev \
     libgsl0-dev \
     libjpeg-dev \
     libjsoncpp-dev \
     libnetcdf-dev \
-    libncurses5-dev \
+    libncurses-dev \
     libopenblas-dev \
     libopenjp2-7 \
     libopenjp2-7-dev \

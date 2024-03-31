@@ -6,6 +6,7 @@ panes for display management and access to command console.
 
 Classes:
  - frame::GMFrame
+ - frame::SingleWindowAuiManager
 
 (C) 2006-2021 by the GRASS Development Team
 
@@ -79,6 +80,7 @@ from lmgr.pyshell import PyShellWindow
 from lmgr.giface import LayerManagerGrassInterface
 from mapdisp.frame import MapPanel
 from datacatalog.catalog import DataCatalog
+from history.browser import HistoryBrowser
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog, SimpleTabArt
 from startup.guiutils import (
@@ -88,6 +90,18 @@ from startup.guiutils import (
     create_location_interactively,
 )
 from grass.grassdb.checks import is_first_time_user
+
+
+class SingleWindowAuiManager(aui.AuiManager):
+    """Custom AuiManager class which override OnClose window
+    close event handler method to prevent prematurely uninitialize
+    manager
+
+    https://github.com/wxWidgets/Phoenix/pull/2460
+    """
+
+    def OnClose(self, event):
+        event.Skip()
 
 
 class GMFrame(wx.Frame):
@@ -150,7 +164,7 @@ class GMFrame(wx.Frame):
         self._menuTreeBuilder = LayerManagerMenuData(message_handler=add_menu_error)
         # the search tree and command console
         self._moduleTreeBuilder = LayerManagerModuleTree(message_handler=add_menu_error)
-        self._auimgr = aui.AuiManager(self)
+        self._auimgr = SingleWindowAuiManager(self)
 
         # list of open dialogs
         self.dialogs = dict()
@@ -244,6 +258,11 @@ class GMFrame(wx.Frame):
 
         self._show_demo_map()
 
+    def _repaintLayersPaneMapDisplayToolbar(self):
+        """Repaint Layers pane map display toolbar widget on the wxMac"""
+        if sys.platform == "darwin":
+            wx.CallLater(100, self.notebookLayers.Refresh)
+
     def _setTitle(self):
         """Set frame title"""
         gisenv = grass.gisenv()
@@ -325,6 +344,7 @@ class GMFrame(wx.Frame):
         # bindings
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnCBPageChanged)
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
+        self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSED, self.OnCBPageClosed)
 
     def _createSearchModule(self, parent):
         """Initialize Search module widget"""
@@ -347,10 +367,7 @@ class GMFrame(wx.Frame):
         self._gconsole = GConsole(
             guiparent=self,
             giface=self._giface,
-            ignoredCmdPattern=r"^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.import$|"
-            "^r.external$|^r.external.out$|"
-            "^v.import$|^v.external$|^v.external.out$|"
-            "^cd$|^cd .*",
+            ignoredCmdPattern=globalvar.ignoredCmdPattern,
         )
         # create 'console' widget
         self.goutput = GConsoleWindow(
@@ -373,6 +390,19 @@ class GMFrame(wx.Frame):
         )
 
         self._setCopyingOfSelectedText()
+
+    def _createHistoryBrowser(self, parent):
+        """Initialize history browser widget"""
+        if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
+            self.history = HistoryBrowser(parent=parent, giface=self._giface)
+            self.history.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
+            self.history.runIgnoredCmdPattern.connect(
+                lambda cmd: self.RunSpecialCmd(command=cmd),
+            )
+        else:
+            self.history = None
 
     def _createPythonShell(self, parent):
         """Initialize Python shell widget"""
@@ -467,6 +497,8 @@ class GMFrame(wx.Frame):
         cb_boxsizer.Fit(self.GetLayerTree())
         self.currentPage.Layout()
         self.GetLayerTree().Layout()
+        # Repaint Layers pane map display toolbar widget on the wxMac
+        self._repaintLayersPaneMapDisplayToolbar()
 
         self.displayIndex += 1
 
@@ -545,6 +577,7 @@ class GMFrame(wx.Frame):
         self._createDisplay(parent=self)
         self._createSearchModule(parent=self)
         self._createConsole(parent=self)
+        self._createHistoryBrowser(parent=self)
         self._createPythonShell(parent=self)
         self.toolbars = {
             "workspace": LMWorkspaceToolbar(parent=self),
@@ -583,7 +616,7 @@ class GMFrame(wx.Frame):
                 .TopDockable(True)
                 .CloseButton(False)
                 .Layer(2)
-                .BestSize((self.toolbars[toolbar].GetBestSize())),
+                .BestSize(self.toolbars[toolbar].GetBestSize()),
             )
 
         self._auimgr.AddPane(
@@ -656,6 +689,20 @@ class GMFrame(wx.Frame):
             aui.AuiPaneInfo()
             .Name("console")
             .Caption(_("Console"))
+            .Right()
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+            target=self._auimgr.GetPane("tools"),
+        )
+
+        self._auimgr.AddPane(
+            self.history,
+            aui.AuiPaneInfo()
+            .Name("history")
+            .Caption(_("History"))
             .Right()
             .BestSize(self.PANE_BEST_SIZE)
             .MinSize(self.PANE_MIN_SIZE)
@@ -941,6 +988,12 @@ class GMFrame(wx.Frame):
             self.mapnotebook.SetSelectionToMapPage(self.GetMapDisplay())
 
         event.Skip()
+
+    def OnCBPageClosed(self, event):
+        """Page of notebook has been closed from the Layers pane via x
+        button or via closing map display notebook page"""
+        # Repaint Layers pane map display toolbar widget on the wxMac
+        self._repaintLayersPaneMapDisplayToolbar()
 
     def OnCBPageClosing(self, event):
         """Page of notebook is being closed
@@ -1364,7 +1417,7 @@ class GMFrame(wx.Frame):
             if not location or not mapset:
                 GError(
                     parent=self,
-                    message=_("No location/mapset provided. Operation canceled."),
+                    message=_("No project provided. Operation canceled."),
                 )
                 return  # this should not happen
             if can_switch_mapset_interactive(
