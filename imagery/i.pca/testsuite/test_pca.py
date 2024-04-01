@@ -13,6 +13,12 @@ class TestReport(TestCase):
     
     @classmethod
     def tearDownClass(cls):
+        cls.runModule("g.remove", flags="f", type="raster", name="lsat7_2002_pca.1")
+        cls.runModule("g.remove", flags="f", type="raster", name="lsat7_2002_pca.2")
+        cls.runModule("g.remove", flags="f", type="raster", name="lsat7_2002_pca.3")
+        cls.runModule("g.remove", flags="f", type="raster", name="lsat7_2002_pca.4")
+        cls.runModule("g.remove", flags="f", type="raster", name="lsat7_2002_pca.5")
+        cls.runModule("g.remove", flags="f", type="raster", name="lsat7_2002_pca.6")
         cls.del_temp_region()
 
     def test_pca_sample(self):
