@@ -103,19 +103,31 @@ jobs:
 
          cat filtered_alerts.json
 
-     - name: Create GitHub issues for each alert in filtered alerts
+     - name: Filter alerts and create issues
        run: |
-          jq -c '.[]' filtered_alerts.json | while read i; do
-            description=$(echo "$i" | jq -r '.description')
-            title="#ALERT $description"
-            curl -X POST \
-                -H "Accept: application/vnd.github+json" \
-                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                -H "X-GitHub-Api-Version: 2022-11-28" \
-                -d '{"title": "'"$title"'", "body": "'"$description"'"}' \
-                https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
-            done
+         # Parse the alerts and issues
+         alerts=$(jq -c '.[]' alerts.json)
+         issues=$(jq -c '.[]' issues.json)
 
+         # For each alert, check if a corresponding issue exists
+         for alert in ${alerts[@]}; do
+           alert_title=$(echo "$alert" | jq -r '.description')
+           dismissed_title="#DISMISSED $alert_title"
+
+           # Check if an issue with the dismissed title exists
+           issue_exists=$(echo "$issues" | jq -r "select(.title == \"$dismissed_title\")")
+
+           # If no issue exists, create a new one
+           if [ -z "$issue_exists" ]; then
+             curl -X POST \
+               -H "Accept: application/vnd.github+json" \
+               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+               -H "X-GitHub-Api-Version: 2022-11-28" \
+               -d '{"title": "'"$dismissed_title"'", "body": "'"$alert_title"'"}' \
+               https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
+           fi
+         done
+         
         
           
        #trigger a rerun
