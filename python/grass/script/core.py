@@ -1736,16 +1736,12 @@ def create_project(
     :param bool overwrite: True to overwrite project if exists (WARNING:
                            ALL DATA from existing project ARE DELETED!)
     """
-    # Support ~ in the path for user home directory.
-    path = Path(path).expanduser()
+    # Add default mapset to project path if needed
+    if not name:
+        path = os.path.join(path, "PERMANENT")
 
-    if name:
-        mapset = "PERMANENT"
-    else:
-        path = path / "PERMANENT"
-        mapset = None
-
-    mapset_path = resolve_mapset_path(path=path, location=name, mapset=mapset)
+    # resolve dbase, location and mapset
+    mapset_path = resolve_mapset_path(path=path, location=name)
 
     # create dbase if not exists
     if not os.path.exists(mapset_path.directory):
