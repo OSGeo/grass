@@ -79,6 +79,11 @@ jobs:
                    
      - uses: actions/checkout@v4 # Checkout repository code
 
+     - name: Install dependencies (if needed for parsing security tool response)
+       run: |
+        # Add any package installation commands here (e.g., pip install requests)
+          sudo apt-get install jq  # Install jq for parsing JSON
+
      - name: Download inssues artifacts
        uses: actions/download-artifact@v4
        with:
@@ -92,23 +97,28 @@ jobs:
          
      - name: Use downloaded artifact
        run: |
-         ls # Access the downloaded artifact
+         # Access the downloaded artifact
+         #if the discription, prepended with #DISMISSED in alerts.json match the title of an issue, remove from alerts.json
+         jq 'reduce inputs as $in (.; if .title == ("#DISMISSED " + $in.description) then empty else . end)' alerts.json issues.json > filtered_alerts.json
 
-         touch dismissed.json
-         jq -c '.[]' alerts.json | while read i; do
-          alert_name=$(echo $i | jq -r '.rule.id')
-          issue_name="${alert_name}_DISMISSED"
-          if grep -q "$issue_name" issues.json; then
-            echo $i >> dismissed.json
-          fi
-         done
-         echo "Dismissed alerts saved to dismissed.json!"
+         cat filtered_alerts.json
 
-     - name: Upload the issues as artifact
-       uses: actions/upload-artifact@v4
-       with:
-        name: dismissed-data
-        path: dismissed.json
+     - name: Create GitHub issues for dismissed alerts
+       run: |
+          jq -c '.[]' filtered_alerts.json | while read i; do
+            description=$(echo "$i" | jq -r '.description')
+            title="#DISMISSED $description"
+            curl -X POST \
+                -H "Accept: application/vnd.github+json" \
+                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                -d '{"title": "'"$title"'", "body": "'"$description"'"}' \
+                https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
+            done
+         
+
+
+
         
           
-       #trigger a reru
+       #trigger a rerun
