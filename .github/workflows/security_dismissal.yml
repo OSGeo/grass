@@ -103,11 +103,11 @@ jobs:
 
          cat filtered_alerts.json
 
-     - name: Create GitHub issues for dismissed alerts
+     - name: Create GitHub issues for each alert in filtered alerts
        run: |
           jq -c '.[]' filtered_alerts.json | while read i; do
             description=$(echo "$i" | jq -r '.description')
-            title="#DISMISSED $description"
+            title="#ALERT $description"
             curl -X POST \
                 -H "Accept: application/vnd.github+json" \
                 -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
@@ -115,9 +115,6 @@ jobs:
                 -d '{"title": "'"$title"'", "body": "'"$description"'"}' \
                 https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
             done
-         
-
-
 
         
           
