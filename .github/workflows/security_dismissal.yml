@@ -91,17 +91,8 @@ jobs:
        
      - name: Download alerts artifacts
        uses: actions/download-artifact@v4
-       with:
-         name: workflow-data 
-
-         
-     - name: Use downloaded artifact
-       run: |
-         # Access the downloaded artifact
-         #if the discription, prepended with #DISMISSED in alerts.json match the title of an issue, remove from alerts.json
-         jq 'reduce inputs as $in (.; if .title == ("#DISMISSED " + $in.description) then empty else . end)' alerts.json issues.json > filtered_alerts.json
-
-         cat filtered_alerts.json
+       with:    
+          name: workflow-data 
 
      - name: Filter alerts and create issues
        run: |
