@@ -1,3 +1,14 @@
+"""
+Name:       i.pca test
+Purpose:    Tests i.pca.
+
+Author:     Hamed Elgizery - hamedashraf2004@gmail.com
+Copyright:  (C) 2024 by Hamed Elgizery and the GRASS Development Team
+Licence:    This program is free software under the GNU General Public
+                License (>=v2). Read the file COPYING that comes with GRASS
+                for details.
+"""
+
 import os
 
 from grass.gunittest.case import TestCase
