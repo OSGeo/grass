@@ -1,0 +1,16 @@
+n=250325
+null_cells=0
+cells=250325
+min=0
+max=255
+range=255
+mean=60.6958074503146
+mean_of_abs=60.6958074503146
+stddev=32.8850846003739
+variance=1081.42878917375
+coeff_var=54.1801583697417
+sum=15193678
+first_quartile=36
+median=51
+third_quartile=77
+percentile_90=101
