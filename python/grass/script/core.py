@@ -1766,19 +1766,18 @@ def create_project(
     # check if location already exists
     if Path(mapset_path.directory, mapset_path.location).exists():
         if not overwrite:
-            warning(
+            fatal(
                 _("Location <%s> already exists. Operation canceled.")
                 % mapset_path.location,
                 env=env,
             )
             return
-        else:
-            warning(
-                _("Location <%s> already exists and will be overwritten")
-                % mapset_path.location,
-                env=env,
-            )
-            shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
+        warning(
+            _("Location <%s> already exists and will be overwritten")
+            % mapset_path.location,
+            env=env,
+        )
+        shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
 
     stdin = None
     kwargs = dict()
