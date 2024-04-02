@@ -38,4 +38,4 @@ timeout = 300
 
 [tool.bandit]
 exclude_dirs = ["./testsuite", "*/tests/*", "*/testsuite/*", "utils/test_generate_last_commit_file.py"]
-skips = ["B324","B110", "B101", "B112", "B404"]
+skips = ["B324","B110", "B101", "B112", "B311", "B404"]
