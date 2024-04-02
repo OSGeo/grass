@@ -1,10 +1,10 @@
 name: Coverity Scan
 on:
   workflow_dispatch: # run whenever a contributor calls it
-  schedule: 
+  schedule:
     - cron: '48 5 * * *' # Run at 05:48
     # Coverity will let GRASS do a scan a maximum of twice per day, so this schedule will help GRASS fit within that limit with some additional space for manual runs
-  
+
 jobs:
   build:
     runs-on: [ ubuntu-latest ]

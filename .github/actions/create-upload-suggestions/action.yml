@@ -225,7 +225,7 @@ runs:
              steps.upload-changes.outputs.artifact-url }})
     - name: Fail action if some files were changed
       if: >-
-        ${{ (steps.files_changed.outputs.files_changed == 'true') && 
+        ${{ (steps.files_changed.outputs.files_changed == 'true') &&
             (steps.inputs.outputs.fail-if-changed == 'true') }}
       shell: bash
       run: |
