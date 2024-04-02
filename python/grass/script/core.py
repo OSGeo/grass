@@ -1771,7 +1771,6 @@ def create_project(
                 % mapset_path.location,
                 env=env,
             )
-            return
         warning(
             _("Location <%s> already exists and will be overwritten")
             % mapset_path.location,
