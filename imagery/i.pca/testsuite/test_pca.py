@@ -15,7 +15,6 @@ class TestReport(TestCase):
     @classmethod
     def setUpClass(cls):
         """Use temporary region settings"""
-        cls.data_path = "data"
         cls.runModule("g.region", raster="lsat7_2002_10@PERMANENT")
         cls.use_temp_region()
 
