@@ -24,70 +24,10 @@ jobs:
           source: "."
           clangFormatVersion: 15
           inplace: True
-      - name: Verify Changed files
-        uses: tj-actions/verify-changed-files@d774a4c7ebe335445d79c7b44138f56a76058ba0 # v19.0.0
-        id: verify-changed-files
-      - id: git-changed-files
-        run: |
-          {
-            echo 'CHANGED_FILES<<EOF'
-            git ls-files --other --modified --exclude-standard
-            echo EOF
-          } >> "$GITHUB_OUTPUT"
-      - name: List all changed files tracked and untracked files
-        run: |
-          echo "Changed files: ${{ steps.git-changed-files.outputs.CHANGED_FILES }}"
-      - name: Add job summary without changed files
-        if: ${{ steps.verify-changed-files.outputs.files_changed == 'false' }}
-        run: |
-          {
-            echo "### Changed files:"
-            echo "No files were changed by clang-format"
-          } >> "$GITHUB_STEP_SUMMARY"
-      - name: Add job summary with changed files
-        if: ${{ steps.verify-changed-files.outputs.files_changed == 'true' }}
-        run: |
-          {
-            echo '### Changed files:'
-            echo '```'
-            echo "${CHANGED_FILES}"
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
-        env:
-          CHANGED_FILES: ${{ steps.git-changed-files.outputs.CHANGED_FILES }}
-      - name: Create unified diff of changes
-        if: ${{ steps.verify-changed-files.outputs.files_changed == 'true' }}
-        run: git diff --unified=0 --no-color --output=diff-clang-format.patch
-      - uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        if: ${{ steps.verify-changed-files.outputs.files_changed == 'true' }}
+      - name: Create and uploads code suggestions to apply
+        id: diff
+        uses: ./.github/actions/create-upload-suggestions
         with:
-          name: diff
-          if-no-files-found: ignore
-          retention-days: 1
-          path: |
-            diff-clang-format.patch
-      - name: Add note to summary explaining that code suggestions will be applied if it is a PR
-        if: ${{ (github.event_name == 'pull_request') && (steps.verify-changed-files.outputs.files_changed == 'true') }}
-        run: |
-          {
-            echo ''
-            echo 'Suggestions can only be added near to lines changed in this PR.'
-            echo 'If any fixes can be added as code suggestions, they will be added shortly from another workflow.'
-          } >> "$GITHUB_STEP_SUMMARY"
-      - uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        if: always()
-        with:
-          name: formatted-clang-format
-          retention-days: 10
-          path: |
-            .clang-format
-            ${{ steps.git-changed-files.outputs.CHANGED_FILES }}
-      - name: Explain that more files need to be fixed
-        if: ${{ steps.verify-changed-files.outputs.files_changed == 'true' }}
-        run: |
-          {
-            echo ''
-            # shellcheck disable=SC2016
-            echo 'All fixed files are included in the `formatted-*` artifact. This artifact can be downloaded and copied to the repository to replace unformatted files with the formatted files.'
-          } >> "$GITHUB_STEP_SUMMARY"
-          exit 1
+          tool-name: clang-format
+          # To keep repo's file structure in formatted changes artifact
+          extra-upload-changes: .clang-format
