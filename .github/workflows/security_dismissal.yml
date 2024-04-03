@@ -97,28 +97,50 @@ jobs:
      - name: Filter alerts and create issues
        run: |
          # Parse the alerts and issues
-         alerts=$(jq -c '.[]' alerts.json)
-         issues=$(jq -c '.[]' issues.json)
+         alerts=$( cat alerts.json | jq .[].most_recent_instance.message.text )
 
-         # For each alert, check if a corresponding issue exists
-         for alert in ${alerts[@]}; do
-           alert_title=$(echo "$alert" | jq -r '.description')
-           dismissed_title="#DISMISSED $alert_title"
+         #get alert id
+         alert_id=$( cat alerts.json | jq .[].number )
 
-           # Check if an issue with the dismissed title exists
-           issue_exists=$(echo "$issues" | jq -r "select(.title == \"$dismissed_title\")")
 
-           # If no issue exists, create a new one
-           if [ -z "$issue_exists" ]; then
-             curl -X POST \
-               -H "Accept: application/vnd.github+json" \
-               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-               -H "X-GitHub-Api-Version: 2022-11-28" \
-               -d '{"title": "'"$dismissed_title"'", "body": "'"$alert_title"'"}' \
-               https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
-           fi
-         done
-         
+          #get the issue title
+
+          issue_title=$( cat issues.json | jq .[].title )
+
+          #if the issue title matches a dismissed alert, remove the dismissed alert from alerts.json
+
+
+          for i in $issue_title
+          do
+            for j in $alerts
+            do
+              if [ "DISSMISSED" + "$i" == "$j" ]
+              then
+                #remove the alert from alerts.json
+                jq 'del(.[].number == $alert_id)' alerts.json > alerts.json
+              fi
+            done
+          done
+
+
+          #make a new issue for each alert in alerts.json
+          for i in $alerts
+
+          do
+            curl -L \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            -d '{"title": "DISMISSED $i", "body": "This alert was dismissed"}' \
+            https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
+          done
+
+
+          echo "Alerts filtered and new issues created successfully!"
+
+
+
+ 
         
           
        #trigger a rerun
