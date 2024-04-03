@@ -99,8 +99,10 @@ jobs:
          # Parse the alerts and issues
          alerts=$( cat alerts.json | jq .[].most_recent_instance.message.text )
 
-         #append the id of the alert to each alert
-          alerts=$( echo $alerts | jq '.[].number' )
+    
+
+         #append the id of the alert from at alerts.json | jq .[].number to each alert
+          alerts=$( echo $alerts | sed 's/^/ID: $(cat alerts.json | jq .[].number) /' )
 
          #append the string "DISMISSED: " to each alert
           alerts=$( echo $alerts | sed 's/^/DISMISSED: /' )
