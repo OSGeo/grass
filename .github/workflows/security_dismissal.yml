@@ -101,7 +101,7 @@ jobs:
           alertsID=()
 
 
-          for every alert in alerts.json, append the alert to the alertsArray
+          #for every alert in alerts.json, append the alert to the alertsArray
           alertsArray+=($(cat alerts.json | jq .[].most_recent_instance.message.text))
        
          #append the alert id number to each alert array
@@ -112,7 +112,7 @@ jobs:
           do
             alertsArray[$i]="${alertsArray[$i]} ID: ${alertsID[$i]}"
           done
-          
+
          #append the string "DISMISSED: " to each alert in alertsArray
           alerts=()
           for alert in $alertsArray
