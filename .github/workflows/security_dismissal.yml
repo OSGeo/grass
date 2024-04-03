@@ -96,14 +96,20 @@ jobs:
 
      - name: Filter alerts and create issues
        run: |
-        #make an array called alertsArray
+        # make an array of strings to store the alerts
           alertsArray=()
+
+        #make an array of strings to store the alert id numbers
+
           alertsID=()
 
 
           #for every alert in alerts.json, append the alert to the alertsArray
-          alertsArray+=($(cat alerts.json | jq .[].most_recent_instance.message.text))
+          alertsArray+=($(cat alerts.json | jq -r .[].most_recent_instance.message.text))
        
+          # print out alertsArray to the console
+          echo "Alerts: ${alertsArray[@]}"
+          
          #append the alert id number to each alert array
           alertsID+=($(cat alerts.json | jq .[].number))
 
@@ -139,7 +145,7 @@ jobs:
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
               -X POST \
-              -d "{\"title\":\"$alert\",\"body\":\"This alert has been dismissed\"}" \
+              -d "{\"title\":\"$alert\ because of this alert, please check the code and fix it.\",\"body\":\"This issue was created because of the alert: $alert\"}" \
               https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
             fi
           done
