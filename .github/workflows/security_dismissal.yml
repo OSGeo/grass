@@ -122,7 +122,13 @@ jobs:
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
-              -d '{"title": "DISMISSED $(echo $message)", "body": "Alert $(echo $number) was dismissed with the comment: $(echo $dismissed_comment)"}' \
+              -d "$(cat <<EOF
+              {
+                "title": "DISMISSED $number $message",
+                "body": $dismissed_comment
+              }
+              EOF
+              )" \
               https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
             fi
 
