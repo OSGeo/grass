@@ -3358,8 +3358,11 @@ def cleanup():
             self.fd.write("    pass\n")
 
         self.fd.write("\ndef main(options, flags):\n")
+        modelVars = self.model.GetVariables()
         for item in self.model.GetItems(ModelAction):
-            self._writeItem(item, variables=item.GetParameterizedParams())
+            modelParams = item.GetParameterizedParams()
+            modelParams["vars"] = modelVars
+            self._writeItem(item, variables=modelParams)
 
         self.fd.write("    return 0\n")
 
@@ -3434,6 +3437,15 @@ if __name__ == "__main__":
                 if name in parameterizedParams:
                     foundVar = True
                     value = 'options["{}"]'.format(self._getParamName(name, item))
+                else:
+                    # check for variables
+                    for var in variables["vars"]:
+                        pattern = re.compile("%" + var)
+                        if pattern.search(value):
+                            foundVar = True
+                            value = pattern.sub('{options["' + var + '"]}', value)
+                    if foundVar:
+                        value = 'f"' + value + '"'
 
                 if (
                     foundVar
