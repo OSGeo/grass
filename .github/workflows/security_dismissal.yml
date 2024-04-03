@@ -120,23 +120,31 @@ jobs:
             alerts+=("DISMISSED: $alert")
           done
 
+
+          #print alerts to the console
+          echo "Alerts: ${alerts[@]}"
+
+
   
 
 
-         #if the alert in alerts is not a title in issues.json, create a new issue with that title
+         #if the alert in alerts has no issue because of it, create a new issue with that title
+        
           for alert in $alerts
           do
-            if ! grep -q "$alert" issues.json
-            then
+            if [[ ! "issues.json" == *"$alert"* ]]; then
+              echo "Creating issue for $alert"
               curl -L \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
               -X POST \
-              -d "{\"title\":\"$alert\",\"body\":\"This issue was created because the alert was dismissed.\"}" \
+              -d "{\"title\":\"$alert\",\"body\":\"This alert has been dismissed\"}" \
               https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
             fi
           done
+
+          #trigger a rerun
 
 
 
