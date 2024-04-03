@@ -96,38 +96,54 @@ jobs:
 
      - name: Filter alerts and create issues
        run: |
-         # Parse the alerts and issues
-         alerts=$( cat alerts.json | jq .[].most_recent_instance.message.text )
-
-    
-
-         #append the id of the alert from at alerts.json | jq .[].number to each alert
-          alerts=$( echo $alerts | sed 's/^/ID: $(cat alerts.json | jq .[].number) /' )
-
-         #append the string "DISMISSED: " to each alert
-          alerts=$( echo $alerts | sed 's/^/DISMISSED: /' )
+        #make an array called alertsArray
+          alertsArray=()
+          alertsID=()
 
 
-         #if the alert is not in the issues, create a new issue
+          for every alert in alerts.json, append the alert to the alertsArray
+          alertsArray+=($(cat alerts.json | jq .[].most_recent_instance.message.text))
+       
+         #append the alert id number to each alert array
+          alertsID+=($(cat alerts.json | jq .[].number))
+
+         #append the alert id number to each alert in alertsArray
+          for i in ${!alertsArray[@]}
+          do
+            alertsArray[$i]="${alertsArray[$i]} ID: ${alertsID[$i]}"
+          done
+          
+         #append the string "DISMISSED: " to each alert in alertsArray
+          alerts=()
+          for alert in $alertsArray
+          do
+            alerts+=("DISMISSED: $alert")
+          done
+
+          echo "Alerts filtered successfully!
+
+
+         #if the alert in alerts is not a title in issues.json, create a new issue with that title
           for alert in $alerts
           do
-            if ! grep -q $alert issues.json
+            if ! grep -q "$alert" issues.json
             then
-              echo "Creating new issue for alert: $alert"
               curl -L \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
               -X POST \
-              -d "{\"title\":\"$alert\",\"body\":\"This alert was dismissed and needs to be addressed.\"}" \
+              -d "{\"title\":\"$alert\",\"body\":\"This issue was created because the alert was dismissed.\"}" \
               https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
             fi
           done
 
 
+
           echo "Alerts filtered and new issues created successfully!"
 
 
+        
 
  
         
