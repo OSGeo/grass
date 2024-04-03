@@ -120,7 +120,7 @@ jobs:
             alerts+=("DISMISSED: $alert")
           done
 
-          echo "Alerts filtered successfully!
+  
 
 
          #if the alert in alerts is not a title in issues.json, create a new issue with that title
@@ -138,9 +138,6 @@ jobs:
             fi
           done
 
-
-
-          echo "Alerts filtered and new issues created successfully!"
 
 
         
