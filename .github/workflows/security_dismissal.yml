@@ -114,23 +114,24 @@ jobs:
 
             #check if the alert is already an issue
             if grep -q "DISMISSED $number $message" issues.json; then
-              echo "Alert DISMISSED $number $message is already an issue"
-            else
-              echo "Alert $number is not an issue"
-              #create an issue
-              curl -L \
+            echo "Alert DISMISSED $number $message is already an issue"
+          else
+            echo "Alert $number is not an issue"
+            #create an issue
+            curl -L \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
               -d "$(cat <<EOF
               {
                 "title": "DISMISSED $number $message",
-                "body": $dismissed_comment
+                "body": "$dismissed_comment"
               }
               EOF
-              )" \
-              https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
-            fi
+            )" \
+            https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
+          fi
+          
 
 
           done <<< "$(cat alerts.json | jq -r '[.[].number, .[].most_recent_instance.message.text, .[].dismissed_comment]  | @tsv' )"
