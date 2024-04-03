@@ -126,8 +126,7 @@ jobs:
               -d "$json_data" \
             https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
           fi
-          
-
+           #make sure there is no double issue
 
           done <<< "$(cat alerts.json | jq -r '[.[].number, .[].most_recent_instance.message.text, .[].dismissed_comment]  | @tsv' )"
           
