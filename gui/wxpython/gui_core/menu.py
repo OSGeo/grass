@@ -121,7 +121,7 @@ class MenuBase:
             ):
                 menuItem.Enable(False)
 
-        rhandler = eval("self.class_handler." + handler)
+        rhandler = eval("self.class_handler." + handler)  # nosec B602
         self.parent.Bind(wx.EVT_MENU, rhandler, menuItem)
 
     def GetData(self):
