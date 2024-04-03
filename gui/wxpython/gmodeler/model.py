@@ -3443,7 +3443,7 @@ if __name__ == "__main__":
                         pattern = re.compile("%" + var)
                         if pattern.search(value):
                             foundVar = True
-                            value = pattern.sub('{options["' + var + '"]}', value)
+                            value = pattern.sub("{options['" + var + "']}", value)
                     if foundVar:
                         value = 'f"' + value + '"'
 
