@@ -19,6 +19,9 @@ This program is free software under the GNU General Public License
 import wx
 from wx.lib import ogl
 
+from gui_core.dialogs import TextEntryDialog as CustomTextEntryDialog
+from gui_core.wrap import TextEntryDialog as wxTextEntryDialog
+
 from gmodeler.model import *
 from gmodeler.dialogs import *
 
