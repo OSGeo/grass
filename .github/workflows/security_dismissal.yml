@@ -99,40 +99,27 @@ jobs:
          # Parse the alerts and issues
          alerts=$( cat alerts.json | jq .[].most_recent_instance.message.text )
 
-         #get alert id
-         alert_id=$( cat alerts.json | jq .[].number )
+         #append the id of the alert to each alert
+          alerts=$( echo $alerts | jq '.[].number' )
+
+         #append the string "DISMISSED: " to each alert
+          alerts=$( echo $alerts | sed 's/^/DISMISSED: /' )
 
 
-          #get the issue title
-
-          issue_title=$( cat issues.json | jq .[].title )
-
-          #if the issue title matches a dismissed alert, remove the dismissed alert from alerts.json
-
-
-          for i in $issue_title
+         #if the alert is not in the issues, create a new issue
+          for alert in $alerts
           do
-            for j in $alerts
-            do
-              if [ "DISSMISSED" + "$i" == "$j" ]
-              then
-                #remove the alert from alerts.json
-                jq 'del(.[].number == $alert_id)' alerts.json > alerts.json
-              fi
-            done
-          done
-
-
-          #make a new issue for each alert in alerts.json
-          for i in $alerts
-
-          do
-            curl -L \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            -d '{"title": "DISMISSED $i", "body": "This alert was dismissed"}' \
-            https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
+            if ! grep -q $alert issues.json
+            then
+              echo "Creating new issue for alert: $alert"
+              curl -L \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              -X POST \
+              -d "{\"title\":\"$alert\",\"body\":\"This alert was dismissed and needs to be addressed.\"}" \
+              https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
+            fi
           done
 
 
