@@ -99,6 +99,37 @@ def test_with_different_path(tmp_path):
         assert epsg == "EPSG:3358"
 
 
+def test_path_only(tmp_path):
+    desired_location = "desired"
+    full_path = tmp_path / desired_location
+    gs.create_location(full_path, epsg="3358")
+    mapset_path = full_path / "PERMANENT"
+    wkt_file = mapset_path / "PROJ_WKT"
+    assert full_path.exists()
+    assert mapset_path.exists()
+    assert wkt_file.exists()
+    with gs.setup.init(full_path):
+        gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path}")
+        gs.run_command("g.gisenv", set=f"LOCATION_NAME={desired_location}")
+        gs.run_command("g.gisenv", set="MAPSET=PERMANENT")
+        epsg = gs.parse_command("g.proj", flags="g")["srid"]
+        assert epsg == "EPSG:3358"
+
+
+def test_create_project(tmp_path):
+    name = "desired"
+    gs.create_project(tmp_path / name, epsg="3358")
+    assert (tmp_path / name).exists()
+    wkt_file = tmp_path / name / "PERMANENT" / "PROJ_WKT"
+    assert wkt_file.exists()
+    with gs.setup.init(tmp_path / name):
+        gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path}")
+        gs.run_command("g.gisenv", set=f"LOCATION_NAME={name}")
+        gs.run_command("g.gisenv", set="MAPSET=PERMANENT")
+        epsg = gs.parse_command("g.proj", flags="g")["srid"]
+        assert epsg == "EPSG:3358"
+
+
 def test_files(tmp_path):
     """Check expected files are created"""
     bootstrap_location = "bootstrap"

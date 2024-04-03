@@ -28,9 +28,11 @@ import string
 import random
 import shlex
 from tempfile import NamedTemporaryFile
+from pathlib import Path
 
 from .utils import KeyValue, parse_key_val, basename, encode, decode, try_remove
 from grass.exceptions import ScriptError, CalledModuleError
+from grass.grassdb.manage import resolve_mapset_path
 
 
 # subprocess wrapper that uses shell on Windows
@@ -1697,9 +1699,16 @@ def mapsets(search_path=False, env=None):
 # interface to `g.proj -c`
 
 
-def create_location(
-    dbase,
-    location,
+def create_location(*args, **kwargs):
+    if "location" in kwargs:
+        kwargs["name"] = kwargs["location"]
+        del kwargs["location"]
+    return create_project(*args, **kwargs)
+
+
+def create_project(
+    path,
+    name=None,
     epsg=None,
     proj4=None,
     filename=None,
@@ -1709,44 +1718,34 @@ def create_location(
     desc=None,
     overwrite=False,
 ):
-    """Create new location
+    """Create new project
 
     Raise ScriptError on error.
 
-    :param str dbase: path to GRASS database
-    :param str location: location name to create
-    :param epsg: if given create new location based on EPSG code
-    :param proj4: if given create new location based on Proj4 definition
-    :param str filename: if given create new location based on georeferenced file
-    :param str wkt: if given create new location based on WKT definition
+    :param str path: path to GRASS database or project; if path to database, project
+                     name must be specified with name parameter
+    :param str name: project name to create
+    :param epsg: if given create new project based on EPSG code
+    :param proj4: if given create new project based on Proj4 definition
+    :param str filename: if given create new project based on georeferenced file
+    :param str wkt: if given create new project based on WKT definition
                     (can be path to PRJ file or WKT string)
     :param datum: GRASS format datum code
     :param datum_trans: datum transformation parameters (used for epsg and proj4)
-    :param desc: description of the location (creates MYNAME file)
-    :param bool overwrite: True to overwrite location if exists(WARNING:
-                           ALL DATA from existing location ARE DELETED!)
+    :param desc: description of the project (creates MYNAME file)
+    :param bool overwrite: True to overwrite project if exists (WARNING:
+                           ALL DATA from existing project ARE DELETED!)
     """
+    # Add default mapset to project path if needed
+    if not name:
+        path = os.path.join(path, "PERMANENT")
+
+    # resolve dbase, location and mapset
+    mapset_path = resolve_mapset_path(path=path, location=name)
+
     # create dbase if not exists
-    if not os.path.exists(dbase):
-        os.mkdir(dbase)
-
-    # check if location already exists
-    if os.path.exists(os.path.join(dbase, location)):
-        if not overwrite:
-            warning(_("Location <%s> already exists. Operation canceled.") % location)
-            return
-        else:
-            warning(
-                _("Location <%s> already exists and will be overwritten") % location
-            )
-            shutil.rmtree(os.path.join(dbase, location))
-
-    stdin = None
-    kwargs = dict()
-    if datum:
-        kwargs["datum"] = datum
-    if datum_trans:
-        kwargs["datum_trans"] = datum_trans
+    if not os.path.exists(mapset_path.directory):
+        os.mkdir(mapset_path.directory)
 
     # Lazy-importing to avoid circular dependencies.
     # pylint: disable=import-outside-toplevel
@@ -1761,8 +1760,30 @@ def create_location(
     if epsg or proj4 or filename or wkt:
         # The names don't really matter here.
         tmp_gisrc, env = create_environment(
-            dbase, "<placeholder>", "<placeholder>", env=env
+            mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
         )
+
+    # check if location already exists
+    if Path(mapset_path.directory, mapset_path.location).exists():
+        if not overwrite:
+            fatal(
+                _("Location <%s> already exists. Operation canceled.")
+                % mapset_path.location,
+                env=env,
+            )
+        warning(
+            _("Location <%s> already exists and will be overwritten")
+            % mapset_path.location,
+            env=env,
+        )
+        shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
+
+    stdin = None
+    kwargs = dict()
+    if datum:
+        kwargs["datum"] = datum
+    if datum_trans:
+        kwargs["datum_trans"] = datum_trans
 
     if epsg:
         ps = pipe_command(
@@ -1770,7 +1791,7 @@ def create_location(
             quiet=True,
             flags="t",
             epsg=epsg,
-            location=location,
+            location=mapset_path.location,
             stderr=PIPE,
             env=env,
             **kwargs,
@@ -1781,7 +1802,7 @@ def create_location(
             quiet=True,
             flags="t",
             proj4=proj4,
-            location=location,
+            location=mapset_path.location,
             stderr=PIPE,
             env=env,
             **kwargs,
@@ -1791,28 +1812,33 @@ def create_location(
             "g.proj",
             quiet=True,
             georef=filename,
-            location=location,
+            location=mapset_path.location,
             stderr=PIPE,
             env=env,
         )
     elif wkt:
         if os.path.isfile(wkt):
             ps = pipe_command(
-                "g.proj", quiet=True, wkt=wkt, location=location, stderr=PIPE, env=env
+                "g.proj",
+                quiet=True,
+                wkt=wkt,
+                location=mapset_path.location,
+                stderr=PIPE,
+                env=env,
             )
         else:
             ps = pipe_command(
                 "g.proj",
                 quiet=True,
                 wkt="-",
-                location=location,
+                location=mapset_path.location,
                 stderr=PIPE,
                 stdin=PIPE,
                 env=env,
             )
             stdin = encode(wkt)
     else:
-        _create_location_xy(dbase, location)
+        _create_location_xy(mapset_path.directory, mapset_path.location)
 
     if epsg or proj4 or filename or wkt:
         error = ps.communicate(stdin)[1]
@@ -1821,7 +1847,7 @@ def create_location(
         if ps.returncode != 0 and error:
             raise ScriptError(repr(error))
 
-    _set_location_description(dbase, location, desc)
+    _set_location_description(mapset_path.directory, mapset_path.location, desc)
 
 
 def _set_location_description(path, location, text):
