@@ -3172,6 +3172,12 @@ class WritePythonFile(WriteScriptFile):
         self._writePython()
 
     def _getStandardizedOption(self, string):
+        """Return GRASS standardized option based on specified string.
+
+        :param string: input string to be converted
+
+        :return: GRASS standardized option as a string or None if not converted
+        """
         if string == "raster":
             return "G_OPT_R_MAP"
         elif string == "vector":
@@ -3185,7 +3191,7 @@ class WritePythonFile(WriteScriptFile):
         elif string == "region":
             return "G_OPT_M_REGION"
 
-        return ""
+        return None
 
     def _writePython(self):
         """Write model to file"""
@@ -3229,7 +3235,8 @@ class WritePythonFile(WriteScriptFile):
 
         modelItems = self.model.GetItems(ModelAction)
         for item in modelItems:
-            for flag in item.GetParameterizedParams()["flags"]:
+            parametrizedParams = item.GetParameterizedParams()
+            for flag in parametrizedParams["flags"]:
                 if flag["label"]:
                     desc = flag["label"]
                 else:
@@ -3253,7 +3260,7 @@ class WritePythonFile(WriteScriptFile):
                     self.fd.write("# % answer: False\n")
                 self.fd.write("# %end\n")
 
-            for param in item.GetParameterizedParams()["params"]:
+            for param in parametrizedParams["params"]:
                 if param["label"]:
                     desc = param["label"]
                 else:
@@ -3279,6 +3286,29 @@ class WritePythonFile(WriteScriptFile):
                 if param["value"]:
                     self.fd.write("# % answer: {}\n".format(param["value"]))
                 self.fd.write("# %end\n")
+
+        # variables
+        for vname, vdesc in self.model.GetVariables().items():
+            self.fd.write("# %option")
+            optionType = self._getStandardizedOption(vdesc["type"])
+            if optionType:
+                self.fd.write(" {}".format(optionType))
+            self.fd.write("\n")
+            self.fd.write(
+                r"""# % key: {param_name}
+# % description: {description}
+# % required: yes
+""".format(
+                    param_name=vname,
+                    description=vdesc["description"],
+                )
+            )
+            if optionType is None and vdesc["type"]:
+                self.fd.write("# % type: {}\n".format(vdesc["type"]))
+
+            if vdesc["value"]:
+                self.fd.write("# % answer: {}\n".format(vdesc["value"]))
+            self.fd.write("# %end\n")
 
         # import modules
         self.fd.write(
