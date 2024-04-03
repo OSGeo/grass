@@ -118,11 +118,12 @@ jobs:
           else
             echo "Alert $number is not an issue"
             #create an issue
+            json_data="{\"title\": \"DISMISSED $number $message\", \"body\": \"$dismissed_comment\"}"
             curl -L \
               -H "Accept: application/vnd.github+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
-              -d '{"title": "DISMISSED $number $message", "body": "$dismissed_comment"}' \
+              -d "$json_data" \
             https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
           fi
           
