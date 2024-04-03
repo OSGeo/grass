@@ -127,8 +127,7 @@ jobs:
                 "title": "DISMISSED $number $message",
                 "body": "$dismissed_comment"
               }
-              EOF
-            )" \
+              EOF)" \
             https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
           fi
           
