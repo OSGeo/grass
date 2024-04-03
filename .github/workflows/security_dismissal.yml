@@ -108,8 +108,8 @@ jobs:
           alertsArray+=($(cat alerts.json | jq -r .[].most_recent_instance.message.text))
        
           # print out alertsArray to the console
-          echo "Alerts: ${alertsArray[@]}"
-          
+          echo "Alerts: ${alertsArray[0]}"
+
          #append the alert id number to each alert array
           alertsID+=($(cat alerts.json | jq .[].number))
 
