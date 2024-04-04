@@ -20,10 +20,11 @@ for details.
 """
 import os
 import re
+import wx
 import copy
 from multiprocessing import Process, Queue, cpu_count
 
-import wx
+import grass.script as gscript
 
 from core.gcmd import RunCommand, GError, GMessage
 from core.utils import GetListOfLocations
@@ -63,7 +64,6 @@ from grass.grassdb.manage import rename_mapset, rename_location
 
 from grass.pydispatch.signal import Signal
 
-import grass.script as gscript
 from grass.script import gisenv
 from grass.grassdb.data import map_exists
 from grass.grassdb.checks import (

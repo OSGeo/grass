@@ -1,9 +1,9 @@
 from os.path import join, exists
 import grass.lib.gis as libgis
-
-libgis.G_gisinit("")
 import grass.lib.vector as libvect
 import ctypes
+
+libgis.G_gisinit("")
 
 #
 # import pygrass modules
