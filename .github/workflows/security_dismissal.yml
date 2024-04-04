@@ -129,8 +129,3 @@ jobs:
      
 
           done <<< "$(cat alerts.json | jq -r '[.[].number, .[].most_recent_instance.message.text, .[].dismissed_comment]  | @tsv' )"
-          
- 
-
-          
-       #trigger a rerun
