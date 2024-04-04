@@ -38,6 +38,7 @@ def test_plain_list_output(simple_dataset, separator):
     _check_parsed_list(mapsets, text, gutils.separator(separator))
 
 
+@pytest.mark.parametrize("separator", SEPARATORS)
 def test_plain_print_output(simple_dataset, separator):
     """Test that the separators are properly applied with print flag"""
     mapsets = simple_dataset.accessible_mapsets
