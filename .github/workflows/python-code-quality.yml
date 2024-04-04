@@ -32,8 +32,11 @@ jobs:
             black-version: "23.1.0"
             flake8-version: "3.9.2"
             pylint-version: "2.12.2"
+            bandit-version: "1.7.8"
 
     runs-on: ${{ matrix.os }}
+    permissions:
+      security-events: write
 
     steps:
       - name: Versions
@@ -44,14 +47,32 @@ jobs:
           echo Black: ${{ matrix.black-version }}
           echo Flake8: ${{ matrix.flake8-version }}
           echo Pylint: ${{ matrix.pylint-version }}
+          echo Bandit: ${{matrix.bandit-version}}
 
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install Black only
+        run: pip install black==${{ matrix.black-version }}
+
+      - name: Run Black
+        run: black .
+
+      - name: Create and uploads code suggestions to apply for Black
+        # Will fail fast here if there are changes required
+        id: diff-black
+        uses: ./.github/actions/create-upload-suggestions
+        with:
+          tool-name: black
+          # To keep repo's file structure in formatted changes artifact
+          extra-upload-changes: .clang-format
 
       - name: Install non-Python dependencies
         run: |
@@ -62,16 +83,11 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install black==${{ matrix.black-version }}
           pip install flake8==${{ matrix.flake8-version }}
           pip install pylint==${{ matrix.pylint-version }} pytest-github-actions-annotate-failures
-
-      - name: Run Black
-        run: |
-          black --check --diff .
+          pip install bandit[sarif]==${{matrix.bandit-version}}
 
       - name: Run Flake8
         run: |
@@ -80,6 +96,21 @@ jobs:
       - name: Run Flake8 on additional files
         run: |
           flake8 --count --statistics --show-source --jobs=$(nproc) python/grass/{script,jupyter}/testsuite/
+
+      - name: Bandit Vulnerability Scan
+        run: |
+          bandit -c pyproject.toml -iii -r . -f sarif -o bandit.sarif --exit-zero
+
+      - name: Upload Bandit Scan Results
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: bandit.sarif
+          path: bandit.sarif
+
+      - name: Upload SARIF File into Security Tab
+        uses: github/codeql-action/upload-sarif@1b1aada464948af03b950897e5eb522f92603cc2 # v3.24.9
+        with:
+          sarif_file: bandit.sarif
 
       - name: Create installation directory
         run: |
@@ -144,11 +175,12 @@ jobs:
           cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
 
       - name: Make Sphinx documentation available
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: sphinx-grass
           path: sphinx-grass
           retention-days: 3
+
   python-success:
     name: Python Code Quality Result
     needs:

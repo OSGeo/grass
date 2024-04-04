@@ -5,16 +5,18 @@ AUTHOR(S): Anna Petrasova <kratochanna at gmail>
 
 PURPOSE:   Test r.horizon
 
-COPYRIGHT: (C) 2015 Anna Petrasova
+COPYRIGHT: (C) 2015-2024 Anna Petrasova
 
            This program is free software under the GNU General Public
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.
 """
+import json
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
+from grass.script import raster_what
 
 
 ref1 = """azimuth,horizon_height
@@ -109,6 +111,9 @@ class TestHorizon(TestCase):
         cls.runModule("g.remove", flags="f", type="raster", name=cls.circle)
         cls.del_temp_region()
 
+    def setUp(self):
+        self.runModule("g.region", raster="elevation")
+
     def tearDown(self):
         """Remove horizon map after each test method"""
         self.runModule("g.remove", flags="f", type="raster", name=self.horizon)
@@ -150,6 +155,33 @@ class TestHorizon(TestCase):
         stdout = module.outputs.stdout
         self.assertMultiLineEqual(first=ref2, second=stdout)
 
+    def test_point_mode_multiple_direction_json(self):
+        """Test mode with 1 point and multiple directions with JSON"""
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            coordinates=(634720, 216180),
+            output=self.horizon,
+            direction=180,
+            step=20,
+            format="json",
+        )
+        self.assertModule(module)
+        stdout = json.loads(module.outputs.stdout)
+        azimuths = []
+        horizons = []
+        reference = {}
+        for line in ref2.splitlines()[1:]:
+            azimuth, horizon = line.split(",")
+            azimuths.append(float(azimuth))
+            horizons.append(float(horizon))
+        reference["x"] = 634720.0
+        reference["y"] = 216180.0
+        reference["azimuth"] = azimuths
+        reference["horizon_height"] = horizons
+
+        self.assertListEqual([reference], stdout)
+
     def test_point_mode_multiple_direction_artificial(self):
         """Test mode with 1 point and multiple directions with artificial surface"""
         module = SimpleModule(
@@ -165,7 +197,7 @@ class TestHorizon(TestCase):
         self.assertMultiLineEqual(first=ref4, second=stdout)
 
     def test_raster_mode_one_direction(self):
-        """Test mode with 1 point and one direction"""
+        """Test mode with one direction and against point mode"""
         module = SimpleModule(
             "r.horizon", elevation="elevation", output=self.horizon_output, direction=50
         )
@@ -175,11 +207,37 @@ class TestHorizon(TestCase):
             "max": 0.70678365230560,
             "stddev": 0.0360724286360789,
         }
+        output = "test_horizon_output_from_elevation_050"
         self.assertRasterFitsUnivar(
-            raster="test_horizon_output_from_elevation_050",
+            raster=output,
             reference=ref,
             precision=1e6,
         )
+
+        # test if point mode matches raster mode
+        coordinates = [
+            (634725, 216185),
+            (633315, 217595),
+            (633555, 223405),
+            (639955, 220605),
+            (637505, 219705),
+            (641105, 222225),
+        ]
+        for coordinate in coordinates:
+            module = SimpleModule(
+                "r.horizon",
+                elevation="elevation",
+                coordinates=coordinate,
+                output=self.horizon,
+                direction=50,
+                step=0,
+            )
+            self.assertModule(module)
+            stdout = module.outputs.stdout
+            first = float(stdout.splitlines()[-1].split(",")[-1])
+            what = raster_what(output, coord=coordinate)
+            second = float(what[0][output]["value"])
+            self.assertAlmostEqual(first=first, second=second, delta=0.000001)
 
     def test_raster_mode_multiple_direction(self):
         self.runModule("g.region", raster="elevation", res=100)

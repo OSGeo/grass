@@ -12,6 +12,8 @@ This program was written in 2006 by Thomas Huld and Tomas Cebecauer,
 Joint Research Centre of the European Commission, based on bits of the r.sun
 module by Jaro Hofierka
 
+Program was refactored by Anna Petrasova to remove most global variables.
+
 *******************************************************************************/
 /*
  * This program is free software; you can redistribute it and/or
@@ -38,113 +40,106 @@ module by Jaro Hofierka
 #include <grass/raster.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
+#include <grass/parson.h>
 
-#define WHOLE_RASTER      1
-#define SINGLE_POINT      0
-#define RAD               (180. / M_PI)
-#define DEG               ((M_PI) / 180.)
-#define EARTHRADIUS       6371000.
-#define UNDEF             0.     /* undefined value for terrain aspect */
-#define UNDEFZ            -9999. /* undefined value for elevation */
-#define BIG               1.e20
-#define SMALL             1.e-20
-#define EPS               1.e-4
-#define DIST              "1.0"
-#define DEGREEINMETERS    111120.  /* 1852m/nm * 60nm/degree = 111120 m/deg */
-#define TANMINANGLE       0.008727 /* tan of minimum horizon angle (0.5 deg) */
+#define WHOLE_RASTER   1
+#define SINGLE_POINT   0
+#define RAD            (180. / M_PI)
+#define DEG            ((M_PI) / 180.)
+#define EARTHRADIUS    6371000.
+#define UNDEF          0.     /* undefined value for terrain aspect */
+#define UNDEFZ         -9999. /* undefined value for elevation */
+#define BIG            1.e20
+#define SMALL          1.e-20
+#define EPS            1.e-4
+#define DIST           "1.0"
+#define DEGREEINMETERS 111120.  /* 1852m/nm * 60nm/degree = 111120 m/deg */
+#define TANMINANGLE    0.008727 /* tan of minimum horizon angle (0.5 deg) */
 
-#define AMAX1(arg1, arg2) ((arg1) >= (arg2) ? (arg1) : (arg2))
 #define DISTANCE1(x1, x2, y1, y2) \
     (sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)))
-
-FILE *fp;
 
 const double pihalf = M_PI * 0.5;
 const double twopi = M_PI * 2.;
 const double invEarth = 1. / EARTHRADIUS;
 const double deg2rad = M_PI / 180.;
 const double rad2deg = 180. / M_PI;
-const double minAngle = DEG;
 
-const char *elevin;
-const char *horizon = NULL;
-const char *mapset = NULL;
-const char *per;
-char *shad_filename;
-char *outfile;
-
-struct Cell_head cellhd;
-struct Key_value *in_proj_info, *in_unit_info;
 struct pj_info iproj, oproj, tproj;
-
-struct Cell_head new_cellhd;
-double bufferZone = 0., ebufferZone = 0., wbufferZone = 0., nbufferZone = 0.,
-       sbufferZone = 0.;
-
-int INPUT(void);
-int OUTGR(int numrows, int numcols);
-double amax1(double, double);
-double amin1(double, double);
-int min(int, int);
-int max(int, int);
-void com_par(void);
-int is_shadow(void);
-double horizon_height(void);
-void calculate_shadow(void);
-double calculate_shadow_onedirection(double shadow_angle);
-
-int new_point(void);
-double searching(void);
-int test_low_res(void);
-
-/*void where_is_point();
-   void cube(int, int);
- */
-
-void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
-               int buffer_s, int buffer_n);
-
-int ip, jp, ip100, jp100;
-int n, m, m100, n100;
-int degreeOutput, compassOutput = FALSE;
 float **z, **z100, **horizon_raster;
-double stepx, stepy, stepxhalf, stepyhalf, stepxy, xp, yp, op, dp, xg0, xx0,
-    yg0, yy0, deltx, delty;
-double invstepx, invstepy, distxy;
-double offsetx, offsety;
-double single_direction;
+bool ll_correction = false;
 
-/*int arrayNumInt; */
-double xmin, xmax, ymin, ymax, zmax = 0.;
-int d, day, tien = 0;
+typedef struct {
+    double xg0, yg0;
+    double z_orig;
+    double coslatsq;
+    double maxlength;
+} OriginPoint;
 
-double length, maxlength = BIG, zmult = 1.0, dist;
-double fixedMaxLength = BIG, step = 0.0, start = 0.0, end = 0.0;
-char *tt, *lt;
-double z_orig, zp;
-double h0, tanh0, angle;
-double stepsinangle, stepcosangle, sinangle, cosangle, distsinangle,
-    distcosangle;
-double TOLER;
-const char *str_step;
+typedef struct {
+    double stepsinangle, stepcosangle;
+    double sinangle, cosangle;
+    double distsinangle, distcosangle;
+} OriginAngle;
 
-int mode;
-int isMode(void)
-{
-    return mode;
-}
+typedef struct {
+    double xx0, yy0;
+    int ip, jp;
+    int ip100, jp100;
+    double zp;
+} SearchPoint;
 
-void setMode(int val)
-{
-    mode = val;
-}
+typedef struct {
+    double tanh0;
+    double length;
+} HorizonProperties;
 
-int ll_correction = FALSE;
-double coslatsq;
+typedef struct {
+    int n, m, m100, n100;
+    double stepx, stepy, stepxy;
+    double invstepx, invstepy;
+    double offsetx, offsety;
+    double distxy;
+    double xmin, xmax, ymin, ymax, zmax;
+} Geometry;
+
+typedef struct {
+    int degreeOutput;
+    int compassOutput;
+    double fixedMaxLength;
+    double start, end, step;
+    double single_direction;
+    const char *str_step;
+    const char *horizon_basename;
+} Settings;
+
+enum OutputFormat { PLAIN, JSON };
+
+int INPUT(Geometry *geometry, const char *elevin);
+int OUTGR(const Settings *settings, char *shad_filename,
+          struct Cell_head *cellhd);
+void com_par(const Geometry *geometry, OriginAngle *origin_angle, double angle,
+             double xp, double yp);
+double horizon_height(const Geometry *geometry, const OriginPoint *origin_point,
+                      const OriginAngle *origin_angle);
+void calculate_point_mode(const Settings *settings, const Geometry *geometry,
+                          double xcoord, double ycoord, FILE *fp,
+                          enum OutputFormat format);
+int new_point(const Geometry *geometry, const OriginPoint *origin_point,
+              const OriginAngle *origin_angle, SearchPoint *search_point,
+              HorizonProperties *horizon);
+int test_low_res(const Geometry *geometry, const OriginPoint *origin_point,
+                 const OriginAngle *origin_angle, SearchPoint *search_point,
+                 const HorizonProperties *horizon);
+void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
+                           struct Cell_head *cellhd,
+                           struct Cell_head *new_cellhd, int buffer_e,
+                           int buffer_w, int buffer_s, int buffer_n,
+                           double bufferZone);
 
 /* why not use G_distance() here which switches to geodesic/great
    circle distance as needed? */
-double distance(double x1, double x2, double y1, double y2)
+double distance(double x1, double x2, double y1, double y2, double coslatsq)
 {
     if (ll_correction) {
         return DEGREEINMETERS *
@@ -158,12 +153,13 @@ double distance(double x1, double x2, double y1, double y2)
 int main(int argc, char *argv[])
 {
     double xcoord, ycoord;
+    enum OutputFormat format;
 
     struct GModule *module;
     struct {
         struct Option *elevin, *dist, *coord, *direction, *horizon, *step,
             *start, *end, *bufferzone, *e_buff, *w_buff, *n_buff, *s_buff,
-            *maxdistance, *output;
+            *maxdistance, *format, *output;
     } parm;
 
     struct {
@@ -297,6 +293,17 @@ int main(int argc, char *argv[])
     parm.dist->description = _("Sampling distance step coefficient (0.5-1.5)");
     parm.dist->guisection = _("Optional");
 
+    parm.format = G_define_option();
+    parm.format->key = "format";
+    parm.format->type = TYPE_STRING;
+    parm.format->required = YES;
+    parm.format->label = _("Output format used for point mode");
+    parm.format->options = "plain,json";
+    parm.format->descriptions = "plain;Plain text output;"
+                                "json;JSON (JavaScript Object Notation);";
+    parm.format->answer = "plain";
+    parm.format->guisection = _("Point mode");
+
     parm.output = G_define_standard_option(G_OPT_F_OUTPUT);
     parm.output->key = "file";
     parm.output->required = NO;
@@ -318,52 +325,57 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    struct Cell_head cellhd;
+    struct Cell_head new_cellhd;
     G_get_set_window(&cellhd);
+    Geometry geometry;
 
-    stepx = cellhd.ew_res;
-    stepy = cellhd.ns_res;
-    stepxhalf = stepx / 2.;
-    stepyhalf = stepy / 2.;
-    invstepx = 1. / stepx;
-    invstepy = 1. / stepy;
+    geometry.stepx = cellhd.ew_res;
+    geometry.stepy = cellhd.ns_res;
+    geometry.invstepx = 1. / geometry.stepx;
+    geometry.invstepy = 1. / geometry.stepy;
     /*
        offsetx = 2. *  invstepx;
        offsety = 2. * invstepy;
        offsetx = 0.5*stepx;
        offsety = 0.5*stepy;
      */
-    offsetx = 0.5;
-    offsety = 0.5;
+    geometry.offsetx = 0.5;
+    geometry.offsety = 0.5;
 
-    n /*n_cols */ = cellhd.cols;
-    m /*n_rows */ = cellhd.rows;
+    geometry.n /*n_cols */ = cellhd.cols;
+    geometry.m /*n_rows */ = cellhd.rows;
 
-    n100 = ceil(n / 100.);
-    m100 = ceil(m / 100.);
+    geometry.n100 = ceil(geometry.n / 100.);
+    geometry.m100 = ceil(geometry.m / 100.);
 
-    xmin = cellhd.west;
-    ymin = cellhd.south;
-    xmax = cellhd.east;
-    ymax = cellhd.north;
-    deltx = fabs(cellhd.east - cellhd.west);
-    delty = fabs(cellhd.north - cellhd.south);
+    geometry.xmin = cellhd.west;
+    geometry.ymin = cellhd.south;
+    geometry.xmax = cellhd.east;
+    geometry.ymax = cellhd.north;
 
-    degreeOutput = flag.degreeOutput->answer;
-    compassOutput = flag.compassOutput->answer;
+    Settings settings;
+    settings.degreeOutput = flag.degreeOutput->answer;
+    settings.compassOutput = flag.compassOutput->answer;
 
     if (G_projection() == PROJECTION_LL)
         G_important_message(_("Note: In latitude-longitude coordinate system "
                               "specify buffers in degree unit"));
 
-    elevin = parm.elevin->answer;
-
+    const char *elevin = parm.elevin->answer;
+    FILE *fp = NULL;
+    int mode;
     if (parm.coord->answer == NULL) {
         G_debug(1, "Setting mode: WHOLE_RASTER");
-        setMode(WHOLE_RASTER);
+        mode = WHOLE_RASTER;
     }
     else {
         G_debug(1, "Setting mode: SINGLE_POINT");
-        setMode(SINGLE_POINT);
+        mode = SINGLE_POINT;
+        if (strcmp(parm.format->answer, "json") == 0)
+            format = JSON;
+        else
+            format = PLAIN;
         if (sscanf(parm.coord->answer, "%lf,%lf", &xcoord, &ycoord) != 2) {
             G_fatal_error(_(
                 "Can't read the coordinates from the \"coordinate\" option."));
@@ -382,7 +394,7 @@ int main(int argc, char *argv[])
          */
 
         /* Open ASCII file for output or stdout */
-        outfile = parm.output->answer;
+        char *outfile = parm.output->answer;
 
         if ((strcmp("-", outfile)) == 0) {
             fp = stdout;
@@ -390,11 +402,15 @@ int main(int argc, char *argv[])
         else if (NULL == (fp = fopen(outfile, "w")))
             G_fatal_error(_("Unable to open file <%s>"), outfile);
     }
-
+    settings.single_direction = 0;
     if (parm.direction->answer != NULL)
-        sscanf(parm.direction->answer, "%lf", &single_direction);
+        sscanf(parm.direction->answer, "%lf", &settings.single_direction);
 
-    if (WHOLE_RASTER == isMode()) {
+    settings.step = 0;
+    settings.start = 0;
+    settings.end = 0;
+    settings.horizon_basename = NULL;
+    if (WHOLE_RASTER == mode) {
         if ((parm.direction->answer == NULL) && (parm.step->answer == NULL)) {
             G_fatal_error(_("You didn't specify a direction value or step "
                             "size. Aborting."));
@@ -404,29 +420,30 @@ int main(int argc, char *argv[])
             G_fatal_error(
                 _("You didn't specify a horizon raster name. Aborting."));
         }
-        horizon = parm.horizon->answer;
+        settings.horizon_basename = parm.horizon->answer;
         if (parm.step->answer != NULL) {
-            str_step = parm.step->answer;
-            sscanf(parm.step->answer, "%lf", &step);
+            settings.str_step = parm.step->answer;
+            sscanf(parm.step->answer, "%lf", &settings.step);
         }
         else {
-            step = 0;
-            str_step = "0";
+            settings.step = 0;
+            settings.str_step = "0";
         }
-        sscanf(parm.start->answer, "%lf", &start);
-        sscanf(parm.end->answer, "%lf", &end);
-        if (start < 0.0) {
+        sscanf(parm.start->answer, "%lf", &settings.start);
+        sscanf(parm.end->answer, "%lf", &settings.end);
+        if (settings.start < 0.0) {
             G_fatal_error(
                 _("Negative values of start angle are not allowed. Aborting."));
         }
-        if (end < 0.0 || end > 360.0) {
+        if (settings.end < 0.0 || settings.end > 360.0) {
             G_fatal_error(_("End angle is not between 0 and 360. Aborting."));
         }
-        if (start >= end) {
+        if (settings.start >= settings.end) {
             G_fatal_error(
                 _("You specify a start grater than the end angle. Aborting."));
         }
-        G_debug(1, "Angle step: %g, start: %g, end: %g", step, start, end);
+        G_debug(1, "Angle step: %g, start: %g, end: %g", settings.step,
+                settings.start, settings.end);
     }
     else {
 
@@ -434,13 +451,14 @@ int main(int argc, char *argv[])
             G_fatal_error(
                 _("You didn't specify an angle step size. Aborting."));
         }
-        sscanf(parm.step->answer, "%lf", &step);
+        sscanf(parm.step->answer, "%lf", &settings.step);
     }
 
-    if (step == 0.0) {
-        step = 360.;
+    if (settings.step == 0.0) {
+        settings.step = 360.;
     }
-
+    double bufferZone = 0., ebufferZone = 0., wbufferZone = 0.,
+           nbufferZone = 0., sbufferZone = 0.;
     if (parm.bufferzone->answer != NULL) {
         if (sscanf(parm.bufferzone->answer, "%lf", &bufferZone) != 1)
             G_fatal_error(_("Could not read bufferzone size. Aborting."));
@@ -470,11 +488,14 @@ int main(int argc, char *argv[])
                           _("north"));
     }
 
+    settings.fixedMaxLength = BIG;
     if (parm.maxdistance->answer != NULL) {
-        if (sscanf(parm.maxdistance->answer, "%lf", &fixedMaxLength) != 1)
+        if (sscanf(parm.maxdistance->answer, "%lf", &settings.fixedMaxLength) !=
+            1)
             G_fatal_error(_("Could not read maximum distance. Aborting."));
     }
-    G_debug(1, "Using maxdistance %f", fixedMaxLength); /* predefined as BIG */
+    G_debug(1, "Using maxdistance %f",
+            settings.fixedMaxLength); /* predefined as BIG */
 
     /* TODO: fixing BIG, there is a bug with distant mountains not being seen:
        attempt to contrain to current region
@@ -482,14 +503,11 @@ int main(int argc, char *argv[])
        fixedMaxLength = (fixedMaxLength < AMAX1(deltx, delty)) ? fixedMaxLength
        : AMAX1(deltx, delty); G_debug(1,"Using maxdistance %f", fixedMaxLength);
      */
-
-    sscanf(parm.dist->answer, "%lf", &dist);
-    if (dist < 0.5 || dist > 1.5)
+    sscanf(parm.dist->answer, "%lf", &geometry.distxy);
+    if (geometry.distxy < 0.5 || geometry.distxy > 1.5)
         G_fatal_error(_("The distance value must be 0.5-1.5. Aborting."));
 
-    stepxy = dist * 0.5 * (stepx + stepy);
-    distxy = dist;
-    TOLER = stepxy * EPS;
+    geometry.stepxy = geometry.distxy * 0.5 * (geometry.stepx + geometry.stepy);
 
     if (bufferZone > 0. || ebufferZone > 0. || wbufferZone > 0. ||
         sbufferZone > 0. || nbufferZone > 0.) {
@@ -505,31 +523,30 @@ int main(int argc, char *argv[])
             nbufferZone = bufferZone;
 
         /* adjust buffer to multiples of resolution */
-        ebufferZone = (int)(ebufferZone / stepx) * stepx;
-        wbufferZone = (int)(wbufferZone / stepx) * stepx;
-        sbufferZone = (int)(sbufferZone / stepy) * stepy;
-        nbufferZone = (int)(nbufferZone / stepy) * stepy;
+        ebufferZone = (int)(ebufferZone / geometry.stepx) * geometry.stepx;
+        wbufferZone = (int)(wbufferZone / geometry.stepx) * geometry.stepx;
+        sbufferZone = (int)(sbufferZone / geometry.stepy) * geometry.stepy;
+        nbufferZone = (int)(nbufferZone / geometry.stepy) * geometry.stepy;
 
-        new_cellhd.rows += (int)((nbufferZone + sbufferZone) / stepy);
-        new_cellhd.cols += (int)((ebufferZone + wbufferZone) / stepx);
+        new_cellhd.rows += (int)((nbufferZone + sbufferZone) / geometry.stepy);
+        new_cellhd.cols += (int)((ebufferZone + wbufferZone) / geometry.stepx);
 
         new_cellhd.north += nbufferZone;
         new_cellhd.south -= sbufferZone;
         new_cellhd.east += ebufferZone;
         new_cellhd.west -= wbufferZone;
 
-        xmin = new_cellhd.west;
-        ymin = new_cellhd.south;
-        xmax = new_cellhd.east;
-        ymax = new_cellhd.north;
-        deltx = fabs(new_cellhd.east - new_cellhd.west);
-        delty = fabs(new_cellhd.north - new_cellhd.south);
+        geometry.xmin = new_cellhd.west;
+        geometry.ymin = new_cellhd.south;
+        geometry.xmax = new_cellhd.east;
+        geometry.ymax = new_cellhd.north;
 
-        n /* n_cols */ = new_cellhd.cols;
-        m /* n_rows */ = new_cellhd.rows;
-        G_debug(1, "%lf %lf %lf %lf \n", ymax, ymin, xmin, xmax);
-        n100 = ceil(n / 100.);
-        m100 = ceil(m / 100.);
+        geometry.n /* n_cols */ = new_cellhd.cols;
+        geometry.m /* n_rows */ = new_cellhd.rows;
+        G_debug(1, "%lf %lf %lf %lf \n", geometry.ymax, geometry.ymin,
+                geometry.xmin, geometry.xmax);
+        geometry.n100 = ceil(geometry.n / 100.);
+        geometry.m100 = ceil(geometry.m / 100.);
 
         Rast_set_window(&new_cellhd);
     }
@@ -556,44 +573,46 @@ int main(int argc, char *argv[])
 
     /**********end of parser - ******************************/
 
-    INPUT();
-    G_debug(1, "calculate() starts...");
-    calculate(xcoord, ycoord, (int)(ebufferZone / stepx),
-              (int)(wbufferZone / stepx), (int)(sbufferZone / stepy),
-              (int)(nbufferZone / stepy));
+    INPUT(&geometry, elevin);
+    if (mode == SINGLE_POINT) {
+        /* Calculate the horizon for one single point */
+        calculate_point_mode(&settings, &geometry, xcoord, ycoord, fp, format);
+    }
+    else {
+        calculate_raster_mode(&settings, &geometry, &cellhd, &new_cellhd,
+                              (int)(ebufferZone / geometry.stepx),
+                              (int)(wbufferZone / geometry.stepx),
+                              (int)(sbufferZone / geometry.stepy),
+                              (int)(nbufferZone / geometry.stepy), bufferZone);
+    }
 
     exit(EXIT_SUCCESS);
 }
 
 /**********************end of main.c*****************/
 
-int INPUT(void)
+int INPUT(Geometry *geometry, const char *elevin)
 {
-    FCELL *cell1;
-    int fd1, row, row_rev;
-    int l, i, j, k;
-    int lmax, kmax;
+    FCELL *cell1 = Rast_allocate_f_buf();
 
-    cell1 = Rast_allocate_f_buf();
+    z = (float **)G_malloc(sizeof(float *) * (geometry->m));
+    z100 = (float **)G_malloc(sizeof(float *) * (geometry->m100));
 
-    z = (float **)G_malloc(sizeof(float *) * (m));
-    z100 = (float **)G_malloc(sizeof(float *) * (m100));
-
-    for (l = 0; l < m; l++) {
-        z[l] = (float *)G_malloc(sizeof(float) * (n));
+    for (int l = 0; l < geometry->m; l++) {
+        z[l] = (float *)G_malloc(sizeof(float) * (geometry->n));
     }
-    for (l = 0; l < m100; l++) {
-        z100[l] = (float *)G_malloc(sizeof(float) * (n100));
+    for (int l = 0; l < geometry->m100; l++) {
+        z100[l] = (float *)G_malloc(sizeof(float) * (geometry->n100));
     }
     /*read Z raster */
 
-    fd1 = Rast_open_old(elevin, "");
+    int fd1 = Rast_open_old(elevin, "");
 
-    for (row = 0; row < m; row++) {
+    for (int row = 0; row < geometry->m; row++) {
         Rast_get_f_row(fd1, cell1, row);
 
-        for (j = 0; j < n; j++) {
-            row_rev = m - row - 1;
+        for (int j = 0; j < geometry->n; j++) {
+            int row_rev = geometry->m - row - 1;
 
             if (!Rast_is_f_null_value(cell1 + j))
                 z[row_rev][j] = (float)cell1[j];
@@ -604,46 +623,47 @@ int INPUT(void)
     Rast_close(fd1);
 
     /* create low resolution array 100 */
-    for (i = 0; i < m100; i++) {
-        lmax = (i + 1) * 100;
-        if (lmax > m)
-            lmax = m;
+    for (int i = 0; i < geometry->m100; i++) {
+        int lmax = (i + 1) * 100;
+        if (lmax > geometry->m)
+            lmax = geometry->m;
 
-        for (j = 0; j < n100; j++) {
-            zmax = SMALL;
-            kmax = (j + 1) * 100;
-            if (kmax > n)
-                kmax = n;
-            for (l = (i * 100); l < lmax; l++) {
-                for (k = (j * 100); k < kmax; k++) {
-                    zmax = amax1(zmax, z[l][k]);
+        for (int j = 0; j < geometry->n100; j++) {
+            geometry->zmax = SMALL;
+            int kmax = (j + 1) * 100;
+            if (kmax > geometry->n)
+                kmax = geometry->n;
+            for (int l = (i * 100); l < lmax; l++) {
+                for (int k = (j * 100); k < kmax; k++) {
+                    geometry->zmax = MAX(geometry->zmax, z[l][k]);
                 }
             }
-            z100[i][j] = zmax;
+            z100[i][j] = geometry->zmax;
             G_debug(3, "%d %d %lf\n", i, j, z100[i][j]);
         }
     }
 
     /* find max Z */
-    for (i = 0; i < m; i++) {
-        for (j = 0; j < n; j++) {
-            zmax = amax1(zmax, z[i][j]);
+    for (int i = 0; i < geometry->m; i++) {
+        for (int j = 0; j < geometry->n; j++) {
+            geometry->zmax = MAX(geometry->zmax, z[i][j]);
         }
     }
 
     return 1;
 }
 
-int OUTGR(int numrows, int numcols)
+int OUTGR(const Settings *settings, char *shad_filename,
+          struct Cell_head *cellhd)
 {
     FCELL *cell1 = NULL;
-
     int fd1 = 0;
-    int i, iarc, j;
 
-    Rast_set_window(&cellhd);
+    int numrows = cellhd->rows;
+    int numcols = cellhd->cols;
+    Rast_set_window(cellhd);
 
-    if (horizon != NULL) {
+    if (settings->horizon_basename != NULL) {
         cell1 = Rast_allocate_f_buf();
         fd1 = Rast_open_fp_new(shad_filename);
     }
@@ -656,11 +676,11 @@ int OUTGR(int numrows, int numcols)
         G_fatal_error(_("OOPS: cols changed from %d to %d"), numcols,
                       Rast_window_cols());
 
-    for (iarc = 0; iarc < numrows; iarc++) {
-        i = numrows - iarc - 1;
+    for (int iarc = 0; iarc < numrows; iarc++) {
+        int i = numrows - iarc - 1;
 
-        if (horizon != NULL) {
-            for (j = 0; j < numcols; j++) {
+        if (settings->horizon_basename != NULL) {
+            for (int j = 0; j < numcols; j++) {
                 if (horizon_raster[i][j] == UNDEFZ)
                     Rast_set_f_null_value(cell1 + j, 1);
                 else
@@ -675,202 +695,170 @@ int OUTGR(int numrows, int numcols)
     return 1;
 }
 
-double amax1(double arg1, double arg2)
-{
-    double res;
-
-    if (arg1 >= arg2) {
-        res = arg1;
-    }
-    else {
-        res = arg2;
-    }
-    return res;
-}
-
-double amin1(double arg1, double arg2)
-{
-    double res;
-
-    if (arg1 <= arg2) {
-        res = arg1;
-    }
-    else {
-        res = arg2;
-    }
-    return res;
-}
-
-int min(int arg1, int arg2)
-{
-    int res;
-
-    if (arg1 <= arg2) {
-        res = arg1;
-    }
-    else {
-        res = arg2;
-    }
-    return res;
-}
-
-int max(int arg1, int arg2)
-{
-    int res;
-
-    if (arg1 >= arg2) {
-        res = arg1;
-    }
-    else {
-        res = arg2;
-    }
-    return res;
-}
-
 /**********************************************************/
 
-void com_par(void)
+void com_par(const Geometry *geometry, OriginAngle *origin_angle, double angle,
+             double xp, double yp)
 {
-    if (fabs(sinangle) < 0.0000001) {
-        sinangle = 0.;
+    double longitude = xp;
+    double latitude = yp;
+    if (G_projection() != PROJECTION_LL) {
+        if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude, &latitude,
+                          NULL) < 0)
+            G_fatal_error(_("Error in %s"), "GPJ_transform()");
     }
-    if (fabs(cosangle) < 0.0000001) {
-        cosangle = 0.;
-    }
-    distsinangle = 32000;
-    distcosangle = 32000;
+    latitude *= deg2rad;
+    longitude *= deg2rad;
 
-    if (sinangle != 0.) {
-        distsinangle = 100. / (distxy * sinangle);
-    }
-    if (cosangle != 0.) {
-        distcosangle = 100. / (distxy * cosangle);
-    }
+    double delt_lat =
+        -0.0001 * cos(angle); /* Arbitrary small distance in latitude */
+    double delt_lon = 0.0001 * sin(angle) / cos(latitude);
 
-    stepsinangle = stepxy * sinangle;
-    stepcosangle = stepxy * cosangle;
-}
+    latitude = (latitude + delt_lat) * rad2deg;
+    longitude = (longitude + delt_lon) * rad2deg;
 
-double horizon_height(void)
-{
-    double height;
-
-    tanh0 = 0.;
-    length = 0;
-    zp = z_orig;
-
-    height = searching();
-
-    xx0 = xg0;
-    yy0 = yg0;
-
-    return height;
-}
-
-double calculate_shadow_onedirection(double shadow_angle)
-{
-    shadow_angle = horizon_height();
-
-    return shadow_angle;
-}
-
-void calculate_shadow(void)
-{
-    double dfr_rad;
-
-    int i;
-    int printCount;
-    double shadow_angle;
-    double printangle;
-    double sx, sy;
-    double xp, yp;
-    double latitude, longitude;
-    double delt_lat, delt_lon;
-    double delt_east, delt_nor;
-    double delt_dist;
-
-    double angle;
-
-    printCount = 360. / fabs(step);
-
-    if (printCount < 1)
-        printCount = 1;
-
-    dfr_rad = step * deg2rad;
-
-    xp = xmin + xx0;
-    yp = ymin + yy0;
-
-    angle = (single_direction * deg2rad) + pihalf;
-    printangle = single_direction;
-
-    maxlength = fixedMaxLength;
-    fprintf(fp, "azimuth,horizon_height\n");
-
-    for (i = 0; i < printCount; i++) {
-
-        ip = jp = 0;
-
-        sx = xx0 * invstepx;
-        sy = yy0 * invstepy;
-        ip100 = floor(sx / 100.);
-        jp100 = floor(sy / 100.);
-
-        if ((G_projection() != PROJECTION_LL)) {
-
-            longitude = xp;
-            latitude = yp;
-
-            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
-                              &latitude, NULL) < 0)
-                G_fatal_error(_("Error in %s"), "GPJ_transform()");
-        }
-        else { /* ll projection */
-            latitude = yp;
-            longitude = xp;
-        }
-        latitude *= deg2rad;
-        longitude *= deg2rad;
-
-        delt_lat = -0.0001 * cos(angle);
-        delt_lon = 0.0001 * sin(angle) / cos(latitude);
-
-        latitude = (latitude + delt_lat) * rad2deg;
-        longitude = (longitude + delt_lon) * rad2deg;
-
+    if (G_projection() != PROJECTION_LL) {
         if (GPJ_transform(&iproj, &oproj, &tproj, PJ_INV, &longitude, &latitude,
                           NULL) < 0)
             G_fatal_error(_("Error in %s"), "GPJ_transform()");
+    }
+    double delt_east = longitude - xp;
+    double delt_nor = latitude - yp;
 
-        delt_east = longitude - xp;
-        delt_nor = latitude - yp;
+    double delt_dist = sqrt(delt_east * delt_east + delt_nor * delt_nor);
 
-        delt_dist = sqrt(delt_east * delt_east + delt_nor * delt_nor);
+    origin_angle->sinangle = delt_nor / delt_dist;
+    origin_angle->cosangle = delt_east / delt_dist;
 
-        sinangle = delt_nor / delt_dist;
-        cosangle = delt_east / delt_dist;
-        com_par();
+    if (fabs(origin_angle->sinangle) < 0.0000001) {
+        origin_angle->sinangle = 0.;
+    }
+    if (fabs(origin_angle->cosangle) < 0.0000001) {
+        origin_angle->cosangle = 0.;
+    }
+    origin_angle->distsinangle = 32000;
+    origin_angle->distcosangle = 32000;
 
-        shadow_angle = horizon_height();
+    if (origin_angle->sinangle != 0.) {
+        origin_angle->distsinangle =
+            100. / (geometry->distxy * origin_angle->sinangle);
+    }
+    if (origin_angle->cosangle != 0.) {
+        origin_angle->distcosangle =
+            100. / (geometry->distxy * origin_angle->cosangle);
+    }
 
-        if (degreeOutput) {
+    origin_angle->stepsinangle = geometry->stepxy * origin_angle->sinangle;
+    origin_angle->stepcosangle = geometry->stepxy * origin_angle->cosangle;
+}
+
+void calculate_point_mode(const Settings *settings, const Geometry *geometry,
+                          double xcoord, double ycoord, FILE *fp,
+                          enum OutputFormat format)
+{
+    /*
+       xg0 = xx0 = (double)xcoord * stepx;
+       yg0 = yy0 = (double)ycoord * stepy;
+       xg0 = xx0 = xcoord -0.5*stepx -xmin;
+       yg0 = yy0 = ycoord -0.5*stepy-ymin;
+       xg0 = xx0 = xindex*stepx -0.5*stepx;
+       yg0 = yy0 = yindex*stepy -0.5*stepy;
+     */
+    OriginPoint origin_point;
+    int xindex = (int)((xcoord - geometry->xmin) / geometry->stepx);
+    int yindex = (int)((ycoord - geometry->ymin) / geometry->stepy);
+    origin_point.xg0 = xindex * geometry->stepx;
+    origin_point.yg0 = yindex * geometry->stepy;
+    origin_point.coslatsq = 0;
+    if ((G_projection() == PROJECTION_LL)) {
+        ll_correction = true;
+    }
+    if (ll_correction) {
+        double coslat = cos(deg2rad * (geometry->ymin + origin_point.yg0));
+        origin_point.coslatsq = coslat * coslat;
+    }
+
+    origin_point.z_orig = z[yindex][xindex];
+    G_debug(1, "yindex: %d, xindex %d, z_orig %.2f", yindex, xindex,
+            origin_point.z_orig);
+
+    int printCount = 360. / fabs(settings->step);
+
+    if (printCount < 1)
+        printCount = 1;
+    double dfr_rad = settings->step * deg2rad;
+
+    double xp = geometry->xmin + origin_point.xg0;
+    double yp = geometry->ymin + origin_point.yg0;
+
+    double angle = (settings->single_direction * deg2rad) + pihalf;
+    double printangle = settings->single_direction;
+
+    origin_point.maxlength = settings->fixedMaxLength;
+    /* JSON variables and formating */
+    JSON_Value *root_value, *origin_value, *azimuths_value, *horizons_value;
+    JSON_Array *coordinates, *azimuths, *horizons;
+    JSON_Object *origin;
+    json_set_float_serialization_format("%lf");
+
+    switch (format) {
+    case PLAIN:
+        fprintf(fp, "azimuth,horizon_height\n");
+        break;
+    case JSON:
+        root_value = json_value_init_array();
+        coordinates = json_value_get_array(root_value);
+        origin_value = json_value_init_object();
+        origin = json_value_get_object(origin_value);
+        json_object_set_number(origin, "x", xcoord);
+        json_object_set_number(origin, "y", ycoord);
+        azimuths_value = json_value_init_array();
+        azimuths = json_value_get_array(azimuths_value);
+        horizons_value = json_value_init_array();
+        horizons = json_value_get_array(horizons_value);
+        break;
+    }
+    for (int i = 0; i < printCount; i++) {
+        OriginAngle origin_angle;
+        com_par(geometry, &origin_angle, angle, xp, yp);
+
+        double shadow_angle =
+            horizon_height(geometry, &origin_point, &origin_angle);
+
+        if (settings->degreeOutput) {
             shadow_angle *= rad2deg;
         }
 
-        if (compassOutput) {
+        if (settings->compassOutput) {
             double tmpangle;
 
             tmpangle = 360. - printangle + 90.;
             if (tmpangle >= 360.)
                 tmpangle = tmpangle - 360.;
-            fprintf(fp, "%lf,%lf\n", tmpangle, shadow_angle);
+            switch (format) {
+            case PLAIN:
+                fprintf(fp, "%lf,%lf\n", tmpangle, shadow_angle);
+                break;
+            case JSON:
+                json_array_append_number(azimuths, tmpangle);
+                json_array_append_number(horizons, shadow_angle);
+                break;
+            }
         }
         else {
-            fprintf(fp, "%lf,%lf\n", printangle, shadow_angle);
+            switch (format) {
+            case PLAIN:
+                fprintf(fp, "%lf,%lf\n", printangle, shadow_angle);
+                break;
+            case JSON:
+                json_array_append_number(azimuths, printangle);
+                json_array_append_number(horizons, shadow_angle);
+                break;
+            }
         }
 
         angle += dfr_rad;
-        printangle += step;
+        printangle += settings->step;
 
         if (angle < 0.)
             angle += twopi;
@@ -882,44 +870,55 @@ void calculate_shadow(void)
         else if (printangle > 360.)
             printangle -= 360;
     } /* end of for loop over angles */
+
+    if (format == JSON) {
+        json_object_set_value(origin, "azimuth", azimuths_value);
+        json_object_set_value(origin, "horizon_height", horizons_value);
+        json_array_append_value(coordinates, origin_value);
+        char *json_string = json_serialize_to_string_pretty(root_value);
+        fprintf(fp, "%s\n", json_string);
+        json_free_serialized_string(json_string);
+        json_value_free(root_value);
+    }
+    fclose(fp);
 }
 
 /*////////////////////////////////////////////////////////////////////// */
 
-int new_point(void)
+int new_point(const Geometry *geometry, const OriginPoint *origin_point,
+              const OriginAngle *origin_angle, SearchPoint *search_point,
+              HorizonProperties *horizon)
 {
-    int iold, jold;
-    int succes = 1, succes2 = 1;
-    double sx, sy;
-    double dx, dy;
+    int iold = search_point->ip;
+    int jold = search_point->jp;
 
-    iold = ip;
-    jold = jp;
-
-    while (succes) {
-        yy0 += stepsinangle;
-        xx0 += stepcosangle;
+    while (TRUE) {
+        search_point->yy0 += origin_angle->stepsinangle;
+        search_point->xx0 += origin_angle->stepcosangle;
 
         /* offset 0.5 cell size to get the right cell i, j */
-        sx = xx0 * invstepx + offsetx;
-        sy = yy0 * invstepy + offsety;
-        ip = (int)sx;
-        jp = (int)sy;
+        double sx = search_point->xx0 * geometry->invstepx + geometry->offsetx;
+        double sy = search_point->yy0 * geometry->invstepy + geometry->offsety;
+        search_point->ip = (int)sx;
+        search_point->jp = (int)sy;
 
         /* test outside of raster */
-        if ((ip < 0) || (ip >= n) || (jp < 0) || (jp >= m))
+        if ((search_point->ip < 0) || (search_point->ip >= geometry->n) ||
+            (search_point->jp < 0) || (search_point->jp >= geometry->m))
             return (3);
 
-        if ((ip != iold) || (jp != jold)) {
-            dx = (double)ip * stepx;
-            dy = (double)jp * stepy;
+        if ((search_point->ip != iold) || (search_point->jp != jold)) {
+            double dx = (double)search_point->ip * geometry->stepx;
+            double dy = (double)search_point->jp * geometry->stepy;
 
-            length = distance(
-                xg0, dx, yg0,
-                dy); /* dist from orig. grid point to the current grid point */
-            succes2 = test_low_res();
+            horizon->length =
+                distance(origin_point->xg0, dx, origin_point->yg0, dy,
+                         origin_point->coslatsq); /* dist from orig. grid point
+                                              to the current grid point */
+            int succes2 = test_low_res(geometry, origin_point, origin_angle,
+                                       search_point, horizon);
             if (succes2 == 1) {
-                zp = z[jp][ip];
+                search_point->zp = z[search_point->jp][search_point->ip];
                 return (1);
             }
         }
@@ -927,61 +926,68 @@ int new_point(void)
     return -1;
 }
 
-int test_low_res(void)
+int test_low_res(const Geometry *geometry, const OriginPoint *origin_point,
+                 const OriginAngle *origin_angle, SearchPoint *search_point,
+                 const HorizonProperties *horizon)
 {
-    int iold100, jold100;
-    double sx, sy;
-    int delx, dely, mindel;
-    double zp100, z2, curvature_diff;
-
-    iold100 = ip100;
-    jold100 = jp100;
-    ip100 = floor(ip / 100.);
-    jp100 = floor(jp / 100.);
+    int iold100 = search_point->ip100;
+    int jold100 = search_point->jp100;
+    search_point->ip100 = floor(search_point->ip / 100.);
+    search_point->jp100 = floor(search_point->jp / 100.);
     /*test the new position with low resolution */
-    if ((ip100 != iold100) || (jp100 != jold100)) {
-        G_debug(2, "ip:%d jp:%d iold100:%d jold100:%d\n", ip, jp, iold100,
-                jold100);
+    if ((search_point->ip100 != iold100) || (search_point->jp100 != jold100)) {
+        G_debug(2, "ip:%d jp:%d iold100:%d jold100:%d\n", search_point->ip,
+                search_point->jp, iold100, jold100);
         /*  replace with approximate version
            curvature_diff = EARTHRADIUS*(1.-cos(length/EARTHRADIUS));
          */
-        curvature_diff = 0.5 * length * length * invEarth;
-        z2 = z_orig + curvature_diff + length * tanh0;
-        zp100 = z100[jp100][ip100];
-        G_debug(2, "ip:%d jp:%d z2:%lf zp100:%lf \n", ip, jp, z2, zp100);
+        double curvature_diff =
+            0.5 * horizon->length * horizon->length * invEarth;
+        double z2 = origin_point->z_orig + curvature_diff +
+                    horizon->length * horizon->tanh0;
+        double zp100 = z100[search_point->jp100][search_point->ip100];
+        G_debug(2, "ip:%d jp:%d z2:%lf zp100:%lf \n", search_point->ip,
+                search_point->jp, z2, zp100);
 
         if (zp100 <= z2)
         /*skip to the next lowres cell */
         {
-            delx = 32000;
-            dely = 32000;
-            if (cosangle > 0.) {
-                sx = xx0 * invstepx + offsetx;
-                delx =
-                    floor(fabs((ceil(sx / 100.) - (sx / 100.)) * distcosangle));
+            int delx = 32000;
+            int dely = 32000;
+            if (origin_angle->cosangle > 0.) {
+                double sx =
+                    search_point->xx0 * geometry->invstepx + geometry->offsetx;
+                delx = floor(fabs((ceil(sx / 100.) - (sx / 100.)) *
+                                  origin_angle->distcosangle));
             }
-            if (cosangle < 0.) {
-                sx = xx0 * invstepx + offsetx;
-                delx = floor(
-                    fabs((floor(sx / 100.) - (sx / 100.)) * distcosangle));
+            if (origin_angle->cosangle < 0.) {
+                double sx =
+                    search_point->xx0 * geometry->invstepx + geometry->offsetx;
+                delx = floor(fabs((floor(sx / 100.) - (sx / 100.)) *
+                                  origin_angle->distcosangle));
             }
-            if (sinangle > 0.) {
-                sy = yy0 * invstepy + offsety;
-                dely =
-                    floor(fabs((ceil(sy / 100.) - (sy / 100.)) * distsinangle));
+            if (origin_angle->sinangle > 0.) {
+                double sy =
+                    search_point->yy0 * geometry->invstepy + geometry->offsety;
+                dely = floor(fabs((ceil(sy / 100.) - (sy / 100.)) *
+                                  origin_angle->distsinangle));
             }
-            else if (sinangle < 0.) {
-                sy = yy0 * invstepy + offsety;
-                dely = floor(
-                    fabs((floor(sy / 100.) - (sy / 100.)) * distsinangle));
+            else if (origin_angle->sinangle < 0.) {
+                double sy =
+                    search_point->yy0 * geometry->invstepy + geometry->offsety;
+                dely = floor(fabs((floor(sy / 100.) - (sy / 100.)) *
+                                  origin_angle->distsinangle));
             }
 
-            mindel = min(delx, dely);
-            G_debug(2, "%d %d %d %lf %lf\n", ip, jp, mindel, xg0, yg0);
+            int mindel = MIN(delx, dely);
+            G_debug(2, "%d %d %d %lf %lf\n", search_point->ip, search_point->jp,
+                    mindel, origin_point->xg0, origin_point->yg0);
 
-            yy0 = yy0 + (mindel * stepsinangle);
-            xx0 = xx0 + (mindel * stepcosangle);
-            G_debug(2, "  %lf %lf\n", xx0, yy0);
+            search_point->yy0 =
+                search_point->yy0 + (mindel * origin_angle->stepsinangle);
+            search_point->xx0 =
+                search_point->xx0 + (mindel * origin_angle->stepcosangle);
+            G_debug(2, "  %lf %lf\n", search_point->xx0, search_point->yy0);
 
             return (3);
         }
@@ -995,285 +1001,215 @@ int test_low_res(void)
     }
 }
 
-double searching(void)
+double horizon_height(const Geometry *geometry, const OriginPoint *origin_point,
+                      const OriginAngle *origin_angle)
 {
-    double z2;
-    double curvature_diff;
-    int succes = 1;
+    SearchPoint search_point;
+    HorizonProperties horizon;
 
-    if (zp == UNDEFZ)
+    search_point.ip = 0;
+    search_point.jp = 0;
+    search_point.xx0 = origin_point->xg0;
+    search_point.yy0 = origin_point->yg0;
+    search_point.zp = origin_point->z_orig;
+    search_point.ip100 = floor(origin_point->xg0 * geometry->invstepx / 100.);
+    search_point.jp100 = floor(origin_point->yg0 * geometry->invstepy / 100.);
+
+    horizon.length = 0;
+    horizon.tanh0 = 0;
+
+    if (search_point.zp == UNDEFZ)
         return 0;
 
     while (1) {
-        succes = new_point();
+        int succes = new_point(geometry, origin_point, origin_angle,
+                               &search_point, &horizon);
 
         if (succes != 1) {
             break;
         }
 
         /* curvature_diff = EARTHRADIUS*(1.-cos(length/EARTHRADIUS)); */
-        curvature_diff = 0.5 * length * length * invEarth;
+        double curvature_diff =
+            0.5 * horizon.length * horizon.length * invEarth;
 
-        z2 = z_orig + curvature_diff + length * tanh0;
+        double z2 = origin_point->z_orig + curvature_diff +
+                    horizon.length * horizon.tanh0;
 
-        if (z2 < zp) {
-            tanh0 = (zp - z_orig - curvature_diff) / length;
+        if (z2 < search_point.zp) {
+            horizon.tanh0 =
+                (search_point.zp - origin_point->z_orig - curvature_diff) /
+                horizon.length;
         }
 
-        if (z2 >= zmax) {
+        if (z2 >= geometry->zmax) {
             break;
         }
 
-        if (length >= maxlength) {
+        if (horizon.length >= origin_point->maxlength) {
             break;
         }
     }
 
-    return atan(tanh0);
+    return atan(horizon.tanh0);
 }
 
 /*////////////////////////////////////////////////////////////////////// */
 
-void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
-               int buffer_s, int buffer_n)
+void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
+                           struct Cell_head *cellhd,
+                           struct Cell_head *new_cellhd, int buffer_e,
+                           int buffer_w, int buffer_s, int buffer_n,
+                           double bufferZone)
 {
-    int i, j, l, k = 0;
-    size_t decimals;
-
-    int xindex, yindex;
-    double shadow_angle;
-    double coslat;
-
-    double latitude, longitude;
-    double xp, yp;
-    double inputAngle;
-    double delt_lat, delt_lon;
-    double delt_east, delt_nor;
-    double delt_dist;
-
-    char msg_buff[256];
-
     int hor_row_start = buffer_s;
-    int hor_row_end = m - buffer_n;
+    int hor_row_end = geometry->m - buffer_n;
 
     int hor_col_start = buffer_w;
-    int hor_col_end = n - buffer_e;
+    int hor_col_end = geometry->n - buffer_e;
 
-    int hor_numrows = m - (buffer_s + buffer_n);
-    int hor_numcols = n - (buffer_e + buffer_w);
-
-    int arrayNumInt;
-    double dfr_rad, angle_deg;
-
-    xindex = (int)((xcoord - xmin) / stepx);
-    yindex = (int)((ycoord - ymin) / stepy);
+    int hor_numrows = geometry->m - (buffer_s + buffer_n);
+    int hor_numcols = geometry->n - (buffer_e + buffer_w);
 
     if ((G_projection() == PROJECTION_LL)) {
-        ll_correction = TRUE;
+        ll_correction = true;
     }
 
-    if (isMode() == SINGLE_POINT) {
-        /* Calculate the horizon for one single point */
+    /****************************************************************/
+    /*  The loop over raster points starts here!                    */
 
-        /*
-           xg0 = xx0 = (double)xcoord * stepx;
-           yg0 = yy0 = (double)ycoord * stepy;
-           xg0 = xx0 = xcoord -0.5*stepx -xmin;
-           yg0 = yy0 = ycoord -0.5*stepy-ymin;
-           xg0 = xx0 = xindex*stepx -0.5*stepx;
-           yg0 = yy0 = yindex*stepy -0.5*stepy;
-         */
-        xg0 = xx0 = xindex * stepx;
-        yg0 = yy0 = yindex * stepy;
+    /****************************************************************/
 
-        if (ll_correction) {
-            coslat = cos(deg2rad * (ymin + yy0));
-            coslatsq = coslat * coslat;
+    if (settings->horizon_basename != NULL) {
+        horizon_raster = (float **)G_malloc(sizeof(float *) * (hor_numrows));
+        for (int l = 0; l < hor_numrows; l++) {
+            horizon_raster[l] =
+                (float *)G_malloc(sizeof(float) * (hor_numcols));
         }
 
-        z_orig = zp = z[yindex][xindex];
-        G_debug(1, "yindex: %d, xindex %d, z_orig %.2f", yindex, xindex,
-                z_orig);
-
-        calculate_shadow();
-        fclose(fp);
+        for (int j = 0; j < hor_numrows; j++) {
+            for (int i = 0; i < hor_numcols; i++)
+                horizon_raster[j][i] = 0.;
+        }
+    }
+    double dfr_rad;
+    int arrayNumInt;
+    /* definition of horizon angle in loop */
+    char *shad_filename = NULL;
+    if (settings->step == 0.0) {
+        dfr_rad = 0;
+        arrayNumInt = 1;
+        sprintf(shad_filename, "%s", settings->horizon_basename);
     }
     else {
+        dfr_rad = settings->step * deg2rad;
+        arrayNumInt = 0;
+        for (double tmp = 0; tmp < settings->end - settings->start;
+             tmp += fabs(settings->step))
+            ++arrayNumInt;
+    }
 
-        /****************************************************************/
-        /*  The loop over raster points starts here!                    */
+    size_t decimals = G_get_num_decimals(settings->str_step);
 
-        /****************************************************************/
+    for (int k = 0; k < arrayNumInt; k++) {
+        struct History history;
 
-        if (horizon != NULL) {
-            horizon_raster =
-                (float **)G_malloc(sizeof(float *) * (hor_numrows));
-            for (l = 0; l < hor_numrows; l++) {
-                horizon_raster[l] =
-                    (float *)G_malloc(sizeof(float) * (hor_numcols));
-            }
+        double angle =
+            (settings->start + settings->single_direction) * deg2rad +
+            (dfr_rad * k);
+        double angle_deg = angle * rad2deg + 0.0001;
 
-            for (j = 0; j < hor_numrows; j++) {
-                for (i = 0; i < hor_numcols; i++)
-                    horizon_raster[j][i] = 0.;
-            }
-        }
+        if (settings->step != 0.0)
+            shad_filename = G_generate_basename(settings->horizon_basename,
+                                                angle_deg, 3, decimals);
+        G_message(
+            _("Calculating map %01d of %01d (angle %.2f, raster map <%s>)"),
+            (k + 1), arrayNumInt, angle_deg, shad_filename);
 
-        /* definition of horizon angle in loop */
-        if (step == 0.0) {
-            dfr_rad = 0;
-            arrayNumInt = 1;
-            sprintf(shad_filename, "%s", horizon);
-        }
-        else {
-            dfr_rad = step * deg2rad;
-            arrayNumInt = 0;
-            for (double tmp = 0; tmp < end - start; tmp += fabs(step))
-                ++arrayNumInt;
-        }
+        for (int j = hor_row_start; j < hor_row_end; j++) {
+            G_percent(j - hor_row_start, hor_numrows - 1, 2);
+            for (int i = hor_col_start; i < hor_col_end; i++) {
+                OriginPoint origin_point;
+                OriginAngle origin_angle;
+                origin_point.xg0 = (double)i * geometry->stepx;
 
-        decimals = G_get_num_decimals(str_step);
+                double xp = geometry->xmin + origin_point.xg0;
+                origin_point.yg0 = (double)j * geometry->stepy;
 
-        for (k = 0; k < arrayNumInt; k++) {
-            struct History history;
-
-            angle = (start + single_direction) * deg2rad + (dfr_rad * k);
-            angle_deg = angle * rad2deg + 0.0001;
-
-            if (step != 0.0)
-                shad_filename =
-                    G_generate_basename(horizon, angle_deg, 3, decimals);
-
-            /*
-               com_par(angle);
-             */
-            G_message(
-                _("Calculating map %01d of %01d (angle %.2f, raster map <%s>)"),
-                (k + 1), arrayNumInt, angle_deg, shad_filename);
-
-            for (j = hor_row_start; j < hor_row_end; j++) {
-                G_percent(j - hor_row_start, hor_numrows - 1, 2);
-                shadow_angle = 15 * deg2rad;
-                for (i = hor_col_start; i < hor_col_end; i++) {
-                    ip100 = floor(i / 100.);
-                    jp100 = floor(j / 100.);
-                    ip = jp = 0;
-                    xg0 = xx0 = (double)i * stepx;
-
-                    xp = xmin + xx0;
-                    yg0 = yy0 = (double)j * stepy;
-
-                    yp = ymin + yy0;
-                    length = 0;
-                    if (ll_correction) {
-                        coslat = cos(deg2rad * yp);
-                        coslatsq = coslat * coslat;
-                    }
-
-                    longitude = xp;
-                    latitude = yp;
-
-                    if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD,
-                                      &longitude, &latitude, NULL) < 0)
-                        G_fatal_error(_("Error in %s"), "GPJ_transform()");
-
-                    latitude *= deg2rad;
-                    longitude *= deg2rad;
-
-                    inputAngle = angle + pihalf;
-                    inputAngle =
-                        (inputAngle >= twopi) ? inputAngle - twopi : inputAngle;
-
-                    delt_lat =
-                        -0.0001 * cos(inputAngle); /* Arbitrary small distance
-                                                      in latitude */
-                    delt_lon = 0.0001 * sin(inputAngle) / cos(latitude);
-
-                    latitude = (latitude + delt_lat) * rad2deg;
-                    longitude = (longitude + delt_lon) * rad2deg;
-
-                    if ((G_projection() != PROJECTION_LL)) {
-                        if (GPJ_transform(&iproj, &oproj, &tproj, PJ_INV,
-                                          &longitude, &latitude, NULL) < 0)
-                            G_fatal_error(_("Error in %s"), "GPJ_transform()");
-                    }
-
-                    delt_east = longitude - xp;
-                    delt_nor = latitude - yp;
-
-                    delt_dist =
-                        sqrt(delt_east * delt_east + delt_nor * delt_nor);
-
-                    sinangle = delt_nor / delt_dist;
-                    cosangle = delt_east / delt_dist;
-                    com_par();
-
-                    z_orig = zp = z[j][i];
-                    maxlength = (zmax - z_orig) / TANMINANGLE;
-                    maxlength = (maxlength < fixedMaxLength) ? maxlength
-                                                             : fixedMaxLength;
-
-                    if (z_orig != UNDEFZ) {
-
-                        G_debug(4, "**************new line %d %d\n", i, j);
-                        shadow_angle = horizon_height();
-
-                        if (degreeOutput) {
-                            shadow_angle *= rad2deg;
-                        }
-
-                        /*
-                           if((j==1400)&&(i==1400))
-                           {
-                           G_debug(1, "coordinates=%f,%f, raster no. %d,
-                           horizon=%f\n", xp, yp, k, shadow_angle);
-                           }
-                         */
-                        horizon_raster[j - buffer_s][i - buffer_w] =
-                            shadow_angle;
-
-                    } /* undefs */
+                double yp = geometry->ymin + origin_point.yg0;
+                origin_point.coslatsq = 0;
+                if (ll_correction) {
+                    double coslat = cos(deg2rad * yp);
+                    origin_point.coslatsq = coslat * coslat;
                 }
+
+                double inputAngle = angle + pihalf;
+                inputAngle =
+                    (inputAngle >= twopi) ? inputAngle - twopi : inputAngle;
+                com_par(geometry, &origin_angle, inputAngle, xp, yp);
+
+                origin_point.z_orig = z[j][i];
+                origin_point.maxlength =
+                    (geometry->zmax - origin_point.z_orig) / TANMINANGLE;
+                origin_point.maxlength =
+                    (origin_point.maxlength < settings->fixedMaxLength)
+                        ? origin_point.maxlength
+                        : settings->fixedMaxLength;
+
+                if (origin_point.z_orig != UNDEFZ) {
+
+                    G_debug(4, "**************new line %d %d\n", i, j);
+                    double shadow_angle =
+                        horizon_height(geometry, &origin_point, &origin_angle);
+
+                    if (settings->degreeOutput) {
+                        shadow_angle *= rad2deg;
+                    }
+
+                    horizon_raster[j - buffer_s][i - buffer_w] = shadow_angle;
+
+                } /* undefs */
             }
-
-            G_debug(1, "OUTGR() starts...");
-            OUTGR(cellhd.rows, cellhd.cols);
-
-            /* empty array */
-            for (j = 0; j < hor_numrows; j++) {
-                for (i = 0; i < hor_numcols; i++)
-                    horizon_raster[j][i] = 0.;
-            }
-
-            /* return back the buffered region */
-            if (bufferZone > 0.)
-                Rast_set_window(&new_cellhd);
-
-            /* write metadata */
-            Rast_short_history(shad_filename, "raster", &history);
-
-            sprintf(msg_buff,
-                    "Angular height of terrain horizon, map %01d of %01d",
-                    (k + 1), arrayNumInt);
-            Rast_put_cell_title(shad_filename, msg_buff);
-
-            if (degreeOutput)
-                Rast_write_units(shad_filename, "degrees");
-            else
-                Rast_write_units(shad_filename, "radians");
-
-            Rast_command_history(&history);
-
-            /* insert a blank line */
-            Rast_append_history(&history, "");
-
-            Rast_append_format_history(
-                &history,
-                "Horizon view from azimuth angle %.2f degrees CCW from East",
-                angle * rad2deg);
-
-            Rast_write_history(shad_filename, &history);
-            G_free(shad_filename);
         }
+
+        G_debug(1, "OUTGR() starts...");
+        OUTGR(settings, shad_filename, cellhd);
+
+        /* empty array */
+        for (int j = 0; j < hor_numrows; j++) {
+            for (int i = 0; i < hor_numcols; i++)
+                horizon_raster[j][i] = 0.;
+        }
+
+        /* return back the buffered region */
+        if (bufferZone > 0.)
+            Rast_set_window(new_cellhd);
+
+        /* write metadata */
+        Rast_short_history(shad_filename, "raster", &history);
+
+        char msg_buff[256];
+        sprintf(msg_buff, "Angular height of terrain horizon, map %01d of %01d",
+                (k + 1), arrayNumInt);
+        Rast_put_cell_title(shad_filename, msg_buff);
+
+        if (settings->degreeOutput)
+            Rast_write_units(shad_filename, "degrees");
+        else
+            Rast_write_units(shad_filename, "radians");
+
+        Rast_command_history(&history);
+
+        /* insert a blank line */
+        Rast_append_history(&history, "");
+
+        Rast_append_format_history(
+            &history,
+            "Horizon view from azimuth angle %.2f degrees CCW from East",
+            angle * rad2deg);
+
+        Rast_write_history(shad_filename, &history);
+        if (shad_filename)
+            G_free(shad_filename);
     }
 }
