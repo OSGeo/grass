@@ -56,7 +56,7 @@ void list_accessible_mapsets(const char *fs)
     fprintf(stdout, "\n");
 }
 
-void list_accessible_mapsets_json(const char *fs)
+void list_accessible_mapsets_json()
 {
     int n;
     const char *name;
