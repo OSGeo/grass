@@ -68,7 +68,7 @@ void list_accessible_mapsets_json(const char *fs)
     root_value = json_value_init_object();
     root_object = json_value_get_object(root_value);
 
-    // Create mapsets array
+    // Create and add mapsets array to root object
     json_object_set_value(root_object, "mapsets", json_value_init_array());
     mapsets = json_object_get_array(root_object, "mapsets");
 
@@ -87,9 +87,6 @@ void list_accessible_mapsets_json(const char *fs)
         // Append mapset name to mapsets array
         json_array_append_string(mapsets, name);
     }
-
-    // Add mapsets array to root object
-    json_object_set_value(root_object, "mapsets", mapsets);
 
     // Serialize root object to string and print it to stdout
     serialized_string = json_serialize_to_string_pretty(root_value);
@@ -128,9 +125,6 @@ void list_avaliable_mapsets_json(const char **mapset_name, int nmapsets)
     for (n = 0; n < nmapsets; n++) {
         json_array_append_string(mapsets, mapset_name[n]);
     }
-
-    // Add mapsets array to root object
-    json_object_set_value(root_object, "mapsets", mapsets);
 
     // Serialize root object to string and print it to stdout
     serialized_string = json_serialize_to_string_pretty(root_value);
