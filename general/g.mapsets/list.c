@@ -62,16 +62,14 @@ void list_accessible_mapsets_json(const char *fs)
     const char *name;
     char *serialized_string = NULL;
     JSON_Value *root_value = NULL;
-    JSON_Object *root_object;
-    JSON_Array *root_array, *mapsets;
+    JSON_Object *root_object = NULL;
+    JSON_Array *mapsets = NULL;
 
-    // Create root json object
     root_value = json_value_init_object();
     root_object = json_value_get_object(root_value);
 
     // Create mapsets array
-    root_array = json_value_init_array();
-    json_object_set_value(root_object, "mapsets", root_array);
+    json_object_set_value(root_object, "mapsets", json_value_init_array());
     mapsets = json_object_get_array(root_object, "mapsets");
 
     // Check that memory was allocated to root json object
@@ -107,15 +105,14 @@ void list_avaliable_mapsets_json(const char **mapset_name, int nmapsets)
     int n;
     char *serialized_string = NULL;
     JSON_Value *root_value = NULL;
-    JSON_Object *root_object;
-    JSON_Array *root_array, *mapsets;
+    JSON_Object *root_object = NULL;
+    JSON_Array *mapsets = NULL;
 
     root_value = json_value_init_object();
     root_object = json_value_get_object(root_value);
 
     // Create mapsets array
-    root_array = json_value_init_array();
-    json_object_set_value(root_object, "mapsets", root_array);
+    json_object_set_value(root_object, "mapsets", json_value_init_array());
     mapsets = json_object_get_array(root_object, "mapsets");
 
     // Check that memory was allocated to root json object
