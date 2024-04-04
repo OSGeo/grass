@@ -82,7 +82,7 @@ jobs:
         # Add any package installation commands here (e.g., pip install requests)
           sudo apt-get install jq  # Install jq for parsing JSON
 
-     - name: Download inssues artifacts
+     - name: Download issues artifacts
        uses: actions/download-artifact@v4
        with:
          name: issues-data   # Match the name used for upload
@@ -127,5 +127,4 @@ jobs:
             https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
           fi
      
-
           done <<< "$(cat alerts.json | jq -r '[.[].number, .[].most_recent_instance.message.text, .[].dismissed_comment]  | @tsv' )"
