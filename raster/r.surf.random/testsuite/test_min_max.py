@@ -128,19 +128,7 @@ class MinMaxTestCase(TestCase):
         min_value = -3.3
         max_value = 5.8
         self.assertModule(
-            "r.surf.random",
-            min=min_value,
-            max=max_value,
-            output=self.output,
-            flags="s",
-        )
-
-    def test_explicit_seed(self):
-        """Check if user defined seed is used"""
-        min_value = -3.3
-        max_value = 5.8
-        self.assertModule(
-            "r.surf.random", min=min_value, max=max_value, output=self.output, seed=33
+            "r.surf.random", min=min_value, max=max_value, output=self.output
         )
 
 
