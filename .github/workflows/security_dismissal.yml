@@ -3,8 +3,8 @@ name: Track Dismissed Code Scanning Alerts
 on:
   push:
     branches: 
-     - main
      - dismissalCheckout   # Trigger only test branch, remember to remove before PRing to grass
+                           # in the grass repo this will be changed to a scheduled event (e.g., every 24 hours)
 
 jobs:
     get-dismissals-data:
@@ -13,7 +13,7 @@ jobs:
 
         steps:
      
-     
+             # will remove this step once some testing has been done to make sure it is unnecessary
            - uses: actions/checkout@v4 # Checkout repository code
     
            - name: Install dependencies (if needed for parsing security tool response)
@@ -23,10 +23,10 @@ jobs:
                  
    
            - name: Get Security Alerts
-          
              run: |
 
                #get only dismissed alerts using curl
+               # path to local repo will be changed to the path to the repo in grass
 
                curl -L \
                 -H "Accept: application/vnd.github+json" \
@@ -36,12 +36,9 @@ jobs:
                 echo "alerts retrieved successfully!"
 
 
-              # remember to change the path above before uploading to grass!
-
          
 
-              #trigger a rerun
-
+             #trigger a rerun
            - name: Upload the coding alerts as artifact
              uses: actions/upload-artifact@v4
              with:
@@ -49,7 +46,7 @@ jobs:
               path: alerts.json
 
 
-# get the repository issues 
+             # get the repository issues 
            - name: Get Current Issues        
              run: |
               
@@ -70,6 +67,7 @@ jobs:
                  name: issues-data
                  path: issues.json
 
+    #track the dismissed alerts in github issues             
     track-dismissals:
      runs-on: ubuntu-latest  
      permissions: write-all
@@ -114,7 +112,9 @@ jobs:
 
             #check if the alert is already an issue
             if grep -q "DISMISSED $number $message" issues.json; then
-            echo "Alert DISMISSED $number $message is already an issue"
+            echo "Alert DISMISSED $number $message is already a github issue"
+
+            # path to local repo will be changed to the path to the repo in grass
           else
             echo "Alert $number is not an issue"
             #create an issue
@@ -126,7 +126,7 @@ jobs:
               -d "$json_data" \
             https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/issues
           fi
-           #make sure there is no double issue
+     
 
           done <<< "$(cat alerts.json | jq -r '[.[].number, .[].most_recent_instance.message.text, .[].dismissed_comment]  | @tsv' )"
           
