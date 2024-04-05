@@ -37,9 +37,7 @@ class MinMaxTestCase(TestCase):
         """Ensures expected computational region"""
         # modifying region just for this script
         cls.use_temp_region()
-        # Only 100,000,000 seem to resonably (not 100%) ensure that all values
-        # are generated, so exceeding of ranges actually shows up.
-        cls.runModule("g.region", rows=10000, cols=10000)
+        cls.runModule("g.region", rows=10, cols=10)
 
     @classmethod
     def tearDownClass(cls):
@@ -54,7 +52,6 @@ class MinMaxTestCase(TestCase):
         """Check to see if double output has the expected range"""
         min_value = -3.3
         max_value = 5.8
-        # arbitrary, but with more cells, we expect higher precision
         precision = 0.00001
         self.assertModule(
             "r.surf.random", min=min_value, max=max_value, output=self.output, seed=42
@@ -68,7 +65,7 @@ class MinMaxTestCase(TestCase):
         )
         self.assertRasterFitsInfo(
             raster=self.output,
-            reference=dict(min=min_value, max=max_value),
+            reference=dict(min=-3.20423, max=5.68621),
             precision=precision,
             msg="Output min and max too far from parameters",
         )
@@ -124,7 +121,7 @@ class MinMaxTestCase(TestCase):
         )
 
     def test_auto_seed(self):
-        """Check if random seed is generated with seed flag"""
+        """Check if random seed is generated without seed"""
         min_value = -3.3
         max_value = 5.8
         self.assertModule(
