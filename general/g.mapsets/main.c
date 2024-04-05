@@ -12,7 +12,7 @@
  *               Huidae Cho <grass4u gmail.com>,
  *               Corey White <smortopahri gmail.com>
  * PURPOSE:      set current mapset path
- * COPYRIGHT:    (C) 1994-2009, 2012-2022 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1994-2009, 2012-2024 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
     else {
         /* A different separator is needed to for each format and output. */
         if (format == PLAIN) {
-            fsep = G_store("|");
+            fsep = G_store("space");
         }
         else
             fsep = NULL; /* Something like a separator is part of the format. */
