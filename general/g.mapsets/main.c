@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
         format = PLAIN;
     if (format == JSON) {
         fatal_error_option_value_excludes_option(
-            opt.format, opt.fsep, _("Separator is part of the format"));
+            opt.format, opt.fsep, _("Separator is part of the format."));
     }
 
     /* the field separator */
