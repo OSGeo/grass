@@ -186,7 +186,6 @@ int make_mapset_element_impl(const char *p_path, const char *p_element,
     char path[GPATH_MAX] = {'\0'};
     char *p;
     const char *element;
-    path[GPATH_MAX] = '\0';
 
     element = p_element;
     if (*element == 0)
