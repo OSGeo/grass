@@ -1477,7 +1477,7 @@ class VariablePanel(wx.Panel):
     def Reset(self):
         """Remove all variables"""
         self.list.DeleteAllItems()
-        self.parent.GetModel().SetVariables([])
+        self.parent.GetModel().SetVariables({})
 
 
 class ItemPanel(wx.Panel):
