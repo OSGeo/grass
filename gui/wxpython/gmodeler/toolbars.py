@@ -40,10 +40,6 @@ class ModelerToolbar(BaseToolbar):
 
     def _toolbarData(self):
         """Toolbar data"""
-        # dockable window has no menu, so shortcuts doesn't work when
-        # window is dockable
-        show_shortcuts = not self.parent.IsDockable()
-
         icons = {
             "new": MetaIcon(
                 img="create",

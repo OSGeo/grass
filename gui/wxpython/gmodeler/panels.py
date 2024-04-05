@@ -65,16 +65,34 @@ from gui_core.wrap import (
 )
 from main_window.page import MainPageBase
 from gmodeler.giface import GraphicalModelerGrassInterface
-from gmodeler.model import *
-from gmodeler.dialogs import *
+from gmodeler.model import (
+    Model,
+    ModelAction,
+    ModelData,
+    ModelRelation,
+    ModelLoop,
+    ModelCondition,
+    ModelComment,
+    WriteModelFile,
+    ModelDataSeries,
+    ModelDataSingle,
+    WritePythonFile,
+    WritePyWPSFile,
+)
+from gmodeler.dialogs import (
+    ModelDataDialog,
+    ModelSearchDialog,
+    VariableListCtrl,
+    ItemListCtrl,
+)
 from gmodeler.canvas import ModelCanvas, ModelEvtHandler
 from gmodeler.toolbars import ModelerToolbar
 from gmodeler.preferences import PreferencesDialog, PropertiesDialog
 
-wxModelDone, EVT_MODEL_DONE = NewEvent()
-
 from grass.script.utils import try_remove
 from grass.script import core as grass
+
+wxModelDone, EVT_MODEL_DONE = NewEvent()
 
 
 class ModelerPanel(wx.Panel, MainPageBase):

@@ -315,8 +315,6 @@ class Model:
 
         Raise exception on error.
         """
-        dtdFilename = os.path.join(globalvar.WXGUIDIR, "xml", "grass-gxm.dtd")
-
         # parse workspace file
         try:
             gxmXml = ProcessModelFile(etree.parse(filename))
@@ -1145,7 +1143,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         else:
             try:
                 label = self.task.get_cmd(ignoreErrors=True)[0]
-            except:
+            except IndexError:
                 label = _("unknown")
 
         idx = self.GetId()
@@ -1999,7 +1997,7 @@ class ProcessModelFile:
             if self.root is not None:
                 tagName = self.root.tag
             else:
-                tabName = _("empty")
+                tagName = _("empty")
             raise GException(_("Details: unsupported tag name '{0}'.").format(tagName))
 
         # list of actions, data
@@ -2137,7 +2135,7 @@ class ProcessModelFile:
             posVal = list(map(int, posAttr.split(",")))
             try:
                 pos = (posVal[0], posVal[1])
-            except:
+            except IndexError:
                 pos = None
 
         sizeAttr = node.get("size", None)
@@ -2145,7 +2143,7 @@ class ProcessModelFile:
             sizeVal = list(map(int, sizeAttr.split(",")))
             try:
                 size = (sizeVal[0], sizeVal[1])
-            except:
+            except IndexError:
                 size = None
 
         return pos, size

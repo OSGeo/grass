@@ -20,10 +20,25 @@ import wx
 from wx.lib import ogl
 
 from gui_core.dialogs import TextEntryDialog as CustomTextEntryDialog
-from gui_core.wrap import TextEntryDialog as wxTextEntryDialog
+from gui_core.wrap import TextEntryDialog as wxTextEntryDialog, NewId, Menu
+from gui_core.forms import GUI
+from core.gcmd import GException, GError
 
-from gmodeler.model import *
-from gmodeler.dialogs import *
+from gmodeler.model import (
+    ModelRelation,
+    ModelAction,
+    ModelData,
+    ModelLoop,
+    ModelCondition,
+    ModelComment,
+)
+from gmodeler.dialogs import (
+    ModelRelationDialog,
+    ModelDataDialog,
+    ModelLoopDialog,
+    ModelConditionDialog,
+)
+from gmodeler.giface import GraphicalModelerGrassInterface
 
 
 class ModelCanvas(ogl.ShapeCanvas):
@@ -115,10 +130,10 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
     def OnLeftClick(self, x, y, keys=0, attachment=0):
         """Left mouse button pressed -> select item & update statusbar"""
         shape = self.GetShape()
-        canvas = shape.GetCanvas()
-        dc = wx.ClientDC(canvas)
 
         # probably does nothing, removed from wxPython 2.9
+        # canvas = shape.GetCanvas()
+        # dc = wx.ClientDC(canvas)
         # canvas.PrepareDC(dc)
 
         if hasattr(self.frame, "defineRelation"):
@@ -424,7 +439,6 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         if shape.Selected():
             shape.Select(False, dc)
         else:
-            redraw = False
             shapeList = canvas.GetDiagram().GetShapeList()
             toUnselect = list()
 
