@@ -18,3 +18,4 @@ jobs:
           coverity_url: ${{ secrets.COVERITY_URL }}               # The URL to Coverity
           coverity_user: ${{ secrets.COVERITY_USER }}             # The user for the Coverity project
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }} # The password for the Coverity user
+          coverity_version: '2023.6.2'                            # The version for Coverity Scan
