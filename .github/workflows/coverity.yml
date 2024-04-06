@@ -6,10 +6,12 @@ on:
     # Coverity will let GRASS do a scan a maximum of twice per day, so this schedule will help GRASS fit within that limit with some additional space for manual runs
 permissions:
   contents: read
+  # action based off of https://github.com/OSGeo/PROJ/blob/905c9a6c2da3dc6b7aa2c89d3ab78d9d1a9cd070/.github/workflows/coverity-scan.yml
+  # and https://github.com/OSGeo/grass/blob/2aa98a166d8f50aa1491908401205962fa1d70fb/.github/workflows/ubuntu.yml
 jobs:
   coverity:
     runs-on: ubuntu-22.04
-    # if: github.repository == 'OSGeo/grass' TODO: uncomment this line when it is deployed
+    if: github.repository == 'OSGeo/grass' # make sure that it only runs for GRASS
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
@@ -22,7 +24,14 @@ jobs:
       - name: Create installation directory
         run: |
           mkdir $HOME/install
-
+          
+      - name: Download Coverity Build Tool
+        run: |
+          wget -q https://scan.coverity.com/download/cxx/linux64 --post-data "token=$TOKEN&project=grass" -O cov-analysis-linux64.tar.gz
+          mkdir cov-analysis-linux64
+          tar xzf cov-analysis-linux64.tar.gz --strip 1 -C cov-analysis-linux64
+        env:
+          TOKEN: ${{ secrets.COVERITY_PASSPHRASE }} # this is the token that admins use to upload builds
       - name: Set number of cores for compilation
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
@@ -36,24 +45,27 @@ jobs:
           printenv | sort
           gcc --version
           ldd --version
-      - name: Build
+      - name: Build with cov-build
         env:
           # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
           CFLAGS: -fPIC -Wvla
           # TODO: -pedantic-errors here won't compile
           CXXFLAGS: -fPIC
-        run: .github/workflows/build_ubuntu-22.04_without_x.sh $HOME/install -Werror
-          
-  # build:
-  #   runs-on: [ ubuntu-latest ]
-  #   steps:
-  #     - name: Checkout Source
-  #       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-  #     - name: Coverity Scan
-  #       uses: synopsys-sig/synopsys-action@cef5e38596faf5d2787bbff78a5d7255a9f7682b # v1.8.0
-  #       with:
-  #         ### SCANNING: Required fields
-  #         coverity_url: ${{ secrets.COVERITY_URL }}               # The URL to Coverity
-  #         coverity_user: ${{ secrets.COVERITY_USER }}             # The user for the Coverity project
-  #         coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }} # The password for the Coverity user
-  #         coverity_version: '2023.6.2'                          
+        run: |
+          pwd
+          export PATH=`pwd`/cov-analysis-linux64/bin:$PATH
+          cov-build --dir cov-int .github/workflows/build_ubuntu-22.04_without_x.sh $HOME/install -Werror
+      - name: Submit to Coverity Scan
+        run: |
+          tar czvf proj.tgz cov-int
+          curl \
+            --form project=grass \
+            --form token=$TOKEN \
+            --form email=wenzeslaus@gmail.com \
+            --form file=@proj.tgz \
+            --form version=master \
+            --form description="`git rev-parse --abbrev-ref HEAD` `git rev-parse --short HEAD`" \
+            https://scan.coverity.com/builds?project=grass
+        env:
+          TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
+                                  
