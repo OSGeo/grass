@@ -155,7 +155,10 @@
 /* Define to 1 if PDAL is to be used. */
 #undef HAVE_PDAL
 
-/* define if glXCreateGLXPixmap exists */
+/* Define to 1 if PDAL NoFilenameWriter is present. */
+#undef HAVE_PDAL_NOFILENAMEWRITER
+
+/* Define to 1 if glXCreateGLXPixmap exists. */
 #undef HAVE_PIXMAPS
 
 /* Define to 1 if you have the <png.h> header file. */
