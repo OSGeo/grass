@@ -32,7 +32,12 @@ extern "C" {
 #include <pdal/Writer.hpp>
 
 /* Binning code wrapped as a PDAL Writer class */
+#ifdef HAVE_PDAL_NOFILENAMEWRITER
+class GrassRasterWriter : public pdal::NoFilenameWriter,
+                          public pdal::Streamable {
+#else
 class GrassRasterWriter : public pdal::Writer, public pdal::Streamable {
+#endif
 public:
     GrassRasterWriter() : n_processed(0) {}
 
