@@ -210,7 +210,7 @@ int main(int argc, char *argv[])
         if (opt.mapset->answer)
             G_warning(_("Option <%s> ignored"), opt.mapset->key);
         if (format == JSON) {
-            list_accessible_mapsets_json(fsep);
+            list_accessible_mapsets_json();
         }
         else {
             list_accessible_mapsets(fsep);
