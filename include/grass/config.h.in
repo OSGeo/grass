@@ -158,6 +158,9 @@
 /* Define to 1 if PDAL exists. */
 #undef HAVE_PDAL
 
+/* Define to 1 if PDAL >2.7.0 Writters should be used */
+#undef HAVE_PDAL_NOFILENAMEWRITER
+
 /* Define to 1 if glXCreateGLXPixmap exists. */
 #undef HAVE_PIXMAPS
 
