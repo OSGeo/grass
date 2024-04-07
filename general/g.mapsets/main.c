@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
     else {
         /* A different separator is needed to for each format and output. */
         if (format == PLAIN) {
-            fsep = G_store("space");
+            fsep = G_store(" ");
         }
         else
             fsep = NULL; /* Something like a separator is part of the format. */
