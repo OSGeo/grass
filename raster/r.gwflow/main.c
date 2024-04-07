@@ -212,7 +212,6 @@ int main(int argc, char *argv[])
     N_gradient_field_2d *field = NULL;
     N_array_2d *xcomp = NULL;
     N_array_2d *ycomp = NULL;
-    char *buff = NULL;
     int with_river = 0, with_drain = 0;
 
     /* Initialize GRASS */
@@ -460,9 +459,6 @@ int main(int argc, char *argv[])
 
         N_write_array_2d_to_rast(xcomp, param.vector_x->answer);
         N_write_array_2d_to_rast(ycomp, param.vector_y->answer);
-        if (buff)
-            G_free(buff);
-
         if (xcomp)
             N_free_array_2d(xcomp);
         if (ycomp)
