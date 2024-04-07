@@ -114,11 +114,11 @@ int main(int argc, char *argv[])
     opt.format->descriptions = "plain;Configurable plain text output;"
                                "json;JSON (JavaScript Object Notation);";
     opt.format->answer = "plain";
-    opt.format->guisection = _("Format");
+    opt.format->guisection = _("Print");
 
     opt.fsep = G_define_standard_option(G_OPT_F_SEP);
     opt.fsep->answer = NULL;
-    opt.fsep->guisection = _("Format");
+    opt.fsep->guisection = _("Print");
 
     opt.list = G_define_flag();
     opt.list->key = 'l';
