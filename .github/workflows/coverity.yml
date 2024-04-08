@@ -7,7 +7,6 @@ on:
 permissions:
   contents: read
   # action based off of https://github.com/OSGeo/PROJ/blob/905c9a6c2da3dc6b7aa2c89d3ab78d9d1a9cd070/.github/workflows/coverity-scan.yml
-  # and https://github.com/OSGeo/grass/blob/2aa98a166d8f50aa1491908401205962fa1d70fb/.github/workflows/ubuntu.yml
 jobs:
   coverity:
     runs-on: ubuntu-22.04
