@@ -58,11 +58,12 @@ jobs:
           curl \
             --form project=grass \
             --form token=$TOKEN \
-            --form email=wenzeslaus@gmail.com \
+            --form email=$EMAIL \
             --form file=@grass.tgz \
             --form version=master \
             --form description="`git rev-parse --abbrev-ref HEAD` `git rev-parse --short HEAD`" \
             https://scan.coverity.com/builds?project=grass
         env:
           TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
+          EMAIL: ${{ secrets.COVERITY_USER }}
                                   
