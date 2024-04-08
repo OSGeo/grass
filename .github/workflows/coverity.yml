@@ -30,7 +30,7 @@ jobs:
           mkdir cov-analysis-linux64
           tar xzf cov-analysis-linux64.tar.gz --strip 1 -C cov-analysis-linux64
         env:
-          TOKEN: ${{ secrets.COVERITY_PASSPHRASE }} # this is the token that admins use to upload builds
+          TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
       - name: Set number of cores for compilation
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
