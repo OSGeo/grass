@@ -104,6 +104,7 @@ typedef struct {
 } Geometry;
 
 typedef struct {
+    bool horizonDistance;
     int degreeOutput;
     int compassOutput;
     double fixedMaxLength;
@@ -120,8 +121,9 @@ int OUTGR(const Settings *settings, char *shad_filename,
           struct Cell_head *cellhd);
 void com_par(const Geometry *geometry, OriginAngle *origin_angle, double angle,
              double xp, double yp);
-double horizon_height(const Geometry *geometry, const OriginPoint *origin_point,
-                      const OriginAngle *origin_angle);
+HorizonProperties horizon_height(const Geometry *geometry,
+                                 const OriginPoint *origin_point,
+                                 const OriginAngle *origin_angle);
 void calculate_point_mode(const Settings *settings, const Geometry *geometry,
                           double xcoord, double ycoord, FILE *fp,
                           enum OutputFormat format, JSON_Object *json_origin);
@@ -164,7 +166,7 @@ int main(int argc, char *argv[])
     } parm;
 
     struct {
-        struct Flag *degreeOutput, *compassOutput;
+        struct Flag *horizonDistance, *degreeOutput, *compassOutput;
     } flag;
 
     G_gisinit(argv[0]);
@@ -314,6 +316,12 @@ int main(int argc, char *argv[])
         _("Name of file for output (use output=- for stdout)");
     parm.output->guisection = _("Point mode");
 
+    flag.horizonDistance = G_define_flag();
+    flag.horizonDistance->key = 'l';
+    flag.horizonDistance->description =
+        _("Include horizon distance in the output");
+    flag.horizonDistance->guisection = _("Point mode");
+
     flag.degreeOutput = G_define_flag();
     flag.degreeOutput->key = 'd';
     flag.degreeOutput->description =
@@ -359,6 +367,7 @@ int main(int argc, char *argv[])
     Settings settings;
     settings.degreeOutput = flag.degreeOutput->answer;
     settings.compassOutput = flag.compassOutput->answer;
+    settings.horizonDistance = flag.horizonDistance->answer;
 
     if (G_projection() == PROJECTION_LL)
         G_important_message(_("Note: In latitude-longitude coordinate system "
@@ -837,12 +846,15 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
 
     origin_point.maxlength = settings->fixedMaxLength;
     /* JSON variables and formating */
-    JSON_Value *azimuths_value, *horizons_value;
-    JSON_Array *azimuths, *horizons;
+    JSON_Value *azimuths_value, *horizons_value, *distances_value;
+    JSON_Array *azimuths, *horizons, *distances;
 
     switch (format) {
     case PLAIN:
-        fprintf(fp, "azimuth,horizon_height\n");
+        fprintf(fp, "azimuth,horizon_height");
+        if (settings->horizonDistance)
+            fprintf(fp, ",horizon_distance");
+        fprintf(fp, "\n");
         break;
     case JSON:
 
@@ -852,14 +864,17 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         azimuths = json_value_get_array(azimuths_value);
         horizons_value = json_value_init_array();
         horizons = json_value_get_array(horizons_value);
+        distances_value = json_value_init_array();
+        distances = json_value_get_array(distances_value);
         break;
     }
     for (int i = 0; i < printCount; i++) {
         OriginAngle origin_angle;
         com_par(geometry, &origin_angle, angle, xp, yp);
 
-        double shadow_angle =
+        HorizonProperties horizon =
             horizon_height(geometry, &origin_point, &origin_angle);
+        double shadow_angle = atan(horizon.tanh0);
 
         if (settings->degreeOutput) {
             shadow_angle *= rad2deg;
@@ -873,22 +888,32 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
                 tmpangle = tmpangle - 360.;
             switch (format) {
             case PLAIN:
-                fprintf(fp, "%lf,%lf\n", tmpangle, shadow_angle);
+                fprintf(fp, "%lf,%lf", tmpangle, shadow_angle);
+                if (settings->horizonDistance)
+                    fprintf(fp, ",%lf", horizon.length);
+                fprintf(fp, "\n");
                 break;
             case JSON:
                 json_array_append_number(azimuths, tmpangle);
                 json_array_append_number(horizons, shadow_angle);
+                if (settings->horizonDistance)
+                    json_array_append_number(distances, horizon.length);
                 break;
             }
         }
         else {
             switch (format) {
             case PLAIN:
-                fprintf(fp, "%lf,%lf\n", printangle, shadow_angle);
+                fprintf(fp, "%lf,%lf", printangle, shadow_angle);
+                if (settings->horizonDistance)
+                    fprintf(fp, ",%lf", horizon.length);
+                fprintf(fp, "\n");
                 break;
             case JSON:
                 json_array_append_number(azimuths, printangle);
                 json_array_append_number(horizons, shadow_angle);
+                if (settings->horizonDistance)
+                    json_array_append_number(distances, horizon.length);
                 break;
             }
         }
@@ -910,6 +935,9 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     if (format == JSON) {
         json_object_set_value(json_origin, "azimuth", azimuths_value);
         json_object_set_value(json_origin, "horizon_height", horizons_value);
+        if (settings->horizonDistance)
+            json_object_set_value(json_origin, "horizon_distance",
+                                  distances_value);
     }
 }
 
@@ -1031,8 +1059,9 @@ int test_low_res(const Geometry *geometry, const OriginPoint *origin_point,
     }
 }
 
-double horizon_height(const Geometry *geometry, const OriginPoint *origin_point,
-                      const OriginAngle *origin_angle)
+HorizonProperties horizon_height(const Geometry *geometry,
+                                 const OriginPoint *origin_point,
+                                 const OriginAngle *origin_angle)
 {
     SearchPoint search_point;
     HorizonProperties horizon;
@@ -1048,8 +1077,10 @@ double horizon_height(const Geometry *geometry, const OriginPoint *origin_point,
     horizon.length = 0;
     horizon.tanh0 = 0;
 
-    if (search_point.zp == UNDEFZ)
-        return 0;
+    if (search_point.zp == UNDEFZ) {
+        HorizonProperties h = {0, 0};
+        return h;
+    }
 
     while (1) {
         int succes = new_point(geometry, origin_point, origin_angle,
@@ -1081,7 +1112,7 @@ double horizon_height(const Geometry *geometry, const OriginPoint *origin_point,
         }
     }
 
-    return atan(horizon.tanh0);
+    return horizon;
 }
 
 /*////////////////////////////////////////////////////////////////////// */
@@ -1189,8 +1220,9 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
                 if (origin_point.z_orig != UNDEFZ) {
 
                     G_debug(4, "**************new line %d %d\n", i, j);
-                    double shadow_angle =
+                    HorizonProperties horizon =
                         horizon_height(geometry, &origin_point, &origin_angle);
+                    double shadow_angle = atan(horizon.tanh0);
 
                     if (settings->degreeOutput) {
                         shadow_angle *= rad2deg;
