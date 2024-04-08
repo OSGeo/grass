@@ -62,7 +62,7 @@ jobs:
             --form project=grass \
             --form token=$TOKEN \
             --form email=wenzeslaus@gmail.com \
-            --form file=@proj.tgz \
+            --form file=@grass.tgz \
             --form version=master \
             --form description="`git rev-parse --abbrev-ref HEAD` `git rev-parse --short HEAD`" \
             https://scan.coverity.com/builds?project=grass
