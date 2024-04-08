@@ -57,7 +57,7 @@ jobs:
           cov-build --dir cov-int .github/workflows/build_ubuntu-22.04_without_x.sh $HOME/install
       - name: Submit to Coverity Scan
         run: |
-          tar czvf proj.tgz cov-int
+          tar czvf grass.tgz cov-int
           curl \
             --form project=grass \
             --form token=$TOKEN \
