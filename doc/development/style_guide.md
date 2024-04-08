@@ -246,6 +246,9 @@ The structure consists of several required and optional sections:
 <!-- required -->
 ```
 
+Sections _Notes_, _Examples_, _References_, and _Authors_ can be also in
+singular form (e.g, _Note_).
+
 Note that HTML is converted to MAN pages by
 [tools/g.html2man/](https://trac.osgeo.org/grass/browser/grass/trunk/tools/g.html2man).
 Since the MAN conversion is limited, please use no other HTML tags than:
