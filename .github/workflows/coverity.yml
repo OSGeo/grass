@@ -46,9 +46,7 @@ jobs:
           ldd --version
       - name: Build with cov-build
         env:
-          # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
           CFLAGS: -fPIC -Wvla
-          # TODO: -pedantic-errors here won't compile
           CXXFLAGS: -fPIC
         run: |
           pwd
