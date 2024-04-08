@@ -65,7 +65,7 @@ void list_accessible_mapsets_json()
     }
 
     // Add mapsets to mapsets array
-    for (n = 0; (name = G_get_mapset_name(n)); n++) {
+    for (int n = 0; (name = G_get_mapset_name(n)); n++) {
         // Append mapset name to mapsets array
         json_array_append_string(mapsets, name);
     }
