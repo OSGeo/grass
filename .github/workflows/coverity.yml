@@ -54,7 +54,7 @@ jobs:
         run: |
           pwd
           export PATH=`pwd`/cov-analysis-linux64/bin:$PATH
-          cov-build --dir cov-int .github/workflows/build_ubuntu-22.04_without_x.sh $HOME/install -Werror
+          cov-build --dir cov-int .github/workflows/build_ubuntu-22.04_without_x.sh $HOME/install
       - name: Submit to Coverity Scan
         run: |
           tar czvf proj.tgz cov-int
