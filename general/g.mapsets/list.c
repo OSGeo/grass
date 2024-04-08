@@ -50,14 +50,9 @@ void list_accessible_mapsets_json()
     json_object_set_value(root_object, "mapsets", json_value_init_array());
     mapsets = json_object_get_array(root_object, "mapsets");
 
-    // Check that memory was allocated to root json object
+    // Check that memory was allocated to root json object and array
     if (root_value == NULL || mapsets == NULL) {
         G_fatal_error(_("Failed to initialize JSON. Out of memory?"));
-    }
-
-    // Check that memory was allocated to mapsets array
-    if (mapsets == NULL) {
-        G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
     }
 
     // Add mapsets to mapsets array
@@ -89,13 +84,9 @@ void list_avaliable_mapsets_json(const char **mapset_name, int nmapsets)
     json_object_set_value(root_object, "mapsets", json_value_init_array());
     mapsets = json_object_get_array(root_object, "mapsets");
 
-    // Check that memory was allocated to root json object
-    if (root_value == NULL) {
+    // Check that memory was allocated to root json object and array
+    if (root_value == NULL || mapsets == NULL) {
         G_fatal_error(_("Failed to initialize JSON. Out of memory?"));
-    }
-
-    if (mapsets == NULL) {
-        G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
     }
 
     // Append mapsets to mapsets array
