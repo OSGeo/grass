@@ -55,7 +55,7 @@ void list_accessible_mapsets_json()
     mapsets = json_object_get_array(root_object, "mapsets");
 
     // Check that memory was allocated to root json object
-    if (root_value == NULL) {
+    if (root_value == NULL || mapsets == NULL) {
         G_fatal_error(_("Failed to initialize JSON. Out of memory?"));
     }
 
