@@ -1076,17 +1076,25 @@ else
   CFLAGS="$CFLAGS $PDAL_CFLAGS"
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
-  class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],[],[
-  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
-  #include <pdal/Streamable.hpp>
-  class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],[PDAL_LIBS="$PDAL_LIBS"],[
+  class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],
+  [PDAL_LIBS="$PDAL_LIBS"],[
   AC_MSG_ERROR([*** Unable to locate suitable (>=1.7.1) PDAL library.])
   ])
-  ])
-  LIBS=${ac_save_libs}
-  CFLAGS=${ac_save_cflags}
 
   AC_DEFINE(HAVE_PDAL, 1, [Define to 1 if PDAL exists.])
+
+  AC_MSG_CHECKING(whether to use PDAL NoFilenameWriter)
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/Writer.hpp>
+  class St:public pdal::NoFilenameWriter {};]], [[
+  class NFWTest : public pdal::NoFilenameWriter {};
+  ]])],
+  [
+    AC_DEFINE(HAVE_PDAL_NOFILENAMEWRITER, 1, [Define to 1 if PDAL NoFilenameWriter is present.])
+    AC_MSG_RESULT(yes)
+  ],[AC_MSG_RESULT(no)])
+
+  LIBS=${ac_save_libs}
+  CFLAGS=${ac_save_cflags}
 fi
 
 AC_SUBST(PDAL_LIBS)
