@@ -86,6 +86,27 @@ ref4 = """azimuth,horizon_height
 340.000000,0.196863
 """
 
+ref5 = """azimuth,horizon_height,horizon_distance
+0.000000,0.197017,5010.039920
+20.000000,0.196832,5017.668781
+40.000000,0.196875,5017.818251
+60.000000,0.196689,5017.220346
+80.000000,0.196847,5014.299552
+100.000000,0.196645,5019.531851
+120.000000,0.196969,5014.957627
+140.000000,0.196778,5020.328674
+160.000000,0.196863,5013.431958
+180.000000,0.197017,5010.039920
+200.000000,0.196832,5014.229751
+220.000000,0.196875,5011.387034
+240.000000,0.196689,5017.220346
+260.000000,0.196847,5014.299552
+280.000000,0.196645,5019.531851
+300.000000,0.196969,5014.957627
+320.000000,0.196778,5020.328674
+340.000000,0.196863,5013.431958
+"""
+
 
 class TestHorizon(TestCase):
     circle = "circle"
@@ -195,6 +216,50 @@ class TestHorizon(TestCase):
         self.assertModule(module)
         stdout = module.outputs.stdout
         self.assertMultiLineEqual(first=ref4, second=stdout)
+
+    def test_point_mode_multiple_direction_artificial_distance(self):
+        """With 1 point, more directions on artificial surface, distance in output"""
+        module = SimpleModule(
+            "r.horizon",
+            elevation=self.circle,
+            coordinates=(637505, 221755),
+            output=self.horizon,
+            direction=0,
+            step=20,
+            flags="l",
+        )
+        self.assertModule(module)
+        stdout = module.outputs.stdout
+        self.assertMultiLineEqual(first=ref5, second=stdout)
+
+        module = SimpleModule(
+            "r.horizon",
+            elevation=self.circle,
+            coordinates=(637505, 221755),
+            output=self.horizon,
+            direction=0,
+            step=20,
+            flags="l",
+            format="json",
+        )
+        self.assertModule(module)
+        stdout = json.loads(module.outputs.stdout)
+        azimuths = []
+        horizons = []
+        distances = []
+        reference = {}
+        for line in ref5.splitlines()[1:]:
+            azimuth, horizon, distance = line.split(",")
+            azimuths.append(float(azimuth))
+            horizons.append(float(horizon))
+            distances.append(float(distance))
+        reference["x"] = 637505.0
+        reference["y"] = 221755.0
+        reference["azimuth"] = azimuths
+        reference["horizon_height"] = horizons
+        reference["horizon_distance"] = distances
+
+        self.assertListEqual([reference], stdout)
 
     def test_raster_mode_one_direction(self):
         """Test mode with one direction and against point mode"""
