@@ -60,7 +60,7 @@ jobs:
             --form token=$TOKEN \
             --form email=$EMAIL \
             --form file=@grass.tgz \
-            --form version=master \
+            --form version=main \
             --form description="`git rev-parse --abbrev-ref HEAD` `git rev-parse --short HEAD`" \
             https://scan.coverity.com/builds?project=grass
         env:
