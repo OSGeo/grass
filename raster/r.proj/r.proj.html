@@ -1,8 +1,9 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.proj</em> projects a raster map in a specified mapset of a
-specified location from the projection of the input location to a raster map
-in the current location. The projection information is taken from the
+specified project  (previously called location) from the projection
+of the input project to a raster map
+in the current project. The projection information is taken from the
 current PROJ_INFO files, as set and viewed with
 <em><a href="g.proj.html">g.proj</a></em>.
 
@@ -79,7 +80,7 @@ GIS the
 vector maps, transferring topology and attributes as well as node coordinates.
 This program uses the projection definition and parameters which are stored in
 the PROJ_INFO and PROJ_UNITS files in the PERMANENT mapset directory for every
-GRASS location.
+GRASS project.
 
 <h3>Design of r.proj</h3>
 
@@ -89,8 +90,8 @@ intersections of a grid in the target projection. The basic procedure
 for accomplishing this, therefore, is as follows:
 <p>
 <em>r.proj</em> converts a map to a new geographic projection. It
-reads a map from a different location, projects it and write it out to
-the current location. The projected data is resampled with one of four
+reads a map from a different project, projects it and write it out to
+the current project. The projected data is resampled with one of four
 different methods: nearest neighbor, bilinear, bicubic interpolation or
 lanczos.
 <p>
@@ -156,16 +157,16 @@ as the current mapset's name.
 <br>
 If <b>dbase</b> is not specified it is assumed to be the current
 database. The user only has to specify <b>dbase</b> if the source
-location is stored in another separate GRASS database.
+project is stored in another separate GRASS database.
 
 <p>
 To avoid excessive time consumption when reprojecting a map the region
-and resolution of the target location should be set appropriately
+and resolution of the target project should be set appropriately
 beforehand.
 
 <p>
 A simple way to do this is to check the projected bounds of the input
-map in the current location's projection using the <b>-p</b>
+map in the current project's projection using the <b>-p</b>
 flag. The <b>-g</b> flag reports the same thing, but in a form which
 can be directly cut and pasted into
 a <em><a href="g.region.html">g.region</a></em> command. After setting
@@ -177,14 +178,14 @@ flag. E.g.
 
 <p>
 A more involved, but more accurate, way to do this is to generate a
-vector "box" map of the region in the source location using
+vector "box" map of the region in the source project using
  <em><a href="v.in.region.html">v.in.region -d</a></em>.
-This "box" map is then reprojected into the target location with
+This "box" map is then reprojected into the target project with
 <em><a href="v.proj.html">v.proj</a></em>. Next the region in the
-target location is set to the extent of the new vector map
+target project is set to the extent of the new vector map
 with <em><a href="g.region.html">g.region</a></em> along with the
 desired raster resolution (<em>g.region -m</em> can be used in
-Latitude/Longitude locations to measure the geodetic length of a
+Latitude/Longitude projects to measure the geodetic length of a
 pixel).
 <em>r.proj</em> is then run for the raster map the user wants to
 reproject.  In this case a little preparation goes a long way.
@@ -199,7 +200,7 @@ than latitude-longitude so results may be odd with trimming.
 
 <h3>Inline method</h3>
 
-With GRASS running in the destination location use the <b>-g</b> flag
+With GRASS running in the destination project use the <b>-g</b> flag
 to show the input map's bounds once projected into the current working
 projection, then use that to set the region bounds before performing
 the reprojection:
@@ -258,26 +259,26 @@ r.proj input=elevation project=ll_wgs84 mapset=user1 memory=800
 
 <div class="code"><pre>
 
-# In the source location, use v.in.region to generate a bounding box around the
+# In the source project, use v.in.region to generate a bounding box around the
 # region of interest:
 
 v.in.region -d output=bounds type=area
 
-# Now switch to the target location and import the vector bounding box
-# (you can run v.proj -l to get a list of vector maps in the source location):
+# Now switch to the target project and import the vector bounding box
+# (you can run v.proj -l to get a list of vector maps in the source project):
 
-v.proj input=bounds project=source_location_name output=bounds_reprojected
+v.proj input=bounds project=source_project_name output=bounds_reprojected
 
-# Set the region in the target location with that of the newly-imported vector
+# Set the region in the target project with that of the newly-imported vector
 # bounds map, and align the resolution to the desired cell resolution of the
 # final, reprojected raster map:
 
 g.region vector=bounds_reprojected res=5 -a
 
-# Now reproject the raster into the target location
+# Now reproject the raster into the target project
 
 r.proj input=elevation.dem output=elevation.dem.reproj \
-  project=source_location_name mapset=PERMANENT res=5 method=bicubic
+  project=source_project_name mapset=PERMANENT res=5 method=bicubic
 </pre></div>
 
 <h2>REFERENCES</h2>
