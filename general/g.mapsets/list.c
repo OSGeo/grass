@@ -8,11 +8,9 @@
 void list_available_mapsets(const char **mapset_name, int nmapsets,
                             const char *fs)
 {
-    int n;
-
     G_message(_("Available mapsets:"));
 
-    for (n = 0; n < nmapsets; n++) {
+    for (int n = 0; n < nmapsets; n++) {
         fprintf(stdout, "%s", mapset_name[n]);
         if (n < nmapsets - 1) {
             fprintf(stdout, "%s", fs);
@@ -23,12 +21,11 @@ void list_available_mapsets(const char **mapset_name, int nmapsets,
 
 void list_accessible_mapsets(const char *fs)
 {
-    int n;
     const char *name;
 
     G_message(_("Accessible mapsets:"));
 
-    for (n = 0; (name = G_get_mapset_name(n)); n++) {
+    for (int n = 0; (name = G_get_mapset_name(n)); n++) {
         /* match each mapset to its numeric equivalent */
         fprintf(stdout, "%s", name);
         if (G_get_mapset_name(n + 1)) {
@@ -40,7 +37,6 @@ void list_accessible_mapsets(const char *fs)
 
 void list_accessible_mapsets_json()
 {
-    int n;
     const char *name;
     char *serialized_string = NULL;
     JSON_Value *root_value = NULL;
@@ -81,7 +77,6 @@ void list_accessible_mapsets_json()
 
 void list_avaliable_mapsets_json(const char **mapset_name, int nmapsets)
 {
-    int n;
     char *serialized_string = NULL;
     JSON_Value *root_value = NULL;
     JSON_Object *root_object = NULL;
@@ -104,7 +99,7 @@ void list_avaliable_mapsets_json(const char **mapset_name, int nmapsets)
     }
 
     // Append mapsets to mapsets array
-    for (n = 0; n < nmapsets; n++) {
+    for (int n = 0; n < nmapsets; n++) {
         json_array_append_string(mapsets, mapset_name[n]);
     }
 
