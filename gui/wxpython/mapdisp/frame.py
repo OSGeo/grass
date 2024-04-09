@@ -56,13 +56,14 @@ from core.giface import Notification
 from gui_core.vselect import VectorSelectBase, VectorSelectHighlighter
 from gui_core.wrap import Menu
 from mapdisp import statusbar as sb
+from main_window.page import MainPageBase
 
 import grass.script as grass
 
 from grass.pydispatch.signal import Signal
 
 
-class MapPanel(SingleMapPanel):
+class MapPanel(SingleMapPanel, MainPageBase):
     """Main panel for map display window. Drawing takes place in
     child double buffered drawing window.
     """
@@ -103,6 +104,7 @@ class MapPanel(SingleMapPanel):
             name=name,
             **kwargs,
         )
+        MainPageBase.__init__(self, dockable)
 
         self._giface = giface
         # Layer Manager object
@@ -111,23 +113,9 @@ class MapPanel(SingleMapPanel):
         # Layer Manager layer tree object
         # used for VDigit toolbar and window and GLWindow
         self.tree = tree
-        # checks for saving workspace
-        self.canCloseDisplayCallback = None
-
-        # distinquishes whether map panel is dockable (Single-Window)
-        self._dockable = dockable
-
-        # distinguishes whether map panel is docked or not
-        self._docked = True
-
-        # undock/dock bound method
-        self._docking_callback = None
 
         # Saved Map Display output img size
         self._saved_output_img_size = None
-
-        # Emitted when switching map notebook tabs (Single-Window)
-        self.onFocus = Signal("MapPanel.onFocus")
 
         # Emitted when starting (switching to) 3D mode.
         # Parameter firstTime specifies if 3D was already activated.
@@ -135,9 +123,6 @@ class MapPanel(SingleMapPanel):
 
         # Emitted when ending (switching from) 3D mode.
         self.ending3dMode = Signal("MapPanel.ending3dMode")
-
-        # Emitted when closing display by closing its window.
-        self.closingDisplay = Signal("MapPanel.closingDisplay")
 
         # Emitted when closing display by closing its window.
         self.closingVNETDialog = Signal("MapPanel.closingVNETDialog")
@@ -677,22 +662,6 @@ class MapPanel(SingleMapPanel):
         for layer in qlayer:
             self.GetMap().DeleteLayer(layer)
 
-    def SetDockingCallback(self, function):
-        """Sets docking bound method to dock or undock"""
-        self._docking_callback = function
-
-    def OnDockUndock(self, event=None):
-        """Dock or undock map display panel to independent MapFrame"""
-        if self._docking_callback:
-            self._docking_callback(self)
-            self._docked = not self._docked
-
-    def IsDocked(self):
-        return self._docked
-
-    def IsDockable(self):
-        return self._dockable
-
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
         self.RemoveQueryLayer()
@@ -1001,22 +970,20 @@ class MapPanel(SingleMapPanel):
         Also close associated layer tree page
         """
         Debug.msg(2, "MapPanel.OnCloseWindow()")
-        if self.canCloseDisplayCallback:
-            pgnum_dict = self.canCloseDisplayCallback(
-                askIfSaveWorkspace=askIfSaveWorkspace
-            )
+        if self.canCloseCallback:
+            pgnum_dict = self.canCloseCallback(askIfSaveWorkspace=askIfSaveWorkspace)
             if pgnum_dict is not None:
                 self.CleanUp()
                 if pgnum_dict["layers"] > -1:
                     if self.IsDockable():
-                        self.closingDisplay.emit(
+                        self.closingPage.emit(
                             pgnum_dict=pgnum_dict, is_docked=self.IsDocked()
                         )
                         if not self.IsDocked():
                             frame = self.GetParent()
                             frame.Destroy()
                     else:
-                        self.closingDisplay.emit(pgnum_dict=pgnum_dict)
+                        self.closingPage.emit(pgnum_dict=pgnum_dict)
                     # Destroy is called when notebook page is deleted
         else:
             self.CleanUp()

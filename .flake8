@@ -69,7 +69,7 @@ per-file-ignores =
     gui/wxpython/gcp/g.gui.gcp.py: F841
     gui/wxpython/gcp/manager.py: E501, F841, E722
     gui/wxpython/gcp/mapdisplay.py: F841
-    gui/wxpython/gmodeler/*: F841, E722, W605, F405, F403, E402
+    gui/wxpython/gmodeler/*: E501
     gui/wxpython/gui_core/*: F841, E266, E722, W605
     gui/wxpython/gui_core/dialogs.py: E501, E722, F841, W605
     gui/wxpython/gui_core/forms.py: E501, E722, F841
