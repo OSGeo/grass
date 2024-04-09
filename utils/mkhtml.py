@@ -398,7 +398,7 @@ def get_last_git_commit(src_dir, addon_path, is_addon):
             src_dir=src_dir,
         )
     else:
-        if gs:
+        if gs and addon_path is not None:
             # Addons installation
             return get_git_commit_from_rest_api_for_addon_repo(
                 addon_path=addon_path,
