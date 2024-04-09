@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
     location->key_desc = "name";
     location->required = NO;
     location->guisection = _("Create");
-    location->description = _("Name of new project to create");
+    location->description = _("Name of new project (location) to create");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
