@@ -126,7 +126,7 @@ HorizonProperties horizon_height(const Geometry *geometry,
                                  const OriginAngle *origin_angle);
 void calculate_point_mode(const Settings *settings, const Geometry *geometry,
                           double xcoord, double ycoord, FILE *fp,
-                          enum OutputFormat format);
+                          enum OutputFormat format, JSON_Object *json_origin);
 int new_point(const Geometry *geometry, const OriginPoint *origin_point,
               const OriginAngle *origin_angle, SearchPoint *search_point,
               HorizonProperties *horizon);
@@ -155,6 +155,7 @@ double distance(double x1, double x2, double y1, double y2, double coslatsq)
 int main(int argc, char *argv[])
 {
     double xcoord, ycoord;
+    double *xcoords, *ycoords;
     enum OutputFormat format;
 
     struct GModule *module;
@@ -284,7 +285,8 @@ int main(int argc, char *argv[])
 
     parm.coord = G_define_standard_option(G_OPT_M_COORDS);
     parm.coord->description =
-        _("Coordinate for which you want to calculate the horizon");
+        _("Coordinate(s) for which you want to calculate the horizon");
+    parm.coord->multiple = YES;
     parm.coord->guisection = _("Point mode");
 
     parm.dist = G_define_option();
@@ -374,6 +376,7 @@ int main(int argc, char *argv[])
     const char *elevin = parm.elevin->answer;
     FILE *fp = NULL;
     int mode;
+    int point_count = 0;
     if (parm.coord->answer == NULL) {
         G_debug(1, "Setting mode: WHOLE_RASTER");
         mode = WHOLE_RASTER;
@@ -385,16 +388,28 @@ int main(int argc, char *argv[])
             format = JSON;
         else
             format = PLAIN;
-        if (sscanf(parm.coord->answer, "%lf,%lf", &xcoord, &ycoord) != 2) {
-            G_fatal_error(_(
-                "Can't read the coordinates from the \"coordinate\" option."));
-        }
 
-        if (xcoord < cellhd.west || xcoord >= cellhd.east ||
-            ycoord <= cellhd.south || ycoord > cellhd.north) {
-            G_fatal_error(_("Coordinates are outside of the current region"));
+        for (int i = 0; parm.coord->answers[i]; i += 2) {
+            point_count++;
         }
-
+        xcoords = (double *)G_malloc(point_count * sizeof(double));
+        ycoords = (double *)G_malloc(point_count * sizeof(double));
+        for (int i = 0; i < point_count; ++i) {
+            if (!(G_scan_easting(parm.coord->answers[2 * i], &xcoord,
+                                 G_projection()) &&
+                  G_scan_northing(parm.coord->answers[2 * i + 1], &ycoord,
+                                  G_projection()))) {
+                G_fatal_error(_("Can't read the coordinates from the "
+                                "\"coordinate\" option."));
+            }
+            if (xcoord < cellhd.west || xcoord >= cellhd.east ||
+                ycoord <= cellhd.south || ycoord > cellhd.north) {
+                G_fatal_error(
+                    _("Coordinates are outside of the current region"));
+            }
+            xcoords[i] = xcoord;
+            ycoords[i] = ycoord;
+        }
         /* Transform the coordinates to row/column */
 
         /*
@@ -584,8 +599,34 @@ int main(int argc, char *argv[])
 
     INPUT(&geometry, elevin);
     if (mode == SINGLE_POINT) {
-        /* Calculate the horizon for one single point */
-        calculate_point_mode(&settings, &geometry, xcoord, ycoord, fp, format);
+        JSON_Value *root_value, *origin_value;
+        JSON_Array *coordinates;
+        JSON_Object *origin;
+        if (format == JSON) {
+            root_value = json_value_init_array();
+            coordinates = json_value_get_array(root_value);
+            json_set_float_serialization_format("%lf");
+        }
+        for (int i = 0; i < point_count; ++i) {
+            /* Calculate the horizon for each point */
+            if (format == JSON) {
+                origin_value = json_value_init_object();
+                origin = json_value_get_object(origin_value);
+            }
+            calculate_point_mode(&settings, &geometry, xcoords[i], ycoords[i],
+                                 fp, format, origin);
+            if (format == JSON)
+                json_array_append_value(coordinates, origin_value);
+        }
+        if (format == JSON) {
+            char *json_string = json_serialize_to_string_pretty(root_value);
+            fprintf(fp, "%s\n", json_string);
+            json_free_serialized_string(json_string);
+            json_value_free(root_value);
+        }
+        fclose(fp);
+        G_free(xcoords);
+        G_free(ycoords);
     }
     else {
         calculate_raster_mode(&settings, &geometry, &cellhd, &new_cellhd,
@@ -763,7 +804,7 @@ void com_par(const Geometry *geometry, OriginAngle *origin_angle, double angle,
 
 void calculate_point_mode(const Settings *settings, const Geometry *geometry,
                           double xcoord, double ycoord, FILE *fp,
-                          enum OutputFormat format)
+                          enum OutputFormat format, JSON_Object *json_origin)
 {
     /*
        xg0 = xx0 = (double)xcoord * stepx;
@@ -805,11 +846,8 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
 
     origin_point.maxlength = settings->fixedMaxLength;
     /* JSON variables and formating */
-    JSON_Value *root_value, *origin_value, *azimuths_value, *horizons_value,
-        *distances_value;
-    JSON_Array *coordinates, *azimuths, *horizons, *distances;
-    JSON_Object *origin;
-    json_set_float_serialization_format("%lf");
+    JSON_Value *azimuths_value, *horizons_value, *distances_value;
+    JSON_Array *azimuths, *horizons, *distances;
 
     switch (format) {
     case PLAIN:
@@ -819,12 +857,9 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
         fprintf(fp, "\n");
         break;
     case JSON:
-        root_value = json_value_init_array();
-        coordinates = json_value_get_array(root_value);
-        origin_value = json_value_init_object();
-        origin = json_value_get_object(origin_value);
-        json_object_set_number(origin, "x", xcoord);
-        json_object_set_number(origin, "y", ycoord);
+
+        json_object_set_number(json_origin, "x", xcoord);
+        json_object_set_number(json_origin, "y", ycoord);
         azimuths_value = json_value_init_array();
         azimuths = json_value_get_array(azimuths_value);
         horizons_value = json_value_init_array();
@@ -898,17 +933,12 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     } /* end of for loop over angles */
 
     if (format == JSON) {
-        json_object_set_value(origin, "azimuth", azimuths_value);
-        json_object_set_value(origin, "horizon_height", horizons_value);
+        json_object_set_value(json_origin, "azimuth", azimuths_value);
+        json_object_set_value(json_origin, "horizon_height", horizons_value);
         if (settings->horizonDistance)
-            json_object_set_value(origin, "horizon_distance", distances_value);
-        json_array_append_value(coordinates, origin_value);
-        char *json_string = json_serialize_to_string_pretty(root_value);
-        fprintf(fp, "%s\n", json_string);
-        json_free_serialized_string(json_string);
-        json_value_free(root_value);
+            json_object_set_value(json_origin, "horizon_distance",
+                                  distances_value);
     }
-    fclose(fp);
 }
 
 /*////////////////////////////////////////////////////////////////////// */
