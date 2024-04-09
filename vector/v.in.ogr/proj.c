@@ -298,14 +298,14 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
          * real SRS has not been recognized or is missing */
         if (proj_trouble) {
             G_fatal_error(_("Unable to convert input map projection to GRASS "
-                            "format; cannot create new location."));
+                            "format; cannot create new project."));
         }
         else {
             if (0 != G_make_location_crs(outloc, cellhd, proj_info, proj_units,
                                          srid, wkt)) {
-                G_fatal_error(_("Unable to create new location <%s>"), outloc);
+                G_fatal_error(_("Unable to create new project <%s>"), outloc);
             }
-            G_message(_("Location <%s> created"), outloc);
+            G_message(_("Project <%s> created"), outloc);
 
             G_unset_window(); /* new location, projection, and window */
             G_get_window(cellhd);
@@ -365,13 +365,13 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
             int i_value;
 
             strcpy(error_msg, _("Projection of dataset does not"
-                                " appear to match current location.\n\n"));
+                                " appear to match current project.\n\n"));
 
             /* TODO: output this info sorted by key: */
             if (loc_wind.proj != cellhd->proj || err != -2) {
                 /* error in proj_info */
                 if (loc_proj_info != NULL) {
-                    strcat(error_msg, _("Location PROJ_INFO is:\n"));
+                    strcat(error_msg, _("Project PROJ_INFO is:\n"));
                     for (i_value = 0; i_value < loc_proj_info->nitems;
                          i_value++)
                         sprintf(error_msg + strlen(error_msg), "%s: %s\n",
@@ -380,22 +380,22 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                     strcat(error_msg, "\n");
                 }
                 else {
-                    strcat(error_msg, _("Location PROJ_INFO is:\n"));
+                    strcat(error_msg, _("Project PROJ_INFO is:\n"));
                     if (loc_wind.proj == PROJECTION_XY)
                         sprintf(error_msg + strlen(error_msg),
-                                "Location proj = %d (unreferenced/unknown)\n",
+                                "Project proj = %d (unreferenced/unknown)\n",
                                 loc_wind.proj);
                     else if (loc_wind.proj == PROJECTION_LL)
                         sprintf(error_msg + strlen(error_msg),
-                                "Location proj = %d (lat/long)\n",
+                                "Project proj = %d (lat/long)\n",
                                 loc_wind.proj);
                     else if (loc_wind.proj == PROJECTION_UTM)
                         sprintf(error_msg + strlen(error_msg),
-                                "Location proj = %d (UTM), zone = %d\n",
+                                "Project proj = %d (UTM), zone = %d\n",
                                 loc_wind.proj, cellhd->zone);
                     else
                         sprintf(error_msg + strlen(error_msg),
-                                "Location proj = %d (unknown), zone = %d\n",
+                                "Project proj = %d (unknown), zone = %d\n",
                                 loc_wind.proj, cellhd->zone);
                 }
 
@@ -469,7 +469,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
             else {
                 /* error in proj_units */
                 if (loc_proj_units != NULL) {
-                    strcat(error_msg, "Location PROJ_UNITS is:\n");
+                    strcat(error_msg, "Project PROJ_UNITS is:\n");
                     for (i_value = 0; i_value < loc_proj_units->nitems;
                          i_value++)
                         sprintf(error_msg + strlen(error_msg), "%s: %s\n",
@@ -490,10 +490,10 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                 strcat(error_msg, _("\nIn case of no significant differences "
                                     "in the projection definitions,"
                                     " use the -o flag to ignore them and use"
-                                    " current location definition.\n"));
-                strcat(error_msg, _("Consider generating a new location from "
+                                    " current project definition.\n"));
+                strcat(error_msg, _("Consider generating a new project from "
                                     "the input dataset using "
-                                    "the 'location' parameter.\n"));
+                                    "the 'project' parameter.\n"));
             }
 
             if (check_only)
@@ -511,7 +511,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                 msg_fn = G_message;
             else
                 msg_fn = G_verbose_message;
-            msg_fn(_("Projection of input dataset and current location "
+            msg_fn(_("Projection of input dataset and current project "
                      "appear to match"));
             if (check_only) {
                 GDALClose(hDS);
