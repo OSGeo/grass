@@ -176,6 +176,20 @@ class TestHorizon(TestCase):
         stdout = module.outputs.stdout
         self.assertMultiLineEqual(first=ref2, second=stdout)
 
+    def test_point_mode_multiple_points_and_directions(self):
+        """Test mode with 2 identical points and multiple directions"""
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            coordinates=(634720, 216180, 634720, 216180),
+            output=self.horizon,
+            direction=180,
+            step=20,
+        )
+        self.assertModule(module)
+        stdout = module.outputs.stdout
+        self.assertMultiLineEqual(first=ref2 + ref2, second=stdout)
+
     def test_point_mode_multiple_direction_json(self):
         """Test mode with 1 point and multiple directions with JSON"""
         module = SimpleModule(
@@ -202,6 +216,33 @@ class TestHorizon(TestCase):
         reference["horizon_height"] = horizons
 
         self.assertListEqual([reference], stdout)
+
+    def test_point_mode_multiple_points_and_directions_json(self):
+        """Test mode with 2 identical points and multiple directions with JSON"""
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            coordinates=(634720, 216180, 634720, 216180),
+            output=self.horizon,
+            direction=180,
+            step=20,
+            format="json",
+        )
+        self.assertModule(module)
+        stdout = json.loads(module.outputs.stdout)
+        azimuths = []
+        horizons = []
+        reference = {}
+        for line in ref2.splitlines()[1:]:
+            azimuth, horizon = line.split(",")
+            azimuths.append(float(azimuth))
+            horizons.append(float(horizon))
+        reference["x"] = 634720.0
+        reference["y"] = 216180.0
+        reference["azimuth"] = azimuths
+        reference["horizon_height"] = horizons
+
+        self.assertListEqual([reference, reference], stdout)
 
     def test_point_mode_multiple_direction_artificial(self):
         """Test mode with 1 point and multiple directions with artificial surface"""
