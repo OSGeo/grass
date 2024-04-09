@@ -18,7 +18,7 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2023 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2024 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -1787,8 +1787,18 @@ def start_gui(grass_gui):
     debug("GRASS GUI should be <%s>" % grass_gui)
     # Check for gui interface
     if grass_gui == "wxpython":
-        # TODO: report failures
-        return Popen([os.getenv("GRASS_PYTHON"), wxpath("wxgui.py")])
+        # Lazy-import to avoid dependency during standard import time.
+        # pylint: disable=import-outside-toplevel
+        import grass.script as gs
+
+        if is_debug() or "WX_DEBUG" in gs.gisenv():
+            stderr_redirect = None
+        else:
+            stderr_redirect = subprocess.DEVNULL
+        # TODO: report start failures?
+        return Popen(
+            [os.getenv("GRASS_PYTHON"), wxpath("wxgui.py")], stderr=stderr_redirect
+        )
     return None
 
 

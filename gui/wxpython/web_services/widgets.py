@@ -1000,7 +1000,7 @@ class LayersList(TreeCtrl):
         # self.ExpandAll(self.GetRootItem())
 
     def GetSelectedLayers(self):
-        """Get selected layers/styles in LayersList
+        r"""Get selected layers/styles in LayersList
 
         :return: dict with these items:
                  * 'name'  : layer name used for request

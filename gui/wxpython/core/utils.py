@@ -602,7 +602,7 @@ def GetListOfMapsets(dbase, location, selectable=False):
 
     if selectable:
         ret = RunCommand(
-            "g.mapset", read=True, flags="l", location=location, dbase=dbase
+            "g.mapset", read=True, flags="l", project=location, dbase=dbase
         )
 
         if not ret:
@@ -1134,9 +1134,9 @@ def do_doctest_gettext_workaround():
 
     sys.displayhook = new_displayhook
 
-    import __builtin__
+    import builtins
 
-    __builtin__._ = new_translator
+    builtins.__dict__["_"] = new_translator
 
 
 def doc_test():
