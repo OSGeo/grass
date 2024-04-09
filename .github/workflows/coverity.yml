@@ -1,12 +1,17 @@
+---
 name: Coverity Scan
+
 on:
   workflow_dispatch: # run whenever a contributor calls it
   schedule:
     - cron: '48 5 * * *' # Run at 05:48
-    # Coverity will let GRASS do a scan a maximum of twice per day, so this schedule will help GRASS fit within that limit with some additional space for manual runs
+    # Coverity will let GRASS do a scan a maximum of twice per day, so this
+    # schedule will help GRASS fit within that limit with some additional space
+    # for manual runs
 permissions:
   contents: read
-  # action based off of https://github.com/OSGeo/PROJ/blob/905c9a6c2da3dc6b7aa2c89d3ab78d9d1a9cd070/.github/workflows/coverity-scan.yml
+  # action based off of
+  # https://github.com/OSGeo/PROJ/blob/905c9a6c2da3dc6b7aa2c89d3ab78d9d1a9cd070/.github/workflows/coverity-scan.yml
 jobs:
   coverity:
     runs-on: ubuntu-22.04
@@ -23,10 +28,11 @@ jobs:
       - name: Create installation directory
         run: |
           mkdir $HOME/install
-          
+
       - name: Download Coverity Build Tool
         run: |
-          wget -q https://scan.coverity.com/download/cxx/linux64 --post-data "token=$TOKEN&project=grass" -O cov-analysis-linux64.tar.gz
+          wget -q https://scan.coverity.com/download/cxx/linux64 \
+            --post-data "token=$TOKEN&project=grass" -O cov-analysis-linux64.tar.gz
           mkdir cov-analysis-linux64
           tar xzf cov-analysis-linux64.tar.gz --strip 1 -C cov-analysis-linux64
         env:
@@ -44,14 +50,38 @@ jobs:
           printenv | sort
           gcc --version
           ldd --version
-      - name: Build with cov-build
+      - name: Configure
+        run: |
+          echo "CFLAGS=${{ env.CFLAGS }}" >> $GITHUB_ENV
+          echo "CXXFLAGS=${{ env.CXXFLAGS }}" >> $GITHUB_ENV
+          ./configure \
+              --prefix="$HOME/install/" \
+              --enable-largefile \
+              --with-cxx \
+              --with-zstd \
+              --with-bzlib \
+              --with-blas \
+              --with-lapack \
+              --with-readline \
+              --without-openmp \
+              --with-pdal \
+              --without-pthread \
+              --with-tiff \
+              --with-freetype \
+              --with-freetype-includes="/usr/include/freetype2/" \
+              --with-proj-share=/usr/share/proj \
+              --with-geos \
+              --with-sqlite \
+              --with-fftw \
+              --with-netcdf
         env:
-          CFLAGS: -fPIC -Wvla
-          CXXFLAGS: -fPIC
+          CFLAGS: -fPIC -g
+          CXXFLAGS: -fPIC -g
+      - name: Build with cov-build
         run: |
           pwd
           export PATH=`pwd`/cov-analysis-linux64/bin:$PATH
-          cov-build --dir cov-int .github/workflows/build_ubuntu-22.04_without_x.sh $HOME/install
+          cov-build --dir cov-int make
       - name: Submit to Coverity Scan
         run: |
           tar czvf grass.tgz cov-int
@@ -66,4 +96,3 @@ jobs:
         env:
           TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
           EMAIL: ${{ secrets.COVERITY_USER }}
-                                  
