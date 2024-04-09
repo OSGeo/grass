@@ -2299,7 +2299,7 @@ class SummaryPage(TitledPage):
         # print coordsys,proj4string
         if coordsys in ("proj", "epsg", "iau", "wkt", "file"):
             extra_opts = {}
-            extra_opts["location"] = "location"
+            extra_opts["project"] = "project"
             extra_opts["getErrorMsg"] = True
             extra_opts["read"] = True
 
