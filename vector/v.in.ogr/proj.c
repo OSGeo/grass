@@ -487,10 +487,11 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                 }
             }
             if (!check_only) {
-                strcat(error_msg, _("\nIn case of no significant differences "
-                                    "in the projection definitions,"
-                                    " use the -o flag to ignore them and use"
-                                    " current project definition.\n"));
+                strcat(error_msg,
+                       _("\nIn case of no significant differences "
+                         "in the coordinate reference system definitions,"
+                         " use the -o flag to ignore them and use"
+                         " current project definition.\n"));
                 strcat(error_msg, _("Consider generating a new project from "
                                     "the input dataset using "
                                     "the 'project' parameter.\n"));
@@ -511,8 +512,9 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                 msg_fn = G_message;
             else
                 msg_fn = G_verbose_message;
-            msg_fn(_("Projection of input dataset and current project "
-                     "appear to match"));
+            msg_fn(_("Coordinate reference system of input dataset and current "
+                     "project appear to match"));
+
             if (check_only) {
                 GDALClose(hDS);
                 exit(EXIT_SUCCESS);
