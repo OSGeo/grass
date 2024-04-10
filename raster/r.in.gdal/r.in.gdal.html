@@ -2,7 +2,7 @@
 
 <em>r.in.gdal</em> allows a user to create a GRASS GIS raster map layer,
 or imagery group, from any GDAL supported raster map format, with an optional
-title. The imported file may also be optionally used to create a new project
+title. The imported file may also be used to create a new project
 (previously called location).
 
 <!--
@@ -272,7 +272,7 @@ Alternatively you can override this error by using the <b>-o</b> flag.
 <p>
 <i>"WARNING: G_set_window(): Illegal latitude for North"</i><br>
 
-Latitude/Longitude project in GRASS can not have regions which exceed
+Latitude/Longitude projects in GRASS can not have regions which exceed
 90&deg; North or South. Non-georeferenced imagery will have coordinates
 based on the images's number of pixels: 0,0 in the bottom left; cols,rows
 in the top right. Typically imagery will be much more than 90 pixels tall
@@ -287,7 +287,7 @@ bounds with <em>r.region</em> you should double check them with
 <em>r.info</em>, paying special attention to the map resolution. In most
 cases you will want to import into the datafile's native projection, or
 into a simple XY project and use the Georectifaction tools
-(<em>i.rectify</em> et al.) to properly project into the target project.
+(<em>i.rectify</em> et al.) to re-project into the target project.
 The <b>-l</b> flag should <i>only</i> be used if you know the projection
 is correct but the internal georeferencing has gotten lost, and you know
 the what the map's bounds and resolution should be beforehand.

@@ -158,7 +158,7 @@ cat proj4.description | g.proj -w proj4=-
 
 <h3>Create new project</h3>
 
-<p>Create a new project with the co-ordinate system referred to by EPSG code
+<p>Create a new project with the coordinate system referred to by EPSG code
 4326 (Latitude-Longitude/WGS84), without explicitly specifying datum
 transformation parameters:<br>
 
@@ -166,14 +166,14 @@ transformation parameters:<br>
 g.proj -c epsg=4326 location=latlong
 </pre></div>
 
-<p>Create a new project with the co-ordinate system referred to by ESRI-EPSG code
+<p>Create a new project with the coordinate system referred to by EPSG code
 900913 (<a href="http://spatialreference.org/ref/user/6/">Google Mercator Projection</a>)<br>
 
 <div class="code"><pre>
 g.proj -c epsg=900913 location=google
 </pre></div>
 
-<p>Create a new project with the co-ordinate system referred to by EPSG code
+<p>Create a new project with the coordinate system referred to by EPSG code
 29900 (Irish Grid), selecting datum transformation parameter set no. 2:<br>
 
 <div class="code"><pre>
@@ -182,14 +182,14 @@ g.proj -t datumtrans=-1 epsg=29900
 g.proj -c epsg=29900 datumtrans=2 location=irish_grid
 </pre></div>
 
-<p>Create a new project with the same co-ordinate system as the current
+<p>Create a new project with the same coordinate system as the current
 project, but forcing a change to datum transformation parameter set no. 1:<br>
 
 <div class="code"><pre>
 g.proj -c location=newloc -t datumtrans=1
 </pre></div>
 
-<p>Create a new project with the co-ordinate system from a WKT definition
+<p>Create a new project with the coordinate system from a WKT definition
 stored in a text file:<br>
 
 <div class="code"><pre>
