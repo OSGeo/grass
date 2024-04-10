@@ -377,9 +377,9 @@ int main(int argc, char *argv[])
     flag.over = G_define_flag();
     flag.over->key = 'o';
     flag.over->label =
-        _("Override projection check (use current project's projection)");
+        _("Override projection check (use current project's CRS)");
     flag.over->description = _("Assume that the dataset has the same "
-                               "projection as the current project");
+                               "coordinate reference system (CRS) as the current project");
 
     flag.proj = G_define_flag();
     flag.proj->key = 'j';
