@@ -364,7 +364,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                                               proj_info, proj_units)) != 1) {
             int i_value;
 
-            strcpy(error_msg, _("Projection of dataset does not"
+            strcpy(error_msg, _("Coordinate reference system of dataset does not"
                                 " appear to match current project.\n\n"));
 
             /* TODO: output this info sorted by key: */
