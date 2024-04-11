@@ -399,15 +399,15 @@ data type               precision and value range info
 -------------------------------------------------------------------------------
  int                    a 32-bit integer with a range from -2,147,483,647 to
                         +2,147,483,647. The value -2,147,483,648 is reserved
-                        for NODATA
+                        for NODATA.
  float                  a 32-bit float (Float32) with a range from -3.4E38 to
                         3.4E38. However, the integer precision can be only
                         ensured between -16,777,216 and 16,777,216. If your
                         raster overpasses this range, it is strongly suggested
-                        to use the type double instead
+                        to use the type double instead.
  double                 a 64-bit float (Float64) with a range from -1.79E308 to
-                        1.79E308. It is 8 bytes, 15-17 digits precision
- null                   NULL value. Refer to section "NULL support" lower
+                        1.79E308. It is 8 bytes, 15-17 digits precision.
+ null                   NULL value. Refer to section "NULL support" below.
 </pre></div>
 
 Note that the value counter rotates when the value range is reached. E.g., if
