@@ -9,9 +9,10 @@
  *               Markus Neteler <neteler itc.it>,
  *               Moritz Lennert <mlennert club.worldonline.be>,
  *               Martin Landa <landa.martin gmail.com>,
- *               Huidae Cho <grass4u gmail.com>
+ *               Huidae Cho <grass4u gmail.com>,
+ *               Corey White <smortopahri gmail.com>
  * PURPOSE:      set current mapset path
- * COPYRIGHT:    (C) 1994-2009, 2012 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1994-2009, 2012-2024 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -33,6 +34,28 @@
 #define OP_ADD 2
 #define OP_REM 3
 
+enum OutputFormat { PLAIN, JSON };
+
+void fatal_error_option_value_excludes_flag(struct Option *option,
+                                            struct Flag *excluded,
+                                            const char *because)
+{
+    if (!excluded->answer)
+        return;
+    G_fatal_error(_("The flag -%c is not allowed with %s=%s. %s"),
+                  excluded->key, option->key, option->answer, because);
+}
+
+void fatal_error_option_value_excludes_option(struct Option *option,
+                                              struct Option *excluded,
+                                              const char *because)
+{
+    if (!excluded->answer)
+        return;
+    G_fatal_error(_("The option %s is not allowed with %s=%s. %s"),
+                  excluded->key, option->key, option->answer, because);
+}
+
 static void append_mapset(char **, const char *);
 
 int main(int argc, char *argv[])
@@ -45,15 +68,15 @@ int main(int argc, char *argv[])
     int no_tokens;
     FILE *fp;
     char path_buf[GPATH_MAX];
-    char *path, *fs;
+    char *path, *fsep;
     int operation, nchoices;
-
+    enum OutputFormat format;
     char **mapset_name;
     int nmapsets;
 
     struct GModule *module;
     struct _opt {
-        struct Option *mapset, *op, *fs;
+        struct Option *mapset, *op, *format, *fsep;
         struct Flag *print, *list, *dialog;
     } opt;
 
@@ -82,10 +105,20 @@ int main(int argc, char *argv[])
     opt.op->description = _("Operation to be performed");
     opt.op->answer = "add";
 
-    opt.fs = G_define_standard_option(G_OPT_F_SEP);
-    opt.fs->label = _("Field separator for printing (-l and -p flags)");
-    opt.fs->answer = "space";
-    opt.fs->guisection = _("Print");
+    opt.format = G_define_option();
+    opt.format->key = "format";
+    opt.format->type = TYPE_STRING;
+    opt.format->required = YES;
+    opt.format->label = _("Output format for printing (-l and -p flags)");
+    opt.format->options = "plain,json";
+    opt.format->descriptions = "plain;Configurable plain text output;"
+                               "json;JSON (JavaScript Object Notation);";
+    opt.format->answer = "plain";
+    opt.format->guisection = _("Print");
+
+    opt.fsep = G_define_standard_option(G_OPT_F_SEP);
+    opt.fsep->answer = NULL;
+    opt.fsep->guisection = _("Print");
 
     opt.list = G_define_flag();
     opt.list->key = 'l';
@@ -130,7 +163,27 @@ int main(int argc, char *argv[])
         }
     }
 
-    fs = G_option_to_separator(opt.fs);
+    if (strcmp(opt.format->answer, "json") == 0)
+        format = JSON;
+    else
+        format = PLAIN;
+    if (format == JSON) {
+        fatal_error_option_value_excludes_option(
+            opt.format, opt.fsep, _("Separator is part of the format."));
+    }
+
+    /* the field separator */
+    if (opt.fsep->answer) {
+        fsep = G_option_to_separator(opt.fsep);
+    }
+    else {
+        /* A different separator is needed to for each format and output. */
+        if (format == PLAIN) {
+            fsep = G_store(" ");
+        }
+        else
+            fsep = NULL; /* Something like a separator is part of the format. */
+    }
 
     /* list available mapsets */
     if (opt.list->answer) {
@@ -141,7 +194,13 @@ int main(int argc, char *argv[])
         if (opt.mapset->answer)
             G_warning(_("Option <%s> ignored"), opt.mapset->key);
         mapset_name = get_available_mapsets(&nmapsets);
-        list_available_mapsets((const char **)mapset_name, nmapsets, fs);
+        if (format == JSON) {
+            list_avaliable_mapsets_json((const char **)mapset_name, nmapsets);
+        }
+        else {
+            list_available_mapsets((const char **)mapset_name, nmapsets, fsep);
+        }
+
         exit(EXIT_SUCCESS);
     }
 
@@ -150,7 +209,13 @@ int main(int argc, char *argv[])
             G_warning(_("Flag -%c ignored"), opt.dialog->key);
         if (opt.mapset->answer)
             G_warning(_("Option <%s> ignored"), opt.mapset->key);
-        list_accessible_mapsets(fs);
+        if (format == JSON) {
+            list_accessible_mapsets_json();
+        }
+        else {
+            list_accessible_mapsets(fsep);
+        }
+
         exit(EXIT_SUCCESS);
     }
 
