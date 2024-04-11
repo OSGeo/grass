@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
     parm.target->required = NO;
     parm.target->label = _("Name of GCPs target project (location)");
     parm.target->description = _("Name of project to create or to read "
-                                 "projection from for GCPs transformation");
+                                 "CRS from for GCPs transformation");
     parm.target->key_desc = "name";
     parm.target->guisection = _("Projection");
 
@@ -213,10 +213,9 @@ int main(int argc, char *argv[])
 
     flag_o = G_define_flag();
     flag_o->key = 'o';
-    flag_o->label =
-        _("Override projection check (use current project's projection)");
-    flag_o->description =
-        _("Assume that the dataset has same projection as the current project");
+    flag_o->label = _("Override projection check (use current project's CRS)");
+    flag_o->description = _("Assume that the dataset has the same coordinate "
+                            "reference system as the current project");
     flag_o->guisection = _("Projection");
 
     flag_j = G_define_flag();
@@ -977,9 +976,8 @@ int main(int argc, char *argv[])
                 /* create target location */
                 if (!hSRS || GPJ_osr_to_grass(&gcpcellhd, &proj_info,
                                               &proj_units, hSRS, 0) == 1) {
-                    G_warning(
-                        _("Unable to convert input map projection to GRASS "
-                          "format; cannot create new project."));
+                    G_warning(_("Unable to convert input map CRS to GRASS "
+                                "format; cannot create new project."));
                 }
                 else {
                     const char *authkey, *authname, *authcode;
@@ -1133,13 +1131,11 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
 
         /* Get projection info from target location */
         if ((out_proj_info = G_get_projinfo()) == NULL)
-            G_fatal_error(_("Unable to get projection info of target project"));
+            G_fatal_error(_("Unable to get CRS info of target project"));
         if ((out_unit_info = G_get_projunits()) == NULL)
-            G_fatal_error(
-                _("Unable to get projection units of target project"));
+            G_fatal_error(_("Unable to get CRS units of target project"));
         if (pj_get_kv(oproj, out_proj_info, out_unit_info) < 0)
-            G_fatal_error(
-                _("Unable to get projection key values of target project"));
+            G_fatal_error(_("Unable to get CRS key values of target project"));
         tproj->def = NULL;
         if (GPJ_init_transform(iproj, oproj, tproj) < 0)
             G_fatal_error(_("Unable to initialize coordinate transformation"));
