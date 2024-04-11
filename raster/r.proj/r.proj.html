@@ -1,10 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.proj</em> projects a raster map in a specified mapset of a
-specified project  (previously called location) from the projection
-of the input project to a raster map
-in the current project. The projection information is taken from the
-current PROJ_INFO files, as set and viewed with
+<em>r.proj</em> is used to reproject a raster map from the coordinate
+reference system (CRS) of the input project into a CRS of a
+specified project (previously called location). The CRS information
+is taken from the current PROJ_INFO files, as set and viewed with
 <em><a href="g.proj.html">g.proj</a></em>.
 
 <h3>Introduction</h3>
@@ -60,11 +59,11 @@ raster maps involves an interpolation step in which the values of
 points at intermediate locations relative to the source grid are
 estimated.
 
-<h4>Projecting vector maps within the GRASS GIS</h4>
+<h4>Reprojecting vector maps within the GRASS GIS</h4>
 <!-- move this into v.proj.html !! -->
-GIS data capture, import and transfer often requires a projection
+GIS data capture, import and transfer often requires a reprojection
 step, since the source or client will frequently be in a different
-projection to the working projection.
+CRS to the working CRS.
 <p>In some cases it is convenient to do the conversion outside the
 package, prior to import or after export, using software such
 as <i>PROJ</i>'s <em><a href="https://proj.org/apps/cs2cs.html">cs2cs</a></em>
@@ -78,20 +77,20 @@ the files will describe topology, and not just coordinates. In GRASS
 GIS the
 <em><a href="v.proj.html">v.proj</a></em> module is provided to reproject
 vector maps, transferring topology and attributes as well as node coordinates.
-This program uses the projection definition and parameters which are stored in
+This program uses the CRS definition and parameters which are stored in
 the PROJ_INFO and PROJ_UNITS files in the PERMANENT mapset directory for every
 GRASS project.
 
 <h3>Design of r.proj</h3>
 
-As discussed briefly above, the fundamental step in re-projecting a
+As discussed briefly above, the fundamental step in reprojecting a
 raster is resampling the source grid at locations corresponding to the
-intersections of a grid in the target projection. The basic procedure
+intersections of a grid in the target CRS. The basic procedure
 for accomplishing this, therefore, is as follows:
 <p>
-<em>r.proj</em> converts a map to a new geographic projection. It
-reads a map from a different project, projects it and write it out to
-the current project. The projected data is resampled with one of four
+<em>r.proj</em> converts a map to a new CRS. It
+reads a map from a different project, reprojects it and writes it out to
+the current project. The reprojected data is resampled with one of four
 different methods: nearest neighbor, bilinear, bicubic interpolation or
 lanczos.
 <p>
@@ -166,7 +165,7 @@ beforehand.
 
 <p>
 A simple way to do this is to check the projected bounds of the input
-map in the current project's projection using the <b>-p</b>
+map in the current project's CRS using the <b>-p</b>
 flag. The <b>-g</b> flag reports the same thing, but in a form which
 can be directly cut and pasted into
 a <em><a href="g.region.html">g.region</a></em> command. After setting
@@ -193,7 +192,7 @@ reproject.  In this case a little preparation goes a long way.
 When reprojecting whole-world maps the user should disable
 map-trimming with the <b>-n</b> flag. Trimming is not useful here
 because the module has the whole map in memory anyway. Besides that,
-world "edges" are hard (or impossible) to find in projections other
+world "edges" are hard (or impossible) to find in CRSs other
 than latitude-longitude so results may be odd with trimming.
 
 <h2>EXAMPLES</h2>
@@ -201,8 +200,8 @@ than latitude-longitude so results may be odd with trimming.
 <h3>Inline method</h3>
 
 With GRASS running in the destination project use the <b>-g</b> flag
-to show the input map's bounds once projected into the current working
-projection, then use that to set the region bounds before performing
+to show the input map's bounds once reprojected into the current working
+CRS, then use that to set the region bounds before performing
 the reprojection:
 
 <div class="code"><pre>

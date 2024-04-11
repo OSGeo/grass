@@ -438,7 +438,7 @@ eval `g.region -g`
 ogr2ogr -spat $w $s $e $n soils_cut.shp soils.shp
 </pre></div>
 
-This requires that the project/SHAPE file projection match.
+This requires that the project and the SHAPE file CRS' match.
 
 <h3>Using g.region in a shell in combination with GDAL</h3>
 
@@ -454,8 +454,8 @@ gdalwarp -t_srs "`g.proj -wf`" -te $w $s $e $n \
          p016r035_7t20020524_nc_spm_wake_nn30.tif
 </pre></div>
 
-Here the input raster map does not have to match the project
-projection since it is reprojected on the fly.
+Here the input raster map does not have to match the project's
+coordinate reference system since it is reprojected on the fly.
 
 <h2>SEE ALSO</h2>
 
