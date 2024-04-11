@@ -23,14 +23,14 @@ use
 We use the following tools in the continuous integration to ensure compliance
 with PEP8, consistent formatting, and readable and error-free code:
 
-- [flake8](https://flake8.pycqa.org/en/latest/) tool to ensure compliance with
+- [Flake8](https://flake8.pycqa.org/en/latest/) tool to ensure compliance with
   PEP8
-- [black](https://black.readthedocs.io/en/stable/) code formatter to ensure
+- [Black](https://black.readthedocs.io/en/stable/) code formatter to ensure
   consistent code formatting
-- [pylint](https://pylint.readthedocs.io/en/latest/) static code analyser to
+- [Pylint](https://pylint.readthedocs.io/en/latest/) static code analyser to
   find bad code practices or errors
 
-Note that while the entire GRASS code base is black formatted, full complience
+Note that while the entire GRASS code base is Black formatted, full compliance
 with PEP8 is still work in progress.
 
 It is highly recommended to install and use [pre-commit](https://pre-commit.com)
@@ -59,7 +59,7 @@ flake8 python_file.py
 
 The root directory contains [.flake8](../../.flake8) configuration file which
 contains a less strict configuration for legacy code. It will be used by default
-when running flake8 within GRASS source code. From outside, you can point to it
+when running Flake8 within GRASS source code. From outside, you can point to it
 with `--config` pararameter:
 
 ```bash
@@ -156,7 +156,7 @@ pre-commit install
 
 ### Documentation
 
-There are three types of documentation: C API, Python API and tool manual pages.
+There are three types of documentation: C API, Python API and tool documentation.
 
 #### C API documentation
 
@@ -167,8 +167,8 @@ examples.
 
 #### Python API documentation
 
-Python API documentation is written in reStructuredText which is compiled with
-Sphinx (see
+Python API documentation is written in reStructuredText (reST) which is
+compiled with Sphinx (see
 [​PyGRASS documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html))
 
 ```python
@@ -198,7 +198,7 @@ def func(arg1, arg2):
 ```
 
 See
-[Sphinx docstring format](https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html)
+[Sphinx docstring formatting](https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html)
 for more details.
 
 #### Tool documentation
@@ -275,8 +275,7 @@ Examples should be coded like this:
 <div class="code">
   <pre>
 v.to.db map=soils type=area option=area column=area_size unit=h
-</pre
-  >
+</pre>
 </div>
 ```
 
@@ -348,8 +347,7 @@ image is displayed as shrunk, both **width** and **height** HTML parameters
       height="600"
       alt="r.viewshed example"
       border="0"
-    /> </a
-  ><br />
+    /></a><br/>
   <i>Figure: Viewshed shown on shaded terrain (observer position in the
     north-east quadrant with white dot; 5m above ground)</i>
 </div>
@@ -363,22 +361,20 @@ image is displayed as shrunk, both **width** and **height** HTML parameters
 
 Tools typically **do not change the computational region based on the input
 data**. Raster processing tools should respect the current computational region.
-Vector processing tools may use the current computational region, e.g., to
-selected subset of the input data.
 
 **Why?** Users should be able to re-run a command or workflow with different
-computational regions to, e.g., test processing in a small are and then move to
+computational regions to, e.g., test processing in a small area and then move to
 a larger one. Also, changing the current region globally can break parallel
 processing.
 
-**Exceptions**: Tools importing data typically import entire dataset, respecting
+**Exceptions**: Tools importing data typically import the entire dataset, respecting
 of the region may be implemented as an optional feature (e.g., r.in.gdal). This
-is to avoid, e.g., importing data under finer resolution than the native
-resolution of the data. Another exception is raster processing where alignment
+is to avoid, e.g., importing data under finer resolution than their native
+resolution. Another exception is raster processing where alignment
 of the cells plays a crucial role and there is a clear answer to how the
 alignment should be done. In that case, the tool may change the resolution. Some
-tools, such as r.mapcalc, opt for providing additional computation region
-handling policies. Finally, some operations are meant use all the data, e.g.,
+tools, such as r.mapcalc, opt for providing additional computational region
+handling policies. Finally, some operations are meant to use all the data, e.g.,
 creating metadata, these operations should not use the current computational
 region.
 
@@ -397,14 +393,15 @@ respect that.
 
 #### Input and Output Geospatial Data Format
 
-A analytical tool should read and write geospatial data as GRASS raster or
-vector maps. Importing data from other formats should be left to dedicated
-import and export tools, e.g., _v.import_. The obvious exceptions are import and
-export of data, e.g., _r.in.xyz_.
+An analytical tool should read and write geospatial data as GRASS raster or
+vector maps. Importing from and exporting to other data formats should be left
+to dedicated import and export tools, e.g., _v.import_. The exceptions are
+import and export of data, e.g., _r.in.xyz_.
 
-The processing and analytical tools can then use simple names referring to the
-data in GRASS project instead of file paths. This follows separation of
-concerns: format conversion and CRS transformations are separate from analysis.
+Processing and analytical tools can then use simple names to refer to the
+data within GRASS projects instead of file paths. This follows the separation of
+concerns principle: format conversion and CRS transformations are separate from
+analysis.
 
 #### Overwriting Existing Data
 
@@ -413,9 +410,9 @@ A tool should not overwrite existing data unless specified by the user using the
 output data (raster, vector maps) existence and ends the tool execution with a
 proper error message in case the output already exists. If the flag is set by
 the user (`--overwrite` in command line, `overwrite=True` in Python), the parser
-enables the overwriting for the whole tool.
+enables the overwriting for the tool.
 
-The `--overwrite` flag can be globally enabled by setting environment variable
+The `--overwrite` flag can be globally enabled by setting the environment variable
 `GRASS_OVERWRITE` to 1. Notably, the GRASS session from _grass.jupyter_ sets
 `GRASS_OVERWRITE` to 1 to enable re-running of the cells and notebooks.
 
@@ -458,14 +455,14 @@ Be consistent with periods. Complete sentences or all parts of a message with
 multiple sentences should end with periods. Short phrases should not.
 Punctuated events, such as errors, deserve a period, e.g., _"Operation
 complete."_ Phrases which imply ongoing action should have an ellipse, e.g.,
- _"Reading raster map.."._.
+ _"Reading raster map..."_.
 
 ### Developing Python scripts
 
 #### Import Python Scripting Library
 
 ```python
-import grass script as gs
+import grass.script as gs
 
 gs.run_command(...)
 ```
@@ -538,14 +535,13 @@ processes as no region-related files are modified.
 
 #### Temporary Maps
 
-Using temporary map is preferred over using temporary mapsets. This follows the
+Using temporary maps is preferred over using temporary mapsets. This follows the
 rule that writing should be done only to the current mapset. Some users may have
 write permissions only for their mapsets, but not for creating other mapsets.
 
-The following script creates a temporary name using append_node_pid which is
-using node (computer) name and process identifier to create unique, but
-identifiable name. The temporary maps are removed when scripts ends that's to
-adding the removal function to exit procedures using atexit.register.
+The following script creates a temporary name using `gs.append_node_pid`` which
+uses node (computer) name and process identifier to create unique, but
+identifiable name. The temporary maps are removed when the script ends.
 
 ```python
 import atexit
@@ -612,30 +608,29 @@ mapset = file_info["mapset"]
 #### Messages
 
 For any informational output, use the _gs.message_ function or _gs.verbose_. For
-error messages should be used _gs.fatal_ (ends execution) or _gs.error_ (just
-prints error) and for warnings _gs.warning_. For debugging purposes use
-_gs.debug_.
+error messages, use _gs.fatal_ (ends execution) or _gs.error_ (just prints error).
+For warnings, use  _gs.warning_. For debugging purposes use _gs.debug_.
 
 ```py
 # normal message:
-gs.message(_("Done"))
+gs.message(_("Done."))
 
 # verbose message:
-gs.verbose(_("Computation finished successfully"))
+gs.verbose(_("Computation finished successfully."))
 
 # warning:
-gs.warning(_("No input values found, using default values"))
+gs.warning(_("No input values found, using default values."))
 
 # error:
-gs.error(_("No map found"))
+gs.error(_("No map found."))
 
 # fatal error:
 # prints error and exits or raises exception (use set_raise_on_error to set the behavior)
-gs.fatal(_("No map found, exiting"))
+gs.fatal(_("No map found, exiting."))
 
 # debug output (use g.gisenv to enable/disable)
 # debug level is 1 to 5 (5 is most detailed)
-gs.debug(_("Our calculated value is: {}".format(value), 3)
+gs.debug(_("Our calculated value is: {}.".format(value), 3)
 ```
 
 Do not use the `print` function for informational output. This is reserved for
@@ -664,7 +659,7 @@ If needed, override values which need to be different:
 # %option G_OPT_V_INPUT
 # % key: point_input
 # % label: Name of input vector map with points
-# % description: Points which used for sampling the raster input
+# % description: Points used for sampling the raster input
 # %end
 # %option G_OPT_R_OUTPUT
 # % key: raster_input
@@ -677,7 +672,7 @@ Do not repeat the values when a standard option defines them.
 
 #### Consider both Flags and Options to modify behavior
 
-Flags are like options which are booleans with default false with names which
+Flags are boolean options that default to false. Their names
 are only one character. They are defined using:
 
 ```python
@@ -697,14 +692,14 @@ gs.run_command(..., flags="n", ...)
 However, options are often better because they improve readability, clarify the
 default behavior, and allow for extension of the interface.
 
-**Example:** Consider a tool which produces text output which by default
-produces human-readable plain text output. Then you add JSON output which is
+**Example:** Consider a tool which by default produces human-readable plain
+text output. Then you add JSON output which is
 enabled by a flag `j`. Later, you decide to add YAML output. This now needs to
-be flag y which needs to be exclusive with flag `j`. Soon, you have several
-related flags each exclusive with all the others. Using an option instead of
+be flag `y` which needs to be exclusive with flag `j`. Soon, you have several
+related flags each exclusive with all the others. Using an option instead of a
 flag from the beginning allows the interface to accommodate more formats. In
 this example, an option named `format` can have default value `plain` and `json`
-from JSON output. When you later add YAML, you simply add `yaml` to possible
+for JSON output. When you later add YAML, you simply add `yaml` to the possible
 values without a need for additional options or flags. The interface definition
 for the example would look like:
 
@@ -755,7 +750,7 @@ GIS.
 
 #### Lazy import of optional dependencies
 
-For optional dependencies, import only after the _gs.parser_ call. That way the
+For optional dependencies, import only after the _gs.parser_ call. In that way the
 tool can be safely compiled even if the dependency is not installed.
 
 ```python
@@ -783,6 +778,7 @@ ps.   - postscript commands
 r.    - raster commands
 r3.   - raster3D commands
 v.    - vector commands
+t.    - temporal commands
 ```
 
 Some additional naming conventions
