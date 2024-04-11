@@ -411,9 +411,9 @@ data type               precision and value range info
 </pre></div>
 
 Note that the value counter rotates when the value range is reached. E.g., if
-your expression is <tt>a = int(2,147,483,648)</tt>, you will get NULL value.
-For expression <tt>a = int(2,147,483,649)</tt>, you will reach the lowest value
-possible instead, i.e. -2,147,483,647.
+your expression is <tt>a = int(2147483648)</tt>, you will get NULL value.
+For expression <tt>a = int(2147483649)</tt>, you will reach the lowest value
+possible instead, i.e. -2147483647.
 
 <h3>Floating point values in the expression</h3>
 
