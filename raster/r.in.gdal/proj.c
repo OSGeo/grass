@@ -196,8 +196,9 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
                                               proj_info, proj_units)) != 1) {
             int i_value;
 
-            strcpy(error_msg, _("Projection of dataset does not"
-                                " appear to match current project.\n\n"));
+            strcpy(error_msg,
+                   _("Coordinate reference system of dataset does not"
+                     " appear to match current project.\n\n"));
 
             /* TODO: output this info sorted by key: */
             if (loc_wind.proj != cellhd->proj || err != -2) {
@@ -320,10 +321,10 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
             }
             if (!check_only) {
                 strcat(error_msg, _("\nIn case of no significant differences "
-                                    "in the projection definitions,"
+                                    "in the CRS definitions,"
                                     " use the -o flag to ignore them and use"
                                     " current project definition.\n"));
-                strcat(error_msg, _("Consider generating a new location from "
+                strcat(error_msg, _("Consider generating a new project from "
                                     "the input dataset using "
                                     "the 'project' parameter.\n"));
             }
@@ -343,8 +344,8 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, char *outloc,
                 msg_fn = G_message;
             else
                 msg_fn = G_verbose_message;
-            msg_fn(_("Projection of input dataset and current project "
-                     "appear to match"));
+            msg_fn(_("Coordinate reference system of input dataset and current "
+                     "project appear to match"));
             if (check_only) {
                 GDALClose(hDS);
                 exit(EXIT_SUCCESS);
