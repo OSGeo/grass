@@ -591,7 +591,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         child_is_maplayer = True
                         break
                     child = self.GetNextSibling(child)
-            if ltype == "group" and child_is_maplayer:
+            if child_is_maplayer:
                 self.popupMenu.AppendSeparator()
                 item = wx.MenuItem(
                     self.popupMenu,
@@ -1232,7 +1232,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         dlg = SetOpacityDialog(
             self,
             opacity=current_opacity,
-            title=_("Set opacity of <{}>").format(maplayer.GetName()),
+            title=_("Set opacity of <{}>").format(self.layer_selected.GetText()),
         )
         dlg.applyOpacity.connect(
             lambda value: self.ChangeGroupLayerOpacity(layer=child, value=value)
