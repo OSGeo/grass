@@ -360,8 +360,8 @@ if more than one parameter is provided.
 The typical file extensions for the LAS format are .las and .laz
 (compressed). The compressed LAS (.laz) format can be imported only if
 libLAS has been compiled with LASzip support. It is also recommended to
-compile libLAS with GDAL which is used to test if the LAS projection
-matches that of the GRASS project (previously called location).
+compile libLAS with GDAL which is used to test if the LAS coordinate reference
+system matches that of the GRASS project (previously called location).
 
 <!--
 <h3>LAS file import preparations</h3>
@@ -521,7 +521,7 @@ available at
 r.in.pdal -p input="Serpent Mound Model LAS Data.las"
 
 # using v.in.lidar to create a new project
-# create project with projection information of the LAS data
+# create a project with CRS information of the LAS data
 v.in.lidar -i input="Serpent Mound Model LAS Data.las" location=Serpent_Mound
 
 # quit and restart GRASS in the newly created project "Serpent_Mound"
