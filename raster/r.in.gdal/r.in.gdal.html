@@ -145,7 +145,7 @@ system of the source data and the current project, they may pass the
 If the user wishes to import the data with the full CRS definition,
 it is possible to have r.in.gdal automatically create a new project based
 on the CRS and extents of the file being read.  This is accomplished
-by passing the name to be used for the new project via the <b>location</b>
+by passing the name to be used for the new project via the <b>project</b>
 parameter.  Upon completion of the command, a new project will have been
 created (with only a PERMANENT mapset), and the raster will have been
 imported with the indicated <b>output</b> name into the PERMANENT mapset.
@@ -264,9 +264,9 @@ gdalwarp rotated.tif northup.tif
 <i>"ERROR: Coordinate reference system of dataset does not appear to match the current project."</i><br>
 
 You need to create a project whose CRS matches the data you
-wish to import. Try using <b>location</b> parameter to create a new
+wish to import. Try using <b>project</b> parameter to create a new
 project based upon the CRS information in the file. If desired,
-you can then re-project it to another project with <em>r.proj</em>.
+you can then reproject it to another project with <em>r.proj</em>.
 Alternatively you can override this error by using the <b>-o</b> flag.
 
 <p>

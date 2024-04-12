@@ -119,6 +119,22 @@ Available mapsets:
 PERMANENT user1 user2
 </pre></div>
 
+Mapsets can be also printed out as json by setting the format option to "json" (<b>format="json"</b>).
+
+<div class="code">
+  <pre>
+    g.mapsets format="json" -l
+
+    {
+      "mapsets": [
+        "PERMANENT",
+        "user1",
+        "user2"
+      ]
+    }
+  </pre>
+</div>
+
 <h3>Add new mapset</h3>
 
 Add mapset 'user2' to the current mapset search path
