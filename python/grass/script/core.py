@@ -1700,6 +1700,9 @@ def mapsets(search_path=False, env=None):
 
 
 def create_location(*args, **kwargs):
+    if "dbase" in kwargs:
+        kwargs["path"] = kwargs["dbase"]
+        del kwargs["dbase"]
     if "location" in kwargs:
         kwargs["name"] = kwargs["location"]
         del kwargs["location"]
