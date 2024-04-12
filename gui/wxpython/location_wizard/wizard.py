@@ -2691,14 +2691,14 @@ class LocationWizard(wx.Object):
         try:
             if coordsys == "xy":
                 grass.create_location(
-                    dbase=self.startpage.grassdatabase,
-                    location=self.startpage.location,
+                    path=self.startpage.grassdatabase,
+                    name=self.startpage.location,
                     desc=self.startpage.locTitle,
                 )
             elif coordsys == "proj":
                 grass.create_location(
-                    dbase=self.startpage.grassdatabase,
-                    location=self.startpage.location,
+                    path=self.startpage.grassdatabase,
+                    name=self.startpage.location,
                     proj4=self.CreateProj4String(),
                     datum=self.datumpage.datum,
                     datum_trans=self.datum_trans,
@@ -2710,8 +2710,8 @@ class LocationWizard(wx.Object):
                     addl_opts["datum_trans"] = self.datum_trans
 
                 grass.create_location(
-                    dbase=self.startpage.grassdatabase,
-                    location=self.startpage.location,
+                    path=self.startpage.grassdatabase,
+                    name=self.startpage.location,
                     proj4=self.custompage.customstring,
                     desc=self.startpage.locTitle,
                     **addl_opts,
@@ -2721,8 +2721,8 @@ class LocationWizard(wx.Object):
                     return _("EPSG code missing.")
 
                 grass.create_location(
-                    dbase=self.startpage.grassdatabase,
-                    location=self.startpage.location,
+                    path=self.startpage.grassdatabase,
+                    name=self.startpage.location,
                     epsg=self.epsgpage.epsgcode,
                     datum=self.datumpage.datum,
                     datum_trans=self.datum_trans,
@@ -2733,8 +2733,8 @@ class LocationWizard(wx.Object):
                     return _("IAU code missing.")
 
                 grass.create_location(
-                    dbase=self.startpage.grassdatabase,
-                    location=self.startpage.location,
+                    path=self.startpage.grassdatabase,
+                    name=self.startpage.location,
                     proj4=self.iaupage.epsgparams,
                     datum=self.datumpage.datum,
                     datum_trans=self.datum_trans,
@@ -2747,8 +2747,8 @@ class LocationWizard(wx.Object):
                     return _("File <%s> not found." % self.filepage.georeffile)
 
                 grass.create_location(
-                    dbase=self.startpage.grassdatabase,
-                    location=self.startpage.location,
+                    path=self.startpage.grassdatabase,
+                    name=self.startpage.location,
                     filename=self.filepage.georeffile,
                     desc=self.startpage.locTitle,
                 )
@@ -2757,8 +2757,8 @@ class LocationWizard(wx.Object):
                     return _("WKT string missing.")
 
                 grass.create_location(
-                    dbase=self.startpage.grassdatabase,
-                    location=self.startpage.location,
+                    path=self.startpage.grassdatabase,
+                    name=self.startpage.location,
                     wkt=self.wktpage.wktstring,
                     desc=self.startpage.locTitle,
                 )
