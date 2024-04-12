@@ -103,12 +103,12 @@ int Vedit_snap_line(struct Map_info *Map, struct Map_info **BgMap, int nbgmaps,
 
     struct line_cats *Cats;
 
-    Cats = Vect_new_cats_struct();
-
     G_debug(3, "Vedit_snap_line(): thresh=%g, to_vertex=%d", thresh, to_vertex);
 
     if (line > 0 && !Vect_line_alive(Map, line))
         return -1;
+
+    Cats = Vect_new_cats_struct();
 
     npoints = Points->n_points;
     x = Points->x;

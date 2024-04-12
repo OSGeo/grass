@@ -52,7 +52,6 @@ int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List, double x1,
 
     value = start;
 
-    Points = Vect_new_line_struct();
     Points_se = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
@@ -68,6 +67,8 @@ int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List, double x1,
     if (temp_line < 0) {
         return -1;
     }
+
+    Points = Vect_new_line_struct();
 
     Vect_line_box(Points_se, &box_se);
 
@@ -126,6 +127,7 @@ int Vedit_bulk_labeling(struct Map_info *Map, struct ilist *List, double x1,
     }
 
     if (Vect_delete_line(Map, temp_line) < 0) {
+        Vect_destroy_line_struct(Points);
         return -1;
     }
 

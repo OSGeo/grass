@@ -203,6 +203,8 @@ int Vedit_merge_lines(struct Map_info *Map, struct ilist *List)
     Vect_destroy_cats_struct(Cats1);
     Vect_destroy_cats_struct(Cats2);
 
+    Vect_destroy_list(List_in_box);
+
     return nlines_merged;
 }
 
