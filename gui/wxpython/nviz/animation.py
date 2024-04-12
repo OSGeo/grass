@@ -59,7 +59,7 @@ class Animation:
 
     def Start(self):
         """Start recording/playing"""
-        self.timer.Start(self.GetInterval())
+        self.timer.Start(int(self.GetInterval()))
 
     def Pause(self):
         """Pause recording/playing"""
