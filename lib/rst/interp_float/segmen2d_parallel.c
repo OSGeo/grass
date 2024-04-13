@@ -371,8 +371,9 @@ int IL_interp_segments_2d_parallel(
                                  indx[tid], b[tid]);
 #pragma omp critical
                         {
-                            params->check_points(params, data_local[tid], b[tid],
-                                                ertot, zmin, dnorm, skip_point);
+                            params->check_points(params, data_local[tid],
+                                                 b[tid], ertot, zmin, dnorm,
+                                                 skip_point);
                         }
                     }
                 } /*end of cv loop */
