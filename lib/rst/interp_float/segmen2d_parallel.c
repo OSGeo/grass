@@ -369,7 +369,7 @@ int IL_interp_segments_2d_parallel(
                         b[tid][0] = 0.;
                         G_lubksb(matrix[tid], data_local[tid]->n_points,
                                  indx[tid], b[tid]);
-#pragma omp critical    
+#pragma omp critical
                         {
                             params->check_points(params, data_local[tid], b[tid],
                                                 ertot, zmin, dnorm, skip_point);
