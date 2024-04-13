@@ -412,7 +412,7 @@ int main(int argc, char *argv[])
                   threads, abs(threads));
         threads = abs(threads);
     }
-  /* delete this block if parallel works for devi and cvdev */
+    /* delete this block if parallel works for devi and cvdev */
 #if 0
     if (parm.devi->answer && threads > 1) {
         G_warning(_(
