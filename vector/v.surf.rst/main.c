@@ -412,16 +412,16 @@ int main(int argc, char *argv[])
                   threads, abs(threads));
         threads = abs(threads);
     }
-    if (parm.devi->answer && threads > 1) {
-        G_warning(_(
-            "Parallel computation disabled when deviation output is required"));
-        threads = 1;
-    }
-    if (parm.cvdev->answer && threads > 1) {
-        G_warning(_("Parallel computation disabled when cross validation "
-                    "output is required"));
-        threads = 1;
-    }
+    // if (parm.devi->answer && threads > 1) {
+    //     G_warning(_(
+    //         "Parallel computation disabled when deviation output is required"));
+    //     threads = 1;
+    // }
+    // if (parm.cvdev->answer && threads > 1) {
+    //     G_warning(_("Parallel computation disabled when cross validation "
+    //                 "output is required"));
+    //     threads = 1;
+    // }
 #if defined(_OPENMP)
     omp_set_num_threads(threads);
 #else
