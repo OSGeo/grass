@@ -414,7 +414,8 @@ int main(int argc, char *argv[])
     }
     // if (parm.devi->answer && threads > 1) {
     //     G_warning(_(
-    //         "Parallel computation disabled when deviation output is required"));
+    //         "Parallel computation disabled when deviation output is
+    //         required"));
     //     threads = 1;
     // }
     // if (parm.cvdev->answer && threads > 1) {
