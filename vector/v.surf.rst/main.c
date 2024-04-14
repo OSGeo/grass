@@ -412,19 +412,7 @@ int main(int argc, char *argv[])
                   threads, abs(threads));
         threads = abs(threads);
     }
-    /* delete this block if parallel works for devi and cvdev */
-#if 0
-    if (parm.devi->answer && threads > 1) {
-        G_warning(_(
-            "Parallel computation disabled when deviation output is required"));
-        threads = 1;
-    }
-    if (parm.cvdev->answer && threads > 1) {
-        G_warning(_("Parallel computation disabled when cross validation "
-                    "output is required"));
-        threads = 1;
-    }
-#endif
+
 #if defined(_OPENMP)
     omp_set_num_threads(threads);
 #else

@@ -359,8 +359,11 @@ int IL_interp_segments_2d_parallel(
                         G_lubksb(matrix[tid], data_local[tid]->n_points + 1,
                                  indx[tid], b[tid]);
                         /* put here condition to skip error if not needed */
-                        params->check_points(params, data_local[tid], b[tid],
-                                             ertot, zmin, dnorm, skip_point);
+#pragma omp critical    
+                    {
+                            params->check_points(params, data_local[tid], b[tid],
+                                                ertot, zmin, dnorm, skip_point);
+                        }
                     }
                     else if (segtest == 1) {
                         for (i = 0; i < data_local[tid]->n_points - 1; i++) {
