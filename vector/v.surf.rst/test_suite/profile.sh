@@ -5,7 +5,7 @@ OUTFILE=callgrind.out.1196
 g.copy vect=elev_lid792_bepts,lidar_test
 v.build lidar_test
 g.region n=221230 s=220816 w=639090 e=639530 res=0.5 -p
-CMD="v.surf.rst in=lidar_test elev=omp_test.rst nproc=16 --o"
+CMD="v.surf.rst in=lidar_test elev=omp_test.rst --o"
 time $CMD
 
 valgrind --tool=callgrind --callgrind-out-file=$OUTFILE --trace-children=yes $CMD
