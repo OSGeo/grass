@@ -67,7 +67,11 @@ from grass.script import task as gtask
 class Model:
     """Class representing the model"""
 
-    def __init__(self, canvas=None):
+    def __init__(
+        self,
+        giface,
+        canvas=None,
+    ):
         self.items = list()  # list of ordered items (action/loop/condition)
 
         # model properties
@@ -81,6 +85,7 @@ class Model:
         self.variablesParams = dict()
 
         self.canvas = canvas
+        self._giface = giface
 
     def GetCanvas(self):
         """Get canvas or None"""
@@ -662,7 +667,9 @@ class Model:
         params = self.Parameterize()
         delInterData = False
         if params:
-            dlg = ModelParamDialog(parent=parent, model=self, params=params)
+            dlg = ModelParamDialog(
+                parent=parent, model=self, params=params, giface=self._giface
+            )
             dlg.CenterOnParent()
 
             ret = dlg.ShowModal()
@@ -3474,6 +3481,7 @@ class ModelParamDialog(wx.Dialog):
         self,
         parent,
         model,
+        giface,
         params,
         id=wx.ID_ANY,
         title=_("Model parameters"),
@@ -3483,6 +3491,7 @@ class ModelParamDialog(wx.Dialog):
         """Model parameters dialog"""
         self.parent = parent
         self._model = model
+        self._giface = giface
         self.params = params
         self.tasks = list()  # list of tasks/pages
 
@@ -3571,7 +3580,9 @@ class ModelParamDialog(wx.Dialog):
             parent=self,
             id=wx.ID_ANY,
             task=task,
-            giface=GraphicalModelerGrassInterface(self._model),
+            giface=GraphicalModelerGrassInterface(
+                model=self._model, giface=self._giface
+            ),
         )
         self.tasks.append(task)
 
