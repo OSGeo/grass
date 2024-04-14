@@ -59,7 +59,7 @@ def print_map_semantic_label(name, label_reader):
         with RasterRow(name) as rast:
             semantic_label = rast.info.semantic_label
             if semantic_label:
-                label_reader.print_info(semantic_label)
+                label_reader.print_info(semantic_label=semantic_label)
             else:
                 gs.info(_("No semantic label assigned to <{}>").format(name))
     except OpenError as e:
