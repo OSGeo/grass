@@ -59,6 +59,11 @@ jobs:
             python3-matplotlib,python3-numpy,python3-ply,python3-pywin32,\
             python3-wxpython,regex-devel,zstd-devel"
 
+      - name: Set number of cores for compilation
+        run: |
+          echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
+        shell: msys2 {0}
+
       - name: Compile GRASS GIS
         run: D:\msys64\usr\bin\bash.exe -l (''+(Get-Location)+'\.github\workflows\build_osgeo4w.sh') (Get-Location)
 
