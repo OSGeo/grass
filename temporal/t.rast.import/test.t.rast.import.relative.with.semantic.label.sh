@@ -65,7 +65,7 @@ t.rast.import --o input=strds_export.tar.bz2 output=precip_rel directory=test\
           -oe title="A test" description="Description of a test"
 r.info prec_1
 
-# Check the raster maps semnatic label
+# Check the raster maps semantic label
 [[ ! "$(r.semantic.label prec_1 operation=print)" == "S2 Visible (Coastal/Aerosol)" ]] && echo "Semantic label of prec_1 raster map is not equal." && exit 1
 [[ ! "$(r.semantic.label prec_2 operation=print)" == "S2 Visible (Blue)" ]] && echo "Semantic label of prec_2 raster map is not equal." && exit 1
 [[ ! "$(r.semantic.label prec_3 operation=print)" == "S2 Visible (Green)" ]] && echo "Semantic label of prec_3 raster map is not equal." && exit 1
