@@ -657,7 +657,7 @@ int main(int argc, char *argv[])
                       Tmp_fd_xy, create_devi, NULL, cv, parm.wheresql->answer);
 
 #if defined(_OPENMP)
-    if (cv != NULL || create_devi != NULL) {
+    if (cv || create_devi) {
         /* use the particular check_point function for cv or dev*/
         /* IL_interp_segments_2d_parallel should use these functions*/
         IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,

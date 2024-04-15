@@ -203,12 +203,10 @@ int IL_check_at_points_2d_cvdev(struct interp_params *params,
 {
     int n_points = data->n_points;        /* number of points */
     struct triple *points = data->points; /* points for interpolation */
-    double east = data->xmax;
     double west = data->x_orig;
-    double north = data->ymax;
     double south = data->y_orig;
     double /* rfsta2, errmax, */ h, xx, yy, r2, hz, zz, err, xmm, ymm, r;
-    int /* n1, */ mm, m;
+    int /* n1, */ m;
 
     if (params->cv) { /* one point is skipped for cross-validation*/
         n_points -= 1;
