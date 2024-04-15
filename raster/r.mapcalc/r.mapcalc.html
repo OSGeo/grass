@@ -392,7 +392,10 @@ Note, that the row() and col() indexing starts with 1.
 <h3>Data types and their precision</h3>
 
 There are three data types that can be used within the mapcalc expression. They
-are defined with certain precision and within certain value range.
+are defined with certain precision and within certain value range. The
+following table reports precision and value range info on AMD64 (x86-64)
+architectures compiled with GCC/CLANG. Note that although this setting is the
+most frequent one, the ranges could differ for different architectures.
 
 <p><div class="code"><pre>
 data type               precision and value range info
@@ -410,10 +413,10 @@ data type               precision and value range info
  null                   NULL value. Refer to section "NULL support" below.
 </pre></div>
 
-Note that the value counter rotates when the value range is reached. E.g., if
-your expression is <tt>a = int(2147483648)</tt>, you will get NULL value.
-For expression <tt>a = int(2147483649)</tt>, you will reach the lowest value
-possible instead, i.e. -2147483647.
+Note that the value counter wraps around when the value overflows its range.
+E.g., if your expression is <tt>a = int(2147483648)</tt>, you will get NULL
+value. For expression <tt>a = int(2147483649)</tt>, you will reach the lowest
+value possible instead, i.e. -2147483647.
 
 <h3>Floating point values in the expression</h3>
 
