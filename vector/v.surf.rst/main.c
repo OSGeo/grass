@@ -38,7 +38,6 @@
 #include <grass/linkm.h>
 #include <grass/bitmap.h>
 #include <grass/interpf.h>
-
 #include <grass/qtree.h>
 #include <grass/dataquad.h>
 #include <grass/gmath.h>
@@ -657,11 +656,28 @@ int main(int argc, char *argv[])
                       Tmp_fd_z, Tmp_fd_dx, Tmp_fd_dy, Tmp_fd_xx, Tmp_fd_yy,
                       Tmp_fd_xy, create_devi, NULL, cv, parm.wheresql->answer);
 
+#if defined(_OPENMP) 
+    if (cv != NULL || create_devi != NULL) { 
+        /* use the particular check_point function for cv or dev*/
+        /* IL_interp_segments_2d_parallel should use these functions*/
+        IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,
+                IL_check_at_points_2d_cvdev, IL_secpar_loop_2d, IL_crst, IL_crstg,
+                IL_write_temp_2d, IL_write_point_2d);
+    }
+    else {
+        IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,
+                IL_check_at_points_2d, IL_secpar_loop_2d, IL_crst, IL_crstg,
+                IL_write_temp_2d, NULL);
+    }
+#else
     IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,
-                    IL_check_at_points_2d, IL_secpar_loop_2d, IL_crst, IL_crstg,
-                    IL_write_temp_2d);
+        IL_check_at_points_2d, IL_secpar_loop_2d, IL_crst, IL_crstg,
+        IL_write_temp_2d, NULL);
+#endif
+
 
     totsegm = IL_vector_input_data_2d(&params, &Map, with_z ? 0 : field, zcol,
+
                                       scol, info, &xmin, &xmax, &ymin, &ymax,
                                       &zmin, &zmax, &NPOINT, &dmax);
     if (totsegm <= 0) {
@@ -745,9 +761,9 @@ int main(int argc, char *argv[])
 #if defined(_OPENMP)
     G_message(_("Processing segments in parallel..."));
     if (IL_interp_segments_2d_parallel(&params, info, info->root, bitmask, zmin,
-                                       zmax, &zminac, &zmaxac, &gmin, &gmax,
-                                       &c1min, &c1max, &c2min, &c2max, &ertot,
-                                       totsegm, n_cols, dnorm, threads) < 0) {
+                                    zmax, &zminac, &zmaxac, &gmin, &gmax,
+                                    &c1min, &c1max, &c2min, &c2max, &ertot,
+                                    totsegm, n_cols, dnorm, threads) < 0) {
         clean();
         G_fatal_error(_("Interp_segmets failed"));
     }
