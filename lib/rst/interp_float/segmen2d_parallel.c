@@ -296,14 +296,14 @@ int IL_interp_segments_2d_parallel(
                 target_point.x = 0;
                 target_point.y = 0;
                 target_point.z = 0;
-  
+
                 /* one time interpolation and devi */
                 if (!params->cv) {
                     if (/* params */
-                        IL_matrix_create_alloc(
-                            params, data_local[tid]->points,
-                            data_local[tid]->n_points, matrix[tid],
-                            indx[tid], A[tid]) < 0) {
+                        IL_matrix_create_alloc(params, data_local[tid]->points,
+                                               data_local[tid]->n_points,
+                                               matrix[tid], indx[tid],
+                                               A[tid]) < 0) {
                         some_thread_failed = -1;
                         continue;
                     }
@@ -311,36 +311,40 @@ int IL_interp_segments_2d_parallel(
                     for (i = 0; i < data_local[tid]->n_points; i++) {
                         b[tid][i + 1] = data_local[tid]->points[i].z;
                     }
-                        b[tid][0] = 0.;
-                        G_lubksb(matrix[tid], data_local[tid]->n_points + 1,
-                                 indx[tid], b[tid]);
-                        /* put here condition to skip error if not needed */
+                    b[tid][0] = 0.;
+                    G_lubksb(matrix[tid], data_local[tid]->n_points + 1,
+                             indx[tid], b[tid]);
+                    /* put here condition to skip error if not needed */
 
-                    if (!params->create_devi) { /* check_points only for one time interpolation */
+                    if (!params->create_devi) { /* check_points only for one
+                                                   time interpolation */
                         params->check_points(params, data_local[tid], b[tid],
                                              ertot, zmin, dnorm, &target_point);
                     }
                 }
 
-                npoints = (params->cv || params->create_devi) ? data_local[tid]->n_points : 0;
-                for (point_index = 0; point_index < npoints; point_index++) { /* loop only for cv or devi*/
+                npoints = (params->cv || params->create_devi)
+                              ? data_local[tid]->n_points
+                              : 0;
+                for (point_index = 0; point_index < npoints;
+                     point_index++) { /* loop only for cv or devi*/
                     if (params->cv) { /* cv: skip one point */
                         /* skip point for cv */
                         target_point.x = point[point_index].x;
                         target_point.y = point[point_index].y;
                         target_point.z = point[point_index].z;
 
-                        xx = target_point.x * dnorm +
-                                data_local[tid]->x_orig + params->x_orig;
-                        yy = target_point.y * dnorm +
-                                data_local[tid]->y_orig + params->y_orig;
+                        xx = target_point.x * dnorm + data_local[tid]->x_orig +
+                             params->x_orig;
+                        yy = target_point.y * dnorm + data_local[tid]->y_orig +
+                             params->y_orig;
                         /* zz = point[point_index].z; */
 
                         if (xx >= data_local[tid]->x_orig + params->x_orig &&
                             xx <= data_local[tid]->xmax + params->x_orig &&
                             yy >= data_local[tid]->y_orig + params->y_orig &&
                             yy <= data_local[tid]->ymax + params->y_orig) {
-                            
+
                             j = 0;
                             for (k = 0; k < npoints; k++) {
                                 if (k != point_index) {
@@ -361,19 +365,20 @@ int IL_interp_segments_2d_parallel(
                                 continue;
                             }
 
-                            for (i = 0; i < data_local[tid]->n_points - 1; i++) {
+                            for (i = 0; i < data_local[tid]->n_points - 1;
+                                 i++) {
                                 b[tid][i + 1] = data_local[tid]->points[i].z;
                             }
                             b[tid][0] = 0.;
                             G_lubksb(matrix[tid], data_local[tid]->n_points,
-                                    indx[tid], b[tid]);
+                                     indx[tid], b[tid]);
                         }
                         else {
                             continue;
-                        } 
+                        }
                     } /* cv: skip one point */
 
-                    if (params->create_devi){
+                    if (params->create_devi) {
                         target_point.x = data_local[tid]->points[point_index].x;
                         target_point.y = data_local[tid]->points[point_index].y;
                         target_point.z = data_local[tid]->points[point_index].z;
@@ -381,28 +386,29 @@ int IL_interp_segments_2d_parallel(
 
                     /* x, y, z is required input, while xmm, ymm, err output*/
                     pointz = target_point.z;
-                    params->check_points(params, data_local[tid], b[tid],
-                                         ertot, zmin, dnorm, &target_point);
-            
+                    params->check_points(params, data_local[tid], b[tid], ertot,
+                                         zmin, dnorm, &target_point);
+
                     err = target_point.z;
                     target_point.z = pointz + zmin;
                     xmm = target_point.x;
                     ymm = target_point.y;
 
-                    /* write out vector (point), if the point is inside the region*/
+                    /* write out vector (point), if the point is inside the
+                     * region*/
                     if (xmm >= data_local[tid]->x_orig + params->x_orig &&
                         xmm <= data_local[tid]->xmax + params->x_orig &&
                         ymm >= data_local[tid]->y_orig + params->y_orig &&
                         ymm <= data_local[tid]->ymax + params->y_orig) {
-                        /* vect append, count, vect_write, db_execute will have conflicts between threads */
+                        /* vect append, count, vect_write, db_execute will have
+                         * conflicts between threads */
 #pragma omp critical
                         {
                             params->wr_point(target_point, err);
                         }
-                    } 
+                    }
                 } /* end of computations for every point in cv or devi*/
-            
-                
+
                 /* write out grid*/
                 if (!params->cv) {
                     if ((params->Tmp_fd_z != NULL) ||

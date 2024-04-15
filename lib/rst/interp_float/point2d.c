@@ -54,8 +54,7 @@ int IL_check_at_points_2d(struct interp_params *params,
                           double *b,     /*!< solution of linear equations */
                           double *ertot, /*!< total error */
                           double zmin,   /*!< min z-value */
-                          double dnorm, 
-                          struct triple *skip_point)
+                          double dnorm, struct triple *skip_point)
 {
     int n_points = data->n_points;        /* number of points */
     struct triple *points = data->points; /* points for interpolation */
@@ -196,12 +195,11 @@ int IL_check_at_points_2d(struct interp_params *params,
 }
 
 int IL_check_at_points_2d_cvdev(struct interp_params *params,
-                          struct quaddata *data, /*!< current region */
-                          double *b,     /*!< solution of linear equations */
-                          double *ertot, /*!< total error */
-                          double zmin,   /*!< min z-value */
-                          double dnorm, 
-                          struct triple* target_point)
+                                struct quaddata *data, /*!< current region */
+                                double *b, /*!< solution of linear equations */
+                                double *ertot, /*!< total error */
+                                double zmin,   /*!< min z-value */
+                                double dnorm, struct triple *target_point)
 {
     int n_points = data->n_points;        /* number of points */
     struct triple *points = data->points; /* points for interpolation */
@@ -211,12 +209,12 @@ int IL_check_at_points_2d_cvdev(struct interp_params *params,
     double south = data->y_orig;
     double /* rfsta2, errmax, */ h, xx, yy, r2, hz, zz, err, xmm, ymm, r;
     int /* n1, */ mm, m;
-    
-    if (params->cv){ /* one point is skipped for cross-validation*/
+
+    if (params->cv) { /* one point is skipped for cross-validation*/
         n_points -= 1;
     }
-    
-    h = b[0];    
+
+    h = b[0];
     for (m = 1; m <= n_points; m++) {
         xx = target_point->x - points[m - 1].x;
         yy = target_point->y - points[m - 1].y;
@@ -243,14 +241,14 @@ int IL_check_at_points_2d_cvdev(struct interp_params *params,
     target_point->x = xmm;
     target_point->y = ymm;
     target_point->z = err;
-    
+
     return 1;
 }
 
-int IL_write_point_2d(struct triple point, double err) {
+int IL_write_point_2d(struct triple point, double err)
+{
 
     char buf[1024];
-
 
     Vect_reset_line(Pnts);
     Vect_reset_cats(Cats2);
@@ -271,10 +269,9 @@ int IL_write_point_2d(struct triple point, double err) {
     if (db_execute_immediate(driver2, &sql2) != DB_OK) {
         db_close_database(driver2);
         db_shutdown_driver(driver2);
-        G_fatal_error("Cannot insert new row: %s",
-                        db_get_string(&sql2));
+        G_fatal_error("Cannot insert new row: %s", db_get_string(&sql2));
     }
     count++;
 
-    return 1;           
+    return 1;
 }

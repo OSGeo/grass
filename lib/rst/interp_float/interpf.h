@@ -189,8 +189,9 @@ int IL_output_2d(struct interp_params *, struct Cell_head *, double, double,
 /* point2d.c */
 int IL_check_at_points_2d(struct interp_params *, struct quaddata *, double *,
                           double *, double, double, struct triple *);
-int IL_check_at_points_2d_cvdev(struct interp_params *, struct quaddata *, double *,
-                          double *, double, double, struct triple *);
+int IL_check_at_points_2d_cvdev(struct interp_params *, struct quaddata *,
+                                double *, double *, double, double,
+                                struct triple *);
 int IL_write_point_2d(struct triple, double);
 
 /* resout2d.c */
