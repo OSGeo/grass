@@ -118,7 +118,7 @@ jobs:
 
       - name: Upload the tarball to the Cloud
         run: |
-          export COV_RES_PATH=`pwd`/grass.tgz
+          export COV_RES_PATH="$(pwd)/grass.tgz"
           curl -X PUT \
             --header 'Content-Type: application/json' \
             --upload-file $COV_RES_PATH \
