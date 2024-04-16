@@ -6,7 +6,7 @@
 #include <grass/parson.h>
 
 // Function to initialize a JSON object with a mapsets array
-static JSON_Object *initialize_json_object()
+static JSON_Object *initialize_json_object(void)
 {
     JSON_Value *root_value = json_value_init_object();
     if (!root_value) {
@@ -70,7 +70,7 @@ void list_accessible_mapsets(const char *fs)
 }
 
 // Lists all accessible mapsets in JSON format
-void list_accessible_mapsets_json()
+void list_accessible_mapsets_json(void)
 {
     const char *name;
     JSON_Object *root_object = initialize_json_object();
