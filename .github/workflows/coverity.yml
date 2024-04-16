@@ -101,7 +101,7 @@ jobs:
         run: |
           curl -X POST \
           -d version="main" \
-          -d description="`git rev-parse --abbrev-ref HEAD` `git rev-parse --short HEAD`" \
+          -d description="$(git rev-parse --abbrev-ref HEAD) $(git rev-parse --short HEAD)" \
           -d email=$EMAIL \
           -d token=$TOKEN \
           -d file_name="grass.tgz" \
