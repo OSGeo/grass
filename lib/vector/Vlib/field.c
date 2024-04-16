@@ -626,7 +626,7 @@ int Vect_get_field_number(struct Map_info *Map, const char *field)
 }
 
 /*!
-   \brief Frees all memory associated with a struct field_info
+   \brief Free a struct field_info and all memory associated with it.
 
    \param[in,out] fi pointer to field_info structure
  */
