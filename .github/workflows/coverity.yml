@@ -123,7 +123,6 @@ jobs:
             --header 'Content-Type: application/json' \
             --upload-file $COV_RES_PATH \
             $UPLOAD_URL
-    
       - name: Trigger the build on Scan
         run: |
           curl -X PUT \
