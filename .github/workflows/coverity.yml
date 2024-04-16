@@ -25,7 +25,7 @@ jobs:
           sudo apt-get install -y wget git gawk findutils jq
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
-              
+
       - name: Create installation directory
         run: |
           mkdir $HOME/install
@@ -38,7 +38,7 @@ jobs:
           tar xzf cov-analysis-linux64.tar.gz --strip 1 -C cov-analysis-linux64
         env:
           TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
-          
+
       - name: Set number of cores for compilation
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
@@ -52,6 +52,7 @@ jobs:
           printenv | sort
           gcc --version
           ldd --version
+
       - name: Configure
         run: |
           echo "CFLAGS=${{ env.CFLAGS }}" >> $GITHUB_ENV
@@ -79,22 +80,23 @@ jobs:
         env:
           CFLAGS: -fPIC -g
           CXXFLAGS: -fPIC -g
-          
+
       - name: Build with cov-build
         run: |
           pwd
           export PATH=`pwd`/cov-analysis-linux64/bin:$PATH
           cov-build --dir cov-int make
-          
+
       - name: Put results into Tarball
         run: | 
           tar czvf grass.tgz cov-int
-      - name: Upload Tarball of Scan Results
+
+      - name: Upload Artifact of Scan Results
         uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: grass.tgz
           path: grass.tgz
-          
+
       - name: Initialize Build in Coverity Cloud
         run: |
           curl -X POST \
@@ -108,7 +110,7 @@ jobs:
         env:
           TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
           EMAIL: ${{ secrets.COVERITY_USER }}
-          
+
       - name: Save Upload URL and Build ID from Initialization Response
         run: |
           echo "UPLOAD_URL=$(jq -r '.url' response)" >> $GITHUB_ENV
