@@ -162,14 +162,14 @@ cat proj4.description | g.proj -w proj4=-
 transformation parameters:<br>
 
 <div class="code"><pre>
-g.proj -c epsg=4326 location=latlong
+g.proj -c epsg=4326 project=latlong
 </pre></div>
 
 <p>Create a new location with the co-ordinate system referred to by ESRI-EPSG code
 900913 (<a href="http://spatialreference.org/ref/user/6/">Google Mercator Projection</a>)<br>
 
 <div class="code"><pre>
-g.proj -c epsg=900913 location=google
+g.proj -c epsg=900913 project=google
 </pre></div>
 
 <p>Create a new location with the co-ordinate system referred to by EPSG code
@@ -178,21 +178,21 @@ g.proj -c epsg=900913 location=google
 <div class="code"><pre>
 # list available datums for EPSG code 29900
 g.proj -t datumtrans=-1 epsg=29900
-g.proj -c epsg=29900 datumtrans=2 location=irish_grid
+g.proj -c epsg=29900 datumtrans=2 project=irish_grid
 </pre></div>
 
 <p>Create a new location with the same co-ordinate system as the current
 location, but forcing a change to datum transformation parameter set no. 1:<br>
 
 <div class="code"><pre>
-g.proj -c location=newloc -t datumtrans=1
+g.proj -c project=newloc -t datumtrans=1
 </pre></div>
 
 <p>Create a new location with the co-ordinate system from a WKT definition
 stored in a text file:<br>
 
 <div class="code"><pre>
-g.proj -c wkt=irish_grid.prj location=irish_grid
+g.proj -c wkt=irish_grid.prj project=irish_grid
 </pre></div>
 
 <p>Create a new location from a PROJ description, explicitly
@@ -200,7 +200,7 @@ specifying a datum and using the default datum transformation
 parameters:<br>
 
 <div class="code"><pre>
-g.proj -c location=spain proj4="+proj=utm +zone=30 +ellps=intl" datum=eur50 datumtrans=0
+g.proj -c project=spain proj4="+proj=utm +zone=30 +ellps=intl" datum=eur50 datumtrans=0
 </pre></div>
 
 <h3>Using g.proj output for GDAL/OGR tools</h3>

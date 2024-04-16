@@ -1700,6 +1700,9 @@ def mapsets(search_path=False, env=None):
 
 
 def create_location(*args, **kwargs):
+    if "dbase" in kwargs:
+        kwargs["path"] = kwargs["dbase"]
+        del kwargs["dbase"]
     if "location" in kwargs:
         kwargs["name"] = kwargs["location"]
         del kwargs["location"]
@@ -1791,7 +1794,7 @@ def create_project(
             quiet=True,
             flags="t",
             epsg=epsg,
-            location=mapset_path.location,
+            project=mapset_path.location,
             stderr=PIPE,
             env=env,
             **kwargs,
@@ -1802,7 +1805,7 @@ def create_project(
             quiet=True,
             flags="t",
             proj4=proj4,
-            location=mapset_path.location,
+            project=mapset_path.location,
             stderr=PIPE,
             env=env,
             **kwargs,
@@ -1812,7 +1815,7 @@ def create_project(
             "g.proj",
             quiet=True,
             georef=filename,
-            location=mapset_path.location,
+            project=mapset_path.location,
             stderr=PIPE,
             env=env,
         )
@@ -1822,7 +1825,7 @@ def create_project(
                 "g.proj",
                 quiet=True,
                 wkt=wkt,
-                location=mapset_path.location,
+                project=mapset_path.location,
                 stderr=PIPE,
                 env=env,
             )
@@ -1831,7 +1834,7 @@ def create_project(
                 "g.proj",
                 quiet=True,
                 wkt="-",
-                location=mapset_path.location,
+                project=mapset_path.location,
                 stderr=PIPE,
                 stdin=PIPE,
                 env=env,
