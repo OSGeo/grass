@@ -22,9 +22,10 @@ jobs:
       - name: Get dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y wget git gawk findutils
+          sudo apt-get install -y wget git gawk findutils jq
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
+              
       - name: Create installation directory
         run: |
           mkdir $HOME/install
@@ -37,6 +38,7 @@ jobs:
           tar xzf cov-analysis-linux64.tar.gz --strip 1 -C cov-analysis-linux64
         env:
           TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
+          
       - name: Set number of cores for compilation
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
@@ -77,22 +79,53 @@ jobs:
         env:
           CFLAGS: -fPIC -g
           CXXFLAGS: -fPIC -g
+          
       - name: Build with cov-build
         run: |
           pwd
           export PATH=`pwd`/cov-analysis-linux64/bin:$PATH
           cov-build --dir cov-int make
-      - name: Submit to Coverity Scan
-        run: |
+          
+      - name: Put results into Tarball
+        run: | 
           tar czvf grass.tgz cov-int
-          curl \
-            --form project=grass \
-            --form token=$TOKEN \
-            --form email=$EMAIL \
-            --form file=@grass.tgz \
-            --form version=main \
-            --form description="`git rev-parse --abbrev-ref HEAD` `git rev-parse --short HEAD`" \
-            https://scan.coverity.com/builds?project=grass
+      - name: Upload Tarball of Scan Results
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: grass.tgz
+          path: grass.tgz
+          
+      - name: Initialize Build in Coverity Cloud
+        run: |
+          curl -X POST \
+          -d version="main" \
+          -d description="`git rev-parse --abbrev-ref HEAD` `git rev-parse --short HEAD`" \
+          -d email=$EMAIL \
+          -d token=$TOKEN \
+          -d file_name="grass.tgz" \
+          https://scan.coverity.com/projects/1038/builds/init \
+          | tee response
         env:
           TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
           EMAIL: ${{ secrets.COVERITY_USER }}
+          
+      - name: Save Upload URL and Build ID from Initialization Response
+        run: |
+          echo "UPLOAD_URL=$(jq -r '.url' response)" >> $GITHUB_ENV
+          echo "BUILD_ID=$(jq -r '.build_id' response)" >> $GITHUB_ENV
+
+      - name: Upload the tarball to the Cloud
+        run: |
+          export COV_RES_PATH=`pwd`/grass.tgz
+          curl -X PUT \
+            --header 'Content-Type: application/json' \
+            --upload-file $COV_RES_PATH \
+            $UPLOAD_URL
+    
+      - name: Trigger the build on Scan
+        run: |
+          curl -X PUT \
+          -d token=$TOKEN \
+          https://scan.coverity.com/projects/1038/builds/$BUILD_ID/enqueue
+        env:
+          TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
