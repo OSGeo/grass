@@ -56,6 +56,9 @@ class ProfileFrame(BasePlotFrame):
         self.SetTitle(_("GRASS Profile Analysis Tool"))
         # in case of degrees, we want to use meters
         self._units = units if "degree" not in units else "meters"
+        self._proj_with_wgs84_ellipsoid = (
+            grass.parse_command("g.proj", flags="g").get("ellps") == "wgs84"
+        )
 
         #
         # Init variables
@@ -144,13 +147,53 @@ class ProfileFrame(BasePlotFrame):
 
         dlg.Destroy()
 
+    def CalculateSpehereHaversineDistance(self, lat1, lon1, lat2, lon2):
+        """Calculate sphere Haversine formula distance between two points
+
+        https://www.igismap.com/haversine-formula-calculate-geographic-distance-earth/
+
+        :param float lat1: lattitude coordinate of first point
+        :param float lon1: longitude coordinate of first point
+        :param float lat2: lattitude coordinate of second point
+        :param float lon2: longitude coordinate of second point
+
+        :return: spehere Haversine formula distance in meters
+                 between two points
+        :rtype: float
+
+        :example:
+
+        >>> lat1 = 50.32382936362351
+        >>> lon1 = 14.391724590702447
+        >>> lat2 = 50.18350605453111
+        >>> lon2 = 14.542638338216916
+        >>> CalculateSpehereHaversineDistancec(lat1, lon1, lat2, lon2)
+        >>> 18936.28570818606
+        """
+
+        r = 6371000  # radius of Earth in meters
+        lat_diff = math.radians(lat2 - lat1)
+        lon_diff = math.radians(lon2 - lon1)
+
+        lat1 = math.radians(lat1)
+        lat2 = math.radians(lat2)
+
+        a = (
+            math.sin(lat_diff / 2.0) ** 2
+            + math.cos(lat1) * math.cos(lat2) * math.sin(lon_diff / 2.0) ** 2
+        )
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+        return r * c
+
     def SetupProfile(self):
         """Create coordinate string for profiling. Create segment
         list for transect segment markers.
         """
         # create list of coordinate points for r.profile
         dist = 0
+        segment_sphere_dist = 0
         cumdist = 0
+        segment_sphere_cum_dist = 0
         self.coordstr = ""
         lasteast = lastnorth = None
 
@@ -201,18 +244,34 @@ class ProfileFrame(BasePlotFrame):
 
                 # calculate distance between coordinate points
                 if lasteast and lastnorth:
+                    if self._proj_with_wgs84_ellipsoid:
+                        segment_sphere_dist = self.CalculateSpehereHaversineDistance(
+                            lat1=lastnorth,
+                            lon1=lasteast,
+                            lat2=point[1],
+                            lon2=point[0],
+                        )
                     dist = math.sqrt(
                         math.pow((lasteast - point[0]), 2)
                         + math.pow((lastnorth - point[1]), 2)
                     )
                 cumdist += dist
+                if self._proj_with_wgs84_ellipsoid:
+                    segment_sphere_cum_dist += segment_sphere_dist
 
                 # store total transect length
                 self.transect_length = cumdist
 
                 # build a list of distance,value pairs for each segment of
                 # transect
-                self.seglist.append((cumdist, val))
+                self.seglist.append(
+                    (
+                        segment_sphere_cum_dist
+                        if self._proj_with_wgs84_ellipsoid
+                        else cumdist,
+                        val,
+                    ),
+                )
                 lasteast = point[0]
                 lastnorth = point[1]
 
