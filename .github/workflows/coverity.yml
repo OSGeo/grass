@@ -104,7 +104,7 @@ jobs:
           -d description="$(git rev-parse --abbrev-ref HEAD) $(git rev-parse --short HEAD)" \
           -d email=$EMAIL \
           -d token=$TOKEN \
-          -d file_name="grass.tgz" \
+          -d file_name=grass.tgz \
           https://scan.coverity.com/projects/1038/builds/init \
           | tee response
         env:
