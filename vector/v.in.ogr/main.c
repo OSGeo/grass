@@ -1145,12 +1145,12 @@ int main(int argc, char *argv[])
 
             /* Create table */
             i = 0;
-            sprintf(buf, "create table %s (%s %s", Fi->table, col_info[i].name,
-                    col_info[i].type);
+            sprintf(buf, "create table %s (\"%s\" %s", Fi->table,
+                    col_info[i].name, col_info[i].type);
             db_set_string(&sql, buf);
 
             for (i = 1; i < ncols_out; i++) {
-                sprintf(buf, ", %s %s", col_info[i].name, col_info[i].type);
+                sprintf(buf, ", \"%s\" %s", col_info[i].name, col_info[i].type);
                 db_append_string(&sql, buf);
             }
 
