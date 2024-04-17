@@ -3,11 +3,11 @@ name: Coverity Scan
 
 on:
   workflow_dispatch: # run whenever a contributor calls it
-  schedule:
-    - cron: '48 5 * * *' # Run at 05:48
-    # Coverity will let GRASS do a scan a maximum of twice per day, so this
-    # schedule will help GRASS fit within that limit with some additional space
-    # for manual runs
+#  schedule:
+#    - cron: '48 5 * * *' # Run at 05:48
+#    # Coverity will let GRASS do a scan a maximum of twice per day, so this
+#    # schedule will help GRASS fit within that limit with some additional space
+#    # for manual runs
 permissions:
   contents: read
   # action based off of
@@ -33,7 +33,7 @@ jobs:
       - name: Download Coverity Build Tool
         run: |
           wget -q https://scan.coverity.com/download/cxx/linux64 \
-            --post-data "token=$TOKEN&project=grass" -O cov-analysis-linux64.tar.gz
+            --post-data "token=${TOKEN}&project=grass" -O cov-analysis-linux64.tar.gz
           mkdir cov-analysis-linux64
           tar xzf cov-analysis-linux64.tar.gz --strip 1 -C cov-analysis-linux64
         env:
@@ -84,7 +84,7 @@ jobs:
       - name: Build with cov-build
         run: |
           pwd
-          export PATH=`pwd`/cov-analysis-linux64/bin:$PATH
+          export PATH="$(pwd)/cov-analysis-linux64/bin:${PATH}"
           cov-build --dir cov-int make
 
       - name: Put results into Tarball
@@ -97,36 +97,21 @@ jobs:
           name: grass.tgz
           path: grass.tgz
 
-      - name: Initialize Build in Coverity Cloud
+      - name: Submit to Coverity Scan
         run: |
-          curl -X POST \
-          -d version="main" \
-          -d description="$(git rev-parse --abbrev-ref HEAD) $(git rev-parse --short HEAD)" \
-          -d email=$EMAIL \
-          -d token=$TOKEN \
-          -d file_name="grass.tgz" \
-          https://scan.coverity.com/projects/1038/builds/init \
-          | tee response
+          version=$(head -n 3 include/VERSION | xargs | sed 's/ /./g')
+          commit=$(git rev-parse --short HEAD)
+          branch=$(git rev-parse --abbrev-ref HEAD)
+          desc="Version%3A${version}%2C%20commit%3${commit}%2C%20branch%3A${branch}."
+          echo "Submitting ${desc}"
+          tar czvf grass.tgz cov-int
+          curl \
+            --form "token=${TOKEN}" \
+            --form "email=${EMAIL}" \
+            --form "file=@grass.tgz" \
+            --form "version=${version}-${commit}" \
+            --form "description=${desc}" \
+            'https://scan.coverity.com/builds?project=grass'
         env:
           TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
           EMAIL: ${{ secrets.COVERITY_USER }}
-
-      - name: Save Upload URL and Build ID from Initialization Response
-        run: |
-          echo "UPLOAD_URL=$(jq -r '.url' response)" >> $GITHUB_ENV
-          echo "BUILD_ID=$(jq -r '.build_id' response)" >> $GITHUB_ENV
-
-      - name: Upload the tarball to the Cloud
-        run: |
-          export COV_RES_PATH="$(pwd)/grass.tgz"
-          curl -X PUT \
-            --header 'Content-Type: application/json' \
-            --upload-file $COV_RES_PATH \
-            $UPLOAD_URL
-      - name: Trigger the build on Scan
-        run: |
-          curl -X PUT \
-          -d token=$TOKEN \
-          https://scan.coverity.com/projects/1038/builds/$BUILD_ID/enqueue
-        env:
-          TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
