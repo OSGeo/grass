@@ -10,7 +10,7 @@ Import of Copernicus Sentinel-2 satellite scene footprints:
 
 <p>
 <div class="code"><pre>
-# run in Latitude-Longitude location (EPGS code 4326):
+# run in Latitude-Longitude project (EPGS code 4326):
 # download "sentinel:mgrs" layer:
 v.in.wfs url="https://geoserver.mundialis.de/geoserver/sentinel/wfs?" name="sentinel:mgrs" output=sentinel2_mgrs
 # download NRW ALKIS "ave:Flurstueck" attribute:
@@ -28,7 +28,7 @@ Download 25 ship wrecks from LINZ data service:
 
 <p>
 <div class="code"><pre>
-# run in LatLong location:
+# run in LatLong project:
 URL='http://wfs.data.linz.govt.nz/&lt;PUT YOUR API KEY HERE&gt;/wfs?'
 
 # download list of available layers to wms_capabilities.xml

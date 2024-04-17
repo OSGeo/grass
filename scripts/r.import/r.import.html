@@ -1,23 +1,24 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.import</em> imports a map or selected bands from a GDAL raster datasource
-into the current location and mapset. If the projection of the input
-does not match the projection of the location, the input is reprojected
-into the current location. If the projection of the input does match
-the projection of the location, the input is imported directly with
+into the current project (previously called location) and mapset.
+If the coordinate reference system (CRS) of the input
+does not match the CRS of the project, the input is reprojected
+into the current project. If the CRS of the input does match
+the CRS of the project, the input is imported directly with
 <a href="r.in.gdal.html">r.in.gdal</a>.
 
 <h2>NOTES</h2>
 
-<em>r.import</em> checks the projection metadata of the dataset to be
-imported against the current location's projection. If not identical a
+<em>r.import</em> checks the CRS metadata of the dataset to be
+imported against the current project's CRS. If not identical a
 related error message is shown.
 <br>
-To override this projection check (i.e. to use current location's projection)
-by assuming that the dataset has the same projection as the current location
+To override this projection check (i.e. to use current project's CRS)
+by assuming that the dataset has the same CRS as the current project
 the <b>-o</b> flag can be used. This is also useful when geodata to be
-imported do not contain any projection metadata at all. The user must be
-sure that the projection is identical in order to avoid to introduce data
+imported do not contain any CRS metadata at all. The user must be
+sure that the CRS is identical in order to avoid introducing data
 errors.
 
 <h3>Resolution</h3>
@@ -31,7 +32,7 @@ estimated resolution, e.g. 250 or 300 instead of 271.301, flag <b>-e</b>
 can be used first to obtain the estimate without importing the raster bands.
 Then the desired resolution is set with option <b>resolution_value</b>
 and option <b>resolution</b>=<em>value</em>.
-For latlong locations, the resolution might be set to arc seconds, e.g. 1, 3, 7.5,
+For latlong projects, the resolution might be set to arc seconds, e.g. 1, 3, 7.5,
 15, and 30 arc seconds are commonly used resolutions.
 
 <h3>Resampling methods</h3>
@@ -106,7 +107,7 @@ r.colors srtmv3_resamp10m color=elevation
 
 <h3>Import of WorldClim data</h3>
 Import of a subset from WorldClim <a href="http://worldclim.org/bioclim">Bioclim data set</a>,
-to be reprojected to current location projection (North Carolina sample dataset).
+to be reprojected to current project CRS (North Carolina sample dataset).
 Different resolutions are available, in this example we use the 2.5 arc-minutes
 resolution data. During import, we spatially subset the world data to the
 North Carolina region using the <em>extent</em> parameter:
@@ -125,7 +126,7 @@ gdal_translate -a_ullr -180 90 180 -60 bio1.bil bio1_fixed.tif
 # set computational region to North Carolina, 4000 m target pixel resolution
 g.region -d res=4000 -ap
 
-# subset to current region and reproject on the fly to current location projection,
+# subset to current region and reproject on the fly to current project CRS,
 # using -n since whole-world map is imported:
 r.import input=bio1_fixed.tif output=bioclim01 resample=bilinear \
          extent=region resolution=region -n

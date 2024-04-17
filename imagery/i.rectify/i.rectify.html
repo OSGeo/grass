@@ -19,34 +19,34 @@ imagery which include throusands of GCPs.
 If no ground control points are available, the
 <a href="wxGUI.gcp.html">Ground Control Points Manager</a>
 must be run before <em>i.rectify</em>. An image must be
-georeferences before it can reside in a standard coordinate
-LOCATION, and therefore be analyzed with the other map
-layers in the standard coordinate LOCATION. Upon
+georeferenced before it can reside in a standard coordinate
+project, and therefore be analyzed with the other map
+layers there. Upon
 completion of <em>i.rectify</em>, the rectified image is
-deposited in the target standard coordinate LOCATION. This
-LOCATION is selected using
+deposited in the target standard coordinate project. This
+project is selected using
 
 <em><a href="i.target.html">i.target</a></em>.
 
 <p>More than one raster map may be rectified at a time. Each cell file
 should be given a unique output file name. The rectified image or
-rectified raster maps will be located in the target LOCATION when the
+rectified raster maps will be located in the target project when the
 program is completed. The original unrectified files are not modified
 or removed.
 
 <p>If the <b>-c</b> flag is used, <em>i.rectify</em> will only rectify that
 portion of the image or raster map that occurs within the chosen window
-region in the target location, and only that portion of the cell
+region in the target project, and only that portion of the cell
 file will be relocated in the target database. It is
 important therefore, to check the current mapset window in
-the target LOCATION if the <b>-c</b> flag is used.
+the target project if the <b>-c</b> flag is used.
 
 <p>
 If you are rectifying a file with plans to patch it to
 another file using the GRASS program <em>r.patch</em>,
 choose option number one, the current window in the target
-location. This window, however, must be the default window
-for the target LOCATION. When a file being rectified is
+project. This window, however, must be the default window
+for the target project. When a file being rectified is
 smaller than the default window in which it is being
 rectified, NULLs are added to the rectified file. Patching
 files of the same size that contain NULL data,
