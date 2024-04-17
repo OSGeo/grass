@@ -63,6 +63,14 @@ int db__driver_open_database(dbHandle *handle)
             db_d_report_error();
             return DB_FAILED;
         }
+        /* Set SQL ANSI_QUOTES MODE which allow to use double quotes instead of
+         * backticks */
+        if (mysql_query(connection, "SET SQL_MODE=ANSI_QUOTES") != 0) {
+            db_d_append_error("%s %s", _("Unable to set SQL ANSI_QUOTES mode:"),
+                              mysql_error(connection));
+            db_d_report_error();
+            return DB_FAILED;
+        }
     }
 
     return DB_OK;
