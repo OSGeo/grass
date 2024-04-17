@@ -1271,7 +1271,6 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
             angle * rad2deg);
 
         Rast_write_history(shad_filename, &history);
-        if (shad_filename)
-            G_free(shad_filename);
+        G_free(shad_filename);
     }
 }
