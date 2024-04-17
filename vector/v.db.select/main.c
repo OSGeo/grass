@@ -287,8 +287,21 @@ int main(int argc, char **argv)
                       Fi->database, Fi->driver);
     db_set_error_handler_driver(driver);
 
-    if (options.cols->answer)
-        sprintf(query, "SELECT %s FROM ", options.cols->answer);
+    if (options.cols->answer) {
+        char col_sep[] = ",";
+        char *token = strtok(options.cols->answer, col_sep);
+
+        sprintf(query, "SELECT ");
+
+        while (token != NULL) {
+            sprintf(query + strlen(query), "\"%s\"", token);
+            token = strtok(NULL, col_sep);
+            if (token)
+                sprintf(query + strlen(query), "%c", *col_sep);
+        }
+
+        sprintf(query + strlen(query), " FROM ");
+    }
     else
         sprintf(query, "SELECT * FROM ");
 
