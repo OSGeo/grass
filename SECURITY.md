@@ -34,7 +34,7 @@ We prioritize the most recent stable release of GRASS GIS for security patches. 
 
 
 ## Vulnerability Scope
-Our security policy covers vulnerabilities in the GRASS GIS core codebase, official plugins, and any official distributions provided by the GRASS GIS team.
+Our security policy covers vulnerabilities in the GRASS GIS core codebase, official addons, and any official distributions provided by the GRASS GIS team.
 
 ## Responsible Disclosure
 We adhere to responsible disclosure practices. We appreciate your cooperation in allowing us time to address any reported vulnerabilities before disclosing them publicly. We ask that you refrain from disclosing any details of the vulnerability until we have had adequate time to provide a fix.
