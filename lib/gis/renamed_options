@@ -733,3 +733,5 @@ v.proj|location:project
 r.in.gdal|location:project
 g.proj|location:project
 v.in.ogr|location:project
+t.vect.import|location:project
+t.rast.import|location:project
