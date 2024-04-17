@@ -26,7 +26,7 @@
 # % keyword: import
 # % keyword: vector
 # % keyword: time
-# % keyword: create location
+# % keyword: create project
 # %end
 
 # %option G_OPT_F_INPUT
