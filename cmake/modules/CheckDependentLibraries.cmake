@@ -11,24 +11,30 @@ find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
 
 find_package(PROJ REQUIRED)
-add_library(PROJ INTERFACE IMPORTED GLOBAL)
-# set_property(TARGET PROJ PROPERTY INTERFACE_LINK_LIBRARIES
-#                                   ${PROJ_LIBRARY${find_library_suffix}})
-# set_property(TARGET PROJ PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-#                                   ${PROJ_INCLUDE_DIR})
+if(PROJ_FOUND)
+  add_library(PROJ INTERFACE IMPORTED GLOBAL)
+  set_property(TARGET PROJ PROPERTY INTERFACE_LINK_LIBRARIES
+                                  ${PROJ_LIBRARY${find_library_suffix}})
+  set_property(TARGET PROJ PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                  ${PROJ_INCLUDE_DIR})
+endif()
 
 find_package(GDAL REQUIRED)
-add_library(GDAL INTERFACE IMPORTED GLOBAL)
-# set_property(TARGET GDAL PROPERTY INTERFACE_LINK_LIBRARIES ${GDAL_LIBRARY})
-# set_property(TARGET GDAL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-#                                   ${GDAL_INCLUDE_DIR})
+if(GDAL_FOUND)
+  add_library(GDAL INTERFACE IMPORTED GLOBAL)
+  set_property(TARGET GDAL PROPERTY INTERFACE_LINK_LIBRARIES ${GDAL_LIBRARY})
+  set_property(TARGET GDAL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                  ${GDAL_INCLUDE_DIR})
+endif()
 
 find_package(PNG REQUIRED)
-add_library(LIBPNG INTERFACE IMPORTED GLOBAL)
-# set_property(TARGET LIBPNG PROPERTY INTERFACE_LINK_LIBRARIES
-#                                     ${PNG_LIBRARY${find_library_suffix}})
-# set_property(TARGET LIBPNG PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-#                                     ${PNG_INCLUDE_DIR})
+if(PNG_FOUND)
+  add_library(LIBPNG INTERFACE IMPORTED GLOBAL)
+  set_property(TARGET LIBPNG PROPERTY INTERFACE_LINK_LIBRARIES
+                                    ${PNG_LIBRARY${find_library_suffix}})
+  set_property(TARGET LIBPNG PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                    ${PNG_INCLUDE_DIR})
+endif()
 
 find_package(JPEG)
 if(JPEG_FOUND)
@@ -38,49 +44,59 @@ if(JPEG_FOUND)
   # set_property(TARGET LIBJPEG PROPERTY INTERFACE_INCLUDE_DIRECTORIES
                                        # ${JPEG_INCLUDE_DIR})
 endif()
+
 find_package(ZLIB REQUIRED)
-add_library(ZLIB INTERFACE IMPORTED GLOBAL)
-# set_property(TARGET ZLIB PROPERTY INTERFACE_LINK_LIBRARIES
-#                                   ${ZLIB_LIBRARY${find_library_suffix}})
-# set_property(TARGET ZLIB PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-#                                   ${ZLIB_INCLUDE_DIR})
+if(ZLIB_FOUND)
+  add_library(ZLIB INTERFACE IMPORTED GLOBAL)
+  set_property(TARGET ZLIB PROPERTY INTERFACE_LINK_LIBRARIES
+                                    ${ZLIB_LIBRARY${find_library_suffix}})
+  set_property(TARGET ZLIB PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                    ${ZLIB_INCLUDE_DIR})
+endif()
+
 if(UNIX)
   find_library(M_LIBRARY m)
   add_library(LIBM INTERFACE IMPORTED GLOBAL)
-  # set_property(TARGET LIBM PROPERTY INTERFACE_LINK_LIBRARIES ${M_LIBRARY})
+  set_property(TARGET LIBM PROPERTY INTERFACE_LINK_LIBRARIES ${M_LIBRARY})
   mark_as_advanced(M_LIBRARY)
 endif()
 
 find_package(Freetype REQUIRED)
-add_library(FREETYPE INTERFACE IMPORTED GLOBAL)
-# set_property(TARGET FREETYPE PROPERTY INTERFACE_LINK_LIBRARIES
-#                                       ${FREETYPE_LIBRARY${find_library_suffix}})
-# set_property(TARGET FREETYPE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-#                                       ${FREETYPE_INCLUDE_DIRS})
+if(FREETYPE_FOUND)
+  add_library(FREETYPE INTERFACE IMPORTED GLOBAL)
+  set_property(TARGET FREETYPE PROPERTY INTERFACE_LINK_LIBRARIES
+                                      ${FREETYPE_LIBRARY${find_library_suffix}})
+  set_property(TARGET FREETYPE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                      ${FREETYPE_INCLUDE_DIRS})
+endif()
 
 find_package(FFTW REQUIRED)
 if(FFTW_FOUND)
   add_library(FFTW INTERFACE IMPORTED GLOBAL)
-  # set_property(TARGET FFTW PROPERTY INTERFACE_LINK_LIBRARIES ${FFTW_LIBRARIES})
-  # set_property(TARGET FFTW PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-  #                                   ${FFTW_INCLUDE_DIR})
+  set_property(TARGET FFTW PROPERTY INTERFACE_LINK_LIBRARIES ${FFTW_LIBRARIES})
+  set_property(TARGET FFTW PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                    ${FFTW_INCLUDE_DIR})
 endif()
 
 if(WITH_CAIRO)
   find_package(Cairo REQUIRED)
-  add_library(CAIRO INTERFACE IMPORTED GLOBAL)
-  # set_property(TARGET CAIRO PROPERTY INTERFACE_LINK_LIBRARIES
-  #                                    ${CAIRO_LIBRARIES})
-  # set_property(TARGET CAIRO PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-  #                                    ${CAIRO_INCLUDE_DIRS})
+  if(CAIRO_FOUND)
+    add_library(CAIRO INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET CAIRO PROPERTY INTERFACE_LINK_LIBRARIES
+                                     ${CAIRO_LIBRARIES})
+    set_property(TARGET CAIRO PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                     ${CAIRO_INCLUDE_DIRS})
+  endif()
 endif()
 
 if(WITH_X11)
   find_package(X11 REQUIRED)
-  add_library(X11 INTERFACE IMPORTED GLOBAL)
-  # set_property(TARGET X11 PROPERTY INTERFACE_LINK_LIBRARIES ${X11_LIBRARIES})
-  # set_property(TARGET X11 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-  #                                  ${X11_INCLUDE_DIR})
+  if(X11_FOUND)
+    add_library(X11 INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET X11 PROPERTY INTERFACE_LINK_LIBRARIES ${X11_LIBRARIES})
+    set_property(TARGET X11 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                   ${X11_INCLUDE_DIR})
+  endif()
 endif()
 
 if(WIN32)
@@ -95,11 +111,13 @@ if(WIN32)
 endif()
 
 find_package(TIFF REQUIRED)
-add_library(TIFF INTERFACE IMPORTED GLOBAL)
-# set_property(TARGET TIFF PROPERTY INTERFACE_LINK_LIBRARIES
-#                                   ${TIFF_LIBRARY${find_library_suffix}})
-# set_property(TARGET TIFF PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-#                                   ${TIFF_INCLUDE_DIR})
+if(TIFF_FOUND)
+  add_library(TIFF INTERFACE IMPORTED GLOBAL)
+  set_property(TARGET TIFF PROPERTY INTERFACE_LINK_LIBRARIES
+                                   ${TIFF_LIBRARY${find_library_suffix}})
+  set_property(TARGET TIFF PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                   ${TIFF_INCLUDE_DIR})
+endif()
 
 find_package(Iconv QUIET)
 if(ICONV_FOUND)
@@ -143,33 +161,39 @@ endif()
 
 if(WITH_OPENGL)
   find_package(OpenGL REQUIRED)
-  add_library(OPENGL INTERFACE IMPORTED GLOBAL)
-  if(APPLE)
-    find_library(AGL_FRAMEWORK AGL DOC "AGL lib for OSX")
-    set(APP "-framework AGL -framework ApplicationServices")
-  endif()
-  set_property(TARGET OPENGL PROPERTY INTERFACE_LINK_LIBRARIES
+  if(OPENGL_FOUND)
+    add_library(OPENGL INTERFACE IMPORTED GLOBAL)
+    if(APPLE)
+      find_library(AGL_FRAMEWORK AGL DOC "AGL lib for OSX")
+      set(APP "-framework AGL -framework ApplicationServices")
+    endif()
+    set_property(TARGET OPENGL PROPERTY INTERFACE_LINK_LIBRARIES
                                       ${OPENGL_LIBRARIES} ${AGL_FRAMEWORK})
-  set_property(TARGET OPENGL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+    set_property(TARGET OPENGL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
                                       ${OPENGL_INCLUDE_DIR} ${AGL_FRAMEWORK})
+  endif()
 endif()
 
 if(WITH_POSTGRES)
   find_package(PostgreSQL REQUIRED)
-  add_library(POSTGRES INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET POSTGRES PROPERTY INTERFACE_LINK_LIBRARIES
+  if(POSTGRESQL_FOUND)
+    add_library(POSTGRES INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET POSTGRES PROPERTY INTERFACE_LINK_LIBRARIES
                                         ${PostgreSQL_LIBRARY})
-  set_property(TARGET POSTGRES PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+    set_property(TARGET POSTGRES PROPERTY INTERFACE_INCLUDE_DIRECTORIES
                                         ${PostgreSQL_INCLUDE_DIR})
+  endif()
 endif()
 
 if(WITH_SQLITE)
   find_package(SQLite REQUIRED)
-  add_library(SQLITE INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET SQLITE PROPERTY INTERFACE_LINK_LIBRARIES
+  if(SQLITE_FOUND)
+    add_library(SQLITE INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET SQLITE PROPERTY INTERFACE_LINK_LIBRARIES
                                       ${SQLITE_LIBRARY})
-  set_property(TARGET SQLITE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+    set_property(TARGET SQLITE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
                                       ${SQLITE_INCLUDE_DIRS})
+  endif()
 endif()
 
 find_package(PDAL QUIET)
@@ -199,15 +223,17 @@ if(NETCDF_FOUND)
 endif()
 
 find_package(GEOS REQUIRED)
-add_library(GEOS INTERFACE IMPORTED GLOBAL)
-set_property(TARGET GEOS PROPERTY INTERFACE_LINK_LIBRARIES
+if(GEOS_FOUND)
+  add_library(GEOS INTERFACE IMPORTED GLOBAL)
+  set_property(TARGET GEOS PROPERTY INTERFACE_LINK_LIBRARIES
                                   ${GEOS_C_LIBRARY${find_library_suffix}})
-set_property(TARGET GEOS PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+  set_property(TARGET GEOS PROPERTY INTERFACE_INCLUDE_DIRECTORIES
                                   ${GEOS_INCLUDE_DIR})
+endif()
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)
-if(Threads_FOUND)
+if(THREADS_FOUND)
   add_library(PTHREAD INTERFACE IMPORTED GLOBAL)
   if(THREADS_HAVE_PTHREAD_ARG)
     set_property(TARGET PTHREAD PROPERTY INTERFACE_COMPILE_OPTIONS "-pthread")
@@ -220,17 +246,21 @@ endif()
 
 if(MSVC)
   find_package(PCRE REQUIRED)
-  add_library(PCRE INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET PCRE PROPERTY INTERFACE_LINK_LIBRARIES
+  if(PCRE_FOUND)
+    add_library(PCRE INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET PCRE PROPERTY INTERFACE_LINK_LIBRARIES
                                     ${PCRE_LIBRARY${find_library_suffix}})
-  set_property(TARGET PCRE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+    set_property(TARGET PCRE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
                                     ${PCRE_INCLUDE_DIR})
+  endif()
 endif()
 
-# find_package (PythonLibs REQUIRED )
 find_package(Python3 REQUIRED)
-set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
+if(PYTHON3_FOUND)
+  set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
+# find_package (PythonLibs REQUIRED )
 # find_package ( Numpy )
+endif()
 
 
 
