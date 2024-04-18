@@ -88,9 +88,11 @@ function(build_module)
 
   else()
     add_library(${G_NAME} ${${G_NAME}_SRCS})
-    set_target_properties(${G_NAME} PROPERTIES FOLDER lib)
     set_target_properties(
-      ${G_NAME} PROPERTIES OUTPUT_NAME ${G_NAME}.${GRASS_VERSION_NUMBER})
+      ${G_NAME}
+      PROPERTIES FOLDER lib
+                 VERSION ${GRASS_VERSION_NUMBER}
+                 SOVERSION ${GRASS_VERSION_MAJOR})
     set(export_file_name
         "${CMAKE_BINARY_DIR}/include/export/${G_NAME}_export.h")
     # Default is to use library target name without grass_ prefix
