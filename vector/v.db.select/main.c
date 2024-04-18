@@ -289,17 +289,19 @@ int main(int argc, char **argv)
 
     if (options.cols->answer) {
         char col_sep[] = ",";
-        char *token = strtok(options.cols->answer, col_sep);
+        char **tokens;
+        int i, ntokens;
 
         sprintf(query, "SELECT ");
-
-        while (token != NULL) {
-            sprintf(query + strlen(query), "\"%s\"", token);
-            token = strtok(NULL, col_sep);
-            if (token)
-                sprintf(query + strlen(query), "%c", *col_sep);
+        tokens = G_tokenize(options.cols->answer, col_sep);
+        ntokens = G_number_of_tokens(tokens);
+        for (i = 0; i < ntokens; i++) {
+            if (i < ntokens - 1)
+                sprintf(query + strlen(query), "\"%s\"%c", tokens[i], *col_sep);
+            else
+                sprintf(query + strlen(query), "\"%s\"", tokens[i]);
         }
-
+        G_free_tokens(tokens);
         sprintf(query + strlen(query), " FROM ");
     }
     else
