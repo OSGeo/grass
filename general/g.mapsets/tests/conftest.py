@@ -28,7 +28,7 @@ def simple_dataset(tmp_path_factory):
         gs.run_command("g.region", s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
         # Create Mock Mapsets
         for mapset in TEST_MAPSETS:
-            gs.run_command("g.mapset", location=location, mapset=mapset, flags="c")
+            gs.run_command("g.mapset", project=location, mapset=mapset, flags="c")
 
         yield SimpleNamespace(
             mapsets=TEST_MAPSETS, accessible_mapsets=ACCESSIBLE_MAPSETS
