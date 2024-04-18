@@ -323,7 +323,7 @@ int main(int argc, char **argv)
         char *buf = NULL;
 
         buf = G_malloc((strlen(options.group->answer) + 8));
-        sprintf(buf, " GROUP BY %s", options.group->answer);
+        sprintf(buf, " GROUP BY \"%s\"", options.group->answer);
         db_append_string(&sql, buf);
         G_free(buf);
     }
