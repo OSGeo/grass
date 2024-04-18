@@ -3,11 +3,11 @@ name: Coverity Scan
 
 on:
   workflow_dispatch: # run whenever a contributor calls it
-#  schedule:
-#    - cron: '48 5 * * *' # Run at 05:48
-#    # Coverity will let GRASS do a scan a maximum of twice per day, so this
-#    # schedule will help GRASS fit within that limit with some additional space
-#    # for manual runs
+  schedule:
+    - cron: '48 5 * * *' # Run at 05:48
+    # Coverity will let GRASS do a scan a maximum of twice per day, so this
+    # schedule will help GRASS fit within that limit with some additional space
+    # for manual runs
 permissions:
   contents: read
   # action based off of
@@ -22,7 +22,7 @@ jobs:
       - name: Get dependencies
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y wget git gawk findutils jq
+          sudo apt-get install -y wget git gawk findutils
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
@@ -90,12 +90,6 @@ jobs:
       - name: Put results into Tarball
         run: |
           tar czvf grass.tgz cov-int
-
-      - name: Upload Artifact of Scan Results
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
-        with:
-          name: grass.tgz
-          path: grass.tgz
 
       - name: Submit to Coverity Scan
         run: |
