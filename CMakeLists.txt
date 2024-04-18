@@ -152,6 +152,8 @@ if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 endif()
 
+include(check_target)
+include(CheckDependentLibraries)
 include(build_module)
 include(build_program)
 include(build_program_in_subdir)
@@ -159,9 +161,6 @@ include(build_library_in_subdir)
 include(copy_python_files_in_subdir)
 include(build_script_in_subdir)
 include(build_gui_in_subdir)
-include(check_target)
-
-include(CheckDependentLibraries)
 
 set(MKHTML_PY ${CMAKE_BINARY_DIR}/utils/mkhtml.py)
 

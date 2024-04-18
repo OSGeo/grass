@@ -229,6 +229,7 @@ endif()
 
 # find_package (PythonLibs REQUIRED )
 find_package(Python3 REQUIRED)
+set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
 # find_package ( Numpy )
 
 

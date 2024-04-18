@@ -183,10 +183,6 @@ build_library_in_subdir(symbol NAME grass_sym DEPENDS grass_raster)
 
 add_subdirectory(init)
 
-set(PYTHON_EXECUTABLE
-    ${PYTHON_EXECUTABLE}
-    PARENT_SCOPE)
-
 build_library_in_subdir(cdhc DEPENDS grass_raster)
 
 build_library_in_subdir(stats DEPENDS grass_raster)
