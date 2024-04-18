@@ -36,14 +36,16 @@ if(PNG_FOUND)
                                     ${PNG_INCLUDE_DIR})
 endif()
 
-find_package(JPEG)
-if(JPEG_FOUND)
-  add_library(LIBJPEG INTERFACE IMPORTED GLOBAL)
-  # set_property(TARGET LIBJPEG PROPERTY INTERFACE_LINK_LIBRARIES
-  #                                      ${JPEG_LIBRARY${find_library_suffix}})
-  # set_property(TARGET LIBJPEG PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+# TODO: no core and addon modules use libjpeg; delete this block
+# find -type f -exec grep -H HAVE_JPEGLIB_H {} \; | grep -v "cmake\|config.h"
+#find_package(JPEG)
+#if(JPEG_FOUND)
+#  add_library(LIBJPEG INTERFACE IMPORTED GLOBAL)
+#  set_property(TARGET LIBJPEG PROPERTY INTERFACE_LINK_LIBRARIES
+#                                      ${JPEG_LIBRARY${find_library_suffix}})
+#  set_property(TARGET LIBJPEG PROPERTY INTERFACE_INCLUDE_DIRECTORIES
                                        # ${JPEG_INCLUDE_DIR})
-endif()
+#endif()
 
 find_package(ZLIB REQUIRED)
 if(ZLIB_FOUND)
