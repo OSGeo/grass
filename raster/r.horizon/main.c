@@ -87,6 +87,7 @@ typedef struct {
     int ip, jp;
     int ip100, jp100;
     double zp;
+    double length;
 } SearchPoint;
 
 typedef struct {
@@ -969,7 +970,7 @@ int new_point(const Geometry *geometry, const OriginPoint *origin_point,
             double dx = (double)search_point->ip * geometry->stepx;
             double dy = (double)search_point->jp * geometry->stepy;
 
-            horizon->length =
+            search_point->length =
                 distance(origin_point->xg0, dx, origin_point->yg0, dy,
                          origin_point->coslatsq); /* dist from orig. grid point
                                               to the current grid point */
@@ -1000,9 +1001,9 @@ int test_low_res(const Geometry *geometry, const OriginPoint *origin_point,
            curvature_diff = EARTHRADIUS*(1.-cos(length/EARTHRADIUS));
          */
         double curvature_diff =
-            0.5 * horizon->length * horizon->length * invEarth;
+            0.5 * search_point->length * search_point->length * invEarth;
         double z2 = origin_point->z_orig + curvature_diff +
-                    horizon->length * horizon->tanh0;
+                    search_point->length * horizon->tanh0;
         double zp100 = z100[search_point->jp100][search_point->ip100];
         G_debug(2, "ip:%d jp:%d z2:%lf zp100:%lf \n", search_point->ip,
                 search_point->jp, z2, zp100);
@@ -1073,6 +1074,7 @@ HorizonProperties horizon_height(const Geometry *geometry,
     search_point.zp = origin_point->z_orig;
     search_point.ip100 = floor(origin_point->xg0 * geometry->invstepx / 100.);
     search_point.jp100 = floor(origin_point->yg0 * geometry->invstepy / 100.);
+    search_point.length = 0;
 
     horizon.length = 0;
     horizon.tanh0 = 0;
@@ -1092,22 +1094,23 @@ HorizonProperties horizon_height(const Geometry *geometry,
 
         /* curvature_diff = EARTHRADIUS*(1.-cos(length/EARTHRADIUS)); */
         double curvature_diff =
-            0.5 * horizon.length * horizon.length * invEarth;
+            0.5 * search_point.length * search_point.length * invEarth;
 
         double z2 = origin_point->z_orig + curvature_diff +
-                    horizon.length * horizon.tanh0;
+                    search_point.length * horizon.tanh0;
 
         if (z2 < search_point.zp) {
             horizon.tanh0 =
                 (search_point.zp - origin_point->z_orig - curvature_diff) /
-                horizon.length;
+                search_point.length;
+            horizon.length = search_point.length;
         }
 
         if (z2 >= geometry->zmax) {
             break;
         }
 
-        if (horizon.length >= origin_point->maxlength) {
+        if (search_point.length >= origin_point->maxlength) {
             break;
         }
     }
