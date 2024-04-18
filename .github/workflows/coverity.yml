@@ -96,15 +96,16 @@ jobs:
           version=$(head -n 3 include/VERSION | xargs | sed 's/ /./g')
           commit=$(git rev-parse --short HEAD)
           branch=$(git rev-parse --abbrev-ref HEAD)
-          desc="Version%3A${version}%2C%20commit%3${commit}%2C%20branch%3A${branch}."
+          desc="Version:${version}, commit:${commit}, branch:${branch}."
           echo "Submitting ${desc}"
+          desc_url_enc=$(echo "$desc" | sed 's/:/%3A/g' | sed 's/,/%2C/g' | sed 's/ /%20/g')
           tar czvf grass.tgz cov-int
           curl \
             --form "token=${TOKEN}" \
             --form "email=${EMAIL}" \
             --form "file=@grass.tgz" \
             --form "version=${version}-${commit}" \
-            --form "description=${desc}" \
+            --form "description=${desc_url_enc}" \
             'https://scan.coverity.com/builds?project=grass'
         env:
           TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
