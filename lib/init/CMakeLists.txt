@@ -6,8 +6,10 @@ file(GLOB init_HTMLFILES "*.html")
 set(START_UP "grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.py")
 if(WIN32)
   set(script_file_name "grass.bat")
+  set(script_input_file_name ${script_file_name}.in)
 else()
-  set(script_file_name "grass.sh")
+  set(script_file_name "grass")
+  set(script_input_file_name ${script_file_name}.sh.in)
 endif()
 
 file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR}/bin BINARY_DIR)
@@ -94,7 +96,7 @@ configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/etc/${START_UP} @ONLY)
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/etc/${START_UP} DESTINATION etc)
 
 # configure and install grass wrapper script (grass.bat or grass.sh
-configure_file(${script_file_name}.in
+configure_file(${script_input_file_name}
                ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name} @ONLY)
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name}
         DESTINATION bin)
@@ -102,7 +104,20 @@ install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name}
 # For build tree
 file(TO_NATIVE_PATH ${GISBASE} gisbase_init_dir)
 file(TO_NATIVE_PATH "${GISBASE}/etc/config" grass_config_dir)
-configure_file(${script_file_name}.in ${GISBASE}/${script_file_name} @ONLY)
+configure_file(${script_input_file_name} ${GISBASE}/${script_file_name} @ONLY)
+if(UNIX OR MINGW)
+  file(
+    CHMOD
+    ${GISBASE}/${script_file_name}
+    FILE_PERMISSIONS
+    OWNER_READ
+    OWNER_WRITE
+    OWNER_EXECUTE
+    GROUP_READ
+    GROUP_EXECUTE
+    WORLD_READ
+    WORLD_EXECUTE)
+endif()
 file(COPY ${CMAKE_SOURCE_DIR}/demolocation/PERMANENT
      DESTINATION ${GISBASE}/demolocation/)
 
