@@ -176,5 +176,5 @@ endif()
 
 # find_package (PythonLibs REQUIRED )
 set(Python_ADDITIONAL_VERSIONS 3.5 3.6)
-find_package (PythonInterp REQUIRED )
+find_package (Python3 REQUIRED )
 # find_package ( Numpy )
