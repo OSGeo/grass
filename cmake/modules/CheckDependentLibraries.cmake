@@ -108,8 +108,10 @@ if(WIN32)
   find_package(ODBC QUIET)
   if(ODBC_FOUND)
     add_library(ODBC INTERFACE IMPORTED GLOBAL)
-    # set_property(TARGET ODBC PROPERTY INTERFACE_LINK_LIBRARIES ${ODBC_LIBRARIES})
-    # set_property(TARGET PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${ODBC_INCLUDE_DIRS})
+    #[[
+    set_property(TARGET ODBC PROPERTY INTERFACE_LINK_LIBRARIES ${ODBC_LIBRARIES})
+    set_property(TARGET PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${ODBC_INCLUDE_DIRS})
+    #]]
   endif()
 endif()
 
@@ -207,13 +209,15 @@ if(PDAL_FOUND)
                                     ${PDAL_INCLUDE_DIRS})
 endif()
 
-find_package(LibLAS QUIET)
-if(LIBLAS_FOUND)
-  add_library(LIBLAS INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET LIBLAS PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${LibLAS_C_LIBRARY})
-  set_property(TARGET LIBLAS PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${LibLAS_INCLUDE_DIR})
+if(WITH_LIBLAS)
+  find_package(LibLAS)
+  if(LIBLAS_FOUND)
+    add_library(LIBLAS INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET LIBLAS PROPERTY INTERFACE_LINK_LIBRARIES
+                                        ${LibLAS_C_LIBRARY})
+    set_property(TARGET LIBLAS PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                        ${LibLAS_INCLUDE_DIR})
+  endif()
 endif()
 
 find_package(NetCDF QUIET)
@@ -261,8 +265,10 @@ endif()
 find_package(Python3 REQUIRED)
 if(PYTHON3_FOUND)
   set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
-  # find_package(PythonLibs REQUIRED)
-  # find_package(Numpy)
+  #[[
+    find_package(PythonLibs REQUIRED)
+    find_package(Numpy)
+    #]]
 endif()
 
 # no target ATLAS in thirdpary/CMakeLists.txt

@@ -85,6 +85,7 @@ option(WITH_LAPACK "enable lapack support" ON)
 option(WITH_LIBLAS "enable libLAS support" OFF)
 option(WITH_OPENDWG "enable v.in.dwg" OFF)
 
+# XXX: Do we need this? Don't we always need Python?
 option(WITH_PYTHON "Build python bindings" ON)
 option(WITH_LARGEFILES "enable largefile support" ${default_option_enabled})
 option(WITH_DOCS "Build documentation" ON)
