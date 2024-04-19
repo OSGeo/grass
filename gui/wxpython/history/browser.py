@@ -135,6 +135,11 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.sizer_region_settings_grid.SetCols(2)
         self.sizer_region_settings_grid.SetRows(9)
 
+        self.sizer_region_settings_text = wx.BoxSizer(wx.VERTICAL)
+        self.region_settings_box_sizer.Add(
+            self.sizer_region_settings_text, proportion=0, flag=wx.EXPAND, border=5
+        )
+
         self.region_settings_box_sizer.Add(
             self.sizer_region_settings_grid,
             proportion=1,
@@ -143,12 +148,6 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         )
 
         self.sizer_region_settings_grid.AddGrowableCol(1)
-
-        self.sizer_region_settings_text = wx.BoxSizer(wx.VERTICAL)
-        self.region_settings_box_sizer.Add(
-            self.sizer_region_settings_text, proportion=0, flag=wx.EXPAND, border=5
-        )
-
         self.region_settings_box.Hide()
 
     def _general_info_filter(self, key, value):
@@ -244,7 +243,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
             )
 
             btnSetRegion = Button(parent=self.region_settings_box, id=wx.ID_ANY)
-            btnSetRegion.SetLabel(_("&Set as current region"))
+            btnSetRegion.SetLabel(_("&Set current region to following values"))
             btnSetRegion.SetToolTip(
                 _("Set current computational region to the region of executed command")
             )
