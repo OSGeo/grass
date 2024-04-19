@@ -106,19 +106,28 @@ if("${isSystemDir}" STREQUAL "-1")
   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 endif("${isSystemDir}" STREQUAL "-1")
 
-include(get_host_arch)
-get_host_arch(BUILD_ARCH)
+set(GISBASE ${CMAKE_BINARY_DIR}/gisbase)
+file(TO_NATIVE_PATH "${CMAKE_SOURCE_DIR}" MODULE_TOPDIR)
+file(TO_NATIVE_PATH "${GISBASE}" GISBASE_NATIVE)
+file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/bin" BIN_DIR)
+file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/lib" LIB_DIR)
+file(TO_NATIVE_PATH "${GISBASE}/scripts" SCRIPTS_DIR)
+file(TO_NATIVE_PATH "${GISBASE}/etc/config/rc" GISRC)
+file(TO_NATIVE_PATH "${GISBASE}/etc/python" ETC_PYTHON_DIR)
+file(TO_NATIVE_PATH "${GISBASE}/gui/wxpython" GUI_WXPYTHON_DIR)
 
-include(get_versions)
-get_versions("include/VERSION" GRASS_VERSION_MAJOR GRASS_VERSION_MINOR
-             GRASS_VERSION_RELEASE GRASS_VERSION_DATE)
+# Setup build locations.
+if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+endif()
+if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+endif()
+if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+endif()
 
-set(GRASS_VERSION_NUMBER
-    ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE})
-message(STATUS "GRASS_VERSION_NUMBER  =  '${GRASS_VERSION_NUMBER}'")
-set(GRASS_VERSION_UPDATE_PKG "0.2")
-
-# setup install directories
+# XXX: not used for now; setup install directories
 set(GISBASE_DIR "grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}")
 set(GRASS_BIN_DIR "${GISBASE_DIR}/bin")
 set(GRASS_DEMOLOCATION_DIR "${GISBASE_DIR}/demolocation")
@@ -133,6 +142,18 @@ set(GRASS_SCRIPTS_DIR "${GISBASE_DIR}/scripts")
 set(GRASS_SHARE_DIR "${GISBASE_DIR}/share")
 set(GRASS_UTILS_DIR "${GISBASE_DIR}/utils")
 
+include(get_host_arch)
+get_host_arch(BUILD_ARCH)
+
+include(get_versions)
+get_versions("include/VERSION" GRASS_VERSION_MAJOR GRASS_VERSION_MINOR
+             GRASS_VERSION_RELEASE GRASS_VERSION_DATE)
+
+set(GRASS_VERSION_NUMBER
+    ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE})
+message(STATUS "GRASS_VERSION_NUMBER  =  '${GRASS_VERSION_NUMBER}'")
+set(GRASS_VERSION_UPDATE_PKG "0.2")
+
 include(set_compiler_flags)
 set_compiler_flags()
 include(Configure)
@@ -141,17 +162,6 @@ include(repo_status)
 repo_status("${CMAKE_CURRENT_LIST_DIR}" GRASS_VERSION_GIT)
 
 enable_testing()
-
-# Setup build locations.
-if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
-  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-endif()
-if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-endif()
-if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
-  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-endif()
 
 include(check_target)
 include(CheckDependentLibraries)
@@ -165,15 +175,6 @@ include(build_gui_in_subdir)
 
 set(MKHTML_PY ${CMAKE_BINARY_DIR}/utils/mkhtml.py)
 
-set(GISBASE ${CMAKE_BINARY_DIR}/gisbase)
-file(TO_NATIVE_PATH "${GISBASE}" GISBASE_NATIVE)
-file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/bin" BIN_DIR)
-file(TO_NATIVE_PATH "${CMAKE_BINARY_DIR}/lib" LIB_DIR)
-file(TO_NATIVE_PATH "${CMAKE_SOURCE_DIR}" MODULE_TOPDIR)
-file(TO_NATIVE_PATH "${GISBASE}/scripts" SCRIPTS_DIR)
-file(TO_NATIVE_PATH "${GISBASE}/etc/config/rc" GISRC)
-file(TO_NATIVE_PATH "${GISBASE}/etc/python" ETC_PYTHON_DIR)
-file(TO_NATIVE_PATH "${GISBASE}/gui/wxpython" GUI_WXPYTHON_DIR)
 if(WIN32)
   set(sep "\;")
   set(env_path "")
