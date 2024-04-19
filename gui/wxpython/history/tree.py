@@ -32,7 +32,7 @@ from core.utils import (
     split,
 )
 from gui_core.forms import GUI
-from core.treemodel import TreeModel, DictNode
+from core.treemodel import TreeModel, DictFilterNode
 from gui_core.treeview import CTreeView
 from gui_core.wrap import Menu
 
@@ -41,7 +41,7 @@ from grass.pydispatch.signal import Signal
 from grass.grassdb import history
 
 
-class HistoryBrowserNode(DictNode):
+class HistoryBrowserNode(DictFilterNode):
     """Node representing item in history browser."""
 
     def __init__(self, data=None):
@@ -62,36 +62,6 @@ class HistoryBrowserNode(DictNode):
                 return _("Missing info")
         else:
             return self.data["name"]
-
-    def match(self, method="exact", **kwargs):
-        """Method used for searching according to given parameters.
-
-        :param method: 'exact' for exact match or 'filtering' for filtering by type/name
-        :param kwargs key-value to be matched, filtering method uses 'type' and 'name'
-        """
-        if not kwargs:
-            return False
-
-        if method == "exact":
-            for key, value in kwargs.items():
-                if not (key in self.data and self.data[key] == value):
-                    return False
-            return True
-
-        # for filtering
-        if (
-            "type" in kwargs
-            and "type" in self.data
-            and kwargs["type"] != self.data["type"]
-        ):
-            return False
-        if (
-            "name" in kwargs
-            and "name" in self.data
-            and not kwargs["name"].search(self.data["name"])
-        ):
-            return False
-        return True
 
 
 class HistoryBrowserTree(CTreeView):
@@ -256,7 +226,7 @@ class HistoryBrowserTree(CTreeView):
         :param timestamp: Time when the command was launched
         :return: Corresponding time period node number:
         Today = 0, Yesterday = 1, This week = 2,
-        Before week = 3, Missing info = 4
+        Older than week = 3, Missing info = 4
         """
         if not timestamp:
             return 4
@@ -264,13 +234,13 @@ class HistoryBrowserTree(CTreeView):
         timestamp = datetime.datetime.fromisoformat(timestamp).date()
         current = datetime.date.today()
         yesterday = current - datetime.timedelta(days=1)
-        before_week = current - datetime.timedelta(days=7)
+        week_ago = current - datetime.timedelta(days=7)
 
         if timestamp == current:
             return 0
         elif timestamp == yesterday:
             return 1
-        elif timestamp > before_week:
+        elif timestamp > week_ago:
             return 2
         else:
             return 3
