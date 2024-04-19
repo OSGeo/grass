@@ -251,7 +251,7 @@ int main(int argc, char *argv[])
         _("Reproject to project's coordinate system if needed");
     reproject_flag->description =
         _("Reprojects input dataset to the coordinate system of"
-          " the GRASS project (by default only datasets with the"
+          " the GRASS project (by default only datasets with"
           " matching coordinate system can be imported");
     reproject_flag->guisection = _("Projection");
 
