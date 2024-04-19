@@ -19,10 +19,10 @@ r.mapcalc "belev = if(isnull(basin), basin, elev)"
 <p>
 <em>r.stats -Anc</em> prints out averaged statistics for topographic index.
 
-<p>Unprojected lat/long locations are not supported. If data is not projected
-in a lat/long location, please create a new location in a projected coordinate
-system and reproject the data into the new projected location. Please run
-<em>r.topidx</em> from that location.
+<p>Lat/long projects are not supported. If data is not projected,
+please create a new project with a projected coordinate reference
+system and reproject the data there. Please run
+<em>r.topidx</em> from that project.
 
 <h2>EXAMPLE</h2>
 

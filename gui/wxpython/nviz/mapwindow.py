@@ -564,7 +564,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     self.fly["pos"]["x"] = sx / 2
                     self.fly["pos"]["y"] = sy / 2
                     self.fly["mouseControl"] = False  # controlled by keyboard
-                    self.timerFly.Start(self.fly["interval"])
+                    self.timerFly.Start(int(self.fly["interval"]))
 
                 self.ProcessFlyByArrows(keyCode=key)
 
@@ -712,7 +712,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
 
         if self.mouse["use"] == "fly":
             if not self.timerFly.IsRunning():
-                self.timerFly.Start(self.fly["interval"])
+                self.timerFly.Start(int(self.fly["interval"]))
                 self.fly["mouseControl"] = True
 
         event.Skip()

@@ -74,14 +74,14 @@ int main(int argc, char *argv[])
     G_add_keyword(_("projection"));
     G_add_keyword(_("transformation"));
     G_add_keyword(_("import"));
-    module->description = _(
-        "Re-projects a vector map from one location to the current location.");
+    module->description =
+        _("Re-projects a vector map from one project to the current project.");
 
     /* set up the options and flags for the command line parser */
 
     ilocopt = G_define_standard_option(G_OPT_M_LOCATION);
     ilocopt->required = YES;
-    ilocopt->label = _("Location containing input vector map");
+    ilocopt->label = _("Project (location) containing input vector map");
     ilocopt->guisection = _("Source");
 
     isetopt = G_define_standard_option(G_OPT_M_MAPSET);
@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
     mapopt->guisection = _("Source");
 
     ibaseopt = G_define_standard_option(G_OPT_M_DBASE);
-    ibaseopt->label = _("Path to GRASS database of input location");
+    ibaseopt->label = _("Path to GRASS database of input project");
 
     smax = G_define_option();
     smax->key = "smax";
@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
         gbase = G_store(G_gisdbase());
 
     if (!ibaseopt->answer && strcmp(iloc_name, G_location()) == 0)
-        G_fatal_error(_("Input and output locations can not be the same"));
+        G_fatal_error(_("Input and output projects can not be the same"));
 
     lmax = atof(smax->answer);
     if (lmax < 0)
@@ -228,8 +228,8 @@ int main(int argc, char *argv[])
         if (flag.list->answer) {
             char **list;
 
-            G_verbose_message(_("Checking location <%s> mapset <%s>"),
-                              iloc_name, iset_name);
+            G_verbose_message(_("Checking project <%s> mapset <%s>"), iloc_name,
+                              iset_name);
             list = G_list(G_ELEMENT_VECTOR, G_getenv_nofatal("GISDBASE"),
                           G_getenv_nofatal("LOCATION_NAME"), iset_name);
             if (list[0]) {
@@ -253,7 +253,7 @@ int main(int argc, char *argv[])
         mapset = G_find_vector2(map_name, iset_name);
         if (mapset == NULL)
             G_fatal_error(
-                _("Vector map <%s> in location <%s> mapset <%s> not found"),
+                _("Vector map <%s> in project <%s> mapset <%s> not found"),
                 map_name, iloc_name, iset_name);
 
         /*** Get projection info for input mapset ***/
@@ -365,10 +365,10 @@ int main(int argc, char *argv[])
         /* need to be able to read from others */
         if (stat == 0)
             G_fatal_error(
-                _("Mapset <%s> in input location <%s> - permission denied"),
+                _("Mapset <%s> in input project <%s> - permission denied"),
                 iset_name, iloc_name);
         else
-            G_fatal_error(_("Mapset <%s> in input location <%s> not found"),
+            G_fatal_error(_("Mapset <%s> in input project <%s> not found"),
                           iset_name, iloc_name);
     }
 

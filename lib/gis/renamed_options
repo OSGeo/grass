@@ -730,3 +730,8 @@ r.proj|location:project
 i.ortho.elev|location:project
 g.download.location|location:project
 v.proj|location:project
+r.in.gdal|location:project
+g.proj|location:project
+v.in.ogr|location:project
+t.vect.import|location:project
+t.rast.import|location:project
