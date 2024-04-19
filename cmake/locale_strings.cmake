@@ -15,7 +15,7 @@ COPYRIGHT:  (C) 2020 by the GRASS Development Team
 set(GISBASE ${BINARY_DIR}/gisbase)
 file(TO_NATIVE_PATH "${GISBASE}" GISBASE_NATIVE)
 file(TO_NATIVE_PATH "${GISBASE}/etc/config/rc" GISRC)
-file(TO_NATIVE_PATH "${BINARY_DIR}/bin" BINARY_DIR)
+file(TO_NATIVE_PATH "${BINARY_DIR}/bin" BIN_DIR)
 file(TO_NATIVE_PATH "${BINARY_DIR}/lib" LIB_DIR)
 file(TO_NATIVE_PATH "${SOURCE_DIR}" MODULE_TOPDIR)
 file(TO_NATIVE_PATH "${GISBASE}/scripts" SCRIPTS_DIR)
@@ -32,7 +32,7 @@ endif()
 
 set(ENV{GISBASE} "${GISBASE_NATIVE}")
 set(ENV{GISRC} ${GISRC})
-set(ENV{PATH} "${BINARY_DIR}${sep}${SCRIPTS_DIR}${env_path}")
+set(ENV{PATH} "${BIN_DIR}${sep}${SCRIPTS_DIR}${env_path}")
 set(ENV{PYTHONPATH}
     "${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}$ENV{PYTHONPATH}")
 if(NOT MSVC)
@@ -54,7 +54,7 @@ if(WIN32)
                  ${GISBASE}/scripts/${G_NAME}.bat @ONLY)
 endif(WIN32)
 
-set(TMP_SCRIPT_FILE ${BINARY_DIR}/CMakeFiles/${G_NAME}${SCRIPT_EXT})
+set(TMP_SCRIPT_FILE ${BIN_DIR}/CMakeFiles/${G_NAME}${SCRIPT_EXT})
 configure_file(${SRC_SCRIPT_FILE} ${TMP_SCRIPT_FILE} COPYONLY)
 file(
   COPY ${TMP_SCRIPT_FILE}
@@ -69,8 +69,7 @@ file(
     WORLD_EXECUTE)
 
 execute_process(
-  COMMAND ${BINARY_DIR}/bin/g.parser -t
-          ${GISBASE}/scripts/${G_NAME}${SCRIPT_EXT}
+  COMMAND ${BIN_DIR}/bin/g.parser -t ${GISBASE}/scripts/${G_NAME}${SCRIPT_EXT}
   OUTPUT_VARIABLE run_g_parser_OV
   ERROR_VARIABLE run_g_parser_EV
   RESULT_VARIABLE run_g_parser_RV)
