@@ -266,9 +266,9 @@ find_package(Python3 REQUIRED)
 if(PYTHON3_FOUND)
   set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
   #[[
-    find_package(PythonLibs REQUIRED)
-    find_package(Numpy)
-    #]]
+  find_package(PythonLibs REQUIRED)
+  find_package(Numpy)
+  #]]
 endif()
 
 # no target ATLAS in thirdpary/CMakeLists.txt
