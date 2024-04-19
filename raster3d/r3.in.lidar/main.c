@@ -288,8 +288,9 @@ int main(int argc, char *argv[])
     over_flag->key = 'o';
     over_flag->label =
         _("Override projection check (use current projects's CRS)");
-    over_flag->description = _("Assume that the dataset has the same coordinate "
-                               "reference system as the current project");
+    over_flag->description =
+        _("Assume that the dataset has the same coordinate "
+          "reference system as the current project");
 
     print_flag = G_define_flag();
     print_flag->key = 'p';
