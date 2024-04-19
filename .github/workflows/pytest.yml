@@ -79,7 +79,7 @@ jobs:
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
-          pytest --verbose --color=yes --numprocesses auto .
+          pytest --verbose --color=yes --numprocesses auto -ra .
 
       - name: Print installed versions
         if: always()
