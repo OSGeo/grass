@@ -96,11 +96,11 @@ def main():
                 # see db_sqltype_name() for type names
                 if f[1] == "CHARACTER":
                     # preserve field length for sql type "CHARACTER"
-                    coltypes.append("%s %s(%s)" % (f[0], f[1], f[2]))
+                    coltypes.append(f'"{f[0]}" {f[1]}({f[2]})')
                 else:
-                    coltypes.append("%s %s" % (f[0], f[1]))
+                    coltypes.append(f'"{f[0]}" {f[1]}')
 
-            colnames = ", ".join(colnames)
+            colnames = ", ".join([f'"{col}"' for col in colnames])
             coltypes = ", ".join(coltypes)
 
             cmds = [
