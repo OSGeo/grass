@@ -119,7 +119,7 @@ def main():
                 table=table, coldef=coltypes, colnames=colnames, keycol=keycol
             )
         else:
-            sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
+            sql = f'ALTER TABLE {table} DROP COLUMN "{column}"'
 
         try:
             grass.write_command(
