@@ -30,6 +30,9 @@ jobs:
       fail-fast: true
 
     runs-on: ${{ matrix.os }}
+    env:
+      FORCE_COLOR: 1 # for software including pip: https://force-color.org/
+      CLICOLOR_FORCE: 1 # for other software including ninja: https://bixense.com/clicolors/
 
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
@@ -63,7 +66,7 @@ jobs:
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
 
       - name: Build
-        run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
+        run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install -fdiagnostics-color
 
       - name: Add the bin directory to PATH
         run: |
