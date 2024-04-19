@@ -107,7 +107,10 @@ def main():
         whitespace = re.search(pattern, col)
         if not whitespace:
             grass.fatal(
-                _("Incorrect new column(s) format <'name type [,name type, ...]'>")
+                _(
+                    "Incorrect new column(s) format, use"
+                    " <'name type [,name type, ...]'> format, please."
+                )
             )
         col_name, col_type = col.split(whitespace.group(0))
         if col_name in column_existing:
