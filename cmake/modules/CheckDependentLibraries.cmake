@@ -14,9 +14,9 @@ find_package(PROJ REQUIRED)
 if(PROJ_FOUND)
   add_library(PROJ INTERFACE IMPORTED GLOBAL)
   set_property(TARGET PROJ PROPERTY INTERFACE_LINK_LIBRARIES
-                                  ${PROJ_LIBRARY${find_library_suffix}})
+                                    ${PROJ_LIBRARY${find_library_suffix}})
   set_property(TARGET PROJ PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                  ${PROJ_INCLUDE_DIR})
+                                    ${PROJ_INCLUDE_DIR})
 endif()
 
 find_package(GDAL REQUIRED)
@@ -24,28 +24,30 @@ if(GDAL_FOUND)
   add_library(GDAL INTERFACE IMPORTED GLOBAL)
   set_property(TARGET GDAL PROPERTY INTERFACE_LINK_LIBRARIES ${GDAL_LIBRARY})
   set_property(TARGET GDAL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                  ${GDAL_INCLUDE_DIR})
+                                    ${GDAL_INCLUDE_DIR})
 endif()
 
 find_package(PNG REQUIRED)
 if(PNG_FOUND)
   add_library(LIBPNG INTERFACE IMPORTED GLOBAL)
   set_property(TARGET LIBPNG PROPERTY INTERFACE_LINK_LIBRARIES
-                                    ${PNG_LIBRARY${find_library_suffix}})
+                                      ${PNG_LIBRARY${find_library_suffix}})
   set_property(TARGET LIBPNG PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${PNG_INCLUDE_DIR})
+                                      ${PNG_INCLUDE_DIR})
 endif()
 
+#[[
 # TODO: no core and addon modules use libjpeg; delete this block
 # find -type f -exec grep -H HAVE_JPEGLIB_H {} \; | grep -v "cmake\|config.h"
-#find_package(JPEG)
-#if(JPEG_FOUND)
-#  add_library(LIBJPEG INTERFACE IMPORTED GLOBAL)
-#  set_property(TARGET LIBJPEG PROPERTY INTERFACE_LINK_LIBRARIES
-#                                      ${JPEG_LIBRARY${find_library_suffix}})
-#  set_property(TARGET LIBJPEG PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                       # ${JPEG_INCLUDE_DIR})
-#endif()
+find_package(JPEG)
+if(JPEG_FOUND)
+  add_library(LIBJPEG INTERFACE IMPORTED GLOBAL)
+  set_property(TARGET LIBJPEG PROPERTY INTERFACE_LINK_LIBRARIES
+                                      ${JPEG_LIBRARY${find_library_suffix}})
+  set_property(TARGET LIBJPEG PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                      # ${JPEG_INCLUDE_DIR})
+endif()
+#]]
 
 find_package(ZLIB REQUIRED)
 if(ZLIB_FOUND)
@@ -66,10 +68,11 @@ endif()
 find_package(Freetype REQUIRED)
 if(FREETYPE_FOUND)
   add_library(FREETYPE INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET FREETYPE PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${FREETYPE_LIBRARY${find_library_suffix}})
+  set_property(
+    TARGET FREETYPE PROPERTY INTERFACE_LINK_LIBRARIES
+                             ${FREETYPE_LIBRARY${find_library_suffix}})
   set_property(TARGET FREETYPE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${FREETYPE_INCLUDE_DIRS})
+                                        ${FREETYPE_INCLUDE_DIRS})
 endif()
 
 find_package(FFTW REQUIRED)
@@ -85,9 +88,9 @@ if(WITH_CAIRO)
   if(CAIRO_FOUND)
     add_library(CAIRO INTERFACE IMPORTED GLOBAL)
     set_property(TARGET CAIRO PROPERTY INTERFACE_LINK_LIBRARIES
-                                     ${CAIRO_LIBRARIES})
+                                       ${CAIRO_LIBRARIES})
     set_property(TARGET CAIRO PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                     ${CAIRO_INCLUDE_DIRS})
+                                       ${CAIRO_INCLUDE_DIRS})
   endif()
 endif()
 
@@ -97,7 +100,7 @@ if(WITH_X11)
     add_library(X11 INTERFACE IMPORTED GLOBAL)
     set_property(TARGET X11 PROPERTY INTERFACE_LINK_LIBRARIES ${X11_LIBRARIES})
     set_property(TARGET X11 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                   ${X11_INCLUDE_DIR})
+                                     ${X11_INCLUDE_DIR})
   endif()
 endif()
 
@@ -105,10 +108,8 @@ if(WIN32)
   find_package(ODBC QUIET)
   if(ODBC_FOUND)
     add_library(ODBC INTERFACE IMPORTED GLOBAL)
-    # set_property(TARGET ODBC PROPERTY INTERFACE_LINK_LIBRARIES
-    #                                   ${ODBC_LIBRARIES})
-    # set_property(TARGET PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-    #                              ${ODBC_INCLUDE_DIRS})
+    # set_property(TARGET ODBC PROPERTY INTERFACE_LINK_LIBRARIES ${ODBC_LIBRARIES})
+    # set_property(TARGET PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${ODBC_INCLUDE_DIRS})
   endif()
 endif()
 
@@ -116,9 +117,9 @@ find_package(TIFF REQUIRED)
 if(TIFF_FOUND)
   add_library(TIFF INTERFACE IMPORTED GLOBAL)
   set_property(TARGET TIFF PROPERTY INTERFACE_LINK_LIBRARIES
-                                   ${TIFF_LIBRARY${find_library_suffix}})
+                                    ${TIFF_LIBRARY${find_library_suffix}})
   set_property(TARGET TIFF PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                   ${TIFF_INCLUDE_DIR})
+                                    ${TIFF_INCLUDE_DIR})
 endif()
 
 find_package(Iconv QUIET)
@@ -170,9 +171,9 @@ if(WITH_OPENGL)
       set(APP "-framework AGL -framework ApplicationServices")
     endif()
     set_property(TARGET OPENGL PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${OPENGL_LIBRARIES} ${AGL_FRAMEWORK})
+                                        ${OPENGL_LIBRARIES} ${AGL_FRAMEWORK})
     set_property(TARGET OPENGL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${OPENGL_INCLUDE_DIR} ${AGL_FRAMEWORK})
+                                        ${OPENGL_INCLUDE_DIR} ${AGL_FRAMEWORK})
   endif()
 endif()
 
@@ -181,9 +182,9 @@ if(WITH_POSTGRES)
   if(POSTGRESQL_FOUND)
     add_library(POSTGRES INTERFACE IMPORTED GLOBAL)
     set_property(TARGET POSTGRES PROPERTY INTERFACE_LINK_LIBRARIES
-                                        ${PostgreSQL_LIBRARY})
+                                          ${PostgreSQL_LIBRARY})
     set_property(TARGET POSTGRES PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                        ${PostgreSQL_INCLUDE_DIR})
+                                          ${PostgreSQL_INCLUDE_DIR})
   endif()
 endif()
 
@@ -192,9 +193,9 @@ if(WITH_SQLITE)
   if(SQLITE_FOUND)
     add_library(SQLITE INTERFACE IMPORTED GLOBAL)
     set_property(TARGET SQLITE PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${SQLITE_LIBRARY})
+                                        ${SQLITE_LIBRARY})
     set_property(TARGET SQLITE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${SQLITE_INCLUDE_DIRS})
+                                        ${SQLITE_INCLUDE_DIRS})
   endif()
 endif()
 
@@ -228,9 +229,9 @@ find_package(GEOS REQUIRED)
 if(GEOS_FOUND)
   add_library(GEOS INTERFACE IMPORTED GLOBAL)
   set_property(TARGET GEOS PROPERTY INTERFACE_LINK_LIBRARIES
-                                  ${GEOS_C_LIBRARY${find_library_suffix}})
+                                    ${GEOS_C_LIBRARY${find_library_suffix}})
   set_property(TARGET GEOS PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                  ${GEOS_INCLUDE_DIR})
+                                    ${GEOS_INCLUDE_DIR})
 endif()
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
@@ -251,25 +252,21 @@ if(MSVC)
   if(PCRE_FOUND)
     add_library(PCRE INTERFACE IMPORTED GLOBAL)
     set_property(TARGET PCRE PROPERTY INTERFACE_LINK_LIBRARIES
-                                    ${PCRE_LIBRARY${find_library_suffix}})
+                                      ${PCRE_LIBRARY${find_library_suffix}})
     set_property(TARGET PCRE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${PCRE_INCLUDE_DIR})
+                                      ${PCRE_INCLUDE_DIR})
   endif()
 endif()
 
 find_package(Python3 REQUIRED)
 if(PYTHON3_FOUND)
   set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
-# find_package (PythonLibs REQUIRED )
-# find_package ( Numpy )
+  # find_package(PythonLibs REQUIRED)
+  # find_package(Numpy)
 endif()
-
-
 
 # no target ATLAS in thirdpary/CMakeLists.txt
 check_target(ATLAS HAVE_LIBATLAS)
-
-
 
 # set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}")
 check_target(ICONV HAVE_ICONV_H)
@@ -317,8 +314,6 @@ if(MSVC)
 endif()
 
 check_target(POSTGRES HAVE_LIBPQ_FE_H)
-
-
 
 set(HAVE_PBUFFERS 0)
 set(HAVE_PIXMAPS 0)
