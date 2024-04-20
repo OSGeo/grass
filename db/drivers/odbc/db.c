@@ -13,6 +13,7 @@ int db__driver_open_database(dbHandle *handle)
     SQLRETURN ret;
     SQLINTEGER err;
     dbConnection connection;
+    SQLCHAR dbms_name[256];
 
     /* Open connection */
     if (open_connection() != DB_OK)
@@ -37,6 +38,30 @@ int db__driver_open_database(dbHandle *handle)
         db_d_report_error();
 
         return DB_FAILED;
+    }
+
+    /* Find ODBC DB driver */
+    SQLGetInfo(ODconn, SQL_DBMS_NAME, (SQLPOINTER)dbms_name, sizeof(dbms_name),
+               NULL);
+
+    if (strcmp((CHAR *)dbms_name, "MySQL") == 0 ||
+        strcmp((CHAR *)dbms_name, "MariaDB") == 0) {
+        cursor *c;
+
+        c = alloc_cursor();
+        if (c == NULL)
+            return DB_FAILED;
+
+        /* Set SQL ANSI_QUOTES MODE which allow to use double quotes instead of
+         * backticks */
+        SQLExecDirect(c->stmt, (SQLCHAR *)"SET SQL_MODE=ANSI_QUOTES", SQL_NTS);
+
+        G_debug(
+            3,
+            "db__driver_open_database(): Set ODBC %s DB SQL ANSI_QUOTES MODE",
+            dbms_name);
+
+        free_cursor(c);
     }
 
     return DB_OK;
