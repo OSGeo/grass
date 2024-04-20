@@ -15,6 +15,22 @@ set(dbf_SRCS
     dbf/str.c
     dbf/table.c)
 
+set(mysql_SRCS
+    mysql/create_table.c
+    mysql/cursor.c
+    mysql/dbe.c
+    mysql/describe.c
+    mysql/driver.c
+    mysql/error.c
+    mysql/execute.c
+    mysql/fetch.c
+    mysql/index.c
+    mysql/listtab.c
+    mysql/main.c
+    mysql/parse.c
+    mysql/replace.c
+    mysql/select.c)
+
 set(db_drivers)
 set(grass_dbstubs_DEFS)
 if(MSVC)
@@ -109,22 +125,6 @@ build_program_in_subdir(
 if(TARGET MYSQL)
   list(APPEND db_drivers mysql)
 endif()
-
-set(mysql_SRCS
-    mysql/create_table.c
-    mysql/cursor.c
-    mysql/dbe.c
-    mysql/describe.c
-    mysql/driver.c
-    mysql/error.c
-    mysql/execute.c
-    mysql/fetch.c
-    mysql/index.c
-    mysql/listtab.c
-    mysql/main.c
-    mysql/parse.c
-    mysql/replace.c
-    mysql/select.c)
 
 build_program_in_subdir(
   mysql
