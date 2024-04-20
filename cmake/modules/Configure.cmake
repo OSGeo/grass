@@ -37,50 +37,33 @@ else()
   check_include_file(dbm.h HAVE_DBM_H)
 endif()
 #
-# # set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}")
-# check_target(ICONV HAVE_ICONV_H)
-# check_target(BZIP2 HAVE_BZLIB_H)
-# check_target(ZLIB HAVE_ZLIB_H)
-# check_target(LIBJPEG HAVE_JPEGLIB_H)
-# check_target(LIBPNG HAVE_PNG_H)
-# check_target(TIFF HAVE_TIFFIO_H)
-# check_target(GEOS HAVE_GEOS)
-# check_target(GDAL HAVE_GDAL)
-# check_target(GDAL HAVE_OGR)
-# check_target(SQLITE HAVE_SQLITE)
+# # set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}") check_target(ICONV
+# HAVE_ICONV_H) check_target(BZIP2 HAVE_BZLIB_H) check_target(ZLIB HAVE_ZLIB_H)
+# check_target(LIBJPEG HAVE_JPEGLIB_H) check_target(LIBPNG HAVE_PNG_H)
+# check_target(TIFF HAVE_TIFFIO_H) check_target(GEOS HAVE_GEOS)
+# check_target(GDAL HAVE_GDAL) check_target(GDAL HAVE_OGR) check_target(SQLITE
+# HAVE_SQLITE)
 #
 # check_target(PROJ HAVE_PROJ_H)
 #
-# check_target(BLAS HAVE_LIBBLAS)
-# check_target(BLAS HAVE_CBLAS_H)
+# check_target(BLAS HAVE_LIBBLAS) check_target(BLAS HAVE_CBLAS_H)
 #
-# check_target(LAPACK HAVE_LIBLAPACK)
-# check_target(LAPACK HAVE_CLAPACK_H)
+# check_target(LAPACK HAVE_LIBLAPACK) check_target(LAPACK HAVE_CLAPACK_H)
 #
-# check_target(FREETYPE HAVE_FT2BUILD_H)
-# check_target(POSTGRES HAVE_POSTGRES)
+# check_target(FREETYPE HAVE_FT2BUILD_H) check_target(POSTGRES HAVE_POSTGRES)
 # check_target(ODBC HAVE_SQL_H)
 #
-# if(TARGET POSTGRES)
-#   try_compile(
-#     HAVE_PQCMDTUPLES ${CMAKE_CURRENT_BINARY_DIR}
-#     ${CMAKE_SOURCE_DIR}/cmake/tests/have_pqcmdtuples.c
-#     CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${PostgreSQL_INCLUDE_DIR}" "-w"
-#                 "-DLINK_LIBRARIES:STRING=${PostgreSQL_LIBRARY}"
-#     OUTPUT_VARIABLE COMPILE_HAVE_PQCMDTUPLES)
-#   if(NOT COMPILE_HAVE_PQCMDTUPLES)
-#     message(
-#       "Performing Test HAVE_PQCMDTUPLES - Failed\n COMPILE_OUTPUT:${COMPILE_HAVE_PQCMDTUPLES}\n"
-#     )
-#   else()
-#     message(STATUS "Performing Test HAVE_PQCMDTUPLES - Success")
-#     set(HAVE_PQCMDTUPLES 1)
-#   endif()
+# if(TARGET POSTGRES) try_compile( HAVE_PQCMDTUPLES ${CMAKE_CURRENT_BINARY_DIR}
+# ${CMAKE_SOURCE_DIR}/cmake/tests/have_pqcmdtuples.c CMAKE_FLAGS
+# "-DINCLUDE_DIRECTORIES:PATH=${PostgreSQL_INCLUDE_DIR}" "-w"
+# "-DLINK_LIBRARIES:STRING=${PostgreSQL_LIBRARY}" OUTPUT_VARIABLE
+# COMPILE_HAVE_PQCMDTUPLES) if(NOT COMPILE_HAVE_PQCMDTUPLES) message(
+# "Performing Test HAVE_PQCMDTUPLES - Failed\n
+# COMPILE_OUTPUT:${COMPILE_HAVE_PQCMDTUPLES}\n" ) else() message(STATUS
+# "Performing Test HAVE_PQCMDTUPLES - Success") set(HAVE_PQCMDTUPLES 1) endif()
 # endif()
 #
-# if(MSVC)
-#   check_target(PCRE HAVE_PCRE_H)
-# endif()
+# if(MSVC) check_target(PCRE HAVE_PCRE_H) endif()
 #
 # check_target(POSTGRES HAVE_LIBPQ_FE_H)
 
@@ -103,8 +86,7 @@ else()
 endif()
 
 # #######################TODO########################
-# no target ATLAS in thirdpary/CMakeLists.txt
-# check_target(ATLAS HAVE_LIBATLAS)
+# no target ATLAS in thirdpary/CMakeLists.txt check_target(ATLAS HAVE_LIBATLAS)
 
 set(USE_NLS 0)
 if(WITH_NLS)
@@ -180,54 +162,29 @@ check_symbol_exists(drand48 "stdlib.h" HAVE_DRAND48)
 check_symbol_exists(nanosleep "time.h" HAVE_NANOSLEEP)
 check_symbol_exists(fseeko "stdio.h" HAVE_FSEEKO)
 
-# set(HAVE_PBUFFERS 0)
-# set(HAVE_PIXMAPS 0)
-# if(WITH_OPENGL)
-#   try_compile(
-#     HAVE_PBUFFERS ${CMAKE_CURRENT_BINARY_DIR}
-#     ${CMAKE_SOURCE_DIR}/cmake/tests/have_pbuffer.c
-#     CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${OPENGL_INCLUDE_DIR}" "-w"
-#                 "-DLINK_LIBRARIES:STRING=${OPENGL_LIBRARIES}"
-#     OUTPUT_VARIABLE COMPILE_HAVE_PBUFFERS)
-#   if(NOT COMPILE_HAVE_PBUFFERS)
-#     message(
-#       FATAL_ERROR
-#         "Performing Test HAVE_PBUFFERS - Failed\n COMPILE_OUTPUT:${COMPILE_HAVE_PBUFFERS}\n"
-#     )
-#   else()
-#     message(STATUS "Performing Test HAVE_PBUFFERS - Success")
-#     set(HAVE_PBUFFERS 1)
-#   endif()
+# set(HAVE_PBUFFERS 0) set(HAVE_PIXMAPS 0) if(WITH_OPENGL) try_compile(
+# HAVE_PBUFFERS ${CMAKE_CURRENT_BINARY_DIR}
+# ${CMAKE_SOURCE_DIR}/cmake/tests/have_pbuffer.c CMAKE_FLAGS
+# "-DINCLUDE_DIRECTORIES:PATH=${OPENGL_INCLUDE_DIR}" "-w"
+# "-DLINK_LIBRARIES:STRING=${OPENGL_LIBRARIES}" OUTPUT_VARIABLE
+# COMPILE_HAVE_PBUFFERS) if(NOT COMPILE_HAVE_PBUFFERS) message( FATAL_ERROR
+# "Performing Test HAVE_PBUFFERS - Failed\n
+# COMPILE_OUTPUT:${COMPILE_HAVE_PBUFFERS}\n" ) else() message(STATUS "Performing
+# Test HAVE_PBUFFERS - Success") set(HAVE_PBUFFERS 1) endif()
 #
-#   try_compile(
-#     HAVE_PIXMAPS ${CMAKE_CURRENT_BINARY_DIR}
-#     ${CMAKE_SOURCE_DIR}/cmake/tests/have_pixmaps.c
-#     CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${OPENGL_INCLUDE_DIR}" "-w"
-#                 "-DLINK_LIBRARIES:STRING=${OPENGL_LIBRARIES}"
-#     OUTPUT_VARIABLE COMPILE_HAVE_PIXMAPS)
+# try_compile( HAVE_PIXMAPS ${CMAKE_CURRENT_BINARY_DIR}
+# ${CMAKE_SOURCE_DIR}/cmake/tests/have_pixmaps.c CMAKE_FLAGS
+# "-DINCLUDE_DIRECTORIES:PATH=${OPENGL_INCLUDE_DIR}" "-w"
+# "-DLINK_LIBRARIES:STRING=${OPENGL_LIBRARIES}" OUTPUT_VARIABLE
+# COMPILE_HAVE_PIXMAPS)
 #
-#   if(NOT COMPILE_HAVE_PIXMAPS)
-#     message(
-#       FATAL_ERROR
-#         "Performing Test HAVE_PIXMAPS - Failed\n COMPILE_OUTPUT:${COMPILE_HAVE_PIXMAPS}\n"
-#     )
-#   else()
-#     message(STATUS "Performing Test HAVE_PIXMAPS - Success")
-#     set(HAVE_PIXMAPS 1)
-#   endif()
+# if(NOT COMPILE_HAVE_PIXMAPS) message( FATAL_ERROR "Performing Test
+# HAVE_PIXMAPS - Failed\n COMPILE_OUTPUT:${COMPILE_HAVE_PIXMAPS}\n" ) else()
+# message(STATUS "Performing Test HAVE_PIXMAPS - Success") set(HAVE_PIXMAPS 1)
+# endif()
 #
 # endif(WITH_OPENGL)
 #
-# set(OPENGL_X11 0)
-# set(OPENGL_AQUA 0)
-# set(OPENGL_WINDOWS 0)
-# if(WITH_OPENGL)
-#   if(APPLE)
-#     set(OPENGL_AQUA 1)
-#     set(OPENGL_AGL 1)
-#   elseif(WIN32)
-#     set(OPENGL_WINDOWS 1)
-#   else()
-#     set(OPENGL_X11 1)
-#   endif()
-# endif()
+# set(OPENGL_X11 0) set(OPENGL_AQUA 0) set(OPENGL_WINDOWS 0) if(WITH_OPENGL)
+# if(APPLE) set(OPENGL_AQUA 1) set(OPENGL_AGL 1) elseif(WIN32)
+# set(OPENGL_WINDOWS 1) else() set(OPENGL_X11 1) endif() endif()

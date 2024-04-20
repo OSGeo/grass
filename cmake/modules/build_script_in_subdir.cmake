@@ -68,7 +68,7 @@ function(build_script_in_subdir dir_name)
       endif()
     endif()
 
-    set(TMP_HTML_FILE ${G_SRC_DIR}/${G_NAME}.tmp.html)
+    set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/${G_NAME}.tmp.html)
     set(OUT_HTML_FILE ${GISBASE}/docs/html/${G_NAME}.html)
 
     add_custom_command(

@@ -11,10 +11,10 @@ macro(build_program_in_subdir dir_name)
   set(extra_args ${ARGN})
   if("NAME" IN_LIST extra_args)
     # message("dir_name=${dir_name} ${extra_args}")
-    build_program(SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/${dir_name} ${ARGN})
+    build_program(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${dir_name} ${ARGN})
   else()
     get_filename_component(pgm_name ${dir_name} NAME)
-    build_program(NAME ${pgm_name} SRCDIR
+    build_program(NAME ${pgm_name} SRC_DIR
                   ${CMAKE_CURRENT_SOURCE_DIR}/${dir_name} ${ARGN})
   endif()
 endmacro()

@@ -13,7 +13,7 @@ function(build_module)
   cmake_parse_arguments(
     G
     "EXE"
-    "NAME;SRCDIR;SRC_REGEX;RUNTIME_OUTPUT_DIR;PACKAGE;HTML_FILE_NAME"
+    "NAME;SRC_DIR;SRC_REGEX;RUNTIME_OUTPUT_DIR;PACKAGE;HTML_FILE_NAME"
     "SOURCES;INCLUDES;DEPENDS;OPTIONAL_DEPENDS;PRIMARY_DEPENDS;DEFS;HEADERS;TEST_SOURCES"
     ${ARGN})
 
@@ -35,24 +35,24 @@ function(build_module)
     set(G_SRC_REGEX "*.c")
   endif()
 
-  if(NOT G_SRCDIR)
-    set(G_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR})
+  if(NOT G_SRC_DIR)
+    set(G_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR})
   endif()
-  set(html_file "${G_SRCDIR}/${G_NAME}.html")
+  set(html_file "${G_SRC_DIR}/${G_NAME}.html")
 
   foreach(G_HEADER ${G_HEADERS})
-    if(EXISTS "${G_SRCDIR}/${G_HEADER}")
-      file(COPY ${G_SRCDIR}/${G_HEADER}
+    if(EXISTS "${G_SRC_DIR}/${G_HEADER}")
+      file(COPY ${G_SRC_DIR}/${G_HEADER}
            DESTINATION "${CMAKE_BINARY_DIR}/include/grass")
     else()
       file(
         GLOB header_list_from_glob
         LIST_DIRECTORIES false
-        "${G_SRCDIR}/${G_HEADER}")
+        "${G_SRC_DIR}/${G_HEADER}")
       if(NOT header_list_from_glob)
         message(
           FATAL_ERROR
-            "MUST copy '${G_SRCDIR}/${G_HEADER}' to ${CMAKE_BINARY_DIR}/include/grass"
+            "MUST copy '${G_SRC_DIR}/${G_HEADER}' to ${CMAKE_BINARY_DIR}/include/grass"
         )
       endif()
       foreach(header_I ${header_list_from_glob})
@@ -62,7 +62,7 @@ function(build_module)
   endforeach()
 
   if(NOT G_SOURCES)
-    file(GLOB ${G_NAME}_SRCS "${G_SRCDIR}/${G_SRC_REGEX}")
+    file(GLOB ${G_NAME}_SRCS "${G_SRC_DIR}/${G_SRC_REGEX}")
   else()
     set(${G_NAME}_SRCS ${G_SOURCES})
   endif()
@@ -146,7 +146,7 @@ function(build_module)
     add_dependencies(${G_NAME} ${G_DEPEND})
 
     set(${G_NAME}_INCLUDE_DIRS)
-    list(APPEND ${G_NAME}_INCLUDE_DIRS "${G_SRCDIR}")
+    list(APPEND ${G_NAME}_INCLUDE_DIRS "${G_SRC_DIR}")
     foreach(G_INCLUDE ${G_INCLUDES})
       list(APPEND ${G_NAME}_INCLUDE_DIRS "${G_INCLUDE}")
     endforeach()
@@ -215,7 +215,7 @@ function(build_module)
 
     set(G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
 
-    set(html_file ${G_SRCDIR}/${G_HTML_FILE_NAME})
+    set(html_file ${G_SRC_DIR}/${G_HTML_FILE_NAME})
     set(HTML_FILE)
     set(no_docs_list "grass_sqlp;echo;clean_temp;lock;run")
 
@@ -224,12 +224,12 @@ function(build_module)
       install(FILES ${GISBASE}/docs/html/${G_HTML_FILE_NAME}
               DESTINATION docs/html)
     else()
-      file(GLOB html_files ${G_SRCDIR}/*.html)
+      file(GLOB html_files ${G_SRC_DIR}/*.html)
       if(html_files)
         if(NOT ${target_name} IN_LIST no_docs_list)
           message(
             FATAL_ERROR
-              "${html_file} does not exists. ${G_SRCDIR} \n ${G_RUNTIME_OUTPUT_DIR} | ${target_name}"
+              "${html_file} does not exists. ${G_SRC_DIR} \n ${G_RUNTIME_OUTPUT_DIR} | ${target_name}"
           )
         endif()
       endif()
@@ -245,7 +245,7 @@ function(build_module)
 
     string(REPLACE ".html" "" PGM_NAME "${HTML_FILE_NAME}")
     string(REPLACE ".html" ".tmp.html" TMP_HTML_NAME ${HTML_FILE_NAME})
-    set(TMP_HTML_FILE ${G_SRCDIR}/${TMP_HTML_NAME})
+    set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/${TMP_HTML_NAME})
     set(OUT_HTML_FILE ${GISBASE}/docs/html/${HTML_FILE_NAME})
 
     set(PGM_EXT "")
@@ -261,7 +261,7 @@ function(build_module)
                              ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_NAME})
     endif()
 
-    file(GLOB IMG_FILES ${G_SRCDIR}/*.png ${G_SRCDIR}/*.jpg)
+    file(GLOB IMG_FILES ${G_SRC_DIR}/*.png ${G_SRC_DIR}/*.jpg)
     set(copy_images_command ${CMAKE_COMMAND} -E touch
                             ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_NAME})
     if(IMG_FILES)
@@ -272,9 +272,9 @@ function(build_module)
     add_custom_command(
       TARGET ${G_NAME}
       POST_BUILD
-      COMMAND ${grass_env_command} ${CMAKE_COMMAND} -E chdir ${G_SRCDIR}
+      COMMAND ${grass_env_command} ${CMAKE_COMMAND} -E chdir ${G_SRC_DIR}
               ${html_descr_command} > ${TMP_HTML_FILE}
-      COMMAND ${grass_env_command} ${CMAKE_COMMAND} -E chdir ${G_SRCDIR}
+      COMMAND ${grass_env_command} ${CMAKE_COMMAND} -E chdir ${G_SRC_DIR}
               ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${PGM_NAME} > ${OUT_HTML_FILE}
       COMMAND ${copy_images_command}
       COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
@@ -285,7 +285,7 @@ function(build_module)
   foreach(test_SOURCE ${G_TEST_SOURCES})
     add_test(NAME ${G_NAME}-test
              COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE}
-                     ${G_SRCDIR}/testsuite/${test_SOURCE})
+                     ${G_SRC_DIR}/testsuite/${test_SOURCE})
     message("[build_module] ADDING TEST ${G_NAME}-test")
   endforeach()
 
