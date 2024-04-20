@@ -189,6 +189,9 @@
 /* define if readline exists */
 #cmakedefine HAVE_READLINE_READLINE_H ${HAVE_READLINE_READLINE_H}
 
+/* define if history exists */
+#cmakedefine HAVE_READLINE_HISTORY_H ${HAVE_READLINE_HISTORY_H}
+
 /* define if ft2build.h exists */
 #cmakedefine HAVE_FT2BUILD_H ${HAVE_FT2BUILD_H}
 

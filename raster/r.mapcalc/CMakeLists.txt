@@ -26,7 +26,9 @@ build_program(
   grass_gis
   grass_btree
   grass_calc
-  grass_raster)
+  grass_raster
+  OPTIONAL_DEPENDS
+  READLINE)
 
 build_program(
   NAME
@@ -37,4 +39,6 @@ build_program(
   grass_gis
   grass_btree
   grass_calc
-  grass_raster3d)
+  grass_raster3d
+  OPTIONAL_DEPENDS
+  READLINE)

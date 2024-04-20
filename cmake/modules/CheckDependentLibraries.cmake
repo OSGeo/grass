@@ -236,6 +236,25 @@ if(GEOS_FOUND)
                                     ${GEOS_INCLUDE_DIR})
 endif()
 
+if(WITH_READLINE)
+  find_package(Readline)
+  if(Readline_FOUND)
+    add_library(READLINE INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET READLINE PROPERTY INTERFACE_LINK_LIBRARIES
+                                          ${Readline_LIBRARIES})
+    set_property(TARGET READLINE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                          ${Readline_INCLUDE_DIRS})
+  endif()
+  if(History_FOUND)
+    add_library(HISTORY INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET HISTORY PROPERTY INTERFACE_LINK_LIBRARIES
+                                         ${History_LIBRARIES})
+    set_property(TARGET HISTORY PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                         ${History_INCLUDE_DIRS})
+    message(HAHA ${History_LIBRARIES}...${History_INCLUDE_DIRS})
+  endif()
+endif()
+
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)
 if(Threads_FOUND)
@@ -295,6 +314,8 @@ check_target(LAPACK HAVE_LIBLAPACK)
 check_target(LAPACK HAVE_CLAPACK_H)
 
 check_target(FREETYPE HAVE_FT2BUILD_H)
+check_target(READLINE HAVE_READLINE_READLINE_H)
+check_target(HISTORY HAVE_READLINE_HISTORY_H)
 check_target(ODBC HAVE_SQL_H)
 
 if(TARGET POSTGRES)

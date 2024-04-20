@@ -199,8 +199,8 @@ function(build_module)
       if(interface_def)
         target_compile_definitions(${G_NAME} PRIVATE "${interface_def}")
       endif()
+      target_link_libraries(${G_NAME} ${dep})
     endif()
-    target_link_libraries(${G_NAME} ${dep})
   endforeach()
 
   # To use this property later in build_docs
