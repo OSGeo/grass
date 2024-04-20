@@ -67,6 +67,21 @@ function(build_module)
     set(${G_NAME}_SRCS ${G_SOURCES})
   endif()
 
+  set(RUN_HTML_DESCR TRUE)
+  # Auto set if to run RUN_HTML_DESCR
+  if(G_EXE)
+    set(RUN_HTML_DESCR TRUE)
+    if(G_RUNTIME_OUTPUT_DIR)
+      set(RUN_HTML_DESCR FALSE)
+    endif()
+    # g.parser and some others does not have --html-description.
+    if(${G_NAME} IN_LIST NO_HTML_DESCR_TARGETS)
+      set(RUN_HTML_DESCR FALSE)
+    endif()
+  else()
+    set(RUN_HTML_DESCR FALSE)
+  endif()
+
   set(install_dest "")
   if(NOT G_RUNTIME_OUTPUT_DIR)
     if(G_EXE)
@@ -188,21 +203,6 @@ function(build_module)
     target_link_libraries(${G_NAME} ${dep})
   endforeach()
 
-  set(RUN_HTML_DESCR TRUE)
-  # Auto set if to run RUN_HTML_DESCR
-  if(G_EXE)
-    set(RUN_HTML_DESCR TRUE)
-    if(G_RUNTIME_OUTPUT_DIR)
-      set(RUN_HTML_DESCR FALSE)
-    endif()
-    # g.parser and some others does not have --html-description.
-    if(${G_NAME} IN_LIST NO_HTML_DESCR_TARGETS)
-      set(RUN_HTML_DESCR FALSE)
-    endif()
-  else()
-    set(RUN_HTML_DESCR FALSE)
-  endif()
-
   # To use this property later in build_docs
   set(PGM_EXT "")
   if(WIN32)
@@ -245,7 +245,7 @@ function(build_module)
 
     string(REPLACE ".html" "" PGM_NAME "${HTML_FILE_NAME}")
     string(REPLACE ".html" ".tmp.html" TMP_HTML_NAME ${HTML_FILE_NAME})
-    set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/${TMP_HTML_NAME})
+    set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${TMP_HTML_NAME})
     set(OUT_HTML_FILE ${GISBASE}/docs/html/${HTML_FILE_NAME})
 
     set(PGM_EXT "")
@@ -256,14 +256,9 @@ function(build_module)
     set(html_descr_argument "--html-description")
     if(RUN_HTML_DESCR)
       set(html_descr_command ${G_NAME}${PGM_EXT} "--html-description")
-    else()
-      set(html_descr_command ${CMAKE_COMMAND} -E touch
-                             ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_NAME})
     endif()
 
     file(GLOB IMG_FILES ${G_SRC_DIR}/*.png ${G_SRC_DIR}/*.jpg)
-    set(copy_images_command ${CMAKE_COMMAND} -E touch
-                            ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_NAME})
     if(IMG_FILES)
       set(copy_images_command ${CMAKE_COMMAND} -E copy ${IMG_FILES}
                               ${GISBASE}/docs/html/)

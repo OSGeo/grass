@@ -51,9 +51,6 @@ function(build_gui_in_subdir dir_name)
   if(WITH_DOCS)
 
     file(GLOB IMG_FILES ${G_SRC_DIR}/*.png ${G_SRC_DIR}/*.jpg)
-    set(copy_images_command
-        ${CMAKE_COMMAND} -E touch
-        ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_TARGET_NAME})
     if(IMG_FILES)
       set(copy_images_command ${CMAKE_COMMAND} -E copy ${IMG_FILES}
                               ${GISBASE}/docs/html/)
@@ -74,7 +71,7 @@ function(build_gui_in_subdir dir_name)
       endif()
     endif()
 
-    set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/${G_TARGET_NAME}.tmp.html)
+    set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_TARGET_NAME}.tmp.html)
     set(OUT_HTML_FILE ${GISBASE}/docs/html/${G_TARGET_NAME}.html)
     set(GUI_HTML_FILE ${GISBASE}/docs/html/wxGUI.${G_NAME}.html)
 
