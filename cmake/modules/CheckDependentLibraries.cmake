@@ -166,17 +166,6 @@ if(WITH_OPENGL)
   endif()
 endif()
 
-if(WITH_POSTGRES)
-  find_package(PostgreSQL REQUIRED)
-  if(POSTGRESQL_FOUND)
-    add_library(POSTGRES INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET POSTGRES PROPERTY INTERFACE_LINK_LIBRARIES
-                                          ${PostgreSQL_LIBRARY})
-    set_property(TARGET POSTGRES PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                          ${PostgreSQL_INCLUDE_DIR})
-  endif()
-endif()
-
 if(WITH_SQLITE)
   find_package(SQLite REQUIRED)
   if(SQLITE_FOUND)
@@ -185,6 +174,28 @@ if(WITH_SQLITE)
                                         ${SQLITE_LIBRARY})
     set_property(TARGET SQLITE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
                                         ${SQLITE_INCLUDE_DIRS})
+  endif()
+endif()
+
+if(WITH_POSTGRES)
+  find_package(PostgreSQL)
+  if(POSTGRESQL_FOUND)
+    add_library(POSTGRES INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET POSTGRES PROPERTY INTERFACE_LINK_LIBRARIES
+                                          ${POSTGRESQL_LIBRARY})
+    set_property(TARGET POSTGRES PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                          ${POSTGRESQL_INCLUDE_DIR})
+  endif()
+endif()
+
+if(WITH_MYSQL)
+  find_package(MySQL)
+  if(MYSQL_FOUND)
+    add_library(MYSQL INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET MYSQL PROPERTY INTERFACE_LINK_LIBRARIES
+                                       ${MYSQL_LIBRARY})
+    set_property(TARGET MYSQL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                       ${MYSQL_INCLUDE_DIR})
   endif()
 endif()
 
@@ -272,6 +283,8 @@ check_target(GEOS HAVE_GEOS)
 check_target(GDAL HAVE_GDAL)
 check_target(GDAL HAVE_OGR)
 check_target(SQLITE HAVE_SQLITE)
+check_target(POSTGRES HAVE_POSTGRES)
+check_target(MYSQL HAVE_MYSQL_H)
 
 check_target(PROJ HAVE_PROJ_H)
 
@@ -282,7 +295,6 @@ check_target(LAPACK HAVE_LIBLAPACK)
 check_target(LAPACK HAVE_CLAPACK_H)
 
 check_target(FREETYPE HAVE_FT2BUILD_H)
-check_target(POSTGRES HAVE_POSTGRES)
 check_target(ODBC HAVE_SQL_H)
 
 if(TARGET POSTGRES)

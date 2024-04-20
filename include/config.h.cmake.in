@@ -125,11 +125,14 @@
 /* define if asprintf() exists */
 #cmakedefine HAVE_ASPRINTF ${HAVE_ASPRINTF}
 
+/* define if SQLite is to be used */
+#cmakedefine HAVE_SQLITE ${HAVE_SQLITE}
+
 /* define if postgres is to be used */
 #cmakedefine HAVE_POSTGRES ${HAVE_POSTGRES}
 
-/* define if SQLite is to be used */
-#cmakedefine HAVE_SQLITE ${HAVE_SQLITE}
+/* define if MySQL is to be used */
+#cmakedefine HAVE_MYSQL_H ${HAVE_MYSQL_H}
 
 /* define if GDAL is to be used */
 #cmakedefine HAVE_GDAL ${HAVE_GDAL}
