@@ -24,17 +24,17 @@ build_program(
   SOURCES
   g.echo.c
   RUNTIME_OUTPUT_DIR
-  tools
+  utils
   PACKAGE
   "NONE")
-add_dependencies(g.echo python_doc_tools)
+add_dependencies(g.echo python_doc_utils)
 add_custom_target(
-  python_doc_tools
+  python_doc_utils
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/mkhtml.py
-          ${GISBASE}/tools
+          ${GISBASE}/utils
   COMMAND ${CMAKE_COMMAND} -E copy
-          ${CMAKE_CURRENT_SOURCE_DIR}/g.html2man/g.html2man.py ${GISBASE}/tools
+          ${CMAKE_CURRENT_SOURCE_DIR}/g.html2man/g.html2man.py ${GISBASE}/utils
   COMMAND ${CMAKE_COMMAND} -E copy
-          ${CMAKE_CURRENT_SOURCE_DIR}/g.html2man/ghtml.py ${GISBASE}/tools
+          ${CMAKE_CURRENT_SOURCE_DIR}/g.html2man/ghtml.py ${GISBASE}/utils
   COMMAND ${CMAKE_COMMAND} -E copy
-          ${CMAKE_CURRENT_SOURCE_DIR}/g.html2man/ggroff.py ${GISBASE}/tools)
+          ${CMAKE_CURRENT_SOURCE_DIR}/g.html2man/ggroff.py ${GISBASE}/utils)
