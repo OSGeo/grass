@@ -156,7 +156,7 @@ set_compiler_flags()
 include(Configure)
 
 include(repo_status)
-repo_status("${CMAKE_CURRENT_LIST_DIR}" GRASS_VERSION_GIT)
+repo_status("${CMAKE_CURRENT_LIST_DIR}")
 
 enable_testing()
 
