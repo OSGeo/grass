@@ -190,12 +190,12 @@ endif()
 
 if(WITH_MYSQL)
   find_package(MySQL)
-  if(MYSQL_FOUND)
+  if(MySQL_FOUND)
     add_library(MYSQL INTERFACE IMPORTED GLOBAL)
     set_property(TARGET MYSQL PROPERTY INTERFACE_LINK_LIBRARIES
-                                       ${MYSQL_LIBRARY})
+                                       ${MySQL_LIBRARY})
     set_property(TARGET MYSQL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                       ${MYSQL_INCLUDE_DIRS})
+                                       ${MySQL_INCLUDE_DIRS})
   endif()
 endif()
 
