@@ -123,7 +123,7 @@ if(ICONV_FOUND)
 endif()
 
 if(WITH_BZLIB)
-  find_package(BZip2)
+  find_package(BZip2 REQUIRED)
   if(BZIP2_FOUND)
     add_library(BZIP2 INTERFACE IMPORTED GLOBAL)
     set_property(TARGET BZIP2 PROPERTY INTERFACE_LINK_LIBRARIES
@@ -134,7 +134,7 @@ if(WITH_BZLIB)
 endif()
 
 if(WITH_BLAS)
-  find_package(BLAS)
+  find_package(BLAS REQUIRED)
   if(BLAS_FOUND)
     add_library(BLAS INTERFACE IMPORTED GLOBAL)
     set_property(TARGET BLAS PROPERTY INTERFACE_LINK_LIBRARIES
@@ -143,7 +143,7 @@ if(WITH_BLAS)
 endif()
 
 if(WITH_LAPACK)
-  find_package(LAPACK)
+  find_package(LAPACK REQUIRED)
   if(LAPACK_FOUND)
     add_library(LAPACK INTERFACE IMPORTED GLOBAL)
     set_property(TARGET LAPACK PROPERTY INTERFACE_LINK_LIBRARIES
@@ -178,7 +178,7 @@ if(WITH_SQLITE)
 endif()
 
 if(WITH_POSTGRES)
-  find_package(PostgreSQL)
+  find_package(PostgreSQL REQUIRED)
   if(PostgreSQL_FOUND)
     add_library(POSTGRES INTERFACE IMPORTED GLOBAL)
     set_property(TARGET POSTGRES PROPERTY INTERFACE_LINK_LIBRARIES
@@ -189,7 +189,7 @@ if(WITH_POSTGRES)
 endif()
 
 if(WITH_MYSQL)
-  find_package(MySQL)
+  find_package(MySQL REQUIRED)
   if(MySQL_FOUND)
     add_library(MYSQL INTERFACE IMPORTED GLOBAL)
     set_property(TARGET MYSQL PROPERTY INTERFACE_LINK_LIBRARIES
@@ -208,7 +208,7 @@ if(PDAL_FOUND)
 endif()
 
 if(WITH_LIBLAS)
-  find_package(LibLAS)
+  find_package(LibLAS REQUIRED)
   if(LibLAS_FOUND)
     add_library(LIBLAS INTERFACE IMPORTED GLOBAL)
     set_property(TARGET LIBLAS PROPERTY INTERFACE_LINK_LIBRARIES
@@ -237,7 +237,7 @@ if(GEOS_FOUND)
 endif()
 
 if(WITH_READLINE)
-  find_package(Readline)
+  find_package(Readline REQUIRED)
   if(Readline_FOUND)
     add_library(READLINE INTERFACE IMPORTED GLOBAL)
     set_property(TARGET READLINE PROPERTY INTERFACE_LINK_LIBRARIES
