@@ -106,12 +106,45 @@ build_program_in_subdir(
   RUNTIME_OUTPUT_DIR
   "driver/db/")
 
-if(TARGET POSTGRES)
-  list(APPEND db_drivers postgres)
+if(TARGET MYSQL)
+  list(APPEND db_drivers mysql)
 endif()
 
-if(MYSQL_LIB)
-  # add_subdirectory(mysql) list(APPEND db_drivers "mysql")
+set(mysql_SRCS
+    mysql/create_table.c
+    mysql/cursor.c
+    mysql/dbe.c
+    mysql/describe.c
+    mysql/driver.c
+    mysql/error.c
+    mysql/execute.c
+    mysql/fetch.c
+    mysql/index.c
+    mysql/listtab.c
+    mysql/main.c
+    mysql/parse.c
+    mysql/replace.c
+    mysql/select.c)
+
+build_program_in_subdir(
+  mysql
+  SOURCES
+  ${mysql_SRCS}
+  DEPENDS
+  grass_gis
+  grass_dbmidriver
+  grass_sqlp
+  DEFS
+  "${grass_dbstubs_DEFS}"
+  PRIMARY_DEPENDS
+  MYSQL
+  HTML_FILE_NAME
+  grass-sql
+  RUNTIME_OUTPUT_DIR
+  "driver/db/")
+
+if(TARGET MYSQL)
+  list(APPEND db_drivers mysql)
 endif()
 
 set(db_drivers

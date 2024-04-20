@@ -195,7 +195,7 @@ if(WITH_MYSQL)
     set_property(TARGET MYSQL PROPERTY INTERFACE_LINK_LIBRARIES
                                        ${MYSQL_LIBRARY})
     set_property(TARGET MYSQL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                       ${MYSQL_INCLUDE_DIR})
+                                       ${MYSQL_INCLUDE_DIRS})
   endif()
 endif()
 
