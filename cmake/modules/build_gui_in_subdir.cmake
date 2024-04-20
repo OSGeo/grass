@@ -71,27 +71,24 @@ function(build_gui_in_subdir dir_name)
       endif()
     endif()
 
-    set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_TARGET_NAME}.tmp.html)
+    set(TMP_HTML_FILE
+        ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${G_TARGET_NAME}.tmp.html)
     set(OUT_HTML_FILE ${GISBASE}/docs/html/${G_TARGET_NAME}.html)
     set(GUI_HTML_FILE ${GISBASE}/docs/html/wxGUI.${G_NAME}.html)
 
     add_custom_command(
       OUTPUT ${OUT_HTML_FILE}
       COMMAND
-        ${grass_env_command} ${CMAKE_COMMAND} -E chdir ${G_SRC_DIR}
-        ${PYTHON_EXECUTABLE} ${G_TARGET_NAME}.py "--html-description" >
+        ${grass_env_command} ${PYTHON_EXECUTABLE}
+        ${GISBASE}/scripts/${G_TARGET_NAME}${SCRIPT_EXT} --html-description >
         ${TMP_HTML_FILE}
-      COMMAND
-        ${grass_env_command} ${CMAKE_COMMAND} -E chdir ${G_SRC_DIR}
-        ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${G_TARGET_NAME} ${GRASS_VERSION_DATE}
-        > ${OUT_HTML_FILE}
+      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY}
+              ${G_TARGET_NAME} ${GRASS_VERSION_DATE} > ${OUT_HTML_FILE}
       COMMENT "Creating ${OUT_HTML_FILE}"
       COMMAND ${copy_images_command}
       COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
-      COMMAND
-        ${grass_env_command} ${CMAKE_COMMAND} -E chdir ${G_SRC_DIR}
-        ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${G_TARGET_NAME} ${GRASS_VERSION_DATE}
-        > ${GUI_HTML_FILE}
+      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY}
+              ${G_TARGET_NAME} ${GRASS_VERSION_DATE} > ${GUI_HTML_FILE}
       COMMENT "Creating ${GUI_HTML_FILE}"
       DEPENDS ${OUT_SCRIPT_FILE} GUI_WXPYTHON LIB_PYTHON)
 

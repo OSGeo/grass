@@ -253,9 +253,10 @@ function(build_module)
       set(PGM_EXT ".exe")
     endif()
 
-    set(html_descr_argument "--html-description")
     if(RUN_HTML_DESCR)
-      set(html_descr_command ${G_NAME}${PGM_EXT} "--html-description")
+      set(html_descr_command ${G_NAME}${PGM_EXT} --html-description)
+    else()
+      set(html_descr_command ${CMAKE_COMMAND} -E echo)
     endif()
 
     file(GLOB IMG_FILES ${G_SRC_DIR}/*.png ${G_SRC_DIR}/*.jpg)
@@ -267,10 +268,9 @@ function(build_module)
     add_custom_command(
       TARGET ${G_NAME}
       POST_BUILD
-      COMMAND ${grass_env_command} ${CMAKE_COMMAND} -E chdir ${G_SRC_DIR}
-              ${html_descr_command} > ${TMP_HTML_FILE}
-      COMMAND ${grass_env_command} ${CMAKE_COMMAND} -E chdir ${G_SRC_DIR}
-              ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${PGM_NAME} > ${OUT_HTML_FILE}
+      COMMAND ${grass_env_command} ${html_descr_command} > ${TMP_HTML_FILE}
+      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${PGM_NAME}
+              > ${OUT_HTML_FILE}
       COMMAND ${copy_images_command}
       COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
       COMMENT "Creating ${OUT_HTML_FILE}")

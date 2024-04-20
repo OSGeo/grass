@@ -72,11 +72,11 @@ function(build_script_in_subdir dir_name)
     add_custom_command(
       OUTPUT ${OUT_HTML_FILE}
       COMMAND
-        ${grass_env_command} ${CMAKE_COMMAND} -E chdir ${G_SRC_DIR}
-        ${PYTHON_EXECUTABLE} ${G_NAME}.py "--html-description" >
+        ${grass_env_command} ${PYTHON_EXECUTABLE}
+        ${GISBASE}/scripts/${G_NAME}${SCRIPT_EXT} --html-description >
         ${TMP_HTML_FILE}
-      COMMAND ${grass_env_command} ${CMAKE_COMMAND} -E chdir ${G_SRC_DIR}
-              ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${G_NAME} > ${OUT_HTML_FILE}
+      COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${G_NAME} >
+              ${OUT_HTML_FILE}
       COMMAND ${copy_images_command}
       COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
       COMMENT "Creating ${OUT_HTML_FILE}"
