@@ -179,12 +179,12 @@ endif()
 
 if(WITH_POSTGRES)
   find_package(PostgreSQL)
-  if(POSTGRESQL_FOUND)
+  if(PostgreSQL_FOUND)
     add_library(POSTGRES INTERFACE IMPORTED GLOBAL)
     set_property(TARGET POSTGRES PROPERTY INTERFACE_LINK_LIBRARIES
-                                          ${POSTGRESQL_LIBRARY})
+                                          ${PostgreSQL_LIBRARY})
     set_property(TARGET POSTGRES PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                          ${POSTGRESQL_INCLUDE_DIR})
+                                          ${PostgreSQL_INCLUDE_DIR})
   endif()
 endif()
 
