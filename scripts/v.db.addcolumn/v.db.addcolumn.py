@@ -112,7 +112,7 @@ def main():
                     " <'name type [,name type, ...]'> format, please."
                 )
             )
-        col_name, col_type = col.split(whitespace.group(0))
+        col_name, col_type = col.split(whitespace.group(0), 1)
         if col_name in column_existing:
             grass.error(
                 _("Column <{}> is already in the table. Skipping.").format(col_name)
