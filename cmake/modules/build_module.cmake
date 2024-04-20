@@ -236,11 +236,6 @@ function(build_module)
     endif()
 
     if(NOT HTML_FILE)
-      add_custom_command(
-        TARGET ${G_NAME}
-        POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${G_NAME}>
-                ${G_RUNTIME_OUTPUT_DIR})
       return()
     endif()
     # message("HTML_FILE=${HTML_FILE}")
@@ -281,8 +276,6 @@ function(build_module)
               ${html_descr_command} > ${TMP_HTML_FILE}
       COMMAND ${grass_env_command} ${CMAKE_COMMAND} -E chdir ${G_SRCDIR}
               ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${PGM_NAME} > ${OUT_HTML_FILE}
-      COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${G_NAME}>
-              ${G_RUNTIME_OUTPUT_DIR}
       COMMAND ${copy_images_command}
       COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
       COMMENT "Creating ${OUT_HTML_FILE}")
