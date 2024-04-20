@@ -209,7 +209,7 @@ endif()
 
 if(WITH_LIBLAS)
   find_package(LibLAS)
-  if(LIBLAS_FOUND)
+  if(LibLAS_FOUND)
     add_library(LIBLAS INTERFACE IMPORTED GLOBAL)
     set_property(TARGET LIBLAS PROPERTY INTERFACE_LINK_LIBRARIES
                                         ${LibLAS_C_LIBRARY})
