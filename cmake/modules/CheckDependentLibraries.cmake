@@ -219,7 +219,7 @@ if(WITH_LIBLAS)
 endif()
 
 find_package(NetCDF QUIET)
-if(NETCDF_FOUND)
+if(NetCDF_FOUND)
   add_library(NETCDF INTERFACE IMPORTED GLOBAL)
   set_property(TARGET NETCDF PROPERTY INTERFACE_LINK_LIBRARIES
                                       ${NetCDF_LIBRARY})
@@ -238,7 +238,7 @@ endif()
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)
-if(THREADS_FOUND)
+if(Threads_FOUND)
   add_library(PTHREAD INTERFACE IMPORTED GLOBAL)
   if(THREADS_HAVE_PTHREAD_ARG)
     set_property(TARGET PTHREAD PROPERTY INTERFACE_COMPILE_OPTIONS "-pthread")
@@ -261,7 +261,7 @@ if(MSVC)
 endif()
 
 find_package(Python3 REQUIRED)
-if(PYTHON3_FOUND)
+if(Python3_FOUND)
   set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})
   #[[
   find_package(PythonLibs REQUIRED)
