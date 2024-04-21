@@ -164,6 +164,7 @@ build_module(
   BZIP2
   ZSTD
   ICONV
+  REGEX
   POSTGRES
   DEFS
   "${grass_gis_DEFS}")

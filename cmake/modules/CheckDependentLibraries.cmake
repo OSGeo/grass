@@ -265,6 +265,19 @@ if(WITH_READLINE)
   endif()
 endif()
 
+if(WITH_REGEX)
+  find_package(regex REQUIRED)
+  if(regex_FOUND)
+    add_library(REGEX INTERFACE IMPORTED GLOBAL)
+    if(regex_LIBRARIES)
+      set_property(TARGET REGEX PROPERTY INTERFACE_LINK_LIBRARIES
+                                         ${regex_LIBRARIES})
+    endif() # else in libc
+    set_property(TARGET REGEX PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                       ${regex_INCLUDE_DIRS})
+  endif()
+endif()
+
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)
 if(Threads_FOUND)
@@ -327,6 +340,7 @@ check_target(LAPACK HAVE_CLAPACK_H)
 check_target(FREETYPE HAVE_FT2BUILD_H)
 check_target(READLINE HAVE_READLINE_READLINE_H)
 check_target(HISTORY HAVE_READLINE_HISTORY_H)
+check_target(REGEX HAVE_REGEX_H)
 check_target(ODBC HAVE_SQL_H)
 
 if(TARGET POSTGRES)

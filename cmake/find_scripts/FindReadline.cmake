@@ -31,10 +31,10 @@ else()
   endif()
 endif()
 
-if(Readline_INCLUDE_DIRS AND Readline_LIBRARIES)
+if(Readline_FOUND)
   message(STATUS "Found Readline: ${Readline_LIBRARIES}")
 endif()
 
-if(History_INCLUDE_DIRS AND History_LIBRARIES)
+if(History_FOUND)
   message(STATUS "Found History: ${History_LIBRARIES}")
 endif()
