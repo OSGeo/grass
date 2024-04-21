@@ -42,8 +42,7 @@ function(build_module)
 
   foreach(G_HEADER ${G_HEADERS})
     if(EXISTS "${G_SRC_DIR}/${G_HEADER}")
-      file(COPY ${G_SRC_DIR}/${G_HEADER}
-           DESTINATION "${CMAKE_BINARY_DIR}/include/grass")
+      file(COPY ${G_SRC_DIR}/${G_HEADER} DESTINATION "${GISBASE}/include/grass")
     else()
       file(
         GLOB header_list_from_glob
@@ -52,11 +51,10 @@ function(build_module)
       if(NOT header_list_from_glob)
         message(
           FATAL_ERROR
-            "MUST copy '${G_SRC_DIR}/${G_HEADER}' to ${CMAKE_BINARY_DIR}/include/grass"
-        )
+            "MUST copy '${G_SRC_DIR}/${G_HEADER}' to ${GISBASE}/include/grass")
       endif()
       foreach(header_I ${header_list_from_glob})
-        file(COPY ${header_I} DESTINATION "${CMAKE_BINARY_DIR}/include/grass")
+        file(COPY ${header_I} DESTINATION "${GISBASE}/include/grass")
       endforeach()
     endif()
   endforeach()
@@ -126,8 +124,7 @@ function(build_module)
       PROPERTIES FOLDER lib
                  VERSION ${GRASS_VERSION_NUMBER}
                  SOVERSION ${GRASS_VERSION_MAJOR})
-    set(export_file_name
-        "${CMAKE_BINARY_DIR}/include/export/${G_NAME}_export.h")
+    set(export_file_name "${GISBASE}/include/export/${G_NAME}_export.h")
     # Default is to use library target name without grass_ prefix
     string(REPLACE "grass_" "" default_html_file_name ${G_NAME})
     set(PGM_NAME ${default_html_file_name})

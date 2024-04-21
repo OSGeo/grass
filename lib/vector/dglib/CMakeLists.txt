@@ -30,7 +30,7 @@ set(DGL_headers
     graph_v1.h
     graph_v2.h)
 foreach(DGL_header ${DGL_headers})
-  file(COPY ${DGL_header} DESTINATION ${CMAKE_BINARY_DIR}/include/grass/dgl)
+  file(COPY ${DGL_header} DESTINATION ${GISBASE}/include/grass/dgl)
 endforeach()
 
 set(graphlib_SRCS

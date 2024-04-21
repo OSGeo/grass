@@ -1,4 +1,3 @@
-
 file(GLOB_RECURSE SRCHS "*.h")
 set(include_depends)
 foreach(srch ${SRCHS})
@@ -17,25 +16,23 @@ endforeach()
 add_custom_target(copy_header DEPENDS ${include_depends} LIB_PYTHON)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/grass/version.h.in
-               "${CMAKE_CURRENT_BINARY_DIR}/grass/version.h")
+               "${GISBASE}/include/grass/version.h")
 
-message(STATUS "Creating ${CMAKE_CURRENT_BINARY_DIR}/grass/config.h")
+message(STATUS "Creating ${GISBASE}/include/grass/config.h")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in
-               "${CMAKE_CURRENT_BINARY_DIR}/grass/config.h")
+               "${GISBASE}/include/grass/config.h")
 
 file(WRITE ${GISBASE}/include/grass/copying.h "")
 file(STRINGS ${CMAKE_SOURCE_DIR}/COPYING copying_lines)
 foreach(copying_line ${copying_lines})
-  file(APPEND ${GISBASE}/include/grass/copying.h
-       "\"${copying_line} \\n\"\n")
+  file(APPEND ${GISBASE}/include/grass/copying.h "\"${copying_line} \\n\"\n")
 endforeach()
 
 file(WRITE ${GISBASE}/include/grass/citing.h "")
 file(STRINGS ${CMAKE_SOURCE_DIR}/CITING citing_lines)
 foreach(citing_line ${citing_lines})
-  file(APPEND ${GISBASE}/include/grass/citing.h
-       "\"${citing_line}\\n\"\n")
+  file(APPEND ${GISBASE}/include/grass/citing.h "\"${citing_line}\\n\"\n")
 endforeach()
 
 # TODO file(READ  ${CMAKE_SOURCE_DIR}/config.status config_status_header)

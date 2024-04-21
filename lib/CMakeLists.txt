@@ -42,8 +42,8 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
   target_link_libraries(grass_raster ${DL_LIBRARY})
 endif()
 
-configure_file(external/ccmath/ccmath.h
-               ${CMAKE_BINARY_DIR}/include/grass/ccmath_grass.h COPYONLY)
+configure_file(external/ccmath/ccmath.h ${GISBASE}/include/grass/ccmath_grass.h
+               COPYONLY)
 build_library_in_subdir(external/ccmath)
 
 build_library_in_subdir(external/shapelib NAME grass_shape HEADERS "shapefil.h")
