@@ -662,17 +662,17 @@ int main(int argc, char *argv[])
         /* IL_interp_segments_2d_parallel should use these functions*/
         IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,
                         IL_check_at_points_2d_cvdev, IL_secpar_loop_2d, IL_crst,
-                        IL_crstg, IL_write_temp_2d, IL_write_point_2d);
+                        IL_crstg, IL_write_temp_2d);
     }
     else {
         IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,
                         IL_check_at_points_2d, IL_secpar_loop_2d, IL_crst,
-                        IL_crstg, IL_write_temp_2d, NULL);
+                        IL_crstg, IL_write_temp_2d);
     }
 #else
     IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,
                     IL_check_at_points_2d, IL_secpar_loop_2d, IL_crst, IL_crstg,
-                    IL_write_temp_2d, NULL);
+                    IL_write_temp_2d);
 #endif
 
     totsegm = IL_vector_input_data_2d(&params, &Map, with_z ? 0 : field, zcol,

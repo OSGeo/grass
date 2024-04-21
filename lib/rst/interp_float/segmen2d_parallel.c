@@ -404,7 +404,8 @@ int IL_interp_segments_2d_parallel(
                          * conflicts between threads */
 #pragma omp critical
                         {
-                            params->wr_point(target_point, err);
+                            params->check_points(params, NULL, NULL, &err, 0.0,
+                                                 0.0, &target_point);
                         }
                     }
                 } /* end of computations for every point in cv or devi*/

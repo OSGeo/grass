@@ -111,8 +111,7 @@ void IL_init_func_2d(
     secpar_fn *secp_f,         /*!< calculates aspect, slope, curvature */
     interp_fn *interp_f,       /*!< radial basis function */
     interpder_fn *interpder_f, /*!< derivatives of radial basis function */
-    wr_temp_fn *temp_f,        /*!< writes temp files */
-    wr_point_fn *wr_point_f    /*!< writes temp files */
+    wr_temp_fn *temp_f         /*!< writes temp files */
 )
 {
     params->grid_calc = grid_f;
@@ -122,5 +121,4 @@ void IL_init_func_2d(
     params->interp = interp_f;
     params->interpder = interpder_f;
     params->wr_temp = temp_f;
-    params->wr_point = wr_point_f;
 }

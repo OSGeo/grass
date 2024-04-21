@@ -129,8 +129,6 @@ struct interp_params {
 
     wr_temp_fn *wr_temp; /**< writes temp files */
 
-    wr_point_fn *wr_point; /**< writes point file */
-
     const char *wheresql; /**< SQL statement to select input points */
 };
 
@@ -152,7 +150,7 @@ void IL_init_params_2d(struct interp_params *, FILE *, int, int, double, int,
 
 void IL_init_func_2d(struct interp_params *, grid_calc_fn *, matrix_create_fn *,
                      check_points_fn *, secpar_fn *, interp_fn *,
-                     interpder_fn *, wr_temp_fn *, wr_point_fn *);
+                     interpder_fn *, wr_temp_fn *);
 
 /* input2d.c */
 int IL_input_data_2d(struct interp_params *, struct tree_info *, double *,

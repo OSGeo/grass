@@ -465,7 +465,7 @@ int main(int argc, char *argv[])
 
     IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,
                     IL_check_at_points_2d, IL_secpar_loop_2d, IL_crst, IL_crstg,
-                    IL_write_temp_2d, NULL);
+                    IL_write_temp_2d);
 
     G_message(_("Temporarily changing the region to desired resolution ..."));
     Rast_set_window(&outhd);
