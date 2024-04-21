@@ -49,12 +49,12 @@ int db__driver_open_database(dbHandle *handle)
         dbString sql;
         cursor *c;
 
-        db_init_string(&sql);
-        db_set_string(&sql, "SET SQL_MODE=ANSI_QUOTES;");
-
         c = alloc_cursor();
         if (c == NULL)
             return DB_FAILED;
+
+        db_init_string(&sql);
+        db_set_string(&sql, "SET SQL_MODE=ANSI_QUOTES;");
 
         /* Set SQL ANSI_QUOTES MODE which allow to use double quotes instead of
          * backticks */
@@ -66,6 +66,7 @@ int db__driver_open_database(dbHandle *handle)
             db_d_append_error("SQLExecDirect():\n%s\n%s (%d)\n",
                               db_get_string(&sql), msg, (int)err);
             db_d_report_error();
+            db_free_string(&sql);
 
             return DB_FAILED;
         }
@@ -74,6 +75,7 @@ int db__driver_open_database(dbHandle *handle)
                 db_get_string(&sql));
 
         free_cursor(c);
+        db_free_string(&sql);
     }
 
     return DB_OK;
