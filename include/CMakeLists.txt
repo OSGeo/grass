@@ -5,7 +5,7 @@ foreach(srch ${SRCHS})
   get_filename_component(srch_DIR ${srch} DIRECTORY)
   get_filename_component(srch_NAME ${srch} NAME)
   string(REPLACE "${CMAKE_CURRENT_SOURCE_DIR}/" "" dsth_DIR "${srch_DIR}")
-  set(output_dir ${CMAKE_BINARY_DIR}/include/${dsth_DIR})
+  set(output_dir ${GISBASE}/include/${dsth_DIR})
   add_custom_command(
     OUTPUT ${output_dir}/${srch_NAME}
     COMMAND ${CMAKE_COMMAND} -E make_directory ${output_dir}
@@ -24,19 +24,19 @@ message(STATUS "Creating ${CMAKE_CURRENT_BINARY_DIR}/grass/config.h")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in
                "${CMAKE_CURRENT_BINARY_DIR}/grass/config.h")
 
-file(WRITE ${CMAKE_BINARY_DIR}/include/grass/copying.h "")
+file(WRITE ${GISBASE}/include/grass/copying.h "")
 file(STRINGS ${CMAKE_SOURCE_DIR}/COPYING copying_lines)
 foreach(copying_line ${copying_lines})
-  file(APPEND ${CMAKE_BINARY_DIR}/include/grass/copying.h
+  file(APPEND ${GISBASE}/include/grass/copying.h
        "\"${copying_line} \\n\"\n")
 endforeach()
 
-file(WRITE ${CMAKE_BINARY_DIR}/include/grass/citing.h "")
+file(WRITE ${GISBASE}/include/grass/citing.h "")
 file(STRINGS ${CMAKE_SOURCE_DIR}/CITING citing_lines)
 foreach(citing_line ${citing_lines})
-  file(APPEND ${CMAKE_BINARY_DIR}/include/grass/citing.h
+  file(APPEND ${GISBASE}/include/grass/citing.h
        "\"${citing_line}\\n\"\n")
 endforeach()
 
 # TODO file(READ  ${CMAKE_SOURCE_DIR}/config.status config_status_header)
-file(WRITE ${CMAKE_BINARY_DIR}/include/grass/confparms.h "\"/*  */\\n\"")
+file(WRITE ${GISBASE}/include/grass/confparms.h "\"/*  */\\n\"")
