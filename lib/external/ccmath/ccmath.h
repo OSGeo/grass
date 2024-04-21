@@ -54,7 +54,6 @@ typedef struct gcomplex Cpx;
 
 /* Real Linear Systems */
 
-
 int minv(double *a, int n);
 
 int psinv(double *v, int n);
