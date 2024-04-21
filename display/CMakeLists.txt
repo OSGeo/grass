@@ -6,7 +6,7 @@ if(NOT MSVC)
   build_program_in_subdir(d.font DEPENDS grass_gis grass_display grass_raster)
   # libgen.h does not exists on windows msvc
   build_program_in_subdir(d.mon DEPENDS grass_gis grass_display)
-  copy_python_files_in_subdir(d.mon etc)
+  copy_python_files_in_subdir(d.mon etc TARGET d.mon POST_BUILD)
 endif()
 build_program_in_subdir(d.fontlist DEPENDS grass_gis grass_display grass_raster)
 build_program_in_subdir(d.geodesic DEPENDS grass_gis grass_display)
