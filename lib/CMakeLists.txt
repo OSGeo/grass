@@ -150,7 +150,15 @@ build_library_in_subdir(segment DEPENDS grass_gis) # addeed DEPENDS grass_gis
 
 add_subdirectory(rst)
 
-build_library_in_subdir(lidar DEPENDS grass_vector HEADERS "lidar.h")
+build_library_in_subdir(
+  lidar
+  DEPENDS
+  grass_vector
+  grass_raster
+  grass_dbmibase
+  grass_segment
+  HEADERS
+  "lidar.h")
 
 build_library_in_subdir(raster3d DEPENDS grass_raster)
 
