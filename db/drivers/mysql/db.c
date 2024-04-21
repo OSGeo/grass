@@ -75,6 +75,7 @@ int db__driver_open_database(dbHandle *handle)
                               mysql_error(connection));
             db_d_report_error();
             db_free_string(&sql);
+            mysql_close(connection);
 
             return DB_FAILED;
         }
