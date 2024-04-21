@@ -303,7 +303,7 @@ if(Threads_FOUND)
 endif()
 
 if(WITH_OPENMP)
-	find_package(OpenMP REQUIRED)
+  find_package(OpenMP REQUIRED)
 endif()
 
 find_package(Python3 REQUIRED)
