@@ -60,7 +60,7 @@ set(gislib_SRCS
     endian.c
     home.c
     make_loc.c
-    parser_rest.c
+    parser_rest_md.c
     rotate.c
     wind_in.c
     basename.c

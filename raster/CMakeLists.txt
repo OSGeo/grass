@@ -65,7 +65,7 @@ build_program_in_subdir(r.gwflow DEPENDS grass_gis grass_raster grass_gpde)
 
 build_program_in_subdir(r.his DEPENDS grass_gis grass_raster grass_gproj)
 
-build_program_in_subdir(r.horizon DEPENDS grass_gis grass_raster grass_gproj)
+build_program_in_subdir(r.horizon DEPENDS grass_gis grass_raster grass_gproj grass_parson)
 
 build_program_in_subdir(r.in.ascii DEPENDS grass_gis grass_raster)
 
