@@ -319,6 +319,5 @@ char *G_rc_path(const char *element, const char *item)
     return path;
 } /* G_rc_path */
 
-
 /* vim: set softtabstop=4 shiftwidth=4 expandtab: */
 #endif
