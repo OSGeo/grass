@@ -46,22 +46,39 @@ int db__driver_open_database(dbHandle *handle)
 
     if (strcmp((CHAR *)dbms_name, "MySQL") == 0 ||
         strcmp((CHAR *)dbms_name, "MariaDB") == 0) {
+        dbString sql;
         cursor *c;
 
         c = alloc_cursor();
         if (c == NULL)
             return DB_FAILED;
 
+        db_init_string(&sql);
+        db_set_string(&sql, "SET SQL_MODE=ANSI_QUOTES;");
+
         /* Set SQL ANSI_QUOTES MODE which allow to use double quotes instead of
          * backticks */
-        SQLExecDirect(c->stmt, (SQLCHAR *)"SET SQL_MODE=ANSI_QUOTES", SQL_NTS);
+        ret = SQLExecDirect(c->stmt, (SQLCHAR *)db_get_string(&sql), SQL_NTS);
 
-        G_debug(
-            3,
-            "db__driver_open_database(): Set ODBC %s DB SQL ANSI_QUOTES MODE",
-            dbms_name);
+        if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {
+            SQLGetDiagRec(SQL_HANDLE_STMT, c->stmt, 1, NULL, &err, msg,
+                          sizeof(msg), NULL);
+            db_d_append_error("SQLExecDirect():\n%s\n%s (%d)\n",
+                              db_get_string(&sql), msg, (int)err);
+            db_d_report_error();
+            free_cursor(c);
+            db_free_string(&sql);
+            SQLDisconnect(ODconn);
+            close_connection();
+
+            return DB_FAILED;
+        }
+
+        G_debug(3, "db__driver_open_database(): Set ODBC %s DB %s", dbms_name,
+                db_get_string(&sql));
 
         free_cursor(c);
+        db_free_string(&sql);
     }
 
     return DB_OK;
