@@ -298,7 +298,7 @@ void record_args(int argc, char **argv)
     }
 
 #ifdef _WIN32
-  strcpy(buf, ctime(&t));
+    strcpy(buf, ctime(&t));
 #else
     ctime_r(&t, buf);
     buf[24] = '\0';
