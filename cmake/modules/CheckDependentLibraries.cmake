@@ -47,6 +47,17 @@ endif()
 
 # Optional dependencies
 
+if(MSVC)
+  find_package(PCRE REQUIRED)
+  if(PCRE_FOUND)
+    add_library(PCRE INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET PCRE PROPERTY INTERFACE_LINK_LIBRARIES
+                                      ${PCRE_LIBRARY${find_library_suffix}})
+    set_property(TARGET PCRE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                      ${PCRE_INCLUDE_DIR})
+  endif()
+endif()
+
 find_package(Iconv QUIET)
 if(ICONV_FOUND)
   add_library(ICONV INTERFACE IMPORTED GLOBAL)
@@ -188,31 +199,7 @@ if(WITH_BZLIB)
   endif()
 endif()
 
-# Command-line/string-related options
-if(WITH_REGEX)
-  find_package(regex REQUIRED)
-  if(regex_FOUND)
-    add_library(REGEX INTERFACE IMPORTED GLOBAL)
-    if(regex_LIBRARIES)
-      set_property(TARGET REGEX PROPERTY INTERFACE_LINK_LIBRARIES
-                                         ${regex_LIBRARIES})
-    endif() # else in libc
-    set_property(TARGET REGEX PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                       ${regex_INCLUDE_DIRS})
-  endif()
-endif()
-
-if(MSVC)
-  find_package(PCRE REQUIRED)
-  if(PCRE_FOUND)
-    add_library(PCRE INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET PCRE PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${PCRE_LIBRARY${find_library_suffix}})
-    set_property(TARGET PCRE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${PCRE_INCLUDE_DIR})
-  endif()
-endif()
-
+# Command-line options
 if(WITH_READLINE)
   find_package(Readline REQUIRED)
   if(Readline_FOUND)
@@ -356,7 +343,6 @@ check_target(MYSQL HAVE_MYSQL_H)
 check_target(ODBC HAVE_SQL_H)
 check_target(ZSTD HAVE_ZSTD_H)
 check_target(BZIP2 HAVE_BZLIB_H)
-check_target(REGEX HAVE_REGEX_H)
 check_target(READLINE HAVE_READLINE_READLINE_H)
 check_target(HISTORY HAVE_READLINE_HISTORY_H)
 check_target(FREETYPE HAVE_FT2BUILD_H)

@@ -89,8 +89,7 @@ endif()
 option(WITH_ZSTD "Build with zstd support" ON)
 option(WITH_BZLIB "Build with bzlib support" OFF)
 
-# Command-line/string-related options
-option(WITH_REGEX "Build with regex support" ON)
+# Command-line options
 option(WITH_READLINE "Build with Readline support" OFF)
 
 # Language options
