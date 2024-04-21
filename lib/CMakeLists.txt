@@ -58,7 +58,8 @@ build_library_in_subdir(
   OPTIONAL_DEPENDS
   FFTW
   LAPACK
-  BLAS)
+  BLAS
+  OPENMP)
 
 build_library_in_subdir(linkm)
 
@@ -175,7 +176,9 @@ build_library_in_subdir(
   DEPENDS
   grass_gis
   grass_raster3d
-  grass_gmath)
+  grass_gmath
+  OPTIONAL_DEPENDS
+  OPENMP)
 
 build_library_in_subdir(dspf DEPENDS grass_gis)
 

@@ -109,11 +109,25 @@ build_program_in_subdir(r.latlong DEPENDS grass_gis grass_raster grass_gproj)
 
 build_program_in_subdir(r.lake DEPENDS grass_gis grass_raster)
 
-build_program_in_subdir(r.mfilter DEPENDS grass_gis grass_raster grass_rowio)
+build_program_in_subdir(
+  r.mfilter
+  DEPENDS
+  grass_gis
+  grass_raster
+  grass_rowio
+  OPTIONAL_DEPENDS
+  OPENMP)
 
 build_program_in_subdir(r.mode DEPENDS grass_gis grass_raster)
 
-build_program_in_subdir(r.neighbors DEPENDS grass_gis grass_raster grass_stats)
+build_program_in_subdir(
+  r.neighbors
+  DEPENDS
+  grass_gis
+  grass_raster
+  grass_stats
+  OPTIONAL_DEPENDS
+  OPENMP)
 
 build_program_in_subdir(r.null DEPENDS grass_gis grass_raster)
 
@@ -158,13 +172,21 @@ build_program_in_subdir(
   grass_interpdata
   grass_qtree)
 
-build_program_in_subdir(r.patch DEPENDS grass_gis grass_raster)
+build_program_in_subdir(r.patch DEPENDS grass_gis grass_raster OPTIONAL_DEPENDS
+                        OPENMP)
 
 build_program_in_subdir(r.path DEPENDS grass_gis grass_raster grass_vector)
 
 build_program_in_subdir(r.profile DEPENDS grass_gis grass_raster)
 
-build_program_in_subdir(r.proj DEPENDS grass_gis grass_raster grass_gproj)
+build_program_in_subdir(
+  r.proj
+  DEPENDS
+  grass_gis
+  grass_raster
+  grass_gproj
+  OPTIONAL_DEPENDS
+  OPENMP)
 
 build_program_in_subdir(r.quant DEPENDS grass_gis grass_raster)
 
@@ -197,9 +219,11 @@ build_program_in_subdir(
   grass_segment
   grass_lidar)
 
-build_program_in_subdir(r.resamp.filter DEPENDS grass_gis grass_raster)
+build_program_in_subdir(r.resamp.filter DEPENDS grass_gis grass_raster
+                        OPTIONAL_DEPENDS OPENMP)
 
-build_program_in_subdir(r.resamp.interp DEPENDS grass_gis grass_raster)
+build_program_in_subdir(r.resamp.interp DEPENDS grass_gis grass_raster
+                        OPTIONAL_DEPENDS OPENMP)
 
 build_program_in_subdir(
   r.resamp.rst
@@ -221,10 +245,23 @@ build_program_in_subdir(r.rescale.eq DEPENDS grass_gis grass_raster)
 
 build_program_in_subdir(r.ros DEPENDS grass_gis grass_raster)
 
-build_program_in_subdir(r.series DEPENDS grass_gis grass_raster grass_stats)
+build_program_in_subdir(
+  r.series
+  DEPENDS
+  grass_gis
+  grass_raster
+  grass_stats
+  OPTIONAL_DEPENDS
+  OPENMP)
 
-build_program_in_subdir(r.series.accumulate DEPENDS grass_gis grass_raster
-                        grass_stats)
+build_program_in_subdir(
+  r.series.accumulate
+  DEPENDS
+  grass_gis
+  grass_raster
+  grass_stats
+  OPTIONAL_DEPENDS
+  OPENMP)
 
 build_program_in_subdir(r.series.interp DEPENDS grass_gis grass_raster
                         grass_stats)
@@ -233,7 +270,8 @@ build_program_in_subdir(r.relief DEPENDS grass_gis grass_raster)
 
 add_subdirectory(r.sim)
 
-build_program_in_subdir(r.slope.aspect DEPENDS grass_gis grass_raster)
+build_program_in_subdir(r.slope.aspect DEPENDS grass_gis grass_raster
+                        OPTIONAL_DEPENDS OPENMP)
 
 build_program_in_subdir(r.solute.transport DEPENDS grass_gis grass_raster
                         grass_gmath grass_gpde)
@@ -254,7 +292,14 @@ build_program_in_subdir(r.stats DEPENDS grass_gis grass_raster)
 build_program_in_subdir(r.stream.extract DEPENDS grass_gis grass_raster
                         grass_segment grass_vector)
 
-build_program_in_subdir(r.sun DEPENDS grass_gmath grass_raster grass_gproj)
+build_program_in_subdir(
+  r.sun
+  DEPENDS
+  grass_gmath
+  grass_raster
+  grass_gproj
+  OPTIONAL_DEPENDS
+  OPENMP)
 
 build_program_in_subdir(r.sunhours DEPENDS grass_gis grass_raster grass_gproj)
 

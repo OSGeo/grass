@@ -88,6 +88,7 @@ option(WITH_BLAS "Build with BLAS support" ON)
 option(WITH_LAPACK "Build with LAPACK support" ON)
 option(WITH_LIBLAS "Build with libLAS support" OFF)
 option(WITH_OPENDWG "Build with OpenDWG support" OFF)
+option(WITH_OPENMP "Build with OpenMP support" OFF)
 
 # XXX: Do we need this? Don't we always need Python?
 option(WITH_PYTHON "Build Python bindings" ON)

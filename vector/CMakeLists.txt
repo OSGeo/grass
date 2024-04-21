@@ -170,7 +170,9 @@ build_program_in_subdir(
   grass_vector
   grass_interpdata
   grass_interpfl
-  grass_qtree)
+  grass_qtree
+  OPTIONAL_DEPENDS
+  OPENMP)
 
 build_program_in_subdir(v.transform DEPENDS grass_gis grass_vector)
 

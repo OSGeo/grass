@@ -6,6 +6,8 @@ build_library_in_subdir(
   grass_datetime
   grass_raster
   grass_vector
+  OPTIONAL_DEPENDS
+  OPENMP
   HEADERS
   "waterglobs.h"
   "simlib.h")
@@ -16,6 +18,8 @@ build_program_in_subdir(
   grass_gis
   grass_gmath
   grass_sim
+  OPTIONAL_DEPENDS
+  OPENMP
   INCLUDES
   "../simlib")
 
@@ -25,5 +29,7 @@ build_program_in_subdir(
   grass_gis
   grass_gmath
   grass_sim
+  OPTIONAL_DEPENDS
+  OPENMP
   INCLUDES
   "../simlib")

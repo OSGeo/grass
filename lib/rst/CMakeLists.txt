@@ -30,5 +30,7 @@ build_library_in_subdir(
   grass_vector
   grass_qtree
   grass_interpdata
+  OPTIONAL_DEPENDS
+  OPENMP
   HEADERS
   "interpf.h")

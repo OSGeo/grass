@@ -278,6 +278,17 @@ if(WITH_REGEX)
   endif()
 endif()
 
+if(MSVC)
+  find_package(PCRE REQUIRED)
+  if(PCRE_FOUND)
+    add_library(PCRE INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET PCRE PROPERTY INTERFACE_LINK_LIBRARIES
+                                      ${PCRE_LIBRARY${find_library_suffix}})
+    set_property(TARGET PCRE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                      ${PCRE_INCLUDE_DIR})
+  endif()
+endif()
+
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)
 if(Threads_FOUND)
@@ -291,15 +302,8 @@ if(Threads_FOUND)
   endif()
 endif()
 
-if(MSVC)
-  find_package(PCRE REQUIRED)
-  if(PCRE_FOUND)
-    add_library(PCRE INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET PCRE PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${PCRE_LIBRARY${find_library_suffix}})
-    set_property(TARGET PCRE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${PCRE_INCLUDE_DIR})
-  endif()
+if(WITH_OPENMP)
+	find_package(OpenMP REQUIRED)
 endif()
 
 find_package(Python3 REQUIRED)
