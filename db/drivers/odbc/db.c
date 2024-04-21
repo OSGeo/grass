@@ -66,7 +66,10 @@ int db__driver_open_database(dbHandle *handle)
             db_d_append_error("SQLExecDirect():\n%s\n%s (%d)\n",
                               db_get_string(&sql), msg, (int)err);
             db_d_report_error();
+            free_cursor(c);
             db_free_string(&sql);
+            SQLDisconnect(ODconn);
+            close_connection();
 
             return DB_FAILED;
         }
