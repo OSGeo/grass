@@ -4,6 +4,7 @@ set(WXPYTHON_DIR ${GISBASE}/gui/wxpython)
 set(gui_lib_DIRS
     core
     gui_core
+    history
     icons
     iscatt
     lmgr
