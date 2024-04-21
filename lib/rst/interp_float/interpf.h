@@ -70,15 +70,19 @@ struct interp_params {
 
     FILE *fdinp; /**< input stream */
 
-    int elatt; /**< which floating point attr to use? first = 1, second = 2, etc
+    int elatt; /**< which floating point attr to
+                * use? first = 1, second = 2, etc
                 */
 
-    int smatt; /**< which floating point attr to use for smoothing? first = 1,
-                  second = 2, etc */
+    int smatt; /**< which floating point attr to use
+                  for smoothing? first = 1, second =
+                  2, etc */
 
-    int kmin; /**< min number of points per segment for interpolation */
+    int kmin; /**< min number of points per segment
+                 for interpolation */
 
-    int kmax; /**< max number of points per segment */
+    int kmax; /**< max number of points per segment
+               */
 
     char *maskmap; /**< name of mask */
 
@@ -89,9 +93,11 @@ struct interp_params {
 
     double fi; /**< tension */
 
-    int KMAX2; /**< max num. of points for interp. */
+    int KMAX2; /**< max num. of points for interp.
+                */
 
-    int scik1, scik2, scik3; /**< multipliers for interp. values */
+    int scik1, scik2, scik3; /**< multipliers for
+                                interp. values */
 
     double rsm; /**< smoothing */
 
@@ -104,7 +110,8 @@ struct interp_params {
 
     int deriv, cv; /**< 1 if compute partial derivs */
 
-    double theta; /**< anisotropy angle, 0=East,counter-clockwise */
+    double theta; /**< anisotropy angle,
+                     0=East,counter-clockwise */
 
     double scalex; /**< anisotropy scaling factor */
 
@@ -128,6 +135,8 @@ struct interp_params {
     interpder_fn *interpder; /**< interp. func. for derivatives */
 
     wr_temp_fn *wr_temp; /**< writes temp files */
+
+    wr_point_fn *wr_point; /**< writes point file */
 
     const char *wheresql; /**< SQL statement to select input points */
 };
