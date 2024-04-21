@@ -82,6 +82,7 @@ option(WITH_MYSQL "Build with MySQL support" OFF)
 option(WITH_NLS "Build with NLS support" ${default_option_enabled})
 option(WITH_READLINE "Build with Readline support" ON)
 option(WITH_BZLIB "Build with bzlib support" ON)
+option(WITH_ZSTD "Build with zstd support" ON)
 option(WITH_BLAS "Build with BLAS support" ON)
 option(WITH_LAPACK "Build with LAPACK support" ON)
 option(WITH_LIBLAS "Build with libLAS support" OFF)
@@ -89,7 +90,8 @@ option(WITH_OPENDWG "Build with OpenDWG support" OFF)
 
 # XXX: Do we need this? Don't we always need Python?
 option(WITH_PYTHON "Build Python bindings" ON)
-option(WITH_LARGEFILES "Build with large file support" ${default_option_enabled})
+option(WITH_LARGEFILES "Build with large file support"
+       ${default_option_enabled})
 option(WITH_DOCS "Build documentation" ON)
 if(APPLE)
   if(POLICY CMP0042)

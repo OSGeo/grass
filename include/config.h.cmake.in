@@ -41,6 +41,9 @@
 /* define if bzlib.h exists */
 #cmakedefine HAVE_BZLIB_H ${HAVE_BZLIB_H}
 
+/* define if zstd.h exists */
+#cmakedefine HAVE_ZSTD_H ${HAVE_ZSTD_H}
+
 /* define if sys/ioctl.h exists */
 #cmakedefine HAVE_SYS_IOCTL_H ${HAVE_SYS_IOCTL_H}
 

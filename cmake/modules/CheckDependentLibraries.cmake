@@ -45,6 +45,28 @@ if(ZLIB_FOUND)
                                     ${ZLIB_INCLUDE_DIR})
 endif()
 
+if(WITH_BZLIB)
+  find_package(BZip2 REQUIRED)
+  if(BZIP2_FOUND)
+    add_library(BZIP2 INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET BZIP2 PROPERTY INTERFACE_LINK_LIBRARIES
+                                       ${BZIP2_LIBRARY${find_library_suffix}})
+    set_property(TARGET BZIP2 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                       ${BZIP2_INCLUDE_DIR})
+  endif()
+endif()
+
+if(WITH_ZSTD)
+  find_package(zstd REQUIRED)
+  if(zstd_FOUND)
+    add_library(ZSTD INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET ZSTD PROPERTY INTERFACE_LINK_LIBRARIES
+                                      ${zstd_LIBRARIES})
+    set_property(TARGET ZSTD PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                      ${zstd_INCLUDE_DIRS})
+  endif()
+endif()
+
 if(UNIX)
   find_library(M_LIBRARY m)
   add_library(LIBM INTERFACE IMPORTED GLOBAL)
@@ -120,17 +142,6 @@ if(ICONV_FOUND)
                                      ${ICONV_INCLUDE_DIR})
   # if(ICONV_SECOND_ARGUMENT_IS_CONST) set() update this value in
   # include/config.cmake.in
-endif()
-
-if(WITH_BZLIB)
-  find_package(BZip2 REQUIRED)
-  if(BZIP2_FOUND)
-    add_library(BZIP2 INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET BZIP2 PROPERTY INTERFACE_LINK_LIBRARIES
-                                       ${BZIP2_LIBRARY${find_library_suffix}})
-    set_property(TARGET BZIP2 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                       ${BZIP2_INCLUDE_DIR})
-  endif()
 endif()
 
 if(WITH_BLAS)
@@ -251,7 +262,6 @@ if(WITH_READLINE)
                                          ${History_LIBRARIES})
     set_property(TARGET HISTORY PROPERTY INTERFACE_INCLUDE_DIRECTORIES
                                          ${History_INCLUDE_DIRS})
-    message(HAHA ${History_LIBRARIES}...${History_INCLUDE_DIRS})
   endif()
 endif()
 
@@ -293,8 +303,9 @@ check_target(ATLAS HAVE_LIBATLAS)
 
 # set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}")
 check_target(ICONV HAVE_ICONV_H)
-check_target(BZIP2 HAVE_BZLIB_H)
 check_target(ZLIB HAVE_ZLIB_H)
+check_target(BZIP2 HAVE_BZLIB_H)
+check_target(ZSTD HAVE_ZSTD_H)
 check_target(LIBJPEG HAVE_JPEGLIB_H)
 check_target(LIBPNG HAVE_PNG_H)
 check_target(TIFF HAVE_TIFFIO_H)
