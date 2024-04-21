@@ -11,18 +11,9 @@ endforeach()
 
 add_custom_target(
   gui_images
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/symbols/basic/
-          ${GISBASE}/gui/images/symbols/
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/symbols/demo/
-          ${GISBASE}/gui/images/symbols/
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/symbols/extra/
-          ${GISBASE}/gui/images/symbols/
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/symbols/geology/
-          ${GISBASE}/gui/images/symbols/
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/symbols/legend/
-          ${GISBASE}/gui/images/symbols/
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/symbols/n_arrows/
-          ${GISBASE}/gui/images/symbols/
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/symbols
+          ${GISBASE}/gui/images/symbols
+  COMMAND ${CMAKE_COMMAND} -E rm ${GISBASE}/gui/images/symbols/README
   DEPENDS gui_icons ${output_images})
 
 install(FILES ${GUI_IMAGES} DESTINATION gui/images/)
