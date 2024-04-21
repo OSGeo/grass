@@ -158,6 +158,9 @@
 /* define if tiffio.h exists */
 #cmakedefine HAVE_TIFFIO_H ${HAVE_TIFFIO_H}
 
+/* define if NetCDF exists */
+#cmakedefine HAVE_NETCDF ${HAVE_NETCDF}
+
 /* define if png.h exists */
 #cmakedefine HAVE_PNG_H ${HAVE_PNG_H}
 

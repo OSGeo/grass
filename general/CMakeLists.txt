@@ -11,7 +11,9 @@ build_program_in_subdir(g.message DEPENDS grass_gis)
 build_program_in_subdir(g.mkfontcap DEPENDS grass_gis FREETYPE)
 build_program_in_subdir(g.parser DEPENDS grass_gis FREETYPE)
 build_program_in_subdir(g.pnmcomp DEPENDS grass_gis)
-build_program_in_subdir(g.ppmtopng DEPENDS grass_gis LIBPNG)
+if(WITH_LIBPNG)
+  build_program_in_subdir(g.ppmtopng DEPENDS grass_gis LIBPNG)
+endif()
 build_program_in_subdir(g.proj DEPENDS grass_gis grass_gproj GDAL)
 build_program_in_subdir(
   g.region
@@ -30,9 +32,10 @@ build_program_in_subdir(
   DEPENDS
   grass_gis
   PROJ
-  GEOS
   GDAL
   SQLITE
+  OPTIONAL_DEPENDS
+  GEOS
   DEFS
   "-DGRASS_VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
   "-DGRASS_VERSION_GIT=\"${GRASS_VERSION_GIT}\""

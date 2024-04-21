@@ -65,6 +65,9 @@ build_library_in_subdir(linkm)
 
 file(GLOB pngdriver_SRCS "./pngdriver/*.c")
 # list(APPEND pngdriver_SRCS "./driver/init.c")
+if(NOT WITH_LIBPNG)
+  list(REMOVE_ITEM pngdriver_SRCS "./pngdriver/*_png.c")
+endif()
 build_library_in_subdir(
   pngdriver
   SOURCES
@@ -72,8 +75,9 @@ build_library_in_subdir(
   DEPENDS
   grass_driver
   grass_gis
-  LIBPNG
-  ZLIB)
+  ZLIB
+  OPTIONAL_DEPENDS
+  LIBPNG)
 # INCLUDES "./driver")
 
 file(GLOB psdriver_SRCS "./psdriver/*.c")
@@ -135,7 +139,7 @@ add_subdirectory(fonts)
 
 add_subdirectory(vector)
 
-build_library_in_subdir(imagery DEPENDS GDAL GEOS grass_vector)
+build_library_in_subdir(imagery DEPENDS grass_vector)
 
 build_library_in_subdir(cluster DEPENDS grass_imagery)
 
@@ -146,17 +150,7 @@ build_library_in_subdir(segment DEPENDS grass_gis) # addeed DEPENDS grass_gis
 
 add_subdirectory(rst)
 
-build_library_in_subdir(
-  lidar
-  DEPENDS
-  GDAL
-  GEOS
-  grass_vector
-  grass_raster
-  grass_dbmibase
-  grass_segment
-  HEADERS
-  "lidar.h")
+build_library_in_subdir(lidar DEPENDS grass_vector HEADERS "lidar.h")
 
 build_library_in_subdir(raster3d DEPENDS grass_raster)
 

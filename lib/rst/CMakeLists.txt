@@ -23,7 +23,6 @@ build_library_in_subdir(
   NAME
   grass_interpfl
   DEPENDS
-  GEOS
   grass_gis
   grass_raster
   grass_bitmap

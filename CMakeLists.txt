@@ -73,28 +73,50 @@ else()
   set(find_library_suffix "")
 endif()
 
-option(WITH_CAIRO "Build with cairo support ." ON)
+# Graphics options
 option(WITH_X11 "Build with X11 support ." ${default_option_enabled})
 option(WITH_OPENGL "Build with opengl support ." ON)
+option(WITH_CAIRO "Build with cairo support ." ON)
+option(WITH_LIBPNG "Build with libpng support ." OFF)
+
+# Data storage options
 option(WITH_SQLITE "Build with SQLite support" ON)
 option(WITH_POSTGRES "Build with Postgres support" OFF)
 option(WITH_MYSQL "Build with MySQL support" OFF)
-option(WITH_NLS "Build with NLS support" ${default_option_enabled})
-option(WITH_READLINE "Build with Readline support" ON)
-option(WITH_REGEX "Build with regex support" ON)
-option(WITH_BZLIB "Build with bzlib support" ON)
+if(WIN32)
+  option(WITH_ODBC "Build with ODBC support" OFF)
+endif()
 option(WITH_ZSTD "Build with zstd support" ON)
+option(WITH_BZLIB "Build with bzlib support" OFF)
+
+# Command-line/string-related options
+option(WITH_REGEX "Build with regex support" ON)
+option(WITH_READLINE "Build with Readline support" OFF)
+
+# Language options
+option(WITH_FREETYPE "Build with FreeType support" ON)
+option(WITH_NLS "Build with NLS support" ${default_option_enabled})
+
+# Computing options
+option(WITH_FFTW "Build with FFTW support" ON)
 option(WITH_BLAS "Build with BLAS support" ON)
 option(WITH_LAPACK "Build with LAPACK support" ON)
+option(WITH_OPENMP "Build with OpenMP support" ON)
+
+# Data format options
+option(WITH_TIFF "Build with LibTIFF support ." ON)
+option(WITH_NETCDF "Build with NetCDF support" OFF)
+option(WITH_GEOS "Build with GEOS support" OFF)
+option(WITH_PDAL "Build with PDAL support" ON)
 option(WITH_LIBLAS "Build with libLAS support" OFF)
 option(WITH_OPENDWG "Build with OpenDWG support" OFF)
-option(WITH_OPENMP "Build with OpenMP support" OFF)
 
-# XXX: Do we need this? Don't we always need Python?
-option(WITH_PYTHON "Build Python bindings" ON)
+# Other options
 option(WITH_LARGEFILES "Build with large file support"
        ${default_option_enabled})
 option(WITH_DOCS "Build documentation" ON)
+option(WITH_GUI "Build GUI" ON)
+
 if(APPLE)
   if(POLICY CMP0042)
     cmake_policy(SET CMP0042 NEW)
@@ -249,7 +271,7 @@ add_custom_target(
 
 # message(FATAL_ERROR "modules_list=${modules_list}")
 
-if(WITH_PYTHON)
+if(WITH_GUI)
   add_subdirectory(gui)
 endif()
 

@@ -31,8 +31,6 @@ build_module(
   SOURCES
   ${dig2_SRCS}
   DEPENDS
-  GDAL
-  GEOS
   grass_gmath
   grass_gis
   grass_rtree)

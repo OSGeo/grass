@@ -6,9 +6,18 @@ Detect GRASS dependencies and set variable HAVE_*
 
 #]=======================================================================]
 
+# Required dependencies
+
 find_package(FLEX REQUIRED)
 
 find_package(BISON REQUIRED)
+
+if(UNIX)
+  find_library(M_LIBRARY m)
+  add_library(LIBM INTERFACE IMPORTED GLOBAL)
+  set_property(TARGET LIBM PROPERTY INTERFACE_LINK_LIBRARIES ${M_LIBRARY})
+  mark_as_advanced(M_LIBRARY)
+endif()
 
 find_package(PROJ REQUIRED)
 if(PROJ_FOUND)
@@ -27,15 +36,6 @@ if(GDAL_FOUND)
                                     ${GDAL_INCLUDE_DIR})
 endif()
 
-find_package(PNG REQUIRED)
-if(PNG_FOUND)
-  add_library(LIBPNG INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET LIBPNG PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${PNG_LIBRARY${find_library_suffix}})
-  set_property(TARGET LIBPNG PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${PNG_INCLUDE_DIR})
-endif()
-
 find_package(ZLIB REQUIRED)
 if(ZLIB_FOUND)
   add_library(ZLIB INTERFACE IMPORTED GLOBAL)
@@ -45,93 +45,7 @@ if(ZLIB_FOUND)
                                     ${ZLIB_INCLUDE_DIR})
 endif()
 
-if(WITH_BZLIB)
-  find_package(BZip2 REQUIRED)
-  if(BZIP2_FOUND)
-    add_library(BZIP2 INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET BZIP2 PROPERTY INTERFACE_LINK_LIBRARIES
-                                       ${BZIP2_LIBRARY${find_library_suffix}})
-    set_property(TARGET BZIP2 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                       ${BZIP2_INCLUDE_DIR})
-  endif()
-endif()
-
-if(WITH_ZSTD)
-  find_package(zstd REQUIRED)
-  if(zstd_FOUND)
-    add_library(ZSTD INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET ZSTD PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${zstd_LIBRARIES})
-    set_property(TARGET ZSTD PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${zstd_INCLUDE_DIRS})
-  endif()
-endif()
-
-if(UNIX)
-  find_library(M_LIBRARY m)
-  add_library(LIBM INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET LIBM PROPERTY INTERFACE_LINK_LIBRARIES ${M_LIBRARY})
-  mark_as_advanced(M_LIBRARY)
-endif()
-
-find_package(Freetype REQUIRED)
-if(FREETYPE_FOUND)
-  add_library(FREETYPE INTERFACE IMPORTED GLOBAL)
-  set_property(
-    TARGET FREETYPE PROPERTY INTERFACE_LINK_LIBRARIES
-                             ${FREETYPE_LIBRARY${find_library_suffix}})
-  set_property(TARGET FREETYPE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                        ${FREETYPE_INCLUDE_DIRS})
-endif()
-
-find_package(FFTW REQUIRED)
-if(FFTW_FOUND)
-  add_library(FFTW INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET FFTW PROPERTY INTERFACE_LINK_LIBRARIES ${FFTW_LIBRARIES})
-  set_property(TARGET FFTW PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${FFTW_INCLUDE_DIR})
-endif()
-
-if(WITH_CAIRO)
-  find_package(Cairo REQUIRED)
-  if(CAIRO_FOUND)
-    add_library(CAIRO INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET CAIRO PROPERTY INTERFACE_LINK_LIBRARIES
-                                       ${CAIRO_LIBRARIES})
-    set_property(TARGET CAIRO PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                       ${CAIRO_INCLUDE_DIRS})
-  endif()
-endif()
-
-if(WITH_X11)
-  find_package(X11 REQUIRED)
-  if(X11_FOUND)
-    add_library(X11 INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET X11 PROPERTY INTERFACE_LINK_LIBRARIES ${X11_LIBRARIES})
-    set_property(TARGET X11 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                     ${X11_INCLUDE_DIR})
-  endif()
-endif()
-
-if(WIN32)
-  find_package(ODBC QUIET)
-  if(ODBC_FOUND)
-    add_library(ODBC INTERFACE IMPORTED GLOBAL)
-    #[[
-    set_property(TARGET ODBC PROPERTY INTERFACE_LINK_LIBRARIES ${ODBC_LIBRARIES})
-    set_property(TARGET PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${ODBC_INCLUDE_DIRS})
-    #]]
-  endif()
-endif()
-
-find_package(TIFF REQUIRED)
-if(TIFF_FOUND)
-  add_library(TIFF INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET TIFF PROPERTY INTERFACE_LINK_LIBRARIES
-                                    ${TIFF_LIBRARY${find_library_suffix}})
-  set_property(TARGET TIFF PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${TIFF_INCLUDE_DIR})
-endif()
+# Optional dependencies
 
 find_package(Iconv QUIET)
 if(ICONV_FOUND)
@@ -144,21 +58,28 @@ if(ICONV_FOUND)
   # include/config.cmake.in
 endif()
 
-if(WITH_BLAS)
-  find_package(BLAS REQUIRED)
-  if(BLAS_FOUND)
-    add_library(BLAS INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET BLAS PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${BLAS_LIBRARIES})
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads)
+if(Threads_FOUND)
+  add_library(PTHREAD INTERFACE IMPORTED GLOBAL)
+  if(THREADS_HAVE_PTHREAD_ARG)
+    set_property(TARGET PTHREAD PROPERTY INTERFACE_COMPILE_OPTIONS "-pthread")
+  endif()
+  if(CMAKE_THREAD_LIBS_INIT)
+    set_property(TARGET PTHREAD PROPERTY INTERFACE_LINK_LIBRARIES
+                                         "${CMAKE_THREAD_LIBS_INIT}")
   endif()
 endif()
 
-if(WITH_LAPACK)
-  find_package(LAPACK REQUIRED)
-  if(LAPACK_FOUND)
-    add_library(LAPACK INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET LAPACK PROPERTY INTERFACE_LINK_LIBRARIES
-                                        ${LAPACK_LIBRARIES})
+# Graphics options
+
+if(WITH_X11)
+  find_package(X11 REQUIRED)
+  if(X11_FOUND)
+    add_library(X11 INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET X11 PROPERTY INTERFACE_LINK_LIBRARIES ${X11_LIBRARIES})
+    set_property(TARGET X11 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                     ${X11_INCLUDE_DIR})
   endif()
 endif()
 
@@ -176,6 +97,30 @@ if(WITH_OPENGL)
                                         ${OPENGL_INCLUDE_DIR} ${AGL_FRAMEWORK})
   endif()
 endif()
+
+if(WITH_CAIRO)
+  find_package(Cairo REQUIRED)
+  if(CAIRO_FOUND)
+    add_library(CAIRO INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET CAIRO PROPERTY INTERFACE_LINK_LIBRARIES
+                                       ${CAIRO_LIBRARIES})
+    set_property(TARGET CAIRO PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                       ${CAIRO_INCLUDE_DIRS})
+  endif()
+endif()
+
+if(WITH_LIBPNG)
+  find_package(PNG REQUIRED)
+  if(PNG_FOUND)
+    add_library(LIBPNG INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET LIBPNG PROPERTY INTERFACE_LINK_LIBRARIES
+                                        ${PNG_LIBRARY${find_library_suffix}})
+    set_property(TARGET LIBPNG PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                        ${PNG_INCLUDE_DIR})
+  endif()
+endif()
+
+# Data storage options
 
 if(WITH_SQLITE)
   find_package(SQLite REQUIRED)
@@ -210,61 +155,40 @@ if(WITH_MYSQL)
   endif()
 endif()
 
-find_package(PDAL QUIET)
-if(PDAL_FOUND)
-  add_library(PDAL INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET PDAL PROPERTY INTERFACE_LINK_LIBRARIES ${PDAL_LIBRARIES})
-  set_property(TARGET PDAL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${PDAL_INCLUDE_DIRS})
-endif()
-
-if(WITH_LIBLAS)
-  find_package(LibLAS REQUIRED)
-  if(LibLAS_FOUND)
-    add_library(LIBLAS INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET LIBLAS PROPERTY INTERFACE_LINK_LIBRARIES
-                                        ${LibLAS_C_LIBRARY})
-    set_property(TARGET LIBLAS PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                        ${LibLAS_INCLUDE_DIR})
+if(WITH_ODBC AND WIN32)
+  find_package(ODBC QUIET)
+  if(ODBC_FOUND)
+    add_library(ODBC INTERFACE IMPORTED GLOBAL)
+    #[[
+    set_property(TARGET ODBC PROPERTY INTERFACE_LINK_LIBRARIES ${ODBC_LIBRARIES})
+    set_property(TARGET PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${ODBC_INCLUDE_DIRS})
+    #]]
   endif()
 endif()
 
-find_package(NetCDF QUIET)
-if(NetCDF_FOUND)
-  add_library(NETCDF INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET NETCDF PROPERTY INTERFACE_LINK_LIBRARIES
-                                      ${NetCDF_LIBRARY})
-  set_property(TARGET NETCDF PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                      ${NetCDF_INCLUDE_DIR})
-endif()
-
-find_package(GEOS REQUIRED)
-if(GEOS_FOUND)
-  add_library(GEOS INTERFACE IMPORTED GLOBAL)
-  set_property(TARGET GEOS PROPERTY INTERFACE_LINK_LIBRARIES
-                                    ${GEOS_C_LIBRARY${find_library_suffix}})
-  set_property(TARGET GEOS PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                    ${GEOS_INCLUDE_DIR})
-endif()
-
-if(WITH_READLINE)
-  find_package(Readline REQUIRED)
-  if(Readline_FOUND)
-    add_library(READLINE INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET READLINE PROPERTY INTERFACE_LINK_LIBRARIES
-                                          ${Readline_LIBRARIES})
-    set_property(TARGET READLINE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                          ${Readline_INCLUDE_DIRS})
-  endif()
-  if(History_FOUND)
-    add_library(HISTORY INTERFACE IMPORTED GLOBAL)
-    set_property(TARGET HISTORY PROPERTY INTERFACE_LINK_LIBRARIES
-                                         ${History_LIBRARIES})
-    set_property(TARGET HISTORY PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-                                         ${History_INCLUDE_DIRS})
+if(WITH_ZSTD)
+  find_package(zstd REQUIRED)
+  if(zstd_FOUND)
+    add_library(ZSTD INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET ZSTD PROPERTY INTERFACE_LINK_LIBRARIES
+                                      ${zstd_LIBRARIES})
+    set_property(TARGET ZSTD PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                      ${zstd_INCLUDE_DIRS})
   endif()
 endif()
 
+if(WITH_BZLIB)
+  find_package(BZip2 REQUIRED)
+  if(BZIP2_FOUND)
+    add_library(BZIP2 INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET BZIP2 PROPERTY INTERFACE_LINK_LIBRARIES
+                                       ${BZIP2_LIBRARY${find_library_suffix}})
+    set_property(TARGET BZIP2 PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                       ${BZIP2_INCLUDE_DIR})
+  endif()
+endif()
+
+# Command-line/string-related options
 if(WITH_REGEX)
   find_package(regex REQUIRED)
   if(regex_FOUND)
@@ -289,21 +213,125 @@ if(MSVC)
   endif()
 endif()
 
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads)
-if(Threads_FOUND)
-  add_library(PTHREAD INTERFACE IMPORTED GLOBAL)
-  if(THREADS_HAVE_PTHREAD_ARG)
-    set_property(TARGET PTHREAD PROPERTY INTERFACE_COMPILE_OPTIONS "-pthread")
+if(WITH_READLINE)
+  find_package(Readline REQUIRED)
+  if(Readline_FOUND)
+    add_library(READLINE INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET READLINE PROPERTY INTERFACE_LINK_LIBRARIES
+                                          ${Readline_LIBRARIES})
+    set_property(TARGET READLINE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                          ${Readline_INCLUDE_DIRS})
   endif()
-  if(CMAKE_THREAD_LIBS_INIT)
-    set_property(TARGET PTHREAD PROPERTY INTERFACE_LINK_LIBRARIES
-                                         "${CMAKE_THREAD_LIBS_INIT}")
+  if(History_FOUND)
+    add_library(HISTORY INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET HISTORY PROPERTY INTERFACE_LINK_LIBRARIES
+                                         ${History_LIBRARIES})
+    set_property(TARGET HISTORY PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                         ${History_INCLUDE_DIRS})
+  endif()
+endif()
+
+# Language options
+if(WITH_FREETYPE)
+  find_package(Freetype REQUIRED)
+  if(FREETYPE_FOUND)
+    add_library(FREETYPE INTERFACE IMPORTED GLOBAL)
+    set_property(
+      TARGET FREETYPE PROPERTY INTERFACE_LINK_LIBRARIES
+                               ${FREETYPE_LIBRARY${find_library_suffix}})
+    set_property(TARGET FREETYPE PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                          ${FREETYPE_INCLUDE_DIRS})
+  endif()
+endif()
+
+# Computing options
+if(WITH_FFTW)
+  find_package(FFTW REQUIRED)
+  if(FFTW_FOUND)
+    add_library(FFTW INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET FFTW PROPERTY INTERFACE_LINK_LIBRARIES
+                                      ${FFTW_LIBRARIES})
+    set_property(TARGET FFTW PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                      ${FFTW_INCLUDE_DIR})
+  endif()
+endif()
+
+if(WITH_BLAS)
+  find_package(BLAS REQUIRED)
+  if(BLAS_FOUND)
+    add_library(BLAS INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET BLAS PROPERTY INTERFACE_LINK_LIBRARIES
+                                      ${BLAS_LIBRARIES})
+  endif()
+endif()
+
+if(WITH_LAPACK)
+  find_package(LAPACK REQUIRED)
+  if(LAPACK_FOUND)
+    add_library(LAPACK INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET LAPACK PROPERTY INTERFACE_LINK_LIBRARIES
+                                        ${LAPACK_LIBRARIES})
   endif()
 endif()
 
 if(WITH_OPENMP)
   find_package(OpenMP REQUIRED)
+endif()
+
+# Data format options
+if(WITH_TIFF)
+  find_package(TIFF REQUIRED)
+  if(TIFF_FOUND)
+    add_library(TIFF INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET TIFF PROPERTY INTERFACE_LINK_LIBRARIES
+                                      ${TIFF_LIBRARY${find_library_suffix}})
+    set_property(TARGET TIFF PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                      ${TIFF_INCLUDE_DIR})
+  endif()
+endif()
+
+if(WITH_NETCDF)
+  find_package(NetCDF REQUIRED)
+  if(NetCDF_FOUND)
+    add_library(NETCDF INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET NETCDF PROPERTY INTERFACE_LINK_LIBRARIES
+                                        ${NetCDF_LIBRARY})
+    set_property(TARGET NETCDF PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                        ${NetCDF_INCLUDE_DIR})
+  endif()
+endif()
+
+if(WITH_GEOS)
+  find_package(GEOS REQUIRED)
+  if(GEOS_FOUND)
+    add_library(GEOS INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET GEOS PROPERTY INTERFACE_LINK_LIBRARIES
+                                      ${GEOS_C_LIBRARY${find_library_suffix}})
+    set_property(TARGET GEOS PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                      ${GEOS_INCLUDE_DIR})
+  endif()
+endif()
+
+if(WITH_PDAL)
+  find_package(PDAL REQUIRED)
+  if(PDAL_FOUND)
+    add_library(PDAL INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET PDAL PROPERTY INTERFACE_LINK_LIBRARIES
+                                      ${PDAL_LIBRARIES})
+    set_property(TARGET PDAL PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                      ${PDAL_INCLUDE_DIRS})
+  endif()
+endif()
+
+if(WITH_LIBLAS)
+  find_package(LibLAS REQUIRED)
+  if(LibLAS_FOUND)
+    add_library(LIBLAS INTERFACE IMPORTED GLOBAL)
+    set_property(TARGET LIBLAS PROPERTY INTERFACE_LINK_LIBRARIES
+                                        ${LibLAS_C_LIBRARY})
+    set_property(TARGET LIBLAS PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                                        ${LibLAS_INCLUDE_DIR})
+  endif()
 endif()
 
 find_package(Python3 REQUIRED)
@@ -315,37 +343,33 @@ if(Python3_FOUND)
   #]]
 endif()
 
-# no target ATLAS in thirdpary/CMakeLists.txt
-check_target(ATLAS HAVE_LIBATLAS)
-
-# set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}")
-check_target(ICONV HAVE_ICONV_H)
-check_target(ZLIB HAVE_ZLIB_H)
-check_target(BZIP2 HAVE_BZLIB_H)
-check_target(ZSTD HAVE_ZSTD_H)
-check_target(LIBJPEG HAVE_JPEGLIB_H)
-check_target(LIBPNG HAVE_PNG_H)
-check_target(TIFF HAVE_TIFFIO_H)
-check_target(GEOS HAVE_GEOS)
+check_target(PROJ HAVE_PROJ_H)
 check_target(GDAL HAVE_GDAL)
 check_target(GDAL HAVE_OGR)
+check_target(ZLIB HAVE_ZLIB_H)
+check_target(ICONV HAVE_ICONV_H)
+check_target(LIBPNG HAVE_PNG_H)
+check_target(LIBJPEG HAVE_JPEGLIB_H)
 check_target(SQLITE HAVE_SQLITE)
 check_target(POSTGRES HAVE_POSTGRES)
 check_target(MYSQL HAVE_MYSQL_H)
-
-check_target(PROJ HAVE_PROJ_H)
-
-check_target(BLAS HAVE_LIBBLAS)
-check_target(BLAS HAVE_CBLAS_H)
-
-check_target(LAPACK HAVE_LIBLAPACK)
-check_target(LAPACK HAVE_CLAPACK_H)
-
-check_target(FREETYPE HAVE_FT2BUILD_H)
+check_target(ODBC HAVE_SQL_H)
+check_target(ZSTD HAVE_ZSTD_H)
+check_target(BZIP2 HAVE_BZLIB_H)
+check_target(REGEX HAVE_REGEX_H)
 check_target(READLINE HAVE_READLINE_READLINE_H)
 check_target(HISTORY HAVE_READLINE_HISTORY_H)
-check_target(REGEX HAVE_REGEX_H)
-check_target(ODBC HAVE_SQL_H)
+check_target(FREETYPE HAVE_FT2BUILD_H)
+# set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}") no target ATLAS in
+# thirdpary/CMakeLists.txt
+check_target(ATLAS HAVE_LIBATLAS)
+check_target(BLAS HAVE_LIBBLAS)
+check_target(BLAS HAVE_CBLAS_H)
+check_target(LAPACK HAVE_LIBLAPACK)
+check_target(LAPACK HAVE_CLAPACK_H)
+check_target(TIFF HAVE_TIFFIO_H)
+check_target(NETCDF HAVE_NETCDF)
+check_target(GEOS HAVE_GEOS)
 
 if(TARGET POSTGRES)
   try_compile(

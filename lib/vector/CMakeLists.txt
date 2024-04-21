@@ -29,6 +29,14 @@ if(TARGET LAPACK)
   target_link_libraries(grass_vector LAPACK)
 endif()
 
-add_subdirectory(vedit)
+build_library_in_subdir(vedit NAME grass_vedit DEPENDS grass_vector)
 
-add_subdirectory(neta)
+build_library_in_subdir(
+  neta
+  NAME
+  grass_neta
+  DEPENDS
+  grass_dbmiclient
+  grass_gis
+  grass_graph
+  grass_vector)
