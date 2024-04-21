@@ -218,7 +218,6 @@ def main():
                 )
             )
 
-    update_str = "BEGIN TRANSACTION\n"
     for col in cols_to_update:
         cur_up_str = (
             f"UPDATE {maptable} SET {col} = (SELECT {col} FROM "
@@ -226,9 +225,8 @@ def main():
             f"{otable}.{ocolumn}={maptable}.{column});\n"
         )
         update_str += cur_up_str
-    update_str += "END TRANSACTION"
-    gs.debug(update_str, 1)
-    gs.verbose(
+    grass.debug(update_str, 1)
+    grass.verbose(
         _("Updating columns {columns} of vector map {map_name}...").format(
             columns=", ".join(cols_to_update.keys()), map_name=vector_map
         )

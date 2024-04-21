@@ -99,7 +99,7 @@ def main():
     driver = f["driver"]
     column_existing = grass.vector_columns(map, int(layer)).keys()
 
-    add_str = "BEGIN TRANSACTION\n"
+    add_str = "BEGIN;\n"
     pattern = re.compile(r"\s+")
     for col in columns:
         if not col:
@@ -120,7 +120,7 @@ def main():
             continue
         grass.verbose(_("Adding column <{}> to the table").format(col_name))
         add_str += f'ALTER TABLE {table} ADD COLUMN "{col_name}" {col_type};\n'
-    add_str += "END TRANSACTION"
+    add_str += "COMMIT;"
     sql_file = grass.tempfile()
     rm_files.append(sql_file)
     cols_add_str = ",".join([col[0] for col in columns])

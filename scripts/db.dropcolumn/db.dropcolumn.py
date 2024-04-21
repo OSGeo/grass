@@ -120,14 +120,14 @@ def main():
             coltypes = ", ".join(coltypes)
 
             cmds = [
-                "BEGIN TRANSACTION",
+                "BEGIN;",
                 "CREATE TEMPORARY TABLE ${table}_backup(${coldef})",
                 "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",
                 "DROP TABLE ${table}",
                 "CREATE TABLE ${table}(${coldef})",
                 "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",
                 "DROP TABLE ${table}_backup",
-                "COMMIT",
+                "COMMIT;",
             ]
             tmpl = string.Template(";\n".join(cmds))
             sql = tmpl.substitute(table=table, coldef=coltypes, colnames=colnames)
