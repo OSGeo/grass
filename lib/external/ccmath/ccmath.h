@@ -52,7 +52,6 @@ typedef struct gcomplex Cpx;
 
 /*   Linear Algebra     */
 
-
 /* Real Linear Systems */
 
 
