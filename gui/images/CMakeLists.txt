@@ -9,11 +9,17 @@ foreach(IMG ${GUI_IMAGES})
   list(APPEND output_images ${GISBASE}/gui/images/${FILE_NAME})
 endforeach()
 
+if(CMAKE_VERSION VERSION_LESS 3.17)
+  set(RM remove)
+else()
+  set(RM rm)
+endif()
+
 add_custom_target(
   gui_images
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/symbols
           ${GISBASE}/gui/images/symbols
-  COMMAND ${CMAKE_COMMAND} -E rm ${GISBASE}/gui/images/symbols/README
+  COMMAND ${CMAKE_COMMAND} -E ${RM}  ${GISBASE}/gui/images/symbols/README
   DEPENDS gui_icons ${output_images})
 
 install(FILES ${GUI_IMAGES} DESTINATION gui/images/)
