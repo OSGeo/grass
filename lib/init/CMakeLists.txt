@@ -100,8 +100,27 @@ install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name}
 # For build tree
 file(TO_NATIVE_PATH ${GISBASE} gisbase_init_dir)
 file(TO_NATIVE_PATH "${GISBASE}/etc/config" grass_config_dir)
+
+# cmake < 3.20
 configure_file(${script_input_file_name} ${GISBASE}/${script_file_name} @ONLY)
+#[[cmake >= 3.20
+configure_file(
+  ${script_input_file_name}
+  ${GISBASE}/${script_file_name}
+  FILE_PERMISSIONS
+  OWNER_READ
+  OWNER_WRITE
+  OWNER_EXECUTE
+  GROUP_READ
+  GROUP_EXECUTE
+  WORLD_READ
+  WORLD_EXECUTE
+  @ONLY)
+#]]
 if(UNIX OR MINGW)
+  # cmake < 3.19
+  execute_process(COMMAND chmod a+x ${GISBASE}/${script_file_name})
+  #[[cmake == 3.19
   file(
     CHMOD
     ${GISBASE}/${script_file_name}
@@ -113,7 +132,9 @@ if(UNIX OR MINGW)
     GROUP_EXECUTE
     WORLD_READ
     WORLD_EXECUTE)
+  #]]
 endif()
+
 file(COPY ${CMAKE_SOURCE_DIR}/demolocation/PERMANENT
      DESTINATION ${GISBASE}/demolocation/)
 

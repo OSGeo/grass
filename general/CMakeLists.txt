@@ -13,7 +13,7 @@ add_dependencies(g.mkfontcap fonts)
 add_custom_command(
   TARGET g.mkfontcap
   POST_BUILD
-  COMMAND ${grass_env_command} ${GISBASE}/bin/g.mkfontcap)
+  COMMAND ${grass_env_command} ${GISBASE}/bin/g.mkfontcap -o)
 build_program_in_subdir(g.parser DEPENDS grass_gis FREETYPE)
 build_program_in_subdir(g.pnmcomp DEPENDS grass_gis)
 if(WITH_LIBPNG)
