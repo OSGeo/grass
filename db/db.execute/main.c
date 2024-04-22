@@ -75,10 +75,6 @@ int main(int argc, char **argv)
     G_add_error_handler(error_handler, driver);
 
     if (parms.sql) {
-        ret = db_begin_transaction(driver);
-        if (ret != DB_OK)
-            G_fatal_error(_("Error while start transaction"));
-
         /* parms.sql */
         db_set_string(&stmt, parms.sql);
         ret = db_execute_immediate(driver, &stmt);
@@ -94,18 +90,11 @@ int main(int argc, char **argv)
                               db_get_string(&stmt));
             }
         }
-        ret = db_commit_transaction(driver);
-        if (ret != DB_OK)
-            G_fatal_error(_("Error while commit transaction"));
     }
     else { /* parms.input */
         while (get_stmt(fd, &stmt)) {
             if (stmt_is_empty(&stmt))
                 continue;
-            ret = db_begin_transaction(driver);
-            if (ret != DB_OK)
-                G_fatal_error(_("Error while start transaction"));
-
             G_debug(3, "sql: %s", db_get_string(&stmt));
 
             ret = db_execute_immediate(driver, &stmt);
@@ -121,9 +110,6 @@ int main(int argc, char **argv)
                                   db_get_string(&stmt));
                 }
             }
-            ret = db_commit_transaction(driver);
-            if (ret != DB_OK)
-                G_fatal_error(_("Error while commit transaction"));
         }
     }
 
