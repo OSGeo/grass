@@ -25,16 +25,16 @@
 
 #include <grass/config.h>
 
-#if defined(HAVE_FFTW3_H) || defined(HAVE_DFFTW_H) || defined(HAVE_FFTW_H)
+#if defined(HAVE_FFTW3_H) || defined(HAVE_FFTW_H) || defined(HAVE_DFFTW_H)
 
-#ifdef HAVE_FFTW3_H
+#if defined(HAVE_FFTW3_H)
 #include <fftw3.h>
 #define c_re(c) ((c)[0])
 #define c_im(c) ((c)[1])
-#elifdef HAVE_DFFTW_H
-#include <dfftw.h>
-#elifdef HAVE_FFTW_H
+#elif defined(HAVE_FFTW_H)
 #include <fftw.h>
+#elif defined(HAVE_DFFTW_H)
+#include <dfftw.h>
 #endif
 
 #include <stdlib.h>
