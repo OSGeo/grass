@@ -38,7 +38,7 @@ jobs:
           /usr/bin/sudo /usr/bin/find /usr/local /opt/homebrew -mindepth 1 -maxdepth 1 \
             -type f -print -delete
           hash -r
-      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4
+      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
       - name: Setup Mamba
         uses: mamba-org/setup-micromamba@422500192359a097648154e8db4e39bdb6c6eed7 # v1.8.1
         with:
