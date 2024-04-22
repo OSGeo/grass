@@ -80,7 +80,6 @@ jobs:
       working-directory: ${{ github.workspace }}
     - name: Configure
       run: |
-        mkdir build
         cmake ${CMAKE_OPTIONS} -S $GITHUB_WORKSPACE -B $GITHUB_WORKSPACE/build
     - name: Build
       run: |
