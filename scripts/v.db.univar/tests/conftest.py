@@ -30,7 +30,7 @@ def value_update_by_category(map_name, layer, column_name, cats, values):
         cats=cats,
         values=values,
     )
-    db_begin_transaction(
+    pdriver = db_begin_transaction(
         driver_name=db_info["driver"],
         database=db_info["database"],
     )
@@ -40,6 +40,7 @@ def value_update_by_category(map_name, layer, column_name, cats, values):
     db_commit_transaction(
         driver_name=db_info["driver"],
         database=db_info["database"],
+        pdriver=pdriver,
     )
 
 

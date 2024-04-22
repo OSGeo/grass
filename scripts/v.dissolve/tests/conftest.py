@@ -48,11 +48,15 @@ def value_update_by_category(map_name, layer, column_name, cats, values):
         cats=cats,
         values=values,
     )
-    db_begin_transaction(driver_name=driver, database=database)
+    pdriver = db_begin_transaction(driver_name=driver, database=database)
     gs.write_command(
         "db.execute", input="-", database=database, driver=driver, stdin=sql
     )
-    db_commit_transaction(driver_name=driver, database=database)
+    db_commit_transaction(
+        driver_name=driver,
+        database=database,
+        pdriver=pdriver,
+    )
 
 
 @pytest.fixture(scope="module")

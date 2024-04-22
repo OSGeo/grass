@@ -241,11 +241,15 @@ def db_begin_transaction(driver_name, database):
 
     :param str driver_name: DB driver name
     :param str database: database name
+
+    :return driver: opened driver/database connection
+    :rtype dbDriver* pointer
     """
     try:
         from grass.lib.dbmi import (
             db_begin_transaction,
             db_start_driver_open_database,
+            db_close_database_shutdown_driver,
             DB_OK,
         )
         from grass.lib.gis import G_gisinit
@@ -268,48 +272,39 @@ def db_begin_transaction(driver_name, database):
 
     ret = db_begin_transaction(driver)
     if ret != DB_OK:
+        db_close_database_shutdown_driver(driver)
         fatal(
             _(
                 "Error while start database <{db}> transaction by driver <{driver}>."
             ).format(db=database, driver=driver_name)
         )
+    return driver
 
 
-def db_commit_transaction(driver_name, database):
+def db_commit_transaction(driver_name, database, pdriver):
     """Commit transaction.
 
     :param str driver_name: DB driver name
     :param str database: database name
+    :param dbDriver* pointer pdriver: opened driver/database connection
+                                      pointer
     """
     try:
         from grass.lib.dbmi import (
             db_commit_transaction,
-            db_start_driver_open_database,
+            db_close_database_shutdown_driver,
             DB_OK,
         )
-        from grass.lib.gis import G_gisinit
-        from grass.lib.vector import Map_info, Vect_subst_var
     except (ImportError, OSError, TypeError) as e:
         fatal(_("Unable to import C functions: {e}").format(e))
 
-    G_gisinit("")
-    map = Map_info()
-
-    driver = db_start_driver_open_database(
-        driver_name, Vect_subst_var(database, byref(map))
-    )
-    if not driver:
-        fatal(
-            _("Unable to commit database <{db}> by driver <{driver}>.").format(
-                db=database, driver=driver_name
-            )
-        )
-
-    ret = db_commit_transaction(driver)
+    ret = db_commit_transaction(pdriver)
     if ret != DB_OK:
+        db_close_database_shutdown_driver(pdriver)
         fatal(
             _(
                 "Error while commit database <{db}> transaction"
                 " by driver <{driver}>."
             ).format(db=database, driver=driver_name)
         )
+    db_close_database_shutdown_driver(pdriver)

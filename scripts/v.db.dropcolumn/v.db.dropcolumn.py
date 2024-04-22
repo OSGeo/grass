@@ -122,11 +122,15 @@ def main():
             sql = f'ALTER TABLE {table} DROP COLUMN "{column}"'
 
         try:
-            db_begin_transaction(driver_name=driver, database=database)
+            pdriver = db_begin_transaction(driver_name=driver, database=database)
             grass.write_command(
                 "db.execute", input="-", database=database, driver=driver, stdin=sql
             )
-            db_commit_transaction(driver_name=driver, database=database)
+            db_commit_transaction(
+                driver_name=driver,
+                database=database,
+                pdriver=pdriver,
+            )
         except CalledModuleError:
             grass.fatal(_("Deleting column failed"))
 

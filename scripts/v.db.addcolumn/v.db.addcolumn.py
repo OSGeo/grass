@@ -128,14 +128,18 @@ def main():
     with open(sql_file, "w") as write_file:
         write_file.write(add_str)
     try:
-        db_begin_transaction(driver_name=driver, database=database)
+        pdriver = db_begin_transaction(driver_name=driver, database=database)
         grass.run_command(
             "db.execute",
             input=sql_file,
             database=database,
             driver=driver,
         )
-        db_commit_transaction(driver_name=driver, database=database)
+        db_commit_transaction(
+            driver_name=driver,
+            database=database,
+            pdriver=pdriver,
+        )
     except CalledModuleError:
         grass.fatal(_("Error adding columns {}").format(cols_add_str))
     # write cmd history:

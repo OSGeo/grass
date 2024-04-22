@@ -221,7 +221,7 @@ def update_columns(output_name, output_layer, updates, add_columns):
         )
     db_info = gs.vector_db(output_name)[int(output_layer)]
     sql = updates_to_sql(table=db_info["table"], updates=updates)
-    db_begin_transaction(
+    pdriver = db_begin_transaction(
         driver_name=db_info["driver"],
         database=db_info["database"],
     )
@@ -235,6 +235,7 @@ def update_columns(output_name, output_layer, updates, add_columns):
     db_commit_transaction(
         driver_name=db_info["driver"],
         database=db_info["database"],
+        pdriver=pdriver,
     )
 
 

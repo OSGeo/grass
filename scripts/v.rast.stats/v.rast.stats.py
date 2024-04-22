@@ -236,7 +236,7 @@ def main():
         grass.message(_("Updating the database ..."))
         exitcode = 0
         try:
-            db_begin_transaction(
+            pdriver = db_begin_transaction(
                 driver_name=fi["driver"],
                 database=fi["database"],
             )
@@ -246,6 +246,7 @@ def main():
             db_commit_transaction(
                 driver_name=fi["driver"],
                 database=fi["database"],
+                pdriver=pdriver,
             )
             grass.verbose(
                 _(

@@ -135,11 +135,15 @@ def main():
         sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
 
     try:
-        db_begin_transaction(driver_name=driver, database=database)
+        pdriver = db_begin_transaction(driver_name=driver, database=database)
         gscript.write_command(
             "db.execute", input="-", database=database, driver=driver, stdin=sql
         )
-        db_commit_transaction(driver_name=driver, database=database)
+        db_commit_transaction(
+            driver_name=driver,
+            database=database,
+            pdriver=pdriver,
+        )
     except CalledModuleError:
         gscript.fatal(_("Cannot continue (problem deleting column)"))
 

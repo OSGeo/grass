@@ -238,13 +238,17 @@ def main():
     sql_file.write_text(update_str, encoding="UTF8")
 
     try:
-        gs.run_command(
+        grass.run_command(
             "db.execute",
             input=str(sql_file),
             database=database,
             driver=driver,
         )
-        db_commit_transaction(driver_name=driver, database=database)
+        db_commit_transaction(
+            driver_name=driver,
+            database=database,
+            pdriver=pdriver,
+        )
     except CalledModuleError:
         gs.fatal(_("Error filling columns {}").format(cols_to_update))
 
