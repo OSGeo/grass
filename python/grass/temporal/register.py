@@ -242,10 +242,13 @@ def register_maps_in_space_time_dataset(
         # Get a new instance of the map type
         map_object = dataset_factory(type, row["id"])
 
+        map_object_id = map_object.get_map_id()
+        map_object_layer = map_object.get_layer()
+        map_object_type = map_object.get_type()
         if not map_object.map_exists():
             msgr.fatal(
                 _("Unable to update {t} map <{mid}>. The map does not exist.").format(
-                    t=map_object.get_type(), mid=map_object.get_map_id()
+                    t=map_object_type, mid=map_object_id
                 )
             )
 
@@ -268,16 +271,16 @@ def register_maps_in_space_time_dataset(
             # Break in case no valid time is provided
             if (start == "" or start is None) and not map_object.has_grass_timestamp():
                 dbif.close()
-                if map_object.get_layer():
+                if map_object_layer:
                     msgr.fatal(
                         _(
                             "Unable to register {t} map <{mid}> with "
                             "layer {l}. The map has timestamp and "
                             "the start time is not set."
                         ).format(
-                            t=map_object.get_type(),
-                            mid=map_object.get_map_id(),
-                            l=map_object.get_layer(),
+                            t=map_object_type,
+                            mid=map_object_id,
+                            l=map_object_layer,
                         )
                     )
                 else:
@@ -286,7 +289,7 @@ def register_maps_in_space_time_dataset(
                             "Unable to register {t} map <{mid}>. The"
                             " map has no timestamp and the start time "
                             "is not set."
-                        ).format(t=map_object.get_type(), mid=map_object.get_map_id())
+                        ).format(t=map_object_type, mid=map_object_id)
                     )
             if start != "" and start is not None:
                 # We need to check if the time is absolute and the unit was specified
@@ -304,7 +307,7 @@ def register_maps_in_space_time_dataset(
         else:
             # Check the overwrite flag
             if not overwrite:
-                if map_object.get_layer():
+                if map_object_layer:
                     msgr.warning(
                         _(
                             "Map is already registered in temporal "
@@ -312,9 +315,9 @@ def register_maps_in_space_time_dataset(
                             "<{mid}> with layer {l}. Overwrite flag"
                             " is not set."
                         ).format(
-                            t=map_object.get_type(),
-                            mid=map_object.get_map_id(),
-                            l=str(map_object.get_layer()),
+                            t=map_object_type,
+                            mid=map_object_id,
+                            l=str(map_object_layer),
                         )
                     )
                 else:
@@ -323,7 +326,7 @@ def register_maps_in_space_time_dataset(
                             "Map is already registered in temporal "
                             "database. Unable to update {t} map "
                             "<{mid}>. Overwrite flag is not set."
-                        ).format(t=map_object.get_type(), mid=map_object.get_map_id())
+                        ).format(t=map_object_type, mid=map_object_id)
                     )
 
                 # Simple registration is allowed
@@ -344,16 +347,16 @@ def register_maps_in_space_time_dataset(
 
                 if name and map_object.get_temporal_type() != sp.get_temporal_type():
                     dbif.close()
-                    if map_object.get_layer():
+                    if map_object_layer:
                         msgr.fatal(
                             _(
                                 "Unable to update {t} map <{id}> "
                                 "with layer {l}. The temporal types "
                                 "are different."
                             ).format(
-                                t=map_object.get_type(),
-                                mid=map_object.get_map_id(),
-                                l=map_object.get_layer(),
+                                t=map_object_type,
+                                mid=map_object_id,
+                                l=map_object_layer,
                             )
                         )
                     else:
@@ -361,9 +364,7 @@ def register_maps_in_space_time_dataset(
                             _(
                                 "Unable to update {t} map <{mid}>. "
                                 "The temporal types are different."
-                            ).format(
-                                t=map_object.get_type(), mid=map_object.get_map_id()
-                            )
+                            ).format(t=map_object_type, mid=map_object_id)
                         )
 
         # Load the data from the grass file database
