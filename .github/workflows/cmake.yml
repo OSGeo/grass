@@ -1,7 +1,7 @@
 # inspired by "build GDAL library and to run test with CMake"
 # from https://github.com/OSGeo/gdal/blob/master/.github/workflows/cmake_builds.yml
 
-name: Build and test with CMake
+name: CMake
 
 on:
     push:
