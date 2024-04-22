@@ -270,7 +270,7 @@ def db_begin_transaction(driver_name, database):
     if ret != DB_OK:
         fatal(
             _(
-                "Error while start database <{db}> transaction" " by driver <{driver}>."
+                "Error while start database <{db}> transaction by driver <{driver}>."
             ).format(db=database, driver=driver_name)
         )
 
