@@ -84,7 +84,6 @@ jobs:
                 cmake ${CMAKE_OPTIONS} -S $GITHUB_WORKSPACE -B $GITHUB_WORKSPACE/build
             - name: Build
               run: |
-                cd $GITHUB_WORKSPACE/build
-                cmake --build . -j$(nproc)
+                cmake --build $GITHUB_WORKSPACE/build --verbose -j$(nproc)
             - name: ccache statistics
               run: ccache -s
