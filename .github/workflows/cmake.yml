@@ -38,10 +38,10 @@ jobs:
       id: cache
       with:
           path: ${{ github.workspace }}/.ccache
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ github.base_ref }}${{ github.ref_name }}-${{ github.run_id }}
+          key: ${{ env.cache-name }}-${{ runner.os }}-${{ github.base_ref }}${{ github.ref_name }}-${{ github.run_id }}
           restore-keys: |
-            ${{ runner.os }}-${{ env.cache-name }}-${{ github.base_ref }}
-            ${{ runner.os }}-${{ env.cache-name }}
+            ${{ env.cache-name }}-${{ runner.os }}-${{ github.base_ref }}
+            ${{ env.cache-name }}-${{ runner.os }}
     - name: Install CMake 3.11.4
       run: |
         cd ${GITHUB_WORKSPACE}
