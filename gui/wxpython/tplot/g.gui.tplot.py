@@ -104,7 +104,7 @@
 # %option
 # % key: size
 # % type: string
-# % label: Size of output image as width,height in pixels units
+# % label: Size of output image as width,height in pixels
 # % description: It works only with output parameter
 # % required: no
 # %end
