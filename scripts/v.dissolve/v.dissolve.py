@@ -197,7 +197,7 @@ def sql_escape(text):
 
 def updates_to_sql(table, updates):
     """Create SQL from a list of dicts with column, value, where"""
-    sql = ["BEGIN;"]
+    sql = []
     for update in updates:
         quote = quote_from_type(update.get("type", None))
         value = update["value"]
@@ -206,7 +206,6 @@ def updates_to_sql(table, updates):
             f"UPDATE {table} SET {update['column']} = {sql_value} "
             f"WHERE {update['where']};"
         )
-    sql.append("COMMIT;")
     return "\n".join(sql)
 
 

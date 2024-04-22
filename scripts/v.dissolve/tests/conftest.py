@@ -10,7 +10,7 @@ import grass.script.setup as grass_setup
 
 def updates_as_transaction(table, cat_column, column, column_quote, cats, values):
     """Create SQL statement for categories and values for a given column"""
-    sql = ["BEGIN;"]
+    sql = []
     if column_quote:
         quote = "'"
     else:
@@ -20,7 +20,6 @@ def updates_as_transaction(table, cat_column, column, column_quote, cats, values
             f"UPDATE {table} SET {column} = {quote}{value}{quote} "
             f"WHERE {cat_column} = {cat};"
         )
-    sql.append("COMMIT;")
     return "\n".join(sql)
 
 

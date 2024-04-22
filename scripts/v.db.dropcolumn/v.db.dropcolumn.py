@@ -104,7 +104,6 @@ def main():
             coltypes = ", ".join(coltypes)
 
             cmds = [
-                "BEGIN;",
                 "CREATE TEMPORARY TABLE ${table}_backup (${coldef})",
                 "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",
                 "DROP TABLE ${table}",
@@ -112,7 +111,6 @@ def main():
                 "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",
                 "CREATE UNIQUE INDEX ${table}_cat ON ${table} (${keycol} )",
                 "DROP TABLE ${table}_backup",
-                "COMMIT;",
             ]
             tmpl = string.Template(";\n".join(cmds))
             sql = tmpl.substitute(

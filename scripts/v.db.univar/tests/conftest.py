@@ -9,10 +9,9 @@ import grass.script as gs
 
 def updates_as_transaction(table, cat_column, column, cats, values):
     """Create SQL statement for categories and values for a given column"""
-    sql = ["BEGIN;"]
+    sql = []
     for cat, value in zip(cats, values):
         sql.append(f"UPDATE {table} SET {column} = {value} WHERE {cat_column} = {cat};")
-    sql.append("COMMIT;")
     return "\n".join(sql)
 
 
