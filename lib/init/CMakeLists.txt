@@ -101,28 +101,9 @@ install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_file_name}
 file(TO_NATIVE_PATH ${GISBASE} gisbase_init_dir)
 file(TO_NATIVE_PATH "${GISBASE}/etc/config" grass_config_dir)
 
-# cmake < 3.20
-configure_file(${script_input_file_name} ${GISBASE}/${script_file_name} @ONLY)
-#[[cmake >= 3.20
-configure_file(
-  ${script_input_file_name}
-  ${GISBASE}/${script_file_name}
-  FILE_PERMISSIONS
-  OWNER_READ
-  OWNER_WRITE
-  OWNER_EXECUTE
-  GROUP_READ
-  GROUP_EXECUTE
-  WORLD_READ
-  WORLD_EXECUTE
-  @ONLY)
-#]]
-if(UNIX OR MINGW)
-  # cmake < 3.19
-  execute_process(COMMAND /bin/chmod 755 ${GISBASE}/${script_file_name})
-  #[[cmake == 3.19
-  file(
-    CHMOD
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.20)
+  configure_file(
+    ${script_input_file_name}
     ${GISBASE}/${script_file_name}
     FILE_PERMISSIONS
     OWNER_READ
@@ -131,8 +112,27 @@ if(UNIX OR MINGW)
     GROUP_READ
     GROUP_EXECUTE
     WORLD_READ
-    WORLD_EXECUTE)
-  #]]
+    WORLD_EXECUTE
+    @ONLY)
+else()
+  configure_file(${script_input_file_name} ${GISBASE}/${script_file_name} @ONLY)
+  if(UNIX OR MINGW)
+    if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.19)
+      file(
+        CHMOD
+        ${GISBASE}/${script_file_name}
+        FILE_PERMISSIONS
+        OWNER_READ
+        OWNER_WRITE
+        OWNER_EXECUTE
+        GROUP_READ
+        GROUP_EXECUTE
+        WORLD_READ
+        WORLD_EXECUTE)
+    else()
+      execute_process(COMMAND /bin/chmod 755 ${GISBASE}/${script_file_name})
+    endif()
+  endif()
 endif()
 
 file(COPY ${CMAKE_SOURCE_DIR}/demolocation/PERMANENT
