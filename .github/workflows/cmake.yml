@@ -70,7 +70,6 @@ jobs:
          subversion libzstd-dev checkinstall \
          libglu1-mesa-dev libxmu-dev \
          ghostscript wget -y make ccache g++ 
-        sudo apt-get update -y
     - name: Configure ccache
       run: |
           echo CCACHE_BASEDIR=$PWD >> ${GITHUB_ENV}
