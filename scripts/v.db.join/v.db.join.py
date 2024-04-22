@@ -87,6 +87,8 @@ def cleanup():
 
 
 def main():
+    from grass.script.db import db_begin_transaction, db_commit_transaction
+
     global rm_files
     # Include mapset into the name, so we avoid multiple messages about
     # found in more mapsets. The following generates an error message, while the code
@@ -242,6 +244,7 @@ def main():
             database=database,
             driver=driver,
         )
+        db_commit_transaction(driver_name=driver, database=database)
     except CalledModuleError:
         gs.fatal(_("Error filling columns {}").format(cols_to_update))
 

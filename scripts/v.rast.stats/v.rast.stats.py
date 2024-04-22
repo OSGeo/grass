@@ -93,6 +93,8 @@ def cleanup():
 
 
 def main():
+    from grass.script.db import db_begin_transaction, db_commit_transaction
+
     global tmp, sqltmp, tmpname, nuldev, vector, rastertmp
     rastertmp = False
     # setup temporary files
@@ -234,8 +236,16 @@ def main():
         grass.message(_("Updating the database ..."))
         exitcode = 0
         try:
+            db_begin_transaction(
+                driver_name=fi["driver"],
+                database=fi["database"],
+            )
             grass.run_command(
                 "db.execute", input=sqltmp, database=fi["database"], driver=fi["driver"]
+            )
+            db_commit_transaction(
+                driver_name=fi["driver"],
+                database=fi["database"],
             )
             grass.verbose(
                 _(
@@ -472,7 +482,6 @@ def perform_stats(
 
         first_line = 1
 
-        f.write("{0}\n".format(grass.db_begin_transaction(fi["driver"])))
         for line in p.stdout:
             if first_line:
                 first_line = 0
@@ -499,7 +508,6 @@ def perform_stats(
                 f.write(" %s=%s" % (colname, value))
 
             f.write(" WHERE %s=%s;\n" % (fi["key"], vars[0]))
-        f.write("{0}\n".format(grass.db_commit_transaction(fi["driver"])))
         p.wait()
 
 

@@ -5,6 +5,7 @@ from types import SimpleNamespace
 import pytest
 
 import grass.script as gs
+from grass.script.db import db_begin_transaction, db_commit_transaction
 
 
 def updates_as_transaction(table, cat_column, column, cats, values):
@@ -29,8 +30,16 @@ def value_update_by_category(map_name, layer, column_name, cats, values):
         cats=cats,
         values=values,
     )
+    db_begin_transaction(
+        driver_name=db_info["driver"],
+        database=db_info["database"],
+    )
     gs.write_command(
         "db.execute", input="-", database=database, driver=driver, stdin=sql
+    )
+    db_commit_transaction(
+        driver_name=db_info["driver"],
+        database=db_info["database"],
     )
 
 

@@ -83,7 +83,6 @@ from collections import defaultdict
 import grass.script as gs
 from grass.exceptions import CalledModuleError
 
-
 # Methods supported by v.db.univar by default.
 UNIVAR_METHODS = [
     "n",
@@ -211,6 +210,8 @@ def updates_to_sql(table, updates):
 
 def update_columns(output_name, output_layer, updates, add_columns):
     """Update attribute values based on a list of updates"""
+    from grass.script.db import db_begin_transaction, db_commit_transaction
+
     if add_columns:
         gs.run_command(
             "v.db.addcolumn",
@@ -220,12 +221,20 @@ def update_columns(output_name, output_layer, updates, add_columns):
         )
     db_info = gs.vector_db(output_name)[int(output_layer)]
     sql = updates_to_sql(table=db_info["table"], updates=updates)
+    db_begin_transaction(
+        driver_name=db_info["driver"],
+        database=db_info["database"],
+    )
     gs.write_command(
         "db.execute",
         input="-",
         database=db_info["database"],
         driver=db_info["driver"],
         stdin=sql,
+    )
+    db_commit_transaction(
+        driver_name=db_info["driver"],
+        database=db_info["database"],
     )
 
 
@@ -548,7 +557,6 @@ def option_as_list(options, name):
 
 def main():
     """Run the dissolve operation based on command line parameters"""
-    options, unused_flags = gs.parser()
     input_vector = options["input"]
     output = options["output"]
     layer = options["layer"]
@@ -683,4 +691,5 @@ def main():
 
 
 if __name__ == "__main__":
+    options, unused_flags = gs.parser()
     main()

@@ -20,6 +20,9 @@ for details.
 """
 
 import os
+
+from ctypes import byref
+
 from .core import (
     run_command,
     parse_command,
@@ -233,23 +236,80 @@ def db_table_in_vector(table, mapset=".", env=None):
         return None
 
 
-def db_begin_transaction(driver):
+def db_begin_transaction(driver_name, database):
     """Begin transaction.
 
-    :return: SQL command as string
+    :param str driver_name: DB driver name
+    :param str database: database name
     """
-    if driver in ("sqlite", "pg"):
-        return "BEGIN"
-    if driver == "mysql":
-        return "START TRANSACTION"
-    return ""
+    try:
+        from grass.lib.dbmi import (
+            db_begin_transaction,
+            db_start_driver_open_database,
+            DB_OK,
+        )
+        from grass.lib.gis import G_gisinit
+        from grass.lib.vector import Map_info, Vect_subst_var
+    except (ImportError, OSError, TypeError) as e:
+        fatal(_("Unable to import C functions: {e}").format(e))
+
+    G_gisinit("")
+    map = Map_info()
+
+    driver = db_start_driver_open_database(
+        driver_name, Vect_subst_var(database, byref(map))
+    )
+    if not driver:
+        fatal(
+            _("Unable to open database <{db}> by driver <{driver}>.").format(
+                db=database, driver=driver_name
+            )
+        )
+
+    ret = db_begin_transaction(driver)
+    if ret != DB_OK:
+        fatal(
+            _(
+                "Error while start database <{db}> transaction" " by driver <{driver}>."
+            ).format(db=database, driver=driver_name)
+        )
 
 
-def db_commit_transaction(driver):
+def db_commit_transaction(driver_name, database):
     """Commit transaction.
 
-    :return: SQL command as string
+    :param str driver_name: DB driver name
+    :param str database: database name
     """
-    if driver in ("sqlite", "pg", "mysql"):
-        return "COMMIT"
-    return ""
+    try:
+        from grass.lib.dbmi import (
+            db_commit_transaction,
+            db_start_driver_open_database,
+            DB_OK,
+        )
+        from grass.lib.gis import G_gisinit
+        from grass.lib.vector import Map_info, Vect_subst_var
+    except (ImportError, OSError, TypeError) as e:
+        fatal(_("Unable to import C functions: {e}").format(e))
+
+    G_gisinit("")
+    map = Map_info()
+
+    driver = db_start_driver_open_database(
+        driver_name, Vect_subst_var(database, byref(map))
+    )
+    if not driver:
+        fatal(
+            _("Unable to commit database <{db}> by driver <{driver}>.").format(
+                db=database, driver=driver_name
+            )
+        )
+
+    ret = db_commit_transaction(driver)
+    if ret != DB_OK:
+        fatal(
+            _(
+                "Error while commit database <{db}> transaction"
+                " by driver <{driver}>."
+            ).format(db=database, driver=driver_name)
+        )

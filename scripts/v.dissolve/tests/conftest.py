@@ -6,9 +6,17 @@ import pytest
 
 import grass.script as gs
 import grass.script.setup as grass_setup
+from grass.script.db import db_begin_transaction, db_commit_transaction
 
 
-def updates_as_transaction(table, cat_column, column, column_quote, cats, values):
+def updates_as_transaction(
+    table,
+    cat_column,
+    column,
+    column_quote,
+    cats,
+    values,
+):
     """Create SQL statement for categories and values for a given column"""
     sql = []
     if column_quote:
@@ -40,9 +48,11 @@ def value_update_by_category(map_name, layer, column_name, cats, values):
         cats=cats,
         values=values,
     )
+    db_begin_transaction(driver_name=driver, database=database)
     gs.write_command(
         "db.execute", input="-", database=database, driver=driver, stdin=sql
     )
+    db_commit_transaction(driver_name=driver, database=database)
 
 
 @pytest.fixture(scope="module")

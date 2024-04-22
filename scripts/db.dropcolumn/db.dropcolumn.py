@@ -50,6 +50,8 @@ import grass.script as gscript
 
 
 def main():
+    from grass.script.db import db_begin_transaction, db_commit_transaction
+
     table = options["table"]
     column = options["column"]
     database = options["database"]
@@ -133,9 +135,11 @@ def main():
         sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
 
     try:
+        db_begin_transaction(driver_name=driver, database=database)
         gscript.write_command(
             "db.execute", input="-", database=database, driver=driver, stdin=sql
         )
+        db_commit_transaction(driver_name=driver, database=database)
     except CalledModuleError:
         gscript.fatal(_("Cannot continue (problem deleting column)"))
 

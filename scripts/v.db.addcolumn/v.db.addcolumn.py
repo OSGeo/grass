@@ -64,6 +64,8 @@ def cleanup():
 
 
 def main():
+    from grass.script.db import db_begin_transaction, db_commit_transaction
+
     global rm_files
     map = options["map"]
     layer = options["layer"]
@@ -126,12 +128,14 @@ def main():
     with open(sql_file, "w") as write_file:
         write_file.write(add_str)
     try:
+        db_begin_transaction(driver_name=driver, database=database)
         grass.run_command(
             "db.execute",
             input=sql_file,
             database=database,
             driver=driver,
         )
+        db_commit_transaction(driver_name=driver, database=database)
     except CalledModuleError:
         grass.fatal(_("Error adding columns {}").format(cols_add_str))
     # write cmd history:

@@ -43,6 +43,8 @@ from grass.exceptions import CalledModuleError
 
 
 def main():
+    from grass.script.db import db_begin_transaction, db_commit_transaction
+
     map = options["map"]
     layer = options["layer"]
     columns = options["columns"].split(",")
@@ -120,9 +122,11 @@ def main():
             sql = f'ALTER TABLE {table} DROP COLUMN "{column}"'
 
         try:
+            db_begin_transaction(driver_name=driver, database=database)
             grass.write_command(
                 "db.execute", input="-", database=database, driver=driver, stdin=sql
             )
+            db_commit_transaction(driver_name=driver, database=database)
         except CalledModuleError:
             grass.fatal(_("Deleting column failed"))
 
