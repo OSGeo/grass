@@ -119,7 +119,7 @@ configure_file(
 #]]
 if(UNIX OR MINGW)
   # cmake < 3.19
-  execute_process(COMMAND chmod a+x ${GISBASE}/${script_file_name})
+  execute_process(COMMAND /bin/chmod a+x ${GISBASE}/${script_file_name})
   #[[cmake == 3.19
   file(
     CHMOD
