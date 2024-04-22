@@ -248,8 +248,10 @@ class DictFilterNode(DictNode):
     def match(self, method="exact", **kwargs):
         """Method used for searching according to given parameters.
 
-        :param method: 'exact' for exact match or 'filtering' for filtering by type/name
+        :param str method: 'exact' for exact match or
+                           'filtering' for filtering by type/name
         :param kwargs key-value to be matched, filtering method uses 'type' and 'name'
+        :return bool: True if an entry matching given parameters was found
         """
         if not kwargs:
             return False
