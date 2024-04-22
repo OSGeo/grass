@@ -18,23 +18,19 @@ At GRASS GIS, we take security vulnerabilities seriously. We appreciate your eff
 
 
 ## Supported Versions
-We prioritize the most recent stable release of GRASS GIS for security patches. However, we understand that users may still be on older versions. We will make reasonable efforts to provide patches for security vulnerabilities in older releases on a case-by-case basis, depending on the severity and feasibility.
-
-| Version | Supported |
-| ------- | --------- |
-| 8.x.x   | ✅        |
-| 7.x.x   | ✅        |
-| < 7.0.0 | 🔴        |
+Please refer to our [Release Schedule](https://trac.osgeo.org/grass/wiki/Release/Schedule) for details on which versions are currently supported.
 
 
 ## Security Measures
-- Code Review: We conduct regular code reviews to catch potential vulnerabilities.
+- Code Review: We conduct code reviews to catch potential vulnerabilities during code submission
 - Dependency Management: We track dependencies and update them regularly to mitigate known security issues.
-- Secure Development Practices: Our developers are trained in secure coding practices to minimize the introduction of vulnerabilities.
+- Secure Development Practices: We use a series of security tools to detect potential vulnerabilities in existing and newly submitted code.
 
 
 ## Vulnerability Scope
 Our security policy covers vulnerabilities in the GRASS GIS core codebase, official addons, and any official distributions provided by the GRASS GIS team.
+
+While packages in Linux and other unix-like distributions are out of scope of this document, distribution maintainers traditionally do a great job in patching their distributions for security vulnerabilities. Please, refer to a specific distribution or package source if you are using packages for a specific distribution.
 
 ## Responsible Disclosure
 We adhere to responsible disclosure practices. We appreciate your cooperation in allowing us time to address any reported vulnerabilities before disclosing them publicly. We ask that you refrain from disclosing any details of the vulnerability until we have had adequate time to provide a fix.
