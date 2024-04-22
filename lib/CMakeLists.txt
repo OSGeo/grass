@@ -68,7 +68,7 @@ build_library_in_subdir(linkm)
 file(GLOB pngdriver_SRCS "./pngdriver/*.c")
 # list(APPEND pngdriver_SRCS "./driver/init.c")
 if(NOT WITH_LIBPNG)
-  list(REMOVE_ITEM pngdriver_SRCS "./pngdriver/*_png.c")
+  list(FILTER pngdriver_SRCS EXCLUDE REGEX "./pngdriver/.*_png.c")
 endif()
 build_library_in_subdir(
   pngdriver
