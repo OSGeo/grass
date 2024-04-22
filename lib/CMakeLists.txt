@@ -186,7 +186,7 @@ build_library_in_subdir(
 
 build_library_in_subdir(dspf DEPENDS grass_gis)
 
-build_library_in_subdir(symbol NAME grass_sym)
+build_library_in_subdir(symbol NAME grass_sym DEPENDS grass_gis)
 add_custom_command(
   TARGET grass_sym
   POST_BUILD
