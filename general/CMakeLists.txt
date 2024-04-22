@@ -10,6 +10,10 @@ build_program_in_subdir(g.mapsets DEPENDS grass_gis grass_parson)
 build_program_in_subdir(g.message DEPENDS grass_gis)
 build_program_in_subdir(g.mkfontcap DEPENDS grass_gis FREETYPE)
 add_dependencies(g.mkfontcap fonts)
+add_custom_command(
+  TARGET g.mkfontcap
+  POST_BUILD
+  COMMAND ${grass_env_command} ${GISBASE}/bin/g.mkfontcap)
 build_program_in_subdir(g.parser DEPENDS grass_gis FREETYPE)
 build_program_in_subdir(g.pnmcomp DEPENDS grass_gis)
 if(WITH_LIBPNG)
