@@ -29,13 +29,9 @@
 
 #ifdef HAVE_FFTW_H
 #include <fftw.h>
-#endif
-
-#ifdef HAVE_DFFTW_H
+#elifdef HAVE_DFFTW_H
 #include <dfftw.h>
-#endif
-
-#ifdef HAVE_FFTW3_H
+#elifdef HAVE_FFTW3_H
 #include <fftw3.h>
 #define c_re(c) ((c)[0])
 #define c_im(c) ((c)[1])
