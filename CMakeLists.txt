@@ -40,9 +40,13 @@ if(NOT CMAKE_C_STANDARD)
   set(CMAKE_C_STANDARD_REQUIRED ON)
 endif()
 
-set(default_option_enabled ON)
+set(x11_default_option_enabled ON)
+set(nls_default_option_enabled ON)
 if(WIN32)
-  set(default_option_enabled OFF)
+  set(x11_default_option_enabled OFF)
+  set(nls_default_option_enabled OFF)
+elseif(APPLE)
+  set(x11_default_option_enabled OFF)
 endif()
 
 # Configure CCache if available
