@@ -33,4 +33,5 @@ build_module(
   DEPENDS
   grass_gmath
   grass_gis
-  grass_rtree)
+  grass_rtree
+  GDAL)
