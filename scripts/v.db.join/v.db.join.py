@@ -213,9 +213,9 @@ def main():
             f"{otable} WHERE "
             f"{otable}.{ocolumn}={maptable}.{column});"
         )
-        sqls.apend(cur_up_str)
-    grass.debug("\n".join(sqls), 1)
-    grass.verbose(
+        sqls.append(cur_up_str)
+    gs.debug("".join(sqls), 1)
+    gs.verbose(
         _("Updating columns {columns} of vector map {map_name}...").format(
             columns=", ".join(cols_to_update.keys()), map_name=vector_map
         )
