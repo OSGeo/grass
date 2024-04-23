@@ -3,6 +3,7 @@ Created on Tue Mar 19 11:09:30 2013
 
 @author: pietro
 """
+
 import grass.lib.vector as libvect
 
 from grass.pygrass.errors import must_be_open

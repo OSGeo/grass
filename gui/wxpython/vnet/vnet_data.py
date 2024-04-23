@@ -22,6 +22,7 @@ This program is free software under the GNU General Public License
 @author Lukas Bocan <silent_bob centrum.cz> (turn costs support)
 @author Eliska Kyzlikova <eliska.kyzlikova gmail.com> (turn costs support)
 """
+
 import os
 import math
 from copy import deepcopy
