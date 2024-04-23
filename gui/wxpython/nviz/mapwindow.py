@@ -2066,18 +2066,18 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 if (
                     data["draw"]["shading"]["isosurface"]["value"] < 0
                 ):  # need to calculate
-                    mode = data["draw"]["shading"]["isosurface"][
-                        "value"
-                    ] = self.nvizDefault.GetDrawMode(
-                        shade=data["draw"]["shading"]["isosurface"], string=False
+                    mode = data["draw"]["shading"]["isosurface"]["value"] = (
+                        self.nvizDefault.GetDrawMode(
+                            shade=data["draw"]["shading"]["isosurface"], string=False
+                        )
                     )
                     self._display.SetIsosurfaceMode(id, mode)
             else:
                 if data["draw"]["shading"]["slice"]["value"] < 0:  # need to calculate
-                    mode = data["draw"]["shading"]["slice"][
-                        "value"
-                    ] = self.nvizDefault.GetDrawMode(
-                        shade=data["draw"]["shading"]["slice"], string=False
+                    mode = data["draw"]["shading"]["slice"]["value"] = (
+                        self.nvizDefault.GetDrawMode(
+                            shade=data["draw"]["shading"]["slice"], string=False
+                        )
                     )
                     self._display.SetSliceMode(id, mode)
             data["draw"]["shading"].pop("update")
@@ -2504,17 +2504,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         # vlines
         #
         if vectors:
-            cmdLines = (
-                cmdLWidth
-            ) = (
-                cmdLHeight
-            ) = (
-                cmdLColor
-            ) = (
-                cmdLMode
-            ) = (
-                cmdLPos
-            ) = (
+            cmdLines = cmdLWidth = cmdLHeight = cmdLColor = cmdLMode = cmdLPos = (
                 cmdPoints
             ) = cmdPWidth = cmdPSize = cmdPColor = cmdPMarker = cmdPPos = cmdPLayer = ""
             markers = [

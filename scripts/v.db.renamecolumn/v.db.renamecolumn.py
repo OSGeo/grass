@@ -103,12 +103,12 @@ def main():
     # some tricks
     if driver in ["sqlite", "dbf"]:
         if oldcoltype.upper() == "CHARACTER":
-            colspec = "%s varchar(%s)" % (newcol, oldcollength)
+            colspec = f"{newcol} varchar({oldcollength})"
         else:
-            colspec = "%s %s" % (newcol, oldcoltype)
+            colspec = f"{newcol} {oldcoltype}"
 
         grass.run_command("v.db.addcolumn", map=map, layer=layer, column=colspec)
-        sql = "UPDATE %s SET %s=%s" % (table, newcol, oldcol)
+        sql = f'UPDATE {table} SET "{newcol}"="{oldcol}"'
         grass.write_command(
             "db.execute", input="-", database=database, driver=driver, stdin=sql
         )
@@ -119,12 +119,12 @@ def main():
         else:
             newcoltype = oldcoltype
 
-        sql = "ALTER TABLE %s CHANGE %s %s %s" % (table, oldcol, newcol, newcoltype)
+        sql = f'ALTER TABLE {table} CHANGE "{oldcol}" "{newcol}" {newcoltype}'
         grass.write_command(
             "db.execute", input="-", database=database, driver=driver, stdin=sql
         )
     else:
-        sql = "ALTER TABLE %s RENAME %s TO %s" % (table, oldcol, newcol)
+        sql = f'ALTER TABLE {table} RENAME "{oldcol}" TO "{newcol}"'
         grass.write_command(
             "db.execute", input="-", database=database, driver=driver, stdin=sql
         )

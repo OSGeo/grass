@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-22.04
     if: github.repository == 'OSGeo/grass'
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
 
       - name: Get dependencies
         run: |
@@ -25,6 +25,7 @@ jobs:
           sudo apt-get install -y wget git gawk findutils
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
+
       - name: Create installation directory
         run: |
           mkdir $HOME/install
@@ -32,11 +33,12 @@ jobs:
       - name: Download Coverity Build Tool
         run: |
           wget -q https://scan.coverity.com/download/cxx/linux64 \
-            --post-data "token=$TOKEN&project=grass" -O cov-analysis-linux64.tar.gz
+            --post-data "token=${TOKEN}&project=grass" -O cov-analysis-linux64.tar.gz
           mkdir cov-analysis-linux64
           tar xzf cov-analysis-linux64.tar.gz --strip 1 -C cov-analysis-linux64
         env:
           TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
+
       - name: Set number of cores for compilation
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
@@ -50,6 +52,7 @@ jobs:
           printenv | sort
           gcc --version
           ldd --version
+
       - name: Configure
         run: |
           echo "CFLAGS=${{ env.CFLAGS }}" >> $GITHUB_ENV
@@ -77,22 +80,33 @@ jobs:
         env:
           CFLAGS: -fPIC -g
           CXXFLAGS: -fPIC -g
+
       - name: Build with cov-build
         run: |
           pwd
-          export PATH=`pwd`/cov-analysis-linux64/bin:$PATH
+          export PATH="$(pwd)/cov-analysis-linux64/bin:${PATH}"
           cov-build --dir cov-int make
-      - name: Submit to Coverity Scan
+
+      - name: Put results into Tarball
         run: |
           tar czvf grass.tgz cov-int
+
+      - name: Submit to Coverity Scan
+        run: |
+          version=$(head -n 3 include/VERSION | xargs | sed 's/ /./g')
+          commit=$(git rev-parse --short HEAD)
+          branch=$(git rev-parse --abbrev-ref HEAD)
+          desc="Version:${version}, commit:${commit}, branch:${branch}."
+          echo "Submitting ${desc}"
+          desc_url_enc=$(echo "$desc" | sed 's/:/%3A/g' | sed 's/,/%2C/g' | sed 's/ /%20/g')
+          tar czvf grass.tgz cov-int
           curl \
-            --form project=grass \
-            --form token=$TOKEN \
-            --form email=$EMAIL \
-            --form file=@grass.tgz \
-            --form version=main \
-            --form description="`git rev-parse --abbrev-ref HEAD` `git rev-parse --short HEAD`" \
-            https://scan.coverity.com/builds?project=grass
+            --form "token=${TOKEN}" \
+            --form "email=${EMAIL}" \
+            --form "file=@grass.tgz" \
+            --form "version=${version}-${commit}" \
+            --form "description=${desc_url_enc}" \
+            'https://scan.coverity.com/builds?project=grass'
         env:
           TOKEN: ${{ secrets.COVERITY_PASSPHRASE }}
           EMAIL: ${{ secrets.COVERITY_USER }}
