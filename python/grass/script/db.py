@@ -141,7 +141,7 @@ def db_connection(force=False, env=None):
         run_command("db.connect", flags="c", env=env)
         conn = parse_command("db.connect", flags="g", env=env)
 
-    if conn.get("driver") == "sqlite":
+    if conn and conn.get("driver") == "sqlite":
         gis_env = gisenv()
         conn["database"] = (
             conn["database"]
