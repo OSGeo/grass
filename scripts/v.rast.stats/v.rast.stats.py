@@ -101,6 +101,8 @@ def main():
 
     global tmp, sqltmp, tmpname, nuldev, vector, rastertmp
     rastertmp = False
+    # setup temporary files
+    tmp = grass.tempfile()
     # we need a random name
     tmpname = grass.basename(tmp)
 
