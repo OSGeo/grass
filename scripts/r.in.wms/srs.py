@@ -11,6 +11,7 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (Based on code from OWSLib - Copyright below)
 """
+
 # -*- coding: ISO-8859-15 -*-
 # =============================================================================
 # Copyright (c) 2011 Tom Kralidis

@@ -5,6 +5,7 @@ what arguments a given callable object can take,
 and subset the given arguments to match only
 those which are acceptable.
 """
+
 import sys
 
 if sys.hexversion >= 0x3000000:

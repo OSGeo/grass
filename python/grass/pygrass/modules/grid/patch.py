@@ -3,6 +3,7 @@ Created on Tue Apr  2 18:57:42 2013
 
 @author: pietro
 """
+
 from grass.pygrass.gis.region import Region
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.utils import coor2pixel

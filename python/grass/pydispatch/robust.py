@@ -1,4 +1,5 @@
 """Module implementing error-catching version of send (sendRobust)"""
+
 from grass.pydispatch.dispatcher import Any, Anonymous, liveReceivers, getAllReceivers
 from grass.pydispatch.robustapply import robustApply
 

@@ -234,9 +234,11 @@ class ProfileFrame(BasePlotFrame):
                 # transect
                 self.seglist.append(
                     (
-                        segment_geodesic_cum_dist
-                        if self._is_lat_lon_proj and haveCtypes
-                        else cumdist,
+                        (
+                            segment_geodesic_cum_dist
+                            if self._is_lat_lon_proj and haveCtypes
+                            else cumdist
+                        ),
                         val,
                     )
                 )

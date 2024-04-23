@@ -16,6 +16,7 @@ for details.
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
+
 import os
 
 from .utils import parse_key_val

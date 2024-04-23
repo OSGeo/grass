@@ -19,6 +19,7 @@ for details.
 @author Vaclav Petras <wenzeslaus gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
+
 import os
 import wx
 

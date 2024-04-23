@@ -796,12 +796,12 @@ class TemporalAlgebraParser:
         self.process_chain_dict = (
             {}
         )  # This dictionary stores all processes, as well as the maps to register and remove
-        self.process_chain_dict[
-            "processes"
-        ] = []  # The mapcalc and v.patch module calls
-        self.process_chain_dict[
-            "register"
-        ] = []  # Maps that must be registered/updated or inserted in a new STDS
+        self.process_chain_dict["processes"] = (
+            []
+        )  # The mapcalc and v.patch module calls
+        self.process_chain_dict["register"] = (
+            []
+        )  # Maps that must be registered/updated or inserted in a new STDS
         self.process_chain_dict["remove"] = []  # The g.remove module calls
         self.process_chain_dict["STDS"] = {}  # The STDS that must be created
 

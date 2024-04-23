@@ -3,6 +3,7 @@ Created on Thu Jun 28 17:44:45 2012
 
 @author: pietro
 """
+
 import ctypes
 import grass.lib.raster as libraster
 import datetime

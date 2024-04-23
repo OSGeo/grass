@@ -14,7 +14,6 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-
 import wx
 from gui_core.widgets import FloatValidator, IntegerValidator
 from core.giface import Notification

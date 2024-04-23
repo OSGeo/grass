@@ -3,6 +3,7 @@ Created on Fri Jul  4 16:32:54 2014
 
 @author: pietro
 """
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 

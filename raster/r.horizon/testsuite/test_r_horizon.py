@@ -11,6 +11,7 @@ COPYRIGHT: (C) 2015-2024 Anna Petrasova
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.
 """
+
 import json
 
 from grass.gunittest.case import TestCase

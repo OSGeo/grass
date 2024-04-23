@@ -371,9 +371,9 @@ class PreferencesDialog(PreferencesBaseDialog):
                 group="manager", key="copySelectedTextToClipboard", subkey="enabled"
             )
         )
-        self.winId[
-            "manager:copySelectedTextToClipboard:enabled"
-        ] = copySelectedTextToClipboard.GetId()
+        self.winId["manager:copySelectedTextToClipboard:enabled"] = (
+            copySelectedTextToClipboard.GetId()
+        )
 
         gridSizer.Add(copySelectedTextToClipboard, pos=(row, 0), span=(1, 2))
 
@@ -1423,9 +1423,9 @@ class PreferencesDialog(PreferencesBaseDialog):
                 subkey=["transparent", "enabled"],
             )
         )
-        self.winId[
-            "vectorLayer:featureColor:transparent:enabled"
-        ] = transpFeature.GetId()
+        self.winId["vectorLayer:featureColor:transparent:enabled"] = (
+            transpFeature.GetId()
+        )
         gridSizer.Add(transpFeature, pos=(row, col + 1), flag=wx.ALIGN_CENTER_VERTICAL)
 
         # area fill color

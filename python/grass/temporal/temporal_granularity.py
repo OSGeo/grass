@@ -17,6 +17,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 from .datetime_math import compute_datetime_delta
 from .abstract_map_dataset import AbstractMapDataset
 from functools import reduce

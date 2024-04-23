@@ -3,6 +3,7 @@ Test of r3.flow
 
 @author Anna Petrasova
 """
+
 import os
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test

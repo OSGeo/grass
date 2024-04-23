@@ -221,9 +221,11 @@ class TemporalManager:
             timestamps = [
                 (
                     datetime.datetime.strftime(st, formatString),
-                    datetime.datetime.strftime(end, formatString)
-                    if end is not None
-                    else None,
+                    (
+                        datetime.datetime.strftime(end, formatString)
+                        if end is not None
+                        else None
+                    ),
                     unit,
                 )
                 for (st, end, unit) in timestamps

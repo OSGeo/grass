@@ -41,6 +41,7 @@ for details.
     LexToken(RPAREN,')',1,16)
 
 """
+
 try:
     import ply.yacc as yacc
 except ImportError:

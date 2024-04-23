@@ -5,7 +5,6 @@ Fixture for grass.jupyter.TimeSeries test
 Fixture for ReprojectionRenderer test with simple GRASS location, raster, vector.
 """
 
-
 from types import SimpleNamespace
 
 import grass.script as gs

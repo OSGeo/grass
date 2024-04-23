@@ -14,6 +14,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support)
 """
+
 import wx
 
 from grass import script as grass

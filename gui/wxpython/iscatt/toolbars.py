@@ -13,6 +13,7 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
+
 import wx
 
 from icons.icon import MetaIcon

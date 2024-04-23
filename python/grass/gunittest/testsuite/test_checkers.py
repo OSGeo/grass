@@ -11,7 +11,6 @@ for details.
 @author Vaclav Petras
 """
 
-
 from grass.script.utils import parse_key_val, try_remove
 
 from grass.gunittest.case import TestCase

@@ -3,6 +3,7 @@ Created on Tue Apr  2 18:31:47 2013
 
 @author: pietro
 """
+
 import re
 
 from grass.pygrass.modules.interface.docstring import docstring_property
@@ -249,9 +250,11 @@ class Parameter:
         if isinstance(self.rawvalue, (list, tuple)):
             value = sep.join(
                 [
-                    sep.join([str(v) for v in val])
-                    if isinstance(val, tuple)
-                    else str(val)
+                    (
+                        sep.join([str(v) for v in val])
+                        if isinstance(val, tuple)
+                        else str(val)
+                    )
                     for val in self.rawvalue
                 ]
             )
