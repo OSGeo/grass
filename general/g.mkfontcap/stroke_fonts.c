@@ -79,8 +79,12 @@ void find_stroke_fonts(void)
                 fontcap[totalfonts].path, dirlisting[i]);
 
         /* Path */
+        fprintf(stderr, "G.MKFONTCAP %d %p; %s %c %s\n", __LINE__,
+                fontcap[totalfonts].path, dirpath, HOST_DIRSEP, dirlisting[i]);
         G_asprintf(&fontcap[totalfonts].path, "%s%c%s", dirpath, HOST_DIRSEP,
                    dirlisting[i]);
+        fprintf(stderr, "G.MKFONTCAP %d %p; %s\n", __LINE__,
+                fontcap[totalfonts].path, fontcap[totalfonts].path);
         G_convert_dirseps_to_host(fontcap[totalfonts].path);
         /* Description & Name */
         fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
