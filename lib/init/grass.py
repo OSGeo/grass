@@ -380,7 +380,8 @@ def help_message(default_gui):
             gui_detail=_("and set as default"),
             config=_("print GRASS configuration parameters"),
             config_detail=_(
-                "options: arch,build,compiler,date,path,python_path,revision,svn_revision,version"
+                "options: arch,build,compiler,date,path,python_path,revision,"
+                "svn_revision,version"
             ),
             params=_("Parameters"),
             gisdbase=_("initial GRASS database directory"),
@@ -1492,8 +1493,10 @@ def set_language(grass_config_dir):
                         # If we got so far, attempts to set up language and locale have
                         # failed on this system.
                         sys.stderr.write(
-                            "Failed to enforce user specified language '%s' with error: '%s'\n"
-                            % (language, e)
+                            (
+                                "Failed to enforce user specified language "
+                                f"'{language}' with error: '{e}'\n"
+                            )
                         )
                         sys.stderr.write(
                             "A LANGUAGE environmental variable has been set.\n"

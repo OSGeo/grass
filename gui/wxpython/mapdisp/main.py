@@ -13,7 +13,8 @@ Classes:
  - mapdisp::MapApp
 
 Usage:
-python mapdisp/main.py monitor-identifier /path/to/map/file /path/to/command/file /path/to/env/file
+python mapdisp/main.py monitor-identifier
+       /path/to/map/file /path/to/command/file /path/to/env/file
 
 (C) 2006-2015 by the GRASS Development Team
 
@@ -227,7 +228,8 @@ class DMonMap(Map):
                         if layersOrder[i] == -1:
                             layersOrder[i] = next_layer
                             next_layer += 1
-                        # layer must be put higher in render order (same cmd was insered more times)
+                        # layer must be put higher in render order (same cmd was
+                        # insered more times)
                         # TODO delete rendurant cmds from cmd file?
                         else:
                             for j, l_order in enumerate(layersOrder):

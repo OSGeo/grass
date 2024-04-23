@@ -154,7 +154,8 @@ def main():
         if os.path.exists(loc_proj):
             grass.fatal(
                 _(
-                    "PROJ_INFO file is missing, unpack vector map in XY (unprojected) location."
+                    "PROJ_INFO file is missing, unpack vector map in XY (unprojected) "
+                    "location."
                 )
             )
         skip_projection_check = True  # XY location
@@ -197,10 +198,10 @@ def main():
                     )
                 grass.fatal(
                     _(
-                        "Projection of dataset does not appear to match current location."
-                        " In case of no significant differences in the projection definitions,"
-                        " use the -o flag to ignore them and use"
-                        " current location definition."
+                        "Projection of dataset does not appear to match current "
+                        "location. In case of no significant differences in the "
+                        "projection definitions, use the -o flag to ignore them and "
+                        "use current location definition."
                     )
                 )
 

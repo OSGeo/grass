@@ -1049,7 +1049,8 @@ class Map:
         :param rast: list of raster maps
         :param zoom: zoom to raster map (ignore NULLs)
         :param vect: list of vector maps
-        :param rast3d: 3d raster map (not list, no support of multiple 3d rasters in g.region)
+        :param rast3d: 3d raster map (not list, no support of multiple 3d rasters in
+                       g.region)
         :param regionName:  named region or None
         :param n,s,e,w: force extent
         :param default: force default region settings

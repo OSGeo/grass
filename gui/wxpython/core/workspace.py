@@ -1768,8 +1768,8 @@ class ProcessGrcFile:
                 parent=parent,
                 message=_(
                     "Some lines were skipped when reading settings "
-                    "from file <%(file)s>.\nSee 'Command output' window for details.\n\n"
-                    "Number of skipped lines: %(line)d"
+                    "from file <%(file)s>.\nSee 'Command output' window for details."
+                    "\n\nNumber of skipped lines: %(line)d"
                 )
                 % {"file": self.filename, "line": self.num_error},
                 caption=_("Warning"),
