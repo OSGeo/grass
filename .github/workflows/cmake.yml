@@ -5,14 +5,15 @@
 name: CMake
 
 on:
-    push:
-        paths-ignore:
-            - 'doc/**'
-        branches-ignore:
-            - 'backport**'
-    pull_request:
-        paths-ignore:
-            - 'doc/**'
+  push:
+    paths-ignore:
+      - 'doc/**'
+    branches:
+      - main
+      - releasebranch_*
+  pull_request:
+    paths-ignore:
+      - 'doc/**'
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
