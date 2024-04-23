@@ -52,44 +52,62 @@ void find_stroke_fonts(void)
     char **dirlisting;
     int numfiles, i;
 
+    fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
     G_asprintf(&dirpath, "%s/fonts", G_gisbase());
 
     dirlisting = G_ls2(dirpath, &numfiles);
+    fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
 
     G_asprintf(&fonttable, "%s/fonts.table", dirpath);
-    if (access(fonttable, R_OK) == 0)
+    if (access(fonttable, R_OK) == 0) {
+        fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
         load_font_descriptions(fonttable);
+    }
 
+    fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
     for (i = 0; i < numfiles; i++) {
         if (!strstr(dirlisting[i], ".hmp"))
             continue;
 
         if (totalfonts >= maxfonts) {
+            fprintf(stderr, "G.MKFONTCAP %d %d %d\n", __LINE__, totalfonts,
+                    maxfonts);
             maxfonts += 20;
             fontcap = G_realloc(fontcap, maxfonts * sizeof(struct GFONT_CAP));
         }
+        fprintf(stderr, "G.MKFONTCAP %d %s; %s\n", __LINE__,
+                fontcap[totalfonts].path, dirlisting[i]);
 
         /* Path */
         G_asprintf(&fontcap[totalfonts].path, "%s%c%s", dirpath, HOST_DIRSEP,
                    dirlisting[i]);
         G_convert_dirseps_to_host(fontcap[totalfonts].path);
         /* Description & Name */
+        fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
         fontcap[totalfonts].longname = G_store(get_desc(dirlisting[i]));
+        fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
         *(strstr(dirlisting[i], ".hmp")) = '\0';
+        fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
         fontcap[totalfonts].name = G_store(dirlisting[i]);
+        fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
         /* Font Type */
         fontcap[totalfonts].type = GFONT_STROKE;
         /* These two probably not relevant */
         fontcap[totalfonts].index = 0;
+        fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
         fontcap[totalfonts].encoding = G_store("utf-8");
         totalfonts++;
 
+        fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
         G_free(dirlisting[i]);
+        fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
     }
     G_free(dirlisting);
 
+    fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
     if (font_descriptions)
         free_font_descriptions();
+    fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
 
     return;
 }
