@@ -84,7 +84,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
     if (!tostdout->answer) {
         const char *gisbase = G_gisbase();
         const char *alt_file = getenv("GRASS_FONT_CAP");
@@ -103,7 +102,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    fprintf(stderr, "G.MKFONTCAP %d %s\n", __LINE__, fontcapfile);
     searchdirs = NULL;
     numsearchdirs = 0;
 
@@ -121,22 +119,17 @@ int main(int argc, char *argv[])
         }
     }
     i = -1;
-    fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
     while (standarddirs[++i])
         add_search_dir(standarddirs[i]);
-    fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
 
     totalfonts = maxfonts = 0;
     fontcap = NULL;
 
     find_stroke_fonts();
-    fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
     find_freetype_fonts();
 
-    fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
     qsort(fontcap, totalfonts, sizeof(struct GFONT_CAP), compare_fonts);
 
-    fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
     if (tostdout->answer)
         outstream = stdout;
     else {
@@ -146,14 +139,12 @@ int main(int argc, char *argv[])
                           strerror(errno));
     }
 
-    fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
     for (i = 0; i < totalfonts; i++)
         fprintf(outstream, "%s|%s|%d|%s|%d|%s|\n", fontcap[i].name,
                 fontcap[i].longname, fontcap[i].type, fontcap[i].path,
                 fontcap[i].index, fontcap[i].encoding);
 
     fclose(outstream);
-    fprintf(stderr, "G.MKFONTCAP %d\n", __LINE__);
 
     exit(EXIT_SUCCESS);
 }

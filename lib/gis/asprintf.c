@@ -52,10 +52,19 @@ int G_vasprintf(char **out, const char *fmt, va_list ap)
          * va_start() should be called immediately before vsnprintf(),
          * and va_end() immediately after vsnprintf()
          * otherwise there will be memory corruption */
+        fprintf(stderr, "G_VASPRINTF %d hitting this bug?\n", __LINE__);
         count = vsnprintf(buf, size, fmt, ap);
+        fprintf(stderr, "G_VASPRINTF %d count=%d size=%d\n", __LINE__, count,
+                size);
         if (count >= 0 && count < size)
             break;
         size *= 2;
+        fprintf(stderr,
+                "G_VASPRINTF %d count=%d size=%d why double size when count is "
+                "already 'the number of characters (excluding the terminating "
+                "null byte) which would have been written to the  final string "
+                "if enough space had been available.'?\n",
+                __LINE__, count, size);
         buf = G_realloc(buf, size);
     }
 
