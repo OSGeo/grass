@@ -5,8 +5,8 @@ radians. It reads a raster of elevation data and outputs the horizon
 outline in one of two modes:
 
 <ul>
-<li> single point: as a series of horizon
-heights in the specified directions from the given point. The results are
+<li> point: as a series of horizon
+heights in the specified directions from the given point(s). The results are
 written to the stdout.
 <li> raster: in this case the output is
 one or more raster maps, with each point in a raster giving the horizon
@@ -23,7 +23,7 @@ geographic projection and not the coordinate system given by the rows
 and columns of the raster map. This correction implies that the
 resulting cardinal directions represent true orientation towards the
 East, North, West and South. The only exception of this feature is
-LOCATION with x,y coordinate system, where this correction is
+x,y coordinate system, where this correction is
 not applied.
 
 <p>
@@ -82,9 +82,10 @@ the higher the risk that you may miss a terrain feature that can
 contribute significantly to the horizon outline. Note that a viewshed
 can be calculated with <em>r.viewshed</em>.
 
-<p>The <i>coordinate</i> parameter takes a pair of easting-northing values
+<p>The <i>coordinate</i> parameter takes one or
+multiple pairs of easting-northing values
 in the current coordinate system and calculates the values of angular
-height of the horizon around this point. To achieve the
+height of the horizon around each point. To achieve the
 consistency of the results, the point coordinate is
 aligned to the midpoint of the closest elevation raster cell.
 
@@ -106,18 +107,19 @@ area specified by the current region definition.
 horizon raster maps. The raster name of each horizon direction
 raster will be constructed as <i>basename_</i>ANGLE, where ANGLE
 is the angle in degrees with the direction. If you use <b>r.horizon</b>
-in the single point mode this option will be ignored.
+in the point mode this option will be ignored.
 
 <p>The <i>file</i> parameter allows saving the resulting horizon
-angles in a comma separated ASCII file (single point mode only). If
+angles in a comma separated ASCII file with option <b>format=plain</b>
+or in a JSON file with option <b>format=json</b> (point mode only). If
 you use <b>r.horizon</b> in the raster map mode this option will be ignored.
 
 <p>At the moment the elevation and maximum distance must be measured in meters,
 even if you use geographical coordinates (longitude/latitude). If your
 projection is based on distance (easting and northing), these too must
 be in meters. The buffer parameters must be in the same units as the
-raster coordinates (e.g., for latitude-longitude locations buffers are
-measured in degree unit).
+raster coordinates (e.g., for latitude-longitude buffers are
+measured in degrees).
 
 <h2>METHOD</h2>
 
@@ -147,7 +149,7 @@ in theory possible, <b>r.horizon</b> currently does not support them.
 
 The examples are intended for the North Carolina sample dataset.
 
-<h3>Single point mode</h3>
+<h3>Point mode</h3>
 
 <b>Example 1</b>: determine horizon angle in 225 degree direction (output
 of horizon angles CCW from East):

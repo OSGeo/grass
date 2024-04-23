@@ -8,6 +8,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import getpass
 from datetime import datetime
 from .abstract_map_dataset import AbstractMapDataset

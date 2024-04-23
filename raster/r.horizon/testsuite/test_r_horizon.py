@@ -11,6 +11,7 @@ COPYRIGHT: (C) 2015-2024 Anna Petrasova
            License (>=v2). Read the file COPYING that comes with GRASS
            for details.
 """
+
 import json
 
 from grass.gunittest.case import TestCase
@@ -87,24 +88,24 @@ ref4 = """azimuth,horizon_height
 """
 
 ref5 = """azimuth,horizon_height,horizon_distance
-0.000000,0.197017,5010.039920
-20.000000,0.196832,5017.668781
-40.000000,0.196875,5017.818251
-60.000000,0.196689,5017.220346
-80.000000,0.196847,5014.299552
-100.000000,0.196645,5019.531851
-120.000000,0.196969,5014.957627
-140.000000,0.196778,5020.328674
-160.000000,0.196863,5013.431958
-180.000000,0.197017,5010.039920
-200.000000,0.196832,5014.229751
-220.000000,0.196875,5011.387034
-240.000000,0.196689,5017.220346
-260.000000,0.196847,5014.299552
-280.000000,0.196645,5019.531851
-300.000000,0.196969,5014.957627
-320.000000,0.196778,5020.328674
-340.000000,0.196863,5013.431958
+0.000000,0.197017,5000.040000
+20.000000,0.196832,5004.837660
+40.000000,0.196875,5003.728610
+60.000000,0.196689,5008.552685
+80.000000,0.196847,5004.448022
+100.000000,0.196645,5009.690609
+120.000000,0.196969,5001.279836
+140.000000,0.196778,5006.246099
+160.000000,0.196863,5004.018385
+180.000000,0.197017,5000.040000
+200.000000,0.196832,5004.837660
+220.000000,0.196875,5003.728610
+240.000000,0.196689,5008.552685
+260.000000,0.196847,5004.448022
+280.000000,0.196645,5009.690609
+300.000000,0.196969,5001.279836
+320.000000,0.196778,5006.246099
+340.000000,0.196863,5004.018385
 """
 
 
@@ -176,6 +177,20 @@ class TestHorizon(TestCase):
         stdout = module.outputs.stdout
         self.assertMultiLineEqual(first=ref2, second=stdout)
 
+    def test_point_mode_multiple_points_and_directions(self):
+        """Test mode with 2 identical points and multiple directions"""
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            coordinates=(634720, 216180, 634720, 216180),
+            output=self.horizon,
+            direction=180,
+            step=20,
+        )
+        self.assertModule(module)
+        stdout = module.outputs.stdout
+        self.assertMultiLineEqual(first=ref2 + ref2, second=stdout)
+
     def test_point_mode_multiple_direction_json(self):
         """Test mode with 1 point and multiple directions with JSON"""
         module = SimpleModule(
@@ -202,6 +217,33 @@ class TestHorizon(TestCase):
         reference["horizon_height"] = horizons
 
         self.assertListEqual([reference], stdout)
+
+    def test_point_mode_multiple_points_and_directions_json(self):
+        """Test mode with 2 identical points and multiple directions with JSON"""
+        module = SimpleModule(
+            "r.horizon",
+            elevation="elevation",
+            coordinates=(634720, 216180, 634720, 216180),
+            output=self.horizon,
+            direction=180,
+            step=20,
+            format="json",
+        )
+        self.assertModule(module)
+        stdout = json.loads(module.outputs.stdout)
+        azimuths = []
+        horizons = []
+        reference = {}
+        for line in ref2.splitlines()[1:]:
+            azimuth, horizon = line.split(",")
+            azimuths.append(float(azimuth))
+            horizons.append(float(horizon))
+        reference["x"] = 634720.0
+        reference["y"] = 216180.0
+        reference["azimuth"] = azimuths
+        reference["horizon_height"] = horizons
+
+        self.assertListEqual([reference, reference], stdout)
 
     def test_point_mode_multiple_direction_artificial(self):
         """Test mode with 1 point and multiple directions with artificial surface"""

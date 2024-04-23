@@ -93,8 +93,8 @@
 # %end
 # %flag
 # % key: o
-# % label: Override projection check (use current location's projection)
-# % description: Assume that the dataset has the same projection as the current location
+# % label: Override projection check (use current project's CRS)
+# % description: Assume that the dataset has the same coordinate reference system (CRS) as the current project
 # %end
 
 import sys
@@ -240,7 +240,7 @@ def main():
     # make sure target is not xy
     if grass.parse_command("g.proj", flags="g")["name"] == "xy_location_unprojected":
         grass.fatal(
-            _("Coordinate reference system not available for current location <%s>")
+            _("Coordinate reference system not available for current project <%s>")
             % tgtloc
         )
 
@@ -261,7 +261,7 @@ def main():
     tgtsrs = grass.read_command("g.proj", flags="j", quiet=True)
 
     # create temp location from input without import
-    grass.verbose(_("Creating temporary location for <%s>...") % OGRdatasource)
+    grass.verbose(_("Creating temporary project for <%s>...") % OGRdatasource)
     try:
         if OGRdatasource.lower().endswith("gml"):
             try:
@@ -277,7 +277,7 @@ def main():
         grass.run_command(
             "v.in.ogr",
             input=OGRdatasource,
-            location=TMPLOC,
+            project=TMPLOC,
             flags="i",
             quiet=True,
             overwrite=overwrite,
@@ -285,7 +285,7 @@ def main():
         )
     except CalledModuleError:
         grass.fatal(
-            _("Unable to create location from OGR datasource <%s>") % OGRdatasource
+            _("Unable to create project from OGR datasource <%s>") % OGRdatasource
         )
 
     # switch to temp location
@@ -330,7 +330,7 @@ def main():
                 overwrite=overwrite,
             )
         except CalledModuleError:
-            grass.fatal(_("Unable to reproject to source location"))
+            grass.fatal(_("Unable to reproject to source project"))
 
         # set region from region vector
         grass.run_command("g.region", res="1")
