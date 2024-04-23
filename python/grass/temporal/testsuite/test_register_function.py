@@ -418,7 +418,7 @@ class TestRasterRegisterFunctions(TestCase):
 
     def test_relative_time_strds_2(self):
         """Test the registration of maps with relative time in a
-        space time raster dataset. The timetsamps are set for the maps
+        space time raster dataset. The timestamps are set for the maps
         using the C-interface before registration.
         """
         ciface = tgis.get_tgis_c_library_interface()
