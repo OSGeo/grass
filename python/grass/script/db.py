@@ -323,7 +323,6 @@ def db_execute(pdriver, sql):
             db_close_database_shutdown_driver,
             db_execute_immediate,
             db_free_string,
-            db_get_string,
             db_init_string,
             db_set_string,
             DB_OK,
@@ -335,7 +334,7 @@ def db_execute(pdriver, sql):
     db_init_string(byref(stmt))
     db_set_string(byref(stmt), sql)
     if db_execute_immediate(pdriver, byref(stmt)) != DB_OK:
-        db_free_string(byref(sql))
+        db_free_string(byref(stmt))
         db_close_database_shutdown_driver(pdriver)
-        fatal(_("Error while executing SQL <{}>.").format(db_get_string(byref(sql))))
+        fatal(_("Error while executing SQL <{}>.").format(sql))
     db_free_string(byref(stmt))

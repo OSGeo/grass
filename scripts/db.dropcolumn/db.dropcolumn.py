@@ -100,6 +100,7 @@ def main():
         )
         return 0
 
+    sqls = []
     if driver == "sqlite":
         sqlite3_version = gscript.read_command(
             "db.select",
@@ -109,7 +110,6 @@ def main():
             driver=driver,
         ).split(".")[0:2]
 
-        sqls = []
         if [int(i) for i in sqlite3_version] >= [int(i) for i in "3.35".split(".")]:
             if column == "cat":
                 sqls.append(f"DROP INDEX {table}_{column};")
@@ -138,7 +138,7 @@ def main():
             sql = tmpl.substitute(table=table, coldef=coltypes, colnames=colnames)
             sqls.extend(sql.split("\n"))
     else:
-        sqls.append("ALTER TABLE {table} DROP COLUMN {column};")
+        sqls.append(f"ALTER TABLE {table} DROP COLUMN {column};")
 
     try:
         pdriver = db_begin_transaction(driver_name=driver, database=database)
