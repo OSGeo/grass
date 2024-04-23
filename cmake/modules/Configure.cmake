@@ -146,7 +146,6 @@ struct tm *tp;
 check_symbol_exists(gethostname "unistd.h" HAVE_GETHOSTNAME)
 check_symbol_exists(gettimeofday "sys/time.h" HAVE_GETTIMEOFDAY)
 check_symbol_exists(time "time.h" HAVE_TIME)
-check_symbol_exists(asprintf "stdio.h" HAVE_ASPRINTF)
 check_symbol_exists(putenv "stdlib.h" HAVE_PUTENV)
 check_symbol_exists(setenv "stdlib.h" HAVE_SETENV)
 check_symbol_exists(socket "sys/socket.h" HAVE_SOCKET)
@@ -161,6 +160,38 @@ check_symbol_exists(setpgrp "unistd.h" SETPGRP_VOID)
 check_symbol_exists(drand48 "stdlib.h" HAVE_DRAND48)
 check_symbol_exists(nanosleep "time.h" HAVE_NANOSLEEP)
 check_symbol_exists(fseeko "stdio.h" HAVE_FSEEKO)
+
+function(check_symbol_definitions)
+  cmake_parse_arguments(PARSE_ARGV 0 ARG "" "SYMBOL" "INCLUDES;DEFINITIONS")
+
+  string(TOUPPER "HAVE_${ARG_SYMBOL}" var_name)
+
+  # First try with a simple check
+  check_symbol_exists("${ARG_SYMBOL}" "${ARG_INCLUDES}" "${var_name}")
+
+  if($CACHE{${var_name}})
+    return()
+  endif()
+
+  # Otherwise, start trying alternatives
+  foreach(def IN LISTS ARG_DEFINITIONS)
+    unset(${var_name} CACHE)
+    set(CMAKE_REQUIRED_DEFINITIONS "-D${def}")
+    check_symbol_exists("${ARG_SYMBOL}" "${ARG_INCLUDES}" "${var_name}")
+    if($CACHE{${var_name}})
+      return()
+    endif()
+  endforeach()
+endfunction()
+
+check_symbol_definitions(
+  SYMBOL
+  asprintf
+  INCLUDES
+  stdio.h
+  DEFINITIONS
+  _GNU_SOURCE
+  _BSD_SOURCE)
 
 # set(HAVE_PBUFFERS 0) set(HAVE_PIXMAPS 0) if(WITH_OPENGL) try_compile(
 # HAVE_PBUFFERS ${CMAKE_CURRENT_BINARY_DIR}
