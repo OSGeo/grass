@@ -24,6 +24,6 @@ rem GISRC must be set
 set GISRC=dummy
 
 rem run g.mkfontcap outside a GRASS session
-"%GISBASE%\bin\g.mkfontcap.exe" -o
+"%GISBASE%\bin\g.mkfontcap.exe" --overwrite
 
 del "%BATCH%.tmpl

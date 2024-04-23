@@ -319,7 +319,7 @@ echo""
 
 echo "Generating display font configuration file..."
 
-GISBASE="$DESTDIR" GISRC=junk LD_LIBRARY_PATH_VAR="${DESTDIR}/lib:$LD_LIBRARY_PATH_VAR" "${DESTDIR}/bin/g.mkfontcap" -o
+GISBASE="$DESTDIR" GISRC=junk LD_LIBRARY_PATH_VAR="${DESTDIR}/lib:$LD_LIBRARY_PATH_VAR" "${DESTDIR}/bin/g.mkfontcap" --overwrite
 
 echo""
 
