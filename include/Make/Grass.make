@@ -152,6 +152,7 @@ libs = \
 	NVIZ:nviz \
 	OGSF:ogsf \
 	OPTRI:optri \
+	PARSON:parson \
 	PNGDRIVER:pngdriver \
 	PSDRIVER:psdriver \
 	QTREE:qtree \

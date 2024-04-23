@@ -694,12 +694,12 @@ struct Option *G_define_standard_option(int opt)
         break;
 
     case G_OPT_M_LOCATION:
-        Opt->key = "location";
+        Opt->key = "project";
         Opt->type = TYPE_STRING;
         Opt->required = NO;
         Opt->multiple = NO;
-        Opt->label = _("Location name");
-        Opt->description = _("Location name (not location path)");
+        Opt->label = _("Project (location) name");
+        Opt->description = _("Project name (not path to project)");
         Opt->gisprompt = "old,location,location";
         Opt->key_desc = "name";
         break;

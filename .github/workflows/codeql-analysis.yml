@@ -16,49 +16,71 @@ on:
     # Check every Saturday at 18:36
     - cron: 36 18 * * 6
 
+permissions: {}
+
 jobs:
   analyze:
-    name: ${{ matrix.language }}
+    name: Analyze
     runs-on: ubuntu-22.04
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
 
     strategy:
       fail-fast: false
       matrix:
-        # C is included in cpp, no separate C language available on CodeQL
         language:
-          - cpp
+          - c-cpp
           - python
+
+    concurrency:
+      group: ${{ github.workflow }}-${{
+        github.event_name == 'pull_request' &&
+        github.head_ref || github.sha }}-${{ matrix.language }}
+      cancel-in-progress: true
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
+        uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
+      - name: Set up Python
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
         with:
-          languages: ${{ matrix.language }}
-          config-file: ./.github/codeql/codeql-config.yml
-
-      - name: Get dependencies
+          python-version: '3.x'
+      - name: Install non-Python dependencies
+        if: ${{ matrix.language == 'c-cpp' }}
         run: |
           sudo apt-get update -y
           sudo apt-get install -y wget git gawk findutils
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@8f596b4ae3cb3c588a5c46780b86dd53fef16c52 # v3.25.2
+        with:
+          languages: ${{ matrix.language }}
+          config-file: ./.github/codeql/codeql-config.yml
+
       - name: Create installation directory
         run: |
-          mkdir $HOME/install
+          mkdir "${HOME}/install"
 
       - name: Set LD_LIBRARY_PATH for compilation
         run: |
-          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=${HOME}/install/lib" >> $GITHUB_ENV
+
+      - name: Set number of cores for compilation
+        run: |
+          echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
 
       - name: Build
+        if: ${{ matrix.language == 'c-cpp' }}
         env:
           CFLAGS: -std=gnu11
           CXXFLAGS: -std=c++11
-        run: .github/workflows/build_ubuntu-22.04.sh $HOME/install
+        run: .github/workflows/build_ubuntu-22.04.sh "${HOME}/install"
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+        uses: github/codeql-action/analyze@8f596b4ae3cb3c588a5c46780b86dd53fef16c52 # v3.25.2
+        with:
+          category: "/language:${{matrix.language}}"

@@ -3,6 +3,7 @@ Created on Mon Nov 26 11:48:03 2012
 
 @author: lucadelu
 """
+
 import wx
 import os
 import sys
@@ -97,7 +98,7 @@ def convertFeature(vect, outrast, cat, origrast, layer="1", overwrite=False):
         input=tmp_vect,
         type="area",
         layer=layer,
-        use="val",
+        use="value",
         value=cat,
         output=outrast,
         overwrite=overwrite,

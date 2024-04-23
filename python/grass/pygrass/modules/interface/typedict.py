@@ -3,6 +3,7 @@ Created on Tue Apr  2 18:37:02 2013
 
 @author: pietro
 """
+
 from collections import OrderedDict
 from copy import deepcopy
 
@@ -12,7 +13,7 @@ from grass.pygrass.modules.interface.docstring import docstring_property
 class TypeDict(OrderedDict):
     def __init__(self, dict_type, *args, **kargs):
         self._type = dict_type
-        super(TypeDict, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
     def __getattr__(self, key):
         if key in self:
@@ -30,7 +31,7 @@ class TypeDict(OrderedDict):
 
     def __setitem__(self, key, value):
         if isinstance(value, self._type):
-            super(TypeDict, self).__setitem__(key, value)
+            super().__setitem__(key, value)
         else:
             str_err = "The value: %r is not a %s instance."
             raise TypeError(str_err % (value, self._type.__name__))

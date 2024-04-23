@@ -25,6 +25,7 @@ Internal attributes:
         deletion, (considerably speeds up the cleanup process
         vs. the original code.)
 """
+
 import weakref
 from grass.pydispatch import saferef, robustapply, errors
 
@@ -442,8 +443,7 @@ def _removeBackrefs(senderkey):
 
         def allReceivers():
             for signal, set in items:
-                for item in set:
-                    yield item
+                yield from set
 
         for receiver in allReceivers():
             _killBackref(receiver, senderkey)

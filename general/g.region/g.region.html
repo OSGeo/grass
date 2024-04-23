@@ -48,7 +48,7 @@ modules and <em>v.in.region</em>.
 
 <dt><b>Default Region:</b>
 
-<dd>Each GRASS LOCATION has a fixed
+<dd>Each GRASS project (previously called location) has a fixed
 geographic region, called the default geographic region
 (stored in the region file <kbd>DEFAULT_WIND</kbd> under
 the special mapset <kbd>PERMANENT</kbd>), that defines the
@@ -57,7 +57,7 @@ point for defining new geographic regions, user-defined
 geographic regions need not fall within this geographic
 region. The current region can be reset to the default region
 with the <b>-d</b> flag. The default region is initially set
-when the location is first created and can be reset using the
+when the project is first created and can be reset using the
 <b>-s</b> flag.
 
 <dt><b>Current Region:</b>
@@ -78,7 +78,7 @@ referred to as the user's saved region definitions).
 Any of these pre-defined geographic regions
 may be selected, by name, to become the current geographic
 region.  Users may also access saved region definitions
-stored under other mapsets in the current location, if
+stored under other mapsets in the current project, if
 these mapsets are included in the user's mapset search
 path or the '@' operator is used (<tt>region_name@mapset</tt>).
 </dl>
@@ -283,7 +283,7 @@ g.region -pm
 </tt></span>
 
 <dd> This will print the current region in the format
- (latitude-longitude location):
+ (latitude-longitude project):
 
 <div class="code"><pre>
 projection: 3 (Latitude-Longitude)
@@ -326,7 +326,7 @@ g.region -dp s=698000
 </tt></span>
 
 <dd> will set the current region from the default region
-for the GRASS data base location, reset the south edge to
+for the GRASS project, reset the south edge to
 698000, and then print the result.
 
 <p>
@@ -438,7 +438,7 @@ eval `g.region -g`
 ogr2ogr -spat $w $s $e $n soils_cut.shp soils.shp
 </pre></div>
 
-This requires that the location/SHAPE file projection match.
+This requires that the project and the SHAPE file CRS' match.
 
 <h3>Using g.region in a shell in combination with GDAL</h3>
 
@@ -454,8 +454,8 @@ gdalwarp -t_srs "`g.proj -wf`" -te $w $s $e $n \
          p016r035_7t20020524_nc_spm_wake_nn30.tif
 </pre></div>
 
-Here the input raster map does not have to match the location
-projection since it is reprojected on the fly.
+Here the input raster map does not have to match the project's
+coordinate reference system since it is reprojected on the fly.
 
 <h2>SEE ALSO</h2>
 

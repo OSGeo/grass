@@ -23,7 +23,6 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
     *proj_wkt = NULL;
 
     /* Fetch input layer projection in GRASS form. */
-#if GDAL_VERSION_NUM >= 1110000
     if (geom_col) {
         int igeom;
         OGRGeomFieldDefnH Ogr_geomdefn;
@@ -41,9 +40,6 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
     else {
         hSRS = OGR_L_GetSpatialRef(Ogr_layer);
     }
-#else
-    hSRS = OGR_L_GetSpatialRef(Ogr_layer); /* should not be freed later */
-#endif
 
     /* verbose is used only when comparing input SRS to GRASS projection,
      * not when comparing SRS's of several input layers */
@@ -131,7 +127,7 @@ int get_layer_proj(OGRLayerH Ogr_layer, struct Cell_head *cellhd,
 }
 
 /* keep in sync with r.in.gdal, r.external, v.in.ogr */
-void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
+void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                       char *geom_col, char *outloc, int create_only,
                       int override, int check_only)
 {
@@ -144,7 +140,7 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
     OGRLayerH Ogr_layer;
 
     /* Get first layer to be imported to use for projection check */
-    Ogr_layer = ds_getlayerbyindex(hDS, layer);
+    Ogr_layer = GDALDatasetGetLayer(hDS, layer);
 
     /* -------------------------------------------------------------------- */
     /*      Fetch the projection in GRASS form, SRID, and WKT.              */
@@ -183,7 +179,7 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
 
         /* If create only, clean up and exit here */
         if (create_only) {
-            ds_close(hDS);
+            GDALClose(hDS);
             exit(EXIT_SUCCESS);
         }
     }
@@ -205,7 +201,7 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
             }
             else {
                 msg_fn = G_fatal_error;
-                ds_close(hDS);
+                GDALClose(hDS);
             }
             msg_fn(error_msg);
             if (!override) {
@@ -374,7 +370,7 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
                 msg_fn = G_fatal_error;
             msg_fn("%s", error_msg);
             if (check_only) {
-                ds_close(hDS);
+                GDALClose(hDS);
                 exit(EXIT_FAILURE);
             }
         }
@@ -386,7 +382,7 @@ void check_projection(struct Cell_head *cellhd, ds_t hDS, int layer,
             msg_fn(_("Projection of input dataset and current location "
                      "appear to match"));
             if (check_only) {
-                ds_close(hDS);
+                GDALClose(hDS);
                 exit(EXIT_SUCCESS);
             }
         }

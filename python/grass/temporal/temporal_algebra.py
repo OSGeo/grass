@@ -476,7 +476,7 @@ from .datetime_math import create_time_suffix
 from .datetime_math import create_numeric_suffix
 
 
-class TemporalAlgebraLexer(object):
+class TemporalAlgebraLexer:
     """Lexical analyzer for the GRASS GIS temporal algebra"""
 
     # Functions that defines an if condition, temporal buffering, snapping and
@@ -700,7 +700,7 @@ class TemporalAlgebraLexer(object):
             print(tok)
 
 
-class GlobalTemporalVar(object):
+class GlobalTemporalVar:
     """This class handles global temporal variable conditional expressions,
     like start_doy() == 3.
     The three parts of the statement are stored separately in
@@ -759,7 +759,7 @@ class FatalError(Exception):
         return self.value
 
 
-class TemporalAlgebraParser(object):
+class TemporalAlgebraParser:
     """The temporal algebra class"""
 
     # Get the tokens from the lexer class
@@ -796,12 +796,12 @@ class TemporalAlgebraParser(object):
         self.process_chain_dict = (
             {}
         )  # This dictionary stores all processes, as well as the maps to register and remove
-        self.process_chain_dict[
-            "processes"
-        ] = []  # The mapcalc and v.patch module calls
-        self.process_chain_dict[
-            "register"
-        ] = []  # Maps that must be registered/updated or inserted in a new STDS
+        self.process_chain_dict["processes"] = (
+            []
+        )  # The mapcalc and v.patch module calls
+        self.process_chain_dict["register"] = (
+            []
+        )  # Maps that must be registered/updated or inserted in a new STDS
         self.process_chain_dict["remove"] = []  # The g.remove module calls
         self.process_chain_dict["STDS"] = {}  # The STDS that must be created
 

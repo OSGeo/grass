@@ -15,6 +15,7 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
+
 import wx
 import numpy as np
 from math import ceil
@@ -917,7 +918,7 @@ class ModestImage(mi.AxesImage):
         self.minx = minx
         self.miny = miny
 
-        super(ModestImage, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def set_data(self, A):
         """
@@ -990,7 +991,7 @@ class ModestImage(mi.AxesImage):
 
     def draw(self, renderer, *args, **kwargs):
         self._scale_to_res()
-        super(ModestImage, self).draw(renderer, *args, **kwargs)
+        super().draw(renderer, *args, **kwargs)
 
 
 def imshow(

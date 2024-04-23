@@ -31,7 +31,7 @@ from grass.pygrass.utils import decode
 ###############################################################################
 
 
-class RPCDefs(object):
+class RPCDefs:
     # Function identifier and index
     STOP = 0
     HAS_TIMESTAMP = 1

@@ -3,6 +3,7 @@ Created on Mon Jun 18 13:22:38 2012
 
 @author: pietro
 """
+
 import ctypes
 
 import grass.lib.rowio as librowio
@@ -39,7 +40,7 @@ get_row = {
 }
 
 
-class RowIO(object):
+class RowIO:
     def __init__(self):
         self.c_rowio = librowio.ROWIO()
         self.fd = None

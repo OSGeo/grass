@@ -628,13 +628,11 @@ static void get_needed_bands(struct scCats *cats, int *b_needed_bands)
  */
 static void free_compute_scatts_data(int *fd_bands, struct rast_row *bands_rows,
                                      int n_a_bands, int *bands_ids,
-                                     int *fd_cats_rasts,
+                                     int *b_needed_bands, int *fd_cats_rasts,
                                      FILE **f_cats_rasts_conds, int n_a_cats)
 {
-    int i, band_id;
-
-    for (i = 0; i < n_a_bands; i++) {
-        band_id = bands_ids[i];
+    for (int i = 0; i < n_a_bands; i++) {
+        int band_id = bands_ids[i];
         if (band_id >= 0) {
             Rast_close(fd_bands[i]);
             G_free(bands_rows[band_id].row);
@@ -642,15 +640,20 @@ static void free_compute_scatts_data(int *fd_bands, struct rast_row *bands_rows,
         }
     }
 
-    if (f_cats_rasts_conds)
-        for (i = 0; i < n_a_cats; i++)
-            if (f_cats_rasts_conds[i])
-                fclose(f_cats_rasts_conds[i]);
+    for (int i = 0; i < n_a_cats; i++)
+        if (f_cats_rasts_conds[i])
+            fclose(f_cats_rasts_conds[i]);
 
-    if (fd_cats_rasts)
-        for (i = 0; i < n_a_cats; i++)
-            if (fd_cats_rasts[i] >= 0)
-                Rast_close(fd_cats_rasts[i]);
+    for (int i = 0; i < n_a_cats; i++)
+        if (fd_cats_rasts[i] >= 0)
+            Rast_close(fd_cats_rasts[i]);
+
+    G_free(fd_bands);
+    G_free(bands_rows);
+    G_free(bands_ids);
+    G_free(b_needed_bands);
+    G_free(fd_cats_rasts);
+    G_free(f_cats_rasts_conds);
 }
 
 /*!
@@ -687,19 +690,20 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     const char *mapset;
     char header[1024];
 
-    int fd_cats_rasts[scatt_conds->n_a_cats];
-    FILE *f_cats_rasts_conds[scatt_conds->n_a_cats];
+    int *fd_cats_rasts = G_malloc(scatt_conds->n_a_cats * sizeof(int));
+    FILE **f_cats_rasts_conds =
+        G_malloc(scatt_conds->n_a_cats * sizeof(FILE *));
 
-    struct rast_row bands_rows[n_bands];
+    struct rast_row *bands_rows = G_malloc(n_bands * sizeof(struct rast_row));
 
     RASTER_MAP_TYPE data_type;
 
     int nrows, i_band, n_a_bands, band_id;
     int i_row, head_nchars, i_cat, id_cat;
 
-    int fd_bands[n_bands];
-    int bands_ids[n_bands];
-    int b_needed_bands[n_bands];
+    int *fd_bands = G_malloc(n_bands * sizeof(int));
+    int *bands_ids = G_malloc(n_bands * sizeof(int));
+    int *b_needed_bands = G_malloc(n_bands * sizeof(int));
 
     Rast_set_window(region);
 
@@ -711,6 +715,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 
     if (n_bands != scatts->n_bands || n_bands != scatt_conds->n_bands)
         return -1;
+
+    for (i_cat = 0; i_cat < scatts->n_a_cats; i_cat++)
+        fd_cats_rasts[i_cat] = -1;
 
     G_zero(b_needed_bands, (size_t)n_bands * sizeof(int));
 
@@ -726,18 +733,18 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
                     bands[band_id]);
 
             if ((mapset = G_find_raster2(bands[band_id], "")) == NULL) {
-                free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
-                                         bands_ids, NULL, NULL,
-                                         scatt_conds->n_a_cats);
+                free_compute_scatts_data(
+                    fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
+                    fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
                 G_warning(_("Unable to find raster <%s>"), bands[band_id]);
                 return -1;
             }
 
             if ((fd_bands[n_a_bands] = Rast_open_old(bands[band_id], mapset)) <
                 0) {
-                free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
-                                         bands_ids, NULL, NULL,
-                                         scatt_conds->n_a_cats);
+                free_compute_scatts_data(
+                    fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
+                    fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
                 G_warning(_("Unable to open raster <%s>"), bands[band_id]);
                 return -1;
             }
@@ -754,9 +761,9 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 
             if (Rast_read_range(bands[band_id], mapset,
                                 &bands_rows[band_id].rast_range) != 1) {
-                free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
-                                         bands_ids, NULL, NULL,
-                                         scatt_conds->n_a_cats);
+                free_compute_scatts_data(
+                    fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
+                    fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
                 G_warning(_("Unable to read range of raster <%s>"),
                           bands[band_id]);
                 return -1;
@@ -773,15 +780,13 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
         if (cats_rasts[id_cat]) {
             fd_cats_rasts[i_cat] = Rast_open_new(cats_rasts[id_cat], CELL_TYPE);
         }
-        else
-            fd_cats_rasts[i_cat] = -1;
 
         if (cats_rasts_conds[id_cat]) {
             f_cats_rasts_conds[i_cat] = fopen(cats_rasts_conds[id_cat], "r");
             if (!f_cats_rasts_conds[i_cat]) {
                 free_compute_scatts_data(
-                    fd_bands, bands_rows, n_a_bands, bands_ids, fd_cats_rasts,
-                    f_cats_rasts_conds, scatt_conds->n_a_cats);
+                    fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
+                    fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
                 G_warning(
                     _("Unable to open category raster condition file <%s>"),
                     bands[band_id]);
@@ -815,13 +820,13 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
                                           bands_rows, scatts,
                                           fd_cats_rasts) == -1) {
             free_compute_scatts_data(fd_bands, bands_rows, n_a_bands, bands_ids,
-                                     fd_cats_rasts, f_cats_rasts_conds,
-                                     scatt_conds->n_a_cats);
+                                     b_needed_bands, fd_cats_rasts,
+                                     f_cats_rasts_conds, scatt_conds->n_a_cats);
             return -1;
         }
     }
     free_compute_scatts_data(fd_bands, bands_rows, n_a_bands, bands_ids,
-                             fd_cats_rasts, f_cats_rasts_conds,
+                             b_needed_bands, fd_cats_rasts, f_cats_rasts_conds,
                              scatt_conds->n_a_cats);
     return 0;
 }
