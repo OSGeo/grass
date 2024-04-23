@@ -308,3 +308,34 @@ def db_commit_transaction(driver_name, database, pdriver):
             ).format(db=database, driver=driver_name)
         )
     db_close_database_shutdown_driver(pdriver)
+
+
+def db_execute(pdriver, sql):
+    """Execute SQL
+
+    :param dbDriver* pointer pdriver: opened driver/database connection
+                                      pointer
+    :param str sql: SQL command
+    """
+    try:
+        from grass.lib.dbmi import (
+            dbString,
+            db_close_database_shutdown_driver,
+            db_execute_immediate,
+            db_free_string,
+            db_get_string,
+            db_init_string,
+            db_set_string,
+            DB_OK,
+        )
+    except (ImportError, OSError, TypeError) as e:
+        fatal(_("Unable to import C functions: {e}").format(e))
+
+    stmt = dbString()
+    db_init_string(byref(stmt))
+    db_set_string(byref(stmt), sql)
+    if db_execute_immediate(pdriver, byref(stmt)) != DB_OK:
+        db_free_string(byref(sql))
+        db_close_database_shutdown_driver(pdriver)
+        fatal(_("Error while executing SQL <{}>.").format(db_get_string(byref(sql))))
+    db_free_string(byref(stmt))

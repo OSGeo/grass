@@ -6,7 +6,11 @@ import pytest
 
 import grass.script as gs
 import grass.script.setup as grass_setup
-from grass.script.db import db_begin_transaction, db_commit_transaction
+from grass.script.db import (
+    db_begin_transaction,
+    db_commit_transaction,
+    db_execute,
+)
 
 
 def updates_as_transaction(
@@ -17,18 +21,29 @@ def updates_as_transaction(
     cats,
     values,
 ):
-    """Create SQL statement for categories and values for a given column"""
-    sql = []
+    """Create SQL statement for categories and values for a given column
+
+    :param str table: DB table name
+    :param str cat_column: DB table cat column name
+    :param str column: DB table update column name
+    :param str column_quote: DB table column quote
+    :param list cats: DB table cat column values
+    :param list values: DB table update column values
+
+    :return sqls: SQLs
+    :rtype list
+    """
+    sqls = []
     if column_quote:
         quote = "'"
     else:
         quote = ""
     for cat, value in zip(cats, values):
-        sql.append(
+        sqls.append(
             f"UPDATE {table} SET {column} = {quote}{value}{quote} "
             f"WHERE {cat_column} = {cat};"
         )
-    return "\n".join(sql)
+    return sqls
 
 
 def value_update_by_category(map_name, layer, column_name, cats, values):
@@ -40,7 +55,7 @@ def value_update_by_category(map_name, layer, column_name, cats, values):
     cat_column = "cat"
     column_type = gs.vector_columns(map_name, layer)[column_name]
     column_quote = bool(column_type["type"] in ("CHARACTER", "TEXT"))
-    sql = updates_as_transaction(
+    sqls = updates_as_transaction(
         table=table,
         cat_column=cat_column,
         column=column_name,
@@ -49,9 +64,8 @@ def value_update_by_category(map_name, layer, column_name, cats, values):
         values=values,
     )
     pdriver = db_begin_transaction(driver_name=driver, database=database)
-    gs.write_command(
-        "db.execute", input="-", database=database, driver=driver, stdin=sql
-    )
+    for sql in sqls:
+        db_execute(pdriver=pdriver, sql=sql)
     db_commit_transaction(
         driver_name=driver,
         database=database,

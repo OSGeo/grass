@@ -40,31 +40,18 @@
 # % key_desc: name type
 # %end
 
-import atexit
-import os
 import re
 
 from grass.exceptions import CalledModuleError
 import grass.script as grass
 
-rm_files = []
-
-
-def cleanup():
-    for file in rm_files:
-        if os.path.isfile(file):
-            try:
-                os.remove(file)
-            except Exception as e:
-                grass.warning(
-                    _("Unable to remove file {file}: {message}").format(
-                        file=file, message=e
-                    )
-                )
-
 
 def main():
-    from grass.script.db import db_begin_transaction, db_commit_transaction
+    from grass.script.db import (
+        db_begin_transaction,
+        db_commit_transaction,
+        db_execute,
+    )
 
     global rm_files
     map = options["map"]
@@ -101,7 +88,7 @@ def main():
     driver = f["driver"]
     column_existing = grass.vector_columns(map, int(layer)).keys()
 
-    add_str = ""
+    sqls = []
     pattern = re.compile(r"\s+")
     for col in columns:
         if not col:
@@ -121,20 +108,12 @@ def main():
             )
             continue
         grass.verbose(_("Adding column <{}> to the table").format(col_name))
-        add_str += f'ALTER TABLE {table} ADD COLUMN "{col_name}" {col_type};\n'
-    sql_file = grass.tempfile()
-    rm_files.append(sql_file)
+        sqls.append(f'ALTER TABLE {table} ADD COLUMN "{col_name}" {col_type};')
     cols_add_str = ",".join([col[0] for col in columns])
-    with open(sql_file, "w") as write_file:
-        write_file.write(add_str)
     try:
         pdriver = db_begin_transaction(driver_name=driver, database=database)
-        grass.run_command(
-            "db.execute",
-            input=sql_file,
-            database=database,
-            driver=driver,
-        )
+        for sql in sqls:
+            db_execute(pdriver=pdriver, sql=sql)
         db_commit_transaction(
             driver_name=driver,
             database=database,
@@ -148,5 +127,4 @@ def main():
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    atexit.register(cleanup)
     main()

@@ -63,33 +63,19 @@
 # % description: Columns to exclude from the other table
 # %end
 
-import atexit
 import sys
-
-from pathlib import Path
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
 
-rm_files = []
-
-
-def cleanup():
-    for file_path in rm_files:
-        try:
-            file_path.unlink(missing_ok=True)
-        except Exception as e:
-            gs.warning(
-                _("Unable to remove file {file}: {message}").format(
-                    file=file_path, message=e
-                )
-            )
-
 
 def main():
-    from grass.script.db import db_begin_transaction, db_commit_transaction
+    from grass.script.db import (
+        db_begin_transaction,
+        db_commit_transaction,
+        db_execute,
+    )
 
-    global rm_files
     # Include mapset into the name, so we avoid multiple messages about
     # found in more mapsets. The following generates an error message, while the code
     # above does not. However, the above checks that the map exists, so we don't
@@ -220,30 +206,21 @@ def main():
                 )
             )
 
+    sqls = []
     for col in cols_to_update:
         cur_up_str = (
             f"UPDATE {maptable} SET {col} = (SELECT {col} FROM "
             f"{otable} WHERE "
-            f"{otable}.{ocolumn}={maptable}.{column});\n"
+            f"{otable}.{ocolumn}={maptable}.{column});"
         )
-        update_str += cur_up_str
-    gs.debug(update_str, 1)
-    gs.verbose(
+        sqls.apend(cur_up_str)
+    grass.debug("\n".join(sqls), 1)
+    grass.verbose(
         _("Updating columns {columns} of vector map {map_name}...").format(
             columns=", ".join(cols_to_update.keys()), map_name=vector_map
         )
     )
-    sql_file = Path(gs.tempfile())
-    rm_files.append(sql_file)
-    sql_file.write_text(update_str, encoding="UTF8")
-
     try:
-        grass.run_command(
-            "db.execute",
-            input=str(sql_file),
-            database=database,
-            driver=driver,
-        )
         db_commit_transaction(
             driver_name=driver,
             database=database,
@@ -260,5 +237,4 @@ def main():
 
 if __name__ == "__main__":
     options, flags = gs.parser()
-    atexit.register(cleanup)
     sys.exit(main())

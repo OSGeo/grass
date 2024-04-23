@@ -195,22 +195,33 @@ def sql_escape(text):
 
 
 def updates_to_sql(table, updates):
-    """Create SQL from a list of dicts with column, value, where"""
-    sql = []
+    """Create SQL from a list of dicts with column, value, where
+
+    :param str table: DB table name
+    :param list updates: DB table updates
+
+    :return sqls: SQLs
+    :rtype list
+    """
+    sqls = []
     for update in updates:
         quote = quote_from_type(update.get("type", None))
         value = update["value"]
         sql_value = f"{quote}{sql_escape(value) if value else 'NULL'}{quote}"
-        sql.append(
+        sqls.append(
             f"UPDATE {table} SET {update['column']} = {sql_value} "
             f"WHERE {update['where']};"
         )
-    return "\n".join(sql)
+    return sqls
 
 
 def update_columns(output_name, output_layer, updates, add_columns):
     """Update attribute values based on a list of updates"""
-    from grass.script.db import db_begin_transaction, db_commit_transaction
+    from grass.script.db import (
+        db_begin_transaction,
+        db_commit_transaction,
+        db_execute,
+    )
 
     if add_columns:
         gs.run_command(
@@ -220,21 +231,18 @@ def update_columns(output_name, output_layer, updates, add_columns):
             columns=",".join(add_columns),
         )
     db_info = gs.vector_db(output_name)[int(output_layer)]
-    sql = updates_to_sql(table=db_info["table"], updates=updates)
+    driver = db_info["driver"]
+    database = db_info["database"]
+    sqls = updates_to_sql(table=db_info["table"], updates=updates)
     pdriver = db_begin_transaction(
-        driver_name=db_info["driver"],
-        database=db_info["database"],
+        driver_name=driver,
+        database=database,
     )
-    gs.write_command(
-        "db.execute",
-        input="-",
-        database=db_info["database"],
-        driver=db_info["driver"],
-        stdin=sql,
-    )
+    for sql in sqls:
+        db_execute(pdriver=pdriver, sql=sql)
     db_commit_transaction(
-        driver_name=db_info["driver"],
-        database=db_info["database"],
+        driver_name=driver,
+        database=database,
         pdriver=pdriver,
     )
 

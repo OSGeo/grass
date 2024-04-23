@@ -50,7 +50,11 @@ import grass.script as gscript
 
 
 def main():
-    from grass.script.db import db_begin_transaction, db_commit_transaction
+    from grass.script.db import (
+        db_begin_transaction,
+        db_commit_transaction,
+        db_execute,
+    )
 
     table = options["table"]
     column = options["column"]
@@ -105,10 +109,11 @@ def main():
             driver=driver,
         ).split(".")[0:2]
 
+        sqls = []
         if [int(i) for i in sqlite3_version] >= [int(i) for i in "3.35".split(".")]:
-            sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
             if column == "cat":
-                sql = "DROP INDEX %s_%s; %s" % (table, column, sql)
+                sqls.append(f"DROP INDEX {table}_{column};")
+            sqls.append(f"ALTER TABLE {table} DROP COLUMN {column};")
         else:
             # for older sqlite3 versions, use old way to remove column
             colnames = []
@@ -131,14 +136,14 @@ def main():
             ]
             tmpl = string.Template(";\n".join(cmds))
             sql = tmpl.substitute(table=table, coldef=coltypes, colnames=colnames)
+            sqls.extend(sql.split("\n"))
     else:
-        sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
+        sqls.append("ALTER TABLE {table} DROP COLUMN {column};")
 
     try:
         pdriver = db_begin_transaction(driver_name=driver, database=database)
-        gscript.write_command(
-            "db.execute", input="-", database=database, driver=driver, stdin=sql
-        )
+        for sql in sqls:
+            db_execute(pdriver=pdriver, sql=sql)
         db_commit_transaction(
             driver_name=driver,
             database=database,
