@@ -98,7 +98,7 @@ option(WITH_READLINE "Build with Readline support" OFF)
 
 # Language options
 option(WITH_FREETYPE "Build with FreeType support" ON)
-option(WITH_NLS "Build with NLS support" ${default_option_enabled})
+option(WITH_NLS "Build with NLS support" ${nls_default_option_enabled})
 
 # Computing options
 option(WITH_FFTW "Build with FFTW support" ON)
