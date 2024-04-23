@@ -24,6 +24,7 @@ import os
 from ctypes import byref
 
 from .core import (
+    gisenv,
     run_command,
     parse_command,
     read_command,
@@ -139,6 +140,15 @@ def db_connection(force=False, env=None):
     if not conn and force:
         run_command("db.connect", flags="c", env=env)
         conn = parse_command("db.connect", flags="g", env=env)
+
+    if conn.get("driver") == "sqlite":
+        gis_env = gisenv()
+        conn["database"] = (
+            conn["database"]
+            .replace("$GISDBASE", gis_env["GISDBASE"])
+            .replace("$LOCATION_NAME", gis_env["LOCATION_NAME"])
+            .replace("$MAPSET", gis_env["MAPSET"])
+        )
 
     return conn
 
