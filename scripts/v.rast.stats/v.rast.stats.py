@@ -491,7 +491,7 @@ def perform_stats(
         vars = decode(line).rstrip("\r\n").split(";")
 
         sql = ""
-        sql += "UPDATE {fi['table']} SET"
+        sql += f"UPDATE {fi['table']} SET"
         first_var = 1
         for colname in colnames:
             variable = colname.replace("%s_" % colprefix, "", 1)
@@ -509,7 +509,7 @@ def perform_stats(
                 first_var = 0
             sql += f" {colname}={value}"
 
-        sql += " WHERE {fi['key']}={vars[0]};"
+        sql += f" WHERE {fi['key']}={vars[0]};"
         sqls.append(sql)
     p.wait()
     return sqls
