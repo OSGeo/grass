@@ -18,6 +18,7 @@ for details.
 @author Anna Petrasova (kratochanna gmail com)
 @author Linda Kladivova (l.kladivova@seznam.cz)
 """
+
 import os
 import re
 import copy
