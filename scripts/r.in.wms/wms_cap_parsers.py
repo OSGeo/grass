@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
+
 import pathlib
 
 from xml.etree.ElementTree import ParseError

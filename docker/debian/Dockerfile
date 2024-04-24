@@ -1,4 +1,4 @@
-FROM debian:stable
+FROM debian:stable@sha256:fef26aa981ff8c3eeb09b20555ec6e02b38e6b227ec0b88bef7fde778cbf848a
 # currently Debian 12
 
 # docker run -it --rm debian:stable bash

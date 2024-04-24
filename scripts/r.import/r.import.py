@@ -106,8 +106,8 @@
 # %end
 # %flag
 # % key: o
-# % label: Override projection check (use current location's projection)
-# % description: Assume that the dataset has the same projection as the current location
+# % label: Override projection check (use current project's CRS)
+# % description: Assume that the dataset has the same coordinate reference system (CRS) as the current project
 # %end
 # %rules
 # % required: output,-e
@@ -215,7 +215,7 @@ def main():
     # make sure target is not xy
     if grass.parse_command("g.proj", flags="g")["name"] == "xy_location_unprojected":
         grass.fatal(
-            _("Coordinate reference system not available for current location <%s>")
+            _("Coordinate reference system not available for current project <%s>")
             % tgtloc
         )
 
@@ -228,7 +228,7 @@ def main():
     SRCGISRC, src_env = grass.create_environment(GISDBASE, TMPLOC, "PERMANENT")
 
     # create temp location from input without import
-    grass.verbose(_("Creating temporary location for <%s>...") % GDALdatasource)
+    grass.verbose(_("Creating temporary project for <%s>...") % GDALdatasource)
     # creating a new location with r.in.gdal requires a sanitized env
     env = os.environ.copy()
     env = grass.sanitize_mapset_environment(env)
@@ -238,7 +238,7 @@ def main():
         memory=memory,
         flags="c",
         title=title,
-        location=TMPLOC,
+        project=TMPLOC,
         quiet=True,
     )
     if bands:
@@ -271,7 +271,7 @@ def main():
         )
 
     # import into temp location
-    grass.verbose(_("Importing <%s> to temporary location...") % GDALdatasource)
+    grass.verbose(_("Importing <%s> to temporary project...") % GDALdatasource)
     parameters = dict(
         input=GDALdatasource,
         output=output,
@@ -387,7 +387,7 @@ def main():
             if grass.vector_info_topo(vreg, env=src_env)["areas"] != 1:
                 grass.fatal(_("Please check the 'extent' parameter"))
         except CalledModuleError:
-            grass.fatal(_("Unable to reproject to source location"))
+            grass.fatal(_("Unable to reproject to source project"))
 
         # set region from region vector
         grass.run_command("g.region", raster=outfile, env=src_env)
