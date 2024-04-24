@@ -443,11 +443,13 @@ def _get_list_of_maps_stds(
                 ).format(
                     name=dataset.get_id(),
                     element_type=element_type,
-                    detail=_(
-                        "Dataset is empty or where clause is too constrained or incorrect"
-                    )
-                    if where
-                    else _("Dataset is empty"),
+                    detail=(
+                        _(
+                            "Dataset is empty or where clause is too constrained or incorrect"
+                        )
+                        if where
+                        else _("Dataset is empty")
+                    ),
                 )
             )
     if connection_state_changed:

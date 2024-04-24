@@ -32,7 +32,6 @@ from gui_core.wrap import NewId
 
 
 class OverlayController:
-
     """Base class for decorations (barscale, legend) controller."""
 
     def __init__(self, renderer, giface):
