@@ -27,8 +27,8 @@ void projection_mismatch_report(struct Cell_head cellhd,
     int i_value;
     char error_msg[8192];
 
-    strcpy(error_msg, _("Projection of dataset does not"
-                        " appear to match current location.\n\n"));
+    strcpy(error_msg, _("Coordinate reference system of the dataset does not"
+                        " appear to match current project.\n\n"));
 
     /* TODO: output this info sorted by key: */
     if (loc_wind.proj != cellhd.proj || err != -2) {
@@ -84,12 +84,12 @@ void projection_mismatch_report(struct Cell_head cellhd,
         }
     }
     sprintf(error_msg + strlen(error_msg),
-            _("\nIn case of no significant differences in the projection "
-              "definitions,"
+            _("\nIn case of no significant differences"
+              " in the coordinate reference system definitions,"
               " use the -o flag to ignore them and use"
-              " current location definition.\n"));
+              " current project definition.\n"));
     strcat(error_msg,
-           _("Consider generating a new location with 'location' parameter"
+           _("Consider generating a new project with 'project' parameter"
              " from input data set.\n"));
     G_fatal_error("%s", error_msg);
 }
@@ -131,8 +131,8 @@ void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
     }
     else {
         if (verbose) {
-            G_message(_("Projection of input dataset and current location "
-                        "appear to match"));
+            G_message(_("Coordinate reference system of the input dataset and "
+                        "current project appear to match"));
         }
     }
 }
