@@ -15,6 +15,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import copy
 
 
@@ -42,8 +43,6 @@ class TemporalTopologyDatasetConnector:
     - finishes
     - finished
 
-    .. code-block:: python
-
         # We have build the temporal topology and we know the first map
         start = first
         while start:
@@ -54,6 +53,8 @@ class TemporalTopologyDatasetConnector:
                 map.print_info()
 
             start = start.next()
+
+    .. code-block:: python
 
          >>> import grass.temporal as tgis
          >>> tgis.init()
@@ -103,7 +104,8 @@ class TemporalTopologyDatasetConnector:
          finished=a@P
          >>> rlist = tmr.get_temporal_relations()
          >>> if "FINISHED" in rlist.keys():
-         ...    print(rlist["FINISHED"][0].get_id())
+         ...     print(rlist["FINISHED"][0].get_id())
+         ...
          a@P
 
     """
@@ -503,8 +505,7 @@ class TemporalTopologyDatasetConnector:
         """Print information about this class in human readable style"""
 
         print(
-            " +-------------------- Temporal Topology ---------------------------------\
-                ----+"
+            " +-------------------- Temporal Topology -------------------------------------+"  # noqa: E501
         )
         #          0123456789012345678901234567890
         if self.next() is not None:

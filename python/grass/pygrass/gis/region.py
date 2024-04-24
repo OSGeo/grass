@@ -3,6 +3,7 @@ Created on Fri May 25 12:57:10 2012
 
 @author: Pietro Zambelli
 """
+
 import ctypes
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
@@ -345,7 +346,7 @@ class Region:
         """Return a list of valid keys. ::
 
             >>> reg = Region()
-            >>> reg.keys()                               # doctest: +ELLIPSIS
+            >>> reg.keys()  # doctest: +ELLIPSIS
             ['proj', 'zone', ..., 'cols', 'cells']
 
         ..

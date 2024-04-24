@@ -55,8 +55,9 @@ class ParallelModuleQueue:
     >>> for i in range(5):
     ...     new_mapcalc = copy.deepcopy(mapcalc)
     ...     mapcalc_list.append(new_mapcalc)
-    ...     m = new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
+    ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
     ...     queue.put(m)
+    ...
     >>> queue.wait()
     >>> mapcalc_list = queue.get_finished_modules()
     >>> queue.get_num_run_procs()
@@ -65,6 +66,7 @@ class ParallelModuleQueue:
     3
     >>> for mapcalc in mapcalc_list:
     ...     print(mapcalc.returncode)
+    ...
     0
     0
     0
@@ -78,8 +80,9 @@ class ParallelModuleQueue:
     >>> for i in range(5):
     ...     new_mapcalc = copy.deepcopy(mapcalc)
     ...     mapcalc_list.append(new_mapcalc)
-    ...     m = new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
+    ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
     ...     queue.put(m)
+    ...
     >>> queue.wait()
     >>> mapcalc_list = queue.get_finished_modules()
     >>> queue.get_num_run_procs()
@@ -88,6 +91,7 @@ class ParallelModuleQueue:
     8
     >>> for mapcalc in mapcalc_list:
     ...     print(mapcalc.returncode)
+    ...
     0
     0
     0
@@ -103,10 +107,13 @@ class ParallelModuleQueue:
     ...     new_gregion = copy.deepcopy(gregion)
     ...     proc_list.append(new_gregion)
     ...     new_mapcalc = copy.deepcopy(mapcalc)
-    ...     m = new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
+    ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
     ...     proc_list.append(new_mapcalc)
-    ...     mm = MultiModule(module_list=[new_gregion, new_mapcalc], sync=False, set_temp_region=True)
+    ...     mm = MultiModule(
+    ...         module_list=[new_gregion, new_mapcalc], sync=False, set_temp_region=True
+    ...     )
     ...     queue.put(mm)
+    ...
     >>> queue.wait()
     >>> proc_list = queue.get_finished_modules()
     >>> queue.get_num_run_procs()
@@ -115,6 +122,7 @@ class ParallelModuleQueue:
     3
     >>> for proc in proc_list:
     ...     print(proc.returncode)
+    ...
     0
     0
     0
@@ -158,6 +166,7 @@ class ParallelModuleQueue:
     8
     >>> for mapcalc in mapcalc_list:
     ...     print(mapcalc.returncode)
+    ...
     0
     0
     0
@@ -182,12 +191,14 @@ class ParallelModuleQueue:
     >>> new_mapcalc = copy.deepcopy(mapcalc)
     >>> mapcalc_list.append(new_mapcalc)
     >>> m = new_mapcalc(expression="test_pygrass_3 =3")
-    >>> queue.put(m) # Now it will wait until all procs finish and set the counter back to 0
+    >>> queue.put(
+    ...     m
+    ... )  # Now it will wait until all procs finish and set the counter back to 0
     >>> queue.get_num_run_procs()
     0
     >>> new_mapcalc = copy.deepcopy(mapcalc)
     >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
+    >>> m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
     >>> queue.put(m)
     >>> queue.get_num_run_procs()
     1
@@ -199,6 +210,7 @@ class ParallelModuleQueue:
     3
     >>> for mapcalc in mapcalc_list:
     ...     print(mapcalc.returncode)
+    ...
     0
     0
     0
@@ -359,15 +371,21 @@ class Module:
     >>> new_neighbors3.get_bash()
     'r.neighbors input=mapA size=3 method=average weighting_function=none nprocs=1 memory=300 output=mapB'
 
-    >>> mapcalc = Module("r.mapcalc", expression="test_a = 1",
-    ...                  overwrite=True, run_=False)
+    >>> mapcalc = Module(
+    ...     "r.mapcalc", expression="test_a = 1", overwrite=True, run_=False
+    ... )
     >>> mapcalc.run()
     Module('r.mapcalc')
     >>> mapcalc.returncode
     0
 
-    >>> mapcalc = Module("r.mapcalc", expression="test_a = 1",
-    ...                  overwrite=True, run_=False, finish_=False)
+    >>> mapcalc = Module(
+    ...     "r.mapcalc",
+    ...     expression="test_a = 1",
+    ...     overwrite=True,
+    ...     run_=False,
+    ...     finish_=False,
+    ... )
     >>> mapcalc.run()
     Module('r.mapcalc')
     >>> p = mapcalc.wait()
@@ -379,9 +397,15 @@ class Module:
     >>> p.returncode
     0
 
-    >>> colors = Module("r.colors", map="test_a", rules="-",
-    ...                 run_=False, stdout_=PIPE,
-    ...                 stderr_=PIPE, stdin_="1 red")
+    >>> colors = Module(
+    ...     "r.colors",
+    ...     map="test_a",
+    ...     rules="-",
+    ...     run_=False,
+    ...     stdout_=PIPE,
+    ...     stderr_=PIPE,
+    ...     stdin_="1 red",
+    ... )
     >>> colors.run()
     Module('r.colors')
     >>> p = mapcalc.wait()
@@ -394,8 +418,9 @@ class Module:
     >>> colors.outputs["stderr"].value.strip()
     "Color table for raster map <test_a> set to 'rules'"
 
-    >>> colors = Module("r.colors", map="test_a", rules="-",
-    ...                 run_=False, finish_=False, stdin_=PIPE)
+    >>> colors = Module(
+    ...     "r.colors", map="test_a", rules="-", run_=False, finish_=False, stdin_=PIPE
+    ... )
     >>> colors.inputs["stdin"].value = "1 red"
     >>> colors.run()
     Module('r.colors')
@@ -404,9 +429,15 @@ class Module:
     >>> colors.returncode
     0
 
-    >>> colors = Module("r.colors", map="test_a", rules="-",
-    ...                 run_=False, finish_=False,
-    ...                 stdin_=PIPE, stderr_=PIPE)
+    >>> colors = Module(
+    ...     "r.colors",
+    ...     map="test_a",
+    ...     rules="-",
+    ...     run_=False,
+    ...     finish_=False,
+    ...     stdin_=PIPE,
+    ...     stderr_=PIPE,
+    ... )
     >>> colors.inputs["stdin"].value = "1 red"
     >>> colors.run()
     Module('r.colors')
@@ -467,15 +498,15 @@ class Module:
 
     therefore if we call the function like:
 
-    >>> f('grass', 'gis', 'modules')                     # doctest: +SKIP
+    >>> f("grass", "gis", "modules")  # doctest: +SKIP
     grass
     gis
     modules
 
     or we can define a new list:
 
-    >>> words = ['grass', 'gis', 'modules']              # doctest: +SKIP
-    >>> f(*words)                                        # doctest: +SKIP
+    >>> words = ["grass", "gis", "modules"]  # doctest: +SKIP
+    >>> f(*words)  # doctest: +SKIP
     grass
     gis
     modules
@@ -490,8 +521,8 @@ class Module:
 
     now we can use the new function, with:
 
-    >>> f('grass', 'gis', 'modules', os = 'linux', language = 'python')
-    ...                                                  # doctest: +SKIP
+    >>> f("grass", "gis", "modules", os="linux", language="python")
+    ... # doctest: +SKIP
     grass
     gis
     modules
@@ -501,8 +532,8 @@ class Module:
     or, as before we can, define a dictionary and give the dictionary to
     the function, like:
 
-    >>> keywords = {'os' : 'linux', 'language' : 'python'}  # doctest: +SKIP
-    >>> f(*words, **keywords)                            # doctest: +SKIP
+    >>> keywords = {"os": "linux", "language": "python"}  # doctest: +SKIP
+    >>> f(*words, **keywords)  # doctest: +SKIP
     grass
     gis
     modules
@@ -895,8 +926,9 @@ class MultiModule:
     >>> region_4.flags.p = True
     >>> region_5 = copy.deepcopy(region_1)
     >>> region_5.flags.p = True
-    >>> mm = MultiModule(module_list=[region_1, region_2, region_3, region_4, region_5],
-    ...                  sync=False)
+    >>> mm = MultiModule(
+    ...     module_list=[region_1, region_2, region_3, region_4, region_5], sync=False
+    ... )
     >>> t = mm.run()
     >>> isinstance(t, Process)
     True
@@ -914,8 +946,11 @@ class MultiModule:
 
     Asynchronous module run, setting finish = False and using temporary region
 
-    >>> mm = MultiModule(module_list=[region_1, region_2, region_3, region_4, region_5],
-    ...                  sync=False, set_temp_region=True)
+    >>> mm = MultiModule(
+    ...     module_list=[region_1, region_2, region_3, region_4, region_5],
+    ...     sync=False,
+    ...     set_temp_region=True,
+    ... )
     >>> str(mm)
     'g.region -p ; g.region -p ; g.region -p ; g.region -p ; g.region -p'
     >>> t = mm.run()

@@ -3,6 +3,7 @@ Created on Fri Aug 17 16:05:25 2012
 
 @author: pietro
 """
+
 import ctypes
 
 #
@@ -48,7 +49,7 @@ class Info:
 
         >>> info = Info(test_raster_name)
         >>> info.read()
-        >>> info          # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> info  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         abstract_test_map@
         rows: 4
         cols: 4

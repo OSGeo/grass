@@ -15,8 +15,9 @@ Usage:
     >>> # Execute a SQL statement
     >>> dbif.execute_transaction("SELECT datetime(0, 'unixepoch', 'localtime');")
     >>> # Mogrify an SQL statement
-    >>> dbif.mogrify_sql_statement(["SELECT name from raster_base where name = ?",
-    ... ("precipitation",)])
+    >>> dbif.mogrify_sql_statement(
+    ...     ["SELECT name from raster_base where name = ?", ("precipitation",)]
+    ... )
     "SELECT name from raster_base where name = 'precipitation'"
     >>> dbif.close()
 
@@ -28,6 +29,7 @@ for details.
 
 :author: Soeren Gebbert
 """
+
 # import traceback
 import os
 import grass.script as gscript
@@ -1394,11 +1396,17 @@ class DBConnection:
 
             >>> init()
             >>> dbif = SQLDatabaseInterfaceConnection()
-            >>> dbif.mogrify_sql_statement(["SELECT ctime FROM raster_base WHERE id = ?",
-            ... ["soil@PERMANENT",]])
+            >>> dbif.mogrify_sql_statement(
+            ...     [
+            ...         "SELECT ctime FROM raster_base WHERE id = ?",
+            ...         [
+            ...             "soil@PERMANENT",
+            ...         ],
+            ...     ]
+            ... )
             "SELECT ctime FROM raster_base WHERE id = 'soil@PERMANENT'"
 
-        """  # noqa: E501
+        """
         sql = content[0]
         args = content[1]
 
@@ -1602,8 +1610,9 @@ def init_dbif(dbif):
 
         dbif, connection_state_changed = tgis.init_dbif(None)
 
-        sql = dbif.mogrify_sql_statement(["SELECT * FROM raster_base WHERE ? = ?"],
-                                               ["id", "soil@PERMANENT"])
+        sql = dbif.mogrify_sql_statement(
+            ["SELECT * FROM raster_base WHERE ? = ?"], ["id", "soil@PERMANENT"]
+        )
         dbif.execute_transaction(sql)
 
         if connection_state_changed:

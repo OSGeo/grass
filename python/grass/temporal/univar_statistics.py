@@ -7,7 +7,9 @@ Usage:
 
     import grass.temporal as tgis
 
-    tgis.print_gridded_dataset_univar_statistics(type, input, output, where, extended, no_header, fs, rast_region)
+    tgis.print_gridded_dataset_univar_statistics(
+        type, input, output, where, extended, no_header, fs, rast_region
+    )
 
 ..
 
@@ -17,7 +19,7 @@ License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Soeren Gebbert
-"""  # noqa: E501
+"""
 
 from multiprocessing import Pool
 from subprocess import PIPE

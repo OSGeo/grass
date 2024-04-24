@@ -60,25 +60,41 @@ def get_dataset_list(
         >>> import grass.temporal as tgis
         >>> tgis.core.init()
         >>> name = "list_stds_test"
-        >>> sp = tgis.open_stds.open_new_stds(name=name, type="strds",
-        ... temporaltype="absolute", title="title", descr="descr",
-        ... semantic="mean", dbif=None, overwrite=True)
+        >>> sp = tgis.open_stds.open_new_stds(
+        ...     name=name,
+        ...     type="strds",
+        ...     temporaltype="absolute",
+        ...     title="title",
+        ...     descr="descr",
+        ...     semantic="mean",
+        ...     dbif=None,
+        ...     overwrite=True,
+        ... )
         >>> mapset = tgis.get_current_mapset()
-        >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name")
-        >>> rows =  stds_list[mapset]
+        >>> stds_list = tgis.list_stds.get_dataset_list(
+        ...     "strds", "absolute", columns="name"
+        ... )
+        >>> rows = stds_list[mapset]
         >>> for row in rows:
         ...     if row["name"] == name:
         ...         print(True)
+        ...
         True
-        >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name,mapset", where="mapset = '%s'"%(mapset))
-        >>> rows =  stds_list[mapset]
+        >>> stds_list = tgis.list_stds.get_dataset_list(
+        ...     "strds",
+        ...     "absolute",
+        ...     columns="name,mapset",
+        ...     where="mapset = '%s'" % (mapset),
+        ... )
+        >>> rows = stds_list[mapset]
         >>> for row in rows:
         ...     if row["name"] == name and row["mapset"] == mapset:
         ...         print(True)
+        ...
         True
         >>> check = sp.delete()
 
-    """  # noqa: E501
+    """
     id = None
     sp = dataset_factory(type, id)
 
@@ -444,12 +460,14 @@ def _get_list_of_maps_stds(
                 ).format(
                     name=dataset.get_id(),
                     element_type=element_type,
-                    detail=_(
-                        "Dataset is empty or where clause is too constrained or \
-                            incorrect"
-                    )
-                    if where
-                    else _("Dataset is empty"),
+                    detail=(
+                        _(
+                            "Dataset is empty or where clause is too constrained or "
+                            "incorrect"
+                        )
+                        if where
+                        else _("Dataset is empty")
+                    ),
                 )
             )
     if connection_state_changed:

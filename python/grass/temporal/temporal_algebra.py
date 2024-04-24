@@ -16,7 +16,7 @@ for details.
     >>> p = tgis.TemporalAlgebraLexer()
     >>> p.build()
     >>> p.debug = True
-    >>> expression =  "C = A : B"
+    >>> expression = "C = A : B"
     >>> p.test(expression)
     C = A : B
     LexToken(NAME,'C',1,0)
@@ -24,7 +24,7 @@ for details.
     LexToken(NAME,'A',1,4)
     LexToken(T_SELECT,':',1,6)
     LexToken(NAME,'B',1,8)
-    >>> expression =  "C = test1 !: test2"
+    >>> expression = "C = test1 !: test2"
     >>> p.test(expression)
     C = test1 !: test2
     LexToken(NAME,'C',1,0)
@@ -32,7 +32,7 @@ for details.
     LexToken(NAME,'test1',1,4)
     LexToken(T_NOT_SELECT,'!:',1,10)
     LexToken(NAME,'test2',1,13)
-    >>> expression =  "C = test1 {:,equal} test2"
+    >>> expression = "C = test1 {:,equal} test2"
     >>> p.test(expression)
     C = test1 {:,equal} test2
     LexToken(NAME,'C',1,0)
@@ -40,7 +40,7 @@ for details.
     LexToken(NAME,'test1',1,4)
     LexToken(T_SELECT_OPERATOR,'{:,equal}',1,10)
     LexToken(NAME,'test2',1,20)
-    >>> expression =  "C = test1 {!:,equal} test2"
+    >>> expression = "C = test1 {!:,equal} test2"
     >>> p.test(expression)
     C = test1 {!:,equal} test2
     LexToken(NAME,'C',1,0)
@@ -48,7 +48,7 @@ for details.
     LexToken(NAME,'test1',1,4)
     LexToken(T_SELECT_OPERATOR,'{!:,equal}',1,10)
     LexToken(NAME,'test2',1,21)
-    >>> expression =  "C = test1 # test2"
+    >>> expression = "C = test1 # test2"
     >>> p.test(expression)
     C = test1 # test2
     LexToken(NAME,'C',1,0)
@@ -56,7 +56,7 @@ for details.
     LexToken(NAME,'test1',1,4)
     LexToken(HASH,'#',1,10)
     LexToken(NAME,'test2',1,12)
-    >>> expression =  "C = test1 {#} test2"
+    >>> expression = "C = test1 {#} test2"
     >>> p.test(expression)
     C = test1 {#} test2
     LexToken(NAME,'C',1,0)
@@ -64,7 +64,7 @@ for details.
     LexToken(NAME,'test1',1,4)
     LexToken(T_HASH_OPERATOR,'{#}',1,10)
     LexToken(NAME,'test2',1,14)
-    >>> expression =  "C = test1 {#,equal} test2"
+    >>> expression = "C = test1 {#,equal} test2"
     >>> p.test(expression)
     C = test1 {#,equal} test2
     LexToken(NAME,'C',1,0)
@@ -72,7 +72,7 @@ for details.
     LexToken(NAME,'test1',1,4)
     LexToken(T_HASH_OPERATOR,'{#,equal}',1,10)
     LexToken(NAME,'test2',1,20)
-    >>> expression =  "C = test1 {#,equal|during} test2"
+    >>> expression = "C = test1 {#,equal|during} test2"
     >>> p.test(expression)
     C = test1 {#,equal|during} test2
     LexToken(NAME,'C',1,0)
@@ -80,7 +80,7 @@ for details.
     LexToken(NAME,'test1',1,4)
     LexToken(T_HASH_OPERATOR,'{#,equal|during}',1,10)
     LexToken(NAME,'test2',1,27)
-    >>> expression =  "E = test1 : test2 !: test1"
+    >>> expression = "E = test1 : test2 !: test1"
     >>> p.test(expression)
     E = test1 : test2 !: test1
     LexToken(NAME,'E',1,0)
@@ -90,7 +90,7 @@ for details.
     LexToken(NAME,'test2',1,12)
     LexToken(T_NOT_SELECT,'!:',1,18)
     LexToken(NAME,'test1',1,21)
-    >>> expression =  'D = buff_t(test1,"10 months")'
+    >>> expression = 'D = buff_t(test1,"10 months")'
     >>> p.test(expression)
     D = buff_t(test1,"10 months")
     LexToken(NAME,'D',1,0)
@@ -104,7 +104,7 @@ for details.
     LexToken(NAME,'months',1,21)
     LexToken(QUOTE,'"',1,27)
     LexToken(RPAREN,')',1,28)
-    >>> expression =  'H = tsnap(test1)'
+    >>> expression = "H = tsnap(test1)"
     >>> p.test(expression)
     H = tsnap(test1)
     LexToken(NAME,'H',1,0)
@@ -113,7 +113,7 @@ for details.
     LexToken(LPAREN,'(',1,9)
     LexToken(NAME,'test1',1,10)
     LexToken(RPAREN,')',1,15)
-    >>> expression =  'H = tsnap(test2 {:,during} buff_t(test1, "1 days"))'
+    >>> expression = 'H = tsnap(test2 {:,during} buff_t(test1, "1 days"))'
     >>> p.test(expression)
     H = tsnap(test2 {:,during} buff_t(test1, "1 days"))
     LexToken(NAME,'H',1,0)
@@ -132,7 +132,7 @@ for details.
     LexToken(QUOTE,'"',1,48)
     LexToken(RPAREN,')',1,49)
     LexToken(RPAREN,')',1,50)
-    >>> expression =  'H = tshift(test2 {:,during} buff_t(test1, "1 days"), "1 months")'
+    >>> expression = 'H = tshift(test2 {:,during} buff_t(test1, "1 days"), "1 months")'
     >>> p.test(expression)
     H = tshift(test2 {:,during} buff_t(test1, "1 days"), "1 months")
     LexToken(NAME,'H',1,0)
@@ -156,7 +156,7 @@ for details.
     LexToken(NAME,'months',1,56)
     LexToken(QUOTE,'"',1,62)
     LexToken(RPAREN,')',1,63)
-    >>> expression =  'H = tshift(A , 10)'
+    >>> expression = "H = tshift(A , 10)"
     >>> p.test(expression)
     H = tshift(A , 10)
     LexToken(NAME,'H',1,0)
@@ -167,7 +167,7 @@ for details.
     LexToken(COMMA,',',1,13)
     LexToken(INT,10,1,15)
     LexToken(RPAREN,')',1,17)
-    >>> expression =  'H = if(td(A) > 10, A)'
+    >>> expression = "H = if(td(A) > 10, A)"
     >>> p.test(expression)
     H = if(td(A) > 10, A)
     LexToken(NAME,'H',1,0)
@@ -183,7 +183,7 @@ for details.
     LexToken(COMMA,',',1,17)
     LexToken(NAME,'A',1,19)
     LexToken(RPAREN,')',1,20)
-    >>> expression =  'H = if(td(A) > 10, A, B)'
+    >>> expression = "H = if(td(A) > 10, A, B)"
     >>> p.test(expression)
     H = if(td(A) > 10, A, B)
     LexToken(NAME,'H',1,0)
@@ -201,7 +201,7 @@ for details.
     LexToken(COMMA,',',1,20)
     LexToken(NAME,'B',1,22)
     LexToken(RPAREN,')',1,23)
-    >>> expression =  'I = if(equals,td(A) > 10 {||,equals} td(B) < 10, A)'
+    >>> expression = "I = if(equals,td(A) > 10 {||,equals} td(B) < 10, A)"
     >>> p.test(expression)
     I = if(equals,td(A) > 10 {||,equals} td(B) < 10, A)
     LexToken(NAME,'I',1,0)
@@ -226,7 +226,7 @@ for details.
     LexToken(COMMA,',',1,47)
     LexToken(NAME,'A',1,49)
     LexToken(RPAREN,')',1,50)
-    >>> expression =  'I = if(equals,td(A) > 10 || start_day() < 10, A)'
+    >>> expression = "I = if(equals,td(A) > 10 || start_day() < 10, A)"
     >>> p.test(expression)
     I = if(equals,td(A) > 10 || start_day() < 10, A)
     LexToken(NAME,'I',1,0)
@@ -251,7 +251,7 @@ for details.
     LexToken(COMMA,',',1,44)
     LexToken(NAME,'A',1,46)
     LexToken(RPAREN,')',1,47)
-    >>> expression =  'E = if({equals},td(A) >= 4 {&&,contain} td(B) == 2, C : D)'
+    >>> expression = "E = if({equals},td(A) >= 4 {&&,contain} td(B) == 2, C : D)"
     >>> p.test(expression)
     E = if({equals},td(A) >= 4 {&&,contain} td(B) == 2, C : D)
     LexToken(NAME,'E',1,0)
@@ -278,7 +278,7 @@ for details.
     LexToken(T_SELECT,':',1,54)
     LexToken(NAME,'D',1,56)
     LexToken(RPAREN,')',1,57)
-    >>> expression =  'F = if({equals},A {#,equal}, B, C : D)'
+    >>> expression = "F = if({equals},A {#,equal}, B, C : D)"
     >>> p.test(expression)
     F = if({equals},A {#,equal}, B, C : D)
     LexToken(NAME,'F',1,0)
@@ -299,14 +299,14 @@ for details.
     >>> p = tgis.TemporalAlgebraParser()
     >>> p.run = False
     >>> p.debug = True
-    >>> expression =  "D = A {!:} B {:,during} C"
+    >>> expression = "D = A {!:} B {:,during} C"
     >>> print(expression)
     D = A {!:} B {:,during} C
     >>> ret = p.parse(expression)
     A* =  A {!:} B
     A** =  A* {:,during} C
     D = A**
-    >>> expression =  "D = A {:} B {!:,during} C"
+    >>> expression = "D = A {:} B {!:,during} C"
     >>> print(expression)
     D = A {:} B {!:,during} C
     >>> ret = p.parse(expression)
@@ -315,52 +315,52 @@ for details.
     D = A**
     >>> p.run = False
     >>> p.debug = False
-    >>> expression =  "C = test1 : test2"
+    >>> expression = "C = test1 : test2"
     >>> print(expression)
     C = test1 : test2
-    >>> ret = p.parse(expression, 'stvds')
-    >>> expression =  'D = buff_t(test1,"10 months")'
+    >>> ret = p.parse(expression, "stvds")
+    >>> expression = 'D = buff_t(test1,"10 months")'
     >>> print(expression)
     D = buff_t(test1,"10 months")
-    >>> ret = p.parse(expression, 'stvds')
-    >>> expression =  'E = test2 {:,during} buff_t(test1,"1 days")'
+    >>> ret = p.parse(expression, "stvds")
+    >>> expression = 'E = test2 {:,during} buff_t(test1,"1 days")'
     >>> print(expression)
     E = test2 {:,during} buff_t(test1,"1 days")
-    >>> ret = p.parse(expression, 'stvds')
-    >>> expression =  'F = test2 {:,equal} buff_t(test1,"1 days")'
+    >>> ret = p.parse(expression, "stvds")
+    >>> expression = 'F = test2 {:,equal} buff_t(test1,"1 days")'
     >>> print(expression)
     F = test2 {:,equal} buff_t(test1,"1 days")
-    >>> ret = p.parse(expression, 'stvds')
+    >>> ret = p.parse(expression, "stvds")
     >>> p.debug = True
-    >>> expression =  'H = tsnap(test2 {:,during} buff_t(test1, "1 days"))'
-    >>> ret = p.parse(expression, 'stvds')
+    >>> expression = 'H = tsnap(test2 {:,during} buff_t(test1, "1 days"))'
+    >>> ret = p.parse(expression, "stvds")
     test1* = buff_t( test1 , " 1 days " )
     test2* =  test2 {:,during} test1*
     test2** = tsnap( test2* )
     H = test2**
-    >>> expression =  'H = tshift(test2 {:,during} test1, "1 days")'
-    >>> ret = p.parse(expression, 'stvds')
+    >>> expression = 'H = tshift(test2 {:,during} test1, "1 days")'
+    >>> ret = p.parse(expression, "stvds")
     test2* =  test2 {:,during} test1
     test2** = tshift( test2* , " 1 days " )
     H = test2**
-    >>> expression =  'H = tshift(H, 3)'
-    >>> ret = p.parse(expression, 'stvds')
+    >>> expression = "H = tshift(H, 3)"
+    >>> ret = p.parse(expression, "stvds")
     H* = tshift( H , 3 )
     H = H*
-    >>> expression =  'C = if(td(A) == 2, A)'
-    >>> ret = p.parse(expression, 'stvds')
+    >>> expression = "C = if(td(A) == 2, A)"
+    >>> ret = p.parse(expression, "stvds")
     td(A)
     td(A) == 2
     A* =  if condition None  then  A
     C = A*
-    >>> expression =  'C = if(td(A) == 5, A, B)'
-    >>> ret = p.parse(expression, 'stvds')
+    >>> expression = "C = if(td(A) == 5, A, B)"
+    >>> ret = p.parse(expression, "stvds")
     td(A)
     td(A) == 5
     A* =  if condition None  then  A  else  B
     C = A*
-    >>> expression =  'C = if(td(A) == 5 || start_date(A) > "2010-01-01", A, B)'
-    >>> ret = p.parse(expression, 'stvds')
+    >>> expression = 'C = if(td(A) == 5 || start_date(A) > "2010-01-01", A, B)'
+    >>> ret = p.parse(expression, "stvds")
     td(A)
     td(A) == 5
     start_date A > "2010-01-01"
@@ -371,7 +371,7 @@ for details.
     >>> p = tgis.TemporalAlgebraLexer()
     >>> p.build()
     >>> p.debug = True
-    >>> expression =  "D = strds(A) : stvds(B) : str3ds(C)"
+    >>> expression = "D = strds(A) : stvds(B) : str3ds(C)"
     >>> p.test(expression)
     D = strds(A) : stvds(B) : str3ds(C)
     LexToken(NAME,'D',1,0)
@@ -394,7 +394,7 @@ for details.
     >>> p = tgis.TemporalAlgebraLexer()
     >>> p.build()
     >>> p.debug = True
-    >>> expression =  "R = if(A {#,during} stvds(C) == 1, A)"
+    >>> expression = "R = if(A {#,during} stvds(C) == 1, A)"
     >>> p.test(expression)
     R = if(A {#,during} stvds(C) == 1, A)
     LexToken(NAME,'R',1,0)
@@ -416,7 +416,7 @@ for details.
     >>> p = tgis.TemporalAlgebraLexer()
     >>> p.build()
     >>> p.debug = True
-    >>> expression =  "R = if({during}, stvds(C) {#,contains} A == 2, A)"
+    >>> expression = "R = if({during}, stvds(C) {#,contains} A == 2, A)"
     >>> p.test(expression)
     R = if({during}, stvds(C) {#,contains} A == 2, A)
     LexToken(NAME,'R',1,0)
@@ -798,12 +798,12 @@ class TemporalAlgebraParser:
         # This dictionary stores all processes, as well as the maps to register and
         # remove
         self.process_chain_dict = {}
-        self.process_chain_dict[
-            "processes"
-        ] = []  # The mapcalc and v.patch module calls
-        self.process_chain_dict[
-            "register"
-        ] = []  # Maps that must be registered/updated or inserted in a new STDS
+        self.process_chain_dict["processes"] = (
+            []
+        )  # The mapcalc and v.patch module calls
+        self.process_chain_dict["register"] = (
+            []
+        )  # Maps that must be registered/updated or inserted in a new STDS
         self.process_chain_dict["remove"] = []  # The g.remove module calls
         self.process_chain_dict["STDS"] = {}  # The STDS that must be created
 
@@ -1283,16 +1283,16 @@ class TemporalAlgebraParser:
                     elif map_i.is_time_absolute() and self.temporaltype == "relative":
                         self.msgr.fatal(
                             _(
-                                "Wrong temporal type of space time dataset <%s> \
-                                      <%s> time is required"
+                                "Wrong temporal type of space time dataset "
+                                "<%s> <%s> time is required"
                             )
                             % (id_input, self.temporaltype)
                         )
                     elif map_i.is_time_relative() and self.temporaltype == "absolute":
                         self.msgr.fatal(
                             _(
-                                "Wrong temporal type of space time dataset <%s> \
-                                      <%s> time is required"
+                                "Wrong temporal type of space time dataset "
+                                "<%s> <%s> time is required"
                             )
                             % (id_input, self.temporaltype)
                         )
@@ -1440,9 +1440,10 @@ class TemporalAlgebraParser:
         :return: List of maps from maplistA that fulfil the topological relationships
                  to maplistB specified in topolist.
 
+        # Example with two lists of maps
+
         .. code-block:: python
 
-            # Example with two lists of maps
             >>> import grass.temporal as tgis
             >>> tgis.init(True)
             >>> l = tgis.TemporalAlgebraParser()
@@ -1450,22 +1451,28 @@ class TemporalAlgebraParser:
             >>> mapsA = []
             >>> mapsB = []
             >>> for i in range(10):
-            ...     idA = "a%i@B"%(i)
+            ...     idA = "a%i@B" % (i)
             ...     mapA = tgis.RasterDataset(idA)
             ...     mapA.uid = idA
-            ...     idB = "b%i@B"%(i)
+            ...     idB = "b%i@B" % (i)
             ...     mapB = tgis.RasterDataset(idB)
             ...     mapB.uid = idB
             ...     check = mapA.set_relative_time(i, i + 1, "months")
             ...     check = mapB.set_relative_time(i, i + 1, "months")
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            >>> resultlist = l.build_spatio_temporal_topology_list(mapsA, mapsB, ['EQUAL'])
+            ...
+            >>> resultlist = l.build_spatio_temporal_topology_list(
+            ...     mapsA, mapsB, ["EQUAL"]
+            ... )
             >>> for map in resultlist:
             ...     if map.get_equal():
             ...         relations = map.get_equal()
-            ...         print("Map %s has equal relation to map %s"%(map.get_name(),
-            ...               relations[0].get_name()))
+            ...         print(
+            ...             "Map %s has equal relation to map %s"
+            ...             % (map.get_name(), relations[0].get_name())
+            ...         )
+            ...
             Map a0 has equal relation to map b0
             Map a1 has equal relation to map b1
             Map a2 has equal relation to map b2
@@ -1476,29 +1483,37 @@ class TemporalAlgebraParser:
             Map a7 has equal relation to map b7
             Map a8 has equal relation to map b8
             Map a9 has equal relation to map b9
-            >>> resultlist = l.build_spatio_temporal_topology_list(mapsA, mapsB, ['DURING'])
+            >>> resultlist = l.build_spatio_temporal_topology_list(
+            ...     mapsA, mapsB, ["DURING"]
+            ... )
             >>> print(resultlist)
             []
             >>> # Create two list of maps with equal time stamps
             >>> mapsA = []
             >>> mapsB = []
             >>> for i in range(10):
-            ...     idA = "a%i@B"%(i)
+            ...     idA = "a%i@B" % (i)
             ...     mapA = tgis.RasterDataset(idA)
             ...     mapA.uid = idA
-            ...     idB = "b%i@B"%(i)
+            ...     idB = "b%i@B" % (i)
             ...     mapB = tgis.RasterDataset(idB)
             ...     mapB.uid = idB
             ...     check = mapA.set_relative_time(i, i + 1, "months")
             ...     check = mapB.set_relative_time(i, i + 2, "months")
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            >>> resultlist = l.build_spatio_temporal_topology_list(mapsA, mapsB, ['starts','during'])
+            ...
+            >>> resultlist = l.build_spatio_temporal_topology_list(
+            ...     mapsA, mapsB, ["starts", "during"]
+            ... )
             >>> for map in resultlist:
             ...     if map.get_starts():
             ...         relations = map.get_starts()
-            ...         print("Map %s has start relation to map %s"%(map.get_name(),
-            ...               relations[0].get_name()))
+            ...         print(
+            ...             "Map %s has start relation to map %s"
+            ...             % (map.get_name(), relations[0].get_name())
+            ...         )
+            ...
             Map a0 has start relation to map b0
             Map a1 has start relation to map b1
             Map a2 has start relation to map b2
@@ -1512,8 +1527,11 @@ class TemporalAlgebraParser:
             >>> for map in resultlist:
             ...     if map.get_during():
             ...         relations = map.get_during()
-            ...         print("Map %s has during relation to map %s"%(map.get_name(),
-            ...               relations[0].get_name()))
+            ...         print(
+            ...             "Map %s has during relation to map %s"
+            ...             % (map.get_name(), relations[0].get_name())
+            ...         )
+            ...
             Map a0 has during relation to map b0
             Map a1 has during relation to map b0
             Map a2 has during relation to map b1
@@ -1528,10 +1546,10 @@ class TemporalAlgebraParser:
             >>> mapsA = []
             >>> mapsB = []
             >>> for i in range(10):
-            ...     idA = "a%i@B"%(i)
+            ...     idA = "a%i@B" % (i)
             ...     mapA = tgis.RasterDataset(idA)
             ...     mapA.uid = idA
-            ...     idB = "b%i@B"%(i)
+            ...     idB = "b%i@B" % (i)
             ...     mapB = tgis.RasterDataset(idB)
             ...     mapB.uid = idB
             ...     check = mapA.set_relative_time(i, i + 1, "months")
@@ -1539,37 +1557,45 @@ class TemporalAlgebraParser:
             ...     mapB.map_value = True
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
+            ...
             >>> # Create two list of maps with equal time stamps
             >>> mapsA = []
             >>> mapsB = []
             >>> for i in range(10):
-            ...     idA = "a%i@B"%(i)
+            ...     idA = "a%i@B" % (i)
             ...     mapA = tgis.RasterDataset(idA)
             ...     mapA.uid = idA
             ...     mapA.map_value = True
-            ...     idB = "b%i@B"%(i)
+            ...     idB = "b%i@B" % (i)
             ...     mapB = tgis.RasterDataset(idB)
             ...     mapB.uid = idB
             ...     mapB.map_value = False
-            ...     check = mapA.set_absolute_time(datetime(2000,1,i+1),
-            ...             datetime(2000,1,i + 2))
-            ...     check = mapB.set_absolute_time(datetime(2000,1,i+6),
-            ...             datetime(2000,1,i + 7))
+            ...     check = mapA.set_absolute_time(
+            ...         datetime(2000, 1, i + 1), datetime(2000, 1, i + 2)
+            ...     )
+            ...     check = mapB.set_absolute_time(
+            ...         datetime(2000, 1, i + 6), datetime(2000, 1, i + 7)
+            ...     )
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
+            ...
             >>> resultlist = l.build_spatio_temporal_topology_list(mapsA, mapsB)
             >>> for map in resultlist:
             ...     print(map.get_id())
+            ...
             a5@B
             a6@B
             a7@B
             a8@B
             a9@B
-            >>> resultlist = l.build_spatio_temporal_topology_list(mapsA, mapsB, ['during'])
+            >>> resultlist = l.build_spatio_temporal_topology_list(
+            ...     mapsA, mapsB, ["during"]
+            ... )
             >>> for map in resultlist:
             ...     print(map.get_id())
+            ...
 
-        """  # noqa: E501
+        """
         # Check the topology definitions and return the list of temporal and spatial
         # topological relations that must be fulfilled
         temporal_topo_list, spatial_topo_list = self._check_topology(topolist=topolist)
@@ -1751,7 +1777,7 @@ class TemporalAlgebraParser:
              >>> tgis.init()
              >>> p = tgis.TemporalOperatorParser()
              >>> operator = "{+, during}"
-             >>> p.parse(operator, optype = 'raster')
+             >>> p.parse(operator, optype="raster")
              >>> print((p.relations, p.temporal, p.function))
              (['during'], 'l', '+')
 
@@ -1790,40 +1816,48 @@ class TemporalAlgebraParser:
             >>> mapsA = []
             >>> mapsB = []
             >>> for i in range(10):
-            ...     idA = "a%i@B"%(i)
+            ...     idA = "a%i@B" % (i)
             ...     mapA = tgis.RasterDataset(idA)
             ...     mapA.uid = idA
-            ...     idB = "b%i@B"%(i)
+            ...     idB = "b%i@B" % (i)
             ...     mapB = tgis.RasterDataset(idB)
             ...     mapB.uid = idB
             ...     check = mapA.set_relative_time(i, i + 1, "months")
             ...     check = mapB.set_relative_time(i + 5, i + 6, "months")
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            >>> resultlist = l.perform_temporal_selection(mapsA, mapsB, ['EQUAL'],
-            ...                                           False)
+            ...
+            >>> resultlist = l.perform_temporal_selection(
+            ...     mapsA, mapsB, ["EQUAL"], False
+            ... )
             >>> for map in resultlist:
             ...     if map.get_equal():
             ...         relations = map.get_equal()
-            ...         print("Map %s has equal relation to map %s"%(map.get_name(),
-            ...               relations[0].get_name()))
+            ...         print(
+            ...             "Map %s has equal relation to map %s"
+            ...             % (map.get_name(), relations[0].get_name())
+            ...         )
+            ...
             Map a5 has equal relation to map b0
             Map a6 has equal relation to map b1
             Map a7 has equal relation to map b2
             Map a8 has equal relation to map b3
             Map a9 has equal relation to map b4
-            >>> resultlist = l.perform_temporal_selection(mapsA, mapsB, ['EQUAL'],
-            ...                                           True)
+            >>> resultlist = l.perform_temporal_selection(mapsA, mapsB, ["EQUAL"], True)
             >>> for map in resultlist:
             ...     if not map.get_equal():
-            ...         print("Map %s has no equal relation to mapset mapsB"%(map.get_name()))
+            ...         print(
+            ...             "Map %s has no equal relation to mapset mapsB"
+            ...             % (map.get_name())
+            ...         )
+            ...
             Map a0 has no equal relation to mapset mapsB
             Map a1 has no equal relation to mapset mapsB
             Map a2 has no equal relation to mapset mapsB
             Map a3 has no equal relation to mapset mapsB
             Map a4 has no equal relation to mapset mapsB
 
-        """  # noqa: E501
+        """
         if not inverse:
             topolist = self.build_spatio_temporal_topology_list(
                 maplistA, maplistB, topolist, assign_val=assign_val
@@ -1866,20 +1900,26 @@ class TemporalAlgebraParser:
             >>> mapsA = []
             >>> mapsB = []
             >>> for i in range(10):
-            ...     idA = "a%i@B"%(i)
+            ...     idA = "a%i@B" % (i)
             ...     mapA = tgis.RasterDataset(idA)
             ...     mapA.uid = idA
-            ...     idB = "b%i@B"%(i)
+            ...     idB = "b%i@B" % (i)
             ...     mapB = tgis.RasterDataset(idB)
             ...     mapB.uid = idB
             ...     check = mapA.set_relative_time(i, i + 1, "months")
-            ...     check = mapB.set_relative_time(i*2, i*2 + 2, "months")
+            ...     check = mapB.set_relative_time(i * 2, i * 2 + 2, "months")
             ...     mapsA.append(mapA)
             ...     mapsB.append(mapB)
-            >>> resultlist = p.set_granularity(mapsA, mapsB, toperator = "u", topolist = ["during"])
+            ...
+            >>> resultlist = p.set_granularity(
+            ...     mapsA, mapsB, toperator="u", topolist=["during"]
+            ... )
             >>> for map in resultlist:
-            ...     start,end,unit = map.get_relative_time()
-            ...     print(map.get_id() + ' - start: ' + str(start) + ' end: ' + str(end))
+            ...     start, end, unit = map.get_relative_time()
+            ...     print(
+            ...         map.get_id() + " - start: " + str(start) + " end: " + str(end)
+            ...     )
+            ...
             a1@B - start: 0 end: 2
             a0@B - start: 0 end: 2
             a3@B - start: 2 end: 4
@@ -1891,7 +1931,7 @@ class TemporalAlgebraParser:
             a9@B - start: 8 end: 10
             a8@B - start: 8 end: 10
 
-        """  # noqa: E501
+        """
         topologylist = [
             "EQUAL",
             "FOLLOWS",
@@ -1995,12 +2035,14 @@ class TemporalAlgebraParser:
             >>> # Example with one list of maps
             >>> # Create one list of maps with equal time stamps
             >>> for i in range(1):
-            ...     idA = "a%i@B"%(i)
+            ...     idA = "a%i@B" % (i)
             ...     mapA = tgis.RasterDataset(idA)
             ...     mapA.uid = idA
-            ...     check = mapA.set_absolute_time(datetime.datetime(2000,1,1),
-            ...             datetime.datetime(2000,10,1))
+            ...     check = mapA.set_absolute_time(
+            ...         datetime.datetime(2000, 1, 1), datetime.datetime(2000, 10, 1)
+            ...     )
             ...     tfuncdict = l.get_temporal_func_dict(mapA)
+            ...
             >>> print(tfuncdict["START_YEAR"])
             2000
             >>> print(tfuncdict["START_TIME"])
@@ -2378,8 +2420,8 @@ class TemporalAlgebraParser:
                                 self.msgr.fatal(
                                     _(
                                         "Maps that should be registered in the "
-                                        "resulting space time dataset have different \
-                                            types."
+                                        "resulting space time dataset have different "
+                                        "types."
                                     )
                                 )
                         count += 1
@@ -2685,16 +2727,16 @@ class TemporalAlgebraParser:
             elif len(maplistA) == 0:
                 self.msgr.message(
                     _(
-                        "First Map list is empty, can't merge it. Return only last map \
-                            list"
+                        "First Map list is empty, can't merge it. "
+                        "Return only last map list"
                     )
                 )
                 resultlist = maplistB
             elif len(maplistB) == 0:
                 self.msgr.message(
                     _(
-                        "Second Map list is empty, can't merge it. Return only first \
-                            map list"
+                        "Second Map list is empty, can't merge it. "
+                        "Return only first map list"
                     )
                 )
                 resultlist = maplistA
@@ -2706,8 +2748,8 @@ class TemporalAlgebraParser:
                 if typeA != typeB:
                     raise FatalError(
                         _(
-                            "Space time datasets to merge must have the same temporal \
-                                type"
+                            "Space time datasets to merge must have "
+                            "the same temporal type"
                         )
                     )
 
@@ -2851,8 +2893,8 @@ class TemporalAlgebraParser:
                         map_i.condition_value = boolname
                 except:
                     self.msgr.fatal(
-                        "Error: the given expression does not contain a correct time \
-                            difference object."
+                        "Error: the given expression does not contain a correct time "
+                        "difference object."
                     )
 
             t[0] = maplist
@@ -3391,8 +3433,8 @@ class TemporalAlgebraParser:
         # Handle errors.
         if t:
             raise SyntaxError(
-                "syntax error on line %d, position %i token %s near '%s' expression \
-                    '%s'"
+                "syntax error on line %d, position %i token %s near '%s' expression "
+                "'%s'"
                 % (t.lineno, t.lexpos, t.type, t.value, self.expression)
             )
         else:

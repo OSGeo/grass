@@ -213,8 +213,10 @@ class GrassTestFilesInvoker:
             if stdout is None:
                 stdout = ""
             if stderr is None:
-                stderr = f"Process has timed out in {timeout}s and produced no error \
-                    output.\n"
+                stderr = (
+                    f"Process has timed out in {timeout}s and produced no error "
+                    "output.\n"
+                )
             # Return code is None if the process times out.
             # Rest of the code expects success to evaluate as False.
             # So, we assign a failing return code.

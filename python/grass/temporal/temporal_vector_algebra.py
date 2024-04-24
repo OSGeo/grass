@@ -16,7 +16,7 @@ for details.
     >>> p = tgis.TemporalVectorAlgebraLexer()
     >>> p.build()
     >>> p.debug = True
-    >>> expression =  'E = A : B ^ C : D'
+    >>> expression = "E = A : B ^ C : D"
     >>> p.test(expression)
     E = A : B ^ C : D
     LexToken(NAME,'E',1,0)
@@ -28,7 +28,7 @@ for details.
     LexToken(NAME,'C',1,12)
     LexToken(T_SELECT,':',1,14)
     LexToken(NAME,'D',1,16)
-    >>> expression =  'E = buff_a(A, 10)'
+    >>> expression = "E = buff_a(A, 10)"
     >>> p.test(expression)
     E = buff_a(A, 10)
     LexToken(NAME,'E',1,0)
@@ -41,6 +41,7 @@ for details.
     LexToken(RPAREN,')',1,16)
 
 """
+
 try:
     import ply.yacc as yacc
 except ImportError:

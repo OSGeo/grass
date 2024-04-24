@@ -14,7 +14,7 @@ for details.
     >>> p = TemporalRasterAlgebraLexer()
     >>> p.build()
     >>> p.debug = True
-    >>> expression =  'R = A {+,equal,l} B'
+    >>> expression = "R = A {+,equal,l} B"
     >>> p.test(expression)
     R = A {+,equal,l} B
     LexToken(NAME,'R',1,0)
@@ -22,7 +22,7 @@ for details.
     LexToken(NAME,'A',1,4)
     LexToken(T_ARITH2_OPERATOR,'{+,equal,l}',1,6)
     LexToken(NAME,'B',1,18)
-    >>> expression =  'R = A {*,equal|during,r} B'
+    >>> expression = "R = A {*,equal|during,r} B"
     >>> p.test(expression)
     R = A {*,equal|during,r} B
     LexToken(NAME,'R',1,0)
@@ -30,7 +30,7 @@ for details.
     LexToken(NAME,'A',1,4)
     LexToken(T_ARITH1_OPERATOR,'{*,equal|during,r}',1,6)
     LexToken(NAME,'B',1,25)
-    >>> expression =  'R = A {+,equal|during} B'
+    >>> expression = "R = A {+,equal|during} B"
     >>> p.test(expression)
     R = A {+,equal|during} B
     LexToken(NAME,'R',1,0)
@@ -40,6 +40,7 @@ for details.
     LexToken(NAME,'B',1,23)
 
 """
+
 import copy
 
 import grass.pygrass.modules as pymod
@@ -244,23 +245,27 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         >>> mapsA = []
         >>> mapsB = []
         >>> for i in range(10):
-        ...     idA = "a%i@B"%(i)
+        ...     idA = "a%i@B" % (i)
         ...     mapA = tgis.RasterDataset(idA)
         ...     mapA.uid = idA
         ...     mapA.map_value = True
-        ...     idB = "b%i@B"%(i)
+        ...     idB = "b%i@B" % (i)
         ...     mapB = tgis.RasterDataset(idB)
         ...     mapB.uid = idB
         ...     mapB.map_value = False
-        ...     check = mapA.set_absolute_time(datetime(2000,1,i+1),
-        ...             datetime(2000,1,i + 2))
-        ...     check = mapB.set_absolute_time(datetime(2000,1,i+6),
-        ...             datetime(2000,1,i + 7))
+        ...     check = mapA.set_absolute_time(
+        ...         datetime(2000, 1, i + 1), datetime(2000, 1, i + 2)
+        ...     )
+        ...     check = mapB.set_absolute_time(
+        ...         datetime(2000, 1, i + 6), datetime(2000, 1, i + 7)
+        ...     )
         ...     mapsA.append(mapA)
         ...     mapsB.append(mapB)
+        ...
         >>> resultlist = l.build_spatio_temporal_topology_list(mapsA, mapsB)
         >>> for map in resultlist:
         ...     print(map.get_id())
+        ...
         a5@B
         a6@B
         a7@B

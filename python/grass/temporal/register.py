@@ -16,6 +16,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 from datetime import datetime
 import grass.script as gscript
 from .core import get_tgis_message_interface, init_dbif, get_current_mapset
@@ -220,8 +221,8 @@ def register_maps_in_space_time_dataset(
             increment = None
             msgr.warning(
                 _(
-                    "The increment option will be ignored because of time stamps in \
-                        input file"
+                    "The increment option will be ignored because of time stamps in "
+                    "input file"
                 )
             )
 
@@ -229,8 +230,8 @@ def register_maps_in_space_time_dataset(
             increment = None
             msgr.warning(
                 _(
-                    "The interval flag will be ignored because of time stamps in input \
-                        file"
+                    "The interval flag will be ignored because of time stamps in input "
+                    "file"
                 )
             )
         fd.close()
