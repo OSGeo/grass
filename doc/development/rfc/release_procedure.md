@@ -1,10 +1,8 @@
 # RFC 4: Release Procedure
 
-Author: GRASS GIS PSC
+Author: Vaclav Petras
 
-Contact: [grass-psc AT lists.osgeo.org](http://lists.osgeo.org/mailman/listinfo/grass-psc)
-
-Status: Late draft (7 Jan 2015)
+Status: Draft
 
 ## Summary
 
@@ -13,29 +11,38 @@ candidate (RC) periods and to lessen the potential for conflict between
 developers during release preparations, this RFC defines a procedure that
 should be followed for each release.
 
-## General philosophy
+## General Philosophy
 
-* The release process should be _short_. I.e. the time between the first RC
+* The release process should be _short_, i.e. the time between the first RC
   and the final release should be a matter of weeks not many months.
 * A release period should be a time of concerted action during which all
   developers give priority to the release instead of other developments.
-* All developers respect a call for commit freeze during a release process.
+* All developers respect a call for commit freeze during a release process
+  or any similar policy.
 * It is sometimes better to ship a release with a known bug than with unknown
   consequences of an untested bug fix.
 
 ## General Procedure
 
-Step 1 - Proposal of release:
-   When a developer feels that it is time for a new release, she or he should
-   propose the launch of a new release process on the developers mailing list
-   ([grass-dev AT lists.osgeo.org](http://lists.osgeo.org/mailman/listinfo/grass-dev)).
-   The Project manager (or the Release manager, if exists) then collects
-   reactions and decides whether there is sufficient support for this proposal.
+### Step 1 - Proposal of a New Release
 
-Step 2 (day X) - Soft freeze of release branch:
+The release manager announces upcomming release on the developer mailing list
+([grass-dev](http://lists.osgeo.org/mailman/listinfo/grass-dev)) according
+to the release schedule or when the release manager deems necessary to create
+a new release.
+
+Alternatively, when any contributor feels a need for a new release, the contributor
+should propose a creation of a new release on the developer mailing list.
+The release manager then collects reactions and decides whether
+there is sufficient support for this proposal consiudering also any applicable
+release policies and schedules. In rare cases, when there is a lack of consensus,
+the release manager or the proposing contributor may refer to the PSC
+for a final decision.
+
+### Step 2 (day X + 0) - Soft Freeze of Release Branch
 
 * If support is lacking, a list of outstanding issues (managed via <https://github.com/OSGeo/grass/issues>)
-  that need to be solved before a soft freeze should be sent to the developers
+  that need to be solved before a soft freeze should be sent to the developer
   mailing list.
 * If sufficient support is present, the first announcement is sent by the
   Release manager to the developers mailing list about the upcoming release
@@ -49,23 +56,35 @@ Step 2 (day X) - Soft freeze of release branch:
   be announced on the developers mailing list with 24 hours advance to allow
   possible discussion.
 
-Step 3 (X+30 days) - Hard freeze & RC1:
-   Once all necessary backports are done, a hard freeze is announced by the
-   Release manager and RC1 is released based on the frozen code (release branch).
+### Step 3 (X + 30 days) - Hard Freeze & RC1
 
-Step 4 - Bug squashing:
-   All developers concentrate on fixing the remaining bugs during a defined
-   period of no more than 2 weeks. Any commits from that point on can only be
-   well-tested, non-invasive bug fixes.
+Once all necessary backports are done, a hard freeze is announced by the
+Release manager and RC1 is released based on the frozen code (release branch).
 
-Step 5 (X+44 days) - RC2:
-   RC2 is released as almost final.
+### Step 4 - Bug Squashing
 
-Step 6 - Bug squashing & Release preparation:
-   A final, concerted bug squashing effort by all developers of no more than
-   one week. During that same time the release announcement is drafted. If an
-   important bug is discovered for which a fix needs some more testing, an RC3
-   can exceptionally be published, with another week of testing before final
-   release.
+All developers concentrate on fixing the remaining bugs during a defined
+period of no more than 2 weeks. Any commits from that point on can only be
+well-tested, non-invasive bug fixes.
 
-Step 7 (X+50 days) - Final release published.
+### Step 5 (X + 44 days) - RC2
+
+RC2 is released as almost final.
+
+### Step 6 - Bug Squashing & Release preparation
+
+A final, concerted bug squashing effort by all developers of no more than
+one week. During that same time the release announcement is drafted. If an
+important bug is discovered for which a fix needs some more testing, an RC3
+can exceptionally be published, with another week of testing before final
+release.
+
+### Step 7 (X + 50 days) - Final Release Published
+
+## Relation to Other Documents
+
+* [RFC: Version Numbering](https://github.com/wenzeslaus/grass/blob/main/doc/development/rfc/version_numbering.md):
+  The Version Numbering RFC describes how these version are numbered.
+  This RFC describes how to release a new version of the software.
+* RFC: Release Policy: The Release Policy RFC describes what releases should be prepared and when.
+  This RFC describes how to do a particular release.
