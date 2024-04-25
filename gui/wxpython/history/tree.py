@@ -41,7 +41,7 @@ from grass.pydispatch.signal import Signal
 from grass.grassdb import history
 
 
-# global variable for purposes of sorting No time info node
+# global variable for purposes of sorting "No time info" node
 OLD_DATE = datetime.datetime(1950, 1, 1).date()
 
 
@@ -73,11 +73,7 @@ class HistoryBrowserNode(DictFilterNode):
             return "{:%B %-d} (today)".format(day)
         elif day == current_date - datetime.timedelta(days=1):
             return "{:%B %-d} (yesterday)".format(day)
-        elif (
-            current_date - datetime.timedelta(days=current_date.weekday())
-            <= day
-            <= current_date
-        ):
+        elif day >= current_date - datetime.timedelta(days=7):
             return "{:%B %-d} (this week)".format(day)
         elif day.year == current_date.year and day.month == current_date.month:
             return "{:%B %-d} (this month)".format(day)
