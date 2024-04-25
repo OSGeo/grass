@@ -41,6 +41,10 @@ from grass.pydispatch.signal import Signal
 from grass.grassdb import history
 
 
+# global variable for purposes of sorting No time info node
+OLD_DATE = datetime.datetime(1950, 1, 1).date()
+
+
 class HistoryBrowserNode(DictFilterNode):
     """Node representing item in history browser."""
 
@@ -49,19 +53,36 @@ class HistoryBrowserNode(DictFilterNode):
 
     @property
     def label(self):
-        if "number" in self.data.keys():
-            if self.data["number"] == 0:
-                return _("Today")
-            elif self.data["number"] == 1:
-                return _("Yesterday")
-            elif self.data["number"] == 2:
-                return _("This week")
-            elif self.data["number"] == 3:
-                return _("Older than week")
-            else:
-                return _("Missing info")
+        if "day" in self.data.keys():
+            return self.dayToLabel(self.data["day"])
         else:
             return self.data["name"]
+
+    def dayToLabel(self, day):
+        """
+        Convert day (midnight timestamp) to a day node label.
+        :param day datetime.date object: midnight of a day.
+        :return str: Corresponding day label.
+        """
+        current_date = datetime.date.today()
+
+        if day == OLD_DATE:
+            return _("No time info")
+
+        if day == current_date:
+            return "{:%B %-d} (today)".format(day)
+        elif day == current_date - datetime.timedelta(days=1):
+            return "{:%B %-d} (yesterday)".format(day)
+        elif (
+            current_date - datetime.timedelta(days=current_date.weekday())
+            <= day
+            <= current_date
+        ):
+            return "{:%B %-d} (this week)".format(day)
+        elif day.year == current_date.year and day.month == current_date.month:
+            return "{:%B %-d} (this month)".format(day)
+        else:
+            return "{:%B %-d, %Y}".format(day)
 
 
 class HistoryBrowserTree(CTreeView):
@@ -109,22 +130,22 @@ class HistoryBrowserTree(CTreeView):
         self.itemActivated.connect(self.OnDoubleClick)
         self.contextMenu.connect(self.OnRightClick)
 
-    def _sortTimePeriods(self):
-        """Sort periods from newest to oldest based on the node number."""
+    def _sortDays(self):
+        """Sort day nodes from earliest to oldest."""
         if self._model.root.children:
             self._model.root.children.sort(
-                key=lambda node: node.data["number"], reverse=False
+                key=lambda node: node.data["day"], reverse=True
             )
 
     def _refreshTree(self):
         """Refresh tree models"""
-        self._sortTimePeriods()
+        self._sortDays()
         self.SetModel(copy.deepcopy(self._model))
         self._orig_model = self._model
 
     def _resetSelectVariables(self):
         """Reset variables related to item selection."""
-        self.selected_time_period = []
+        self.selected_day = []
         self.selected_command = []
 
     def _confirmDialog(self, question, title):
@@ -154,6 +175,88 @@ class HistoryBrowserTree(CTreeView):
         self.PopupMenu(menu)
         menu.Destroy()
 
+    def _timestampToDay(self, timestamp=None):
+        """
+        Convert timestamp to datetime.date object with time set to midnight.
+        :param str timestamp: Timestamp as a string in ISO format.
+        :return datetime.date day_midnight: midnight of a day.
+        """
+        if not timestamp:
+            return OLD_DATE
+
+        timestamp_datetime = datetime.datetime.fromisoformat(timestamp)
+        day_midnight = datetime.datetime(
+            timestamp_datetime.year, timestamp_datetime.month, timestamp_datetime.day
+        ).date()
+
+        return day_midnight
+
+    def _initHistoryModel(self):
+        """Fill tree history model based on the current history log."""
+        content_list = self.ReadFromHistory()
+
+        for entry in content_list:
+            timestamp = None
+            if entry["command_info"]:
+                # Find day node for entries with command info
+                timestamp = entry["command_info"].get("timestamp")
+                if timestamp:
+                    day = self._model.SearchNodes(
+                        parent=self._model.root,
+                        day=self._timestampToDay(timestamp),
+                        type="day",
+                    )
+            else:
+                # Find day node prepared for entries without any command info
+                day = self._model.SearchNodes(
+                    parent=self._model.root,
+                    day=self._timestampToDay(),
+                    type="day",
+                )
+
+            if day:
+                day = day[0]
+            else:
+                # Create time period node if not found
+                if not entry["command_info"]:
+                    # Prepare it for entries without command info
+                    day = self._model.AppendNode(
+                        parent=self._model.root,
+                        data=dict(type="day", day=self._timestampToDay()),
+                    )
+                else:
+                    day = self._model.AppendNode(
+                        parent=self._model.root,
+                        data=dict(
+                            type="day",
+                            day=self._timestampToDay(
+                                entry["command_info"]["timestamp"]
+                            ),
+                        ),
+                    )
+
+            # Determine status and create command node
+            status = (
+                entry["command_info"].get("status")
+                if entry.get("command_info")
+                and entry["command_info"].get("status") is not None
+                else "unknown"
+            )
+
+            # Add command to time period node
+            self._model.AppendNode(
+                parent=day,
+                data=dict(
+                    type="command",
+                    name=entry["command"].strip(),
+                    timestamp=timestamp if timestamp else None,
+                    status=status,
+                ),
+            )
+
+        # Refresh the tree view
+        self._refreshTree()
+
     def _getIndexFromFile(self, command_node):
         """Get index of command node in the corresponding history log file."""
         if not command_node.data["timestamp"]:
@@ -164,86 +267,6 @@ class HistoryBrowserTree(CTreeView):
                 command=command_node.data["name"],
                 timestamp=command_node.data["timestamp"],
             )
-
-    def _initHistoryModel(self):
-        """Fill tree history model based on the current history log."""
-        content_list = self.ReadFromHistory()
-
-        # Initialize time period nodes
-        for node_number in range(5):
-            self._model.AppendNode(
-                parent=self._model.root,
-                data=dict(type="time_period", number=node_number),
-            )
-
-        # Populate time period nodes
-        for entry in content_list:
-            # Determine node number
-            timestamp = (
-                entry["command_info"]["timestamp"] if entry["command_info"] else None
-            )
-            node_number = self._timestampToNodeNumber(timestamp)
-
-            # Find corresponding time period node
-            time_node = self._model.SearchNodes(
-                parent=self._model.root, number=node_number, type="time_period"
-            )[0]
-
-            # Determine status and create command node
-            status = (
-                entry["command_info"].get("status")
-                if entry.get("command_info")
-                else None
-            )
-
-            # Add command to time period node
-            self._model.AppendNode(
-                parent=time_node,
-                data=dict(
-                    type="command",
-                    name=entry["command"].strip(),
-                    timestamp=timestamp if timestamp else None,
-                    status=status,
-                ),
-            )
-
-        # Remove empty time period nodes
-        for node_number in range(5):
-            time_node = self._model.SearchNodes(
-                parent=self._model.root, number=node_number, type="time_period"
-            )[0]
-
-            if len(time_node.children) == 0:
-                self._model.RemoveNode(time_node)
-
-        # Sort time periods and refresh the tree view
-        self._refreshTree()
-
-    def _timestampToNodeNumber(self, timestamp=None):
-        """
-        Convert timestamp to a corresponding time period node number.
-
-        :param timestamp: Time when the command was launched
-        :return: Corresponding time period node number:
-        Today = 0, Yesterday = 1, This week = 2,
-        Older than week = 3, Missing info = 4
-        """
-        if not timestamp:
-            return 4
-
-        timestamp = datetime.datetime.fromisoformat(timestamp).date()
-        current = datetime.date.today()
-        yesterday = current - datetime.timedelta(days=1)
-        week_ago = current - datetime.timedelta(days=7)
-
-        if timestamp == current:
-            return 0
-        elif timestamp == yesterday:
-            return 1
-        elif timestamp > week_ago:
-            return 2
-        else:
-            return 3
 
     def ReadFromHistory(self):
         """Read content of command history log.
@@ -289,10 +312,10 @@ class HistoryBrowserTree(CTreeView):
             type = item.data["type"]
             if type == "command":
                 self.selected_command.append(item)
-                self.selected_time_period.append(item.parent)
-            elif type == "time_period":
+                self.selected_day.append(item.parent)
+            elif type == "day":
                 self.selected_command.append(None)
-                self.selected_time_period.append(item)
+                self.selected_day.append(item)
 
     def Filter(self, text):
         """Filter history
@@ -323,15 +346,16 @@ class HistoryBrowserTree(CTreeView):
         :param entry dict: entry with 'command' and 'command_info' keys
         """
         # Check if today time period node exists or create it
+        today = self._timestampToDay(entry["command_info"]["timestamp"])
         today_nodes = self._model.SearchNodes(
-            parent=self._model.root, number=0, type="time_period"
+            parent=self._model.root, day=today, type="day"
         )
         if not today_nodes:
             today_node = self._model.AppendNode(
                 parent=self._model.root,
                 data=dict(
-                    type="time_period",
-                    number=0,
+                    type="day",
+                    day=today,
                 ),
             )
         else:
@@ -344,7 +368,7 @@ class HistoryBrowserTree(CTreeView):
                 type="command",
                 name=entry["command"].strip(),
                 timestamp=entry["command_info"]["timestamp"],
-                status=entry["command_info"].get("status", "In process"),
+                status=entry["command_info"].get("status", "in process"),
             ),
         )
 
@@ -364,8 +388,9 @@ class HistoryBrowserTree(CTreeView):
         :param entry dict: entry with 'command' and 'command_info' keys
         """
         # Get node of last command
+        today = self._timestampToDay(entry["command_info"]["timestamp"])
         today_node = self._model.SearchNodes(
-            parent=self._model.root, number=0, type="time_period"
+            parent=self._model.root, day=today, type="day"
         )[0]
         command_nodes = self._model.SearchNodes(parent=today_node, type="command")
         last_node = command_nodes[-1]
@@ -419,7 +444,7 @@ class HistoryBrowserTree(CTreeView):
             return
 
         selected_command = self.selected_command[0]
-        selected_time_period = self.selected_time_period[0]
+        selected_day = self.selected_day[0]
         command = selected_command.data["name"]
 
         # Confirm deletion with user
@@ -439,9 +464,9 @@ class HistoryBrowserTree(CTreeView):
         self._model.RemoveNode(selected_command)
 
         # Check if the time period node should also be removed
-        selected_time_period = selected_command.parent
-        if selected_time_period and len(selected_time_period.children) == 0:
-            self._model.RemoveNode(selected_time_period)
+        selected_day = selected_command.parent
+        if selected_day and len(selected_day.children) == 0:
+            self._model.RemoveNode(selected_day)
 
         self._refreshTree()
         self.showNotification.emit(message=_("<{}> removed").format(command))
