@@ -8,7 +8,9 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import getpass
+from datetime import datetime
 from .abstract_map_dataset import AbstractMapDataset
 from .abstract_space_time_dataset import AbstractSpaceTimeDataset
 from .base import (
@@ -54,6 +56,8 @@ from .temporal_extent import (
 )
 import grass.script.array as garray
 
+
+GRASS_TIMESTAMP_FMT = "%a %b  %d %H:%M:%S %Y"
 
 ###############################################################################
 
@@ -408,7 +412,16 @@ class RasterDataset(AbstractMapDataset):
             return False
 
         # Fill base information
-        self.base.set_creator(str(getpass.getuser()))
+        kvp = self.ciface.read_raster_history(self.get_name(), self.get_mapset())
+
+        if kvp:
+            self.base.set_creator(kvp["creator"])
+            self.base.set_ctime(
+                datetime.strptime(kvp["creation_time"], GRASS_TIMESTAMP_FMT)
+            )
+        else:
+            self.base.set_creator(str(getpass.getuser()))
+            self.base.set_ctime()
 
         kvp = self.ciface.read_raster_info(self.get_name(), self.get_mapset())
 
@@ -790,7 +803,16 @@ class Raster3DDataset(AbstractMapDataset):
             return False
 
         # Fill base information
-        self.base.set_creator(str(getpass.getuser()))
+        kvp = self.ciface.read_raster3d_history(self.get_name(), self.get_mapset())
+
+        if kvp:
+            self.base.set_creator(kvp["creator"])
+            self.base.set_ctime(
+                datetime.strptime(kvp["creation_time"], GRASS_TIMESTAMP_FMT)
+            )
+        else:
+            self.base.set_creator(str(getpass.getuser()))
+            self.base.set_ctime()
 
         # Fill spatial extent
         kvp = self.ciface.read_raster3d_info(self.get_name(), self.get_mapset())
@@ -1114,10 +1136,18 @@ class VectorDataset(AbstractMapDataset):
             return False
 
         # Fill base information
-        self.base.set_creator(str(getpass.getuser()))
+        kvp = self.ciface.read_vector_history(self.get_name(), self.get_mapset())
+
+        if kvp:
+            self.base.set_creator(kvp["creator"])
+            self.base.set_ctime(
+                datetime.strptime(kvp["creation_time"], GRASS_TIMESTAMP_FMT)
+            )
+        else:
+            self.base.set_creator(str(getpass.getuser()))
+            self.base.set_ctime()
 
         # Get the data from an existing vector map
-
         kvp = self.ciface.read_vector_info(self.get_name(), self.get_mapset())
 
         if kvp:

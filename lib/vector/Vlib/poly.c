@@ -52,8 +52,7 @@ static int Vect__divide_and_conquer(struct Slink *, const struct line_pnts *,
    \return 0 on success
    \return -1 on error
  */
-int Vect_get_point_in_area(const struct Map_info *Map, int area, double *X,
-                           double *Y)
+int Vect_get_point_in_area(struct Map_info *Map, int area, double *X, double *Y)
 {
     static struct line_pnts *Points;
     static struct line_pnts **IPoints;
@@ -852,9 +851,8 @@ int Vect_point_in_poly(double X, double Y, const struct line_pnts *Points)
    \return 1 - inside
    \return 2 - on the boundary
  */
-int Vect_point_in_area_outer_ring(double X, double Y,
-                                  const struct Map_info *Map, int area,
-                                  struct bound_box *box)
+int Vect_point_in_area_outer_ring(double X, double Y, struct Map_info *Map,
+                                  int area, struct bound_box *box)
 {
     static int first = 1;
     int n_intersects, inter;
@@ -922,8 +920,8 @@ int Vect_point_in_area_outer_ring(double X, double Y,
    \return 1 - inside
    \return 2 - on the boundary
  */
-int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
-                         int isle, struct bound_box *box)
+int Vect_point_in_island(double X, double Y, struct Map_info *Map, int isle,
+                         struct bound_box *box)
 {
     static int first = 1;
     int n_intersects, inter;

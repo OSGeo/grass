@@ -3,6 +3,7 @@ Created on Fri Aug 17 16:05:25 2012
 
 @author: pietro
 """
+
 import ctypes
 
 #
@@ -42,7 +43,7 @@ proj: {proj}
 """
 
 
-class Info(object):
+class Info:
     def __init__(self, name, mapset=""):
         """Read the information for a raster map. ::
 
@@ -255,7 +256,7 @@ class Info(object):
         return dict2html(dict(self.items()), keys=self.keys(), border="1", kdec="b")
 
 
-class RasterAbstractBase(object):
+class RasterAbstractBase:
     """Raster_abstract_base: The base class from which all sub-classes
     inherit. It does not implement any row or map access methods:
 

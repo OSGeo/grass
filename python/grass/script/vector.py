@@ -16,8 +16,8 @@ for details.
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
+
 import os
-import sys
 
 from .utils import parse_key_val
 from .core import (
@@ -446,8 +446,7 @@ def vector_what(
     if encoding:
         kwargs["encoding"] = encoding
 
-    if sys.version_info[0:2] > (2, 6):
-        kwargs["object_pairs_hook"] = orderedDict
+    kwargs["object_pairs_hook"] = orderedDict
 
     try:
         result = json.loads(ret, **kwargs)

@@ -45,7 +45,7 @@ int I_get_group(char *group)
     G_suppress_warnings(0);
     if (fd == NULL)
         return 0;
-    stat = (fscanf(fd, "%s", group) == 1);
+    stat = (fscanf(fd, "%255s", group) == 1);
     fclose(fd);
     return stat;
 }
@@ -77,7 +77,7 @@ int I_get_subgroup(const char *group, char *subgroup)
     G_suppress_warnings(0);
     if (fd == NULL)
         return 0;
-    stat = (fscanf(fd, "%s", subgroup) == 1);
+    stat = (fscanf(fd, "%255s", subgroup) == 1);
     fclose(fd);
     return stat;
 }
@@ -174,7 +174,6 @@ int I_get_subgroup_ref2(const char *group, const char *subgroup,
 static int get_ref(const char *group, const char *subgroup, const char *gmapset,
                    struct Ref *ref)
 {
-    int n;
     char buf[1024];
     char name[INAME_LEN], mapset[INAME_LEN];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
@@ -200,8 +199,8 @@ static int get_ref(const char *group, const char *subgroup, const char *gmapset,
         return 0;
 
     while (G_getl2(buf, sizeof buf, fd)) {
-        n = sscanf(buf, "%255s %255s %15s", name, mapset,
-                   color); /* better use INAME_LEN */
+        int n = sscanf(buf, "%255s %255s %15s", name, mapset,
+                       color); /* better use INAME_LEN */
         if (n == 2 || n == 3) {
             I_add_file_to_group_ref(name, mapset, ref);
             if (n == 3)
@@ -262,7 +261,7 @@ int I_init_ref_color_nums(struct Ref *ref)
     ref->blu.index = NULL;
 
     if (ref->nfiles <= 0 || ref->red.n >= 0 || ref->blu.n >= 0 ||
-        ref->blu.n >= 0)
+        ref->grn.n >= 0)
         return 1;
     switch (ref->nfiles) {
     case 1:

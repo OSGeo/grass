@@ -15,10 +15,11 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import copy
 
 
-class TemporalTopologyDatasetConnector(object):
+class TemporalTopologyDatasetConnector:
     """This class implements a temporal topology access structure to connect
     temporal related datasets
 

@@ -498,7 +498,7 @@ class PsMapFrame(wx.Frame):
                     im_array = np.array(im)
                     im = PILImage.fromarray(np.rot90(im_array, 3))
                 im.save(self.imgName, format="PNG")
-            except (IOError, OSError):
+            except OSError:
                 del busy
                 program = self._getGhostscriptProgramName()
                 dlg = HyperlinkDialog(
@@ -2292,10 +2292,10 @@ class PsMapBufferedWindow(wx.Window):
                         rot = float(self.instruction[id]["rotate"])
                     else:
                         rot = 0
-                    self.instruction[id][
-                        "rect"
-                    ] = bounds = self.parent.getModifiedTextBounds(
-                        coords[0], coords[1], extent, rot
+                    self.instruction[id]["rect"] = bounds = (
+                        self.parent.getModifiedTextBounds(
+                            coords[0], coords[1], extent, rot
+                        )
                     )
                     self.DrawRotText(
                         pdc=self.pdcObj,

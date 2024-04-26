@@ -40,10 +40,10 @@ int rectify(struct Ortho_Image_Group *group, char *name, char *mapset,
 
     Rast_close(infd); /* (pmx) 17 april 2000 */
 
-    G_message(_("Rectify <%s@%s> (location <%s>)"), name, mapset, G_location());
+    G_message(_("Rectify <%s@%s> (project <%s>)"), name, mapset, G_location());
     select_target_env();
     G_set_window(&target_window);
-    G_message(_("into  <%s@%s> (location <%s>) ..."), result, G_mapset(),
+    G_message(_("into  <%s@%s> (project <%s>) ..."), result, G_mapset(),
               G_location());
 
     nrows = target_window.rows;

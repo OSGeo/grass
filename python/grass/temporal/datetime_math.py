@@ -8,6 +8,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 from datetime import datetime, timedelta
 from .core import get_tgis_message_interface
 import copy
@@ -212,7 +213,7 @@ def increment_datetime_by_string(mydate, increment, mult=1):
     :param mult: A multiplier, default is 1
     :return: The new datetime object or none in case of an error
     """
-    return modify_datetime_by_string(mydate, increment, mult, sign=int(1))
+    return modify_datetime_by_string(mydate, increment, mult, sign=1)
 
 
 ###############################################################################

@@ -24,6 +24,7 @@ for details.
 
 :author: Soeren Gebbert
 """
+
 from datetime import datetime
 from .core import (
     get_tgis_message_interface,
@@ -35,7 +36,7 @@ from .core import (
 ###############################################################################
 
 
-class DictSQLSerializer(object):
+class DictSQLSerializer:
     def __init__(self):
         self.D = {}
         self.dbmi_paramstyle = get_tgis_dbmi_paramstyle()

@@ -1,7 +1,7 @@
 # How the GRASS GIS Webserver and related infrastructure works
 
 Author: Markus Neteler
-Last update: Sep 2023
+Last update: Dec 2023
 
 ## GRASS GIS Source code repository
 
@@ -224,7 +224,7 @@ Maintainer: Martin Landa
 
 ## GRASS CI: GitHub Actions
 
-Started Apr. 2020
+Started in Apr. 2020
 
 Maintainer: Vaclav Petras
 
@@ -247,9 +247,50 @@ Maintainer: Vaclav Petras
 
 Helper files placed in .github/workflows/
 
+## GRASS docker images
+
+Maintainer: Carmen Tawalika, Vaclav Petras + OSGeo-SAC
+
+Docker images are created with a GitHub action. Subsequently, login is done
+to DockerHub using `docker/login-action` with username and password through
+CI secrets and the images pushed to Docker hub at:
+
+- <https://hub.docker.com/r/osgeo/grass-gis/>
+
+User settings:
+
+- The GRASS GIS CI user at Docker hub is "grassgis" (joined June 3, 2023),
+  see also <https://hub.docker.com/u/grassgis>
+- Docker Hub access token are managed via <grass-ci-admin@osgeo.org>.
+- The OSGeo Org membership is managed at <https://hub.docker.com/orgs>
+  through OSGeo-SAC
+
+Helper files placed in .github/workflows/
+
+## GRASS Zenodo.org repository: citable source code with DOI
+
+Zenodo page with DOI (for all versions, shows latest release on top):
+[10.5281/zenodo.5176030](https://doi.org/10.5281/zenodo.5176030)
+
+**GitHub - Zenodo Integration**: The settings are accessible with any
+GitHub account which has write access to the GRASS GIS GitHub repo and
+they are managed here:
+
+<https://zenodo.org/account/settings/github/repository/OSGeo/grass>
+
+In the settings, the GRASS GIS GitHub repository needs to be enabled.
+
+Upcoming releases should automatically show up and get a DOI
+assigned.
+
+Explanations: <https://grasswiki.osgeo.org/wiki/GitHub-Zenodo_linkage>
+
 ## GRASS Coverity Scan
 
 Maintainer: Markus Neteler
+
+Coverity Scan is a service to find security issues. At time the service
+is used only occasionally.
 
 - <https://scan.coverity.com/projects/grass?tab=overview>
 

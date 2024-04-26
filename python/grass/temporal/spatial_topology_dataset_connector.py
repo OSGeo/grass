@@ -13,10 +13,11 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import copy
 
 
-class SpatialTopologyDatasetConnector(object):
+class SpatialTopologyDatasetConnector:
     """This class implements a spatial topology access structure to connect
     spatial related datasets
 

@@ -36,7 +36,7 @@ class GranularityMode:
     ORIGINAL = 2
 
 
-class TemporalManager(object):
+class TemporalManager:
     """Class for temporal data processing."""
 
     def __init__(self):
@@ -221,9 +221,11 @@ class TemporalManager(object):
             timestamps = [
                 (
                     datetime.datetime.strftime(st, formatString),
-                    datetime.datetime.strftime(end, formatString)
-                    if end is not None
-                    else None,
+                    (
+                        datetime.datetime.strftime(end, formatString)
+                        if end is not None
+                        else None
+                    ),
                     unit,
                 )
                 for (st, end, unit) in timestamps
