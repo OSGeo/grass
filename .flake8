@@ -20,6 +20,28 @@ per-file-ignores =
     # F841 local variable assigned to but never used
     # E741 ambiguous variable name 'l'
     __init__.py: F401, F403
+    # HTML
+    man/build_html.py: E501
+    # wxgui
+    doc/python/m.distance.py: E501
+    gui/scripts/d.wms.py: E501
+    gui/wxpython/image2target/g.gui.image2target.py: E501
+    gui/wxpython/photo2image/g.gui.photo2image.py: E501
+    gui/wxpython/animation/g.gui.animation.py: E501
+    gui/wxpython/tplot/g.gui.tplot.py: E501
+    gui/wxpython/iclass/g.gui.iclass.py: E501
+    gui/wxpython/mapdisp/test_mapdisp.py: E501
+    gui/wxpython/mapswipe/g.gui.mapswipe.py: E501
+    gui/wxpython/timeline/g.gui.timeline.py: E501
+    scripts/r.semantic.label/r.semantic.label.py: E501
+    scripts/g.extension/g.extension.py: E501
+    scripts/r.unpack/r.unpack.py: E501
+    scripts/v.unpack/v.unpack.py: E501
+    scripts/v.import/v.import.py: E501
+    scripts/db.univar/db.univar.py: E501
+    scripts/i.pansharpen/i.pansharpen.py: E501
+    scripts/v.what.strds/v.what.strds.py: E501
+    # ---------------------------------------------------------------------
     lib/init/grass.py: E501, E722, F821, F841, W605
     utils/mkrest.py: E501, W605
     utils/gitlog2changelog.py: E722, E712, W605
