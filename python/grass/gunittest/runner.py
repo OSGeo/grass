@@ -12,7 +12,6 @@ File content taken from Python's  ``unittest.runner``, it will be used as
 a template. It is not expected that something will left.
 """
 
-
 import sys
 import time
 

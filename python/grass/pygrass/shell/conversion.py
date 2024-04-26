@@ -4,7 +4,6 @@ Created on Sun Jun 23 13:40:19 2013
 @author: pietro
 """
 
-
 dcont = """    <tr>
       <td>{key}</td>
       <td>{value}</td>
