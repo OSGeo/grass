@@ -537,7 +537,8 @@ def assign_valid_time_to_map(
             msgr.debug(
                 1,
                 _(
-                    "Set absolute valid time for map <{mid}> to {start_time} - {end_time}"
+                    "Set absolute valid time for map <{mid}> to "
+                    "{start_time} - {end_time}"
                 ).format(
                     mid=map_object.get_map_id(),
                     start_time=str(start_time),
@@ -576,7 +577,8 @@ def assign_valid_time_to_map(
             msgr.debug(
                 1,
                 _(
-                    "Set relative valid time for map <{mid}> to {start} - {end} with unit {unit}"
+                    "Set relative valid time for map <{mid}> to "
+                    "{start} - {end} with unit {unit}"
                 ).format(
                     mid=map_object.get_map_id(),
                     start=start_time,
