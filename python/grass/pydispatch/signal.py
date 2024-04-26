@@ -4,7 +4,6 @@ Created on Mon Mar 11 18:39:13 2013
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
-
 from grass.pydispatch import dispatcher
 
 

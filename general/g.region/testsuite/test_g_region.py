@@ -2,6 +2,7 @@
 
 @author Anna Petrasova
 """
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import call_module
 import grass.script as gs

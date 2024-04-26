@@ -42,6 +42,8 @@
 
 import atexit
 import os
+import re
+
 from grass.exceptions import CalledModuleError
 import grass.script as grass
 
@@ -98,17 +100,26 @@ def main():
     column_existing = grass.vector_columns(map, int(layer)).keys()
 
     add_str = "BEGIN TRANSACTION\n"
+    pattern = re.compile(r"\s+")
     for col in columns:
         if not col:
             grass.fatal(_("There is an empty column. Did you leave a trailing comma?"))
-        col_name = col.split(" ")[0].strip()
+        whitespace = re.search(pattern, col)
+        if not whitespace:
+            grass.fatal(
+                _(
+                    "Incorrect new column(s) format, use"
+                    " <'name type [,name type, ...]'> format, please."
+                )
+            )
+        col_name, col_type = col.split(whitespace.group(0), 1)
         if col_name in column_existing:
             grass.error(
                 _("Column <{}> is already in the table. Skipping.").format(col_name)
             )
             continue
         grass.verbose(_("Adding column <{}> to the table").format(col_name))
-        add_str += f"ALTER TABLE {table} ADD COLUMN {col};\n"
+        add_str += f'ALTER TABLE {table} ADD COLUMN "{col_name}" {col_type};\n'
     add_str += "END TRANSACTION"
     sql_file = grass.tempfile()
     rm_files.append(sql_file)

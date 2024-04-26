@@ -525,9 +525,8 @@ class TemporalAlgebraLexer:
         # and in relative units in case of relative time.
         # The end_time() will be represented by null() in case of a time instance.
         "start_doy": "START_DOY",  # Day of year (doy) from the start time [1 - 366]
-        # Day of week (dow) from the start time [1 - 7], the start of the week is
-        # Monday == 1
-        "start_dow": "START_DOW",
+        "start_dow": "START_DOW",  # Day of week (dow) from the start time [1 - 7],
+        # the start of the week is Monday == 1
         "start_year": "START_YEAR",  # The year of the start time [0 - 9999]
         "start_month": "START_MONTH",  # The month of the start time [1 - 12]
         "start_week": "START_WEEK",  # Week of year of the start time [1 - 54]
@@ -536,9 +535,8 @@ class TemporalAlgebraLexer:
         "start_minute": "START_MINUTE",  # The minute of the start time [0 - 59]
         "start_second": "START_SECOND",  # The second of the start time [0 - 59]
         "end_doy": "END_DOY",  # Day of year (doy) from the end time [1 - 366]
-        # Day of week (dow) from the end time [1 - 7], the start of the week is
-        # Monday == 1
-        "end_dow": "END_DOW",
+        "end_dow": "END_DOW",  # Day of week (dow) from the end time [1 - 7], the
+        # start of the week is Monday == 1
         "end_year": "END_YEAR",  # The year of the end time [0 - 9999]
         "end_month": "END_MONTH",  # The month of the end time [1 - 12]
         "end_week": "END_WEEK",  # Week of year of the end time [1 - 54]
@@ -795,9 +793,10 @@ class TemporalAlgebraParser:
         self.dry_run = (
             dry_run  # Compute the processes and output but Do not start the processes
         )
-        # This dictionary stores all processes, as well as the maps to register and
+        self.process_chain_dict = (
+            {}
+        )  # This dictionary stores all processes, as well as the maps to register and
         # remove
-        self.process_chain_dict = {}
         self.process_chain_dict["processes"] = (
             []
         )  # The mapcalc and v.patch module calls
@@ -925,8 +924,8 @@ class TemporalAlgebraParser:
             if stds.check_temporal_topology() is False:
                 self.msgr.error(
                     _(
-                        "All input space time datasets must have a valid temporal \
-                            topology."
+                        "All input space time datasets must have a valid temporal "
+                        "topology."
                     )
                 )
                 return False
@@ -1163,8 +1162,8 @@ class TemporalAlgebraParser:
                                 break
                             # Append map to result map list.
                             elif returncode == 1:
-                                # print(map_new.get_id() + " " + str(
-                                # map_new.get_temporal_extent_as_tuple()))
+                                # print(map_new.get_id() + " " +
+                                #       str(map_new.get_temporal_extent_as_tuple()))
                                 # print(map_new.condition_value)
                                 # print(map_new.cmd_list)
                                 # resultlist.append(map_new)
@@ -1172,8 +1171,7 @@ class TemporalAlgebraParser:
 
                             # Create r.mapcalc expression string for the operation.
                             # cmdstring = self.build_command_string(
-                            #   s_expr_a = map_new, s_expr_b = map_j,
-                            #    operator = function)
+                            # s_expr_a = map_new, s_expr_b = map_j, operator = function)
                             # Conditional append of module command.
                             # map_new.cmd_list = cmdstring
                     if returncode == 0:
@@ -1440,10 +1438,9 @@ class TemporalAlgebraParser:
         :return: List of maps from maplistA that fulfil the topological relationships
                  to maplistB specified in topolist.
 
-        # Example with two lists of maps
-
         .. code-block:: python
 
+            >>> # Example with two lists of maps
             >>> import grass.temporal as tgis
             >>> tgis.init(True)
             >>> l = tgis.TemporalAlgebraParser()
@@ -1987,6 +1984,8 @@ class TemporalAlgebraParser:
                         if newextent is not None:
                             start = newextent.get_start_time()
                             end = newextent.get_end_time()
+                            # print(map_i.get_id() + " - start: " + str(start)
+                            #     + " end: " + str(end))
                             # Track changes in temporal extents of maps.
                             if map_start != start or map_end != end:
                                 unchanged = False
@@ -2217,9 +2216,9 @@ class TemporalAlgebraParser:
         """This function evaluates temporal variable expressions of a conditional
         expression in two steps.
         At first it combines stepwise the single conditions by their relations with
-        LALR. In this process sub condition map lists will be created which will include
-        information of the underlying single conditions. Important: The temporal
-        relations between conditions are evaluated by implicit aggregation.
+        LALR. In this process sub condition map lists will be created which will
+        include information of the underlying single conditions. Important: The
+        temporal relations between conditions are evaluated by implicit aggregation.
         In the second step the aggregated condition map list will be compared with the
         map list of conclusion statements by the given temporal relation.
 
@@ -3434,8 +3433,7 @@ class TemporalAlgebraParser:
         if t:
             raise SyntaxError(
                 "syntax error on line %d, position %i token %s near '%s' expression "
-                "'%s'"
-                % (t.lineno, t.lexpos, t.type, t.value, self.expression)
+                "'%s'" % (t.lineno, t.lexpos, t.type, t.value, self.expression)
             )
         else:
             raise SyntaxError("Unexpected syntax error")
