@@ -43,9 +43,9 @@ def do_doctest_gettext_workaround():
     sys.displayhook = new_displayhook
     sys.__displayhook__ = new_displayhook
 
-    import __builtin__
+    import builtins
 
-    __builtin__._ = new_translator
+    builtins.__dict__["_"] = new_translator
 
 
 def parse_modules(fd):

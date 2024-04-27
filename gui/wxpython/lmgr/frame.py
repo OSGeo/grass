@@ -203,7 +203,7 @@ class GMFrame(wx.Frame):
                 .TopDockable(True)
                 .CloseButton(False)
                 .Layer(2)
-                .BestSize((self.toolbars[toolbar].GetBestSize())),
+                .BestSize(self.toolbars[toolbar].GetBestSize()),
             )
 
         self._auimgr.GetPane("toolbarNviz").Hide()
@@ -586,7 +586,7 @@ class GMFrame(wx.Frame):
                 return pgnum_dict
             return None
 
-        mapdisplay.canCloseDisplayCallback = CanCloseDisplay
+        mapdisplay.canCloseCallback = CanCloseDisplay
 
         # bind various events
         mapdisplay.BindToFrame(
@@ -601,7 +601,7 @@ class GMFrame(wx.Frame):
         )
         mapdisplay.starting3dMode.connect(self.AddNvizTools)
         mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
-        mapdisplay.closingDisplay.connect(self._closePageNoEvent)
+        mapdisplay.closingPage.connect(self._closePageNoEvent)
 
         # set default properties
         mapdisplay.SetProperties(
@@ -775,9 +775,9 @@ class GMFrame(wx.Frame):
 
     def OnGModeler(self, event=None, cmd=None):
         """Launch Graphical Modeler. See OnIClass documentation"""
-        from gmodeler.frame import ModelFrame
+        from gmodeler.frame import ModelerFrame
 
-        win = ModelFrame(parent=self, giface=self._giface)
+        win = ModelerFrame(parent=self, giface=self._giface)
         win.CentreOnScreen()
         win.Show()
 
@@ -947,9 +947,9 @@ class GMFrame(wx.Frame):
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
-        if re.compile("^d\..*").search(command[0]):
+        if re.compile(r"^d\..*").search(command[0]):
             self.RunDisplayCmd(command)
-        elif re.compile("r[3]?\.mapcalc").search(command[0]):
+        elif re.compile(r"r[3]?\.mapcalc").search(command[0]):
             self.OnMapCalculator(event=None, cmd=command)
         elif command[0] == "i.group":
             self.OnEditImageryGroups(event=None, cmd=command)

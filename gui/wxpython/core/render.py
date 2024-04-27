@@ -816,7 +816,7 @@ class RenderMapMgr(wx.EvtHandler):
         self.renderingFailed.emit(cmd=cmd, error=error)
 
 
-class Map(object):
+class Map:
     def __init__(self, gisrc=None):
         """Map composition (stack of map layers and overlays)
 

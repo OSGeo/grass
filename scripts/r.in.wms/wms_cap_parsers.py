@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
+
 import pathlib
 
 from xml.etree.ElementTree import ParseError
@@ -136,7 +137,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
         if first:
             self._initLayer(parent_layer, None)
 
-        layers = parent_layer.findall((self.xml_ns.Ns("Layer")))
+        layers = parent_layer.findall(self.xml_ns.Ns("Layer"))
 
         for l in layers:
             self._initLayer(l, parent_layer)

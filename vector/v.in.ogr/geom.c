@@ -270,6 +270,7 @@ int geom(OGRGeometryH hGeomAny, struct Map_info *Map, int field, int cat,
     OGRGeometryH hRing;
     double x, y;
     double size;
+    int lastidx;
 
     G_debug(3, "geom() cat = %d", cat);
 
@@ -355,6 +356,23 @@ int geom(OGRGeometryH hGeomAny, struct Map_info *Map, int field, int cat,
         }
         Vect_line_prune(Points);
 
+        lastidx = Points->n_points - 1;
+        if (Points->x[0] != Points->x[lastidx] ||
+            Points->y[0] != Points->y[lastidx] ||
+            Points->z[0] != Points->z[lastidx]) {
+            if (mk_centr) {
+                /* do not clean polygons */
+                G_fatal_error(
+                    _("Found unclosed outer polygon ring, can be "
+                      "closed when cleaning polygons is not disabled"));
+            }
+            else {
+                G_warning(_("Closing unclosed outer polygon ring"));
+                Vect_append_point(Points, Points->x[0], Points->y[0],
+                                  Points->z[0]);
+            }
+        }
+
         /* Degenerate is not ignored because it may be useful to see where it
          * is, but may be eliminated by min_area option */
         if (Points->n_points < 4)
@@ -400,6 +418,28 @@ int geom(OGRGeometryH hGeomAny, struct Map_info *Map, int field, int cat,
                         OGR_G_GetY(hRing, j), OGR_G_GetZ(hRing, j));
                 }
                 Vect_line_prune(IPoints[valid_isles]);
+
+                lastidx = IPoints[valid_isles]->n_points - 1;
+                if (IPoints[valid_isles]->x[0] !=
+                        IPoints[valid_isles]->x[lastidx] ||
+                    IPoints[valid_isles]->y[0] !=
+                        IPoints[valid_isles]->y[lastidx] ||
+                    IPoints[valid_isles]->z[0] !=
+                        IPoints[valid_isles]->z[lastidx]) {
+                    if (mk_centr) {
+                        /* do not clean polygons */
+                        G_fatal_error(
+                            _("Found unclosed inner polygon ring, can be "
+                              "closed when cleaning polygons is not disabled"));
+                    }
+                    else {
+                        G_warning(_("Closing unclosed inner polygon ring"));
+                        Vect_append_point(IPoints[valid_isles],
+                                          IPoints[valid_isles]->x[0],
+                                          IPoints[valid_isles]->y[0],
+                                          IPoints[valid_isles]->z[0]);
+                    }
+                }
 
                 if (IPoints[valid_isles]->n_points < 4)
                     G_warning(_("Degenerate island (%d vertices)"),

@@ -13,6 +13,7 @@ for details.
 
 @author Soeren Gebbert
 """
+
 import sys
 from multiprocessing import Process, Lock, Pipe
 
@@ -77,10 +78,6 @@ def message_server(lock, conn):
             sys.exit()
 
         message = data[1]
-        # libgis limitation
-        if isinstance(message, type(" ")):
-            if len(message) >= 2000:
-                message = message[:1999]
 
         if message_type == "PERCENT":
             n = int(data[1])

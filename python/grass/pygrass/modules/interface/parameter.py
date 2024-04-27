@@ -3,6 +3,7 @@ Created on Tue Apr  2 18:31:47 2013
 
 @author: pietro
 """
+
 import re
 
 from grass.pygrass.modules.interface.docstring import docstring_property
@@ -14,7 +15,7 @@ def _check_value(param, value):
     return the checked value and the original.
     """
     req = "The Parameter <%s>, require: %s, get: %s instead: %r\n%s"
-    string = (type(b""), type(""))
+    string = (bytes, str)
 
     def raiseexcpet(exc, param, ptype, value):
         """Function to modifa the error message"""
@@ -176,7 +177,8 @@ class Parameter:
             try:
                 # Check for integer ranges: "3-30" or float ranges: "0.0-1.0"
                 isrange = re.match(
-                    "(?P<min>-*\d+.*\d*)*-(?P<max>\d+.*\d*)*", diz["values"][0]
+                    r"(?P<min>-?(?:\d*\.)?\d+)?-(?P<max>-?(?:\d*\.)?\d+)?",
+                    diz["values"][0],
                 )
                 if isrange:
                     mn, mx = isrange.groups()
@@ -248,9 +250,11 @@ class Parameter:
         if isinstance(self.rawvalue, (list, tuple)):
             value = sep.join(
                 [
-                    sep.join([str(v) for v in val])
-                    if isinstance(val, tuple)
-                    else str(val)
+                    (
+                        sep.join([str(v) for v in val])
+                        if isinstance(val, tuple)
+                        else str(val)
+                    )
                     for val in self.rawvalue
                 ]
             )

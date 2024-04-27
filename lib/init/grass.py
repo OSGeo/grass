@@ -18,7 +18,7 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2023 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2024 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -280,7 +280,7 @@ def f(fmt, *args):
     matches = []
     # https://docs.python.org/3/library/stdtypes.html#old-string-formatting
     for m in re.finditer(
-        "%([#0 +-]*)([0-9]*)(\.[0-9]*)?([hlL]?[diouxXeEfFgGcrsa%])", fmt
+        r"%([#0 +-]*)([0-9]*)(\.[0-9]*)?([hlL]?[diouxXeEfFgGcrsa%])", fmt
     ):
         matches.append(m)
 
@@ -309,10 +309,10 @@ Geographic Resources Analysis Support System (GRASS GIS).
   $CMD_NAME [-h | --help] [-v | --version]
           [-c | -c geofile | -c EPSG:code[:datum_trans] | -c XY]
           [-e] [-f] [--text | --gtext | --gui] [--config param]
-          [[[GISDBASE/]LOCATION/]MAPSET]
-  $CMD_NAME [FLAG]... GISDBASE/LOCATION/MAPSET --exec EXECUTABLE [EPARAM]...
-  $CMD_NAME --tmp-location [geofile | EPSG | XY] --exec EXECUTABLE [EPARAM]...
-  $CMD_NAME --tmp-mapset GISDBASE/LOCATION/ --exec EXECUTABLE [EPARAM]...
+          [[[GISDBASE/]PROJECT/]MAPSET]
+  $CMD_NAME [FLAG]... GISDBASE/PROJECT/MAPSET --exec EXECUTABLE [EPARAM]...
+  $CMD_NAME --tmp-project [geofile | EPSG | XY] --exec EXECUTABLE [EPARAM]...
+  $CMD_NAME --tmp-mapset GISDBASE/PROJECT/ --exec EXECUTABLE [EPARAM]...
 
 {flags}:
   -h or --help                   {help_flag}
@@ -330,6 +330,8 @@ Geographic Resources Analysis Support System (GRASS GIS).
                                    {config_detail}
   --exec EXECUTABLE              {exec_}
                                    {exec_detail}
+  --tmp-project                  {tmp_project}
+                                   {tmp_project_detail}
   --tmp-location                 {tmp_location}
                                    {tmp_location_detail}
   --tmp-mapset                   {tmp_mapset}
@@ -338,11 +340,11 @@ Geographic Resources Analysis Support System (GRASS GIS).
 {params}:
   GISDBASE                       {gisdbase}
                                    {gisdbase_detail}
-  LOCATION                       {location}
-                                   {location_detail}
+  PROJECT                        {project}
+                                   {project_detail}
   MAPSET                         {mapset}
 
-  GISDBASE/LOCATION/MAPSET       {full_mapset}
+  GISDBASE/PROJECT/MAPSET        {full_mapset}
 
   EXECUTABLE                     {executable}
   EPARAM                         {executable_params}
@@ -364,10 +366,8 @@ def help_message(default_gui):
             flags=_("Flags"),
             help_flag=_("print this help message"),
             version_flag=_("show version information and exit"),
-            create=_("create given database, location or mapset if it doesn't exist"),
-            exit_after=_(
-                "exit after creation of location or mapset. Only with -c flag"
-            ),
+            create=_("create given database, project or mapset if it doesn't exist"),
+            exit_after=_("exit after creation of project or mapset. Only with -c flag"),
             force_removal=_(
                 "force removal of .gislock if exists (use with care!)."
                 " Only with --text flag"
@@ -384,14 +384,14 @@ def help_message(default_gui):
             ),
             params=_("Parameters"),
             gisdbase=_("initial GRASS database directory"),
-            gisdbase_detail=_("directory containing Locations"),
-            location=_("initial GRASS Location"),
-            location_detail=_(
-                "directory containing Mapsets with one common"
-                " coordinate system (projection)"
+            gisdbase_detail=_("directory containing GRASS projects"),
+            project=_("initial GRASS project (location)"),
+            project_detail=_(
+                "directory containing mapsets with one common"
+                " coordinate reference system"
             ),
-            mapset=_("initial GRASS Mapset"),
-            full_mapset=_("fully qualified initial Mapset directory"),
+            mapset=_("initial GRASS mapset"),
+            full_mapset=_("fully qualified initial mapset directory"),
             env_vars=_("Environment variables relevant for startup"),
             gui_var=_("select GUI (text, gui, gtext)"),
             html_var=_("set html web browser for help pages"),
@@ -407,14 +407,14 @@ def help_message(default_gui):
             executable=_("GRASS module, script or any other executable"),
             executable_params=_("parameters of the executable"),
             standard_flags=_("standard flags"),
-            tmp_location=_("create temporary location (use with the --exec flag)"),
-            tmp_location_detail=_(
+            tmp_location=_("deprecated, use --tmp-project instead"),
+            tmp_location_detail=_("location was renamed to project"),
+            tmp_project=_("create temporary project (use with the --exec flag)"),
+            tmp_project_detail=_(
                 "created in a temporary directory and deleted at exit"
             ),
             tmp_mapset=_("create temporary mapset (use with the --exec flag)"),
-            tmp_mapset_detail=_(
-                "created in the specified location and deleted at exit"
-            ),
+            tmp_mapset_detail=_("created in the specified project and deleted at exit"),
         )
     )
     s = t.substitute(
@@ -985,23 +985,23 @@ def cannot_create_location_reason(gisdbase, location):
     path = os.path.join(gisdbase, location)
     if is_location_valid(gisdbase, location):
         return _(
-            "Unable to create new location because"
-            " the location <{location}>"
+            "Unable to create new project because"
+            " the project <{location}>"
             " already exists."
         ).format(**locals())
     elif os.path.isfile(path):
         return _(
-            "Unable to create new location <{location}> because" " <{path}> is a file."
+            "Unable to create new project <{location}> because" " <{path}> is a file."
         ).format(**locals())
     elif os.path.isdir(path):
         return _(
-            "Unable to create new location <{location}> because"
+            "Unable to create new project <{location}> because"
             " the directory <{path}>"
             " already exists."
         ).format(**locals())
     else:
         return _(
-            "Unable to create new location in"
+            "Unable to create new project in"
             " the directory <{path}>"
             " for an unknown reason."
         ).format(**locals())
@@ -1064,11 +1064,11 @@ def set_mapset(
         # set gisdbase to temporary directory
         gisdbase = tmpdir
         # we are already in a unique directory, so we can use fixed name
-        location_name = "tmploc"
+        location_name = "tmpproject"
         # we need only one mapset
         mapset = "PERMANENT"
         debug(
-            "Using temporary location <{gdb}{sep}{lc}>".format(
+            "Using temporary project <{gdb}{sep}{lc}>".format(
                 gdb=gisdbase, lc=location_name, sep=os.path.sep
             )
         )
@@ -1129,11 +1129,11 @@ def set_mapset(
                         fatal(cannot_create_location_reason(gisdbase, location_name))
                     # create new location based on the provided EPSG/...
                     if not geofile:
-                        fatal(_("Provide CRS to create a location"))
+                        fatal(_("Provide CRS to create a project"))
                     if not tmp_location:
                         # Report report only when new location is not temporary.
                         message(
-                            _("Creating new GRASS GIS location <{}>...").format(
+                            _("Creating new GRASS GIS project <{}>...").format(
                                 location_name
                             )
                         )
@@ -1167,7 +1167,7 @@ def set_mapset(
                                 _(
                                     "No CRS is needed for creating mapset <{mapset}>, "
                                     "but <{geofile}> was provided as CRS."
-                                    " Did you mean to create a new location?"
+                                    " Did you mean to create a new project?"
                                 ).format(mapset=mapset, geofile=geofile)
                             )
                         if not tmp_mapset:
@@ -1203,7 +1203,7 @@ def set_mapset(
     else:
         fatal(
             _(
-                "GRASS GIS database directory, location and mapset"
+                "GRASS GIS database directory, project and mapset"
                 " not set properly."
                 " Use GUI or command line to set them."
             )
@@ -1787,8 +1787,18 @@ def start_gui(grass_gui):
     debug("GRASS GUI should be <%s>" % grass_gui)
     # Check for gui interface
     if grass_gui == "wxpython":
-        # TODO: report failures
-        return Popen([os.getenv("GRASS_PYTHON"), wxpath("wxgui.py")])
+        # Lazy-import to avoid dependency during standard import time.
+        # pylint: disable=import-outside-toplevel
+        import grass.script as gs
+
+        if is_debug() or "WX_DEBUG" in gs.gisenv():
+            stderr_redirect = None
+        else:
+            stderr_redirect = subprocess.DEVNULL
+        # TODO: report start failures?
+        return Popen(
+            [os.getenv("GRASS_PYTHON"), wxpath("wxgui.py")], stderr=stderr_redirect
+        )
     return None
 
 
@@ -1898,7 +1908,7 @@ def csh_startup(location, grass_env_file):
 
     f.write("alias _location g.gisenv get=LOCATION_NAME\n")
     f.write("alias _mapset g.gisenv get=MAPSET\n")
-    f.write("alias precmd 'echo \"Mapset <`_mapset`> in Location <`_location`>\"'\n")
+    f.write("alias precmd 'echo \"Mapset <`_mapset`> in project <`_location`>\"'\n")
     f.write('set prompt="GRASS > "\n')
 
     # csh shell rc file left for backward compatibility
@@ -2272,7 +2282,7 @@ def add_mapset_arguments(parser, mapset_as_option):
             "--tmp-mapset",
             metavar="PATH",
             type=str,
-            help=_("use temporary mapset in location %(metavar)s"),
+            help=_("use temporary mapset in project %(metavar)s"),
         )
     else:
         parser.add_argument(
@@ -2280,18 +2290,24 @@ def add_mapset_arguments(parser, mapset_as_option):
             metavar="PATH",
             type=str,
             nargs="?",
-            help=_("path to mapset (or location if creating one)"),
+            help=_("path to mapset (or project if creating one)"),
         )
         parser.add_argument(
             "--tmp-mapset", action="store_true", help=_("use temporary mapset")
         )
     parser.add_argument(
-        "--tmp-location",
+        "--tmp-project",
         metavar="CRS",
         type=str,
         help=_(
-            "use temporary location with %(metavar)s (EPSG, georeferenced file, ...)"
+            "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
         ),
+    )
+    parser.add_argument(
+        "--tmp-location",
+        metavar="CRS",
+        type=str,
+        help=_("deprecated, use --tmp-project instead"),
     )
     parser.add_argument(
         "-f",
@@ -2308,6 +2324,13 @@ def update_params_with_mapset_arguments(params, args):
     if args.tmp_location:
         params.tmp_location = True
         params.geofile = args.tmp_location
+        sys.stdout.write(
+            _("Option --tmp-location is deprecated, use --tmp-project instead\n")
+        )
+        sys.stdout.flush()
+    if args.tmp_project:
+        params.tmp_location = True
+        params.geofile = args.tmp_project
     if args.tmp_mapset:
         params.tmp_mapset = True
     if args.mapset:
@@ -2404,10 +2427,10 @@ def validate_cmdline(params):
     if params.exit_grass and not params.create_new:
         fatal(_("Flag -e requires also flag -c"))
     if params.create_new and not params.mapset:
-        fatal(_("Flag -c requires name of location or mapset"))
+        fatal(_("Flag -c requires name of project or mapset"))
     if params.tmp_location and params.tmp_mapset:
         fatal(
-            _("Either --tmp-location or --tmp-mapset can be used, not both").format(
+            _("Either --tmp-project or --tmp-mapset can be used, not both").format(
                 params.mapset
             )
         )
@@ -2415,14 +2438,14 @@ def validate_cmdline(params):
         fatal(
             _(
                 "Coordinate reference system argument (e.g. EPSG)"
-                " is needed for --tmp-location"
+                " is needed for --tmp-project"
             )
         )
     if params.tmp_location and params.mapset:
         fatal(
             _(
                 "Only one argument (e.g. EPSG) is needed for"
-                " --tmp-location, mapset name <{}> provided"
+                " --tmp-project, mapset name <{}> provided"
             ).format(params.mapset)
         )
     # For now, we allow, but not advertise/document, --tmp-location
@@ -2520,12 +2543,12 @@ def main():
                     " the '--gui' switch\n"
                     "     {cmd_name} --gui\n"
                     " - Launch with path to "
-                    "the location/mapset as an argument\n"
-                    "     {cmd_name} /path/to/location/mapset`\n"
-                    " - Create a location with '-c' and launch in its"
+                    "the project/mapset as an argument\n"
+                    "     {cmd_name} /path/to/project/mapset`\n"
+                    " - Create a project with '-c' and launch in its"
                     " PERMANENT mapset\n"
-                    "     {cmd_name} -c EPSG:number /path/to/location\n"
-                    "     {cmd_name} -c geofile /path/to/location\n"
+                    "     {cmd_name} -c EPSG:number /path/to/project\n"
+                    "     {cmd_name} -c geofile /path/to/project\n"
                     " - Create manually the GISRC file ({gisrcrc})\n"
                     " - Use '--help' for further options\n"
                     "     {cmd_name} --help\n"
@@ -2592,7 +2615,7 @@ def main():
                 elif not default_location:
                     fatal(
                         _(
-                            "Failed to start GRASS GIS, no default location to copy in"
+                            "Failed to start GRASS GIS, no default project to copy in"
                             " the installation or copying failed."
                         )
                     )
