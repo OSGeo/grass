@@ -5,7 +5,7 @@
 #include <grass/colors.h>
 #include <grass/glocale.h>
 
-void rgb2colr(const struct Map_info *Map, int layer, const char *rgb_column,
+void rgb2colr(struct Map_info *Map, int layer, const char *rgb_column,
               struct Colors *colors)
 {
     int i, ret, nskipped;

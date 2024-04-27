@@ -3212,9 +3212,9 @@ class VPropertiesDialog(Dialog):
                 if self.colorColRadio.GetValue():
                     # this color is taken in case of no record in rgb column
                     self.vPropertiesDict["fcolor"] = "none"
-                    self.vPropertiesDict[
-                        "rgbcolumn"
-                    ] = self.colorColChoice.GetStringSelection()
+                    self.vPropertiesDict["rgbcolumn"] = (
+                        self.colorColChoice.GetStringSelection()
+                    )
             else:
                 self.vPropertiesDict["fcolor"] = "none"
 
@@ -3238,9 +3238,9 @@ class VPropertiesDialog(Dialog):
             if self.colorColRadio.GetValue():
                 # this color is taken in case of no record in rgb column
                 self.vPropertiesDict["color"] = "none"
-                self.vPropertiesDict[
-                    "rgbcolumn"
-                ] = self.colorColChoice.GetStringSelection()
+                self.vPropertiesDict["rgbcolumn"] = (
+                    self.colorColChoice.GetStringSelection()
+                )
         #
         # size and style
         #
@@ -3258,9 +3258,9 @@ class VPropertiesDialog(Dialog):
                 self.vPropertiesDict["sizecolumn"] = None
                 self.vPropertiesDict["scale"] = None
             else:
-                self.vPropertiesDict[
-                    "sizecolumn"
-                ] = self.sizeColChoice.GetStringSelection()
+                self.vPropertiesDict["sizecolumn"] = (
+                    self.sizeColChoice.GetStringSelection()
+                )
                 self.vPropertiesDict["scale"] = self.scaleSpin.GetValue()
                 self.vPropertiesDict["size"] = None
 
@@ -3273,9 +3273,9 @@ class VPropertiesDialog(Dialog):
             if self.rotateRadio.GetValue():
                 self.vPropertiesDict["rotate"] = self.rotateSpin.GetValue()
             else:
-                self.vPropertiesDict[
-                    "rotatecolumn"
-                ] = self.rotateColChoice.GetStringSelection()
+                self.vPropertiesDict["rotatecolumn"] = (
+                    self.rotateColChoice.GetStringSelection()
+                )
 
         if self.type == "areas":
             # pattern
@@ -5950,7 +5950,7 @@ class ImageDialog(PsmapDialog):
             try:
                 pImg = PILImage.open(file)
                 img = PilImageToWxImage(pImg)
-            except IOError as e:
+            except OSError as e:
                 GError(message=_("Unable to read file %s") % file)
                 self.ClearPreview()
                 return
@@ -5971,10 +5971,10 @@ class ImageDialog(PsmapDialog):
             return img
         if w > h:
             newW = self.previewSize[0]
-            newH = self.previewSize[0] * h / w
+            newH = self.previewSize[0] * h // w
         else:
             newH = self.previewSize[0]
-            newW = self.previewSize[0] * w / h
+            newW = self.previewSize[0] * w // h
         return img.Scale(newW, newH, wx.IMAGE_QUALITY_HIGH)
 
     def DrawWarningText(self, warning):

@@ -21,7 +21,6 @@ sys.path.append("%s/.." % (os.getcwd()))
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 import grass.script as core
-import grass.pygrass
 import ctypes
 
 
@@ -302,7 +301,7 @@ def run_benchmark(resolution_list, runs, testdict, profile):
                         locals(),
                         filename=filename,
                     )
-                print(("    {0}: {1: 40.6f}s".format(oper, operdict["time"])))
+                print("    {0}: {1: 40.6f}s".format(oper, operdict["time"]))
                 del operdict["func"]
 
         regions.append(result)

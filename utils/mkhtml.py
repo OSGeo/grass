@@ -7,7 +7,7 @@
 #               Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
-# COPYRIGHT:    (C) 2007-2023 by Glynn Clements
+# COPYRIGHT:    (C) 2007-2024 by Glynn Clements
 #                and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -291,25 +291,26 @@ def get_git_commit_from_rest_api_for_addon_repo(
     # Accessed date time if getting commit from GitHub REST API wasn't successful
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
-    grass_addons_url = (
-        "https://api.github.com/repos/osgeo/grass-addons/commits?"
-        "path={path}&page=1&per_page=1&sha=grass{major}".format(
-            path=addon_path,
-            major=major,
-        )
-    )  # sha=git_branch_name
-
-    response = download_git_commit(
-        url=grass_addons_url,
-        response_format="application/json",
-    )
-    if response:
-        commit = json.loads(response.read())
-        if commit:
-            git_log["commit"] = commit[0]["sha"]
-            git_log["date"] = format_git_commit_date_from_rest_api(
-                commit_datetime=commit[0]["commit"]["author"]["date"],
+    if addon_path is not None:
+        grass_addons_url = (
+            "https://api.github.com/repos/osgeo/grass-addons/commits?"
+            "path={path}&page=1&per_page=1&sha=grass{major}".format(
+                path=addon_path,
+                major=major,
             )
+        )  # sha=git_branch_name
+
+        response = download_git_commit(
+            url=grass_addons_url,
+            response_format="application/json",
+        )
+        if response:
+            commit = json.loads(response.read())
+            if commit:
+                git_log["commit"] = commit[0]["sha"]
+                git_log["date"] = format_git_commit_date_from_rest_api(
+                    commit_datetime=commit[0]["commit"]["author"]["date"],
+                )
     return git_log
 
 
@@ -449,7 +450,8 @@ header_pgm_desc = """<h2>NAME</h2>
 """
 
 sourcecode = string.Template(
-    """<h2>SOURCE CODE</h2>
+    """
+<h2>SOURCE CODE</h2>
 <p>
   Available at:
   <a href="${URL_SOURCE}">${PGM} source code</a>
@@ -510,7 +512,7 @@ def read_file(name):
         with open(name) as f:
             s = f.read()
         return s
-    except IOError:
+    except OSError:
         return ""
 
 
@@ -905,36 +907,39 @@ else:
 if sys.platform == "win32":
     url_source = url_source.replace(os.path.sep, "/")
 
+# Process Source code section
+branches = "branches"
+tree = "tree"
+commits = "commits"
+
+if branches in url_source:
+    url_log = url_source.replace(branches, commits)
+    url_source = url_source.replace(branches, tree)
+else:
+    url_log = url_source.replace(tree, commits)
+
+git_commit = get_last_git_commit(
+    src_dir=curdir,
+    addon_path=addon_path if addon_path else None,
+    is_addon=True if addon_path else False,
+)
+if git_commit["commit"] == "unknown":
+    date_tag = "Accessed: {date}".format(date=git_commit["date"])
+else:
+    date_tag = "Latest change: {date} in commit: {commit}".format(
+        date=git_commit["date"], commit=git_commit["commit"]
+    )
+sys.stdout.write(
+    sourcecode.substitute(
+        URL_SOURCE=url_source,
+        PGM=pgm,
+        URL_LOG=url_log,
+        DATE_TAG=date_tag,
+    )
+)
+
+# Process footer
 if index_name:
-    branches = "branches"
-    tree = "tree"
-    commits = "commits"
-
-    if branches in url_source:
-        url_log = url_source.replace(branches, commits)
-        url_source = url_source.replace(branches, tree)
-    else:
-        url_log = url_source.replace(tree, commits)
-
-    git_commit = get_last_git_commit(
-        src_dir=curdir,
-        addon_path=addon_path if addon_path else None,
-        is_addon=True if addon_path else False,
-    )
-    if git_commit["commit"] == "unknown":
-        date_tag = "Accessed: {date}".format(date=git_commit["date"])
-    else:
-        date_tag = "Latest change: {date} in commit: {commit}".format(
-            date=git_commit["date"], commit=git_commit["commit"]
-        )
-    sys.stdout.write(
-        sourcecode.substitute(
-            URL_SOURCE=url_source,
-            PGM=pgm,
-            URL_LOG=url_log,
-            DATE_TAG=date_tag,
-        )
-    )
     sys.stdout.write(
         footer_index.substitute(
             INDEXNAME=index_name,

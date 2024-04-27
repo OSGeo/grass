@@ -2,6 +2,7 @@
 
 @author Soeren Gebbert
 """
+
 from grass.gunittest.case import TestCase
 
 
@@ -146,8 +147,8 @@ class TestGdalImport(TestCase):
         # Output of r.info
         info_string = """north=228500
                        south=215000
-                       east=644640
-                       west=629640
+                       east=645000
+                       west=630000
                        nsres=100
                        ewres=100
                        rows=135
@@ -186,8 +187,8 @@ class TestGdalImport(TestCase):
         # Output of r.info
         info_string = """north=228500
                        south=215000
-                       east=644640
-                       west=629640
+                       east=645000
+                       west=630000
                        nsres=100
                        ewres=100
                        rows=135
@@ -226,8 +227,8 @@ class TestGdalImport(TestCase):
         # Output of r.info
         info_string = """north=228500
                        south=215000
-                       east=644640
-                       west=629640
+                       east=645000
+                       west=630000
                        nsres=100
                        ewres=100
                        rows=135
@@ -266,8 +267,8 @@ class TestGdalImport(TestCase):
         # Output of r.info
         info_string = """north=228500
                        south=215000
-                       east=644640
-                       west=629640
+                       east=645000
+                       west=630000
                        nsres=100
                        ewres=100
                        rows=135

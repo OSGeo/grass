@@ -53,10 +53,11 @@ if ! (${fmt} --version >/dev/null); then
 fi
 
 clang_version_full=$(${fmt} --version)
-clang_version=$(echo "${clang_version_full}" | cut -f3 -d" " | cut -f1 -d".")
-if [ "${clang_version}" -lt "${req_cf_v}" ]; then
+clang_version=$(echo "${clang_version_full}" | \
+    sed -En 's/.*version ([0-9]+)\.[0-9]+\.[0-9]+.*/\1/p')
+if [ "${clang_version}" -ne "${req_cf_v}" ]; then
     echo "Error: ${clang_version_full}"
-    echo "  is used, but version ${req_cf_v} or newer is required."
+    echo "  is used, but version ${req_cf_v} is required."
     echo "  Consider setting the global variable GRASS_CLANG_FORMAT to"
     echo "  the clang-format version needed."
     exit 1
