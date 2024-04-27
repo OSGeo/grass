@@ -1858,6 +1858,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if vselect:
             vselect.Reset()
 
+        self.AdjustMyScrollbars()
+
     def OnCmdChanged(self, event):
         """Change command string"""
         ctrl = event.GetEventObject().GetId()
