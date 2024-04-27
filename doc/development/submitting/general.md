@@ -149,9 +149,10 @@ done manually, you can take an advantage of our [​CI](https://github.com/OSGeo
 
 Often there is more than one active release branch. You can also choose to backport
 only to the closest branch. If you are backporting to other release branches than
-just the closets one, make sure you always backport to all the branches between "main"
-and the furthest branch you are backporting to. For example, let's say we have
-release branches 3.6 and 3.5, if you backport to 3.5, you should backport to 3.6, too.
+just the closets one, make sure you always backport to all the branches between
+"main" and the furthest branch you are backporting to. For example, let's say we
+have release branches 3.6 and 3.5, if you backport to 3.5, you should backport to
+3.6, too.
 
 Backport only complete fixes. When you are not sure if the fix is complete or if
 there is an possibility that some details such as wording will change, wait with
