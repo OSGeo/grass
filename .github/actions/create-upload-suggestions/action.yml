@@ -1,3 +1,4 @@
+---
 name: "Create and upload suggestions"
 description: "Creates a file containing changes applied by a tool"
 author: echoix
@@ -217,7 +218,9 @@ runs:
       run: |
         {
           echo ''
-          echo 'All fixed files are included in the '"${FORMATTED_URL}"' artifact. This artifact can be downloaded and copied to the repository to replace unformatted files with the formatted files.'
+          echo 'All fixed files are included in the '"${FORMATTED_URL}"' artifact. \
+          This artifact can be downloaded and copied to the repository to replace \
+          unformatted files with the formatted files.'
         } >> "${GITHUB_STEP_SUMMARY}"
       env:
         FORMATTED_URL: >-
