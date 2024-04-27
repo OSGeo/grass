@@ -39,7 +39,7 @@ class ModulesMeta(type):
         return type.__new__(mcs, name, bases, dict)
 
 
-class TestModules(ModulesMeta, metaclass=TestCase):
+class TestModules(TestCase, metaclass=ModulesMeta):
     pass
 
 
