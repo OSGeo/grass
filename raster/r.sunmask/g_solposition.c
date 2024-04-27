@@ -64,7 +64,7 @@ long calc_solar_position(double longitude, double latitude, double timezone,
     /* we don't like to run G_calc_solar_position in xy locations */
     if (window.proj == 0)
         G_fatal_error(
-            _("Unable to calculate sun position in un-projected projects. "
+            _("Unable to calculate sun position in projects without CRS. "
               "Specify sunposition directly."));
 
     pdat = &pd; /* point to the structure for convenience */
