@@ -23,7 +23,6 @@ import time
 import stat
 import tempfile
 import random
-import six
 import math
 
 import wx
@@ -1227,7 +1226,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         dlg.Init(properties)
         if dlg.ShowModal() == wx.ID_OK:
             self.ModelChanged()
-            for key, value in six.iteritems(dlg.GetValues()):
+            for key, value in dlg.GetValues().items():
                 properties[key] = value
             for action in self.model.GetItems(objType=ModelAction):
                 action.GetTask().set_flag("overwrite", properties["overwrite"])
@@ -1459,7 +1458,7 @@ class VariablePanel(wx.Panel):
     def UpdateModelVariables(self):
         """Update model variables"""
         variables = dict()
-        for values in six.itervalues(self.list.GetData()):
+        for values in self.list.GetData().values():
             name = values[0]
             variables[name] = {"type": str(values[1])}
             if values[2]:
