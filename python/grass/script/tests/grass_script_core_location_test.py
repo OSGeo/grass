@@ -70,9 +70,6 @@ def test_without_session(tmp_path):
     wkt_file = tmp_path / name / "PERMANENT" / "PROJ_WKT"
     assert wkt_file.exists()
     with gs.setup.init(tmp_path / name):
-        gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path}")
-        gs.run_command("g.gisenv", set=f"LOCATION_NAME={name}")
-        gs.run_command("g.gisenv", set="MAPSET=PERMANENT")
         epsg = gs.parse_command("g.proj", flags="g")["srid"]
         assert epsg == "EPSG:3358"
 
@@ -109,9 +106,6 @@ def test_path_only(tmp_path):
     assert mapset_path.exists()
     assert wkt_file.exists()
     with gs.setup.init(full_path):
-        gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path}")
-        gs.run_command("g.gisenv", set=f"LOCATION_NAME={desired_location}")
-        gs.run_command("g.gisenv", set="MAPSET=PERMANENT")
         epsg = gs.parse_command("g.proj", flags="g")["srid"]
         assert epsg == "EPSG:3358"
 
@@ -123,9 +117,6 @@ def test_create_project(tmp_path):
     wkt_file = tmp_path / name / "PERMANENT" / "PROJ_WKT"
     assert wkt_file.exists()
     with gs.setup.init(tmp_path / name):
-        gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path}")
-        gs.run_command("g.gisenv", set=f"LOCATION_NAME={name}")
-        gs.run_command("g.gisenv", set="MAPSET=PERMANENT")
         epsg = gs.parse_command("g.proj", flags="g")["srid"]
         assert epsg == "EPSG:3358"
 
