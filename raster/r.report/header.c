@@ -36,7 +36,7 @@ int header(int unit1, int unit2)
     if (page == 1 && with_headers) {
         lcr("", "RASTER MAP CATEGORY REPORT", "", buf, page_width - 2);
         pbuf(buf);
-        sprintf(tbuf1, "LOCATION: %s", G_location());
+        sprintf(tbuf1, "PROJECT: %s", G_location());
         if (with_headers && (page_length > 0))
             sprintf(tbuf2, "Page %d", page);
         else

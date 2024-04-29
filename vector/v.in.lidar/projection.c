@@ -33,7 +33,7 @@ void projection_mismatch_report(struct Cell_head cellhd,
     /* TODO: output this info sorted by key: */
     if (loc_wind.proj != cellhd.proj || err != -2) {
         if (loc_proj_info != NULL) {
-            strcat(error_msg, _("GRASS LOCATION PROJ_INFO is:\n"));
+            strcat(error_msg, _("GRASS project PROJ_INFO is:\n"));
             for (i_value = 0; i_value < loc_proj_info->nitems; i_value++)
                 sprintf(error_msg + strlen(error_msg), "%s: %s\n",
                         loc_proj_info->key[i_value],
@@ -68,7 +68,7 @@ void projection_mismatch_report(struct Cell_head cellhd,
     }
     else {
         if (loc_proj_units != NULL) {
-            strcat(error_msg, "GRASS LOCATION PROJ_UNITS is:\n");
+            strcat(error_msg, "GRASS project PROJ_UNITS is:\n");
             for (i_value = 0; i_value < loc_proj_units->nitems; i_value++)
                 sprintf(error_msg + strlen(error_msg), "%s: %s\n",
                         loc_proj_units->key[i_value],

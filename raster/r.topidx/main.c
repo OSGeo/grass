@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 
     /* Make sure that the current projection is not lat/long */
     if (G_projection() == PROJECTION_LL)
-        G_fatal_error(_("Lat/Long location is not supported by %s. Please "
+        G_fatal_error(_("Lat/Long project is not supported by %s. Please "
                         "reproject map first."),
                       G_program_name());
 
