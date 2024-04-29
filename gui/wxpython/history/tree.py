@@ -36,10 +36,16 @@ from core.treemodel import TreeModel, DictFilterNode
 from gui_core.treeview import CTreeView
 from gui_core.wrap import Menu
 
+from icons.icon import MetaIcon
+
 from grass.pydispatch.signal import Signal
 
 from grass.grassdb import history
 
+
+# global variables for node types
+TIME_PERIOD = _("time_period")
+COMMAND = _("command")
 
 # global variable for purposes of sorting "No time info" node
 OLD_DATE = datetime.datetime(1950, 1, 1).date()
@@ -108,6 +114,17 @@ class HistoryBrowserTree(CTreeView):
 
         self._resetSelectVariables()
 
+        self._iconTypes = [
+            TIME_PERIOD,
+            history.status_aborted,
+            history.status_failed,
+            history.status_running,
+            history.status_success,
+            history.status_unknown,
+        ]
+
+        self._initImages()
+
         self._initHistoryModel()
 
         self.showNotification = Signal("HistoryBrowserTree.showNotification")
@@ -143,6 +160,21 @@ class HistoryBrowserTree(CTreeView):
         """Reset variables related to item selection."""
         self.selected_day = []
         self.selected_command = []
+
+    def _initImages(self):
+        bmpsize = (16, 16)
+        icons = {
+            TIME_PERIOD: MetaIcon(img="time-period").GetBitmap(bmpsize),
+            history.status_aborted: MetaIcon(img="exclamation-mark").GetBitmap(bmpsize),
+            history.status_failed: MetaIcon(img="cross").GetBitmap(bmpsize),
+            history.status_running: MetaIcon(img="circle").GetBitmap(bmpsize),
+            history.status_success: MetaIcon(img="check").GetBitmap(bmpsize),
+            history.status_unknown: MetaIcon(img="question-mark").GetBitmap(bmpsize),
+        }
+        il = wx.ImageList(bmpsize[0], bmpsize[1], mask=False)
+        for each in self._iconTypes:
+            il.Add(icons[each])
+        self.AssignImageList(il)
 
     def _confirmDialog(self, question, title):
         """Confirm dialog"""
@@ -200,14 +232,14 @@ class HistoryBrowserTree(CTreeView):
                     day = self._model.SearchNodes(
                         parent=self._model.root,
                         day=self._timestampToDay(timestamp),
-                        type="day",
+                        type=TIME_PERIOD,
                     )
             else:
                 # Find day node prepared for entries without any command info
                 day = self._model.SearchNodes(
                     parent=self._model.root,
                     day=self._timestampToDay(),
-                    type="day",
+                    type=TIME_PERIOD,
                 )
 
             if day:
@@ -218,13 +250,13 @@ class HistoryBrowserTree(CTreeView):
                     # Prepare it for entries without command info
                     day = self._model.AppendNode(
                         parent=self._model.root,
-                        data=dict(type="day", day=self._timestampToDay()),
+                        data=dict(type=TIME_PERIOD, day=self._timestampToDay()),
                     )
                 else:
                     day = self._model.AppendNode(
                         parent=self._model.root,
                         data=dict(
-                            type="day",
+                            type=TIME_PERIOD,
                             day=self._timestampToDay(
                                 entry["command_info"]["timestamp"]
                             ),
@@ -243,7 +275,7 @@ class HistoryBrowserTree(CTreeView):
             self._model.AppendNode(
                 parent=day,
                 data=dict(
-                    type="command",
+                    type=COMMAND,
                     name=entry["command"].strip(),
                     timestamp=timestamp if timestamp else None,
                     status=status,
@@ -306,10 +338,10 @@ class HistoryBrowserTree(CTreeView):
         self._resetSelectVariables()
         for item in selected:
             type = item.data["type"]
-            if type == "command":
+            if type == COMMAND:
                 self.selected_command.append(item)
                 self.selected_day.append(item.parent)
-            elif type == "day":
+            elif type == TIME_PERIOD:
                 self.selected_command.append(None)
                 self.selected_day.append(item)
 
@@ -323,7 +355,7 @@ class HistoryBrowserTree(CTreeView):
             except re.error:
                 return
             self._model = self._orig_model.Filtered(
-                method="filtering", name=compiled, type="command"
+                method="filtering", name=compiled, type=COMMAND
             )
         else:
             self._model = self._orig_model
@@ -432,6 +464,17 @@ class HistoryBrowserTree(CTreeView):
                 caption=_("Cannot be parsed into command"),
                 showTraceback=False,
             )
+
+    def OnGetItemImage(self, index, which=wx.TreeItemIcon_Normal, column=0):
+        """Overridden method to return image for each item."""
+        node = self._model.GetNodeByIndex(index)
+        try:
+            if node.data["type"] == TIME_PERIOD:
+                return self._iconTypes.index(node.data["type"])
+            elif node.data["type"] == COMMAND:
+                return self._iconTypes.index(node.data["status"])
+        except ValueError:
+            return 0
 
     def OnRemoveCmd(self, event):
         """Remove cmd from the history file"""

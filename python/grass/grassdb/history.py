@@ -18,6 +18,14 @@ import grass.script as gs
 from grass.script.utils import parse_key_val
 
 
+# global status variables
+status_aborted = _("aborted")
+status_failed = _("failed")
+status_running = _("running")
+status_success = _("success")
+status_unknown = _("unknown")
+
+
 def get_current_mapset_gui_history_path():
     """Return path to the current mapset history file.
     This function does not ensure that the file exists.
