@@ -551,13 +551,8 @@ def get_default_branch(full_url):
     # Construct API call and retrieve default branch
     api_calls = {
         "github.com": f"https://api.github.com/repos/{organization}/{repository}",
-        "gitlab.com": (
-            f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}"
-        ),
-        "bitbucket.org": (
-            f"https://api.bitbucket.org/2.0/repositories/{organization}/{repository}"
-            f"/branching-model?",
-        ),
+        "gitlab.com": f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}",  # noqa: E501
+        "bitbucket.org": f"https://api.bitbucket.org/2.0/repositories/{organization}/{repository}/branching-model?",  # noqa: E501
     }
     # Try to get default branch via API. The API call is known to fail a) if the
     # full_url does not belong to an implemented hosting service or b) if the rate
