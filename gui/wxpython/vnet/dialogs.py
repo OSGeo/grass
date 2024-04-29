@@ -902,8 +902,10 @@ class VNETDialog(wx.Dialog):
         if ["turn_layer", "turn_cat_layer"] in err_params:
             GMessage(
                 parent=self,
-                message=("Please choose existing turntable layer and unique "
-                         "categories layer in Parameters tab."),
+                message=(
+                    "Please choose existing turntable layer and unique "
+                    "categories layer in Parameters tab."
+                ),
             )
 
         cat = GetNearestNodeCat(

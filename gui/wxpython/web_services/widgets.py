@@ -559,8 +559,7 @@ class WSPanel(wx.Panel):
         except (OSError, ParseError) as error:
             error_msg = _(
                 "%s web service was not found in fetched capabilities file from "
-                "<%s>:\n%s\n"
-                % (self.ws, self.conn["url"], str(error))
+                "<%s>:\n%s\n" % (self.ws, self.conn["url"], str(error))
             )
             if Debug.GetLevel() != 0:
                 Debug.msg(1, error_msg)

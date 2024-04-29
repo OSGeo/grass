@@ -650,9 +650,9 @@ def pca(pan, ms1, ms2, ms3, out, pid, sproc):
         outg = "%s_green" % out
         outb = "%s_blue" % out
 
-        cmd1 = ("$outb = 1 * round(($panmatch1 * $b1evect1) + ($pca2 * $b1evect2) + ($pca3 * $b1evect3) + $b1mean)")  # noqa: E501
-        cmd2 = ("$outg = 1 * round(($panmatch2 * $b2evect1) + ($pca2 * $b2evect2) + ($pca3 * $b2evect3) + $b2mean)")  # noqa: E501
-        cmd3 = ("$outr = 1 * round(($panmatch3 * $b3evect1) + ($pca2 * $b3evect2) + ($pca3 * $b3evect3) + $b3mean)")  # noqa: E501
+        cmd1 = "$outb = 1 * round(($panmatch1 * $b1evect1) + ($pca2 * $b1evect2) + ($pca3 * $b1evect3) + $b1mean)"  # noqa: E501
+        cmd2 = "$outg = 1 * round(($panmatch2 * $b2evect1) + ($pca2 * $b2evect2) + ($pca3 * $b2evect3) + $b2mean)"  # noqa: E501
+        cmd3 = "$outr = 1 * round(($panmatch3 * $b3evect1) + ($pca2 * $b3evect2) + ($pca3 * $b3evect3) + $b3mean)"  # noqa: E501
 
         cmd = "\n".join([cmd1, cmd2, cmd3])
 

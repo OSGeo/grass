@@ -121,7 +121,7 @@ class MapToolbar(BaseToolbar):
             self._giface.WriteLog(
                 _(
                     "Note that the wxGUI's vector digitizer is disabled in this "
-                    "installation." 
+                    "installation."
                     "Please keep an eye out for updated versions of GRASS. "
                     'In the meantime you can use "v.edit" for non-interactive editing '
                     "from the Develop vector map menu."
