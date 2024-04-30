@@ -738,7 +738,8 @@ class MapFrame(InstructionObject):
                 ):
                     GWarning(
                         _(
-                            "Map frame position changed, old value: %(old1)s %(old2)s\nnew value: %(new1)s %(new2)s"
+                            "Map frame position changed, old value: %(old1)s %(old2)s\n"
+                            "new value: %(new1)s %(new2)s"
                         )
                         % {
                             "old1": maploc[0],

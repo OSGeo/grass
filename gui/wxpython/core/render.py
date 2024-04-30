@@ -1257,7 +1257,8 @@ class Map:
         """Returns list of layers of selected properties or list of
         all layers.
 
-        :param ltype: layer type, e.g. raster/vector/wms/overlay (value or tuple of values)
+        :param ltype: layer type, e.g. raster/vector/wms/overlay (value or tuple of
+                      values)
         :param mapset: all layers from given mapset (only for maplayers)
         :param name: all layers with given name
         :param active: only layers with 'active' attribute set to True or False

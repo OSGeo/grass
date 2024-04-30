@@ -148,9 +148,8 @@ def main():
         if len(rows) > max_files_open:
             grass.warning(
                 _(
-                    "Processing over {} maps: activating -z flag of r.series which slows down processing.".format(
-                        max_files_open
-                    )
+                    "Processing over {} maps: activating -z flag of r.series which "
+                    "slows down processing.".format(max_files_open)
                 )
             )
             flag += "z"

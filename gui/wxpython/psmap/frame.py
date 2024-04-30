@@ -2536,10 +2536,12 @@ class PsMapBufferedWindow(wx.Window):
         # if textDict["border"] != "none" and not rot:
         #     units = UnitConversion(self)
         #     borderWidth = (
-        #         units.convert(value=textDict["width"], fromUnit="point", toUnit="pixel")
+        #         units.convert(
+        #         value=textDict["width"], fromUnit="point", toUnit="pixel")
         #         * self.currScale
         #     )
-        #     pdc.SetPen(wx.Pen(colour=convertRGB(textDict["border"]), width=borderWidth))
+        #     pdc.SetPen(wx.Pen(colour=convertRGB(
+        #     textDict["border"]), width=borderWidth))
         #     pdc.DrawRectangle(*bounds)
 
         if background:
