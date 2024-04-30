@@ -24,7 +24,7 @@ __To build a stable version__:
 change to the releasebranch or tag you want to build:
 
 ```bash
-git checkout 8.2.0
+git checkout {tag or branch}
 ```
 
 and build and enter with:
