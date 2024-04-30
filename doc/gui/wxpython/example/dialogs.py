@@ -55,7 +55,7 @@ class ExampleMapDialog(SimpleDialog):
     def _layout(self):
         """!Do layout"""
         self.dataSizer.Add(
-            item=wx.StaticText(parent=self.panel, label=_("Name of raster map:")),
+            wx.StaticText(parent=self.panel, label=_("Name of raster map:")),
             proportion=0,
             flag=wx.ALL,
             border=1,
