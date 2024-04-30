@@ -11,7 +11,7 @@ and what types releases should be created.
 
 ## Summary
 
-One major or minor release should be released once a year.
+One major or minor release should be released per year.
 This becomes the only actively maintained release series
 which is subsequently updated by micro releases as needed.
 Individual contributors can step up to maintain an older release series.
@@ -34,15 +34,17 @@ it may also bring changes breaking backwards compatibility
 such as breaking API changes. Additionally, contributors may decide
 to include certain feature into a major release rather than a minor release
 if the feature has a potential to negatively impact some users or use cases.
-A major release may include a particularly important feature or a set of features,
-but that's not required. The purpose of a major release is to bring changes
-which cannot be included into a minor release such as A or some extensive code rewrites.
-It may or may not be used to bring revolutionary changes or highlight specific features.
+A major release may include a particularly important feature or a set of
+features, but that's not required. The purpose of a major release is to bring
+changes which cannot be included into a minor release such as
+backwards-incompatible changes in API or unusually large code rewrites.
+It may or may not be used to bring revolutionary changes or highlight specific
+features.
 
 Minor release may bring any new features, small or big, as long as backwards
-compatibility is kept, e.g., an automated procedure relying on public API should
-still work. The purpose of a minor release is to bring features to the users
-as soon as possible with software stability and compatibility and without
+compatibility is kept, e.g., an automated procedure relying on public API
+still works. The purpose of a minor release is to bring features to the users
+as soon as possible with software stability and compatibility, but without
 a need to wait for a major release.
 
 Both major and minor releases may include bugfixes which may or may not be
@@ -51,18 +53,19 @@ already included in a micro release of the previous major or minor release.
 A special effort is put into keeping backwards compatibility.
 While this is a requirement for minor version, the community makes extra effort
 even for major release to maximize backwards compatibility so that users can
-conveniently transition to new versions.
+conveniently transition to new versions. This is, however, not guaranteed and
+it depends on many factors.
 
 ### Micro
 
 Micro releases should contain only bugfixes.
 Their purpose is to fix issues with a particular major or minor release.
-Providing both stability and fixes to the users.
+They provide software stability and fixes to the users.
 
 A minor release should be considered instead of a micro release when
 a bugfix is large, a bugfix has unclear side-effects, or it is not clear
-if it is bugfix or a feature given that, in practice, the line between
-a bugfix and a feature is not completely clear.
+whether a particular change is bugfix or a feature given that, in practice,
+the line between a bugfix and a feature is not completely clear.
 
 ### Pre-releases and Daily Builds
 
