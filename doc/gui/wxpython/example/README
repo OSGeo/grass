@@ -24,15 +24,9 @@ or it can be launched from the console.
 
 3. Edit ./gui/wxpython/Makefile:
 
--SUBDIRS = docs animation datacatalog mapswipe gmodeler rlisetup psmap dbmgr vdigit rdigit iclass gcp timeline tplot photo2image image2target
-+SUBDIRS = docs animation datacatalog example mapswipe gmodeler rlisetup psmap dbmgr vdigit rdigit iclass gcp timeline tplot photo2image image2target
-
- SRCFILES := $(wildcard icons/*.* scripts/* xml/*) \
--       $(wildcard animation/*.py core/*.py datacatalog/*.py dbmgr/*.py gcp/*.py gmodeler/*.py \
-+       $(wildcard animation/*.py core/*.py datacatalog/*.py dbmgr/*.py example/*.py gcp/*.py gmodeler/*.py \
-
--PYDSTDIRS := $(patsubst %,$(DSTDIR)/%,animation core datacatalog dbmgr gcp gmodeler \
-+PYDSTDIRS := $(patsubst %,$(DSTDIR)/%,animation core datacatalog dbmgr example gcp gmodeler \
+SUBDIRS: Add example
+SRCFILES: add example/*py
+PYDSTDIRS: add example
 
 4. Run make (in ./gui/wxpython)
 
