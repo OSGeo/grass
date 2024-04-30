@@ -60,7 +60,7 @@ per-file-ignores =
     gui/wxpython/dbmgr/sqlbuilder.py: E722, F841
     gui/wxpython/dbmgr/manager.py: E722
     gui/wxpython/dbmgr/vinfo.py: F841
-    gui/wxpython/docs/wxgui_sphinx/conf.py: E402
+    gui/wxpython/docs/wxgui_sphinx/conf.py: E402, W291
     gui/wxpython/gcp/g.gui.gcp.py: F841
     gui/wxpython/gcp/manager.py: F841, E722
     gui/wxpython/gcp/mapdisplay.py: F841
@@ -73,7 +73,7 @@ per-file-ignores =
     gui/wxpython/gui_core/treeview.py: F841
     gui/wxpython/gui_core/widgets.py: F841, E722, E266
     gui/wxpython/image2target/*: F841, E722, E265
-    gui/wxpython/image2target/g.gui.image2target.py: E501
+    gui/wxpython/image2target/g.gui.image2target.py: E501, E265, F841
     gui/wxpython/iscatt/*: F841, E722, E741, F405, F403
     gui/wxpython/lmgr/giface.py: E741
     gui/wxpython/lmgr/frame.py: F841, E722, W605
@@ -83,7 +83,7 @@ per-file-ignores =
     gui/wxpython/modules/*: F841, E722, W605
     gui/wxpython/nviz/*: F841, E266, E722, W605, F403, F405
     gui/wxpython/photo2image/*: F841, E722, E265
-    gui/wxpython/photo2image/g.gui.photo2image.py: E501
+    gui/wxpython/photo2image/g.gui.photo2image.py: E501, F841
     gui/wxpython/psmap/*: F841, E266, E722, F405, F403
     gui/wxpython/vdigit/*: F841, E722, E741, F405, F403
     gui/wxpython/vnet/*: F841
@@ -91,7 +91,7 @@ per-file-ignores =
     gui/wxpython/animation/g.gui.animation.py: E501
     gui/wxpython/animation/mapwindow.py: F841
     gui/wxpython/animation/provider.py: F841
-    gui/wxpython/tplot/frame.py: F841, E722
+    gui/wxpython/tplot/frame.py: F841, E722, E741
     gui/wxpython/tplot/g.gui.tplot.py: E501
     gui/wxpython/rdigit/g.gui.rdigit.py: F841
     gui/wxpython/iclass/dialogs.py: E741
@@ -112,7 +112,8 @@ per-file-ignores =
     gui/wxpython/mapwin/buffered.py: E722
     gui/wxpython/mapwin/graphics.py: E722
     gui/wxpython/startup/locdownload.py: E722, E402
-    gui/wxpython/timeline/g.gui.timeline.py: E501
+    gui/wxpython/timeline/g.gui.timeline.py: E501, E741
+    gui/wxpython/timeline/frame.py: E741
     gui/wxpython/tools/build_modules_xml.py: E722
     gui/wxpython/web_services/cap_interface.py: E501
     gui/wxpython/web_services/widgets.py: F841, E741, W605, E402
@@ -129,6 +130,7 @@ per-file-ignores =
     python/grass/pygrass/vector/__init__.py: E402
     python/grass/pygrass/raster/__init__.py: E402
     python/grass/gunittest/gmodules.py: W605
+    python/grass/gunittest/invoker.py: E721
     python/grass/pygrass/vector/geometry.py: W605
     python/grass/pygrass/vector/__init__.py: E402
     python/grass/pygrass/modules/interface/*.py: F401
@@ -136,6 +138,7 @@ per-file-ignores =
     python/grass/pygrass/modules/interface/parameter.py: W605
     python/grass/pygrass/modules/grid/*.py: F401
     python/grass/pygrass/raster/rowio.py: E741
+    python/grass/pygrass/raster/category.py: E721
     python/grass/pygrass/rpc/__init__.py: F401, F403
     python/grass/pygrass/utils.py: E402
     python/grass/script/task.py: W605
@@ -152,6 +155,7 @@ per-file-ignores =
     python/grass/temporal/temporal_raster3d_algebra.py: E741
     python/grass/temporal/temporal_topology_dataset_connector.py: E722
     python/grass/temporal/temporal_vector_algebra.py: E741, F841
+    python/grass/temporal/univar_statistics.py: E231
     # Current benchmarks/tests are changing sys.path before import.
     # Possibly, a different approach should be taken there anyway.
     python/grass/pygrass/tests/benchmark.py: E402, F401, F821
@@ -173,7 +177,7 @@ per-file-ignores =
     scripts/r.in.wms/wms_drv.py: E402, E722
     scripts/r.in.wms/srs.py: E722
     scripts/r.semantic.label/r.semantic.label.py: F841, E501
-    scripts/v.report/v.report.py: F841
+    scripts/v.report/v.report.py: F841, E721
     scripts/db.out.ogr/db.out.ogr.py: F841
     scripts/g.extension/g.extension.py: F841, E722, E501
     scripts/v.unpack/v.unpack.py: F841, E722, E501
