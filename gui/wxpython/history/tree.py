@@ -376,13 +376,13 @@ class HistoryBrowserTree(CTreeView):
         # Check if today time period node exists or create it
         today = self._timestampToDay(entry["command_info"]["timestamp"])
         today_nodes = self._model.SearchNodes(
-            parent=self._model.root, day=today, type="day"
+            parent=self._model.root, day=today, type=TIME_PERIOD
         )
         if not today_nodes:
             today_node = self._model.AppendNode(
                 parent=self._model.root,
                 data=dict(
-                    type="day",
+                    type=TIME_PERIOD,
                     day=today,
                 ),
             )
@@ -393,7 +393,7 @@ class HistoryBrowserTree(CTreeView):
         command_node = self._model.AppendNode(
             parent=today_node,
             data=dict(
-                type="command",
+                type=COMMAND,
                 name=entry["command"].strip(),
                 timestamp=entry["command_info"]["timestamp"],
                 status=entry["command_info"].get("status", "in process"),
@@ -418,9 +418,9 @@ class HistoryBrowserTree(CTreeView):
         # Get node of last command
         today = self._timestampToDay(entry["command_info"]["timestamp"])
         today_node = self._model.SearchNodes(
-            parent=self._model.root, day=today, type="day"
+            parent=self._model.root, day=today, type=TIME_PERIOD
         )[0]
-        command_nodes = self._model.SearchNodes(parent=today_node, type="command")
+        command_nodes = self._model.SearchNodes(parent=today_node, type=COMMAND)
         last_node = command_nodes[-1]
 
         # Remove last node
