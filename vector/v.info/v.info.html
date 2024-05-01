@@ -23,7 +23,7 @@ v.info map=geology
  +----------------------------------------------------------------------------+
  | Name:            geology                                                   |
  | Mapset:          PERMANENT                                                 |
- | Location:        nc_spm_08                                                 |
+ | Project:         nc_spm_08                                                 |
  | Database:        /home/martin/grassdata                                    |
  | Title:           North Carolina geology map (polygon map)                  |
  | Map scale:       1:1                                                       |
@@ -68,6 +68,10 @@ area without category: 0.000000e+00 (0 areas)
 ---------------------------------------------------------------------------------
 </pre></div>
 
+Note that while "project" is used by <em>v.info</em> elsewhere, history output
+uses the legacy term "location" because "LOCATION" is currently a part of the
+native vector format.
+
 <h3>Attribute columns for given layer</h3>
 
 <div class="code"><pre>
@@ -91,7 +95,7 @@ v.info -get map=geology
 
 name=geology
 mapset=PERMANENT
-location=nc_spm_08
+project=nc_spm_08
 database=/home/martin/grassdata
 title=North Carolina geology map (polygon map)
 scale=1:1

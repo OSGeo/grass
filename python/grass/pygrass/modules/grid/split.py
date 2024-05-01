@@ -3,6 +3,7 @@ Created on Tue Apr  2 19:00:15 2013
 
 @author: pietro
 """
+
 from grass.pygrass.gis.region import Region
 from grass.pygrass.vector.basic import Bbox
 

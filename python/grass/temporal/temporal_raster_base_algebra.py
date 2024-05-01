@@ -40,6 +40,7 @@ for details.
     LexToken(NAME,'B',1,23)
 
 """
+
 import copy
 
 import grass.pygrass.modules as pymod

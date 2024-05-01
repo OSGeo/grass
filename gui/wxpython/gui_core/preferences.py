@@ -371,9 +371,9 @@ class PreferencesDialog(PreferencesBaseDialog):
                 group="manager", key="copySelectedTextToClipboard", subkey="enabled"
             )
         )
-        self.winId[
-            "manager:copySelectedTextToClipboard:enabled"
-        ] = copySelectedTextToClipboard.GetId()
+        self.winId["manager:copySelectedTextToClipboard:enabled"] = (
+            copySelectedTextToClipboard.GetId()
+        )
 
         gridSizer.Add(copySelectedTextToClipboard, pos=(row, 0), span=(1, 2))
 
@@ -1423,9 +1423,9 @@ class PreferencesDialog(PreferencesBaseDialog):
                 subkey=["transparent", "enabled"],
             )
         )
-        self.winId[
-            "vectorLayer:featureColor:transparent:enabled"
-        ] = transpFeature.GetId()
+        self.winId["vectorLayer:featureColor:transparent:enabled"] = (
+            transpFeature.GetId()
+        )
         gridSizer.Add(transpFeature, pos=(row, col + 1), flag=wx.ALIGN_CENTER_VERTICAL)
 
         # area fill color
@@ -1757,7 +1757,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                 "displayed in the lower-left of the Map "
                 "Display\nwindow's status bar. It is purely "
                 "cosmetic and does not affect the working "
-                "location's\nprojection in any way. You will "
+                "project's\ncoordinate reference system in any way. You will "
                 "need to enable the Projection check box in "
                 "the drop-down\nmenu located at the bottom "
                 "of the Map Display window.\n"

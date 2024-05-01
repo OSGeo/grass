@@ -15,6 +15,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
+import shutil
 import xml.etree.ElementTree as etree
 from xml.parsers import expat
 
@@ -591,15 +592,19 @@ def _expandRuntimeModules(node, loadMetadata=True):
 
         if module.find("description") is None:
             if loadMetadata:
-                desc, keywords = _loadMetadata(name)
+                # not all modules are always compiled (e.g., r.in.lidar)
+                if shutil.which(name):
+                    desc, keywords = _loadMetadata(name)
+                    if not desc:
+                        hasErrors = True
+                else:
+                    desc, keywords = _("Module not installed"), ""
             else:
                 desc, keywords = "", ""
             n = etree.SubElement(module, "description")
             n.text = _escapeXML(desc)
             n = etree.SubElement(module, "keywords")
             n.text = _escapeXML(",".join(keywords))
-            if loadMetadata and not desc:
-                hasErrors = True
 
     if hasErrors:
         # not translatable until toolboxes compilation on Mac is fixed
