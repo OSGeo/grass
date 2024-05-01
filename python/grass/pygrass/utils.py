@@ -7,13 +7,12 @@ import grass.lib.gis as libgis
 
 libgis.G_gisinit("")
 
-if True:
-    import grass.lib.raster as libraster
-    from grass.lib.ctypes_preamble import String
-    from grass.script import core as grasscore
-    from grass.script import utils as grassutils
+import grass.lib.raster as libraster
+from grass.lib.ctypes_preamble import String
+from grass.script import core as grasscore
+from grass.script import utils as grassutils
 
-    from grass.pygrass.errors import GrassError
+from grass.pygrass.errors import GrassError
 
 
 test_vector_name = "Utils_test_vector"

@@ -13,8 +13,7 @@ Classes:
  - mapdisp::MapApp
 
 Usage:
-python mapdisp/main.py monitor-identifier
-       /path/to/map/file /path/to/command/file /path/to/env/file
+python mapdisp/main.py monitor-identifier /path/to/map/file /path/to/command/file /path/to/env/file
 
 (C) 2006-2015 by the GRASS Development Team
 
@@ -26,7 +25,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com> (MapPanelBase)
 @author Anna Kratochvilova <kratochanna gmail.com> (MapPanelBase)
-"""
+"""  # noqa: E501
 
 import os
 import sys

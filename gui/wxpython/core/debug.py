@@ -48,8 +48,8 @@ class DebugMsg:
             self.debuglevel = 0
             sys.stderr.write(
                 _(
-                    "WARNING: Ignoring unsupported wx debug level "
-                    f"(must be >=0 and <=5). {e}\n"
+                    "WARNING: Ignoring unsupported wx debug level (must be >=0 and "
+                    "<=5). {0}\n".format(e)
                 )
             )
 

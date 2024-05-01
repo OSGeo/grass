@@ -265,7 +265,7 @@ def _write_table(rows, column_names, output_format, separator, file):
     elif output_format == "yaml":
         _write_yaml(rows=rows, column_names=column_names, file=file)
     elif output_format == "plain":
-        # No particular reason for this separator expect that this is the original
+        # No particular reason for this separator except that this is the original
         # behavior.
         if not separator:
             separator = "\t"
