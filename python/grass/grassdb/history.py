@@ -134,6 +134,25 @@ def read(history_path):
     return _read_from_plain_text(history_path)
 
 
+def filter(json_data, command, timestamp):
+    """
+    Filter JSON history file based on provided command and the time of command launch.
+
+    :param json_data: List of dictionaries representing JSON entries
+    :param command: First filtering argument representing command as string
+    :param timestamp: Second filtering argument representing the time of command launch
+    :return: Index of entry matching the filter criteria.
+    """
+    for index, entry in enumerate(json_data):
+        if entry["command_info"]:
+            if (
+                entry["command"] == command
+                and entry["command_info"]["timestamp"] == timestamp
+            ):
+                return index
+    return None
+
+
 def _remove_entry_from_plain_text(history_path, index):
     """Remove entry from plain text history file.
 
