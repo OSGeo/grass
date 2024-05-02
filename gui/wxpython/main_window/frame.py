@@ -738,6 +738,20 @@ class GMFrame(wx.Frame):
 
         wx.CallAfter(self.datacatalog.LoadItems)
 
+        single_win_panes_layout_pos_enabled = UserSettings.Get(
+            group="general",
+            key="singleWinPanesLayoutPos",
+            subkey="enabled",
+        )
+
+        single_win_panes_layout_pos = UserSettings.Get(
+            group="general",
+            key="singleWinPanesLayoutPos",
+            subkey="pos",
+        )
+        if single_win_panes_layout_pos_enabled and single_win_panes_layout_pos:
+            self._auimgr.LoadPerspective(single_win_panes_layout_pos)
+
         self._auimgr.Update()
 
     def BindEvents(self):

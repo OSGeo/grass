@@ -152,6 +152,10 @@ class Settings:
                 "region": {
                     "resAlign": {"enabled": False},
                 },
+                "singleWinPanesLayoutPos": {
+                    "enabled": False,
+                    "pos": "",
+                },
             },
             #
             # datacatalog
