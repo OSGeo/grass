@@ -38,7 +38,7 @@ from core.watchdog import (
 )
 from gui_core.dialogs import TextEntryDialog
 from core.giface import StandaloneGrassInterface
-from core.treemodel import TreeModel, DictNode
+from core.treemodel import TreeModel, DictFilterNode
 from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
@@ -171,7 +171,7 @@ class NameEntryDialog(TextEntryDialog):
             self.EndModal(wx.ID_OK)
 
 
-class DataCatalogNode(DictNode):
+class DataCatalogNode(DictFilterNode):
     """Node representing item in datacatalog."""
 
     def __init__(self, data=None):
@@ -196,36 +196,6 @@ class DataCatalogNode(DictNode):
                 )
 
         return _("{name}").format(**data)
-
-    def match(self, method="exact", **kwargs):
-        """Method used for searching according to given parameters.
-
-        :param method: 'exact' for exact match or 'filtering' for filtering by type/name
-        :param kwargs key-value to be matched, filtering method uses 'type' and 'name'
-               where 'name' is compiled regex
-        """
-        if not kwargs:
-            return False
-
-        if method == "exact":
-            for key, value in kwargs.items():
-                if not (key in self.data and self.data[key] == value):
-                    return False
-            return True
-        # for filtering
-        if (
-            "type" in kwargs
-            and "type" in self.data
-            and kwargs["type"] != self.data["type"]
-        ):
-            return False
-        if (
-            "name" in kwargs
-            and "name" in self.data
-            and not kwargs["name"].search(self.data["name"])
-        ):
-            return False
-        return True
 
 
 class DataCatalogTree(TreeView):
