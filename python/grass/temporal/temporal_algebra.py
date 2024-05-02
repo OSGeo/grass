@@ -790,19 +790,15 @@ class TemporalAlgebraParser:
         time_suffix=None,
     ):
         self.run = run
-        self.dry_run = (
-            dry_run  # Compute the processes and output but Do not start the processes
-        )
-        self.process_chain_dict = (
-            {}
-        )  # This dictionary stores all processes, as well as the maps to register and
+        # Compute the processes and output but Do not start the processes
+        self.dry_run = dry_run
+        # This dictionary stores all processes, as well as the maps to register and
         # remove
-        self.process_chain_dict["processes"] = (
-            []
-        )  # The mapcalc and v.patch module calls
-        self.process_chain_dict["register"] = (
-            []
-        )  # Maps that must be registered/updated or inserted in a new STDS
+        self.process_chain_dict = {}
+        # The mapcalc and v.patch module calls
+        self.process_chain_dict["processes"] = []
+        # Maps that must be registered/updated or inserted in a new STDS
+        self.process_chain_dict["register"] = []
         self.process_chain_dict["remove"] = []  # The g.remove module calls
         self.process_chain_dict["STDS"] = {}  # The STDS that must be created
 
