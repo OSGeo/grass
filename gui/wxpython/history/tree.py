@@ -73,10 +73,10 @@ class HistoryBrowserNode(DictFilterNode):
             return "{:%B %-d} (today)".format(day)
         elif day == current_date - datetime.timedelta(days=1):
             return "{:%B %-d} (yesterday)".format(day)
-        elif day >= current_date - datetime.timedelta(days=7):
+        elif day >= (current_date - datetime.timedelta(days=current_date.weekday())):
             return "{:%B %-d} (this week)".format(day)
-        elif day.year == current_date.year and day.month == current_date.month:
-            return "{:%B %-d} (this month)".format(day)
+        elif day.year == current_date.year:
+            return "{:%B %-d}".format(day)
         else:
             return "{:%B %-d, %Y}".format(day)
 
