@@ -4,7 +4,7 @@
    width="24"
    version="1.1"
    id="svg866"
-   sodipodi:docname="status-running.svg"
+   sodipodi:docname="circle.svg"
    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -21,9 +21,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      showgrid="false"
-     inkscape:zoom="50.4375"
-     inkscape:cx="4.0247831"
-     inkscape:cy="8"
+     inkscape:zoom="25.21875"
+     inkscape:cx="5.511772"
+     inkscape:cy="13.541512"
      inkscape:window-width="1846"
      inkscape:window-height="1016"
      inkscape:window-x="0"
@@ -31,13 +31,13 @@
      inkscape:window-maximized="1"
      inkscape:current-layer="svg866" />
   <circle
-     cx="10.333331"
-     cy="10.333332"
+     cx="12"
+     cy="12"
      fill="#f0f0f0"
      stroke="#9a9a9a"
      stroke-linejoin="round"
      stroke-miterlimit="0.4"
      id="circle864"
-     style="fill:#ffd900;fill-opacity:1;stroke:#f29a1a;stroke-width:0.827587;stroke-miterlimit:0.4;stroke-dasharray:none;stroke-opacity:1"
-     r="7.5862064" />
+     style="fill:#f7d200;fill-opacity:1;stroke:#f28f1a;stroke-width:0.724246;stroke-miterlimit:0.4;stroke-dasharray:none;stroke-opacity:1"
+     r="6.637877" />
 </svg>

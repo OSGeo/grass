@@ -168,7 +168,7 @@ class HistoryBrowserTree(CTreeView):
             history.status_aborted: MetaIcon(img="exclamation-mark").GetBitmap(bmpsize),
             history.status_failed: MetaIcon(img="cross").GetBitmap(bmpsize),
             history.status_running: MetaIcon(img="circle").GetBitmap(bmpsize),
-            history.status_success: MetaIcon(img="check").GetBitmap(bmpsize),
+            history.status_success: MetaIcon(img="success").GetBitmap(bmpsize),
             history.status_unknown: MetaIcon(img="question-mark").GetBitmap(bmpsize),
         }
         il = wx.ImageList(bmpsize[0], bmpsize[1], mask=False)
