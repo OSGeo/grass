@@ -480,7 +480,7 @@ class GdalImportDialog(ImportDialog):
                         GError(
                             parent=self,
                             message=_(
-                                "The Python osgeo package is missing."
+                                "The Python GDAL package is missing."
                                 " Please install it."
                             ),
                         )
