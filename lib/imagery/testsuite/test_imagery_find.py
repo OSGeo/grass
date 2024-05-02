@@ -8,6 +8,7 @@
 Read the file COPYING that comes with GRASS
 for details
 """
+
 import os
 import shutil
 

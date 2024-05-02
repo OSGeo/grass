@@ -51,6 +51,7 @@ class RPCDefs:
     WRITE_SEMANTIC_LABEL = 15
     READ_SEMANTIC_LABEL = 16
     REMOVE_SEMANTIC_LABEL = 17
+    READ_MAP_HISTORY = 18
     G_FATAL_ERROR = 49
 
     TYPE_RASTER = 0
@@ -981,6 +982,142 @@ def _read_vector_info(name, mapset):
 ###############################################################################
 
 
+def _read_map_history(lock, conn, data):
+    """Read map history from the spatial database using C-library functions
+
+    :param lock: A multiprocessing.Lock instance
+    :param conn: A multiprocessing.Pipe instance used to send True or False
+    :param data: The list of data entries [function_id, maptype, name, mapset]
+    """
+    kvp = None
+    try:
+        maptype = data[1]
+        name = data[2]
+        mapset = data[3]
+        if maptype == RPCDefs.TYPE_RASTER:
+            kvp = _read_raster_history(name, mapset)
+        elif maptype == RPCDefs.TYPE_VECTOR:
+            kvp = _read_vector_history(name, mapset)
+        elif maptype == RPCDefs.TYPE_RASTER3D:
+            kvp = _read_raster3d_history(name, mapset)
+    except:
+        raise
+    finally:
+        conn.send(kvp)
+
+
+###############################################################################
+
+
+def _read_raster_history(name, mapset):
+    """Read the raster history from the file system and store the content
+    into a dictionary
+
+    This method uses the ctypes interface to the gis and raster libraries
+    to read the map history
+
+    :param name: The name of the map
+    :param mapset: The mapset of the map
+    :returns: The key value pairs of the map specific metadata, or None in
+              case of an error
+    """
+
+    kvp = {}
+
+    if not libgis.G_find_raster(name, mapset):
+        return None
+
+    # Read the raster history
+    hist = libraster.History()
+    ret = libraster.Rast_read_history(name, mapset, byref(hist))
+    if ret < 0:
+        logging.warning(_("Unable to read history file"))
+        return None
+    else:
+        kvp["creation_time"] = decode(
+            libraster.Rast_get_history(byref(hist), libraster.HIST_MAPID)
+        )
+        kvp["creator"] = decode(
+            libraster.Rast_get_history(byref(hist), libraster.HIST_CREATOR)
+        )
+
+    return kvp
+
+
+###############################################################################
+
+
+def _read_raster3d_history(name, mapset):
+    """Read the 3D raster map info from the file system and store the content
+    into a dictionary
+
+    This method uses the ctypes interface to the gis and raster3d libraries
+    to read the map metadata information
+
+    :param name: The name of the map
+    :param mapset: The mapset of the map
+    :returns: The key value pairs of the map specific metadata, or None in
+              case of an error
+    """
+
+    kvp = {}
+
+    if not libgis.G_find_raster3d(name, mapset):
+        return None
+
+    # Read the region information
+    hist = libraster.History()
+    ret = libraster3d.Rast3d_read_history(name, mapset, byref(hist))
+    if ret < 0:
+        logging.warning(_("Unable to read history file"))
+        return None
+    else:
+        kvp["creation_time"] = decode(
+            libraster.Rast_get_history(byref(hist), libraster3d.HIST_MAPID)
+        )
+        kvp["creator"] = decode(
+            libraster.Rast_get_history(byref(hist), libraster3d.HIST_CREATOR)
+        )
+
+    return kvp
+
+
+###############################################################################
+
+
+def _read_vector_history(name, mapset):
+    """Read the vector history from the file system and store the content
+    into a dictionary
+
+    This method uses the ctypes interface to the gis and raster libraries
+    to read the map history
+
+    :param name: The name of the map
+    :param mapset: The mapset of the map
+    :returns: The key value pairs of the map specific metadata, or None in
+              case of an error
+    """
+
+    kvp = {}
+
+    if not libgis.G_find_vector(name, mapset):
+        return None
+
+    # Read the vector history
+    Map = libvector.Map_info()
+    if libvector.Vect_open_old(byref(Map), name, mapset, "1") > 0:
+        kvp["creation_time"] = decode(libvector.Vect_get_map_date(byref(Map)))
+        kvp["creator"] = decode(libvector.Vect_get_person(byref(Map)))
+    else:
+        None
+    libvector.Vect_close(byref(Map))
+
+    return kvp
+
+
+###############################################################################
+
+
 def _convert_timestamp_from_grass(ts):
     """Convert a GRASS file based timestamp into the temporal framework
     format datetime or integer.
@@ -1124,6 +1261,7 @@ def c_library_server(lock, conn):
     functions[RPCDefs.WRITE_SEMANTIC_LABEL] = _write_semantic_label
     functions[RPCDefs.READ_SEMANTIC_LABEL] = _read_semantic_label
     functions[RPCDefs.REMOVE_SEMANTIC_LABEL] = _remove_semantic_label
+    functions[RPCDefs.READ_MAP_HISTORY] = _read_map_history
     functions[RPCDefs.G_FATAL_ERROR] = _fatal_error
 
     libgis.G_gisinit("c_library_server")
@@ -1374,6 +1512,21 @@ class CLibrariesInterface(RPCServerBase):
         )
         return self.safe_receive("read_raster_full_info")
 
+    def read_raster_history(self, name, mapset):
+        """Read the raster map history from the file system and store the content
+        into a dictionary
+
+        :param name: The name of the map
+        :param mapset: The mapset of the map
+        :returns: The key value pairs of the map history (creation, creation_time),
+                  or None in case of an error
+        """
+        self.check_server()
+        self.client_conn.send(
+            [RPCDefs.READ_MAP_HISTORY, RPCDefs.TYPE_RASTER, name, mapset, None]
+        )
+        return self.safe_receive("read_raster_history")
+
     def has_raster_timestamp(self, name, mapset):
         """Check if a file based raster timestamp exists
 
@@ -1533,6 +1686,21 @@ class CLibrariesInterface(RPCServerBase):
         )
         return self.safe_receive("read_raster3d_info")
 
+    def read_raster3d_history(self, name, mapset):
+        """Read the 3D raster map history from the file system and store the content
+        into a dictionary
+
+        :param name: The name of the map
+        :param mapset: The mapset of the map
+        :returns: The key value pairs of the map history (creation, creation_time),
+                  or None in case of an error
+        """
+        self.check_server()
+        self.client_conn.send(
+            [RPCDefs.READ_MAP_HISTORY, RPCDefs.TYPE_RASTER3D, name, mapset, None]
+        )
+        return self.safe_receive("read_raster3d_history")
+
     def has_raster3d_timestamp(self, name, mapset):
         """Check if a file based 3D raster timestamp exists
 
@@ -1654,6 +1822,21 @@ class CLibrariesInterface(RPCServerBase):
             [RPCDefs.READ_MAP_FULL_INFO, RPCDefs.TYPE_VECTOR, name, mapset, None]
         )
         return self.safe_receive("read_vector_full_info")
+
+    def read_vector_history(self, name, mapset):
+        """Read the vector map history from the file system and store the content
+        into a dictionary
+
+        :param name: The name of the map
+        :param mapset: The mapset of the map
+        :returns: The key value pairs of the map history (creation, creation_time),
+                  or None in case of an error
+        """
+        self.check_server()
+        self.client_conn.send(
+            [RPCDefs.READ_MAP_HISTORY, RPCDefs.TYPE_VECTOR, name, mapset, None]
+        )
+        return self.safe_receive("read_vector_history")
 
     def has_vector_timestamp(self, name, mapset, layer=None):
         """Check if a file based vector timestamp exists

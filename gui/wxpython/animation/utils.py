@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Perasova <kratochanna gmail.com>
 """
+
 import os
 import wx
 import hashlib

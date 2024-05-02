@@ -82,9 +82,6 @@ def test_without_session(tmp_path):
     wkt_file = tmp_path / name / "PERMANENT" / "PROJ_WKT"
     assert wkt_file.exists()
     with gs.setup.init(tmp_path / name, env=os.environ.copy()) as session:
-        gs.run_command("g.gisenv", set=f"GISDBASE={tmp_path}", env=session.env)
-        gs.run_command("g.gisenv", set=f"LOCATION_NAME={name}", env=session.env)
-        gs.run_command("g.gisenv", set="MAPSET=PERMANENT", env=session.env)
         epsg = gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
         assert epsg == "EPSG:3358"
 
@@ -115,6 +112,31 @@ def test_with_different_path(tmp_path):
         assert epsg == "EPSG:3358"
 
 
+def test_path_only(tmp_path):
+    desired_location = "desired"
+    full_path = tmp_path / desired_location
+    gs.create_location(full_path, epsg="3358")
+    mapset_path = full_path / "PERMANENT"
+    wkt_file = mapset_path / "PROJ_WKT"
+    assert full_path.exists()
+    assert mapset_path.exists()
+    assert wkt_file.exists()
+    with gs.setup.init(full_path):
+        epsg = gs.parse_command("g.proj", flags="g")["srid"]
+        assert epsg == "EPSG:3358"
+
+
+def test_create_project(tmp_path):
+    name = "desired"
+    gs.create_project(tmp_path / name, epsg="3358")
+    assert (tmp_path / name).exists()
+    wkt_file = tmp_path / name / "PERMANENT" / "PROJ_WKT"
+    assert wkt_file.exists()
+    with gs.setup.init(tmp_path / name):
+        epsg = gs.parse_command("g.proj", flags="g")["srid"]
+        assert epsg == "EPSG:3358"
+
+
 def test_files(tmp_path):
     """Check expected files are created"""
     bootstrap_location = "bootstrap"
@@ -136,3 +158,34 @@ def test_files(tmp_path):
         description_file = base_path / "MYNAME"
         assert description_file.exists()
         assert description_file.read_text(encoding="utf-8").strip() == description
+
+
+def set_and_test_description(tmp_path, text):
+    """Set text as description and check the result"""
+    name = "test"
+    gs.core._create_location_xy(tmp_path, name)  # pylint: disable=protected-access
+    gs.core._set_location_description(tmp_path, name, text)
+    description_file = tmp_path / name / "PERMANENT" / "MYNAME"
+    assert description_file.exists()
+    text = text if text else ""  # None and empty should both yield empty.
+    assert description_file.read_text(encoding="utf-8").strip() == text
+
+
+def test_location_description_setter_ascii(tmp_path):
+    """Check ASCII text"""
+    set_and_test_description(tmp_path, "This is a test")
+
+
+def test_location_description_setter_unicode(tmp_path):
+    """Check unicode text"""
+    set_and_test_description(tmp_path, "This is a test (not Gauss-Krüger or Křovák)")
+
+
+def test_location_description_setter_empty(tmp_path):
+    """Check empty text"""
+    set_and_test_description(tmp_path, "")
+
+
+def test_location_description_setter_none(tmp_path):
+    """Check None in place of text"""
+    set_and_test_description(tmp_path, None)

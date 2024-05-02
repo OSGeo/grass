@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
 """
+
 import os
 
 import wx

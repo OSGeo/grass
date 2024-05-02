@@ -95,6 +95,8 @@ g.mapset|gisdbase:dbase
 g.mapsets|addmapset:operation
 g.mapsets|removemapset:operation
 g.mapsets|measure:method
+# g.mkfontcap
+g.mkfontcap|-o:--overwrite
 # g.pnmcomp
 g.pnmcomp|background:bgcolor
 ###################################
@@ -468,6 +470,8 @@ v.buffer|bufcolumn:column
 v.clean|thresh:threshold
 # v.colors
 v.colors|volume:raster_3d
+# v.db.connect
+v.db.connect|-o:--overwrite
 # v.db.join
 v.db.join|otable:other_table
 v.db.join|ocolumn:other_column
@@ -718,3 +722,18 @@ v.what.vect|qvector:query_map
 v.what.vect|qlayer:query_layer
 v.what.vect|qcolumn:query_column
 v.what.vect|vector:map
+### Renamed options for location to project rename (8.3->8.4)
+#############################################################
+g.gui.image2target|source_location:source_project
+i.ortho.target|target_location:target_project
+i.ortho.target|mapset_location:target_mapset
+g.mapset|location:project
+r.proj|location:project
+i.ortho.elev|location:project
+g.download.location|location:project
+v.proj|location:project
+r.in.gdal|location:project
+g.proj|location:project
+v.in.ogr|location:project
+t.vect.import|location:project
+t.rast.import|location:project

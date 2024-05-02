@@ -172,10 +172,9 @@ g.region res=100 tbres=100 res3=100 b=0 t=1500 -ap3
 
 ### First part: generate synthetic 3D data (true 3D soil data preferred)
 # generate random positions from elevation map (2D)
-r.random elevation.10m vector_output=elevrand n=200
+r.random elevation.10m vector=elevrand n=200 seed=42
 
 # generate synthetic values
-v.db.addcolumn elevrand col="x double precision, y double precision"
 v.to.db elevrand option=coor col=x,y
 v.db.select elevrand
 
@@ -202,7 +201,7 @@ v.db.update elevrand_3d col=soilrange value=NULL where="soilrange=0"
 v.db.select elevrand_3d
 
 # optionally: check 3D points in Paraview
-v.out.vtk input=elevrand_3d output=elevrand_3d.vtk type=point dp=2
+v.out.vtk input=elevrand_3d output=elevrand_3d.vtk type=point precision=2
 paraview --data=elevrand_3d.vtk
 
 ### Second part: 3D interpolation from 3D point data

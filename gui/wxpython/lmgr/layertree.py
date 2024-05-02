@@ -578,6 +578,33 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         self.OnAlignCompRegToRaster,
                         id=self.popupID["align"],
                     )
+        elif ltype == "group":
+            # Dynamically add Change opacity level menu item according
+            # if any layer inside group layer is map layer
+            child, cookie = self.GetFirstChild(self.layer_selected)
+            child_is_maplayer = None
+            if child:
+                while child:
+                    child_maplayer = self.GetLayerInfo(child, key="maplayer")
+                    child_ltype = self.GetLayerInfo(child, key="type")
+                    if child_maplayer and child_ltype != "command":
+                        child_is_maplayer = True
+                        break
+                    child = self.GetNextSibling(child)
+            if child_is_maplayer:
+                self.popupMenu.AppendSeparator()
+                item = wx.MenuItem(
+                    self.popupMenu,
+                    id=self.popupID["opacity"],
+                    text=_("Change opacity level"),
+                )
+                item.SetBitmap(MetaIcon(img="layer-opacity").GetBitmap(self.bmpsize))
+                self.popupMenu.AppendItem(item)
+                self.Bind(
+                    wx.EVT_MENU,
+                    self.OnPopupGroupOpacityLevel,
+                    id=self.popupID["opacity"],
+                )
 
         # vector layers (specific items)
         if ltype and ltype == "vector" and numSelected == 1:
@@ -1189,6 +1216,49 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Popup properties dialog"""
         self.PropertiesDialog(self.layer_selected)
 
+    def OnPopupGroupOpacityLevel(self, event):
+        """Popup opacity level indicator for group of layers"""
+        # Get opacity level from the first finded map layer
+        child, cookie = self.GetFirstChild(self.layer_selected)
+        while child:
+            maplayer = self.GetLayerInfo(child, key="maplayer")
+            ltype = self.GetLayerInfo(child, key="type")
+            if maplayer and ltype != "command":
+                break
+            child = self.GetNextSibling(child)
+            if child is None:
+                child, cookie = self.GetNextChild(child, cookie)
+        current_opacity = maplayer.GetOpacity()
+        dlg = SetOpacityDialog(
+            self,
+            opacity=current_opacity,
+            title=_("Set opacity of <{}>").format(self.layer_selected.GetText()),
+        )
+        dlg.applyOpacity.connect(
+            lambda value: self.ChangeGroupLayerOpacity(layer=child, value=value)
+        )
+        # Apply button
+        dlg.applyOpacity.connect(lambda: self._recalculateLayerButtonPosition())
+        dlg.CentreOnParent()
+
+        if dlg.ShowModal() == wx.ID_OK:
+            self.ChangeGroupLayerOpacity(layer=child, value=dlg.GetOpacity())
+            self._recalculateLayerButtonPosition()
+        dlg.Destroy()
+
+    def ChangeGroupLayerOpacity(self, layer, value):
+        """Change group layers opacity level
+
+        :param wx.lib.agw.customtreectrl.GenericTreeItem obj layer: tree item object
+        :param int value: opacity value
+        """
+        while layer:
+            maplayer = self.GetLayerInfo(layer, key="maplayer")
+            ltype = self.GetLayerInfo(layer, key="type")
+            if maplayer and ltype != "command":
+                self.ChangeLayerOpacity(layer=layer, value=value)
+            layer = self.GetNextSibling(layer)
+
     def OnPopupOpacityLevel(self, event):
         """Popup opacity level indicator"""
         if not self.GetLayerInfo(self.layer_selected, key="ctrl"):
@@ -1787,6 +1857,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         vselect = self._giface.GetMapDisplay().GetDialog("vselect")
         if vselect:
             vselect.Reset()
+
+        self.AdjustMyScrollbars()
 
     def OnCmdChanged(self, event):
         """Change command string"""
