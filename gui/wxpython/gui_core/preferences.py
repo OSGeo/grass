@@ -399,9 +399,9 @@ class PreferencesDialog(PreferencesBaseDialog):
             subkey="enabled",
         ):
             singleWinPanesLayoutPos.Disable()
-        self.winId[
-            "general:singleWinPanesLayoutPos:enabled"
-        ] = singleWinPanesLayoutPos.GetId()
+        self.winId["general:singleWinPanesLayoutPos:enabled"] = (
+            singleWinPanesLayoutPos.GetId()
+        )
 
         gridSizer.Add(singleWinPanesLayoutPos, pos=(row, 0), span=(1, 2))
 
