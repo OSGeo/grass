@@ -121,8 +121,8 @@ def test_path_only(tmp_path):
     assert full_path.exists()
     assert mapset_path.exists()
     assert wkt_file.exists()
-    with gs.setup.init(full_path):
-        epsg = gs.parse_command("g.proj", flags="g")["srid"]
+    with gs.setup.init(full_path, env=os.environ.copy()) as session:
+        epsg = gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
         assert epsg == "EPSG:3358"
 
 
@@ -132,8 +132,8 @@ def test_create_project(tmp_path):
     assert (tmp_path / name).exists()
     wkt_file = tmp_path / name / "PERMANENT" / "PROJ_WKT"
     assert wkt_file.exists()
-    with gs.setup.init(tmp_path / name):
-        epsg = gs.parse_command("g.proj", flags="g")["srid"]
+    with gs.setup.init(tmp_path / name, env=os.environ.copy()) as session:
+        epsg = gs.parse_command("g.proj", flags="g", env=session.env)["srid"]
         assert epsg == "EPSG:3358"
 
 
