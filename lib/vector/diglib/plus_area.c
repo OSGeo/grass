@@ -208,8 +208,10 @@ int dig_add_area(struct Plus_head *plus, int n_lines, plus_t *lines,
     if (Area == NULL)
         return -1;
 
-    if (dig_area_alloc_line(Area, n_lines) == -1)
+    if (dig_area_alloc_line(Area, n_lines) == -1) {
+        dig_free_area(Area);
         return -1;
+    }
 
     for (i = 0; i < n_lines; i++) {
         line = lines[i];
@@ -220,6 +222,7 @@ int dig_add_area(struct Plus_head *plus, int n_lines, plus_t *lines,
             if (topo->left != 0) {
                 G_warning(_("Line %d already has area/isle %d to left"), line,
                           topo->left);
+                dig_free_area(Area);
                 return -1;
             }
 
@@ -230,6 +233,7 @@ int dig_add_area(struct Plus_head *plus, int n_lines, plus_t *lines,
             if (topo->right != 0) {
                 G_warning(_("Line %d already has area/isle %d to right"), line,
                           topo->right);
+                dig_free_area(Area);
                 return -1;
             }
 
@@ -719,8 +723,10 @@ int dig_add_isle(struct Plus_head *plus, int n_lines, plus_t *lines,
     if (Isle == NULL)
         return -1;
 
-    if ((dig_isle_alloc_line(Isle, n_lines)) == -1)
+    if ((dig_isle_alloc_line(Isle, n_lines)) == -1) {
+        dig_free_isle(Isle);
         return -1;
+    }
 
     Isle->area = 0;
 
@@ -734,6 +740,7 @@ int dig_add_isle(struct Plus_head *plus, int n_lines, plus_t *lines,
             if (topo->left != 0) {
                 G_warning(_("Line %d already has area/isle %d to left"), line,
                           topo->left);
+                dig_free_isle(Isle);
                 return -1;
             }
             topo->left = -isle;
@@ -742,6 +749,7 @@ int dig_add_isle(struct Plus_head *plus, int n_lines, plus_t *lines,
             if (topo->right != 0) {
                 G_warning(_("Line %d already has area/isle %d to right"), line,
                           topo->right);
+                dig_free_isle(Isle);
                 return -1;
             }
 
