@@ -766,7 +766,7 @@ def fatal(msg, env=None):
     if raise_on_error:
         raise ScriptError(msg)
 
-    error(msg, env=None)
+    error(msg, env=env)
     sys.exit(1)
 
 
