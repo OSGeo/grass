@@ -93,9 +93,9 @@ class BitmapProvider:
         Applies to 2D mode.
 
         :param cmdsForComposition: list of lists of command lists
-                                   [[['d.rast', 'map=elev_2001'], ['d.vect', 'map=points']], # g.pnmcomp
-                                   [['d.rast', 'map=elev_2002'], ['d.vect', 'map=points']],
-                                   ...]
+                   [[['d.rast', 'map=elev_2001'], ['d.vect', 'map=points']], # g.pnmcomp
+                   [['d.rast', 'map=elev_2002'], ['d.vect', 'map=points']],
+                   ...]
         :param opacities: list of opacity values
         :param regions: list of regions
         """

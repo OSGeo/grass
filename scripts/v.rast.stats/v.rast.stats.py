@@ -133,7 +133,8 @@ def main():
     except KeyError:
         grass.fatal(
             _(
-                "There is no table connected to this map. Run v.db.connect or v.db.addtable first."
+                "There is no table connected to this map. Run v.db.connect or "
+                "v.db.addtable first."
             )
         )
     # we need this for non-DBF driver:

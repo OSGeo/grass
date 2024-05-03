@@ -275,7 +275,7 @@ $DIAGRAMLINEWIDTH setlinewidth                          %% DIAGRAM-LINEWIDTH set
 newpath
                                         %% coordinates of rescaled, translated outer circle follow
                                         %% first point moveto, then lineto
-"""
+"""  # noqa: E501
     )
     s = t.substitute(
         AXESLINEWIDTH=axeslinewidth,
@@ -322,7 +322,7 @@ $DIAGRAMLINEWIDTH setlinewidth                          %% DIAGRAM-LINEWIDTH set
 newpath
                                         %% coordinates of rescaled, translated diagram follow
                                         %% first point moveto, then lineto
-"""
+"""  # noqa: E501
     )
     s = t.substitute(
         AXESFONTSIZE=axesfontsize,
@@ -364,7 +364,7 @@ $DIAGRAMLINEWIDTH setlinewidth                          %% DIAGRAM-LINEWIDTH set
 newpath
                                         %% coordinates of rescaled, translated average direction follow
                                         %% first point moveto, second lineto
-"""
+"""  # noqa: E501
     )
     s = t.substitute(DIAGRAMLINEWIDTH=diagramlinewidth)
     outf.write(s)
@@ -396,7 +396,7 @@ col4                                    %% colDIAGRAM-COLOR
 col1                                    %% colAVERAGE-DIRECTION-COLOR
 %% Line below: (AVERAGE-DIRECTION-STRING) LEGENDS-X AVERAGE-DIRECTION-LEGEND-Y 4 just-string
 ($AVERAGEDIRECTIONSTRING) $LEGENDSX $AVERAGEDIRECTIONLEGENDY 4 just-string
-"""
+"""  # noqa: E501
     )
     s = t.substitute(
         ALLDATALEGENDY=alldatalegendy,

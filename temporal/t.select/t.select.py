@@ -75,7 +75,8 @@ def main():
     except ImportError:
         grass.fatal(
             _(
-                "Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules."
+                "Please install PLY (Lex and Yacc Python implementation) to use the "
+                "temporal algebra modules."
             )
         )
 

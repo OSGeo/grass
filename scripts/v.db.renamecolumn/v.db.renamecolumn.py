@@ -63,7 +63,8 @@ def main():
     if not table:
         grass.fatal(
             _(
-                "There is no table connected to the input vector map. Cannot rename any column"
+                "There is no table connected to the input vector map. Cannot rename "
+                "any column"
             )
         )
 
@@ -75,7 +76,8 @@ def main():
         if len(newcol) > 10:
             grass.fatal(
                 _(
-                    "Column name <%s> too long. The DBF driver supports column names not longer than 10 characters"
+                    "Column name <%s> too long. The DBF driver supports column names "
+                    "not longer than 10 characters"
                 )
                 % newcol
             )
@@ -83,7 +85,8 @@ def main():
     if oldcol == keycol:
         grass.fatal(
             _(
-                "Cannot rename column <%s> as it is needed to keep table <%s> connected to the input vector map"
+                "Cannot rename column <%s> as it is needed to keep table <%s> "
+                "connected to the input vector map"
             )
             % (oldcol, table)
         )

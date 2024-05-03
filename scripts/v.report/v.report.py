@@ -141,8 +141,8 @@ def main():
                 grass.fatal(
                     _(
                         "There is a table connected to input vector map '%s', but "
-                        "there are no categories present in the key column '%s'. Consider using "
-                        "v.to.db to correct this."
+                        "there are no categories present in the key column '%s'. "
+                        "Consider using v.to.db to correct this."
                     )
                     % (mapname, f["key"])
                 )

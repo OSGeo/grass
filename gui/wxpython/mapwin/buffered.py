@@ -866,7 +866,8 @@ class BufferedMapWindow(MapWindowBase, Window):
             giface
 
         :param render: re-render map composition
-        :param renderVector: re-render vector map layer enabled for editing (used for digitizer)
+        :param renderVector: re-render vector map layer enabled for editing (used for
+                             digitizer)
         :param delay: defines time threshold  in seconds for postponing
                       rendering to merge more update requests.
 
@@ -2254,7 +2255,8 @@ class BufferedMapWindow(MapWindowBase, Window):
                          is not defined DrawCross method is used for
                          type "point", DrawLines method for type "line",
                          DrawRectangle for "rectangle".
-        :param mapCoords: True if map coordinates should be set by user, otherwise pixels
+        :param mapCoords: True if map coordinates should be set by user, otherwise
+                          pixels
 
         :return: reference to GraphicsSet, which was added.
         """

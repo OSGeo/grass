@@ -233,8 +233,8 @@ class ScattsManager:
                         "Interactive Scatter Plot Tool can not be used.\n"
                         "Number of cells (rows*cols) <%d> in current region"
                         "is higher than maximum limit <%d>.\n\n"
-                        "You can reduce number of cells in current region using <g.region> command."
-                        % (ncells, MAX_NCELLS)
+                        "You can reduce number of cells in current region using "
+                        "<g.region> command." % (ncells, MAX_NCELLS)
                     ),
                 )
             )

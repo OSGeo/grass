@@ -188,16 +188,26 @@ class AboutWindow(wx.Frame):
 
         # show only basic info
         # row += 1
-        # infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-        #                                        label = '%s:' % _('GIS Library Revision')),
-        #                   pos = (row, 0),
-        #                   flag = wx.ALIGN_RIGHT)
-
-        # infoGridSizer.Add(item = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
-        #                                        label = vInfo['libgis_revision'] + ' (' +
-        #                                        vInfo['libgis_date'].split(' ')[0] + ')'),
-        #                   pos = (row, 1),
-        #                   flag = wx.ALIGN_LEFT)
+        # infoGridSizer.Add(
+        #     item=wx.StaticText(
+        #         parent=infoTxt, id=wx.ID_ANY, label="%s:" % _("GIS Library Revision")
+        #     ),
+        #     pos=(row, 0),
+        #     flag=wx.ALIGN_RIGHT,
+        # )
+        #
+        # infoGridSizer.Add(
+        #     item=wx.StaticText(
+        #         parent=infoTxt,
+        #         id=wx.ID_ANY,
+        #         label=vInfo["libgis_revision"]
+        #         + " ("
+        #         + vInfo["libgis_date"].split(" ")[0]
+        #         + ")",
+        #     ),
+        #     pos=(row, 1),
+        #     flag=wx.ALIGN_LEFT,
+        # )
 
         row += 2
         infoGridSizer.Add(
@@ -751,7 +761,8 @@ class HelpWindow(HtmlWindow):
                 self.history.append(url)
                 self.loaded = True
             else:
-                # FIXME: calling LoadPage() is strangely time-consuming (only first call)
+                # FIXME: calling LoadPage() is strangely time-consuming
+                #        (only first call)
                 # self.LoadPage(self.fspath + command + ".html")
                 self.loaded = False
         else:

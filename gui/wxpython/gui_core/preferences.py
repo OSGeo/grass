@@ -113,7 +113,8 @@ class PreferencesBaseDialog(wx.Dialog):
         self.btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         self.btnSave.SetToolTip(
             _(
-                "Apply and save changes to user settings file (default for next sessions)"
+                "Apply and save changes to user settings file (default for next "
+                "sessions)"
             )
         )
         self.btnSave.SetDefault()

@@ -2370,7 +2370,8 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         return -1
 
     def ReloadLayersData(self):
-        """Delete nviz data of all loaded layers and reload them from current settings"""
+        """Delete nviz data of all loaded layers and reload them from current
+        settings"""
         for item in self.layers:
             type = self.tree.GetLayerInfo(item, key="type")
             layer = self.tree.GetLayerInfo(item, key="maplayer")

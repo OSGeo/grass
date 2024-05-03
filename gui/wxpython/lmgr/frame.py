@@ -595,8 +595,8 @@ class GMFrame(wx.Frame):
         )
 
         mapdisplay.starting3dMode.connect(
-            lambda firstTime, mapDisplayPage=self.currentPage: self._onMapDisplayStarting3dMode(
-                mapDisplayPage
+            lambda firstTime, mapDisplayPage=self.currentPage: (
+                self._onMapDisplayStarting3dMode(mapDisplayPage)
             )
         )
         mapdisplay.starting3dMode.connect(self.AddNvizTools)
@@ -2129,8 +2129,13 @@ class GMFrame(wx.Frame):
             dlg.Destroy()
 
         # region = tree.GetMap().GetCurrentRegion()
-        # if region['cells'] > 10000:
-        #   GMessage(message = "Cell values can only be displayed for regions of < 10,000 cells.", parent = self)
+        # if region["cells"] > 10000:
+        # GMessage(
+        #     message=(
+        #     "Cell values can only be displayed for regions of < 10,000 cells."
+        #     ),
+        #     parent=self,
+        # )
         self.GetLayerTree().AddLayer("rastnum")
 
     def OnAddCommand(self, event):

@@ -346,7 +346,7 @@ class Region:
         """Return a list of valid keys. ::
 
             >>> reg = Region()
-            >>> reg.keys()                               # doctest: +ELLIPSIS
+            >>> reg.keys()  # doctest: +ELLIPSIS
             ['proj', 'zone', ..., 'cols', 'cells']
 
         ..
@@ -459,7 +459,8 @@ class Region:
             libraster.Rast_get_cellhd(raster_name, mapset, self.byref())
 
     def set_raster_region(self):
-        """Set the computational region (window) for all raster maps in the current process.
+        """Set the computational region (window) for all raster maps in the current
+        process.
 
         Attention: All raster objects must be closed or the
                    process will be terminated.

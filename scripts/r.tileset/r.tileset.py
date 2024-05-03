@@ -333,15 +333,17 @@ def main():
 
     # Find the skewedness of the two directions.
     # Define it to be greater than one
-    # In the direction (x or y) in which the world is least skewed (ie north south in lat long)
-    # Divide the world into strips. These strips are as big as possible constrained by max_
+    # In the direction (x or y) in which the world is least skewed (ie north south in
+    #   lat long)
+    # Divide the world into strips. These strips are as big as possible constrained by
+    #   max_
     # In the other direction do the same thing.
     # There's some recomputation of the size of the world that's got to come in
     # here somewhere.
 
-    # For now, however, we are going to go ahead and request more data than is necessary.
-    # For small regions far from the critical areas of projections this makes very little difference
-    # in the amount of data gotten.
+    # For now, however, we are going to go ahead and request more data than is
+    # necessary. For small regions far from the critical areas of projections this
+    # makes very little difference in the amount of data gotten.
     # We can make this efficient for big regions or regions near critical
     # points later.
 

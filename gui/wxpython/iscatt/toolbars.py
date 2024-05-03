@@ -69,7 +69,8 @@ class MainToolbar(BaseToolbar):
             "zoomExtent": MetaIcon(
                 img="zoom-extent",
                 label=_(
-                    "Zoom to scatter plot data extend mode (click on scatter plot for zooming to extend)"
+                    "Zoom to scatter plot data extend mode (click on scatter plot for "
+                    "zooming to extend)"
                 ),
             ),
             "cats_mgr": MetaIcon(

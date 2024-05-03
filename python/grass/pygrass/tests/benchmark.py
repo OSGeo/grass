@@ -343,7 +343,7 @@ def print_test(testdict):
 TXT = """
 {% for region in regions %}
 {{ '#'*60 }}
-### Benchmark cols = {{ region.cols }} rows = {{ region.rows}} cells = {{ region.cells }}
+# Benchmark cols = {{ region.cols }} rows = {{ region.rows }} cells = {{ region.cells }}
 {{ '#'*60 }}
 
     # equation: c = a + b

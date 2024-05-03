@@ -179,7 +179,8 @@ def main():
     elif tgtres == "value":
         grass.fatal(
             _(
-                "Please provide the resolution for the imported dataset or change to 'estimated' resolution"
+                "Please provide the resolution for the imported dataset or change to "
+                "'estimated' resolution"
             )
         )
 

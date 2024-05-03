@@ -16,8 +16,8 @@
 #
 # TODO:         - update temporary workaround of using grass7 subdir of addon-repo, see
 #                 https://github.com/OSGeo/grass-addons/issues/528
-#               - add sudo support where needed (i.e. check first permission to write into
-#                 $GISBASE directory)
+#               - add sudo support where needed (i.e. check first permission to write
+#                 into $GISBASE directory)
 #               - fix toolbox support in install_private_extension_xml()
 #############################################################################
 
@@ -224,9 +224,11 @@ class GitAdapter:
         #: Attribute containing the URL to the online repository
         self.url = url
         self.major_grass_version = major_grass_version
-        #: Attribute flagging if the repository is structured like the official addons repository
+        #: Attribute flagging if the repository is structured like the official addons
+        # repository
         self.official_repository_structure = official_repository_structure
-        #: Attribute containing the path to the working directory where the repo is cloned out to
+        #: Attribute containing the path to the working directory where the repo is
+        # cloned out to
         if working_directory:
             self.working_directory = Path(working_directory).absolute()
         else:
@@ -247,7 +249,8 @@ class GitAdapter:
         self.default_branch = self._get_default_branch()
         #: Attribute containing the branch used for checkout
         self.branch = self._set_branch(branch)
-        #: Attribute containing list of addons in the repository with path to directories
+        #: Attribute containing list of addons in the repository with path to
+        # directories
         self.addons = self._get_addons_list()
 
     def _get_version(self):
@@ -350,7 +353,8 @@ class GitAdapter:
     def _set_branch(self, branch_name):
         """Set the branch to check out to either:
         a) a user defined branch
-        b) a version branch for repositories following the official addons repository structure
+        b) a version branch for repositories following the official addons repository
+           structure
         c) the default branch of the repository
         """
         checkout_branch = None
@@ -547,12 +551,12 @@ def get_default_branch(full_url):
     # Construct API call and retrieve default branch
     api_calls = {
         "github.com": f"https://api.github.com/repos/{organization}/{repository}",
-        "gitlab.com": f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}",
-        "bitbucket.org": f"https://api.bitbucket.org/2.0/repositories/{organization}/{repository}/branching-model?",
+        "gitlab.com": f"https://gitlab.com/api/v4/projects/{organization}%2F{repository}",  # noqa: E501
+        "bitbucket.org": f"https://api.bitbucket.org/2.0/repositories/{organization}/{repository}/branching-model?",  # noqa: E501
     }
-    # Try to get default branch via API. The API call is known to fail a) if the full_url
-    # does not belong to an implemented hosting service or b) if the rate limit of the
-    # API is exceeded
+    # Try to get default branch via API. The API call is known to fail a) if the
+    # full_url does not belong to an implemented hosting service or b) if the rate
+    # limit of the API is exceeded
     try:
         req = urlrequest.urlopen(api_calls.get(url_parts.netloc))
         content = json.loads(req.read())
@@ -606,9 +610,9 @@ def expand_module_class_name(class_letters):
     The letter or letters are used in module names, e.g. r.slope.aspect.
     The names are used in directories in Addons but also in the source code.
 
-    >>> expand_module_class_name('r')
+    >>> expand_module_class_name("r")
     'raster'
-    >>> expand_module_class_name('v')
+    >>> expand_module_class_name("v")
     'vector'
     """
     name = {
@@ -635,9 +639,9 @@ def get_module_class_name(module_name):
 
     The names are used in directories in Addons but also in the source code.
 
-    >>> get_module_class_name('r.slope.aspect')
+    >>> get_module_class_name("r.slope.aspect")
     'raster'
-    >>> get_module_class_name('v.to.rast')
+    >>> get_module_class_name("v.to.rast")
     'vector'
     """
     classchar = module_name.split(".", 1)[0]
@@ -1590,7 +1594,8 @@ def install_module_xml(mlist):
             tree.append(tnode)
         else:
             gs.verbose(
-                "Extension module already listed in metadata file; metadata not updated!"
+                "Extension module already listed in metadata file; metadata not "
+                "updated!"
             )
     write_xml_modules(xml_file, tree)
 
@@ -2503,9 +2508,9 @@ def resolve_xmlurl_prefix(url, source=None):
     It ensures that there is a single slash at the end of URL, so we can attach
      file name easily:
 
-    >>> resolve_xmlurl_prefix('https://grass.osgeo.org/addons')
+    >>> resolve_xmlurl_prefix("https://grass.osgeo.org/addons")
     'https://grass.osgeo.org/addons/'
-    >>> resolve_xmlurl_prefix('https://grass.osgeo.org/addons/')
+    >>> resolve_xmlurl_prefix("https://grass.osgeo.org/addons/")
     'https://grass.osgeo.org/addons/'
     """
     gs.debug("resolve_xmlurl_prefix(url={0}, source={1})".format(url, source))
@@ -2655,58 +2660,62 @@ def resolve_source_code(url=None, name=None, branch=None, fork=False):
 
     Official repository:
 
-    >>> resolve_source_code(name='g.example') # doctest: +SKIP
+    >>> resolve_source_code(name="g.example")  # doctest: +SKIP
     ('official', 'https://trac.osgeo.org/.../general/g.example')
 
     Subversion:
 
-    >>> resolve_source_code('https://svn.osgeo.org/grass/grass-addons/grass7')
+    >>> resolve_source_code("https://svn.osgeo.org/grass/grass-addons/grass7")
     ('svn', 'https://svn.osgeo.org/grass/grass-addons/grass7')
 
     ZIP files online:
 
-    >>> resolve_source_code('https://trac.osgeo.org/.../r.modis?format=zip') # doctest: +SKIP
+    >>> resolve_source_code(
+    ...     "https://trac.osgeo.org/.../r.modis?format=zip"
+    ... )  # doctest: +SKIP
     ('remote_zip', 'https://trac.osgeo.org/.../r.modis?format=zip')
 
     Local directories and ZIP files:
 
-    >>> resolve_source_code(os.path.expanduser("~")) # doctest: +ELLIPSIS
+    >>> resolve_source_code(os.path.expanduser("~"))  # doctest: +ELLIPSIS
     ('dir', '...')
-    >>> resolve_source_code('/local/directory/downloaded.zip') # doctest: +SKIP
+    >>> resolve_source_code("/local/directory/downloaded.zip")  # doctest: +SKIP
     ('zip', '/local/directory/downloaded.zip')
 
     OSGeo Trac:
 
-    >>> resolve_source_code('trac.osgeo.org/.../r.agent.aco') # doctest: +SKIP
+    >>> resolve_source_code("trac.osgeo.org/.../r.agent.aco")  # doctest: +SKIP
     ('remote_zip', 'https://trac.osgeo.org/.../r.agent.aco?format=zip')
-    >>> resolve_source_code('https://trac.osgeo.org/.../r.agent.aco') # doctest: +SKIP
+    >>> resolve_source_code("https://trac.osgeo.org/.../r.agent.aco")  # doctest: +SKIP
     ('remote_zip', 'https://trac.osgeo.org/.../r.agent.aco?format=zip')
 
     GitHub:
 
-    >>> resolve_source_code('github.com/user/g.example') # doctest: +SKIP
+    >>> resolve_source_code("github.com/user/g.example")  # doctest: +SKIP
     ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
-    >>> resolve_source_code('github.com/user/g.example/') # doctest: +SKIP
+    >>> resolve_source_code("github.com/user/g.example/")  # doctest: +SKIP
     ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
-    >>> resolve_source_code('https://github.com/user/g.example') # doctest: +SKIP
+    >>> resolve_source_code("https://github.com/user/g.example")  # doctest: +SKIP
     ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
-    >>> resolve_source_code('https://github.com/user/g.example/') # doctest: +SKIP
+    >>> resolve_source_code("https://github.com/user/g.example/")  # doctest: +SKIP
     ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
 
     GitLab:
 
-    >>> resolve_source_code('gitlab.com/JoeUser/GrassModule') # doctest: +SKIP
+    >>> resolve_source_code("gitlab.com/JoeUser/GrassModule")  # doctest: +SKIP
     ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/-/archive/master/GrassModule-master.zip')
-    >>> resolve_source_code('https://gitlab.com/JoeUser/GrassModule') # doctest: +SKIP
+    >>> resolve_source_code("https://gitlab.com/JoeUser/GrassModule")  # doctest: +SKIP
     ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/-/archive/master/GrassModule-master.zip')
 
     Bitbucket:
 
-    >>> resolve_source_code('bitbucket.org/joe-user/grass-module') # doctest: +SKIP
+    >>> resolve_source_code("bitbucket.org/joe-user/grass-module")  # doctest: +SKIP
     ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
-    >>> resolve_source_code('https://bitbucket.org/joe-user/grass-module') # doctest: +SKIP
+    >>> resolve_source_code(
+    ...     "https://bitbucket.org/joe-user/grass-module"
+    ... )  # doctest: +SKIP
     ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
-    """
+    """  # noqa: E501
     # Handle URL for the official repo
     if not url or url == GIT_URL:
         return "official", GIT_URL

@@ -12,8 +12,9 @@
 #               License (>=v2). Read the file COPYING that comes with GRASS
 #               for details.
 #
-# TODO: - implement g.findfile for 3 and 4 maps (currently only current mapset supported)
-#            [done for 2 maps]
+# TODO: - implement g.findfile for 3 and 4 maps (currently only current mapset
+#           supported)
+#               [done for 2 maps]
 #       - fix isnull() in r.mapcalc for 3 and 4 maps composites
 #            [done for 2 maps]
 #       - fix color table length (currently only 256 cols supported, make

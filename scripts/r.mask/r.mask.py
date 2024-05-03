@@ -122,7 +122,8 @@ def main():
             if not grass.overwrite():
                 grass.fatal(
                     _(
-                        "MASK already found in current mapset. Delete first or overwrite."
+                        "MASK already found in current mapset. Delete first or "
+                        "overwrite."
                     )
                 )
             else:

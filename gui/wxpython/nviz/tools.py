@@ -329,7 +329,8 @@ class NvizToolWindow(GNotebook):
         gridSizer.Add(posSizer, pos=(0, 0))
 
         # perspective
-        # set initial defaults here (or perhaps in a default values file), not in user settings
+        # set initial defaults here (or perhaps in a default values file), not in user
+        # settings
         # todo: consider setting an absolute max at 360 instead of undefined.
         # (leave the default max value at pi)
         tooltip = _(
@@ -488,7 +489,8 @@ class NvizToolWindow(GNotebook):
         top.SetName("top")
         top.SetToolTip(
             _(
-                "Sets the viewer directly over the scene's center position. This top view orients approximately north south."
+                "Sets the viewer directly over the scene's center position. This top "
+                "view orients approximately north south."
             )
         )
         viewSizer.Add(top, flag=wx.TOP | wx.BOTTOM | wx.ALIGN_CENTER_VERTICAL, border=5)
@@ -685,7 +687,8 @@ class NvizToolWindow(GNotebook):
         )
         prefixCtrl.SetToolTip(
             _(
-                "Generated files names will look like this: prefix_1.ppm, prefix_2.ppm, ..."
+                "Generated files names will look like this: prefix_1.ppm, "
+                "prefix_2.ppm, ..."
             )
         )
         fileTypeLabel = StaticText(parent=panel, id=wx.ID_ANY, label=_("File format:"))
@@ -1425,7 +1428,8 @@ class NvizToolWindow(GNotebook):
             flag=wx.ALIGN_CENTER_VERTICAL,
         )
         tooltip = _(
-            "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)"
+            "Sets the Z coordinate of the current cutting plane (only meaningful when "
+            "tilt is not 0)"
         )
         self._createControl(
             panel,
@@ -2678,7 +2682,8 @@ class NvizToolWindow(GNotebook):
         if not anim.IsPaused():
             if anim.Exists() and not anim.IsSaved():
                 msg = _(
-                    "Do you want to record new animation without saving the previous one?"
+                    "Do you want to record new animation without saving the previous "
+                    "one?"
                 )
                 dlg = wx.MessageDialog(
                     parent=self,
@@ -4295,7 +4300,7 @@ class NvizToolWindow(GNotebook):
         marker = self.FindWindowById(
             self.win["vector"]["points"]["marker"]
         ).GetSelection()
-        #        width = self.FindWindowById(self.win['vector']['points']['width']).GetValue()
+        # width = self.FindWindowById(self.win['vector']['points']['width']).GetValue()
 
         for attrb in ("size", "marker"):
             data["vector"]["points"][attrb]["update"] = None

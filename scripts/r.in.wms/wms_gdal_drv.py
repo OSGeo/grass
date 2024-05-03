@@ -20,7 +20,8 @@ try:
 except:
     grass.fatal(
         _(
-            "Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"
+            "Unable to load GDAL Python bindings (requires package 'python-gdal' being "
+            "installed)"
         )
     )
 
@@ -144,7 +145,8 @@ class WMSGdalDrv(WMSBase):
             grass.warning(
                 _(
                     "If module will not be able to fetch the data in this "
-                    + "geographic projection, \n try 'WMS_GRASS' driver or use WMS version 1.1.1."
+                    "geographic projection, \n try 'WMS_GRASS' driver or use WMS "
+                    "version 1.1.1."
                 )
             )
 
