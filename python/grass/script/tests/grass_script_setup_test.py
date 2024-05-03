@@ -49,7 +49,7 @@ def test_init_session_finish(tmp_path):
     assert not os.path.exists(session_file)
 
 
-def test_init_finish_global_functions(tmp_path):
+def test_init_finish_global_functions_with_env(tmp_path):
     """Check that init and finish global functions work"""
     location = "test"
     gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
@@ -62,8 +62,8 @@ def test_init_finish_global_functions(tmp_path):
     assert not os.path.exists(session_file)
 
 
-def test_init_finish_global_functions_capture_strerr(tmp_path):
-    """Check that init and finish global functions work"""
+def test_init_finish_global_functions_capture_strerr0(tmp_path):
+    """Check that init and finish global functions work with global env"""
 
     def init_finish(queue):
         gs.set_capture_stderr(True)
@@ -73,11 +73,68 @@ def test_init_finish_global_functions_capture_strerr(tmp_path):
         )
         gs.setup.init(tmp_path / location)
         gs.run_command("g.region", flags="p")
-        queue.put(os.environ["GISRC"])
+        runtime_present = bool(os.environ.get("GISBASE"))
+        queue.put((os.environ["GISRC"], runtime_present))
         gs.setup.finish()
 
-    session_file = run_in_subprocess(init_finish)
+    session_file, runtime_present = run_in_subprocess(init_finish)
     assert session_file, "Expected file name from the subprocess"
+    assert runtime_present, "Runtime (GISBASE) should be present"
+    assert not os.path.exists(session_file), "Session file not deleted"
+
+
+def test_init_finish_global_functions_capture_strerrX(tmp_path):
+    """Check that init and finish global functions work with global env"""
+
+    def init_finish(queue):
+        gs.set_capture_stderr(True)
+        location = "test"
+        gs.core._create_location_xy(  # pylint: disable=protected-access
+            tmp_path, location
+        )
+        gs.setup.init(tmp_path / location)
+        gs.run_command("g.region", flags="p")
+        runtime_present = bool(os.environ.get("GISBASE"))
+        session_file = os.environ["GISRC"]
+        gs.setup.finish()
+        runtime_present_after = bool(os.environ.get("GISBASE"))
+        queue.put((session_file, runtime_present, runtime_present_after))
+
+    session_file, runtime_present, runtime_present_after = run_in_subprocess(
+        init_finish
+    )
+    assert session_file, "Expected file name from the subprocess"
+    assert runtime_present, "Runtime (GISBASE) should be present"
+    assert not os.path.exists(session_file), "Session file not deleted"
+    # This is testing the current implementation behavior, but it is not required
+    # to be this way in terms of design.
+    assert runtime_present_after, "Runtime should continue to be present"
+
+
+def test_init_finish_global_functions_capture_strerr(tmp_path):
+    """Check that init and finish global functions work with global env"""
+
+    def init_finish(queue):
+        gs.set_capture_stderr(True)
+        location = "test"
+        gs.core._create_location_xy(  # pylint: disable=protected-access
+            tmp_path, location
+        )
+        gs.setup.init(tmp_path / location)
+        gs.run_command("g.region", flags="p")
+        runtime_present_during = bool(os.environ.get("GISBASE"))
+        gs.setup.finish()
+        runtime_present_after = bool(os.environ.get("GISBASE"))
+        queue.put((os.environ["GISRC"], runtime_present_during, runtime_present_after))
+
+    session_file, runtime_present, runtime_present_after = run_in_subprocess(
+        init_finish
+    )
+    assert session_file, "Expected file name from the subprocess"
+    assert runtime_present, "Runtime (GISBASE) should be present"
+    # This is testing the current implementation behavior, but it is not required
+    # to be this way in terms of design.
+    assert runtime_present_after, "Runtime should continue to be present"
     assert not os.path.exists(session_file), "Session file not deleted"
 
 
@@ -93,11 +150,13 @@ def test_init_as_context_manager_env_attribute(tmp_path):
         with gs.setup.init(tmp_path / location) as session:
             gs.run_command("g.region", flags="p", env=session.env)
             session_file = os.environ["GISRC"]
-            queue.put((session_file, os.path.exists(session_file)))
+            runtime_present = bool(os.environ.get("GISBASE"))
+            queue.put((session_file, os.path.exists(session_file), runtime_present))
 
-    session_file, file_existed = run_in_subprocess(workload)
+    session_file, file_existed, runtime_present = run_in_subprocess(workload)
     assert session_file, "Expected file name from the subprocess"
     assert file_existed, "File should have been present"
+    assert runtime_present, "Runtime (GISBASE) should be present"
     assert not os.path.exists(session_file), "Session file not deleted"
     assert not os.environ.get("GISRC")
     assert not os.environ.get("GISBASE")
