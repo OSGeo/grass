@@ -8,23 +8,59 @@ Usage:
     >>> import grass.temporal as tgis
     >>> tgis.init()
     >>> extent = tgis.RasterSpatialExtent(
-    ... ident="raster@PERMANENT", north=90, south=90, east=180, west=180,
-    ... top=100, bottom=-20)
+    ...     ident="raster@PERMANENT",
+    ...     north=90,
+    ...     south=90,
+    ...     east=180,
+    ...     west=180,
+    ...     top=100,
+    ...     bottom=-20,
+    ... )
     >>> extent = tgis.Raster3DSpatialExtent(
-    ... ident="raster3d@PERMANENT", north=90, south=90, east=180, west=180,
-    ... top=100, bottom=-20)
+    ...     ident="raster3d@PERMANENT",
+    ...     north=90,
+    ...     south=90,
+    ...     east=180,
+    ...     west=180,
+    ...     top=100,
+    ...     bottom=-20,
+    ... )
     >>> extent = tgis.VectorSpatialExtent(
-    ... ident="vector@PERMANENT", north=90, south=90, east=180, west=180,
-    ... top=100, bottom=-20)
+    ...     ident="vector@PERMANENT",
+    ...     north=90,
+    ...     south=90,
+    ...     east=180,
+    ...     west=180,
+    ...     top=100,
+    ...     bottom=-20,
+    ... )
     >>> extent = tgis.STRDSSpatialExtent(
-    ... ident="strds@PERMANENT", north=90, south=90, east=180, west=180,
-    ... top=100, bottom=-20)
+    ...     ident="strds@PERMANENT",
+    ...     north=90,
+    ...     south=90,
+    ...     east=180,
+    ...     west=180,
+    ...     top=100,
+    ...     bottom=-20,
+    ... )
     >>> extent = tgis.STR3DSSpatialExtent(
-    ... ident="str3ds@PERMANENT", north=90, south=90, east=180, west=180,
-    ... top=100, bottom=-20)
+    ...     ident="str3ds@PERMANENT",
+    ...     north=90,
+    ...     south=90,
+    ...     east=180,
+    ...     west=180,
+    ...     top=100,
+    ...     bottom=-20,
+    ... )
     >>> extent = tgis.STVDSSpatialExtent(
-    ... ident="stvds@PERMANENT", north=90, south=90, east=180, west=180,
-    ... top=100, bottom=-20)
+    ...     ident="stvds@PERMANENT",
+    ...     north=90,
+    ...     south=90,
+    ...     east=180,
+    ...     west=180,
+    ...     top=100,
+    ...     bottom=-20,
+    ... )
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
@@ -48,9 +84,16 @@ class SpatialExtent(SQLDatabaseInterface):
     .. code-block:: python
 
         >>> init()
-        >>> extent = SpatialExtent(table="raster_spatial_extent",
-        ... ident="soil@PERMANENT", north=90, south=90, east=180, west=180,
-        ... top=100, bottom=-20)
+        >>> extent = SpatialExtent(
+        ...     table="raster_spatial_extent",
+        ...     ident="soil@PERMANENT",
+        ...     north=90,
+        ...     south=90,
+        ...     east=180,
+        ...     west=180,
+        ...     top=100,
+        ...     bottom=-20,
+        ... )
         >>> extent.id
         'soil@PERMANENT'
         >>> extent.north
@@ -178,8 +221,12 @@ class SpatialExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-             >>> A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
-             >>> B = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+             >>> A = SpatialExtent(
+             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+             ... )
+             >>> B = SpatialExtent(
+             ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+             ... )
              >>> A.overlapping(B)
              True
 
@@ -266,10 +313,12 @@ class SpatialExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = SpatialExtent(north=80, south=20, east=60, west=10,
-            ... bottom=-50, top=50)
-            >>> B = SpatialExtent(north=80, south=20, east=60, west=10,
-            ... bottom=-50, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
             >>> C = A.intersect(B)
             >>> C.print_info()
              +-------------------- Spatial extent ----------------------------------------+
@@ -279,8 +328,9 @@ class SpatialExtent(SQLDatabaseInterface):
              | West:....................... 10.0
              | Top:........................ 50.0
              | Bottom:..................... -50.0
-            >>> B = SpatialExtent(north=40, south=30, east=60, west=10,
-            ... bottom=-50, top=50)
+            >>> B = SpatialExtent(
+            ...     north=40, south=30, east=60, west=10, bottom=-50, top=50
+            ... )
             >>> C = A.intersect(B)
             >>> C.print_info()
              +-------------------- Spatial extent ----------------------------------------+
@@ -290,8 +340,9 @@ class SpatialExtent(SQLDatabaseInterface):
              | West:....................... 10.0
              | Top:........................ 50.0
              | Bottom:..................... -50.0
-            >>> B = SpatialExtent(north=40, south=30, east=60, west=30,
-            ... bottom=-50, top=50)
+            >>> B = SpatialExtent(
+            ...     north=40, south=30, east=60, west=30, bottom=-50, top=50
+            ... )
             >>> C = A.intersect(B)
             >>> C.print_info()
              +-------------------- Spatial extent ----------------------------------------+
@@ -301,8 +352,9 @@ class SpatialExtent(SQLDatabaseInterface):
              | West:....................... 30.0
              | Top:........................ 50.0
              | Bottom:..................... -50.0
-            >>> B = SpatialExtent(north=40, south=30, east=60, west=30,
-            ... bottom=-30, top=50)
+            >>> B = SpatialExtent(
+            ...     north=40, south=30, east=60, west=30, bottom=-30, top=50
+            ... )
             >>> C = A.intersect(B)
             >>> C.print_info()
              +-------------------- Spatial extent ----------------------------------------+
@@ -312,8 +364,9 @@ class SpatialExtent(SQLDatabaseInterface):
              | West:....................... 30.0
              | Top:........................ 50.0
              | Bottom:..................... -30.0
-            >>> B = SpatialExtent(north=40, south=30, east=60, west=30,
-            ... bottom=-30, top=30)
+            >>> B = SpatialExtent(
+            ...     north=40, south=30, east=60, west=30, bottom=-30, top=30
+            ... )
             >>> C = A.intersect(B)
             >>> C.print_info()
              +-------------------- Spatial extent ----------------------------------------+
@@ -327,7 +380,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
          :param extent: The spatial extent to intersect with
          :return: The intersection spatial extent
-        """
+        """  # noqa: E501
 
         if not self.overlapping(extent):
             return None
@@ -436,10 +489,12 @@ class SpatialExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = SpatialExtent(north=80, south=20, east=60, west=10,
-            ... bottom=-50, top=50)
-            >>> B = SpatialExtent(north=80, south=20, east=60, west=10,
-            ... bottom=-50, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
             >>> C = A.disjoint_union(B)
             >>> C.print_info()
              +-------------------- Spatial extent ----------------------------------------+
@@ -449,8 +504,9 @@ class SpatialExtent(SQLDatabaseInterface):
              | West:....................... 10.0
              | Top:........................ 50.0
              | Bottom:..................... -50.0
-            >>> B = SpatialExtent(north=40, south=30, east=60, west=10,
-            ... bottom=-50, top=50)
+            >>> B = SpatialExtent(
+            ...     north=40, south=30, east=60, west=10, bottom=-50, top=50
+            ... )
             >>> C = A.disjoint_union(B)
             >>> C.print_info()
              +-------------------- Spatial extent ----------------------------------------+
@@ -460,8 +516,9 @@ class SpatialExtent(SQLDatabaseInterface):
              | West:....................... 10.0
              | Top:........................ 50.0
              | Bottom:..................... -50.0
-            >>> B = SpatialExtent(north=40, south=30, east=60, west=30,
-            ... bottom=-50, top=50)
+            >>> B = SpatialExtent(
+            ...     north=40, south=30, east=60, west=30, bottom=-50, top=50
+            ... )
             >>> C = A.disjoint_union(B)
             >>> C.print_info()
              +-------------------- Spatial extent ----------------------------------------+
@@ -471,8 +528,9 @@ class SpatialExtent(SQLDatabaseInterface):
              | West:....................... 10.0
              | Top:........................ 50.0
              | Bottom:..................... -50.0
-            >>> B = SpatialExtent(north=40, south=30, east=60, west=30,
-            ... bottom=-30, top=50)
+            >>> B = SpatialExtent(
+            ...     north=40, south=30, east=60, west=30, bottom=-30, top=50
+            ... )
             >>> C = A.disjoint_union(B)
             >>> C.print_info()
              +-------------------- Spatial extent ----------------------------------------+
@@ -482,8 +540,9 @@ class SpatialExtent(SQLDatabaseInterface):
              | West:....................... 10.0
              | Top:........................ 50.0
              | Bottom:..................... -50.0
-            >>> B = SpatialExtent(north=40, south=30, east=60, west=30,
-            ... bottom=-30, top=30)
+            >>> B = SpatialExtent(
+            ...     north=40, south=30, east=60, west=30, bottom=-30, top=30
+            ... )
             >>> C = A.disjoint_union(B)
             >>> C.print_info()
              +-------------------- Spatial extent ----------------------------------------+
@@ -493,10 +552,12 @@ class SpatialExtent(SQLDatabaseInterface):
              | West:....................... 10.0
              | Top:........................ 50.0
              | Bottom:..................... -50.0
-            >>> A = SpatialExtent(north=80, south=20, east=60, west=10,
-            ... bottom=-50, top=50)
-            >>> B = SpatialExtent(north=90, south=80, east=70, west=20,
-            ... bottom=-30, top=60)
+            >>> A = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=90, south=80, east=70, west=20, bottom=-30, top=60
+            ... )
             >>> C = A.disjoint_union(B)
             >>> C.print_info()
              +-------------------- Spatial extent ----------------------------------------+
@@ -510,7 +571,7 @@ class SpatialExtent(SQLDatabaseInterface):
 
          :param extent: The spatial extent to create a disjoint union with
          :return: The union spatial extent
-        """
+        """  # noqa: E501
 
         new = self.disjoint_union_2d(extent)
 
@@ -596,10 +657,12 @@ class SpatialExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = SpatialExtent(north=79, south=21, east=59, west=11,
-            ... bottom=-49, top=49)
-            >>> B = SpatialExtent(north=80, south=20, east=60, west=10,
-            ... bottom=-50, top=50)
+            >>> A = SpatialExtent(
+            ...     north=79, south=21, east=59, west=11, bottom=-49, top=49
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
             >>> A.is_in(B)
             True
             >>> B.is_in(A)
@@ -652,10 +715,12 @@ class SpatialExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = SpatialExtent(north=80, south=20, east=60, west=10,
-            ... bottom=-50, top=50)
-            >>> B = SpatialExtent(north=79, south=21, east=59, west=11,
-            ... bottom=-49, top=49)
+            >>> A = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=79, south=21, east=59, west=11, bottom=-49, top=49
+            ... )
             >>> A.contain(B)
             True
             >>> B.contain(A)
@@ -732,10 +797,12 @@ class SpatialExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = SpatialExtent(north=80, south=20, east=60, west=10,
-            ... bottom=-50, top=50)
-            >>> B = SpatialExtent(north=80, south=20, east=60, west=10,
-            ... bottom=-50, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
             >>> A.equivalent(B)
             True
             >>> B.equivalent(A)
@@ -1414,18 +1481,26 @@ class SpatialExtent(SQLDatabaseInterface):
 
         .. code-block:: python
 
-            >>> A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
-            >>> B = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
             >>> A.spatial_relation(B)
             'equivalent'
             >>> B.spatial_relation(A)
             'equivalent'
-            >>> B = SpatialExtent(north=70, south=20, east=60, west=10, bottom=-50, top=50)
+            >>> B = SpatialExtent(
+            ...     north=70, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
             >>> A.spatial_relation_2d(B)
             'cover'
             >>> A.spatial_relation(B)
             'cover'
-            >>> B = SpatialExtent(north=70, south=30, east=60, west=10, bottom=-50, top=50)
+            >>> B = SpatialExtent(
+            ...     north=70, south=30, east=60, west=10, bottom=-50, top=50
+            ... )
             >>> A.spatial_relation_2d(B)
             'cover'
             >>> A.spatial_relation(B)
@@ -1434,141 +1509,243 @@ class SpatialExtent(SQLDatabaseInterface):
             'covered'
             >>> B.spatial_relation(A)
             'covered'
-            >>> B = SpatialExtent(north=70, south=30, east=50, west=10, bottom=-50, top=50)
+            >>> B = SpatialExtent(
+            ...     north=70, south=30, east=50, west=10, bottom=-50, top=50
+            ... )
             >>> A.spatial_relation_2d(B)
             'cover'
             >>> B.spatial_relation_2d(A)
             'covered'
             >>> A.spatial_relation(B)
             'cover'
-            >>> B = SpatialExtent(north=70, south=30, east=50, west=20, bottom=-50, top=50)
+            >>> B = SpatialExtent(
+            ...     north=70, south=30, east=50, west=20, bottom=-50, top=50
+            ... )
             >>> B.spatial_relation(A)
             'covered'
-            >>> B = SpatialExtent(north=70, south=30, east=50, west=20, bottom=-50, top=50)
+            >>> B = SpatialExtent(
+            ...     north=70, south=30, east=50, west=20, bottom=-50, top=50
+            ... )
             >>> A.spatial_relation_2d(B)
             'contain'
             >>> A.spatial_relation(B)
             'cover'
-            >>> B = SpatialExtent(north=70, south=30, east=50, west=20, bottom=-40, top=50)
+            >>> B = SpatialExtent(
+            ...     north=70, south=30, east=50, west=20, bottom=-40, top=50
+            ... )
             >>> A.spatial_relation(B)
             'cover'
-            >>> B = SpatialExtent(north=70, south=30, east=50, west=20, bottom=-40, top=40)
+            >>> B = SpatialExtent(
+            ...     north=70, south=30, east=50, west=20, bottom=-40, top=40
+            ... )
             >>> A.spatial_relation(B)
             'contain'
             >>> B.spatial_relation(A)
             'in'
-            >>> B = SpatialExtent(north=90, south=30, east=50, west=20, bottom=-40, top=40)
+            >>> B = SpatialExtent(
+            ...     north=90, south=30, east=50, west=20, bottom=-40, top=40
+            ... )
             >>> A.spatial_relation_2d(B)
             'overlap'
             >>> A.spatial_relation(B)
             'overlap'
-            >>> B = SpatialExtent(north=90, south=5, east=70, west=5, bottom=-40, top=40)
+            >>> B = SpatialExtent(
+            ...     north=90, south=5, east=70, west=5, bottom=-40, top=40
+            ... )
             >>> A.spatial_relation_2d(B)
             'in'
             >>> A.spatial_relation(B)
             'overlap'
-            >>> B = SpatialExtent(north=90, south=5, east=70, west=5, bottom=-40, top=60)
+            >>> B = SpatialExtent(
+            ...     north=90, south=5, east=70, west=5, bottom=-40, top=60
+            ... )
             >>> A.spatial_relation(B)
             'overlap'
-            >>> B = SpatialExtent(north=90, south=5, east=70, west=5, bottom=-60, top=60)
+            >>> B = SpatialExtent(
+            ...     north=90, south=5, east=70, west=5, bottom=-60, top=60
+            ... )
             >>> A.spatial_relation(B)
             'in'
-            >>> A = SpatialExtent(north=80, south=60, east=60, west=10, bottom=-50, top=50)
-            >>> B = SpatialExtent(north=60, south=20, east=60, west=10, bottom=-50, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=60, east=60, west=10, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=60, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
             >>> A.spatial_relation_2d(B)
             'meet'
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=60, south=40, east=60, west=10, bottom=-50, top=50)
-            >>> B = SpatialExtent(north=80, south=60, east=60, west=10, bottom=-50, top=50)
+            >>> A = SpatialExtent(
+            ...     north=60, south=40, east=60, west=10, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=80, south=60, east=60, west=10, bottom=-50, top=50
+            ... )
             >>> A.spatial_relation_2d(B)
             'meet'
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=60, west=40, bottom=-50, top=50)
-            >>> B = SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=60, west=40, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=80, south=40, east=40, west=20, bottom=-50, top=50
+            ... )
             >>> A.spatial_relation_2d(B)
             'meet'
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
-            >>> B = SpatialExtent(north=90, south=30, east=60, west=40, bottom=-50, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=40, west=20, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=90, south=30, east=60, west=40, bottom=-50, top=50
+            ... )
             >>> A.spatial_relation_2d(B)
             'meet'
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
-            >>> B = SpatialExtent(north=70, south=50, east=60, west=40, bottom=-50, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=40, west=20, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=70, south=50, east=60, west=40, bottom=-50, top=50
+            ... )
             >>> A.spatial_relation_2d(B)
             'meet'
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
-            >>> B = SpatialExtent(north=60, south=20, east=60, west=40, bottom=-50, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=40, west=20, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=60, south=20, east=60, west=40, bottom=-50, top=50
+            ... )
             >>> A.spatial_relation_2d(B)
             'meet'
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
-            >>> B = SpatialExtent(north=40, south=20, east=60, west=40, bottom=-50, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=40, west=20, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=40, south=20, east=60, west=40, bottom=-50, top=50
+            ... )
             >>> A.spatial_relation_2d(B)
             'disjoint'
             >>> A.spatial_relation(B)
             'disjoint'
-            >>> A = SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
-            >>> B = SpatialExtent(north=60, south=20, east=60, west=40, bottom=-60, top=60)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=40, west=20, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=60, south=20, east=60, west=40, bottom=-60, top=60
+            ... )
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=40, west=20, bottom=-50, top=50)
-            >>> B = SpatialExtent(north=90, south=30, east=60, west=40, bottom=-40, top=40)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=40, west=20, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=90, south=30, east=60, west=40, bottom=-40, top=40
+            ... )
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
-            >>> B = SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=60, west=20, bottom=0, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=80, south=40, east=60, west=20, bottom=-50, top=0
+            ... )
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
-            >>> B = SpatialExtent(north=80, south=50, east=60, west=30, bottom=-50, top=0)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=60, west=20, bottom=0, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=80, south=50, east=60, west=30, bottom=-50, top=0
+            ... )
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
-            >>> B = SpatialExtent(north=70, south=50, east=50, west=30, bottom=-50, top=0)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=60, west=20, bottom=0, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=70, south=50, east=50, west=30, bottom=-50, top=0
+            ... )
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
-            >>> B = SpatialExtent(north=90, south=30, east=70, west=10, bottom=-50, top=0)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=60, west=20, bottom=0, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=90, south=30, east=70, west=10, bottom=-50, top=0
+            ... )
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
-            >>> B = SpatialExtent(north=70, south=30, east=50, west=10, bottom=-50, top=0)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=60, west=20, bottom=0, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=70, south=30, east=50, west=10, bottom=-50, top=0
+            ... )
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
-            >>> B = SpatialExtent(north=80, south=40, east=60, west=20, bottom=0, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=60, west=20, bottom=-50, top=0
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=80, south=40, east=60, west=20, bottom=0, top=50
+            ... )
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
-            >>> B = SpatialExtent(north=80, south=50, east=60, west=30, bottom=0, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=60, west=20, bottom=-50, top=0
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=80, south=50, east=60, west=30, bottom=0, top=50
+            ... )
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
-            >>> B = SpatialExtent(north=70, south=50, east=50, west=30, bottom=0, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=60, west=20, bottom=-50, top=0
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=70, south=50, east=50, west=30, bottom=0, top=50
+            ... )
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
-            >>> B = SpatialExtent(north=90, south=30, east=70, west=10, bottom=0, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=60, west=20, bottom=-50, top=0
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=90, south=30, east=70, west=10, bottom=0, top=50
+            ... )
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
-            >>> B = SpatialExtent(north=70, south=30, east=50, west=10, bottom=0, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=40, east=60, west=20, bottom=-50, top=0
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=70, south=30, east=50, west=10, bottom=0, top=50
+            ... )
             >>> A.spatial_relation(B)
             'meet'
-            >>> A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
-            >>> B = SpatialExtent(north=90, south=81, east=60, west=10, bottom=-50, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=90, south=81, east=60, west=10, bottom=-50, top=50
+            ... )
             >>> A.spatial_relation(B)
             'disjoint'
-            >>> A = SpatialExtent(north=80, south=20, east=60, west=10, bottom=-50, top=50)
-            >>> B = SpatialExtent(north=90, south=80, east=60, west=10, bottom=-50, top=50)
+            >>> A = SpatialExtent(
+            ...     north=80, south=20, east=60, west=10, bottom=-50, top=50
+            ... )
+            >>> B = SpatialExtent(
+            ...     north=90, south=80, east=60, west=10, bottom=-50, top=50
+            ... )
             >>> A.spatial_relation(B)
             'meet'
 
@@ -1825,7 +2002,7 @@ class SpatialExtent(SQLDatabaseInterface):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
         print(
-            " +-------------------- Spatial extent ----------------------------------------+"
+            " +-------------------- Spatial extent ----------------------------------------+"  # noqa: E501
         )
         print(" | North:...................... " + str(self.get_north()))
         print(" | South:...................... " + str(self.get_south()))

@@ -414,7 +414,8 @@ class WSDialogBase(wx.Dialog):
 
     def _getConnectedWS(self):
         """
-        :return: list of found web services on server (identified as keys in self.ws_panels)
+        :return: list of found web services on server (identified as keys in
+                 self.ws_panels)
         """
         conn_ws = []
         for ws, data in self.ws_panels.items():
@@ -424,7 +425,8 @@ class WSDialogBase(wx.Dialog):
         return conn_ws
 
     def UpdateDialogAfterConnection(self):
-        """Update dialog after all web service panels downloaded and parsed capabilities data."""
+        """Update dialog after all web service panels downloaded and parsed
+        capabilities data."""
         avail_ws = {}
         conn_ws = self._getConnectedWS()
 
