@@ -43,7 +43,6 @@ class TemporalTopologyDatasetConnector:
     - finishes
     - finished
 
-    .. code-block:: python
         # We have build the temporal topology and we know the first map
         start = first
         while start:
@@ -54,6 +53,8 @@ class TemporalTopologyDatasetConnector:
                 map.print_info()
 
             start = start.next()
+
+    .. code-block:: python
 
          >>> import grass.temporal as tgis
          >>> tgis.init()
