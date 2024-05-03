@@ -43,6 +43,8 @@ class TemporalTopologyDatasetConnector:
     - finishes
     - finished
 
+    .. code-block:: python
+
         # We have build the temporal topology and we know the first map
         start = first
         while start:
