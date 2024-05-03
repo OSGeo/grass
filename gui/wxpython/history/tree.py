@@ -116,11 +116,11 @@ class HistoryBrowserTree(CTreeView):
 
         self._iconTypes = [
             TIME_PERIOD,
-            history.status_aborted,
-            history.status_failed,
-            history.status_running,
-            history.status_success,
-            history.status_unknown,
+            history.STATUS_ABORTED,
+            history.STATUS_FAILED,
+            history.STATUS_RUNNING,
+            history.STATUS_SUCCESS,
+            history.STATUS_UNKNOWN,
         ]
 
         self._initImages()
@@ -165,11 +165,11 @@ class HistoryBrowserTree(CTreeView):
         bmpsize = (16, 16)
         icons = {
             TIME_PERIOD: MetaIcon(img="time-period").GetBitmap(bmpsize),
-            history.status_aborted: MetaIcon(img="exclamation-mark").GetBitmap(bmpsize),
-            history.status_failed: MetaIcon(img="cross").GetBitmap(bmpsize),
-            history.status_running: MetaIcon(img="circle").GetBitmap(bmpsize),
-            history.status_success: MetaIcon(img="success").GetBitmap(bmpsize),
-            history.status_unknown: MetaIcon(img="question-mark").GetBitmap(bmpsize),
+            history.STATUS_ABORTED: MetaIcon(img="exclamation-mark").GetBitmap(bmpsize),
+            history.STATUS_FAILED: MetaIcon(img="cross").GetBitmap(bmpsize),
+            history.STATUS_RUNNING: MetaIcon(img="circle").GetBitmap(bmpsize),
+            history.STATUS_SUCCESS: MetaIcon(img="success").GetBitmap(bmpsize),
+            history.STATUS_UNKNOWN: MetaIcon(img="question-mark").GetBitmap(bmpsize),
         }
         il = wx.ImageList(bmpsize[0], bmpsize[1], mask=False)
         for each in self._iconTypes:
@@ -268,7 +268,7 @@ class HistoryBrowserTree(CTreeView):
                 entry["command_info"].get("status")
                 if entry.get("command_info")
                 and entry["command_info"].get("status") is not None
-                else "unknown"
+                else history.STATUS_UNKNOWN
             )
 
             # Add command to time period node
@@ -396,7 +396,7 @@ class HistoryBrowserTree(CTreeView):
                 type=COMMAND,
                 name=entry["command"].strip(),
                 timestamp=entry["command_info"]["timestamp"],
-                status=entry["command_info"].get("status", "in process"),
+                status=entry["command_info"].get("status", history.STATUS_UNKNOWN),
             ),
         )
 

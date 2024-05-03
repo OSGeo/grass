@@ -19,11 +19,11 @@ from grass.script.utils import parse_key_val
 
 
 # global status variables
-status_aborted = _("aborted")
-status_failed = _("failed")
-status_running = _("running")
-status_success = _("success")
-status_unknown = _("unknown")
+STATUS_ABORTED = _("aborted")
+STATUS_FAILED = _("failed")
+STATUS_RUNNING = _("running")
+STATUS_SUCCESS = _("success")
+STATUS_UNKNOWN = _("unknown")
 
 
 def get_current_mapset_gui_history_path():
@@ -286,6 +286,7 @@ def get_initial_command_info(env_run):
         "mask2d": mask2d_present,
         "mask3d": mask3d_present,
         "region": region_settings,
+        "status": STATUS_RUNNING,
     }
     return cmd_info
 

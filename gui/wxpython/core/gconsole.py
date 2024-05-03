@@ -446,6 +446,21 @@ class GConsole(wx.EvtHandler):
         """Write message in error style"""
         self.writeError.emit(text=text)
 
+    def UpdateHistory(self, status):
+        """Update command history"""
+        cmd_info = {"status": status}
+
+        try:
+            history_path = history.get_current_mapset_gui_history_path()
+            history.update_entry(history_path, cmd_info)
+
+            # update history model
+            if self._giface:
+                entry = history.read(history_path)[-1]
+                self._giface.entryInHistoryUpdated.emit(entry=entry)
+        except (OSError, ValueError) as e:
+            GError(str(e))
+
     def RunCmd(
         self,
         command,
@@ -529,14 +544,16 @@ class GConsole(wx.EvtHandler):
             ):
                 event = gIgnoredCmdRun(cmd=command)
                 wx.PostEvent(self, event)
-                return
 
+                self.UpdateHistory(status=history.STATUS_FAILED)
+                return
             else:
                 # other GRASS commands (r|v|g|...)
                 try:
                     task = GUI(show=None).ParseCommand(command)
                 except GException as e:
                     GError(parent=self._guiparent, message=str(e), showTraceback=False)
+                    self.UpdateHistory(status=history.STATUS_FAILED)
                     return
 
                 hasParams = False
@@ -560,6 +577,7 @@ class GConsole(wx.EvtHandler):
                                 )
                                 % {"cmd": " ".join(command), "opt": p.get("name", "")},
                             )
+                            self.UpdateHistory(status=history.STATUS_FAILED)
                             return
 
                 if len(command) == 1:
@@ -580,6 +598,8 @@ class GConsole(wx.EvtHandler):
                                 parent=self._guiparent,
                                 message=_("Module <%s> not found.") % command[0],
                             )
+                            self.UpdateHistory(status=history.STATUS_FAILED)
+
                         pymodule = imp.load_source(command[0].replace(".", "_"), pyPath)
                         pymain = inspect.getfullargspec(pymodule.main)
                         if pymain and "giface" in pymain.args:
@@ -593,8 +613,11 @@ class GConsole(wx.EvtHandler):
                             GUI(
                                 parent=self._guiparent, giface=self._giface
                             ).ParseCommand(command)
+                            self.UpdateHistory(status=history.STATUS_SUCCESS)
+
                         except GException as e:
                             print(e, file=sys.stderr)
+                            self.UpdateHistory(status=history.STATUS_FAILED)
 
                         return
 
@@ -636,6 +659,8 @@ class GConsole(wx.EvtHandler):
             ):
                 event = gIgnoredCmdRun(cmd=command)
                 wx.PostEvent(self, event)
+
+                self.UpdateHistory(status=history.STATUS_FAILED)
                 return
 
             skipInterface = True
@@ -649,6 +674,7 @@ class GConsole(wx.EvtHandler):
                                 skipInterface = False
                                 break
                 except OSError:
+                    self.UpdateHistory(status=history.STATUS_FAILED)
                     pass
 
             if len(command) == 1 and not skipInterface:
@@ -662,6 +688,7 @@ class GConsole(wx.EvtHandler):
             if task:
                 # process GRASS command without argument
                 GUI(parent=self._guiparent, giface=self._giface).ParseCommand(command)
+                self.UpdateHistory(status=history.STATUS_SUCCESS)
             else:
                 self.cmdThread.RunCmd(
                     command,
@@ -736,15 +763,15 @@ class GConsole(wx.EvtHandler):
                 )
             )
             msg = _("Command aborted")
-            status = "aborted"
+            status = history.STATUS_ABORTED
         elif event.returncode != 0:
             msg = _("Command ended with non-zero return code {returncode}").format(
                 returncode=event.returncode
             )
-            status = "failed"
+            status = history.STATUS_FAILED
         else:
             msg = _("Command finished")
-            status = "success"
+            status = history.STATUS_SUCCESS
 
         cmd_info = {"runtime": int(ctime), "status": status}
 
