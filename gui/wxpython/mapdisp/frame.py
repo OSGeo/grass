@@ -1237,7 +1237,8 @@ class MapPanel(SingleMapPanel, MainPageBase):
     def _onMeasure(self, controller):
         """Starts measurement mode.
 
-        :param controller: measurement class (MeasureDistanceController, MeasureAreaController)
+        :param controller: measurement class (MeasureDistanceController,
+                           MeasureAreaController)
         """
         self.measureController = controller(self._giface, mapWindow=self.GetMapWindow())
         # assure that the mode is ended and lines are cleared whenever other
@@ -1303,8 +1304,8 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
         win.CentreOnParent()
         win.Show()
-        # Open raster select dialog to make sure that at least 2 rasters (and the desired rasters)
-        # are selected to be plotted
+        # Open raster select dialog to make sure that at least 2 rasters (and the
+        # desired rasters) are selected to be plotted
         win.OnSelectRaster(None)
 
     def OnHistogram(self, event):

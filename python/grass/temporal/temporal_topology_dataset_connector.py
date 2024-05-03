@@ -56,6 +56,8 @@ class TemporalTopologyDatasetConnector:
 
             start = start.next()
 
+    .. code-block:: python
+
          >>> import grass.temporal as tgis
          >>> tgis.init()
          >>> map = tgis.RasterDataset("a@P")
@@ -104,7 +106,8 @@ class TemporalTopologyDatasetConnector:
          finished=a@P
          >>> rlist = tmr.get_temporal_relations()
          >>> if "FINISHED" in rlist.keys():
-         ...    print(rlist["FINISHED"][0].get_id())
+         ...     print(rlist["FINISHED"][0].get_id())
+         ...
          a@P
 
     """
@@ -504,7 +507,7 @@ class TemporalTopologyDatasetConnector:
         """Print information about this class in human readable style"""
 
         print(
-            " +-------------------- Temporal Topology -------------------------------------+"
+            " +-------------------- Temporal Topology -------------------------------------+"  # noqa: E501
         )
         #          0123456789012345678901234567890
         if self.next() is not None:

@@ -153,7 +153,8 @@ def main():
             if os.path.exists(proj_info_file_2):
                 grass.fatal(
                     _(
-                        "PROJ_INFO file is missing, unpack raster map in XY (unprojected) project."
+                        "PROJ_INFO file is missing, unpack raster map in XY "
+                        "(unprojected) project."
                     )
                 )
             skip_projection_check = True  # XY location

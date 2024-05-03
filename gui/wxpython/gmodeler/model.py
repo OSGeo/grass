@@ -2783,7 +2783,7 @@ class Model(Process):
         inputs = list()
         outputs = list()
 
-"""
+"""  # noqa: E501
         )
 
         for item in self.model.GetItems():
