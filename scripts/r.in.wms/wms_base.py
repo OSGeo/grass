@@ -355,16 +355,20 @@ class WMSBase:
                 grass.fatal(_("Unable to write data into tempfile"))
             finally:
                 temp_region_opened.close()
+            try:
+                points = grass.read_command(
+                    "m.proj",
+                    flags="d",
+                    proj_out=self.proj_srs,
+                    proj_in=self.proj_location,
+                    input=temp_region,
+                    quiet=True,
+                )  # TODO: stdin
+            except CalledModuleError:
+                points = None
+            finally:
+                grass.try_remove(temp_region)
 
-            points = grass.read_command(
-                "m.proj",
-                flags="d",
-                proj_out=self.proj_srs,
-                proj_in=self.proj_location,
-                input=temp_region,
-                quiet=True,
-            )  # TODO: stdin
-            grass.try_remove(temp_region)
             if not points:
                 grass.fatal(_("Unable to determine region, %s failed") % "m.proj")
 
