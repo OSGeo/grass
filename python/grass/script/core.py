@@ -573,7 +573,7 @@ def parse_command(*args, **kwargs):
     """
 
     def parse_csv(result):
-        return list(csv.reader(io.StringIO(result)))
+        return list(csv.DictReader(io.StringIO(result)))
 
     parse = None
     parse_args = {}
