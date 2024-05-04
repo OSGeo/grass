@@ -238,7 +238,10 @@ class VirtualAttributeList(
             self.sqlFilter = {"where": where}
 
             if columns:
-                cmdParams.update(dict(columns=",".join(columns)))
+                # Enclose column name with SQL standard double quotes
+                cmdParams.update(
+                    dict(columns=",".join([f'"{col}"' for col in columns]))
+                )
 
             ret = RunCommand("v.db.select", **cmdParams)
 
@@ -2109,8 +2112,9 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             try:
                 if len(whereVal) > 0:
                     showSelected = True
+                    # Enclose column name with SQL standard double quotes
                     keyColumn = listWin.LoadData(
-                        self.selLayer, where=whereCol + whereOpe + whereVal
+                        self.selLayer, where=f'"{whereCol}"' + whereOpe + whereVal
                     )
                 else:
                     keyColumn = listWin.LoadData(self.selLayer)
