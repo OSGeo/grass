@@ -299,7 +299,8 @@ class LegendController(OverlayController):
         for param in self._cmd:
             if not param.startswith("at"):
                 continue
-            # if the at= is the default, we will move the legend from the center to bottom left
+            # if the at= is the default, we will move the legend from the center to
+            # bottom left
             if param == self._defaultAt:
                 b, t, l, r = 5, 50, 7, 10
             else:

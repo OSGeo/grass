@@ -776,7 +776,7 @@ def fatal(msg, env=None):
     if raise_on_error:
         raise ScriptError(msg)
 
-    error(msg, env=None)
+    error(msg, env=env)
     sys.exit(1)
 
 
@@ -1770,11 +1770,11 @@ def create_project(
         env = os.environ.copy()
         setup_runtime_env(env=env)
 
-    if epsg or proj4 or filename or wkt:
-        # The names don't really matter here.
-        tmp_gisrc, env = create_environment(
-            mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
-        )
+    # Even g.proj and g.message need GISRC to be present.
+    # The names don't really matter here.
+    tmp_gisrc, env = create_environment(
+        mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
+    )
 
     # check if location already exists
     if Path(mapset_path.directory, mapset_path.location).exists():

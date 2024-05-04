@@ -218,10 +218,12 @@ class StandaloneGrassInterface(GrassInterface):
         # Signal for communicating something in current grassdb has changed.
         # Parameters:
         # action: required, is one of 'new', 'rename', 'delete'
-        # element: required, can be one of 'grassdb', 'location', 'mapset', 'raster', 'vector' and 'raster_3d'
+        # element: required, can be one of 'grassdb', 'location', 'mapset', 'raster',
+        #          'vector' and 'raster_3d'
         # grassdb: path to grass db, required
         # location: location name, required
-        # mapset: mapset name, required when element is 'mapset', 'raster', 'vector' or 'raster_3d'
+        # mapset: mapset name, required when element is 'mapset', 'raster',
+        #         'vector' or 'raster_3d'
         # map: map name, required when element is 'raster', 'vector' or 'raster_3d'
         # newname: new name (of mapset, map), required with action='rename'
         self.grassdbChanged = Signal("StandaloneGrassInterface.grassdbChanged")

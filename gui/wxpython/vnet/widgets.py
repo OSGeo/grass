@@ -15,7 +15,8 @@ This program is free software under the GNU General Public License
 @author Original author Michael Barton
 @author Original version improved by Martin Landa <landa.martin gmail.com>
 @author Rewritten by Markus Metz redesign georectfier -> GCP Manage
-@author Stepan Turek <stepan.turek seznam.cz> (Created PointsList from GCPList) (GSoC 2012, mentor: Martin Landa)
+@author Stepan Turek <stepan.turek seznam.cz> (Created PointsList from GCPList)
+        (GSoC 2012, mentor: Martin Landa)
 """
 
 import os
@@ -64,13 +65,13 @@ class PointsList(
                 Structure of list item must be this:
                -1. item: column name
                -2. item: column label
-               -3. item: If column is editable by user, it must contain convert function to convert
-                         inserted string to it's type for sorting. Use None for not editable
-                         columns. Values for insertion can be in list. This allows insert
-                         just values in the list.
-               -4. item: Default value for column cell. Value should be given in it's  type
-                         in order to sorting would work properly. If 3. item is list, it must be index
-                         of some item in the list.
+               -3. item: If column is editable by user, it must contain convert
+                         function to convert inserted string to it's type for sorting.
+                         Use None for not editable columns. Values for insertion can be
+                         in list. This allows insert just values in the list.
+               -4. item: Default value for column cell. Value should be given in it's
+                         type in order to sorting would work properly. If 3. item is
+                         list, it must be index of some item in the list.
 
         Example of cols parameter:
                  column name, column label, convert function, default val
@@ -82,8 +83,9 @@ class PointsList(
                    ['N', _('target N'), float, 0.0],
                    ['F_Err', _('Forward error'), None, 0],
                    ['B_Err', _(Backward error'), None, 0]
-                   ['type', _('type'), [_(""), _("Start point"), _("End point")], 0] # Select from 3 choices ("Start point", "End point"),
-                                                                                     # Choice with index 0 ("") is default.
+                   # Select from 3 choices ("Start point", "End point"),
+                   # Choice with index 0 ("") is default.
+                   ['type', _('type'), [_(""), _("Start point"), _("End point")], 0]
                   ]
         @endcode
         """
@@ -281,7 +283,8 @@ class PointsList(
         return -1
 
     def ChangeColEditable(self, colName, colType):
-        """Change 3. item in constructor parameter cols (see the class constructor hint)"""
+        """Change 3. item in constructor parameter cols (see the class constructor
+        hint)"""
         colNum = self._getColumnNum(colName)
         iColEd = self.dataTypes["colEditable"]
         self.colsData[colNum][iColEd] = colType
@@ -504,7 +507,8 @@ class PointsList(
 
         :param colName: name of column
         :type colName: str
-        :param pos: zero based index of position among showed columns (including added 'use' column)
+        :param pos: zero based index of position among showed columns (including added
+                    'use' column)
 
         :return: True if column was shown
         :return: False if position is not valid or column is not hidden

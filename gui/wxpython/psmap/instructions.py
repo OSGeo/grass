@@ -738,7 +738,8 @@ class MapFrame(InstructionObject):
                 ):
                     GWarning(
                         _(
-                            "Map frame position changed, old value: %(old1)s %(old2)s\nnew value: %(new1)s %(new2)s"
+                            "Map frame position changed, old value: %(old1)s %(old2)s\n"
+                            "new value: %(new1)s %(new2)s"
                         )
                         % {
                             "old1": maploc[0],
@@ -748,7 +749,12 @@ class MapFrame(InstructionObject):
                         }
                     )
 
-                # instr['rect'] = wx.Rect2D(float(maploc[0]), float(maploc[1]), self.instruction['rect'][2], self.instruction['rect'][3])
+                # instr["rect"] = wx.Rect2D(
+                #     float(maploc[0]),
+                #     float(maploc[1]),
+                #     self.instruction["rect"][2],
+                #     self.instruction["rect"][3],
+                # )
             if len(maploc) == 4:
                 if (
                     abs(self.instruction["rect"].Get()[2] - float(maploc[2])) > 0.5
@@ -756,7 +762,8 @@ class MapFrame(InstructionObject):
                 ):
                     GWarning(
                         _(
-                            "Map frame size changed, old value: %(old1)s %(old2)s\nnew value: %(new1)s %(new2)s"
+                            "Map frame size changed, old value: %(old1)s %(old2)s\n"
+                            "new value: %(new1)s %(new2)s"
                         )
                         % {
                             "old1": maploc[2],
@@ -799,7 +806,8 @@ class PageSetup(InstructionObject):
         else:
             instr = string.Template("paper $Format\n").substitute(self.instruction)
         instr += string.Template(
-            "    left $Left\n    right $Right\n    bottom $Bottom\n    top $Top\n    end"
+            "    left $Left\n    right $Right\n    bottom $Bottom\n    top $Top\n"
+            "    end"
         ).substitute(self.instruction)
 
         return instr
@@ -829,7 +837,8 @@ class PageSetup(InstructionObject):
                         except KeyError:
                             GError(
                                 _(
-                                    "Failed to read instruction %(file)s.\nUnknown format %(for)s"
+                                    "Failed to read instruction %(file)s.\n"
+                                    "Unknown format %(for)s"
                                 )
                                 % {"file": instruction, "for": format}
                             )

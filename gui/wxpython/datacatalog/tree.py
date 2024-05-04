@@ -581,9 +581,11 @@ class DataCatalogTree(TreeView):
         """Updates grass databases, locations, mapsets and layers in the tree.
 
         It runs in thread, so it should not directly interact with GUI.
-        In case of any errors it returns the errors as a list of strings, otherwise None.
+        In case of any errors it returns the errors as a list of strings, otherwise
+        None.
 
-        Option full=True forces full reload, full=False will behave based on user settings.
+        Option full=True forces full reload, full=False will behave based on user
+        settings.
         """
         errors = []
         for grassdatabase in self.grassdatabases:
@@ -870,10 +872,10 @@ class DataCatalogTree(TreeView):
                     dlg = wx.MessageDialog(
                         parent=self,
                         message=_(
-                            "Map <{map_name}@{map_mapset}> is not in the current project. "
-                            "To be able to display it you need to switch to <{map_location}> "
-                            "project. Note that if you switch there all current "
-                            "Map Displays will be closed.\n\n"
+                            "Map <{map_name}@{map_mapset}> is not in the current "
+                            "project. To be able to display it you need to switch to "
+                            "<{map_location}> project. Note that if you switch there "
+                            "all current Map Displays will be closed.\n\n"
                             "Do you want to switch anyway?"
                         ).format(
                             map_name=selected_layer.data["name"],
@@ -1676,7 +1678,8 @@ class DataCatalogTree(TreeView):
             )
             names[self.selected_layer[i].data["type"]].append(name)
             all_names.append(name)
-        # if self.selected_location[0].data['name'] == gisenv()['LOCATION_NAME'] and self.selected_mapset[0]:
+        # if self.selected_location[0].data['name'] == gisenv()['LOCATION_NAME'] and
+        # self.selected_mapset[0]:
         for ltype in names:
             if names[ltype]:
                 self._giface.lmgr.AddMaps(list(reversed(names[ltype])), ltype, True)
@@ -1712,7 +1715,8 @@ class DataCatalogTree(TreeView):
                 ):
                     GMessage(
                         _(
-                            "To move or copy maps to other mapsets, unlock editing of other mapsets"
+                            "To move or copy maps to other mapsets, unlock editing of "
+                            "other mapsets"
                         ),
                         parent=self,
                     )
