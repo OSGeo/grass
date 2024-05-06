@@ -94,9 +94,10 @@ def main():
     except ImportError:
         grass.script.fatal(
             _(
-                "Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules. "
-                "You can use t.rast3d.mapcalc that provides a limited but useful alternative to "
-                "t.rast3d.mapcalc2 without PLY requirement."
+                "Please install PLY (Lex and Yacc Python implementation) to use the "
+                "temporal algebra modules. You can use t.rast3d.mapcalc that provides "
+                "a limited but useful alternative to t.rast3d.mapcalc2 without PLY "
+                "requirement."
             )
         )
 

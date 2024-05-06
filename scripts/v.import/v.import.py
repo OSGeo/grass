@@ -269,7 +269,8 @@ def main():
             except:
                 grass.fatal(
                     _(
-                        "Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"
+                        "Unable to load GDAL Python bindings (requires package "
+                        "'python-gdal' being installed)"
                     )
                 )
             if int(gdal.VersionInfo("VERSION_NUM")) < GDAL_COMPUTE_VERSION(2, 4, 1):
@@ -345,7 +346,8 @@ def main():
             except:
                 grass.fatal(
                     _(
-                        "Unable to load GDAL Python bindings (requires package 'python-gdal' being installed)"
+                        "Unable to load GDAL Python bindings (requires package "
+                        "'python-gdal' being installed)"
                     )
                 )
             if int(gdal.VersionInfo("VERSION_NUM")) < GDAL_COMPUTE_VERSION(2, 4, 1):

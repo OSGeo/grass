@@ -215,7 +215,8 @@ def register_maps_in_space_time_dataset(
             increment = None
             msgr.warning(
                 _(
-                    "The increment option will be ignored because of time stamps in input file"
+                    "The increment option will be ignored because of time stamps in "
+                    "input file"
                 )
             )
 
@@ -223,7 +224,8 @@ def register_maps_in_space_time_dataset(
             increment = None
             msgr.warning(
                 _(
-                    "The interval flag will be ignored because of time stamps in input file"
+                    "The interval flag will be ignored because of time stamps in input "
+                    "file"
                 )
             )
         fd.close()
@@ -373,7 +375,8 @@ def register_maps_in_space_time_dataset(
 
         # Try to read an existing time stamp from the grass spatial database
         # in case this map wasn't already registered in the temporal database
-        # Read the spatial database time stamp only, if no time stamp was provided for this map
+        # Read the spatial database time stamp only, if no time stamp was provided for
+        # this map
         # as method argument or in the input file
         if not is_in_db and not start:
             map_object.read_timestamp_from_grass()
@@ -534,7 +537,8 @@ def assign_valid_time_to_map(
             msgr.debug(
                 1,
                 _(
-                    "Set absolute valid time for map <{mid}> to {start_time} - {end_time}"
+                    "Set absolute valid time for map <{mid}> to "
+                    "{start_time} - {end_time}"
                 ).format(
                     mid=map_object.get_map_id(),
                     start_time=str(start_time),
@@ -573,7 +577,8 @@ def assign_valid_time_to_map(
             msgr.debug(
                 1,
                 _(
-                    "Set relative valid time for map <{mid}> to {start} - {end} with unit {unit}"
+                    "Set relative valid time for map <{mid}> to "
+                    "{start} - {end} with unit {unit}"
                 ).format(
                     mid=map_object.get_map_id(),
                     start=start_time,

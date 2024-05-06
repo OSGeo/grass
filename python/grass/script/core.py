@@ -128,7 +128,7 @@ def _make_unicode(val, enc):
             return decode(val, encoding=enc)
 
 
-def get_commands():
+def get_commands(*, env=None):
     """Create list of available GRASS commands to use when parsing
     string from the command line
 
@@ -141,7 +141,17 @@ def get_commands():
     ['d.barscale', 'd.colorlist', 'd.colortable', 'd.correlate', 'd.erase']
 
     """
-    gisbase = os.environ["GISBASE"]
+    if not env:
+        env = os.environ
+    gisbase = env.get("GISBASE")
+
+    # Lazy-importing to avoid circular dependencies.
+    # pylint: disable=import-outside-toplevel
+    if not gisbase:
+        from grass.script.setup import get_install_path
+
+        gisbase = get_install_path()
+
     cmd = list()
     scripts = {".py": list()} if sys.platform == "win32" else {}
 
@@ -766,7 +776,7 @@ def fatal(msg, env=None):
     if raise_on_error:
         raise ScriptError(msg)
 
-    error(msg, env=None)
+    error(msg, env=env)
     sys.exit(1)
 
 
@@ -1760,11 +1770,11 @@ def create_project(
         env = os.environ.copy()
         setup_runtime_env(env=env)
 
-    if epsg or proj4 or filename or wkt:
-        # The names don't really matter here.
-        tmp_gisrc, env = create_environment(
-            mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
-        )
+    # Even g.proj and g.message need GISRC to be present.
+    # The names don't really matter here.
+    tmp_gisrc, env = create_environment(
+        mapset_path.directory, mapset_path.location, mapset_path.mapset, env=env
+    )
 
     # check if location already exists
     if Path(mapset_path.directory, mapset_path.location).exists():

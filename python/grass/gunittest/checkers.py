@@ -23,7 +23,8 @@ except (ImportError, AttributeError):
     # TODO: we are silent about the error and use a object with different
     # interface, should be replaced by central keyvalue module
     # this can happen when translations are not available
-    # TODO: grass should survive are give better error when tranlsations are not available
+    # TODO: grass should survive and give better errors when translations are not
+    # available
     # even the lazy loading after first _ call would be interesting
     # File "...grass/script/core.py", line 40, in <module>
     # AttributeError: 'NoneType' object has no attribute 'endswith'
@@ -41,7 +42,7 @@ def unify_projection(dic):
 
     Example of common typo in UTM replaced by correct spelling::
 
-        >>> unify_projection({'name': ['Universe Transverse Mercator']})
+        >>> unify_projection({"name": ["Universe Transverse Mercator"]})
         {'name': ['Universal Transverse Mercator']}
 
     :param dic: The dictionary containing information about projection
@@ -67,7 +68,7 @@ def unify_units(dic):
 
     Example of British English spelling replaced by US English spelling::
 
-        >>> unify_units({'units': ['metres'], 'unit': ['metre']})  # doctest: +SKIP
+        >>> unify_units({"units": ["metres"], "unit": ["metre"]})  # doctest: +SKIP
         {'units': ['meters'], 'unit': ['meter']}
 
     :param dic: The dictionary containing information about units
@@ -111,13 +112,13 @@ def value_from_string(value):
     Type conversions are applied in order ``int``, ``float``, ``string``
     where string is no conversion.
 
-    >>> value_from_string('1')
+    >>> value_from_string("1")
     1
-    >>> value_from_string('5.6')
+    >>> value_from_string("5.6")
     5.6
-    >>> value_from_string('  5.6\t  ')
+    >>> value_from_string("  5.6\t  ")
     5.6
-    >>> value_from_string('hello')
+    >>> value_from_string("hello")
     'hello'
     """
     not_float = False
@@ -178,10 +179,14 @@ def text_to_keyvalue(
     And example of converting text with text, floats, integers and list
     to a dictionary::
 
-        >>> sorted(text_to_keyvalue('''a: Hello
+        >>> sorted(
+        ...     text_to_keyvalue(
+        ...         '''a: Hello
         ... b: 1.0
         ... c: 1,2,3,4,5
-        ... d : hello,8,0.1''').items())  # sorted items from the dictionary
+        ... d : hello,8,0.1'''
+        ...     ).items()
+        ... )  # sorted items from the dictionary
         [('a', 'Hello'), ('b', 1.0), ('c', [1, 2, 3, 4, 5]), ('d', ['hello', 8, 0.1])]
 
     .. warning::
@@ -260,7 +265,7 @@ def values_equal(value_a, value_b, precision=0.000001):
     True
     >>> values_equal(1, 5.9, precision=10)
     True
-    >>> values_equal('Hello', 'hello')
+    >>> values_equal("Hello", "hello")
     False
     """
     # each if body needs to handle only not equal state
@@ -325,14 +330,21 @@ def keyvalue_equals(
 
     An example of key-value texts comparison::
 
-        >>> keyvalue_equals(text_to_keyvalue('''a: Hello
+        >>> keyvalue_equals(
+        ...     text_to_keyvalue(
+        ...         '''a: Hello
         ... b: 1.0
         ... c: 1,2,3,4,5
-        ... d: hello,8,0.1'''),
-        ... text_to_keyvalue('''a: Hello
+        ... d: hello,8,0.1'''
+        ...     ),
+        ...     text_to_keyvalue(
+        ...         '''a: Hello
         ... b: 1.1
         ... c: 1,22,3,4,5
-        ... d: hello,8,0.1'''), precision=0.1)
+        ... d: hello,8,0.1'''
+        ...     ),
+        ...     precision=0.1,
+        ... )
         False
 
     :param dict_a: first dictionary
@@ -381,8 +393,8 @@ def diff_keyvalue(
 
     The function returns missing keys and different values for common keys::
 
-        >>> a = {'c': 2, 'b': 3, 'a': 4}
-        >>> b = {'c': 1, 'b': 3, 'd': 5}
+        >>> a = {"c": 2, "b": 3, "a": 4}
+        >>> b = {"c": 1, "b": 3, "d": 5}
         >>> diff_keyvalue(a, b, precision=0)
         (['d'], ['a'], [('c', 2, 1)])
 
@@ -486,32 +498,31 @@ def proj_units_equals(text_a, text_b):
 # TODO: the behavior with last \n is strange but now using DOTALL and $
 def check_text_ellipsis(reference, actual):
     r"""
-    >>> check_text_ellipsis("Vector map <...> contains ... points.",
-    ...                     "Vector map <bridges> contains 5268 points.")
+    >>> check_text_ellipsis(
+    ...     "Vector map <...> contains ... points.",
+    ...     "Vector map <bridges> contains 5268 points.",
+    ... )
     True
-    >>> check_text_ellipsis("user: ...\\nname: elevation",
-    ...                     "user: some_user\\nname: elevation")
+    >>> check_text_ellipsis(
+    ...     "user: ...\\nname: elevation", "user: some_user\\nname: elevation"
+    ... )
     True
-    >>> check_text_ellipsis("user: ...\\nname: elevation",
-    ...                     "user: \\nname: elevation")
+    >>> check_text_ellipsis("user: ...\\nname: elevation", "user: \\nname: elevation")
     False
 
     The ellipsis is always considered even if it is followed by another
     dots. Consequently, a dot at the end of the sentence with preceding
     ellipsis will work as well as a line filled with undefined number of dots.
 
-    >>> check_text_ellipsis("The result is ....",
-    ...                     "The result is 25.")
+    >>> check_text_ellipsis("The result is ....", "The result is 25.")
     True
-    >>> check_text_ellipsis("max ..... ...",
-    ...                     "max ....... 6")
+    >>> check_text_ellipsis("max ..... ...", "max ....... 6")
     True
 
     However, there is no way how to express that the dot should be in the
     beginning and the ellipsis is at the end of the group of dots.
 
-    >>> check_text_ellipsis("The result is ....",
-    ...                     "The result is .25")
+    >>> check_text_ellipsis("The result is ....", "The result is .25")
     False
 
     The matching goes over lines (TODO: should this be changed?):
@@ -521,8 +532,7 @@ def check_text_ellipsis(reference, actual):
     This function is based on regular expression containing .+ but no other
     regular expression matching will be done.
 
-    >>> check_text_ellipsis("Result: [569] (...)",
-    ...                     "Result: 9 (too high)")
+    >>> check_text_ellipsis("Result: [569] (...)", "Result: 9 (too high)")
     False
     """
     ref_escaped = re.escape(reference)
@@ -536,43 +546,55 @@ def check_text_ellipsis(reference, actual):
 
 def check_text_ellipsis_doctest(reference, actual):
     """
-    >>> check_text_ellipsis_doctest("user: ...\\nname: elevation",
-    ...                     "user: some_user\\nname: elevation")
+    >>> check_text_ellipsis_doctest(
+    ...     "user: ...\\nname: elevation", "user: some_user\\nname: elevation"
+    ... )
     True
-    >>> check_text_ellipsis_doctest("user: ...\\nname: elevation",
-    ...                     "user: \\nname: elevation")
+    >>> check_text_ellipsis_doctest(
+    ...     "user: ...\\nname: elevation", "user: \\nname: elevation"
+    ... )
     True
 
     This function is using doctest's function to check the result, so we
     will discuss here how the underlying function behaves.
 
     >>> checker = doctest.OutputChecker()
-    >>> checker.check_output("user: some_user\\nname: elevation",
-    ...                      "user: some_user\\nname: elevation",
-    ...                      optionflags=None)
+    >>> checker.check_output(
+    ...     "user: some_user\\nname: elevation",
+    ...     "user: some_user\\nname: elevation",
+    ...     optionflags=None,
+    ... )
     True
-    >>> checker.check_output("user: user1\\nname: elevation",
-    ...                      "user: some_user\\nname: elevation",
-    ...                      optionflags=doctest.ELLIPSIS)
+    >>> checker.check_output(
+    ...     "user: user1\\nname: elevation",
+    ...     "user: some_user\\nname: elevation",
+    ...     optionflags=doctest.ELLIPSIS,
+    ... )
     False
-    >>> checker.check_output("user: ...\\nname: elevation",
-    ...                      "user: some_user\\nname: elevation",
-    ...                      optionflags=doctest.ELLIPSIS)
+    >>> checker.check_output(
+    ...     "user: ...\\nname: elevation",
+    ...     "user: some_user\\nname: elevation",
+    ...     optionflags=doctest.ELLIPSIS,
+    ... )
     True
 
     The ellipsis matches also an empty string, so the following matches:
 
-    >>> checker.check_output("user: ...\\nname: elevation",
-    ...                      "user: \\nname: elevation",
-    ...                      optionflags=doctest.ELLIPSIS)
+    >>> checker.check_output(
+    ...     "user: ...\\nname: elevation",
+    ...     "user: \\nname: elevation",
+    ...     optionflags=doctest.ELLIPSIS,
+    ... )
     True
 
     It is robust concerning misspelled matching string but does not allow
     ellipsis followed by a dot, e.g. at the end of the sentence:
 
-    >>> checker.check_output("user: ....\\nname: elevation",
-    ...                      "user: some_user\\nname: elevation",
-    ...                      optionflags=doctest.ELLIPSIS)
+    >>> checker.check_output(
+    ...     "user: ....\\nname: elevation",
+    ...     "user: some_user\\nname: elevation",
+    ...     optionflags=doctest.ELLIPSIS,
+    ... )
     False
     """
     # this can be also global
