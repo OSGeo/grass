@@ -545,7 +545,6 @@ class GConsole(wx.EvtHandler):
                 event = gIgnoredCmdRun(cmd=command)
                 wx.PostEvent(self, event)
 
-                self.UpdateHistory(status=history.STATUS_FAILED)
                 return
             else:
                 # other GRASS commands (r|v|g|...)
@@ -553,7 +552,6 @@ class GConsole(wx.EvtHandler):
                     task = GUI(show=None).ParseCommand(command)
                 except GException as e:
                     GError(parent=self._guiparent, message=str(e), showTraceback=False)
-                    self.UpdateHistory(status=history.STATUS_FAILED)
                     return
 
                 hasParams = False
@@ -577,7 +575,6 @@ class GConsole(wx.EvtHandler):
                                 )
                                 % {"cmd": " ".join(command), "opt": p.get("name", "")},
                             )
-                            self.UpdateHistory(status=history.STATUS_FAILED)
                             return
 
                 if len(command) == 1:
@@ -598,7 +595,6 @@ class GConsole(wx.EvtHandler):
                                 parent=self._guiparent,
                                 message=_("Module <%s> not found.") % command[0],
                             )
-                            self.UpdateHistory(status=history.STATUS_FAILED)
 
                         pymodule = imp.load_source(command[0].replace(".", "_"), pyPath)
                         pymain = inspect.getfullargspec(pymodule.main)
@@ -617,7 +613,6 @@ class GConsole(wx.EvtHandler):
 
                         except GException as e:
                             print(e, file=sys.stderr)
-                            self.UpdateHistory(status=history.STATUS_FAILED)
 
                         return
 
@@ -660,7 +655,6 @@ class GConsole(wx.EvtHandler):
                 event = gIgnoredCmdRun(cmd=command)
                 wx.PostEvent(self, event)
 
-                self.UpdateHistory(status=history.STATUS_FAILED)
                 return
 
             skipInterface = True
@@ -674,7 +668,6 @@ class GConsole(wx.EvtHandler):
                                 skipInterface = False
                                 break
                 except OSError:
-                    self.UpdateHistory(status=history.STATUS_FAILED)
                     pass
 
             if len(command) == 1 and not skipInterface:
