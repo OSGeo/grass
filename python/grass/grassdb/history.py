@@ -19,11 +19,11 @@ from grass.script.utils import parse_key_val
 
 
 # global status variables
-STATUS_ABORTED = _("aborted")
-STATUS_FAILED = _("failed")
-STATUS_RUNNING = _("running")
-STATUS_SUCCESS = _("success")
-STATUS_UNKNOWN = _("unknown")
+STATUS_ABORTED = "aborted"
+STATUS_FAILED = "failed"
+STATUS_RUNNING = "running"
+STATUS_SUCCESS = "success"
+STATUS_UNKNOWN = "unknown"
 
 
 def get_current_mapset_gui_history_path():

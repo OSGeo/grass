@@ -44,8 +44,8 @@ from grass.grassdb import history
 
 
 # global variables for node types
-TIME_PERIOD = _("time_period")
-COMMAND = _("command")
+TIME_PERIOD = "time_period"
+COMMAND = "command"
 
 # global variable for purposes of sorting "No time info" node
 OLD_DATE = datetime.datetime(1950, 1, 1).date()
