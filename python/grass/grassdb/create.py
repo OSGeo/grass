@@ -9,7 +9,6 @@ for details.
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 """
 
-
 import os
 import shutil
 import getpass

@@ -10,6 +10,7 @@ for details.
 :authors: Thomas Leppelt and Soeren Gebbert
 
 """
+
 try:
     import ply.yacc as yacc
 except ImportError:

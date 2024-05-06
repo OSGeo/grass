@@ -26,7 +26,8 @@ This program is free software under the GNU General Public License
 
 @author Jachym Cepicky <jachym.cepicky gmail.com>
 @author Martin Landa <landa.martin gmail.com>
-@author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
+@author Refactoring by Stepan Turek <stepan.turek seznam.cz>
+        (GSoC 2012, mentor: Martin Landa)
 """
 
 import os
@@ -237,7 +238,10 @@ class VirtualAttributeList(
             self.sqlFilter = {"where": where}
 
             if columns:
-                cmdParams.update(dict(columns=",".join(columns)))
+                # Enclose column name with SQL standard double quotes
+                cmdParams.update(
+                    dict(columns=",".join([f'"{col}"' for col in columns]))
+                )
 
             ret = RunCommand("v.db.select", **cmdParams)
 
@@ -301,8 +305,8 @@ class VirtualAttributeList(
                     GWarning(
                         parent=self,
                         message=_(
-                            "Incorrect encoding {enc} used. Set encoding in GUI Settings"
-                            " or set GRASS_DB_ENCODING variable."
+                            "Incorrect encoding {enc} used. Set encoding in GUI "
+                            "Settings or set GRASS_DB_ENCODING variable."
                         ).format(enc=enc),
                     )
 
@@ -317,13 +321,16 @@ class VirtualAttributeList(
                 if len(record) > show_max:
                     record = record[:show_max]
                 # TODO: The real fix here is to use JSON output from v.db.select or
-                # proper CSV output and real CSV reader here (Python csv and json packages).
+                # proper CSV output and real CSV reader here (Python csv and json
+                # packages).
                 raise GException(
                     _(
                         "Unable to read the table <{table}> from the database due"
-                        " to seemingly inconsistent number of columns in the data transfer."
+                        " to seemingly inconsistent number of columns in the data"
+                        " transfer."
                         " Check row: {row}..."
-                        " Likely, a newline character is present in the attribute value starting with: '{value}'"
+                        " Likely, a newline character is present in the attribute value"
+                        " starting with: '{value}'"
                         " Use the v.db.select module to investigate."
                     ).format(table=tableName, row=" | ".join(record), value=last)
                 )
@@ -404,8 +411,8 @@ class VirtualAttributeList(
                         parent=self,
                         message=_(
                             "Error loading attribute data. "
-                            "Record number: %(rec)d. Unable to convert value '%(val)s' in "
-                            "key column (%(key)s) to integer.\n\n"
+                            "Record number: %(rec)d. Unable to convert value '%(val)s' "
+                            "in key column (%(key)s) to integer.\n\n"
                             "Details: %(detail)s"
                         )
                         % {"rec": i + 1, "val": value, "key": keyColumn, "detail": e},
@@ -856,9 +863,11 @@ class DbMgrBase:
         if layer in self.dbMgrData["mapDBInfo"].layers.keys():
             # delete page
             # dragging pages disallowed
-            # if self.browsePage.GetPageText(page).replace('Layer ', '').strip() == str(layer):
-            # self.browsePage.DeletePage(page)
-            # break
+            # if self.browsePage.GetPageText(page).replace("Layer ", "").strip() == str(
+            #     layer
+            # ):
+            #     self.browsePage.DeletePage(page)
+            #     break
             if self.pages["browse"]:
                 self.pages["browse"].DeletePage(layer)
             if self.pages["manageTable"]:
@@ -2103,8 +2112,9 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             try:
                 if len(whereVal) > 0:
                     showSelected = True
+                    # Enclose column name with SQL standard double quotes
                     keyColumn = listWin.LoadData(
-                        self.selLayer, where=whereCol + whereOpe + whereVal
+                        self.selLayer, where=f'"{whereCol}"' + whereOpe + whereVal
                     )
                 else:
                     keyColumn = listWin.LoadData(self.selLayer)
@@ -2319,7 +2329,8 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         :param pos: position of tab, if -1 it is added to end
 
         :return: True if layer was added
-        :return: False if layer was not added - layer has been already added or does not exist
+        :return: False if layer was not added - layer has been already added or does
+                 not exist
         """
         if layer in self.layers or layer not in self.parentDbMgrBase.GetVectorLayers():
             return False
@@ -2839,7 +2850,8 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         self.FindWindowById(
             self.pages["browse"].layerPage[self.selLayer]["whereColumn"]
         ).SetItems(cols)
-        # Browse data page SQL Query Builder page SQL builder frame ListBox column names widget
+        # Browse data page SQL Query Builder page SQL builder frame ListBox column
+        # names widget
         if self.pages["browse"].builder:
             self.pages["browse"].builder.list_columns.Set(cols)
         # Browse data page column Field calculator frame ListBox column names widget
@@ -3135,7 +3147,8 @@ class LayerBook(wx.Notebook):
         #        len(self.defaultConnect['database']) == 0:
         #     GWarning(parent = self.parent,
         #              message = _("Unknown default DB connection. "
-        #                          "Please define DB connection using db.connect module."))
+        #                          "Please define DB connection using db.connect"
+        #                          "module."))
 
         self.defaultTables = self._getTables(
             self.defaultConnect["driver"], self.defaultConnect["database"]
@@ -3536,9 +3549,11 @@ class LayerBook(wx.Notebook):
 
         # events
         self.modifyLayerWidgets["layer"][1].Bind(wx.EVT_COMBOBOX, self.OnChangeLayer)
-        # self.modifyLayerWidgets['driver'][1].Bind(wx.EVT_CHOICE, self.OnDriverChanged)
-        # self.modifyLayerWidgets['database'][1].Bind(wx.EVT_TEXT_ENTER, self.OnDatabaseChanged)
-        # self.modifyLayerWidgets['table'][1].Bind(wx.EVT_CHOICE, self.OnTableChanged)
+        # self.modifyLayerWidgets["driver"][1].Bind(wx.EVT_CHOICE, self.OnDriverChanged)
+        # self.modifyLayerWidgets["database"][1].Bind(
+        #     wx.EVT_TEXT_ENTER, self.OnDatabaseChanged
+        # )
+        # self.modifyLayerWidgets["table"][1].Bind(wx.EVT_CHOICE, self.OnTableChanged)
 
         btnModify = Button(
             self.modifyPanel, wx.ID_DELETE, _("&Modify layer"), size=(125, -1)

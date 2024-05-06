@@ -16,6 +16,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 from .core import (
     get_current_mapset,
     get_tgis_message_interface,

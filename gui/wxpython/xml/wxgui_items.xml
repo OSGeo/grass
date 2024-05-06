@@ -268,14 +268,14 @@
     <label>Mapset access</label>
     <handler>OnMapsets</handler>
     <related-module>g.mapsets</related-module>
-    <description>Set/unset access to other mapsets in current location</description>
+    <description>Set/unset access to other mapsets in current project</description>
     <keywords>general,settings,search path</keywords>
   </wxgui-item>
   <wxgui-item name="ChangeLocationAndMapset">
-    <label>Change location and mapset</label>
+    <label>Change project (location) and mapset</label>
     <handler>OnChangeLocation</handler>
-    <description>Change current location and mapset.</description>
-    <keywords>general,location,current</keywords>
+    <description>Change current project and mapset.</description>
+    <keywords>general,project,location,current</keywords>
   </wxgui-item>
   <wxgui-item name="ChangeMapset">
     <label>Change mapset</label>
@@ -295,22 +295,22 @@
     <keywords>general,settings,variables</keywords>
   </wxgui-item>
   <wxgui-item name="CreateNewLocation">
-    <label>Create new location</label>
+    <label>Create new project (location)</label>
     <handler>OnLocationWizard</handler>
-    <description>Launches location wizard to create new GRASS location.</description>
-    <keywords>general,location,wizard</keywords>
+    <description>Launches project wizard to create a new GRASS project (also known as location).</description>
+    <keywords>general,project,location,wizard</keywords>
   </wxgui-item>
   <wxgui-item name="CreateNewMapset">
     <label>Create new mapset</label>
     <handler>OnCreateMapset</handler>
-    <description>Creates new mapset in the current location, changes current mapset.</description>
+    <description>Creates new mapset in the current project, changes current mapset.</description>
     <keywords>general,mapset,create</keywords>
   </wxgui-item>
   <wxgui-item name="DisplayMapProjection">
     <label>Display map projection</label>
     <command>g.proj -p</command>
     <description>Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format).</description>
-    <keywords>general,projection,create location</keywords>
+    <keywords>general,projection,create project,create project</keywords>
   </wxgui-item>
   <wxgui-item name="InstallExtensionFromAddons">
     <label>Install extension from addons</label>

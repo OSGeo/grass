@@ -2,7 +2,6 @@
 Tests assertion methods.
 """
 
-
 import os
 
 import grass.script.core as gcore

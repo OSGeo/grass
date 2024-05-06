@@ -40,11 +40,31 @@
 # % key_desc: name type
 # %end
 
+import atexit
+import os
+import re
+
+from grass.exceptions import CalledModuleError
 import grass.script as grass
-from grass.script.utils import encode
+
+rm_files = []
+
+
+def cleanup():
+    for file in rm_files:
+        if os.path.isfile(file):
+            try:
+                os.remove(file)
+            except Exception as e:
+                grass.warning(
+                    _("Unable to remove file {file}: {message}").format(
+                        file=file, message=e
+                    )
+                )
 
 
 def main():
+    global rm_files
     map = options["map"]
     layer = options["layer"]
     columns = options["columns"]
@@ -55,7 +75,7 @@ def main():
     exists = bool(grass.find_file(map, element="vector", mapset=mapset)["file"])
 
     if not exists:
-        grass.fatal(_("Vector map <%s> not found in current mapset") % map)
+        grass.fatal(_("Vector map <{}> not found in current mapset").format(map))
 
     try:
         f = grass.vector_db(map)[int(layer)]
@@ -79,28 +99,47 @@ def main():
     driver = f["driver"]
     column_existing = grass.vector_columns(map, int(layer)).keys()
 
+    add_str = "BEGIN TRANSACTION\n"
+    pattern = re.compile(r"\s+")
     for col in columns:
         if not col:
             grass.fatal(_("There is an empty column. Did you leave a trailing comma?"))
-        col_name = col.split(" ")[0].strip()
+        whitespace = re.search(pattern, col)
+        if not whitespace:
+            grass.fatal(
+                _(
+                    "Incorrect new column(s) format, use"
+                    " <'name type [,name type, ...]'> format, please."
+                )
+            )
+        col_name, col_type = col.split(whitespace.group(0), 1)
         if col_name in column_existing:
-            grass.error(_("Column <%s> is already in the table. Skipping.") % col_name)
+            grass.error(
+                _("Column <{}> is already in the table. Skipping.").format(col_name)
+            )
             continue
-        grass.verbose(_("Adding column <%s> to the table") % col_name)
-        p = grass.feed_command(
-            "db.execute", input="-", database=database, driver=driver
+        grass.verbose(_("Adding column <{}> to the table").format(col_name))
+        add_str += f'ALTER TABLE {table} ADD COLUMN "{col_name}" {col_type};\n'
+    add_str += "END TRANSACTION"
+    sql_file = grass.tempfile()
+    rm_files.append(sql_file)
+    cols_add_str = ",".join([col[0] for col in columns])
+    with open(sql_file, "w") as write_file:
+        write_file.write(add_str)
+    try:
+        grass.run_command(
+            "db.execute",
+            input=sql_file,
+            database=database,
+            driver=driver,
         )
-        res = "ALTER TABLE {} ADD COLUMN {}".format(table, col)
-        p.stdin.write(encode(res))
-        grass.debug(res)
-        p.stdin.close()
-        if p.wait() != 0:
-            grass.fatal(_("Unable to add column <%s>.") % col)
-
+    except CalledModuleError:
+        grass.fatal(_("Error adding columns {}").format(cols_add_str))
     # write cmd history:
     grass.vector_history(map)
 
 
 if __name__ == "__main__":
     options, flags = grass.parser()
+    atexit.register(cleanup)
     main()

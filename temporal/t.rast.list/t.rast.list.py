@@ -155,7 +155,8 @@ def main():
                     excluded_option_name="separator",
                     excluded_option_value=separator,
                     reason=_(
-                        "A standard CSV separator (delimiter) is only one character long"
+                        "A standard CSV separator (delimiter) is only one character "
+                        "long"
                     ),
                 )
             )
@@ -221,7 +222,8 @@ def main():
                             excluded_option_name="columns",
                             excluded_option_value=columns,
                             reason=_(
-                                "Column '{name}' is not available with the method '{method}'"
+                                "Column '{name}' is not available with the method "
+                                "'{method}'"
                             ).format(name=column, method=method),
                         )
                     )
@@ -236,7 +238,8 @@ def main():
                         excluded_option_name="columns",
                         excluded_option_value=columns,
                         reason=_(
-                            "Column '{name}' is not available with the method '{method}'"
+                            "Column '{name}' is not available with the method "
+                            "'{method}'"
                         ).format(name=column, method=method),
                     )
                 )

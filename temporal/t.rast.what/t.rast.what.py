@@ -160,7 +160,9 @@ def main(options, flags):
     if not coordinates and not points and not use_stdin:
         gscript.fatal(
             _(
-                "Please specify the coordinates, the points option or use the 'i' flag to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"
+                "Please specify the coordinates, the points option or use the 'i' flag "
+                "to pipe coordinate positions to t.rast.what from stdin, to provide "
+                "the sampling coordinates"
             )
         )
 
@@ -552,7 +554,7 @@ def one_point_per_timerow_output(
      x|y|1991-01-01 00:00:00;1991-01-02 00:00:00|1991-01-02 00:00:00;1991-01-03 00:00:00|1991-01-03 00:00:00;1991-01-04 00:00:00|1991-01-04 00:00:00;1991-01-05 00:00:00
      3730731.49590371|5642483.51236521|6|8|7|7
      3581249.04638104|5634411.97526282|5|8|7|7
-    """
+    """  # noqa: E501
     out_file = open(output, "w") if output != "-" else sys.stdout
 
     matrix = []

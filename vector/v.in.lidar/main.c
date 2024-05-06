@@ -270,10 +270,10 @@ int main(int argc, char *argv[])
     limit_opt->guisection = _("Decimation");
 
     outloc_opt = G_define_option();
-    outloc_opt->key = "location";
+    outloc_opt->key = "project";
     outloc_opt->type = TYPE_STRING;
     outloc_opt->required = NO;
-    outloc_opt->description = _("Name for new location to create");
+    outloc_opt->description = _("Name for new project (location) to create");
     outloc_opt->key_desc = "name";
 
     print_flag = G_define_flag();
@@ -319,15 +319,16 @@ int main(int argc, char *argv[])
     over_flag = G_define_flag();
     over_flag->key = 'o';
     over_flag->label =
-        _("Override projection check (use current location's projection)");
-    over_flag->description = _(
-        "Assume that the dataset has same projection as the current location");
+        _("Override projection check (use current project's CRS)");
+    over_flag->description =
+        _("Assume that the dataset has the same coordinate reference system as "
+          "the current project");
 
     no_import_flag = G_define_flag();
     no_import_flag->key = 'i';
-    no_import_flag->description = _(
-        "Create the location specified by the \"location\" parameter and exit."
-        " Do not import the vector data.");
+    no_import_flag->description =
+        _("Create the project specified by the \"project\" parameter and exit."
+          " Do not import the vector data.");
     no_import_flag->suppress_required = YES;
 
     G_option_exclusive(skip_opt, preserve_opt, NULL);
@@ -512,16 +513,16 @@ int main(int argc, char *argv[])
          * assume the user has a terminal open */
         if (GPJ_wkt_to_grass(&cellhd, &proj_info, &proj_units, projstr, 0) <
             0) {
-            G_fatal_error(_("Unable to convert input map projection to GRASS "
-                            "format; cannot create new location."));
+            G_fatal_error(_("Unable to convert input map CRS to GRASS "
+                            "format; cannot create new project."));
         }
         else {
             if (0 != G_make_location(outloc_opt->answer, &cellhd, proj_info,
                                      proj_units)) {
-                G_fatal_error(_("Unable to create new location <%s>"),
+                G_fatal_error(_("Unable to create new project <%s>"),
                               outloc_opt->answer);
             }
-            G_message(_("Location <%s> created"), outloc_opt->answer);
+            G_message(_("Project <%s> created"), outloc_opt->answer);
         }
 
         /* If the i flag is set, clean up? and exit here */
@@ -529,7 +530,7 @@ int main(int argc, char *argv[])
             exit(EXIT_SUCCESS);
 
         /*  TODO: */
-        G_warning("Import into new location not yet implemented");
+        G_warning("Import into new project not yet implemented");
         /* at this point the module should be using G_create_alt_env()
            to change context to the newly created location; once done
            it should switch back with G_switch_env(). See r.in.gdal */

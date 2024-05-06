@@ -8,7 +8,7 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 
 DSTDIR = $(GUIDIR)/wxpython
 
-SRCFILES := $(wildcard icons/*.py scripts/*.py xml/*) \
+SRCFILES := $(wildcard icons/*.py xml/*) \
 	$(wildcard animation/*.py core/*.py datacatalog/*.py history/*.py dbmgr/*.py gcp/*.py gmodeler/*.py \
 	gui_core/*.py iclass/*.py lmgr/*.py location_wizard/*.py main_window/*.py mapwin/*.py mapdisp/*.py \
 	mapswipe/*.py modules/*.py nviz/*.py psmap/*.py rdigit/*.py \
@@ -25,7 +25,7 @@ PYDSTDIRS := $(patsubst %,$(DSTDIR)/%,animation core datacatalog history dbmgr g
 	vnet timeline iscatt tplot photo2image image2target)
 
 
-DSTDIRS := $(patsubst %,$(DSTDIR)/%,icons scripts xml)
+DSTDIRS := $(patsubst %,$(DSTDIR)/%,icons xml)
 
 default: $(DSTFILES)
 ifndef CROSS_COMPILING

@@ -3,6 +3,7 @@ Created on Tue Apr  2 18:31:47 2013
 
 @author: pietro
 """
+
 import re
 
 from grass.pygrass.modules.interface.docstring import docstring_property
@@ -114,8 +115,8 @@ def _check_value(param, value):
                         break
             if not good:
                 raise ValueError(
-                    f"The Parameter <{param.name}>, must be one of the following values:"
-                    f" {param.values!r} not '{newvalue}'"
+                    f"The Parameter <{param.name}>, must be one of the following "
+                    f"values: {param.values!r} not '{newvalue}'"
                 )
     return (
         (
@@ -134,9 +135,15 @@ class Parameter:
     """The Parameter object store all information about a parameter of a
     GRASS GIS module. ::
 
-        >>> param = Parameter(diz=dict(name='int_number', required='yes',
-        ...                            multiple='no', type='integer',
-        ...                            values=[2, 4, 6, 8]))
+        >>> param = Parameter(
+        ...     diz=dict(
+        ...         name="int_number",
+        ...         required="yes",
+        ...         multiple="no",
+        ...         type="integer",
+        ...         values=[2, 4, 6, 8],
+        ...     )
+        ... )
         >>> param.value = 2
         >>> param.value
         2
@@ -146,7 +153,7 @@ class Parameter:
         ValueError: The Parameter <int_number>, must be one of the following values: [2, 4, 6, 8] not '3'
 
     ...
-    """
+    """  # noqa: E501
 
     def __init__(self, xparameter=None, diz=None):
         self._value = None
@@ -237,9 +244,16 @@ class Parameter:
     def get_bash(self):
         """Return the BASH representation of the parameter. ::
 
-            >>> param = Parameter(diz=dict(name='int_number', required='yes',
-            ...                            multiple='no', type='integer',
-            ...                            values=[2, 4, 6, 8], default=8))
+            >>> param = Parameter(
+            ...     diz=dict(
+            ...         name="int_number",
+            ...         required="yes",
+            ...         multiple="no",
+            ...         type="integer",
+            ...         values=[2, 4, 6, 8],
+            ...         default=8,
+            ...     )
+            ... )
             >>> param.get_bash()
             'int_number=8'
 
@@ -249,9 +263,11 @@ class Parameter:
         if isinstance(self.rawvalue, (list, tuple)):
             value = sep.join(
                 [
-                    sep.join([str(v) for v in val])
-                    if isinstance(val, tuple)
-                    else str(val)
+                    (
+                        sep.join([str(v) for v in val])
+                        if isinstance(val, tuple)
+                        else str(val)
+                    )
                     for val in self.rawvalue
                 ]
             )
@@ -262,9 +278,16 @@ class Parameter:
     def get_python(self):
         """Return a string with the Python representation of the parameter. ::
 
-            >>> param = Parameter(diz=dict(name='int_number', required='yes',
-            ...                            multiple='no', type='integer',
-            ...                            values=[2, 4, 6, 8], default=8))
+            >>> param = Parameter(
+            ...     diz=dict(
+            ...         name="int_number",
+            ...         required="yes",
+            ...         multiple="no",
+            ...         type="integer",
+            ...         values=[2, 4, 6, 8],
+            ...         default=8,
+            ...     )
+            ... )
             >>> param.get_python()
             'int_number=8'
 
@@ -298,11 +321,17 @@ class Parameter:
 
         ::
 
-            >>> param = Parameter(diz=dict(name='int_number',
-            ...                            description="Set an number",
-            ...                            required='yes',
-            ...                            multiple='no', type='integer',
-            ...                            values=[2, 4, 6, 8], default=8))
+            >>> param = Parameter(
+            ...     diz=dict(
+            ...         name="int_number",
+            ...         description="Set an number",
+            ...         required="yes",
+            ...         multiple="no",
+            ...         type="integer",
+            ...         values=[2, 4, 6, 8],
+            ...         default=8,
+            ...     )
+            ... )
             >>> print(param.__doc__)
             int_number: 8, required, integer
                 Set an number

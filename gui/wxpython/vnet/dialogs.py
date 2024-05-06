@@ -100,8 +100,8 @@ class VNETDialog(wx.Dialog):
         self.mapWin = giface.GetMapWindow()
         self.giface = giface
 
-        # contains current analysis result (do not have to be last one, when history is browsed),
-        # it is instance of VectMap class
+        # contains current analysis result (do not have to be last one, when history
+        # is browsed), it is instance of VectMap class
         self.tmp_result = None
 
         self.defIsecTurnsHndlrReg = False
@@ -388,7 +388,8 @@ class VNETDialog(wx.Dialog):
             ["arc_layer", "Arc layer number or name:", LayerSelect],
             ["node_layer", "Node layer number or name:", LayerSelect],
             # ['turn_layer', "Layer with turntable:", LayerSelect],
-            # ['turn_cat_layer', "Layer with unique categories for turntable:", LayerSelect],
+            # ['turn_cat_layer',
+            # "Layer with unique categories for turntable:", LayerSelect],
             ["arc_column", "", ColumnSelect],
             ["arc_backward_column", "", ColumnSelect],
             ["node_column", "", ColumnSelect],
@@ -737,7 +738,8 @@ class VNETDialog(wx.Dialog):
         self.stBar.RemoveStatusItem("ttb")
 
     def OnVectSel(self, event):
-        """When vector map is selected it populates other comboboxes in Parameters tab (layer selects, columns selects)"""
+        """When vector map is selected it populates other comboboxes in Parameters
+        tab (layer selects, columns selects)"""
         if self.vnet_mgr.IsSnappingActive():  # TODO should be in vnet_mgr
             self.vnet_mgr.Snapping(activate=True)
 
@@ -798,7 +800,8 @@ class VNETDialog(wx.Dialog):
             self.inputData[k].SetValue(params[k])
 
     def OnALayerSel(self, event):
-        """When arc layer from vector map is selected, populates corespondent columns selects"""
+        """When arc layer from vector map is selected, populates corespondent columns
+        selects"""
         self.inputData["arc_column"].InsertColumns(
             vector=self.inputData["input"].GetValue(),
             layer=self.inputData["arc_layer"].GetValue(),
@@ -813,7 +816,8 @@ class VNETDialog(wx.Dialog):
         self._setInputData()
 
     def OnNLayerSel(self, event):
-        """When node layer from vector map is selected, populates corespondent column select"""
+        """When node layer from vector map is selected, populates corespondent column
+        select"""
         if self.vnet_mgr.IsSnappingActive():
             self.vnet_mgr.Snapping(activate=True)
 
@@ -898,7 +902,10 @@ class VNETDialog(wx.Dialog):
         if ["turn_layer", "turn_cat_layer"] in err_params:
             GMessage(
                 parent=self,
-                message="Please choose existing turntable layer and unique categories layer in Parameters tab.",
+                message=(
+                    "Please choose existing turntable layer and unique "
+                    "categories layer in Parameters tab."
+                ),
             )
 
         cat = GetNearestNodeCat(
@@ -1322,7 +1329,8 @@ class SettingsDialog(wx.Dialog):
         self.btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         self.btnSave.SetToolTip(
             _(
-                "Apply and save changes to user settings file (default for next sessions)"
+                "Apply and save changes to user settings file "
+                "(default for next sessions)"
             )
         )
         self.btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
@@ -1619,7 +1627,8 @@ class CreateTtbDialog(wx.Dialog):
         return selSizer
 
     def InputSel(self):
-        """When vector map is selected it populates other comboboxes in Parameters tab (layer selects, columns selects)"""
+        """When vector map is selected it populates other comboboxes in Parameters tab
+        (layer selects, columns selects)"""
         vectMapName, mapSet = self._parseMapStr(self.inputData["input"].GetValue())
         vectorMap = vectMapName + "@" + mapSet
 
@@ -1711,7 +1720,8 @@ class OutputVectorDialog(wx.Dialog):
 
 
 class VnetStatusbar(wx.StatusBar):
-    """Extends wx.StatusBar class with functionality to show multiple messages with the highest priority"""
+    """Extends wx.StatusBar class with functionality to show multiple messages with
+    the highest priority"""
 
     def __init__(self, parent, style, id=wx.ID_ANY, **kwargs):
         wx.StatusBar.__init__(self, parent, id, style, **kwargs)

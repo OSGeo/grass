@@ -17,6 +17,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 from datetime import datetime
 from .core import init_dbif
 from .abstract_dataset import AbstractDatasetComparisonKeyStartTime
@@ -36,8 +37,6 @@ class SpatioTemporalTopologyBuilder:
     two lists.
 
      Example:
-
-     .. code-block:: python
 
          # We have a space time raster dataset and build a map list
          # from all registered maps ordered by start time
@@ -73,6 +72,8 @@ class SpatioTemporalTopologyBuilder:
          # Dictionary like accessed
          map = tb["name@mapset"]
 
+     .. code-block:: python
+
          >>> # Example with two lists of maps
          >>> import grass.temporal as tgis
          >>> import datetime
@@ -80,14 +81,15 @@ class SpatioTemporalTopologyBuilder:
          >>> mapsA = []
          >>> mapsB = []
          >>> for i in range(4):
-         ...     idA = "a%i@B"%(i)
+         ...     idA = "a%i@B" % (i)
          ...     mapA = tgis.RasterDataset(idA)
-         ...     idB = "b%i@B"%(i)
+         ...     idB = "b%i@B" % (i)
          ...     mapB = tgis.RasterDataset(idB)
          ...     check = mapA.set_relative_time(i, i + 1, "months")
          ...     check = mapB.set_relative_time(i, i + 1, "months")
          ...     mapsA.append(mapA)
          ...     mapsB.append(mapB)
+         ...
          >>> # Build the topology between the two map lists
          >>> tb = SpatioTemporalTopologyBuilder()
          >>> tb.build(mapsA, mapsB, None)
@@ -95,8 +97,11 @@ class SpatioTemporalTopologyBuilder:
          >>> for map in mapsA:
          ...     if map.get_equal():
          ...         relations = map.get_equal()
-         ...         print("Map %s has equal relation to map %s"%(map.get_name(),
-         ...               relations[0].get_name()))
+         ...         print(
+         ...             "Map %s has equal relation to map %s"
+         ...             % (map.get_name(), relations[0].get_name())
+         ...         )
+         ...
          Map a0 has equal relation to map b0
          Map a1 has equal relation to map b1
          Map a2 has equal relation to map b2
@@ -105,8 +110,11 @@ class SpatioTemporalTopologyBuilder:
          >>> for map in mapsB:
          ...     if map.get_equal():
          ...         relations = map.get_equal()
-         ...         print("Map %s has equal relation to map %s"%(map.get_name(),
-         ...               relations[0].get_name()))
+         ...         print(
+         ...             "Map %s has equal relation to map %s"
+         ...             % (map.get_name(), relations[0].get_name())
+         ...         )
+         ...
          Map b0 has equal relation to map a0
          Map b1 has equal relation to map a1
          Map b2 has equal relation to map a2
@@ -116,14 +124,15 @@ class SpatioTemporalTopologyBuilder:
          >>> mapsA = []
          >>> mapsB = []
          >>> for i in range(4):
-         ...     idA = "a%i@B"%(i)
+         ...     idA = "a%i@B" % (i)
          ...     mapA = tgis.RasterDataset(idA)
-         ...     idB = "b%i@B"%(i)
+         ...     idB = "b%i@B" % (i)
          ...     mapB = tgis.RasterDataset(idB)
          ...     check = mapA.set_relative_time(i, i + 1, "months")
          ...     check = mapB.set_relative_time(i + 1, i + 2, "months")
          ...     mapsA.append(mapA)
          ...     mapsB.append(mapB)
+         ...
          >>> # Build the topology between the two map lists
          >>> tb = SpatioTemporalTopologyBuilder()
          >>> tb.build(mapsA, mapsB, None)
@@ -134,6 +143,7 @@ class SpatioTemporalTopologyBuilder:
          ...     for key in m.keys():
          ...         if key not in ["NEXT", "PREV"]:
          ...             print((key, m[key][0].get_temporal_extent_as_tuple()))
+         ...
          (0, 1)
          ('PRECEDES', (1, 2))
          (1, 2)
@@ -151,9 +161,9 @@ class SpatioTemporalTopologyBuilder:
          >>> mapsA = []
          >>> mapsB = []
          >>> for i in range(4):
-         ...     idA = "a%i@B"%(i)
+         ...     idA = "a%i@B" % (i)
          ...     mapA = tgis.RasterDataset(idA)
-         ...     idB = "b%i@B"%(i)
+         ...     idB = "b%i@B" % (i)
          ...     mapB = tgis.RasterDataset(idB)
          ...     start = datetime.datetime(2000 + i, 1, 1)
          ...     end = datetime.datetime(2000 + i + 1, 1, 1)
@@ -163,6 +173,7 @@ class SpatioTemporalTopologyBuilder:
          ...     check = mapB.set_absolute_time(start, end)
          ...     mapsA.append(mapA)
          ...     mapsB.append(mapB)
+         ...
          >>> # Build the topology between the two map lists
          >>> tb = SpatioTemporalTopologyBuilder()
          >>> tb.build(mapsA, mapsB, None)
@@ -173,6 +184,7 @@ class SpatioTemporalTopologyBuilder:
          ...     for key in m.keys():
          ...         if key not in ["NEXT", "PREV"]:
          ...             print((key, m[key][0].get_temporal_extent_as_tuple()))
+         ...
          (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
          ('PRECEDES', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0)))
          (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0))
@@ -190,9 +202,9 @@ class SpatioTemporalTopologyBuilder:
          >>> mapsA = []
          >>> mapsB = []
          >>> for i in range(4):
-         ...     idA = "a%i@B"%(i)
+         ...     idA = "a%i@B" % (i)
          ...     mapA = tgis.RasterDataset(idA)
-         ...     idB = "b%i@B"%(i)
+         ...     idB = "b%i@B" % (i)
          ...     mapB = tgis.RasterDataset(idB)
          ...     start = datetime.datetime(2000 + i, 1, 1)
          ...     end = datetime.datetime(2000 + i + 1, 1, 1)
@@ -202,6 +214,7 @@ class SpatioTemporalTopologyBuilder:
          ...     check = mapB.set_absolute_time(start, end)
          ...     mapsA.append(mapA)
          ...     mapsB.append(mapB)
+         ...
          >>> # Build the topology between the two map lists
          >>> tb = SpatioTemporalTopologyBuilder()
          >>> tb.build(mapsA, mapsB, None)
@@ -212,6 +225,7 @@ class SpatioTemporalTopologyBuilder:
          ...     for key in m.keys():
          ...         if key not in ["NEXT", "PREV"]:
          ...             print((key, m[key][0].get_temporal_extent_as_tuple()))
+         ...
          (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
          ('DURING', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
          ('STARTS', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
@@ -234,9 +248,9 @@ class SpatioTemporalTopologyBuilder:
          >>> mapsA = []
          >>> mapsB = []
          >>> for i in range(4):
-         ...     idA = "a%i@B"%(i)
+         ...     idA = "a%i@B" % (i)
          ...     mapA = tgis.RasterDataset(idA)
-         ...     idB = "b%i@B"%(i)
+         ...     idB = "b%i@B" % (i)
          ...     mapB = tgis.RasterDataset(idB)
          ...     start = datetime.datetime(2000 + i, 1, 1)
          ...     end = datetime.datetime(2000 + i + 2, 1, 1)
@@ -246,6 +260,7 @@ class SpatioTemporalTopologyBuilder:
          ...     check = mapB.set_absolute_time(start, end)
          ...     mapsA.append(mapA)
          ...     mapsB.append(mapB)
+         ...
          >>> # Build the topology between the two map lists
          >>> tb = SpatioTemporalTopologyBuilder()
          >>> tb.build(mapsA, mapsB, None)
@@ -256,6 +271,7 @@ class SpatioTemporalTopologyBuilder:
          ...     for key in m.keys():
          ...         if key not in ["NEXT", "PREV"]:
          ...             print((key, m[key][0].get_temporal_extent_as_tuple()))
+         ...
          (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0))
          ('OVERLAPS', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
          ('DURING', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
@@ -283,9 +299,9 @@ class SpatioTemporalTopologyBuilder:
          >>> mapsA = []
          >>> mapsB = []
          >>> for i in range(4):
-         ...     idA = "a%i@B"%(i)
+         ...     idA = "a%i@B" % (i)
          ...     mapA = tgis.RasterDataset(idA)
-         ...     idB = "b%i@B"%(i)
+         ...     idB = "b%i@B" % (i)
          ...     mapB = tgis.RasterDataset(idB)
          ...     start = datetime.datetime(2000, 1, 1, 0, 0, i)
          ...     end = datetime.datetime(2000, 1, 1, 0, 0, i + 2)
@@ -295,6 +311,7 @@ class SpatioTemporalTopologyBuilder:
          ...     check = mapB.set_absolute_time(start, end)
          ...     mapsA.append(mapA)
          ...     mapsB.append(mapB)
+         ...
          >>> # Build the topology between the two map lists
          >>> tb = SpatioTemporalTopologyBuilder()
          >>> tb.build(mapsA, mapsB, None)
@@ -305,6 +322,7 @@ class SpatioTemporalTopologyBuilder:
          ...     for key in m.keys():
          ...         if key not in ["NEXT", "PREV"]:
          ...             print((key, m[key][0].get_temporal_extent_as_tuple()))
+         ...
          (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2))
          ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
          ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
@@ -325,12 +343,13 @@ class SpatioTemporalTopologyBuilder:
 
          >>> mapsA = []
          >>> for i in range(4):
-         ...     idA = "a%i@B"%(i)
+         ...     idA = "a%i@B" % (i)
          ...     mapA = tgis.RasterDataset(idA)
          ...     start = datetime.datetime(2000, 1, 1, 0, 0, i)
          ...     end = datetime.datetime(2000, 1, 1, 0, 0, i + 2)
          ...     check = mapA.set_absolute_time(start, end)
          ...     mapsA.append(mapA)
+         ...
          >>> tb = SpatioTemporalTopologyBuilder()
          >>> tb.build(mapsA)
          >>> # Check relations of mapsA
@@ -340,6 +359,7 @@ class SpatioTemporalTopologyBuilder:
          ...     for key in m.keys():
          ...         if key not in ["NEXT", "PREV"]:
          ...             print((key, m[key][0].get_temporal_extent_as_tuple()))
+         ...
          (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2))
          ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
          ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
@@ -355,7 +375,7 @@ class SpatioTemporalTopologyBuilder:
          ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
          ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
 
-    """
+    """  # noqa: E501
 
     def __init__(self):
         self._reset()
@@ -888,70 +908,94 @@ def create_temporal_relation_sql_where_statement(
          >>> # Relative time
          >>> start = 1
          >>> end = 2
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=False)
+         >>> create_temporal_relation_sql_where_statement(start, end, use_start=False)
          >>> create_temporal_relation_sql_where_statement(start, end)
          '((start_time >= 1 and start_time < 2) )'
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=True)
+         >>> create_temporal_relation_sql_where_statement(start, end, use_start=True)
          '((start_time >= 1 and start_time < 2) )'
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=False, use_during=True)
+         >>> create_temporal_relation_sql_where_statement(
+         ...     start, end, use_start=False, use_during=True
+         ... )
          '(((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)))'
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=False, use_overlap=True)
+         >>> create_temporal_relation_sql_where_statement(
+         ...     start, end, use_start=False, use_overlap=True
+         ... )
          '(((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)))'
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=False, use_contain=True)
+         >>> create_temporal_relation_sql_where_statement(
+         ...     start, end, use_start=False, use_contain=True
+         ... )
          '(((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)))'
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=False, use_equal=True)
+         >>> create_temporal_relation_sql_where_statement(
+         ...     start, end, use_start=False, use_equal=True
+         ... )
          '((start_time = 1 and end_time = 2))'
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=False, use_follows=True)
+         >>> create_temporal_relation_sql_where_statement(
+         ...     start, end, use_start=False, use_follows=True
+         ... )
          '((start_time = 2))'
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=False, use_precedes=True)
+         >>> create_temporal_relation_sql_where_statement(
+         ...     start, end, use_start=False, use_precedes=True
+         ... )
          '((end_time = 1))'
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=True, use_during=True, use_overlap=True, use_contain=True,
-         ... use_equal=True, use_follows=True, use_precedes=True)
+         >>> create_temporal_relation_sql_where_statement(
+         ...     start,
+         ...     end,
+         ...     use_start=True,
+         ...     use_during=True,
+         ...     use_overlap=True,
+         ...     use_contain=True,
+         ...     use_equal=True,
+         ...     use_follows=True,
+         ...     use_precedes=True,
+         ... )
          '((start_time >= 1 and start_time < 2)  OR ((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)) OR ((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)) OR ((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)) OR (start_time = 1 and end_time = 2) OR (start_time = 2) OR (end_time = 1))'
 
          >>> # Absolute time
          >>> start = datetime(2001, 1, 1, 12, 30)
          >>> end = datetime(2001, 3, 31, 14, 30)
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=False)
+         >>> create_temporal_relation_sql_where_statement(start, end, use_start=False)
          >>> create_temporal_relation_sql_where_statement(start, end)
          "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=True)
+         >>> create_temporal_relation_sql_where_statement(start, end, use_start=True)
          "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=False, use_during=True)
+         >>> create_temporal_relation_sql_where_statement(
+         ...     start, end, use_start=False, use_during=True
+         ... )
          "(((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')))"
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=False, use_overlap=True)
+         >>> create_temporal_relation_sql_where_statement(
+         ...     start, end, use_start=False, use_overlap=True
+         ... )
          "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')))"
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=False, use_contain=True)
+         >>> create_temporal_relation_sql_where_statement(
+         ...     start, end, use_start=False, use_contain=True
+         ... )
          "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')))"
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=False, use_equal=True)
+         >>> create_temporal_relation_sql_where_statement(
+         ...     start, end, use_start=False, use_equal=True
+         ... )
          "((start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00'))"
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=False, use_follows=True)
+         >>> create_temporal_relation_sql_where_statement(
+         ...     start, end, use_start=False, use_follows=True
+         ... )
          "((start_time = '2001-03-31 14:30:00'))"
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=False, use_precedes=True)
+         >>> create_temporal_relation_sql_where_statement(
+         ...     start, end, use_start=False, use_precedes=True
+         ... )
          "((end_time = '2001-01-01 12:30:00'))"
-         >>> create_temporal_relation_sql_where_statement(start, end,
-         ... use_start=True, use_during=True, use_overlap=True, use_contain=True,
-         ... use_equal=True, use_follows=True, use_precedes=True)
+         >>> create_temporal_relation_sql_where_statement(
+         ...     start,
+         ...     end,
+         ...     use_start=True,
+         ...     use_during=True,
+         ...     use_overlap=True,
+         ...     use_contain=True,
+         ...     use_equal=True,
+         ...     use_follows=True,
+         ...     use_precedes=True,
+         ... )
          "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00')  OR ((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')) OR (start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00') OR (start_time = '2001-03-31 14:30:00') OR (end_time = '2001-01-01 12:30:00'))"
 
-    """
+    """  # noqa: E501
 
     where = "("
 

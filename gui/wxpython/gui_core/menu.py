@@ -4,11 +4,13 @@
 @brief Menu classes for wxGUI
 
 Classes:
+ - menu::MenuBase
  - menu::Menu
+ - menu::MenuItem
  - menu::SearchModuleWindow
  - menu::RecentFilesMenu
 
-(C) 2010-2013 by the GRASS Development Team
+(C) 2010-2024 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -20,6 +22,7 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
 @author Tomas Zigo <tomas.zigo slovanet.sk> RecentFilesMenu
 """
+
 import re
 import os
 import wx
@@ -35,17 +38,21 @@ from icons.icon import MetaIcon
 from grass.pydispatch.signal import Signal
 
 
-class Menu(wx.MenuBar):
-    def __init__(self, parent, model):
-        """Creates menubar"""
-        wx.MenuBar.__init__(self)
+class MenuBase:
+    def __init__(self, parent, model, class_handler=None):
+        """Base menu class.
+
+        Base class for Menu and MenuItem classes.
+
+        :param parent: parent object
+        :param model: model menu data object
+        :param class_handler: handler object if None parent is used
+        """
         self.parent = parent
         self.model = model
         self.menucmd = dict()
         self.bmpsize = (16, 16)
-
-        for child in self.model.root.children:
-            self.Append(self._createMenu(child), child.label)
+        self.class_handler = class_handler if class_handler is not None else parent
 
     def _createMenu(self, node):
         """Creates menu"""
@@ -115,7 +122,7 @@ class Menu(wx.MenuBar):
             ):
                 menuItem.Enable(False)
 
-        rhandler = eval("self.parent." + handler)
+        rhandler = eval("self.class_handler." + handler)  # nosec B307
         self.parent.Bind(wx.EVT_MENU, rhandler, menuItem)
 
     def GetData(self):
@@ -141,6 +148,39 @@ class Menu(wx.MenuBar):
 
         # but in this case just call Skip so the default is done
         event.Skip()
+
+
+class Menu(MenuBase, wx.MenuBar):
+    def __init__(self, parent, model, class_handler=None):
+        """Menu Bar class.
+
+        :param parent: parent object
+        :param model: model menu data object
+        :param class_handler: handler object if None parent is used
+        """
+        MenuBase.__init__(self, parent, model, class_handler)
+        wx.MenuBar.__init__(self)
+
+        for child in self.model.root.children:
+            self.Append(self._createMenu(child), child.label)
+
+
+class MenuItem(MenuBase, MenuWidget):
+    def __init__(self, parent, model, class_handler=None):
+        """Menu class.
+
+        Used for dockable GUI components.
+
+        :param parent: parent object
+        :param model: model menu data object
+        :param class_handler: handler object if None parent is used
+        """
+        MenuBase.__init__(self, parent, model, class_handler)
+        MenuWidget.__init__(self)
+
+        for child in self.model.root.children:
+            subMenu = self._createMenu(child)
+            self.AppendMenu(wx.ID_ANY, child.label, subMenu)
 
 
 class SearchModuleWindow(wx.Panel):

@@ -120,7 +120,8 @@ class MapToolbar(BaseToolbar):
             self._giface.WriteWarning(_("Reason: %s") % errorMsg)
             self._giface.WriteLog(
                 _(
-                    "Note that the wxGUI's vector digitizer is disabled in this installation. "
+                    "Note that the wxGUI's vector digitizer is disabled in this "
+                    "installation."
                     "Please keep an eye out for updated versions of GRASS. "
                     'In the meantime you can use "v.edit" for non-interactive editing '
                     "from the Develop vector map menu."
@@ -253,8 +254,8 @@ class MapToolbar(BaseToolbar):
         if self.parent.IsDockable():
             data = data + (
                 (
-                    ("mapDispDocking", BaseIcons["mapDispDocking"].label),
-                    BaseIcons["mapDispDocking"],
+                    ("docking", BaseIcons["docking"].label),
+                    BaseIcons["docking"],
                     self.parent.OnDockUndock,
                     wx.ITEM_CHECK,
                 ),

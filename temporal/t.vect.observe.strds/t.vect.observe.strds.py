@@ -104,7 +104,8 @@ def main():
     if len(strds_names) != len(column_names):
         grass.fatal(
             _(
-                "The number of columns must be equal to the number of space time raster datasets"
+                "The number of columns must be equal to the number of space time "
+                "raster datasets"
             )
         )
 
@@ -149,7 +150,8 @@ def main():
                 grass.fatal(
                     _(
                         "Temporal type of space time raster datasets must be equal\n"
-                        "<%(a)s> of type %(type_a)s do not match <%(b)s> of type %(type_b)s"
+                        "<%(a)s> of type %(type_a)s do not match <%(b)s> of type "
+                        "%(type_b)s"
                         % {
                             "a": first_strds.get_id(),
                             "type_a": first_strds.get_temporal_type(),

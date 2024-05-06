@@ -53,7 +53,6 @@ for details.
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 """
 
-
 # import similar to what is in visvis
 try:
     import PIL

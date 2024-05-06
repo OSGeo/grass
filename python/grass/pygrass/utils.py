@@ -6,6 +6,7 @@ from sqlite3 import OperationalError
 import grass.lib.gis as libgis
 
 libgis.G_gisinit("")
+
 import grass.lib.raster as libraster
 from grass.lib.ctypes_preamble import String
 from grass.script import core as grasscore
@@ -21,7 +22,7 @@ test_raster_name = "Utils_test_raster"
 def looking(obj, filter_string):
     """
     >>> import grass.lib.vector as libvect
-    >>> sorted(looking(libvect, '*by_box*'))  # doctest: +NORMALIZE_WHITESPACE
+    >>> sorted(looking(libvect, "*by_box*"))  # doctest: +NORMALIZE_WHITESPACE
     ['Vect_select_areas_by_box', 'Vect_select_isles_by_box',
      'Vect_select_lines_by_box', 'Vect_select_nodes_by_box']
 
@@ -120,9 +121,9 @@ def rename(oldname, newname, maptype, **kwargs):
 def copy(existingmap, newmap, maptype, **kwargs):
     """Copy a map
 
-    >>> copy(test_vector_name, 'mycensus', 'vector')
-    >>> rename('mycensus', 'mynewcensus', 'vector')
-    >>> remove('mynewcensus', 'vector')
+    >>> copy(test_vector_name, "mycensus", "vector")
+    >>> rename("mycensus", "mynewcensus", "vector")
+    >>> remove("mynewcensus", "vector")
 
     """
     kwargs.update({maptype: "{old},{new}".format(old=existingmap, new=newmap)})
@@ -176,13 +177,13 @@ def get_mapset_vector(mapname, mapset=""):
 def is_clean_name(name):
     """Return if the name is valid
 
-    >>> is_clean_name('census')
+    >>> is_clean_name("census")
     True
-    >>> is_clean_name('0census')
+    >>> is_clean_name("0census")
     True
-    >>> is_clean_name('census?')
+    >>> is_clean_name("census?")
     True
-    >>> is_clean_name('cénsus')
+    >>> is_clean_name("cénsus")
     False
 
     """
@@ -239,14 +240,30 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
 
     Create a vector map
 
-    >>> cols = [(u'cat', 'INTEGER PRIMARY KEY'),
-    ...         (u'value', 'double precision')]
+    >>> cols = [("cat", "INTEGER PRIMARY KEY"), ("value", "double precision")]
     >>> vect = VectorTopo("test_vect_2")
-    >>> vect.open("w",tab_name="test_vect_2",
-    ...           tab_cols=cols)
-    >>> vect.write(Point(10, 6), cat=1, attrs=[10, ])
-    >>> vect.write(Point(12, 6), cat=2, attrs=[12, ])
-    >>> vect.write(Point(14, 6), cat=3, attrs=[14, ])
+    >>> vect.open("w", tab_name="test_vect_2", tab_cols=cols)
+    >>> vect.write(
+    ...     Point(10, 6),
+    ...     cat=1,
+    ...     attrs=[
+    ...         10,
+    ...     ],
+    ... )
+    >>> vect.write(
+    ...     Point(12, 6),
+    ...     cat=2,
+    ...     attrs=[
+    ...         12,
+    ...     ],
+    ... )
+    >>> vect.write(
+    ...     Point(14, 6),
+    ...     cat=3,
+    ...     attrs=[
+    ...         14,
+    ...     ],
+    ... )
     >>> vect.table.conn.commit()
     >>> vect.close()
 
@@ -260,38 +277,40 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
     Sample the raster layer at the given points, return a list of values
 
     >>> l = get_raster_for_points(vect, ele, region=region)
-    >>> l[0]                                        # doctest: +ELLIPSIS
+    >>> l[0]  # doctest: +ELLIPSIS
     (1, 10.0, 6.0, 1)
-    >>> l[1]                                        # doctest: +ELLIPSIS
+    >>> l[1]  # doctest: +ELLIPSIS
     (2, 12.0, 6.0, 1)
 
     Add a new column and sample again
 
     >>> vect.open("r")
-    >>> vect.table.columns.add(test_raster_name,'double precision')
+    >>> vect.table.columns.add(test_raster_name, "double precision")
     >>> vect.table.conn.commit()
     >>> test_raster_name in vect.table.columns
     True
     >>> get_raster_for_points(vect, ele, column=test_raster_name, region=region)
     True
-    >>> vect.table.filters.select('value', test_raster_name)
+    >>> vect.table.filters.select("value", test_raster_name)
     Filters('SELECT value, Utils_test_raster FROM test_vect_2;')
     >>> cur = vect.table.execute()
     >>> r = cur.fetchall()
-    >>> r[0]                                        # doctest: +ELLIPSIS
+    >>> r[0]  # doctest: +ELLIPSIS
     (10.0, 1.0)
-    >>> r[1]                                        # doctest: +ELLIPSIS
+    >>> r[1]  # doctest: +ELLIPSIS
     (12.0, 1.0)
-    >>> remove('test_vect_2','vect')
+    >>> remove("test_vect_2", "vect")
 
     :param poi_vector: A VectorTopo object that contains points
     :param raster: raster object
     :param str column: column name to update in the attrinute table,
                        if set to None a list of sampled values will be returned
-    :param region: The region to work with, if not set the current computational region will be used
+    :param region: The region to work with, if not set the current computational region
+                   will be used
 
     :return: True in case of success and a specified column for update,
-             if column name for update was not set a list of (id, x, y, value) is returned
+             if column name for update was not set a list of (id, x, y, value) is
+             returned
     """
     from math import isnan
 
@@ -372,11 +391,15 @@ def set_path(modulename, dirname=None, path="."):
 def split_in_chunk(iterable, length=10):
     """Split a list in chunk.
 
-    >>> for chunk in split_in_chunk(range(25)): print (chunk)
+    >>> for chunk in split_in_chunk(range(25)):
+    ...     print(chunk)
+    ...
     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
     (10, 11, 12, 13, 14, 15, 16, 17, 18, 19)
     (20, 21, 22, 23, 24)
-    >>> for chunk in split_in_chunk(range(25), 3): print (chunk)
+    >>> for chunk in split_in_chunk(range(25), 3):
+    ...     print(chunk)
+    ...
     (0, 1, 2)
     (3, 4, 5)
     (6, 7, 8)

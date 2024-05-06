@@ -15,6 +15,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+
 import copy
 
 from grass.script.utils import naturally_sort
@@ -237,6 +238,52 @@ class DictNode:
         if key in self.data and self.data[key] == value:
             return True
         return False
+
+
+class DictFilterNode(DictNode):
+    """Node which has data in a form of dictionary and can be filtered."""
+
+    def __init__(self, data=None):
+        super().__init__(data=data)
+
+    def match(self, method="exact", **kwargs):
+        """Method used for searching according to given parameters.
+
+        :param str method: 'exact' for exact match or
+                           'filtering' for filtering by type/name
+        :param kwargs key-value to be matched, filtering method uses 'type' and 'name'
+        :return bool: True if an entry matching given parameters was found
+        """
+        if not kwargs:
+            return False
+
+        if method == "exact":
+            return self._match_exact(**kwargs)
+        elif method == "filtering":
+            return self._match_filtering(**kwargs)
+
+    def _match_exact(self, **kwargs):
+        """Match method for exact matching."""
+        for key, value in kwargs.items():
+            if not (key in self.data and self.data[key] == value):
+                return False
+        return True
+
+    def _match_filtering(self, **kwargs):
+        """Match method for filtering."""
+        if (
+            "type" in kwargs
+            and "type" in self.data
+            and kwargs["type"] != self.data["type"]
+        ):
+            return False
+        if (
+            "name" in kwargs
+            and "name" in self.data
+            and not kwargs["name"].search(self.data["name"])
+        ):
+            return False
+        return True
 
 
 class ModuleNode(DictNode):

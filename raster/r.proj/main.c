@@ -147,12 +147,12 @@ int main(int argc, char **argv)
     G_add_keyword(_("projection"));
     G_add_keyword(_("transformation"));
     G_add_keyword(_("import"));
-    module->description = _("Re-projects a raster map from given location to "
-                            "the current location.");
+    module->description = _("Re-projects a raster map from given project to "
+                            "the current project.");
 
     inlocation = G_define_standard_option(G_OPT_M_LOCATION);
     inlocation->required = YES;
-    inlocation->label = _("Location containing input raster map");
+    inlocation->label = _("Project (location) containing input raster map");
     inlocation->guisection = _("Source");
 
     imapset = G_define_standard_option(G_OPT_M_MAPSET);
@@ -166,7 +166,7 @@ int main(int argc, char **argv)
     inmap->guisection = _("Source");
 
     indbase = G_define_standard_option(G_OPT_M_DBASE);
-    indbase->label = _("Path to GRASS database of input location");
+    indbase->label = _("Path to GRASS database of input project");
 
     outmap = G_define_standard_option(G_OPT_R_OUTPUT);
     outmap->required = NO;
@@ -255,7 +255,7 @@ int main(int argc, char **argv)
 #if 0
         G_fatal_error(_("Input and output locations can not be the same"));
 #else
-        G_warning(_("Input and output locations are the same"));
+        G_warning(_("Input and output projects are the same"));
 #endif
         G_get_window(&outcellhd);
 
@@ -286,7 +286,7 @@ int main(int argc, char **argv)
 
     permissions = G_mapset_permissions(setname);
     if (permissions < 0) /* can't access mapset       */
-        G_fatal_error(_("Mapset <%s> in input location <%s> - %s"), setname,
+        G_fatal_error(_("Mapset <%s> in input project <%s> - %s"), setname,
                       inlocation->answer,
                       permissions == 0 ? _("permission denied")
                                        : _("not found"));
@@ -296,7 +296,7 @@ int main(int argc, char **argv)
         int i;
         char **srclist;
 
-        G_verbose_message(_("Checking location <%s> mapset <%s>"),
+        G_verbose_message(_("Checking project <%s> mapset <%s>"),
                           inlocation->answer, setname);
         srclist = G_list(G_ELEMENT_RASTER, G_getenv_nofatal("GISDBASE"),
                          G_getenv_nofatal("LOCATION_NAME"), setname);
@@ -312,7 +312,7 @@ int main(int argc, char **argv)
 
     if (!G_find_raster(inmap->answer, setname))
         G_fatal_error(
-            _("Raster map <%s> in location <%s> in mapset <%s> not found"),
+            _("Raster map <%s> in project <%s> in mapset <%s> not found"),
             inmap->answer, inlocation->answer, setname);
 
     /* Read input map colour table */
@@ -358,7 +358,7 @@ int main(int argc, char **argv)
     Rast_get_cellhd(inmap->answer, setname, &incellhd);
 
     if (G_projection() == PROJECTION_XY)
-        G_fatal_error(_("Unable to work with unprojected data (xy location)"));
+        G_fatal_error(_("Unable to work with unprojected data (xy project)"));
 
     /* Save default borders so we can show them later */
     inorth = incellhd.north;
@@ -376,7 +376,7 @@ int main(int argc, char **argv)
     ocols = outcellhd.cols;
 
     if (print_bounds->answer) {
-        G_message(_("Input map <%s@%s> in location <%s>:"), inmap->answer,
+        G_message(_("Input map <%s@%s> in project <%s>:"), inmap->answer,
                   setname, inlocation->answer);
 
         /* reproject input raster extents from input to output */

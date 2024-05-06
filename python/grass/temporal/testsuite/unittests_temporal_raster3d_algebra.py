@@ -7,7 +7,6 @@ for details.
 :authors: Soeren Gebbert and Thomas Leppelt
 """
 
-
 import grass.script
 import grass.temporal as tgis
 from grass.gunittest.case import TestCase

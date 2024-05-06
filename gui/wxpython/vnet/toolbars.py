@@ -85,7 +85,7 @@ class PointListToolbar(BaseToolbar):
                     icons["pointDelete"],
                     self.OnDeletePoint,
                 ),
-                (None,)  # ,
+                (None,),  # ,
                 # ('isec_turn_edit', icons['isec_turn_edit'],
                 # self.dialog.OnDefIsecTurnCosts,
                 # wx.ITEM_CHECK),

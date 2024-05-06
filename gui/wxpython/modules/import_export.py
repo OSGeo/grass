@@ -959,7 +959,8 @@ class ReprojectionDialog(wx.Dialog):
             parent=self.panel,
             id=wx.ID_ANY,
             label=_(
-                "Projection of following layers do not match with projection of current location. "
+                "Projection of following layers do not match with projection of "
+                "current location. "
             ),
         )
 

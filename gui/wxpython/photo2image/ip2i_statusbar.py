@@ -16,7 +16,6 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com> (statusbar refactoring)
 """
 
-
 import wx
 
 from core.gcmd import GMessage

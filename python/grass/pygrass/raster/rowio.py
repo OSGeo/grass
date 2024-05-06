@@ -3,6 +3,7 @@ Created on Mon Jun 18 13:22:38 2012
 
 @author: pietro
 """
+
 import ctypes
 
 import grass.lib.rowio as librowio

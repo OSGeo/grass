@@ -317,7 +317,8 @@ class PsMapFrame(wx.Frame):
                 GMessage(
                     parent=self,
                     message=_(
-                        "Program ps2pdf is not available. Please install it first to create PDF."
+                        "Program ps2pdf is not available. Please install it first to "
+                        "create PDF."
                     ),
                 )
                 return
@@ -505,7 +506,8 @@ class PsMapFrame(wx.Frame):
                     self,
                     title=_("Preview not available"),
                     message=_(
-                        "Preview is not available probably because Ghostscript is not installed or not on PATH."
+                        "Preview is not available probably because Ghostscript is not "
+                        "installed or not on PATH."
                     ),
                     hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
                     hyperlinkLabel=_(
@@ -1062,7 +1064,8 @@ class PsMapFrame(wx.Frame):
             return (0, 0)
 
     def getInitMap(self):
-        """Create default map frame when no map is selected, needed for coordinates in map units"""
+        """Create default map frame when no map is selected, needed for coordinates in
+        map units"""
         instrFile = grass.tempfile()
         instrFileFd = open(instrFile, mode="wb")
         content = self.InstructionFile()
@@ -1457,7 +1460,8 @@ class PsMapBufferedWindow(wx.Window):
             self.SetPage()
 
     def CanvasPaperCoordinates(self, rect, canvasToPaper=True):
-        """Converts canvas (pixel) -> paper (inch) coordinates and size and vice versa"""
+        """Converts canvas (pixel) -> paper (inch) coordinates and size and
+        vice versa"""
 
         units = UnitConversion(self)
 
@@ -1524,7 +1528,8 @@ class PsMapBufferedWindow(wx.Window):
         return r
 
     def RecalculateEN(self):
-        """Recalculate east and north for texts (eps, points) after their or map's movement"""
+        """Recalculate east and north for texts (eps, points) after their or map's
+        movement"""
         try:
             mapId = self.instruction.FindInstructionByType("map").id
         except AttributeError:
@@ -2292,10 +2297,10 @@ class PsMapBufferedWindow(wx.Window):
                         rot = float(self.instruction[id]["rotate"])
                     else:
                         rot = 0
-                    self.instruction[id][
-                        "rect"
-                    ] = bounds = self.parent.getModifiedTextBounds(
-                        coords[0], coords[1], extent, rot
+                    self.instruction[id]["rect"] = bounds = (
+                        self.parent.getModifiedTextBounds(
+                            coords[0], coords[1], extent, rot
+                        )
                     )
                     self.DrawRotText(
                         pdc=self.pdcObj,
@@ -2528,12 +2533,16 @@ class PsMapBufferedWindow(wx.Window):
         pdc.BeginDrawing()
 
         # border is not redrawn when zoom changes, why?
-        # if textDict['border'] != 'none' and not rot:
-        ##            units = UnitConversion(self)
-        # borderWidth = units.convert(value = textDict['width'],
-        # fromUnit = 'point', toUnit = 'pixel' ) * self.currScale
-        ##            pdc.SetPen(wx.Pen(colour = convertRGB(textDict['border']), width = borderWidth))
-        # pdc.DrawRectangle(*bounds)
+        # if textDict["border"] != "none" and not rot:
+        #     units = UnitConversion(self)
+        #     borderWidth = (
+        #         units.convert(
+        #         value=textDict["width"], fromUnit="point", toUnit="pixel")
+        #         * self.currScale
+        #     )
+        #     pdc.SetPen(wx.Pen(colour=convertRGB(
+        #     textDict["border"]), width=borderWidth))
+        #     pdc.DrawRectangle(*bounds)
 
         if background:
             pdc.SetTextBackground(convertRGB(background))

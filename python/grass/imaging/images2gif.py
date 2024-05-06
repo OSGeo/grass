@@ -891,7 +891,8 @@ class NeuQuant:
     #    """ Search for biased BGR values
     #            Finds closest neuron (min dist) and updates self.freq
     #            finds best neuron (min dist-self.bias) and returns position
-    #            for frequently chosen neurons, self.freq[i] is high and self.bias[i] is negative
+    #            for frequently chosen neurons, self.freq[i] is high and self.bias[i]
+    #            is negative
     #            self.bias[i] = self.GAMMA * ((1/self.NETSIZE)-self.freq[i])"""
     #
     #    i, j = self.SPECIALS, self.NETSIZE

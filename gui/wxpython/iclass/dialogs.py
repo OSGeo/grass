@@ -19,6 +19,7 @@ for details.
 @author Vaclav Petras <wenzeslaus gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
+
 import os
 import wx
 
@@ -179,9 +180,9 @@ class IClassGroupDialog(SimpleDialog):
         return self.groupSelect.GetValue().split("@")[0]
 
     def GetGroupBandsErr(self, parent):
-        """Get list of raster bands which are in the soubgroup of group with both having same name.
-        If the group does not exists or it does not contain any bands in subgoup with same name,
-        error dialog is shown.
+        """Get list of raster bands which are in the subgroup of group with both
+        having same name. If the group does not exist, or it does not contain any bands
+        in subgroup with same name, error dialog is shown.
         """
         gr, s = self.GetData()
 
@@ -219,7 +220,8 @@ class IClassGroupDialog(SimpleDialog):
         return bands
 
     def GetGroupBands(self, group, subgroup):
-        """Get list of raster bands which are in the soubgroup of group with both having same name."""
+        """Get list of raster bands which are in the subgroup of group with both having
+        same name."""
 
         kwargs = {}
         if subgroup:
@@ -383,7 +385,8 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdi
     def __init__(self, parent, mapwindow, stats_data, id=wx.ID_ANY):
         """
         :param parent: gui parent
-        :param mapwindow: mapwindow instance with iclass toolbar and remove raster method
+        :param mapwindow: mapwindow instance with iclass toolbar and remove raster
+                          method
         :param stats_data: StatisticsData instance (defined in statistics.py)
         :param id: wx id
         """

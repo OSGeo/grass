@@ -107,7 +107,8 @@ class SimpleDialog(wx.Dialog):
 
         self.sizer.Add(self.dataSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
 
-        # self.sizer.Add(item = self.informLabel, proportion = 0, flag = wx.ALL, border = 5)
+        # self.sizer.Add(item = self.informLabel, proportion = 0,
+        # flag = wx.ALL, border = 5)
         self.sizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
     def ValidatorCallback(self, win):
@@ -119,7 +120,7 @@ class SimpleDialog(wx.Dialog):
 class LocationDialog(SimpleDialog):
     """Dialog used to select location"""
 
-    def __init__(self, parent, title=_("Select GRASS location and mapset")):
+    def __init__(self, parent, title=_("Select GRASS project and mapset")):
         SimpleDialog.__init__(self, parent, title)
 
         self.element1 = LocationSelect(
@@ -139,7 +140,7 @@ class LocationDialog(SimpleDialog):
             validator=SimpleValidator(callback=self.ValidatorCallback),
         )
         self.element1.SetFocus()
-        self.warning = _("Location or mapset is not defined.")
+        self.warning = _("Project or mapset is not defined.")
         self._layout()
         self.SetMinSize(self.GetSize())
 
@@ -147,7 +148,7 @@ class LocationDialog(SimpleDialog):
         """Do layout"""
         self.dataSizer.Add(
             StaticText(
-                parent=self.panel, id=wx.ID_ANY, label=_("Name of GRASS location:")
+                parent=self.panel, id=wx.ID_ANY, label=_("Name of GRASS project:")
             ),
             proportion=0,
             flag=wx.ALL,
@@ -190,7 +191,7 @@ class MapsetDialog(SimpleDialog):
     """Dialog used to select mapset"""
 
     def __init__(
-        self, parent, title=_("Select mapset in GRASS location"), location=None
+        self, parent, title=_("Select mapset in GRASS project"), location=None
     ):
         SimpleDialog.__init__(self, parent, title)
 
@@ -304,7 +305,8 @@ class NewVectorDialog(VectorDialog):
         :param title: window title
         :param disableAdd: disable 'add layer' checkbox
         :param disableTable: disable 'create table' checkbox
-        :param showType: True to show feature type selector (used for creating new empty OGR layers)
+        :param showType: True to show feature type selector (used for creating new
+                         empty OGR layers)
 
         :return: dialog instance
         """
@@ -2599,7 +2601,8 @@ class DefaultFontDialog(wx.Dialog):
         return fontdict, fontdict_reverse, fontlist
 
     def RenderText(self, font, text, size):
-        """Renders an example text with the selected font and resets the bitmap widget"""
+        """Renders an example text with the selected font and resets the bitmap
+        widget"""
         env = os.environ.copy()
         driver = UserSettings.Get(group="display", key="driver", subkey="type")
         if driver == "png":

@@ -9,6 +9,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import grass.script as gs
 from grass.exceptions import ImplementationError
 from datetime import datetime
@@ -176,8 +177,8 @@ class AbstractMapDataset(AbstractDataset):
                       layer exists
         :param mapset: The mapset in which the map is located
 
-        :return: tuple of three elements name, layer, mapset e(:layer)@mapset" while layer is
-                 optional
+        :return: tuple of three elements name, layer, mapset e(:layer)@mapset" while
+                 layer is optional
         """
 
         # Check if the name includes any mapset
@@ -222,7 +223,8 @@ class AbstractMapDataset(AbstractDataset):
             else:
                 gs.fatal(
                     _(
-                        "Map <{map_name}> of element tpye '{element}' not found on search path"
+                        "Map <{map_name}> of element tpye '{element}' not found on \
+                            search path"
                     ).format(element=element, map_name=name)
                 )
 
@@ -276,25 +278,25 @@ class AbstractMapDataset(AbstractDataset):
         """Print information about this object in human readable style"""
 
         if self.get_type() == "raster":
-            #                1         2         3         4         5         6         7
-            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            #                1         2         3         4         5         6         7  # noqa: E501
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678  # noqa: E501
             print(
-                " +-------------------- Raster Dataset ----------------------------------------+"
+                " +-------------------- Raster Dataset ----------------------------------------+"  # noqa: E501
             )
         if self.get_type() == "raster3d":
-            #                1         2         3         4         5         6         7
-            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            #                1         2         3         4         5         6         7  # noqa: E501
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678  # noqa: E501
             print(
-                " +-------------------- 3D Raster Dataset -------------------------------------+"
+                " +-------------------- 3D Raster Dataset -------------------------------------+"  # noqa: E501
             )
         if self.get_type() == "vector":
-            #                1         2         3         4         5         6         7
-            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
+            #                1         2         3         4         5         6         7  # noqa: E501
+            #      0123456789012345678901234567890123456789012345678901234567890123456789012345678  # noqa: E501
             print(
-                " +-------------------- Vector Dataset ----------------------------------------+"
+                " +-------------------- Vector Dataset ----------------------------------------+"  # noqa: E501
             )
         print(
-            " |                                                                            |"
+            " |                                                                            |"  # noqa: E501
         )
         self.base.print_info()
         self.temporal_extent.print_info()
@@ -317,7 +319,7 @@ class AbstractMapDataset(AbstractDataset):
                 count += 1
         print(" | Registered datasets ........ " + string)
         print(
-            " +----------------------------------------------------------------------------+"
+            " +----------------------------------------------------------------------------+"  # noqa: E501
         )
 
     def print_shell_info(self):
@@ -683,24 +685,32 @@ class AbstractMapDataset(AbstractDataset):
 
             >>> import datetime
             >>> import grass.temporal as tgis
-            >>> map      = tgis.RasterDataset(None)
-            >>> temp_ext = tgis.RasterRelativeTime(start_time=1, end_time=2, unit="years")
+            >>> map = tgis.RasterDataset(None)
+            >>> temp_ext = tgis.RasterRelativeTime(
+            ...     start_time=1, end_time=2, unit="years"
+            ... )
             >>> map.set_temporal_extent(temp_ext)
             >>> print(map.get_temporal_extent_as_tuple())
             (1, 2)
-            >>> map      = tgis.VectorDataset(None)
-            >>> temp_ext = tgis.VectorAbsoluteTime(start_time=datetime.datetime(2000, 1, 1),
-            ...                                        end_time=datetime.datetime(2001, 1, 1))
+            >>> map = tgis.VectorDataset(None)
+            >>> temp_ext = tgis.VectorAbsoluteTime(
+            ...     start_time=datetime.datetime(2000, 1, 1),
+            ...     end_time=datetime.datetime(2001, 1, 1),
+            ... )
             >>> map.set_temporal_extent(temp_ext)
             >>> print(map.get_temporal_extent_as_tuple())
             (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
 
             >>> map1 = tgis.VectorDataset("A@P")
-            >>> check = map1.set_absolute_time(datetime.datetime(2000,5,5), datetime.datetime(2005,6,6))
+            >>> check = map1.set_absolute_time(
+            ...     datetime.datetime(2000, 5, 5), datetime.datetime(2005, 6, 6)
+            ... )
             >>> print(map1.get_temporal_extent_as_tuple())
             (datetime.datetime(2000, 5, 5, 0, 0), datetime.datetime(2005, 6, 6, 0, 0))
             >>> map2 = tgis.RasterDataset("B@P")
-            >>> check = map2.set_absolute_time(datetime.datetime(1990,1,1), datetime.datetime(1999,8,1))
+            >>> check = map2.set_absolute_time(
+            ...     datetime.datetime(1990, 1, 1), datetime.datetime(1999, 8, 1)
+            ... )
             >>> print(map2.get_temporal_extent_as_tuple())
             (datetime.datetime(1990, 1, 1, 0, 0), datetime.datetime(1999, 8, 1, 0, 0))
             >>> map2.set_temporal_extent(map1.get_temporal_extent())
@@ -743,15 +753,17 @@ class AbstractMapDataset(AbstractDataset):
             >>> import grass.temporal as tgis
             >>> maps = []
             >>> for i in range(5):
-            ...   map = tgis.RasterDataset(None)
-            ...   if i%2 == 0:
-            ...       check = map.set_relative_time(i, i + 1, 'years')
-            ...   else:
-            ...       check = map.set_relative_time(i, None, 'years')
-            ...   map.temporal_buffer(3)
-            ...   maps.append(map)
+            ...     map = tgis.RasterDataset(None)
+            ...     if i % 2 == 0:
+            ...         check = map.set_relative_time(i, i + 1, "years")
+            ...     else:
+            ...         check = map.set_relative_time(i, None, "years")
+            ...     map.temporal_buffer(3)
+            ...     maps.append(map)
+            ...
             >>> for map in maps:
-            ...   map.temporal_extent.print_info()
+            ...     map.temporal_extent.print_info()
+            ...
              +-------------------- Relative time -----------------------------------------+
              | Start time:................. -3
              | End time:................... 4
@@ -773,16 +785,20 @@ class AbstractMapDataset(AbstractDataset):
              | End time:................... 8
              | Relative time unit:......... years
             >>> maps = []
-            >>> for i in range(1,5):
-            ...   map = tgis.RasterDataset(None)
-            ...   if i%2 == 0:
-            ...       check = map.set_absolute_time(datetime(2001,i,1), datetime(2001, i + 1, 1))
-            ...   else:
-            ...       check = map.set_absolute_time(datetime(2001,i,1),  None)
-            ...   map.temporal_buffer("7 days")
-            ...   maps.append(map)
+            >>> for i in range(1, 5):
+            ...     map = tgis.RasterDataset(None)
+            ...     if i % 2 == 0:
+            ...         check = map.set_absolute_time(
+            ...             datetime(2001, i, 1), datetime(2001, i + 1, 1)
+            ...         )
+            ...     else:
+            ...         check = map.set_absolute_time(datetime(2001, i, 1), None)
+            ...     map.temporal_buffer("7 days")
+            ...     maps.append(map)
+            ...
             >>> for map in maps:
-            ...   map.temporal_extent.print_info()
+            ...     map.temporal_extent.print_info()
+            ...
              +-------------------- Absolute time -----------------------------------------+
              | Start time:................. 2000-12-25 00:00:00
              | End time:................... 2001-01-08 00:00:00
@@ -796,7 +812,7 @@ class AbstractMapDataset(AbstractDataset):
              | Start time:................. 2001-03-25 00:00:00
              | End time:................... 2001-05-08 00:00:00
 
-        """
+        """  # noqa: E501
 
         if self.is_time_absolute():
             start, end = self.get_absolute_time()
@@ -854,8 +870,10 @@ class AbstractMapDataset(AbstractDataset):
 
             >>> import datetime
             >>> import grass.temporal as tgis
-            >>> map      = tgis.RasterDataset(None)
-            >>> spat_ext = tgis.SpatialExtent(north=10, south=-10, east=20, west=-20, top=5, bottom=-5)
+            >>> map = tgis.RasterDataset(None)
+            >>> spat_ext = tgis.SpatialExtent(
+            ...     north=10, south=-10, east=20, west=-20, top=5, bottom=-5
+            ... )
             >>> map.set_spatial_extent(spat_ext)
             >>> print(map.get_spatial_extent_as_tuple())
             (10.0, -10.0, 20.0, -20.0, 5.0, -5.0)
@@ -876,7 +894,9 @@ class AbstractMapDataset(AbstractDataset):
 
             >>> import grass.temporal as tgis
             >>> map = tgis.RasterDataset(None)
-            >>> spat_ext = tgis.SpatialExtent(north=10, south=-10, east=20, west=-20, top=5, bottom=-5)
+            >>> spat_ext = tgis.SpatialExtent(
+            ...     north=10, south=-10, east=20, west=-20, top=5, bottom=-5
+            ... )
             >>> map.set_spatial_extent(spat_ext)
             >>> map.spatial_buffer(10)
             >>> print(map.get_spatial_extent_as_tuple())
@@ -906,7 +926,9 @@ class AbstractMapDataset(AbstractDataset):
 
             >>> import grass.temporal as tgis
             >>> map = tgis.RasterDataset(None)
-            >>> spat_ext = tgis.SpatialExtent(north=10, south=-10, east=20, west=-20, top=5, bottom=-5)
+            >>> spat_ext = tgis.SpatialExtent(
+            ...     north=10, south=-10, east=20, west=-20, top=5, bottom=-5
+            ... )
             >>> map.set_spatial_extent(spat_ext)
             >>> map.spatial_buffer_2d(10)
             >>> print(map.get_spatial_extent_as_tuple())

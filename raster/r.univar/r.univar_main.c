@@ -188,7 +188,10 @@ int main(int argc, char *argv[])
                     "threads setting."));
     nprocs = 1;
 #endif
-
+    if (nprocs > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
+        G_warning(_("Parallel processing disabled due to active MASK."));
+        nprocs = 1;
+    }
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
 
@@ -371,7 +374,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
             zd->sum_abs = 0;
             zd->size = 0;
             zd->min = DBL_MAX;
-            zd->max = DBL_MIN;
+            zd->max = -DBL_MAX;
             zd->bucket.n = 0;
             zd->bucket.n_alloc = 0;
             zd->bucket.nextp = NULL;

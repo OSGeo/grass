@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
     geo_f = G_define_flag();
     geo_f->key = 'g';
     geo_f->description =
-        _("Use geodesic calculation for longitude-latitude locations");
+        _("Use geodesic calculation for longitude-latitude projects");
 
     /* options and flags parser */
     if (G_parser(argc, argv))

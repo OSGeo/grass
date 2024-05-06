@@ -279,8 +279,8 @@ class TreeFrame(wx.Frame):
         wx.Frame.__init__(self, None, title="Test tree")
 
         panel = wx.Panel(self)
-        #        self.tree = TreeListView(model=model, parent=panel, columns=['col1', 'xxx'])
-        #        self.tree = TreeView(model=model, parent=panel)
+        # self.tree = TreeListView(model=model, parent=panel, columns=["col1", "xxx"])
+        # self.tree = TreeView(model=model, parent=panel)
         self.tree = CTreeView(model=model, parent=panel)
         self.tree.selectionChanged.connect(self.OnSelChanged)
         self.tree.itemActivated.connect(self.OnItemActivated)

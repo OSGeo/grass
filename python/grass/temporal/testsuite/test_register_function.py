@@ -24,7 +24,7 @@ class TestRasterRegisterFunctions(TestCase):
         os.putenv("GRASS_OVERWRITE", "1")
         # Use always the current mapset as temporal database
         cls.runModule("g.gisenv", set="TGIS_USE_CURRENT_MAPSET=1")
-        tgis.init()
+        cls.dbif = tgis.init()
         cls.use_temp_region()
         cls.runModule("g.region", n=80.0, s=0.0, e=120.0, w=0.0, t=1.0, b=0.0, res=10.0)
 
@@ -72,7 +72,7 @@ class TestRasterRegisterFunctions(TestCase):
         self.runModule(
             "t.unregister",
             type="raster",
-            maps="register_map_1,register_map_2",
+            maps="register_map_1,register_map_2,elevation",
             quiet=True,
         )
         self.runModule(
@@ -118,7 +118,8 @@ class TestRasterRegisterFunctions(TestCase):
     def test_absolute_time_strds_2(self):
         """Test the registration of maps with absolute time in a
         space time raster dataset.
-        The timestamps are set using the C-Interface beforehand, so that the register function needs
+        The timestamps are set using the C-Interface beforehand,
+        so that the register function needs
         to read the timetsamp from the map metadata.
         """
 
@@ -155,9 +156,10 @@ class TestRasterRegisterFunctions(TestCase):
 
     def test_absolute_time_strds_3(self):
         """Test the registration of maps with absolute time in a
-        space time raster dataset. The timestamps are set via method arguments and with the
-        c-interface. The timestamps of the method arguments should overwrite the
-        time stamps set via the C-interface.
+        space time raster dataset. The timestamps are set via method
+        arguments and with the c-interface. The timestamps of the
+        method arguments should overwrite the time stamps set via the
+        C-interface.
         """
 
         ciface = tgis.get_tgis_c_library_interface()
@@ -187,9 +189,10 @@ class TestRasterRegisterFunctions(TestCase):
 
     def test_absolute_time_strds_4(self):
         """Test the registration of maps with absolute time in a
-        space time raster dataset. The timestamps are set via method arguments and with the
-        c-interface. The timestamps of the method arguments should overwrite the
-        time stamps set via the C-interface. The C-interface sets relative time stamps.
+        space time raster dataset. The timestamps are set via method
+        arguments and with the c-interface. The timestamps of the method
+        arguments should overwrite the time stamps set via the C-interface.
+        The C-interface sets relative time stamps.
         """
 
         ciface = tgis.get_tgis_c_library_interface()
@@ -258,7 +261,8 @@ class TestRasterRegisterFunctions(TestCase):
 
     def test_absolute_time_2(self):
         """Test the registration of maps with absolute time
-        using register_maps_in_space_time_dataset() and register_map_object_list() with empty map deletion
+        using register_maps_in_space_time_dataset() and
+        register_map_object_list() with empty map deletion
         """
         tgis.register_maps_in_space_time_dataset(
             type="raster",
@@ -300,9 +304,58 @@ class TestRasterRegisterFunctions(TestCase):
         map_3 = tgis.VectorDataset("register_map_null@" + tgis.get_current_mapset())
         self.assertEqual(map_3.map_exists(), False)
 
+    def test_history_raster(self):
+        """Test that raster maps are registered with the history
+        (creator and creation time) of the raster map itself (and from a
+        different mapset (PERMANENT)
+        """
+        tgis.register_maps_in_space_time_dataset(
+            type="raster",
+            name=None,
+            maps="elevation@PERMANENT",
+            start="2001-01-01 10:30:01",
+            increment="1 year",
+            interval=True,
+            dbif=self.dbif,
+        )
+
+        map_1 = tgis.RasterDataset("elevation@PERMANENT")
+        map_1.select(self.dbif, tgis.get_current_mapset())
+        # Test that creation time of the map is used
+        self.assertEqual(
+            map_1.base.get_ctime(), datetime.datetime(2006, 11, 7, 1, 9, 51)
+        )
+        # Test that registered creator of the map is not the current user
+        self.assertEqual(map_1.base.get_creator(), "helena")
+
+    def test_history_vector(self):
+        """Test that vector maps are registered with the history (creator
+        and creation time) of the vector map itself (and from a
+        different mapset (PERMANENT)
+        """
+        tgis.register_maps_in_space_time_dataset(
+            type="vector",
+            name=None,
+            maps="lakes@PERMANENT",
+            start="2001-01-01 10:30:01",
+            increment="1 year",
+            interval=True,
+            dbif=self.dbif,
+        )
+
+        map_1 = tgis.VectorDataset("lakes@PERMANENT")
+        map_1.select(self.dbif, tgis.get_current_mapset())
+        # Test that creation time of the map is used
+        self.assertEqual(
+            map_1.base.get_ctime(), datetime.datetime(2006, 11, 7, 19, 48, 8)
+        )
+        # Test that registered creator of the map is not the current user
+        self.assertTrue(map_1.base.get_creator(), "helena")
+
     def test_absolute_time_3(self):
         """Test the registration of maps with absolute time.
-        The timestamps are set using the C-Interface beforehand, so that the register function needs
+        The timestamps are set using the C-Interface beforehand,
+        so that the register function needs
         to read the timetsamp from the map metadata.
         """
 
@@ -365,8 +418,8 @@ class TestRasterRegisterFunctions(TestCase):
 
     def test_relative_time_strds_2(self):
         """Test the registration of maps with relative time in a
-        space time raster dataset. The timetsamps are set for the maps using the
-        C-interface before registration.
+        space time raster dataset. The timestamps are set for the maps
+        using the C-interface before registration.
         """
         ciface = tgis.get_tgis_c_library_interface()
         ciface.write_raster_timestamp(
@@ -459,8 +512,8 @@ class TestRasterRegisterFunctions(TestCase):
         self.assertEqual(unit, "seconds")
 
     def test_relative_time_3(self):
-        """Test the registration of maps with relative time. The timetsamps are set beforehand using
-        the C-interface.
+        """Test the registration of maps with relative time. The
+        timestamps are set beforehand using the C-interface.
         """
         ciface = tgis.get_tgis_c_library_interface()
         ciface.write_raster_timestamp(
@@ -619,7 +672,8 @@ class TestVectorRegisterFunctions(TestCase):
     def test_absolute_time_stvds_2(self):
         """Test the registration of maps with absolute time in a
         space time raster dataset.
-        The timestamps are set using the C-Interface beforehand, so that the register function needs
+        The timestamps are set using the C-Interface beforehand,
+        so that the register function needs
         to read the timetsamp from the map metadata.
         """
 
@@ -656,9 +710,9 @@ class TestVectorRegisterFunctions(TestCase):
 
     def test_absolute_time_stvds_3(self):
         """Test the registration of maps with absolute time in a
-        space time raster dataset. The timestamps are set via method arguments and with the
-        c-interface. The timestamps of the method arguments should overwrite the
-        time stamps set via the C-interface.
+        space time raster dataset. The timestamps are set via method
+        arguments and with the C-interface. The timestamps of the method
+        arguments should overwrite the time stamps set via the C-interface.
         """
 
         ciface = tgis.get_tgis_c_library_interface()
@@ -687,7 +741,8 @@ class TestVectorRegisterFunctions(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 2, 2))
 
     def test_absolute_time_1(self):
-        """Register vector maps in the temporal database and in addition in a stvds using the object method
+        """Register vector maps in the temporal database and in addition
+        in a stvds using the object method
 
         :return:
         """

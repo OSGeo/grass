@@ -1270,11 +1270,14 @@ class TestCase(unittest.TestCase):
         # a difference (always a iterator object is returned)
         if i > 0:
             # do HTML diff only if there is not too many lines
-            # TODO: this might be tough to do with some more sophisticated way of reports
+            # TODO: this might be tough to do with some more sophisticated way of
+            # reports
             if self.html_reports and i < maxlines:
-                # TODO: this might be here and somehow stored as file or done in reporter again if right information is stored
+                # TODO: this might be here and somehow stored as file or done in
+                # reporter again if right information is stored
                 # i.e., files not deleted or the whole strings passed
-                # alternative is make_table() which is the same but creates just a table not a whole document
+                # alternative is make_table() which is the same but creates just a table
+                # not a whole document
                 # TODO: all HTML files might be collected by the main reporter
                 # TODO: standardize the format of name of HTML file
                 # for one test id there is only one possible file of this name
@@ -1357,7 +1360,8 @@ class TestCase(unittest.TestCase):
     # should be done by some other function
     # TODO: this should be the function used for valgrind or profiling or debug
     # TODO: it asserts the rc but it does much more, so testModule?
-    # TODO: do we need special function for testing module failures or just add parameter returncode=0?
+    # TODO: do we need special function for testing module failures or just add
+    # parameter returncode=0?
     # TODO: consider not allowing to call this method more than once
     # the original idea was to run this method just once for test method
     # but for "integration" tests  (script-like tests with more than one module)

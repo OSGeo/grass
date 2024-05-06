@@ -22,7 +22,8 @@ This program is free software under the GNU General Public License
 @author Original version improved by Martin Landa <landa.martin gmail.com>
 @author Rewritten by Markus Metz redesign georectfier -> GCP Manage
 @author Support for GraphicsSet added by Stepan Turek <stepan.turek seznam.cz> (2012)
-@author Yann modified: graphical replacement of i.photo.2image (was in v6 using Vask lib)
+@author Yann modified: graphical replacement of i.photo.2image
+        (was in v6 using Vask lib)
 """
 
 import os
@@ -473,7 +474,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             f.write("#\tsource\t\ttarget\t\tstatus\n")
             f.write("#\teast\tnorth\teast\tnorth\t(1=ok, 0=ignore)\n")
             f.write(
-                "#-----------------------     -----------------------     ---------------\n"
+                "#-----------------------     -----------------------     ---------------\n"  # noqa: E501
             )
 
             check = "0"
@@ -894,7 +895,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             f.write("#\tsource\t\ttarget\t\tstatus\n")
             f.write("#\teast\tnorth\teast\tnorth\t(1=ok, 0=ignore)\n")
             f.write(
-                "#-----------------------     -----------------------     ---------------\n"
+                "#-----------------------     -----------------------     ---------------\n"  # noqa: E501
             )
 
             for index in range(self.list.GetItemCount()):
@@ -1040,7 +1041,8 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             targetMapWin.UpdateMap(render=False)
 
     def OnFocus(self, event):
-        # TODO: it is here just to remove old or obsolete beavior of base class gcp/MapPanel?
+        # TODO: it is here just to remove old or obsolete beavior of base class
+        #       gcp/MapPanel?
         # self.grwiz.SwitchEnv('source')
         pass
 
@@ -1251,16 +1253,19 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         if self.gr_order == 1:
             minNumOfItems = 3
-            # self.SetStatusText(_('Insufficient points, 3+ points needed for 1st order'))
+            # self.SetStatusText(_(
+            # "Insufficient points, 3+ points needed for 1st order"))
 
         elif self.gr_order == 2:
             minNumOfItems = 6
             diff = 6 - numOfItems
-            # self.SetStatusText(_('Insufficient points, 6+ points needed for 2nd order'))
+            # self.SetStatusText(_(
+            # "Insufficient points, 6+ points needed for 2nd order"))
 
         elif self.gr_order == 3:
             minNumOfItems = 10
-            # self.SetStatusText(_('Insufficient points, 10+ points needed for 3rd order'))
+            # self.SetStatusText(_(
+            # "Insufficient points, 10+ points needed for 3rd order"))
 
         for i in range(minNumOfItems - numOfItems):
             self.AddGCP(None)
@@ -2039,7 +2044,8 @@ class GrSettingsDialog(wx.Dialog):
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         btnSave.SetToolTip(
             _(
-                "Apply and save changes to user settings file (default for next sessions)"
+                "Apply and save changes to user settings file (default for next "
+                "sessions)"
             )
         )
         btnClose.Bind(wx.EVT_BUTTON, self.OnClose)

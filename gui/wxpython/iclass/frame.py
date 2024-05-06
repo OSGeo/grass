@@ -94,7 +94,8 @@ class IClassMapPanel(DoubleMapPanel):
         """
         :param parent: (no parent is expected)
         :param title: window title
-        :param toolbars: dictionary of active toolbars (default value represents all toolbars)
+        :param toolbars: dictionary of active toolbars (default value represents all
+                         toolbars)
         :param size: default size
         """
         DoubleMapPanel.__init__(
@@ -1445,7 +1446,8 @@ class MapManager:
         """Adds layer to Map and update toolbar
 
         :param str name: layer (raster) name
-        :param str resultsLayer: True if layer is temp. raster showing the results of computation
+        :param str resultsLayer: True if layer is temp. raster showing the results of
+                                 computation
         """
         if resultsLayer and name in [
             layer.GetName() for layer in self.map.GetListOfLayers(name=name)

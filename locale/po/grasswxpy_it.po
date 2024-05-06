@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 06:51-0700\n"
-"PO-Revision-Date: 2023-04-04 21:08+0000\n"
-"Last-Translator: Markus <neteler@osgeo.org>\n"
+"PO-Revision-Date: 2024-03-28 22:45+0000\n"
+"Last-Translator: luca <lucadeluge@gmail.com>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/"
 "grasswxpy/it/>\n"
 "Language: it\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 5.3\n"
 
 #: ../gui/wxpython/nviz/tools.py:109 ../gui/wxpython/nviz/preferences.py:65
 #: ../gui/wxpython/nviz/preferences.py:69
@@ -712,7 +712,7 @@ msgstr "Vuoi registrare una nuova animazione senza salvare la precedente?"
 
 #: ../gui/wxpython/nviz/tools.py:2591
 msgid "Animation already exists"
-msgstr ""
+msgstr "L'animazione esiste già"
 
 #: ../gui/wxpython/nviz/tools.py:2757
 msgid "No file prefix given."
@@ -2369,9 +2369,8 @@ msgid "Re&load maps"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/tree.py:2178
-#, fuzzy
 msgid "&Copy path to mapset"
-msgstr "&Crea mapset"
+msgstr "&Copia percorso al mapset"
 
 #: ../gui/wxpython/datacatalog/tree.py:2189
 msgid "&Create mapset"
@@ -2410,9 +2409,8 @@ msgid "&Delete mapsets"
 msgstr "&Elimina mapsets"
 
 #: ../gui/wxpython/datacatalog/tree.py:2282
-#, fuzzy
 msgid "&Copy paths to mapsets"
-msgstr "&Crea mapset"
+msgstr "&Copia percorsi ai mapsets"
 
 #: ../gui/wxpython/datacatalog/tree.py:2292
 msgid "No available options"
@@ -2689,9 +2687,8 @@ msgid "Double-click to open the tool"
 msgstr "Doppio click o Ctrl-Enter per eseguire il modulo selezionato"
 
 #: ../gui/wxpython/history/tree.py:120
-#, fuzzy
 msgid "&Remove"
-msgstr "Rimuovi"
+msgstr "&Rimuovi"
 
 #: ../gui/wxpython/history/tree.py:179
 msgid "Cannot be parsed into command"
@@ -2714,7 +2711,7 @@ msgstr "Spostando <{name}>"
 
 #: ../gui/wxpython/history/tree.py:203
 msgid "<{}> removed"
-msgstr ""
+msgstr "<{}> rimosso"
 
 #: ../gui/wxpython/history/browser.py:46
 #, fuzzy
@@ -2722,9 +2719,8 @@ msgid "History browser"
 msgstr "Naviga nei dati"
 
 #: ../gui/wxpython/history/browser.py:68
-#, fuzzy
 msgid "&Export history"
-msgstr "Esporta a:"
+msgstr "&Esporta storia dei comandi"
 
 #: ../gui/wxpython/history/browser.py:70
 #, fuzzy
@@ -3872,7 +3868,7 @@ msgstr "Successivo: %(forw)s, Precedente: %(back)s"
 #: ../gui/wxpython/image2target/ii2t_toolbars.py:40
 #: ../gui/wxpython/photo2image/ip2i_toolbars.py:40
 msgid "Add new GCP to the list"
-msgstr ""
+msgstr "Aggiungi nuovo GCP alla lista"
 
 #: ../gui/wxpython/gcp/toolbars.py:41
 #: ../gui/wxpython/image2target/ii2t_toolbars.py:41
@@ -3915,7 +3911,7 @@ msgstr ""
 #: ../gui/wxpython/image2target/ii2t_toolbars.py:117
 #: ../gui/wxpython/photo2image/ip2i_toolbars.py:117
 msgid " / Zoom to map"
-msgstr ""
+msgstr " /Zoom alla mappa"
 
 #: ../gui/wxpython/gcp/toolbars.py:134
 #: ../gui/wxpython/image2target/ii2t_toolbars.py:134
@@ -4545,11 +4541,11 @@ msgstr "Esporta modello in un script Python"
 
 #: ../gui/wxpython/gmodeler/toolbars.py:52
 msgid "Add GRASS tool (module) to model"
-msgstr ""
+msgstr "Aggiungi uno strumento (modulo) di GRASS al modello"
 
 #: ../gui/wxpython/gmodeler/toolbars.py:54
 msgid "Add data to model"
-msgstr ""
+msgstr "Aggiungi dati al modello"
 
 #: ../gui/wxpython/gmodeler/toolbars.py:57
 msgid "Manually define relation between data and commands"
@@ -4557,11 +4553,11 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/toolbars.py:59
 msgid "Add loop/series to model"
-msgstr ""
+msgstr "Aggiungi cicli/serie al modello"
 
 #: ../gui/wxpython/gmodeler/toolbars.py:60
 msgid "Add comment to model"
-msgstr ""
+msgstr "Aggiungi commento al modello"
 
 #: ../gui/wxpython/gmodeler/toolbars.py:61 ../gui/wxpython/menustrings.py:201
 #: ../gui/wxpython/menustrings.py:2094
@@ -4632,6 +4628,9 @@ msgid ""
 "\n"
 "Unable to add new action to the model."
 msgstr ""
+"'%s' non è uno strumento di GRASS.\n"
+"\n"
+"Impossibile aggiungere una nuova azione al modello."
 
 #: ../gui/wxpython/gmodeler/dialogs.py:359
 msgid "Relation properties"
@@ -10997,7 +10996,7 @@ msgid "Abort running command"
 msgstr "Ferma l'esecuzione del comando"
 
 #: ../gui/wxpython/gui_core/goutput.py:374
-#, fuzzy, python-format
+#, python-format
 msgid "%(txt)s (*.txt)|*.txt|%(files)s (*)|*"
 msgstr "%(txt)s (*.txt)|*.txt|%(files)s (*)|*"
 
@@ -11217,7 +11216,7 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/preferences.py:392
 msgid "At startup load maps from current mapset only (in the Data tab)"
-msgstr ""
+msgstr "All'avvio carica mappe solo dal mapset in uso (nel pannello Dati)"
 
 #: ../gui/wxpython/gui_core/preferences.py:407
 msgid "Workspace settings"
@@ -11771,9 +11770,8 @@ msgid "Map Display Settings"
 msgstr "Impostazioni della mappa"
 
 #: ../gui/wxpython/gui_core/toolbars.py:86
-#, fuzzy
 msgid "(Un)dock Map Display"
-msgstr "Visualizzatore di mappe"
+msgstr ""
 
 #: ../gui/wxpython/gui_core/wrap.py:258
 msgid "Clear"
@@ -11793,7 +11791,7 @@ msgstr "&Chiudi"
 
 #: ../gui/wxpython/gui_core/wrap.py:297
 msgid "Apply"
-msgstr ""
+msgstr "Applica"
 
 #: ../gui/wxpython/gui_core/wrap.py:299
 #: ../gui/wxpython/web_services/dialogs.py:692
@@ -12835,9 +12833,8 @@ msgid "Digitize new area (boundary without category) (Ctrl+A)"
 msgstr "Digitalizza nuova area (confine senza categoria)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:179
-#, fuzzy
 msgid "Add new vertex to line or boundary (Ctrl+V)"
-msgstr "Aggiungi nuovo vertice a linee o confini"
+msgstr "Aggiungi nuovo vertice a linee o confini (Ctrl+V)"
 
 #: ../gui/wxpython/vdigit/toolbars.py:180
 #: ../gui/wxpython/vdigit/toolbars.py:187
@@ -13622,6 +13619,9 @@ msgid ""
 "%s web service was not found in fetched capabilities file from <%s>:\n"
 "%s\n"
 msgstr ""
+"%s il servizio web non è stato trovato nel file delle capabilities ottenuto "
+"da <%s>:\n"
+"%s\n"
 
 #: ../gui/wxpython/web_services/widgets.py:834
 msgid "Source image format"
@@ -17644,7 +17644,7 @@ msgstr ""
 
 #: ../gui/wxpython/lmgr/statusbar.py:137
 msgid "Are you sure that you want to remove the MASK?"
-msgstr ""
+msgstr "Sei sicuro che vuoi rimuovere la MASK?"
 
 #: ../gui/wxpython/lmgr/statusbar.py:138
 #, fuzzy
@@ -17718,29 +17718,24 @@ msgid "Show attribute data for selected vector map"
 msgstr "Mostra i dati degli attributi per il vettoriale selezionato"
 
 #: ../gui/wxpython/lmgr/toolbars.py:128
-#, fuzzy
 msgid "Add multiple map layers"
-msgstr "Aggiunge un layer raster"
+msgstr "Aggiunge più layer raster"
 
 #: ../gui/wxpython/lmgr/toolbars.py:138
-#, fuzzy
 msgid "Add various raster maps"
-msgstr "Aggiungi raster"
+msgstr "Aggiungi più mappe raster"
 
 #: ../gui/wxpython/lmgr/toolbars.py:143
-#, fuzzy
 msgid "Add vector map"
-msgstr "Aggiungi vettoriale"
+msgstr "Aggiungi mappa vettoriale"
 
 #: ../gui/wxpython/lmgr/toolbars.py:148
-#, fuzzy
 msgid "Add various vector maps"
-msgstr "Aggiungi diverse sovrapposizioni"
+msgstr "Aggiungi diverse mappe vettoriali"
 
 #: ../gui/wxpython/lmgr/toolbars.py:158
-#, fuzzy
 msgid "Add web service map"
-msgstr "Aggiungi layer da servizi web"
+msgstr "Aggiungi mappa da servizi web"
 
 #: ../gui/wxpython/lmgr/toolbars.py:169
 #, fuzzy
@@ -17926,7 +17921,7 @@ msgstr ""
 
 #: ../gui/wxpython/dbmgr/manager.py:91
 msgid "Attribute Table Manager"
-msgstr ""
+msgstr "Gestore della Tabella degli Attributi"
 
 #: ../gui/wxpython/dbmgr/manager.py:94
 #, python-brace-format
@@ -17984,7 +17979,7 @@ msgstr "Caricando gli attributi per il vettoriale <%s> ..."
 
 #: ../gui/wxpython/dbmgr/g.gui.dbmgr.py:55
 msgid "Attribute Table Manager - GRASS GIS"
-msgstr ""
+msgstr "Gestore della Tabella degli Attributi - GRASS GIS"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:106 ../gui/wxpython/dbmgr/base.py:2351
 msgid "Database connection"
@@ -18856,7 +18851,7 @@ msgstr "%s=, %s=, %s= e %s= si escludono a vicenda."
 
 #: ../gui/wxpython/animation/g.gui.animation.py:137
 msgid "Animation Tool - GRASS GIS"
-msgstr ""
+msgstr "Strumento Animazione - GRASS GIS"
 
 #: ../gui/wxpython/animation/dialogs.py:81
 msgid "Adjust speed of animation"
@@ -19319,7 +19314,7 @@ msgstr "Directory {t} non rimossa."
 
 #: ../gui/wxpython/animation/frame.py:49
 msgid "Animation Tool"
-msgstr ""
+msgstr "Strumento Animazione"
 
 #: ../gui/wxpython/animation/frame.py:192
 msgid "Animation Toolbar"

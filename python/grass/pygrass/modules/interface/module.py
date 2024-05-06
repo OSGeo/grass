@@ -20,8 +20,8 @@ def _get_bash(self, *args, **kargs):
 
 
 class ParallelModuleQueue:
-    """This class is designed to run an arbitrary number of pygrass Module or MultiModule
-    processes in parallel.
+    """This class is designed to run an arbitrary number of pygrass Module or
+    MultiModule processes in parallel.
 
     Objects of type grass.pygrass.modules.Module or
     grass.pygrass.modules.MultiModule can be put into the
@@ -55,8 +55,9 @@ class ParallelModuleQueue:
     >>> for i in range(5):
     ...     new_mapcalc = copy.deepcopy(mapcalc)
     ...     mapcalc_list.append(new_mapcalc)
-    ...     m = new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
+    ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
     ...     queue.put(m)
+    ...
     >>> queue.wait()
     >>> mapcalc_list = queue.get_finished_modules()
     >>> queue.get_num_run_procs()
@@ -65,6 +66,7 @@ class ParallelModuleQueue:
     3
     >>> for mapcalc in mapcalc_list:
     ...     print(mapcalc.returncode)
+    ...
     0
     0
     0
@@ -78,8 +80,9 @@ class ParallelModuleQueue:
     >>> for i in range(5):
     ...     new_mapcalc = copy.deepcopy(mapcalc)
     ...     mapcalc_list.append(new_mapcalc)
-    ...     m = new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
+    ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
     ...     queue.put(m)
+    ...
     >>> queue.wait()
     >>> mapcalc_list = queue.get_finished_modules()
     >>> queue.get_num_run_procs()
@@ -88,6 +91,7 @@ class ParallelModuleQueue:
     8
     >>> for mapcalc in mapcalc_list:
     ...     print(mapcalc.returncode)
+    ...
     0
     0
     0
@@ -103,10 +107,13 @@ class ParallelModuleQueue:
     ...     new_gregion = copy.deepcopy(gregion)
     ...     proc_list.append(new_gregion)
     ...     new_mapcalc = copy.deepcopy(mapcalc)
-    ...     m = new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
+    ...     m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
     ...     proc_list.append(new_mapcalc)
-    ...     mm = MultiModule(module_list=[new_gregion, new_mapcalc], sync=False, set_temp_region=True)
+    ...     mm = MultiModule(
+    ...         module_list=[new_gregion, new_mapcalc], sync=False, set_temp_region=True
+    ...     )
     ...     queue.put(mm)
+    ...
     >>> queue.wait()
     >>> proc_list = queue.get_finished_modules()
     >>> queue.get_num_run_procs()
@@ -115,6 +122,7 @@ class ParallelModuleQueue:
     3
     >>> for proc in proc_list:
     ...     print(proc.returncode)
+    ...
     0
     0
     0
@@ -158,6 +166,7 @@ class ParallelModuleQueue:
     8
     >>> for mapcalc in mapcalc_list:
     ...     print(mapcalc.returncode)
+    ...
     0
     0
     0
@@ -182,12 +191,14 @@ class ParallelModuleQueue:
     >>> new_mapcalc = copy.deepcopy(mapcalc)
     >>> mapcalc_list.append(new_mapcalc)
     >>> m = new_mapcalc(expression="test_pygrass_3 =3")
-    >>> queue.put(m) # Now it will wait until all procs finish and set the counter back to 0
+    >>> queue.put(
+    ...     m
+    ... )  # Now it will wait until all procs finish and set the counter back to 0
     >>> queue.get_num_run_procs()
     0
     >>> new_mapcalc = copy.deepcopy(mapcalc)
     >>> mapcalc_list.append(new_mapcalc)
-    >>> m = new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
+    >>> m = new_mapcalc(expression="test_pygrass_%i = %i" % (i, i))
     >>> queue.put(m)
     >>> queue.get_num_run_procs()
     1
@@ -199,12 +210,13 @@ class ParallelModuleQueue:
     3
     >>> for mapcalc in mapcalc_list:
     ...     print(mapcalc.returncode)
+    ...
     0
     0
     0
     0
 
-    """
+    """  # noqa: E501
 
     def __init__(self, nprocs=1):
         """Constructor
@@ -245,7 +257,8 @@ class ParallelModuleQueue:
 
         :param num: the number of the object in queue
         :type num: int
-        :returns: the Module object or list of Module objects or None if num is not in the queue
+        :returns: the Module object or list of Module objects or None if num is not in
+            the queue
         """
         if num < self._num_procs:
             return self._list[num]
@@ -358,15 +371,21 @@ class Module:
     >>> new_neighbors3.get_bash()
     'r.neighbors input=mapA size=3 method=average weighting_function=none nprocs=1 memory=300 output=mapB'
 
-    >>> mapcalc = Module("r.mapcalc", expression="test_a = 1",
-    ...                  overwrite=True, run_=False)
+    >>> mapcalc = Module(
+    ...     "r.mapcalc", expression="test_a = 1", overwrite=True, run_=False
+    ... )
     >>> mapcalc.run()
     Module('r.mapcalc')
     >>> mapcalc.returncode
     0
 
-    >>> mapcalc = Module("r.mapcalc", expression="test_a = 1",
-    ...                  overwrite=True, run_=False, finish_=False)
+    >>> mapcalc = Module(
+    ...     "r.mapcalc",
+    ...     expression="test_a = 1",
+    ...     overwrite=True,
+    ...     run_=False,
+    ...     finish_=False,
+    ... )
     >>> mapcalc.run()
     Module('r.mapcalc')
     >>> p = mapcalc.wait()
@@ -378,9 +397,15 @@ class Module:
     >>> p.returncode
     0
 
-    >>> colors = Module("r.colors", map="test_a", rules="-",
-    ...                 run_=False, stdout_=PIPE,
-    ...                 stderr_=PIPE, stdin_="1 red")
+    >>> colors = Module(
+    ...     "r.colors",
+    ...     map="test_a",
+    ...     rules="-",
+    ...     run_=False,
+    ...     stdout_=PIPE,
+    ...     stderr_=PIPE,
+    ...     stdin_="1 red",
+    ... )
     >>> colors.run()
     Module('r.colors')
     >>> p = mapcalc.wait()
@@ -393,8 +418,9 @@ class Module:
     >>> colors.outputs["stderr"].value.strip()
     "Color table for raster map <test_a> set to 'rules'"
 
-    >>> colors = Module("r.colors", map="test_a", rules="-",
-    ...                 run_=False, finish_=False, stdin_=PIPE)
+    >>> colors = Module(
+    ...     "r.colors", map="test_a", rules="-", run_=False, finish_=False, stdin_=PIPE
+    ... )
     >>> colors.inputs["stdin"].value = "1 red"
     >>> colors.run()
     Module('r.colors')
@@ -403,9 +429,15 @@ class Module:
     >>> colors.returncode
     0
 
-    >>> colors = Module("r.colors", map="test_a", rules="-",
-    ...                 run_=False, finish_=False,
-    ...                 stdin_=PIPE, stderr_=PIPE)
+    >>> colors = Module(
+    ...     "r.colors",
+    ...     map="test_a",
+    ...     rules="-",
+    ...     run_=False,
+    ...     finish_=False,
+    ...     stdin_=PIPE,
+    ...     stderr_=PIPE,
+    ... )
     >>> colors.inputs["stdin"].value = "1 red"
     >>> colors.run()
     Module('r.colors')
@@ -466,15 +498,15 @@ class Module:
 
     therefore if we call the function like:
 
-    >>> f('grass', 'gis', 'modules')                     # doctest: +SKIP
+    >>> f("grass", "gis", "modules")  # doctest: +SKIP
     grass
     gis
     modules
 
     or we can define a new list:
 
-    >>> words = ['grass', 'gis', 'modules']              # doctest: +SKIP
-    >>> f(*words)                                        # doctest: +SKIP
+    >>> words = ["grass", "gis", "modules"]  # doctest: +SKIP
+    >>> f(*words)  # doctest: +SKIP
     grass
     gis
     modules
@@ -489,8 +521,8 @@ class Module:
 
     now we can use the new function, with:
 
-    >>> f('grass', 'gis', 'modules', os = 'linux', language = 'python')
-    ...                                                  # doctest: +SKIP
+    >>> f("grass", "gis", "modules", os="linux", language="python")
+    ... # doctest: +SKIP
     grass
     gis
     modules
@@ -500,8 +532,8 @@ class Module:
     or, as before we can, define a dictionary and give the dictionary to
     the function, like:
 
-    >>> keywords = {'os' : 'linux', 'language' : 'python'}  # doctest: +SKIP
-    >>> f(*words, **keywords)                            # doctest: +SKIP
+    >>> keywords = {"os": "linux", "language": "python"}  # doctest: +SKIP
+    >>> f(*words, **keywords)  # doctest: +SKIP
     grass
     gis
     modules
@@ -510,7 +542,7 @@ class Module:
 
     In the Module class we heavily use this language feature to pass arguments
     and keyword arguments to the grass module.
-    """
+    """  # noqa: E501
 
     def __init__(self, cmd, *args, **kargs):
         if isinstance(cmd, str):
@@ -842,20 +874,22 @@ class MultiModule:
     Module can be run in serial synchronously or asynchronously.
 
     - Synchronously:  When calling run() all modules will run in serial order
-                      until they are finished, The run() method will return until all modules finished.
-                      The modules objects can be accessed by calling get_modules() to check their return
-                      values.
-    - Asynchronously: When calling run() all modules will run in serial order in a background process.
-                      Method run() will return after starting the modules without waiting for them to finish.
-                      The user must call the wait() method to wait for the modules to finish.
-                      Asynchronously called module can be optionally run in a temporary region
-                      environment, hence invokeing g.region will not alter the current
-                      region or the region of other MultiModule runs.
+                      until they are finished, The run() method will return until all
+                      modules finished. The modules objects can be accessed by calling
+                      get_modules() to check their return values.
+    - Asynchronously: When calling run() all modules will run in serial order in a
+                      background process. Method run() will return after starting the
+                      modules without waiting for them to finish. The user must call
+                      the wait() method to wait for the modules to finish.
+                      Asynchronously called module can be optionally run in a temporary
+                      region environment, hence invoking g.region will not alter the
+                      current region or the region of other MultiModule runs.
 
                       Note:
 
-                          Modules run in asynchronous mode can only be accessed via the wait() method.
-                          The wait() method will return all finished module objects as list.
+                          Modules run in asynchronous mode can only be accessed via the
+                          wait() method. The wait() method will return all finished
+                          module objects as list.
 
     Objects of this class can be passed to the ParallelModuleQueue to run serial stacks
     of modules in parallel. This is meaningful if region settings must be applied
@@ -892,8 +926,9 @@ class MultiModule:
     >>> region_4.flags.p = True
     >>> region_5 = copy.deepcopy(region_1)
     >>> region_5.flags.p = True
-    >>> mm = MultiModule(module_list=[region_1, region_2, region_3, region_4, region_5],
-    ...                  sync=False)
+    >>> mm = MultiModule(
+    ...     module_list=[region_1, region_2, region_3, region_4, region_5], sync=False
+    ... )
     >>> t = mm.run()
     >>> isinstance(t, Process)
     True
@@ -911,8 +946,11 @@ class MultiModule:
 
     Asynchronous module run, setting finish = False and using temporary region
 
-    >>> mm = MultiModule(module_list=[region_1, region_2, region_3, region_4, region_5],
-    ...                  sync=False, set_temp_region=True)
+    >>> mm = MultiModule(
+    ...     module_list=[region_1, region_2, region_3, region_4, region_5],
+    ...     sync=False,
+    ...     set_temp_region=True,
+    ... )
     >>> str(mm)
     'g.region -p ; g.region -p ; g.region -p ; g.region -p ; g.region -p'
     >>> t = mm.run()
@@ -936,12 +974,14 @@ class MultiModule:
         """Constructor of the multi module class
 
         :param module_list: A list of pre-configured Module objects that should be run
-        :param sync: If set True the run() method will wait for all processes to finish -> synchronously run.
-                     If set False, the run() method will return after starting the processes -> asynchronously run.
-                     The wait() method must be called to finish the modules.
-        :param set_temp_region: Set a temporary region in which the modules should be run, hence
-                                region settings in the process list will not affect the current
-                                computation region.
+        :param sync: If set True the run() method will wait for all processes to finish
+                     -> synchronously run.
+                     If set False, the run() method will return after starting the
+                     processes -> asynchronously run. The wait() method must be called
+                     to finish the modules.
+        :param set_temp_region: Set a temporary region in which the modules should be
+                                run, hence region settings in the process list will not
+                                affect the current computation region.
 
                                 Note:
 

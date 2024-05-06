@@ -13,16 +13,12 @@ import grass.lib.rowio as librowio
 
 libgis.G_gisinit("")
 
-#
 # import pygrass modules
-#
 from grass.pygrass.errors import must_be_open
 from grass.pygrass.gis.region import Region
 from grass.pygrass import utils
 
-#
 # import raster classes
-#
 from grass.pygrass.raster.abstract import RasterAbstractBase
 from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.buffer import Buffer

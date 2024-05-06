@@ -38,6 +38,7 @@ export INSTALL_PREFIX=$1
     --with-bzlib \
     --with-blas \
     --with-lapack \
+    --with-libsvm \
     --with-readline \
     --with-openmp \
     --with-pdal \

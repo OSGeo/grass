@@ -22,6 +22,7 @@ This program is free software under the GNU General Public License
 @author Lukas Bocan <silent_bob centrum.cz> (turn costs support)
 @author Eliska Kyzlikova <eliska.kyzlikova gmail.com> (turn costs support)
 """
+
 import os
 import math
 from copy import deepcopy
@@ -142,7 +143,8 @@ class VNETData:
     def InputsErrorMsgs(
         self, msg, analysis, params, flags, inv_params, relevant_params
     ):
-        """Checks input data in Parameters tab and shows messages if some value is not valid
+        """Checks input data in Parameters tab and shows messages if some value is
+        not valid
 
         :param str msg: message added to start of message string
         :return: True if checked inputs are OK
@@ -192,7 +194,8 @@ class VNETData:
         for col in ["arc_column", "arc_backward_column", "node_column"]:
             if params[col] and col in inv_params and col in relevant_params:
                 errColStr += _(
-                    "Chosen column '%s' does not exist in attribute table of layer '%s' of vector map '%s'.\n"
+                    "Chosen column '%s' does not exist in attribute table of layer "
+                    "'%s' of vector map '%s'.\n"
                 ) % (params[col], params[layer], params["input"])
 
         if errColStr:
@@ -407,7 +410,8 @@ class VNETPointsData:
                 self._vnetPathUpdateUsePoints(None)
 
     def _updateTypeCol(self):
-        """Rename category values when module is changed. Expample: Start point -> Sink point"""
+        """Rename category values when module is changed. Example: Start point
+        -> Sink point"""
         colValues = [""]
         analysis, valid = self.an_params.GetParam("analysis")
         anParamsCats = self.an_data[analysis]["cmdParams"]["cats"]
@@ -736,7 +740,8 @@ class VNETAnalysesProperties:
                 },
                 "resultProps": {
                     "singleColor": None,
-                    "dbMgr": True,  # TODO delete this property, this information can be get from result
+                    "dbMgr": True,  # TODO delete this property, this information can
+                    # be get from result
                 },
                 "turns_support": True,
             },
@@ -1083,7 +1088,8 @@ class VectMap:
 
 
 class History:
-    """Class which reads and saves history data (based on gui.core.settings Settings class file save/load)
+    """Class which reads and saves history data (based on gui.core.settings Settings
+    class file save/load)
 
     .. todo::
         Maybe it could be useful for other GRASS wxGUI tools.

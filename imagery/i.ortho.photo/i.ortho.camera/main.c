@@ -209,7 +209,8 @@ int main(int argc, char *argv[])
 
         I_put_group_camera(group, camera);
 
-        G_message(_("Group [%s] in location [%s] mapset [%s] now uses camera "
+        G_message(_("Group [%s] in project (location) [%s] mapset [%s] now "
+                    "uses camera "
                     "file [%s]"),
                   group, location, mapset, camera);
     }

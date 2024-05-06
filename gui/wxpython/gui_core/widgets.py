@@ -43,10 +43,11 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 @author Enhancements by Michael Barton <michael.barton asu.edu>
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
-@author Stepan Turek <stepan.turek seznam.cz> (ManageSettingsWidget - created from GdalSelect)
-@author Matej Krejci <matejkrejci gmail.com> (Google GSoC 2014; EmailValidator, TimeISOValidator)
-@author Tomas Zigo <tomas.zigo slovanet.sk> (LayersListValidator,
-PlacementValidator)
+@author Stepan Turek <stepan.turek seznam.cz> (ManageSettingsWidget - created from
+        GdalSelect)
+@author Matej Krejci <matejkrejci gmail.com> (Google GSoC 2014; EmailValidator,
+        TimeISOValidator)
+@author Tomas Zigo <tomas.zigo slovanet.sk> (LayersListValidator, PlacementValidator)
 """
 
 import os

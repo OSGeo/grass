@@ -688,7 +688,8 @@ def RunCommand(
     :param env: environment (optional, uses os.environ if not provided)
     :param kwargs: program parameters
 
-    The environment passed to the function (env or os.environ) is not modified (a copy is used internally).
+    The environment passed to the function (env or os.environ) is not modified
+    (a copy is used internally).
 
     :return: returncode (read == False and getErrorMsg == False)
     :return: returncode, messages (read == False and getErrorMsg == True)

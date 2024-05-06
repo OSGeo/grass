@@ -15,6 +15,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
+import shutil
 import xml.etree.ElementTree as etree
 from xml.parsers import expat
 
@@ -134,7 +135,10 @@ def getMenudataFile(userRootFile, newFile, fallback):
                 os.remove(menudataFile)
                 _debug(
                     2,
-                    "toolboxes.getMenudataFile: no user defined files, menudata deleted",
+                    (
+                        "toolboxes.getMenudataFile: no user defined files, "
+                        "menudata deleted"
+                    ),
                 )
                 return fallback
 
@@ -143,7 +147,11 @@ def getMenudataFile(userRootFile, newFile, fallback):
                 # any change
                 generateNew = True
                 _debug(
-                    2, "toolboxes.getMenudataFile: only one of the user defined files"
+                    2,
+                    (
+                        "toolboxes.getMenudataFile: only one of the user "
+                        "defined files"
+                    ),
                 )
             else:
                 # if newer files -> generate new
@@ -152,14 +160,20 @@ def getMenudataFile(userRootFile, newFile, fallback):
                     if os.path.getmtime(_getUserToolboxesFile()) > menudataTime:
                         _debug(
                             2,
-                            "toolboxes.getMenudataFile: user toolboxes is newer than menudata",
+                            (
+                                "toolboxes.getMenudataFile: user toolboxes is newer "
+                                "than menudata"
+                            ),
                         )
                         generateNew = True
                 if userRootFile:
                     if os.path.getmtime(userRootFile) > menudataTime:
                         _debug(
                             2,
-                            "toolboxes.getMenudataFile: user root file is newer than menudata",
+                            (
+                                "toolboxes.getMenudataFile: user root file is "
+                                "newer than menudata"
+                            ),
                         )
                         generateNew = True
         elif _getUserToolboxesFile() or userRootFile:
@@ -197,7 +211,10 @@ def getMenudataFile(userRootFile, newFile, fallback):
             except:
                 _debug(
                     2,
-                    "toolboxes.getMenudataFile: writing menudata failed, returning fallback file",
+                    (
+                        "toolboxes.getMenudataFile: writing menudata failed, "
+                        "returning fallback file"
+                    ),
                 )
                 return fallback
         else:
@@ -431,12 +448,16 @@ def _expandUserToolboxesItem(node, toolboxes):
 
     Include all user toolboxes.
 
-    >>> tree = etree.fromstring('<toolbox><items><user-toolboxes-list/></items></toolbox>')
-    >>> toolboxes = etree.fromstring('<toolboxes><toolbox name="UserToolbox"><items><module-item name="g.region"/></items></toolbox></toolboxes>')
+    >>> tree = etree.fromstring(
+    ...     "<toolbox><items><user-toolboxes-list/></items></toolbox>"
+    ... )
+    >>> toolboxes = etree.fromstring(
+    ...     '<toolboxes><toolbox name="UserToolbox"><items><module-item name="g.region"/></items></toolbox></toolboxes>'
+    ... )
     >>> _expandUserToolboxesItem(tree, toolboxes)
     >>> etree.tostring(tree)
     b'<toolbox><items><toolbox name="GeneratedUserToolboxesList"><label>Custom toolboxes</label><items><toolbox name="UserToolbox"><items><module-item name="g.region" /></items></toolbox></items></toolbox></items></toolbox>'
-    """
+    """  # noqa: E501
     tboxes = toolboxes.findall(".//toolbox")
 
     for n in node.findall("./items/user-toolboxes-list"):
@@ -455,7 +476,9 @@ def _expandUserToolboxesItem(node, toolboxes):
 def _removeUserToolboxesItem(root):
     """Removes tag 'user-toolboxes-list' if there are no user toolboxes.
 
-    >>> tree = etree.fromstring('<toolbox><items><user-toolboxes-list/></items></toolbox>')
+    >>> tree = etree.fromstring(
+    ...     "<toolbox><items><user-toolboxes-list/></items></toolbox>"
+    ... )
     >>> _removeUserToolboxesItem(tree)
     >>> etree.tostring(tree)
     b'<toolbox><items /></toolbox>'
@@ -544,12 +567,16 @@ def _expandAddonsItem(node):
 def _expandItems(node, items, itemTag):
     """Expand items from file
 
-    >>> tree = etree.fromstring('<items><module-item name="g.region"></module-item></items>')
-    >>> items = etree.fromstring('<module-items><module-item name="g.region"><module>g.region</module><description>GRASS region management</description></module-item></module-items>')
-    >>> _expandItems(tree, items, 'module-item')
+    >>> tree = etree.fromstring(
+    ...     '<items><module-item name="g.region"></module-item></items>'
+    ... )
+    >>> items = etree.fromstring(
+    ...     '<module-items><module-item name="g.region"><module>g.region</module><description>GRASS region management</description></module-item></module-items>'
+    ... )
+    >>> _expandItems(tree, items, "module-item")
     >>> etree.tostring(tree)
     b'<items><module-item name="g.region"><module>g.region</module><description>GRASS region management</description></module-item></items>'
-    """
+    """  # noqa: E501
     for moduleItem in node.findall(".//" + itemTag):
         itemName = moduleItem.get("name")
         moduleNode = items.find('.//%s[@name="%s"]' % (itemTag, itemName))
@@ -568,19 +595,19 @@ def _expandRuntimeModules(node, loadMetadata=True):
     If loadMetadata is False, modules are not called,
     useful for incompatible addons.
 
-    >>> tree = etree.fromstring('<items>'
-    ...                         '<module-item name="g.region"></module-item>'
-    ...                         '</items>')
+    >>> tree = etree.fromstring(
+    ...     "<items>" '<module-item name="g.region"></module-item>' "</items>"
+    ... )
     >>> _expandRuntimeModules(tree)
     >>> etree.tostring(tree)
     b'<items><module-item name="g.region"><module>g.region</module><description>Manages the boundary definitions for the geographic region.</description><keywords>general,settings,computational region,extent,resolution,level1</keywords></module-item></items>'
-    >>> tree = etree.fromstring('<items>'
-    ...                         '<module-item name="m.proj"></module-item>'
-    ...                         '</items>')
+    >>> tree = etree.fromstring(
+    ...     "<items>" '<module-item name="m.proj"></module-item>' "</items>"
+    ... )
     >>> _expandRuntimeModules(tree)
     >>> etree.tostring(tree)
     b'<items><module-item name="m.proj"><module>m.proj</module><description>Converts coordinates from one projection to another (cs2cs frontend).</description><keywords>miscellaneous,projection,transformation</keywords></module-item></items>'
-    """
+    """  # noqa: E501
     hasErrors = False
     modules = node.findall(".//module-item")
     for module in modules:
@@ -591,15 +618,19 @@ def _expandRuntimeModules(node, loadMetadata=True):
 
         if module.find("description") is None:
             if loadMetadata:
-                desc, keywords = _loadMetadata(name)
+                # not all modules are always compiled (e.g., r.in.lidar)
+                if shutil.which(name):
+                    desc, keywords = _loadMetadata(name)
+                    if not desc:
+                        hasErrors = True
+                else:
+                    desc, keywords = _("Module not installed"), ""
             else:
                 desc, keywords = "", ""
             n = etree.SubElement(module, "description")
             n.text = _escapeXML(desc)
             n = etree.SubElement(module, "keywords")
             n.text = _escapeXML(",".join(keywords))
-            if loadMetadata and not desc:
-                hasErrors = True
 
     if hasErrors:
         # not translatable until toolboxes compilation on Mac is fixed
@@ -616,7 +647,7 @@ def _escapeXML(text):
     Duplicate function in core/toolboxes and probably also in man compilation
     and some existing Python package.
 
-    >>> _escapeXML('<>&')
+    >>> _escapeXML("<>&")
     '&amp;lt;&gt;&amp;'
     """
     return text.replace("<", "&lt;").replace("&", "&amp;").replace(">", "&gt;")
@@ -654,9 +685,11 @@ def _addHandlers(node):
 def _convertTag(node, old, new):
     """Converts tag name.
 
-    >>> tree = etree.fromstring('<toolboxes><toolbox><items><module-item/></items></toolbox></toolboxes>')
-    >>> _convertTag(tree, 'toolbox', 'menu')
-    >>> _convertTag(tree, 'module-item', 'menuitem')
+    >>> tree = etree.fromstring(
+    ...     "<toolboxes><toolbox><items><module-item/></items></toolbox></toolboxes>"
+    ... )
+    >>> _convertTag(tree, "toolbox", "menu")
+    >>> _convertTag(tree, "module-item", "menuitem")
     >>> etree.tostring(tree)
     b'<toolboxes><menu><items><menuitem /></items></menu></toolboxes>'
     """
@@ -667,12 +700,14 @@ def _convertTag(node, old, new):
 def _convertTagAndRemoveAttrib(node, old, new):
     """Converts tag name and removes attributes.
 
-    >>> tree = etree.fromstring('<toolboxes><toolbox name="Raster"><items><module-item name="g.region"/></items></toolbox></toolboxes>')
-    >>> _convertTagAndRemoveAttrib(tree, 'toolbox', 'menu')
-    >>> _convertTagAndRemoveAttrib(tree, 'module-item', 'menuitem')
+    >>> tree = etree.fromstring(
+    ...     '<toolboxes><toolbox name="Raster"><items><module-item name="g.region"/></items></toolbox></toolboxes>'
+    ... )
+    >>> _convertTagAndRemoveAttrib(tree, "toolbox", "menu")
+    >>> _convertTagAndRemoveAttrib(tree, "module-item", "menuitem")
     >>> etree.tostring(tree)
     b'<toolboxes><menu><items><menuitem /></items></menu></toolboxes>'
-    """
+    """  # noqa: E501
     for n in node.findall(".//%s" % old):
         n.tag = new
         n.attrib = {}
@@ -681,11 +716,13 @@ def _convertTagAndRemoveAttrib(node, old, new):
 def _convertTree(root):
     """Converts tree to be the form readable by core/menutree.py.
 
-    >>> tree = etree.fromstring('<toolbox name="MainMenu"><label>Main menu</label><items><toolbox><label>Raster</label><items><module-item name="g.region"><module>g.region</module></module-item></items></toolbox></items></toolbox>')
+    >>> tree = etree.fromstring(
+    ...     '<toolbox name="MainMenu"><label>Main menu</label><items><toolbox><label>Raster</label><items><module-item name="g.region"><module>g.region</module></module-item></items></toolbox></items></toolbox>'
+    ... )
     >>> _convertTree(tree)
     >>> etree.tostring(tree)
     b'<menudata><menubar><menu><label>Raster</label><items><menuitem><command>g.region</command></menuitem></items></menu></menubar></menudata>'
-    """
+    """  # noqa: E501
     root.attrib = {}
     label = root.find("label")
     # must check because of inconsistent XML menudata file

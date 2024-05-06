@@ -8,6 +8,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 from .core import (
     get_tgis_message_interface,
     get_current_mapset,

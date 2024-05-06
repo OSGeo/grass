@@ -429,7 +429,10 @@ int main(int argc, char *argv[])
         G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel "
                     "computation is disabled."));
 #endif
-
+    if (threads > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
+        G_warning(_("Parallel processing disabled due to active MASK."));
+        threads = 1;
+    }
     if (devi) {
         create_devi = true;
         if (Vect_legal_filename(devi) == -1)

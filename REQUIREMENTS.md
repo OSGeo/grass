@@ -65,11 +65,15 @@ Note: also the respective development packages (commonly named `xxx-dev` or
   [https://mesa3d.org/](https://mesa3d.org/)
 - **libpng** (for `r.out.png` and the PNG driver), usually already installed.
   [http://www.libpng.org/pub/png/libpng.html](http://www.libpng.org/pub/png/libpng.html)
+- **LIBSVM** (for SVM classification modules `i.svm.train` and `i.svm.predict`)
+  [https://www.csie.ntu.edu.tw/~cjlin/libsvm/](https://www.csie.ntu.edu.tw/~cjlin/libsvm/)
 - **libtiff** (for `r.out.tiff`), usually already installed.
   [https://gitlab.com/libtiff/libtiff](https://gitlab.com/libtiff/libtiff)
 - **readline** for extra command prompt functionality
   [https://tiswww.case.edu/~chet/readline/rltop.html](https://tiswww.case.edu/~chet/readline/rltop.html)
   [ftp://ftp.gnu.org/gnu/readline](ftp://ftp.gnu.org/gnu/readline)
+- **PDAL** ( for LAS import modules `r.in.pdal` and `v.in.pdal`)
+  [https://pdal.io](https://pdal.io)
 - **PostgreSQL libraries** (for the PostgreSQL database interface and PostGIS support)
   [https://www.postgresql.org](https://www.postgresql.org)
 - **MariaDB/MySQL libraries** (for the MySQL database interface)

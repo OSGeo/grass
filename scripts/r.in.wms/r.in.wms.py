@@ -264,7 +264,8 @@ def main():
             if "GRASS" in options["driver"]:
                 grass.warning(
                     _(
-                        "The proxy will be ignored by the chosen GRASS driver. It is only used with the GDAL driver."
+                        "The proxy will be ignored by the chosen GRASS driver. It is "
+                        "only used with the GDAL driver."
                     )
                 )
 

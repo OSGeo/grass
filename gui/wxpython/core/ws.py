@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
+
 import sys
 import copy
 import time
@@ -227,7 +228,8 @@ class RenderWMSMgr(wx.EvtHandler):
         return region
 
     def _createRegionStr(self, region):
-        """Create string for GRASS_REGION env variable from  dict created by _getRegionDict."""
+        """Create string for GRASS_REGION env variable from  dict created
+        by _getRegionDict."""
         regionStr = ""
         for k, v in region.items():
             item = k + ": " + str(v)

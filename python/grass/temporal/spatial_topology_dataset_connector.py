@@ -13,6 +13,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import copy
 
 
@@ -67,7 +68,8 @@ class SpatialTopologyDatasetConnector:
          meet=a@P
          >>> rlist = tmr.get_spatial_relations()
          >>> if "COVER" in rlist.keys():
-         ...    print(rlist["COVER"][0].get_id())
+         ...     print(rlist["COVER"][0].get_id())
+         ...
          a@P
 
     """
@@ -318,7 +320,7 @@ class SpatialTopologyDatasetConnector:
         """Print information about this class in human readable style"""
 
         print(
-            " +-------------------- Spatial Topology --------------------------------------+"
+            " +-------------------- Spatial Topology --------------------------------------+"  # noqa: E501
         )
         #          0123456789012345678901234567890
         if self.equivalent is not None:

@@ -362,7 +362,8 @@ def create_or_check_result_columns_or_fatal(
                             "Result column '{column}' needs a type "
                             "specified (using the syntax: 'name type') "
                             "when no methods are provided with the "
-                            "{option_name} option and aggregation backend is '{backend}'"
+                            "{option_name} option and aggregation backend is "
+                            "'{backend}'"
                         ).format(
                             column=column,
                             option_name="aggregate_methods",
@@ -586,7 +587,8 @@ def main():
     if not column:
         gs.warning(
             _(
-                "No '%s' option specified. Dissolving based on category values from layer <%s>."
+                "No '%s' option specified. Dissolving based on category values from "
+                "layer <%s>."
             )
             % ("column", layer)
         )

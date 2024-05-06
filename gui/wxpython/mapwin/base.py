@@ -255,8 +255,9 @@ class MapWindowBase:
                 # current map display's map window
                 # expects LayerManager to be the parent
                 self.mapwin = self.parent.GetLayerTree().GetMapDisplay().GetWindow()
-                if self.mapwin.RegisterEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction,
-                                                    'cross'):
+                if self.mapwin.RegisterEventHandler(
+                    wx.EVT_LEFT_DOWN, self.OnMouseAction, "cross"
+                ):
                     self.parent.GetLayerTree().GetMapDisplay().Raise()
                 else:
                     # handle that you cannot get coordinates
@@ -264,8 +265,10 @@ class MapWindowBase:
             def OnMouseAction(self, event):
                 # get real world coordinates of mouse click
                 coor = self.mapwin.Pixel2Cell(event.GetPositionTuple()[:])
-                self.text.SetLabel('Coor: ' + str(coor))
-                self.mapwin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction)
+                self.text.SetLabel("Coor: " + str(coor))
+                self.mapwin.UnregisterMouseEventHandler(
+                    wx.EVT_LEFT_DOWN, self.OnMouseAction
+                )
                 event.Skip()
 
 
@@ -390,7 +393,8 @@ class MapWindowBase:
     def GetLastEN(self):
         """Returns last coordinates of mouse cursor.
 
-        @deprecated This method is deprecated. Use Signal with coordinates as parameters.
+        @deprecated This method is deprecated. Use Signal with coordinates as
+        parameters.
 
         :func:`OnMotion`
         """

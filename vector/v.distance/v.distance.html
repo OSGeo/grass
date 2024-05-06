@@ -6,7 +6,7 @@ the vectors' relationships (distance, category, etc.) may be uploaded to
 the attribute table attached to the first vector map, or printed to
 'stdout'. A new vector map may be created where lines connecting
 nearest points on features are written. <b>dmin</b> and/or
-<b>dmax</b> can be used to limit the search radius (in lat-long locations
+<b>dmax</b> can be used to limit the search radius (in lat-long projects
 to be given in meters since they are calculated as geodesic distances on
 a sphere).
 
@@ -55,7 +55,7 @@ updated to NULL.
 <p>The upload <b>column</b>(s) must already exist. Create one with
 <em><a href="v.db.addcolumn.html">v.db.addcolumn</a></em>.
 
-<p>In lat-long locations <em>v.distance</em> gives distances
+<p>In lat-long projects <em>v.distance</em> gives distances
 (<em>dist</em>, <em>from_along</em>, and <em>to_along</em>) not in
 degrees but in meters calculated as geodesic distances on a sphere.
 
@@ -181,7 +181,7 @@ v.univar vdistance_vectors column=length
 
 <h3>Print distance between points</h3>
 
-Example for a Latitude-longitude location (EPSG 4326):
+Example for a Latitude-longitude project (EPSG 4326):
 <div class="code"><pre>
 # points along the equator
 echo "0|-61|1" | v.in.ascii output=pnt1 input=-
@@ -195,7 +195,7 @@ from_cat|distance
 
 <h3>Print distance matrix</h3>
 
-North Carolina sample data location
+North Carolina sample data
 
 <p>As linear matrix:
 <div class="code"><pre>

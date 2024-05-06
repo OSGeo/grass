@@ -108,6 +108,7 @@ void Vect_set_db_updated(struct Map_info *);
 const char *Vect_get_column_names(struct Map_info *, int);
 const char *Vect_get_column_types(struct Map_info *, int);
 const char *Vect_get_column_names_types(struct Map_info *, int);
+void Vect_destroy_field_info(struct field_info *);
 
 /* List of FID (feature ID) (integers) */
 struct ilist *Vect_new_list(void);

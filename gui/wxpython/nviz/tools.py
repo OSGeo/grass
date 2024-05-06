@@ -200,11 +200,32 @@ class NvizToolWindow(GNotebook):
 
     def OnPageChanged(self, event):
         new = event.GetSelection()
-        # self.ChangeSelection(new)
-        # Data, Appearance, Analysis page
-        if new in (1, 2, 3):
-            foldpanel = self.GetPage(new).GetChildren()[0]
-            wx.CallLater(100, self.UpdateScrolling, (foldpanel,))
+        pages = {
+            # Data page
+            1: {
+                "expand": lambda: self._expandFoldPanelBarPanel(
+                    foldPanelBar=self.foldpanelData,
+                ),
+                "foldPanelBar": self.foldpanelData,
+            },
+            # Appearance page
+            2: {
+                "expand": lambda: self._expandFoldPanelBarPanel(
+                    foldPanelBar=self.foldpanelAppear,
+                ),
+                "foldPanelBar": self.foldpanelAppear,
+            },
+            # Analysis page
+            3: {
+                "expand": lambda: self._expandFoldPanelBarPanel(
+                    foldPanelBar=self.foldpanelAnalysis,
+                ),
+                "foldPanelBar": self.foldpanelAnalysis,
+            },
+        }
+        if new in pages.keys():
+            pages[new]["expand"]()
+            wx.CallAfter(self.UpdateScrolling, (pages[new]["foldPanelBar"],))
 
     def PostViewEvent(self, zExag=False):
         """Change view settings"""
@@ -235,9 +256,54 @@ class NvizToolWindow(GNotebook):
         """Update scrollbars in foldpanel"""
         for foldpanel in foldpanels:
             length = foldpanel.GetPanelsLength(collapsed=0, expanded=0)
-            # virtual width is set to fixed value to suppress GTK warning
-            foldpanel.GetParent().SetVirtualSize((100, length[2]))
-            foldpanel.GetParent().Layout()
+            # Show scrollbars
+            for panelIdx in range(foldpanel.GetCount()):
+                # Nested ScrolledPanel widget with horizontal scrollbar
+                scrolledPanel = (
+                    foldpanel.GetFoldPanel(panelIdx).GetParent().GetGrandParent()
+                )
+                width = self.GetSize()[0]
+                if sys.platform in ("darwin", "win32"):
+                    width -= 60  # 60px right margin to show scrollbar
+                scrolledPanel.SetVirtualSize(width=width, height=length[2])
+                scrolledPanel.Layout()
+
+    def _expandFoldPanelBarPanel(self, foldPanelBar, expandFoldPanelBarIdx=0):
+        """
+        Expand FoldPanelBar widget panel
+
+        Fix expanding FoldPanelBar widget panel (fist panel), because using
+        AddFoldPanel method with collapsed=True param arg cause the expanding
+        panel to render incorrectly on wxMAC, wxMSW.
+
+        :param obj foldPanelBar: FoldPanelBar widget obj instance
+        :param int expandFoldpanelbarIdx: FoldPanelBar widget panel index with
+                                          default value 0 (first panel)
+        """
+        foldPanelsCount = foldPanelBar.GetCount()
+        expanded = []
+        for panelIdx in range(foldPanelsCount):
+            foldPanel = foldPanelBar.GetFoldPanel(panelIdx)
+            expanded.append(foldPanel.IsExpanded())
+        if not any(expanded):
+            foldPanelBar.Expand(foldPanelBar.GetFoldPanel(expandFoldPanelBarIdx))
+
+    def _resizeScrolledPanel(self, foldPanelBar, scrolledPanel, collapsed, expanded):
+        """
+        Resize FoldPanelBar widget ScrolledPanel to show scrollbars
+
+        :param obj foldPanelBar: FolPanelBar widget obj instance
+        :param obj scrolledPanel: ScrolledPanel widget obj instance
+        :param int collapsed: number of collapsed panels of FoldPanelBar
+                              widget
+        :param int expanded: number of expanded panels of FoldPanelBar
+                             widget
+        """
+        if expanded > 0:
+            foldPanelBar.Expand(foldPanelBar.GetFoldPanel(0))
+        length = foldPanelBar.GetPanelsLength(collapsed, expanded)
+        scrolledPanel.SetSize(self.GetSize()[0], length[2])
+        foldPanelBar.Collapse(foldPanelBar.GetFoldPanel(0))
 
     def _createViewPage(self):
         """Create view settings page"""
@@ -263,7 +329,8 @@ class NvizToolWindow(GNotebook):
         gridSizer.Add(posSizer, pos=(0, 0))
 
         # perspective
-        # set initial defaults here (or perhaps in a default values file), not in user settings
+        # set initial defaults here (or perhaps in a default values file), not in user
+        # settings
         # todo: consider setting an absolute max at 360 instead of undefined.
         # (leave the default max value at pi)
         tooltip = _(
@@ -422,7 +489,8 @@ class NvizToolWindow(GNotebook):
         top.SetName("top")
         top.SetToolTip(
             _(
-                "Sets the viewer directly over the scene's center position. This top view orients approximately north south."
+                "Sets the viewer directly over the scene's center position. This top "
+                "view orients approximately north south."
             )
         )
         viewSizer.Add(top, flag=wx.TOP | wx.BOTTOM | wx.ALIGN_CENTER_VERTICAL, border=5)
@@ -619,7 +687,8 @@ class NvizToolWindow(GNotebook):
         )
         prefixCtrl.SetToolTip(
             _(
-                "Generated files names will look like this: prefix_1.ppm, prefix_2.ppm, ..."
+                "Generated files names will look like this: prefix_1.ppm, "
+                "prefix_2.ppm, ..."
             )
         )
         fileTypeLabel = StaticText(parent=panel, id=wx.ID_ANY, label=_("File format:"))
@@ -661,8 +730,9 @@ class NvizToolWindow(GNotebook):
 
     def _createDataPage(self):
         """Create data (surface, vector, volume) settings page"""
-        self.mainPanelData = ScrolledPanel(parent=self)
+        self.mainPanelData = SP.ScrolledPanel(parent=self)
         self.mainPanelData.SetupScrolling(scroll_x=False)
+        self.mainPanelData.AlwaysShowScrollbars(hflag=False)
         try:  # wxpython <= 2.8.10
             self.foldpanelData = fpb.FoldPanelBar(
                 parent=self.mainPanelData,
@@ -685,7 +755,7 @@ class NvizToolWindow(GNotebook):
         self.foldpanelData.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
 
         # # surface page
-        surfacePanel = self.foldpanelData.AddFoldPanel(_("Surface"), collapsed=False)
+        surfacePanel = self.foldpanelData.AddFoldPanel(_("Surface"), collapsed=True)
         self.foldpanelData.AddFoldPanelWindow(
             surfacePanel,
             window=self._createSurfacePage(parent=surfacePanel),
@@ -729,13 +799,20 @@ class NvizToolWindow(GNotebook):
         self.mainPanelData.Layout()
         self.mainPanelData.Fit()
 
+        self._resizeScrolledPanel(
+            foldPanelBar=self.foldpanelData,
+            scrolledPanel=self.mainPanelData,
+            collapsed=self.foldpanelData.GetCount() - 1,
+            expanded=1,
+        )
+
         return self.mainPanelData
 
     def _createAppearancePage(self):
         """Create data (surface, vector, volume) settings page"""
-        self.mainPanelAppear = ScrolledPanel(parent=self)
+        self.mainPanelAppear = SP.ScrolledPanel(parent=self)
         self.mainPanelAppear.SetupScrolling(scroll_x=False)
-
+        self.mainPanelAppear.AlwaysShowScrollbars(hflag=False)
         try:  # wxpython <= 2.8.10
             self.foldpanelAppear = fpb.FoldPanelBar(
                 parent=self.mainPanelAppear,
@@ -757,7 +834,7 @@ class NvizToolWindow(GNotebook):
 
         self.foldpanelAppear.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
         # light page
-        lightPanel = self.foldpanelAppear.AddFoldPanel(_("Lighting"), collapsed=False)
+        lightPanel = self.foldpanelAppear.AddFoldPanel(_("Lighting"), collapsed=True)
         self.foldpanelAppear.AddFoldPanelWindow(
             lightPanel,
             window=self._createLightPage(parent=lightPanel),
@@ -789,19 +866,28 @@ class NvizToolWindow(GNotebook):
         self.mainPanelAppear.SetSizer(sizer)
         self.mainPanelAppear.Layout()
         self.mainPanelAppear.Fit()
+
+        self._resizeScrolledPanel(
+            foldPanelBar=self.foldpanelAppear,
+            scrolledPanel=self.mainPanelAppear,
+            collapsed=self.foldpanelAppear.GetCount() - 1,
+            expanded=1,
+        )
+
         return self.mainPanelAppear
 
     def _createAnalysisPage(self):
         """Create data analysis (cutting planes, ...) page"""
-        self.mainPanelAnalysis = ScrolledPanel(parent=self)
+        self.mainPanelAnalysis = SP.ScrolledPanel(parent=self)
         self.mainPanelAnalysis.SetupScrolling(scroll_x=False)
+        self.mainPanelAnalysis.AlwaysShowScrollbars(hflag=False)
         self.foldpanelAnalysis = fpb.FoldPanelBar(
             parent=self.mainPanelAnalysis, id=wx.ID_ANY, style=fpb.FPB_SINGLE_FOLD
         )
         self.foldpanelAnalysis.Bind(fpb.EVT_CAPTIONBAR, self.OnPressCaption)
         # cutting planes page
         cplanePanel = self.foldpanelAnalysis.AddFoldPanel(
-            _("Cutting planes"), collapsed=False
+            _("Cutting planes"), collapsed=True
         )
         self.foldpanelAnalysis.AddFoldPanelWindow(
             cplanePanel,
@@ -814,6 +900,14 @@ class NvizToolWindow(GNotebook):
         self.mainPanelAnalysis.SetSizer(sizer)
         self.mainPanelAnalysis.Layout()
         self.mainPanelAnalysis.Fit()
+
+        self._resizeScrolledPanel(
+            foldPanelBar=self.foldpanelAnalysis,
+            scrolledPanel=self.mainPanelAnalysis,
+            collapsed=self.foldpanelAnalysis.GetCount() - 1,
+            expanded=1,
+        )
+
         return self.mainPanelAnalysis
 
     def _createSurfacePage(self, parent):
@@ -1334,7 +1428,8 @@ class NvizToolWindow(GNotebook):
             flag=wx.ALIGN_CENTER_VERTICAL,
         )
         tooltip = _(
-            "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)"
+            "Sets the Z coordinate of the current cutting plane (only meaningful when "
+            "tilt is not 0)"
         )
         self._createControl(
             panel,
@@ -1377,6 +1472,7 @@ class NvizToolWindow(GNotebook):
         pageSizer.Add(boxSizer, proportion=0, flag=wx.EXPAND)
 
         panel.SetSizer(pageSizer)
+        panel.Layout()
         panel.Fit()
         panel.SetupScrolling(scroll_y=False)
 
@@ -1470,6 +1566,7 @@ class NvizToolWindow(GNotebook):
         pageSizer.Add(boxSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=3)
 
         panel.SetSizer(pageSizer)
+        panel.Layout()
         panel.Fit()
         panel.SetupScrolling(scroll_y=False)
 
@@ -1903,6 +2000,7 @@ class NvizToolWindow(GNotebook):
         )
 
         panel.SetSizer(pageSizer)
+        panel.Layout()
         panel.Fit()
         panel.SetupScrolling(scroll_y=False)
 
@@ -2118,6 +2216,7 @@ class NvizToolWindow(GNotebook):
             border=3,
         )
         panel.SetSizer(pageSizer)
+        panel.Layout()
         panel.Fit()
         panel.SetupScrolling(scroll_y=False)
 
@@ -2583,7 +2682,8 @@ class NvizToolWindow(GNotebook):
         if not anim.IsPaused():
             if anim.Exists() and not anim.IsSaved():
                 msg = _(
-                    "Do you want to record new animation without saving the previous one?"
+                    "Do you want to record new animation without saving the previous "
+                    "one?"
                 )
                 dlg = wx.MessageDialog(
                     parent=self,
@@ -4200,7 +4300,7 @@ class NvizToolWindow(GNotebook):
         marker = self.FindWindowById(
             self.win["vector"]["points"]["marker"]
         ).GetSelection()
-        #        width = self.FindWindowById(self.win['vector']['points']['width']).GetValue()
+        # width = self.FindWindowById(self.win['vector']['points']['width']).GetValue()
 
         for attrb in ("size", "marker"):
             data["vector"]["points"][attrb]["update"] = None

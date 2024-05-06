@@ -1548,8 +1548,8 @@ class CmdPanel(wx.Panel):
                             selection.SetValue(value)
 
                         formatSelector = True
-                        # A gselect.Select is a combobox with two children: a textctl and a popupwindow;
-                        # we target the textctl here
+                        # A gselect.Select is a combobox with two children: a textctl
+                        # and a popupwindow; we target the textctl here
                         textWin = selection.GetTextCtrl()
                         if globalvar.CheckWxVersion([3]):
                             p["wxId"] = [
@@ -1572,44 +1572,63 @@ class CmdPanel(wx.Panel):
                         win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
                         win.Bind(wx.EVT_TEXT, self.OnSetValue)
 
-                        # if formatSelector and p.get('age', 'old') == 'old':
+                        # if formatSelector and p.get("age", "old") == "old":
                         #     # OGR supported (read-only)
                         #     self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
-
-                        #     self.hsizer.Add(item = selection,
-                        #                     flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_TOP,
-                        #                     border = 5)
-
+                        #
+                        #     self.hsizer.Add(
+                        #         item=selection,
+                        #         flag=wx.ADJUST_MINSIZE
+                        #         | wx.BOTTOM
+                        #         | wx.LEFT
+                        #         | wx.RIGHT
+                        #         | wx.TOP
+                        #         | wx.ALIGN_TOP,
+                        #         border=5,
+                        #     )
+                        #
                         #     # format (native / ogr)
-                        #     rbox = wx.RadioBox(parent = which_panel, id = wx.ID_ANY,
-                        #                        label = " %s " % _("Format"),
-                        #                        style = wx.RA_SPECIFY_ROWS,
-                        #                        choices = [_("Native / Linked OGR"), _("Direct OGR")])
-                        #     if p.get('value', '').lower().rfind('@ogr') > -1:
+                        #     rbox = wx.RadioBox(
+                        #         parent=which_panel,
+                        #         id=wx.ID_ANY,
+                        #         label=" %s " % _("Format"),
+                        #         style=wx.RA_SPECIFY_ROWS,
+                        #         choices=[_("Native / Linked OGR"), _("Direct OGR")],
+                        #     )
+                        #     if p.get("value", "").lower().rfind("@ogr") > -1:
                         #         rbox.SetSelection(1)
-                        #     rbox.SetName('VectorFormat')
+                        #     rbox.SetName("VectorFormat")
                         #     rbox.Bind(wx.EVT_RADIOBOX, self.OnVectorFormat)
-
-                        #     self.hsizer.Add(item = rbox,
-                        #                     flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT |
-                        #                     wx.RIGHT | wx.ALIGN_TOP,
-                        #                     border = 5)
-
-                        #     ogrSelection = gselect.GdalSelect(parent = self, panel = which_panel, ogr = True,
-                        #                                       default = 'dir',
-                        #                                       exclude = ['file'])
+                        #
+                        #     self.hsizer.Add(
+                        #         item=rbox,
+                        #         flag=wx.ADJUST_MINSIZE
+                        #         | wx.BOTTOM
+                        #         | wx.LEFT
+                        #         | wx.RIGHT
+                        #         | wx.ALIGN_TOP,
+                        #         border=5,
+                        #     )
+                        #
+                        #     ogrSelection = gselect.GdalSelect(
+                        #         parent=self,
+                        #         panel=which_panel,
+                        #         ogr=True,
+                        #         default="dir",
+                        #         exclude=["file"],
+                        #     )
                         #     self.Bind(gselect.EVT_GDALSELECT, self.OnUpdateSelection)
                         #     self.Bind(gselect.EVT_GDALSELECT, self.OnSetValue)
 
-                        #     ogrSelection.SetName('OgrSelect')
+                        #     ogrSelection.SetName("OgrSelect")
                         #     ogrSelection.Hide()
 
                         #     which_sizer.Add(item = self.hsizer, proportion = 0)
 
-                        #     p['wxId'].append(rbox.GetId())
-                        #     p['wxId'].append(ogrSelection.GetId())
+                        #     p["wxId"].append(rbox.GetId())
+                        #     p["wxId"].append(ogrSelection.GetId())
                         #     for win in ogrSelection.GetDsnWin():
-                        #         p['wxId'].append(win.GetId())
+                        #         p["wxId"].append(win.GetId())
                         # else:
                         which_sizer.Add(
                             selection,
@@ -1660,7 +1679,8 @@ class CmdPanel(wx.Panel):
                             bb.Bind(wx.EVT_BUTTON, self.OnTimelineTool)
                             bb.SetToolTip(
                                 _(
-                                    "Show graphical representation of temporal extent of dataset(s) ."
+                                    "Show graphical representation of temporal extent "
+                                    "of dataset(s)."
                                 )
                             )
                             p["wxId"].append(bb.GetId())
@@ -1935,9 +1955,9 @@ class CmdPanel(wx.Panel):
                     else:
                         this_sizer = which_sizer
                     colorSize = 150
-                    # For color selectors, this is a three-member array, holding the IDs of
-                    # the color picker,  the text control for multiple colors (or None),
-                    # and either a "transparent" checkbox or None
+                    # For color selectors, this is a three-member array, holding the
+                    # IDs of the color picker,  the text control for multiple colors
+                    # (or None), and either a "transparent" checkbox or None
                     p["wxId"] = [None] * 3
                     if p.get("multiple", False):
                         txt = TextCtrl(parent=which_panel, id=wx.ID_ANY)
@@ -2063,7 +2083,8 @@ class CmdPanel(wx.Panel):
                                     try:
                                         ifbb.AppendText(line)
                                     except UnicodeDecodeError:
-                                        # remove non-ascii characters on encoding mismatch (file vs OS)
+                                        # remove non-ascii characters on encoding
+                                        # mismatch (file vs OS)
                                         ifbb.AppendText(line.translate(None, nonascii))
                                 ifbb.SetInsertionPoint(0)
 
@@ -2818,8 +2839,8 @@ class CmdPanel(wx.Panel):
                 else:
                     colorchooser = wx.FindWindowById(p["wxId"][0])
                     new_color = colorchooser.GetValue()[:]
-                    # This is weird: new_color is a 4-tuple and new_color[:] is a 3-tuple
-                    # under wx2.8.1
+                    # This is weird: new_color is a 4-tuple and new_color[:] is
+                    # a 3-tuple under wx2.8.1
                     new_label = utils.rgb2str.get(
                         new_color, ":".join(list(map(str, new_color)))
                     )
@@ -3306,7 +3327,8 @@ if __name__ == "__main__":
         task.params = [
             {
                 "name": "text",
-                "description": "Descriptions go into tooltips if labels are present, like this one",
+                "description": "Descriptions go into tooltips if labels are present, "
+                "like this one",
                 "label": "Enter some text",
                 "key_desc": ["value"],
                 "values_desc": [],
@@ -3334,7 +3356,8 @@ if __name__ == "__main__":
             },
             {
                 "name": "plain_color",
-                "description": "This is a plain color, and it is a compulsory parameter",
+                "description": "This is a plain color, and it is a compulsory "
+                "parameter",
                 "required": False,
                 "gisprompt": True,
                 "prompt": "color",
@@ -3400,7 +3423,8 @@ if __name__ == "__main__":
             },
             {
                 "name": "b",
-                "description": "pre-filled flag, will appear in options since it is not required",
+                "description": "pre-filled flag, will appear in options since it is "
+                "not required",
                 "value": True,
                 "suppress_required": False,
             },

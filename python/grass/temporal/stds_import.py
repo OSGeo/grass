@@ -360,7 +360,7 @@ def import_stds(
             gscript.run_command(
                 "g.mapset",
                 mapset="PERMANENT",
-                location=location,
+                project=location,
                 dbase=old_env["GISDBASE"],
             )
         except CalledModuleError:
@@ -421,9 +421,11 @@ def import_stds(
             row["id"] = mapid
             row["start"] = line_list[1].strip()
             row["end"] = line_list[2].strip()
+            row["semantic_label"] = line_list[3].strip() if len(line_list) == 4 else ""
 
             new_list_file.write(
-                "%s%s%s%s%s\n" % (mapname, fs, row["start"], fs, row["end"])
+                f"{mapname}{fs}{row['start']}{fs}{row['end']}"
+                f"{fs}{row['semantic_label']}\n"
             )
 
             maplist.append(row)
@@ -601,7 +603,7 @@ def import_stds(
                 gscript.run_command(
                     "g.mapset",
                     mapset=old_env["MAPSET"],
-                    location=old_env["LOCATION_NAME"],
+                    project=old_env["LOCATION_NAME"],
                     gisdbase=old_env["GISDBASE"],
                 )
             except CalledModuleError:
