@@ -83,6 +83,7 @@ from startup.guiutils import (
     create_location_interactively,
 )
 from grass.grassdb.checks import is_first_time_user
+from grass.grassdb import history
 
 
 class GMFrame(wx.Frame):
@@ -947,8 +948,9 @@ class GMFrame(wx.Frame):
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
+        result = 0
         if re.compile(r"^d\..*").search(command[0]):
-            self.RunDisplayCmd(command)
+            result = self.RunDisplayCmd(command)
         elif re.compile(r"r[3]?\.mapcalc").search(command[0]):
             self.OnMapCalculator(event=None, cmd=command)
         elif command[0] == "i.group":
@@ -968,10 +970,15 @@ class GMFrame(wx.Frame):
         elif command[0] == "cd":
             self.OnChangeCWD(event=None, cmd=command)
         else:
+            result = 1
             raise ValueError(
                 "Layer Manager special command (%s)"
                 " not supported." % " ".join(command)
             )
+        if result == 0:
+            self._gconsole.UpdateHistory(status=history.STATUS_SUCCESS)
+        else:
+            self._gconsole.UpdateHistory(status=history.STATUS_FAILED)
 
     def RunDisplayCmd(self, command):
         """Handles display commands.
@@ -984,7 +991,7 @@ class GMFrame(wx.Frame):
         if command[0] == "d.erase":
             # rest of d.erase is ignored
             self.GetLayerTree().DeleteAllLayers()
-            return
+            return 1
         try:
             # display GRASS commands
             layertype = command2ltype[command[0]]
@@ -997,7 +1004,7 @@ class GMFrame(wx.Frame):
                 )
                 % command[0],
             )
-            return
+            return 1
 
         if layertype == "barscale":
             if len(command) > 1:
@@ -1051,6 +1058,7 @@ class GMFrame(wx.Frame):
                 lname=lname,
                 lcmd=command,
             )
+        return 0
 
     def GetLayerNotebook(self):
         """Get Layers Notebook"""

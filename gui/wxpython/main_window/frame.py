@@ -1083,21 +1083,6 @@ class GMFrame(wx.Frame):
                 if notebook.GetPageText(i) == page_text:
                     notebook.SetSelection(i)
 
-    def UpdateHistory(self, status):
-        """Update command history"""
-        cmd_info = {"status": status}
-
-        try:
-            history_path = history.get_current_mapset_gui_history_path()
-            history.update_entry(history_path, cmd_info)
-
-            # update history model
-            if self._giface:
-                entry = history.read(history_path)[-1]
-                self._giface.entryInHistoryUpdated.emit(entry=entry)
-        except (OSError, ValueError) as e:
-            GError(str(e))
-
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
         result = 0
@@ -1128,9 +1113,9 @@ class GMFrame(wx.Frame):
                 " not supported." % " ".join(command)
             )
         if result == 0:
-            self.UpdateHistory(status=history.STATUS_SUCCESS)
+            self._gconsole.UpdateHistory(status=history.STATUS_SUCCESS)
         else:
-            self.UpdateHistory(status=history.STATUS_FAILED)
+            self._gconsole.UpdateHistory(status=history.STATUS_FAILED)
 
     def RunDisplayCmd(self, command):
         """Handles display commands.
