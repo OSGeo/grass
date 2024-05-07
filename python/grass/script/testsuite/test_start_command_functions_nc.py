@@ -73,7 +73,6 @@ class TestParseCommand(TestCase):
             isinstance(result, list)
             and isinstance(result[0].get("easting"), (int, float))
         )
-        result = parse_command("v.db.select", map="zipcodes", format="json")
 
     def test_parse_format_csv(self):
         reference = parse_command("v.db.select", map="zipcodes", format="json")[
