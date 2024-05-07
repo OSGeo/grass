@@ -41,6 +41,7 @@ from grass.script import task as gtask
 from grass.pydispatch.signal import Signal
 
 from grass.grassdb import history
+from grass.grassdb.history import Status
 
 from core import globalvar
 from core.gcmd import CommandThread, GError, GException
@@ -448,14 +449,13 @@ class GConsole(wx.EvtHandler):
 
     def UpdateHistory(self, status, runtime=None):
         """Update command history.
-        :param enum status enum: status of command
+        :param enum status: status of command run
         :param int runtime: duration of command run
         """
         if runtime:
-            cmd_info = {"runtime": runtime, "status": status}
+            cmd_info = {"runtime": runtime, "status": status.value}
         else:
-            cmd_info = {"status": status}
-
+            cmd_info = {"status": status.value}
         try:
             history_path = history.get_current_mapset_gui_history_path()
             history.update_entry(history_path, cmd_info)
@@ -550,8 +550,8 @@ class GConsole(wx.EvtHandler):
             ):
                 event = gIgnoredCmdRun(cmd=command)
                 wx.PostEvent(self, event)
-
                 return
+
             else:
                 # other GRASS commands (r|v|g|...)
                 try:
@@ -601,7 +601,6 @@ class GConsole(wx.EvtHandler):
                                 parent=self._guiparent,
                                 message=_("Module <%s> not found.") % command[0],
                             )
-
                         pymodule = imp.load_source(command[0].replace(".", "_"), pyPath)
                         pymain = inspect.getfullargspec(pymodule.main)
                         if pymain and "giface" in pymain.args:
@@ -615,8 +614,7 @@ class GConsole(wx.EvtHandler):
                             GUI(
                                 parent=self._guiparent, giface=self._giface
                             ).ParseCommand(command)
-                            self.UpdateHistory(status=history.STATUS_SUCCESS)
-
+                            self.UpdateHistory(status=Status.SUCCESS)
                         except GException as e:
                             print(e, file=sys.stderr)
 
@@ -660,7 +658,6 @@ class GConsole(wx.EvtHandler):
             ):
                 event = gIgnoredCmdRun(cmd=command)
                 wx.PostEvent(self, event)
-
                 return
 
             skipInterface = True
@@ -687,7 +684,7 @@ class GConsole(wx.EvtHandler):
             if task:
                 # process GRASS command without argument
                 GUI(parent=self._guiparent, giface=self._giface).ParseCommand(command)
-                self.UpdateHistory(status=history.STATUS_SUCCESS)
+                self.UpdateHistory(status=Status.SUCCESS)
             else:
                 self.cmdThread.RunCmd(
                     command,
@@ -762,15 +759,15 @@ class GConsole(wx.EvtHandler):
                 )
             )
             msg = _("Command aborted")
-            status = history.STATUS_ABORTED
+            status = Status.ABORTED
         elif event.returncode != 0:
             msg = _("Command ended with non-zero return code {returncode}").format(
                 returncode=event.returncode
             )
-            status = history.STATUS_FAILED
+            status = Status.FAILED
         else:
             msg = _("Command finished")
-            status = history.STATUS_SUCCESS
+            status = Status.SUCCESS
 
         # update command history log by status and runtime duration
         self.UpdateHistory(status=status, runtime=int(ctime))

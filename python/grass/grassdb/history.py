@@ -11,6 +11,7 @@ for details.
 
 import json
 import shutil
+from enum import Enum
 from pathlib import Path
 
 from datetime import datetime
@@ -18,12 +19,15 @@ import grass.script as gs
 from grass.script.utils import parse_key_val
 
 
-# global status variables
-STATUS_ABORTED = "aborted"
-STATUS_FAILED = "failed"
-STATUS_RUNNING = "running"
-STATUS_SUCCESS = "success"
-STATUS_UNKNOWN = "unknown"
+class Status(Enum):
+    """Enum representing a set of status constants
+    that are used to represent various states or command outcomes."""
+
+    ABORTED = "aborted"
+    FAILED = "failed"
+    RUNNING = "running"
+    SUCCESS = "success"
+    UNKNOWN = "unknown"
 
 
 def get_current_mapset_gui_history_path():
@@ -286,7 +290,7 @@ def get_initial_command_info(env_run):
         "mask2d": mask2d_present,
         "mask3d": mask3d_present,
         "region": region_settings,
-        "status": STATUS_RUNNING,
+        "status": Status.RUNNING.value,
     }
     return cmd_info
 

@@ -41,6 +41,7 @@ from icons.icon import MetaIcon
 from grass.pydispatch.signal import Signal
 
 from grass.grassdb import history
+from grass.grassdb.history import Status
 
 
 # global variables for node types
@@ -116,11 +117,11 @@ class HistoryBrowserTree(CTreeView):
 
         self._iconTypes = [
             TIME_PERIOD,
-            history.STATUS_ABORTED,
-            history.STATUS_FAILED,
-            history.STATUS_RUNNING,
-            history.STATUS_SUCCESS,
-            history.STATUS_UNKNOWN,
+            Status.ABORTED.value,
+            Status.FAILED.value,
+            Status.RUNNING.value,
+            Status.SUCCESS.value,
+            Status.UNKNOWN.value,
         ]
 
         self._initImages()
@@ -165,11 +166,11 @@ class HistoryBrowserTree(CTreeView):
         bmpsize = (16, 16)
         icons = {
             TIME_PERIOD: MetaIcon(img="time-period").GetBitmap(bmpsize),
-            history.STATUS_ABORTED: MetaIcon(img="exclamation-mark").GetBitmap(bmpsize),
-            history.STATUS_FAILED: MetaIcon(img="cross").GetBitmap(bmpsize),
-            history.STATUS_RUNNING: MetaIcon(img="circle").GetBitmap(bmpsize),
-            history.STATUS_SUCCESS: MetaIcon(img="success").GetBitmap(bmpsize),
-            history.STATUS_UNKNOWN: MetaIcon(img="question-mark").GetBitmap(bmpsize),
+            Status.ABORTED.value: MetaIcon(img="exclamation-mark").GetBitmap(bmpsize),
+            Status.FAILED.value: MetaIcon(img="cross").GetBitmap(bmpsize),
+            Status.RUNNING.value: MetaIcon(img="circle").GetBitmap(bmpsize),
+            Status.SUCCESS.value: MetaIcon(img="success").GetBitmap(bmpsize),
+            Status.UNKNOWN.value: MetaIcon(img="question-mark").GetBitmap(bmpsize),
         }
         il = wx.ImageList(bmpsize[0], bmpsize[1], mask=False)
         for each in self._iconTypes:
@@ -268,7 +269,7 @@ class HistoryBrowserTree(CTreeView):
                 entry["command_info"].get("status")
                 if entry.get("command_info")
                 and entry["command_info"].get("status") is not None
-                else history.STATUS_UNKNOWN
+                else Status.UNKNOWN.value
             )
 
             # Add command to time period node
@@ -396,7 +397,7 @@ class HistoryBrowserTree(CTreeView):
                 type=COMMAND,
                 name=entry["command"].strip(),
                 timestamp=entry["command_info"]["timestamp"],
-                status=entry["command_info"].get("status", history.STATUS_UNKNOWN),
+                status=entry["command_info"].get("status", Status.UNKNOWN.value),
             ),
         )
 

@@ -89,7 +89,7 @@ from startup.guiutils import (
     create_location_interactively,
 )
 from grass.grassdb.checks import is_first_time_user
-from grass.grassdb import history
+from grass.grassdb.history import Status
 
 
 class SingleWindowAuiManager(aui.AuiManager):
@@ -1113,9 +1113,9 @@ class GMFrame(wx.Frame):
                 " not supported." % " ".join(command)
             )
         if result == 0:
-            self._gconsole.UpdateHistory(status=history.STATUS_SUCCESS)
+            self._gconsole.UpdateHistory(status=Status.SUCCESS)
         else:
-            self._gconsole.UpdateHistory(status=history.STATUS_FAILED)
+            self._gconsole.UpdateHistory(status=Status.FAILED)
 
     def RunDisplayCmd(self, command):
         """Handles display commands.
