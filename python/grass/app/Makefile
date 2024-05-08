@@ -5,7 +5,10 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 
 DSTDIR = $(ETC)/python/grass/app
 
-MODULES = data
+MODULES = \
+	data \
+	runtime \
+	utils
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
