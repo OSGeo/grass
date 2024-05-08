@@ -15,6 +15,7 @@ This is not a stable part of the API. Use at your own risk.
 import os
 import subprocess
 import sys
+import collections
 
 from .utils import to_text_string
 
@@ -70,37 +71,60 @@ def path_prepend(directory, var):
     os.environ[var] = path
 
 
-def set_paths(
-    grass_config_dir, major_version, minor_version, ld_library_path_variable_name
-):
-    # addons (path)
-    addon_path = os.getenv("GRASS_ADDON_PATH")
-    if addon_path:
-        for path in addon_path.split(os.pathsep):
-            path_prepend(addon_path, "PATH")
+def append_left_executable_paths(paths, install_path):
+    # define PATH
+    paths.appendleft(os.path.join(install_path, "bin"))
+    paths.appendleft(os.path.join(install_path, "scripts"))
+    if WINDOWS:
+        paths.appendleft(os.path.join(install_path, "extrabin"))
 
+
+def append_left_addon_paths(paths, config_dir, major_version, minor_version, env):
     # addons (base)
-    addon_base = os.getenv("GRASS_ADDON_BASE")
+    addon_base = env.get("GRASS_ADDON_BASE")
     if not addon_base:
         if MACOS:
             version = f"{major_version}.{minor_version}"
             addon_base = os.path.join(
-                os.getenv("HOME"), "Library", "GRASS", version, "Addons"
+                env.get("HOME"), "Library", "GRASS", version, "Addons"
             )
         else:
-            addon_base = os.path.join(grass_config_dir, "addons")
-        os.environ["GRASS_ADDON_BASE"] = addon_base
+            addon_base = os.path.join(config_dir, "addons")
+        env["GRASS_ADDON_BASE"] = addon_base
+
     if not WINDOWS:
-        path_prepend(os.path.join(addon_base, "scripts"), "PATH")
-    path_prepend(os.path.join(addon_base, "bin"), "PATH")
+        paths.appendleft(os.path.join(addon_base, "scripts"))
+    paths.appendleft(os.path.join(addon_base, "bin"))
+
+    # addons (path)
+    addon_path = env.get("GRASS_ADDON_PATH")
+    if addon_path:
+        for path in addon_path.split(os.pathsep):
+            paths.appendleft(path)
+
+
+def set_paths(
+    grass_config_dir, major_version, minor_version, ld_library_path_variable_name
+):
+    paths = collections.deque()
+
+    env = os.environ  # used sometimes
+
+    append_left_addon_paths(
+        paths, grass_config_dir, major_version, minor_version, env=env
+    )
 
     # standard installation
-    if not WINDOWS:
-        path_prepend(gpath("scripts"), "PATH")
-    path_prepend(gpath("bin"), "PATH")
+    append_left_executable_paths(paths, install_path=GISBASE)
+
+    paths.append(env.get("PATH"))
+    env["PATH"] = os.pathsep.join(paths)
+
+    set_python_path_variable(install_path=GISBASE, env=os.environ)
 
     # set path for the GRASS man pages
     grass_man_path = gpath("docs", "man")
+    addon_base = os.getenv("GRASS_ADDON_BASE")  # retrieving second time
     addons_man_path = os.path.join(addon_base, "docs", "man")
     man_path = os.getenv("MANPATH")
     sys_man_path = None
@@ -144,12 +168,32 @@ def set_dynamic_library_path(variable_name, install_path, env):
     env[variable_name] += os.pathsep + os.path.join(install_path, "lib")
 
 
+def set_python_path_variable(install_path, env):
+    """Set PYTHONPATH to find GRASS Python package in subprocesses"""
+    path = env.get("PYTHONPATH")
+    etcpy = os.path.join(install_path, "etc", "python")
+    if path:
+        path = etcpy + os.pathsep + path
+    else:
+        path = etcpy
+    env["PYTHONPATH"] = path
+
+
 def find_exe(pgm):
     for directory in os.getenv("PATH").split(os.pathsep):
         path = os.path.join(directory, pgm)
         if os.access(path, os.X_OK):
             return path
     return None
+
+
+def set_path_to_python_executable(env):
+    # Set GRASS_PYTHON
+    if not env.get("GRASS_PYTHON"):
+        if WINDOWS:
+            env["GRASS_PYTHON"] = "python3.exe"
+        else:
+            env["GRASS_PYTHON"] = "python3"
 
 
 def set_defaults(config_projshare_path):
@@ -166,11 +210,7 @@ def set_defaults(config_projshare_path):
         os.environ["GRASS_PAGER"] = pager
 
     # GRASS_PYTHON
-    if not os.getenv("GRASS_PYTHON"):
-        if WINDOWS:
-            os.environ["GRASS_PYTHON"] = "python3.exe"
-        else:
-            os.environ["GRASS_PYTHON"] = "python3"
+    set_path_to_python_executable(env=os.environ)
 
     # GRASS_GNUPLOT
     if not os.getenv("GRASS_GNUPLOT"):
