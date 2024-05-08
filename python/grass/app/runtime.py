@@ -71,6 +71,23 @@ def path_prepend(directory, var):
     os.environ[var] = path
 
 
+def get_grass_config_dir(major_version, minor_version, env):
+    """Get configuration directory
+
+    Determines path of GRASS GIS user configuration directory.
+    """
+    # The code is in sync with grass.app.runtime (but not the same).
+    if WINDOWS:
+        config_dirname = f"GRASS{major_version}"
+        return os.path.join(env.get("APPDATA"), config_dirname)
+    elif MACOS:
+        version = f"{major_version}.{minor_version}"
+        return os.path.join(env.get("HOME"), "Library", "GRASS", version)
+    else:
+        config_dirname = f".grass{major_version}"
+        return os.path.join(env.get("HOME"), config_dirname)
+
+
 def append_left_executable_paths(paths, install_path):
     # define PATH
     paths.appendleft(os.path.join(install_path, "bin"))
@@ -79,17 +96,15 @@ def append_left_executable_paths(paths, install_path):
         paths.appendleft(os.path.join(install_path, "extrabin"))
 
 
-def append_left_addon_paths(paths, config_dir, major_version, minor_version, env):
+def append_left_addon_paths(paths, config_dir, env):
     # addons (base)
     addon_base = env.get("GRASS_ADDON_BASE")
     if not addon_base:
         if MACOS:
-            version = f"{major_version}.{minor_version}"
-            addon_base = os.path.join(
-                env.get("HOME"), "Library", "GRASS", version, "Addons"
-            )
+            name = "Addons"
         else:
-            addon_base = os.path.join(config_dir, "addons")
+            name = "addons"
+        addon_base = os.path.join(config_dir, name)
         env["GRASS_ADDON_BASE"] = addon_base
 
     if not WINDOWS:
@@ -103,16 +118,12 @@ def append_left_addon_paths(paths, config_dir, major_version, minor_version, env
             paths.appendleft(path)
 
 
-def set_paths(
-    grass_config_dir, major_version, minor_version, ld_library_path_variable_name
-):
+def set_paths(grass_config_dir, ld_library_path_variable_name):
     paths = collections.deque()
 
     env = os.environ  # used sometimes
 
-    append_left_addon_paths(
-        paths, grass_config_dir, major_version, minor_version, env=env
-    )
+    append_left_addon_paths(paths, grass_config_dir, env=env)
 
     # standard installation
     append_left_executable_paths(paths, install_path=GISBASE)
@@ -124,7 +135,8 @@ def set_paths(
 
     # set path for the GRASS man pages
     grass_man_path = gpath("docs", "man")
-    addon_base = os.getenv("GRASS_ADDON_BASE")  # retrieving second time
+    # retrieving second time, but now it is always set
+    addon_base = os.getenv("GRASS_ADDON_BASE")
     addons_man_path = os.path.join(addon_base, "docs", "man")
     man_path = os.getenv("MANPATH")
     sys_man_path = None

@@ -373,6 +373,7 @@ def get_grass_config_dir():
     Configuration directory is for example used for grass env file
     (the one which caries mapset settings from session to session).
     """
+    # The code is in sync with grass.app.runtime (but not the same).
     if WINDOWS:
         grass_config_dirname = f"GRASS{GRASS_VERSION_MAJOR}"
         win_conf_path = os.getenv("APPDATA")
@@ -392,6 +393,9 @@ def get_grass_config_dir():
                 )
             )
         directory = os.path.join(win_conf_path, grass_config_dirname)
+    elif MACOS:
+        version = f"{GRASS_VERSION_MAJOR}.{GRASS_VERSION_MINOR}"
+        return os.path.join(env.get("HOME"), "Library", "GRASS", version)
     else:
         grass_config_dirname = f".grass{GRASS_VERSION_MAJOR}"
         directory = os.path.join(os.getenv("HOME"), grass_config_dirname)
@@ -2306,8 +2310,6 @@ def main():
     # Set PATH, PYTHONPATH, ...
     set_paths(
         grass_config_dir=grass_config_dir,
-        major_version=GRASS_VERSION_MAJOR,
-        minor_version=GRASS_VERSION_MINOR,
         ld_library_path_variable_name=LD_LIBRARY_PATH_VAR,
     )
     # Set GRASS_PAGER, GRASS_PYTHON, GRASS_GNUPLOT, GRASS_PROJSHARE

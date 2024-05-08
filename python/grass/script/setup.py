@@ -217,6 +217,7 @@ def setup_runtime_env(gisbase=None, *, env=None):
 
     import collections
     from grass.app.runtime import (
+        get_grass_config_dir,
         set_dynamic_library_path,
         append_left_addon_paths,
         set_path_to_python_executable,
@@ -230,14 +231,11 @@ def setup_runtime_env(gisbase=None, *, env=None):
     # define PATH
     paths = collections.deque()
     append_left_executable_paths(paths, install_path=gisbase)
-    if WINDOWS:
-        config_dirname = f"GRASS{VERSION_MAJOR}"
-        config_dir = os.path.join(env.get("APPDATA"), config_dirname)
-    else:
-        config_dirname = f".grass{VERSION_MAJOR}"
-        config_dir = os.path.join(env.get("HOME"), config_dirname)
-        # macOS handled separately, so the above is basically not Windows, not macOS.
-    append_left_addon_paths(paths, config_dir, VERSION_MAJOR, VERSION_MINOR, env=env)
+    append_left_addon_paths(
+        paths,
+        get_grass_config_dir(VERSION_MAJOR, VERSION_MINOR, env=env),
+        env=env,
+    )
     paths.append(env.get("PATH"))
     env["PATH"] = os.pathsep.join(paths)
 
