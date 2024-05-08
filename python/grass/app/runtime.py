@@ -88,7 +88,7 @@ def get_grass_config_dir(major_version, minor_version, env):
         return os.path.join(env.get("HOME"), config_dirname)
 
 
-def append_left_executable_paths(paths, install_path):
+def append_left_main_executable_paths(paths, install_path):
     # define PATH
     paths.appendleft(os.path.join(install_path, "bin"))
     paths.appendleft(os.path.join(install_path, "scripts"))
@@ -118,19 +118,21 @@ def append_left_addon_paths(paths, config_dir, env):
             paths.appendleft(path)
 
 
-def set_paths(grass_config_dir, ld_library_path_variable_name):
+def set_executable_paths(install_path, grass_config_dir, env):
     paths = collections.deque()
-
-    env = os.environ  # used sometimes
-
+    # Addons
     append_left_addon_paths(paths, grass_config_dir, env=env)
-
-    # standard installation
-    append_left_executable_paths(paths, install_path=GISBASE)
+    # Standard installation
+    append_left_main_executable_paths(paths, install_path=install_path)
 
     paths.append(env.get("PATH"))
     env["PATH"] = os.pathsep.join(paths)
 
+
+def set_paths(grass_config_dir, ld_library_path_variable_name):
+    set_executable_paths(
+        install_path=GISBASE, grass_config_dir=grass_config_dir, env=os.environ
+    )
     set_python_path_variable(install_path=GISBASE, env=os.environ)
 
     # set path for the GRASS man pages
