@@ -31,12 +31,10 @@ with PEP8, consistent formatting, and readable and error-free code:
   find bad code practices or errors
 
 Note that while the entire GRASS code base is Black formatted, full compliance
-with PEP8 is still work in progress.
+with PEP8, Flake8, and Pylint practices is still work in progress.
 
-It is highly recommended to install and use [pre-commit](https://pre-commit.com)
-before submitting any new or modified code or any other content. The pre-commit
-Git hooks set checks validity and executes automated formatting. See
-[using pre-commit](#using-pre-commit) for pre-commit setup and usage.
+See [using pre-commit](#using-pre-commit) for pre-commit setup and usage to
+simplify performing of these checks.
 
 #### Black
 
@@ -46,12 +44,12 @@ Use Black to format files:
 black {source_file_or_directory}
 ```
 
-Black is configured via [pyproject.toml](../../pyproject.toml). Default line
-length is 88 characters.
+Black is configured via [pyproject.toml](../../pyproject.toml). The line
+length is set to 88 characters.
 
 #### Flake8
 
-Use Flake8 to check formatting of all files:
+Use Flake8 to check formatting and basic issues in all files:
 
 ```bash
 flake8 python_file.py
@@ -59,14 +57,15 @@ flake8 python_file.py
 
 The root directory contains [.flake8](../../.flake8) configuration file which
 contains a less strict configuration for legacy code. It will be used by default
-when running Flake8 within GRASS source code. From outside, you can point to it
-with `--config` pararameter:
+when running Flake8 within GRASS source code. For new files, you can use the
+default configuration:
 
 ```bash
-flake8 --config  {path_to_flake8_file} {path_to_python_file}
+flake8 --isolated --max-line-length=88 {path_to_python_file}
 ```
 
-Alternatively, you can explicitely specify which errors or warnings to ignore:
+For specific, temporary issues, you can explicitly specify which errors or
+warnings to ignore:
 
 ```bash
 flake8 --ignore=E203,E266,E501 --max-line-length=88 python_file.py
@@ -97,7 +96,7 @@ bulk reformatting.
 
 It is highly recommended to install and use [pre-commit](https://pre-commit.com)
 before submitting any new or modified code or any other content. The pre-commit
-Git hooks set checks validity and executes automated formatting for
+uses Git hooks to check validity and executes automated formatting for
 a range of file formats, including C/C++ and Python. Pre-commit installs
 all necessary tools in a virtual environment upon first use.
 
@@ -169,7 +168,7 @@ examples.
 
 Python API documentation is written in reStructuredText (reST) which is
 compiled with Sphinx (see
-[​PyGRASS documentation](https://grass.osgeo.org/grass-devel/manuals/libpython/pygrass_index.html))
+[grass package documentation](https://grass.osgeo.org/grass-devel/manuals/libpython/))
 
 ```python
 def func(arg1, arg2):
@@ -183,7 +182,7 @@ def func(arg1, arg2):
     :return: Description of return value
     :rtype: bool
 
-    :example:
+    Example:
 
     >>> a=1
     >>> b=2
@@ -249,9 +248,9 @@ The structure consists of several required and optional sections:
 Sections _Notes_, _Examples_, _References_, and _Authors_ can be also in
 singular form (e.g, _Note_).
 
-Note that HTML is converted to MAN pages by
-[tools/g.html2man/](https://trac.osgeo.org/grass/browser/grass/trunk/tools/g.html2man).
-Since the MAN conversion is limited, please use no other HTML tags than:
+Note that HTML is converted to man pages by
+[utils/g.html2man/](../../utils/g.html2man/).
+Since the man conversion is limited, please use no other HTML tags than:
 
 ```html
 <a> <b> <body> <br> <code> <dd> <dl> <dt> <em>
@@ -273,7 +272,7 @@ Examples should be coded like this:
 
 ```html
 <div class="code">
-  <pre>
+<pre>
 v.to.db map=soils type=area option=area column=area_size unit=h
 </pre>
 </div>
@@ -779,7 +778,7 @@ r.    - raster commands
 r3.   - raster3D commands
 v.    - vector commands
 t.    - temporal commands
-wx.   - wxPython GUI commands
+g.gui - GUI commands
 ```
 
 Some additional naming conventions
