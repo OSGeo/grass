@@ -130,7 +130,18 @@ def set_paths(
     # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
     # this works for subprocesses but won't affect the current process
     if ld_library_path_variable_name:
-        path_prepend(gpath("lib"), ld_library_path_variable_name)
+        set_dynamic_library_path(
+            variable_name=ld_library_path_variable_name,
+            install_path=GISBASE,
+            env=os.environ,
+        )
+
+
+def set_dynamic_library_path(variable_name, install_path, env):
+    # define LD_LIBRARY_PATH
+    if variable_name not in env:
+        env[variable_name] = ""
+    env[variable_name] += os.pathsep + os.path.join(install_path, "lib")
 
 
 def find_exe(pgm):

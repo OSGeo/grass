@@ -247,10 +247,12 @@ def setup_runtime_env(gisbase=None, *, env=None):
 
     env["PATH"] = path_addition + os.pathsep + env.get("PATH")
 
+    from grass.app.runtime import set_dynamic_library_path
+
     # define LD_LIBRARY_PATH
-    if "@LD_LIBRARY_PATH_VAR@" not in env:
-        env["@LD_LIBRARY_PATH_VAR@"] = ""
-    env["@LD_LIBRARY_PATH_VAR@"] += os.pathsep + os.path.join(gisbase, "lib")
+    set_dynamic_library_path(
+        variable_name="@LD_LIBRARY_PATH_VAR@", install_path=gisbase, env=env
+    )
 
     # Set GRASS_PYTHON and PYTHONPATH to find GRASS Python modules
     if not env.get("GRASS_PYTHON"):
