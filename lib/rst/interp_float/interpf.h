@@ -62,8 +62,6 @@ typedef int interpder_fn(double, double, double *, double *);
 
 typedef int wr_temp_fn(struct interp_params *, int, int, off_t);
 
-typedef int wr_point_fn(struct triple, double);
-
 struct interp_params {
 
     double zmult; /**< multiplier for z-values */
@@ -135,8 +133,6 @@ struct interp_params {
     interpder_fn *interpder; /**< interp. func. for derivatives */
 
     wr_temp_fn *wr_temp; /**< writes temp files */
-
-    wr_point_fn *wr_point; /**< writes point file */
 
     const char *wheresql; /**< SQL statement to select input points */
 };

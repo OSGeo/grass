@@ -5,12 +5,14 @@
  * Lubos Mitas (original program and various modifications)
  *
  * \author
+ * C.Y. Liang,
  * H. Mitasova,
  * I. Kosinovsky,
  * D. Gerdes,
  * D. McCauley
  * (GRASS4.1 version of the program and GRASS4.2 modifications)
  *
+ * \author modified by Liang in May 2024
  * \author modified by McCauley in August 1995
  * \author modified by Mitasova in August 1995, Nov. 1996
  *
