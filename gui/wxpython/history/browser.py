@@ -25,6 +25,7 @@ import wx.lib.scrolledpanel as SP
 
 from gui_core.wrap import SearchCtrl, StaticText, StaticBox, Button
 from history.tree import HistoryBrowserTree
+from icons.icon import MetaIcon
 
 import grass.script as gs
 
@@ -80,6 +81,8 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
         self.region_settings = None
 
+        self._initImages()
+
         self._createGeneralInfoBox()
         self._createRegionSettingsBox()
 
@@ -100,6 +103,13 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.SetMinSize(self.GetBestSize())
 
         self.Layout()
+
+    def _initImages(self):
+        bmpsize = (16, 16)
+        self.icons = {
+            "check": MetaIcon(img="grassdb").GetBitmap(bmpsize),
+            "cross": MetaIcon(img="location").GetBitmap(bmpsize),
+        }
 
     def _createGeneralInfoBox(self):
         """Create static box for general info about the command"""
@@ -135,9 +145,9 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.sizer_region_settings_grid.SetCols(2)
         self.sizer_region_settings_grid.SetRows(9)
 
-        self.sizer_region_settings_text = wx.BoxSizer(wx.VERTICAL)
+        self.sizer_region_settings_match = wx.BoxSizer(wx.VERTICAL)
         self.region_settings_box_sizer.Add(
-            self.sizer_region_settings_text, proportion=0, flag=wx.EXPAND, border=5
+            self.sizer_region_settings_match, proportion=0, flag=wx.EXPAND, border=5
         )
 
         self.region_settings_box_sizer.Add(
@@ -225,32 +235,61 @@ class HistoryInfoPanel(SP.ScrolledPanel):
                 )
                 idx += 1
 
-        self.sizer_region_settings_text.Clear(True)
+        self.sizer_region_settings_match.Clear(True)
 
         if self.region_settings != self._get_current_region():
-            textSetRegion = StaticText(
-                parent=self.region_settings_box,
-                id=wx.ID_ANY,
-                label=_("Region is different from the current region"),
-            )
-            textSetRegion.Wrap(self.GetSize()[0])
+            status_text = _("Region does not match current region")
+            icon = self.icons["cross"]
+            button_label = _("Update current region")
+        else:
+            status_text = _("Region match current region")
+            icon = self.icons["check"]
+            button_label = None
 
-            self.sizer_region_settings_text.Add(
-                textSetRegion,
-                proportion=1,
+        # Sizer for text and icon
+        text_icon_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.sizer_region_settings_match.Add(
+            text_icon_sizer,
+            proportion=0,
+            flag=wx.ALL | wx.EXPAND,
+            border=5,
+        )
+
+        # Static text
+        textRegionMatch = StaticText(
+            parent=self.region_settings_box,
+            id=wx.ID_ANY,
+            label=status_text,
+        )
+        text_icon_sizer.Add(
+            textRegionMatch,
+            proportion=0,
+            flag=wx.ALL | wx.EXPAND,
+            border=5,
+        )
+
+        # Static bitmap for icon
+        iconRegionMatch = wx.StaticBitmap(self.region_settings_box, bitmap=icon)
+        text_icon_sizer.Add(
+            iconRegionMatch,
+            proportion=0,
+            flag=wx.ALL | wx.EXPAND,
+            border=5,
+        )
+
+        if button_label:
+            button_sizer = wx.BoxSizer(wx.HORIZONTAL)
+            self.sizer_region_settings_match.Add(
+                button_sizer,
+                proportion=0,
                 flag=wx.ALL | wx.EXPAND,
                 border=5,
             )
 
-            btnSetRegion = Button(parent=self.region_settings_box, id=wx.ID_ANY)
-            btnSetRegion.SetLabel(_("&Set current region to following values"))
-            btnSetRegion.SetToolTip(
-                _("Set current computational region to the region of executed command")
-            )
-            btnSetRegion.Bind(wx.EVT_BUTTON, self.OnSetCurrentRegionToHistory)
-
-            self.sizer_region_settings_text.Add(
-                btnSetRegion,
+            buttonUpdateRegion = wx.Button(self.region_settings_box, label=button_label)
+            buttonUpdateRegion.Bind(wx.EVT_BUTTON, self.OnUpdateRegion)
+            button_sizer.Add(
+                buttonUpdateRegion,
                 proportion=0,
                 flag=wx.ALL | wx.EXPAND,
                 border=5,
@@ -290,7 +329,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
                 history_region[key] = value
         return history_region
 
-    def OnSetCurrentRegionToHistory(self, event):
+    def OnUpdateRegion(self, event):
         """Set current region to the region of executed command."""
         history_region = self._get_history_region()
         gs.run_command("g.region", **history_region)
