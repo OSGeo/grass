@@ -30,7 +30,7 @@ static int test_basics_3d(void);
 static int test_basics_4d(void);
 
 /* ************************************************************************* */
-/* Performe the solver unit tests ****************************************** */
+/* Perform the solver unit tests ****************************************** */
 /* ************************************************************************* */
 
 int unit_test_basics(void)

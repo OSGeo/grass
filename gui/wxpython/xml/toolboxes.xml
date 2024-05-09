@@ -305,6 +305,19 @@
       <module-item name="r.in.pdal">
         <label>Point cloud (LAS LiDAR) import</label>
       </module-item>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+      <separator/>
+      <module-item name="r.in.wms">
+        <label>WMS/WMTS import</label>
+      </module-item>
+=======
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
       <separator/>
       <module-item name="r.in.wms">
         <label>WMS/WMTS import</label>
@@ -315,7 +328,7 @@
       </module-item>
       <separator/>
       <module-item name="r.proj">
-        <label>Reproject raster map from different GRASS location</label>
+        <label>Reproject raster map from different GRASS project</label>
       </module-item>
     </items>
   </toolbox>
@@ -361,7 +374,7 @@
       </module-item>
       <separator/>
       <module-item name="v.proj">
-        <label>Reproject vector map from different GRASS location</label>
+        <label>Reproject vector map from different GRASS project</label>
       </module-item>
     </items>
   </toolbox>
@@ -686,7 +699,7 @@
       </module-item>
       <separator/>
       <module-item name="r.proj">
-        <label>Reproject raster map from different GRASS location</label>
+        <label>Reproject raster map from different GRASS project</label>
       </module-item>
       <module-item name="r.tileset">
         <label>Tiling</label>
@@ -1183,7 +1196,7 @@
         <label>Rectify vector map</label>
       </module-item>
       <module-item name="v.proj">
-        <label>Reproject vector map from different GRASS location</label>
+        <label>Reproject vector map from different GRASS project</label>
       </module-item>
       <separator/>
       <module-item name="v.support">
@@ -1214,6 +1227,18 @@
       <module-item name="v.clean">
         <label>Clean vector map</label>
       </module-item>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+      <module-item name="v.fill.holes">
+        <label>Fill holes in areas</label>
+      </module-item>
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
       <module-item name="v.generalize">
         <label>Smooth or simplify</label>
       </module-item>
@@ -1554,6 +1579,17 @@
       </module-item>
       <module-item name="i.smap">
         <label>Sequential maximum a posteriori classification (SMAP)</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.svm.train">
+        <label>Input for supervised SVM</label>
+      </module-item>
+      <module-item name="i.svm.predict">
+        <label>Support Vector Machines classification (SVM)</label>
+      </module-item>
+      <separator/>
+      <module-item name="i.signatures">
+        <label>Manage signature files</label>
       </module-item>
       <separator/>
       <module-item name="i.segment">

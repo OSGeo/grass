@@ -3,7 +3,29 @@
 <em>t.rast.algebra</em> performs temporal and spatial map algebra operations on
 space time raster datasets (STRDS) using the temporal raster algebra.
 <p>
+<<<<<<< HEAD
 The module expects an <b>expression</b> as input parameter in the
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+The module expects an <b>expression</b> as input parameter in the
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+The module expects an <b>expression</b> as input parameter in the 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+The module expects an <b>expression</b> as input parameter in the
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+The module expects an <b>expression</b> as input parameter in the 
+=======
+The module expects an <b>expression</b> as input parameter in the
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 following form:
 <p>
 <b>"result = expression"</b>
@@ -273,6 +295,11 @@ end_minute(A)            The minute of the end time [0 - 59]
 end_second(A)            The second of the end time [0 - 59]
 </pre></div>
 
+In order to use the numbers returned by the functions in the last block above, an
+offset value needs to be added. For example, start_doy(A, 0) would return the
+DOY of the current map in STDS A. end_hour(A, -1) would return the end hour of
+the previous map in STDS A.
+
 <h4>Comparison operator</h4>
 
 As mentioned above, the conditions are comparison expressions that are
@@ -445,7 +472,18 @@ a1 of A:
 The neighbourhood modifier of <em>r.mapcalc</em> is extended for the temporal
 raster algebra with the temporal dimension. The format is strds[t,r,c],
 where t is the temporal offset, r is the row offset and c is the column
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+offset. A single neighborhood modifier is interpreted as temporal offset [t],
+while two neighborhood modifiers are interpreted as row and column offsets [r,c].
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 offset.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
 <pre class="code">
 strds[2]
@@ -560,6 +598,23 @@ and temporal operators:
 C = if({equal}, B {#,contain} A > 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/} (B {#,contain} A), A)
 </pre></div>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<h3>Compute DOY for spatio-temporal conditions</h3>
+Compute the DOY for all maps from STRDS A where conditions are met at three
+consecutive time intervals (e.g. temperature > 0):
+<div class="code"><pre>
+B = if(A > 0.0 && A[-1] > 0.0 && A[-2] > 0.0, start_doy(A, -1), 0)"
+</pre></div>
+
+
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 <h2>SEE ALSO</h2>
 
 <em>

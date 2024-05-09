@@ -33,7 +33,17 @@ The multi column output from <em>r.profile</em> is intended for easy use in
 other programs.  The output can be piped (|) directly into other programs or
 saved to a file for later use. Output with geographic coordinates (<em>-g</em>)
 is compatible with <em><a href="v.in.ascii.html">v.in.ascii</a></em> and can
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+be piped directly into this program.
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 be piped direcly into this program.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
 <div class="code"><pre>
 r.profile -g input=elevation coordinates=... | v.in.ascii output=elevation_profile separator=space
@@ -45,8 +55,8 @@ The optional RGB output provides the associated GRASS colour value for
 each profile point.
 
 <p>Option <b>units</b> enables to set units of the profile length output.
-If the units are not specified, current location units will be used.
-In case of geographic locations (latitude/longitude), meters are used as default unit.
+If the units are not specified, current coordinate reference system's units will be used.
+In case of geographic CRS (latitude/longitude), meters are used as default unit.
 
 <h2>NOTES</h2>
 
@@ -60,7 +70,7 @@ the end point coordinates entered for the segmanet.
 r.profile input=dgm12.5 coordinates=3570631,5763556 2>/dev/null
 </pre></div>
 
-This filters out the everything except the numbers.
+This filters out everything except the numbers.
 
 <h2>EXAMPLES</h2>
 
@@ -111,7 +121,7 @@ d.where | r.profile elevation.dem
 
 <h3>Extraction of values along profile defined by coordinates (variant 2)</h3>
 
-Coordinate pairs can also being "piped" into <em>r.profile</em> (variant 2a):
+Coordinate pairs can also be "piped" into <em>r.profile</em> (variant 2a):
 
 <div class="code"><pre>
 r.profile elevation resolution=1000 file=- &lt;&lt; EOF
@@ -123,7 +133,7 @@ EOF
 </pre></div>
 
 <p>
-Coordinate pairs can also being "piped" into <em>r.profile</em> (variant 2b):
+Coordinate pairs can also be "piped" into <em>r.profile</em> (variant 2b):
 
 <div class="code"><pre>
 echo "641712,226095

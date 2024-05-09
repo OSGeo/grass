@@ -41,7 +41,17 @@
    </pre>
    Intersection points:
    <pre>
+<<<<<<< HEAD
+   return   point1 breaks: point2 breaks:     distance1 on:  distance2 on:
+=======
    return  point1 breakes: point2 breaks:    distance1 on:   distance2 on:
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
    0        -              -                  -              -
    1        a,b            -                  a              b
    2        a              b                  a              b
@@ -601,7 +611,7 @@ static int ident(double x1, double y1, double x2, double y2, double thresh)
 static struct line_pnts *APnts, *BPnts;
 
 /* break segments (called by rtree search) */
-static int cross_seg(int id, const struct RTree_Rect *rect, void *arg)
+static int cross_seg(int id, const struct RTree_Rect *rect UNUSED, void *arg)
 {
     double x1, y1, z1, x2, y2, z2;
     int i, j, ret;
@@ -661,7 +671,19 @@ int Vect_line_intersection(struct line_pnts *APoints, struct line_pnts *BPoints,
                            struct bound_box *ABox, struct bound_box *BBox,
                            struct line_pnts ***ALines,
                            struct line_pnts ***BLines, int *nalines,
+<<<<<<< HEAD
                            int *nblines, int with_z)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                           int *nblines, int with_z UNUSED)
+=======
+                           int *nblines, int with_z)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                           int *nblines, int with_z)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     int i, j, k, l, last_seg, seg, last;
     int n_alive_cross;
@@ -746,7 +768,19 @@ int Vect_line_intersection(struct line_pnts *APoints, struct line_pnts *BPoints,
      *   /  \  c                /  \
      *
      *  Note: once we snap breaks to vertices, we have to do that for both lines
+<<<<<<< HEAD
      * A and B in the same way and because we cannot be sure that A childrens
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+     * A and B in the same way and because we cannot be sure that A children
+=======
+     * A and B in the same way and because we cannot be sure that A childrens
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+     * A and B in the same way and because we cannot be sure that A childrens
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
      * will not change a bit by break(s) we have to break both A and B  at once
      * i.e. in one Vect_line_intersection () call.
      */
@@ -1001,7 +1035,19 @@ int Vect_line_intersection(struct line_pnts *APoints, struct line_pnts *BPoints,
          * and next AB -----+----+--- A     0/4, 0/5, 1/4, 1/5 - OK
          *              \___|
          *                B
+<<<<<<< HEAD
          *  This should not inluence that break is always on first segment, see
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+         *  This should not influence that break is always on first segment, see
+=======
+         *  This should not inluence that break is always on first segment, see
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+         *  This should not inluence that break is always on first segment, see
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
          * below (I hope)
          */
         /* TODO: this doesn't find identical with breaks on revious/next */
@@ -1157,7 +1203,19 @@ int Vect_line_intersection(struct line_pnts *APoints, struct line_pnts *BPoints,
                 /* add first points of segments between last and current seg */
                 for (j = last_seg + 1; j <= seg; j++) {
                     G_debug(2, "  segment j = %d", j);
+<<<<<<< HEAD
                     /* skipp vertex identical to last break */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    /* skip vertex identical to last break */
+=======
+                    /* skipp vertex identical to last break */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    /* skipp vertex identical to last break */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                     if ((j == last_seg + 1) && Points->x[j] == last_x &&
                         Points->y[j] == last_y) {
                         G_debug(2, "   -> skip (identical to last break)");
@@ -1232,7 +1290,7 @@ static int cross_found; /* set by find_cross() */
 static int report_all;  /* should all crossings be reported or just first one */
 
 /* break segments (called by rtree search) */
-static int find_cross(int id, const struct RTree_Rect *rect, void *arg)
+static int find_cross(int id, const struct RTree_Rect *rect UNUSED, void *arg)
 {
     double x1, y1, z1, x2, y2, z2;
     int i, j, ret;

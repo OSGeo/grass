@@ -73,14 +73,14 @@ As a general rule in GRASS:
 The module <a href="r.in.gdal.html">r.in.gdal</a> offers a common
 interface for many different raster and satellite image
 formats. Additionally, it also offers options such as on-the-fly
-location creation or extension of the default region to match the
+project creation or extension of the default region to match the
 extent of the imported raster map.  For special cases, other import
 modules are available. Always the full map is imported. Imagery data
 can be group (e.g. channel-wise) with <a href="i.group.html">i.group</a>.
 
 <p>
 For importing scanned maps, the user will need to create a
-x,y-location, scan the map in the desired resolution and save it into
+x,y-project, scan the map in the desired resolution and save it into
 an appropriate raster format (e.g. tiff, jpeg, png, pbm) and then use
 <a href="r.in.gdal.html">r.in.gdal</a> to import it. Based on
 reference points the scanned map can be rectified to obtain geocoded
@@ -94,7 +94,30 @@ data, use <a href="i.band.library.html">i.band.library</a>.
 <a href="r.semantic.label.html">r.semantic.label</a> allows assigning of
 these satellite imagery band references as defined in
 <a href="i.band.library.html">i.band.library</a>. Semantic labels are
+<<<<<<< HEAD
 also used in signature files of imagery classification tools. Therefore,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+also used in signature files of imagery classification tools. Therefore,
+=======
+also used in signature files of imagery classification tools. Therefore, 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+also used in signature files of imagery classification tools. Therefore, 
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+also used in signature files of imagery classification tools. Therefore,
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+also used in signature files of imagery classification tools. Therefore, 
+=======
+also used in signature files of imagery classification tools. Therefore,
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 signature files of one imagery or raster group can be used to classify
 a different group with identical semantic labels.
 
@@ -106,7 +129,30 @@ a different group with identical semantic labels.
 </div>
 
 With <a href="r.support.html">r.support</a> any sort of semantic label
+<<<<<<< HEAD
 the user wishes may be added (i.e., not only those registered in
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+the user wishes may be added (i.e., not only those registered in
+=======
+the user wishes may be added (i.e., not only those registered in 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+the user wishes may be added (i.e., not only those registered in 
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+the user wishes may be added (i.e., not only those registered in
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+the user wishes may be added (i.e., not only those registered in 
+=======
+the user wishes may be added (i.e., not only those registered in
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 <em>i.band.library</em>). Semantic labels are supported also by the
 <a href="temporalintro.html">temporal</a> GRASS modules.
 
@@ -208,7 +254,23 @@ calculated with <a href="r.covar.html">r.covar</a>.
 <p>
 Note - signatures generated for one scene are suitable for classification
 of other scenes as long as they consist of same raster bands
+<<<<<<< HEAD
 (semantic labels match). This comes handy when classifying multiple scenes
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+(semantic labels match). This comes handy when classifying multiple scenes
+=======
+(band references match). This comes handy when classifying multiple scenes
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+(semantic labels match). This comes handy when classifying multiple scenes
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+(semantic labels match). This comes handy when classifying multiple scenes
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 from a single sensor taken in different areas or different times.
 
 <h3>Image fusion</h3>

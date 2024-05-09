@@ -21,7 +21,7 @@
  * <25 Jun 1995> - new site API (jdm)
  * <13 Sep 2000> - released under GPL
  *
- * COPYRIGHT:    (C) 2003-2018 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2023 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -77,6 +77,16 @@ int main(int argc, char *argv[])
     struct bound_box box;
     struct Cell_head window;
     struct GModule *module;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    char xname[GNAME_MAX], xmapset[GNAME_MAX];
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     struct {
         struct Option *input, *field, *cats, *where, *output, *nsites, *zmin,
             *zmax, *zcol, *ztype, *seed;
@@ -223,6 +233,16 @@ int main(int argc, char *argv[])
             Vect_close(&In);
             G_fatal_error(_("No areas in vector map <%s>"), parm.input->answer);
         }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        G_unqualified_name(parm.input->answer, G_mapset(), xname, xmapset);
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     }
 
     /* create new vector map */
@@ -253,10 +273,12 @@ int main(int argc, char *argv[])
         db_init_string(&sql);
 
         /* Create table */
-        sprintf(buf, "create table %s (%s integer", Fi->table, GV_KEY_COLUMN);
+        snprintf(buf, DB_SQL_MAX, "create table %s (%s integer", Fi->table,
+                 GV_KEY_COLUMN);
         db_set_string(&sql, buf);
         if (parm.zcol->answer) {
-            sprintf(buf, ", %s %s", parm.zcol->answer, parm.ztype->answer);
+            snprintf(buf, DB_SQL_MAX, ", %s %s", parm.zcol->answer,
+                     parm.ztype->answer);
             db_append_string(&sql, buf);
         }
         if (parm.input->answer && field > 0) {
@@ -286,9 +308,9 @@ int main(int argc, char *argv[])
             ncols = db_get_table_number_of_columns(table);
             for (icol = 0; icol < ncols; icol++) {
                 col = db_get_table_column(table, icol);
-                sprintf(buf, ",%s_%s %s", parm.input->answer,
-                        db_get_column_name(col),
-                        db_sqltype_name(db_get_column_sqltype(col)));
+                snprintf(buf, DB_SQL_MAX, ",%s_%s %s", xname,
+                         db_get_column_name(col),
+                         db_sqltype_name(db_get_column_sqltype(col)));
                 db_append_string(&sql, buf);
             }
         }
@@ -359,7 +381,30 @@ int main(int argc, char *argv[])
 
         count = 0;
 
+<<<<<<< HEAD
         for (i = 1; i <= (unsigned int)nareas; i++) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for (i = 1; i <= (unsigned int)nareas; i++) {
+=======
+        for (i = 1; i <= nareas; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        for (i = 1; i <= nareas; i++) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        for (i = 1; i <= (unsigned int)nareas; i++) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+        for (i = 1; i <= nareas; i++) {
+=======
+        for (i = 1; i <= (unsigned int)nareas; i++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
             if (!Vect_get_area_centroid(&In, i))
                 continue;
@@ -481,7 +526,30 @@ int main(int argc, char *argv[])
             cat_area = -1;
             if (field > 0) {
                 if (cat_list) {
+<<<<<<< HEAD
                     for (i = 0; i < (unsigned int)Cats->n_cats; i++) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    for (i = 0; i < (unsigned int)Cats->n_cats; i++) {
+=======
+                    for (i = 0; i < Cats->n_cats; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    for (i = 0; i < Cats->n_cats; i++) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    for (i = 0; i < (unsigned int)Cats->n_cats; i++) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+                    for (i = 0; i < Cats->n_cats; i++) {
+=======
+                    for (i = 0; i < (unsigned int)Cats->n_cats; i++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                         if (Cats->field[i] == field &&
                             Vect_cat_in_cat_list(Cats->cat[i], cat_list)) {
                             cat_area = Cats->cat[i];
@@ -530,20 +598,31 @@ int main(int argc, char *argv[])
                     Vect_append_point(Points, x, y, 0.0);
 
                 if (!notable) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    snprintf(buf, DB_SQL_MAX, "insert into %s (%s", Fi->table,
+                             Fi->key);
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                     sprintf(buf, "insert into %s (%s", Fi->table, Fi->key);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                     db_set_string(&sql, buf);
                     if (parm.zcol->answer) {
-                        sprintf(buf, ", %s", parm.zcol->answer);
+                        snprintf(buf, DB_SQL_MAX, ", %s", parm.zcol->answer);
                         db_append_string(&sql, buf);
                     }
-                    sprintf(buf, ") values ( %d", cat);
+                    snprintf(buf, DB_SQL_MAX, ") values ( %d", cat);
                     db_append_string(&sql, buf);
                     if (parm.zcol->answer) {
                         /* Round random value if column is integer type */
                         if (usefloat)
-                            sprintf(buf, ", %f", z);
+                            snprintf(buf, DB_SQL_MAX, ", %f", z);
                         else
-                            sprintf(buf, ", %.0f", z);
+                            snprintf(buf, DB_SQL_MAX, ", %.0f", z);
                         db_append_string(&sql, buf);
                     }
                     db_append_string(&sql, ")");
@@ -685,20 +764,31 @@ int main(int argc, char *argv[])
                     Vect_reset_cats(Cats);
                 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                snprintf(buf, DB_SQL_MAX, "insert into %s (%s", Fi->table,
+                         Fi->key);
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 sprintf(buf, "insert into %s (%s", Fi->table, Fi->key);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 db_set_string(&sql, buf);
                 if (parm.zcol->answer) {
-                    sprintf(buf, ", %s", parm.zcol->answer);
+                    snprintf(buf, DB_SQL_MAX, ", %s", parm.zcol->answer);
                     db_append_string(&sql, buf);
                 }
-                sprintf(buf, ") values ( %ld", i + 1);
+                snprintf(buf, DB_SQL_MAX, ") values ( %ld", i + 1);
                 db_append_string(&sql, buf);
                 if (parm.zcol->answer) {
                     /* Round random value if column is integer type */
                     if (usefloat)
-                        sprintf(buf, ", %f", z);
+                        snprintf(buf, DB_SQL_MAX, ", %f", z);
                     else
-                        sprintf(buf, ", %.0f", z);
+                        snprintf(buf, DB_SQL_MAX, ", %.0f", z);
                     db_append_string(&sql, buf);
                 }
                 db_append_string(&sql, ")");
@@ -726,7 +816,7 @@ int main(int argc, char *argv[])
 
         db_init_string(&value_str);
         db_init_string(&update_str);
-        sprintf(buf, "select * from %s", Fi_input->table);
+        snprintf(buf, DB_SQL_MAX, "select * from %s", Fi_input->table);
         db_set_string(&sql, buf);
         if (db_open_select_cursor(driver_input, &sql, &cursor, DB_SEQUENTIAL) !=
             DB_OK)
@@ -742,7 +832,7 @@ int main(int argc, char *argv[])
                 break;
             }
 
-            sprintf(buf, "update %s set ", Fi->table);
+            snprintf(buf, DB_SQL_MAX, "update %s set ", Fi->table);
             db_set_string(&update_str, buf);
             for (icol = 0; icol < ncols; icol++) {
                 column = db_get_table_column(table, icol);
@@ -753,20 +843,22 @@ int main(int argc, char *argv[])
 
                 if (icol > 0)
                     db_append_string(&update_str, ", ");
-                sprintf(buf, "%s_%s = ", parm.input->answer, column_name);
+                snprintf(buf, DB_SQL_MAX, "%s_%s = ", xname, column_name);
                 db_append_string(&update_str, buf);
                 ctype = db_sqltype_to_Ctype(db_get_column_sqltype(column));
                 db_convert_value_to_string(value, ctype, &value_str);
                 if (ctype == DB_C_TYPE_INT || ctype == DB_C_TYPE_DOUBLE)
-                    sprintf(buf, "%s", db_get_string(&value_str));
+                    snprintf(buf, DB_SQL_MAX, "%s", db_get_string(&value_str));
                 else
-                    sprintf(buf, "'%s'", db_get_string(&value_str));
+                    snprintf(buf, DB_SQL_MAX, "'%s'",
+                             db_get_string(&value_str));
                 db_append_string(&update_str, buf);
             }
             for (i = 0; i < total_n; i++) {
                 if (cat_area == cats_array[i].val) {
                     db_copy_string(&sql, &update_str);
-                    sprintf(buf, " where %s = %d", Fi->key, cats_array[i].cat);
+                    snprintf(buf, DB_SQL_MAX, " where %s = %d", Fi->key,
+                             cats_array[i].cat);
                     db_append_string(&sql, buf);
                     G_debug(3, "%s", db_get_string(&sql));
                     if (db_execute_immediate(driver, &sql) != DB_OK) {

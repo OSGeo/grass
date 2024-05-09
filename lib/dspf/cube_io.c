@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <stdlib.h>
 #include <grass/gis.h>
 #include "viz.h"
@@ -197,14 +198,38 @@ int read_cube(Cube_data *Cube, file_info *headfax)
     size |= inchar;
 
     if (0 >= (ret = my_fread((char *)Buffer, 1, size, fp))) {
+<<<<<<< HEAD
         fprintf(stderr, "Error reading display file offset %" PRI_OFF_T "\n",
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        fprintf(stderr, "Error reading display file offset %" PRId64 "\n",
+=======
+        fprintf(stderr, "Error reading display file offset %" PRI_OFF_T "\n",
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        fprintf(stderr, "Error reading display file offset %" PRI_OFF_T "\n",
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 G_ftell(fp));
         return (-1);
     }
 
     if (ret != size) {
         fprintf(stderr,
+<<<<<<< HEAD
                 "Error (size) reading display file offset %" PRI_OFF_T "\n",
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                "Error (size) reading display file offset %" PRId64 "\n",
+=======
+                "Error (size) reading display file offset %" PRI_OFF_T "\n",
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                "Error (size) reading display file offset %" PRI_OFF_T "\n",
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 G_ftell(fp));
         return (-1);
     }

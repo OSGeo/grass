@@ -140,7 +140,30 @@ void *Rast3d_open_cell_old(const char *name, const char *mapset,
         }
 
         /* if our long is to short to store offsets we can't read the file */
+<<<<<<< HEAD
         if (map->indexNbytesUsed > (int)sizeof(long))
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (map->indexNbytesUsed > (int)sizeof(long))
+=======
+        if (map->indexNbytesUsed > sizeof(long))
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (map->indexNbytesUsed > sizeof(long))
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (map->indexNbytesUsed > (int)sizeof(long))
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+        if (map->indexNbytesUsed > sizeof(long))
+=======
+        if (map->indexNbytesUsed > (int)sizeof(long))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
             Rast3d_fatal_error(
                 _("Rast3d_open_cell_old: index does not fit into long"));
 

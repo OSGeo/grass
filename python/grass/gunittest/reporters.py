@@ -14,7 +14,6 @@ import datetime
 import xml.sax.saxutils as saxutils
 import xml.etree.ElementTree as et
 import subprocess
-import sys
 import collections
 import re
 from collections.abc import Iterable
@@ -23,10 +22,7 @@ from .utils import ensure_dir
 from .checkers import text_to_keyvalue
 
 
-if sys.version_info[0] == 2:
-    from StringIO import StringIO
-else:
-    from io import StringIO
+from io import StringIO
 
 
 # TODO: change text_to_keyvalue to same sep as here
@@ -67,13 +63,13 @@ def replace_in_file(file_path, pattern, repl):
     os.rename(tmp_file_path, file_path)
 
 
-class NoopFileAnonymizer(object):
+class NoopFileAnonymizer:
     def anonymize(self, filenames):
         pass
 
 
 # TODO: why not remove GISDBASE by default?
-class FileAnonymizer(object):
+class FileAnonymizer:
     def __init__(self, paths_to_remove, remove_gisbase=True, remove_gisdbase=False):
         self._paths_to_remove = []
         if remove_gisbase:
@@ -234,7 +230,7 @@ def get_svn_info():
 
 
 def years_ago(date, years):
-    # dateutil relative delte would be better but this is more portable
+    # dateutil relative date would be better but this is more portable
     return date - datetime.timedelta(weeks=years * 52)
 
 
@@ -318,7 +314,7 @@ def get_html_test_authors_table(directory, tests_authors):
     return test_authors
 
 
-class GrassTestFilesMultiReporter(object):
+class GrassTestFilesMultiReporter:
     """Interface to multiple repoter objects
 
     For start and finish of the tests and of a test of one file,
@@ -335,7 +331,7 @@ class GrassTestFilesMultiReporter(object):
     def start(self, results_dir):
         # TODO: no directory cleaning (self.clean_before)? now cleaned by caller
         # TODO: perhaps only those whoe need it should do it (even multiple times)
-        # and there is also the delet problem
+        # and there is also the delete problem
         ensure_dir(os.path.abspath(results_dir))
         for reporter in self.reporters:
             try:
@@ -385,7 +381,7 @@ class GrassTestFilesMultiReporter(object):
         raise AttributeError
 
 
-class GrassTestFilesCountingReporter(object):
+class GrassTestFilesCountingReporter:
     def __init__(self):
         self.test_files = None
         self.files_fail = None
@@ -557,17 +553,16 @@ def success_to_html_percent(total, successes):
 
 
 class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
-
     unknown_number = UNKNOWN_NUMBER_HTML
 
     def __init__(self, file_anonymizer, main_page_name="index.html"):
-        super(GrassTestFilesHtmlReporter, self).__init__()
+        super().__init__()
         self.main_index = None
         self._file_anonymizer = file_anonymizer
         self._main_page_name = main_page_name
 
     def start(self, results_dir):
-        super(GrassTestFilesHtmlReporter, self).start(results_dir)
+        super().start(results_dir)
         # having all variables public although not really part of API
         main_page_name = os.path.join(results_dir, self._main_page_name)
         self.main_index = open(main_page_name, "w")
@@ -611,7 +606,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         )
 
     def finish(self):
-        super(GrassTestFilesHtmlReporter, self).finish()
+        super().finish()
 
         pass_per = success_to_html_percent(total=self.total, successes=self.successes)
         tfoot = (
@@ -662,13 +657,25 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         self.main_index.close()
 
     def start_file_test(self, module):
-        super(GrassTestFilesHtmlReporter, self).start_file_test(module)
+        super().start_file_test(module)
         self.main_index.flush()  # to get previous lines to the report
 
     def end_file_test(
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
     ):
+<<<<<<< HEAD
         super(GrassTestFilesHtmlReporter, self).end_file_test(
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        super().end_file_test(
+=======
+        super(GrassTestFilesHtmlReporter, self).end_file_test(
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        super(GrassTestFilesHtmlReporter, self).end_file_test(
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             module=module,
             cwd=cwd,
             returncode=returncode,
@@ -751,7 +758,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         )
 
         # TODO: include optionally hyper link to test suite
-        # TODO: file_path is reconstucted in a naive way
+        # TODO: file_path is reconstructed in a naive way
         # file_path should be stored in the module/test file object and just used here
         summary_section = (
             "<table><tbody>"
@@ -838,12 +845,12 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
 # allows overwriting what was collected
 class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
     def __init__(self, info=None):
-        super(GrassTestFilesKeyValueReporter, self).__init__()
+        super().__init__()
         self.result_dir = None
         self._info = info
 
     def start(self, results_dir):
-        super(GrassTestFilesKeyValueReporter, self).start(results_dir)
+        super().start(results_dir)
         # having all variables public although not really part of API
         self.result_dir = results_dir
 
@@ -866,7 +873,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
         self.test_files_authors = set()
 
     def finish(self):
-        super(GrassTestFilesKeyValueReporter, self).finish()
+        super().finish()
 
         # this shoul be moved to some additional meta passed in constructor
         svn_info = get_svn_info()
@@ -919,7 +926,19 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
     def end_file_test(
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
     ):
+<<<<<<< HEAD
         super(GrassTestFilesKeyValueReporter, self).end_file_test(
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        super().end_file_test(
+=======
+        super(GrassTestFilesKeyValueReporter, self).end_file_test(
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        super(GrassTestFilesKeyValueReporter, self).end_file_test(
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             module=module,
             cwd=cwd,
             returncode=returncode,
@@ -979,14 +998,14 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
 
 class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
     def __init__(self, stream):
-        super(GrassTestFilesTextReporter, self).__init__()
+        super().__init__()
         self._stream = stream
 
     def start(self, results_dir):
-        super(GrassTestFilesTextReporter, self).start(results_dir)
+        super().start(results_dir)
 
     def finish(self):
-        super(GrassTestFilesTextReporter, self).finish()
+        super().finish()
 
         def format_percentage(percentage):
             if percentage is not None:
@@ -1010,7 +1029,17 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
         self._stream.write(summary_sentence)
 
     def start_file_test(self, module):
+<<<<<<< HEAD
+        super().start_file_test(module)
+=======
         super(GrassTestFilesTextReporter, self).start_file_test(module)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+>>>>>>> osgeo-main
         self._stream.write("Running {file}...\n".format(file=module.file_path))
         # get the above line and all previous ones to the report
         self._stream.flush()
@@ -1018,7 +1047,19 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
     def end_file_test(
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
     ):
+<<<<<<< HEAD
         super(GrassTestFilesTextReporter, self).end_file_test(
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        super().end_file_test(
+=======
+        super(GrassTestFilesTextReporter, self).end_file_test(
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        super(GrassTestFilesTextReporter, self).end_file_test(
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             module=module,
             cwd=cwd,
             returncode=returncode,
@@ -1035,9 +1076,35 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
                 self._stream.write(text.read())
             self._stream.write(width * "=")
             self._stream.write("\n")
+<<<<<<< HEAD
             self._stream.write(f"FAILED {module.file_path}")
             if timed_out:
                 self._stream.write(f" - Timeout >{timed_out}s")
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            self._stream.write(f"FAILED {module.file_path}")
+            if timed_out:
+                self._stream.write(f" - Timeout >{timed_out}s")
+=======
+            self._stream.write("FAILED {file}".format(file=module.file_path))
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+            self._stream.write("FAILED {file}".format(file=module.file_path))
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+=======
+            self._stream.write(f"FAILED {module.file_path}")
+            if timed_out:
+                self._stream.write(f" - Timeout >{timed_out}s")
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            self._stream.write(f"FAILED {module.file_path}")
+            if timed_out:
+                self._stream.write(f" - Timeout >{timed_out}s")
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             num_failed = test_summary.get("failures", 0)
             num_failed += test_summary.get("errors", 0)
             if num_failed:
@@ -1055,7 +1122,7 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
 # TODO: document: do not use it for two reports, it accumulates the results
 # TODO: add also keyvalue summary generation?
 # wouldn't this conflict with collecting data from report afterwards?
-class TestsuiteDirReporter(object):
+class TestsuiteDirReporter:
     def __init__(
         self,
         main_page_name,
@@ -1239,7 +1306,8 @@ class TestsuiteDirReporter(object):
         return row
 
     def report_for_dirs(self, root, directories):
-        # TODO: this will need chanages according to potential changes in absolute/relative paths
+        # TODO: this will need changes according to potential changes in
+        # absolute/relative paths
 
         page_name = os.path.join(root, self.main_page_name)
         page = open(page_name, "w")

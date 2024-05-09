@@ -83,7 +83,19 @@ static void getParams(char **input, char **output, int *convertNull,
 /*---------------------------------------------------------------------------*/
 
 void convert(char *openFile, RASTER3D_Region *region, int convertNull,
+<<<<<<< HEAD
              double nullValue)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+             double nullValue UNUSED)
+=======
+             double nullValue)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+             double nullValue)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     v5dstruct v5d;
     int time, var;
@@ -138,7 +150,30 @@ void convert(char *openFile, RASTER3D_Region *region, int convertNull,
                 for (y = 0; y < region->rows; y++) {
                     for (x = 0; x < region->cols; x++) {
                         value = data1[cnt++];
+<<<<<<< HEAD
                         if (convertNull && IS_MISSING(value))
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                        if (convertNull && IS_MISSING(value))
+=======
+                        if (convertNull && (value == MISSING))
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                        if (convertNull && (value == MISSING))
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                        if (convertNull && IS_MISSING(value))
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+                        if (convertNull && (value == MISSING))
+=======
+                        if (convertNull && IS_MISSING(value))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                             Rast3d_set_null_value(&value, 1, FCELL_TYPE);
                         Rast3d_put_float(map, x, y, z, value);
                     }

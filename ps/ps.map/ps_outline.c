@@ -38,7 +38,17 @@ static RASTER_MAP_TYPE map_type;
 
 int ps_outline(void)
 {
+<<<<<<< HEAD
+    /* let user know what's happening */
+=======
     /* let user know what's happenning */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     G_message(_("Outlining areas in raster map <%s in %s> ..."), PS.cell_name,
               PS.cell_mapset);
 

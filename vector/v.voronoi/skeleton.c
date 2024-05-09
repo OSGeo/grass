@@ -528,7 +528,30 @@ int tie_up(void)
                                  IPoints[i]);
         }
 
+<<<<<<< HEAD
         distmin = INFINITY;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        distmin = INFINITY;
+=======
+        distmin = 1. / 0.; /* +inf */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        distmin = 1. / 0.; /* +inf */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        distmin = INFINITY;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        distmin = 1. / 0.; /* +inf */
+=======
+        distmin = INFINITY;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         xmin = x;
         ymin = y;
 

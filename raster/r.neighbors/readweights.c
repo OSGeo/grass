@@ -27,6 +27,7 @@ void read_weights(const char *filename)
 }
 
 double gaussian(double factor, double squared_distance)
+<<<<<<< HEAD
 {
     double sigma2 = factor * factor;
 
@@ -49,7 +50,61 @@ void compute_weights(const char *function_type, double factor)
     else if (!strcmp(function_type, "exponential")) {
         weight = exponential;
     }
+=======
+{
+    double sigma2 = factor * factor;
+>>>>>>> osgeo-main
 
+    return exp(-squared_distance / (2 * sigma2)) / (2 * M_PI * sigma2);
+}
+
+double exponential(double factor, double squared_distance)
+{
+    return exp(factor * sqrt(squared_distance));
+}
+
+void compute_weights(const char *function_type, double factor)
+{
+    int i, j;
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    double (*weight)(double, double);
+=======
+    double (*weight) (double, double);
+>>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
+=======
+    double (*weight) (double, double);
+>>>>>>> 1dffc5dfd4 (r.report: add default units, change to full unit names (#1666))
+=======
+    double (*weight)(double, double);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    double (*weight)(double, double);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+
+    if (!strcmp(function_type, "gaussian")) {
+        weight = gaussian;
+    }
+    else if (!strcmp(function_type, "exponential")) {
+        weight = exponential;
+    }
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
+=======
+
+>>>>>>> 1dffc5dfd4 (r.report: add default units, change to full unit names (#1666))
+
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     ncb.weights = G_malloc(ncb.nsize * sizeof(DCELL *));
     for (i = 0; i < ncb.nsize; i++)
         ncb.weights[i] = G_malloc(ncb.nsize * sizeof(DCELL));

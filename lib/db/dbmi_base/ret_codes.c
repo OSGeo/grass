@@ -23,7 +23,17 @@
 
    \return DB_OK
  */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int db__send_success(void)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 int db__send_success()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     DB_SEND_INT(DB_OK);
     return DB_OK;
@@ -34,7 +44,17 @@ int db__send_success()
 
    \return DB_OK
  */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int db__send_failure(void)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 int db__send_failure()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     DB_SEND_INT(DB_FAILED);
     DB_SEND_C_STRING(db_get_error_msg());

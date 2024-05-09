@@ -59,19 +59,50 @@ int main(int argc, char *argv[])
     int formats;
     const char *epsg = NULL;
 
+    /* We don't call G_gisinit() here because it validates the
+     * mapset, whereas this module may legitimately be used
+     * (to create a new location) when none exists. */
     G_set_program_name(argv[0]);
+<<<<<<< HEAD
     G_no_gisinit(); /* We don't call G_gisinit() here because it validates the
                      * mapset, whereas this module may legitmately be used
                      * (to create a new location) when none exists */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    G_no_gisinit();
+=======
+    G_no_gisinit(); /* We don't call G_gisinit() here because it validates the
+                     * mapset, whereas this module may legitmately be used
+                     * (to create a new location) when none exists */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    G_no_gisinit(); /* We don't call G_gisinit() here because it validates the
+                     * mapset, whereas this module may legitmately be used
+                     * (to create a new location) when none exists */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("projection"));
-    G_add_keyword(_("create location"));
+    G_add_keyword(_("create project"));
 #ifdef HAVE_OGR
     module->label = _("Prints or modifies GRASS projection information files "
                       "(in various co-ordinate system descriptions).");
+<<<<<<< HEAD
     module->description = _("Can also be used to create new GRASS locations.");
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    module->description = _("Can also be used to create new GRASS projects.");
+=======
+    module->description = _("Can also be used to create new GRASS locations.");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    module->description = _("Can also be used to create new GRASS locations.");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #else
     module->description =
         _("Prints and manipulates GRASS projection information files.");
@@ -104,12 +135,40 @@ int main(int argc, char *argv[])
     dontprettify = G_define_flag();
     dontprettify->key = 'f';
     dontprettify->guisection = _("Print");
+<<<<<<< HEAD
     dontprettify->description =
         _("Print 'flat' output with no linebreaks (applies to "
 #ifdef HAVE_OGR
           "WKT and "
 #endif
           "PROJ.4 output)");
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+#ifdef HAVE_OGR
+    dontprettify->description = _("Print 'flat' output with no linebreaks "
+                                  "(applies to WKT and PROJ.4 output)");
+#else
+    dontprettify->description =
+        _("Print 'flat' output with no linebreaks (applies to PROJ.4 output)");
+#endif
+=======
+    dontprettify->description =
+        _("Print 'flat' output with no linebreaks (applies to "
+#ifdef HAVE_OGR
+          "WKT and "
+#endif
+          "PROJ.4 output)");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    dontprettify->description =
+        _("Print 'flat' output with no linebreaks (applies to "
+#ifdef HAVE_OGR
+          "WKT and "
+#endif
+          "PROJ.4 output)");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 #ifdef HAVE_OGR
     printwkt = G_define_flag();
@@ -211,15 +270,15 @@ int main(int argc, char *argv[])
     create = G_define_flag();
     create->key = 'c';
     create->guisection = _("Modify");
-    create->description = _("Modify current location projection files");
+    create->description = _("Modify current project's projection files");
 
     location = G_define_option();
-    location->key = "location";
+    location->key = "project";
     location->type = TYPE_STRING;
     location->key_desc = "name";
     location->required = NO;
     location->guisection = _("Create");
-    location->description = _("Name of new location to create");
+    location->description = _("Name of new project (location) to create");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -310,6 +369,27 @@ int main(int argc, char *argv[])
                (printwkt->answer ? 1 : 0) +
 #endif
                (create->answer ? 1 : 0));
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (formats > 1) {
+#ifdef HAVE_OGR
+        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c, -%c"
+                        " or -%c flags may be specified"),
+                      printinfo->key, shellinfo->key, datuminfo->key,
+                      printproj4->key, printwkt->key, create->key);
+#else
+        G_fatal_error(_("Only one of -%c, -%c, -%c, -%c"
+                        " or -%c flags may be specified"),
+                      printinfo->key, shellinfo->key, datuminfo->key,
+                      printproj4->key, create->key);
+#endif
+    }
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     if (formats > 1)
         G_fatal_error(_("Only one of -%c, -%c, -%c, -%c"
 #ifdef HAVE_OGR
@@ -323,6 +403,7 @@ int main(int argc, char *argv[])
 #endif
                       create->key);
 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     if (printinfo->answer || shellinfo->answer)
         print_projinfo(shellinfo->answer);
     else if (datuminfo->answer)

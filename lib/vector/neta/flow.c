@@ -167,7 +167,7 @@ int NetA_flow(dglGraph_s *graph, struct ilist *source_list,
 
    \param graph input graph
    \param source_list list of sources
-   \param sink_list list of sinks
+   \param sink_list list of sinks (unused)
    \param flow
    \param[out] cut list of edges (cut)
 
@@ -175,7 +175,19 @@ int NetA_flow(dglGraph_s *graph, struct ilist *source_list,
    \return -1 on failure
  */
 int NetA_min_cut(dglGraph_s *graph, struct ilist *source_list,
+<<<<<<< HEAD
                  struct ilist *sink_list, int *flow, struct ilist *cut)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                 struct ilist *sink_list UNUSED, int *flow, struct ilist *cut)
+=======
+                 struct ilist *sink_list, int *flow, struct ilist *cut)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                 struct ilist *sink_list, int *flow, struct ilist *cut)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     int nnodes, i;
     dglEdgesetTraverser_s et;

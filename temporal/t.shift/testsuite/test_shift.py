@@ -7,6 +7,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import os
 import grass.pygrass.modules as pymod
 import grass.temporal as tgis
@@ -54,7 +55,6 @@ class TestShiftAbsoluteSTRDS(TestCase):
         cls.runModule("t.remove", flags="df", type="strds", inputs="A")
 
     def test_1(self):
-
         A = tgis.open_old_stds("A", type="strds")
         A.select()
         self.assertEqual(A.get_map_time(), "point")
@@ -159,7 +159,6 @@ class TestShiftRelativeSTRDS(TestCase):
         cls.runModule("t.remove", flags="df", type="strds", inputs="A")
 
     def test_1(self):
-
         A = tgis.open_old_stds("A", type="strds")
         A.select()
         self.assertEqual(A.get_map_time(), "point")
@@ -213,7 +212,6 @@ class TestShiftAbsoluteSTR3DS(TestCase):
         cls.runModule("t.remove", flags="df", type="str3ds", inputs="A")
 
     def test_1(self):
-
         A = tgis.open_old_stds("A", type="str3ds")
         A.select()
         self.assertEqual(A.get_map_time(), "point")
@@ -317,7 +315,6 @@ class TestShiftRelativeSTR3DS(TestCase):
         cls.runModule("t.remove", flags="df", type="str3ds", inputs="A")
 
     def test_1(self):
-
         A = tgis.open_old_stds("A", type="str3ds")
         A.select()
         self.assertEqual(A.get_map_time(), "point")
@@ -372,7 +369,6 @@ class TestShiftAbsoluteSTVDS(TestCase):
         cls.runModule("t.remove", flags="df", type="stvds", inputs="A")
 
     def test_1(self):
-
         A = tgis.open_old_stds("A", type="stvds")
         A.select()
         self.assertEqual(A.get_map_time(), "interval")
@@ -478,7 +474,6 @@ class TestShiftRelativeSTVDS(TestCase):
         cls.runModule("t.remove", flags="df", type="stvds", inputs="A")
 
     def test_1(self):
-
         A = tgis.open_old_stds("A", type="stvds")
         A.select()
         self.assertEqual(A.get_map_time(), "interval")

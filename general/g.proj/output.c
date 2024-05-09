@@ -22,6 +22,10 @@
 #include <grass/glocale.h>
 #include <grass/config.h>
 
+#ifdef HAVE_OGR
+#include <cpl_csv.h>
+#endif
+
 #include "local_proto.h"
 
 static int check_xy(int shell);
@@ -274,7 +278,19 @@ void print_wkt(int esristyle, int dontprettify)
 
     if (outwkt != NULL) {
         fprintf(stdout, "%s\n", outwkt);
+<<<<<<< HEAD
         G_free(outwkt);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        CPLFree(outwkt);
+=======
+        G_free(outwkt);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_free(outwkt);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     }
     else
         G_warning(_("Unable to convert to WKT"));

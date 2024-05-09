@@ -20,6 +20,8 @@
  * best view with tabstop=4
  */
 
+#include <grass/gis.h>
+
 /*
  * Build the depth-first spanning tree of 'pgraphIn' into 'pgraphOut'
  * - pgraphOut must have been previously initialized by the caller and is
@@ -220,14 +222,30 @@ dfs_error:
 
 /*
  * Use a edge prioritized, tree growing scheme (aka Prim algorithm) in order to
- * be appliable to both undirected graphs (minimum spanning tree - MST) and
+ * be applicable to both undirected graphs (minimum spanning tree - MST) and
  * digraphs (minimum arborescense tree - MAT)
  * The vertex argument is ignored in MST (when algorithm is applied to a
  * version 3 undirected graph).
  */
 int DGL_SPAN_MINIMUM_SPANNING_FUNC(dglGraph_s *pgraphIn, dglGraph_s *pgraphOut,
+<<<<<<< HEAD
                                    dglInt32_t nVertex, dglSpanClip_fn fnClip,
                                    void *pvClipArg)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                                   dglInt32_t nVertex,
+                                   dglSpanClip_fn fnClip UNUSED,
+                                   void *pvClipArg UNUSED)
+=======
+                                   dglInt32_t nVertex, dglSpanClip_fn fnClip,
+                                   void *pvClipArg)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                                   dglInt32_t nVertex, dglSpanClip_fn fnClip,
+                                   void *pvClipArg)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     dglInt32_t *pHead, *pTail, *pEdgeset, *pEdge;
     dglHeap_s FrontEdgeHeap;

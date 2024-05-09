@@ -6,6 +6,10 @@ panes for display management and access to command console.
 
 Classes:
  - frame::GMFrame
+<<<<<<< HEAD
+=======
+ - frame::SingleWindowAuiManager
+>>>>>>> osgeo-main
 
 (C) 2006-2021 by the GRASS Development Team
 
@@ -47,9 +51,27 @@ from grass.script.utils import decode
 from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings, GetDisplayVectSettings
 from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype, get_shell_pid
+<<<<<<< HEAD
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
+=======
+from core.watchdog import (
+    EVT_UPDATE_MAPSET,
+    EVT_CURRENT_MAPSET_CHANGED,
+    MapsetWatchdog,
+)
+from gui_core.preferences import MapsetAccess, PreferencesDialog
+from lmgr.layertree import LayerTree, LMIcons
+from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
+<<<<<<< HEAD
+<<<<<<< HEAD
+from main_window.notebook import MainNotebook
+=======
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
+=======
+>>>>>>> 5871ca876b (wxGUI/Single-Window GUI: arrangement of basic widgets (#1621))
+>>>>>>> osgeo-main
 from gui_core.widgets import GNotebook
 from core.gconsole import GConsole, EVT_IGNORED_CMD_RUN
 from core.giface import Notification
@@ -62,20 +84,43 @@ from gui_core.dialogs import (
     MapLayersDialog,
     QuitDialog,
 )
+<<<<<<< HEAD
 from gui_core.menu import SearchModuleWindow
 from gui_core.menu import Menu as GMenu
+=======
+from gui_core.menu import SearchModuleWindow, Menu as GMenu
+>>>>>>> osgeo-main
 from core.debug import Debug
 from lmgr.toolbars import LMWorkspaceToolbar, LMToolsToolbar
 from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
 from lmgr.statusbar import SbMain
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+from lmgr.giface import LayerManagerGrassInterface
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 from lmgr.giface import (
     LayerManagerGrassInterface,
     LayerManagerGrassInterfaceForMapDisplay,
 )
+<<<<<<< HEAD
 from mapdisp.frame import MapPanel
 from datacatalog.catalog import DataCatalog
+=======
+<<<<<<< HEAD
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+from mapdisp.frame import MapPanel
+from datacatalog.catalog import DataCatalog
+from history.browser import HistoryBrowser
+>>>>>>> osgeo-main
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog, SimpleTabArt
 from startup.guiutils import (
@@ -85,6 +130,22 @@ from startup.guiutils import (
     create_location_interactively,
 )
 from grass.grassdb.checks import is_first_time_user
+<<<<<<< HEAD
+=======
+from grass.grassdb.history import Status
+
+
+class SingleWindowAuiManager(aui.AuiManager):
+    """Custom AuiManager class which override OnClose window
+    close event handler method to prevent prematurely uninitialize
+    manager
+
+    https://github.com/wxWidgets/Phoenix/pull/2460
+    """
+
+    def OnClose(self, event):
+        event.Skip()
+>>>>>>> osgeo-main
 
 
 class GMFrame(wx.Frame):
@@ -97,7 +158,19 @@ class GMFrame(wx.Frame):
         id=wx.ID_ANY,
         title=None,
         workspace=None,
+<<<<<<< HEAD
         size=wx.Display().GetGeometry().GetSize(),
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        size=wx.GetClientDisplayRect().GetSize(),
+=======
+        size=wx.Display().GetGeometry().GetSize(),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        size=wx.Display().GetGeometry().GetSize(),
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         style=wx.DEFAULT_FRAME_STYLE,
         **kwargs,
     ):
@@ -147,7 +220,19 @@ class GMFrame(wx.Frame):
         self._menuTreeBuilder = LayerManagerMenuData(message_handler=add_menu_error)
         # the search tree and command console
         self._moduleTreeBuilder = LayerManagerModuleTree(message_handler=add_menu_error)
+<<<<<<< HEAD
         self._auimgr = aui.AuiManager(self)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        self._auimgr = SingleWindowAuiManager(self)
+=======
+        self._auimgr = aui.AuiManager(self)
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
+=======
+        self._auimgr = aui.AuiManager(self)
+>>>>>>> 5871ca876b (wxGUI/Single-Window GUI: arrangement of basic widgets (#1621))
+>>>>>>> osgeo-main
 
         # list of open dialogs
         self.dialogs = dict()
@@ -156,6 +241,13 @@ class GMFrame(wx.Frame):
         self.dialogs["atm"] = list()
 
         # set pane sizes according to the full screen size of the primary monitor
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
         self.PANE_BEST_SIZE = tuple(t // 5 for t in self.size)
         self.PANE_MIN_SIZE = tuple(t // 8 for t in self.size)
 
@@ -164,6 +256,47 @@ class GMFrame(wx.Frame):
         self.workspace_manager.CreateRecentFilesMenu(
             menu=self.menubar,
         )
+<<<<<<< HEAD
+=======
+=======
+        size = wx.Display().GetGeometry().GetSize()
+        self.PANE_BEST_SIZE = tuple(t / 3 for t in size)
+        self.PANE_MIN_SIZE = tuple(t / 5 for t in size)
+
+        # create widgets and build panes
+        self.CreateMenuBar()
+        self.CreateStatusBar(number=1)
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
+=======
+        size = wx.Display().GetGeometry().GetSize()
+        self.PANE_BEST_SIZE = tuple(t / 5 for t in size)
+        self.PANE_MIN_SIZE = tuple(t / 10 for t in size)
+
+        # create widgets and build panes
+        self.CreateMenuBar()
+        self.CreateStatusBar(number=1)
+>>>>>>> 5871ca876b (wxGUI/Single-Window GUI: arrangement of basic widgets (#1621))
+=======
+        self.PANE_BEST_SIZE = tuple(t // 5 for t in self.size)
+        self.PANE_MIN_SIZE = tuple(t // 8 for t in self.size)
+
+        # create widgets and build panes
+        self.CreateMenuBar()
+        self.workspace_manager.CreateRecentFilesMenu(
+            menu=self.menubar,
+        )
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        self.PANE_BEST_SIZE = tuple(t // 5 for t in self.size)
+        self.PANE_MIN_SIZE = tuple(t // 8 for t in self.size)
+
+        # create widgets and build panes
+        self.CreateMenuBar()
+        self.workspace_manager.CreateRecentFilesMenu(
+            menu=self.menubar,
+        )
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         self.BuildPanes()
         self.BindEvents()
 
@@ -173,6 +306,37 @@ class GMFrame(wx.Frame):
 
         # use default window layout ?
         if UserSettings.Get(group="general", key="defWindowPos", subkey="enabled"):
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+            single_window_dim = {
+                "group": "general",
+                "key": "defWindowPos",
+                "subkey": "dimSingleWindow",
+            }
+            dim = UserSettings.Get(**single_window_dim)
+            default_dim = UserSettings.Get(**single_window_dim, settings_type="default")
+
+            if dim != default_dim:
+                try:
+                    x, y, w, h = map(int, dim.split(",")[:4])
+                    client_disp = wx.ClientDisplayRect()
+                    if x == 1:
+                        # Get client display x offset (OS panel)
+                        x = client_disp[0]
+                    if y == 1:
+                        # Get client display y offset (OS panel)
+                        y = client_disp[1]
+                    self.SetPosition((x, y))
+                    self.SetSize((w, h))
+                except Exception:
+                    pass
+            else:
+                self.Maximize(True)
+        else:
+            self.Maximize(True)
+=======
+>>>>>>> osgeo-main
             dim = UserSettings.Get(group="general", key="defWindowPos", subkey="dim")
             try:
                 x, y = map(int, dim.split(",")[0:2])
@@ -197,6 +361,13 @@ class GMFrame(wx.Frame):
             # does center (of screen) make sense for lmgr?
             self.Centre()
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         self.Show()
 
         # load workspace file if requested
@@ -215,6 +386,21 @@ class GMFrame(wx.Frame):
         # redirect stderr to log area
         self._gconsole.Redirect()
 
+<<<<<<< HEAD
+=======
+        #  mapset watchdog
+        self._mapset_watchdog = MapsetWatchdog(
+            elements_dirs=(("raster", "cell"),),
+            evt_handler=self,
+            giface=self._giface,
+        )
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()
+        self.Bind(
+            EVT_UPDATE_MAPSET,
+            lambda evt: self._onMapsetWatchdog(evt.src_path, evt.dest_path),
+        )
+        self.Bind(EVT_CURRENT_MAPSET_CHANGED, self._onMapsetChanged)
+>>>>>>> osgeo-main
         # fix goutput's pane size (required for Mac OSX)`
         self.goutput.SetSashPosition(int(self.GetSize()[1] * 0.8))
 
@@ -227,6 +413,14 @@ class GMFrame(wx.Frame):
 
         self._show_demo_map()
 
+<<<<<<< HEAD
+=======
+    def _repaintLayersPaneMapDisplayToolbar(self):
+        """Repaint Layers pane map display toolbar widget on the wxMac"""
+        if sys.platform == "darwin":
+            wx.CallLater(100, self.notebookLayers.Refresh)
+
+>>>>>>> osgeo-main
     def _setTitle(self):
         """Set frame title"""
         gisenv = grass.gisenv()
@@ -283,10 +477,42 @@ class GMFrame(wx.Frame):
             return self._auimgr.GetPane(name).IsShown()
         return False
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    def SetStatusText(self, *args):
+        """Override SbMain statusbar method"""
+        self.statusbar.SetStatusText(*args)
+
+    def _createMainNotebook(self):
+        """Create Map Display notebook"""
+        # create the notebook off-window to avoid flicker
+        self.mainnotebook = MainNotebook(parent=self)
+
+=======
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
+=======
+>>>>>>> 5871ca876b (wxGUI/Single-Window GUI: arrangement of basic widgets (#1621))
+=======
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     def SetStatusText(self, *args):
         """Overide SbMain statusbar method"""
         self.statusbar.SetStatusText(*args)
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     def _createMapNotebook(self):
         """Create Map Display notebook"""
         # create the notebook off-window to avoid flicker
@@ -312,6 +538,13 @@ class GMFrame(wx.Frame):
             self.OnMapNotebookClose,
         )
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     def _createDataCatalog(self, parent):
         """Initialize Data Catalog widget"""
         self.datacatalog = DataCatalog(parent=parent, giface=self._giface)
@@ -328,6 +561,10 @@ class GMFrame(wx.Frame):
         # bindings
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnCBPageChanged)
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
+<<<<<<< HEAD
+=======
+        self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSED, self.OnCBPageClosed)
+>>>>>>> osgeo-main
 
     def _createSearchModule(self, parent):
         """Initialize Search module widget"""
@@ -350,10 +587,14 @@ class GMFrame(wx.Frame):
         self._gconsole = GConsole(
             guiparent=self,
             giface=self._giface,
+<<<<<<< HEAD
             ignoredCmdPattern=r"^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.import$|"
             "^r.external$|^r.external.out$|"
             "^v.import$|^v.external$|^v.external.out$|"
             "^cd$|^cd .*",
+=======
+            ignoredCmdPattern=globalvar.ignoredCmdPattern,
+>>>>>>> osgeo-main
         )
         # create 'console' widget
         self.goutput = GConsoleWindow(
@@ -377,6 +618,22 @@ class GMFrame(wx.Frame):
 
         self._setCopyingOfSelectedText()
 
+<<<<<<< HEAD
+=======
+    def _createHistoryBrowser(self, parent):
+        """Initialize history browser widget"""
+        if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
+            self.history = HistoryBrowser(parent=parent, giface=self._giface)
+            self.history.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
+            self.history.runIgnoredCmdPattern.connect(
+                lambda cmd: self.RunSpecialCmd(command=cmd),
+            )
+        else:
+            self.history = None
+
+>>>>>>> osgeo-main
     def _createPythonShell(self, parent):
         """Initialize Python shell widget"""
         if not UserSettings.Get(group="manager", key="hideTabs", subkey="pyshell"):
@@ -388,6 +645,17 @@ class GMFrame(wx.Frame):
         else:
             self.pyshell = None
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     def OnNewDisplay(self, event=None):
         """Create new layer tree and map display window instance"""
         self.NewDisplay()
@@ -407,6 +675,14 @@ class GMFrame(wx.Frame):
         self.pg_panel = wx.Panel(
             self.notebookLayers, id=wx.ID_ANY, style=wx.BORDER_NONE
         )
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         # create display toolbar
         dmgrToolbar = DisplayPanelToolbar(guiparent=self.pg_panel, parent=self)
 
@@ -415,6 +691,34 @@ class GMFrame(wx.Frame):
         self.currentPageNum = self.notebookLayers.GetSelection()
         self.notebookLayers.EnsureVisible(self.currentPageNum)
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        def CreateNewMapDisplay(giface, layertree):
+            """Callback function which creates a new Map Display window
+            :param giface: giface for map display
+            :param layertree: layer tree object
+            :return: reference to mapdisplay instance
+            """
+
+            # create Map Display
+            mapdisplay = MapPanel(
+                parent=self.mainnotebook,
+                giface=giface,
+=======
+=======
+        # create display toolbar
+        dmgrToolbar = DisplayPanelToolbar(guiparent=self.pg_panel, parent=self)
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+        self.notebookLayers.AddPage(page=self.pg_panel, text=name, select=True)
+        self.currentPage = self.notebookLayers.GetCurrentPage()
+        self.currentPageNum = self.notebookLayers.GetSelection()
+        self.notebookLayers.EnsureVisible(self.currentPageNum)
+
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         def CreateNewMapDisplay(layertree):
             """Callback function which creates a new Map Display window
             :param layertree: layer tree object
@@ -429,16 +733,47 @@ class GMFrame(wx.Frame):
             mapdisplay = MapPanel(
                 parent=self.mapnotebook,
                 giface=self._gifaceForDisplay,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 id=wx.ID_ANY,
                 tree=layertree,
                 lmgr=self,
                 Map=layertree.Map,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                dockable=True,
+=======
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 title=name,
                 size=globalvar.MAP_WINDOW_SIZE,
             )
             # add map display panel to notebook and make it current
+<<<<<<< HEAD
             self.mapnotebook.AddPage(mapdisplay, name)
             self.mapnotebook.SetSelection(self.currentPageNum)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            self.mainnotebook.AddPage(mapdisplay, name)
+=======
+            self.mapnotebook.AddPage(mapdisplay, name)
+            self.mapnotebook.SetSelection(self.currentPageNum)
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+            self.mapnotebook.AddPage(mapdisplay, name)
+            self.mapnotebook.SetSelection(self.currentPageNum)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
             # set map display properties
             self._setUpMapDisplay(mapdisplay)
@@ -467,12 +802,38 @@ class GMFrame(wx.Frame):
 
         # layout for controls
         cb_boxsizer = wx.BoxSizer(wx.VERTICAL)
+<<<<<<< HEAD
         cb_boxsizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        cb_boxsizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
+=======
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+        cb_boxsizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        cb_boxsizer.Add(dmgrToolbar, proportion=0, flag=wx.EXPAND)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         cb_boxsizer.Add(self.GetLayerTree(), proportion=1, flag=wx.EXPAND, border=1)
         self.currentPage.SetSizer(cb_boxsizer)
         cb_boxsizer.Fit(self.GetLayerTree())
         self.currentPage.Layout()
         self.GetLayerTree().Layout()
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        # Repaint Layers pane map display toolbar widget on the wxMac
+        self._repaintLayersPaneMapDisplayToolbar()
+=======
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
         self.displayIndex += 1
 
@@ -483,24 +844,100 @@ class GMFrame(wx.Frame):
         page = self.currentPage
 
         def CanCloseDisplay(askIfSaveWorkspace):
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             """Callback to check if user wants to close display. Map
             Display index can be different from index in Display tab.
 
             :return dict/None pgnum_dict/None: dict "layers" key represent
                                                map display notebook layers
                                                tree page index and
+<<<<<<< HEAD
                                                "mapnotebook" key represent
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                                               "mainnotebook" key represent
+=======
+                                               "mapnotebook" key represent
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                                               "mapnotebook" key represent
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                                                map display notebook page
                                                index (single window mode)
             """
             pgnum_dict = {}
             pgnum_dict["layers"] = self.notebookLayers.GetPageIndex(page)
+<<<<<<< HEAD
             pgnum_dict["mapnotebook"] = self.mapnotebook.GetPageIndex(mapdisplay)
             name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            pgnum_dict["mainnotebook"] = self.mainnotebook.GetPageIndex(mapdisplay)
+            name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
+=======
+            """Callback to check if user wants to close display"""
+            pgnum = self.notebookLayers.GetPageIndex(page)
+            name = self.notebookLayers.GetPageText(pgnum)
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+            pgnum_dict["mapnotebook"] = self.mapnotebook.GetPageIndex(mapdisplay)
+            name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            pgnum_dict["mapnotebook"] = self.mapnotebook.GetPageIndex(mapdisplay)
+            name = self.notebookLayers.GetPageText(pgnum_dict["layers"])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             caption = _("Close Map Display {}").format(name)
             if not askIfSaveWorkspace or (
                 askIfSaveWorkspace and self.workspace_manager.CanClosePage(caption)
             ):
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                return pgnum_dict
+            return None
+
+        mapdisplay.SetUpPage(self, self.mainnotebook, CanCloseDisplay)
+
+        # bind various events
+        mapdisplay.onFocus.connect(
+            lambda page=self.currentPage: self._onMapDisplayFocus(page),
+=======
+                return pgnum
+=======
+                return pgnum_dict
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+            return None
+
+        mapdisplay.canCloseDisplayCallback = CanCloseDisplay
+
+        # bind various events
+<<<<<<< HEAD
+        mapdisplay.Bind(
+            wx.EVT_ACTIVATE,
+            lambda event, page=self.currentPage: self._onMapDisplayFocus(page),
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+        mapdisplay.onFocus.connect(
+            lambda page=self.currentPage: self._onMapDisplayFocus(page),
+>>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
+=======
+>>>>>>> osgeo-main
                 return pgnum_dict
             return None
 
@@ -509,6 +946,10 @@ class GMFrame(wx.Frame):
         # bind various events
         mapdisplay.onFocus.connect(
             lambda page=self.currentPage: self._onMapDisplayFocus(page),
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         )
 
         mapdisplay.starting3dMode.connect(
@@ -518,7 +959,18 @@ class GMFrame(wx.Frame):
         )
         mapdisplay.starting3dMode.connect(self.AddNvizTools)
         mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
+<<<<<<< HEAD
         mapdisplay.closingDisplay.connect(self._closePageNoEvent)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        mapdisplay.closingDisplay.connect(self._closePageNoEvent)
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+        mapdisplay.closingDisplay.connect(self._closePageNoEvent)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
         # set default properties
         mapdisplay.SetProperties(
@@ -538,6 +990,111 @@ class GMFrame(wx.Frame):
                 group="display", key="showCompExtent", subkey="enabled"
             ),
         )
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+    def BuildPanes(self):
+        """Build panes - toolbars as well as panels"""
+        self._auimgr.SetAutoNotebookTabArt(SimpleTabArt())
+        # initialize all main widgets
+        self.statusbar = SbMain(parent=self, giface=self._giface)
+        self._createMainNotebook()
+        self._createDataCatalog(parent=self)
+        self._createDisplay(parent=self)
+        self._createSearchModule(parent=self)
+        self._createConsole(parent=self)
+        self._createHistoryBrowser(parent=self)
+        self._createPythonShell(parent=self)
+        self.toolbars = {
+            "workspace": LMWorkspaceToolbar(parent=self),
+            "tools": LMToolsToolbar(parent=self),
+            "misc": LMMiscToolbar(parent=self),
+            "nviz": LMNvizToolbar(parent=self),
+        }
+        self._toolbarsData = {
+            "workspace": (
+                "toolbarWorkspace",  # name
+                _("Workspace Toolbar"),  # caption
+                1,
+                0,
+            ),  # row, position
+            "tools": ("toolbarTools", _("Tools Toolbar"), 1, 1),
+            "misc": ("toolbarMisc", _("Misc Toolbar"), 1, 2),
+            "nviz": ("toolbarNviz", _("3D view Toolbar"), 1, 3),
+        }
+
+        # add a bunch of panes
+        toolbarsList = ("workspace", "tools", "misc", "nviz")
+        for toolbar in toolbarsList:
+            name, caption, row, position = self._toolbarsData[toolbar]
+            self._auimgr.AddPane(
+                self.toolbars[toolbar],
+                aui.AuiPaneInfo()
+                .Name(name)
+                .Caption(caption)
+                .ToolbarPane()
+                .Top()
+                .Row(row)
+                .Position(position)
+                .LeftDockable(False)
+                .RightDockable(False)
+                .BottomDockable(False)
+                .TopDockable(True)
+                .CloseButton(False)
+                .Layer(2)
+                .BestSize(self.toolbars[toolbar].GetBestSize()),
+            )
+
+        self._auimgr.AddPane(
+            self.mainnotebook,
+            aui.AuiPaneInfo().Name("map display content").CenterPane().PaneBorder(True),
+        )
+
+        self._auimgr.AddPane(
+            self.statusbar.GetWidget(),
+            aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
+        )
+
+        self._auimgr.AddPane(
+            self.datacatalog,
+            aui.AuiPaneInfo()
+            .Name("datacatalog")
+            .Caption(_("Data"))
+            .Left()
+            .Layer(1)
+            .Position(1)
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+        )
+
+        self._auimgr.AddPane(
+            self.notebookLayers,
+            aui.AuiPaneInfo()
+            .Name("layers")
+            .Caption(_("Layers"))
+=======
+    def _createMapDisplay(self, parent):
+        """Set up Map Display"""
+        # blank panel for testing
+        self.mapdisplay = wx.Panel(parent=parent)
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     def BuildPanes(self):
         """Build panes - toolbars as well as panels"""
@@ -628,6 +1185,196 @@ class GMFrame(wx.Frame):
         self._auimgr.AddPane(
             self.notebookLayers,
             aui.AuiPaneInfo()
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+            .Name("display")
+            .Caption("Display")
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
+            .Left()
+            .Layer(1)
+            .Position(2)
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+        )
+<<<<<<< HEAD
+
+        self._auimgr.AddPane(
+            self.search,
+            aui.AuiPaneInfo()
+            .Name("tools")
+            .Caption(_("Tools"))
+            .Right()
+            .Layer(1)
+            .Position(1)
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+        )
+
+        self._auimgr.AddPane(
+            self.goutput,
+            aui.AuiPaneInfo()
+            .Name("console")
+            .Caption(_("Console"))
+            .Right()
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+            target=self._auimgr.GetPane("tools"),
+        )
+
+        self._auimgr.AddPane(
+            self.history,
+            aui.AuiPaneInfo()
+            .Name("history")
+            .Caption(_("History"))
+            .Right()
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+            target=self._auimgr.GetPane("tools"),
+        )
+
+        self._auimgr.AddPane(
+            self.pyshell,
+            aui.AuiPaneInfo()
+            .Name("python")
+            .Caption(_("Python"))
+            .Right()
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+            target=self._auimgr.GetPane("tools"),
+        )
+
+        self._auimgr.GetPane("toolbarNviz").Hide()
+
+        # Set Tools as active tab
+        notebooks = self._auimgr.GetNotebooks()
+        if notebooks:
+            notebook = notebooks[0]
+            tools = self._auimgr.GetPane("tools")
+            notebook.SetSelectionToPage(tools)
+
+            # Set the size for automatic notebook
+            pane = self._auimgr.GetPane(notebook)
+            pane.BestSize(self.PANE_BEST_SIZE)
+            pane.MinSize(self.PANE_MIN_SIZE)
+=======
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
+
+=======
+    def _createMapDisplay(self, parent):
+        """Set up Map Display"""
+        # blank panel for testing
+        self.mapdisplay = wx.Panel(parent=parent)
+=======
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+
+    def BuildPanes(self):
+        """Build panes - toolbars as well as panels"""
+        self._auimgr.SetAutoNotebookTabArt(SimpleTabArt())
+        # initialize all main widgets
+        self.statusbar = SbMain(parent=self, giface=self._giface)
+        self._createMapNotebook()
+        self._createDataCatalog(parent=self)
+        self._createDisplay(parent=self)
+        self._createSearchModule(parent=self)
+        self._createConsole(parent=self)
+        self._createPythonShell(parent=self)
+        self.toolbars = {
+            "workspace": LMWorkspaceToolbar(parent=self),
+            "tools": LMToolsToolbar(parent=self),
+            "misc": LMMiscToolbar(parent=self),
+            "nviz": LMNvizToolbar(parent=self),
+        }
+        self._toolbarsData = {
+            "workspace": (
+                "toolbarWorkspace",  # name
+                _("Workspace Toolbar"),  # caption
+                1,
+                0,
+            ),  # row, position
+            "tools": ("toolbarTools", _("Tools Toolbar"), 1, 1),
+            "misc": ("toolbarMisc", _("Misc Toolbar"), 1, 2),
+            "nviz": ("toolbarNviz", _("3D view Toolbar"), 1, 3),
+        }
+
+        # add a bunch of panes
+        toolbarsList = ("workspace", "tools", "misc", "nviz")
+        for toolbar in toolbarsList:
+            name, caption, row, position = self._toolbarsData[toolbar]
+            self._auimgr.AddPane(
+                self.toolbars[toolbar],
+                aui.AuiPaneInfo()
+                .Name(name)
+                .Caption(caption)
+                .ToolbarPane()
+                .Top()
+                .Row(row)
+                .Position(position)
+                .LeftDockable(False)
+                .RightDockable(False)
+                .BottomDockable(False)
+                .TopDockable(True)
+                .CloseButton(False)
+                .Layer(2)
+                .BestSize((self.toolbars[toolbar].GetBestSize())),
+            )
+
+        self._auimgr.AddPane(
+            self.mapnotebook,
+            aui.AuiPaneInfo().Name("map display content").CenterPane().PaneBorder(True),
+        )
+
+        self._auimgr.AddPane(
+            self.statusbar.GetWidget(),
+            aui.AuiPaneInfo()
+            .Bottom()
+            .MinSize(30, 30)
+            .Fixed()
+            .Name("statusbar")
+            .CloseButton(False)
+            .DestroyOnClose(True)
+            .ToolbarPane()
+            .Dockable(False)
+            .PaneBorder(False)
+            .Gripper(False),
+        )
+
+        self._auimgr.AddPane(
+            self.datacatalog,
+            aui.AuiPaneInfo()
+            .Name("datacatalog")
+            .Caption("Data Catalog")
+            .Left()
+            .Layer(1)
+            .Position(1)
+            .BestSize(self.PANE_BEST_SIZE)
+            .MinSize(self.PANE_MIN_SIZE)
+            .CloseButton(False)
+            .MinimizeButton(True)
+            .MaximizeButton(True),
+        )
+
+        self._auimgr.AddPane(
+            self.notebookLayers,
+            aui.AuiPaneInfo()
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             .Name("layers")
             .Caption("Layers")
             .Left()
@@ -640,6 +1387,10 @@ class GMFrame(wx.Frame):
             .MaximizeButton(True),
         )
 
+<<<<<<< HEAD
+=======
+>>>>>>> 5871ca876b (wxGUI/Single-Window GUI: arrangement of basic widgets (#1621))
+>>>>>>> osgeo-main
         self._auimgr.AddPane(
             self.search,
             aui.AuiPaneInfo()
@@ -699,11 +1450,51 @@ class GMFrame(wx.Frame):
 
         wx.CallAfter(self.datacatalog.LoadItems)
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        single_win_panes_layout_pos_enabled = UserSettings.Get(
+            group="general",
+            key="singleWinPanesLayoutPos",
+            subkey="enabled",
+        )
+
+        single_win_panes_layout_pos = UserSettings.Get(
+            group="general",
+            key="singleWinPanesLayoutPos",
+            subkey="pos",
+        )
+        if single_win_panes_layout_pos_enabled and single_win_panes_layout_pos:
+            self._auimgr.LoadPerspective(single_win_panes_layout_pos)
+
+=======
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
+=======
+>>>>>>> 5871ca876b (wxGUI/Single-Window GUI: arrangement of basic widgets (#1621))
+>>>>>>> osgeo-main
         self._auimgr.Update()
 
     def BindEvents(self):
         # bindings
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindowOrExit)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
+=======
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+>>>>>>> 5871ca876b (wxGUI/Single-Window GUI: arrangement of basic widgets (#1621))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     def _show_demo_map(self):
         """If in demolocation, add demo map to map display
@@ -771,11 +1562,30 @@ class GMFrame(wx.Frame):
             .MinimizeButton(True)
             .MaximizeButton(True),
         )
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+
+        self._auimgr.GetPane("nviz").Show()
+        self._auimgr.Update()
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+
+        self._auimgr.GetPane("nviz").Show()
+        self._auimgr.Update()
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+>>>>>>> osgeo-main
 
         self._auimgr.GetPane("nviz").Show()
         self._auimgr.Update()
 
+<<<<<<< HEAD
         # this is a bit strange here since a new window is created everytime
+=======
+        # this is a bit strange here since a new window is created every time
+>>>>>>> osgeo-main
         if not firstTime:
             for page in ("view", "light", "fringe", "constant", "cplane", "animation"):
                 self.nviz.UpdatePage(page)
@@ -835,11 +1645,29 @@ class GMFrame(wx.Frame):
 
     def OnGModeler(self, event=None, cmd=None):
         """Launch Graphical Modeler. See OnIClass documentation"""
+<<<<<<< HEAD
         from gmodeler.frame import ModelFrame
 
         win = ModelFrame(parent=self, giface=self._giface)
         win.CentreOnScreen()
         win.Show()
+=======
+        from gmodeler.panels import ModelerPanel
+        from gmodeler.menudata import ModelerMenuData
+
+        gmodeler_panel = ModelerPanel(
+            parent=self, giface=self._giface, statusbar=self.statusbar, dockable=True
+        )
+        gmodeler_panel.SetUpPage(
+            self,
+            self.mainnotebook,
+            menuModel=ModelerMenuData().GetModel(separators=True),
+            menuName="&Modeler",
+        )
+
+        # add map display panel to notebook and make it current
+        self.mainnotebook.AddPage(gmodeler_panel, _("Graphical Modeler"))
+>>>>>>> osgeo-main
 
     def OnPsMap(self, event=None, cmd=None):
         """Launch Cartographic Composer. See OnIClass documentation"""
@@ -940,10 +1768,19 @@ class GMFrame(wx.Frame):
         Also change active map notebook tab."""
         self.currentPage = self.notebookLayers.GetCurrentPage()
         self.currentPageNum = self.notebookLayers.GetSelection()
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+        if hasattr(self.currentPage, "maptree") and self.mainnotebook.GetCurrentPage():
+            self.mainnotebook.SetSelectionToMainPage(self.GetMapDisplay())
+=======
+>>>>>>> osgeo-main
         try:
             self.mapnotebook.SetSelection(self.GetMapDisplayIndex())
         except Exception:
             pass
+<<<<<<< HEAD
 
         event.Skip()
 
@@ -951,6 +1788,28 @@ class GMFrame(wx.Frame):
         """Page of notebook is being closed
         from Layer Manager (x button next to arrows)
         Also close associated map display.
+=======
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+
+        event.Skip()
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+    def OnCBPageClosed(self, event):
+        """Page of notebook has been closed from the Layers pane via x
+        button or via closing map display notebook page"""
+        # Repaint Layers pane map display toolbar widget on the wxMac
+        self._repaintLayersPaneMapDisplayToolbar()
+
+=======
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
+=======
+>>>>>>> 5871ca876b (wxGUI/Single-Window GUI: arrangement of basic widgets (#1621))
+    def OnCBPageClosing(self, event):
+        """Page of notebook is being closed
+        from Layer Manager (x button next to arrows)
+        Also close associated map display (whether docked or undocked).
+>>>>>>> osgeo-main
         """
         # save changes in the workspace
         name = self.notebookLayers.GetPageText(event.GetSelection())
@@ -961,13 +1820,50 @@ class GMFrame(wx.Frame):
 
         maptree = self.notebookLayers.GetPage(event.GetSelection()).maptree
         maptree.GetMapDisplay().CleanUp()
+<<<<<<< HEAD
         self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        self.mainnotebook.DeleteMainPage(self.GetMapDisplay())
+=======
+        self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+        self.mapnotebook.DeletePage(self.GetMapDisplayIndex())
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         maptree.Close(True)
 
         self.currentPage = None
 
         event.Skip()
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    def _renamePageNoEvent(self, pgnum_dict, is_docked, text):
+        if is_docked:
+            self.mainnotebook.SetMainPageText(
+                self.mainnotebook.GetPage(pgnum_dict["mainnotebook"]), text
+            )
+=======
+    def _closePageNoEvent(self, page_index):
+        """Close page and destroy map display without
+        generating notebook page closing event"""
+        self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
+        self.notebookLayers.DeletePage(page_index)
+        self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING, self.OnCBPageClosing)
+        self.mapnotebook.DeletePage(page_index)
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+    def _closePageNoEvent(self, pgnum_dict):
+        """Close page and destroy map display without generating notebook
+        page closing event.
+=======
+>>>>>>> osgeo-main
     def _closePageNoEvent(self, pgnum_dict):
         """Close page and destroy map display without generating notebook
         page closing event.
@@ -1001,11 +1897,98 @@ class GMFrame(wx.Frame):
             for i in range(notebook.GetPageCount()):
                 if notebook.GetPageText(i) == page_text:
                     notebook.SetSelection(i)
+<<<<<<< HEAD
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
         if re.compile(r"^d\..*").search(command[0]):
             self.RunDisplayCmd(command)
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+
+        :param dict pgnum_dict: dict "layers" key represent map display
+                                notebook layers tree page index and
+                                "mapnotebook" key represent map display
+                                notebook page index (single window mode)
+        """
+        self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
+        self.notebookLayers.DeletePage(pgnum_dict["layers"])
+        self.notebookLayers.Bind(
+            FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
+            self.OnCBPageClosing,
+        )
+        self.mapnotebook.DeletePage(pgnum_dict["mapnotebook"])
+
+    def _focusPage(self, notification):
+        """Focus the 'Console' notebook page according to event notification."""
+        if (
+            notification == Notification.HIGHLIGHT
+            or notification == Notification.MAKE_VISIBLE
+            or notification == Notification.RAISE_WINDOW
+        ):
+            self.FocusPage("Console")
+
+    def FocusPage(self, page_text):
+        """Focus the page if part of any of aui notebooks"""
+        notebooks = self._auimgr.GetNotebooks()
+        for notebook in notebooks:
+            for i in range(notebook.GetPageCount()):
+                if notebook.GetPageText(i) == page_text:
+                    notebook.SetSelection(i)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+
+    def _closePageNoEvent(self, pgnum_dict, is_docked):
+        """If map display is docked, close page and destroy map display without
+        generating layer notebook page closing event. If map display is undocked,
+        close only layer notebook page, not map notebook page.
+
+        :param dict pgnum_dict: dict "layers" key represent map display
+                                notebook layers tree page index and
+                                "mainnotebook" key represent map display
+                                notebook page index (single window mode)
+              boolean is_docked: "True" means that map display is docked in map
+                               display notebook, "False" means that map display
+                               is undocked to independent frame
+        """
+        self.notebookLayers.Unbind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING)
+        if "layers" in pgnum_dict:
+            self.notebookLayers.DeletePage(pgnum_dict["layers"])
+        self.notebookLayers.Bind(
+            FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,
+            self.OnCBPageClosing,
+        )
+        if is_docked:
+            self.mainnotebook.DeletePage(pgnum_dict["mainnotebook"])
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+    def _focusPage(self, notification):
+        """Focus the 'Console' notebook page according to event notification."""
+        if (
+            notification == Notification.HIGHLIGHT
+            or notification == Notification.MAKE_VISIBLE
+            or notification == Notification.RAISE_WINDOW
+        ):
+            self.FocusPage("Console")
+
+    def FocusPage(self, page_text):
+        """Focus the page if part of any of aui notebooks"""
+        notebooks = self._auimgr.GetNotebooks()
+        for notebook in notebooks:
+            for i in range(notebook.GetPageCount()):
+                if notebook.GetPageText(i) == page_text:
+                    notebook.SetSelection(i)
+
+=======
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
+=======
+>>>>>>> 5871ca876b (wxGUI/Single-Window GUI: arrangement of basic widgets (#1621))
+    def RunSpecialCmd(self, command):
+        """Run command from command line, check for GUI wrappers"""
+        result = True
+        if re.compile(r"^d\..*").search(command[0]):
+            result = self.RunDisplayCmd(command)
+>>>>>>> osgeo-main
         elif re.compile(r"r[3]?\.mapcalc").search(command[0]):
             self.OnMapCalculator(event=None, cmd=command)
         elif command[0] == "i.group":
@@ -1025,15 +2008,30 @@ class GMFrame(wx.Frame):
         elif command[0] == "cd":
             self.OnChangeCWD(event=None, cmd=command)
         else:
+<<<<<<< HEAD
+=======
+            result = False
+>>>>>>> osgeo-main
             raise ValueError(
                 "Layer Manager special command (%s)"
                 " not supported." % " ".join(command)
             )
+<<<<<<< HEAD
+=======
+        if result:
+            self._gconsole.UpdateHistory(status=Status.SUCCESS)
+        else:
+            self._gconsole.UpdateHistory(status=Status.FAILED)
+>>>>>>> osgeo-main
 
     def RunDisplayCmd(self, command):
         """Handles display commands.
 
         :param command: command in a list
+<<<<<<< HEAD
+=======
+        :return int: False if failed, True if succcess
+>>>>>>> osgeo-main
         """
         if not self.currentPage:
             self.NewDisplay(show=True)
@@ -1041,7 +2039,11 @@ class GMFrame(wx.Frame):
         if command[0] == "d.erase":
             # rest of d.erase is ignored
             self.GetLayerTree().DeleteAllLayers()
+<<<<<<< HEAD
             return
+=======
+            return False
+>>>>>>> osgeo-main
         try:
             # display GRASS commands
             layertype = command2ltype[command[0]]
@@ -1054,7 +2056,11 @@ class GMFrame(wx.Frame):
                 )
                 % command[0],
             )
+<<<<<<< HEAD
             return
+=======
+            return False
+>>>>>>> osgeo-main
 
         if layertype == "barscale":
             if len(command) > 1:
@@ -1108,6 +2114,24 @@ class GMFrame(wx.Frame):
                 lname=lname,
                 lcmd=command,
             )
+<<<<<<< HEAD
+=======
+        return True
+
+    def GetAuiManager(self):
+        """Get aui manager
+
+        :return: aui manager instance
+        """
+        return self._auimgr
+
+    def GetAuiNotebook(self):
+        """Get aui notebook
+
+        :return: aui notebook instance
+        """
+        return self.mainnotebook
+>>>>>>> osgeo-main
 
     def GetLayerNotebook(self):
         """Get Layers Notebook"""
@@ -1355,7 +2379,11 @@ class GMFrame(wx.Frame):
             if not location or not mapset:
                 GError(
                     parent=self,
+<<<<<<< HEAD
                     message=_("No location/mapset provided. Operation canceled."),
+=======
+                    message=_("No project provided. Operation canceled."),
+>>>>>>> osgeo-main
                 )
                 return  # this should not happen
             if can_switch_mapset_interactive(
@@ -1420,6 +2448,10 @@ class GMFrame(wx.Frame):
         :param event: to be able to serve as a handler of wx event
         :param cmd: command as a list (must start with 'cd')
         """
+<<<<<<< HEAD
+=======
+
+>>>>>>> osgeo-main
         # local functions
         def write_beginning(parameter=None, command=None):
             if parameter:
@@ -1654,7 +2686,19 @@ class GMFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             name = dlg.GetValue()
             self.notebookLayers.SetPageText(page=self.currentPageNum, text=name)
+<<<<<<< HEAD
             self.mapnotebook.SetPageText(page_idx=self.GetMapDisplayIndex(), text=name)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            self.mainnotebook.SetMainPageText(page=self.GetMapDisplay(), text=name)
+=======
+            self.mapnotebook.SetPageText(page_idx=self.GetMapDisplayIndex(), text=name)
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+=======
+            self.mapnotebook.SetPageText(page_idx=self.GetMapDisplayIndex(), text=name)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         dlg.Destroy()
 
     def OnRasterRules(self, event):
@@ -1948,8 +2992,11 @@ class GMFrame(wx.Frame):
         # moved from mapdisp/frame.py
         # TODO: why it is called 3 times when getting focus?
         # and one times when loosing focus?
+<<<<<<< HEAD
         if self.workspace_manager.loadingWorkspace:
             return
+=======
+>>>>>>> osgeo-main
         pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)
         if pgnum > -1:
             self.notebookLayers.SetSelection(pgnum)
@@ -2277,12 +3324,48 @@ class GMFrame(wx.Frame):
             except ValueError:
                 pass
 
+<<<<<<< HEAD
     def OnCloseWindow(self, event):
         """Cleanup when wxGUI is quitted"""
         self._closeWindow(event)
 
     def OnCloseWindowOrExit(self, event):
         """Cleanup when wxGUI is quitted
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    def OnKeyDown(self, event):
+        """Key pressed"""
+        kc = event.GetKeyCode()
+
+        try:
+            kc = chr(kc)
+        except ValueError:
+            event.Skip()
+            return
+
+        if event.CtrlDown():
+            if kc == "R":
+                self.OnAddRaster(None)
+            elif kc == "V":
+                self.OnAddVector(None)
+
+        event.Skip()
+
+>>>>>>> 4fcbd3f967 (Add Binder badge/button to readme (#1628))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+    def OnCloseWindow(self, event):
+        """Cleanup when wxGUI is quit"""
+        self._closeWindow(event)
+
+    def OnCloseWindowOrExit(self, event):
+        """Cleanup when wxGUI is quit
+>>>>>>> osgeo-main
 
         Ask user also to quit GRASS including terminal
         """
@@ -2354,8 +3437,36 @@ class GMFrame(wx.Frame):
         )
         return dlg
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    def _onMapsetWatchdog(self, map_path, map_dest):
+        """Current mapset watchdog event handler
+
+        :param str map_path: map path (map that is changed)
+        :param str map_dest: new map path
+        """
+        self.statusbar.mask.dbChanged(
+            map=os.path.basename(map_path) if map_path else map_path,
+            newname=os.path.basename(map_dest) if map_dest else map_dest,
+        )
+
+    def _onMapsetChanged(self, event):
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     def OnMapNotebookClose(self, event):
         """Page of map notebook is being closed"""
         display = self.GetMapDisplay(onlyCurrent=True)
         display.OnCloseWindow(event=None, askIfSaveWorkspace=True)
         event.Veto()
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main

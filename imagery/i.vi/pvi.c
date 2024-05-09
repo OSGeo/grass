@@ -10,15 +10,41 @@
    to the soil line therefore a=1
 
  */
+<<<<<<< HEAD
 double p_vi(double redchan, double nirchan)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+double p_vi(double redchan, double nirchan, double soil_line_slope)
+=======
+double p_vi(double redchan, double nirchan)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+double p_vi(double redchan, double nirchan)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
-    double result;
+    double result, a;
+
+    a = soil_line_slope;
 
     if ((nirchan + redchan) == 0.0) {
         result = -1.0;
     }
     else {
+<<<<<<< HEAD
         result = (sin(1) * nirchan) - (cos(1) * redchan);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        result = (sin(a) * nirchan) - (cos(a) * redchan);
+=======
+        result = (sin(1) * nirchan) - (cos(1) * redchan);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        result = (sin(1) * nirchan) - (cos(1) * redchan);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     }
     return result;
 }

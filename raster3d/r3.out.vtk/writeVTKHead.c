@@ -30,7 +30,19 @@
 /* Writes the structured points Header ************************************* */
 
 /* ************************************************************************* */
+<<<<<<< HEAD
 void write_vtk_structured_point_header(FILE *fp, char *vtkFile,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void write_vtk_structured_point_header(FILE *fp, char *vtkFile UNUSED,
+=======
+void write_vtk_structured_point_header(FILE *fp, char *vtkFile,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void write_vtk_structured_point_header(FILE *fp, char *vtkFile,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                                        RASTER3D_Region region, int dp,
                                        double scale)
 {
@@ -41,7 +53,8 @@ void write_vtk_structured_point_header(FILE *fp, char *vtkFile,
     /*Simple vtk ASCII header */
 
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS 7 Export\n");
+    /* The header line describes the data. */
+    fprintf(fp, "GRASS GIS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET STRUCTURED_POINTS\n"); /*We are using the structured
                                                    point dataset. */
@@ -93,14 +106,26 @@ void write_vtk_structured_point_header(FILE *fp, char *vtkFile,
 /* Writes the strcutured grid header **************************************** */
 
 /* ************************************************************************* */
+<<<<<<< HEAD
 void write_vtk_structured_grid_header(FILE *fp, char *vtkFile,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void write_vtk_structured_grid_header(FILE *fp, char *vtkFile UNUSED,
+=======
+void write_vtk_structured_grid_header(FILE *fp, char *vtkFile,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void write_vtk_structured_grid_header(FILE *fp, char *vtkFile,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                                       RASTER3D_Region region)
 {
     G_debug(
         3,
         "write_vtk_structured_grid_header: Writing VTKStructuredGrid-Header");
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS 7 Export\n");
+    fprintf(fp, "GRASS GIS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET STRUCTURED_GRID\n"); /*We are using the structured grid
                                                  dataset. */
@@ -116,13 +141,25 @@ void write_vtk_structured_grid_header(FILE *fp, char *vtkFile,
 /* Writes the unstrcutured grid header ************************************* */
 
 /* ************************************************************************* */
+<<<<<<< HEAD
 void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile UNUSED,
+=======
+void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                                         RASTER3D_Region region)
 {
     G_debug(3, "write_vtk_unstructured_grid_header: Writing "
                "VTKUnstructuredGrid-Header");
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS 7 Export\n");
+    fprintf(fp, "GRASS GIS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET UNSTRUCTURED_GRID\n"); /*We are using the unstructured
                                                    grid dataset. */

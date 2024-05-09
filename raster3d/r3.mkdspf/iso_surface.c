@@ -22,8 +22,23 @@ static void xings_grad(float *data[], int c_ndx, int x1, int y1, int z1,
                        int t_ndx);
 static void normalize(float n[3]);
 
+<<<<<<< HEAD
 void viz_iso_surface(void *g3map, RASTER3D_Region *g3reg, cmndln_info *linefax,
                      int quiet)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void viz_iso_surface(void *g3map, RASTER3D_Region *g3reg,
+                     cmndln_info *linefax UNUSED, int quiet)
+=======
+void viz_iso_surface(void *g3map, RASTER3D_Region *g3reg, cmndln_info *linefax,
+                     int quiet)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void viz_iso_surface(void *g3map, RASTER3D_Region *g3reg, cmndln_info *linefax,
+                     int quiet)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     float *data[4]; /* will hold 4 slices of xy data */
     int zloop;

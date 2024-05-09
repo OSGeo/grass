@@ -518,7 +518,30 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
                         "Unable to read from category raster condition file."));
                     return -1;
                 }
+<<<<<<< HEAD
                 if (n_pixs != (row_size) / (int)sizeof(unsigned char)) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (n_pixs != (row_size) / (int)sizeof(unsigned char)) {
+=======
+                if (n_pixs != (row_size) / sizeof(unsigned char)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                if (n_pixs != (row_size) / sizeof(unsigned char)) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                if (n_pixs != (row_size) / (int)sizeof(unsigned char)) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+                if (n_pixs != (row_size) / sizeof(unsigned char)) {
+=======
+                if (n_pixs != (row_size) / (int)sizeof(unsigned char)) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                     G_free(rast_pixs);
                     G_free(belongs_pix);
                     G_warning(
@@ -570,7 +593,19 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
                                     "initialized range."));
                         continue;
                     }
+<<<<<<< HEAD
                     /* pixels meets condtion defined in scatter plot ->
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    /* pixels meets condition defined in scatter plot ->
+=======
+                    /* pixels meets condtion defined in scatter plot ->
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    /* pixels meets condtion defined in scatter plot ->
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                        belongs to scatter plot category */
                     if (i_scatt_conds[array_idx])
                         belongs_pix[i_rows_pix] = 1;
@@ -628,6 +663,19 @@ static void get_needed_bands(struct scCats *cats, int *b_needed_bands)
  */
 static void free_compute_scatts_data(int *fd_bands, struct rast_row *bands_rows,
                                      int n_a_bands, int *bands_ids,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                                     int *b_needed_bands, int *fd_cats_rasts,
+                                     FILE **f_cats_rasts_conds, int n_a_cats)
+{
+    for (int i = 0; i < n_a_bands; i++) {
+        int band_id = bands_ids[i];
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                                      int *fd_cats_rasts,
                                      FILE **f_cats_rasts_conds, int n_a_cats)
 {
@@ -635,6 +683,13 @@ static void free_compute_scatts_data(int *fd_bands, struct rast_row *bands_rows,
 
     for (i = 0; i < n_a_bands; i++) {
         band_id = bands_ids[i];
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         if (band_id >= 0) {
             Rast_close(fd_bands[i]);
             G_free(bands_rows[band_id].row);
@@ -642,6 +697,22 @@ static void free_compute_scatts_data(int *fd_bands, struct rast_row *bands_rows,
         }
     }
 
+<<<<<<< HEAD
+    for (int i = 0; i < n_a_cats; i++)
+        if (f_cats_rasts_conds[i])
+            fclose(f_cats_rasts_conds[i]);
+
+    for (int i = 0; i < n_a_cats; i++)
+        if (fd_cats_rasts[i] >= 0)
+            Rast_close(fd_cats_rasts[i]);
+
+    G_free(fd_bands);
+    G_free(bands_rows);
+    G_free(bands_ids);
+    G_free(b_needed_bands);
+    G_free(fd_cats_rasts);
+    G_free(f_cats_rasts_conds);
+=======
     if (f_cats_rasts_conds)
         for (i = 0; i < n_a_cats; i++)
             if (f_cats_rasts_conds[i])
@@ -651,6 +722,13 @@ static void free_compute_scatts_data(int *fd_bands, struct rast_row *bands_rows,
         for (i = 0; i < n_a_cats; i++)
             if (fd_cats_rasts[i] >= 0)
                 Rast_close(fd_cats_rasts[i]);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 }
 
 /*!
@@ -687,19 +765,20 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     const char *mapset;
     char header[1024];
 
-    int fd_cats_rasts[scatt_conds->n_a_cats];
-    FILE *f_cats_rasts_conds[scatt_conds->n_a_cats];
+    int *fd_cats_rasts = G_malloc(scatt_conds->n_a_cats * sizeof(int));
+    FILE **f_cats_rasts_conds =
+        G_malloc(scatt_conds->n_a_cats * sizeof(FILE *));
 
-    struct rast_row bands_rows[n_bands];
+    struct rast_row *bands_rows = G_malloc(n_bands * sizeof(struct rast_row));
 
     RASTER_MAP_TYPE data_type;
 
     int nrows, i_band, n_a_bands, band_id;
     int i_row, head_nchars, i_cat, id_cat;
 
-    int fd_bands[n_bands];
-    int bands_ids[n_bands];
-    int b_needed_bands[n_bands];
+    int *fd_bands = G_malloc(n_bands * sizeof(int));
+    int *bands_ids = G_malloc(n_bands * sizeof(int));
+    int *b_needed_bands = G_malloc(n_bands * sizeof(int));
 
     Rast_set_window(region);
 
@@ -712,6 +791,18 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     if (n_bands != scatts->n_bands || n_bands != scatt_conds->n_bands)
         return -1;
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (i_cat = 0; i_cat < scatts->n_a_cats; i_cat++)
+        fd_cats_rasts[i_cat] = -1;
+
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     G_zero(b_needed_bands, (size_t)n_bands * sizeof(int));
 
     get_needed_bands(scatt_conds, &b_needed_bands[0]);
@@ -726,18 +817,54 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
                     bands[band_id]);
 
             if ((mapset = G_find_raster2(bands[band_id], "")) == NULL) {
+<<<<<<< HEAD
                 free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
                                          bands_ids, NULL, NULL,
                                          scatt_conds->n_a_cats);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                free_compute_scatts_data(
+                    fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
+                    fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
+=======
+                free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
+                                         bands_ids, NULL, NULL,
+                                         scatt_conds->n_a_cats);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
+                                         bands_ids, NULL, NULL,
+                                         scatt_conds->n_a_cats);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 G_warning(_("Unable to find raster <%s>"), bands[band_id]);
                 return -1;
             }
 
             if ((fd_bands[n_a_bands] = Rast_open_old(bands[band_id], mapset)) <
                 0) {
+<<<<<<< HEAD
                 free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
                                          bands_ids, NULL, NULL,
                                          scatt_conds->n_a_cats);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                free_compute_scatts_data(
+                    fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
+                    fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
+=======
+                free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
+                                         bands_ids, NULL, NULL,
+                                         scatt_conds->n_a_cats);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
+                                         bands_ids, NULL, NULL,
+                                         scatt_conds->n_a_cats);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 G_warning(_("Unable to open raster <%s>"), bands[band_id]);
                 return -1;
             }
@@ -754,9 +881,27 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
 
             if (Rast_read_range(bands[band_id], mapset,
                                 &bands_rows[band_id].rast_range) != 1) {
+<<<<<<< HEAD
                 free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
                                          bands_ids, NULL, NULL,
                                          scatt_conds->n_a_cats);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                free_compute_scatts_data(
+                    fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
+                    fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
+=======
+                free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
+                                         bands_ids, NULL, NULL,
+                                         scatt_conds->n_a_cats);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                free_compute_scatts_data(fd_bands, bands_rows, n_a_bands,
+                                         bands_ids, NULL, NULL,
+                                         scatt_conds->n_a_cats);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 G_warning(_("Unable to read range of raster <%s>"),
                           bands[band_id]);
                 return -1;
@@ -773,15 +918,43 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
         if (cats_rasts[id_cat]) {
             fd_cats_rasts[i_cat] = Rast_open_new(cats_rasts[id_cat], CELL_TYPE);
         }
+<<<<<<< HEAD
         else
             fd_cats_rasts[i_cat] = -1;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        else
+            fd_cats_rasts[i_cat] = -1;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        else
+            fd_cats_rasts[i_cat] = -1;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
         if (cats_rasts_conds[id_cat]) {
             f_cats_rasts_conds[i_cat] = fopen(cats_rasts_conds[id_cat], "r");
             if (!f_cats_rasts_conds[i_cat]) {
                 free_compute_scatts_data(
+<<<<<<< HEAD
                     fd_bands, bands_rows, n_a_bands, bands_ids, fd_cats_rasts,
                     f_cats_rasts_conds, scatt_conds->n_a_cats);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    fd_bands, bands_rows, n_a_bands, bands_ids, b_needed_bands,
+                    fd_cats_rasts, f_cats_rasts_conds, scatt_conds->n_a_cats);
+=======
+                    fd_bands, bands_rows, n_a_bands, bands_ids, fd_cats_rasts,
+                    f_cats_rasts_conds, scatt_conds->n_a_cats);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    fd_bands, bands_rows, n_a_bands, bands_ids, fd_cats_rasts,
+                    f_cats_rasts_conds, scatt_conds->n_a_cats);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 G_warning(
                     _("Unable to open category raster condition file <%s>"),
                     bands[band_id]);
@@ -815,13 +988,40 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
                                           bands_rows, scatts,
                                           fd_cats_rasts) == -1) {
             free_compute_scatts_data(fd_bands, bands_rows, n_a_bands, bands_ids,
+<<<<<<< HEAD
                                      fd_cats_rasts, f_cats_rasts_conds,
                                      scatt_conds->n_a_cats);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                                     b_needed_bands, fd_cats_rasts,
+                                     f_cats_rasts_conds, scatt_conds->n_a_cats);
+=======
+                                     fd_cats_rasts, f_cats_rasts_conds,
+                                     scatt_conds->n_a_cats);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                                     fd_cats_rasts, f_cats_rasts_conds,
+                                     scatt_conds->n_a_cats);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             return -1;
         }
     }
     free_compute_scatts_data(fd_bands, bands_rows, n_a_bands, bands_ids,
+<<<<<<< HEAD
                              fd_cats_rasts, f_cats_rasts_conds,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                             b_needed_bands, fd_cats_rasts, f_cats_rasts_conds,
+=======
+                             fd_cats_rasts, f_cats_rasts_conds,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                             fd_cats_rasts, f_cats_rasts_conds,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                              scatt_conds->n_a_cats);
     return 0;
 }
@@ -830,7 +1030,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
    \brief Merge arrays according to opacity.
    Every pixel in array must be represented by 4 values (RGBA).
 
-   Implementd for speeding up of scatter plots rendering.
+   Implemented for speeding up of scatter plots rendering.
 
    \param merged_arr array which will be overlayd with overlay_arr
    \param overlay_arr array to be merged_arr overlaid with
@@ -872,10 +1072,10 @@ int I_merge_arrays(unsigned char *merged_arr, unsigned char *overlay_arr,
 /*!
    \brief Apply colromap to the raster.
 
-   Implementd for speeding up of scatter plots rendering.
+   Implemented for speeding up of scatter plots rendering.
 
    \param vals array of values for applying the colormap
-   \param vals_mask maks of vals array
+   \param vals_mask mask of vals array
    \param nvals number of items of vals_mask and vals array
    \param colmap colour map to be applied
    \param[out] col_vals output raster with applied color map (length is 4 *

@@ -403,7 +403,19 @@ int main(int argc, char **argv)
     geo_f = G_define_flag();
     geo_f->key = 'g';
     geo_f->description =
+<<<<<<< HEAD
         _("Use geodesic calculation for longitude-latitude locations");
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        _("Use geodesic calculation for longitude-latitude projects");
+=======
+        _("Use geodesic calculation for longitude-latitude locations");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        _("Use geodesic calculation for longitude-latitude locations");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -422,7 +434,7 @@ int main(int argc, char **argv)
     tfield = atoi(tfield_opt->answer);
     Vect_str_to_cat_list(term_opt->answer, Clist);
 
-    G_debug(1, "Imput categories:\n");
+    G_debug(1, "Input categories:\n");
     for (i = 0; i < Clist->n_ranges; i++) {
         G_debug(1, "%d - %d\n", Clist->min[i], Clist->max[i]);
     }
@@ -634,10 +646,34 @@ int main(int argc, char **argv)
         Vect_cat_get(Cats, afield, &cat);
         G_debug(1, "arc cat = %d", cat);
     }
+<<<<<<< HEAD
 
     G_debug(1, "Nodes' categories (layer %d, %d nodes):", tfield,
             StNodes->n_values);
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+    G_debug(1, "Nodes' categories (layer %d, %d nodes):", tfield,
+            StNodes->n_values);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+
+    G_debug(1, "Nodes' categories (layer %d, %d nodes):", tfield,
+            StNodes->n_values);
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+
+    G_debug(1, "Nodes' categories (layer %d, %d nodes):", tfield,
+            StNodes->n_values);
+
+>>>>>>> osgeo-main
     pointlist = Vect_new_boxlist(0);
     for (i = 0; i < StNodes->n_values; i++) {
         double x, y, z;
@@ -661,6 +697,26 @@ int main(int argc, char **argv)
                 continue;
             Vect_write_line(&Out, ltype, Points, Cats);
             G_debug(1, "node cat = %d", cat);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+            k++;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            k++;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+            k++;
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         }
     }
 

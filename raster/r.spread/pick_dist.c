@@ -8,7 +8,19 @@
  * outward in an inverse square rate. It use three consecutive random number
  * generator:
  *     applying it once gets an UNIFORM distribution in the range of 0-max_num;
+<<<<<<< HEAD
  *     doing it twice gets a SIMPLE INVERSE distribuion in that range;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+ *     doing it twice gets a SIMPLE INVERSE distribution in that range;
+=======
+ *     doing it twice gets a SIMPLE INVERSE distribuion in that range;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+ *     doing it twice gets a SIMPLE INVERSE distribuion in that range;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
  *     doing three times gets a INVERSE SQUARE distribution.
  *
  * Author: Jianping Xu, Rutgers University
@@ -23,7 +35,7 @@
 
 /**
  * @brief Picks one possible distance value from range 0, u
- * @param u maximum pontential distance
+ * @param u maximum potential distance
  * @return value in range 0, u
  */
 int pick_dist(int u)

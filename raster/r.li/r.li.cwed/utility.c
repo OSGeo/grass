@@ -35,8 +35,37 @@ char **split_arg(char *linea, char separatore, long *numerotoken)
     char **argv;      /* token array */
     char *copialinea; /* line copy */
 
+<<<<<<< HEAD
     long i;    /* find token number */
     size_t it; /* iterator */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    long i;    /* find token number */
+    size_t it; /* iterator */
+=======
+    long i;  /* find token number */
+    long it; /* iterator */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    long i;  /* find token number */
+    long it; /* iterator */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    long i;    /* find token number */
+    size_t it; /* iterator */
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+    long i;  /* find token number */
+    long it; /* iterator */
+=======
+    long i;    /* find token number */
+    size_t it; /* iterator */
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     long num;
 
     int term; /* =0 if last token has not /0 */

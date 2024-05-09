@@ -227,14 +227,24 @@ int vect_to_rast(const char *vector_map, const char *raster_map,
                   column);
 
 #if 0
-    /* maximum possible numer of areas: number of centroids
+    /* maximum possible number of areas: number of centroids
      * actual number of areas, currently unknown:
      * number of areas with centroid that are within cat constraint
      * and overlap with current region */
     if (nareas_all > 0)
         G_message(_("Converted areas: %d of %d"), nareas,
                   Vect_get_num_primitives(&Map, GV_CENTROID));
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /* maximum possible number of lines: number of GV_LINE + GV_POINT
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     /* maximum possible numer of lines: number of GV_LINE + GV_POINT
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
      * actual number of lines, currently unknown:
      * number of lines are within cat constraint
      * and overlap with current region */

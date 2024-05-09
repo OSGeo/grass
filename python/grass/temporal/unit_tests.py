@@ -8,7 +8,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
 
 import copy
 from datetime import datetime
@@ -39,7 +38,6 @@ core.set_raise_on_error(True)
 
 
 def test_increment_datetime_by_string():
-
     # First test
     print("# Test 1")
     dt = datetime(2001, 9, 1, 0, 0, 0)
@@ -109,7 +107,6 @@ def test_increment_datetime_by_string():
 
 
 def test_adjust_datetime_to_granularity():
-
     # First test
     print("Test 1")
     dt = datetime(2001, 8, 8, 12, 30, 30)
@@ -228,7 +225,6 @@ def test_adjust_datetime_to_granularity():
 
 
 def test_compute_datetime_delta():
-
     print("Test 1")
     start = datetime(2001, 1, 1, 0, 0, 0)
     end = datetime(2001, 1, 1, 0, 0, 0)
@@ -572,7 +568,6 @@ def test_compute_datetime_delta():
 
 
 def test_compute_absolute_time_granularity():
-
     # First we test intervals
     print("Test 1")
     maps = []
@@ -1472,7 +1467,6 @@ def test_temporal_topology_builder():
 
 
 def test_map_list_sorting():
-
     map_list = []
 
     _map = RasterDataset(ident="1@a")
@@ -1531,7 +1525,6 @@ def test_1d_rtree():
     tree = rtree.RTreeCreateTree(-1, 0, 1)
 
     for i in range(10):
-
         rect = rtree.RTreeAllocRect(tree)
         rtree.RTreeSetRect1D(rect, tree, float(i - 2), float(i + 2))
         rtree.RTreeInsertRect(rect, i + 1, tree)
@@ -1562,7 +1555,6 @@ def test_2d_rtree():
     tree = rtree.RTreeCreateTree(-1, 0, 2)
 
     for i in range(10):
-
         rect = rtree.RTreeAllocRect(tree)
 
         rtree.RTreeSetRect2D(
@@ -1595,7 +1587,6 @@ def test_3d_rtree():
     tree = rtree.RTreeCreateTree(-1, 0, 3)
 
     for i in range(10):
-
         rect = rtree.RTreeAllocRect(tree)
         rtree.RTreeSetRect3D(
             rect,
@@ -1638,7 +1629,6 @@ def test_4d_rtree():
     tree = rtree.RTreeCreateTree(-1, 0, 4)
 
     for i in range(10):
-
         # Allocate the boundary
         rect = rtree.RTreeAllocRect(tree)
         rtree.RTreeSetRect4D(

@@ -11,7 +11,30 @@ int get_line_box(const struct line_pnts *Points, struct bound_box *box)
     int i;
 
     if (Points->n_points == 0) {
+<<<<<<< HEAD
         box->E = box->W = box->N = box->S = box->T = box->B = NAN;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        box->E = box->W = box->N = box->S = box->T = box->B = NAN;
+=======
+        box->E = box->W = box->N = box->S = box->T = box->B = 0.0 / 0.0;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        box->E = box->W = box->N = box->S = box->T = box->B = 0.0 / 0.0;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        box->E = box->W = box->N = box->S = box->T = box->B = NAN;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        box->E = box->W = box->N = box->S = box->T = box->B = 0.0 / 0.0;
+=======
+        box->E = box->W = box->N = box->S = box->T = box->B = NAN;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         return 0;
     }
 
@@ -222,11 +245,31 @@ int line2line(struct line_pnts *FPoints, int ftype, struct line_pnts *TPoints,
  * return 1 inside area
  * return 2 inside isle of area
  * return 3 outside area */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int line2area(struct Map_info *To, struct line_pnts *Points, int type, int area,
+              const struct bound_box *abox, double *fx, double *fy, double *fz,
+              double *falong, double *fangle, double *tx, double *ty,
+              double *tz, double *talong, double *tangle, double *dist,
+              int with_z)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 int line2area(const struct Map_info *To, struct line_pnts *Points, int type,
               int area, const struct bound_box *abox, double *fx, double *fy,
               double *fz, double *falong, double *fangle, double *tx,
               double *ty, double *tz, double *talong, double *tangle,
               double *dist, int with_z)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     int i, j;
     double tmp_dist;

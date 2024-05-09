@@ -99,8 +99,23 @@ int main(int argc, char *argv[])
     parm.units->options = "meters,kilometers,feet,miles";
     parm.units->label = parm.units->description;
     parm.units->description =
+<<<<<<< HEAD
         _("If units are not specified, current location units are used. "
           "Meters are used by default in geographic (latlon) locations.");
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        _("If units are not specified, current project units are used. "
+          "Meters are used by default in geographic (latlon) projects.");
+=======
+        _("If units are not specified, current location units are used. "
+          "Meters are used by default in geographic (latlon) locations.");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        _("If units are not specified, current location units are used. "
+          "Meters are used by default in geographic (latlon) locations.");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);

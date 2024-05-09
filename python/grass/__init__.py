@@ -13,7 +13,19 @@
 """Top-level GRASS GIS Python package
 
 Importing the package (or any subpackage) initializes translation functions
+<<<<<<< HEAD
 so that the function ``_`` appears in the global namespace (as an additional build-in).
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+so that the function ``_`` appears in the global namespace (as an additional built-in).
+=======
+so that the function ``_`` appears in the global namespace (as an additional build-in).
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+so that the function ``_`` appears in the global namespace (as an additional build-in).
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 """
 
 import builtins as _builtins
@@ -58,7 +70,19 @@ def _translate(text):
     """Get translated version of text
 
     The first call to this function initializes translations, i.e., simply importing
+<<<<<<< HEAD
     the package does not require the translations to be availabe. However, a first
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    the package does not require the translations to be available. However, a first
+=======
+    the package does not require the translations to be availabe. However, a first
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    the package does not require the translations to be availabe. However, a first
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     call to translate a message will do the initialization first before translating
     the message.
     """

@@ -148,9 +148,26 @@ def main():
         if len(rows) > max_files_open:
             grass.warning(
                 _(
+<<<<<<< HEAD
                     "Processing over {} maps: activating -z flag of r.series which slows down processing.".format(
                         max_files_open
                     )
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "Processing over {} maps: activating -z flag of r.series which "
+                    "slows down processing.".format(max_files_open)
+=======
+                    "Processing over {} maps: activating -z flag of r.series which slows down processing.".format(
+                        max_files_open
+                    )
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    "Processing over {} maps: activating -z flag of r.series which slows down processing.".format(
+                        max_files_open
+                    )
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 )
             )
             flag += "z"
@@ -173,7 +190,6 @@ def main():
             grass.fatal(_("%s failed. Check above error messages.") % "r.series")
 
         if not add_time:
-
             # We need to set the temporal extent from the subset of selected maps
             maps = sp.get_registered_maps_as_objects(
                 where=where, order=order, dbif=None
@@ -196,7 +212,6 @@ def main():
                 )
 
             for out_map in output.split(","):
-
                 # Create the time range for the output map
                 if out_map.find("@") >= 0:
                     id = out_map

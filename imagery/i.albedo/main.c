@@ -330,7 +330,19 @@ int main(int argc, char *argv[])
             }
         }
         /* Cloud/Snow histogram higher bound */
+<<<<<<< HEAD
         for (i = 100; i > i_peak3; i--) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for (i = 99; i > i_peak3; i--) {
+=======
+        for (i = 100; i > i_peak3; i--) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        for (i = 100; i > i_peak3; i--) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             if (histogram[i] < bottom3b) {
                 bottom3b = histogram[i];
                 /* i_bottom3b = i; */

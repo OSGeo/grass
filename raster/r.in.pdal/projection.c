@@ -27,13 +27,46 @@ void projection_mismatch_report(struct Cell_head cellhd,
     int i_value;
     char error_msg[8192];
 
+<<<<<<< HEAD
     strcpy(error_msg, _("Projection of dataset does not"
                         " appear to match current location.\n\n"));
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    strcpy(error_msg, _("Coordinate reference system of dataset does not"
+                        " appear to match current project.\n\n"));
+=======
+    strcpy(error_msg,
+           _("Projection of dataset does not"
+             " appear to match current location.\n\n"));
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    strcpy(error_msg, _("Projection of dataset does not"
+                        " appear to match current location.\n\n"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    strcpy(error_msg, _("Projection of dataset does not"
+                        " appear to match current location.\n\n"));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     /* TODO: output this info sorted by key: */
     if (loc_wind.proj != cellhd.proj || err != -2) {
         if (loc_proj_info != NULL) {
+<<<<<<< HEAD
             strcat(error_msg, _("GRASS LOCATION PROJ_INFO is:\n"));
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            strcat(error_msg, _("GRASS project PROJ_INFO is:\n"));
+=======
+            strcat(error_msg, _("GRASS LOCATION PROJ_INFO is:\n"));
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+            strcat(error_msg, _("GRASS LOCATION PROJ_INFO is:\n"));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             for (i_value = 0; i_value < loc_proj_info->nitems; i_value++)
                 sprintf(error_msg + strlen(error_msg), "%s: %s\n",
                         loc_proj_info->key[i_value],
@@ -58,17 +91,59 @@ void projection_mismatch_report(struct Cell_head cellhd,
                         "Dataset proj = %d (lat/long)\n", cellhd.proj);
             else if (cellhd.proj == PROJECTION_UTM)
                 sprintf(error_msg + strlen(error_msg),
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                         "Dataset proj = %d (UTM), zone = %d\n", cellhd.proj,
                         cellhd.zone);
             else
                 sprintf(error_msg + strlen(error_msg),
                         "Dataset proj = %d (unknown), zone = %d\n", cellhd.proj,
                         cellhd.zone);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+                        "Dataset proj = %d (UTM), zone = %d\n",
+                        cellhd.proj, cellhd.zone);
+            else
+                sprintf(error_msg + strlen(error_msg),
+                        "Dataset proj = %d (unknown), zone = %d\n",
+                        cellhd.proj, cellhd.zone);
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+                        "Dataset proj = %d (UTM), zone = %d\n", cellhd.proj,
+                        cellhd.zone);
+            else
+                sprintf(error_msg + strlen(error_msg),
+                        "Dataset proj = %d (unknown), zone = %d\n", cellhd.proj,
+                        cellhd.zone);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         }
     }
     else {
         if (loc_proj_units != NULL) {
+<<<<<<< HEAD
             strcat(error_msg, "GRASS LOCATION PROJ_UNITS is:\n");
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            strcat(error_msg, "GRASS project PROJ_UNITS is:\n");
+=======
+            strcat(error_msg, "GRASS LOCATION PROJ_UNITS is:\n");
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+            strcat(error_msg, "GRASS LOCATION PROJ_UNITS is:\n");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             for (i_value = 0; i_value < loc_proj_units->nitems; i_value++)
                 sprintf(error_msg + strlen(error_msg), "%s: %s\n",
                         loc_proj_units->key[i_value],
@@ -84,17 +159,65 @@ void projection_mismatch_report(struct Cell_head cellhd,
         }
     }
     sprintf(error_msg + strlen(error_msg),
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            _("\nIn case of no significant differences"
+              " in the coordinate reference system definitions,"
+              " use the -o flag to ignore them and use"
+              " current project definition.\n"));
+    strcat(error_msg,
+           _("Consider generating a new project with 'project' parameter"
+=======
+            _("\nIn case of no significant differences in the projection definitions,"
+             " use the -o flag to ignore them and use"
+             " current location definition.\n"));
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             _("\nIn case of no significant differences in the projection "
               "definitions,"
               " use the -o flag to ignore them and use"
               " current location definition.\n"));
+<<<<<<< HEAD
     strcat(error_msg,
            _("Consider generating a new location with 'location' parameter"
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+    strcat(error_msg,
+           _("Consider generating a new location with 'location' parameter"
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    strcat(error_msg,
+           _("Consider generating a new location with 'location' parameter"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
              " from input data set.\n"));
     G_fatal_error("%s", error_msg);
 }
 
+<<<<<<< HEAD
 void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
+=======
+void projection_check_wkt(struct Cell_head cellhd,
+                          struct Cell_head loc_wind,
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                           const char *projstr, int override, int verbose)
 {
     struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
@@ -123,6 +246,14 @@ void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
         if (verbose)
             G_message(_("Overriding projection check"));
     }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     else if (loc_wind.proj != cellhd.proj ||
              (err = G_compare_projections(loc_proj_info, loc_proj_units,
                                           proj_info, proj_units)) != TRUE) {
@@ -131,12 +262,53 @@ void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
     }
     else {
         if (verbose) {
+<<<<<<< HEAD
             G_message(_("Projection of input dataset and current location "
                         "appear to match"));
+=======
+<<<<<<< HEAD
+            G_message(_("Coordinate reference system of input dataset and "
+                        "current project appear to match"));
+=======
+    else if (loc_wind.proj != cellhd.proj
+             || (err =
+                 G_compare_projections(loc_proj_info, loc_proj_units,
+                                       proj_info, proj_units)) != TRUE) {
+=======
+    else if (loc_wind.proj != cellhd.proj ||
+             (err = G_compare_projections(loc_proj_info, loc_proj_units,
+                                          proj_info, proj_units)) != TRUE) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+        projection_mismatch_report(cellhd, loc_wind, loc_proj_info,
+                                   loc_proj_units, proj_info, proj_units, err);
+    }
+    else {
+        if (verbose) {
+            G_message(_("Projection of input dataset and current location "
+                        "appear to match"));
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+            G_message(_("Projection of input dataset and current location "
+                        "appear to match"));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         }
     }
 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 /* Does the projection of the current location match the dataset? */
 int is_wkt_projection_same_as_loc(const char *wkt)
 {
@@ -161,8 +333,28 @@ int is_wkt_projection_same_as_loc(const char *wkt)
     if (loc_wind.proj != cellhd.proj) {
         return FALSE;
     }
+<<<<<<< HEAD
     else if (G_compare_projections(loc_proj_info, loc_proj_units, proj_info,
                                    proj_units) != 1) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    else if (G_compare_projections(loc_proj_info, loc_proj_units, proj_info,
+                                   proj_units) != 1) {
+=======
+    else if (G_compare_projections(loc_proj_info, loc_proj_units,
+                                   proj_info, proj_units) != 1) {
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    else if (G_compare_projections(loc_proj_info, loc_proj_units, proj_info,
+                                   proj_units) != 1) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    else if (G_compare_projections(loc_proj_info, loc_proj_units, proj_info,
+                                   proj_units) != 1) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         return FALSE;
     }
     else {
@@ -190,11 +382,39 @@ void wkt_projection_mismatch_report(const char *wkt)
         loc_proj_info = G_get_projinfo();
         loc_proj_units = G_get_projunits();
     }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     int err = G_compare_projections(loc_proj_info, loc_proj_units, proj_info,
                                     proj_units);
 
     projection_mismatch_report(cellhd, loc_wind, loc_proj_info, loc_proj_units,
                                proj_info, proj_units, err);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+    int err = G_compare_projections(loc_proj_info, loc_proj_units,
+                                    proj_info, proj_units);
+
+    projection_mismatch_report(cellhd, loc_wind, loc_proj_info,
+                               loc_proj_units, proj_info, proj_units, err);
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+    int err = G_compare_projections(loc_proj_info, loc_proj_units, proj_info,
+                                    proj_units);
+
+    projection_mismatch_report(cellhd, loc_wind, loc_proj_info, loc_proj_units,
+                               proj_info, proj_units, err);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 }
 
 /* caller should free the returned string */

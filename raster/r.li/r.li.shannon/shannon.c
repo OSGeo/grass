@@ -65,7 +65,17 @@ int main(int argc, char *argv[])
                           output->answer);
 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int shannon(int fd, char **par UNUSED, struct area_entry *ad, double *result)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 int shannon(int fd, char **par, struct area_entry *ad, double *result)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int ris = RLI_OK;
     double indice = 0;

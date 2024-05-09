@@ -18,10 +18,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 
-if sys.version_info.major == 2:
-    import Queue
-else:
-    import queue as Queue
+import queue as Queue
 from math import sin, cos, pi, sqrt
 
 import wx
@@ -320,7 +317,8 @@ class PsMapFrame(wx.Frame):
                 GMessage(
                     parent=self,
                     message=_(
-                        "Program ps2pdf is not available. Please install it first to create PDF."
+                        "Program ps2pdf is not available. Please install it first to "
+                        "create PDF."
                     ),
                 )
                 return
@@ -407,8 +405,14 @@ class PsMapFrame(wx.Frame):
 
         if event.userData["pdfname"]:
             if sys.platform == "win32":
+                import platform
+
+                arch = platform.architecture()[0]
+                pdf_rendering_prog = "gswin64c"
+                if "32" in arch:
+                    pdf_rendering_prog = "gswin32c"
                 command = [
-                    "gswin32c",
+                    pdf_rendering_prog,
                     "-P-",
                     "-dSAFER",
                     "-dCompatibilityLevel=1.4",
@@ -430,14 +434,23 @@ class PsMapFrame(wx.Frame):
                     "-f",
                     event.userData["filename"],
                 ]
+                title = _("Program {} is not available.").format(pdf_rendering_prog)
+                message = _("{title} Please install it to create PDF.\n\n").format(
+                    title=title
+                )
             else:
+                pdf_rendering_prog = "ps2pdf"
                 command = [
-                    "ps2pdf",
+                    pdf_rendering_prog,
                     "-dPDFSETTINGS=/prepress",
                     "-r1200",
                     event.userData["filename"],
                     event.userData["pdfname"],
                 ]
+                message = _(
+                    "Program {} is not available."
+                    " Please install it to create PDF.\n\n "
+                ).format(pdf_rendering_prog)
             try:
                 proc = grass.Popen(command)
                 ret = proc.wait()
@@ -450,13 +463,20 @@ class PsMapFrame(wx.Frame):
                 else:
                     self.SetStatusText(_("PDF generated"), 0)
             except OSError as e:
-                GError(
-                    parent=self,
-                    message=_(
-                        "Program ps2pdf is not available. Please install it to create PDF.\n\n %s"
+                if sys.platform == "win32":
+                    dlg = HyperlinkDialog(
+                        self,
+                        title=title,
+                        message=message + str(e),
+                        hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
+                        hyperlinkLabel=_("You can download {} version here.").format(
+                            arch
+                        ),
                     )
-                    % e,
-                )
+                    dlg.ShowModal()
+                    dlg.Destroy()
+                    return
+                GError(parent=self, message=message + str(e))
 
         elif not event.userData["temp"]:
             self.SetStatusText(_("PostScript file generated"), 0)
@@ -479,22 +499,57 @@ class PsMapFrame(wx.Frame):
                     im_array = np.array(im)
                     im = PILImage.fromarray(np.rot90(im_array, 3))
                 im.save(self.imgName, format="PNG")
+<<<<<<< HEAD
             except (IOError, OSError):
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            except OSError:
+=======
+            except (IOError, OSError):
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            except (IOError, OSError):
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 del busy
                 program = self._getGhostscriptProgramName()
                 dlg = HyperlinkDialog(
                     self,
                     title=_("Preview not available"),
                     message=_(
-                        "Preview is not available probably because Ghostscript is not installed or not on PATH."
+                        "Preview is not available probably because Ghostscript is not "
+                        "installed or not on PATH."
                     ),
                     hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
                     hyperlinkLabel=_(
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                        "You can download {program} {arch} version here."
+                    ).format(
+                        program=program,
+                        arch="64bit" if "64" in program else "32bit",
+                    ),
+<<<<<<< HEAD
+=======
+                    hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
+                    hyperlinkLabel=_(
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                         "You can donwload {program} {arch} version here."
                     ).format(
                         program=program,
                         arch="64bit" if "64" in program else "32bit",
                     ),
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 )
                 dlg.ShowModal()
                 dlg.Destroy()
@@ -1043,7 +1098,8 @@ class PsMapFrame(wx.Frame):
             return (0, 0)
 
     def getInitMap(self):
-        """Create default map frame when no map is selected, needed for coordinates in map units"""
+        """Create default map frame when no map is selected, needed for coordinates in
+        map units"""
         instrFile = grass.tempfile()
         instrFileFd = open(instrFile, mode="wb")
         content = self.InstructionFile()
@@ -1174,7 +1230,6 @@ class PsMapFrame(wx.Frame):
                 self.canvas.RedrawSelectBox(id)
 
             if itype == "text":
-
                 if self.instruction[id]["rotate"]:
                     rot = float(self.instruction[id]["rotate"])
                 else:
@@ -1223,7 +1278,6 @@ class PsMapFrame(wx.Frame):
                 self.canvas.RedrawSelectBox(id)
 
             if itype in ("map", "vector", "raster", "labels"):
-
                 if itype == "raster":  # set resolution
                     try:
                         info = grass.raster_info(self.instruction[id]["raster"])
@@ -1440,7 +1494,8 @@ class PsMapBufferedWindow(wx.Window):
             self.SetPage()
 
     def CanvasPaperCoordinates(self, rect, canvasToPaper=True):
-        """Converts canvas (pixel) -> paper (inch) coordinates and size and vice versa"""
+        """Converts canvas (pixel) -> paper (inch) coordinates and size and
+        vice versa"""
 
         units = UnitConversion(self)
 
@@ -1507,7 +1562,8 @@ class PsMapBufferedWindow(wx.Window):
         return r
 
     def RecalculateEN(self):
-        """Recalculate east and north for texts (eps, points) after their or map's movement"""
+        """Recalculate east and north for texts (eps, points) after their or map's
+        movement"""
         try:
             mapId = self.instruction.FindInstructionByType("map").id
         except AttributeError:
@@ -1782,7 +1838,6 @@ class PsMapBufferedWindow(wx.Window):
 
                 if self.instruction[mapId]["scaleType"] in (0, 1, 2):
                     if self.instruction[mapId]["scaleType"] == 0:
-
                         scale, foo, rect = AutoAdjust(
                             self,
                             scaleType=0,
@@ -1852,7 +1907,6 @@ class PsMapBufferedWindow(wx.Window):
         # recalculate the position of objects after dragging
         if self.mouse["use"] in ("pointer", "resize") and self.dragId != -1:
             if self.mouse["begin"] != event.GetPosition():  # for double click
-
                 self.RecalculatePosition(ids=[self.dragId])
                 if self.instruction[self.dragId].type in self.openDialogs:
                     self.openDialogs[self.instruction[self.dragId].type].updateDialog()
@@ -2133,8 +2187,8 @@ class PsMapBufferedWindow(wx.Window):
                     rect=rect, canvasToPaper=True
                 )
                 rect.Offset(
-                    dx=rect.GetWidth() / 2,
-                    dy=rect.GetHeight() / 2,
+                    dx=int(rect.GetWidth() / 2),
+                    dy=int(rect.GetHeight() / 2),
                 )
                 self.instruction[id]["where"] = self.CanvasPaperCoordinates(
                     rect=rect, canvasToPaper=True
@@ -2277,10 +2331,10 @@ class PsMapBufferedWindow(wx.Window):
                         rot = float(self.instruction[id]["rotate"])
                     else:
                         rot = 0
-                    self.instruction[id][
-                        "rect"
-                    ] = bounds = self.parent.getModifiedTextBounds(
-                        coords[0], coords[1], extent, rot
+                    self.instruction[id]["rect"] = bounds = (
+                        self.parent.getModifiedTextBounds(
+                            coords[0], coords[1], extent, rot
+                        )
                     )
                     self.DrawRotText(
                         pdc=self.pdcObj,
@@ -2513,12 +2567,16 @@ class PsMapBufferedWindow(wx.Window):
         pdc.BeginDrawing()
 
         # border is not redrawn when zoom changes, why?
-        # if textDict['border'] != 'none' and not rot:
-        ##            units = UnitConversion(self)
-        # borderWidth = units.convert(value = textDict['width'],
-        # fromUnit = 'point', toUnit = 'pixel' ) * self.currScale
-        ##            pdc.SetPen(wx.Pen(colour = convertRGB(textDict['border']), width = borderWidth))
-        # pdc.DrawRectangle(*bounds)
+        # if textDict["border"] != "none" and not rot:
+        #     units = UnitConversion(self)
+        #     borderWidth = (
+        #         units.convert(
+        #         value=textDict["width"], fromUnit="point", toUnit="pixel")
+        #         * self.currScale
+        #     )
+        #     pdc.SetPen(wx.Pen(colour=convertRGB(
+        #     textDict["border"]), width=borderWidth))
+        #     pdc.DrawRectangle(*bounds)
 
         if background:
             pdc.SetTextBackground(convertRGB(background))
@@ -2533,7 +2591,7 @@ class PsMapBufferedWindow(wx.Window):
         if rot == 0:
             pdc.DrawLabel(text=textDict["text"], rect=bounds)
         else:
-            pdc.DrawRotatedText(textDict["text"], coords[0], coords[1], rot)
+            pdc.DrawRotatedText(textDict["text"], int(coords[0]), int(coords[1]), rot)
 
         pdc.SetIdBounds(drawId, Rect(*bounds))
         self.Refresh()

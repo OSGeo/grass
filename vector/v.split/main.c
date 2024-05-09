@@ -44,7 +44,30 @@ int main(int argc, char *argv[])
     int line, nlines, layer, nosplit, fixedlength;
     double length = -1;
     int vertices = 0;
+<<<<<<< HEAD
     double (*line_length)(const struct line_pnts *);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    double (*line_length)(const struct line_pnts *);
+=======
+    double (*line_length)();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    double (*line_length)();
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    double (*line_length)(const struct line_pnts *);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    double (*line_length)();
+=======
+    double (*line_length)(const struct line_pnts *);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     int geodesic = 0;
 
     G_gisinit(argv[0]);

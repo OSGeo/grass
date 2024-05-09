@@ -295,7 +295,7 @@ static void translate_from_colors(struct map *m, DCELL *rast, CELL *cell,
  *
  * This requires performing sscanf() of the category label
  * and only do it it for new categories. Must maintain
- * some kind of maps of already scaned values.
+ * some kind of maps of already scanned values.
  *
  * This maps is a hybrid tree, where the data in each node
  * of the tree is an array of, for example, 64 values, and
@@ -593,8 +593,19 @@ void setup_maps(void)
         setup_map(&maps[i]);
 }
 
+<<<<<<< HEAD
+void get_map_row(int idx, int mod, int depth UNUSED, int row, int col,
+                 void *buf, int res_type)
+=======
 void get_map_row(int idx, int mod, int depth, int row, int col, void *buf,
                  int res_type)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     CELL *ibuf;
     DCELL *fbuf;
@@ -725,9 +736,18 @@ void copy_history(const char *dst, int idx)
     Rast_write_history((char *)dst, &hist);
 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+#define RECORD_LEN 80
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 void create_history(const char *dst, expression *e)
 {
-    int RECORD_LEN = 80;
     int WIDTH = RECORD_LEN - 12;
     struct History hist;
     char *expr = format_expression(e);
@@ -736,7 +756,30 @@ void create_history(const char *dst, expression *e)
 
     Rast_short_history(dst, "raster", &hist);
 
+<<<<<<< HEAD
     for (;;) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (;;) {
+=======
+    for (i = 0;; i++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    for (i = 0;; i++) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    for (;;) {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    for (i = 0;; i++) {
+=======
+    for (;;) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         char buf[RECORD_LEN];
         int n;
 

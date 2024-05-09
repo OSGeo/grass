@@ -45,7 +45,6 @@ class PointListToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-
         icons = {
             "insertPoint": MetaIcon(
                 img="pointer", label=_("Insert points from Map Display")
@@ -86,7 +85,17 @@ class PointListToolbar(BaseToolbar):
                     icons["pointDelete"],
                     self.OnDeletePoint,
                 ),
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (None,),  # ,
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 (None,)  # ,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
                 # ('isec_turn_edit', icons['isec_turn_edit'],
                 # self.dialog.OnDefIsecTurnCosts,
                 # wx.ITEM_CHECK),
@@ -120,7 +129,6 @@ class MainToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-
         icons = {
             "run": MetaIcon(img="execute", label=_("Execute analysis")),
             "undo": MetaIcon(img="undo", label=_("Go to previous analysis result")),
@@ -184,7 +192,6 @@ class MainToolbar(BaseToolbar):
         )
 
     def UpdateUndoRedo(self, curr_step, steps_num):
-
         id = vars(self)["showResult"]
         self.ToggleTool(id, True)
 
@@ -238,7 +245,6 @@ class AnalysisToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-
         icons = {}
 
         return self._getToolbarData(())

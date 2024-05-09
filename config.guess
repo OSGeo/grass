@@ -1,10 +1,34 @@
 #! /bin/sh
 # Attempt to guess a canonical system name.
+<<<<<<< HEAD
 #   Copyright 1992-2022 Free Software Foundation, Inc.
 
 # shellcheck disable=SC2006,SC2268 # see below for rationale
 
 timestamp='2022-01-09'
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+#   Copyright 1992-2024 Free Software Foundation, Inc.
+
+# shellcheck disable=SC2006,SC2268 # see below for rationale
+
+timestamp='2024-01-01'
+=======
+#   Copyright 1992-2022 Free Software Foundation, Inc.
+
+# shellcheck disable=SC2006,SC2268 # see below for rationale
+
+timestamp='2022-01-09'
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#   Copyright 1992-2022 Free Software Foundation, Inc.
+
+# shellcheck disable=SC2006,SC2268 # see below for rationale
+
+timestamp='2022-01-09'
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -47,7 +71,7 @@ me=`echo "$0" | sed -e 's,.*/,,'`
 usage="\
 Usage: $0 [OPTION]
 
-Output the configuration name of the system \`$me' is run on.
+Output the configuration name of the system '$me' is run on.
 
 Options:
   -h, --help         print this help, then exit
@@ -60,13 +84,25 @@ version="\
 GNU config.guess ($timestamp)
 
 Originally written by Per Bothner.
+<<<<<<< HEAD
 Copyright 1992-2022 Free Software Foundation, Inc.
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+Copyright 1992-2024 Free Software Foundation, Inc.
+=======
+Copyright 1992-2022 Free Software Foundation, Inc.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+Copyright 1992-2022 Free Software Foundation, Inc.
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
 
 help="
-Try \`$me --help' for more information."
+Try '$me --help' for more information."
 
 # Parse command line
 while test $# -gt 0 ; do
@@ -102,8 +138,8 @@ GUESS=
 # temporary files to be created and, as you can see below, it is a
 # headache to deal with in a portable fashion.
 
-# Historically, `CC_FOR_BUILD' used to be named `HOST_CC'. We still
-# use `HOST_CC' if defined, but it is deprecated.
+# Historically, 'CC_FOR_BUILD' used to be named 'HOST_CC'. We still
+# use 'HOST_CC' if defined, but it is deprecated.
 
 # Portable tmp directory creation inspired by the Autoconf team.
 
@@ -155,6 +191,9 @@ Linux|GNU|GNU/*)
 
 	set_cc_for_build
 	cat <<-EOF > "$dummy.c"
+	#if defined(__ANDROID__)
+	LIBC=android
+	#else
 	#include <features.h>
 	#if defined(__UCLIBC__)
 	LIBC=uclibc
@@ -162,11 +201,14 @@ Linux|GNU|GNU/*)
 	LIBC=dietlibc
 	#elif defined(__GLIBC__)
 	LIBC=gnu
+	#elif defined(__LLVM_LIBC__)
+	LIBC=llvm
 	#else
 	#include <stdarg.h>
 	/* First heuristic to detect musl libc.  */
 	#ifdef __DEFINED_va_list
 	LIBC=musl
+	#endif
 	#endif
 	#endif
 	EOF
@@ -459,7 +501,17 @@ case $UNAME_MACHINE:$UNAME_SYSTEM:$UNAME_RELEASE:$UNAME_VERSION in
 		UNAME_RELEASE=`uname -v`
 		;;
 	esac
+<<<<<<< HEAD
+	# Japanese Language versions have a version number like '4.1.3-JL'.
+=======
 	# Japanese Language versions have a version number like `4.1.3-JL'.
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 	SUN_REL=`echo "$UNAME_RELEASE" | sed -e 's/-/_/'`
 	GUESS=sparc-sun-sunos$SUN_REL
 	;;
@@ -904,7 +956,19 @@ EOF
 	fi
 	;;
     *:FreeBSD:*:*)
+<<<<<<< HEAD
 	UNAME_PROCESSOR=`/usr/bin/uname -p`
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+	UNAME_PROCESSOR=`uname -p`
+=======
+	UNAME_PROCESSOR=`/usr/bin/uname -p`
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+	UNAME_PROCESSOR=`/usr/bin/uname -p`
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 	case $UNAME_PROCESSOR in
 	    amd64)
 		UNAME_PROCESSOR=x86_64 ;;
@@ -966,11 +1030,58 @@ EOF
 	GNU_REL=`echo "$UNAME_RELEASE" | sed -e 's/[-(].*//'`
 	GUESS=$UNAME_MACHINE-unknown-$GNU_SYS$GNU_REL-$LIBC
 	;;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    x86_64:[Mm]anagarm:*:*|i?86:[Mm]anagarm:*:*)
+	GUESS="$UNAME_MACHINE-pc-managarm-mlibc"
+	;;
+    *:[Mm]anagarm:*:*)
+	GUESS="$UNAME_MACHINE-unknown-managarm-mlibc"
+	;;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     *:Minix:*:*)
 	GUESS=$UNAME_MACHINE-unknown-minix
 	;;
     aarch64:Linux:*:*)
+<<<<<<< HEAD
 	GUESS=$UNAME_MACHINE-unknown-linux-$LIBC
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+	set_cc_for_build
+	CPU=$UNAME_MACHINE
+	LIBCABI=$LIBC
+	if test "$CC_FOR_BUILD" != no_compiler_found; then
+	    ABI=64
+	    sed 's/^	    //' << EOF > "$dummy.c"
+	    #ifdef __ARM_EABI__
+	    #ifdef __ARM_PCS_VFP
+	    ABI=eabihf
+	    #else
+	    ABI=eabi
+	    #endif
+	    #endif
+EOF
+	    cc_set_abi=`$CC_FOR_BUILD -E "$dummy.c" 2>/dev/null | grep '^ABI' | sed 's, ,,g'`
+	    eval "$cc_set_abi"
+	    case $ABI in
+		eabi | eabihf) CPU=armv8l; LIBCABI=$LIBC$ABI ;;
+	    esac
+	fi
+	GUESS=$CPU-unknown-linux-$LIBCABI
+=======
+	GUESS=$UNAME_MACHINE-unknown-linux-$LIBC
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+	GUESS=$UNAME_MACHINE-unknown-linux-$LIBC
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 	;;
     aarch64_be:Linux:*:*)
 	UNAME_MACHINE=aarch64_be
@@ -1036,7 +1147,28 @@ EOF
     k1om:Linux:*:*)
 	GUESS=$UNAME_MACHINE-unknown-linux-$LIBC
 	;;
+<<<<<<< HEAD
     loongarch32:Linux:*:* | loongarch64:Linux:*:* | loongarchx32:Linux:*:*)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    kvx:Linux:*:*)
+	GUESS=$UNAME_MACHINE-unknown-linux-$LIBC
+	;;
+    kvx:cos:*:*)
+	GUESS=$UNAME_MACHINE-unknown-cos
+	;;
+    kvx:mbr:*:*)
+	GUESS=$UNAME_MACHINE-unknown-mbr
+	;;
+    loongarch32:Linux:*:* | loongarch64:Linux:*:*)
+=======
+    loongarch32:Linux:*:* | loongarch64:Linux:*:* | loongarchx32:Linux:*:*)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    loongarch32:Linux:*:* | loongarch64:Linux:*:* | loongarchx32:Linux:*:*)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 	GUESS=$UNAME_MACHINE-unknown-linux-$LIBC
 	;;
     m32r*:Linux:*:*)
@@ -1151,8 +1283,29 @@ EOF
 	;;
     x86_64:Linux:*:*)
 	set_cc_for_build
+	CPU=$UNAME_MACHINE
 	LIBCABI=$LIBC
 	if test "$CC_FOR_BUILD" != no_compiler_found; then
+<<<<<<< HEAD
+	    ABI=64
+	    sed 's/^	    //' << EOF > "$dummy.c"
+	    #ifdef __i386__
+	    ABI=x86
+	    #else
+	    #ifdef __ILP32__
+	    ABI=x32
+	    #endif
+	    #endif
+EOF
+	    cc_set_abi=`$CC_FOR_BUILD -E "$dummy.c" 2>/dev/null | grep '^ABI' | sed 's, ,,g'`
+	    eval "$cc_set_abi"
+	    case $ABI in
+		x86) CPU=i686 ;;
+		x32) LIBCABI=${LIBC}x32 ;;
+	    esac
+	fi
+	GUESS=$CPU-pc-linux-$LIBCABI
+=======
 	    if (echo '#ifdef __ILP32__'; echo IS_X32; echo '#endif') | \
 		(CCOPTS="" $CC_FOR_BUILD -E - 2>/dev/null) | \
 		grep IS_X32 >/dev/null
@@ -1161,6 +1314,13 @@ EOF
 	    fi
 	fi
 	GUESS=$UNAME_MACHINE-pc-linux-$LIBCABI
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 	;;
     xtensa*:Linux:*:*)
 	GUESS=$UNAME_MACHINE-unknown-linux-$LIBC
@@ -1180,7 +1340,7 @@ EOF
 	GUESS=$UNAME_MACHINE-pc-sysv4.2uw$UNAME_VERSION
 	;;
     i*86:OS/2:*:*)
-	# If we were able to find `uname', then EMX Unix compatibility
+	# If we were able to find 'uname', then EMX Unix compatibility
 	# is probably installed.
 	GUESS=$UNAME_MACHINE-pc-os2-emx
 	;;
@@ -1321,7 +1481,17 @@ EOF
 		GUESS=ns32k-sni-sysv
 	fi
 	;;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    PENTIUM:*:4.0*:*)	# Unisys 'ClearPath HMP IX 4000' SVR4/MP effort
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     PENTIUM:*:4.0*:*)	# Unisys `ClearPath HMP IX 4000' SVR4/MP effort
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 			# says <Richard.M.Bartel@ccMail.Census.GOV>
 	GUESS=i586-unisys-sysv4
 	;;
@@ -1367,8 +1537,26 @@ EOF
     BePC:Haiku:*:*)	# Haiku running on Intel PC compatible.
 	GUESS=i586-pc-haiku
 	;;
+<<<<<<< HEAD
     x86_64:Haiku:*:*)
 	GUESS=x86_64-unknown-haiku
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    ppc:Haiku:*:*)	# Haiku running on Apple PowerPC
+	GUESS=powerpc-apple-haiku
+	;;
+    *:Haiku:*:*)	# Haiku modern gcc (not bound by BeOS compat)
+	GUESS=$UNAME_MACHINE-unknown-haiku
+=======
+    x86_64:Haiku:*:*)
+	GUESS=x86_64-unknown-haiku
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    x86_64:Haiku:*:*)
+	GUESS=x86_64-unknown-haiku
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 	;;
     SX-4:SUPER-UX:*:*)
 	GUESS=sx4-nec-superux$UNAME_RELEASE
@@ -1540,6 +1728,18 @@ EOF
     *:Unleashed:*:*)
 	GUESS=$UNAME_MACHINE-unknown-unleashed$UNAME_RELEASE
 	;;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    *:Ironclad:*:*)
+	GUESS=$UNAME_MACHINE-unknown-ironclad
+	;;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 esac
 
 # Do we have a guess based on uname results?

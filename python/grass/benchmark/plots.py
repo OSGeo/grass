@@ -37,10 +37,36 @@ def get_pyplot(to_file):
     return plt
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 def nprocs_plot(results, filename=None, title=None):
     """Plot results from a multiple nprocs (thread) benchmarks.
 
     *results* is a list of individual results from separate benchmarks.
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+def nprocs_plot(results, filename=None):
+    """Plot results from a multiple nprocs (thread) benchmarks.
+
+<<<<<<< HEAD
+    *results* is a list of individual results from separate benchmars.
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+    *results* is a list of individual results from separate benchmarks.
+>>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     One result is required to have attributes: *nprocs*, *times*, *label*.
     The *nprocs* attribute is a list of all processing elements
     (cores, threads, processes) used in the benchmark.
@@ -67,10 +93,30 @@ def nprocs_plot(results, filename=None, title=None):
             maxes = [max(i) for i in result.all_times]
             plt.fill_between(x, mins, maxes, color="gray", alpha=0.3)
     plt.legend()
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     # If there is not many x values, show ticks for each, but use default
     # ticks when there is a lot of x values.
     if len(x_ticks) < 10:
         axes.set(xticks=sorted(x_ticks))
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     else:
         from matplotlib.ticker import (  # pylint: disable=import-outside-toplevel
             MaxNLocator,
@@ -83,16 +129,61 @@ def nprocs_plot(results, filename=None, title=None):
         plt.title(title)
     else:
         plt.title("Execution time by processing elements")
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+    axes.set(xticks=sorted(x_ticks))
+    plt.xlabel("Number of cores (threads, processes)")
+    plt.ylabel("Time [s]")
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+    plt.xlabel("Number of processing elements (cores, threads, processes)")
+    plt.ylabel("Time [s]")
+    if title:
+        plt.title(title)
+    else:
+        plt.title("Execution time by processing elements")
+>>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     if filename:
         plt.savefig(filename)
     else:
         plt.show()
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 def num_cells_plot(results, filename=None, title=None, show_resolution=False):
     """Plot results from a multiple raster grid size benchmarks.
 
     *results* is a list of individual results from separate benchmarks
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+def num_cells_plot(results, filename=None, show_resolution=False):
+    """Plot results from a multiple raster grid size benchmarks.
+
+    *results* is a list of individual results from separate benchmars
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+def num_cells_plot(results, filename=None, title=None, show_resolution=False):
+    """Plot results from a multiple raster grid size benchmarks.
+
+    *results* is a list of individual results from separate benchmarks
+>>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     with one result being similar to the :func:`nprocs_plot` function.
     The result is required to have *times* and *label* attributes
     and may have an *all_times* attribute.
@@ -129,12 +220,33 @@ def num_cells_plot(results, filename=None, title=None, show_resolution=False):
     else:
         plt.xlabel("Number of cells")
     plt.ylabel("Time [s]")
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     if title:
         plt.title(title)
     elif show_resolution:
         plt.title("Execution time by resolution")
     else:
         plt.title("Execution time by cell count")
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     if filename:
         plt.savefig(filename)
     else:

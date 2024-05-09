@@ -59,7 +59,19 @@ static void seq_MAP_routine(
     double tmp[3];   /* temporary transition probability parameters */
     double diff1;    /* change in parameter estimates */
     double diff2;    /* change in log likelihood */
+<<<<<<< HEAD
     struct Region *regionary; /* array of region stuctures */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    struct Region *regionary; /* array of region structures */
+=======
+    struct Region *regionary; /* array of region stuctures */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    struct Region *regionary; /* array of region stuctures */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     /* determine number of resolutions */
     D = levels_reg(region);
@@ -212,7 +224,19 @@ static void interp(
     int best = 0;          /* class of minimum cost selection */
     double Constant, tmp;
     double *pdf; /* propability density function of class selections */
+<<<<<<< HEAD
     double Z;    /* normalizing costant for pdf */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    double Z;    /* normalizing constant for pdf */
+=======
+    double Z;    /* normalizing costant for pdf */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    double Z;    /* normalizing costant for pdf */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     double alpha0, alpha1, alpha2; /* transition probabilities */
     double log_tbl[2][3][2];       /* log of transition probability */
 

@@ -34,7 +34,7 @@
    \return string containing OGR/PostGIS datasource name
    \return NULL on error (map format is native)
  */
-const char *Vect_get_finfo_dsn_name(const struct Map_info *Map)
+const char *Vect_get_finfo_dsn_name(struct Map_info *Map)
 {
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
 #ifndef HAVE_OGR
@@ -70,7 +70,7 @@ const char *Vect_get_finfo_dsn_name(const struct Map_info *Map)
    \return string containing layer name
    \return NULL on error (map format is native)
  */
-char *Vect_get_finfo_layer_name(const struct Map_info *Map)
+char *Vect_get_finfo_layer_name(struct Map_info *Map)
 {
     char *name;
 
@@ -105,7 +105,17 @@ char *Vect_get_finfo_layer_name(const struct Map_info *Map)
    \return "PostgreSQL" for PostGIS format (GV_FORMAT_POSTGIS)
    \return NULL on error (or on missing OGR/PostgreSQL support)
  */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+const char *Vect_get_finfo_format_info(struct Map_info *Map)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 const char *Vect_get_finfo_format_info(const struct Map_info *Map)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
 #ifndef HAVE_OGR
@@ -140,7 +150,17 @@ const char *Vect_get_finfo_format_info(const struct Map_info *Map)
    (point, linestring, polygon, ...)
    \return NULL on error (map format is native)
  */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+const char *Vect_get_finfo_geometry_type(struct Map_info *Map)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int dim;
     char *ftype, *ftype_tmp;
@@ -221,7 +241,19 @@ const char *Vect_get_finfo_geometry_type(const struct Map_info *Map)
    \return pointer to Format_info structure
    \return NULL for native format
  */
+<<<<<<< HEAD
 const struct Format_info *Vect_get_finfo(const struct Map_info *Map)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+const struct Format_info *Vect_get_finfo(struct Map_info *Map)
+=======
+const struct Format_info *Vect_get_finfo(const struct Map_info *Map)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+const struct Format_info *Vect_get_finfo(const struct Map_info *Map)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     /* do not check Map-format which is native (see
      * GRASS_VECTOR_EXTERNAL_IMMEDIATE) */
@@ -244,7 +276,19 @@ const struct Format_info *Vect_get_finfo(const struct Map_info *Map)
    \return GV_TOPO_PSEUDO for pseudo-topology
    \return GV_TOPO_POSTGIS for PostGIS Topology
  */
+<<<<<<< HEAD
 int Vect_get_finfo_topology_info(const struct Map_info *Map, char **toposchema,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int Vect_get_finfo_topology_info(struct Map_info *Map, char **toposchema,
+=======
+int Vect_get_finfo_topology_info(const struct Map_info *Map, char **toposchema,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int Vect_get_finfo_topology_info(const struct Map_info *Map, char **toposchema,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                                  char **topogeom, int *topo_geo_only)
 {
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {

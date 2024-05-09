@@ -65,7 +65,7 @@
 /*                                                                      c */
 /*                                                                      c */
 /*   example for iaer and iaerp                                         c */
-/* 8                      Multimodal Log-Normale distribution selected  c */
+/* 8                      Multimodal Log-Normal distribution selected  c */
 /* 0.0001 100.0 3         Rmin, Rmax, 3 components                      c */
 /* 0.5000 2.99 1.66E-7    Rmean, Sigma, percentage density-1st componentc */
 /* 1.53 1.53 1.53 1.53 1.53 1.53 1.52 1.40 1.22 1.27  nr-10 wavelengths c */
@@ -98,7 +98,19 @@ private:
     void load();
     void save(); /* .mie file */
 
+<<<<<<< HEAD
     /* defined models' initilizations */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /* defined models' initializations */
+=======
+    /* defined models' initilizations */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    /* defined models' initilizations */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     void bdm();
     void bbm();
     void stm();

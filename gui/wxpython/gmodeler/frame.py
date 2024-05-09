@@ -4,14 +4,9 @@
 @brief wxGUI Graphical Modeler for creating, editing, and managing models
 
 Classes:
- - frame::ModelFrame
- - frame::ModelCanvas
- - frame::ModelEvtHandler
- - frame::VariablePanel
- - frame::ItemPanel
- - frame::PythonPanel
+ - frame::ModelerFrame
 
-(C) 2010-2018 by the GRASS Development Team
+(C) 2010-2023 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -21,173 +16,49 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import sys
-import time
-import stat
-import tempfile
-import random
-import six
 
 import wx
-from wx.lib import ogl
+
 from core import globalvar
-
-if globalvar.wxPythonPhoenix:
-    try:
-        import agw.flatnotebook as FN
-    except ImportError:  # if it's not there locally, try the wxPython lib.
-        import wx.lib.agw.flatnotebook as FN
-else:
-    import wx.lib.flatnotebook as FN
-from wx.lib.newevent import NewEvent
-
-from gui_core.widgets import GNotebook
-from core.gconsole import GConsole, EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE
-from gui_core.goutput import GConsoleWindow
-from core.debug import Debug
-from core.gcmd import GMessage, GException, GWarning, GError
-from gui_core.dialogs import GetImageHandlers
-from gui_core.dialogs import TextEntryDialog as CustomTextEntryDialog
-from gui_core.ghelp import ShowAboutDialog
-from core.settings import UserSettings
 from gui_core.menu import Menu as Menubar
+
 from gmodeler.menudata import ModelerMenuData
-from gui_core.forms import GUI
-from gmodeler.preferences import PreferencesDialog, PropertiesDialog
-from gmodeler.toolbars import ModelerToolbar
-from core.giface import Notification
-from gui_core.pystc import PyStc, SetDarkMode
-from gmodeler.giface import GraphicalModelerGrassInterface
-from gmodeler.model import *
-from gmodeler.dialogs import *
-from gui_core.wrap import (
-    Button,
-    EmptyBitmap,
-    ImageFromBitmap,
-    Menu,
-    NewId,
-    StaticBox,
-    StaticText,
-    StockCursor,
-    TextCtrl,
-    IsDark,
-)
-from gui_core.wrap import TextEntryDialog as wxTextEntryDialog
-
-wxModelDone, EVT_MODEL_DONE = NewEvent()
-
-from grass.script.utils import try_remove
-from grass.script import core as grass
+from gmodeler.panels import ModelerPanel
 
 
-class ModelFrame(wx.Frame):
+class ModelerFrame(wx.Frame):
     def __init__(
         self, parent, giface, id=wx.ID_ANY, title=_("Graphical Modeler"), **kwargs
     ):
         """Graphical modeler main window
-
         :param parent: parent window
+        :param giface: GRASS interface
         :param id: window id
         :param title: window title
 
         :param kwargs: wx.Frames' arguments
         """
-        self.parent = parent
-        self._giface = giface
-        self.searchDialog = None  # module search dialog
-        self.baseTitle = title
-        self.modelFile = None  # loaded model
-        self.start_time = None
-        self.modelChanged = False
-        self.randomness = 40  # random layout
-
-        self.cursors = {
-            "default": StockCursor(wx.CURSOR_ARROW),
-            "cross": StockCursor(wx.CURSOR_CROSS),
-        }
-
         wx.Frame.__init__(self, parent=parent, id=id, title=title, **kwargs)
-        self.SetName("Modeler")
+
         self.SetIcon(
             wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
+        self.statusbar = self.CreateStatusBar(number=1)
+        self.panel = ModelerPanel(parent=self, giface=giface, statusbar=self.statusbar)
+
         self.menubar = Menubar(
-            parent=self, model=ModelerMenuData().GetModel(separators=True)
+            parent=self,
+            model=ModelerMenuData().GetModel(separators=True),
+            class_handler=self.panel,
         )
         self.SetMenuBar(self.menubar)
 
-        self.toolbar = ModelerToolbar(parent=self)
-        # workaround for http://trac.wxwidgets.org/ticket/13888
-        if sys.platform != "darwin":
-            self.SetToolBar(self.toolbar)
-
-        self.statusbar = self.CreateStatusBar(number=1)
-
-        self.notebook = GNotebook(parent=self, style=globalvar.FNPageDStyle)
-
-        self.canvas = ModelCanvas(self)
-        self.canvas.SetBackgroundColour(
-            wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW)
-        )
-        self.canvas.SetCursor(self.cursors["default"])
-
-        self.model = Model(self.canvas)
-
-        self.variablePanel = VariablePanel(parent=self)
-
-        self.itemPanel = ItemPanel(parent=self)
-
-        self.pythonPanel = PythonPanel(parent=self)
-
-        self._gconsole = GConsole(guiparent=self)
-        self.goutput = GConsoleWindow(
-            parent=self, giface=giface, gconsole=self._gconsole
-        )
-        self.goutput.showNotification.connect(
-            lambda message: self.SetStatusText(message)
-        )
-
-        # here events are binded twice
-        self._gconsole.Bind(
-            EVT_CMD_RUN,
-            lambda event: self._switchPageHandler(
-                event=event, notification=Notification.MAKE_VISIBLE
-            ),
-        )
-        self._gconsole.Bind(
-            EVT_CMD_DONE,
-            lambda event: self._switchPageHandler(
-                event=event, notification=Notification.RAISE_WINDOW
-            ),
-        )
-        self.Bind(EVT_CMD_RUN, self.OnCmdRun)
-        # rewrite default method to avoid hiding progress bar
-        self._gconsole.Bind(EVT_CMD_DONE, self.OnCmdDone)
-        self.Bind(EVT_CMD_PREPARE, self.OnCmdPrepare)
-        self.Bind(EVT_MODEL_DONE, self.OnModelDone)
-
-        self.notebook.AddPage(page=self.canvas, text=_("Model"), name="model")
-        self.notebook.AddPage(page=self.itemPanel, text=_("Items"), name="items")
-        self.notebook.AddPage(
-            page=self.variablePanel, text=_("Variables"), name="variables"
-        )
-        self.notebook.AddPage(
-            page=self.pythonPanel, text=_("Python editor"), name="python"
-        )
-        self.notebook.AddPage(
-            page=self.goutput, text=_("Command output"), name="output"
-        )
-        wx.CallAfter(self.notebook.SetSelectionByName, "model")
-        wx.CallAfter(self.ModelChanged, False)
-
-        self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
-        self.Bind(wx.EVT_SIZE, self.OnSize)
-        self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
-
-        self._layout()
+        self.SetName("ModelerFrame")
         self.SetMinSize((640, 300))
         self.SetSize((800, 600))
+<<<<<<< HEAD
+=======
 
         # fix goutput's pane size
         if self.goutput:
@@ -2249,3 +2120,4 @@ class PythonPanel(wx.Panel):
     def IsEmpty(self):
         """Check if the script is empty."""
         return len(self.body.GetText()) == 0
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

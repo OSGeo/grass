@@ -85,6 +85,18 @@ private:
     void planetscope0e(int iwa);
     void planetscope0f10(int iwa);
     void worldview4(int iwa);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    void aviris(int iwa);
+    void hyperion_vnir(int iwa);
+    void hyperion_swir(int iwa);
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 public:
     /* To compute the equivalent wavelength needed for the calculation of the

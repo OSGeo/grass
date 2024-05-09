@@ -250,8 +250,18 @@ int db__driver_fetch(dbCursor *cn, int position, int *more)
     return DB_OK;
 }
 
+<<<<<<< HEAD
+int db__driver_get_num_rows(dbCursor *cn)
+=======
 int db__driver_get_num_rows(cn)
 dbCursor *cn;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     cursor *c;
     dbToken token;

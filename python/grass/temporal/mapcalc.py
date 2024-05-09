@@ -8,6 +8,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import copy
 from datetime import datetime
 from multiprocessing import Process
@@ -220,7 +221,6 @@ def dataset_mapcalculator(
     map_list = []
 
     if len(map_matrix) > 0:
-
         msgr.message(_("Starting mapcalc computation..."))
 
         count = 0
@@ -233,7 +233,6 @@ def dataset_mapcalculator(
 
         # For all samples
         for i in range(num):
-
             count += 1
             msgr.percent(count, num, 10)
 
@@ -352,7 +351,6 @@ def dataset_mapcalculator(
         # Insert maps in the temporal database and in the new space time
         # dataset
         for new_map in map_list:
-
             count += 1
             msgr.percent(count, num, 10)
 

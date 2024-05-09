@@ -18,11 +18,14 @@ for details.
 @author Anna Petrasova (kratochanna gmail com)
 @author Linda Kladivova (l.kladivova@seznam.cz)
 """
+
 import os
 import re
 import copy
 from multiprocessing import Process, Queue, cpu_count
 
+<<<<<<< HEAD
+=======
 watchdog_used = True
 try:
     from watchdog.observers import Observer
@@ -33,16 +36,22 @@ except ImportError:
     FileSystemEventHandler = object
 
 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 import wx
-from wx.lib.newevent import NewEvent
 
 from core.gcmd import RunCommand, GError, GMessage
 from core.utils import GetListOfLocations
 from core.debug import Debug
 from core.gthread import gThread
+from core.watchdog import (
+    EVT_UPDATE_MAPSET,
+    EVT_CURRENT_MAPSET_CHANGED,
+    MapsetWatchdog,
+    watchdog_used,
+)
 from gui_core.dialogs import TextEntryDialog
 from core.giface import StandaloneGrassInterface
-from core.treemodel import TreeModel, DictNode
+from core.treemodel import TreeModel, DictFilterNode
 from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
@@ -80,10 +89,13 @@ from grass.grassdb.checks import (
 from grass.exceptions import CalledModuleError
 
 
+<<<<<<< HEAD
+=======
 updateMapset, EVT_UPDATE_MAPSET = NewEvent()
 currentMapsetChanged, EVT_CURRENT_MAPSET_CHANGED = NewEvent()
 
 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
     """Creates dictionary with mapsets, elements, layers for given location.
     Returns tuple with the dictionary and error (or None)"""
@@ -101,14 +113,14 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
         queue.put(
             (
                 maps_dict,
-                _("Failed to read mapsets from location <{l}>.").format(l=location),
+                _("Failed to read mapsets from project <{l}>.").format(l=location),
             )
         )
         gscript.try_remove(tmp_gisrc_file)
         return
     else:
         mapsets = mapsets.split(",")
-        Debug.msg(4, "Location <{0}>: {1} mapsets found".format(location, len(mapsets)))
+        Debug.msg(4, "Project <{0}>: {1} mapsets found".format(location, len(mapsets)))
         for each in mapsets:
             maps_dict[each] = []
     if lazy:
@@ -127,7 +139,7 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
         queue.put(
             (
                 maps_dict,
-                _("Failed to read maps from location <{l}>.").format(l=location),
+                _("Failed to read maps from project <{l}>.").format(l=location),
             )
         )
         gscript.try_remove(tmp_gisrc_file)
@@ -135,7 +147,7 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
     else:
         # fill dictionary
         listOfMaps = maplist.splitlines()
-        Debug.msg(4, "Location <{0}>: {1} maps found".format(location, len(listOfMaps)))
+        Debug.msg(4, "Project <{0}>: {1} maps found".format(location, len(listOfMaps)))
         for each in listOfMaps:
             ltype, wholename = each.split("/")
             name, mapset = wholename.split("@", maxsplit=1)
@@ -145,6 +157,14 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
     gscript.try_remove(tmp_gisrc_file)
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 class CurrentMapsetWatch(FileSystemEventHandler):
     """Monitors rc file to check if mapset has been changed.
     In that case wx event is dispatched to event handler.
@@ -235,6 +255,7 @@ class MapWatch(PatternMatchingEventHandler):
         wx.PostEvent(self.event_handler, evt)
 
 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 class NameEntryDialog(TextEntryDialog):
     def __init__(self, element, mapset, env, **kwargs):
         TextEntryDialog.__init__(self, **kwargs)
@@ -269,11 +290,11 @@ class NameEntryDialog(TextEntryDialog):
             self.EndModal(wx.ID_OK)
 
 
-class DataCatalogNode(DictNode):
+class DataCatalogNode(DictFilterNode):
     """Node representing item in datacatalog."""
 
     def __init__(self, data=None):
-        super(DataCatalogNode, self).__init__(data=data)
+        super().__init__(data=data)
 
     @property
     def label(self):
@@ -294,36 +315,6 @@ class DataCatalogNode(DictNode):
                 )
 
         return _("{name}").format(**data)
-
-    def match(self, method="exact", **kwargs):
-        """Method used for searching according to given parameters.
-
-        :param method: 'exact' for exact match or 'filtering' for filtering by type/name
-        :param kwargs key-value to be matched, filtering method uses 'type' and 'name'
-               where 'name' is compiled regex
-        """
-        if not kwargs:
-            return False
-
-        if method == "exact":
-            for key, value in kwargs.items():
-                if not (key in self.data and self.data[key] == value):
-                    return False
-            return True
-        # for filtering
-        if (
-            "type" in kwargs
-            and "type" in self.data
-            and kwargs["type"] != self.data["type"]
-        ):
-            return False
-        if (
-            "name" in kwargs
-            and "name" in self.data
-            and not kwargs["name"].search(self.data["name"])
-        ):
-            return False
-        return True
 
 
 class DataCatalogTree(TreeView):
@@ -352,9 +343,7 @@ class DataCatalogTree(TreeView):
         """Location Map Tree constructor."""
         self._model = TreeModel(DataCatalogNode)
         self._orig_model = self._model
-        super(DataCatalogTree, self).__init__(
-            parent=parent, model=self._model, id=wx.ID_ANY, style=style
-        )
+        super().__init__(parent=parent, model=self._model, id=wx.ID_ANY, style=style)
 
         self._giface = giface
         self._restricted = True
@@ -387,6 +376,16 @@ class DataCatalogTree(TreeView):
         self._lastWatchdogUpdate = gscript.clock()
         self._updateMapsetWhenIdle = None
 
+        #  mapset watchdog
+        self._mapset_watchdog = MapsetWatchdog(
+            elements_dirs=(
+                ("raster", "cell"),
+                ("vector", "vector"),
+                ("raster_3d", "grid3"),
+            ),
+            evt_handler=self,
+            giface=self._giface,
+        )
         # Get databases from settings
         # add current to settings if it's not included
         self.grassdatabases = self._getValidSavedGrassDBs()
@@ -428,7 +427,16 @@ class DataCatalogTree(TreeView):
         self.Bind(
             EVT_CURRENT_MAPSET_CHANGED, lambda evt: self._updateAfterMapsetChanged()
         )
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         self.observer = None
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     def _resetSelectVariables(self):
         """Reset variables related to item selection."""
@@ -640,7 +648,7 @@ class DataCatalogTree(TreeView):
 
             Debug.msg(
                 3,
-                "Scanning location <{0}> ({1}/{2})".format(
+                "Scanning project <{0}> ({1}/{2})".format(
                     location, loc_count, nlocations
                 ),
             )
@@ -702,9 +710,11 @@ class DataCatalogTree(TreeView):
         """Updates grass databases, locations, mapsets and layers in the tree.
 
         It runs in thread, so it should not directly interact with GUI.
-        In case of any errors it returns the errors as a list of strings, otherwise None.
+        In case of any errors it returns the errors as a list of strings, otherwise
+        None.
 
-        Option full=True forces full reload, full=False will behave based on user settings.
+        Option full=True forces full reload, full=False will behave based on user
+        settings.
         """
         errors = []
         for grassdatabase in self.grassdatabases:
@@ -727,6 +737,8 @@ class DataCatalogTree(TreeView):
             return errors
         return None
 
+<<<<<<< HEAD
+=======
     def ScheduleWatchCurrentMapset(self):
         """Using watchdog library, sets up watching of current mapset folder
         to detect changes not captured by other means (e.g. from command line).
@@ -776,6 +788,7 @@ class DataCatalogTree(TreeView):
             watchdog_used = False
             return
 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     def _onUpdateMapsetWhenIdle(self, event):
         """When idle, check if current mapset should be reloaded
         because there are skipped update events."""
@@ -906,7 +919,7 @@ class DataCatalogTree(TreeView):
         if event.ret is not None:
             self._giface.WriteWarning("\n".join(event.ret))
         self.UpdateCurrentDbLocationMapsetNode()
-        self.ScheduleWatchCurrentMapset()
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()
         self.RefreshItems()
         self.ExpandCurrentMapset()
         self.loadingDone.emit()
@@ -1040,17 +1053,48 @@ class DataCatalogTree(TreeView):
                     dlg = wx.MessageDialog(
                         parent=self,
                         message=_(
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                            "Map <{map_name}@{map_mapset}> is not in the current "
+                            "project. To be able to display it you need to switch to "
+                            "<{map_location}> project. Note that if you switch there "
+                            "all current Map Displays will be closed.\n\n"
+=======
+=======
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+>>>>>>> osgeo-main
                             "Map <{map_name}@{map_mapset}> is not in the current location. "
                             "To be able to display it you need to switch to <{map_location}> "
                             "location. Note that if you switch there all current "
                             "Map Displays will be closed.\n\n"
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+>>>>>>> osgeo-main
                             "Do you want to switch anyway?"
                         ).format(
                             map_name=selected_layer.data["name"],
                             map_mapset=selected_mapset.data["name"],
                             map_location=selected_loc.data["name"],
                         ),
+<<<<<<< HEAD
                         caption=_("Map in a different location"),
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                        caption=_("Map in a different project"),
+=======
+                        caption=_("Map in a different location"),
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+                        caption=_("Map in a different location"),
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+>>>>>>> osgeo-main
                         style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
                     )
                     dlg.SetYesNoLabels("S&witch", "C&ancel")
@@ -1084,7 +1128,7 @@ class DataCatalogTree(TreeView):
             self.Select(item[0], select=True)
             self.ExpandNode(item[0], recursive=False)
         else:
-            Debug.msg(1, "Location <%s> not found" % location)
+            Debug.msg(1, "Project <%s> not found" % location)
 
     def GetCurrentDbLocationMapsetNode(self):
         """Get current mapset node"""
@@ -1388,7 +1432,7 @@ class DataCatalogTree(TreeView):
             )
             self._renameNode(self.selected_location[0], new_name)
             label = _(
-                "Renaming location <{oldlocation}> to <{newlocation}> completed"
+                "Renaming project <{oldlocation}> to <{newlocation}> completed"
             ).format(oldlocation=old_name, newlocation=new_name)
             self.showNotification.emit(message=label)
 
@@ -1846,7 +1890,8 @@ class DataCatalogTree(TreeView):
             )
             names[self.selected_layer[i].data["type"]].append(name)
             all_names.append(name)
-        # if self.selected_location[0].data['name'] == gisenv()['LOCATION_NAME'] and self.selected_mapset[0]:
+        # if self.selected_location[0].data['name'] == gisenv()['LOCATION_NAME'] and
+        # self.selected_mapset[0]:
         for ltype in names:
             if names[ltype]:
                 self._giface.lmgr.AddMaps(list(reversed(names[ltype])), ltype, True)
@@ -1882,7 +1927,8 @@ class DataCatalogTree(TreeView):
                 ):
                     GMessage(
                         _(
-                            "To move or copy maps to other mapsets, unlock editing of other mapsets"
+                            "To move or copy maps to other mapsets, unlock editing of "
+                            "other mapsets"
                         ),
                         parent=self,
                     )
@@ -1895,9 +1941,9 @@ class DataCatalogTree(TreeView):
             else:
                 GMessage(
                     _(
-                        "To move or copy maps to other location, "
+                        "To move or copy maps to other project, "
                         "please drag them to a mapset in the "
-                        "destination location"
+                        "destination project"
                     ),
                     parent=self,
                 )
@@ -2047,7 +2093,7 @@ class DataCatalogTree(TreeView):
         self.RefreshNode(self.current_mapset_node, recursive=True)
         self.ExpandCurrentMapset()
         self.RefreshItems()
-        self.ScheduleWatchCurrentMapset()
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()
 
     def OnMetadata(self, event):
         """Show metadata of any raster/vector/3draster"""
@@ -2127,6 +2173,22 @@ class DataCatalogTree(TreeView):
         self._reloadMapsetNode(node)
         self.RefreshNode(node, recursive=True)
         self.ExpandNode(node, recursive=False)
+
+    def OnCopyMapsetPath(self, event):
+        """Copy path to mapset"""
+        if wx.TheClipboard.Open():
+            do = wx.TextDataObject()
+            text = []
+            for i in range(len(self.selected_mapset)):
+                path = os.path.join(
+                    self.selected_grassdb[i].data["name"],
+                    self.selected_location[i].data["name"],
+                    self.selected_mapset[i].data["name"],
+                )
+                text.append(path)
+            do.SetText(",".join(text))
+            wx.TheClipboard.SetData(do)
+            wx.TheClipboard.Close()
 
     def OnReloadLocation(self, event):
         """Reload all mapsets in selected location"""
@@ -2300,6 +2362,10 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnReloadMapset, item)
 
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy path to mapset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
+
         self.PopupMenu(menu)
         menu.Destroy()
 
@@ -2311,13 +2377,13 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCreateMapset, item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete location"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete project"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteLocation, item)
         if self._restricted:
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename location"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename project"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameLocation, item)
         if self._restricted:
@@ -2336,11 +2402,11 @@ class DataCatalogTree(TreeView):
         genv = gisenv()
         currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new location"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new project (location)"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCreateLocation, item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Download sample location"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Download sample project (location)"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDownloadLocation, item)
 
@@ -2382,7 +2448,7 @@ class DataCatalogTree(TreeView):
     def _popupMenuMultipleLocations(self):
         """Create popup menu for multiple selected locations"""
         menu = Menu()
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete locations"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete projects (locations)"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteLocation, item)
         if self._restricted:
@@ -2399,6 +2465,10 @@ class DataCatalogTree(TreeView):
         self.Bind(wx.EVT_MENU, self.OnDeleteMapset, item)
         if self._restricted:
             item.Enable(False)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy paths to mapsets"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
 
         self.PopupMenu(menu)
         menu.Destroy()

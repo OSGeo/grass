@@ -5,7 +5,7 @@
 
 int report(void)
 {
-    int i;
+    int i, print_header = G_verbose() > G_verbose_min() || options.print_header;
     char left[20], right[20];
 
     if (!options.print &&
@@ -17,7 +17,19 @@ int report(void)
 
     switch (options.option) {
     case O_CAT:
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (print_header)
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             fprintf(stdout, "cat\n");
         for (i = 0; i < vstat.rcat; i++)
             fprintf(stdout, "%d\n", Values[i].cat);
@@ -25,7 +37,7 @@ int report(void)
 
     case O_COUNT:
         if (options.print) {
-            if (G_verbose() > G_verbose_min())
+            if (print_header)
                 fprintf(stdout, "cat%scount\n", options.fs);
             for (i = 0; i < vstat.rcat; i++)
                 fprintf(stdout, "%d%s%d\n", Values[i].cat, options.fs,
@@ -43,7 +55,7 @@ int report(void)
 
     case O_AREA:
         if (options.print) {
-            if (G_verbose() > G_verbose_min())
+            if (print_header)
                 fprintf(stdout, "cat%sarea\n", options.fs);
             for (i = 0; i < vstat.rcat; i++)
                 fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs,
@@ -62,7 +74,19 @@ int report(void)
     case O_COMPACT:
         /* perimeter / perimeter of equivalent circle
          *   perimeter of equivalent circle: 2.0 * sqrt(M_PI * area) */
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (print_header)
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             fprintf(stdout, "cat%scompact\n", options.fs);
         for (i = 0; i < vstat.rcat; i++) {
             Values[i].d1 = Values[i].d2 / (2.0 * sqrt(M_PI * Values[i].d1));
@@ -82,7 +106,19 @@ int report(void)
          *
          * avoid division by zero:
          * 2.0 * log(1 + perimeter) / log(1 + area) */
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (print_header)
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             fprintf(stdout, "cat%sfd\n", options.fs);
         for (i = 0; i < vstat.rcat; i++) {
             if (Values[i].d1 == 1) /* log(1) == 0 */
@@ -94,7 +130,19 @@ int report(void)
         break;
 
     case O_PERIMETER:
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (print_header)
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             fprintf(stdout, "cat%sperimeter\n", options.fs);
         for (i = 0; i < vstat.rcat; i++)
             fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs,
@@ -102,7 +150,19 @@ int report(void)
         break;
 
     case O_BBOX:
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (print_header)
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             fprintf(stdout, "cat%sN%sS%sE%sW\n", options.fs, options.fs,
                     options.fs, options.fs);
         for (i = 0; i < vstat.rcat; i++) {
@@ -114,7 +174,7 @@ int report(void)
 
     case O_LENGTH:
         if (options.print) {
-            if (G_verbose() > G_verbose_min())
+            if (print_header)
                 fprintf(stdout, "cat%slength\n", options.fs);
             for (i = 0; i < vstat.rcat; i++)
                 fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs,
@@ -130,7 +190,19 @@ int report(void)
         }
         break;
     case O_SLOPE:
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (print_header)
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             fprintf(stdout, "cat%sslope\n", options.fs);
         for (i = 0; i < vstat.rcat; i++)
             fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs,
@@ -138,7 +210,19 @@ int report(void)
 
         break;
     case O_SINUOUS:
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (print_header)
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             fprintf(stdout, "cat%ssinuous\n", options.fs);
         for (i = 0; i < vstat.rcat; i++)
             fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs,
@@ -147,7 +231,19 @@ int report(void)
     case O_COOR:
     case O_START:
     case O_END:
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (print_header)
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             fprintf(stdout, "cat%sx%sy%sz\n", options.fs, options.fs,
                     options.fs);
         for (i = 0; i < vstat.rcat; i++) {
@@ -159,7 +255,19 @@ int report(void)
         break;
 
     case O_SIDES:
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (print_header)
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             fprintf(stdout, "cat%sleft%sright\n", options.fs, options.fs);
         for (i = 0; i < vstat.rcat; i++) {
             if (Values[i].count1 == 1) {
@@ -197,7 +305,19 @@ int report(void)
         break;
 
     case O_QUERY:
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (print_header)
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             fprintf(stdout, "cat%squery\n", options.fs);
         for (i = 0; i < vstat.rcat; i++) {
             if (Values[i].null) {
@@ -222,7 +342,19 @@ int report(void)
         }
         break;
     case O_AZIMUTH:
+<<<<<<< HEAD
         if (G_verbose() > G_verbose_min())
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (print_header)
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (G_verbose() > G_verbose_min())
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             fprintf(stdout, "cat%sazimuth\n", options.fs);
         for (i = 0; i < vstat.rcat; i++)
             fprintf(stdout, "%d%s%.15g\n", Values[i].cat, options.fs,

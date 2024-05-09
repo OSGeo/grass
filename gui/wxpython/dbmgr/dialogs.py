@@ -14,10 +14,9 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
-@author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
+@author Refactoring by Stepan Turek <stepan.turek seznam.cz>
+        (GSoC 2012, mentor: Martin Landa)
 """
-
-import six
 
 import wx
 import wx.lib.scrolledpanel as scrolled
@@ -239,7 +238,8 @@ class DisplayAttributesDialog(wx.Dialog):
                             GError(
                                 parent=self,
                                 message=_(
-                                    "Column <%(col)s>: Value '%(value)s' needs to be entered as %(type)s."
+                                    "Column <%(col)s>: Value '%(value)s' needs to be "
+                                    "entered as %(type)s."
                                 )
                                 % {
                                     "col": name,
@@ -537,7 +537,7 @@ class DisplayAttributesDialog(wx.Dialog):
                     ctype = columns[name]["ctype"]
 
                     if columns[name]["values"][idx] is not None:
-                        if not isinstance(columns[name]["ctype"], six.string_types):
+                        if not isinstance(columns[name]["ctype"], str):
                             value = str(columns[name]["values"][idx])
                         else:
                             value = columns[name]["values"][idx]
@@ -598,7 +598,7 @@ class DisplayAttributesDialog(wx.Dialog):
         table = self.mapDBInfo.GetTable(layer)
         columns = self.mapDBInfo.GetTableDesc(table)
 
-        for key, col in six.iteritems(columns):
+        for key, col in columns.items():
             if key == column:
                 col["values"] = [
                     col["ctype"](value),
@@ -801,7 +801,6 @@ class AddColumnDialog(wx.Dialog):
         self._layout()
 
     def _layout(self):
-
         sizer = wx.BoxSizer(wx.VERTICAL)
         addSizer = wx.BoxSizer(wx.HORIZONTAL)
 

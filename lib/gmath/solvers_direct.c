@@ -109,7 +109,7 @@ int G_math_solver_lu(double **A, double *x, double *b, int rows)
 
 /*!
  * \brief The choleksy decomposition solver for quardatic, symmetric
- * positiv definite matrices
+ * positive definite matrices
  *
  * This solver does not support sparse matrices
  * The matrix A will be overwritten.
@@ -183,7 +183,7 @@ void G_math_gauss_elimination(double **A, double *b, int rows)
  * system, otherwise set it to NULL \param rows int \return void
  *
  * */
-void G_math_lu_decomposition(double **A, double *b, int rows)
+void G_math_lu_decomposition(double **A, double *b UNUSED, int rows)
 {
 
     int i, j, k;
@@ -202,7 +202,7 @@ void G_math_lu_decomposition(double **A, double *b, int rows)
 }
 
 /*!
- * \brief cholesky decomposition for symmetric, positiv definite matrices
+ * \brief cholesky decomposition for symmetric, positive definite matrices
  *        with bandwidth optimization
  *
  * The provided matrix will be overwritten with the lower and

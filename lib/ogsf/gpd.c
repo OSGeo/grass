@@ -212,7 +212,19 @@ void gpd_obj(geosurf *gs, gvstyle *style, Point3 pt)
    \return 0 on failure
    \return 1 on success
  */
+<<<<<<< HEAD
 int gpd_2dsite(geosite *gp, geosurf *gs, int do_fast)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int gpd_2dsite(geosite *gp, geosurf *gs, int do_fast UNUSED)
+=======
+int gpd_2dsite(geosite *gp, geosurf *gs, int do_fast)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int gpd_2dsite(geosite *gp, geosurf *gs, int do_fast)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     float site[4], konst;
     int src, check;
@@ -309,7 +321,19 @@ int gpd_2dsite(geosite *gp, geosurf *gs, int do_fast)
    \return 0 on success
    \return 1 on failure
  */
+<<<<<<< HEAD
 int gpd_3dsite(geosite *gp, float xo, float yo, int do_fast)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int gpd_3dsite(geosite *gp, float xo, float yo, int do_fast UNUSED)
+=======
+int gpd_3dsite(geosite *gp, float xo, float yo, int do_fast)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int gpd_3dsite(geosite *gp, float xo, float yo, int do_fast)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     float site[4], tz;
     int check;

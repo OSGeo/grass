@@ -59,7 +59,29 @@ and the points in its neighborhood. The minimum number of points taken
 for interpolation is controlled by <b>npmin</b> , the value of which
 must be larger than <b>segmax</b> and less than 700. This limit of 700 was
 selected to ensure the numerical stability and efficiency of the
+<<<<<<< HEAD
 algorithm.
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+algorithm.
+=======
+algorithm. 
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+algorithm.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+algorithm. 
+=======
+algorithm.
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
 <h3>SQL support</h3>
 
@@ -158,7 +180,29 @@ zoom into a smaller representative area and test whether the parameters
 chosen (e.g. defaults) are appropriate.
 
 <p>The user must run <em>g.region</em> before the program to set the
+<<<<<<< HEAD
 3D region for interpolation.
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+3D region for interpolation.
+=======
+3D region for interpolation. 
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+3D region for interpolation.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+3D region for interpolation. 
+=======
+3D region for interpolation.
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
 <h2>EXAMPLES</h2>
 
@@ -172,10 +216,9 @@ g.region res=100 tbres=100 res3=100 b=0 t=1500 -ap3
 
 ### First part: generate synthetic 3D data (true 3D soil data preferred)
 # generate random positions from elevation map (2D)
-r.random elevation.10m vector_output=elevrand n=200
+r.random elevation.10m vector=elevrand n=200 seed=42
 
 # generate synthetic values
-v.db.addcolumn elevrand col="x double precision, y double precision"
 v.to.db elevrand option=coor col=x,y
 v.db.select elevrand
 
@@ -202,7 +245,7 @@ v.db.update elevrand_3d col=soilrange value=NULL where="soilrange=0"
 v.db.select elevrand_3d
 
 # optionally: check 3D points in Paraview
-v.out.vtk input=elevrand_3d output=elevrand_3d.vtk type=point dp=2
+v.out.vtk input=elevrand_3d output=elevrand_3d.vtk type=point precision=2
 paraview --data=elevrand_3d.vtk
 
 ### Second part: 3D interpolation from 3D point data

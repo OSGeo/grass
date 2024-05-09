@@ -11,6 +11,7 @@
  *
  *****************************************************************************/
 
+#include <inttypes.h>
 #include <grass/segment.h>
 #include <grass/imagery.h>
 #include "flag.h"
@@ -24,7 +25,7 @@
 #define PRI_LONG "lld"
 #elif defined HAVE_LARGEFILES
 #define LARGEINT off_t
-#define PRI_LONG PRI_OFF_T
+#define PRI_LONG PRId64
 #else
 #define LARGEINT long
 #define PRI_LONG "ld"
@@ -70,12 +71,53 @@ struct globals {
     char *bsuf;     /* suffix to be appended to input bands */
 
     /* general segmentation */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+>>>>>>> osgeo-main
     int method;                         /* Segmentation method code */
     int (*method_fn)(struct globals *); /* Segmentation method function */
     int nn;                             /* number of neighbors, 4 or 8 */
     double max_diff;                    /* max possible difference */
     double alpha;                       /* similarity threshold */
     int end_t;                          /* maximum number of iterations */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+    int method;         /* Segmentation method code */
+    int (*method_fn)(); /* Segmentation method function */
+    int nn;             /* number of neighbors, 4 or 8 */
+    double max_diff;    /* max possible difference */
+    double alpha;       /* similarity threshold */
+    int end_t;          /* maximum number of iterations */
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+=======
+    int method;                         /* Segmentation method code */
+    int (*method_fn)(struct globals *); /* Segmentation method function */
+    int nn;                             /* number of neighbors, 4 or 8 */
+    double max_diff;                    /* max possible difference */
+    double alpha;                       /* similarity threshold */
+    int end_t;                          /* maximum number of iterations */
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
     /* region growing */
     int min_segment_size; /* smallest number of pixels/cells allowed in a final
@@ -119,7 +161,19 @@ struct globals {
     FLAG *candidate_flag,
         *null_flag; /*TODO, need some way to remember MASK/NULL values.  Was
                        using -1, 0, 1 in int array.  Better to use 2 FLAG
+<<<<<<< HEAD
                        structures, better readibility? */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                       structures, better readability? */
+=======
+                       structures, better readibility? */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                       structures, better readibility? */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     /* number of remaining cells to check */
     LARGEINT candidate_count;

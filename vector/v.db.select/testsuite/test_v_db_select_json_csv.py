@@ -3,7 +3,19 @@
 # MODULE:       Test of v.db.select
 # AUTHOR(S):    Vaclav Petras <wenzeslaus gmail com>
 # PURPOSE:      Test parsing and structure of CSV and JSON outputs
+<<<<<<< HEAD
 # COPYRIGHT:    (C) 2021 by Vaclav Petras the GRASS Development Team
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+# COPYRIGHT:    (C) 2021-2023 by Vaclav Petras the GRASS Development Team
+=======
+# COPYRIGHT:    (C) 2021 by Vaclav Petras the GRASS Development Team
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
+=======
+# COPYRIGHT:    (C) 2021 by Vaclav Petras the GRASS Development Team
+>>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
+>>>>>>> osgeo-main
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -173,6 +185,30 @@ class DifficultValueTest(TestCase):
         """Load JSON with difficult values"""
         text = gs.read_command("v.db.select", map=self.vector_points, format="json")
         data = json.loads(text)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+        column_info = data["info"]["columns"]
+        self.assertEqual(column_info[0]["name"], "cat")
+        self.assertEqual(column_info[0]["sql_type"], "INTEGER")
+        self.assertEqual(column_info[0]["is_number"], True)
+        self.assertEqual(column_info[1]["name"], "x")
+        self.assertEqual(column_info[1]["sql_type"], "DOUBLE PRECISION")
+        self.assertEqual(column_info[1]["is_number"], True)
+        self.assertEqual(column_info[4]["name"], "owner_id")
+        self.assertEqual(column_info[4]["sql_type"], "INTEGER")
+        self.assertEqual(column_info[4]["is_number"], True)
+        self.assertEqual(column_info[5]["name"], "place_name")
+        self.assertEqual(column_info[5]["sql_type"], "TEXT")
+        self.assertEqual(column_info[5]["is_number"], False)
+
+=======
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
+=======
+>>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
+>>>>>>> osgeo-main
         data = data["records"]
         self.assertIsNone(data[2]["place_name"])
         self.assertEqual(data[3]["place_name"], 'The "Great" Place')

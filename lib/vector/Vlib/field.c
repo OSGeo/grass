@@ -37,6 +37,12 @@
 #include <ogr_api.h>
 #endif
 
+#ifdef HAVE_POSTGRES
+#define NOPG_UNUSED
+#else
+#define NOPG_UNUSED UNUSED
+#endif
+
 /*!
    \brief Create and init new dblinks structure
 
@@ -196,7 +202,19 @@ int Vect_map_del_dblink(struct Map_info *Map, int field)
    \param first_only TRUE to copy only first link otherwise all DB links are
    copied
  */
+<<<<<<< HEAD
 void Vect_copy_map_dblinks(const struct Map_info *In, struct Map_info *Out,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void Vect_copy_map_dblinks(struct Map_info *In, struct Map_info *Out,
+=======
+void Vect_copy_map_dblinks(const struct Map_info *In, struct Map_info *Out,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void Vect_copy_map_dblinks(const struct Map_info *In, struct Map_info *Out,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                            int first_only)
 {
     int i, ndblinks;
@@ -228,8 +246,22 @@ void Vect_copy_map_dblinks(const struct Map_info *In, struct Map_info *Out,
    \return 1 dblink for field exists
    \return 0 dblink does not exist for field
  */
+<<<<<<< HEAD
 int Vect_map_check_dblink(const struct Map_info *Map, int field,
                           const char *name)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int Vect_map_check_dblink(struct Map_info *Map, int field, const char *name)
+=======
+int Vect_map_check_dblink(const struct Map_info *Map, int field,
+                          const char *name)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int Vect_map_check_dblink(const struct Map_info *Map, int field,
+                          const char *name)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     return Vect_check_dblink(Map->dblnk, field, name);
 }
@@ -467,7 +499,7 @@ struct field_info *Vect_default_field_info(struct Map_info *Map, int field,
 
    \return pointer to new field_info structure
  */
-struct field_info *Vect_get_dblink(const struct Map_info *Map, int link)
+struct field_info *Vect_get_dblink(struct Map_info *Map, int link)
 {
     struct field_info *fi;
 
@@ -507,7 +539,17 @@ struct field_info *Vect_get_dblink(const struct Map_info *Map, int link)
    \return pointer to new field_info structure
    \return NULL if not found
  */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct field_info *Vect_get_field(struct Map_info *Map, int field)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 struct field_info *Vect_get_field(const struct Map_info *Map, int field)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int i;
     struct field_info *fi = NULL;
@@ -533,7 +575,19 @@ struct field_info *Vect_get_field(const struct Map_info *Map, int field)
    \return pointer to new field_info structure
    \return NULL if not found
  */
+<<<<<<< HEAD
 struct field_info *Vect_get_field_by_name(const struct Map_info *Map,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct field_info *Vect_get_field_by_name(struct Map_info *Map,
+=======
+struct field_info *Vect_get_field_by_name(const struct Map_info *Map,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+struct field_info *Vect_get_field_by_name(const struct Map_info *Map,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                                           const char *field)
 {
     int i;
@@ -563,8 +617,22 @@ struct field_info *Vect_get_field_by_name(const struct Map_info *Map,
    \return pointer to new field_info structure
    \return NULL if not found
  */
+<<<<<<< HEAD
 struct field_info *Vect_get_field2(const struct Map_info *Map,
                                    const char *field)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct field_info *Vect_get_field2(struct Map_info *Map, const char *field)
+=======
+struct field_info *Vect_get_field2(const struct Map_info *Map,
+                                   const char *field)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+struct field_info *Vect_get_field2(const struct Map_info *Map,
+                                   const char *field)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     int ifield;
     struct field_info *fi;
@@ -601,7 +669,17 @@ struct field_info *Vect_get_field2(const struct Map_info *Map,
    \return -1 for all layers
    \return 0 if layer not found
  */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int Vect_get_field_number(struct Map_info *Map, const char *field)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 int Vect_get_field_number(const struct Map_info *Map, const char *field)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     struct field_info *fi;
 
@@ -619,6 +697,25 @@ int Vect_get_field_number(const struct Map_info *Map, const char *field)
         return fi->number;
 
     return atoi(field);
+}
+
+/*!
+   \brief Free a struct field_info and all memory associated with it.
+
+   \param[in,out] fi pointer to field_info structure
+ */
+void Vect_destroy_field_info(struct field_info *fi)
+{
+    if (!fi)
+        return;
+    if (fi->name)
+        G_free(fi->name);
+    G_free(fi->driver);
+    G_free(fi->database);
+    G_free(fi->table);
+    G_free(fi->key);
+    G_free(fi);
+    fi = NULL;
 }
 
 static int read_dblinks_nat(struct Map_info *Map)
@@ -727,8 +824,21 @@ static int read_dblinks_ogr(struct Map_info *Map)
 #ifndef HAVE_OGR
     G_warning(_("GRASS is not compiled with OGR support"));
 #else
+<<<<<<< HEAD
 #if GDAL_VERSION_NUM > 1320 && \
     HAVE_OGR /* seems to be fixed after 1320 release */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#if GDAL_VERSION_NUM > 1320 && \
+    HAVE_OGR /* seems to be fixed after 1320 release */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#if GDAL_VERSION_NUM > 1320 && \
+    HAVE_OGR /* seems to be fixed after 1320 release */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     int nLayers;
     char *ogr_fid_col;
 
@@ -773,6 +883,14 @@ static int read_dblinks_ogr(struct Map_info *Map)
     Vect_add_dblink(dbl, 1, Map->fInfo.ogr.layer_name,
                     Map->fInfo.ogr.layer_name, ogr_fid_col, Map->fInfo.ogr.dsn,
                     "ogr");
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #else
     dbDriver *driver;
     dbCursor cursor;
@@ -879,11 +997,18 @@ static int read_dblinks_ogr(struct Map_info *Map)
         }
     }
 #endif /* GDAL_VERSION_NUM > 1320 && HAVE_OGR */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     return 1;
 #endif /* HAVE_GDAL */
 }
 
-static int read_dblinks_pg(struct Map_info *Map)
+static int read_dblinks_pg(struct Map_info *Map NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     char *name;
@@ -1013,7 +1138,17 @@ int Vect_write_dblinks(struct Map_info *Map)
 
    \return pointer to new string
  */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+char *Vect_subst_var(const char *in, struct Map_info *Map)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 char *Vect_subst_var(const char *in, const struct Map_info *Map)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     char *c;
     char buf[1000], str[1000];

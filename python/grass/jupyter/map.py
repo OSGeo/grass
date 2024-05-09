@@ -61,7 +61,18 @@ class Map:
         saved_region=None,
         read_file=False,
     ):
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         """Creates an instance of the Map class.
 
         :param int height: height of map in pixels

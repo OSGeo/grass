@@ -144,13 +144,26 @@ int main(int argc, char *argv[])
 
     G_gisinit(argv[0]);
 
+<<<<<<< HEAD
+    G_option_required(opt.height, opt.hcolumn, opt.elevation, NULL);
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+    if (G_parser(argc, argv))
+        exit(EXIT_FAILURE);
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     if (!opt.height->answer && !opt.hcolumn->answer) {
         G_fatal_error(_("One of '%s' or '%s' parameters must be set"),
                       opt.height->key, opt.hcolumn->key);
     }
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     sscanf(opt.zshift->answer, "%lf", &voffset);
     G_debug(1, "voffset = %f", voffset);

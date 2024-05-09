@@ -38,7 +38,7 @@ class TestPythonKeywordsInParameters(TestCase):
         proc = start_command("g.region", _raster_=self.raster, stderr=PIPE)
         stderr = proc.communicate()[1]
         returncode = proc.poll()
-        self.assertEquals(returncode, 1)
+        self.assertEqual(returncode, 1)
         self.assertIn(b"raster", stderr)
 
 
@@ -96,7 +96,17 @@ class TestPythonModuleWithStdinStdout(TestCase):
             separator=":",
         )
         res = read_command("r.category", map=self.raster, separator=":").strip()
+<<<<<<< HEAD
+        self.assertEqual(res, "1:kůň\n2:kráva\n3:ovečka\n4:býk")
+=======
         self.assertEquals(res, "1:kůň\n2:kráva\n3:ovečka\n4:býk")
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         self.assertIsInstance(res, str)
 
     def test_write_labels_bytes(self):
@@ -112,7 +122,7 @@ class TestPythonModuleWithStdinStdout(TestCase):
         res = read_command(
             "r.category", map=self.raster, separator=":", encoding=None
         ).strip()
-        self.assertEquals(res, encode("1:kůň\n2:kráva\n3:ovečka\n4:býk"))
+        self.assertEqual(res, encode("1:kůň\n2:kráva\n3:ovečka\n4:býk"))
         self.assertIsInstance(res, bytes)
 
 

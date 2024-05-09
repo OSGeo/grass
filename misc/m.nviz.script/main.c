@@ -4,7 +4,7 @@
  * AUTHOR(S):    Bob Covill <bcovill@tekmap.ns.ca>
  * PURPOSE:      interactively create fly-through script for NVIZ
  * Functions:
- *   main --      parse parameters and get key frame coorinates
+ *   main --      parse parameters and get key frame coordinates
  *   do_profile-- calculate camera and eye coordinates from
  *                raster map
  *   move --      part of screen coords
@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
     strcat(buf1, buf2);
     fprintf(fp, "%s", buf1);
 
-    /* eanble vector and sites drawing */
+    /* enable vector and sites drawing */
     if (parm.e->answer) {
         sprintf(buf1, "\nSendScriptLine \"Nshow_vect on\"");
         sprintf(buf2, "\nSendScriptLine \"Nshow_sites on\"\n\n");
@@ -324,8 +324,23 @@ int main(int argc, char *argv[])
 /* ************************************
  * Calculate camera and eye coordinates
  **************************************/
+<<<<<<< HEAD
 int do_profile(double e1, double e2, double n1, double n2, const char *name,
                int fd, int data_type)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int do_profile(double e1, double e2, double n1, double n2,
+               const char *name UNUSED, int fd, int data_type)
+=======
+int do_profile(double e1, double e2, double n1, double n2, const char *name,
+               int fd, int data_type)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int do_profile(double e1, double e2, double n1, double n2, const char *name,
+               int fd, int data_type)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     float rows, cols, LEN;
     double Y, X, AZI;

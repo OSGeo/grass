@@ -43,17 +43,17 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 @author Enhancements by Michael Barton <michael.barton asu.edu>
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
-@author Stepan Turek <stepan.turek seznam.cz> (ManageSettingsWidget - created from GdalSelect)
-@author Matej Krejci <matejkrejci gmail.com> (Google GSoC 2014; EmailValidator, TimeISOValidator)
-@author Tomas Zigo <tomas.zigo slovanet.sk> (LayersListValidator,
-PlacementValidator)
+@author Stepan Turek <stepan.turek seznam.cz> (ManageSettingsWidget - created from
+        GdalSelect)
+@author Matej Krejci <matejkrejci gmail.com> (Google GSoC 2014; EmailValidator,
+        TimeISOValidator)
+@author Tomas Zigo <tomas.zigo slovanet.sk> (LayersListValidator, PlacementValidator)
 """
 
 import os
 import sys
 import string
 import re
-import six
 from bisect import bisect
 from datetime import datetime
 from core.globalvar import wxPythonPhoenix
@@ -133,7 +133,27 @@ class NotebookController:
         self.widget.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnRemoveHighlight)
 
     def AddPage(self, *args, **kwargs):
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        """Add a new page
+
+        :param str name: use this param if notebooks has ability to
+                         change position and then you must use page name
+                         param arg to correctly delete notebook page.
+                         If you do not use this parameter, make sure that
+                         the notebooks does not have the ability to change
+                         position, because in that case the deletion of
+                         the page based on the position index would not
+                         work correctly.
+        """
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         """Add a new page"""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
@@ -141,14 +161,46 @@ class NotebookController:
         self.classObject.AddPage(self.widget, *args, **kwargs)
 
     def InsertPage(self, *args, **kwargs):
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        """Insert a new page
+
+        :param str name: use this param if notebooks has ability to
+                         change position and then you must use page name
+                         param arg to correctly delete notebook page.
+                         If you do not use this parameter, make sure that
+                         the notebooks does not have the ability to change
+                         position, because in that case the deletion of
+                         the page based on the position index would not
+                         work correctly.
+        """
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         """Insert a new page"""
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         if "name" in kwargs:
             self.notebookPages[kwargs["name"]] = kwargs["page"]
             del kwargs["name"]
 
         try:
             self.classObject.InsertPage(self.widget, *args, **kwargs)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        except (
+            TypeError
+        ) as e:  # documentation says 'index', but certain versions of wx require 'n'
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         except TypeError as e:  # documentation says 'index', but certain versions of wx require 'n'
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
             kwargs["n"] = kwargs["index"]
             del kwargs["index"]
             self.classObject.InsertPage(self.widget, *args, **kwargs)
@@ -156,8 +208,9 @@ class NotebookController:
     def DeletePage(self, page):
         """Delete page
 
-        :param page: name
-        :return: True if page was deleted, False if not exists
+        :param str|int page: page name or page index position
+
+        :return bool: True if page was deleted, False if not exists
         """
         delPageIndex = self.GetPageIndexByName(page)
         if delPageIndex != -1:
@@ -214,8 +267,12 @@ class NotebookController:
     def GetPageIndexByName(self, page):
         """Get notebook page index
 
-        :param page: name
+        :param str|int page: page name or page index position
+
+        :return int: page index
         """
+        if not self.notebookPages:
+            return page
         if page not in self.notebookPages:
             return -1
         for pageIndex in range(self.classObject.GetPageCount(self.widget)):
@@ -258,8 +315,12 @@ class FlatNotebookController(NotebookController):
     def GetPageIndexByName(self, page):
         """Get notebook page index
 
-        :param page: name
+        :param str|int page: page name or page index position
+
+        :return int: page index
         """
+        if not self.notebookPages:
+            return page
         if page not in self.notebookPages:
             return -1
 
@@ -411,10 +472,10 @@ class NumTextCtrl(TextCtrl):
         )
 
     def SetValue(self, value):
-        super(NumTextCtrl, self).SetValue(str(value))
+        super().SetValue(str(value))
 
     def GetValue(self):
-        val = super(NumTextCtrl, self).GetValue()
+        val = super().GetValue()
         if val == "":
             val = "0"
         try:
@@ -444,10 +505,10 @@ class FloatSlider(Slider):
             while abs(value) < 1:
                 value *= 100
                 self.coef *= 100
-            super(FloatSlider, self).SetRange(
+            super().SetRange(
                 self.minValueOrig * self.coef, self.maxValueOrig * self.coef
             )
-        super(FloatSlider, self).SetValue(value)
+        super().SetValue(value)
 
         Debug.msg(4, "FloatSlider.SetValue(): value = %f" % value)
 
@@ -462,10 +523,8 @@ class FloatSlider(Slider):
                 minValue *= 100
                 maxValue *= 100
                 self.coef *= 100
-            super(FloatSlider, self).SetValue(
-                super(FloatSlider, self).GetValue() * self.coef
-            )
-        super(FloatSlider, self).SetRange(minValue, maxValue)
+            super().SetValue(super().GetValue() * self.coef)
+        super().SetRange(minValue, maxValue)
         Debug.msg(
             4,
             "FloatSlider.SetRange(): minValue = %f, maxValue = %f"
@@ -473,7 +532,7 @@ class FloatSlider(Slider):
         )
 
     def GetValue(self):
-        val = super(FloatSlider, self).GetValue()
+        val = super().GetValue()
         Debug.msg(4, "FloatSlider.GetValue(): value = %f" % (val / self.coef))
         return val / self.coef
 
@@ -1137,7 +1196,6 @@ class GListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, CheckListCtrlMixin):
 
         item = -1
         while True:
-
             row = []
             item = self.GetNextItem(item)
             if item == -1:
@@ -1223,7 +1281,19 @@ class SearchModuleWidget(wx.Panel):
 
         if self._showTip:
             self._searchTip = StaticWrapText(
+<<<<<<< HEAD
                 parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 35)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 40)
+=======
+                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 35)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                parent=self, id=wx.ID_ANY, label="Choose a tool", size=(-1, 35)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             )
 
         if self._showChoice:
@@ -1288,9 +1358,21 @@ class SearchModuleWidget(wx.Panel):
                 self._searchChoice.SetSelection(0)
                 self.OnSelectModule()
 
+<<<<<<< HEAD
         label = _("%d tools match") % len(commands)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        label = _("{} tools matched").format(len(commands))
+=======
+        label = _("%d tools match") % len(commands)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        label = _("%d tools match") % len(commands)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         if self._showTip:
-            self._searchTip.SetLabel(label)
+            self._searchTip.SetLabel(self._searchTip.GetLabel() + " [{}]".format(label))
 
         self.showNotification.emit(message=label)
 
@@ -1386,7 +1468,6 @@ class ManageSettingsWidget(wx.Panel):
         self.settingsSizer.Fit(self)
 
     def _layout(self):
-
         self.settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.HORIZONTAL)
         self.settingsSizer.Add(
             StaticText(parent=self, id=wx.ID_ANY, label=_("Load:")),
@@ -1471,7 +1552,7 @@ class ManageSettingsWidget(wx.Panel):
     def SetSettings(self, settings):
         """Set settings
 
-        :param settings: - dict with all settigs {nameofsetting : settingdata, ....}
+        :param settings: - dict with all settings {nameofsetting : settingdata, ....}
         """
         self._settings = settings
         self._saveSettings()
@@ -1479,7 +1560,7 @@ class ManageSettingsWidget(wx.Panel):
     def AddSettings(self, settings):
         """Add settings
 
-        :param settings: - dict with all settigs {nameofsetting : settingdata, ....}
+        :param settings: - dict with all settings {nameofsetting : settingdata, ....}
         """
         self._settings.update(settings)
         self._saveSettings()
@@ -1506,7 +1587,7 @@ class ManageSettingsWidget(wx.Panel):
         try:
             fd = open(self.settingsFile, "w")
             fd.write("format_version=2.0\n")
-            for key, values in six.iteritems(self._settings):
+            for key, values in self._settings.items():
                 first = True
                 for v in values:
                     # escaping characters
@@ -1524,7 +1605,7 @@ class ManageSettingsWidget(wx.Panel):
                         fd.write("%s;" % (v))
                 fd.write("\n")
 
-        except IOError:
+        except OSError:
             GError(parent=self, message=_("Unable to save settings"))
             return -1
         fd.close()
@@ -1546,7 +1627,7 @@ class ManageSettingsWidget(wx.Panel):
 
         try:
             fd = open(self.settingsFile, "r")
-        except IOError:
+        except OSError:
             return data
 
         fd_lines = fd.readlines()
@@ -1588,7 +1669,6 @@ class ManageSettingsWidget(wx.Panel):
                     if idx < 0:
                         break
                     elif idx != 0:
-
                         # find out whether it is separator
                         # $$$$; - it is separator
                         # $$$$$; - it is not separator
@@ -1794,7 +1874,6 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         data = self.GetData(checked=True)
 
         for itm in data:
-
             layer = itm[1]
             ftype = itm[2]
             if "/" in ftype:

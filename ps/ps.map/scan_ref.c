@@ -29,10 +29,30 @@ int scan_ref(char *buf, int *xref, int *yref)
         lowercase(word2);
         if (!(xmatch(word2, xref) || ymatch(word2, yref)))
             return 0;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        FALLTHROUGH;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     case 1:
         lowercase(word1);
         if (xmatch(word1, xref) || ymatch(word1, yref))
             return 1;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        FALLTHROUGH;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     default:
         return 0;
     }

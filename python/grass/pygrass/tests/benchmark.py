@@ -3,15 +3,6 @@ Created on Sat Jun 16 20:24:56 2012
 
 @author: soeren
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 
 import optparse
 
@@ -30,7 +21,6 @@ sys.path.append("%s/.." % (os.getcwd()))
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 import grass.script as core
-import grass.pygrass
 import ctypes
 
 
@@ -311,7 +301,7 @@ def run_benchmark(resolution_list, runs, testdict, profile):
                         locals(),
                         filename=filename,
                     )
-                print(("    {0}: {1: 40.6f}s".format(oper, operdict["time"])))
+                print("    {0}: {1: 40.6f}s".format(oper, operdict["time"]))
                 del operdict["func"]
 
         regions.append(result)
@@ -353,7 +343,7 @@ def print_test(testdict):
 TXT = """
 {% for region in regions %}
 {{ '#'*60 }}
-### Benchmark cols = {{ region.cols }} rows = {{ region.rows}} cells = {{ region.cells }}
+# Benchmark cols = {{ region.cols }} rows = {{ region.rows }} cells = {{ region.cells }}
 {{ '#'*60 }}
 
     # equation: c = a + b

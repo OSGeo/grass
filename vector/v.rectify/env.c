@@ -35,7 +35,17 @@ int select_target_env(void)
 
 int show_env(void)
 {
+<<<<<<< HEAD
+    fprintf(stderr, "env(%d) switch to project %s, mapset %s\n", which_env,
+=======
     fprintf(stderr, "env(%d) switch to LOCATION %s, MAPSET %s\n", which_env,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             G_getenv_nofatal("LOCATION_NAME") == NULL
                 ? "?"
                 : G_getenv_nofatal("LOCATION_NAME"),

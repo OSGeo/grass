@@ -1,8 +1,23 @@
 #include <grass/dbmi.h>
 #include <grass/dbstubs.h>
 
+<<<<<<< HEAD
 int db__driver_list_databases(dbString *path, int npaths, dbHandle **handles,
                               int *num)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int db__driver_list_databases(dbString *path UNUSED, int npaths UNUSED,
+                              dbHandle **handles UNUSED, int *num UNUSED)
+=======
+int db__driver_list_databases(dbString *path, int npaths, dbHandle **handles,
+                              int *num)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int db__driver_list_databases(dbString *path, int npaths, dbHandle **handles,
+                              int *num)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     db_procedure_not_implemented("db_list_databases");
     return DB_FAILED;

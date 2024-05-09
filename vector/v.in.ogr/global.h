@@ -26,6 +26,8 @@
 #include <gdal_version.h>
 #include <ogr_api.h>
 
+<<<<<<< HEAD
+=======
 /* define type of input datasource
  * as of GDAL 2.2, all functions having as argument a GDAL/OGR dataset
  * must use the GDAL version, not the OGR version */
@@ -39,6 +41,7 @@ typedef OGRDataSourceH ds_t;
 #define ds_close(ds)              OGR_DS_Destroy(ds)
 #endif
 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 extern int n_polygons;
 extern int n_polygon_boundaries;
 extern double split_distance;

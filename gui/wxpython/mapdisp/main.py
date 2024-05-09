@@ -25,13 +25,22 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com> (MapPanelBase)
 @author Anna Kratochvilova <kratochanna gmail.com> (MapPanelBase)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+"""  # noqa: E501
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 """
 
 from __future__ import print_function
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 import os
 import sys
-import six
 import time
 import shutil
 import fileinput
@@ -230,7 +239,8 @@ class DMonMap(Map):
                         if layersOrder[i] == -1:
                             layersOrder[i] = next_layer
                             next_layer += 1
-                        # layer must be put higher in render order (same cmd was insered more times)
+                        # layer must be put higher in render order (same cmd was
+                        # insered more times)
                         # TODO delete rendurant cmds from cmd file?
                         else:
                             for j, l_order in enumerate(layersOrder):
@@ -270,7 +280,6 @@ class DMonMap(Map):
 
             reorderedLayers = [-1] * next_layer
             for i, layer in enumerate(existingLayers):
-
                 # owned layer was not found in cmd file -> is deleted
                 if layersOrder[i] == -1 and layer in self.ownedLayers:
                     self.ownedLayers.remove(layer)
@@ -287,7 +296,7 @@ class DMonMap(Map):
 
             self.SetLayers(reorderedLayers)
 
-        except IOError as e:
+        except OSError as e:
             grass.warning(
                 _("Unable to read cmdfile '%(cmd)s'. Details: %(det)s")
                 % {"cmd": self.cmdfile, "det": e}
@@ -328,7 +337,7 @@ class DMonMap(Map):
         return layer
 
 
-class Layer(object):
+class Layer:
     """@implements core::giface::Layer"""
 
     def __init__(self, maplayer):
@@ -349,7 +358,7 @@ class Layer(object):
             # elif name == 'propwin':
 
 
-class LayerList(object):
+class LayerList:
     """@implements core::giface::LayerList"""
 
     def __init__(self, map, giface):
@@ -458,7 +467,23 @@ class StandaloneMapDisplayGrassInterface(StandaloneGrassInterface):
     def GetProgress(self):
         return self._mapframe.GetProgressBar()
 
+<<<<<<< HEAD
 
+class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
+    """@implements GrassInterface"""
+
+    def __init__(self, mapframe):
+        StandaloneMapDisplayGrassInterface.__init__(self, mapframe)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
+    """@implements GrassInterface"""
+=======
 class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
     """@implements GrassInterface"""
 
@@ -466,9 +491,74 @@ class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
         StandaloneMapDisplayGrassInterface.__init__(self, mapframe)
 
 
+<<<<<<< HEAD
+class DMonFrame(MapFrame):
+    def OnZoomToMap(self, event):
+        layers = self.MapWindow.GetMap().GetListOfLayers()
+        self.MapWindow.ZoomToMap(layers=layers)
+>>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
+
+    def __init__(self, mapframe):
+        StandaloneMapDisplayGrassInterface.__init__(self, mapframe)
+=======
+=======
+>>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
+        self._mapframe.ShowStatusbar(show)
+
+    def IsStatusbarShown(self):
+        if not self._mapframe.statusbarManager:
+            return False
+
+        return self._mapframe.IsStatusbarShown()
+
+    def ShowAllToolbars(self, show=True):
+        if not show:  # hide
+            action = self._mapframe.RemoveToolbar
+        else:
+            action = self._mapframe.AddToolbar
+        toolbars = list(self._mapframe.GetToolbarNames())
+        if not toolbars:
+            toolbars.append("map")
+        for toolbar in toolbars:
+            action(toolbar)
+
+    def AreAllToolbarsShown(self):
+        toolbar = self._mapframe.GetMapToolbar()
+        if toolbar is None:
+            return False
+
+        return toolbar.IsShown()
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
+=======
+>>>>>>> osgeo-main
+
+class DMonGrassInterface(StandaloneMapDisplayGrassInterface):
+    """@implements GrassInterface"""
+
+<<<<<<< HEAD
 class DMonDisplay(FrameMixin, MapPanel):
     """Map display for wrapping map panel with d.mon mathods and frame methods"""
 
+=======
+    def __init__(self, mapframe):
+        StandaloneMapDisplayGrassInterface.__init__(self, mapframe)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+
+=======
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+
+class DMonDisplay(FrameMixin, MapPanel):
+    """Map display for wrapping map panel with d.mon mathods and frame methods"""
+
+<<<<<<< HEAD
+=======
+class DMonDisplay(FrameMixin, MapPanel):
+    """Map display for wrapping map panel with d.mon mathods and frame methods"""
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     def __init__(self, parent, giface, id, Map, title, toolbars, statusbar):
         # init map panel
         MapPanel.__init__(
@@ -598,7 +688,7 @@ class MapApp(wx.App):
             if self.timer.IsRunning:
                 self.timer.Stop()
             # terminate thread
-            for f in six.itervalues(monFile):
+            for f in monFile.values():
                 try_remove(f)
         return True
 
@@ -614,7 +704,7 @@ class MapApp(wx.App):
         # try:
         # GISBASE and other system environmental variables can not be used
         # since the process inherited them from GRASS
-        # raises exception when vaiable does not exists
+        # raises exception when viable does not exists
         # grass.gisenv()['GISDBASE']
         # except KeyError:
         #    self.timer.Stop()

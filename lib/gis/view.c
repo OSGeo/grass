@@ -102,7 +102,7 @@ int G_get_3dview_defaults(struct G_3dview *v, struct Cell_head *w)
 }
 
 /**
- * \brief Saves info to a 3d.view file.
+ * \brief Saves info to a 3d.view file in the current mapset.
  *
  * The address of a window (struct Cell_head *) may be passed, or if
  * NULL is passed, the Cell_head structure inside the G_3dview struct
@@ -154,15 +154,25 @@ int G_get_3dview_defaults(struct G_3dview *v, struct Cell_head *w)
  * SURFACEONLY<br>
  *
  * \param[in] fname file name
- * \param[in] mapset
  * \param[in] View
  * \param[in] Win
  * \return 1 on success
  * \return -1 on error
  */
 
+<<<<<<< HEAD
+int G_put_3dview(const char *fname, const struct G_3dview *View,
+                 const struct Cell_head *Win)
+=======
 int G_put_3dview(const char *fname, const char *mapset,
                  const struct G_3dview *View, const struct Cell_head *Win)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     FILE *fp;
 

@@ -1,7 +1,23 @@
 <h2>DESCRIPTION</h2>
 
+<<<<<<< HEAD
 <b>r.support</b> allows the user to create and/or edit raster map support
 information. Editing of raster map color tables, category labels, header,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<b>r.support</b> allows the user to create and/or edit raster map support
+information. Editing of raster map color tables, category labels, header,
+=======
+<b>r.support</b> allows the user to create and/or edit raster map support 
+information. Editing of raster map color tables, category labels, header, 
+=======
+<b>r.support</b> allows the user to create and/or edit raster map support
+information. Editing of raster map color tables, category labels, header,
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 history, semantic label elements and title is supported.
 Category labels can also be copied from another raster map.
 
@@ -11,10 +27,48 @@ remote sensing applications. Most common usage will be assigning a
 remote sensing platform sensor band ID to the raster, although any
 identifier is supported. Raster semantic label is suggested to work with
 imagery classification tools.<br>
+<<<<<<< HEAD
 
 <h2>EXAMPLES</h2>
 
+=======
+=======
+<b>r.support</b> allows the user to create and/or edit raster map support 
+information. Editing of raster map color tables, category labels, header, 
+=======
+<b>r.support</b> allows the user to create and/or edit raster map support
+information. Editing of raster map color tables, category labels, header,
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+history, semantic label elements and title is supported.
+Category labels can also be copied from another raster map.
+
+<h3>Raster band management</h3>
+Raster semantic label concept is similar to dimension name in other GIS and
+remote sensing applications. Most common usage will be assigning a
+remote sensing platform sensor band ID to the raster, although any
+identifier is supported. Raster semantic label is suggested to work with
+imagery classification tools.<br>
+<<<<<<< HEAD
+<<<<<<< HEAD
+Band reference should be in form &lt;shortcut&gt;_&lt;bandname&gt; e.g.
+use <b>L5_1</b> if raster contains data from Landsat 5 visible blue (1) band.
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+
+<h2>EXAMPLES</h2>
+
+These examples are based on the North Carolina dataset, more specifically the <em>landuse</em> raster map.
+=======
+
+<h2>EXAMPLES</h2>
+
+=======
+
+<h2>EXAMPLES</h2>
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 These examples are based on the North Carolina dataset, more specfically the <em>landuse</em> raster map.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 Copy the landuse map to the current mapset
 <div class="code"><pre>g.copy raster=landuse,my_landuse
@@ -36,9 +90,33 @@ Copy the landuse map to the current mapset
 <div class="code"><pre>r.support map=my_landuse units=meter
 </pre></div>
 
+<<<<<<< HEAD
 <h3>Set semantic label</h3>
 Note: landuse map doesn't confirm to CORINE specification. This is an example only.
 <div class="code"><pre>r.support map=my_landuse semantic_label=CORINE_LULC
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<h3>Set semantic label</h3>
+Note: landuse map doesn't confirm to CORINE specification. This is an example only.
+<div class="code"><pre>r.support map=my_landuse semantic_label=CORINE_LULC
+=======
+<h3>Set band reference</h3>
+Note: landuse map doesn't confirm to CORINE specification. This is an example only.
+<div class="code"><pre>r.support map=my_landuse bandref=CORINE_LULC
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+<h3>Set semantic label</h3>
+Note: landuse map doesn't confirm to CORINE specification. This is an example only.
+<div class="code"><pre>r.support map=my_landuse semantic_label=CORINE_LULC
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+<h3>Set semantic label</h3>
+Note: landuse map doesn't confirm to CORINE specification. This is an example only.
+<div class="code"><pre>r.support map=my_landuse semantic_label=CORINE_LULC
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 </pre></div>
 
 <h2>NOTES</h2>
@@ -72,4 +150,30 @@ Micharl Shapiro, CERL: Original author<br>
 <a href="MAILTO:rez@touchofmadness.com">Brad Douglas</a>: GRASS 6 Port<br>
 M. Hamish Bowman: command line enhancements<br>
 Markus Neteler: category copy from other map<br>
+<<<<<<< HEAD
 Maris Nartiss: semantic label management
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+Maris Nartiss: semantic label management
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+Maris Nartiss: band reference management
+=======
+Maris Nartiss: semantic label management
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+Maris Nartiss: semantic label management
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main

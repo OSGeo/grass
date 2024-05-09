@@ -3,6 +3,7 @@ Created on Thu Jun 19 14:13:53 2014
 
 @author: pietro
 """
+
 import sys
 import unittest
 import numpy as np
@@ -101,12 +102,10 @@ class PointTestCase(TestCase):
 
 
 class LineTestCase(TestCase):
-
     tmpname = "LineTestCase_map"
 
     @classmethod
     def setUpClass(cls):
-
         from grass.pygrass import utils
 
         utils.create_test_vector_map(cls.tmpname)
@@ -192,12 +191,10 @@ class LineTestCase(TestCase):
 
 
 class NodeTestCase(TestCase):
-
     tmpname = "NodeTestCase_map"
 
     @classmethod
     def setUpClass(cls):
-
         # Tests are based on a stream network
         from grass.pygrass import utils
 
@@ -251,12 +248,10 @@ class NodeTestCase(TestCase):
 
 
 class AreaTestCase(TestCase):
-
     tmpname = "AreaTestCase_map"
 
     @classmethod
     def setUpClass(cls):
-
         # Tests are based on a stream network
         from grass.pygrass import utils
 

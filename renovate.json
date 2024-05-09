@@ -1,7 +1,19 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
+<<<<<<< HEAD
         "config:base",
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        "config:best-practices",
+=======
+        "config:base",
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+        "config:base",
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         ":semanticCommitTypeAll(CI)"
     ]
 }

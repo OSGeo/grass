@@ -77,7 +77,7 @@ int db_d_begin_transaction(void)
    \return DB_OK on success
    \return DB_FAILED on failure
  */
-int db_d_commit_transaction()
+int db_d_commit_transaction(void)
 {
     int stat;
 

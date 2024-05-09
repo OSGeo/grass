@@ -19,7 +19,7 @@
 #include "globals.h"
 #include "proto.h"
 
-static void notice_processor(void *arg, const char *message)
+static void notice_processor(void *arg UNUSED, const char *message)
 {
     /* print notice messages only on verbose level */
     if (G_verbose() > G_verbose_std()) {

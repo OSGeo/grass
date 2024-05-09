@@ -143,6 +143,17 @@ def update_minor(args):
     version_file = read_version_file()
     micro = version_file.micro
     minor = int(version_file.minor)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    minor += 1
+    if micro.endswith("dev"):
+        micro = "0dev"
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     if args.dev:
         if not minor % 2:
             sys.exit(
@@ -159,6 +170,13 @@ def update_minor(args):
         else:
             # Even will be released, so adding micro version.
             micro = "0dev"
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     else:
         sys.exit("Updating version from a non-dev VERSION file is not possible")
     write_version_file(
@@ -249,6 +267,37 @@ def status(args):
         status_as_yaml(version_info=version_info, today=today, version=version, tag=tag)
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+def suggest_message(args):
+    """Print suggestion for a commit message
+
+    Assumes that the version file was changed, but not commited yet,
+    but it does not check that assumption.
+
+    This shows a wrong commit message if going back from RCs,
+    but it is not likely this is needed because the suggestion
+    will be part of the message for the switch and there is
+    no other work to do afterwards except for the commit
+    (unlike updating the version number).
+    """
+    version_info = read_version_file()
+    if not version_info.micro.endswith("dev"):
+        tag = construct_version(version_info)
+        action = "GRASS GIS"
+    else:
+        tag = None
+        action = "Start"
+    suggest_commit_from_version_file(action, tag=tag)
+
+
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 def main():
     """Translate sub-commands to function calls"""
     parser = argparse.ArgumentParser(
@@ -283,9 +332,24 @@ def main():
     subparser = subparsers.add_parser(
         "minor", help="increase minor (x.Y.z) version (uses dev in micro)"
     )
+<<<<<<< HEAD
     subparser.add_argument(
         "--dev", action="store_true", help="increase development-only version"
     )
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    subparser.add_argument(
+        "--dev", action="store_true", help="increase development-only version"
+    )
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    subparser.add_argument(
+        "--dev", action="store_true", help="increase development-only version"
+    )
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     subparser.set_defaults(func=update_minor)
 
     subparser = subparsers.add_parser(
@@ -301,6 +365,20 @@ def main():
     )
     subparser.set_defaults(func=status)
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    subparser = subparsers.add_parser(
+        "suggest", help="suggest a commit message for new version"
+    )
+    subparser.set_defaults(func=suggest_message)
+
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     args = parser.parse_args()
     args.func(args)
 

@@ -1,14 +1,10 @@
-from __future__ import (
-    absolute_import,
-    division,
-    generators,
-    nested_scopes,
-    print_function,
-    unicode_literals,
-    with_statement,
-)
+import html.parser as base
 import sys
+from html.entities import entitydefs
 
+<<<<<<< HEAD
+__all__ = ["HTMLParser"]
+=======
 try:
     # Python 2 import
     import HTMLParser as base
@@ -32,6 +28,7 @@ except ImportError:
 
 
 __all__ = ["HTMLParser", "HTMLParseError"]
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 
 omit_start = ["body", "tbody", "head", "html"]
 

@@ -27,7 +27,29 @@
    \return pointer to allocated P_node struct
    \return NULL on error
  */
+<<<<<<< HEAD
 struct P_node *dig_alloc_node(void)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct P_node *dig_alloc_node(void)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+struct P_node *dig_alloc_node()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+struct P_node *dig_alloc_node(void)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+struct P_node *dig_alloc_node()
+=======
+struct P_node *dig_alloc_node(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 {
     struct P_node *Node;
 
@@ -124,7 +146,29 @@ int dig_alloc_nodes(struct Plus_head *Plus, int add)
    \return pointer to allocated P_node struct
    \return NULL on error
  */
+<<<<<<< HEAD
 struct P_line *dig_alloc_line(void)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct P_line *dig_alloc_line(void)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+struct P_line *dig_alloc_line()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+struct P_line *dig_alloc_line(void)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+struct P_line *dig_alloc_line()
+=======
+struct P_line *dig_alloc_line(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 {
     struct P_line *Line;
 
@@ -263,7 +307,29 @@ int dig_alloc_isles(struct Plus_head *Plus, int add)
    \return pointer to allocated P_area struct
    \return NULL on error
  */
+<<<<<<< HEAD
 struct P_area *dig_alloc_area(void)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct P_area *dig_alloc_area(void)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+struct P_area *dig_alloc_area()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+struct P_area *dig_alloc_area(void)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+struct P_area *dig_alloc_area()
+=======
+struct P_area *dig_alloc_area(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 {
     struct P_area *Area;
 
@@ -298,7 +364,29 @@ void dig_free_area(struct P_area *Area)
    \return pointer to allocated P_isle struct
    \return NULL on error
  */
+<<<<<<< HEAD
 struct P_isle *dig_alloc_isle(void)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+struct P_isle *dig_alloc_isle(void)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+struct P_isle *dig_alloc_isle()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+struct P_isle *dig_alloc_isle(void)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+struct P_isle *dig_alloc_isle()
+=======
+struct P_isle *dig_alloc_isle(void)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 {
     struct P_isle *Isle;
 
@@ -484,7 +572,17 @@ int dig_isle_alloc_line(struct P_isle *isle, int add)
 /*!
    \brief For now just print message and return error code
  */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int dig_out_of_memory(void)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 int dig_out_of_memory()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     G_warning(_("Out of memory"));
     return -1;

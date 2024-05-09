@@ -19,6 +19,7 @@ for details.
 @author Vaclav Petras <wenzeslaus gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
+
 import os
 import wx
 
@@ -179,9 +180,9 @@ class IClassGroupDialog(SimpleDialog):
         return self.groupSelect.GetValue().split("@")[0]
 
     def GetGroupBandsErr(self, parent):
-        """Get list of raster bands which are in the soubgroup of group with both having same name.
-        If the group does not exists or it does not contain any bands in subgoup with same name,
-        error dialog is shown.
+        """Get list of raster bands which are in the subgroup of group with both
+        having same name. If the group does not exist, or it does not contain any bands
+        in subgroup with same name, error dialog is shown.
         """
         gr, s = self.GetData()
 
@@ -219,7 +220,8 @@ class IClassGroupDialog(SimpleDialog):
         return bands
 
     def GetGroupBands(self, group, subgroup):
-        """Get list of raster bands which are in the soubgroup of group with both having same name."""
+        """Get list of raster bands which are in the subgroup of group with both having
+        same name."""
 
         kwargs = {}
         if subgroup:
@@ -289,7 +291,7 @@ class IClassMapDialog(SimpleDialog):
 class IClassCategoryManagerDialog(wx.Dialog):
     """Dialog for managing categories (classes).
 
-    Alows adding, deleting class and changing its name and color.
+    Allows adding, deleting class and changing its name and color.
     """
 
     def __init__(self, parent, title=_("Class manager"), id=wx.ID_ANY):
@@ -383,7 +385,8 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdi
     def __init__(self, parent, mapwindow, stats_data, id=wx.ID_ANY):
         """
         :param parent: gui parent
-        :param mapwindow: mapwindow instance with iclass toolbar and remove raster method
+        :param mapwindow: mapwindow instance with iclass toolbar and remove raster
+                          method
         :param stats_data: StatisticsData instance (defined in statistics.py)
         :param id: wx id
         """
@@ -570,14 +573,14 @@ class CategoryListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEdi
         text_c = wx.Colour(*ContrastColor(back_c))
 
         # if it is in scope of the method, gui falls, using self solved it
-        self.l = wx.ListItemAttr()
+        self.l = wx.ItemAttr()
         self.l.SetBackgroundColour(back_c)
         self.l.SetTextColour(text_c)
         return self.l
 
 
 def ContrastColor(color):
-    """Decides which value shoud have text to be contrast with background color
+    """Decides which value should have text to be contrast with background color
         (bright bg -> black, dark bg -> white)
 
     .. todo::
@@ -591,7 +594,7 @@ def ContrastColor(color):
         d = 0
     else:
         d = 255
-    # maybe return just bool if text shoud be dark or bright
+    # maybe return just bool if text should be dark or bright
     return (d, d, d)
 
 
@@ -756,7 +759,7 @@ class IClassExportAreasDialog(wx.Dialog):
     def OnTextChanged(self, event):
         """Name of new vector map given.
 
-        Enable/diable OK button.
+        Enable/disable OK button.
         """
         file = self.vectorNameCtrl.GetValue()
         if len(file) > 0:

@@ -251,7 +251,19 @@ void open_write_rgb_maps(input_maps *in, RASTER3D_Region region, FILE *fp,
                 fatal_error(_("Unable to close 3D raster map"), in);
             }
 
+<<<<<<< HEAD
             /*Set the pointer to null so we noe later that these files are
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            /*Set the pointer to null so we know later that these files are
+=======
+            /*Set the pointer to null so we noe later that these files are
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            /*Set the pointer to null so we noe later that these files are
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
              * already closed */
             if (i == 0)
                 in->map_r = NULL;
@@ -402,7 +414,7 @@ int main(int argc, char *argv[])
 
     /*Correct the coordinates, so the precision of VTK is not hurt :( */
     if (param.coorcorr->answer) {
-        /*Get the default region for coordiante correction */
+        /*Get the default region for coordinate correction */
         G_get_default_window(&default_region);
 
         /*Use the center of the current region as extent */

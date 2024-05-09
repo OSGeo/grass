@@ -44,7 +44,23 @@ int main(int argc, char **argv)
     const char *title;
     char tmp1[100], tmp2[100], tmp3[100];
     char timebuff[256];
+<<<<<<< HEAD
     char *units, *vdatum, *semantic_label;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    char *units, *vdatum, *semantic_label;
+=======
+    char *units, *vdatum, *bandref;
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+    char *units, *vdatum, *semantic_label;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    char *units, *vdatum, *semantic_label;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     int i;
     CELL mincat = 0, maxcat = 0, cat;
     FILE *out;
@@ -121,7 +137,23 @@ int main(int argc, char **argv)
 
     vdatum = Rast_read_vdatum(name, "");
 
+<<<<<<< HEAD
     semantic_label = Rast_read_semantic_label(name, "");
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    semantic_label = Rast_read_semantic_label(name, "");
+=======
+    bandref = Rast_read_bandref(name, "");
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+    semantic_label = Rast_read_semantic_label(name, "");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    semantic_label = Rast_read_semantic_label(name, "");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     /*Check the Timestamp */
     time_ok = G_read_raster_timestamp(name, "", &ts) > 0;
@@ -159,7 +191,19 @@ int main(int argc, char **argv)
                      hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
         compose_line(out, "Mapset:   %-29.29s  Login of Creator: %s", mapset,
                      hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??");
+<<<<<<< HEAD
         compose_line(out, "Location: %s", G_location());
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        compose_line(out, "Project:  %s", G_location());
+=======
+        compose_line(out, "Location: %s", G_location());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        compose_line(out, "Location: %s", G_location());
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         compose_line(out, "DataBase: %s", G_gisdbase());
         compose_line(out, "Title:    %s", title);
 
@@ -182,6 +226,16 @@ int main(int argc, char **argv)
                      hist_ok ? Rast_get_history(&hist, HIST_MAPTYPE) : "??",
                      cats_ok ? tmp1 : "??");
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         compose_line(out, "  Data Type:    %-20.20s Semantic label: %s ",
                      (data_type == CELL_TYPE
                           ? "CELL"
@@ -189,6 +243,22 @@ int main(int argc, char **argv)
                                  ? "DCELL"
                                  : (data_type == FCELL_TYPE ? "FCELL" : "??"))),
                      (semantic_label ? semantic_label : "(none)"));
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	compose_line(out, "  Data Type:    %-20.20s Band reference: %s ",
+		     (data_type == CELL_TYPE ? "CELL" :
+		      (data_type == DCELL_TYPE ? "DCELL" :
+		       (data_type == FCELL_TYPE ? "FCELL" : "??"))),
+             (bandref ? bandref : "(none)"));
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
         /* For now hide these unless they exist to keep the noise low. In
          *   future when the two are used more widely they can be printed
@@ -565,6 +635,7 @@ int main(int argc, char **argv)
                     hist_ok ? Rast_get_history(&hist, HIST_MAPTYPE) : "??");
             fprintf(out, "mapset=%s\n", mapset);
             fprintf(out, "location=%s\n", G_location());
+            fprintf(out, "project=%s\n", G_location());
             fprintf(out, "database=%s\n", G_gisdbase());
             fprintf(out, "date=\"%s\"\n",
                     hist_ok ? Rast_get_history(&hist, HIST_MAPID) : "??");
@@ -575,6 +646,16 @@ int main(int argc, char **argv)
 
                 G_format_timestamp(&ts, timebuff);
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 /*Create the r.info timestamp string */
                 fprintf(out, "timestamp=\"%s\"\n", timebuff);
             }
@@ -598,6 +679,34 @@ int main(int argc, char **argv)
                 fprintf(out, "comments=\"");
                 for (i = 0; i < Rast_history_length(&hist); i++)
                     fprintf(out, "%s", Rast_history_line(&hist, i));
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+		/*Create the r.info timestamp string */
+		fprintf(out, "timestamp=\"%s\"\n", timebuff);
+
+	    }
+	    else {
+		fprintf(out, "timestamp=\"none\"\n");
+	    }
+	    fprintf(out, "units=%s\n", units ? units : "\"none\"");
+	    fprintf(out, "vdatum=%s\n", vdatum ? vdatum : "\"none\"");
+        fprintf(out, "bandref=%s\n", bandref ? bandref : "\"none\"");
+	    fprintf(out, "source1=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_DATSRC_1) : "\"none\"");
+	    fprintf(out, "source2=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_DATSRC_2) : "\"none\"");
+	    fprintf(out, "description=\"%s\"\n", hist_ok ? Rast_get_history(&hist, HIST_KEYWRD) : "\"none\"");
+	    if (Rast_history_length(&hist)) {
+		fprintf(out, "comments=\"");
+		for (i = 0; i < Rast_history_length(&hist); i++)
+		    fprintf(out, "%s", Rast_history_line(&hist, i));
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 fprintf(out, "\"\n");
             }
         }

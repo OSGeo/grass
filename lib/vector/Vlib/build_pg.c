@@ -39,6 +39,9 @@ static int write_isles(const struct Plus_head *, const struct Format_info_pg *);
 static void build_stmt_id(const void *, int, int, const struct Plus_head *,
                           char **, size_t *);
 static int create_simple_feature_from_topo(struct Map_info *);
+#define NOPG_UNUSED
+#else
+#define NOPG_UNUSED UNUSED
 #endif
 
 /*!
@@ -57,7 +60,7 @@ static int create_simple_feature_from_topo(struct Map_info *);
    \return 1 on success
    \return 0 on error
  */
-int Vect_build_pg(struct Map_info *Map, int build)
+int Vect_build_pg(struct Map_info *Map NOPG_UNUSED, int build NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     struct Plus_head *plus;
@@ -211,13 +214,37 @@ int build_topo(struct Map_info *Map, int build)
 
     /* update TopoGeometry based on GRASS-like topology */
     Vect_build_nat(Map, build);
+<<<<<<< HEAD
+
+    if (n_nodes != Map->plus.n_nodes)
+        G_warning(
+            _("Inconsistency in topology: number of nodes %d (should be %d)"),
+            Map->plus.n_nodes, n_nodes);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> osgeo-main
+
+    if (n_nodes != Map->plus.n_nodes)
+        G_warning(
+            _("Inconsistency in topology: number of nodes %d (should be %d)"),
+            Map->plus.n_nodes, n_nodes);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+
+    if (n_nodes != Map->plus.n_nodes)
+        G_warning(
+            _("Inconsistency in topology: number of nodes %d (should be %d)"),
+            Map->plus.n_nodes, n_nodes);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     if (n_nodes != Map->plus.n_nodes)
         G_warning(
             _("Inconsistency in topology: number of nodes %d (should be %d)"),
             Map->plus.n_nodes, n_nodes);
 
-    /* store map boundig box in DB */
+    /* store map bounding box in DB */
     save_map_bbox(pg_info, &(plus->box));
 
     /* begin transaction */

@@ -138,8 +138,8 @@ struct RTree {
     int rootlevel; /* root level = tree depth */
 
     /* settings for RTree building */
-    int nodecard;           /* max number of childs in node */
-    int leafcard;           /* max number of childs in leaf */
+    int nodecard;           /* max number of children in node */
+    int leafcard;           /* max number of children in leaf */
     int min_node_fill;      /* balance criteria for node removal */
     int min_leaf_fill;      /* balance criteria for leaf removal */
     int minfill_node_split; /* balance criteria for splitting */
@@ -149,7 +149,19 @@ struct RTree {
     /* free node positions for recycling */
     struct _recycle {
         int avail;  /* number of available positions */
+<<<<<<< HEAD
         int alloc;  /* number of allcoated positions in *pos */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        int alloc;  /* number of allocated positions in *pos */
+=======
+        int alloc;  /* number of allcoated positions in *pos */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        int alloc;  /* number of allcoated positions in *pos */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         off_t *pos; /* array of available positions */
     } free_nodes;
 

@@ -23,7 +23,19 @@
 #include <grass/vector.h>
 
 int reclass(struct Map_info *In, struct Map_info *Out, int type, int field,
+<<<<<<< HEAD
             dbCatValArray *cvarr, int dissolve)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            dbCatValArray *cvarr, int dissolve UNUSED)
+=======
+            dbCatValArray *cvarr, int dissolve)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            dbCatValArray *cvarr, int dissolve)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     int i, nlines, line, ltype, old_cat, new_cat;
     int nocat = 0, rclelem = 0, negative = 0;

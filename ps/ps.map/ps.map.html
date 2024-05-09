@@ -7,7 +7,29 @@ number of vector overlays, text labels, decorations, and other spatial data.
 <p>A file of mapping instructions that describes the various spatial and textual
 information to be printed must be prepared prior to running <em>ps.map</em>.
 
+<<<<<<< HEAD
 <h2>NOTES</h2>
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<h2>NOTES</h2>
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<h2>NOTES</h2> 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+<h2>NOTES</h2>
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+<h2>NOTES</h2> 
+=======
+<h2>NOTES</h2>
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
 The order of commands is generally unimportant but may affect how some layers
 are drawn. For example to plot <b>vpoints</b> above <b>vareas</b> list the
@@ -520,7 +542,7 @@ USAGE:	<b>header</b>
 </pre></div>
 If the <em>file</em> sub-instruction is absent the header will consist
 of the map's title <!-- from hist file -->
-and the location's description.<!-- PERMANENT/MYNAME -->
+and the project's description.<!-- PERMANENT/MYNAME -->
 The text will be centered on the page above the map.
 The default text color is black.
 <p>If the <em>file</em> sub-instruction is given the header will consist
@@ -532,8 +554,8 @@ of the text in the text file specified, with some special formatting keys:
 <li><tt>%_</tt>  - horizontal bar
 <li><tt>%c</tt>  - "&lt;raster name&gt; in mapset &lt;mapset name&gt;"
 <li><tt>%d</tt>  - today's date
-<li><tt>%l</tt>  - location name
-<li><tt>%L</tt>  - Location's text description
+<li><tt>%l</tt>  - project name
+<li><tt>%L</tt>  - project's text description
 <li><tt>%m</tt>  - mapset name
 <li><tt>%u</tt>  - user name
 <li><tt>%x</tt>  - mask info

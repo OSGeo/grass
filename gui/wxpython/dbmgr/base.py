@@ -26,10 +26,10 @@ This program is free software under the GNU General Public License
 
 @author Jachym Cepicky <jachym.cepicky gmail.com>
 @author Martin Landa <landa.martin gmail.com>
-@author Refactoring by Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
+@author Refactoring by Stepan Turek <stepan.turek seznam.cz>
+        (GSoC 2012, mentor: Martin Landa)
 """
 
-import sys
 import os
 import locale
 import tempfile
@@ -75,9 +75,6 @@ from gui_core.wrap import (
     TextCtrl,
 )
 from core.utils import cmp
-
-if sys.version_info.major >= 3:
-    unicode = str
 
 
 class Log:
@@ -241,7 +238,10 @@ class VirtualAttributeList(
             self.sqlFilter = {"where": where}
 
             if columns:
-                cmdParams.update(dict(columns=",".join(columns)))
+                # Enclose column name with SQL standard double quotes
+                cmdParams.update(
+                    dict(columns=",".join([f'"{col}"' for col in columns]))
+                )
 
             ret = RunCommand("v.db.select", **cmdParams)
 
@@ -305,8 +305,8 @@ class VirtualAttributeList(
                     GWarning(
                         parent=self,
                         message=_(
-                            "Incorrect encoding {enc} used. Set encoding in GUI Settings"
-                            " or set GRASS_DB_ENCODING variable."
+                            "Incorrect encoding {enc} used. Set encoding in GUI "
+                            "Settings or set GRASS_DB_ENCODING variable."
                         ).format(enc=enc),
                     )
 
@@ -321,13 +321,16 @@ class VirtualAttributeList(
                 if len(record) > show_max:
                     record = record[:show_max]
                 # TODO: The real fix here is to use JSON output from v.db.select or
-                # proper CSV output and real CSV reader here (Python csv and json packages).
+                # proper CSV output and real CSV reader here (Python csv and json
+                # packages).
                 raise GException(
                     _(
                         "Unable to read the table <{table}> from the database due"
-                        " to seemingly inconsistent number of columns in the data transfer."
+                        " to seemingly inconsistent number of columns in the data"
+                        " transfer."
                         " Check row: {row}..."
-                        " Likely, a newline character is present in the attribute value starting with: '{value}'"
+                        " Likely, a newline character is present in the attribute value"
+                        " starting with: '{value}'"
                         " Use the v.db.select module to investigate."
                     ).format(table=tableName, row=" | ".join(record), value=last)
                 )
@@ -408,8 +411,8 @@ class VirtualAttributeList(
                         parent=self,
                         message=_(
                             "Error loading attribute data. "
-                            "Record number: %(rec)d. Unable to convert value '%(val)s' in "
-                            "key column (%(key)s) to integer.\n\n"
+                            "Record number: %(rec)d. Unable to convert value '%(val)s' "
+                            "in key column (%(key)s) to integer.\n\n"
                             "Details: %(detail)s"
                         )
                         % {"rec": i + 1, "val": value, "key": keyColumn, "detail": e},
@@ -481,7 +484,6 @@ class VirtualAttributeList(
             self.popupId = {
                 "sortAsc": NewId(),
                 "sortDesc": NewId(),
-                "calculate": NewId(),
                 "area": NewId(),
                 "length": NewId(),
                 "compact": NewId(),
@@ -499,8 +501,9 @@ class VirtualAttributeList(
         popupMenu.Append(self.popupId["sortDesc"], _("Sort descending"))
         popupMenu.AppendSeparator()
         subMenu = Menu()
-        popupMenu.AppendMenu(
-            self.popupId["calculate"], _("Calculate (only numeric columns)"), subMenu
+        subMenuItem = popupMenu.AppendSubMenu(
+            subMenu,
+            _("Calculate (only numeric columns)"),
         )
         popupMenu.Append(self.popupId["calculator"], _("Field calculator"))
         popupMenu.AppendSeparator()
@@ -519,7 +522,7 @@ class VirtualAttributeList(
         if not self.dbMgrData["editable"] or self.columns[
             self.GetColumn(self._col).GetText()
         ]["ctype"] not in (int, float):
-            popupMenu.Enable(self.popupId["calculate"], False)
+            subMenuItem.Enable(False)
 
         subMenu.Append(self.popupId["area"], _("Area size"))
         subMenu.Append(self.popupId["length"], _("Line length"))
@@ -560,18 +563,19 @@ class VirtualAttributeList(
     def OnColumnSort(self, event):
         """Column heading left mouse button -> sorting"""
         self._col = event.GetColumn()
-
+        self._updateColSortFlag()
         self.ColumnSort()
-
         event.Skip()
 
     def OnColumnSortAsc(self, event):
         """Sort values of selected column (ascending)"""
+        self._updateColSortFlag()
         self.SortListItems(col=self._col, ascending=True)
         event.Skip()
 
     def OnColumnSortDesc(self, event):
         """Sort values of selected column (descending)"""
+        self._updateColSortFlag()
         self.SortListItems(col=self._col, ascending=False)
         event.Skip()
 
@@ -689,7 +693,7 @@ class VirtualAttributeList(
             item1 = self.itemDataMap[key1][self._col]
             item2 = self.itemDataMap[key2][self._col]
 
-        if isinstance(item1, str) or isinstance(item2, unicode):
+        if isinstance(item1, str) or isinstance(item2, str):
             cmpVal = locale.strcoll(GetUnicodeValue(item1), GetUnicodeValue(item2))
         else:
             cmpVal = cmp(item1, item2)
@@ -717,6 +721,14 @@ class VirtualAttributeList(
             return False
 
         return True
+
+    def _updateColSortFlag(self):
+        """
+        Update listmix.ColumnSorterMixin class self._colSortFlag list
+        private variable for new column which was added (required for
+        sorting new added column values)
+        """
+        self._colSortFlag.extend([0] * (len(self.columns) - len(self._colSortFlag)))
 
 
 class DbMgrBase:
@@ -850,10 +862,12 @@ class DbMgrBase:
         # delete page
         if layer in self.dbMgrData["mapDBInfo"].layers.keys():
             # delete page
-            # draging pages disallowed
-            # if self.browsePage.GetPageText(page).replace('Layer ', '').strip() == str(layer):
-            # self.browsePage.DeletePage(page)
-            # break
+            # dragging pages disallowed
+            # if self.browsePage.GetPageText(page).replace("Layer ", "").strip() == str(
+            #     layer
+            # ):
+            #     self.browsePage.DeletePage(page)
+            #     break
             if self.pages["browse"]:
                 self.pages["browse"].DeletePage(layer)
             if self.pages["manageTable"]:
@@ -1024,7 +1038,7 @@ class DbMgrNotebookBase(GNotebook):
         del self.layerPage[layer]
 
         if self.GetSelection() >= 0:
-            self.selLayer = self.layers[self.GetSelection()]
+            self.selLayer = self.layers[-1]
         else:
             self.selLayer = None
 
@@ -1355,6 +1369,9 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
     def OnSqlQuerySize(self, event, layer):
         """Adapts SQL Query Simple tab on current width"""
+
+        if layer not in self.layers:
+            return
 
         sqlNtb = event.GetEventObject()
         if not self.sqlBestSize:
@@ -1832,7 +1849,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                 n, s, w, e = display.GetRegionSelected()
                 self.mapdisplay.Map.GetRegion(n=n, s=s, w=w, e=e, update=True)
         else:
-            # add map layer with higlighted vector features
+            # add map layer with highlighted vector features
             self.AddQueryMapLayer(selectedOnly)  # -> self.qlayer
 
             # set opacity based on queried layer
@@ -2020,7 +2037,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
     def OnDeleteSelected(self, event):
         """Delete vector objects selected in attribute browse window
-        (attribures and geometry)
+        (attributes and geometry)
         """
         tlist = self.FindWindowById(self.layerPage[self.selLayer]["data"])
         cats = tlist.GetSelectedItems()
@@ -2095,8 +2112,9 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             try:
                 if len(whereVal) > 0:
                     showSelected = True
+                    # Enclose column name with SQL standard double quotes
                     keyColumn = listWin.LoadData(
-                        self.selLayer, where=whereCol + whereOpe + whereVal
+                        self.selLayer, where=f'"{whereCol}"' + whereOpe + whereVal
                     )
                 else:
                     keyColumn = listWin.LoadData(self.selLayer)
@@ -2311,7 +2329,8 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         :param pos: position of tab, if -1 it is added to end
 
         :return: True if layer was added
-        :return: False if layer was not added - layer has been already added or does not exist
+        :return: False if layer was not added - layer has been already added or does
+                 not exist
         """
         if layer in self.layers or layer not in self.parentDbMgrBase.GetVectorLayers():
             return False
@@ -2634,6 +2653,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         )
         self.FindWindowById(self.layerPage[self.selLayer]["renameCol"]).SetSelection(0)
         self.FindWindowById(self.layerPage[self.selLayer]["renameColTo"]).SetValue("")
+        self._updateTableColumnWidgetChoices(table=table)
 
         event.Skip()
 
@@ -2721,6 +2741,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             self.dbMgrData["mapDBInfo"].GetColumns(table)
         )
         self.FindWindowById(self.layerPage[self.selLayer]["renameCol"]).SetSelection(0)
+        self._updateTableColumnWidgetChoices(table=table)
 
         event.Skip()
 
@@ -2768,6 +2789,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             self.dbMgrData["mapDBInfo"].GetColumns(table)
         )
         self.FindWindowById(self.layerPage[self.selLayer]["renameCol"]).SetSelection(0)
+        self._updateTableColumnWidgetChoices(table=table)
 
         event.Skip()
 
@@ -2794,14 +2816,6 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             ).GetValue()
         )
 
-        # add item to the list of table columns
-        tlist = self.FindWindowById(self.layerPage[self.selLayer]["tableData"])
-
-        index = tlist.InsertItem(tlist.GetItemCount(), str(name))
-        tlist.SetItem(index, 0, str(name))
-        tlist.SetItem(index, 1, str(ctype))
-        tlist.SetItem(index, 2, str(length))
-
         self.AddColumn(name, ctype, length)
 
         # update widgets
@@ -2811,11 +2825,10 @@ class DbMgrTablesPage(DbMgrNotebookBase):
             self.dbMgrData["mapDBInfo"].GetColumns(table)
         )
         self.FindWindowById(self.layerPage[self.selLayer]["renameCol"]).SetSelection(0)
-
+        self._updateTableColumnWidgetChoices(table=table)
         event.Skip()
 
     def UpdatePage(self, layer):
-
         if layer in self.layerPage.keys():
             table = self.dbMgrData["mapDBInfo"].layers[layer]["table"]
 
@@ -2826,6 +2839,27 @@ class DbMgrTablesPage(DbMgrNotebookBase):
                 columns=self.dbMgrData["mapDBInfo"].GetColumns(table),
             )
             self.OnTableReload(None)
+
+    def _updateTableColumnWidgetChoices(self, table):
+        """Update table column widget choices
+
+        :param str table: table name
+        """
+        cols = self.dbMgrData["mapDBInfo"].GetColumns(table)
+        # Browse data page SQL Query Simple page WHERE Combobox column names widget
+        self.FindWindowById(
+            self.pages["browse"].layerPage[self.selLayer]["whereColumn"]
+        ).SetItems(cols)
+        # Browse data page SQL Query Builder page SQL builder frame ListBox column
+        # names widget
+        if self.pages["browse"].builder:
+            self.pages["browse"].builder.list_columns.Set(cols)
+        # Browse data page column Field calculator frame ListBox column names widget
+        fieldCalc = self.FindWindowById(
+            self.pages["browse"].layerPage[self.selLayer]["data"],
+        ).fieldCalc
+        if fieldCalc:
+            fieldCalc.list_columns.Set(cols)
 
 
 class DbMgrLayersPage(wx.Panel):
@@ -2944,7 +2978,6 @@ class TableListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __init__(
         self, parent, id, table, columns, pos=wx.DefaultPosition, size=wx.DefaultSize
     ):
-
         self.parent = parent
         self.table = table
         self.columns = columns
@@ -3005,7 +3038,6 @@ class LayerListCtrl(ListCtrl, listmix.ListCtrlAutoWidthMixin):
     """Layer description list"""
 
     def __init__(self, parent, id, layers, pos=wx.DefaultPosition, size=wx.DefaultSize):
-
         self.parent = parent
         self.layers = layers
         ListCtrl.__init__(
@@ -3072,6 +3104,7 @@ class LayerBook(wx.Notebook):
         self.parent = parent
         self.parentDialog = parentDialog
         self.mapDBInfo = self.parentDialog.dbMgrData["mapDBInfo"]
+        vectName = self.parentDialog.dbMgrData["vectName"]
 
         #
         # drivers
@@ -3086,7 +3119,24 @@ class LayerBook(wx.Notebook):
         # get default values
         #
         self.defaultConnect = {}
-        connect = RunCommand("db.connect", flags="p", read=True, quiet=True)
+        genv = grass.gisenv()
+        vectMap = grass.find_file(
+            name=vectName,
+            element="vector",
+        )
+        vectGisrc, vectEnv = grass.create_environment(
+            gisdbase=genv["GISDBASE"],
+            location=genv["LOCATION_NAME"],
+            mapset=vectMap["mapset"],
+        )
+        connect = RunCommand(
+            "db.connect",
+            flags="p",
+            env=vectEnv,
+            read=True,
+            quiet=True,
+        )
+        grass.utils.try_remove(vectGisrc)
 
         for line in connect.splitlines():
             item, value = line.split(":", 1)
@@ -3097,7 +3147,8 @@ class LayerBook(wx.Notebook):
         #        len(self.defaultConnect['database']) == 0:
         #     GWarning(parent = self.parent,
         #              message = _("Unknown default DB connection. "
-        #                          "Please define DB connection using db.connect module."))
+        #                          "Please define DB connection using db.connect"
+        #                          "module."))
 
         self.defaultTables = self._getTables(
             self.defaultConnect["driver"], self.defaultConnect["database"]
@@ -3498,9 +3549,11 @@ class LayerBook(wx.Notebook):
 
         # events
         self.modifyLayerWidgets["layer"][1].Bind(wx.EVT_COMBOBOX, self.OnChangeLayer)
-        # self.modifyLayerWidgets['driver'][1].Bind(wx.EVT_CHOICE, self.OnDriverChanged)
-        # self.modifyLayerWidgets['database'][1].Bind(wx.EVT_TEXT_ENTER, self.OnDatabaseChanged)
-        # self.modifyLayerWidgets['table'][1].Bind(wx.EVT_CHOICE, self.OnTableChanged)
+        # self.modifyLayerWidgets["driver"][1].Bind(wx.EVT_CHOICE, self.OnDriverChanged)
+        # self.modifyLayerWidgets["database"][1].Bind(
+        #     wx.EVT_TEXT_ENTER, self.OnDatabaseChanged
+        # )
+        # self.modifyLayerWidgets["table"][1].Bind(wx.EVT_CHOICE, self.OnTableChanged)
 
         btnModify = Button(
             self.modifyPanel, wx.ID_DELETE, _("&Modify layer"), size=(125, -1)
@@ -3849,7 +3902,7 @@ class LayerBook(wx.Notebook):
         if (
             self.modifyLayerWidgets["driver"][1].GetStringSelection()
             != self.mapDBInfo.layers[layer]["driver"]
-            or self.modifyLayerWidgets["database"][1].GetStringSelection()
+            or self.modifyLayerWidgets["database"][1].GetValue()
             != self.mapDBInfo.layers[layer]["database"]
             or self.modifyLayerWidgets["table"][1].GetStringSelection()
             != self.mapDBInfo.layers[layer]["table"]

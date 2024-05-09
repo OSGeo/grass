@@ -212,7 +212,6 @@ int main(int argc, char *argv[])
     N_gradient_field_2d *field = NULL;
     N_array_2d *xcomp = NULL;
     N_array_2d *ycomp = NULL;
-    char *buff = NULL;
     int with_river = 0, with_drain = 0;
 
     /* Initialize GRASS */
@@ -234,7 +233,19 @@ int main(int argc, char *argv[])
 
     /* Make sure that the current projection is not lat/long */
     if ((G_projection() == PROJECTION_LL))
+<<<<<<< HEAD
         G_fatal_error(_("Lat/Long location is not supported by %s. Please "
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        G_fatal_error(_("Lat/Long project is not supported by %s. Please "
+=======
+        G_fatal_error(_("Lat/Long location is not supported by %s. Please "
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_fatal_error(_("Lat/Long location is not supported by %s. Please "
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                         "reproject map first."),
                       G_program_name());
 
@@ -460,9 +471,24 @@ int main(int argc, char *argv[])
 
         N_write_array_2d_to_rast(xcomp, param.vector_x->answer);
         N_write_array_2d_to_rast(ycomp, param.vector_y->answer);
+<<<<<<< HEAD
         if (buff)
             G_free(buff);
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        if (buff)
+            G_free(buff);
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (buff)
+            G_free(buff);
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         if (xcomp)
             N_free_array_2d(xcomp);
         if (ycomp)

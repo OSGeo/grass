@@ -12,12 +12,25 @@
 #           for details.
 
 import os
+<<<<<<< HEAD
 import shutil
+=======
+<<<<<<< HEAD
+from pathlib import Path
+=======
+import shutil
+<<<<<<< HEAD
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+from IPython.display import Image
+=======
+>>>>>>> 920471e340 (libraster: fix Rast_legal_bandref() (#1796))
+>>>>>>> osgeo-main
 import tempfile
 import grass.script as gs
 
 
 class GrassRenderer:
+<<<<<<< HEAD
     """GrassRenderer creates and displays GRASS maps in
     Jupyter Notebooks.
 
@@ -38,6 +51,10 @@ class GrassRenderer:
     >>> m.d_legend(raster="elevation")
     >>> m.show()
     """
+=======
+    """The grassRenderer class creates and displays GRASS maps in
+    Jupyter Notebooks."""
+>>>>>>> osgeo-main
 
     def __init__(
         self,
@@ -48,6 +65,12 @@ class GrassRenderer:
         text_size=12,
         renderer="cairo",
     ):
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        """Initiates an instance of the GrassRenderer class."""
+=======
+>>>>>>> osgeo-main
 
         """Creates an instance of the GrassRenderer class.
 
@@ -58,6 +81,10 @@ class GrassRenderer:
         :param int text_size: default text size, overwritten by most display modules
         :param renderer: GRASS renderer driver (options: cairo, png, ps, html)
         """
+<<<<<<< HEAD
+=======
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+>>>>>>> osgeo-main
 
         # Copy Environment
         if env:
@@ -67,8 +94,19 @@ class GrassRenderer:
         # Environment Settings
         self._env["GRASS_RENDER_WIDTH"] = str(width)
         self._env["GRASS_RENDER_HEIGHT"] = str(height)
+<<<<<<< HEAD
         self._env["GRASS_RENDER_TEXT_SIZE"] = str(text_size)
         self._env["GRASS_RENDER_IMMEDIATE"] = renderer
+=======
+<<<<<<< HEAD
+        self._env["GRASS_TEXT_SIZE"] = str(text_size)
+        self._env["GRASS_RENDER_IMMEDIATE"] = "cairo"
+        self._env["GRASS_RENDER_FILE"] = str(filename)
+=======
+        self._env["GRASS_RENDER_TEXT_SIZE"] = str(text_size)
+        self._env["GRASS_RENDER_IMMEDIATE"] = renderer
+>>>>>>> 523219d6d4 (r.in.pdal: info.cpp also needs PDALCPPFLAGS (#1768))
+>>>>>>> osgeo-main
         self._env["GRASS_RENDER_FILE_READ"] = "TRUE"
         self._env["GRASS_RENDER_TRANSPARENT"] = "TRUE"
 
@@ -98,6 +136,7 @@ class GrassRenderer:
         else:
             raise ValueError("Module must begin with letter 'd'.")
 
+<<<<<<< HEAD
     def __getattr__(self, name):
         """Parse attribute to GRASS display module. Attribute should be in
         the form 'd_module_name'. For example, 'd.rast' is called with 'd_rast'.
@@ -122,4 +161,14 @@ class GrassRenderer:
         """Displays a PNG image of the map"""
         from IPython.display import Image
 
+=======
+    def show(self):
+<<<<<<< HEAD
+        """Displays a PNG image of the map (non-interactive)"""
+=======
+        """Displays a PNG image of the map"""
+        from IPython.display import Image
+
+>>>>>>> 920471e340 (libraster: fix Rast_legal_bandref() (#1796))
+>>>>>>> osgeo-main
         return Image(self._filename)

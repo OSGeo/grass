@@ -26,21 +26,57 @@ void c_quant(DCELL *result, DCELL *values, int n, const void *closure)
         (i0 == i1) ? values[i0] : values[i0] * (i1 - k) + values[i1] * (k - i0);
 }
 
+<<<<<<< HEAD
 void c_quart1(DCELL *result, DCELL *values, int n, const void *closure)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void c_quart1(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
+=======
+void c_quart1(DCELL *result, DCELL *values, int n, const void *closure)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void c_quart1(DCELL *result, DCELL *values, int n, const void *closure)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     static const double q = 0.25;
 
     c_quant(result, values, n, &q);
 }
 
+<<<<<<< HEAD
 void c_quart3(DCELL *result, DCELL *values, int n, const void *closure)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void c_quart3(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
+=======
+void c_quart3(DCELL *result, DCELL *values, int n, const void *closure)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void c_quart3(DCELL *result, DCELL *values, int n, const void *closure)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     static const double q = 0.75;
 
     c_quant(result, values, n, &q);
 }
 
+<<<<<<< HEAD
 void c_perc90(DCELL *result, DCELL *values, int n, const void *closure)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void c_perc90(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
+=======
+void c_perc90(DCELL *result, DCELL *values, int n, const void *closure)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void c_perc90(DCELL *result, DCELL *values, int n, const void *closure)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     static const double q = 0.90;
 
@@ -75,21 +111,60 @@ void w_quant(DCELL *result, DCELL (*values)[2], int n, const void *closure)
     *result = values[i][0];
 }
 
+<<<<<<< HEAD
 void w_quart1(DCELL *result, DCELL (*values)[2], int n, const void *closure)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void w_quart1(DCELL *result, DCELL (*values)[2], int n,
+              const void *closure UNUSED)
+=======
+void w_quart1(DCELL *result, DCELL (*values)[2], int n, const void *closure)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void w_quart1(DCELL *result, DCELL (*values)[2], int n, const void *closure)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     static const double q = 0.25;
 
     w_quant(result, values, n, &q);
 }
 
+<<<<<<< HEAD
 void w_quart3(DCELL *result, DCELL (*values)[2], int n, const void *closure)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void w_quart3(DCELL *result, DCELL (*values)[2], int n,
+              const void *closure UNUSED)
+=======
+void w_quart3(DCELL *result, DCELL (*values)[2], int n, const void *closure)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void w_quart3(DCELL *result, DCELL (*values)[2], int n, const void *closure)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     static const double q = 0.75;
 
     w_quant(result, values, n, &q);
 }
 
+<<<<<<< HEAD
 void w_perc90(DCELL *result, DCELL (*values)[2], int n, const void *closure)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void w_perc90(DCELL *result, DCELL (*values)[2], int n,
+              const void *closure UNUSED)
+=======
+void w_perc90(DCELL *result, DCELL (*values)[2], int n, const void *closure)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void w_perc90(DCELL *result, DCELL (*values)[2], int n, const void *closure)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     static const double q = 0.90;
 

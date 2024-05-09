@@ -107,7 +107,30 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
      */
 
     if (old) {
+<<<<<<< HEAD
         n = ((unsigned int)nrows + 1) * sizeof(off_t);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        n = ((unsigned int)nrows + 1) * sizeof(off_t);
+=======
+        n = (nrows + 1) * sizeof(off_t);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        n = (nrows + 1) * sizeof(off_t);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        n = ((unsigned int)nrows + 1) * sizeof(off_t);
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+        n = (nrows + 1) * sizeof(off_t);
+=======
+        n = ((unsigned int)nrows + 1) * sizeof(off_t);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         if (read(fd, row_ptr, n) != n)
             goto badread;
         return 1;
@@ -130,6 +153,7 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
     if (read(fd, buf, n) != n)
         goto badread;
 
+<<<<<<< HEAD
     for (row = 0, b = buf; row <= (unsigned int)nrows; row++) {
         off_t v = 0;
 
@@ -143,6 +167,48 @@ static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
             v += c;
         }
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (row = 0, b = buf; row <= (unsigned int)nrows; row++) {
+        off_t v = 0;
+
+        for (n = 0; n < nbytes; n++) {
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+    for (row = 0, b = buf; row <= nrows; row++) {
+        off_t v = 0;
+
+        for (n = 0; n < (int)nbytes; n++) {
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+=======
+    for (row = 0, b = buf; row <= (unsigned int)nrows; row++) {
+        off_t v = 0;
+
+        for (n = 0; n < nbytes; n++) {
+<<<<<<< HEAD
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+            unsigned char c = *b++;
+
+            if (nbytes > sizeof(off_t) && n < nbytes - sizeof(off_t) && c != 0)
+                goto badread;
+
+            v <<= 8;
+            v += c;
+        }
+
+>>>>>>> osgeo-main
         row_ptr[row] = v;
     }
 

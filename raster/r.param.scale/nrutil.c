@@ -140,7 +140,17 @@ int **imatrix(int nrl, int nrh, int ncl, int nch)
 }
 
 /* point a submatrix [newrl..][newcl..] to a[oldrl..oldrh][oldcl..oldch] */
+<<<<<<< HEAD
+float **submatrix(float **a, int oldrl, int oldrh, int oldcl, int oldch UNUSED,
+=======
 float **submatrix(float **a, int oldrl, int oldrh, int oldcl, int oldch,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                   int newrl, int newcl)
 {
     int i, j, nrow = oldrh - oldrl + 1, ncol = oldcl - newcl;
@@ -219,71 +229,88 @@ float ***f3tensor(int nrl, int nrh, int ncl, int nch, int ndl, int ndh)
 }
 
 /* free a float vector allocated with vector() */
-void free_vector(float *v, int nl, int nh)
+void free_vector(float *v, int nl, int nh UNUSED)
 {
     G_free((FREE_ARG)(v + nl - NR_END));
 }
 
 /* free an int vector allocated with ivector() */
-void free_ivector(int *v, int nl, int nh)
+void free_ivector(int *v, int nl, int nh UNUSED)
 {
     G_free((FREE_ARG)(v + nl - NR_END));
 }
 
 /* free an unsigned char vector allocated with cvector() */
-void free_cvector(unsigned char *v, int nl, int nh)
+void free_cvector(unsigned char *v, int nl, int nh UNUSED)
 {
     G_free((FREE_ARG)(v + nl - NR_END));
 }
 
 /* free an unsigned long vector allocated with lvector() */
-void free_lvector(unsigned long *v, int nl, int nh)
+void free_lvector(unsigned long *v, int nl, int nh UNUSED)
 {
     G_free((FREE_ARG)(v + nl - NR_END));
 }
 
 /* free a double vector allocated with dvector() */
-void free_dvector(double *v, int nl, int nh)
+void free_dvector(double *v, int nl, int nh UNUSED)
 {
     G_free((FREE_ARG)(v + nl - NR_END));
 }
 
 /* free a float matrix allocated by matrix() */
-void free_matrix(float **m, int nrl, int nrh, int ncl, int nch)
+void free_matrix(float **m, int nrl, int nrh UNUSED, int ncl, int nch UNUSED)
 {
     G_free((FREE_ARG)(m[nrl] + ncl - NR_END));
     G_free((FREE_ARG)(m + nrl - NR_END));
 }
 
 /* free a double matrix allocated by dmatrix() */
-void free_dmatrix(double **m, int nrl, int nrh, int ncl, int nch)
+void free_dmatrix(double **m, int nrl, int nrh UNUSED, int ncl, int nch UNUSED)
 {
     G_free((FREE_ARG)(m[nrl] + ncl - NR_END));
     G_free((FREE_ARG)(m + nrl - NR_END));
 }
 
 /* free an int matrix allocated by imatrix() */
-void free_imatrix(int **m, int nrl, int nrh, int ncl, int nch)
+void free_imatrix(int **m, int nrl, int nrh UNUSED, int ncl, int nch UNUSED)
 {
     G_free((FREE_ARG)(m[nrl] + ncl - NR_END));
     G_free((FREE_ARG)(m + nrl - NR_END));
 }
 
 /* free a submatrix allocated by submatrix() */
-void free_submatrix(float **b, int nrl, int nrh, int ncl, int nch)
+void free_submatrix(float **b, int nrl, int nrh UNUSED, int ncl UNUSED,
+                    int nch UNUSED)
 {
     G_free((FREE_ARG)(b + nrl - NR_END));
 }
 
 /* free a matrix allocated by convert_matrix() */
-void free_convert_matrix(float **b, int nrl, int nrh, int ncl, int nch)
+void free_convert_matrix(float **b, int nrl, int nrh UNUSED, int ncl UNUSED,
+                         int nch UNUSED)
 {
     G_free((FREE_ARG)(b + nrl - NR_END));
 }
 
 /* free a float f3tensor allocated by f3tensor() */
+<<<<<<< HEAD
 void free_f3tensor(float ***t, int nrl, int nrh, int ncl, int nch, int ndl,
                    int ndh)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void free_f3tensor(float ***t, int nrl, int nrh UNUSED, int ncl, int nch UNUSED,
+                   int ndl, int ndh UNUSED)
+=======
+void free_f3tensor(float ***t, int nrl, int nrh, int ncl, int nch, int ndl,
+                   int ndh)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void free_f3tensor(float ***t, int nrl, int nrh, int ncl, int nch, int ndl,
+                   int ndh)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     G_free((FREE_ARG)(t[nrl][ncl] + ndl - NR_END));
     G_free((FREE_ARG)(t[nrl] + ncl - NR_END));

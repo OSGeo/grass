@@ -9,7 +9,27 @@
 # PURPOSE:	This configure runs all the tests to determine what components
 #		are installed on the current system. It also defines certain
 #		configuration variables for compilation and installation.
+<<<<<<< HEAD
 # COPYRIGHT:    (C) 2000-2023 by the GRASS Development Team
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+# COPYRIGHT:    (C) 2000-2024 by the GRASS Development Team
+=======
+# COPYRIGHT:    (C) 2000-2022 by the GRASS Development Team
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+# COPYRIGHT:    (C) 2000-2022 by the GRASS Development Team
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+# COPYRIGHT:    (C) 2000-2023 by the GRASS Development Team
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
+=======
+# COPYRIGHT:    (C) 2000-2023 by the GRASS Development Team
+>>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
+>>>>>>> osgeo-main
 #
 #		This program is free software under the GNU General
 #		Public License (>=v2). Read the file COPYING that
@@ -31,8 +51,23 @@ $2
 
 AC_INIT
 AC_CONFIG_SRCDIR([configure.ac])
+<<<<<<< HEAD
 AC_PREREQ([2.69])
 AC_CONFIG_HEADER(include/grass/config.h)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+AC_PREREQ([2.71])
+AC_CONFIG_HEADERS([include/grass/config.h])
+=======
+AC_PREREQ([2.69])
+AC_CONFIG_HEADER(include/grass/config.h)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+AC_PREREQ([2.69])
+AC_CONFIG_HEADER(include/grass/config.h)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 AC_CANONICAL_HOST
 AC_PROG_CC
 
@@ -144,6 +179,16 @@ AC_SUBST(GRASS_BIN)
 # Set GRASS_VERSION_*
 
 GRASS_VERSION_FILE=include/VERSION
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+GRASS_VERSION_GIT_FILE=include/VERSION_GIT
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 GRASS_VERSION_MAJOR=`sed -n 1p "${GRASS_VERSION_FILE}"`
 GRASS_VERSION_MINOR=`sed -n 2p "${GRASS_VERSION_FILE}"`
 GRASS_VERSION_RELEASE=`sed -n 3p "${GRASS_VERSION_FILE}"`
@@ -160,6 +205,17 @@ GRASS_VERSION_GIT="exported"
 GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
 GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
 AC_PATH_PROG(GIT, git, no)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+AC_CHECK_FILE([$GRASS_VERSION_GIT_FILE])
+AC_MSG_CHECKING(for GRASS GIS headers commit date)
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 if test "$GIT" != "no" ; then
    GRASS_VERSION_GIT=`$GIT rev-parse --short HEAD 2>/dev/null`
    if test -z "$GRASS_VERSION_GIT"; then
@@ -169,11 +225,40 @@ if test "$GIT" != "no" ; then
    if test -z "$GRASS_HEADERS_GIT_HASH"; then
       GRASS_HEADERS_GIT_HASH="${GRASS_VERSION_NUMBER}"
    fi
+<<<<<<< HEAD
    GRASS_HEADERS_GIT_DATE=`date -d $($GIT log -1 --pretty=format:"%cI" -- "${SRCDIR}/include") -u +%FT%T%z | sed 's/\(..\)$/:\1/'` 2>/dev/null
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+   gitdate_utc_local=$(TZ=UTC0 git log -1 --date=iso-local --pretty=format:"%cd" -- include)
+   GRASS_HEADERS_GIT_DATE=$(echo "$gitdate_utc_local" | sed 's/ /T/' | sed 's/ //' | sed 's/\(..\)$/:\1/')
+=======
+   GRASS_HEADERS_GIT_DATE=`date -d $($GIT log -1 --pretty=format:"%cI" -- "${SRCDIR}/include") -u +%FT%T%z | sed 's/\(..\)$/:\1/'` 2>/dev/null
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   GRASS_HEADERS_GIT_DATE=`date -d $($GIT log -1 --pretty=format:"%cI" -- "${SRCDIR}/include") -u +%FT%T%z | sed 's/\(..\)$/:\1/'` 2>/dev/null
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
    if test -z "$GRASS_HEADERS_GIT_DATE"; then
       GRASS_HEADERS_GIT_DATE=`date -u +%FT%T%z | sed 's/\(..\)$/:\1/'`
    fi
 fi
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+if test $GRASS_VERSION_GIT == "exported" && \
+   test "$ac_cv_file_include_VERSION_GIT" == "yes"; then
+      GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${GRASS_VERSION_GIT_FILE}")
+      GRASS_VERSION_GIT=$GRASS_HEADERS_GIT_HASH
+      GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${GRASS_VERSION_GIT_FILE}")
+fi
+AC_MSG_RESULT($GRASS_HEADERS_GIT_DATE)
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 AC_SUBST(GRASS_VERSION_FILE)
 AC_SUBST(GRASS_VERSION_MAJOR)
@@ -296,6 +381,16 @@ LOC_ARG_WITH(odbc, ODBC, no)
 LOC_ARG_WITH(fftw, FFTW)
 LOC_ARG_WITH(blas, BLAS, no)
 LOC_ARG_WITH(lapack, LAPACK, no)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+LOC_ARG_WITH(libsvm, LIBSVM, no)
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 LOC_ARG_WITH(cairo, Cairo)
 LOC_ARG_WITH(freetype, FreeType)
 LOC_ARG_WITH(nls, NLS, no)
@@ -307,6 +402,16 @@ LOC_ARG_WITH(openmp, OpenMP, no)
 LOC_ARG_WITH(opencl, OpenCL, no)
 LOC_ARG_WITH(bzlib, BZIP2, no)
 LOC_ARG_WITH(zstd, Zstandard)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+LOC_ARG_WITH(pdal, PDAL)
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 AC_ARG_WITH(libpng,
 [  --with-libpng[=path/libpng-config]
@@ -324,12 +429,27 @@ AC_ARG_WITH(liblas,
                           e.g. '--with-liblas=/usr/local/bin/liblas-config',
                           default: no)],, with_liblas="no")
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 AC_ARG_WITH(pdal,
 [  --with-pdal[=path/pdal-config]
                           enable PDAL support (pdal-config with path,
                           e.g. '--with-pdal=/usr/local/bin/pdal-config',
                           default: no)],, with_pdal="no")
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 AC_ARG_WITH(netcdf,
 [  --with-netcdf[=path/nc-config]
                           enable NetCDF support (nc-config with path,
@@ -390,6 +510,18 @@ LOC_ARG_WITH_LIB(blas, BLAS)
 LOC_ARG_WITH_INC(lapack, LAPACK)
 LOC_ARG_WITH_LIB(lapack, LAPACK)
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+LOC_ARG_WITH_INC(libsvm, LIBSVM)
+LOC_ARG_WITH_LIB(libsvm, LIBSVM)
+
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 LOC_ARG_WITH_INC(cairo, cairo)
 LOC_ARG_WITH_LIB(cairo, cairo)
 LOC_ARG_WITH_LDFLAGS(cairo, cairo)
@@ -471,11 +603,33 @@ AC_SUBST(LIBRARY_DIRS)
 
 AC_PROG_INSTALL
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+AC_PROG_LEX(noyywrap)
+if test "x$LEX" = "x:"; then
+    AC_MSG_ERROR([*** Unable to locate lex.])
+elif test "$LEX" = "lex"; then
+    AC_PATH_PROG(LEXPATH, lex, no)
+    if test "$LEXPATH" = "no"; then
+        AC_MSG_ERROR([*** Unable to locate lex.])
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 AC_PROG_LEX
 if test "$LEX" = "lex"; then
     AC_PATH_PROG(LEXPATH, lex, no)
     if test "$LEXPATH" = "no"; then
 	AC_MSG_ERROR([*** Unable to locate lex.])
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     fi
 fi
 
@@ -491,14 +645,38 @@ AC_PROG_RANLIB
 AC_CHECK_PROGS(AR, ar)
 AC_CHECK_PROGS(ENV, env)
 AC_PATH_PROG(PERL, perl, no)
+<<<<<<< HEAD
 AC_HEADER_STDC
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+AC_HEADER_STDC
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+AC_HEADER_STDC
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #AC_CHECK_HEADERS(curses.h limits.h termio.h termios.h unistd.h values.h)
 AC_CHECK_HEADERS(limits.h termio.h termios.h unistd.h values.h f2c.h g2c.h)
 AC_CHECK_HEADERS(sys/ioctl.h sys/mtio.h sys/resource.h sys/time.h)
 AC_CHECK_HEADERS(sys/timeb.h sys/types.h sys/utsname.h)
 AC_CHECK_HEADERS(libintl.h iconv.h)
 AC_CHECK_HEADERS(langinfo.h)
+<<<<<<< HEAD
 AC_HEADER_TIME
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+AC_HEADER_TIME
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+AC_HEADER_TIME
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 AC_TYPE_OFF_T
 AC_TYPE_UID_T
 
@@ -523,7 +701,19 @@ fi
 AC_MSG_CHECKING(for long long int)
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[long long int x;]])],[
 AC_MSG_RESULT(yes)
+<<<<<<< HEAD
 AC_DEFINE(HAVE_LONG_LONG_INT, 1, [define if "long long int" is available])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+AC_DEFINE(HAVE_LONG_LONG_INT, 1, [Define to 1 if "long long int" is available.])
+=======
+AC_DEFINE(HAVE_LONG_LONG_INT, 1, [define if "long long int" is available])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+AC_DEFINE(HAVE_LONG_LONG_INT, 1, [define if "long long int" is available])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 ],[
 AC_MSG_RESULT(no)
 ])
@@ -531,7 +721,19 @@ AC_MSG_RESULT(no)
 AC_MSG_CHECKING(for int64_t)
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <sys/types.h>]], [[int64_t x;]])],[
 AC_MSG_RESULT(yes)
+<<<<<<< HEAD
 AC_DEFINE(HAVE_INT64_T, 1, [define if "int64_t" is available])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+AC_DEFINE(HAVE_INT64_T, 1, [Define to 1 if "int64_t" is available.])
+=======
+AC_DEFINE(HAVE_INT64_T, 1, [define if "int64_t" is available])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+AC_DEFINE(HAVE_INT64_T, 1, [define if "int64_t" is available])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 ],[
 AC_MSG_RESULT(no)
 ])
@@ -759,7 +961,19 @@ if test $PROJ4API = 0 ; then
     LOC_CHECK_LIBS(proj,proj_pj_info,External PROJ,$PROJLIB,PROJLIB,,,)
 else
     AC_MSG_RESULT([using old PROJ version 4 API])
+<<<<<<< HEAD
     AC_DEFINE(USE_PROJ4API, 1, [define if using old PROJ version 4 API])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    AC_DEFINE(USE_PROJ4API, 1, [Define to 1 if using old PROJ version 4 API.])
+=======
+    AC_DEFINE(USE_PROJ4API, 1, [define if using old PROJ version 4 API])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    AC_DEFINE(USE_PROJ4API, 1, [define if using old PROJ version 4 API])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     LOC_CHECK_INCLUDES(proj_api.h,External PROJ,$PROJINC)
     # PROJ version check for v4.x
@@ -909,7 +1123,19 @@ else
   CFLAGS="$CFLAGS $PNGINC"
 
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <png.h>]], [[png_read_image(NULL, NULL);]])],[],[
+<<<<<<< HEAD
   AC_TRY_LINK([#include <png.h>],[png_read_image(NULL, NULL);],PNGLIB="$PNGLIB",[
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <png.h>]], [[png_read_image(NULL, NULL);]])],[PNGLIB="$PNGLIB"],[
+=======
+  AC_TRY_LINK([#include <png.h>],[png_read_image(NULL, NULL);],PNGLIB="$PNGLIB",[
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+  AC_TRY_LINK([#include <png.h>],[png_read_image(NULL, NULL);],PNGLIB="$PNGLIB",[
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
   AC_MSG_ERROR([*** Unable to locate libpng library.])
   ])
   ])
@@ -952,7 +1178,19 @@ else
     GDAL_CFLAGS=`"$GDAL_CONFIG" --cflags`
     USE_GDAL=1
     if test `"$GDAL_CONFIG" --ogr-enabled` = "yes" ; then
+<<<<<<< HEAD
       AC_DEFINE(HAVE_OGR, 1, [define if OGR is to be used])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+      AC_DEFINE(HAVE_OGR, 1, [Define to 1 if OGR is to be used.])
+=======
+      AC_DEFINE(HAVE_OGR, 1, [define if OGR is to be used])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+      AC_DEFINE(HAVE_OGR, 1, [define if OGR is to be used])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
       USE_OGR=1
     fi
   fi
@@ -964,14 +1202,38 @@ else
   CFLAGS="$CFLAGS $GDAL_CFLAGS"
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <gdal.h>]], [[GDALOpen("foo", GA_ReadOnly);]])],[],[
   LIBS="$LIBS $GDAL_DEP_LIBS"
+<<<<<<< HEAD
   AC_TRY_LINK([#include <gdal.h>],[GDALOpen("foo", GA_ReadOnly);],GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS",[
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <gdal.h>]], [[GDALOpen("foo", GA_ReadOnly);]])],[GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS"],[
+=======
+  AC_TRY_LINK([#include <gdal.h>],[GDALOpen("foo", GA_ReadOnly);],GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS",[
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+  AC_TRY_LINK([#include <gdal.h>],[GDALOpen("foo", GA_ReadOnly);],GDAL_LIBS="$GDAL_LIBS $GDAL_DEP_LIBS",[
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
   AC_MSG_ERROR([*** Unable to locate GDAL library.])
   ])
   ])
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
+<<<<<<< HEAD
   AC_DEFINE(HAVE_GDAL, 1, [define if GDAL is to be used])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+  AC_DEFINE(HAVE_GDAL, 1, [Define to 1 if GDAL is to be used.])
+=======
+  AC_DEFINE(HAVE_GDAL, 1, [define if GDAL is to be used])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+  AC_DEFINE(HAVE_GDAL, 1, [define if GDAL is to be used])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 fi
 
 AC_SUBST(GDAL_LIBS)
@@ -1017,7 +1279,19 @@ else
   CPPFLAGS="$CPPFLAGS $LIBLAS_INC"
   AC_CHECK_HEADERS(liblas/capi/liblas.h)
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <liblas/capi/liblas.h>]], [[LASReader_Create("foo");]])],[],[
+<<<<<<< HEAD
   AC_TRY_LINK([#include <liblas/capi/liblas.h>],[LASReader_Create("foo");],LAS_LIBS="$LAS_LIBS",[
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <liblas/capi/liblas.h>]], [[LASReader_Create("foo");]])],[LAS_LIBS="$LAS_LIBS"],[
+=======
+  AC_TRY_LINK([#include <liblas/capi/liblas.h>],[LASReader_Create("foo");],LAS_LIBS="$LAS_LIBS",[
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+  AC_TRY_LINK([#include <liblas/capi/liblas.h>],[LASReader_Create("foo");],LAS_LIBS="$LAS_LIBS",[
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
   AC_MSG_ERROR([*** Unable to locate libLAS library.])
   ])
   ])
@@ -1025,7 +1299,19 @@ else
   CFLAGS=${ac_save_cflags}
   CPPFLAGS=${ac_save_cppflags}
 
+<<<<<<< HEAD
   AC_DEFINE(HAVE_LIBLAS, 1, [define if liblas exists])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+  AC_DEFINE(HAVE_LIBLAS, 1, [Define to 1 if liblas exists.])
+=======
+  AC_DEFINE(HAVE_LIBLAS, 1, [define if liblas exists])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+  AC_DEFINE(HAVE_LIBLAS, 1, [define if liblas exists])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 fi
 
 AC_SUBST(LIBLAS_LIBS)
@@ -1042,15 +1328,47 @@ AC_LANG_PUSH(C++)
 PDAL_LIBS=
 PDAL_CPPFLAGS=
 USE_PDAL=
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+pdal="pdal"
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 if test "`basename xx/$with_pdal`" = "pdal-config" ; then
   PDAL_CONFIG="$with_pdal"
 fi
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 if test "$with_pdal" = "no" ; then
   AC_MSG_RESULT(no)
 else
   AC_MSG_RESULT(yes)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+  if test -s "${PKG_CONFIG} --exists ${pdal}" ; then
+    AC_MSG_ERROR([*** Unable to locate PDAL package.])
+  fi
+
+  PDAL_LIBS=`${PKG_CONFIG} --libs "${pdal}"`
+  PDAL_INC=`${PKG_CONFIG} --cflags "${pdal}"`
+  USE_PDAL=1
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
   AC_PATH_PROG(PDAL_CONFIG, pdal-config, no)
 
   if test "$PDAL_CONFIG" = "no" ; then
@@ -1059,28 +1377,137 @@ else
 
   if test "$PDAL_CONFIG" != "" ; then
     PDAL_LIBS=`"$PDAL_CONFIG" --libs`
+<<<<<<< HEAD
     PDAL_INC=`"$PDAL_CONFIG" --includes`
     USE_PDAL=1
   fi
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    PDAL_CPPFLAGS=`"$PDAL_CONFIG" --cxxflags`
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+    PDAL_INC=`"$PDAL_CONFIG" --includes`
+    USE_PDAL=1
+  fi
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
   PDAL=
   ac_save_libs="$LIBS"
   ac_save_cflags="$CFLAGS"
+<<<<<<< HEAD
   LIBS="$LIBS $PDAL_LIBS"
   CFLAGS="$CFLAGS $PDAL_CFLAGS"
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
   class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],[],[
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+  ac_save_cppflags="$CPPFLAGS"
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+  LIBS="$LIBS $PDAL_LIBS"
+  CFLAGS="$CFLAGS $PDAL_CFLAGS"
+<<<<<<< HEAD:configure.ac
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
+  #include <pdal/Streamable.hpp>
+  class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],
+  [PDAL_LIBS="$PDAL_LIBS"],[
+  AC_MSG_ERROR([*** Unable to locate suitable (>=1.7.1) PDAL library.])
+=======
+  CPPFLAGS="$CPPFLAGS $PDAL_CPPFLAGS $PDAL_INC"
+<<<<<<<< HEAD:configure.in
+  AC_TRY_LINK([#include <pdal/PointTable.hpp>
+  #include <pdal/Streamable.hpp>
+  class St:public pdal::Streamable {};],[pdal::PointTable table;],,[
+========
+<<<<<<< HEAD
+  AC_TRY_LINK([#include <pdal/PointTable.hpp>
+  #include <pdal/Streamable.hpp>
+  class St:public pdal::Streamable {};],[pdal::PointTable table;],,[
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+  ac_save_cppflags="$CPPFLAGS"
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+  LIBS="$LIBS $PDAL_LIBS"
+  CFLAGS="$CFLAGS $PDAL_CFLAGS"
+=======
+=======
+  LIBS="$LIBS $PDAL_LIBS"
+  CFLAGS="$CFLAGS $PDAL_CFLAGS"
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/PointTable.hpp>
+  #include <pdal/Streamable.hpp>
+  class St:public pdal::Streamable {};]], [[pdal::PointTable table;]])],[],[
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>>> osgeo-main:configure.ac
+>>>>>>> osgeo-main
   AC_TRY_LINK([#include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
   class St:public pdal::Streamable {};],[pdal::PointTable table;],PDAL_LIBS="$PDAL_LIBS",[
   AC_MSG_ERROR([*** Unable to locate suitable (>=1.7.1) PDAL library.])
   ])
+<<<<<<< HEAD
   ])
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
   AC_DEFINE(HAVE_PDAL, 1, [define if PDAL exists])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697)):configure.in
+  ])
+
+  AC_DEFINE(HAVE_PDAL, 1, [Define to 1 if PDAL exists.])
+
+  AC_MSG_CHECKING(whether to use PDAL NoFilenameWriter)
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <pdal/Writer.hpp>
+  class St:public pdal::NoFilenameWriter {};]], [[
+  class NFWTest : public pdal::NoFilenameWriter {};
+  ]])],
+  [
+    AC_DEFINE(HAVE_PDAL_NOFILENAMEWRITER, 1, [Define to 1 if PDAL NoFilenameWriter is present.])
+    AC_MSG_RESULT(yes)
+  ],[AC_MSG_RESULT(no)])
+
+  LIBS=${ac_save_libs}
+  CFLAGS=${ac_save_cflags}
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+  ])
+  LIBS=${ac_save_libs}
+  CFLAGS=${ac_save_cflags}
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+  CPPFLAGS=${ac_save_cppflags}
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+
+  AC_DEFINE(HAVE_PDAL, 1, [define if PDAL exists])
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 fi
 
 AC_SUBST(PDAL_LIBS)
@@ -1124,14 +1551,38 @@ else
   LIBS="$LIBS $NETCDF_LIBS"
   CFLAGS="$CFLAGS $NETCDF_CFLAGS"
   AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <netcdf.h>]], [[nc_create("foo", NC_CLOBBER, NULL);]])],[],[
+<<<<<<< HEAD
   AC_TRY_LINK([#include <netcdf.h>],[nc_create("foo", NC_CLOBBER, NULL);],NETCDF_LIBS="$NETCDF_LIBS",[
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <netcdf.h>]], [[nc_create("foo", NC_CLOBBER, NULL);]])],[NETCDF_LIBS="$NETCDF_LIBS"],[
+=======
+  AC_TRY_LINK([#include <netcdf.h>],[nc_create("foo", NC_CLOBBER, NULL);],NETCDF_LIBS="$NETCDF_LIBS",[
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+  AC_TRY_LINK([#include <netcdf.h>],[nc_create("foo", NC_CLOBBER, NULL);],NETCDF_LIBS="$NETCDF_LIBS",[
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
   AC_MSG_ERROR([*** Unable to locate NetCDF library.])
   ])
   ])
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
+<<<<<<< HEAD
   AC_DEFINE(HAVE_NETCDF, 1, [define if NetCDF exists])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+  AC_DEFINE(HAVE_NETCDF, 1, [Define to 1 if NetCDF exists.])
+=======
+  AC_DEFINE(HAVE_NETCDF, 1, [define if NetCDF exists])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+  AC_DEFINE(HAVE_NETCDF, 1, [define if NetCDF exists])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 fi
 
 AC_SUBST(NETCDF_LIBS)
@@ -1174,7 +1625,19 @@ else
 #  else
   LOC_CHECK_LIBS(geos_c,initGEOS,GEOS,$GEOS_LIBS,GEOS_LIBS)
 #  fi
+<<<<<<< HEAD
   AC_DEFINE(HAVE_GEOS, 1, [define if GEOS is to be used])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+  AC_DEFINE(HAVE_GEOS, 1, [Define to 1 if GEOS is to be used.])
+=======
+  AC_DEFINE(HAVE_GEOS, 1, [define if GEOS is to be used])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+  AC_DEFINE(HAVE_GEOS, 1, [define if GEOS is to be used])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 fi
 
 AC_SUBST(GEOS_LIBS)
@@ -1216,7 +1679,19 @@ AC_SUBST(TIFFLIB)
 LOC_CHECK_USE(postgres,PostgreSQL,USE_POSTGRES)
 
 if test -n "$USE_POSTGRES"; then
+<<<<<<< HEAD
 AC_DEFINE(HAVE_POSTGRES, 1, [define if PostgreSQL is to be used])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+AC_DEFINE(HAVE_POSTGRES, 1, [Define to 1 if PostgreSQL is to be used.])
+=======
+AC_DEFINE(HAVE_POSTGRES, 1, [define if PostgreSQL is to be used])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+AC_DEFINE(HAVE_POSTGRES, 1, [define if PostgreSQL is to be used])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 fi # $USE_POSTGRES
 
 PQINCPATH=
@@ -1243,8 +1718,23 @@ LOC_CHECK_LIBS(pq,PQsetdbLogin,PostgreSQL,$PQLIBPATH,PQLIB,,,,-lcrypt,-lssl -lcr
 
 ac_save_ldflags="$LDFLAGS"
 LDFLAGS="$LDFLAGS $PQLIBPATH"
+<<<<<<< HEAD
 AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [define if PQcmdTuples in lpq])], [
 AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [define if PQcmdTuples in lpq])], [
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [Define to 1 if PQcmdTuples in lpq.])], [
+AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [Define to 1 if PQcmdTuples in lpq.])], [
+=======
+AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [define if PQcmdTuples in lpq])], [
+AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [define if PQcmdTuples in lpq])], [
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [define if PQcmdTuples in lpq])], [
+AC_CHECK_LIB(pq,PQcmdTuples, [AC_DEFINE(HAVE_PQCMDTUPLES, 1, [define if PQcmdTuples in lpq])], [
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 ], -lcrypt)
 ])
 LDFLAGS="${ac_save_ldflags}"
@@ -1292,13 +1782,40 @@ if test -n "$USE_MYSQL"; then
   fi
 
   if test "$MYSQLD_CONFIG" != "" ; then
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    mysql_version=`"$MYSQLD_CONFIG" --version`
+    AC_MSG_RESULT([using MySQL/MariaDB version "$mysql_version"])
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     AC_LANG_PUSH([C++])
     ac_save_libs="$LIBS"
     MYSQLDLIB=`"$MYSQLD_CONFIG" --libmysqld-libs`
 
     LIBS="$MYSQLDLIB $LIBS"
+<<<<<<< HEAD
     AC_CHECK_FUNC(mysql_server_init,,[MYSQLDLIB="";
                   AC_MSG_WARN([libmysqld not found])] )
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    AC_CHECK_FUNC(mysql_server_init,
+                  AC_MSG_RESULT([libmysqld found]),
+                  [MYSQLDLIB=""; AC_MSG_WARN([libmysqld not found])])
+=======
+    AC_CHECK_FUNC(mysql_server_init,,[MYSQLDLIB="";
+                  AC_MSG_WARN([libmysqld not found])] )
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    AC_CHECK_FUNC(mysql_server_init,,[MYSQLDLIB="";
+                  AC_MSG_WARN([libmysqld not found])] )
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     LIBS=$ac_save_libs
     AC_LANG_POP([C++])
   fi
@@ -1330,7 +1847,19 @@ LOC_CHECK_INC_PATH(sqlite,SQLite,SQLITEINCPATH)
 
 LOC_CHECK_INCLUDES(sqlite3.h,SQLite,$SQLITEINCPATH)
 
+<<<<<<< HEAD
 AC_DEFINE(HAVE_SQLITE, 1, [define if SQLite is to be used])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+AC_DEFINE(HAVE_SQLITE, 1, [Define to 1 if SQLite is to be used.])
+=======
+AC_DEFINE(HAVE_SQLITE, 1, [define if SQLite is to be used])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+AC_DEFINE(HAVE_SQLITE, 1, [define if SQLite is to be used])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 fi # $USE_SQLITE
 
@@ -1409,10 +1938,29 @@ LOC_CHECK_LIBS(GLU,gluBeginCurve,GLU,$OPENGL_LIB_PATH,OPENGLULIB,$OPENGLLIB $X_L
 OPENGLLIB="$OPENGL_LIB_PATH $OPENGLLIB"
 OPENGLULIB="$OPENGL_LIB_PATH $OPENGLULIB"
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+LOC_CHECK_FUNC(glXCreatePbuffer,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PBUFFERS, 1, [Define to 1 if glXCreatePbuffer exists.])])
+LOC_CHECK_FUNC(glXCreateGLXPixmap,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PIXMAPS, 1, [Define to 1 if glXCreateGLXPixmap exists.])])
+
+AC_DEFINE(OPENGL_X11, 1, [Define to 1 if OpenGL uses X11.])
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 LOC_CHECK_FUNC(glXCreatePbuffer,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PBUFFERS, 1, [define if glXCreatePbuffer exists])])
 LOC_CHECK_FUNC(glXCreateGLXPixmap,,,,,$OPENGLLIB,[AC_DEFINE(HAVE_PIXMAPS, 1, [define if glXCreateGLXPixmap exists])])
 
 AC_DEFINE(OPENGL_X11, 1, [define if OpenGL uses X11])
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 fi # $OPENGL_X11
 
@@ -1428,7 +1976,19 @@ LOC_CHECK_FUNC(gluBeginCurve,GLU library,OPENGLLIB,,$OPENGLPATH,$OPENGLLIB)
 OPENGLINC="$OPENGLPATH"
 OPENGLLIBPATH="$OPENGLPATH"
 
+<<<<<<< HEAD
 AC_DEFINE(OPENGL_AQUA, 1, [define if OpenGL uses Aqua (MacOS X)])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+AC_DEFINE(OPENGL_AQUA, 1, [Define to 1 if OpenGL uses Aqua (MacOS X).])
+=======
+AC_DEFINE(OPENGL_AQUA, 1, [define if OpenGL uses Aqua (MacOS X)])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+AC_DEFINE(OPENGL_AQUA, 1, [define if OpenGL uses Aqua (MacOS X)])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 fi # $OPENGL_AQUA
 
@@ -1453,7 +2013,19 @@ CFLAGS="${ac_save_cflags}"
 OPENGLLIB="$OPENGL_LIB_PATH $OPENGLLIB"
 OPENGLULIB="$OPENGL_LIB_PATH $OPENGLULIB"
 
+<<<<<<< HEAD
 AC_DEFINE(OPENGL_WINDOWS, 1, [define if OpenGL uses Windows])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+AC_DEFINE(OPENGL_WINDOWS, 1, [Define to 1 if OpenGL uses Windows.])
+=======
+AC_DEFINE(OPENGL_WINDOWS, 1, [define if OpenGL uses Windows])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+AC_DEFINE(OPENGL_WINDOWS, 1, [define if OpenGL uses Windows])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 fi # $OPENGL_WINDOWS
 
@@ -1593,7 +2165,19 @@ LDFLAGS="$save_LDFLAGS"
 
 # Do we have ATLAS?
 if test $blas_ok = yes; then
+<<<<<<< HEAD
 	AC_DEFINE(HAVE_LIBATLAS, 1, [define if ATLAS exists])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+	AC_DEFINE(HAVE_LIBATLAS, 1, [Define to 1 if ATLAS exists.])
+=======
+	AC_DEFINE(HAVE_LIBATLAS, 1, [define if ATLAS exists])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+	AC_DEFINE(HAVE_LIBATLAS, 1, [define if ATLAS exists])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 fi
 
 # BLAS in Apple vecLib framework? (Mac OS-X)
@@ -1638,7 +2222,19 @@ if test $blas_ok = no; then
 fi
 
 if test $blas_ok = yes; then
+<<<<<<< HEAD
 AC_DEFINE(HAVE_LIBBLAS, 1, [define if BLAS exists])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+AC_DEFINE(HAVE_LIBBLAS, 1, [Define to 1 if BLAS exists.])
+=======
+AC_DEFINE(HAVE_LIBBLAS, 1, [define if BLAS exists])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+AC_DEFINE(HAVE_LIBBLAS, 1, [define if BLAS exists])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 fi
 
 fi # $USE_BLAS
@@ -1697,7 +2293,19 @@ if test $lapack_ok = no; then
 	LOC_CHECK_LIBS(lapack,dgesv_,LAPACK,$LAPACKLIB,LAPACKLIB,$BLASLIB $MATHLIB,,,-lg2c)
 fi
 
+<<<<<<< HEAD
 AC_DEFINE(HAVE_LIBLAPACK, 1, [define if LAPACK exists])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+AC_DEFINE(HAVE_LIBLAPACK, 1, [Define to 1 if LAPACK exists.])
+=======
+AC_DEFINE(HAVE_LIBLAPACK, 1, [define if LAPACK exists])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+AC_DEFINE(HAVE_LIBLAPACK, 1, [define if LAPACK exists])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 fi # $USE_LAPACK
 fi # $USE_BLAS
@@ -1707,6 +2315,37 @@ AC_SUBST(LAPACKINC)
 
 # Done checking LAPACK
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+# libsvm option
+LIBSVM_INC=
+LIBSVM_LIB=
+USE_LIBSVM=
+
+LOC_CHECK_USE(libsvm,LIBSVM,USE_LIBSVM)
+
+if test -n "$USE_LIBSVM"; then
+  LOC_CHECK_INC_PATH(libsvm,LIBSVM,LIBSVM_INC)
+  LOC_CHECK_INCLUDES(svm.h,LIBSVM,$LIBSVM_INC, [
+    LOC_CHECK_INCLUDES(libsvm/svm.h,LIBSVM,$LIBSVM_INC)
+  ])
+  LOC_CHECK_LIB_PATH(libsvm,libsvm,LIBSVM_LIB)
+  LOC_CHECK_LIBS(svm,svm_load_model,LIBSVM,$LIBSVM_LIB,LIBSVM_LIB,,,)
+  AC_DEFINE(HAVE_LIBSVM, 1, [Define to 1 if using LIBSVM.])
+fi
+
+AC_SUBST(LIBSVM_INC)
+AC_SUBST(LIBSVM_LIB)
+AC_SUBST(USE_LIBSVM)
+# Done with LIBSVM
+
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 # Enable Cairo display driver option
 
 LOC_CHECK_USE(cairo,Cairo,USE_CAIRO)
@@ -1800,7 +2439,19 @@ INTLLIB=
 HAVE_NLS=
 
 if test -n "${USE_NLS}" ; then
+<<<<<<< HEAD
     AC_DEFINE(USE_NLS, 1, [define if NLS requested])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    AC_DEFINE(USE_NLS, 1, [Define to 1 if NLS requested.])
+=======
+    AC_DEFINE(USE_NLS, 1, [define if NLS requested])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    AC_DEFINE(USE_NLS, 1, [define if NLS requested])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 AC_CHECK_FUNC(gettext, INTLLIB=, [
 AC_CHECK_LIB(intl, gettext, INTLLIB=-lintl, [
@@ -1888,6 +2539,13 @@ AC_SUBST(USE_PTHREAD)
 
 LOC_CHECK_USE(openmp,OpenMP,USE_OPENMP)
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 if test "$enable_openmp" != no; then
 
 if test -n "${USE_OPENMP}"; then
@@ -1925,6 +2583,112 @@ USE_OPENMP=
 
 fi  # enable_openmp
 
+<<<<<<< HEAD
+=======
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+OMPINCPATH=
+OMPLIBPATH=
+OMPLIB=
+OMPCFLAGS=
+=======
+if test "$enable_openmp" != no; then
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+
+if test -n "${USE_OPENMP}"; then
+
+OPENMP_INCPATH=
+OPENMP_LIBPATH=
+OPENMP_LIB=
+OPENMP_CFLAGS=
+
+LOC_CHECK_INC_PATH(openmp,OpenMP,OPENMP_INCPATH)
+LOC_CHECK_LIB_PATH(openmp,OpenMP,OPENMP_LIBPATH)
+LOC_CHECK_INCLUDES(omp.h,OpenMP,$OPENMP_INCPATH)
+
+LOC_CHECK_LIBS(omp,omp_get_num_threads,OpenMP,$OPENMP_LIBPATH,OPENMP_LIB,,,[
+LOC_CHECK_LIBS(gomp,GOMP_parallel_start,OpenMP,$OPENMP_LIBPATH,OPENMP_LIB,,,)])
+
+loc_save_cflags="$CFLAGS"
+CFLAGS="${CFLAGS} ${OPENMP_INCPATH} ${OPENMP_LIBPATH} ${OPENMP_LIB}"
+LOC_OPENMP
+CFLAGS="${loc_save_cflags}"
+
+AC_SUBST(OPENMP_INCPATH)
+AC_SUBST(OPENMP_LIBPATH)
+AC_SUBST(OPENMP_LIB)
+AC_SUBST(OPENMP_CFLAGS)
+
+fi # USE_OPENMP
+
+else # enable_openmp
+
+if test -n "${USE_OPENMP}"; then
+LOC_MSG(OpenMP explicitly disabled with --disable-openmp.)
+fi
+USE_OPENMP=
+
+fi  # enable_openmp
+
+<<<<<<< HEAD
+fi # $USE_OPENMP
+
+AC_SUBST(OMPINCPATH)
+AC_SUBST(OMPLIBPATH)
+AC_SUBST(OMPLIB)
+AC_SUBST(OMPCFLAGS)
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+=======
+if test "$enable_openmp" != no; then
+
+if test -n "${USE_OPENMP}"; then
+
+OPENMP_INCPATH=
+OPENMP_LIBPATH=
+OPENMP_LIB=
+OPENMP_CFLAGS=
+
+LOC_CHECK_INC_PATH(openmp,OpenMP,OPENMP_INCPATH)
+LOC_CHECK_LIB_PATH(openmp,OpenMP,OPENMP_LIBPATH)
+LOC_CHECK_INCLUDES(omp.h,OpenMP,$OPENMP_INCPATH)
+
+LOC_CHECK_LIBS(omp,omp_get_num_threads,OpenMP,$OPENMP_LIBPATH,OPENMP_LIB,,,[
+LOC_CHECK_LIBS(gomp,GOMP_parallel_start,OpenMP,$OPENMP_LIBPATH,OPENMP_LIB,,,)])
+
+loc_save_cflags="$CFLAGS"
+CFLAGS="${CFLAGS} ${OPENMP_INCPATH} ${OPENMP_LIBPATH} ${OPENMP_LIB}"
+LOC_OPENMP
+CFLAGS="${loc_save_cflags}"
+
+AC_SUBST(OPENMP_INCPATH)
+AC_SUBST(OPENMP_LIBPATH)
+AC_SUBST(OPENMP_LIB)
+AC_SUBST(OPENMP_CFLAGS)
+
+fi # USE_OPENMP
+
+else # enable_openmp
+
+if test -n "${USE_OPENMP}"; then
+LOC_MSG(OpenMP explicitly disabled with --disable-openmp.)
+fi
+USE_OPENMP=
+
+fi  # enable_openmp
+
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 AC_SUBST(USE_OPENMP)
 
 # Done checking OpenMP
@@ -2033,6 +2797,16 @@ LOC_MSG_USE(GEOS support,USE_GEOS)
 LOC_MSG_USE(LAPACK support,USE_LAPACK)
 LOC_MSG_USE(Large File support (LFS), USE_LARGEFILES)
 LOC_MSG_USE(libLAS support,USE_LIBLAS)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+LOC_MSG_USE(LIBSVM support,USE_LIBSVM)
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 LOC_MSG_USE(MySQL support,USE_MYSQL)
 LOC_MSG_USE(NetCDF support,USE_NETCDF)
 LOC_MSG_USE(NLS support,USE_NLS)

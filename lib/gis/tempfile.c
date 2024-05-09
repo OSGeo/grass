@@ -171,7 +171,23 @@ void G__temp_element(char *element, int tmp)
         G_make_mapset_object_group(element);
     else
         G_make_mapset_object_group_tmp(element);
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+    
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     G_debug(2, "G__temp_element(): %s (tmp=%d)", element, tmp);
 }
 

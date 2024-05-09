@@ -12,18 +12,17 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-from __future__ import print_function
-
 import sys
 
 import grass.script.core as gcore
 import grass.script.task as gtask
+from grass.exceptions import ScriptError
 
 
 def escapeXML(text):
     """This is a duplicate of function in core/toolboxes.
 
-    >>> escapeXML('<>&')
+    >>> escapeXML("<>&")
     '&amp;lt;&gt;&amp;'
     """
     return text.replace("<", "&lt;").replace("&", "&amp;").replace(">", "&gt;")
@@ -44,9 +43,9 @@ def do_doctest_gettext_workaround():
     sys.displayhook = new_displayhook
     sys.__displayhook__ = new_displayhook
 
-    import __builtin__
+    import builtins
 
-    __builtin__._ = new_translator
+    builtins.__dict__["_"] = new_translator
 
 
 def parse_modules(fd):
@@ -73,18 +72,18 @@ def parse_modules(fd):
 def get_module_metadata(name):
     """
 
-    >>> get_module_metadata('g.region')
+    >>> get_module_metadata("g.region")
     ('Manages the boundary definitions for the geographic region.', ['general', 'settings'])
-    >>> get_module_metadata('m.proj')
+    >>> get_module_metadata("m.proj")
     ('Converts coordinates from one projection to another (cs2cs frontend).', ['miscellaneous', 'projection'])
-    """
+    """  # noqa: E501
     try:
         task = gtask.parse_interface(name)
-    except:
+    except ScriptError as exc:
         sys.stderr.write(
             "Cannot parse interface for module %s. Empty strings"
             " will be placed instead of description and keywords."
-            "\n" % name
+            " Reason: %s\n" % (name, str(exc))
         )
         return "", ""
 

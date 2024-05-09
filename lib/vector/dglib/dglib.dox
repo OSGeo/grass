@@ -138,7 +138,7 @@ Directed graph library is responsible for network analysis operations
 done on vector maps. For this purpose directed graph library converts
 the vector attributes into form of a graph. This graph structure and
 related structures are defined in dglib/graph.h This header file
-contains defination of all structers required for storing components
+contains definition of all structers required for storing components
 of graph, transversing, accessing and modifying it.
 
 Map Structure Map_info contains a instance of dglGraph_s as one of its
@@ -231,7 +231,7 @@ operation is called unflattening.
 
 This has been explained earlier that graph may be one of three
 versions depending on which operations will be supported. APIs for
-these has been diffrentiated from each other through a suffix _v1 and
+these has been differentiated from each other through a suffix _v1 and
 _v2 .  All generic graph operations are defined in dglib/graph.h
 . These APIs depending on graph version call respective version
 APIs. For version 1 they resolve into *_v1() ones declared and defined
@@ -251,8 +251,8 @@ THIS. Operations on various permitives are defined in template files.
 <li> misc operations: misc-template.c -> operations like flattening or unflattening of graph, edgeset  transversing, node set  transversing etc.
 </ul>
 
-All these files contains defination using/for macros.These macro
-definations are there to make graph version transparent and provide
+All these files contains definition using/for macros.These macro
+definitions are there to make graph version transparent and provide
 uniform interface.  Macro declaration happens in v1-defs.h for version 1
 and v2-defs.h for version 2 graphs. If you are looking for any API,
 if it is all capital, it is a macro. You need to look for its

@@ -1,3 +1,5 @@
+<<<<<<< HEAD
+=======
 from __future__ import (
     nested_scopes,
     generators,
@@ -7,6 +9,13 @@ from __future__ import (
     print_function,
     unicode_literals,
 )
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 import contextlib
 import os
 import sys
@@ -23,7 +32,20 @@ from grass.pygrass.gis.region import Region
 from grass.pygrass.modules import Module
 from grass.pygrass.utils import get_mapset_raster, findmaps
 
+<<<<<<< HEAD
+from grass.pygrass.modules.grid.split import (
+    split_region_tiles,
+    split_region_in_overlapping_tiles,
+)
+=======
 from grass.pygrass.modules.grid.split import split_region_tiles
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 from grass.pygrass.modules.grid.patch import rpatch_map, rpatch_map_r_patch_backend
 
 
@@ -50,8 +72,7 @@ def select(parms, ptype):
         par = parms[k]
         if par.type == ptype or par.typedesc == ptype and par.value:
             if par.multiple:
-                for val in par.value:
-                    yield val
+                yield from par.value
             else:
                 yield par.value
 
@@ -407,7 +428,7 @@ def cmd_exe(args):
     os.remove(gisrc_dst)
 
 
-class GridModule(object):
+class GridModule:
     # TODO maybe also i.* could be supported easily
     """Run GRASS raster commands in a multiprocessing mode.
 
@@ -515,7 +536,17 @@ class GridModule(object):
             groups = [g for g in select(self.module.inputs, "group")]
             if groups:
                 copy_groups(groups, self.gisrc_src, self.gisrc_dst, region=self.region)
+<<<<<<< HEAD
+        self.bboxes = split_region_in_overlapping_tiles(
+=======
         self.bboxes = split_region_tiles(
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             region=region, width=self.width, height=self.height, overlap=overlap
         )
         if mapset_prefix:

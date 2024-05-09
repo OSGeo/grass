@@ -104,7 +104,7 @@ class SimpleLayerManager(wx.Panel):
             .Name("checklist")
             .CenterPane()
             .CloseButton(False)
-            .BestSize((self._checkList.GetBestSize())),
+            .BestSize(self._checkList.GetBestSize()),
         )
         paneInfo = (
             wx.aui.AuiPaneInfo()
@@ -114,7 +114,7 @@ class SimpleLayerManager(wx.Panel):
             .CloseButton(False)
             .Layer(1)
             .Gripper(False)
-            .BestSize((self._toolbar.GetBestSize()))
+            .BestSize(self._toolbar.GetBestSize())
         )
         if self._style & SIMPLE_LMGR_TB_LEFT:
             paneInfo.Left()

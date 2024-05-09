@@ -32,7 +32,30 @@
 char *labelElevType::printLabel(const labelElevType &p)
 {
     static char buf[8];
+<<<<<<< HEAD
     snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+=======
+    sprintf(buf, CCLABEL_FMT, p.label);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    sprintf(buf, CCLABEL_FMT, p.label);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    sprintf(buf, CCLABEL_FMT, p.label);
+=======
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     return buf;
 }
 
@@ -175,7 +198,30 @@ ostream &operator<<(ostream &s, const labelElevType &p)
 char *waterType::printLabel(const waterType &p)
 {
     static char buf[8];
+<<<<<<< HEAD
     snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+=======
+    sprintf(buf, CCLABEL_FMT, p.label);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    sprintf(buf, CCLABEL_FMT, p.label);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    sprintf(buf, CCLABEL_FMT, p.label);
+=======
+    snprintf(buf, sizeof(buf), CCLABEL_FMT, p.label);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     return buf;
 }
 
@@ -247,7 +293,19 @@ void createWaterWindows(AMI_STREAM<waterGridType> *mergedWaterStr,
 void generateWatersheds(AMI_STREAM<waterWindowType> **waterWindows,
                         const dimension_type nrows, const dimension_type ncols,
                         AMI_STREAM<labelElevType> *labeledWater,
+<<<<<<< HEAD
                         AMI_STREAM<boundaryType> *boundaryStr)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                        AMI_STREAM<boundaryType> *boundaryStr UNUSED)
+=======
+                        AMI_STREAM<boundaryType> *boundaryStr)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                        AMI_STREAM<boundaryType> *boundaryStr)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     AMI_err ae;
     waterWindowType *winp, prevWin;

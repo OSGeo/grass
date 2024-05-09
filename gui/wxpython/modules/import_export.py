@@ -138,7 +138,6 @@ class ImportDialog(wx.Dialog):
         self.createSettingsPage()
 
     def createSettingsPage(self):
-
         self._blackList = {
             "enabled": True,
             "items": {
@@ -358,7 +357,6 @@ class ImportDialog(wx.Dialog):
         data = self.list.GetData(checked=True)
 
         for itm in data:
-
             layerId = itm[-1]
 
             # select only layers with different projetion
@@ -371,7 +369,6 @@ class ImportDialog(wx.Dialog):
         if (
             not self.link and differentProjLayers and not self.override.IsChecked()
         ):  # '-o' not in self.getSettingsPageCmd():
-
             dlg = ReprojectionDialog(
                 parent=self, giface=self._giface, data=differentProjLayers
             )
@@ -379,7 +376,6 @@ class ImportDialog(wx.Dialog):
             ret = dlg.ShowModal()
 
             if ret == wx.ID_OK:
-
                 # do not import unchecked layers
                 for itm in reversed(list(dlg.GetData(checked=False))):
                     idx = itm[-1]
@@ -390,7 +386,6 @@ class ImportDialog(wx.Dialog):
         return layers
 
     def getSettingsPageCmd(self):
-
         return self.advancedPagePanel.createCmd(ignoreErrors=True, ignoreRequired=True)
 
 
@@ -443,7 +438,6 @@ class GdalImportDialog(ImportDialog):
         self.doLayout()
 
     def reload(self, data, listData):
-
         self.list.LoadData(listData)
         self.list.SelectAll(select=True)
         self.layersData = data
@@ -590,7 +584,6 @@ class OgrImportDialog(ImportDialog):
         self.doLayout()
 
     def reload(self, data, listData):
-
         self.list.LoadData(listData)
         self.list.SelectAll(select=True)
         self.layersData = data
@@ -860,7 +853,6 @@ class DxfImportDialog(ImportDialog):
         inputDxf = self.dsnInput.GetValue()
 
         for layer, output, itemId in data:
-
             cmd = self.getSettingsPageCmd()
             cmd.append("input=%s" % inputDxf)
             cmd.append("layer=%s" % layer)
@@ -967,7 +959,8 @@ class ReprojectionDialog(wx.Dialog):
             parent=self.panel,
             id=wx.ID_ANY,
             label=_(
-                "Projection of following layers do not match with projection of current location. "
+                "Projection of following layers do not match with projection of "
+                "current location. "
             ),
         )
 
@@ -1032,5 +1025,4 @@ class ReprojectionDialog(wx.Dialog):
         self.Layout()
 
     def GetData(self, checked):
-
         return self.list.GetData(checked)

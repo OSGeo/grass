@@ -23,6 +23,7 @@ int db__driver_open_database(dbHandle *handle)
     const char *name;
     dbConnection default_connection;
     MYSQL *res;
+    dbString sql;
 
     db_get_connection(&default_connection);
     name = db_get_handle_dbname(handle);
@@ -53,8 +54,24 @@ int db__driver_open_database(dbHandle *handle)
         db_get_login2("mysql", name, &user, &password, &host, &port);
 
         connection = mysql_init(NULL);
+<<<<<<< HEAD
         res = mysql_real_connect(connection, host, user, password,
                                  connpar.dbname, port, NULL, 0);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        res =
+            mysql_real_connect(connection, host, user, password, connpar.dbname,
+                               port != NULL ? atoi(port) : 0, NULL, 0);
+=======
+        res = mysql_real_connect(connection, host, user, password,
+                                 connpar.dbname, port, NULL, 0);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        res = mysql_real_connect(connection, host, user, password,
+                                 connpar.dbname, port, NULL, 0);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
         if (res == NULL) {
             db_d_append_error("%s\n%s", _("Connection failed."),
@@ -62,6 +79,34 @@ int db__driver_open_database(dbHandle *handle)
             db_d_report_error();
             return DB_FAILED;
         }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+        db_init_string(&sql);
+        db_set_string(&sql, "SET SQL_MODE=ANSI_QUOTES;");
+
+        /* Set SQL ANSI_QUOTES MODE which allow to use double quotes instead of
+         * backticks */
+        if (mysql_query(connection, db_get_string(&sql)) != 0) {
+            db_d_append_error("%s %s", _("Unable to set SQL ANSI_QUOTES mode:"),
+                              mysql_error(connection));
+            db_d_report_error();
+            db_free_string(&sql);
+            mysql_close(connection);
+
+            return DB_FAILED;
+        }
+        G_debug(3, "db__driver_open_database(): Set ODBC MySQL DB %s",
+                db_get_string(&sql));
+
+        db_free_string(&sql);
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     }
 
     return DB_OK;

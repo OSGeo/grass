@@ -860,7 +860,7 @@ int order_intersects(geosurf *gs, Point3 first, Point3 last, int vi, int hi,
 /*!
    \brief ADD
 
-   \todo For consistancy, need to decide how last row & last column are
+   \todo For consistency, need to decide how last row & last column are
    displayed - would it look funny to always draw last row/col with
    finer resolution if necessary, or would it be better to only show
    full rows/cols?
@@ -1063,7 +1063,19 @@ int get_horz_intersects(geosurf *gs, float *bgn, float *end, float *dir)
 
    \return number of intersects
  */
+<<<<<<< HEAD
 int get_diag_intersects(geosurf *gs, float *bgn, float *end, float *dir)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int get_diag_intersects(geosurf *gs, float *bgn, float *end, float *dir UNUSED)
+=======
+int get_diag_intersects(geosurf *gs, float *bgn, float *end, float *dir)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int get_diag_intersects(geosurf *gs, float *bgn, float *end, float *dir)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     int fdig, ldig, incr, hits, num, offset;
     int vrow, vcol, drow1, drow2, dcol1, dcol2;

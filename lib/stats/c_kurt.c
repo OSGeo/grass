@@ -1,7 +1,19 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
+<<<<<<< HEAD
 void c_kurt(DCELL *result, DCELL *values, int n, const void *closure)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void c_kurt(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
+=======
+void c_kurt(DCELL *result, DCELL *values, int n, const void *closure)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void c_kurt(DCELL *result, DCELL *values, int n, const void *closure)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     DCELL sum, ave, sumsq, sumqt, var;
     int count;
@@ -44,7 +56,20 @@ void c_kurt(DCELL *result, DCELL *values, int n, const void *closure)
     *result = sumqt / (count * var * var) - 3;
 }
 
+<<<<<<< HEAD
 void w_kurt(DCELL *result, DCELL (*values)[2], int n, const void *closure)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void w_kurt(DCELL *result, DCELL (*values)[2], int n,
+            const void *closure UNUSED)
+=======
+void w_kurt(DCELL *result, DCELL (*values)[2], int n, const void *closure)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void w_kurt(DCELL *result, DCELL (*values)[2], int n, const void *closure)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     DCELL sum, ave, sumsq, sumqt, var;
     DCELL count;

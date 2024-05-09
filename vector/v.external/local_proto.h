@@ -5,6 +5,8 @@
 #include <gdal_version.h>
 #include <ogr_api.h>
 
+<<<<<<< HEAD
+=======
 /* define type of input datasource
  * as of GDAL 2.2, all functions having as argument a GDAL/OGR dataset
  * must use the GDAL version, not the OGR version */
@@ -20,6 +22,7 @@ typedef OGRDataSourceH ds_t;
 #define ds_close(ds)              OGR_DS_Destroy(ds)
 #endif
 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 struct _options {
     struct Option *dsn, *output, *layer, *where;
 };
@@ -40,6 +43,21 @@ int list_layers(FILE *, const char *, char **, int, int);
 void get_table_name(const char *, char **, char **);
 
 /* proj.c */
+<<<<<<< HEAD
 void check_projection(struct Cell_head *, ds_t, int, char *, char *, int, int,
                       int);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void check_projection(struct Cell_head *, GDALDatasetH, int, char *, char *,
+                      int, int, int);
+=======
+void check_projection(struct Cell_head *, ds_t, int, char *, char *, int, int,
+                      int);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void check_projection(struct Cell_head *, ds_t, int, char *, char *, int, int,
+                      int);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #endif

@@ -404,7 +404,19 @@ int main(int argc, char **argv)
 
             nclass = atoi(nbclass_opt->answer);
             nbreaks = nclass - 1; /* we need one less classbreaks (min and
+<<<<<<< HEAD
                                    * max exluded) than classes */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                                   * max excluded) than classes */
+=======
+                                   * max exluded) than classes */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                                   * max exluded) than classes */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
             breakpoints = (double *)G_malloc((nbreaks) * sizeof(double));
             for (i = 0; i < nbreaks; i++)
@@ -533,26 +545,83 @@ int main(int argc, char **argv)
         while (TRUE) {
             nfeatures = Vect_get_num_primitives(&Map, GV_POINT);
             if (nfeatures > 0) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                write_into_legend_file(
+                    "stdout", icon_opt->answer, title, stats.min, stats.max,
+                    breakpoints, nbreaks, size, bcolor, colors, default_width,
+                    frequencies, ctype, "point");
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 write_into_legend_file("stdout", icon_opt->answer, title,
                                        stats.min, stats.max, breakpoints,
                                        nbreaks, size, bcolor, colors,
                                        default_width, frequencies, "point");
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_LINE);
             if (nfeatures > 0) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                write_into_legend_file(
+                    "stdout", icon_line_opt->answer, title, stats.min,
+                    stats.max, breakpoints, nbreaks, size, bcolor, colors,
+                    default_width, frequencies, ctype, "line");
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 write_into_legend_file("stdout", icon_line_opt->answer, title,
                                        stats.min, stats.max, breakpoints,
                                        nbreaks, size, bcolor, colors,
                                        default_width, frequencies, "line");
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_BOUNDARY);
             if (nfeatures > 0) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                write_into_legend_file(
+                    "stdout", icon_area_opt->answer, title, stats.min,
+                    stats.max, breakpoints, nbreaks, size, bcolor, colors,
+                    default_width, frequencies, ctype, "area");
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 write_into_legend_file("stdout", icon_area_opt->answer, title,
                                        stats.min, stats.max, breakpoints,
                                        nbreaks, size, bcolor, colors,
                                        default_width, frequencies, "area");
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 break;
             }
         }
@@ -564,26 +633,83 @@ int main(int argc, char **argv)
         while (TRUE) {
             nfeatures = Vect_get_num_primitives(&Map, GV_POINT);
             if (nfeatures > 0) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                write_into_legend_file(
+                    leg_file, icon_opt->answer, title, stats.min, stats.max,
+                    breakpoints, nbreaks, size, bcolor, colors, default_width,
+                    frequencies, ctype, "point");
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 write_into_legend_file(leg_file, icon_opt->answer, title,
                                        stats.min, stats.max, breakpoints,
                                        nbreaks, size, bcolor, colors,
                                        default_width, frequencies, "point");
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_LINE);
             if (nfeatures > 0) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                write_into_legend_file(
+                    leg_file, icon_line_opt->answer, title, stats.min,
+                    stats.max, breakpoints, nbreaks, size, bcolor, colors,
+                    default_width, frequencies, ctype, "line");
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 write_into_legend_file(leg_file, icon_line_opt->answer, title,
                                        stats.min, stats.max, breakpoints,
                                        nbreaks, size, bcolor, colors,
                                        default_width, frequencies, "line");
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_BOUNDARY);
             if (nfeatures > 0) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                write_into_legend_file(
+                    leg_file, icon_area_opt->answer, title, stats.min,
+                    stats.max, breakpoints, nbreaks, size, bcolor, colors,
+                    default_width, frequencies, ctype, "area");
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 write_into_legend_file(leg_file, icon_area_opt->answer, title,
                                        stats.min, stats.max, breakpoints,
                                        nbreaks, size, bcolor, colors,
                                        default_width, frequencies, "area");
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 break;
             }
         }
@@ -598,7 +724,19 @@ int main(int argc, char **argv)
                 write_into_legend_file(
                     legend_file_opt->answer, icon_opt->answer, title, stats.min,
                     stats.max, breakpoints, nbreaks, size, bcolor, colors,
+<<<<<<< HEAD
                     default_width, frequencies, "point");
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    default_width, frequencies, ctype, "point");
+=======
+                    default_width, frequencies, "point");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    default_width, frequencies, "point");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_LINE);
@@ -606,7 +744,19 @@ int main(int argc, char **argv)
                 write_into_legend_file(
                     legend_file_opt->answer, icon_line_opt->answer, title,
                     stats.min, stats.max, breakpoints, nbreaks, size, bcolor,
+<<<<<<< HEAD
                     colors, default_width, frequencies, "line");
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    colors, default_width, frequencies, ctype, "line");
+=======
+                    colors, default_width, frequencies, "line");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    colors, default_width, frequencies, "line");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 break;
             }
             nfeatures = Vect_get_num_primitives(&Map, GV_BOUNDARY);
@@ -614,7 +764,19 @@ int main(int argc, char **argv)
                 write_into_legend_file(
                     legend_file_opt->answer, icon_area_opt->answer, title,
                     stats.min, stats.max, breakpoints, nbreaks, size, bcolor,
+<<<<<<< HEAD
                     colors, default_width, frequencies, "area");
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    colors, default_width, frequencies, ctype, "area");
+=======
+                    colors, default_width, frequencies, "area");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    colors, default_width, frequencies, "area");
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 break;
             }
         }

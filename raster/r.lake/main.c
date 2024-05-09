@@ -16,7 +16,7 @@
  *               for details.
  *
  *  TODO:        - Option to create 3D output;
- *               - Test with lat/lon location, feets and other crap;
+ *               - Test with lat/lon location, feet and other crap;
  *               - In progress: Add different debug level messages;
  *               - In progress: Option to output resulting lake area and volume.
  *
@@ -311,7 +311,19 @@ int main(int argc, char *argv[])
                 load_window_values(out_water, water_window, rows, cols, row,
                                    col);
 
+<<<<<<< HEAD
                 /* Cheking presence of water. */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                /* Checking presence of water. */
+=======
+                /* Cheking presence of water. */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                /* Cheking presence of water. */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 if (is_near_water(water_window) == 1) {
                     if (in_terran[row][col] < water_level) {
                         out_water[row][col] = water_level - in_terran[row][col];

@@ -17,14 +17,29 @@ for details.
 
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+>>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
+=======
+>>>>>>> 7e8f036e2d (pythonlib: Remove star imports (#1546))
+>>>>>>> osgeo-main
 import os
 import re
 import sys
+import xml.etree.ElementTree as etree
+from xml.parsers import expat
 
 from grass.exceptions import ScriptError
 from .utils import decode, split
 from .core import Popen, PIPE, get_real_command
 
+<<<<<<< HEAD
+ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
+=======
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
@@ -41,6 +56,7 @@ else:
 
 if sys.version_info.major >= 3:
     unicode = str
+>>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
 
 
 class grassTask:
@@ -160,7 +176,7 @@ class grassTask:
             if isinstance(val, (list, tuple)):
                 if value in val:
                     return p
-            elif isinstance(val, (bytes, unicode)):
+            elif isinstance(val, (bytes, str)):
                 if p[element][: len(value)] == value:
                     return p
             else:
@@ -459,7 +475,7 @@ def convert_xml_to_utf8(xml_text):
 
     # modify: fetch encoding from the interface description text(xml)
     # e.g. <?xml version="1.0" encoding="GBK"?>
-    pattern = re.compile(b'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
+    pattern = re.compile(rb'<\?xml[^>]*\Wencoding="([^"]*)"[^>]*\?>')
     m = re.match(pattern, xml_text)
     if m is None:
         return xml_text.encode("utf-8") if xml_text else None

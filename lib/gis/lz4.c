@@ -641,7 +641,19 @@ int LZ4_compressBound(int isize)
     return LZ4_COMPRESSBOUND(isize);
 }
 
+<<<<<<< HEAD
 int LZ4_sizeofState()
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int LZ4_sizeofState(void)
+=======
+int LZ4_sizeofState()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int LZ4_sizeofState()
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     return LZ4_STREAMSIZE;
 }
@@ -2454,7 +2466,19 @@ int LZ4_uncompress_unknownOutputSize(const char *source, char *dest, int isize,
 
 /* Obsolete Streaming functions */
 
+<<<<<<< HEAD
 int LZ4_sizeofStreamState()
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int LZ4_sizeofStreamState(void)
+=======
+int LZ4_sizeofStreamState()
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int LZ4_sizeofStreamState()
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     return LZ4_STREAMSIZE;
 }

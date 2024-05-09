@@ -70,7 +70,17 @@ static void read_header(FILE *fp, unsigned char *magic, int *maxval)
 
     read_line(buf, sizeof(buf), fp);
 
+<<<<<<< HEAD
+    if (sscanf(buf, "%u %u", &ncols, &nrows) != 2)
+=======
     if (sscanf(buf, "%d %d", &ncols, &nrows) != 2)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         G_fatal_error(_("Invalid PPM file"));
 
     if (ncols != width || nrows != height)

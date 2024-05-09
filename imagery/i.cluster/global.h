@@ -1,17 +1,4 @@
-#include <grass/config.h>
-
-#ifndef TIME_WITH_SYS_TIME
-#ifdef HAVE_TIME
 #include <time.h>
-#endif
-#ifdef HAVE_SYS_TIME_H
-#include <sys/time.h>
-#endif
-#else
-#include <time.h>
-#include <sys/time.h>
-#endif
-
 #include <grass/imagery.h>
 #include <grass/cluster.h>
 
@@ -26,7 +13,23 @@ extern int mcs;
 extern char *group;
 extern char *subgroup;
 extern struct Ref ref;
+<<<<<<< HEAD
 extern char **semantic_labels;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+extern char **semantic_labels;
+=======
+extern char **bandrefs;
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+extern char **semantic_labels;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+extern char **semantic_labels;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 extern char outsigfile[GNAME_MAX + GMAPSET_MAX];
 extern char *insigfile;
 extern char *reportfile;

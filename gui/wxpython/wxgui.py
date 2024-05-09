@@ -17,8 +17,6 @@ This program is free software under the GNU General Public License
 @author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
 """
 
-from __future__ import print_function
-
 import os
 import sys
 import getopt
@@ -26,7 +24,7 @@ import getopt
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.
 from grass.exceptions import Usage
-from grass.script.core import set_raise_on_error
+from grass.script.core import set_raise_on_error, warning, error
 
 from core import globalvar
 from core.utils import registerPid, unregisterPid
@@ -84,18 +82,79 @@ class GMApp(wx.App):
 
         def show_main_gui():
             # create and show main frame
+<<<<<<< HEAD
             single = UserSettings.Get(
                 group="general", key="singleWindow", subkey="enabled"
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            single = UserSettings.Get(
+                group="appearance", key="singleWindow", subkey="enabled"
+=======
+            single = UserSettings.Get(
+                group="general", key="singleWindow", subkey="enabled"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            single = UserSettings.Get(
+                group="general", key="singleWindow", subkey="enabled"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             )
             if single:
                 from main_window.frame import GMFrame
             else:
                 from lmgr.frame import GMFrame
+<<<<<<< HEAD
 
             mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
             mainframe.Show()
             self.SetTopWindow(mainframe)
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            try:
+                mainframe = GMFrame(
+                    parent=None, id=wx.ID_ANY, workspace=self.workspaceFile
+                )
+            except Exception as err:
+                min_required_wx_version = [4, 2, 0]
+                if not globalvar.CheckWxVersion(min_required_wx_version):
+                    error(err)
+                    warning(
+                        _(
+                            "Current version of wxPython {} is lower than "
+                            "minimum required version {}".format(
+                                wx.__version__,
+                                ".".join(map(str, min_required_wx_version)),
+                            )
+                        )
+                    )
+                else:
+                    raise
+            else:
+                mainframe.Show()
+                self.SetTopWindow(mainframe)
+
+=======
+            from lmgr.frame import GMFrame
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+
+            mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
+            mainframe.Show()
+            self.SetTopWindow(mainframe)
+
+>>>>>>> 6d691c8cd4 (wxGUI/splashscreen: use standard one, try to show it before main app, increase timeout (#1718))
+=======
+
+            mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
+            mainframe.Show()
+            self.SetTopWindow(mainframe)
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         wx.CallAfter(show_main_gui)
 
         return True
@@ -132,7 +191,6 @@ def process_opt(opts, args):
 
 
 def main(argv=None):
-
     if argv is None:
         argv = sys.argv
     try:

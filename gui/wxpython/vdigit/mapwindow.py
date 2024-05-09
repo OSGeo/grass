@@ -16,7 +16,6 @@ This program is free software under the GNU General Public License
 
 import wx
 import tempfile
-import six
 
 from grass.pydispatch.signal import Signal
 
@@ -73,9 +72,9 @@ class VDigitWindow(BufferedMapWindow):
         # currently used only for coordinates of mouse cursor + segmnt and
         # total feature length
         self.digitizingInfo = Signal("VDigitWindow.digitizingInfo")
-        # Emitted when some info about digitizing is or will be availbale
+        # Emitted when some info about digitizing is or will be available
         self.digitizingInfoAvailable = Signal("VDigitWindow.digitizingInfo")
-        # Emitted when some info about digitizing is or will be availbale
+        # Emitted when some info about digitizing is or will be available
         # digitizingInfo signal is emitted only between digitizingInfoAvailable
         # and digitizingInfoUnavailable signals
         self.digitizingInfoUnavailable = Signal("VDigitWindow.digitizingInfo")
@@ -136,6 +135,7 @@ class VDigitWindow(BufferedMapWindow):
         shift = event.ShiftDown()
         kc = event.GetKeyCode()
 
+<<<<<<< HEAD
         tools = {
             ord("P"): {
                 "event": wx.CommandEvent(id=self.toolbar.addPoint),
@@ -216,6 +216,288 @@ class VDigitWindow(BufferedMapWindow):
         }
         if not shift:
             tool = tools.get(kc)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        default_tools = {
+            "addPoint": {
+                "evt": True,
+                "ord": ord("P"),
+                "tool": self.toolbar.OnAddPoint,
+            },
+            "addLine": {
+                "evt": True,
+                "ord": ord("L"),
+                "tool": self.toolbar.OnAddLine,
+            },
+            "addArea": {
+                "evt": True,
+                "ord": ord("A"),
+                "tool": self.toolbar.OnAddArea,
+            },
+            "addBoundary": {
+                "evt": False,
+                "ord": ord("B"),
+                "tool": self.toolbar.OnAddBoundary,
+            },
+            "addCentroid": {
+                "evt": False,
+                "ord": ord("C"),
+                "tool": self.toolbar.OnAddCentroid,
+            },
+            "addVertex": {
+                "evt": True,
+                "ord": ord("V"),
+                "tool": self.toolbar.OnAddVertex,
+            },
+            "removeVertex": {
+                "evt": True,
+                "ord": ord("X"),
+                "tool": self.toolbar.OnRemoveVertex,
+            },
+            "moveVertex": {
+                "evt": True,
+                "ord": ord("G"),
+                "tool": self.toolbar.OnMoveVertex,
+            },
+            "deleteLine": {
+                "evt": True,
+                "ord": ord("D"),
+                "tool": self.toolbar.OnDeleteLine,
+            },
+            "deleteArea": {
+                "evt": True,
+                "ord": ord("F"),
+                "tool": self.toolbar.OnDeleteArea,
+            },
+            "editLine": {
+                "evt": True,
+                "ord": ord("E"),
+                "tool": self.toolbar.OnEditLine,
+            },
+            "moveLine": {
+                "evt": True,
+                "ord": ord("M"),
+                "tool": self.toolbar.OnMoveLine,
+            },
+            "displayCats": {
+                "evt": True,
+                "ord": ord("J"),
+                "tool": self.toolbar.OnDisplayCats,
+            },
+            "displayAttr": {
+                "evt": True,
+                "ord": ord("K"),
+                "tool": self.toolbar.OnDisplayAttr,
+            },
+            "undo": {
+                "evt": True,
+                "ord": ord("Z"),
+                "tool": self.toolbar.OnUndo,
+            },
+            "redo": {
+                "evt": True,
+                "ord": ord("Y"),
+                "tool": self.toolbar.OnRedo,
+            },
+            "settings": {
+                "evt": True,
+                "ord": ord("T"),
+                "tool": self.toolbar.OnSettings,
+            },
+            "help": {
+                "evt": True,
+                "ord": ord("H"),
+                "tool": self.toolbar.OnHelp,
+            },
+            "quit": {
+                "evt": True,
+                "ord": ord("Q"),
+                "tool": self.toolbar.OnExit,
+            },
+        }
+
+        # Custom vdigit tools if VDigitToolbar class tool param arg was defined
+        actual_tools = {}
+        for tool in default_tools:
+            # custom tools, e.g. in g.gui.iclass
+            if self.toolbar.tools and tool not in self.toolbar.tools:
+                continue
+            event = None
+            if default_tools[tool]["evt"] and hasattr(self.toolbar, tool):
+                event = wx.CommandEvent(id=getattr(self.toolbar, tool))
+            actual_tools[default_tools[tool]["ord"]] = {
+                "event": event,
+                "tool": default_tools[tool]["tool"],
+            }
+
+        if not shift:
+            tool = actual_tools.get(kc)
+=======
+        tools = {
+            ord("P"): {
+                "event": wx.CommandEvent(id=self.toolbar.addPoint),
+                "tool": self.toolbar.OnAddPoint,
+            },
+            ord("L"): {
+                "event": wx.CommandEvent(id=self.toolbar.addLine),
+                "tool": self.toolbar.OnAddLine,
+            },
+            ord("A"): {
+                "event": wx.CommandEvent(id=self.toolbar.addArea),
+                "tool": self.toolbar.OnAddArea,
+            },
+            ord("B"): {
+                "event": None,
+                "tool": self.toolbar.OnAddBoundary,
+            },
+            ord("C"): {
+                "event": None,
+                "tool": self.toolbar.OnAddCentroid,
+            },
+            ord("V"): {
+                "event": wx.CommandEvent(id=self.toolbar.addVertex),
+                "tool": self.toolbar.OnAddVertex,
+            },
+            ord("X"): {
+                "event": wx.CommandEvent(id=self.toolbar.removeVertex),
+                "tool": self.toolbar.OnRemoveVertex,
+            },
+            ord("G"): {
+                "event": wx.CommandEvent(id=self.toolbar.moveVertex),
+                "tool": self.toolbar.OnMoveVertex,
+            },
+            ord("D"): {
+                "event": wx.CommandEvent(id=self.toolbar.deleteLine),
+                "tool": self.toolbar.OnDeleteLine,
+            },
+            ord("F"): {
+                "event": wx.CommandEvent(id=self.toolbar.deleteArea),
+                "tool": self.toolbar.OnDeleteArea,
+            },
+            ord("E"): {
+                "event": wx.CommandEvent(id=self.toolbar.editLine),
+                "tool": self.toolbar.OnEditLine,
+            },
+            ord("M"): {
+                "event": wx.CommandEvent(id=self.toolbar.moveLine),
+                "tool": self.toolbar.OnMoveLine,
+            },
+            ord("J"): {
+                "event": wx.CommandEvent(id=self.toolbar.displayCats),
+                "tool": self.toolbar.OnDisplayCats,
+            },
+            ord("K"): {
+                "event": wx.CommandEvent(id=self.toolbar.displayAttr),
+                "tool": self.toolbar.OnDisplayAttr,
+            },
+            ord("Z"): {
+                "event": wx.CommandEvent(id=self.toolbar.undo),
+                "tool": self.toolbar.OnUndo,
+            },
+            ord("Y"): {
+                "event": wx.CommandEvent(id=self.toolbar.redo),
+                "tool": self.toolbar.OnRedo,
+            },
+            ord("T"): {
+                "event": wx.CommandEvent(id=self.toolbar.settings),
+                "tool": self.toolbar.OnSettings,
+            },
+            ord("H"): {
+                "event": wx.CommandEvent(id=self.toolbar.help),
+                "tool": self.toolbar.OnHelp,
+            },
+            ord("Q"): {
+                "event": wx.CommandEvent(id=self.toolbar.quit),
+                "tool": self.toolbar.OnExit,
+            },
+        }
+        if not shift:
+            tool = tools.get(kc)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        tools = {
+            ord("P"): {
+                "event": wx.CommandEvent(id=self.toolbar.addPoint),
+                "tool": self.toolbar.OnAddPoint,
+            },
+            ord("L"): {
+                "event": wx.CommandEvent(id=self.toolbar.addLine),
+                "tool": self.toolbar.OnAddLine,
+            },
+            ord("A"): {
+                "event": wx.CommandEvent(id=self.toolbar.addArea),
+                "tool": self.toolbar.OnAddArea,
+            },
+            ord("B"): {
+                "event": None,
+                "tool": self.toolbar.OnAddBoundary,
+            },
+            ord("C"): {
+                "event": None,
+                "tool": self.toolbar.OnAddCentroid,
+            },
+            ord("V"): {
+                "event": wx.CommandEvent(id=self.toolbar.addVertex),
+                "tool": self.toolbar.OnAddVertex,
+            },
+            ord("X"): {
+                "event": wx.CommandEvent(id=self.toolbar.removeVertex),
+                "tool": self.toolbar.OnRemoveVertex,
+            },
+            ord("G"): {
+                "event": wx.CommandEvent(id=self.toolbar.moveVertex),
+                "tool": self.toolbar.OnMoveVertex,
+            },
+            ord("D"): {
+                "event": wx.CommandEvent(id=self.toolbar.deleteLine),
+                "tool": self.toolbar.OnDeleteLine,
+            },
+            ord("F"): {
+                "event": wx.CommandEvent(id=self.toolbar.deleteArea),
+                "tool": self.toolbar.OnDeleteArea,
+            },
+            ord("E"): {
+                "event": wx.CommandEvent(id=self.toolbar.editLine),
+                "tool": self.toolbar.OnEditLine,
+            },
+            ord("M"): {
+                "event": wx.CommandEvent(id=self.toolbar.moveLine),
+                "tool": self.toolbar.OnMoveLine,
+            },
+            ord("J"): {
+                "event": wx.CommandEvent(id=self.toolbar.displayCats),
+                "tool": self.toolbar.OnDisplayCats,
+            },
+            ord("K"): {
+                "event": wx.CommandEvent(id=self.toolbar.displayAttr),
+                "tool": self.toolbar.OnDisplayAttr,
+            },
+            ord("Z"): {
+                "event": wx.CommandEvent(id=self.toolbar.undo),
+                "tool": self.toolbar.OnUndo,
+            },
+            ord("Y"): {
+                "event": wx.CommandEvent(id=self.toolbar.redo),
+                "tool": self.toolbar.OnRedo,
+            },
+            ord("T"): {
+                "event": wx.CommandEvent(id=self.toolbar.settings),
+                "tool": self.toolbar.OnSettings,
+            },
+            ord("H"): {
+                "event": wx.CommandEvent(id=self.toolbar.help),
+                "tool": self.toolbar.OnHelp,
+            },
+            ord("Q"): {
+                "event": wx.CommandEvent(id=self.toolbar.quit),
+                "tool": self.toolbar.OnExit,
+            },
+        }
+        if not shift:
+            tool = tools.get(kc)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             if tool:
                 event = self.toolbar.OnTool(tool["event"])
                 tool["tool"](event)
@@ -345,7 +627,7 @@ class VDigitWindow(BufferedMapWindow):
             dialog.OnReset()
 
     def _geomAttrbUpdate(self, fids):
-        """Update geometry atrributes of currently selected features
+        """Update geometry attributes of currently selected features
 
         :param fid: list feature id
         """
@@ -363,9 +645,9 @@ class VDigitWindow(BufferedMapWindow):
         dbInfo = gselect.VectorDBInfo(vectorName)
         sqlfile = tempfile.NamedTemporaryFile(mode="w")
         for fid in fids:
-            for layer, cats in six.iteritems(self.digit.GetLineCats(fid)):
+            for layer, cats in self.digit.GetLineCats(fid).items():
                 table = dbInfo.GetTable(layer)
-                for attrb, item in six.iteritems(vdigit["geomAttr"]):
+                for attrb, item in vdigit["geomAttr"].items():
                     val = -1
                     if attrb == "length":
                         val = self.digit.GetLineLength(fid)
@@ -994,7 +1276,7 @@ class VDigitWindow(BufferedMapWindow):
                     self.mouse["begin"]
                 )  # left down
 
-            # eliminate initial mouse moving efect
+            # eliminate initial mouse moving effect
             self.mouse["begin"] = self.mouse["end"]
 
         action = self.toolbar.GetAction()

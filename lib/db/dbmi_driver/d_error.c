@@ -75,7 +75,30 @@ void db_d_append_error(const char *fmt, ...)
         count = vfprintf(fp, fmt, ap);
         if (count >= 0 && (work = G_calloc(count + 1, 1))) {
             rewind(fp);
+<<<<<<< HEAD
             if (fread(work, 1, count, fp) != (size_t)count) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (fread(work, 1, count, fp) != (size_t)count) {
+=======
+            if (fread(work, 1, count, fp) != count) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (fread(work, 1, count, fp) != count) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (fread(work, 1, count, fp) != (size_t)count) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+            if (fread(work, 1, count, fp) != count) {
+=======
+            if (fread(work, 1, count, fp) != (size_t)count) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                 if (ferror(fp))
                     G_fatal_error(_("DBMI-%s driver file reading error: %s"),
                                   st->driver_name, strerror(errno));

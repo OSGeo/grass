@@ -11,7 +11,6 @@ for details.
 @author Vaclav Petras
 """
 
-
 from grass.script.utils import parse_key_val, try_remove
 
 from grass.gunittest.case import TestCase
@@ -228,7 +227,7 @@ cells=60020100
 R_UNIVAR_KEYVAL_INT_DICT = {"n": 2025000, "null_cells": 57995100, "cells": 60020100}
 
 
-class TestComapreProjections(TestCase):
+class TestCompareProjections(TestCase):
     def test_compare_proj_info(self):
         self.assertTrue(proj_info_equals(PROJ_INFO_TEXT_1, PROJ_INFO_TEXT_2))
         self.assertTrue(proj_units_equals(PROJ_UNITS_TEXT_1, PROJ_UNITS_TEXT_2))
@@ -236,7 +235,6 @@ class TestComapreProjections(TestCase):
 
 class TestParseKeyvalue(TestCase):
     def test_shell_script_style(self):
-
         self.assertDictEqual(
             parse_key_val(R_UNIVAR_KEYVAL_INT, val_type=int), R_UNIVAR_KEYVAL_INT_DICT
         )

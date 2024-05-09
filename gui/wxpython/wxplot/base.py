@@ -16,7 +16,6 @@ This program is free software under the GNU General Public License
 """
 
 import os
-import six
 
 import wx
 from random import randint
@@ -57,7 +56,6 @@ class BasePlotFrame(wx.Frame):
         rasterList=[],
         **kwargs,
     ):
-
         wx.Frame.__init__(self, parent, id=wx.ID_ANY, size=size, style=style, **kwargs)
 
         self.parent = parent  # MapFrame for a plot type
@@ -118,7 +116,7 @@ class BasePlotFrame(wx.Frame):
         for assigning colors to images in imagery groups"""
 
         self.colorDict = {}
-        for clr in six.iterkeys(grass.named_colors):
+        for clr in grass.named_colors.keys():
             if clr == "white":
                 continue
             r = int(grass.named_colors[clr][0] * 255)
@@ -181,7 +179,17 @@ class BasePlotFrame(wx.Frame):
         self.properties["legend"] = UserSettings.Get(group=self.plottype, key="legend")
 
         self.zoom = False  # zooming disabled
+<<<<<<< HEAD
+        self.drag = False  # dragging disabled
+=======
         self.drag = False  # draging disabled
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
         # x and y axis set to normal (non-log)
         self.client.logScale = (False, False)
@@ -431,7 +439,7 @@ class BasePlotFrame(wx.Frame):
         )
 
     def DrawPointLabel(self, dc, mDataDict):
-        """This is the fuction that defines how the pointLabels are
+        """This is the function that defines how the pointLabels are
         plotted dc - DC that will be passed mDataDict - Dictionary
         of data that you want to use for the pointLabel
 

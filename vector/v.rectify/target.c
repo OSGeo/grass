@@ -26,7 +26,19 @@ int get_target(char *group)
 
     sprintf(buf, "%s/%s", G_gisdbase(), location);
     if (access(buf, 0) != 0) {
+<<<<<<< HEAD
         sprintf(buf, _("Target location <%s> not found"), location);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        sprintf(buf, _("Target project <%s> not found"), location);
+=======
+        sprintf(buf, _("Target location <%s> not found"), location);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        sprintf(buf, _("Target location <%s> not found"), location);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         goto error;
     }
     select_target_env();
@@ -37,7 +49,7 @@ int get_target(char *group)
         select_current_env();
         return 1;
     }
-    sprintf(buf, _("Mapset <%s> in target location <%s> - "), mapset, location);
+    sprintf(buf, _("Mapset <%s> in target project <%s> - "), mapset, location);
     strcat(buf, stat == 0 ? _("permission denied") : _("not found"));
 error:
     strcat(buf, _("Please run i.target for group."));

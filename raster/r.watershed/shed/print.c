@@ -72,6 +72,77 @@ int print_output(OUTPUT *output)
                     Rast_get_c_cat(&(do_cat->cat_val), &(output->maps[b].cats));
                 switch (output->type_area) {
                 case 1:
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    snprintf(area, sizeof(area), "%.3f acres",
+                             METERSQ_TO_ACRE * cell_size * do_cat->num_cat);
+=======
+                    sprintf(area, "%.3f acres",
+                            METERSQ_TO_ACRE * cell_size * do_cat->num_cat);
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+                    break;
+                case 2:
+                    snprintf(area, sizeof(area), "%.2f sq. meters",
+                             cell_size * do_cat->num_cat);
+                    break;
+                case 3:
+                    snprintf(area, sizeof(area), "%.4f sq. miles",
+                             METERSQ_TO_MILESQ * cell_size * do_cat->num_cat);
+                    break;
+                case 4:
+                    snprintf(area, sizeof(area), "%.3f hectacres",
+                             METERSQ_TO_HECTACRE * cell_size * do_cat->num_cat);
+                    break;
+                case 5:
+                    snprintf(area, sizeof(area), "%.3f sq. km.",
+                             METERSQ_TO_KILOSQ * cell_size * do_cat->num_cat);
+                    break;
+                case 6:
+                    snprintf(area, sizeof(area), "%6d cells", do_cat->num_cat);
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+                    sprintf(area, "%.3f acres",
+                            METERSQ_TO_ACRE * cell_size * do_cat->num_cat);
+=======
+                    snprintf(area, sizeof(area), "%.3f acres",
+                             METERSQ_TO_ACRE * cell_size * do_cat->num_cat);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+                    break;
+                case 2:
+                    snprintf(area, sizeof(area), "%.2f sq. meters",
+                             cell_size * do_cat->num_cat);
+                    break;
+                case 3:
+                    snprintf(area, sizeof(area), "%.4f sq. miles",
+                             METERSQ_TO_MILESQ * cell_size * do_cat->num_cat);
+                    break;
+                case 4:
+                    snprintf(area, sizeof(area), "%.3f hectacres",
+                             METERSQ_TO_HECTACRE * cell_size * do_cat->num_cat);
+                    break;
+                case 5:
+                    snprintf(area, sizeof(area), "%.3f sq. km.",
+                             METERSQ_TO_KILOSQ * cell_size * do_cat->num_cat);
+                    break;
+                case 6:
+<<<<<<< HEAD
+                    sprintf(area, "%6d cells", do_cat->num_cat);
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    snprintf(area, sizeof(area), "%6d cells", do_cat->num_cat);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+=======
+>>>>>>> osgeo-main
                     snprintf(area, sizeof(area), "%.3f acres",
                              METERSQ_TO_ACRE * cell_size * do_cat->num_cat);
                     break;
@@ -93,6 +164,11 @@ int print_output(OUTPUT *output)
                     break;
                 case 6:
                     snprintf(area, sizeof(area), "%6d cells", do_cat->num_cat);
+<<<<<<< HEAD
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                     break;
                 }
                 fprintf(output->out_file, "%3d %-43s %16s %-.4f\n",

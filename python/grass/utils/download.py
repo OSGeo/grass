@@ -30,7 +30,19 @@ def debug(*args, **kwargs):
     dependency if this is used from grass.script, so this is a wrapper which lazy
     imports the standard function.
     """
+<<<<<<< HEAD
     # Lazy import to avoding potential circular dependency.
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    # Lazy import to avoiding potential circular dependency.
+=======
+    # Lazy import to avoding potential circular dependency.
+>>>>>>> 6d691c8cd4 (wxGUI/splashscreen: use standard one, try to show it before main app, increase timeout (#1718))
+=======
+    # Lazy import to avoding potential circular dependency.
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     import grass.script as gs  # pylint: disable=import-outside-toplevel
 
     gs.debug(*args, **kwargs)
@@ -52,7 +64,33 @@ def extract_tar(name, directory, tmpdir):
         tar = tarfile.open(name)
         extract_dir = os.path.join(tmpdir, "extract_dir")
         os.mkdir(extract_dir)
+<<<<<<< HEAD
         tar.extractall(path=extract_dir)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+        # Extraction filters were added in Python 3.12,
+        # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
+        # See
+        # https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
+        # and https://peps.python.org/pep-0706/
+        # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
+        # and in Python 3.14, `filter='data'` will be the default
+        if hasattr(tarfile, "data_filter"):
+            tar.extractall(path=extract_dir, filter="data")
+        else:
+            # Remove this when no longer needed
+            debug(_("Extracting may be unsafe; consider updating Python"))
+            tar.extractall(path=extract_dir)
+
+=======
+        tar.extractall(path=extract_dir)
+>>>>>>> 6d691c8cd4 (wxGUI/splashscreen: use standard one, try to show it before main app, increase timeout (#1718))
+=======
+        tar.extractall(path=extract_dir)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         files = os.listdir(extract_dir)
         _move_extracted_files(
             extract_dir=extract_dir, target_dir=directory, files=files

@@ -8,7 +8,17 @@
  *               Markus Neteler <neteler itc.it>,
  *               Martin Landa <landa.martin gmail.com> (bbox)
  * PURPOSE:
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+ * COPYRIGHT:    (C) 2002-2024 by the GRASS Development Team
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
  * COPYRIGHT:    (C) 2002-2006 by the GRASS Development Team
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -22,7 +32,7 @@
  **
  **
  **  no checking is done for overlapping lines.
- **  header information will have to be editted afterwards.
+ **  header information will have to be edited afterwards.
  */
 
 /*
@@ -416,7 +426,19 @@ int main(int argc, char *argv[])
             Vect_copy_head_data(&InMap, &OutMap);
 
         if (do_table) {
+<<<<<<< HEAD
             add_cat = maxcat + 1;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            add_cat = maxcat;
+=======
+            add_cat = maxcat + 1;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            add_cat = maxcat + 1;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         }
         else {
             add_cat = 0;

@@ -71,7 +71,17 @@ struct Site *nextone(void)
         return ((struct Site *)NULL);
 }
 
+<<<<<<< HEAD
+/* removes duplicate sites that would break the voronoi algorithm */
+=======
 /* removes duplicate sites that would break the voronoi alghoritm */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 void removeDuplicates(void)
 {
     int i, j;
@@ -379,6 +389,26 @@ int readbounds(void)
          * must be >= 2 */
         /* count number of valid boundaries */
         nlines = Vect_get_node_n_lines(&In, node);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        nconnected = 0;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        nconnected = 0;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        nconnected = 0;
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         Vect_reset_list(linelist);
         Vect_reset_list(arealist);
 
@@ -393,6 +423,26 @@ int readbounds(void)
             if (n_areas(abs(line), &area_id) == 1) {
                 Vect_list_append(linelist, line);
                 Vect_list_append(arealist, area_id);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+                nconnected++;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                nconnected++;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+                nconnected++;
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
             }
         }
 

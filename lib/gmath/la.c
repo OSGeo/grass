@@ -861,11 +861,31 @@ int G_matvect_extract_vector(mat_struct *mt, vtype vt, int indx)
     case RVEC: {
         mt->type = ROWVEC_;
         mt->v_indx = indx;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        break;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     }
 
     case CVEC: {
         mt->type = COLVEC_;
         mt->v_indx = indx;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        break;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     }
 
     default: {
@@ -1291,7 +1311,30 @@ double G_vector_norm1(vec_struct *vc)
 
     if (!vc->is_init) {
         G_warning(_("Matrix is not initialised"));
+<<<<<<< HEAD
         return NAN;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        return NAN;
+=======
+        return 0.0 / 0.0; /* NaN */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        return 0.0 / 0.0; /* NaN */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        return NAN;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        return 0.0 / 0.0; /* NaN */
+=======
+        return NAN;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     }
 
     idx = (vc->v_indx > 0) ? vc->v_indx : 0;

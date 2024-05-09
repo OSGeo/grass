@@ -34,7 +34,7 @@ static float RASTER3D_MASKNUMmaskValue;
 
 /*--------------------------------------------------------------------------*/
 
-int Rast3d_mask_close()
+int Rast3d_mask_close(void)
 {
     /* No Idea if this is correct return value */
     if (!Rast3d_maskMapExistsVar)
@@ -304,12 +304,39 @@ void Rast3d_mask_tile(RASTER3D_Map *map, int tileIndex, void *tile, int type)
         for (dy = y; dy < rows; dy++) {
             for (dx = x; dx < cols; dx++) {
                 RASTER3D_MASKNUM(map, dx, dy, dz, tile, type);
+<<<<<<< HEAD
                 tile += length;
             }
 
             tile += xLength;
         }
         tile += yLength;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                tile = (char *)tile + length;
+            }
+
+            tile = (char *)tile + xLength;
+        }
+        tile = (char *)tile + yLength;
+=======
+                tile += length;
+            }
+
+            tile += xLength;
+        }
+        tile += yLength;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                tile += length;
+            }
+
+            tile += xLength;
+        }
+        tile += yLength;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     }
 }
 

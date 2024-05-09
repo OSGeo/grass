@@ -67,7 +67,6 @@ sources and tools:
 """
 
 import os
-import sys
 import zlib
 
 try:
@@ -80,10 +79,6 @@ try:
 except ImportError:
     PIL = None
 
-
-# True if we are running on Python 3.
-# Code taken from six.py by Benjamin Peterson (MIT licensed)
-PY3 = sys.version_info[0] == 3
 
 string_types = (str,)
 integer_types = (int,)
@@ -105,7 +100,7 @@ def checkImages(images):
 
     for im in images:
         if PIL and isinstance(im, PIL.Image.Image):
-            # We assume PIL images are allright
+            # We assume PIL images are alright
             images2.append(im)
 
         elif np and isinstance(im, np.ndarray):
@@ -175,7 +170,6 @@ class BitArray:
         return self
 
     def Append(self, bits):
-
         # check input
         if isinstance(bits, BitArray):
             bits = str(bits)
@@ -425,7 +419,6 @@ class Tag:
         return twitsToBits([xmin, xmax, ymin, ymax])
 
     def MakeMatrixRecord(self, scale_xy=None, rot_xy=None, trans_xy=None):
-
         # empty matrix?
         if scale_xy is None and rot_xy is None and trans_xy is None:
             return "0" * 8
@@ -573,7 +566,6 @@ class BitmapTag(DefinitionTag):
         self.imshape = im.shape
 
     def ProcessTag(self):
-
         # build tag
         bb = binary_type()
         bb += intToUint16(self.id)  # CharacterID
@@ -675,7 +667,6 @@ class ShapeTag(DefinitionTag):
         # self.bytes = bb
 
     def MakeStyleChangeRecord(self, lineStyle=None, fillStyle=None, moveTo=None):
-
         # first 6 flags
         # Note that we use FillStyle1. If we don't flash (at least 8) does not
         # recognize the frames properly when importing to library.
@@ -905,7 +896,7 @@ def readSwf(filename, asNumpy=True):
 
     # Check whether it exists
     if not os.path.isfile(filename):
-        raise IOError("File not found: " + str(filename))
+        raise OSError("File not found: " + str(filename))
 
     # Check PIL
     if (not asNumpy) and (PIL is None):
@@ -931,7 +922,7 @@ def readSwf(filename, asNumpy=True):
             # Decompress movie
             bb = bb[:8] + zlib.decompress(bb[8:])
         else:
-            raise IOError("Not a valid SWF file: " + str(filename))
+            raise OSError("Not a valid SWF file: " + str(filename))
 
         # Set filepointer at first tag (skipping framesize RECT and two uin16's
         i = 8

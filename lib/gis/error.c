@@ -370,7 +370,19 @@ void G_init_logging(void)
     if (!logfile) {
         char buf[GPATH_MAX];
 
+<<<<<<< HEAD
         sprintf(buf, "%s/GIS_ERROR_LOG", G__home());
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, GPATH_MAX, "%s/GIS_ERROR_LOG", G__home());
+=======
+        sprintf(buf, "%s/GIS_ERROR_LOG", G__home());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        sprintf(buf, "%s/GIS_ERROR_LOG", G__home());
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         logfile = G_store(buf);
     }
 

@@ -11,6 +11,7 @@
  * \date 2005-2018
  */
 
+#include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -108,7 +109,19 @@ static int seg_format(int fd, off_t nrows, off_t ncols, int srows, int scols,
     int spr, size;
 
     if (nrows <= 0 || ncols <= 0 || len <= 0 || srows <= 0 || scols <= 0) {
+<<<<<<< HEAD
         G_warning("Segment_format(fd,%" PRI_OFF_T ",%" PRI_OFF_T
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        G_warning("Segment_format(fd,%" PRId64 ",%" PRId64
+=======
+        G_warning("Segment_format(fd,%" PRI_OFF_T ",%" PRI_OFF_T
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G_warning("Segment_format(fd,%" PRI_OFF_T ",%" PRI_OFF_T
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                   ",%d,%d,%d): illegal value(s)",
                   nrows, ncols, srows, scols, len);
         return -3;
@@ -225,7 +238,30 @@ static int zero_fill(int fd, off_t nbytes)
         *b++ = 0;
 
     while (nbytes > 0) {
+<<<<<<< HEAD
         n = nbytes > (int)sizeof(buf) ? (int)sizeof(buf) : nbytes;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        n = nbytes > (int)sizeof(buf) ? (int)sizeof(buf) : nbytes;
+=======
+        n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        n = nbytes > (int)sizeof(buf) ? (int)sizeof(buf) : nbytes;
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+        n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
+=======
+        n = nbytes > (int)sizeof(buf) ? (int)sizeof(buf) : nbytes;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         errno = 0;
         if (write(fd, buf, n) != n) {
             int err = errno;

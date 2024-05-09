@@ -73,7 +73,7 @@ void Rast_quant_free(struct Quant *q)
  *  Organizes fp_lookup table for faster (logarithmic) lookup time
  *  G_quant_organize_fp_lookup() creates a list of min and max for
  *  each quant rule, sorts this list, and stores the pointer to quant
- *  rule that should be used inbetween any 2 numbers in this list.
+ *  rule that should be used in between any 2 numbers in this list.
  *  Also it stores extreme points for 2 infinite rules, if exist.
  *  After the call to G_quant_organize_fp_lookup()
  *  instead of linearly searching through list of rules to find
@@ -124,7 +124,19 @@ int Rast__quant_organize_fp_lookup(struct Quant *q)
         qsort((char *)q->fp_lookup.vals, q->fp_lookup.nalloc, sizeof(DCELL),
               double_comp);
 
+<<<<<<< HEAD
         /* now find the rule to apply inbetween each 2 values in a list */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        /* now find the rule to apply in between each 2 values in a list */
+=======
+        /* now find the rule to apply inbetween each 2 values in a list */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        /* now find the rule to apply inbetween each 2 values in a list */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         for (i = 0; i < q->fp_lookup.nalloc - 1; i++) {
             /*debug
                fprintf (stderr, "%lf %lf ", q->fp_lookup.vals[i],
@@ -595,7 +607,30 @@ CELL Rast_quant_get_cell_value(struct Quant *q, DCELL dcellVal)
     DCELL dtmp;
     int try, min_ind, max_ind;
     struct Quant_table *p;
+<<<<<<< HEAD
     int (*lower)(double, double);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int (*lower)(double, double);
+=======
+    int (*lower)();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int (*lower)();
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int (*lower)(double, double);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    int (*lower)();
+=======
+    int (*lower)(double, double);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
     dtmp = dcellVal;
     /* I know the functions which call me already check for null values,

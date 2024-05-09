@@ -88,9 +88,38 @@ static void print_escaped_for_xml(FILE *fp, const char *str)
     }
 
 #ifdef HAVE_ICONV_H
+<<<<<<< HEAD
     if (enc) {
         G_freea(enc);
     }
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (enc) {
+        G_freea(enc);
+    }
+=======
+    if (enc)
+        G_freea(enc);
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    if (enc)
+        G_freea(enc);
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+=======
+    if (enc) {
+        G_freea(enc);
+    }
+<<<<<<< HEAD
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
     if (conv != (iconv_t)-1)
         iconv_close(conv);
@@ -152,7 +181,19 @@ void G__usage_xml(void)
 
     if (st->module_info.keywords) {
         fprintf(stdout, "\t<keywords>\n\t\t");
+<<<<<<< HEAD
         G__print_keywords(stdout, print_escaped_for_xml);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        G__print_keywords(stdout, print_escaped_for_xml, FALSE);
+=======
+        G__print_keywords(stdout, print_escaped_for_xml);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        G__print_keywords(stdout, print_escaped_for_xml);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         fprintf(stdout, "\n\t</keywords>\n");
     }
 

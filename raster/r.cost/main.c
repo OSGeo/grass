@@ -513,7 +513,19 @@ int main(int argc, char *argv[])
         costs.cost_out = dnullval;
         costs.nearest = 0;
 
+<<<<<<< HEAD
         total_cells = nrows * ncols;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        total_cells = (long)nrows * ncols;
+=======
+        total_cells = nrows * ncols;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        total_cells = nrows * ncols;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
         skip_nulls = Rast_is_d_null_value(&null_cost);
 
@@ -815,7 +827,7 @@ int main(int argc, char *argv[])
      */
 
     G_debug(1, "total cells: %ld", total_cells);
-    G_debug(1, "nrows x ncols: %d", nrows * ncols);
+    G_debug(1, "nrows x ncols: %ld", (long)nrows * ncols);
     G_message(_("Finding cost path..."));
     n_processed = 0;
     visited = flag_create(nrows, ncols);

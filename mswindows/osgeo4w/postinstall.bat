@@ -24,6 +24,18 @@ rem GISRC must be set
 set GISRC=dummy
 
 rem run g.mkfontcap outside a GRASS session
+<<<<<<< HEAD
 "%GISBASE%\bin\g.mkfontcap.exe" -o
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+"%GISBASE%\bin\g.mkfontcap.exe" --overwrite
+=======
+"%GISBASE%\bin\g.mkfontcap.exe" -o
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+"%GISBASE%\bin\g.mkfontcap.exe" -o
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 del "%BATCH%.tmpl

@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     int nrows, ncols;
     int row, col;
 
-    /* parser stuctures definition */
+    /* parser structures definition */
     struct GModule *module;
     struct Option *input_RNET, *input_TEMPKAVG, *input_TEMPKMIN;
     struct Option *input_TEMPKMAX, *input_P;

@@ -10,11 +10,17 @@ char *OGR_list_write_drivers(void)
     int i, count;
     size_t len;
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #if GDAL_VERSION_NUM >= 2000000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     GDALDriverH hDriver;
-#else
-    OGRSFDriverH Ogr_driver;
-#endif
     char buf[2000];
 
     char **list, *ret;
@@ -22,7 +28,16 @@ char *OGR_list_write_drivers(void)
     list = NULL;
     count = len = 0;
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #if GDAL_VERSION_NUM >= 2000000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     /* get GDAL driver names */
     GDALAllRegister();
     G_debug(2, "driver count = %d", GDALGetDriverCount());
@@ -47,6 +62,8 @@ char *OGR_list_write_drivers(void)
         list[count++] = G_store(buf);
         len += strlen(buf) + 1; /* + ',' */
     }
+<<<<<<< HEAD
+=======
 #else
     /* get OGR driver names */
     OGRRegisterAll();
@@ -69,6 +86,7 @@ char *OGR_list_write_drivers(void)
         len += strlen(buf) + 1; /* + ',' */
     }
 #endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     qsort(list, count, sizeof(char *), cmp);
 
@@ -99,11 +117,19 @@ int cmp(const void *a, const void *b)
 
 char *default_driver(void)
 {
-#if GDAL_VERSION_NUM >= 2000000
     if (GDALGetDriverByName("GPKG")) {
+<<<<<<< HEAD
+=======
 #else
     if (OGRGetDriverByName("GPKG")) {
 #endif
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         return G_store("GPKG");
     }
 
@@ -116,7 +142,6 @@ void list_formats(void)
 
     G_message(_("Supported formats:"));
 
-#if GDAL_VERSION_NUM >= 2000000
     for (iDriver = 0; iDriver < GDALGetDriverCount(); iDriver++) {
         GDALDriverH hDriver = GDALGetDriver(iDriver);
         const char *pszRWFlag;
@@ -134,6 +159,8 @@ void list_formats(void)
         fprintf(stdout, " %s (%s): %s\n", GDALGetDriverShortName(hDriver),
                 pszRWFlag, GDALGetDriverLongName(hDriver));
     }
+<<<<<<< HEAD
+=======
 
 #else
     for (iDriver = 0; iDriver < OGRGetDriverCount(); iDriver++) {
@@ -149,4 +176,5 @@ void list_formats(void)
                 OGR_Dr_GetName(poDriver));
     }
 #endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 }

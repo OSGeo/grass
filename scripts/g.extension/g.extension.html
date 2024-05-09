@@ -35,7 +35,26 @@ is available.
 GRASS GIS extensions are installed by <em>g.extension</em> into a dedicated
 directory.
 The default is a directory for application data and settings inside
+<<<<<<< HEAD
 the user's home directory.
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+the user's home directory.
+=======
+the user's home directory. 
+<<<<<<< HEAD
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+the user's home directory.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+the user's home directory.
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 On GNU/Linux it is <tt>$HOME/.grass8/addons</tt>,
 on MS-Windows it is <tt>%APPDATA%\Roaming\GRASS8\addons</tt>.
 The name of the directory is stored in the <tt>GRASS_ADDON_BASE</tt>
@@ -75,21 +94,36 @@ a new module.
 To keep the directory clean, the directory content is copied
 to a temporary directory and the compilation happens there.
 
-<h4>Local source code ZIP file</h4>
+<h4>Source code in a ZIP or TAR archive</h4>
 In addition, new extension can be also installed from a ZIP file
 or an archive file from the TAR family (e.g., <tt>.tar.gz</tt> or <tt>.bz2</tt>).
-The file can be on disk (specified with a path), or on web (specified by
+The file can be on disk (specified with a path), or on the web (specified by
 an URL).
 
 <h4>Online repositories: GitHub, GitLab and Bitbucket</h4>
 For well known general hosting services, namely GitHub, GitLab and Bitbucket,
-<em>g.extension</em> supports the download of a repository as a ZIP file.
+<em>g.extension</em> supports the download of a repository.
 Here the user only needs to provide a base URL to the repository web page
 (with or without the <tt>https://</tt> part).
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+For GitHub, GitLab and Bitbucket, the latest source code in the default
+branch is downloaded, unless a specific branch is requested in the
+<em>branch</em> option.
+
+Of course, a user can still specify the full URL of a ZIP file e.g. for a
+specific release and install the archived code in this way (ZIP file mechanism
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 For GitLab and Bitbucket, the latest source code in the default branch is
 downloaded, for GitHub, the latest source code in the master branch is downloaded.
 Of course, a user can still specify the full URL of a ZIP file
 and install a specific branch or release in this way (ZIP file mechanism
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 will be applied).
 
 <p>
@@ -98,12 +132,12 @@ extensions (addons) and few other metadata-related operations which
 depend on a specific infrastructure.
 For other sources and repositories, this is not supported because it is
 assumed that other sources contain only one extension, typically a module
-or group of modules.
+or group of modules with a Makefile at the root of the repository.
 
 <h4>Needed directory layout</h4>
 When none of the above sources is identified, <em>g.extension</em> assumes
 <!-- TODO: update this description -->
-that the source is in a GitHub repository and uses the <em>svn</em> command
+that the source is in a GitHub repository and uses the <em>git</em> command
 line tool to obtain the source code. The expected structure of the repository
 should be the same as the one of the official repository.
 
@@ -225,6 +259,27 @@ one can install it using:
 g.extension r.example url=/local/directory/r.example/
 </pre></div>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<h2>REQUIREMENTS</h2>
+In order to clone source code repositories, the <em>git</em> command line
+tool is required. The installation of single AddOns is most efficient with
+versions of git that support so called <i>sparse checkout</i>, which was
+introduced with version 2.25. With older versions of git, the entire AddOns
+repository will be downloaded.
+
+On UNIX like systems, installation is done with the
+<em>make</em> command line tool. For AddOns written in C / C++, a respective
+build environment is needed.
+
+
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 <h2>KNOWN ISSUES</h2>
 
 Toolboxes in the official repository cannot be downloaded.

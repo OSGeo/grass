@@ -591,6 +591,10 @@ int main(int argc, char *argv[])
 #else
     threads = 1;
 #endif
+    if (threads > 1 && G_find_raster("MASK", G_mapset()) != NULL) {
+        G_warning(_("Parallel processing disabled due to active MASK."));
+        threads = 1;
+    }
     G_message(_("Number of threads <%d>"), threads);
 
     if (civiltime != NULL) {
@@ -797,6 +801,7 @@ int main(int argc, char *argv[])
         struct Key_Value *in_proj_info, *in_unit_info;
 
         if ((in_proj_info = G_get_projinfo()) == NULL)
+<<<<<<< HEAD
             G_fatal_error(_("Can't get projection info of current location"));
 
         if ((in_unit_info = G_get_projunits()) == NULL)
@@ -812,13 +817,71 @@ int main(int argc, char *argv[])
         oproj.pj = NULL;
         tproj.def = NULL;
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            G_fatal_error(_("Can't get projection info of current project"));
+
+        if ((in_unit_info = G_get_projunits()) == NULL)
+            G_fatal_error(_("Can't get projection units of current project"));
+
+        if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
+            G_fatal_error(
+                _("Can't get projection key values of current project"));
+=======
+            G_fatal_error(_("Can't get projection info of current location"));
+
+        if ((in_unit_info = G_get_projunits()) == NULL)
+            G_fatal_error(_("Can't get projection units of current location"));
+
+        if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
+            G_fatal_error(
+                _("Can't get projection key values of current location"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+
+        G_free_key_value(in_proj_info);
+        G_free_key_value(in_unit_info);
+
+        oproj.pj = NULL;
+        tproj.def = NULL;
+
+=======
+            G_fatal_error(_("Can't get projection info of current location"));
+
+        if ((in_unit_info = G_get_projunits()) == NULL)
+            G_fatal_error(_("Can't get projection units of current location"));
+
+        if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
+            G_fatal_error(
+                _("Can't get projection key values of current location"));
+
+        G_free_key_value(in_proj_info);
+        G_free_key_value(in_unit_info);
+
+        oproj.pj = NULL;
+        tproj.def = NULL;
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
             G_fatal_error(_("Unable to initialize coordinate transformation"));
     }
 
     if ((latin != NULL || longin != NULL) && (G_projection() == PROJECTION_LL))
         G_warning(_("latin and longin raster maps have no effect when in a "
+<<<<<<< HEAD
                     "Lat/Lon location"));
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "Lat/Lon project"));
+=======
+                    "Lat/Lon location"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    "Lat/Lon location"));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     /* true about longin= when civiltime is used? */
     /* civiltime needs longin= but not latin= for non-LL projections -
        better would be it just use pj_proj() if it needs those?? */
@@ -1690,6 +1753,17 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     double locTimeOffset;
     double latitude, longitude;
     double coslat = 0.0;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    bool shouldBeBestAM = false;
+    bool isBestAM = false;
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     struct SunGeometryConstDay sunGeom;
     struct SunGeometryVarDay sunVarGeom;
@@ -1817,7 +1891,20 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     latitude, longitude, sin_phi_l, latid_l, sin_u, cos_u, sin_v, cos_v, lum,  \
     gridGeom, elevin, aspin, slopein, civiltime, linkein, albedo, latin,       \
     coefbh, coefdh, incidout, longin, horizon, beam_rad, insol_time, diff_rad, \
+<<<<<<< HEAD
     refl_rad, glob_rad, mapset, per, decimals, str_step)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    refl_rad, glob_rad, mapset, per, decimals, str_step, shouldBeBestAM,       \
+    isBestAM)
+=======
+    refl_rad, glob_rad, mapset, per, decimals, str_step)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    refl_rad, glob_rad, mapset, per, decimals, str_step)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         {
 #pragma omp for schedule(dynamic) firstprivate(sunGeom, sunVarGeom,      \
                                                sunSlopeGeom, sunRadVar)  \
@@ -1937,6 +2024,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 
                     q1 = gridGeom.sinlat * cos_u * sin_v +
                          gridGeom.coslat * sin_u;
+<<<<<<< HEAD
                     tan_lam_l = -cos_u * cos_v / q1;
                     sunSlopeGeom.longit_l = atan(tan_lam_l);
                     sunSlopeGeom.lum_C31_l = cos(latid_l) * sunGeom.cosdecl;
@@ -1987,6 +2075,177 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
                                 (float)(Pbeam_e + Pdiff_e + Prefl_e);
                     }
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+                    if (q1 != 0.0) {
+                        tan_lam_l = -cos_u * cos_v / q1;
+                        sunSlopeGeom.longit_l = atan(tan_lam_l);
+                        isBestAM = (tan_lam_l > 0);
+                    }
+                    else {
+                        sunSlopeGeom.longit_l = pihalf;
+                        isBestAM = true;
+                    }
+
+                    shouldBeBestAM = (0.0 < sunSlopeGeom.aspect &&
+                                      sunSlopeGeom.aspect <= M_PI);
+                    sunSlopeGeom.shift12hrs = (shouldBeBestAM != isBestAM);
+
+                    sunSlopeGeom.lum_C31_l = cos(latid_l) * sunGeom.cosdecl;
+                    sunSlopeGeom.lum_C33_l = sin_phi_l * sunGeom.sindecl;
+
+                    if ((incidout != NULL) || someRadiation) {
+                        com_par_const(longitTime, &sunGeom, &gridGeom);
+                        sunrise_min = AMIN1(sunrise_min, sunGeom.sunrise_time);
+                        sunrise_max = AMAX1(sunrise_max, sunGeom.sunrise_time);
+                        sunset_min = AMIN1(sunset_min, sunGeom.sunset_time);
+                        sunset_max = AMAX1(sunset_max, sunGeom.sunset_time);
+                    }
+
+                    if (incidout != NULL) {
+                        com_par(&sunGeom, &sunVarGeom, &gridGeom, latitude,
+                                longitude);
+                        lum = lumcline2(&sunGeom, &sunVarGeom, &sunSlopeGeom,
+                                        &gridGeom, horizonarray + shadowoffset);
+                        if (lum > 0.) {
+                            lum = rad2deg * asin(lum);
+                            lumcl[j][i] = (float)lum;
+                        }
+                        else
+                            lumcl[j][i] = UNDEFZ;
+                    }
+
+                    double Pbeam_e = 0.;
+                    double Pdiff_e = 0.;
+                    double Prefl_e = 0.;
+                    double Pinsol_t = 0.;
+
+                    if (someRadiation) {
+                        joules2(
+                            &sunGeom, &sunVarGeom, &sunSlopeGeom, &sunRadVar,
+                            &gridGeom, horizonarray + shadowoffset, latitude,
+                            longitude, &Pbeam_e, &Pdiff_e, &Prefl_e, &Pinsol_t);
+                        if (beam_rad != NULL)
+                            beam[j][i] = (float)Pbeam_e;
+                        if (insol_time != NULL)
+                            insol[j][i] = (float)Pinsol_t;
+                        /*  G_debug(3,"\n %f",insol[j][i]); */
+                        if (diff_rad != NULL)
+                            diff[j][i] = (float)Pdiff_e;
+                        if (refl_rad != NULL)
+                            refl[j][i] = (float)Prefl_e;
+                        if (glob_rad != NULL)
+                            globrad[j][i] =
+                                (float)(Pbeam_e + Pdiff_e + Prefl_e);
+                    }
+
+=======
+                    tan_lam_l = -cos_u * cos_v / q1;
+                    sunSlopeGeom.longit_l = atan(tan_lam_l);
+                    sunSlopeGeom.lum_C31_l = cos(latid_l) * sunGeom.cosdecl;
+                    sunSlopeGeom.lum_C33_l = sin_phi_l * sunGeom.sindecl;
+
+                    if ((incidout != NULL) || someRadiation) {
+                        com_par_const(longitTime, &sunGeom, &gridGeom);
+                        sunrise_min = AMIN1(sunrise_min, sunGeom.sunrise_time);
+                        sunrise_max = AMAX1(sunrise_max, sunGeom.sunrise_time);
+                        sunset_min = AMIN1(sunset_min, sunGeom.sunset_time);
+                        sunset_max = AMAX1(sunset_max, sunGeom.sunset_time);
+                    }
+
+                    if (incidout != NULL) {
+                        com_par(&sunGeom, &sunVarGeom, &gridGeom, latitude,
+                                longitude);
+                        lum = lumcline2(&sunGeom, &sunVarGeom, &sunSlopeGeom,
+                                        &gridGeom, horizonarray + shadowoffset);
+                        if (lum > 0.) {
+                            lum = rad2deg * asin(lum);
+                            lumcl[j][i] = (float)lum;
+                        }
+                        else
+                            lumcl[j][i] = UNDEFZ;
+                    }
+
+                    double Pbeam_e = 0.;
+                    double Pdiff_e = 0.;
+                    double Prefl_e = 0.;
+                    double Pinsol_t = 0.;
+
+                    if (someRadiation) {
+                        joules2(
+                            &sunGeom, &sunVarGeom, &sunSlopeGeom, &sunRadVar,
+                            &gridGeom, horizonarray + shadowoffset, latitude,
+                            longitude, &Pbeam_e, &Pdiff_e, &Prefl_e, &Pinsol_t);
+                        if (beam_rad != NULL)
+                            beam[j][i] = (float)Pbeam_e;
+                        if (insol_time != NULL)
+                            insol[j][i] = (float)Pinsol_t;
+                        /*  G_debug(3,"\n %f",insol[j][i]); */
+                        if (diff_rad != NULL)
+                            diff[j][i] = (float)Pdiff_e;
+                        if (refl_rad != NULL)
+                            refl[j][i] = (float)Prefl_e;
+                        if (glob_rad != NULL)
+                            globrad[j][i] =
+                                (float)(Pbeam_e + Pdiff_e + Prefl_e);
+                    }
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    tan_lam_l = -cos_u * cos_v / q1;
+                    sunSlopeGeom.longit_l = atan(tan_lam_l);
+                    sunSlopeGeom.lum_C31_l = cos(latid_l) * sunGeom.cosdecl;
+                    sunSlopeGeom.lum_C33_l = sin_phi_l * sunGeom.sindecl;
+
+                    if ((incidout != NULL) || someRadiation) {
+                        com_par_const(longitTime, &sunGeom, &gridGeom);
+                        sunrise_min = AMIN1(sunrise_min, sunGeom.sunrise_time);
+                        sunrise_max = AMAX1(sunrise_max, sunGeom.sunrise_time);
+                        sunset_min = AMIN1(sunset_min, sunGeom.sunset_time);
+                        sunset_max = AMAX1(sunset_max, sunGeom.sunset_time);
+                    }
+
+                    if (incidout != NULL) {
+                        com_par(&sunGeom, &sunVarGeom, &gridGeom, latitude,
+                                longitude);
+                        lum = lumcline2(&sunGeom, &sunVarGeom, &sunSlopeGeom,
+                                        &gridGeom, horizonarray + shadowoffset);
+                        if (lum > 0.) {
+                            lum = rad2deg * asin(lum);
+                            lumcl[j][i] = (float)lum;
+                        }
+                        else
+                            lumcl[j][i] = UNDEFZ;
+                    }
+
+                    double Pbeam_e = 0.;
+                    double Pdiff_e = 0.;
+                    double Prefl_e = 0.;
+                    double Pinsol_t = 0.;
+
+                    if (someRadiation) {
+                        joules2(
+                            &sunGeom, &sunVarGeom, &sunSlopeGeom, &sunRadVar,
+                            &gridGeom, horizonarray + shadowoffset, latitude,
+                            longitude, &Pbeam_e, &Pdiff_e, &Prefl_e, &Pinsol_t);
+                        if (beam_rad != NULL)
+                            beam[j][i] = (float)Pbeam_e;
+                        if (insol_time != NULL)
+                            insol[j][i] = (float)Pinsol_t;
+                        /*  G_debug(3,"\n %f",insol[j][i]); */
+                        if (diff_rad != NULL)
+                            diff[j][i] = (float)Pdiff_e;
+                        if (refl_rad != NULL)
+                            refl[j][i] = (float)Prefl_e;
+                        if (glob_rad != NULL)
+                            globrad[j][i] =
+                                (float)(Pbeam_e + Pdiff_e + Prefl_e);
+                    }
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 } /* undefs */
             }
         }
@@ -2114,7 +2373,7 @@ double com_declin(int no_of_day)
 
 int test(void)
 {
-    /* not finshed yet */
+    /* not finished yet */
     int dej;
 
     G_message("\n ddd: %f", declin);

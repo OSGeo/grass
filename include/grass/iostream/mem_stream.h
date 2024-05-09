@@ -167,7 +167,30 @@ template <class T>
 char *MEM_STREAM<T>::sprint()
 {
     static char buf[BUFSIZ];
+<<<<<<< HEAD
     snprintf(buf, sizeof(buf), "[MEM_STREAM %d]", stream_len());
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, sizeof(buf), "[MEM_STREAM %d]", stream_len());
+=======
+    sprintf(buf, "[MEM_STREAM %d]", stream_len());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    sprintf(buf, "[MEM_STREAM %d]", stream_len());
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(buf, sizeof(buf), "[MEM_STREAM %d]", stream_len());
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    sprintf(buf, "[MEM_STREAM %d]", stream_len());
+=======
+    snprintf(buf, sizeof(buf), "[MEM_STREAM %d]", stream_len());
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     return buf;
 }
 

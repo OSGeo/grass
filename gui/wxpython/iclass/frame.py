@@ -19,7 +19,6 @@ for details.
 """
 
 import os
-import six
 import copy
 import tempfile
 
@@ -95,7 +94,20 @@ class IClassMapPanel(DoubleMapPanel):
         """
         :param parent: (no parent is expected)
         :param title: window title
+<<<<<<< HEAD
         :param toolbars: dictionary of active toolbars (default value represents all toolbars)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        :param toolbars: dictionary of active toolbars (default value represents all
+                         toolbars)
+=======
+        :param toolbars: dictionary of active toolbars (default value represents all toolbars)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        :param toolbars: dictionary of active toolbars (default value represents all toolbars)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         :param size: default size
         """
         DoubleMapPanel.__init__(
@@ -113,7 +125,17 @@ class IClassMapPanel(DoubleMapPanel):
             self.giface = StandaloneMapDisplayGrassInterface(self)
         self.tree = None
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        # show computation region by default
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         # show computation region by defaut
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
         self.mapWindowProperties.showRegion = True
 
         self.firstMapWindow = IClassVDigitWindow(
@@ -193,9 +215,37 @@ class IClassMapPanel(DoubleMapPanel):
             sb.SbCoordinates,
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
+<<<<<<< HEAD
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbGoTo,
+=======
+            sb.SbShowRegion,
+            sb.SbAlignExtent,
+            sb.SbResolution,
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbGoTo,
+            sb.SbProjection,
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbGoTo,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            sb.SbDisplayGeometry,
+            sb.SbMapScale,
+            sb.SbGoTo,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         ]
         self.statusbar = self.CreateStatusbar(statusbarItems)
         self._addPanes()
@@ -314,7 +364,7 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(1)
                 .Position(0)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "iClass":
@@ -336,7 +386,7 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(2)
                 .Position(0)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "iClassMisc":
@@ -358,10 +408,20 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(1)
                 .Position(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         if name == "vdigit":
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             if "vdigit" not in self.toolbars:
                 self.toolbars[name] = VDigitToolbar(
                     parent=self,
@@ -383,6 +443,36 @@ class IClassMapPanel(DoubleMapPanel):
                     ],
                 )
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+            self.toolbars[name] = VDigitToolbar(
+                parent=self,
+                toolSwitcher=self._toolSwitcher,
+                MapWindow=self.GetFirstWindow(),
+                digitClass=IClassVDigit,
+                giface=self.giface,
+                tools=[
+                    "addArea",
+                    "moveVertex",
+                    "addVertex",
+                    "removeVertex",
+                    "editLine",
+                    "moveLine",
+                    "deleteArea",
+                    "undo",
+                    "redo",
+                    "settings",
+                ],
+            )
+>>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
+=======
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             self._mgr.AddPane(
                 self.toolbars[name],
                 wx.aui.AuiPaneInfo()
@@ -398,7 +488,7 @@ class IClassMapPanel(DoubleMapPanel):
                 .Layer(2)
                 .Row(2)
                 .Position(1)
-                .BestSize((self.toolbars[name].GetBestSize())),
+                .BestSize(self.toolbars[name].GetBestSize()),
             )
 
         self._mgr.Update()
@@ -446,7 +536,7 @@ class IClassMapPanel(DoubleMapPanel):
             .Center()
             .Layer(0)
             .Position(position)
-            .BestSize((self.toolbars[name].GetBestSize())),
+            .BestSize(self.toolbars[name].GetBestSize()),
         )
 
     def _addPaneMapWindow(self, name, position):
@@ -497,7 +587,7 @@ class IClassMapPanel(DoubleMapPanel):
         mapTb.Enable("zoomBack", enable=(len(self.MapWindow.zoomhistory) > 1))
 
         if mapTb.GetActiveMap() != (win == self.secondMapWindow):
-            mapTb.SetActiveMap((win == self.secondMapWindow))
+            mapTb.SetActiveMap(win == self.secondMapWindow)
         self.StatusbarUpdate()
 
     def ActivateFirstMap(self, event=None):
@@ -598,7 +688,6 @@ class IClassMapPanel(DoubleMapPanel):
 
         while True:
             if dlg.ShowModal() == wx.ID_OK:
-
                 if dlg.GetGroupBandsErr(parent=self):
                     g, s = dlg.GetData()
                     group = grass.find_file(name=g, element="group")
@@ -1356,17 +1445,53 @@ class IClassMapPanel(DoubleMapPanel):
 
     def OnZoomIn(self, event):
         """Enable zooming for plots"""
+<<<<<<< HEAD
         super(IClassMapPanel, self).OnZoomIn(event)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        super().OnZoomIn(event)
+=======
+        super(IClassMapPanel, self).OnZoomIn(event)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        super(IClassMapPanel, self).OnZoomIn(event)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         self.plotPanel.EnableZoom(type=1)
 
     def OnZoomOut(self, event):
         """Enable zooming for plots"""
+<<<<<<< HEAD
         super(IClassMapPanel, self).OnZoomOut(event)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        super().OnZoomOut(event)
+=======
+        super(IClassMapPanel, self).OnZoomOut(event)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        super(IClassMapPanel, self).OnZoomOut(event)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         self.plotPanel.EnableZoom(type=-1)
 
     def OnPan(self, event):
         """Enable panning for plots"""
+<<<<<<< HEAD
         super(IClassMapPanel, self).OnPan(event)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        super().OnPan(event)
+=======
+        super(IClassMapPanel, self).OnPan(event)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        super(IClassMapPanel, self).OnPan(event)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         self.plotPanel.EnablePan()
 
     def OnPointer(self, event):
@@ -1447,7 +1572,8 @@ class MapManager:
         """Adds layer to Map and update toolbar
 
         :param str name: layer (raster) name
-        :param str resultsLayer: True if layer is temp. raster showing the results of computation
+        :param str resultsLayer: True if layer is temp. raster showing the results of
+                                 computation
         """
         if resultsLayer and name in [
             layer.GetName() for layer in self.map.GetListOfLayers(name=name)
@@ -1535,7 +1661,7 @@ class MapManager:
     def Render(self):
         """
         .. todo::
-            giface shoud be used instead of this method"""
+            giface should be used instead of this method"""
         self.frame.Render(self.mapWindow)
 
     def RemoveLayer(self, name, idx):
@@ -1598,7 +1724,7 @@ class MapManager:
 
     def GetAlias(self, name):
         """Returns alias for layer"""
-        name = [k for k, v in six.iteritems(self.layerName) if v == name]
+        name = [k for k, v in self.layerName.items() if v == name]
         if name:
             return name[0]
         return None

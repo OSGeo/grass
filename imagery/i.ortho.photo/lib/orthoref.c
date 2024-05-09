@@ -515,7 +515,19 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
                 CC.x[1][0], CC.x[2][0], CC.x[3][0], CC.x[4][0], CC.x[5][0]);
 #endif
 
+<<<<<<< HEAD
         /* Add weigth matrix of unknowns to NN */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        /* Add weight matrix of unknowns to NN */
+=======
+        /* Add weigth matrix of unknowns to NN */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        /* Add weigth matrix of unknowns to NN */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         m_add(&NN, &WT1, &NN);
         /* Solve for delta */
 
@@ -611,8 +623,23 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 /* given ground coordinates (e1,n1,z1) and the solution from above */
 /* compute the photo coordinate (e2,n2) position */
 int I_ortho_ref(double e1, double n1, double z1, double *e2, double *n2,
+<<<<<<< HEAD
                 double *z2, struct Ortho_Camera_File_Ref *cam_info, double XC,
                 double YC, double ZC, MATRIX M)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                double *z2 UNUSED, struct Ortho_Camera_File_Ref *cam_info,
+                double XC, double YC, double ZC, MATRIX M)
+=======
+                double *z2, struct Ortho_Camera_File_Ref *cam_info, double XC,
+                double YC, double ZC, MATRIX M)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                double *z2, struct Ortho_Camera_File_Ref *cam_info, double XC,
+                double YC, double ZC, MATRIX M)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     MATRIX UVW, XYZ;
     double U, V, W;
@@ -679,12 +706,28 @@ int I_ortho_ref(double e1, double n1, double z1, double *e2, double *n2,
     return (1);
 }
 
-/* given the photo coordiantes (e1,n1) and elevation z2  */
+/* given the photo coordinates (e1,n1) and elevation z2  */
 /* and the solution from I_compute_ortho_equation */
 /* compute ground position (e2,n2) */
 int I_inverse_ortho_ref(double e1, double n1, double z1, double *e2, double *n2,
+<<<<<<< HEAD
                         double *z2, struct Ortho_Camera_File_Ref *cam_info,
                         double XC, double YC, double ZC, MATRIX M)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                        double *z2 UNUSED,
+                        struct Ortho_Camera_File_Ref *cam_info, double XC,
+                        double YC, double ZC, MATRIX M)
+=======
+                        double *z2, struct Ortho_Camera_File_Ref *cam_info,
+                        double XC, double YC, double ZC, MATRIX M)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                        double *z2, struct Ortho_Camera_File_Ref *cam_info,
+                        double XC, double YC, double ZC, MATRIX M)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     MATRIX UVW, XYZ;
     double lam, mu, nu;

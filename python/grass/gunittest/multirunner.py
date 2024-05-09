@@ -9,21 +9,11 @@ for details.
 :authors: Vaclav Petras
 """
 
-from __future__ import print_function
-
 import sys
 import os
 import argparse
 import subprocess
 import locale
-
-try:
-    from itertools import izip as zip
-except ImportError:  # will be 3.x series
-    pass
-
-if sys.version_info.major >= 3:
-    unicode = str
 
 
 def _get_encoding():
@@ -45,7 +35,7 @@ def decode(bytes_, encoding=None):
 
 
 def encode(string, encoding=None):
-    if isinstance(string, unicode):
+    if isinstance(string, str):
         return string.encode(_get_encoding())
     else:
         return string
@@ -55,12 +45,7 @@ def text_to_string(text):
     """Convert text to str. Useful when passing text into environments,
     in Python 2 it needs to be bytes on Windows, in Python 3 in needs unicode.
     """
-    if sys.version[0] == "2":
-        # Python 2
-        return encode(text)
-    else:
-        # Python 3
-        return decode(text)
+    return decode(text)
 
 
 def main():
@@ -121,6 +106,44 @@ def main():
     # TODO: create directory according to date and revision and create reports there
 
     # some predefined variables, name of the GRASS launch script + location/mapset
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+    grass_executable = args.grassbin
+
+    # Software
+    # query GRASS GIS itself for its GISBASE
+    # we assume that the start script is available and in the PATH
+<<<<<<< HEAD
+    # the shell=True is here because of MS Windows? (code taken from wiki)
+    startcmd = grass_executable + " --config path"
+=======
+    # the shell=True is here because of MS Windows? (code taken from wiki)
+    startcmd = grass_executable + " --config path"
+=======
+    # grass8bin = 'C:\Program Files (x86)\GRASS GIS 8.0.git\grass.bat'
+    grass8bin = args.grassbin  # TODO: can be used if pressent
+
+    # Software
+=======
+    # grass8bin = 'C:\Program Files (x86)\GRASS GIS 8.0.git\grass.bat'
+    grass8bin = args.grassbin  # TODO: can be used if pressent
+
+    # Software
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+    # query GRASS GIS 8 itself for its GISBASE
+    # we assume that GRASS GIS' start script is available and in the PATH
+    # the shell=True is here because of MS Windows? (code taken from wiki)
+    startcmd = grass8bin + " --config path"
+<<<<<<< HEAD
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
     grass_executable = args.grassbin
 
     # Software
@@ -128,13 +151,44 @@ def main():
     # we assume that the start script is available and in the PATH
     # the shell=True is here because of MS Windows? (code taken from wiki)
     startcmd = grass_executable + " --config path"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    grass_executable = args.grassbin
+
+    # Software
+    # query GRASS GIS itself for its GISBASE
+    # we assume that the start script is available and in the PATH
+    # the shell=True is here because of MS Windows? (code taken from wiki)
+    startcmd = grass_executable + " --config path"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     p = subprocess.Popen(
         startcmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
     out, err = p.communicate()
     if p.returncode != 0:
         print(
+<<<<<<< HEAD
             "ERROR: Cannot find GRASS GIS start script (%s):\n%s" % (startcmd, err),
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            "ERROR: Cannot find GRASS GIS start script (%s):\n%s" % (startcmd, err),
+=======
+            "ERROR: Cannot find GRASS GIS 8 start script (%s):\n%s" % (startcmd, err),
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+            "ERROR: Cannot find GRASS GIS 8 start script (%s):\n%s" % (startcmd, err),
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+            "ERROR: Cannot find GRASS GIS start script (%s):\n%s" % (startcmd, err),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            "ERROR: Cannot find GRASS GIS start script (%s):\n%s" % (startcmd, err),
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             file=sys.stderr,
         )
         return 1

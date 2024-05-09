@@ -289,20 +289,48 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
         loc_proj_info = G_get_projinfo();
         loc_proj_units = G_get_projunits();
     }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     for (i = 0; i < nlayers; i++) {
         Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
         Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        layer_name = (char *)OGR_FD_GetName(Ogr_featuredefn);
+
+=======
+
+    for (i = 0; i < nlayers; i++) {
+        Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
+        Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #if GDAL_VERSION_NUM < 1110000
         Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
 #endif
         layer_name = (char *)OGR_FD_GetName(Ogr_featuredefn);
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         if (fd) {
             if (print_types) {
                 int proj_same, igeom;
                 OGRSpatialReferenceH Ogr_projection;
 
+<<<<<<< HEAD
 #if GDAL_VERSION_NUM >= 1110000
                 OGRGeomFieldDefnH Ogr_geomdefn;
 #endif
@@ -328,6 +356,50 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
                 }
                 G_suppress_warnings(FALSE);
 #if GDAL_VERSION_NUM >= 1110000
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                OGRGeomFieldDefnH Ogr_geomdefn;
+=======
+#if GDAL_VERSION_NUM >= 1110000
+                OGRGeomFieldDefnH Ogr_geomdefn;
+#endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#if GDAL_VERSION_NUM >= 1110000
+                OGRGeomFieldDefnH Ogr_geomdefn;
+#endif
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+                /* projection check */
+                Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);
+                proj_same = 0;
+                G_suppress_warnings(TRUE);
+                if (GPJ_osr_to_grass(&loc_wind, &proj_info, &proj_units,
+                                     Ogr_projection, 0) < 0) {
+                    G_warning(
+                        _("Unable to convert input map projection to GRASS "
+                          "format. Projection check cannot be provided for "
+                          "OGR layer <%s>"),
+                        layer_name);
+                }
+                else {
+                    if (TRUE == G_compare_projections(loc_proj_info,
+                                                      loc_proj_units, proj_info,
+                                                      proj_units))
+                        proj_same = 1;
+                    else
+                        proj_same = 0;
+                }
+                G_suppress_warnings(FALSE);
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+#if GDAL_VERSION_NUM >= 1110000
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+#if GDAL_VERSION_NUM >= 1110000
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 for (igeom = 0;
                      igeom < OGR_FD_GetGeomFieldCount(Ogr_featuredefn);
                      igeom++) {
@@ -343,11 +415,20 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
                             feature_type(OGRGeometryTypeToName(Ogr_geom_type)),
                             proj_same, OGR_GFld_GetNameRef(Ogr_geomdefn));
                 }
+<<<<<<< HEAD
+=======
 #else
                 fprintf(fd, "%s,%s,%d,\n", layer_name,
                         feature_type(OGRGeometryTypeToName(Ogr_geom_type)),
                         proj_same);
 #endif
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             }
             else {
                 fprintf(fd, "%s\n", layer_name);

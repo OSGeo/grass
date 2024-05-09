@@ -49,7 +49,30 @@ void PNG_draw_bitmap(int ncols, int nrows, int threshold,
                 unsigned int k = buf[j * ncols + i];
                 unsigned int *p = &png.grid[y * png.width + x];
 
+<<<<<<< HEAD
                 if (k > (unsigned int)threshold)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (k > (unsigned int)threshold)
+=======
+                if (k > threshold)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                if (k > threshold)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                if (k > (unsigned int)threshold)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+                if (k > threshold)
+=======
+                if (k > (unsigned int)threshold)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                     *p = png.current_color;
             }
         }

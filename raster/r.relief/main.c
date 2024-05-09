@@ -32,7 +32,7 @@
  * z-exaggeration.
  *
  *   6/2003 fixes for Lat/Long Gordon Keith <gordon.keith@csiro.au>
- *   If n is a number then the ewres and nsres are mulitplied by that scale
+ *   If n is a number then the ewres and nsres are multiplied by that scale
  *    to calculate the shading.
  *   If n is the letter M (either case) the number of metres is degree of
  *    latitude is used as the scale.

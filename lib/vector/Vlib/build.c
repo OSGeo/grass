@@ -32,13 +32,32 @@
 #define SEP "-----------------------------------\n"
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
+<<<<<<< HEAD
 static int format(struct Map_info *Map, int build)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+static int format(struct Map_info *Map UNUSED, int build UNUSED)
+=======
+static int format(struct Map_info *Map, int build)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+static int format(struct Map_info *Map, int build)
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 static int (*Build_array[])(struct Map_info *, int) = {Vect_build_nat
 #ifdef HAVE_OGR
                                                        ,
@@ -54,6 +73,72 @@ static int (*Build_array[])(struct Map_info *, int) = {Vect_build_nat
 #else
                                                        ,
                                                        format
+<<<<<<< HEAD
+=======
+=======
+static int (*Build_array[])() = {Vect_build_nat
+=======
+static int (*Build_array[])(struct Map_info *, int) = {Vect_build_nat
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+#ifdef HAVE_OGR
+                                                       ,
+                                                       Vect_build_ogr,
+                                                       Vect_build_ogr
+#else
+                                                       ,
+                                                       format, format
+#endif
+#ifdef HAVE_POSTGRES
+                                                       ,
+                                                       Vect_build_pg
+#else
+<<<<<<< HEAD
+                                 ,
+                                 format
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+static int (*Build_array[])() = {Vect_build_nat
+#ifdef HAVE_OGR
+                                 ,
+                                 Vect_build_ogr, Vect_build_ogr
+#else
+                                 ,
+                                 format, format
+#endif
+#ifdef HAVE_POSTGRES
+                                 ,
+                                 Vect_build_pg
+#else
+                                 ,
+                                 format
+<<<<<<< HEAD
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                                                       ,
+                                                       format
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+=======
+static int (*Build_array[])(struct Map_info *, int) = {Vect_build_nat
+#ifdef HAVE_OGR
+                                                       ,
+                                                       Vect_build_ogr,
+                                                       Vect_build_ogr
+#else
+                                                       ,
+                                                       format, format
+#endif
+#ifdef HAVE_POSTGRES
+                                                       ,
+                                                       Vect_build_pg
+#else
+                                                       ,
+                                                       format
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 #endif
 };
 
@@ -754,7 +839,7 @@ int Vect_topo_check(struct Map_info *Map, struct Map_info *Err)
 
    \return current highest built level
  */
-int Vect_get_built(const struct Map_info *Map)
+int Vect_get_built(struct Map_info *Map)
 {
     return Map->plus.built;
 }
@@ -930,7 +1015,30 @@ int Vect_build_partial(struct Map_info *Map, int build)
 
     if (plus->built >= GV_BUILD_AREAS) {
         int line, nlines, area, nareas, err_boundaries, err_centr_out,
+<<<<<<< HEAD
             err_centr_dupl /*, err_nocentr */;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            err_centr_dupl /*, err_nocentr */;
+=======
+            err_centr_dupl, err_nocentr;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            err_centr_dupl, err_nocentr;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            err_centr_dupl /*, err_nocentr */;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+            err_centr_dupl, err_nocentr;
+=======
+            err_centr_dupl /*, err_nocentr */;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         struct P_line *Line;
         struct Plus_head *Plus;
 
@@ -962,14 +1070,66 @@ int Vect_build_partial(struct Map_info *Map, int build)
             }
         }
 
+<<<<<<< HEAD
         /* err_nocentr = 0; */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        /* err_nocentr = 0; */
+=======
+        err_nocentr = 0;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        err_nocentr = 0;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        /* err_nocentr = 0; */
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        err_nocentr = 0;
+=======
+        /* err_nocentr = 0; */
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         nareas = Vect_get_num_areas(Map);
         for (area = 1; area <= nareas; area++) {
             if (!Vect_area_alive(Map, area))
                 continue;
             line = Vect_get_area_centroid(Map, area);
+<<<<<<< HEAD
             /* if (line == 0)
                 err_nocentr++; */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            /* if (line == 0)
+                err_nocentr++; */
+=======
+            if (line == 0)
+                err_nocentr++;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (line == 0)
+                err_nocentr++;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            /* if (line == 0)
+                err_nocentr++; */
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+            if (line == 0)
+                err_nocentr++;
+=======
+            /* if (line == 0)
+                err_nocentr++; */
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         }
 
         G_verbose_message(_("Number of areas: %d"), plus->n_areas);
@@ -1051,7 +1211,7 @@ int Vect_save_topo(struct Map_info *Map)
    \return 1 on success
    \return 0 on error
  */
-int Vect_topo_dump(const struct Map_info *Map, FILE *out)
+int Vect_topo_dump(struct Map_info *Map, FILE *out)
 {
     int i, j, line, isle;
     float angle_deg;
@@ -1241,8 +1401,27 @@ int Vect_build_sidx(struct Map_info *Map)
 
    \return 1
  */
-int Vect_build_sidx_from_topo(const struct Map_info *Map)
+int Vect_build_sidx_from_topo(struct Map_info *Map)
 {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     G_debug(3, "Vect_build_sidx_from_topo(): name=%s", Vect_get_full_name(Map));
 
     G_warning(_("%s is no longer supported"), "Vect_build_sidx_from_topo()");
@@ -1312,7 +1491,19 @@ int Vect_save_sidx(struct Map_info *Map)
    \return 1 on success
    \return 0 on error
  */
+<<<<<<< HEAD
 int Vect_sidx_dump(const struct Map_info *Map, FILE *out)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int Vect_sidx_dump(struct Map_info *Map, FILE *out)
+=======
+int Vect_sidx_dump(const struct Map_info *Map, FILE *out)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int Vect_sidx_dump(const struct Map_info *Map, FILE *out)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     if (!(Map->plus.Spidx_built)) {
         Vect_build_sidx_from_topo(Map);

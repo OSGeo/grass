@@ -5,8 +5,19 @@ radians. It reads a raster of elevation data and outputs the horizon
 outline in one of two modes:
 
 <ul>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<li> point: as a series of horizon
+heights in the specified directions from the given point(s). The results are
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 <li> single point: as a series of horizon
 heights in the specified directions from the given point. The results are
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 written to the stdout.
 <li> raster: in this case the output is
 one or more raster maps, with each point in a raster giving the horizon
@@ -23,12 +34,16 @@ geographic projection and not the coordinate system given by the rows
 and columns of the raster map. This correction implies that the
 resulting cardinal directions represent true orientation towards the
 East, North, West and South. The only exception of this feature is
-LOCATION with x,y coordinate system, where this correction is
+x,y coordinate system, where this correction is
 not applied.
 
 <p>
 Using the <b>-c</b> flag, the azimuthal angles will be printed in compass
 orientation (North=0, clockwise).
+
+<p>
+Activating the <b>-l</b> flag allows to additionally print the distance
+to each horizon angle.
 
 <h3>Input parameters:</h3>
 <p>The <i>elevation</i> parameter is an input elevation raster map. If
@@ -78,9 +93,10 @@ the higher the risk that you may miss a terrain feature that can
 contribute significantly to the horizon outline. Note that a viewshed
 can be calculated with <em>r.viewshed</em>.
 
-<p>The <i>coordinate</i> parameter takes a pair of easting-northing values
+<p>The <i>coordinate</i> parameter takes one or
+multiple pairs of easting-northing values
 in the current coordinate system and calculates the values of angular
-height of the horizon around this point. To achieve the
+height of the horizon around each point. To achieve the
 consistency of the results, the point coordinate is
 aligned to the midpoint of the closest elevation raster cell.
 
@@ -102,18 +118,63 @@ area specified by the current region definition.
 horizon raster maps. The raster name of each horizon direction
 raster will be constructed as <i>basename_</i>ANGLE, where ANGLE
 is the angle in degrees with the direction. If you use <b>r.horizon</b>
+<<<<<<< HEAD
 in the single point mode this option will be ignored.
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+in the point mode this option will be ignored.
+=======
+in the single point mode this option will be ignored.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+in the single point mode this option will be ignored.
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
 <p>The <i>file</i> parameter allows saving the resulting horizon
-angles in a comma separated ASCII file (single point mode only). If
+angles in a comma separated ASCII file with option <b>format=plain</b>
+or in a JSON file with option <b>format=json</b> (point mode only). If
 you use <b>r.horizon</b> in the raster map mode this option will be ignored.
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 <p>At the moment the elevation and maximum distance must be measured in meters,
 even if you use geographical coordinates (longitude/latitude). If your
 projection is based on distance (easting and northing), these too must
 be in meters. The buffer parameters must be in the same units as the
+<<<<<<< HEAD
 raster coordinates (e.g., for latitude-longitude locations buffers are
 measured in degree unit).
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+raster coordinates (e.g., for latitude-longitude buffers are
+measured in degrees).
+=======
+<p>At the moment the elevation and maximum distance must be measured in meters, 
+even if you use geographical coordinates (longitude/latitude). If your 
+projection is based on distance (easting and northing), these too must 
+be in meters. The buffer parameters must be in the same units as the 
+=======
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+raster coordinates (e.g., for latitude-longitude locations buffers are
+measured in degree unit).
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 <h2>METHOD</h2>
 
@@ -134,15 +195,16 @@ cardinal directions caused by the projection (see above).
 
 <p>
 The output with the <b>-d</b> flag is azimuth degree (-90 to 90, where
-0 is parallel with the focal cell). In case of negative horizon values
-obtained this indicates that the horizon height is below the cell it is
-computed from.
+0 is parallel with the focal cell).
+
+<p> All horizon values are positive (or zero). While negative values are
+in theory possible, <b>r.horizon</b> currently does not support them.
 
 <h2>EXAMPLES</h2>
 
 The examples are intended for the North Carolina sample dataset.
 
-<h3>Single point mode</h3>
+<h3>Point mode</h3>
 
 <b>Example 1</b>: determine horizon angle in 225 degree direction (output
 of horizon angles CCW from East):
@@ -245,7 +307,29 @@ in GIS</a>, 8(2), 175-190
 <h2>AUTHORS</h2>
 
 Thomas Huld, Joint Research Centre of
+<<<<<<< HEAD
 the European Commission, Ispra, Italy
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+the European Commission, Ispra, Italy
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+the European Commission, Ispra, Italy 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+the European Commission, Ispra, Italy
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+the European Commission, Ispra, Italy 
+=======
+the European Commission, Ispra, Italy
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 <br>
 <p>Tomas Cebecauer, Joint Research Centre
 of the European Commission, Ispra, Italy
@@ -258,4 +342,26 @@ European Commission, Ispra, Italy
 <a href="mailto:Thomas.Huld@jrc.it">Thomas.Huld@jrc.it</a>
 <a href="mailto:Tomas.Cebecauer@jrc.it">Tomas.Cebecauer@jrc.it</a>
 <a href="mailto:hofi@geomodel.sk">hofierka@geomodel.sk</a>
+<<<<<<< HEAD
 <a href="mailto:Marcel.Suri@jrc.it">Marcel.Suri@jrc.it</a>
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<a href="mailto:Marcel.Suri@jrc.it">Marcel.Suri@jrc.it</a>
+=======
+<a href="mailto:Marcel.Suri@jrc.it">Marcel.Suri@jrc.it</a> 
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+<a href="mailto:Marcel.Suri@jrc.it">Marcel.Suri@jrc.it</a>
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+<a href="mailto:Marcel.Suri@jrc.it">Marcel.Suri@jrc.it</a> 
+=======
+<a href="mailto:Marcel.Suri@jrc.it">Marcel.Suri@jrc.it</a>
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main

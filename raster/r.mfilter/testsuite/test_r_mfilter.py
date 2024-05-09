@@ -172,9 +172,43 @@ class TestNeighbors(TestCase):
                    TYPE    S
 
                    MATRIX 3
+<<<<<<< HEAD
                    1 1 1
                    1 1 1
                    1 1 1
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                   1 1 1
+                   1 1 1
+                   1 1 1
+=======
+                   1 1 1 
+                   1 1 1 
+                   1 1 1 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                   1 1 1 
+                   1 1 1 
+                   1 1 1 
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                   1 1 1 
+                   1 1 1 
+                   1 1 1 
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+=======
+                   1 1 1
+                   1 1 1
+                   1 1 1
+<<<<<<< HEAD
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                    DIVISOR 9
                    TYPE    P""",
     }

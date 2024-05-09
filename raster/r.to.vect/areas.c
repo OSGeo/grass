@@ -668,7 +668,7 @@ static int add_to_list(int x, int y)
 /* assign_area - make current area number correspond to the passed */
 /* category number and allocate more space to store areas if necessary */
 
-static int assign_area(double cat, int kase)
+static int assign_area(double cat, int kase UNUSED)
 {
     a_list_new->free = 0;
     a_list_new->cat = cat;

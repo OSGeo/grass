@@ -46,8 +46,23 @@ int IL_resample_output_2d(
     struct interp_params *params, double zmin,
     double zmax,                  /* min,max input z-values */
     double zminac, double zmaxac, /* min,max interpolated values */
+<<<<<<< HEAD
     double c1min, double c1max, double c2min, double c2max, double gmin,
     double gmax, double ertot,              /* total interplating func. error */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    double c1min, double c1max, double c2min, double c2max, double gmin UNUSED,
+    double gmax UNUSED, double ertot,       /* total interplating func. error */
+=======
+    double c1min, double c1max, double c2min, double c2max, double gmin,
+    double gmax, double ertot,              /* total interplating func. error */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    double c1min, double c1max, double c2min, double c2max, double gmin,
+    double gmax, double ertot,              /* total interplating func. error */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     char *input,                            /* input file name */
     double *dnorm, struct Cell_head *outhd, /* Region with desired resolution */
     struct Cell_head *winhd,                /* Current region */
@@ -125,7 +140,30 @@ int IL_resample_output_2d(
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_z) !=
+<<<<<<< HEAD
                 (size_t)params->nsizc)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
+                params->nsizc)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                params->nsizc)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+                params->nsizc)
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf1, cell1);
@@ -141,7 +179,30 @@ int IL_resample_output_2d(
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx) !=
+<<<<<<< HEAD
                 (size_t)params->nsizc)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
+                params->nsizc)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                params->nsizc)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+                params->nsizc)
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf2, cell1);
@@ -157,7 +218,30 @@ int IL_resample_output_2d(
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy) !=
+<<<<<<< HEAD
                 (size_t)params->nsizc)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
+                params->nsizc)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                params->nsizc)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+                params->nsizc)
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf3, cell1);
@@ -173,7 +257,30 @@ int IL_resample_output_2d(
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx) !=
+<<<<<<< HEAD
                 (size_t)params->nsizc)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
+                params->nsizc)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                params->nsizc)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+                params->nsizc)
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf4, cell1);
@@ -189,7 +296,30 @@ int IL_resample_output_2d(
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy) !=
+<<<<<<< HEAD
                 (size_t)params->nsizc)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
+                params->nsizc)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                params->nsizc)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+                params->nsizc)
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf5, cell1);
@@ -205,7 +335,30 @@ int IL_resample_output_2d(
                         sizeof(FCELL),
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy) !=
+<<<<<<< HEAD
                 (size_t)params->nsizc)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
+                params->nsizc)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                params->nsizc)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+                params->nsizc)
+=======
+                (size_t)params->nsizc)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
             Rast_put_f_row(cf6, cell1);

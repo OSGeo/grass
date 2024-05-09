@@ -5,18 +5,29 @@ set -e
 
 # compile
 ./configure \
+<<<<<<< HEAD
     --enable-largefile=yes \
+=======
+>>>>>>> osgeo-main
     --with-nls \
     --with-cxx \
     --with-readline \
     --with-bzlib \
+<<<<<<< HEAD
     --with-pthread \
+=======
+>>>>>>> osgeo-main
     --with-proj-share=/usr/share/proj \
     --with-geos=/usr/bin/geos-config \
     --with-cairo \
     --with-opengl-libs=/usr/include/GL \
     --with-freetype=yes --with-freetype-includes="/usr/include/freetype2/" \
+<<<<<<< HEAD
     --with-sqlite=yes
+=======
+    --with-sqlite=yes \
+    --without-pdal
+>>>>>>> osgeo-main
 make
 
 # put command on path

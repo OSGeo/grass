@@ -73,7 +73,30 @@ public:
     char *operator()(const elevation_type &p)
     {
         static char buf[20];
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%.1f", (float)p);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), "%.1f", (float)p);
+=======
+        sprintf(buf, "%.1f", (float)p);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        sprintf(buf, "%.1f", (float)p);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, sizeof(buf), "%.1f", (float)p);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        sprintf(buf, "%.1f", (float)p);
+=======
+        snprintf(buf, sizeof(buf), "%.1f", (float)p);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         return buf;
     }
 };
@@ -83,13 +106,59 @@ public:
     char *operator()(const direction_type &p)
     {
         static char buf[20];
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%3d", p);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), "%3d", p);
+=======
+        sprintf(buf, "%3d", p);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        sprintf(buf, "%3d", p);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, sizeof(buf), "%3d", p);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        sprintf(buf, "%3d", p);
+=======
+        snprintf(buf, sizeof(buf), "%3d", p);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         return buf;
     }
     char *operator()(const waterWindowBaseType &p)
     {
         static char buf[20];
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%3d", p.dir);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), "%3d", p.dir);
+=======
+        sprintf(buf, "%3d", p.dir);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        sprintf(buf, "%3d", p.dir);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, sizeof(buf), "%3d", p.dir);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        sprintf(buf, "%3d", p.dir);
+=======
+        snprintf(buf, sizeof(buf), "%3d", p.dir);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         return buf;
     }
 #if (0)
@@ -108,19 +177,88 @@ public:
     char *operator()(const labelElevType &p)
     {
         static char buf[8];
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+=======
+        sprintf(buf, CCLABEL_FMT, p.getLabel());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        sprintf(buf, CCLABEL_FMT, p.getLabel());
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        sprintf(buf, CCLABEL_FMT, p.getLabel());
+=======
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         return buf;
     }
     char *operator()(const waterGridType &p)
     {
         static char buf[8];
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+=======
+        sprintf(buf, CCLABEL_FMT, p.getLabel());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        sprintf(buf, CCLABEL_FMT, p.getLabel());
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        sprintf(buf, CCLABEL_FMT, p.getLabel());
+=======
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         return buf;
     }
     char *operator()(const waterType &p)
     {
         static char buf[8];
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+=======
+        sprintf(buf, CCLABEL_FMT, p.getLabel());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        sprintf(buf, CCLABEL_FMT, p.getLabel());
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        sprintf(buf, CCLABEL_FMT, p.getLabel());
+=======
+        snprintf(buf, sizeof(buf), CCLABEL_FMT, p.getLabel());
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         return buf;
     }
 };
@@ -130,7 +268,30 @@ public:
     char *operator()(const waterGridType &p)
     {
         static char buf[3];
+<<<<<<< HEAD
         snprintf(buf, sizeof(buf), "%1u", p.depth);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        snprintf(buf, sizeof(buf), "%1u", p.depth);
+=======
+        sprintf(buf, "%1u", p.depth);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        sprintf(buf, "%1u", p.depth);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        snprintf(buf, sizeof(buf), "%1u", p.depth);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        sprintf(buf, "%1u", p.depth);
+=======
+        snprintf(buf, sizeof(buf), "%1u", p.depth);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         return buf;
     }
 };
@@ -138,7 +299,30 @@ public:
 char *verbosedir(const std::string &s)
 {
     static char buf[BUFSIZ];
+<<<<<<< HEAD
     snprintf(buf, BUFSIZ, "dump/%s", s.c_str());
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, BUFSIZ, "dump/%s", s.c_str());
+=======
+    sprintf(buf, "dump/%s", s.c_str());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    sprintf(buf, "dump/%s", s.c_str());
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(buf, BUFSIZ, "dump/%s", s.c_str());
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    sprintf(buf, "dump/%s", s.c_str());
+=======
+    snprintf(buf, BUFSIZ, "dump/%s", s.c_str());
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     return buf;
 }
 
@@ -365,7 +549,30 @@ computeFlowDirections(AMI_STREAM<elevation_type> *&elstr,
     char path[BUFSIZ];
     char *base_dir = getenv(STREAM_TMPDIR);
     assert(base_dir);
+<<<<<<< HEAD
     snprintf(path, BUFSIZ, "%s/flowStream", base_dir);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(path, BUFSIZ, "%s/flowStream", base_dir);
+=======
+    sprintf(path, "%s/flowStream", base_dir);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    sprintf(path, "%s/flowStream", base_dir);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(path, BUFSIZ, "%s/flowStream", base_dir);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    sprintf(path, "%s/flowStream", base_dir);
+=======
+    snprintf(path, BUFSIZ, "%s/flowStream", base_dir);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     flowStream = new AMI_STREAM<waterWindowBaseType>(path);
     /*flowStream->persist(PERSIST_PERSISTENT); */
     if (stats)
@@ -523,7 +730,19 @@ void assignFinalDirections(AMI_STREAM<plateauStats> *statstr,
 /* ********************************************************************** */
 class directionElevationMerger {
 public:
+<<<<<<< HEAD
     waterGridType operator()(elevation_type el, direction_type dir,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    waterGridType operator()(elevation_type el, direction_type dir UNUSED,
+=======
+    waterGridType operator()(elevation_type el, direction_type dir,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    waterGridType operator()(elevation_type el, direction_type dir,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                              const waterType &p)
     {
         /* check that no (boundary) nodata values got in here */

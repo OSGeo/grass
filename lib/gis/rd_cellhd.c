@@ -52,9 +52,26 @@ static double scan_double(const char *, double *);
 
    \param fp file descriptor
    \param[out] cellhd pointer to Cell_head structure
+<<<<<<< HEAD
    \param is_cellhd ? (unused)
  */
 void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd, int is_cellhd)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+ */
+void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd)
+=======
+   \param is_cellhd ? (unused)
+ */
+void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd, int is_cellhd)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   \param is_cellhd ? (unused)
+ */
+void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd, int is_cellhd)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     int count;
     char **array;
@@ -77,7 +94,7 @@ void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd, int is_cellhd)
         count++;
     }
 
-    G__read_Cell_head_array(array, cellhd, is_cellhd);
+    G__read_Cell_head_array(array, cellhd);
 
     count = 0;
     while (array[count]) {
@@ -93,10 +110,27 @@ void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd, int is_cellhd)
 
    \param array array of strings
    \param[out] cellhd pointer to Cell_head structure
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+ */
+void G__read_Cell_head_array(char **array, struct Cell_head *cellhd)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
    \param is_cellhd ? (unused)
  */
 void G__read_Cell_head_array(char **array, struct Cell_head *cellhd,
                              int is_cellhd)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     char *buf;
     char label[200];

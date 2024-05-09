@@ -26,7 +26,6 @@ import os
 import shutil
 import copy
 import tempfile
-import six
 
 import wx
 import wx.lib.colourselect as csel
@@ -679,7 +678,7 @@ class ColorTable(wx.Frame):
                 return
 
         rulestxt = ""
-        for rule in six.itervalues(self.rulesPanel.ruleslines):
+        for rule in self.rulesPanel.ruleslines.values():
             if "value" not in rule:
                 continue
             rulestxt += rule["value"] + " " + rule["color"] + "\n"
@@ -783,7 +782,7 @@ class ColorTable(wx.Frame):
         """
         rulestxt = ""
 
-        for rule in six.itervalues(self.rulesPanel.ruleslines):
+        for rule in self.rulesPanel.ruleslines.values():
             if "value" not in rule:  # skip empty rules
                 continue
 
@@ -1404,8 +1403,8 @@ class VectorColorTable(ColorTable):
         :param type: type of column (e.g. vachar(11))"""
         if not self.CheckMapset():
             return
-        # because more than one dialog with the same map can be opened we must test column name and
-        # create another one
+        # because more than one dialog with the same map can be opened we must test
+        # column name and create another one
         while (
             self.properties["tmpColumn"]
             in self.dbInfo.GetTableDesc(self.properties["table"]).keys()
@@ -1830,7 +1829,7 @@ class VectorColorTable(ColorTable):
         """
         rulestxt = ""
 
-        for rule in six.itervalues(self.rulesPanel.ruleslines):
+        for rule in self.rulesPanel.ruleslines.values():
             if "value" not in rule:  # skip empty rules
                 break
 
@@ -1977,7 +1976,6 @@ class BufferedWindow(wx.Window):
     def __init__(
         self, parent, id, style=wx.NO_FULL_REPAINT_ON_RESIZE, Map=None, **kwargs
     ):
-
         wx.Window.__init__(self, parent, id, style=style, **kwargs)
 
         self.parent = parent

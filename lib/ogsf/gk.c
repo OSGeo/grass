@@ -536,7 +536,7 @@ double get_key_neighbors(int nvk, double time, double range, int loop,
 /*!
    \brief Linear interpolation
 
-   \param dt coeficient
+   \param dt coefficient
    \param val2 value 2
    \param val1 value 1
 
@@ -561,8 +561,20 @@ double lin_interp(float dt, float val1, float val2)
 
    \return interval value
  */
+<<<<<<< HEAD
+double get_2key_neighbors(int nvk, float time, float range UNUSED,
+                          int loop UNUSED, Keylist *karray[], Keylist **km1,
+                          Keylist **kp1)
+=======
 double get_2key_neighbors(int nvk, float time, float range, int loop,
                           Keylist *karray[], Keylist **km1, Keylist **kp1)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     int i;
     double len;

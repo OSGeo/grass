@@ -8,7 +8,9 @@ for details.
 
 :authors: Soeren Gebbert
 """
+
 import getpass
+from datetime import datetime
 from .abstract_map_dataset import AbstractMapDataset
 from .abstract_space_time_dataset import AbstractSpaceTimeDataset
 from .base import (
@@ -55,6 +57,8 @@ from .temporal_extent import (
 import grass.script.array as garray
 
 
+GRASS_TIMESTAMP_FMT = "%a %b  %d %H:%M:%S %Y"
+
 ###############################################################################
 
 
@@ -72,14 +76,20 @@ class RasterDataset(AbstractMapDataset):
         >>> import grass.temporal as tgis
         >>> init()
         >>> gs.use_temp_region()
-        >>> gs.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
-        ... t=1.0, b=0.0, res=10.0)
+        >>> gs.run_command(
+        ...     "g.region", n=80.0, s=0.0, e=120.0, w=0.0, t=1.0, b=0.0, res=10.0
+        ... )
         0
-        >>> gs.run_command("r.mapcalc", overwrite=True, quiet=True,
-        ... expression="strds_map_test_case = 1")
+        >>> gs.run_command(
+        ...     "r.mapcalc",
+        ...     overwrite=True,
+        ...     quiet=True,
+        ...     expression="strds_map_test_case = 1",
+        ... )
         0
-        >>> gs.run_command("r.timestamp", map="strds_map_test_case",
-        ...                date="15 jan 1999", quiet=True)
+        >>> gs.run_command(
+        ...     "r.timestamp", map="strds_map_test_case", date="15 jan 1999", quiet=True
+        ... )
         0
         >>> mapset = tgis.get_current_mapset()
         >>> name = "strds_map_test_case"
@@ -116,8 +126,9 @@ class RasterDataset(AbstractMapDataset):
          | Minimum value:.............. 1.0
          | Maximum value:.............. 1.0
 
-        >>> gs.run_command("r.timestamp", map="strds_map_test_case",
-        ...                date="2 years", quiet=True)
+        >>> gs.run_command(
+        ...     "r.timestamp", map="strds_map_test_case", date="2 years", quiet=True
+        ... )
         0
         >>> rmap.read_timestamp_from_grass()
         True
@@ -138,8 +149,9 @@ class RasterDataset(AbstractMapDataset):
         True
         >>> rmap.get_type()
         'raster'
-        >>> rmap.set_absolute_time(start_time=datetime(2001,1,1),
-        ...                        end_time=datetime(2012,1,1))
+        >>> rmap.set_absolute_time(
+        ...     start_time=datetime(2001, 1, 1), end_time=datetime(2012, 1, 1)
+        ... )
         True
         >>> rmap.get_absolute_time()
         (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
@@ -225,7 +237,7 @@ class RasterDataset(AbstractMapDataset):
         """Return this raster map as memmap numpy style array to access the raster
         values in numpy style without loading the whole map in the RAM.
 
-        In case this raster map does exists in the grass spatial database,
+        In case this raster map does exist in the grass spatial database,
         the map will be exported using r.out.bin to a temporary location
         and assigned to the memmap object that is returned by this function.
 
@@ -259,7 +271,7 @@ class RasterDataset(AbstractMapDataset):
     def read_timestamp_from_grass(self):
         """Read the timestamp of this map from the map metadata
         in the grass file system based spatial database and
-        set the internal time stamp that should be insert/updated
+        set the internal time stamp that should be inserted/updated
         in the temporal database.
 
         :return: True if success, False on error
@@ -346,18 +358,58 @@ class RasterDataset(AbstractMapDataset):
     def read_semantic_label_from_grass(self):
         """Read the semantic label of this map from the map metadata
         in the GRASS file system based spatial database and
+<<<<<<< HEAD
         set the internal semantic label that should be insert/updated
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        set the internal semantic label that should be inserted/updated
+=======
+        set the internal semantic label that should be insert/updated
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        set the internal semantic label that should be insert/updated
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         in the temporal database.
 
         :return: True if success, False if semantic labels could not be
                  read (due to an error or because not being present)
         """
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         semantic_label = self.ciface.read_raster_semantic_label(
             self.get_name(), self.get_mapset()
         )
 
         if not semantic_label:
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+        band_ref = self.ciface.read_raster_band_reference(
+            self.get_name(), self.get_mapset()
+        )
+
+        if not band_ref:
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+        semantic_label = self.ciface.read_raster_semantic_label(
+            self.get_name(), self.get_mapset()
+        )
+
+        if not semantic_label:
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             return False
 
         self.metadata.set_semantic_label(semantic_label)
@@ -408,7 +460,16 @@ class RasterDataset(AbstractMapDataset):
             return False
 
         # Fill base information
-        self.base.set_creator(str(getpass.getuser()))
+        kvp = self.ciface.read_raster_history(self.get_name(), self.get_mapset())
+
+        if kvp:
+            self.base.set_creator(kvp["creator"])
+            self.base.set_ctime(
+                datetime.strptime(kvp["creation_time"], GRASS_TIMESTAMP_FMT)
+            )
+        else:
+            self.base.set_creator(str(getpass.getuser()))
+            self.base.set_ctime()
 
         kvp = self.ciface.read_raster_info(self.get_name(), self.get_mapset())
 
@@ -437,12 +498,42 @@ class RasterDataset(AbstractMapDataset):
             self.metadata.set_rows(rows)
             self.metadata.set_number_of_cells(ncells)
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             # Fill semantic label if defined
             semantic_label = self.ciface.read_raster_semantic_label(
                 self.get_name(), self.get_mapset()
             )
             if semantic_label:
                 self.metadata.set_semantic_label(semantic_label)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+            # Fill band reference if defined
+            band_ref = self.ciface.read_raster_band_reference(
+                self.get_name(), self.get_mapset()
+            )
+            if band_ref:
+                self.metadata.set_band_reference(band_ref)
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+            # Fill semantic label if defined
+            semantic_label = self.ciface.read_raster_semantic_label(
+                self.get_name(), self.get_mapset()
+            )
+            if semantic_label:
+                self.metadata.set_semantic_label(semantic_label)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
             return True
 
@@ -478,14 +569,31 @@ class Raster3DDataset(AbstractMapDataset):
         >>> import grass.script as gs
         >>> init()
         >>> gs.use_temp_region()
-        >>> gs.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
-        ... t=100.0, b=0.0, res=10.0, res3=10.0)
+        >>> gs.run_command(
+        ...     "g.region",
+        ...     n=80.0,
+        ...     s=0.0,
+        ...     e=120.0,
+        ...     w=0.0,
+        ...     t=100.0,
+        ...     b=0.0,
+        ...     res=10.0,
+        ...     res3=10.0,
+        ... )
         0
-        >>> gs.run_command("r3.mapcalc", overwrite=True, quiet=True,
-        ...                expression="str3ds_map_test_case = 1")
+        >>> gs.run_command(
+        ...     "r3.mapcalc",
+        ...     overwrite=True,
+        ...     quiet=True,
+        ...     expression="str3ds_map_test_case = 1",
+        ... )
         0
-        >>> gs.run_command("r3.timestamp", map="str3ds_map_test_case",
-        ...                date="15 jan 1999", quiet=True)
+        >>> gs.run_command(
+        ...     "r3.timestamp",
+        ...     map="str3ds_map_test_case",
+        ...     date="15 jan 1999",
+        ...     quiet=True,
+        ... )
         0
         >>> mapset = get_current_mapset()
         >>> name = "str3ds_map_test_case"
@@ -524,8 +632,9 @@ class Raster3DDataset(AbstractMapDataset):
          | Number of depths:........... 10
          | Top-Bottom resolution:...... 10.0
 
-        >>> gs.run_command("r3.timestamp", map="str3ds_map_test_case",
-        ...                date="2 years", quiet=True)
+        >>> gs.run_command(
+        ...     "r3.timestamp", map="str3ds_map_test_case", date="2 years", quiet=True
+        ... )
         0
         >>> r3map.read_timestamp_from_grass()
         True
@@ -546,8 +655,9 @@ class Raster3DDataset(AbstractMapDataset):
         True
         >>> r3map.get_type()
         'raster3d'
-        >>> r3map.set_absolute_time(start_time=datetime(2001,1,1),
-        ...                        end_time=datetime(2012,1,1))
+        >>> r3map.set_absolute_time(
+        ...     start_time=datetime(2001, 1, 1), end_time=datetime(2012, 1, 1)
+        ... )
         True
         >>> r3map.get_absolute_time()
         (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
@@ -565,7 +675,9 @@ class Raster3DDataset(AbstractMapDataset):
         True
         >>> r3map.is_time_relative()
         False
-        >>> gs.run_command("g.remove", flags="f", type="raster_3d", name=name, quiet=True)
+        >>> gs.run_command(
+        ...     "g.remove", flags="f", type="raster_3d", name=name, quiet=True
+        ... )
         0
         >>> gs.del_temp_region()
 
@@ -648,7 +760,7 @@ class Raster3DDataset(AbstractMapDataset):
         3D raster values in numpy style without loading the whole map in
         the RAM.
 
-        In case this 3D raster map does exists in the grass spatial database,
+        In case this 3D raster map does exist in the grass spatial database,
         the map will be exported using r3.out.bin to a temporary location
         and assigned to the memmap object that is returned by this function.
 
@@ -682,7 +794,7 @@ class Raster3DDataset(AbstractMapDataset):
     def read_timestamp_from_grass(self):
         """Read the timestamp of this map from the map metadata
         in the grass file system based spatial database and
-        set the internal time stamp that should be insert/updated
+        set the internal time stamp that should be inserted/updated
         in the temporal database.
 
         :return: True if success, False on error
@@ -790,7 +902,16 @@ class Raster3DDataset(AbstractMapDataset):
             return False
 
         # Fill base information
-        self.base.set_creator(str(getpass.getuser()))
+        kvp = self.ciface.read_raster3d_history(self.get_name(), self.get_mapset())
+
+        if kvp:
+            self.base.set_creator(kvp["creator"])
+            self.base.set_ctime(
+                datetime.strptime(kvp["creation_time"], GRASS_TIMESTAMP_FMT)
+            )
+        else:
+            self.base.set_creator(str(getpass.getuser()))
+            self.base.set_ctime()
 
         # Fill spatial extent
         kvp = self.ciface.read_raster3d_info(self.get_name(), self.get_mapset())
@@ -845,14 +966,25 @@ class VectorDataset(AbstractMapDataset):
         >>> import grass.script as gs
         >>> init()
         >>> gs.use_temp_region()
-        >>> gs.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
-        ... t=1.0, b=0.0, res=10.0)
+        >>> gs.run_command(
+        ...     "g.region", n=80.0, s=0.0, e=120.0, w=0.0, t=1.0, b=0.0, res=10.0
+        ... )
         0
-        >>> gs.run_command("v.random", overwrite=True, output="stvds_map_test_case",
-        ... n=100, zmin=0, zmax=100, flags="z", column="elevation", quiet=True)
+        >>> gs.run_command(
+        ...     "v.random",
+        ...     overwrite=True,
+        ...     output="stvds_map_test_case",
+        ...     n=100,
+        ...     zmin=0,
+        ...     zmax=100,
+        ...     flags="z",
+        ...     column="elevation",
+        ...     quiet=True,
+        ... )
         0
-        >>> gs.run_command("v.timestamp", map="stvds_map_test_case",
-        ...                date="15 jan 1999", quiet=True)
+        >>> gs.run_command(
+        ...     "v.timestamp", map="stvds_map_test_case", date="15 jan 1999", quiet=True
+        ... )
         0
         >>> mapset = get_current_mapset()
         >>> name = "stvds_map_test_case"
@@ -886,8 +1018,9 @@ class VectorDataset(AbstractMapDataset):
          | Number of holes ............ 0
          | Number of volumes .......... 0
 
-        >>> gs.run_command("v.timestamp", map="stvds_map_test_case",
-        ...                date="2 years", quiet=True)
+        >>> gs.run_command(
+        ...     "v.timestamp", map="stvds_map_test_case", date="2 years", quiet=True
+        ... )
         0
         >>> vmap.read_timestamp_from_grass()
         True
@@ -908,8 +1041,9 @@ class VectorDataset(AbstractMapDataset):
         True
         >>> vmap.get_type()
         'vector'
-        >>> vmap.set_absolute_time(start_time=datetime(2001,1,1),
-        ...                        end_time=datetime(2012,1,1))
+        >>> vmap.set_absolute_time(
+        ...     start_time=datetime(2001, 1, 1), end_time=datetime(2012, 1, 1)
+        ... )
         True
         >>> vmap.get_absolute_time()
         (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2012, 1, 1, 0, 0))
@@ -1012,7 +1146,7 @@ class VectorDataset(AbstractMapDataset):
     def read_timestamp_from_grass(self):
         """Read the timestamp of this map from the map metadata
         in the grass file system based spatial database and
-        set the internal time stamp that should be insert/updated
+        set the internal time stamp that should be inserted/updated
         in the temporal database.
         """
 
@@ -1100,7 +1234,6 @@ class VectorDataset(AbstractMapDataset):
         return self.ciface.vector_map_exists(self.get_name(), self.get_mapset())
 
     def load(self):
-
         """Load all info from an existing vector map into the internal structure
 
         This method checks first if the map exists, in case it exists
@@ -1115,10 +1248,18 @@ class VectorDataset(AbstractMapDataset):
             return False
 
         # Fill base information
-        self.base.set_creator(str(getpass.getuser()))
+        kvp = self.ciface.read_vector_history(self.get_name(), self.get_mapset())
+
+        if kvp:
+            self.base.set_creator(kvp["creator"])
+            self.base.set_ctime(
+                datetime.strptime(kvp["creation_time"], GRASS_TIMESTAMP_FMT)
+            )
+        else:
+            self.base.set_creator(str(getpass.getuser()))
+            self.base.set_ctime()
 
         # Get the data from an existing vector map
-
         kvp = self.ciface.read_vector_info(self.get_name(), self.get_mapset())
 
         if kvp:
@@ -1163,20 +1304,20 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
         >>> import grass.temporal as tgis
         >>> tgis.init()
         >>> mapset = tgis.get_current_mapset()
-        >>> strds = tgis.SpaceTimeRasterDataset("old@%s"%mapset)
+        >>> strds = tgis.SpaceTimeRasterDataset("old@%s" % mapset)
         >>> strds.is_in_db()
         False
         >>> strds.is_stds()
         True
         >>> strds.get_type()
         'strds'
-        >>> newstrds = strds.get_new_instance("newstrds@%s"%mapset)
+        >>> newstrds = strds.get_new_instance("newstrds@%s" % mapset)
         >>> isinstance(newstrds, SpaceTimeRasterDataset)
         True
-        >>> newmap = strds.get_new_map_instance("newmap@%s"%mapset)
+        >>> newmap = strds.get_new_map_instance("newmap@%s" % mapset)
         >>> isinstance(newmap, RasterDataset)
         True
-        >>> strds.reset("new@%s"%mapset)
+        >>> strds.reset("new@%s" % mapset)
         >>> strds.is_in_db()
         False
         >>> strds.reset(None)
@@ -1259,7 +1400,6 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
         return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
     def reset(self, ident):
-
         """Reset the internal structure and set the identifier"""
         self.base = STRDSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))
@@ -1280,20 +1420,20 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
         >>> import grass.temporal as tgis
         >>> tgis.init()
         >>> mapset = tgis.get_current_mapset()
-        >>> str3ds = tgis.SpaceTimeRaster3DDataset("old@%s"%mapset)
+        >>> str3ds = tgis.SpaceTimeRaster3DDataset("old@%s" % mapset)
         >>> str3ds.is_in_db()
         False
         >>> str3ds.is_stds()
         True
         >>> str3ds.get_type()
         'str3ds'
-        >>> newstrds = str3ds.get_new_instance("newstrds@%s"%mapset)
+        >>> newstrds = str3ds.get_new_instance("newstrds@%s" % mapset)
         >>> isinstance(newstrds, SpaceTimeRaster3DDataset)
         True
-        >>> newmap = str3ds.get_new_map_instance("newmap@%s"%mapset)
+        >>> newmap = str3ds.get_new_map_instance("newmap@%s" % mapset)
         >>> isinstance(newmap, Raster3DDataset)
         True
-        >>> str3ds.reset("new@%s"%mapset)
+        >>> str3ds.reset("new@%s" % mapset)
         >>> str3ds.is_in_db()
         False
         >>> str3ds.reset(None)
@@ -1386,7 +1526,6 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
             return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
     def reset(self, ident):
-
         """Reset the internal structure and set the identifier"""
         self.base = STR3DSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))
@@ -1407,20 +1546,20 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
         >>> import grass.temporal as tgis
         >>> tgis.init()
         >>> mapset = tgis.get_current_mapset()
-        >>> stvds = tgis.SpaceTimeVectorDataset("old@%s"%mapset)
+        >>> stvds = tgis.SpaceTimeVectorDataset("old@%s" % mapset)
         >>> stvds.is_in_db()
         False
         >>> stvds.is_stds()
         True
         >>> stvds.get_type()
         'stvds'
-        >>> newstvds = stvds.get_new_instance("newstvds@%s"%mapset)
+        >>> newstvds = stvds.get_new_instance("newstvds@%s" % mapset)
         >>> isinstance(newstvds, SpaceTimeVectorDataset)
         True
-        >>> newmap = stvds.get_new_map_instance("newmap@%s"%mapset)
+        >>> newmap = stvds.get_new_map_instance("newmap@%s" % mapset)
         >>> isinstance(newmap, VectorDataset)
         True
-        >>> stvds.reset("new@%s"%mapset)
+        >>> stvds.reset("new@%s" % mapset)
         >>> stvds.is_in_db()
         False
         >>> stvds.reset(None)
@@ -1496,7 +1635,6 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
         return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
     def reset(self, ident):
-
         """Reset the internal structure and set the identifier"""
         self.base = STVDSBase(ident=ident)
         self.base.set_creator(str(getpass.getuser()))

@@ -138,10 +138,30 @@ int D_open_driver(void)
     drv = (p && G_strcasecmp(p, "png") == 0)    ? PNG_Driver()
           : (p && G_strcasecmp(p, "ps") == 0)   ? PS_Driver()
           : (p && G_strcasecmp(p, "html") == 0) ? HTML_Driver()
+<<<<<<< HEAD
           :
 #ifdef USE_CAIRO
           (p && G_strcasecmp(p, "cairo") == 0) ? Cairo_Driver()
                                                : Cairo_Driver();
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                                                :
+#ifdef USE_CAIRO
+                                                Cairo_Driver();
+=======
+          :
+#ifdef USE_CAIRO
+          (p && G_strcasecmp(p, "cairo") == 0) ? Cairo_Driver()
+                                               : Cairo_Driver();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+          :
+#ifdef USE_CAIRO
+          (p && G_strcasecmp(p, "cairo") == 0) ? Cairo_Driver()
+                                               : Cairo_Driver();
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #else
                                                 PNG_Driver();
 #endif
@@ -176,7 +196,7 @@ void D_close_driver(void)
 
   \todo To be removed
 */
-int D_save_command(const char *cmd)
+int D_save_command(const char *cmd UNUSED)
 {
     return 0;
 }

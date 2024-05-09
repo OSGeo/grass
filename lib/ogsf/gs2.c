@@ -218,7 +218,7 @@ int GS_surf_exists(int id)
    since left and right columns are on the edges.
 
    \return surface id
-   \return -1 on error (MAX_SURFS exceded)
+   \return -1 on error (MAX_SURFS exceeded)
  */
 int GS_new_surface(void)
 {
@@ -263,7 +263,7 @@ int GS_get_light_reset(void)
    \brief Add new model light
 
    \return light model id
-   \return -1 on error (MAX_LIGHTS exceded)
+   \return -1 on error (MAX_LIGHTS exceeded)
  */
 int GS_new_light(void)
 {
@@ -1520,7 +1520,7 @@ int GS_num_surfs(void)
 /*!
    \brief Get surface list
 
-   Must be freed when not neeed!
+   Must be freed when not needed!
 
    \param[out] numsurf number of available surfaces
 
@@ -2843,7 +2843,7 @@ void GS_set_fov(int fov)
 }
 
 /*!
-   \brief Get fied of view
+   \brief Get field of view
 
    \return field of view, in 10ths of degrees
  */
@@ -3282,7 +3282,29 @@ int GS_get_distance_alongsurf(int hs, float x1, float y1, float x2, float y2,
                               float *dist, int use_exag)
 {
     geosurf *gs;
+<<<<<<< HEAD
     Point3 p1, p2;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    Point3 p1, p2;
+=======
+    float p1[2], p2[2];
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    Point3 p1, p2;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    float p1[2], p2[2];
+=======
+    Point3 p1, p2;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
     gs = gs_get_surf(hs);
     if (gs == NULL) {

@@ -124,6 +124,16 @@ class DisplayPanelToolbar(BaseToolbar):
 
         return self._getToolbarData(
             (
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 (
                     ("addMulti", _("Add multiple map layers")),
                     icons["addMulti"],
@@ -159,6 +169,41 @@ class DisplayPanelToolbar(BaseToolbar):
                     icons["addWS"],
                     self.parent.OnAddWS,
                 ),
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+                (None,),
+                (
+                    ("addgrp", icons["addGroup"].label),
+                    icons["addGroup"],
+                    self.parent.OnAddGroup,
+                ),
+                (
+                    ("delcmd", _("Delete map layer")),
+                    icons["delCmd"],
+                    self.parent.OnDeleteLayer,
+                ),
+<<<<<<< HEAD
+                (None,),
+                (
+=======
+<<<<<<< HEAD
+=======
+                ("addMulti", icons["addMulti"], self.parent.OnAddMaps),
+                ("addrast", icons["addRast"], self.parent.OnAddRaster),
+                ("rastmisc", icons["rastMisc"], self.parent.OnAddRasterMisc),
+                ("addvect", icons["addVect"], self.parent.OnAddVector),
+                ("vectmisc", icons["vectMisc"], self.parent.OnAddVectorMisc),
+                ("addovl", icons["addOverlay"], self.parent.OnAddOverlay),
+                ("addWS", icons["addWS"], self.parent.OnAddWS),
+>>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
+                (None,),
+                (
+=======
                 (None,),
                 (
                     ("addgrp", icons["addGroup"].label),
@@ -172,6 +217,12 @@ class DisplayPanelToolbar(BaseToolbar):
                 ),
                 (None,),
                 (
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                (None,),
+                (
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                     ("vdigit", icons["vdigit"].label),
                     icons["vdigit"],
                     self.parent.OnVDigit,
@@ -218,11 +269,36 @@ class LMToolsToolbar(AuiToolbar):
 
         return self._getToolbarData(
             (
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 (
                     ("newdisplay", _("New display")),
                     icons["newdisplay"],
                     self.parent.OnNewDisplay,
                 ),
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+                ("newdisplay", icons["newdisplay"], self.parent.OnNewDisplay),
+                (None,),
+                ("mapCalc", icons["mapcalc"], self.parent.OnMapCalculator),
+                ("georect", icons["georectify"], self.parent.OnGCPManager),
+                ("modeler", icons["modeler"], self.parent.OnGModeler),
+                ("mapOutput", icons["composer"], self.parent.OnPsMap),
+>>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 (None,),
                 (
                     ("mapCalc", icons["mapcalc"].label),
@@ -246,6 +322,37 @@ class LMToolsToolbar(AuiToolbar):
                 ),
                 (None,),
                 (
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+                (None,),
+                (
+                    ("mapCalc", icons["mapcalc"].label),
+                    icons["mapcalc"],
+                    self.parent.OnMapCalculator,
+                ),
+                (
+                    ("georect", icons["georectify"].label),
+                    icons["georectify"],
+                    self.parent.OnGCPManager,
+                ),
+                (
+                    ("modeler", icons["modeler"].label),
+                    icons["modeler"],
+                    self.parent.OnGModeler,
+                ),
+                (
+                    ("mapOutput", icons["composer"].label),
+                    icons["composer"],
+                    self.parent.OnPsMap,
+                ),
+                (None,),
+                (
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                     ("script-load", icons["script-load"].label),
                     icons["script-load"],
                     self.parent.OnRunScript,

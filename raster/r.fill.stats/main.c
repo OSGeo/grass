@@ -147,6 +147,17 @@ long int estimate_mem_needed(long int cols, char *mode)
     return (mem_count);
 }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+#define WEIGHT_MATRIX_LINE_LENGTH 80
+
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 /*
  * Prints the spatial weights matrix to the console.
  * This uses a fixed layout which may not be able to print very
@@ -155,27 +166,59 @@ long int estimate_mem_needed(long int cols, char *mode)
 void print_weights_matrix(long int rows, long int cols)
 {
     int i, j;
+<<<<<<< HEAD
     size_t weight_matrix_line_length = 80;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    char weight_matrix_line_buf[WEIGHT_MATRIX_LINE_LENGTH + 1];
+    char weight_matrix_weight_buf[WEIGHT_MATRIX_LINE_LENGTH + 1];
+=======
+    int weight_matrix_line_length = 80;
+=======
+    size_t weight_matrix_line_length = 80;
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+    int weight_matrix_line_length = 80;
+=======
+    size_t weight_matrix_line_length = 80;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     char weight_matrix_line_buf[weight_matrix_line_length + 1];
     char weight_matrix_weight_buf[weight_matrix_line_length + 1];
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     G_message(_("Spatial weights neighborhood (cells):"));
     for (i = 0; i < rows; i++) {
         weight_matrix_line_buf[0] = '\0';
         for (j = 0; j < cols; j++) {
             if (WEIGHTS[i][j] != -1.0) {
-                snprintf(weight_matrix_weight_buf, weight_matrix_line_length,
+                snprintf(weight_matrix_weight_buf, WEIGHT_MATRIX_LINE_LENGTH,
                          "%06.2f ", WEIGHTS[i][j]);
             }
             else {
-                snprintf(weight_matrix_weight_buf, weight_matrix_line_length,
+                snprintf(weight_matrix_weight_buf, WEIGHT_MATRIX_LINE_LENGTH,
                          "...... ");
             }
             if (strlen(weight_matrix_weight_buf) +
                     strlen(weight_matrix_line_buf) >
+<<<<<<< HEAD
                 weight_matrix_line_length) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                WEIGHT_MATRIX_LINE_LENGTH) {
+=======
+                weight_matrix_line_length) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                weight_matrix_line_length) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 strncpy(weight_matrix_line_buf, "[line too long to print]",
-                        weight_matrix_line_length);
+                        WEIGHT_MATRIX_LINE_LENGTH);
                 break;
             }
             else {
@@ -193,14 +236,34 @@ void print_weights_matrix(long int rows, long int cols)
 void *get_input_row(unsigned long row_idx)
 {
     unsigned long i;
+<<<<<<< HEAD
+    char *my_cell = NULL;
+=======
     void *my_cell = NULL;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     my_cell = CELL_INPUT_HANDLES[row_idx];
 
     for (i = 0; i < PADDING_WIDTH; i++)
         my_cell += CELL_IN_SIZE;
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    return (void *)my_cell;
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     return (my_cell);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 }
 
 /* NEIGHBORHOOD STATISTICS
@@ -232,8 +295,23 @@ void *get_input_row(unsigned long row_idx)
  * types of information to be collected.
  */
 
+<<<<<<< HEAD
 void collect_values_unfiltered(double val1, double val2, double min, double max,
                                stats_struct *stats)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void collect_values_unfiltered(double val1, double val2, double min UNUSED,
+                               double max UNUSED, stats_struct *stats)
+=======
+void collect_values_unfiltered(double val1, double val2, double min, double max,
+                               stats_struct *stats)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void collect_values_unfiltered(double val1, double val2, double min, double max,
+                               stats_struct *stats)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     stats->values[stats->num_values] = val1;
     stats->certainty += val2;
@@ -248,8 +326,24 @@ void collect_values_filtered(double val1, double val2, double min, double max,
     }
 }
 
+<<<<<<< HEAD
 void collect_values_and_weights_unfiltered(double val1, double val2, double min,
                                            double max, stats_struct *stats)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void collect_values_and_weights_unfiltered(double val1, double val2,
+                                           double min UNUSED, double max UNUSED,
+                                           stats_struct *stats)
+=======
+void collect_values_and_weights_unfiltered(double val1, double val2, double min,
+                                           double max, stats_struct *stats)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void collect_values_and_weights_unfiltered(double val1, double val2, double min,
+                                           double max, stats_struct *stats)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     stats->values[stats->num_values] = val1;
     stats->weights[stats->num_values] = val2;
@@ -266,7 +360,18 @@ void collect_values_and_weights_filtered(double val1, double val2, double min,
 }
 
 void collect_values_and_frequencies_unfiltered(double val1, double val2,
+<<<<<<< HEAD
+                                               double min UNUSED,
+                                               double max UNUSED,
+=======
                                                double min, double max,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                                                stats_struct *stats)
 {
     unsigned long i;
@@ -329,7 +434,7 @@ void read_neighborhood(unsigned long row_index, unsigned long col, double min,
                        double max, int preserve, stats_struct *stats)
 {
     unsigned long i, j;
-    void *cell;
+    char *cell;
     double cell_value;
 
     stats->overwrite = 0;
@@ -509,7 +614,17 @@ void init_handles(void)
 void advance_one_row(int file_desc, long current_row)
 {
     unsigned long i, j;
+<<<<<<< HEAD
+    char *cell_input;
+=======
     void *cell_input;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     static unsigned long replace_row =
         0; /* points to the row which will be replaced next */
     unsigned long replace_pos = 0;
@@ -554,7 +669,7 @@ void interpolate_row(unsigned long row_index, unsigned long cols, double min,
                      stats_struct *stats, int write_err)
 {
     unsigned long j;
-    void *cell_output;
+    char *cell_output;
     FCELL *err_output;
 
     cell_output = CELL_OUTPUT;
@@ -742,7 +857,7 @@ int main(int argc, char *argv[])
     int write_error;
 
     /* file handlers */
-    void *cell_input;
+    char *cell_input;
     int in_fd;
     int out_fd;
     int err_fd;

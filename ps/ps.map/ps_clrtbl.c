@@ -32,7 +32,17 @@ int PS_colortable(void)
     double grey_color_val;
     RASTER_MAP_TYPE rast_type;
 
+<<<<<<< HEAD
+    /* let user know what's happening */
+=======
     /* let user know what's happenning */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     G_message(_("Creating color table for <%s in %s>..."), ct.name, ct.mapset);
 
     if (Rast_read_cats(ct.name, ct.mapset, &PS.cats) == -1) {

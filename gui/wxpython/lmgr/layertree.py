@@ -93,7 +93,25 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self,
         parent,
         giface,
+<<<<<<< HEAD
         createNewMapDisplay,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        createNewMapDisplay,
+=======
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+=======
+        createNewMapDisplay,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        createNewMapDisplay,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         id=wx.ID_ANY,
         style=wx.SUNKEN_BORDER,
         ctstyle=CT.TR_HAS_BUTTONS
@@ -105,15 +123,60 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         title=None,
         **kwargs,
     ):
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if "style" in kwargs:
+            ctstyle |= kwargs["style"]
+            del kwargs["style"]
+=======
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+>>>>>>> osgeo-main
 
         if "style" in kwargs:
             ctstyle |= kwargs["style"]
             del kwargs["style"]
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        self.displayIndex = kwargs["idx"]
+        del kwargs["idx"]
+<<<<<<< HEAD
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         self.lmgr = kwargs["lmgr"]
         del kwargs["lmgr"]
         # GIS Manager notebook for layer tree
         self.notebook = kwargs["notebook"]
         del kwargs["notebook"]
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        showMapDisplay = kwargs["showMapDisplay"]
+        del kwargs["showMapDisplay"]
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+        showMapDisplay = kwargs["showMapDisplay"]
+        del kwargs["showMapDisplay"]
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
         self._giface = giface
         self.treepg = parent  # notebook page holding layer tree
@@ -139,9 +202,27 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             pass
 
         if globalvar.hasAgw:
+<<<<<<< HEAD
             super(LayerTree, self).__init__(parent, id, agwStyle=ctstyle, **kwargs)
         else:
             super(LayerTree, self).__init__(parent, id, style=ctstyle, **kwargs)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            super().__init__(parent, id, agwStyle=ctstyle, **kwargs)
+        else:
+            super().__init__(parent, id, style=ctstyle, **kwargs)
+=======
+            super(LayerTree, self).__init__(parent, id, agwStyle=ctstyle, **kwargs)
+        else:
+            super(LayerTree, self).__init__(parent, id, style=ctstyle, **kwargs)
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+            super(LayerTree, self).__init__(parent, id, agwStyle=ctstyle, **kwargs)
+        else:
+            super(LayerTree, self).__init__(parent, id, style=ctstyle, **kwargs)
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+>>>>>>> osgeo-main
         self.SetName("LayerTree")
         self.SetBackgroundColour(wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW))
 
@@ -149,11 +230,54 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # when some layers are not visible in layer tree
         # self.SetAutoLayout(True)
         self.SetGradientStyle(1)
-        self.EnableSelectionGradient(True)
+        if sys.platform != "darwin":
+            self.EnableSelectionGradient(True)
         self._setGradient()
 
         # init associated map display
+<<<<<<< HEAD
         self.mapdisplay = createNewMapDisplay(layertree=self)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        # create instance of Map Display interface
+        self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(giface, self)
+        self.mapdisplay = createNewMapDisplay(self._gifaceForDisplay, layertree=self)
+=======
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+        pos = wx.Point((self.displayIndex + 1) * 25, (self.displayIndex + 1) * 25)
+        self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
+            self._giface, self
+        )
+        self.mapdisplay = MapFrame(
+            self,
+            giface=self._gifaceForDisplay,
+            id=wx.ID_ANY,
+            pos=pos,
+            size=globalvar.MAP_WINDOW_SIZE,
+            style=wx.DEFAULT_FRAME_STYLE,
+            tree=self,
+            lmgr=self.lmgr,
+            Map=self.Map,
+            title=title,
+        )
+
+        # show new display
+        if showMapDisplay is True:
+            self.mapdisplay.Show()
+            self.mapdisplay.Refresh()
+            self.mapdisplay.Update()
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+        self.mapdisplay = createNewMapDisplay(layertree=self)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        self.mapdisplay = createNewMapDisplay(layertree=self)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
         self.root = self.AddRoot(_("Map Layers"))
         self.SetPyData(self.root, (None, None))
@@ -314,7 +438,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         return array
 
     def GetMap(self):
-        """Get map instace"""
+        """Get map instance"""
         return self.Map
 
     def GetMapDisplay(self):
@@ -353,9 +477,9 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Only re-order and re-render a composite map image from GRASS during
         idle time instead of multiple times during layer changing.
         """
-        # no need to check for digitizer since it is handled internaly
+        # no need to check for digitizer since it is handled internally
         # no need to distinguish 2D and 3D since the interface is the same
-        # remove this comment when it is onl enough
+        # remove this comment when it is only enough
         if self.rerender:
             # restart rerender value here before wx.Yield
             # can cause another idle event
@@ -433,8 +557,29 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 "export-pg",
                 "export-attr",
                 "pack",
+<<<<<<< HEAD
                 "check",
                 "uncheck",
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                "check",
+                "uncheck",
+=======
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+=======
+                "check",
+                "uncheck",
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                "check",
+                "uncheck",
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             ):
                 self.popupID[key] = NewId()
 
@@ -453,6 +598,41 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if ltype != "command" and numSelected == 1:
             self.popupMenu.Append(self.popupID["rename"], _("Rename"))
             self.Bind(wx.EVT_MENU, self.OnRenameLayer, id=self.popupID["rename"])
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+
+        if numSelected > 1:
+            item = wx.MenuItem(
+                self.popupMenu,
+                id=self.popupID["check"],
+                text=_("Check selected layers"),
+            )
+            self.popupMenu.AppendItem(item)
+            self.Bind(
+                wx.EVT_MENU,
+                self.OnCheckUncheckSelectedLayer,
+                id=self.popupID["check"],
+            )
+            item = wx.MenuItem(
+                self.popupMenu,
+                id=self.popupID["uncheck"],
+                text=_("Uncheck selected layers"),
+            )
+            self.popupMenu.AppendItem(item)
+            self.Bind(
+                wx.EVT_MENU,
+                self.OnCheckUncheckSelectedLayer,
+                id=self.popupID["uncheck"],
+            )
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
 
         if numSelected > 1:
             item = wx.MenuItem(
@@ -478,6 +658,31 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 id=self.popupID["uncheck"],
             )
 
+        if numSelected > 1:
+            item = wx.MenuItem(
+                self.popupMenu,
+                id=self.popupID["check"],
+                text=_("Check selected layers"),
+            )
+            self.popupMenu.AppendItem(item)
+            self.Bind(
+                wx.EVT_MENU,
+                self.OnCheckUncheckSelectedLayer,
+                id=self.popupID["check"],
+            )
+            item = wx.MenuItem(
+                self.popupMenu,
+                id=self.popupID["uncheck"],
+                text=_("Uncheck selected layers"),
+            )
+            self.popupMenu.AppendItem(item)
+            self.Bind(
+                wx.EVT_MENU,
+                self.OnCheckUncheckSelectedLayer,
+                id=self.popupID["uncheck"],
+            )
+>>>>>>> osgeo-main
+
         # when multiple maps are selected of different types
         # we cannot zoom or change region
         # because g.region can handle only the same type
@@ -491,7 +696,27 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if ltype not in ("group", "command"):
             if numSelected == 1:
                 self.popupMenu.AppendSeparator()
+<<<<<<< HEAD
                 if not (ltype == "raster_3d" or self.mapdisplay.IsPaneShown("3d")):
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if not (ltype == "raster_3d" or self.mapdisplay.IsPaneShown("3d")):
+=======
+                if ltype != "raster_3d":
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+                if ltype != "raster_3d":
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+=======
+                if not (ltype == "raster_3d" or self.mapdisplay.IsPaneShown("3d")):
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                if not (ltype == "raster_3d" or self.mapdisplay.IsPaneShown("3d")):
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                     item = wx.MenuItem(
                         self.popupMenu,
                         id=self.popupID["opacity"],
@@ -515,11 +740,47 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     wx.EVT_MENU, self.OnPopupProperties, id=self.popupID["properties"]
                 )
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 if ltype in (
                     "raster",
                     "vector",
                     "raster_3d",
                 ) and self.mapdisplay.IsPaneShown("3d"):
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+                if (
+                    ltype
+                    in (
+                        "raster",
+                        "vector",
+                        "raster_3d",
+                    )
+                    and self.mapdisplay.IsPaneShown("3d")
+                ):
+<<<<<<< HEAD
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                     self.popupMenu.Append(self.popupID["nviz"], _("3D view properties"))
                     self.Bind(
                         wx.EVT_MENU, self.OnNvizProperties, id=self.popupID["nviz"]
@@ -575,6 +836,42 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         self.OnAlignCompRegToRaster,
                         id=self.popupID["align"],
                     )
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        elif ltype == "group":
+            # Dynamically add Change opacity level menu item according
+            # if any layer inside group layer is map layer
+            child, cookie = self.GetFirstChild(self.layer_selected)
+            child_is_maplayer = None
+            if child:
+                while child:
+                    child_maplayer = self.GetLayerInfo(child, key="maplayer")
+                    child_ltype = self.GetLayerInfo(child, key="type")
+                    if child_maplayer and child_ltype != "command":
+                        child_is_maplayer = True
+                        break
+                    child = self.GetNextSibling(child)
+            if child_is_maplayer:
+                self.popupMenu.AppendSeparator()
+                item = wx.MenuItem(
+                    self.popupMenu,
+                    id=self.popupID["opacity"],
+                    text=_("Change opacity level"),
+                )
+                item.SetBitmap(MetaIcon(img="layer-opacity").GetBitmap(self.bmpsize))
+                self.popupMenu.AppendItem(item)
+                self.Bind(
+                    wx.EVT_MENU,
+                    self.OnPopupGroupOpacityLevel,
+                    id=self.popupID["opacity"],
+                )
+=======
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+>>>>>>> osgeo-main
 
         # vector layers (specific items)
         if ltype and ltype == "vector" and numSelected == 1:
@@ -680,29 +977,40 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             # removed from layer tree
             #  if digitToolbar:
             # background vector map
-            # self.popupMenu.Append(self.popupID['bgmap'],
-            #                       text = _("Use as background vector map for digitizer"),
-            #                       kind = wx.ITEM_CHECK)
-            # self.Bind(wx.EVT_MENU, self.OnSetBgMap, id = self.popupID['bgmap'])
-            # if UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
-            #                     internal = True) == layer.GetName():
-            #     self.popupMenu.Check(self.popupID['bgmap'], True)
+            # self.popupMenu.Append(
+            #     self.popupID["bgmap"],
+            #     text=_("Use as background vector map for digitizer"),
+            #     kind=wx.ITEM_CHECK,
+            # )
+            # self.Bind(wx.EVT_MENU, self.OnSetBgMap, id = self.popupID["bgmap"])
+            # if (
+            #     UserSettings.Get(
+            #         group="vdigit", key="bgmap", subkey="value", internal=True
+            #     )
+            #     == layer.GetName()
+            # ):
+            #     self.popupMenu.Check(self.popupID["bgmap"], True)
 
             self.popupMenu.Append(self.popupID["topo"], _("Rebuild topology"))
             self.Bind(wx.EVT_MENU, self.OnTopology, id=self.popupID["topo"])
 
             # determine format
-            # if layer and layer.GetType() == 'vector':
-            #     if 'info' not in self.GetLayerInfo(self.layer_selected):
-            #         info = grass.parse_command('v.info',
-            #                                    flags = 'e',
-            #                                    map = layer.GetName())
-            #         self.SetLayerInfo(self.layer_selected, key = 'info', value = info)
-            #     info = self.GetLayerInfo(self.layer_selected, key = 'info')
-            #     if info and info['format'] != 'native' and \
-            #             info['format'].split(',')[1] == 'PostgreSQL':
-            #         self.popupMenu.Append(self.popupID['sql'], text = _("SQL Spatial Query"))
-            #         self.Bind(wx.EVT_MENU, self.OnSqlQuery, id = self.popupID['sql'])
+            # if layer and layer.GetType() == "vector":
+            #     if "info" not in self.GetLayerInfo(self.layer_selected):
+            #         info = grass.parse_command(
+            #                   "v.info", flags="e", map=layer.GetName()
+            #               )
+            #         self.SetLayerInfo(self.layer_selected, key="info", value=info)
+            #     info = self.GetLayerInfo(self.layer_selected, key="info")
+            #     if (
+            #         info
+            #         and info["format"] != "native"
+            #         and info["format"].split(",")[1] == "PostgreSQL"
+            #     ):
+            #         self.popupMenu.Append(
+            #             self.popupID["sql"], text=_("SQL Spatial Query")
+            #         )
+            #         self.Bind(wx.EVT_MENU, self.OnSqlQuery, id=self.popupID["sql"])
 
             if layer.GetMapset() != currentMapset:
                 # only vector map in current mapset can be edited
@@ -1087,7 +1395,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             )
             return
 
-        # lazy import to reduce dependecies and startup
+        # lazy import to reduce dependencies and startup
         from wxplot.histogram import HistogramPlotFrame
 
         win = HistogramPlotFrame(
@@ -1122,11 +1430,37 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         if rasters:
             self._giface.RunCmd(
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
+=======
+>>>>>>> 1dffc5dfd4 (r.report: add default units, change to full unit names (#1666))
+>>>>>>> osgeo-main
                 [
                     "r.report",
                     "map=%s" % ",".join(rasters),
                     "units=hectares,cells,percent",
                 ]
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+                ["r.report", "map=%s" % ",".join(rasters), "units=h,c,p"]
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+                ["r.report", "map=%s" % ",".join(rasters), "units=h,c,p"]
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> a025896dba (r.report: add default units, change to full unit names (#1666))
+=======
+>>>>>>> 1dffc5dfd4 (r.report: add default units, change to full unit names (#1666))
+>>>>>>> osgeo-main
             )
 
     def OnStartEditing(self, event):
@@ -1185,6 +1519,49 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnPopupProperties(self, event):
         """Popup properties dialog"""
         self.PropertiesDialog(self.layer_selected)
+
+    def OnPopupGroupOpacityLevel(self, event):
+        """Popup opacity level indicator for group of layers"""
+        # Get opacity level from the first finded map layer
+        child, cookie = self.GetFirstChild(self.layer_selected)
+        while child:
+            maplayer = self.GetLayerInfo(child, key="maplayer")
+            ltype = self.GetLayerInfo(child, key="type")
+            if maplayer and ltype != "command":
+                break
+            child = self.GetNextSibling(child)
+            if child is None:
+                child, cookie = self.GetNextChild(child, cookie)
+        current_opacity = maplayer.GetOpacity()
+        dlg = SetOpacityDialog(
+            self,
+            opacity=current_opacity,
+            title=_("Set opacity of <{}>").format(self.layer_selected.GetText()),
+        )
+        dlg.applyOpacity.connect(
+            lambda value: self.ChangeGroupLayerOpacity(layer=child, value=value)
+        )
+        # Apply button
+        dlg.applyOpacity.connect(lambda: self._recalculateLayerButtonPosition())
+        dlg.CentreOnParent()
+
+        if dlg.ShowModal() == wx.ID_OK:
+            self.ChangeGroupLayerOpacity(layer=child, value=dlg.GetOpacity())
+            self._recalculateLayerButtonPosition()
+        dlg.Destroy()
+
+    def ChangeGroupLayerOpacity(self, layer, value):
+        """Change group layers opacity level
+
+        :param wx.lib.agw.customtreectrl.GenericTreeItem obj layer: tree item object
+        :param int value: opacity value
+        """
+        while layer:
+            maplayer = self.GetLayerInfo(layer, key="maplayer")
+            ltype = self.GetLayerInfo(layer, key="type")
+            if maplayer and ltype != "command":
+                self.ChangeLayerOpacity(layer=layer, value=value)
+            layer = self.GetNextSibling(layer)
 
     def OnPopupOpacityLevel(self, event):
         """Popup opacity level indicator"""
@@ -1248,12 +1625,44 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         .. todo::
             vector/volume
         """
+<<<<<<< HEAD
         if not UserSettings.Get(
             group="general",
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if not UserSettings.Get(
+            group="appearance",
+=======
+        if not UserSettings.Get(
+            group="general",
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if not UserSettings.Get(
+            group="general",
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             key="singleWindow",
             subkey="enabled",
         ):
             self.lmgr.notebook.SetSelectionByName("nviz")
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        self.lmgr.notebook.SetSelectionByName("nviz")
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+        self.lmgr.notebook.SetSelectionByName("nviz")
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         ltype = self.GetLayerInfo(self.layer_selected, key="type")
         if ltype == "raster":
             self.lmgr.nviz.SetPage("surface")
@@ -1335,6 +1744,17 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     )
                     self.SetItemText(item, newlabel)
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     def OnCheckUncheckSelectedLayer(self, event):
         """Check/uncheck selected layer(s)"""
         check = wx.CHK_CHECKED
@@ -1344,6 +1764,19 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         for layer in self.GetSelections():
             self.CheckItem(layer, checked=check)
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     def AddLayer(
         self,
         ltype,
@@ -1693,7 +2126,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         # here was some dead code related to layer and nviz
         # however, in condition was rerender = False
-        # but rerender is alway True
+        # but rerender is always True
         # (here no change and also in UpdateListOfLayers and GetListOfLayers)
         # You can safely remove this comment after some testing.
 
@@ -1702,7 +2135,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def OnLayerChecking(self, event):
         """Layer checkbox is being checked.
 
-        Continue only if mouse is above checkbox or layer was checked programatically.
+        Continue only if mouse is above checkbox or layer was checked programmatically.
         """
         if self.hitCheckbox or self.forceCheck:
             self.forceCheck = False
@@ -1784,6 +2217,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         vselect = self._giface.GetMapDisplay().GetDialog("vselect")
         if vselect:
             vselect.Reset()
+
+        self.AdjustMyScrollbars()
 
     def OnCmdChanged(self, event):
         """Change command string"""

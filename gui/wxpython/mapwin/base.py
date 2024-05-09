@@ -20,7 +20,6 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-import six
 
 from core.settings import UserSettings
 from core.gcmd import GError
@@ -30,7 +29,7 @@ from grass.script import core as grass
 from grass.pydispatch.signal import Signal
 
 
-class MapWindowProperties(object):
+class MapWindowProperties:
     def __init__(self):
         self._resolution = None
         self.resolutionChanged = Signal("MapWindowProperties.resolutionChanged")
@@ -103,6 +102,78 @@ class MapWindowProperties(object):
     @property
     def useDefinedProjection(self):
         return self._useDefinedProjection
+<<<<<<< HEAD
+
+    @useDefinedProjection.setter
+    def useDefinedProjection(self, value):
+        if value != self._useDefinedProjection:
+            self._useDefinedProjection = value
+            self.useDefinedProjectionChanged.emit(value=value)
+
+    @property
+    def epsg(self):
+        return UserSettings.Get(group="projection", key="statusbar", subkey="epsg")
+
+    @property
+    def sbItem(self):
+        return self._sbItem
+
+    @sbItem.setter
+    def sbItem(self, mode):
+        if mode != self._sbItem:
+            self._sbItem = mode
+            self.sbItemChanged.emit(mode=mode)
+
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> osgeo-main
+
+    @useDefinedProjection.setter
+    def useDefinedProjection(self, value):
+        if value != self._useDefinedProjection:
+            self._useDefinedProjection = value
+            self.useDefinedProjectionChanged.emit(value=value)
+
+    @property
+    def epsg(self):
+        return UserSettings.Get(group="projection", key="statusbar", subkey="epsg")
+
+    @property
+    def sbItem(self):
+        return self._sbItem
+
+    @sbItem.setter
+    def sbItem(self, mode):
+        if mode != self._sbItem:
+            self._sbItem = mode
+            self.sbItemChanged.emit(mode=mode)
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+
+    @useDefinedProjection.setter
+    def useDefinedProjection(self, value):
+        if value != self._useDefinedProjection:
+            self._useDefinedProjection = value
+            self.useDefinedProjectionChanged.emit(value=value)
+
+    @property
+    def epsg(self):
+        return UserSettings.Get(group="projection", key="statusbar", subkey="epsg")
+
+    @property
+    def sbItem(self):
+        return self._sbItem
+
+    @sbItem.setter
+    def sbItem(self, mode):
+        if mode != self._sbItem:
+            self._sbItem = mode
+            self.sbItemChanged.emit(mode=mode)
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     @useDefinedProjection.setter
     def useDefinedProjection(self, value):
@@ -125,7 +196,7 @@ class MapWindowProperties(object):
             self.sbItemChanged.emit(mode=mode)
 
 
-class MapWindowBase(object):
+class MapWindowBase:
     """Abstract map display window class
 
     Superclass for BufferedWindow class (2D display mode), and GLWindow
@@ -208,14 +279,14 @@ class MapWindowBase(object):
         """Binds helper functions, which calls all handlers
         registered to events with the events
         """
-        for ev, handlers in six.iteritems(self.handlersContainer):
+        for ev, handlers in self.handlersContainer.items():
             self.Bind(ev, self.EventTypeHandler(handlers))
 
     def EventTypeHandler(self, evHandlers):
         return lambda event: self.HandlersCaller(event, evHandlers)
 
     def HandlersCaller(self, event, handlers):
-        """Hepler function which calls all handlers registered for
+        """Helper function which calls all handlers registered for
         event
         """
         for handler in handlers:
@@ -256,8 +327,9 @@ class MapWindowBase(object):
                 # current map display's map window
                 # expects LayerManager to be the parent
                 self.mapwin = self.parent.GetLayerTree().GetMapDisplay().GetWindow()
-                if self.mapwin.RegisterEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction,
-                                                    'cross'):
+                if self.mapwin.RegisterEventHandler(
+                    wx.EVT_LEFT_DOWN, self.OnMouseAction, "cross"
+                ):
                     self.parent.GetLayerTree().GetMapDisplay().Raise()
                 else:
                     # handle that you cannot get coordinates
@@ -265,8 +337,10 @@ class MapWindowBase(object):
             def OnMouseAction(self, event):
                 # get real world coordinates of mouse click
                 coor = self.mapwin.Pixel2Cell(event.GetPositionTuple()[:])
-                self.text.SetLabel('Coor: ' + str(coor))
-                self.mapwin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction)
+                self.text.SetLabel("Coor: " + str(coor))
+                self.mapwin.UnregisterMouseEventHandler(
+                    wx.EVT_LEFT_DOWN, self.OnMouseAction
+                )
                 event.Skip()
 
 
@@ -281,7 +355,7 @@ class MapWindowBase(object):
         """
         self.mouseHandlerRegistered.emit()
         # inserts handler into list
-        for containerEv, handlers in six.iteritems(self.handlersContainer):
+        for containerEv, handlers in self.handlersContainer.items():
             if event == containerEv:
                 handlers.append(handler)
 
@@ -302,7 +376,7 @@ class MapWindowBase(object):
         Before each handler is unregistered it is called with string
         value "unregistered" of event parameter.
         """
-        for containerEv, handlers in six.iteritems(self.handlersContainer):
+        for containerEv, handlers in self.handlersContainer.items():
             for handler in handlers:
                 try:
                     handler("unregistered")
@@ -335,7 +409,7 @@ class MapWindowBase(object):
         :return: False if event cannot be unbind
         """
         # removes handler from list
-        for containerEv, handlers in six.iteritems(self.handlersContainer):
+        for containerEv, handlers in self.handlersContainer.items():
             if event != containerEv:
                 continue
             try:
@@ -383,7 +457,7 @@ class MapWindowBase(object):
         """
         try:
             self.lastEN = self.Pixel2Cell(event.GetPosition())
-        except (ValueError):
+        except ValueError:
             self.lastEN = None
 
         event.Skip()
@@ -391,7 +465,20 @@ class MapWindowBase(object):
     def GetLastEN(self):
         """Returns last coordinates of mouse cursor.
 
+<<<<<<< HEAD
         @deprecated This method is deprecated. Use Signal with coordinates as parameters.
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        @deprecated This method is deprecated. Use Signal with coordinates as
+        parameters.
+=======
+        @deprecated This method is deprecated. Use Signal with coordinates as parameters.
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+        @deprecated This method is deprecated. Use Signal with coordinates as parameters.
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+>>>>>>> osgeo-main
 
         :func:`OnMotion`
         """

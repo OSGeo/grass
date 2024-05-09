@@ -70,11 +70,13 @@ tail. By scaling the axes to the same width, the a=3 window has a narrower
 central lobe.
 
 <p>
-For longitude-latitude locations, the interpolation algorithm is based on
+For longitude-latitude coordinate reference systems,
+the interpolation algorithm is based on
 degree fractions, not on the absolute distances between cell centers.  Any
 attempt to implement the latter would violate the integrity of the
 interpolation method.
 
+<<<<<<< HEAD
 <h3>PERFORMANCE</h3>
 <p>By specifying the number of parallel processes with <b>nprocs</b> option,
 <em>r.resamp.filter</em> can run faster, see benchmarks below.
@@ -89,7 +91,43 @@ interpolation method.
 To take advantage of the parallelization, GRASS GIS
 needs to compiled with OpenMP enabled.
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<h3>PERFORMANCE</h3>
+<p>By specifying the number of parallel processes with <b>nprocs</b> option,
+<em>r.resamp.filter</em> can run faster, see benchmarks below.
+>>>>>>> osgeo-main
 
+<div align="center" style="margin: 10px">
+     <img src="r_resamp_filter_benchmark_size.png" alt="benchmark for number of cells" border="0">
+     <br>
+     <i>Figure: Benchmark shows execution time for different
+     number of cells. See benchmark script in the source code.</i>
+     </div>
+<p>To reduce the memory requirements to minimum, set option <b>memory</b> to zero.
+To take advantage of the parallelization, GRASS GIS
+needs to compiled with OpenMP enabled.
+
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
 <h2>SEE ALSO</h2>
 
 <em>

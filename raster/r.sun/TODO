@@ -1,7 +1,17 @@
 TODO
 
 -------
+<<<<<<< HEAD
+Probably the sun position calculation should be replaced
+=======
 Probably the sun position calculation shouldbe replaced
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 with
 
  G_calc_solar_position()

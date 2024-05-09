@@ -9,7 +9,6 @@ for details.
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 """
 
-
 import os
 import shutil
 import sys
@@ -119,7 +118,19 @@ def split_mapset_path(mapset_path):
     return os.fspath(grassdb), location, mapset
 
 
+<<<<<<< HEAD
 def resolve_mapset_path(path, location=None, mapset=None):
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+def resolve_mapset_path(path, location=None, mapset=None) -> MapsetPath:
+=======
+def resolve_mapset_path(path, location=None, mapset=None):
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+def resolve_mapset_path(path, location=None, mapset=None):
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     """Resolve full path to mapset from given combination of parameters.
 
     Full or relative path to mapset can be provided as *path*. If the *path*

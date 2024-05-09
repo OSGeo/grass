@@ -110,6 +110,29 @@ static int G__open(const char *element, const char *name, const char *mapset,
             G_file_name(path, element, name, mapset);
         else
             G_file_name_tmp(path, element, name, mapset);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        
+	if (mode == 1 || access(path, 0) != 0) {
+=======
+
+        if (mode == 1 || access(path, 0) != 0) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+            if (is_tmp)
+                G_make_mapset_object_group_tmp(element);
+            else
+                G_make_mapset_object_group(element);
+<<<<<<< HEAD
+	    close(open(path, O_WRONLY | O_CREAT | O_TRUNC, 0666));
+	}
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
         if (mode == 1 || access(path, 0) != 0) {
             if (is_tmp)
@@ -119,6 +142,17 @@ static int G__open(const char *element, const char *name, const char *mapset,
             close(open(path, O_WRONLY | O_CREAT | O_TRUNC, 0666));
         }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+            close(open(path, O_WRONLY | O_CREAT | O_TRUNC, 0666));
+        }
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         if ((fd = open(path, mode)) < 0)
             G_warning(_("G__open(write): Unable to open '%s': %s"), path,
                       strerror(errno));

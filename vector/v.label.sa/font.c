@@ -1,6 +1,6 @@
 /*
  * from lib/driver/parse_ftcap.c
- * These functions are copied from the diplay driver lib,
+ * These functions are copied from the display driver lib,
  * so that we don't need to have an active display driver open,
  * to run this module.
  */

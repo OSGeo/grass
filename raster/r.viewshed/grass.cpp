@@ -17,7 +17,19 @@
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the
  * line-of-sight that connects their centers does not intersect the
+<<<<<<< HEAD
  * terrain. The terrain is NOT viewed as a tesselation of flat cells,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+ * terrain. The terrain is NOT viewed as a tessellation of flat cells,
+=======
+ * terrain. The terrain is NOT viewed as a tesselation of flat cells,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+ * terrain. The terrain is NOT viewed as a tesselation of flat cells,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
  * i.e. if the line-of-sight does not pass through the cell center,
  * elevation is determined using bilinear interpolation.
  * The viewshed algorithm is efficient both in
@@ -240,7 +252,29 @@ size_t init_event_list_in_memory(AEvent *eventList, char *rastName,
     Rast_get_row(infd, inrast[2], 0, data_type);
 
     e.angle = -1;
+<<<<<<< HEAD
     for (i = 0; i < (dimensionType)nrows; i++) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (dimensionType)nrows; i++) {
+=======
+    for (i = 0; i < nrows; i++) {
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    for (i = 0; i < (dimensionType)nrows; i++) {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    for (i = 0; i < nrows; i++) {
+=======
+    for (i = 0; i < (dimensionType)nrows; i++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         /*read in the raster row */
 
         G_SURFACE_T *tmprast = inrast[0];
@@ -256,7 +290,30 @@ size_t init_event_list_in_memory(AEvent *eventList, char *rastName,
         G_percent(i, nrows, 2);
 
         /*fill event list with events from this row */
+<<<<<<< HEAD
         for (j = 0; j < (dimensionType)ncols; j++) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for (j = 0; j < (dimensionType)ncols; j++) {
+=======
+        for (j = 0; j < Rast_window_cols(); j++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        for (j = 0; j < Rast_window_cols(); j++) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        for (j = 0; j < (dimensionType)ncols; j++) {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        for (j = 0; j < Rast_window_cols(); j++) {
+=======
+        for (j = 0; j < (dimensionType)ncols; j++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
             e.row = i;
             e.col = j;
 
@@ -295,7 +352,19 @@ size_t init_event_list_in_memory(AEvent *eventList, char *rastName,
             /*don't insert in eventlist nodata cell events */
             if (isnull) {
                 /* record this cell as being NODATA; this is necessary so
+<<<<<<< HEAD
                    that we can distingush invisible events, from nodata
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                   that we can distinguish invisible events, from nodata
+=======
+                   that we can distingush invisible events, from nodata
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                   that we can distingush invisible events, from nodata
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                    events in the output */
                 add_result_to_inmem_visibilitygrid(visgrid, i, j,
                                                    hd->nodata_value);
@@ -382,7 +451,7 @@ size_t init_event_list_in_memory(AEvent *eventList, char *rastName,
 /* ************************************************************ */
 /* input: an arcascii file, a grid header and a viewpoint; action:
    figure out all events in the input file, and write them to the
-   stream.  It assumes the file pointer is positioned rigth after the
+   stream.  It assumes the file pointer is positioned right after the
    grid header so that this function can read all grid elements.
 
    if data is not NULL, it creates an array that stores all events on
@@ -460,7 +529,29 @@ AMI_STREAM<AEvent> *init_event_list(char *rastName, Viewpoint *vp,
     e.angle = -1;
 
     /*start scanning through the grid */
+<<<<<<< HEAD
     for (i = 0; i < (dimensionType)nrows; i++) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (dimensionType)nrows; i++) {
+=======
+    for (i = 0; i < nrows; i++) {
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    for (i = 0; i < (dimensionType)nrows; i++) {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    for (i = 0; i < nrows; i++) {
+=======
+    for (i = 0; i < (dimensionType)nrows; i++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
         G_percent(i, nrows, 2);
 
@@ -477,7 +568,30 @@ AMI_STREAM<AEvent> *init_event_list(char *rastName, Viewpoint *vp,
             Rast_set_null_value(inrast[2], ncols, data_type);
 
         /*fill event list with events from this row */
+<<<<<<< HEAD
         for (j = 0; j < (dimensionType)ncols; j++) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for (j = 0; j < (dimensionType)ncols; j++) {
+=======
+        for (j = 0; j < ncols; j++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        for (j = 0; j < ncols; j++) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        for (j = 0; j < (dimensionType)ncols; j++) {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        for (j = 0; j < ncols; j++) {
+=======
+        for (j = 0; j < (dimensionType)ncols; j++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
             e.row = i;
             e.col = j;
@@ -524,7 +638,19 @@ AMI_STREAM<AEvent> *init_event_list(char *rastName, Viewpoint *vp,
             /*don't insert the nodata cell events */
             if (is_nodata(hd, e.elev[1])) {
                 /* record this cell as being NODATA. ; this is necessary so
+<<<<<<< HEAD
                    that we can distingush invisible events, from nodata
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                   that we can distinguish invisible events, from nodata
+=======
+                   that we can distingush invisible events, from nodata
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                   that we can distingush invisible events, from nodata
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                    events in the output */
                 VisCell visCell = {i, j, hd->nodata_value};
                 add_result_to_io_visibilitygrid(visgrid, &visCell);
@@ -638,9 +764,40 @@ void save_grid_to_GRASS(Grid *grid, char *filename, RASTER_MAP_TYPE type,
 
     dimensionType i, j;
 
+<<<<<<< HEAD
     for (i = 0; i < (dimensionType)nrows; i++) {
         G_percent(i, nrows, 5);
         for (j = 0; j < (dimensionType)ncols; j++) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (dimensionType)nrows; i++) {
+        G_percent(i, nrows, 5);
+        for (j = 0; j < (dimensionType)ncols; j++) {
+=======
+    for (i = 0; i < Rast_window_rows(); i++) {
+        G_percent(i, Rast_window_rows(), 5);
+        for (j = 0; j < Rast_window_cols(); j++) {
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    for (i = 0; i < Rast_window_rows(); i++) {
+        G_percent(i, Rast_window_rows(), 5);
+        for (j = 0; j < Rast_window_cols(); j++) {
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+=======
+    for (i = 0; i < (dimensionType)nrows; i++) {
+        G_percent(i, nrows, 5);
+        for (j = 0; j < (dimensionType)ncols; j++) {
+<<<<<<< HEAD
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
             if (is_invisible_nodata(grid->grid_data[i][j])) {
                 writeNodataValue(outrast, j, type);
             }
@@ -722,6 +879,7 @@ void save_vis_elev_to_GRASS(Grid *visgrid, char *elevfname, char *visfname,
     dimensionType i, j;
     double elev = 0, viewshed_value;
 
+<<<<<<< HEAD
     for (i = 0; i < (dimensionType)nrows; i++) {
         /* get the row from elevation */
         Rast_get_row(elevfd, elevrast, i, elev_data_type);
@@ -771,6 +929,86 @@ void save_vis_elev_to_GRASS(Grid *visgrid, char *elevfname, char *visfname,
                 writeNodataValue(visrast, j, elev_data_type);
             }
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (dimensionType)nrows; i++) {
+        /* get the row from elevation */
+        Rast_get_row(elevfd, elevrast, i, elev_data_type);
+
+        for (j = 0; j < (dimensionType)ncols; j++) {
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+    for (i = 0; i < Rast_window_rows(); i++) {
+        /* get the row from elevation */
+        Rast_get_row(elevfd, elevrast, i, elev_data_type);
+
+        for (j = 0; j < Rast_window_cols(); j++) {
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+=======
+    for (i = 0; i < (dimensionType)nrows; i++) {
+        /* get the row from elevation */
+        Rast_get_row(elevfd, elevrast, i, elev_data_type);
+
+        for (j = 0; j < (dimensionType)ncols; j++) {
+<<<<<<< HEAD
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+
+            /* read the current elevation value */
+            int isNull = 0;
+
+            switch (elev_data_type) {
+            case CELL_TYPE:
+                isNull = Rast_is_c_null_value(&((CELL *)elevrast)[j]);
+                elev = (double)(((CELL *)elevrast)[j]);
+                break;
+            case FCELL_TYPE:
+                isNull = Rast_is_f_null_value(&((FCELL *)elevrast)[j]);
+                elev = (double)(((FCELL *)elevrast)[j]);
+                break;
+            case DCELL_TYPE:
+                isNull = Rast_is_d_null_value(&((DCELL *)elevrast)[j]);
+                elev = (double)(((DCELL *)elevrast)[j]);
+                break;
+            }
+
+            if (is_visible(visgrid->grid_data[i][j])) {
+                /* elevation cannot be null */
+                assert(!isNull);
+                /* write elev - viewpoint_elevation */
+                viewshed_value = elev - vp_elev;
+                writeValue(visrast, j, viewshed_value, elev_data_type);
+            }
+            else if (is_invisible_not_nodata(visgrid->grid_data[i][j])) {
+                /* elevation cannot be null */
+                assert(!isNull);
+                /* write INVISIBLE */
+                /*
+                viewshed_value = INVISIBLE;
+                writeValue(visrast, j, viewshed_value, elev_data_type);
+                */
+                /* write  NODATA */
+                writeNodataValue(visrast, j, elev_data_type);
+            }
+            else {
+                /* nodata */
+                assert(isNull);
+                /* write  NODATA */
+                writeNodataValue(visrast, j, elev_data_type);
+            }
+
+>>>>>>> osgeo-main
         } /* for j */
         Rast_put_row(visfd, visrast, elev_data_type);
     } /* for i */
@@ -861,8 +1099,35 @@ void save_io_visibilitygrid_to_GRASS(IOVisibilityGrid *visgrid, char *fname,
 
     dimensionType i, j;
 
+<<<<<<< HEAD
     for (i = 0; i < (dimensionType)nrows; i++) {
         for (j = 0; j < (dimensionType)ncols; j++) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (dimensionType)nrows; i++) {
+        for (j = 0; j < (dimensionType)ncols; j++) {
+=======
+    for (i = 0; i < Rast_window_rows(); i++) {
+        for (j = 0; j < Rast_window_cols(); j++) {
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    for (i = 0; i < (dimensionType)nrows; i++) {
+        for (j = 0; j < (dimensionType)ncols; j++) {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    for (i = 0; i < Rast_window_rows(); i++) {
+        for (j = 0; j < Rast_window_cols(); j++) {
+=======
+    for (i = 0; i < (dimensionType)nrows; i++) {
+        for (j = 0; j < (dimensionType)ncols; j++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
             if (curResult->row == i && curResult->col == j) {
                 /*cell is recodred in the visibility stream: it must be
@@ -959,10 +1224,36 @@ void save_io_vis_and_elev_to_GRASS(IOVisibilityGrid *visgrid, char *elevfname,
 
     dimensionType i, j;
     double elev = 0;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     int nrows = Rast_window_rows();
     int ncols = Rast_window_cols();
     if (nrows > maxDimension || ncols > maxDimension)
         G_fatal_error(_("Grid size exceeds max dimension: %d"), maxDimension);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
     for (i = 0; i < (dimensionType)nrows; i++) {
 

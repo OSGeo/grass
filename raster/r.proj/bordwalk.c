@@ -11,6 +11,21 @@
  * memory allocation. Then main calls the function again, but reversed,
  * to project the input map on the output region, trimming this down to
  * the smallest possible rectangular region.
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+ *
+ * Simply using corner and midpoints (original r.proj) will only work
+ * between cylindrical projections. In other projections, though he input
+ * map is always a rectangular area, the projected output can be of almost
+ * any shape and its position can be rotated any way. It can even be a
+ * discontinuous area.
+ *
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
  *
  * Simply using corner and midpoints (original r.proj) will only work
  * between cylindrical projections. In other projections, though he input
@@ -18,6 +33,13 @@
  * any shape and its position can be rotated any way. It can even be a
  * discontinous area.
  *
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
  * In many projections, especially when large areas are displayed, the edges
  * of rectangular GRASS regions do not necessarily represent east, west, north
  * and south. Naming the region edges accordingly (as is regions and cellhd) can
@@ -217,7 +239,7 @@ void bordwalk(const struct Cell_head *from_hd, struct Cell_head *to_hd,
 
     debug("Extra check", &cur_hd);
 
-    /* if we still have some unresonable default minmax left, then abort */
+    /* if we still have some unreasonable default minmax left, then abort */
 
     if (outside(&cur_hd, to_hd))
         G_fatal_error(_("Input raster map is outside current region"));

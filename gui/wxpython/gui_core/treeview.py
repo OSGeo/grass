@@ -1,7 +1,7 @@
 """
 @package gui_core.treeview
 
-@brief tree view for dislaying tree model (used for search tree)
+@brief tree view for displaying tree model (used for search tree)
 
 Classes:
  - treeview::TreeView
@@ -13,8 +13,6 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
-
-from __future__ import print_function
 
 import wx
 from wx.lib.mixins.treemixin import VirtualTree, ExpansionState
@@ -58,7 +56,7 @@ class AbstractTreeViewMixin(VirtualTree):
 
     def __init__(self, model, parent, *args, **kw):
         self._model = model
-        super(AbstractTreeViewMixin, self).__init__(parent=parent, *args, **kw)
+        super().__init__(parent=parent, *args, **kw)
 
         self.selectionChanged = Signal("TreeView.selectionChanged")
         self.itemActivated = Signal("TreeView.itemActivated")
@@ -204,7 +202,7 @@ class TreeView(AbstractTreeViewMixin, wx.TreeCtrl):
     """Tree view class inheriting from wx.TreeCtrl"""
 
     def __init__(self, model, parent, *args, **kw):
-        super(TreeView, self).__init__(parent=parent, model=model, *args, **kw)
+        super().__init__(parent=parent, model=model, *args, **kw)
         self.RefreshItems()
 
 
@@ -225,7 +223,7 @@ class CTreeView(AbstractTreeViewMixin, CustomTreeCtrl):
                 | CT.TR_LINES_AT_ROOT
                 | CT.TR_SINGLE
             )
-        super(CTreeView, self).__init__(parent=parent, model=model, **kw)
+        super().__init__(parent=parent, model=model, **kw)
         self.SetBackgroundColour(wx.SystemSettings().GetColour(wx.SYS_COLOUR_WINDOW))
         self.RefreshItems()
 
@@ -237,12 +235,12 @@ class TreeListView(AbstractTreeViewMixin, ExpansionState, TreeListCtrl):
             flags = kw["style"]
             kw["agwStyle"] = flags
             del kw["style"]
-        super(TreeListView, self).__init__(parent=parent, model=model, **kw)
+        super().__init__(parent=parent, model=model, **kw)
         for column in columns:
             self.AddColumn(column)
         self.SetMainColumn(0)
         self.RefreshItems()
-        # to solve events inconsitency
+        # to solve events inconsistency
         self.Bind(
             wx.EVT_TREE_ITEM_RIGHT_CLICK,
             lambda evt: self._emitSignal(evt.GetItem(), self.contextMenu),
@@ -281,8 +279,8 @@ class TreeFrame(wx.Frame):
         wx.Frame.__init__(self, None, title="Test tree")
 
         panel = wx.Panel(self)
-        #        self.tree = TreeListView(model=model, parent=panel, columns=['col1', 'xxx'])
-        #        self.tree = TreeView(model=model, parent=panel)
+        # self.tree = TreeListView(model=model, parent=panel, columns=["col1", "xxx"])
+        # self.tree = TreeView(model=model, parent=panel)
         self.tree = CTreeView(model=model, parent=panel)
         self.tree.selectionChanged.connect(self.OnSelChanged)
         self.tree.itemActivated.connect(self.OnItemActivated)

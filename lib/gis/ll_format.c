@@ -12,9 +12,9 @@ G_llres_format (res, buf)
     char *buf;
 
   formats lat (latitude in degrees), or lon (longitude in degrees)
-  into buf as dd:mm:ssH, where H (hemishpere) is
-      N for northern hemishpere, S for southern,
-      W for western hemishpere, E for eastern
+  into buf as dd:mm:ssH, where H (hemisphere) is
+      N for northern hemisphere, S for southern,
+      W for western hemisphere, E for eastern
       none for resolution
   (lat > 0 is northern, lat < 0 is southern)
   (lon > 0 is eastern,  lon < 0 is western)

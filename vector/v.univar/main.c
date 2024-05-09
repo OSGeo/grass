@@ -71,8 +71,37 @@ double sumsq = 0.0;
 double sumcb = 0.0;
 double sumqt = 0.0;
 double sum_abs = 0.0;
+<<<<<<< HEAD
 double min = NAN;
 double max = NAN;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+double min = NAN;
+double max = NAN;
+=======
+double min = 0.0 / 0.0; /* init as nan */
+double max = 0.0 / 0.0;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+double min = 0.0 / 0.0; /* init as nan */
+double max = 0.0 / 0.0;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+double min = NAN;
+double max = NAN;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+double min = 0.0 / 0.0; /* init as nan */
+double max = 0.0 / 0.0;
+=======
+double min = NAN;
+double max = NAN;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 double mean, mean_abs, pop_variance, sample_variance, pop_stdev, sample_stdev,
     pop_coeff_variation, kurtosis, skewness;
 double total_size = 0.0; /* total size: length/area */

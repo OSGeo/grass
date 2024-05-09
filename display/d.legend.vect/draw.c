@@ -1,7 +1,19 @@
 /* draw.c:
  *
  * With do_bg=1 compute position of all legend graphic item and draw only
+<<<<<<< HEAD
  * background. Eith do_bg=0 compute position of all legend graphic item and draw
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+ * background. With do_bg=0 compute position of all legend graphic item and draw
+=======
+ * background. Eith do_bg=0 compute position of all legend graphic item and draw
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+ * background. Eith do_bg=0 compute position of all legend graphic item and draw
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
  * all.
  *
  * Copyright (C) 2016 by Adam Laza, GSoC 2016, and the GRASS Development Team
@@ -52,6 +64,7 @@ void draw(char *file_name, double LL, double LT, char *title, int cols,
 
     /* Draw title */
     title_h = 0;
+    title_w = 0;
     if (strlen(title) > 0) {
         D_font(tit_font);
         D_text_size(tit_size, tit_size);

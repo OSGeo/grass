@@ -3,15 +3,7 @@ Created on Fri Aug 17 16:05:25 2012
 
 @author: pietro
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
+
 import ctypes
 
 #
@@ -51,13 +43,13 @@ proj: {proj}
 """
 
 
-class Info(object):
+class Info:
     def __init__(self, name, mapset=""):
         """Read the information for a raster map. ::
 
         >>> info = Info(test_raster_name)
         >>> info.read()
-        >>> info          # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> info  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         abstract_test_map@
         rows: 4
         cols: 4
@@ -162,12 +154,40 @@ class Info(object):
     def mtype(self):
         return RTYPE_STR[libraster.Rast_map_type(self.name, self.mapset)]
 
+<<<<<<< HEAD
     def _get_semantic_label(self):
         """Get semantic label identifier.
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    def _get_semantic_label(self):
+        """Get semantic label identifier.
+=======
+    def _get_bandref(self):
+        """Get band reference identifier.
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+    def _get_semantic_label(self):
+        """Get semantic label identifier.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    def _get_semantic_label(self):
+        """Get semantic label identifier.
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
         :return str: semantic label (eg. S2_1) or None
         """
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         semantic_label = libraster.Rast_read_semantic_label(self.name, self.mapset)
         if semantic_label:
             return utils.decode(semantic_label)
@@ -187,6 +207,42 @@ class Info(object):
             libgis.G_remove_misc("cell_misc", "semantic_label", self.name)
 
     semantic_label = property(_get_semantic_label, _set_semantic_label)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+        bandref = libraster.Rast_read_bandref(self.name, self.mapset)
+        if bandref:
+            return utils.decode(bandref)
+=======
+        semantic_label = libraster.Rast_read_semantic_label(self.name, self.mapset)
+        if semantic_label:
+            return utils.decode(semantic_label)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+        return None
+
+    @must_be_in_current_mapset
+    def _set_semantic_label(self, semantic_label):
+        """Set/Unset semantic label identifier.
+
+        :param str semantic_label: semantic label to assign or None to remove (unset)
+        """
+        if semantic_label:
+            if libraster.Rast_legal_semantic_label(semantic_label) is False:
+                raise ValueError(_("Invalid semantic label"))
+            libraster.Rast_write_semantic_label(self.name, semantic_label)
+        else:
+            libgis.G_remove_misc("cell_misc", "semantic_label", self.name)
+
+<<<<<<< HEAD
+    bandref = property(_get_bandref, _set_bandref)
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+    semantic_label = property(_get_semantic_label, _set_semantic_label)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     def _get_units(self):
         units = libraster.Rast_read_units(self.name, self.mapset)
@@ -264,7 +320,7 @@ class Info(object):
         return dict2html(dict(self.items()), keys=self.keys(), border="1", kdec="b")
 
 
-class RasterAbstractBase(object):
+class RasterAbstractBase:
     """Raster_abstract_base: The base class from which all sub-classes
     inherit. It does not implement any row or map access methods:
 
@@ -547,7 +603,8 @@ class RasterAbstractBase(object):
     def get_value(self, point, region=None):
         """This method returns the pixel value of a given pair of coordinates:
 
-        :param point: pair of coordinates in tuple object or class object with coords() method
+        :param point: pair of coordinates in tuple object or class object with coords()
+            method
         """
         # Check for tuple
         if not isinstance(point, list) and not isinstance(point, tuple):
@@ -629,7 +686,6 @@ class RasterAbstractBase(object):
 
 
 if __name__ == "__main__":
-
     import doctest
     from grass.pygrass.modules import Module
 

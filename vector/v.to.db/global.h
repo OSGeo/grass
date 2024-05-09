@@ -26,9 +26,28 @@ struct options {
     char *qcol;
     int type;
     int option;
+<<<<<<< HEAD
     int print; /* print only */
     int sql;   /* print only sql statements */
     int total; /* print totals */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int print;        /* print only */
+    int print_header; /* print header for print and total */
+    int sql;          /* print only sql statements */
+    int total;        /* print totals */
+=======
+    int print; /* print only */
+    int sql;   /* print only sql statements */
+    int total; /* print totals */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int print; /* print only */
+    int sql;   /* print only sql statements */
+    int total; /* print totals */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     int units;
     int qfield; /* query field */
     char *fs;

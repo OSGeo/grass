@@ -34,7 +34,7 @@ static int test_gwflow_2d(void);
 static int test_gwflow_3d(void);
 
 /* *************************************************************** */
-/* Performe the gwflow integration tests ************************* */
+/* Perform the gwflow integration tests ************************* */
 /* *************************************************************** */
 int integration_test_gwflow(void)
 {
@@ -279,7 +279,19 @@ int test_gwflow_3d(void)
     N_print_les(les);
     N_free_les(les);
 
+<<<<<<< HEAD
     /*GUASS*/ les = N_assemble_les_3d(N_NORMAL_LES, geom, data->status,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /*GAUSS*/ les = N_assemble_les_3d(N_NORMAL_LES, geom, data->status,
+=======
+    /*GUASS*/ les = N_assemble_les_3d(N_NORMAL_LES, geom, data->status,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    /*GUASS*/ les = N_assemble_les_3d(N_NORMAL_LES, geom, data->status,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                                       data->phead_start, (void *)data, call);
     G_math_solver_gauss(les->A, les->x, les->b, les->rows);
     N_print_les(les);
@@ -291,7 +303,19 @@ int test_gwflow_3d(void)
     N_print_les(les);
     N_free_les(les);
 
+<<<<<<< HEAD
     /*GUASS*/ les =
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /*GAUSS*/ les =
+=======
+    /*GUASS*/ les =
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    /*GUASS*/ les =
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         N_assemble_les_3d_dirichlet(N_NORMAL_LES, geom, data->status,
                                     data->phead_start, (void *)data, call);
     N_les_integrate_dirichlet_3d(les, geom, data->status, data->phead_start);
@@ -467,7 +491,19 @@ int test_gwflow_2d(void)
     N_print_les(les);
     N_free_les(les);
 
+<<<<<<< HEAD
     /*GUASS*/ les = N_assemble_les_2d(N_NORMAL_LES, geom, data->status,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /*GAUSS*/ les = N_assemble_les_2d(N_NORMAL_LES, geom, data->status,
+=======
+    /*GUASS*/ les = N_assemble_les_2d(N_NORMAL_LES, geom, data->status,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    /*GUASS*/ les = N_assemble_les_2d(N_NORMAL_LES, geom, data->status,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                                       data->phead_start, (void *)data, call);
     G_math_solver_gauss(les->A, les->x, les->b, les->rows);
     N_print_les(les);
@@ -479,7 +515,19 @@ int test_gwflow_2d(void)
     N_print_les(les);
     N_free_les(les);
 
+<<<<<<< HEAD
     /*GUASS*/ les =
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /*GAUSS*/ les =
+=======
+    /*GUASS*/ les =
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    /*GUASS*/ les =
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         N_assemble_les_2d_dirichlet(N_NORMAL_LES, geom, data->status,
                                     data->phead_start, (void *)data, call);
     N_les_integrate_dirichlet_2d(les, geom, data->status, data->phead_start);

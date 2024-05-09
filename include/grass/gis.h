@@ -6,7 +6,35 @@
  * PURPOSE:     This file contains definitions of variables and data types
  *              for use with most, if not all, Grass programs. This file is
  *              usually included in every Grass program.
+<<<<<<< HEAD
  * COPYRIGHT:   (C) 2000-2023 by the GRASS Development Team
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+ * COPYRIGHT:   (C) 2000-2024 by the GRASS Development Team
+=======
+ * COPYRIGHT:   (C) 2000-2021 by the GRASS Development Team
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+ * COPYRIGHT:   (C) 2000-2021 by the GRASS Development Team
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+ * COPYRIGHT:   (C) 2000-2022 by the GRASS Development Team
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+ * COPYRIGHT:   (C) 2000-2022 by the GRASS Development Team
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+ * COPYRIGHT:   (C) 2000-2023 by the GRASS Development Team
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
+=======
+ * COPYRIGHT:   (C) 2000-2023 by the GRASS Development Team
+>>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
+>>>>>>> osgeo-main
  *
  *              This program is free software under the GNU General Public
  *              License (>=v2). Read the file COPYING that comes with GRASS
@@ -36,8 +64,44 @@
 #define __attribute__(x)
 #endif
 
+<<<<<<< HEAD
 static const char *GRASS_copyright __attribute__((unused)) =
     "GRASS GNU GPL licensed Software";
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+/*!
+    \def UNUSED
+    \brief A macro for an attribute, if attached to a variable,
+           indicating that the variable is not used
+*/
+#if (defined(__GNUC__) || defined(__APPLE__)) && !defined(_MSC_VER)
+#define UNUSED __attribute__((unused))
+#else
+#define UNUSED
+#endif
+
+static const char *GRASS_copyright UNUSED = "GRASS GNU GPL licensed Software";
+
+/*!
+    \def FALLTHROUGH
+    \brief A macro for a fallthrough statement attribute
+ */
+#if (defined(__GNUC__) && __GNUC__ >= 7) || \
+    (defined(__clang__) && __clang_major__ >= 12)
+#define FALLTHROUGH __attribute__((__fallthrough__))
+#else
+#define FALLTHROUGH ((void)0)
+#endif
+=======
+static const char *GRASS_copyright __attribute__((unused)) =
+    "GRASS GNU GPL licensed Software";
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+static const char *GRASS_copyright __attribute__((unused)) =
+    "GRASS GNU GPL licensed Software";
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 /* GRASS version, GRASS date, git short hash of last change in GRASS headers
  * (and anything else in include)
@@ -62,6 +126,14 @@ static const char *GRASS_copyright __attribute__((unused)) =
 #define FALSE false
 #endif
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #if (defined(_FILE_OFFSET_BITS) && _FILE_OFFSET_BITS == 64) || \
     (__APPLE__ && __LP64__)
 #define PRI_OFF_T "lld"
@@ -69,6 +141,7 @@ static const char *GRASS_copyright __attribute__((unused)) =
 #define PRI_OFF_T "ld"
 #endif
 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 /*! \brief Cross-platform Newline Character */
 #define NEWLINE '\n'
 #ifdef __MINGW32__
@@ -99,12 +172,45 @@ static const char *GRASS_copyright __attribute__((unused)) =
 #define U_DEGREES        8
 #define U_USFEET         9
 /* Temporal units from the datetime library */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #define U_YEARS          DATETIME_YEAR
 #define U_MONTHS         DATETIME_MONTH
 #define U_DAYS           DATETIME_DAY
 #define U_HOURS          DATETIME_HOUR
 #define U_MINUTES        DATETIME_MINUTE
 #define U_SECONDS        DATETIME_SECOND
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 270077e68a (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
+#define U_YEARS         DATETIME_YEAR
+#define U_MONTHS        DATETIME_MONTH
+#define U_DAYS          DATETIME_DAY
+#define U_HOURS         DATETIME_HOUR
+#define U_MINUTES       DATETIME_MINUTE
+#define U_SECONDS       DATETIME_SECOND
+<<<<<<< HEAD
+>>>>>>> 015cec3442 (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
+=======
+>>>>>>> 270077e68a (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 /*! \brief Projection code - XY coordinate system (unreferenced data) */
 #define PROJECTION_XY    0
@@ -305,6 +411,16 @@ typedef enum {
     G_OPT_C,  /*!< color */
     G_OPT_CN, /*!< color or none */
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     G_OPT_M_UNITS,      /*!< units */
     G_OPT_M_DATATYPE,   /*!< datatype */
     G_OPT_M_MAPSET,     /*!< mapset */
@@ -316,6 +432,49 @@ typedef enum {
     G_OPT_M_REGION,     /*!< saved region */
     G_OPT_M_NULL_VALUE, /*!< null value string */
     G_OPT_M_NPROCS,     /*!< number of threads for parallel computing */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    G_OPT_M_UNITS,              /*!< units */
+    G_OPT_M_DATATYPE,           /*!< datatype */
+    G_OPT_M_MAPSET,             /*!< mapset */
+    G_OPT_M_LOCATION,           /*!< location */
+    G_OPT_M_DBASE,              /*!< dbase */
+    G_OPT_M_COORDS,             /*!< coordinates */
+    G_OPT_M_COLR,               /*!< color rules */
+    G_OPT_M_DIR,                /*!< directory input */
+    G_OPT_M_REGION,             /*!< saved region */
+    G_OPT_M_NULL_VALUE,         /*!< null value string */
+    G_OPT_M_NPROCS,             /*!< number of threads for parallel computing */
+
+    G_OPT_STDS_INPUT,           /*!< old input space time dataset of type strds, str3ds or stvds */
+    G_OPT_STDS_INPUTS,          /*!< old input space time datasets */
+    G_OPT_STDS_OUTPUT,          /*!< new output space time dataset */
+    G_OPT_STRDS_INPUT,          /*!< old input space time raster dataset */
+    G_OPT_STRDS_INPUTS,         /*!< old input space time raster datasets */
+    G_OPT_STRDS_OUTPUT,         /*!< new output space time raster dataset */
+    G_OPT_STRDS_OUTPUTS,        /*!< new output space time raster datasets */
+    G_OPT_STR3DS_INPUT,         /*!< old input space time raster3d dataset */
+    G_OPT_STR3DS_INPUTS,        /*!< old input space time raster3d datasets */
+    G_OPT_STR3DS_OUTPUT,        /*!< new output space time raster3d dataset */
+    G_OPT_STVDS_INPUT,          /*!< old input space time vector dataset */
+    G_OPT_STVDS_INPUTS,         /*!< old input space time vector datasets */
+    G_OPT_STVDS_OUTPUT,         /*!< new output space time vector dataset */
+    G_OPT_MAP_INPUT,            /*!< old input map of type raster, vector or raster3d  */
+    G_OPT_MAP_INPUTS,           /*!< old input maps of type raster, vector or raster3d  */
+    G_OPT_STDS_TYPE,            /*!< the type of a space time dataset: strds, str3ds, stvds */
+    G_OPT_MAP_TYPE,             /*!< The type of an input map: raster, vect, rast3d */
+    G_OPT_T_TYPE,               /*!< The temporal type of a space time dataset */
+    G_OPT_T_WHERE,              /*!< A temporal GIS framework SQL WHERE statement */
+    G_OPT_T_SAMPLE             /*!< Temporal sample methods */
+>>>>>>> 015cec3442 (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     G_OPT_STDS_INPUT, /*!< old input space time dataset of type strds, str3ds or
                          stvds */

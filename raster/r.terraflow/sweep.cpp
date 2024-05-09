@@ -16,6 +16,16 @@
  *
  *****************************************************************************/
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+#include <cinttypes>
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
@@ -123,8 +133,34 @@ FLOW_DATASTR *initializePQ()
         stats->comment("FLOW_DATASTRUCTURE: in-memory pqueue");
     flowpq = new FLOW_DATASTR(PQ_SIZE);
     char buf[1024];
+<<<<<<< HEAD
     snprintf(buf, sizeof(buf), "initialized to %.2fMB\n",
              (float)PQ_SIZE / (1 << 20));
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, sizeof(buf), "initialized to %.2fMB\n",
+             (float)PQ_SIZE / (1 << 20));
+=======
+    sprintf(buf, "initialized to %.2fMB\n", (float)PQ_SIZE / (1 << 20));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    sprintf(buf, "initialized to %.2fMB\n", (float)PQ_SIZE / (1 << 20));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(buf, sizeof(buf), "initialized to %.2fMB\n",
+             (float)PQ_SIZE / (1 << 20));
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    sprintf(buf, "initialized to %.2fMB\n", (float)PQ_SIZE / (1 << 20));
+=======
+    snprintf(buf, sizeof(buf), "initialized to %.2fMB\n",
+             (float)PQ_SIZE / (1 << 20));
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     if (stats)
         *stats << buf;
 
@@ -195,8 +231,23 @@ AMI_STREAM<sweepOutput> *sweep(AMI_STREAM<sweepItem> *sweepstr,
         /* read next sweepItem = (prio, elevwin, topoRankwin, dir) */
         ae = sweepstr->read_item(&crtpoint);
         if (ae != AMI_ERROR_NO_ERROR) {
+<<<<<<< HEAD
             fprintf(stderr,
                     "sweep: k=%" PRI_OFF_T ": cannot read next item..\n", k);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            fprintf(stderr, "sweep: k=%" PRId64 ": cannot read next item..\n",
+                    k);
+=======
+            fprintf(stderr,
+                    "sweep: k=%" PRI_OFF_T ": cannot read next item..\n", k);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            fprintf(stderr,
+                    "sweep: k=%" PRI_OFF_T ": cannot read next item..\n", k);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             exit(1);
         }
         /* cout << "k=" << k << " prio =" << crtpoint->getPriority() << "\n"; */
@@ -272,7 +323,30 @@ AMI_STREAM<sweepOutput> *sweep(AMI_STREAM<sweepItem> *sweepstr,
     if (stats)
         *stats << "sweeping done\n";
     char buf[1024];
+<<<<<<< HEAD
     snprintf(buf, sizeof(buf), "pqsize = %ld \n", (long)flowpq->size());
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, sizeof(buf), "pqsize = %ld \n", (long)flowpq->size());
+=======
+    sprintf(buf, "pqsize = %ld \n", (long)flowpq->size());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    sprintf(buf, "pqsize = %ld \n", (long)flowpq->size());
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    snprintf(buf, sizeof(buf), "pqsize = %ld \n", (long)flowpq->size());
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    sprintf(buf, "pqsize = %ld \n", (long)flowpq->size());
+=======
+    snprintf(buf, sizeof(buf), "pqsize = %ld \n", (long)flowpq->size());
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     if (stats)
         *stats << buf;
 

@@ -22,7 +22,30 @@
 #include <grass/glocale.h>
 
 static int list_element(FILE *, const char *, const char *, const char *,
+<<<<<<< HEAD
                         int (*)(const char *, const char *, char *));
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                        int (*)(const char *, const char *, char *));
+=======
+                        int (*)(const char *, const char *, const char *));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                        int (*)(const char *, const char *, const char *));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                        int (*)(const char *, const char *, char *));
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+                        int (*)(const char *, const char *, const char *));
+=======
+                        int (*)(const char *, const char *, char *));
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
 /*!
    \brief General purpose list function
@@ -49,7 +72,30 @@ static int list_element(FILE *, const char *, const char *, const char *,
    NULL if no titles desired.
  */
 void G_list_element(const char *element, const char *desc, const char *mapset,
+<<<<<<< HEAD
                     int (*lister)(const char *, const char *, char *))
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    int (*lister)(const char *, const char *, char *))
+=======
+                    int (*lister)(const char *, const char *, const char *))
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    int (*lister)(const char *, const char *, const char *))
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    int (*lister)(const char *, const char *, char *))
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+                    int (*lister)(const char *, const char *, const char *))
+=======
+                    int (*lister)(const char *, const char *, char *))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 {
     struct Popen pager;
     int n;
@@ -94,7 +140,30 @@ void G_list_element(const char *element, const char *desc, const char *mapset,
 
 static int list_element(FILE *out, const char *element, const char *desc,
                         const char *mapset,
+<<<<<<< HEAD
                         int (*lister)(const char *, const char *, char *))
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                        int (*lister)(const char *, const char *, char *))
+=======
+                        int (*lister)(const char *, const char *, const char *))
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                        int (*lister)(const char *, const char *, const char *))
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                        int (*lister)(const char *, const char *, char *))
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+                        int (*lister)(const char *, const char *, const char *))
+=======
+                        int (*lister)(const char *, const char *, char *))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 {
     char path[GPATH_MAX];
     int count = 0;

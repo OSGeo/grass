@@ -1,4 +1,39 @@
 8
+<<<<<<< HEAD
 3
 dev
 2023
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+4
+0dev
+2024
+=======
+=======
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+0
+dev
+2021
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+3
+dev
+<<<<<<< HEAD
+2022
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+3
+dev
+<<<<<<< HEAD
+2022
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+2023
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
+=======
+2023
+>>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
+>>>>>>> osgeo-main

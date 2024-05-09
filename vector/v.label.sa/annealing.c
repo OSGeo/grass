@@ -48,7 +48,19 @@ static unsigned int overlaps_removed = 0;
  @param n_labels The size of the labels array.
  @params The commandline parameters.
  */
+<<<<<<< HEAD
 void simulate_annealing(label_t *labels, int n_labels, struct params *p)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void simulate_annealing(label_t *labels, int n_labels, struct params *p UNUSED)
+=======
+void simulate_annealing(label_t *labels, int n_labels, struct params *p)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void simulate_annealing(label_t *labels, int n_labels, struct params *p)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     /* The temperature of the system */
     double T;
@@ -96,6 +108,26 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
                 lp->current_candidate = c;
                 successes++;
                 consec_successes++;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+                tot_better++;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                tot_better++;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+                tot_better++;
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
             }
             /* else apply with probability p=e^(-dE/T) */
             else {
@@ -109,13 +141,69 @@ void simulate_annealing(label_t *labels, int n_labels, struct params *p)
                     lp->current_candidate = c;
                     successes++;
                     consec_successes++;
+<<<<<<< HEAD
                 }
                 else {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                }
+                else {
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+                    tot_worse++;
+                }
+                else {
+                    tot_ign++;
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                }
+                else {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+=======
+                }
+                else {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                     consec_successes = 0;
                 }
             }
             /* decrease immediately */
+<<<<<<< HEAD
             if (consec_successes > (unsigned int)(5 * n_labels)) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (consec_successes > (unsigned int)(5 * n_labels)) {
+=======
+            if (consec_successes > (5 * n_labels)) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (consec_successes > (5 * n_labels)) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (consec_successes > (unsigned int)(5 * n_labels)) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+            if (consec_successes > (5 * n_labels)) {
+=======
+            if (consec_successes > (unsigned int)(5 * n_labels)) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                 consec_successes = 0;
                 break;
             }

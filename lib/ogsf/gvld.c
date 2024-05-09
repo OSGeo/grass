@@ -403,11 +403,23 @@ int gvld_isosurf(geovol *gvl)
 /*!
    \brief Draw volume isosurface in draw mode
 
-   \param gvl pointer to geovol struct
+   \param gvl pointer to geovol struct [unused]
 
    \return 0
  */
+<<<<<<< HEAD
 int gvld_wire_isosurf(geovol *gvl)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int gvld_wire_isosurf(geovol *gvl UNUSED)
+=======
+int gvld_wire_isosurf(geovol *gvl)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int gvld_wire_isosurf(geovol *gvl)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     return (0);
 }

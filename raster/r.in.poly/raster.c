@@ -22,7 +22,30 @@ static int cur_x, cur_y;
 static int format;
 static CELL *cell;
 
+<<<<<<< HEAD
 static int (*dot)(int, int);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static int (*dot)(int, int);
+=======
+static int (*dot)();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+static int (*dot)();
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+static int (*dot)(int, int);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+static int (*dot)();
+=======
+static int (*dot)(int, int);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 static int cell_dot(int, int);
 static int fcell_dot(int, int);
 static int dcell_dot(int, int);
@@ -167,7 +190,7 @@ int configure_plot(void)
     /* change the region */
     page.north = region.north - at_row * region.ns_res;
     page.south = page.north - nrows * region.ns_res;
-    /* Rast_set_[inpu|output]_window not working but G_set_window ??? */
+    /* Rast_set_[input|output]_window not working but G_set_window ??? */
     G_set_window(&page);
 
     /* configure the plot routines */

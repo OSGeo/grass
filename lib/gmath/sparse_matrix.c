@@ -39,7 +39,19 @@ int G_math_add_spvector(G_math_spvector **Asp, G_math_spvector *spvector,
         G_debug(5,
                 "Add sparse vector %p to the sparse linear equation system at "
                 "row %i\n",
+<<<<<<< HEAD
                 spvector, row);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (void *)spvector, row);
+=======
+                spvector, row);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                spvector, row);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         Asp[row] = spvector;
     }
     else {
@@ -153,7 +165,30 @@ void G_math_print_spmatrix(G_math_spvector **Asp, int rows)
         for (j = 0; j < rows; j++) {
             out = 0;
             for (k = 0; k < Asp[i]->cols; k++) {
+<<<<<<< HEAD
                 if (Asp[i]->index[k] == (unsigned int)j) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (Asp[i]->index[k] == (unsigned int)j) {
+=======
+                if (Asp[i]->index[k] == j) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                if (Asp[i]->index[k] == j) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                if (Asp[i]->index[k] == (unsigned int)j) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+                if (Asp[i]->index[k] == j) {
+=======
+                if (Asp[i]->index[k] == (unsigned int)j) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                     fprintf(stdout, "%4.5f ", Asp[i]->values[k]);
                     out = 1;
                 }
@@ -232,7 +267,29 @@ double **G_math_Asp_to_sband_matrix(G_math_spvector **Asp, int rows,
 
     A = G_alloc_matrix(rows, bandwidth);
 
+<<<<<<< HEAD
     for (i = 0; i < (unsigned int)rows; i++) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (i = 0; i < (unsigned int)rows; i++) {
+=======
+    for (i = 0; i < rows; i++) {
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    for (i = 0; i < (unsigned int)rows; i++) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+    for (i = 0; i < rows; i++) {
+=======
+    for (i = 0; i < (unsigned int)rows; i++) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         for (j = 0; j < Asp[i]->cols; j++) {
             if (Asp[i]->index[j] == i) {
                 A[i][0] = Asp[i]->values[j];
@@ -297,7 +354,7 @@ G_math_spvector **G_math_A_to_Asp(double **A, int rows, double epsilon)
  *
  * WARNING:
  * This function is experimental, do not use.
- * Only the upper triangle matrix of the band strcuture is copied.
+ * Only the upper triangle matrix of the band structure is copied.
  *
  * \param A (double **) the symmetric band matrix
  * \param rows (int)

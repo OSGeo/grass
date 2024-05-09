@@ -99,11 +99,44 @@ PERMANENT
     distribution. The default on GNU/Linux
     is <tt>$HOME/.grass8/addons</tt>, on MS
     Windows <tt>%APPDATA%\Roaming\GRASS8\addons</tt>.</dd>
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+=======
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+  
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
   <dt>GRASS_ADDON_ETC</dt>
   <dd>[libgis, g.findetc]<br>
     specify paths where support files (etc/) may be found external to
     standard distribution.</dd>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+  <dt>GRASS_COMPATIBILITY_TEST</dt>
+  <dd>[libgis]<br>
+    By default it is not possible to run C modules with a libgis that has a
+    different <tt>GIS_H_VERSION</tt>, the compatibility test will exit with a
+    fatal error. Setting this variable to 0 (zero) with
+    <tt>GRASS_COMPATIBILITY_TEST=0</tt> allows the test to be passed with a
+    warning.</dd>
+=======
+>>>>>>> 6dd43833fd (Improve G_open|find _misc function documentation (#1760))
+>>>>>>> osgeo-main
 
   <dt>GRASS_COMPRESSOR</dt>
   <dd>[libraster]<br>
@@ -111,10 +144,23 @@ PERMANENT
     environment variable GRASS_COMPRESSOR. Supported methods are RLE,
     ZLIB, LZ4, BZIP2, and ZSTD. The default is ZSTD if available,
     otherwise ZLIB, which can be changed with e.g.
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    <tt>GRASS_COMPRESSOR=ZSTD</tt>, granted that GRASS has been
+    compiled with the requested compressor. Compressors that are always
+    available are RLE, ZLIB, and LZ4. The compressors BZIP2 and ZSTD
+    must be enabled when configuring GRASS for compilation.</dd>
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     <tt>GRASS_COMPRESSOR=ZSTD</tt></dd>, granted that GRASS has been
     compiled with the requested compressor. Compressors that are always
     available are RLE, ZLIB, and LZ4. The compressors BZIP2 and ZSTD
     must be enabled when configuring GRASS for compilation.
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 
   <dt>GRASS_DB_ENCODING</dt>
   <dd>[various modules, wxGUI]<br>
@@ -524,10 +570,23 @@ g.gisenv set=DEBUG=0
   <dd>See <tt>GRASS_GUI</tt> environmental variable for details.</dd>
 
   <dt>LOCATION</dt>
+<<<<<<< HEAD
+  <dd>full path to project (previously called location) directory</dd>
+
+  <dt>LOCATION_NAME</dt>
+  <dd>initial project name</dd>
+=======
   <dd>full path to location directory</dd>
 
   <dt>LOCATION_NAME</dt>
   <dd>initial location name</dd>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
   <dt>MAPSET</dt>
   <dd>initial mapset</dd>
@@ -546,6 +605,26 @@ g.gisenv set="MEMORYMB=6000"
 # set to use 12 threads (default: 1)
 g.gisenv set="NPROCS=12"
 </pre></div></dd>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+  <dt>NPROCS</dt>
+  <dd>sets the number of threads for parallel computing
+<div class="code"><pre>
+# set to use 12 threads (default: 1)
+g.gisenv set="NPROCS=12"
+</pre></div></dd>
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+
+  <dt>NPROCS</dt>
+  <dd>sets the number of threads for parallel computing
+<div class="code"><pre>
+# set to use 12 threads (default: 1)
+g.gisenv set="NPROCS=12"
+</pre></div></dd>
+>>>>>>> osgeo-main
 
   <dt>OVERWRITE</dt>
   <dd>[all modules]<br>
@@ -573,7 +652,26 @@ g.gisenv set="NPROCS=12"
 
   <dt><tt>$HOME/.grass8/env.bat</tt></dt>
   <dd>stores the shell environment variables (MS Windows only)</dd>
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+  
+<<<<<<< HEAD
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
   <dt><tt>$HOME/.grass8/login</tt></dt>
   <dd>stores the DBMI passwords in this hidden file.
     Only the file owner can access this file.</dd>

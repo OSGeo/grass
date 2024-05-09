@@ -60,21 +60,37 @@ def get_dataset_list(
         >>> import grass.temporal as tgis
         >>> tgis.core.init()
         >>> name = "list_stds_test"
-        >>> sp = tgis.open_stds.open_new_stds(name=name, type="strds",
-        ... temporaltype="absolute", title="title", descr="descr",
-        ... semantic="mean", dbif=None, overwrite=True)
+        >>> sp = tgis.open_stds.open_new_stds(
+        ...     name=name,
+        ...     type="strds",
+        ...     temporaltype="absolute",
+        ...     title="title",
+        ...     descr="descr",
+        ...     semantic="mean",
+        ...     dbif=None,
+        ...     overwrite=True,
+        ... )
         >>> mapset = tgis.get_current_mapset()
-        >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name")
-        >>> rows =  stds_list[mapset]
+        >>> stds_list = tgis.list_stds.get_dataset_list(
+        ...     "strds", "absolute", columns="name"
+        ... )
+        >>> rows = stds_list[mapset]
         >>> for row in rows:
         ...     if row["name"] == name:
         ...         print(True)
+        ...
         True
-        >>> stds_list = tgis.list_stds.get_dataset_list("strds", "absolute", columns="name,mapset", where="mapset = '%s'"%(mapset))
-        >>> rows =  stds_list[mapset]
+        >>> stds_list = tgis.list_stds.get_dataset_list(
+        ...     "strds",
+        ...     "absolute",
+        ...     columns="name,mapset",
+        ...     where="mapset = '%s'" % (mapset),
+        ... )
+        >>> rows = stds_list[mapset]
         >>> for row in rows:
         ...     if row["name"] == name and row["mapset"] == mapset:
         ...         print(True)
+        ...
         True
         >>> check = sp.delete()
 
@@ -89,7 +105,6 @@ def get_dataset_list(
     result = {}
 
     for mapset in mapsets.keys():
-
         if temporal_type == "absolute":
             table = sp.get_type() + "_view_abs_time"
         else:
@@ -250,7 +265,20 @@ def _write_table(rows, column_names, output_format, separator, file):
     elif output_format == "yaml":
         _write_yaml(rows=rows, column_names=column_names, file=file)
     elif output_format == "plain":
+<<<<<<< HEAD
         # No particular reason for this separator expect that this is the original behavior.
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        # No particular reason for this separator except that this is the original
+        # behavior.
+=======
+        # No particular reason for this separator expect that this is the original behavior.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        # No particular reason for this separator expect that this is the original behavior.
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         if not separator:
             separator = "\t"
         _write_plain(rows=rows, header=column_names, separator=separator, file=file)
@@ -302,7 +330,18 @@ def _get_get_registered_maps_as_objects_delta_gran(
 
     records = []
     for map_object in maps:
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         if isinstance(map_object, list):
             if len(map_object) > 0:
                 map_object = map_object[0]
@@ -445,11 +484,34 @@ def _get_list_of_maps_stds(
                 ).format(
                     name=dataset.get_id(),
                     element_type=element_type,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    detail=(
+                        _(
+                            "Dataset is empty or where clause is too constrained or "
+                            "incorrect"
+                        )
+                        if where
+                        else _("Dataset is empty")
+                    ),
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                     detail=_(
                         "Dataset is empty or where clause is too constrained or incorrect"
                     )
                     if where
                     else _("Dataset is empty"),
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 )
             )
     if connection_state_changed:

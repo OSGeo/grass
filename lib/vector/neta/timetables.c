@@ -105,7 +105,7 @@ static int cmp_int(const void *a, const void *b)
    \param walk_length walk length as string
    \param timetable pointer to neta_timetable
    \param route_ids list of route ids
-   \param stop_ids lits of stop ids
+   \param stop_ids list of stop ids
 
    \return 0 on success
    \return non-zero value on failure
@@ -335,13 +335,25 @@ static neta_heap_data *new_heap_data(int conns, int v)
    \param new_dst new 'to' node
    \param v ?
    \param route id of route
-   \param rows ?
+   \param rows ? (unused)
    \param update ?
    \param[out] result pointer to neta_timetable_result structure
    \param heap ?
  */
 void NetA_update_dijkstra(int old_conns, int new_conns, int to, int new_dst,
+<<<<<<< HEAD
                           int v, int route, int rows, int update,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                          int v, int route, int rows UNUSED, int update,
+=======
+                          int v, int route, int rows, int update,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                          int v, int route, int rows, int update,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                           neta_timetable_result *result, dglHeap_s *heap)
 {
     if (result->dst[new_conns][to] == -1 ||

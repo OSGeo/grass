@@ -9,7 +9,6 @@ for details.
 :authors: Vaclav Petras
 """
 
-
 import sys
 import os
 import argparse
@@ -32,7 +31,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.dates import date2num  # noqa: E402
 
 
-class TestResultSummary(object):
+class TestResultSummary:
     def __init__(self):
         self.timestamp = None
         self.svn_revision = None
@@ -167,7 +166,6 @@ def tests_successful_plot(x, xticks, xlabels, results, filename, style):
 
 
 def tests_plot(x, xticks, xlabels, results, filename, style):
-
     total = [result.total for result in results]
     successes = [result.successes for result in results]
     # TODO: document: counting errors and failures together
@@ -314,7 +312,6 @@ def files_percent_plot(x, xticks, xlabels, results, filename, style):
 
 
 def info_plot(x, xticks, xlabels, results, filename, style):
-
     modules = [len(result.tested_modules) for result in results]
     names = [len(result.names) for result in results]
     authors = [len(result.test_files_authors) for result in results]
@@ -430,7 +427,6 @@ def main_page(
 
 
 def main():
-
     parser = argparse.ArgumentParser(
         description="Create overall report from several individual test reports"
     )

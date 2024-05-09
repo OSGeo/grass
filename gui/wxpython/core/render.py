@@ -60,7 +60,7 @@ def get_tempfile_name(suffix, create=False):
     return name
 
 
-class Layer(object):
+class Layer:
     """Virtual class which stores information about layers (map layers and
     overlays) of the map composition.
 
@@ -314,7 +314,7 @@ class Layer(object):
         self.name = name
 
     def SetActive(self, enable=True):
-        """Active or deactive layer"""
+        """Active or deactivate layer"""
         self.active = bool(enable)
 
     def SetHidden(self, enable=False):
@@ -557,7 +557,7 @@ class RenderMapMgr(wx.EvtHandler):
         for layer in layers:
             size = layer.GetRenderedSize()
             if size:
-                # is rendered but its size differes from current env
+                # is rendered but its size differs from current env
                 if not layer.forceRender and (size[0] != w or size[1] != h):
                     layer.forceRender = True
             # Force render cmd (e.g. d.mon start=wx0 && d.rast elevation)
@@ -816,7 +816,7 @@ class RenderMapMgr(wx.EvtHandler):
         self.renderingFailed.emit(cmd=cmd, error=error)
 
 
-class Map(object):
+class Map:
     def __init__(self, gisrc=None):
         """Map composition (stack of map layers and overlays)
 
@@ -902,7 +902,7 @@ class Map(object):
         )
         try:
             windfile = open(filename, "r")
-        except IOError as e:
+        except OSError as e:
             sys.exit(
                 _("Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n")
                 % {"file": filename, "ret": e}
@@ -1049,7 +1049,8 @@ class Map(object):
         :param rast: list of raster maps
         :param zoom: zoom to raster map (ignore NULLs)
         :param vect: list of vector maps
-        :param rast3d: 3d raster map (not list, no support of multiple 3d rasters in g.region)
+        :param rast3d: 3d raster map (not list, no support of multiple 3d rasters in
+                       g.region)
         :param regionName:  named region or None
         :param n,s,e,w: force extent
         :param default: force default region settings
@@ -1130,7 +1131,7 @@ class Map(object):
             else:
                 message = _(
                     "Unable to get current geographic extent. "
-                    "Force quiting wxGUI. Please manually run g.region to "
+                    "Force quitting wxGUI. Please manually run g.region to "
                     "fix the problem."
                 )
             GError(message)
@@ -1194,7 +1195,6 @@ class Map(object):
         # read values from wind file
         try:
             for key in self.wind.keys():
-
                 if key == "north":
                     grass_region += "north: %s; " % (region["n"])
                     continue
@@ -1257,7 +1257,8 @@ class Map(object):
         """Returns list of layers of selected properties or list of
         all layers.
 
-        :param ltype: layer type, e.g. raster/vector/wms/overlay (value or tuple of values)
+        :param ltype: layer type, e.g. raster/vector/wms/overlay (value or tuple of
+                      values)
         :param mapset: all layers from given mapset (only for maplayers)
         :param name: all layers with given name
         :param active: only layers with 'active' attribute set to True or False
@@ -1329,7 +1330,7 @@ class Map(object):
     def Render(self, force=False, windres=False):
         """Creates final image composite
 
-        This function can conditionaly use high-level tools, which
+        This function can conditionally use high-level tools, which
         should be available in wxPython library
 
         :param force: force rendering
@@ -1585,7 +1586,7 @@ class Map(object):
     def GetLayerIndex(self, layer, overlay=False):
         """Get index of layer in layer list.
 
-        :param layer: layer instace in layer tree
+        :param layer: layer instance in layer tree
         :param overlay: use list of overlays instead
 
         :return: layer index
@@ -1639,7 +1640,7 @@ class Map(object):
         return overlay
 
     def ChangeOverlay(self, id, **kargs):
-        """Change overlay properities
+        """Change overlay properties
 
         Add new overlay if overlay with 'id' doesn't exist.
 

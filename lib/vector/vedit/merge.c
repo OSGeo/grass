@@ -216,7 +216,17 @@ static int merge_lines(struct line_pnts *Points1, struct line_cats *Cats1,
     int i, mindistidx;
     double mindist;
 
+<<<<<<< HEAD
+    /* find minimal distance and its index */
+=======
     /* find mininal distance and its index */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     mindist = Vedit_get_min_distance(Points1, Points2, 0, /* TODO 3D */
                                      &mindistidx);
 

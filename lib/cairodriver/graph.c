@@ -8,7 +8,19 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
+<<<<<<< HEAD
    \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+   \author Lars Ahlzen <lars ahlzen.com> (original contributor)
+=======
+   \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
    \author Glynn Clements
  */
 
@@ -73,7 +85,7 @@ static void init_xlib(void)
     }
 
     p = getenv("GRASS_RENDER_CAIRO_VISUAL");
-    if (!p || sscanf(p, "%li", &xid) != 1) {
+    if (!p || sscanf(p, "%lu", &xid) != 1) {
         G_debug(1, "cairo: GRASS_RENDER_CAIRO_VISUAL=%s", p);
         xid = DefaultVisual(ca.dpy, scrn)->visualid;
     }

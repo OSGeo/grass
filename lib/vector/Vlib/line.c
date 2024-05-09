@@ -42,7 +42,7 @@ struct line_pnts *Vect__new_line_struct(void);
 
    \return pointer to line_pnts
  */
-struct line_pnts *Vect_new_line_struct()
+struct line_pnts *Vect_new_line_struct(void)
 {
     struct line_pnts *p;
 
@@ -52,7 +52,7 @@ struct line_pnts *Vect_new_line_struct()
     return p;
 }
 
-struct line_pnts *Vect__new_line_struct()
+struct line_pnts *Vect__new_line_struct(void)
 {
     struct line_pnts *p;
 
@@ -171,7 +171,19 @@ int Vect_append_point(struct line_pnts *Points, double x, double y, double z)
    \param x,y,z point coordinates
 
    \return number of points
+<<<<<<< HEAD
    \return -1 on error (alocation)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+   \return -1 on error (allocation)
+=======
+   \return -1 on error (alocation)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   \return -1 on error (alocation)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
  */
 int Vect_line_insert_point(struct line_pnts *Points, int index, double x,
                            double y, double z)
@@ -926,7 +938,7 @@ void Vect_line_reverse(struct line_pnts *Points)
    \return -1 no category
    \return category number (>=0)
  */
-int Vect_get_line_cat(const struct Map_info *Map, int line, int field)
+int Vect_get_line_cat(struct Map_info *Map, int line, int field)
 {
 
     static struct line_cats *cats = NULL;

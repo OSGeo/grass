@@ -194,7 +194,19 @@ int main(int argc, char *argv[])
     /*------------------------------------------------------------------
       | Subdividing and working with tiles:
       | Each original region will be divided into several subregions.
+<<<<<<< HEAD
       | Each one will be overlaped by its neighbouring subregions.
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+      | Each one will be overlapped by its neighbouring subregions.
+=======
+      | Each one will be overlaped by its neighbouring subregions.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+      | Each one will be overlaped by its neighbouring subregions.
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
       | The overlapping is calculated as a fixed OVERLAP_SIZE times
       | the largest spline step plus 2 * orlo
       ----------------------------------------------------------------*/
@@ -718,6 +730,17 @@ int main(int argc, char *argv[])
             else {
                 if (observ)
                     G_free(observ);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (observ_marked)
+                    G_free(observ_marked);
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 if (npoints == 0)
                     G_warning(_("No data within this subregion. "
                                 "Consider increasing the spline step."));

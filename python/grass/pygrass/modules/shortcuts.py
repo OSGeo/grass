@@ -1,12 +1,3 @@
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 import fnmatch
 
 
@@ -17,7 +8,7 @@ _CMDS = list(get_commands()[0])
 _CMDS.sort()
 
 
-class MetaModule(object):
+class MetaModule:
     """Example how to use MetaModule
 
     >>> g = MetaModule('g')
@@ -68,7 +59,27 @@ class MetaModule(object):
         return self.cls("%s.%s" % (self.prefix, name.strip("_").replace("_", ".")))
 
 
+<<<<<<< HEAD
 # https://grass.osgeo.org/grass-devel/manuals/full_index.html
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+# https://grass.osgeo.org/grass-devel/manuals/full_index.html
+=======
+# https://grass.osgeo.org/grass80/manuals/full_index.html
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+# https://grass.osgeo.org/grass80/manuals/full_index.html
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+# https://grass.osgeo.org/grass-devel/manuals/full_index.html
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+# https://grass.osgeo.org/grass-devel/manuals/full_index.html
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 # [ d.* | db.* | g.* | i.* | m.* | ps.* | r.* | r3.* | t.* | v.* ]
 #
 #  d.*	display commands

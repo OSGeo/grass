@@ -43,7 +43,17 @@ int main(int argc, char *argv[])
     char buf[GPATH_MAX], *dsn, *layer;
     const char *output;
     struct Cell_head cellhd;
+<<<<<<< HEAD
+    GDALDatasetH Ogr_ds;
+=======
     ds_t Ogr_ds;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     G_gisinit(argv[0]);
 
@@ -141,12 +151,17 @@ int main(int argc, char *argv[])
     /* open OGR DSN */
     Ogr_ds = NULL;
     if (strlen(options.dsn->answer) > 0) {
+<<<<<<< HEAD
+        Ogr_ds =
+            GDALOpenEx(options.dsn->answer, GDAL_OF_VECTOR, NULL, NULL, NULL);
+=======
 #if GDAL_VERSION_NUM >= 2020000
         Ogr_ds =
             GDALOpenEx(options.dsn->answer, GDAL_OF_VECTOR, NULL, NULL, NULL);
 #else
         Ogr_ds = OGROpen(dsn, FALSE, NULL);
 #endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     }
     if (Ogr_ds == NULL)
         G_fatal_error(_("Unable to open data source <%s>"), dsn);
@@ -173,7 +188,17 @@ int main(int argc, char *argv[])
     /* check projection match */
     check_projection(&cellhd, Ogr_ds, ilayer, NULL, NULL, 0,
                      flags.override->answer, flags.proj->answer);
+<<<<<<< HEAD
+    GDALClose(Ogr_ds);
+=======
     ds_close(Ogr_ds);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     /* create new vector map */
     putenv("GRASS_VECTOR_EXTERNAL_IGNORE=1");

@@ -109,8 +109,11 @@ for details.
 .. sectionauthor:: Glynn Clements
 """
 
+<<<<<<< HEAD
+=======
 from __future__ import absolute_import
 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 import numpy
 
 from .utils import try_remove
@@ -121,7 +124,7 @@ from grass.exceptions import CalledModuleError
 ###############################################################################
 
 
-class _tempfile(object):
+class _tempfile:
     def __init__(self, env=None):
         self.filename = gcore.tempfile(env=env)
 
@@ -187,7 +190,7 @@ class array(numpy.memmap):
         :param str mapname: name for raster map
         :param str title: title for raster map
         :param null: null value
-        :param bool overwrite: True for overwritting existing raster maps
+        :param bool overwrite: True for overwriting existing raster maps
 
         :return: 0 on success
         :return: non-zero code on failure
@@ -209,6 +212,9 @@ class array(numpy.memmap):
             flags = None
         else:
             raise ValueError(_("Invalid kind <%s>") % kind)
+
+        # ensure all array content is written to the file
+        self.flush()
 
         reg = gcore.region(env=self._env)
 
@@ -314,6 +320,9 @@ class array3d(numpy.memmap):
             flags = "i"
         else:
             raise ValueError(_("Invalid kind <%s>") % kind)
+
+        # ensure all array content is written to the file
+        self.flush()
 
         reg = gcore.region(True, env=self._env)
 

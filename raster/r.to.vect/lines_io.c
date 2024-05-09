@@ -143,7 +143,19 @@ int write_line(struct COOR *seed)
 /* writes binary and supplemental file */
 
 static int write_ln(struct COOR *begin,
+<<<<<<< HEAD
                     struct COOR *end, /* start and end point of line */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    struct COOR *end UNUSED, /* start and end point of line */
+=======
+                    struct COOR *end, /* start and end point of line */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    struct COOR *end, /* start and end point of line */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                     int n)
 { /* number of points to write */
     static struct line_pnts *points = NULL;

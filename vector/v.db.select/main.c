@@ -29,7 +29,34 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 
+<<<<<<< HEAD
 enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
+=======
+=======
+>>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
+enum OutputFormat {
+    PLAIN,
+    JSON,
+    CSV,
+    VERTICAL
+};
+<<<<<<< HEAD
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
+=======
+>>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
+=======
+enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+enum OutputFormat { PLAIN, JSON, CSV, VERTICAL };
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 void fatal_error_option_value_excludes_flag(struct Option *option,
                                             struct Flag *excluded,
@@ -196,6 +223,17 @@ int main(int argc, char **argv)
     else
         format = PLAIN;
     if (format == JSON) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         fatal_error_option_value_excludes_flag(
             options.format, flags.escape, _("Escaping is based on the format"));
         fatal_error_option_value_excludes_flag(
@@ -206,11 +244,52 @@ int main(int argc, char **argv)
         fatal_error_option_value_excludes_option(
             options.format, options.nullval,
             _("Null value is part of the format"));
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
     }
     if (format != VERTICAL) {
         fatal_error_option_value_excludes_option(
             options.format, options.vsep,
             _("Only vertical output can use vertical separator"));
+<<<<<<< HEAD
+=======
+=======
+=======
+>>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
+        fatal_error_option_value_excludes_flag(options.format, flags.escape,
+                                               _("Escaping is based on the format"));
+        fatal_error_option_value_excludes_flag(options.format, flags.colnames,
+                                               _("Column names are always included"));
+        fatal_error_option_value_excludes_option(options.format, options.fsep,
+                                                 _("Separator is part of the format"));
+        fatal_error_option_value_excludes_option(options.format, options.nullval,
+                                                 _("Null value is part of the format"));
+    }
+    if (format != VERTICAL) {
+        fatal_error_option_value_excludes_option(options.format, options.vsep,
+                                                 _("Only vertical output can use vertical separator"));
+<<<<<<< HEAD
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
+=======
+>>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
+=======
+    }
+    if (format != VERTICAL) {
+        fatal_error_option_value_excludes_option(
+            options.format, options.vsep,
+            _("Only vertical output can use vertical separator"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    }
+    if (format != VERTICAL) {
+        fatal_error_option_value_excludes_option(
+            options.format, options.vsep,
+            _("Only vertical output can use vertical separator"));
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     }
 
     min_box = line_box = NULL;
@@ -237,12 +316,47 @@ int main(int argc, char **argv)
         }
         else if (format == PLAIN || format == VERTICAL) {
             if (flags.region->answer)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 fsep = G_store("=");
             else
                 fsep = G_store("|");
         }
         else
             fsep = NULL; /* Something like a separator is part of the format. */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
+               fsep = G_store("=");
+=======
+                fsep = G_store("=");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+            else
+                fsep = G_store("|");
+        }
+        else
+<<<<<<< HEAD
+            fsep = NULL;  /* Something like a separator is part of the format. */
+<<<<<<< HEAD
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
+=======
+>>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
+=======
+            fsep = NULL; /* Something like a separator is part of the format. */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     }
     if (options.vsep->answer)
         vsep = G_option_to_separator(options.vsep);
@@ -320,8 +434,33 @@ int main(int argc, char **argv)
     ncols = db_get_table_number_of_columns(table);
 
     /* column names if horizontal output (ignore for -r, -c, JSON, vertical) */
+<<<<<<< HEAD
     if (!flags.region->answer && !flags.colnames->answer && format != JSON &&
         format != VERTICAL) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (!flags.region->answer && !flags.colnames->answer && format != JSON &&
+        format != VERTICAL) {
+=======
+    if (!flags.region->answer && !flags.colnames->answer &&
+        format != JSON && format != VERTICAL) {
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
+=======
+    if (!flags.region->answer && !flags.colnames->answer &&
+        format != JSON && format != VERTICAL) {
+>>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
+=======
+    if (!flags.region->answer && !flags.colnames->answer && format != JSON &&
+        format != VERTICAL) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    if (!flags.region->answer && !flags.colnames->answer && format != JSON &&
+        format != VERTICAL) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         for (col = 0; col < ncols; col++) {
             column = db_get_table_column(table, col);
             if (col)
@@ -337,8 +476,47 @@ int main(int argc, char **argv)
     if (format == JSON) {
         if (flags.region->answer)
             fprintf(stdout, "{\"extent\":\n");
+<<<<<<< HEAD
         else
             fprintf(stdout, "{\"records\":[\n");
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        else {
+            fprintf(stdout, "{\"info\":\n{\"columns\":[\n");
+            for (col = 0; col < ncols; col++) {
+                column = db_get_table_column(table, col);
+                if (col)
+                    fprintf(stdout, "},\n");
+                fprintf(stdout, "{\"name\":\"%s\",",
+                        db_get_column_name(column));
+                int sql_type = db_get_column_sqltype(column);
+                fprintf(stdout, "\"sql_type\":\"%s\",",
+                        db_sqltype_name(sql_type));
+
+                int c_type = db_sqltype_to_Ctype(sql_type);
+                fprintf(stdout, "\"is_number\":");
+                /* Same rules as for quoting, i.e., number only as
+                 * JSON or Python would see it and not numeric which may
+                 * include, e.g., date. */
+                if (c_type == DB_C_TYPE_INT || c_type == DB_C_TYPE_DOUBLE)
+                    fprintf(stdout, "true");
+                else
+                    fprintf(stdout, "false");
+            }
+
+            fprintf(stdout, "}\n]},\n");
+            fprintf(stdout, "\"records\":[\n");
+        }
+=======
+        else
+            fprintf(stdout, "{\"records\":[\n");
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
+=======
+        else
+            fprintf(stdout, "{\"records\":[\n");
+>>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
+>>>>>>> osgeo-main
     }
 
     /* fetch the data */
@@ -400,7 +578,19 @@ int main(int argc, char **argv)
             else {
                 char *str = db_get_string(&value_string);
 
+<<<<<<< HEAD
                 /* Escaped charcters in different formats
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                /* Escaped characters in different formats
+=======
+                /* Escaped charcters in different formats
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
+=======
+                /* Escaped charcters in different formats
+>>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
+>>>>>>> osgeo-main
                  * JSON (mandatory): \" \\ \r \n \t \f \b
                  * CSV (usually none, here optional): \\ \r \n \t \f \b
                  * Plain, vertical (optional): v7: \\ \r \n, v8 also: \t \f \b
@@ -416,6 +606,15 @@ int main(int argc, char **argv)
                         str = G_str_replace(str, "\t", "\\t");
                     if (format == JSON && strchr(str, '"'))
                         str = G_str_replace(str, "\"", "\\\"");
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                     if (strchr(str, '\f')) /* form feed, somewhat unlikely */
                         str = G_str_replace(str, "\f", "\\f");
                     if (strchr(str, '\b')) /* backspace, quite unlikely */
@@ -424,6 +623,35 @@ int main(int argc, char **argv)
                 /* Common CSV does not escape, but doubles quotes (and we quote
                  * all text fields which takes care of a separator character in
                  * text). */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
+                    if (strchr(str, '\f'))  /* form feed, somewhat unlikely */
+=======
+                    if (strchr(str, '\f')) /* form feed, somewhat unlikely */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+                        str = G_str_replace(str, "\f", "\\f");
+                    if (strchr(str, '\b')) /* backspace, quite unlikely */
+                        str = G_str_replace(str, "\b", "\\b");
+                }
+<<<<<<< HEAD
+                /* Common CSV does not escape, but doubles quotes (and we quote all
+                 * text fields which takes care of a separator character in text). */
+<<<<<<< HEAD
+>>>>>>> fbc5f37844 (WMS: replace broken URLs with alternative WMS (#1635))
+=======
+>>>>>>> 4d944b87c5 (WMS: replace broken URLs with alternative WMS (#1635))
+=======
+                /* Common CSV does not escape, but doubles quotes (and we quote
+                 * all text fields which takes care of a separator character in
+                 * text). */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 if (format == CSV && strchr(str, '"')) {
                     str = G_str_replace(str, "\"", "\"\"");
                 }

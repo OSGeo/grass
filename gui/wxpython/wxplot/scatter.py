@@ -29,7 +29,8 @@ from core.gcmd import RunCommand, GException, GError, GMessage
 
 
 class ScatterFrame(BasePlotFrame):
-    """Mainframe for displaying bivariate scatter plot of two raster maps. Uses wx.lib.plot."""
+    """Mainframe for displaying bivariate scatter plot of two raster maps. Uses
+    wx.lib.plot."""
 
     def __init__(
         self,
@@ -132,7 +133,7 @@ class ScatterFrame(BasePlotFrame):
         dlg.Destroy()
 
     def SetupScatterplot(self):
-        """Build data list for ploting each raster"""
+        """Build data list for plotting each raster"""
 
         #
         # initialize title string

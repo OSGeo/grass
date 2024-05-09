@@ -34,7 +34,17 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *inopt, *dbdriver, *dbdatabase, *dbtable, *field_opt, *dbkey,
         *sep_opt;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    struct Flag *print, *columns, *delete, *shell_print;
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     struct Flag *overwrite, *print, *columns, *delete, *shell_print;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     dbDriver *driver;
     dbString table_name;
     dbTable *table;
@@ -101,11 +111,14 @@ int main(int argc, char **argv)
                              "layer and exit");
     columns->guisection = _("Print");
 
+<<<<<<< HEAD
+=======
     overwrite = G_define_flag();
     overwrite->key = 'o';
     overwrite->description =
         _("Overwrite connection parameter for certain layer");
 
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     delete = G_define_flag();
     delete->key = 'd';
     delete->description =
@@ -271,9 +284,27 @@ int main(int argc, char **argv)
                 G_debug(3, "Vect_map_check_dblink = %d", ret);
                 if (ret == 1) {
                     /* field already defined */
+<<<<<<< HEAD
                     if (!overwrite->answer)
                         G_fatal_error(_("Use -o to overwrite existing link "
                                         "for layer <%d>"),
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    if (!G_get_overwrite())
+                        G_fatal_error(_("Use --overwrite to overwrite "
+                                        "existing link for layer <%d>"),
+=======
+                    if (!overwrite->answer)
+                        G_fatal_error(_("Use -o to overwrite existing link "
+                                        "for layer <%d>"),
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    if (!overwrite->answer)
+                        G_fatal_error(_("Use -o to overwrite existing link "
+                                        "for layer <%d>"),
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                                       field);
                     else {
                         dbColumn *column;

@@ -18,20 +18,67 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+<<<<<<< HEAD
 static int rew_dummy(struct Map_info *Map)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+static int rew_dummy(struct Map_info *Map UNUSED)
+=======
+static int rew_dummy(struct Map_info *Map)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+static int rew_dummy(struct Map_info *Map)
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 {
     return -1;
 }
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
+<<<<<<< HEAD
 static int format(struct Map_info *Map)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+static int format(struct Map_info *Map UNUSED)
+=======
+static int format(struct Map_info *Map)
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+static int format(struct Map_info *Map)
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
+<<<<<<< HEAD
 static int (*Rewind_array[][4])(struct Map_info *) = {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static int (*Rewind_array[][4])(struct Map_info *) = {
+=======
+static int (*Rewind_array[][4])() = {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+static int (*Rewind_array[][4])() = {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+static int (*Rewind_array[][4])(struct Map_info *) = {
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+static int (*Rewind_array[][4])() = {
+=======
+static int (*Rewind_array[][4])(struct Map_info *) = {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     {rew_dummy, V1_rewind_nat, V2_rewind_nat, rew_dummy}
 #ifdef HAVE_OGR
     ,

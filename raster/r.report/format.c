@@ -5,7 +5,7 @@
  * format_parms() is called for each value.
  *     before first call set eformat=0,dp=6
  *
- * format_double() does the formating with the
+ * format_double() does the formatting with the
  *     parms determined by format_parms()
  ***************************************************/
 
@@ -24,7 +24,30 @@ int format_parms(double v, int *n, int *dp, int *eformat, int e_option)
         else
             scient_format(v, buf, *n, *dp);
 
+<<<<<<< HEAD
         if ((int)strlen(buf) <= *n)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((int)strlen(buf) <= *n)
+=======
+        if (strlen(buf) <= *n)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (strlen(buf) <= *n)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if ((int)strlen(buf) <= *n)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+        if (strlen(buf) <= *n)
+=======
+        if ((int)strlen(buf) <= *n)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
             break;
 
         if (*dp) {

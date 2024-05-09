@@ -360,7 +360,20 @@ void GeomCond::parse()
     }
     case 4:
         campm = 1.0f; /* avhrr PM, case 4 must fall through to case 5 */
+<<<<<<< HEAD
     case 5:           /* avhrr PM and avhrr AM */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        FALLTHROUGH;
+    case 5: /* avhrr PM and avhrr AM */
+=======
+    case 5:           /* avhrr PM and avhrr AM */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    case 5:           /* avhrr PM and avhrr AM */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     {
         cin >> month;
         cin >> jday;
@@ -397,6 +410,18 @@ void GeomCond::parse()
     case 28: /* planetscope0e    * enter month,day,hh.ddd,long.,lat. */
     case 29: /* planetscope0f10  * enter month,day,hh.ddd,long.,lat. */
     case 30: /* worldview4       * enter month,day,hh.ddd,long.,lat. */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    case 31: /* AVIRIS           * enter month,day,hh.ddd,long.,lat. */
+    case 32: /* Hyperion VNIR    * enter month,day,hh.ddd,long.,lat. */
+    case 33: /* Hyperion SWIR    * enter month,day,hh.ddd,long.,lat. */
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     {
         cin >> month;
         cin >> jday;
@@ -480,7 +505,22 @@ void GeomCond::print()
                                    string(" planetscope 0c 0d observation"),
                                    string(" planetscope 0e observation  "),
                                    string(" planetscope 0f 10 observation"),
+<<<<<<< HEAD
                                    string(" worldview4 observation      ")};
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                                   string(" worldview4 observation      "),
+                                   string(" AVIRIS observation          "),
+                                   string(" Hyperion VNIR observation   "),
+                                   string(" Hyperion SWIR observation   ")};
+=======
+                                   string(" worldview4 observation      ")};
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                                   string(" worldview4 observation      ")};
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     static const string head(" geometrical conditions identity  ");
     static const string line(" -------------------------------  ");

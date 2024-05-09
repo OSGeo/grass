@@ -27,7 +27,19 @@
 
 /*!
    \brief This structure keeps info about geometry parts above current
+<<<<<<< HEAD
    geometry, path to curent geometry in the feature. First 'part' number
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+   geometry, path to current geometry in the feature. First 'part' number
+=======
+   geometry, path to curent geometry in the feature. First 'part' number
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   geometry, path to curent geometry in the feature. First 'part' number
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
    however is feature id */
 struct geom_parts {
     int *part;
@@ -747,7 +759,7 @@ int Vect__build_sfa(struct Map_info *Map, int build)
    \return 1 on success
    \return 0 on error
  */
-int Vect_fidx_dump(const struct Map_info *Map, FILE *out)
+int Vect_fidx_dump(struct Map_info *Map, FILE *out)
 {
     int i;
     const struct Format_info_offset *offset;

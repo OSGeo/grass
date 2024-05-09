@@ -18,7 +18,16 @@ for details.
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
+<<<<<<< HEAD
+=======
 from __future__ import absolute_import
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
+=======
+>>>>>>> 7e8f036e2d (pythonlib: Remove star imports (#1546))
+>>>>>>> osgeo-main
 
 import os
 from .core import (
@@ -37,11 +46,11 @@ def db_describe(table, env=None, **args):
     """Return the list of columns for a database table
     (interface to `db.describe -c`). Example:
 
-    >>> run_command('g.copy', vector='firestations,myfirestations')
+    >>> run_command("g.copy", vector="firestations,myfirestations")
     0
-    >>> db_describe('myfirestations') # doctest: +ELLIPSIS
+    >>> db_describe("myfirestations")  # doctest: +ELLIPSIS
     {'nrows': 71, 'cols': [['cat', 'INTEGER', '20'], ... 'ncols': 22}
-    >>> run_command('g.remove', flags='f', type='vector', name='myfirestations')
+    >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
     0
 
     :param str table: table name
@@ -82,11 +91,11 @@ def db_table_exist(table, env=None, **args):
     If no driver or database are given, then default settings is used
     (check db_connection()).
 
-    >>> run_command('g.copy', vector='firestations,myfirestations')
+    >>> run_command("g.copy", vector="firestations,myfirestations")
     0
-    >>> db_table_exist('myfirestations')
+    >>> db_table_exist("myfirestations")
     True
-    >>> run_command('g.remove', flags='f', type='vector', name='myfirestations')
+    >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
     0
 
     :param str table: table name
@@ -126,7 +135,7 @@ def db_connection(force=False, env=None):
     :param env: environment
 
     :return: parsed output of db.connect
-    """
+    """  # noqa: E501
     try:
         nuldev = open(os.devnull, "w")
         conn = parse_command("db.connect", flags="g", stderr=nuldev, env=env)
@@ -149,16 +158,16 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
 
     Examples:
 
-    >>> run_command('g.copy', vector='firestations,myfirestations')
+    >>> run_command("g.copy", vector="firestations,myfirestations")
     0
-    >>> db_select(sql = 'SELECT cat,CITY FROM myfirestations WHERE cat < 4')
+    >>> db_select(sql="SELECT cat,CITY FROM myfirestations WHERE cat < 4")
     (('1', 'Morrisville'), ('2', 'Morrisville'), ('3', 'Apex'))
 
     Simplyfied usage (it performs <tt>SELECT * FROM myfirestations</tt>.)
 
-    >>> db_select(table = 'myfirestations') # doctest: +ELLIPSIS
+    >>> db_select(table="myfirestations")  # doctest: +ELLIPSIS
     (('1', '24', 'Morrisville #3', ... 'HS2A', '1.37'))
-    >>> run_command('g.remove', flags='f', type='vector', name='myfirestations')
+    >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
     0
 
     :param str sql: SQL statement to perform (or None)
@@ -177,7 +186,8 @@ def db_select(sql=None, filename=None, table=None, env=None, **args):
     else:
         fatal(
             _(
-                "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
+                "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be \
+                    provided"
             )
             % {"sql": "sql", "filename": "filename", "table": "table"}
         )
@@ -204,12 +214,12 @@ def db_table_in_vector(table, mapset=".", env=None):
     name could be used also in other mapset by other vector.
     It returns None if no vectors are connected to the table.
 
-    >>> run_command('g.copy', vector='firestations,myfirestations')
+    >>> run_command("g.copy", vector="firestations,myfirestations")
     0
-    >>> db_table_in_vector('myfirestations')
+    >>> db_table_in_vector("myfirestations")
     ['myfirestations@user1']
-    >>> db_table_in_vector('mfirestations')
-    >>> run_command('g.remove', flags='f', type='vector', name='myfirestations')
+    >>> db_table_in_vector("mfirestations")
+    >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
     0
 
     :param str table: name of table to query

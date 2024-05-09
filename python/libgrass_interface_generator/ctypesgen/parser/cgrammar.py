@@ -108,7 +108,19 @@ tokens = reserved_keyword_tokens + reserved_keyword_tokens_new + (
     # Pragma
     "PRAGMA", "PRAGMA_END", "PRAGMA_PACK",
 
+<<<<<<< HEAD
     # Delimeters
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    # Delimiters
+=======
+    # Delimeters
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    # Delimeters
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     "PERIOD", "ELLIPSIS", "LPAREN", "RPAREN", "LBRACKET",
     "RBRACKET", "LBRACE", "RBRACE", "COMMA", "SEMI",
     "COLON",

@@ -51,7 +51,7 @@
 #undef hz
 #endif
 
-int secpar_loop(int ngstc, int nszc, int i)
+int secpar_loop(int ngstc UNUSED, int nszc UNUSED, int i)
 {
     double dnorm1, ro, dx2, dy2, dz2, grad1, grad2, slp, grad, oor1, oor2, curn,
         curm, curg, dxy2, dxz2, dyz2;
@@ -236,6 +236,25 @@ int COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
     double x_crs, x_crsd, x_crsdd, x_crsdr2;
     int n1, k1, k2, k, i1, l, l1, n4, n5, m, i;
     int /* NGST, */ LSIZE, ngstc, nszc, ngstr, nszr, ngstl, nszl;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+    int POINT();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    int POINT();
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     int ind, ind1;
     static int first_time_z = 1;
     off_t offset, offset1, offset2;

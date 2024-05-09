@@ -35,17 +35,32 @@
 
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
+#define NOPG_UNUSED
+#else
+#define NOPG_UNUSED UNUSED
 #endif
 
 static int copy_lines_1(struct Map_info *, int, struct Map_info *);
 static int copy_lines_2(struct Map_info *, int, int, struct Map_info *);
 
 #if 0
-static int copy_nodes(const struct Map_info *, struct Map_info *);
+static int copy_nodes(struct Map_info *, struct Map_info *);
 #endif
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+static int copy_line_nodes(struct Map_info *, int, int, struct line_pnts *,
+                           struct Map_info *);
+static int is_isle(struct Map_info *, int);
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 static int copy_line_nodes(const struct Map_info *, int, int,
                            struct line_pnts *, struct Map_info *);
 static int is_isle(const struct Map_info *, int);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 /*!
    \brief Copy all alive vector features from input vector map to
@@ -389,7 +404,17 @@ int copy_lines_2(struct Map_info *In, int field, int topo, struct Map_info *Out)
    \return 0 on success
    \return 1 on error
  */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int copy_nodes(struct Map_info *In, struct Map_info *Out)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 int copy_nodes(const struct Map_info *In, struct Map_info *Out)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int nnodes, node, with_z;
 
@@ -415,8 +440,8 @@ int copy_nodes(const struct Map_info *In, struct Map_info *Out)
 }
 #endif
 
-int copy_line_nodes(const struct Map_info *In, int node, int with_z,
-                    struct line_pnts *Points, struct Map_info *Out)
+int copy_line_nodes(struct Map_info *In, int node, int with_z,
+                    struct line_pnts *Points, struct Map_info *Out NOPG_UNUSED)
 {
     double x, y, z;
 
@@ -450,7 +475,17 @@ int copy_line_nodes(const struct Map_info *In, int node, int with_z,
 
    \return TRUE if area forms an isle otherwise FALSE
  */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int is_isle(struct Map_info *Map, int area)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 int is_isle(const struct Map_info *Map, int area)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int i, line, left, right, isle, is_isle;
 
@@ -490,7 +525,17 @@ int is_isle(const struct Map_info *Map, int area)
    \return 0 on success
    \return 1 on error
  */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int Vect__copy_areas(struct Map_info *In, int field, struct Map_info *Out)
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 int Vect__copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 {
     int i, area, nareas, cat, isle, nisles, nparts_alloc, nskipped;
     struct line_pnts **Points;
@@ -608,7 +653,19 @@ int Vect__copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
    \return 0 on success
    \return -1 on error
  */
+<<<<<<< HEAD
 int Vect_copy_tables(const struct Map_info *In, struct Map_info *Out, int field)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int Vect_copy_tables(struct Map_info *In, struct Map_info *Out, int field)
+=======
+int Vect_copy_tables(const struct Map_info *In, struct Map_info *Out, int field)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int Vect_copy_tables(const struct Map_info *In, struct Map_info *Out, int field)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     int i, n, type;
     struct field_info *Fi;
@@ -658,9 +715,26 @@ int Vect_copy_tables(const struct Map_info *In, struct Map_info *Out, int field)
    \return 0 on success
    \return -1 on error
  */
+<<<<<<< HEAD
 int Vect_copy_table(const struct Map_info *In, struct Map_info *Out,
                     int field_in, int field_out, const char *field_name,
                     int type)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int Vect_copy_table(struct Map_info *In, struct Map_info *Out, int field_in,
+                    int field_out, const char *field_name, int type)
+=======
+int Vect_copy_table(const struct Map_info *In, struct Map_info *Out,
+                    int field_in, int field_out, const char *field_name,
+                    int type)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int Vect_copy_table(const struct Map_info *In, struct Map_info *Out,
+                    int field_in, int field_out, const char *field_name,
+                    int type)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     return Vect_copy_table_by_cats(In, Out, field_in, field_out, field_name,
                                    type, NULL, 0);
@@ -683,7 +757,19 @@ int Vect_copy_table(const struct Map_info *In, struct Map_info *Out,
    \return 0 on success
    \return -1 on error
  */
+<<<<<<< HEAD
 int Vect_copy_table_by_cat_list(const struct Map_info *In, struct Map_info *Out,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+int Vect_copy_table_by_cat_list(struct Map_info *In, struct Map_info *Out,
+=======
+int Vect_copy_table_by_cat_list(const struct Map_info *In, struct Map_info *Out,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int Vect_copy_table_by_cat_list(const struct Map_info *In, struct Map_info *Out,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                                 int field_in, int field_out,
                                 const char *field_name, int type,
                                 const struct cat_list *cat_list)
@@ -723,7 +809,7 @@ int Vect_copy_table_by_cat_list(const struct Map_info *In, struct Map_info *Out,
    \return 0 on success
    \return -1 on error
  */
-int Vect_copy_table_by_cats(const struct Map_info *In, struct Map_info *Out,
+int Vect_copy_table_by_cats(struct Map_info *In, struct Map_info *Out,
                             int field_in, int field_out, const char *field_name,
                             int type, int *cats, int ncats)
 {

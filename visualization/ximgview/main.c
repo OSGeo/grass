@@ -128,7 +128,7 @@ static void redraw(void)
     last = (tv1.tv_sec - tv0.tv_sec) * 1000000L + (tv1.tv_usec - tv0.tv_usec);
 }
 
-static void dummy_handler(int sig)
+static void dummy_handler(int sig UNUSED)
 {
 }
 
@@ -145,7 +145,30 @@ static void main_loop(void)
     for (;;) {
         fd_set waitset;
         struct timeval tv;
+<<<<<<< HEAD
         unsigned long delay = 0;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        unsigned long delay = 0;
+=======
+        unsigned long delay;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        unsigned long delay;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        unsigned long delay = 0;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        unsigned long delay;
+=======
+        unsigned long delay = 0;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
         while (XPending(dpy) > 0) {
             XEvent event;
@@ -226,7 +249,30 @@ static int read_bmp_header(const unsigned char *p)
 
     if (get_4(&p) != 0)
         return 0;
+<<<<<<< HEAD
     if (get_4(&p) != (unsigned int)i_width * i_height * 4)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (get_4(&p) != (unsigned int)i_width * i_height * 4)
+=======
+    if (get_4(&p) != i_width * i_height * 4)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    if (get_4(&p) != i_width * i_height * 4)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    if (get_4(&p) != (unsigned int)i_width * i_height * 4)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+    if (get_4(&p) != i_width * i_height * 4)
+=======
+    if (get_4(&p) != (unsigned int)i_width * i_height * 4)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         return 0;
 
     if (size != HEADER_SIZE + i_width * i_height * 4)

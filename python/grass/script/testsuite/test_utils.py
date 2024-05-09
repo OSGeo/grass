@@ -1,5 +1,4 @@
 import os
-import sys
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -49,24 +48,15 @@ class TestEncode(TestCase):
 
     def test_int(self):
         """If the input is an integer return bytes"""
-        if sys.version_info.major >= 3:
-            self.assertRaises(TypeError, utils.encode, 1234567890)
-        else:
-            self.assertEqual("1234567890", utils.encode(1234567890))
+        self.assertRaises(TypeError, utils.encode, 1234567890)
 
     def test_float(self):
         """If the input is a float return bytes"""
-        if sys.version_info.major >= 3:
-            self.assertRaises(TypeError, utils.encode, 12345.6789)
-        else:
-            self.assertEqual("12345.6789", utils.encode(12345.6789))
+        self.assertRaises(TypeError, utils.encode, 12345.6789)
 
     def test_none(self):
         """If the input is a boolean return bytes"""
-        if sys.version_info.major >= 3:
-            self.assertRaises(TypeError, utils.encode, None)
-        else:
-            self.assertEqual("None", utils.encode(None))
+        self.assertRaises(TypeError, utils.encode, None)
 
 
 class TestDecode(TestCase):
@@ -80,24 +70,15 @@ class TestDecode(TestCase):
 
     def test_int(self):
         """If the input is an integer return bytes"""
-        if sys.version_info.major >= 3:
-            self.assertRaises(TypeError, utils.decode, 1234567890)
-        else:
-            self.assertEqual("1234567890", utils.decode(1234567890))
+        self.assertRaises(TypeError, utils.decode, 1234567890)
 
     def test_float(self):
         """If the input is a float return bytes"""
-        if sys.version_info.major >= 3:
-            self.assertRaises(TypeError, utils.decode, 12345.6789)
-        else:
-            self.assertEqual("12345.6789", utils.decode(12345.6789))
+        self.assertRaises(TypeError, utils.decode, 12345.6789)
 
     def test_none(self):
         """If the input is a boolean return bytes"""
-        if sys.version_info.major >= 3:
-            self.assertRaises(TypeError, utils.decode, None)
-        else:
-            self.assertEqual("None", utils.decode(None))
+        self.assertRaises(TypeError, utils.decode, None)
 
 
 class TestEncodeLcAllC(TestEncode, LcAllC):

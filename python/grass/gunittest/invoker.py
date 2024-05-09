@@ -9,10 +9,11 @@ for details.
 :authors: Vaclav Petras
 """
 
+import collections
 import os
-import sys
 import shutil
 import subprocess
+import sys
 
 from .checkers import text_to_keyvalue
 
@@ -32,12 +33,16 @@ from .utils import silent_rmtree, ensure_dir
 import grass.script as gs
 from grass.script.utils import decode, _get_encoding
 
+<<<<<<< HEAD
+maketrans = str.maketrans
+=======
 try:
     from string import maketrans
 except ImportError:
     maketrans = str.maketrans
 
 import collections
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
 
 # TODO: this might be more extend then update
@@ -54,7 +59,7 @@ def update_keyval_file(filename, module, returncode):
     if test_file_authors is None:
         test_file_authors = ""
 
-    # always owerwrite name and status
+    # always overwrite name and status
     keyval["name"] = module.name
     keyval["tested_dir"] = module.tested_dir
     if "status" not in keyval.keys():
@@ -71,7 +76,7 @@ def update_keyval_file(filename, module, returncode):
     return keyval
 
 
-class GrassTestFilesInvoker(object):
+class GrassTestFilesInvoker:
     """A class used to invoke test files and create the main report"""
 
     # TODO: it is not clear what clean_outputs mean, if should be split
@@ -131,7 +136,18 @@ class GrassTestFilesInvoker(object):
         os.mkdir(mapset_dir)
         # TODO: default region in mapset will be what?
         # copy DEFAULT_WIND file from PERMANENT to WIND
+<<<<<<< HEAD
+        # TODO: this should be a function in grass.script (used also in gis_set.py,
+        # PyGRASS also has its way with Mapset)
+=======
         # TODO: this should be a function in grass.script (used also in gis_set.py, PyGRASS also has its way with Mapset)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         shutil.copy(
             os.path.join(gisdbase, location, "PERMANENT", "DEFAULT_WIND"),
             os.path.join(mapset_dir, "WIND"),
@@ -204,6 +220,19 @@ class GrassTestFilesInvoker(object):
                 timeout=timeout,
                 check=False,
             )
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 57aff3a06a (pythonlib: Remove star imports (#1546))
+>>>>>>> osgeo-main
             stdout = p.stdout
             stderr = p.stderr
             returncode = p.returncode
@@ -216,16 +245,57 @@ class GrassTestFilesInvoker(object):
             if stdout is None:
                 stdout = ""
             if stderr is None:
+<<<<<<< HEAD
                 stderr = f"Process has timed out in {timeout}s and produced no error output.\n"
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                stderr = (
+                    f"Process has timed out in {timeout}s and produced no error "
+                    "output.\n"
+                )
+=======
+                stderr = f"Process has timed out in {timeout}s and produced no error output.\n"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                stderr = f"Process has timed out in {timeout}s and produced no error output.\n"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             # Return code is None if the process times out.
             # Rest of the code expects success to evaluate as False.
             # So, we assign a failing return code.
             # In any case, we treat the timeout case as a failure.
             returncode = 1
             timed_out = timeout
+<<<<<<< HEAD
 
         encodings = [_get_encoding(), "utf8", "latin-1", "ascii"]
 
+=======
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+        encodings = [_get_encoding(), "utf8", "latin-1", "ascii"]
+
+=======
+        stdout, stderr = p.communicate()
+        returncode = p.returncode
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+        encodings = [_get_encoding(), "utf8", "latin-1", "ascii"]
+
+<<<<<<< HEAD
+>>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
+=======
+=======
+        encodings = [_get_encoding(), "utf8", "latin-1", "ascii"]
+
+>>>>>>> 57aff3a06a (pythonlib: Remove star imports (#1546))
+>>>>>>> 7e8f036e2d (pythonlib: Remove star imports (#1546))
+>>>>>>> osgeo-main
         def try_decode(data, encodings):
             """Try to decode data (bytes) using one of encodings
 
@@ -234,7 +304,34 @@ class GrassTestFilesInvoker(object):
             """
             for encoding in encodings:
                 try:
+<<<<<<< HEAD
                     return decode(data, encoding=encoding)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    return decode(data, encoding=encoding)
+=======
+                    return decode(stdout, encoding=encoding)
+>>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
+=======
+                    return decode(stdout, encoding=encoding)
+>>>>>>> 7e8f036e2d (pythonlib: Remove star imports (#1546))
+=======
+                    return decode(data, encoding=encoding)
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+                    return decode(data, encoding=encoding)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    return decode(data, encoding=encoding)
+=======
+                    return decode(stdout, encoding=encoding)
+>>>>>>> 7e8f036e2d (pythonlib: Remove star imports (#1546))
+>>>>>>> 57aff3a06a (pythonlib: Remove star imports (#1546))
+>>>>>>> osgeo-main
                 except UnicodeError:
                     pass
             if isinstance(data, bytes):

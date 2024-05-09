@@ -142,8 +142,19 @@ static void set_file_pointer(int fd, int row)
     fcb->row_ptr[row] = lseek(fcb->data_fd, 0L, SEEK_CUR);
 }
 
+<<<<<<< HEAD
+static void convert_float(float *work_buf, char *null_buf, const FCELL *rast,
+                          int n)
+=======
 static void convert_float(float *work_buf, int size, char *null_buf,
                           const FCELL *rast, int row, int n)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     int i;
 
@@ -162,8 +173,19 @@ static void convert_float(float *work_buf, int size, char *null_buf,
     }
 }
 
+<<<<<<< HEAD
+static void convert_double(double *work_buf, char *null_buf, const DCELL *rast,
+                           int n)
+=======
 static void convert_double(double *work_buf, int size, char *null_buf,
                            const DCELL *rast, int row, int n)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 {
     int i;
 
@@ -203,9 +225,27 @@ static void put_fp_data(int fd, char *null_buf, const void *rast, int row,
         set_file_pointer(fd, row);
 
     if (data_type == FCELL_TYPE)
+<<<<<<< HEAD
         convert_float(work_buf, size, null_buf, rast, row, n);
     else
         convert_double(work_buf, size, null_buf, rast, row, n);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        convert_float(work_buf, null_buf, rast, n);
+    else
+        convert_double(work_buf, null_buf, rast, n);
+=======
+        convert_float(work_buf, size, null_buf, rast, row, n);
+    else
+        convert_double(work_buf, size, null_buf, rast, row, n);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        convert_float(work_buf, size, null_buf, rast, row, n);
+    else
+        convert_double(work_buf, size, null_buf, rast, row, n);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     if (compressed)
         write_data_compressed(fd, row, work_buf, n, fcb->cellhd.compressed);
@@ -522,16 +562,71 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
     /* compress null bits file with LZ4, see lib/gis/compress.h */
     nwrite = G_compress((unsigned char *)flags, size, compressed_buf, cmax, 3);
 
+<<<<<<< HEAD
     if (nwrite > 0 && (size_t)nwrite < size) {
         if ((res = write(fcb->null_fd, compressed_buf, nwrite)) < 0 ||
             (unsigned int)res != nwrite)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (nwrite > 0 && (size_t)nwrite < size) {
+        if ((res = write(fcb->null_fd, compressed_buf, nwrite)) < 0 ||
+            (unsigned int)res != nwrite)
+=======
+    if (nwrite > 0 && nwrite < size) {
+        if (write(fcb->null_fd, compressed_buf, nwrite) != nwrite)
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    if (nwrite > 0 && nwrite < size) {
+        if (write(fcb->null_fd, compressed_buf, nwrite) != nwrite)
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+=======
+    if (nwrite > 0 && (size_t)nwrite < size) {
+        if ((res = write(fcb->null_fd, compressed_buf, nwrite)) < 0 ||
+            (unsigned int)res != nwrite)
+<<<<<<< HEAD
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
             G_fatal_error(
                 _("Error writing compressed null data for row %d of <%s>: %s"),
                 row, fcb->name, strerror(errno));
     }
     else {
+<<<<<<< HEAD
         if ((res = write(fcb->null_fd, flags, size)) < 0 ||
             (unsigned int)res != size)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+            (unsigned int)res != size)
+=======
+        if (write(fcb->null_fd, flags, size) != size)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (write(fcb->null_fd, flags, size) != size)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+            (unsigned int)res != size)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+        if (write(fcb->null_fd, flags, size) != size)
+=======
+        if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+            (unsigned int)res != size)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
             G_fatal_error(
                 _("Error writing compressed null data for row %d of <%s>: %s"),
                 row, fcb->name, strerror(errno));
@@ -570,8 +665,33 @@ void Rast__write_null_bits(int fd, const unsigned char *flags)
     if (lseek(fcb->null_fd, offset, SEEK_SET) < 0)
         G_fatal_error(_("Error writing null row %d of <%s>"), row, fcb->name);
 
+<<<<<<< HEAD
     if ((res = write(fcb->null_fd, flags, size)) < 0 ||
         (unsigned int)res != size)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+        (unsigned int)res != size)
+=======
+    if (write(fcb->null_fd, flags, size) != size)
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+        (unsigned int)res != size)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+    if (write(fcb->null_fd, flags, size) != size)
+=======
+    if ((res = write(fcb->null_fd, flags, size)) < 0 ||
+        (unsigned int)res != size)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         G_fatal_error(_("Error writing null row %d of <%s>: %s"), row,
                       fcb->name, strerror(errno));
 }

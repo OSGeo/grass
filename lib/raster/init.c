@@ -68,7 +68,7 @@ void Rast__init(void)
     G_initialize_done(&initialized);
 }
 
-void Rast__error_handler(void *p)
+void Rast__error_handler(void *p UNUSED)
 {
     Rast__unopen_all();
 }

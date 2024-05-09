@@ -253,3 +253,51 @@ def test_tiling(tmp_path, width, height, processes):
 
         info = gs.raster_info("slope")
         assert info["min"] > 0
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+
+@pytest.mark.parametrize(
+    "processes, backend",
+    [
+        (1, "RasterRow"),
+        (9, "RasterRow"),
+        (9, "r.patch"),
+        (10, "RasterRow"),
+        (10, "r.patch"),
+    ],
+)
+def test_patching_error(tmp_path, processes, backend):
+    """Check auto adjusted tile size based on processes"""
+    location = "test"
+    gs.core._create_location_xy(tmp_path, location)  # pylint: disable=protected-access
+    with gs.setup.init(tmp_path / location):
+        gs.run_command("g.region", s=0, n=10, w=0, e=10, res=0.1)
+        surface = "fractal"
+
+        def run_grid_module():
+            # modules/shortcuts calls get_commands which requires GISBASE.
+            # pylint: disable=import-outside-toplevel
+            from grass.pygrass.modules.grid import GridModule
+
+            grid = GridModule(
+                "r.surf.fractal",
+                overlap=0,
+                processes=processes,
+                output=surface,
+                patch_backend=backend,
+                debug=True,
+            )
+            grid.run()
+
+        run_in_subprocess(run_grid_module)
+
+        info = gs.parse_command("r.univar", flags="g", map=surface)
+        assert int(info["null_cells"]) == 0
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main

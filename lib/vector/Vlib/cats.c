@@ -36,7 +36,7 @@ static struct line_cats *Vect__new_cats_struct(void);
    \return struct line_cats *
    \return NULL on error
  */
-struct line_cats *Vect_new_cats_struct()
+struct line_cats *Vect_new_cats_struct(void)
 {
     struct line_cats *p;
 
@@ -54,7 +54,7 @@ struct line_cats *Vect_new_cats_struct()
 
    \return struct line_cats *
  */
-static struct line_cats *Vect__new_cats_struct()
+static struct line_cats *Vect__new_cats_struct(void)
 {
     struct line_cats *p;
 
@@ -306,7 +306,7 @@ int Vect_reset_cats(struct line_cats *Cats)
    \return pointer to allocated structure
    \return NULL if out of memory
  */
-struct cat_list *Vect_new_cat_list()
+struct cat_list *Vect_new_cat_list(void)
 {
     struct cat_list *p;
 

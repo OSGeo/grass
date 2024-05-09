@@ -13,11 +13,11 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
+
 import copy
 
 
-class SpatialTopologyDatasetConnector(object):
+class SpatialTopologyDatasetConnector:
     """This class implements a spatial topology access structure to connect
     spatial related datasets
 
@@ -68,7 +68,8 @@ class SpatialTopologyDatasetConnector(object):
          meet=a@P
          >>> rlist = tmr.get_spatial_relations()
          >>> if "COVER" in rlist.keys():
-         ...    print(rlist["COVER"][0].get_id())
+         ...     print(rlist["COVER"][0].get_id())
+         ...
          a@P
 
     """
@@ -319,7 +320,7 @@ class SpatialTopologyDatasetConnector(object):
         """Print information about this class in human readable style"""
 
         print(
-            " +-------------------- Spatial Topology --------------------------------------+"
+            " +-------------------- Spatial Topology --------------------------------------+"  # noqa: E501
         )
         #          0123456789012345678901234567890
         if self.equivalent is not None:

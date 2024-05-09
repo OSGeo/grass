@@ -143,12 +143,20 @@ int db__driver_fetch(dbCursor *cn, int position, int *more)
             value->i = OGR_F_GetFieldAsInteger(c->hFeature, i);
             break;
 
-#if GDAL_VERSION_NUM >= 2000000
         case OFTInteger64:
             /* test for integer overflow ? */
             value->i = OGR_F_GetFieldAsInteger64(c->hFeature, i);
             break;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 #endif
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
         case OFTReal:
             value->d = OGR_F_GetFieldAsDouble(c->hFeature, i);

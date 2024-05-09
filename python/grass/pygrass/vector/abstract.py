@@ -3,6 +3,7 @@ Created on Fri Aug 17 17:24:03 2012
 
 @author: pietro
 """
+
 import ctypes
 import datetime
 import grass.lib.vector as libvect
@@ -30,7 +31,7 @@ def is_open(c_mapinfo):
 # =============================================
 
 
-class Info(object):
+class Info:
     """Basic vector info.
     To get access to the vector info the map must be opened. ::
 
@@ -341,7 +342,7 @@ class Info(object):
         :param tab_cols: define the name and type of the columns of the
                          attribute table of the vecto map
         :type tab_cols: list of pairs
-        :param link_name: define the name of the link connecttion with the
+        :param link_name: define the name of the link connection with the
                           database
         :type link_name: str
         :param link_key: define the nema of the column that will be use as
@@ -427,7 +428,19 @@ class Info(object):
                 )
             if layer_db_link.layer != layer:
                 raise RuntimeError(
+<<<<<<< HEAD
                     "The databse link for layer %d of <%s> references layer %d."
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    "The database link for layer %d of <%s> references layer %d."
+=======
+                    "The databse link for layer %d of <%s> references layer %d."
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                    "The databse link for layer %d of <%s> references layer %d."
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                     % (layer, self.name, layer_db_link.layer)
                 )
             self.layer = layer

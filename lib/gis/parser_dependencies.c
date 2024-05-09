@@ -207,6 +207,17 @@ static void append_error(const char *msg)
    When running the module, at most one option from a set can be
    provided.
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+   The last item of the list must be NULL.
+
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
    \param first first given option
  */
 void G_option_exclusive(void *first, ...)
@@ -233,6 +244,17 @@ static void check_exclusive(const struct rule *rule)
 
    At least one option from a set must be given.
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+   The last item of the list must be NULL.
+
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
    \param first first given option
  */
 void G_option_required(void *first, ...)
@@ -262,11 +284,37 @@ static void check_required(const struct rule *rule)
    If the first option is present, at least one of the other
    options must also be present.
 
+<<<<<<< HEAD
    If you want all options to be provided use G_option_requires_all()
    function.
    If you want more than one option to be present but not all,
    call this function multiple times.
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+   The last item of the list must be NULL.
+
+   If you want all options to be provided use G_option_requires_all()
+   function.
+   If you want more than one option to be present but not all,
+   call this function multiple times.
+
+=======
+   If you want all options to be provided use G_option_requires_all()
+   function.
+   If you want more than one option to be present but not all,
+   call this function multiple times.
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   If you want all options to be provided use G_option_requires_all()
+   function.
+   If you want more than one option to be present but not all,
+   call this function multiple times.
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
    \param first first given option
  */
 void G_option_requires(void *first, ...)
@@ -300,11 +348,37 @@ static void check_requires(const struct rule *rule)
    If the first option is present, all the other options must also
    be present.
 
+<<<<<<< HEAD
    If it is enough if only one option from a set is present,
    use G_option_requires() function.
 
    \see G_option_collective()
 
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+   The last item of the list must be NULL.
+
+   If it is enough if only one option from a set is present,
+   use G_option_requires() function.
+
+   \see G_option_collective()
+
+=======
+   If it is enough if only one option from a set is present,
+   use G_option_requires() function.
+
+   \see G_option_collective()
+
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   If it is enough if only one option from a set is present,
+   use G_option_requires() function.
+
+   \see G_option_collective()
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
    \param first first given option
  */
 void G_option_requires_all(void *first, ...)
@@ -334,6 +408,17 @@ static void check_requires_all(const struct rule *rule)
    If the first option is present, none of the other options may also (should?)
    be present.
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+   The last item of the list must be NULL.
+
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
    \param first first given option
  */
 void G_option_excludes(void *first, ...)
@@ -363,6 +448,17 @@ static void check_excludes(const struct rule *rule)
    If any option is present, all the other options must also be present
    all or nothing from a set.
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+   The last item of the list must be NULL.
+
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
    \param first first given option
  */
 void G_option_collective(void *first, ...)
@@ -498,11 +594,44 @@ void G__describe_option_rules_xml(FILE *fp)
     for (i = 0; i < rules.count; i++) {
         const struct rule *rule = &((const struct rule *)rules.data)[i];
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
         if (rule->count < 0)
             G_fatal_error(_("Internal error: the number of options is < 0"));
 
         fprintf(fp, "\t\t<rule type=\"%s\">\n", rule_types[rule->type]);
         for (j = 0; j < (unsigned int)rule->count; j++) {
+<<<<<<< HEAD
+=======
+=======
+        fprintf(fp, "\t\t<rule type=\"%s\">\n", rule_types[rule->type]);
+        for (j = 0; j < rule->count; j++) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        fprintf(fp, "\t\t<rule type=\"%s\">\n", rule_types[rule->type]);
+        for (j = 0; j < rule->count; j++) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        fprintf(fp, "\t\t<rule type=\"%s\">\n", rule_types[rule->type]);
+        for (j = 0; j < rule->count; j++) {
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+=======
+        if (rule->count < 0)
+            G_fatal_error(_("Internal error: the number of options is < 0"));
+
+        fprintf(fp, "\t\t<rule type=\"%s\">\n", rule_types[rule->type]);
+        for (j = 0; j < (unsigned int)rule->count; j++) {
+<<<<<<< HEAD
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
             void *p = rule->opts[j];
 
             if (is_flag(p)) {

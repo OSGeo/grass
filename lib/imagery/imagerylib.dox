@@ -39,7 +39,7 @@ The group is the key database structure which permits integration of
 image processing in GRASS. As GRASS during import splits up multiband
 image into separate rasters, groups allow to keep them together to
 ease workflows. Groups do not store data themselves, only references
-to group members and auxilary data.
+to group members and auxiliary data.
 
 \subsection Finding_Groups_in_the_Database Finding Groups in the Database
 

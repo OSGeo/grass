@@ -41,7 +41,19 @@ struct _label_point {
  * This structure represents a label for a vector feature */
 struct _label {
 
+<<<<<<< HEAD
     struct line_pnts *skyline; /**< The skyline of the text, as an offest
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    struct line_pnts *skyline; /**< The skyline of the text, as an offset
+=======
+    struct line_pnts *skyline; /**< The skyline of the text, as an offest
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    struct line_pnts *skyline; /**< The skyline of the text, as an offest
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                                 *  from the label point */
     struct bound_box bb;
     double size;
@@ -59,7 +71,19 @@ struct _label {
 
     int cat; /**< the cat of the feature */
 
+<<<<<<< HEAD
     int type; /**< The feture type (point, line, area) */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int type; /**< The feature type (point, line, area) */
+=======
+    int type; /**< The feture type (point, line, area) */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int type; /**< The feture type (point, line, area) */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     struct line_pnts *shape; /**< The points for the feature that this
                               *  label belongs to */
@@ -89,7 +113,7 @@ struct _label_candidate {
 };
 
 /**
- * This structire represents an intersection of two labels
+ * This structure represents an intersection of two labels
  */
 struct _label_intersection {
 

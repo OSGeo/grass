@@ -1,6 +1,29 @@
 [tool.black]
+required-version = '24'
 line-length = 88
+<<<<<<< HEAD
 target-version = ['py37', 'py38', 'py39', 'py310']
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+# 'extend-exclude' excludes files or directories in addition to the defaults
+extend-exclude = '''
+(
+    python/libgrass_interface_generator/
+=======
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+target-version = ['py36', 'py37', 'py38', 'py39']
+=======
+target-version = ['py37', 'py38', 'py39', 'py310']
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+target-version = ['py37', 'py38', 'py39', 'py310']
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 include = '\.pyi?$'
 exclude = '''
 (
@@ -18,7 +41,28 @@ exclude = '''
         | bin\..*
         | dist\..*
     )/
+<<<<<<< HEAD
     | python/libgrass_interface_generator/
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    | python/grass/ctypes/
+    # Bug in Black related to r-string prefix capitalization reformats
+    # a line in this file unnecessarily. File is however fully Black-formatted
+    # at the time of writing.
+    # https://github.com/psf/black/issues/1244
+    | python/grass/pygrass/utils.py
+<<<<<<< HEAD
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+=======
+    | python/libgrass_interface_generator/
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    | python/libgrass_interface_generator/
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 )
 '''
 
@@ -34,3 +78,17 @@ addopts = """
     --ignore='raster/r.category/test_rcategory_doctest.txt'
 """
 timeout = 300
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+
+[tool.bandit]
+exclude_dirs = ["./testsuite", "*/tests/*", "*/testsuite/*", "utils/test_generate_last_commit_file.py"]
+skips = ["B324","B110", "B101", "B112", "B311", "B404"]
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main

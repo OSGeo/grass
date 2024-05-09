@@ -25,10 +25,29 @@
 /* prototypes */
 static int bench_solvers(int rows);
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+/* ************************************************************************* */
+/* Perform the solver unit tests ****************************************** */
+
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+/* ************************************************************************* */
+=======
+>>>>>>> osgeo-main
 /* ************************************************************************* */
 /* Performe the solver unit tests ****************************************** */
 
 /* ************************************************************************* */
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 int bench_solvers_krylov(int rows)
 {
     G_message(_("\n++ Running krylov solver benchmark ++"));

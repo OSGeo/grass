@@ -34,7 +34,19 @@ void extract_init(struct SigSet *S)
         for (i = 0; i < C->nsubclasses; i++) {
             SubS = &(C->SubSig[i]);
 
+<<<<<<< HEAD
             /* Test for symetric  matrix */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            /* Test for symmetric  matrix */
+=======
+            /* Test for symetric  matrix */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            /* Test for symetric  matrix */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             for (b1 = 0; b1 < nbands; b1++)
                 for (b2 = 0; b2 < nbands; b2++) {
                     if (SubS->R[b1][b2] != SubS->R[b2][b1])

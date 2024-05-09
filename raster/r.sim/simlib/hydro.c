@@ -120,7 +120,30 @@ void main_loop(void)
 {
 
     int i, ii, l, k;
+<<<<<<< HEAD
     /* int icoub, nmult */;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /* int icoub, nmult */;
+=======
+    int icoub /*, nmult */;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    int icoub /*, nmult */;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    /* int icoub, nmult */;
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    int icoub /*, nmult */;
+=======
+    /* int icoub, nmult */;
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     int iw, iblock, lw;
     int itime, iter1;
 
@@ -141,7 +164,29 @@ void main_loop(void)
     float eff;
 
     nblock = 1;
+<<<<<<< HEAD
     /* icoub = 0; */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /* icoub = 0; */
+=======
+    icoub = 0;
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    /* icoub = 0; */
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+    icoub = 0;
+=======
+    /* icoub = 0; */
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     /* icfl = 0; */
     nstack = 0;
 
@@ -157,7 +202,30 @@ void main_loop(void)
     G_debug(2, " maxwa, nblock %d %d", maxwa, nblock);
 
     for (iblock = 1; iblock <= nblock; iblock++) {
+<<<<<<< HEAD
         /* ++icoub; */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        /* ++icoub; */
+=======
+        ++icoub;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        ++icoub;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        /* ++icoub; */
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+        ++icoub;
+=======
+        /* ++icoub; */
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
         lw = 0;
         walkwe = 0.;
@@ -305,7 +373,19 @@ void main_loop(void)
                         }
 
                         if (zz[k][l] != UNDEF) {
+<<<<<<< HEAD
                             if (infil != NULL) { /* infiltration part */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                            if (inf[k][l] != UNDEF) { /* infiltration part */
+=======
+                            if (infil != NULL) { /* infiltration part */
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+                            if (infil != NULL) { /* infiltration part */
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                                 if (inf[k][l] - si[k][l] > 0.) {
 
                                     decr = pow(

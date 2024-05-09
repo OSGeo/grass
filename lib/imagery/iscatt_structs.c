@@ -150,7 +150,7 @@ void I_sc_free_cats(struct scCats *cats)
    \param cats pointer to scCats struct
 
    \return assigned category id (starts with 0)
-   \return -1 if maximum nuber of categories was reached
+   \return -1 if maximum number of categories was reached
  */
 int I_sc_add_cat(struct scCats *cats)
 {

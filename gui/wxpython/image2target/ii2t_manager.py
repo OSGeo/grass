@@ -32,11 +32,9 @@ This program is free software under the GNU General Public License
 # TODO: i.ortho.transform looks for REF_POINTS/CONTROL_POINTS and not POINTS
 # TODO: CHECK CONTROL_POINTS format and create it for i.ortho.transform to use.
 
-from __future__ import print_function
 
 import os
 import sys
-import six
 import shutil
 from copy import copy
 
@@ -109,32 +107,45 @@ def getSmallDnArrowImage():
     return img
 
 
-class GCPWizard(object):
+class GCPWizard:
     """
     Start wizard here and finish wizard here
     """
 
-    # def __init__(self, parent, giface, srcloc, srcmpt, srcgrp, srcras, tgtras, camera, order, extension):
-    #    global maptype
-    #    global src_map
-    #    global tgt_map
-    #    maptype = 'raster'
-    #    rendertype = 'raster'
-    #    self.parent = parent  # GMFrame
-    #    self._giface = giface
-    #    self.srcloc = srcloc
-    #    self.srcmpt = srcmpt
-    #    self.group = srcgrp
-    #    self.src_map = srcras
-    #    self.tgt_map = tgtras
-    #    self.camera = camera
-    #    self.order = int(order)
-    #    self.extension = extension
-    #    self.src_maps = self.src_map
-    #    # location for xy map to georectify
-    #    self.newlocation = self.srcloc
-    #    # mapset for xy map to georectify
-    #    self.newmapset = self.srcmpt
+    # def __init__(
+    #     self,
+    #     parent,
+    #     giface,
+    #     srcloc,
+    #     srcmpt,
+    #     srcgrp,
+    #     srcras,
+    #     tgtras,
+    #     camera,
+    #     order,
+    #     extension,
+    # ):
+    #     global maptype
+    #     global src_map
+    #     global tgt_map
+    #     maptype = "raster"
+    #     rendertype = "raster"
+    #     self.parent = parent  # GMFrame
+    #     self._giface = giface
+    #     self.srcloc = srcloc
+    #     self.srcmpt = srcmpt
+    #     self.group = srcgrp
+    #     self.src_map = srcras
+    #     self.tgt_map = tgtras
+    #     self.camera = camera
+    #     self.order = int(order)
+    #     self.extension = extension
+    #     self.src_maps = self.src_map
+    #     # location for xy map to georectify
+    #     self.newlocation = self.srcloc
+    #     # mapset for xy map to georectify
+    #     self.newmapset = self.srcmpt
+
     def __init__(self, parent, giface):
         self.parent = parent  # GMFrame
         self._giface = giface
@@ -1018,7 +1029,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         Map=None,
         lmgr=None,
     ):
-
         self.grwiz = grwiz  # GR Wizard
         self._giface = giface
 
@@ -1385,7 +1395,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         }
         wpx = UserSettings.Get(group="gcpman", key="symbol", subkey="width")
 
-        for k, v in six.iteritems(colours):
+        for k, v in colours.items():
             col = UserSettings.Get(group="gcpman", key="symbol", subkey=k)
             self.pointsToDrawSrc.GetPen(v).SetColour(
                 wx.Colour(col[0], col[1], col[2], 255)
@@ -1412,7 +1422,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
     def SetGCPSatus(self, item, itemIndex):
         """Before GCP is drawn, decides it's colour and whether it
-        will be drawed.
+        will be drawn.
         """
         key = self.list.GetItemData(itemIndex)
         # incremented because of itemDataMap (has one more item) - will be
@@ -1555,7 +1565,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             f.write("#\tsource\t\t\ttarget\t\t\tstatus\n")
             f.write("#\teast\tnorth\theight\teast\tnorth\theight\t(1=ok, 0=ignore)\n")
             f.write(
-                "#----------------------------     ---------------------------     ---------------\n"
+                "#----------------------------     ---------------------------     ---------------\n"  # noqa: E501
             )
 
             for index in range(self.list.GetItemCount()):
@@ -1587,7 +1597,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     + "\n"
                 )
 
-        except IOError as err:
+        except OSError as err:
             GError(
                 parent=self,
                 message="%s <%s>. %s%s"
@@ -1649,7 +1659,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                     self.list.CheckItem(index, check)
                 GCPcnt += 1
 
-        except IOError as err:
+        except OSError as err:
             GError(
                 parent=self,
                 message="%s <%s>. %s%s"
@@ -1710,7 +1720,20 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             targetMapWin.UpdateMap(render=False, renderVector=False)
 
     def OnFocus(self, event):
+<<<<<<< HEAD
         # TODO: it is here just to remove old or obsolate beavior of base class gcp/MapPanel?
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        # TODO: it is here just to remove old or obsolete beavior of base class
+        #       gcp/MapPanel?
+=======
+        # TODO: it is here just to remove old or obsolate beavior of base class gcp/MapPanel?
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        # TODO: it is here just to remove old or obsolate beavior of base class gcp/MapPanel?
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         # self.grwiz.SwitchEnv('source')
         pass
 
@@ -1965,16 +1988,19 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
         if self.gr_order == 1:
             minNumOfItems = 3
-            # self.SetStatusText(_('Insufficient points, 3+ points needed for 1st order'))
+            # self.SetStatusText(_(
+            # "Insufficient points, 3+ points needed for 1st order"))
 
         elif self.gr_order == 2:
             minNumOfItems = 6
             diff = 6 - numOfItems
-            # self.SetStatusText(_('Insufficient points, 6+ points needed for 2nd order'))
+            # self.SetStatusText(_(
+            # "Insufficient points, 6+ points needed for 2nd order"))
 
         elif self.gr_order == 3:
             minNumOfItems = 10
-            # self.SetStatusText(_('Insufficient points, 10+ points needed for 3rd order'))
+            # self.SetStatusText(_(
+            # "Insufficient points, 10+ points needed for 3rd order"))
 
         for i in range(minNumOfItems - numOfItems):
             self.AddGCP(None)
@@ -2074,7 +2100,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         self.list.ResizeColumns()
 
     def GetNewExtent(self, region, map=None):
-
         coord_file = utils.GetTempfile()
         newreg = {
             "n": 0.0,
@@ -2177,7 +2202,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         self._giface.Help(entry="wxGUI.gcp")
 
     def OnUpdateActive(self, event):
-
         if self.activemap.GetSelection() == 0:
             self.MapWindow = self.SrcMapWindow
             self.Map = self.SrcMap
@@ -2191,7 +2215,6 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             self.MapWindow.SetFocus()
 
     def UpdateActive(self, win):
-
         # optionally disable tool zoomback tool
         self.GetMapToolbar().Enable(
             "zoomback", enable=(len(self.MapWindow.zoomhistory) > 1)
@@ -2370,7 +2393,6 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
         size=wx.DefaultSize,
         style=wx.LC_REPORT | wx.SUNKEN_BORDER | wx.LC_HRULES | wx.LC_SINGLE_SEL,
     ):
-
         ListCtrl.__init__(self, parent, id, pos, size, style)
 
         self.gcp = gcp  # GCP class
@@ -2394,7 +2416,6 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
         self.selectedkey = -1
 
     def _Create(self):
-
         if 0:
             # normal, simple columns
             idx_col = 0
@@ -2623,7 +2644,6 @@ class VectGroup(wx.Dialog):
         group,
         style=wx.DEFAULT_DIALOG_STYLE,
     ):
-
         wx.Dialog.__init__(
             self, parent, id, style=style, title=_("Create vector map group")
         )
@@ -2916,7 +2936,8 @@ class GrSettingsDialog(wx.Dialog):
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         btnSave.SetToolTip(
             _(
-                "Apply and save changes to user settings file (default for next sessions)"
+                "Apply and save changes to user settings file (default for next "
+                "sessions)"
             )
         )
         btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
@@ -3126,13 +3147,13 @@ class GrSettingsDialog(wx.Dialog):
                 parent=panel, id=wx.ID_ANY, label=_("Select source map to display:")
             ),
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
         sizer.Add(
             self.srcselection,
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
         self.srcselection.SetValue(src_map)
@@ -3143,13 +3164,13 @@ class GrSettingsDialog(wx.Dialog):
                 label=_("Select target raster map to display:"),
             ),
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
         sizer.Add(
             self.tgtrastselection,
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
         self.tgtrastselection.SetValue(tgt_map["raster"])
@@ -3160,13 +3181,13 @@ class GrSettingsDialog(wx.Dialog):
                 label=_("Select target vector map to display:"),
             ),
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
         sizer.Add(
             self.tgtvectselection,
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
         self.tgtvectselection.SetValue(tgt_map["vector"])
@@ -3232,7 +3253,7 @@ class GrSettingsDialog(wx.Dialog):
                 parent=panel, id=wx.ID_ANY, label=_("Extension for output maps:")
             ),
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
         self.ext_txt = TextCtrl(parent=panel, id=wx.ID_ANY, value="", size=(350, -1))
@@ -3240,7 +3261,7 @@ class GrSettingsDialog(wx.Dialog):
         sizer.Add(
             self.ext_txt,
             proportion=0,
-            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
+            flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
         )
 

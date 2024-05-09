@@ -62,6 +62,7 @@ int main(int argc, char **argv)
     struct Option *expr, *file, *seed, *region;
     struct Flag *random, *describe;
     int all_ok;
+    char *desc;
 
     G_gisinit(argv[0]);
 
@@ -84,6 +85,26 @@ int main(int argc, char **argv)
     region->required = NO;
     region->answer = "current";
     region->options = "current,intersect,union";
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    region->description = _("The computational region that should be used.");
+    desc = NULL;
+    G_asprintf(&desc,
+               "current;%s;"
+               "intersect;%s;"
+               "union;%s;",
+               _("current uses the current region of the mapset"),
+               _("intersect computes the intersection region between "
+                 "all input maps and uses the smallest resolution"),
+               _("union computes the union extent of all map regions "
+                 "and uses the smallest resolution"));
+    region->descriptions = desc;
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     region->description = _(
         "The computational region that should be used.\n"
         "               - current uses the current region of the mapset.\n"
@@ -91,6 +112,13 @@ int main(int argc, char **argv)
         "                 all input maps and uses the smallest resolution\n"
         "               - union computes the union extent of all map regions\n"
         "                 and uses the smallest resolution");
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     file = G_define_standard_option(G_OPT_F_INPUT);
     file->key = "file";

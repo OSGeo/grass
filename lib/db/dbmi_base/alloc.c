@@ -64,7 +64,19 @@ void *db_malloc(int n)
    \param n number of entities
    \param m entity size
 
+<<<<<<< HEAD
    \return pointer to allocated memmory
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+   \return pointer to allocated memory
+=======
+   \return pointer to allocated memmory
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   \return pointer to allocated memmory
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
  */
 void *db_calloc(int n, int m)
 {
@@ -88,7 +100,19 @@ void *db_calloc(int n, int m)
    \param s pointer to memory
    \param n number of newly allocated bytes
 
+<<<<<<< HEAD
    \return pointer to allocated memmory
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+   \return pointer to allocated memory
+=======
+   \return pointer to allocated memmory
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   \return pointer to allocated memmory
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
  */
 void *db_realloc(void *s, int n)
 {

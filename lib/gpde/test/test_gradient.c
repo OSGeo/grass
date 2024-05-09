@@ -29,7 +29,7 @@ static N_array_2d *create_potential_array_2d(void);
 static N_array_3d *create_potential_array_3d(void);
 
 /* *************************************************************** */
-/* Performe the gradient tests *********************************** */
+/* Perform the gradient tests *********************************** */
 /* *************************************************************** */
 int unit_test_gradient(void)
 {

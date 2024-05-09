@@ -434,12 +434,35 @@ int gsd_wire_surf_const(geosurf *surf, float k)
 
    Not yet implemented.
 
-   \param gs surface (geosurf)
-   \param user_func user defined function
+   \param gs surface (geosurf) [unused]
+   \param user_func user defined function [unused]
 
    \return 1
  */
+<<<<<<< HEAD
 int gsd_wire_surf_func(geosurf *gs, int (*user_func)(void))
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+int gsd_wire_surf_func(geosurf *gs UNUSED, int (*user_func)(void) UNUSED)
+=======
+int gsd_wire_surf_func(geosurf *gs, int (*user_func)())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int gsd_wire_surf_func(geosurf *gs, int (*user_func)())
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+int gsd_wire_surf_func(geosurf *gs, int (*user_func)(void))
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+int gsd_wire_surf_func(geosurf *gs, int (*user_func)())
+=======
+int gsd_wire_surf_func(geosurf *gs, int (*user_func)(void))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 {
     return (1);
 }

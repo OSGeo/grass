@@ -33,9 +33,9 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Hamish Bowman (planetary ellipsoids)
 """
+
 import os
 import locale
-import six
 import functools
 
 import wx
@@ -181,7 +181,7 @@ class DatabasePage(TitledPage):
     """Wizard page for setting GIS data directory and location name"""
 
     def __init__(self, wizard, parent, grassdatabase):
-        TitledPage.__init__(self, wizard, _("Define new GRASS Location"))
+        TitledPage.__init__(self, wizard, _("Define new GRASS project"))
 
         # grid definition
         self.sizer = wx.GridBagSizer(vgap=0, hgap=0)
@@ -199,7 +199,19 @@ class DatabasePage(TitledPage):
 
         # text controls
         self.tgisdbase = self.MakeLabel(grassdatabase)
+<<<<<<< HEAD
         self.tlocation = self.MakeTextCtrl("newLocation")
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        self.tlocation = self.MakeTextCtrl("newProject")
+=======
+        self.tlocation = self.MakeTextCtrl("newLocation")
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        self.tlocation = self.MakeTextCtrl("newLocation")
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         self.tlocation.SetFocus()
 
         checks = [
@@ -226,7 +238,7 @@ class DatabasePage(TitledPage):
         self.sizer.Add(
             self.MakeLabel(
                 "%s:" % _("Name"),
-                tooltip=_("Name of location directory in GIS Data Directory"),
+                tooltip=_("Name of project directory in GIS Data Directory"),
             ),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
@@ -248,7 +260,7 @@ class DatabasePage(TitledPage):
         self.sizer.Add(
             self.MakeLabel(
                 "%s:" % _("Description"),
-                tooltip=_("Description of location directory in GIS Data Directory"),
+                tooltip=_("Description of project directory in GIS Data Directory"),
             ),
             flag=wx.ALIGN_LEFT | wx.ALIGN_TOP | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=5,
@@ -268,7 +280,7 @@ class DatabasePage(TitledPage):
         )
 
         self.sizer.Add(
-            self.MakeLabel(_("Location will be created in GRASS database:")),
+            self.MakeLabel(_("Project will be created in GRASS database:")),
             flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
             border=2,
             pos=(5, 1),
@@ -294,7 +306,7 @@ class DatabasePage(TitledPage):
 
     def _nameValidationFailed(self, ctrl):
         message = _(
-            "Name '{}' is not a valid name for location. "
+            "Name '{}' is not a valid name for project. "
             "Please use only ASCII characters excluding characters {} "
             "and space."
         ).format(ctrl.GetValue(), "/\"'@,=*~")
@@ -308,10 +320,10 @@ class DatabasePage(TitledPage):
 
     def _locationAlreadyExists(self, ctrl):
         message = _(
-            "Location '{}' already exists. Please consider using "
-            "another name for your location."
+            "Project '{}' already exists. Please consider using "
+            "another name for your project."
         ).format(ctrl.GetValue())
-        GError(parent=self, message=message, caption=_("Existing location path"))
+        GError(parent=self, message=message, caption=_("Existing project path"))
 
     def OnChangeName(self, event):
         """Name for new location was changed"""
@@ -336,7 +348,6 @@ class DatabasePage(TitledPage):
         dlg.Destroy()
 
     def OnPageChanging(self, event=None):
-
         self.location = self.tlocation.GetValue()
         self.grassdatabase = self.tgisdbase.GetLabel()
         self.locTitle = self.tlocTitle.GetValue()
@@ -344,7 +355,7 @@ class DatabasePage(TitledPage):
             GWarning(
                 parent=self,
                 message=_(
-                    "Title of the location is limited only to one line and "
+                    "Title of the project is limited only to one line and "
                     "256 characters. The rest of the text will be ignored."
                 ),
             )
@@ -765,7 +776,7 @@ class ItemList(ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.ColumnSorterMix
         item1 = self.itemDataMap[key1][self._col]
         item2 = self.itemDataMap[key2][self._col]
 
-        if isinstance(item1, type("")) or isinstance(item2, type("")):
+        if isinstance(item1, str) or isinstance(item2, str):
             cmpVal = locale.strcoll(str(item1), str(item2))
         else:
             cmpVal = cmp(item1, item2)
@@ -906,7 +917,7 @@ class ProjParamsPage(TitledPage):
         """Go to next page"""
         if event.GetDirection():
             self.p4projparams = ""
-            for id, param in six.iteritems(self.pparam):
+            for id, param in self.pparam.items():
                 if param["type"] == "bool":
                     if param["value"] is False:
                         continue
@@ -1135,7 +1146,7 @@ class DatumPage(TitledPage):
             if self.datum not in self.parent.datums:
                 event.Veto()
             else:
-                # check for datum tranforms
+                # check for datum transforms
                 #                proj4string = self.parent.CreateProj4String()
                 #                + ' +datum=%s' % self.datum
                 ret = RunCommand(
@@ -1702,7 +1713,7 @@ class EPSGPage(TitledPage):
     def OnTextChange(self, event):
         value = self.searchb.GetValue()
         if value == "":
-            self.tlink.SetURL(str("https://epsg.io/"))
+            self.tlink.SetURL("https://epsg.io/")
             self.epsgcode = None
             self.epsgdesc = self.epsgparams = ""
             self.searchb.ChangeValue("")
@@ -1762,7 +1773,7 @@ class EPSGPage(TitledPage):
             return
 
         data = list()
-        for code, val in six.iteritems(self.epsgCodeDict):
+        for code, val in self.epsgCodeDict.items():
             if code is not None:
                 data.append((code, val[0], val[1]))
 
@@ -2038,7 +2049,7 @@ class IAUPage(TitledPage):
             return
 
         data = list()
-        for code, val in six.iteritems(self.epsgCodeDict):
+        for code, val in self.epsgCodeDict.items():
             if code is not None:
                 data.append((code, val[0], val[1]))
 
@@ -2101,7 +2112,7 @@ class CustomPage(TitledPage):
                 self.GetNext().SetPrev(self)
                 return
 
-            # check for datum tranforms
+            # check for datum transforms
             # FIXME: -t flag is a hack-around for trac bug #1849
             ret, out, err = RunCommand(
                 "g.proj",
@@ -2237,7 +2248,7 @@ class SummaryPage(TitledPage):
             self.ldatabase, flag=wx.ALIGN_LEFT | wx.ALL, border=5, pos=(1, 1)
         )
         self.sizer.Add(
-            self.MakeLabel(_("Location Name:")),
+            self.MakeLabel(_("Project Name:")),
             flag=wx.ALIGN_LEFT | wx.ALL,
             border=5,
             pos=(2, 0),
@@ -2301,7 +2312,7 @@ class SummaryPage(TitledPage):
         # print coordsys,proj4string
         if coordsys in ("proj", "epsg", "iau", "wkt", "file"):
             extra_opts = {}
-            extra_opts["location"] = "location"
+            extra_opts["project"] = "project"
             extra_opts["getErrorMsg"] = True
             extra_opts["read"] = True
 
@@ -2394,9 +2405,7 @@ class SummaryPage(TitledPage):
                 self.parent.custompage.customstring
                 + self.parent.custompage.custom_dtrans_string
             )
-            self.lproj4string.SetLabel(
-                ("%s" % combo_str.replace(" +", os.linesep + "+"))
-            )
+            self.lproj4string.SetLabel("%s" % combo_str.replace(" +", os.linesep + "+"))
 
         self.lprojection.SetLabel(label)
 
@@ -2432,7 +2441,7 @@ class LocationWizard(wx.Object):
         # define wizard pages
         #
         self.wizard = WizardWithHelpButton(
-            parent, id=wx.ID_ANY, title=_("Define new GRASS Location")
+            parent, id=wx.ID_ANY, title=_("Define new GRASS project")
         )
         self.wizard.Bind(wiz.EVT_WIZARD_HELP, self.OnHelp)
 
@@ -2531,8 +2540,8 @@ class LocationWizard(wx.Object):
                     parent=self.parent,
                     message="%s"
                     % _(
-                        "Unable to create new location. "
-                        "Location <%(loc)s> not created.\n\n"
+                        "Unable to create new project. "
+                        "Project <%(loc)s> not created.\n\n"
                         "Details: %(err)s"
                     )
                     % {"loc": self.startpage.location, "err": msg},
@@ -2664,9 +2673,9 @@ class LocationWizard(wx.Object):
                 parent=self.wizard,
                 message="%s <%s>: %s"
                 % (
-                    _("Unable to create new location"),
+                    _("Unable to create new project"),
                     os.path.join(database, location),
-                    _("Location already exists in GRASS Database."),
+                    _("Project already exists in GRASS Database."),
                 ),
             )
             return None
@@ -2773,7 +2782,7 @@ class LocationWizard(wx.Object):
         return None
 
     def CreateProj4String(self):
-        """Constract PROJ.4 string"""
+        """Construct PROJ.4 string"""
         proj = self.projpage.p4proj
         proj4params = self.paramspage.p4projparams
 

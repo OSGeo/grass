@@ -38,7 +38,7 @@ static char *format_zone(int zone_num)
     return zone_str;
 }
 
-void print_region(const struct Map_info *Map)
+void print_region(struct Map_info *Map)
 {
     char tmp1[1024], tmp2[1024];
 
@@ -59,7 +59,7 @@ void print_region(const struct Map_info *Map)
     fprintf(stdout, "bottom=%f\n", box.B);
 }
 
-void print_topo(const struct Map_info *Map)
+void print_topo(struct Map_info *Map)
 {
     int with_z;
     long nprimitives;
@@ -123,7 +123,19 @@ void print_topo(const struct Map_info *Map)
     fflush(stdout);
 }
 
+<<<<<<< HEAD
 void print_columns(const struct Map_info *Map, const char *input_opt,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void print_columns(struct Map_info *Map, const char *input_opt,
+=======
+void print_columns(const struct Map_info *Map, const char *input_opt,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+void print_columns(const struct Map_info *Map, const char *input_opt,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                    const char *field_opt)
 {
     int num_dblinks, col, ncols;
@@ -147,8 +159,9 @@ void print_columns(const struct Map_info *Map, const char *input_opt,
               field_opt);
 
     if ((fi = Vect_get_field2(Map, field_opt)) == NULL)
-        G_fatal_error(_("Database connection not defined for layer <%s>"),
-                      field_opt);
+        G_fatal_error(
+            _("Database connection not defined for layer <%s> of <%s>"),
+            field_opt, input_opt);
     driver = db_start_driver(fi->driver);
     if (driver == NULL)
         G_fatal_error(_("Unable to open driver <%s>"), fi->driver);
@@ -173,7 +186,7 @@ void print_columns(const struct Map_info *Map, const char *input_opt,
     db_shutdown_driver(driver);
 }
 
-void print_shell(const struct Map_info *Map, const char *field_opt)
+void print_shell(struct Map_info *Map, const char *field_opt)
 {
     int map_type;
     int time_ok, first_time_ok, second_time_ok;
@@ -199,6 +212,16 @@ void print_shell(const struct Map_info *Map, const char *field_opt)
     fprintf(stdout, "name=%s\n", Vect_get_name(Map));
     fprintf(stdout, "mapset=%s\n", Vect_get_mapset(Map));
     fprintf(stdout, "location=%s\n", G_location());
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    fprintf(stdout, "project=%s\n", G_location());
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     fprintf(stdout, "database=%s\n", G_gisdbase());
     fprintf(stdout, "title=%s\n", Vect_get_map_name(Map));
     fprintf(stdout, "scale=1:%d\n", Vect_get_scale(Map));
@@ -271,7 +294,7 @@ void print_shell(const struct Map_info *Map, const char *field_opt)
     fprintf(stdout, "comment=%s\n", Vect_get_comment(Map));
 }
 
-void print_info(const struct Map_info *Map)
+void print_info(struct Map_info *Map)
 {
     int i, map_type;
     char line[1024];
@@ -301,7 +324,19 @@ void print_info(const struct Map_info *Map)
     G_saprintf(line, "%-17s%s", _("Mapset:"), Vect_get_mapset(Map));
     printline(line);
 
+<<<<<<< HEAD
     G_saprintf(line, "%-17s%s", _("Location:"), G_location());
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    G_saprintf(line, "%-17s%s", _("Project:"), G_location());
+=======
+    G_saprintf(line, "%-17s%s", _("Location:"), G_location());
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    G_saprintf(line, "%-17s%s", _("Location:"), G_location());
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     printline(line);
     G_saprintf(line, "%-17s%s", _("Database:"), G_gisdbase());
     printline(line);

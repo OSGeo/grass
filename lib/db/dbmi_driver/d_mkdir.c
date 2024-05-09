@@ -27,7 +27,19 @@ static int make_dir(const char *path, int mode);
    \brief Create db directory
 
    \param path full path
+<<<<<<< HEAD
    \param mode mode
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+   \param mode mode (unused, defaults to chmod 0777 on non-Windows systems)
+=======
+   \param mode mode
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+   \param mode mode
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
    \param parentdirs parent directories
 
    \return DB_OK on success
@@ -48,7 +60,7 @@ int db_driver_mkdir(const char *path, int mode, int parentdirs)
 
 /* make a directory if it doesn't exist */
 /* this routine could be made more intelligent as to why it failed */
-static int make_dir(const char *path, int mode)
+static int make_dir(const char *path, int mode UNUSED)
 {
     if (db_isdir(path) == DB_OK)
         return DB_OK;

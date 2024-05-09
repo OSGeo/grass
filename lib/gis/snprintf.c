@@ -36,7 +36,7 @@
  * \param[in] str input string
  * \param[in] size length of string
  * \param[in] fmt
- * \return numer of chars written
+ * \return number of chars written
  */
 
 int G_snprintf(char *str, size_t size, const char *fmt, ...)
@@ -49,7 +49,29 @@ int G_snprintf(char *str, size_t size, const char *fmt, ...)
     va_end(ap);
 
     /* Windows' vsnprintf() doesn't always NUL-terminate the buffer */
+<<<<<<< HEAD
     if (count >= 0 && (unsigned int)count == size)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (count >= 0 && (unsigned int)count == size)
+=======
+    if (count == size)
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+    if (count >= 0 && (unsigned int)count == size)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+    if (count == size)
+=======
+    if (count >= 0 && (unsigned int)count == size)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         str[--count] = '\0';
 
     return count;

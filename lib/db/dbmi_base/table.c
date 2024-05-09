@@ -140,8 +140,34 @@ int db_get_table_number_of_columns(dbTable *table)
     return table->numColumns;
 }
 
+<<<<<<< HEAD
 static void set_all_column_privs(dbTable *table,
                                  void (*set_column_priv)(dbColumn *))
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static void set_all_column_privs(dbTable *table,
+                                 void (*set_column_priv)(dbColumn *))
+=======
+static void set_all_column_privs(dbTable *table, void (*set_column_priv)())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+static void set_all_column_privs(dbTable *table, void (*set_column_priv)())
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+static void set_all_column_privs(dbTable *table,
+                                 void (*set_column_priv)(dbColumn *))
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+static void set_all_column_privs(dbTable *table, void (*set_column_priv)())
+=======
+static void set_all_column_privs(dbTable *table,
+                                 void (*set_column_priv)(dbColumn *))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 {
     int col, ncols;
     dbColumn *column;
@@ -153,8 +179,34 @@ static void set_all_column_privs(dbTable *table,
     }
 }
 
+<<<<<<< HEAD
 static int get_all_column_privs(dbTable *table,
                                 int (*get_column_priv)(dbColumn *))
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static int get_all_column_privs(dbTable *table,
+                                int (*get_column_priv)(dbColumn *))
+=======
+static int get_all_column_privs(dbTable *table, int (*get_column_priv)())
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+static int get_all_column_privs(dbTable *table, int (*get_column_priv)())
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+static int get_all_column_privs(dbTable *table,
+                                int (*get_column_priv)(dbColumn *))
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+static int get_all_column_privs(dbTable *table, int (*get_column_priv)())
+=======
+static int get_all_column_privs(dbTable *table,
+                                int (*get_column_priv)(dbColumn *))
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 {
     int priv, col, ncols;
     dbColumn *column;
@@ -417,7 +469,17 @@ dbTable *db_clone_table(dbTable *src)
 }
 
 /*!
+<<<<<<< HEAD
+   \brief Create SQL CREATE string from table definition
+=======
    \brief Create SQL CREATE sring from table definition
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
    \param table pointer to dbTable
    \param sql dbString to store the SQL CREATE string

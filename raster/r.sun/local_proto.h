@@ -18,7 +18,29 @@ int searching_parallel(double *length, double *sunVarGeom_z_orig,
                        double *gridGeom_stepy, double *gridGeom_deltx,
                        double *gridGeom_delty);
 
+<<<<<<< HEAD
 int useCivilTime(void);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+int useCivilTime(void);
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+int useCivilTime();
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+int useCivilTime(void);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+int useCivilTime();
+=======
+int useCivilTime(void);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 void setUseCivilTime(int val);
 int useShadow(void);
 void setUseShadow(int val);
@@ -30,7 +52,29 @@ double getTimeOffset(void);
 void setTimeOffset(double val);
 double getHorizonInterval(void);
 void setHorizonInterval(double val);
+<<<<<<< HEAD
 void setAngularLossDenominator(void);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void setAngularLossDenominator(void);
+=======
+void setAngularLossDenominator();
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+void setAngularLossDenominator(void);
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+void setAngularLossDenominator();
+=======
+void setAngularLossDenominator(void);
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
 /* void cube(int, int); */
 

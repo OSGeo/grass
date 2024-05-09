@@ -46,7 +46,30 @@ static int Rast3d_readIndex(RASTER3D_Map *map)
         if (indexLength <
             map->indexLongNbytes * map->nTiles) { /* RLE encoded? */
 
+<<<<<<< HEAD
             if (indexLength > (int)sizeof(long) * map->nTiles) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (indexLength > (int)sizeof(long) * map->nTiles) {
+=======
+            if (indexLength > sizeof(long) * map->nTiles) {
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (indexLength > sizeof(long) * map->nTiles) {
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (indexLength > (int)sizeof(long) * map->nTiles) {
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+            if (indexLength > sizeof(long) * map->nTiles) {
+=======
+            if (indexLength > (int)sizeof(long) * map->nTiles) {
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
                 /*->index large enough? */
                 tmp2 = Rast3d_malloc(indexLength);
@@ -67,7 +90,30 @@ static int Rast3d_readIndex(RASTER3D_Map *map)
                               map->indexLongNbytes * map->nTiles, 1, &dummy1,
                               &dummy2);
 
+<<<<<<< HEAD
             if (indexLength > (int)sizeof(long) * map->nTiles)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (indexLength > (int)sizeof(long) * map->nTiles)
+=======
+            if (indexLength > sizeof(long) * map->nTiles)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (indexLength > sizeof(long) * map->nTiles)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+            if (indexLength > (int)sizeof(long) * map->nTiles)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+            if (indexLength > sizeof(long) * map->nTiles)
+=======
+            if (indexLength > (int)sizeof(long) * map->nTiles)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
                 Rast3d_free(tmp2);
         } /* END RLE */
 

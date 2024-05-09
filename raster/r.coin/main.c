@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     G_get_window(&window);
-    /* now make a temorary region with the same boundaries only 1 x 1 */
+    /* now make a temporary region with the same boundaries only 1 x 1 */
     window.rows = 1;
     window.cols = 1;
     G_adjust_Cell_head(&window, 1, 1);

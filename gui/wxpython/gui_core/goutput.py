@@ -43,7 +43,19 @@ from core.gconsole import (
 )
 from core.globalvar import CheckWxVersion, wxPythonPhoenix
 from gui_core.prompt import GPromptSTC
+<<<<<<< HEAD
 from gui_core.wrap import Button, ClearButton, StaticText, StaticBox
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+from gui_core.wrap import Button, ClearButton, StaticText
+=======
+from gui_core.wrap import Button, ClearButton, StaticText, StaticBox
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
+=======
+from gui_core.wrap import Button, ClearButton, StaticText, StaticBox
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 from core.settings import UserSettings
 
 
@@ -84,6 +96,7 @@ class GConsoleWindow(wx.SplitterWindow):
         self.panelPrompt = wx.Panel(parent=self, id=wx.ID_ANY)
         # initialize variables
         self.parent = parent  # GMFrame | CmdPanel | ?
+        self.giface = giface
         self._gconsole = gconsole
         self._menuModel = menuModel
 
@@ -135,25 +148,25 @@ class GConsoleWindow(wx.SplitterWindow):
         if not self._gcstyle & GC_PROMPT:
             self.cmdPrompt.Hide()
 
-        if self._gcstyle & GC_PROMPT:
-            cmdLabel = _("Command prompt")
-            self.outputBox = StaticBox(
-                parent=self.panelOutput, id=wx.ID_ANY, label=" %s " % _("Output window")
-            )
-
-            self.cmdBox = StaticBox(
-                parent=self.panelOutput, id=wx.ID_ANY, label=" %s " % cmdLabel
-            )
-
         # buttons
-        self.btnOutputClear = ClearButton(parent=self.panelOutput)
-        self.btnOutputClear.SetToolTip(_("Clear output window content"))
-        self.btnCmdClear = ClearButton(parent=self.panelOutput)
-        self.btnCmdClear.SetToolTip(_("Clear command prompt content"))
-        self.btnOutputSave = Button(parent=self.panelOutput, id=wx.ID_SAVE)
-        self.btnOutputSave.SetToolTip(_("Save output window content to the file"))
+        self.btnClear = ClearButton(parent=self.panelPrompt)
+        self.btnClear.SetToolTip(_("Clear prompt and output window"))
+        self.btnOutputSave = Button(parent=self.panelPrompt, id=wx.ID_SAVE)
+        self.btnOutputSave.SetToolTip(_("Save output to a file"))
         self.btnCmdAbort = Button(parent=self.panelProgress, id=wx.ID_STOP)
         self.btnCmdAbort.SetToolTip(_("Abort running command"))
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+        self.btnClear.Bind(wx.EVT_BUTTON, self.OnClear)
+        self.btnOutputSave.Bind(wx.EVT_BUTTON, self.OnOutputSave)
+        self.btnCmdAbort.Bind(wx.EVT_BUTTON, self._gconsole.OnCmdAbort)
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         self.btnCmdExportHistory = Button(parent=self.panelOutput, id=wx.ID_ANY)
         self.btnCmdExportHistory.SetLabel(_("&Export history"))
         self.btnCmdExportHistory.SetToolTip(
@@ -169,6 +182,13 @@ class GConsoleWindow(wx.SplitterWindow):
         self.btnOutputSave.Bind(wx.EVT_BUTTON, self.OnOutputSave)
         self.btnCmdAbort.Bind(wx.EVT_BUTTON, self._gconsole.OnCmdAbort)
         self.btnCmdExportHistory.Bind(wx.EVT_BUTTON, self.OnCmdExportHistory)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 
         self._layout()
 
@@ -176,13 +196,6 @@ class GConsoleWindow(wx.SplitterWindow):
         """Do layout"""
         self.outputSizer = wx.BoxSizer(wx.VERTICAL)
         progressSizer = wx.BoxSizer(wx.HORIZONTAL)
-        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
-        if self._gcstyle & GC_PROMPT:
-            outBtnSizer = wx.StaticBoxSizer(self.outputBox, wx.HORIZONTAL)
-            cmdBtnSizer = wx.StaticBoxSizer(self.cmdBox, wx.HORIZONTAL)
-        else:
-            outBtnSizer = wx.BoxSizer(wx.HORIZONTAL)
-            cmdBtnSizer = wx.BoxSizer(wx.HORIZONTAL)
 
         if self._gcstyle & GC_PROMPT:
             promptSizer = wx.BoxSizer(wx.VERTICAL)
@@ -202,15 +215,23 @@ class GConsoleWindow(wx.SplitterWindow):
             )
             promptSizer.Add(helpText, proportion=0, flag=wx.EXPAND | wx.LEFT, border=5)
 
+            btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+            btnSizer.AddStretchSpacer()
+            btnSizer.Add(
+                self.btnOutputSave,
+                proportion=0,
+                flag=wx.EXPAND | wx.LEFT | wx.RIGHT,
+                border=5,
+            )
+            btnSizer.Add(self.btnClear, proportion=0, flag=wx.EXPAND, border=5)
+            promptSizer.Add(btnSizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=5)
+
         self.outputSizer.Add(
             self.cmdOutput, proportion=1, flag=wx.EXPAND | wx.ALL, border=3
         )
-        if self._gcstyle & GC_PROMPT:
-            proportion = 1
-        else:
-            proportion = 0
-            outBtnSizer.AddStretchSpacer()
 
+<<<<<<< HEAD
+=======
         outBtnSizer.Add(
             self.btnOutputClear,
             proportion=proportion,
@@ -241,6 +262,7 @@ class GConsoleWindow(wx.SplitterWindow):
             flag=wx.ALIGN_CENTER | wx.RIGHT | wx.BOTTOM,
             border=5,
         )
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
         progressSizer.Add(
             self.btnCmdAbort, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border=5
         )
@@ -253,16 +275,7 @@ class GConsoleWindow(wx.SplitterWindow):
 
         self.panelProgress.SetSizer(progressSizer)
         progressSizer.Fit(self.panelProgress)
-
-        btnSizer.Add(outBtnSizer, proportion=1, flag=wx.ALL | wx.ALIGN_CENTER, border=5)
-        btnSizer.Add(
-            cmdBtnSizer,
-            proportion=1,
-            flag=wx.ALIGN_CENTER | wx.TOP | wx.BOTTOM | wx.RIGHT,
-            border=5,
-        )
         self.outputSizer.Add(self.panelProgress, proportion=0, flag=wx.EXPAND)
-        self.outputSizer.Add(btnSizer, proportion=0, flag=wx.EXPAND)
 
         self.outputSizer.Fit(self)
         self.outputSizer.SetSizeHints(self)
@@ -274,12 +287,10 @@ class GConsoleWindow(wx.SplitterWindow):
             self.panelPrompt.SetSizer(promptSizer)
 
         # split window
-        if self._gcstyle & GC_PROMPT:
-            self.SplitHorizontally(self.panelOutput, self.panelPrompt, -50)
-        else:
-            self.SplitHorizontally(self.panelOutput, self.panelPrompt, -45)
+        self.SplitHorizontally(self.panelOutput, self.panelPrompt, 0)
+        if not (self._gcstyle & GC_PROMPT):
             self.Unsplit()
-        self.SetMinimumPaneSize(self.btnCmdClear.GetSize()[1] + 25)
+        self.SetMinimumPaneSize(self.btnClear.GetSize()[1] + 100)
 
         self.SetSashGravity(1.0)
 
@@ -378,12 +389,13 @@ class GConsoleWindow(wx.SplitterWindow):
             notification=Notification.MAKE_VISIBLE,
         )
 
-    def OnOutputClear(self, event):
-        """Clear content of output window"""
+    def OnClear(self, event):
+        """Clear content of output window and command window"""
         self.cmdOutput.SetReadOnly(False)
         self.cmdOutput.ClearAll()
         self.cmdOutput.SetReadOnly(True)
         self.progressbar.SetValue(0)
+        self.cmdPrompt.CmdErase()
 
     def GetProgressBar(self):
         """Return progress bar widget"""
@@ -416,7 +428,7 @@ class GConsoleWindow(wx.SplitterWindow):
             try:
                 output = open(path, "w")
                 output.write(text)
-            except IOError as e:
+            except OSError as e:
                 GError(
                     _("Unable to write file '%(path)s'.\n\nDetails: %(error)s")
                     % {"path": path, "error": e}
@@ -465,6 +477,14 @@ class GConsoleWindow(wx.SplitterWindow):
         self.progressbar.SetValue(event.value)
         event.Skip()
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
     def OnCmdExportHistory(self, event):
         """Export the history of executed commands stored
         in a .wxgui_history file to a selected file."""
@@ -488,6 +508,7 @@ class GConsoleWindow(wx.SplitterWindow):
         dlg.Destroy()
         event.Skip()
 
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
     def OnCmdRun(self, event):
         """Run command"""
         self.outputSizer.Show(self.panelProgress)

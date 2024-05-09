@@ -12,13 +12,11 @@ COPYRIGHT: (C) 2015 Vaclav Petras, and by the GRASS Development Team
            for details.
 """
 
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
 
 class TestCounts(TestCase):
-
     # TODO: replace by unified handing of maps
     to_remove = []
     all_rast = "r_random_cells_all"

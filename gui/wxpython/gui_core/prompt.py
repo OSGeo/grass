@@ -18,9 +18,7 @@ This program is free software under the GNU General Public License
 @author Wolf Bergenheim <wolf bergenheim.net> (#962)
 """
 
-import os
 import difflib
-import codecs
 import sys
 import shutil
 
@@ -30,6 +28,8 @@ import wx.stc
 from grass.script import core as grass
 from grass.script import task as gtask
 
+from grass.grassdb import history
+
 from grass.pydispatch.signal import Signal
 
 from core import globalvar
@@ -37,7 +37,7 @@ from core import utils
 from core.gcmd import EncodeString, DecodeString, GError
 
 
-class GPrompt(object):
+class GPrompt:
     """Abstract class for interactive wxGUI prompt
 
     Signal promptRunCmd - emitted to run command from prompt
@@ -65,10 +65,6 @@ class GPrompt(object):
         # command description (gtask.grassTask)
         self.cmdDesc = None
 
-        self._loadHistory()
-        if giface:
-            giface.currentMapsetChanged.connect(self._loadHistory)
-
         # list of traced commands
         self.commands = list()
 
@@ -76,6 +72,14 @@ class GPrompt(object):
         if giface:
             giface.currentMapsetChanged.connect(self._reloadListOfMaps)
             giface.grassdbChanged.connect(self._reloadListOfMaps)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 7c10386e82 (g.proj: fix reading input WKT (#1582))
+>>>>>>> osgeo-main
 
     def _readHistory(self):
         """Get list of commands from history file"""
@@ -108,6 +112,7 @@ class GPrompt(object):
         """Load history from a history file to data structures"""
         self.cmdbuffer = self._readHistory()
         self.cmdindex = len(self.cmdbuffer)
+>>>>>>> b3579a4902 (g.proj: fix reading input WKT (#1582))
 
     def _getListOfMaps(self):
         """Get list of maps"""
@@ -132,12 +137,12 @@ class GPrompt(object):
         try:
             cmd = utils.split(str(cmdString))
         except UnicodeError:
-            cmd = utils.split(EncodeString((cmdString)))
+            cmd = utils.split(EncodeString(cmdString))
         cmd = list(map(DecodeString, cmd))
 
-        self.promptRunCmd.emit(cmd=cmd)
+        self.promptRunCmd.emit(cmd={"cmd": cmd, "cmdString": str(cmdString)})
 
-        self.OnCmdErase(None)
+        self.CmdErase()
         self.ShowStatusText("")
 
     def CopyHistory(self, targetFile):
@@ -221,6 +226,25 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         # show hint
         self._showHint()
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        # read history file
+        self._loadHistory()
+        if giface:
+            giface.currentMapsetChanged.connect(self._loadHistory)
+            giface.entryToHistoryAdded.connect(
+                lambda entry: self._addEntryToCmdHistoryBuffer(entry)
+            )
+            giface.entryFromHistoryRemoved.connect(
+                lambda index: self._removeEntryFromCmdHistoryBuffer(index)
+            )
+=======
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         #
         # bindings
         #
@@ -323,7 +347,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         if not self.cmdDesc or cmd != self.cmdDesc.get_name():
             try:
                 self.cmdDesc = gtask.parse_interface(cmd)
-            except IOError:
+            except OSError:
                 self.cmdDesc = None
 
     def _showHint(self):
@@ -348,7 +372,19 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.AutoCompCancel()
         # show hint
         if self.IsEmpty():
+<<<<<<< HEAD
             self._showHint()
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            wx.CallAfter(self._showHint)
+=======
+            self._showHint()
+>>>>>>> 498a331298 (Fix missing function prototypes (#2727))
+=======
+            self._showHint()
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
         event.Skip()
 
     def OnSetFocus(self, event):
@@ -364,19 +400,45 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         self.SetCurrentPos(pos)
         self.SetFocus()
 
-    def UpdateCmdHistory(self, cmd):
-        """Update command history
+    def _loadHistory(self):
+        """Load history from a history file to data structures"""
+        try:
+            history_path = history.get_current_mapset_gui_history_path()
+            history.ensure_history_file(history_path)
+            self.cmdbuffer = [
+                entry["command"] for entry in history.read(history_path)
+            ] or []
+            self.cmdindex = len(self.cmdbuffer)
+        except (OSError, ValueError) as e:
+            GError(str(e))
 
-        :param cmd: command given as a string
+    def _addEntryToCmdHistoryBuffer(self, entry):
+        """Add entry to command history buffer.
+
+        :param entry dict: entry with 'command' and 'command_info' keys
+        command value is a string.
         """
+        # create command string
+        entry = entry["command"]
         # add command to history
-        self.cmdbuffer.append(cmd)
+        self.cmdbuffer.append(entry)
         # update also traced commands
-        self.commands.append(cmd)
+        self.commands.append(entry)
 
         # keep command history to a manageable size
         if len(self.cmdbuffer) > 200:
             del self.cmdbuffer[0]
+        self.cmdindex = len(self.cmdbuffer)
+
+    def _removeEntryFromCmdHistoryBuffer(self, index):
+        """Remove entry from command history buffer.
+        :param index: index of deleted command
+        """
+        # remove command at the given index from history buffer
+        if index < len(self.cmdbuffer):
+            self.cmdbuffer.pop(index)
+
+        # update cmd index size
         self.cmdindex = len(self.cmdbuffer)
 
     def EntityToComplete(self):
@@ -440,8 +502,8 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         """Get word left from current cursor position. The beginning
         of the word is given by space or chars: .,-=
 
-        :param withDelimiter: returns the word with the initial delimeter
-        :param ignoredDelimiter: finds the word ignoring certain delimeter
+        :param withDelimiter: returns the word with the initial delimiter
+        :param ignoredDelimiter: finds the word ignoring certain delimiter
         """
         textLeft = self.GetTextLeft()
 
@@ -676,7 +738,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 ):
                     try:
                         self.cmdDesc = gtask.parse_interface(cmd)
-                    except IOError:
+                    except OSError:
                         self.cmdDesc = None
             event.Skip()
 
@@ -703,7 +765,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             wx.TheClipboard.Flush()
         event.Skip()
 
-    def OnCmdErase(self, event):
+    def CmdErase(self):
         """Erase command prompt"""
         self.Home()
         self.DelLineRight()

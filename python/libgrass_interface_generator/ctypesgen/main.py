@@ -35,7 +35,21 @@ def option_callback_W(option, opt, value, parser):
         raise optparse.BadOptionError("not in '-Wl,<opt>' form: %s%s" % (opt, value))
     opt = value[2:]
     if opt not in ["-L", "-R", "--rpath"]:
+<<<<<<< HEAD
         raise optparse.BadOptionError("-Wl option must be -L, -R" " or --rpath, not " + value[2:])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        raise optparse.BadOptionError(
+            "-Wl option must be -L, -R" " or --rpath, not " + value[2:]
+        )
+=======
+        raise optparse.BadOptionError("-Wl option must be -L, -R" " or --rpath, not " + value[2:])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        raise optparse.BadOptionError("-Wl option must be -L, -R" " or --rpath, not " + value[2:])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     # Push the linker option onto the list for further parsing.
     parser.rargs.insert(0, value)
 
@@ -313,6 +327,16 @@ def main(givenargs=None):
         dest="output_language",
         metavar="LANGUAGE",
         default="py",
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        choices=("py", "json"),
+        help="Choose output language (`py'[default], or `json').",
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         choices=("py", "py32", "py27", "py25", "json"),
         help="Choose output language (`py'[default], `py32', `py27', `py25', or "
         "`json').  The implementation for py32 does appear to be "
@@ -320,6 +344,13 @@ def main(givenargs=None):
         "any case _not_ compatible with >= Python3.  The default choice "
         "(py) attempts to select `py32', `py27', or `py25' based on the "
         "version of Python that runs this script.",
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     )
     op.add_option(
         "-P",
@@ -390,7 +421,21 @@ def main(givenargs=None):
     elif options.output_language == "json":
         printer = printer_json.WrapperPrinter
     else:
+<<<<<<< HEAD
         msgs.error_message("No such output language `" + options.output_language + "'", cls="usage")
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        msgs.error_message(
+            "No such output language `" + options.output_language + "'", cls="usage"
+        )
+=======
+        msgs.error_message("No such output language `" + options.output_language + "'", cls="usage")
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        msgs.error_message("No such output language `" + options.output_language + "'", cls="usage")
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         sys.exit(1)
 
     # Step 1: Parse

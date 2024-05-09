@@ -53,7 +53,17 @@ int main(int argc, char **argv)
 
     units = G_define_standard_option(G_OPT_M_UNITS);
     units->label = _("Units");
+<<<<<<< HEAD
+    units->description = _("Default: project map units");
+=======
     units->description = _("Default: location map units");
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     shell = G_define_flag();
     shell->key = 'g';

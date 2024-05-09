@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
@@ -114,9 +115,27 @@ int init_search(int depr_fd)
         G_free(depr_buf);
     }
 
+<<<<<<< HEAD
     G_debug(1, "%" PRI_OFF_T " edge cells", heap_size - n_depr_cells);
     if (n_depr_cells)
         G_debug(1, "%" PRI_OFF_T " cells in depressions", n_depr_cells);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    G_debug(1, "%" PRId64 " edge cells", heap_size - n_depr_cells);
+    if (n_depr_cells)
+        G_debug(1, "%" PRId64 " cells in depressions", n_depr_cells);
+=======
+    G_debug(1, "%" PRI_OFF_T " edge cells", heap_size - n_depr_cells);
+    if (n_depr_cells)
+        G_debug(1, "%" PRI_OFF_T " cells in depressions", n_depr_cells);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    G_debug(1, "%" PRI_OFF_T " edge cells", heap_size - n_depr_cells);
+    if (n_depr_cells)
+        G_debug(1, "%" PRI_OFF_T " cells in depressions", n_depr_cells);
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     return 1;
 }

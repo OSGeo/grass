@@ -20,14 +20,24 @@ category number falls into different <b>query_map</b> polygons.
 <p>When transferring attributes from a point map into a polygon map,
 <b>dmax</b> has to be larger than zero, i.e., it will be determined by the
 distance between query points and polygon centroids. Importantly, distance
+<<<<<<< HEAD
+is in meters for latitude-longitude projects.
+=======
 is in meters for latitude-longitude locations.
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 <p>In case that one or both input vector maps are 3D, features need to
 touch also in the 3rd dimension (z coordinate) in order to transfer
 attributes.
 
 <h2>EXAMPLES</h2>
 
-In this example, the 'hospitals' point map in the North Carolina location is
+In this example, the 'hospitals' point map in the North Carolina dataset is
 copied to the current mapset, a new attribute column is added and the urban
 names from the 'urbanarea' polygon map are transferred to hospital points
 locations in 'myhospitals' map:

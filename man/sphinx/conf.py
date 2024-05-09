@@ -1,6 +1,26 @@
 #
+<<<<<<< HEAD
 # GRASS GIS 8.3 Documentation documentation build configuration file, created by
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+# GRASS GIS Python documentation build configuration file
+# originally created by sphinx-quickstart.
+=======
+=======
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+# GRASS GIS 8.0 Documentation documentation build configuration file, created by
+=======
+# GRASS GIS 8.3 Documentation documentation build configuration file, created by
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+# GRASS GIS 8.3 Documentation documentation build configuration file, created by
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 # sphinx-quickstart on Thu Aug  9 17:16:28 2012.
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 #
 # This file is execfile()d with the current directory set to its containing dir.
 #
@@ -22,7 +42,7 @@
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ["sphinx.ext.todo", "sphinx.ext.pngmath"]
+extensions = ["sphinx.ext.todo", "sphinx.ext.imgmath"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -37,15 +57,68 @@ source_suffix = ".txt"
 master_doc = "index"
 
 # General information about the project.
+<<<<<<< HEAD
 project = "GRASS GIS 8.3 Documentation"
 copyright = "2023, GRASS Development Team"
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+project = "GRASS GIS"
+copyright = "2024, GRASS Development Team"
+=======
+project = "GRASS GIS 8.0 Documentation"
+copyright = "2021, GRASS Development Team"
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+project = "GRASS GIS 8.0 Documentation"
+copyright = "2021, GRASS Development Team"
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+project = "GRASS GIS 8.3 Documentation"
+<<<<<<< HEAD
+copyright = "2022, GRASS Development Team"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+project = "GRASS GIS 8.3 Documentation"
+<<<<<<< HEAD
+copyright = "2022, GRASS Development Team"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+copyright = "2023, GRASS Development Team"
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
+=======
+copyright = "2023, GRASS Development Team"
+>>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
+>>>>>>> osgeo-main
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
 # The short X.Y version.
+<<<<<<< HEAD
 version = "8.3"
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+version = "8.4"
+=======
+version = "8.0"
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+version = "8.0"
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+version = "8.3"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+version = "8.3"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 # The full version, including alpha/beta/rc tags.
 release = "dev"
 
@@ -161,7 +234,27 @@ html_use_index = False
 # html_file_suffix = None
 
 # Output file base name for HTML help builder.
+<<<<<<< HEAD
 htmlhelp_basename = "grass83Documentationdoc"
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+htmlhelp_basename = "grass_gis"
+=======
+htmlhelp_basename = "grass80Documentationdoc"
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+htmlhelp_basename = "grass80Documentationdoc"
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+htmlhelp_basename = "grass83Documentationdoc"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+htmlhelp_basename = "grass83Documentationdoc"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -180,8 +273,33 @@ latex_elements = {
 latex_documents = [
     (
         "content",
+<<<<<<< HEAD
         "grass83Documentation.tex",
         "GRASS GIS 8.3 Documentation",
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        "grass_gis.tex",
+        project,
+=======
+        "grass80Documentation.tex",
+        "GRASS GIS 8.0 Documentation",
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+        "grass80Documentation.tex",
+        "GRASS GIS 8.0 Documentation",
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+        "grass83Documentation.tex",
+        "GRASS GIS 8.3 Documentation",
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        "grass83Documentation.tex",
+        "GRASS GIS 8.3 Documentation",
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         "GRASS Development Team",
         "manual",
     ),
@@ -215,8 +333,33 @@ latex_documents = [
 man_pages = [
     (
         "content",
+<<<<<<< HEAD
         "grass83documentation",
         "GRASS GIS 8.3 Documentation",
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        "grass_gis",
+        project,
+=======
+        "grass80documentation",
+        "GRASS GIS 8.0 Documentation",
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+        "grass80documentation",
+        "GRASS GIS 8.0 Documentation",
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+        "grass83documentation",
+        "GRASS GIS 8.3 Documentation",
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        "grass83documentation",
+        "GRASS GIS 8.3 Documentation",
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         ["GRASS Development Team"],
         1,
     )
@@ -234,11 +377,46 @@ man_pages = [
 texinfo_documents = [
     (
         "content",
+<<<<<<< HEAD
         "grass83Documentation",
         "GRASS GIS 8.3 Documentation",
         "GRASS Development Team",
         "grass83Documentation",
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        "grass_gis",
+        project,
+        "GRASS Development Team",
+        "grass_gis",
+        "Documentation for GRASS GIS in Sphinx",
+=======
+        "grass80Documentation",
+        "GRASS GIS 8.0 Documentation",
+        "GRASS Development Team",
+=======
+        "grass80Documentation",
+        "GRASS GIS 8.0 Documentation",
+        "GRASS Development Team",
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+        "grass80Documentation",
+=======
+        "grass83Documentation",
+        "GRASS GIS 8.3 Documentation",
+        "GRASS Development Team",
+        "grass83Documentation",
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        "grass83Documentation",
+        "GRASS GIS 8.3 Documentation",
+        "GRASS Development Team",
+        "grass83Documentation",
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         "One line description of project.",
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
         "Miscellaneous",
     ),
 ]
@@ -256,10 +434,52 @@ texinfo_documents = [
 # -- Options for Epub output ---------------------------------------------------
 
 # Bibliographic Dublin Core info.
+<<<<<<< HEAD
 epub_title = "GRASS GIS 8.3 Documentation"
 epub_author = "GRASS Development Team"
 epub_publisher = "GRASS Development Team"
 epub_copyright = "2023, GRASS Development Team"
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+epub_title = project
+epub_author = "GRASS Development Team"
+epub_publisher = epub_author
+epub_copyright = copyright
+=======
+=======
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+epub_title = "GRASS GIS 8.0 Documentation"
+epub_author = "GRASS Development Team"
+epub_publisher = "GRASS Development Team"
+epub_copyright = "2021, GRASS Development Team"
+<<<<<<< HEAD
+>>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+>>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+=======
+epub_title = "GRASS GIS 8.3 Documentation"
+epub_author = "GRASS Development Team"
+epub_publisher = "GRASS Development Team"
+<<<<<<< HEAD
+epub_copyright = "2022, GRASS Development Team"
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+epub_title = "GRASS GIS 8.3 Documentation"
+epub_author = "GRASS Development Team"
+epub_publisher = "GRASS Development Team"
+<<<<<<< HEAD
+epub_copyright = "2022, GRASS Development Team"
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+epub_copyright = "2023, GRASS Development Team"
+>>>>>>> 021dfb5d52 (r.terrafow: explicit use of default constructors (#2660))
+=======
+epub_copyright = "2023, GRASS Development Team"
+>>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
+>>>>>>> osgeo-main
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.

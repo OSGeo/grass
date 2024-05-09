@@ -344,7 +344,30 @@ void Rast3d_compute_optimal_tile_dimension(RASTER3D_Region *region, int type,
                 "%li z %li\n",
                 tileSize, x, y, z);
 
+<<<<<<< HEAD
         if (maxSize < 0 || tileSize <= (unsigned int)maxSize * 1024)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (maxSize < 0 || tileSize <= (unsigned int)maxSize * 1024)
+=======
+        if (tileSize <= maxSize * 1024)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (tileSize <= maxSize * 1024)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (maxSize < 0 || tileSize <= (unsigned int)maxSize * 1024)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+        if (tileSize <= maxSize * 1024)
+=======
+        if (maxSize < 0 || tileSize <= (unsigned int)maxSize * 1024)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
             break;
 
         /* Compute weighted tile sizes. Take care that the tile size is computed

@@ -8,13 +8,13 @@ Licence:    This program is free software under the GNU General Public
                 License (>=v2). Read the file COPYING that comes with GRASS
                 for details.
 """
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
 
 class Testrr(TestCase):
-
     input = "lakes"
     cover = "elevation"
     raster = "routfile"

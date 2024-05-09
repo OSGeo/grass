@@ -67,7 +67,19 @@ double th_4_b = 0.08;
 double th_5 = 2.35;    /* Band 4/3 Ratio */
 double th_6 = 2.16248; /* Band 4/2 Ratio */
 double th_7 = 1.0;     /* Band 4/5 Ratio */
+<<<<<<< HEAD
 ;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+;
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 double th_8 = 210.; /* Band 5/6 Composite */
 
 extern int hist_n;
@@ -75,8 +87,11 @@ extern int hist_n;
 void acca_algorithm(Gfile *out, Gfile band[], int single_pass, int with_shadow,
                     int cloud_signature)
 {
-    int i, count[5], hist_cold[hist_n], hist_warm[hist_n];
+    int i, count[5];
     double max, value[5], signa[5], idesert, review_warm, shift;
+
+    int *hist_cold = G_malloc(hist_n * sizeof(int));
+    int *hist_warm = G_malloc(hist_n * sizeof(int));
 
     /* Reset variables ... */
     for (i = 0; i < 5; i++) {
@@ -212,6 +227,9 @@ void acca_algorithm(Gfile *out, Gfile band[], int single_pass, int with_shadow,
     }
     acca_second(out, band[BAND6], review_warm, value[KUPPER], value[KLOWER]);
     /* CATEGORIES: IS_WARM_CLOUD, IS_COLD_CLOUD, IS_SHADOW, NULL (= NO_CLOUD) */
+
+    G_free(hist_cold);
+    G_free(hist_warm);
 
     return;
 }

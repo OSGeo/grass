@@ -35,16 +35,32 @@
 # % key: f
 # % label: Force operation (required for removal)
 # % end
+<<<<<<< HEAD
+
+=======
 from __future__ import print_function
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 import http
 import os
 import re
 import sys
 
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import xml.etree.ElementTree as etree
+
+from urllib import request as urlrequest
+from urllib.error import HTTPError, URLError
+
+from six.moves.urllib import request as urlrequest
+from six.moves.urllib.error import HTTPError, URLError
+
+from six.moves.urllib import request as urlrequest
+from six.moves.urllib.error import HTTPError, URLError
 
 from six.moves.urllib import request as urlrequest
 from six.moves.urllib.error import HTTPError, URLError

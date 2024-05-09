@@ -485,7 +485,30 @@ int main(int argc, char *argv[])
 
         convert_row(out_buf, in_buf, ncols, is_fp, bytes, swap_flag, null_val);
 
+<<<<<<< HEAD
         if (fwrite(out_buf, bytes, ncols, fp) != (size_t)ncols)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (fwrite(out_buf, bytes, ncols, fp) != (size_t)ncols)
+=======
+        if (fwrite(out_buf, bytes, ncols, fp) != ncols)
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (fwrite(out_buf, bytes, ncols, fp) != ncols)
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+=======
+        if (fwrite(out_buf, bytes, ncols, fp) != (size_t)ncols)
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+        if (fwrite(out_buf, bytes, ncols, fp) != ncols)
+=======
+        if (fwrite(out_buf, bytes, ncols, fp) != (size_t)ncols)
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
             G_fatal_error(_("Error writing data"));
     }
 

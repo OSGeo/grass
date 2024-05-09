@@ -15,6 +15,16 @@ This program is free software under the GNU General Public License
 
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 import wx
 from math import ceil, floor, sin, cos, pi
 
@@ -374,7 +384,7 @@ def GetMapBounds(filename, env, portrait=True):
     """Run ps.map -b to get information about map bounding box
 
     :param filename: psmap input file
-    :param env: enironment with GRASS_REGION defined
+    :param env: environment with GRASS_REGION defined
     :param portrait: page orientation"""
     orient = ""
     if not portrait:

@@ -7,6 +7,16 @@ Classes:
  - mapdisp::MapPanelBase
  - mapdisp::SingleMapPanel
  - mapdisp::DoubleMapPanel
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+ - mapdisp::FrameMixin
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 (C) 2009-2014 by the GRASS Development Team
 
@@ -20,7 +30,6 @@ This program is free software under the GNU General Public License
 """
 
 import sys
-import six
 
 import wx
 
@@ -28,13 +37,38 @@ from core.debug import Debug
 from gui_core.toolbars import ToolSwitcher
 from gui_core.wrap import NewId
 from mapdisp import statusbar as sb
+<<<<<<< HEAD
 from mapwin.base import MapWindowProperties
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+from mapwin.base import MapWindowProperties
+=======
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+from mapwin.base import MapWindowProperties
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+from mapwin.base import MapWindowProperties
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
 from grass.script import core as grass
 
 
 class MapPanelBase(wx.Panel):
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    r"""Base class for map display window
+=======
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     """Base class for map display window
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     Derived class must use (create and initialize) \c statusbarManager
     or override
@@ -66,7 +100,7 @@ class MapPanelBase(wx.Panel):
         name="",
         **kwargs,
     ):
-        """
+        r"""
 
         .. warning::
             Use \a auimgr parameter only if you know what you are doing.
@@ -161,6 +195,26 @@ class MapPanelBase(wx.Panel):
         # update statusbar
         self.StatusbarUpdate()
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    def OnFullScreen(self, event):
+        """!Switch fullscreen mode, hides also toolbars"""
+        for toolbar in self.toolbars:
+            self._mgr.GetPane(self.toolbars[toolbar]).Show(self.IsFullScreen())
+        self._mgr.Update()
+        self.ShowFullScreen(not self.IsFullScreen())
+        event.Skip()
+
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
     def OnCloseWindow(self, event):
         self.Destroy()
 
@@ -336,8 +390,28 @@ class MapPanelBase(wx.Panel):
         # create statusbar and its manager
         statusbar = wx.StatusBar(self, id=wx.ID_ANY)
         statusbar.SetMinHeight(24)
+<<<<<<< HEAD
         statusbar.SetFieldsCount(3)
         statusbar.SetStatusWidths([-6, -2, -1])
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        statusbar.SetFieldsCount(3)
+        statusbar.SetStatusWidths([-6, -2, -1])
+=======
+        statusbar.SetFieldsCount(4)
+        statusbar.SetStatusWidths([-5, -2, -1, -1])
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+        statusbar.SetFieldsCount(3)
+        statusbar.SetStatusWidths([-6, -2, -1])
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+        statusbar.SetFieldsCount(3)
+        statusbar.SetStatusWidths([-6, -2, -1])
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         self.statusbarManager = sb.SbManager(mapframe=self, statusbar=statusbar)
 
         # fill statusbar manager
@@ -345,8 +419,32 @@ class MapPanelBase(wx.Panel):
             statusbarItems, mapframe=self, statusbar=statusbar
         )
         self.statusbarManager.AddStatusbarItem(
+<<<<<<< HEAD
             sb.SbRender(self, statusbar=statusbar, position=2)
         )
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            sb.SbRender(self, statusbar=statusbar, position=2)
+        )
+=======
+            sb.SbMask(self, statusbar=statusbar, position=2)
+        )
+        self.statusbarManager.AddStatusbarItem(
+            sb.SbRender(self, statusbar=statusbar, position=3)
+        )
+        self.statusbarManager.Update()
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+            sb.SbRender(self, statusbar=statusbar, position=2)
+        )
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+            sb.SbRender(self, statusbar=statusbar, position=2)
+        )
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         return statusbar
 
     def AddStatusbarPane(self):
@@ -367,7 +465,19 @@ class MapPanelBase(wx.Panel):
         )
 
     def SetStatusText(self, *args):
+<<<<<<< HEAD
         """Overide wx.StatusBar method"""
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        """Override wx.StatusBar method"""
+=======
+        """Overide wx.StatusBar method"""
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+        """Overide wx.StatusBar method"""
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         self.statusbar.SetStatusText(*args)
 
     def ShowStatusbar(self, show):
@@ -386,7 +496,11 @@ class MapPanelBase(wx.Panel):
 
     def StatusbarEnableLongHelp(self, enable=True):
         """Enable/disable toolbars long help"""
+<<<<<<< HEAD
+        for toolbar in self.toolbars.values():
+=======
         for toolbar in six.itervalues(self.toolbars):
+<<<<<<< HEAD
             if toolbar:
                 toolbar.EnableLongHelp(enable)
 
@@ -430,7 +544,104 @@ class MapPanelBase(wx.Panel):
         if self._mgr.GetPane(name).IsOk():
             return self._mgr.GetPane(name).IsShown()
         return False
+=======
+<<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+            if toolbar:
+                toolbar.EnableLongHelp(enable)
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
+=======
+            if toolbar:
+                toolbar.EnableLongHelp(enable)
+>>>>>>> osgeo-main
+
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+    def ShowAllToolbars(self, show=True):
+        if not show:  # hide
+            action = self.RemoveToolbar
+        else:
+            action = self.AddToolbar
+        for toolbar in self.GetToolbarNames():
+            action(toolbar)
+<<<<<<< HEAD
+=======
+
+    def AreAllToolbarsShown(self):
+        return self.GetMapToolbar().IsShown()
+
+    def GetToolbarNames(self):
+        """Return toolbar names"""
+        return list(self.toolbars.keys())
+
+    def AddToolbar(self):
+        """Add defined toolbar to the window"""
+        raise NotImplementedError("AddToolbar")
+
+    def RemoveToolbar(self, name, destroy=False):
+        """Removes defined toolbar from the window
+
+        :param name toolbar to remove
+        :param destroy True to destroy otherwise toolbar is only hidden
+        """
+        self._mgr.DetachPane(self.toolbars[name])
+        if destroy:
+            self._toolSwitcher.RemoveToolbarFromGroup("mouseUse", self.toolbars[name])
+            self.toolbars[name].Destroy()
+            self.toolbars.pop(name)
+        else:
+            self.toolbars[name].Hide()
+
+        self._mgr.Update()
+
+    def IsPaneShown(self, name):
+        """Check if pane (toolbar, mapWindow ...) of given name is currently shown"""
+        if self._mgr.GetPane(name).IsOk():
+            return self._mgr.GetPane(name).IsShown()
+        return False
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+
+    def AreAllToolbarsShown(self):
+        return self.GetMapToolbar().IsShown()
+
+    def GetToolbarNames(self):
+        """Return toolbar names"""
+        return list(self.toolbars.keys())
+
+    def AddToolbar(self):
+        """Add defined toolbar to the window"""
+        raise NotImplementedError("AddToolbar")
+
+    def RemoveToolbar(self, name, destroy=False):
+        """Removes defined toolbar from the window
+
+        :param name toolbar to remove
+        :param destroy True to destroy otherwise toolbar is only hidden
+        """
+        self._mgr.DetachPane(self.toolbars[name])
+        if destroy:
+            self._toolSwitcher.RemoveToolbarFromGroup("mouseUse", self.toolbars[name])
+            self.toolbars[name].Destroy()
+            self.toolbars.pop(name)
+        else:
+            self.toolbars[name].Hide()
+
+        self._mgr.Update()
+
+    def IsPaneShown(self, name):
+        """Check if pane (toolbar, mapWindow ...) of given name is currently shown"""
+        if self._mgr.GetPane(name).IsOk():
+            return self._mgr.GetPane(name).IsShown()
+        return False
+
+<<<<<<< HEAD
+=======
+>>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
+=======
+>>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
     def OnRender(self, event):
         """Re-render map composition (each map layer)"""
         raise NotImplementedError("OnRender")
@@ -507,7 +718,19 @@ class MapPanelBase(wx.Panel):
 
 
 class SingleMapPanel(MapPanelBase):
+<<<<<<< HEAD
     """Panel with one map window.
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    r"""Panel with one map window.
+=======
+    """Panel with one map window.
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+    """Panel with one map window.
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
     It is base class for panels which needs only one map.
 
@@ -609,11 +832,11 @@ class DoubleMapPanel(MapPanelBase):
         name=None,
         **kwargs,
     ):
-        """
+        r"""
 
         \a firstMap is set as active (by assign it to \c self.Map).
         Derived class should assging to \c self.MapWindow to make one
-        map window current by dafault.
+        map window current by default.
 
         :param parent: gui parent
         :param id: wx id
@@ -669,10 +892,10 @@ class DoubleMapPanel(MapPanelBase):
         return self.secondMapWindow
 
     def GetMap(self):
-        """Returns current map (renderer) instance
+        r"""Returns current map (renderer) instance
 
         @note Use this method to access current map renderer.
-        (It is not guarented that current map will be stored in
+        (It is not guaranteed that current map will be stored in
         \c self.Map in future versions.)
         """
         return self.Map
@@ -869,3 +1092,15 @@ class FrameMixin:
 
     def SetSize(self, *args):
         self.GetParent().SetSize(*args)
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+    def Close(self):
+        self.GetParent().Close()
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main

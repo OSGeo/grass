@@ -136,9 +136,46 @@ r.mapcalc "MASKed_map = classification_results"
 
 <h2>EXAMPLE</h2>
 
+<<<<<<< HEAD
 Supervised classification of LANDSAT scene (complete NC location)
 
 <div class="code"><pre>
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+Supervised classification of LANDSAT scene (complete NC dataset)
+
+<div class="code"><pre>
+=======
+Supervised classification of LANDSAT scene (complete NC location)
+
+<div class="code"><pre>
+<<<<<<< HEAD
+## Prepare imagery for classification
+# Skip this step if your rasters already have band references defined
+# Define band references for all LANDSAT bands in mapset PERMANENT
+g.mapset mapset=PERMANENT
+r.support map=lsat7_2002_10 bandref=TM7_1
+r.support map=lsat7_2002_20 bandref=TM7_2
+r.support map=lsat7_2002_30 bandref=TM7_3
+r.support map=lsat7_2002_40 bandref=TM7_4
+r.support map=lsat7_2002_50 bandref=TM7_5
+r.support map=lsat7_2002_61 bandref=TM7_61
+r.support map=lsat7_2002_62 bandref=TM7_62
+r.support map=lsat7_2002_70 bandref=TM7_7
+r.support map=lsat7_2002_80 bandref=TM7_8
+g.mapset mapset=user1  # replace user1 with your mapset name
+
+## Real work starts here
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+Supervised classification of LANDSAT scene (complete NC location)
+
+<div class="code"><pre>
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 # Align computation region to the scene
 g.region raster=lsat7_2002_10 -p
 
@@ -206,14 +243,30 @@ pp. III-565 - III-568, San Francisco, California, March 23-26, 1992.
 (<a href="http://dynamo.ecn.purdue.edu/~bouman/publications/pdf/ip2.pdf">PDF</a>)</em>
 
 <li>McCauley, J.D. and B.A. Engel 1995,
-"Comparison of Scene Segmentations: SMAP, ECHO and Maximum Likelyhood",
+"Comparison of Scene Segmentations: SMAP, ECHO and Maximum Likelihood",
 <em>IEEE Trans. on Geoscience and Remote Sensing, 33(6): 1313-1316.</em>
 </ul>
 
 <h2>SEE ALSO</h2>
 
 <em>
+<<<<<<< HEAD
 <a href="r.support.html">r.support</a></em> for setting semantic labels,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<a href="r.support.html">r.support</a></em> for setting semantic labels,
+=======
+<a href="r.support.html">r.support</a></em> for setting band references,
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+<a href="r.support.html">r.support</a></em> for setting semantic labels,
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+<a href="r.support.html">r.support</a></em> for setting semantic labels,
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 <br>
 <em>
 <a href="i.group.html">i.group</a></em> for creating groups and subgroups
@@ -239,5 +292,30 @@ Michael Shapiro,
 U.S.Army Construction Engineering
 Research Laboratory
 <br>
+<<<<<<< HEAD
 Semantic label support: Maris Nartiss,
 University of Latvia
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+Semantic label support: Maris Nartiss,
+University of Latvia
+=======
+Band reference support: Maris Nartiss,
+University of Latvia
+
+<!--
+<p>
+<i>Last changed: $Date$</i>
+-->
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+Semantic label support: Maris Nartiss,
+University of Latvia
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+Semantic label support: Maris Nartiss,
+University of Latvia
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
