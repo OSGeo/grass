@@ -948,7 +948,7 @@ class GMFrame(wx.Frame):
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
-        result = 0
+        result = True
         if re.compile(r"^d\..*").search(command[0]):
             result = self.RunDisplayCmd(command)
         elif re.compile(r"r[3]?\.mapcalc").search(command[0]):
@@ -970,12 +970,12 @@ class GMFrame(wx.Frame):
         elif command[0] == "cd":
             self.OnChangeCWD(event=None, cmd=command)
         else:
-            result = 1
+            result = False
             raise ValueError(
                 "Layer Manager special command (%s)"
                 " not supported." % " ".join(command)
             )
-        if result == 0:
+        if result:
             self._gconsole.UpdateHistory(status=Status.SUCCESS)
         else:
             self._gconsole.UpdateHistory(status=Status.FAILED)
@@ -984,6 +984,7 @@ class GMFrame(wx.Frame):
         """Handles display commands.
 
         :param command: command in a list
+        :return int: False if failed, True if succcess
         """
         if not self.currentPage:
             self.NewDisplay(show=True)
@@ -991,7 +992,7 @@ class GMFrame(wx.Frame):
         if command[0] == "d.erase":
             # rest of d.erase is ignored
             self.GetLayerTree().DeleteAllLayers()
-            return 1
+            return False
         try:
             # display GRASS commands
             layertype = command2ltype[command[0]]
@@ -1004,7 +1005,7 @@ class GMFrame(wx.Frame):
                 )
                 % command[0],
             )
-            return 1
+            return False
 
         if layertype == "barscale":
             if len(command) > 1:
@@ -1058,7 +1059,7 @@ class GMFrame(wx.Frame):
                 lname=lname,
                 lcmd=command,
             )
-        return 0
+        return True
 
     def GetLayerNotebook(self):
         """Get Layers Notebook"""
