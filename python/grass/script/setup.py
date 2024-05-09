@@ -268,7 +268,7 @@ def setup_runtime_env(gisbase=None, *, env=None):
     env["PYTHONPATH"] = path
 
 
-def init(path, location=None, mapset=None, grass_path=None):
+def init(path, location=None, mapset=None, *, grass_path=None):
     """Initialize system variables to run GRASS modules
 
     This function is for running GRASS GIS without starting it with the
