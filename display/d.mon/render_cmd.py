@@ -180,7 +180,7 @@ if __name__ == "__main__":
             mapfile += ".ppm"
         # to force rendering by wx monitors, but don't create a map file for
         # non-rendering modules
-        if cmd[0] not in ("d.redraw",) + non_rendering_modules:
+        if cmd[0] not in non_rendering_modules:
             Path(mapfile).touch()
     else:
         mapfile = None
