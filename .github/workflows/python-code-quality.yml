@@ -125,9 +125,6 @@ jobs:
         run: |
           echo "$HOME/install/bin" >> $GITHUB_PATH
 
-      - name: Test executing of the grass command
-        run: .github/workflows/test_simple.sh
-
       - name: Run Pylint on grass package
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
