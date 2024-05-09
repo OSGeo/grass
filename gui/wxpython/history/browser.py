@@ -107,8 +107,8 @@ class HistoryInfoPanel(SP.ScrolledPanel):
     def _initImages(self):
         bmpsize = (16, 16)
         self.icons = {
-            "check": MetaIcon(img="grassdb").GetBitmap(bmpsize),
-            "cross": MetaIcon(img="location").GetBitmap(bmpsize),
+            "check": MetaIcon(img="check").GetBitmap(bmpsize),
+            "cross": MetaIcon(img="check").GetBitmap(bmpsize),
         }
 
     def _createGeneralInfoBox(self):
@@ -145,7 +145,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.sizer_region_settings_grid.SetCols(2)
         self.sizer_region_settings_grid.SetRows(9)
 
-        self.sizer_region_settings_match = wx.BoxSizer(wx.VERTICAL)
+        self.sizer_region_settings_match = wx.BoxSizer(wx.HORIZONTAL)
         self.region_settings_box_sizer.Add(
             self.sizer_region_settings_match, proportion=0, flag=wx.EXPAND, border=5
         )
@@ -237,23 +237,14 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
         self.sizer_region_settings_match.Clear(True)
 
+        status_text = _("Region match")
+
         if self.region_settings != self._get_current_region():
-            status_text = _("Region does not match current region")
             icon = self.icons["cross"]
             button_label = _("Update current region")
         else:
-            status_text = _("Region match current region")
             icon = self.icons["check"]
             button_label = None
-
-        # Sizer for text and icon
-        text_icon_sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.sizer_region_settings_match.Add(
-            text_icon_sizer,
-            proportion=0,
-            flag=wx.ALL | wx.EXPAND,
-            border=5,
-        )
 
         # Static text
         textRegionMatch = StaticText(
@@ -261,16 +252,16 @@ class HistoryInfoPanel(SP.ScrolledPanel):
             id=wx.ID_ANY,
             label=status_text,
         )
-        text_icon_sizer.Add(
+        self.sizer_region_settings_match.Add(
             textRegionMatch,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
-            border=5,
+            border=15,
         )
 
         # Static bitmap for icon
         iconRegionMatch = wx.StaticBitmap(self.region_settings_box, bitmap=icon)
-        text_icon_sizer.Add(
+        self.sizer_region_settings_match.Add(
             iconRegionMatch,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
@@ -278,19 +269,11 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         )
 
         if button_label:
-            button_sizer = wx.BoxSizer(wx.HORIZONTAL)
-            self.sizer_region_settings_match.Add(
-                button_sizer,
-                proportion=0,
-                flag=wx.ALL | wx.EXPAND,
-                border=5,
-            )
-
             buttonUpdateRegion = wx.Button(self.region_settings_box, label=button_label)
             buttonUpdateRegion.Bind(wx.EVT_BUTTON, self.OnUpdateRegion)
-            button_sizer.Add(
+            self.sizer_region_settings_match.Add(
                 buttonUpdateRegion,
-                proportion=0,
+                proportion=1,
                 flag=wx.ALL | wx.EXPAND,
                 border=5,
             )
