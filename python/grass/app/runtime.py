@@ -133,6 +133,14 @@ def set_paths(grass_config_dir, ld_library_path_variable_name):
     set_executable_paths(
         install_path=GISBASE, grass_config_dir=grass_config_dir, env=os.environ
     )
+    # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
+    # this works for subprocesses but won't affect the current process
+    if ld_library_path_variable_name:
+        set_dynamic_library_path(
+            variable_name=ld_library_path_variable_name,
+            install_path=GISBASE,
+            env=os.environ,
+        )
     set_python_path_variable(install_path=GISBASE, env=os.environ)
 
     # set path for the GRASS man pages
@@ -166,15 +174,6 @@ def set_paths(grass_config_dir, ld_library_path_variable_name):
         else:
             os.environ["MANPATH"] = addons_man_path
             path_prepend(grass_man_path, "MANPATH")
-
-    # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
-    # this works for subprocesses but won't affect the current process
-    if ld_library_path_variable_name:
-        set_dynamic_library_path(
-            variable_name=ld_library_path_variable_name,
-            install_path=GISBASE,
-            env=os.environ,
-        )
 
 
 def set_dynamic_library_path(variable_name, install_path, env):
