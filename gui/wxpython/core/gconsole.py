@@ -41,6 +41,7 @@ from grass.script import task as gtask
 from grass.pydispatch.signal import Signal
 
 from grass.grassdb import history
+from grass.grassdb.history import Status
 
 from core import globalvar
 from core.gcmd import CommandThread, GError, GException
@@ -446,6 +447,26 @@ class GConsole(wx.EvtHandler):
         """Write message in error style"""
         self.writeError.emit(text=text)
 
+    def UpdateHistory(self, status, runtime=None):
+        """Update command history.
+        :param enum status: status of command run
+        :param int runtime: duration of command run
+        """
+        if runtime:
+            cmd_info = {"runtime": runtime, "status": status.value}
+        else:
+            cmd_info = {"status": status.value}
+        try:
+            history_path = history.get_current_mapset_gui_history_path()
+            history.update_entry(history_path, cmd_info)
+
+            # update history model
+            if self._giface:
+                entry = history.read(history_path)[-1]
+                self._giface.entryInHistoryUpdated.emit(entry=entry)
+        except (OSError, ValueError) as e:
+            GError(str(e))
+
     def RunCmd(
         self,
         command,
@@ -593,6 +614,7 @@ class GConsole(wx.EvtHandler):
                             GUI(
                                 parent=self._guiparent, giface=self._giface
                             ).ParseCommand(command)
+                            self.UpdateHistory(status=Status.SUCCESS)
                         except GException as e:
                             print(e, file=sys.stderr)
 
@@ -662,6 +684,7 @@ class GConsole(wx.EvtHandler):
             if task:
                 # process GRASS command without argument
                 GUI(parent=self._guiparent, giface=self._giface).ParseCommand(command)
+                self.UpdateHistory(status=Status.SUCCESS)
             else:
                 self.cmdThread.RunCmd(
                     command,
@@ -736,29 +759,18 @@ class GConsole(wx.EvtHandler):
                 )
             )
             msg = _("Command aborted")
-            status = "aborted"
+            status = Status.ABORTED
         elif event.returncode != 0:
             msg = _("Command ended with non-zero return code {returncode}").format(
                 returncode=event.returncode
             )
-            status = "failed"
+            status = Status.FAILED
         else:
             msg = _("Command finished")
-            status = "success"
-
-        cmd_info = {"runtime": int(ctime), "status": status}
+            status = Status.SUCCESS
 
         # update command history log by status and runtime duration
-        try:
-            history_path = history.get_current_mapset_gui_history_path()
-            history.update_entry(history_path, cmd_info)
-
-            # update history model
-            if self._giface:
-                entry = history.read(history_path)[-1]
-                self._giface.entryInHistoryUpdated.emit(entry=entry)
-        except (OSError, ValueError) as e:
-            GError(str(e))
+        self.UpdateHistory(status=status, runtime=int(ctime))
 
         self.WriteCmdLog(
             "(%s) %s (%s)" % (str(time.ctime()), msg, stime),
