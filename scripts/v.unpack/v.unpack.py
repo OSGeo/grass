@@ -154,7 +154,8 @@ def main():
         if os.path.exists(loc_proj):
             grass.fatal(
                 _(
-                    "PROJ_INFO file is missing, unpack vector map in XY (unprojected) project."
+                    "PROJ_INFO file is missing, unpack vector map in XY (unprojected) "
+                    "project."
                 )
             )
         skip_projection_check = True  # XY location

@@ -135,7 +135,8 @@ class TemporalManager:
             message = _(
                 "You are going to display data with different "
                 "temporal types of maps (interval and point)."
-                " It is recommended to use data of one temporal type to avoid confusion."
+                " It is recommended to use data of one temporal type to avoid "
+                "confusion."
             )
             return True, message  # warning
 

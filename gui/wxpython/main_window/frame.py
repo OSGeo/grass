@@ -1044,9 +1044,9 @@ class GMFrame(wx.Frame):
             )
 
     def _closePageNoEvent(self, pgnum_dict, is_docked):
-        """If map display is docked, close page and destroy map display without generating
-        layer notebook page closing event. If map display is undocked, close only
-        layer notebook page, not map notebook page.
+        """If map display is docked, close page and destroy map display without
+        generating layer notebook page closing event. If map display is undocked,
+        close only layer notebook page, not map notebook page.
 
         :param dict pgnum_dict: dict "layers" key represent map display
                                 notebook layers tree page index and
