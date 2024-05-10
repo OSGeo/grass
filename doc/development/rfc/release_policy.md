@@ -7,7 +7,7 @@ Status: Draft
 ## Goal
 
 The goal of this document is to define when releases should be created
-and what types releases should be created.
+and what types of releases should be created.
 
 ## Summary
 
@@ -51,8 +51,8 @@ Both major and minor releases may include bugfixes which may or may not be
 already included in a micro release of the previous major or minor release.
 
 A special effort is put into keeping backwards compatibility.
-While this is a requirement for minor version, the community makes extra effort
-even for major release to maximize backwards compatibility so that users can
+While this is a requirement for minor versions, the community makes extra effort
+even for major releases to maximize backwards compatibility so that users can
 conveniently transition to new versions. This is, however, not guaranteed and
 it depends on many factors.
 
@@ -73,9 +73,9 @@ There can be zero or more release candidates, i.e., pre-releases,
 for each major, minor, or micro release. The specifics are determined
 by the Release Procedure RFC.
 
-There can be daily or per-commit frequent builds of
-which can serve as preview versions or version for testing.
-Other frequencies are permissable but not recommended.
+There can be daily or per-commit frequent builds 
+which can serve as preview versions or versions for testing.
+Other frequencies are permitted but not recommended.
 
 ### Post-releases and Build Versions
 
@@ -88,29 +88,30 @@ a new micro release should be created.
 ## Frequency
 
 One major or minor release should be released at least once a year.
-More then one major or minor release may be released
+More than one major or minor release may be released
 if the contributors consider that necessary or advantageous.
-There is no requirement for frequency of major releases, but
-the practice and rhythm so far was to release major version
-before the minor version number reaches value ten which translates
+There is no frequency requirement for major releases, but
+the practice and rhythm so far was to release a new major version
+before the minor version number reaches the value ten which translates
 to a major release every five to ten years.
 
 There can be zero or more micro releases per year for different major or minor
-release based on the needs of the community practically driven by the number
-of fixes accumulated for a particular release.
+releases based on the needs of the community and practically driven by the number
+of fixes accumulated.
 
 ## Maintenance
 
-We have one actively updated, maintained, and supported release series
+At any time there is one actively updated, maintained, and supported release series
 which is started by a release of a new major or minor version.
-We release micro versions in this series throughout the year as needed.
+There are micro versions releases in this series throughout the year as needed.
 
 Once a new major or minor version is released, the old release series goes to
 a low maintenance mode and no further releases are planned.
 However, any low maintenance series can be updated on demand.
-If you submit a patch to fix a bug, we will likely accept it and
-create a new release when there is enough changes accumulated
-or support you in creating the release as a temporary release manager.
+If a contributor submits a patch to fix a bug, it will be likely accepted and
+a new release will be created when there are enough changes accumulated.
+Alternatively the contributor might receive support in creating the release as
+a temporary release manager.
 Security fixes will be given special consideration in light of how wide
 the usage of a particular release series is.
 
@@ -118,4 +119,4 @@ the usage of a particular release series is.
 
 * Release procedure covers branching and creation of pre-releases.
 * Version number covers how major, minor, micro releases are numbered
-  and what changes can be included in a release.
+  and what types of changes can be included in a release.
