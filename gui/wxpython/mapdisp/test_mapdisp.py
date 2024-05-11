@@ -161,8 +161,10 @@ class Tester:
         from mapdisp.frame import MapFrame
 
         # known issues (should be similar with d.mon):
-        # * opening map in digitizer ends with: vdigit/toolbars.py:723: 'selection' referenced before assignment
-        # * nviz start fails (closes window? segfaults?) after mapdisp/frame.py:306: 'NoneType' object has no attribute 'GetLayerNotebook'
+        # * opening map in digitizer ends with: vdigit/toolbars.py:723: 'selection'
+        #   referenced before assignment
+        # * nviz start fails (closes window? segfaults?) after mapdisp/frame.py:306:
+        #   'NoneType' object has no attribute 'GetLayerNotebook'
         frame = MapFrame(
             parent=None, title=_("Map display test"), giface=giface, Map=map_
         )

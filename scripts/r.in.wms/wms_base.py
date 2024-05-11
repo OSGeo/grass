@@ -1,5 +1,6 @@
 """!
-@brief Preparation of parameters for drivers, which download it, and managing downloaded data.
+@brief Preparation of parameters for drivers, which download it, and managing
+    downloaded data.
 
 List of classes:
  - wms_base::WMSBase
@@ -108,7 +109,8 @@ class WMSBase:
             self.params["wms_version"] = "1.3.0"
             grass.warning(
                 _(
-                    "WMS version <1.3.0> will be used, because version <1.1.1> does not support <%s>projection"
+                    "WMS version <1.3.0> will be used, because version <1.1.1> does "
+                    "not support <%s>projection"
                 )
                 % GetSRSParamVal(self.params["srs"])
             )
@@ -130,7 +132,8 @@ class WMSBase:
             if self.source_epsg != self.target_epsg:
                 grass.warning(
                     _(
-                        "SRS differences: WMS source EPSG %s != location EPSG %s (use srs=%s to adjust)"
+                        "SRS differences: WMS source EPSG %s != location EPSG %s (use "
+                        "srs=%s to adjust)"
                     )
                     % (self.source_epsg, self.target_epsg, self.target_epsg)
                 )
@@ -173,14 +176,16 @@ class WMSBase:
     def _modifyProj(self, proj):
         """!Modify proj.4 string for usage in this module"""
 
-        # add +wktext parameter to avoid dropping of +nadgrids parameter (if presented) in gdalwarp
+        # add +wktext parameter to avoid dropping of +nadgrids parameter (if presented)
+        # in gdalwarp
         if "+nadgrids=" in proj and " +wktext" not in proj:
             proj += " +wktext"
 
         return proj
 
     def _checkIgnoeredParams(self, options, flags, driver_props):
-        """!Write warnings for set parameters and flags, which chosen driver does not use."""
+        """!Write warnings for set parameters and flags, which chosen driver does not
+        use."""
 
         not_relevant_params = []
         for i_param in driver_props["ignored_params"]:
@@ -350,16 +355,20 @@ class WMSBase:
                 grass.fatal(_("Unable to write data into tempfile"))
             finally:
                 temp_region_opened.close()
+            try:
+                points = grass.read_command(
+                    "m.proj",
+                    flags="d",
+                    proj_out=self.proj_srs,
+                    proj_in=self.proj_location,
+                    input=temp_region,
+                    quiet=True,
+                )  # TODO: stdin
+            except CalledModuleError:
+                points = None
+            finally:
+                grass.try_remove(temp_region)
 
-            points = grass.read_command(
-                "m.proj",
-                flags="d",
-                proj_out=self.proj_srs,
-                proj_in=self.proj_location,
-                input=temp_region,
-                quiet=True,
-            )  # TODO: stdin
-            grass.try_remove(temp_region)
             if not points:
                 grass.fatal(_("Unable to determine region, %s failed") % "m.proj")
 

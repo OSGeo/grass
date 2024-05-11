@@ -1403,8 +1403,8 @@ class VectorColorTable(ColorTable):
         :param type: type of column (e.g. vachar(11))"""
         if not self.CheckMapset():
             return
-        # because more than one dialog with the same map can be opened we must test column name and
-        # create another one
+        # because more than one dialog with the same map can be opened we must test
+        # column name and create another one
         while (
             self.properties["tmpColumn"]
             in self.dbInfo.GetTableDesc(self.properties["table"]).keys()

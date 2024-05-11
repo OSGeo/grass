@@ -109,7 +109,11 @@ class TestLegalizeVectorName(TestCase):
         try:
             gs.run_command("v.edit", map=name, tool="create")
             gs.run_command("v.db.addtable", map=name)
-            gs.run_command("v.db.addcolumn", map=name, columns=name)
+            gs.run_command(
+                "v.db.addcolumn",
+                map=name,
+                columns=f"{name} integer",
+            )
             works = True
         except gs.CalledModuleError:
             works = False
