@@ -1,4 +1,3 @@
-import pytest
 from grass.script.task import grassTask as gtask
 
 
