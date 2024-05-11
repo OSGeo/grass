@@ -160,9 +160,6 @@ class grassTask:
             if isinstance(val, (list, tuple)):
                 if value in val:
                     return p
-            elif isinstance(val, (bytes, unicode)):
-                if p[element][: len(value)] == value:
-                    return p
             else:
                 if p[element] == value:
                     return p
