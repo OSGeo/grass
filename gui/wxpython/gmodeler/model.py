@@ -2637,6 +2637,7 @@ class WriteScriptFile(ABC):
         self.fd = None
         self.model = None
         self.indent = None
+        self.grassAPI = None
 
         # call method_write...()
 
@@ -2752,7 +2753,7 @@ class WriteScriptFile(ABC):
 class WriteActiniaFile(WriteScriptFile):
     """Class for exporting model to an actinia script."""
 
-    def __init__(self, fd, model):
+    def __init__(self, fd, model, grassAPI=None):
         """Class for exporting model to actinia script."""
         self.fd = fd
         self.model = model
