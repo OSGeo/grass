@@ -1,7 +1,8 @@
 """
 @package web_services.cap_interface
 
-@brief Provides common interface for GUI web_services.widgets to capabilities data of web services.
+@brief Provides common interface for GUI web_services.widgets to capabilities data of
+       web services.
 
 List of classes:
  - cap_interface::CapabilitiesBase

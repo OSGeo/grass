@@ -127,7 +127,8 @@ class VNETManager:
             return False
 
         # for case there is some map with same name
-        # (when analysis does not produce any map, this map would have been shown as result)
+        # (when analysis does not produce any map, this map would have been shown
+        # as result)
         RunCommand(
             "g.remove",
             flags="f",
@@ -604,10 +605,11 @@ class VNETAnalyses:
             # if angle < from_angle:
             #    angle = math.pi * 2  + angle
 
-            where = " WHERE (((angle < {0}) AND ({2} + angle >= {0} AND {2} + angle < {1})) OR \
-                            ((angle >= {0}) AND (angle >= {0} AND angle < {1}))) AND cost==0.0 ".format(
-                str(from_angle), str(to_angle), str(math.pi * 2)
-            )
+            where = (
+                " WHERE (((angle < {0}) AND ({2} + angle >= {0} AND {2} + angle < {1}))"
+                " OR ((angle >= {0}) AND (angle >= {0} AND angle < {1})))"
+                " AND cost==0.0 "
+            ).format(str(from_angle), str(to_angle), str(math.pi * 2))
 
             stm = ("UPDATE %s SET cost=%f " % (table, cost)) + where + ";\n"
             sqlFile_f.write(stm)
@@ -753,7 +755,8 @@ class VNETAnalyses:
     def _setInputParams(self, analysis, params, flags):
         """Return list of chosen values (vector map, layers).
 
-        The list items are in form to be used in command for analysis e.g. 'arc_layer=1'.
+        The list items are in form to be used in command for analysis
+        e.g. 'arc_layer=1'.
         """
 
         inParams = []

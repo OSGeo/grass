@@ -56,6 +56,7 @@ from core.gcmd import (
     GetDefaultEncoding,
 )
 from core.settings import UserSettings
+from core.giface import StandaloneGrassInterface
 from gui_core.forms import GUI, CmdPanel
 from gui_core.widgets import GNotebook
 from gui_core.wrap import Button, IsDark
@@ -315,8 +316,6 @@ class Model:
 
         Raise exception on error.
         """
-        dtdFilename = os.path.join(globalvar.WXGUIDIR, "xml", "grass-gxm.dtd")
-
         # parse workspace file
         try:
             gxmXml = ProcessModelFile(etree.parse(filename))
@@ -325,10 +324,11 @@ class Model:
 
         if self.canvas:
             win = self.canvas.parent
-            if gxmXml.pos:
-                win.SetPosition(gxmXml.pos)
-            if gxmXml.size:
-                win.SetSize(gxmXml.size)
+            if isinstance(win._giface, StandaloneGrassInterface):
+                if gxmXml.pos:
+                    win.SetPosition(gxmXml.pos)
+                if gxmXml.size:
+                    win.SetSize(gxmXml.size)
 
         # load properties
         self.properties = gxmXml.properties
@@ -1144,7 +1144,7 @@ class ModelAction(ModelObject, ogl.DividedShape):
         else:
             try:
                 label = self.task.get_cmd(ignoreErrors=True)[0]
-            except:
+            except IndexError:
                 label = _("unknown")
 
         idx = self.GetId()
@@ -1998,7 +1998,7 @@ class ProcessModelFile:
             if self.root is not None:
                 tagName = self.root.tag
             else:
-                tabName = _("empty")
+                tagName = _("empty")
             raise GException(_("Details: unsupported tag name '{0}'.").format(tagName))
 
         # list of actions, data
@@ -2136,7 +2136,7 @@ class ProcessModelFile:
             posVal = list(map(int, posAttr.split(",")))
             try:
                 pos = (posVal[0], posVal[1])
-            except:
+            except IndexError:
                 pos = None
 
         sizeAttr = node.get("size", None)
@@ -2144,7 +2144,7 @@ class ProcessModelFile:
             sizeVal = list(map(int, sizeAttr.split(",")))
             try:
                 size = (sizeVal[0], sizeVal[1])
-            except:
+            except IndexError:
                 size = None
 
         return pos, size
@@ -2940,7 +2940,7 @@ class Model(Process):
         inputs = list()
         outputs = list()
 
-"""
+"""  # noqa: E501
         )
 
         for item in self.model.GetItems(ModelAction):

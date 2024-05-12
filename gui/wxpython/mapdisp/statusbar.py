@@ -53,10 +53,10 @@ class SbManager:
 
     Statusbar manager manages items added by AddStatusbarItem method.
     Provides progress bar (SbProgress).
-    Items with position 0 are shown according to selection in Map Display settings dialog.
-    Only one item of the same class is supposed to be in statusbar.
-    Manager user have to create statusbar on his own, add items to manager
-    and call Update method to show particular widgets.
+    Items with position 0 are shown according to selection in Map Display settings
+    dialog. Only one item of the same class is supposed to be in statusbar. Manager
+    user have to create statusbar on his own, add items to manager and call Update
+    method to show particular widgets.
     User settings (group = 'display', key = 'statusbarMode', subkey = 'selection')
     are taken into account.
 
@@ -286,7 +286,8 @@ class SbManager:
             self.statusbar.SetStatusText(text)
 
     def OnContextMenu(self, event):
-        """Popup context menu enabling to choose a widget that will be shown in statusbar."""
+        """Popup context menu enabling to choose a widget that will be shown in
+        statusbar."""
 
         def setSbItemProperty(idx):
             self.mapFrame.mapWindowProperties.sbItem = idx
@@ -381,7 +382,8 @@ class SbItem:
         self.mapFrame.StatusbarEnableLongHelp(longHelp)
 
     def Update(self):
-        """Called when statusbar action is activated (e.g. through Map Display settings)."""
+        """Called when statusbar action is activated (e.g. through Map Display
+        settings)."""
         self._update(longHelp=False)
 
 
@@ -533,7 +535,8 @@ class SbGoTo(SbItem):
         :param e,n: coordinate (for DMS string, else float or string)
         :param useDefinedProjection: projection defined by user in settings dialog
 
-        @throws SbException if useDefinedProjection is True and projection is not defined in UserSettings
+        @throws SbException if useDefinedProjection is True and projection is not
+                defined in UserSettings
         """
         if useDefinedProjection:
             settings = UserSettings.Get(
@@ -788,7 +791,8 @@ class SbCoordinates(SbTextItem):
 
         :param e,n: coordinate
 
-        @throws SbException if useDefinedProjection is True and projection is not defined in UserSettings
+        @throws SbException if useDefinedProjection is True and projection is not
+                defined in UserSettings
         """
         if useDefinedProjection:
             settings = UserSettings.Get(
@@ -867,7 +871,8 @@ class SbRegionExtent(SbTextItem):
         """Reproject region values
 
         .. todo::
-            reorganize this method to remove code useful only for derived class SbCompRegionExtent
+            reorganize this method to remove code useful only for derived class
+            SbCompRegionExtent
         """
         if useDefinedProjection:
             settings = UserSettings.Get(

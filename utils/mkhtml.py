@@ -291,25 +291,26 @@ def get_git_commit_from_rest_api_for_addon_repo(
     # Accessed date time if getting commit from GitHub REST API wasn't successful
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
-    grass_addons_url = (
-        "https://api.github.com/repos/osgeo/grass-addons/commits?"
-        "path={path}&page=1&per_page=1&sha=grass{major}".format(
-            path=addon_path,
-            major=major,
-        )
-    )  # sha=git_branch_name
-
-    response = download_git_commit(
-        url=grass_addons_url,
-        response_format="application/json",
-    )
-    if response:
-        commit = json.loads(response.read())
-        if commit:
-            git_log["commit"] = commit[0]["sha"]
-            git_log["date"] = format_git_commit_date_from_rest_api(
-                commit_datetime=commit[0]["commit"]["author"]["date"],
+    if addon_path is not None:
+        grass_addons_url = (
+            "https://api.github.com/repos/osgeo/grass-addons/commits?"
+            "path={path}&page=1&per_page=1&sha=grass{major}".format(
+                path=addon_path,
+                major=major,
             )
+        )  # sha=git_branch_name
+
+        response = download_git_commit(
+            url=grass_addons_url,
+            response_format="application/json",
+        )
+        if response:
+            commit = json.loads(response.read())
+            if commit:
+                git_log["commit"] = commit[0]["sha"]
+                git_log["date"] = format_git_commit_date_from_rest_api(
+                    commit_datetime=commit[0]["commit"]["author"]["date"],
+                )
     return git_log
 
 

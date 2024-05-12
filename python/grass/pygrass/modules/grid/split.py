@@ -3,6 +3,7 @@ Created on Tue Apr  2 19:00:15 2013
 
 @author: pietro
 """
+
 from grass.pygrass.gis.region import Region
 from grass.pygrass.vector.basic import Bbox
 
@@ -81,10 +82,14 @@ def split_region_in_overlapping_tiles(region=None, width=100, height=100, overla
     1500
     >>> reg.rows
     1350
-    >>> split_region_in_overlapping_tiles(region=reg, width=1000, height=700, overlap=0) # doctest: +NORMALIZE_WHITESPACE
+    >>> split_region_in_overlapping_tiles(
+    ...     region=reg, width=1000, height=700, overlap=0
+    ... )  # doctest: +NORMALIZE_WHITESPACE
     [[Bbox(1350.0, 650.0, 1000.0, 0.0), Bbox(1350.0, 650.0, 1500.0, 1000.0)],
      [Bbox(650.0, 0.0, 1000.0, 0.0), Bbox(650.0, 0.0, 1500.0, 1000.0)]]
-    >>> split_region_in_overlapping_tiles(region=reg, width=1000, height=700, overlap=10) # doctest: +NORMALIZE_WHITESPACE
+    >>> split_region_in_overlapping_tiles(
+    ...     region=reg, width=1000, height=700, overlap=10
+    ... )  # doctest: +NORMALIZE_WHITESPACE
     [[Bbox(1350.0, 640.0, 1010.0, 0.0), Bbox(1350.0, 640.0, 1500.0, 990.0)],
      [Bbox(660.0, 0.0, 1010.0, 0.0), Bbox(660.0, 0.0, 1500.0, 990.0)]]
     """
@@ -103,7 +108,8 @@ def split_region_in_overlapping_tiles(region=None, width=100, height=100, overla
 
 
 def split_region_tiles(region=None, width=100, height=100):
-    """Split a region into a list of tiles defined as (start_row, end_row, start_col, end_col).
+    """Split a region into a list of tiles defined as (start_row, end_row, start_col,
+    end_col).
 
     :param region: a Region object to split
     :type region: Region object
