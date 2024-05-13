@@ -2847,10 +2847,8 @@ class WriteActiniaFile(WriteScriptFile):
             value = p.get("value", None)
 
             if (name and value) or (name in parameterizedParams):
-                foundVar = False
 
                 if name in parameterizedParams:
-                    foundVar = True
                     parameterizedParam = self._getParamName(name, item)
                     default_val = p.get("value", "")
 
