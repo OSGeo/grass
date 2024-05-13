@@ -132,7 +132,7 @@ pre-commit run black --all-files
 Or to target a specific set of files:
 
 ```bash
-pre-commit run --files raster/r.somemodule/*
+pre-commit run --files raster/r.sometool/*
 ```
 
 The pre-commit hooks set is defined in
@@ -161,7 +161,7 @@ There are three types of documentation: C API, Python API and tool documentation
 
 We
 [​use doxygen and document the functions](https://grass.osgeo.org/programming8/)
-directly in the source code. See lib/gis/\*.c and lib/gis/gislib.dox for
+directly in the source code. See `lib/gis/open.c` and `lib/gis/gislib.dox` for
 examples.
 
 #### Python API documentation
@@ -282,15 +282,28 @@ The `<h2>SEE ALSO</h2>` section of each page should be alphabetized:
 
 ```html
 <em>
-  <a href="d.shade.html">d.shade</a>, <a href="g.region.html">g.region</a>,
-  <a href="r.shade.html">r.shade</a>
+  <a href="d.shade.html">d.shade</a>, <a href="r.shade.html">r.shade</a>
 </em>
 ```
+
+Alternatively, the section can provide details on how each of the linked tools
+or pages is relevant:
+
+```html
+<em>
+  <a href="r.shade.html">r.shade</a> for computing shaded relief,
+  <a href="d.shade.html">d.shade</a> for displaying shaded relief with other data,
+  <a href="g.region.html">g.region</a> for managing the resolution.
+</em>
+```
+
+In this case, the list can be ordered thematically rather than alphabetically.
+Either all tools should have the description or none (do not mix the styles).
 
 ##### Images
 
 **Naming convention:** `tool_name.png` or `tool_name_keyword.png` (in both cases,
-dots in module name are replaced by underscores)
+dots in tool name are replaced by underscores)
 
 Examples:
 
@@ -578,12 +591,12 @@ Use gs.findfile() when there is a need to test if a map exists.
 ```python
 # test for input raster map
 result = gs.find_file(map_name, element='raster')
-if not result['file']
+if not result['file']:
     gs.fatal(_("Raster map <{}> not found").format(map_name))
 
 # test for input vector map
 result = gs.find_file(map_name, element='vector')
-if not result['file']
+if not result['file']:
     gs.fatal(_("Vector map <{}> not found").format(map_name))
 ```
 
@@ -607,7 +620,8 @@ mapset = file_info["mapset"]
 #### Messages
 
 For any informational output, use the _gs.message_ function or _gs.verbose_. For
-error messages, use _gs.fatal_ (ends execution) or _gs.error_ (just prints error).
+error messages, use _gs.fatal_ (ends execution) or _gs.error_ (just prints error,
+so additional code needs to handle next steps and communicate them to the user).
 For warnings, use  _gs.warning_. For debugging purposes use _gs.debug_.
 
 ```py
@@ -627,13 +641,14 @@ gs.error(_("No map found."))
 # prints error and exits or raises exception (use set_raise_on_error to set the behavior)
 gs.fatal(_("No map found, exiting."))
 
-# debug output (use g.gisenv to enable/disable)
+# debug output (users can use g.gisenv to enable/disable)
 # debug level is 1 to 5 (5 is most detailed)
-gs.debug(_("Our calculated value is: {}.").format(value), 3)
+# debug message should not be translated
+gs.debug(f"Our calculated value is: {value}."), 3)
 ```
 
 Do not use the `print` function for informational output. This is reserved for
-standard module output if it has one.
+standard tool output if it has one.
 
 ### Developing GRASS Addons
 
@@ -642,7 +657,7 @@ standard module output if it has one.
 GRASS tools must use the GRASS parser to handle its command line parameters. To
 make writing parameters simpler and the interfaces more unified, use standard
 options. See
-[Parser standard options](https://grass.osgeo.org/grass82/manuals/parser_standard_options.html).
+[Parser standard options](https://grass.osgeo.org/grass-devel/manuals/parser_standard_options.html).
 For example, use this:
 
 ```python
@@ -734,9 +749,10 @@ Each tool needs to have a description and at least 3 keywords:
 
 Notes:
 
-- the **first** keyword is the module family which goes to the
-  [module family index](https://grass.osgeo.org/grass-devel/manuals/general.html)
-  in the manual
+- the **first** keyword is the tool family which goes to the
+  [tool family index](https://grass.osgeo.org/grass-devel/manuals/general.html)
+  in the manual and should correspond to the first part of the tool name
+  (e.g., r is for raster).
 - the **second** keyword is the overall topic which goes to the
   [topic index](https://grass.osgeo.org/grass-devel/manuals/topics.html) in the
   manual
@@ -749,7 +765,9 @@ GIS.
 
 #### Lazy import of optional dependencies
 
-For optional dependencies, import only after the _gs.parser_ call. In that way the
+A tool may use a package that is not [required](../../REQUIREMENTS.md)
+by GRASS GIS and may not be available on a user's system.
+In these cases, import only after the _gs.parser_ call. In that way the
 tool can be safely compiled even if the dependency is not installed.
 
 ```python
@@ -768,27 +786,27 @@ Try to use names which describe shortly the intended purpose of the tool.
 The first letters for the tool name should be:
 
 ```text
-d.    - display commands
-db.   - database commands
-g.    - general GIS management commands
-i.    - imagery commands
-m.    - miscellaneous tool commands
-ps.   - postscript commands
-r.    - raster commands
-r3.   - raster3D commands
-v.    - vector commands
-t.    - temporal commands
-g.gui - GUI commands
+d.    - display tools
+db.   - database tools
+g.    - general GIS management tools
+i.    - imagery tools
+m.    - miscellaneous tool tools
+ps.   - postscript tools
+r.    - raster tools
+r3.   - raster3D tools
+v.    - vector tools
+t.    - temporal tools
+g.gui - GUI tools
 ```
 
 Some additional naming conventions
 
-- export modules: (type).out.(format) eg: _r.out.arc_, _v.out.ascii_
-- import module: (type).in.(format) eg: _r.in.arc_, _v.in.ascii_
-- conversion modules: (type).to.(type) eg: _r.to.vect_, _v.to.rast_,
+- specialized export tools: (type).out.(format) eg: _r.out.arc_, _v.out.ascii_
+- specialized import tools: (type).in.(format) eg: _r.in.arc_, _v.in.ascii_
+- conversion tools: (type).to.(type) eg: _r.to.vect_, _v.to.rast_,
   _r3.to.rast_
 
-Avoid module names with more than two dots in the name. Example: instead of
+Avoid tool names with more than two dots in the name. Example: instead of
 _r.to.rast3.elev_ use _r.to.rast3elev_.
 
 #### Data processing history
@@ -834,8 +852,8 @@ This program is free software under the GNU General Public License
 
 #### Translations
 
-To enable translating of messages to other languages, use full strings, e.g.
-(good example):
+To enable [translating of messages](https://weblate.osgeo.org/projects/grass-gis/)
+to other languages, use full strings, e.g. (good example):
 
 ```python
 if ...:
