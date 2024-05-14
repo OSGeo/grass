@@ -32,7 +32,7 @@
 #include <grass/glocale.h>
 #include "r.flow.h"
 #include "mem.h"
-#include "io.h"
+#include "flow_io.h"
 #include "aspect.h"
 #include "precomp.h"
 
