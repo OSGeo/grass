@@ -38,6 +38,7 @@ jobs:
           path-type: inherit
           location: D:\
           update: true
+          msystem: MINGW64
           install: tar libintl make bison flex diffutils git dos2unix zip mingw-w64-x86_64-toolchain
             mingw-w64-x86_64-fftw mingw-w64-x86_64-lapack mingw-w64-x86_64-pkgconf
             mingw-w64-x86_64-gcc mingw-w64-x86_64-ccache mingw-w64-x86_64-zlib mingw-w64-x86_64-libiconv
@@ -65,13 +66,15 @@ jobs:
         shell: msys2 {0}
 
       - name: Compile GRASS GIS
-        run: D:\msys64\usr\bin\bash.exe -l (''+(Get-Location)+'\.github\workflows\build_osgeo4w.sh') (Get-Location)
+        shell: msys2 {0}
+        run: .github/workflows/build_osgeo4w.sh
 
       - name: Test executing of the grass command
         run: .github/workflows/test_simple.bat 'C:\OSGeo4W\opt\grass\grass84.bat'
 
       - name: Test executing of the grass command in bash
-        run: D:\msys64\usr\bin\bash.exe .github/workflows/test_simple.sh
+        shell: msys2 {0}
+        run: .github/workflows/test_simple.sh
 
       - name: Run tests
         run: .github/workflows/test_thorough.bat 'C:\OSGeo4W\opt\grass\grass84.bat' 'C:\OSGeo4W\bin\python3'
