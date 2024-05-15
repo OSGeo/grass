@@ -43,6 +43,16 @@
 	  <handler>OnExportPython</handler>
 	  <shortcut>Ctrl+Alt+P</shortcut>
 	</menuitem>
+	<menuitem>
+	  <label>Export to PyWPS</label>
+	  <help>Export model to PyWPS script</help>
+	  <handler>OnExportPyWPS</handler>
+	</menuitem>
+	<menuitem>
+	  <label>Export to actinia</label>
+	  <help>Export model to actinia script</help>
+	  <handler>OnExportActinia</handler>
+	</menuitem>
 	<separator />
 	<menuitem>
 	  <label>Quit modeler</label>
