@@ -402,7 +402,7 @@ class Command:
             Debug.msg(
                 3,
                 "Command(): cmd='%s', wait=%s, returncode=%d, alive=%s"
-                % (" ".join(cmd), wait, self.returncode, self.cmdThread.isAlive()),
+                % (" ".join(cmd), wait, self.returncode, self.cmdThread.is_alive()),
             )
             if rerr is not None and self.returncode != 0:
                 if rerr is False:  # GUI dialog
@@ -430,7 +430,7 @@ class Command:
             Debug.msg(
                 3,
                 "Command(): cmd='%s', wait=%s, returncode=?, alive=%s"
-                % (" ".join(cmd), wait, self.cmdThread.isAlive()),
+                % (" ".join(cmd), wait, self.cmdThread.is_alive()),
             )
 
         if verbose_orig:
@@ -688,7 +688,8 @@ def RunCommand(
     :param env: environment (optional, uses os.environ if not provided)
     :param kwargs: program parameters
 
-    The environment passed to the function (env or os.environ) is not modified (a copy is used internally).
+    The environment passed to the function (env or os.environ) is not modified
+    (a copy is used internally).
 
     :return: returncode (read == False and getErrorMsg == False)
     :return: returncode, messages (read == False and getErrorMsg == True)

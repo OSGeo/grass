@@ -50,6 +50,14 @@ To use existing data, we start a GRASS session in an existing mapset::
 
 >>> gj.init("grassdata/nc_basic_spm_grass7/user1")
 
+.. note::
+    Contrary to typical command line / GUI module usage, grass.jupyter
+    enables output overwrite by default to align with behaviour of other
+    Python packages and to allow repeated executions of the same cells and
+    of the whole notebook. The default command line behaviour can be
+    restored by setting GRASS_OVERWRITE environmental variable to "0" after
+    `gj.init()` call: `os.environ["GRASS_OVERWRITE"] = "0"`.
+
 All classes and functions for interaction in notebooks are now available under *gj*,
 for example we can display a map with a selected raster and vector::
 
@@ -103,3 +111,4 @@ from .map import Map
 from .map3d import Map3D
 from .setup import init
 from .timeseriesmap import TimeSeriesMap
+from .seriesmap import SeriesMap

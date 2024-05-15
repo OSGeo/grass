@@ -3,6 +3,7 @@ Created on Fri Aug 17 17:24:03 2012
 
 @author: pietro
 """
+
 import ctypes
 import datetime
 import grass.lib.vector as libvect
@@ -30,7 +31,7 @@ def is_open(c_mapinfo):
 # =============================================
 
 
-class Info(object):
+class Info:
     """Basic vector info.
     To get access to the vector info the map must be opened. ::
 

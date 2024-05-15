@@ -4,7 +4,6 @@ Created on Mon Mar 11 18:39:13 2013
 @author Vaclav Petras <wenzeslaus gmail.com>
 """
 
-
 from grass.pydispatch import dispatcher
 
 
@@ -27,7 +26,7 @@ def _islambda(function):
     )
 
 
-class Signal(object):
+class Signal:
     """
 
     The signal object is created usually as a instance attribute.

@@ -16,6 +16,7 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
+
 import pathlib
 
 from xml.etree.ElementTree import ParseError
@@ -42,7 +43,7 @@ class BaseCapabilitiesTree(etree.ElementTree):
                 etree.ElementTree.__init__(self, file=cap_file)
             except ParseError:
                 raise ParseError(_("Unable to parse XML file"))
-            except IOError as error:
+            except OSError as error:
                 raise ParseError(
                     _("Unable to open XML file '%s'.\n%s\n" % (cap_file, error))
                 )
@@ -84,7 +85,8 @@ class WMSXMLNsHandler:
 class WMSCapabilitiesTree(BaseCapabilitiesTree):
     def __init__(self, cap_file, force_version=None):
         """!Parses WMS capabilities file.
-            If the capabilities file cannot be parsed if it raises xml.etree.ElementTree.ParseError.
+            If the capabilities file cannot be parsed if it raises
+            xml.etree.ElementTree.ParseError.
 
         The class manges inheritance in 'Layer' elements. Inherited elements
         are added to 'Layer' element.
@@ -136,7 +138,7 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
         if first:
             self._initLayer(parent_layer, None)
 
-        layers = parent_layer.findall((self.xml_ns.Ns("Layer")))
+        layers = parent_layer.findall(self.xml_ns.Ns("Layer"))
 
         for l in layers:
             self._initLayer(l, parent_layer)
@@ -200,8 +202,10 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
 
         @param element_name - name of inherited element
         @param cmp_type - 'element_content' - compared value is text of <Layer> element
-        @param cmp_type - 'child_element_content' - compared value is text of a child of the <Layer> element
-        @param cmp_type - 'attribute' - compared value is text of the <Layer> element attribute
+        @param cmp_type - 'child_element_content' - compared value is text of a child
+                           of the <Layer> element
+        @param cmp_type - 'attribute' - compared value is text of the <Layer> element
+                           attribute
         @param layer - <Layer> element which inherits
         @param parent_layer - <Layer> element which is inherited from
         @param add_arg - name of child element or attribute
@@ -309,10 +313,12 @@ class WMTSXMLNsHandler:
 class WMTSCapabilitiesTree(BaseCapabilitiesTree):
     def __init__(self, cap_file):
         """!Parses WMTS capabilities file.
-            If the capabilities file cannot be parsed it raises xml.etree.ElementTree.ParseError.
+            If the capabilities file cannot be parsed it raises
+            xml.etree.ElementTree.ParseError.
 
         The class also removes elements which are in invalid form and are needed
-        by wxGUI capabilities dialog or for creation of GetTile request by GRASS WMS library.
+        by wxGUI capabilities dialog or for creation of GetTile request by GRASS WMS
+        library.
 
         @param cap_file - capabilities file
         """
@@ -550,7 +556,8 @@ class OnEarthCapabilitiesTree(BaseCapabilitiesTree):
             If the file cannot be parsed it raises xml.etree.ElementTree.ParseError.
 
         The class also removes elements which are in invalid form and are needed
-        by wxGUI capabilities dialog or for creation of GetMap request by GRASS WMS library.
+        by wxGUI capabilities dialog or for creation of GetMap request by GRASS WMS
+        library.
 
         @param cap_file - capabilities file
         """

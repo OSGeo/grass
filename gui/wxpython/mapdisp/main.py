@@ -25,7 +25,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com> (MapPanelBase)
 @author Anna Kratochvilova <kratochanna gmail.com> (MapPanelBase)
-"""
+"""  # noqa: E501
 
 import os
 import sys
@@ -227,7 +227,8 @@ class DMonMap(Map):
                         if layersOrder[i] == -1:
                             layersOrder[i] = next_layer
                             next_layer += 1
-                        # layer must be put higher in render order (same cmd was insered more times)
+                        # layer must be put higher in render order (same cmd was
+                        # insered more times)
                         # TODO delete rendurant cmds from cmd file?
                         else:
                             for j, l_order in enumerate(layersOrder):
@@ -283,7 +284,7 @@ class DMonMap(Map):
 
             self.SetLayers(reorderedLayers)
 
-        except IOError as e:
+        except OSError as e:
             grass.warning(
                 _("Unable to read cmdfile '%(cmd)s'. Details: %(det)s")
                 % {"cmd": self.cmdfile, "det": e}
@@ -324,7 +325,7 @@ class DMonMap(Map):
         return layer
 
 
-class Layer(object):
+class Layer:
     """@implements core::giface::Layer"""
 
     def __init__(self, maplayer):
@@ -345,7 +346,7 @@ class Layer(object):
             # elif name == 'propwin':
 
 
-class LayerList(object):
+class LayerList:
     """@implements core::giface::LayerList"""
 
     def __init__(self, map, giface):

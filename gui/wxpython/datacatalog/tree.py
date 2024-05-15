@@ -18,6 +18,7 @@ for details.
 @author Anna Petrasova (kratochanna gmail com)
 @author Linda Kladivova (l.kladivova@seznam.cz)
 """
+
 import os
 import re
 import copy
@@ -37,7 +38,7 @@ from core.watchdog import (
 )
 from gui_core.dialogs import TextEntryDialog
 from core.giface import StandaloneGrassInterface
-from core.treemodel import TreeModel, DictNode
+from core.treemodel import TreeModel, DictFilterNode
 from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
@@ -92,14 +93,14 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
         queue.put(
             (
                 maps_dict,
-                _("Failed to read mapsets from location <{l}>.").format(l=location),
+                _("Failed to read mapsets from project <{l}>.").format(l=location),
             )
         )
         gscript.try_remove(tmp_gisrc_file)
         return
     else:
         mapsets = mapsets.split(",")
-        Debug.msg(4, "Location <{0}>: {1} mapsets found".format(location, len(mapsets)))
+        Debug.msg(4, "Project <{0}>: {1} mapsets found".format(location, len(mapsets)))
         for each in mapsets:
             maps_dict[each] = []
     if lazy:
@@ -118,7 +119,7 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
         queue.put(
             (
                 maps_dict,
-                _("Failed to read maps from location <{l}>.").format(l=location),
+                _("Failed to read maps from project <{l}>.").format(l=location),
             )
         )
         gscript.try_remove(tmp_gisrc_file)
@@ -126,7 +127,7 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
     else:
         # fill dictionary
         listOfMaps = maplist.splitlines()
-        Debug.msg(4, "Location <{0}>: {1} maps found".format(location, len(listOfMaps)))
+        Debug.msg(4, "Project <{0}>: {1} maps found".format(location, len(listOfMaps)))
         for each in listOfMaps:
             ltype, wholename = each.split("/")
             name, mapset = wholename.split("@", maxsplit=1)
@@ -170,11 +171,11 @@ class NameEntryDialog(TextEntryDialog):
             self.EndModal(wx.ID_OK)
 
 
-class DataCatalogNode(DictNode):
+class DataCatalogNode(DictFilterNode):
     """Node representing item in datacatalog."""
 
     def __init__(self, data=None):
-        super(DataCatalogNode, self).__init__(data=data)
+        super().__init__(data=data)
 
     @property
     def label(self):
@@ -195,36 +196,6 @@ class DataCatalogNode(DictNode):
                 )
 
         return _("{name}").format(**data)
-
-    def match(self, method="exact", **kwargs):
-        """Method used for searching according to given parameters.
-
-        :param method: 'exact' for exact match or 'filtering' for filtering by type/name
-        :param kwargs key-value to be matched, filtering method uses 'type' and 'name'
-               where 'name' is compiled regex
-        """
-        if not kwargs:
-            return False
-
-        if method == "exact":
-            for key, value in kwargs.items():
-                if not (key in self.data and self.data[key] == value):
-                    return False
-            return True
-        # for filtering
-        if (
-            "type" in kwargs
-            and "type" in self.data
-            and kwargs["type"] != self.data["type"]
-        ):
-            return False
-        if (
-            "name" in kwargs
-            and "name" in self.data
-            and not kwargs["name"].search(self.data["name"])
-        ):
-            return False
-        return True
 
 
 class DataCatalogTree(TreeView):
@@ -253,9 +224,7 @@ class DataCatalogTree(TreeView):
         """Location Map Tree constructor."""
         self._model = TreeModel(DataCatalogNode)
         self._orig_model = self._model
-        super(DataCatalogTree, self).__init__(
-            parent=parent, model=self._model, id=wx.ID_ANY, style=style
-        )
+        super().__init__(parent=parent, model=self._model, id=wx.ID_ANY, style=style)
 
         self._giface = giface
         self._restricted = True
@@ -550,7 +519,7 @@ class DataCatalogTree(TreeView):
 
             Debug.msg(
                 3,
-                "Scanning location <{0}> ({1}/{2})".format(
+                "Scanning project <{0}> ({1}/{2})".format(
                     location, loc_count, nlocations
                 ),
             )
@@ -612,9 +581,11 @@ class DataCatalogTree(TreeView):
         """Updates grass databases, locations, mapsets and layers in the tree.
 
         It runs in thread, so it should not directly interact with GUI.
-        In case of any errors it returns the errors as a list of strings, otherwise None.
+        In case of any errors it returns the errors as a list of strings, otherwise
+        None.
 
-        Option full=True forces full reload, full=False will behave based on user settings.
+        Option full=True forces full reload, full=False will behave based on user
+        settings.
         """
         errors = []
         for grassdatabase in self.grassdatabases:
@@ -901,17 +872,17 @@ class DataCatalogTree(TreeView):
                     dlg = wx.MessageDialog(
                         parent=self,
                         message=_(
-                            "Map <{map_name}@{map_mapset}> is not in the current location. "
-                            "To be able to display it you need to switch to <{map_location}> "
-                            "location. Note that if you switch there all current "
-                            "Map Displays will be closed.\n\n"
+                            "Map <{map_name}@{map_mapset}> is not in the current "
+                            "project. To be able to display it you need to switch to "
+                            "<{map_location}> project. Note that if you switch there "
+                            "all current Map Displays will be closed.\n\n"
                             "Do you want to switch anyway?"
                         ).format(
                             map_name=selected_layer.data["name"],
                             map_mapset=selected_mapset.data["name"],
                             map_location=selected_loc.data["name"],
                         ),
-                        caption=_("Map in a different location"),
+                        caption=_("Map in a different project"),
                         style=wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION,
                     )
                     dlg.SetYesNoLabels("S&witch", "C&ancel")
@@ -945,7 +916,7 @@ class DataCatalogTree(TreeView):
             self.Select(item[0], select=True)
             self.ExpandNode(item[0], recursive=False)
         else:
-            Debug.msg(1, "Location <%s> not found" % location)
+            Debug.msg(1, "Project <%s> not found" % location)
 
     def GetCurrentDbLocationMapsetNode(self):
         """Get current mapset node"""
@@ -1249,7 +1220,7 @@ class DataCatalogTree(TreeView):
             )
             self._renameNode(self.selected_location[0], new_name)
             label = _(
-                "Renaming location <{oldlocation}> to <{newlocation}> completed"
+                "Renaming project <{oldlocation}> to <{newlocation}> completed"
             ).format(oldlocation=old_name, newlocation=new_name)
             self.showNotification.emit(message=label)
 
@@ -1707,7 +1678,8 @@ class DataCatalogTree(TreeView):
             )
             names[self.selected_layer[i].data["type"]].append(name)
             all_names.append(name)
-        # if self.selected_location[0].data['name'] == gisenv()['LOCATION_NAME'] and self.selected_mapset[0]:
+        # if self.selected_location[0].data['name'] == gisenv()['LOCATION_NAME'] and
+        # self.selected_mapset[0]:
         for ltype in names:
             if names[ltype]:
                 self._giface.lmgr.AddMaps(list(reversed(names[ltype])), ltype, True)
@@ -1743,7 +1715,8 @@ class DataCatalogTree(TreeView):
                 ):
                     GMessage(
                         _(
-                            "To move or copy maps to other mapsets, unlock editing of other mapsets"
+                            "To move or copy maps to other mapsets, unlock editing of "
+                            "other mapsets"
                         ),
                         parent=self,
                     )
@@ -1756,9 +1729,9 @@ class DataCatalogTree(TreeView):
             else:
                 GMessage(
                     _(
-                        "To move or copy maps to other location, "
+                        "To move or copy maps to other project, "
                         "please drag them to a mapset in the "
-                        "destination location"
+                        "destination project"
                     ),
                     parent=self,
                 )
@@ -2192,13 +2165,13 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCreateMapset, item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete location"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete project"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteLocation, item)
         if self._restricted:
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename location"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename project"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameLocation, item)
         if self._restricted:
@@ -2217,11 +2190,11 @@ class DataCatalogTree(TreeView):
         genv = gisenv()
         currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new location"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Create new project (location)"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCreateLocation, item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Download sample location"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Download sample project (location)"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDownloadLocation, item)
 
@@ -2263,7 +2236,7 @@ class DataCatalogTree(TreeView):
     def _popupMenuMultipleLocations(self):
         """Create popup menu for multiple selected locations"""
         menu = Menu()
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete locations"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete projects (locations)"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteLocation, item)
         if self._restricted:
