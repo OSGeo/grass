@@ -99,8 +99,8 @@ int main(int argc, char *argv[])
     parm.units->options = "meters,kilometers,feet,miles";
     parm.units->label = parm.units->description;
     parm.units->description =
-        _("If units are not specified, current location units are used. "
-          "Meters are used by default in geographic (latlon) locations.");
+        _("If units are not specified, current project units are used. "
+          "Meters are used by default in geographic (latlon) projects.");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);

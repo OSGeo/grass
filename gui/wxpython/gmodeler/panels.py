@@ -23,7 +23,6 @@ import time
 import stat
 import tempfile
 import random
-import six
 import math
 
 import wx
@@ -76,6 +75,7 @@ from gmodeler.model import (
     WriteModelFile,
     ModelDataSeries,
     ModelDataSingle,
+    WriteActiniaFile,
     WritePythonFile,
     WritePyWPSFile,
 )
@@ -186,7 +186,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
             page=self.variablePanel, text=_("Variables"), name="variables"
         )
         self.notebook.AddPage(
-            page=self.pythonPanel, text=_("Python editor"), name="python"
+            page=self.pythonPanel, text=_("Script editor"), name="python"
         )
         self.notebook.AddPage(
             page=self.goutput, text=_("Command output"), name="output"
@@ -1037,8 +1037,25 @@ class ModelerPanel(wx.Panel, MainPageBase):
         dlg.Destroy()
 
     def OnExportPython(self, event=None, text=None):
-        """Export model to Python script"""
+        """Export model to Python script."""
+        self.pythonPanel.SetWriteObject("Python")
+        self.ExportScript()
+
+    def OnExportPyWPS(self, event=None, text=None):
+        """Export model to PyWPS script."""
+        self.pythonPanel.SetWriteObject("PyWPS")
+        self.ExportScript()
+
+    def OnExportActinia(self, event=None, text=None):
+        """Export model to actinia script."""
+        self.pythonPanel.SetWriteObject("actinia")
+        self.ExportScript()
+
+    def ExportScript(self):
+        """Export model to script."""
+        orig_script_type = self.pythonPanel.body.script_type
         filename = self.pythonPanel.SaveAs(force=True)
+        self.pythonPanel.SetWriteObject(orig_script_type)
         self.SetStatusText(_("Model exported to <%s>") % filename)
 
     def OnPreferences(self, event):
@@ -1227,7 +1244,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         dlg.Init(properties)
         if dlg.ShowModal() == wx.ID_OK:
             self.ModelChanged()
-            for key, value in six.iteritems(dlg.GetValues()):
+            for key, value in dlg.GetValues().items():
                 properties[key] = value
             for action in self.model.GetItems(objType=ModelAction):
                 action.GetTask().set_flag("overwrite", properties["overwrite"])
@@ -1459,7 +1476,7 @@ class VariablePanel(wx.Panel):
     def UpdateModelVariables(self):
         """Update model variables"""
         variables = dict()
-        for values in six.itervalues(self.list.GetData()):
+        for values in self.list.GetData().values():
             name = values[0]
             variables[name] = {"type": str(values[1])}
             if values[2]:
@@ -1607,6 +1624,7 @@ class PythonPanel(wx.Panel):
             choices=[
                 _("Python"),
                 _("PyWPS"),
+                _("actinia"),
             ],
         )
         self.script_type_box.SetSelection(0)  # Python
@@ -1644,6 +1662,30 @@ class PythonPanel(wx.Panel):
         sizer.Fit(self)
         sizer.SetSizeHints(self)
         self.SetSizer(sizer)
+
+    def GetScriptExt(self):
+        """Get extension for script exporting.
+        :return: script extension
+        """
+        if self.write_object == WriteActiniaFile:
+            ext = "json"
+        else:
+            # Python, PyWPS
+            ext = "py"
+
+        return ext
+
+    def SetWriteObject(self, script_type):
+        """Set correct self.write_object dependng on the script type.
+        :param script_type: script type name as a string
+        """
+        if script_type == "PyWPS":
+            self.write_object = WritePyWPSFile
+        elif script_type == "actinia":
+            self.write_object = WriteActiniaFile
+        else:
+            # script_type == "Python", fallback
+            self.write_object = WritePythonFile
 
     def RefreshScript(self):
         """Refresh the script.
@@ -1694,12 +1736,18 @@ class PythonPanel(wx.Panel):
         :return: filename
         """
         filename = ""
+        file_ext = self.GetScriptExt()
+        if file_ext == "py":
+            fn_wildcard = _("Python script (*.py)|*.py")
+        elif file_ext == "json":
+            fn_wildcard = _("JSON file (*.json)|*.json")
+
         dlg = wx.FileDialog(
             parent=self,
             message=_("Choose file to save"),
             defaultFile=os.path.basename(self.parent.GetModelFile(ext=False)),
             defaultDir=os.getcwd(),
-            wildcard=_("Python script (*.py)|*.py"),
+            wildcard=fn_wildcard,
             style=wx.FD_SAVE,
         )
 
@@ -1710,8 +1758,8 @@ class PythonPanel(wx.Panel):
             return ""
 
         # check for extension
-        if filename[-3:] != ".py":
-            filename += ".py"
+        if filename[-len(file_ext) - 1 :] != f".{file_ext}":
+            filename += f".{file_ext}"
 
         if os.path.exists(filename):
             dlg = wx.MessageDialog(
@@ -1781,10 +1829,8 @@ class PythonPanel(wx.Panel):
 
     def OnChangeScriptType(self, event):
         new_script_type = self.script_type_box.GetStringSelection()
-        if new_script_type == "Python":
-            self.write_object = WritePythonFile
-        elif new_script_type == "PyWPS":
-            self.write_object = WritePyWPSFile
+
+        self.SetWriteObject(new_script_type)
 
         if self.RefreshScript():
             self.body.script_type = new_script_type
@@ -1796,11 +1842,9 @@ class PythonPanel(wx.Panel):
         self.script_type_box.SetStringSelection(self.body.script_type)
 
         if self.body.script_type == "Python":
-            self.write_object = WritePythonFile
             self.btnRun.Enable()
             self.btnRun.SetToolTip(_("Run script"))
-        elif self.body.script_type == "PyWPS":
-            self.write_object = WritePyWPSFile
+        elif self.body.script_type in ("PyWPS", "actinia"):
             self.btnRun.Disable()
             self.btnRun.SetToolTip(
                 _("Run script - enabled only for basic Python scripts")

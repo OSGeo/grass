@@ -7,9 +7,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 
 jobs:
   python-checks:
@@ -29,7 +26,7 @@ jobs:
           - os: ubuntu-22.04
             python-version: "3.10"
             min-python-version: "3.7"
-            black-version: "23.1.0"
+            black-version: "24.4.0"
             flake8-version: "3.9.2"
             pylint-version: "2.12.2"
             bandit-version: "1.7.8"
@@ -49,7 +46,7 @@ jobs:
           echo Pylint: ${{ matrix.pylint-version }}
           echo Bandit: ${{matrix.bandit-version}}
 
-      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
+      - uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
 
       - name: Set up Python
         uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
@@ -60,7 +57,7 @@ jobs:
         run: python -m pip install --upgrade pip
 
       - name: Install Black only
-        run: pip install black==${{ matrix.black-version }}
+        run: pip install black[jupyter]==${{ matrix.black-version }}
 
       - name: Run Black
         run: black .
@@ -108,7 +105,7 @@ jobs:
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@c7f9125735019aa87cfc361530512d50ea439c71 # v3.25.1
+        uses: github/codeql-action/upload-sarif@b7cec7526559c32f1616476ff32d17ba4c59b2d6 # v3.25.5
         with:
           sarif_file: bandit.sarif
 
@@ -120,15 +117,13 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
 
+      - uses: rui314/setup-mold@8de9eea54963d01c1a6c200606257d65bd53bea1 # v1
       - name: Build
         run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
 
       - name: Add the bin directory to PATH
         run: |
           echo "$HOME/install/bin" >> $GITHUB_PATH
-
-      - name: Test executing of the grass command
-        run: .github/workflows/test_simple.sh
 
       - name: Run Pylint on grass package
         run: |

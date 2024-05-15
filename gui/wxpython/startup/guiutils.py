@@ -14,7 +14,6 @@ This program is free software under the GNU General Public License
 This is for code which depend on something from GUI (wx or wxGUI).
 """
 
-
 import os
 import wx
 

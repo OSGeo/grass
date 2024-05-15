@@ -107,7 +107,8 @@ class SimpleDialog(wx.Dialog):
 
         self.sizer.Add(self.dataSizer, proportion=1, flag=wx.EXPAND | wx.ALL, border=5)
 
-        # self.sizer.Add(item = self.informLabel, proportion = 0, flag = wx.ALL, border = 5)
+        # self.sizer.Add(item = self.informLabel, proportion = 0,
+        # flag = wx.ALL, border = 5)
         self.sizer.Add(btnSizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5)
 
     def ValidatorCallback(self, win):
@@ -304,7 +305,8 @@ class NewVectorDialog(VectorDialog):
         :param title: window title
         :param disableAdd: disable 'add layer' checkbox
         :param disableTable: disable 'create table' checkbox
-        :param showType: True to show feature type selector (used for creating new empty OGR layers)
+        :param showType: True to show feature type selector (used for creating new
+                         empty OGR layers)
 
         :return: dialog instance
         """
@@ -2599,7 +2601,8 @@ class DefaultFontDialog(wx.Dialog):
         return fontdict, fontdict_reverse, fontlist
 
     def RenderText(self, font, text, size):
-        """Renders an example text with the selected font and resets the bitmap widget"""
+        """Renders an example text with the selected font and resets the bitmap
+        widget"""
         env = os.environ.copy()
         driver = UserSettings.Get(group="display", key="driver", subkey="type")
         if driver == "png":
