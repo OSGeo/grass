@@ -127,7 +127,8 @@ class GrassTestFilesInvoker:
         os.mkdir(mapset_dir)
         # TODO: default region in mapset will be what?
         # copy DEFAULT_WIND file from PERMANENT to WIND
-        # TODO: this should be a function in grass.script (used also in gis_set.py, PyGRASS also has its way with Mapset)
+        # TODO: this should be a function in grass.script (used also in gis_set.py,
+        # PyGRASS also has its way with Mapset)
         shutil.copy(
             os.path.join(gisdbase, location, "PERMANENT", "DEFAULT_WIND"),
             os.path.join(mapset_dir, "WIND"),
@@ -212,7 +213,10 @@ class GrassTestFilesInvoker:
             if stdout is None:
                 stdout = ""
             if stderr is None:
-                stderr = f"Process has timed out in {timeout}s and produced no error output.\n"
+                stderr = (
+                    f"Process has timed out in {timeout}s and produced no error "
+                    "output.\n"
+                )
             # Return code is None if the process times out.
             # Rest of the code expects success to evaluate as False.
             # So, we assign a failing return code.

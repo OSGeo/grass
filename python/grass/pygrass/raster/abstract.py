@@ -3,6 +3,7 @@ Created on Fri Aug 17 16:05:25 2012
 
 @author: pietro
 """
+
 import ctypes
 
 #
@@ -48,7 +49,7 @@ class Info:
 
         >>> info = Info(test_raster_name)
         >>> info.read()
-        >>> info          # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> info  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         abstract_test_map@
         rows: 4
         cols: 4
@@ -538,7 +539,8 @@ class RasterAbstractBase:
     def get_value(self, point, region=None):
         """This method returns the pixel value of a given pair of coordinates:
 
-        :param point: pair of coordinates in tuple object or class object with coords() method
+        :param point: pair of coordinates in tuple object or class object with coords()
+            method
         """
         # Check for tuple
         if not isinstance(point, list) and not isinstance(point, tuple):

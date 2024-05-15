@@ -1,6 +1,7 @@
 """Test of r.series.interp
 @author Soeren Gebbert
 """
+
 from grass.gunittest.case import TestCase
 
 

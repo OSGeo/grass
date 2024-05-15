@@ -1,4 +1,4 @@
-FROM python:3-alpine3.19 as common
+FROM alpine:3.19@sha256:c5b1261d6d3e43071626931fc004f70149baeba2c8ec672bd4f27761f8e1ad6b as common
 
 # Based on:
 # https://github.com/mundialis/docker-grass-gis/blob/master/Dockerfile
@@ -56,6 +56,7 @@ ENV GRASS_RUN_PACKAGES="\
       openblas \
       py3-numpy \
       py3-pillow \
+      python3 \
       pdal \
       pdal-dev \
       postgresql15-client \
@@ -73,18 +74,8 @@ ENV GRASS_RUN_PACKAGES="\
 
 WORKDIR /src
 
-ENV PYTHONBIN=python$PYTHON_VERSION
-
-RUN echo "Install Python";\
-    apk add --no-cache $PYTHONBIN && \
-    $PYTHONBIN -m ensurepip && \
-    rm -r /usr/lib/python*/ensurepip && \
-    pip$PYTHON_VERSION install --no-cache-dir --upgrade pip setuptools && \
-    if [ ! -e /usr/bin/pip ]; then ln -s pip$PYTHON_VERSION /usr/bin/pip ; fi && \
-    if [ ! -e /usr/bin/python ]; then ln -sf /usr/bin/$PYTHONBIN /usr/bin/python; fi && \
-    rm -r /root/.cache; \
-    # Add the packages
-    echo "Install main packages";\
+# Add the packages
+RUN echo "Install main packages";\
     apk update; \
     apk add --no-cache $GRASS_RUN_PACKAGES
 
@@ -215,15 +206,14 @@ COPY --from=build /usr/local/grass* /usr/local/grass/
 COPY --from=build /usr/lib/gdalplugins/*_GRASS.so /usr/lib/gdalplugins/
 # run simple LAZ test
 COPY docker/testdata/simple.laz /tmp/
-COPY docker/testdata/test_grass_session.py docker/alpine/grass_tests.sh /scripts/
-COPY docker/testdata/test_grass_session.py /scripts/
+COPY docker/testdata/test_grass_python.py docker/alpine/grass_tests.sh /scripts/
+COPY docker/testdata/test_grass_python.py /scripts/
 
 # install external Python API
-RUN pip3 install --no-cache-dir --upgrade pip six grass-session --ignore-installed six; \
-    ln -sf /usr/local/grass $(grass --config path); \
+RUN ln -sf /usr/local/grass $(grass --config path); \
     # run some tests and cleanup
     $SHELL /scripts/grass_tests.sh \
-    && rm -f /scripts/grass_tests.sh /tmp/simple.laz /scripts/test_grass_session.py; \
+    && rm -f /scripts/grass_tests.sh /tmp/simple.laz /scripts/test_grass_python.py; \
     # delete unused packages
     apk del --no-cache gettext pdal-dev; \
     # show installed version
