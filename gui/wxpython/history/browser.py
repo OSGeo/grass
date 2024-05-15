@@ -307,7 +307,6 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         """Clear command info."""
         self.sizer_general_info.Clear(True)
         self.sizer_region_settings_grid.Clear(True)
-        self.sizer_region_settings_text.Clear(True)
         self._createGeneralInfoBox()
         self._createRegionSettingsBox()
         self._layout()
