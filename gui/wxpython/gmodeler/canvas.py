@@ -44,8 +44,9 @@ from gmodeler.giface import GraphicalModelerGrassInterface
 class ModelCanvas(ogl.ShapeCanvas):
     """Canvas where model is drawn"""
 
-    def __init__(self, parent):
+    def __init__(self, parent, giface):
         self.parent = parent
+        self._giface = giface
         ogl.OGLInitialize()
         ogl.ShapeCanvas.__init__(self, parent)
 
@@ -121,11 +122,12 @@ class ModelCanvas(ogl.ShapeCanvas):
 class ModelEvtHandler(ogl.ShapeEvtHandler):
     """Model event handler class"""
 
-    def __init__(self, log, frame):
+    def __init__(self, log, frame, giface):
         ogl.ShapeEvtHandler.__init__(self)
         self.log = log
         self.frame = frame
         self.x = self.y = None
+        self._giface = giface
 
     def OnLeftClick(self, x, y, keys=0, attachment=0):
         """Left mouse button pressed -> select item & update statusbar"""
@@ -185,7 +187,10 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             gmodule = GUI(
                 parent=self.frame,
                 show=True,
-                giface=GraphicalModelerGrassInterface(self.frame.GetModel()),
+                giface=GraphicalModelerGrassInterface(
+                    model=self.frame.GetModel(),
+                    giface=self._giface,
+                ),
             )
             gmodule.ParseCommand(
                 shape.GetLog(string=False),
