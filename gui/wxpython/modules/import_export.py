@@ -470,8 +470,24 @@ class GdalImportDialog(ImportDialog):
             if self.dsnInput.GetType() == "dir":
                 idsn = os.path.join(dsn, layer)
             elif self.dsnInput.GetType() == "db":
+                idsn = dsn
                 if "PG:" in dsn:
                     idsn = f"{dsn} table={layer}"
+                elif os.path.exists(idsn):
+                    try:
+                        from osgeo import gdal
+                    except ImportError:
+                        GError(
+                            parent=self,
+                            message=_(
+                                "The Python GDAL package is missing."
+                                " Please install it."
+                            ),
+                        )
+                        return
+                    dataset = gdal.Open(dsn)
+                    if "Rasterlite" in dataset.GetDriver().ShortName:
+                        idsn = f"RASTERLITE:{dsn},table={layer}"
             else:
                 idsn = dsn
 
