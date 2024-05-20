@@ -7,7 +7,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
 
 jobs:
   pytest:

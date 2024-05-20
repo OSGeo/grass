@@ -7,9 +7,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 
 jobs:
   build:
