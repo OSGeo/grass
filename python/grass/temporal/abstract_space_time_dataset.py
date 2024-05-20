@@ -2806,30 +2806,27 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         sql = open(
             os.path.join(
                 sql_path,
-                "update_"
-                + self.get_type()
-                + f"_metadata_template{template_suffix}.sql",
+                f"update_{self.get_type()}_metadata_template{template_suffix}.sql",
             ),
             "r",
         ).read()
 
         # Comment out update of semantic labels for DB version < 3
         if get_tgis_db_version_from_metadata() < 3:
-            if old_sqlite_version:
-                semantic_label_sql = open(
-                    os.path.join(sql_path, "update_strds_metadata_template_v3.sql"),
-                    "r",
-                ).read()
-                sql = sql + "\n" + semantic_label_sql
-            else:
-                sql = sql.replace(
-                    "strds_metadata.number_of_semantic_labels =",
-                    "-- number_of_semantic_labels =",
-                )
-                sql = sql.replace(
-                    "count(distinct semantic_label)",
-                    "-- count(distinct semantic_label)",
-                )
+            sql = sql.replace(
+                "strds_metadata.number_of_semantic_labels =",
+                "-- number_of_semantic_labels =",
+            )
+            sql = sql.replace(
+                "count(distinct semantic_label)",
+                "-- count(distinct semantic_label)",
+            )
+        elif old_sqlite_version and self.get_type() == "strds":
+            semantic_label_sql = open(
+                os.path.join(sql_path, "update_strds_metadata_template_v3.sql"),
+                "r",
+            ).read()
+            sql = sql + "\n" + semantic_label_sql
 
         sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
         sql = sql.replace("SPACETIME_ID", self.base.get_id())
