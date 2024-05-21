@@ -56,6 +56,7 @@ def update_cmd_file(cmd_file, cmd, mapfile):
         "d.info",
         "d.mon",
         "d.out.file",
+        "d.redraw",
         "d.to.rast",
         "d.what.rast",
         "d.what.vect",
