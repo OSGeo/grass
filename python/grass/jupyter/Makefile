@@ -6,14 +6,20 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 DSTDIR = $(ETC)/python/grass/jupyter
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 MODULES = \
 	setup \
@@ -22,11 +28,14 @@ MODULES = \
 	region \
 	map3d \
 <<<<<<< HEAD
+<<<<<<< HEAD
 	reprojection_renderer \
 	utils \
 	timeseriesmap
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 	seriesmap \
 	reprojection_renderer \
 	utils \
@@ -66,6 +75,9 @@ MODULES = \
 	utils \
 	timeseriesmap
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)

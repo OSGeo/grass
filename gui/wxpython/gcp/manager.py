@@ -1695,9 +1695,12 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 
     def OnFocus(self, event):
 <<<<<<< HEAD
+<<<<<<< HEAD
         # TODO: it is here just to remove old or obsolate beavior of base class gcp/MapPanel?
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         # TODO: it is here just to remove old or obsolete beavior of base class
         #       gcp/MapPanel?
@@ -1707,6 +1710,9 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
 =======
         # TODO: it is here just to remove old or obsolate beavior of base class gcp/MapPanel?
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # self.grwiz.SwitchEnv('source')
         pass

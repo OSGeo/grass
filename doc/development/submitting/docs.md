@@ -178,9 +178,12 @@ pages as raster images (i.e. PNGs) for portability but the original format
 Adding the image to the HTML page (r.viewshed example, the screenshot is shown
 with a width of 600 pixel but it is clickable in the manual page). If a larger
 <<<<<<< HEAD
+<<<<<<< HEAD
 image is displayed as shrinked, both **width** and **height** HTML parameters
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 image is displayed as shrunk, both **width** and **height** HTML parameters
 =======
@@ -189,6 +192,9 @@ image is displayed as shrinked, both **width** and **height** HTML parameters
 =======
 image is displayed as shrinked, both **width** and **height** HTML parameters
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 (values must be calculated according to the picture size!) should be set:
 

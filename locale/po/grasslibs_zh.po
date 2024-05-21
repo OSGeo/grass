@@ -3736,8 +3736,11 @@ msgid "ERROR: Option key not defined"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../lib/gis/parser_help.c:198
 msgid "Flags:"
@@ -4012,6 +4015,9 @@ msgid "<%s> in mapset <%s>"
 msgstr "<%s>在地图集<%s>中"
 =======
 #: ../lib/manage/do_copy.c:43
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 #: ../lib/manage/do_copy.c:43
@@ -12022,6 +12028,7 @@ msgstr "[%s]: 没有此颜色"
 #~ msgstr "G_spawn：无法打开文件%s"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid "Illegal row value"
 msgstr "非法的行值"
 
@@ -12066,6 +12073,8 @@ msgstr "非法的深度值"
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #~ msgid "ERROR: option <%s>: <%s> exists.\n"
 #~ msgstr "错误：选项<%s>：<%s>已存在。\n"
 
@@ -12212,6 +12221,9 @@ msgid "Illegal depths value"
 msgstr "非法的深度值"
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 msgid "Top must be larger than Bottom"
 msgstr "顶部的值必须比底部的值大"

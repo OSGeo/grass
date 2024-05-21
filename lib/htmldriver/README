@@ -76,9 +76,12 @@ that exists in a vector file will have the same HREF tag.
 	export GRASS_RENDER_HTMLMAXPOINTS
 	GRASS_RENDER_HTMLMAXPOINTS=xx
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    specifies the maxiumum number of vertices that a polygon can
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 	    specifies the maximum number of vertices that a polygon can
 =======
@@ -87,6 +90,9 @@ that exists in a vector file will have the same HREF tag.
 =======
 	    specifies the maxiumum number of vertices that a polygon can
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 	    have.  The default is 99.  Some browser can only handle
 	    image map polygons of less that 100 vertices.

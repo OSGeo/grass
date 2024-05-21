@@ -189,10 +189,13 @@ int checkHull(int cR, int cC, double **oldHull, int lungOld)
 /*---------------------------------------------------------------------------*/
 double pianOriz(double **punti, int obsNum, double *minNS, double *minEW,
 <<<<<<< HEAD
+<<<<<<< HEAD
                 double *maxNS, double *maxEW, struct element_grow **mat,
                 int CBordo)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 double *maxNS, double *maxEW, struct element_grow **mat UNUSED,
                 int CBordo UNUSED)
@@ -204,6 +207,9 @@ double pianOriz(double **punti, int obsNum, double *minNS, double *minEW,
                 double *maxNS, double *maxEW, struct element_grow **mat,
                 int CBordo)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int c1;
@@ -329,8 +335,14 @@ void free_structmatrix(struct element_grow **m, long nrl, long nrh UNUSED,
 void free_structmatrix(struct element_grow **m, long nrl, long nrh, long ncl,
                        long nch)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

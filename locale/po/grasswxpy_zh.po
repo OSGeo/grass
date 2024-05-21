@@ -4697,11 +4697,14 @@ msgid "Re&load maps"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/gmodeler/g.gui.gmodeler.py:55
 msgid "Graphical Modeler - GRASS GIS"
 msgstr ""
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../gui/wxpython/datacatalog/tree.py:2178
 msgid "&Copy path to mapset"
@@ -4757,6 +4760,9 @@ msgstr ""
 msgid "Graphical Modeler - GRASS GIS"
 msgstr ""
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 #: ../gui/wxpython/datacatalog/tree.py:2292
@@ -6242,8 +6248,14 @@ msgstr "定义新GRASS地点"
 =======
 #: ../gui/wxpython/location_wizard/wizard.py:186
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -6261,8 +6273,14 @@ msgstr ""
 =======
 #: ../gui/wxpython/location_wizard/wizard.py:205
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -6297,6 +6315,7 @@ msgid "Description of location directory in GIS Data Directory"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/location_wizard/wizard.py:253
 msgid "Location will be created in GRASS database:"
 msgstr ""
@@ -6305,6 +6324,8 @@ msgstr ""
 msgid "Name '{}' is not a valid name for location. Please use only ASCII characters excluding characters {} and space."
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../gui/wxpython/location_wizard/wizard.py:270
 msgid "Location will be created in GRASS database:"
@@ -6325,6 +6346,9 @@ msgid "Name '{}' is not a valid name for location. Please use only ASCII charact
 =======
 #: ../gui/wxpython/location_wizard/wizard.py:253
 msgid "Location will be created in GRASS database:"
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 msgstr ""
 
@@ -6357,11 +6381,14 @@ msgid ""
 msgstr "地点标签长度限制1行256个字符串。多出部分将被忽略。"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/location_wizard/wizard.py:335
 msgid "Select Coordinate Reference System (CRS)"
 msgstr ""
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../gui/wxpython/location_wizard/wizard.py:356
 msgid "Select Coordinate Reference System (CRS)"
@@ -6386,6 +6413,9 @@ msgstr ""
 msgid "Select Coordinate Reference System (CRS)"
 msgstr ""
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 #: ../gui/wxpython/location_wizard/wizard.py:346
@@ -6399,8 +6429,14 @@ msgstr ""
 
 #: ../gui/wxpython/location_wizard/wizard.py:354
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -6526,6 +6562,7 @@ msgid "Select georeferenced file"
 msgstr "选择地理配准文件"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/location_wizard/wizard.py:1450
 msgid "Enter WKT parameters string:"
 msgstr ""
@@ -6534,6 +6571,8 @@ msgstr ""
 msgid "Select CRS from a list"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../gui/wxpython/location_wizard/wizard.py:1534
 msgid "Enter WKT parameters string:"
@@ -6550,6 +6589,9 @@ msgstr ""
 =======
 #: ../gui/wxpython/location_wizard/wizard.py:1450
 msgid "Enter WKT parameters string:"
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 msgstr ""
 
@@ -6567,8 +6609,14 @@ msgstr ""
 =======
 #: ../gui/wxpython/location_wizard/wizard.py:1517
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -13616,11 +13664,14 @@ msgid "OSGeo_ID"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/vnet/dialogs.py:74
 msgid "Vector Network Analysis Tool"
 msgstr ""
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../gui/wxpython/gui_core/ghelp.py:439
 msgid "ORCID"
@@ -13681,6 +13732,9 @@ msgstr ""
 msgid "Vector Network Analysis Tool"
 msgstr ""
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 #: ../gui/wxpython/gui_core/goutput.py:165
@@ -16864,8 +16918,14 @@ msgstr "激活节点对齐"
 msgid "Raster map <{}> not found in current mapset."
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -17710,6 +17770,9 @@ msgid "Map Display {number}"
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 msgstr ""
@@ -18526,6 +18589,10 @@ msgid "Multiple import"
 #: ../gui/wxpython/modules/mcalc_builder.py:58
 msgid "3D Raster Map Calculator"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
@@ -19843,8 +19910,14 @@ msgstr "警告"
 =======
 #: ../gui/wxpython/rlisetup/frame.py:114
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -19934,10 +20007,13 @@ msgid "Tools Toolbar"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/mapwin/decorations.py:203
 msgid "Text properties"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../gui/wxpython/main_window/frame.py:597 ../gui/wxpython/lmgr/frame.py:186
 msgid "3D view Toolbar"
 msgstr ""
@@ -19954,6 +20030,9 @@ msgstr "地图比较(Map Swipe)"
 #: ../gui/wxpython/mapwin/decorations.py:203
 msgid "Text properties"
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 msgstr ""
@@ -20368,10 +20447,13 @@ msgid "Please provide a group name to process"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/wxplot/histogram.py:43
 msgid "Histogram Tool"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../gui/wxpython/photo2image/g.gui.photo2image.py:104
 msgid "Please provide a raster map name to process"
@@ -20673,6 +20755,9 @@ msgid "Histogram Tool"
 =======
 #: ../gui/wxpython/wxplot/histogram.py:43
 msgid "Histogram Tool"
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 msgstr ""
 
@@ -22612,6 +22697,9 @@ msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 msgstr ""
@@ -25198,6 +25286,7 @@ msgid "Show attribute data for selected vector map"
 msgstr "显示选中矢量地图的属性数据"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../gui/wxpython/menustrings.py:1031 ../gui/wxpython/menustrings.py:1976
 msgid "Univariate raster dataset statistics"
 msgstr "栅格数据集一元统计量"
@@ -25297,6 +25386,8 @@ msgstr "属性表管理器"
 msgid "Launch Data Catalog."
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../gui/wxpython/lmgr/toolbars.py:128
 #, fuzzy
@@ -25308,6 +25399,9 @@ msgid "Launch Data Catalog."
 =======
 #: ../gui/wxpython/menustrings.py:2000
 msgid "Launch Data Catalog."
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 msgstr ""
 
@@ -25586,8 +25680,14 @@ msgid "Raster map <%s> added"
 #: ../gui/wxpython/startup/guiutils.py:186
 msgid "Unable to create new mapset: {}"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -30218,6 +30318,9 @@ msgid "Cartographic Composer - GRASS GIS"
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 msgstr ""
@@ -31734,6 +31837,10 @@ msgstr "创建GRASS地点<%s>?"
 msgid "Create new location?"
 msgstr "创建新地点？"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main

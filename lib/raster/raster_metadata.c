@@ -3,13 +3,20 @@
 
    \brief Raster library - Functions to read and write raster "units",
 <<<<<<< HEAD
-   "semantic label" and "vertical datum" meta-data info
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
    "semantic label" and "vertical datum" meta-data info
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+   "semantic label" and "vertical datum" meta-data info
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+   "semantic label" and "vertical datum" meta-data info
+=======
+>>>>>>> osgeo-main
    "band reference" and "vertical datum" meta-data info
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
@@ -18,6 +25,9 @@
 =======
    "semantic label" and "vertical datum" meta-data info
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
    (C) 2007-2009, 2021 by Hamish Bowman, Maris Nartiss,
@@ -99,6 +109,11 @@ void Rast_write_vdatum(const char *name, const char *str)
 
 /*!
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
  * \brief Get a raster map semantic label metadata string
  *
  * Read raster semantic label metadata file and put string in to str
@@ -106,10 +121,13 @@ void Rast_write_vdatum(const char *name, const char *str)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * \brief Get a raster map semantic label metadata string
  *
  * Read raster semantic label metadata file and put string in to str
 =======
+=======
+>>>>>>> osgeo-main
  * \brief Get a raster map's band reference metadata string
  *
  * Read the raster's band reference metadata file and put string in str
@@ -124,18 +142,27 @@ void Rast_write_vdatum(const char *name, const char *str)
  *
  * Read raster semantic label metadata file and put string in to str
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  *
  * \param name raster map name
  * \param mapset mapset name
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  * \return  string representing semantic label on success
  * \return  NULL on error
@@ -173,7 +200,10 @@ char *Rast_get_semantic_label_or_name(const char *name, const char *mapset)
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
  * \return  string representing band reference on success
 =======
  * \return  string representing semantic label on success
@@ -218,18 +248,27 @@ char *Rast_get_semantic_label_or_name(const char *name, const char *mapset)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  *
  * \param name raster map name
  * \param str  string containing data to be written
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 void Rast_write_semantic_label(const char *name, const char *str)
 {
@@ -241,9 +280,12 @@ void Rast_write_semantic_label(const char *name, const char *str)
  *
  * Legal semantic label must be a legal GRASS file name.
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Semantic labels are capped in legth to GNAME_MAX.
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
  * Semantic labels are capped in length to GNAME_MAX.
 >>>>>>> osgeo-main
  *
@@ -284,7 +326,10 @@ bool Rast_legal_semantic_label(const char *semantic_label)
 
     return true;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 void Rast_write_bandref(const char *name, const char *str)
 =======
@@ -347,6 +392,9 @@ bool Rast_legal_semantic_label(const char *semantic_label)
 =======
     return true;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 }
 
@@ -408,12 +456,18 @@ static void misc_write_line(const char *elem, const char *name, const char *str)
     fp = G_fopen_new_misc("cell_misc", elem, name);
     if (!fp) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         G_fatal_error(
             _("Unable to create <%s> metadata file for raster map <%s@%s>"),
@@ -423,7 +477,10 @@ static void misc_write_line(const char *elem, const char *name, const char *str)
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
         G_fatal_error(_("Unable to create <%s> metadata file for raster map <%s@%s>"),
             elem, name, G_mapset());
     } /* This else block is unnecessary but helps to silence static code analysis tools */
@@ -437,21 +494,32 @@ static void misc_write_line(const char *elem, const char *name, const char *str)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     else {
         fprintf(fp, "%s\n", str);
 
         if (fclose(fp) != 0)
 <<<<<<< HEAD
-            G_fatal_error(
-                _("Error closing <%s> metadata file for raster map <%s@%s>"),
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             G_fatal_error(
                 _("Error closing <%s> metadata file for raster map <%s@%s>"),
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            G_fatal_error(
+                _("Error closing <%s> metadata file for raster map <%s@%s>"),
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            G_fatal_error(
+                _("Error closing <%s> metadata file for raster map <%s@%s>"),
+=======
+>>>>>>> osgeo-main
             G_fatal_error(_("Error closing <%s> metadata file for raster map <%s@%s>"),
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
@@ -462,6 +530,9 @@ static void misc_write_line(const char *elem, const char *name, const char *str)
             G_fatal_error(
                 _("Error closing <%s> metadata file for raster map <%s@%s>"),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 elem, name, G_mapset());
     }

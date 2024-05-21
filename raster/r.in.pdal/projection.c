@@ -28,10 +28,13 @@ void projection_mismatch_report(struct Cell_head cellhd,
     char error_msg[8192];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     strcpy(error_msg, _("Projection of dataset does not"
                         " appear to match current location.\n\n"));
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
     strcpy(error_msg, _("Coordinate reference system of dataset does not"
@@ -49,15 +52,21 @@ void projection_mismatch_report(struct Cell_head cellhd,
     strcpy(error_msg, _("Projection of dataset does not"
                         " appear to match current location.\n\n"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     /* TODO: output this info sorted by key: */
     if (loc_wind.proj != cellhd.proj || err != -2) {
         if (loc_proj_info != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             strcat(error_msg, _("GRASS LOCATION PROJ_INFO is:\n"));
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             strcat(error_msg, _("GRASS project PROJ_INFO is:\n"));
 =======
@@ -66,6 +75,9 @@ void projection_mismatch_report(struct Cell_head cellhd,
 =======
             strcat(error_msg, _("GRASS LOCATION PROJ_INFO is:\n"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             for (i_value = 0; i_value < loc_proj_info->nitems; i_value++)
                 sprintf(error_msg + strlen(error_msg), "%s: %s\n",
@@ -92,12 +104,18 @@ void projection_mismatch_report(struct Cell_head cellhd,
             else if (cellhd.proj == PROJECTION_UTM)
                 sprintf(error_msg + strlen(error_msg),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                         "Dataset proj = %d (UTM), zone = %d\n", cellhd.proj,
                         cellhd.zone);
@@ -108,7 +126,10 @@ void projection_mismatch_report(struct Cell_head cellhd,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
                         "Dataset proj = %d (UTM), zone = %d\n",
                         cellhd.proj, cellhd.zone);
             else
@@ -126,15 +147,21 @@ void projection_mismatch_report(struct Cell_head cellhd,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         }
     }
     else {
         if (loc_proj_units != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             strcat(error_msg, "GRASS LOCATION PROJ_UNITS is:\n");
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             strcat(error_msg, "GRASS project PROJ_UNITS is:\n");
 =======
@@ -143,6 +170,9 @@ void projection_mismatch_report(struct Cell_head cellhd,
 =======
             strcat(error_msg, "GRASS LOCATION PROJ_UNITS is:\n");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             for (i_value = 0; i_value < loc_proj_units->nitems; i_value++)
                 sprintf(error_msg + strlen(error_msg), "%s: %s\n",
@@ -160,8 +190,11 @@ void projection_mismatch_report(struct Cell_head cellhd,
     }
     sprintf(error_msg + strlen(error_msg),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
             _("\nIn case of no significant differences"
@@ -177,16 +210,22 @@ void projection_mismatch_report(struct Cell_head cellhd,
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             _("\nIn case of no significant differences in the projection "
               "definitions,"
               " use the -o flag to ignore them and use"
               " current location definition.\n"));
 <<<<<<< HEAD
+<<<<<<< HEAD
     strcat(error_msg,
            _("Consider generating a new location with 'location' parameter"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     strcat(error_msg,
            _("Consider generating a new location with 'location' parameter"
@@ -195,19 +234,29 @@ void projection_mismatch_report(struct Cell_head cellhd,
     strcat(error_msg,
            _("Consider generating a new location with 'location' parameter"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
              " from input data set.\n"));
     G_fatal_error("%s", error_msg);
 }
 
 <<<<<<< HEAD
-void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
+=======
+>>>>>>> osgeo-main
 void projection_check_wkt(struct Cell_head cellhd,
                           struct Cell_head loc_wind,
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
@@ -217,6 +266,9 @@ void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
 =======
 void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                           const char *projstr, int override, int verbose)
 {
@@ -247,12 +299,18 @@ void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
             G_message(_("Overriding projection check"));
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     else if (loc_wind.proj != cellhd.proj ||
              (err = G_compare_projections(loc_proj_info, loc_proj_units,
@@ -263,10 +321,13 @@ void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
     else {
         if (verbose) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             G_message(_("Projection of input dataset and current location "
                         "appear to match"));
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
             G_message(_("Coordinate reference system of input dataset and "
                         "current project appear to match"));
 =======
@@ -291,14 +352,20 @@ void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
             G_message(_("Projection of input dataset and current location "
                         "appear to match"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         }
     }
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -308,6 +375,9 @@ void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 /* Does the projection of the current location match the dataset? */
 int is_wkt_projection_same_as_loc(const char *wkt)
@@ -334,15 +404,23 @@ int is_wkt_projection_same_as_loc(const char *wkt)
         return FALSE;
     }
 <<<<<<< HEAD
-    else if (G_compare_projections(loc_proj_info, loc_proj_units, proj_info,
-                                   proj_units) != 1) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     else if (G_compare_projections(loc_proj_info, loc_proj_units, proj_info,
                                    proj_units) != 1) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    else if (G_compare_projections(loc_proj_info, loc_proj_units, proj_info,
+                                   proj_units) != 1) {
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    else if (G_compare_projections(loc_proj_info, loc_proj_units, proj_info,
+                                   proj_units) != 1) {
+=======
+>>>>>>> osgeo-main
     else if (G_compare_projections(loc_proj_info, loc_proj_units,
                                    proj_info, proj_units) != 1) {
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
@@ -354,6 +432,9 @@ int is_wkt_projection_same_as_loc(const char *wkt)
     else if (G_compare_projections(loc_proj_info, loc_proj_units, proj_info,
                                    proj_units) != 1) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         return FALSE;
     }
@@ -383,12 +464,18 @@ void wkt_projection_mismatch_report(const char *wkt)
         loc_proj_units = G_get_projunits();
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     int err = G_compare_projections(loc_proj_info, loc_proj_units, proj_info,
                                     proj_units);
@@ -398,7 +485,10 @@ void wkt_projection_mismatch_report(const char *wkt)
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
     int err = G_compare_projections(loc_proj_info, loc_proj_units,
                                     proj_info, proj_units);
 
@@ -414,6 +504,9 @@ void wkt_projection_mismatch_report(const char *wkt)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 }
 

@@ -226,9 +226,12 @@ int Vedit_connect_lines(struct Map_info *Map, struct ilist *List, double thresh)
 
 int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
 <<<<<<< HEAD
+<<<<<<< HEAD
                   double thresh, struct ilist *List)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                   double thresh, struct ilist *List UNUSED)
 =======
@@ -237,6 +240,9 @@ int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
 =======
                   double thresh, struct ilist *List)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int line_new;

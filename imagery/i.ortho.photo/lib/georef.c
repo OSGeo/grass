@@ -43,14 +43,22 @@ int I_compute_ref_equations(struct Ortho_Photo_Points *cp, double E12[3],
     double x0, x1, x2;
     double det;
 <<<<<<< HEAD
+<<<<<<< HEAD
     void (*sigfpe)(int);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    void (*sigfpe)(int);
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
     void (*sigfpe)(int);
 =======
+>>>>>>> osgeo-main
     void (*sigfpe)();
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -65,6 +73,9 @@ int I_compute_ref_equations(struct Ortho_Photo_Points *cp, double E12[3],
     void (*sigfpe)(int);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     int i;
 

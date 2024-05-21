@@ -22,9 +22,12 @@ void deleteHa(float old_min_cost, int row, int col, struct costHa *heap,
 
     if (*heap_len < 1) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         printf("programming ERROR: can't delete a cell from an ampty list");
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         printf("programming ERROR: can't delete a cell from an empty list");
 =======
@@ -33,6 +36,9 @@ void deleteHa(float old_min_cost, int row, int col, struct costHa *heap,
 =======
         printf("programming ERROR: can't delete a cell from an ampty list");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         exit(1);
     }

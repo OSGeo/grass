@@ -29,9 +29,12 @@ def main():
 
 def benchmark(memory, label, results, reference):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -39,6 +42,9 @@ def benchmark(memory, label, results, reference):
 =======
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     slope = "benchmark_slope"
     aspect = "benchmark_aspect"

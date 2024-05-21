@@ -65,9 +65,12 @@ long calc_solar_position(double longitude, double latitude, double timezone,
     if (window.proj == 0)
         G_fatal_error(
 <<<<<<< HEAD
+<<<<<<< HEAD
             _("Unable to calculate sun position in un-projected locations. "
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             _("Unable to calculate sun position in projects without CRS. "
 =======
@@ -76,6 +79,9 @@ long calc_solar_position(double longitude, double latitude, double timezone,
 =======
             _("Unable to calculate sun position in un-projected locations. "
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
               "Specify sunposition directly."));
 
@@ -111,6 +117,24 @@ long calc_solar_position(double longitude, double latitude, double timezone,
         if ((in_proj_info = G_get_projinfo()) == NULL)
             G_fatal_error(
 <<<<<<< HEAD
+<<<<<<< HEAD
+                _("Unable to get projection info of current location"));
+=======
+<<<<<<< HEAD
+                _("Unable to get projection info of current project"));
+>>>>>>> osgeo-main
+
+        if ((in_unit_info = G_get_projunits()) == NULL)
+            G_fatal_error(
+                _("Unable to get projection units of current location"));
+
+        if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
+            G_fatal_error(
+<<<<<<< HEAD
+                _("Unable to get projection key values of current location"));
+=======
+                _("Unable to get projection key values of current project"));
+=======
                 _("Unable to get projection info of current location"));
 
         if ((in_unit_info = G_get_projunits()) == NULL)
@@ -120,12 +144,22 @@ long calc_solar_position(double longitude, double latitude, double timezone,
         if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
             G_fatal_error(
                 _("Unable to get projection key values of current location"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
         G_free_key_value(in_proj_info);
         G_free_key_value(in_unit_info);
 
         /* Try using pj_print_proj_params() instead of all this */
+<<<<<<< HEAD
         G_debug(1, "Projection found in location:");
+=======
+<<<<<<< HEAD
+        G_debug(1, "Projection found in project:");
+=======
+        G_debug(1, "Projection found in location:");
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
         G_debug(1, "IN: meter: %f zone: %i proj: %s (iproj struct)",
                 iproj.meters, iproj.zone, iproj.proj);
         G_debug(1, "IN coord: longitude: %f, latitude: %f", longitude,
@@ -150,6 +184,7 @@ long calc_solar_position(double longitude, double latitude, double timezone,
         G_debug(1, "OUT: longitude: %f, latitude: %f", longitude, latitude);
 
 =======
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
                 _("Unable to get projection info of current project"));
@@ -206,6 +241,8 @@ long calc_solar_position(double longitude, double latitude, double timezone,
         G_debug(1, "OUT: longitude: %f, latitude: %f", longitude, latitude);
 
 =======
+=======
+>>>>>>> osgeo-main
                 _("Unable to get projection info of current location"));
 
         if ((in_unit_info = G_get_projunits()) == NULL)
@@ -245,6 +282,9 @@ long calc_solar_position(double longitude, double latitude, double timezone,
         G_debug(1, "OUT: longitude: %f, latitude: %f", longitude, latitude);
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     } /* transform if not LL */
 

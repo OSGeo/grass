@@ -103,6 +103,7 @@ class MapWindowProperties:
     def useDefinedProjection(self):
         return self._useDefinedProjection
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     @useDefinedProjection.setter
     def useDefinedProjection(self, value):
@@ -126,6 +127,11 @@ class MapWindowProperties:
 
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 =======
 =======
@@ -466,9 +472,12 @@ class MapWindowBase:
         """Returns last coordinates of mouse cursor.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         @deprecated This method is deprecated. Use Signal with coordinates as parameters.
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         @deprecated This method is deprecated. Use Signal with coordinates as
         parameters.
@@ -478,6 +487,9 @@ class MapWindowBase:
 =======
         @deprecated This method is deprecated. Use Signal with coordinates as parameters.
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         :func:`OnMotion`

@@ -112,8 +112,11 @@ int main(int argc, char *argv[])
     if (I_find_group(grp_opt->answer) <= 0)
         G_fatal_error(_("Unknown imagery group."));
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 
     if (!I_find_subgroup(grp_opt->answer, subgrp_opt->answer))
@@ -123,6 +126,9 @@ int main(int argc, char *argv[])
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     if (!I_find_subgroup(grp_opt->answer, subgrp_opt->answer))
@@ -134,15 +140,23 @@ int main(int argc, char *argv[])
 
     /* open and input the signatures file */
 <<<<<<< HEAD
-    if ((sigfp = I_fopen_signature_file_old(sig_opt->answer)) == NULL)
-        G_fatal_error(_("Unable to open the signature file"));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if ((sigfp = I_fopen_signature_file_old(sig_opt->answer)) == NULL)
         G_fatal_error(_("Unable to open the signature file"));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if ((sigfp = I_fopen_signature_file_old(sig_opt->answer)) == NULL)
+        G_fatal_error(_("Unable to open the signature file"));
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if ((sigfp = I_fopen_signature_file_old(sig_opt->answer)) == NULL)
+        G_fatal_error(_("Unable to open the signature file"));
+=======
+>>>>>>> osgeo-main
     if ((sigfp =
 	 I_fopen_signature_file_old(sig_opt->answer)) == NULL)
 	G_fatal_error(_("Unable to open the signature file"));
@@ -155,6 +169,9 @@ int main(int argc, char *argv[])
     if ((sigfp = I_fopen_signature_file_old(sig_opt->answer)) == NULL)
         G_fatal_error(_("Unable to open the signature file"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     if (I_read_signatures(sigfp, &sigs) < 0)
@@ -165,8 +182,11 @@ int main(int argc, char *argv[])
     if (nclass < 2)
         G_fatal_error(_("Need at least two signatures in signature file."));
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 
     err = I_sort_signatures_by_semantic_label(&sigs, &refs);
@@ -179,6 +199,9 @@ int main(int argc, char *argv[])
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     err = I_sort_signatures_by_semantic_label(&sigs, &refs);

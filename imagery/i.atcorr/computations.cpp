@@ -615,10 +615,13 @@ void os(const double tamoy, const double trmoy, const double pizmoy,
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* inm2 is inialized with scattering computed at n-2
            i3 is inialized with primary scattering */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         /* inm2 is initialized with scattering computed at n-2
            i3 is initialized with primary scattering */
@@ -630,6 +633,9 @@ void os(const double tamoy, const double trmoy, const double pizmoy,
         /* inm2 is inialized with scattering computed at n-2
            i3 is inialized with primary scattering */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         for (k = -mu; k <= mu; k++) {
             if (k < 0) {
@@ -772,9 +778,12 @@ void os(const double tamoy, const double trmoy, const double pizmoy,
             roavion0 = i1[iplane][STDI(mu)];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             /*  convergence test (geometrical serie) */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             /*  convergence test (geometrical series) */
 =======
@@ -783,6 +792,9 @@ void os(const double tamoy, const double trmoy, const double pizmoy,
 =======
             /*  convergence test (geometrical serie) */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             if (ig > 2) {
                 double a1 = roavion2;
@@ -821,9 +833,12 @@ void os(const double tamoy, const double trmoy, const double pizmoy,
 
                 if (z < 0.0001) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                     /* successful test (geometrical serie) */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     /* successful test (geometrical series) */
 =======
@@ -832,6 +847,9 @@ void os(const double tamoy, const double trmoy, const double pizmoy,
 =======
                     /* successful test (geometrical serie) */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     double y1;
 
@@ -1148,8 +1166,14 @@ void iso(const double tamoy, const double trmoy, const double pizmoy,
     /* inm2 is inialized with scattering computed at n-2
        i3 is inialized with primary scattering */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1250,9 +1274,12 @@ void iso(const double tamoy, const double trmoy, const double pizmoy,
         tavion0 = i1[iplane][STDI(mu)];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* convergence test (geometrical serie) */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         /* convergence test (geometrical series) */
 =======
@@ -1261,6 +1288,9 @@ void iso(const double tamoy, const double trmoy, const double pizmoy,
 =======
         /* convergence test (geometrical serie) */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         if (ig > 2) {
             double z = 0;
@@ -1296,9 +1326,12 @@ void iso(const double tamoy, const double trmoy, const double pizmoy,
 
             if (z < 0.0001) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 /* successful test (geometrical serie) */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 /* successful test (geometrical series) */
 =======
@@ -1307,6 +1340,9 @@ void iso(const double tamoy, const double trmoy, const double pizmoy,
 =======
                 /* successful test (geometrical serie) */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
                 for (int l = -mu; l <= mu; l++) {
@@ -1468,9 +1504,12 @@ double chand(const double xtau, const GeomCond &geom)
   reflectance. The polarization is addressed in computing the Rayleigh
   reflectance (Subroutine CHAND.f) by semi-empirical fitting of the vectorized
 <<<<<<< HEAD
+<<<<<<< HEAD
   Successive Orders of Scattering method (Deuzé et al, 1989).
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
   Successive Orders of Scattering method (Deuze et al, 1989).
 =======
@@ -1479,6 +1518,9 @@ double chand(const double xtau, const GeomCond &geom)
 =======
   Successive Orders of Scattering method (Deuzé et al, 1989).
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 */
 void atmref(const double tamoy, const double trmoy, const double pizmoy,

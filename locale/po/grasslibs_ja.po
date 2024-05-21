@@ -3625,8 +3625,11 @@ msgid "Unable to create timestamp file for vector map <%s@%s>"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../lib/gis/timestamp.c:534
 #, c-format
@@ -3924,6 +3927,9 @@ msgid "<%s> in mapset <%s>"
 msgstr "<%s> マップセット <%s>"
 =======
 #: ../lib/manage/do_copy.c:43
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 #: ../lib/manage/do_copy.c:43
@@ -9261,8 +9267,14 @@ msgstr ""
 msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -11870,6 +11882,7 @@ msgstr "[%s]: そのような色はありません"
 #~ msgstr "例: 収入 < 1000 かつ 住人 >= 10000"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid "which is missing."
 msgstr "見つかりません"
 
@@ -11928,6 +11941,8 @@ msgid "Invalid offset (%ld)"
 msgstr "無効なオフセット (%ld)"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #~ msgid "Absurd polygon."
 #~ msgstr "不正なポリゴン"
 
@@ -12065,4 +12080,7 @@ msgstr "無効なオフセット (%ld)"
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main

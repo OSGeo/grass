@@ -50,15 +50,23 @@ void subcluster(struct SigSet *S, int Class_Index, int *Max_num,
         int i;
 
 <<<<<<< HEAD
-        I_InitSigSet(&min_S, nbands);
-        min_Sig = I_NewClassSig(&min_S);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         I_InitSigSet(&min_S, nbands);
         min_Sig = I_NewClassSig(&min_S);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        I_InitSigSet(&min_S, nbands);
+        min_Sig = I_NewClassSig(&min_S);
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        I_InitSigSet(&min_S, nbands);
+        min_Sig = I_NewClassSig(&min_S);
+=======
+>>>>>>> osgeo-main
 	I_InitSigSet(&min_S, nbands);
 	min_Sig = I_NewClassSig(&min_S);
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
@@ -70,6 +78,9 @@ void subcluster(struct SigSet *S, int Class_Index, int *Max_num,
         I_InitSigSet(&min_S, nbands);
         min_Sig = I_NewClassSig(&min_S);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         /* allocate enough subsignatures in scratch space */
@@ -412,14 +423,20 @@ static void reduce_order(struct ClassSig *Sig, int nbands, int *min_ii,
     /* allocate scratch space first time subroutine is called */
     if (first) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         I_InitSigSet(&S, nbands);
         Sig3 = I_NewClassSig(&S);
@@ -427,8 +444,11 @@ static void reduce_order(struct ClassSig *Sig, int nbands, int *min_ii,
         SubSig3 = Sig3->SubSig;
         first = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 	I_InitSigSet(&S, nbands);
@@ -441,6 +461,9 @@ static void reduce_order(struct ClassSig *Sig, int nbands, int *min_ii,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
 
@@ -513,14 +536,20 @@ static double distance(struct SubSig *SubSig1, struct SubSig *SubSig2,
     /* allocate scratch space first time subroutine is called */
     if (first) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         I_InitSigSet(&S, nbands);
         Sig3 = I_NewClassSig(&S);
@@ -528,8 +557,11 @@ static double distance(struct SubSig *SubSig1, struct SubSig *SubSig2,
         SubSig3 = Sig3->SubSig;
         first = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 	I_InitSigSet(&S, nbands);
@@ -542,6 +574,9 @@ static double distance(struct SubSig *SubSig1, struct SubSig *SubSig2,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
 

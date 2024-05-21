@@ -91,9 +91,12 @@ int Nviz_draw_cplane(nv_data *data, int bound1, int bound2)
    \param surf2 second surface id
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 void cp_draw(nv_data *data, int current, int surf1, int surf2)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 void cp_draw(nv_data *data, int current UNUSED, int surf1, int surf2)
 =======
@@ -102,6 +105,9 @@ void cp_draw(nv_data *data, int current, int surf1, int surf2)
 =======
 void cp_draw(nv_data *data, int current, int surf1, int surf2)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int i, nsurfs;
@@ -261,9 +267,12 @@ int Nviz_get_cplane_translation(nv_data *data, int id, float *dx, float *dy,
    \param type type of fence (FC_ABOVE, FC_BELOW, FC_BLEND, FC_GREY, FC_OFF)
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Nviz_set_fence_color(nv_data *data, int type)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int Nviz_set_fence_color(nv_data *data UNUSED, int type)
 =======
@@ -272,6 +281,9 @@ int Nviz_set_fence_color(nv_data *data, int type)
 =======
 int Nviz_set_fence_color(nv_data *data, int type)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     GS_set_fencecolor(type);

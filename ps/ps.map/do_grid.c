@@ -90,15 +90,23 @@ int do_grid_cross(void)
     g_north = floor(PS.w.north / PS.grid) * PS.grid;
     g_east = floor(PS.w.east / PS.grid) * PS.grid;
 <<<<<<< HEAD
-    for (; g_north >= PS.w.south; g_north -= PS.grid) {
-        for (; g_east > PS.w.west; g_east -= PS.grid) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     for (; g_north >= PS.w.south; g_north -= PS.grid) {
         for (; g_east > PS.w.west; g_east -= PS.grid) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (; g_north >= PS.w.south; g_north -= PS.grid) {
+        for (; g_east > PS.w.west; g_east -= PS.grid) {
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (; g_north >= PS.w.south; g_north -= PS.grid) {
+        for (; g_east > PS.w.west; g_east -= PS.grid) {
+=======
+>>>>>>> osgeo-main
     for (j = 0; g_north >= PS.w.south; j++, g_north -= PS.grid) {
         for (k = 0; g_east > PS.w.west; k++, g_east -= PS.grid) {
 <<<<<<< HEAD
@@ -117,6 +125,9 @@ int do_grid_cross(void)
         for (; g_east > PS.w.west; g_east -= PS.grid) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
             if (g_north == PS.w.north || g_north == PS.w.south)

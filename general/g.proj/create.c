@@ -14,11 +14,14 @@ void create_location(const char *location)
                               projwkt);
     if (ret == 0)
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_message(_("Location <%s> created"), location);
     else if (ret == -1)
         G_fatal_error(_("Unable to create location <%s>: %s"), location,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         G_message(_("Project <%s> created"), location);
     else if (ret == -1)
@@ -33,6 +36,9 @@ void create_location(const char *location)
     else if (ret == -1)
         G_fatal_error(_("Unable to create location <%s>: %s"), location,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                       strerror(errno));
     else if (ret == -2)
@@ -41,8 +47,11 @@ void create_location(const char *location)
     else
         /* Shouldn't happen */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         G_fatal_error(_("Unable to create project <%s>"), location);
 
@@ -51,14 +60,23 @@ void create_location(const char *location)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         G_fatal_error(_("Unable to create location <%s>"), location);
 
     G_message(_("You can switch to the new location by\n`%s=%s`"),
               "g.mapset mapset=PERMANENT location", location);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -74,9 +92,12 @@ void modify_projinfo(void)
         G_fatal_error(
             _("You must select the PERMANENT mapset before updating the "
 <<<<<<< HEAD
+<<<<<<< HEAD
               "current location's projection (current mapset is <%s>)"),
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
               "current project's coordinate reference system"
               " (current mapset is <%s>)"),
@@ -86,6 +107,9 @@ void modify_projinfo(void)
 =======
               "current location's projection (current mapset is <%s>)"),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             mapset);
 

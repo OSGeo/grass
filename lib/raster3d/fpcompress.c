@@ -164,14 +164,22 @@ static void G_fpcompress_rearrangeEncodeFloats(unsigned char *src, int size,
             /*printf ("%d\n", ((*src & mask) >> nBits) << nBits); */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (8 - nBits < (unsigned int)precision) {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
 =======
+>>>>>>> osgeo-main
             if (8 - nBits < precision) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -186,6 +194,9 @@ static void G_fpcompress_rearrangeEncodeFloats(unsigned char *src, int size,
             if (8 - nBits < (unsigned int)precision) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 cp1++;
 
@@ -361,14 +372,22 @@ static void G_fpcompress_rearrangeEncodeDoubles(unsigned char *src, int size,
         if (nBits && precision) {
             *cp1 |= (unsigned char)((unsigned char)(*src & mask) >> nBits);
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (8 - nBits < (unsigned int)precision) {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
 =======
+>>>>>>> osgeo-main
             if (8 - nBits < precision) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -383,6 +402,9 @@ static void G_fpcompress_rearrangeEncodeDoubles(unsigned char *src, int size,
             if (8 - nBits < (unsigned int)precision) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 cp1++;
                 *cp1 = (unsigned char)(((unsigned char)(*src & mask))
@@ -538,14 +560,22 @@ static void G_fpcompress_rearrangeDecodeFloats(unsigned char *src, int size,
             *dst = (unsigned char)((*cp1 << nBits) & mask);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (8 - nBits < (unsigned int)precision) {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
 =======
+>>>>>>> osgeo-main
             if (8 - nBits < precision) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -560,6 +590,9 @@ static void G_fpcompress_rearrangeDecodeFloats(unsigned char *src, int size,
             if (8 - nBits < (unsigned int)precision) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 cp1++;
                 *dst |= (unsigned char)((*cp1 >> (8 - nBits)) & mask);
@@ -728,14 +761,22 @@ static void G_fpcompress_rearrangeDecodeDoubles(unsigned char *src, int size,
             *dst = (unsigned char)((*cp1 << nBits) & mask);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (8 - nBits < (unsigned int)precision) {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
             if (8 - nBits < (unsigned int)precision) {
 =======
+>>>>>>> osgeo-main
             if (8 - nBits < precision) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -750,6 +791,9 @@ static void G_fpcompress_rearrangeDecodeDoubles(unsigned char *src, int size,
             if (8 - nBits < (unsigned int)precision) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 cp1++;
                 *dst |= (unsigned char)((*cp1 >> (8 - nBits)) & mask);

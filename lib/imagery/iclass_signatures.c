@@ -49,15 +49,23 @@ int I_iclass_init_signatures(struct Signature *sigs, struct Ref *refer)
     I_init_signatures(sigs, refer->nfiles);
     for (unsigned int i = refer->nfiles; i--;) {
 <<<<<<< HEAD
-        sigs->semantic_labels[i] = Rast_get_semantic_label_or_name(
-            refer->file[i].name, refer->file[i].mapset);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         sigs->semantic_labels[i] = Rast_get_semantic_label_or_name(
             refer->file[i].name, refer->file[i].mapset);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        sigs->semantic_labels[i] = Rast_get_semantic_label_or_name(
+            refer->file[i].name, refer->file[i].mapset);
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        sigs->semantic_labels[i] = Rast_get_semantic_label_or_name(
+            refer->file[i].name, refer->file[i].mapset);
+=======
+>>>>>>> osgeo-main
         sigs->bandrefs[i] = Rast_read_bandref(refer->file[i].name, refer->file[i].mapset);
         if (!sigs->bandrefs[i]) {
             G_warning(_("Raster map <%s@%s> lacks band reference"),
@@ -73,6 +81,9 @@ int I_iclass_init_signatures(struct Signature *sigs, struct Ref *refer)
         sigs->semantic_labels[i] = Rast_get_semantic_label_or_name(
             refer->file[i].name, refer->file[i].mapset);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
 
@@ -136,6 +147,11 @@ int I_iclass_write_signatures(struct Signature *sigs, const char *file_name)
     G_debug(3, "I_write_signatures(): file_name=%s", file_name);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
     if (!(outsig_fd = I_fopen_signature_file_new(file_name))) {
         G_warning(_("Unable to open output signature file '%s'"), file_name);
         return 0;
@@ -143,10 +159,13 @@ int I_iclass_write_signatures(struct Signature *sigs, const char *file_name)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (!(outsig_fd = I_fopen_signature_file_new(file_name))) {
         G_warning(_("Unable to open output signature file '%s'"), file_name);
         return 0;
 =======
+=======
+>>>>>>> osgeo-main
     if (!
 	(outsig_fd =
 	 I_fopen_signature_file_new(file_name))) {
@@ -163,6 +182,9 @@ int I_iclass_write_signatures(struct Signature *sigs, const char *file_name)
         G_warning(_("Unable to open output signature file '%s'"), file_name);
         return 0;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
 

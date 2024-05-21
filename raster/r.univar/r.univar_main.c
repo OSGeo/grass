@@ -29,8 +29,11 @@ param_type param;
 zone_type zone_info;
 int nprocs;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 
 /* Parallelization
  * Only raster statistics reduction in process_raster() is parallelized.
@@ -64,6 +67,9 @@ typedef struct thread_workspace {
 } thread_workspace;
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 /* ************************************************************************* */
@@ -129,10 +135,13 @@ void set_params(void)
 static int open_raster(const char *infile);
 static univar_stat *univar_stat_with_percentiles(int map_type);
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void process_raster(univar_stat *stats, int *fd, int *fdz,
                            const struct Cell_head *region);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 static void process_raster(univar_stat *stats, thread_workspace *tw,
                            const struct Cell_head *region, int nprocs);
@@ -144,6 +153,9 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
 static void process_raster(univar_stat *stats, int *fd, int *fdz,
                            const struct Cell_head *region);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 /* *************************************************************** */
@@ -158,9 +170,12 @@ int main(int argc, char *argv[])
     univar_stat *stats;
     char **p, *z;
 <<<<<<< HEAD
+<<<<<<< HEAD
     int *fd, *fdz, cell_type, min, max;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     int cell_type, min, max;
 =======
@@ -169,6 +184,9 @@ int main(int argc, char *argv[])
 =======
     int *fd, *fdz, cell_type, min, max;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     struct Range zone_range;
     const char *mapset, *name;
@@ -208,6 +226,7 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Unable to open file <%s> for writing"), name);
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
     }
 
     /* set nprocs parameter */
@@ -234,6 +253,8 @@ int main(int argc, char *argv[])
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     }
 
@@ -343,12 +364,16 @@ int main(int argc, char *argv[])
     fdz = NULL;
     fd = G_malloc(nprocs * sizeof(int));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     /* open zoning raster */
     if ((z = param.zonefile->answer)) {
         mapset = G_find_raster2(z, "");
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         fdz = G_malloc(nprocs * sizeof(int));
         for (t = 0; t < nprocs; t++)
@@ -360,6 +385,8 @@ int main(int argc, char *argv[])
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         for (t = 0; t < nprocs; ++t)
             tw[t].fdz = open_raster(z);
@@ -385,6 +412,9 @@ int main(int argc, char *argv[])
             G_fatal_error("Zoning raster must be of type CELL");
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         if (Rast_read_range(z, mapset, &zone_range) == -1)
             G_fatal_error("Can not read range for zoning raster");
@@ -422,11 +452,27 @@ int main(int argc, char *argv[])
 
         for (t = 0; t < nprocs; t++)
 <<<<<<< HEAD
+<<<<<<< HEAD
             fd[t] = open_raster(*p);
 
         if (map_type != -1) {
             /* NB: map_type must match when doing extended stats */
             int this_type = Rast_get_map_type(fd[0]);
+=======
+<<<<<<< HEAD
+            tw[t].fd = open_raster(*p);
+
+        if (map_type != -1) {
+            /* NB: map_type must match when doing extended stats */
+            int this_type = Rast_get_map_type(tw->fd);
+=======
+            fd[t] = open_raster(*p);
+
+        if (map_type != -1) {
+            /* NB: map_type must match when doing extended stats */
+            int this_type = Rast_get_map_type(fd[0]);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
             assert(this_type > -1);
             if (map_type < -1) {
@@ -440,6 +486,7 @@ int main(int argc, char *argv[])
             }
         }
 
+<<<<<<< HEAD
         process_raster(stats, fd, fdz, &region);
 
         /* close input raster */
@@ -473,6 +520,8 @@ int main(int argc, char *argv[])
             }
         }
 
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         process_raster(stats, tw, &region, nprocs);
 
@@ -511,6 +560,9 @@ int main(int argc, char *argv[])
         for (t = 0; t < nprocs; t++)
             Rast_close(fd[t]);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
 
@@ -518,9 +570,12 @@ int main(int argc, char *argv[])
     if (z) {
         for (t = 0; t < nprocs; t++)
 <<<<<<< HEAD
+<<<<<<< HEAD
             Rast_close(fdz[t]);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             Rast_close(tw[t].fdz);
 =======
@@ -529,6 +584,9 @@ int main(int argc, char *argv[])
 =======
             Rast_close(fdz[t]);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
 
@@ -583,10 +641,13 @@ static univar_stat *univar_stat_with_percentiles(int map_type)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void process_raster(univar_stat *stats, int *fd, int *fdz,
                            const struct Cell_head *region)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 static void process_raster(univar_stat *stats, thread_workspace *tw,
                            const struct Cell_head *region, int nprocs)
@@ -598,6 +659,9 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
 static void process_raster(univar_stat *stats, int *fd, int *fdz,
                            const struct Cell_head *region)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     /* use G_window_rows(), G_window_cols() here? */
@@ -605,10 +669,13 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
     const int cols = region->cols;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     const RASTER_MAP_TYPE map_type = Rast_get_map_type(fd[0]);
     const size_t value_sz = Rast_cell_size(map_type);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     const RASTER_MAP_TYPE map_type = Rast_get_map_type(tw->fd);
     const size_t value_sz = Rast_cell_size(map_type);
@@ -678,6 +745,9 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
     const RASTER_MAP_TYPE map_type = Rast_get_map_type(fd[0]);
     const size_t value_sz = Rast_cell_size(map_type);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     int t;
     unsigned int row;
@@ -747,8 +817,14 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
             for (col = 0; col < cols; col++) {
                 double val;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -765,11 +841,14 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                     zone = *zptr - zone_info.min;
                 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
                 /* count all including NULL cells in input map */
                 size[zone]++;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 zone_workspace *zd = &zw[zone];
 
@@ -785,6 +864,9 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                 /* count all including NULL cells in input map */
                 size[zone]++;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
                 /* can't do stats with NULL cells in input map */
@@ -797,8 +879,11 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
 
                 if (param.extended->answer) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     zone_bucket *bucket = &zd->bucket;
 
@@ -808,6 +893,9 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     /* check allocated memory */
                     /* parallelization is disabled, local variable reflects
@@ -815,8 +903,14 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                     if (stats[zone].n + n[zone] >= stats[zone].n_alloc) {
                         stats[zone].n_alloc += 1000;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -826,8 +920,11 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                         switch (map_type) {
                         case DCELL_TYPE:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                             msize = bucket->n_alloc * sizeof(DCELL);
                             bucket->dcells = (DCELL *)G_realloc(
@@ -850,6 +947,9 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                             msize = stats[zone].n_alloc * sizeof(DCELL);
                             stats[zone].dcell_array = (DCELL *)G_realloc(
@@ -876,8 +976,14 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                             break;
                         default:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -887,8 +993,11 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                     }
                     /* put the value into stats->XXXcell_array */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     memcpy(bucket->nextp, ptr, value_sz);
                     bucket->nextp = G_incr_void_ptr(bucket->nextp, value_sz);
@@ -909,6 +1018,9 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     memcpy(stats[zone].nextp, ptr, value_sz);
                     stats[zone].nextp =
@@ -928,8 +1040,14 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                 if (val < min[zone])
                     min[zone] = val;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -939,10 +1057,13 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                 if (n_zones)
                     zptr++;
 <<<<<<< HEAD
+<<<<<<< HEAD
                 n[zone]++;
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 zd->bucket.n++;
 =======
@@ -953,6 +1074,9 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
                 n[zone]++;
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             } /* end column loop */
             if (!(param.shell_style->answer)) {
@@ -963,8 +1087,11 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
         } /* end row loop */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         for (int z = 0; z < n_alloc; z++) {
             zone_workspace *zd = &zw[z];
@@ -1094,6 +1221,9 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         for (i = 0; i < n_alloc; i++) {
 #pragma omp atomic update
@@ -1135,8 +1265,14 @@ static void process_raster(univar_stat *stats, int *fd, int *fdz,
         }
         G_free(zoneraster_row);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

@@ -9,14 +9,20 @@ Read the file COPYING that comes with GRASS
 for details
 """
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 import os
 import shutil
@@ -41,14 +47,20 @@ from grass.lib.imagery import (
     I_SIGFILE_TYPE_SIG,
     I_SIGFILE_TYPE_SIGSET,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     I_SIGFILE_TYPE_LIBSVM,
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     I_find_signature,
     I_signatures_remove,
@@ -57,12 +69,18 @@ from grass.lib.imagery import (
     I_signatures_list_by_type,
     I_free_signatures_list,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     I_get_signatures_dir,
     I_make_signatures_dir,
@@ -70,8 +88,11 @@ from grass.lib.imagery import (
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 class GetSignaturesDirTestCase(TestCase):
     def test_get_sig(self):
         cdir = ctypes.create_string_buffer(GNAME_MAX)
@@ -102,6 +123,9 @@ class MakeSignaturesDirTestCase(TestCase):
 
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 class GetSignaturesElementTestCase(TestCase):
     def test_get_sig(self):
@@ -117,8 +141,14 @@ class GetSignaturesElementTestCase(TestCase):
 
 class MakeSignaturesElementTestCase(TestCase):
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -139,13 +169,20 @@ class MakeSignaturesElementTestCase(TestCase):
 
     def test_make_sig(self):
 <<<<<<< HEAD
-        I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
+=======
+>>>>>>> osgeo-main
         I__make_signatures_element(I_SIGFILE_TYPE_SIG)
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -154,19 +191,29 @@ class MakeSignaturesElementTestCase(TestCase):
 =======
         I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertTrue(
             os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sig"))
         )
         # There should not be any side effects of calling function multiple times
 <<<<<<< HEAD
-        I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
+=======
+>>>>>>> osgeo-main
         I__make_signatures_element(I_SIGFILE_TYPE_SIG)
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -175,6 +222,9 @@ class MakeSignaturesElementTestCase(TestCase):
 =======
         I_make_signatures_dir(I_SIGFILE_TYPE_SIG)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertTrue(
             os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sig"))
@@ -182,13 +232,20 @@ class MakeSignaturesElementTestCase(TestCase):
 
     def test_make_sigset(self):
 <<<<<<< HEAD
-        I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
+=======
+>>>>>>> osgeo-main
         I__make_signatures_element(I_SIGFILE_TYPE_SIGSET)
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -197,19 +254,29 @@ class MakeSignaturesElementTestCase(TestCase):
 =======
         I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertTrue(
             os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sigset"))
         )
         # There should not be any side effects of calling function multiple times
 <<<<<<< HEAD
-        I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
+=======
+>>>>>>> osgeo-main
         I__make_signatures_element(I_SIGFILE_TYPE_SIGSET)
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -218,14 +285,20 @@ class MakeSignaturesElementTestCase(TestCase):
 =======
         I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertTrue(
             os.path.isdir(os.path.join(self.tmp_mapset_path, "signatures", "sigset"))
         )
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     def test_make_libsvm(self):
         I_make_signatures_dir(I_SIGFILE_TYPE_LIBSVM)
@@ -242,6 +315,9 @@ class MakeSignaturesElementTestCase(TestCase):
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 class SignaturesRemoveTestCase(TestCase):
@@ -250,13 +326,20 @@ class SignaturesRemoveTestCase(TestCase):
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
 <<<<<<< HEAD
-        cls.sigdirs = []
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         cls.sigdirs = []
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        cls.sigdirs = []
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        cls.sigdirs = []
+=======
+>>>>>>> osgeo-main
         cls.sigfiles = []
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -265,18 +348,27 @@ class SignaturesRemoveTestCase(TestCase):
 =======
         cls.sigdirs = []
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
         os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
         os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     @classmethod
@@ -286,7 +378,10 @@ class SignaturesRemoveTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 
     @classmethod
     def tearDownClass(cls):
@@ -303,6 +398,9 @@ class SignaturesRemoveTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     def test_remove_existing_sig(self):
@@ -310,22 +408,34 @@ class SignaturesRemoveTestCase(TestCase):
         # Set up files and mark for clean-up
         sig_name1 = tempname(10)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         sig_dir1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
         os.makedirs(sig_dir1)
         self.sigdirs.append(sig_dir1)
         sigfile_name1 = f"{sig_dir1}/sig"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -346,7 +456,10 @@ class SignaturesRemoveTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
         sigfile_name1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -370,6 +483,9 @@ class SignaturesRemoveTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # Try to remove with wrong type
         ret = I_signatures_remove(I_SIGFILE_TYPE_SIGSET, sig_name2)
@@ -402,22 +518,34 @@ class SignaturesRemoveTestCase(TestCase):
         # Set up files and mark for clean-up
         sig_name1 = tempname(10)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         sig_dir1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
         os.makedirs(sig_dir1)
         self.sigdirs.append(sig_dir1)
         sigfile_name1 = f"{sig_dir1}/sig"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -434,7 +562,10 @@ class SignaturesRemoveTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
         sigfile_name1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -454,6 +585,9 @@ class SignaturesRemoveTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # Now remove one (should fail as file is absent)
         ret = I_signatures_remove(I_SIGFILE_TYPE_SIG, sig_name2)
@@ -475,22 +609,34 @@ class SignaturesRemoveTestCase(TestCase):
         # Set up files and mark for clean-up
         sig_name1 = tempname(10)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         sig_dir1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
         os.makedirs(sig_dir1)
         self.sigdirs.append(sig_dir1)
         sigfile_name1 = f"{sig_dir1}/sig"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -511,7 +657,10 @@ class SignaturesRemoveTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
         sigfile_name1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -535,6 +684,9 @@ class SignaturesRemoveTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # Try to remove with wrong type
         ret = I_signatures_remove(I_SIGFILE_TYPE_SIG, sig_name2)
@@ -567,22 +719,34 @@ class SignaturesRemoveTestCase(TestCase):
         # Set up files and mark for clean-up
         sig_name1 = tempname(10)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         sig_dir1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
         os.makedirs(sig_dir1)
         self.sigdirs.append(sig_dir1)
         sigfile_name1 = f"{sig_dir1}/sig"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -599,7 +763,10 @@ class SignaturesRemoveTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
         sigfile_name1 = f"{self.mpath}/signatures/sigset/{sig_name1}"
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -619,6 +786,9 @@ class SignaturesRemoveTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # Now remove one (should fail as file doesn't exist)
         ret = I_signatures_remove(I_SIGFILE_TYPE_SIGSET, sig_name2)
@@ -637,8 +807,11 @@ class SignaturesRemoveTestCase(TestCase):
         self.assertEqual(ms, self.mapset_name)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     def test_remove_existing_libsvm(self):
         # This test will fail if run in PERMANENT!
@@ -724,6 +897,9 @@ class SignaturesRemoveTestCase(TestCase):
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 class SignaturesCopyTestCase(TestCase):
@@ -732,13 +908,20 @@ class SignaturesCopyTestCase(TestCase):
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
 <<<<<<< HEAD
-        cls.sigdirs = []
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         cls.sigdirs = []
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        cls.sigdirs = []
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        cls.sigdirs = []
+=======
+>>>>>>> osgeo-main
         cls.sigfiles = []
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -747,20 +930,29 @@ class SignaturesCopyTestCase(TestCase):
 =======
         cls.sigdirs = []
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
         os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
         os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # A mapset with a random name
         cls.src_mapset_name = tempname(10)
@@ -769,12 +961,18 @@ class SignaturesCopyTestCase(TestCase):
             cls.mpath.rsplit("/", maxsplit=1)[0] + "/" + cls.src_mapset_name
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # Create fake signature files
         os.makedirs(f"{cls.src_mapset_path}/signatures/sig/")
@@ -786,7 +984,10 @@ class SignaturesCopyTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
         os.makedirs(f"{cls.src_mapset_path}/signatures/sig/")
         cls.src_sig = tempname(10)
         cls.sigfiles.append(f"{cls.src_mapset_path}/signatures/sig/{cls.src_sig}")
@@ -803,30 +1004,42 @@ class SignaturesCopyTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         f.write("A sig file")
         f.close()
         os.makedirs(f"{cls.src_mapset_path}/signatures/sigset/")
         cls.src_sigset = tempname(10)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         cls.src_sigset_dir = f"{cls.src_mapset_path}/signatures/sigset/{cls.src_sigset}"
         os.makedirs(cls.src_sigset_dir)
         cls.sigdirs.append(cls.src_sigset_dir)
         f = open(f"{cls.src_sigset_dir}/sig", "w")
 <<<<<<< HEAD
+<<<<<<< HEAD
         f.write("A sigset file")
         f.close()
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         f.write("A sigset file")
         f.close()
@@ -850,6 +1063,9 @@ class SignaturesCopyTestCase(TestCase):
         f.write("A sigset file")
         f.close()
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     @classmethod
@@ -857,15 +1073,23 @@ class SignaturesCopyTestCase(TestCase):
         # Remove random mapset created during setup
         shutil.rmtree(cls.src_mapset_path, ignore_errors=True)
 <<<<<<< HEAD
-        for d in cls.sigdirs:
-            shutil.rmtree(d, ignore_errors=True)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         for d in cls.sigdirs:
             shutil.rmtree(d, ignore_errors=True)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for d in cls.sigdirs:
+            shutil.rmtree(d, ignore_errors=True)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for d in cls.sigdirs:
+            shutil.rmtree(d, ignore_errors=True)
+=======
+>>>>>>> osgeo-main
         for f in cls.sigfiles:
             try:
                 os.remove(f)
@@ -880,6 +1104,9 @@ class SignaturesCopyTestCase(TestCase):
         for d in cls.sigdirs:
             shutil.rmtree(d, ignore_errors=True)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     def test_copy_to_wrong_mapset(self):
@@ -902,8 +1129,11 @@ class SignaturesCopyTestCase(TestCase):
         self.assertEqual(ret, 1)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     def test_libsvm_does_not_exist(self):
         ret = I_signatures_copy(
@@ -915,6 +1145,9 @@ class SignaturesCopyTestCase(TestCase):
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     def test_success_unqualified_sig(self):
         dst = tempname(10)
@@ -926,13 +1159,20 @@ class SignaturesCopyTestCase(TestCase):
             I_SIGFILE_TYPE_SIG, self.src_sig, self.src_mapset_name, dst
         )
 <<<<<<< HEAD
-        self.sigdirs.append(f"{self.mpath}/signatures/sig/{dst}")
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         self.sigdirs.append(f"{self.mpath}/signatures/sig/{dst}")
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        self.sigdirs.append(f"{self.mpath}/signatures/sig/{dst}")
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        self.sigdirs.append(f"{self.mpath}/signatures/sig/{dst}")
+=======
+>>>>>>> osgeo-main
         self.sigfiles.append(f"{self.mpath}/signatures/sig/{dst}")
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -941,6 +1181,9 @@ class SignaturesCopyTestCase(TestCase):
 =======
         self.sigdirs.append(f"{self.mpath}/signatures/sig/{dst}")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertEqual(ret, 0)
         ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
@@ -948,12 +1191,18 @@ class SignaturesCopyTestCase(TestCase):
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst}/sig"))
 
@@ -964,7 +1213,10 @@ class SignaturesCopyTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 
     def test_success_fq_sig(self):
         dst = tempname(10)
@@ -981,6 +1233,9 @@ class SignaturesCopyTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertFalse(ret)
@@ -998,13 +1253,20 @@ class SignaturesCopyTestCase(TestCase):
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
-        self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst_name}/sig"))
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst_name}/sig"))
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst_name}/sig"))
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst_name}/sig"))
+=======
+>>>>>>> osgeo-main
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst_name}/sig"))
@@ -1012,6 +1274,9 @@ class SignaturesCopyTestCase(TestCase):
 =======
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst_name}/sig"))
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     def test_success_unqualified_sigset(self):
@@ -1026,13 +1291,20 @@ class SignaturesCopyTestCase(TestCase):
             I_SIGFILE_TYPE_SIGSET, self.src_sigset, self.src_mapset_name, dst
         )
 <<<<<<< HEAD
-        self.sigdirs.append(f"{self.mpath}/signatures/sigset/{dst}")
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         self.sigdirs.append(f"{self.mpath}/signatures/sigset/{dst}")
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        self.sigdirs.append(f"{self.mpath}/signatures/sigset/{dst}")
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        self.sigdirs.append(f"{self.mpath}/signatures/sigset/{dst}")
+=======
+>>>>>>> osgeo-main
         self.sigfiles.append(f"{self.mpath}/signatures/sigset/{dst}")
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -1041,6 +1313,9 @@ class SignaturesCopyTestCase(TestCase):
 =======
         self.sigdirs.append(f"{self.mpath}/signatures/sigset/{dst}")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertEqual(ret, 0)
         ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
@@ -1048,12 +1323,18 @@ class SignaturesCopyTestCase(TestCase):
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sigset/{dst}/sig"))
 
@@ -1064,7 +1345,10 @@ class SignaturesCopyTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 
     def test_success_fq_sigset(self):
         dst = tempname(10)
@@ -1081,6 +1365,9 @@ class SignaturesCopyTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertFalse(ret)
@@ -1100,20 +1387,29 @@ class SignaturesCopyTestCase(TestCase):
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertTrue(
             os.path.isfile(f"{self.mpath}/signatures/sigset/{dst_name}/sig")
         )
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     def test_success_unqualified_libsvm(self):
         dst = tempname(10)
         ret = I_find_signature(I_SIGFILE_TYPE_LIBSVM, dst, self.mapset_name)
@@ -1166,6 +1462,9 @@ class SignaturesCopyTestCase(TestCase):
 
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 class SignaturesRenameTestCase(TestCase):
@@ -1174,13 +1473,20 @@ class SignaturesRenameTestCase(TestCase):
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
 <<<<<<< HEAD
-        cls.sigdirs = []
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         cls.sigdirs = []
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        cls.sigdirs = []
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        cls.sigdirs = []
+=======
+>>>>>>> osgeo-main
         cls.sigfiles = []
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -1189,18 +1495,27 @@ class SignaturesRenameTestCase(TestCase):
 =======
         cls.sigdirs = []
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
         os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
         os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     @classmethod
@@ -1210,7 +1525,10 @@ class SignaturesRenameTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 
     @classmethod
     def tearDownClass(cls):
@@ -1227,6 +1545,9 @@ class SignaturesRenameTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     def test_rename_from_wrong_mapset(self):
@@ -1248,8 +1569,11 @@ class SignaturesRenameTestCase(TestCase):
         self.assertEqual(ret, 1)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     def test_libsvm_does_not_exist(self):
         ret = I_signatures_rename(I_SIGFILE_TYPE_LIBSVM, tempname(10), tempname(10))
@@ -1257,6 +1581,9 @@ class SignaturesRenameTestCase(TestCase):
 
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     def test_success_unqualified_sig(self):
         src_sig = tempname(10)
@@ -1271,7 +1598,10 @@ class SignaturesRenameTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
     def test_success_unqualified_sig(self):
         src_sig = tempname(10)
         sig_dir = f"{self.mpath}/signatures/sig/{src_sig}"
@@ -1289,6 +1619,9 @@ class SignaturesRenameTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertFalse(ret)
@@ -1301,12 +1634,18 @@ class SignaturesRenameTestCase(TestCase):
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst}/sig"))
 
@@ -1324,7 +1663,10 @@ class SignaturesRenameTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst}/sig"))
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -1349,6 +1691,9 @@ class SignaturesRenameTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         ret = I_find_signature(I_SIGFILE_TYPE_SIG, dst, self.mapset_name)
         self.assertFalse(ret)
@@ -1365,12 +1710,18 @@ class SignaturesRenameTestCase(TestCase):
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst_name}/sig"))
 
@@ -1387,7 +1738,10 @@ class SignaturesRenameTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sig/{dst_name}/sig"))
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -1409,6 +1763,9 @@ class SignaturesRenameTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertFalse(ret)
@@ -1421,12 +1778,18 @@ class SignaturesRenameTestCase(TestCase):
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sigset/{dst}/sig"))
 
@@ -1444,7 +1807,10 @@ class SignaturesRenameTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
         self.assertTrue(os.path.isfile(f"{self.mpath}/signatures/sigset/{dst}/sig"))
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -1469,6 +1835,9 @@ class SignaturesRenameTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         ret = I_find_signature(I_SIGFILE_TYPE_SIGSET, dst, self.mapset_name)
         self.assertFalse(ret)
@@ -1485,20 +1854,29 @@ class SignaturesRenameTestCase(TestCase):
         ms = utils.decode(ret)
         self.assertEqual(ms, self.mapset_name)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertTrue(
             os.path.isfile(f"{self.mpath}/signatures/sigset/{dst_name}/sig")
         )
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     def test_success_unqualified_libsvm(self):
         src_sig = tempname(10)
         sig_dir = f"{self.mpath}/signatures/libsvm/{src_sig}"
@@ -1558,6 +1936,9 @@ class SignaturesRenameTestCase(TestCase):
 
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 class SignaturesListByTypeTestCase(TestCase):
@@ -1567,13 +1948,20 @@ class SignaturesListByTypeTestCase(TestCase):
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
 <<<<<<< HEAD
-        cls.sigdirs = []
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         cls.sigdirs = []
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        cls.sigdirs = []
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        cls.sigdirs = []
+=======
+>>>>>>> osgeo-main
         cls.sigfiles = []
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -1582,20 +1970,29 @@ class SignaturesListByTypeTestCase(TestCase):
 =======
         cls.sigdirs = []
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # As signatures are created directly not via signature creation
         # tools, we must ensure signature directories exist
         os.makedirs(f"{cls.mpath}/signatures/sig/", exist_ok=True)
         os.makedirs(f"{cls.mpath}/signatures/sigset/", exist_ok=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         os.makedirs(f"{cls.mpath}/signatures/libsvm/", exist_ok=True)
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # A mapset with a random name
         cls.rnd_mapset_name = tempname(10)
@@ -1606,14 +2003,20 @@ class SignaturesListByTypeTestCase(TestCase):
         os.makedirs(f"{cls.rnd_mapset_path}/signatures/sig/")
         os.makedirs(f"{cls.rnd_mapset_path}/signatures/sigset/")
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         os.makedirs(f"{cls.rnd_mapset_path}/signatures/libsvm/")
 =======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     @classmethod
@@ -1621,15 +2024,23 @@ class SignaturesListByTypeTestCase(TestCase):
         # Remove random mapset created during setup
         shutil.rmtree(cls.rnd_mapset_path, ignore_errors=True)
 <<<<<<< HEAD
-        for d in cls.sigdirs:
-            shutil.rmtree(d, ignore_errors=True)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         for d in cls.sigdirs:
             shutil.rmtree(d, ignore_errors=True)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for d in cls.sigdirs:
+            shutil.rmtree(d, ignore_errors=True)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        for d in cls.sigdirs:
+            shutil.rmtree(d, ignore_errors=True)
+=======
+>>>>>>> osgeo-main
         for f in cls.sigfiles:
             try:
                 os.remove(f)
@@ -1644,6 +2055,9 @@ class SignaturesListByTypeTestCase(TestCase):
         for d in cls.sigdirs:
             shutil.rmtree(d, ignore_errors=True)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     def test_no_sigs_at_all(self):
@@ -1656,14 +2070,20 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertEqual(ret, 0)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_SIGSET, self.rnd_mapset_name, ctypes.byref(sig_list)
@@ -1671,8 +2091,11 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertEqual(ret, 0)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         ret = I_signatures_list_by_type(
             I_SIGFILE_TYPE_LIBSVM, self.rnd_mapset_name, ctypes.byref(sig_list)
@@ -1681,6 +2104,9 @@ class SignaturesListByTypeTestCase(TestCase):
         I_free_signatures_list(ret, ctypes.byref(sig_list))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     def test_sig_in_different_mapset(self):
@@ -1694,7 +2120,10 @@ class SignaturesListByTypeTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
@@ -1715,6 +2144,9 @@ class SignaturesListByTypeTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         f.write("A sig file")
         f.close()
@@ -1723,12 +2155,18 @@ class SignaturesListByTypeTestCase(TestCase):
             I_SIGFILE_TYPE_SIG, self.rnd_mapset_name, ctypes.byref(sig_list)
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         shutil.rmtree(sig_dir)
         self.assertEqual(ret, 0)
@@ -1742,7 +2180,10 @@ class SignaturesListByTypeTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
         os.remove(sig_file)
 =======
         shutil.rmtree(sig_dir)
@@ -1764,6 +2205,9 @@ class SignaturesListByTypeTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         f.write("A sigset file")
         f.close()
@@ -1772,8 +2216,11 @@ class SignaturesListByTypeTestCase(TestCase):
             I_SIGFILE_TYPE_SIGSET, self.rnd_mapset_name, ctypes.byref(sig_list)
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
         shutil.rmtree(sig_dir)
@@ -1807,6 +2254,9 @@ class SignaturesListByTypeTestCase(TestCase):
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         shutil.rmtree(sig_dir)
         self.assertEqual(ret, 0)
@@ -1815,6 +2265,10 @@ class SignaturesListByTypeTestCase(TestCase):
     def test_single_sig(self):
         # Case when only a single signature file is present
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
@@ -1827,7 +2281,10 @@ class SignaturesListByTypeTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
         rnd_sig = tempname(10)
         sig_file = f"{self.rnd_mapset_path}/signatures/sig/{rnd_sig}"
         f = open(sig_file, "w")
@@ -1842,6 +2299,9 @@ class SignaturesListByTypeTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         f.write("A sig file")
         f.close()
@@ -1850,13 +2310,20 @@ class SignaturesListByTypeTestCase(TestCase):
             I_SIGFILE_TYPE_SIG, self.rnd_mapset_name, ctypes.byref(sig_list)
         )
 <<<<<<< HEAD
-        shutil.rmtree(sig_dir)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         shutil.rmtree(sig_dir)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        shutil.rmtree(sig_dir)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        shutil.rmtree(sig_dir)
+=======
+>>>>>>> osgeo-main
         os.remove(sig_file)
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -1865,18 +2332,27 @@ class SignaturesListByTypeTestCase(TestCase):
 =======
         shutil.rmtree(sig_dir)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertEqual(ret, 1)
         val = utils.decode(sig_list[0])
         self.assertEqual(val, f"{rnd_sig}@{self.rnd_mapset_name}")
         I_free_signatures_list(ret, ctypes.byref(sig_list))
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # SigSet type
         # SigSet equals sig. Just testing branching inside.
@@ -1888,7 +2364,10 @@ class SignaturesListByTypeTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
         # SigSet equals sig. Just testing branching inside.
         rnd_sigset = tempname(10)
         sigset_file = f"{self.rnd_mapset_path}/signatures/sigset/{rnd_sigset}"
@@ -1905,6 +2384,9 @@ class SignaturesListByTypeTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         f.write("A sigset file")
         f.close()
@@ -1913,13 +2395,20 @@ class SignaturesListByTypeTestCase(TestCase):
             I_SIGFILE_TYPE_SIGSET, self.rnd_mapset_name, ctypes.byref(sigset_list)
         )
 <<<<<<< HEAD
-        shutil.rmtree(sig_dir)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         shutil.rmtree(sig_dir)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        shutil.rmtree(sig_dir)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        shutil.rmtree(sig_dir)
+=======
+>>>>>>> osgeo-main
         os.remove(sigset_file)
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -1928,14 +2417,20 @@ class SignaturesListByTypeTestCase(TestCase):
 =======
         shutil.rmtree(sig_dir)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertEqual(ret, 1)
         val = utils.decode(sigset_list[0])
         self.assertEqual(val, f"{rnd_sigset}@{self.rnd_mapset_name}")
         I_free_signatures_list(ret, ctypes.byref(sigset_list))
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         # libsvm type
         rnd_sig = tempname(10)
@@ -1956,6 +2451,9 @@ class SignaturesListByTypeTestCase(TestCase):
         I_free_signatures_list(ret, ctypes.byref(sig_list))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     def test_multiple_sigs(self):
@@ -1976,7 +2474,10 @@ class SignaturesListByTypeTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 
     def test_multiple_sigs(self):
         # Should result into a multiple sigs returned
@@ -2001,6 +2502,9 @@ class SignaturesListByTypeTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         f.write("A sig file")
         f.close()
@@ -2010,15 +2514,23 @@ class SignaturesListByTypeTestCase(TestCase):
             I_SIGFILE_TYPE_SIG, self.rnd_mapset_name, ctypes.byref(sig_list)
         )
 <<<<<<< HEAD
-        shutil.rmtree(sig_dir1)
-        shutil.rmtree(sig_dir2)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        shutil.rmtree(sig_dir1)
+        shutil.rmtree(sig_dir2)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        shutil.rmtree(sig_dir1)
+        shutil.rmtree(sig_dir2)
+=======
+>>>>>>> osgeo-main
         os.remove(sig_file1)
         os.remove(sig_file2)
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
@@ -2030,6 +2542,9 @@ class SignaturesListByTypeTestCase(TestCase):
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertEqual(ret, 2)
         golden = (
@@ -2040,12 +2555,18 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertIn(utils.decode(sig_list[1]), golden)
         I_free_signatures_list(ret, ctypes.byref(sig_list))
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # SigSet type
         rnd_sigset1 = tempname(10)
@@ -2063,7 +2584,10 @@ class SignaturesListByTypeTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
         # Ditto for sigset
 =======
         # SigSet type
@@ -2088,6 +2612,9 @@ class SignaturesListByTypeTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         f.write("A sigset file")
         f.close()
@@ -2096,15 +2623,23 @@ class SignaturesListByTypeTestCase(TestCase):
             I_SIGFILE_TYPE_SIGSET, self.rnd_mapset_name, ctypes.byref(sigset_list)
         )
 <<<<<<< HEAD
-        shutil.rmtree(sig_dir1)
-        shutil.rmtree(sig_dir2)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        shutil.rmtree(sig_dir1)
+        shutil.rmtree(sig_dir2)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        shutil.rmtree(sig_dir1)
+        shutil.rmtree(sig_dir2)
+=======
+>>>>>>> osgeo-main
         os.remove(sigset_file1)
         os.remove(sigset_file2)
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
@@ -2116,6 +2651,9 @@ class SignaturesListByTypeTestCase(TestCase):
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.assertEqual(ret, 2)
         golden = (
@@ -2126,8 +2664,11 @@ class SignaturesListByTypeTestCase(TestCase):
         self.assertIn(utils.decode(sigset_list[1]), golden)
         I_free_signatures_list(ret, ctypes.byref(sigset_list))
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         # libsvm type
         rnd_sig1 = tempname(10)
@@ -2163,28 +2704,43 @@ class SignaturesListByTypeTestCase(TestCase):
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     def test_multiple_sigs_multiple_mapsets(self):
         # Test searching in multiple mapsets. Identical to SIGSET case
         rnd_sig1 = tempname(10)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         sig_dir1 = f"{self.rnd_mapset_path}/signatures/sig/{rnd_sig1}"
         os.makedirs(sig_dir1)
         self.sigdirs.append(sig_dir1)
         f = open(f"{sig_dir1}/sig", "w")
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2201,7 +2757,10 @@ class SignaturesListByTypeTestCase(TestCase):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
         sig_file1 = f"{self.rnd_mapset_path}/signatures/sig/{rnd_sig1}"
         f = open(sig_file1, "w")
 =======
@@ -2222,6 +2781,9 @@ class SignaturesListByTypeTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         sig_list = self.list_ptr()
         ret = I_signatures_list_by_type(
@@ -2250,15 +2812,23 @@ class SignaturesListByTypeTestCase(TestCase):
         grass.run_command("g.mapsets", mapset=self.rnd_mapset_name, operation="remove")
         G_reset_mapsets()
 <<<<<<< HEAD
-        shutil.rmtree(sig_dir1)
-        shutil.rmtree(sig_dir2)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        shutil.rmtree(sig_dir1)
+        shutil.rmtree(sig_dir2)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        shutil.rmtree(sig_dir1)
+        shutil.rmtree(sig_dir2)
+=======
+>>>>>>> osgeo-main
         os.remove(sig_file1)
         os.remove(sig_file2)
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
@@ -2270,6 +2840,9 @@ class SignaturesListByTypeTestCase(TestCase):
         shutil.rmtree(sig_dir1)
         shutil.rmtree(sig_dir2)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # There could be more sigs if this is not an empty mapset
         self.assertTrue(ret >= 2)
@@ -2282,22 +2855,34 @@ class SignaturesListByTypeTestCase(TestCase):
         # Test searching in multiple mapsets. Identical to SIG case
         rnd_sig1 = tempname(10)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         sig_dir1 = f"{self.rnd_mapset_path}/signatures/sigset/{rnd_sig1}"
         os.makedirs(sig_dir1)
         self.sigdirs.append(sig_dir1)
         f = open(f"{sig_dir1}/sig", "w")
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2347,8 +2932,11 @@ class SignaturesListByTypeTestCase(TestCase):
         I_free_signatures_list(ret, ctypes.byref(sig_list))
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     def test_multiple_libsvms_multiple_mapsets(self):
         # Test searching in multiple mapsets. Identical to SIG and SIGSET case
         rnd_sig1 = tempname(10)
@@ -2435,6 +3023,9 @@ class SignaturesListByTypeTestCase(TestCase):
 
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 if __name__ == "__main__":

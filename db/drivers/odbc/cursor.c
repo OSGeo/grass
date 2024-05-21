@@ -22,14 +22,22 @@ int db__driver_close_cursor(dbCursor *dbc)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 cursor *alloc_cursor(void)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+cursor *alloc_cursor(void)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 cursor *alloc_cursor(void)
 =======
+>>>>>>> osgeo-main
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 cursor *alloc_cursor()
@@ -43,6 +51,9 @@ cursor *alloc_cursor()
 cursor *alloc_cursor(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     cursor *c;

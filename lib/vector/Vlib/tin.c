@@ -30,9 +30,12 @@
  */
 int Vect_tin_get_z(struct Map_info *Map, double tx, double ty, double *tz,
 <<<<<<< HEAD
+<<<<<<< HEAD
                    double *angle, double *slope)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                    double *angle UNUSED, double *slope UNUSED)
 =======
@@ -41,6 +44,9 @@ int Vect_tin_get_z(struct Map_info *Map, double tx, double ty, double *tz,
 =======
                    double *angle, double *slope)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int i, area, n_points;

@@ -138,9 +138,12 @@ public:
         return (x.k == y.k);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     friend merge_key operator+(const merge_key &x, const merge_key &y)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     friend merge_key operator+(const merge_key &x, const merge_key &y UNUSED)
 =======
@@ -149,6 +152,9 @@ public:
 =======
     friend merge_key operator+(const merge_key &x, const merge_key &y)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     {
         assert(0);
@@ -215,9 +221,12 @@ private:
     // the buffers can be depleted to fill the internal pq;
     // keep an array which counts, for each stream, how many elements
 <<<<<<< HEAD
+<<<<<<< HEAD
     // have been deleted (implicitely from the beginning of stream)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     // have been deleted (implicitly from the beginning of stream)
 =======
@@ -226,6 +235,9 @@ private:
 =======
     // have been deleted (implicitely from the beginning of stream)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     long *deleted;
 
@@ -436,9 +448,12 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
 {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     assert((level >= 1) && (basesize >= 0));
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     assert(level >= 1);
 >>>>>>> osgeo-main
@@ -448,7 +463,10 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
              "em_buffer: allocate %d AMI_STREAM*, total %ld\n", arity,
              (long)(arity * sizeof(AMI_STREAM<T> *)));
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -474,6 +492,9 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     MEMORY_LOG(str);
     // allocate STREAM* array
@@ -481,16 +502,25 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
 
     // allocate deleted array
 <<<<<<< HEAD
-    snprintf(str, sizeof(str), "em_buffer: allocate deleted array: %ld\n",
-             (long)(arity * sizeof(long)));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(str, sizeof(str), "em_buffer: allocate deleted array: %ld\n",
              (long)(arity * sizeof(long)));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(str, sizeof(str), "em_buffer: allocate deleted array: %ld\n",
+             (long)(arity * sizeof(long)));
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(str, sizeof(str), "em_buffer: allocate deleted array: %ld\n",
+             (long)(arity * sizeof(long)));
+=======
+>>>>>>> osgeo-main
     sprintf(str, "em_buffer: allocate deleted array: %ld\n",
             (long)(arity * sizeof(long)));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -510,22 +540,34 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
              (long)(arity * sizeof(long)));
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     MEMORY_LOG(str);
     deleted = new long[arity];
 
     // allocate streamsize array
 <<<<<<< HEAD
-    snprintf(str, sizeof(str), "em_buffer: allocate streamsize array: %ld\n",
-             (long)(arity * sizeof(long)));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(str, sizeof(str), "em_buffer: allocate streamsize array: %ld\n",
              (long)(arity * sizeof(long)));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(str, sizeof(str), "em_buffer: allocate streamsize array: %ld\n",
+             (long)(arity * sizeof(long)));
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(str, sizeof(str), "em_buffer: allocate streamsize array: %ld\n",
+             (long)(arity * sizeof(long)));
+=======
+>>>>>>> osgeo-main
     sprintf(str, "em_buffer: allocate streamsize array: %ld\n",
             (long)(arity * sizeof(long)));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -545,6 +587,9 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
              (long)(arity * sizeof(long)));
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     MEMORY_LOG(str);
     streamsize = new unsigned long[arity];
@@ -552,16 +597,25 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
 #ifdef SAVE_MEMORY
     // allocate name array
 <<<<<<< HEAD
-    snprintf(str, sizeof(str), "em_buffer: allocate name array: %ld\n",
-             (long)(arity * sizeof(char *)));
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     snprintf(str, sizeof(str), "em_buffer: allocate name array: %ld\n",
              (long)(arity * sizeof(char *)));
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(str, sizeof(str), "em_buffer: allocate name array: %ld\n",
+             (long)(arity * sizeof(char *)));
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(str, sizeof(str), "em_buffer: allocate name array: %ld\n",
+             (long)(arity * sizeof(char *)));
+=======
+>>>>>>> osgeo-main
     sprintf(str, "em_buffer: allocate name array: %ld\n",
             (long)(arity * sizeof(char *)));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -581,6 +635,9 @@ em_buffer<T, Key>::em_buffer(const unsigned short i, const unsigned long bs,
              (long)(arity * sizeof(char *)));
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     MEMORY_LOG(str);
     name = new char *[arity];
@@ -679,9 +736,12 @@ em_buffer<T, Key>::~em_buffer()
 // find its length
 template <class T, class Key>
 <<<<<<< HEAD
+<<<<<<< HEAD
 void em_buffer<T, Key>::check_name(unsigned int i)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 void em_buffer<T, Key>::check_name(unsigned int i UNUSED)
 =======
@@ -690,6 +750,9 @@ void em_buffer<T, Key>::check_name(unsigned int i)
 =======
 void em_buffer<T, Key>::check_name(unsigned int i)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
 
@@ -722,9 +785,12 @@ AMI_STREAM<T> *em_buffer<T, Key>::get_stream(unsigned int i)
 {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     assert(i >= 0 && i < index);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     assert(i < index);
 =======
@@ -733,6 +799,9 @@ AMI_STREAM<T> *em_buffer<T, Key>::get_stream(unsigned int i)
 =======
     assert(i >= 0 && i < index);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 #ifdef SAVE_MEMORY
@@ -793,9 +862,12 @@ void em_buffer<T, Key>::put_stream(unsigned int i)
 {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     assert(i >= 0 && i < index);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     assert(i < index);
 =======
@@ -804,6 +876,9 @@ void em_buffer<T, Key>::put_stream(unsigned int i)
 =======
     assert(i >= 0 && i < index);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 #ifdef SAVE_MEMORY
@@ -1068,9 +1143,12 @@ AMI_STREAM<T> *em_buffer<T, Key>::sort()
 
     AMI_STREAM<T> *sorted_stream =
 <<<<<<< HEAD
+<<<<<<< HEAD
         new AMI_STREAM<T>(); /* will be deleteed in insert() */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         new AMI_STREAM<T>(); /* will be deleted in insert() */
 =======
@@ -1079,6 +1157,9 @@ AMI_STREAM<T> *em_buffer<T, Key>::sort()
 =======
         new AMI_STREAM<T>(); /* will be deleteed in insert() */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     assert(sorted_stream);
 
@@ -1132,6 +1213,12 @@ AMI_err em_buffer<T, Key>::substream_merge(AMI_STREAM<T> **instreams,
 
     char str[200];
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
     snprintf(str, sizeof(str),
              "em_buffer::substream_merge: allocate keys array, total %ldB\n",
              (long)((long)arity * sizeof(merge_key<Key>)));
@@ -1140,10 +1227,13 @@ AMI_err em_buffer<T, Key>::substream_merge(AMI_STREAM<T> **instreams,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(str, sizeof(str),
              "em_buffer::substream_merge: allocate keys array, total %ldB\n",
              (long)((long)arity * sizeof(merge_key<Key>)));
 =======
+=======
+>>>>>>> osgeo-main
     sprintf(str,
             "em_buffer::substream_merge: allocate keys array, total %ldB\n",
             (long)((long)arity * sizeof(merge_key<Key>)));
@@ -1167,6 +1257,9 @@ AMI_err em_buffer<T, Key>::substream_merge(AMI_STREAM<T> **instreams,
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     MEMORY_LOG(str);
 
@@ -1247,9 +1340,12 @@ AMI_err em_buffer<T, Key>::substream_merge(AMI_STREAM<T> **instreams,
     //!!! KEYS BELONGS NOW TO MERGEHEAP, AND WILL BE DELETED BY THE
     // DESTRUCTOR OF MERGEHEAP (CALLED AUUTOMATICALLY ON FUNCTION EXIT) IF
 <<<<<<< HEAD
+<<<<<<< HEAD
     // I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY DESTRUCTOR,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     // I DELETE KEYS EXPLICITLY, THEY WILL BE DELETED AGAIN BY DESTRUCTOR,
 =======
@@ -1258,6 +1354,9 @@ AMI_err em_buffer<T, Key>::substream_merge(AMI_STREAM<T> **instreams,
 =======
     // I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY DESTRUCTOR,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     // AND EVERYTHING SCREWS UP..
 
@@ -1318,8 +1417,14 @@ long em_buffer<T, Key>::insert(T *a, long n)
 =======
    skipped (were deleted) from the beginning fo stream;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

@@ -651,9 +651,12 @@ int main(int argc, char *argv[])
         costs.nearest = 0;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         total_cells = nrows * ncols;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         total_cells = (long)nrows * ncols;
 =======
@@ -662,6 +665,9 @@ int main(int argc, char *argv[])
 =======
         total_cells = nrows * ncols;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         skip_nulls = Rast_is_d_null_value(&null_cost);

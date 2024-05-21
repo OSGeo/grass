@@ -74,14 +74,22 @@ int db__driver_open_database(dbHandle *handle)
    \return DB_FAILED on failure
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int db__driver_close_database(void)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+int db__driver_close_database(void)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 int db__driver_close_database(void)
 =======
+>>>>>>> osgeo-main
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int db__driver_close_database()
@@ -95,6 +103,9 @@ int db__driver_close_database()
 int db__driver_close_database(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     G_debug(3, "db_driver_close_database()");

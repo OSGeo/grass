@@ -199,9 +199,12 @@ int read_cube(Cube_data *Cube, file_info *headfax)
 
     if (0 >= (ret = my_fread((char *)Buffer, 1, size, fp))) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         fprintf(stderr, "Error reading display file offset %" PRI_OFF_T "\n",
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         fprintf(stderr, "Error reading display file offset %" PRId64 "\n",
 =======
@@ -210,6 +213,9 @@ int read_cube(Cube_data *Cube, file_info *headfax)
 =======
         fprintf(stderr, "Error reading display file offset %" PRI_OFF_T "\n",
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 G_ftell(fp));
         return (-1);
@@ -218,9 +224,12 @@ int read_cube(Cube_data *Cube, file_info *headfax)
     if (ret != size) {
         fprintf(stderr,
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "Error (size) reading display file offset %" PRI_OFF_T "\n",
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 "Error (size) reading display file offset %" PRId64 "\n",
 =======
@@ -229,6 +238,9 @@ int read_cube(Cube_data *Cube, file_info *headfax)
 =======
                 "Error (size) reading display file offset %" PRI_OFF_T "\n",
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 G_ftell(fp));
         return (-1);

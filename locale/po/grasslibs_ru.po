@@ -2372,8 +2372,14 @@ msgstr ""
 msgid "Illegal e-w resolution value: %g"
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2385,12 +2391,15 @@ msgid "Illegal number of columns: %d (resolution is %g)"
 msgstr "Неверное число столбцов: %d (разрешение: %g)"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:219
 #, c-format
 msgid "North must be north of South, but %g (north) <= %g (south"
 msgstr ""
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../lib/gis/adj_cellhd.c:81 ../lib/gis/adj_cellhd.c:217
 #, c-format
@@ -2423,6 +2432,9 @@ msgstr ""
 msgid "North must be north of South, but %g (north) <= %g (south"
 msgstr ""
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 #: ../lib/gis/adj_cellhd.c:85 ../lib/gis/adj_cellhd.c:223
@@ -2435,8 +2447,14 @@ msgstr ""
 msgid "East must be larger than West, but %g (east) <= %g (west)"
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2447,11 +2465,14 @@ msgid "Invalid coordinates: negative number of columns"
 msgstr "Недопустимые координаты: отрицательное число столбцов"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/adj_cellhd.c:117 ../lib/gis/adj_cellhd.c:280
 msgid "Invalid coordinates: negative number of rows"
 msgstr ""
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../lib/gis/adj_cellhd.c:115 ../lib/gis/adj_cellhd.c:274
 msgid "Invalid coordinates: negative number of rows"
@@ -2466,6 +2487,9 @@ msgstr ""
 msgid "Invalid coordinates: negative number of rows"
 msgstr ""
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 #: ../lib/gis/adj_cellhd.c:122 ../lib/gis/adj_cellhd.c:284
@@ -2481,12 +2505,15 @@ msgid "NS and EW resolutions are different"
 msgstr "Отличаются разрешения север-юг и восток-запад"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/adj_cellhd.c:175
 #, c-format
 msgid "Illegal n-s resolution value for 3D: %g"
 msgstr ""
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../lib/gis/adj_cellhd.c:173
 #, c-format
@@ -2504,6 +2531,9 @@ msgstr ""
 msgid "Illegal n-s resolution value for 3D: %g"
 msgstr ""
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 #: ../lib/gis/adj_cellhd.c:182
@@ -2512,12 +2542,15 @@ msgid "Illegal number of rows for 3D: %d (resolution is %g)"
 msgstr "Неверное число рядов для 3D: %d (разрешение: %g)"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/adj_cellhd.c:193
 #, c-format
 msgid "Illegal e-w resolution value for 3D: %g"
 msgstr ""
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../lib/gis/adj_cellhd.c:191
 #, c-format
@@ -2535,6 +2568,9 @@ msgstr ""
 msgid "Illegal e-w resolution value for 3D: %g"
 msgstr ""
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 #: ../lib/gis/adj_cellhd.c:200
@@ -2570,6 +2606,7 @@ msgid "Illegal t-b resolution value: %g"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/gis/adj_cellhd.c:208
 #, c-format
 msgid "Illegal t-b resolution value: %g"
@@ -2579,10 +2616,15 @@ msgstr ""
 #, c-format
 msgid "Illegal depths value: %d"
 =======
+=======
+>>>>>>> osgeo-main
 #: ../lib/gis/adj_cellhd.c:213
 #, c-format
 msgid "Illegal depths value: %d"
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 msgstr ""
@@ -4560,10 +4602,13 @@ msgid "Internal error: invalid rule type: %d"
 msgstr "Внутренняя ошибка: недопустимый тип правила: %d"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #: ../lib/vector/Vlib/write_pg.c:327 ../lib/vector/Vlib/write_ogr.c:134
 msgid "Invalid offset (%"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../lib/gis/parser_dependencies.c:514
 #, fuzzy
@@ -4575,6 +4620,9 @@ msgid "Invalid offset (%"
 =======
 #: ../lib/vector/Vlib/write_pg.c:327 ../lib/vector/Vlib/write_ogr.c:134
 msgid "Invalid offset (%"
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 msgstr ""
 
@@ -10899,6 +10947,7 @@ msgid "Corrupted category raster conditions file (fseek failed)"
 msgstr "Повреждён файл условий для категорий растра (ошибка fseek)"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid "which is missing."
 msgstr "который отсутствует."
 
@@ -10952,6 +11001,8 @@ msgstr "Верх должен быть больше Низа"
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #: ../lib/imagery/iscatt_core.c:958 ../lib/imagery/iclass_statistics.c:225
 #, c-format
 msgid "prepare_signature: scan line %d has odd number of points."
@@ -16671,6 +16722,9 @@ msgid "Top must be larger than Bottom"
 msgstr "Верх должен быть больше Низа"
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 msgid "Unable to open header file for raster map <%s@%s>"
 msgstr "Невозможно открыть файл заголовка для растрового слоя <%s@%s>"

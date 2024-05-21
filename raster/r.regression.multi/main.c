@@ -322,14 +322,22 @@ int main(int argc, char *argv[])
     G_percent(rows, rows, 2);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (count < (unsigned int)n_predictors + 1)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (count < (unsigned int)n_predictors + 1)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
     if (count < (unsigned int)n_predictors + 1)
 =======
+>>>>>>> osgeo-main
     if (count < n_predictors + 1)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -344,6 +352,9 @@ int main(int argc, char *argv[])
     if (count < (unsigned int)n_predictors + 1)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         G_fatal_error(_("Not enough valid cells available"));
 

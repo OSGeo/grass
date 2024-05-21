@@ -22,9 +22,12 @@
 /* *************************************************************** */
 /*!
 <<<<<<< HEAD
+<<<<<<< HEAD
  * \brief Alllocate memory for the groundwater calculation data structure in 3
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
  * \brief Allocate memory for the groundwater calculation data structure in 3
 =======
@@ -33,6 +36,9 @@
 =======
  * \brief Alllocate memory for the groundwater calculation data structure in 3
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  * dimensions
  *
@@ -145,9 +151,12 @@ void N_free_gwflow_data3d(N_gwflow_data3d *data)
 /* *************************************************************** */
 /*!
 <<<<<<< HEAD
+<<<<<<< HEAD
  * \brief Alllocate memory for the groundwater calculation data structure in 2
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
  * \brief Allocate memory for the groundwater calculation data structure in 2
 =======
@@ -156,6 +165,9 @@ void N_free_gwflow_data3d(N_gwflow_data3d *data)
 =======
  * \brief Alllocate memory for the groundwater calculation data structure in 2
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  * dimensions
  *
@@ -552,9 +564,12 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data *geom, int col,
     else { /* the aquifer is unconfined */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* If the aquifer is unconfied use an explicite scheme to solve
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         /* If the aquifer is unconfied use an explicit scheme to solve
 =======
@@ -563,6 +578,9 @@ N_data_star *N_callback_gwflow_2d(void *gwdata, N_geom_data *geom, int col,
 =======
         /* If the aquifer is unconfied use an explicite scheme to solve
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
          * the nonlinear equation. We use the phead from the first iteration */
         z = N_get_array_2d_d_value(data->phead, col, row) -

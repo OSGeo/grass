@@ -3726,8 +3726,11 @@ msgid "ZLIB decompression error %d: %s"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../lib/gis/mapset.c:38
 msgid "MAPSET is not set"
@@ -3942,6 +3945,9 @@ msgid "<%s> in mapset <%s>"
 msgstr "<%s> harita takımındaki <%s>"
 =======
 #: ../lib/manage/do_copy.c:43
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 #: ../lib/manage/do_copy.c:43
@@ -9294,8 +9300,14 @@ msgstr "%d düğümünün (cat = %d) veritabanı kaydı bulunamıyor (cost set t
 msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s>. %s"
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -11776,6 +11788,7 @@ msgstr "[%s]:Böyle bir renk yok"
 #~ msgstr "%s geçici boş dosyası bulunamadı"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid "which is missing."
 msgstr "kayıp olan"
 
@@ -11826,6 +11839,8 @@ msgstr "Uygun olmayan derinlik değeri"
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #, fuzzy
 #~ msgid "Unable to open null file <%s>"
 #~ msgstr "datum tablo dosyası açılamıyor <%s>"
@@ -11982,6 +11997,9 @@ msgid "Illegal depths value"
 msgstr "Uygun olmayan derinlik değeri"
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 msgid "Top must be larger than Bottom"
 msgstr "Tepe dipten büyük olmalıdır"

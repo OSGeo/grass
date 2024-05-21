@@ -31,9 +31,12 @@ def debug(*args, **kwargs):
     imports the standard function.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     # Lazy import to avoding potential circular dependency.
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     # Lazy import to avoiding potential circular dependency.
 =======
@@ -42,6 +45,9 @@ def debug(*args, **kwargs):
 =======
     # Lazy import to avoding potential circular dependency.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     import grass.script as gs  # pylint: disable=import-outside-toplevel
 
@@ -65,9 +71,12 @@ def extract_tar(name, directory, tmpdir):
         extract_dir = os.path.join(tmpdir, "extract_dir")
         os.mkdir(extract_dir)
 <<<<<<< HEAD
+<<<<<<< HEAD
         tar.extractall(path=extract_dir)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 
         # Extraction filters were added in Python 3.12,
@@ -90,6 +99,9 @@ def extract_tar(name, directory, tmpdir):
 =======
         tar.extractall(path=extract_dir)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         files = os.listdir(extract_dir)
         _move_extracted_files(

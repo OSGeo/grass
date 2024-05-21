@@ -112,8 +112,14 @@ int prct2tex(double sand_input, double clay_input, double silt_input)
     /*setup the 3Dvectors and initialize them */
     /* index 0 */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -142,7 +148,10 @@ int prct2tex(double sand_input, double clay_input, double silt_input)
     /* index 11 */
     struct vector cls_silt[POLYGON_DIMENSION] = {{.sand = 0.0}};
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
     struct vector cls_clay[POLYGON_DIMENSION] = {{0.0}};
 =======
@@ -230,6 +239,9 @@ int prct2tex(double sand_input, double clay_input, double silt_input)
     struct vector cls_silt[POLYGON_DIMENSION] = {{.sand = 0.0}};
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     if ((sand_input + clay_input + silt_input) <= 10.0) {

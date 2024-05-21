@@ -203,9 +203,12 @@ int main(int argc, char *argv[])
             G_warning(_("The vector map <%s> already exists in"),
                       out_opt->answer);
 <<<<<<< HEAD
+<<<<<<< HEAD
             G_warning(_("target LOCATION %s, MAPSET %s:"), G_location(),
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             G_warning(_("target project %s, mapset %s:"), G_location(),
 =======
@@ -214,6 +217,9 @@ int main(int argc, char *argv[])
 =======
             G_warning(_("target LOCATION %s, MAPSET %s:"), G_location(),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                       G_mapset());
             G_fatal_error(_("Rectification cancelled."));

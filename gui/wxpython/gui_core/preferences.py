@@ -2016,8 +2016,11 @@ class PreferencesDialog(PreferencesBaseDialog):
 
                 # window size must be larger than zero, not minimized
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 # do not save dim when mapdisp is docked within single window
                 if (not mapdisp.IsDockable() or not mapdisp.IsDocked()) and (
@@ -2027,6 +2030,9 @@ class PreferencesDialog(PreferencesBaseDialog):
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 # when mapdisp is inside single window (panel has no IsIconized), don't save dim
                 if (

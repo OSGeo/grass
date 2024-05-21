@@ -33,7 +33,7 @@ for other platforms you may have to install some of them.
   PROJ: [https://proj.org/](https://proj.org/)
 - **GDAL/OGR** for import and export of most external raster and vector map formats
   GDAL: [https://gdal.org](https://gdal.org)
-- **Python >= 3.7** (for temporal framework, scripts, wxGUI, and ctypes interface)
+- **Python >= 3.8** (for temporal framework, scripts, wxGUI, and ctypes interface)
   [https://www.python.org](https://www.python.org)
 
 ## Optional packages
@@ -66,8 +66,11 @@ Note: also the respective development packages (commonly named `xxx-dev` or
 - **libpng** (for `r.out.png` and the PNG driver), usually already installed.
   [http://www.libpng.org/pub/png/libpng.html](http://www.libpng.org/pub/png/libpng.html)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 - **LIBSVM** (for SVM classification modules `i.svm.train` and `i.svm.predict`)
   [https://www.csie.ntu.edu.tw/~cjlin/libsvm/](https://www.csie.ntu.edu.tw/~cjlin/libsvm/)
@@ -75,6 +78,9 @@ Note: also the respective development packages (commonly named `xxx-dev` or
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 - **libtiff** (for `r.out.tiff`), usually already installed.
   [https://gitlab.com/libtiff/libtiff](https://gitlab.com/libtiff/libtiff)
@@ -82,8 +88,11 @@ Note: also the respective development packages (commonly named `xxx-dev` or
   [https://tiswww.case.edu/~chet/readline/rltop.html](https://tiswww.case.edu/~chet/readline/rltop.html)
   [ftp://ftp.gnu.org/gnu/readline](ftp://ftp.gnu.org/gnu/readline)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 - **PDAL** ( for LAS import modules `r.in.pdal` and `v.in.pdal`)
   [https://pdal.io](https://pdal.io)
@@ -91,6 +100,9 @@ Note: also the respective development packages (commonly named `xxx-dev` or
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 - **PostgreSQL libraries** (for the PostgreSQL database interface and PostGIS support)
   [https://www.postgresql.org](https://www.postgresql.org)
@@ -105,20 +117,32 @@ Note: also the respective development packages (commonly named `xxx-dev` or
 - **FreeType2** (for TrueType font support and `d.text.freetype`)
   [https://freetype.org/](https://freetype.org/)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 - **Ctypes** (for ctypes interface)
   Ctypes can be added as a third-party module in Python 2.3 and
   2.4 - [https://pypi.org/project/ctypes/1.0.2/](https://pypi.org/project/ctypes/1.0.2/)
   [https://docs.python.org/library/ctypes.html](https://docs.python.org/library/ctypes.html)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -145,20 +169,32 @@ Note: also the respective development packages (commonly named `xxx-dev` or
 - **python-termcolor** (recommended for `g.search.modules`)
   [https://pypi.org/project/termcolor/](https://pypi.org/project/termcolor/)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 - **six** (`python-six`, needed for Python API and for cross-version Python
   compatibility)
   [https://pypi.python.org/pypi/six](https://pypi.python.org/pypi/six)
   [https://github.com/benjaminp/six](https://github.com/benjaminp/six)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -192,9 +228,12 @@ MacOSX users may go here to download precompiled libraries etc.:
 ---
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 © _GRASS Development Team 1997-2023_
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 © _GRASS Development Team 1997-2024_
 =======
@@ -203,6 +242,9 @@ MacOSX users may go here to download precompiled libraries etc.:
 =======
 © _GRASS Development Team 1997-2023_
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 Please report bugs here:

@@ -49,8 +49,14 @@ import glob
 =======
 import six
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2008,15 +2014,23 @@ class GdalSelect(wx.Panel):
             self.dbWidgets["format"].SetItems(list(self.dbFormats.values()))
             if self.dbFormats:
 <<<<<<< HEAD
-                db_formats = self.dbFormats.values()
-                if "PostgreSQL" in db_formats:
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 db_formats = self.dbFormats.values()
                 if "PostgreSQL" in db_formats:
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                db_formats = self.dbFormats.values()
+                if "PostgreSQL" in db_formats:
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                db_formats = self.dbFormats.values()
+                if "PostgreSQL" in db_formats:
+=======
+>>>>>>> osgeo-main
                 if "PostgreSQL" in self.dbFormats.values():
 >>>>>>> 584e61d06d (wxGUI/datacatalog: fix setting output vector/raster format (#1596))
 =======
@@ -2027,6 +2041,9 @@ class GdalSelect(wx.Panel):
                 db_formats = self.dbFormats.values()
                 if "PostgreSQL" in db_formats:
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     self.dbWidgets["format"].SetStringSelection("PostgreSQL")
                 elif "PostgreSQL/PostGIS" in db_formats:
@@ -2315,10 +2332,13 @@ class GdalSelect(wx.Panel):
                 )
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                 # v.external returns info for individual bands, however projection is shared by all bands ->
                 # (it is possible to take first line)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 # v.external returns info for individual bands, however projection is
                 # shared by all bands -> (it is possible to take first line)
@@ -2330,6 +2350,9 @@ class GdalSelect(wx.Panel):
                 # v.external returns info for individual bands, however projection is shared by all bands ->
                 # (it is possible to take first line)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
                 lines = ret.splitlines()
@@ -3061,9 +3084,12 @@ class VectorCategorySelect(wx.Panel):
 
     def _chckMap(self):
 <<<<<<< HEAD
+<<<<<<< HEAD
         """Check if selected map in 'input' widget is the same as selected map in lmgr"""
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         """Check if selected map in 'input' widget is the same as selected map in
         lmgr"""
@@ -3073,6 +3099,9 @@ class VectorCategorySelect(wx.Panel):
 =======
         """Check if selected map in 'input' widget is the same as selected map in lmgr"""
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         if self._isMapSelected():
             layerList = self.giface.GetLayerList()
@@ -3179,6 +3208,7 @@ class SignatureSelect(wx.ComboBox):
         **kwargs,
     ):
 <<<<<<< HEAD
+<<<<<<< HEAD
         super(SignatureSelect, self).__init__(parent, id, size=size, **kwargs)
 
         items = []
@@ -3186,6 +3216,8 @@ class SignatureSelect(wx.ComboBox):
             for mapset in mapsets:
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         super().__init__(parent, id, size=size, **kwargs)
         self.SetName("SignatureSelect")
@@ -3207,6 +3239,9 @@ class SignatureSelect(wx.ComboBox):
         if mapsets:
             for mapset in mapsets:
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 self._append_mapset_signatures(mapset, element, items)
         else:
@@ -3216,14 +3251,20 @@ class SignatureSelect(wx.ComboBox):
 
     def _append_mapset_signatures(self, mapset, element, items):
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         # A workaround to list signature files before a separate
         # signature management module is developed
         try:
             from grass.lib.gis import G_gisinit
 =======
         super(SignatureSelect, self).__init__(parent, id, size=size, **kwargs)
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         try:
@@ -3252,7 +3293,10 @@ class SignatureSelect(wx.ComboBox):
             items.append(grass.decode(sig_list[n]))
         I_free_signatures_list(count, ctypes.byref(sig_list))
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 

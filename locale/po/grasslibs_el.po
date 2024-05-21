@@ -2370,6 +2370,7 @@ msgstr ""
 
 #: ../lib/gis/adj_cellhd.c:175
 <<<<<<< HEAD
+<<<<<<< HEAD
 #, c-format
 msgid "Illegal n-s resolution value for 3D: %g"
 msgstr ""
@@ -2377,6 +2378,9 @@ msgstr ""
 #: ../lib/gis/adj_cellhd.c:184
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
+=======
 =======
 >>>>>>> osgeo-main
 #, c-format
@@ -3756,8 +3760,11 @@ msgid "ZLIB decompression error %d: %s"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../lib/gis/mapset.c:38
 msgid "MAPSET is not set"
@@ -3974,6 +3981,9 @@ msgid "<%s> in mapset <%s>"
 msgstr "<%s> στο mapset <%s>"
 =======
 #: ../lib/manage/do_copy.c:43
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 #: ../lib/manage/do_copy.c:43
@@ -4352,6 +4362,9 @@ msgid "Invalid offset (%"
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 msgstr ""
@@ -8865,8 +8878,11 @@ msgid "Length of input WKB is too small"
 msgstr ""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #: ../lib/vector/Vlib/read_pg.c:1097
 #, c-format
@@ -9135,6 +9151,9 @@ msgid ""
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 #: ../lib/raster/get_cellhd.c:70
 #, c-format
@@ -12504,6 +12523,7 @@ msgstr "[%s]: Δεν υπάρχει τέτοιο χρώμα"
 #~ "να βρεθούν."
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid "which is missing."
 msgstr "το οποίο λείπει"
 
@@ -12559,6 +12579,8 @@ msgid "Unable to open header file for raster map <%s@%s>"
 msgstr "Αδυναμία ανοίγματος κεφαλικού (header) αρχείου για τον ράστερ χάρτη <%s@%s>"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #, c-format
 #~ msgid ""
 #~ "Datum <%s> apparently recognised by GRASS but no parameters found. You "
@@ -12790,4 +12812,7 @@ msgstr "Το πάνω πρέπει να είναι μεγαλύτερο του �
 msgid "Unable to open header file for raster map <%s@%s>"
 msgstr "Αδυναμία ανοίγματος κεφαλικού (header) αρχείου για τον ράστερ χάρτη <%s@%s>"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main

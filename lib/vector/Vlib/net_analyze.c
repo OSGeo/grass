@@ -23,9 +23,12 @@ static int
 
 static int clipper(dglGraph_s *pgraph, dglSPClipInput_s *pargIn,
 <<<<<<< HEAD
+<<<<<<< HEAD
                    dglSPClipOutput_s *pargOut, void *pvarg)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                    dglSPClipOutput_s *pargOut, void *pvarg UNUSED)
 =======
@@ -34,6 +37,9 @@ static int clipper(dglGraph_s *pgraph, dglSPClipInput_s *pargIn,
 =======
                    dglSPClipOutput_s *pargOut, void *pvarg)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 { /* caller's pointer */
     dglInt32_t cost;
@@ -177,9 +183,12 @@ static int find_shortest_path(struct Map_info *Map, int from, int to,
 
     /* Check if from and to are identical, otherwise dglib returns path to
 <<<<<<< HEAD
+<<<<<<< HEAD
      * neares node and back! */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
      * nearest node and back! */
 =======
@@ -188,6 +197,9 @@ static int find_shortest_path(struct Map_info *Map, int from, int to,
 =======
      * neares node and back! */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     if (from == to) {
         if (cost != NULL)
@@ -436,9 +448,12 @@ dglGraph_s *Vect_net_get_graph(struct Map_info *Map)
    \return 0 does not exist (was not inserted)
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vect_net_get_line_cost(const struct Map_info *Map, int line, int direction,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int Vect_net_get_line_cost(struct Map_info *Map, int line, int direction,
 =======
@@ -447,6 +462,9 @@ int Vect_net_get_line_cost(const struct Map_info *Map, int line, int direction,
 =======
 int Vect_net_get_line_cost(const struct Map_info *Map, int line, int direction,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                            double *cost)
 {
@@ -991,10 +1009,13 @@ find_shortest_path_coor(struct Map_info *Map, double fx, double fy, double fz,
 
                     Vect_get_line_nodes(Map, abs(line), &node1, &node2);
 <<<<<<< HEAD
+<<<<<<< HEAD
                     /* add the second node, the first of first segmet was alread
                      * added */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     /* add the second node, the first of first segmet was
                      * already added */
@@ -1006,6 +1027,9 @@ find_shortest_path_coor(struct Map_info *Map, double fx, double fy, double fz,
                     /* add the second node, the first of first segmet was alread
                      * added */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     if (line > 0)
                         node = node2;

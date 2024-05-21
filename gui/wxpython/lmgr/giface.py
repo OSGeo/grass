@@ -276,8 +276,11 @@ class LayerManagerGrassInterface:
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 class LayerManagerGrassInterfaceForMapDisplay:
@@ -303,6 +306,9 @@ class LayerManagerGrassInterfaceForMapDisplay:
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 class LayerManagerGrassInterfaceForMapDisplay(object):

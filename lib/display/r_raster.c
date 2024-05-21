@@ -139,12 +139,15 @@ int D_open_driver(void)
           : (p && G_strcasecmp(p, "ps") == 0)   ? PS_Driver()
           : (p && G_strcasecmp(p, "html") == 0) ? HTML_Driver()
 <<<<<<< HEAD
+<<<<<<< HEAD
           :
 #ifdef USE_CAIRO
           (p && G_strcasecmp(p, "cairo") == 0) ? Cairo_Driver()
                                                : Cairo_Driver();
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                                                 :
 #ifdef USE_CAIRO
@@ -161,6 +164,9 @@ int D_open_driver(void)
           (p && G_strcasecmp(p, "cairo") == 0) ? Cairo_Driver()
                                                : Cairo_Driver();
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 #else
                                                 PNG_Driver();

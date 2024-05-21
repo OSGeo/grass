@@ -92,9 +92,12 @@ void update_default_window(struct Cell_head *cellhd)
     if (strcmp(G_mapset(), "PERMANENT") == 0) {
         G_put_element_window(&cur_wind, "", "DEFAULT_WIND");
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_message(_("Default region for this location updated"));
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         G_message(_("Default region for this project updated"));
 =======
@@ -103,6 +106,9 @@ void update_default_window(struct Cell_head *cellhd)
 =======
         G_message(_("Default region for this location updated"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
     G_put_window(&cur_wind);

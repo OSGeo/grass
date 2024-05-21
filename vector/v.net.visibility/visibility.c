@@ -20,10 +20,13 @@
 /** for all points initiate their vis line to the one directly below
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 void init_vis(struct Point *points, int num_points, struct Line *lines,
               int num_lines)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 void init_vis(struct Point *points, int num_points, struct Line *lines UNUSED,
               int num_lines UNUSED)
@@ -35,6 +38,9 @@ void init_vis(struct Point *points, int num_points, struct Line *lines,
 void init_vis(struct Point *points, int num_points, struct Line *lines,
               int num_lines)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int i;

@@ -215,6 +215,7 @@ int build_topo(struct Map_info *Map, int build)
     /* update TopoGeometry based on GRASS-like topology */
     Vect_build_nat(Map, build);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     if (n_nodes != Map->plus.n_nodes)
         G_warning(
@@ -222,6 +223,11 @@ int build_topo(struct Map_info *Map, int build)
             Map->plus.n_nodes, n_nodes);
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 =======
 =======

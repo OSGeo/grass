@@ -7,9 +7,12 @@
 static void scan_layer(int, const struct line_cats *, int *, int *);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void scan_cats(const struct Map_info *Map, int field, const char *style,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 void scan_cats(struct Map_info *Map, int field, const char *style,
 =======
@@ -18,6 +21,9 @@ void scan_cats(const struct Map_info *Map, int field, const char *style,
 =======
 void scan_cats(const struct Map_info *Map, int field, const char *style,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                const char *rules, const struct FPRange *range,
                struct Colors *colors)

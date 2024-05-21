@@ -4798,8 +4798,11 @@ void IWave::planetscope0f10(int iwa)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 /* Following filter function created using create_iwave.py */
 
@@ -6441,6 +6444,9 @@ void IWave::aviris(int iwa)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 /* filter functions must be defined above */
 
@@ -6462,8 +6468,11 @@ double IWave::equivwl() const
 
     return wlwave / seb;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 }
 
@@ -7941,6 +7950,9 @@ void IWave::hyperion_swir(int iwa)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 }
 
@@ -7956,9 +7968,12 @@ void IWave::parse()
     cin >> iwave;
     cin.ignore(numeric_limits<int>::max(), '\n');
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     printf("iwave = %d\n", iwave);
 =======
@@ -7967,6 +7982,9 @@ void IWave::parse()
 =======
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     if (iwave == 0 || iwave == -2) {
         cin >> ffu.wlinf;
@@ -8057,8 +8075,11 @@ void IWave::parse()
         else if (iwave <= 208)
             worldview4(iwave - 203);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         else if (iwave <= 432)
             aviris(iwave - 208);
@@ -8070,6 +8091,9 @@ void IWave::parse()
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         else
             G_warning(_("Unsupported iwave value: %d"), iwave);
@@ -8333,9 +8357,12 @@ void IWave::print()
                                   string(" worldview 4 green"),
                                   string(" worldview 4 red"),
 <<<<<<< HEAD
+<<<<<<< HEAD
                                   string(" worldview 4 nir")};
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                                   string(" worldview 4 nir"),
                                   string(" aviris b1-224"),
@@ -8347,6 +8374,9 @@ void IWave::print()
 =======
                                   string(" worldview 4 nir")};
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     Output::Begin();

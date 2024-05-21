@@ -62,12 +62,30 @@ int do_astar(void)
         G_percent(count++, n_points, 1);
         if (count > n_points)
 <<<<<<< HEAD
+<<<<<<< HEAD
             G_fatal_error(_("%" PRI_OFF_T " surplus points"), heap_size);
 
         if (heap_size > n_points)
             G_fatal_error(_("Too many points in heap %" PRI_OFF_T
                             ", should be %" PRI_OFF_T ""),
                           heap_size, n_points);
+=======
+<<<<<<< HEAD
+            G_fatal_error(_("%" PRId64 " surplus points"), heap_size);
+
+        if (heap_size > n_points)
+            G_fatal_error(
+                _("Too many points in heap %" PRId64 ", should be %" PRId64 ""),
+                heap_size, n_points);
+=======
+            G_fatal_error(_("%" PRI_OFF_T " surplus points"), heap_size);
+
+        if (heap_size > n_points)
+            G_fatal_error(_("Too many points in heap %" PRI_OFF_T
+                            ", should be %" PRI_OFF_T ""),
+                          heap_size, n_points);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
         heap_p = heap_drop();
 
@@ -155,6 +173,7 @@ int do_astar(void)
     } /* end A* search */
 
 =======
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
             G_fatal_error(_("%" PRId64 " surplus points"), heap_size);
@@ -258,6 +277,8 @@ int do_astar(void)
     } /* end A* search */
 
 =======
+=======
+>>>>>>> osgeo-main
             G_fatal_error(_("%" PRI_OFF_T " surplus points"), heap_size);
 
         if (heap_size > n_points)
@@ -351,6 +372,9 @@ int do_astar(void)
     } /* end A* search */
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     G_percent(n_points, n_points, 1); /* finish it */
 

@@ -153,9 +153,12 @@ int check_coor(struct Map_info *Map)
         G_warning(
             _("Coor file of vector map <%s@%s> is larger than it should be "
 <<<<<<< HEAD
+<<<<<<< HEAD
               "(%" PRI_OFF_T " bytes excess)"),
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
               "(%" PRId64 " bytes excess)"),
 =======
@@ -164,15 +167,21 @@ int check_coor(struct Map_info *Map)
 =======
               "(%" PRI_OFF_T " bytes excess)"),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             Map->name, Map->mapset, dif);
     }
     else if (dif < 0) {
         G_warning(_("Coor file of vector <%s@%s> is shorter than it should be "
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "(%" PRI_OFF_T " bytes missing)."),
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     "(%" PRId64 " bytes missing)."),
 =======
@@ -181,6 +190,9 @@ int check_coor(struct Map_info *Map)
 =======
                     "(%" PRI_OFF_T " bytes missing)."),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                   Map->name, Map->mapset, -dif);
     }

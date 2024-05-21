@@ -1,13 +1,20 @@
 #include "local_proto.h"
 
 <<<<<<< HEAD
-typedef struct {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 typedef struct {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+typedef struct {
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+typedef struct {
+=======
+>>>>>>> osgeo-main
 typedef struct
 {
 <<<<<<< HEAD
@@ -20,6 +27,9 @@ typedef struct {
 =======
 typedef struct {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     const char *sname;
     int r;
@@ -50,14 +60,22 @@ static const CATCOLORS ccolors[CNT] = {
     [VL] = {"VL", 0, 0, 255, "valley"},
     [PT] = {"PT", 0, 0, 56, "pit"},
 <<<<<<< HEAD
+<<<<<<< HEAD
     [__] = {"ERROR", 255, 0, 255, "ERROR"}};
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    [__] = {"ERROR", 255, 0, 255, "ERROR"}};
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
     [__] = {"ERROR", 255, 0, 255, "ERROR"}};
 =======
+>>>>>>> osgeo-main
     [__] = {"ERROR", 255, 0, 255, "ERROR"}
 };
 >>>>>>> 298e3c87b5 (Dockerfile_alpine: fix broken link creatio)
@@ -71,6 +89,9 @@ static const CATCOLORS ccolors[CNT] = {
 =======
     [__] = {"ERROR", 255, 0, 255, "ERROR"}};
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 static int get_cell(int, float *, void *, RASTER_MAP_TYPE);
@@ -96,9 +117,12 @@ int open_map(MAPS *rast)
         window.ns_res + 1e-10 < cellhd.ns_res)
         G_warning(
 <<<<<<< HEAD
+<<<<<<< HEAD
             _("Region resolution shoudn't be lesser than map %s resolution. "
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             _("Region resolution shouldn't be lesser than map %s resolution. "
 =======
@@ -107,6 +131,9 @@ int open_map(MAPS *rast)
 =======
             _("Region resolution shoudn't be lesser than map %s resolution. "
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
               "Run g.region raster=%s to set proper resolution"),
             rast->elevname, rast->elevname);
@@ -201,6 +228,12 @@ int write_form_cat_colors(char *raster)
 
     for (i = FL; i <= PT; ++i)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
         Rast_add_color_rule(&i, ccolors[i].r, ccolors[i].g, ccolors[i].b, &i,
                             ccolors[i].r, ccolors[i].g, ccolors[i].b, &colors,
                             CELL_TYPE);
@@ -209,10 +242,13 @@ int write_form_cat_colors(char *raster)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         Rast_add_color_rule(&i, ccolors[i].r, ccolors[i].g, ccolors[i].b, &i,
                             ccolors[i].r, ccolors[i].g, ccolors[i].b, &colors,
                             CELL_TYPE);
 =======
+=======
+>>>>>>> osgeo-main
         Rast_add_color_rule(&i, ccolors[i].r, ccolors[i].g, ccolors[i].b,
                             &i, ccolors[i].r, ccolors[i].g, ccolors[i].b,
                             &colors, CELL_TYPE);
@@ -232,6 +268,9 @@ int write_form_cat_colors(char *raster)
                             ccolors[i].r, ccolors[i].g, ccolors[i].b, &colors,
                             CELL_TYPE);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     Rast_write_colors(raster, G_mapset(), &colors);
     Rast_free_colors(&colors);

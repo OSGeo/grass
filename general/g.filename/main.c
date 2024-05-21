@@ -82,6 +82,37 @@ int main(int argc, char *argv[])
     if (strcmp(mapset, ".") == 0 || strcmp(mapset, "") == 0)
         mapset = G_mapset();
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+    /* Create element directory if requested and in current mapset. */
+    if (flag_create) {
+        if (strcmp(mapset, G_mapset()) != 0) {
+            G_fatal_error("Cannot create <%s> (flag -%c):"
+                          " <%s> is not the current mapset (%s)",
+                          element, flag_create->key, mapset, G_mapset());
+        }
+        G_make_mapset_object_group(element);
+<<<<<<< HEAD
+    }
+
+<<<<<<< HEAD
+=======
+    /* Create element directory if requested and in current mapset. */
+    if (flag_create) {
+        if (strcmp(mapset, G_mapset()) != 0) {
+            G_fatal_error("Cannot create <%s> (flag -%c):"
+                          " <%s> is not the current mapset (%s)",
+                          element, flag_create->key, mapset, G_mapset());
+        }
+        G_make_mapset_element(element);
+=======
+>>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
+    }
+
+>>>>>>> 392c6e8e0b (pygrass: Add update parameters method to Module (#1712))
+=======
+>>>>>>> osgeo-main
 
     /* Create element directory if requested and in current mapset. */
     if (flag_create) {
@@ -93,6 +124,7 @@ int main(int argc, char *argv[])
         G_make_mapset_object_group(element);
     }
 
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 
@@ -134,6 +166,9 @@ int main(int argc, char *argv[])
         G_make_mapset_object_group(element);
     }
 
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
     G_file_name(path, element, name, mapset);

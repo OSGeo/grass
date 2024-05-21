@@ -28,9 +28,12 @@
 /* transformation, first level is 0 ( called from main ) and transformation
  *  for this level is 0,0,0, 1,1,1, 0 so that no transformation is done on first
 <<<<<<< HEAD
+<<<<<<< HEAD
  * level (not efective but better readable?) */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
  * level (not effective but better readable?) */
 =======
@@ -39,6 +42,9 @@
 =======
  * level (not efective but better readable?) */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 typedef struct {
     double dx, dy, dz;

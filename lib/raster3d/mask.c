@@ -305,6 +305,7 @@ void Rast3d_mask_tile(RASTER3D_Map *map, int tileIndex, void *tile, int type)
             for (dx = x; dx < cols; dx++) {
                 RASTER3D_MASKNUM(map, dx, dy, dz, tile, type);
 <<<<<<< HEAD
+<<<<<<< HEAD
                 tile += length;
             }
 
@@ -313,6 +314,8 @@ void Rast3d_mask_tile(RASTER3D_Map *map, int tileIndex, void *tile, int type)
         tile += yLength;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 tile = (char *)tile + length;
             }
@@ -336,6 +339,9 @@ void Rast3d_mask_tile(RASTER3D_Map *map, int tileIndex, void *tile, int type)
         }
         tile += yLength;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
 }

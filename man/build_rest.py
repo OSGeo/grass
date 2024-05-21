@@ -10,9 +10,12 @@ Created on Thu Aug  9 14:04:12 2012
 # utilities for generating REST indices
 # utilities for generating HTML indices
 <<<<<<< HEAD
+<<<<<<< HEAD
 # (C) 2003-2023 by Luca Delucchi and the GRASS Development Team
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -29,6 +32,9 @@ Created on Thu Aug  9 14:04:12 2012
 =======
 # (C) 2003-2023 by Luca Delucchi and the GRASS Development Team
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 import os
@@ -190,9 +196,12 @@ footer_tmpl = string.Template(
 
 :doc:`Manual main page <index>` \| :doc:`Full Index <full_index>`
 <<<<<<< HEAD
+<<<<<<< HEAD
  2003-2023 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -208,6 +217,9 @@ footer_tmpl = string.Template(
 =======
  2003-2023 `GRASS Development Team <https://grass.osgeo.org>`_, GRASS GIS ${grass_version} Reference Manual
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 """
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

@@ -31,9 +31,12 @@
  * The coordinates of the points from the map that is to be converted
  * are placed in ax[] and ay[].
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Those cooresponding points in the other coordinate system
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
  * Those corresponding points in the other coordinate system
 =======
@@ -42,6 +45,9 @@
 =======
  * Those cooresponding points in the other coordinate system
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  * are placed in bx[], by[].
  *

@@ -42,13 +42,20 @@ void calculate_atanb(void)
 
     nsink = 0;
 <<<<<<< HEAD
-    for (; natb < ncells;) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     for (; natb < ncells;) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (; natb < ncells;) {
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (; natb < ncells;) {
+=======
+>>>>>>> osgeo-main
     for (iter = 1; natb < ncells; iter++) {
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -63,6 +70,9 @@ void calculate_atanb(void)
     for (; natb < ncells;) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         /*
            for(i=0;i<80;i++)

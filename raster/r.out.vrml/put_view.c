@@ -3,9 +3,12 @@
 /* Not yet implemented - just defaults */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void vrml_put_view(FILE *vout, struct G_3dview *v3d)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 void vrml_put_view(FILE *vout, struct G_3dview *v3d UNUSED)
 =======
@@ -14,6 +17,9 @@ void vrml_put_view(FILE *vout, struct G_3dview *v3d)
 =======
 void vrml_put_view(FILE *vout, struct G_3dview *v3d)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     char tbuf[512];

@@ -2,13 +2,20 @@
 #include "local_proto.h"
 #include <math.h>
 <<<<<<< HEAD
-double **matrix(int, int, int, int), *vector(int, int);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 double **matrix(int, int, int, int), *vector(int, int);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+double **matrix(int, int, int, int), *vector(int, int);
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+double **matrix(int, int, int, int), *vector(int, int);
+=======
+>>>>>>> osgeo-main
 double **matrix(), *vector();
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -23,6 +30,9 @@ double **matrix(), *vector();
 double **matrix(int, int, int, int), *vector(int, int);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 /* Computes eigenvalues (and eigen vectors if desired) for      *

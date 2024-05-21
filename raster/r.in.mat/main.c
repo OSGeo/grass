@@ -213,8 +213,14 @@ int main(int argc, char *argv[])
 
             if (data_format == 5) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -226,7 +232,10 @@ int main(int argc, char *argv[])
                 if (fread(&map_name_d, sizeof(double), ncols, fp1) !=
                     (size_t)ncols)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -256,6 +265,9 @@ int main(int argc, char *argv[])
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     G_fatal_error(_("Error reading data"));
                 for (i = 0; i < ncols; i++)
@@ -312,16 +324,25 @@ int main(int argc, char *argv[])
 
             if (data_format == 5) {
 <<<<<<< HEAD
-                if (fread(&map_title, sizeof(char), ncols, fp1) !=
-                    (size_t)ncols)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 if (fread(&map_title, sizeof(char), ncols, fp1) !=
                     (size_t)ncols)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (fread(&map_title, sizeof(char), ncols, fp1) !=
+                    (size_t)ncols)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                if (fread(&map_title, sizeof(char), ncols, fp1) !=
+                    (size_t)ncols)
+=======
+>>>>>>> osgeo-main
                 if (fread(&map_title, sizeof(char), ncols, fp1) != ncols)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -338,20 +359,31 @@ int main(int argc, char *argv[])
                     (size_t)ncols)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     G_fatal_error(_("Error reading data"));
             }
             else if (data_format == 0) { /* sigh.. */
                 if (fread(&map_name_d, sizeof(double), ncols, fp1) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                     (size_t)ncols) /* note reusing variable */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    (size_t)ncols) /* note reusing variable */
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                     (size_t)ncols) /* note reusing variable */
 =======
+>>>>>>> osgeo-main
                     ncols) /* note reusing variable */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -366,6 +398,9 @@ int main(int argc, char *argv[])
                     (size_t)ncols) /* note reusing variable */
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     G_fatal_error(_("Error reading data"));
                 for (i = 0; i < ncols; i++)
@@ -397,14 +432,22 @@ int main(int argc, char *argv[])
                     G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
                 if (fread(array_data, sizeof(double), (size_t)mrows * ncols,
 <<<<<<< HEAD
+<<<<<<< HEAD
                           fp1) != (size_t)(mrows * ncols))
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                          fp1) != (size_t)(mrows * ncols))
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                           fp1) != (size_t)(mrows * ncols))
 =======
+>>>>>>> osgeo-main
                           fp1) != (mrows * ncols))
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -419,6 +462,9 @@ int main(int argc, char *argv[])
                           fp1) != (size_t)(mrows * ncols))
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     G_fatal_error(_("Error reading data"));
                 break;
@@ -429,14 +475,22 @@ int main(int argc, char *argv[])
                     G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
                 if (fread(array_data, sizeof(float), (size_t)mrows * ncols,
 <<<<<<< HEAD
+<<<<<<< HEAD
                           fp1) != (size_t)(mrows * ncols))
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                          fp1) != (size_t)(mrows * ncols))
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                           fp1) != (size_t)(mrows * ncols))
 =======
+>>>>>>> osgeo-main
                           fp1) != (mrows * ncols))
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -451,6 +505,9 @@ int main(int argc, char *argv[])
                           fp1) != (size_t)(mrows * ncols))
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     G_fatal_error(_("Error reading data"));
                 break;
@@ -461,14 +518,22 @@ int main(int argc, char *argv[])
                     G_calloc(mrows * (ncols + 1), Rast_cell_size(map_type));
                 if (fread(array_data, sizeof(int), (size_t)mrows * ncols,
 <<<<<<< HEAD
+<<<<<<< HEAD
                           fp1) != (size_t)(mrows * ncols))
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                          fp1) != (size_t)(mrows * ncols))
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                           fp1) != (size_t)(mrows * ncols))
 =======
+>>>>>>> osgeo-main
                           fp1) != (mrows * ncols))
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -483,6 +548,9 @@ int main(int argc, char *argv[])
                           fp1) != (size_t)(mrows * ncols))
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     G_fatal_error(_("Error reading data"));
                 break;

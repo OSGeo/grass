@@ -274,9 +274,12 @@ int main(int argc, char *argv[])
                 /* Hard coded to use "Equidistant Cylincrical"
                  * until g.setproj has been changed to run
 <<<<<<< HEAD
+<<<<<<< HEAD
                  * recurively, to allow input of options for
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                  * recursively, to allow input of options for
 =======
@@ -285,6 +288,9 @@ int main(int argc, char *argv[])
 =======
                  * recurively, to allow input of options for
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                  * a second projection, MHu991010 */
                 G_set_key_value("o_proj", "eqc", out_proj_keys);
@@ -297,9 +303,12 @@ int main(int argc, char *argv[])
                     G_strip(spheroid);
                     if (G_get_spheroid_by_name(spheroid, &aa, &e2, &f)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                         /* if legal ellips. exist, ask wether or not to change
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                         /* if legal ellips. exist, ask whether or not to change
 =======
@@ -308,6 +317,9 @@ int main(int argc, char *argv[])
 =======
                         /* if legal ellips. exist, ask wether or not to change
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                          * it */
                         G_message(_("The current ellipsoid is %s"), spheroid);

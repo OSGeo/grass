@@ -83,10 +83,13 @@ class GMApp(wx.App):
         def show_main_gui():
             # create and show main frame
 <<<<<<< HEAD
+<<<<<<< HEAD
             single = UserSettings.Get(
                 group="general", key="singleWindow", subkey="enabled"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
             single = UserSettings.Get(
@@ -99,12 +102,16 @@ class GMApp(wx.App):
             single = UserSettings.Get(
                 group="general", key="singleWindow", subkey="enabled"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             )
             if single:
                 from main_window.frame import GMFrame
             else:
                 from lmgr.frame import GMFrame
+<<<<<<< HEAD
 <<<<<<< HEAD
 
             mainframe = GMFrame(parent=None, id=wx.ID_ANY, workspace=self.workspaceFile)
@@ -113,6 +120,8 @@ class GMApp(wx.App):
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             try:
                 mainframe = GMFrame(
@@ -154,6 +163,9 @@ class GMApp(wx.App):
             self.SetTopWindow(mainframe)
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         wx.CallAfter(show_main_gui)
 

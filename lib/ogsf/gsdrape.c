@@ -1064,9 +1064,12 @@ int get_horz_intersects(geosurf *gs, float *bgn, float *end, float *dir)
    \return number of intersects
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int get_diag_intersects(geosurf *gs, float *bgn, float *end, float *dir)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int get_diag_intersects(geosurf *gs, float *bgn, float *end, float *dir UNUSED)
 =======
@@ -1075,6 +1078,9 @@ int get_diag_intersects(geosurf *gs, float *bgn, float *end, float *dir)
 =======
 int get_diag_intersects(geosurf *gs, float *bgn, float *end, float *dir)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int fdig, ldig, incr, hits, num, offset;

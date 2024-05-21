@@ -5,9 +5,12 @@
 #include "local_proto.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void print_json()
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 void print_json(void)
 =======
@@ -16,6 +19,9 @@ void print_json()
 =======
 void print_json()
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     bool first;
@@ -130,9 +136,12 @@ void print_json()
             fprintf(fd, "%.5f", metrics->conditional_kappa[i]);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
     fprintf(fd, "]\n");
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     fprintf(fd, "],\n");
     if (metrics->mcc == na_value)
@@ -145,6 +154,9 @@ void print_json()
 =======
     fprintf(fd, "]\n");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     fprintf(fd, "}\n");

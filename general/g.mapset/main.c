@@ -51,9 +51,12 @@ int main(int argc, char *argv[])
     module->label = _("Changes/reports current mapset.");
     module->description = _("Optionally create new mapset or list available "
 <<<<<<< HEAD
+<<<<<<< HEAD
                             "mapsets in given location.");
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                             "mapsets in given project (location).");
 =======
@@ -62,6 +65,9 @@ int main(int argc, char *argv[])
 =======
                             "mapsets in given location.");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);

@@ -100,6 +100,11 @@ class SwipeMapPanel(DoubleMapPanel):
             sb.SbRegionExtent,
             sb.SbCompRegionExtent,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
@@ -107,10 +112,13 @@ class SwipeMapPanel(DoubleMapPanel):
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             sb.SbDisplayGeometry,
             sb.SbMapScale,
             sb.SbGoTo,
 =======
+=======
+>>>>>>> osgeo-main
             sb.SbShowRegion,
             sb.SbAlignExtent,
             sb.SbResolution,
@@ -129,6 +137,9 @@ class SwipeMapPanel(DoubleMapPanel):
             sb.SbMapScale,
             sb.SbGoTo,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         ]
         self.statusbar = self.CreateStatusbar(statusbarItems)
@@ -181,9 +192,12 @@ class SwipeMapPanel(DoubleMapPanel):
     def ActivateFirstMap(self, event=None):
         """Switch tracking direction"""
 <<<<<<< HEAD
+<<<<<<< HEAD
         super(SwipeMapPanel, self).ActivateFirstMap(event)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         super().ActivateFirstMap(event)
 =======
@@ -192,6 +206,9 @@ class SwipeMapPanel(DoubleMapPanel):
 =======
         super(SwipeMapPanel, self).ActivateFirstMap(event)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         self.firstMapWindow.ClearLines()
@@ -200,9 +217,12 @@ class SwipeMapPanel(DoubleMapPanel):
     def ActivateSecondMap(self, event=None):
         """Switch tracking direction"""
 <<<<<<< HEAD
+<<<<<<< HEAD
         super(SwipeMapPanel, self).ActivateSecondMap(event)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         super().ActivateSecondMap(event)
 =======
@@ -211,6 +231,9 @@ class SwipeMapPanel(DoubleMapPanel):
 =======
         super(SwipeMapPanel, self).ActivateSecondMap(event)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         self.secondMapWindow.ClearLines()
@@ -276,9 +299,12 @@ class SwipeMapPanel(DoubleMapPanel):
         Debug.msg(4, "SwipeMapPanel.OnSize()")
         self.resize = grass.clock()
 <<<<<<< HEAD
+<<<<<<< HEAD
         super(SwipeMapPanel, self).OnSize(event)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         super().OnSize(event)
 =======
@@ -287,6 +313,9 @@ class SwipeMapPanel(DoubleMapPanel):
 =======
         super(SwipeMapPanel, self).OnSize(event)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     def OnIdle(self, event):
@@ -338,9 +367,12 @@ class SwipeMapPanel(DoubleMapPanel):
                 .Row(1)
                 .Position(0)
 <<<<<<< HEAD
+<<<<<<< HEAD
                 .BestSize((self.toolbars["swipeMain"].GetBestSize())),
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 .BestSize(self.toolbars["swipeMain"].GetBestSize()),
 =======
@@ -349,6 +381,9 @@ class SwipeMapPanel(DoubleMapPanel):
 =======
                 .BestSize((self.toolbars["swipeMain"].GetBestSize())),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             )
 
@@ -372,9 +407,12 @@ class SwipeMapPanel(DoubleMapPanel):
                 .Row(1)
                 .Position(1)
 <<<<<<< HEAD
+<<<<<<< HEAD
                 .BestSize((self.toolbars["swipeMap"].GetBestSize())),
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 .BestSize(self.toolbars["swipeMap"].GetBestSize()),
 =======
@@ -383,6 +421,9 @@ class SwipeMapPanel(DoubleMapPanel):
 =======
                 .BestSize((self.toolbars["swipeMap"].GetBestSize())),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             )
 
@@ -406,9 +447,12 @@ class SwipeMapPanel(DoubleMapPanel):
                 .Row(1)
                 .Position(2)
 <<<<<<< HEAD
+<<<<<<< HEAD
                 .BestSize((self.toolbars["swipeMisc"].GetBestSize())),
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 .BestSize(self.toolbars["swipeMisc"].GetBestSize()),
 =======
@@ -417,6 +461,9 @@ class SwipeMapPanel(DoubleMapPanel):
 =======
                 .BestSize((self.toolbars["swipeMisc"].GetBestSize())),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             )
 

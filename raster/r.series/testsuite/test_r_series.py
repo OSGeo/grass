@@ -5,9 +5,12 @@ from grass.gunittest.gmodules import call_module
 
 class TestRSeries(TestCase):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -15,6 +18,9 @@ class TestRSeries(TestCase):
 =======
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     average = "average"
     count = "count"

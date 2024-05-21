@@ -47,14 +47,22 @@ static int Rast3d_readIndex(RASTER3D_Map *map)
             map->indexLongNbytes * map->nTiles) { /* RLE encoded? */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (indexLength > (int)sizeof(long) * map->nTiles) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (indexLength > (int)sizeof(long) * map->nTiles) {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
             if (indexLength > (int)sizeof(long) * map->nTiles) {
 =======
+>>>>>>> osgeo-main
             if (indexLength > sizeof(long) * map->nTiles) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -69,6 +77,9 @@ static int Rast3d_readIndex(RASTER3D_Map *map)
             if (indexLength > (int)sizeof(long) * map->nTiles) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
                 /*->index large enough? */
@@ -91,14 +102,22 @@ static int Rast3d_readIndex(RASTER3D_Map *map)
                               &dummy2);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (indexLength > (int)sizeof(long) * map->nTiles)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (indexLength > (int)sizeof(long) * map->nTiles)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
             if (indexLength > (int)sizeof(long) * map->nTiles)
 =======
+>>>>>>> osgeo-main
             if (indexLength > sizeof(long) * map->nTiles)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -113,6 +132,9 @@ static int Rast3d_readIndex(RASTER3D_Map *map)
             if (indexLength > (int)sizeof(long) * map->nTiles)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 Rast3d_free(tmp2);
         } /* END RLE */

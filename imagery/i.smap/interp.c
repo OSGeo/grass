@@ -60,9 +60,12 @@ static void seq_MAP_routine(
     double diff1;    /* change in parameter estimates */
     double diff2;    /* change in log likelihood */
 <<<<<<< HEAD
+<<<<<<< HEAD
     struct Region *regionary; /* array of region stuctures */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     struct Region *regionary; /* array of region structures */
 =======
@@ -71,6 +74,9 @@ static void seq_MAP_routine(
 =======
     struct Region *regionary; /* array of region stuctures */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     /* determine number of resolutions */
@@ -225,9 +231,12 @@ static void interp(
     double Constant, tmp;
     double *pdf; /* propability density function of class selections */
 <<<<<<< HEAD
+<<<<<<< HEAD
     double Z;    /* normalizing costant for pdf */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     double Z;    /* normalizing constant for pdf */
 =======
@@ -236,6 +245,9 @@ static void interp(
 =======
     double Z;    /* normalizing costant for pdf */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     double alpha0, alpha1, alpha2; /* transition probabilities */
     double log_tbl[2][3][2];       /* log of transition probability */

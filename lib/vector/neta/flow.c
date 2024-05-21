@@ -176,9 +176,12 @@ int NetA_flow(dglGraph_s *graph, struct ilist *source_list,
  */
 int NetA_min_cut(dglGraph_s *graph, struct ilist *source_list,
 <<<<<<< HEAD
+<<<<<<< HEAD
                  struct ilist *sink_list, int *flow, struct ilist *cut)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                  struct ilist *sink_list UNUSED, int *flow, struct ilist *cut)
 =======
@@ -187,6 +190,9 @@ int NetA_min_cut(dglGraph_s *graph, struct ilist *source_list,
 =======
                  struct ilist *sink_list, int *flow, struct ilist *cut)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int nnodes, i;

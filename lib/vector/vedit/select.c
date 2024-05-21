@@ -35,9 +35,12 @@ static int merge_lists(struct ilist *alist, struct ilist *blist);
    \param Map pointer to Map_info
    \param type feature type
 <<<<<<< HEAD
+<<<<<<< HEAD
    \param layer layer number
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
    \param layer layer number (unused)
 =======
@@ -46,6 +49,9 @@ static int merge_lists(struct ilist *alist, struct ilist *blist);
 =======
    \param layer layer number
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
    \param thresh threshold value (< 0 for 'shorter', > 0 for 'longer')
    \param query query (length, dangle, ...)
@@ -54,9 +60,12 @@ static int merge_lists(struct ilist *alist, struct ilist *blist);
    \return number of selected primitives
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vedit_select_by_query(struct Map_info *Map, int type, int layer,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int Vedit_select_by_query(struct Map_info *Map, int type, int layer UNUSED,
 =======
@@ -65,6 +74,9 @@ int Vedit_select_by_query(struct Map_info *Map, int type, int layer,
 =======
 int Vedit_select_by_query(struct Map_info *Map, int type, int layer,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                           double thresh, int query, struct ilist *List)
 {

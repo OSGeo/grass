@@ -28,12 +28,18 @@
 FILE *I_fopen_sigset_file_new(const char *name)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     char dir[GNAME_MAX];
     FILE *fd;
@@ -43,6 +49,7 @@ FILE *I_fopen_sigset_file_new(const char *name)
 
     I_get_signatures_dir(dir, I_SIGFILE_TYPE_SIGSET);
     fd = G_fopen_new_misc(dir, "sig", name);
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 =======
@@ -54,6 +61,15 @@ FILE *I_fopen_sigset_file_new(const char *name)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
     FILE *fd;
 
+=======
+=======
+    char element[GNAME_MAX];
+=======
+    char dir[GNAME_MAX];
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+    FILE *fd;
+
+>>>>>>> osgeo-main
     /* create sig directory */
     I_make_signatures_dir(I_SIGFILE_TYPE_SIGSET);
 
@@ -69,6 +85,9 @@ FILE *I_fopen_sigset_file_new(const char *name)
 =======
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     return fd;
 }
@@ -85,13 +104,20 @@ FILE *I_fopen_sigset_file_old(const char *name)
 {
     char sig_name[GNAME_MAX], sig_mapset[GMAPSET_MAX];
 <<<<<<< HEAD
-    char dir[GNAME_MAX];
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     char dir[GNAME_MAX];
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    char dir[GNAME_MAX];
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    char dir[GNAME_MAX];
+=======
+>>>>>>> osgeo-main
     char element[GNAME_MAX];
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -100,6 +126,9 @@ FILE *I_fopen_sigset_file_old(const char *name)
 =======
     char dir[GNAME_MAX];
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     FILE *fd;
 
@@ -107,15 +136,23 @@ FILE *I_fopen_sigset_file_old(const char *name)
         strcpy(sig_mapset, G_mapset());
 
 <<<<<<< HEAD
-    I_get_signatures_dir(dir, I_SIGFILE_TYPE_SIGSET);
-    fd = G_fopen_old_misc(dir, "sig", sig_name, sig_mapset);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     I_get_signatures_dir(dir, I_SIGFILE_TYPE_SIGSET);
     fd = G_fopen_old_misc(dir, "sig", sig_name, sig_mapset);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    I_get_signatures_dir(dir, I_SIGFILE_TYPE_SIGSET);
+    fd = G_fopen_old_misc(dir, "sig", sig_name, sig_mapset);
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    I_get_signatures_dir(dir, I_SIGFILE_TYPE_SIGSET);
+    fd = G_fopen_old_misc(dir, "sig", sig_name, sig_mapset);
+=======
+>>>>>>> osgeo-main
     I__get_signatures_element(element, I_SIGFILE_TYPE_SIGSET);
     fd = G_fopen_old(element, sig_name, sig_mapset);
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
@@ -127,6 +164,9 @@ FILE *I_fopen_sigset_file_old(const char *name)
     I_get_signatures_dir(dir, I_SIGFILE_TYPE_SIGSET);
     fd = G_fopen_old_misc(dir, "sig", sig_name, sig_mapset);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     return fd;

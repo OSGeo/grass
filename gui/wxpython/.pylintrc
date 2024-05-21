@@ -320,9 +320,12 @@ ignore-on-opaque-inference=yes
 # for classes with dynamically set attributes). This supports the use of
 # qualified names.
 <<<<<<< HEAD
+<<<<<<< HEAD
 ignored-classes=optparse.Values,thread._local,_thread._local
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 ignored-classes=optparse.Values,thread._local,_thread._local,main_window.page.MainPageBase
 =======
@@ -331,6 +334,9 @@ ignored-classes=optparse.Values,thread._local,_thread._local
 =======
 ignored-classes=optparse.Values,thread._local,_thread._local
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 # List of module names for which member attributes should not be checked
@@ -392,9 +398,12 @@ init-import=no
 # List of qualified module names which can have objects that can redefine
 # builtins.
 <<<<<<< HEAD
+<<<<<<< HEAD
 redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 redefining-builtins-modules=past.builtins,future.builtins,builtins,io
 =======
@@ -403,6 +412,9 @@ redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
 =======
 redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 

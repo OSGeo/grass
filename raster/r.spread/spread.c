@@ -10,9 +10,12 @@
  *                   spread cell and stored in a linked list of type
  *                   cell_ptrHa - select() ;
 <<<<<<< HEAD
+<<<<<<< HEAD
  *                        A) caculates the cumulative cost (time) of the
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
  *                        A) calculates the cumulative cost (time) of the
 =======
@@ -21,6 +24,9 @@
 =======
  *                        A) caculates the cumulative cost (time) of the
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  *                           end cell of each link - calculate();
  *                        B) compares this new cumulative cost (time) with

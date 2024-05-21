@@ -83,14 +83,20 @@ def register_maps_in_space_time_dataset(
     end_time_in_file = False
     semantic_label_in_file = False
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     overwrite = gs.overwrite()
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     msgr = get_tgis_message_interface()
@@ -151,6 +157,7 @@ def register_maps_in_space_time_dataset(
     currcon[mapset] = dbif.connections[mapset]
     dbif.connections = currcon
 
+<<<<<<< HEAD
     # create new stds only in the current mapset
     # remove all connections to any other mapsets
     # ugly hack !
@@ -158,6 +165,8 @@ def register_maps_in_space_time_dataset(
     currcon[mapset] = dbif.connections[mapset]
     dbif.connections = currcon
 
+=======
+>>>>>>> osgeo-main
     # The name of the space time dataset is optional
     if name:
         sp = open_old_stds(name, type, dbif)
@@ -253,8 +262,14 @@ def register_maps_in_space_time_dataset(
                 row["start"] = line_list[1].strip()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -265,13 +280,19 @@ def register_maps_in_space_time_dataset(
                 row["semantic_label"] = line_list[idx].strip()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             row["id"] = AbstractMapDataset.build_id_from_search_path(mapname, type)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             map_mapset = mapset
             if "@" not in mapname:
@@ -280,8 +301,14 @@ def register_maps_in_space_time_dataset(
                     map_mapset = found["mapset"]
             row["id"] = AbstractMapDataset.build_id(mapname, map_mapset)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -341,10 +368,13 @@ def register_maps_in_space_time_dataset(
 
         # Use the semantic label from file
 <<<<<<< HEAD
+<<<<<<< HEAD
         if "semantic_label" in maplist[count]:
             semantic_label = maplist[count]["semantic_label"]
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         if "semantic_label" in row:
             semantic_label = row["semantic_label"]
@@ -356,6 +386,9 @@ def register_maps_in_space_time_dataset(
         if "semantic_label" in maplist[count]:
             semantic_label = maplist[count]["semantic_label"]
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         else:
             semantic_label = None
@@ -364,9 +397,12 @@ def register_maps_in_space_time_dataset(
 
         # Put the map into the database of the current mapset
 <<<<<<< HEAD
+<<<<<<< HEAD
         if not map.is_in_db(dbif, mapset):
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         if not is_in_db:
 =======
@@ -375,6 +411,9 @@ def register_maps_in_space_time_dataset(
 =======
         if not map.is_in_db(dbif, mapset):
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             # Break in case no valid time is provided
             if (start == "" or start is None) and not map_object.has_grass_timestamp():
@@ -509,12 +548,15 @@ def register_maps_in_space_time_dataset(
             # -> update raster metadata
             # -> write band identifier to GRASS data base
 <<<<<<< HEAD
+<<<<<<< HEAD
             map.set_semantic_label(semantic_label)
         else:
             # Try to read semantic label from GRASS data base if defined
             map.read_semantic_label_from_grass()
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             map_object.set_semantic_label(semantic_label)
         else:
@@ -532,6 +574,9 @@ def register_maps_in_space_time_dataset(
             # Try to read semantic label from GRASS data base if defined
             map.read_semantic_label_from_grass()
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         if is_in_db:
@@ -562,13 +607,19 @@ def register_maps_in_space_time_dataset(
     if name and map_object_list:
         num_maps = len(map_object_list)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         for count, map_object in enumerate(map_object_list):
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         for map in map_object_list:
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

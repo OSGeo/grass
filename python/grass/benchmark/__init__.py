@@ -1,12 +1,18 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 # MODULE:    grass.benchmark
 #
@@ -21,8 +27,11 @@
 #            for details.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
@@ -30,6 +39,9 @@
 >>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 """Benchmarking for GRASS GIS modules
 
@@ -37,14 +49,20 @@ This subpackage of the grass package is experimental and the API can change anyt
 The API of the package is defined by what is imported in the top-level ``__init__.py``
 file of the subpackage.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 The functions in the Python API raise exceptions, although calls of other functions from
@@ -54,8 +72,11 @@ This applies to the CLI interface of this subpackage too except that raised usag
 exceptions originating in the CLI code result in *sys.exit* with an error message, not
 traceback. Messages and other user-visible texts in this package are not translatable.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
@@ -63,6 +84,9 @@ traceback. Messages and other user-visible texts in this package are not transla
 >>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 """
 
@@ -70,13 +94,20 @@ from .plots import nprocs_plot, num_cells_plot
 from .results import (
     join_results,
 <<<<<<< HEAD
-    join_results_from_files,
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     join_results_from_files,
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    join_results_from_files,
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    join_results_from_files,
+=======
+>>>>>>> osgeo-main
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
     join_results_from_files,
@@ -84,6 +115,9 @@ from .results import (
 =======
     join_results_from_files,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     load_results,
     load_results_from_file,
@@ -91,13 +125,20 @@ from .results import (
     save_results_to_file,
 )
 <<<<<<< HEAD
-from .runners import benchmark_nprocs, benchmark_resolutions, benchmark_single
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 from .runners import benchmark_nprocs, benchmark_resolutions, benchmark_single
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+from .runners import benchmark_nprocs, benchmark_resolutions, benchmark_single
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+from .runners import benchmark_nprocs, benchmark_resolutions, benchmark_single
+=======
+>>>>>>> osgeo-main
 from .runners import benchmark_nprocs, benchmark_resolutions
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
@@ -106,4 +147,7 @@ from .runners import benchmark_nprocs, benchmark_resolutions, benchmark_single
 =======
 from .runners import benchmark_nprocs, benchmark_resolutions, benchmark_single
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main

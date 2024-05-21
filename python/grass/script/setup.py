@@ -25,8 +25,14 @@ Usage::
     # (with fixes for specific platforms)
     # needs to be edited by the user
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -47,7 +53,10 @@ Usage::
     grass_cmd = [executable, "--config", "python_path"]
     process = subprocess.run(grass_cmd, check=True, text=True, stdout=subprocess.PIPE)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 =======
 >>>>>>> 227cbcebbf (Programmer's manual: update GRASS GIS arch drawing (#1610))
@@ -101,6 +110,9 @@ Usage::
     grass_cmd = [executable, "--config", "python_path"]
     process = subprocess.run(grass_cmd, check=True, text=True, stdout=subprocess.PIPE)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     # define GRASS-Python environment
@@ -114,14 +126,22 @@ Usage::
 
     # example calls
 <<<<<<< HEAD
+<<<<<<< HEAD
     gs.message("Current GRASS GIS 8 environment:")
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    gs.message("Current GRASS GIS 8 environment:")
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
     gs.message("Current GRASS GIS 8 environment:")
 =======
+>>>>>>> osgeo-main
     gs.message('Current GRASS GIS 8 environment:')
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 =======
@@ -133,6 +153,9 @@ Usage::
 =======
     gs.message("Current GRASS GIS 8 environment:")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     print(gs.gisenv())
 
@@ -149,9 +172,12 @@ Usage::
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 (C) 2010-2023 by the GRASS Development Team
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -176,6 +202,9 @@ Usage::
 =======
 (C) 2010-2023 by the GRASS Development Team
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -225,6 +254,7 @@ def set_gui_path():
 
 def get_install_path(path=None):
     """Get path to GRASS installation usable for setup of environmental variables.
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     The function tries to determine path tp GRASS GIS installation so that the
@@ -344,6 +374,8 @@ def setup_runtime_env(gisbase):
     os.environ["PATH"] = path_addition + os.pathsep + os.getenv("PATH")
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 
     The function tries to determine path tp GRASS GIS installation so that the
@@ -625,6 +657,9 @@ def init(path, location=None, mapset=None, *, grass_path=None):
     if it exists. If GRASSBIN environmental variable exists and it is an existing
     executable, the executable is queried for the path.
 =======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     The function tries to determine path tp GRASS GIS installation so that the
@@ -1004,6 +1039,7 @@ def init(path, location=None, mapset=None, grass_path=None):
     as long as the object is used as a context manager or the *finish* method
     of the object is called explicitly. Using methods of the session object is
     preferred over calling the function :func:`finish`.
+<<<<<<< HEAD
 
     Basic usage::
 
@@ -1109,6 +1145,8 @@ def init(path, location=None, mapset=None, grass_path=None):
     as long as the object is used as a context manager or the *finish* method
     of the object is called explicitly. Using methods of the session object is
     preferred over calling the function :func:`finish`.
+=======
+>>>>>>> osgeo-main
 
     Basic usage::
 
@@ -1182,10 +1220,14 @@ def init(path, location=None, mapset=None, grass_path=None):
 class SessionHandle:
     """Object used to manage GRASS sessions.
 
+<<<<<<< HEAD
 =======
 class SessionHandle:
     """Object used to manage GRASS sessions.
 
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
     Do not create objects of this class directly. Use the *init* function
@@ -1225,8 +1267,11 @@ class SessionHandle:
         return self._active
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     @property
     def env(self):
@@ -1236,6 +1281,9 @@ class SessionHandle:
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     def __enter__(self):
         """Enter the context manager context.

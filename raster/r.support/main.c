@@ -40,12 +40,18 @@ int main(int argc, char *argv[])
     struct Option *raster, *title_opt, *history_opt;
     struct Option *datasrc1_opt, *datasrc2_opt, *datadesc_opt;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     struct Option *semantic_label_opt;
     struct Option *map_opt, *units_opt, *vdatum_opt;
@@ -55,7 +61,10 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
     struct Option *bandref_opt;
     struct Option *map_opt, *units_opt, *vdatum_opt;
     struct Option *load_opt, *save_opt;
@@ -71,6 +80,9 @@ int main(int argc, char *argv[])
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     const char *infile;
     struct History hist;
@@ -163,14 +175,20 @@ int main(int argc, char *argv[])
     save_opt->description = _("Text file in which to save history");
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     semantic_label_opt = G_define_option();
     semantic_label_opt->key = "semantic_label";
@@ -180,8 +198,14 @@ int main(int argc, char *argv[])
     semantic_label_opt->guisection = _("Semantic label");
     semantic_label_opt->description = _("Semantic label e.g. S2_8A");
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -194,7 +218,10 @@ int main(int argc, char *argv[])
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
     bandref_opt = G_define_option();
     bandref_opt->key = "bandref";
     bandref_opt->key_desc = "phrase";
@@ -218,6 +245,9 @@ int main(int argc, char *argv[])
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     stats_flag = G_define_flag();
@@ -246,8 +276,11 @@ int main(int argc, char *argv[])
     if (!mapset || strcmp(mapset, G_mapset()) != 0)
         G_fatal_error(_("Raster map <%s> not found in current mapset"), infile);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 
     if (semantic_label_rm_flag->answer && semantic_label_opt->answer)
@@ -257,6 +290,9 @@ int main(int argc, char *argv[])
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     if (semantic_label_rm_flag->answer && semantic_label_opt->answer)
@@ -320,8 +356,14 @@ int main(int argc, char *argv[])
         /* Should be RECORD_LEN, but r.info truncates at > 71 chars */
         if (strlen(history_opt->answer) > 71) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -339,7 +381,10 @@ int main(int argc, char *argv[])
             Rast_append_history(&hist, history_opt->answer);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
             int i;
 
@@ -394,6 +439,9 @@ int main(int argc, char *argv[])
 
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         Rast_write_history(raster->answer, &hist);
     }
@@ -436,25 +484,64 @@ int main(int argc, char *argv[])
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     if (semantic_label_opt->answer) {
         if (Rast_legal_semantic_label(semantic_label_opt->answer) == false)
             G_fatal_error(_("Provided semantic label is not valid. "
                             "See documentation for valid examples"));
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+        Rast_write_semantic_label(infile, semantic_label_opt->answer);
+    }
+=======
+    if (bandref_opt->answer) {
+        if (Rast_legal_bandref(bandref_opt->answer) < 0)
+            G_fatal_error(_("Provided band reference is not valid. "
+=======
+    if (semantic_label_opt->answer) {
+        if (Rast_legal_semantic_label(semantic_label_opt->answer) == false)
+            G_fatal_error(_("Provided semantic label is not valid. "
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+                            "See documentation for valid examples"));
+>>>>>>> osgeo-main
 
         Rast_write_semantic_label(infile, semantic_label_opt->answer);
     }
 
+<<<<<<< HEAD
+    if (bandref_rm_flag->answer)
+        G_remove_misc("cell_misc", "bandref", infile);
+
+    if (title_opt->answer || history_opt->answer || units_opt->answer
+	|| vdatum_opt->answer || datasrc1_opt->answer || datasrc2_opt->answer
+	|| datadesc_opt->answer || map_opt->answer
+	|| bandref_opt->answer || bandref_rm_flag->answer)
+	exit(EXIT_SUCCESS);
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+=======
+
+        Rast_write_semantic_label(infile, semantic_label_opt->answer);
+    }
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+
     if (semantic_label_rm_flag->answer)
         G_remove_misc("cell_misc", "semantic_label", infile);
 
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 
@@ -493,6 +580,8 @@ int main(int argc, char *argv[])
     if (semantic_label_rm_flag->answer)
         G_remove_misc("cell_misc", "semantic_label", infile);
 
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
     if (semantic_label_rm_flag->answer)
@@ -501,6 +590,9 @@ int main(int argc, char *argv[])
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     if (title_opt->answer || history_opt->answer || units_opt->answer ||
         vdatum_opt->answer || datasrc1_opt->answer || datasrc2_opt->answer ||

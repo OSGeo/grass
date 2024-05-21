@@ -126,9 +126,12 @@ char *Vect_read_area_to_wkt(struct Map_info *Map, int area)
    \return NULL on error
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 unsigned char *Vect_read_line_to_wkb(const struct Map_info *Map,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 unsigned char *Vect_read_line_to_wkb(struct Map_info *Map,
 =======
@@ -137,6 +140,9 @@ unsigned char *Vect_read_line_to_wkb(const struct Map_info *Map,
 =======
 unsigned char *Vect_read_line_to_wkb(const struct Map_info *Map,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                                      struct line_pnts *line_p,
                                      struct line_cats *line_c, int line,

@@ -13,9 +13,12 @@ int columns;
 /****************************************************************************/
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void handle_fpe(int n)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 static void handle_fpe(int n UNUSED)
 =======
@@ -24,6 +27,9 @@ static void handle_fpe(int n)
 =======
 static void handle_fpe(int n)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     floating_point_exception = 1;

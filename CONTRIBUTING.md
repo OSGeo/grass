@@ -14,6 +14,9 @@ It assumes that you have some very basic knowledge of Git and GitHub,
 but if you don't just go through some tutorial online or ask on the
 GRASS GIS developer mailing list.
 
+To contribute effectively, please familiarize yourself with our
+[Programming Style Guide](./doc/development/style_guide.md).
+
 ### First time setup
 
 * Create an account on GitHub.
@@ -119,8 +122,11 @@ git checkout -b new-feature
 
 You can use your favorite tools to change source code or other files
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 in the local copy of the code. When making changes, please follow the
 [Submitting Guidelines](./doc/development/submitting/submitting.md).
@@ -148,6 +154,9 @@ to your code.
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 in the local copy of the code. When making changes, please follow
 Submitting Guidelines at
@@ -195,6 +204,7 @@ Note that there are some steps you can do locally to improve your code.
 For Python, run `black .` to apply standardized formatting. You can
 also run linter tools such as Pylint which will suggest different improvements
 to your code.
+<<<<<<< HEAD
 
 ### Testing changes
 
@@ -216,6 +226,8 @@ Note that there are some steps you can do locally to improve your code.
 For Python, run `black .` to apply standardized formatting. You can
 also run linter tools such as Pylint which will suggest different improvements
 to your code.
+=======
+>>>>>>> osgeo-main
 
 ### Committing
 

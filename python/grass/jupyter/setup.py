@@ -2,13 +2,19 @@
 #
 # AUTHOR(S): Caitlin Haedrich <caitlin DOT haedrich AT gmail>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 #            Vaclav Petras <wenzeslaus gmail com>
 #
@@ -26,8 +32,11 @@
 import os
 import weakref
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 from pathlib import Path
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -59,6 +68,9 @@ def _set_notebook_defaults():
 
 import os
 import weakref
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 import grass.script as gs
@@ -66,10 +78,13 @@ import grass.script as gs
 
 def _set_notebook_defaults():
 <<<<<<< HEAD
+<<<<<<< HEAD
     """Set defaults appropriate for Jupyter Notebooks.
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     """
 <<<<<<< HEAD
 >>>>>>> 584e61d06d (wxGUI/datacatalog: fix setting output vector/raster format (#1596))
@@ -81,6 +96,9 @@ def _set_notebook_defaults():
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     This function sets several GRASS environment variables that are
     important for GRASS to run smoothly in Jupyter.
@@ -97,13 +115,19 @@ def _set_notebook_defaults():
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 class _JupyterGlobalSession:
     """Represents a global GRASS session for Jupyter Notebooks.
@@ -116,8 +140,11 @@ class _JupyterGlobalSession:
 
     An object ends the session when it is destroyed or when the *finish* method is
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     called explicitly.
 
     Notably, only the mapset is closed, but the libraries and GRASS modules
@@ -255,6 +282,9 @@ class _JupyterGlobalSession:
     Do not create objects of this class directly. Use the standalone *init* function
     and an object will be returned to you, e.g.:
 =======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     called explicitely.
 
@@ -346,7 +376,10 @@ def init(path, location=None, mapset=None, grass_path=None):
 
     Calling this function returns an object which represents the session.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 
     >>> import grass.jupyter as gj
@@ -481,6 +514,9 @@ def init(path, location=None, mapset=None, grass_path=None):
     """Initiates a GRASS session and sets GRASS environment variables.
 
     Calling this function returns an object which represents the session.
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     >>> import grass.jupyter as gj
@@ -505,7 +541,10 @@ def init(path, location=None, mapset=None, grass_path=None):
     :param str mapset: name of mapset within location
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
     The session is ended when `session.finish` is called or when the object is
     destroyed when kernel ends or restarts. This function returns a copy of an
@@ -526,6 +565,9 @@ def init(path, location=None, mapset=None, grass_path=None):
     :param str mapset: name of mapset within location
     """
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     global _global_session_handle  # pylint: disable=global-statement,invalid-name
     if not _global_session_handle or not _global_session_handle.active:
@@ -538,8 +580,14 @@ def init(path, location=None, mapset=None, grass_path=None):
         _global_session_handle.switch_mapset(path, location=location, mapset=mapset)
     return _global_session_handle
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

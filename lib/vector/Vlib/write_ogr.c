@@ -91,10 +91,13 @@ off_t V1_rewrite_line_ogr(struct Map_info *Map, off_t offset, int type,
                           const struct line_cats *cats)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
     G_debug(3, "V1_rewrite_line_ogr(): type=%d offset=%" PRI_OFF_T, type,
             offset);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     G_debug(3, "V1_rewrite_line_ogr(): type=%d offset=%" PRId64, type, offset);
 =======
@@ -105,6 +108,9 @@ off_t V1_rewrite_line_ogr(struct Map_info *Map, off_t offset, int type,
     G_debug(3, "V1_rewrite_line_ogr(): type=%d offset=%" PRI_OFF_T, type,
             offset);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 #ifdef HAVE_OGR
     if (type != V1_read_line_ogr(Map, NULL, NULL, offset)) {
@@ -147,9 +153,12 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
 
     if (offset >= ogr_info->offset.array_num) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_warning(_("Invalid offset (%" PRI_OFF_T ")"), offset);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         G_warning(_("Invalid offset (%" PRId64 ")"), offset);
 =======
@@ -158,6 +167,9 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
 =======
         G_warning(_("Invalid offset (%" PRI_OFF_T ")"), offset);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         return -1;
     }

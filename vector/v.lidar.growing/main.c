@@ -178,15 +178,23 @@ int main(int argc, char *argv[])
     Cats = Vect_new_cats_struct();
     Vect_rewind(&In);
 <<<<<<< HEAD
-    while (Vect_read_next_line(&In, points, Cats) > 0)
-        ;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     while (Vect_read_next_line(&In, points, Cats) > 0)
         ;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    while (Vect_read_next_line(&In, points, Cats) > 0)
+        ;
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    while (Vect_read_next_line(&In, points, Cats) > 0)
+        ;
+=======
+>>>>>>> osgeo-main
     while (Vect_read_next_line(&In, points, Cats) > 0) {
         nlines++;
     }
@@ -204,6 +212,9 @@ int main(int argc, char *argv[])
         ;
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     Vect_rewind(&In);
 
@@ -212,15 +223,23 @@ int main(int argc, char *argv[])
     Cats_first = Vect_new_cats_struct();
     Vect_rewind(&First);
 <<<<<<< HEAD
-    while (Vect_read_next_line(&First, points_first, Cats_first) > 0)
-        ;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     while (Vect_read_next_line(&First, points_first, Cats_first) > 0)
         ;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    while (Vect_read_next_line(&First, points_first, Cats_first) > 0)
+        ;
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    while (Vect_read_next_line(&First, points_first, Cats_first) > 0)
+        ;
+=======
+>>>>>>> osgeo-main
     while (Vect_read_next_line(&First, points_first, Cats_first) > 0) {
         nlines_first++;
     }
@@ -238,6 +257,9 @@ int main(int argc, char *argv[])
         ;
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     Vect_rewind(&First);
 

@@ -19,13 +19,20 @@ from types import SimpleNamespace
 from grass.benchmark import (
     benchmark_resolutions,
 <<<<<<< HEAD
-    benchmark_single,
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     benchmark_single,
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    benchmark_single,
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    benchmark_single,
+=======
+>>>>>>> osgeo-main
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
     benchmark_single,
@@ -33,6 +40,9 @@ from grass.benchmark import (
 =======
     benchmark_single,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     join_results,
     load_results,
@@ -77,14 +87,20 @@ class TestBenchmarksRun(TestCase):
         self.assertTrue(Path(plot_file).is_file())
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     def test_single(self):
         """Test that single benchmark function runs"""
@@ -108,8 +124,11 @@ class TestBenchmarksRun(TestCase):
         self.assertEqual(results[0].label, label)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
@@ -117,6 +136,9 @@ class TestBenchmarksRun(TestCase):
 >>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 class TestBenchmarkResults(TestCase):

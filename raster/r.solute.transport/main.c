@@ -40,14 +40,22 @@ paramType param; /*Parameters */
 
 /*- prototypes --------------------------------------------------------------*/
 <<<<<<< HEAD
+<<<<<<< HEAD
 void set_params(void); /*Fill the paramType structure */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void set_params(void); /*Fill the paramType structure */
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 void set_params(void); /*Fill the paramType structure */
 =======
+>>>>>>> osgeo-main
 void set_params(); /*Fill the paramType structure */
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -62,6 +70,9 @@ void set_params(); /*Fill the paramType structure */
 void set_params(void); /*Fill the paramType structure */
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 void copy_result(N_array_2d *status, N_array_2d *c_start, double *result,
                  struct Cell_head *region, N_array_2d *target, int tflag);
@@ -264,9 +275,12 @@ int main(int argc, char *argv[])
     /* Make sure that the current projection is not lat/long */
     if ((G_projection() == PROJECTION_LL))
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_fatal_error(_("Lat/Long location is not supported by %s. Please "
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         G_fatal_error(_("Lat/Long project is not supported by %s. Please "
 =======
@@ -275,6 +289,9 @@ int main(int argc, char *argv[])
 =======
         G_fatal_error(_("Lat/Long location is not supported by %s. Please "
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                         "reproject map first."),
                       G_program_name());

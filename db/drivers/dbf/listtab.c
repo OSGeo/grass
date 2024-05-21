@@ -19,9 +19,12 @@
 #include "proto.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 int db__driver_list_tables(dbString **tlist, int *tcount, int system)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int db__driver_list_tables(dbString **tlist, int *tcount, int system UNUSED)
 =======
@@ -30,6 +33,9 @@ int db__driver_list_tables(dbString **tlist, int *tcount, int system)
 =======
 int db__driver_list_tables(dbString **tlist, int *tcount, int system)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     dbString *list;

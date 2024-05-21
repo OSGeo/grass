@@ -17,14 +17,20 @@
  *****************************************************************************/
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #include <cinttypes>
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 #include <fcntl.h>
 #include <unistd.h>
@@ -100,14 +106,22 @@ int noclobberFile(char *fname)
                 char buf[BUFSIZ];
                 G_debug(1, "file %s exists - renaming.\n", fname);
 <<<<<<< HEAD
+<<<<<<< HEAD
                 snprintf(buf, BUFSIZ, "%s.old", fname);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                snprintf(buf, BUFSIZ, "%s.old", fname);
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                 snprintf(buf, BUFSIZ, "%s.old", fname);
 =======
+>>>>>>> osgeo-main
                 sprintf(buf, "%s.old", fname);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -122,6 +136,9 @@ int noclobberFile(char *fname)
                 snprintf(buf, BUFSIZ, "%s.old", fname);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 if (rename(fname, buf) != 0) {
                     G_fatal_error("%s", fname);
@@ -145,14 +162,22 @@ char *noclobberFileName(char *fname)
             char buf[BUFSIZ];
             G_debug(1, "file %s exists - renaming.\n", fname);
 <<<<<<< HEAD
+<<<<<<< HEAD
             snprintf(buf, BUFSIZ, "%s.old", fname);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            snprintf(buf, BUFSIZ, "%s.old", fname);
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
             snprintf(buf, BUFSIZ, "%s.old", fname);
 =======
+>>>>>>> osgeo-main
             sprintf(buf, "%s.old", fname);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -167,6 +192,9 @@ char *noclobberFileName(char *fname)
             snprintf(buf, BUFSIZ, "%s.old", fname);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             if (rename(fname, buf) != 0) {
                 G_fatal_error("%s", fname);
@@ -194,14 +222,22 @@ char *statsRecorder::timestamp()
     static char buf[BUFSIZ];
     rt_stop(tm);
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(buf, BUFSIZ, "[%.1f] ", rt_seconds(tm));
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, BUFSIZ, "[%.1f] ", rt_seconds(tm));
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
     snprintf(buf, BUFSIZ, "[%.1f] ", rt_seconds(tm));
 =======
+>>>>>>> osgeo-main
     sprintf(buf, "[%.1f] ", rt_seconds(tm));
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -216,6 +252,9 @@ char *statsRecorder::timestamp()
     snprintf(buf, BUFSIZ, "[%.1f] ", rt_seconds(tm));
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     return buf;
 }
@@ -239,14 +278,22 @@ void statsRecorder::comment(const char *s1, const char *s2)
 {
     char buf[BUFSIZ];
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(buf, BUFSIZ, "%s%s", s1, s2);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, BUFSIZ, "%s%s", s1, s2);
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
     snprintf(buf, BUFSIZ, "%s%s", s1, s2);
 =======
+>>>>>>> osgeo-main
     sprintf(buf, "%s%s", s1, s2);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -261,6 +308,9 @@ void statsRecorder::comment(const char *s1, const char *s2)
     snprintf(buf, BUFSIZ, "%s%s", s1, s2);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     comment(buf);
 }
@@ -269,14 +319,22 @@ void statsRecorder::comment(const int n)
 {
     char buf[BUFSIZ];
 <<<<<<< HEAD
+<<<<<<< HEAD
     snprintf(buf, BUFSIZ, "%d", n);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    snprintf(buf, BUFSIZ, "%d", n);
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
     snprintf(buf, BUFSIZ, "%d", n);
 =======
+>>>>>>> osgeo-main
     sprintf(buf, "%d", n);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -291,6 +349,9 @@ void statsRecorder::comment(const int n)
     snprintf(buf, BUFSIZ, "%d", n);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     comment(buf);
 }
@@ -299,8 +360,11 @@ char *formatNumber(char *buf, off_t val)
 {
     if (val > (1 << 30)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -350,6 +414,9 @@ char *formatNumber(char *buf, off_t val)
 >>>>>>> 498a331298 (Fix missing function prototypes (#2727))
 =======
 =======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         snprintf(buf, BUFSIZ, "%.2fG (%" PRI_OFF_T ")", (double)val / (1 << 30),
                  val);
@@ -365,6 +432,11 @@ char *formatNumber(char *buf, off_t val)
     else {
         snprintf(buf, BUFSIZ, "%" PRI_OFF_T, val);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))

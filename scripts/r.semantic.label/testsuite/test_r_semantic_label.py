@@ -1,9 +1,12 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 <<<<<<< HEAD
+<<<<<<< HEAD
 from grass.gunittest.gmodules import SimpleModule, call_module
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 from grass.gunittest.gmodules import SimpleModule
 =======
@@ -12,6 +15,9 @@ from grass.gunittest.gmodules import SimpleModule, call_module
 =======
 from grass.gunittest.gmodules import SimpleModule, call_module
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 from grass.script.core import tempname
@@ -59,8 +65,11 @@ class TestSemanticLabelsSystemDefined(TestCase):
         self.assertEqual(self.read_semantic_label(), self.semantic_label)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     def test_semantic_label_print(self):
         semantic_label = "S2_1"
@@ -81,6 +90,9 @@ class TestSemanticLabelsSystemDefined(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     def test_semantic_label_dissociate(self):
         module = SimpleModule("r.semantic.label", operation="remove", map=self.map)

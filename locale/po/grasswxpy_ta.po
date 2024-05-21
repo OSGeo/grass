@@ -28459,6 +28459,9 @@ msgid "Launch Data Catalog."
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 msgstr ""
@@ -30396,8 +30399,14 @@ msgid "Rendering map layers"
 #: ../gui/wxpython/gui_core/preferences.py:1739
 msgid "PROJ string (required):"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -32119,11 +32128,14 @@ msgstr ""
 #~ msgstr "'%s' கோப்பை உருவாக்க முடியவில்லை\n"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 msgid "GRASS GIS Data Catalog"
 msgstr "GRASS GIS தகவல் அட்டவணை"
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 #, fuzzy, python-format
 #~ msgid "Unable to rename location: %s"
 #~ msgstr "'%s' கோப்பை உருவாக்க முடியவில்லை\n"
@@ -32144,6 +32156,9 @@ msgid "GRASS GIS Data Catalog"
 msgstr "GRASS GIS தகவல் அட்டவணை"
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 msgid "Search:"
 msgstr "தேடு:"

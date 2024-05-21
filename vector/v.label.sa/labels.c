@@ -63,13 +63,19 @@ label_t *labels_init(struct params *p, int *n_labels)
             sizeof(label_t) * label_sz);
     labels = (label_t *)G_malloc(sizeof(label_t) * label_sz);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     G_debug(1, "labels=%p", (void *)labels);
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     G_debug(1, "labels=%p", labels);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -233,8 +239,11 @@ label_t *labels_init(struct params *p, int *n_labels)
  * This function calculates the skyline of a label and stores it in the label
  * structure.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
  * @param face The opened FT library face to use.
  * @param The charset to use [unused]
@@ -245,6 +254,9 @@ static int label_skyline(FT_Face face, const char *charset UNUSED,
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  * @param face The openned FT library face to use.
  * @param The charset to use
@@ -252,8 +264,14 @@ static int label_skyline(FT_Face face, const char *charset UNUSED,
  */
 static int label_skyline(FT_Face face, const char *charset, label_t *label)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1121,10 +1139,13 @@ static double label_lineover(label_t *label, label_candidate_t *candidate,
  * @param skyline The skyline to investigate.
  * @param swathline The swath line to investigate.
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @param p The point on the skyline which is neares to the swath line is stored
  * in this structure.
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
  * @param p The point on the skyline which is nearest to the swath line is
  * stored in this structure.
@@ -1136,6 +1157,9 @@ static double label_lineover(label_t *label, label_candidate_t *candidate,
  * @param p The point on the skyline which is neares to the swath line is stored
  * in this structure.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  * @return The distance in map units.
  */

@@ -64,14 +64,22 @@ const char *G_database_unit_name(int plural)
    \return units id
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int G_database_unit(void)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+int G_database_unit(void)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 int G_database_unit(void)
 =======
+>>>>>>> osgeo-main
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int G_database_unit()
@@ -85,6 +93,9 @@ int G_database_unit()
 int G_database_unit(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int units;

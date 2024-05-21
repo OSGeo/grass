@@ -8,9 +8,12 @@
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create HTML manual page snippets
 <<<<<<< HEAD
+<<<<<<< HEAD
 # COPYRIGHT:    (C) 2007-2023 by Glynn Clements
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -27,6 +30,9 @@
 =======
 # COPYRIGHT:    (C) 2007-2023 by Glynn Clements
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 #                and the GRASS Development Team
 #
@@ -68,8 +74,11 @@ HTTP_STATUS_CODES = list(http.HTTPStatus)
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 def get_version_branch(major_version, addons_git_repo_url):
     """Check if version branch for the current GRASS version exists,
@@ -114,14 +123,20 @@ def get_version_branch(major_version, addons_git_repo_url):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
 trunk_url = ""
 addons_url = ""
 grass_git_branch = "main"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 major, minor, patch = None, None, None
 if grass_version != "unknown":
@@ -146,6 +161,9 @@ if grass_version != "unknown":
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 if grass_version != "unknown":
     major, minor, patch = grass_version.split(".")
@@ -156,8 +174,14 @@ if grass_version != "unknown":
     addons_url = "{base_url}/grass-addons/tree/grass{major}/".format(
         base_url=base_url, major=major
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -258,9 +282,12 @@ def get_default_git_log(src_dir, datetime_format="%A %b %d %H:%M:%S %Y"):
     """Get default Git commit and commit date, when getting commit from
     local Git, local JSON file and remote GitHub REST API server wasn't
 <<<<<<< HEAD
+<<<<<<< HEAD
     successfull.
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     successful.
 =======
@@ -269,6 +296,9 @@ def get_default_git_log(src_dir, datetime_format="%A %b %d %H:%M:%S %Y"):
 =======
     successfull.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     :param str src_dir: addon source dir
@@ -321,9 +351,12 @@ def get_git_commit_from_file(
     :return dict git_log: dict which store last commit and commnit date
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     # Accessed date time if getting commit from JSON file wasn't successfull
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     # Accessed date time if getting commit from JSON file wasn't successful
 =======
@@ -332,6 +365,9 @@ def get_git_commit_from_file(
 =======
     # Accessed date time if getting commit from JSON file wasn't successfull
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     if not git_log:
         git_log = get_default_git_log(src_dir=src_dir)
@@ -365,8 +401,11 @@ def get_git_commit_from_rest_api_for_addon_repo(
     :return dict git_log: dict which store last commit and commnit date
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     # Accessed date time if getting commit from GitHub REST API wasn't successful
     if not git_log:
@@ -394,6 +433,9 @@ def get_git_commit_from_rest_api_for_addon_repo(
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     # Accessed date time if getting commit from GitHub REST API wasn't successfull
     if not git_log:
@@ -418,8 +460,14 @@ def get_git_commit_from_rest_api_for_addon_repo(
                 commit_datetime=commit[0]["commit"]["author"]["date"],
             )
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -455,9 +503,18 @@ def format_git_commit_date_from_local_git(
 
     :return str: output formatted commit datetime
     """
-    return datetime.fromisoformat(
-        commit_datetime,
-    ).strftime(datetime_format)
+    try:
+        date = datetime.fromisoformat(
+            commit_datetime,
+        )
+    except ValueError:
+        if commit_datetime.endswith("Z"):
+            # Python 3.10 and older does not support Z in time, while recent versions
+            # of Git (2.45.1) use it. Try to help the parsing if Z is in the string.
+            date = datetime.fromisoformat(commit_datetime[:-1] + "+00:00")
+        else:
+            raise
+    return date.strftime(datetime_format)
 
 
 def has_src_code_git(src_dir, is_addon):
@@ -477,9 +534,12 @@ def has_src_code_git(src_dir, is_addon):
         os.chdir(topdir)
     try:
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -487,6 +547,9 @@ def has_src_code_git(src_dir, is_addon):
 =======
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         process_result = subprocess.run(
             [
@@ -638,13 +701,19 @@ def read_file(name):
             s = f.read()
         return s
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     except OSError:
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     except IOError:
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -816,9 +885,12 @@ def get_addon_path():
     """Check if pgm is in the addons list and get addon path
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     return: pgm path if pgm is addon else None
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     Make or update list of the official addons source
     code paths g.extension prefix parameter plus /grass-addons directory
@@ -831,6 +903,9 @@ def get_addon_path():
 =======
     return: pgm path if pgm is addon else None
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     """
 <<<<<<< HEAD
@@ -904,8 +979,11 @@ def get_addon_path():
     addon_base = os.getenv("GRASS_ADDON_BASE")
     if addon_base:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         """'addons_paths.json' is file created during install extension
         check get_addons_paths() function in the g.extension.py file
@@ -924,6 +1002,9 @@ def get_addon_path():
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # addons_paths.json is file created during install extension
         # check get_addons_paths() function in the g.extension.py file
@@ -947,8 +1028,14 @@ def get_addon_path():
             if pgm == pathlib.Path(addon["path"]).name:
                 return addon["path"]
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1109,6 +1196,7 @@ if sys.platform == "win32":
     url_source = url_source.replace(os.path.sep, "/")
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 if index_name:
     branches = "branches"
     tree = "tree"
@@ -1116,6 +1204,8 @@ if index_name:
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 # Process Source code section
 branches = "branches"
@@ -1151,6 +1241,9 @@ if index_name:
     commits = "commits"
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     if branches in url_source:
         url_log = url_source.replace(branches, commits)

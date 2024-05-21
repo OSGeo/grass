@@ -205,9 +205,12 @@ static int init_projection(struct Cell_head *window, int *wrap_ncols)
             (360.0 - (window->east - window->west)) / window->ew_res + 1.1;
 #else
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_fatal_error(_("Lat/Long location is not supported by %s. Please "
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         G_fatal_error(_("Lat/Long project is not supported by %s. Please "
 =======
@@ -216,6 +219,9 @@ static int init_projection(struct Cell_head *window, int *wrap_ncols)
 =======
         G_fatal_error(_("Lat/Long location is not supported by %s. Please "
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                         "reproject map first."),
                       G_program_name());

@@ -253,8 +253,11 @@ static void dangles(struct Map_info *Map, int type, int option,
                     lines_removed++;
                 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 dangles_removed++;
             } /* delete the chain */
@@ -263,6 +266,9 @@ static void dangles(struct Map_info *Map, int type, int option,
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             } /* delete the chain */
 
@@ -270,8 +276,14 @@ static void dangles(struct Map_info *Map, int type, int option,
         } /* lcount == 1 */
     }     /* node <= nnodes */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

@@ -30,9 +30,12 @@ DCELL feature(double *coeff)
         b = C_B * zscale, c = C_C * zscale, d = C_D * zscale, e = C_E * zscale;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     double maxic, minic, /* Minimium and maximum curvature.      */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     double maxic, minic, /* Minimum and maximum curvature.      */
 =======
@@ -41,6 +44,9 @@ DCELL feature(double *coeff)
 =======
     double maxic, minic, /* Minimium and maximum curvature.      */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         slope,           /* Slope.                               */
         crosc;           /* Cross-sectional curvature.           */

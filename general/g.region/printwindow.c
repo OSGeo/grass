@@ -44,8 +44,14 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
     if (print_flag & PRINT_SH)
         x = G_projection() == PROJECTION_LL ? -1 : 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -112,14 +118,20 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
         if (print_flag & PRINT_SH) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             fprintf(stdout, "projection=%d%s", window->proj, sep);
             fprintf(stdout, "zone=%d%s", window->zone, sep);
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             fprintf(stdout, "projection=%d\n", window->proj);
             fprintf(stdout, "zone=%d\n", window->zone);
@@ -148,8 +160,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                {
                if (datum[0] != '*')
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                fprintf(stdout, "datum=%s%s", datum, sep);
                else
@@ -161,6 +176,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                fprintf(stdout, "datum=%s\n", datum);
                else
@@ -170,8 +188,14 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                else
                fprintf(stdout, "ellipsoid=wgs84\n");
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -192,10 +216,13 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
         if (print_flag & PRINT_SH) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (flat_flag)
                 sep = " ";
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
             if (flat_flag)
@@ -205,6 +232,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             if (flat_flag)
                 sep = " ";
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             fprintf(stdout, "n=%s%s", north, sep);
             fprintf(stdout, "s=%s%s", south, sep);
@@ -248,10 +278,13 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                         sep);
 #endif
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (flat_flag)
                 fprintf(stdout, "\n");
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
             if (flat_flag)
@@ -261,6 +294,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             if (flat_flag)
                 fprintf(stdout, "\n");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         }
         else {
@@ -323,6 +359,23 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             if ((in_proj_info = G_get_projinfo()) == NULL)
                 G_fatal_error(
 <<<<<<< HEAD
+<<<<<<< HEAD
+                    _("Can't get projection info of current location"));
+=======
+<<<<<<< HEAD
+                    _("Can't get projection info of current project"));
+>>>>>>> osgeo-main
+
+            if ((in_unit_info = G_get_projunits()) == NULL)
+                G_fatal_error(
+                    _("Can't get projection units of current location"));
+
+            if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
+                G_fatal_error(
+<<<<<<< HEAD
+=======
+                    _("Can't get projection key values of current project"));
+=======
                     _("Can't get projection info of current location"));
 
             if ((in_unit_info = G_get_projunits()) == NULL)
@@ -331,6 +384,38 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
             if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
                 G_fatal_error(
+                    _("Can't get projection key values of current location"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+
+            G_free_key_value(in_proj_info);
+            G_free_key_value(in_unit_info);
+
+            oproj.pj = NULL;
+            tproj.def = NULL;
+
+            if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
+                G_fatal_error(
+                    _("Unable to initialize coordinate transformation"));
+
+            /*
+             *  1 ------ 2
+             *  |        |  map corners
+             *  |        |
+             *  4--------3
+             */
+
+            latitude = window->north;
+            longitude = window->west;
+=======
+                    _("Can't get projection info of current location"));
+
+            if ((in_unit_info = G_get_projunits()) == NULL)
+                G_fatal_error(
+                    _("Can't get projection units of current location"));
+
+            if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
+                G_fatal_error(
+>>>>>>> osgeo-main
                     _("Can't get projection key values of current location"));
 
             G_free_key_value(in_proj_info);
@@ -364,6 +449,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
             latitude = window->north;
             longitude = window->east;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             /* get lat/long w/ same datum/ellipsoid as input */
             if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
                               &latitude, NULL) < 0)
@@ -371,10 +457,17 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                     _("Error in %s (projection of input coordinate pair)"),
                     "GPJ_transform()");
 
+<<<<<<< HEAD
+            lo1 = longitude;
+            la1 = latitude;
+
+            latitude = window->north;
+=======
             lo2 = longitude;
             la2 = latitude;
 
             latitude = window->south;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             longitude = window->east;
             /* get lat/long w/ same datum/ellipsoid as input */
             if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
@@ -383,11 +476,19 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                     _("Error in %s (projection of input coordinate pair)"),
                     "GPJ_transform()");
 
+<<<<<<< HEAD
+            lo2 = longitude;
+            la2 = latitude;
+
+            latitude = window->south;
+            longitude = window->east;
+=======
             lo3 = longitude;
             la3 = latitude;
 
             latitude = window->south;
             longitude = window->west;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
             /* get lat/long w/ same datum/ellipsoid as input */
             if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
                               &latitude, NULL) < 0)
@@ -395,6 +496,29 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                     _("Error in %s (projection of input coordinate pair)"),
                     "GPJ_transform()");
 
+<<<<<<< HEAD
+            lo3 = longitude;
+            la3 = latitude;
+
+            latitude = window->south;
+            longitude = window->west;
+=======
+            lo4 = longitude;
+            la4 = latitude;
+
+            /* center coordinates of the current region,
+             * not average of the projected corner coordinates */
+            latitude = (window->north + window->south) / 2.;
+            longitude = (window->west + window->east) / 2.;
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+            /* get lat/long w/ same datum/ellipsoid as input */
+            if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
+                              &latitude, NULL) < 0)
+                G_fatal_error(
+                    _("Error in %s (projection of input coordinate pair)"),
+                    "GPJ_transform()");
+
+<<<<<<< HEAD
             lo4 = longitude;
             la4 = latitude;
 
@@ -413,12 +537,31 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             lac = latitude;
 
             if (print_flag & PRINT_SH) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                fprintf(stdout, "nw_long=%.8f%snw_lat=%.8f%s", lo1, sep, la1,
+                        sep);
+                fprintf(stdout, "ne_long=%.8f%sne_lat=%.8f%s", lo2, sep, la2,
+                        sep);
+                fprintf(stdout, "se_long=%.8f%sse_lat=%.8f%s", lo3, sep, la3,
+                        sep);
+                fprintf(stdout, "sw_long=%.8f%ssw_lat=%.8f%s", lo4, sep, la4,
+                        sep);
+                fprintf(stdout, "center_long=%.8f%s", loc, sep);
+                fprintf(stdout, "center_lat=%.8f%s", lac, sep);
+=======
+>>>>>>> osgeo-main
                 fprintf(stdout, "nw_long=%.8f\nnw_lat=%.8f\n", lo1, la1);
                 fprintf(stdout, "ne_long=%.8f\nne_lat=%.8f\n", lo2, la2);
                 fprintf(stdout, "se_long=%.8f\nse_lat=%.8f\n", lo3, la3);
                 fprintf(stdout, "sw_long=%.8f\nsw_lat=%.8f\n", lo4, la4);
                 fprintf(stdout, "center_long=%.8f\n", loc);
                 fprintf(stdout, "center_lat=%.8f\n", lac);
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
             }
             else {
                 G_format_easting(lo1, buf, PROJECTION_LL);
@@ -454,8 +597,18 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
             if (!(print_flag & PRINT_REG)) {
                 if (print_flag & PRINT_SH) {
+<<<<<<< HEAD
                     fprintf(stdout, "rows=%d\n", window->rows);
                     fprintf(stdout, "cols=%d\n", window->cols);
+=======
+<<<<<<< HEAD
+                    fprintf(stdout, "rows=%d%s", window->rows, sep);
+                    fprintf(stdout, "cols=%d%s", window->cols, sep);
+=======
+                    fprintf(stdout, "rows=%d\n", window->rows);
+                    fprintf(stdout, "cols=%d\n", window->cols);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                 }
                 else {
                     fprintf(stdout, "%-*s %d\n", width, "rows:", window->rows);
@@ -466,6 +619,7 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
         else { /* in lat/long already */
 
 =======
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
                     _("Can't get projection info of current project"));
@@ -709,6 +863,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
         else { /* in lat/long already */
 
 =======
+=======
+>>>>>>> osgeo-main
             loc = longitude;
             lac = latitude;
 
@@ -766,6 +922,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
         else { /* in lat/long already */
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             if (window->proj != 0)
                 G_message(
@@ -773,9 +932,12 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             else
                 G_message(
 <<<<<<< HEAD
+<<<<<<< HEAD
                     _("You are in a simple XY location, projection to Lat/Lon "
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     _("You are in a simple XY project, projection to Lat/Lon "
 =======
@@ -784,6 +946,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 =======
                     _("You are in a simple XY location, projection to Lat/Lon "
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                       "is not possible. Use the -p flag instead."));
         }
@@ -793,10 +958,13 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
     if (print_flag & PRINT_EXTENT) {
         if (print_flag & PRINT_SH) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             fprintf(stdout, "ns_extent=%f\n", window->north - window->south);
             fprintf(stdout, "ew_extent=%f\n", window->east - window->west);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             fprintf(stdout, "ns_extent=%f%s", window->north - window->south,
                     sep);
@@ -809,6 +977,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             fprintf(stdout, "ns_extent=%f\n", window->north - window->south);
             fprintf(stdout, "ew_extent=%f\n", window->east - window->west);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         }
         else {
@@ -833,8 +1004,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
     if (print_flag & PRINT_CENTER) {
         if (print_flag & PRINT_SH) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             fprintf(stdout, "center_easting=%f%s",
                     (window->west + window->east) / 2., sep);
@@ -843,14 +1017,23 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             fprintf(stdout, "center_easting=%f\n",
                     (window->west + window->east) / 2.);
             fprintf(stdout, "center_northing=%f\n",
                     (window->north + window->south) / 2.);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -885,9 +1068,12 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
         G_format_easting(window->east, east, -1);
         G_format_easting(window->west, west, -1);
 <<<<<<< HEAD
+<<<<<<< HEAD
         fprintf(stdout, "bbox=%s,%s,%s,%s\n", west, south, east, north);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         fprintf(stdout, "bbox=%s,%s,%s,%s%s", west, south, east, north, sep);
 =======
@@ -896,6 +1082,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 =======
         fprintf(stdout, "bbox=%s,%s,%s,%s\n", west, south, east, north);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
 
@@ -905,14 +1094,22 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
         if (G_projection() == PROJECTION_XY)
 <<<<<<< HEAD
+<<<<<<< HEAD
             convergence = NAN;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            convergence = NAN;
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
             convergence = NAN;
 =======
+>>>>>>> osgeo-main
             convergence = 0. / 0.;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -927,6 +1124,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             convergence = NAN;
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         else if (G_projection() == PROJECTION_LL)
             convergence = 0.0;
@@ -948,8 +1148,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             if ((in_proj_info = G_get_projinfo()) == NULL)
                 G_fatal_error(
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     _("Can't get projection info of current project"));
 
@@ -963,6 +1166,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     _("Can't get projection info of current location"));
 
@@ -974,8 +1180,14 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                 G_fatal_error(
                     _("Can't get projection key values of current location"));
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1020,9 +1232,12 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 
         if (print_flag & PRINT_SH)
 <<<<<<< HEAD
+<<<<<<< HEAD
             fprintf(stdout, "converge_angle=%f\n", convergence);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             fprintf(stdout, "converge_angle=%f%s", convergence, sep);
 =======
@@ -1031,6 +1246,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 =======
             fprintf(stdout, "converge_angle=%f\n", convergence);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         else
             fprintf(stdout, "%-*s %f\n", width,
@@ -1058,9 +1276,12 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             if ((in_proj_info = G_get_projinfo()) == NULL)
                 G_fatal_error(
 <<<<<<< HEAD
+<<<<<<< HEAD
                     _("Can't get projection info of current location"));
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     _("Can't get projection info of current project"));
 =======
@@ -1069,6 +1290,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 =======
                     _("Can't get projection info of current location"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             /* do not wrap to -180, 180, otherwise east can be < west */
             /* TODO: for PROJ 6+, the +over switch must be added to the
@@ -1079,17 +1303,34 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             if ((in_unit_info = G_get_projunits()) == NULL)
                 G_fatal_error(
 <<<<<<< HEAD
+<<<<<<< HEAD
                     _("Can't get projection units of current location"));
 
             if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
                 G_fatal_error(
                     _("Can't get projection key values of current location"));
+=======
+<<<<<<< HEAD
+                    _("Can't get projection units of current project"));
+
+            if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
+                G_fatal_error(
+                    _("Can't get projection key values of current project"));
+=======
+                    _("Can't get projection units of current location"));
+
+            if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
+                G_fatal_error(
+                    _("Can't get projection key values of current location"));
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
             /*  output projection to lat/long and wgs84 ellipsoid */
             out_proj_info = G_create_key_value();
             out_unit_info = G_create_key_value();
 
 =======
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
                     _("Can't get projection units of current project"));
@@ -1110,6 +1351,8 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             out_unit_info = G_create_key_value();
 
 =======
+=======
+>>>>>>> osgeo-main
                     _("Can't get projection units of current location"));
 
             if (pj_get_kv(&iproj, in_proj_info, in_unit_info) < 0)
@@ -1121,6 +1364,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             out_unit_info = G_create_key_value();
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             G_set_key_value("proj", "ll", out_proj_info);
 
@@ -1131,9 +1377,12 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             if (G_get_datumparams_from_projinfo(in_proj_info, buff, dum) < 0)
                 G_fatal_error(_(
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "WGS84 output not possible as this location does not "
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     "WGS84 output not possible as this project does not "
 =======
@@ -1142,6 +1391,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 =======
                     "WGS84 output not possible as this location does not "
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     "contain "
                     "datum transformation parameters. Try running g.setproj."));
@@ -1272,8 +1524,11 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
             /* print the largest bounding box */
             if (print_flag & PRINT_SH) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 fprintf(stdout, "ll_n=%.8f%s", sh_ll_n, sep);
                 fprintf(stdout, "ll_s=%.8f%s", sh_ll_s, sep);
@@ -1286,6 +1541,9 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 fprintf(stdout, "ll_n=%.8f\n", sh_ll_n);
                 fprintf(stdout, "ll_s=%.8f\n", sh_ll_s);
@@ -1295,8 +1553,14 @@ void print_window(struct Cell_head *window, int print_flag, int flat_flag)
                 fprintf(stdout, "ll_clon=%.8f\n", loc);
                 fprintf(stdout, "ll_clat=%.8f\n", (sh_ll_n + sh_ll_s) / 2.);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

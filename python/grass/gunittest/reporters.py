@@ -664,9 +664,12 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
     ):
 <<<<<<< HEAD
+<<<<<<< HEAD
         super(GrassTestFilesHtmlReporter, self).end_file_test(
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         super().end_file_test(
 =======
@@ -675,6 +678,9 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
 =======
         super(GrassTestFilesHtmlReporter, self).end_file_test(
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             module=module,
             cwd=cwd,
@@ -927,9 +933,12 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
     ):
 <<<<<<< HEAD
+<<<<<<< HEAD
         super(GrassTestFilesKeyValueReporter, self).end_file_test(
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         super().end_file_test(
 =======
@@ -938,6 +947,9 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
 =======
         super(GrassTestFilesKeyValueReporter, self).end_file_test(
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             module=module,
             cwd=cwd,
@@ -1034,8 +1046,14 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
 =======
         super(GrassTestFilesTextReporter, self).start_file_test(module)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
+=======
+>>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 =======
 >>>>>>> c875f035a5 (Dockerfile: fix broken lib link (#1625))
@@ -1048,9 +1066,12 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
         self, module, cwd, returncode, stdout, stderr, test_summary, timed_out=None
     ):
 <<<<<<< HEAD
+<<<<<<< HEAD
         super(GrassTestFilesTextReporter, self).end_file_test(
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         super().end_file_test(
 =======
@@ -1059,6 +1080,9 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
 =======
         super(GrassTestFilesTextReporter, self).end_file_test(
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             module=module,
             cwd=cwd,
@@ -1077,6 +1101,12 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
             self._stream.write(width * "=")
             self._stream.write("\n")
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
             self._stream.write(f"FAILED {module.file_path}")
             if timed_out:
                 self._stream.write(f" - Timeout >{timed_out}s")
@@ -1085,10 +1115,13 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             self._stream.write(f"FAILED {module.file_path}")
             if timed_out:
                 self._stream.write(f" - Timeout >{timed_out}s")
 =======
+=======
+>>>>>>> osgeo-main
             self._stream.write("FAILED {file}".format(file=module.file_path))
 >>>>>>> 756514063b (Dockerfile: fix broken lib link (#1625))
 =======
@@ -1104,6 +1137,9 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
             if timed_out:
                 self._stream.write(f" - Timeout >{timed_out}s")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             num_failed = test_summary.get("failures", 0)
             num_failed += test_summary.get("errors", 0)

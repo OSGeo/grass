@@ -377,14 +377,22 @@ int main(int argc, char **argv)
             Rast_get_d_row(fd, map_buf, i);
             if (write(val_fd, map_buf, ncols * sizeof(DCELL)) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                 ncols * (int)sizeof(DCELL)) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                ncols * (int)sizeof(DCELL)) {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                 ncols * (int)sizeof(DCELL)) {
 =======
+>>>>>>> osgeo-main
                 ncols * sizeof(DCELL)) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -399,6 +407,9 @@ int main(int argc, char **argv)
                 ncols * (int)sizeof(DCELL)) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 G_fatal_error(_("Unable to write to tempfile"));
             }
@@ -471,14 +482,22 @@ int main(int argc, char **argv)
             Rast_get_c_row(dir_id, dir_buf, i);
             if (write(dir_fd, dir_buf, ncols * sizeof(CELL)) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                 ncols * (int)sizeof(CELL)) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                ncols * (int)sizeof(CELL)) {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                 ncols * (int)sizeof(CELL)) {
 =======
+>>>>>>> osgeo-main
                 ncols * sizeof(CELL)) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -493,6 +512,9 @@ int main(int argc, char **argv)
                 ncols * (int)sizeof(CELL)) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 G_fatal_error(_("Unable to write to tempfile"));
             }
@@ -511,14 +533,22 @@ int main(int argc, char **argv)
             }
             if (write(dir_fd, dir_buf, ncols * sizeof(DCELL)) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                 ncols * (int)sizeof(DCELL)) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                ncols * (int)sizeof(DCELL)) {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                 ncols * (int)sizeof(DCELL)) {
 =======
+>>>>>>> osgeo-main
                 ncols * sizeof(DCELL)) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -533,6 +563,9 @@ int main(int argc, char **argv)
                 ncols * (int)sizeof(DCELL)) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 G_fatal_error(_("Unable to write to tempfile"));
             }
@@ -813,14 +846,22 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                       SEEK_SET);
                 if (read(val_fd, val_buf, window->cols * sizeof(DCELL)) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                     window->cols * (int)sizeof(DCELL)) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    window->cols * (int)sizeof(DCELL)) {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                     window->cols * (int)sizeof(DCELL)) {
 =======
+>>>>>>> osgeo-main
                     window->cols * sizeof(DCELL)) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -835,6 +876,9 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                     window->cols * (int)sizeof(DCELL)) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     G_fatal_error(_("Unable to read from temp file"));
                 }
@@ -867,14 +911,22 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                       SEEK_SET);
                 if (read(dir_fd, dir_buf, window->cols * sizeof(CELL)) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                     window->cols * (int)sizeof(CELL)) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    window->cols * (int)sizeof(CELL)) {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                     window->cols * (int)sizeof(CELL)) {
 =======
+>>>>>>> osgeo-main
                     window->cols * sizeof(CELL)) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -889,6 +941,9 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                     window->cols * (int)sizeof(CELL)) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     G_fatal_error(_("Unable to read from temp file"));
                 }
@@ -1019,14 +1074,22 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                             if (read(val_fd, val_buf,
                                      window->cols * sizeof(DCELL)) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                                 window->cols * (int)sizeof(DCELL)) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                                window->cols * (int)sizeof(DCELL)) {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                                 window->cols * (int)sizeof(DCELL)) {
 =======
+>>>>>>> osgeo-main
                                 window->cols * sizeof(DCELL)) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -1041,6 +1104,9 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                                 window->cols * (int)sizeof(DCELL)) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                                 G_fatal_error(
                                     _("Unable to read from temp file"));
@@ -1153,14 +1219,22 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                       SEEK_SET);
                 if (read(val_fd, val_buf, window->cols * sizeof(DCELL)) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                     window->cols * (int)sizeof(DCELL)) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    window->cols * (int)sizeof(DCELL)) {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                     window->cols * (int)sizeof(DCELL)) {
 =======
+>>>>>>> osgeo-main
                     window->cols * sizeof(DCELL)) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -1175,6 +1249,9 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                     window->cols * (int)sizeof(DCELL)) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     G_fatal_error(_("Unable to read from temp file"));
                 }
@@ -1202,14 +1279,22 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                   SEEK_SET);
             if (read(dir_fd, dir_buf, window->cols * sizeof(DCELL)) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                 window->cols * (int)sizeof(DCELL)) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                window->cols * (int)sizeof(DCELL)) {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                 window->cols * (int)sizeof(DCELL)) {
 =======
+>>>>>>> osgeo-main
                 window->cols * sizeof(DCELL)) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -1224,6 +1309,9 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                 window->cols * (int)sizeof(DCELL)) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 G_fatal_error(_("Unable to read from temp file"));
             }
@@ -1324,14 +1412,22 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                         if (read(val_fd, val_buf,
                                  window->cols * sizeof(DCELL)) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                             window->cols * (int)sizeof(DCELL)) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                            window->cols * (int)sizeof(DCELL)) {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                             window->cols * (int)sizeof(DCELL)) {
 =======
+>>>>>>> osgeo-main
                             window->cols * sizeof(DCELL)) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -1346,6 +1442,9 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                             window->cols * (int)sizeof(DCELL)) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                             G_fatal_error(_("Unable to read from temp file"));
                         }

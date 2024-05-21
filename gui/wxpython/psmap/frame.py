@@ -500,9 +500,12 @@ class PsMapFrame(wx.Frame):
                     im = PILImage.fromarray(np.rot90(im_array, 3))
                 im.save(self.imgName, format="PNG")
 <<<<<<< HEAD
+<<<<<<< HEAD
             except (IOError, OSError):
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             except OSError:
 =======
@@ -511,6 +514,9 @@ class PsMapFrame(wx.Frame):
 =======
             except (IOError, OSError):
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 del busy
                 program = self._getGhostscriptProgramName()
@@ -524,8 +530,11 @@ class PsMapFrame(wx.Frame):
                     hyperlink="https://www.ghostscript.com/releases/gsdnld.html",
                     hyperlinkLabel=_(
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
                         "You can download {program} {arch} version here."
                     ).format(
                         program=program,
@@ -537,6 +546,9 @@ class PsMapFrame(wx.Frame):
                     hyperlinkLabel=_(
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                         "You can donwload {program} {arch} version here."
                     ).format(
@@ -544,8 +556,14 @@ class PsMapFrame(wx.Frame):
                         arch="64bit" if "64" in program else "32bit",
                     ),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

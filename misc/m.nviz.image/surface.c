@@ -100,8 +100,11 @@ int load_rasters(const struct GParams *params, nv_data *data)
     for (i = 0; i < nsurfs; i++) {
         id = surf_list[i];
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         /* color */
         /* check for color map */
@@ -114,6 +117,9 @@ int load_rasters(const struct GParams *params, nv_data *data)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         mapset = G_find_raster2(params->color_map->answers[i], "");
         if (mapset == NULL) {
@@ -124,8 +130,14 @@ int load_rasters(const struct GParams *params, nv_data *data)
         /* check for color map */
         if (i < ncolor_map && strcmp(params->color_map->answers[i], "")) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

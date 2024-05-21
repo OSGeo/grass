@@ -65,15 +65,23 @@ def main():
 
     from core.settings import UserSettings
 <<<<<<< HEAD
-    from core import globalvar
-    from iclass.frame import IClassMapDisplay
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     from core import globalvar
     from iclass.frame import IClassMapDisplay
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    from core import globalvar
+    from iclass.frame import IClassMapDisplay
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    from core import globalvar
+    from iclass.frame import IClassMapDisplay
+=======
+>>>>>>> osgeo-main
     from iclass.frame import IClassMapFrame
 >>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
 =======
@@ -84,6 +92,9 @@ def main():
     from core import globalvar
     from iclass.frame import IClassMapDisplay
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     group_name = subgroup_name = map_name = trainingmap_name = None
@@ -125,6 +136,11 @@ def main():
 
     # show main frame
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
     frame = wx.Frame(
         parent=None,
         size=globalvar.MAP_WINDOW_SIZE,
@@ -132,10 +148,13 @@ def main():
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     frame = wx.Frame(
         parent=None,
         size=globalvar.MAP_WINDOW_SIZE,
 =======
+=======
+>>>>>>> osgeo-main
     frame = IClassMapFrame(
         parent=None,
         giface=None,
@@ -150,6 +169,9 @@ def main():
         parent=None,
         size=globalvar.MAP_WINDOW_SIZE,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         title=_("Supervised Classification Tool - GRASS GIS"),
     )

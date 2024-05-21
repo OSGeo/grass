@@ -261,9 +261,12 @@ class Attrib(dict):
 
         According to https://gcc.gnu.org/onlinedocs/gcc/Attribute-Syntax.html,
 <<<<<<< HEAD
+<<<<<<< HEAD
         an attribute can also be preceeded/followed by a double underscore
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         an attribute can also be preceded/followed by a double underscore
 =======
@@ -272,6 +275,9 @@ class Attrib(dict):
 =======
         an attribute can also be preceeded/followed by a double underscore
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         ('__').
         """

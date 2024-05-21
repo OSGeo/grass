@@ -6,21 +6,30 @@ control raster operations.
 <p>
 The MASK is applied when <em>reading</em> an existing GRASS raster map,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 for example when used as an input map in a module. The MASK will block out
 certain areas of a raster map from analysis and/or display, by "hiding" them
 from sight of other GRASS modules. Data falling within the boundaries of the
 MASK can be modified and operated upon by other GRASS raster modules; data
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 falling outside the MASK is treated as if it were NULL.
 <p>
@@ -33,8 +42,11 @@ Because the MASK created with <em>r.mask</em> is actually only a reclass map
 named "MASK", it can be copied, renamed, removed, and used in analyses, just
 like other GRASS raster map layers.
 <<<<<<< HEAD
+<<<<<<< HEAD
 <p>
 =======
+=======
+>>>>>>> osgeo-main
 =======
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -92,20 +104,31 @@ named "MASK", it can be copied, renamed, removed, and used in analyses, just
 like other GRASS raster map layers.
 <p>
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 The user should be aware that a MASK remains in place until a user renames it
 to something other than "MASK", or removes it. To remove a mask and restore
 raster operations to normal (i.e., all cells of the current region), remove the
 MASK by setting the <b>-r</b> remove MASK flag (<tt>r.mask -r</tt>).
 <<<<<<< HEAD
+<<<<<<< HEAD
 Alternatively, a mask can be removed using <em>g.remove</em> or by renaming it
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+Alternatively, a mask can be removed using <em>g.remove</em> or by renaming it
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 Alternatively, a mask can be removed using <em>g.remove</em> or by renaming it
 =======
+>>>>>>> osgeo-main
 Alternatively, a mask can be removed using <em>g.remove</em> or by renaming it 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -120,14 +143,23 @@ Alternatively, a mask can be removed using <em>g.remove</em> or by renaming it
 Alternatively, a mask can be removed using <em>g.remove</em> or by renaming it
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 to any other name with <em>g.rename</em>.
 
 <h2>NOTES</h2>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -144,7 +176,10 @@ MASK with the <em>maskcats</em> parameter; if <em>r.mask</em> is run from the
 command line, the category values listed in <em>maskcats</em> must be quoted
 (see example below). Note that the <em>maskcats</em> can only be used if the
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 The above method for specifying a "mask" may seem counterintuitive. Areas 
 inside the MASK are not hidden; areas outside the MASK will be ignored until 
@@ -197,14 +232,20 @@ command line, the category values listed in <em>maskcats</em> must be quoted
 (see example below). Note that the <em>maskcats</em> can only be used if the
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 input map is an integer map.
 
 <h3>Different ways to create a MASK</h3>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -251,6 +292,9 @@ raster cells with 0 and 1 will be part of the MASK. This is because
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 =======
 =======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 The <em>r.mask</em> function creates a MASK with values 1 and NULL. But note
 that a MASK can also be created using other functions that have a raster as
@@ -263,6 +307,11 @@ unaltered. This means that:
 If a binary map with [0,1] values is used as input in <em>r.mask</em>, all
 raster cells with 0 and 1 will be part of the MASK. This is because
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -275,14 +324,22 @@ r.mask raster=map1
 </pre></div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 On the other hand, if a binary map is used as an input in <em>g.copy</em> to create a MASK,
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+On the other hand, if a binary map is used as an input in <em>g.copy</em> to create a MASK,
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 On the other hand, if a binary map is used as an input in <em>g.copy</em> to create a MASK,
 =======
+>>>>>>> osgeo-main
 On the other hand, if a binary map is used as an input in <em>g.copy</em> to create a MASK,  
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -297,6 +354,9 @@ On the other hand, if a binary map is used as an input in <em>g.copy</em> to cre
 On the other hand, if a binary map is used as an input in <em>g.copy</em> to create a MASK,
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 only the raster cells with value 1 will be part of the MASK.
 
@@ -309,6 +369,12 @@ g.copy raster=map2,MASK
 
 <em>r.mask</em> treats floating-point maps the same as integer maps (except that
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 floating maps are not allowed in combination with the <em>maskcats</em>
 parameter); all non-NULL values of the input raster map are converted to 1 and
 are thus part of the MASK. In the example below, all raster cells are part of
@@ -317,10 +383,13 @@ are thus part of the MASK. In the example below, all raster cells are part of
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 floating maps are not allowed in combination with the <em>maskcats</em>
 parameter); all non-NULL values of the input raster map are converted to 1 and
 are thus part of the MASK. In the example below, all raster cells are part of
 =======
+=======
+>>>>>>> osgeo-main
 floating maps are not allowed in combination with the <em>maskcats</em> 
 parameter); all non-NULL values of the input raster map are converted to 1 and 
 are thus part of the MASK. In the example below, all raster cells are part of 
@@ -344,6 +413,9 @@ are thus part of the MASK. In the example below, all raster cells are part of
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 the MASK, i.e., nothing is blocked out from analysis and/or display.
 
@@ -357,14 +429,22 @@ the user should be aware that the MASK is read as an integer map. If MASK is
 a floating-point map, the values will be converted to integers using
 the map's quantisation rules (this defaults to round-to-nearest, but can be
 <<<<<<< HEAD
+<<<<<<< HEAD
 changed with r.quant).
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+changed with r.quant).
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 changed with r.quant).
 =======
+>>>>>>> osgeo-main
 changed with r.quant). 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -379,6 +459,9 @@ changed with r.quant).
 changed with r.quant).
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 <div class="code"><pre>
@@ -387,16 +470,25 @@ g.copy raster=map4,MASK
 </pre></div>
 
 <<<<<<< HEAD
-In the example above, raster cells with a rounded value of 1 are part of
-the MASK, while raster cells with a rounded value of 0 are converted to NULL
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 In the example above, raster cells with a rounded value of 1 are part of
 the MASK, while raster cells with a rounded value of 0 are converted to NULL
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+In the example above, raster cells with a rounded value of 1 are part of
+the MASK, while raster cells with a rounded value of 0 are converted to NULL
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+In the example above, raster cells with a rounded value of 1 are part of
+the MASK, while raster cells with a rounded value of 0 are converted to NULL
+=======
+>>>>>>> osgeo-main
 In the example above, raster cells with a rounded value of 1 are part of 
 the MASK, while raster cells with a rounded value of 0 are converted to NULL 
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -416,6 +508,9 @@ In the example above, raster cells with a rounded value of 1 are part of
 the MASK, while raster cells with a rounded value of 0 are converted to NULL
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 and consequently blocked out from analysis and/or display.
 

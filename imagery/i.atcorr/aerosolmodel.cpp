@@ -484,9 +484,12 @@ void AerosolModel::save()
 /*
   To compute the optical scattering parameters (extinction and scattering
 <<<<<<< HEAD
+<<<<<<< HEAD
   coefficients, single scattering albedo, phase function, assymetry factor)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
   coefficients, single scattering albedo, phase function, asymmetry factor)
 =======
@@ -495,6 +498,9 @@ void AerosolModel::save()
 =======
   coefficients, single scattering albedo, phase function, assymetry factor)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
   at the ten discrete wavelengths for the selected model (or created model)
   from:

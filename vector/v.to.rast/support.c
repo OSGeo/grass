@@ -159,9 +159,12 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
 
         /* append color rules to my_color_rules array, they will be set
 <<<<<<< HEAD
+<<<<<<< HEAD
          * later all togheter */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
          * later all together */
 =======
@@ -170,6 +173,9 @@ int update_dbcolors(const char *rast_name, const char *vector_map, int field,
 =======
          * later all togheter */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         colors_n_values++;
         my_color_rules[i].red = red;

@@ -69,9 +69,12 @@ static int continue_stream(CELL stream_id, int r_max, int c_max, int *stream_no)
         if (n_stream_nodes != *stream_no)
             G_warning(
 <<<<<<< HEAD
+<<<<<<< HEAD
                 _("Stream_no %d and n_stream_nodes %" PRI_OFF_T " out of sync"),
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 _("Stream_no %d and n_stream_nodes %" PRId64 " out of sync"),
 =======
@@ -80,6 +83,9 @@ static int continue_stream(CELL stream_id, int r_max, int c_max, int *stream_no)
 =======
                 _("Stream_no %d and n_stream_nodes %" PRI_OFF_T " out of sync"),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 *stream_no, n_stream_nodes);
 
@@ -666,9 +672,12 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
             /* debug */
             if (n_stream_nodes != stream_no)
 <<<<<<< HEAD
+<<<<<<< HEAD
                 G_warning(_("Stream_no %d and n_stream_nodes %" PRI_OFF_T
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 G_warning(_("Stream_no %d and n_stream_nodes %" PRId64
 =======
@@ -677,6 +686,9 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
 =======
                 G_warning(_("Stream_no %d and n_stream_nodes %" PRI_OFF_T
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                             " out of sync"),
                           stream_no, n_stream_nodes);
@@ -712,9 +724,12 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
     if (workedon)
         G_warning(_("MFD: A * path already processed when setting drainage "
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "direction: %" PRI_OFF_T " of %" PRI_OFF_T " cells"),
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     "direction: %" PRId64 " of %" PRId64 " cells"),
 =======
@@ -723,6 +738,9 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
 =======
                     "direction: %" PRI_OFF_T " of %" PRI_OFF_T " cells"),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                   workedon, n_points);
 
@@ -732,10 +750,13 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
     G_free(flag_nbr);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     G_debug(1, "%" PRI_OFF_T " outlets", n_outlets);
     G_debug(1, "%" PRI_OFF_T " nodes", n_stream_nodes);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     G_debug(1, "%" PRId64 " outlets", n_outlets);
     G_debug(1, "%" PRId64 " nodes", n_stream_nodes);
@@ -747,6 +768,9 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
     G_debug(1, "%" PRI_OFF_T " outlets", n_outlets);
     G_debug(1, "%" PRI_OFF_T " nodes", n_stream_nodes);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     G_debug(1, "%d streams", stream_no);
 

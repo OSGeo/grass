@@ -201,8 +201,14 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
     G_message(_("Resolving conflicts..."));
     for (iter = 0; iter < iterations; iter++) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -273,10 +279,13 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
         matrix_add(&dy, &fy, &fy);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         matrix_mult(&kinv, &fx, &dx);
         matrix_mult(&kinv, &fy, &dy);
 
 =======
+=======
+>>>>>>> osgeo-main
 =======
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -496,6 +505,9 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
         matrix_mult(&kinv, &fy, &dy);
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         for (i = 0; i < index; i++) {
             if (point_index[i] == -1)

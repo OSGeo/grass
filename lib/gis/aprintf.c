@@ -200,11 +200,27 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                     ;
                 if (*c) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                     va_list ap_copy;
                     char tmp;
 
                     /* copy ap for ovprintf() */
                     va_copy(ap_copy, ap);
+=======
+<<<<<<< HEAD
+                    va_list aq;
+                    char tmp;
+
+                    /* copy ap for ovprintf() */
+                    va_copy(aq, ap);
+=======
+                    va_list ap_copy;
+                    char tmp;
+
+                    /* copy ap for ovprintf() */
+                    va_copy(ap_copy, ap);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 
                     /* found a conversion specifier */
                     if (*c == 's') {
@@ -255,13 +271,22 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                         }
                         if (*p_spec) {
                             /* illegal string specifier? */
+<<<<<<< HEAD
                             va_end(ap_copy);
+=======
+<<<<<<< HEAD
+                            va_end(aq);
+=======
+                            va_end(ap_copy);
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
                             *(q + 1) = 0;
                             G_fatal_error(
                                 _("Failed to parse string specifier: %s"), p);
                         }
 
 =======
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
                     va_list aq;
@@ -337,6 +362,8 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                         }
 
 =======
+=======
+>>>>>>> osgeo-main
                     va_list ap_copy;
                     char tmp;
 
@@ -399,6 +426,9 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                         }
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                         s = va_arg(ap, char *);
 
@@ -431,9 +461,12 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                             tmp = *(q + 1);
                             *(q + 1) = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
                             nbytes += ovprintf(opts, p, ap_copy);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                             nbytes += ovprintf(opts, p, aq);
 =======
@@ -442,6 +475,9 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
 =======
                             nbytes += ovprintf(opts, p, ap_copy);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                             *(q + 1) = tmp;
                         }
@@ -451,9 +487,12 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                         tmp = *(q + 1);
                         *(q + 1) = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
                         nbytes += ovprintf(opts, p, ap_copy);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                         nbytes += ovprintf(opts, p, aq);
 =======
@@ -462,6 +501,9 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
 =======
                         nbytes += ovprintf(opts, p, ap_copy);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                         *(q + 1) = tmp;
 
@@ -510,9 +552,12 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                         }
                     }
 <<<<<<< HEAD
+<<<<<<< HEAD
                     va_end(ap_copy);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     va_end(aq);
 =======
@@ -521,6 +566,9 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
 =======
                     va_end(ap_copy);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     break;
                 }

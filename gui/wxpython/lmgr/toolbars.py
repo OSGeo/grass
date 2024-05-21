@@ -125,14 +125,20 @@ class DisplayPanelToolbar(BaseToolbar):
         return self._getToolbarData(
             (
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 (
                     ("addMulti", _("Add multiple map layers")),
@@ -170,8 +176,14 @@ class DisplayPanelToolbar(BaseToolbar):
                     self.parent.OnAddWS,
                 ),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -188,10 +200,13 @@ class DisplayPanelToolbar(BaseToolbar):
                     self.parent.OnDeleteLayer,
                 ),
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (None,),
                 (
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
                 ("addMulti", icons["addMulti"], self.parent.OnAddMaps),
                 ("addrast", icons["addRast"], self.parent.OnAddRaster),
@@ -222,6 +237,9 @@ class DisplayPanelToolbar(BaseToolbar):
                 (None,),
                 (
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     ("vdigit", icons["vdigit"].label),
                     icons["vdigit"],
@@ -270,14 +288,20 @@ class LMToolsToolbar(AuiToolbar):
         return self._getToolbarData(
             (
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 (
                     ("newdisplay", _("New display")),
@@ -285,8 +309,11 @@ class LMToolsToolbar(AuiToolbar):
                     self.parent.OnNewDisplay,
                 ),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
                 ("newdisplay", icons["newdisplay"], self.parent.OnNewDisplay),
@@ -298,6 +325,9 @@ class LMToolsToolbar(AuiToolbar):
 >>>>>>> 7896e1a53f (wxGUI/Single-Window: New change page event for AuiNotebook (#1780))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 (None,),
                 (
@@ -325,7 +355,10 @@ class LMToolsToolbar(AuiToolbar):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
                 (None,),
                 (
                     ("mapCalc", icons["mapcalc"].label),
@@ -352,6 +385,9 @@ class LMToolsToolbar(AuiToolbar):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     ("script-load", icons["script-load"].label),
                     icons["script-load"],

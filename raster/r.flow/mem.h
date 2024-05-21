@@ -26,14 +26,22 @@ void allocate_heap(void);
 void deallocate_heap(void);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void put_row_seg(layer, int /* l, row */);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void put_row_seg(layer, int /* l, row */);
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 void put_row_seg(layer, int /* l, row */);
 =======
+>>>>>>> osgeo-main
 void put_row_seg(/* l, row */);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -48,6 +56,9 @@ void put_row_seg(/* l, row */);
 void put_row_seg(layer, int /* l, row */);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 #define get_row(l, row)                                                 \

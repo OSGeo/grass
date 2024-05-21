@@ -123,9 +123,12 @@ def main(options, unused_flags):
             # The relative path misses the root directory (name), because we
             # loose it on the way. (We should use parent directory to get the
 <<<<<<< HEAD
+<<<<<<< HEAD
             # full relative path, but the directory name is diffrent now.
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             # full relative path, but the directory name is different now.
 =======
@@ -134,6 +137,9 @@ def main(options, unused_flags):
 =======
             # full relative path, but the directory name is diffrent now.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             # This is the consequence of how the extract functions work.)
             relative = os.path.relpath(result, start=directory)
@@ -150,9 +156,12 @@ def main(options, unused_flags):
             gs.fatal(
                 _(
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "The dowloaded file is not a valid GRASS Location."
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     "The downloaded file is not a valid GRASS Location."
 =======
@@ -161,6 +170,9 @@ def main(options, unused_flags):
 =======
                     "The dowloaded file is not a valid GRASS Location."
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     " The extracted file contains these files and directories:"
                     "\n{files_and_dirs}"

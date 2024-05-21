@@ -83,9 +83,12 @@ void write_fp_quant(const char *output)
 void create_map(const struct input *inputs, int num_inputs, const char *output,
                 struct Cell_head *cellhd, int maptype, DCELL dmin, DCELL dmax,
 <<<<<<< HEAD
+<<<<<<< HEAD
                 int have_stats, struct R_stats *ostats, const char *title)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 int have_stats UNUSED, struct R_stats *ostats UNUSED,
                 const char *title)
@@ -95,6 +98,9 @@ void create_map(const struct input *inputs, int num_inputs, const char *output,
 =======
                 int have_stats, struct R_stats *ostats, const char *title)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     struct History history;

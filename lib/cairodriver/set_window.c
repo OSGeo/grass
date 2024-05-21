@@ -9,9 +9,12 @@
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
    \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
    \author Lars Ahlzen <lars ahlzen.com> (original contributor)
 =======
@@ -20,6 +23,9 @@
 =======
    \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
    \author Glynn Clements
  */

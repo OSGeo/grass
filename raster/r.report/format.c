@@ -25,14 +25,22 @@ int format_parms(double v, int *n, int *dp, int *eformat, int e_option)
             scient_format(v, buf, *n, *dp);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         if ((int)strlen(buf) <= *n)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if ((int)strlen(buf) <= *n)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
         if ((int)strlen(buf) <= *n)
 =======
+>>>>>>> osgeo-main
         if (strlen(buf) <= *n)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -47,6 +55,9 @@ int format_parms(double v, int *n, int *dp, int *eformat, int e_option)
         if ((int)strlen(buf) <= *n)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             break;
 

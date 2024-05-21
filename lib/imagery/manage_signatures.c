@@ -20,12 +20,18 @@
 
 /*!
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
    \brief Get signature directory
 
@@ -43,8 +49,11 @@ void I_get_signatures_dir(char *dir, I_SIGFILE_TYPE type)
         sprintf(dir, "signatures%csigset", HOST_DIRSEP);
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     else if (type == I_SIGFILE_TYPE_LIBSVM) {
         sprintf(dir, "signatures%clibsvm", HOST_DIRSEP);
 =======
@@ -73,6 +82,9 @@ void I_get_signatures_dir(char *dir, I_SIGFILE_TYPE type)
     }
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     else {
         G_fatal_error("Programming error: unknown signature file type");
@@ -81,12 +93,18 @@ void I_get_signatures_dir(char *dir, I_SIGFILE_TYPE type)
 
 /*!
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
    \brief Make signature dir
 
@@ -105,7 +123,10 @@ void I_make_signatures_dir(I_SIGFILE_TYPE type)
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
   \brief Make signature element (internal use only)
 =======
    \brief Make signature dir
@@ -131,6 +152,9 @@ void I_make_signatures_dir(I_SIGFILE_TYPE type)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 }
 
@@ -139,12 +163,18 @@ static int list_by_type(I_SIGFILE_TYPE, const char *, int, char ***);
 /*!
  * \brief Remove a signature file
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  *
  * If removal fails, prints a warning and returns 1.
@@ -153,7 +183,10 @@ static int list_by_type(I_SIGFILE_TYPE, const char *, int, char ***);
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
  * 
  * If removal fails, prints a warning and returns 1.
  * It is safe to pass fully qualified names.
@@ -167,6 +200,9 @@ static int list_by_type(I_SIGFILE_TYPE, const char *, int, char ***);
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  * \param type I_SIGFILE_TYPE signature type
  * \param name of signature to remove
@@ -177,13 +213,20 @@ int I_signatures_remove(I_SIGFILE_TYPE type, const char *name)
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 <<<<<<< HEAD
-    char dir[GNAME_MAX];
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     char dir[GNAME_MAX];
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    char dir[GNAME_MAX];
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    char dir[GNAME_MAX];
+=======
+>>>>>>> osgeo-main
     char element[GNAME_MAX];
     int ret = 0;
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
@@ -193,6 +236,9 @@ int I_signatures_remove(I_SIGFILE_TYPE type, const char *name)
 =======
     char dir[GNAME_MAX];
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     G_debug(1, "I_signatures_remove(%d, %s);", type, name);
@@ -201,12 +247,18 @@ int I_signatures_remove(I_SIGFILE_TYPE type, const char *name)
     if (G_name_is_fully_qualified(name, xname, xmapset) &&
         strcmp(xmapset, G_mapset()) != 0) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         G_warning(_("%s is not in the current mapset (%s)"), name, G_mapset());
         return 1;
@@ -217,7 +269,10 @@ int I_signatures_remove(I_SIGFILE_TYPE type, const char *name)
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
         G_warning(_("%s is not in the current mapset (%s)"), name,
                   G_mapset());
         return 1;
@@ -236,6 +291,9 @@ int I_signatures_remove(I_SIGFILE_TYPE type, const char *name)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             G_verbose_message(_("%s removed"), name);
             return 0;
@@ -266,12 +324,18 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
     char sname[GNAME_MAX], tname[GNAME_MAX], tmapset[GMAPSET_MAX],
         xmapset[GMAPSET_MAX];
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     char dir[GNAME_MAX];
     const char *smapset;
@@ -282,7 +346,10 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
     char element[GNAME_MAX];
     const char *smapset;
     char old_path[GPATH_MAX], new_path[GPATH_MAX];
@@ -300,6 +367,9 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     /* Copy only if mapset of new name is the current mapset */
@@ -321,12 +391,18 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
     G_unqualified_name(old_name, NULL, sname, xmapset);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     I_make_signatures_dir(type);
 
@@ -340,7 +416,10 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
     I__make_signatures_element(type);
 =======
     I_make_signatures_dir(type);
@@ -360,6 +439,9 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         G_warning(_("Unable to copy <%s> to current mapset as <%s>"),
                   G_fully_qualified_name(old_name, smapset), tname);
@@ -385,13 +467,20 @@ int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name,
 {
     char sname[GNAME_MAX], tname[GNAME_MAX], tmapset[GMAPSET_MAX];
 <<<<<<< HEAD
-    char dir[GNAME_MAX];
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     char dir[GNAME_MAX];
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    char dir[GNAME_MAX];
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    char dir[GNAME_MAX];
+=======
+>>>>>>> osgeo-main
     char element[GNAME_MAX];
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -400,6 +489,9 @@ int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name,
 =======
     char dir[GNAME_MAX];
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     const char *smapset;
     char old_path[GPATH_MAX], new_path[GPATH_MAX];
@@ -433,14 +525,20 @@ int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name,
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     I_get_signatures_dir(dir, type);
     /* Note – we need whole directory not just an element in it thus
@@ -448,8 +546,11 @@ int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name,
     G_file_name(old_path, dir, sname, tmapset);
     G_file_name(new_path, dir, tname, tmapset);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
     I__get_signatures_element(element, type);
@@ -460,6 +561,9 @@ int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     if (G_rename_file(old_path, new_path) != 0) {
@@ -508,13 +612,20 @@ int I_signatures_list_by_type(I_SIGFILE_TYPE type, const char *mapset,
  *
  * Calls G_free for all list items returned by I_signatures_list_by_type()
 <<<<<<< HEAD
- * Sets pointer to NULL to prevent accidental use after free.
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
  * Sets pointer to NULL to prevent accidental use after free.
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+ * Sets pointer to NULL to prevent accidental use after free.
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+ * Sets pointer to NULL to prevent accidental use after free.
+=======
+>>>>>>> osgeo-main
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
  * Sets pointer to NULL to prevent accidental use after free.
@@ -522,6 +633,9 @@ int I_signatures_list_by_type(I_SIGFILE_TYPE type, const char *mapset,
 =======
  * Sets pointer to NULL to prevent accidental use after free.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  *
  * \param int Return value of I_signatures_list_by_type()
@@ -534,13 +648,20 @@ void I_free_signatures_list(int count, char ***list)
     }
     G_free(*list);
 <<<<<<< HEAD
-    *list = NULL;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     *list = NULL;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    *list = NULL;
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    *list = NULL;
+=======
+>>>>>>> osgeo-main
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
     *list = NULL;
@@ -548,6 +669,9 @@ void I_free_signatures_list(int count, char ***list)
 =======
     *list = NULL;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 }
 
@@ -557,12 +681,18 @@ static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
     int count = 0;
     char path[GPATH_MAX];
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     char dir[GNAME_MAX];
     char **dirlist;
@@ -572,7 +702,10 @@ static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
     char element[GNAME_MAX];
     char **dirlist;
 
@@ -588,6 +721,9 @@ static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     if (access(path, 0) != 0) {
@@ -602,12 +738,18 @@ static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
     int mapset_len = strlen(mapset);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     *out_list = (char **)G_realloc(*out_list, (base + count) * sizeof(char *));
     for (int i = 0; i < count; i++) {
@@ -615,9 +757,12 @@ static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
             (strlen(dirlist[i]) + 1 + mapset_len + 1) * sizeof(char));
         sprintf((*out_list)[base + i], "%s@%s", dirlist[i], mapset);
 <<<<<<< HEAD
+<<<<<<< HEAD
     }
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         G_free(dirlist[i]);
     }
     G_free(dirlist);
@@ -636,6 +781,9 @@ static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
 =======
     }
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     return count;

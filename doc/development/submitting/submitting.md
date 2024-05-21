@@ -20,8 +20,11 @@ Be sure to check your code against these rules:
   standard phrases, i18N etc.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 ### Use pre-commit
 
@@ -88,6 +91,9 @@ pre-commit install
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 ## GRASS GIS programming best practice
 

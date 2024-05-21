@@ -12,8 +12,11 @@ This program was written in 2006 by Thomas Huld and Tomas Cebecauer,
 Joint Research Centre of the European Commission, based on bits of the r.sun
 module by Jaro Hofierka
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 
 Program was refactored by Anna Petrasova to remove most global variables.
@@ -21,6 +24,9 @@ Program was refactored by Anna Petrasova to remove most global variables.
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 *******************************************************************************/
@@ -52,8 +58,11 @@ Program was refactored by Anna Petrasova to remove most global variables.
 #include <grass/parson.h>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #define WHOLE_RASTER   1
 #define SINGLE_POINT   0
@@ -74,6 +83,9 @@ Program was refactored by Anna Petrasova to remove most global variables.
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 #define WHOLE_RASTER      1
 #define SINGLE_POINT      0
@@ -180,10 +192,13 @@ typedef struct {
 } HorizonProperties;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* why not use G_distance() here which switches to geodesic/great
    circle distance as needed? */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 typedef struct {
     int n, m, m100, n100;
@@ -240,6 +255,9 @@ double distance(double x1, double x2, double y1, double y2, double coslatsq)
 /* why not use G_distance() here which switches to geodesic/great
    circle distance as needed? */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 double distance(double x1, double x2, double y1, double y2)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -264,6 +282,7 @@ int main(int argc, char *argv[])
         struct Option *elevin, *dist, *coord, *direction, *horizon, *step,
             *start, *end, *bufferzone, *e_buff, *w_buff, *n_buff, *s_buff,
 <<<<<<< HEAD
+<<<<<<< HEAD
             *maxdistance, *output;
     } parm;
 
@@ -271,6 +290,8 @@ int main(int argc, char *argv[])
         struct Flag *degreeOutput, *compassOutput;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             *maxdistance, *format, *output;
     } parm;
@@ -291,6 +312,9 @@ int main(int argc, char *argv[])
     struct {
         struct Flag *degreeOutput, *compassOutput;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     } flag;
 
@@ -358,14 +382,20 @@ int main(int argc, char *argv[])
         _("For horizon rasters, read from the DEM an extra buffer around the "
           "present region");
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     parm.bufferzone->options = "0-";
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     parm.bufferzone->guisection = _("Raster mode");
 
@@ -376,14 +406,20 @@ int main(int argc, char *argv[])
     parm.e_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer eastward the present region");
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     parm.e_buff->options = "0-";
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     parm.e_buff->guisection = _("Raster mode");
 
@@ -394,14 +430,20 @@ int main(int argc, char *argv[])
     parm.w_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer westward the present region");
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     parm.w_buff->options = "0-";
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     parm.w_buff->guisection = _("Raster mode");
 
@@ -412,14 +454,20 @@ int main(int argc, char *argv[])
     parm.n_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer northward the present region");
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     parm.n_buff->options = "0-";
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     parm.n_buff->guisection = _("Raster mode");
 
@@ -430,14 +478,20 @@ int main(int argc, char *argv[])
     parm.s_buff->description = _("For horizon rasters, read from the DEM an "
                                  "extra buffer southward the present region");
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     parm.s_buff->options = "0-";
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     parm.s_buff->guisection = _("Raster mode");
 
@@ -456,9 +510,12 @@ int main(int argc, char *argv[])
     parm.coord = G_define_standard_option(G_OPT_M_COORDS);
     parm.coord->description =
 <<<<<<< HEAD
+<<<<<<< HEAD
         _("Coordinate for which you want to calculate the horizon");
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         _("Coordinate(s) for which you want to calculate the horizon");
     parm.coord->multiple = YES;
@@ -468,6 +525,9 @@ int main(int argc, char *argv[])
 =======
         _("Coordinate for which you want to calculate the horizon");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     parm.coord->guisection = _("Point mode");
 
@@ -536,10 +596,13 @@ int main(int argc, char *argv[])
     geometry.offsety = 0.5;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     n /*n_cols */ = cellhd.cols;
     m /*n_rows */ = cellhd.rows;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     geometry.n /*n_cols */ = cellhd.cols;
     geometry.m /*n_rows */ = cellhd.rows;
@@ -551,6 +614,9 @@ int main(int argc, char *argv[])
     n /*n_cols */ = cellhd.cols;
     m /*n_rows */ = cellhd.rows;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     geometry.n100 = ceil(geometry.n / 100.);
@@ -570,12 +636,18 @@ int main(int argc, char *argv[])
         G_important_message(_("Note: In latitude-longitude coordinate system "
                               "specify buffers in degree unit"));
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     elevin = parm.elevin->answer;
@@ -587,6 +659,7 @@ int main(int argc, char *argv[])
     int point_count = 0;
     if (parm.coord->answer == NULL) {
         G_debug(1, "Setting mode: WHOLE_RASTER");
+<<<<<<< HEAD
 <<<<<<< HEAD
         setMode(WHOLE_RASTER);
     }
@@ -620,6 +693,8 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Unable to open file <%s>"), outfile);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         mode = WHOLE_RASTER;
     }
@@ -666,6 +741,9 @@ int main(int argc, char *argv[])
         setMode(WHOLE_RASTER);
 =======
         setMode(WHOLE_RASTER);
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
     else {
@@ -731,8 +809,11 @@ int main(int argc, char *argv[])
     settings.single_direction = 0;
     if (parm.direction->answer != NULL)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         sscanf(parm.direction->answer, "%lf", &settings.single_direction);
 
@@ -749,6 +830,9 @@ int main(int argc, char *argv[])
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         sscanf(parm.direction->answer, "%lf", &single_direction);
 
@@ -759,8 +843,14 @@ int main(int argc, char *argv[])
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -770,8 +860,11 @@ int main(int argc, char *argv[])
                 _("You didn't specify a horizon raster name. Aborting."));
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         settings.horizon_basename = parm.horizon->answer;
         if (parm.step->answer != NULL) {
@@ -792,6 +885,9 @@ int main(int argc, char *argv[])
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         horizon = parm.horizon->answer;
         if (parm.step->answer != NULL) {
@@ -810,8 +906,14 @@ int main(int argc, char *argv[])
         }
         if (end < 0.0 || end > 360.0) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -832,8 +934,11 @@ int main(int argc, char *argv[])
                 _("You didn't specify an angle step size. Aborting."));
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         sscanf(parm.step->answer, "%lf", &settings.step);
     }
@@ -843,6 +948,9 @@ int main(int argc, char *argv[])
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         sscanf(parm.step->answer, "%lf", &step);
     }
@@ -850,8 +958,14 @@ int main(int argc, char *argv[])
     if (step == 0.0) {
         step = 360.;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -891,12 +1005,15 @@ int main(int argc, char *argv[])
     settings.fixedMaxLength = BIG;
     if (parm.maxdistance->answer != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (sscanf(parm.maxdistance->answer, "%lf", &fixedMaxLength) != 1)
             G_fatal_error(_("Could not read maximum distance. Aborting."));
     }
     G_debug(1, "Using maxdistance %f", fixedMaxLength); /* predefined as BIG */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         if (sscanf(parm.maxdistance->answer, "%lf", &settings.fixedMaxLength) !=
             1)
@@ -910,6 +1027,9 @@ int main(int argc, char *argv[])
     }
     G_debug(1, "Using maxdistance %f", fixedMaxLength); /* predefined as BIG */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     /* TODO: fixing BIG, there is a bug with distant mountains not being seen:
@@ -919,12 +1039,15 @@ int main(int argc, char *argv[])
        : AMAX1(deltx, delty); G_debug(1,"Using maxdistance %f", fixedMaxLength);
      */
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     sscanf(parm.dist->answer, "%lf", &dist);
     if (dist < 0.5 || dist > 1.5)
         G_fatal_error(_("The distance value must be 0.5-1.5. Aborting."));
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
     sscanf(parm.dist->answer, "%lf", &geometry.distxy);
     if (geometry.distxy < 0.5 || geometry.distxy > 1.5)
 =======
@@ -943,6 +1066,9 @@ int main(int argc, char *argv[])
     sscanf(parm.dist->answer, "%lf", &dist);
     if (dist < 0.5 || dist > 1.5)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 
@@ -967,6 +1093,7 @@ int main(int argc, char *argv[])
             nbufferZone = bufferZone;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         new_cellhd.rows += (int)((nbufferZone + sbufferZone) / stepy);
         new_cellhd.cols += (int)((ebufferZone + wbufferZone) / stepx);
 
@@ -990,6 +1117,8 @@ int main(int argc, char *argv[])
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         /* adjust buffer to multiples of resolution */
         ebufferZone = (int)(ebufferZone / geometry.stepx) * geometry.stepx;
@@ -1063,6 +1192,9 @@ int main(int argc, char *argv[])
         m100 = ceil(m / 100.);
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         Rast_set_window(&new_cellhd);
     }
@@ -1135,8 +1267,14 @@ int main(int argc, char *argv[])
               (int)(wbufferZone / stepx), (int)(sbufferZone / stepy),
               (int)(nbufferZone / stepy));
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1148,13 +1286,19 @@ int main(int argc, char *argv[])
 /**********************end of main.c*****************/
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int INPUT(Geometry *geometry, const char *elevin)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 int INPUT(void)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -1180,8 +1324,14 @@ int INPUT(void)
     for (l = 0; l < m100; l++) {
         z100[l] = (float *)G_malloc(sizeof(float) * (n100));
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1204,8 +1354,14 @@ int INPUT(void)
         for (j = 0; j < n; j++) {
             row_rev = m - row - 1;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1221,6 +1377,7 @@ int INPUT(void)
 
     /* create low resolution array 100 */
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (i = 0; i < m100; i++) {
         lmax = (i + 1) * 100;
         if (lmax > m)
@@ -1228,6 +1385,8 @@ int INPUT(void)
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     for (int i = 0; i < geometry->m100; i++) {
         int lmax = (i + 1) * 100;
@@ -1258,6 +1417,9 @@ int INPUT(void)
             lmax = m;
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         for (j = 0; j < n100; j++) {
             zmax = SMALL;
@@ -1271,8 +1433,14 @@ int INPUT(void)
             }
             z100[i][j] = zmax;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1291,8 +1459,14 @@ int INPUT(void)
         for (j = 0; j < n; j++) {
             zmax = amax1(zmax, z[i][j]);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1304,14 +1478,20 @@ int INPUT(void)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int OUTGR(const Settings *settings, char *shad_filename,
           struct Cell_head *cellhd)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 int OUTGR(int numrows, int numcols)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -1328,8 +1508,14 @@ int OUTGR(int numrows, int numcols)
 =======
     if (horizon != NULL) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1359,8 +1545,14 @@ int OUTGR(int numrows, int numcols)
         if (horizon != NULL) {
             for (j = 0; j < numcols; j++) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1380,12 +1572,18 @@ int OUTGR(int numrows, int numcols)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 double amax1(arg1, arg2)
 double arg1;
@@ -1448,8 +1646,14 @@ int arg2;
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1524,8 +1728,14 @@ void com_par(const Geometry *geometry, OriginAngle *origin_angle, double angle,
     if (cosangle != 0.) {
         distcosangle = 100. / (distxy * cosangle);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1563,9 +1773,12 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     tanh0 = -INFINITY;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1594,6 +1807,9 @@ void calculate_point_mode(const Settings *settings, const Geometry *geometry,
     tanh0 = -INFINITY;
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     length = 0;
 
@@ -1616,14 +1832,20 @@ double calculate_shadow_onedirection(double shadow_angle)
 void calculate_shadow(void)
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 void calculate_shadow(void)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 void calculate_shadow()
 =======
 void calculate_shadow(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     double dfr_rad;
@@ -1646,14 +1868,20 @@ void calculate_shadow(void)
     if (printCount < 1)
         printCount = 1;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 
     double angle = (settings->single_direction * deg2rad) + pihalf;
     double printangle = settings->single_direction;
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     origin_point.maxlength = settings->fixedMaxLength;
@@ -1693,6 +1921,7 @@ void calculate_shadow(void)
             shadow_angle *= rad2deg;
         }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         ip = jp = 0;
 
@@ -1762,6 +1991,8 @@ void calculate_shadow(void)
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
         if (settings->compassOutput) {
             double tmpangle;
 
@@ -1956,6 +2187,9 @@ void calculate_shadow(void)
         angle += dfr_rad;
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         if (angle < 0.)
             angle += twopi;
@@ -1963,8 +2197,14 @@ void calculate_shadow(void)
             angle -= twopi;
     } /* end of for loop over angles */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1974,9 +2214,12 @@ void calculate_shadow(void)
 /*////////////////////////////////////////////////////////////////////// */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 int new_point(void)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1997,6 +2240,9 @@ int new_point()
 int new_point(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int iold = search_point->ip;
@@ -2056,8 +2302,14 @@ int new_point(void)
             if (succes2 == 1) {
                 zp = z[jp][ip];
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2070,9 +2322,12 @@ int new_point(void)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 int test_low_res(void)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2093,6 +2348,9 @@ int test_low_res()
 int test_low_res(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int iold100 = search_point->ip100;
@@ -2126,8 +2384,14 @@ int test_low_res(void)
         zp100 = z100[jp100][ip100];
         G_debug(2, "ip:%d jp:%d z2:%lf zp100:%lf \n", ip, jp, z2, zp100);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2136,6 +2400,7 @@ int test_low_res(void)
         if (zp100 <= z2)
         /*skip to the next lowres cell */
         {
+<<<<<<< HEAD
 <<<<<<< HEAD
             delx = 32000;
             dely = 32000;
@@ -2169,6 +2434,8 @@ int test_low_res(void)
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             int delx = 32000;
             int dely = 32000;
@@ -2270,6 +2537,9 @@ int test_low_res(void)
             G_debug(2, "  %lf %lf\n", xx0, yy0);
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             return (3);
         }
@@ -2284,9 +2554,12 @@ int test_low_res(void)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 double searching(void)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2307,11 +2580,15 @@ double searching()
 double searching(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     SearchPoint search_point;
     HorizonProperties horizon;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     if (zp == UNDEFZ)
         return 0;
@@ -2339,6 +2616,8 @@ double searching(void)
         if (length >= maxlength) {
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     search_point.ip = 0;
     search_point.jp = 0;
@@ -2433,6 +2712,9 @@ double searching(void)
 
         if (length >= maxlength) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             break;
         }
@@ -2453,8 +2735,14 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
 void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
                int buffer_s, int buffer_n)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2471,11 +2759,14 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 
     if ((G_projection() == PROJECTION_LL)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         ll_correction = TRUE;
     }
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         ll_correction = true;
     }
@@ -2514,6 +2805,9 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
     }
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     if (isMode() == SINGLE_POINT) {
         /* Calculate the horizon for one single point */
@@ -2541,8 +2835,14 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
         calculate_shadow();
         fclose(fp);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -2556,6 +2856,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
             ++arrayNumInt;
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         /****************************************************************/
         /*  The loop over raster points starts here!                    */
@@ -2588,6 +2889,8 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
         }
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     size_t decimals = G_get_num_decimals(settings->str_step);
 
@@ -2611,6 +2914,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 =======
         /****************************************************************/
         /*  The loop over raster points starts here!                    */
+<<<<<<< HEAD
 >>>>>>> osgeo-main
 
         /****************************************************************/
@@ -2620,6 +2924,11 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
             struct History history;
 
 =======
+=======
+
+        /****************************************************************/
+
+>>>>>>> osgeo-main
         if (horizon != NULL) {
             horizon_raster =
                 (float **)G_malloc(sizeof(float *) * (hor_numrows));
@@ -2770,6 +3079,9 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
             struct History history;
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             angle = (start + single_direction) * deg2rad + (dfr_rad * k);
             angle_deg = angle * rad2deg + 0.0001;
@@ -2927,8 +3239,14 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
             G_free(shad_filename);
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

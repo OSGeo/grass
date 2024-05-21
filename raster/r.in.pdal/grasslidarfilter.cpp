@@ -1,11 +1,18 @@
 <<<<<<< HEAD
-/****************************************************************************
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 /****************************************************************************
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+/****************************************************************************
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+/****************************************************************************
+=======
+>>>>>>> osgeo-main
 
  /****************************************************************************
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
@@ -15,6 +22,9 @@
 =======
 /****************************************************************************
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  *
  * MODULE:    r.in.pdal
@@ -33,12 +43,18 @@
  *****************************************************************************/
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 #include "grasslidarfilter.h"
 
@@ -52,7 +68,10 @@ bool GrassLidarFilter::processOne(pdal::PointRef &point)
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -74,6 +93,9 @@ bool GrassLidarFilter::processOne(pdal::PointRef &point)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     n_processed_++;
@@ -88,13 +110,20 @@ bool GrassLidarFilter::processOne(pdal::PointRef &point)
     }
     if (use_irange_) {
 <<<<<<< HEAD
-        double intensity = point.getFieldAs<double>(Id::Intensity);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         double intensity = point.getFieldAs<double>(Id::Intensity);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        double intensity = point.getFieldAs<double>(Id::Intensity);
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        double intensity = point.getFieldAs<double>(Id::Intensity);
+=======
+>>>>>>> osgeo-main
         double intensity = point.getFieldAs < double >(Id::Intensity);
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -103,6 +132,9 @@ bool GrassLidarFilter::processOne(pdal::PointRef &point)
 =======
         double intensity = point.getFieldAs<double>(Id::Intensity);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         intensity *= iscale_;
@@ -113,13 +145,20 @@ bool GrassLidarFilter::processOne(pdal::PointRef &point)
     }
     if (use_drange_) {
 <<<<<<< HEAD
-        double value = point.getFieldAs<double>(dim_to_import_);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         double value = point.getFieldAs<double>(dim_to_import_);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        double value = point.getFieldAs<double>(dim_to_import_);
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        double value = point.getFieldAs<double>(dim_to_import_);
+=======
+>>>>>>> osgeo-main
         double value = point.getFieldAs < double >(dim_to_import_);
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -128,6 +167,9 @@ bool GrassLidarFilter::processOne(pdal::PointRef &point)
 =======
         double value = point.getFieldAs<double>(dim_to_import_);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         value *= dscale_;
@@ -144,13 +186,20 @@ bool GrassLidarFilter::processOne(pdal::PointRef &point)
             z -= base_z;
         else
 <<<<<<< HEAD
-            return false; // skip points outside of base raster
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             return false; // skip points outside of base raster
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            return false; // skip points outside of base raster
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            return false; // skip points outside of base raster
+=======
+>>>>>>> osgeo-main
             return false;       // skip points outside of base raster
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -159,6 +208,9 @@ bool GrassLidarFilter::processOne(pdal::PointRef &point)
 =======
             return false; // skip points outside of base raster
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
     if (use_zrange_) {
@@ -169,15 +221,23 @@ bool GrassLidarFilter::processOne(pdal::PointRef &point)
     }
     if (use_return_filter_) {
 <<<<<<< HEAD
-        int return_n = point.getFieldAs<int>(Id::ReturnNumber);
-        int n_returns = point.getFieldAs<int>(Id::NumberOfReturns);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         int return_n = point.getFieldAs<int>(Id::ReturnNumber);
         int n_returns = point.getFieldAs<int>(Id::NumberOfReturns);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        int return_n = point.getFieldAs<int>(Id::ReturnNumber);
+        int n_returns = point.getFieldAs<int>(Id::NumberOfReturns);
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        int return_n = point.getFieldAs<int>(Id::ReturnNumber);
+        int n_returns = point.getFieldAs<int>(Id::NumberOfReturns);
+=======
+>>>>>>> osgeo-main
         int return_n = point.getFieldAs < int >(Id::ReturnNumber);
         int n_returns = point.getFieldAs < int >(Id::NumberOfReturns);
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
@@ -189,6 +249,9 @@ bool GrassLidarFilter::processOne(pdal::PointRef &point)
         int return_n = point.getFieldAs<int>(Id::ReturnNumber);
         int n_returns = point.getFieldAs<int>(Id::NumberOfReturns);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         if (return_filter_is_out(&return_filter_, return_n, n_returns)) {
@@ -198,13 +261,20 @@ bool GrassLidarFilter::processOne(pdal::PointRef &point)
     }
     if (use_class_filter_) {
 <<<<<<< HEAD
-        int point_class = point.getFieldAs<int>(Id::Classification);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         int point_class = point.getFieldAs<int>(Id::Classification);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        int point_class = point.getFieldAs<int>(Id::Classification);
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        int point_class = point.getFieldAs<int>(Id::Classification);
+=======
+>>>>>>> osgeo-main
         int point_class = point.getFieldAs < int >(Id::Classification);
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -213,6 +283,9 @@ bool GrassLidarFilter::processOne(pdal::PointRef &point)
 =======
         int point_class = point.getFieldAs<int>(Id::Classification);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         if (class_filter_is_out(&class_filter_, point_class)) {

@@ -58,9 +58,12 @@ public:
     /* start in INMEM regim by allocating im of size precisely twice the
        size of the (pqueue within) the em_pqueue; */
 <<<<<<< HEAD
+<<<<<<< HEAD
     EMPQueueAdaptive(long N) : EMPQueueAdaptive(){};
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     EMPQueueAdaptive(long N UNUSED) : EMPQueueAdaptive(){};
 =======
@@ -69,6 +72,9 @@ public:
 =======
     EMPQueueAdaptive(long N) : EMPQueueAdaptive(){};
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     EMPQueueAdaptive();
     EMPQueueAdaptive(size_t inMem);

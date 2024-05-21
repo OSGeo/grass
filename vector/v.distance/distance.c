@@ -12,14 +12,22 @@ int get_line_box(const struct line_pnts *Points, struct bound_box *box)
 
     if (Points->n_points == 0) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         box->E = box->W = box->N = box->S = box->T = box->B = NAN;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        box->E = box->W = box->N = box->S = box->T = box->B = NAN;
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
         box->E = box->W = box->N = box->S = box->T = box->B = NAN;
 =======
+>>>>>>> osgeo-main
         box->E = box->W = box->N = box->S = box->T = box->B = 0.0 / 0.0;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -34,6 +42,9 @@ int get_line_box(const struct line_pnts *Points, struct bound_box *box)
         box->E = box->W = box->N = box->S = box->T = box->B = NAN;
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         return 0;
     }
@@ -246,8 +257,11 @@ int line2line(struct line_pnts *FPoints, int ftype, struct line_pnts *TPoints,
  * return 2 inside isle of area
  * return 3 outside area */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int line2area(struct Map_info *To, struct line_pnts *Points, int type, int area,
               const struct bound_box *abox, double *fx, double *fy, double *fz,
@@ -257,6 +271,9 @@ int line2area(struct Map_info *To, struct line_pnts *Points, int type, int area,
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 int line2area(const struct Map_info *To, struct line_pnts *Points, int type,
               int area, const struct bound_box *abox, double *fx, double *fy,
@@ -264,8 +281,14 @@ int line2area(const struct Map_info *To, struct line_pnts *Points, int type,
               double *ty, double *tz, double *talong, double *tangle,
               double *dist, int with_z)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

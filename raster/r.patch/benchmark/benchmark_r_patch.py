@@ -66,9 +66,12 @@ def generate_map(rows, cols, fname):
             Module(
                 "r.random.surface",
 <<<<<<< HEAD
+<<<<<<< HEAD
                 maximum=255,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 high=255,
 =======
@@ -77,6 +80,9 @@ def generate_map(rows, cols, fname):
 =======
                 maximum=255,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 output=temp,
                 overwrite=True,

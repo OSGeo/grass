@@ -60,9 +60,12 @@ int IL_output_2d(struct interp_params *params,
                  double zminac, double zmaxac, double c1min,
                  double c1max, /*!< min,max interpolated values */
 <<<<<<< HEAD
+<<<<<<< HEAD
                  double c2min, double c2max, double gmin, double gmax,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                  double c2min, double c2max, double gmin UNUSED,
                  double gmax UNUSED,
@@ -72,6 +75,9 @@ int IL_output_2d(struct interp_params *params,
 =======
                  double c2min, double c2max, double gmin, double gmax,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                  double ertot, /*!< total interpolating func. error */
                  char *input,  /*!< input file name */
@@ -145,14 +151,22 @@ int IL_output_2d(struct interp_params *params,
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_z) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (size_t)params->nsizc)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
+>>>>>>> osgeo-main
                 params->nsizc)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -167,6 +181,9 @@ int IL_output_2d(struct interp_params *params,
                 (size_t)params->nsizc)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
@@ -184,14 +201,22 @@ int IL_output_2d(struct interp_params *params,
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dx) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (size_t)params->nsizc)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
+>>>>>>> osgeo-main
                 params->nsizc)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -206,6 +231,9 @@ int IL_output_2d(struct interp_params *params,
                 (size_t)params->nsizc)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
@@ -223,14 +251,22 @@ int IL_output_2d(struct interp_params *params,
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_dy) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (size_t)params->nsizc)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
+>>>>>>> osgeo-main
                 params->nsizc)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -245,6 +281,9 @@ int IL_output_2d(struct interp_params *params,
                 (size_t)params->nsizc)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
@@ -262,14 +301,22 @@ int IL_output_2d(struct interp_params *params,
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xx) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (size_t)params->nsizc)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
+>>>>>>> osgeo-main
                 params->nsizc)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -284,6 +331,9 @@ int IL_output_2d(struct interp_params *params,
                 (size_t)params->nsizc)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
@@ -301,14 +351,22 @@ int IL_output_2d(struct interp_params *params,
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_yy) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (size_t)params->nsizc)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
+>>>>>>> osgeo-main
                 params->nsizc)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -323,6 +381,9 @@ int IL_output_2d(struct interp_params *params,
                 (size_t)params->nsizc)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));
@@ -340,14 +401,22 @@ int IL_output_2d(struct interp_params *params,
                     0);
             if (fread(cell1, sizeof(FCELL), params->nsizc, params->Tmp_fd_xy) !=
 <<<<<<< HEAD
+<<<<<<< HEAD
                 (size_t)params->nsizc)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                (size_t)params->nsizc)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                 (size_t)params->nsizc)
 =======
+>>>>>>> osgeo-main
                 params->nsizc)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -362,6 +431,9 @@ int IL_output_2d(struct interp_params *params,
                 (size_t)params->nsizc)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 G_fatal_error(_("RST library temporary file reading error: %s"),
                               strerror(errno));

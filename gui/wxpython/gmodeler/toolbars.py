@@ -60,9 +60,12 @@ class ModelerToolbar(BaseToolbar):
             ),
             "actionAdd": MetaIcon(
 <<<<<<< HEAD
+<<<<<<< HEAD
                 img="module-add", label=_("Add GRASS tool (module) to model")
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 img="module-add",
                 label=_("Add GRASS tool (module) to model") + " (Ctrl+Alt+A)",
@@ -75,6 +78,9 @@ class ModelerToolbar(BaseToolbar):
 =======
                 img="module-add", label=_("Add GRASS tool (module) to model")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             ),
             "relation": MetaIcon(
@@ -90,14 +96,20 @@ class ModelerToolbar(BaseToolbar):
             "run": MetaIcon(img="execute", label=_("Run model") + " (Ctrl+Alt+R)"),
             "validate": MetaIcon(img="check", label=_("Validate model")),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             "settings": MetaIcon(img="modeler-settings", label=_("Modeler settings")),
             "properties": MetaIcon(img="options", label=_("Set model properties")),
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             "settings": BaseIcons["settings"],
             "properties": MetaIcon(img="options", label=_("Show model properties")),
@@ -113,8 +125,11 @@ class ModelerToolbar(BaseToolbar):
         data = (
             (
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 ("new", icons["new"].label.rsplit(" ", 1)[0]),
                 icons["new"],
@@ -208,6 +223,9 @@ class ModelerToolbar(BaseToolbar):
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 (
                     ("new", icons["new"].label.rsplit(" ", 1)[0]),

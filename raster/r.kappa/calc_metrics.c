@@ -1,13 +1,19 @@
 #include <stdlib.h>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #include <math.h>
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -17,14 +23,20 @@
 static int longcomp(const void *aa, const void *bb);
 static int collapse(long *l, int n);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 static void update_sum(double *sum, double *c, double value);
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 void calc_metrics(void)
@@ -36,11 +48,14 @@ void calc_metrics(void)
     int cndx;
     double *pi, *pj, *pii;
 <<<<<<< HEAD
+<<<<<<< HEAD
     double p0 = 0.0, pC = 0.0;
     double inter1 = 0.0, inter2 = 0.0;
     int a_i = 0, b_i = 0;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     double p0 = 0.0, pC = 0.0, p0c = 0.0, pCc = 0.0;
     double inter1 = 0.0, inter2 = 0.0, inter1c = 0.0, inter2c = 0.0;
@@ -58,6 +73,9 @@ void calc_metrics(void)
     double inter1 = 0.0, inter2 = 0.0;
     int a_i = 0, b_i = 0;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     metrics = (METRICS *)G_malloc(sizeof(METRICS));
@@ -70,14 +88,20 @@ void calc_metrics(void)
         metrics->kappa = na_value;
         metrics->kappa_variance = na_value;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         metrics->mcc = na_value;
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         return;
     }
@@ -194,8 +218,11 @@ void calc_metrics(void)
             metrics->producers_accuracy[i] = 100 * (pii[i] / pj[i]);
         /* theta 1 */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         update_sum(&p0, &p0c, pii[i]);
         /* theta 2 */
@@ -206,14 +233,23 @@ void calc_metrics(void)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         p0 += pii[i];
         /* theta 2 */
         pC += pi[i] * pj[i];
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -231,9 +267,12 @@ void calc_metrics(void)
             metrics->conditional_kappa[i] =
                 (pii[i] - pi[i] * pj[i]) / (pi[i] - pi[i] * pj[i]);
 <<<<<<< HEAD
+<<<<<<< HEAD
         inter1 += pii[i] * pow(((1 - pC) - (1 - p0) * (pi[i] + pj[i])), 2.);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         update_sum(&inter1, &inter1c,
                    pii[i] * pow(((1 - pC) - (1 - p0) * (pi[i] + pj[i])), 2.));
@@ -243,6 +282,9 @@ void calc_metrics(void)
 =======
         inter1 += pii[i] * pow(((1 - pC) - (1 - p0) * (pi[i] + pj[i])), 2.);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
 
@@ -256,8 +298,11 @@ void calc_metrics(void)
                     b_i = i;
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             update_sum(&inter2, &inter2c,
                        Gstats[l].count * pow((pi[a_i] + pj[b_i]), 2.) /
@@ -294,6 +339,9 @@ void calc_metrics(void)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             inter2 += Gstats[l].count * pow((pi[a_i] + pj[b_i]), 2.) /
                       metrics->observations;
@@ -308,8 +356,14 @@ void calc_metrics(void)
     G_free(pii);
 };
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -346,8 +400,11 @@ static int longcomp(const void *aa, const void *bb)
     return (*a > *b);
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 
 /* Implements improved Kahan–Babuska algorithm by Neumaier, A. 1974 */
@@ -366,4 +423,7 @@ void update_sum(double *sum, double *c, double value)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main

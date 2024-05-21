@@ -189,9 +189,12 @@ static void evaluate_constant(expression *e)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static void evaluate_variable(expression *e)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 static void evaluate_variable(expression *e UNUSED)
 =======
@@ -200,6 +203,9 @@ static void evaluate_variable(expression *e)
 =======
 static void evaluate_variable(expression *e)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     /* this is a no-op */

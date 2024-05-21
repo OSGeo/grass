@@ -79,6 +79,7 @@ int dig_prune(struct line_pnts *points, double thresh)
     int n_num; /* points left */
     int at_num;
 <<<<<<< HEAD
+<<<<<<< HEAD
     int ij = 0,                      /* position of farest point */
         ja, jd, i, j, k, n, inu, it; /* indicateur de parcours du segment */
 
@@ -90,6 +91,8 @@ int dig_prune(struct line_pnts *points, double thresh)
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     int ij = 0,                      /* position of farthest point */
         ja, jd, i, j, k, n, inu, it; /* indicateur de parcours du segment */
@@ -118,6 +121,9 @@ int dig_prune(struct line_pnts *points, double thresh)
     double dx, dy; /* temporary variables */
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     double sx[18], sy[18]; /* temporary table for processing points */
     int nt[17], nu[17];
@@ -200,9 +206,12 @@ int dig_prune(struct line_pnts *points, double thresh)
             k = 1;
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         else {              /* No point keeped : farest point  */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         else {              /* No point keeped : farthest point  */
 =======
@@ -211,6 +220,9 @@ int dig_prune(struct line_pnts *points, double thresh)
 =======
         else {              /* No point keeped : farest point  */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             sx[1] = sx[ij]; /* is loaded in second position    */
             sy[1] = sy[ij]; /* to avoid cutting lines with     */
@@ -219,9 +231,12 @@ int dig_prune(struct line_pnts *points, double thresh)
             k = 2;          /* becomes the third one.          */
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* Loding remaining points         */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         /* Loading remaining points         */
 =======
@@ -230,6 +245,9 @@ int dig_prune(struct line_pnts *points, double thresh)
 =======
         /* Loding remaining points         */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         for (j = at_num; j < n; j++) {
             k++;
@@ -268,9 +286,12 @@ int dig_prune(struct line_pnts *points, double thresh)
             if (fpdist >
                 t) { /* We found a point to be keeped    */ /* Restart from
 <<<<<<< HEAD
+<<<<<<< HEAD
                                                                farest point */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                                                                farthest point */
 =======
@@ -279,6 +300,9 @@ int dig_prune(struct line_pnts *points, double thresh)
 =======
                                                                farest point */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 jd = ij;
                 nt[++it] = ij;

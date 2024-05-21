@@ -36,9 +36,12 @@ def option_callback_W(option, opt, value, parser):
     opt = value[2:]
     if opt not in ["-L", "-R", "--rpath"]:
 <<<<<<< HEAD
+<<<<<<< HEAD
         raise optparse.BadOptionError("-Wl option must be -L, -R" " or --rpath, not " + value[2:])
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         raise optparse.BadOptionError(
             "-Wl option must be -L, -R" " or --rpath, not " + value[2:]
@@ -49,6 +52,9 @@ def option_callback_W(option, opt, value, parser):
 =======
         raise optparse.BadOptionError("-Wl option must be -L, -R" " or --rpath, not " + value[2:])
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     # Push the linker option onto the list for further parsing.
     parser.rargs.insert(0, value)
@@ -328,14 +334,20 @@ def main(givenargs=None):
         metavar="LANGUAGE",
         default="py",
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         choices=("py", "json"),
         help="Choose output language (`py'[default], or `json').",
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         choices=("py", "py32", "py27", "py25", "json"),
         help="Choose output language (`py'[default], `py32', `py27', `py25', or "
@@ -345,8 +357,14 @@ def main(givenargs=None):
         "(py) attempts to select `py32', `py27', or `py25' based on the "
         "version of Python that runs this script.",
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -422,9 +440,12 @@ def main(givenargs=None):
         printer = printer_json.WrapperPrinter
     else:
 <<<<<<< HEAD
+<<<<<<< HEAD
         msgs.error_message("No such output language `" + options.output_language + "'", cls="usage")
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         msgs.error_message(
             "No such output language `" + options.output_language + "'", cls="usage"
@@ -435,6 +456,9 @@ def main(givenargs=None):
 =======
         msgs.error_message("No such output language `" + options.output_language + "'", cls="usage")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         sys.exit(1)
 

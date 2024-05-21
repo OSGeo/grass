@@ -150,9 +150,12 @@ struct RTree {
     struct _recycle {
         int avail;  /* number of available positions */
 <<<<<<< HEAD
+<<<<<<< HEAD
         int alloc;  /* number of allcoated positions in *pos */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         int alloc;  /* number of allocated positions in *pos */
 =======
@@ -161,6 +164,9 @@ struct RTree {
 =======
         int alloc;  /* number of allcoated positions in *pos */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         off_t *pos; /* array of available positions */
     } free_nodes;

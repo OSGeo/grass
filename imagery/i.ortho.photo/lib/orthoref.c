@@ -516,9 +516,12 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 #endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* Add weigth matrix of unknowns to NN */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         /* Add weight matrix of unknowns to NN */
 =======
@@ -527,6 +530,9 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 =======
         /* Add weigth matrix of unknowns to NN */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         m_add(&NN, &WT1, &NN);
         /* Solve for delta */
@@ -624,10 +630,13 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 /* compute the photo coordinate (e2,n2) position */
 int I_ortho_ref(double e1, double n1, double z1, double *e2, double *n2,
 <<<<<<< HEAD
+<<<<<<< HEAD
                 double *z2, struct Ortho_Camera_File_Ref *cam_info, double XC,
                 double YC, double ZC, MATRIX M)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 double *z2 UNUSED, struct Ortho_Camera_File_Ref *cam_info,
                 double XC, double YC, double ZC, MATRIX M)
@@ -639,6 +648,9 @@ int I_ortho_ref(double e1, double n1, double z1, double *e2, double *n2,
                 double *z2, struct Ortho_Camera_File_Ref *cam_info, double XC,
                 double YC, double ZC, MATRIX M)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     MATRIX UVW, XYZ;
@@ -711,10 +723,13 @@ int I_ortho_ref(double e1, double n1, double z1, double *e2, double *n2,
 /* compute ground position (e2,n2) */
 int I_inverse_ortho_ref(double e1, double n1, double z1, double *e2, double *n2,
 <<<<<<< HEAD
+<<<<<<< HEAD
                         double *z2, struct Ortho_Camera_File_Ref *cam_info,
                         double XC, double YC, double ZC, MATRIX M)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                         double *z2 UNUSED,
                         struct Ortho_Camera_File_Ref *cam_info, double XC,
@@ -727,6 +742,9 @@ int I_inverse_ortho_ref(double e1, double n1, double z1, double *e2, double *n2,
                         double *z2, struct Ortho_Camera_File_Ref *cam_info,
                         double XC, double YC, double ZC, MATRIX M)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     MATRIX UVW, XYZ;

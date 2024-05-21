@@ -556,9 +556,12 @@ int do_cum_mfd(void)
     if (workedon)
         G_warning(_("MFD: A * path already processed when distributing flow: "
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "%d of %" PRI_OFF_T " cells"),
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     "%d of %" PRId64 " cells"),
 =======
@@ -567,6 +570,9 @@ int do_cum_mfd(void)
 =======
                     "%d of %" PRI_OFF_T " cells"),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                   workedon, do_points);
 
@@ -677,12 +683,15 @@ int do_cum_mfd(void)
                     af.asp = drain[r - r_max + 1][c - c_max + 1];
             }
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (mfd_cells == 1)
                 /* mfdir = (1 << nextmfd[max_side]); */
 
                 is_swale = FLAG_GET(af.flag, SWALEFLAG);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             /*
             if (mfd_cells == 1)
@@ -702,6 +711,9 @@ int do_cum_mfd(void)
 
                 is_swale = FLAG_GET(af.flag, SWALEFLAG);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             /* start new stream */
             if (!is_swale && fabs(value) >= threshold && stream_cells < 1 &&

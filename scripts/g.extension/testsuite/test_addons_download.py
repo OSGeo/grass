@@ -13,24 +13,33 @@ COPYRIGHT: (C) 2022 Stefan Blumentrath and by the GRASS Development Team
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 import re
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 import sys
 import unittest
 
 from pathlib import Path
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 from grass.gunittest.case import TestCase
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 from urllib import request as urlrequest
 
@@ -44,6 +53,9 @@ from grass.gunittest.case import TestCase
 
 from grass.gunittest.case import TestCase
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 from grass.gunittest.main import test
 from grass.gunittest.utils import silent_rmtree
@@ -67,8 +79,11 @@ class TestModuleDownloadFromDifferentSources(TestCase):
     ]
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     request_headers = {
         "User-Agent": "Mozilla/5.0",
@@ -78,6 +93,9 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     def setUp(self):
         """Make sure we are not dealing with some old files"""
@@ -196,8 +214,11 @@ class TestModuleDownloadFromDifferentSources(TestCase):
                 self.assertModule(str(file), help=True)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     def test_github_install_official_non_exists_module(self):
         """Test installing non exists extension from official addons repository"""
@@ -275,6 +296,9 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 if __name__ == "__main__":

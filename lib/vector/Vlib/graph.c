@@ -26,9 +26,12 @@ static int
 
 static int clipper(dglGraph_s *pgraph, dglSPClipInput_s *pargIn,
 <<<<<<< HEAD
+<<<<<<< HEAD
                    dglSPClipOutput_s *pargOut, void *pvarg)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                    dglSPClipOutput_s *pargOut, void *pvarg UNUSED)
 =======
@@ -37,6 +40,9 @@ static int clipper(dglGraph_s *pgraph, dglSPClipInput_s *pargIn,
 =======
                    dglSPClipOutput_s *pargOut, void *pvarg)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 { /* caller's pointer */
     dglInt32_t cost;
@@ -209,9 +215,12 @@ int Vect_graph_shortest_path(dglGraph_s *graph, int from, int to,
 
     /* Check if from and to are identical, otherwise dglib returns path to
 <<<<<<< HEAD
+<<<<<<< HEAD
      * neares node and back! */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
      * nearest node and back! */
 =======
@@ -220,6 +229,9 @@ int Vect_graph_shortest_path(dglGraph_s *graph, int from, int to,
 =======
      * neares node and back! */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     if (from == to) {
         if (cost != NULL)

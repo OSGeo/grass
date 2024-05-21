@@ -2,9 +2,12 @@
 #include <grass/dbstubs.h>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 int db__driver_fetch(dbCursor *cursor, int position, int *more)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int db__driver_fetch(dbCursor *cursor UNUSED, int position UNUSED,
                      int *more UNUSED)
@@ -14,6 +17,9 @@ int db__driver_fetch(dbCursor *cursor, int position, int *more)
 =======
 int db__driver_fetch(dbCursor *cursor, int position, int *more)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     db_procedure_not_implemented("db_fetch");

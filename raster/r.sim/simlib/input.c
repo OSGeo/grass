@@ -300,12 +300,18 @@ int input_data(void)
     int max_walkers;
     double unitconv = 0.000000278; /* mm/hr to m/s */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     int if_rain = 0;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -338,8 +344,11 @@ int input_data(void)
     if (rain != NULL) {
         si = read_double_raster_map(rows, cols, rain, unitconv);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     }
     else if (rain_val >= 0.0) { /* If no value set its set to -999.99 */
@@ -350,6 +359,9 @@ int input_data(void)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         if_rain = 1;
     }
@@ -361,8 +373,14 @@ int input_data(void)
         si = create_double_matrix(rows, cols, (double)UNDEF);
         if_rain = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -402,8 +420,14 @@ int input_data(void)
         else
             trap = create_float_matrix(rows, cols, (double)UNDEF);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -641,9 +665,12 @@ int grad_check(void)
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     /*! compute transport capacity limted erosion/deposition et
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     /*! compute transport capacity limited erosion/deposition et
 =======
@@ -652,6 +679,9 @@ int grad_check(void)
 =======
     /*! compute transport capacity limted erosion/deposition et
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
      *   as a divergence of sediment transport capacity
      *   \f$

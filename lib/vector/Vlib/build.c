@@ -33,9 +33,12 @@
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int format(struct Map_info *Map, int build)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 static int format(struct Map_info *Map UNUSED, int build UNUSED)
 =======
@@ -44,6 +47,9 @@ static int format(struct Map_info *Map, int build)
 =======
 static int format(struct Map_info *Map, int build)
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
@@ -52,8 +58,14 @@ static int format(struct Map_info *Map, int build)
 #endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -74,7 +86,10 @@ static int (*Build_array[])(struct Map_info *, int) = {Vect_build_nat
                                                        ,
                                                        format
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 static int (*Build_array[])() = {Vect_build_nat
 =======
@@ -138,6 +153,9 @@ static int (*Build_array[])(struct Map_info *, int) = {Vect_build_nat
                                                        format
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 #endif
 };
@@ -1016,14 +1034,22 @@ int Vect_build_partial(struct Map_info *Map, int build)
     if (plus->built >= GV_BUILD_AREAS) {
         int line, nlines, area, nareas, err_boundaries, err_centr_out,
 <<<<<<< HEAD
+<<<<<<< HEAD
             err_centr_dupl /*, err_nocentr */;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            err_centr_dupl /*, err_nocentr */;
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
             err_centr_dupl /*, err_nocentr */;
 =======
+>>>>>>> osgeo-main
             err_centr_dupl, err_nocentr;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -1038,6 +1064,9 @@ int Vect_build_partial(struct Map_info *Map, int build)
             err_centr_dupl /*, err_nocentr */;
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         struct P_line *Line;
         struct Plus_head *Plus;
@@ -1071,14 +1100,22 @@ int Vect_build_partial(struct Map_info *Map, int build)
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* err_nocentr = 0; */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        /* err_nocentr = 0; */
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
         /* err_nocentr = 0; */
 =======
+>>>>>>> osgeo-main
         err_nocentr = 0;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -1093,6 +1130,9 @@ int Vect_build_partial(struct Map_info *Map, int build)
         /* err_nocentr = 0; */
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         nareas = Vect_get_num_areas(Map);
         for (area = 1; area <= nareas; area++) {
@@ -1100,16 +1140,25 @@ int Vect_build_partial(struct Map_info *Map, int build)
                 continue;
             line = Vect_get_area_centroid(Map, area);
 <<<<<<< HEAD
-            /* if (line == 0)
-                err_nocentr++; */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             /* if (line == 0)
                 err_nocentr++; */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            /* if (line == 0)
+                err_nocentr++; */
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            /* if (line == 0)
+                err_nocentr++; */
+=======
+>>>>>>> osgeo-main
             if (line == 0)
                 err_nocentr++;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -1129,6 +1178,9 @@ int Vect_build_partial(struct Map_info *Map, int build)
                 err_nocentr++; */
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         }
 
@@ -1404,8 +1456,11 @@ int Vect_build_sidx(struct Map_info *Map)
 int Vect_build_sidx_from_topo(struct Map_info *Map)
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -1421,6 +1476,9 @@ int Vect_build_sidx_from_topo(struct Map_info *Map)
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     G_debug(3, "Vect_build_sidx_from_topo(): name=%s", Vect_get_full_name(Map));
 
@@ -1492,9 +1550,12 @@ int Vect_save_sidx(struct Map_info *Map)
    \return 0 on error
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vect_sidx_dump(const struct Map_info *Map, FILE *out)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int Vect_sidx_dump(struct Map_info *Map, FILE *out)
 =======
@@ -1503,6 +1564,9 @@ int Vect_sidx_dump(const struct Map_info *Map, FILE *out)
 =======
 int Vect_sidx_dump(const struct Map_info *Map, FILE *out)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     if (!(Map->plus.Spidx_built)) {

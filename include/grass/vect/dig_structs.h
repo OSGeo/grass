@@ -400,9 +400,12 @@ struct Format_info_offset {
        5. ring in 3. polygon in 7. feature (multipolygon) of geometry
        collection which has FID = 123 123 (feature 123: geometry
 <<<<<<< HEAD
+<<<<<<< HEAD
        colletion) 6 (7. feature in geometry collection: multiPolygon) 2
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
        collection) 6 (7. feature in geometry collection: multiPolygon) 2
 =======
@@ -411,6 +414,9 @@ struct Format_info_offset {
 =======
        colletion) 6 (7. feature in geometry collection: multiPolygon) 2
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
        (3. polygon) 4 (5. ring in the polygon)
 
@@ -618,9 +624,12 @@ struct Format_info_pg {
     char *table_name;
     /*!
 <<<<<<< HEAD
+<<<<<<< HEAD
        \brief SQL where statement (fo filter features)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
        \brief SQL where statement (of filter features)
 =======
@@ -629,6 +638,9 @@ struct Format_info_pg {
 =======
        \brief SQL where statement (fo filter features)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
      */
     char *where;
@@ -820,9 +832,12 @@ struct Plus_head {
        \brief Offset size
 
 <<<<<<< HEAD
+<<<<<<< HEAD
        Because Plus_head is available to all releveant
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
        Because Plus_head is available to all relevant
 =======
@@ -831,6 +846,9 @@ struct Plus_head {
 =======
        Because Plus_head is available to all releveant
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
        functions
      */

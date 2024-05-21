@@ -215,9 +215,12 @@ int Vect_sfa_line_astext(const struct line_pnts *Points, int type, int with_z,
     }
     case SF_POLYGON: /* polygon */ {
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* write only outter/inner ring */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         /* write only outer/inner ring */
 =======
@@ -226,6 +229,9 @@ int Vect_sfa_line_astext(const struct line_pnts *Points, int type, int with_z,
 =======
         /* write only outter/inner ring */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         fprintf(file, "(");
         for (i = 0; i < Points->n_points; i++) {
@@ -258,10 +264,13 @@ int Vect_sfa_line_astext(const struct line_pnts *Points, int type, int with_z,
    \note Implementation is pending, now always returns 0
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int Vect_sfa_is_line_simple(const struct line_pnts *Points, int type,
                             int with_z)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int Vect_sfa_is_line_simple(const struct line_pnts *Points UNUSED,
                             int type UNUSED, int with_z UNUSED)
@@ -273,6 +282,9 @@ int Vect_sfa_is_line_simple(const struct line_pnts *Points, int type,
 int Vect_sfa_is_line_simple(const struct line_pnts *Points, int type,
                             int with_z)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     /* TODO:
@@ -325,13 +337,19 @@ int Vect_sfa_is_line_closed(const struct line_pnts *Points, int type,
    \return -1 on error
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int Vect_sfa_get_num_features(struct Map_info *Map)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 int Vect_sfa_get_num_features(const struct Map_info *Map)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))

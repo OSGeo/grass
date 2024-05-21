@@ -105,9 +105,12 @@ class ReprojectionRenderer:
             output=tgt_name,
             mapset=mapset,
 <<<<<<< HEAD
+<<<<<<< HEAD
             location=env_info["LOCATION_NAME"],
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             project=env_info["LOCATION_NAME"],
 =======
@@ -116,6 +119,9 @@ class ReprojectionRenderer:
 =======
             location=env_info["LOCATION_NAME"],
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             dbase=env_info["GISDBASE"],
             resolution=self._region_manager.resolution,
@@ -166,9 +172,12 @@ class ReprojectionRenderer:
             output=new_name,
             mapset=mapset,
 <<<<<<< HEAD
+<<<<<<< HEAD
             location=env_info["LOCATION_NAME"],
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             project=env_info["LOCATION_NAME"],
 =======
@@ -177,6 +186,9 @@ class ReprojectionRenderer:
 =======
             location=env_info["LOCATION_NAME"],
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             dbase=env_info["GISDBASE"],
             env=self._wgs84_env,

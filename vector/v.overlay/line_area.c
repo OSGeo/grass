@@ -57,14 +57,22 @@ static int merge_line(struct Map_info *Map, int line, struct line_pnts *MPoints,
 {
     int i, first, last, next_line, curr_line;
 <<<<<<< HEAD
+<<<<<<< HEAD
     int merged = 0;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int merged = 0;
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
     int merged = 0;
 =======
+>>>>>>> osgeo-main
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
     int merged = 0, newl = 0;
@@ -78,6 +86,9 @@ static int merge_line(struct Map_info *Map, int line, struct line_pnts *MPoints,
     int merged = 0;
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     int next_node, direction, node_n_lines, type, ltype, lines_type;
     static struct ilist *List = NULL;
@@ -135,9 +146,12 @@ static int merge_line(struct Map_info *Map, int line, struct line_pnts *MPoints,
                     Vect_read_line(Map, NULL, Cats, abs(curr_line));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                     /* catgories must be identical */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     /* categories must be identical */
 =======
@@ -146,6 +160,9 @@ static int merge_line(struct Map_info *Map, int line, struct line_pnts *MPoints,
 =======
                     /* catgories must be identical */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     if (compare_cats(MCats, Cats) == 0)
                         next_line = curr_line;

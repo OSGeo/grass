@@ -37,14 +37,22 @@ int main(int argc, char **argv)
 {
     double p1, p2, numbers[1000], numbers2[1000];
 <<<<<<< HEAD
+<<<<<<< HEAD
     int (*rng)(int, double *);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    int (*rng)(int, double *);
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
     int (*rng)(int, double *);
 =======
+>>>>>>> osgeo-main
     int (*rng)();
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -59,6 +67,9 @@ int main(int argc, char **argv)
     int (*rng)(int, double *);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     int i;
     int line, nlines, ttype, n, ret, seed, field;

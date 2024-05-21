@@ -273,9 +273,12 @@ void Altitude::init(AtmosModel &atms, const AerosolConcentration &aerocon)
 
         if ((taer55p > 0) || ((aerocon.taer55 - taer55p) < 1e-03)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             /* a scale heigh of 2km is assumed in case no value is given for
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             /* a scale height of 2km is assumed in case no value is given for
 =======
@@ -284,15 +287,21 @@ void Altitude::init(AtmosModel &atms, const AerosolConcentration &aerocon)
 =======
             /* a scale heigh of 2km is assumed in case no value is given for
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
              * taer55p */
             taer55p = (double)(aerocon.taer55 * (1 - exp(-palt / 2)));
         }
         else {
 <<<<<<< HEAD
+<<<<<<< HEAD
             /* compute effective scale heigh */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             /* compute effective scale height */
 =======
@@ -301,6 +310,9 @@ void Altitude::init(AtmosModel &atms, const AerosolConcentration &aerocon)
 =======
             /* compute effective scale heigh */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             double sham = exp(-palt / 4);
             double sha = 1 - (taer55p / aerocon.taer55);
@@ -379,9 +391,12 @@ void Altitude::update_hv(AtmosModel &atms, const AerosolConcentration &aerocon)
 
         if ((taer55p > 0) || ((aerocon.taer55 - taer55p) < 1e-03)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
             /* a scale heigh of 2km is assumed in case no value is given for
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             /* a scale height of 2km is assumed in case no value is given for
 =======
@@ -390,15 +405,21 @@ void Altitude::update_hv(AtmosModel &atms, const AerosolConcentration &aerocon)
 =======
             /* a scale heigh of 2km is assumed in case no value is given for
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
              * taer55p */
             taer55p = (double)(aerocon.taer55 * (1 - exp(-palt / 2)));
         }
         else {
 <<<<<<< HEAD
+<<<<<<< HEAD
             /* compute effective scale heigh */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             /* compute effective scale height */
 =======
@@ -407,6 +428,9 @@ void Altitude::update_hv(AtmosModel &atms, const AerosolConcentration &aerocon)
 =======
             /* compute effective scale heigh */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             double sham = exp(-palt / 4);
             double sha = 1 - (taer55p / aerocon.taer55);

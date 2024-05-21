@@ -46,9 +46,12 @@ int blank_array(void *array, int nrows, int ncols, RASTER_MAP_TYPE map_type,
         /* fill with NULL */
         /* alloc for col+1, do we come up (nrows) short? no. */
 <<<<<<< HEAD
+<<<<<<< HEAD
         Rast_set_null_value(array, nrows * ncols, map_type);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         for (row = 0; row < nrows; row++) {
             Rast_set_null_value(ptr, ncols, map_type);
@@ -60,6 +63,9 @@ int blank_array(void *array, int nrows, int ncols, RASTER_MAP_TYPE map_type,
 =======
         Rast_set_null_value(array, nrows * ncols, map_type);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         break;
 

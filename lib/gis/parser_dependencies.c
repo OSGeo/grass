@@ -208,8 +208,11 @@ static void append_error(const char *msg)
    provided.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
    The last item of the list must be NULL.
 
@@ -217,6 +220,9 @@ static void append_error(const char *msg)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
    \param first first given option
  */
@@ -245,8 +251,11 @@ static void check_exclusive(const struct rule *rule)
    At least one option from a set must be given.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
    The last item of the list must be NULL.
 
@@ -254,6 +263,9 @@ static void check_exclusive(const struct rule *rule)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
    \param first first given option
  */
@@ -285,6 +297,7 @@ static void check_required(const struct rule *rule)
    options must also be present.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
    If you want all options to be provided use G_option_requires_all()
    function.
    If you want more than one option to be present but not all,
@@ -292,6 +305,8 @@ static void check_required(const struct rule *rule)
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
    The last item of the list must be NULL.
 
@@ -314,6 +329,9 @@ static void check_required(const struct rule *rule)
    call this function multiple times.
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
    \param first first given option
  */
@@ -349,6 +367,7 @@ static void check_requires(const struct rule *rule)
    be present.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
    If it is enough if only one option from a set is present,
    use G_option_requires() function.
 
@@ -356,6 +375,8 @@ static void check_requires(const struct rule *rule)
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
    The last item of the list must be NULL.
 
@@ -378,6 +399,9 @@ static void check_requires(const struct rule *rule)
    \see G_option_collective()
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
    \param first first given option
  */
@@ -409,8 +433,11 @@ static void check_requires_all(const struct rule *rule)
    be present.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
    The last item of the list must be NULL.
 
@@ -418,6 +445,9 @@ static void check_requires_all(const struct rule *rule)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
    \param first first given option
  */
@@ -449,8 +479,11 @@ static void check_excludes(const struct rule *rule)
    all or nothing from a set.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
    The last item of the list must be NULL.
 
@@ -458,6 +491,9 @@ static void check_excludes(const struct rule *rule)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
    \param first first given option
  */
@@ -595,8 +631,14 @@ void G__describe_option_rules_xml(FILE *fp)
         const struct rule *rule = &((const struct rule *)rules.data)[i];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -607,7 +649,10 @@ void G__describe_option_rules_xml(FILE *fp)
         fprintf(fp, "\t\t<rule type=\"%s\">\n", rule_types[rule->type]);
         for (j = 0; j < (unsigned int)rule->count; j++) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
         fprintf(fp, "\t\t<rule type=\"%s\">\n", rule_types[rule->type]);
         for (j = 0; j < rule->count; j++) {
@@ -631,6 +676,9 @@ void G__describe_option_rules_xml(FILE *fp)
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             void *p = rule->opts[j];
 

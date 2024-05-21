@@ -22,13 +22,19 @@
 
 struct pq_node {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     size_t idx;
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     int idx;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -111,14 +117,20 @@ int pq_destroy(struct pq *q)
 
 struct orders {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     size_t index;
     int uphill, downhill;
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     int index, uphill, downhill;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -138,9 +150,12 @@ int cmp_orders(const void *a, const void *b)
  * return 1 if elevation was modified
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int do_flatarea(int index, CELL ele, CELL *alt_org, CELL *alt_new)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int do_flatarea(size_t index, CELL ele, CELL *alt_org, CELL *alt_new)
 =======
@@ -149,6 +164,9 @@ int do_flatarea(int index, CELL ele, CELL *alt_org, CELL *alt_new)
 =======
 int do_flatarea(int index, CELL ele, CELL *alt_org, CELL *alt_new)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int upr, upc, r, c, ct_dir;
@@ -184,9 +202,12 @@ int do_flatarea(int index, CELL ele, CELL *alt_org, CELL *alt_new)
     counter = 0;
     while (down_pq->size) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         if ((index_doer = pq_drop(down_pq)) == -1)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         if ((index_doer = pq_drop(down_pq)) == SIZE_MAX)
 =======
@@ -195,6 +216,9 @@ int do_flatarea(int index, CELL ele, CELL *alt_org, CELL *alt_new)
 =======
         if ((index_doer = pq_drop(down_pq)) == -1)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             G_fatal_error("get start points: no more points in down queue");
 
@@ -265,9 +289,12 @@ int do_flatarea(int index, CELL ele, CELL *alt_org, CELL *alt_new)
         int is_in_down_queue = 0;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         if ((index_doer = pq_drop(up_pq)) == -1)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         if ((index_doer = pq_drop(up_pq)) == SIZE_MAX)
 =======
@@ -276,6 +303,9 @@ int do_flatarea(int index, CELL ele, CELL *alt_org, CELL *alt_new)
 =======
         if ((index_doer = pq_drop(up_pq)) == -1)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             G_fatal_error("uphill order: no more points in up queue");
 
@@ -361,9 +391,12 @@ int do_flatarea(int index, CELL ele, CELL *alt_org, CELL *alt_new)
     downhill_order = 1;
     while (down_pq->size) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         if ((index_doer = pq_drop(down_pq)) == -1)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         if ((index_doer = pq_drop(down_pq)) == SIZE_MAX)
 =======
@@ -372,6 +405,9 @@ int do_flatarea(int index, CELL ele, CELL *alt_org, CELL *alt_new)
 =======
         if ((index_doer = pq_drop(down_pq)) == -1)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             G_fatal_error(_("downhill order: no more points in down queue"));
 
@@ -449,9 +485,12 @@ int do_flatarea(int index, CELL ele, CELL *alt_org, CELL *alt_new)
     G_debug(2, "adjust ele");
     while (up_pq->size) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         if ((index_doer = pq_drop(up_pq)) == -1)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         if ((index_doer = pq_drop(up_pq)) == SIZE_MAX)
 =======
@@ -460,6 +499,9 @@ int do_flatarea(int index, CELL ele, CELL *alt_org, CELL *alt_new)
 =======
         if ((index_doer = pq_drop(up_pq)) == -1)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             G_fatal_error("no more points in up queue");
 

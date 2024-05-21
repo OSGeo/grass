@@ -367,7 +367,7 @@ class HistoryBrowserTree(CTreeView):
         """Reload tree history model based on the current history log from scratch."""
         self._model.RemoveNode(self._model.root)
         self._initHistoryModel()
-        self.infoPanel.clearCommandInfo()
+        self.infoPanel.hideCommandInfo()
 
     def InsertCommand(self, entry):
         """Insert command node to the model and refresh the tree.
@@ -499,7 +499,7 @@ class HistoryBrowserTree(CTreeView):
 
         # Remove the entry from history
         self.RemoveEntryFromHistory(history_index)
-        self.infoPanel.clearCommandInfo()
+        self.infoPanel.hideCommandInfo()
         self._giface.entryFromHistoryRemoved.emit(index=history_index)
         self._model.RemoveNode(selected_command)
 

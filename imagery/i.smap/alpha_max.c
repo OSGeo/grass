@@ -105,9 +105,12 @@ double func(double x)
 double log_like(
     /* compute log likelihood being maximized. This subroutine *
 <<<<<<< HEAD
+<<<<<<< HEAD
      * is useful for debuging since the log likelihood must be *
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
      * is useful for debugging since the log likelihood must be *
 =======
@@ -116,6 +119,9 @@ double log_like(
 =======
      * is useful for debuging since the log likelihood must be *
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
      * monotonically decreasing.                               */
     double ***N, /* transition statistics */

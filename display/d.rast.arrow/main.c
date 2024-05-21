@@ -4,13 +4,19 @@
  * AUTHOR(S):    Chris Rewerts, Agricultural Engineering, Purdue University
  * PURPOSE:      Draw arrows on slope/aspect maps.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
  * COPYRIGHT:    (C) 2000, 2010, 2023 by the GRASS Development Team
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  * COPYRIGHT:    (C) 2000, 2010 by the GRASS Development Team
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -24,11 +30,14 @@
 /* some minor cleanup done by Andreas Lange, andreas.lange@rhein-main.de
  * Update to handle NULLs and floating point aspect maps: Hamish Bowman, Aug
 <<<<<<< HEAD
+<<<<<<< HEAD
  * 2004 Update for 360 degree arrows and magnitude scaling:  Hamish Bowman, Oct
  * 2005 Align grids with raster cells: Huidae Cho, Apr 2009 Drainage aspect
  * type: Huidae Cho, Sep 2015
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
  * 2004; Update for 360 degree arrows and magnitude scaling:  Hamish Bowman, Oct
  * 2005; Align grids with raster cells: Huidae Cho, Apr 2009; Drainage aspect
@@ -43,6 +52,9 @@
  * 2005 Align grids with raster cells: Huidae Cho, Apr 2009 Drainage aspect
  * type: Huidae Cho, Sep 2015
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  */
 
@@ -227,8 +239,11 @@ int main(int argc, char **argv)
     else if (strcmp("drainage", opt2->answer) == 0)
         map_type = 5;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     else if (strcmp("terraflow", opt2->answer) == 0)
         map_type = 6;
@@ -236,6 +251,9 @@ int main(int argc, char **argv)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     scale = atof(opt8->answer);
@@ -417,9 +435,12 @@ int main(int argc, char **argv)
             /* treat AGNPS and ANSWERS data like old zero-as-null CELL */
             /*   TODO: update models */
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (map_type == 2 || map_type == 3 || map_type == 5) {
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             if (map_type == 2 || map_type == 3 || map_type == 5 ||
                 map_type == 6) {
@@ -429,6 +450,9 @@ int main(int argc, char **argv)
 =======
             if (map_type == 2 || map_type == 3 || map_type == 5) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 if (Rast_is_null_value(ptr, raster_type))
                     aspect_c = 0;
@@ -610,8 +634,11 @@ int main(int argc, char **argv)
             }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             /* case switch for r.terraflow direction type aspect map */
             else if (map_type == 6) {
@@ -664,6 +691,9 @@ int main(int argc, char **argv)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             ptr = G_incr_void_ptr(ptr, Rast_cell_size(raster_type));
             if (opt7->answer)

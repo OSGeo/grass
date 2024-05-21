@@ -51,8 +51,11 @@ static int by_point(const void *, const void *);
 static int tty = 0;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 enum OutputFormat { PLAIN, JSON };
 
@@ -60,6 +63,9 @@ enum OutputFormat { PLAIN, JSON };
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 int main(int argc, char *argv[])
 {
@@ -107,8 +113,11 @@ int main(int argc, char *argv[])
     struct GModule *module;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     JSON_Value *root_value = NULL, *point_value, *layer_value;
     JSON_Array *root_array;
@@ -120,6 +129,9 @@ int main(int argc, char *argv[])
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     G_gisinit(argv[0]);
 
@@ -309,9 +321,12 @@ int main(int argc, char *argv[])
 
     /* print header row */
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (flg.header->answer) {
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     if (format == PLAIN && flg.header->answer) {
 =======
@@ -320,6 +335,9 @@ int main(int argc, char *argv[])
 =======
     if (flg.header->answer) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         if (flg.cat->answer) {
             fprintf(stdout, "cat%s", fs);
@@ -531,9 +549,12 @@ int main(int argc, char *argv[])
 
         /* report data from re-ordered cache */
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -541,6 +562,9 @@ int main(int argc, char *argv[])
 =======
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         for (point = 0; point < point_cnt; point++) {
 
@@ -548,8 +572,11 @@ int main(int argc, char *argv[])
                     cache[point].north_buf, cache[point].col, cache[point].row);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             if (format == PLAIN) {
 
@@ -655,6 +682,9 @@ int main(int argc, char *argv[])
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             if (flg.cat->answer) {
                 fprintf(stdout, "%d%s", cache[point].cat, fs);
@@ -701,8 +731,14 @@ int main(int argc, char *argv[])
             }
             fprintf(stdout, "\n");
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -717,8 +753,11 @@ int main(int argc, char *argv[])
         cache_miss_tot += cache_miss;
         cache_hit = cache_miss = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     }
 
@@ -735,6 +774,9 @@ int main(int argc, char *argv[])
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
 

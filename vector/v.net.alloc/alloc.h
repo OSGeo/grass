@@ -5,9 +5,12 @@ typedef struct {
 
 typedef struct {
 <<<<<<< HEAD
+<<<<<<< HEAD
     int center;  /* neares center, initially -1 */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     int center;  /* nearest center, initially -1 */
 =======
@@ -16,6 +19,9 @@ typedef struct {
 =======
     int center;  /* neares center, initially -1 */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     double cost; /* costs from this center, initially not defined */
     int edge;    /* edge to follow from this node */

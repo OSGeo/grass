@@ -23,14 +23,22 @@ static int format;
 static CELL *cell;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int (*dot)(int, int);
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static int (*dot)(int, int);
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 static int (*dot)(int, int);
 =======
+>>>>>>> osgeo-main
 static int (*dot)();
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -45,6 +53,9 @@ static int (*dot)();
 static int (*dot)(int, int);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 static int cell_dot(int, int);
 static int fcell_dot(int, int);

@@ -357,9 +357,12 @@ class ExampleMapDisplay(FrameMixin, ExampleMapPanel):
 
     def __init__(self, parent, giface, **kwargs):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -367,6 +370,9 @@ class ExampleMapDisplay(FrameMixin, ExampleMapPanel):
 =======
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # init map panel
         ExampleMapPanel.__init__(

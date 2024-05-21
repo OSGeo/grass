@@ -58,9 +58,12 @@ int centroids(int fd, /* File descriptor of map layer to process */
                 continue; /* can't handle 0 or - values */
             count[v]++;
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (method > 0) { /* acccumulate row, col weights */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             if (method > 0) { /* accumulate row, col weights */
 =======
@@ -69,6 +72,9 @@ int centroids(int fd, /* File descriptor of map layer to process */
 =======
             if (method > 0) { /* acccumulate row, col weights */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 e[v] += col;
                 n[v] += row;

@@ -408,9 +408,12 @@ int gvld_isosurf(geovol *gvl)
    \return 0
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int gvld_wire_isosurf(geovol *gvl)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int gvld_wire_isosurf(geovol *gvl UNUSED)
 =======
@@ -419,6 +422,9 @@ int gvld_wire_isosurf(geovol *gvl)
 =======
 int gvld_wire_isosurf(geovol *gvl)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     return (0);

@@ -14,13 +14,20 @@ extern char *group;
 extern char *subgroup;
 extern struct Ref ref;
 <<<<<<< HEAD
-extern char **semantic_labels;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 extern char **semantic_labels;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+extern char **semantic_labels;
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+extern char **semantic_labels;
+=======
+>>>>>>> osgeo-main
 extern char **bandrefs;
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -29,6 +36,9 @@ extern char **semantic_labels;
 =======
 extern char **semantic_labels;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 extern char outsigfile[GNAME_MAX + GMAPSET_MAX];
 extern char *insigfile;

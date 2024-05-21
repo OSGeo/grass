@@ -19,9 +19,12 @@
 #include <grass/glocale.h>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int rew_dummy(struct Map_info *Map)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 static int rew_dummy(struct Map_info *Map UNUSED)
 =======
@@ -30,6 +33,9 @@ static int rew_dummy(struct Map_info *Map)
 =======
 static int rew_dummy(struct Map_info *Map)
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     return -1;
@@ -37,9 +43,12 @@ static int rew_dummy(struct Map_info *Map)
 
 #if !defined HAVE_OGR || !defined HAVE_POSTGRES
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int format(struct Map_info *Map)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 static int format(struct Map_info *Map UNUSED)
 =======
@@ -48,6 +57,9 @@ static int format(struct Map_info *Map)
 =======
 static int format(struct Map_info *Map)
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
@@ -56,14 +68,22 @@ static int format(struct Map_info *Map)
 #endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int (*Rewind_array[][4])(struct Map_info *) = {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static int (*Rewind_array[][4])(struct Map_info *) = {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 static int (*Rewind_array[][4])(struct Map_info *) = {
 =======
+>>>>>>> osgeo-main
 static int (*Rewind_array[][4])() = {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -78,6 +98,9 @@ static int (*Rewind_array[][4])() = {
 static int (*Rewind_array[][4])(struct Map_info *) = {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     {rew_dummy, V1_rewind_nat, V2_rewind_nat, rew_dummy}
 #ifdef HAVE_OGR

@@ -59,14 +59,22 @@ int add_table(char *table, char *name)
     res = snprintf(db.tables[db.ntables].file, buf_s, "%s/%s", db.name, name);
 #endif
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (res < 0 || (size_t)res >= buf_s) {
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (res < 0 || (size_t)res >= buf_s) {
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
     if (res < 0 || (size_t)res >= buf_s) {
 =======
+>>>>>>> osgeo-main
     if (res >= buf_s) {
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -81,6 +89,9 @@ int add_table(char *table, char *name)
     if (res < 0 || (size_t)res >= buf_s) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         db_d_append_error(_("Unable to add table %s to %s. "
                             "The file path is too long."),

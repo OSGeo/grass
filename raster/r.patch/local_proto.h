@@ -2,6 +2,7 @@
 int do_patch(void *result, void *, struct Cell_stats *, int, RASTER_MAP_TYPE,
              size_t, int, int);
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* support.c */
 int support(char **, struct Cell_stats *, int, struct Categories *, int *,
             struct Colors *, int *, RASTER_MAP_TYPE);
@@ -14,6 +15,15 @@ int support(char **, struct Cell_stats *, int, struct Categories *, int *,
 /* support.c */
 int support(char **, struct Cell_stats *, int, struct Categories *, int *,
             struct Colors *, int *, RASTER_MAP_TYPE);
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+/* support.c */
+int support(char **, struct Cell_stats *, int, struct Categories *, int *,
+            struct Colors *, int *, RASTER_MAP_TYPE);
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 
 void merge_threads(struct Cell_stats **, int, int);
@@ -24,4 +34,7 @@ void merge_threads(struct Cell_stats **, int, int);
 int support(char **, struct Cell_stats *, int, struct Categories *, int *,
             struct Colors *, int *, RASTER_MAP_TYPE);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main

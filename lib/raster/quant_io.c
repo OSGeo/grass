@@ -288,14 +288,20 @@ int Rast__quant_export(const char *name, const char *mapset,
     }
     else {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         sprintf(element, "quant2/%s", mapset);
         G_remove(element, name);
@@ -303,8 +309,11 @@ int Rast__quant_export(const char *name, const char *mapset,
         if (!(fd = G_fopen_new(element, name)))
             return -1;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 	sprintf(element, "quant2/%s", mapset);
@@ -317,6 +326,9 @@ int Rast__quant_export(const char *name, const char *mapset,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
 

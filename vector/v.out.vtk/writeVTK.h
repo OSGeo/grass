@@ -27,9 +27,12 @@ typedef struct {
     int numpolygons; /* The number of polygons */
     int polygonoffset;
 <<<<<<< HEAD
+<<<<<<< HEAD
     int generatedata; /* If 0 the categorie data is not complete */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     int generatedata; /* If 0 the category data is not complete */
 =======
@@ -38,6 +41,9 @@ typedef struct {
 =======
     int generatedata; /* If 0 the categorie data is not complete */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 } VTKTypeInfo;
 

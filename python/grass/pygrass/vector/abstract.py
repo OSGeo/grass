@@ -429,9 +429,12 @@ class Info:
             if layer_db_link.layer != layer:
                 raise RuntimeError(
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "The databse link for layer %d of <%s> references layer %d."
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     "The database link for layer %d of <%s> references layer %d."
 =======
@@ -440,6 +443,9 @@ class Info:
 =======
                     "The databse link for layer %d of <%s> references layer %d."
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     % (layer, self.name, layer_db_link.layer)
                 )

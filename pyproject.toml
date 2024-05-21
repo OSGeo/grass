@@ -2,9 +2,12 @@
 required-version = '24'
 line-length = 88
 <<<<<<< HEAD
+<<<<<<< HEAD
 target-version = ['py37', 'py38', 'py39', 'py310']
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -23,6 +26,9 @@ target-version = ['py37', 'py38', 'py39', 'py310']
 =======
 target-version = ['py37', 'py38', 'py39', 'py310']
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 include = '\.pyi?$'
 exclude = '''
@@ -42,9 +48,12 @@ exclude = '''
         | dist\..*
     )/
 <<<<<<< HEAD
+<<<<<<< HEAD
     | python/libgrass_interface_generator/
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     | python/grass/ctypes/
     # Bug in Black related to r-string prefix capitalization reformats
@@ -62,6 +71,9 @@ exclude = '''
 =======
     | python/libgrass_interface_generator/
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 )
 '''
@@ -79,8 +91,11 @@ addopts = """
 """
 timeout = 300
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 
 
@@ -91,4 +106,7 @@ skips = ["B324","B110", "B101", "B112", "B311", "B404"]
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main

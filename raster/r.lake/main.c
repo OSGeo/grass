@@ -312,9 +312,12 @@ int main(int argc, char *argv[])
                                    col);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
                 /* Cheking presence of water. */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 /* Checking presence of water. */
 =======
@@ -323,6 +326,9 @@ int main(int argc, char *argv[])
 =======
                 /* Cheking presence of water. */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 if (is_near_water(water_window) == 1) {
                     if (in_terran[row][col] < water_level) {

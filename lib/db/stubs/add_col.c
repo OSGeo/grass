@@ -5,9 +5,12 @@
    This function calls db_procedure_not_implemented().
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int db__driver_add_column(dbString *tableName, dbColumn *column)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int db__driver_add_column(dbString *tableName UNUSED, dbColumn *column UNUSED)
 =======
@@ -16,6 +19,9 @@ int db__driver_add_column(dbString *tableName, dbColumn *column)
 =======
 int db__driver_add_column(dbString *tableName, dbColumn *column)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     db_procedure_not_implemented("db_add_column");

@@ -257,14 +257,22 @@ int main(int argc, char *argv[])
             n = 0;
             sum = sumsq = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
             min = INFINITY;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            min = INFINITY;
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
             min = INFINITY;
 =======
+>>>>>>> osgeo-main
             min = 1.0 / 0.0;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -279,6 +287,9 @@ int main(int argc, char *argv[])
             min = INFINITY;
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             max = 0;
             kd = G_malloc(minpnts * sizeof(double));
@@ -487,14 +498,22 @@ int main(int argc, char *argv[])
             n = 0;
             sum = sumsq = 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
             min = INFINITY;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            min = INFINITY;
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
             min = INFINITY;
 =======
+>>>>>>> osgeo-main
             min = 1.0 / 0.0;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -509,6 +528,9 @@ int main(int argc, char *argv[])
             min = INFINITY;
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             max = 0;
             kd = G_malloc(minpnts * sizeof(double));

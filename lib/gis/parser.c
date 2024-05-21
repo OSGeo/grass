@@ -497,6 +497,7 @@ int G_parser(int argc, char **argv)
         }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* If first arg is "--wps-process-description" then print out
          * the wps process description of the task */
         if (strcmp(argv[1], "--wps-process-description") == 0) {
@@ -554,6 +555,8 @@ int G_parser(int argc, char **argv)
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         /* If first arg is "--md-description" then print out
          * a Markdown description of the task */
@@ -731,6 +734,9 @@ int G_parser(int argc, char **argv)
                 char buff[32];
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 /* print nothing, but errors and warnings */
                 st->module_info.verbose = G_verbose_min();
@@ -1097,8 +1103,11 @@ int G__uses_new_gisprompt(void)
    \param[out] fd file where to print
    \param format pointer to print function
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
    \param newline TRUE to include newline
  */
@@ -1107,6 +1116,9 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *),
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  */
 void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
@@ -1122,10 +1134,13 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
             format(fd, st->module_info.keywords[i]);
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (i < st->n_keys - 1)
             fprintf(fd, ", ");
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         if (i < st->n_keys - 1) {
             fprintf(fd, ",");
@@ -1142,6 +1157,9 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
         if (i < st->n_keys - 1)
             fprintf(fd, ", ");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
 
@@ -1155,14 +1173,22 @@ void G__print_keywords(FILE *fd, void (*format)(FILE *, const char *))
    \return 0 overwrite disabled
  */
 <<<<<<< HEAD
+<<<<<<< HEAD
 int G_get_overwrite(void)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+int G_get_overwrite(void)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 int G_get_overwrite(void)
 =======
+>>>>>>> osgeo-main
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 int G_get_overwrite()
@@ -1176,6 +1202,9 @@ int G_get_overwrite()
 int G_get_overwrite(void)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     return st->module_info.overwrite;
@@ -1248,8 +1277,11 @@ void set_flag(int f)
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     /* First, check if key has been renamed */
     G_asprintf(&key, "-%c", f);
@@ -1316,6 +1348,9 @@ void set_flag(int f)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     G_asprintf(&err, _("%s: Sorry, <%c> is not a valid flag"), G_program_name(),
                f);
@@ -1474,8 +1509,11 @@ void set_option(const char *string)
 
         if (renamed_key) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             /* if renamed to a new flag (option value given but will be lost),
              * fatal error */
@@ -1499,6 +1537,9 @@ void set_option(const char *string)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             for (at_opt = &st->first_option; at_opt;
                  at_opt = at_opt->next_opt) {

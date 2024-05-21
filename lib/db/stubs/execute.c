@@ -2,9 +2,12 @@
 #include <grass/dbstubs.h>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 int db__driver_execute_immediate(dbString *SQLstatement)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 int db__driver_execute_immediate(dbString *SQLstatement UNUSED)
 =======
@@ -13,6 +16,9 @@ int db__driver_execute_immediate(dbString *SQLstatement)
 =======
 int db__driver_execute_immediate(dbString *SQLstatement)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     db_procedure_not_implemented("db_execute_immediate");

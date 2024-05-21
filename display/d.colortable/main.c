@@ -254,9 +254,12 @@ int main(int argc, char **argv)
         /* Color ramp box */
         /* get separate color for each pixel */
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* fisrt 5 pixels draw null color */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         /* first 5 pixels draw null color */
 =======
@@ -265,6 +268,9 @@ int main(int argc, char **argv)
 =======
         /* fisrt 5 pixels draw null color */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         y_box[1] = -1;
         y_box[3] = 1;

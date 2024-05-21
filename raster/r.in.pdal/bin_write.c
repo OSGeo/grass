@@ -23,6 +23,11 @@
 #include "bin_write.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 /* Get error corrected sum */
 double get_sum(void *sum_array, void *c_array, int row, int cols, int col,
                RASTER_MAP_TYPE rtype)
@@ -30,10 +35,13 @@ double get_sum(void *sum_array, void *c_array, int row, int cols, int col,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* Get error corrected sum */
 double get_sum(void *sum_array, void *c_array, int row, int cols, int col,
                RASTER_MAP_TYPE rtype)
 =======
+=======
+>>>>>>> osgeo-main
 
 /* Get error corrected sum */
 double get_sum(void *sum_array, void *c_array,
@@ -49,6 +57,9 @@ double get_sum(void *sum_array, void *c_array, int row, int cols, int col,
 double get_sum(void *sum_array, void *c_array, int row, int cols, int col,
                RASTER_MAP_TYPE rtype)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     size_t offset = ((size_t)row * cols + col) * Rast_cell_size(rtype);
@@ -59,15 +70,23 @@ double get_sum(void *sum_array, void *c_array, int row, int cols, int col,
 }
 
 <<<<<<< HEAD
-void write_sum(void *raster_row, void *sum_array, void *c_array, int row,
-               int cols, RASTER_MAP_TYPE rtype)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 void write_sum(void *raster_row, void *sum_array, void *c_array, int row,
                int cols, RASTER_MAP_TYPE rtype)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void write_sum(void *raster_row, void *sum_array, void *c_array, int row,
+               int cols, RASTER_MAP_TYPE rtype)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void write_sum(void *raster_row, void *sum_array, void *c_array, int row,
+               int cols, RASTER_MAP_TYPE rtype)
+=======
+>>>>>>> osgeo-main
 
 void write_sum(void *raster_row, void *sum_array, void *c_array,
                int row, int cols, RASTER_MAP_TYPE rtype)
@@ -80,6 +99,9 @@ void write_sum(void *raster_row, void *sum_array, void *c_array, int row,
 void write_sum(void *raster_row, void *sum_array, void *c_array, int row,
                int cols, RASTER_MAP_TYPE rtype)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int col;
@@ -94,6 +116,11 @@ void write_sum(void *raster_row, void *sum_array, void *c_array, int row,
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 void write_variance(void *raster_row, void *n_array, void *mean_array,
                     void *m2_array, int row, int cols, RASTER_MAP_TYPE rtype,
                     int method)
@@ -101,10 +128,13 @@ void write_variance(void *raster_row, void *n_array, void *mean_array,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void write_variance(void *raster_row, void *n_array, void *mean_array,
                     void *m2_array, int row, int cols, RASTER_MAP_TYPE rtype,
                     int method)
 =======
+=======
+>>>>>>> osgeo-main
 
 void write_variance(void *raster_row, void *n_array, void *mean_array,
                     void *m2_array, int row, int cols,
@@ -120,6 +150,9 @@ void write_variance(void *raster_row, void *n_array, void *mean_array,
                     void *m2_array, int row, int cols, RASTER_MAP_TYPE rtype,
                     int method)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     double variance;
@@ -157,8 +190,11 @@ void write_variance(void *raster_row, void *n_array, void *mean_array,
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -168,6 +204,9 @@ void write_variance(void *raster_row, void *n_array, void *mean_array,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 void write_median(struct BinIndex *bin_index, void *raster_row,
                   void *index_array, int row, int cols, RASTER_MAP_TYPE rtype)
@@ -183,12 +222,18 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
         size_t n_offset =
             ((size_t)row * cols + col) * Rast_cell_size(CELL_TYPE);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         if (Rast_is_null_value(((char *)index_array) + n_offset,
                                CELL_TYPE)) /* no points in cell */
@@ -197,7 +242,10 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
         if (Rast_is_null_value(((char *)index_array) + n_offset, CELL_TYPE))    /* no points in cell */
             Rast_set_null_value(ptr, 1, rtype);
         else {                  /* one or more points in cell */
@@ -210,6 +258,9 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
             head_id =
@@ -219,13 +270,20 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
             n = 0;
 
 <<<<<<< HEAD
-            while (node_id != -1) { /* count number of points in cell */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             while (node_id != -1) { /* count number of points in cell */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            while (node_id != -1) { /* count number of points in cell */
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            while (node_id != -1) { /* count number of points in cell */
+=======
+>>>>>>> osgeo-main
             while (node_id != -1) {     /* count number of points in cell */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -234,20 +292,29 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
 =======
             while (node_id != -1) { /* count number of points in cell */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 n++;
                 node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
             }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             if (n == 1) /* only one point, use that */
                 Rast_set_d_value(
@@ -255,8 +322,14 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
             else if (n % 2 !=
                      0) { /* odd number of points: median_i = (n + 1) / 2 */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -274,7 +347,10 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
             if (n == 1)         /* only one point, use that */
                 Rast_set_d_value(ptr,
                                  ((struct z_node *)bin_index->
@@ -299,6 +375,9 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
                 z = (n + 1) / 2.0;
@@ -306,12 +385,18 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
                 node_id = head_id;
                 for (j = 1; j < n; j++) /* get element "below" */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
 
@@ -323,7 +408,10 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
                     node_id =
                         ((struct z_node *)bin_index->nodes)[node_id].next;
 
@@ -343,6 +431,9 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 Rast_set_d_value(ptr, z, rtype);
             }
@@ -352,15 +443,23 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
 }
 
 <<<<<<< HEAD
-void write_mode(struct BinIndex *bin_index, void *raster_row, void *index_array,
-                int row, int cols)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 void write_mode(struct BinIndex *bin_index, void *raster_row, void *index_array,
                 int row, int cols)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void write_mode(struct BinIndex *bin_index, void *raster_row, void *index_array,
+                int row, int cols)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void write_mode(struct BinIndex *bin_index, void *raster_row, void *index_array,
+                int row, int cols)
+=======
+>>>>>>> osgeo-main
 
 void write_mode(struct BinIndex *bin_index, void *raster_row,
                 void *index_array, int row, int cols)
@@ -373,6 +472,9 @@ void write_mode(struct BinIndex *bin_index, void *raster_row, void *index_array,
 void write_mode(struct BinIndex *bin_index, void *raster_row, void *index_array,
                 int row, int cols)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int col;
@@ -383,15 +485,23 @@ void write_mode(struct BinIndex *bin_index, void *raster_row, void *index_array,
         size_t n_offset =
             ((size_t)row * cols + col) * Rast_cell_size(CELL_TYPE);
 <<<<<<< HEAD
-        if (Rast_is_null_value(((char *)index_array) + n_offset,
-                               CELL_TYPE)) /* no points in cell */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (Rast_is_null_value(((char *)index_array) + n_offset,
                                CELL_TYPE)) /* no points in cell */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (Rast_is_null_value(((char *)index_array) + n_offset,
+                               CELL_TYPE)) /* no points in cell */
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (Rast_is_null_value(((char *)index_array) + n_offset,
+                               CELL_TYPE)) /* no points in cell */
+=======
+>>>>>>> osgeo-main
         if (Rast_is_null_value(((char *)index_array) + n_offset, CELL_TYPE))    /* no points in cell */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -402,6 +512,9 @@ void write_mode(struct BinIndex *bin_index, void *raster_row, void *index_array,
         if (Rast_is_null_value(((char *)index_array) + n_offset,
                                CELL_TYPE)) /* no points in cell */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             Rast_set_null_value(ptr, 1, CELL_TYPE);
         else {
@@ -414,12 +527,18 @@ void write_mode(struct BinIndex *bin_index, void *raster_row, void *index_array,
                 if (mode_node == -1)
                     mode_node = node_id;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 else if (((struct cnt_node *)bin_index->nodes)[node_id].count >
                          ((struct cnt_node *)bin_index->nodes)[mode_node].count)
@@ -432,7 +551,10 @@ void write_mode(struct BinIndex *bin_index, void *raster_row, void *index_array,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
                 else if (((struct cnt_node *)bin_index->
                           nodes)[node_id].count >
                          ((struct cnt_node *)bin_index->
@@ -456,6 +578,9 @@ void write_mode(struct BinIndex *bin_index, void *raster_row, void *index_array,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         }
         ptr = G_incr_void_ptr(ptr, Rast_cell_size(CELL_TYPE));
@@ -463,8 +588,11 @@ void write_mode(struct BinIndex *bin_index, void *raster_row, void *index_array,
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -474,6 +602,9 @@ void write_mode(struct BinIndex *bin_index, void *raster_row, void *index_array,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 void write_percentile(struct BinIndex *bin_index, void *raster_row,
                       void *index_array, int row, int cols,
@@ -491,15 +622,23 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
         size_t n_offset =
             ((size_t)row * cols + col) * Rast_cell_size(CELL_TYPE);
 <<<<<<< HEAD
-        if (Rast_is_null_value(((char *)index_array) + n_offset,
-                               CELL_TYPE)) /* no points in cell */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (Rast_is_null_value(((char *)index_array) + n_offset,
                                CELL_TYPE)) /* no points in cell */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (Rast_is_null_value(((char *)index_array) + n_offset,
+                               CELL_TYPE)) /* no points in cell */
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (Rast_is_null_value(((char *)index_array) + n_offset,
+                               CELL_TYPE)) /* no points in cell */
+=======
+>>>>>>> osgeo-main
         if (Rast_is_null_value(((char *)index_array) + n_offset, CELL_TYPE))    /* no points in cell */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -510,6 +649,9 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
         if (Rast_is_null_value(((char *)index_array) + n_offset,
                                CELL_TYPE)) /* no points in cell */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             Rast_set_null_value(ptr, 1, rtype);
         else {
@@ -519,13 +661,20 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
             n = 0;
 
 <<<<<<< HEAD
-            while (node_id != -1) { /* count number of points in cell */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             while (node_id != -1) { /* count number of points in cell */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            while (node_id != -1) { /* count number of points in cell */
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            while (node_id != -1) { /* count number of points in cell */
+=======
+>>>>>>> osgeo-main
             while (node_id != -1) {     /* count number of points in cell */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -534,6 +683,9 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
 =======
             while (node_id != -1) { /* count number of points in cell */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 n++;
                 node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
@@ -541,13 +693,20 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
 
             z = (pth * (n + 1)) / 100.0;
 <<<<<<< HEAD
-            r_low = floor(z); /* lower rank */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             r_low = floor(z); /* lower rank */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            r_low = floor(z); /* lower rank */
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            r_low = floor(z); /* lower rank */
+=======
+>>>>>>> osgeo-main
             r_low = floor(z);   /* lower rank */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -556,6 +715,9 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
 =======
             r_low = floor(z); /* lower rank */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             if (r_low < 1)
                 r_low = 1;
@@ -563,13 +725,20 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
                 r_low = n;
 
 <<<<<<< HEAD
-            r_up = ceil(z); /* upper rank */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             r_up = ceil(z); /* upper rank */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            r_up = ceil(z); /* upper rank */
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            r_up = ceil(z); /* upper rank */
+=======
+>>>>>>> osgeo-main
             r_up = ceil(z);     /* upper rank */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -578,6 +747,9 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
 =======
             r_up = ceil(z); /* upper rank */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             if (r_up > n)
                 r_up = n;
@@ -587,12 +759,18 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
                 node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             z = ((struct z_node *)bin_index->nodes)[node_id]
                     .z; /* save lower value */
@@ -601,7 +779,10 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
             z = ((struct z_node *)bin_index->nodes)[node_id].z; /* save lower value */
             node_id = head_id;
             for (j = 1; j < r_up; j++)  /* search upper value */
@@ -614,6 +795,9 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
 
@@ -625,15 +809,23 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
 }
 
 <<<<<<< HEAD
-void write_skewness(struct BinIndex *bin_index, void *raster_row,
-                    void *index_array, int row, int cols, RASTER_MAP_TYPE rtype)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 void write_skewness(struct BinIndex *bin_index, void *raster_row,
                     void *index_array, int row, int cols, RASTER_MAP_TYPE rtype)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void write_skewness(struct BinIndex *bin_index, void *raster_row,
+                    void *index_array, int row, int cols, RASTER_MAP_TYPE rtype)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void write_skewness(struct BinIndex *bin_index, void *raster_row,
+                    void *index_array, int row, int cols, RASTER_MAP_TYPE rtype)
+=======
+>>>>>>> osgeo-main
 
 void write_skewness(struct BinIndex *bin_index, void *raster_row,
                     void *index_array, int row, int cols,
@@ -647,6 +839,9 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
 void write_skewness(struct BinIndex *bin_index, void *raster_row,
                     void *index_array, int row, int cols, RASTER_MAP_TYPE rtype)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int n;
@@ -662,15 +857,23 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
         size_t n_offset =
             ((size_t)row * cols + col) * Rast_cell_size(CELL_TYPE);
 <<<<<<< HEAD
-        if (Rast_is_null_value(((char *)index_array) + n_offset,
-                               CELL_TYPE)) /* no points in cell */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (Rast_is_null_value(((char *)index_array) + n_offset,
                                CELL_TYPE)) /* no points in cell */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (Rast_is_null_value(((char *)index_array) + n_offset,
+                               CELL_TYPE)) /* no points in cell */
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (Rast_is_null_value(((char *)index_array) + n_offset,
+                               CELL_TYPE)) /* no points in cell */
+=======
+>>>>>>> osgeo-main
         if (Rast_is_null_value(((char *)index_array) + n_offset, CELL_TYPE))    /* no points in cell */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -681,6 +884,9 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
         if (Rast_is_null_value(((char *)index_array) + n_offset,
                                CELL_TYPE)) /* no points in cell */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             Rast_set_null_value(ptr, 1, rtype);
         else {
@@ -689,14 +895,20 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
             node_id = head_id;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             n = 0;        /* count */
             sum = 0.0;    /* sum */
@@ -704,8 +916,11 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
             sumdev = 0.0; /* sum of (xi - mean)^3 */
             skew = 0.0;   /* skewness */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
             n = 0;              /* count */
@@ -718,6 +933,9 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
             while (node_id != -1) {
@@ -729,13 +947,20 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
             }
 
 <<<<<<< HEAD
-            if (n > 1) { /* if n == 1, skew is "0.0" */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             if (n > 1) { /* if n == 1, skew is "0.0" */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (n > 1) { /* if n == 1, skew is "0.0" */
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (n > 1) { /* if n == 1, skew is "0.0" */
+=======
+>>>>>>> osgeo-main
             if (n > 1) {        /* if n == 1, skew is "0.0" */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -744,6 +969,9 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
 =======
             if (n > 1) { /* if n == 1, skew is "0.0" */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 mean = sum / n;
                 node_id = head_id;
@@ -751,13 +979,20 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
                     z = ((struct z_node *)bin_index->nodes)[node_id].z;
                     sumdev += pow((z - mean), 3);
 <<<<<<< HEAD
-                    node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                     node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
+=======
+>>>>>>> osgeo-main
                     node_id =
                         ((struct z_node *)bin_index->nodes)[node_id].next;
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
@@ -767,6 +1002,9 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
 =======
                     node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 }
 
@@ -783,6 +1021,11 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
 void write_trimmean(struct BinIndex *bin_index, void *raster_row,
                     void *index_array, int row, int cols, RASTER_MAP_TYPE rtype,
                     double trim)
@@ -790,10 +1033,13 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void write_trimmean(struct BinIndex *bin_index, void *raster_row,
                     void *index_array, int row, int cols, RASTER_MAP_TYPE rtype,
                     double trim)
 =======
+=======
+>>>>>>> osgeo-main
 
 void write_trimmean(struct BinIndex *bin_index, void *raster_row,
                     void *index_array, int row, int cols,
@@ -809,6 +1055,9 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
                     void *index_array, int row, int cols, RASTER_MAP_TYPE rtype,
                     double trim)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int n;
@@ -823,15 +1072,23 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
         size_t n_offset =
             ((size_t)row * cols + col) * Rast_cell_size(CELL_TYPE);
 <<<<<<< HEAD
-        if (Rast_is_null_value(((char *)index_array) + n_offset,
-                               CELL_TYPE)) /* no points in cell */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (Rast_is_null_value(((char *)index_array) + n_offset,
                                CELL_TYPE)) /* no points in cell */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (Rast_is_null_value(((char *)index_array) + n_offset,
+                               CELL_TYPE)) /* no points in cell */
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (Rast_is_null_value(((char *)index_array) + n_offset,
+                               CELL_TYPE)) /* no points in cell */
+=======
+>>>>>>> osgeo-main
         if (Rast_is_null_value(((char *)index_array) + n_offset, CELL_TYPE))    /* no points in cell */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -842,6 +1099,9 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
         if (Rast_is_null_value(((char *)index_array) + n_offset,
                                CELL_TYPE)) /* no points in cell */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             Rast_set_null_value(ptr, 1, rtype);
         else {
@@ -851,13 +1111,20 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
             node_id = head_id;
             n = 0;
 <<<<<<< HEAD
-            while (node_id != -1) { /* count number of points in cell */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
             while (node_id != -1) { /* count number of points in cell */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            while (node_id != -1) { /* count number of points in cell */
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+            while (node_id != -1) { /* count number of points in cell */
+=======
+>>>>>>> osgeo-main
             while (node_id != -1) {     /* count number of points in cell */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -866,6 +1133,9 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
 =======
             while (node_id != -1) { /* count number of points in cell */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 n++;
                 node_id = ((struct z_node *)bin_index->nodes)[node_id].next;
@@ -875,12 +1145,18 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
                 mean = ((struct z_node *)bin_index->nodes)[head_id].z;
             else {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 k = floor(trim * n +
                           0.5); /* number of ranks to discard on each tail */
@@ -891,7 +1167,10 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
                 k = floor(trim * n + 0.5);      /* number of ranks to discard on each tail */
 
                 if (k > 0 && (n - 2 * k) > 0) { /* enough elements to discard */
@@ -908,6 +1187,9 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                         node_id =
                             ((struct z_node *)bin_index->nodes)[node_id].next;
@@ -918,13 +1200,20 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
                     sum = 0.0;
 
 <<<<<<< HEAD
-                    while (j <= k) { /* get values in interval */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                     while (j <= k) { /* get values in interval */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    while (j <= k) { /* get values in interval */
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    while (j <= k) { /* get values in interval */
+=======
+>>>>>>> osgeo-main
                     while (j <= k) {    /* get values in interval */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -933,6 +1222,9 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
 =======
                     while (j <= k) { /* get values in interval */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                         n++;
                         sum += ((struct z_node *)bin_index->nodes)[node_id].z;
@@ -961,15 +1253,23 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
 }
 
 <<<<<<< HEAD
-void write_sidn(struct BinIndex *bin_index, void *raster_row, void *index_array,
-                int row, int cols, int min)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 void write_sidn(struct BinIndex *bin_index, void *raster_row, void *index_array,
                 int row, int cols, int min)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void write_sidn(struct BinIndex *bin_index, void *raster_row, void *index_array,
+                int row, int cols, int min)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+void write_sidn(struct BinIndex *bin_index, void *raster_row, void *index_array,
+                int row, int cols, int min)
+=======
+>>>>>>> osgeo-main
 
 void write_sidn(struct BinIndex *bin_index, void *raster_row,
                 void *index_array, int row, int cols, int min)
@@ -982,6 +1282,9 @@ void write_sidn(struct BinIndex *bin_index, void *raster_row, void *index_array,
 void write_sidn(struct BinIndex *bin_index, void *raster_row, void *index_array,
                 int row, int cols, int min)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int col;
@@ -993,15 +1296,23 @@ void write_sidn(struct BinIndex *bin_index, void *raster_row, void *index_array,
         size_t n_offset =
             ((size_t)row * cols + col) * Rast_cell_size(CELL_TYPE);
 <<<<<<< HEAD
-        if (Rast_is_null_value(((char *)index_array) + n_offset,
-                               CELL_TYPE)) /* no points in cell */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (Rast_is_null_value(((char *)index_array) + n_offset,
                                CELL_TYPE)) /* no points in cell */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (Rast_is_null_value(((char *)index_array) + n_offset,
+                               CELL_TYPE)) /* no points in cell */
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (Rast_is_null_value(((char *)index_array) + n_offset,
+                               CELL_TYPE)) /* no points in cell */
+=======
+>>>>>>> osgeo-main
         if (Rast_is_null_value(((char *)index_array) + n_offset, CELL_TYPE))    /* no points in cell */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -1012,6 +1323,9 @@ void write_sidn(struct BinIndex *bin_index, void *raster_row, void *index_array,
         if (Rast_is_null_value(((char *)index_array) + n_offset,
                                CELL_TYPE)) /* no points in cell */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             Rast_set_c_value(ptr, 0, CELL_TYPE);
         else {
@@ -1025,12 +1339,18 @@ void write_sidn(struct BinIndex *bin_index, void *raster_row, void *index_array,
                 if (min &&
                     ((struct cnt_node *)bin_index->nodes)[node_id].count <
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                         count)
                     count =
@@ -1041,7 +1361,10 @@ void write_sidn(struct BinIndex *bin_index, void *raster_row, void *index_array,
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
                     count)
                     count =
                         ((struct cnt_node *)bin_index->nodes)[node_id].count;
@@ -1059,6 +1382,9 @@ void write_sidn(struct BinIndex *bin_index, void *raster_row, void *index_array,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     count =
                         ((struct cnt_node *)bin_index->nodes)[node_id].count;
@@ -1071,8 +1397,11 @@ void write_sidn(struct BinIndex *bin_index, void *raster_row, void *index_array,
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -1082,6 +1411,9 @@ void write_sidn(struct BinIndex *bin_index, void *raster_row, void *index_array,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 void write_ev(struct BinIndex *bin_index, void *raster_row, void *index_array,
               int row, int cols, RASTER_MAP_TYPE rtype, int method)
@@ -1094,15 +1426,23 @@ void write_ev(struct BinIndex *bin_index, void *raster_row, void *index_array,
         size_t n_offset =
             ((size_t)row * cols + col) * Rast_cell_size(CELL_TYPE);
 <<<<<<< HEAD
-        if (Rast_is_null_value(((char *)index_array) + n_offset,
-                               CELL_TYPE)) /* no points in cell */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if (Rast_is_null_value(((char *)index_array) + n_offset,
                                CELL_TYPE)) /* no points in cell */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (Rast_is_null_value(((char *)index_array) + n_offset,
+                               CELL_TYPE)) /* no points in cell */
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if (Rast_is_null_value(((char *)index_array) + n_offset,
+                               CELL_TYPE)) /* no points in cell */
+=======
+>>>>>>> osgeo-main
         if (Rast_is_null_value(((char *)index_array) + n_offset, CELL_TYPE))    /* no points in cell */
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -1113,6 +1453,9 @@ void write_ev(struct BinIndex *bin_index, void *raster_row, void *index_array,
         if (Rast_is_null_value(((char *)index_array) + n_offset,
                                CELL_TYPE)) /* no points in cell */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             Rast_set_null_value(ptr, 1, rtype);
         else {

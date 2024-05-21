@@ -110,9 +110,12 @@ static int seg_format(int fd, off_t nrows, off_t ncols, int srows, int scols,
 
     if (nrows <= 0 || ncols <= 0 || len <= 0 || srows <= 0 || scols <= 0) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         G_warning("Segment_format(fd,%" PRI_OFF_T ",%" PRI_OFF_T
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         G_warning("Segment_format(fd,%" PRId64 ",%" PRId64
 =======
@@ -121,6 +124,9 @@ static int seg_format(int fd, off_t nrows, off_t ncols, int srows, int scols,
 =======
         G_warning("Segment_format(fd,%" PRI_OFF_T ",%" PRI_OFF_T
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                   ",%d,%d,%d): illegal value(s)",
                   nrows, ncols, srows, scols, len);
@@ -239,14 +245,22 @@ static int zero_fill(int fd, off_t nbytes)
 
     while (nbytes > 0) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         n = nbytes > (int)sizeof(buf) ? (int)sizeof(buf) : nbytes;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        n = nbytes > (int)sizeof(buf) ? (int)sizeof(buf) : nbytes;
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
         n = nbytes > (int)sizeof(buf) ? (int)sizeof(buf) : nbytes;
 =======
+>>>>>>> osgeo-main
         n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -261,6 +275,9 @@ static int zero_fill(int fd, off_t nbytes)
         n = nbytes > (int)sizeof(buf) ? (int)sizeof(buf) : nbytes;
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         errno = 0;
         if (write(fd, buf, n) != n) {

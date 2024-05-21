@@ -73,9 +73,12 @@ int getgrdhead(FILE *fd, struct Cell_head *cellhd)
     cellhd->ns_res = (double)(ymax - ymin) / (nr - 1);
     /* the Surfer grid specifies x,y locations of gridded points.  The GRASS
 <<<<<<< HEAD
+<<<<<<< HEAD
        raster specifies an area covered by rectangular cells centerd at gridded
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
        raster specifies an area covered by rectangular cells centered at gridded
 =======
@@ -84,6 +87,9 @@ int getgrdhead(FILE *fd, struct Cell_head *cellhd)
 =======
        raster specifies an area covered by rectangular cells centerd at gridded
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
        points. That difference requires an adjustment */
     cellhd->north = ymax + cellhd->ns_res / 2.;
@@ -241,9 +247,12 @@ int gethead(FILE *fd, struct Cell_head *cellhd, RASTER_MAP_TYPE *d_type,
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 static int scan_int(const char *s, double *i, int proj)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 static int scan_int(const char *s, double *i, int proj UNUSED)
 =======
@@ -252,6 +261,9 @@ static int scan_int(const char *s, double *i, int proj)
 =======
 static int scan_int(const char *s, double *i, int proj)
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     char dummy[3];
@@ -260,8 +272,14 @@ static int scan_int(const char *s, double *i, int proj)
     *dummy = 0;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -272,7 +290,10 @@ static int scan_int(const char *s, double *i, int proj)
         return 0;
     if (*i_loc <= 0)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -303,6 +324,9 @@ static int scan_int(const char *s, double *i, int proj)
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         return 0;
     return 1;
@@ -310,14 +334,22 @@ static int scan_int(const char *s, double *i, int proj)
 
 static int extract(int count, char *label, char *value, void *data, int proj,
 <<<<<<< HEAD
+<<<<<<< HEAD
                    int (*scanner)(const char *, double *, int))
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                   int (*scanner)(const char *, double *, int))
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                    int (*scanner)(const char *, double *, int))
 =======
+>>>>>>> osgeo-main
                    int (*scanner)())
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -332,6 +364,9 @@ static int extract(int count, char *label, char *value, void *data, int proj,
                    int (*scanner)(const char *, double *, int))
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     if (count) {

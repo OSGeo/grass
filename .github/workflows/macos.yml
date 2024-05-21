@@ -9,9 +9,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 env:
   CACHE_NUMBER: 0
 concurrency:

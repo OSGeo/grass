@@ -563,8 +563,14 @@ static void set_color(char *tcolor)
         sscanf(tcolor, "0x%02x%02x%02x", &r, &g, &b) == 3) {
         if (r >= 0 && r < 256 && g >= 0 && g < 256 && b >= 0 && b < 256) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

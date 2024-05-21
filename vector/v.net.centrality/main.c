@@ -186,9 +186,12 @@ int main(int argc, char *argv[])
     geo_f->key = 'g';
     geo_f->description =
 <<<<<<< HEAD
+<<<<<<< HEAD
         _("Use geodesic calculation for longitude-latitude locations");
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         _("Use geodesic calculation for longitude-latitude projects");
 =======
@@ -197,6 +200,9 @@ int main(int argc, char *argv[])
 =======
         _("Use geodesic calculation for longitude-latitude locations");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     add_f = G_define_flag();

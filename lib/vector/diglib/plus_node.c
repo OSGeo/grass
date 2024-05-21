@@ -26,9 +26,12 @@ static double dist_squared(double, double, double, double);
  * Line will be negative if END node
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  * 'node' must of course already exist space will be alloced to add 'line' to
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
  * 'node' must of course already exist space will be allocated to add 'line' to
 =======
@@ -37,6 +40,9 @@ static double dist_squared(double, double, double, double);
 =======
  * 'node' must of course already exist space will be alloced to add 'line' to
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  * array
  *

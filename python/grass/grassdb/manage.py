@@ -119,9 +119,12 @@ def split_mapset_path(mapset_path):
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 def resolve_mapset_path(path, location=None, mapset=None):
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 def resolve_mapset_path(path, location=None, mapset=None) -> MapsetPath:
 =======
@@ -130,6 +133,9 @@ def resolve_mapset_path(path, location=None, mapset=None):
 =======
 def resolve_mapset_path(path, location=None, mapset=None):
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     """Resolve full path to mapset from given combination of parameters.
 

@@ -45,13 +45,20 @@ int main(int argc, char **argv)
     char tmp1[100], tmp2[100], tmp3[100];
     char timebuff[256];
 <<<<<<< HEAD
-    char *units, *vdatum, *semantic_label;
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     char *units, *vdatum, *semantic_label;
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    char *units, *vdatum, *semantic_label;
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    char *units, *vdatum, *semantic_label;
+=======
+>>>>>>> osgeo-main
     char *units, *vdatum, *bandref;
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
@@ -60,6 +67,9 @@ int main(int argc, char **argv)
 =======
     char *units, *vdatum, *semantic_label;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     int i;
     CELL mincat = 0, maxcat = 0, cat;
@@ -138,13 +148,20 @@ int main(int argc, char **argv)
     vdatum = Rast_read_vdatum(name, "");
 
 <<<<<<< HEAD
-    semantic_label = Rast_read_semantic_label(name, "");
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     semantic_label = Rast_read_semantic_label(name, "");
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    semantic_label = Rast_read_semantic_label(name, "");
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    semantic_label = Rast_read_semantic_label(name, "");
+=======
+>>>>>>> osgeo-main
     bandref = Rast_read_bandref(name, "");
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
@@ -153,6 +170,9 @@ int main(int argc, char **argv)
 =======
     semantic_label = Rast_read_semantic_label(name, "");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     /*Check the Timestamp */
@@ -192,9 +212,12 @@ int main(int argc, char **argv)
         compose_line(out, "Mapset:   %-29.29s  Login of Creator: %s", mapset,
                      hist_ok ? Rast_get_history(&hist, HIST_CREATOR) : "??");
 <<<<<<< HEAD
+<<<<<<< HEAD
         compose_line(out, "Location: %s", G_location());
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         compose_line(out, "Project:  %s", G_location());
 =======
@@ -203,6 +226,9 @@ int main(int argc, char **argv)
 =======
         compose_line(out, "Location: %s", G_location());
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         compose_line(out, "DataBase: %s", G_gisdbase());
         compose_line(out, "Title:    %s", title);
@@ -227,14 +253,20 @@ int main(int argc, char **argv)
                      cats_ok ? tmp1 : "??");
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         compose_line(out, "  Data Type:    %-20.20s Semantic label: %s ",
                      (data_type == CELL_TYPE
@@ -244,8 +276,11 @@ int main(int argc, char **argv)
                                  : (data_type == FCELL_TYPE ? "FCELL" : "??"))),
                      (semantic_label ? semantic_label : "(none)"));
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 	compose_line(out, "  Data Type:    %-20.20s Band reference: %s ",
@@ -258,6 +293,9 @@ int main(int argc, char **argv)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         /* For now hide these unless they exist to keep the noise low. In
@@ -647,14 +685,20 @@ int main(int argc, char **argv)
                 G_format_timestamp(&ts, timebuff);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 /*Create the r.info timestamp string */
                 fprintf(out, "timestamp=\"%s\"\n", timebuff);
@@ -680,8 +724,11 @@ int main(int argc, char **argv)
                 for (i = 0; i < Rast_history_length(&hist); i++)
                     fprintf(out, "%s", Rast_history_line(&hist, i));
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 		/*Create the r.info timestamp string */
@@ -706,6 +753,9 @@ int main(int argc, char **argv)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 fprintf(out, "\"\n");
             }

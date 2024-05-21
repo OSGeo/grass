@@ -306,8 +306,11 @@
         <label>Point cloud (LAS LiDAR) import</label>
       </module-item>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
       <separator/>
       <module-item name="r.in.wms">
@@ -317,6 +320,9 @@
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
       <separator/>
       <module-item name="r.in.wms">
@@ -1228,8 +1234,11 @@
         <label>Clean vector map</label>
       </module-item>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
       <module-item name="v.fill.holes">
         <label>Fill holes in areas</label>
@@ -1238,6 +1247,9 @@
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
       <module-item name="v.generalize">
         <label>Smooth or simplify</label>

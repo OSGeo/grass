@@ -1507,9 +1507,12 @@ class Grammar(object):
                                     # form ('right',level) or ('nonassoc', level) or ('left',level)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.UsedPrecedence = set() # Precedence rules that were actually used by the grammer.
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         self.UsedPrecedence = set() # Precedence rules that were actually used by the grammar.
 =======
@@ -1518,6 +1521,9 @@ class Grammar(object):
 =======
         self.UsedPrecedence = set() # Precedence rules that were actually used by the grammer.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                                     # This is only used to provide error checking and to generate
                                     # a warning about unused precedence rules.

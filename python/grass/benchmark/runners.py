@@ -15,13 +15,20 @@
 """Basic functions for benchmarking modules"""
 
 <<<<<<< HEAD
-import random
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 import random
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+import random
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+import random
+=======
+>>>>>>> osgeo-main
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
 import random
@@ -29,6 +36,9 @@ import random
 =======
 import random
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 import shutil
 from types import SimpleNamespace
@@ -37,10 +47,13 @@ import grass.script as gs
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 def benchmark_single(module, label, repeat=5):
     """Benchmark module as is without chaning anything.
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 def benchmark_single(module, label, repeat=5):
@@ -53,6 +66,9 @@ def benchmark_single(module, label, repeat=5):
 def benchmark_single(module, label, repeat=5):
     """Benchmark module as is without chaning anything.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     *module* is an instance of PyGRASS Module class or any object which
@@ -101,14 +117,20 @@ def benchmark_single(module, label, repeat=5):
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
     """Benchmark module using values of nprocs up to *max_nprocs*.
@@ -127,8 +149,11 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5, shuffle=True):
     Runs are executed in random order, set *shuffle* to false if they
     need to be executed in order based on number of threads.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 def benchmark_nprocs(module, label, max_nprocs, repeat):
@@ -153,6 +178,9 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     *label* is a text to add to the result (for user-facing display).
@@ -160,12 +188,18 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5):
 
     Returns an object with attributes *times* (list of average execution times),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     *all_times* (list of lists of measured execution times),
     *efficiency* (parallel efficiency), *nprocs* (list of *nprocs* values used),
@@ -204,7 +238,10 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
     *all_times* (list of lists of measured execution times), *nprocs*
     (list of *nprocs* values used), and *label* (the provided parameter as is).
 =======
@@ -250,6 +287,9 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         if nprocs == 1:
             serial_avg = avg
@@ -257,14 +297,20 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5):
             min_avg = avg
             min_time = nprocs
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         efficiency.append(serial_avg / (nprocs * avg))
 
@@ -274,7 +320,10 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
         print(f"\nResult - {avg}s")
 
     print("\u2500" * term_size.columns)
@@ -287,6 +336,9 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5):
 >>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     print(f"Best average time - {min_avg}s ({min_time} threads)\n")
 
@@ -294,13 +346,20 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5):
         all_times=all_times,
         times=avg_times,
 <<<<<<< HEAD
-        efficiency=efficiency,
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         efficiency=efficiency,
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        efficiency=efficiency,
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        efficiency=efficiency,
+=======
+>>>>>>> osgeo-main
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
         efficiency=efficiency,
@@ -308,6 +367,9 @@ def benchmark_nprocs(module, label, max_nprocs, repeat=5):
 =======
         efficiency=efficiency,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         nprocs=nprocs_list,
         label=label,
@@ -318,22 +380,31 @@ def benchmark_resolutions(module, resolutions, label, repeat=5, nprocs=None):
     """Benchmark module using different resolutions.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 392c6e8e0b (pygrass: Add update parameters method to Module (#1712))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     *module* is an instance of PyGRASS Module class or any object
     with attributes as specified in :func:`benchmark_nprocs`
     except that the *update* method is required only when *nprocs* is set.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
     *module* is an instance of PyGRASS Module class.
@@ -342,6 +413,9 @@ def benchmark_resolutions(module, resolutions, label, repeat=5, nprocs=None):
 >>>>>>> 392c6e8e0b (pygrass: Add update parameters method to Module (#1712))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     *resolutions* is a list of resolutions to set (current region is currently
     used and changed but that may change in the future).
@@ -350,15 +424,23 @@ def benchmark_resolutions(module, resolutions, label, repeat=5, nprocs=None):
 
     *label* is a text to add to the result (for user-facing display).
 <<<<<<< HEAD
-    Optional *nprocs* is passed to the module if present
-    (the called module does not have to support nprocs parameter).
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     Optional *nprocs* is passed to the module if present
     (the called module does not have to support nprocs parameter).
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    Optional *nprocs* is passed to the module if present
+    (the called module does not have to support nprocs parameter).
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    Optional *nprocs* is passed to the module if present
+    (the called module does not have to support nprocs parameter).
+=======
+>>>>>>> osgeo-main
     Optional *nprocs* is passed to the module if present.
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
@@ -369,6 +451,9 @@ def benchmark_resolutions(module, resolutions, label, repeat=5, nprocs=None):
     Optional *nprocs* is passed to the module if present
     (the called module does not have to support nprocs parameter).
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     Returns an object with attributes *times* (list of average execution times),
@@ -378,22 +463,31 @@ def benchmark_resolutions(module, resolutions, label, repeat=5, nprocs=None):
     """
     term_size = shutil.get_terminal_size()
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     if hasattr(module, "get_bash"):
         print(module.get_bash())
     else:
         print(module)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
     print(module.get_bash())
@@ -402,6 +496,9 @@ def benchmark_resolutions(module, resolutions, label, repeat=5, nprocs=None):
 >>>>>>> ba3c0640fa (libpython: Support benchmarks of non-parallel runs better (#1733))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     avg_times = []
@@ -418,13 +515,20 @@ def benchmark_resolutions(module, resolutions, label, repeat=5, nprocs=None):
         for _ in range(repeat):
             if nprocs:
 <<<<<<< HEAD
-                module.update(nprocs=nprocs)
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                 module.update(nprocs=nprocs)
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                module.update(nprocs=nprocs)
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                module.update(nprocs=nprocs)
+=======
+>>>>>>> osgeo-main
                 module(nprocs=nprocs)
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
@@ -433,6 +537,9 @@ def benchmark_resolutions(module, resolutions, label, repeat=5, nprocs=None):
 =======
                 module.update(nprocs=nprocs)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             module.run()
             print(f"{module.time}s")

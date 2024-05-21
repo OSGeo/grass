@@ -16,14 +16,20 @@
  *****************************************************************************/
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #include <inttypes.h>
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 #include <sys/types.h>
 #include <string.h>
@@ -78,12 +84,15 @@ int dig_Rd_P_node(struct Plus_head *Plus, int n, struct gvfile *fp)
     ptr->n_lines = cnt;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (dig_node_alloc_line(ptr, ptr->n_lines) == -1)
         return -1;
 
     if (ptr->n_lines) {
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     if (dig_node_alloc_line(ptr, ptr->n_lines) == -1) {
         dig_free_node(ptr);
@@ -134,6 +143,9 @@ int dig_Rd_P_node(struct Plus_head *Plus, int n, struct gvfile *fp)
 
     if (ptr->n_lines) {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         if (0 >= dig__fread_port_P(ptr->lines, ptr->n_lines, fp))
             return (-1);
@@ -156,8 +168,14 @@ int dig_Rd_P_node(struct Plus_head *Plus, int n, struct gvfile *fp)
         if (0 >= dig__fread_port_D(&(ptr->z), 1, fp))
             return (-1);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -242,9 +260,12 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
     /* offset */
     if (0 >= dig__fread_port_O(&(ptr->offset), 1, fp, Plus->off_t_size))
 <<<<<<< HEAD
+<<<<<<< HEAD
         return (-1);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         goto free_exit_failure;
 =======
@@ -253,6 +274,9 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
 =======
         return (-1);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     if (ptr->type == GV_POINT) {
@@ -268,9 +292,12 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
 
         if (0 >= dig__fread_port_P(&(topo->area), 1, fp))
 <<<<<<< HEAD
+<<<<<<< HEAD
             return -1;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             goto free_exit_failure;
 =======
@@ -279,6 +306,9 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
 =======
             return -1;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
     /* lines */
@@ -287,11 +317,14 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
 
         if (0 >= dig__fread_port_P(&(topo->N1), 1, fp))
 <<<<<<< HEAD
+<<<<<<< HEAD
             return -1;
         if (0 >= dig__fread_port_P(&(topo->N2), 1, fp))
             return -1;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             goto free_exit_failure;
         if (0 >= dig__fread_port_P(&(topo->N2), 1, fp))
@@ -306,6 +339,9 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
         if (0 >= dig__fread_port_P(&(topo->N2), 1, fp))
             return -1;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
     /* boundaries */
@@ -314,8 +350,11 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
 
         if (0 >= dig__fread_port_P(&(topo->N1), 1, fp))
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             goto free_exit_failure;
         if (0 >= dig__fread_port_P(&(topo->N2), 1, fp))
@@ -327,6 +366,9 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             return -1;
         if (0 >= dig__fread_port_P(&(topo->N2), 1, fp))
@@ -336,8 +378,14 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
         if (0 >= dig__fread_port_P(&(topo->right), 1, fp))
             return -1;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -350,9 +398,12 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
 
         if (0 >= dig__fread_port_I(&n_edges, 1, fp))
 <<<<<<< HEAD
+<<<<<<< HEAD
             return -1;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             goto free_exit_failure;
 =======
@@ -361,6 +412,9 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
 =======
             return -1;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         /* here will be list of edges */
@@ -368,11 +422,14 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
         /* left / right volume */
         if (0 >= dig__fread_port_P(&(topo->left), 1, fp))
 <<<<<<< HEAD
+<<<<<<< HEAD
             return -1;
         if (0 >= dig__fread_port_P(&(topo->left), 1, fp))
             return -1;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             goto free_exit_failure;
         if (0 >= dig__fread_port_P(&(topo->left), 1, fp))
@@ -387,6 +444,9 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
         if (0 >= dig__fread_port_P(&(topo->left), 1, fp))
             return -1;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
     /* kernels */
@@ -396,9 +456,12 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
 
         if (0 >= dig__fread_port_P(&(topo->volume), 1, fp))
 <<<<<<< HEAD
+<<<<<<< HEAD
             return -1;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             goto free_exit_failure;
 =======
@@ -407,6 +470,9 @@ int dig_Rd_P_line(struct Plus_head *Plus, int n, struct gvfile *fp)
 =======
             return -1;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     }
 
@@ -572,8 +638,14 @@ int dig_Rd_P_area(struct Plus_head *Plus, int n, struct gvfile *fp)
         if (0 >= dig__fread_port_P(ptr->isles, ptr->n_isles, fp))
             return -1;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -595,8 +667,14 @@ int dig_Rd_P_area(struct Plus_head *Plus, int n, struct gvfile *fp)
     if (0 >= dig__fread_port_P(&(ptr->centroid), 1, fp))
         return -1;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -695,8 +773,14 @@ int dig_Rd_P_isle(struct Plus_head *Plus, int n, struct gvfile *fp)
     if (0 >= dig__fread_port_P(&(ptr->area), 1, fp))
         return -1;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -829,13 +913,20 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
         ptr->off_t_size = 4;
 
 <<<<<<< HEAD
-    if (sizeof(off_t) < (size_t)ptr->off_t_size) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     if (sizeof(off_t) < (size_t)ptr->off_t_size) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (sizeof(off_t) < (size_t)ptr->off_t_size) {
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    if (sizeof(off_t) < (size_t)ptr->off_t_size) {
+=======
+>>>>>>> osgeo-main
     if (sizeof(off_t) < ptr->off_t_size) {
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -850,6 +941,9 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     if (sizeof(off_t) < (size_t)ptr->off_t_size) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         G_warning(_("Vector exceeds supported file size limit"));
         return (-1);
@@ -928,9 +1022,12 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
         return (-1);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     G_debug(2, "  coor size %" PRI_OFF_T, ptr->coor_size);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     G_debug(2, "  coor size %" PRId64, ptr->coor_size);
 =======
@@ -939,6 +1036,9 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
 =======
     G_debug(2, "  coor size %" PRI_OFF_T, ptr->coor_size);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     dig_fseek(fp, ptr->head_size, SEEK_SET);
@@ -947,8 +1047,11 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 /*!
    \brief Write Plus_head to file
@@ -968,6 +1071,9 @@ int dig_Rd_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
 {
@@ -991,11 +1097,14 @@ int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
         /* can only happen when sizeof(off_t) == 8 */
         ptr->off_t_size = 8;
 <<<<<<< HEAD
+<<<<<<< HEAD
     }
     else
         ptr->off_t_size = 4;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     }
     else if (ptr->off_t_size == 0) {
@@ -1071,6 +1180,9 @@ int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
     else
         ptr->off_t_size = 4;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     /* add a new field with off_t_size after byte_order? */
@@ -1155,9 +1267,12 @@ int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
         return (-1);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     G_debug(2, "topo body offset %" PRI_OFF_T, dig_ftell(fp));
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     G_debug(2, "topo body offset %" PRId64, dig_ftell(fp));
 =======
@@ -1166,6 +1281,9 @@ int dig_Wr_Plus_head(struct gvfile *fp, struct Plus_head *ptr)
 =======
     G_debug(2, "topo body offset %" PRI_OFF_T, dig_ftell(fp));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     return (0);

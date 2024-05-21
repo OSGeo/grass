@@ -129,9 +129,12 @@ master_doc = "index"
 # General information about the project.
 project = "Python library documentation"
 <<<<<<< HEAD
+<<<<<<< HEAD
 copyright = "2023, GRASS Development Team"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -148,6 +151,9 @@ copyright = "2023, GRASS Development Team"
 =======
 copyright = "2023, GRASS Development Team"
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 # The version info for the project you're documenting, acts as replacement for
@@ -387,9 +393,12 @@ epub_copyright = copyright
 =======
 epub_publisher = "GRASS Development Team"
 <<<<<<< HEAD
+<<<<<<< HEAD
 epub_copyright = "2023, GRASS Development Team"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 epub_copyright = "2022, GRASS Development Team"
 <<<<<<< HEAD
@@ -402,6 +411,9 @@ epub_copyright = "2023, GRASS Development Team"
 =======
 epub_copyright = "2023, GRASS Development Team"
 >>>>>>> 6104ec7096 (i.maxlik: fix crash when classification result is NULL (#2724))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 # The basename for the epub file. It defaults to the project name.

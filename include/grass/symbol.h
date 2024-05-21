@@ -63,9 +63,12 @@ typedef struct {
     double yscale; /* scale in x dimension */
     double xscale; /* scale in y dimension */
 <<<<<<< HEAD
+<<<<<<< HEAD
     int count, alloc; /* numer of parts */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     int count, alloc; /* number of parts */
 =======
@@ -74,6 +77,9 @@ typedef struct {
 =======
     int count, alloc; /* numer of parts */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     SYMBPART **part;  /* objects ( parts ) */
 } SYMBOL;

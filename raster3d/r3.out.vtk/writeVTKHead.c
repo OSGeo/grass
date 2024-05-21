@@ -31,9 +31,12 @@
 
 /* ************************************************************************* */
 <<<<<<< HEAD
+<<<<<<< HEAD
 void write_vtk_structured_point_header(FILE *fp, char *vtkFile,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 void write_vtk_structured_point_header(FILE *fp, char *vtkFile UNUSED,
 =======
@@ -42,6 +45,9 @@ void write_vtk_structured_point_header(FILE *fp, char *vtkFile,
 =======
 void write_vtk_structured_point_header(FILE *fp, char *vtkFile,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                                        RASTER3D_Region region, int dp,
                                        double scale)
@@ -107,9 +113,12 @@ void write_vtk_structured_point_header(FILE *fp, char *vtkFile,
 
 /* ************************************************************************* */
 <<<<<<< HEAD
+<<<<<<< HEAD
 void write_vtk_structured_grid_header(FILE *fp, char *vtkFile,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 void write_vtk_structured_grid_header(FILE *fp, char *vtkFile UNUSED,
 =======
@@ -118,6 +127,9 @@ void write_vtk_structured_grid_header(FILE *fp, char *vtkFile,
 =======
 void write_vtk_structured_grid_header(FILE *fp, char *vtkFile,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                                       RASTER3D_Region region)
 {
@@ -142,9 +154,12 @@ void write_vtk_structured_grid_header(FILE *fp, char *vtkFile,
 
 /* ************************************************************************* */
 <<<<<<< HEAD
+<<<<<<< HEAD
 void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile UNUSED,
 =======
@@ -153,6 +168,9 @@ void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile,
 =======
 void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                                         RASTER3D_Region region)
 {

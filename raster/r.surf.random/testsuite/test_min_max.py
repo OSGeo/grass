@@ -6,9 +6,12 @@ MODULE:    Test of r.surf.random
 AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 PURPOSE:   Test of min and max paramters
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 PURPOSE:   Test of min and max parameters
 =======
@@ -17,6 +20,9 @@ PURPOSE:   Test of min and max paramters
 =======
 PURPOSE:   Test of min and max paramters
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 COPYRIGHT: (C) 2020 by Vaclav Petras and the GRASS Development Team
@@ -27,10 +33,13 @@ for details.
 """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import os
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 import os
@@ -40,6 +49,9 @@ import os
 import os
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 import grass.script as gs
 
@@ -63,8 +75,11 @@ class MinMaxTestCase(TestCase):
     def setUpClass(cls):
         """Ensures expected computational region"""
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         # modifying region just for this script
         cls.use_temp_region()
@@ -72,6 +87,9 @@ class MinMaxTestCase(TestCase):
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         os.environ["GRASS_RANDOM_SEED"] = "42"
         # modfying region just for this script
@@ -80,8 +98,14 @@ class MinMaxTestCase(TestCase):
         # are generated, so exceeding of ranges actually shows up.
         cls.runModule("g.region", rows=10000, cols=10000)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -101,8 +125,11 @@ class MinMaxTestCase(TestCase):
         min_value = -3.3
         max_value = 5.8
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         precision = 0.00001
         self.assertModule(
@@ -110,14 +137,23 @@ class MinMaxTestCase(TestCase):
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # arbitrary, but with more cells, we expect higher precision
         precision = 0.00001
         self.assertModule(
             "r.surf.random", min=min_value, max=max_value, output=self.output
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -133,9 +169,12 @@ class MinMaxTestCase(TestCase):
         self.assertRasterFitsInfo(
             raster=self.output,
 <<<<<<< HEAD
+<<<<<<< HEAD
             reference=dict(min=min_value, max=max_value),
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             reference=dict(min=-3.20423, max=5.68621),
 =======
@@ -144,6 +183,9 @@ class MinMaxTestCase(TestCase):
 =======
             reference=dict(min=min_value, max=max_value),
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             precision=precision,
             msg="Output min and max too far from parameters",
@@ -158,9 +200,12 @@ class MinMaxTestCase(TestCase):
         precision = 0
         self.assertModule(
 <<<<<<< HEAD
+<<<<<<< HEAD
             "r.surf.random", min=min_value, max=max_value, output=self.output, flags="i"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             "r.surf.random",
             min=min_value,
@@ -174,6 +219,9 @@ class MinMaxTestCase(TestCase):
 =======
             "r.surf.random", min=min_value, max=max_value, output=self.output, flags="i"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         )
         self.assertRasterExists(self.output, msg="Output was not created")
@@ -196,9 +244,12 @@ class MinMaxTestCase(TestCase):
         max_value = 5.8
         self.assertModuleFail(
 <<<<<<< HEAD
+<<<<<<< HEAD
             "r.surf.random", min=min_value, max=max_value, output=self.output, flags="i"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             "r.surf.random",
             min=min_value,
@@ -212,6 +263,9 @@ class MinMaxTestCase(TestCase):
 =======
             "r.surf.random", min=min_value, max=max_value, output=self.output, flags="i"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         )
 
@@ -221,8 +275,11 @@ class MinMaxTestCase(TestCase):
         max_value = 5.8
         self.assertModuleFail(
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             "r.surf.random", min=min_value, max=max_value, output=self.output, seed=42
         )
@@ -236,6 +293,9 @@ class MinMaxTestCase(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             "r.surf.random", min=min_value, max=max_value, output=self.output
         )

@@ -6,9 +6,12 @@
 
 void plot(double lon1, double lat1, double lon2, double lat2, int line_color,
 <<<<<<< HEAD
+<<<<<<< HEAD
           int text_color)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
           int text_color UNUSED)
 =======
@@ -17,6 +20,9 @@ void plot(double lon1, double lat1, double lon2, double lat2, int line_color,
 =======
           int text_color)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     int nsteps = 1000;

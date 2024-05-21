@@ -2,8 +2,11 @@
 #include <grass/raster.h>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 /**
  * Merges the statf[] arrays for each thread into
@@ -42,6 +45,9 @@ void merge_threads(struct Cell_stats **thread_statf, int nprocs, int nfiles)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 /*
  * creates new category and color structures from the patching
@@ -93,13 +99,20 @@ int support(char **names, struct Cell_stats *statf, int nfiles,
                         Rast_update_cell_stats(&n, 1, statf);
                         Rast_set_c_cat(
 <<<<<<< HEAD
-                            &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
                             &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                            &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+                            &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
+=======
+>>>>>>> osgeo-main
                             &n, &n, Rast_get_c_cat((CELL *) &n, &pcats), cats);
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -108,6 +121,9 @@ int support(char **names, struct Cell_stats *statf, int nfiles,
 =======
                             &n, &n, Rast_get_c_cat((CELL *)&n, &pcats), cats);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     }
                     if (do_colr) {
@@ -116,15 +132,23 @@ int support(char **names, struct Cell_stats *statf, int nfiles,
                     }
                 }
 <<<<<<< HEAD
-        }
-        else {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         }
         else {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        }
+        else {
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        }
+        else {
+=======
+>>>>>>> osgeo-main
         } else {
 >>>>>>> 268d757b7d (ci: Ignore paths in CodeQL (#1778))
 =======
@@ -135,6 +159,9 @@ int support(char **names, struct Cell_stats *statf, int nfiles,
         }
         else {
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             /* the color would be the color of the first map,
              * possibly not covering the range of the other maps */

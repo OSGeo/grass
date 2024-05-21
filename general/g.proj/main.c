@@ -64,11 +64,14 @@ int main(int argc, char *argv[])
      * (to create a new location) when none exists. */
     G_set_program_name(argv[0]);
 <<<<<<< HEAD
+<<<<<<< HEAD
     G_no_gisinit(); /* We don't call G_gisinit() here because it validates the
                      * mapset, whereas this module may legitmately be used
                      * (to create a new location) when none exists */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     G_no_gisinit();
 =======
@@ -81,6 +84,9 @@ int main(int argc, char *argv[])
                      * mapset, whereas this module may legitmately be used
                      * (to create a new location) when none exists */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     module = G_define_module();
@@ -91,9 +97,12 @@ int main(int argc, char *argv[])
     module->label = _("Prints or modifies GRASS projection information files "
                       "(in various co-ordinate system descriptions).");
 <<<<<<< HEAD
+<<<<<<< HEAD
     module->description = _("Can also be used to create new GRASS locations.");
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     module->description = _("Can also be used to create new GRASS projects.");
 =======
@@ -102,6 +111,9 @@ int main(int argc, char *argv[])
 =======
     module->description = _("Can also be used to create new GRASS locations.");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 #else
     module->description =
@@ -136,6 +148,7 @@ int main(int argc, char *argv[])
     dontprettify->key = 'f';
     dontprettify->guisection = _("Print");
 <<<<<<< HEAD
+<<<<<<< HEAD
     dontprettify->description =
         _("Print 'flat' output with no linebreaks (applies to "
 #ifdef HAVE_OGR
@@ -144,6 +157,8 @@ int main(int argc, char *argv[])
           "PROJ.4 output)");
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 #ifdef HAVE_OGR
     dontprettify->description = _("Print 'flat' output with no linebreaks "
@@ -168,6 +183,9 @@ int main(int argc, char *argv[])
 #endif
           "PROJ.4 output)");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 #ifdef HAVE_OGR
@@ -370,8 +388,11 @@ int main(int argc, char *argv[])
 #endif
                (create->answer ? 1 : 0));
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     if (formats > 1) {
 #ifdef HAVE_OGR
@@ -389,6 +410,9 @@ int main(int argc, char *argv[])
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     if (formats > 1)
         G_fatal_error(_("Only one of -%c, -%c, -%c, -%c"

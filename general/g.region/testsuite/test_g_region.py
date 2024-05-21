@@ -3,9 +3,12 @@
 @author Anna Petrasova
 """
 <<<<<<< HEAD
+<<<<<<< HEAD
 from grass.gunittest.case import TestCase
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 
 from grass.gunittest.case import TestCase
@@ -16,6 +19,9 @@ from grass.gunittest.case import TestCase
 =======
 from grass.gunittest.case import TestCase
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 import grass.script as gs
 
@@ -55,8 +61,11 @@ class TestRegion(TestCase):
         self.assertEqual(res_default, region["nsres"])
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     def test_f_flag(self):
         line = call_module("g.region", flags="fglecn3", capture_stdout=True)
@@ -66,6 +75,9 @@ class TestRegion(TestCase):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 if __name__ == "__main__":

@@ -124,9 +124,12 @@ t_ANY_CONDOP = r"\?"
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Delimeters
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 # Delimiters
 =======
@@ -135,6 +138,9 @@ t_ANY_CONDOP = r"\?"
 =======
 # Delimeters
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 t_ANY_PERIOD = r"\."
 t_ANY_LPAREN = r"\("

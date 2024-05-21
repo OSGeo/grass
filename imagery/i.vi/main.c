@@ -180,9 +180,12 @@ int main(int argc, char *argv[])
     opt.sl_slope->required = NO;
     opt.sl_slope->description =
 <<<<<<< HEAD
+<<<<<<< HEAD
         _("Value of the slope of the soil line (MSAVI only)");
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         _("Value of the slope of the soil line (MSAVI and PVI only)");
 =======
@@ -191,6 +194,9 @@ int main(int argc, char *argv[])
 =======
         _("Value of the slope of the soil line (MSAVI only)");
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     opt.sl_slope->guisection = _("MSAVI settings");
 
@@ -233,8 +239,11 @@ int main(int argc, char *argv[])
     chan7chan = opt.chan7->answer;
     if (opt.sl_slope->answer)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         soil_slope = atof(opt.sl_slope->answer);
     if (opt.sl_int->answer)
@@ -244,6 +253,9 @@ int main(int argc, char *argv[])
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         msavip1 = atof(opt.sl_slope->answer);
     if (opt.sl_int->answer)
@@ -251,8 +263,14 @@ int main(int argc, char *argv[])
     if (opt.sl_red->answer)
         msavip3 = atof(opt.sl_red->answer);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -287,10 +305,13 @@ int main(int argc, char *argv[])
 
     if (!strcasecmp(viflag, "pvi") &&
 <<<<<<< HEAD
+<<<<<<< HEAD
         (!(opt.red->answer) || !(opt.nir->answer)))
         G_fatal_error(_("pvi index requires red and nir maps"));
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         (!(opt.red->answer) || !(opt.nir->answer) || !(opt.sl_slope->answer)))
         G_fatal_error(
@@ -303,6 +324,9 @@ int main(int argc, char *argv[])
         (!(opt.red->answer) || !(opt.nir->answer)))
         G_fatal_error(_("pvi index requires red and nir maps"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     if (!strcasecmp(viflag, "wdvi") &&
@@ -566,9 +590,12 @@ int main(int argc, char *argv[])
 
                 if (!strcasecmp(viflag, "pvi"))
 <<<<<<< HEAD
+<<<<<<< HEAD
                     outrast[col] = p_vi(d_redchan, d_nirchan);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     outrast[col] = p_vi(d_redchan, d_nirchan, soil_slope);
 =======
@@ -577,6 +604,9 @@ int main(int argc, char *argv[])
 =======
                     outrast[col] = p_vi(d_redchan, d_nirchan);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
                 if (!strcasecmp(viflag, "wdvi"))
@@ -587,10 +617,13 @@ int main(int argc, char *argv[])
 
                 if (!strcasecmp(viflag, "msavi"))
 <<<<<<< HEAD
+<<<<<<< HEAD
                     outrast[col] =
                         msa_vi(d_redchan, d_nirchan, msavip1, msavip2, msavip3);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     outrast[col] = msa_vi(d_redchan, d_nirchan, soil_slope,
                                           soil_inter, soil_noise);
@@ -602,6 +635,9 @@ int main(int argc, char *argv[])
                     outrast[col] =
                         msa_vi(d_redchan, d_nirchan, msavip1, msavip2, msavip3);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
                 if (!strcasecmp(viflag, "msavi2"))

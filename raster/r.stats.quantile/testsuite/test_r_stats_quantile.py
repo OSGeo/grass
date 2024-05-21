@@ -35,9 +35,12 @@ reference_str = """\
 
 class TestStatsQuantile(TestCase):
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -45,6 +48,9 @@ class TestStatsQuantile(TestCase):
 =======
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     base = "zipcodes"
     cover = "elevation"

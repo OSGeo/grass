@@ -29813,6 +29813,9 @@ msgid "Apriori Phi (roll) standard deviation"
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
 msgstr ""
@@ -45614,8 +45617,14 @@ msgstr ""
 msgid "image collections"
 msgstr ""
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -71002,6 +71011,991 @@ msgid "Default: one category for each iso-band"
 msgstr "Padrão: uma categoria para cada banda iso"
 
 #: ../vector/v.net.iso/main.c:215
+<<<<<<< HEAD
+=======
+#, c-format
+msgid "Wrong iso cost: %f"
+msgstr "Custo da iso errado: %f"
+
+#: ../vector/v.net.iso/main.c:218
+#, c-format
+msgid "Iso cost: %f less than previous"
+msgstr "Custo da iso: %f menor que o anterior"
+
+#: ../vector/v.net.iso/main.c:223
+#, c-format
+msgid "Iso cost %d: %f"
+msgstr "Custo da iso %d: %f"
+
+#: ../vector/v.net.iso/main.c:231
+msgid "Not enough costs, everything reachable falls to first band"
+msgstr "Custos insuficientes, tudo o que é alcançável cai para a primeira faixa"
+
+#: ../vector/v.net.iso/main.c:282 ../vector/v.net.alloc/main.c:224
+#: ../vector/v.net.salesman/main.c:277
+msgid "Point is not connected to the network"
+msgstr "O ponto não está conectado à rede"
+
+#: ../vector/v.net.iso/main.c:290 ../vector/v.net.alloc/main.c:232
+msgid "Center at closed node (costs = -1) ignored"
+msgstr "Centro no nó fechado (custos = -1) ignorado"
+
+#: ../vector/v.net.iso/main.c:308 ../vector/v.net.alloc/main.c:250
+#, c-format
+msgid "Number of centers: %d (nlayer %d)"
+msgstr "Número de centros: %d (nlayer %d)"
+
+#: ../vector/v.net.iso/main.c:311 ../vector/v.net.alloc/main.c:253
+msgid "Not enough centers for selected nlayer. Nothing will be allocated."
+msgstr "Centros insuficientes para a camada selecionada. Nada será alocado."
+
+#: ../vector/v.net.iso/main.c:333 ../vector/v.net.iso/main.c:345
+#: ../vector/v.net.alloc/main.c:275 ../vector/v.net.alloc/main.c:287
+msgid "Calculating costs from centers ..."
+msgstr "Calculando custos dos centros..."
+
+#: ../vector/v.net.iso/main.c:338 ../vector/v.net.iso/main.c:349
+#: ../vector/v.net.alloc/main.c:280 ../vector/v.net.alloc/main.c:291
+msgid "Calculating costs to centers ..."
+msgstr "Calculando custos para centros..."
+
+#: ../vector/v.net.iso/main.c:394 ../vector/v.sample/main.c:193
+#: ../vector/v.net.flow/main.c:185 ../vector/v.net.alloc/main.c:333
+#: ../vector/v.net.path/path.c:113 ../vector/v.net.centrality/main.c:270
+#: ../vector/v.db.connect/main.c:338 ../vector/v.net.timetable/main.c:107
+#: ../vector/v.net.components/main.c:194 ../vector/v.kcv/main.c:176
+#: ../vector/v.net.allpairs/main.c:183 ../vector/v.net.distance/main.c:295
+msgid "Cannot create index"
+msgstr "Não consegui criar índice"
+
+#: ../vector/v.net.iso/main.c:398 ../vector/v.net.flow/main.c:189
+#: ../vector/v.net.alloc/main.c:337 ../vector/v.net.path/path.c:117
+#: ../vector/v.net.centrality/main.c:274 ../vector/v.net.timetable/main.c:112
+#: ../vector/v.net.components/main.c:198 ../vector/v.net.allpairs/main.c:187
+#: ../vector/v.net.distance/main.c:299
+#, c-format
+msgid "Cannot grant privileges on table <%s>"
+msgstr "Não é possível conceder privilégios na tabela <%s>"
+
+#: ../vector/v.net.iso/main.c:403
+msgid "Generating isolines..."
+msgstr "Gerando isolinhas..."
+
+#: ../vector/v.net.iso/main.c:704 ../vector/v.net.alloc/main.c:592
+#: ../vector/v.net.alloc/main.c:627
+msgid "Cannot get line segment, segment out of line"
+msgstr "Não é possível obter segmento de linha, segmento fora da linha"
+
+#: ../vector/v.net.iso/main.c:724 ../vector/v.net.iso/main.c:754
+#: ../vector/v.net.flow/main.c:262 ../vector/v.net.alloc/main.c:432
+#: ../vector/v.net.alloc/main.c:464 ../vector/v.net.alloc/main.c:495
+#: ../vector/v.net.alloc/main.c:533 ../vector/v.net.alloc/main.c:561
+#: ../vector/v.net.alloc/main.c:612 ../vector/v.net.alloc/main.c:648
+#: ../vector/v.net.alloc/main.c:679 ../vector/v.net.path/path.c:350
+#: ../vector/v.net.centrality/main.c:69 ../vector/v.net.timetable/main.c:134
+#: ../vector/v.net.timetable/main.c:156 ../vector/v.net.components/main.c:39
+#: ../vector/v.net.allpairs/main.c:271 ../vector/v.net.distance/main.c:363
+#: ../raster/r.random/random.c:189
+#, c-format
+msgid "Cannot insert new record: %s"
+msgstr "Não é possível inserir novo registro: %s"
+
+#: ../vector/v.parallel/main.c:53
+msgid "Creates parallel line to input vector lines."
+msgstr "Cria uma linha paralela para inserir linhas de vetor."
+
+#: ../vector/v.parallel/main.c:68
+msgid "Offset along major axis in map units"
+msgstr "Deslocamento ao longo do eixo principal em unidades de mapa"
+
+#: ../vector/v.parallel/main.c:76
+msgid "Offset along minor axis in map units"
+msgstr "Deslocamento ao longo do eixo secundário em unidades de mapa"
+
+#: ../vector/v.parallel/main.c:84 ../vector/v.buffer/main.c:271
+msgid "Angle of major axis in degrees"
+msgstr "Ângulo do eixo principal em graus"
+
+#: ../vector/v.parallel/main.c:93
+msgid "Side"
+msgstr "Lado"
+
+#: ../vector/v.parallel/main.c:97
+msgid "Parallel line is on the left"
+msgstr "A linha paralela está à esquerda"
+
+#: ../vector/v.parallel/main.c:98
+msgid "Parallel line is on the right"
+msgstr "A linha paralela está à direita"
+
+#: ../vector/v.parallel/main.c:99
+msgid "Parallel lines on both sides"
+msgstr "As linhas paralelas estão dos dois lados"
+
+#: ../vector/v.parallel/main.c:108
+msgid "Tolerance of arc polylines in map units"
+msgstr "Tolerância de polilinhas de arco em unidades de mapa"
+
+#: ../vector/v.parallel/main.c:112
+msgid "Make outside corners round"
+msgstr "Fazer os cantos externos arredondados"
+
+#: ../vector/v.parallel/main.c:116
+msgid "Create buffer-like parallel lines"
+msgstr "Criar linhas paralelas semelhantes a buffer"
+
+#: ../vector/v.net.visibility/main.c:48
+msgid "visibility"
+msgstr "visibility"
+
+#: ../vector/v.net.visibility/main.c:49
+msgid "Performs visibility graph construction."
+msgstr "Executa a construção do gráfico de visibilidade."
+
+#: ../vector/v.net.visibility/main.c:60
+msgid "Name of input vector map containing visible points"
+msgstr "Nome do mapa vetorial de entrada contendo pontos visíveis"
+
+#: ../vector/v.net.visibility/main.c:61
+msgid "Add points after computing the visibility graph"
+msgstr "Adicionar pontos após calcular o gráfico de visibilidade"
+
+#: ../vector/v.net.visibility/main.c:85
+#, c-format
+msgid "Unable to copy elements from vector map <%s>"
+msgstr "Não foi possível copiar elementos do mapa vetorial <%s>"
+
+#: ../vector/v.net.visibility/main.c:90
+msgid "Lat-long projection"
+msgstr "Projeção lat-long"
+
+#: ../vector/v.out.dxf/main.c:59
+msgid "DXF"
+msgstr "DXF"
+
+#: ../vector/v.out.dxf/main.c:61
+msgid "Exports vector map to DXF file format."
+msgstr "Exporta o mapa vetorial para o formato de arquivo DXF."
+
+#: ../vector/v.out.dxf/main.c:69
+msgid "Name for DXF output file"
+msgstr "Nome para o arquivo de saída DXF"
+
+#: ../vector/v.out.dxf/main.c:94
+#, c-format
+msgid "%d features written to '%s'."
+msgstr "%d feições escritas para '%s'."
+
+#: ../vector/v.out.dxf/write_dxf.c:21
+#, c-format
+msgid "The file '%s' already exists."
+msgstr "O arquivo '%s' já existe."
+
+#: ../vector/v.out.dxf/write_dxf.c:23
+#, c-format
+msgid "The file '%s' already exists and will be overwritten."
+msgstr "O arquivo '%s' já existe e será substituído."
+
+#: ../vector/v.out.dxf/write_dxf.c:27
+#, c-format
+msgid "%s: Cannot write dxf file."
+msgstr "%s: Não é possível escrever o arquivo dxf."
+
+#: ../vector/v.external/list.c:94 ../vector/v.external.out/list.c:102
+#: ../vector/v.out.ogr/list.c:116 ../vector/v.in.ogr/main.c:442
+#: ../raster/r.in.gdal/main.c:314 ../raster/r.external/list.c:23
+msgid "Supported formats:"
+msgstr "Formatos suportados:"
+
+#: ../vector/v.external/list.c:111
+msgid "GRASS is not compiled with PostgreSQL support"
+msgstr "GRASS não é compilado com suporte PostgreSQL"
+
+#: ../vector/v.external/list.c:117
+msgid "GRASS is not compiled with OGR support"
+msgstr "GRASS não é compilado com suporte OGR"
+
+#: ../vector/v.external/list.c:158
+msgid "Connection to PostgreSQL database failed."
+msgstr "A conexão com o banco de dados PostgreSQL falhou."
+
+#: ../vector/v.external/list.c:168
+msgid "No feature tables found in database."
+msgstr "Nenhuma tabela de feição encontrada no banco de dados."
+
+#: ../vector/v.external/list.c:179
+#, c-format
+msgid "PostGIS database <%s> contains %d feature table:"
+msgid_plural "PostGIS database <%s> contains %d feature tables:"
+msgstr[0] "O banco de dados PostGIS <%s> contém %d tabela de feição:"
+msgstr[1] "O banco de dados PostGIS <%s> contém %d tabelas de feições:"
+
+#: ../vector/v.external/list.c:260
+#, c-format
+msgid "Unable to open data source '%s'"
+msgstr "Não foi possível abrir a fonte de dados '%s'"
+
+#: ../vector/v.external/list.c:267
+#, c-format
+msgid "Data source <%s> (format '%s') contains %d layer:"
+msgid_plural "Data source <%s> (format '%s') contains %d layers:"
+msgstr[0] "A fonte de dados <%s> (formato '%s') contém %d camada:"
+msgstr[1] "A fonte de dados <%s> (formato '%s') contém %d camadas:"
+
+#: ../vector/v.external/list.c:310
+#, c-format
+msgid "Unable to convert input map projection to GRASS format. Projection check cannot be provided for OGR layer <%s>"
+msgstr "Não foi possível converter a projeção do mapa de entrada para o formato GRASS. A verificação de projeção não pode ser fornecida para a camada OGR <%s>"
+
+#: ../vector/v.external/list.c:326
+#, c-format
+msgid "Invalid geometry column %d"
+msgstr "Coluna de geometria inválida %d"
+
+#: ../vector/v.external/args.c:15 ../vector/v.external.out/args.c:15
+msgid ""
+"Examples:\n"
+"\t\tESRI Shapefile: directory containing a shapefile\n"
+"\t\tMapInfo File: directory containing a mapinfo file\n"
+"\t\tPostGIS database: connection string, eg. 'PG:dbname=db user=grass'"
+msgstr ""
+"Exemplos:\n"
+"\t\tESRI Shapefile: diretório contendo um shapefile\n"
+"\t\tArquivo MapInfo: diretório contendo um arquivo mapinfo\n"
+"\t\tBanco de dados PostGIS: string de conexão, por exemplo. 'PG:dbname=db user=grass'"
+
+#: ../vector/v.external/args.c:27
+msgid "Name of OGR layer or PostGIS feature table to be linked"
+msgstr "Nome da camada OGR ou tabela de feição PostGIS a ser vinculada"
+
+#: ../vector/v.external/args.c:28
+msgid ""
+"Examples:\n"
+"\t\tESRI Shapefile: shapefile name\n"
+"\t\tMapInfo File: mapinfo file name\n"
+"\t\tPostGIS database: table name"
+msgstr ""
+"Exemplos:\n"
+"\t\tESRI Shapefile: nome do shapefile\n"
+"\t\tArquivo MapInfo: nome do arquivo mapinfo\n"
+"\t\tBanco de dados PostGIS: nome da tabela"
+
+#: ../vector/v.external/args.c:40
+msgid "Name for output GRASS vector map (default: input layer)"
+msgstr "Nome para o mapa vetorial GRASS de saída (padrão: camada de entrada)"
+
+#: ../vector/v.external/args.c:52 ../vector/v.in.ogr/main.c:393
+#: ../raster/r.in.gdal/main.c:235 ../raster/r.external/main.c:109
+msgid "Perform projection check only and exit"
+msgstr "Executar apenas a verificação de projeção e sair"
+
+#: ../vector/v.external/args.c:56 ../vector/v.external.out/args.c:62
+#: ../raster/r.in.gdal/main.c:249 ../raster/r.external.out/main.c:271
+#: ../raster/r.external/main.c:95
+msgid "List supported formats and exit"
+msgstr "Mostra os formatos suportados e encerra"
+
+#: ../vector/v.external/args.c:68
+msgid "List available layers including feature type in data source and exit"
+msgstr "Listar as camadas disponíveis, incluindo o tipo de feição na fonte de dados e sair"
+
+#: ../vector/v.external/args.c:70
+msgid "Format: layer name,type,projection check,geometry"
+msgstr "Formato: layer name,type,projection check,geometry"
+
+#: ../vector/v.external/proj.c:36 ../vector/v.in.ogr/proj.c:37
+#: ../vector/v.in.ogr/main.c:798
+#, c-format
+msgid "Geometry column <%s> not found in input layer <%s>"
+msgstr "Coluna de geometria <%s> não encontrada na camada de entrada <%s>"
+
+#: ../vector/v.external/proj.c:54 ../vector/v.in.ogr/proj.c:55
+msgid "Unable to convert input layer projection information to GRASS format for checking"
+msgstr "Não foi possível converter as informações de projeção da camada de entrada para o formato GRASS para verificação"
+
+#: ../vector/v.external/proj.c:60 ../vector/v.external/proj.c:88
+#: ../vector/v.in.ogr/proj.c:61 ../vector/v.in.ogr/proj.c:89
+msgid "Can't get WKT parameter string"
+msgstr "Não é possível obter string de parâmetro WKT"
+
+#: ../vector/v.external/proj.c:63 ../vector/v.external/proj.c:91
+#: ../vector/v.in.ogr/proj.c:64 ../vector/v.in.ogr/proj.c:92
+#, c-format
+msgid ""
+"WKT definition:\n"
+"%s"
+msgstr ""
+"Definição WKT:\n"
+"%s"
+
+#: ../vector/v.external/proj.c:73 ../vector/v.in.ogr/proj.c:74
+#, c-format
+msgid "No projection information available for layer <%s>"
+msgstr "Nenhuma informação de projeção disponível para a camada <%s>"
+
+#: ../vector/v.external/proj.c:81 ../vector/v.in.ogr/proj.c:82
+#, c-format
+msgid "Projection for layer <%s> does not contain a valid SRS"
+msgstr "A projeção para a camada <%s> não contém um SRS válido"
+
+#: ../vector/v.external/proj.c:201 ../vector/v.in.ogr/proj.c:335
+#: ../raster/r.in.gdal/proj.c:165 ../raster/r.external/proj.c:165
+msgid "Unable to convert input map projection information to GRASS format."
+msgstr "Não foi possível converter as informações de projeção do mapa de entrada para o formato GRASS."
+
+#: ../vector/v.external/proj.c:246 ../vector/v.external/proj.c:255
+#: ../vector/v.in.ogr/proj.c:380 ../vector/v.in.ogr/proj.c:389
+#: ../raster/r.in.gdal/proj.c:209 ../raster/r.in.gdal/proj.c:218
+#: ../raster/r.external/proj.c:209 ../raster/r.external/proj.c:218
+msgid "Location PROJ_INFO is:\n"
+msgstr "Locação PROJ_INFO é:\n"
+
+#: ../vector/v.external/proj.c:275 ../vector/v.external/proj.c:282
+#: ../vector/v.in.ogr/proj.c:409 ../vector/v.in.ogr/proj.c:416
+#: ../raster/r.in.gdal/proj.c:238 ../raster/r.in.gdal/proj.c:245
+#: ../raster/r.external/proj.c:238 ../raster/r.external/proj.c:245
+msgid "Dataset PROJ_INFO is:\n"
+msgstr "PROJ_INFO do conjunto de dados é:\n"
+
+#: ../vector/v.external/proj.c:368 ../vector/v.in.ogr/proj.c:502
+#: ../raster/r.in.gdal/proj.c:331 ../raster/r.external/proj.c:331
+msgid "Consider generating a new location from the input dataset using the 'location' parameter.\n"
+msgstr "Considere gerar uma nova locação a partir do conjunto de dados de entrada usando o parâmetro 'location'.\n"
+
+#: ../vector/v.external/main.c:59
+msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer or a PostGIS feature table."
+msgstr "Cria um novo mapa pseudo-vetorial como um link para uma camada suportada por OGR ou uma tabela de feição PostGIS."
+
+#: ../vector/v.external/main.c:78 ../vector/v.external.out/format.c:22
+msgid "Environment variable GRASS_VECTOR_OGR defined, but GRASS is compiled with OGR support. Using GRASS-PostGIS data driver instead."
+msgstr "Variável de ambiente GRASS_VECTOR_OGR definida, mas GRASS é compilado com suporte OGR. Usando o driver de dados GRASS-PostGIS."
+
+#: ../vector/v.external/main.c:83 ../vector/v.external.out/format.c:27
+msgid "GRASS is not compiled with PostgreSQL support. Using OGR-PostgreSQL driver instead of native GRASS-PostGIS data driver."
+msgstr "GRASS não é compilado com suporte PostgreSQL. Usando o driver OGR-PostgreSQL em vez do driver de dados GRASS-PostGIS nativo."
+
+#: ../vector/v.external/main.c:110 ../vector/v.what.rast/main.c:121
+#: ../vector/v.edit/main.c:90 ../vector/v.in.ogr/main.c:483
+#: ../vector/v.proj/main.c:249 ../vector/v.net/args.c:152
+#: ../vector/v.net/args.c:159 ../vector/v.net/args.c:165
+#: ../vector/v.net/args.c:169 ../vector/v.net/args.c:179
+#: ../vector/v.select/main.c:91 ../raster/r.proj/main.c:309
+#: ../scripts/d.frame/d.frame.py:284
+#, c-format, python-format
+msgid "Required parameter <%s> not set"
+msgstr "parâmetro <%s> necessário não configurado"
+
+#: ../vector/v.external/main.c:124 ../vector/v.in.ogr/main.c:693
+#, c-format
+msgid "Layer <%s> not available"
+msgstr "Camada <%s> não disponível"
+
+#: ../vector/v.external/main.c:126
+msgid "No layer defined"
+msgstr "Nenhuma camada definida"
+
+#: ../vector/v.external/main.c:151 ../vector/v.in.ogr/main.c:584
+#, c-format
+msgid "Unable to open data source <%s>"
+msgstr "Não foi possível abrir a fonte de dados  <%s>"
+
+#: ../vector/v.external/main.c:192
+#, c-format
+msgid "Unable to delete '%s'"
+msgstr "Não foi possível excluir '%s'"
+
+#: ../vector/v.external/main.c:199
+#, c-format
+msgid "Unable to create file '%s/%s'"
+msgstr "Não foi possível criar o arquivo '%s/%s'"
+
+#: ../vector/v.external/main.c:233
+#, c-format
+msgid "Link to vector map <%s> created."
+msgstr "Link para o mapa vetorial <%s> criado."
+
+#: ../vector/v.external/dsn.c:21 ../vector/v.out.ogr/dsn.c:27
+#: ../vector/v.in.ogr/dsn.c:28
+msgid "Invalid connection string (dbname missing)"
+msgstr "String de conexão inválida (dbname ausente)"
+
+#: ../vector/v.what.rast/main.c:79
+msgid "Uploads raster values at positions of vector points to the table."
+msgstr "Carrega valores raster em posições de pontos vetoriais para a tabela."
+
+#: ../vector/v.what.rast/main.c:110
+msgid "Print categories and values instead of updating the database"
+msgstr "Imprimir categorias e valores em vez de atualizar o banco de dados"
+
+#: ../vector/v.what.rast/main.c:170
+#, c-format
+msgid "Column <%s> not found in the table <%s>. Creating..."
+msgstr "Coluna <%s> não encontrada na tabela <%s>. Criando ..."
+
+#: ../vector/v.what.rast/main.c:177 ../vector/v.colors/write_rgb.c:37
+#, c-format
+msgid "Unable to add column <%s> to table <%s>"
+msgstr "Não é possível adicionar coluna <%s> à tabela <%s>"
+
+#: ../vector/v.what.rast/main.c:186
+msgid "Raster type is integer and column type is float"
+msgstr "Tipo do raster é inteiro e o tipo da coluna é 'float'"
+
+#: ../vector/v.what.rast/main.c:189
+msgid "Raster type is float and column type is integer, some data lost!!"
+msgstr "Tipo do raster é 'float' e tipo da coluna é inteiro, alguns dados foram perdidos !!"
+
+#: ../vector/v.what.rast/main.c:206 ../vector/v.what.rast3/main.c:158
+msgid "Reading features from vector map..."
+msgstr "Lendo feições do mapa vetorial..."
+
+#: ../vector/v.what.rast/main.c:266 ../vector/v.to.db/main.c:406
+#, c-format
+msgid "Unable to write history for vector map <%s>"
+msgstr ""
+
+#: ../vector/v.what.rast/main.c:274
+#, c-format
+msgid "No features of type (%s) found in the current computational region"
+msgstr ""
+
+#: ../vector/v.what.rast/main.c:298
+#, c-format
+msgid "%d points outside current region were skipped"
+msgstr "%d pontos fora da região atual foram ignorados"
+
+#: ../vector/v.what.rast/main.c:302
+#, c-format
+msgid "%d points without category were skipped"
+msgstr "%d pontos sem categoria foram ignorados"
+
+#: ../vector/v.what.rast/main.c:573 ../vector/v.what.rast/main.c:613
+#, c-format
+msgid "Multiple points (%d) of category %d, value set to 'NULL'"
+msgstr "Vários pontos (%d) da categoria %d, valor definido como 'NULL'"
+
+#: ../vector/v.what.rast/main.c:626 ../vector/v.sample/main.c:226
+#: ../vector/v.sample/main.c:234 ../vector/v.buffer/main.c:548
+#: ../vector/v.buffer/main.c:658 ../vector/v.what.rast3/main.c:272
+#: ../vector/v.label.sa/labels.c:166 ../vector/v.vol.rst/user1.c:172
+#: ../vector/v.label/main.c:325
+#, c-format
+msgid "No record for category %d in table <%s>"
+msgstr "Não há registro para a categoria %d na tabela <%s>"
+
+#: ../vector/v.what.rast/main.c:681
+#, c-format
+msgid "%d categories loaded from vector"
+msgstr "%d categorias carregadas do vetor"
+
+#: ../vector/v.what.rast/main.c:683
+#, c-format
+msgid "%d duplicate categories in vector map <%s>"
+msgstr "%d categorias duplicadas no mapa vetorial <%s>"
+
+#: ../vector/v.what.rast/main.c:687
+#, c-format
+msgid "%d categories loaded from table"
+msgstr "%d categorias carregadas da tabela"
+
+#: ../vector/v.what.rast/main.c:688
+#, c-format
+msgid "%d categories from vector missing in table"
+msgstr "%d categorias do vetor faltando na tabela"
+
+#: ../vector/v.what.rast/main.c:691 ../vector/v.distance/main.c:1754
+#: ../vector/v.vect.stats/main.c:782
+#, c-format
+msgid "%d update errors"
+msgstr "%d atualizar erros"
+
+#: ../vector/v.what.rast/main.c:693 ../vector/v.distance/main.c:1756
+#, c-format
+msgid "%d records updated."
+msgstr "%d registros atualizados."
+
+#: ../vector/v.lidar.correction/main.c:74
+msgid "Corrects the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering."
+msgstr "Corrige a saída v.lidar.growing. É o último dos três algoritmos de filtragem LIDAR."
+
+#: ../vector/v.lidar.correction/main.c:85
+msgid "Input observation vector map name (v.lidar.growing output)"
+msgstr "Nome do mapa vetorial de observações de entrada (saída v.lidar.growing)"
+
+#: ../vector/v.lidar.correction/main.c:88
+msgid "Output classified vector map name"
+msgstr "Nome do mapa vetorial classificado de saída"
+
+#: ../vector/v.lidar.correction/main.c:93
+msgid "Name for output only 'terrain' points vector map"
+msgstr "Nome para o mapa vetorial de pontos de 'terreno' de saída"
+
+#: ../vector/v.lidar.correction/main.c:101
+msgid "Default: 25 * east-west resolution"
+msgstr "Padrão: 25 * resolução leste-oeste"
+
+#: ../vector/v.lidar.correction/main.c:110
+msgid "Default: 25 * north-south resolution"
+msgstr "Padrão: 25 * resolução norte-sul"
+
+#: ../vector/v.lidar.correction/main.c:118
+msgid "Regularization weight in reclassification evaluation"
+msgstr "Peso de regularização na avaliação de reclassificação"
+
+#: ../vector/v.lidar.correction/main.c:126
+msgid "High threshold for object to terrain reclassification"
+msgstr "Limiar alto para reclassificação de objeto para terreno"
+
+#: ../vector/v.lidar.correction/main.c:134
+msgid "Low threshold for terrain to object reclassification"
+msgstr "Limiar baixo para reclassificação de terreno para objeto"
+
+#: ../vector/v.lidar.correction/main.c:278
+#, c-format
+msgid "Adjusted EW spline %d"
+msgid_plural "Adjusted EW splines %d"
+msgstr[0] "Spline EW ajustada %d"
+msgstr[1] "Splines EW ajustadas %d"
+
+#: ../vector/v.lidar.correction/main.c:281
+#, c-format
+msgid "Adjusted NS spline %d"
+msgid_plural "Adjusted NS splines %d"
+msgstr[0] "Spline NS ajustada %d"
+msgstr[1] "Splines NS ajustadas %d"
+
+#: ../vector/v.lidar.correction/main.c:376
+msgid "Performing mean calculation..."
+msgstr "Fazendo o cálculo da média..."
+
+#: ../vector/v.lidar.correction/main.c:407 ../vector/v.surf.bspline/main.c:170
+#: ../vector/v.outlier/main.c:418 ../raster/r.resamp.bspline/main.c:128
+msgid "Bilinear interpolation"
+msgstr "Interpolação bilinear"
+
+#: ../vector/v.lidar.correction/main.c:420
+msgid "Correction and creation of terrain vector map..."
+msgstr "Correção e criação de mapa vetorial de terreno..."
+
+#: ../vector/v.lidar.correction/correction.c:93
+#: ../vector/v.lidar.correction/correction.c:127
+#: ../vector/v.lidar.correction/correction.c:151
+#: ../vector/v.lidar.correction/correction.c:163
+#: ../vector/v.lidar.correction/correction.c:187
+#: ../vector/v.outlier/outlier.c:86 ../vector/v.outlier/outlier.c:123
+#: ../vector/v.outlier/outlier.c:148 ../vector/v.outlier/outlier.c:161
+#: ../vector/v.outlier/outlier.c:185
+msgid "Impossible to read the database"
+msgstr "Impossível ler o banco de dados"
+
+#: ../vector/v.lidar.correction/correction.c:97
+#: ../vector/v.lidar.correction/correction.c:155
+#: ../vector/v.outlier/outlier.c:90 ../vector/v.outlier/outlier.c:152
+msgid "Impossible to update the database"
+msgstr "Impossível atualizar o banco de dados"
+
+#: ../vector/v.lidar.correction/correction.c:107
+#: ../vector/v.lidar.correction/correction.c:115
+#: ../vector/v.lidar.correction/correction.c:210
+#: ../vector/v.outlier/outlier.c:101 ../vector/v.outlier/outlier.c:110
+#: ../vector/v.outlier/outlier.c:207
+msgid "Impossible to write in the database"
+msgstr "Impossível escrever no banco de dados"
+
+#: ../vector/v.sample/main.c:79
+msgid "Samples a raster map at vector point locations."
+msgstr "Faz a amostragem de um mapa raster em locations de pontos vetoriais."
+
+#: ../vector/v.sample/main.c:82 ../vector/v.surf.bspline/main.c:110
+msgid "Name of input vector point map"
+msgstr "Nome do mapa de pontos do vetor de entrada"
+
+#: ../vector/v.sample/main.c:89
+msgid "Name of attribute column to use for comparison"
+msgstr "Nome da coluna de atributo a ser usada para comparação"
+
+#: ../vector/v.sample/main.c:92
+msgid "Name for output vector map to store differences"
+msgstr "Nome para o mapa vetorial de saída para armazenar diferenças"
+
+#: ../vector/v.sample/main.c:96
+msgid "Name of raster map to be sampled"
+msgstr "Nome do mapa raster a ser amostrado"
+
+#: ../vector/v.sample/main.c:107
+msgid "Scaling factor for values read from raster map"
+msgstr "Fator de escala para valores lidos do mapa raster"
+
+#: ../vector/v.sample/main.c:109
+msgid "Sampled values will be multiplied by this factor"
+msgstr "Os valores amostrados serão multiplicados por este fator"
+
+#: ../vector/v.sample/main.c:133 ../vector/v.surf.idw/read_sites.c:50
+#: ../vector/v.reclass/main.c:128
+#, c-format
+msgid "Database connection not defined for layer %s"
+msgstr "Conexão de banco de dados não definida para camada %s"
+
+#: ../vector/v.sample/main.c:148
+#, c-format
+msgid "Column type <%s> not supported (must be integer or double precision)"
+msgstr "Tipo de coluna <%s> não suportado (deve ser inteiro ou dupla precisão)"
+
+#: ../vector/v.sample/main.c:154
+#, c-format
+msgid "%d record selected from table"
+msgid_plural "%d records selected from table"
+msgstr[0] "%d registros selecionados da tabela"
+msgstr[1] "%d registros selecionados da tabela"
+
+#: ../vector/v.sample/main.c:190 ../vector/v.patch/main.c:385
+#: ../scripts/v.db.addtable/v.db.addtable.py:137
+#, c-format, python-format
+msgid "Unable to create table <%s>"
+msgstr "Não foi possível criar a tabela <%s>"
+
+#: ../vector/v.sample/main.c:200 ../raster3d/r3.in.lidar/main.c:574
+msgid "Reading points..."
+msgstr "Lendo pontos..."
+
+#: ../vector/v.sample/main.c:263 ../vector/v.kcv/main.c:285
+#, c-format
+msgid "Unable to insert row: %s"
+msgstr "Não foi possível inserir linha: %s"
+
+#: ../vector/v.out.svg/main.c:76
+msgid "Exports a vector map to SVG file."
+msgstr "Exporta um mapa vetorial para um arquivo SVG."
+
+#: ../vector/v.out.svg/main.c:86
+msgid "Name for SVG output file"
+msgstr "Nome do arquivo de saída SVG"
+
+#: ../vector/v.out.svg/main.c:95
+msgid "Output type"
+msgstr "Tipo de saída"
+
+#: ../vector/v.out.svg/main.c:96
+msgid "Defines which feature-type will be extracted"
+msgstr "Define qual tipo de feição será extraída"
+
+#: ../vector/v.out.svg/main.c:104
+msgid "Coordinate precision"
+msgstr "Precisão da coordenada"
+
+#: ../vector/v.out.svg/main.c:110
+msgid "Attribute(s) to include in output SVG"
+msgstr "Atributo(s) a incluir na saída SVG"
+
+#: ../vector/v.out.svg/main.c:131
+msgid "Precision must not be negative"
+msgstr "A precisão não deve ser negativa"
+
+#: ../vector/v.out.svg/main.c:134
+msgid "Precision must not be higher than 15"
+msgstr "A precisão não deve ser superior a 15"
+
+#: ../vector/v.out.svg/main.c:202
+#, c-format
+msgid "Unable to create SVG file <%s>"
+msgstr "Não foi possível criar o arquivo SVG <%s>"
+
+#: ../vector/v.out.svg/main.c:219
+#, c-format
+msgid "No areas found, skipping %s"
+msgstr "Nenhuma área encontrada, ignorando %s"
+
+#: ../vector/v.out.svg/main.c:234 ../vector/v.extrude/main.c:275
+#, c-format
+msgid "Skipping area %d without centroid"
+msgstr "Ignorando área %d sem centroide"
+
+#: ../vector/v.out.svg/main.c:260
+#, c-format
+msgid "%d areas extracted"
+msgstr "%d áreas extraídas"
+
+#: ../vector/v.out.svg/main.c:267
+#, c-format
+msgid "No points found, skipping %s"
+msgstr "Nenhum ponto encontrado, ignorando %s"
+
+#: ../vector/v.out.svg/main.c:296
+#, c-format
+msgid "%d points extracted"
+msgstr "%d pontos extraídos"
+
+#: ../vector/v.out.svg/main.c:303
+#, c-format
+msgid "No lines found, skipping %s"
+msgstr "Nenhuma linha encontrada, ignorando %s"
+
+#: ../vector/v.out.svg/main.c:330
+#, c-format
+msgid "%d lines extracted"
+msgstr "%d linhas extraídas"
+
+#: ../vector/v.out.svg/main.c:397
+#, c-format
+msgid "Cannot select attributes for cat=%d"
+msgstr "Não é possível selecionar atributos para cat=%d"
+
+#: ../vector/v.segment/main.c:62 ../vector/v.edit/main.c:59
+#: ../vector/v.to.points/main.c:57 ../vector/v.split/main.c:57
+#: ../vector/v.build.polylines/main.c:114
+msgid "node"
+msgstr "nó"
+
+#: ../vector/v.segment/main.c:65 ../vector/v.edit/main.c:61
+#: ../vector/v.to.points/main.c:58 ../vector/v.split/main.c:59
+#: ../vector/v.build.polylines/main.c:115
+msgid "vertex"
+msgstr "vértice"
+
+#: ../vector/v.segment/main.c:67
+msgid "Creates points/segments from input vector lines and positions."
+msgstr "Cria pontos/segmentos a partir de linhas e posições vetoriais de entrada."
+
+#: ../vector/v.segment/main.c:70
+msgid "Name of input vector lines map"
+msgstr "Nome do mapa de linhas vetoriais de entrada"
+
+#: ../vector/v.segment/main.c:79
+msgid "Name of file containing segment rules"
+msgstr "Nome do arquivo contendo regras de segmento"
+
+#: ../vector/v.segment/main.c:146 ../vector/v.segment/main.c:190
+#, c-format
+msgid "Unable to read input: %s"
+msgstr "Não foi possível ler entrada: %s"
+
+#: ../vector/v.segment/main.c:157 ../vector/v.segment/main.c:201
+#, c-format
+msgid "Unable to find line of cat %d"
+msgstr "Não foi possível encontrar a linha da categoria %d"
+
+#: ../vector/v.segment/main.c:172
+#, c-format
+msgid ""
+"Unable to get point on line: cat = %d offset = %f (line length = %.15g)\n"
+"%s"
+msgstr "Não foi possível obter o ponto na linha: cat = %d deslocamento = %f (comprimento da linha = %.15g)"
+
+#: ../vector/v.segment/main.c:226
+msgid "End of segment > line length -> cut"
+msgstr "Fim do segmento > comprimento da linha  -> corte"
+
+#: ../vector/v.segment/main.c:232
+#, c-format
+msgid ""
+"Unable to make line segment: cat = %d : %f - %f (line length = %.15g)\n"
+"%s"
+msgstr ""
+"Não é possível fazer segmento de linha: cat = %d: %f - %f(comprimento da linha = %.15g)\n"
+"%s"
+
+#: ../vector/v.segment/main.c:256 ../vector/v.lrs/v.lrs.segment/main.c:337
+#, c-format
+msgid "Incorrect segment type: %s"
+msgstr "Tipo de segmento incorreto: %s"
+
+#: ../vector/v.segment/main.c:263
+#, c-format
+msgid "%d point read from input"
+msgid_plural "%d points read from input"
+msgstr[0] "%d ponto lido da entrada"
+msgstr[1] "%d pontos lidos da entrada"
+
+#. GTC Number of lost points
+#. GTC Number of lost lines
+#: ../vector/v.segment/main.c:267 ../vector/v.segment/main.c:278
+#: ../vector/v.lrs/v.lrs.segment/main.c:360
+#: ../vector/v.lrs/v.lrs.segment/main.c:372
+#, c-format
+msgid "%d lost"
+msgid_plural "%d lost"
+msgstr[0] "%d perdido"
+msgstr[1] "%d perdidos"
+
+#. GTC %s is replaced with message indicating number of lost points.
+#: ../vector/v.segment/main.c:269
+#, c-format
+msgid "%d point written to output map (%s)"
+msgid_plural "%d points written to output map (%s)"
+msgstr[0] "%d ponto escrito no mapa de saída (%s)"
+msgstr[1] "%d pontos escritos no mapa de saída (%s)"
+
+#: ../vector/v.segment/main.c:274
+#, c-format
+msgid "%d line read from input"
+msgid_plural "%d lines read from input"
+msgstr[0] "%d linha lida da entrada"
+msgstr[1] "%d linhas lidas da entrada"
+
+#. GTC %s is replaced with message indicating number of lost lines.
+#: ../vector/v.segment/main.c:280
+#, c-format
+msgid "%d line written to output map (%s)"
+msgid_plural "%d lines written to output map (%s)"
+msgstr[0] "%d linha escrita no mapa de saída (%s)"
+msgstr[1] "%d linhas escritas no mapa de saída (%s)"
+
+#: ../vector/v.net.connectivity/main.c:56
+msgid "Computes vertex connectivity between two sets of nodes in the network."
+msgstr "Calcula a conectividade de vértice entre dois conjuntos de nós na rede."
+
+#: ../vector/v.net.connectivity/main.c:96
+msgid "Set1 category values"
+msgstr "Valores da categoria Set1"
+
+#: ../vector/v.net.connectivity/main.c:97
+#: ../vector/v.net.connectivity/main.c:103
+msgid "Set1"
+msgstr "Set1"
+
+#: ../vector/v.net.connectivity/main.c:102
+msgid "Set1 WHERE conditions of SQL statement without 'where' keyword"
+msgstr "Condições Set1 WHERE da instrução SQL sem a palavra-chave 'where'"
+
+#: ../vector/v.net.connectivity/main.c:107
+msgid "Set2 category values"
+msgstr "Valores de categoria Set2"
+
+#: ../vector/v.net.connectivity/main.c:108
+#: ../vector/v.net.connectivity/main.c:114
+msgid "Set2"
+msgstr "Set2"
+
+#: ../vector/v.net.connectivity/main.c:113
+msgid "Set2 WHERE conditions of SQL statement without 'where' keyword"
+msgstr "Condições Set2 WHERE da instrução SQL sem a palavra-chave 'where'"
+
+#: ../vector/v.net.connectivity/main.c:146
+#: ../vector/v.net.connectivity/main.c:153
+#, c-format
+msgid "No features for %s selected. Please check options '%s', '%s'."
+msgstr "Nenhuma feição para %s selecionada. Verifique as opções '%s', '%s'."
+
+#: ../vector/v.net.connectivity/main.c:167
+#: ../vector/v.net.connectivity/main.c:170
+#, c-format
+msgid "%s is empty"
+msgstr "%s está vazio"
+
+#: ../vector/v.net.connectivity/main.c:178 ../vector/v.net.flow/main.c:226
+#: ../vector/v.net.bridge/main.c:134 ../vector/v.generalize/network.c:89
+#: ../vector/v.net.centrality/main.c:284
+#: ../vector/v.net.spanningtree/main.c:124 ../vector/v.net.timetable/main.c:405
+#: ../vector/v.net.components/main.c:163 ../vector/v.net.distance/main.c:264
+#, c-format
+msgid "Unable to build graph for vector map <%s>"
+msgstr "Não foi possível construir gráfico para mapa vetorial <%s>"
+
+#: ../vector/v.what/what.c:45
+msgid "Cannot open driver"
+msgstr "Não é possível abrir driver"
+
+#: ../vector/v.what/what.c:53
+msgid "Cannot open database"
+msgstr "Não é possível abrir banco de dados"
+
+#: ../vector/v.what/what.c:66
+msgid "Cannot open select cursor"
+msgstr "Não é possível abrir o cursor de seleção"
+
+#: ../vector/v.what/what.c:73
+msgid "Cannot fetch next record"
+msgstr "Não é possível buscar o próximo registro"
+
+#: ../vector/v.what/what.c:76
+msgid "No database record"
+msgstr "Nenhum registro de banco de dados"
+
+#: ../vector/v.what/what.c:178
+#, c-format
+msgid ""
+"Layer: %d\n"
+"Category: %d\n"
+msgstr ""
+"Camada: %d\n"
+"Categoria: %d\n"
+
+#: ../vector/v.what/what.c:202
+#, c-format
+msgid ""
+"\n"
+"Driver: %s\n"
+"Database: %s\n"
+"Table: %s\n"
+"Key column: %s\n"
+msgstr ""
+"\n"
+"Driver: %s\n"
+"Banco de dados: %s\n"
+"Tabela: %s\n"
+"Coluna chave: %s\n"
+
+#: ../vector/v.what/what.c:381
+#, c-format
+msgid "Nothing found.\n"
+msgstr "Nada encontrado.\n"
+
+#: ../vector/v.what/what.c:476
+#, c-format
+msgid ""
+"Id: %d\n"
+"Type: %s\n"
+"Left: %d\n"
+"Right: %d\n"
+msgstr ""
+"Id: %d\n"
+"Tipo: %s\n"
+"Esquerda: %d\n"
+"Direita: %d\n"
+
+#: ../vector/v.what/what.c:482 ../vector/v.what/what.c:558
+#, c-format
+msgid "Length: %f\n"
+msgstr "Comprimento: %f\n"
+
+#: ../vector/v.what/what.c:502
+#, c-format
+msgid ""
+"Node[%d]=%d\n"
+"Number_lines=%d\n"
+"Coordinates=%.6f,%.6f,%.6f\n"
+msgstr ""
+"Nó[%d]=%d\n"
+"Number_lines=%d\n"
+"Coordinates=%.6f,%.6f,%.6f\n"
+
+#: ../vector/v.what/what.c:507
+#, c-format
+msgid ""
+",\n"
+"\"Node[%d]\": %d,\n"
+"\"Number_lines\": %d,\n"
+"\"Coordinates\": %.6f,%.6f,%.6f"
+msgstr ""
+",\n"
+"\"Node[%d]\": %d,\n"
+"\"Number_lines\": %d,\n"
+"\"Coordinates\": %.6f,%.6f,%.6f"
+
+#: ../vector/v.what/what.c:512
+#, c-format
+msgid ""
+"Node[%d]: %d\n"
+"Number of lines: %d\n"
+"Coordinates: %.6f, %.6f, %.6f\n"
+msgstr ""
+"Nó[%d]: %d\n"
+"Número de linhas: %d\n"
+"Coordinadas: %.6f, %.6f, %.6f\n"
+
+#: ../vector/v.what/what.c:532
+>>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
+>>>>>>> osgeo-main
 #, c-format
 msgid "Wrong iso cost: %f"
 msgstr "Custo da iso errado: %f"
@@ -75651,6 +76645,7 @@ msgstr "Linha de perfilagem"
 msgid "Profiling line map"
 msgstr "Mapa de linhas de perfil"
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 #: ../vector/v.profile/main.c:248
 msgid "Vector map containing profiling line"
@@ -75676,6 +76671,8 @@ msgstr "Camada 0 não suportada"
 msgid "Failed to interpreter 'dp' parameter as an integer"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -77283,6 +78280,7 @@ msgstr "Fator de anisotropia"
 #: ../vector/v.surf.rst/main.c:408 ../raster/r.sim/r.sim.water/main.c:402
 #: ../raster/r.sim/r.sim.sediment/main.c:374
 #, c-format
+<<<<<<< HEAD
 msgid "<%d> is not valid number of threads. Number of threads will be set on <%d>"
 msgstr ""
 
@@ -78669,6 +79667,8 @@ msgstr ""
 #: ../vector/v.out.postgis/create.c:107
 >>>>>>> osgeo-main
 #, c-format
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 msgid "Error writing <%s> file"
 msgstr "Erro na escrita do arquivo <%s>"
@@ -79097,6 +80097,10 @@ msgstr "Foi impossível criar tabela <%s>."
 msgid "Outlier detection"
 msgstr "Detecção de outlier"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main
@@ -116085,6 +117089,9 @@ msgstr ""
 msgid "Missing table"
 msgstr "Tabela faltando"
 
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 msgid "No features of type (%s) found in vector map <%s>"
 msgstr "Nenhuma feição do tipo (%s) encontrada no mapa vetorial <%s>"
@@ -116125,6 +117132,10 @@ msgstr "O mapa vetorial <%s> é 3D. Use opções de criação de camada específ
 #~ msgid "Missing attribute table for vector map <%s>"
 #~ msgstr "Tabela de atributos ausente para mapa vetorial <%s>"
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main

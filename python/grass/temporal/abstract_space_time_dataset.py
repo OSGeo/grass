@@ -22,8 +22,11 @@ from .core import (
     get_current_mapset,
     get_tgis_db_version_from_metadata,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 )
 from .abstract_dataset import (
@@ -33,6 +36,9 @@ from .abstract_dataset import (
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 )
 from .temporal_granularity import (
@@ -1414,8 +1420,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      subset of the registered maps without "WHERE"
         :param dbif: The database interface to be used
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         :param spatial_extent: Spatial extent dict and projection information
             e.g. from g.region -ug3 with GRASS GIS region keys
@@ -1429,6 +1438,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 =======
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         :param spatial_extent: Return only maps with the provided spatial
                      relation to the given spatial extent (requires
@@ -1437,8 +1449,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      relation to the provided spatial extent (requires
                      spatial_extent parameter)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -1513,8 +1531,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      objects in the list without "ORDER BY"
         :param dbif: The database interface to be used
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         :param spatial_extent: Spatial extent dict and projection information
             e.g. from g.region -ug3 with GRASS GIS region keys
@@ -1528,6 +1549,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 =======
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         :param spatial_extent: Return only maps with the provided spatial
                      relation to the given spatial extent (requires
@@ -1536,8 +1560,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      relation to the provided spatial extent (requires
                      spatial_extent parameter)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -1588,8 +1618,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                       objects in the list without "ORDER BY"
         :param dbif: The database interface to be used
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         :param spatial_extent: Spatial extent dict and projection information
             e.g. from g.region -ug3 with GRASS GIS region keys
@@ -1603,6 +1636,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 =======
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         :param spatial_extent: Return only maps with the provided spatial
                      relation to the given spatial extent (requires
@@ -1611,8 +1647,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      relation to the provided spatial extent (requires
                      spatial_extent parameter)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -1637,12 +1679,15 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             # spatial extent as well
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         # use all columns
         rows = self.get_registered_maps(
             None, where, order, dbif, spatial_extent, spatial_relation
         )
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             # check keys in first row
             # note that 'if "bottom" in row' does not work
@@ -1704,6 +1749,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         )
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         if rows is not None:
@@ -1821,8 +1869,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     "{br} LIKE '{si}\_%' {esc} OR {br} LIKE '%\_{si}' {esc} OR "
                     "{br} LIKE '{orig}\_%' {esc} OR {br} LIKE '%\_{orig}' {esc}".format(
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -1857,9 +1911,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         :param dict spatial_extent: Spatial extent dict and projection information
             e.g. from g.region -ug3
 <<<<<<< HEAD
+<<<<<<< HEAD
         :param dict spatial_relation: Spatial relation to the provided
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         :param str spatial_relation: Spatial relation to the provided
 =======
@@ -1868,6 +1925,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 =======
         :param dict spatial_relation: Spatial relation to the provided
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             spatial extent as a string with one of the following values:
             "overlaps": maps that spatially overlap ("intersect")
@@ -1882,9 +1942,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
              >>> where = None
              >>> spatial_extent = gs.parse_command("g.region", flags="ug3")
 <<<<<<< HEAD
+<<<<<<< HEAD
              >>> _update_where_statement_by_spatial_extent(where, spatial_extent, "overlaps")
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
              >>> _update_where_statement_by_spatial_extent(
              ...     where, spatial_extent, "overlaps"
@@ -1895,6 +1958,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 =======
              >>> _update_where_statement_by_spatial_extent(where, spatial_extent, "overlaps")
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
              ((north > 0 AND south < 1 AND east > 0 AND west < 1))
         """
@@ -1912,9 +1978,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 _(
                     "Invalid spatial relation <{}> requested."
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "Only values 'overlaps', 'is_contained', and 'contains' are allowed."
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     "Only values 'overlaps', 'is_contained', and 'contains' are \
                         allowed."
@@ -1924,6 +1993,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 =======
                     "Only values 'overlaps', 'is_contained', and 'contains' are allowed."
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 ).format(spatial_relation)
             )
@@ -1954,8 +2026,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             if spatial_relation == "overlaps":
                 spatial_where_template += " AND top > {b}" " AND bottom < {t}"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             elif spatial_relation == "is_contained":
                 spatial_where_template += " AND top <= {t}" " AND bottom >= {b}"
@@ -1964,14 +2039,23 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 =======
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         elif spatial_relation == "is_contained":
             spatial_where_template += " AND top <= {t}" " AND bottom >= {b}"
         elif spatial_relation == "contains":
             spatial_where_template += " AND top >= {t}" " AND bottom <= {b}"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -2025,8 +2109,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      objects in the list without "ORDER BY"
         :param dbif: The database interface to be used
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         :param spatial_extent: Spatial extent dict and projection information
             e.g. from g.region -ug3 with GRASS GIS region keys
@@ -2040,6 +2127,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 =======
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         :param spatial_extent: Return only maps with the provided spatial
                      relation to the given spatial extent (requires
@@ -2048,8 +2138,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      relation to the provided spatial extent (requires
                      spatial_extent parameter)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
+=======
+>>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 7f32ec0a8d (r.horizon manual - fix typo (#2794))
 =======
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
@@ -2088,8 +2184,13 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             if self.semantic_label:
                 where = self._update_where_statement_by_semantic_label(where)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> osgeo-main
@@ -2100,7 +2201,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     where, spatial_extent, spatial_relation
                 )
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -2118,6 +2222,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
             if where is not None and where != "":
@@ -3063,8 +3170,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         ).read()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         # Comment out update of semantic labels for DB version < 3
         if get_tgis_db_version_from_metadata() < 3:
@@ -3078,6 +3188,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         for version in range(3, get_tgis_db_version_from_metadata() + 1):
             sqlfile = os.path.join(
@@ -3089,8 +3202,14 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             if os.path.exists(sqlfile):
                 sql += open(sqlfile).read()
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))

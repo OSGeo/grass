@@ -142,8 +142,14 @@ class GrassTestFilesInvoker:
 =======
         # TODO: this should be a function in grass.script (used also in gis_set.py, PyGRASS also has its way with Mapset)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -221,8 +227,11 @@ class GrassTestFilesInvoker:
                 check=False,
             )
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -232,6 +241,9 @@ class GrassTestFilesInvoker:
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 57aff3a06a (pythonlib: Remove star imports (#1546))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             stdout = p.stdout
             stderr = p.stderr
@@ -246,9 +258,12 @@ class GrassTestFilesInvoker:
                 stdout = ""
             if stderr is None:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 stderr = f"Process has timed out in {timeout}s and produced no error output.\n"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                 stderr = (
                     f"Process has timed out in {timeout}s and produced no error "
@@ -260,6 +275,9 @@ class GrassTestFilesInvoker:
 =======
                 stderr = f"Process has timed out in {timeout}s and produced no error output.\n"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             # Return code is None if the process times out.
             # Rest of the code expects success to evaluate as False.
@@ -269,9 +287,14 @@ class GrassTestFilesInvoker:
             timed_out = timeout
 <<<<<<< HEAD
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
         encodings = [_get_encoding(), "utf8", "latin-1", "ascii"]
 
 =======
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -280,6 +303,8 @@ class GrassTestFilesInvoker:
         encodings = [_get_encoding(), "utf8", "latin-1", "ascii"]
 
 =======
+=======
+>>>>>>> osgeo-main
         stdout, stderr = p.communicate()
         returncode = p.returncode
 <<<<<<< HEAD
@@ -295,6 +320,9 @@ class GrassTestFilesInvoker:
 
 >>>>>>> 57aff3a06a (pythonlib: Remove star imports (#1546))
 >>>>>>> 7e8f036e2d (pythonlib: Remove star imports (#1546))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         def try_decode(data, encodings):
             """Try to decode data (bytes) using one of encodings
@@ -305,15 +333,24 @@ class GrassTestFilesInvoker:
             for encoding in encodings:
                 try:
 <<<<<<< HEAD
+<<<<<<< HEAD
                     return decode(data, encoding=encoding)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+                    return decode(data, encoding=encoding)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
                     return decode(data, encoding=encoding)
 =======
+>>>>>>> osgeo-main
                     return decode(stdout, encoding=encoding)
 >>>>>>> 3fce2ed438 (pythonlib: Remove star imports (#1546))
 =======
@@ -331,6 +368,9 @@ class GrassTestFilesInvoker:
                     return decode(stdout, encoding=encoding)
 >>>>>>> 7e8f036e2d (pythonlib: Remove star imports (#1546))
 >>>>>>> 57aff3a06a (pythonlib: Remove star imports (#1546))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 except UnicodeError:
                     pass

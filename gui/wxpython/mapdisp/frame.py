@@ -64,9 +64,12 @@ from grass.pydispatch.signal import Signal
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 class MapPanel(SingleMapPanel):
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 class MapPanel(SingleMapPanel, MainPageBase):
 =======
@@ -75,6 +78,9 @@ class MapPanel(SingleMapPanel):
 =======
 class MapPanel(SingleMapPanel):
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     """Main panel for map display window. Drawing takes place in
     child double buffered drawing window.
@@ -126,10 +132,13 @@ class MapPanel(SingleMapPanel):
         # used for VDigit toolbar and window and GLWindow
         self.tree = tree
 <<<<<<< HEAD
+<<<<<<< HEAD
         # checks for saving workspace
         self.canCloseDisplayCallback = None
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 
         # Saved Map Display output img size
@@ -145,6 +154,9 @@ class MapPanel(SingleMapPanel):
 
         # Emitted when switching map notebook tabs (Single-Window)
         self.onFocus = Signal("MapPanel.onFocus")
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         # Emitted when switching map notebook tabs (Single-Window)
@@ -156,8 +168,14 @@ class MapPanel(SingleMapPanel):
 =======
         # Parameter firstTime specifies if 3D was already actived.
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -169,11 +187,14 @@ class MapPanel(SingleMapPanel):
 
         # Emitted when closing display by closing its window.
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.closingDisplay = Signal("MapPanel.closingDisplay")
 
         # Emitted when closing display by closing its window.
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
         self.closingDisplay = Signal("MapPanel.closingDisplay")
@@ -185,6 +206,9 @@ class MapPanel(SingleMapPanel):
 
         # Emitted when closing display by closing its window.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.closingVNETDialog = Signal("MapPanel.closingVNETDialog")
 
@@ -201,8 +225,11 @@ class MapPanel(SingleMapPanel):
         self.statusbarManager = None
         if statusbar:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -210,6 +237,9 @@ class MapPanel(SingleMapPanel):
 >>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             # items for choice
             statusbarItems = [
@@ -217,12 +247,18 @@ class MapPanel(SingleMapPanel):
                 sb.SbRegionExtent,
                 sb.SbCompRegionExtent,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 sb.SbDisplayGeometry,
                 sb.SbMapScale,
@@ -233,7 +269,10 @@ class MapPanel(SingleMapPanel):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
                 sb.SbShowRegion,
                 sb.SbAlignExtent,
                 sb.SbResolution,
@@ -253,6 +292,9 @@ class MapPanel(SingleMapPanel):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 sb.SbMapScale,
             )
@@ -269,8 +311,11 @@ class MapPanel(SingleMapPanel):
             )
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
             self.statusbar = self.CreateStatusbar()
@@ -282,6 +327,9 @@ class MapPanel(SingleMapPanel):
 >>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         # init decoration objects
@@ -314,15 +362,23 @@ class MapPanel(SingleMapPanel):
 
         # register context menu actions
 <<<<<<< HEAD
-        if self.statusbar:
-            self._registerContextMenuActions()
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         if self.statusbar:
             self._registerContextMenuActions()
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if self.statusbar:
+            self._registerContextMenuActions()
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        if self.statusbar:
+            self._registerContextMenuActions()
+=======
+>>>>>>> osgeo-main
         self._registerContextMenuActions()
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711))
 =======
@@ -333,6 +389,9 @@ class MapPanel(SingleMapPanel):
         if self.statusbar:
             self._registerContextMenuActions()
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         self._giface.updateMap.connect(self.MapWindow2D.UpdateMap)
@@ -368,13 +427,19 @@ class MapPanel(SingleMapPanel):
         )
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         # statusbar
         if self.statusbar:
@@ -383,7 +448,10 @@ class MapPanel(SingleMapPanel):
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> 270077e68a (wxGUI/map display: manage wx.StatusBar widget by AUI (#1646))
         self._mgr.AddPane(
@@ -412,6 +480,9 @@ class MapPanel(SingleMapPanel):
 >>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self._mgr.Update()
 
@@ -443,12 +514,15 @@ class MapPanel(SingleMapPanel):
     def _registerContextMenuActions(self):
         """Register show/hide toolbars and statusbar context menu actions"""
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         def show_hide_toolbar_label():
             return (
                 _("Hide toolbars") if self.AreAllToolbarsShown() else _("Show toolbars")
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 
@@ -546,6 +620,9 @@ class MapPanel(SingleMapPanel):
             return (
                 _("Hide toolbars") if self.AreAllToolbarsShown() else _("Show toolbars")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             )
 
@@ -556,6 +633,7 @@ class MapPanel(SingleMapPanel):
             name="showAllToolbars",
             label=show_hide_toolbar_label,
             action=on_show_hide_toolbar,
+<<<<<<< HEAD
 <<<<<<< HEAD
         )
 
@@ -571,6 +649,8 @@ class MapPanel(SingleMapPanel):
             name="showStatusbar",
             label=show_hide_statusbar_label,
             action=on_show_hide_statusbar,
+=======
+>>>>>>> osgeo-main
 =======
 >>>>>>> osgeo-main
         )
@@ -985,8 +1065,11 @@ class MapPanel(SingleMapPanel):
         self._mgr.Update()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -1012,6 +1095,9 @@ class MapPanel(SingleMapPanel):
 >>>>>>> 03a790ad9a (wxGUI: refactoring: build GUI tools' status bars based on wx.StatusBar widget (#1689))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     def RemoveQueryLayer(self):
         """Removes temporary map layers (queries)"""
@@ -1327,6 +1413,7 @@ class MapPanel(SingleMapPanel):
         Also close associated layer tree page
         """
 <<<<<<< HEAD
+<<<<<<< HEAD
         Debug.msg(2, "MapPanel.OnCloseWindow()")
         if self.canCloseDisplayCallback:
             pgnum_dict = self.canCloseDisplayCallback(
@@ -1338,6 +1425,8 @@ class MapPanel(SingleMapPanel):
                     self.closingDisplay.emit(pgnum_dict=pgnum_dict)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
         Debug.msg(2, "MapPanel.OnCloseWindow()")
@@ -1386,6 +1475,9 @@ class MapPanel(SingleMapPanel):
                 if pgnum_dict["layers"] > -1:
                     self.closingDisplay.emit(pgnum_dict=pgnum_dict)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                     # Destroy is called when notebook page is deleted
         else:
@@ -1879,13 +1971,20 @@ class MapPanel(SingleMapPanel):
         NULLs) or vector map.
         """
 <<<<<<< HEAD
-        Debug.msg(3, "MapPanel.OnZoomToMap()")
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
         Debug.msg(3, "MapPanel.OnZoomToMap()")
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        Debug.msg(3, "MapPanel.OnZoomToMap()")
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+        Debug.msg(3, "MapPanel.OnZoomToMap()")
+=======
+>>>>>>> osgeo-main
         Debug.msg(3, "MapFrame.OnZoomToMap()")
 >>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
 =======
@@ -1894,6 +1993,9 @@ class MapPanel(SingleMapPanel):
 =======
         Debug.msg(3, "MapPanel.OnZoomToMap()")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.MapWindow.ZoomToMap(layers=None)
 
@@ -1983,8 +2085,11 @@ class MapPanel(SingleMapPanel):
         self.mapWindowProperties.resolution = constrainRes
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -2028,6 +2133,9 @@ class MapPanel(SingleMapPanel):
 >>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
@@ -2152,14 +2260,20 @@ class MapPanel(SingleMapPanel):
         # disable the toolbar
         self.RemoveToolbar("vdigit", destroy=True)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 
@@ -2220,8 +2334,11 @@ class MapDisplay(FrameMixin, MapPanel):
         parent.SetSizer(sizer)
         parent.Layout()
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 =======
 >>>>>>> 953489b535 (wxGUI: fix layout flag assert in wms dialog (#1764))
@@ -2229,4 +2346,7 @@ class MapDisplay(FrameMixin, MapPanel):
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main

@@ -7,13 +7,20 @@
 #include <grass/datetime.h>
 
 <<<<<<< HEAD
-static void make_incr(DateTime *, int, int, DateTime *);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 static void make_incr(DateTime *, int, int, DateTime *);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static void make_incr(DateTime *, int, int, DateTime *);
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+static void make_incr(DateTime *, int, int, DateTime *);
+=======
+>>>>>>> osgeo-main
 static void make_incr();
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -28,6 +35,9 @@ static void make_incr();
 static void make_incr(DateTime *, int, int, DateTime *);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 /*!

@@ -45,9 +45,12 @@ int is_int_only(const char *buffer)
 /** Issue a fatal error if the option value is not integer
  *
 <<<<<<< HEAD
+<<<<<<< HEAD
  * This catches the cases when option is readble as integer,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
  * This catches the cases when option is readable as integer,
 =======
@@ -56,6 +59,9 @@ int is_int_only(const char *buffer)
 =======
  * This catches the cases when option is readble as integer,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  * but there would be additional characters left.
  * For example, when a number with a decimal point is read by C
@@ -84,8 +90,11 @@ int main(int argc, char *argv[])
     double min_value;
     double max_value;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     long seed_value;
     char *seedptr;
@@ -93,6 +102,9 @@ int main(int argc, char *argv[])
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     struct History history;
@@ -140,8 +152,11 @@ int main(int argc, char *argv[])
     max_value = atof(max->answer);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     if (seed->answer) {
         seed_value = strtol(seed->answer, &seedptr, 10);
@@ -160,6 +175,9 @@ int main(int argc, char *argv[])
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     /* We disallow max=5.5 for integer output since there are unclear
      * expectations on what it should do. */
@@ -173,9 +191,12 @@ int main(int argc, char *argv[])
     if (min_value > max_value) {
         /* showing the not parsed numbers to show exactly what user
 <<<<<<< HEAD
+<<<<<<< HEAD
          * provided and to avoid any issues with formating %f vs %d */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
          * provided and to avoid any issues with formatting %f vs %d */
 =======
@@ -184,6 +205,9 @@ int main(int argc, char *argv[])
 =======
          * provided and to avoid any issues with formating %f vs %d */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         G_fatal_error(_("Minimum %s should be higher than maximum %s,"
                         " but %s > %s"),

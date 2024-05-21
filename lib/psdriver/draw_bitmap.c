@@ -14,14 +14,22 @@ void PS_Bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)
             unsigned int k = buf[j * ncols + i];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             if (k > (unsigned int)threshold)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if (k > (unsigned int)threshold)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
             if (k > (unsigned int)threshold)
 =======
+>>>>>>> osgeo-main
             if (k > threshold)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -36,6 +44,9 @@ void PS_Bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)
             if (k > (unsigned int)threshold)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 acc |= bit;
 

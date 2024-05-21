@@ -18,9 +18,12 @@
  * visible to each other.  Two cells are visible to each other if the
  * line-of-sight that connects their centers does not intersect the
 <<<<<<< HEAD
+<<<<<<< HEAD
  * terrain. The terrain is NOT viewed as a tesselation of flat cells,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
  * terrain. The terrain is NOT viewed as a tessellation of flat cells,
 =======
@@ -29,6 +32,9 @@
 =======
  * terrain. The terrain is NOT viewed as a tesselation of flat cells,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  * i.e. if the line-of-sight does not pass through the cell center,
  * elevation is determined using bilinear interpolation.
@@ -515,9 +521,12 @@ void distribute_bnd_events(AMI_STREAM<AEvent> *bndEvents,
 unsigned long solve_in_memory(AMI_STREAM<AEvent> *eventList,
                               AMI_STREAM<AEvent> *enterBndEvents,
 <<<<<<< HEAD
+<<<<<<< HEAD
                               double start_angle, double end_angle,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                               double start_angle UNUSED,
                               double end_angle UNUSED,
@@ -527,6 +536,9 @@ unsigned long solve_in_memory(AMI_STREAM<AEvent> *eventList,
 =======
                               double start_angle, double end_angle,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                               IOVisibilityGrid *visgrid, GridHeader *hd,
                               Viewpoint *vp, const ViewOptions &viewOptions)

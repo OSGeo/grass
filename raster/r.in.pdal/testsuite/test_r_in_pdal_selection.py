@@ -12,13 +12,20 @@ Licence:   This program is free software under the GNU General Public
 import os
 import pathlib
 <<<<<<< HEAD
-import shutil
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 import shutil
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+import shutil
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+import shutil
+=======
+>>>>>>> osgeo-main
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
 import shutil
@@ -26,14 +33,20 @@ import shutil
 =======
 import shutil
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 import unittest
 from tempfile import TemporaryDirectory
 
 from grass.script import core as grass
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -43,6 +56,9 @@ from grass.script import shutil_which
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -57,13 +73,20 @@ class SelectionTest(TestCase):
 
     @classmethod
 <<<<<<< HEAD
-    @unittest.skipIf(shutil.which("pdal") is None, "Cannot find pdal utility")
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     @unittest.skipIf(shutil.which("pdal") is None, "Cannot find pdal utility")
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    @unittest.skipIf(shutil.which("pdal") is None, "Cannot find pdal utility")
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    @unittest.skipIf(shutil.which("pdal") is None, "Cannot find pdal utility")
+=======
+>>>>>>> osgeo-main
     @unittest.skipIf(shutil_which("pdal") is None, "Cannot find pdal utility")
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -72,6 +95,9 @@ class SelectionTest(TestCase):
 =======
     @unittest.skipIf(shutil.which("pdal") is None, "Cannot find pdal utility")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     def setUpClass(cls):
         """Ensures expected computational region and generated data"""
@@ -119,13 +145,20 @@ class SelectionTest(TestCase):
             pass
 
 <<<<<<< HEAD
-    @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
+=======
+>>>>>>> osgeo-main
     @unittest.skipIf(shutil_which("r.in.pdal") is None, "Cannot find r.in.pdal")
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -134,6 +167,9 @@ class SelectionTest(TestCase):
 =======
     @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     def test_dimension(self):
         """Test LAS dimension selection"""
@@ -160,13 +196,20 @@ class SelectionTest(TestCase):
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0)
 
 <<<<<<< HEAD
-    @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
+=======
+>>>>>>> osgeo-main
     @unittest.skipIf(shutil_which("r.in.pdal") is None, "Cannot find r.in.pdal")
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -175,6 +218,9 @@ class SelectionTest(TestCase):
 =======
     @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     def test_user_dimension(self):
         """Test PDAL user dimension selection"""
@@ -201,13 +247,20 @@ class SelectionTest(TestCase):
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0)
 
 <<<<<<< HEAD
-    @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
+=======
+>>>>>>> osgeo-main
     @unittest.skipIf(shutil_which("r.in.pdal") is None, "Cannot find r.in.pdal")
 >>>>>>> 9d4a079d2e (libcairodriver: enable Cairo with and without Fontconfig (#1697))
 =======
@@ -216,6 +269,9 @@ class SelectionTest(TestCase):
 =======
     @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     def test_filter(self):
         """Test input filtering"""
@@ -245,11 +301,14 @@ class SelectionTest(TestCase):
         self.assertRastersEqual(self.imp_raster, self.ref_raster, 0)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
     def test_base_raster(self):
         """Test Z adjustement by base raster"""
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD
     @unittest.skipIf(shutil.which("r.in.pdal") is None, "Cannot find r.in.pdal")
@@ -268,6 +327,9 @@ class SelectionTest(TestCase):
     def test_base_raster(self):
         """Test Z adjustement by base raster"""
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.imp_raster = "imp_base_adj"
         self.ref_raster = "ref_base_adj"

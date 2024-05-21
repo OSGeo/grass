@@ -173,6 +173,12 @@ class TestNeighbors(TestCase):
 
                    MATRIX 3
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> osgeo-main
                    1 1 1
                    1 1 1
                    1 1 1
@@ -181,10 +187,13 @@ class TestNeighbors(TestCase):
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                    1 1 1
                    1 1 1
                    1 1 1
 =======
+=======
+>>>>>>> osgeo-main
                    1 1 1 
                    1 1 1 
                    1 1 1 
@@ -208,6 +217,9 @@ class TestNeighbors(TestCase):
 =======
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                    DIVISOR 9
                    TYPE    P""",

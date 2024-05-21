@@ -802,6 +802,7 @@ int main(int argc, char *argv[])
 
         if ((in_proj_info = G_get_projinfo()) == NULL)
 <<<<<<< HEAD
+<<<<<<< HEAD
             G_fatal_error(_("Can't get projection info of current location"));
 
         if ((in_unit_info = G_get_projunits()) == NULL)
@@ -819,6 +820,8 @@ int main(int argc, char *argv[])
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
             G_fatal_error(_("Can't get projection info of current project"));
 
@@ -862,6 +865,9 @@ int main(int argc, char *argv[])
         tproj.def = NULL;
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         if (GPJ_init_transform(&iproj, &oproj, &tproj) < 0)
             G_fatal_error(_("Unable to initialize coordinate transformation"));
@@ -870,9 +876,12 @@ int main(int argc, char *argv[])
     if ((latin != NULL || longin != NULL) && (G_projection() == PROJECTION_LL))
         G_warning(_("latin and longin raster maps have no effect when in a "
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "Lat/Lon location"));
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                     "Lat/Lon project"));
 =======
@@ -881,6 +890,9 @@ int main(int argc, char *argv[])
 =======
                     "Lat/Lon location"));
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     /* true about longin= when civiltime is used? */
     /* civiltime needs longin= but not latin= for non-LL projections -
@@ -1754,8 +1766,11 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     double latitude, longitude;
     double coslat = 0.0;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     bool shouldBeBestAM = false;
     bool isBestAM = false;
@@ -1763,6 +1778,9 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
     struct SunGeometryConstDay sunGeom;
@@ -1892,9 +1910,12 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
     gridGeom, elevin, aspin, slopein, civiltime, linkein, albedo, latin,       \
     coefbh, coefdh, incidout, longin, horizon, beam_rad, insol_time, diff_rad, \
 <<<<<<< HEAD
+<<<<<<< HEAD
     refl_rad, glob_rad, mapset, per, decimals, str_step)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     refl_rad, glob_rad, mapset, per, decimals, str_step, shouldBeBestAM,       \
     isBestAM)
@@ -1904,6 +1925,9 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 =======
     refl_rad, glob_rad, mapset, per, decimals, str_step)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         {
 #pragma omp for schedule(dynamic) firstprivate(sunGeom, sunVarGeom,      \
@@ -2025,6 +2049,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
                     q1 = gridGeom.sinlat * cos_u * sin_v +
                          gridGeom.coslat * sin_u;
 <<<<<<< HEAD
+<<<<<<< HEAD
                     tan_lam_l = -cos_u * cos_v / q1;
                     sunSlopeGeom.longit_l = atan(tan_lam_l);
                     sunSlopeGeom.lum_C31_l = cos(latid_l) * sunGeom.cosdecl;
@@ -2077,6 +2102,8 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 
                     if (q1 != 0.0) {
@@ -2245,6 +2272,9 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
                     }
 
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                 } /* undefs */
             }

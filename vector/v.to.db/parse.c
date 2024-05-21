@@ -25,9 +25,12 @@ int parse_command_line(int argc, char *argv[])
     } parms;
     struct {
 <<<<<<< HEAD
+<<<<<<< HEAD
         struct Flag *p, *s, *t;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         struct Flag *h, *p, *s, *t;
 =======
@@ -36,6 +39,9 @@ int parse_command_line(int argc, char *argv[])
 =======
         struct Flag *p, *s, *t;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     } flags;
     char *desc;
@@ -83,8 +89,11 @@ int parse_command_line(int argc, char *argv[])
         _("insert new row for each category if doesn't exist yet"),
         _("area size"),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         _("compactness of an area, calculated as compactness = perimeter / (2 "
           "* sqrt(PI * area))"),
@@ -93,14 +102,23 @@ int parse_command_line(int argc, char *argv[])
 =======
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         _("compactness of an area, calculated as \n"
           "              compactness = perimeter / (2 * sqrt(PI * area))"),
         _("fractal dimension of boundary defining a polygon, calculated as \n"
           "              fd = 2 * (log(perimeter) / log(area))"),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
+=======
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
@@ -113,9 +131,12 @@ int parse_command_line(int argc, char *argv[])
         _("categories of areas on the left and right side of the boundary, "
           "'query_layer' is used for area category"),
 <<<<<<< HEAD
+<<<<<<< HEAD
         _("result of a database query for all records of the geometry"
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         _("result of a database query for all records of the geometry "
 =======
@@ -124,6 +145,9 @@ int parse_command_line(int argc, char *argv[])
 =======
         _("result of a database query for all records of the geometry"
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
           "(or geometries) from table specified by 'query_layer' option"),
         _("slope steepness of vector line or boundary"),
@@ -166,8 +190,11 @@ int parse_command_line(int argc, char *argv[])
     flags.p->suppress_required = YES;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     flags.h = G_define_flag();
     flags.h->key = 'h';
@@ -178,6 +205,9 @@ int parse_command_line(int argc, char *argv[])
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     flags.s = G_define_flag();
     flags.s->key = 's';

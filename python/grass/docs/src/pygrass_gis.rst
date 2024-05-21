@@ -15,14 +15,22 @@ GIS data directory, Location and Mapset. Details about the GRASS GIS
 database management (locations and mapsets) can be found in the `GRASS
 GIS 7 User's Manual: GRASS GIS Quickstart
 <<<<<<< HEAD
+<<<<<<< HEAD
 <https://grass.osgeo.org/grass-devel/manuals/helptext.html>`_.
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<https://grass.osgeo.org/grass-devel/manuals/helptext.html>`_.
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 <https://grass.osgeo.org/grass-devel/manuals/helptext.html>`_.
 =======
+>>>>>>> osgeo-main
 <https://grass.osgeo.org/grass80/manuals/helptext.html>`_.
 >>>>>>> 73a1a8ce38 (Programmer's manual: update GRASS GIS arch drawing (#1610))
 =======
@@ -34,6 +42,9 @@ GIS 7 User's Manual: GRASS GIS Quickstart
 =======
 <https://grass.osgeo.org/grass-devel/manuals/helptext.html>`_.
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
 .. _Region-label:

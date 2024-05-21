@@ -200,9 +200,12 @@ class DatabasePage(TitledPage):
         # text controls
         self.tgisdbase = self.MakeLabel(grassdatabase)
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.tlocation = self.MakeTextCtrl("newLocation")
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
         self.tlocation = self.MakeTextCtrl("newProject")
 =======
@@ -211,6 +214,9 @@ class DatabasePage(TitledPage):
 =======
         self.tlocation = self.MakeTextCtrl("newLocation")
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         self.tlocation.SetFocus()
 

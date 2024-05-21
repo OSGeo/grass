@@ -140,9 +140,12 @@ int display_lines(struct Map_info *Map, struct cat_list *Clist, int chcat,
 
 int draw_line(int ltype, int line, const struct line_pnts *Points,
 <<<<<<< HEAD
+<<<<<<< HEAD
               const struct line_cats *Cats, int chcat, double size,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
               const struct line_cats *Cats, int chcat, double size UNUSED,
 =======
@@ -151,6 +154,9 @@ int draw_line(int ltype, int line, const struct line_pnts *Points,
 =======
               const struct line_cats *Cats, int chcat, double size,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
               int default_width, const struct cat_list *Clist, SYMBOL *Symb,
               RGBA_Color *primary_color, int *n_points, int *n_lines,

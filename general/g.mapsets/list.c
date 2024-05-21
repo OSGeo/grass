@@ -6,11 +6,14 @@
 #include <grass/parson.h>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void list_available_mapsets(const char **mapset_name, int nmapsets,
                             const char *fs)
 {
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 // Function to initialize a JSON object with a mapsets array
 static JSON_Object *initialize_json_object(void)
@@ -22,6 +25,9 @@ static JSON_Object *initialize_json_object(void)
 void list_available_mapsets(const char **mapset_name, int nmapsets,
                             const char *fs)
 {
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     int n;
 
@@ -57,8 +63,11 @@ void list_available_mapsets(const char **mapset_name, int nmapsets,
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 // Function to serialize and print JSON object
 static void serialize_and_print_json_object(JSON_Value *root_value)
 {
@@ -94,6 +103,9 @@ void list_available_mapsets(const char **mapset_name, int nmapsets,
         fprintf(stdout, "%s", mapset_name[n]);
         if (n < nmapsets - 1) {
 =======
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 void list_accessible_mapsets(const char *fs)
 {
@@ -106,6 +118,10 @@ void list_accessible_mapsets(const char *fs)
         fprintf(stdout, "%s", name);
         if (G_get_mapset_name(n + 1)) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+>>>>>>> osgeo-main
 =======
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
 >>>>>>> osgeo-main

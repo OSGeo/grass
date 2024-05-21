@@ -27,9 +27,12 @@
 /* prototypes */
 static int test_table(void);
 <<<<<<< HEAD
+<<<<<<< HEAD
 static dbColumn *create_column(const char *name, const char *desctiption,
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 static dbColumn *create_column(const char *name, const char *description,
 =======
@@ -38,6 +41,9 @@ static dbColumn *create_column(const char *name, const char *desctiption,
 =======
 static dbColumn *create_column(const char *name, const char *desctiption,
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                                int sqltype);
 
@@ -187,9 +193,12 @@ dbColumn *create_column(const char *name, const char *description, int sqltype)
     db_set_value_double(&column->value, 10.5);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     db_set_column_description(column, desctiption);
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
     db_set_column_description(column, description);
 =======
@@ -198,6 +207,9 @@ dbColumn *create_column(const char *name, const char *description, int sqltype)
 =======
     db_set_column_description(column, desctiption);
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     db_set_column_host_type(column, 1);
     db_set_column_length(column, 8);

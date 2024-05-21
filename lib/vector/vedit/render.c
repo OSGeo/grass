@@ -34,13 +34,20 @@ static struct _state {
 
 static struct robject *draw_line(struct Map_info *, int, int);
 <<<<<<< HEAD
-static struct robject *draw_line_vertices(void);
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
 static struct robject *draw_line_vertices(void);
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+static struct robject *draw_line_vertices(void);
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+static struct robject *draw_line_vertices(void);
+=======
+>>>>>>> osgeo-main
 static struct robject *draw_line_vertices();
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -55,6 +62,9 @@ static struct robject *draw_line_vertices();
 static struct robject *draw_line_vertices(void);
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 static void draw_line_nodes(struct Map_info *, int, int, struct robject_list *);
 static int draw_line_dir(struct robject_list *, int);

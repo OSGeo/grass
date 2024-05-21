@@ -220,14 +220,22 @@ float variance(float *elevation, int pattern_size)
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 void radial2cartesian(PATTERN *pattern)
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void radial2cartesian(PATTERN *pattern)
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 void radial2cartesian(PATTERN *pattern)
 =======
+>>>>>>> osgeo-main
 int radial2cartesian(PATTERN *pattern)
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -242,6 +250,9 @@ int radial2cartesian(PATTERN *pattern)
 void radial2cartesian(PATTERN *pattern)
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     /* this function converts radial coordinates of geomorphon

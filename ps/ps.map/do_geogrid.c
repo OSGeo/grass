@@ -78,13 +78,20 @@ int do_geogrid(void)
     g = floor(north / grid) * grid;
     e1 = east;
 <<<<<<< HEAD
-    for (; g >= south; g -= grid) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     for (; g >= south; g -= grid) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (; g >= south; g -= grid) {
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (; g >= south; g -= grid) {
+=======
+>>>>>>> osgeo-main
     for (j = 0; g >= south; j++, g -= grid) {
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -99,6 +106,9 @@ int do_geogrid(void)
     for (; g >= south; g -= grid) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         if (g == north || g == south)
             continue;
@@ -129,13 +139,20 @@ int do_geogrid(void)
     g = floor(east / grid) * grid;
     n1 = north;
 <<<<<<< HEAD
-    for (; g > west; g -= grid) {
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     for (; g > west; g -= grid) {
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (; g > west; g -= grid) {
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    for (; g > west; g -= grid) {
+=======
+>>>>>>> osgeo-main
     for (j = 0; g > west; j++, g -= grid) {
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -150,6 +167,9 @@ int do_geogrid(void)
     for (; g > west; g -= grid) {
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
         if (g == east || g == west)
             continue;

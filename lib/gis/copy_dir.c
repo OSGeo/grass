@@ -80,14 +80,22 @@ int G_recursive_copy(const char *src, const char *dst)
         char buf[4096];
         int fd, fd2;
 <<<<<<< HEAD
+<<<<<<< HEAD
         ssize_t len, len2;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        ssize_t len, len2;
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
         ssize_t len, len2;
 =======
+>>>>>>> osgeo-main
         size_t len, len2;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -102,6 +110,9 @@ int G_recursive_copy(const char *src, const char *dst)
         ssize_t len, len2;
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         if (G_lstat(dst, &sb) == 0 && S_ISDIR(sb.st_mode)) {

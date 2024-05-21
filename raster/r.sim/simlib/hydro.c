@@ -121,14 +121,22 @@ void main_loop(void)
 
     int i, ii, l, k;
 <<<<<<< HEAD
+<<<<<<< HEAD
     /* int icoub, nmult */;
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /* int icoub, nmult */;
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
     /* int icoub, nmult */;
 =======
+>>>>>>> osgeo-main
     int icoub /*, nmult */;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -143,6 +151,9 @@ void main_loop(void)
     /* int icoub, nmult */;
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     int iw, iblock, lw;
     int itime, iter1;
@@ -165,13 +176,20 @@ void main_loop(void)
 
     nblock = 1;
 <<<<<<< HEAD
-    /* icoub = 0; */
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
 <<<<<<< HEAD
     /* icoub = 0; */
 =======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /* icoub = 0; */
+=======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    /* icoub = 0; */
+=======
+>>>>>>> osgeo-main
     icoub = 0;
 <<<<<<< HEAD
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
@@ -186,6 +204,9 @@ void main_loop(void)
     /* icoub = 0; */
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
     /* icfl = 0; */
     nstack = 0;
@@ -203,14 +224,22 @@ void main_loop(void)
 
     for (iblock = 1; iblock <= nblock; iblock++) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         /* ++icoub; */
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+        /* ++icoub; */
+=======
 =======
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
         /* ++icoub; */
 =======
+>>>>>>> osgeo-main
         ++icoub;
 >>>>>>> 6cf60c76a4 (wxpyimgview: explicit conversion to int (#2704))
 =======
@@ -225,6 +254,9 @@ void main_loop(void)
         /* ++icoub; */
 >>>>>>> 7409ab6716 (r.horizon manual - fix typo (#2794))
 >>>>>>> f130b43e6c (r.horizon manual - fix typo (#2794))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 
         lw = 0;
@@ -374,9 +406,12 @@ void main_loop(void)
 
                         if (zz[k][l] != UNDEF) {
 <<<<<<< HEAD
+<<<<<<< HEAD
                             if (infil != NULL) { /* infiltration part */
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
                             if (inf[k][l] != UNDEF) { /* infiltration part */
 =======
@@ -385,6 +420,9 @@ void main_loop(void)
 =======
                             if (infil != NULL) { /* infiltration part */
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
                                 if (inf[k][l] - si[k][l] > 0.) {
 

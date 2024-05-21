@@ -131,9 +131,12 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
 
     /*
 <<<<<<< HEAD
+<<<<<<< HEAD
      * every row of a rigth file has this layout
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
      * every row of a right file has this layout
 =======
@@ -142,6 +145,9 @@ int contrastWeightedEdgeDensity(int fd, char **par, struct area_entry *ad,
 =======
      * every row of a rigth file has this layout
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
      * CELL1,CELL2,dissimilarity
      */
@@ -703,9 +709,12 @@ int calculateF(int fd, struct area_entry *ad, Coppie *cc, long totCoppie,
 
 int addCoppia(Coppie *cc, generic_cell ce1, generic_cell ce2, double pe,
 <<<<<<< HEAD
+<<<<<<< HEAD
               long tc, long *siz)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
               long tc, long *siz UNUSED)
 =======
@@ -714,6 +723,9 @@ int addCoppia(Coppie *cc, generic_cell ce1, generic_cell ce2, double pe,
 =======
               long tc, long *siz)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
 {
     generic_cell cs;

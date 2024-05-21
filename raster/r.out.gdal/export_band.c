@@ -3,9 +3,12 @@
  * MODULE:       r.out.gdal
  * AUTHOR(S):    Vytautas Vebra <olivership@gmail.com>
 <<<<<<< HEAD
+<<<<<<< HEAD
  * PURPOSE:      Exports GRASS raster to GDAL suported formats;
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
  * PURPOSE:      Exports GRASS raster to GDAL supported formats;
 =======
@@ -14,6 +17,9 @@
 =======
  * PURPOSE:      Exports GRASS raster to GDAL suported formats;
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
  *               based on GDAL library.
  *

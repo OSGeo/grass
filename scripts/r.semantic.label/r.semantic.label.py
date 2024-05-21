@@ -58,11 +58,14 @@ def print_map_semantic_label(name, label_reader):
     try:
         with RasterRow(name) as rast:
 <<<<<<< HEAD
+<<<<<<< HEAD
             semantic_label = rast.info.semantic_label
             if semantic_label:
                 label_reader.print_info(semantic_label)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> osgeo-main
 <<<<<<< HEAD
 <<<<<<< HEAD:scripts/r.semantic.label/r.semantic.label.py
             semantic_label = rast.info.semantic_label
@@ -84,6 +87,9 @@ def print_map_semantic_label(name, label_reader):
             if semantic_label:
                 label_reader.print_info(semantic_label)
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             else:
                 gs.info(_("No semantic label assigned to <{}>").format(name))
@@ -116,6 +122,7 @@ def manage_map_semantic_label(name, semantic_label):
                 )
             try:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 rast.info.semantic_label = semantic_label
 =======
 <<<<<<< HEAD
@@ -123,6 +130,12 @@ def manage_map_semantic_label(name, semantic_label):
 <<<<<<< HEAD:scripts/r.semantic.label/r.semantic.label.py
                 rast.info.semantic_label = semantic_label
 =======
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD:scripts/r.semantic.label/r.semantic.label.py
+                rast.info.semantic_label = semantic_label
+=======
+>>>>>>> osgeo-main
                 rast.info.bandref = band_ref
 >>>>>>> da7f79c3f9 (libpython: Save and load benchmark results (#1711)):scripts/i.band/i.band.py
 =======
@@ -131,6 +144,9 @@ def manage_map_semantic_label(name, semantic_label):
 =======
                 rast.info.semantic_label = semantic_label
 >>>>>>> 8422103f4c (wxpyimgview: explicit conversion to int (#2704))
+<<<<<<< HEAD
+>>>>>>> osgeo-main
+=======
 >>>>>>> osgeo-main
             except GrassError as e:
                 gs.error(_("Unable to assign/dissociate semantic label. {}").format(e))
