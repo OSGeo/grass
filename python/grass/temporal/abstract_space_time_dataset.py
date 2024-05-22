@@ -2780,8 +2780,18 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Update the spatial and temporal extent from registered maps
         # Read the SQL template
+        template_suffix = ""
+        db_backend = dbif.get_dbmi().__name__
+        old_sqlite_version = (
+            db_backend == "sqlite3" and dbif.get_dbmi().sqlite_version_info < (3, 33)
+        )
+        if old_sqlite_version:
+            template_suffix = "_old"
         sql = open(
-            os.path.join(sql_path, "update_stds_spatial_temporal_extent_template.sql"),
+            os.path.join(
+                sql_path,
+                f"update_stds_spatial_temporal_extent_template{template_suffix}.sql",
+            ),
             "r",
         ).read()
         sql = sql.replace("GRASS_MAP", self.get_new_map_instance(None).get_type())
@@ -2795,7 +2805,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # Update type specific metadata
         sql = open(
             os.path.join(
-                sql_path, "update_" + self.get_type() + "_metadata_template.sql"
+                sql_path,
+                f"update_{self.get_type()}_metadata_template{template_suffix}.sql",
             ),
             "r",
         ).read()
@@ -2807,8 +2818,15 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 "-- number_of_semantic_labels =",
             )
             sql = sql.replace(
-                "count(distinct semantic_label)", "-- count(distinct semantic_label)"
+                "count(distinct semantic_label)",
+                "-- count(distinct semantic_label)",
             )
+        elif old_sqlite_version and self.get_type() == "strds":
+            semantic_label_sql = open(
+                os.path.join(sql_path, "update_strds_metadata_template_v3.sql"),
+                "r",
+            ).read()
+            sql = sql + "\n" + semantic_label_sql
 
         sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
         sql = sql.replace("SPACETIME_ID", self.base.get_id())
@@ -2854,7 +2872,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
             if row is not None:
                 # This seems to be a bug in sqlite3 Python driver
-                if dbif.get_dbmi().__name__ == "sqlite3":
+                # datetime format can be parsed if the connection is
+                # established with: detect_types=sqlite3.PARSE_DECLTYPES
+                if db_backend == "sqlite3":
                     tstring = row[0]
                     # Convert the unicode string into the datetime format
                     if self.is_time_absolute():
