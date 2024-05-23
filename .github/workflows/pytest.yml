@@ -7,9 +7,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 
 jobs:
   pytest:
@@ -29,9 +26,12 @@ jobs:
       fail-fast: true
 
     runs-on: ${{ matrix.os }}
+    env:
+      FORCE_COLOR: 1 # for software including pip: https://force-color.org/
+      CLICOLOR_FORCE: 1 # for other software including ninja: https://bixense.com/clicolors/
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
 
       - name: Set up Python
         uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
@@ -45,6 +45,8 @@ jobs:
           sudo apt-get install -y wget git gawk findutils
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
+
+      - uses: rui314/setup-mold@8de9eea54963d01c1a6c200606257d65bd53bea1 # v1
 
       - name: Install Python dependencies
         run: |
@@ -75,7 +77,7 @@ jobs:
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
           export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
-          pytest --numprocesses auto .
+          pytest --verbose --color=yes --durations=0 --durations-min=0.5 --numprocesses auto -ra .
 
       - name: Print installed versions
         if: always()

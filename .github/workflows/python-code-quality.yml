@@ -7,9 +7,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 
 jobs:
   python-checks:
@@ -28,8 +25,8 @@ jobs:
         include:
           - os: ubuntu-22.04
             python-version: "3.10"
-            min-python-version: "3.7"
-            black-version: "23.1.0"
+            min-python-version: "3.8"
+            black-version: "24.4.0"
             flake8-version: "3.9.2"
             pylint-version: "2.12.2"
             bandit-version: "1.7.8"
@@ -49,7 +46,7 @@ jobs:
           echo Pylint: ${{ matrix.pylint-version }}
           echo Bandit: ${{matrix.bandit-version}}
 
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
 
       - name: Set up Python
         uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
@@ -60,7 +57,7 @@ jobs:
         run: python -m pip install --upgrade pip
 
       - name: Install Black only
-        run: pip install black==${{ matrix.black-version }}
+        run: pip install black[jupyter]==${{ matrix.black-version }}
 
       - name: Run Black
         run: black .
@@ -102,13 +99,13 @@ jobs:
           bandit -c pyproject.toml -iii -r . -f sarif -o bandit.sarif --exit-zero
 
       - name: Upload Bandit Scan Results
-        uses: actions/upload-artifact@1746f4ab65b179e0ea60a494b83293b640dd5bba # v4.3.2
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: bandit.sarif
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@c7f9125735019aa87cfc361530512d50ea439c71 # v3.25.1
+        uses: github/codeql-action/upload-sarif@9fdb3e49720b44c48891d036bb502feb25684276 # v3.25.6
         with:
           sarif_file: bandit.sarif
 
@@ -120,15 +117,13 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> $GITHUB_ENV
 
+      - uses: rui314/setup-mold@8de9eea54963d01c1a6c200606257d65bd53bea1 # v1
       - name: Build
         run: .github/workflows/build_${{ matrix.os }}.sh $HOME/install
 
       - name: Add the bin directory to PATH
         run: |
           echo "$HOME/install/bin" >> $GITHUB_PATH
-
-      - name: Test executing of the grass command
-        run: .github/workflows/test_simple.sh
 
       - name: Run Pylint on grass package
         run: |
@@ -175,7 +170,7 @@ jobs:
           cp -rp dist.$ARCH/docs/html/libpython sphinx-grass
 
       - name: Make Sphinx documentation available
-        uses: actions/upload-artifact@1746f4ab65b179e0ea60a494b83293b640dd5bba # v4.3.2
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: sphinx-grass
           path: sphinx-grass

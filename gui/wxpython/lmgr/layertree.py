@@ -710,29 +710,40 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             # removed from layer tree
             #  if digitToolbar:
             # background vector map
-            # self.popupMenu.Append(self.popupID['bgmap'],
-            #                       text = _("Use as background vector map for digitizer"),
-            #                       kind = wx.ITEM_CHECK)
-            # self.Bind(wx.EVT_MENU, self.OnSetBgMap, id = self.popupID['bgmap'])
-            # if UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
-            #                     internal = True) == layer.GetName():
-            #     self.popupMenu.Check(self.popupID['bgmap'], True)
+            # self.popupMenu.Append(
+            #     self.popupID["bgmap"],
+            #     text=_("Use as background vector map for digitizer"),
+            #     kind=wx.ITEM_CHECK,
+            # )
+            # self.Bind(wx.EVT_MENU, self.OnSetBgMap, id = self.popupID["bgmap"])
+            # if (
+            #     UserSettings.Get(
+            #         group="vdigit", key="bgmap", subkey="value", internal=True
+            #     )
+            #     == layer.GetName()
+            # ):
+            #     self.popupMenu.Check(self.popupID["bgmap"], True)
 
             self.popupMenu.Append(self.popupID["topo"], _("Rebuild topology"))
             self.Bind(wx.EVT_MENU, self.OnTopology, id=self.popupID["topo"])
 
             # determine format
-            # if layer and layer.GetType() == 'vector':
-            #     if 'info' not in self.GetLayerInfo(self.layer_selected):
-            #         info = grass.parse_command('v.info',
-            #                                    flags = 'e',
-            #                                    map = layer.GetName())
-            #         self.SetLayerInfo(self.layer_selected, key = 'info', value = info)
-            #     info = self.GetLayerInfo(self.layer_selected, key = 'info')
-            #     if info and info['format'] != 'native' and \
-            #             info['format'].split(',')[1] == 'PostgreSQL':
-            #         self.popupMenu.Append(self.popupID['sql'], text = _("SQL Spatial Query"))
-            #         self.Bind(wx.EVT_MENU, self.OnSqlQuery, id = self.popupID['sql'])
+            # if layer and layer.GetType() == "vector":
+            #     if "info" not in self.GetLayerInfo(self.layer_selected):
+            #         info = grass.parse_command(
+            #                   "v.info", flags="e", map=layer.GetName()
+            #               )
+            #         self.SetLayerInfo(self.layer_selected, key="info", value=info)
+            #     info = self.GetLayerInfo(self.layer_selected, key="info")
+            #     if (
+            #         info
+            #         and info["format"] != "native"
+            #         and info["format"].split(",")[1] == "PostgreSQL"
+            #     ):
+            #         self.popupMenu.Append(
+            #             self.popupID["sql"], text=_("SQL Spatial Query")
+            #         )
+            #         self.Bind(wx.EVT_MENU, self.OnSqlQuery, id=self.popupID["sql"])
 
             if layer.GetMapset() != currentMapset:
                 # only vector map in current mapset can be edited
@@ -1857,6 +1868,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         vselect = self._giface.GetMapDisplay().GetDialog("vselect")
         if vselect:
             vselect.Reset()
+
+        self.AdjustMyScrollbars()
 
     def OnCmdChanged(self, event):
         """Change command string"""

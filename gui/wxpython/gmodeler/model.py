@@ -17,6 +17,7 @@ Classes:
  - model::ModelComment
  - model::ProcessModelFile
  - model::WriteModelFile
+ - model::WriteActiniaFile
  - model::WritePyWPSFile
  - model::WritePythonFile
  - model::ModelParamDialog
@@ -27,7 +28,7 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Martin Landa <landa.martin gmail.com>
-@PyWPS, Python parameterization Ondrej Pesek <pesej.ondrek gmail.com>
+@actinia, PyWPS, Python parameterization Ondrej Pesek <pesej.ondrek gmail.com>
 """
 
 import os
@@ -67,7 +68,11 @@ from grass.script import task as gtask
 class Model:
     """Class representing the model"""
 
-    def __init__(self, canvas=None):
+    def __init__(
+        self,
+        giface,
+        canvas=None,
+    ):
         self.items = list()  # list of ordered items (action/loop/condition)
 
         # model properties
@@ -81,6 +86,7 @@ class Model:
         self.variablesParams = dict()
 
         self.canvas = canvas
+        self._giface = giface
 
     def GetCanvas(self):
         """Get canvas or None"""
@@ -662,7 +668,9 @@ class Model:
         params = self.Parameterize()
         delInterData = False
         if params:
-            dlg = ModelParamDialog(parent=parent, model=self, params=params)
+            dlg = ModelParamDialog(
+                parent=parent, model=self, params=params, giface=self._giface
+            )
             dlg.CenterOnParent()
 
             ret = dlg.ShowModal()
@@ -2636,6 +2644,7 @@ class WriteScriptFile(ABC):
         self.fd = None
         self.model = None
         self.indent = None
+        self.grassAPI = None
 
         # call method_write...()
 
@@ -2701,12 +2710,17 @@ class WriteScriptFile(ABC):
         for line in item.GetLabel().splitlines():
             self.fd.write("#" + line + "\n")
 
+    def _getParamName(self, parameter_name, item):
+        return "{module_nickname}_{param_name}".format(
+            module_nickname=self._getModuleNickname(item),
+            param_name=parameter_name,
+        )
+
     @staticmethod
-    def _getParamName(parameter_name, item):
-        return "{module_name}{module_id}_{param_name}".format(
+    def _getModuleNickname(item):
+        return "{module_name}{module_id}".format(
             module_name=re.sub("[^a-zA-Z]+", "", item.GetLabel()),
             module_id=item.GetId(),
-            param_name=parameter_name,
         )
 
     def _getItemFlags(self, item, opts, variables):
@@ -2741,6 +2755,155 @@ class WriteScriptFile(ABC):
         item_parameterized_flags = ", ".join(item_parameterized_flags)
 
         return item_true_flags, item_parameterized_flags, item_params
+
+
+class WriteActiniaFile(WriteScriptFile):
+    """Class for exporting model to an actinia script."""
+
+    def __init__(self, fd, model, grassAPI=None):
+        """Class for exporting model to actinia script."""
+        self.fd = fd
+        self.model = model
+        self.indent = 2
+
+        self._writeActinia()
+
+    def _writeActinia(self):
+        """Write actinia model to file."""
+        properties = self.model.GetProperties()
+
+        description = properties["description"]
+
+        self.fd.write(
+            f"""{{
+{' ' * self.indent * 1}"id": "model",
+{' ' * self.indent * 1}"description": "{'""'.join(description.splitlines())}",
+{' ' * self.indent * 1}"version": "1",
+"""
+        )
+
+        parameterized = False
+        module_list_str = ""
+        for item in self.model.GetItems(ModelAction):
+            parameterizedParams = item.GetParameterizedParams()
+            if len(parameterizedParams["params"]) > 0:
+                parameterized = True
+
+            module_list_str += self._getPythonAction(item, parameterizedParams)
+            module_list_str += f"{' ' * self.indent * 3}}},\n"
+
+        if parameterized is True:
+            self.fd.write(f'{" " * self.indent * 1}"template": {{\n')
+            self.fd.write(
+                f"""{' ' * self.indent * 2}"list": [
+    """
+            )
+        else:
+            self.fd.write(
+                f"""{' ' * self.indent}"list": [
+    """
+            )
+
+        # module_list_str[:-2] to get rid of the trailing comma and newline
+        self.fd.write(module_list_str[:-2] + "\n")
+
+        if parameterized is True:
+            self.fd.write(f"{' ' * self.indent * 2}]\n{' ' * self.indent * 1}}}\n}}")
+        else:
+            self.fd.write(f"{' ' * self.indent * 1}]\n}}")
+
+    def _getPythonAction(self, item, variables={}, intermediates=None):
+        """Write model action to Python file"""
+        task = GUI(show=None).ParseCommand(cmd=item.GetLog(string=False))
+        strcmd = f"{' ' * self.indent * 3}{{\n"
+
+        return (
+            strcmd + self._getPythonActionCmd(item, task, len(strcmd), variables) + "\n"
+        )
+
+    def _getPythonActionCmd(self, item, task, cmdIndent, variables={}):
+        opts = task.get_options()
+
+        ret = ""
+        parameterizedParams = [v["name"] for v in variables["params"]]
+
+        flags, itemParameterizedFlags, params = self._getItemFlags(
+            item, opts, variables
+        )
+        inputs = []
+        outputs = []
+
+        if len(itemParameterizedFlags) > 0:
+            dlg = wx.MessageDialog(
+                self.model.canvas,
+                message=_(
+                    f"Module {task.get_name()} in your model contains "
+                    f"parameterized flags. actinia does not support "
+                    f"parameterized flags. The following flags are therefore "
+                    f"not being written in the generated json: "
+                    f"{itemParameterizedFlags}"
+                ),
+                caption=_("Warning"),
+                style=wx.OK_DEFAULT | wx.ICON_WARNING,
+            )
+            dlg.ShowModal()
+            dlg.Destroy()
+
+        for p in opts["params"]:
+            name = p.get("name", None)
+            value = p.get("value", None)
+
+            if (name and value) or (name in parameterizedParams):
+
+                if name in parameterizedParams:
+                    parameterizedParam = self._getParamName(name, item)
+                    default_val = p.get("value", "")
+
+                    if len(default_val) > 0:
+                        parameterizedParam += f"|default({default_val})"
+
+                    value = f"{{{{ {parameterizedParam} }}}}"
+
+                param_string = f'{{"param": "{name}", "value": "{value}"}}'
+                age = p.get("age", "old")
+                if age == "new":
+                    outputs.append(param_string)
+                else:
+                    inputs.append(param_string)
+
+        ret += f'{" " * self.indent * 4}"module": "{task.get_name()}",\n'
+        ret += f'{" " * self.indent * 4}"id": "{self._getModuleNickname(item)}",\n'
+
+        # write flags
+        if flags:
+            ret += f'{" " * self.indent * 4}"flags": "{flags}",\n'
+
+        # write inputs and outputs
+        if len(inputs) > 0:
+            ret += self.write_params("inputs", inputs)
+        else:
+            ret += "}"
+
+        if len(outputs) > 0:
+            ret += self.write_params("outputs", outputs)
+
+        # ret[:-2] to get rid of the trailing comma and newline
+        # (to make the json valid)
+        return ret[:-2]
+
+    def write_params(self, param_type, params):
+        """Write the full list of parameters of one type.
+
+        :param param_type: type of parameters (inputs or outputs)
+        :params: list of the parameters
+        """
+        ret = f'{" " * self.indent * 4}"{param_type}": [\n'
+        for opt in params[:-1]:
+            ret += f"{' ' * self.indent * 5}{opt},\n"
+        ret += f"{' ' * self.indent * 5}{params[-1]}\n"
+        ret += f"{' ' * self.indent * 4}],\n"
+
+        return ret
 
 
 class WritePyWPSFile(WriteScriptFile):
@@ -2783,10 +2946,10 @@ class Model(Process):
         inputs = list()
         outputs = list()
 
-"""
+"""  # noqa: E501
         )
 
-        for item in self.model.GetItems():
+        for item in self.model.GetItems(ModelAction):
             self._write_input_outputs(item, self.model.GetIntermediateData()[:3])
 
         self.fd.write(
@@ -3474,6 +3637,7 @@ class ModelParamDialog(wx.Dialog):
         self,
         parent,
         model,
+        giface,
         params,
         id=wx.ID_ANY,
         title=_("Model parameters"),
@@ -3483,6 +3647,7 @@ class ModelParamDialog(wx.Dialog):
         """Model parameters dialog"""
         self.parent = parent
         self._model = model
+        self._giface = giface
         self.params = params
         self.tasks = list()  # list of tasks/pages
 
@@ -3571,7 +3736,9 @@ class ModelParamDialog(wx.Dialog):
             parent=self,
             id=wx.ID_ANY,
             task=task,
-            giface=GraphicalModelerGrassInterface(self._model),
+            giface=GraphicalModelerGrassInterface(
+                model=self._model, giface=self._giface
+            ),
         )
         self.tasks.append(task)
 

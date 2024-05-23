@@ -9,9 +9,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 env:
   CACHE_NUMBER: 0
 concurrency:
@@ -38,7 +35,7 @@ jobs:
           /usr/bin/sudo /usr/bin/find /usr/local /opt/homebrew -mindepth 1 -maxdepth 1 \
             -type f -print -delete
           hash -r
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       - name: Setup Mamba
         uses: mamba-org/setup-micromamba@422500192359a097648154e8db4e39bdb6c6eed7 # v1.8.1
         with:
@@ -74,7 +71,7 @@ jobs:
                        nc_spm_full_v2alpha2.tar.gz"
       - name: Make HTML test report available
         if: ${{ always() }}
-        uses: actions/upload-artifact@1746f4ab65b179e0ea60a494b83293b640dd5bba # v4.3.2
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: testreport-macOS
           path: testreport

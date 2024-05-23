@@ -1,5 +1,6 @@
 """!
-@brief WMS, WMTS and NASA OnEarth drivers implemented in GRASS using GDAL Python bindings.
+@brief WMS, WMTS and NASA OnEarth drivers implemented in GRASS using GDAL Python
+bindings.
 
 List of classes:
  - srs.py::Srs
@@ -9,8 +10,10 @@ List of classes:
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
-@author Stepan Turek <stepan.turek seznam.cz> (Based on code from OWSLib - Copyright below)
+@author Stepan Turek <stepan.turek seznam.cz> (Based on code from OWSLib - Copyright
+        below)
 """
+
 # -*- coding: ISO-8859-15 -*-
 # =============================================================================
 # Copyright (c) 2011 Tom Kralidis

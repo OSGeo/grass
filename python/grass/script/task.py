@@ -17,6 +17,7 @@ for details.
 
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
+
 import os
 import re
 import sys
@@ -146,9 +147,6 @@ class grassTask:
                 continue
             if isinstance(val, (list, tuple)):
                 if value in val:
-                    return p
-            elif isinstance(val, (bytes, str)):
-                if p[element][: len(value)] == value:
                     return p
             else:
                 if p[element] == value:
