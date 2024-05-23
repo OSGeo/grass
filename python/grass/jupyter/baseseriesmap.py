@@ -45,8 +45,8 @@ class BaseSeriesMap:
         self._height = height
 
         self._slider_description = ""
-        self._labels = None
-        self._indices = None
+        self._labels = []
+        self._indices = []
 
         # Create a temporary directory for our PNG images
         # Resource managed by weakref.finalize.

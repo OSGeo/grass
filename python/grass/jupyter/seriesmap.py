@@ -115,6 +115,7 @@ class SeriesMap(BaseSeriesMap):
         if not self._labels:
             self._labels = rasters
         self._layers_rendered = False
+        self._indices = range(len(self._labels))
 
     def add_vectors(self, vectors, **kwargs):
         """
@@ -141,6 +142,7 @@ class SeriesMap(BaseSeriesMap):
         if not self._labels:
             self._labels = vectors
         self._layers_rendered = False
+        self._indices = range(len(self._labels))
 
     def add_names(self, names):
         """Add list of names associated with layers.
@@ -149,6 +151,7 @@ class SeriesMap(BaseSeriesMap):
             "Number of vectors in series must match number of vectors"
         )
         self._labels = names
+        self._indices = range(len(self._labels))
 
     def render(self):
         """Renders image for each raster in series.
