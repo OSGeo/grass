@@ -59,10 +59,11 @@ int main(int argc, char *argv[])
     int formats;
     const char *epsg = NULL;
 
+    /* We don't call G_gisinit() here because it validates the
+     * mapset, whereas this module may legitimately be used
+     * (to create a new location) when none exists. */
     G_set_program_name(argv[0]);
-    G_no_gisinit(); /* We don't call G_gisinit() here because it validates the
-                     * mapset, whereas this module may legitmately be used
-                     * (to create a new location) when none exists */
+    G_no_gisinit();
 
     module = G_define_module();
     G_add_keyword(_("general"));

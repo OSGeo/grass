@@ -9,9 +9,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 env:
   CACHE_NUMBER: 0
 concurrency:
@@ -38,7 +35,7 @@ jobs:
           /usr/bin/sudo /usr/bin/find /usr/local /opt/homebrew -mindepth 1 -maxdepth 1 \
             -type f -print -delete
           hash -r
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       - name: Setup Mamba
         uses: mamba-org/setup-micromamba@422500192359a097648154e8db4e39bdb6c6eed7 # v1.8.1
         with:
