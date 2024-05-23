@@ -202,6 +202,7 @@ class TimeSeriesMap(BaseSeriesMap):
         }
         # Update Region
         self._region_manager.set_region_from_timeseries(self.baseseries)
+        self._indices = self._labels
 
     def add_vector_series(self, baseseries, fill_gaps=False):
         """
@@ -224,6 +225,7 @@ class TimeSeriesMap(BaseSeriesMap):
         }
         # Update Region
         self._region_manager.set_region_from_timeseries(self.baseseries)
+        self._indices = self._labels
 
     def d_legend(self, **kwargs):
         """Display legend.
