@@ -76,27 +76,18 @@ class HistoryBrowserNode(DictFilterNode):
         if day == OLD_DATE:
             return _("No time info")
 
-        month_name = day.strftime("%B")
+        base_date = day.strftime("%B {day_number}").format(day_number=day.day)
+
         if day == current_date:
-            return _("{month_name} {day_number} (today)").format(
-                month_name=month_name, day_number=day.day
-            )
+            return _("{base_date} (today)").format(base_date=base_date)
         elif day == current_date - datetime.timedelta(days=1):
-            return _("{month_name} {day_number} (yesterday)").format(
-                month_name=month_name, day_number=day.day
-            )
+            return _("{base_date} (yesterday)").format(base_date=base_date)
         elif day >= (current_date - datetime.timedelta(days=current_date.weekday())):
-            return _("{month_name} {day_number} (this week)").format(
-                month_name=month_name, day_number=day.day
-            )
+            return _("{base_date} (this week)").format(base_date=base_date)
         elif day.year == current_date.year:
-            return _("{month_name} {day_number}").format(
-                month_name=month_name, day_number=day.day
-            )
+            return _("{base_date}").format(base_date=base_date)
         else:
-            return _("{month_name} {day_number}, {year}").format(
-                month_name=month_name, day_number=day.day, year=day.year
-            )
+            return _("{base_date}, {year}").format(base_date=base_date, year=day.year)
 
 
 class HistoryBrowserTree(CTreeView):
