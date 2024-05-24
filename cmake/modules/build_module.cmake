@@ -12,7 +12,7 @@ include(GenerateExportHeader)
 function(build_module)
   cmake_parse_arguments(
     G
-    "EXE"
+    "EXE;NO_DOCS"
     "NAME;SRC_DIR;SRC_REGEX;RUNTIME_OUTPUT_DIR;PACKAGE;HTML_FILE_NAME"
     "SOURCES;INCLUDES;DEPENDS;OPTIONAL_DEPENDS;PRIMARY_DEPENDS;DEFS;HEADERS;TEST_SOURCES"
     ${ARGN})
@@ -42,7 +42,8 @@ function(build_module)
 
   foreach(G_HEADER ${G_HEADERS})
     if(EXISTS "${G_SRC_DIR}/${G_HEADER}")
-      file(COPY ${G_SRC_DIR}/${G_HEADER} DESTINATION "${GISBASE}/include/grass")
+      file(COPY ${G_SRC_DIR}/${G_HEADER}
+           DESTINATION "${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass")
     else()
       file(
         GLOB header_list_from_glob
@@ -51,10 +52,12 @@ function(build_module)
       if(NOT header_list_from_glob)
         message(
           FATAL_ERROR
-            "MUST copy '${G_SRC_DIR}/${G_HEADER}' to ${GISBASE}/include/grass")
+            "MUST copy '${G_SRC_DIR}/${G_HEADER}' to ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass"
+        )
       endif()
       foreach(header_I ${header_list_from_glob})
-        file(COPY ${header_I} DESTINATION "${GISBASE}/include/grass")
+        file(COPY ${header_I}
+             DESTINATION "${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass")
       endforeach()
     endif()
   endforeach()
@@ -83,15 +86,15 @@ function(build_module)
   set(install_dest "")
   if(NOT G_RUNTIME_OUTPUT_DIR)
     if(G_EXE)
-      set(G_RUNTIME_OUTPUT_DIR "${GISBASE}/bin")
-      set(install_dest "bin")
+      set(G_RUNTIME_OUTPUT_DIR "${OUTDIR}/${GRASS_INSTALL_BINDIR}")
+      set(install_dest "${GRASS_INSTALL_BINDIR}")
     else()
-      set(G_RUNTIME_OUTPUT_DIR "${GISBASE}/lib")
-      set(install_dest "lib")
+      set(G_RUNTIME_OUTPUT_DIR "${OUTDIR}/${GRASS_INSTALL_LIBDIR}")
+      set(install_dest "${GRASS_INSTALL_LIBDIR}")
     endif()
   else()
     set(install_dest "${G_RUNTIME_OUTPUT_DIR}")
-    set(G_RUNTIME_OUTPUT_DIR "${GISBASE}/${install_dest}")
+    set(G_RUNTIME_OUTPUT_DIR "${OUTDIR}/${install_dest}")
   endif()
 
   if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
@@ -124,7 +127,10 @@ function(build_module)
       PROPERTIES FOLDER lib
                  VERSION ${GRASS_VERSION_NUMBER}
                  SOVERSION ${GRASS_VERSION_MAJOR})
-    set(export_file_name "${GISBASE}/include/export/${G_NAME}_export.h")
+
+    # TODO: check when and where the export header files are needed
+    set(export_file_name
+        "${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/export/${G_NAME}_export.h")
     # Default is to use library target name without grass_ prefix
     string(REPLACE "grass_" "" default_html_file_name ${G_NAME})
     set(PGM_NAME ${default_html_file_name})
@@ -196,9 +202,9 @@ function(build_module)
       if(interface_def)
         target_compile_definitions(${G_NAME} PRIVATE "${interface_def}")
       endif()
-      target_link_libraries(${G_NAME} ${dep})
+      target_link_libraries(${G_NAME} PRIVATE ${dep})
     elseif(OpenMP_C_FOUND)
-      target_link_libraries(${G_NAME} OpenMP::OpenMP_C)
+      target_link_libraries(${G_NAME} PRIVATE OpenMP::OpenMP_C)
     endif()
   endforeach()
 
@@ -210,42 +216,31 @@ function(build_module)
     endif()
   endif()
 
-  if(WITH_DOCS)
+  set(G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
+  set(html_file_search ${G_SRC_DIR}/${G_HTML_FILE_NAME})
+  if(NOT G_NO_DOCS AND NOT EXISTS ${html_file_search})
+    set(G_NO_DOCS YES)
+  endif()
 
-    set(G_HTML_FILE_NAME "${HTML_FILE_NAME}.html")
-
-    set(html_file ${G_SRC_DIR}/${G_HTML_FILE_NAME})
+  if(WITH_DOCS AND NOT G_NO_DOCS)
     set(HTML_FILE)
-    set(no_docs_list "grass_sqlp;echo;clean_temp;lock;run")
-
-    if(EXISTS ${html_file})
-      set(HTML_FILE ${html_file})
-      install(FILES ${GISBASE}/docs/html/${G_HTML_FILE_NAME}
-              DESTINATION docs/html)
-    else()
-      file(GLOB html_files ${G_SRC_DIR}/*.html)
-      if(html_files)
-        if(NOT ${target_name} IN_LIST no_docs_list)
-          message(
-            FATAL_ERROR
-              "${html_file} does not exists. ${G_SRC_DIR} \n ${G_RUNTIME_OUTPUT_DIR} | ${target_name}"
-          )
-        endif()
-      endif()
+    if(EXISTS ${html_file_search})
+      set(HTML_FILE ${html_file_search})
+      install(FILES ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${G_HTML_FILE_NAME}
+              DESTINATION ${GRASS_INSTALL_DOCDIR})
     endif()
 
     if(NOT HTML_FILE)
       return()
     endif()
-    # message("HTML_FILE=${HTML_FILE}")
 
     get_filename_component(HTML_FILE_NAME ${HTML_FILE} NAME)
     get_filename_component(PGM_SOURCE_DIR ${HTML_FILE} PATH)
 
     string(REPLACE ".html" "" PGM_NAME "${HTML_FILE_NAME}")
     string(REPLACE ".html" ".tmp.html" TMP_HTML_NAME ${HTML_FILE_NAME})
-    set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${TMP_HTML_NAME})
-    set(OUT_HTML_FILE ${GISBASE}/docs/html/${HTML_FILE_NAME})
+    set(TMP_HTML_FILE ${CMAKE_CURRENT_BINARY_DIR}/${TMP_HTML_NAME})
+    set(OUT_HTML_FILE ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/${HTML_FILE_NAME})
 
     set(PGM_EXT "")
     if(WIN32)
@@ -253,27 +248,36 @@ function(build_module)
     endif()
 
     if(RUN_HTML_DESCR)
-      set(html_descr_command ${G_NAME}${PGM_EXT} --html-description)
+      set(html_descr_command
+          ${G_NAME}${PGM_EXT} --html-description < /dev/null | grep -v
+          '</body>\|</html>\|</div> <!-- end container -->')
     else()
       set(html_descr_command ${CMAKE_COMMAND} -E echo)
     endif()
 
-    file(GLOB IMG_FILES ${G_SRC_DIR}/*.png ${G_SRC_DIR}/*.jpg)
+    file(
+      GLOB IMG_FILES
+      LIST_DIRECTORIES FALSE
+      ${G_SRC_DIR}/*.png ${G_SRC_DIR}/*.jpg)
     if(IMG_FILES)
       set(copy_images_command ${CMAKE_COMMAND} -E copy ${IMG_FILES}
-                              ${GISBASE}/docs/html/)
+                              ${OUTDIR}/${GRASS_INSTALL_DOCDIR})
+      install(FILES ${IMG_FILES} DESTINATION ${GRASS_INSTALL_DOCDIR})
     endif()
 
     add_custom_command(
       TARGET ${G_NAME}
       POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy ${G_SRC_DIR}/${G_HTML_FILE_NAME}
+              ${CMAKE_CURRENT_BINARY_DIR}/${G_HTML_FILE_NAME}
       COMMAND ${grass_env_command} ${html_descr_command} > ${TMP_HTML_FILE}
       COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${MKHTML_PY} ${PGM_NAME}
               > ${OUT_HTML_FILE}
       COMMAND ${copy_images_command}
       COMMAND ${CMAKE_COMMAND} -E remove ${TMP_HTML_FILE}
+              ${CMAKE_CURRENT_BINARY_DIR}/${G_HTML_FILE_NAME}
       COMMENT "Creating ${OUT_HTML_FILE}")
-
+    install(FILES ${OUT_HTML_FILE} DESTINATION ${GRASS_INSTALL_DOCDIR})
   endif() # WITH_DOCS
 
   foreach(test_SOURCE ${G_TEST_SOURCES})

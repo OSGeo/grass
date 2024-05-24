@@ -12,6 +12,7 @@ build_module(
   grass_gproj
   DEPENDS
   grass_driver
+  grass_gis
   GDAL
   ZLIB
   PROJ

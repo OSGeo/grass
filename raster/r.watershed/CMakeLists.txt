@@ -5,8 +5,10 @@ build_program_in_subdir(
   grass_raster
   grass_btree2
   grass_gmath
+  LIBM
   RUNTIME_OUTPUT_DIR
-  etc/r.watershed)
+  ${GRASS_INSTALL_ETCBINDIR}/r.watershed
+  NO_DOCS)
 
 build_program_in_subdir(
   seg
@@ -15,7 +17,9 @@ build_program_in_subdir(
   grass_raster
   grass_gmath
   grass_segment
+  LIBM
   RUNTIME_OUTPUT_DIR
-  etc/r.watershed)
+  ${GRASS_INSTALL_ETCBINDIR}/r.watershed
+  NO_DOCS)
 
 build_program_in_subdir(front NAME r.watershed DEPENDS grass_gis grass_raster)

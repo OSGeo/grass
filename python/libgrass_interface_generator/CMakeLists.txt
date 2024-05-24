@@ -62,11 +62,13 @@ foreach(module ${MODULES})
     message(FATAL_ERROR "${module}_HDRS is not set")
   endif()
 
+#[[
   foreach(${module}_LIB ${${module}_LIBS})
     if(NOT TARGET ${${module}_LIB})
       message(FATAL_ERROR "${${module}_LIB} is not a target")
     endif()
   endforeach()
+]]
 
   if(NOT ${module}_TARGET_NAME)
     list(GET ${module}_LIBS 0 first_lib)
@@ -77,22 +79,31 @@ foreach(module ${MODULES})
     message(FATAL_ERROR "${${module}_TARGET_NAME} is not set")
   endif()
 
-  set(output_file "${GISBASE}/etc/python/grass/lib/${module}.py")
+  set(LIBS_VERSIONED ${${module}_LIBS})
+  list(TRANSFORM LIBS_VERSIONED APPEND .${GRASS_VERSION_NUMBER})
 
+  set(output_file "${OUTDIR}/${GRASS_INSTALL_PYDIR}/grass/lib/${module}.py")
   add_custom_command(
     OUTPUT ${output_file}
     DEPENDS ${${module}_LIBS}
     COMMAND
       ${CMAKE_COMMAND} -DCTYPESGEN_PY=${CMAKE_CURRENT_SOURCE_DIR}/run.py
       -DPython_EXECUTABLE=${Python_EXECUTABLE} -DCOMPILER=${CMAKE_C_COMPILER}
-      -DBIN_DIR=${GISBASE} "-DHDRS=${${module}_HDRS}" "-DLIBS=${${module}_LIBS}"
-      -DOUT_FILE=${output_file} -DGRASS_VERSION_NUMBER=${GRASS_VERSION_NUMBER}
-      -P ${CMAKE_SOURCE_DIR}/cmake/ctypesgen.cmake
+      "-DHDRS=${${module}_HDRS}" "-DLIBS=${LIBS_VERSIONED}" -DOUTDIR=${OUTDIR}
+      -DGRASS_INSTALL_INCLUDEDIR=${GRASS_INSTALL_INCLUDEDIR}
+      -DGRASS_INSTALL_SCRIPTDIR=${GRASS_INSTALL_SCRIPTDIR}
+      -DGRASS_INSTALL_DEMODIR=${GRASS_INSTALL_DEMODIR}
+      -DGRASS_INSTALL_LIBDIR=${GRASS_INSTALL_LIBDIR}
+      -DRUNTIME_GISBASE=${RUNTIME_GISBASE} -DOUT_FILE=${output_file}
+      -DGRASS_VERSION_NUMBER=${GRASS_VERSION_NUMBER}
+      -DGRASS_VERSION_MAJOR=${GRASS_VERSION_MAJOR}
+      -DGRASS_VERSION_MINOR=${GRASS_VERSION_MINOR} -P
+      ${CMAKE_SOURCE_DIR}/cmake/ctypesgen.cmake
     COMMENT "Generating ${output_file}"
     VERBATIM)
 
   add_custom_target(${${module}_TARGET_NAME} ALL DEPENDS ${output_file})
   set_target_properties(${${module}_TARGET_NAME} PROPERTIES FOLDER lib/python)
-  install(FILES ${output_file} DESTINATION etc/python/grass/lib)
+  install(FILES ${output_file} DESTINATION ${GRASS_INSTALL_PYDIR}/grass/lib)
 
 endforeach()

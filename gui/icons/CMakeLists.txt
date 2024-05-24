@@ -4,48 +4,58 @@ file(GLOB FLAGS_ICONS "flags/*.png")
 
 add_custom_target(
   make_gui_icons_dirs
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/gui/icons/grass
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/gui/icons/flags
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/docs/html/icons
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/gui/images/symbols)
+  COMMAND ${CMAKE_COMMAND} -E make_directory
+          ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/icons/grass
+  COMMAND ${CMAKE_COMMAND} -E make_directory
+          ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/icons/flags
+  COMMAND ${CMAKE_COMMAND} -E make_directory
+          ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/icons
+  COMMAND ${CMAKE_COMMAND} -E make_directory
+          ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/symbols)
 
 set(output_icons)
 foreach(ICON ${GUI_ICONS})
   get_filename_component(FILE_NAME ${ICON} NAME)
   add_custom_command(
-    OUTPUT ${GISBASE}/gui/icons/${FILE_NAME}
-    COMMAND ${CMAKE_COMMAND} -E copy ${ICON} ${GISBASE}/gui/icons/)
-  list(APPEND output_icons ${GISBASE}/gui/icons/${FILE_NAME})
+    OUTPUT ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/icons/${FILE_NAME}
+    COMMAND ${CMAKE_COMMAND} -E copy ${ICON}
+            ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/icons)
+  list(APPEND output_icons ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/icons/${FILE_NAME})
 endforeach()
 
 foreach(ICON ${GRASS_ICONS})
   get_filename_component(FILE_NAME ${ICON} NAME)
   add_custom_command(
-    OUTPUT ${GISBASE}/gui/icons/grass/${FILE_NAME}
-    COMMAND ${CMAKE_COMMAND} -E copy ${ICON} ${GISBASE}/gui/icons/grass/)
-  list(APPEND output_icons ${GISBASE}/gui/icons/grass/${FILE_NAME})
+    OUTPUT ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/icons/grass/${FILE_NAME}
+    COMMAND ${CMAKE_COMMAND} -E copy ${ICON}
+            ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/icons/grass)
+  list(APPEND output_icons
+       ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/icons/grass/${FILE_NAME})
 
   add_custom_command(
-    OUTPUT ${GISBASE}/docs/html/icons/${FILE_NAME}
-    COMMAND ${CMAKE_COMMAND} -E copy ${ICON} ${GISBASE}/docs/html/icons/)
-  list(APPEND output_icons ${GISBASE}/docs/html/icons/${FILE_NAME})
+    OUTPUT ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/icons/${FILE_NAME}
+    COMMAND ${CMAKE_COMMAND} -E copy ${ICON}
+            ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/icons)
+  list(APPEND output_icons ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/icons/${FILE_NAME})
 endforeach()
 
 foreach(ICON ${FLAGS_ICONS})
   get_filename_component(FILE_NAME ${ICON} NAME)
   add_custom_command(
-    OUTPUT ${GISBASE}/gui/icons/flags/${FILE_NAME}
-    COMMAND ${CMAKE_COMMAND} -E copy ${ICON} ${GISBASE}/gui/icons/flags/)
-  list(APPEND output_icons ${GISBASE}/gui/icons/flags/${FILE_NAME})
+    OUTPUT ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/icons/flags/${FILE_NAME}
+    COMMAND ${CMAKE_COMMAND} -E copy ${ICON}
+            ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/icons/flags)
+  list(APPEND output_icons
+       ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/icons/flags/${FILE_NAME})
 endforeach()
 
 add_custom_target(gui_icons DEPENDS make_gui_icons_dirs ${output_icons})
 
-install(FILES ${GUI_ICONS} DESTINATION gui/icons)
-install(FILES ${GRASS_ICONS} DESTINATION gui/icons/grass)
-install(FILES ${FLAGS_ICONS} DESTINATION gui/icons/flags)
-install(FILES ${GRASS_ICONS} DESTINATION docs/html/icons)
-install(FILES grass.desktop DESTINATION share/applications)
+install(FILES ${GUI_ICONS} DESTINATION ${GRASS_INSTALL_GUIDIR}/icons)
+install(FILES ${GRASS_ICONS} DESTINATION ${GRASS_INSTALL_GUIDIR}/icons/grass)
+install(FILES ${FLAGS_ICONS} DESTINATION ${GRASS_INSTALL_GUIDIR}/icons/flags)
+install(FILES ${GRASS_ICONS} DESTINATION ${GRASS_INSTALL_DOCDIR}/icons)
+install(FILES grass.desktop DESTINATION ${GRASS_INSTALL_SHAREDIR}/applications)
 foreach(
   icon_type
   8
@@ -64,13 +74,13 @@ foreach(
   128
   192)
   set(icon_size "${icon_type}x${icon_type}")
-  install(FILES grass-${icon_size}.png
-          DESTINATION share/icons/hicolor/${icon_size}/apps)
+  install(
+    FILES grass-${icon_size}.png
+    DESTINATION ${GRASS_INSTALL_SHAREDIR}/icons/hicolor/${icon_size}/apps
+    RENAME grass.svg)
 endforeach()
 
-install(
-  FILES grass.svg
-  DESTINATION share/icons/hicolor/scalable/apps
-  RENAME grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}.svg)
+install(FILES grass.svg
+        DESTINATION ${GRASS_INSTALL_SHAREDIR}/icons/hicolor/scalable/apps)
 
-install(FILES grass.appdata.xml DESTINATION share/appdata)
+install(FILES grass.appdata.xml DESTINATION ${GRASS_INSTALL_SHAREDIR}/metainfo)

@@ -4,16 +4,7 @@
 ---
 name: CMake
 
-on:
-  push:
-    paths-ignore:
-      - 'doc/**'
-    branches:
-      - main
-      - releasebranch_*
-  pull_request:
-    paths-ignore:
-      - 'doc/**'
+on: [push]
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
@@ -81,11 +72,40 @@ jobs:
                   echo CCACHE_MAXSIZE=250M >> ${GITHUB_ENV}
                   ccache -z
               working-directory: ${{ github.workspace }}
+            - name: Print build environment variables
+              shell: bash -el {0}
+              run: |
+                printenv | sort
+                gcc --version
+                ldd --version
+            - name: Create installation directory
+              run: |
+                mkdir $HOME/install
             - name: Configure
               run: |
-                cmake ${CMAKE_OPTIONS} -S $GITHUB_WORKSPACE -B $GITHUB_WORKSPACE/build -G Ninja
+                cmake ${CMAKE_OPTIONS} -S $GITHUB_WORKSPACE -B $GITHUB_WORKSPACE/build -G Ninja \
+                  -DCMAKE_INSTALL_PREFIX=$HOME/install -DWITH_NLS=OFF \
+                  -DCMAKE_C_FLAGS="-I/usr/include -I/usr/include/gdal" \
+                  -DCMAKE_CXX_FLAGS="-I/usr/include -I/usr/include/gdal"
+            - name: Print CMakeCache.txt
+              shell: bash -el {0}
+              run: |
+                cat ${GITHUB_WORKSPACE}/build/CMakeCache.txt
             - name: Build
               run: |
-                cmake --build $GITHUB_WORKSPACE/build --verbose -j$(nproc)
+                cmake --build build --verbose -j$(nproc)
+            - name: Install
+              run: |
+                cmake --install $GITHUB_WORKSPACE/build --verbose
+            - name: Add the bin directory to PATH
+              run: |
+                echo "$HOME/install/bin" >> $GITHUB_PATH
+            - name: Print installed versions
+              if: always()
+              run: .github/workflows/print_versions.sh
+            - name: Test executing of the grass command
+              run: .github/workflows/test_simple.sh
+            - name: Run tests
+              run: .github/workflows/test_thorough.sh --config .gunittest.cfg
             - name: ccache statistics
               run: ccache -s

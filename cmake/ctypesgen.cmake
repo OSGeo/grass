@@ -7,32 +7,29 @@ COPYRIGHT:  (C) 2020 by the GRASS Development Team
 #]]
 
 set(ENV{GISRC}
-    "${BIN_DIR}/demolocation/.grassrc${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}"
+    "${OUTDIR}/${GRASS_INSTALL_DEMODIR}/.grassrc${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}"
 )
-set(ENV{GISBASE} "${BIN_DIR}")
-set(ENV{PATH} "${BIN_DIR}/bin:${BIN_DIR}/scripts:$ENV{PATH}")
+set(ENV{GISBASE} "${OUTDIR}/${GISBASE_DIR}")
+set(ENV{PATH}
+    "${OUTDIR}/${GRASS_INSTALL_BINDIR}:${OUTDIR}/${GRASS_INSTALL_SCRIPTDIR}:$ENV{PATH}"
+)
 set(ENV{PYTHONPATH}
-    "${BIN_DIR}/gui/wxpython:${BIN_DIR}/etc/python:$ENV{PYTHONPATH}")
+    "${OUTDIR}/${GRASS_INSTALL_GUIDIR}/wxpython:${OUTDIR}/${GRASS_INSTALL_PYDIR}:$ENV{PYTHONPATH}"
+)
 if(NOT MSVC)
-  set(ENV{LD_LIBRARY_PATH} "${BIN_DIR}/lib:$ENV{LD_LIBRARY_PATH}")
+  set(ENV{LD_LIBRARY_PATH}
+      "${OUTDIR}/${GRASS_INSTALL_LIBDIR}:$ENV{LD_LIBRARY_PATH}")
 endif()
 set(ENV{LC_ALL} C)
 
 set(LIBRARIES)
 foreach(LIB ${LIBS})
-  if(WIN32)
-    list(APPEND LIBRARIES "--library=${BIN_DIR}/lib/${LIB}.dll")
-  elseif(APPLE)
-    list(APPEND LIBRARIES "--library=${BIN_DIR}/lib/lib${LIB}.so")
-  else()
-    # This can be linux or unix
-    list(APPEND LIBRARIES "--library=${BIN_DIR}/lib/lib${LIB}.so")
-  endif()
+  list(APPEND LIBRARIES --library=${LIB})
 endforeach()
 
 set(HEADERS)
 foreach(HDR ${HDRS})
-  list(APPEND HEADERS "${BIN_DIR}/include/grass/${HDR}")
+  list(APPEND HEADERS "${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass/${HDR}")
 endforeach()
 
 foreach(req OUT_FILE HDRS LIBS CTYPESGEN_PY COMPILER)
@@ -50,17 +47,17 @@ endif()
 
 message(
   STATUS
-    "Running ${PYTHON_EXECUTABLE} ${CTYPESGEN_PY} --cpp=${CTYPESFLAGS} --includedir=\"${BIN_DIR}/include\" --runtime-libdir=\"${BIN_DIR}/lib\" ${HEADERS} ${LIBRARIES} --output=${OUT_FILE}"
+    "Running ${PYTHON_EXECUTABLE} ${CTYPESGEN_PY} --cpp=${CTYPESFLAGS} --no-embed-preamble --strip-build-path ${RUNTIME_GISBASE} --includedir=\"${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}\" ${LIBRARIES} ${HEADERS} --output=${OUT_FILE}"
 )
 execute_process(
   COMMAND
     ${PYTHON_EXECUTABLE} ${CTYPESGEN_PY} --cpp=${CTYPESFLAGS}
-    --includedir="${BIN_DIR}/include" --runtime-libdir="${BIN_DIR}/lib"
-    ${HEADERS} ${LIBRARIES} --output=${OUT_FILE}
+    --no-embed-preamble --strip-build-path ${RUNTIME_GISBASE}
+    --includedir="${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}" ${LIBRARIES} ${HEADERS}
+    --output=${OUT_FILE}
   OUTPUT_VARIABLE ctypesgen_OV
   ERROR_VARIABLE ctypesgen_EV
   RESULT_VARIABLE ctypesgen_RV)
-
 if(ctypesgen_RV)
   message(FATAL_ERROR "ctypesgen.py: ${ctypesgen_EV} \n ${ctypesgen_OV}")
 endif()

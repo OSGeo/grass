@@ -25,17 +25,24 @@ function(copy_python_files_in_subdir dir_name dst_prefix)
       TARGET ${G_TARGET}
       ${BUILD}
       COMMAND ${CMAKE_COMMAND} -E make_directory
-              ${GISBASE}/${dst_prefix}/${dir_name}/
+              "${OUTDIR}/${dst_prefix}/${dir_name}"
       COMMAND ${CMAKE_COMMAND} -E copy ${PY_FILES}
-              ${GISBASE}/${dst_prefix}/${dir_name}/)
+              "${OUTDIR}/${dst_prefix}/${dir_name}")
+    set(py_files_out)
+    foreach(pyfile ${PY_FILES})
+      get_filename_component(py_file_name ${pyfile} NAME)
+      list(APPEND py_files_out
+           "${OUTDIR}/${dst_prefix}/${dir_name}/${py_file_name}")
+    endforeach()
+    install(PROGRAMS ${py_files_out} DESTINATION ${dst_prefix}/${dir_name})
   else()
     string(REPLACE "/" "_" targ_name ${dir_name})
     add_custom_target(
       python_${targ_name}
       COMMAND ${CMAKE_COMMAND} -E make_directory
-              ${GISBASE}/${dst_prefix}/${dir_name}/
+              "${OUTDIR}/${dst_prefix}/${dir_name}"
       COMMAND ${CMAKE_COMMAND} -E copy ${PY_FILES}
-              ${GISBASE}/${dst_prefix}/${dir_name}/)
+              "${OUTDIR}/${dst_prefix}/${dir_name}")
     set_target_properties(python_${targ_name} PROPERTIES FOLDER lib/python)
   endif()
 endfunction()

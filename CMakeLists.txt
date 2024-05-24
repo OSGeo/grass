@@ -1,20 +1,23 @@
-#[[
+#[===========================================================================[
 AUTHOR(S):  Rashad Kanavath <rashad km gmail>
 PURPOSE:    GRASS GIS root that adds options to activate/deactivate
             3rd party libraries
 COPYRIGHT:  (C) 2020-2022 by the GRASS Development Team
             This program is free software under the GPL (>=v2)
             Read the file COPYING that comes with GRASS for details.
-#]]
+#]===========================================================================]
 
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.16)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
-# if(DEFINED ENV{VCPKG_DEFAULT_TRIPLET} AND NOT DEFINED VCPKG_TARGET_TRIPLET)
-# set(VCPKG_TARGET_TRIPLET "$ENV{VCPKG_DEFAULT_TRIPLET}" CACHE STRING "")
-# endif()
+#[[
+if(DEFINED ENV{VCPKG_DEFAULT_TRIPLET} AND NOT DEFINED VCPKG_TARGET_TRIPLET)
+set(VCPKG_TARGET_TRIPLET "$ENV{VCPKG_DEFAULT_TRIPLET}" CACHE STRING "")
+endif()
+]]
 
 project(GRASS)
+string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
 
 set(BUILD_SHARED_LIBS ON)
 # message(FATAL_ERROR "VCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}")
@@ -22,7 +25,6 @@ if(MSVC)
   if(BUILD_SHARED_LIBS)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
   endif()
-
   set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 endif()
 
@@ -119,56 +121,10 @@ option(WITH_LARGEFILES "Build with large file support"
        ${default_option_enabled})
 option(WITH_DOCS "Build documentation" ON)
 option(WITH_GUI "Build GUI" ON)
+option(WITH_FHS "Install with FHS" OFF)
 
-if(APPLE)
-  if(POLICY CMP0042)
-    cmake_policy(SET CMP0042 NEW)
-  endif()
-  set(CMAKE_MACOSX_RPATH TRUE)
-endif()
-
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
-     "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
-if("${isSystemDir}" STREQUAL "-1")
-  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-endif("${isSystemDir}" STREQUAL "-1")
-
-set(GISBASE ${CMAKE_BINARY_DIR}/gisbase)
-file(TO_NATIVE_PATH "${CMAKE_SOURCE_DIR}" MODULE_TOPDIR)
-file(TO_NATIVE_PATH "${GISBASE}" GISBASE_NATIVE)
-file(TO_NATIVE_PATH "${GISBASE}/bin" BIN_DIR)
-file(TO_NATIVE_PATH "${GISBASE}/lib" LIB_DIR)
-file(TO_NATIVE_PATH "${GISBASE}/scripts" SCRIPTS_DIR)
-file(TO_NATIVE_PATH "${GISBASE}/etc/config/rc" GISRC)
-file(TO_NATIVE_PATH "${GISBASE}/etc/python" ETC_PYTHON_DIR)
-file(TO_NATIVE_PATH "${GISBASE}/gui/wxpython" GUI_WXPYTHON_DIR)
-
-# Setup build locations.
-if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${GISBASE}/lib)
-endif()
-if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
-  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${GISBASE}/lib)
-endif()
-
-# XXX: not used for now; setup install directories
-set(GISBASE_DIR "grass${GRASS_VERSION_MAJOR}${GRASS_VERSION_MINOR}")
-set(GRASS_BIN_DIR "${GISBASE_DIR}/bin")
-set(GRASS_LIB_DIR "${GISBASE_DIR}/lib")
-set(GRASS_SCRIPTS_DIR "${GISBASE_DIR}/scripts")
-set(GRASS_ETC_DIR "${GISBASE_DIR}/etc")
-set(GRASS_GUI_DIR "${GISBASE_DIR}/gui")
-set(GRASS_DRIVER_DIR "${GISBASE_DIR}/driver")
-set(GRASS_FONTS_DIR "${GISBASE_DIR}/fonts")
-set(GRASS_UTILS_DIR "${GISBASE_DIR}/utils")
-set(GRASS_SHARE_DIR "${GISBASE_DIR}/share")
-set(GRASS_INCLUDE_DIR "${GISBASE_DIR}/include")
-set(GRASS_DOCS_DIR "${GISBASE_DIR}/docs")
-set(GRASS_DEMOLOCATION_DIR "${GISBASE_DIR}/demolocation")
+include(check_target)
+include(CheckDependentLibraries)
 
 include(get_host_arch)
 get_host_arch(BUILD_ARCH)
@@ -182,6 +138,58 @@ set(GRASS_VERSION_NUMBER
 message(STATUS "GRASS_VERSION_NUMBER  =  '${GRASS_VERSION_NUMBER}'")
 set(GRASS_VERSION_UPDATE_PKG "0.2")
 
+# Setup GRASS install directories
+include(GRASSInstallDirs)
+
+# Setup build locations.
+if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OUTDIR}/${GRASS_INSTALL_LIBDIR})
+endif()
+if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OUTDIR}/${GRASS_INSTALL_LIBDIR})
+endif()
+
+if(APPLE)
+  if(POLICY CMP0042)
+    cmake_policy(SET CMP0042 NEW)
+  endif()
+  set(CMAKE_MACOSX_RPATH TRUE)
+endif()
+
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${GRASS_INSTALL_LIBDIR}")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+#[[ Probably not needed, but leave it here in case...
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
+     "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+if("${isSystemDir}" STREQUAL "-1")
+  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+endif()
+]]
+
+# TODO: a proper fix to this workaround
+if(WITH_FHS)
+  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_DEMODIR}
+       ${RUNTIME_GISBASE}/demolocation SYMBOLIC)
+  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_FONTSDIR} ${RUNTIME_GISBASE}/fonts
+       SYMBOLIC)
+  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/colors
+       ${RUNTIME_GISBASE}/etc/colors SYMBOLIC)
+  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/colors.desc
+       ${RUNTIME_GISBASE}/etc/colors.desc SYMBOLIC)
+  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/element_list
+       ${RUNTIME_GISBASE}/etc/element_list SYMBOLIC)
+  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/renamed_options
+       ${RUNTIME_GISBASE}/etc/renamed_options SYMBOLIC)
+  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/VERSIONNUMBER
+       ${RUNTIME_GISBASE}/etc/VERSIONNUMBER SYMBOLIC)
+  file(MAKE_DIRECTORY "${GISBASE}/gui/wxpython")
+  file(CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/wxpython/xml
+       ${RUNTIME_GISBASE}/gui/wxpython/xml SYMBOLIC)
+endif()
+
 include(set_compiler_flags)
 set_compiler_flags()
 include(Configure)
@@ -191,8 +199,6 @@ repo_status("${CMAKE_CURRENT_LIST_DIR}")
 
 enable_testing()
 
-include(check_target)
-include(CheckDependentLibraries)
 include(build_module)
 include(build_program)
 include(build_program_in_subdir)
@@ -200,8 +206,12 @@ include(build_library_in_subdir)
 include(copy_python_files_in_subdir)
 include(build_script_in_subdir)
 include(build_gui_in_subdir)
+include(generate_html)
 
 set(MKHTML_PY ${CMAKE_BINARY_DIR}/utils/mkhtml.py)
+set(THUMBNAILS_PY ${CMAKE_BINARY_DIR}/utils/thumbnails.py)
+set(HTML2MAN VERSION_NUMBER=${GRASS_VERSION_NUMBER} ${PYTHON_EXECUTABLE}
+             ${OUTDIR}/${GRASS_INSTALL_UTILSDIR}/g.html2man.py)
 
 if(WIN32)
   set(sep "\;")
@@ -215,77 +225,87 @@ set(grass_env_command
     ${CMAKE_COMMAND} -E env "PATH=${BIN_DIR}${sep}${SCRIPTS_DIR}${env_path}"
     "PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}$ENV{PYTHONPATH}"
     "LD_LIBRARY_PATH=${LIB_DIR}${sep}$ENV{LD_LIBRARY_PATH}"
-    "GISBASE=${GISBASE_NATIVE}" "GISRC=${GISRC}" "LC_ALL=C" "LANG=C"
-    "LANGUAGE=C" "MODULE_TOPDIR=${MODULE_TOPDIR}"
+    "GISBASE=${RUN_GISBASE_NATIVE}" "GISRC=${GISRC}" "LC_ALL=C" "LANG=C"
+    "LANGUAGE=C" "MODULE_TOPDIR=${MODULE_TOPDIR}" "HTMLDIR=${DOC_DIR}"
     "VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
     "VERSION_DATE=\"${GRASS_VERSION_DATE}\"")
 
 set(NO_HTML_DESCR_TARGETS "g.parser;ximgview;test.raster3d.lib")
-# include(Configure)
+
 add_subdirectory(include)
 
-include_directories("${GISBASE}/include")
-include_directories("${GISBASE}/include/grass")
+include_directories("${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}")
 if(MSVC)
   include_directories("${CMAKE_SOURCE_DIR}/msvc")
 endif()
 
-execute_process(
-  COMMAND ${CMAKE_COMMAND} -E echo "Creating directories in ${GISBASE}"
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/bin/
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/scripts/
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/demolocation/
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/etc/config/
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/driver/db/
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/utils/
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/lib/
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/python/
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/etc/lister/
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/etc/python/grass/lib
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/gui/wxpython/xml/
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/gui/icons/
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/gui/images/
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/docs/html/)
+# TODO: fix this hack
+include_directories(${PostgreSQL_INCLUDE_DIR})
+include_directories(${PROJ_INCLUDE_DIR})
+include_directories(/opt/local/include)
 
+add_subdirectory(python)
 add_subdirectory(lib)
 add_subdirectory(utils)
 set(modules_list)
 
 set(ALL_SUBDIRS
-    general
     db
     display
+    general
     imagery
     misc
+    ps
     raster
     raster3d
     scripts
-    vector
     temporal
-    ps)
+    vector)
 
 foreach(d ${ALL_SUBDIRS})
   add_subdirectory(${d})
 endforeach()
 add_custom_target(
   ALL_MODULES
-  COMMAND ${CMAKE_COMMAND} -E echo "Building all modules"
-  DEPENDS ${modules_list})
-
-# message(FATAL_ERROR "modules_list=${modules_list}")
+  DEPENDS ${modules_list}
+  COMMENT "Building all modules.")
 
 if(WITH_GUI)
   add_subdirectory(gui)
 endif()
 
-add_subdirectory(python)
-
 if(WITH_DOCS)
   add_subdirectory(doc)
   add_subdirectory(man)
-endif() # WITH_DOCS
+endif()
 
-# add_subdirectory(locale)
+add_custom_target(
+  r_colors_thumbnails ALL
+  COMMAND ${CMAKE_COMMAND} -E make_directory
+          ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+  COMMAND ${grass_env_command} ${PYTHON_EXECUTABLE} ${THUMBNAILS_PY}
+  BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+  COMMENT "Creating thumbnails"
+  DEPENDS ALL_MODULES)
+install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+        DESTINATION ${GRASS_INSTALL_DOCDIR})
+
+set(misc_files
+    AUTHORS
+    CHANGES
+    CITING
+    contributors_extra.csv
+    contributors.csv
+    COPYING
+    GPL.TXT
+    INSTALL.md
+    REQUIREMENTS.md
+    translators.csv)
+install(FILES ${misc_files} DESTINATION ${GRASS_INSTALL_MISCDIR})
+
+if(WITH_NLS)
+  add_subdirectory(locale)
+endif()
 
 # TODO: To be discussed - add_subdirectory(testsuite) - add_subdirectory(macosx)
 

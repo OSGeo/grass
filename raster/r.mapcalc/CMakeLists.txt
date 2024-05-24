@@ -23,9 +23,9 @@ build_program(
   SOURCES
   "${r_mapcalc_SRCS}"
   DEPENDS
-  grass_gis
   grass_btree
   grass_calc
+  grass_gis
   grass_raster
   OPTIONAL_DEPENDS
   READLINE)
@@ -36,9 +36,10 @@ build_program(
   SOURCES
   "${r3_mapcalc_SRCS}"
   DEPENDS
-  grass_gis
   grass_btree
   grass_calc
+  grass_gis
+  grass_raster
   grass_raster3d
   OPTIONAL_DEPENDS
   READLINE)

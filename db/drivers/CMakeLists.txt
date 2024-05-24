@@ -42,6 +42,7 @@ build_program_in_subdir(
   ${dbf_SRCS}
   DEPENDS
   grass_gis
+  grass_dbmibase
   grass_dbmidriver
   grass_shape
   grass_sqlp
@@ -50,7 +51,7 @@ build_program_in_subdir(
   HTML_FILE_NAME
   grass-dbf
   RUNTIME_OUTPUT_DIR
-  "driver/db/")
+  "${GRASS_INSTALL_DRIVERDIR}/db")
 
 list(APPEND db_drivers dbf)
 
@@ -58,6 +59,7 @@ build_program_in_subdir(
   ogr
   DEPENDS
   grass_gis
+  grass_dbmibase
   grass_dbmidriver
   grass_sqlp
   GDAL
@@ -66,7 +68,7 @@ build_program_in_subdir(
   HTML_FILE_NAME
   grass-ogr
   RUNTIME_OUTPUT_DIR
-  "driver/db/")
+  "${GRASS_INSTALL_DRIVERDIR}/db")
 
 list(APPEND db_drivers ogr)
 
@@ -83,7 +85,7 @@ build_program_in_subdir(
   HTML_FILE_NAME
   grass-odbc
   RUNTIME_OUTPUT_DIR
-  "driver/db/")
+  "${GRASS_INSTALL_DRIVERDIR}/db")
 if(TARGET ODBC)
   list(APPEND db_drivers odbc)
 endif()
@@ -92,6 +94,7 @@ build_program_in_subdir(
   sqlite
   DEPENDS
   grass_gis
+  grass_dbmibase
   grass_dbmidriver
   grass_sqlp
   DEFS
@@ -101,7 +104,7 @@ build_program_in_subdir(
   HTML_FILE_NAME
   grass-sqlite
   RUNTIME_OUTPUT_DIR
-  "driver/db/")
+  "${GRASS_INSTALL_DRIVERDIR}/db")
 
 if(TARGET SQLITE)
   list(APPEND db_drivers sqlite)
@@ -109,8 +112,11 @@ endif()
 
 build_program_in_subdir(
   postgres
+  NAME
+  pg
   DEPENDS
   grass_gis
+  grass_dbmibase
   grass_dbmidriver
   grass_sqlp
   DEFS
@@ -120,7 +126,7 @@ build_program_in_subdir(
   HTML_FILE_NAME
   grass-pg
   RUNTIME_OUTPUT_DIR
-  "driver/db/")
+  "${GRASS_INSTALL_DRIVERDIR}/db")
 
 if(TARGET MYSQL)
   list(APPEND db_drivers mysql)
@@ -132,6 +138,7 @@ build_program_in_subdir(
   ${mysql_SRCS}
   DEPENDS
   grass_gis
+  grass_dbmibase
   grass_dbmidriver
   grass_sqlp
   DEFS
@@ -139,12 +146,17 @@ build_program_in_subdir(
   PRIMARY_DEPENDS
   MYSQL
   HTML_FILE_NAME
-  grass-sql
+  grass-mysql
   RUNTIME_OUTPUT_DIR
-  "driver/db/")
+  "${GRASS_INSTALL_DRIVERDIR}/db")
 
 if(TARGET MYSQL)
   list(APPEND db_drivers mysql)
+
+  if(WITH_DOCS)
+    generate_html(TARGET mysql NAME grass-mesql SOURCEDIR
+                  ${CMAKE_CURRENT_SOURCE_DIR}/mysql)
+  endif()
 endif()
 
 set(db_drivers

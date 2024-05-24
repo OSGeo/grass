@@ -17,4 +17,5 @@ build_program(
   "${r3_colors_out_SRCS}"
   DEPENDS
   grass_gis
+  grass_raster
   grass_raster3d)

@@ -9,7 +9,8 @@ build_program(
   grass_gis
   grass_raster
   RUNTIME_OUTPUT_DIR
-  etc/lister)
+  "${GRASS_INSTALL_ETCDIR}/lister"
+  NO_DOCS)
 
 build_program(
   NAME
@@ -22,4 +23,5 @@ build_program(
   grass_gis
   grass_raster
   RUNTIME_OUTPUT_DIR
-  etc/lister)
+  "${GRASS_INSTALL_ETCDIR}/lister"
+  NO_DOCS)

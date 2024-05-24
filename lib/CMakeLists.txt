@@ -20,30 +20,31 @@ build_library_in_subdir(
 add_subdirectory(proj)
 
 file(GLOB raster_SRCS "./raster/*.c")
-# list(APPEND raster_SRCS "./gis/gisinit.c")
 build_library_in_subdir(
   raster
   DEFS
-  "-DGDAL_DYNAMIC=1;-DGDAL_LINK=1"
+  "-DGDAL_LINK=1"
   SOURCES
   ${raster_SRCS}
   DEPENDS
   GDAL
   PROJ
+  grass_gis
   grass_gproj)
 
 if(TARGET LAPACK)
-  target_link_libraries(grass_raster LAPACK)
+  target_link_libraries(grass_raster PRIVATE LAPACK)
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
   find_library(DL_LIBRARY dl)
   mark_as_advanced(DL_LIBRARY)
-  target_link_libraries(grass_raster ${DL_LIBRARY})
+  target_link_libraries(grass_raster PRIVATE ${DL_LIBRARY})
 endif()
 
-configure_file(external/ccmath/ccmath.h ${GISBASE}/include/grass/ccmath_grass.h
-               COPYONLY)
+configure_file(
+  external/ccmath/ccmath.h
+  ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass/ccmath_grass.h COPYONLY)
 build_library_in_subdir(external/ccmath)
 
 build_library_in_subdir(external/shapelib NAME grass_shape HEADERS "shapefil.h")
@@ -66,7 +67,6 @@ build_library_in_subdir(
 build_library_in_subdir(linkm)
 
 file(GLOB pngdriver_SRCS "./pngdriver/*.c")
-# list(APPEND pngdriver_SRCS "./driver/init.c")
 if(NOT WITH_LIBPNG)
   list(FILTER pngdriver_SRCS EXCLUDE REGEX "./pngdriver/.*_png.c")
 endif()
@@ -80,26 +80,33 @@ build_library_in_subdir(
   ZLIB
   OPTIONAL_DEPENDS
   LIBPNG)
-# INCLUDES "./driver")
 
 file(GLOB psdriver_SRCS "./psdriver/*.c")
-list(APPEND psdriver_SRCS "./driver/init.c")
 build_library_in_subdir(
   psdriver
   SOURCES
   ${psdriver_SRCS}
   DEPENDS
   grass_driver
+  grass_gis
   INCLUDES
   "./driver")
+add_custom_command(
+  TARGET grass_psdriver
+  POST_BUILD
+  COMMAND
+    ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/psdriver/psdriver.ps
+    ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/psdriver.ps)
+install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/psdriver.ps
+        DESTINATION ${GRASS_INSTALL_ETCDIR})
 
 file(GLOB htmldriver_SRCS "./htmldriver/*.c")
-list(APPEND htmldriver_SRCS "./driver/init.c")
 build_library_in_subdir(
   htmldriver
   SOURCES
   ${htmldriver_SRCS}
   DEPENDS
+  grass_gis
   grass_driver
   INCLUDES
   "./driver")
@@ -107,17 +114,15 @@ build_library_in_subdir(
 set(_grass_display_DEFS)
 
 set(_grass_display_DEPENDS grass_driver grass_raster grass_htmldriver
-                           grass_pngdriver grass_psdriver)
+                           grass_pngdriver grass_psdriver grass_gis)
 
 if(WITH_CAIRO)
-
-  set(_cairodriver_DEPENDS CAIRO FREETYPE grass_driver)
+  set(_cairodriver_DEPENDS CAIRO FREETYPE grass_gis grass_driver ICONV)
   if(WITH_X11)
     list(APPEND _cairodriver_DEPENDS X11)
   endif()
 
   file(GLOB cairodriver_SRCS "./cairodriver/*.c")
-  list(APPEND cairodriver_SRCS "./driver/init.c")
   build_library_in_subdir(cairodriver DEPENDS ${_cairodriver_DEPENDS} SOURCES
                           ${cairodriver_SRCS})
 
@@ -141,9 +146,9 @@ add_subdirectory(fonts)
 
 add_subdirectory(vector)
 
-build_library_in_subdir(imagery DEPENDS grass_vector)
+build_library_in_subdir(imagery DEPENDS grass_gis grass_vector grass_raster)
 
-build_library_in_subdir(cluster DEPENDS grass_imagery)
+build_library_in_subdir(cluster DEPENDS grass_imagery grass_gis grass_raster)
 
 build_library_in_subdir(rowio DEPENDS grass_gis)
 
@@ -155,14 +160,19 @@ add_subdirectory(rst)
 build_library_in_subdir(
   lidar
   DEPENDS
+  grass_gis
   grass_vector
   grass_raster
   grass_dbmibase
+  grass_dbmiclient
+  grass_dbmidriver
+  grass_gmath
   grass_segment
   HEADERS
   "lidar.h")
 
-build_library_in_subdir(raster3d DEPENDS grass_raster)
+build_library_in_subdir(raster3d NAME grass_raster3d DEPENDS grass_raster
+                        grass_gis)
 
 build_program_in_subdir(
   raster3d/test
@@ -179,25 +189,31 @@ build_library_in_subdir(
   "N_*.h"
   DEPENDS
   grass_gis
+  grass_raster
   grass_raster3d
   grass_gmath
+  LIBM
   OPTIONAL_DEPENDS
   OPENMP)
 
 build_library_in_subdir(dspf DEPENDS grass_gis)
 
-build_library_in_subdir(symbol NAME grass_sym DEPENDS grass_gis)
+build_library_in_subdir(symbol NAME grass_symb DEPENDS grass_gis)
 add_custom_command(
-  TARGET grass_sym
+  TARGET grass_symb
   POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_directory
-          ${CMAKE_CURRENT_SOURCE_DIR}/symbol/symbol ${GISBASE}/etc/symbol)
+  COMMAND
+    ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/symbol/symbol
+    ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/symbol)
+install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/symbol
+        DESTINATION ${GRASS_INSTALL_ETCDIR})
 
 add_subdirectory(init)
 
-build_library_in_subdir(cdhc DEPENDS grass_raster)
+build_library_in_subdir(cdhc DEPENDS grass_gis grass_raster)
 
-build_library_in_subdir(stats DEPENDS grass_raster)
+build_library_in_subdir(stats DEPENDS grass_gis grass_raster)
 
 build_library_in_subdir(arraystats DEPENDS grass_gis)
 
@@ -205,10 +221,14 @@ if(WITH_OPENGL)
   build_library_in_subdir(
     ogsf
     DEPENDS
+    grass_bitmap
+    grass_dbmibase
+    grass_dbmiclient
+    grass_dbmidriver
+    grass_gis
     grass_raster
     grass_raster3d
     grass_vector
-    grass_bitmap
     OPENGL
     TIFF)
 
@@ -220,6 +240,7 @@ if(WITH_OPENGL)
     grass_vector
     grass_bitmap
     grass_ogsf
+    grass_gis
     OPENGL
     TIFF)
 endif()
@@ -228,8 +249,10 @@ add_subdirectory(temporal)
 
 build_library_in_subdir(iostream SRC_REGEX "*.cpp" DEPENDS grass_gis)
 
-build_library_in_subdir(manage DEPENDS grass_raster grass_vector grass_raster3d)
-file(COPY manage/element_list DESTINATION ${GISBASE}/etc)
-install(FILES ${GISBASE}/etc/element_list DESTINATION etc)
+build_library_in_subdir(manage DEPENDS grass_gis grass_raster grass_vector
+                        grass_raster3d)
+file(COPY manage/element_list DESTINATION ${OUTDIR}/${GRASS_INSTALL_ETCDIR})
+install(FILES ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/element_list
+        DESTINATION ${GRASS_INSTALL_ETCDIR})
 
-build_library_in_subdir(calc DEPENDS grass_raster)
+build_library_in_subdir(calc DEPENDS grass_raster grass_gis)

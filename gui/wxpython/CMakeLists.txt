@@ -1,6 +1,4 @@
-# missing docs
-
-set(WXPYTHON_DIR ${GISBASE}/gui/wxpython)
+set(WXPYTHON_DIR ${GRASS_INSTALL_GUIDIR}/wxpython)
 set(gui_lib_DIRS
     core
     gui_core
@@ -14,7 +12,6 @@ set(gui_lib_DIRS
     mapwin
     modules
     nviz
-    rdigit
     startup
     tools
     vnet
@@ -23,14 +20,14 @@ set(gui_lib_DIRS
 
 set(gui_lib_targets)
 foreach(gui_lib_DIR ${gui_lib_DIRS})
-  copy_python_files_in_subdir(${gui_lib_DIR} gui/wxpython)
+  copy_python_files_in_subdir(${gui_lib_DIR} ${WXPYTHON_DIR})
   list(APPEND gui_lib_targets python_${gui_lib_DIR})
 endforeach()
 add_custom_target(
   GUI_WXPYTHON
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/wxgui.py
-          ${WXPYTHON_DIR}/
-  DEPENDS ${gui_lib_targets})
+          ${OUTDIR}/${WXPYTHON_DIR}
+  DEPENDS ${gui_lib_targets} LIB_PYTHON)
 
 set(gui_DIRS
     animation
@@ -46,6 +43,7 @@ set(gui_DIRS
     rlisetup
     timeline
     tplot
+    rdigit
     vdigit)
 set(g_gui_targets)
 foreach(gui_DIR ${gui_DIRS})
@@ -53,9 +51,11 @@ foreach(gui_DIR ${gui_DIRS})
   list(APPEND g_gui_targets "g.gui.${gui_DIR}")
 endforeach()
 
-add_subdirectory(docs)
+if(WITH_DOCS)
+  add_subdirectory(docs)
+endif()
 
-install(FILES README DESTINATION gui/wxpython)
+install(FILES README DESTINATION ${GRASS_INSTALL_GUIDIR}/wxpython)
 
 # copy all python files gui/ lib/python compile all python files so below target
 # depends on MODULD_LIST
@@ -63,15 +63,18 @@ install(FILES README DESTINATION gui/wxpython)
 add_custom_target(
   copy_wxpython_xml
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/xml
-          ${WXPYTHON_DIR}/xml/
-  COMMAND ${CMAKE_COMMAND} -E copy
-          ${CMAKE_CURRENT_SOURCE_DIR}/../xml/grass-interface.dtd ${GISBASE}/gui/
+          ${OUTDIR}/${WXPYTHON_DIR}/xml
+  COMMAND
+    ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/../xml/grass-interface.dtd
+    ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/xml
   DEPENDS GUI_WXPYTHON)
 
 add_custom_target(
   compile_python_files
-  COMMAND ${PYTHON_EXECUTABLE} -m compileall ${GISBASE}/scripts
-  COMMAND ${PYTHON_EXECUTABLE} -m compileall ${WXPYTHON_DIR}
+  COMMAND ${PYTHON_EXECUTABLE} -m compileall
+          ${OUTDIR}/${GRASS_INSTALL_SCRIPTDIR}
+  COMMAND ${PYTHON_EXECUTABLE} -m compileall ${OUTDIR}/${WXPYTHON_DIR}
   DEPENDS ALL_MODULES)
 
 add_custom_target(
@@ -79,7 +82,7 @@ add_custom_target(
   COMMAND
     ${grass_env_command} ${PYTHON_EXECUTABLE}
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/build_modules_xml.py >
-    ${WXPYTHON_DIR}/xml/module_items.xml
+    ${OUTDIR}/${WXPYTHON_DIR}/xml/module_items.xml
   DEPENDS copy_wxpython_xml compile_python_files ${g_gui_targets}
   COMMENT "Generating interface description for all modules..."
   VERBATIM)
@@ -96,7 +99,7 @@ add_custom_target(
     ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/menudata.xml
   COMMAND
     ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/menudata.xml
-    ${WXPYTHON_DIR}/xml/
+    ${OUTDIR}/${WXPYTHON_DIR}/xml
   DEPENDS build_modules_items_xml)
 
 add_custom_target(
@@ -112,7 +115,7 @@ add_custom_target(
   COMMAND
     ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/module_tree_menudata.xml
-    ${WXPYTHON_DIR}/xml/
+    ${OUTDIR}/${WXPYTHON_DIR}/xml
   DEPENDS build_xml_menudata)
 
 add_custom_target(

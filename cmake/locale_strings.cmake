@@ -5,22 +5,28 @@ PURPOSE:    create translation strings for grass scripts
 COPYRIGHT:  (C) 2020 by the GRASS Development Team
             This program is free software under the GPL (>=v2)
             Read the file COPYING that comes with GRASS for details.
--DBINARY_DIR=
--DG_NAME=
--DSRC_SCRIPT_FILE=
--DOUTPUT_FILE=
--DSOURCE_DIR=
+
+PARAMS:     BINARY_DIR
+            ETCDIR
+            GISBASE_DIR
+            GISRC
+            GUIDIR
+            G_NAME
+            LIBDIR
+            OUTPUT_FILE
+            PYDIR
+            SCRIPTDIR
+            SOURCE_DIR
 #]]
 
-set(GISBASE ${BINARY_DIR}/gisbase)
 file(TO_NATIVE_PATH "${SOURCE_DIR}" MODULE_TOPDIR)
-file(TO_NATIVE_PATH "${GISBASE}" GISBASE_NATIVE)
-file(TO_NATIVE_PATH "${GISBASE}/bin" BIN_DIR)
-file(TO_NATIVE_PATH "${GISBASE}/lib" LIB_DIR)
-file(TO_NATIVE_PATH "${GISBASE}/scripts" SCRIPTS_DIR)
-file(TO_NATIVE_PATH "${GISBASE}/etc/config/rc" GISRC)
-file(TO_NATIVE_PATH "${GISBASE}/etc/python" ETC_PYTHON_DIR)
-file(TO_NATIVE_PATH "${GISBASE}/gui/wxpython" GUI_WXPYTHON_DIR)
+file(TO_NATIVE_PATH "${GISBASE_DIR}" GISBASE_NATIVE)
+file(TO_NATIVE_PATH "${BINARY_DIR}" BIN_DIR)
+file(TO_NATIVE_PATH "${LIBDIR}" LIB_DIR)
+file(TO_NATIVE_PATH "${SCRIPTDIR}" SCRIPTS_DIR)
+file(TO_NATIVE_PATH "${GISRC}" GISRC)
+file(TO_NATIVE_PATH "${PYDIR}" ETC_PYTHON_DIR)
+file(TO_NATIVE_PATH "${GUIDIR}/wxpython" GUI_WXPYTHON_DIR)
 
 if(WIN32)
   set(sep "\;")
@@ -51,25 +57,11 @@ endif()
 if(WIN32)
   set(PGM_NAME ${G_NAME})
   configure_file(${SOURCE_DIR}/cmake/windows_launch.bat.in
-                 ${GISBASE}/scripts/${G_NAME}.bat @ONLY)
+                 ${SCRIPTDIR}/${G_NAME}.bat @ONLY)
 endif(WIN32)
 
-set(TMP_SCRIPT_FILE ${BINARY_DIR}/CMakeFiles/${G_NAME}${SCRIPT_EXT})
-configure_file(${SRC_SCRIPT_FILE} ${TMP_SCRIPT_FILE} COPYONLY)
-file(
-  COPY ${TMP_SCRIPT_FILE}
-  DESTINATION ${GISBASE}/scripts/
-  FILE_PERMISSIONS
-    OWNER_READ
-    OWNER_WRITE
-    OWNER_EXECUTE
-    GROUP_READ
-    GROUP_EXECUTE
-    WORLD_READ
-    WORLD_EXECUTE)
-
 execute_process(
-  COMMAND ${BIN_DIR}/bin/g.parser -t ${GISBASE}/scripts/${G_NAME}${SCRIPT_EXT}
+  COMMAND ${BINARY_DIR}/g.parser -t ${SCRIPTDIR}/${G_NAME}${SCRIPT_EXT}
   OUTPUT_VARIABLE run_g_parser_OV
   ERROR_VARIABLE run_g_parser_EV
   RESULT_VARIABLE run_g_parser_RV)
@@ -84,4 +76,3 @@ endforeach()
 
 string(REGEX REPLACE ";" "\n" output_to_write "${output_to_write}")
 file(WRITE "${OUTPUT_FILE}" "${output_to_write}\n")
-file(REMOVE ${TMP_SCRIPT_FILE})

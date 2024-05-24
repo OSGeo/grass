@@ -100,6 +100,7 @@ if(PROJ_FOUND)
   endif()
 endif()
 
+# ~~~
 # find_path(PROJ_INCLUDE_DIR proj.h PATH_SUFFIXES proj)
 #
 # find_library(PROJ_LIBRARY_RELEASE NAMES proj_i proj)
@@ -114,4 +115,4 @@ endif()
 #
 # include(FindPackageHandleStandardArgs) find_package_handle_standard_args( PROJ
 # DEFAULT_MSG PROJ_LIBRARY PROJ_INCLUDE_DIR )
-#
+# ~~~

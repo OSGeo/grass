@@ -21,26 +21,28 @@
 
 set(DGL_headers
     avl.h
-    tavl.h
     graph.h
-    heap.h
-    tree.h
-    type.h
-    helpers.h
     graph_v1.h
-    graph_v2.h)
+    graph_v2.h
+    heap.h
+    helpers.h
+    tavl.h
+    tree.h
+    type.h)
 foreach(DGL_header ${DGL_headers})
-  file(COPY ${DGL_header} DESTINATION ${GISBASE}/include/grass/dgl)
+  file(COPY ${DGL_header}
+       DESTINATION ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass/dgl)
 endforeach()
+# file(COPY dgl.h DESTINATION ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass)
 
 set(graphlib_SRCS
     avl.c
     graph.c
-    graph_v2.c
-    helpers.c
-    tree.c
     graph_v1.c
+    graph_v2.c
     heap.c
-    tavl.c)
+    helpers.c
+    tavl.c
+    tree.c)
 
-build_module(NAME grass_graph SOURCES "${graphlib_SRCS}" HEADERS "dgl.h")
+build_module(NAME grass_dgl SOURCES "${graphlib_SRCS}" HEADERS "dgl.h")

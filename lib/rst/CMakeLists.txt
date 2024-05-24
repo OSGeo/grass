@@ -24,11 +24,16 @@ build_library_in_subdir(
   grass_interpfl
   DEPENDS
   grass_gis
+  grass_dbmibase
+  grass_dbmiclient
+  grass_dbmidriver
+  grass_gmath
   grass_raster
   grass_bitmap
   grass_vector
   grass_qtree
   grass_interpdata
+  LIBM
   OPTIONAL_DEPENDS
   OPENMP
   HEADERS

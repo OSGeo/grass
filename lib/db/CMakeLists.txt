@@ -23,17 +23,21 @@ build_library_in_subdir(
   grass_dbmiclient
   DEPENDS
   grass_dbmibase
+  grass_gis
   INCLUDES
   "./dbmi_base")
 
-build_library_in_subdir(stubs NAME grass_dstubs DEPENDS grass_dbmibase)
+build_library_in_subdir(stubs NAME grass_dbstubs DEPENDS grass_gis
+                        grass_dbmibase)
 
 build_library_in_subdir(
   dbmi_driver
   NAME
   grass_dbmidriver
   DEPENDS
-  grass_dstubs
+  grass_dbmibase
+  grass_dbstubs
+  grass_gis
   INCLUDES
   "./dbmi_base")
 

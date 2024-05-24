@@ -1,15 +1,13 @@
 set(script_DIRS
-    r.shade
     d.background
     d.correlate
     d.frame
     d.out.file
-    d.to.rast
     d.polar
     d.rast.edit
     d.rast.leg
-    d.redraw
     d.shade
+    d.to.rast
     d.what.rast
     d.what.vect
     db.dropcolumn
@@ -35,11 +33,14 @@ set(script_DIRS
     r.blend
     r.buffer.lowmem
     r.colors.stddev
+    r.drain
     r.fillnulls
     r.grow
     r.import
     r.in.aster
     r.in.srtm
+    r.in.wms
+    r.mapcalc.simple
     r.mask
     r.out.xyz
     r.pack
@@ -47,6 +48,7 @@ set(script_DIRS
     r.reclass.area
     r.rgb
     r.semantic.label
+    r.shade
     r.tileset
     r.unpack
     r3.in.xyz
@@ -55,12 +57,12 @@ set(script_DIRS
     v.clip
     v.db.addcolumn
     v.db.addtable
-    v.db.join
     v.db.dropcolumn
     v.db.droprow
     v.db.droptable
-    v.db.renamecolumn
+    v.db.join
     v.db.reconnect.all
+    v.db.renamecolumn
     v.db.univar
     v.db.update
     v.dissolve
@@ -70,46 +72,82 @@ set(script_DIRS
     v.in.lines
     v.in.mapgen
     v.in.wfs
+    v.pack
     v.rast.stats
     v.report
-    v.pack
     v.to.lines
     v.unpack
     v.what.strds
     v.what.vect
-    wxpyimgview
-    r.mapcalc.simple
-    r.in.wms)
+    wxpyimgview)
 
 foreach(script_DIR ${script_DIRS})
   build_script_in_subdir(${script_DIR})
 endforeach()
 
+add_custom_command(
+  TARGET d.polar
+  POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E make_directory
+          ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/d.polar
+  COMMAND
+    ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/d.polar/ps_defs.eps
+    ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/d.polar)
+install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/d.polar
+        DESTINATION ${GRASS_INSTALL_ETCDIR})
+
+add_custom_command(
+  TARGET db.test
+  POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E make_directory
+          ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/db.test
+  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/db.test/test1
+          ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/db.test)
+install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/db.test
+        DESTINATION ${GRASS_INSTALL_ETCDIR})
+
+add_custom_command(
+  TARGET i.band.library
+  POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E make_directory
+          ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/i.band.library
+  COMMAND
+    ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/i.band.library/landsat.json
+    ${CMAKE_CURRENT_SOURCE_DIR}/i.band.library/sentinel.json
+    ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/i.band.library)
+install(DIRECTORY ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/i.band.library
+        DESTINATION ${GRASS_INSTALL_ETCDIR})
+
+# TODO: Create CMakeLists.txt in scripts/r.in.wms and scripts/wxpyimgview
+# respectively, and put the following there.
+
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms
-     DESTINATION ${CMAKE_BINARY_DIR}/etc/)
+     DESTINATION ${OUTDIR}/${GRASS_INSTALL_ETCBINDIR})
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/wxpyimgview/wxpyimgview_gui.py
-     DESTINATION ${CMAKE_BINARY_DIR}/etc/)
+     DESTINATION ${OUTDIR}/${GRASS_INSTALL_ETCBINDIR})
 
 add_custom_target(
   r.in.wms_files
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${GISBASE}/etc/r.in.wms/
+  COMMAND ${CMAKE_COMMAND} -E make_directory
+          ${OUTDIR}/${GRASS_INSTALL_ETCBINDIR}/r.in.wms
   COMMAND
     ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms/wms_base.py
-    ${GISBASE}/etc/r.in.wms/
+    ${OUTDIR}/${GRASS_INSTALL_ETCBINDIR}/r.in.wms
   COMMAND
     ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms/wms_cap_parsers.py
-    ${GISBASE}/etc/r.in.wms/
+    ${OUTDIR}/${GRASS_INSTALL_ETCBINDIR}/r.in.wms
   COMMAND
     ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms/wms_drv.py
-    ${GISBASE}/etc/r.in.wms/
+    ${OUTDIR}/${GRASS_INSTALL_ETCBINDIR}/r.in.wms
   COMMAND
     ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms/wms_gdal_drv.py
-    ${GISBASE}/etc/r.in.wms/
+    ${OUTDIR}/${GRASS_INSTALL_ETCBINDIR}/r.in.wms
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms/srs.py
-          ${GISBASE}/etc/r.in.wms/
+          ${OUTDIR}/${GRASS_INSTALL_ETCBINDIR}/r.in.wms
   DEPENDS v.to.lines)
 add_dependencies(r.in.wms r.in.wms_files)
 

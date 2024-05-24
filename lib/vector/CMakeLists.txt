@@ -1,5 +1,3 @@
-# TODO: docs vectorascii PGM = vectorascii
-
 build_library_in_subdir(rtree HEADERS "rtree.h" DEPENDS grass_gis)
 
 add_subdirectory(dglib)
@@ -10,33 +8,54 @@ build_library_in_subdir(
   NAME
   grass_vector
   DEPENDS
+  GDAL
+  grass_btree2
+  grass_dbmibase
+  grass_dbmiclient
+  grass_dbmidriver
+  grass_dig2
   grass_gis
+  grass_gproj
+  grass_dgl
+  grass_linkm
   grass_raster
   grass_rtree
-  grass_graph
-  grass_dig2
-  grass_dbmibase
-  grass_btree2
-  grass_dbmiclient
-  grass_linkm
-  grass_gproj)
+  OPTIONAL_DEPENDS
+  GEOS)
 
 if(TARGET POSTGRES)
-  target_link_libraries(grass_vector POSTGRES)
+  # target_include_directories(grass_vector SYSTEM PUBLIC
+  # ${PostgreSQL_INCLUDE_DIR})
+  target_link_libraries(grass_vector PRIVATE POSTGRES)
 endif()
 
 if(TARGET LAPACK)
-  target_link_libraries(grass_vector LAPACK)
+  target_link_libraries(grass_vector PRIVATE LAPACK)
 endif()
 
-build_library_in_subdir(vedit NAME grass_vedit DEPENDS grass_vector)
+build_library_in_subdir(
+  vedit
+  NAME
+  grass_vedit
+  DEPENDS
+  grass_gis
+  grass_vector
+  grass_dbmibase
+  grass_dbmiclient
+  grass_dbmidriver)
 
 build_library_in_subdir(
   neta
   NAME
   grass_neta
   DEPENDS
+  grass_dbmibase
   grass_dbmiclient
+  grass_dbmidriver
   grass_gis
-  grass_graph
+  grass_dgl
   grass_vector)
+
+if(WITH_DOCS)
+  generate_html(TARGET grass_vector NAME vectorascii)
+endif()

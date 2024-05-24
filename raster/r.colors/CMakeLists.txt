@@ -8,7 +8,9 @@ build_program(
   "${r_colors_SRCS}"
   DEPENDS
   grass_gis
-  grass_raster3d)
+  grass_raster
+  grass_raster3d
+  LIBM)
 
 build_program(
   NAME
@@ -17,4 +19,6 @@ build_program(
   "${r3_colors_SRCS}"
   DEPENDS
   grass_gis
-  grass_raster3d)
+  grass_raster
+  grass_raster3d
+  LIBM)

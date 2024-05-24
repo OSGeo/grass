@@ -3,9 +3,12 @@ build_library_in_subdir(
   NAME
   grass_sim
   DEPENDS
+  grass_gis
   grass_datetime
   grass_raster
   grass_vector
+  grass_gmath
+  LIBM
   OPTIONAL_DEPENDS
   OPENMP
   HEADERS

@@ -26,7 +26,8 @@ build_library_in_subdir(
   grass_raster
   HTML_FILE_NAME
   "r.li.daemon")
+generate_html(TARGET grass_rli NAME r.li)
 
 foreach(SUBDIR ${SUBDIRS1})
-  build_program_in_subdir(${SUBDIR} DEPENDS grass_rli)
+  build_program_in_subdir(${SUBDIR} DEPENDS grass_gis grass_rli grass_raster LIBM)
 endforeach()
