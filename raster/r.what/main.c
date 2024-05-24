@@ -140,15 +140,7 @@ int main(int argc, char *argv[])
     opt.fs = G_define_standard_option(G_OPT_F_SEP);
     opt.fs->guisection = _("Print");
 
-    opt.format = G_define_option();
-    opt.format->key = "format";
-    opt.format->type = TYPE_STRING;
-    opt.format->required = NO;
-    opt.format->label = _("Output format");
-    opt.format->options = "plain,json";
-    opt.format->descriptions = "plain;Plain text output;"
-                               "json;JSON (JavaScript Object Notation);";
-    opt.format->answer = "plain";
+    opt.format = G_define_standard_option(G_OPT_F_FORMAT);
     opt.format->guisection = _("Print");
 
     opt.cache = G_define_option();
