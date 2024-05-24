@@ -354,7 +354,7 @@ typedef enum {
     G_OPT_T_WHERE,   /*!< A temporal GIS framework SQL WHERE statement */
     G_OPT_T_SAMPLE,  /*!< Temporal sample methods */
 
-    G_OPT_F_FORMAT, /*!< set output format to JSON */
+    G_OPT_F_FORMAT, /*!< set output format to plain text or JSON */
 } STD_OPT;
 
 /*!

@@ -299,7 +299,6 @@ int main(int argc, char *argv[])
     parm.dist->guisection = _("Optional");
 
     parm.format = G_define_standard_option(G_OPT_F_FORMAT);
-    parm.format->required = YES;
     parm.format->guisection = _("Point mode");
 
     parm.output = G_define_standard_option(G_OPT_F_OUTPUT);
