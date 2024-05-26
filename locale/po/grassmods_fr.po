@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-23 03:37-0600\n"
-"PO-Revision-Date: 2024-05-26 19:11+0000\n"
+"PO-Revision-Date: 2024-05-27 09:55+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/"
 "grassmods/fr/>\n"
@@ -1445,22 +1445,20 @@ msgstr "Lister les formats supportés et sortir"
 #: ../locale/scriptstrings/v.import_to_translate.c:27
 #: ../vector/v.in.lidar/main.c:322 ../vector/v.external/args.c:49
 #: ../vector/v.in.pdal/main.cpp:225 ../vector/v.in.ogr/main.c:380
-#, fuzzy
 msgid "Override projection check (use current project's CRS)"
 msgstr ""
 "Supplanter la vérification de la projection (utiliser la projection du "
-"secteur courant)"
+"projet courant)"
 
 #: ../raster/r.external/main.c:102 ../raster/r.in.pdal/main.cpp:398
 #: ../raster/r.in.gdal/main.c:217 ../raster/r.in.lidar/main.c:305
 #: ../raster3d/r3.in.lidar/main.c:292 ../vector/v.in.lidar/main.c:324
 #: ../vector/v.external/args.c:51 ../vector/v.in.pdal/main.cpp:227
-#, fuzzy
 msgid ""
 "Assume that the dataset has the same coordinate reference system as the "
 "current project"
 msgstr ""
-"Considérer que le jeu de données a la même projection que le secteur courant"
+"Considérer que le jeu de données a la même projection que le projet courant"
 
 #: ../raster/r.external/main.c:107 ../raster/r.in.gdal/main.c:223
 #: ../vector/v.external/args.c:56 ../vector/v.in.ogr/main.c:387
@@ -1576,13 +1574,12 @@ msgid "No projection information available"
 msgstr ""
 
 #: ../raster/r.external/proj.c:134
-#, fuzzy
 msgid ""
 "Unable to convert input map coordinate reference system to GRASS format; "
 "cannot create new project."
 msgstr ""
-"Impossible de convertir la projection de la couche en entrée au format "
-"GRASS ; impossible de créer le nouveau Secteur"
+"Impossible de convertir la projection de la couche en entrée au format GRASS "
+"; impossible de créer le nouveau projet"
 
 #: ../raster/r.external/proj.c:140 ../raster/r.in.gdal/main.c:1035
 #: ../raster/r.in.gdal/proj.c:139 ../vector/v.in.lidar/main.c:522
@@ -3850,23 +3847,20 @@ msgstr ""
 
 #: ../raster/r.sun/main.c:804 ../general/g.region/printwindow.c:251
 #: ../general/g.region/printwindow.c:496 ../general/g.region/printwindow.c:570
-#, fuzzy
 msgid "Can't get projection info of current project"
 msgstr ""
-"Impossible d'obtenir les informations de projection pour le Secteur courant"
+"Impossible d'obtenir les informations de projection pour le projet courant"
 
 #: ../raster/r.sun/main.c:807 ../general/g.region/printwindow.c:255
 #: ../general/g.region/printwindow.c:500 ../general/g.region/printwindow.c:579
-#, fuzzy
 msgid "Can't get projection units of current project"
-msgstr "Impossible d'obtenir les unités de projection pour le Secteur courant"
+msgstr "Impossible d'obtenir les unités de projection pour le projet courant"
 
 #: ../raster/r.sun/main.c:811 ../general/g.region/printwindow.c:259
 #: ../general/g.region/printwindow.c:504 ../general/g.region/printwindow.c:583
-#, fuzzy
 msgid "Can't get projection key values of current project"
 msgstr ""
-"Impossible d'obtenir les valeurs clefs de projection pour le Secteur courant"
+"Impossible d'obtenir les valeurs clefs de projection pour le projet courant"
 
 #: ../raster/r.sun/main.c:820 ../raster/r.horizon/main.c:597
 #: ../raster/r.latlong/main.c:115 ../raster/r.in.gdal/main.c:1141
@@ -4252,17 +4246,17 @@ msgstr ""
 #: ../raster/r.horizon/main.c:582 ../display/d.where/main.c:104
 msgid "Can't get projection info of current location"
 msgstr ""
-"Impossible d'obtenir les informations de projection pour le Secteur courant"
+"Impossible d'obtenir les informations de projection pour le projet courant"
 
 #: ../raster/r.horizon/main.c:585 ../display/d.where/main.c:107
 msgid "Can't get projection units of current location"
-msgstr "Impossible d'obtenir les unités de projection pour le Secteur courant"
+msgstr "Impossible d'obtenir les unités de projection pour le projet courant"
 
 #: ../raster/r.horizon/main.c:588 ../ps/ps.map/do_geogrid.c:279
 #: ../display/d.where/main.c:111 ../display/d.grid/plot.c:578
 msgid "Can't get projection key values of current location"
 msgstr ""
-"Impossible d'obtenir les valeurs clefs de projection pour le Secteur courant"
+"Impossible d'obtenir les valeurs clefs de projection pour le projet courant"
 
 #: ../raster/r.horizon/main.c:723 ../raster/r.in.ascii/main.c:187
 #, c-format
@@ -4798,7 +4792,7 @@ msgstr ""
 
 #: ../raster/r.out.gdal/main.c:701
 msgid "Unable to set projection"
-msgstr ""
+msgstr "Impossible de définir la projection"
 
 #: ../raster/r.out.gdal/main.c:729
 #, c-format
