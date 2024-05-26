@@ -66,6 +66,11 @@ jobs:
         shell: msys2 {0}
         run: .github/workflows/build_osgeo4w.sh
 
+      - name: Print installed versions
+        if: always()
+        shell: msys2 {0}
+        run: .github/workflows/print_versions.sh
+
       - name: Test executing of the grass command
         run: .github/workflows/test_simple.bat 'C:\OSGeo4W\opt\grass\grass84.bat'
 
