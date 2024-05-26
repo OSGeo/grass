@@ -55,6 +55,7 @@ jobs:
       - name: Add the bin directory to PATH
         run: echo "$HOME/install/bin" >> $GITHUB_PATH
       - name: Check installed version
+        if: always()
         shell: bash -l {0}
         run: source ./.github/workflows/print_versions.sh
       - name: Run tests

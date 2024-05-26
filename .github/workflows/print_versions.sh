@@ -10,6 +10,6 @@ git --version
 
 # This will fail if the build failed.
 grass --version
-grass --tmp-location XY --exec g.version -e
+grass --tmp-location XY --exec g.version -ergb
 # Detailed Python version info (in one line thanks to echo)
 grass --tmp-location XY --exec bash -c "echo Python: \$(\$GRASS_PYTHON -c 'import sys; print(sys.version)')"
