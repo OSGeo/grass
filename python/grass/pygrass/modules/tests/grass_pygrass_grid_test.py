@@ -5,6 +5,7 @@ import multiprocessing
 import pytest
 
 import grass.script as gs
+from grass.pygrass.modules.grid import GridModule
 
 
 def max_processes():
@@ -34,10 +35,6 @@ def test_processes(tmp_path, processes):
         gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.slope.aspect",
                 width=10,
@@ -72,10 +69,6 @@ def test_tiling_schemes(tmp_path, width, height):
         gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.slope.aspect",
                 width=width,
@@ -105,10 +98,6 @@ def test_overlaps(tmp_path, overlap):
         gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.slope.aspect",
                 width=10,
@@ -140,10 +129,6 @@ def test_cleans(tmp_path, clean, surface):
             gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.slope.aspect",
                 width=10,
@@ -189,10 +174,6 @@ def test_patching_backend(tmp_path, patch_backend):
         )
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "v.to.rast",
                 width=10,
@@ -233,10 +214,6 @@ def test_tiling(tmp_path, width, height, processes):
         gs.run_command("r.surf.fractal", output=surface)
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.slope.aspect",
                 width=width,
@@ -274,10 +251,6 @@ def test_patching_error(tmp_path, processes, backend):
         surface = "fractal"
 
         def run_grid_module():
-            # modules/shortcuts calls get_commands which requires GISBASE.
-            # pylint: disable=import-outside-toplevel
-            from grass.pygrass.modules.grid import GridModule
-
             grid = GridModule(
                 "r.surf.fractal",
                 overlap=0,
