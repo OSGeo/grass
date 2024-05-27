@@ -76,7 +76,10 @@ class HistoryBrowserNode(DictFilterNode):
         if day == OLD_DATE:
             return _("No time info")
 
-        base_date = day.strftime("%B {day_number}").format(day_number=day.day)
+        month_name = day.strftime("%B")
+        base_date = _("{month_name} {day_number}").format(
+            month_name=month_name, day_number=day.day
+        )
 
         if day == current_date:
             return _("{base_date} (today)").format(base_date=base_date)
