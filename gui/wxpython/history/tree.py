@@ -76,16 +76,21 @@ class HistoryBrowserNode(DictFilterNode):
         if day == OLD_DATE:
             return _("No time info")
 
+        month_name = day.strftime("%B")
+        base_date = _("{month_name} {day_number}").format(
+            month_name=month_name, day_number=day.day
+        )
+
         if day == current_date:
-            return "{:%B %-d} (today)".format(day)
+            return _("{base_date} (today)").format(base_date=base_date)
         elif day == current_date - datetime.timedelta(days=1):
-            return "{:%B %-d} (yesterday)".format(day)
+            return _("{base_date} (yesterday)").format(base_date=base_date)
         elif day >= (current_date - datetime.timedelta(days=current_date.weekday())):
-            return "{:%B %-d} (this week)".format(day)
+            return _("{base_date} (this week)").format(base_date=base_date)
         elif day.year == current_date.year:
-            return "{:%B %-d}".format(day)
+            return _("{base_date}").format(base_date=base_date)
         else:
-            return "{:%B %-d, %Y}".format(day)
+            return _("{base_date}, {year}").format(base_date=base_date, year=day.year)
 
 
 class HistoryBrowserTree(CTreeView):
