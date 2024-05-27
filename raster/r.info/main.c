@@ -462,11 +462,12 @@ int main(int argc, char **argv)
         }
 
         if (gflag->answer) {
-            const char* data_type_f = (data_type == CELL_TYPE
-                                           ? "CELL"
-                                           : (data_type == DCELL_TYPE
-                                                  ? "DCELL"
-                                                  : (data_type == FCELL_TYPE ? "FCELL" : "??")));
+            const char *data_type_f =
+                (data_type == CELL_TYPE
+                     ? "CELL"
+                     : (data_type == DCELL_TYPE
+                            ? "DCELL"
+                            : (data_type == FCELL_TYPE ? "FCELL" : "??")));
             grass_int64 total_cells = (grass_int64)cellhd.rows * cellhd.cols;
 
             switch (format) {
@@ -514,7 +515,8 @@ int main(int argc, char **argv)
                 json_object_set_string(root_object, "datatype", data_type_f);
                 if (cats_ok) {
                     json_object_set_number(root_object, "ncats", cats.num);
-                } else {
+                }
+                else {
                     json_object_set_null(root_object, "ncats");
                 }
                 break;
@@ -591,7 +593,8 @@ int main(int argc, char **argv)
         if (sflag->answer) {
 
             if (!gflag->answer) {
-                grass_int64 total_cells = (grass_int64)cellhd.rows * cellhd.cols;
+                grass_int64 total_cells =
+                    (grass_int64)cellhd.rows * cellhd.cols;
                 /* always report total number of cells */
                 switch (format) {
                 case PLAIN:
@@ -601,7 +604,6 @@ int main(int argc, char **argv)
                     json_object_set_number(root_object, "cells", total_cells);
                     break;
                 }
-
             }
 
             if (rstats.count > 0) {
@@ -756,24 +758,35 @@ int main(int argc, char **argv)
                     json_object_set_null(root_object, "vdatum");
                 }
                 if (semantic_label) {
-                    json_object_set_string(root_object, "semantic_label", semantic_label);
-                } else {
+                    json_object_set_string(root_object, "semantic_label",
+                                           semantic_label);
+                }
+                else {
                     json_object_set_null(root_object, "semantic_label");
                 }
 
                 if (hist_ok) {
-                    json_object_set_string(root_object, "source1", Rast_get_history(&hist, HIST_DATSRC_1));
-                    json_object_set_string(root_object, "source2", Rast_get_history(&hist, HIST_DATSRC_2));
-                    json_object_set_string(root_object, "description", Rast_get_history(&hist, HIST_KEYWRD));
+                    json_object_set_string(
+                        root_object, "source1",
+                        Rast_get_history(&hist, HIST_DATSRC_1));
+                    json_object_set_string(
+                        root_object, "source2",
+                        Rast_get_history(&hist, HIST_DATSRC_2));
+                    json_object_set_string(
+                        root_object, "description",
+                        Rast_get_history(&hist, HIST_KEYWRD));
                     JSON_Value *comments_value = json_value_init_array();
                     JSON_Array *comments = json_array(comments_value);
                     if (Rast_history_length(&hist)) {
                         for (i = 0; i < Rast_history_length(&hist); i++) {
-                            json_array_append_string(comments, Rast_history_line(&hist, i));
+                            json_array_append_string(
+                                comments, Rast_history_line(&hist, i));
                         }
                     }
-                    json_object_set_value(root_object, "comments", comments_value);
-                } else {
+                    json_object_set_value(root_object, "comments",
+                                          comments_value);
+                }
+                else {
                     json_object_set_null(root_object, "source1");
                     json_object_set_null(root_object, "source2");
                     json_object_set_null(root_object, "description");
@@ -803,9 +816,15 @@ int main(int argc, char **argv)
                     }
                     break;
                 case JSON:
-                    json_object_set_string(root_object, "source1", Rast_get_history(&hist, HIST_DATSRC_1));
-                    json_object_set_string(root_object, "source2", Rast_get_history(&hist, HIST_DATSRC_2));
-                    json_object_set_string(root_object, "description", Rast_get_history(&hist, HIST_KEYWRD));
+                    json_object_set_string(
+                        root_object, "source1",
+                        Rast_get_history(&hist, HIST_DATSRC_1));
+                    json_object_set_string(
+                        root_object, "source2",
+                        Rast_get_history(&hist, HIST_DATSRC_2));
+                    json_object_set_string(
+                        root_object, "description",
+                        Rast_get_history(&hist, HIST_KEYWRD));
                     JSON_Value *comments_value = json_value_init_array();
                     JSON_Array *comments = json_array(comments_value);
                     if (Rast_history_length(&hist)) {
@@ -813,7 +832,8 @@ int main(int argc, char **argv)
                             json_array_append_string(comments, Rast_history_line(&hist, i));
                         }
                     }
-                    json_object_set_value(root_object, "comments", comments_value);
+                    json_object_set_value(root_object, "comments",
+                                          comments_value);
                     break;
                 }
             }
