@@ -208,7 +208,7 @@ class VirtualAttributeList(
         try:
             # for maps connected via v.external
             keyId = columns.index(keyColumn)
-        except:
+        except Exception:
             keyId = -1
 
         # read data
@@ -963,7 +963,7 @@ class DbMgrNotebookBase(GNotebook):
                     self.layerPage[self.selLayer]["data"]
                 ).GetItemCount()
             )
-        except:
+        except Exception:
             pass
 
         if idCol:
@@ -1645,7 +1645,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         if dlg.ShowModal() == wx.ID_OK:
             try:  # get category number
                 cat = int(dlg.GetValues(columns=[keyColumn])[0])
-            except:
+            except Exception:
                 cat = -1
 
             try:
@@ -1678,7 +1678,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                             values[i] = int(float(values[i]))
                         elif tlist.columns[columnName[i]]["ctype"] == float:
                             values[i] = float(values[i])
-                    except:
+                    except Exception:
                         raise ValueError(
                             _("Value '%(value)s' needs to be entered as %(type)s.")
                             % {
@@ -3818,7 +3818,7 @@ class LayerBook(wx.Notebook):
         """Delete layer"""
         try:
             layer = int(self.deleteLayer.GetValue())
-        except:
+        except Exception:
             return
 
         RunCommand(
@@ -3865,10 +3865,10 @@ class LayerBook(wx.Notebook):
         """Layer number of layer to be deleted is changed"""
         try:
             layer = int(event.GetString())
-        except:
+        except Exception:
             try:
                 layer = self.mapDBInfo.layers.keys()[0]
-            except:
+            except Exception:
                 return
 
         if self.GetCurrentPage() == self.modifyPanel:

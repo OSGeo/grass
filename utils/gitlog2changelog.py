@@ -66,7 +66,7 @@ for line in fin:
             author = authorList[1]
             author = author[0 : len(author) - 1]
             authorFound = True
-        except:
+        except Exception:
             print("Could not parse authorList = '%s'" % (line))
 
     # Match the date line
@@ -76,7 +76,7 @@ for line in fin:
             date = dateList[1]
             date = date[0 : len(date) - 1]
             dateFound = True
-        except:
+        except Exception:
             print("Could not parse dateList = '%s'" % (line))
     # The Fossil-IDs are ignored:
     elif line.startswith("    Fossil-ID:") or line.startswith("    [[SVN:"):

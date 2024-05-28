@@ -24,16 +24,16 @@ for fname in htmlfiles:
     try:
         index_keys = lines.index("<h2>KEYWORDS</h2>\n") + 1
         index_desc = lines.index("<h2>NAME</h2>\n") + 1
-    except:
+    except Exception:
         continue
     try:
         key = lines[index_keys].split(",")[1].strip().replace(" ", "_")
         key = key.split(">")[1].split("<")[0]
-    except:
+    except Exception:
         continue
     try:
         desc = lines[index_desc].split("-", 1)[1].strip()
-    except:
+    except Exception:
         desc.strip()
     if key not in keywords.keys():
         keywords[key] = {}

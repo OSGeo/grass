@@ -225,7 +225,7 @@ class DisplayAttributesDialog(wx.Dialog):
                     id = columns[name]["ids"][idx]
                     try:
                         newvalue = self.FindWindowById(id).GetValue()
-                    except:
+                    except Exception:
                         newvalue = self.FindWindowById(id).GetLabel()
 
                     if newvalue:

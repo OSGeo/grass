@@ -210,7 +210,7 @@ class TplotFrame(wx.Frame):
             self.coorval = gselect.CoordinatesSelect(
                 parent=self.controlPanelRaster, giface=self._giface
             )
-        except:
+        except Exception:
             self.coorval = TextCtrl(
                 parent=self.controlPanelRaster,
                 id=wx.ID_ANY,
@@ -279,7 +279,7 @@ class TplotFrame(wx.Frame):
             self.cats = gselect.VectorCategorySelect(
                 parent=self.controlPanelVector, giface=self._giface
             )
-        except:
+        except Exception:
             self.cats = TextCtrl(
                 parent=self.controlPanelVector,
                 id=wx.ID_ANY,
@@ -1032,10 +1032,10 @@ class TplotFrame(wx.Frame):
 
         try:
             getcoors = self.coorval.coordsField.GetValue()
-        except:
+        except Exception:
             try:
                 getcoors = self.coorval.GetValue()
-            except:
+            except Exception:
                 getcoors = None
         if getcoors and getcoors != "":
             try:
@@ -1264,7 +1264,7 @@ class TplotFrame(wx.Frame):
                 return
             try:
                 self.coorval.coordsField.SetValue(",".join(coors))
-            except:
+            except Exception:
                 self.coorval.SetValue(",".join(coors))
         if self.datasetsV:
             vdatas = ",".join(map(lambda x: x[0] + "@" + x[1], self.datasetsV))
@@ -1466,7 +1466,7 @@ class DataCursor:
                 for a in event.artist.get_xdata():
                     try:
                         d = self.convert(a)
-                    except:
+                    except Exception:
                         d = a
                     xData.append(d)
                 x = xData[np.argmin(abs(xData - x))]

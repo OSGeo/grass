@@ -321,7 +321,7 @@ class RulesPanel:
                 else:
                     value = float(self.ruleslines[item][self.attributeType])
                     self.mainPanel.FindWindowById(item + 2000).SetValue(value)
-            except:
+            except Exception:
                 continue
 
         if message:
@@ -403,7 +403,7 @@ class ColorTable(wx.Frame):
                 layer = sel
             else:
                 layer = self.layerTree.FindItemByData(key="type", value=self.mapType)
-        except:
+        except Exception:
             layer = None
         if layer:
             mapLayer = self.layerTree.GetLayerInfo(layer, key="maplayer")

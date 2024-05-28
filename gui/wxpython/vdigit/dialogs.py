@@ -256,7 +256,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
                 self.cats[self.fid][layerNew] = []
             self.cats[self.fid][layerNew].append(catNew)
             self.cats[self.fid][layerOld].remove(catOld)
-        except:
+        except Exception:
             event.Veto()
             self.list.SetItem(itemIndex, 0, str(layerNew))
             self.list.SetItem(itemIndex, 1, str(catNew))

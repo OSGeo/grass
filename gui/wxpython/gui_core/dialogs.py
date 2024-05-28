@@ -1217,7 +1217,7 @@ class GroupDialog(wx.Dialog):
             try:
                 if re.compile(self.flt_pattern).search(dt):
                     flt_data.append(dt)
-            except:
+            except Exception:
                 pass
 
         return flt_data
@@ -1662,7 +1662,7 @@ class MapLayersDialogBase(wx.Dialog):
             try:
                 if re.compile(event.GetString()).search(layer):
                     list.append(layer)
-            except:
+            except Exception:
                 pass
         list = naturally_sorted(list)
 

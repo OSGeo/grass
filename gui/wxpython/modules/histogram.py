@@ -258,7 +258,7 @@ class BufferedWindow(wx.Window):
             return
         try:
             id = self.imagedict[self.img]
-        except:
+        except Exception:
             return
 
         # paint images to PseudoDC
@@ -525,7 +525,7 @@ class HistogramFrame(wx.Frame):
         """
         try:
             self.propwin.Close(True)
-        except:
+        except Exception:
             pass
         self.Map.Clean()
         self.Destroy()

@@ -81,17 +81,17 @@ for html_file in htmlfiles:
     try:
         index_keys = lines.index("<h2>KEYWORDS</h2>\n") + 1
         index_desc = lines.index("<h2>NAME</h2>\n") + 1
-    except:
+    except Exception:
         continue
     try:
         keys = lines[index_keys].split(",")
-    except:
+    except Exception:
         continue
     for key in keys:
         key = key.strip()
         try:
             key = key.split(">")[1].split("<")[0]
-        except:
+        except Exception:
             pass
         if not key:
             exit("Empty keyword from file %s line: %s" % (fname, lines[index_keys]))
@@ -104,10 +104,10 @@ for html_file in htmlfiles:
 for black in blacklist:
     try:
         del keywords[black]
-    except:
+    except Exception:
         try:
             del keywords[black.lower()]
-        except:
+        except Exception:
             continue
 
 for key in sorted(keywords.keys()):

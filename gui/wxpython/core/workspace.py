@@ -125,7 +125,7 @@ class ProcessWorkspaceFile:
                 try:
                     self.layerManager["pos"] = (posVal[0], posVal[1])
                     self.layerManager["size"] = (posVal[2], posVal[3])
-                except:
+                except Exception:
                     pass
             # current working directory
             cwdPath = self.__getNodeText(node_lm, "cwd")
@@ -157,7 +157,7 @@ class ProcessWorkspaceFile:
                 try:
                     pos = (posVal[0], posVal[1])
                     size = (posVal[2], posVal[3])
-                except:
+                except Exception:
                     pos = None
                     size = None
                 # this happens on Windows when mapwindow is minimized when
@@ -2023,7 +2023,7 @@ class ProcessGrcFile:
         """Get value of element"""
         try:
             return line.strip(" ").split(" ")[1].strip(" ")
-        except:
+        except Exception:
             return ""
 
     def _get_element(self, line):

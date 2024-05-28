@@ -93,7 +93,7 @@ class RedirectText:
                 heigth = self._get_heigth(string)
                 wx.CallAfter(self.out.SetLabel, string)
                 self._resize(heigth)
-        except:
+        except Exception:
             # window closed -> PyDeadObjectError
             pass
 

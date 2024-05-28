@@ -17,7 +17,7 @@ import grass.script as grass
 
 try:
     from osgeo import gdal
-except:
+except Exception:
     grass.fatal(
         _(
             "Unable to load GDAL Python bindings (requires package 'python-gdal' being "
