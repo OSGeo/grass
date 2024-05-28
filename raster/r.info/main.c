@@ -384,8 +384,8 @@ int main(int argc, char **argv)
     else { /* g, r, s, e, or h flags */
         int need_range, have_range, need_stats, have_stats;
 
-        need_range = rflag->answer;
-        need_stats = sflag->answer;
+        need_range = rflag->answer || format == JSON;
+        need_stats = sflag->answer || format == JSON;
         if (need_stats)
             need_range = 1;
 
@@ -461,7 +461,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if (gflag->answer) {
+        if (gflag->answer || format == JSON) {
             const char *data_type_f =
                 (data_type == CELL_TYPE
                      ? "CELL"
@@ -523,7 +523,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if (rflag->answer || sflag->answer) {
+        if (rflag->answer || sflag->answer || format == JSON) {
             if (data_type == CELL_TYPE) {
                 CELL min, max;
 
@@ -590,7 +590,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if (sflag->answer) {
+        if (sflag->answer || format == JSON) {
 
             if (!gflag->answer) {
                 grass_int64 total_cells =
@@ -641,7 +641,7 @@ int main(int argc, char **argv)
                 case JSON:
                     json_object_set_number(root_object, "n", rstats.count);
                     json_object_set_number(root_object, "mean", mean);
-                    json_object_set_number(root_object, "sd", sd);
+                    json_object_set_number(root_object, "stddev", sd);
                     json_object_set_number(root_object, "sum", rstats.sum);
                     break;
                 }
@@ -664,7 +664,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if (eflag->answer) {
+        if (eflag->answer || format == JSON) {
             char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
             const char *maptype, *date, *creator;
 
@@ -796,7 +796,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if (hflag->answer) {
+        if (hflag->answer || format == JSON) {
             if (hist_ok) {
                 switch (format) {
                 case PLAIN:
