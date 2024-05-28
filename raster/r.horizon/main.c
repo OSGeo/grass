@@ -298,15 +298,7 @@ int main(int argc, char *argv[])
     parm.dist->description = _("Sampling distance step coefficient (0.5-1.5)");
     parm.dist->guisection = _("Optional");
 
-    parm.format = G_define_option();
-    parm.format->key = "format";
-    parm.format->type = TYPE_STRING;
-    parm.format->required = YES;
-    parm.format->label = _("Output format used for point mode");
-    parm.format->options = "plain,json";
-    parm.format->descriptions = "plain;Plain text output;"
-                                "json;JSON (JavaScript Object Notation);";
-    parm.format->answer = "plain";
+    parm.format = G_define_standard_option(G_OPT_F_FORMAT);
     parm.format->guisection = _("Point mode");
 
     parm.output = G_define_standard_option(G_OPT_F_OUTPUT);

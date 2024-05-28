@@ -94,7 +94,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
             self.general_info_box_sizer, proportion=0, flag=wx.EXPAND | wx.ALL, border=5
         )
         mainSizer.Add(
-            self.region_settings_box_sizer,
+            self.sizer_region_settings,
             proportion=0,
             flag=wx.EXPAND | wx.ALL,
             border=5,
@@ -137,12 +137,12 @@ class HistoryInfoPanel(SP.ScrolledPanel):
             id=wx.ID_ANY,
             label=_("Computational region during command execution"),
         )
-        self.region_settings_box_sizer = wx.StaticBoxSizer(
+        self.sizer_region_settings = wx.StaticBoxSizer(
             self.region_settings_box, wx.VERTICAL
         )
 
         self.sizer_region_settings_match = wx.BoxSizer(wx.HORIZONTAL)
-        self.region_settings_box_sizer.Add(
+        self.sizer_region_settings.Add(
             self.sizer_region_settings_match,
             proportion=0,
             flag=wx.ALL | wx.EXPAND,
@@ -153,7 +153,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.sizer_region_settings_grid.SetCols(2)
         self.sizer_region_settings_grid.SetRows(9)
 
-        self.region_settings_box_sizer.Add(
+        self.sizer_region_settings.Add(
             self.sizer_region_settings_grid,
             proportion=1,
             flag=wx.ALL | wx.EXPAND,
@@ -173,7 +173,10 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         return (key != "projection") and (key != "zone") and (key != "cells")
 
     def _updateGeneralInfoBox(self, command_info):
-        """Update a static box for displaying general info about the command"""
+        """Update a static box for displaying general info about the command.
+
+        :param dict command_info: command info entry for update
+        """
         self.sizer_general_info.Clear(True)
 
         idx = 0
@@ -206,8 +209,12 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.general_info_box.Layout()
         self.general_info_box.Show()
 
-    def _updateRegionSettingsBox(self, command_info):
-        """Update a static box for displaying region settings of the command"""
+    def _updateRegionSettingsGrid(self, command_info):
+        """Update a grid that displays numerical values
+        for the regional settings of the executed command.
+
+        :param dict command_info: command info entry for update
+        """
         self.sizer_region_settings_grid.Clear(True)
 
         self.region_settings = command_info["region"]
@@ -238,6 +245,10 @@ class HistoryInfoPanel(SP.ScrolledPanel):
                 )
                 idx += 1
 
+        self.region_settings_box.Show()
+
+    def _updateRegionSettingsMatch(self):
+        """Update text, icon and button dealing with region update"""
         self.sizer_region_settings_match.Clear(True)
 
         # Region condition
@@ -290,27 +301,26 @@ class HistoryInfoPanel(SP.ScrolledPanel):
                 border=10,
             )
 
-        self.region_settings_box.Layout()
         self.region_settings_box.Show()
 
     def showCommandInfo(self, command_info):
-        """Show command info input."""
+        """Show command info input.
+
+        :param dict command_info: command info entry for update
+        """
         if command_info:
             self._updateGeneralInfoBox(command_info)
-            self._updateRegionSettingsBox(command_info)
+            self._updateRegionSettingsGrid(command_info)
+            self._updateRegionSettingsMatch()
         else:
-            self.clearCommandInfo()
+            self.hideCommandInfo()
         self.SetupScrolling(scroll_x=False, scroll_y=True)
         self.Layout()
 
-    def clearCommandInfo(self):
-        """Clear command info."""
-        self.sizer_general_info.Clear(True)
-        self.sizer_region_settings_grid.Clear(True)
-        self.sizer_region_settings_text.Clear(True)
-        self._createGeneralInfoBox()
-        self._createRegionSettingsBox()
-        self._layout()
+    def hideCommandInfo(self):
+        """Hide command info input."""
+        self.general_info_box.Hide()
+        self.region_settings_box.Hide()
 
     def _get_current_region(self):
         """Get current computational region settings."""
@@ -329,6 +339,8 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         history_region = self._get_history_region()
         gs.run_command("g.region", **history_region)
         self.giface.updateMap.emit(render=False, renderVector=False)
+        self._updateRegionSettingsMatch()
+        self.Layout()
 
 
 class HistoryBrowser(wx.SplitterWindow):
