@@ -829,7 +829,8 @@ int main(int argc, char **argv)
                     JSON_Array *comments = json_array(comments_value);
                     if (Rast_history_length(&hist)) {
                         for (i = 0; i < Rast_history_length(&hist); i++) {
-                            json_array_append_string(comments, Rast_history_line(&hist, i));
+                            json_array_append_string(
+                                comments, Rast_history_line(&hist, i));
                         }
                     }
                     json_object_set_value(root_object, "comments",
