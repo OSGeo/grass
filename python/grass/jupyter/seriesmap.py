@@ -97,7 +97,7 @@ class SeriesMap(BaseSeriesMap):
         if not self._labels:
             self._labels = rasters
         self._layers_rendered = False
-        self._indices = range(len(self._labels))
+        self._indices = list(range(len(self._labels)))
 
     def add_vectors(self, vectors, **kwargs):
         """
@@ -133,7 +133,7 @@ class SeriesMap(BaseSeriesMap):
             "Number of vectors in series must match number of vectors"
         )
         self._labels = names
-        self._indices = range(len(self._labels))
+        self._indices = list(range(len(self._labels)))
 
     def render(self):
         """Renders image for each raster in series.
@@ -141,7 +141,7 @@ class SeriesMap(BaseSeriesMap):
         Save PNGs to temporary directory. Must be run before creating a visualization
         (i.e. show or save).
         """
-        super()._render()
+        self._render()
         if not self._baseseries_added:
             raise RuntimeError(
                 "Cannot render series since none has been added."
