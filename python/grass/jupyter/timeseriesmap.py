@@ -150,30 +150,13 @@ class TimeSeriesMap(BaseSeriesMap):
         :param saved_region: if name of saved_region is provided,
                             this region is then used for rendering
         """
-        super().__init__(width, height, env, use_region, saved_region)
-        # Copy Environment
-        if env:
-            self._env = env.copy()
-        else:
-            self._env = os.environ.copy()
+        super().__init__(width, height, env)
 
         self._element_type = None
         self._fill_gaps = None
         self._legend = None
         self._layers = None
         self._date_layer_dict = {}
-
-        # self.timeseries = None
-        # self._base_layer_calls = []
-        # self._overlay_calls = []
-        # self._timeseries_added = False
-        # self._layers_rendered = False
-        # self._dates = None
-        # self._width = width
-        # self._height = height
-        # self._date_filename_dict = {}
-
-        self._indices = self._labels
         self._slider_description = _("Date/Time")
 
         # Handle Regions
@@ -305,30 +288,15 @@ class TimeSeriesMap(BaseSeriesMap):
         (i.e. show or save). Can be time-consuming to run with large
         space-time datasets.
         """
-        super().render()
+
+        super()._render()
         if not self._baseseries_added:
             raise RuntimeError(
                 "Cannot render space time dataset since none has been added."
                 "Use TimeSeriesMap.add_raster_series() or "
                 "TimeSeriesMap.add_vector_series() to add dataset"
             )
-        # # Make base image (background and baselayers)
-        # # Random name needed to avoid potential conflict with layer names
-        # random_name_base = gs.append_random("base", 8) + ".png"
-        # base_file = os.path.join(self._tmpdir.name, random_name_base)
-        # img = Map(
-        #     width=self._width,
-        #     height=self._height,
-        #     filename=base_file,
-        #     use_region=True,
-        #     env=self._env,
-        #     read_file=True,
-        # )
-        # # We have to call d_erase to ensure the file is created. If there are no
-        # # base layers, then there is nothing to render in random_base_name
-        # img.d_erase()
-        # # Add baselayers
-        # self._render_baselayers(img)
+
         # Create name for empty layers
         # Random name needed to avoid potential conflict with layer names
         # A new random_name_none is created each time the render function is run,

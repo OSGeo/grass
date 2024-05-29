@@ -61,25 +61,7 @@ class SeriesMap(BaseSeriesMap):
         :param saved_region: if name of saved_region is provided,
                             this region is then used for rendering
         """
-        super().__init__(width, height, env, use_region, saved_region)
-        # Copy Environment
-        if env:
-            self._env = env.copy()
-        else:
-            self._env = os.environ.copy()
-
-        # self._series_length = None
-        # self._base_layer_calls = []
-        # self._calls = []
-        # self._series_added = False
-        # self._layers_rendered = False
-        # self._names = []
-        # self._width = width
-        # self._height = height
-        # self._layer_filename_dict = {}
-
-        self._labels = []
-        self._indices = range(len(self._labels))
+        super().__init__(width, height, env)
 
         # Handle Regions
         self._region_manager = RegionManagerForSeries(
@@ -159,27 +141,13 @@ class SeriesMap(BaseSeriesMap):
         Save PNGs to temporary directory. Must be run before creating a visualization
         (i.e. show or save).
         """
-        super().render()
+        super()._render()
         if not self._baseseries_added:
             raise RuntimeError(
                 "Cannot render series since none has been added."
                 "Use SeriesMap.add_rasters() or SeriesMap.add_vectors()"
             )
-        # random_name_base = gs.append_random("base", 8) + ".png"
-        # base_file = os.path.join(self._tmpdir.name, random_name_base)
-        # img = Map(
-        #     width=self._width,
-        #     height=self._height,
-        #     filename=base_file,
-        #     use_region=True,
-        #     env=self._env,
-        #     read_file=True,
-        # )
-        # # We have to call d_erase to ensure the file is created. If there are no
-        # # base layers, then there is nothing to render in random_base_name
-        # img.d_erase()
-        # # Add baselayers
-        # self._render_baselayers(img)
+
         # Render each layer
         for i in range(self.baseseries):
             # Create file

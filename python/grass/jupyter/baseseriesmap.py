@@ -15,18 +15,12 @@ class BaseSeriesMap:
     Base class for SeriesMap and TimeSeriesMap
     """
 
-    def __init__(
-        self, width=None, height=None, env=None, use_region=False, saved_region=None
-    ):
+    def __init__(self, width=None, height=None, env=None):
         """Creates an instance of the visualizations class.
 
         :param int width: width of map in pixels
         :param int height: height of map in pixels
         :param str env: environment
-        :param use_region: if True, use either current or provided saved region,
-                          else derive region from rendered layers
-        :param saved_region: if name of saved_region is provided,
-                            this region is then used for rendering
         """
 
         # Copy Environment
@@ -43,10 +37,10 @@ class BaseSeriesMap:
         self._base_filename_dict = {}
         self._width = width
         self._height = height
-
         self._slider_description = ""
         self._labels = []
         self._indices = []
+        self.base_file = None
 
         # Create a temporary directory for our PNG images
         # Resource managed by weakref.finalize.
@@ -59,10 +53,6 @@ class BaseSeriesMap:
             tmpdir.cleanup()
 
         weakref.finalize(self, cleanup, self._tmpdir)
-
-        # Handle regions in respective classes
-        self.use_region = use_region
-        self.saved_region = saved_region
 
     def __getattr__(self, name):
         """
@@ -97,12 +87,18 @@ class BaseSeriesMap:
         for grass_module, kwargs in self._base_layer_calls:
             img.run(grass_module, **kwargs)
 
-    def render(self):
-        """Renders image for each time-step in space-time dataset.
+    def _render(self):
+        """
+        Renders the base image for the dataset.
 
-        Save PNGs to temporary directory. Must be run before creating a visualization
-        (i.e. show or save). Can be time-consuming to run with large
-        space-time datasets.
+        Saves PNGs to a temporary directory.
+        This method must be run before creating a visualization (e.g., show or save).
+        It can be time-consuming to run with large space-time datasets.
+
+        Child classes should override the `render` method
+        to define specific rendering behaviors, such as:
+        - Rendering images for each time-step in a space-time dataset (e.g., class1).
+        - Rendering images for each raster in a series (e.g., class2).
         """
         # Runtime error in respective classes
 
@@ -126,15 +122,13 @@ class BaseSeriesMap:
 
         # Render layers in respective classes
 
+    def render(self):
+        return self._render()
+
     def show(self, slider_width=None):
         """Create interactive timeline slider.
 
         param str slider_width: width of datetime selection slider
-        param list options: list of options for the slider
-        param str value: initial value of the slider
-        param str description: description of the slider
-        param int max_value: maximum value of the slider
-        param bool label: include date/time stamp on each frame
 
         The slider_width parameter sets the width of the slider in the output cell.
         It should be formatted as a percentage (%) between 0 and 100 of the cell width
