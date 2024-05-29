@@ -122,9 +122,6 @@ class BaseSeriesMap:
 
         # Render layers in respective classes
 
-    def render(self):
-        return self._render()
-
     def show(self, slider_width=None):
         """Create interactive timeline slider.
 

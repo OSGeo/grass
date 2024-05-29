@@ -289,7 +289,7 @@ class TimeSeriesMap(BaseSeriesMap):
         space-time datasets.
         """
 
-        super()._render()
+        self._render()
         if not self._baseseries_added:
             raise RuntimeError(
                 "Cannot render space time dataset since none has been added."
