@@ -835,9 +835,11 @@ class Module:
             if val.value:
                 param = {
                     "param": key,
-                    "value": ",".join(val.value)
-                    if type(val.value) == list
-                    else str(val.value),
+                    "value": (
+                        ",".join(val.value)
+                        if type(val.value) == list
+                        else str(val.value)
+                    ),
                 }
                 if export:
                     param["export"] = {
