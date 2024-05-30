@@ -18,7 +18,6 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 .. sectionauthor:: Soeren Gebbert <soeren.gebbert gmail.com>
 """
-from __future__ import absolute_import
 
 import os
 import time

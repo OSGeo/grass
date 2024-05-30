@@ -27,7 +27,7 @@ ignore the warning. The interpolation will be continued. However, the user
 may pay attention to below notes.
 <p>
 If interpolation fails, temporary raster and vector maps are left in place to allow
-unfilled map hole (NULL area) identification and manual repair.
+unfilled map holes (NULL areas) to be identified and manually repaired.
 
 <p>
 When using the default RST method, the algorithm is based
@@ -61,7 +61,7 @@ free space as one extra input raster map takes.
 <h2>EXAMPLE</h2>
 
 In this example, the SRTM elevation map in the
-North Carolina sample dataset location is filtered for outlier
+North Carolina sample dataset is filtered for outlier
 elevation values; missing pixels are then re-interpolated to obtain
 a complete elevation map:
 
@@ -128,7 +128,8 @@ II. Application to Terrain Modeling and Surface Geometry Analysis,
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.resamp.bspline.html">r.resamp.bspline</a>,
 <a href="v.surf.bspline.html">v.surf.bspline</a>,
-<a href="v.surf.rst.html">v.surf.rst</a>
+<a href="v.surf.rst.html">v.surf.rst</a>,
+<a href="v.fill.holes.html">v.fill.holes</a>
 </em>
 
 <h2>AUTHORS</h2>

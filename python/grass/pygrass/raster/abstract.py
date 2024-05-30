@@ -3,15 +3,7 @@ Created on Fri Aug 17 16:05:25 2012
 
 @author: pietro
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
+
 import ctypes
 
 #
@@ -51,13 +43,13 @@ proj: {proj}
 """
 
 
-class Info(object):
+class Info:
     def __init__(self, name, mapset=""):
         """Read the information for a raster map. ::
 
         >>> info = Info(test_raster_name)
         >>> info.read()
-        >>> info          # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        >>> info  # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
         abstract_test_map@
         rows: 4
         cols: 4
@@ -264,7 +256,7 @@ class Info(object):
         return dict2html(dict(self.items()), keys=self.keys(), border="1", kdec="b")
 
 
-class RasterAbstractBase(object):
+class RasterAbstractBase:
     """Raster_abstract_base: The base class from which all sub-classes
     inherit. It does not implement any row or map access methods:
 
@@ -547,7 +539,8 @@ class RasterAbstractBase(object):
     def get_value(self, point, region=None):
         """This method returns the pixel value of a given pair of coordinates:
 
-        :param point: pair of coordinates in tuple object or class object with coords() method
+        :param point: pair of coordinates in tuple object or class object with coords()
+            method
         """
         # Check for tuple
         if not isinstance(point, list) and not isinstance(point, tuple):

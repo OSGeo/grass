@@ -42,6 +42,11 @@ from grass.script.utils import decode
 from core.gcmd import RunCommand, GError, GMessage
 from core.settings import UserSettings, GetDisplayVectSettings
 from core.utils import SetAddOnPath, GetLayerNameFromCmd, command2ltype, get_shell_pid
+from core.watchdog import (
+    EVT_UPDATE_MAPSET,
+    EVT_CURRENT_MAPSET_CHANGED,
+    MapsetWatchdog,
+)
 from gui_core.preferences import MapsetAccess, PreferencesDialog
 from lmgr.layertree import LayerTree, LMIcons
 from lmgr.menudata import LayerManagerMenuData, LayerManagerModuleTree
@@ -65,12 +70,10 @@ from lmgr.toolbars import LMMiscToolbar, LMNvizToolbar, DisplayPanelToolbar
 from lmgr.statusbar import SbMain
 from lmgr.workspace import WorkspaceManager
 from lmgr.pyshell import PyShellWindow
-from lmgr.giface import (
-    LayerManagerGrassInterface,
-    LayerManagerGrassInterfaceForMapDisplay,
-)
+from lmgr.giface import LayerManagerGrassInterface
 from mapdisp.frame import MapDisplay
 from datacatalog.catalog import DataCatalog
+from history.browser import HistoryBrowser
 from gui_core.forms import GUI
 from gui_core.wrap import Menu, TextEntryDialog
 from startup.guiutils import (
@@ -80,6 +83,7 @@ from startup.guiutils import (
     create_location_interactively,
 )
 from grass.grassdb.checks import is_first_time_user
+from grass.grassdb.history import Status
 
 
 class GMFrame(wx.Frame):
@@ -162,6 +166,7 @@ class GMFrame(wx.Frame):
         self._createDisplay(self.notebook)
         self._createSearchModule(self.notebook)
         self._createConsole(self.notebook)
+        self._createHistoryBrowser(self.notebook)
         self._createPythonShell(self.notebook)
         self._addPagesToNotebook()
         self.toolbars = {
@@ -199,7 +204,7 @@ class GMFrame(wx.Frame):
                 .TopDockable(True)
                 .CloseButton(False)
                 .Layer(2)
-                .BestSize((self.toolbars[toolbar].GetBestSize())),
+                .BestSize(self.toolbars[toolbar].GetBestSize()),
             )
 
         self._auimgr.GetPane("toolbarNviz").Hide()
@@ -288,6 +293,19 @@ class GMFrame(wx.Frame):
 
         # redirect stderr to log area
         self._gconsole.Redirect()
+
+        #  mapset watchdog
+        self._mapset_watchdog = MapsetWatchdog(
+            elements_dirs=(("raster", "cell"),),
+            evt_handler=self,
+            giface=self._giface,
+        )
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()
+        self.Bind(
+            EVT_UPDATE_MAPSET,
+            lambda evt: self._onMapsetWatchdog(evt.src_path, evt.dest_path),
+        )
+        self.Bind(EVT_CURRENT_MAPSET_CHANGED, self._onMapsetChanged)
 
         # fix goutput's pane size (required for Mac OSX)`
         self.goutput.SetSashPosition(int(self.GetSize()[1] * 0.8))
@@ -406,10 +424,7 @@ class GMFrame(wx.Frame):
         self._gconsole = GConsole(
             guiparent=self,
             giface=self._giface,
-            ignoredCmdPattern="^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.import$|"
-            "^r.external$|^r.external.out$|"
-            "^v.import$|^v.external$|^v.external.out$|"
-            "^cd$|^cd .*",
+            ignoredCmdPattern=globalvar.ignoredCmdPattern,
         )
         # create 'console' widget
         self.goutput = GConsoleWindow(
@@ -429,6 +444,19 @@ class GMFrame(wx.Frame):
         )
 
         self._setCopyingOfSelectedText()
+
+    def _createHistoryBrowser(self, parent):
+        """Initialize history browser widget"""
+        if not UserSettings.Get(group="manager", key="hideTabs", subkey="history"):
+            self.history = HistoryBrowser(parent=parent, giface=self._giface)
+            self.history.showNotification.connect(
+                lambda message: self.SetStatusText(message)
+            )
+            self.history.runIgnoredCmdPattern.connect(
+                lambda cmd: self.RunSpecialCmd(command=cmd),
+            )
+        else:
+            self.history = None
 
     def _createPythonShell(self, parent):
         """Initialize Python shell widget"""
@@ -466,10 +494,10 @@ class GMFrame(wx.Frame):
         self.notebookLayers.AddPage(page=self.pg_panel, text=name, select=True)
         self.currentPage = self.notebookLayers.GetCurrentPage()
 
-        def CreateNewMapDisplay(layertree):
+        def CreateNewMapDisplay(giface, layertree):
             """Callback function which creates a new Map Display window
+            :param giface: giface for map display
             :param layertree: layer tree object
-            :param name: name of new map display window
             :return: reference to mapdisplay instance
             """
             # count map display frame position
@@ -485,14 +513,10 @@ class GMFrame(wx.Frame):
                 title=name,
             )
 
-            # create instance of Map Display interface
-            self._gifaceForDisplay = LayerManagerGrassInterfaceForMapDisplay(
-                self._giface, layertree
-            )
             # create Map Display
             mapdisplay = MapDisplay(
                 parent=mapframe,
-                giface=self._gifaceForDisplay,
+                giface=giface,
                 id=wx.ID_ANY,
                 size=globalvar.MAP_WINDOW_SIZE,
                 tree=layertree,
@@ -563,7 +587,7 @@ class GMFrame(wx.Frame):
                 return pgnum_dict
             return None
 
-        mapdisplay.canCloseDisplayCallback = CanCloseDisplay
+        mapdisplay.canCloseCallback = CanCloseDisplay
 
         # bind various events
         mapdisplay.BindToFrame(
@@ -572,13 +596,13 @@ class GMFrame(wx.Frame):
         )
 
         mapdisplay.starting3dMode.connect(
-            lambda firstTime, mapDisplayPage=self.currentPage: self._onMapDisplayStarting3dMode(
-                mapDisplayPage
+            lambda firstTime, mapDisplayPage=self.currentPage: (
+                self._onMapDisplayStarting3dMode(mapDisplayPage)
             )
         )
         mapdisplay.starting3dMode.connect(self.AddNvizTools)
         mapdisplay.ending3dMode.connect(self.RemoveNvizTools)
-        mapdisplay.closingDisplay.connect(self._closePageNoEvent)
+        mapdisplay.closingPage.connect(self._closePageNoEvent)
 
         # set default properties
         mapdisplay.SetProperties(
@@ -616,6 +640,10 @@ class GMFrame(wx.Frame):
         self.goutput.contentChanged.connect(
             lambda notification: self._switchPage(notification)
         )
+
+        # add 'history module' widget to main notebook page
+        if self.history:
+            self.notebook.AddPage(page=self.history, text=_("History"), name="history")
 
         # add 'python shell' widget to main notebook page
         if self.pyshell:
@@ -748,9 +776,9 @@ class GMFrame(wx.Frame):
 
     def OnGModeler(self, event=None, cmd=None):
         """Launch Graphical Modeler. See OnIClass documentation"""
-        from gmodeler.frame import ModelFrame
+        from gmodeler.frame import ModelerFrame
 
-        win = ModelFrame(parent=self, giface=self._giface)
+        win = ModelerFrame(parent=self, giface=self._giface)
         win.CentreOnScreen()
         win.Show()
 
@@ -920,9 +948,10 @@ class GMFrame(wx.Frame):
 
     def RunSpecialCmd(self, command):
         """Run command from command line, check for GUI wrappers"""
-        if re.compile("^d\..*").search(command[0]):
-            self.RunDisplayCmd(command)
-        elif re.compile("r[3]?\.mapcalc").search(command[0]):
+        result = True
+        if re.compile(r"^d\..*").search(command[0]):
+            result = self.RunDisplayCmd(command)
+        elif re.compile(r"r[3]?\.mapcalc").search(command[0]):
             self.OnMapCalculator(event=None, cmd=command)
         elif command[0] == "i.group":
             self.OnEditImageryGroups(event=None, cmd=command)
@@ -941,15 +970,21 @@ class GMFrame(wx.Frame):
         elif command[0] == "cd":
             self.OnChangeCWD(event=None, cmd=command)
         else:
+            result = False
             raise ValueError(
                 "Layer Manager special command (%s)"
                 " not supported." % " ".join(command)
             )
+        if result:
+            self._gconsole.UpdateHistory(status=Status.SUCCESS)
+        else:
+            self._gconsole.UpdateHistory(status=Status.FAILED)
 
     def RunDisplayCmd(self, command):
         """Handles display commands.
 
         :param command: command in a list
+        :return int: False if failed, True if succcess
         """
         if not self.currentPage:
             self.NewDisplay(show=True)
@@ -957,7 +992,7 @@ class GMFrame(wx.Frame):
         if command[0] == "d.erase":
             # rest of d.erase is ignored
             self.GetLayerTree().DeleteAllLayers()
-            return
+            return False
         try:
             # display GRASS commands
             layertype = command2ltype[command[0]]
@@ -970,7 +1005,7 @@ class GMFrame(wx.Frame):
                 )
                 % command[0],
             )
-            return
+            return False
 
         if layertype == "barscale":
             if len(command) > 1:
@@ -1024,6 +1059,7 @@ class GMFrame(wx.Frame):
                 lname=lname,
                 lcmd=command,
             )
+        return True
 
     def GetLayerNotebook(self):
         """Get Layers Notebook"""
@@ -2102,8 +2138,13 @@ class GMFrame(wx.Frame):
             dlg.Destroy()
 
         # region = tree.GetMap().GetCurrentRegion()
-        # if region['cells'] > 10000:
-        #   GMessage(message = "Cell values can only be displayed for regions of < 10,000 cells.", parent = self)
+        # if region["cells"] > 10000:
+        # GMessage(
+        #     message=(
+        #     "Cell values can only be displayed for regions of < 10,000 cells."
+        #     ),
+        #     parent=self,
+        # )
         self.GetLayerTree().AddLayer("rastnum")
 
     def OnAddCommand(self, event):
@@ -2315,3 +2356,17 @@ class GMFrame(wx.Frame):
             style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
         )
         return dlg
+
+    def _onMapsetWatchdog(self, map_path, map_dest):
+        """Current mapset watchdog event handler
+
+        :param str map_path: map path (map that is changed)
+        :param str map_dest: new map path
+        """
+        self.statusbar.mask.dbChanged(
+            map=os.path.basename(map_path) if map_path else map_path,
+            newname=os.path.basename(map_dest) if map_dest else map_dest,
+        )
+
+    def _onMapsetChanged(self, event):
+        self._mapset_watchdog.ScheduleWatchCurrentMapset()

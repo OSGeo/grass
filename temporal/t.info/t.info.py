@@ -53,7 +53,6 @@
 # % description: Print information about the temporal DBMI interface and exit
 # % suppress_required: yes
 # %end
-from __future__ import print_function
 
 import grass.script as grass
 
@@ -80,7 +79,7 @@ def main():
     if system and not shellstyle and not history:
         #      0123456789012345678901234567890
         print(
-            " +------------------- Temporal DBMI backend information ----------------------+"
+            " +------------------- Temporal DBMI backend information ----------------------+"  # noqa: E501
         )
         print(" | DBMI Python interface:...... " + str(dbif.get_dbmi().__name__))
         print(" | Temporal database string:... " + str(tgis.get_tgis_database_string()))
@@ -89,7 +88,7 @@ def main():
             for row in rows:
                 print(" | %s .......... %s" % (row[0], row[1]))
         print(
-            " +----------------------------------------------------------------------------+"
+            " +----------------------------------------------------------------------------+"  # noqa: E501
         )
         return
     elif system and not history:

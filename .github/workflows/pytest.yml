@@ -7,9 +7,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 
 jobs:
   pytest:
@@ -25,17 +22,22 @@ jobs:
         python-version:
           - '3.8'
           - '3.10'
+          - '3.12'
       fail-fast: true
 
     runs-on: ${{ matrix.os }}
+    env:
+      FORCE_COLOR: 1 # for software including pip: https://force-color.org/
+      CLICOLOR_FORCE: 1 # for other software including ninja: https://bixense.com/clicolors/
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
         with:
           python-version: ${{ matrix.python-version }}
+          cache: pip
 
       - name: Install non-Python dependencies
         run: |
@@ -44,12 +46,14 @@ jobs:
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
+      - uses: rui314/setup-mold@8de9eea54963d01c1a6c200606257d65bd53bea1 # v1
+
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r .github/workflows/python_requirements.txt
           pip install -r .github/workflows/optional_requirements.txt
-          pip install pytest pytest-timeout
+          pip install pytest pytest-timeout pytest-github-actions-annotate-failures pytest-xdist
 
       - name: Create installation directory
         run: |
@@ -72,9 +76,17 @@ jobs:
       - name: Run pytest
         run: |
           export PYTHONPATH=`grass --config python_path`:$PYTHONPATH
-          export LD_LIBRARY_PATH=$HOME/install/grass83/lib:$LD_LIBRARY_PATH
-          pytest .
+          export LD_LIBRARY_PATH=$HOME/install/grass84/lib:$LD_LIBRARY_PATH
+          pytest --verbose --color=yes --durations=0 --durations-min=0.5 --numprocesses auto -ra .
 
       - name: Print installed versions
         if: always()
         run: .github/workflows/print_versions.sh
+  pytest-success:
+    name: pytest Result
+    needs:
+      - pytest
+    if: ${{ always() }}
+    uses: ./.github/workflows/verify-success.yml
+    with:
+      needs_context: ${{ toJson(needs) }}

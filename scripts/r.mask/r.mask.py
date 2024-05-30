@@ -122,7 +122,8 @@ def main():
             if not grass.overwrite():
                 grass.fatal(
                     _(
-                        "MASK already found in current mapset. Delete first or overwrite."
+                        "MASK already found in current mapset. Delete first or "
+                        "overwrite."
                     )
                 )
             else:
@@ -203,8 +204,8 @@ def main():
                 input=to_rast_input,
                 layer=layer,
                 output="MASK",
-                use="val",
-                val="1",
+                use="value",
+                value="1",
                 type="area",
                 cats=cats,
                 where=where,

@@ -19,9 +19,9 @@ This program is free software under the GNU General Public License
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
+
 from copy import deepcopy
 import wx
-import six
 
 
 from core.gcmd import GError, GMessage, RunCommand, GWarning
@@ -233,8 +233,8 @@ class ScattsManager:
                         "Interactive Scatter Plot Tool can not be used.\n"
                         "Number of cells (rows*cols) <%d> in current region"
                         "is higher than maximum limit <%d>.\n\n"
-                        "You can reduce number of cells in current region using <g.region> command."
-                        % (ncells, MAX_NCELLS)
+                        "You can reduce number of cells in current region using "
+                        "<g.region> command." % (ncells, MAX_NCELLS)
                     ),
                 )
             )
@@ -409,7 +409,7 @@ class ScattsManager:
 
     def SetPlotsMode(self, mode):
         self.plot_mode = mode
-        for scatt in six.itervalues(self.plots):
+        for scatt in self.plots.values():
             if scatt["scatt"]:
                 scatt["scatt"].SetMode(mode)
 
@@ -417,7 +417,7 @@ class ScattsManager:
 
     def ActivateSelectionPolygonMode(self, activate):
         self.pol_sel_mode[0] = activate
-        for scatt in six.itervalues(self.plots):
+        for scatt in self.plots.values():
             if not scatt["scatt"]:
                 continue
             scatt["scatt"].SetSelectionPolygonMode(activate)
@@ -429,7 +429,7 @@ class ScattsManager:
 
     def ProcessSelectionPolygons(self, process_mode):
         scatts_polygons = {}
-        for scatt_id, scatt in six.iteritems(self.plots):
+        for scatt_id, scatt in self.plots.items():
             if not scatt["scatt"]:
                 continue
             coords = scatt["scatt"].GetCoords()
@@ -463,7 +463,7 @@ class ScattsManager:
         if not sel_cat_id:
             return
 
-        for scatt in six.itervalues(self.plots):
+        for scatt in self.plots.values():
             if scatt["scatt"]:
                 scatt["scatt"].SetEmpty()
 
@@ -592,7 +592,7 @@ class PlotsRenderingManager:
             else:
                 ellipses_dt = {}
 
-            for c in six.iterkeys(scatt_dt):
+            for c in scatt_dt.keys():
                 try:
                     self.cat_ids.remove(c)
                     scatt_dt[c]["render"] = True
@@ -739,7 +739,7 @@ class CategoriesManager:
         render = False
         update_cat_rast = []
 
-        for k, v in six.iteritems(attrs_dict):
+        for k, v in attrs_dict.items():
             if not render and k in ["color", "opacity", "show", "nstd"]:
                 render = True
             if k in ["color", "name"]:
@@ -1014,7 +1014,7 @@ class IMapDispConnection:
             cats_attrs["name"]
 
     def RenderCatRast(self, cat_id):
-        if cat_id not in six.iterkeys(self.added_cats_rasts):
+        if cat_id not in self.added_cats_rasts.keys():
             cat_rast = self.scatt_mgr.core.GetCatRast(cat_id)
 
             cat_name = self.cats_mgr.GetCategoryAttrs(cat_id)["name"]

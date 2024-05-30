@@ -7,9 +7,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
 
 jobs:
   build:
@@ -35,7 +32,7 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       - name: Get dependencies
         run: |
           sudo apt-get update -y
@@ -63,4 +60,6 @@ jobs:
           CFLAGS: -std=${{ matrix.c }} -fPIC -Wall -Wextra
           # TODO: -pedantic-errors here won't compile
           CXXFLAGS: -std=${{ matrix.cpp }} -fPIC -Wall -Wextra
-        run: .github/workflows/build_ubuntu-22.04.sh $HOME/install -Werror
+        run: |
+          .github/workflows/build_ubuntu-22.04.sh $HOME/install \
+              -isystem/usr/include/gdal -Wpedantic -Werror

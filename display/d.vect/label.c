@@ -151,12 +151,26 @@ int process_line(int ltype, const struct line_pnts *Points,
 void show_label(double *px, double *py, LATTR *lattr, const char *text)
 {
     double X = *px, Y = *py;
-    int Xoffset, Yoffset;
+    double Xoffset;
     double xarr[5], yarr[5];
     double T, B, L, R;
+    double ysize;
 
-    X = X + D_get_d_to_u_xconv() * 0.5 * lattr->size;
-    Y = Y + D_get_d_to_u_yconv() * 1.5 * lattr->size;
+    /* Vertical alignment has to be performed in advance as returned box
+     * height will depend on letters in use. Shifting of Y location
+     * ensures that text baseline is aligned instead of just bounding box.
+     * This logic will break down for any vertical texts.
+     * A proper fix would be to obtain baseline and shift it around. */
+    ysize = D_get_d_to_u_yconv() * lattr->size;
+    if (lattr->yref == LBOTTOM)
+        Y = Y - ysize * 0.6;
+    else if (lattr->yref == LCENTER)
+        Y = Y + ysize * 0.35;
+    else
+        Y = Y + ysize * 1.4;
+
+    if (lattr->xref != LRIGHT)
+        X = X + D_get_d_to_u_xconv() * 0.5 * lattr->size;
 
     D_pos_abs(X, Y);
     D_get_text_box(text, &T, &B, &L, &R);
@@ -168,21 +182,17 @@ void show_label(double *px, double *py, LATTR *lattr, const char *text)
     R = R + D_get_d_to_u_xconv() * lattr->size / 2;
 
     Xoffset = 0;
-    Yoffset = 0;
+
     if (lattr->xref == LCENTER)
         Xoffset = -(R - L) / 2;
     if (lattr->xref == LRIGHT)
         Xoffset = -(R - L);
-    if (lattr->yref == LCENTER)
-        Yoffset = -(B - T) / 2;
-    if (lattr->yref == LBOTTOM)
-        Yoffset = -(B - T);
 
     if (lattr->has_bgcolor || lattr->has_bcolor) {
         xarr[0] = xarr[1] = xarr[4] = L + Xoffset;
         xarr[2] = xarr[3] = R + Xoffset;
-        yarr[0] = yarr[3] = yarr[4] = B + Yoffset;
-        yarr[1] = yarr[2] = T + Yoffset;
+        yarr[0] = yarr[3] = yarr[4] = B;
+        yarr[1] = yarr[2] = T;
 
         if (lattr->has_bgcolor) {
             D_RGB_color(lattr->bgcolor.R, lattr->bgcolor.G, lattr->bgcolor.B);
@@ -196,7 +206,7 @@ void show_label(double *px, double *py, LATTR *lattr, const char *text)
         D_RGB_color(lattr->color.R, lattr->color.G, lattr->color.B);
     }
 
-    D_pos_abs(X + Xoffset, Y + Yoffset);
+    D_pos_abs(X + Xoffset, Y);
     D_text(text);
 }
 

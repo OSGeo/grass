@@ -180,7 +180,8 @@ def reclass(inf, outf, lim, clump, diag, les):
 def rmarea(infile, outfile, thresh, coef):
     # transform user input from hectares to map units (kept this for future)
     # thresh = thresh * 10000.0 / (float(coef)**2)
-    # grass.debug("Threshold: %d, coeff linear: %s, coef squared: %d" % (thresh, coef, (float(coef)**2)), 0)
+    # grass.debug("Threshold: %d, coeff linear: %s, coef squared: %d" %
+    # (thresh, coef, (float(coef)**2)), 0)
 
     # transform user input from hectares to meters because currently v.clean
     # rmarea accept only meters as threshold

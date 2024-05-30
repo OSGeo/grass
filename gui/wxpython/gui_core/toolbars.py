@@ -83,6 +83,7 @@ BaseIcons = {
     "mapDispSettings": MetaIcon(
         img="monitor-settings", label=_("Map Display Settings")
     ),
+    "docking": MetaIcon(img="monitor-dock", label=_("(Un)dock")),
 }
 
 
