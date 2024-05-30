@@ -813,9 +813,11 @@ class Module:
             "inputs": [
                 {
                     "param": key,
-                    "value": ",".join(val.value)
-                    if type(val.value) == list
-                    else str(val.value),
+                    "value": (
+                        ",".join(val.value)
+                        if type(val.value) == list
+                        else str(val.value)
+                    ),
                 }
                 for key, val in self.inputs.items()
                 if val.value and key not in skip
