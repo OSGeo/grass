@@ -769,11 +769,23 @@ class Module:
                     msg = "Required parameter <%s> not set."
                     raise ParameterError(msg % k)
 
-    def get_json_dict(self, export=None):
+    def get_json_dict(
+        self, export=None, stdout_export=None, stdout_id="stdout", stdout_delimiter="|"
+    ):
         """Return a dictionary that includes the name, all valid
         inputs, outputs and flags as well as export settings for
         usage with actinia
-        param export: string with export format, e.g. GTiff
+        param export: string with export format for non-stdout output, one of
+                      "GTiff", "COG", for raster;
+                      "strds" for SpaceTimeRasterDatasets,
+                      "PostgreSQL", "GPKG", "GML", "GeoJSON", "ESRI_Shapefile",
+                      "SQLite" for vector and
+                      "CSV", "TXT" for files
+        param stdout_export: string with export format for stdout output, one of
+                             "table", "list", "kv", "json"
+        param stdout_id: unique string with "id" for stdout output of the module
+                         defaults to "stdout"
+        param stdout_delimiter: string with single delimiter, defaults to "|"
         """
         import uuid
 
@@ -790,6 +802,7 @@ class Module:
             "CSV": "file",
             "TXT": "file",
         }
+        stdout_export_formats = ["table", "list", "kv", "json"]
         special_flags = ["overwrite", "verbose", "quiet"]
         skip = ["stdin", "stdout", "stderr"]
 
@@ -846,6 +859,16 @@ class Module:
                     }
                 outputs.append(param)
         json_dict["outputs"] = outputs
+
+        # Handle stdout
+        if stdout_export is not None:
+            if stdout_export not in stdout_export_formats:
+                raise GrassError(f"Invalid export format <{stdout_export}> for stdout.")
+            json_dict["stdout"] = {
+                "id": stdout_id,
+                "format": stdout_export,
+                "delimiter": stdout_delimiter,
+            }
 
         return {key: val for key, val in json_dict.items() if val}
 
