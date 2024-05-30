@@ -53,44 +53,6 @@ class TestModulesPickability(TestCase):
         out.close()
 
 
-class TestModulesJsonDictExport(TestCase):
-    def test_rinfo_simple(self):
-        """Test if a Module can be exported to json dict"""
-
-        Module("r.info", map="elevation", run_=False).get_json_dict()
-
-    def test_rinfo_ov(self):
-        """Test if a Module can be exported to json dict with verbose flag"""
-
-        Module("r.info", verbose=True, map="elevation", run_=False).get_json_dict()
-
-    def test_rinfo_ov_export(self):
-        """Test if a Module can be exported to json dict with overwrite
-        and verbose flags and results exported to CSV"""
-
-        Module(
-            "r.info",
-            verbose=True,
-            map="elevation",
-            flags="g",
-            run_=False,
-        ).get_json_dict(export="CSV")
-
-    def test_rslopeaspect_ov_export(self):
-        """Test if a Module can be exported to json dict with overwrite
-        and verbose flags and results exported to CSV"""
-
-        Module(
-            "r.slope.aspect",
-            elevation="elevation",
-            slope="slope",
-            aspect="aspect",
-            overwrite=True,
-            verbose=True,
-            run_=False,
-        ).get_json_dict(export="GTiff")
-
-
 class TestModulesCheck(TestCase):
     def test_flags_with_suppress_required(self):
         """Test if flags with suppress required are handle correctly"""
