@@ -14,8 +14,6 @@ from .typedict import TypeDict
 from .read import GETFROMTAG, DOC
 from .env import G_debug
 
-from itertools import zip_longest
-
 
 def _get_bash(self, *args, **kargs):
     return self.get_bash()
