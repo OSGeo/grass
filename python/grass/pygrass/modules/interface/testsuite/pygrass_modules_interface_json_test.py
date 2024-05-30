@@ -14,9 +14,6 @@
 """Test of JSON export from pygrass.Module for usage in actinia """
 
 
-import pytest
-
-from subprocess import PIPE
 from grass.pygrass.modules.interface import Module
 
 
