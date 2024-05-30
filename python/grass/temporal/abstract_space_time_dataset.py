@@ -1790,10 +1790,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         columns=None,
         where=None,
         order=None,
+        dbif=None,
         group=None,
         spatial_extent=None,
         spatial_relation=None,
-        dbif=None,
     ):
         """Return SQL rows of the selected registered maps.
 
