@@ -1339,9 +1339,13 @@ class DataCatalogTree(TreeView):
                 if pasted == 0:
                     Debug.msg(1, "COPIED TO: " + new_name)
                     if self.copy_mode:
-                        self.showNotification.emit(message=_("g.copy completed"))
+                        self.showNotification.emit(message=_("Copying completed"))
                     else:
-                        self.showNotification.emit(message=_("g.copy completed"))
+                        # remove old
+                        self._removeMapAfterCopy(
+                            self.copy_layer[i], self.copy_mapset[i], env2
+                        )
+                        self.showNotification.emit(message=_("Moving completed"))
                     self._giface.grassdbChanged.emit(
                         grassdb=self.selected_grassdb[0].data["name"],
                         location=self.selected_location[0].data["name"],
@@ -1350,11 +1354,6 @@ class DataCatalogTree(TreeView):
                         element=node,
                         action="new",
                     )
-                    # remove old
-                    if not self.copy_mode:
-                        self._removeMapAfterCopy(
-                            self.copy_layer[i], self.copy_mapset[i], env2
-                        )
 
                 gscript.try_remove(gisrc)
                 gscript.try_remove(gisrc2)
