@@ -11,15 +11,18 @@ class TestImageryGroupToDict(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.bands = [1, 2, 3]
-        cls.raster_maps = ",".join([f"lsat7_2000_{band}" for band in cls.bands])
+        cls.raster_maps = [f"lsat7_2002_{band}0" for band in cls.bands]
         cls.group = "L8_group"
         cls.subgroup = "L8_group_subgroup"
+        # Create input maps with label and group
         for band in cls.bands:
-            cls.runModule("g.copy", raster=f"lsat7_2000_{band}0,lsat7_2000_{band}0")
             cls.runModule(
-                "r.support", raster=f"lsat7_2000_{band}", semantic_label=f"L8_{band}"
+                "g.copy", raster=[f"lsat7_2002_{band}0", f"lsat7_2002_{band}0"]
             )
-        cls.runModule("i.group", group="L8_group", input=cls.raster_maps)
+            cls.runModule(
+                "r.support", map=f"lsat7_2002_{band}0", semantic_label=f"L8_{band}"
+            )
+        cls.runModule("i.group", group=cls.group, input=cls.raster_maps)
 
     @classmethod
     def tearDownClass(cls):
@@ -27,22 +30,55 @@ class TestImageryGroupToDict(TestCase):
         cls.runModule("g.remove", type="group", name=cls.group, flags="f")
 
     def test_basic_group_label_keys(self):
-        ref_dict = {f"L8_{band}": f"lsat7_2000_{band}" for band in self.bands}
+        ref_dict = {f"L8_{band}": f"lsat7_2002_{band}0" for band in self.bands}
         group_info = gs.imagery.group_to_dict(self.group, full_info=False)
-        self.assertIsInstance(dict, group_info)
-        self.assertDictEqual(ref_dict, group_info)
+        # Check that a dict is returned
+        self.assertIsInstance(group_info, dict)
+        self.assertListEqual(list(ref_dict.keys()), list(group_info.keys()))
+        self.assertListEqual(
+            list(ref_dict.values()), [val.split("@")[0] for val in group_info.values()]
+        )
 
     def test_basic_group_map_keys(self):
-        ref_dict = {f"lsat7_2000_{band}": f"L8_{band}" for band in self.bands}
+        ref_dict = {f"lsat7_2002_{band}0": f"L8_{band}" for band in self.bands}
         group_info = gs.imagery.group_to_dict(
             self.group, dict_key=None, full_info=False
         )
-        self.assertIsInstance(dict, group_info)
-        self.assertDictEqual(ref_dict, group_info)
+        # Check that a dict is returned
+        self.assertIsInstance(group_info, dict)
+        self.assertListEqual(
+            list(ref_dict.keys()), [key.split("@")[0] for key in group_info.keys()]
+        )
+        self.assertListEqual(list(ref_dict.values()), list(group_info.values()))
 
     def test_full_info_group_label_keys(self):
-        group_info = gs.imagery.group_to_dict(self.group, full_info=False)
-        self.assertIsInstance(dict, group_info)
+        group_info = gs.imagery.group_to_dict(self.group, full_info=True)
+        # Check that a dict is returned
+        self.assertIsInstance(group_info, dict)
+        self.assertListEqual(
+            [f"L8_{band}" for band in self.bands], list(group_info.keys())
+        )
+        for band in self.bands:
+            # Take some metadata keys from raster_info
+            for metadata_key in [
+                "north",
+                "nsres",
+                "cols",
+                "datatype",
+                "map",
+                "date",
+                "semantic_label",
+                "comments",
+            ]:
+                self.assertIn(metadata_key, group_info[f"L8_{band}"])
+
+    def test_full_info_group_label_keys_subgroup(self):
+        self.runModule(
+            "i.group", group=self.group, subgroup=self.subgroup, input=self.raster_maps
+        )
+        group_info = gs.imagery.group_to_dict(self.group, full_info=True)
+        # Check that a dict is returned
+        self.assertIsInstance(group_info, dict)
         self.assertListEqual(
             [f"L8_{band}" for band in self.bands], list(group_info.keys())
         )
