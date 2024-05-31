@@ -3610,7 +3610,7 @@ if __name__ == "__main__":
                                 formattedVar = True
                                 value = pattern.sub("{options['" + var + "']}", value)
                             else:
-                                value = f"options['{var}']"
+                                value = f'options["{var}"]'
                     if formattedVar:
                         value = 'f"' + value + '"'
 
