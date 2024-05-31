@@ -3461,7 +3461,7 @@ class WritePythonFile(WriteScriptFile):
 # % required: yes
 """.format(
                     param_name=vname,
-                    description=vdesc["description"],
+                    description=vdesc.get("description", ""),
                 )
             )
             if optionType is None and vdesc["type"]:
