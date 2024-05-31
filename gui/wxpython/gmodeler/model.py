@@ -3625,7 +3625,7 @@ if __name__ == "__main__":
 
         ret += '"%s"' % task.get_name()
         if flags:
-            ret += ",\n{indent}flags='{fl}'".format(indent=" " * cmdIndent, fl=flags)
+            ret += ',\n{indent}flags="{fl}"'.format(indent=" " * cmdIndent, fl=flags)
             if itemParameterizedFlags:
                 ret += " + getParameterizedFlags(options, [{}])".format(
                     itemParameterizedFlags
