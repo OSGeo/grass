@@ -1,5 +1,9 @@
+import json
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+
+from grass.gunittest.gmodules import SimpleModule
 
 
 class TestVInfo(TestCase):
@@ -182,6 +186,53 @@ class TestVInfo(TestCase):
                 timestamp="15 Jan 1994",
             ),
         )
+
+    def test_json(self):
+        module = SimpleModule("v.info", map=self.test_vinfo_with_db_3d, format="json")
+        self.runModule(module)
+
+        expected = {
+            "name": "test_vinfo_with_db_3d",
+            "title": "",
+            "scale": 1.000000,
+            "organization": "",
+            "timestamp": "15 Jan 1994",
+            "format": "native",
+            "level": 2.000000,
+            "num_dblinks": 1.000000,
+            "attribute_layer_number": 1.000000,
+            "attribute_layer_name": "test_vinfo_with_db_3d",
+            "attribute_database_driver": "sqlite",
+            "attribute_table": "test_vinfo_with_db_3d",
+            "attribute_primary_key": "cat",
+            "projection": "Lambert Conformal Conic",
+            "digitization_threshold": 0.000000,
+            "comment": "",
+            "nodes": 0.000000,
+            "points": 5.000000,
+            "lines": 0.000000,
+            "boundaries": 0.000000,
+            "centroids": 0.000000,
+            "areas": 0.000000,
+            "islands": 0.000000,
+            "faces": 0.000000,
+            "kernels": 0.000000,
+            "volumes": 0.000000,
+            "holes": 0.000000,
+            "primitives": 5.000000,
+            "map3d": 1.000000
+        }
+        result = json.loads(module.outputs.stdout)
+
+        # the following fields vary with the Grass sample data's path
+        # therefore only check for their presence in the JSON output
+        # and not exact values
+        remove_fields = ["location", "project", "database", "source_date", "attribute_database",
+                         "top", "bottom", "east", "west", "north", "south", "creator", "mapset"]
+        for field in remove_fields:
+            self.assertIn(field, result)
+            result.pop(field)
+        self.assertDictEqual(expected, result)
 
     def test_database_table(self):
         """Test the database table column and type of the two vector maps with attribute data"""

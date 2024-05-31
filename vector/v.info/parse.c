@@ -6,9 +6,9 @@
 #include "local_proto.h"
 
 void parse_args(int argc, char **argv, char **input, char **field, int *history,
-                int *columns, int *shell)
+                int *columns, int *shell, enum OutputFormat *format_ptr)
 {
-    struct Option *input_opt, *field_opt;
+    struct Option *input_opt, *field_opt, *format_opt;
     struct Flag *hist_flag, *col_flag, *shell_flag, *region_flag, *topo_flag;
 
     input_opt = G_define_standard_option(G_OPT_V_MAP);
@@ -42,6 +42,9 @@ void parse_args(int argc, char **argv, char **input, char **field, int *history,
     topo_flag->description = _("Print topology info in shell script style");
     topo_flag->guisection = _("Print");
 
+    format_opt = G_define_standard_option(G_OPT_F_FORMAT);
+    format_opt->guisection = _("Print");
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -56,4 +59,9 @@ void parse_args(int argc, char **argv, char **input, char **field, int *history,
         *shell |= SHELL_REGION;
     if (topo_flag->answer)
         *shell |= SHELL_TOPO;
+
+    if (strcmp(format_opt->answer, "json") == 0)
+        *format_ptr = JSON;
+    else
+        *format_ptr = PLAIN;
 }
