@@ -3600,12 +3600,18 @@ if __name__ == "__main__":
                     value = 'options["{}"]'.format(self._getParamName(name, item))
                 else:
                     # check for variables
+                    formattedVar = False
                     for var in variables["vars"]:
                         pattern = re.compile("%" + var)
-                        if pattern.search(value):
+                        found = pattern.search(value)
+                        if found:
                             foundVar = True
-                            value = pattern.sub("{options['" + var + "']}", value)
-                    if foundVar:
+                            if found.end() != len(value):
+                                formattedVar = True
+                                value = pattern.sub("{options['" + var + "']}", value)
+                            else:
+                                value = f"options['{var}']"
+                    if formattedVar:
                         value = 'f"' + value + '"'
 
                 if (
