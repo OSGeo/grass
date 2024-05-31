@@ -1878,7 +1878,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     where, spatial_extent, spatial_relation
                 )
 
-            sql = "SELECT %s FROM %s  WHERE %s.id IN (SELECT id FROM %s)" % (
+            sql = "SELECT %s FROM %s WHERE %s.id IN (SELECT id FROM %s)" % (
                 columns,
                 map_view,
                 map_view,
@@ -1900,7 +1900,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 if connection_state_changed:
                     dbif.close()
                 self.msgr.error(
-                    _("Unable to get map ids from register table " "<{}>").format(
+                    _("Unable to get map ids from register table <{}>").format(
                         self.get_map_register()
                     )
                 )
