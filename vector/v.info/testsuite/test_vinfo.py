@@ -220,15 +220,28 @@ class TestVInfo(TestCase):
             "volumes": 0.000000,
             "holes": 0.000000,
             "primitives": 5.000000,
-            "map3d": 1.000000
+            "map3d": 1.000000,
         }
         result = json.loads(module.outputs.stdout)
 
         # the following fields vary with the Grass sample data's path
         # therefore only check for their presence in the JSON output
         # and not exact values
-        remove_fields = ["location", "project", "database", "source_date", "attribute_database",
-                         "top", "bottom", "east", "west", "north", "south", "creator", "mapset"]
+        remove_fields = [
+            "location",
+            "project",
+            "database",
+            "source_date",
+            "attribute_database",
+            "top",
+            "bottom",
+            "east",
+            "west",
+            "north",
+            "south",
+            "creator",
+            "mapset",
+        ]
         for field in remove_fields:
             self.assertIn(field, result)
             result.pop(field)
