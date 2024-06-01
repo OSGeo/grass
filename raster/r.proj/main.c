@@ -210,7 +210,9 @@ int main(int argc, char **argv)
 
     nocrop = G_define_flag();
     nocrop->key = 'n';
-    nocrop->description = _("Do not perform region cropping optimization");
+    nocrop->description =
+        _("Do not perform region cropping optimization. See Notes if working "
+          "with a global latitude-longitude projection");
 
     print_bounds = G_define_flag();
     print_bounds->key = 'p';
