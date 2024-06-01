@@ -3566,6 +3566,45 @@ if __name__ == "__main__":
             strcmd + self._getPythonActionCmd(item, task, len(strcmd), variables) + "\n"
         )
 
+    def _substitutePythonParamValue(
+        self, value, name, parameterizedParams, variables, item
+    ):
+        """Substitute parameterized options or variables.
+
+        :param value: parameter value to be substituted
+        :param name: parameter name
+        :param parameterizedParams: list of parameterized options
+        :param variables: list of user-defined variables
+        :param item: item object
+
+        :return: substituted value
+        """
+        foundVar = False
+        parameterizedValue = value
+
+        if name in parameterizedParams:
+            foundVar = True
+            parameterizedValue = 'options["{}"]'.format(self._getParamName(name, item))
+        else:
+            # check for variables
+            formattedVar = False
+            for var in variables["vars"]:
+                pattern = re.compile("%" + var)
+                found = pattern.search(value)
+                if found:
+                    foundVar = True
+                    if found.end() != len(value):
+                        formattedVar = True
+                        parameterizedValue = pattern.sub(
+                            "{options['" + var + "']}", value
+                        )
+                    else:
+                        parameterizedValue = f'options["{var}"]'
+            if formattedVar:
+                parameterizedValue = 'f"' + parameterizedValue + '"'
+
+        return foundVar, parameterizedValue
+
     def _getPythonActionCmd(self, item, task, cmdIndent, variables={}):
         opts = task.get_options()
 
@@ -3593,26 +3632,18 @@ if __name__ == "__main__":
                     value = list(map(float, value))
 
             if (name and value) or (name in parameterizedParams):
-                foundVar = False
-
-                if name in parameterizedParams:
-                    foundVar = True
-                    value = 'options["{}"]'.format(self._getParamName(name, item))
-                else:
-                    # check for variables
-                    formattedVar = False
-                    for var in variables["vars"]:
-                        pattern = re.compile("%" + var)
-                        found = pattern.search(value)
-                        if found:
+                if isinstance(value, list):
+                    foundVar = False
+                    for idx in range(len(value)):
+                        foundVar_, value[idx] = self._substitutePythonParamValue(
+                            value[idx], name, parameterizedParams, variables, item
+                        )
+                        if foundVar_ is True:
                             foundVar = True
-                            if found.end() != len(value):
-                                formattedVar = True
-                                value = pattern.sub("{options['" + var + "']}", value)
-                            else:
-                                value = f'options["{var}"]'
-                    if formattedVar:
-                        value = 'f"' + value + '"'
+                else:
+                    foundVar, value = self._substitutePythonParamValue(
+                        value, name, parameterizedParams, variables, item
+                    )
 
                 if (
                     foundVar
