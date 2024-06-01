@@ -3676,40 +3676,6 @@ if __name__ == "__main__":
 
         return ret
 
-    def _substituteVariable(self, string, variable, data):
-        """Substitute variable in the string
-
-        :param string: string to be modified
-        :param variable: variable to be substituted
-        :param data: data related to the variable
-
-        :return: modified string
-        """
-        result = ""
-        ss = re.split(r"\w*(%" + variable + ")w*", string)
-
-        if not ss[0] and not ss[-1]:
-            if data:
-                return "options['%s']" % variable
-            else:
-                return variable
-
-        for s in ss:
-            if not s or s == '"':
-                continue
-
-            if s == "%" + variable:
-                if data:
-                    result += "+options['%s']+" % variable
-                else:
-                    result += "+%s+" % variable
-            else:
-                result += '"' + s
-                if not s.endswith("]"):  # options
-                    result += '"'
-
-        return result.strip("+")
-
 
 class ModelParamDialog(wx.Dialog):
     def __init__(
