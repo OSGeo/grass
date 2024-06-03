@@ -7,16 +7,29 @@ class TestPansharpeningAlgorithms(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        # Names of rasters used as per i.pansharpen.py
+        cls.inputs = {
+            'blue': 'ms1_orig',
+            'green': 'ms2_orig',
+            'red': 'ms3_orig',
+            'pan': 'pan_orig'
+        }
+        cls.outputs = {
+            'brovey': 'output_brovey',
+            'ihs': 'output_ihs',
+            'pca': 'output_pca'
+        }
+        cls.expected_stats = {
+            'min': 0,
+            'max': 255
+        }
         try:
-            # Ensure the pan raster exists and set the region accordingly
-            pan_raster = 'input_pan@PERMANENT'
-            if not gs.find_file(pan_raster)['name']:
-                raise FileNotFoundError(f"Raster map <{pan_raster}> not found.")
-            gs.run_command('g.region', raster=pan_raster, flags='p')
-
-            cls.inputs = {'red': 'input_red', 'green': 'input_green', 'blue': 'input_blue', 'pan': pan_raster}
-            cls.outputs = {'brovey': 'output_brovey', 'ihs': 'output_ihs', 'pca': 'output_pca'}
-
+            # Ensure all input raster maps exist and set the region accordingly
+            for key, raster in cls.inputs.items():
+                if not gs.find_file(raster)['name']:
+                    raise FileNotFoundError(f"Raster map <{raster}> not found.")
+            # Set region to the first raster (usually the pan band)
+            gs.run_command('g.region', raster=cls.inputs['pan'], flags='p')
         except CalledModuleError as e:
             raise unittest.SkipTest(f"Required raster data not available or GRASS setup issue: {str(e)}.")
 
