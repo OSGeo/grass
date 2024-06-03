@@ -40,7 +40,8 @@ def group_to_dict(
     The default is to use semantic_labels. Note that map metadata
     of the maps in the group have to be read to get the semantic label,
     in addition to the group file. The same metadata is read when the
-    full_info should be returned.
+    "metadata" is requested as dict_values. Other supported dict_values
+    are "map_names" (default), "semantic_labels", or "indices".
 
     The function can also operate on the level of subgroups. In case a
     non-existing (or empty sub-group) is requested a warning is printed
