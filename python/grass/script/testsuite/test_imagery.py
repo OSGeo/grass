@@ -45,18 +45,32 @@ class TestImageryGroupToDict(TestCase):
         self.assertRaises(
             CalledModuleError, gs.imagery.group_to_dict, "non_existing_group"
         )
-        # invalid dict_key
+        # Invalid dict_keys
         self.assertRaises(
-            CalledModuleError,
+            ValueError,
             gs.imagery.group_to_dict,
             self.group,
-            **{"dict_key": "invalid_dict_key"},
+            **{"dict_keys": "invalid_dict_key"},
         )
+        # Invalid dict_values
+        self.assertRaises(
+            ValueError,
+            gs.imagery.group_to_dict,
+            self.group,
+            **{"dict_values": "invalid_dict_value"},
+        )
+        group_info = gs.imagery.group_to_dict(
+            self.group, subgroup="non_existing_subgroup"
+        )
+
+        # Check that an empty dict is returned
+        self.assertIsInstance(group_info, dict)
+        self.assertDictEqual(group_info, {})
 
     def test_basic_group_map_keys(self):
         ref_dict = {f"lsat7_2002_{band}0": f"L8_{band}" for band in self.bands}
         group_info = gs.imagery.group_to_dict(
-            self.group, dict_key="map_names", full_info=False
+            self.group, dict_keys="map_names", dict_values="semantic_labels"
         )
         # Check that a dict is returned
         self.assertIsInstance(group_info, dict)
@@ -66,10 +80,8 @@ class TestImageryGroupToDict(TestCase):
         self.assertListEqual(list(ref_dict.values()), list(group_info.values()))
 
     def test_basic_group_index_keys(self):
-        ref_dict = {band: f"lsat7_2002_{band}0" for band in self.bands}
-        group_info = gs.imagery.group_to_dict(
-            self.group, dict_key="indices", full_info=False
-        )
+        ref_dict = {str(band): f"lsat7_2002_{band}0" for band in self.bands}
+        group_info = gs.imagery.group_to_dict(self.group, dict_keys="indices")
         # Check that a dict is returned
         self.assertIsInstance(group_info, dict)
         self.assertListEqual(
@@ -78,7 +90,7 @@ class TestImageryGroupToDict(TestCase):
         self.assertListEqual(list(ref_dict.values()), list(group_info.values()))
 
     def test_full_info_group_label_keys(self):
-        group_info = gs.imagery.group_to_dict(self.group, full_info=True)
+        group_info = gs.imagery.group_to_dict(self.group, dict_values="metadata")
         # Check that a dict is returned
         self.assertIsInstance(group_info, dict)
         self.assertListEqual(
@@ -102,11 +114,16 @@ class TestImageryGroupToDict(TestCase):
         self.runModule(
             "i.group", group=self.group, subgroup=self.subgroup, input=self.raster_maps
         )
-        group_info = gs.imagery.group_to_dict(self.group, full_info=True)
+        group_info = gs.imagery.group_to_dict(
+            self.group,
+            subgroup=self.subgroup,
+            dict_keys="map_names",
+            dict_values="metadata",
+        )
         # Check that a dict is returned
         self.assertIsInstance(group_info, dict)
         self.assertListEqual(
-            [f"L8_{band}" for band in self.bands], list(group_info.keys())
+            [f"lsat7_2002_{band}0" for band in self.bands], list(group_info.keys())
         )
         for band in self.bands:
             # Take some metadata keys from raster_info
@@ -120,7 +137,7 @@ class TestImageryGroupToDict(TestCase):
                 "semantic_label",
                 "comments",
             ]:
-                self.assertIn(metadata_key, group_info[f"L8_{band}"])
+                self.assertIn(metadata_key, group_info[f"lsat7_2002_{band}0"])
 
 
 if __name__ == "__main__":
