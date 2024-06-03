@@ -208,7 +208,7 @@ class VirtualAttributeList(
         try:
             # for maps connected via v.external
             keyId = columns.index(keyColumn)
-        except Exception:
+        except ValueError:
             keyId = -1
 
         # read data
@@ -3101,6 +3101,7 @@ class LayerBook(wx.Notebook):
     def __init__(self, parent, id, parentDialog, style=wx.BK_DEFAULT):
         wx.Notebook.__init__(self, parent, id, style=style)
 
+        self.delet6yeLayer = None
         self.parent = parent
         self.parentDialog = parentDialog
         self.mapDBInfo = self.parentDialog.dbMgrData["mapDBInfo"]
@@ -3817,7 +3818,7 @@ class LayerBook(wx.Notebook):
     def OnDeleteLayer(self, event):
         """Delete layer"""
         try:
-            layer = int(self.deleteLayer.GetValue())
+            layer = int(self.delet6yeLayer.GetValue())
         except Exception:
             return
 
@@ -3868,7 +3869,7 @@ class LayerBook(wx.Notebook):
         except Exception:
             try:
                 layer = self.mapDBInfo.layers.keys()[0]
-            except Exception:
+            except (TypeError, IndexError, AttributeError):
                 return
 
         if self.GetCurrentPage() == self.modifyPanel:

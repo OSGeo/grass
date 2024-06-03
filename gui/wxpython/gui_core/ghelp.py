@@ -568,15 +568,15 @@ class AboutWindow(wx.Frame):
         allStr = "%s :" % k.upper()
         try:
             allStr += _("   %d translated" % v["good"])
-        except Exception:
+        except (KeyError, TypeError):
             pass
         try:
             allStr += _("   %d fuzzy" % v["fuzzy"])
-        except Exception:
+        except (KeyError, TypeError):
             pass
         try:
             allStr += _("   %d untranslated" % v["bad"])
-        except Exception:
+        except (KeyError, TypeError):
             pass
         return allStr
 

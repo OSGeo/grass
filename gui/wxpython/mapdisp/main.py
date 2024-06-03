@@ -176,7 +176,7 @@ class DMonMap(Map):
                         mapFile = line.split("=", 1)[1].strip()
                     try:
                         k, v = line[2:].strip().split("=", 1)
-                    except Exception:
+                    except (AttributeError, ValueError):
                         pass
                     render_env[k] = v
                     continue

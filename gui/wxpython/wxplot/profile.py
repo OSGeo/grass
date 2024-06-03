@@ -248,7 +248,7 @@ class ProfileFrame(BasePlotFrame):
             # delete extra first segment point
             try:
                 self.seglist.pop(0)
-            except Exception:
+            except IndexError:
                 pass
 
         #

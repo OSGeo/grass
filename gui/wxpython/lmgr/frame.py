@@ -1123,7 +1123,7 @@ class GMFrame(wx.Frame):
 
         try:
             cmdlist = cmd.split(" ")
-        except Exception:  # already list?
+        except AttributeError:  # already list?
             cmdlist = cmd
 
         # check list of dummy commands for GUI modules that do not have GRASS

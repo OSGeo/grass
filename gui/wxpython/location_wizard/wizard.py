@@ -1195,15 +1195,15 @@ class DatumPage(TitledPage):
             self.datumparams = self.parent.datums[self.datum][2]
             try:
                 self.datumparams.remove("dx=0.0")
-            except Exception:
+            except (AttributeError, ValueError):
                 pass
             try:
                 self.datumparams.remove("dy=0.0")
-            except Exception:
+            except (AttributeError, ValueError):
                 pass
             try:
                 self.datumparams.remove("dz=0.0")
-            except Exception:
+            except (AttributeError, ValueError):
                 pass
 
             nextButton.Enable(True)
@@ -1945,7 +1945,7 @@ class IAUPage(TitledPage):
         self.epsgcode = event.GetString()
         try:
             self.epsgcode = int(self.epsgcode)
-        except Exception:
+        except (TypeError, ValueError):
             self.epsgcode = None
 
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
@@ -2642,7 +2642,7 @@ class LocationWizard(wx.Object):
             try:
                 pparam, datatype, proj4term, desc = line.split(":")
                 self.paramdesc[pparam] = (datatype, proj4term, desc)
-            except Exception:
+            except (ValueError, AttributeError):
                 continue
         f.close()
 

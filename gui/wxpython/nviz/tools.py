@@ -158,7 +158,7 @@ class NvizToolWindow(GNotebook):
             else:
                 try:
                     selection = layers[0].GetName()
-                except Exception:
+                except (IndexError, AttributeError):
                     continue
             if ltype == "raster":
                 self.FindWindowById(self.win["surface"]["map"]).SetValue(selection)
@@ -5066,7 +5066,7 @@ class NvizToolWindow(GNotebook):
         plane = self.FindWindowById(self.win["cplane"]["planes"]).GetStringSelection()
         try:
             planeIndex = int(plane.split()[-1]) - 1
-        except Exception:  # TODO disabled page
+        except (IndexError, TypeError, ValueError):  # TODO disabled page
             planeIndex = -1
 
         if event.GetId() in (
@@ -5110,7 +5110,7 @@ class NvizToolWindow(GNotebook):
         plane = self.FindWindowById(self.win["cplane"]["planes"]).GetStringSelection()
         try:
             planeIndex = int(plane.split()[-1]) - 1
-        except Exception:  # TODO disabled page
+        except (IndexError, TypeError, ValueError):  # TODO disabled page
             planeIndex = -1
 
         self.mapWindow.cplanes[planeIndex]["shading"] = shading
@@ -5125,7 +5125,7 @@ class NvizToolWindow(GNotebook):
         plane = self.FindWindowById(self.win["cplane"]["planes"]).GetStringSelection()
         try:
             planeIndex = int(plane.split()[-1]) - 1
-        except Exception:  # TODO disabled page
+        except (TypeError, ValueError, IndexError):  # TODO disabled page
             planeIndex = -1
 
         self.mapWindow.cplanes[planeIndex] = copy.deepcopy(

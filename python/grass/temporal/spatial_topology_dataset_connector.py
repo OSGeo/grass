@@ -118,31 +118,31 @@ class SpatialTopologyDatasetConnector:
         relations = {}
         try:
             relations["equivalent"] = len(self._spatial_topology["EQUIVALENT"])
-        except Exception:
+        except (KeyError, TypeError):
             relations["equivalent"] = 0
         try:
             relations["overlap"] = len(self._spatial_topology["OVERLAP"])
-        except Exception:
+        except (KeyError, TypeError):
             relations["overlap"] = 0
         try:
             relations["in"] = len(self._spatial_topology["IN"])
-        except Exception:
+        except (KeyError, TypeError):
             relations["in"] = 0
         try:
             relations["contain"] = len(self._spatial_topology["CONTAIN"])
-        except Exception:
+        except (KeyError, TypeError):
             relations["contain"] = 0
         try:
             relations["meet"] = len(self._spatial_topology["MEET"])
-        except Exception:
+        except (KeyError, TypeError):
             relations["meet"] = 0
         try:
             relations["cover"] = len(self._spatial_topology["COVER"])
-        except Exception:
+        except (KeyError, TypeError):
             relations["cover"] = 0
         try:
             relations["covered"] = len(self._spatial_topology["COVERED"])
-        except Exception:
+        except (KeyError, TypeError):
             relations["covered"] = 0
 
         return relations

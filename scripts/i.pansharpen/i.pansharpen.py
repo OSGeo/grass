@@ -102,7 +102,7 @@ except ImportError:
     hasNumPy = False
 
 import grass.script as grass
-
+from grass.exceptions import CalledModuleError
 
 def main():
     if not hasNumPy:
@@ -535,7 +535,7 @@ def brovey(pan, ms1, ms2, ms3, out, pid, sproc):
             type="raster",
             name="%s,%s,%s" % (panmatch1, panmatch2, panmatch3),
         )
-    except Exception:
+    except CalledModuleError:
         pass
 
 
@@ -577,7 +577,7 @@ def ihs(pan, ms1, ms2, ms3, out, pid, sproc):
         grass.run_command(
             "g.remove", flags="f", quiet=True, type="raster", name=panmatch
         )
-    except Exception:
+    except CalledModuleError:
         pass
 
 

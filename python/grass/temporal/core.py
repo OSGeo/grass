@@ -48,7 +48,7 @@ except ImportError:
 try:
     import psycopg2
     import psycopg2.extras
-except Exception:
+except ImportError:
     pass
 
 import atexit

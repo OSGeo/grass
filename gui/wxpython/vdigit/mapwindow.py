@@ -625,7 +625,7 @@ class VDigitWindow(BufferedMapWindow):
                     ],
                 )
                 # self.mouse['begin'] = self.Cell2Pixel(self.polycoords[-1])
-            except Exception:
+            except IndexError:
                 pass
 
         if action == "editLine":

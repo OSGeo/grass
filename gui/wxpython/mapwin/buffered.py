@@ -1762,7 +1762,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         try:
             x = int(xyCoords[0])
             y = int(xyCoords[1])
-        except Exception:
+        except (TypeError, ValueError, IndexError):
             return None
 
         if self.Map.region["ewres"] > self.Map.region["nsres"]:
@@ -1783,7 +1783,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         try:
             east = float(enCoords[0])
             north = float(enCoords[1])
-        except Exception:
+        except (TypeError, ValueError, IndexError):
             return None
 
         if self.Map.region["ewres"] > self.Map.region["nsres"]:

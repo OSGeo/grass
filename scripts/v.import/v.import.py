@@ -266,7 +266,7 @@ def main():
         if OGRdatasource.lower().endswith("gml"):
             try:
                 from osgeo import gdal
-            except Exception:
+            except ImportError:
                 grass.fatal(
                     _(
                         "Unable to load GDAL Python bindings (requires package "
@@ -343,7 +343,7 @@ def main():
         if OGRdatasource.lower().endswith("gml"):
             try:
                 from osgeo import gdal
-            except Exception:
+            except ImportError:
                 grass.fatal(
                     _(
                         "Unable to load GDAL Python bindings (requires package "

@@ -230,7 +230,7 @@ def main():
         try:
             zf = zfile.ZipFile(zipfile)
             zf.extractall()
-        except Exception:
+        except (FileNotFoundError, PermissionError, OSError, zipfile.BadZipFile):
             grass.fatal(_("Unable to unzip file."))
 
     grass.message(_("Converting input file to BIL..."))
@@ -275,10 +275,7 @@ def main():
     outf.write(proj)
     outf.close()
 
-    try:
-        grass.run_command("r.in.gdal", input=bilfile, out=tileout)
-    except Exception:
-        grass.fatal(_("Unable to import data"))
+    grass.run_command("r.in.gdal", input=bilfile, out=tileout, errors="fatal")
 
     # nice color table
     if not swbd:

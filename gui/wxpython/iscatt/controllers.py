@@ -596,7 +596,7 @@ class PlotsRenderingManager:
                 try:
                     self.cat_ids.remove(c)
                     scatt_dt[c]["render"] = True
-                except Exception:
+                except (ValueError, KeyError):
                     scatt_dt[c]["render"] = False
 
             if self.scatt_mgr.pol_sel_mode[0]:
@@ -673,7 +673,7 @@ class CategoriesManager:
 
         try:
             pos = self.cats_ids.index(cat_id)
-        except Exception:
+        except ValueError:
             return False
 
         if pos > new_pos:

@@ -442,7 +442,7 @@ for details.
 try:
     import ply.lex as lex
     import ply.yacc as yacc
-except Exception:
+except ImportError:
     pass
 
 import os
